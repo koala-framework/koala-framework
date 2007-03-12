@@ -1,0 +1,5 @@
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !^/+(public/assets|public/files|public/themes)/?
+RewriteCond %{REQUEST_URI} !^(/public/index.php)/?
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^(.*)$ /public/index.php
