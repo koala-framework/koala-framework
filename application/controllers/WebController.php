@@ -1,8 +1,8 @@
 <?php
-Zend::loadClass('E3_Web');
 
 class WebController extends Zend_Controller_Action
 {
+    protected $_pageCollection;
     public function indexAction()
     {
         echo "WebController::indexAction()<br />";
@@ -24,15 +24,21 @@ class WebController extends Zend_Controller_Action
     {
         $return = array();
         try {
-            $web = E3_Web::getInstance();
-            $page = $web->getPageByPath($this->getRequest()->getPathInfo());
+            $pageCollectionConfig = new Zend_Config_Ini('../application/config.ini', 'pagecollection');
+
+            $dbConfig = new Zend_Config_Ini('../application/config.db.ini', 'web');
+            $dbConfig = $dbConfig->database->asArray();
+            $db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
+
+            $this->_pageCollection = new $pageCollectionConfig->pagecollection->type($db);
+
+            $page = $this->_pageCollection->getPageByPath($this->getRequest()->getPathInfo());
             if ($page != null) {
                	$return = $page->getTemplateVars();
             }
         } catch (E3_Web_Exception $e) {
         }
-        return $return;    	
+        return $return;
     }
 
 }
-?>

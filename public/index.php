@@ -8,14 +8,13 @@ $include_path .= PATH_SEPARATOR . '../application/models';
 set_include_path($include_path);
  
 require_once 'Zend.php';
-/*
 function __autoload($class)
 {
     Zend::loadClass($class);
 }
-*/
-Zend::loadClass('Zend_Controller_Front');
-Zend::loadClass('Zend_Config_Ini');
+
+//Zend_Db_Table::setDefaultAdapter($db);
+
 $frontController = Zend_Controller_Front::getInstance();
 //$frontController->setRequest('E3_Controller_Request');
 //$frontController->setRouter('E3_Controller_Router');
@@ -52,6 +51,7 @@ try {
 }
 */
 function p($src, $max_depth = 3) {
+    //Zend::dump($src);
     ini_set('xdebug.var_display_max_depth', $max_depth);
     if(function_exists('xdebug_var_dump')) {
         xdebug_var_dump($src);

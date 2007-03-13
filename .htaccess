@@ -1,0 +1,7 @@
+RewriteEngine on
+RewriteCond %{REQUEST_URI} !^/+(public/index.php)/?
+RewriteRule ^(.*)$ /public/index.php
+
+#RewriteCond %{REQUEST_URI} !^/+(index.php|test|admin|admin_kunden|files|css|zwischenseiten|heading.php|test.html|syncdata.php|webspecial|test.php|include.php|cron|webservice|specialsites)/?
+#RewriteCond %{QUERY_STRING} ^(.*)$
+#RewriteRule ^(.*)$     /index.php?site=$1&%1 [L]
