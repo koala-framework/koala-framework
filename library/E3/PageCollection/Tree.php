@@ -1,25 +1,22 @@
 <?php
 class E3_PageCollection_Tree extends E3_PageCollection_Abstract
 {
-    protected $_pageParentIds;
+    protected $_pageParentIds = array();
 
-    public function createPage($id, $filename, $component, $parentPage)
+    public function setParentPage($page, $parentPage)
     {
-        $page = parent::createPage($id, $filename, $component, $parentPage);
-        if($parentPage) {
-            $this->_pageParentIds[$id] = $parentPage->getPageId();
-        }
+        $this->_pageParentIds[$page->getComponentId()] = $parentPage->getComponentId();
     }
 
     public function getPageByPath($path)
     {
         $pathParts = explode('/', trim($path, '/'));
-        $page = $this->getPageById(0);
+        $page = $this->_rootPage;
         foreach($pathParts as $pathPart) {
             $childPages = $this->getChildPages($page);
             $found = false;
             foreach($childPages as $p) {
-                if($this->_pageFilenames[$p->getPageId()]==$pathPart) {
+                if($this->_pageFilenames[$p->getComponentId()]==$pathPart) {
                     $page = $p;
                     $found = true;
                     break;
@@ -32,16 +29,18 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
     
     public function getParentPage($page)
     {
-        return $this->getPageById($this->_pageParentIds[$page->getPageId()]);
+        $parentId = $this->_pageParentIds[$page->getComponentId()];
+        return $this->_pages[$parentId];
     }
 
     public function getChildPages($page)
     {
-        $page->generateHierachy();
+        $page->generateHierachy($this);
         $childs = array();
+        $searchId = $page->getComponentId();
         foreach($this->_pageParentIds as $id=>$parentId) {
-            if($parentId == $page->getPageId()) {
-                $childs[] = $this->getPageById($id);
+            if($parentId == $searchId) {
+                $childs[] = $this->_pages[$id];
             }
         }
         return $childs;
