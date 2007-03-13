@@ -5,6 +5,8 @@ class E3_Component_Textbox extends E3_Component_Abstract
 {
     public function getTemplateVars()
     {
-        return array("Text" => "foo", "id"=>$this->getPageId());
+        $row = $this->_dao->getModel('E3_Model_Textbox')
+                ->find($this->getComponentId());
+        return array("content" => $row->content);
     }
 }

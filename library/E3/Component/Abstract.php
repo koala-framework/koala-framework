@@ -1,34 +1,39 @@
 <?php
-require_once '../application/models/Pages.php';
 abstract class E3_Component_Abstract
 {
-    protected $_pageCollection;
-    protected $_pageId;
+    protected $_dao;
+    protected $_componentId;
 
-    function __construct(E3_PageCollection_Abstract $pageCollection, $pageId)
+    public function __construct($componentId, $dao)
     {
-        $this->_pageCollection = $pageCollection;
-        $this->_pageId = $pageId;
+        $this->_dao = $dao;
+        $this->_componentId = $componentId;
     }
 
-    public function generateHierachy()
+    public function generateHierachy(E3_PageCollection_Abstract $pageCollection)
     {
-        $db = $this->_pageCollection->getDb();
-        $sql = $db->quoteInto('SELECT * FROM pages WHERE parent_id = ?', $this->_pageId);
-        $result = $db->query($sql);
-        $rows = $result->fetchAll();
+        $componentModel = $this->_dao->getModel('E3_Model_Components');
+        $rows = $this->_dao->getModel('E3_Model_Pages')
+                ->fetchChildRowsByComponentId($this->getComponentId());
+
         foreach($rows as $pageRow) {
-            $this->_pageCollection->createPage($pageRow['id'], $pageRow['filename'], $pageRow['component'], $this);
+            $componentClass = $componentModel->getComponentClass($pageRow->componentId);
+            $component = new $componentClass($pageRow->componentId, $this->getDao());
+            $page = $pageCollection->addPage($component, $pageRow->filename, $pageRow->componentId);
+            $pageCollection->setParentPage($component, $this);
         }
     }
 
-    function getPageId()
+    public function getComponentId()
     {
-        return $this->_pageId;
+        return $this->_componentId;
     }
-
     public function getTemplateVars()
     {
         return array();
+    }
+    protected function getDao()
+    {
+        return $this->_dao;
     }
 }
