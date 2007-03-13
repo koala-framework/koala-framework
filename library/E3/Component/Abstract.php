@@ -13,12 +13,12 @@ abstract class E3_Component_Abstract
 
     public function generateHierachy()
     {
-        $pages = new Pages(array('db'=>$this->_pageCollection->getDb()));
-        $db = $pages->getAdapter();
-        $where = $db->quoteInto('parent_id = ?', $this->_pageId);
-        $rows = $pages->fetchAll($where);
+        $db = $this->_pageCollection->getDb();
+        $sql = $db->quoteInto('SELECT * FROM pages WHERE parent_id = ?', $this->_pageId);
+        $result = $db->query($sql);
+        $rows = $result->fetchAll();
         foreach($rows as $pageRow) {
-            $this->_pageCollection->createPage($pageRow->id, $pageRow->filename, $pageRow->component, $this);
+            $this->_pageCollection->createPage($pageRow['id'], $pageRow['filename'], $pageRow['component'], $this);
         }
     }
 
