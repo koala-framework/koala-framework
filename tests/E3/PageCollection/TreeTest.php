@@ -57,5 +57,19 @@ class E3_PageCollection_TreeTest extends E3_Test
     	}
     	$this->fail('An expected Exception has not been raised.');    	
     }
+    public function testParentPage()
+    {
+   		$page = $this->_pc->getPageByPath("/test1/test2");
+   		$parentPage = $this->_pc->getParentPage($page);
+    	$this->assertType('E3_Component_Decorator', $parentPage);
+    }
+
+    public function testChildPages()
+    {
+   		$page = $this->_pc->getPageByPath("/test1");
+   		$childPages = $this->_pc->getChildPages($page);
+   		$this->assertEquals(1, sizeof($childPages));
+    	$this->assertType('E3_Component_Textbox', $childPages[0]);
+    }
 }
 

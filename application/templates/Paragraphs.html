@@ -1,0 +1,5 @@
+{foreach from=$component.paragraphs item=paragraph}
+    <div>
+    {include file=$paragraph.template component=$paragraph}
+    </div>
+{/foreach}

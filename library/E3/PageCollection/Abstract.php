@@ -5,9 +5,12 @@ abstract class E3_PageCollection_Abstract
     protected $_pages = array();
     protected $_rootPage;
 	
-    function __construct(E3_Dao $_dao)
+    function __construct(E3_Dao $dao)
     {
-        $this->_rootPage = new E3_Component_Root(0, $_dao);
+        $pageRow = $dao->getTable('E3_Dao_Pages')->fetchRootPage();
+        $componentClass = $dao->getTable('E3_Dao_Components')
+                            ->getComponentClass($pageRow->componentId);
+        $this->_rootPage = new $componentClass($pageRow->componentId, $dao);
     }
 
     public function addPage(E3_Component_Abstract $component, $filename)
