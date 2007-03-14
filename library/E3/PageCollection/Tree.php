@@ -11,10 +11,10 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
 
     public function getPageByPath($path)
     {
-        if (trim($path, '/') == '') {
-        	$path = '/home';
-        }
-        $pathParts = explode('/', trim($path, '/'));
+        $path = trim($path, '/');
+        if($path=='') return $this->_rootPage; //home
+
+        $pathParts = explode('/', $path);
         $page = $this->_rootPage;
         foreach($pathParts as $pathPart) {
             $childPages = $this->getChildPages($page);

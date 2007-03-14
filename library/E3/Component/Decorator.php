@@ -17,8 +17,9 @@ class E3_Component_Decorator extends E3_Component_Abstract
 
     public function getTemplateVars()
     {
-        $ret = $this->_decorated->getTemplateVars();
+        $ret['decorated'] = $this->_decorated->getTemplateVars();
         $ret['color'] = 'blue';
+        $ret['template'] = 'Decorator.html';
         return $ret;
     }
 }

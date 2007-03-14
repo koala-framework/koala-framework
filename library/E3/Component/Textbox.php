@@ -5,6 +5,8 @@ class E3_Component_Textbox extends E3_Component_Abstract
     {
         $row = $this->_dao->getTable('E3_Dao_Textbox')
                 ->find($this->getComponentId());
-        return array("content" => $row->content);
+        $ret['content'] = $row->content;
+        $ret['template'] = 'Textbox.html';
+        return $ret;
     }
 }

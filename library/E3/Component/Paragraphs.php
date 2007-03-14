@@ -1,5 +1,5 @@
 <?php
-class E3_Component_Paragraph extends E3_Component_Abstract
+class E3_Component_Paragraphs extends E3_Component_Abstract
 {
     protected $_paragraphs;
     function __construct($componentId, E3_Dao $dao)
@@ -19,10 +19,11 @@ class E3_Component_Paragraph extends E3_Component_Abstract
 
     public function getTemplateVars()
     {
-        $ret = array();
+        $ret = array('paragraphs'=>array());
         foreach($this->_paragraphs as $paragraph) {
-            $ret[] = $paragraph->getTemplateVars();
+            $ret['paragraphs'][] = $paragraph->getTemplateVars();
         }
-        return array("paragraphs" => $ret);
+        $ret['template'] = 'Paragraphs.html';
+        return $ret;
     }
 }
