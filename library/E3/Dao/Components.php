@@ -1,5 +1,5 @@
 <?php
-class E3_Model_Components extends Zend_Db_Table
+class E3_Dao_Components extends Zend_Db_Table
 {
     protected $_name = 'components';
 
