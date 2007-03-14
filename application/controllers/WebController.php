@@ -29,7 +29,7 @@ class WebController extends Zend_Controller_Action
             $dbConfig = new Zend_Config_Ini('../application/config.db.ini', 'web');
             $dbConfig = $dbConfig->database->asArray();
             $db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
-            
+
             $dao = new E3_Dao($db);
 
             $this->_pageCollection = new $pageCollectionConfig->pagecollection->type($dao);

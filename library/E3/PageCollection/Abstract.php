@@ -4,28 +4,26 @@ abstract class E3_PageCollection_Abstract
     protected $_pageFilenames = array();
     protected $_pages = array();
     protected $_rootPage;
-
-    protected $_db;
-
-    function __construct($db)
+	
+    function __construct(E3_Dao $_dao)
     {
-        $this->_db = $db;
-
-        $this->_rootPage = new E3_Component_Root(0, $db);
+        $this->_rootPage = new E3_Component_Root(0, $_dao);
     }
 
-    public function addPage($component, $filename, $componentId)
+    public function addPage(E3_Component_Abstract $component, $filename)
     {
-        $this->_pages[$componentId] = $component;
-        $this->_pageFilenames[$componentId] = $filename;
+        $id = $component->getComponentId();
+        if (isset($this->_pages[$id])) {
+        	throw new E3_PageCollection_Exception("A page with the same componentId already exists.");
+        }
+        $this->_pages[$id] = $component;
+        $this->_pageFilenames[$id] = $filename;
     }
     
-    public function getDb()
+    public function getRootPage()
     {
-        return $this->_db;
+    	return $this->_rootPage;
     }
 
-    abstract public function getParentPage($page);
-    abstract public function getChildPages($page);
     abstract public function getPageByPath($path);
 }

@@ -2,14 +2,14 @@
 class E3_Component_Decorator extends E3_Component_Abstract
 {
     protected $_decorated;
-    function __construct($componentId, $dao)
+    function __construct($componentId, E3_Dao $dao)
     {
         parent::__construct($componentId, $dao);
 
-        $row = $dao->getModel('E3_Model_Decorator')
+        $row = $dao->getTable('E3_Dao_Decorator')
                 ->find($this->getComponentId());
 
-        $componentClass = $dao->getModel('E3_Model_Components')
+        $componentClass = $dao->getTable('E3_Dao_Components')
                             ->getComponentClass($row->componentId);
 
         $this->_decorated = new $componentClass($row->componentId, $dao);

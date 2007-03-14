@@ -2,14 +2,18 @@
 class E3_PageCollection_Tree extends E3_PageCollection_Abstract
 {
     protected $_pageParentIds = array();
+    
 
-    public function setParentPage($page, $parentPage)
+    public function setParentPage(E3_Component_Abstract $page, E3_Component_Abstract $parentPage)
     {
         $this->_pageParentIds[$page->getComponentId()] = $parentPage->getComponentId();
     }
 
     public function getPageByPath($path)
     {
+        if (trim($path, '/') == '') {
+        	$path = '/home';
+        }
         $pathParts = explode('/', trim($path, '/'));
         $page = $this->_rootPage;
         foreach($pathParts as $pathPart) {
@@ -27,15 +31,15 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
         return $page;
     }
     
-    public function getParentPage($page)
+    public function getParentPage(E3_Component_Abstract $page)
     {
         $parentId = $this->_pageParentIds[$page->getComponentId()];
         return $this->_pages[$parentId];
     }
 
-    public function getChildPages($page)
+    public function getChildPages(E3_Component_Abstract $page)
     {
-        $page->generateHierachy($this);
+        $page->callGenerateHierarchy($this);
         $childs = array();
         $searchId = $page->getComponentId();
         foreach($this->_pageParentIds as $id=>$parentId) {
