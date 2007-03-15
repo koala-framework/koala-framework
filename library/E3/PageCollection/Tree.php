@@ -6,16 +6,36 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
 
     public function setParentPage(E3_Component_Abstract $page, E3_Component_Abstract $parentPage)
     {
-        $this->_pageParentIds[$page->getComponentId()] = $parentPage->getComponentId();
+        $id = $page->getComponentId();
+        $parentId = $parentPage->getComponentId();
+        $rootId = $this->getRootPage()->getComponentId();
+        
+        if ($parentId == $id) {
+        	throw new E3_PageCollection_Exception('Cannot set Parent Page for the same object.');
+        }
+        
+        if (!isset($this->_pages[$id])) {
+        	throw new E3_PageCollection_Exception('Page does not exist.');
+        }
+        
+        if (!isset($this->_pages[$parentId]) && $rootId != $parentId) {
+        	throw new E3_PageCollection_Exception('Parent Page does not exist.');
+        }
+        
+        if ($id == $rootId) {
+        	throw new E3_PageCollection_Exception('Cannot set Parent for Root Page.');
+        }
+        
+        $this->_pageParentIds[$id] = $parentId;
     }
 
     public function getPageByPath($path)
     {
         $path = trim($path, '/');
-        if($path=='') return $this->_rootPage; //home
+        if($path=='') return $this->getRootPage(); //home
 
         $pathParts = explode('/', $path);
-        $page = $this->_rootPage;
+        $page = $this->getRootPage();
         foreach($pathParts as $pathPart) {
             $childPages = $this->getChildPages($page);
             $found = false;
@@ -33,8 +53,17 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
     
     public function getParentPage(E3_Component_Abstract $page)
     {
-        $parentId = $this->_pageParentIds[$page->getComponentId()];
-        return $this->_pages[$parentId];
+       	$return = null;
+        $id = $page->getComponentId();
+        if (isset($this->_pageParentIds[$id])) {
+	        $parentId = $this->_pageParentIds[$id];
+	        if (!isset($this->_pages[$parentId])) {
+	        	unset($this->_pageParentIds[$id]);
+	        } else {
+	        	$return = $this->_pages[$parentId];
+	        }
+        }
+        return $return;
     }
 
     public function getChildPages(E3_Component_Abstract $page)

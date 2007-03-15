@@ -8,7 +8,7 @@ abstract class E3_Component_Abstract
     public function __construct($componentId, E3_Dao $dao)
     {
         $this->_dao = $dao;
-        $this->_componentId = $componentId;
+        $this->_componentId = (int)$componentId;
     }
 
     public final function callGenerateHierarchy(E3_PageCollection_Abstract $pageCollection)

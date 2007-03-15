@@ -13,43 +13,24 @@ function __autoload($class)
     Zend::loadClass($class);
 }
 
-//Zend_Db_Table::setDefaultAdapter($db);
-
 $frontController = Zend_Controller_Front::getInstance();
 //$frontController->setRequest('E3_Controller_Request');
 //$frontController->setRouter('E3_Controller_Router');
 $frontController->getRouter()->addConfig(new Zend_Config_Ini('../application/config.ini', 'routes'), 'routes');
 $frontController->setControllerDirectory('../application/controllers');
-$frontController->throwExceptions(true);
-$frontController->dispatch();
-
-/*
-// DB
-$params = array ('host'     => '127.0.0.1',
-                 'username' => 'root',
-                 'password' => '',
-                 'dbname'   => 'travelloblog');
-$db = Zend_Db::factory('PDO_MYSQL', $params);
-Zend_Db_Table::setDefaultAdapter($db);
-
-$route1 = new Zend_Controller_Router_Route(':controller/:action/:id', array('action' => 'index'));
-$router = new Zend_Controller_RewriteRouter();
-$router->addRoute('myroute', $route1);
-Zend::register('router', $router);
-
-$view = new Zend_View();
-$view->setScriptPath('../application/views');
-Zend::register('view', $view);
-$controller = Zend_Controller_Front::getInstance();
-//$controller->setRouter($router);
-$controller->setControllerDirectory('../application/controllers');
-$controller->throwExceptions(true);
-try {
-    $controller->dispatch();
-} catch (Exception $e) {
-	echo "<pre>$e</pre>";
+$frontController->returnResponse(true);
+$response = $frontController->dispatch();
+if ($response->isException()) {
+	$response->sendHeaders();
+    $response->outputBody();
+    foreach ($response->getException() as $exception) {
+    	throw($exception);
+    }
+} else {
+	$response->sendHeaders();
+    $response->outputBody();
 }
-*/
+
 function p($src, $max_depth = 3) {
     //Zend::dump($src);
     ini_set('xdebug.var_display_max_depth', $max_depth);
@@ -61,4 +42,3 @@ function p($src, $max_depth = 3) {
         echo "</pre>";
     }
 }
-?> 

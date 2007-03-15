@@ -22,6 +22,7 @@ require_once 'TestConfiguration.php';
 
 require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
+require_once 'PHPUnit/Extensions/ExceptionTestCase.php';
 
 /**
  * Prepend library/ to the include_path.  This allows the tests to run out of the box and
@@ -37,6 +38,17 @@ function __autoload($class)
 }
 
 class E3_Test extends PHPUnit_Framework_TestCase
+{
+	protected function createDao()
+	{
+        $dbConfig = new Zend_Config_Ini('../application/config.db.ini', 'web');
+        $dbConfig = $dbConfig->database->asArray();
+        $db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
+        return new E3_Dao($db);
+	}
+}
+
+class E3_ExceptionTest extends PHPUnit_Extensions_ExceptionTestCase
 {
 	protected function createDao()
 	{

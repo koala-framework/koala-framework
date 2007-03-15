@@ -6,13 +6,12 @@ class E3_Dao_Pages extends Zend_Db_Table
     function fetchChildRowsByComponentId($componentId)
     {
         $db = $this->getAdapter();
-/*        
-        if ($componentId == 0) {
-            $pageId = 0;
-        } else {*/
-            $pageId = $db->fetchOne('SELECT id FROM pages WHERE component_id = ?', $componentId);
-//         }
-        return $this->fetchAll($db->quoteInto('parent_id = ?', $pageId));
+        $pageId = $db->fetchOne('SELECT id FROM pages WHERE component_id = ?', $componentId);
+        if ($pageId) {
+        	return $this->fetchAll($db->quoteInto('parent_id = ?', $pageId));
+        } else {
+        	return array();
+        }
     }
 
     function fetchRootPage()

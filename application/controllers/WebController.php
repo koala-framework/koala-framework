@@ -8,10 +8,18 @@ class WebController extends Zend_Controller_Action
         echo "WebController::indexAction()<br />";
         $component = $this->getTemplateVars();
         p($component);
+        
         $view = new E3_View_Smarty('../application/templates',
                         array('compile_dir'=>'../application/templates_c'));
         $view->assign('component', $component);
-        echo $view->render('master/default.html');
+        $body = $view->render('master/default.html');
+
+        $response = $this->getResponse();
+        if ($response->canSendHeaders()) {
+        	$response->setHeader('Content-Type', 'text/html');
+        }
+        $response->appendBody($body);
+        return $response;        
     }
 
     public function ajaxAction()
