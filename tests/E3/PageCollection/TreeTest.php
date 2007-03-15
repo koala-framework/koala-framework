@@ -31,37 +31,53 @@ class E3_PageCollection_TreeTest extends E3_Test
     	$this->assertType('E3_Component_Textbox', $page);
     }
 
-    public function testConstructedPaths()
+    public function testSetParentPage()
     {
 		$pc = $this->_pc;
-		$component = new E3_Component_Textbox(10, $this->_dao);
-		$pc->addPage($component, 'foo');
-		$pc->setParentPage($component, $pc->getRootPage());
-		
-		$pc->getRootPage()->callGenerateHierarchy($pc);
-   		
-   		$page = $this->_pc->getPageByPath('/foo');
-    	$this->assertType('E3_Component_Textbox', $page);
+		$p1 = new E3_Component_Textbox(-1, $this->_dao);
+		$p2 = new E3_Component_Textbox(-2, $this->_dao);
+
+		$pc->addPage($p1, 'foo');
+		$pc->addPage($p2, 'bar');
+		$pc->setParentPage($p1, $pc->getRootPage());
+		$pc->setParentPage($p2, $p1);
+
+   		$page1 = $this->_pc->getPageByPath('/foo');
+   		$page2 = $this->_pc->getPageByPath('/foo/bar');
+    	
+    	$this->assertEquals(-1, $page1->getComponentId());
+    	$this->assertEquals(-2, $page2->getComponentId());
     }
     
-    public function testAddPageAlreadyExistingComponentId()
+    public function testGetParentPage()
     {
+		// Setup
 		$pc = $this->_pc;
-		$component = new E3_Component_Textbox(10, $this->_dao);
-		$pc->addPage($component, 'foo');
-    	try {
-			$component = new E3_Component_Textbox(10, $this->_dao);
-			$pc->addPage($component, 'foo1');
-    	} catch (E3_PageCollection_Exception $e) {
-    		return;
-    	}
-    	$this->fail('An expected Exception has not been raised.');    	
-    }
-    public function testParentPage()
-    {
-   		$page = $this->_pc->getPageByPath("/test1/test2");
+		$p1 = new E3_Component_Textbox(-1, $this->_dao);
+		$p2 = new E3_Component_Textbox(-2, $this->_dao);
+
+		$pc->addPage($p1, 'foo');
+		$pc->addPage($p2, 'bar');
+		$pc->setParentPage($p1, $pc->getRootPage());
+		$pc->setParentPage($p2, $p1);
+
+   		// Seiten aus Datenbank
+   		$page = $this->_pc->getPageByPath('/test1/test2');
    		$parentPage = $this->_pc->getParentPage($page);
     	$this->assertType('E3_Component_Decorator', $parentPage);
+
+   		// Oben erstellte Seiten
+   		$page = $this->_pc->getPageByPath('/foo/bar');
+   		$parentPage = $this->_pc->getParentPage($page);
+   		$home = $this->_pc->getParentPage($parentPage);
+		// /foo
+    	$this->assertEquals(-1, $parentPage->getComponentId());
+    	// home
+    	$this->assertEquals($pc->getRootPage()->getComponentId(), $home->getComponentId());
+    	// parent von home
+    	$this->assertNull($this->_pc->getParentPage($home));
+    	// Seite nicht in Seitenbaum
+    	$this->assertNull($this->_pc->getParentPage(new E3_Component_Textbox(-100, $this->_dao)));
     }
 
     public function testChildPages()
@@ -71,5 +87,6 @@ class E3_PageCollection_TreeTest extends E3_Test
    		$this->assertEquals(1, sizeof($childPages));
     	$this->assertType('E3_Component_Textbox', $childPages[0]);
     }
+    
 }
 

@@ -3,14 +3,17 @@ abstract class E3_PageCollection_Abstract
 {
     protected $_pageFilenames = array();
     protected $_pages = array();
-    protected $_rootPage;
+    protected $_rootPageId;
 	
     function __construct(E3_Dao $dao)
     {
         $pageRow = $dao->getTable('E3_Dao_Pages')->fetchRootPage();
         $componentClass = $dao->getTable('E3_Dao_Components')
                             ->getComponentClass($pageRow->componentId);
-        $this->_rootPage = new $componentClass($pageRow->componentId, $dao);
+        $rootPage = new $componentClass($pageRow->componentId, $dao);
+        $this->addPage($rootPage, '');
+        $this->_rootPageId = $rootPage->getComponentId();
+        //$this->_rootPage = new $componentClass($pageRow->componentId, $dao);
     }
 
     public function addPage(E3_Component_Abstract $component, $filename)
@@ -25,7 +28,7 @@ abstract class E3_PageCollection_Abstract
     
     public function getRootPage()
     {
-    	return $this->_rootPage;
+    	return $this->_pages[$this->_rootPageId];
     }
 
     abstract public function getPageByPath($path);
