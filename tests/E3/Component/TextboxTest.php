@@ -1,31 +1,31 @@
 <?php
 class E3_Component_TextboxTest extends E3_Test
 {
+    private $_dao;
+
     public function setUp()
     {
+        $this->_dao = $this->createDao();
     }
 
     public function testPaths()
     {
-        $dao = $this->createDao();
-        $db = $dao->getDb();
-        $mocDao = $this->getMock('E3_Dao', array(), array('db'=>$db));
-
-        $row = (object)array('content'=>'testContent');
-
-        $textboxDao = $this->getMock('E3_Dao_Textbox', array(), array('db'=>array('db'=>$db)));
-        $textboxDao->expects($this->any())
-                   ->method('find')
-                   ->with($this->equalTo(1))
-                   ->will($this->returnValue($row));
-
-        $mocDao->expects($this->any())
-               ->method('getTable')
-               ->with($this->equalTo('E3_Dao_Textbox'))
-               ->will($this->returnValue($textboxDao));
-        $textbox = new E3_Component_Textbox(1, $mocDao);
+        $db = $this->_dao->getDb();
+        $textbox = new E3_Component_Textbox(1, $this->_dao);
         $templateVars = $textbox->getTemplateVars();
-        $this->assertEquals(array('content'=>'testContent',
+        $this->assertEquals(array('content'=>'inhalt von home',
+                                  'template'=>'Textbox.html'),
+                                  $templateVars);
+        
+        $textbox = new E3_Component_Textbox(-1, $this->_dao);
+        $templateVars = $textbox->getTemplateVars();
+        $this->assertEquals(array('content'=>null,
+                                  'template'=>'Textbox.html'),
+                                  $templateVars);
+
+        $db->query("INSERT INTO component_textbox SET component_id=-1, content='unit-test-content'");
+        $templateVars = $textbox->getTemplateVars();
+        $this->assertEquals(array('content'=>'unit-test-content',
                                   'template'=>'Textbox.html'),
                                   $templateVars);
     }

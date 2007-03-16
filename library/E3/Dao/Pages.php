@@ -3,12 +3,14 @@ class E3_Dao_Pages extends Zend_Db_Table
 {
     protected $_name = 'pages';
 
-    function fetchChildRowsByComponentId($componentId)
+    function fetchChildRows($componentId, $filename='')
     {
         $db = $this->getAdapter();
         $pageId = $db->fetchOne('SELECT id FROM pages WHERE component_id = ?', $componentId);
         if ($pageId) {
-        	return $this->fetchAll($db->quoteInto('parent_id = ?', $pageId));
+            $where = array($db->quoteInto('parent_id = ?', $pageId));
+            if ($filename != '') $where[] = $db->quoteInto('filename = ?', $filename);
+        	return $this->fetchAll($where);
         } else {
         	return array();
         }
