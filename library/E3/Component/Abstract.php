@@ -3,7 +3,8 @@ abstract class E3_Component_Abstract
 {
     protected $_dao;
     protected $_componentId;
-    private $_hasGenerated = false;
+    private $_hasGeneratedForFilename = array();
+    private $_generatedIds = array();
 
     public function __construct($componentId, E3_Dao $dao)
     {
@@ -11,21 +12,24 @@ abstract class E3_Component_Abstract
         $this->_componentId = (int)$componentId;
     }
 
-    public final function callGenerateHierarchy(E3_PageCollection_Abstract $pageCollection)
+    public final function callGenerateHierarchy(E3_PageCollection_Abstract $pageCollection, $filename='')
     {
-		if (!$this->_hasGenerated) {
-			$this->generateHierarchy($pageCollection);
-			$this->_hasGenerated = true;
-		}    	
+        //fixme: noch nicht optimal, wenn zuerst mit filename dann ohne aufgerufen werden componenten doppelt erstellt
+        if (!in_array($filename, $this->_hasGeneratedForFilename)) {
+            $this->generateHierarchy($pageCollection, $filename);
+            $this->_hasGeneratedForFilename[] = $filename;
+        }
     }
     
-    protected function generateHierarchy(E3_PageCollection_Abstract $pageCollection)
+    protected function generateHierarchy(E3_PageCollection_Abstract $pageCollection, $filename)
     {
         $componentModel = $this->_dao->getTable('E3_Dao_Components');
         $rows = $this->_dao->getTable('E3_Dao_Pages')
-                ->fetchChildRowsByComponentId($this->getComponentId());
+                ->fetchChildRows($this->getComponentId(), $filename);
 
         foreach($rows as $pageRow) {
+            if(in_array($pageRow->componentId, $this->_generatedIds)) continue; //fixme: uneffizient, unnötiger speicherverbrauch, langsam
+            $this->_generatedIds[] = $pageRow->componentId;
             $componentClass = $componentModel->getComponentClass($pageRow->componentId);
             $component = new $componentClass($pageRow->componentId, $this->getDao());
             $page = $pageCollection->addPage($component, $pageRow->filename);

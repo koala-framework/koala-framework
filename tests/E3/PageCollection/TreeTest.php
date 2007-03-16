@@ -9,13 +9,13 @@ class E3_PageCollection_TreeTest extends E3_Test
         $this->_dao = $this->createDao(); 
         $this->_pc = new E3_PageCollection_Tree($this->_dao);
     }
-
+    
     public function testPaths()
     {
    		$page = $this->_pc->getPageByPath("../");
     	$this->assertNull($page);
     	
-   		$page = $this->_pc->getPageByPath("ä#ü+986#ä3");
+   		$page = $this->_pc->getPageByPath("ï¿½+986#ï¿½");
     	$this->assertNull($page);
     	
    		$page = $this->_pc->getPageByPath("//////");
@@ -110,6 +110,8 @@ class E3_PageCollection_TreeTest extends E3_Test
    		$childPages = $this->_pc->getChildPages($page);
    		$this->assertEquals(1, sizeof($childPages));
     	$this->assertType('E3_Component_Textbox', $childPages[0]);
+    	$childPage = $this->_pc->getChildPage($page, 'test2');
+    	$this->assertEquals($childPages[0], $childPage);
    		
    		// Seiten aus Datenbank
    		$page = $this->_pc->getPageByPath("/test1");
@@ -121,6 +123,13 @@ class E3_PageCollection_TreeTest extends E3_Test
     	$this->assertEquals(-3, $childPages[0]->getComponentId());
     	$this->assertEquals(-4, $childPages[1]->getComponentId());
     }
-    
+
+    public function testGenerateHierarchyWithAndWithoutFilename()
+    {
+		$pc = $this->_pc;
+		$rootPage = $pc->getRootPage();
+		$rootPage->callGenerateHierarchy($pc, 'test1');
+        $rootPage->callGenerateHierarchy($pc);
+    }
 }
 

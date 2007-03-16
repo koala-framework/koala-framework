@@ -37,16 +37,8 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
         $pathParts = explode('/', $path);
         $page = $this->getRootPage();
         foreach($pathParts as $pathPart) {
-            $childPages = $this->getChildPages($page);
-            $found = false;
-            foreach($childPages as $p) {
-                if($this->_pageFilenames[$p->getComponentId()]==$pathPart) {
-                    $page = $p;
-                    $found = true;
-                    break;
-                }
-            }
-            if(!$found) return null;
+            $page = $this->getChildPage($page, $pathPart);
+            if(!$page) return null;
         }
         return $page;
     }
@@ -77,5 +69,18 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
             }
         }
         return $childs;
+    }
+
+    public function getChildPage(E3_Component_Abstract $page, $filename)
+    {
+        $page->callGenerateHierarchy($this, $filename);
+        $childs = array();
+        $searchId = $page->getComponentId();
+        foreach($this->_pageParentIds as $id=>$parentId) {
+            if($parentId == $searchId && $filename == $this->_pageFilenames[$id]) {
+                return $this->_pages[$id];
+            }
+        }
+        return null;
     }
 }

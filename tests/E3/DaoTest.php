@@ -18,7 +18,7 @@ class E3_DaoTest extends E3_Test
     {
     	try {
     		$this->_dao->getTable('Non_Existant_Table');
-    	} catch (Zend_Exception $e) {
+    	} catch (E3_Dao_Exception $e) {
     		return;
     	}
     	$this->fail('An expected Exception has not been raised.');
