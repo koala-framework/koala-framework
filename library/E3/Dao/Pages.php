@@ -17,6 +17,12 @@ class E3_Dao_Pages extends Zend_Db_Table
     function fetchRootPage()
     {
         $db = $this->getAdapter();
-        return $this->fetchRow($db->quoteInto('parent_id = ?', 0));
+        $rows = $this->fetchAll($db->quoteInto('parent_id = ?', 0));
+        
+        if ($rows->count() != 1) {
+        	throw new E3_Dao_Exception('There must be exactly one row with parent_id 0 in table "pages".');
+        }
+        
+        return $rows->current();
     }
 }
