@@ -12,8 +12,12 @@ class E3_Dao
     public function getTable($tablename)
     {
         if (!isset($this->_tables[$tablename])) {
-            Zend::loadClass($tablename);
-            $this->_tables[$tablename] = new $tablename(array('db'=>$this->_db));
+            try {
+            	Zend::loadClass($tablename);
+            	$this->_tables[$tablename] = new $tablename(array('db'=>$this->_db));
+            } catch (Zend_Exception $e){
+            	throw new E3_Dao_Exception('Dao not found: ' . $e->getMessage());
+            }
         }
         return $this->_tables[$tablename];
     }

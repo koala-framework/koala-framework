@@ -13,11 +13,17 @@ class E3_PageCollection_TreeExceptionTest extends E3_ExceptionTest
 		$this->setExpectedException('E3_PageCollection_Exception');
     }
 
-    public function testAddPageAlreadyExistingComponentId()
+    public function testAddPage1()
     {
 		$component = new E3_Component_Textbox(-1, $this->_dao);
 		$this->_pc->addPage($component, 'foo');
 		$this->_pc->addPage($component, 'bar');
+    }
+    
+    public function testAddPage2()
+    {
+		$c1 = new E3_Component_Textbox(-1, $this->_dao);
+		$this->_pc->addPage($c1, '');
     }
     
     public function testSetWrongParentPage1()
