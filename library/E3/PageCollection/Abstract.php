@@ -40,9 +40,10 @@ abstract class E3_PageCollection_Abstract
     {
     	if (!isset($this->_rootPageId)) {
 	    	$pageRow = $this->_dao->getTable('E3_Dao_Pages')->fetchRootPage();
+	    	//p($pageRow);
 	        $componentClass = $this->_dao->getTable('E3_Dao_Components')
-	                            ->getComponentClass($pageRow->componentId);
-	        $rootPage = new $componentClass($pageRow->componentId, $this->_dao);
+	                            ->getComponentClass($pageRow->component_id);
+	        $rootPage = new $componentClass($pageRow->component_id, $this->_dao);
 	        $this->setRootPage($rootPage);
     	}
     	return $this->_pages[$this->_rootPageId];

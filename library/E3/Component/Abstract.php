@@ -28,10 +28,10 @@ abstract class E3_Component_Abstract
                 ->fetchChildRows($this->getComponentId(), $filename);
 
         foreach($rows as $pageRow) {
-            if(in_array($pageRow->componentId, $this->_generatedIds)) continue; //fixme: uneffizient, unnötiger speicherverbrauch, langsam
-            $this->_generatedIds[] = $pageRow->componentId;
-            $componentClass = $componentModel->getComponentClass($pageRow->componentId);
-            $component = new $componentClass($pageRow->componentId, $this->getDao());
+            if(in_array($pageRow->component_id, $this->_generatedIds)) continue; //fixme: uneffizient, unnötiger speicherverbrauch, langsam
+            $this->_generatedIds[] = $pageRow->component_id;
+            $componentClass = $componentModel->getComponentClass($pageRow->component_id);
+            $component = new $componentClass($pageRow->component_id, $this->getDao());
             $page = $pageCollection->addPage($component, $pageRow->filename);
             $pageCollection->setParentPage($component, $this);
         }

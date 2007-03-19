@@ -9,8 +9,8 @@ class WebController extends Zend_Controller_Action
         $component = $this->getTemplateVars();
         p($component);
         
-        $view = new E3_View_Smarty('../application/templates',
-                        array('compile_dir'=>'../application/templates_c'));
+        $view = new E3_View_Smarty('../application/views',
+                        array('compile_dir'=>'../application/views_c'));
         $view->assign('component', $component);
         $body = $view->render('master/default.html');
 
