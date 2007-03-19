@@ -207,7 +207,7 @@ abstract class Zend_Search_Lucene_Search_Query
     /**
      * Highlight matches in $inputHTML
      *
-     * @param $inputHTML
+     * @param string $inputHTML
      * @return string
      */
     public function highlightMatches($inputHTML)

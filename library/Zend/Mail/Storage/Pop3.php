@@ -150,6 +150,8 @@ class Zend_Mail_Storage_Pop3 extends Zend_Mail_Storage_Abstract
     public function __construct($params)
     {
         $this->_has['fetchPart'] = false;
+        $this->_has['top']       = null;
+        $this->_has['uniqueid']  = null;
 
         if ($params instanceof Zend_Mail_Protocol_Pop3) {
             $this->_protocol = $params;
@@ -207,7 +209,55 @@ class Zend_Mail_Storage_Pop3 extends Zend_Mail_Storage_Abstract
     }
 
     /**
-     * Special handling for hasTop. The headers of the first message is
+     * get unique id for one or all messages
+     *
+     * if storage does not support unique ids it's the same as the message number
+     *
+     * @param int|null $id message number
+     * @return array|string message number for given message or all messages as array
+     * @throws Zend_Mail_Storage_Exception
+     */
+    public function getUniqueId($id = null)
+    {
+        if (!$this->hasUniqueid) {
+            if ($id) {
+                return $id;
+            }
+            $range = range(1, $this->countMessages());
+            return array_combine($range, $range);
+        }
+
+        return $this->_protocol->uniqueid($id);
+    }
+
+    /**
+     * get a message number from a unique id
+     *
+     * I.e. if you have a webmailer that supports deleting messages you should use unique ids
+     * as parameter and use this method to translate it to message number right before calling removeMessage()
+     *
+     * @param string $id unique id
+     * @return int message number
+     * @throws Zend_Mail_Storage_Exception
+     */
+    public function getNumberByUniqueId($id)
+    {
+        if (!$this->hasUniqueid) {
+            return $id;
+        }
+
+        $ids = $this->getUniqueId();
+        foreach ($ids as $k => $v) {
+            if ($v == $id) {
+                return $k;
+            }
+        }
+
+        throw new Zend_Mail_Storage_Exception('unique id not found');
+    }
+
+    /**
+     * Special handling for hasTop and hasUniqueid. The headers of the first message is
      * retrieved if Top wasn't needed/tried yet.
      *
      * @see Zend_Mail_Storage_Abstract:__get()
@@ -217,6 +267,11 @@ class Zend_Mail_Storage_Pop3 extends Zend_Mail_Storage_Abstract
      */
     public function __get($var)
     {
+        $result = parent::__get($var);
+        if ($result !== null) {
+            return $result;
+        }
+
         if (strtolower($var) == 'hastop') {
             if ($this->_protocol->hasTop === null) {
                 // need to make a real call, because not all server are honest in their capas
@@ -226,9 +281,21 @@ class Zend_Mail_Storage_Pop3 extends Zend_Mail_Storage_Abstract
                     // ignoring error
                 }
             }
+            $this->_has['top'] = $this->_protocol->hasTop;
             return $this->_protocol->hasTop;
         }
 
-        return parent::__get($var);
+        if (strtolower($var) == 'hasuniqueid') {
+            $id = null;
+            try {
+                $id = $this->_protocol->uniqueid(1);
+            } catch(Zend_Mail_Exception $e) {
+                // ignoring error
+            }
+            $this->_has['uniqueid'] = $id ? true : false;
+            return $this->_has['uniqueid'];
+        }
+
+        return $result;
     }
 }

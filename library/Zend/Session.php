@@ -16,14 +16,14 @@
  * @package    Zend_Session
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Session.php 3272 2007-02-07 20:17:03Z gavin $
+ * @version    $Id: Session.php 3841 2007-03-09 16:09:30Z gavin $
  * @since      Preview Release 0.2
  */
 
 /**
  * Zend
  */
-require_once 'Zend.php';
+require_once 'Zend/Loader.php';
 
 /**
  * Zend_Session_Abstract
@@ -184,7 +184,7 @@ class Zend_Session extends Zend_Session_Abstract
         // set default options on first run only (before applying user settings)
         if (!self::$_defaultOptionsSet) {
             foreach (self::$_defaultOptions as $default_option_name => $default_option_value) {
-                if (isset(self::$_defaultOptions[$default_option_name]) && $default_option_value !== null) {
+                if (isset(self::$_defaultOptions[$default_option_name])) {
                     ini_set('session.' . $default_option_name, $default_option_value);
                 }
             }
@@ -628,7 +628,7 @@ class Zend_Session extends Zend_Session_Abstract
     static private function _processValidators()
     {
         foreach ($_SESSION['__ZF']['VALID'] as $validator_name => $valid_data) {
-            Zend::loadClass($validator_name);
+            Zend_Loader::loadClass($validator_name);
             $validator = new $validator_name;
             if ($validator->validate() === false) {
                 throw new Zend_Session_Exception("This session is not valid according to {$validator_name}.");
@@ -671,7 +671,7 @@ class Zend_Session extends Zend_Session_Abstract
      */
     static public function namespaceGet($namespace)
     {
-        return parent::_namespaceGet($namespace);
+        return parent::_namespaceGetAll($namespace);
     }
 
 

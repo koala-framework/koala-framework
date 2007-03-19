@@ -502,6 +502,8 @@ class Zend_Search_Lucene
 
         $query->execute($this);
 
+        $topScore = 0;
+
         foreach ($query->matchedDocs() as $id => $num) {
             $docScore = $query->score($id, $this);
             if( $docScore != 0 ) {
@@ -512,12 +514,26 @@ class Zend_Search_Lucene
                 $hits[]   = $hit;
                 $ids[]    = $id;
                 $scores[] = $docScore;
+
+                if ($docScore > $topScore) {
+                    $topScore = $docScore;
+                }
             }
         }
 
         if (count($hits) == 0) {
             // skip sorting, which may cause a error on empty index
         	return array();
+        }
+
+        if ($topScore > 1) {
+            $normalizedScores = array();
+
+            foreach ($scores as $score) {
+                $normalizedScores[] = $score/$topScore;
+            }
+
+            $scores = $normalizedScores;
         }
 
         if (func_num_args() == 1) {
@@ -566,7 +582,7 @@ class Zend_Search_Lucene
 
                     if ($count + 1 < count($argList)  &&  is_integer($argList[$count+1])) {
                         $count++;
-                        $sortArgs[] = $argList[$count+1];
+                        $sortArgs[] = $argList[$count];
                     } else {
                         if ($argList[$count] == SORT_ASC  || $argList[$count] == SORT_DESC) {
                             $sortArgs[] = SORT_REGULAR;
@@ -586,7 +602,7 @@ class Zend_Search_Lucene
             $sortArgs[] = SORT_NUMERIC;
 
             // Array to be sorted
-            $sortArgs[] = $hits;
+            $sortArgs[] = &$hits;
 
             // Do sort
             call_user_func_array('array_multisort', $sortArgs);
@@ -692,9 +708,9 @@ class Zend_Search_Lucene
             if ($segInfo->getTermInfo($term) instanceof Zend_Search_Lucene_Index_TermInfo) {
                 return true;
             }
-
-            return false;
         }
+
+        return false;
     }
 
     /**

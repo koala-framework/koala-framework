@@ -16,7 +16,7 @@
  * @package    Zend_Locale
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Math.php 2883 2007-01-18 05:56:31Z gavin $
+ * @version    $Id: Math.php 3953 2007-03-15 01:25:52Z gavin $
  */
 
 
@@ -35,21 +35,79 @@
 class Zend_Locale_Math
 {
     // support unit testing without using bcmath functions 
-    static protected $_bcmathDisabled = false;
+    public static $_bcmathDisabled = false;
 
-    static public $add   = 'bcadd';
-    static public $sub   = 'bcsub';
-    static public $pow   = 'bcpow';
-    static public $mul   = 'bcmul';
-    static public $div   = 'bcdiv';
-    static public $comp  = 'bccomp';
-    static public $sqrt  = 'bcsqrt';
-    static public $mod   = 'bcmod';
-    static public $scale = 'bcscale';
+    public static $add   = 'bcadd';
+    public static $sub   = 'bcsub';
+    public static $pow   = 'bcpow';
+    public static $mul   = 'bcmul';
+    public static $div   = 'bcdiv';
+    public static $comp  = 'bccomp';
+    public static $sqrt  = 'bcsqrt';
+    public static $mod   = 'bcmod';
+    public static $scale = 'bcscale';
 
-    static public function isBcmathDisabled()
+    public static function isBcmathDisabled()
     {
         return self::$_bcmathDisabled;
+    }
+
+    /**
+     * Surprisingly, the results of this implementation of round()
+     * prove better than the native PHP round(). For example, try:
+     *   round(639.795, 2);
+     *   round(267.835, 2);
+     *   round(0.302515, 5);
+     *   round(0.36665, 4);
+     * then try:
+     *   Zend_Locale_Math::round('639.795', 2);
+     */
+    public static function round($op1, $precision = 0)
+    {
+        if (self::$_bcmathDisabled) {
+            return round($op1, $precision);
+        }
+        $op1 = trim($op1);
+        $length = strlen($op1);
+        if (($decPos = strpos($op1, '.')) === false) {
+            $op1 .= '.0';
+            $decPos = $length;
+            $length += 2;
+        }
+        if ($precision < 0 && abs($precision) > $decPos) {
+            return '0';
+        }
+        $digitsBeforeDot = $length - ($decPos + 1);
+        if ($precision >= ($length - ($decPos + 1))) {
+            return $op1;
+        }
+        if ($precision === 0) {
+            $triggerPos = 1;
+            $roundPos   = -1;
+        } elseif ($precision > 0) {
+            $triggerPos = $precision + 1;
+            $roundPos   = $precision;
+        } else {
+            $triggerPos = $precision;
+            $roundPos   = $precision -1;
+        }
+        $triggerDigit = $op1[$triggerPos + $decPos];
+        if ($precision < 0) {
+            // zero fill digits to the left of the decimal place
+            $op1 = substr($op1, 0, $decPos + $precision) . str_pad('', abs($precision), '0');
+        }
+        if ($triggerDigit >= '5') {
+            if ($roundPos + $decPos == -1) {
+                return str_pad('1', $decPos + 1, '0');
+            }
+            $roundUp = str_pad('', $length, '0');
+            $roundUp[$decPos] = '.';
+            $roundUp[$roundPos + $decPos] = '1';
+            return bcadd($op1, $roundUp, $precision);
+        } elseif ($precision >= 0) {
+            return substr($op1, 0, $decPos + ($precision ? $precision + 1: 0));
+        }
+        return $op1;
     }
 }
 

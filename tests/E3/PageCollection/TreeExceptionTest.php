@@ -1,5 +1,5 @@
 <?php
-Zend::loadClass('E3_PageCollection_Exception');
+Zend_Loader::loadClass('E3_PageCollection_Exception');
 
 class E3_PageCollection_TreeExceptionTest extends E3_ExceptionTest
 {

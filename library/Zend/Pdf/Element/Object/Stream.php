@@ -25,17 +25,17 @@ require_once 'Zend/Pdf/Element/Object.php';
 /** Zend_Pdf_Element_Stream */
 require_once 'Zend/Pdf/Element/Stream.php';
 
-/** Zend_Pdf_Filter_ASCII85 */
-require_once 'Zend/Pdf/Filter/ASCII85.php';
+/** Zend_Pdf_Filter_Ascii85 */
+require_once 'Zend/Pdf/Filter/Ascii85.php';
 
-/** Zend_Pdf_Filter_ASCIIHEX */
-require_once 'Zend/Pdf/Filter/ASCIIHEX.php';
+/** Zend_Pdf_Filter_AsciiHex */
+require_once 'Zend/Pdf/Filter/AsciiHex.php';
 
 /** Zend_Pdf_Filter_Compression_Flate */
 require_once 'Zend/Pdf/Filter/Compression/Flate.php';
 
-/** Zend_Pdf_Filter_Compression_LZW */
-require_once 'Zend/Pdf/Filter/Compression/LZW.php';
+/** Zend_Pdf_Filter_Compression_Lzw */
+require_once 'Zend/Pdf/Filter/Compression/Lzw.php';
 
 
 /**
@@ -196,11 +196,11 @@ class Zend_Pdf_Element_Object_Stream extends Zend_Pdf_Element_Object
         foreach ($this->_originalDictionary['Filter'] as $id => $filterName ) {
             switch ($filterName) {
                 case 'ASCIIHexDecode':
-                    $this->_value->value = Zend_Pdf_Filter_ASCIIHEX::decode($this->_value->value);
+                    $this->_value->value = Zend_Pdf_Filter_AsciiHex::decode($this->_value->value);
                     break;
 
                 case 'ASCII85Decode':
-                    $this->_value->value = Zend_Pdf_Filter_ASCII85::decode($this->_value->value);
+                    $this->_value->value = Zend_Pdf_Filter_Ascii85::decode($this->_value->value);
                     break;
 
                 case 'FlateDecode':
@@ -209,7 +209,7 @@ class Zend_Pdf_Element_Object_Stream extends Zend_Pdf_Element_Object
                     break;
 
                 case 'LZWDecode':
-                    $this->_value->value = Zend_Pdf_Filter_Compression_LZW::decode($this->_value->value,
+                    $this->_value->value = Zend_Pdf_Filter_Compression_Lzw::decode($this->_value->value,
                                                                                    $this->_originalDictionary['DecodeParms'][$id]);
                     break;
 
@@ -242,11 +242,11 @@ class Zend_Pdf_Element_Object_Stream extends Zend_Pdf_Element_Object
         foreach ($filters as $id => $filterName ) {
             switch ($filterName) {
                 case 'ASCIIHexDecode':
-                    $this->_value->value = Zend_Pdf_Filter_ASCIIHEX::encode($this->_value->value);
+                    $this->_value->value = Zend_Pdf_Filter_AsciiHex::encode($this->_value->value);
                     break;
 
                 case 'ASCII85Decode':
-                    $this->_value->value = Zend_Pdf_Filter_ASCII85::encode($this->_value->value);
+                    $this->_value->value = Zend_Pdf_Filter_Ascii85::encode($this->_value->value);
                     break;
 
                 case 'FlateDecode':
@@ -255,7 +255,7 @@ class Zend_Pdf_Element_Object_Stream extends Zend_Pdf_Element_Object
                     break;
 
                 case 'LZWDecode':
-                    $this->_value->value = Zend_Pdf_Filter_Compression_LZW::encode($this->_value->value,
+                    $this->_value->value = Zend_Pdf_Filter_Compression_Lzw::encode($this->_value->value,
                                                                                    $this->_originalDictionary['DecodeParms'][$id]);
                     break;
 

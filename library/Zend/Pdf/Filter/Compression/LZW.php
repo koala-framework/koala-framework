@@ -29,7 +29,7 @@ require_once 'Zend/Pdf/Filter/Compression.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Pdf_Filter_Compression_LZW extends Zend_Pdf_Filter_Compression
+class Zend_Pdf_Filter_Compression_Lzw extends Zend_Pdf_Filter_Compression
 {
     /**
      * Get EarlyChange decode param value

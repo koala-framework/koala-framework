@@ -26,7 +26,7 @@ require_once 'Zend/Uri.php';
 /**
  * Zend_Filter
  */
-require_once 'Zend/Filter.php';
+require_once 'Zend/Validate/Hostname.php';
 
 /**
  * @category   Zend
@@ -326,16 +326,19 @@ class Zend_Uri_Http extends Zend_Uri
         if ($host === null) {
             $host = $this->_host;
         }
+        
         /**
          * If the host is empty, then it is considered invalid
          */
         if (strlen($host) == 0) {
             return false;
         }
+        
         /**
          * Check the host against the allowed values; delegated to Zend_Filter.
          */
-        return Zend_Filter::isHostname($host) !== FALSE;
+        $validate = new Zend_Validate_Hostname(Zend_Validate_Hostname::ALLOW_ALL);
+        return $validate->isValid($host);
     }
 
     /**
@@ -505,36 +508,6 @@ class Zend_Uri_Http extends Zend_Uri
     }
 
     /**
-     * Sets given associative array to query string for the current URI and
-     * returns the old query string
-     *
-     * Note: This method is deprecated. Please use setQuery() instead.
-     * 
-     * @param array $query
-     * @return string
-     * @deprecated Since 0.1.5
-     */
-    public function setQueryArray($query = array())
-    {
-    	return $this->setQuery($query);
-    }
-
-    /**
-     * Sets the query string for the current URI, and returns the old query 
-     * string
-     *
-     * Note: This method is deprecated. Please use setQuery() instead.
-     * 
-     * @param string $query
-     * @return string
-     * @deprecated Since 0.1.5
-     */
-    public function setQueryString($query)
-    {
-		return $this->setQuery($query);
-    }
-    
-    /**
      * Set the query string for the current URI, and return the old query 
      * string This method accepts both strings and arrays.
      *
@@ -646,3 +619,4 @@ class Zend_Uri_Http extends Zend_Uri
         return $oldFragment;
     }
 }
+

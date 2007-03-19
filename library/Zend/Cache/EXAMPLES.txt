@@ -7,7 +7,7 @@
 require_once 'Zend/Cache.php';
 
 $frontendOptions = array(
-    'lifeTime' => 7200 // cache lifetime of 2 hours
+    'lifetime' => 7200 // cache lifetime of 2 hours
 );
 
 $backendOptions = array(
@@ -170,7 +170,7 @@ if (!($data = $cache->load($id2))) {
     }
     
     $cache->save($data, null, array(), 3600);
-    // => this cache will have a specific lifeTime of 3600 seconds
+    // => this cache will have a specific lifetime of 3600 seconds
     
 } 
 echo($data);
@@ -187,7 +187,7 @@ echo($data);
 require_once 'Zend/Cache.php';
 
 $frontendOptions = array(
-    'lifeTime' => 7200 // cache lifetime of 2 hours
+    'lifetime' => 7200 // cache lifetime of 2 hours
 );
 
 $backendOptions = array(
@@ -222,7 +222,7 @@ if (!($cache->start($id))) {
 require_once 'Zend/Cache.php';
 
 $frontendOptions = array(
-    'lifeTime' => 7200 // cache lifetime of 2 hours
+    'lifetime' => 7200 // cache lifetime of 2 hours
 );
 
 $backendOptions = array(
@@ -271,7 +271,7 @@ class test {
 require_once 'Zend/Cache.php';
 
 $frontendOptions = array(
-    'lifeTime' => 7200 // cache lifetime of 2 hours,
+    'lifetime' => 7200 // cache lifetime of 2 hours,
     'cachedEntity' => 'test'
 );
 
@@ -319,7 +319,7 @@ class test {
 require_once 'Zend/Cache.php';
 
 $frontendOptions = array(
-    'lifeTime' => 7200 // cache lifetime of 2 hours,
+    'lifetime' => 7200 // cache lifetime of 2 hours,
     'cachedEntity' => new test()
 );
 
@@ -358,7 +358,7 @@ echo($res3);
 require_once 'Zend/Cache.php';
 
 $frontendOptions = array(
-    'lifeTime' => null // no lifetime,
+    'lifetime' => null // no lifetime,
     'masterFile' => '/path/to/your/master.file' // your master file here
 );
 

@@ -47,17 +47,17 @@ class Zend_Pdf_ImageFactory
             case 'tif':
                 //Fall through to next case;
             case 'tiff':
-                return new Zend_Pdf_Image_TIFF($filename);
+                return new Zend_Pdf_Image_Tiff($filename);
                 break;
             case 'png':
-                return new Zend_Pdf_Image_PNG($filename);
+                return new Zend_Pdf_Image_Png($filename);
                 break;
             case 'jpg':
                 //Fall through to next case;
             case 'jpe':
                 //Fall through to next case;
             case 'jpeg':
-                return new Zend_Pdf_Image_JPEG($filename);
+                return new Zend_Pdf_Image_Jpeg($filename);
                 break;
             default:
                 throw new Zend_Pdf_Exception("Cannot create image resource. File extension not known or unsupported type.");

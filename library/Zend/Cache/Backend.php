@@ -37,7 +37,7 @@ class Zend_Cache_Backend
     /**
      * Frontend or Core directives
      * 
-     * =====> (int) lifeTime :
+     * =====> (int) lifetime :
      * - Cache lifetime (in seconds)
      * - If null, the cache is valid forever
      * 
@@ -47,7 +47,7 @@ class Zend_Cache_Backend
      * @var array directives
      */
     protected $_directives = array(
-        'lifeTime' => 3600,
+        'lifetime' => 3600,
         'logging' => false
     );  
     
@@ -117,17 +117,17 @@ class Zend_Cache_Backend
     /**
      * Get the life time
      * 
-     * if $specificLifeTime is not false, the given specific life time is used
-     * else, the global lifeTime is used
+     * if $specificLifetime is not false, the given specific life time is used
+     * else, the global lifetime is used
      * 
      * @return int cache life time
      */
-    public function getLifeTime($specificLifeTime)
+    public function getLifetime($specificLifetime)
     {
-        if ($specificLifeTime === false) {
-            return $this->_directives['lifeTime'];
+        if ($specificLifetime === false) {
+            return $this->_directives['lifetime'];
         }
-        return $specificLifeTime;
+        return $specificLifetime;
     }
     
     /**

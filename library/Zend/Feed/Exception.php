@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -16,11 +17,12 @@
  * @package    Zend_Feed
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Exception.php 3941 2007-03-14 21:36:13Z darby $
  */
 
 
 /**
- * Zend_Exception
+ * @see Zend_Exception
  */
 require_once 'Zend/Exception.php';
 

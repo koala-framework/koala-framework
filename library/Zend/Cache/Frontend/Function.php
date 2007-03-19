@@ -84,10 +84,10 @@ class Zend_Cache_Frontend_Function extends Zend_Cache_Core
      * @param string $name function name
      * @param array $parameters function parameters
      * @param array $tags cache tags
-     * @param int $specificLifeTime if != false, set a specific lifetime for this cache record (null => infinite lifeTime)    
+     * @param int $specificLifetime if != false, set a specific lifetime for this cache record (null => infinite lifetime)    
      * @return mixed result
      */
-    public function call($name, $parameters = array(), $tags = array(), $specificLifeTime = false) 
+    public function call($name, $parameters = array(), $tags = array(), $specificLifetime = false) 
     {
         $cacheBool1 = $this->_specificOptions['cacheByDefault'];
         $cacheBool2 = in_array($name, $this->_specificOptions['cachedFunctions']);
@@ -111,7 +111,7 @@ class Zend_Cache_Frontend_Function extends Zend_Cache_Core
             $output = ob_get_contents();
             ob_end_clean();
             $data = array($output, $return);
-            $this->save($data, $id, $tags, $specificLifeTime);
+            $this->save($data, $id, $tags, $specificLifetime);
         }
         echo $output;
         return $return;

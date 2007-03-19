@@ -200,9 +200,6 @@ class Zend_XmlRpc_Fault
             throw new Zend_XmlRpc_Exception('Invalid XML provided to fault');
         }
 
-        // cast to default encoding
-        $fault = iconv('', $this->getEncoding(), $fault);
-
         try {
             $xml = @new SimpleXMLElement($fault);
         } catch (Exception $e) {

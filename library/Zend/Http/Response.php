@@ -16,12 +16,10 @@
  * @category   Zend
  * @package    Zend_Http
  * @subpackage Response
- * @version    $Id: Response.php 2805 2007-01-16 01:38:10Z bkarwin $
+ * @version    $Id: Response.php 3834 2007-03-09 05:12:52Z bkarwin $
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
-require_once 'Zend.php';
 
 /**
  * Zend_Http_Response represents an HTTP 1.0 / 1.1 response message. It 

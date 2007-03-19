@@ -15,7 +15,7 @@
  * @package    Zend_Controller
  * @subpackage Router
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Route.php 3447 2007-02-15 17:57:41Z martel $
+ * @version    $Id: Route.php 3837 2007-03-09 11:28:26Z martel $
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
@@ -49,6 +49,16 @@ class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Inter
     protected $_vars = array();
     protected $_params = array();
     protected $_values = array();
+    
+    /**
+     * Instantiates route based on passed Zend_Config structure
+     */
+    public static function getInstance(Zend_Config $config) 
+    {
+        $reqs = ($config->reqs instanceof Zend_Config) ? $config->reqs->asArray() : array();
+        $defs = ($config->defaults instanceof Zend_Config) ? $config->defaults->asArray() : array();
+        return new self($config->route, $defs, $reqs);
+    }
 
     /**
      * Prepares the route for mapping by splitting (exploding) it 
@@ -194,14 +204,19 @@ class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Inter
         
         foreach ($this->_parts as $key => $part) {
             
+            $resetPart = false;
+            if (isset($part['name']) && array_key_exists($part['name'], $data) && $data[$part['name']] === null) {
+                $resetPart = true;
+            }
+            
             if (isset($part['name'])) {
 
-                if (isset($data[$part['name']])) {
+                if (isset($data[$part['name']]) && !$resetPart) {
                     $url[$key] = $data[$part['name']];
                     unset($data[$part['name']]);
-                } elseif (isset($this->_values[$part['name']])) {
+                } elseif (!$reset && !$resetPart && isset($this->_values[$part['name']])) {
                     $url[$key] = $this->_values[$part['name']];
-                } elseif (!$reset && isset($this->_params[$part['name']])) {
+                } elseif (!$reset && !$resetPart && isset($this->_params[$part['name']])) {
                     $url[$key] = $this->_params[$part['name']];
                 } elseif (isset($this->_defaults[$part['name']])) {
                     $url[$key] = $this->_defaults[$part['name']];
@@ -212,9 +227,12 @@ class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Inter
                 
                 if ($part['regex'] != '\*') {
                     $url[$key] = $part['regex'];
-                } else {
-                    foreach ($data as $var => $value) {
-                        $url[$var] = $var . self::URI_DELIMITER . $value;
+                } elseif (!$reset) {
+                    $wildcards = $data + $this->_params;
+                    foreach ($wildcards as $var => $value) {
+                        if ($value !== null) {
+                            $url[$var] = $var . self::URI_DELIMITER . $value;
+                        }
                     } 
                 }
 

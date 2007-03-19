@@ -170,6 +170,17 @@ class Zend_Mail_Storage_Folder implements RecursiveIterator
     }
 
     /**
+     * remove subfolder named $name
+     *
+     * @param string $name local name of subfolder
+     * @return null
+     */
+    public function __unset($name)
+    {
+        unset($this->_folders[$name]);
+    }
+
+    /**
      * magic method for easy output of global name
      *
      * @return string global name of folder

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -16,6 +17,7 @@
  * @package    Zend_Feed
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Element.php 3941 2007-03-14 21:36:13Z darby $
  */
 
 
@@ -49,7 +51,8 @@ class Zend_Feed_Element implements ArrayAccess
     /**
      * Zend_Feed_Element constructor.
      *
-     * @param DOMElement $element The DOM element we're encapsulating.
+     * @param  DOMElement $element The DOM element we're encapsulating.
+     * @return void
      */
     public function __construct($element = null)
     {
@@ -78,19 +81,20 @@ class Zend_Feed_Element implements ArrayAccess
      * to getDOM() or may be custom created, and use it as the
      * DOM tree for this Zend_Feed_Element.
      *
-     * @param DOMElement $element
+     * @param  DOMElement $element
+     * @return void
      */
     public function setDOM(DOMElement $element)
     {
         $this->_element = $this->_element->ownerDocument->importNode($element, true);
     }
 
-
     /**
      * Set the parent element of this object to another
      * Zend_Feed_Element.
      *
-     * @internal
+     * @param  Zend_Feed_Element $element
+     * @return void
      */
     public function setParent(Zend_Feed_Element $element)
     {
@@ -102,7 +106,7 @@ class Zend_Feed_Element implements ArrayAccess
     /**
      * Appends this element to its parent if necessary.
      *
-     * @internal
+     * @return void
      */
     protected function ensureAppended()
     {
@@ -152,7 +156,7 @@ class Zend_Feed_Element implements ArrayAccess
      * child element accessed. To get string values, use method syntax
      * with the __call() overriding.
      *
-     * @param string $var The property to access.
+     * @param  string $var The property to access.
      * @return mixed
      */
     public function __get($var)
@@ -187,8 +191,9 @@ class Zend_Feed_Element implements ArrayAccess
     /**
      * Map variable sets onto the underlying entry representation.
      *
-     * @param string $var The property to change.
-     * @param string $val The property's new value.
+     * @param  string $var The property to change.
+     * @param  string $val The property's new value.
+     * @return void
      */
     public function __set($var, $val)
     {
@@ -215,7 +220,8 @@ class Zend_Feed_Element implements ArrayAccess
     /**
      * Map isset calls onto the underlying entry representation.
      *
-     * Only supported by PHP 5.1 and later.
+     * @param  string $var
+     * @return boolean
      */
     public function __isset($var)
     {
@@ -246,8 +252,8 @@ class Zend_Feed_Element implements ArrayAccess
      * element. If there are multiple elements that match, this will
      * return an array of those objects.
      *
-     * @param string $var The element to get the string value of.
-     *
+     * @param  string $var    The element to get the string value of.
+     * @param  mixed  $unused This parameter is not used.
      * @return mixed The node's value, null, or an array of nodes.
      */
     public function __call($var, $unused)
@@ -267,7 +273,8 @@ class Zend_Feed_Element implements ArrayAccess
     /**
      * Remove all children matching $var.
      *
-     * Only supported by PHP 5.1 and later.
+     * @param  string $var
+     * @return void
      */
     public function __unset($var)
     {
@@ -283,7 +290,7 @@ class Zend_Feed_Element implements ArrayAccess
      * Returns the nodeValue of this element when this object is used
      * in a string context.
      *
-     * @internal
+     * @return string
      */
     public function __toString()
     {
@@ -296,7 +303,7 @@ class Zend_Feed_Element implements ArrayAccess
      *
      * Similar to SimpleXML's children() method.
      *
-     * @param string Tagname to match, can be either namespace:tagName or just tagName.
+     * @param  string $var Tagname to match, can be either namespace:tagName or just tagName.
      * @return array
      */
     protected function _children($var)
@@ -326,7 +333,8 @@ class Zend_Feed_Element implements ArrayAccess
     /**
      * Required by the ArrayAccess interface.
      *
-     * @internal
+     * @param  string $offset
+     * @return boolean
      */
     public function offsetExists($offset)
     {
@@ -342,7 +350,8 @@ class Zend_Feed_Element implements ArrayAccess
     /**
      * Required by the ArrayAccess interface.
      *
-     * @internal
+     * @param  string $offset
+     * @return string
      */
     public function offsetGet($offset)
     {
@@ -358,7 +367,9 @@ class Zend_Feed_Element implements ArrayAccess
     /**
      * Required by the ArrayAccess interface.
      *
-     * @internal
+     * @param  string $offset
+     * @param  string $value
+     * @return string
      */
     public function offsetSet($offset, $value)
     {
@@ -376,7 +387,8 @@ class Zend_Feed_Element implements ArrayAccess
     /**
      * Required by the ArrayAccess interface.
      *
-     * @internal
+     * @param  string $offset
+     * @return boolean
      */
     public function offsetUnset($offset)
     {

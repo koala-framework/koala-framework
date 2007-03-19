@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -16,10 +17,13 @@
  * @package    Zend_Feed
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: EntryAtom.php 3941 2007-03-14 21:36:13Z darby $
  */
 
 
-/** Zend_Feed_EntryAbstract */
+/**
+ * @see Zend_Feed_EntryAbstract
+ */
 require_once 'Zend/Feed/EntryAbstract.php';
 
 
@@ -59,8 +63,8 @@ class Zend_Feed_EntryAtom extends Zend_Feed_EntryAbstract
      * Usually the response would be 204 No Content, but the Atom
      * Publishing Protocol permits it to be 200 OK.
      *
-     * @throws Zend_Feed_Exception If an error occurs, an Zend_Feed_Exception will
-     * be thrown.
+     * @throws Zend_Feed_Exception
+     * @return void
      */
     public function delete()
     {
@@ -113,11 +117,9 @@ class Zend_Feed_EntryAtom extends Zend_Feed_EntryAbstract
      * the server has generated: an id, an updated time, and its new
      * link rel="edit".
      *
-     * @param string $postUri Location to POST for creating new
-     * entries.
-     *
-     * @throws Zend_Feed_Exception If an error occurs, a Zend_Feed_Exception will
-     * be thrown.
+     * @param  string $postUri Location to POST for creating new entries.
+     * @throws Zend_Feed_Exception
+     * @return void
      */
     public function save($postUri = null)
     {
@@ -195,7 +197,7 @@ class Zend_Feed_EntryAtom extends Zend_Feed_EntryAbstract
      * $elt->link(): returns the value of the link tag.
      * $elt->link('self'): returns the href from the first <link rel="self"> in the entry.
      *
-     * @param string $rel The "rel" attribute to look for.
+     * @param  string $rel The "rel" attribute to look for.
      * @return mixed
      */
     public function link($rel = null)

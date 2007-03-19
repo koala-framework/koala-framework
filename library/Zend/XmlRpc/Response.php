@@ -37,7 +37,7 @@ require_once 'Zend/XmlRpc/Fault.php';
  * @package  Zend_XmlRpc
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version $Id: Response.php 2810 2007-01-16 01:40:21Z bkarwin $
+ * @version $Id: Response.php 3832 2007-03-09 04:18:32Z matthew $
  */
 class Zend_XmlRpc_Response
 {
@@ -174,9 +174,6 @@ class Zend_XmlRpc_Response
             $this->_fault->setEncoding($this->getEncoding());
             return false;
         }
-
-        // cast to default encoding
-        $response = iconv('', $this->getEncoding(), $response);
 
         try {
             $xml = @new SimpleXMLElement($response);

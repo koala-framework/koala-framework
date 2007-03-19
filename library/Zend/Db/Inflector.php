@@ -31,6 +31,8 @@
  * @subpackage Inflector
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ *
+ * @deprecated Since Zend Framework 0.9.0
  */
 class Zend_Db_Inflector
 {

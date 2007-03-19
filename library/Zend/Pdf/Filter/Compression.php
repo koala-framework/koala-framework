@@ -188,11 +188,11 @@ abstract class Zend_Pdf_Filter_Compression implements Zend_Pdf_Filter
             $bitsPerSample  = $bitsPerComponent*$colors;
             $bytesPerSample = ceil($bitsPerSample/8);
             $bytesPerRow    = ceil($bitsPerSample*$columns/8);
-            $rows           = ceil(strlen($data)/($bytesPerRow + 1));
+            $rows           = strlen($data)/$bytesPerRow;
             $output         = '';
             $offset         = 0;
 
-            if (strlen($data) != $rows*$bytesPerRow) {
+            if (!is_integer($rows)) {
                 throw new Zend_Pdf_Exception('Wrong data length.');
             }
 

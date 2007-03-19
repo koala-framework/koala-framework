@@ -38,18 +38,36 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
 
     /**
      * The mysqli_stmt object.
+     *
+     * @var mysqli_stmt
      */
     protected $_stmt;
 
     /**
      * Column names.
+     *
+     * @var array
      */
     protected $_keys;
 
     /**
      * Fetched result values.
+     *
+     * @var array
      */
     protected $_values;
+
+    /**
+     * Returns the number of rows that were affected by the execution of an SQL statement.
+     *
+     * @return int Number of rows affected.
+     * @throws Zend_Db_Adapter_Exception
+     */
+    public function rowCount()
+    {
+        $mysqli = $this->_connection->getConnection();
+        return $mysqli->affected_rows;
+    }
 
     /**
      * Closes the cursor, allowing the statement to be executed again.
@@ -63,18 +81,22 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
 
     /**
      * Returns the number of columns in the result set.
+     * Returns null if the statement has no result set metadata.
      *
-     * @return field count.
+     * @return int|null field count.
      */
     public function columnCount()
     {
-        return $this->_meta->field_count;
+        if ($this->_meta) {
+            return $this->_meta->field_count;
+        }
+        return null;
     }
 
     /**
      * Retrieves an error code, if any, from the statement.
      *
-     * @return error code.
+     * @return string error code.
      */
     public function errorCode()
     {
@@ -98,45 +120,63 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
     /**
      * Executes a prepared statement.
      *
-     * @param $params
+     * @param array $params OPTIONAL values to supply as input to statement parameters
      * @return void
      */
-    public function execute($params = null)
+    public function execute($params = array())
     {
         // prepare for mysqli
         $sql = $this->_joinSql();
-        $mysqli = $this->_db->getMysqli();
-        $this->_stmt = $mysqli->prepare($sql);
+        $mysqli = $this->_connection->getConnection();
 
-        if (! $this->_stmt) {
-            throw new Zend_Db_Statement_Exception($mysqli->error);
+        $this->_stmt = $mysqli->prepare($sql);
+        if ($this->_stmt === false || $mysqli->errno) {
+            require_once 'Zend/Db/Statement/Mysqli/Exception.php';
+            throw new Zend_Db_Statement_Mysqli_Exception("Mysqli prepare error: " . $mysqli->error);
         }
 
         // retain metadata
         $this->_meta = $this->_stmt->result_metadata();
-
-        // get the column names that will result
-        $this->_keys = array();
-        foreach ($this->_meta->fetch_fields() as $col) {
-            $this->_keys[] = $col->name;
+        if ($this->_stmt->errno) {
+            require_once 'Zend/Db/Statement/Mysqli/Exception.php';
+            throw new Zend_Db_Statement_Mysqli_Exception("Mysqli statement metadata error for SQL = \"$sql\": " . $this->_stmt->error);
         }
 
-        // set up a binding space for result variables
-        $this->_values = array_fill(0, count($this->_keys), null);
+        // statements that have no result set do not return metadata
+        if ($this->_meta !== false) {
 
-        // set up references to the result binding space.
-        // just passing $this->_values in the call_user_func_array()
-        // below won't work, you need references.
-        $refs = array();
-        foreach ($this->_values as $i => &$f) {
-            $refs[$i] = &$f;
+            // get the column names that will result
+            $this->_keys = array();
+            foreach ($this->_meta->fetch_fields() as $col) {
+                $this->_keys[] = $col->name;
+            }
+
+            // set up a binding space for result variables
+            $this->_values = array_fill(0, count($this->_keys), null);
+
+            // set up references to the result binding space.
+            // just passing $this->_values in the call_user_func_array()
+            // below won't work, you need references.
+            $refs = array();
+            foreach ($this->_values as $i => &$f) {
+                $refs[$i] = &$f;
+            }
+
+            // bind to the result variables
+            call_user_func_array(
+                array($this->_stmt, 'bind_result'),
+                $this->_values
+            );
         }
 
-        // bind to the result variables
-        call_user_func_array(
-            array($this->_stmt, 'bind_result'),
-            $this->_values
-        );
+        // send $params as input parameters to the statement
+        if ($params) {
+            array_unshift($params, str_repeat('s', count($params)));
+            call_user_func_array(
+                array($this->_stmt, 'bind_param'),
+                $params
+            );
+        }
 
         // execute the statement
         $this->_stmt->execute();
@@ -150,14 +190,19 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
      * @param $cursor
      * @param $offset
      * @return $data
-     * @throws Zend_Db_Statement_Exception
+     * @throws Zend_Db_Statement_Mysqli_Exception
      */
     public function fetch($style = null, $cursor = null, $offset = null)
     {
         // fetch the next result
-        $ok = $this->_stmt->fetch();
-        if (! $ok) {
-            return false;
+        $retval = $this->_stmt->fetch();
+        switch ($retval) {
+        case null: // end of data
+        case false: // error occurred
+            $this->closeCursor();
+            return $retval;
+        default:
+            // fallthrough
         }
 
         // make sure we have a fetch mode
@@ -185,7 +230,6 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
             }
         }
 
-        // return based on fetch mode
         $data = false;
         switch ($style) {
             case Zend_Db::FETCH_NUM:
@@ -202,21 +246,13 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
                 $data = (object) array_combine($this->_keys, $values);
                 break;
             default:
-                throw new Zend_Db_Statement_Exception("invalid fetch mode specified");
+                require_once 'Zend/Db/Statement/Mysqli/Exception.php';
+                throw new Zend_Db_Statement_Mysqli_Exception("Invalid fetch mode specified");
                 break;
         }
 
-        // done
         return $data;
     }
 
 
-    /**
-     * Returns the number of rows that were affected by the execution of an SQL statement.
-     * @return num_rows
-     */
-    public function rowCount()
-    {
-        return $this->_meta->num_rows;
-    }
 }

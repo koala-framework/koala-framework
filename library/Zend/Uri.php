@@ -19,11 +19,6 @@
  */
 
 /**
- * Zend Framework utility class
- */
-require_once 'Zend.php';
-
-/**
  * Zend_Uri_Exception
  */
 require_once 'Zend/Uri/Exception.php';

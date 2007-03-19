@@ -8,9 +8,10 @@ $include_path .= PATH_SEPARATOR . '../application/models';
 set_include_path($include_path);
  
 require_once 'Zend.php';
+require_once 'Zend/Loader.php';
 function __autoload($class)
 {
-    Zend::loadClass($class);
+    Zend_Loader::loadClass($class);
 }
 
 $frontController = Zend_Controller_Front::getInstance();
@@ -25,6 +26,7 @@ if ($response->isException()) {
     $response->outputBody();
     foreach ($response->getException() as $exception) {
     	throw($exception);
+    	//p($exception);
     }
 } else {
 	$response->sendHeaders();

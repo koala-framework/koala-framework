@@ -86,11 +86,11 @@ class Zend_Cache_Backend_ZendPlatform extends Zend_Cache_Backend implements Zend
     {
         // doNotTestCacheValidity implemented by giving zero lifetime to the cache
         if ($doNotTestCacheValidity) {
-            $lifeTime = 0;
+            $lifetime = 0;
         } else {
-            $lifeTime = $this->_directives['lifeTime'];
+            $lifetime = $this->_directives['lifetime'];
         }
-        $res = output_cache_get($id, $lifeTime);
+        $res = output_cache_get($id, $lifetime);
         if($res) {
             return $res[0];
         } else {
@@ -107,7 +107,7 @@ class Zend_Cache_Backend_ZendPlatform extends Zend_Cache_Backend implements Zend
      */
     public function test($id)
     {
-        $result = output_cache_get($id, $this->_directives['lifeTime']);
+        $result = output_cache_get($id, $this->_directives['lifetime']);
         if ($result) {
             return $result[1];
         }
@@ -123,21 +123,21 @@ class Zend_Cache_Backend_ZendPlatform extends Zend_Cache_Backend implements Zend
      * @param string $data data to cache
      * @param string $id cache id
      * @param array $tags array of strings, the cache record will be tagged by each string entry
-     * @param int $specificLifeTime if != false, set a specific lifetime for this cache record (null => infinite lifeTime)
+     * @param int $specificLifetime if != false, set a specific lifetime for this cache record (null => infinite lifetime)
      * @return boolean true if no problem
      */
-    public function save($data, $id, $tags = array(), $specificLifeTime = false)
+    public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
-        if (!($specificLifeTime === false)) {
+        if (!($specificLifetime === false)) {
             if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_ZendPlatform::save() : non false specifc lifeTime is unsuported for this backend", Zend_Log::LEVEL_WARNING);
+                Zend_Log::log("Zend_Cache_Backend_ZendPlatform::save() : non false specifc lifetime is unsuported for this backend", Zend_Log::LEVEL_WARNING);
             }
         }
-        $lifeTime = $this->_directives['lifeTime'];
+        $lifetime = $this->_directives['lifetime'];
         $result1 = output_cache_put($id, array($data, time()));
         foreach($tags as $tag) {
             $tagid = self::TAGS_PREFIX.$tag;
-            $old_tags = output_cache_get($tagid, $lifeTime);
+            $old_tags = output_cache_get($tagid, $lifetime);
             if ($old_tags === false) {
                 $old_tags = array();
             }
@@ -183,7 +183,7 @@ class Zend_Cache_Backend_ZendPlatform extends Zend_Cache_Backend implements Zend
         if ($mode==Zend_Cache::CLEANING_MODE_MATCHING_TAG) {
             $idlist = null;
             foreach ($tags as $tag) {
-                $next_idlist = output_cache_get(self::TAGS_PREFIX.$tag, $this->_directives['lifeTime']);
+                $next_idlist = output_cache_get(self::TAGS_PREFIX.$tag, $this->_directives['lifetime']);
                 if ($idlist) {
                     $idlist = array_intersect_assoc($idlist, $next_idlist);
                 } else {
@@ -248,9 +248,9 @@ class Zend_Cache_Backend_ZendPlatform extends Zend_Cache_Backend implements Zend
                 if ($mode == Zend_Cache::CLEANING_MODE_ALL) {
                     $result = ($this->_remove($file)) && ($result);
                 } else if ($mode == Zend_Cache::CLEANING_MODE_OLD) {
-                    // Files older than lifeTime get deleted from cache
-                    if (!is_null($this->_directives['lifeTime'])) {
-                        if ((time() - @filemtime($file)) > $this->_directives['lifeTime']) {
+                    // Files older than lifetime get deleted from cache
+                    if (!is_null($this->_directives['lifetime'])) {
+                        if ((time() - @filemtime($file)) > $this->_directives['lifetime']) {
                             $result = ($this->_remove($file)) && ($result);
                         }
                     }
@@ -278,13 +278,13 @@ class Zend_Cache_Backend_ZendPlatform extends Zend_Cache_Backend implements Zend
             if ($this->_directives['logging']) {
                 Zend_Log::log("Zend_Cache_Backend_ZendPlatform::_remove() : we can't remove $file => we are going to try to invalidate it", Zend_Log::LEVEL_WARNING);
             }
-            if (is_null($this->_directives['lifeTime'])) {
+            if (is_null($this->_directives['lifetime'])) {
                 return false;
             }
             if (!file_exists($file)) {
                 return false;
             }
-            return @touch($file, time() - 2*abs($this->_directives['lifeTime']));
+            return @touch($file, time() - 2*abs($this->_directives['lifetime']));
         }
         return true;
     }

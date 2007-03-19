@@ -44,11 +44,14 @@ class Zend_Mail_Transport_Sendmail extends Zend_Mail_Transport_Abstract
      */
     public $subject = null;
 
+
     /**
-     * EOL for headers and MIME parts
-     * @var string 
-     * @access public
+     * Config options for sendmail parameters
+     *
+     * @var string
      */
+    public $parameters;
+    
 
     /**
      * EOL character string
@@ -56,6 +59,19 @@ class Zend_Mail_Transport_Sendmail extends Zend_Mail_Transport_Abstract
      * @access public
      */
     public $EOL = PHP_EOL;
+
+
+    /**
+     * Constructor.
+     *
+     * @param  string $parameters OPTIONAL (Default: null)
+     * @return void
+     */
+    public function __construct($parameters = null)
+    {
+        $this->parameters = $parameters;
+    }
+
 
     /**
      * Send mail using PHP native mail()
@@ -70,11 +86,13 @@ class Zend_Mail_Transport_Sendmail extends Zend_Mail_Transport_Abstract
                 $this->recipients, 
                 $this->_mail->getSubject(), 
                 $this->body, 
-                $this->header)) 
+                $this->header,
+                $this->parameters)) 
         {
             throw new Zend_Mail_Transport_Exception('Unable to send mail');
         }
     }
+
 
     /**
      * Format and fix headers
@@ -110,6 +128,9 @@ class Zend_Mail_Transport_Sendmail extends Zend_Mail_Transport_Abstract
             $this->recipients = implode(',', $headers['To']);
         }
 
+        // Remove recipient header
+        unset($headers['To']);
+
         // Remove subject header, if present
         if (isset($headers['Subject'])) {
             unset($headers['Subject']);
@@ -118,5 +139,6 @@ class Zend_Mail_Transport_Sendmail extends Zend_Mail_Transport_Abstract
         // Prepare headers
         parent::_prepareHeaders($headers);
     }
+
 }
 

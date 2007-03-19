@@ -16,7 +16,7 @@
  * @package    Zend_Session
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Abstract.php 3272 2007-02-07 20:17:03Z gavin $
+ * @version    $Id: Abstract.php 3702 2007-03-02 23:31:09Z gavin $
  * @since      Preview Release 0.2
  */
 
@@ -123,7 +123,7 @@ abstract class Zend_Session_Abstract
 
 
     /**
-     * namespaceGet() - get a variable from a namespace.
+     * namespaceGet() - Get $name variable from $namespace, returning by reference.
      *
      * @param string $namespace
      * @param string $name
@@ -135,23 +135,39 @@ abstract class Zend_Session_Abstract
             throw new Zend_Session_Exception(self::_THROW_NOT_READABLE_MSG);
         }
 
+        if ($name === null) {
+            if (isset($_SESSION[$namespace])) { // check session first for data requested
+                return $_SESSION[$namespace];
+            } elseif (isset(self::$_expiringData[$namespace])) { // check expiring data for data reqeusted
+                return self::$_expiringData[$namespace];
+            } else {
+                return $_SESSION[$namespace]; // satisfy return by reference
+            }
+        } else {
+            if (isset($_SESSION[$namespace][$name])) { // check session first
+                return $_SESSION[$namespace][$name];
+            } elseif (isset(self::$_expiringData[$namespace][$name])) { // check expiring data
+                return self::$_expiringData[$namespace][$name];
+            } else {
+                return $_SESSION[$namespace][$name]; // satisfy return by reference
+            }
+        }
+    }
+
+
+    /**
+     * namespaceGetAll() - Get an array containing $namespace, including expiring data.
+     *
+     * @param string $namespace
+     * @param string $name
+     * @return mixed
+     */
+    static protected function _namespaceGetAll($namespace)
+    {
         $current_data  = (isset($_SESSION[$namespace]) && is_array($_SESSION[$namespace])) ?
             $_SESSION[$namespace] : array();
         $expiring_data = (isset(self::$_expiringData[$namespace]) && is_array(self::$_expiringData[$namespace])) ?
             self::$_expiringData[$namespace] : array();
-
-        $merged_data = array_merge($current_data, $expiring_data);
-
-        if ($name !== null) {
-            if (isset($merged_data[$name])) {
-                return $merged_data[$name];
-            } else {
-                $foo = null;
-                return $foo;
-            }
-        } else {
-            return $merged_data;
-        }
+        return array_merge($current_data, $expiring_data);
     }
-
 }

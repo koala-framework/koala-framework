@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -16,11 +17,12 @@
  * @package    Zend_Feed
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Abstract.php 3941 2007-03-14 21:36:13Z darby $
  */
 
 
 /**
- * Zend_Feed_Element
+ * @see Zend_Feed_Element
  */
 require_once 'Zend/Feed/Element.php';
 
@@ -40,7 +42,6 @@ require_once 'Zend/Feed/Element.php';
  */
 abstract class Zend_Feed_Abstract extends Zend_Feed_Element implements Iterator
 {
-
     /**
      * Current index on the collection of feed entries for the
      * Iterator implementation.
@@ -64,10 +65,12 @@ abstract class Zend_Feed_Abstract extends Zend_Feed_Element implements Iterator
      *
      * @throws Zend_Feed_Exception If loading the feed failed.
      *
-     * @param string $uri The full URI of the feed to load, or NULL if not retrieved via HTTP.
-     * @param string $string The feed as a string, or NULL if retrieved via HTTP.
+     * @param  string $uri The full URI of the feed to load, or NULL if not retrieved via HTTP or as an array.
+     * @param  string $string The feed as a string, or NULL if retrieved via HTTP or as an array.
+     * @param  Zend_Feed_Builder_Interface $builder The feed as a builder instance or NULL if retrieved as a string or via HTTP.
+     * @return void
      */
-    public function __construct($uri = null, $string = null)
+    public function __construct($uri = null, $string = null, Zend_Feed_Builder_Interface $builder = null)
     {
         if ($uri !== null) {
             // Retrieve the feed via HTTP
@@ -78,17 +81,27 @@ abstract class Zend_Feed_Abstract extends Zend_Feed_Element implements Iterator
                 throw new Zend_Feed_Exception('Feed failed to load, got response code ' . $response->getStatus());
             }
             $this->_element = $response->getBody();
-        } else {
+            $this->__wakeup();
+        } elseif ($string !== null) {
             // Retrieve the feed from $string
             $this->_element = $string;
+            $this->__wakeup();
+        } else {
+            // Generate the feed from the array
+            $header = $builder->getHeader();
+            $this->_element = new DOMDocument('1.0', $header['charset']);
+            $root = $this->_mapFeedHeaders($header);
+            $this->_mapFeedEntries($root, $builder->getEntries());
+            $this->_element = $root;
+            $this->_buildEntryCache();
         }
-
-        $this->__wakeup();
     }
 
 
     /**
      * Load the feed as an XML DOMDocument object
+     *
+     * @return void
      */
     public function __wakeup()
     {
@@ -122,7 +135,7 @@ abstract class Zend_Feed_Abstract extends Zend_Feed_Element implements Iterator
      * Cache the individual feed elements so they don't need to be
      * searched for on every operation.
      *
-     * @internal
+     * @return void
      */
     protected function _buildEntryCache()
     {
@@ -149,7 +162,7 @@ abstract class Zend_Feed_Abstract extends Zend_Feed_Element implements Iterator
     /**
      * Required by the Iterator interface.
      *
-     * @internal
+     * @return void
      */
     public function rewind()
     {
@@ -159,8 +172,6 @@ abstract class Zend_Feed_Abstract extends Zend_Feed_Element implements Iterator
 
     /**
      * Required by the Iterator interface.
-     *
-     * @internal
      *
      * @return mixed The current row, or null if no rows.
      */
@@ -175,8 +186,6 @@ abstract class Zend_Feed_Abstract extends Zend_Feed_Element implements Iterator
     /**
      * Required by the Iterator interface.
      *
-     * @internal
-     *
      * @return mixed The current row number (starts at 0), or NULL if no rows
      */
     public function key()
@@ -187,8 +196,6 @@ abstract class Zend_Feed_Abstract extends Zend_Feed_Element implements Iterator
 
     /**
      * Required by the Iterator interface.
-     *
-     * @internal
      *
      * @return mixed The next row, or null if no more rows.
      */
@@ -201,13 +208,35 @@ abstract class Zend_Feed_Abstract extends Zend_Feed_Element implements Iterator
     /**
      * Required by the Iterator interface.
      *
-     * @internal
-     *
      * @return boolean Whether the iteration is valid
      */
     public function valid()
     {
-        return (0 <= $this->_entryIndex && $this->_entryIndex < $this->count());
+        return 0 <= $this->_entryIndex && $this->_entryIndex < $this->count();
     }
 
+    /**
+     * Generate the header of the feed when working in write mode
+     *
+     * @param  array $array the data to use
+     * @return DOMElement root node
+     */
+    abstract protected function _mapFeedHeaders($array);
+
+    /**
+     * Generate the entries of the feed when working in write mode
+     *
+     * @param  DOMElement $root the root node to use
+     * @param  array $array the data to use
+     * @return DOMElement root node
+     */
+    abstract protected function _mapFeedEntries(DOMElement $root, $array);
+
+    /**
+     * Send feed to a http client with the correct header
+     *
+     * @throws Zend_Feed_Exception if headers have already been sent
+     * @return void
+     */
+    abstract public function send();
 }

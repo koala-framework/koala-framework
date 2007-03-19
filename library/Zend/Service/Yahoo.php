@@ -80,11 +80,6 @@ require_once 'Zend/Service/Yahoo/WebResult.php';
  */
 require_once 'Zend/Service/Yahoo/WebResultSet.php';
 
-/**
- * Zend_Filter
- */
-require_once 'Zend/Filter.php';
-
 
 /**
  * @category   Zend
@@ -93,7 +88,7 @@ require_once 'Zend/Filter.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Yahoo 
+class Zend_Service_Yahoo
 {
     /**
      * Yahoo Developer Application ID
@@ -325,31 +320,38 @@ class Zend_Service_Yahoo
 
         $this->_compareOptions($options, $valid_options);
 
+        /**
+         * @see Zend_Validate_Between
+         */
+        require_once 'Zend/Validate/Between.php';
+        $between = new Zend_Validate_Between(1, 20, true);
+
         if (isset($options['results'])) {
-            if (!Zend_Filter::isBetween($options['results'], 1, 20, true)) {
+            if (!$between->setMin(1)->setMax(20)->isValid($options['results'])) {
                 throw new Zend_Service_Exception($options['results'] . ' is not valid for the "results" option.');
             }
         }
 
         if (isset($options['start'])) {
-            if (!Zend_Filter::isBetween($options['start'], 1, 1000, true)) {
+            if (!$between->setMin(1)->setMax(1000)->isValid($options['start'])) {
                 throw new Zend_Service_Exception($options['start'] . ' is not valid for the "start" option.');
             }
         }
 
         if (isset($options['longitude'])) {
-            if (!Zend_Filter::isBetween($options['longitude'], -90, 90, true)) {
+            if (!$between->setMin(-90)->setMax(90)->isValid($options['longitude'])) {
                 throw new Zend_Service_Exception($options['longitude'] . ' is not valid for the "longitude" option.');
             }
         }
+
         if (isset($options['latitude'])) {
-            if (!Zend_Filter::isBetween($options['latitude'], -180, 180, true)) {
+            if (!$between->setMin(-180)->setMax(180)->isValid($options['latitude'])) {
                 throw new Zend_Service_Exception($options['latitude'] . ' is not valid for the "latitude" option.');
             }
         }
 
         if (isset($options['zip'])) {
-            if (!Zend_Filter::isZip($options['zip'])) {
+            if (!preg_match('/(^\d{5}$)|(^\d{5}-\d{4}$)/', $options['zip'])) {
                 throw new Zend_Service_Exception($options['zip'] . ' is not a valid for the "zip" option.');
             }
         }
@@ -395,14 +397,20 @@ class Zend_Service_Yahoo
             }
         }
 
+        /**
+         * @see Zend_Validate_Between
+         */
+        require_once 'Zend/Validate/Between.php';
+        $between = new Zend_Validate_Between(1, 50, true);
+
         if (isset($options['results'])) {
-            if (!Zend_Filter::isBetween($options['results'], 1, 50, true)) {
+            if (!$between->setMin(1)->setMax(50)->isValid($options['results'])) {
                 throw new Zend_Service_Exception($options['results'] . ' is not valid for the "results" option.');
             }
         }
 
         if (isset($options['start'])) {
-            if (!Zend_Filter::isBetween($options['start'], 1, 1000, true)) {
+            if (!$between->setMin(1)->setMax(1000)->isValid($options['start'])) {
                 throw new Zend_Service_Exception($options['start'] . ' is not valid for the "start" option.');
             }
         }
@@ -446,13 +454,19 @@ class Zend_Service_Yahoo
 
         $this->_compareOptions($options, $valid_options);
 
+        /**
+         * @see Zend_Validate_Between
+         */
+        require_once 'Zend/Validate/Between.php';
+        $between = new Zend_Validate_Between(1, 20, true);
+
         if (isset($options['results'])) {
-            if (!Zend_Filter::isBetween($options['results'], 1, 20, true)) {
+            if (!$between->setMin(1)->setMax(20)->isValid($options['results'])) {
                 throw new Zend_Service_Exception($options['results'] . ' is not valid for the "results" option.');
             }
         }
         if (isset($options['start'])) {
-            if (!Zend_Filter::isBetween($options['start'], 1, 1000, true)) {
+            if (!$between->setMin(1)->setMax(1000)->isValid($options['start'])) {
                 throw new Zend_Service_Exception($options['start'] . ' is not valid for the "start" option.');
             }
         }
@@ -482,13 +496,19 @@ class Zend_Service_Yahoo
 
         $this->_compareOptions($options, $valid_options);
 
+        /**
+         * @see Zend_Validate_Between
+         */
+        require_once 'Zend/Validate/Between.php';
+        $between = new Zend_Validate_Between(1, 20, true);
+
         if (isset($options['results'])) {
-            if (!Zend_Filter::isBetween($options['results'], 1, 20, true)) {
+            if (!$between->setMin(1)->setMax(20)->isValid($options['results'])) {
                 throw new Zend_Service_Exception($options['results'] . ' is not valid for the "results" option.');
             }
         }
         if (isset($options['start'])) {
-            if (!Zend_Filter::isBetween($options['start'], 1, 1000, true)) {
+            if (!$between->setMin(1)->setMax(1000)->isValid($options['start'])) {
                 throw new Zend_Service_Exception($options['start'] . ' is not valid for the "start" option.');
             }
         }

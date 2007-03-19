@@ -77,7 +77,7 @@ abstract class Zend_Cache
         
         $backendClass = 'Zend_Cache_Backend_' . $backend;
         
-        // For perfs reasons, we do not use the Zend::loadClass() method
+        // For perfs reasons, we do not use the Zend_Loader::loadClass() method
         // (security controls are explicit)
         require_once str_replace('_', DIRECTORY_SEPARATOR, $frontendClass) . '.php';
         require_once str_replace('_', DIRECTORY_SEPARATOR, $backendClass) . '.php';

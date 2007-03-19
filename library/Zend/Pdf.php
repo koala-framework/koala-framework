@@ -52,14 +52,14 @@ require_once 'Zend/Pdf/Color.php';
 /** Zend_Pdf_Color_GrayScale */
 require_once 'Zend/Pdf/Color/GrayScale.php';
 
-/** Zend_Pdf_Color_RGB */
-require_once 'Zend/Pdf/Color/RGB.php';
+/** Zend_Pdf_Color_Rgb */
+require_once 'Zend/Pdf/Color/Rgb.php';
 
-/** Zend_Pdf_Color_CMYK */
-require_once 'Zend/Pdf/Color/CMYK.php';
+/** Zend_Pdf_Color_Cmyk */
+require_once 'Zend/Pdf/Color/Cmyk.php';
 
-/** Zend_Pdf_Color_HTML */
-require_once 'Zend/Pdf/Color/HTML.php';
+/** Zend_Pdf_Color_Html */
+require_once 'Zend/Pdf/Color/Html.php';
 
 /** Zend_Pdf_Image */
 require_once 'Zend/Pdf/Resource/Image.php';
@@ -67,14 +67,14 @@ require_once 'Zend/Pdf/Resource/Image.php';
 /** Zend_Pdf_Image */
 require_once 'Zend/Pdf/Resource/ImageFactory.php';
 
-/** Zend_Pdf_Image_JPEG */
-require_once 'Zend/Pdf/Resource/Image/JPEG.php';
+/** Zend_Pdf_Image_Jpeg */
+require_once 'Zend/Pdf/Resource/Image/Jpeg.php';
 
-/** Zend_Pdf_Image_TIFF */
-require_once 'Zend/Pdf/Resource/Image/TIFF.php';
+/** Zend_Pdf_Image_Tiff */
+require_once 'Zend/Pdf/Resource/Image/Tiff.php';
 
-/** Zend_Pdf_Image_PNG */
-require_once 'Zend/Pdf/Resource/Image/PNG.php';
+/** Zend_Pdf_Image_Png */
+require_once 'Zend/Pdf/Resource/Image/Png.php';
 
 
 /**

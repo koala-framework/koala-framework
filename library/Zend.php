@@ -16,18 +16,18 @@
  * @package    Zend
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Zend.php 3103 2007-01-30 22:55:28Z gavin $
+ * @version    $Id: Zend.php 3900 2007-03-13 18:51:49Z bkarwin $
  */
-
 
 /**
  * Zend_Exception
  */
 require_once 'Zend/Exception.php';
 
-
 /**
  * Utility class for common functions.
+ *
+ * @deprecated Since Zend Framework 0.9.0.
  *
  * @category   Zend
  * @package    Zend
@@ -38,11 +38,14 @@ final class Zend
 {
     /**
      * Zend Framework version identification - see compareVersion()
+     *
+     * @deprecated Since 0.9.0 -- use Zend_Version::VERSION instead.
      */
-    const VERSION = '0.8.0dev';
+    const VERSION = '0.9.0dev';
 
     /**
      * Object registry provides storage for shared objects
+     *
      * @var Zend_Registry
      */
     static private $_registry = null;
@@ -65,49 +68,15 @@ final class Zend
      * @param string|array $dirs - OPTIONAL either a path or array of paths to search
      * @throws Zend_Exception
      * @return void
+     *
+     * @deprecated Since 0.9.0 -- Use Zend_Loader::loadClass() instead.
      */
     static public function loadClass($class, $dirs = null)
     {
-        if (class_exists($class, false)) {
-            return;
-        }
-
-        if ((null !== $dirs) && !is_string($dirs) && !is_array($dirs)) {
-            throw new Zend_Exception('Directory argument must be a string or an array');
-        }
-        if (null === $dirs) {
-            $dirs = array();
-        }
-        if (is_string($dirs)) {
-            $dirs = (array) $dirs;
-        }
-
-        // autodiscover the path from the class name
-        $path = str_replace('_', DIRECTORY_SEPARATOR, $class);
-        if ($path != $class) {
-            // use the autodiscovered path
-            $dirPath = dirname($path);
-            if (0 == count($dirs)) {
-                $dirs = array($dirPath);
-            } else {
-                foreach ($dirs as $key => $dir) {
-                    $dir = rtrim($dir, '\\/');
-                    $dirs[$key] = $dir . DIRECTORY_SEPARATOR . $dirPath;
-                }
-            }
-            $file = basename($path) . '.php';
-        } else {
-            $file = $class . '.php';
-        }
-
-        self::loadFile($file, $dirs, true);
-
-        if (!class_exists($class, false)) {
-            throw new Zend_Exception("File \"$file\" was loaded "
-                               . "but class \"$class\" was not found within.");
-        }
+        trigger_error(__CLASS__ . "::" . __FUNCTION__ . " deprecated since 0.9.0, use Zend_Loader::loadClass() instead");
+        require_once 'Zend/Loader.php';
+        Zend_Loader::loadClass($class, $dirs);
     }
-
 
     /**
      * Loads an interface from a PHP file
@@ -140,57 +109,15 @@ final class Zend
      * @param  boolean       $once
      * @throws Zend_Exception
      * @return mixed
+     *
+     * @deprecated Since 0.9.0 -- Use Zend_Loader::loadFile() instead.
      */
     static public function loadFile($filename, $dirs = null, $once = false)
     {
-        // security check
-        if (preg_match('/[^a-z0-9\-_.]/i', $filename)) {
-            throw new Zend_Exception('Security check: Illegal character in filename');
-        }
-
-        /**
-         * Determine if the file is readable, either within just the include_path
-         * or within the $dirs search list.
-         */
-        $filespec = $filename;
-        if (empty($dirs)) {
-            $dirs = null;
-        }
-        if ($dirs === null) {
-            $found = self::isReadable($filespec);
-        } else {
-            foreach ((array)$dirs as $dir) {
-                $filespec = rtrim($dir, '\\/') . DIRECTORY_SEPARATOR . $filename;
-                $found = self::isReadable($filespec);
-                if ($found) {
-                    break;
-                }
-            }
-        }
-
-        /**
-         * Throw an exception if the file could not be located
-         */
-        if (!$found) {
-            throw new Zend_Exception("File \"$filespec\" was not found.");
-        }
-
-        /**
-         * Attempt to include() the file.
-         *
-         * include() is not prefixed with the @ operator because if
-         * the file is loaded and contains a parse error, execution
-         * will halt silently and this is difficult to debug.
-         *
-         * Always set display_errors = Off on production servers!
-         */
-        if ($once) {
-            return include_once $filespec;
-        } else {
-            return include $filespec ;
-        }
+        trigger_error(__CLASS__ . "::" . __FUNCTION__ . " deprecated since 0.9.0, use Zend_Loader::loadFile() instead");
+        require_once 'Zend/Loader.php';
+        Zend_Loader::loadFile($filename, $dirs, $once);
     }
-
 
     /**
      * Returns TRUE if the $filename is readable, or FALSE otherwise.  This
@@ -198,30 +125,15 @@ final class Zend
      *
      * @param string $filename
      * @return boolean
+     *
+     * @deprecated Since 0.9.0 -- Use Zend_Loader::isReadable() instead.
      */
     static public function isReadable($filename)
     {
-        if (is_readable($filename)) {
-            return true;
-        }
-
-        $path = get_include_path();
-        $dirs = explode(PATH_SEPARATOR, $path);
-
-        foreach ($dirs as $dir) {
-            // No need to check against current dir -- already checked
-            if ('.' == $dir) {
-                continue;
-            }
-
-            if (is_readable($dir . DIRECTORY_SEPARATOR . $filename)) {
-                return true;
-            }
-        }
-
-        return false;
+        trigger_error(__CLASS__ . "::" . __FUNCTION__ . " deprecated since 0.9.0, use Zend_Loader::isReadable() instead");
+        require_once 'Zend/Loader.php';
+        return Zend_Loader::isReadable($filename);
     }
-
 
     /**
      * Return a new exception
@@ -243,13 +155,17 @@ final class Zend
      * @param int $code Defaults to 0
      * @return Exception
      * @throws Zend_Exception when invalid exception class passed
-     * @deprecated since 0.6.1
+     *
+     * @deprecated Since 0.6.1
      */
     static public function exception($class, $message = '', $code = 0)
     {
+        trigger_error(__CLASS__ . "::" . __FUNCTION__ . " deprecated since 0.6.1");
+
         $class = (string) $class;
 
-        self::loadClass($class);
+        require_once 'Zend/Loader.php';
+        Zend_Loader::loadClass($class);
 
         $exception = new $class($message, $code);
 
@@ -260,23 +176,21 @@ final class Zend
         return $exception;
     }
 
-
     /**
      * offsetSet stores $newval at key $index
      *
      * @param mixed $index  index to set
      * @param $newval new value to store at offset $index
      * @return  void
+     *
+     * @deprecated Since 0.9.0 -- Use Zend_Registry::set() instead.
      */
     static public function register($index, $newval)
     {
-        if (self::$_registry === null) {
-            self::initRegistry();
-        }
-
-        self::$_registry[$index] = $newval;
+        trigger_error(__CLASS__ . "::" . __FUNCTION__ . " deprecated since 0.9.0, use Zend_Registry::set() instead");
+        require_once 'Zend/Registry.php';
+        Zend_Registry::set($index, $newval);
     }
-
 
     /**
      * registry() retrieves the value stored at an index.
@@ -288,16 +202,15 @@ final class Zend
      * @param   string      $index The name for the value.
      * @throws  Zend_Registry_Exception
      * @return  mixed       The registered value for $index.
+     *
+     * @deprecated Since 0.9.0 -- Use Zend_Registry::get() instead.
      */
     static public function registry($index = null)
     {
-        if (self::$_registry === null) {
-            self::initRegistry();
-        }
-
-        return self::$_registry->get($index);
+        trigger_error(__CLASS__ . "::" . __FUNCTION__ . " deprecated since 0.9.0, use Zend_Registry::get() instead");
+        require_once 'Zend/Registry.php';
+        Zend_Registry::get($index);
     }
-
 
     /**
      * Returns TRUE if the $index is a named value in the
@@ -305,66 +218,44 @@ final class Zend
      *
      * @param  string $index
      * @return boolean
+     *
+     * @deprecated Since 0.9.0 -- Use Zend_Registry::isRegistered() instead.
      */
     static public function isRegistered($index)
     {
-        if (self::$_registry === null) {
-            return false;
-        }
-
-        return self::$_registry->offsetExists($index);
+        trigger_error(__CLASS__ . "::" . __FUNCTION__ . " deprecated since 0.9.0, use Zend_Registry::isRegistered() instead");
+        require_once 'Zend/Registry.php';
+        return Zend_Registry::isRegistered($index);
     }
-
 
     /**
      * Initialize the registry. Invoking this method more than once will generate an exception.
      *
      * @param mixed $registry - Either a name of the registry class (Zend_Registry, or a subclass)
      *                          or an instance of Zend_Registry (or subclass)
-     *
      * @return Zend_Registry
+     *
+     * @deprecated Since 0.9.0 -- Use Zend_Registry::setClassName() instead.
      */
     static public function initRegistry($registry = 'Zend_Registry')
     {
-        // prevent multiple calls to this method
-        if (self::$_registry !== null) {
-            throw new Zend_Exception('Registry already initialized.');
-        }
-
-        if ($registry === 'Zend_Registry') {
-            require_once 'Zend/Registry.php';
-        }
-
-        if (is_string($registry)) {
-            if (!class_exists($registry, false)) {
-                throw new Zend_Exception("'$registry' class not found.");
-            } else {
-                self::initRegistry(new $registry());
-            }
-        } else {
-            if (!class_exists('Zend_Registry', false)) {
-                require_once 'Zend/Registry.php';
-            }
-            $type = gettype($registry);
-            if ($type !== 'object' || !($registry instanceof Zend_Registry)) {
-                throw new Zend_Exception(" '" . ($type === 'object' ? get_class($registry) : $type)
-                    . "' is not an \"instanceof\" Zend_Registry (or subclass)");
-            }
-            self::$_registry = $registry;
-        }
-
-        return self::$_registry;
+        trigger_error(__CLASS__ . "::" . __FUNCTION__ . " deprecated since 0.9.0, use Zend_Registry::setClassName() instead");
+        require_once 'Zend/Registry.php';
+        Zend_Registry::setClassName($registry);
+        return Zend_Registry::getInstance();
     }
-
 
     /**
      * primarily for tearDown() in unit tests
+     *
+     * @deprecated Since 0.9.0 -- Use Zend_Registry::_unsetInstance() instead.
      */
     static public function __unsetRegistry()
     {
-        self::$_registry = null;
+        trigger_error(__CLASS__ . "::" . __FUNCTION__ . " deprecated since 0.9.0, use Zend_Registry::_unsetInstance() instead");
+        require_once 'Zend/Registry.php';
+        Zend_Registry::_unsetInstance();
     }
-
 
     /**
      * Debug helper function.  This is a wrapper for var_dump() that adds
@@ -374,34 +265,14 @@ final class Zend
      * @param  mixed  $var The variable to dump.
      * @param  string $label An optional label.
      * @return string
+     *
+     * @deprecated since 0.9.0
      */
     static public function dump($var, $label=null, $echo=true)
     {
-        // format the label
-        $label = ($label===null) ? '' : rtrim($label) . ' ';
-
-        // var_dump the variable into a buffer and keep the output
-        ob_start();
-        var_dump($var);
-        $output = ob_get_clean();
-
-        // neaten the newlines and indents
-        $output = preg_replace("/\]\=\>\n(\s+)/m", "] => ", $output);
-        if (PHP_SAPI == 'cli') {
-            $output = PHP_EOL . $label
-                    . PHP_EOL . $output
-                    . PHP_EOL;
-        } else {
-            $output = '<pre>'
-                    . $label
-                    . htmlentities($output, ENT_QUOTES, 'UTF-8')
-                    . '</pre>';
-        }
-
-        if ($echo) {
-            echo($output);
-        }
-        return $output;
+        trigger_error(__CLASS__ . "::" . __FUNCTION__ . " deprecated since 0.9.0, use Zend_Debug::dump() instead");
+        require_once 'Zend/Debug.php';
+        return Zend_Debug::dump($var, $label, $echo);
     }
 
     /**
@@ -410,9 +281,13 @@ final class Zend
      * @param  string  $version  A version identifier for the ZF (e.g. "0.7.1")
      * @return boolean    -1 if the $version is older, 0 if they are the same, and +1 if $version is newer
      *
+     * @deprecated Since 0.9.0 -- Use Zend_Version::compareVersion() instead.
      */
     static public function compareVersion($version)
     {
-        return version_compare($version, Zend::VERSION);
+        trigger_error(__CLASS__ . "::" . __FUNCTION__ . " deprecated since 0.9.0, use Zend_Version::compareVersion() instead");
+        require_once 'Zend/Version.php';
+        return Zend_Version::compareVersion($version);
     }
+
 }

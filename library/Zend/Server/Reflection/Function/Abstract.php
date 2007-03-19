@@ -53,7 +53,7 @@ require_once 'Zend/Server/Reflection/Prototype.php';
  * @subpackage Reflection
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version $Id: Abstract.php 2815 2007-01-16 01:42:33Z bkarwin $
+ * @version $Id: Abstract.php 3916 2007-03-14 11:42:22Z matthew $
  */
 abstract class Zend_Server_Reflection_Function_Abstract
 {
@@ -273,35 +273,35 @@ abstract class Zend_Server_Reflection_Function_Abstract
 
         if (!empty($docBlock)) {
             // Get help text
-            if (preg_match(':/\*\*\s*\r?\n\s*\* (.*?)\r?\n\s*\*( @|/):s', $docBlock, $matches))
+            if (preg_match(':/\*\*\s*\r?\n\s*\*\s(.*?)\r?\n\s*\*(\s@|/):s', $docBlock, $matches))
             {
                 $helpText = $matches[1];
-                $helpText = preg_replace('/(^\s*\* )/m', '', $helpText);
+                $helpText = preg_replace('/(^\s*\*\s)/m', '', $helpText);
                 $helpText = preg_replace('/\r?\n\s*\*\s*(\r?\n)*/s', "\n", $helpText);
                 $helpText = trim($helpText);
             }
 
             // Get return type(s) and description
             $return     = 'void';
-            if (preg_match('/@return ([^\s]*)/', $docBlock, $matches)) {
+            if (preg_match('/@return\s+(\S+)/', $docBlock, $matches)) {
                 $return = explode('|', $matches[1]);
-                if (preg_match('/@return [^\s]*\s+(.*?)(@|\*\/)/s', $docBlock, $matches))
+                if (preg_match('/@return\s+\S+\s+(.*?)(@|\*\/)/s', $docBlock, $matches))
                 {
                     $value = $matches[1];
-                    $value = preg_replace('/\s?\* /m', '', $value);
+                    $value = preg_replace('/\s?\*\s/m', '', $value);
                     $value = preg_replace('/\s{2,}/', ' ', $value);
                     $returnDesc = trim($value);
                 }
             }
 
             // Get param types and description
-            if (preg_match_all('/@param ([^ ]*) /', $docBlock, $matches)) {
+            if (preg_match_all('/@param\s+([^\s]+)/m', $docBlock, $matches)) {
                 $paramTypesTmp = $matches[1];
-                if (preg_match_all('/@param [^\s]*\s+(\$[^ ]*)\s+(.*?)(@|\*\/)/s', $docBlock, $matches))
+                if (preg_match_all('/@param\s+\S+\s+(\$^\S+)\s+(.*?)(@|\*\/)/s', $docBlock, $matches))
                 {
                     $paramDesc = $matches[2];
                     foreach ($paramDesc as $key => $value) {
-                        $value = preg_replace('/\s?\* /m', '', $value);
+                        $value = preg_replace('/\s?\*\s/m', '', $value);
                         $value = preg_replace('/\s{2,}/', ' ', $value);
                         $paramDesc[$key] = trim($value);
                     }

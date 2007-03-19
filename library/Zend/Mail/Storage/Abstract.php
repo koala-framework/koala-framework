@@ -33,11 +33,12 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
      * class capabilities with default values
      * @var array
      */
-    protected $_has = array('uniqueid'  => false,
+    protected $_has = array('uniqueid'  => true,
                             'delete'    => false,
                             'create'    => false,
                             'top'       => false,
-                            'fetchPart' => true);
+                            'fetchPart' => true,
+                            'flags'     => false);
 
     /**
      * current iteration position
@@ -173,12 +174,34 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
      */
     abstract public function removeMessage($id);
 
+    /**
+     * get unique id for one or all messages
+     *
+     * if storage does not support unique ids it's the same as the message number
+     *
+     * @param int|null $id message number
+     * @return array|string message number for given message or all messages as array
+     * @throws Zend_Mail_Storage_Exception
+     */
+    abstract public function getUniqueId($id = null);
+
+    /**
+     * get a message number from a unique id
+     *
+     * I.e. if you have a webmailer that supports deleting messages you should use unique ids
+     * as parameter and use this method to translate it to message number right before calling removeMessage()
+     *
+     * @param string $id unique id
+     * @return int message number
+     * @throws Zend_Mail_Storage_Exception
+     */
+    abstract public function getNumberByUniqueId($id);
+
     // interface implementations follows
 
     /**
      * Countable::count()
      *
-     * @internal
      * @return   int
      */
      public function count()
@@ -190,7 +213,6 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
      /**
       * ArrayAccess::offsetExists()
       *
-      * @internal
       * @param    int     $id
       * @return   boolean
       */
@@ -209,7 +231,6 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
      /**
       * ArrayAccess::offsetGet()
       *
-      * @internal
       * @param    int $id
       * @return   Zend_Mail_Message message object
       */
@@ -222,7 +243,6 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
      /**
       * ArrayAccess::offsetSet()
       *
-      * @internal
       * @param    id     $id
       * @param    mixed  $value
       * @throws   Zend_Mail_Storage_Exception
@@ -237,7 +257,6 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
      /**
       * ArrayAccess::offsetUnset()
       *
-      * @internal
       * @param    int   $id
       * @return   boolean success
       */
@@ -254,7 +273,6 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
       * the interfaces and your scripts take long you should use reset()
       * from time to time.
       *
-      * @internal
       * @return   void
       */
      public function rewind()
@@ -267,7 +285,6 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
      /**
       * Iterator::current()
       *
-      * @internal
       * @return   Zend_Mail_Message current message
       */
      public function current()
@@ -279,7 +296,6 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
      /**
       * Iterator::key()
       *
-      * @internal
       * @return   int id of current position
       */
      public function key()
@@ -291,7 +307,6 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
      /**
       * Iterator::next()
       *
-      * @internal
       * @return   void
       */
      public function next()
@@ -303,7 +318,6 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
      /**
       * Iterator::valid()
       *
-      * @internal
       * @return   boolean
       */
      public function valid()
@@ -318,7 +332,6 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
      /**
       * SeekableIterator::seek()
       *
-      * @internal
       * @param  int $pos
       * @return void
       * @throws OutOfBoundsException

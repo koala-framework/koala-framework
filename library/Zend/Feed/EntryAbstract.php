@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -16,13 +17,18 @@
  * @package    Zend_Feed
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: EntryAbstract.php 3941 2007-03-14 21:36:13Z darby $
  */
 
 
-/** Zend_Feed */
+/**
+ * @see Zend_Feed
+ */
 require_once 'Zend/Feed.php';
 
-/** Zend_Feed_Element */
+/**
+ * @see Zend_Feed_Element
+ */
 require_once 'Zend/Feed/Element.php';
 
 
@@ -61,6 +67,10 @@ abstract class Zend_Feed_EntryAbstract extends Zend_Feed_Element
      * is part of, and optionally an XML construct (usually a
      * SimpleXMLElement, but it can be an XML string or a DOMNode as
      * well) that contains the contents of the entry.
+     *
+     * @param  string $uri
+     * @param  SimpleXMLElement|DOMNode|string  $element
+     * @return void
      */
     public function __construct($uri = null, $element = null)
     {

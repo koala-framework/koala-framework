@@ -86,6 +86,7 @@ class Zend_Mail_Storage_Folder_Maildir extends Zend_Mail_Storage_Maildir impleme
         $this->_buildFolderTree();
         $this->selectFolder(!empty($params['folder']) ? $params['folder'] : 'INBOX');
         $this->_has['top'] = true;
+        $this->_has['flags'] = true;
     }
 
     /**
@@ -158,12 +159,12 @@ class Zend_Mail_Storage_Folder_Maildir extends Zend_Mail_Storage_Maildir impleme
      */
     public function getFolders($rootFolder = null)
     {
-        if (!$rootFolder) {
+        if (!$rootFolder || $rootFolder == 'INBOX') {
             return $this->_rootFolder;
         }
 
         // rootdir is same as INBOX in maildir
-        if (strpos($rootFolder, 'INBOX') === 0) {
+        if (strpos($rootFolder, 'INBOX' . $this->_delim) === 0) {
             $rootFolder = substr($rootFolder, 6);
         }
         $currentFolder = $this->_rootFolder;
@@ -193,23 +194,21 @@ class Zend_Mail_Storage_Folder_Maildir extends Zend_Mail_Storage_Maildir impleme
      */
     public function selectFolder($globalName)
     {
-        // TODO: check $globalName for ..! could be user submitted data
         $this->_currentFolder = (string)$globalName;
-        // rootdir is same as INBOX in maildir
-        if (strpos($this->_currentFolder, 'INBOX') === 0) {
-            $this->_currentFolder = substr($this->_currentFolder, 6);
-        }
+
+        // getting folder from folder tree for validation
+        $folder = $this->getFolders($this->_currentFolder);
+
         try {
-            $this->_openMaildir($this->_currentFolder ? $this->_rootdir . '.' . $this->_currentFolder : $this->_rootdir);
+            $this->_openMaildir($this->_rootdir . '.' . $folder->getGlobalName());
         } catch(Zend_Mail_Storage_Exception $e) {
             // check what went wrong
-            // if folder does not exist getFolders() throws an exception
-            if (!$this->getFolders($this->_currentFolder)->isSelectable()) {
+            if (!$folder->isSelectable()) {
                 throw new Zend_Mail_Storage_Exception("{$this->_currentFolder} is not selectable");
             }
             // seems like file has vanished; rebuilding folder tree - but it's still an exception
             $this->_buildFolderTree($this->_rootdir);
-            throw new Zend_Mail_Storage_Exception('seems like the mbox file has vanished, I\'ve rebuild the ' .
+            throw new Zend_Mail_Storage_Exception('seems like the maildir has vanished, I\'ve rebuild the ' .
                                                          'folder tree, search for an other folder and try again');
         }
     }

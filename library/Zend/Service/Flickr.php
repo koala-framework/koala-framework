@@ -45,11 +45,6 @@ require_once 'Zend/Service/Flickr/Result.php';
  */
 require_once 'Zend/Service/Flickr/Image.php';
 
-/**
- * Zend_Filter
- */
-require_once 'Zend/Filter.php';
-
 
 /**
  * @category   Zend
@@ -97,8 +92,8 @@ class Zend_Service_Flickr
      * Additional query options include:
      *    # per_page:  how many results to return per query
      *    # page:  the starting page offset.  first result will be (page -1)*per_page + 1
-     *    # tag_mode: Either 'any' for an OR combination of tags, 
-     *                or 'all' for an AND combination. Default is 'any'. 
+     *    # tag_mode: Either 'any' for an OR combination of tags,
+     *                or 'all' for an AND combination. Default is 'any'.
      *    # min_upload_date: Minimum upload date to search on.  Date should be a unix timestamp.
      *    # max_upload_date: Maximum upload date to search on.  Date should be a unix timestamp.
      *    # min_taken_date: Minimum upload date to search on.  Date should be a MySQL datetime.
@@ -215,11 +210,21 @@ class Zend_Service_Flickr
         $this->_compareOptions($options, $valid_options);
 
 
-        if (!Zend_Filter::isBetween($options['per_page'], 1, 500, true)) {
+        /**
+         * @see Zend_Validate_Between
+         */
+        require_once 'Zend/Validate/Between.php';
+        $between = new Zend_Validate_Between(1, 500, true);
+        if (!$between->isValid($options['per_page'])) {
             throw new Zend_Service_Exception($options['per_page'] . ' is not valid for the "per_page" option');
         }
 
-        if (!Zend_Filter::isInt($options['page'])) {
+        /**
+         * @see Zend_Validate_Int
+         */
+        require_once 'Zend/Validate/Int.php';
+        $int = new Zend_Validate_Int();
+        if (!$int->isValid($options['page'])) {
             throw new Zend_Service_Exception($options['page'] . ' is not valid for the "page" option');
         }
 
@@ -253,11 +258,21 @@ class Zend_Service_Flickr
 
         $this->_compareOptions($options, $valid_options);
 
-        if (!Zend_Filter::isBetween($options['per_page'], 1, 500, true)) {
+        /**
+         * @see Zend_Validate_Between
+         */
+        require_once 'Zend/Validate/Between.php';
+        $between = new Zend_Validate_Between(1, 500, true);
+        if (!$between->isValid($options['per_page'])) {
             throw new Zend_Service_Exception($options['per_page'] . ' is not valid for the "per_page" option');
         }
 
-        if (!Zend_Filter::isInt($options['page'])) {
+        /**
+         * @see Zend_Validate_Int
+         */
+        require_once 'Zend/Validate/Int.php';
+        $int = new Zend_Validate_Int();
+        if (!$int->isValid($options['page'])) {
             throw new Zend_Service_Exception($options['page'] . ' is not valid for the "page" option');
         }
 

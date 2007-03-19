@@ -85,6 +85,19 @@ abstract class Zend_Controller_Action
     protected $_response = null;
 
     /**
+     * View script suffix; defaults to 'phtml'
+     * @see {render()}
+     * @var string
+     */
+    public $viewSuffix = 'phtml';
+
+    /**
+     * View object
+     * @var Zend_View_Interface
+     */
+    public $view;
+
+    /**
      * Class constructor
      *
      * The request and response objects should be registered with the 
@@ -122,6 +135,89 @@ abstract class Zend_Controller_Action
      */
     public function init()
     {
+    }
+
+    /**
+     * Initialize View object 
+     *
+     * Initializes {@link $view} if not otherwise a Zend_View_Interface.
+     *
+     * If {@link $view} is not otherwise set, instantiates a new Zend_View 
+     * object, using the 'views' subdirectory at the same level as the 
+     * controller directory for the current module as the base directory. 
+     * It uses this to set the following:
+     * - script path = views/scripts/
+     * - helper path = views/helpers/
+     * - filter path = views/filters/
+     * 
+     * @return Zend_View_Interface
+     * @throws Zend_Controller_Exception if base view directory does not exist
+     */
+    public function initView()
+    {
+        require_once 'Zend/View/Interface.php';
+        if (isset($this->view) && ($this->view instanceof Zend_View_Interface)) {
+            return $this->view;
+        }
+
+        $request = $this->getRequest();
+        $module  = $request->getModuleName();
+        $dirs    = $this->getFrontController()->getControllerDirectory();
+        if (empty($module) || !isset($dirs[$module])) {
+            $module = 'default';
+        }
+        $baseDir = dirname($dirs[$module]) . '/views';
+        if (!file_exists($baseDir) || !is_dir($baseDir)) {
+            throw new Zend_Controller_Exception('Missing base view directory ("' . $baseDir . '")');
+        }
+
+        require_once 'Zend/View.php';
+        $this->view = new Zend_View(array(
+            'scriptPath' => $baseDir . '/scripts',
+            'helperPath' => $baseDir . '/helpers',
+            'filterPath' => $baseDir . '/filters'
+        ));
+
+        return $this->view;
+    }
+
+    /**
+     * Render a view
+     *
+     * Renders a view. By default, views are found in the view script path as
+     * <controller>/<action>.phtml. You may change the script suffix by 
+     * resetting {@link $viewSuffix}. You may omit the controller directory
+     * prefix by specifying boolean true for $noController.
+     *
+     * By default, the rendered contents are appended to the response. You may 
+     * specify the named body content segment to set by specifying a $name.
+     *
+     * @see Zend_Controller_Response_Abstract::appendBody()
+     * @param string|null $action 
+     * @param string|null $name 
+     * @param boolean $noController 
+     * @return void
+     * @throws Zend_Controller_Exception with bad $action
+     */
+    public function render($action = null, $name = null, $noController = false)
+    {
+        if (null === $action) {
+            $action = $this->getRequest()->getActionName();
+        } elseif (!is_string($action)) {
+            throw new Zend_Controller_Exception('Invalid action specifier for view render');
+        }
+
+        $script = $action . '.' . $this->viewSuffix;
+
+        if (!$noController) {
+            $script = $this->getRequest()->getControllerName() . DIRECTORY_SEPARATOR . $script;
+        }
+
+        $view = $this->initView();
+        $this->getResponse()->appendBody(
+            $view->render($script),
+            $name
+        );
     }
 
     /**
@@ -608,7 +704,9 @@ abstract class Zend_Controller_Action
 
         if ($exit) {
             // Close session, if started
-            if (isset($_SESSION)) {
+            if (class_exists('Zend_Session') && Zend_Session::isStarted()) {
+                Zend_Session::writeClose();
+            } elseif (isset($_SESSION)) {
                 session_write_close();
             }
 

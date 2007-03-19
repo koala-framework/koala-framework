@@ -147,10 +147,10 @@ class Zend_Cache_Backend_Sqlite extends Zend_Cache_Backend implements Zend_Cache
      * @param string $data datas to cache
      * @param string $id cache id
      * @param array $tags array of strings, the cache record will be tagged by each string entry
-     * @param int $specificLifeTime if != false, set a specific lifetime for this cache record (null => infinite lifeTime)
+     * @param int $specificLifetime if != false, set a specific lifetime for this cache record (null => infinite lifetime)
      * @return boolean true if no problem
      */
-    public function save($data, $id, $tags = array(), $specificLifeTime = false)
+    public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
         if (!$this->_checkStructureVersion()) {
             $this->_buildStructure();
@@ -158,13 +158,13 @@ class Zend_Cache_Backend_Sqlite extends Zend_Cache_Backend implements Zend_Cache
                 Zend_Cache::throwException("Impossible to build cache structure in " . $this->_options['cacheDBCompletePath']);
             }
         }    
-        $lifeTime = $this->getLifeTime($specificLifeTime);
+        $lifetime = $this->getLifetime($specificLifetime);
         $data = @sqlite_escape_string($data);
         $mktime = time();
-        if (is_null($lifeTime)) {
+        if (is_null($lifetime)) {
             $expire = 0;
         } else {
-            $expire = $mktime + $lifeTime;
+            $expire = $mktime + $lifetime;
         }
         @sqlite_query($this->_db, "DELETE FROM cache WHERE id='$id'");
         $sql = "INSERT INTO cache (id, content, lastModified, expire) VALUES ('$id', '$data', $mktime, $expire)";

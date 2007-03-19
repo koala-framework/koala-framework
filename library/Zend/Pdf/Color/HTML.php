@@ -25,8 +25,8 @@ require_once 'Zend/Pdf/Exception.php';
 /** Zend_Pdf_Color */
 require_once 'Zend/Pdf/Color.php';
 
-/** Zend_Pdf_Color_RGB */
-require_once 'Zend/Pdf/Color/RGB.php';
+/** Zend_Pdf_Color_Rgb */
+require_once 'Zend/Pdf/Color/Rgb.php';
 
 /** Zend_Pdf_GrayScale */
 require_once 'Zend/Pdf/Color/GrayScale.php';
@@ -43,7 +43,7 @@ require_once 'Zend/Pdf/Color/GrayScale.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Pdf_Color_HTML extends Zend_Pdf_Color
+class Zend_Pdf_Color_Html extends Zend_Pdf_Color
 {
 
     /**
@@ -95,10 +95,10 @@ class Zend_Pdf_Color_HTML extends Zend_Pdf_Color
             if (($r == $g) && ($g == $b)) {
                 return new Zend_Pdf_Color_GrayScale($r);
             } else {
-                return new Zend_Pdf_Color_RGB($r, $g, $b);
+                return new Zend_Pdf_Color_Rgb($r, $g, $b);
             }
         } else {
-            return Zend_Pdf_Color_HTML::namedColor($color);
+            return Zend_Pdf_Color_Html::namedColor($color);
         }
     }
 
@@ -400,7 +400,7 @@ class Zend_Pdf_Color_HTML extends Zend_Pdf_Color
         if (($r == $g) && ($g == $b)) {
             return new Zend_Pdf_Color_GrayScale($r);
         } else {
-            return new Zend_Pdf_Color_RGB($r, $g, $b);
+            return new Zend_Pdf_Color_Rgb($r, $g, $b);
         }
     }
 }

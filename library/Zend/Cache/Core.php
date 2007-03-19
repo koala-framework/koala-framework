@@ -63,7 +63,7 @@ class Zend_Cache_Core
      *     1               => systematic cache cleaning
      *     x (integer) > 1 => automatic cleaning randomly 1 times on x cache write    
      *
-     * ====> (int) lifeTime :
+     * ====> (int) lifetime :
      * - Cache lifetime (in seconds)
      * - If null, the cache is valid forever.
      * 
@@ -77,14 +77,14 @@ class Zend_Cache_Core
         'caching' => true, 
         'automaticSerialization' => false,
         'automaticCleaningFactor' => 10,
-        'lifeTime' => 3600,
+        'lifetime' => 3600,
         'logging' => false
     ); 
     
     /**
      * Array of options which have to be transfered to backend
      */
-    protected static $_directivesList = array('lifeTime', 'logging');
+    protected static $_directivesList = array('lifetime', 'logging');
     
     /**
      * Not used for the core, just a sort a hint to get a common setOption() method (for the core and for frontends)
@@ -149,6 +149,10 @@ class Zend_Cache_Core
     public function setOption($name, $value)
     {
         if (is_string($name)) {
+            // backward compatibily becase of ZF-879 (it will be removed in ZF 1.1)
+            if ($name=='lifeTime') {
+                $name = 'lifetime';
+            }
             if (array_key_exists($name, $this->_options)) {
                 // This is a Core option
                 $this->_setOption($name, $value);
@@ -171,6 +175,10 @@ class Zend_Cache_Core
      */
     private function _setOption($name, $value)
     {
+        // backward compatibily becase of ZF-879 (it will be removed in ZF 1.1)
+        if ($name=='lifeTime') {
+            $name = 'lifetime';
+        }
         if (!is_string($name) || !array_key_exists($name, $this->_options)) {
             Zend_Cache::throwException("Incorrect option name : $name");
         }
@@ -187,13 +195,13 @@ class Zend_Cache_Core
      * 
      * The new value is set for the core/frontend but for the backend too (directive)
      * 
-     * @param int $newLifeTime new lifetime (in seconds)
+     * @param int $newLifetime new lifetime (in seconds)
      */
-    public function setLifeTime($newLifeTime)
+    public function setLifetime($newLifetime)
     {
-        $this->_options['lifeTime'] = $newLifeTime;
+        $this->_options['lifetime'] = $newLifetime;
         $this->_backend->setDirectives(array(
-            'lifeTime' => $newLifeTime
+            'lifetime' => $newLifetime
         ));
     }
     
@@ -226,6 +234,8 @@ class Zend_Cache_Core
     
     /**
      * THIS METHOD IS DEPRECATED : USE LOAD() INSTEAD (same syntax) !
+     * 
+     * it will be removed in ZF 1.1 !
      */
     public function get($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
     {
@@ -257,10 +267,10 @@ class Zend_Cache_Core
      * @param mixed $data data to put in cache (can be another type than string if automaticSerialization is on)
      * @param cache $id cache id (if not set, the last cache id will be used)
      * @param array $tags cache tags
-     * @param int $specificLifeTime if != false, set a specific lifetime for this cache record (null => infinite lifeTime)
+     * @param int $specificLifetime if != false, set a specific lifetime for this cache record (null => infinite lifetime)
      * @return boolean true if no problem
      */
-    public function save($data, $id = null, $tags = array(), $specificLifeTime = false) 
+    public function save($data, $id = null, $tags = array(), $specificLifetime = false) 
     {
         if (!$this->_options['caching']) {
             return true;
@@ -285,7 +295,7 @@ class Zend_Cache_Core
                 $this->clean('old');
             }
         }
-        $result = $this->_backend->save($data, $id, $tags, $specificLifeTime);
+        $result = $this->_backend->save($data, $id, $tags, $specificLifetime);
         if (!$result) {
             // maybe the cache is corrupted, so we remove it !
             if ($this->_options['logging']) {

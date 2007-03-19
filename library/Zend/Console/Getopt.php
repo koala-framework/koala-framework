@@ -104,7 +104,7 @@ require_once 'Zend/Console/Getopt/Exception.php';
  *        Set value of the option's parameter to the integer count of instances
  *        instead of a boolean.
  *        Enable with Zend_Console_Getopt::CONFIG_CUMULATIVE_FLAGS.
- *        Default is that the value is simply boolean TRUE regardless of 
+ *        Default is that the value is simply boolean true regardless of 
  *        how many instances of the flag appear.
  *
  * @todo: Handle flags that implicitly print usage message, e.g. --help
@@ -224,7 +224,7 @@ class Zend_Console_Getopt
      * @throws Zend_Console_Getopt_Exception
      * @return Zend_Console_Getopt
      */
-    public function __construct($rules, $argv = NULL, $getoptConfig = array())
+    public function __construct($rules, $argv = null, $getoptConfig = array())
     {
         $this->_progname = $_SERVER['argv'][0];
         $this->setOptions($getoptConfig);
@@ -241,7 +241,7 @@ class Zend_Console_Getopt
      * Return the state of the option seen on the command line of the
      * current application invocation.  This function returns true, or the
      * parameter to the option, if any.  If the option was not given,
-     * this function returns NULL.
+     * this function returns null.
      *
      * The magic __get method works in the context of naming the option
      * as a virtual member of this class.
@@ -452,7 +452,7 @@ class Zend_Console_Getopt
             );
         }
 
-        Zend::loadClass('Zend_Json');
+        require_once 'Zend/Json.php';
         $json = Zend_Json::encode($j);
 
         return $json;
@@ -517,11 +517,13 @@ class Zend_Console_Getopt
         if ($this->_getoptConfig[self::CONFIG_IGNORECASE]) {
             $flag = strtolower($flag);
         }
-        $flag = $this->_ruleMap[$flag];
-        if (isset($this->_options[$flag])) {
-            return $this->_options[$flag];
+        if (isset($this->_ruleMap[$flag])) {
+            $flag = $this->_ruleMap[$flag];
+            if (isset($this->_options[$flag])) {
+                return $this->_options[$flag];
+            }
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -607,9 +609,10 @@ class Zend_Console_Getopt
                 $flag = strtolower($flag);
                 $alias = strtolower($alias);
             }
-            if (strlen($flag) == 1) {
-                $flag = $this->_ruleMap[$flag];
+            if (!isset($this->_ruleMap[$flag])) {
+                continue;
             }
+            $flag = $this->_ruleMap[$flag];
             if (isset($this->_rules[$alias]) || isset($this->_ruleMap[$alias])) {
                 $o = (strlen($alias) == 1 ? '-' : '--') . $alias;
                 throw new Zend_Console_Getopt_Exception(
@@ -632,6 +635,9 @@ class Zend_Console_Getopt
     {
         foreach ($helpMap as $flag => $help)
         {
+            if (!isset($this->_ruleMap[$flag])) {
+                continue;
+            }
             $flag = $this->_ruleMap[$flag];
             $this->_rules[$flag]['help'] = $help;
         }

@@ -151,7 +151,8 @@ class Zend_Search_Lucene_Index_Writer
                                              '.tvx' => '.tvx',
                                              '.tvd' => '.tvd',
                                              '.tvf' => '.tvf',
-                                             '.del' => '.del'  );
+                                             '.del' => '.del',
+                                             '.sti' => '.sti' );
 
     /**
      * Opens the index for writing

@@ -72,13 +72,13 @@ class Zend_Cache_Frontend_Class extends Zend_Cache_Core
     private $_tags = array();
     
     /**
-     * SpecificLifeTime value
+     * SpecificLifetime value
      * 
      * false => no specific life time
      * 
      * @var int
      */
-    private $_specificLifeTime = false;
+    private $_specificLifetime = false;
             
     /**
      * The cached object or the name of the cached abstract class
@@ -116,11 +116,11 @@ class Zend_Cache_Frontend_Class extends Zend_Cache_Core
     /**
      * Set a specific life time
      * 
-     * @param int $specificLifeTime 
+     * @param int $specificLifetime 
      */
-    public function setSpecificLifeTime($specificLifeTime = false)
+    public function setSpecificLifetime($specificLifetime = false)
     {
-        $this->_specificLifeTime = $specificLifeTime;
+        $this->_specificLifetime = $specificLifetime;
     }
     
     /**
@@ -164,7 +164,7 @@ class Zend_Cache_Frontend_Class extends Zend_Cache_Core
             $output = ob_get_contents();
             ob_end_clean();
             $data = array($output, $return);
-            $this->save($data, $id, $this->_tags, $this->_specificLifeTime);
+            $this->save($data, $id, $this->_tags, $this->_specificLifetime);
         }
         echo $output;
         return $return;

@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Measure
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Abstract.php 3224 2007-02-05 22:08:48Z gavin $
+ * @version    $Id: Abstract.php 3867 2007-03-11 13:02:10Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -142,7 +142,7 @@ abstract class Zend_Measure_Abstract
         }
 
         try {
-            $value = Zend_Locale_Format::getNumber($value, $locale);
+            $value = Zend_Locale_Format::getNumber($value, array('locale' => $locale));
         } catch(Exception $e) {
             throw new Zend_Measure_Exception($e->getMessage());
         }

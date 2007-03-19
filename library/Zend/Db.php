@@ -19,15 +19,14 @@
  */
 
 /**
- * Zend
+ * Zend_Loader
  */
-require_once 'Zend.php';
+require_once 'Zend/Loader.php';
 
 /**
  * Zend_Db_Exception
  */
 require_once 'Zend/Db/Exception.php';
-
 
 /**
  * Class for connecting to SQL databases and performing common operations.
@@ -168,7 +167,7 @@ class Zend_Db {
         $adapterName = 'Zend_Db_Adapter_' .
             str_replace(' ', '_' , ucwords(str_replace('_', ' ', $adapterName)));
 
-        Zend::loadClass($adapterName);
+        Zend_Loader::loadClass($adapterName);
 
         return new $adapterName($config);
     }

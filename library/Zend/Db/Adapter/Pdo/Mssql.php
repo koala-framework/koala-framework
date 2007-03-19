@@ -116,18 +116,19 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
      * The value of each array element is an associative array
      * with the following keys:
      *
-     * SCHEMA_NAME => string; name of database or schema
-     * TABLE_NAME  => string;
-     * COLUMN_NAME => string; column name
-     * COLUMN_POSITION => number; ordinal position of column in table
-     * DATA_TYPE   => string; SQL datatype name of column
-     * DEFAULT     => string; default expression of column, null if none
-     * NULLABLE    => boolean; true if column can have nulls
-     * LENGTH      => number; length of CHAR/VARCHAR
-     * SCALE       => number; scale of NUMERIC/DECIMAL
-     * PRECISION   => number; precision of NUMERIC/DECIMAL
-     * UNSIGNED    => boolean; unsigned property of an integer type
-     * PRIMARY     => boolean; true if column is part of the primary key
+     * SCHEMA_NAME      => string; name of database or schema
+     * TABLE_NAME       => string;
+     * COLUMN_NAME      => string; column name
+     * COLUMN_POSITION  => number; ordinal position of column in table
+     * DATA_TYPE        => string; SQL datatype name of column
+     * DEFAULT          => string; default expression of column, null if none
+     * NULLABLE         => boolean; true if column can have nulls
+     * LENGTH           => number; length of CHAR/VARCHAR
+     * SCALE            => number; scale of NUMERIC/DECIMAL
+     * PRECISION        => number; precision of NUMERIC/DECIMAL
+     * UNSIGNED         => boolean; unsigned property of an integer type
+     * PRIMARY          => boolean; true if column is part of the primary key
+     * PRIMARY_POSITION => integer; position of column in primary key
      *
      * @todo Discover column position.
      * @todo Discover integer unsigned property.
@@ -158,18 +159,19 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
             }
 
             $desc[$row['column_name']] = array(
-                'SCHEMA_NAME' => null,
-                'TABLE_NAME'  => $row['table_name'],
-                'COLUMN_NAME' => $row['column_name'],
-                'COLUMN_POSITION' => null, // @todo
-                'DATA_TYPE'   => $type,
-                'DEFAULT'     => $row['column_def'],
-                'NULLABLE'    => (bool) $row['nullable'],
-                'LENGTH'      => $row['length'],
-                'SCALE'       => $row['scale'],
-                'PRECISION'   => $row['precision'],
-                'UNSIGNED'    => null, // @todo
-                'PRIMARY'     => (bool) $row['is_primary']
+                'SCHEMA_NAME'      => null,
+                'TABLE_NAME'       => $row['table_name'],
+                'COLUMN_NAME'      => $row['column_name'],
+                'COLUMN_POSITION'  => null, // @todo
+                'DATA_TYPE'        => $type,
+                'DEFAULT'          => $row['column_def'],
+                'NULLABLE'         => (bool) $row['nullable'],
+                'LENGTH'           => $row['length'],
+                'SCALE'            => $row['scale'],
+                'PRECISION'        => $row['precision'],
+                'UNSIGNED'         => null, // @todo
+                'PRIMARY'          => (bool) $row['is_primary'],
+                'PRIMARY_POSITION' => null // @todo
             );
         }
         return $desc;

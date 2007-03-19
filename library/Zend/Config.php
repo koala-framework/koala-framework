@@ -99,28 +99,13 @@ class Zend_Config implements Countable, Iterator
         $this->_index = 0;
         $this->_data = array();
         foreach ($array as $key => $value) {
-            if ($this->_isValidKeyName($key)) {
-                if (is_array($value)) {
-                    $this->_data[$key] = new Zend_Config($value, $this->_allowModifications);
-                } else {
-                    $this->_data[$key] = $value;
-                }
+            if (is_array($value)) {
+                $this->_data[$key] = new Zend_Config($value, $this->_allowModifications);
             } else {
-                throw new Zend_Config_Exception("Invalid key: '$key'");
+                $this->_data[$key] = $value;
             }
         }
         $this->_count = count($this->_data);
-    }
-
-    /**
-     * Ensure that the key is a valid PHP property name
-     *
-     * @param string $key
-     * @return boolean
-     */
-    protected function _isValidKeyName($key)
-    {
-        return (bool) preg_match('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/', $key);
     }
 
     /**

@@ -53,7 +53,7 @@ class Zend_Pdf_Parser_Stream extends Zend_Pdf_Parser
         $this->_current        = 0;
         $this->_currentContext = null;
         $this->_contextStack   = array();
-        $this->_elements       = new Zend_Pdf_PHPArray();
+        $this->_elements       = new Zend_Pdf_PhpArray();
         $this->_objFactory     = $factory;
     }
 }

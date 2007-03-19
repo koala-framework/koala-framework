@@ -203,22 +203,33 @@ abstract class Zend_Db_Adapter_Abstract
     /**
      * Inserts a table row with specified data.
      *
-     * @param string $table The table to insert data into.
+     * @param string|array|Zend_Db_Expr $table The table to insert data into.
      * @param array $bind Column-value pairs.
      * @return int The number of affected rows.
      */
     public function insert($table, $bind)
     {
-        // col names come from the array keys
-        $cols = array_keys($bind);
+        // extract and quote col names from the array keys
+        $cols = array();
+        $vals = array();
+        foreach ($bind as $col => $val) {
+            $cols[] = $this->quoteIdentifier($col);
+            if ($val instanceof Zend_Db_Expr) {
+                $vals[] = $val->__toString();
+                unset($bind[$col]);
+            } else {
+                $vals[] = '?';
+            }
+        }
 
         // build the statement
-        $sql = "INSERT INTO $table "
-             . '(' . implode(', ', $cols) . ') '
-             . 'VALUES (:' . implode(', :', $cols) . ')';
+        $sql = "INSERT INTO "
+             . $this->quoteIdentifier($table)
+             . ' (' . implode(', ', $cols) . ') '
+             . 'VALUES (' . implode(', ', $vals) . ')';
 
         // execute the statement and return the number of affected rows
-        $stmt = $this->query($sql, $bind);
+        $stmt = $this->query($sql, array_values($bind));
         $result = $stmt->rowCount();
         return $result;
     }
@@ -226,26 +237,37 @@ abstract class Zend_Db_Adapter_Abstract
     /**
      * Updates table rows with specified data based on a WHERE clause.
      *
-     * @param string $table The table to udpate.
+     * @param string|array|Zend_Db_Expr $table The table to update.
      * @param array $bind Column-value pairs.
      * @param string $where UPDATE WHERE clause.
      * @return int The number of affected rows.
      */
     public function update($table, $bind, $where)
     {
-        // build "col = :col" pairs for the statement
+        // build "col = ?" pairs for the statement
         $set = array();
         foreach ($bind as $col => $val) {
-            $set[] = "$col = :$col";
+        	if ($val instanceof Zend_Db_Expr) {
+                $val = $val->__toString();
+                unset($bind[$col]);
+            } else {
+                $val = '?';
+            }
+            $set[] = $this->quoteIdentifier($col) . ' = ' . $val;
+        }
+
+        if (is_array($where)) {
+            $where = implode(' AND ', $where);
         }
 
         // build the statement
-        $sql = "UPDATE $table "
-             . 'SET ' . implode(', ', $set)
+        $sql = "UPDATE "
+             . $this->quoteIdentifier($table)
+             . ' SET ' . implode(', ', $set)
              . (($where) ? " WHERE $where" : '');
 
         // execute the statement and return the number of affected rows
-        $stmt = $this->query($sql, $bind);
+        $stmt = $this->query($sql, array_values($bind));
         $result = $stmt->rowCount();
         return $result;
     }
@@ -253,14 +275,19 @@ abstract class Zend_Db_Adapter_Abstract
     /**
      * Deletes table rows based on a WHERE clause.
      *
-     * @param string $table The table to udpate.
+     * @param string|array|Zend_Db_Expr $table The table to update.
      * @param string $where DELETE WHERE clause.
      * @return int The number of affected rows.
      */
     public function delete($table, $where)
     {
+        if (is_array($where)) {
+            $where = implode(' AND ', $where);
+        }
+
         // build the statement
-        $sql = "DELETE FROM $table"
+        $sql = "DELETE FROM "
+             . $this->quoteIdentifier($table)
              . (($where) ? " WHERE $where" : '');
 
         // execute the statement and return the number of affected rows
@@ -391,6 +418,18 @@ abstract class Zend_Db_Adapter_Abstract
     }
 
     /**
+     * Quote a raw string.
+     *
+     * @param string $value     Raw string
+     * @return string           Quoted string
+     */
+    protected function _quote($value)
+    {
+        $value = str_replace("'", "''", $value);
+        return "'" . $value . "'";
+    }
+
+    /**
      * Safely quotes a value for an SQL statement.
      *
      * If an array is passed as the value, the array values are quoted
@@ -410,7 +449,7 @@ abstract class Zend_Db_Adapter_Abstract
             }
             return implode(', ', $value);
         } else {
-            if (is_int($value)) {
+            if (is_int($value) || is_float($value)) {
                 return $value;
             } else {
                 return $this->_quote($value);
@@ -443,17 +482,92 @@ abstract class Zend_Db_Adapter_Abstract
     /**
      * Quotes an identifier.
      *
-     * @param string|Zend_Db_Expr $ident The identifier.
+     * Accepts a string representing a qualified indentifier. For Example:
+     * <code>
+     * $adapter->quoteIdentifier('myschema.mytable')
+     * </code>
+     * Returns: "myschema"."mytable"
+     *
+     * Or, an array of one or more identifiers that may form a qualified identifier:
+     * <code>
+     * $adapter->quoteIdentifier(array('myschema','my.table'))
+     * </code>
+     * Returns: "myschema"."my.table"
+     *
+     * The actual quote character surrounding the identifiers may vary depending on
+     * the adapter.
+     *
+     * @param string|array|Zend_Db_Expr $ident The identifier.
      * @return string The quoted identifier.
      */
     public function quoteIdentifier($ident)
     {
-        if ($ident instanceof Zend_Db_Expr) {
-            return $ident->__toString();
-        }
+        return $this->_quoteIdentifierAs($ident);
+    }
+
+    /**
+     * Quote a column identifier and alias.
+     *
+     * @param string|array|Zend_Db_Expr $ident The identifier or expression.
+     * @param string $alias An alias for the column.
+     * @return string The quoted identifier and alias.
+     */
+    public function quoteColumnAs($ident, $alias)
+    {
+        return $this->_quoteIdentifierAs($ident, $alias);
+    }
+
+    /**
+     * Quote a table identifier and alias.
+     *
+     * @param string|array|Zend_Db_Expr $ident The identifier or expression.
+     * @param string $alias An alias for the table.
+     * @return string The quoted identifier and alias.
+     */
+    public function quoteTableAs($ident, $alias)
+    {
+        return $this->_quoteIdentifierAs($ident, $alias);
+    }
+
+    /**
+     * Quote an identifier and an optional alias.
+     *
+     * @param string|array|Zend_Db_Expr $ident The identifier or expression.
+     * @param string $alias An optional alias.
+     * @param string $as The string to add between the identifier/expression and the alias.
+     * @return string The quoted identifier and alias.
+     */
+    protected function _quoteIdentifierAs($ident, $alias = null, $as = ' AS ')
+    {
         $q = $this->getQuoteIdentifierSymbol();
-        $ident = str_replace("$q", "$q$q", $ident);
-        return $q . $ident . $q;
+
+        if ($ident instanceof Zend_Db_Expr) {
+            $quoted = $ident->__toString();
+        } else {
+            if (is_string($ident)) {
+                $ident = explode('.', $ident);
+            }
+            if (is_array($ident)) {
+                $segments = array();
+                foreach ($ident as $segment) {
+                    if ($segment instanceof Zend_Db_Expr) {
+                        $segments[] = $segment->__toString();
+                    } else {
+                        $segments[] = $q . str_replace("$q", "$q$q", $segment) . $q;
+                    }
+                }
+                if ($alias !== null && end($ident) == $alias) {
+                    $alias = null;
+                }
+                $quoted = implode('.', $segments);
+            } else {
+                $quoted = $q . str_replace("$q", "$q$q", $ident) . $q;
+            }
+        }
+        if ($alias !== null) {
+            $quoted .= $as . $q . str_replace("$q", "$q$q", $alias) . $q;
+        }
+        return $quoted;
     }
 
     /**
@@ -464,6 +578,64 @@ abstract class Zend_Db_Adapter_Abstract
     public function getQuoteIdentifierSymbol()
     {
         return '"';
+    }
+
+    /**
+     * Returns the column descriptions for a table, using a query against
+     * the ISO SQL standard INFORMATION_SCHEMA system views, for RDBMS
+     * implementations that support that feature.
+     * This method returns an associative array compatible with that returned
+     * by the describeTable() method.
+     *
+     * @param string $tableName
+     * @param string $schemaName OPTIONAL
+     * @return array
+     */
+    protected function _describeTableInformationSchema($tableName, $schemaName = null)
+    {
+        $sql = "SELECT c.table_schema, c.table_name, c.column_name,
+              c.ordinal_position as column_ordinal_position, c.data_type,
+              c.column_default, c.is_nullable, c.character_octet_length,
+              c.numeric_precision, c.numeric_scale, c.character_set_name,
+              tc.constraint_type, k.ordinal_position as key_ordinal_position
+            FROM INFORMATION_SCHEMA.COLUMNS c
+              LEFT JOIN (INFORMATION_SCHEMA.KEY_COLUMN_USAGE k
+                JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+                ON (k.table_schema = tc.table_schema
+                  AND k.table_name = tc.table_name
+                  AND tc.constraint_type = 'PRIMARY KEY'))
+              ON (c.table_schema = k.table_schema
+                AND c.table_name = k.table_name
+                AND c.column_name = k.column_name)
+            WHERE c.table_name = '$tableName'";
+
+        if ($schemaName != null) {
+            $sql .= " AND c.table_schema = '$schemaName'";
+        }
+
+        $stmt = $this->query($sql);
+        $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        $desc = array();
+        foreach ($result as $key => $row) {
+            $desc[$row['column_name']] = array(
+                'SCHEMA_NAME'      => $row['table_schema'],
+                'TABLE_NAME'       => $row['table_name'],
+                'COLUMN_NAME'      => $row['column_name'],
+                'COLUMN_POSITION'  => $row['column_ordinal_position'],
+                'DATA_TYPE'        => $row['data_type'],
+                'DEFAULT'          => $row['column_default'],
+                'NULLABLE'         => (bool) ($row['is_nullable'] == 'YES'),
+                'LENGTH'           => $row['character_octet_length'],
+                'PRECISION'        => $row['numeric_precision'],
+                'SCALE'            => $row['numeric_scale'],
+                'UNSIGNED'         => null, // @todo
+                'PRIMARY'          => (bool) ($row['constraint_type'] == 'PRIMARY KEY'),
+                'PRIMARY_POSITION' => $row['key_ordinal_position']
+            );
+        }
+
+        return $desc;
     }
 
     /**
@@ -498,20 +670,13 @@ abstract class Zend_Db_Adapter_Abstract
      * PRECISION   => number; precision of NUMERIC/DECIMAL
      * UNSIGNED    => boolean; unsigned property of an integer type
      * PRIMARY     => boolean; true if column is part of the primary key
+     * PRIMARY_POSITION => integer; position of column in primary key
      *
      * @param string $tableName
      * @param string $schemaName OPTIONAL
      * @return array
      */
     abstract public function describeTable($tableName, $schemaName = null);
-
-    /**
-     * Quote a raw string.
-     *
-     * @param string $value     Raw string
-     * @return string           Quoted string
-     */
-    abstract protected function _quote($value);
 
     /**
      * Creates a connection to the database.

@@ -71,15 +71,14 @@ class Zend_Cache_Frontend_Output extends Zend_Cache_Core
      * Stop the cache
      * 
      * @param array $tags tags array
-     * @param int $specificLifeTime if != false, set a specific lifetime for this cache record (null => infinite lifeTime)    
+     * @param int $specificLifetime if != false, set a specific lifetime for this cache record (null => infinite lifetime)    
      */
-    public function end($tags = array(), $specificLifeTime = false)
+    public function end($tags = array(), $specificLifetime = false)
     {
         $data = ob_get_contents();
         ob_end_clean();
-        $this->save($data, null, $tags, $specificLifeTime);
+        $this->save($data, null, $tags, $specificLifetime);
         echo($data);
     }
              
 }
-

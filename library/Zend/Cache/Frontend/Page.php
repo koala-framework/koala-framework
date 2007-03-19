@@ -1,7 +1,5 @@
 <?php
 
-// HTTPCONDITIONAL IS MISSING !!!
-
 /**
  * Zend Framework
  *
@@ -189,10 +187,10 @@ class Zend_Cache_Frontend_Page extends Zend_Cache_Core
             return false;
         }
         if (!$id) {
-	        $id = $this->_makeId(); 
-	        if (!$id) {
-	            return false;
-	        }
+            $id = $this->_makeId(); 
+            if (!$id) {
+                return false;
+            }
         }
         $data = $this->load($id);
         if ($data !== false) {

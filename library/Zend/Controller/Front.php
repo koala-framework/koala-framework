@@ -19,6 +19,9 @@
  */
 
 
+/** Zend_Loader */
+require_once 'Zend/Loader.php';
+
 /** Zend_Controller_Exception */
 require_once 'Zend/Controller/Exception.php';
 
@@ -319,7 +322,7 @@ class Zend_Controller_Front
     public function setRequest($request)
     {
         if (is_string($request)) {
-            Zend::loadClass($request);
+            Zend_Loader::loadClass($request);
             $request = new $request();
         }
         if (!$request instanceof Zend_Controller_Request_Abstract) {
@@ -357,7 +360,7 @@ class Zend_Controller_Front
     public function setRouter($router)
     {
         if (is_string($router)) {
-            Zend::loadClass($router);
+            Zend_Loader::loadClass($router);
             $router = new $router();
         }
         if (!$router instanceof Zend_Controller_Router_Interface) {
@@ -473,7 +476,7 @@ class Zend_Controller_Front
     public function setResponse($response)
     {
         if (is_string($response)) {
-            Zend::loadClass($response);
+            Zend_Loader::loadClass($response);
             $response = new $response();
         }
         if (!$response instanceof Zend_Controller_Response_Abstract) {

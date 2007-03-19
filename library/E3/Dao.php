@@ -13,7 +13,7 @@ class E3_Dao
     {
         if (!isset($this->_tables[$tablename])) {
             try {
-            	Zend::loadClass($tablename);
+            	Zend_Loader::loadClass($tablename);
             	$this->_tables[$tablename] = new $tablename(array('db'=>$this->_db));
             } catch (Zend_Exception $e){
             	throw new E3_Dao_Exception('Dao not found: ' . $e->getMessage());

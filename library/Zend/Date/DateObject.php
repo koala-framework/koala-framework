@@ -14,8 +14,8 @@
  *
  * @category   Zend
  * @package    Zend_Date
- * @copyright  Copyright (c) 2006 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: DateObject.php 3224 2007-02-05 22:08:48Z gavin $
+ * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
+ * @version    $Id: DateObject.php 3877 2007-03-12 21:24:41Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -29,7 +29,7 @@ require_once 'Zend/Date/Exception.php';
  * @category   Zend
  * @package    Zend_Date
  * @subpackage Zend_Date_DateObject
- * @copyright  Copyright (c) 2006 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_Date_DateObject {
@@ -46,18 +46,19 @@ abstract class Zend_Date_DateObject {
      */
     private $_timezone = 'UTC';
     private $_offset   = 0;
+    private $_syncronised = 0;
 
 
     /**
      * Table of Monthdays
      */
-    static private $_monthTable = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+    private static $_monthTable = array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 
 
     /**
      * Table of Years
      */
-    static private $_yearTable = array(
+    private static $_yearTable = array(
         1970 => 0,            1960 => -315619200,   1950 => -631152000,
         1940 => -946771200,   1930 => -1262304000,  1920 => -1577923200,
         1910 => -1893456000,  1900 => -2208988800,  1890 => -2524521600,
@@ -89,7 +90,7 @@ abstract class Zend_Date_DateObject {
         } else if ($timestamp === null) {
             $this->_unixTimestamp = time();
         } else {
-            throw new Zend_Date_Exception('\'' . $timestamp . '\' is not a valid UNIX timestamp');
+            throw new Zend_Date_Exception('\'' . $timestamp . '\' is not a valid UNIX timestamp', $timestamp);
         }
 
         return $old;
@@ -117,11 +118,15 @@ abstract class Zend_Date_DateObject {
      * Returns time().  This method exists to allow unit tests to work-around methods that might otherwise
      * be hard-coded to use time().  For example, this makes it possible to test isYesterday() in Date.php.
      *
+     * @param   integer  $sync      OPTIONAL time syncronisation value
      * @return  integer  timestamp
      */
-    protected function _getTime()
+    protected function _getTime($sync = null)
     {
-        return time();
+        if ($sync !== null) {
+            $this->_syncronised = round($sync);
+        }
+        return (time() + $this->_syncronised);
     }
 
 
@@ -591,7 +596,7 @@ abstract class Zend_Date_DateObject {
      * @param  integer  $day
      * @return integer  dayOfWeek
      */
-    static protected function dayOfWeek($year, $month, $day)
+    protected static function dayOfWeek($year, $month, $day)
     {
         if ((1901 < $year) and ($year < 2038)) {
             return (int) date('w', mktime(0, 0, 0, $month, $day, $year));
@@ -954,6 +959,7 @@ abstract class Zend_Date_DateObject {
      * 
      * @param  string  $zone      OPTIONAL timezone for date calculation; defaults to date_default_timezone_get()
      * @return string  actual set timezone string
+     * @throws Zend_Date_Exception
      */
     public function setTimezone($zone = null)
     {
@@ -961,7 +967,15 @@ abstract class Zend_Date_DateObject {
         if ($zone === null) {
             $zone = $oldzone;
         }
-        $result = @date_default_timezone_set($zone);
+
+        // throw an error on false input, but only if the new date extension is avaiable
+        if (function_exists('timezone_open')) {
+            if (!@timezone_open($zone)) {
+                throw new Zend_Date_Exception("timezone ($zone) is not a known timezone", $zone);
+            }
+        }
+        // this can generate an error if the date extension is not avaiable and a false timezone is given
+        $result = date_default_timezone_set($zone);
         if ($result === true) {
             $this->_offset   = mktime(0, 0, 0, 1, 2, 1970) - gmmktime(0, 0, 0, 1, 2, 1970);
             $this->_timezone = $zone;

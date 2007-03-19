@@ -19,11 +19,6 @@
  */
 
 /**
- * Zend
- */
-require_once 'Zend.php';
-
-/**
  * Implement Zend_Server_Interface
  */
 require_once 'Zend/Server/Interface.php';

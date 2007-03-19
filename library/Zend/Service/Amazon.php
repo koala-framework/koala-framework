@@ -80,11 +80,6 @@ require_once 'Zend/Service/Amazon/ResultSet.php';
  */
 require_once 'Zend/Service/Amazon/SimilarProduct.php';
 
-/**
- * Zend_Filter
- */
-require_once 'Zend/Filter.php';
-
 
 /**
  * @category   Zend
@@ -1021,7 +1016,12 @@ class Zend_Service_Amazon
         }
 
         if (isset($options['ItemPage'])) {
-        	if (!Zend_Filter::isBetween($options['ItemPage'],0, 2500, true)) {
+            /**
+             * @see Zend_Validate_Between
+             */
+            require_once 'Zend/Validate/Between.php';
+            $between = new Zend_Validate_Between(0, 2500, true);
+        	if (!$between->isValid($options['ItemPage'])) {
         	    throw new Zend_Service_Exception($options['ItemPage'] . ' is not valid for the "ItemPage" option.');
         	}
         }
@@ -1089,7 +1089,12 @@ class Zend_Service_Amazon
         }
 
         if (isset($options['ItemPage'])) {
-        	if (!Zend_Filter::isBetween($options['ItemPage'],0, 2500, true)) {
+            /**
+             * @see Zend_Validate_Between
+             */
+            require_once 'Zend/Validate/Between.php';
+            $between = new Zend_Validate_Between(0, 2500, true);
+        	if (!$between->isValid($options['ItemPage'])) {
         	    throw new Zend_Service_Exception($options['ItemPage'] . ' is not a valid value for the "ItemPage" option.');
         	}
         }

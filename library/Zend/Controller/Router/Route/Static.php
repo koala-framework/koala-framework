@@ -39,6 +39,15 @@ class Zend_Controller_Router_Route_Static implements Zend_Controller_Router_Rout
     protected $_defaults = array();
 
     /**
+     * Instantiates route based on passed Zend_Config structure
+     */
+    public static function getInstance(Zend_Config $config) 
+    {
+        $defs = ($config->defaults instanceof Zend_Config) ? $config->defaults->asArray() : array();
+        return new self($config->route, $defs);
+    }
+
+    /**
      * Prepares the route for mapping.  
      *
      * @param string Map used to match with later submitted URL path 

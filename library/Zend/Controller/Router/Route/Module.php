@@ -15,7 +15,7 @@
  * @package    Zend_Controller
  * @subpackage Router
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Module.php 3502 2007-02-16 18:59:43Z matthew $
+ * @version    $Id: Module.php 3745 2007-03-05 22:14:04Z martel $
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
@@ -71,6 +71,15 @@ class Zend_Controller_Router_Route_Module implements Zend_Controller_Router_Rout
      * @var Zend_Controller_Request_Abstract
      */
     protected $_request;
+
+    /**
+     * Instantiates route based on passed Zend_Config structure
+     */
+    public static function getInstance(Zend_Config $config) 
+    {
+        $defs = ($config->defaults instanceof Zend_Config) ? $config->defaults->asArray() : array();
+        return new self($defs);
+    }
 
     /**
      * Constructor

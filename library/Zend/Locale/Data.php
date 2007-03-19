@@ -16,7 +16,7 @@
  * @package    Zend_Locale
  * @subpackage Data
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Data.php 3224 2007-02-05 22:08:48Z gavin $
+ * @version    $Id: Data.php 3675 2007-02-28 21:12:38Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -350,8 +350,9 @@ class Zend_Locale_Data
 
             case 'monthlist':
                 self::_getFile($locale, '/ldml/dates/calendars/calendar[@type=\''
-                             . $value[0] . '\']/months/monthContext[@type=\'format\']/monthWidth[@type=\''
-                             . $value[1] . '\']/month', 'type');
+                             . $value[0] . '\']/months/monthContext[@type=\''
+                             . $value[1] . '\']/monthWidth[@type=\''
+                             . $value[2] . '\']/month', 'type');
                 break;
 
             case 'month':
@@ -368,14 +369,16 @@ class Zend_Locale_Data
 
             case 'daylist':
                 self::_getFile($locale, '/ldml/dates/calendars/calendar[@type=\''
-                             . $value[0] . '\']/days/dayContext[@type=\'format\']/dayWidth[@type=\''
-                             . $value[1] . '\']/day', 'type');
+                             . $value[0] . '\']/days/dayContext[@type=\''
+                             . $value[1] . '\']/dayWidth[@type=\''
+                             . $value[2] . '\']/day', 'type');
                 break;
 
             case 'day':
                 self::_getFile($locale, '/ldml/dates/calendars/calendar[@type=\''
-                             . $value[0] . '\']/days/dayContext[@type=\'format\']/dayWidth[@type=\''
-                             . $value[1] . '\']/day[@type=\'' . $value[2] . '\']', 'type');
+                             . $value[0] . '\']/days/dayContext[@type=\''
+                             . $value[1] . '\']/dayWidth[@type=\''
+                             . $value[2] . '\']/day[@type=\'' . $value[3] . '\']', 'type');
                 break;
 
             case 'week':
@@ -480,6 +483,7 @@ class Zend_Locale_Data
                     self::_getFile($locale, '/ldml/dates/timeZoneNames/zone[@type=\''
                                  . $key . '\']/exemplarCity', '', $key);
                 }
+                self::_getFile($locale, '/ldml/dates/timeZoneNames/zone', 'type');
                 break;
 
             case 'timezone':
@@ -604,6 +608,11 @@ class Zend_Locale_Data
                 }
                 break;
 
+            case 'currencyname':
+                self::_getFile($locale, '/ldml/numbers/currencies/currency[@type=\''
+                             . $value . '\']/displayName', '', $value);
+                break;
+
             case 'currencysymbols':
                 self::_getFile($locale, '/ldml/numbers/currencies/currency', 'type');
                 $_temp = self::$_list;
@@ -612,6 +621,11 @@ class Zend_Locale_Data
                     self::_getFile($locale, '/ldml/numbers/currencies/currency[@type=\''
                                  . $key . '\']/symbol', '', $key);
                 }
+                break;
+
+            case 'currencysymbol':
+                self::_getFile($locale, '/ldml/numbers/currencies/currency[@type=\''
+                             . $value . '\']/symbol', '', $value);
                 break;
 
             case 'questionstrings':
@@ -714,7 +728,9 @@ class Zend_Locale_Data
                                  . $key . '\']', 'territories', $key);
                 }
                 break;
-
+            default :
+                throw new Zend_Locale_Exception("Unknown detail ($path) for parsing locale data.");
+                break;
         }
         return self::$_list;
     }

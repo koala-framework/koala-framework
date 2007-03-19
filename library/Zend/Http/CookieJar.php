@@ -15,12 +15,11 @@
  * @category   Zend
  * @package    Zend_Http
  * @subpackage CookieJar
- * @version    $Id: CookieJar.php 2805 2007-01-16 01:38:10Z bkarwin $
+ * @version    $Id: CookieJar.php 3834 2007-03-09 05:12:52Z bkarwin $
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com/)
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
-require_once "Zend.php";
 require_once "Zend/Uri.php";
 require_once "Zend/Http/Cookie.php";
 require_once "Zend/Http/Response.php";

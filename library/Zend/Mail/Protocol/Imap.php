@@ -35,6 +35,12 @@ class Zend_Mail_Protocol_Imap
      */
     protected $_socket;
 
+    /**
+     * counter for request tag
+     * @var int
+     */
+    protected $_tagCount = 0;
+
 
     /**
      * Public constructor
@@ -278,11 +284,11 @@ class Zend_Mail_Protocol_Imap
         while (!$this->readLine($tokens, $tag, $dontParse)) {
             $lines[] = $tokens;
         }
+
         if ($dontParse) {
             // last to chars are still needed for response code
             $tokens = array(substr($tokens, 0, 2));
         }
-
         // last line has response code
         if ($tokens[0] == 'OK') {
             return $lines ? $lines : true;
@@ -304,7 +310,8 @@ class Zend_Mail_Protocol_Imap
     public function sendRequest($command, $tokens = array(), &$tag = null)
     {
         if (!$tag) {
-            $tag = 'TAG' . rand(100, 999);
+            ++$this->_tagCount;
+            $tag = 'TAG' . $this->_tagCount;
         }
 
         $line = $tag . ' ' . $command;
@@ -317,7 +324,7 @@ class Zend_Mail_Protocol_Imap
                 if (!$this->_assumedNextLine('+ OK')) {
                     throw new Zend_Mail_Protocol_Exception('cannot send literal string');
                 }
-                $line .= $token[1];
+                $line = $token[1];
             } else {
                 $line .= ' ' . $token;
             }
@@ -455,7 +462,7 @@ class Zend_Mail_Protocol_Imap
      */
     public function examineOrSelect($command = 'EXAMINE', $box = 'INBOX')
     {
-        $this->sendRequest($command, (array)$this->escapeString($box), $tag);
+        $this->sendRequest($command, array($this->escapeString($box)), $tag);
 
         $result = array();
         while (!$this->readLine($tokens, $tag)) {
@@ -540,14 +547,30 @@ class Zend_Mail_Protocol_Imap
 
         $result = array();
         while (!$this->readLine($tokens, $tag)) {
+            // ignore other responses
             if ($tokens[1] != 'FETCH') {
                 continue;
             }
+            // ignore other messages
             if ($to === null && $tokens[0] != $from) {
                 continue;
             }
+            // if we only want one item we return that one directly
             if (count($items) == 1) {
-                $data = next($tokens[2]);
+                if ($tokens[2][0] == $items[0]) {
+                    $data = $tokens[2][1];
+                } else {
+                    // maybe the server send an other field we didn't wanted
+                    $count = count($tokens[2]);
+                    // we start with 2, because 0 was already checked
+                    for ($i = 2; $i < $count; $i += 2) {
+                        if ($tokens[2][$i] != $items[0]) {
+                            continue;
+                        }
+                        $data = $tokens[2][$i + 1];
+                        break;
+                    }
+                }
             } else {
                 $data = array();
                 while (key($tokens[2]) !== null) {
@@ -555,7 +578,10 @@ class Zend_Mail_Protocol_Imap
                     next($tokens[2]);
                 }
             }
+            // if we want only one message we can ignore everything else and just return
             if ($to === null && $tokens[0] == $from) {
+                // we still need to read all lines
+                while (!$this->readLine($tokens, $tag));
                 return $data;
             }
             $result[$tokens[0]] = $data;
@@ -594,5 +620,129 @@ class Zend_Mail_Protocol_Imap
         }
 
         return $result;
+    }
+
+    /**
+     * set flags
+     *
+     * @param  array       $flags  flags to set, add or remove - see $mode
+     * @param  int         $from   message for items or start message if $to !== null
+     * @param  int|null    $to     if null only one message ($from) is fetched, else it's the
+     *                             last message, INF means last message avaible
+     * @param  string|null $mode   '+' to add flags, '-' to remove flags, everything else sets the flags as given
+     * @param  bool        $silent if false the return values are the new flags for the wanted messages
+     * @return bool|array new flags if $silent is false, else true or false depending on success
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function store($flags, $from, $to = null, $mode = null, $silent = true)
+    {
+        $item = 'FLAGS';
+        if ($mode == '+' || $mode == '-') {
+            $item = $mode . $item;
+        }
+        if ($silent) {
+            $item .= '.SILENT';
+        }
+
+        $flags = $this->escapeList($flags);
+        $set = (int)$from;
+        if ($to != null) {
+            $set .= ':' . ($to == INF ? '*' : (int)$to);
+        }
+
+        $result = $this->requestAndResponse('STORE', array($set, $item, $flags), $silent);
+
+        if ($silent) {
+            return $result ? true : false;
+        }
+
+        $tokens = $result;
+        $result = array();
+        foreach ($tokens as $token) {
+            if ($token[1] != 'FETCH' || $token[2][0]) {
+                continue;
+            }
+            $result[$token[0]] = $token[2][1];
+        }
+
+        return $result;
+    }
+
+    /**
+     * append a new message to given folder
+     *
+     * @param string $folder  name of target folder
+     * @param string $message full message content
+     * @param array  $flags   flags for new message
+     * @param string $date    date for new message
+     * @return bool success
+     * @throws Zend_Mail_Protocol_Exception
+     */
+    public function append($folder, $message, $flags = null, $date = null)
+    {
+        $tokens = array();
+        $tokens[] = $this->escapeString($folder);
+        if ($flags !== null) {
+            $tokens[] = $this->escapeList($flags);
+        }
+        if ($date !== null) {
+            $tokens[] = $this->escapeString($date);
+        }
+        $tokens[] = $this->escapeString($message);
+
+        return $this->requestAndResponse('APPEND', $tokens, true);
+    }
+
+    /**
+     * copy message set from current folder to other folder
+     *
+     * @param string   $folder destination folder
+     * @param int|null $to     if null only one message ($from) is fetched, else it's the
+     *                         last message, INF means last message avaible
+     * @return bool success
+     * @throw Zend_Mail_Protocol_Exception
+     */
+    public function copy($folder, $from, $to = null)
+    {
+        $set = (int)$from;
+        if ($to != null) {
+            $set .= ':' . ($to == INF ? '*' : (int)$to);
+        }
+
+        return $this->requestAndResponse('COPY', array($set, $this->escapeString($folder)), true);
+    }
+
+    /**
+     * create a new folder (and parent folders if needed)
+     *
+     * @param string $folder folder name
+     * @return bool success
+     */
+    public function create($folder)
+    {
+        return $this->requestAndResponse('CREATE', array($this->escapeString($folder)), true);
+    }
+
+    /**
+     * rename an existing folder
+     *
+     * @param string $old old name
+     * @param string $new new name
+     * @return bool success
+     */
+    public function rename($old, $new)
+    {
+        return $this->requestAndResponse('RENAME', $this->escapeString($old, $new), true);
+    }
+
+    /**
+     * remove a folder
+     *
+     * @param string $folder folder name
+     * @return bool success
+     */
+    public function delete($folder)
+    {
+        return $this->requestAndResponse('DELETE', array($this->escapeString($folder)), true);
     }
 }

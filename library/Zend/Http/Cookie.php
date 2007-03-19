@@ -16,12 +16,9 @@
  * @package    Zend_Http
  * @subpackage Cookie
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com/)
- * @version    $Id: Cookie.php 3032 2007-01-26 21:18:46Z shahar $
+ * @version    $Id: Cookie.php 3834 2007-03-09 05:12:52Z bkarwin $
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
-
-require_once "Zend.php";
-require_once "Zend/Uri.php";
 
 /**
  * Zend_Http_Cookie is a class describing an HTTP cookie and all it's parameters. 

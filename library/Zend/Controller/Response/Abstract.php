@@ -234,10 +234,10 @@ abstract class Zend_Controller_Response_Abstract
      */
     public function canSendHeaders($throw = false)
     {
-        $ok = headers_sent();
+        $ok = headers_sent($file, $line);
         if ($ok && $throw && $this->headersSentThrowsException) {
             require_once 'Zend/Controller/Response/Exception.php';
-            throw new Zend_Controller_Response_Exception('Cannot send headers; headers already sent');
+            throw new Zend_Controller_Response_Exception('Cannot send headers; headers already sent in ' . $file . ', line ' . $line);
         }
 
         return !$ok;
@@ -292,14 +292,24 @@ abstract class Zend_Controller_Response_Abstract
     /**
      * Set body content
      *
-     * If body content already defined, this will replace it.
+     * If $name is not passed, or is not a string, resets the entire body and 
+     * sets the 'default' key to $content.
+     *
+     * If $name is a string, sets the named segment in the body array to 
+     * $content.
      *
      * @param string $content
+     * @param null|string $name 
      * @return Zend_Controller_Response_Abstract
      */
-    public function setBody($content)
+    public function setBody($content, $name = null)
     {
-        $this->_body = array((string) $content);
+        if ((null === $name) || !is_string($name)) {
+            $this->_body = array('default' => (string) $content);
+        } else {
+            $this->_body[$name] = (string) $content;
+        }
+
         return $this;
     }
 
@@ -307,30 +317,150 @@ abstract class Zend_Controller_Response_Abstract
      * Append content to the body content
      *
      * @param string $content
+     * @param null|string $name 
      * @return Zend_Controller_Response_Abstract
      */
-    public function appendBody($content)
+    public function appendBody($content, $name = null)
     {
-        $this->_body[] = (string) $content;
+        if ((null === $name) || !is_string($name)) {
+            if (isset($this->_body['default'])) {
+                $this->_body['default'] .= (string) $content;
+            } else {
+                return $this->append('default', $content);
+            }
+        } elseif (isset($this->_body[$name])) {
+            $this->_body[$name] .= (string) $content;
+        } else {
+            return $this->append($name, $content);
+        }
+
         return $this;
+    }
+
+    /**
+     * Clear body array
+     * 
+     * @return true
+     */
+    public function clearBody()
+    {
+        $this->_body = array();
+        return true;
     }
 
     /**
      * Return the body content
      *
-     * @param boolean $asArray Whether or not to return the body content as an 
-     * array of strings or as a single string; defaults to false
-     * @return string|array
+     * If $spec is false, returns the concatenated values of the body content 
+     * array. If $spec is boolean true, returns the body content array. If 
+     * $spec is a string and matches a named segment, returns the contents of 
+     * that segment; otherwise, returns null.
+     *
+     * @param boolean $spec 
+     * @return string|array|null
      */
-    public function getBody($asArray = false)
+    public function getBody($spec = false)
     {
-        if ($asArray) {
+        if (false === $spec) {
+            ob_start();
+            $this->outputBody();
+            return ob_get_clean();
+        } elseif (true === $spec) {
             return $this->_body;
+        } elseif (is_string($spec) && isset($this->_body[$spec])) {
+            return $this->_body[$spec];
         }
 
-        ob_start();
-        $this->outputBody();
-        return ob_get_clean();
+        return null;
+    }
+
+    /**
+     * Append a named body segment to the body content array
+     * 
+     * If segment already exists, replaces with $content and places at end of 
+     * array.
+     *
+     * @param string $name 
+     * @param string $content 
+     * @return Zend_Controller_Response_Abstract
+     */
+    public function append($name, $content)
+    {
+        if (!is_string($name)) {
+            require_once 'Zend/Controller/Response/Exception.php';
+            throw new Zend_Controller_Response_Exception('Invalid body segment key ("' . gettype($name) . '")');
+        }
+
+        if (isset($this->_body[$name])) {
+            unset($this->_body[$name]);
+        }
+        $this->_body[$name] = (string) $content;
+        return $this;
+    }
+
+    /**
+     * Prepend a named body segment to the body content array
+     * 
+     * If segment already exists, replaces with $content and places at top of 
+     * array.
+     *
+     * @param string $name 
+     * @param string $content 
+     * @return void
+     */
+    public function prepend($name, $content)
+    {
+        if (!is_string($name)) {
+            require_once 'Zend/Controller/Response/Exception.php';
+            throw new Zend_Controller_Response_Exception('Invalid body segment key ("' . gettype($name) . '")');
+        }
+
+        if (isset($this->_body[$name])) {
+            unset($this->_body[$name]);
+        }
+
+        $new = array($name => (string) $content);
+        $this->_body = $new + $this->_body;
+
+        return $this;
+    }
+
+    public function insert($name, $content, $parent = null, $before = false)
+    {
+        if (!is_string($name)) {
+            require_once 'Zend/Controller/Response/Exception.php';
+            throw new Zend_Controller_Response_Exception('Invalid body segment key ("' . gettype($name) . '")');
+        }
+
+        if ((null !== $parent) && !is_string($parent)) {
+            require_once 'Zend/Controller/Response/Exception.php';
+            throw new Zend_Controller_Response_Exception('Invalid body segment parent key ("' . gettype($parent) . '")');
+        }
+
+        if (isset($this->_body[$name])) {
+            unset($this->_body[$name]);
+        }
+
+        if ((null === $parent) || !isset($this->_body[$parent])) {
+            if (!$before) {
+                return $this->append($name, $content);
+            } else {
+                return $this->prepend($name, $content);
+            }
+        }
+
+        $ins  = array($name => (string) $content);
+        $keys = array_keys($this->_body);
+        $loc  = array_search($parent, $keys);
+        if ($before) {
+            --$loc;
+        }
+        $pre  = array_slice($this->_body, 0, $loc);
+        $post = array_slice($this->_body, $loc);
+
+        $this->_body = $pre + $ins + $post;
+
+        return $this;
     }
 
     /**

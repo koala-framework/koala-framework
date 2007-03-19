@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Measure
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Number.php 3242 2007-02-06 19:53:10Z thomas $
+ * @version    $Id: Number.php 4070 2007-03-17 19:52:37Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -230,7 +230,7 @@ class Zend_Measure_Number extends Zend_Measure_Abstract
                 break;
             default:
                 try {
-                    $value = Zend_Locale_Format::getInteger($value, $locale);
+                    $value = Zend_Locale_Format::getInteger($value, array('locale' => $locale));
                 } catch (Exception $e) {
                     throw new Zend_Measure_Exception($e->getMessage());
                 }
@@ -299,7 +299,7 @@ class Zend_Measure_Number extends Zend_Measure_Abstract
     {
         if ($this->_UNITS[$type][0] <= 16) {
             $newvalue = "";
-            while(call_user_func(Zend_Locale_Math::$comp, $value, 0) > 1) {
+            while(call_user_func(Zend_Locale_Math::$comp, $value, 0) > 0) {
                 $target = call_user_func(Zend_Locale_Math::$mod, $value, $this->_UNITS[$type][0]);
                 $target = strtoupper( dechex($target) );
                 $newvalue = $target . $newvalue;

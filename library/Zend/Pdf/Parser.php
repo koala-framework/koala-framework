@@ -68,8 +68,8 @@ require_once 'Zend/Pdf/Trailer/Keeper.php';
 /** Zend_Pdf_ElementFactory */
 require_once 'Zend/Pdf/ElementFactory.php';
 
-/** Zend_Pdf_PHPArray */
-require_once 'Zend/Pdf/PHPArray.php';
+/** Zend_Pdf_PhpArray */
+require_once 'Zend/Pdf/PhpArray.php';
 
 /** Zend_Pdf_StringParser */
 require_once 'Zend/Pdf/StringParser.php';

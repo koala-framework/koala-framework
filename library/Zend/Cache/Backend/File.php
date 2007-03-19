@@ -201,10 +201,10 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
      * @param string $data datas to cache
      * @param string $id cache id
      * @param array $tags array of strings, the cache record will be tagged by each string entry
-     * @param int $specificLifeTime if != false, set a specific lifetime for this cache record (null => infinite lifeTime)
+     * @param int $specificLifetime if != false, set a specific lifetime for this cache record (null => infinite lifetime)
      * @return boolean true if no problem
      */
-    public function save($data, $id, $tags = array(), $specificLifeTime = false)
+    public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
         if ((!is_dir($this->_options['cacheDir'])) or (!is_writable($this->_options['cacheDir']))) {
             if ($this->_directives['logging']) {
@@ -212,8 +212,8 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
             }
         }
         $this->remove($id); // to avoid multiple files with the same cache id
-        $lifeTime = $this->getLifeTime($specificLifeTime);
-        $expire = $this->_expireTime($lifeTime);
+        $lifetime = $this->getLifetime($specificLifetime);
+        $expire = $this->_expireTime($lifetime);
         $file = $this->_file($id, $expire);
         $firstTry = true;
         $result = false;
@@ -489,12 +489,12 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
      * 
      * @return int expire time (unix timestamp)
      */
-    private function _expireTime($lifeTime) 
+    private function _expireTime($lifetime) 
     {
-        if (is_null($this->_directives['lifeTime'])) {
+        if (is_null($this->_directives['lifetime'])) {
             return 9999999999;
         }
-        return time() + $lifeTime;
+        return time() + $lifetime;
     }
     
     /**

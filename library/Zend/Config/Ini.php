@@ -34,6 +34,8 @@ require_once 'Zend/Config.php';
  */
 class Zend_Config_Ini extends Zend_Config
 {
+    protected $_nestSeparator= '.';
+    
     /**
      * Loads the section $section from the config file $filename for
      * access facilitated by nested object properties.
@@ -64,10 +66,22 @@ class Zend_Config_Ini extends Zend_Config
      * @param boolean $allowModifications
      * @throws Zend_Config_Exception
      */
-    public function __construct($filename, $section, $allowModifications = false)
+    public function __construct($filename, $section, $config = false)
     {
         if (empty($filename)) {
             throw new Zend_Config_Exception('Filename is not set');
+        }
+        
+        $allowModifications = false;
+        if (is_bool($config)) {
+            $allowModifications = $config;
+        } elseif (is_array($config)) {
+            if (isset($config['allowModifications'])) {
+                $allowModifications = (bool)$config['allowModifications'];
+            }
+            if (isset($config['nestSeparator'])) {
+                $this->_nestSeparator = $config['nestSeparator'];
+            }
         }
 
         $iniArray = parse_ini_file($filename, true);
@@ -161,8 +175,8 @@ class Zend_Config_Ini extends Zend_Config
      */
     protected function _processKey($config, $key, $value)
     {
-        if (strpos($key, '.') !== false) {
-            $pieces = explode('.', $key, 2);
+        if (strpos($key, $this->_nestSeparator) !== false) {
+            $pieces = explode($this->_nestSeparator, $key, 2);
             if (strlen($pieces[0]) && strlen($pieces[1])) {
                 if (!isset($config[$pieces[0]])) {
                     $config[$pieces[0]] = array();

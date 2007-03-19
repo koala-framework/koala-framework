@@ -38,7 +38,7 @@ require_once 'Zend/Pdf/Element/Name.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Pdf_Image_JPEG extends Zend_Pdf_Image
+class Zend_Pdf_Image_Jpeg extends Zend_Pdf_Image
 {
 
     protected $_width;

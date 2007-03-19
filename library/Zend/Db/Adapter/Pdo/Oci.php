@@ -68,6 +68,19 @@ class Zend_Db_Adapter_Pdo_Oci extends Zend_Db_Adapter_Pdo_Abstract
     }
 
     /**
+     * Quote a table identifier and alias.
+     *
+     * @param string|array|Zend_Db_Expr $ident The identifier or expression.
+     * @param string $alias An alias for the table.
+     * @return string The quoted identifier and alias.
+     */
+    public function quoteTableAs($ident, $alias)
+    {
+        // Oracle doesn't allow the 'AS' keyword between the table identifier/expression and alias.
+        return $this->_quoteIdentifierAs($ident, $alias, ' ');
+    }
+
+    /**
      * Returns a list of the tables in the database.
      *
      * @return array
@@ -87,18 +100,19 @@ class Zend_Db_Adapter_Pdo_Oci extends Zend_Db_Adapter_Pdo_Abstract
      * The value of each array element is an associative array
      * with the following keys:
      *
-     * SCHEMA_NAME => string; name of database or schema
-     * TABLE_NAME  => string;
-     * COLUMN_NAME => string; column name
-     * COLUMN_POSITION => number; ordinal position of column in table
-     * DATA_TYPE   => string; SQL datatype name of column
-     * DEFAULT     => string; default expression of column, null if none
-     * NULLABLE    => boolean; true if column can have nulls
-     * LENGTH      => number; length of CHAR/VARCHAR
-     * SCALE       => number; scale of NUMERIC/DECIMAL
-     * PRECISION   => number; precision of NUMERIC/DECIMAL
-     * UNSIGNED    => boolean; unsigned property of an integer type
-     * PRIMARY     => boolean; true if column is part of the primary key
+     * SCHEMA_NAME      => string; name of database or schema
+     * TABLE_NAME       => string;
+     * COLUMN_NAME      => string; column name
+     * COLUMN_POSITION  => number; ordinal position of column in table
+     * DATA_TYPE        => string; SQL datatype name of column
+     * DEFAULT          => string; default expression of column, null if none
+     * NULLABLE         => boolean; true if column can have nulls
+     * LENGTH           => number; length of CHAR/VARCHAR
+     * SCALE            => number; scale of NUMERIC/DECIMAL
+     * PRECISION        => number; precision of NUMERIC/DECIMAL
+     * UNSIGNED         => boolean; unsigned property of an integer type
+     * PRIMARY          => boolean; true if column is part of the primary key
+     * PRIMARY_POSITION => integer; position of column in primary key
      *
      * @todo Discover column position.
      * @todo Discover integer unsigned property.
@@ -111,41 +125,36 @@ class Zend_Db_Adapter_Pdo_Oci extends Zend_Db_Adapter_Pdo_Abstract
     public function describeTable($tableName, $schemaName = null)
     {
         $tableName = strtoupper($tableName);
-        $sql = "SELECT TABLE_NAME, COLUMN_NAME, DATA_TYPE, DATA_DEFAULT, NULLABLE, DATA_LENGTH, DATA_SCALE, DATA_PRECISION
-            FROM ALL_TAB_COLUMNS
-            WHERE TABLE_NAME = '$tableName'";
+        $sql = "SELECT T.TABLE_NAME, T.COLUMN_NAME, T.DATA_TYPE,
+                T.DATA_DEFAULT, T.NULLABLE, T.COLUMN_ID, T.DATA_LENGTH,
+                T.DATA_SCALE, T.DATA_PRECISION, C.CONSTRAINT_TYPE, CC.POSITION
+            FROM USER_TAB_COLUMNS T
+            LEFT JOIN (USER_CONS_COLUMNS CC JOIN USER_CONSTRAINTS C
+                ON (CC.CONSTRAINT_NAME = C.CONSTRAINT_NAME AND CC.TABLE_NAME = C.TABLE_NAME AND C.CONSTRAINT_TYPE = 'P'))
+              ON T.TABLE_NAME = CC.TABLE_NAME AND T.COLUMN_NAME = CC.COLUMN_NAME
+            WHERE T.TABLE_NAME = '$tableName'";
+
         $stmt = $this->query($sql);
         $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         $desc = array();
         foreach ($result as $key => $row) {
             $desc[$row['column_name']] = array(
-                'SCHEMA_NAME' => null,
-                'TABLE_NAME'  => $row['table_name'],
-                'COLUMN_NAME' => $row['column_name'],
-                'COLUMN_POSITION' => null,
-                'DATA_TYPE'   => $row['data_type'],
-                'DEFAULT'     => $row['data_default'],
-                'NULLABLE'    => (bool) ($row['nullable'] == 'Y'),
-                'LENGTH'      => $row['data_length'],
-                'SCALE'       => $row['data_scale'],
-                'PRECISION'   => $row['data_precision'],
-                'UNSIGNED'    => null,
-                'PRIMARY'     => (bool) 0
+                'SCHEMA_NAME'      => null,
+                'TABLE_NAME'       => $row['table_name'],
+                'COLUMN_NAME'      => $row['column_name'],
+                'COLUMN_POSITION'  => $row['column_id'],
+                'DATA_TYPE'        => $row['data_type'],
+                'DEFAULT'          => $row['data_default'],
+                'NULLABLE'         => (bool) ($row['nullable'] == 'Y'),
+                'LENGTH'           => $row['data_length'],
+                'SCALE'            => $row['data_scale'],
+                'PRECISION'        => $row['data_precision'],
+                'UNSIGNED'         => null,
+                'PRIMARY'          => (bool) ($row['constraint_type'] == 'P'),
+                'PRIMARY_POSITION' => $row['position']
             );
         }
         return $desc;
-    }
-
-    /**
-     * Quote a raw string.
-     *
-     * @param string $value     Raw string
-     * @return string           Quoted string
-     */
-    public function _quote($value)
-    {
-        $value = str_replace("'", "''", $value);
-        return "'" . $value . "'";
     }
 
     /**

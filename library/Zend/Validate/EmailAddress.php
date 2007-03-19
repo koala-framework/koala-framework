@@ -15,9 +15,9 @@
  *
  * @category   Zend
  * @package    Zend_Validate
- * @copyright  Copyright (c) 2006 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: EmailAddress.php 3429 2007-02-15 14:19:43Z studio24 $
+ * @version    $Id: EmailAddress.php 3970 2007-03-15 20:13:26Z studio24 $
  */
 
 
@@ -36,7 +36,7 @@ require_once 'Zend/Validate/Hostname.php';
 /**
  * @category   Zend
  * @package    Zend_Validate
- * @copyright  Copyright (c) 2006 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Validate_EmailAddress implements Zend_Validate_Interface
@@ -53,12 +53,19 @@ class Zend_Validate_EmailAddress implements Zend_Validate_Interface
      *
      * @var Zend_Validate_Hostname
      */
-    protected $_hostnameValidator;
+    public $hostnameValidator;
+
+    /**
+     * Whether we check for a valid MX record via DNS
+     *
+     * @var boolean 
+     */
+    protected $_validateMx = false;
     
     /**
      * Instantiates hostname validator for local use
-     * 
-     * You can pass a bitfield to determine what types of hostnames are allowed. 
+     *
+     * You can pass a bitfield to determine what types of hostnames are allowed.
      * These bitfields are defined by the ALLOW_* constants in Zend_Validate_Hostname
      * The default is to allow DNS hostnames only
      *
@@ -66,11 +73,38 @@ class Zend_Validate_EmailAddress implements Zend_Validate_Interface
      * @param integer $allow
      * @return void
      */
-    public function __construct($allow = Zend_Validate_Hostname::ALLOW_DNS)
+    public function __construct($allow = Zend_Validate_Hostname::ALLOW_DNS, $validateMx = false)
     {
-        // Initialise Zend_Validate_Hostnames
-        $this->_hostnameValidator = new Zend_Validate_Hostname($allow);
+        // Initialise Zend_Validate_Hostname
+        $this->hostnameValidator = new Zend_Validate_Hostname($allow);
+        
+        // Set validation options
+        $this->_validateMx = $validateMx;
+    }   
+    
+    /**
+     * Whether MX checking via dns_get_mx is supported or not
+     * 
+     * This currently only works on UNIX systems
+     *
+     * @return boolean
+     */
+    public function validateMxSupported ()
+    {
+        return function_exists('dns_get_mx');
     }
+    
+    /**
+     * Set whether we check for a valid MX record via DNS
+     * 
+     * This only applies when DNS hostnames are validated
+     *
+     * @param boolean $allowed Set allowed to true to validate for MX records, and false to not validate them
+     */
+    public function setValidateMx ($allowed)
+    {
+        $this->_validateMx = (bool) $allowed;  
+    }    
     
     /**
      * Defined by Zend_Validate_Interface
@@ -95,22 +129,37 @@ class Zend_Validate_EmailAddress implements Zend_Validate_Interface
 
         $localPart	= $matches[1];
         $hostname 	= $matches[2];
-
-        /**
-         * @todo 0.9 ZF-42 implement basic MX check on hostname via dns_get_record()
-         */
         
         // Match hostname part
-        $hostnameResult = $this->_hostnameValidator->isValid($hostname);
+        $hostnameResult = $this->hostnameValidator->isValid($hostname);
         if (!$hostnameResult) {
             $this->_messages[] = "'$hostname' is not a valid hostname for email address '$value'";
 
             // Get messages from hostnameValidator
-            foreach ($this->_hostnameValidator->getMessages() as $message) {
+            foreach ($this->hostnameValidator->getMessages() as $message) {
                 $this->_messages[] = $message;
             }
         }
 
+        // MX check on hostname via dns_get_record()
+        if ($this->_validateMx) {
+            if ($this->validateMxSupported()) {
+                $result = dns_get_mx($hostname, $mxHosts); 
+                var_dump($result, $mxHosts);
+                if (count($result) < 1) {
+                    $hostnameResult = false;
+                    $this->_messages[] = "'$hostname' does not appear to have a valid MX record for the email address '$value'";
+                }
+            } else {
+                /**
+                  * MX checks are not supported by this system
+                  * @see Zend_Validate_Exception
+                  */
+                require_once 'Zend/Validate/Exception.php';
+                throw new Zend_Validate_Exception('Internal error: MX checking not available on this system');
+            }
+        }
+        
         // First try to match the local part on the common dot-atom format
         $localResult = false;
 
@@ -124,7 +173,7 @@ class Zend_Validate_EmailAddress implements Zend_Validate_Interface
         } else {
              $this->_messages[] = "'$localPart' not matched against dot-atom format";
         }
-        
+
         // If not matched, try quoted string format
         if (!$localResult) {
 

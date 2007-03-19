@@ -101,12 +101,8 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
     protected function _prepSql($sql)
     {
         // split into text and params
-        $this->_sqlSplit = preg_split(
-            "/(\?|\:[a-z]+)/",
-            $sql,
-            -1,
-            PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY
-        );
+        $this->_sqlSplit = preg_split('/(\?|\:[a-z_]+)/',
+            $sql, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
 
         // map params
         $this->_sqlParam = array();
@@ -306,6 +302,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
      * @todo needs implementation or better exception message
      * @todo fix docblock for params & return types
      *
+     * @return int Number of rows affected.
      * @throws Zend_Db_Statement_Exception
      */
     public function rowCount()

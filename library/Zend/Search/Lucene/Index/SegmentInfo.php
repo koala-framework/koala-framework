@@ -452,13 +452,28 @@ class Zend_Search_Lucene_Index_SegmentInfo
 
 
         if ($this->_termDictionary === null) {
-            // Prefetch dictionary index data
-            $tiiFile = $this->openCompoundFile('.tii');
-            $tiiFileData = $tiiFile->readBytes($this->compoundFileLength('.tii'));
+            // Check, if index is already serialized
+            if ($this->_directory->fileExists($this->_name . '.sti')) {
+                // Prefetch dictionary index data
+                $stiFile = $this->_directory->getFileObject($this->_name . '.sti');
+                $stiFileData = $stiFile->readBytes($this->_directory->fileLength($this->_name . '.sti'));
 
-            // Load dictionary index data
-            list($this->_termDictionary, $this->_termDictionaryInfos) =
-                        Zend_Search_Lucene_Index_DictionaryLoader::load($tiiFileData);
+                // Load dictionary index data
+                list($this->_termDictionary, $this->_termDictionaryInfos) = unserialize($stiFileData);
+            } else {
+                // Prefetch dictionary index data
+                $tiiFile = $this->openCompoundFile('.tii');
+                $tiiFileData = $tiiFile->readBytes($this->compoundFileLength('.tii'));
+
+                // Load dictionary index data
+                list($this->_termDictionary, $this->_termDictionaryInfos) =
+                            Zend_Search_Lucene_Index_DictionaryLoader::load($tiiFileData);
+
+                $stiFileData = serialize(array($this->_termDictionary, $this->_termDictionaryInfos));
+                $stiFile = $this->_directory->createFile($this->_name . '.sti');
+                $stiFile->writeBytes($stiFileData);
+            }
+
         }
 
 

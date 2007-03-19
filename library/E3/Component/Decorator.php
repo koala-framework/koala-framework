@@ -6,12 +6,12 @@ class E3_Component_Decorator extends E3_Component_Abstract
     public function getTemplateVars()
     {
         $row = $this->_dao->getTable('E3_Dao_Decorator')
-                ->find($this->getComponentId());
+                ->find($this->getComponentId())->current();
 
         $componentClass = $this->_dao->getTable('E3_Dao_Components')
-                            ->getComponentClass($row->componentId);
+                            ->getComponentClass($row->component_id);
 
-        $this->_decorated = new $componentClass($row->componentId, $this->_dao);
+        $this->_decorated = new $componentClass($row->component_id, $this->_dao);
 
         $ret['decorated'] = $this->_decorated->getTemplateVars();
         $ret['color'] = 'blue';

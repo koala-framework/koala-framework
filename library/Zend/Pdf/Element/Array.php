@@ -22,8 +22,8 @@
 /** Zend_Pdf_Element */
 require_once 'Zend/Pdf/Element.php';
 
-/** Zend_Pdf_PHPArray */
-require_once 'Zend/Pdf/PHPArray.php';
+/** Zend_Pdf_PhpArray */
+require_once 'Zend/Pdf/PhpArray.php';
 
 
 
@@ -43,7 +43,7 @@ class Zend_Pdf_Element_Array extends Zend_Pdf_Element
      * Appropriate methods must (!) be used to modify it to provide correct
      * work with objects and references.
      *
-     * @var Zend_Pdf_PHPArray
+     * @var Zend_Pdf_PhpArray
      */
     private $_items;
 
@@ -56,7 +56,7 @@ class Zend_Pdf_Element_Array extends Zend_Pdf_Element
      */
     public function __construct($val = null)
     {
-        $this->_items = new Zend_Pdf_PHPArray();
+        $this->_items = new Zend_Pdf_PhpArray();
 
         if ($val !== null  &&  is_array($val)) {
             foreach ($val as $element) {
@@ -75,7 +75,7 @@ class Zend_Pdf_Element_Array extends Zend_Pdf_Element
      * Provides access to $this->_items
      *
      * @param string $property
-     * @return Zend_Pdf_PHPArray
+     * @return Zend_Pdf_PhpArray
      */
     public function __get($property) {
         if ($property=='items') {

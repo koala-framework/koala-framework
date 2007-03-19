@@ -42,11 +42,11 @@ require_once 'Zend/Pdf/Color.php';
 /** Zend_Pdf_Color_GrayScale */
 require_once 'Zend/Pdf/Color/GrayScale.php';
 
-/** Zend_Pdf_Color_RGB */
-require_once 'Zend/Pdf/Color/RGB.php';
+/** Zend_Pdf_Color_Rgb */
+require_once 'Zend/Pdf/Color/Rgb.php';
 
-/** Zend_Pdf_Color_CMYK */
-require_once 'Zend/Pdf/Color/CMYK.php';
+/** Zend_Pdf_Color_Cmyk */
+require_once 'Zend/Pdf/Color/Cmyk.php';
 
 /**
  * PDF Page
@@ -339,8 +339,6 @@ class Zend_Pdf_Page
      */
     private function _addProcSet($procSetName)
     {
-        global $procSets;
-
         // Check that Resources dictionary contains ProcSet entry
         if ($this->_pageDictionary->Resources->ProcSet === null) {
             $this->_pageDictionary->Resources->touch();

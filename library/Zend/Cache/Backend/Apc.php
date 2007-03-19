@@ -105,13 +105,13 @@ class Zend_Cache_Backend_APC extends Zend_Cache_Backend implements Zend_Cache_Ba
      * @param string $data datas to cache
      * @param string $id cache id
      * @param array $tags array of strings, the cache record will be tagged by each string entry
-     * @param int $specificLifeTime if != false, set a specific lifetime for this cache record (null => infinite lifeTime)
+     * @param int $specificLifetime if != false, set a specific lifetime for this cache record (null => infinite lifetime)
      * @return boolean true if no problem
      */
-    public function save($data, $id, $tags = array(), $specificLifeTime = false)
+    public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
-        $lifeTime = $this->getLifeTime($specificLifeTime);
-        $result = apc_store($id, array($data, time()), $lifeTime);
+        $lifetime = $this->getLifetime($specificLifetime);
+        $result = apc_store($id, array($data, time()), $lifetime);
         if (count($tags) > 0) {
             if ($this->_directives['logging']) {
                 Zend_Log::log("Zend_Cache_Backend_APC::save() : tags are unsupported by the APC backend", Zend_Log::LEVEL_WARNING);

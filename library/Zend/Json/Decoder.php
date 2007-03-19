@@ -18,12 +18,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-
-/**
- * Zend
- */
-require_once 'Zend.php';
-
 /**
  * Zend_Json
  */

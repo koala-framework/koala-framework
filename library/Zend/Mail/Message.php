@@ -36,10 +36,17 @@ require_once 'Zend/Mail/Part.php';
 class Zend_Mail_Message extends Zend_Mail_Part
 {
     /**
+     * flags for this message
+     * @var array
+     */
+    protected $_flags = array();
+
+    /**
      * Public constructor
      *
      * In addition to the parameters of Zend_Mail_Part::__construct() this constructor supports:
-     * - file filename or file handle of a file with raw message content
+     * - file  filename or file handle of a file with raw message content
+     * - flags array with flags for message, keys are ignored, use constants defined in Zend_Mail_Storage
      *
      * @param  string $rawMessage  full message with or without headers
      * @throws Zend_Mail_Exception
@@ -57,6 +64,11 @@ class Zend_Mail_Message extends Zend_Mail_Part
             }
         }
 
+        if (!empty($params['flags'])) {
+            // set key and value to the same value for easy lookup
+            $this->_flags = array_combine($params['flags'], $params['flags']);
+        }
+
         parent::__construct($params);
     }
 
@@ -68,5 +80,26 @@ class Zend_Mail_Message extends Zend_Mail_Part
     public function getTopLines()
     {
         return $this->_topLines;
+    }
+
+    /**
+     * check if flag is set
+     *
+     * @param mixed $flag a flag name, use constants defined in Zend_Mail_Storage
+     * @return bool true if set, otherwise false
+     */
+    public function hasFlag($flag)
+    {
+        return isset($this->_flags[$flag]);
+    }
+
+    /**
+     * get all set flags
+     *
+     * @return array array with flags, key and value are the same for easy lookup
+     */
+    public function getFlags()
+    {
+        return $this->_flags;
     }
 }

@@ -108,21 +108,19 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
      * The value of each array element is an associative array
      * with the following keys:
      *
-     * SCHEMA_NAME => string; name of database or schema
-     * TABLE_NAME  => string;
-     * COLUMN_NAME => string; column name
-     * COLUMN_POSITION => number; ordinal position of column in table
-     * DATA_TYPE   => string; SQL datatype name of column
-     * DEFAULT     => string; default expression of column, null if none
-     * NULLABLE    => boolean; true if column can have nulls
-     * LENGTH      => number; length of CHAR/VARCHAR
-     * SCALE       => number; scale of NUMERIC/DECIMAL
-     * PRECISION   => number; precision of NUMERIC/DECIMAL
-     * UNSIGNED    => boolean; unsigned property of an integer type
-     * PRIMARY     => boolean; true if column is part of the primary key
-     *
-     * @todo Discover column position.
-     * @todo Discover integer unsigned property.
+     * SCHEMA_NAME      => string; name of database or schema
+     * TABLE_NAME       => string;
+     * COLUMN_NAME      => string; column name
+     * COLUMN_POSITION  => number; ordinal position of column in table
+     * DATA_TYPE        => string; SQL datatype name of column
+     * DEFAULT          => string; default expression of column, null if none
+     * NULLABLE         => boolean; true if column can have nulls
+     * LENGTH           => number; length of CHAR/VARCHAR
+     * SCALE            => number; scale of NUMERIC/DECIMAL
+     * PRECISION        => number; precision of NUMERIC/DECIMAL
+     * UNSIGNED         => boolean; unsigned property of an integer type
+     * PRIMARY          => boolean; true if column is part of the primary key
+     * PRIMARY_POSITION => integer; position of column in primary key
      *
      * @param string $tableName
      * @param string $schemaName OPTIONAL
@@ -134,21 +132,25 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
         $stmt = $this->query($sql);
         $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         $desc = array();
+        $i = 1;
+        $p = 1;
         foreach ($result as $key => $row) {
             $desc[$row['name']] = array(
-                'SCHEMA_NAME' => null,
-                'TABLE_NAME'  => $tableName,
-                'COLUMN_NAME' => $row['name'],
-                'COLUMN_POSITION' => null, // @todo
-                'DATA_TYPE'   => $row['type'],
-                'DEFAULT'     => $row['dflt_value'],
-                'NULLABLE'    => ! (bool) $row['notnull'],
-                'LENGTH'      => null,
-                'SCALE'       => null,
-                'PRECISION'   => null,
-                'UNSIGNED'    => null, // @todo
-                'PRIMARY'     => (bool) $row['pk'],
+                'SCHEMA_NAME'      => null,
+                'TABLE_NAME'       => $tableName,
+                'COLUMN_NAME'      => $row['name'],
+                'COLUMN_POSITION'  => $i,
+                'DATA_TYPE'        => $row['type'],
+                'DEFAULT'          => $row['dflt_value'],
+                'NULLABLE'         => ! (bool) $row['notnull'],
+                'LENGTH'           => null, // @todo
+                'SCALE'            => null, // @todo
+                'PRECISION'        => null, // @todo
+                'UNSIGNED'         => null, // @todo
+                'PRIMARY'          => (bool) $row['pk'],
+                'PRIMARY_POSITION' => ((bool) $row['pk']) ? $p++ : 0
             );
+            ++$i;
         }
         return $desc;
     }

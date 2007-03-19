@@ -175,17 +175,6 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
     }
 
     /**
-     * Quote a raw string.
-     *
-     * @param string $value     Raw string
-     * @return string           Quoted string
-     */
-    protected function _quote($value)
-    {
-        return $this->_connection->quote($value);
-    }
-
-    /**
      * Set the PDO fetch mode.
      *
      * @todo Support FETCH_CLASS and FETCH_INTO.

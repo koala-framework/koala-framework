@@ -32,9 +32,10 @@ set_include_path(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library'
                  . PATH_SEPARATOR . '.' . PATH_SEPARATOR . get_include_path());
 
 require_once 'Zend.php';
+require_once 'Zend/Loader.php';
 function __autoload($class)
 {
-    Zend::loadClass($class);
+    Zend_Loader::loadClass($class);
 }
 
 class E3_Test extends PHPUnit_Framework_TestCase
