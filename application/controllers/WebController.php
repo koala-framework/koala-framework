@@ -7,7 +7,6 @@ class WebController extends Zend_Controller_Action
     {
         echo "WebController::indexAction()<br />";
         $component = $this->getTemplateVars();
-        p($component);
         
         $view = new E3_View_Smarty('../application/views',
                         array('compile_dir'=>'../application/views_c'));
@@ -36,23 +35,19 @@ class WebController extends Zend_Controller_Action
     private function getTemplateVars()
     {
         $return = array();
-        try {
-            $pageCollectionConfig = new Zend_Config_Ini('../application/config.ini', 'pagecollection');
 
-            $dbConfig = new Zend_Config_Ini('../application/config.db.ini', 'web');
-            $dbConfig = $dbConfig->database->asArray();
-            $db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
+        $pageCollectionConfig = new Zend_Config_Ini('../application/config.ini', 'pagecollection');
+        $dbConfig = new Zend_Config_Ini('../application/config.db.ini', 'web');
+        $dbConfig = $dbConfig->database->asArray();
+        $db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
+        $dao = new E3_Dao($db);
 
-            $dao = new E3_Dao($db);
-
-            $this->_pageCollection = new $pageCollectionConfig->pagecollection->type($dao);
-
-            $page = $this->_pageCollection->getPageByPath($this->getRequest()->getPathInfo());
-            if ($page != null) {
-               	$return = $page->getTemplateVars();
-            }
-        } catch (E3_Web_Exception $e) {
+        $pageCollection = new $pageCollectionConfig->pagecollection->type($dao);
+        $page = $pageCollection->getPageByPath($this->getRequest()->getPathInfo());
+        if ($page != null) {
+           	$return = $page->getTemplateVars();
         }
+
         return $return;
     }
 

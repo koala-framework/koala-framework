@@ -128,8 +128,22 @@ class E3_PageCollection_TreeTest extends E3_Test
     {
 		$pc = $this->_pc;
 		$rootPage = $pc->getRootPage();
-		$rootPage->callGenerateHierarchy($pc, 'test1');
-        $rootPage->callGenerateHierarchy($pc);
+		$rootPage->generateHierarchy($pc, 'test1');
+		$rootPage->generateHierarchy($pc, 'test1');
+        $rootPage->generateHierarchy($pc);
+        $rootPage->generateHierarchy($pc);
+    }
+
+    public function testGetChildPageWithFilename()
+    {
+		$pc = $this->_pc;
+		$rootPage = $pc->getRootPage();
+		$test1 = $pc->getChildPage($rootPage, 'test1');
+		$test2_1 = $pc->getChildPage($test1, 'test2');
+		$test2_2 = $pc->getChildPage($rootPage, 'test2');
+		$this->assertEquals(2, $test1->getComponentId());
+		$this->assertEquals(6, $test2_1->getComponentId());
+		$this->assertEquals(124, $test2_2->getComponentId());
     }
 }
 

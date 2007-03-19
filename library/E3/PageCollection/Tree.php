@@ -60,7 +60,7 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
 
     public function getChildPages(E3_Component_Abstract $page)
     {
-        $page->callGenerateHierarchy($this);
+        $page->generateHierarchy($this);
         $childs = array();
         $searchId = $page->getComponentId();
         foreach($this->_pageParentIds as $id=>$parentId) {
@@ -73,7 +73,7 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
 
     public function getChildPage(E3_Component_Abstract $page, $filename)
     {
-        $page->callGenerateHierarchy($this, $filename);
+        $page->generateHierarchy($this, $filename);
         $childs = array();
         $searchId = $page->getComponentId();
         foreach($this->_pageParentIds as $id=>$parentId) {

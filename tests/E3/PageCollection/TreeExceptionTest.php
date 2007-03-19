@@ -60,5 +60,10 @@ class E3_PageCollection_TreeExceptionTest extends E3_ExceptionTest
 		$this->_pc->addPage($component, 'foo');
      	$this->_pc->setParentPage($component, $component);
     }
+    
+    public function pageExists()
+    {
+		$this->_pc->pageExists('foo');
+    }
 }
 
