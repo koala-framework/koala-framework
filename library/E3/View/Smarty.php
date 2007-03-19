@@ -28,6 +28,9 @@ class E3_View_Smarty implements Zend_View_Interface
         foreach ($extraParams as $key => $value) {
             $this->_smarty->$key = $value;
         }
+
+        $this->_smarty->plugins_dir[] = 'SmartyPlugins/';
+        
     }
 
     /**
@@ -39,7 +42,7 @@ class E3_View_Smarty implements Zend_View_Interface
     {
         return $this->_smarty;
     }
-
+    
     /**
      * Setze den Pfad zu den Templates
      *

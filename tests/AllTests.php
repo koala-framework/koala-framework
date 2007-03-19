@@ -5,7 +5,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 function p($src, $max_depth = 3) {
-    Zend::dump($src);
+    Zend_Debug::dump($src);
     /*
     ini_set('xdebug.var_display_max_depth', $max_depth);
     if(function_exists('xdebug_var_dump')) {

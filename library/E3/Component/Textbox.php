@@ -10,8 +10,13 @@ class E3_Component_Textbox extends E3_Component_Abstract
         } else {
         	$content = '';
         }
+        $ret['id'] = $this->getComponentId();
         $ret['content'] = $content;
-        $ret['template'] = 'Textbox.html';
+        if (isset($_GET["mode"]) && $_GET["mode"] == 'edit') {
+        	$ret['template'] = '../../library/E3/Component/Textbox.html';
+        } else {
+        	$ret['template'] = 'Textbox.html';
+        }
         return $ret;
     }
 }

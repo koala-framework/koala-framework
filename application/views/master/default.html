@@ -1,3 +1,21 @@
+{literal}
+<script src="/files/js/yui/yahoo/yahoo-min.js"></script> 
+<script src="/files/js/yui/event/event-min.js"></script> 
+<script src="/files/js/yui/connection/connection-min.js"></script> 
+<script type="text/javascript">
+var callback = {
+	success: function(o){
+		$(this.container).innerHTML = o.responseText;
+	}
+};
+
+function fe(div) {
+    callback.container = div;
+    var connectionObject = YAHOO.util.Connect.asyncRequest('get', '/ajax/fe', callback);
+}
+</script>
+{/literal}
+
 <h1>e3-test</h1>
 
 {include file=$component.template}
