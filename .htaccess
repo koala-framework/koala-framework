@@ -2,7 +2,7 @@ RewriteEngine on
 
 RewriteRule ^files/js/yui/(.*)$ /library/YUI/$1 [L]
 
-RewriteCond %{REQUEST_URI} !^/*(files|public/index.php)/?
+RewriteCond %{REQUEST_URI} !^/*(library|files|public/index.php)/?
 RewriteRule ^(.*)$ /public/index.php
 
 
