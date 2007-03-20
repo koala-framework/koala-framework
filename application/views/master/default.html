@@ -1,21 +1,103 @@
-{literal}
-<script src="/files/js/yui/yahoo/yahoo-min.js"></script> 
-<script src="/files/js/yui/event/event-min.js"></script> 
-<script src="/files/js/yui/connection/connection-min.js"></script> 
-<script type="text/javascript">
-var callback = {
-	success: function(o){
-		$(this.container).innerHTML = o.responseText;
-	}
-};
-
-function fe(div) {
-    callback.container = div;
-    var connectionObject = YAHOO.util.Connect.asyncRequest('get', '/ajax/fe', callback);
-}
-</script>
-{/literal}
+<script type="text/javascript" src="/files/js/yui/yahoo/yahoo-min.js"></script> 
+<script type="text/javascript" src="/files/js/yui/event/event-min.js"></script> 
+<script type="text/javascript" src="/files/js/yui/connection/connection-min.js"></script> 
+<script type="text/javascript" src="/files/js/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script type="text/javascript" src="/files/js/yui/element/element-beta-min.js"></script>
+<script type="text/javascript" src="/files/js/yui/button/button-beta-min.js"></script> 
 
 <h1>e3-test</h1>
 
 {include file=$component.template}
+
+{literal}
+<script type="text/javascript">
+
+YAHOO.namespace('fe');
+var E3 = YAHOO.fe;
+
+E3.Component = function(componentId) {
+    
+	this.handleSuccess = function(o){
+  		this.htmlelement.innerHTML = o.responseText;
+		this.makeFe(this.componentId);
+	},
+
+	this.handleFailure = function(o){
+		alert('failure');
+	},
+
+	this.handleMouseOver = function(o, el) { 
+		el.setStyle('border', '1px solid black');
+	};
+
+	this.handleMouseOut = function(o, el) { 
+		el.setStyle('border', '');
+	};
+
+	this.handleSave = function() {
+		var connectionObject = YAHOO.util.Connect.asyncRequest('get', 'ajax/fe?componentId='+this.componentId, this);
+	};
+	
+	this.handleCancel = function() { 
+		var connectionObject = YAHOO.util.Connect.asyncRequest('get', 'ajax/fe?componentId='+this.componentId, this);
+	};
+
+
+	this.makeFe = function() {
+		el = new YAHOO.util.Element(this.htmlelement);
+		el.on('mouseover', this.handleMouseOver, el);
+		el.on('mouseout', this.handleMouseOut, el);
+		el.on('click', this.handleClick, {el:el, scope:this});
+	}
+	
+	this.componentId = componentId;
+	this.htmlelement = document.getElementById('container_' + this.componentId);
+	this.success = this.handleSuccess;
+	this.failure = this.handleFailure;
+	this.makeFe();
+};
+
+E3.Component.prototype.handleClick = function(o, e) {
+	el = e.el;
+	scope = e.scope;
+
+	el.removeListener('mouseover', el.handleMouseOver);  
+	el.removeListener('mouseout', el.handleMouseOut);  
+	el.removeListener('click', el.handleClick);  
+
+	el.setStyle('border', '');
+	var saveButton = new YAHOO.widget.Button({
+	                                        label: "Save", 
+	                                        container: el
+	                                    });
+	saveButton.on('click', scope.handleSave, null, scope);
+	var cancelButton = new YAHOO.widget.Button({
+	                                        label: "Cancel", 
+	                                        container: el
+	                                    });
+	cancelButton.on('click', scope.handleCancel, null, scope);
+};
+
+E3.Textbox = function(componentId) {
+    E3.Textbox.superclass.constructor.call(this, componentId);
+};
+YAHOO.lang.extend(E3.Textbox, E3.Component);
+
+E3.Textbox.prototype.handleClick = function(o, e) {
+	el = e.el;
+    if (el.hasChildNodes) { 
+        el.removeChild(el.get('firstChild')); 
+	}
+	child = new YAHOO.util.Element(document.createElement('input'));
+	el.appendChild(child);
+	
+	E3.Textbox.superclass.handleClick.call(this, o, e); 
+	
+};
+
+
+new YAHOO.fe.Textbox(4);
+new YAHOO.fe.Component(5);
+
+</script>
+{/literal}

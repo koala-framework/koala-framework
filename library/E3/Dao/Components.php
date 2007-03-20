@@ -9,7 +9,7 @@ class E3_Dao_Components extends Zend_Db_Table
         $rowset = $this->find($componentId);
         
         if ($rowset->count() == 0) {
-        	throw new E3_Dao_Exception("Component with id $componentId does not exists in table components.");
+        	throw new E3_Dao_Exception("Component with id $componentId does not exist in table components.");
         }
         
         return $rowset->current()->component;

@@ -10,6 +10,13 @@ abstract class E3_Component_Abstract
         $this->_dao = $dao;
         $this->_componentId = (int)$componentId;
     }
+    
+    public static function createComponent($dao, $componentId)
+    {
+        $model = $dao->getTable('E3_Dao_Components');
+        $class = $model->getComponentClass($componentId);
+	    return new $class($componentId, $dao);
+    }
 
     public final function generateHierarchy(E3_PageCollection_Abstract $pageCollection, $filename='')
     {
