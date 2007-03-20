@@ -30,7 +30,7 @@ abstract class E3_Component_Abstract
         }
     }
     
-    protected function generateTreeHierarchy(E3_PageCollection_Abstract $pageCollection, $filename)
+    protected function generateTreeHierarchy(E3_PageCollection_Tree $pageCollection, $filename)
     {
         $componentModel = $this->_dao->getTable('E3_Dao_Components');
         $rows = $this->_dao->getTable('E3_Dao_Pages')
