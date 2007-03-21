@@ -6,9 +6,9 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
 
     public function setParentPage(E3_Component_Abstract $page, E3_Component_Abstract $parentPage)
     {
-        $id = $page->getComponentId();
-        $parentId = $parentPage->getComponentId();
-        $rootId = $this->getRootPage()->getComponentId();
+        $id = $page->getId();
+        $parentId = $parentPage->getId();
+        $rootId = $this->getRootPage()->getId();
         
         if ($parentId == $id) {
         	throw new E3_PageCollection_Exception('Cannot set Parent Page for the same object.');
@@ -46,7 +46,7 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
     public function getParentPage(E3_Component_Abstract $page)
     {
        	$return = null;
-        $id = $page->getComponentId();
+        $id = $page->getId();
         if (isset($this->_pageParentIds[$id])) {
 	        $parentId = $this->_pageParentIds[$id];
 	        if (!isset($this->_pages[$parentId])) {
@@ -62,7 +62,7 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
     {
         $page->generateHierarchy($this);
         $childs = array();
-        $searchId = $page->getComponentId();
+        $searchId = $page->getId();
         foreach($this->_pageParentIds as $id=>$parentId) {
             if($parentId == $searchId) {
                 $childs[] = $this->_pages[$id];
@@ -75,7 +75,7 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
     {
         $page->generateHierarchy($this, $filename);
         $childs = array();
-        $searchId = $page->getComponentId();
+        $searchId = $page->getId();
         foreach($this->_pageParentIds as $id=>$parentId) {
             if($parentId == $searchId && $filename == $this->_pageFilenames[$id]) {
                 return $this->_pages[$id];

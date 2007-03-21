@@ -2,20 +2,24 @@
 abstract class E3_Component_Abstract
 {
     protected $_dao;
-    protected $_componentId;
+    private $_componentId;
+    private $_componentKey;
+    private $_pageKey;
     private $_hasGeneratedForFilename = array();
 
-    public function __construct($componentId, E3_Dao $dao)
+    public function __construct(E3_Dao $dao, $componentId, $pageKey="", $componentKey="")
     {
         $this->_dao = $dao;
         $this->_componentId = (int)$componentId;
+        $this->_pageKey = $pageKey;
+        $this->_componentKey = $componentKey;
     }
     
-    public static function createComponent($dao, $componentId)
+    public static function createComponent($dao, $componentId, $pageKey="", $componentKey="")
     {
         $model = $dao->getTable('E3_Dao_Components');
         $class = $model->getComponentClass($componentId);
-	    return new $class($componentId, $dao);
+	    return new $class($dao, $componentId, $pageKey, $componentKey);
     }
 
     public final function generateHierarchy(E3_PageCollection_Abstract $pageCollection, $filename='')
@@ -40,18 +44,33 @@ abstract class E3_Component_Abstract
             $id = (int)$pageRow->component_id;
             if (!$pageCollection->pageExists($id)) {
 	            $componentClass = $componentModel->getComponentClass($pageRow->component_id);
-	            $component = new $componentClass($pageRow->component_id, $this->getDao());
+	            $component = new $componentClass($this->getDao(), $pageRow->component_id);
 	            $pageCollection->addPage($component, $pageRow->filename);
 	            $pageCollection->setParentPage($component, $this);
             }
         }
     }
 
-    public function getComponentId()
+    protected function getComponentId()
     {
         return (int)$this->_componentId;
     }
-    
+    protected function getComponentKey()
+    {
+        return $this->_componentKey;
+    }
+    protected function getPageKey()
+    {
+        return $this->_pageKey;
+    }
+
+    public function getId()
+    {
+        $ret = (string)$this->getComponentId();
+        if ($this->getPageKey() != "") $ret .= "_" . $this->getPageKey();
+        if ($this->getComponentKey() != "") $ret .= "_" . $this->getComponentKey();
+        return $ret;
+    }
     public function getTemplateVars()
     {
         return array();

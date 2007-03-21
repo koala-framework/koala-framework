@@ -11,7 +11,7 @@ class E3_Component_DecoratorTest extends E3_Test
     public function testPaths()
     {
         $db = $this->_dao->getDb();
-        $decorator = new E3_Component_Decorator(2, $this->_dao);
+        $decorator = new E3_Component_Decorator($this->_dao, 2);
         $templateVars = $decorator->getTemplateVars();
         //todo...
     }

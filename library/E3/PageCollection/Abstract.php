@@ -25,7 +25,7 @@ abstract class E3_PageCollection_Abstract
         	throw new E3_PageCollection_Exception("A page with the same componentId already exists.");
         }
         
-        $id = $component->getComponentId();
+        $id = $component->getId();
         $this->_pages[$id] = $component;
         $this->_pageFilenames[$id] = $filename;
     }
@@ -33,17 +33,22 @@ abstract class E3_PageCollection_Abstract
     public function setRootPage(E3_Component_Abstract $component)
     {
 		$this->_setPage($component, '');
-        $this->_rootPageId = $component->getComponentId();
+        $this->_rootPageId = $component->getId();
     }
     
-    public function pageExists($id)
+    public function pageExists($id, $pageTag="", $componentTag="")
     {
     	if ($id instanceof E3_Component_Abstract) {
-    		$id = $id->getComponentId();
+    		$id = $id->getId();
+    		if ($pageTag != "" || $componentTag != "") {
+    		    throw new E3_PageCollection_Exception('pageTag and componentTag must be emty when id is a E3_Component_Abstract.');
+    		}
     	}
-    	if (!is_int($id)) {
-    		throw new E3_PageCollection_Exception('ID must be an instance of E3_Component_Abstract or an Integer.');
-    	}
+//     	if (!is_int($id)) {
+//     		throw new E3_PageCollection_Exception('ID must be an instance of E3_Component_Abstract or an Integer.');
+//     	}
+    	if ($pageTag != "") $id .= "_".$pageTag;
+    	if ($componentTag != "") $id .= "_".$componentTag;
     	return isset($this->_pages[$id]);
     }
     
@@ -51,10 +56,10 @@ abstract class E3_PageCollection_Abstract
     {
     	if (!isset($this->_rootPageId)) {
 	    	$pageRow = $this->_dao->getTable('E3_Dao_Pages')->fetchRootPage();
-	    	//p($pageRow);
+
 	        $componentClass = $this->_dao->getTable('E3_Dao_Components')
 	                            ->getComponentClass($pageRow->component_id);
-	        $rootPage = new $componentClass($pageRow->component_id, $this->_dao);
+	        $rootPage = new $componentClass($this->_dao, $pageRow->component_id);
 	        $this->setRootPage($rootPage);
     	}
     	return $this->_pages[$this->_rootPageId];

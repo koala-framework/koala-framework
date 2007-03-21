@@ -7,12 +7,13 @@ class E3_Component_Paragraphs extends E3_Component_Abstract
     {
         $this->_paragraphs = array();
 
-        $rows = $this->_dao->getTable('E3_Dao_Paragraphs')->find($this->getComponentId());
+        $rows = $this->_dao->getTable('E3_Dao_Paragraphs')
+            ->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
 
         $componentModel = $this->_dao->getTable('E3_Dao_Components');
         foreach($rows as $row) {
             $componentClass = $componentModel->getComponentClass($row->component_id);
-            $this->_paragraphs[] = new $componentClass($row->component_id, $this->_dao);
+            $this->_paragraphs[] = new $componentClass($this->_dao, $row->component_id);
         }
 
         $ret = array('paragraphs'=>array());
