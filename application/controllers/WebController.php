@@ -51,12 +51,29 @@ class WebController extends Zend_Controller_Action
         	$body = $view->render('master/default.html');
         }
 
+        $params = $this->getRequest()->getParams();
+        if (isset($params['mode']) && $params['mode'] == 'edit') {
+	        $view = new E3_View_Smarty('../library/E3',
+                        array('compile_dir'=>'../application/views_c'));
+            $componentsInfo = array();
+            $components = array();
+            foreach ($page->getComponentInfo() as $key => $component) {
+            	$filename = str_replace('_', '/', $component) . '.js';
+            	if (is_file('../library/' . $filename)) {
+		            $componentsInfo[$key] = str_replace('_', '.', $component);
+		            $components[] = $filename;
+            	}
+            }
+            $view->assign('componentsInfo', $componentsInfo);
+            $view->assign('components', array_unique($components));
+        	$body .= $view->render('fe.html');
+        }
+
         $response = $this->getResponse();
         if ($response->canSendHeaders()) {
         	$response->setHeader('Content-Type', 'text/html');
         }
         $response->appendBody($body);
-        return $response;        
     }
 
 }

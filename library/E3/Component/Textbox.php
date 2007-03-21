@@ -10,7 +10,8 @@ class E3_Component_Textbox extends E3_Component_Abstract
         } else {
         	$content = '';
         }
-        $ret['id'] = $this->getId();
+        
+        $ret = parent::getTemplateVars();
         $ret['content'] = $content;
        	$ret['template'] = 'Textbox.html';
 

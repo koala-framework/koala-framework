@@ -1,5 +1,7 @@
+<div id="container_{$component.id}">
 {foreach from=$component.paragraphs item=paragraph}
-<div>
+<div id="container_{$component.id}_{counter}">
     {include file=$paragraph.template component=$paragraph}
 </div>
 {/foreach}
+</div>
