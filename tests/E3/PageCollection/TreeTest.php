@@ -40,8 +40,8 @@ class E3_PageCollection_TreeTest extends E3_Test
     public function testSetParentPage()
     {
 		$pc = $this->_pc;
-		$p1 = new E3_Component_Textbox(-1, $this->_dao);
-		$p2 = new E3_Component_Textbox(-2, $this->_dao);
+		$p1 = new E3_Component_Textbox($this->_dao, -1);
+		$p2 = new E3_Component_Textbox($this->_dao, -2);
 
 		$pc->addPage($p1, 'foo');
 		$pc->addPage($p2, 'bar');
@@ -51,16 +51,16 @@ class E3_PageCollection_TreeTest extends E3_Test
    		$page1 = $this->_pc->getPageByPath('/foo');
    		$page2 = $this->_pc->getPageByPath('/foo/bar');
     	
-    	$this->assertEquals(-1, $page1->getComponentId());
-    	$this->assertEquals(-2, $page2->getComponentId());
+    	$this->assertEquals(-1, $page1->getId());
+    	$this->assertEquals(-2, $page2->getId());
     }
     
     public function testGetParentPage()
     {
 		// Setup
 		$pc = $this->_pc;
-		$p1 = new E3_Component_Textbox(-1, $this->_dao);
-		$p2 = new E3_Component_Textbox(-2, $this->_dao);
+		$p1 = new E3_Component_Textbox($this->_dao, -1);
+		$p2 = new E3_Component_Textbox($this->_dao, -2);
 
 		$pc->addPage($p1, 'foo');
 		$pc->addPage($p2, 'bar');
@@ -77,23 +77,23 @@ class E3_PageCollection_TreeTest extends E3_Test
    		$parentPage = $this->_pc->getParentPage($page);
    		$home = $this->_pc->getParentPage($parentPage);
 		// /foo
-    	$this->assertEquals(-1, $parentPage->getComponentId());
+    	$this->assertEquals(-1, $parentPage->getId());
     	// home
-    	$this->assertEquals($pc->getRootPage()->getComponentId(), $home->getComponentId());
+    	$this->assertEquals($pc->getRootPage()->getId(), $home->getId());
     	// parent von home
     	$this->assertNull($this->_pc->getParentPage($home));
     	// Seite nicht in Seitenbaum
-    	$this->assertNull($this->_pc->getParentPage(new E3_Component_Textbox(-100, $this->_dao)));
+    	$this->assertNull($this->_pc->getParentPage(new E3_Component_Textbox($this->_dao, -100)));
     }
 
     public function testGetChildPages()
     {
 		// Setup
 		$pc = $this->_pc;
-		$p1 = new E3_Component_Textbox(-1, $this->_dao);
-		$p2 = new E3_Component_Textbox(-2, $this->_dao);
-		$p3 = new E3_Component_Textbox(-3, $this->_dao);
-		$p4 = new E3_Component_Textbox(-4, $this->_dao);
+		$p1 = new E3_Component_Textbox($this->_dao, -1);
+		$p2 = new E3_Component_Textbox($this->_dao, -2);
+		$p3 = new E3_Component_Textbox($this->_dao, -3);
+		$p4 = new E3_Component_Textbox($this->_dao, -4);
 
 		// root -> foo -> bar -> {barchild1, barchild2}
 		$pc->addPage($p1, 'foo');
@@ -117,11 +117,11 @@ class E3_PageCollection_TreeTest extends E3_Test
    		$page = $this->_pc->getPageByPath("/test1");
    		$childPages = $this->_pc->getChildPages($p1);
    		$this->assertEquals(1, sizeof($childPages));
-    	$this->assertEquals(-2, $childPages[0]->getComponentId());
+    	$this->assertEquals(-2, $childPages[0]->getId());
    		$childPages = $this->_pc->getChildPages($p2);
    		$this->assertEquals(2, sizeof($childPages));
-    	$this->assertEquals(-3, $childPages[0]->getComponentId());
-    	$this->assertEquals(-4, $childPages[1]->getComponentId());
+    	$this->assertEquals(-3, $childPages[0]->getId());
+    	$this->assertEquals(-4, $childPages[1]->getId());
     }
 
     public function testGenerateHierarchyWithAndWithoutFilename()
@@ -141,9 +141,9 @@ class E3_PageCollection_TreeTest extends E3_Test
 		$test1 = $pc->getChildPage($rootPage, 'test1');
 		$test2_1 = $pc->getChildPage($test1, 'test2');
 		$test2_2 = $pc->getChildPage($rootPage, 'test2');
-		$this->assertEquals(2, $test1->getComponentId());
-		$this->assertEquals(6, $test2_1->getComponentId());
-		$this->assertEquals(124, $test2_2->getComponentId());
+		$this->assertEquals(2, $test1->getId());
+		$this->assertEquals(6, $test2_1->getId());
+		$this->assertEquals(124, $test2_2->getId());
     }
 }
 

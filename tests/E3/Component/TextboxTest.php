@@ -8,17 +8,17 @@ class E3_Component_TextboxTest extends E3_Test
         $this->_dao = $this->createDao();
     }
 
-    public function testPaths()
+    public function testContent()
     {
         $db = $this->_dao->getDb();
-        $textbox = new E3_Component_Textbox(1, $this->_dao);
+        $textbox = new E3_Component_Textbox($this->_dao, 1);
         $templateVars = $textbox->getTemplateVars();
         $this->assertEquals(array('content'=>'inhalt von home',
                                   'template'=>'Textbox.html',
                                   'id'=>1),
                                   $templateVars);
         
-        $textbox = new E3_Component_Textbox(-1, $this->_dao);
+        $textbox = new E3_Component_Textbox($this->_dao, -1);
         $templateVars = $textbox->getTemplateVars();
         $this->assertEquals(array('content'=>null,
                                   'template'=>'Textbox.html',
