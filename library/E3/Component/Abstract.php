@@ -42,15 +42,28 @@ abstract class E3_Component_Abstract
 
         foreach($rows as $pageRow) {
             $id = (int)$pageRow->component_id;
-            if (!$pageCollection->pageExists($id)) {
-	            $componentClass = $componentModel->getComponentClass($pageRow->component_id);
-	            $component = new $componentClass($this->getDao(), $pageRow->component_id);
-	            $pageCollection->addPage($component, $pageRow->filename);
-	            $pageCollection->setParentPage($component, $this);
-            }
+            $componentClass = $componentModel->getComponentClass($pageRow->component_id);
+            $this->createPageInTree($pageCollection, $componentClass, $pageRow->filename, $pageRow->component_id);
         }
     }
 
+  	protected function createPageInTree(E3_PageCollection_Tree $pageCollection, $className, $filename, $componentId, $postfixKey = '')
+    {
+       	$key = "";
+        if ($this->getPageKey() != "") $key = $this->getPageKey() . ".";
+        $key = $key . $postfixKey;
+        if (!$pageCollection->pageExists($componentId, $key)) {
+ 	    	$component = new $className($this->getDao(), $componentId, $key);
+
+    		$pageCollection->addPage($component, $filename);
+        	$pageCollection->setParentPage($component, $this);
+        	
+        	return $component;
+        }
+        return null;
+    	
+    }
+    
     protected function getComponentId()
     {
         return (int)$this->_componentId;

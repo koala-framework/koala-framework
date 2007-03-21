@@ -26,3 +26,4 @@ class E3_Component_NewsTest extends E3_Test
         $this->assertEquals('Textbox.html', $vars['content']['template']);
     }
 }
+
