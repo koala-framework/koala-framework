@@ -11,16 +11,8 @@ class E3_Component_News_Aktuelle extends E3_Component_Abstract
         foreach($this->getNews() as $row) {
             if ($filename != '' && $filename != $row->filename) continue;
 
-            $tag = "";
-            if($this->getPageKey()!="") $tag = $this->getPageKey().".";
-            $tag = $tag.$row->id;
-            if (!$pageCollection->pageExists($this->getComponentId(), $tag)) {
-	            $component = new E3_Component_News_Details($this->getDao(), $this->getComponentId(), $tag);
-	            $component->setNewsId($row->id);
-
-	            $pageCollection->addPage($component, $row->filename);
-	            $pageCollection->setParentPage($component, $this);
-            }
+            $component = $this->createPageInTree($pageCollection, 'E3_Component_News_Details', $row->filename, $this->getComponentId(), $row->id);
+            if($component) $component->setNewsId($row->id);
         }
     }
     
