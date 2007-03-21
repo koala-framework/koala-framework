@@ -16,11 +16,22 @@ class E3_Component_Paragraphs extends E3_Component_Abstract
             $this->_paragraphs[] = new $componentClass($this->_dao, $row->component_id);
         }
 
-        $ret = array('paragraphs'=>array());
+        $ret = parent::getTemplateVars();
+        $ret['paragraphs'] = array();
         foreach($this->_paragraphs as $paragraph) {
             $ret['paragraphs'][] = $paragraph->getTemplateVars();
         }
         $ret['template'] = 'Paragraphs.html';
         return $ret;
     }
+
+    public function getComponentInfo()
+    {
+    	$info = parent::getComponentInfo();
+    	foreach ($this->_paragraphs as $p) {
+    		$info += $p->getComponentInfo();
+    	}
+    	return $info;
+    }
+    
 }

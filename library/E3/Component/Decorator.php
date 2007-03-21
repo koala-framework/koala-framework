@@ -13,9 +13,16 @@ class E3_Component_Decorator extends E3_Component_Abstract
 
         $this->_decorated = new $componentClass($this->_dao, $row->component_id);
 
+        $ret = parent::getTemplateVars();
         $ret['decorated'] = $this->_decorated->getTemplateVars();
         $ret['color'] = 'blue';
         $ret['template'] = 'Decorator.html';
         return $ret;
     }
+    
+    public function getComponentInfo()
+    {
+    	return parent::getComponentInfo() + $this->_decorated->getComponentInfo();
+    }
+    
 }

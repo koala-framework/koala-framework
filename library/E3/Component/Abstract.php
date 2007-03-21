@@ -73,7 +73,13 @@ abstract class E3_Component_Abstract
     }
     public function getTemplateVars()
     {
-        return array();
+        $ret['id'] = $this->getId();
+        return $ret;
+    }
+    
+    public function getComponentInfo()
+    {
+    	return array($this->getId() => get_class($this));
     }
     
     protected function getDao()
