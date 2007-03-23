@@ -49,7 +49,7 @@ abstract class E3_PageCollection_Abstract
     
     public function setRootPage(E3_Component_Interface $component)
     {
-		$this->_setPage($component, '');
+		$this->_setPage($this->addDecoratorsToComponent($component), '');
         $this->_rootPageId = $component->getId();
     }
     
