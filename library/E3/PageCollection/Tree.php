@@ -4,7 +4,7 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
     protected $_pageParentIds = array();
     
 
-    public function setParentPage(E3_Component_Abstract $page, E3_Component_Abstract $parentPage)
+    public function setParentPage(E3_Component_Interface $page, E3_Component_Interface $parentPage)
     {
         $id = $page->getId();
         $parentId = $parentPage->getId();
@@ -43,7 +43,7 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
         return $page;
     }
     
-    public function getParentPage(E3_Component_Abstract $page)
+    public function getParentPage(E3_Component_Interface $page)
     {
        	$return = null;
         $id = $page->getId();
@@ -58,7 +58,7 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
         return $return;
     }
 
-    public function getChildPages(E3_Component_Abstract $page)
+    public function getChildPages(E3_Component_Interface $page)
     {
         $page->generateHierarchy($this);
         $childs = array();
@@ -71,7 +71,7 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
         return $childs;
     }
 
-    public function getChildPage(E3_Component_Abstract $page, $filename)
+    public function getChildPage(E3_Component_Interface $page, $filename)
     {
         $page->generateHierarchy($this, $filename);
         $childs = array();

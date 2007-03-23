@@ -1,6 +1,7 @@
 RewriteEngine on
 
-RewriteRule ^files/js/(.*)$ /library/include.php?filename=$1 [L]
+RewriteRule ^files/js/yui/(.*)$ /library/YUI/$1 [L]
+RewriteRule ^files/js/E3/(.*\.js)$ /library/E3/$1 [L]
 
 RewriteCond %{REQUEST_URI} !^/*(library|files|public/index.php)/?
 RewriteRule ^(.*)$ /public/index.php

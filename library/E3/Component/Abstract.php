@@ -1,5 +1,5 @@
 <?php
-abstract class E3_Component_Abstract
+abstract class E3_Component_Abstract implements E3_Component_Interface
 {
     protected $_dao;
     private $_componentId;
@@ -13,14 +13,19 @@ abstract class E3_Component_Abstract
         $this->_componentId = (int)$componentId;
         $this->_pageKey = $pageKey;
         $this->_componentKey = $componentKey;
+        $this->setup();
     }
-    
+
+    protected function setup()
+    {
+    }
+/*
     public static function createComponent($dao, $componentId, $pageKey="", $componentKey="")
     {
         $model = $dao->getTable('E3_Dao_Components');
         $class = $model->getComponentClass($componentId);
 	    return new $class($dao, $componentId, $pageKey, $componentKey);
-    }
+    }*/
 
     public final function generateHierarchy(E3_PageCollection_Abstract $pageCollection, $filename='')
     {
@@ -36,14 +41,12 @@ abstract class E3_Component_Abstract
     
     protected function generateTreeHierarchy(E3_PageCollection_Tree $pageCollection, $filename)
     {
-        $componentModel = $this->_dao->getTable('E3_Dao_Components');
         $rows = $this->_dao->getTable('E3_Dao_Pages')
                 ->fetchChildRows($this->getComponentId(), $filename);
 
         foreach($rows as $pageRow) {
             $id = (int)$pageRow->component_id;
-            $componentClass = $componentModel->getComponentClass($pageRow->component_id);
-            $this->createPageInTree($pageCollection, $componentClass, $pageRow->filename, $pageRow->component_id);
+            $this->createPageInTree($pageCollection, false, $pageRow->filename, $pageRow->component_id);
         }
     }
 
@@ -52,12 +55,15 @@ abstract class E3_Component_Abstract
        	$key = "";
         if ($this->getPageKey() != "") $key = $this->getPageKey() . ".";
         $key = $key . $postfixKey;
+        if (!$className) {
+            $className = $this->_dao->getTable('E3_Dao_Components')->getComponentClass($componentId);
+        }
         if (!$pageCollection->pageExists($componentId, $key)) {
- 	    	$component = new $className($this->getDao(), $componentId, $key);
+            $component = new $className($this->getDao(), $componentId, $key, $this->getComponentKey());
 
     		$pageCollection->addPage($component, $filename);
         	$pageCollection->setParentPage($component, $this);
-        	
+
         	return $component;
         }
         return null;

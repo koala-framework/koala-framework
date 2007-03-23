@@ -8,6 +8,7 @@ class WebController extends Zend_Controller_Action
 		$dao = $this->createDao();
         $pageCollectionConfig = new Zend_Config_Ini('../application/config.ini', 'pagecollection');
         $pageCollection = new $pageCollectionConfig->pagecollection->type($dao);
+        $pageCollection->setAddDecorator($pageCollectionConfig->pagecollection->addDecorator);
         $page = $pageCollection->getPageByPath($this->getRequest()->getPathInfo());
         $this->renderPage($page);
     }
@@ -21,7 +22,10 @@ class WebController extends Zend_Controller_Action
     {
         $componentId = $this->getRequest()->getQuery("componentId");
         if (!is_null($componentId)) {
-	        $component = E3_Component_Abstract::createComponent($this->createDao(), $componentId);
+            $dao = $this->createDao();
+            $className = $dao->getTable('E3_Dao_Components')->getComponentClass($componentId);
+            $component = new $className($dao, $componentId);
+//	        $component = E3_Component_Abstract::createComponent($this->createDao(), $componentId);
 	        $this->renderPage($component, true);
         }
     }
