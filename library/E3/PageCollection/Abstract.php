@@ -4,6 +4,7 @@ abstract class E3_PageCollection_Abstract
     protected $_pageFilenames = array();
     protected $_pages = array();
     protected $_rootPageId;
+    protected $_addDecorator = false;
     private $_dao;
 	
     function __construct(E3_Dao $dao)
@@ -11,15 +12,31 @@ abstract class E3_PageCollection_Abstract
     	$this->_dao = $dao;
     }
 
-    public function addPage(E3_Component_Abstract $component, $filename)
+    public function addPage(E3_Component_Interface $component, $filename)
     {
         if ($filename == '') {
         	throw new E3_PageCollection_Exception("Pagename must not be empty.");
         }
-        $this->_setPage($component, $filename);
+        $decoratedComponent = $this->addDecoratorsToComponent($component);
+        $this->_setPage($decoratedComponent, $filename);
+    }
+
+    public function setAddDecorator($decorator)
+    {
+        //todo: raise exception if no string, or class does'nt exist, or class doesn't inherit E3_Component_Decorator_Abstract
+        $this->_addDecorator = $decorator;
+    }
+
+    protected function addDecoratorsToComponent(E3_Component_Abstract $component)
+    {
+        if ($this->_addDecorator) {
+            return new $this->_addDecorator($this->_dao, $component);
+        } else {
+            return $component;
+        }
     }
     
-    private function _setPage(E3_Component_Abstract $component, $filename)
+    private function _setPage(E3_Component_Interface $component, $filename)
     {
         if ($this->pageExists($component)) {
         	throw new E3_PageCollection_Exception("A page with the same componentId already exists.");
@@ -30,7 +47,7 @@ abstract class E3_PageCollection_Abstract
         $this->_pageFilenames[$id] = $filename;
     }
     
-    public function setRootPage(E3_Component_Abstract $component)
+    public function setRootPage(E3_Component_Interface $component)
     {
 		$this->_setPage($component, '');
         $this->_rootPageId = $component->getId();
@@ -38,14 +55,14 @@ abstract class E3_PageCollection_Abstract
     
     public function pageExists($id, $pageTag="", $componentTag="")
     {
-    	if ($id instanceof E3_Component_Abstract) {
+    	if ($id instanceof E3_Component_Interface) {
     		$id = $id->getId();
     		if ($pageTag != "" || $componentTag != "") {
-    		    throw new E3_PageCollection_Exception('pageTag and componentTag must be emty when id is a E3_Component_Abstract.');
+    		    throw new E3_PageCollection_Exception('pageTag and componentTag must be emty when id is a E3_Component_Interface.');
     		}
     	}
 //     	if (!is_int($id)) {
-//     		throw new E3_PageCollection_Exception('ID must be an instance of E3_Component_Abstract or an Integer.');
+//     		throw new E3_PageCollection_Exception('ID must be an instance of E3_Component_Interface or an Integer.');
 //     	}
     	if ($pageTag != "") $id .= "_".$pageTag;
     	if ($componentTag != "") $id .= "_".$componentTag;
@@ -56,10 +73,8 @@ abstract class E3_PageCollection_Abstract
     {
     	if (!isset($this->_rootPageId)) {
 	    	$pageRow = $this->_dao->getTable('E3_Dao_Pages')->fetchRootPage();
-
-	        $componentClass = $this->_dao->getTable('E3_Dao_Components')
-	                            ->getComponentClass($pageRow->component_id);
-	        $rootPage = new $componentClass($this->_dao, $pageRow->component_id);
+            $className = $this->_dao->getTable('E3_Dao_Components')->getComponentClass($pageRow->component_id);
+	        $rootPage = new $className($this->_dao, $pageRow->component_id);
 	        $this->setRootPage($rootPage);
     	}
     	return $this->_pages[$this->_rootPageId];

@@ -66,7 +66,7 @@ E3.Component.Paragraphs.prototype.init = function() {
 	}
 	for (var i = 1; i < this.containers.length; i++) {
 		container = this.containers[i]['container'];
-		//var dd = new YAHOO.util.DD(containername);
+		//var dd = new YAHOO.util.DD(container);
 
 		var moveUpButton = new YAHOO.widget.Button(
 			{id:container.id + '_button_up', label: 'Up', container: container}

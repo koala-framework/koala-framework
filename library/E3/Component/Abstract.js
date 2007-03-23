@@ -35,11 +35,11 @@ E3.Component.Abstract.prototype.handleMouseOut = function(o, el) {
 };
 
 E3.Component.Abstract.prototype.handleSave = function() {
-	var connectionObject = YAHOO.util.Connect.asyncRequest('get', 'ajax/fe?componentId='+this.componentId, this);
+	var connectionObject = YAHOO.util.Connect.asyncRequest('get', '/ajax/fe?componentId='+this.componentId, this);
 };
 
 E3.Component.Abstract.prototype.handleCancel = function() { 
-	var connectionObject = YAHOO.util.Connect.asyncRequest('get', 'ajax/fe?componentId='+this.componentId, this);
+	var connectionObject = YAHOO.util.Connect.asyncRequest('get', '/ajax/fe?componentId='+this.componentId, this);
 };
 
 E3.Component.Abstract.prototype.handleClick = function(o, e) {

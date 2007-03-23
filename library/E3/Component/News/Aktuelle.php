@@ -26,4 +26,5 @@ class E3_Component_News_Aktuelle extends E3_Component_Abstract
        	$ret['template'] = 'News/Aktuelle.html';
         return $ret;
     }
+
 }
