@@ -86,8 +86,9 @@ abstract class E3_Component_Abstract implements E3_Component_Interface
     public function getId()
     {
         $ret = (string)$this->getComponentId();
-        if ($this->getPageKey() != "") $ret .= "_" . $this->getPageKey();
-        if ($this->getComponentKey() != "") $ret .= "_" . $this->getComponentKey();
+        if ($this->getPageKey() != "" || $this->getComponentKey() != "") {
+            $ret .= "_" . $this->getPageKey() . "_" . $this->getComponentKey();
+        }
         return $ret;
     }
     public function getTemplateVars()
