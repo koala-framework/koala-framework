@@ -1,8 +1,10 @@
 <h1>e3-test</h1>
+
 <ul>
 {foreach from=$component.menu item=m}
-<li><a href="{$m.url}">{$m.text}</a></li>
+<li><a href="{$m.url}{if isset($smarty.get.mode) && $smarty.get.mode=="edit"}?mode=edit{/if}">{$m.text}</a></li>
 {/foreach}
 </ul>
+
 {include file=$component.template}
 

@@ -102,7 +102,7 @@ abstract class E3_Component_Abstract implements E3_Component_Interface
 
     public function getComponentInfo()
     {
-      return array($this->getId() => get_class($this));
+        return array($this->getId() => get_class($this));
     }
 
     protected function getDao()

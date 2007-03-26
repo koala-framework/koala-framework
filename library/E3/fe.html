@@ -17,6 +17,6 @@
 <!-- Komponenten aktivieren -->
 <script type="text/javascript">
 {foreach from=$componentsInfo key=id item=component}
-	new {$component}({$id});
+	new {$component}('{$id}', '{$component}');
 {/foreach}
 </script>

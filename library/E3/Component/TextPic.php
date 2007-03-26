@@ -19,4 +19,11 @@ class E3_Component_TextPic extends E3_Component_Abstract
         $ret['template'] = 'TextPic.html';
         return $ret;
     }
+    public function getComponentInfo()
+    {
+    	$info = parent::getComponentInfo();
+    	$info += $this->_textboxComponent->getComponentInfo();
+    	$info += $this->_picComponent->getComponentInfo();
+    	return $info;
+    }
 }

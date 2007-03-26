@@ -20,12 +20,15 @@ class WebController extends Zend_Controller_Action
 
     public function frontendEditingAction()
     {
-        $componentId = $this->getRequest()->getQuery("componentId");
-        if (!is_null($componentId)) {
+        $id = $this->getRequest()->getQuery("componentId");
+        if (!is_null($id)) {
             $dao = $this->createDao();
-            $className = $dao->getTable('E3_Dao_Components')->getComponentClass($componentId);
-            $component = new $className($dao, $componentId);
-//	        $component = E3_Component_Abstract::createComponent($this->createDao(), $componentId);
+            $className = str_replace(".", "_", $this->getRequest()->getQuery("componentClass"));
+            preg_match('#^([^_\\|]*)_?([^_\\|]*)\\|?([^_\\|]*)$#', $id, $keys);
+            $component = new $className($dao, $keys[1], $keys[2], $keys[3]);
+            if ($this->getRequest()->getQuery("save")) {
+                $component->saveFrontendEditing();
+            }
 	        $this->renderPage($component, true);
         }
     }

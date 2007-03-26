@@ -1,5 +1,5 @@
-E3.Component.Paragraphs = function(componentId) {
-    E3.Component.Paragraphs.superclass.constructor.call(this, componentId);
+E3.Component.Paragraphs = function(componentId, class) {
+    E3.Component.Paragraphs.superclass.constructor.call(this, componentId, class);
     
 };
 YAHOO.lang.extend(E3.Component.Paragraphs, E3.Component.Abstract);
