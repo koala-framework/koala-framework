@@ -1,35 +1,37 @@
 <?php
-error_reporting(E_ALL|E_STRICT);
+//error_reporting(E_ALL|E_STRICT);
+error_reporting(E_ALL); // wg. HTML_QuickForm (PEAR)
 date_default_timezone_set('Europe/Berlin');
- 
+
 $include_path  = get_include_path();
 $include_path .= PATH_SEPARATOR . '../library';
-$include_path .= PATH_SEPARATOR . '../application/models';  
+$include_path .= PATH_SEPARATOR . '../application/models';
 set_include_path($include_path);
- 
-require_once 'Zend.php';
+
 require_once 'Zend/Loader.php';
 function __autoload($class)
 {
     Zend_Loader::loadClass($class);
 }
 
-$frontController = Zend_Controller_Front::getInstance();
+$front = Zend_Controller_Front::getInstance();
 //$frontController->setRequest('E3_Controller_Request');
 //$frontController->setRouter('E3_Controller_Router');
-$frontController->getRouter()->addConfig(new Zend_Config_Ini('../application/config.ini', 'routes'), 'routes');
-$frontController->setControllerDirectory('../application/controllers');
-$frontController->returnResponse(true);
-$response = $frontController->dispatch();
+$router = $front->getRouter();
+$router->addConfig(new Zend_Config_Ini('../application/config.ini', 'routes'), 'routes');
+$front->registerPlugin(new E3_Controller_Plugin_Fe());
+$front->setControllerDirectory('../application/controllers');
+$front->returnResponse(true);
+$response = $front->dispatch();
 if ($response->isException()) {
-	$response->sendHeaders();
+  $response->sendHeaders();
     $response->outputBody();
     foreach ($response->getException() as $exception) {
-    	throw($exception);
-    	//p($exception);
+      throw($exception);
+      //p($exception);
     }
 } else {
-	$response->sendHeaders();
+  $response->sendHeaders();
     $response->outputBody();
 }
 
