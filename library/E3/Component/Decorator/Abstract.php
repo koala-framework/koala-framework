@@ -1,5 +1,5 @@
 <?php
-class E3_Component_Decorator_Abstract implements E3_Component_Interface
+abstract class E3_Component_Decorator_Abstract implements E3_Component_Interface
 {
     protected $_component;
     protected $_dao;

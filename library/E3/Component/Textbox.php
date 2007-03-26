@@ -17,4 +17,16 @@ class E3_Component_Textbox extends E3_Component_Abstract
 
         return $ret;
     }
+    public function saveFrontendEditing()
+    {
+        $rowset = $this->_dao->getTable('E3_Dao_Textbox')
+                ->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
+        if ($rowset->count() == 1) {
+        	$row = $rowset->current();
+        } else {
+        	//todo: throw error
+        }
+        $row->content = $_POST['content'];
+        $row->save();
+    }
 }

@@ -1,9 +1,10 @@
 YAHOO.namespace('E3.Component');
 var E3 = YAHOO.E3;
 
-E3.Component.Abstract = function(componentId) {
+E3.Component.Abstract = function(componentId, class) {
     
 	this.componentId = componentId;
+	this.class = class;
 	this.htmlelement = document.getElementById('container_' + this.componentId);
 	this.success = this.handleSuccess;
 	this.failure = this.handleFailure;
@@ -35,11 +36,11 @@ E3.Component.Abstract.prototype.handleMouseOut = function(o, el) {
 };
 
 E3.Component.Abstract.prototype.handleSave = function() {
-	var connectionObject = YAHOO.util.Connect.asyncRequest('get', '/ajax/fe?componentId='+this.componentId, this);
+	var connectionObject = YAHOO.util.Connect.asyncRequest('get', '/ajax/fe?save=1&componentId='+this.componentId+'&componentClass='+this.class, this);
 };
 
 E3.Component.Abstract.prototype.handleCancel = function() { 
-	var connectionObject = YAHOO.util.Connect.asyncRequest('get', '/ajax/fe?componentId='+this.componentId, this);
+	var connectionObject = YAHOO.util.Connect.asyncRequest('get', '/ajax/fe?componentId='+this.componentId+'&componentClass='+this.class, this);
 };
 
 E3.Component.Abstract.prototype.handleClick = function(o, e) {
