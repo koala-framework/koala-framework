@@ -173,7 +173,7 @@ class Zend_Mail_Part implements RecursiveIterator
     protected function _cacheContent()
     {
         // caching content if we can't fetch parts
-        if ($this->_content === null) {
+        if ($this->_content === null && $this->_mail) {
             $this->_content = $this->_mail->getRawContent($this->_messageNum);
         }
 

@@ -144,10 +144,6 @@ abstract class Zend_Db_Table_Rowset_Abstract implements Iterator, Countable
     public function setTable(Zend_Db_Table_Abstract $table)
     {
         $this->_table = $table;
-        if ($this->_table->getAdapter() == null) {
-            $this->_connected = false;
-            return false;
-        }
         $this->_connected = false;
         // @todo This works only if we have iterated through
         // the result set once to instantiate the rows.

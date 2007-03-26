@@ -76,27 +76,6 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
     }
 
     /**
-     * Quotes an identifier.
-     *
-     * @param string $ident The identifier.
-     * @return string The quoted identifier.
-     */
-    public function quoteIdentifier($ident)
-    {
-        $q = $this->getQuoteIdentifierSymbol();
-        $ident = str_replace("$q[1]", "$q[1]$q[1]", $ident);
-        return $q[0] . $ident . $q[1];
-    }
-
-    /**
-     * @return array
-     */
-    public function getQuoteIdentifierSymbol()
-    {
-        return array('[', ']');
-    }
-
-    /**
      * Returns a list of the tables in the database.
      *
      * @return array

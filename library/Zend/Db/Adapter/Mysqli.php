@@ -49,6 +49,18 @@ class Zend_Db_Adapter_Mysqli extends Zend_Db_Adapter_Abstract
 {
 
     /**
+     * Quote a raw string.
+     *
+     * @param string $value     Raw string
+     * @return string           Quoted string
+     */
+    protected function _quote($value)
+    {
+        $this->_connect();
+        return "'" . $this->_connection->real_escape_string($value) . "'";
+    }
+
+    /**
      * Returns the symbol the adapter uses for delimiting identifiers.
      *
      * @return string
@@ -97,61 +109,57 @@ class Zend_Db_Adapter_Mysqli extends Zend_Db_Adapter_Abstract
      */
     public function describeTable($tableName, $schemaName = null)
     {
-        $result = array();
-        try {
-            $stmt = $this->query("DESCRIBE INFORMATION_SCHEMA.TABLES");
-            $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        } catch (Exception $e) {
-            // fallthrough
-        }
+        // @todo: use INFORMATION_SCHEMA someday when
+        // MySQL's implementation isn't dog slow.
 
-        if (!empty($result)) {
-            return $this->_describeTableInformationSchema($tableName, $schemaName);
+        if ($schemaName) {
+            $sql = 'DESCRIBE ' . $this->quoteIdentifier("$schemaName.$tableName");
+        } else {
+            $sql = 'DESCRIBE ' . $this->quoteIdentifier($tableName);
         }
-
-        $sql = "DESCRIBE $tableName";
-        $row_defaults = array(
-            'length'    => null,
-            'scale'     => null,
-            'precision' => null,
-            'unsigned'  => null
-        );
         $stmt = $this->query($sql);
         $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         $desc = array();
+
+        $row_defaults = array(
+            'Length'    => null,
+            'Scale'     => null,
+            'Precision' => null,
+            'Unsigned'  => null
+        );
         $i = 1;
         $p = 1;
         foreach ($result as $key => $row) {
             $row = array_merge($row_defaults, $row);
-            if (preg_match('/unsigned/', $row['type'])) {
-                $row['unsigned'] = true;
+            if (preg_match('/unsigned/', $row['Type'])) {
+                $row['Unsigned'] = true;
             }
-            if (preg_match('/^((?:var)?char)\((\d+)\)/', $row['type'], $matches)) {
-                $row['type'] = $matches[1];
-                $row['length'] = $matches[2];
-            } else if (preg_match('/^decimal\((\d+),(\d+)\)/', $row['type'], $matches)) {
-                $row['type'] = 'decimal';
-                $row['precision'] = $matches[1];
-                $row['scale'] = $matches[2];
-            } else if (preg_match('/^((?:big|medium|small)?int)\((\d+)\)/', $row['type'], $matches)) {
-                $row['type'] = $matches[1];
+            if (preg_match('/^((?:var)?char)\((\d+)\)/', $row['Type'], $matches)) {
+                $row['Type'] = $matches[1];
+                $row['Length'] = $matches[2];
+            } else if (preg_match('/^decimal\((\d+),(\d+)\)/', $row['Type'], $matches)) {
+                $row['Type'] = 'decimal';
+                $row['Precision'] = $matches[1];
+                $row['Scale'] = $matches[2];
+            } else if (preg_match('/^((?:big|medium|small)?int)\((\d+)\)/', $row['Type'], $matches)) {
+                $row['Type'] = $matches[1];
                 // The optional argument of a MySQL int type is not precision
                 // or length; it is only a hint for display width.
             }
-            $desc[$row['field']] = array(
+            $desc[$row['Field']] = array(
                 'SCHEMA_NAME'      => null,
                 'TABLE_NAME'       => $tableName,
-                'COLUMN_NAME'      => $row['field'],
+                'COLUMN_NAME'      => $row['Field'],
                 'COLUMN_POSITION'  => $i,
-                'DATA_TYPE'        => $row['type'],
-                'DEFAULT'          => $row['default'],
-                'NULLABLE'         => (bool) ($row['null'] == 'YES'),
-                'LENGTH'           => $row['length'],
-                'PRECISION'        => $row['precision'],
-                'SCALE'            => $row['scale'],
-                'UNSIGNED'         => $row['unsigned'],
-                'PRIMARY'          => (bool) (strtoupper($row['key']) == 'PRI'),
-                'PRIMARY_POSITION' => ((bool) (strtoupper($row['key']) == 'PRI') ? $p++ : 0)
+                'DATA_TYPE'        => $row['Type'],
+                'DEFAULT'          => $row['Default'],
+                'NULLABLE'         => (bool) ($row['Null'] == 'YES'),
+                'LENGTH'           => $row['Length'],
+                'PRECISION'        => $row['Precision'],
+                'SCALE'            => $row['Scale'],
+                'UNSIGNED'         => $row['Unsigned'],
+                'PRIMARY'          => (bool) (strtoupper($row['Key']) == 'PRI'),
+                'PRIMARY_POSITION' => ((bool) (strtoupper($row['Key']) == 'PRI') ? $p++ : 0)
             );
             ++$i;
         }
@@ -169,7 +177,9 @@ class Zend_Db_Adapter_Mysqli extends Zend_Db_Adapter_Abstract
         if ($this->_connection) {
             return;
         }
-        $this->_connection = new mysqli(
+        // Suppress connection warnings here.
+        // Throw an exception instead.
+        @$this->_connection = new mysqli(
             $this->_config['host'],
             $this->_config['username'],
             $this->_config['password'],
@@ -214,6 +224,7 @@ class Zend_Db_Adapter_Mysqli extends Zend_Db_Adapter_Abstract
      */
     protected function _beginTransaction()
     {
+        $this->_connect();
         $this->_connection->beginTransaction();
     }
 
@@ -224,6 +235,7 @@ class Zend_Db_Adapter_Mysqli extends Zend_Db_Adapter_Abstract
      */
     protected function _commit()
     {
+        $this->_connect();
         $this->_connection->commit();
     }
 
@@ -234,6 +246,7 @@ class Zend_Db_Adapter_Mysqli extends Zend_Db_Adapter_Abstract
      */
     protected function _rollBack()
     {
+        $this->_connect();
         $this->_connection->rollBack();
     }
 

@@ -530,10 +530,10 @@ class Zend_Mail_Protocol_Imap
      */
     public function fetch($items, $from, $to = null)
     {
-        if ($to === null) {
-            $set = (int)$from;
-        } else if (is_array($from)) {
+        if (is_array($from)) {
             $set = implode(',', $from);
+        } else if ($to === null) {
+            $set = (int)$from;
         } else if ($to === INF) {
             $set = (int)$from . ':*';
         } else {
@@ -552,7 +552,7 @@ class Zend_Mail_Protocol_Imap
                 continue;
             }
             // ignore other messages
-            if ($to === null && $tokens[0] != $from) {
+            if ($to === null && !is_array($from) && $tokens[0] != $from) {
                 continue;
             }
             // if we only want one item we return that one directly
@@ -579,7 +579,7 @@ class Zend_Mail_Protocol_Imap
                 }
             }
             // if we want only one message we can ignore everything else and just return
-            if ($to === null && $tokens[0] == $from) {
+            if ($to === null && !is_array($from) && $tokens[0] == $from) {
                 // we still need to read all lines
                 while (!$this->readLine($tokens, $tag));
                 return $data;
@@ -587,7 +587,7 @@ class Zend_Mail_Protocol_Imap
             $result[$tokens[0]] = $data;
         }
 
-        if ($to === null) {
+        if ($to === null && !is_array($from)) {
             throw new Zend_Mail_Protocol_Exception('the single id was not found in response');
         }
 
@@ -634,7 +634,7 @@ class Zend_Mail_Protocol_Imap
      * @return bool|array new flags if $silent is false, else true or false depending on success
      * @throws Zend_Mail_Protocol_Exception
      */
-    public function store($flags, $from, $to = null, $mode = null, $silent = true)
+    public function store(array $flags, $from, $to = null, $mode = null, $silent = true)
     {
         $item = 'FLAGS';
         if ($mode == '+' || $mode == '-') {
@@ -659,7 +659,7 @@ class Zend_Mail_Protocol_Imap
         $tokens = $result;
         $result = array();
         foreach ($tokens as $token) {
-            if ($token[1] != 'FETCH' || $token[2][0]) {
+            if ($token[1] != 'FETCH' || $token[2][0] != 'FLAGS') {
                 continue;
             }
             $result[$token[0]] = $token[2][1];

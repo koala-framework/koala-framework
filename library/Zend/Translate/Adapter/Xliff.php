@@ -45,6 +45,8 @@ class Zend_Translate_Adapter_Xliff extends Zend_Translate_Adapter {
     private $_target      = null;
     private $_scontent    = null;
     private $_tcontent    = null;
+    private $_stag        = false;
+    private $_ttag        = true;
     
     /**
      * Generates the xliff adapter
@@ -108,11 +110,15 @@ class Zend_Translate_Adapter_Xliff extends Zend_Translate_Adapter {
             case 'source':
                 if ($this->_transunit === true) {
                     $this->_scontent = null;
+                    $this->_stag = true;
+                    $this->_ttag = false;
                 }
                 break;
             case 'target':
                 if ($this->_transunit === true) {
                     $this->_tcontent = null;
+                    $this->_ttag = true;
+                    $this->_stag = false;
                 }
                 break;
             default:
@@ -133,12 +139,14 @@ class Zend_Translate_Adapter_Xliff extends Zend_Translate_Adapter {
                     !array_key_exists($this->_scontent, $this->_translate[$this->_source])) {
                     $this->_translate[$this->_source][$this->_scontent] = $this->_scontent;
                 }
+                $this->_stag = false;
                 break;
             case 'target':
                 if (!empty($this->_scontent) and !empty($this->_tcontent) or 
                     !array_key_exists($this->_scontent, $this->_translate[$this->_source])) {
                     $this->_translate[$this->_target][$this->_scontent] = $this->_tcontent;
                 }
+                $this->_ttag = false;
                 break;
             default:
                 break;
@@ -147,12 +155,12 @@ class Zend_Translate_Adapter_Xliff extends Zend_Translate_Adapter {
 
     private function _contentElement($file, $data)
     {
-        if (($this->_transunit !== null) and ($this->_source !== null) and ($this->_scontent === null)) {
-            $this->_scontent = $data;
+        if (($this->_transunit !== null) and ($this->_source !== null) and ($this->_stag === true)) {
+            $this->_scontent .= $data;
         }
 
-        if (($this->_transunit !== null) and ($this->_target !== null) and ($this->_tcontent === null)) {
-            $this->_tcontent = $data;
+        if (($this->_transunit !== null) and ($this->_target !== null) and ($this->_ttag === true)) {
+            $this->_tcontent .= $data;
         }
     }
 

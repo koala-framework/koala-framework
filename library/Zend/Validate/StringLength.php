@@ -17,7 +17,7 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: StringLength.php 3278 2007-02-07 21:54:50Z darby $
+ * @version    $Id: StringLength.php 4135 2007-03-20 12:46:11Z darby $
  */
 
 
@@ -61,8 +61,8 @@ class Zend_Validate_StringLength implements Zend_Validate_Interface
     /**
      * Sets validator options
      *
-     * @param  mixed $min
-     * @param  mixed $max
+     * @param  integer $min
+     * @param  integer $max
      * @return void
      */
     public function __construct($min = 0, $max = null)
@@ -84,7 +84,7 @@ class Zend_Validate_StringLength implements Zend_Validate_Interface
     /**
      * Sets the min option
      *
-     * @param  mixed $min
+     * @param  integer $min
      * @return Zend_Validate_StringLength Provides a fluent interface
      */
     public function setMin($min)
@@ -106,7 +106,7 @@ class Zend_Validate_StringLength implements Zend_Validate_Interface
     /**
      * Sets the max option
      *
-     * @param  mixed $max
+     * @param  integer|null $max
      * @return Zend_Validate_StringLength Provides a fluent interface
      */
     public function setMax($max)
@@ -126,18 +126,19 @@ class Zend_Validate_StringLength implements Zend_Validate_Interface
      * Returns true if and only if the string length of $value is at least the min option and
      * no greater than the max option (when the max option is not null).
      *
-     * @param  mixed $value
+     * @param  string $value
      * @return boolean
      */
     public function isValid($value)
     {
         $this->_messages = array();
-        $length = strlen($value);
+        $valueString = (string) $value;
+        $length = strlen($valueString);
         if ($length < $this->_min) {
-            $this->_messages[] = "'$value' is less than $this->_min characters long";
+            $this->_messages[] = "'$valueString' is less than $this->_min characters long";
         }
         if (null !== $this->_max && $this->_max < $length) {
-            $this->_messages[] = "'$value' is greater than $this->_max characters long";
+            $this->_messages[] = "'$valueString' is greater than $this->_max characters long";
         }
         if (count($this->_messages)) {
             return false;

@@ -17,7 +17,7 @@
  * @package    Zend_Filter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: StripTags.php 3278 2007-02-07 21:54:50Z darby $
+ * @version    $Id: StripTags.php 4135 2007-03-20 12:46:11Z darby $
  */
 
 
@@ -168,7 +168,7 @@ class Zend_Filter_StripTags implements Zend_Filter_Interface
         $dataFiltered = '';
         // Parse the input data iteratively as regular pre-tag text followed by a
         // tag; either may be empty strings
-        preg_match_all('/([^<]*)(<?[^>]*>?)/s', $value, $matches);
+        preg_match_all('/([^<]*)(<?[^>]*>?)/s', (string) $value, $matches);
         // Iterate over each set of matches
         foreach ($matches[1] as $index => $preTag) {
             // If the pre-tag text is non-empty, strip any ">" characters from it

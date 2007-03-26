@@ -33,5 +33,16 @@ require_once 'Zend/Db/Exception.php';
  */
 class Zend_Db_Adapter_Exception extends Zend_Db_Exception
 {
-}
+    protected $_chainedException = null;
 
+    public function __construct($message = null, Exception $e = null)
+    {
+        $this->_chainedException = $e;
+        parent::__construct($message);
+    }
+
+    public function getChainedException()
+    {
+        return $this->_chainedException;
+    }
+}

@@ -425,8 +425,7 @@ abstract class Zend_Db_Adapter_Abstract
      */
     protected function _quote($value)
     {
-        $value = str_replace("'", "''", $value);
-        return "'" . $value . "'";
+        return "'" . addcslashes($value, "\000\n\r\\'\"\032") . "'";
     }
 
     /**
@@ -539,8 +538,6 @@ abstract class Zend_Db_Adapter_Abstract
      */
     protected function _quoteIdentifierAs($ident, $alias = null, $as = ' AS ')
     {
-        $q = $this->getQuoteIdentifierSymbol();
-
         if ($ident instanceof Zend_Db_Expr) {
             $quoted = $ident->__toString();
         } else {
@@ -553,7 +550,7 @@ abstract class Zend_Db_Adapter_Abstract
                     if ($segment instanceof Zend_Db_Expr) {
                         $segments[] = $segment->__toString();
                     } else {
-                        $segments[] = $q . str_replace("$q", "$q$q", $segment) . $q;
+                        $segments[] = $this->_quoteIdentifier($segment);
                     }
                 }
                 if ($alias !== null && end($ident) == $alias) {
@@ -561,13 +558,25 @@ abstract class Zend_Db_Adapter_Abstract
                 }
                 $quoted = implode('.', $segments);
             } else {
-                $quoted = $q . str_replace("$q", "$q$q", $ident) . $q;
+                $quoted = $this->_quoteIdentifier($ident);
             }
         }
         if ($alias !== null) {
-            $quoted .= $as . $q . str_replace("$q", "$q$q", $alias) . $q;
+            $quoted .= $as . $this->_quoteIdentifier($alias);
         }
         return $quoted;
+    }
+
+    /**
+     * Quote an identifier.
+     *
+     * @param  string $value The identifier or expression.
+     * @return string        The quoted identifier and alias.
+     */
+    protected function _quoteIdentifier($value)
+    {
+        $q = $this->getQuoteIdentifierSymbol();
+        return ($q . str_replace("$q", "$q$q", $value) . $q);
     }
 
     /**
@@ -587,10 +596,17 @@ abstract class Zend_Db_Adapter_Abstract
      * This method returns an associative array compatible with that returned
      * by the describeTable() method.
      *
+     * @todo: use this for any RDBMS that support it satisfactorily.
+     * Currently it is either buggy or has such slow performance in
+     * all RDBMS that do support it, that we choose to comment it out.
+     * E.g. in MySQL 5.0.0 to 5.0.37 (at least), the INFORMATION_SCHEMA
+     * is too slow to be usable in a web application.
+     *
      * @param string $tableName
      * @param string $schemaName OPTIONAL
      * @return array
      */
+    /*
     protected function _describeTableInformationSchema($tableName, $schemaName = null)
     {
         $sql = "SELECT c.table_schema, c.table_name, c.column_name,
@@ -603,14 +619,15 @@ abstract class Zend_Db_Adapter_Abstract
                 JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
                 ON (k.table_schema = tc.table_schema
                   AND k.table_name = tc.table_name
+                  AND k.constraint_name = tc.constraint_name
                   AND tc.constraint_type = 'PRIMARY KEY'))
               ON (c.table_schema = k.table_schema
                 AND c.table_name = k.table_name
                 AND c.column_name = k.column_name)
-            WHERE c.table_name = '$tableName'";
+            WHERE c.table_name = ".$this->quote($tableName);
 
         if ($schemaName != null) {
-            $sql .= " AND c.table_schema = '$schemaName'";
+            $sql .= " AND c.table_schema = ".$this->quote($schemaName);
         }
 
         $stmt = $this->query($sql);
@@ -637,6 +654,7 @@ abstract class Zend_Db_Adapter_Abstract
 
         return $desc;
     }
+     */
 
     /**
      * Abstract Methods

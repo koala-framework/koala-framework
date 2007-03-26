@@ -128,6 +128,7 @@ class Zend_Mime
         $out = '';
         $str = str_replace('=', '=3D', $str);
         $str = str_replace(self::$qpKeys, self::$qpReplaceValues, $str);
+        $str = rtrim($str);
 
         // Split encoded text into separate lines
         while ($str) {
@@ -142,7 +143,7 @@ class Zend_Mime
             }
 
             // Check if there is a space at the end of the line and rewind
-            if ($str[$ptr - 1] == ' ') {
+            if ($ptr > 0 && $str[$ptr - 1] == ' ') {
                 --$ptr;
             }
 

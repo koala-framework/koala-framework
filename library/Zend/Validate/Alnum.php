@@ -17,7 +17,7 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Alnum.php 3278 2007-02-07 21:54:50Z darby $
+ * @version    $Id: Alnum.php 4135 2007-03-20 12:46:11Z darby $
  */
 
 
@@ -53,10 +53,14 @@ class Zend_Validate_Alnum implements Zend_Validate_Interface
     public function isValid($value)
     {
         $this->_messages = array();
-        if (!ctype_alnum($value)) {
-            $this->_messages[] = "'$value' has not only alphabetic and digit characters";
+
+        $valueString = (string) $value;
+
+        if (!ctype_alnum($valueString)) {
+            $this->_messages[] = "'$valueString' has not only alphabetic and digit characters";
             return false;
         }
+
         return true;
     }
 

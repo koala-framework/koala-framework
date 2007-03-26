@@ -166,16 +166,16 @@ abstract class Zend_Controller_Action
         if (empty($module) || !isset($dirs[$module])) {
             $module = 'default';
         }
-        $baseDir = dirname($dirs[$module]) . '/views';
+        $baseDir = dirname($dirs[$module]) . DIRECTORY_SEPARATOR . 'views';
         if (!file_exists($baseDir) || !is_dir($baseDir)) {
             throw new Zend_Controller_Exception('Missing base view directory ("' . $baseDir . '")');
         }
 
         require_once 'Zend/View.php';
         $this->view = new Zend_View(array(
-            'scriptPath' => $baseDir . '/scripts',
-            'helperPath' => $baseDir . '/helpers',
-            'filterPath' => $baseDir . '/filters'
+            'scriptPath' => $baseDir . DIRECTORY_SEPARATOR . 'scripts',
+            'helperPath' => $baseDir . DIRECTORY_SEPARATOR . 'helpers',
+            'filterPath' => $baseDir . DIRECTORY_SEPARATOR . 'filters'
         ));
 
         return $this->view;
@@ -704,7 +704,7 @@ abstract class Zend_Controller_Action
 
         if ($exit) {
             // Close session, if started
-            if (class_exists('Zend_Session') && Zend_Session::isStarted()) {
+            if (class_exists('Zend_Session', false) && Zend_Session::isStarted()) {
                 Zend_Session::writeClose();
             } elseif (isset($_SESSION)) {
                 session_write_close();

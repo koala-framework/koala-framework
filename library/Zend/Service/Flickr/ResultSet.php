@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,11 +18,12 @@
  * @subpackage Flickr
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: ResultSet.php 4186 2007-03-22 20:52:47Z darby $
  */
 
 
 /**
- * Zend_Service_Flickr_Result
+ * @see Zend_Service_Flickr_Result
  */
 require_once 'Zend/Service/Flickr/Result.php';
 
@@ -36,60 +38,68 @@ require_once 'Zend/Service/Flickr/Result.php';
 class Zend_Service_Flickr_ResultSet implements SeekableIterator
 {
     /**
-     * @var array $Result an array of XNC_Services_Flickr_GenericSearchResult results
-     */
-    protected $_results;
-
-    /**
-     * @var int $totalResultsAvailable the total number of results available
+     * Total number of available results
+     *
+     * @var int
      */
     public $totalResultsAvailable;
 
-    /*
-     * @var int $totalResultsReturned the number of results in this result set
+    /**
+     * Number of results in this result set
+     *
+     * @var int
      */
     public $totalResultsReturned;
 
-    /*
-     * @var int $firstResultPosition the offset in the total result set of this search set
+    /**
+     * The offset of this result set in the total set of available results
+     *
+     * @var int
      */
     public $firstResultPosition;
 
     /**
-     * @var Zend_Service_Flickr $_flickr Original Zend_Service_Flickr object with which the request was made
+     * Results storage
+     *
+     * @var DOMNodeList
+     */
+    protected $_results = null;
+
+    /**
+     * Reference to Zend_Service_Flickr object with which the request was made
+     *
+     * @var Zend_Service_Flickr
      */
     private $_flickr;
 
     /**
-     * @var int How many items Per Page
+     * Current index for the Iterator
+     *
+     * @var int
      */
-    private $_perPage;
-
-    /**
-     * @var int Current Item for the Iterator
-     */
-    private $_currentItem = 0;
+    private $_currentIndex = 0;
 
     /**
      * Parse the Flickr Result Set
      *
-     * @param DomDocument $dom
-     * @param Zend_Service_Flickr $flickr
+     * @param  DOMDocument         $dom
+     * @param  Zend_Service_Flickr $flickr
+     * @return void
      */
-    public function __construct(DomDocument $dom, Zend_Service_Flickr $flickr)
+    public function __construct(DOMDocument $dom, Zend_Service_Flickr $flickr)
     {
-    	$this->_flickr = $flickr;
+        $this->_flickr = $flickr;
 
-    	$xpath = new DOMXPath($dom);
+        $xpath = new DOMXPath($dom);
 
-    	$photos = $xpath->query('//photos')->item(0);
+        $photos = $xpath->query('//photos')->item(0);
 
-    	$page    = $photos->getAttribute('page');
-    	$pages   = $photos->getAttribute('pages');
-    	$perPage = $photos->getAttribute('perpage');
-    	$total   = $photos->getAttribute('total');
+        $page    = $photos->getAttribute('page');
+        $pages   = $photos->getAttribute('pages');
+        $perPage = $photos->getAttribute('perpage');
+        $total   = $photos->getAttribute('total');
 
-		$this->totalResultsReturned  = ($page == $pages) ? ($total - ($page - 1) * $perPage) : $perPage;
+        $this->totalResultsReturned  = ($page == $pages) ? ($total - ($page - 1) * $perPage) : $perPage;
         $this->firstResultPosition   = ($page - 1) * $perPage + 1;
         $this->totalResultsAvailable = $total;
 
@@ -105,83 +115,74 @@ class Zend_Service_Flickr_ResultSet implements SeekableIterator
      */
     public function totalResults()
     {
-		return (int) $this->totalResultsReturned;
+        return (int) $this->totalResultsReturned;
     }
 
     /**
-     * Return the Current Item
+     * Implements SeekableIterator::current()
      *
      * @return Zend_Service_Flickr_Result
      */
     public function current()
     {
-    	return new Zend_Service_Flickr_Result($this->_results->item($this->_currentItem), $this->_flickr);
+        return new Zend_Service_Flickr_Result($this->_results->item($this->_currentIndex), $this->_flickr);
     }
 
     /**
-     * Implement SeekableIterator::key
+     * Implements SeekableIterator::key()
      *
      * @return int
      */
     public function key()
     {
-    	return $this->_currentItem;
+        return $this->_currentIndex;
     }
 
     /**
-     * Implement SeekableIterator::next
+     * Implements SeekableIterator::next()
+     *
+     * @return void
      */
     public function next()
     {
-    	$this->_currentItem += 1;
+        $this->_currentIndex += 1;
     }
 
     /**
-     * Implement SeekableIterator::rewind
+     * Implements SeekableIterator::rewind()
      *
-     * @return boolean
+     * @return void
      */
     public function rewind()
     {
-    	$this->_currentItem = 0;
-    	return true;
+        $this->_currentIndex = 0;
     }
 
     /**
-     * Implement SeekableIterator::seek
+     * Implements SeekableIterator::seek()
      *
-     * @param integer $item
-     * @return Zend_Service_Flickr_Result
-     * @throws Zend_Service_Exception
+     * @param  int $index
+     * @throws OutOfBoundsException
+     * @return void
      */
-    public function seek($item)
+    public function seek($index)
     {
-    	if ($this->valid($item)) {
-    		$this->_currentItem = $item;
-    		return $this->current();
-    	} else {
-    		/* @todo Should be an OutOfBoundsException but that was added in PHP 5.1 */
-    		throw new Zend_Service_Exception('Item not found');
-    	}
+        $indexInt = (int) $index;
+        if ($indexInt >= 0 && (null === $this->_results || $indexInt < $this->_results->length)) {
+            $this->_currentIndex = $indexInt;
+        } else {
+            throw new OutOfBoundsException("Illegal index '$index'");
+        }
     }
 
     /**
-     * Implement SeekableIterator::valid
+     * Implements SeekableIterator::valid()
      *
-     * @param int $item
      * @return boolean
      */
-    public function valid($item = null)
+    public function valid()
     {
-    	if (empty($item) && empty($this->_results)) {
-    		return false;
-    	} elseif (empty($item) && $this->_currentItem < $this->_results->length) {
-    		return true;
-    	} else if (isset($item) && $item <= $this->_results->length) {
-    		return true;
-    	} else {
-    		return false;
-    	}
+        return null !== $this->_results && $this->_currentIndex < $this->_results->length;
     }
 }
 

@@ -140,7 +140,7 @@ class Zend_Translate_Adapter_Tmx extends Zend_Translate_Adapter {
     private function _contentElement($file, $data)
     {
         if (($this->_seg !== null) and ($this->_tu !== null) and ($this->_tuv !== null)) {
-            $this->_content = $data;
+            $this->_content .= $data;
         }
     }
 

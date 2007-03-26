@@ -56,12 +56,6 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
     protected $_curModule = 'default';
 
     /**
-     * Directories where Zend_Controller_Action files are stored.
-     * @var array
-     */
-    protected $_directories = array();
-
-    /**
      * Add a single path to the controller directory stack
      * 
      * @param string $path 
@@ -100,7 +94,7 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
     {
         $directories = $this->getFrontController()->getControllerDirectory();
 
-        if ((null !== $module) && (isset($this->_directories['module']))) {
+        if ((null !== $module) && (isset($directories[$module]))) {
             return $directories[$module];
         }
 

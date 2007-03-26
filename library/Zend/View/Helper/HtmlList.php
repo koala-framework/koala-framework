@@ -19,10 +19,6 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-/**
- * Zend_Exception
- */
-require_once 'Zend/Exception.php';
 
 /**
  * Zend_View_Helper_FormELement
@@ -53,7 +49,8 @@ class Zend_View_Helper_HtmlList extends Zend_View_Helper_FormElement
     public function htmlList($items, $ordered = false, $attribs = false)
     {
         if (!is_array($items)) {
-            throw new Zend_Exception('First param must be an array');
+            require_once 'Zend/View/Exception.php';
+            throw new Zend_View_Exception('First param must be an array', $this);
         }
 
         $list = '';
@@ -84,4 +81,3 @@ class Zend_View_Helper_HtmlList extends Zend_View_Helper_FormElement
         return '<' . $tag . $attribs . '>' . $list . '</' . $tag . '>';
     }
 }
-

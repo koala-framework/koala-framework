@@ -17,7 +17,7 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Float.php 3278 2007-02-07 21:54:50Z darby $
+ * @version    $Id: Float.php 4135 2007-03-20 12:46:11Z darby $
  */
 
 
@@ -54,13 +54,15 @@ class Zend_Validate_Float implements Zend_Validate_Interface
     {
         $this->_messages = array();
 
+        $valueString = (string) $value;
+
         $locale = localeconv();
 
-        $valueFiltered = str_replace($locale['decimal_point'], '.', $value);
+        $valueFiltered = str_replace($locale['decimal_point'], '.', $valueString);
         $valueFiltered = str_replace($locale['thousands_sep'], '', $valueFiltered);
 
         if (strval(floatval($valueFiltered)) != $valueFiltered) {
-            $this->_messages[] = "'$value' does not appear to be a float";
+            $this->_messages[] = "'$valueString' does not appear to be a float";
             return false;
         }
 

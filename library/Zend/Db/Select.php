@@ -757,6 +757,7 @@ class Zend_Db_Select
         }
 
         foreach ($cols as $alias => $col) {
+            $currentCorrelationName = $correlationName;
             if (is_string($col)) {
                 // Check for a column matching "<column> AS <alias>" and extract the alias name
                 if (preg_match('/^(.+)\s+AS\s+(.+)$/i', $col, $m)) {
@@ -767,14 +768,14 @@ class Zend_Db_Select
                 if (preg_match('/\(.*\)/', $col)) {
                     $col = new Zend_Db_Expr($col);
                 } elseif (preg_match('/(.+)\.(.+)/', $col, $m)) {
-                    $correlationName = $m[1];
+                    $currentCorrelationName = $m[1];
                     $col = $m[2];
                 }
             }
             if (is_string($alias)) {
-                $this->_parts[self::COLUMNS][$correlationName][$alias] = $col;
+                $this->_parts[self::COLUMNS][$currentCorrelationName][$alias] = $col;
             } else {
-                $this->_parts[self::COLUMNS][$correlationName][] = $col;
+                $this->_parts[self::COLUMNS][$currentCorrelationName][] = $col;
             }
         }
     }

@@ -18,7 +18,7 @@
  * @subpackage Zend_Auth_Adapter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: DbTable.php 3998 2007-03-16 02:22:16Z darby $
+ * @version    $Id: DbTable.php 4194 2007-03-22 23:50:34Z darby $
  */
 
 
@@ -216,13 +216,43 @@ class Zend_Auth_Adapter_DbTable implements Zend_Auth_Adapter_Interface
     }
 
     /**
-     * getResultRow() - returns the result row
+     * getResultRowObject() - Returns the result row as a stdClass object
      *
-     * @return array
+     * @param  string|array $returnColumns
+     * @param  string|array $omitColumns
+     * @return stdClass
      */
-    public function getResultRow()
+    public function getResultRowObject($returnColumns = null, $omitColumns = null)
     {
-        return $this->_resultRow;
+        $returnObject = new stdClass();
+
+        if (null !== $returnColumns) {
+
+            foreach ( (array) $returnColumns as $returnColumn) {
+                if (isset($this->_resultRow[$returnColumn])) {
+                    $returnObject->{$returnColumn} = $this->_resultRow[$returnColumn];
+                }
+            }
+            return $returnObject;
+
+        } elseif (null !== $omitColumns) {
+
+            $omitColumns = (array) $omitColumns;
+            foreach ($this->_resultRow as $resultColumn => $resultValue) {
+                if (!in_array($resultColumn, $omitColumns)) {
+                    $returnObject->{$resultColumn} = $resultValue;
+                }
+            }
+            return $returnObject;
+
+        } else {
+
+            foreach ($this->_resultRow as $resultColumn => $resultValue) {
+                $returnObject->{$resultColumn} = $resultValue;
+            }
+            return $returnObject;
+
+        }
     }
 
     /**
@@ -236,15 +266,15 @@ class Zend_Auth_Adapter_DbTable implements Zend_Auth_Adapter_Interface
         $exception = null;
 
         if ($this->_tableName == '') {
-            $exception = 'A table must be supplied authentication adapter.';
+            $exception = 'A table must be supplied for the Zend_Auth_Adapter_DbTable authentication adapter.';
         } elseif ($this->_identityColumn == '') {
-            $exception = 'A table column must be supplied for the identity.';
-        } elseif ($this->_identity == '') {
-            $exception = 'A value for the identity must be provided to authenticate.';
+            $exception = 'An identity column must be supplied for the Zend_Auth_Adapter_DbTable authentication adapter.';
         } elseif ($this->_credentialColumn == '') {
-            $exception = 'A credential column must be supplied to autheticate against.';
+            $exception = 'A credential column must be supplied for the Zend_Auth_Adapter_DbTable authentication adapter.';
+        } elseif ($this->_identity == '') {
+            $exception = 'A value for the identity was not provided prior to authentication with Zend_Auth_Adapter_DbTable.';
         } elseif ($this->_credential === null) {
-            $exception = 'A credential value must be provided to authenticate.';
+            $exception = 'A credential value was not provided prior to authentication with Zend_Auth_Adapter_DbTable.';
         }
 
         if (null !== $exception) {
@@ -257,10 +287,11 @@ class Zend_Auth_Adapter_DbTable implements Zend_Auth_Adapter_Interface
 
         // create result array
         $authResult = array(
-            'isValid'  => false,
+            'code'     => Zend_Auth_Result::FAILURE,
             'identity' => $this->_identity,
             'messages' => array()
             );
+
 
         // build credential expression
         if (empty($this->_credentialTreatment) || (strpos($this->_credentialTreatment, "?") === false)) {
@@ -288,29 +319,35 @@ class Zend_Auth_Adapter_DbTable implements Zend_Auth_Adapter_Interface
              * @see Zend_Auth_Adapter_Exception
              */
             require_once 'Zend/Auth/Adapter/Exception.php';
-            throw new Zend_Auth_Adapter_Exception($e->getMessage());
+            throw new Zend_Auth_Adapter_Exception('The supplied parameters to Zend_Auth_Adapter_DbTable failed to '
+                                                . 'produce a valid sql statement, please check table and column names '
+                                                . 'for validity.');
         }
 
         if (count($resultIdentities) < 1) {
+            $authResult['code'] = Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND;
             $authResult['messages'][] = 'A record with the supplied identity could not be found.';
-            return new Zend_Auth_Result($authResult['isValid'], $authResult['identity'], $authResult['messages']);
+            return new Zend_Auth_Result($authResult['code'], $authResult['identity'], $authResult['messages']);
         } elseif (count($resultIdentities) > 1) {
+            $authResult['code'] = Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS;
             $authResult['messages'][] = 'More than one record matches the supplied identity.';
-            return new Zend_Auth_Result($authResult['isValid'], $authResult['identity'], $authResult['messages']);
+            return new Zend_Auth_Result($authResult['code'], $authResult['identity'], $authResult['messages']);
         }
 
         $resultIdentity = $resultIdentities[0];
 
         if ($resultIdentity['zend_auth_credential_match'] != '1') {
+            $authResult['code'] = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
             $authResult['messages'][] = 'Supplied credential is invalid.';
-            return new Zend_Auth_Result($authResult['isValid'], $authResult['identity'], $authResult['messages']);
+            return new Zend_Auth_Result($authResult['code'], $authResult['identity'], $authResult['messages']);
         }
 
         unset($resultIdentity['zend_auth_credential_match']);
         $this->_resultRow = $resultIdentity;
 
-        $authResult['isValid'] = true;
-        return new Zend_Auth_Result($authResult['isValid'], $authResult['identity'], $authResult['messages']);
+        $authResult['code'] = Zend_Auth_Result::SUCCESS;
+        $authResult['messages'][] = 'Authentication successful.';
+        return new Zend_Auth_Result($authResult['code'], $authResult['identity'], $authResult['messages']);
     }
 
 }

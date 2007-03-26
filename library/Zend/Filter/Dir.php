@@ -17,7 +17,7 @@
  * @package    Zend_Filter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Dir.php 3278 2007-02-07 21:54:50Z darby $
+ * @version    $Id: Dir.php 4135 2007-03-20 12:46:11Z darby $
  */
 
 
@@ -45,6 +45,6 @@ class Zend_Filter_Dir implements Zend_Filter_Interface
      */
     public function filter($value)
     {
-        return dirname($value);
+        return dirname((string) $value);
     }
 }

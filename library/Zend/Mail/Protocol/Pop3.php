@@ -145,7 +145,7 @@ class Zend_Mail_Protocol_Pop3
      */
     public function readResponse($multiline = false)
     {
-        $result = fgets($this->_socket);
+        $result = @fgets($this->_socket);
         if (!is_string($result)) {
             throw new Zend_Mail_Protocol_Exception('read failed - connection closed?');
         }

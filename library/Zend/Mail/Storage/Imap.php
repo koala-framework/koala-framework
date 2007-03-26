@@ -105,8 +105,8 @@ class Zend_Mail_Storage_Imap extends Zend_Mail_Storage_Abstract
             throw new Zend_Mail_Storage_Exception('No selected folder to count');
         }
 
-        // TODO: check usage of examine
-        $result = $this->_protocol->examine($this->_currentFolder);
+        // we're reselecting the current mailbox, because STATUS is slow and shouldn't be used on the current mailbox
+        $result = $this->_protocol->select($this->_currentFolder);
         return $result['exists'];
     }
 

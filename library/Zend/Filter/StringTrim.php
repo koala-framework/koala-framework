@@ -17,7 +17,7 @@
  * @package    Zend_Filter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: StringTrim.php 3278 2007-02-07 21:54:50Z darby $
+ * @version    $Id: StringTrim.php 4135 2007-03-20 12:46:11Z darby $
  */
 
 
@@ -89,9 +89,9 @@ class Zend_Filter_StringTrim implements Zend_Filter_Interface
     public function filter($value)
     {
         if (null === $this->_charList) {
-            return trim($value);
+            return trim((string) $value);
         } else {
-            return trim($value, $this->_charList);
+            return trim((string) $value, $this->_charList);
         }
     }
 }

@@ -15,7 +15,7 @@
  * @package    Zend_Controller
  * @subpackage Router
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Route.php 3837 2007-03-09 11:28:26Z martel $
+ * @version    $Id: Route.php 4175 2007-03-22 11:46:52Z martel $
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
@@ -227,9 +227,9 @@ class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Inter
                 
                 if ($part['regex'] != '\*') {
                     $url[$key] = $part['regex'];
-                } elseif (!$reset) {
-                    $wildcards = $data + $this->_params;
-                    foreach ($wildcards as $var => $value) {
+                } else {
+                    if (!$reset) $data += $this->_params;
+                    foreach ($data as $var => $value) {
                         if ($value !== null) {
                             $url[$var] = $var . self::URI_DELIMITER . $value;
                         }

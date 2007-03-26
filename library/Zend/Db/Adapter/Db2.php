@@ -315,9 +315,9 @@ class Zend_Db_Adapter_Db2 extends Zend_Db_Adapter_Abstract
               ON (c.tabschema = k.tabschema
                 AND c.tabname = k.tabname
                 AND c.colname = k.colname)
-            WHERE c.tabname = '$tableName'";
-        if ($schemaName != null) {
-            $sql .= " AND c.tabschema = '$schemaName'";
+            WHERE c.tabname = ".$this->quote($tableName);
+        if ($schemaName) {
+            $sql .= " AND c.tabschema = ".$this->quote($schemaName);
         }
 
         $desc = array();

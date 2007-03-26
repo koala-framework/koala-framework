@@ -382,7 +382,7 @@ class Zend_Mail_Storage_Mbox extends Zend_Mail_Storage_Abstract
      */
     public function __wakeup()
     {
-        if ($this->_filemtime != filemtime($this->_filename)) {
+        if ($this->_filemtime != @filemtime($this->_filename)) {
             $this->close();
             $this->_openMboxFile($this->_filename);
         } else {

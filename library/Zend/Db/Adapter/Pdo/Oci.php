@@ -68,6 +68,20 @@ class Zend_Db_Adapter_Pdo_Oci extends Zend_Db_Adapter_Pdo_Abstract
     }
 
     /**
+     * Quote a raw string.
+     * Most PDO drivers have an implementation for the quote() method,
+     * but the Oracle OCI driver must use the same implementation as the
+     * Zend_Db_Adapter_Abstract class.
+     *
+     * @param string $value     Raw string
+     * @return string           Quoted string
+     */
+    protected function _quote($value)
+    {
+        return "'" . addcslashes($value, "\000\n\r\\'\"\032") . "'";
+    }
+
+    /**
      * Quote a table identifier and alias.
      *
      * @param string|array|Zend_Db_Expr $ident The identifier or expression.
@@ -114,9 +128,7 @@ class Zend_Db_Adapter_Pdo_Oci extends Zend_Db_Adapter_Pdo_Abstract
      * PRIMARY          => boolean; true if column is part of the primary key
      * PRIMARY_POSITION => integer; position of column in primary key
      *
-     * @todo Discover column position.
      * @todo Discover integer unsigned property.
-     * @todo Improve discovery of primary key columns.
      *
      * @param string $tableName
      * @param string $schemaName OPTIONAL
@@ -125,21 +137,25 @@ class Zend_Db_Adapter_Pdo_Oci extends Zend_Db_Adapter_Pdo_Abstract
     public function describeTable($tableName, $schemaName = null)
     {
         $tableName = strtoupper($tableName);
-        $sql = "SELECT T.TABLE_NAME, T.COLUMN_NAME, T.DATA_TYPE,
+        $sql = "SELECT T.TABLE_NAME, T.TABLESPACE_NAME, T.COLUMN_NAME, T.DATA_TYPE,
                 T.DATA_DEFAULT, T.NULLABLE, T.COLUMN_ID, T.DATA_LENGTH,
                 T.DATA_SCALE, T.DATA_PRECISION, C.CONSTRAINT_TYPE, CC.POSITION
-            FROM USER_TAB_COLUMNS T
-            LEFT JOIN (USER_CONS_COLUMNS CC JOIN USER_CONSTRAINTS C
+            FROM ALL_TAB_COLUMNS T
+            LEFT JOIN (ALL_CONS_COLUMNS CC JOIN ALL_CONSTRAINTS C
                 ON (CC.CONSTRAINT_NAME = C.CONSTRAINT_NAME AND CC.TABLE_NAME = C.TABLE_NAME AND C.CONSTRAINT_TYPE = 'P'))
               ON T.TABLE_NAME = CC.TABLE_NAME AND T.COLUMN_NAME = CC.COLUMN_NAME
-            WHERE T.TABLE_NAME = '$tableName'";
+            WHERE T.TABLE_NAME = ".$this->quote($tableName);
+
+        if ($schemaName) {
+            $sql .= " AND T.TABLESPACE_NAME = ".$this->quote($schemaName);
+        }
 
         $stmt = $this->query($sql);
         $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         $desc = array();
         foreach ($result as $key => $row) {
             $desc[$row['column_name']] = array(
-                'SCHEMA_NAME'      => null,
+                'SCHEMA_NAME'      => $row['tablespace_name'],
                 'TABLE_NAME'       => $row['table_name'],
                 'COLUMN_NAME'      => $row['column_name'],
                 'COLUMN_POSITION'  => $row['column_id'],

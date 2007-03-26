@@ -16,7 +16,7 @@
  * @package    Zend_Locale
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Math.php 3953 2007-03-15 01:25:52Z gavin $
+ * @version    $Id: Math.php 4104 2007-03-18 17:57:13Z thomas $
  */
 
 
@@ -65,7 +65,7 @@ class Zend_Locale_Math
     public static function round($op1, $precision = 0)
     {
         if (self::$_bcmathDisabled) {
-            return round($op1, $precision);
+            return (string) round($op1, $precision);
         }
         $op1 = trim($op1);
         $length = strlen($op1);
@@ -107,7 +107,27 @@ class Zend_Locale_Math
         } elseif ($precision >= 0) {
             return substr($op1, 0, $decPos + ($precision ? $precision + 1: 0));
         }
-        return $op1;
+        return (string) $op1;
+    }
+
+    /**
+     * Normalizes an input to standard english notation
+     * Fixes a problem of BCMath with setLocale which is PHP related
+     * 
+     * @param   integer  $value  Value to normalize
+     * @return  string           Normalized string without BCMath problems
+     */
+    public static function normalize($value)
+    {
+        $value = (string) $value;
+        $convert = localeconv();
+        $value = str_replace($convert['thousands_sep'], "",$value);
+        $value = str_replace($convert['positive_sign'], "",$value);
+        if (!empty($convert['negative_sign']) and (strpos($value, $convert['negative_sign']))) {
+            $value = str_replace($convert['negative_sign'], "",$value);
+            $value = "-".$value;
+        }
+        return $value;
     }
 }
 

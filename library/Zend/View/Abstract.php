@@ -200,7 +200,7 @@ abstract class Zend_View_Abstract implements Zend_View_Interface
         }
 
         require_once 'Zend/View/Exception.php';
-        throw new Zend_View_Exception('Setting private or protected class members is not allowed');
+        throw new Zend_View_Exception('Setting private or protected class members is not allowed', $this);
     }
 
     /**
@@ -452,7 +452,7 @@ abstract class Zend_View_Abstract implements Zend_View_Interface
             // assign by name and value
             if ('_' == substr($spec, 0, 1)) {
                 require_once 'Zend/View/Exception.php';
-                throw new Zend_View_Exception('Setting private or protected class members is not allowed');
+                throw new Zend_View_Exception('Setting private or protected class members is not allowed', $this);
             }
             $this->$spec = $value;
         } elseif (is_array($spec)) {
@@ -467,11 +467,11 @@ abstract class Zend_View_Abstract implements Zend_View_Interface
             }
             if ($error) {
                 require_once 'Zend/View/Exception.php';
-                throw new Zend_View_Exception('Setting private or protected class members is not allowed');
+                throw new Zend_View_Exception('Setting private or protected class members is not allowed', $this);
             }
         } else {
             require_once 'Zend/View/Exception.php';
-            throw new Zend_View_Exception('assign() expects a string or array, received ' . gettype($spec));
+            throw new Zend_View_Exception('assign() expects a string or array, received ' . gettype($spec), $this);
         }
     }
 
@@ -581,7 +581,8 @@ abstract class Zend_View_Abstract implements Zend_View_Interface
     {
         if (0 == count($this->_path['script'])) {
             require_once 'Zend/View/Exception.php';
-            throw new Zend_View_Exception('no view script directory set; unable to determine location for view script');
+            throw new Zend_View_Exception('no view script directory set; unable to determine location for view script',
+                $this);
         }
 
         foreach ($this->_path['script'] as $dir) {
@@ -591,7 +592,7 @@ abstract class Zend_View_Abstract implements Zend_View_Interface
         }
 
         require_once 'Zend/View/Exception.php';
-        throw new Zend_View_Exception("script '$name' not found in path");
+        throw new Zend_View_Exception("script '$name' not found in path", $this);
     }
 
     /**
@@ -735,7 +736,7 @@ abstract class Zend_View_Abstract implements Zend_View_Interface
         }
 
         require_once 'Zend/View/Exception.php';
-        throw new Zend_View_Exception("$type '$name' not found in path");
+        throw new Zend_View_Exception("$type '$name' not found in path", $this);
     }
 
     /**

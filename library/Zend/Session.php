@@ -16,7 +16,7 @@
  * @package    Zend_Session
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Session.php 3841 2007-03-09 16:09:30Z gavin $
+ * @version    $Id: Session.php 4193 2007-03-22 23:25:57Z gavin $
  * @since      Preview Release 0.2
  */
 
@@ -207,6 +207,9 @@ class Zend_Session extends Zend_Session_Abstract
             else {
                 throw new Zend_Session_Exception("Unknown option: $user_option_name = $user_option_value");
             }
+        }
+        if (!is_writable(ini_get('session.save_path'))) {
+            throw new Zend_Session_Exception("Unwritable session.save_path: ". ini_get('session.save_path'));
         }
     }
 

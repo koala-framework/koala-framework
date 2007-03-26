@@ -128,15 +128,21 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
      */
     public function describeTable($tableName, $schemaName = null)
     {
-        $sql = "PRAGMA table_info($tableName)";
+        if ($schemaName) {
+            $sql = "PRAGMA table_info($schemaName.$tableName)";
+        } else {
+            $sql = "PRAGMA table_info($tableName)";
+        }
+
         $stmt = $this->query($sql);
         $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         $desc = array();
+
         $i = 1;
         $p = 1;
         foreach ($result as $key => $row) {
             $desc[$row['name']] = array(
-                'SCHEMA_NAME'      => null,
+                'SCHEMA_NAME'      => $schemaName,
                 'TABLE_NAME'       => $tableName,
                 'COLUMN_NAME'      => $row['name'],
                 'COLUMN_POSITION'  => $i,

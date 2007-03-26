@@ -92,14 +92,14 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
             $this->_profiler->queryEnd($q);
 
             // force names to lower case
-            $this->_connection->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
+            $this->_connection->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
 
             // always use exceptions.
             $this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
             /** @todo Are there other portability attribs to consider? */
         } catch (PDOException $e) {
-            throw new Zend_Db_Adapter_Exception($e->getMessage(), $e->getCode());
+            throw new Zend_Db_Adapter_Exception($e->getMessage(), $e);
         }
 
     }
@@ -136,6 +136,7 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
      * @param string|Zend_Db_Select $sql The SQL statement with placeholders.
      * @param array $bind An array of data to bind to the placeholders.
      * @return Zend_Db_Pdo_Statement
+     * @throws Zend_Db_Adapter_Exception To re-throw PDOException.
      */
     public function query($sql, $bind = array())
     {
@@ -148,7 +149,24 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
                 }
             }
         }
-        return parent::query($sql, $bind);
+
+        try {
+            return parent::query($sql, $bind);
+        } catch (PDOException $e) {
+            throw new Zend_Db_Adapter_Exception($e->getMessage(), $e);
+        }
+    }
+
+    /**
+     * Quote a raw string.
+     *
+     * @param string $value     Raw string
+     * @return string           Quoted string
+     */
+    protected function _quote($value)
+    {
+        $this->_connect();
+        return $this->_connection->quote($value);
     }
 
     /**
@@ -156,6 +174,7 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
      */
     protected function _beginTransaction()
     {
+        $this->_connect();
         $this->_connection->beginTransaction();
     }
 
@@ -164,6 +183,7 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
      */
     protected function _commit()
     {
+        $this->_connect();
         $this->_connection->commit();
     }
 
@@ -171,6 +191,7 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
      * Roll-back a transaction.
      */
     protected function _rollBack() {
+        $this->_connect();
         $this->_connection->rollBack();
     }
 

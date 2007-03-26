@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Measure
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Number.php 4070 2007-03-17 19:52:37Z thomas $
+ * @version    $Id: Number.php 4120 2007-03-19 22:09:51Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -275,9 +275,13 @@ class Zend_Measure_Number extends Zend_Measure_Abstract
             $input = preg_replace( array_keys(self::$_ROMANCONVERT), array_values(self::$_ROMANCONVERT), $input);
 
             $split = preg_split('//', strrev($input), -1, PREG_SPLIT_NO_EMPTY);
+
             for ($X=0; $X < sizeof($split); $X++) {
+                if ($split[$X] == '/') {
+                    continue;
+                }
                 $num = self::$_ROMAN[$split[$X]];
-                if ($X > 0 && ($num < self::$_ROMAN[$split[$X-1]])) {
+                if (($X > 0 and ($split[$X-1] != '/') and ($num < self::$_ROMAN[$split[$X-1]]))) {
                     $num -= $num;
                 }
                 $value += $num;
@@ -299,7 +303,7 @@ class Zend_Measure_Number extends Zend_Measure_Abstract
     {
         if ($this->_UNITS[$type][0] <= 16) {
             $newvalue = "";
-            while(call_user_func(Zend_Locale_Math::$comp, $value, 0) > 0) {
+            while(call_user_func(Zend_Locale_Math::$comp, $value, 0) >= 1) {
                 $target = call_user_func(Zend_Locale_Math::$mod, $value, $this->_UNITS[$type][0]);
                 $target = strtoupper( dechex($target) );
                 $newvalue = $target . $newvalue;

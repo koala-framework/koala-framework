@@ -95,7 +95,6 @@ class Zend_Db_Adapter_Pdo_Pgsql extends Zend_Db_Adapter_Pdo_Abstract
      * PRIMARY          => boolean; true if column is part of the primary key
      * PRIMARY_POSITION => integer; position of column in primary key
      *
-     * @todo Discover column position.
      * @todo Discover integer unsigned property.
      *
      * @param string $tableName
@@ -106,6 +105,7 @@ class Zend_Db_Adapter_Pdo_Pgsql extends Zend_Db_Adapter_Pdo_Abstract
     {
         $sql = "SELECT
                 a.attnum,
+                n.nspname,
                 c.relname,
                 a.attname AS colname,
                 t.typname AS type,
@@ -123,7 +123,11 @@ class Zend_Db_Adapter_Pdo_Pgsql extends Zend_Db_Adapter_Pdo_Abstract
                 LEFT OUTER JOIN pg_constraint AS co ON (co.conrelid = c.oid
                     AND a.attnum = ANY(co.conkey) AND co.contype = 'p')
                 LEFT OUTER JOIN pg_attrdef AS d ON d.adrelid = c.oid AND d.adnum = a.attnum
-            WHERE c.relname = '$tableName' AND a.attnum > 0";
+            WHERE a.attnum > 0 AND c.relname = ".$this->quote($tableName);
+
+        if ($schemaName) {
+            $sql .= " AND ... n.nspname = ".$this->quote($schemaName);
+        }
 
         $stmt = $this->query($sql);
         $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -139,7 +143,7 @@ class Zend_Db_Adapter_Pdo_Pgsql extends Zend_Db_Adapter_Pdo_Abstract
                 }
             }
             $desc[$row['colname']] = array(
-                'SCHEMA_NAME'      => null,
+                'SCHEMA_NAME'      => $row['nspname'],
                 'TABLE_NAME'       => $row['relname'],
                 'COLUMN_NAME'      => $row['colname'],
                 'COLUMN_POSITION'  => $row['attnum'],
