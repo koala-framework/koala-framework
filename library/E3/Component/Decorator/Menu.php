@@ -13,6 +13,7 @@ class E3_Component_Decorator_Menu extends E3_Component_Decorator_Abstract
         $menus['/textpic/'] = 'Text + Pic';
         $menus['/events/'] = 'Events';
         foreach ($menus as $url=>$text) {
+            $url = '/edit' . $url;
             $return['menu'][] = array('url'=>$url, 'text'=>$text);
         }
         return $return;
