@@ -3,6 +3,7 @@
 class WebController extends Zend_Controller_Action
 {
     protected $_pageCollection;
+    private $_mode = ''; //hässlicher hack, bitte verbessern :D
     public function indexAction()
     {
         $dao = $this->createDao();
@@ -16,6 +17,7 @@ class WebController extends Zend_Controller_Action
 
     public function feAction()
     {
+        $this->_mode = 'edit';
         $page = $this->indexAction();
         $params = $this->getRequest()->getParams();
         $view = new E3_View_Smarty('../library/E3', array('compile_dir'=>'../application/views_c'));
@@ -31,7 +33,7 @@ class WebController extends Zend_Controller_Action
         $view->assign('componentsInfo', $componentsInfo);
         $view->assign('components', array_unique($components));
         $body = $view->render('fe.html');
-        
+
         $this->getResponse()->appendBody($body);
     }
 
@@ -72,8 +74,10 @@ class WebController extends Zend_Controller_Action
     {
         $templateVars = $page->getTemplateVars();
         $view = new E3_View_Smarty('../application/views',
-                        array('compile_dir'=>'../application/views_c'));
+                        array('compile_dir'=>'../application/views_c',
+                              'debugging' => true)); //todo: ein/ausschaltbar machen
         $view->assign('component', $templateVars);
+        $view->assign('mode', $this->_mode);
         if ($usePageTemplate) {
           $body = $view->render($templateVars['template']);
         } else {

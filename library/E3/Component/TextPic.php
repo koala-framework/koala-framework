@@ -11,7 +11,7 @@ class E3_Component_TextPic extends E3_Component_Abstract
         if($componentKey!='') $componentKey .= ".";
 
         $this->_textboxComponent = new E3_Component_Textbox($this->_dao, $this->getComponentId(), '', $componentKey.'1');
-        $this->_picComponent = new E3_Component_Pic($this->_dao, $this->getComponentId(), '', $componentKey.'1');
+        $this->_picComponent = new E3_Component_Pic($this->_dao, $this->getComponentId(), '', $componentKey.'2');
 
         $ret = parent::getTemplateVars();
         $ret['textbox'] = $this->_textboxComponent->getTemplateVars();

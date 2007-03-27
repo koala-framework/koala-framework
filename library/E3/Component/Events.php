@@ -10,6 +10,7 @@
     private $_paragraphs;
  	protected function generateTreeHierarchy(E3_PageCollection_Tree $pageCollection, $filename)
     {
+        $this->_paragraphs = array();
 		for($i = 2000; $i <= 2007; $i++)
 		{
             if ($filename != '' && $filename != $i) continue;
