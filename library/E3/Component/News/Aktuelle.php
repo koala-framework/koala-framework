@@ -16,8 +16,9 @@ class E3_Component_News_Aktuelle extends E3_Component_Abstract
         }
     }
     
-    public function getTemplateVars()
+    public function getTemplateVars($mode)
     {
+        $ret = parent::getTemplateVars($mode);
         foreach($this->getNews() as $row) {
             $new = array('title'=>$row->title, 'filename'=>$row->filename);
             $ret['news'][] = $new;;

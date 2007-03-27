@@ -19,7 +19,7 @@
 		}
     }
  	
- 	public function getTemplateVars()
+ 	public function getTemplateVars($mode)
  	{
  		$ret['years']= array(2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007);
  		$ret['template'] = 'Events.html';

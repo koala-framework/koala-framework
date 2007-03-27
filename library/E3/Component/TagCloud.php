@@ -1,7 +1,7 @@
 <?php
 class E3_Component_TagCloud extends E3_Component_Abstract
 {
-    public function getTemplateVars()
+    public function getTemplateVars($mode)
     {
         $db = $this->getDao()->getDb('beyars');
         $select = $db->select()
@@ -62,7 +62,7 @@ class E3_Component_TagCloud extends E3_Component_Abstract
 			}
 		}
 
-        $ret = parent::getTemplateVars();
+        $ret = parent::getTemplateVars($mode);
         $ret['data'] = $returnVars;
        	$ret['template'] = 'TagCloud.html';
        	return $ret;

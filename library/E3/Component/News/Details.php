@@ -7,8 +7,10 @@ class E3_Component_News_Details extends E3_Component_Abstract
     {
         $this->_newsId = $id;
     }
-    public function getTemplateVars()
+    public function getTemplateVars($mode)
     {
+        $ret = parent::getTemplateVars($mode);
+
         $componentModel = $this->getDao()->getTable('E3_Dao_Components');
 
         $rows = $this->getDao()->getTable('E3_Dao_News')->find($this->_newsId);
@@ -17,7 +19,7 @@ class E3_Component_News_Details extends E3_Component_Abstract
         $componentClass = $componentModel->getComponentClass($row->component_id);
         $this->_content = new $componentClass($this->getDao(), $row->component_id);
 
-        $ret['content'] = $this->_content->getTemplateVars();
+        $ret['content'] = $this->_content->getTemplateVars($mode);
        	$ret['template'] = 'News/Details.html';
         return $ret;
     }
