@@ -1,9 +1,9 @@
 <?php
 class E3_Component_Decorator_Menu extends E3_Component_Decorator_Abstract
 {
-    public function getTemplateVars()
+    public function getTemplateVars($mode)
     {
-        $return = parent::getTemplateVars();
+        $return = parent::getTemplateVars($mode);
 
         $menus['/'] = 'Home';
         $menus['/test1/'] = 'decorator + paragraphs + 2x text';

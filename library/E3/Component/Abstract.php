@@ -94,7 +94,7 @@ abstract class E3_Component_Abstract implements E3_Component_Interface
         }
         return $ret;
     }
-    public function getTemplateVars()
+    public function getTemplateVars($mode)
     {
         $ret['id'] = $this->getId();
         return $ret;

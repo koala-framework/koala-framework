@@ -3,7 +3,7 @@ class E3_Component_Decorator extends E3_Component_Abstract
 {
     protected $_decorated;
 
-    public function getTemplateVars()
+    public function getTemplateVars($mode)
     {
         $row = $this->_dao->getTable('E3_Dao_Decorator')
                 ->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey())->current();
@@ -13,8 +13,8 @@ class E3_Component_Decorator extends E3_Component_Abstract
 
         $this->_decorated = new $componentClass($this->_dao, $row->component_id);
 
-        $ret = parent::getTemplateVars();
-        $ret['decorated'] = $this->_decorated->getTemplateVars();
+        $ret = parent::getTemplateVars($mode);
+        $ret['decorated'] = $this->_decorated->getTemplateVars($mode);
         $ret['color'] = 'blue';
         $ret['template'] = 'Decorator.html';
         return $ret;

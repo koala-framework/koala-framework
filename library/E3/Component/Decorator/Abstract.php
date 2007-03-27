@@ -10,9 +10,9 @@ abstract class E3_Component_Decorator_Abstract implements E3_Component_Interface
         $this->_component = $component;
     }
     
-    public function getTemplateVars()
+    public function getTemplateVars($mode)
     {
-        return $this->_component->getTemplateVars();
+        return $this->_component->getTemplateVars($mode);
     }
     
     public function getId()

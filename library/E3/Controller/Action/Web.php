@@ -40,33 +40,37 @@ class E3_Controller_Action_Web extends E3_Controller_Action
         echo "WebController::ajaxAction()<br />";
     }
 
-    public function feSaveAction()
+    private function _createComponent()
     {
         $id = $this->getRequest()->getQuery("componentId");
-        if (!is_null($id)) {
-            $dao = $this->createDao();
-            $className = str_replace(".", "_", $this->getRequest()->getQuery("componentClass"));
-            preg_match('#^([^_\\|]*)_?([^_\\|]*)\\|?([^_\\|]*)$#', $id, $keys);
-            $component = new $className($dao, $keys[1], $keys[2], $keys[3]);
-            if ($this->getRequest()->getQuery("save")) {
-                $component->saveFrontendEditing();
-            }
+        if (is_null($id)) return null;
+        $dao = $this->createDao();
+        $className = str_replace(".", "_", $this->getRequest()->getQuery("componentClass"));
+        preg_match('#^([^_\\|]*)_?([^_\\|]*)\\|?([^_\\|]*)$#', $id, $keys);
+        $component = new $className($dao, $keys[1], $keys[2], $keys[3]);
+        return $component;
+    }
+
+    public function feSaveAction()
+    {
+        $component = $this->_createComponent();
+        if (!is_null($component)) {
+            $component->saveFrontendEditing();
             $this->renderPage($component, "fe", true);
         }
     }
     public function feCancelAction()
     {
-    
+        $component = $this->_createComponent();
+        if (!is_null($component)) {
+            $this->renderPage($component, "fe", true);
+        }
     }
     public function feEditAction()
     {
-        $id = $this->getRequest()->getQuery("componentId");
-        if (!is_null($id)) {
-            $dao = $this->createDao();
-            $className = str_replace(".", "_", $this->getRequest()->getQuery("componentClass"));
-            preg_match('#^([^_\\|]*)_?([^_\\|]*)\\|?([^_\\|]*)$#', $id, $keys);
-            $component = new $className($dao, $keys[1], $keys[2], $keys[3]);
-            $this->renderPage($page, "edit", true);
+        $component = $this->_createComponent();
+        if (!is_null($component)) {
+            $this->renderPage($component, "edit", true);
         }
     }
 
@@ -84,14 +88,14 @@ class E3_Controller_Action_Web extends E3_Controller_Action
         $view->assign('component', $templateVars);
         $view->assign('mode', $mode);
         if ($usePageTemplate) {
-          $body = $view->render($templateVars['template']);
+            $body = $view->render($templateVars['template']);
         } else {
-          $body = $view->render('master/default.html');
+            $body = $view->render('master/default.html');
         }
 
         $response = $this->getResponse();
         if ($response->canSendHeaders()) {
-          $response->setHeader('Content-Type', 'text/html');
+            $response->setHeader('Content-Type', 'text/html');
         }
         $response->appendBody($body);
     }
