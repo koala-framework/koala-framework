@@ -1,0 +1,14 @@
+{literal}
+<style type="text/css">
+	.wordrank_1, .wordrank_2, .wordrank_3 { margin: 0px 10px 0px 10px; text-align:left; }
+	
+	.wordrank_1 { font-size: 11px; }
+	.wordrank_2 { font-size: 13px; font-weight:bold; }
+	.wordrank_3 { font-size: 18px; font-weight: normal; }
+</style>
+{/literal}
+
+<div style="text-align:center;">
+{section name=i loop=$component.data}
+<nobr><a href="/de_searchtag_{$component.data[i].a_word}.html" class="{$component.data[i].style}">{$component.data[i].word}</a></nobr> {/section}
+</div>
