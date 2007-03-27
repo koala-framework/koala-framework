@@ -42,11 +42,8 @@ class E3_Test extends PHPUnit_Framework_TestCase
 {
 	protected function createDao()
 	{
-        $dbConfig = new Zend_Config_Ini('../application/config.db.ini', 'web');
-        $dbConfig = $dbConfig->database->asArray();
-        $db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
-        $db->beginTransaction();
-        return new E3_Dao($db);
+        $dbConfig = new Zend_Config_Ini('../application/config.db.ini', 'database');
+        return new E3_Dao($dbConfig);
 	}
 }
 
@@ -54,11 +51,8 @@ class E3_ExceptionTest extends PHPUnit_Extensions_ExceptionTestCase
 {
 	protected function createDao()
 	{
-        $dbConfig = new Zend_Config_Ini('../application/config.db.ini', 'web');
-        $dbConfig = $dbConfig->database->asArray();
-        $db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
-        $db->beginTransaction();
-        return new E3_Dao($db);
+        $dbConfig = new Zend_Config_Ini('../application/config.db.ini', 'database');
+        return new E3_Dao($dbConfig);
 	}
 }
 

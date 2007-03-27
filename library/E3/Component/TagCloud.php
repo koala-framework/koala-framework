@@ -1,21 +1,10 @@
 <?php
 class E3_Component_TagCloud extends E3_Component_Abstract
 {
-    private $_db;
-    
-    protected function setup()
-    {
-        parent::setup();
-        
-        //todo: hack entfernen!
-        $dbConfig = new Zend_Config_Ini('../application/config.db.ini', 'beyars');
-        $dbConfig = $dbConfig->database->asArray();
-        $this->_db = Zend_Db::factory('PDO_MYSQL', $dbConfig);
-    }
-    
     public function getTemplateVars()
     {
-        $select = $this->_db->select()
+        $db = $this->getDao()->getDb('beyars');
+        $select = $db->select()
             ->from(array('wr' => 'index_words_ranking'),
                    array('word_id', 'ROUND(fullWeight) AS fullWeight', 'anzahlVorkommen'))
             ->join(array('w' => 'index_words'),
@@ -24,7 +13,7 @@ class E3_Component_TagCloud extends E3_Component_Abstract
             ->order(array('wr.fullWeight DESC'))
             ->limit(100);
 
-        $stmt = $this->_db->query($select);
+        $stmt = $db->query($select);
         $smRows = $stmt->fetchAll();
 
 		$sortArr = $returnVars = array();
