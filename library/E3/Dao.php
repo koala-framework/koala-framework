@@ -23,7 +23,7 @@ class E3_Dao
         return $this->_tables[$tablename];
     }
     
-    public function getDb($db = 'web1')
+    public function getDb($db = 'web')
     {
         if (!isset($this->_db[$db])) {
             if(!isset($this->_config->$db)) {
