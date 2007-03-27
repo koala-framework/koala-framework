@@ -19,5 +19,5 @@ E3.Component.Textbox.prototype.handleClick = function(o, e) {
 E3.Component.Textbox.prototype.handleSave = function(o, e) {
     var data = 'content='+encodeURIComponent(this.textbox.value);
     this.textbox = null;
-	YAHOO.util.Connect.asyncRequest('POST', '/ajax/fe?save=1&componentId='+this.componentId+'&componentClass='+this.class, this, data);
+	YAHOO.util.Connect.asyncRequest('POST', '/ajax/fe/save?componentId='+this.componentId+'&componentClass='+this.class, this, data);
 };
