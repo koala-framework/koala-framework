@@ -40,6 +40,8 @@ class E3_Component_Product_List extends E3_Component_Abstract
 
         foreach($this->getProducts() as $row) {
             $teaser = new E3_Component_Product_Teaser($this->_dao, $this->getComponentId(), '', $componentKey.$row->id);;
+            $product = array('name'=>$row->name, 'filename'=>$row->filename,
+                             'price'=>$row->price, 'vat'=>$row->vat);
             $teaser->setProductData($product);
             $this->_productTeasers[] = $teaser;
             $ret['products'][] = $teaser->getTemplateVars($mode);

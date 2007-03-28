@@ -1,7 +1,7 @@
 <?php
 class E3_Dao_ProductProductsToCategories extends Zend_Db_Table
 {
-    protected $_name = 'product_products';
+    protected $_name = 'product_products_to_categories';
     protected $_referenceMap    = array(
         'Product' => array(
             'columns'           => array('product_id'),

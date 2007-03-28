@@ -1,0 +1,7 @@
+{foreach from=$component.products item=product}
+	{$product.product.name}
+	{component component=$product.pic}
+	{component component=$product.textbox}
+	Preis:	{$product.product.price} inkl. 	{$product.product.vat}% MwSt.
+	<a href="./{$product.product.filename}/">Details</a><br>
+{/foreach}
