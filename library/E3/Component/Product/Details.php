@@ -33,10 +33,10 @@ class E3_Component_Product_Details extends E3_Component_Abstract
         $ret['vat'] = $product->vat;
 
         $componentClass = $componentModel->getComponentClass($product->component_id);
-        $this->_content = new $componentClass($this->getDao(), $product->component_id)
+        $this->_content = new $componentClass($this->getDao(), $product->component_id);
         $ret['content'] = $this->_content->getTemplateVars($mode);
 
-       	$ret['template'] = 'Product/List.html';
+       	$ret['template'] = 'Product/Details.html';
         return $ret;
     }
     public function getComponentInfo()

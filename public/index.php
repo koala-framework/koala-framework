@@ -27,7 +27,7 @@ if ($response->isException()) {
   $response->sendHeaders();
     $response->outputBody();
     foreach ($response->getException() as $exception) {
-      throw($exception);
+      p($exception);
       //p($exception);
     }
 } else {

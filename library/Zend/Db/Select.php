@@ -802,7 +802,8 @@ class Zend_Db_Select
      */
     public function query($fetchMode = null)
     {
-        $stmt = $this->_adapter->query($this);
+    	$stmt = $this->_adapter->query($this);
+        
         if ($fetchMode == null) {
             $fetchMode = $this->_adapter->getFetchMode();
         }
