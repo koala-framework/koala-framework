@@ -1,0 +1,71 @@
+{literal}
+<style type="text/css">
+
+    /* first or middle sibling, no children */
+    .ygtvtn { width:16px; height:22px; background: url(/files/tree/tn.gif) 0 0 no-repeat; }
+
+    /* first or middle sibling, collapsable */
+    .ygtvtm { width:16px; height:22px; cursor:pointer; background: url(/files/tree/tm.gif) 0 0 no-repeat; }
+
+    /* first or middle sibling, collapsable, hover */
+    .ygtvtmh { width:16px; height:22px; cursor:pointer; background: url(/files/tree/tmh.gif) 0 0 no-repeat; }
+    
+    /* first or middle sibling, expandable */
+    .ygtvtp { width:16px; height:22px; cursor:pointer; background: url(/files/tree/tp.gif) 0 0 no-repeat; }
+    
+    /* first or middle sibling, expandable, hover */
+    .ygtvtph { width:16px; height:22px; cursor:pointer; background: url(/files/tree/tph.gif) 0 0 no-repeat; }
+    
+    /* last sibling, no children */
+    .ygtvln { width:16px; height:22px; background: url(/files/tree/ln.gif) 0 0 no-repeat; }
+    
+    /* Last sibling, collapsable */
+    .ygtvlm { width:16px; height:22px; cursor:pointer; background: url(/files/tree/lm.gif) 0 0 no-repeat; }
+    
+    /* Last sibling, collapsable, hover */
+    .ygtvlmh { width:16px; height:22px; cursor:pointer; background: url(/files/tree/lmh.gif) 0 0 no-repeat; }
+    
+    /* Last sibling, expandable */
+    .ygtvlp { width:16px; height:22px; cursor:pointer; background: url(/files/tree/lp.gif) 0 0 no-repeat; }
+    
+    /* Last sibling, expandable, hover */
+    .ygtvlph { width:16px; height:22px; cursor:pointer; background: url(/files/tree/lph.gif) 0 0 no-repeat; }
+    
+    /* Loading icon */
+    .ygtvloading { width:16px; height:22px; background: url(/files/tree/loading.gif) 0 0 no-repeat; }
+    
+    /* the style for the empty cells that are used for rendering the depth 
+    * of the node */
+    .ygtvdepthcell { width:16px; height:22px; background: url(/files/tree/vline.gif) 0 0 no-repeat; }
+    
+    .ygtvblankdepthcell { width:16px; height:22px; }
+    
+    /* the style of the div around each node */
+    .ygtvitem { }  
+    
+    /* the style of the div around each node's collection of children */
+    .ygtvchildren {  }  
+    * html .ygtvchildren { height:2%; }  
+    
+    /* the style of the text label in ygTextNode */
+    .ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { margin-left:2px; text-decoration: none; background-color: white; }
+    
+    .ygtvspacer { height: 22px; width: 16px; }
+</style>
+
+<script src = "/files/js/yui/treeview/treeview-min.js" ></script>
+
+<div id="treeDiv1" />
+{/literal}
+  
+<script type="text/javascript">
+    var tree = new YAHOO.widget.TreeView("treeDiv1");
+    var node = new Array();
+    node['{$rootId}'] = tree.getRoot();
+    
+    {foreach from=$hierarchy key=id item=page}
+    node['{$id}'] = new YAHOO.widget.TextNode({ldelim}label: '{$page.name}', href:'{$page.path}'{rdelim}, node['{$page.parent}'], {if $page.expanded}true{else}false{/if});
+    {/foreach}
+    
+    tree.draw();
+</script>

@@ -28,9 +28,16 @@ class E3_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
         }
 
         if ($this->_isAllowed('admin')) {
-            $view = new E3_View_Smarty('../library/E3', array('compile_dir'=>'../application/views_c'));
             $session = new Zend_Session_Namespace('admin');
-            $view->assign('mode', $session->mode);
+            $mode = $session->mode;
+            $path = $this->getRequest()->getParam('path');
+            if ($path == null) {
+                $path = $this->getRequest()->getPathInfo();
+            }
+
+            $view = new E3_View_Smarty('../library/E3', array('compile_dir'=>'../application/views_c'));
+            $view->assign('mode', $mode);
+            $view->assign('path', $path);
             $view->assign('_debugMemoryUsage', memory_get_usage());
             $body = $view->render('admin.html');
             $this->getResponse()->appendBody($body);

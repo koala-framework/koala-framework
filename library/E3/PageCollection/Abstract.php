@@ -96,6 +96,6 @@ abstract class E3_PageCollection_Abstract
       }
       return $this->_pages[$this->_rootPageId];
     }
-
+    
     abstract public function getPageByPath($path);
 }

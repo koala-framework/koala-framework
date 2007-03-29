@@ -3,7 +3,6 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
 {
     protected $_pageParentIds = array();
     
-
     public function setParentPage(E3_Component_Interface $page, E3_Component_Interface $parentPage)
     {
         $id = $page->getId();
@@ -11,19 +10,19 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
         $rootId = $this->getRootPage()->getId();
         
         if ($parentId == $id) {
-        	throw new E3_PageCollection_Exception('Cannot set Parent Page for the same object.');
+          throw new E3_PageCollection_Exception('Cannot set Parent Page for the same object.');
         }
         
         if (!isset($this->_pages[$id])) {
-        	throw new E3_PageCollection_Exception('Page does not exist.');
+          throw new E3_PageCollection_Exception('Page does not exist.');
         }
         
         if (!isset($this->_pages[$parentId]) && $rootId != $parentId) {
-        	throw new E3_PageCollection_Exception('Parent Page does not exist.');
+          throw new E3_PageCollection_Exception('Parent Page does not exist.');
         }
         
         if ($id == $rootId) {
-        	throw new E3_PageCollection_Exception('Cannot set Parent for Root Page.');
+          throw new E3_PageCollection_Exception('Cannot set Parent for Root Page.');
         }
         
         $this->_pageParentIds[$id] = $parentId;
@@ -45,15 +44,15 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
     
     public function getParentPage(E3_Component_Interface $page)
     {
-       	$return = null;
+         $return = null;
         $id = $page->getId();
         if (isset($this->_pageParentIds[$id])) {
-	        $parentId = $this->_pageParentIds[$id];
-	        if (!isset($this->_pages[$parentId])) {
-	        	unset($this->_pageParentIds[$id]);
-	        } else {
-	        	$return = $this->_pages[$parentId];
-	        }
+          $parentId = $this->_pageParentIds[$id];
+          if (!isset($this->_pages[$parentId])) {
+            unset($this->_pageParentIds[$id]);
+          } else {
+            $return = $this->_pages[$parentId];
+          }
         }
         return $return;
     }
@@ -83,4 +82,57 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
         }
         return null;
     }
+    
+    public function generateHierarchy(E3_Component_Interface $page = null)
+    {
+        if ($page == null) {
+            $page = $this->getRootPage();
+        }
+        
+        foreach ($this->getChildPages($page) as $childPage) {
+            $this->generateHierarchy($childPage);
+        }
+    }
+    
+    // TODO: Fehlerbehebung
+    public function getPath(E3_Component_Interface $page)
+    {
+        do {
+          $id = $page->getId();
+          $filenames[] = $this->_pageFilenames[$id];
+          $page = null;
+          if (isset($this->_pageParentIds[$id])) {
+              $page = $this->_pages[$this->_pageParentIds[$id]];
+          }
+        } while ($page != null);
+        
+        $return = implode('/', array_reverse($filenames));
+        return $return;
+    }
+    
+    // TODO: Fehlerbehebung, evt. auslagern?
+    public function getFlatHierarchy($expandedPath = '')
+    {
+        $this->generateHierarchy();
+        foreach ($this->_pageParentIds as $id => $parentId) {
+            $return[$id]["parent"] = $parentId;
+            $return[$id]["name"] = $this->_pageFilenames[$id];
+            $return[$id]["expanded"] = false;
+            $return[$id]["path"] = $this->getPath($this->_pages[$id]);
+        }
+        
+        $pathParts = explode('/', $expandedPath);
+        $page = $this->getRootPage();
+        foreach($pathParts as $pathPart) {
+            if ($page != null && $pathPart != '') {
+                $page = $this->getChildPage($page, $pathPart);
+                if ($page != null) {
+                    $return[$page->getId()]["expanded"] = true;
+                }
+            }
+        }
+
+        return $return;
+    }
+
 }
