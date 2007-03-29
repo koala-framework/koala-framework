@@ -26,8 +26,8 @@
         var callback = 
         { 
             success: function(o) { document.location.reload(); }, 
-            failure: function(o) { document.location.reload(); }, 
-        } 
+            failure: function(o) { document.location.reload(); }
+        };
         YAHOO.util.Connect.asyncRequest('get', '/admin/session/?param=mode&value=' + mode, callback);
     }
     

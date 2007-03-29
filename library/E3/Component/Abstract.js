@@ -1,10 +1,10 @@
 YAHOO.namespace('E3.Component');
 var E3 = YAHOO.E3;
 
-E3.Component.Abstract = function(componentId, class) {
+E3.Component.Abstract = function(componentId, componentClass) {
     
   this.componentId = componentId;
-  this.class = class;
+  this.componentClass = componentClass;
   this.htmlelement = document.getElementById('container_' + this.componentId);
   this.el = new YAHOO.util.Element(this.htmlelement);
   this.success = this.handleSuccess;
@@ -62,13 +62,13 @@ E3.Component.Abstract.prototype.handleSave = function() {
     for(var i=0;i<inputs.length;i++) {
         data += '&'+encodeURIComponent(inputs[i].name)+'='+encodeURIComponent(inputs[i].value);
     }
-  YAHOO.util.Connect.asyncRequest('post', '/ajax/fe/save?componentId='+this.componentId+'&componentClass='+this.class, this, data);
+  YAHOO.util.Connect.asyncRequest('post', '/ajax/fe/save?componentId='+this.componentId+'&componentClass='+this.componentClass, this, data);
 };
 
 E3.Component.Abstract.prototype.handleCancel = function() { 
-  var connectionObject = YAHOO.util.Connect.asyncRequest('get', '/ajax/fe/cancel?componentId='+this.componentId+'&componentClass='+this.class, this);
+  var connectionObject = YAHOO.util.Connect.asyncRequest('get', '/ajax/fe/cancel?componentId='+this.componentId+'&componentClass='+this.componentClass, this);
 };
 
 E3.Component.Abstract.prototype.handleClick = function(o, e) {
-  YAHOO.util.Connect.asyncRequest('get', '/ajax/fe/edit?componentId='+e.componentId+'&componentClass='+e.class, {success: e.handleEditSuccess, failure: e.handleFailure, scope: e});
+  YAHOO.util.Connect.asyncRequest('get', '/ajax/fe/edit?componentId='+e.componentId+'&componentClass='+e.componentClass, {success: e.handleEditSuccess, failure: e.handleFailure, scope: e});
 };
