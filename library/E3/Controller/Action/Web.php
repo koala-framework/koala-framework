@@ -44,7 +44,7 @@ class E3_Controller_Action_Web extends E3_Controller_Action
         if (is_null($id)) return null;
         $dao = $this->createDao();
         $className = str_replace(".", "_", $this->getRequest()->getQuery('componentClass'));
-        preg_match('#^([^_\\|]*)_?([^_\\|]*)\\|?([^_\\|]*)$#', $id, $keys);
+        preg_match('#^([^_\\-]*)_?([^_\\-]*)\\-?([^_\\-]*)$#', $id, $keys);
         $component = new $className($dao, $keys[1], $keys[2], $keys[3]);
         return $component;
     }

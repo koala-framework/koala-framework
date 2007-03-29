@@ -90,7 +90,7 @@ abstract class E3_Component_Abstract implements E3_Component_Interface
             $ret .= "_" . $this->getPageKey();
         }
         if ($this->getComponentKey() != "") {
-            $ret .= "|" . $this->getComponentKey();
+            $ret .= "-" . $this->getComponentKey();
         }
         return $ret;
     }
