@@ -3,8 +3,11 @@ RewriteEngine on
 RewriteRule ^files/js/yui/(.*)$ /library/YUI/$1 [L]
 RewriteRule ^files/js/E3/(.*\.js)$ /library/E3/$1 [L]
 
-RewriteCond %{REQUEST_URI} !^/*(library|files|public/index.php)/?
-RewriteRule ^(.*)$ /public/index.php
+RewriteRule ^files/(.*)$ /public/files/$1 [L]
+
+
+RewriteCond %{REQUEST_URI} !^/*(library|public/index.php|public/files)/?
+RewriteRule ^(.*)$ /public/index.php [L]
 
 
 #RewriteCond %{REQUEST_URI} !^/+(index.php|test|admin|admin_kunden|files|css|zwischenseiten|heading.php|test.html|syncdata.php|webspecial|test.php|include.php|cron|webservice|specialsites)/?
