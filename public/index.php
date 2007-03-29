@@ -19,12 +19,12 @@ $front = Zend_Controller_Front::getInstance();
 //$frontController->setRouter('E3_Controller_Router');
 $router = $front->getRouter();
 $router->addConfig(new Zend_Config_Ini('../application/config.ini', 'routes'), 'routes');
-$front->registerPlugin(new E3_Controller_Plugin_Fe());
+$front->registerPlugin(new E3_Controller_Plugin_Admin());
 $front->setControllerDirectory('../application/controllers');
 $front->returnResponse(true);
 $response = $front->dispatch();
 if ($response->isException()) {
-  $response->sendHeaders();
+    $response->sendHeaders();
     $response->outputBody();
     foreach ($response->getException() as $exception) {
       p($exception);
