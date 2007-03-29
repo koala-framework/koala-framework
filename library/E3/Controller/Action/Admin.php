@@ -51,6 +51,7 @@ class E3_Controller_Action_Admin extends E3_Controller_Action
                 }
             } else {
                 echo "You are now logged in.";
+                // TODO: redirect auf HP?
             }
             
         }
@@ -62,7 +63,19 @@ class E3_Controller_Action_Admin extends E3_Controller_Action
     public function logoutAction()
     {
         Zend_Auth::getInstance()->clearIdentity();
+        $adminSession = new Zend_Session_Namespace('admin');
+        $adminSession->unsetAll();
         echo "You are now logged out.";
+        $this->loginAction();
+    }
+
+    public function sessionAction()
+    {
+        $param = $this->getRequest()->getParam("param");
+        $value = $this->getRequest()->getParam("value");
+
+        $adminSession = new Zend_Session_Namespace('admin');
+        $adminSession->$param = $value;
     }
 
     public function __call($methodName, $args)
