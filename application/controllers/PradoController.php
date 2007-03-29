@@ -5,9 +5,9 @@ class PradoController extends Zend_Controller_Action
     {
         $basePath = dirname(__FILE__);
         $frameworkPath = 'prado/prado.php';
-        $assetsPath = $basePath.'/../../public/assets';
-        $runtimePath = $basePath.'/../prado/runtime';
-        $applicationPath = $basePath.'/../prado';
+        $assetsPath = '../public/assets';
+        $runtimePath = '../application/prado/runtime';
+        $applicationPath = '../application/prado';
         
         if(!is_writable($assetsPath))
             die("Please make sure that the directory $assetsPath is writable by Web server process.");
