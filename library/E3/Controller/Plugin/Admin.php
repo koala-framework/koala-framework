@@ -22,10 +22,7 @@ class E3_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
             $session = new Zend_Session_Namespace('admin');
             $request->setParam('mode', $session->mode); 
         }
-    }
-    
-    public function postDispatch(Zend_Controller_Request_Http $request)
-    {
+        
         if ($request->getControllerName() == 'fe') {
             return false;
         }
@@ -39,6 +36,10 @@ class E3_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
             $this->getResponse()->appendBody($body);
         }
 
+    }
+    
+    public function postDispatch(Zend_Controller_Request_Http $request)
+    {
         if ($this->_isAllowed('fe')) {
             $view = new E3_View_Smarty('../library/E3', array('compile_dir'=>'../application/views_c'));
             $pageCollection = E3_PageCollection_Abstract::getInstance();
