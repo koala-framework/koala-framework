@@ -1,16 +1,11 @@
 <?php
 class E3_Controller_Action_Admin extends E3_Controller_Action
 {
-    public function indexAction()
+    public function __call($methodName, $args)
     {
-        echo "AdminController::indexAction()<br />";
+        $this->loginAction();
     }
-
-    public function norouteAction()
-    {
-        echo "AdminController::norouteAction()<br />";
-    }
-
+    
     public function loginAction()
     {
         require_once 'HTML/QuickForm.php';
@@ -36,7 +31,7 @@ class E3_Controller_Action_Admin extends E3_Controller_Action
             $username = $form->exportValue('username');
             $password = $form->exportValue('password');
             
-            $dao = $this->createDao();
+            $dao = Zend_Registry::get('dao');
             $db = $dao->getDb();
 
             $auth = Zend_Auth::getInstance();
@@ -69,6 +64,7 @@ class E3_Controller_Action_Admin extends E3_Controller_Action
         $this->loginAction();
     }
 
+    // Ajax
     public function sessionAction()
     {
         $param = $this->getRequest()->getParam("param");
@@ -77,9 +73,5 @@ class E3_Controller_Action_Admin extends E3_Controller_Action
         $adminSession = new Zend_Session_Namespace('admin');
         $adminSession->$param = $value;
     }
-
-    public function __call($methodName, $args)
-    {
-        echo "AdminController::__call()<br />";
-    }
+    
 }

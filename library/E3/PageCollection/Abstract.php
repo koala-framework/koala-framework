@@ -6,10 +6,27 @@ abstract class E3_PageCollection_Abstract
     protected $_rootPageId;
     protected $_addDecorator = false;
     private $_dao;
+    protected static $_instance = null;
+    
 
     function __construct(E3_Dao $dao)
     {
       $this->_dao = $dao;
+    }
+    
+    public static function getInstance()
+    {
+        if (null === self::$_instance) {
+            $dao = Zend_Registry::get('dao');
+            
+            $pageCollectionConfig = new Zend_Config_Ini('../application/config.ini', 'pagecollection');
+            $pageCollection = new $pageCollectionConfig->pagecollection->type($dao);
+            $pageCollection->setAddDecorator($pageCollectionConfig->pagecollection->addDecorator);
+            
+            self::$_instance = $pageCollection;
+        }
+
+        return self::$_instance;
     }
 
     public function addPage(E3_Component_Interface $component, $filename)

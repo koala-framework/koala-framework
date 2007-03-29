@@ -7,9 +7,9 @@ class E3_Component_Textbox extends E3_Component_Abstract
         $rowset = $this->_dao->getTable('E3_Dao_Textbox')
                 ->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
         if ($rowset->count() == 1) {
-        	$content = $rowset->current()->content;
+          $content = $rowset->current()->content;
         } else {
-        	$content = '';
+          $content = '';
         }
         $ret = parent::getTemplateVars($mode);
 
@@ -23,7 +23,7 @@ class E3_Component_Textbox extends E3_Component_Abstract
     
             $componentNr = 0;
             $this->_components = array();
-            while(preg_match('#^(.*?)\{([a-zA-Z0-9_]+)\}(.*)$#', $content, $m)) {
+            while(preg_match('#^(.*?)\{([a-zA-Z0-9_]+)\}(.*)$#s', $content, $m)) {
                 $contentParts[] = array('type'=>'content', 'content'=>$m[1]);
                 $className = $m[2];
                 if (class_exists($className)) {
@@ -41,28 +41,28 @@ class E3_Component_Textbox extends E3_Component_Abstract
         if ($mode == 'edit') {
             $ret['template'] = dirname(__FILE__).'/Textbox.html';
         } else {
-       	    $ret['template'] = 'Textbox.html';
-       	}
+             $ret['template'] = 'Textbox.html';
+         }
 
         return $ret;
     }
 
     public function getComponentInfo()
     {
-    	$info = parent::getComponentInfo();
-    	foreach ($this->_components as $p) {
-    		$info += $p->getComponentInfo();
-    	}
-    	return $info;
+      $info = parent::getComponentInfo();
+      foreach ($this->_components as $p) {
+        $info += $p->getComponentInfo();
+      }
+      return $info;
     }
     public function saveFrontendEditing()
     {
         $rowset = $this->_dao->getTable('E3_Dao_Textbox')
                 ->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
         if ($rowset->count() == 1) {
-        	$row = $rowset->current();
+          $row = $rowset->current();
         } else {
-        	//todo: throw error
+          //todo: throw error
         }
         if (isset($_POST['content'])) {
             $row->content = $_POST['content'];
