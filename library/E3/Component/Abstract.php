@@ -109,4 +109,9 @@ abstract class E3_Component_Abstract implements E3_Component_Interface
     {
         return $this->_dao;
     }
+
+    public function saveFrontendEditing(Zend_Controller_Request_Http $request)
+    {
+        return array();
+    }
 }

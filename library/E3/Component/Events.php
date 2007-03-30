@@ -8,6 +8,7 @@
  class E3_Component_Events extends E3_Component_Abstract
  {
     private $_paragraphs;
+
  	protected function generateTreeHierarchy(E3_PageCollection_Tree $pageCollection, $filename)
     {
         $this->_paragraphs = array();
@@ -21,17 +22,10 @@
  	
  	public function getTemplateVars($mode)
  	{
+ 	    $ret = parent::getTemplateVars($mode);
  		$ret['years']= array(2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007);
  		$ret['template'] = 'Events.html';
         return $ret;
  	}
-    public function getComponentInfo()
-    {
-    	$info = parent::getComponentInfo();
-    	foreach ($this->_paragraphs as $p) {
-    		$info += $p->getComponentInfo();
-    	}
-    	return $info;
-    }
 }
  

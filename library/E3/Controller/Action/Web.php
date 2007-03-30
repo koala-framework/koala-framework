@@ -6,7 +6,11 @@ class E3_Controller_Action_Web extends E3_Controller_Action
         $pageCollection = E3_PageCollection_Abstract::getInstance();
         $page = $pageCollection->getPageByPath($this->getRequest()->getPathInfo());
         $mode = $this->getRequest()->getParam('mode');
-        $this->_renderPage($page, $mode, false);
+        
+        $body = $this->_renderPage($page, $mode, false);
+        $this->getResponse()
+            ->setHeader('Content-Type', 'text/html')
+            ->appendBody($body);
     }
 
 
@@ -23,12 +27,7 @@ class E3_Controller_Action_Web extends E3_Controller_Action
         } else {
             $body = $view->render('master/default.html');
         }
-
-        $response = $this->getResponse();
-        if ($response->canSendHeaders()) {
-            $response->setHeader('Content-Type', 'text/html');
-        }
-        $response->appendBody($body);
+        return $body;
     }
 
 }

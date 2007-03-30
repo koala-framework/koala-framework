@@ -1,4 +1,6 @@
 <?php
+
+// $test = str_repeat(str_repeat("x", 1000), 1000);
 //error_reporting(E_ALL|E_STRICT);
 error_reporting(E_ALL); // wg. HTML_QuickForm (PEAR)
 date_default_timezone_set('Europe/Berlin');
@@ -17,15 +19,20 @@ function __autoload($class)
 $dao = new E3_Dao(new Zend_Config_Ini('../application/config.db.ini', 'database'));
 Zend_Registry::set('dao', $dao);
 
+
 $front = Zend_Controller_Front::getInstance();
 $front->setDispatcher(new E3_Controller_Dispatcher());
 //$front->setRequest('E3_Controller_Request');
 //$front->setRouter('E3_Controller_Router');
 $router = $front->getRouter();
 $router->addConfig(new Zend_Config_Ini('../application/config.ini', 'routes'), 'routes');
+
+
+
 $front->registerPlugin(new E3_Controller_Plugin_Admin());
 $front->setControllerDirectory('../application/controllers');
 $front->returnResponse(true);
+
 $response = $front->dispatch();
 if ($response->isException()) {
     $response->sendHeaders();

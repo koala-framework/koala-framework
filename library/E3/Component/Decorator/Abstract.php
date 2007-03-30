@@ -37,5 +37,8 @@ abstract class E3_Component_Decorator_Abstract implements E3_Component_Interface
     {
         return $this->_component->generateTreeHierarchy($pageCollection, $filename);
     }
-
+    public function saveFrontendEditing(Zend_Controller_Request_Http $request)
+    {
+        return $this->_component->saveFrontendEditing($request);
+    }
 }

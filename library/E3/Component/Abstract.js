@@ -14,12 +14,7 @@ E3.Component.Abstract.prototype.init = function() {
   this.editButton = new YAHOO.util.Element(document.createElement('a'));
   this.editButton.set('innerHTML', 'edit...');
   this.editButton.set('href', 'javascript:void(0)');
-  this.editButton.setStyle('position', 'absolute');
-  this.editButton.setStyle('backgroundColor', 'white');
-  this.editButton.setStyle('left', '0');
-  this.editButton.setStyle('border', '1px solid black');
-  this.editButton.setStyle('padding', '2px');
-  this.editButton.setStyle('display', 'none');
+  this.editButton.set('className', 'E3AbstractEditButton');
 
   this.el.insertBefore(this.editButton, this.el.get('firstChild'));
 
@@ -29,7 +24,8 @@ E3.Component.Abstract.prototype.init = function() {
 };
 
 E3.Component.Abstract.prototype.handleSuccess = function(o) {
-    this.htmlelement.innerHTML = o.responseText;
+    var resp = eval('(' + o.responseText + ')');
+    if(resp.html) this.htmlelement.innerHTML = resp.html;
     this.init(this.componentId);
 };
 
@@ -66,17 +62,20 @@ E3.Component.Abstract.prototype.handleMouseOut = function(o, scope) {
 
 E3.Component.Abstract.prototype.handleSave = function() {
     var form = this.htmlelement.getElementsByTagName('form')[0];
+    this.htmlelement.innerHTML = 'saving...';
     YAHOO.util.Connect.setForm(form);
     YAHOO.util.Connect.asyncRequest('POST', '/ajax/fe/save?componentId='+this.componentId+'&componentClass='+this.componentClass,
             {success: this.handleSuccess, failure: this.handleFailure, scope: this});
 };
 
-E3.Component.Abstract.prototype.handleCancel = function() { 
-  var connectionObject = YAHOO.util.Connect.asyncRequest('get', '/ajax/fe/cancel?componentId='+this.componentId+'&componentClass='+this.componentClass,
+E3.Component.Abstract.prototype.handleCancel = function() {
+    this.htmlelement.innerHTML = 'reloading...';
+    var connectionObject = YAHOO.util.Connect.asyncRequest('get', '/ajax/fe/cancel?componentId='+this.componentId+'&componentClass='+this.componentClass,
     {success: this.handleSuccess, failure: this.handleFailure, scope: this});
 };
 
 E3.Component.Abstract.prototype.handleClick = function(o, e) {
-  YAHOO.util.Connect.asyncRequest('get', '/ajax/fe/edit?componentId='+e.componentId+'&componentClass='+e.componentClass,
-    {success: e.handleEditSuccess, failure: e.handleFailure, scope: e});
+    e.htmlelement.innerHTML = 'loading...';
+    YAHOO.util.Connect.asyncRequest('get', '/ajax/fe/edit?componentId='+e.componentId+'&componentClass='+e.componentClass,
+        {success: e.handleEditSuccess, failure: e.handleFailure, scope: e});
 };
