@@ -105,34 +105,9 @@ class E3_PageCollection_Tree extends E3_PageCollection_Abstract
               $page = $this->_pages[$this->_pageParentIds[$id]];
           }
         } while ($page != null);
-        
         $return = implode('/', array_reverse($filenames));
+        if (substr($return, 0, 1) != '/') { $return = '/' . $return; }
         return $return;
     }
     
-    // TODO: Fehlerbehebung, evt. auslagern?
-    public function getFlatHierarchy($expandedPath = '')
-    {
-        $this->generateHierarchy();
-        foreach ($this->_pageParentIds as $id => $parentId) {
-            $return[$id]["parent"] = $parentId;
-            $return[$id]["name"] = $this->_pageFilenames[$id];
-            $return[$id]["expanded"] = false;
-            $return[$id]["path"] = $this->getPath($this->_pages[$id]);
-        }
-        
-        $pathParts = explode('/', $expandedPath);
-        $page = $this->getRootPage();
-        foreach($pathParts as $pathPart) {
-            if ($page != null && $pathPart != '') {
-                $page = $this->getChildPage($page, $pathPart);
-                if ($page != null) {
-                    $return[$page->getId()]["expanded"] = true;
-                }
-            }
-        }
-
-        return $return;
-    }
-
 }

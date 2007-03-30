@@ -1,29 +1,35 @@
 <?php
 class E3_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
 {
-    
+
     private function _isAllowed($resource)
     {
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity()) {
             $identity = $auth->getIdentity();
-            
+
             // TODO: get role of user
             $role = 'admin';
             $acl = new E3_Acl();
-            
+
             return $acl->isAllowed($role, $resource);
         }
+        return false;
     }
-    
+
     public function preDispatch(Zend_Controller_Request_Http $request)
     {
         if ($this->_isAllowed('fe')) {
             $session = new Zend_Session_Namespace('admin');
-            $request->setParam('mode', $session->mode); 
+            $request->setParam('mode', $session->mode);
         }
-        
-        if ($request->getControllerName() == 'fe') {
+
+        if (substr($request->getPathInfo(), 0, 6) == '/admin' && $request->getActionName() != 'login' && !$this->_isAllowed('admin')) {
+            header('Location: /admin/login'); // hab ich mir dem Response-Objekt nicht geschafft
+            die();
+        }
+
+        if ($request->getControllerName() == 'fe' || strpos($request->getActionName(), 'ajax') !== false) {
             return false;
         }
 
@@ -44,7 +50,7 @@ class E3_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
         }
 
     }
-    
+
     public function postDispatch(Zend_Controller_Request_Http $request)
     {
         if ($this->_isAllowed('fe')) {
@@ -68,7 +74,7 @@ class E3_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
             }
         }
     }
-    
+
 }
 
 ?>
