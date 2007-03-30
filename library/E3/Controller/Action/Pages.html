@@ -1,4 +1,4 @@
-{literal}
+<literal>
 <style type="text/css">
 
     /* first or middle sibling, no children */
@@ -54,18 +54,53 @@
 </style>
 
 <script src = "/files/js/yui/treeview/treeview-min.js" ></script>
+<script src = "/files/js/yui/animation/animation.js" ></script>
 
 <div id="treeDiv1" />
-{/literal}
   
 <script type="text/javascript">
-    var tree = new YAHOO.widget.TreeView("treeDiv1");
-    var node = new Array();
-    node['{$rootId}'] = tree.getRoot();
+</literal>
+    function loadDataForNode(node, onCompleteCallback) {
+        YAHOO.util.Connect.asyncRequest(
+            'get',
+            '/admin/pages/ajaxGetChildNodes?id='+node.data.id,
+            {success: addNodes, failure: handleFailure, parentNode: node}, this
+        );
+        
+        function addNodes(o) {
+            var pages = eval(o.responseText);
+            for (x=0; x<ldelim>pages.length; x++) {
+                page = pages[x];
+                node = new YAHOO.widget.TextNode({label:page.name, href:page.path, id:page.id}, this.parentNode);
+                if (page.hasChildren) {
+                    node.setDynamicLoad(loadDataForNode);
+                }
+            }
+            onCompleteCallback(); 
+        }
+         
+        function handleFailure() {
+            alert('failure');
+            onCompleteCallback();
+        }
+    }
     
-    {foreach from=$hierarchy key=id item=page}
-    node['{$id}'] = new YAHOO.widget.TextNode({ldelim}label: '{$page.name}', href:'{$page.path}'{rdelim}, node['{$page.parent}'], {if $page.expanded}true{else}false{/if});
-    {/foreach}
+    
+    var tree = new YAHOO.widget.TreeView("treeDiv1");
+    tree.setExpandAnim(YAHOO.widget.TVAnim.FADE_IN);
+    tree.setCollapseAnim(YAHOO.widget.TVAnim.FADE_OUT);
+    
+    var nodes = new Array();
+    nodes['<$rootId>'] = tree.getRoot();
+    <foreach from=$data item=page>
+    nodes['<$page.id>'] = new YAHOO.widget.TextNode({label: '<$page.name>', href:'<$page.path>', id:'<$page.id>'}, nodes['<$page.parent>'], <if $page.expanded>true<else>false</if>);
+    <if $page.hasChildren>
+    nodes['<$page.id>'].setDynamicLoad(loadDataForNode);
+    </if>
+    </foreach>
     
     tree.draw();
+
+<literal>
 </script>
+</literal>

@@ -1,6 +1,4 @@
 <?php
-
-// $test = str_repeat(str_repeat("x", 1000), 1000);
 //error_reporting(E_ALL|E_STRICT);
 error_reporting(E_ALL); // wg. HTML_QuickForm (PEAR)
 date_default_timezone_set('Europe/Berlin');

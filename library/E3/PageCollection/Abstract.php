@@ -78,12 +78,49 @@ abstract class E3_PageCollection_Abstract
             throw new E3_PageCollection_Exception('pageTag and componentTag must be emty when id is a E3_Component_Interface.');
         }
       }
-//     	if (!is_int($id)) {
-//     		throw new E3_PageCollection_Exception('ID must be an instance of E3_Component_Interface or an Integer.');
-//     	}
+//      if (!is_int($id)) {
+//          throw new E3_PageCollection_Exception('ID must be an instance of E3_Component_Interface or an Integer.');
+//      }
       if ($pageTag != "") $id .= "_".$pageTag;
       if ($componentTag != "") $id .= "|".$componentTag;
       return isset($this->_pages[$id]);
+    }
+
+    public function getPageById($id)
+    {
+        if (!isset($this->_pages[$id])) {
+            try {
+                $parts = E3_Component_Abstract::parseId($id);
+                $pageId = $parts['componentId'];
+                $pageRow = $this->_dao->getTable('E3_Dao_Pages')->fetchPageById($pageId);
+                if ($pageRow != null) {
+                    $className = $this->_dao->getTable('E3_Dao_Components')->getComponentClass($pageRow->component_id);
+                    $this->_pages[$pageId] = new $className($this->_dao, $pageRow->component_id);
+                    $this->_pageFilenames[$pageId] = $pageRow->filename;
+                    foreach ($parts['pageKeys'] as $pageKey) {
+                        $this->_pages[$pageId]->generateHierarchy($this);
+                        $pageId .= '.' . $pageKey;
+                    }
+                }
+            } catch (E3_Component_Exception $e) {
+                return null;
+            }
+        }
+
+        if (isset($this->_pages[$id])) {
+            return $this->_pages[$id];
+        } else {
+            return null;
+        }
+    }
+
+    public function getFilename(E3_Component_Interface $page)
+    {
+        $id = $page->getId();
+        if (isset($this->_pageFilenames[$id])) {
+            return $this->_pageFilenames[$id];
+        }
+        return '';
     }
 
     public function getRootPage()

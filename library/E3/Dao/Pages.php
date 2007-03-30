@@ -10,9 +10,9 @@ class E3_Dao_Pages extends Zend_Db_Table
         if ($pageId) {
             $where = array($db->quoteInto('parent_id = ?', $pageId));
             if ($filename != '') $where[] = $db->quoteInto('filename = ?', $filename);
-        	return $this->fetchAll($where);
+          return $this->fetchAll($where);
         } else {
-        	return array();
+          return array();
         }
     }
 
@@ -22,7 +22,19 @@ class E3_Dao_Pages extends Zend_Db_Table
         $rows = $this->fetchAll($db->quoteInto('parent_id = ?', 0));
         
         if ($rows->count() != 1) {
-        	throw new E3_Dao_Exception('There must be exactly one row with parent_id 0 in table "pages".');
+            throw new E3_Dao_Exception('There must be exactly one row with parent_id 0 in table "pages".');
+        }
+        
+        return $rows->current();
+    }
+    
+    function fetchPageById($id)
+    {
+        $db = $this->getAdapter();
+        $rows = $this->fetchAll($db->quoteInto('component_id = ?', $id));
+        
+        if ($rows->count() != 1) {
+            return null;
         }
         
         return $rows->current();
