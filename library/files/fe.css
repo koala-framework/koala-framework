@@ -1,0 +1,8 @@
+div.E3ParagraphsMoveButton,
+a.E3AbstractEditButton { padding: 2px; border: 1px solid black; left: 0;
+    background-color: white; position: absolute; display: none; }
+
+div.E3ParagraphsMoveButton { cursor: move; margin-left: 40px; }
+a.E3AbstractEditButton {  }
+
+div.E3PicProgress { }

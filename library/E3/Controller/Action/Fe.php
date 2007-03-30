@@ -5,16 +5,29 @@ class E3_Controller_Action_Fe extends E3_Controller_Action_Web
     {
         $component = $this->_createComponent();
         if (!is_null($component)) {
-            $component->saveFrontendEditing();
-            $this->_renderPage($component, 'fe', true);
+            $ret = $component->saveFrontendEditing($this->getRequest());
+            if (!isset($ret['html'])) {
+                $ret['html'] = $this->_renderPage($component, 'fe', true);
+            }
+
+            $body = Zend_Json::encode($ret);
+            $this->getResponse()
+                ->setHeader('Content-Type', 'application/json')
+                ->appendBody($body);
         }
     }
-    
+
     public function cancelAction()
     {
         $component = $this->_createComponent();
         if (!is_null($component)) {
-            $this->_renderPage($component, 'fe', true);
+            $ret = array();
+            $ret['html'] = $this->_renderPage($component, 'fe', true);
+
+            $body = Zend_Json::encode($ret);
+            $this->getResponse()
+                ->setHeader('Content-Type', 'application/json')
+                ->appendBody($body);
         }
     }
     
@@ -22,7 +35,21 @@ class E3_Controller_Action_Fe extends E3_Controller_Action_Web
     {
         $component = $this->_createComponent();
         if (!is_null($component)) {
-            $this->_renderPage($component, 'edit', true);
+            $body = $this->_renderPage($component, 'edit', true);
+            $this->getResponse()
+                ->setHeader('Content-Type', 'text/html')
+                ->appendBody($body);
+        }
+    }
+
+    public function statusAction()
+    {
+        $component = $this->_createComponent();
+        if (!is_null($component)) {
+            $body = Zend_Json::encode($component->getStatus());
+            $this->getResponse()
+                ->setHeader('Content-Type', 'application/json')
+                ->appendBody($body);
         }
     }
 

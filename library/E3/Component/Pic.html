@@ -1,3 +1,5 @@
 <form>
-    <input type="file" name="content" />
+    <input type=hidden name=UPLOAD_IDENTIFIER value="{$component.uniqid}" />
+    <input type="hidden" name="MAX_FILE_SIZE" value="64388608" />
+    <input type="file" name="upload" />
 </form>
