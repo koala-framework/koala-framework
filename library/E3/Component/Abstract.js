@@ -27,6 +27,12 @@ E3.Component.Abstract.prototype.handleSuccess = function(o) {
     var resp = eval('(' + o.responseText + ')');
     if(resp.html) this.htmlelement.innerHTML = resp.html;
     this.init(this.componentId);
+    if (resp.createComponents) {
+        for(var id in resp.createComponents) {
+            var className = resp.createComponents[id].replace(/_/g, '.');
+            eval('new '+className+'(\''+id+'\', \''+className+'\');');
+        }
+    }
 };
 
 E3.Component.Abstract.prototype.handleEditSuccess = function(o)
