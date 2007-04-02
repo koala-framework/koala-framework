@@ -2,7 +2,7 @@
 require_once 'Zend/View/Interface.php';
 require_once 'Smarty/Smarty.class.php';
 
-class E3_View_Smarty implements Zend_View_Interface
+class VPS_View_Smarty implements Zend_View_Interface
 {
     /**
      * Smarty object
@@ -151,4 +151,4 @@ class E3_View_Smarty implements Zend_View_Interface
     {
         return $this->_smarty->fetch($name);
     }
-}?>
+}
