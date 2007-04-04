@@ -91,12 +91,12 @@ class E3_Component_Textbox extends E3_Component_Abstract
         }
 
         $ret = parent::saveFrontendEditing($request);
-
+/*
         $this->_getContentParts('fe'); //um components zu laden
         $ret['createComponents'] = array();
         foreach ($this->_components as $p) {
             $ret['createComponents'] += $p->getComponentInfo();
-        }
+        }*/
         return $ret;
     }
 }

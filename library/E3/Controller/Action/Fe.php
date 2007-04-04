@@ -9,6 +9,15 @@ class E3_Controller_Action_Fe extends E3_Controller_Action_Web
             if (!isset($ret['html'])) {
                 $ret['html'] = $this->_renderPage($component, 'fe', true);
             }
+            $pageCollection = E3_PageCollection_Abstract::getInstance();
+            $page = $pageCollection->getPageById($this->getRequest()->getParam('currentPageId'));
+            $ret['createComponents'] = $page->getComponentInfo();
+            foreach ($ret['createComponents'] as $key => $component) {
+                $filename = str_replace('_', '/', $component) . '.js';
+                if (!is_file('../library/' . $filename)) {
+                    unset($ret['createComponents'][$key]);
+                }
+            }
 
             $body = Zend_Json::encode($ret);
             $this->getResponse()
@@ -23,6 +32,15 @@ class E3_Controller_Action_Fe extends E3_Controller_Action_Web
         if (!is_null($component)) {
             $ret = array();
             $ret['html'] = $this->_renderPage($component, 'fe', true);
+            $pageCollection = E3_PageCollection_Abstract::getInstance();
+            $page = $pageCollection->getPageById($this->getRequest()->getParam('currentPageId'));
+            $ret['createComponents'] = $page->getComponentInfo();
+            foreach ($ret['createComponents'] as $key => $component) {
+                $filename = str_replace('_', '/', $component) . '.js';
+                if (!is_file('../library/' . $filename)) {
+                    unset($ret['createComponents'][$key]);
+                }
+            }
 
             $body = Zend_Json::encode($ret);
             $this->getResponse()
