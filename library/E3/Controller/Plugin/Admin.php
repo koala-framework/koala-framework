@@ -60,15 +60,15 @@ class E3_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
             $componentsInfo = array();
             $components = array();
             if ($page != null) {
-                foreach ($page->getComponentInfo() as $key => $component) {
+                $componentsInfo = $page->getComponentInfo();
+                foreach ($componentsInfo as $key => $component) {
                     $filename = str_replace('_', '/', $component) . '.js';
-                    if (is_file('../library/' . $filename)) {
-                        $componentsInfo[$key] = str_replace('_', '.', $component);
-                        $components[] = $filename;
+                    if (!is_file('../library/' . $filename)) {
+                        unset($componentsInfo[$key]);
                     }
                 }
                 $view->assign('componentsInfo', $componentsInfo);
-                $view->assign('components', array_unique($components));
+                $view->assign('currentPageId', $page->getId());
                 $body = $view->render('fe.html');
                 $this->getResponse()->appendBody($body);
             }

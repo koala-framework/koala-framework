@@ -1,13 +1,10 @@
 <!-- Frontend Editing -->
 <link rel="stylesheet" type="text/css" href="/files/library/fe.css" />
 <script type="text/javascript" src="/files/E3/Component/Abstract.js"></script> 
-{foreach from=$components item=component}
-<script type="text/javascript" src="/files/{$component}"></script> 
-{/foreach}
-
 <!-- Komponenten aktivieren -->
 <script type="text/javascript">
+  var currentPageId = '{$currentPageId}';
 {foreach from=$componentsInfo key=id item=component}
-  new {$component}('{$id}', '{$component}');
+    E3.createComponent('{$id}', '{$component}');
 {/foreach}
 </script>

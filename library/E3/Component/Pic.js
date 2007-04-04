@@ -1,18 +1,18 @@
-E3.Component.Pic = function(componentId, componentClass) {
-    E3.Component.Pic.superclass.constructor.call(this, componentId, componentClass);
+YAHOO.E3.Component.Pic = function(componentId, componentClass) {
+    YAHOO.E3.Component.Pic.superclass.constructor.call(this, componentId, componentClass);
 };
-YAHOO.lang.extend(E3.Component.Pic, E3.Component.Abstract);
+YAHOO.lang.extend(YAHOO.E3.Component.Pic, YAHOO.E3.Component.Abstract);
 
-E3.Component.Pic.prototype.handleSuccess = function(o) {
+YAHOO.E3.Component.Pic.prototype.handleSuccess = function(o) {
     this.progressBar = null;
     this.progressPercent = null;
     this.progressText = null;
-    E3.Component.Pic.superclass.handleSuccess.call(this, o);
+    YAHOO.E3.Component.Pic.superclass.handleSuccess.call(this, o);
 };
-E3.Component.Pic.prototype.handleSave = function() {
+YAHOO.E3.Component.Pic.prototype.handleSave = function() {
     var form = this.htmlelement.getElementsByTagName('form')[0];
     YAHOO.util.Connect.setForm(form, true);
-    YAHOO.util.Connect.asyncRequest('POST', '/ajax/fe/save?componentId='+this.componentId+'&componentClass='+this.componentClass, 
+    YAHOO.util.Connect.asyncRequest('POST', '/ajax/fe/save?componentId='+this.componentId+'&componentClass='+this.componentClass+'&currentPageId='+currentPageId, 
         {success: this.handleSuccess, failure: this.handleFailure, upload: this.handleSuccess, scope: this});
     this.progressKey = form.UPLOAD_IDENTIFIER.value;
 
@@ -43,15 +43,17 @@ E3.Component.Pic.prototype.handleSave = function() {
     this.htmlelement.appendChild(this.progressText);
     
     this.updateProgress();
+
+    this.htmlelement.isInEditMode = false;
 };
 
-E3.Component.Pic.prototype.updateProgress = function() {
-  YAHOO.util.Connect.asyncRequest('POST','/ajax/fe/status?componentId='+this.componentId+'&componentClass='+this.componentClass,
+YAHOO.E3.Component.Pic.prototype.updateProgress = function() {
+  YAHOO.util.Connect.asyncRequest('POST','/ajax/fe/status?componentId='+this.componentId+'&componentClass='+this.componentClass+'&currentPageId='+currentPageId,
     {success: this.progressHandler, scope: this},
     'progress_upload='+this.progressKey);
 };
 
-E3.Component.Pic.prototype.progressHandler = function(o) {
+YAHOO.E3.Component.Pic.prototype.progressHandler = function(o) {
   var resp = eval('(' + o.responseText + ')');
   if(resp.progress_upload) resp = resp.progress_upload;
   
