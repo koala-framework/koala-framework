@@ -14,20 +14,20 @@ function __autoload($class)
     Zend_Loader::loadClass($class);
 }
 
-$dao = new E3_Dao(new Zend_Config_Ini('../application/config.db.ini', 'database'));
+$dao = new Vps_Dao(new Zend_Config_Ini('../application/config.db.ini', 'database'));
 Zend_Registry::set('dao', $dao);
 
 
 $front = Zend_Controller_Front::getInstance();
-$front->setDispatcher(new E3_Controller_Dispatcher());
-//$front->setRequest('E3_Controller_Request');
-//$front->setRouter('E3_Controller_Router');
+$front->setDispatcher(new Vps_Controller_Dispatcher());
+//$front->setRequest('Vps_Controller_Request');
+//$front->setRouter('Vps_Controller_Router');
 $router = $front->getRouter();
 $router->addConfig(new Zend_Config_Ini('../application/config.ini', 'routes'), 'routes');
 
 
 
-$front->registerPlugin(new E3_Controller_Plugin_Admin());
+$front->registerPlugin(new Vps_Controller_Plugin_Admin());
 $front->setControllerDirectory('../application/controllers');
 $front->returnResponse(true);
 
