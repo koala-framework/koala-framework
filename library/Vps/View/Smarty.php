@@ -97,7 +97,7 @@ class Vps_View_Smarty implements Zend_View_Interface
     }
 
     /**
-     * Erlaubt das Zur�cksetzen von Objekteigenschaften
+     * Erlaubt das Zurücksetzen von Objekteigenschaften
      *
      * @param string $key
      * @return void
@@ -110,12 +110,12 @@ class Vps_View_Smarty implements Zend_View_Interface
     /**
      * Weise dem Template Variablen zu
      *
-     * Erlaubt das Zuweisen eines bestimmten Wertes zu einem bestimmten Schl�ssel, ODER die 
-     * �bergabe eines Array mit Schl�ssel => Wert Paaren zum Setzen in einem Rutsch.
+     * Erlaubt das Zuweisen eines bestimmten Wertes zu einem bestimmten Schlüssel, ODER die 
+     * Übergabe eines Array mit Schlüssel => Wert Paaren zum Setzen in einem Rutsch.
      *
      * @see __set()
-     * @param string|array $spec Die zu verwendene Zuweisungsstrategie (Schl�ssel oder Array mit 
-     * Schl�ssel => Wert paaren)
+     * @param string|array $spec Die zu verwendene Zuweisungsstrategie (Schlüssel oder Array mit 
+     * Schlüssel => Wert paaren)
      * @param mixed $value (Optional) Wenn ein Variablenname verwendet wurde, verwende dies als den
      * Wert.
      * @return void
@@ -133,8 +133,8 @@ class Vps_View_Smarty implements Zend_View_Interface
     /**
      * Setze alle zugewiesenen Variablen zur�ck.
      *
-     * Setzt alle Variablen zur�ck, die Zend_View entweder durch {@link assign()} oder
-     * �berladen von Eigenschaften ({@link __get()}/{@link __set()}) zugewiesen worden sind.
+     * Setzt alle Variablen zurück, die Zend_View entweder durch {@link assign()} oder
+     * überladen von Eigenschaften ({@link __get()}/{@link __set()}) zugewiesen worden sind.
      *
      * @return void
      */

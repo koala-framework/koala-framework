@@ -1,5 +1,6 @@
 RewriteEngine on
 
+RewriteRule ^files/ext/(.*)$ /library/ext/$1 [L]
 RewriteRule ^files/yui/(.*)$ /library/YUI/$1 [L]
 RewriteRule ^files/E3/(.*\.js)$ /library/E3/$1 [L]
 RewriteRule ^files/library/(.*\.)(js|css|jpg|gif)$ /library/files/$1$2 [L]
