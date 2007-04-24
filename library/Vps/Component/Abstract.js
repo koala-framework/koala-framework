@@ -72,16 +72,42 @@ YAHOO.Vps.Component.Abstract.prototype.handleEditSuccess = function(o)
   this.el.removeListener('mouseover', this.el.handleMouseOver);  
   this.el.removeListener('mouseout', this.el.handleMouseOut);  
 
+  var self = this;
+
+  var saveButton = document.createElement('button');
+  saveButton.innerHTML = 'Save';
+  this.htmlelement.appendChild(saveButton);
+  YAHOO.util.Event.addListener(saveButton, "click",
+  function() {
+    console.log('onclick');
+    self.handleSave();
+  }); 
+
+  var cancelButton = document.createElement('button');
+  cancelButton.innerHTML = 'Cancel';
+  this.htmlelement.appendChild(cancelButton);
+  YAHOO.util.Event.addListener(cancelButton, "click",
+  function() {
+    console.log('onclick');
+    self.handleCancel();
+  }); 
+
+/*
   var saveButton = new YAHOO.widget.Button({
                                           label: "Save", 
                                           container: this.el
                                       });
   saveButton.on('click', this.handleSave, null, this);
+
   var cancelButton = new YAHOO.widget.Button({
                                           label: "Cancel", 
                                           container: this.el
                                       });
-  cancelButton.on('click', this.handleCancel, null, this);
+
+  cancelButton.on('click', function() {
+    console.log('onclick');
+    this.handleCancel;
+  }, null, this);*/
 };
 
 YAHOO.Vps.Component.Abstract.prototype.handleFailure = function(o) {
