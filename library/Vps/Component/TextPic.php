@@ -10,8 +10,8 @@ class Vps_Component_TextPic extends Vps_Component_Abstract
         $componentKey = $this->getComponentKey();
         if($componentKey!='') $componentKey .= ".";
 
-        $this->_textboxComponent = new Vps_Component_Textbox($this->_dao, $this->getComponentId(), $this->getPageKey(), $componentKey.'1');
-        $this->_picComponent = new Vps_Component_Pic($this->_dao, $this->getComponentId(), $this->getPageKey(), $componentKey.'2');
+        $this->_textboxComponent = $this->createComponent('Vps_Component_Textbox', 0, '', '1');
+        $this->_picComponent = $this->createComponent('Vps_Component_Pic', 0, '', '2');
 
         $ret = parent::getTemplateVars($mode);
         $ret['textbox'] = $this->_textboxComponent->getTemplateVars($mode);
@@ -21,9 +21,9 @@ class Vps_Component_TextPic extends Vps_Component_Abstract
     }
     public function getComponentInfo()
     {
-    	$info = parent::getComponentInfo();
-    	$info += $this->_textboxComponent->getComponentInfo();
-    	$info += $this->_picComponent->getComponentInfo();
-    	return $info;
+      $info = parent::getComponentInfo();
+      $info += $this->_textboxComponent->getComponentInfo();
+      $info += $this->_picComponent->getComponentInfo();
+      return $info;
     }
 }

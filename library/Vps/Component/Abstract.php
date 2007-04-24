@@ -29,12 +29,19 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
                 // Hierarchie aus Seitenbaum immer erstellen
                 $rows = $this->_dao->getTable('Vps_Dao_Pages')->fetchChildRows($this->getComponentId(), $filename);
                 foreach($rows as $pageRow) {
-                    $this->createPageInTree($pageCollection, false, $pageRow->filename, $pageRow->component_id);
+                    $className = $this->_dao->getTable('Vps_Dao_Components')->getComponentClass($pageRow->component_id);
+                    $component = $this->createComponent($className, $pageRow->component_id);
+                    $pageCollection->addPage($component, $pageRow->filename);
+                    $pageCollection->setParentPage($component, $this);
                 }
                 
                 // Hierarchie von aktueller Komponente nur erstellen, wenn die dynamischen Seiten auch angezeigt werden sollen
                 if ($pageCollection->getCreateDynamicPages()) {
-                    $this->generateTreeHierarchy($pageCollection, $filename);
+                    $components = $this->createComponents($filename);
+                    foreach ($components as $filename => $component) {
+                        $pageCollection->addPage($component, $filename);
+                        $pageCollection->setParentPage($component, $this);
+                    }
                 }
                 
                 $this->_hasGeneratedForFilename[] = $filename;
@@ -47,22 +54,26 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         }
     }
 
-    protected function generateTreeHierarchy(Vps_PageCollection_Tree $pageCollection, $filename) {}
+    protected function createComponents($filename) {
+        return array();
+    }
 
-    protected function createPageInTree(Vps_PageCollection_Tree $pageCollection, $className, $filename, $componentId, $postfixKey = '')
+    protected function createComponent($className, $componentId = 0, $pageKeySuffix = '', $componentKeySuffix = '')
     {
-        $key = '';
-        if ($this->getPageKey() != '') { $key = $this->getPageKey() . '.'; }
-        $key = $key . $postfixKey;
-        if (!$className) {
-            $className = $this->_dao->getTable('Vps_Dao_Components')->getComponentClass($componentId);
+        if ($componentId == 0) {
+            $componentId = $this->getComponentId();
         }
         
-        $component = new $className($this->getDao(), $componentId, $key, $this->getComponentKey());
-        $pageCollection->addPage($component, $filename);
-        $pageCollection->setParentPage($component, $this);
+        $pageKey = $this->getPageKey();
+        if ($pageKey != '' && $pageKeySuffix != '') { $pageKey .= '.'; }
+        $pageKey .= $pageKeySuffix;
 
-        return $component;
+        
+        $componentKey = $this->getComponentKey();
+        if ($componentKey != '' && $componentKeySuffix != '') { $componentKey .= '.'; }
+        $componentKey .= $componentKeySuffix;
+        
+        return new $className($this->getDao(), $componentId, $pageKey, $componentKey);
     }
 
     protected function getComponentId()

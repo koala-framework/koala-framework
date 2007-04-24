@@ -33,9 +33,9 @@ abstract class Vps_Component_Decorator_Abstract implements Vps_Component_Interfa
     {
         return $this->_component->generateHierarchy($pageCollection, $filename);
     }
-    public function generateTreeHierarchy(Vps_PageCollection_Tree $pageCollection, $filename)
+    public function generateChildComponents($filename)
     {
-        return $this->_component->generateTreeHierarchy($pageCollection, $filename);
+        return $this->_component->generateChildComponents($filename);
     }
     public function saveFrontendEditing(Zend_Controller_Request_Http $request)
     {
