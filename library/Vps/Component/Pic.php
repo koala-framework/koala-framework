@@ -12,9 +12,8 @@ class Vps_Component_Pic extends Vps_Component_Abstract
             $ret['template'] = dirname(__FILE__).'/Pic.html';
             $ret['uniqid'] = rand() . '.' . time();
         } else {
-       	    $ret['template'] = 'Pic.html';
-       	}
-
+             $ret['template'] = 'Pic.html';
+         }
         return $ret;
     }
     public function saveFrontendEditing(Zend_Controller_Request_Http $request)
@@ -25,8 +24,8 @@ class Vps_Component_Pic extends Vps_Component_Abstract
         return parent::saveFrontendEditing($request);
     }
 
-	public function getStatus()
-	{    
+  public function getStatus()
+  {    
         $upId = $_POST['progress_upload'];
     
         $ret =  new stdClass();
@@ -59,5 +58,5 @@ class Vps_Component_Pic extends Vps_Component_Abstract
         $ret->percent = $percent;
     
         return $ret;
-	}
+  }
 }

@@ -6,14 +6,17 @@ class Vps_Component_News_Aktuelle extends Vps_Component_Abstract
         return $this->getDao()->getTable('Vps_Dao_News')->fetchAll();
     }
 
-    protected function generateTreeHierarchy(Vps_PageCollection_Tree $pageCollection, $filename)
+    protected function createComponents($filename)
     {
+        $components = array();
         foreach($this->getNews() as $row) {
             if ($filename != '' && $filename != $row->filename) continue;
 
-            $component = $this->createPageInTree($pageCollection, 'Vps_Component_News_Details', $row->filename, $this->getComponentId(), $row->id);
-            if($component) $component->setNewsId($row->id);
+            $component = $this->createComponent('Vps_Component_News_Details', 0, $row->id);
+            $component->setNewsId($row->id);
+            $components[$row->filename] = $component;
         }
+        return $components;
     }
     
     public function getTemplateVars($mode)
@@ -24,7 +27,7 @@ class Vps_Component_News_Aktuelle extends Vps_Component_Abstract
             $ret['news'][] = $new;;
         }
         $ret['id'] = $this->getComponentId();
-       	$ret['template'] = 'News/Aktuelle.html';
+         $ret['template'] = 'News/Aktuelle.html';
         return $ret;
     }
 

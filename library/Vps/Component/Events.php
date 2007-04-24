@@ -1,31 +1,27 @@
 <?php
-/**
- * @author Dipl.-Ing. (FH) Martin Mayrhofer
- * @copyright 2007, Vivid Planet Software GmbH
- * @since 21.03.2007
- */
- 
- class Vps_Component_Events extends Vps_Component_Abstract
- {
+class Vps_Component_Events extends Vps_Component_Abstract
+{
     private $_paragraphs;
 
- 	protected function generateTreeHierarchy(Vps_PageCollection_Tree $pageCollection, $filename)
+    protected function createComponents($filename)
     {
-        $this->_paragraphs = array();
-		for($i = 2000; $i <= 2007; $i++)
-		{
+        $components = array();
+        for ($i = 2000; $i <= 2007; $i++) {
             if ($filename != '' && $filename != $i) continue;
 
-    		$this->_paragraphs[] = $this->createPageInTree($pageCollection, 'Vps_Component_TextPic', $i, $this->getComponentId(), $i-1999);
-		}
+            $component = $this->createComponent('Vps_Component_TextPic', 0, $i-1999);
+            $components[$i] = $component;
+        }
+        $this->_paragraphs = $components;
+        return $components;
     }
- 	
- 	public function getTemplateVars($mode)
- 	{
- 	    $ret = parent::getTemplateVars($mode);
- 		$ret['years']= array(2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007);
- 		$ret['template'] = 'Events.html';
+   
+    public function getTemplateVars($mode)
+    {
+        $ret = parent::getTemplateVars($mode);
+        $ret['years']= array(2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007);
+        $ret['template'] = 'Events.html';
         return $ret;
- 	}
+    }
 }
  

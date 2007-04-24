@@ -12,14 +12,17 @@ class Vps_Component_Product_Categories extends Vps_Component_Abstract
         return $this->_categories;
     }
 
-    protected function generateTreeHierarchy(Vps_PageCollection_Tree $pageCollection, $filename)
+    protected function createComponents($filename)
     {
+        $components = array();
         foreach($this->getCategories() as $row) {
             if ($filename != '' && $filename != $row->filename) continue;
 
-            $component = $this->createPageInTree($pageCollection, 'Vps_Component_Product_List', $row->filename, $this->getComponentId(), $row->id);
-            if($component) $component->setCategoryId($row->id);
+            $component = $this->createComponent('Vps_Component_Product_List', 0, $row->id);
+            $component->setCategoryId($row->id);
+            $components[$row->filename] = $component;
         }
+        return $components;
     }
     
     public function getTemplateVars($mode)
@@ -29,7 +32,7 @@ class Vps_Component_Product_Categories extends Vps_Component_Abstract
             $new = array('name'=>$row->name, 'filename'=>$row->filename);
             $ret['categories'][] = $new;
         }
-       	$ret['template'] = 'Product/Categories.html';
+         $ret['template'] = 'Product/Categories.html';
         return $ret;
     }
 }

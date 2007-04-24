@@ -21,14 +21,17 @@ class Vps_Component_Product_List extends Vps_Component_Abstract
         return $this->_products;
     }
 
-    protected function generateTreeHierarchy(Vps_PageCollection_Tree $pageCollection, $filename)
+    protected function createComponents($filename)
     {
+        $components = array();
         foreach($this->getProducts() as $row) {
             if ($filename != '' && $filename != $row->filename) continue;
 
-            $component = $this->createPageInTree($pageCollection, 'Vps_Component_Product_Details', $row->filename, $this->getComponentId(), $row->id);
-            if($component) $component->setProductId($row->id);
+            $component = $this->createComponent('Vps_Component_Product_Details', 0, $row->id);
+            $component->setProductId($row->id);
+            $components[$row->filename] = $component;
         }
+        return $components;
     }
     
     public function getTemplateVars($mode)
@@ -46,7 +49,7 @@ class Vps_Component_Product_List extends Vps_Component_Abstract
             $this->_productTeasers[] = $teaser;
             $ret['products'][] = $teaser->getTemplateVars($mode);
         }
-       	$ret['template'] = 'Product/List.html';
+         $ret['template'] = 'Product/List.html';
         return $ret;
     }
     public function getComponentInfo()
