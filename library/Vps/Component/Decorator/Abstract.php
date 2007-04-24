@@ -4,7 +4,7 @@ abstract class Vps_Component_Decorator_Abstract implements Vps_Component_Interfa
     protected $_component;
     protected $_dao;
 
-    public function __construct(Vps_Dao $dao, Vps_Component_Interface $component)
+    public function __construct(Vps_Dao $dao, Vps_Component_Interface $component, Vps_PageCollection_Abstract $pageCollection = null)
     {
         $this->_dao = $dao;
         $this->_component = $component;
@@ -29,14 +29,12 @@ abstract class Vps_Component_Decorator_Abstract implements Vps_Component_Interfa
     {
         return $this->_dao;
     }
-    public final function generateHierarchy(Vps_PageCollection_Abstract $pageCollection, $filename = '')
+
+    public function generateHierarchy(Vps_PageCollection_Abstract $pageCollection, $filename = '')
     {
         return $this->_component->generateHierarchy($pageCollection, $filename);
     }
-    public function generateChildComponents($filename)
-    {
-        return $this->_component->generateChildComponents($filename);
-    }
+
     public function saveFrontendEditing(Zend_Controller_Request_Http $request)
     {
         return $this->_component->saveFrontendEditing($request);

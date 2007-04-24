@@ -25,16 +25,16 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         if ($pageCollection instanceof Vps_PageCollection_Tree) {
 
             if (!in_array('', $this->_hasGeneratedForFilename) && !in_array($filename, $this->_hasGeneratedForFilename)) {
-                
+
                 // Hierarchie aus Seitenbaum immer erstellen
-                $rows = $this->_dao->getTable('Vps_Dao_Pages')->fetchChildRows($this->getComponentId(), $filename);
+                $rows = $this->_dao->getChildPagesData($this->getComponentId());
                 foreach($rows as $pageRow) {
-                    $className = $this->_dao->getTable('Vps_Dao_Components')->getComponentClass($pageRow->component_id);
-                    $component = $this->createComponent($className, $pageRow->component_id);
-                    $pageCollection->addPage($component, $pageRow->filename);
+                    if ($filename != '' && $filename != $pageRow['filename']) { continue; }
+                    $component = $this->createComponent($pageRow['component'], $pageRow['component_id']);
+                    $pageCollection->addPage($component, $pageRow['filename']);
                     $pageCollection->setParentPage($component, $this);
                 }
-                
+
                 // Hierarchie von aktueller Komponente nur erstellen, wenn die dynamischen Seiten auch angezeigt werden sollen
                 if ($pageCollection->getCreateDynamicPages()) {
                     $components = $this->createComponents($filename);
@@ -43,14 +43,14 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
                         $pageCollection->setParentPage($component, $this);
                     }
                 }
-                
+
                 $this->_hasGeneratedForFilename[] = $filename;
             }
-            
+
         } else {
-            
+
             throw new Vps_Component_Exception('Until now, generateHierarchy only works for instances of Vps_PageCollection_Tree');
-            
+
         }
     }
 
@@ -60,19 +60,26 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
 
     protected function createComponent($className, $componentId = 0, $pageKeySuffix = '', $componentKeySuffix = '')
     {
-        if ($componentId == 0) {
-            $componentId = $this->getComponentId();
+        if ($className == '' && $componentId == 0) {
+            throw new Vps_Component_Exception('Either className or componentId must not be empty.');
         }
         
+        if ($className == '') {
+            $data = $this->_dao->getPageData($componentId);
+            $className = $data['component'];
+        } else if ($componentId == 0) {
+            $componentId = $this->getComponentId();
+        }
+
         $pageKey = $this->getPageKey();
         if ($pageKey != '' && $pageKeySuffix != '') { $pageKey .= '.'; }
         $pageKey .= $pageKeySuffix;
 
-        
+
         $componentKey = $this->getComponentKey();
         if ($componentKey != '' && $componentKeySuffix != '') { $componentKey .= '.'; }
         $componentKey .= $componentKeySuffix;
-        
+
         return new $className($this->getDao(), $componentId, $pageKey, $componentKey);
     }
 
@@ -100,7 +107,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         }
         return $ret;
     }
-    
+
     public static function parseId($id)
     {
         $keys = array();
@@ -123,7 +130,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         $parts['componentKeys'] = $parts['componentKey'] != '' ? explode('.', $parts['componentKey']) : array();
         return $parts;
     }
-    
+
     public function getTemplateVars($mode)
     {
         $ret['id'] = $this->getId();

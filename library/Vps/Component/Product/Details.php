@@ -47,15 +47,13 @@ class Vps_Component_Product_Details extends Vps_Component_Abstract
     {
         if (!isset($this->_content)) {
             $product = $this->getProduct();
-            $componentClass = $this->getDao()->getTable('Vps_Dao_Components')
-                                ->getComponentClass($product->component_id);
-            $this->_content = new $componentClass($this->getDao(), $product->component_id);
+            $this->_content = $this->createComponent('', $product->component_id);
         }
         return $this->_content;
     }
     public function getComponentInfo()
     {
-    	return parent::getComponentInfo() + $this->_content->getComponentInfo();
+      return parent::getComponentInfo() + $this->_content->getComponentInfo();
     }
     public function saveFrontendEditing(Zend_Controller_Request_Http $request)
     {
