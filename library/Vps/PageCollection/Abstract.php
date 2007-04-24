@@ -5,14 +5,15 @@ abstract class Vps_PageCollection_Abstract
     protected $_pages = array();
     protected $_rootPageId;
     protected $_addDecorator = false;
-    private $_dao;
+    protected $_dao;
     protected static $_instance = null;
     private $_createDynamicPages = true;
+    protected $_pageData = array();
     
 
     function __construct(Vps_Dao $dao)
     {
-      $this->_dao = $dao;
+        $this->_dao = $dao;
     }
     
     public static function getInstance()
@@ -30,7 +31,7 @@ abstract class Vps_PageCollection_Abstract
         return self::$_instance;
     }
 
-    public function addPage(Vps_Component_Interface $component, $filename)
+    public function addPage(Vps_Component_Abstract $component, $filename)
     {
         if ($filename == '') {
             throw new Vps_PageCollection_Exception("Pagename must not be empty.");
@@ -66,7 +67,7 @@ abstract class Vps_PageCollection_Abstract
     protected function addDecoratorsToComponent(Vps_Component_Abstract $component)
     {
         if ($this->_addDecorator) {
-            return new $this->_addDecorator($this->_dao, $component);
+            return new $this->_addDecorator($this->_dao, $component, $this);
         } else {
             return $component;
         }
@@ -95,14 +96,14 @@ abstract class Vps_PageCollection_Abstract
         if (!isset($this->_pages[$id])) {
             try {
                 $parts = Vps_Component_Abstract::parseId($id);
-                $pageId = $parts['componentId'];
-                $pageRow = $this->_dao->getTable('Vps_Dao_Pages')->fetchPageById($pageId);
-                if ($pageRow != null) {
-                    $className = $this->_dao->getTable('Vps_Dao_Components')->getComponentClass($pageRow->component_id);
-                    $this->_pages[$pageId] = new $className($this->_dao, $pageRow->component_id);
-                    $this->_pageFilenames[$pageId] = $pageRow->filename;
+                $componentId = $parts['componentId'];
+                $pageRow = $this->_dao->getPageData($componentId);
+                if (!empty($pageRow)) {
+                    $className = $pageRow['classname'];
+                    $this->_pages[$componentId] = new $className($this->_dao, $pageRow['component_id']);
+                    $this->_pageFilenames[$componentId] = $pageRow['filename'];
                     foreach ($parts['pageKeys'] as $pageKey) {
-                        $this->_pages[$pageId]->generateHierarchy($this);
+                        $this->_pages[$componentId]->generateHierarchy($this);
                         $pageId .= '.' . $pageKey;
                     }
                 }
@@ -129,13 +130,13 @@ abstract class Vps_PageCollection_Abstract
 
     public function getRootPage()
     {
-      if (!isset($this->_rootPageId)) {
-        $pageRow = $this->_dao->getTable('Vps_Dao_Pages')->fetchRootPage();
-            $className = $this->_dao->getTable('Vps_Dao_Components')->getComponentClass($pageRow->component_id);
-          $rootPage = new $className($this->_dao, $pageRow->component_id);
-          $this->setRootPage($rootPage);
-      }
-      return $this->_pages[$this->_rootPageId];
+        if (!isset($this->_rootPageId)) {
+            $data = $this->_dao->getRootPageData();
+            $classname = $data['component'];
+            $rootPage = new $classname($this->_dao, $data['component_id']);
+            $this->setRootPage($rootPage);
+        }
+        return $this->_pages[$this->_rootPageId];
     }
     
     public function setCreateDynamicPages($create)

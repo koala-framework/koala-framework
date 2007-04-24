@@ -22,10 +22,8 @@ class Vps_Component_Paragraphs extends Vps_Component_Abstract
             $rows = $this->_dao->getTable('Vps_Dao_Paragraphs')
                         ->fetchParagraphs($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
     
-            $componentModel = $this->_dao->getTable('Vps_Dao_Components');
             foreach($rows as $row) {
-                $componentClass = $componentModel->getComponentClass($row->component_id);
-                $this->_paragraphs[] = new $componentClass($this->_dao, $row->component_id);
+                $this->_paragraphs[] = $this->createComponent('', $row->component_id);
             }
         }
         return $this->_paragraphs;
@@ -33,11 +31,11 @@ class Vps_Component_Paragraphs extends Vps_Component_Abstract
 
     public function getComponentInfo()
     {
-    	$info = parent::getComponentInfo();
-    	foreach ($this->_getParagraphs() as $p) {
-    		$info += $p->getComponentInfo();
-    	}
-    	return $info;
+      $info = parent::getComponentInfo();
+      foreach ($this->_getParagraphs() as $p) {
+        $info += $p->getComponentInfo();
+      }
+      return $info;
     }
 
     public function saveFrontendEditing(Zend_Controller_Request_Http $request)

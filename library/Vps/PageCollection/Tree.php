@@ -45,6 +45,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
     public function getIdsForPath($path)
     {
         $ids = array();
+        $matches = array();
         if (preg_match('/^(\/\w+)*\/$/', $path)) { // hierarchische URLs, Format /x/y/z/
             $page = $this->getRootPage();
             $ids[] = $page->getId();
@@ -59,8 +60,9 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
                     }
                 }
             }
+        } else if (preg_match('/^\/[a-z0-9]+_[a-z0-9]+_([0-9\_\.]+)$/', $path, $matches)) {
+            $ids[] = $matches[1];
         }
-
         return $ids;
     }
 
@@ -81,7 +83,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
 
     public function getChildPages(Vps_Component_Interface $page)
     {
-        $page->generateHierarchy($this, '');
+        $page->generateHierarchy($this);
         $childs = array();
         $searchId = $page->getId();
         foreach($this->_pageParentIds as $id=>$parentId) {
@@ -105,20 +107,19 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         return null;
     }
 
-    // TODO: Fehlerbehebung
-    public function getPath(Vps_Component_Interface $page)
+    public function getPageData(Vps_Component_Interface $page)
     {
-        do {
-          $id = $page->getId();
-          $filenames[] = $this->_pageFilenames[$id];
-          $page = null;
-          if (isset($this->_pageParentIds[$id])) {
-              $page = $this->_pages[$this->_pageParentIds[$id]];
-          }
-        } while ($page != null);
-        $return = implode('/', array_reverse($filenames));
-        if (substr($return, 0, 1) != '/') { $return = '/' . $return; }
-        return $return;
+        $rootId = $this->getRootPage()->getId();
+        $id = $page->getId();
+        $data = $this->_dao->getPageData($id);
+         
+        $pageId = $page->getId();
+        $data['path'] = '/';
+        while ($pageId != $rootId) {
+            $data['path'] .= $this->_pageFilenames[$pageId] . '/';
+            $pageId = $this->_pageParentIds[$pageId];
+        }
+        
+        return $data;
     }
-
 }

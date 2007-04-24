@@ -16,18 +16,14 @@ class Vps_Component_Decorator extends Vps_Component_Abstract
         if (!isset($this->_decorated)) {
             $row = $this->_dao->getTable('Vps_Dao_Decorator')
                     ->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey())->current();
-    
-            $componentClass = $this->_dao->getTable('Vps_Dao_Components')
-                                ->getComponentClass($row->component_id);
-    
-            $this->_decorated = new $componentClass($this->_dao, $row->component_id);
+            $this->_decorated = $this->createComponent('', $row->component_id);
         }
         return $this->_decorated;
     }
     
     public function getComponentInfo()
     {
-    	return parent::getComponentInfo() + $this->_getDecorated()->getComponentInfo();
+      return parent::getComponentInfo() + $this->_getDecorated()->getComponentInfo();
     }
     
 }
