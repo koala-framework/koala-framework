@@ -92,8 +92,7 @@ class Vps_View_Smarty implements Zend_View_Interface
      */
     public function __isset($key)
     {
-        $value = $this->_smarty->get_template_vars($key);
-        return null === $value;
+        return (null !== $this->_smarty->get_template_vars($key));
     }
 
     /**
