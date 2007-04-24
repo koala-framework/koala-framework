@@ -7,6 +7,7 @@ abstract class Vps_PageCollection_Abstract
     protected $_addDecorator = false;
     private $_dao;
     protected static $_instance = null;
+    private $_createDynamicPages = true;
     
 
     function __construct(Vps_Dao $dao)
@@ -32,10 +33,28 @@ abstract class Vps_PageCollection_Abstract
     public function addPage(Vps_Component_Interface $component, $filename)
     {
         if ($filename == '') {
-          throw new Vps_PageCollection_Exception("Pagename must not be empty.");
+            throw new Vps_PageCollection_Exception("Pagename must not be empty.");
         }
-        $decoratedComponent = $this->addDecoratorsToComponent($component);
+        
+        $id = $component->getId();
+        if (isset($this->_pages[$id])) {
+            $decoratedComponent = $this->_removePage($id);
+        } else {
+            $decoratedComponent = $this->addDecoratorsToComponent($component);
+        }
+        
         $this->_setPage($decoratedComponent, $filename);
+    }
+    
+    protected function _removePage($id)
+    {
+        $page = null;
+        if (isset($this->_pages[$id])) {
+            $page = $this->_pages[$id];
+            unset($this->_pages[$id]);
+            unset($this->_pageFilenames[$id]);
+        }
+        return $page;
     }
 
     public function setAddDecorator($decorator)
@@ -55,35 +74,20 @@ abstract class Vps_PageCollection_Abstract
 
     private function _setPage(Vps_Component_Interface $component, $filename)
     {
-        if ($this->pageExists($component)) {
-          throw new Vps_PageCollection_Exception("A page with the same componentId already exists.");
+        $id = (string)$component->getId();
+
+        if (isset($this->_pages[$id])) {
+          throw new Vps_PageCollection_Exception('A page with the same componentId already exists.');
         }
 
-        $id = $component->getId();
         $this->_pages[$id] = $component;
         $this->_pageFilenames[$id] = $filename;
     }
 
     public function setRootPage(Vps_Component_Interface $component)
     {
-    $this->_setPage($this->addDecoratorsToComponent($component), '');
+        $this->_setPage($this->addDecoratorsToComponent($component), '');
         $this->_rootPageId = $component->getId();
-    }
-
-    public function pageExists($id, $pageTag="", $componentTag="")
-    {
-      if ($id instanceof Vps_Component_Interface) {
-        $id = $id->getId();
-        if ($pageTag != "" || $componentTag != "") {
-            throw new Vps_PageCollection_Exception('pageTag and componentTag must be emty when id is a Vps_Component_Interface.');
-        }
-      }
-//      if (!is_int($id)) {
-//          throw new Vps_PageCollection_Exception('ID must be an instance of Vps_Component_Interface or an Integer.');
-//      }
-      if ($pageTag != "") $id .= "_".$pageTag;
-      if ($componentTag != "") $id .= "|".$componentTag;
-      return isset($this->_pages[$id]);
     }
 
     public function getPageById($id)
@@ -132,6 +136,19 @@ abstract class Vps_PageCollection_Abstract
           $this->setRootPage($rootPage);
       }
       return $this->_pages[$this->_rootPageId];
+    }
+    
+    public function setCreateDynamicPages($create)
+    {
+        if (!is_bool($create)) {
+            throw new Vps_PageCollection_Exception('$create must be boolean.');
+        }
+        $this->_createDynamicPages = $create;
+    }
+    
+    public function getCreateDynamicPages()
+    {
+        return $this->_createDynamicPages;
     }
     
     abstract public function getPageByPath($path);
