@@ -36,7 +36,7 @@ class Vps_View_Smarty implements Zend_View_Interface
     }
 
     /**
-     * Gebe das aktuelle Template Engine Objekt zurï¿½ck
+     * Gebe das aktuelle Template Engine Objekt zurück
      *
      * @return Smarty
      */
@@ -96,7 +96,7 @@ class Vps_View_Smarty implements Zend_View_Interface
     }
 
     /**
-     * Erlaubt das ZurÃ¼cksetzen von Objekteigenschaften
+     * Erlaubt das Zurücksetzen von Objekteigenschaften
      *
      * @param string $key
      * @return void
@@ -109,12 +109,12 @@ class Vps_View_Smarty implements Zend_View_Interface
     /**
      * Weise dem Template Variablen zu
      *
-     * Erlaubt das Zuweisen eines bestimmten Wertes zu einem bestimmten SchlÃ¼ssel, ODER die 
-     * Ãœbergabe eines Array mit SchlÃ¼ssel => Wert Paaren zum Setzen in einem Rutsch.
+     * Erlaubt das Zuweisen eines bestimmten Wertes zu einem bestimmten Schlüssel, ODER die 
+     * Übergabe eines Array mit Schlüssel => Wert Paaren zum Setzen in einem Rutsch.
      *
      * @see __set()
-     * @param string|array $spec Die zu verwendene Zuweisungsstrategie (SchlÃ¼ssel oder Array mit 
-     * SchlÃ¼ssel => Wert paaren)
+     * @param string|array $spec Die zu verwendene Zuweisungsstrategie (Schlüssel oder Array mit 
+     * Schlüssel => Wert paaren)
      * @param mixed $value (Optional) Wenn ein Variablenname verwendet wurde, verwende dies als den
      * Wert.
      * @return void
@@ -130,10 +130,10 @@ class Vps_View_Smarty implements Zend_View_Interface
     }
 
     /**
-     * Setze alle zugewiesenen Variablen zurï¿½ck.
+     * Setze alle zugewiesenen Variablen zurück.
      *
-     * Setzt alle Variablen zurÃ¼ck, die Zend_View entweder durch {@link assign()} oder
-     * Ã¼berladen von Eigenschaften ({@link __get()}/{@link __set()}) zugewiesen worden sind.
+     * Setzt alle Variablen zurück, die Zend_View entweder durch {@link assign()} oder
+     * Überladen von Eigenschaften ({@link __get()}/{@link __set()}) zugewiesen worden sind.
      *
      * @return void
      */
@@ -143,7 +143,7 @@ class Vps_View_Smarty implements Zend_View_Interface
     }
 
     /**
-     * Verarbeitet ein Template und gibt die Ausgabe zurï¿½ck
+     * Verarbeitet ein Template und gibt die Ausgabe zurück
      *
      * @param string $name Das zu verarbeitende Template
      * @return string Die Ausgabe.

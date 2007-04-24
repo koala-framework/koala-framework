@@ -17,9 +17,7 @@ class Vps_Controller_Action_Web extends Vps_Controller_Action
     protected function _renderPage($page, $mode, $usePageTemplate)
     {
         $templateVars = $page->getTemplateVars($mode);
-        $view = new Vps_View_Smarty('../application/views',
-                        array('compile_dir'=>'../application/views_c',
-                              'debugging' => true)); //todo: ein/ausschaltbar machen
+        $view = new Vps_View_Smarty();
         $view->assign('component', $templateVars);
         $view->assign('mode', $mode);
         if ($usePageTemplate) {

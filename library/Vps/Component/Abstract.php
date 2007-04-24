@@ -19,55 +19,50 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
     protected function setup()
     {
     }
-/*
-    public static function createComponent($dao, $componentId, $pageKey="", $componentKey="")
-    {
-        $model = $dao->getTable('Vps_Dao_Components');
-        $class = $model->getComponentClass($componentId);
-      return new $class($dao, $componentId, $pageKey, $componentKey);
-    }*/
 
-    public final function generateHierarchy(Vps_PageCollection_Abstract $pageCollection, $filename='')
+    public final function generateHierarchy(Vps_PageCollection_Abstract $pageCollection, $filename = '', $createDynamicPages = true)
     {
         if ($pageCollection instanceof Vps_PageCollection_Tree) {
-          if (!in_array('', $this->_hasGeneratedForFilename) && !in_array($filename, $this->_hasGeneratedForFilename)) {
-              $this->generateTreeHierarchy($pageCollection, $filename);
-              $this->_hasGeneratedForFilename[] = $filename;
-          }
+
+            if (!in_array('', $this->_hasGeneratedForFilename) && !in_array($filename, $this->_hasGeneratedForFilename)) {
+                
+                // Hierarchie aus Seitenbaum immer erstellen
+                $rows = $this->_dao->getTable('Vps_Dao_Pages')->fetchChildRows($this->getComponentId(), $filename);
+                foreach($rows as $pageRow) {
+                    $this->createPageInTree($pageCollection, false, $pageRow->filename, $pageRow->component_id);
+                }
+                
+                // Hierarchie von aktueller Komponente nur erstellen, wenn die dynamischen Seiten auch angezeigt werden sollen
+                if ($pageCollection->getCreateDynamicPages()) {
+                    $this->generateTreeHierarchy($pageCollection, $filename);
+                }
+                
+                $this->_hasGeneratedForFilename[] = $filename;
+            }
+            
         } else {
-          throw new Vps_Component_Exception('Until now, generateHierarchy only works for instances of Vps_PageCollection_Tree');
+            
+            throw new Vps_Component_Exception('Until now, generateHierarchy only works for instances of Vps_PageCollection_Tree');
+            
         }
     }
 
-    protected function generateTreeHierarchy(Vps_PageCollection_Tree $pageCollection, $filename)
-    {
-        $rows = $this->_dao->getTable('Vps_Dao_Pages')
-                ->fetchChildRows($this->getComponentId(), $filename);
-
-        foreach($rows as $pageRow) {
-            $id = (int)$pageRow->component_id;
-            $this->createPageInTree($pageCollection, false, $pageRow->filename, $pageRow->component_id);
-        }
-    }
+    protected function generateTreeHierarchy(Vps_PageCollection_Tree $pageCollection, $filename) {}
 
     protected function createPageInTree(Vps_PageCollection_Tree $pageCollection, $className, $filename, $componentId, $postfixKey = '')
     {
-         $key = "";
-        if ($this->getPageKey() != "") $key = $this->getPageKey() . ".";
+        $key = '';
+        if ($this->getPageKey() != '') { $key = $this->getPageKey() . '.'; }
         $key = $key . $postfixKey;
         if (!$className) {
             $className = $this->_dao->getTable('Vps_Dao_Components')->getComponentClass($componentId);
         }
-        if (!$pageCollection->pageExists($componentId, $key)) {
-            $component = new $className($this->getDao(), $componentId, $key, $this->getComponentKey());
-
+        
+        $component = new $className($this->getDao(), $componentId, $key, $this->getComponentKey());
         $pageCollection->addPage($component, $filename);
-          $pageCollection->setParentPage($component, $this);
+        $pageCollection->setParentPage($component, $this);
 
-          return $component;
-        }
-        return null;
-
+        return $component;
     }
 
     protected function getComponentId()
@@ -86,11 +81,11 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
     public function getId()
     {
         $ret = (string)$this->getComponentId();
-        if ($this->getPageKey() != "") {
-            $ret .= "_" . $this->getPageKey();
+        if ($this->getPageKey() != '') {
+            $ret .= '_' . $this->getPageKey();
         }
-        if ($this->getComponentKey() != "") {
-            $ret .= "-" . $this->getComponentKey();
+        if ($this->getComponentKey() != '') {
+            $ret .= '-' . $this->getComponentKey();
         }
         return $ret;
     }

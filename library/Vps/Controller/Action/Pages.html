@@ -1,106 +1,44 @@
-<literal>
-<style type="text/css">
+{literal}
+<link rel="stylesheet" type="text/css" href="/files/ext/resources/css/ext-all.css" />
+<script type="text/javascript" src="/files/ext/adapter/yui/yui-utilities.js"></script>
+<script type="text/javascript" src="/files/ext/adapter/yui/ext-yui-adapter.js"></script>
+<script type="text/javascript" src="/files/ext/ext-all.js"></script>
 
-    /* first or middle sibling, no children */
-    .ygtvtn { width:16px; height:22px; background: url(/files/tree/tn.gif) 0 0 no-repeat; }
-
-    /* first or middle sibling, collapsable */
-    .ygtvtm { width:16px; height:22px; cursor:pointer; background: url(/files/tree/tm.gif) 0 0 no-repeat; }
-
-    /* first or middle sibling, collapsable, hover */
-    .ygtvtmh { width:16px; height:22px; cursor:pointer; background: url(/files/tree/tmh.gif) 0 0 no-repeat; }
-    
-    /* first or middle sibling, expandable */
-    .ygtvtp { width:16px; height:22px; cursor:pointer; background: url(/files/tree/tp.gif) 0 0 no-repeat; }
-    
-    /* first or middle sibling, expandable, hover */
-    .ygtvtph { width:16px; height:22px; cursor:pointer; background: url(/files/tree/tph.gif) 0 0 no-repeat; }
-    
-    /* last sibling, no children */
-    .ygtvln { width:16px; height:22px; background: url(/files/tree/ln.gif) 0 0 no-repeat; }
-    
-    /* Last sibling, collapsable */
-    .ygtvlm { width:16px; height:22px; cursor:pointer; background: url(/files/tree/lm.gif) 0 0 no-repeat; }
-    
-    /* Last sibling, collapsable, hover */
-    .ygtvlmh { width:16px; height:22px; cursor:pointer; background: url(/files/tree/lmh.gif) 0 0 no-repeat; }
-    
-    /* Last sibling, expandable */
-    .ygtvlp { width:16px; height:22px; cursor:pointer; background: url(/files/tree/lp.gif) 0 0 no-repeat; }
-    
-    /* Last sibling, expandable, hover */
-    .ygtvlph { width:16px; height:22px; cursor:pointer; background: url(/files/tree/lph.gif) 0 0 no-repeat; }
-    
-    /* Loading icon */
-    .ygtvloading { width:16px; height:22px; background: url(/files/tree/loading.gif) 0 0 no-repeat; }
-    
-    /* the style for the empty cells that are used for rendering the depth 
-    * of the node */
-    .ygtvdepthcell { width:16px; height:22px; background: url(/files/tree/vline.gif) 0 0 no-repeat; }
-    
-    .ygtvblankdepthcell { width:16px; height:22px; }
-    
-    /* the style of the div around each node */
-    .ygtvitem { }  
-    
-    /* the style of the div around each node's collection of children */
-    .ygtvchildren {  }  
-    * html .ygtvchildren { height:2%; }  
-    
-    /* the style of the text label in ygTextNode */
-    .ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { margin-left:2px; text-decoration: none; background-color: white; }
-    
-    .ygtvspacer { height: 22px; width: 16px; }
-</style>
-
-<script src = "/files/js/yui/treeview/treeview-min.js" ></script>
-<script src = "/files/js/yui/animation/animation.js" ></script>
 
 <div id="treeDiv1" />
   
 <script type="text/javascript">
-</literal>
-    function loadDataForNode(node, onCompleteCallback) {
-        YAHOO.util.Connect.asyncRequest(
-            'get',
-            '/admin/pages/ajaxGetChildNodes?id='+node.data.id,
-            {success: addNodes, failure: handleFailure, parentNode: node}, this
-        );
-        
-        function addNodes(o) {
-            var pages = eval(o.responseText);
-            for (x=0; x<ldelim>pages.length; x++) {
-                page = pages[x];
-                node = new YAHOO.widget.TextNode({label:page.name, href:page.path, id:page.id}, this.parentNode);
-                if (page.hasChildren) {
-                    node.setDynamicLoad(loadDataForNode);
-                }
-            }
-            onCompleteCallback(); 
-        }
-         
-        function handleFailure() {
-            alert('failure');
-            onCompleteCallback();
-        }
-    }
-    
-    
-    var tree = new YAHOO.widget.TreeView("treeDiv1");
-    tree.setExpandAnim(YAHOO.widget.TVAnim.FADE_IN);
-    tree.setCollapseAnim(YAHOO.widget.TVAnim.FADE_OUT);
-    
-    var nodes = new Array();
-    nodes['<$rootId>'] = tree.getRoot();
-    <foreach from=$data item=page>
-    nodes['<$page.id>'] = new YAHOO.widget.TextNode({label: '<$page.name>', href:'<$page.path>', id:'<$page.id>'}, nodes['<$page.parent>'], <if $page.expanded>true<else>false</if>);
-    <if $page.hasChildren>
-    nodes['<$page.id>'].setDynamicLoad(loadDataForNode);
-    </if>
-    </foreach>
-    
-    tree.draw();
 
-<literal>
+Ext.onReady(function(){
+    // shorthand
+    var Tree = Ext.tree;
+    
+    var tree = new Tree.TreePanel(
+        'treeDiv1',
+        {
+            animate:true, 
+            loader: new Tree.TreeLoader({dataUrl:'/admin/pages/ajaxGetNodes', baseParams:{'expandedPath': '{/literal}{$expandedPath}{literal}'}}),
+            enableDD:true,
+            containerScroll: true,
+            rootVisible: false
+        }
+    );
+
+    // set the root node
+    var root = new Tree.AsyncTreeNode({
+        text: 'yui-ext',
+        draggable:false,
+        id:'source'
+    });
+    tree.setRootNode(root);
+
+    tree.on('nodedrop', function(e){
+        alert('drop');
+    });
+    
+    // render the tree
+    tree.render();
+    root.expand();
+});
 </script>
-</literal>
+{/literal}
