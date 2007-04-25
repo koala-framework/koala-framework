@@ -78,7 +78,7 @@ Ext.apply = function(o, c, defaults){
          * "http://extjs.com/s.gif" and you should change this to a URL on your server).
          * @type String
          */
-        BLANK_IMAGE_URL : "http:/"+"/extjs.com/s.gif",
+        BLANK_IMAGE_URL : "/files/images/s.gif",
 
         emptyFn : function(){},
 
