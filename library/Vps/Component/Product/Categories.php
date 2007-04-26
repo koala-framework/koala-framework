@@ -1,26 +1,22 @@
 <?php
 class Vps_Component_Product_Categories extends Vps_Component_Abstract
 {
-    private $_categories;
-    private function getCategories()
-    {
-        if (!isset($this->_categories)) {
-            $dao = $this->getDao();
-            $where = $dao->getDb()->quoteInto('visible = ?', '1');
-            $this->_categories = $dao->getTable('Vps_Dao_ProductCategories')->fetchAll($where);
-        }
-        return $this->_categories;
-    }
-
+    private $_names;
+    
     protected function createComponents($filename)
     {
+        $dao = $this->getDao();
+        $where = $dao->getDb()->quoteInto('visible = ?', '1');
+        $rows = $dao->getTable('Vps_Dao_ProductCategories')->fetchAll($where);
+
         $components = array();
-        foreach($this->getCategories() as $row) {
+        foreach($rows as $row) {
             if ($filename != '' && $filename != $row->filename) continue;
 
             $component = $this->createComponent('Vps_Component_Product_List', 0, $row->id);
             $component->setCategoryId($row->id);
             $components[$row->filename] = $component;
+            $this->_names[$row->filename] = $row->name;
         }
         return $components;
     }
@@ -28,11 +24,14 @@ class Vps_Component_Product_Categories extends Vps_Component_Abstract
     public function getTemplateVars($mode)
     {
         $ret = parent::getTemplateVars($mode);
-        foreach($this->getCategories() as $row) {
-            $new = array('name'=>$row->name, 'filename'=>$row->filename);
-            $ret['categories'][] = $new;
+        $pages = $this->generateHierarchy();
+        foreach($pages as $filename => $page) {
+            $data['name'] = $this->_names[$filename];
+            $data['filename'] = $page->getPath();
+            $ret['categories'][] = $data;
         }
-         $ret['template'] = 'Product/Categories.html';
+
+        $ret['template'] = 'Product/Categories.html';
         return $ret;
     }
 }

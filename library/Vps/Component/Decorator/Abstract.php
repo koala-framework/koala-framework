@@ -30,9 +30,9 @@ abstract class Vps_Component_Decorator_Abstract implements Vps_Component_Interfa
         return $this->_dao;
     }
 
-    public function generateHierarchy(Vps_PageCollection_Abstract $pageCollection, $filename = '')
+    public function generateHierarchy($filename = '')
     {
-        return $this->_component->generateHierarchy($pageCollection, $filename);
+        return $this->_component->generateHierarchy($filename);
     }
 
     public function saveFrontendEditing(Zend_Controller_Request_Http $request)

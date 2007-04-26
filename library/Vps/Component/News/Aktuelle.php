@@ -1,20 +1,18 @@
 <?php
 class Vps_Component_News_Aktuelle extends Vps_Component_Abstract
 {
-    private function getNews()
-    {
-        return $this->getDao()->getTable('Vps_Dao_News')->fetchAll();
-    }
-
+    private $_titles;
+    
     protected function createComponents($filename)
     {
         $components = array();
-        foreach($this->getNews() as $row) {
+        foreach($this->getDao()->getTable('Vps_Dao_News')->fetchAll() as $row) {
             if ($filename != '' && $filename != $row->filename) continue;
 
             $component = $this->createComponent('Vps_Component_News_Details', 0, $row->id);
             $component->setNewsId($row->id);
             $components[$row->filename] = $component;
+            $this->_titles[$row->filename] = $row->title;
         }
         return $components;
     }
@@ -22,12 +20,15 @@ class Vps_Component_News_Aktuelle extends Vps_Component_Abstract
     public function getTemplateVars($mode)
     {
         $ret = parent::getTemplateVars($mode);
-        foreach($this->getNews() as $row) {
-            $new = array('title'=>$row->title, 'filename'=>$row->filename);
-            $ret['news'][] = $new;;
+        
+        $news = $this->generateHierarchy();
+        foreach($news as $filename => $n) {
+            $data['title'] = $this->_titles[$filename];
+            $data['filename'] = $n->getPath();
+            $ret['news'][] = $data;
         }
         $ret['id'] = $this->getComponentId();
-         $ret['template'] = 'News/Aktuelle.html';
+        $ret['template'] = 'News/Aktuelle.html';
         return $ret;
     }
 

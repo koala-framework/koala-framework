@@ -9,11 +9,22 @@ abstract class Vps_PageCollection_Abstract
     protected static $_instance = null;
     private $_createDynamicPages = true;
     protected $_pageData = array();
-    
+    protected $_currentPage = null;
+    protected $_urlScheme = 0;
+    const URL_SCHEME_HIERARCHICAL = 0;
+    const URL_SCHEME_FLAT = 1;
 
-    function __construct(Vps_Dao $dao)
+    function __construct(Vps_Dao $dao, $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL)
     {
         $this->_dao = $dao;
+        switch ($urlScheme) {
+            case Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL:
+            case Vps_PageCollection_Abstract::URL_SCHEME_FLAT:
+                $this->_urlScheme = $urlScheme;
+                break;
+            default:
+                throw new Vps_PageCollection_Exception('Invalid urlScheme specified');
+        }
     }
     
     public static function getInstance()
@@ -22,7 +33,12 @@ abstract class Vps_PageCollection_Abstract
             $dao = Zend_Registry::get('dao');
             
             $pageCollectionConfig = new Zend_Config_Ini('../application/config.ini', 'pagecollection');
-            $pageCollection = new $pageCollectionConfig->pagecollection->type($dao);
+            if ($pageCollectionConfig->pagecollection->urlscheme == 'flat') {
+                $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_FLAT;
+            } else {
+                $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL;
+            }
+            $pageCollection = new $pageCollectionConfig->pagecollection->type($dao, $urlScheme);
             $pageCollection->setAddDecorator($pageCollectionConfig->pagecollection->addDecorator);
             
             self::$_instance = $pageCollection;
@@ -93,18 +109,22 @@ abstract class Vps_PageCollection_Abstract
 
     public function getPageById($id)
     {
+        $this->getRootPage(); // Muss hier gemacht werden
         if (!isset($this->_pages[$id])) {
             try {
                 $parts = Vps_Component_Abstract::parseId($id);
                 $componentId = $parts['componentId'];
                 $pageRow = $this->_dao->getPageData($componentId);
                 if (!empty($pageRow)) {
-                    $className = $pageRow['classname'];
-                    $this->_pages[$componentId] = new $className($this->_dao, $pageRow['component_id']);
-                    $this->_pageFilenames[$componentId] = $pageRow['filename'];
+                    $className = $pageRow['component'];
+                    $component = new $className($this->_dao, $pageRow['component_id']);
+                    $component->setPageCollection($this);
+                    $this->addPage($component, $pageRow['filename']);
+                    $id = $component->getId();
                     foreach ($parts['pageKeys'] as $pageKey) {
-                        $this->_pages[$componentId]->generateHierarchy($this);
-                        $pageId .= '.' . $pageKey;
+                        $this->_pages[$id]->generateHierarchy();
+                        $id .= $id == $component->getId() ? '_' : '.';
+                        $id .= $pageKey;
                     }
                 }
             } catch (Vps_Component_Exception $e) {
@@ -119,21 +139,13 @@ abstract class Vps_PageCollection_Abstract
         }
     }
 
-    public function getFilename(Vps_Component_Interface $page)
-    {
-        $id = $page->getId();
-        if (isset($this->_pageFilenames[$id])) {
-            return $this->_pageFilenames[$id];
-        }
-        return '';
-    }
-
     public function getRootPage()
     {
         if (!isset($this->_rootPageId)) {
             $data = $this->_dao->getRootPageData();
             $classname = $data['component'];
             $rootPage = new $classname($this->_dao, $data['component_id']);
+            $rootPage->setPageCollection($this);
             $this->setRootPage($rootPage);
         }
         return $this->_pages[$this->_rootPageId];
@@ -150,6 +162,11 @@ abstract class Vps_PageCollection_Abstract
     public function getCreateDynamicPages()
     {
         return $this->_createDynamicPages;
+    }
+    
+    public function getCurrentPage()
+    {
+        return $this->_currentPage;
     }
     
     abstract public function getPageByPath($path);

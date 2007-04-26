@@ -19,7 +19,7 @@ class Vps_Component_News_Details extends Vps_Component_Abstract
         $this->_content = $this->createComponent('', $row->component_id);
 
         $ret['content'] = $this->_content->getTemplateVars($mode);
-         $ret['template'] = 'News/Details.html';
+        $ret['template'] = 'News/Details.html';
         return $ret;
     }
     

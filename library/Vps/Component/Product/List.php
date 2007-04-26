@@ -3,33 +3,30 @@ class Vps_Component_Product_List extends Vps_Component_Abstract
 {
     private $_products;
     private $_categoryId;
+    private $_productTeasers = array();
+    
     public function setCategoryId($id)
     {
         $this->_categoryId = $id;
     }
 
-    private function getProducts()
-    {
-        if (!isset($this->_products)) {
-            $dao = $this->getDao();
-            $categories = $dao->getTable('Vps_Dao_ProductCategories')->find($this->_categoryId);
-            //todo: raise error?
-            $category = $categories->current();
-            $this->_products = $category->findManyToManyRowset('Vps_Dao_ProductProducts', 'Vps_Dao_ProductProductsToCategories');
-            //todo: visible berÃ¼cksichtigen
-        }
-        return $this->_products;
-    }
-
     protected function createComponents($filename)
     {
+        $dao = $this->getDao();
+        $categories = $dao->getTable('Vps_Dao_ProductCategories')->find($this->_categoryId);
+        //todo: raise error?
+        $category = $categories->current();
+        $rows = $category->findManyToManyRowset('Vps_Dao_ProductProducts', 'Vps_Dao_ProductProductsToCategories');
+        //todo: visible berücksichtigen
+
         $components = array();
-        foreach($this->getProducts() as $row) {
+        foreach($rows as $row) {
             if ($filename != '' && $filename != $row->filename) continue;
 
             $component = $this->createComponent('Vps_Component_Product_Details', 0, $row->id);
             $component->setProductId($row->id);
             $components[$row->filename] = $component;
+            $this->_products[$row->filename] = $row;
         }
         return $components;
     }
@@ -38,20 +35,22 @@ class Vps_Component_Product_List extends Vps_Component_Abstract
     {
         $ret = parent::getTemplateVars($mode);
 
-        $componentKey = $this->getComponentKey();
-        if($componentKey!='') $componentKey .= ".";
-
-        foreach($this->getProducts() as $row) {
-            $teaser = new Vps_Component_Product_Teaser($this->_dao, $this->getComponentId(), '', $componentKey.$row->id);;
+        $pages = $this->generateHierarchy();
+        foreach ($pages as $filename => $page) {
+            $row = $this->_products[$filename];
+            
+            $teaser = $this->createComponent('Vps_Component_Product_Teaser', 0, '', $row->id);
             $product = array('name'=>$row->name, 'filename'=>$row->filename,
                              'price'=>$row->price, 'vat'=>$row->vat);
             $teaser->setProductData($product);
             $this->_productTeasers[] = $teaser;
             $ret['products'][] = $teaser->getTemplateVars($mode);
         }
-         $ret['template'] = 'Product/List.html';
+        $ret['template'] = 'Product/List.html';
+        
         return $ret;
     }
+    
     public function getComponentInfo()
     {
         $ret = parent::getComponentInfo();

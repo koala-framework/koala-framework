@@ -11,21 +11,21 @@ class Vps_Component_Decorator_Menu extends Vps_Component_Decorator_Abstract
 
     public function getTemplateVars($mode)
     {
+        $return = parent::getTemplateVars($mode);
         $pc = $this->_pageCollection;
 
-        // Erste Ebene
+        $startingPage = $pc->getRootPage();
+        $levels = 2;
+
         $menus = array();
-        $pages = $pc->getChildPages($pc->getRootPage());
-        array_unshift($pages, $pc->getRootPage());
+        $pages = $pc->getChildPages($startingPage);
+        array_unshift($pages, $startingPage);
         foreach ($pages as $page) {
             $data = $pc->getPageData($page);
-            $menus[$data['path']] = $data['sitename'];
+            $return['menu'][] = array('url' => $data['path'], 'text' => $data['sitename']);
         }
 
-        $return = parent::getTemplateVars($mode);
-        foreach ($menus as $url=>$text) {
-            $return['menu'][] = array('url'=>$url, 'text'=>$text);
-        }
         return $return;
     }
+    
 }

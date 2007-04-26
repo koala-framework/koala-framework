@@ -1,39 +1,37 @@
 <?php
 class Vps_Component_Product_Details extends Vps_Component_Abstract
 {
-    private $_product;
     private $_productId;
+    private $_product;
     private $_content;
+    
     public function setProductId($id)
     {
         $this->_productId = $id;
     }
-
-    private function getProduct()
+    
+    protected function setup()
     {
-        if (!isset($this->_product)) {
-            $dao = $this->getDao();
-            if(!isset($this->_productId)) {
-                $this->_productId = substr($this->getPageKey(), strpos($this->getPageKey(), '.')+1);
-            }
-            $products = $dao->getTable('Vps_Dao_ProductProducts')->find($this->_productId);
-            //fixme: raise error?
-            $this->_product = $products->current();
+        $dao = $this->getDao();
+        if (!isset($this->_productId)) {
+            $this->_productId = substr($this->getPageKey(), strpos($this->getPageKey(), '.') + 1);
         }
-        return $this->_product;
+        $products = $dao->getTable('Vps_Dao_ProductProducts')->find($this->_productId);
+        //fixme: raise error?
+        $this->_product = $products->current();
+        $this->_content = $this->createComponent('', $this->_product->component_id);
     }
 
     public function getTemplateVars($mode)
     {
         $ret = parent::getTemplateVars($mode);
 
-        $product = $this->getProduct();
-        $ret['name'] = $product->name;
-        $ret['filename'] = $product->filename;
-        $ret['price'] = $product->price;
-        $ret['vat'] = $product->vat;
+        $ret['name'] = $this->_product->name;
+        $ret['filename'] = $this->_product->filename;
+        $ret['price'] = $this->_product->price;
+        $ret['vat'] = $this->_product->vat;
 
-        $ret['content'] = $this->_getContentComponent()->getTemplateVars($mode);
+        $ret['content'] = $this->_content->getTemplateVars($mode);
 
         if ($mode == 'edit') {
             $ret['template'] = dirname(__FILE__).'/Details.html';
@@ -43,29 +41,21 @@ class Vps_Component_Product_Details extends Vps_Component_Abstract
 
         return $ret;
     }
-    private function _getContentComponent()
-    {
-        if (!isset($this->_content)) {
-            $product = $this->getProduct();
-            $this->_content = $this->createComponent('', $product->component_id);
-        }
-        return $this->_content;
-    }
+
     public function getComponentInfo()
     {
       return parent::getComponentInfo() + $this->_content->getComponentInfo();
     }
+
     public function saveFrontendEditing(Zend_Controller_Request_Http $request)
     {
-        $product = $this->getProduct();
-        $product->filename = $request->getPost('filename');
-        $product->name = $request->getPost('name');
-        $product->price = $request->getPost('price');
-        $product->vat = $request->getPost('vat');
-        $product->save();
+        $this->_product->name = $request->getPost('name');
+        $this->_product->price = $request->getPost('price');
+        $this->_product->vat = $request->getPost('vat');
+        $this->_product->save();
 
         $ret = parent::saveFrontendEditing($request);
-        $ret['createComponents'] = $this->_getContentComponent()->getComponentInfo();
+        $ret['createComponents'] = $this->_content->getComponentInfo();
         return $ret;
     }
 }
