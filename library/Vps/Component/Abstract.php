@@ -6,6 +6,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
     private $_componentKey;
     private $_pageKey;
     private $_hasGeneratedForFilename = array();
+    private $_pageCollection = null;
 
     public function __construct(Vps_Dao $dao, $componentId, $pageKey='', $componentKey='')
     {
@@ -15,14 +16,20 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         $this->_componentKey = $componentKey;
         $this->setup();
     }
-
+    
+    public function setPageCollection(Vps_PageCollection_Abstract $pageCollection)
+    {
+        $this->_pageCollection = $pageCollection;
+    }
+    
     protected function setup()
     {
     }
 
-    public final function generateHierarchy(Vps_PageCollection_Abstract $pageCollection, $filename = '', $createDynamicPages = true)
+    public final function generateHierarchy($filename = '')
     {
-        if ($pageCollection instanceof Vps_PageCollection_Tree) {
+        $pages = array();
+        if ($this->_pageCollection instanceof Vps_PageCollection_Tree) {
 
             if (!in_array('', $this->_hasGeneratedForFilename) && !in_array($filename, $this->_hasGeneratedForFilename)) {
 
@@ -31,29 +38,33 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
                 foreach($rows as $pageRow) {
                     if ($filename != '' && $filename != $pageRow['filename']) { continue; }
                     $component = $this->createComponent($pageRow['component'], $pageRow['component_id']);
-                    $pageCollection->addPage($component, $pageRow['filename']);
-                    $pageCollection->setParentPage($component, $this);
+                    $this->_pageCollection->addPage($component, $pageRow['filename']);
+                    $this->_pageCollection->setParentPage($component, $this);
+                    $pages[$pageRow['filename']] = $component;
                 }
 
                 // Hierarchie von aktueller Komponente nur erstellen, wenn die dynamischen Seiten auch angezeigt werden sollen
-                if ($pageCollection->getCreateDynamicPages()) {
+                if ($this->_pageCollection->getCreateDynamicPages()) {
                     $components = $this->createComponents($filename);
-                    foreach ($components as $filename => $component) {
-                        $pageCollection->addPage($component, $filename);
-                        $pageCollection->setParentPage($component, $this);
+                    foreach ($components as $fn => $component) {
+                        $this->_pageCollection->addPage($component, $fn);
+                        $this->_pageCollection->setParentPage($component, $this);
+                        $pages[$fn] = $component;
                     }
                 }
 
                 $this->_hasGeneratedForFilename[] = $filename;
             }
 
-        } else {
+        } else if ($this->_pageCollection != null){
 
             throw new Vps_Component_Exception('Until now, generateHierarchy only works for instances of Vps_PageCollection_Tree');
 
         }
+        
+        return $pages;
     }
-
+    
     protected function createComponents($filename) {
         return array();
     }
@@ -80,7 +91,11 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         if ($componentKey != '' && $componentKeySuffix != '') { $componentKey .= '.'; }
         $componentKey .= $componentKeySuffix;
 
-        return new $className($this->getDao(), $componentId, $pageKey, $componentKey);
+        $component = new $className($this->getDao(), $componentId, $pageKey, $componentKey);
+        if (!is_null($this->_pageCollection)) {
+            $component->setPageCollection($this->_pageCollection);
+        }
+        return $component;
     }
 
     protected function getComponentId()
@@ -95,7 +110,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
     {
         return $this->_pageKey;
     }
-
+    
     public function getId()
     {
         $ret = (string)$this->getComponentId();
@@ -106,6 +121,11 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
             $ret .= '-' . $this->getComponentKey();
         }
         return $ret;
+    }
+    
+    protected function getPath()
+    {
+        return $this->_pageCollection->getPath($this);
     }
 
     public static function parseId($id)

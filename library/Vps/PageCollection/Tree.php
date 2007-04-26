@@ -39,14 +39,22 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
     public function getPageByPath($path)
     {
         $ids = $this->getIdsForPath($path);
-        return $this->getPageById(array_pop($ids));
+        $page = $this->getPageById(array_pop($ids));
+        $this->_currentPage = $page;
+        return $page;
     }
 
     public function getIdsForPath($path)
     {
         $ids = array();
         $matches = array();
-        if (preg_match('/^(\/\w+)*\/$/', $path)) { // hierarchische URLs, Format /x/y/z/
+        if (preg_match('/^\/[a-z0-9]+_[a-z0-9]+_([0-9\_\.]+)\/(\w+\/)?$/', $path, $matches)) {
+            if (isset($matches[2]) && $matches[2] != '') {
+                $ids = $this->getIdsForPath('/' . $matches[2], $this->getPageById($matches[1]));
+            } else {
+                $ids[] = $matches[1];
+            }
+        } else if (preg_match('/^(\/\w+)*\/$/', $path)) { // hierarchische URLs, Format /x/y/z/
             $page = $this->getRootPage();
             $ids[] = $page->getId();
             $pathParts = explode('/', substr($path, 1, -1));
@@ -60,9 +68,8 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
                     }
                 }
             }
-        } else if (preg_match('/^\/[a-z0-9]+_[a-z0-9]+_([0-9\_\.]+)$/', $path, $matches)) {
-            $ids[] = $matches[1];
         }
+
         return $ids;
     }
 
@@ -83,7 +90,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
 
     public function getChildPages(Vps_Component_Interface $page)
     {
-        $page->generateHierarchy($this);
+        $page->generateHierarchy();
         $childs = array();
         $searchId = $page->getId();
         foreach($this->_pageParentIds as $id=>$parentId) {
@@ -96,30 +103,44 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
 
     public function getChildPage(Vps_Component_Interface $page, $filename)
     {
-        $page->generateHierarchy($this, $filename);
-        $childs = array();
+        $page->generateHierarchy($filename);
         $searchId = $page->getId();
-        foreach($this->_pageParentIds as $id=>$parentId) {
+        foreach($this->_pageParentIds as $id => $parentId) {
             if($parentId == $searchId && $filename == $this->_pageFilenames[$id]) {
                 return $this->_pages[$id];
             }
         }
         return null;
     }
+    
+    public function getPath($page)
+    {
+        $pageId = $page->getId();
+        $rootId = $this->getRootPage()->getId();
+        $id = $page->getId();
+
+        $path = '/';
+        if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL) {
+            while ($pageId != $rootId) {
+                $path = '/' . $this->_pageFilenames[$pageId] . $path;
+                $pageId = $this->_pageParentIds[$pageId];
+            }
+        } else {
+            if ($pageId != $rootId) {
+                $path .= 'de_' . $this->_pageFilenames[$pageId] . '_' . $pageId;
+            }
+        }
+
+        return $path;
+    }
 
     public function getPageData(Vps_Component_Interface $page)
     {
+        $pageId = $page->getId();
         $rootId = $this->getRootPage()->getId();
         $id = $page->getId();
         $data = $this->_dao->getPageData($id);
-         
-        $pageId = $page->getId();
-        $data['path'] = '/';
-        while ($pageId != $rootId) {
-            $data['path'] .= $this->_pageFilenames[$pageId] . '/';
-            $pageId = $this->_pageParentIds[$pageId];
-        }
-        
+        $data['path'] = $this->getPath($page);
         return $data;
     }
 }

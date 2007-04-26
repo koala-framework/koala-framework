@@ -36,7 +36,7 @@ class Vps_Component_Textbox extends Vps_Component_Abstract
                 $className = $m[2];
                 if (class_exists($className)) {
                     $componentNr++;
-                    $component = new $className($this->_dao, $this->getComponentId(), '', $componentKey.$componentNr);
+                    $component = $this->createComponent($className, 0, '', $componentNr);
                     $this->_components[] = $component;
                     $this->_contentParts[] = array('type'=>'component', 'component'=>$component->getTemplateVars($mode));
                 }
