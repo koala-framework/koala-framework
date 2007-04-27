@@ -22,7 +22,7 @@ class Vps_Component_Decorator_Menu extends Vps_Component_Decorator_Abstract
         array_unshift($pages, $startingPage);
         foreach ($pages as $page) {
             $data = $pc->getPageData($page);
-            $return['menu'][] = array('url' => $data['path'], 'text' => $data['sitename']);
+            $return['menu'][] = array('url' => $data['path'], 'text' => $data['name']);
         }
 
         return $return;

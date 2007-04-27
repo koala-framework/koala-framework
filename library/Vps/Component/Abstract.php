@@ -30,7 +30,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
     {
         $pages = array();
         if ($this->_pageCollection instanceof Vps_PageCollection_Tree) {
-
+            // Erstellt hier nur ChildPages, ParentPages werden bei bedarf in Vps_PageCollection_Tree erstellt
             if (!in_array('', $this->_hasGeneratedForFilename) && !in_array($filename, $this->_hasGeneratedForFilename)) {
 
                 // Hierarchie aus Seitenbaum immer erstellen
