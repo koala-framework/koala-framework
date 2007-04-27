@@ -43,6 +43,21 @@ class Vps_Dao
         return isset($data[$componentId]) ? $data[$componentId] : array();
     }
 
+    function getParentPageData($componentId)
+    {
+        $data = $this->_getPageData();
+        if (isset($data[$componentId])) {
+            $parentId = $data[$componentId]['parent_id'];
+            if (isset($data[$parentId])) {
+                return $data[$parentId];
+            } else {
+                return array();
+            }
+        } else {
+            return array();
+        }
+    }
+
     function getChildPagesData($componentId)
     {
         $return = array();
@@ -70,7 +85,7 @@ class Vps_Dao
     {
         if (empty($this->_pageData)) {
             $sql = '
-                SELECT components.id component_id, components.component, pages.id, pages.parent_id, pages.filename, pages.sitename 
+                SELECT components.id component_id, components.component, pages.id, pages.parent_id, pages.name, pages.filename 
                 FROM components
                 LEFT JOIN pages
                 ON components.id=pages.component_id

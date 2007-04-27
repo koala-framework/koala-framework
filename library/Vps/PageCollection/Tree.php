@@ -75,17 +75,29 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
 
     public function getParentPage(Vps_Component_Interface $page)
     {
-        $return = null;
         $id = $page->getId();
         if (isset($this->_pageParentIds[$id])) {
-          $parentId = $this->_pageParentIds[$id];
-          if (!isset($this->_pages[$parentId])) {
-            unset($this->_pageParentIds[$id]);
-          } else {
-            $return = $this->_pages[$parentId];
-          }
+            $parentId = $this->_pageParentIds[$id];
+            if (!isset($this->_pages[$parentId])) {
+                unset($this->_pageParentIds[$id]);
+                return $this->getParentPage($page);
+            } else {
+                return $this->_pages[$parentId];
+            }
+        } else if ($id != $this->getRootPage()->getId()) {
+            // Wird jetzt hier gemacht
+            $data = $this->_dao->getParentPageData($id); // id==componentId
+            if ($data['component_id'] == $this->getRootPage()->getId()) {
+                return $this->getRootPage();
+            } else {
+                $component = new $data['component']($this->getDao(), $data['component_id']);
+                $parentPage = $this->addPage($component, $data['filename']);
+                $this->setParentPage($page, $parentPage);
+                return $parentPage;
+            }
+        } else { // ParentPage von RootPage
+            return null;
         }
-        return $return;
     }
 
     public function getChildPages(Vps_Component_Interface $page)
@@ -117,13 +129,13 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
     {
         $pageId = $page->getId();
         $rootId = $this->getRootPage()->getId();
-        $id = $page->getId();
 
         $path = '/';
         if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL) {
             while ($pageId != $rootId) {
                 $path = '/' . $this->_pageFilenames[$pageId] . $path;
-                $pageId = $this->_pageParentIds[$pageId];
+                $page = $this->getParentPage($page);
+                $pageId = $page ? $page->getId() : $rootId;
             }
         } else {
             if ($pageId != $rootId) {

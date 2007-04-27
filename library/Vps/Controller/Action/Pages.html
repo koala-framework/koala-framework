@@ -3,21 +3,41 @@
 <script type="text/javascript" src="/files/ext/adapter/yui/yui-utilities.js"></script>
 <script type="text/javascript" src="/files/ext/adapter/yui/ext-yui-adapter.js"></script>
 <script type="text/javascript" src="/files/ext/ext-all.js"></script>
+<style type="text/css">
+    .x-tree-node-collapsed .x-tree-node-icon{
+      background-image:url(/files/ext/resources/images/default/tree/leaf.gif);
+    }
+    .x-tree-node-expanded .x-tree-node-icon{
+      background-image:url(/files/ext/resources/images/default/tree/leaf.gif);
+    }
+    .x-tree-node-leaf .x-tree-node-icon{
+      background-image:url(/files/ext/resources/images/default/tree/leaf.gif);
+    }
+</style>
 
-
-<div id="treeDiv1" />
-  
+<div id="tabs" />
+ 
 <script type="text/javascript">
-
-Ext.onReady(function(){
-    // shorthand
-    var Tree = Ext.tree;
+function initTabs() {
+    var jtabs = new Ext.TabPanel('tabs');
     
+    var tabs = new Array();
+    
+    tabs[1] = jtabs.addTab('tab1', 'Seitenbaum', '<div id="treeDiv" />');
+    tabs[1].on('activate', function() { initTree('treeDiv'); });
+
+    jtabs.activate('tab1');
+}
+
+function initTree(div) {
+    var Tree = Ext.tree;
+    var dialog = new PageDialog('booking-dialog');
+
     var tree = new Tree.TreePanel(
-        'treeDiv1',
+        div,
         {
             animate:true, 
-            loader: new Tree.TreeLoader({dataUrl:'/admin/pages/ajaxGetNodes', baseParams:{'expandedPath': '{/literal}{$expandedPath}{literal}'}}),
+            loader: new Tree.TreeLoader({dataUrl:'/admin/pages/ajaxGetNodes'}),
             enableDD:true,
             containerScroll: true,
             rootVisible: false
@@ -35,10 +55,102 @@ Ext.onReady(function(){
     tree.on('nodedrop', function(e){
         alert('drop');
     });
+    /*
+    tree.getLoader().createNode = function(attr){
+          if(attr.someNonLeafAttr){
+               return new TreeNode(attr);
+          }
+          return Ext.tree.TreeLoader.createNode.call(this, attr);
+    };
+    */
+    
+    tree.on('click', function (node, e) { dialog.edit() });
     
     // render the tree
     tree.render();
     root.expand();
-});
+    
+}
+
+PageDialog = function(el) {
+    
+    var self = this;
+    var dialog = new Ext.BasicDialog('booking-dialog', 
+        {
+            height: 200, 
+            width: 400, 
+            modal: true,
+            proxyDrag: true,
+            shadow: true,
+            autoCreate: true
+        }
+    )
+    dialog.addKeyListener(27, dialog.hide, dialog); // ESC
+    
+    form = new Ext.form.Form({
+        labelWidth: 100,
+        url: '/admin/pages/save',
+        baseParams: {id: 0}
+    });
+
+    form.fieldset(
+        {legend: 'Seiteneigenschaften'},
+        new Ext.form.TextField({
+            allowBlank: false,
+            blankText: 'Seitenname wird benötigt',
+            fieldLabel: 'Seitenname',
+            name: 'name',
+            minLength: 1,
+            maxLength: 255,
+            width: 200
+        }),
+        new Ext.form.Checkbox({
+            fieldLabel: 'Status',
+            name: 'status'
+        })
+    );
+
+    form.addButton('OK', function() {
+        this.form.submit({
+            success: function(form, a) {
+                console.log()
+                dialog.hide();
+            },
+            invalid: function(form, type) {
+                alert('invalid');
+            },
+            failure: function(form, a) {
+                alert('failure');
+            }
+        });
+    }, dialog);
+    form.addButton('Cancel', function() { this.hide() } , dialog);
+    dialog.form = form;
+    form.render(dialog.body);
+
+    this.edit = function () {
+        dialog.setTitle('Seite bearbeiten');
+        //console.log(data);
+        //form.setValues(data);
+        //form.baseParams.id = data.id;
+        dialog.show();
+    }
+
+    this.add = function () {
+        this.dialog.setTitle('Seite hinzufügen');
+        this.dialog.form.setValues(data);
+        this.dialog.form.baseParams.id = 0;
+        this.dialog.show();
+    }
+
+};
+
+Ext.BLANK_IMAGE_URL = '/files/ext/resources/images/default/s.gif';
+Ext.EventManager.onDocumentReady(initTabs);
 </script>
+
+<div id="hello-dlg">
+    <div id="form-ct" />
+</div>
+
 {/literal}
