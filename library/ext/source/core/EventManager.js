@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -23,6 +23,7 @@ Ext.EventManager = function(){
     var fireDocReady = function(){
         if(!docReadyState){
             docReadyState = true;
+            Ext.isReady = true;
             if(docReadyProcId){
                 clearInterval(docReadyProcId);
             }
@@ -43,11 +44,14 @@ Ext.EventManager = function(){
         }else if(Ext.isIE){
             // inspired by  http://www.thefutureoftheweb.com/blog/2006/6/adddomloadevent
             document.write("<s"+'cript id="ie-deferred-loader" defer="defer" src="/'+'/:"></s'+"cript>");
-            E.on("ie-deferred-loader", "readystatechange", function(){
+            var defer = document.getElementById("ie-deferred-loader");
+            defer.onreadystatechange = function(){
                 if(this.readyState == "complete"){
                     fireDocReady();
+                    defer.onreadystatechange = null;
+                    defer.parentNode.removeChild(defer);
                 }
-            });
+            };
         }else if(Ext.isSafari){ 
             docReadyProcId = setInterval(function(){
                 var rs = document.readyState;
@@ -91,7 +95,7 @@ Ext.EventManager = function(){
         fn = fn || o.fn; scope = scope || o.scope;
         var el = Ext.getDom(element);
         if(!el){
-            throw "Error listening for " + ename + '. Element ' + element + ' doesn\'t exist.';
+            throw "Error listening for \"" + ename + '\". Element "' + element + '" doesn\'t exist.';
         }
         var h = function(e){
             e = Ext.EventObject.setEvent(e);
@@ -146,24 +150,24 @@ Ext.EventManager = function(){
     };
 
     var stopListening = function(el, ename, fn){
-        var id = Ext.id(el), hds = fn._handlers;
+        var id = Ext.id(el), hds = fn._handlers, hd = fn;
         if(hds){
             for(var i = 0, len = hds.length; i < len; i++){
                 var h = hds[i];
                 if(h[0] == id && h[1] == ename){
-                    var hd = h[2];
+                    hd = h[2];
                     hds.splice(i, 1);
-                    return E.un(el, ename, hd);
+                    break;
                 }
             }
         }
-        E.un(el, ename, fn);
+        E.un(el, ename, hd);
         el = Ext.getDom(el);
         if(ename == "mousewheel" && el.addEventListener){
-            el.removeEventListener("DOMMouseScroll", fn, false);
+            el.removeEventListener("DOMMouseScroll", hd, false);
         }
         if(ename == "mousedown" && el == document){ // fix stopped mousedowns on the document
-            Ext.EventManager.stoppedMouseDownEvent.removeListener(fn);
+            Ext.EventManager.stoppedMouseDownEvent.removeListener(hd);
         }
     };
 
@@ -367,7 +371,7 @@ Ext.onReady(function(){
  * passed to your event handler. It exists mostly for convenience. It also fixes the annoying null checks automatically to cleanup your code 
  * Example:
  * <pre><code>
- fu<>nction handleClick(e){ // e is not a standard event object, it is a Ext.EventObject
+ function handleClick(e){ // e is not a standard event object, it is a Ext.EventObject
     e.preventDefault();
     var target = e.getTarget();
     ...

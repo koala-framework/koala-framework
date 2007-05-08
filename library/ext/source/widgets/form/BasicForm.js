@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -87,6 +87,13 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
     // private
     activeAction : null,
 
+    /**
+     * By default wait messages are displayed with Ext.MessageBox.wait. You can target a specific
+     * element by passing it or its id or mask the form itself by passing in true.
+     * @type Mixed
+     */
+    waitMsgTarget : undefined,
+
     // private
     initEl : function(el){
         this.el = Ext.get(el);
@@ -153,7 +160,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         record.beginEdit();
         var fs = record.fields;
         fs.each(function(f){
-            var field = this.fieldField(f.name);
+            var field = this.findField(f.name);
             if(field){
                 record.set(f.name, field.getValue());
             }
@@ -165,7 +172,14 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
     beforeAction : function(action){
         var o = action.options;
         if(o.waitMsg){
-            Ext.MessageBox.wait(o.waitMsg, o.waitTitle || this.waitTitle || 'Please Wait...');
+            if(this.waitMsgTarget === true){
+                this.el.mask(o.waitMsg, 'x-mask-loading');
+            }else if(this.waitMsgTarget){
+                this.waitMsgTarget = Ext.get(this.waitMsgTarget);
+                this.waitMsgTarget.mask(o.waitMsg, 'x-mask-loading');
+            }else{
+                Ext.MessageBox.wait(o.waitMsg, o.waitTitle || this.waitTitle || 'Please Wait...');
+            }
         }
     },
 
@@ -174,8 +188,14 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         this.activeAction = null;
         var o = action.options;
         if(o.waitMsg){
-            Ext.MessageBox.updateProgress(1);
-            Ext.MessageBox.hide();
+            if(this.waitMsgTarget === true){
+                this.el.unmask();
+            }else if(this.waitMsgTarget){
+                this.waitMsgTarget.unmask();
+            }else{
+                Ext.MessageBox.updateProgress(1);
+                Ext.MessageBox.hide();
+            }
         }
         if(success){
             if(o.reset){
@@ -257,10 +277,14 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
     /**
      * Returns the fields in this form as an object with key value pair. If multiple fields exist with the same name
      * they are returned as an array.
+     * @param {Boolean} asString
      * @return {Object}
      */
-    getValues : function(){
+    getValues : function(asString){
         var fs = Ext.lib.Ajax.serializeForm(this.el.dom);
+        if(asString === true){
+            return fs;
+        }
         return Ext.urlDecode(fs);
     },
 
@@ -294,7 +318,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
 
 
     /**
-     * Removes a field from the items collection (does NOT remove it's markup)
+     * Removes a field from the items collection (does NOT remove its markup)
      * @param {Field} field
      */
     remove : function(field){

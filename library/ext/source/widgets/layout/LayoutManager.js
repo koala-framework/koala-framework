@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -11,11 +11,11 @@
  * @extends Ext.util.Observable
  * Base class for layout managers.
  */
-Ext.LayoutManager = function(container){
+Ext.LayoutManager = function(container, config){
     Ext.LayoutManager.superclass.constructor.call(this);
     this.el = Ext.get(container);
     // ie scrollbar fix
-    if(this.el.dom == document.body && Ext.isIE){
+    if(this.el.dom == document.body && Ext.isIE && !config.allowScroll){
         document.body.scroll = "no";
     }else if(this.el.dom != document.body && this.el.getStyle('position') == 'static'){
         this.el.position('relative');
@@ -25,7 +25,7 @@ Ext.LayoutManager = function(container){
     /** false to disable window resize monitoring @type Boolean */
     this.monitorWindowResize = true;
     this.regions = {};
-    this.events = {
+    this.addEvents({
         /**
          * @event layout
          * Fires when a layout is performed. 
@@ -51,7 +51,7 @@ Ext.LayoutManager = function(container){
          * @param {Ext.LayoutRegion} region
          */
         "regionexpanded" : true
-    };
+    });
     this.updating = false;
     Ext.EventManager.onWindowResize(this.onWindowResize, this, true);
 };

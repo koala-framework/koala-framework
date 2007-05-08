@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -23,7 +23,7 @@ Ext.dd.Registry = function(){
         }
         var id = el.id;
         if(!id && autogen !== false){
-            id = "yddgen-" + (++autoIdSeed);
+            id = "extdd-" + (++autoIdSeed);
             el.id = id;
         }
         return id;
@@ -38,11 +38,11 @@ Ext.dd.Registry = function(){
      * knows how to interpret, plus there are some specific properties known to the Registry that should be
      * populated in the data object (if applicable):
      * <pre>
-Value      Description
----------  ------------------------------------------
-handles    Array of DOM nodes that trigger dragging
-           for the element being registered
-isHandle   True if the element passed in triggers
+Value      Description<br />
+---------  ------------------------------------------<br />
+handles    Array of DOM nodes that trigger dragging<br />
+           for the element being registered<br />
+isHandle   True if the element passed in triggers<br />
            dragging itself, else false
 </pre>
      */

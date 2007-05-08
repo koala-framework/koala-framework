@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -112,7 +112,7 @@
 }
 
 /* invalid fields */
-.x-form-invalid{
+.x-form-invalid, textarea.x-form-invalid{
 	background:#fff url(../images/default/grid/invalid_line.gif) repeat-x bottom;
 	border: 1px solid #dd7870;
 }
@@ -220,6 +220,9 @@
 .ext-ie .x-form fieldset legend {
     margin-bottom:10px;
 }
+.ext-ie .x-form fieldset {
+    padding-top: 0;
+}
 .x-form-empty-field {
     color:gray;
 }
@@ -325,6 +328,25 @@
 	padding:3px;
 }
 
+.x-form .x-form-btns-ct .x-btn-focus .x-btn-left{
+	background-position:0 -147px;
+}
+.x-form .x-form-btns-ct .x-btn-focus .x-btn-right{
+	background-position:0 -168px;
+}
+.x-form .x-form-btns-ct .x-btn-focus .x-btn-center{
+	background-position:0 -189px;
+}
+
+.x-form .x-form-btns-ct .x-btn-click .x-btn-center{
+	background-position:0 -126px;
+}
+.x-form .x-form-btns-ct .x-btn-click  .x-btn-right{
+	background-position:0 -84px;
+}
+.x-form .x-form-btns-ct .x-btn-click .x-btn-left{
+	background-position:0 -63px;
+}
 .x-form-invalid-icon {
     width:16px;
     height:18px;

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -22,7 +22,7 @@
    ]);
    var myReader = new Ext.data.ArrayReader({
        id: 0                     // The subscript within row Array that provides an ID for the Record (optional)
-   }, myRecordDefinition);
+   }, RecordDef);
   </code></pre>
  * <p>
  * This would consume an Array like this:

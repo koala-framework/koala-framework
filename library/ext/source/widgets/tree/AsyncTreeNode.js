@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -22,13 +22,12 @@
     * Fires before this node is loaded, return false to cancel
     * @param {Node} this This node
     */
-    this.events["beforeload"] = true;
+    this.addEvents({'beforeload':true, 'load': true});
     /**
     * @event load
     * Fires when this node is loaded
     * @param {Node} this This node
     */
-    this.events["load"] = true;
     /**
      * The loader used by this node (defaults to using the tree's defined loader)
      * @type TreeLoader

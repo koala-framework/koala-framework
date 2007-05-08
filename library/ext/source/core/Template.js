@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -143,6 +143,17 @@ Ext.Template.prototype = {
     },
     
     /**
+     * Applies the supplied values to the template and inserts the new node(s) as the first child of el
+     * @param {String/HTMLElement/Element} el The context element
+     * @param {Object} values The template values. Can be an array if your params are numeric (i.e. {0}) or an object (i.e. {foo: 'bar'})
+     * @param {Boolean} returnElement (optional) true to return a Ext.Element
+     * @return {HTMLElement} The new node
+     */
+    insertFirst: function(el, values, returnElement){
+        return this.doInsert('afterBegin', el, values, returnElement);
+    },
+
+    /**
      * Applies the supplied values to the template and inserts the new node(s) before el
      * @param {String/HTMLElement/Element} el The context element
      * @param {Object} values The template values. Can be an array if your params are numeric (i.e. {0}) or an object (i.e. {foo: 'bar'})
@@ -150,11 +161,9 @@ Ext.Template.prototype = {
      * @return {HTMLElement} The new node
      */
     insertBefore: function(el, values, returnElement){
-        el = Ext.getDom(el);
-        var newNode = Ext.DomHelper.insertHtml("beforeBegin", el, this.applyTemplate(values));
-        return returnElement ? Ext.get(newNode, true) : newNode;
+        return this.doInsert('beforeBegin', el, values, returnElement);
     },
-    
+
     /**
      * Applies the supplied values to the template and inserts the new node(s) after el
      * @param {String/HTMLElement/Element} el The context element
@@ -163,9 +172,7 @@ Ext.Template.prototype = {
      * @return {HTMLElement} The new node
      */
     insertAfter : function(el, values, returnElement){
-        el = Ext.getDom(el);
-        var newNode = Ext.DomHelper.insertHtml("afterEnd", el, this.applyTemplate(values));
-        return returnElement ? Ext.get(newNode, true) : newNode;
+        return this.doInsert('afterEnd', el, values, returnElement);
     },
     
     /**
@@ -176,11 +183,15 @@ Ext.Template.prototype = {
      * @return {HTMLElement} The new node
      */
     append : function(el, values, returnElement){
-        el = Ext.getDom(el);
-        var newNode = Ext.DomHelper.insertHtml("beforeEnd", el, this.applyTemplate(values));
-        return returnElement ? Ext.get(newNode, true) : newNode;
+        return this.doInsert('beforeEnd', el, values, returnElement);
     },
-    
+
+    doInsert : function(where, el, values, returnEl){
+        el = Ext.getDom(el);
+        var newNode = Ext.DomHelper.insertHtml(where, el, this.applyTemplate(values));
+        return returnEl ? Ext.get(newNode, true) : newNode;
+    },
+
     /**
      * Applies the supplied values to the template and overwrites the content of el with the new node(s)
      * @param {String/HTMLElement/Element} el The context element

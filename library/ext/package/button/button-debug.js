@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -9,7 +9,7 @@
 
 Ext.Button = function(renderTo, config){
     Ext.apply(this, config);
-    this.events = {
+    this.addEvents({
         
 	    "click" : true,
         
@@ -18,7 +18,7 @@ Ext.Button = function(renderTo, config){
         'mouseover' : true,
         
         'mouseout': true
-    };
+    });
     if(this.menu){
         this.menu = Ext.menu.MenuMgr.get(this.menu);
     }
@@ -46,6 +46,9 @@ Ext.extend(Ext.Button, Ext.util.Observable, {
     
     menuClassTarget: 'tr',
 
+    clickEvent : 'click',
+    handleMouseEvents : true,
+
     
     tooltipType : 'qtip',
 
@@ -68,6 +71,8 @@ Ext.extend(Ext.Button, Ext.util.Observable, {
             }
             btn = this.template.append(renderTo, [this.text || '&#160;'], true);
             var btnEl = btn.child("button:first");
+            btnEl.on('focus', this.onFocus, this);
+            btnEl.on('blur', this.onBlur, this);
             if(this.cls){
                 btn.addClass(this.cls);
             }
@@ -101,10 +106,12 @@ Ext.extend(Ext.Button, Ext.util.Observable, {
         }else{
             this.autoWidth();
         }
-        btn.on("click", this.onClick, this);
-        btn.on("mouseover", this.onMouseOver, this);
-        btn.on("mouseout", this.onMouseOut, this);
-        btn.on("mousedown", this.onMouseDown, this);
+        if(this.handleMouseEvents){
+            btn.on("mouseover", this.onMouseOver, this);
+            btn.on("mouseout", this.onMouseOut, this);
+            btn.on("mousedown", this.onMouseDown, this);
+        }
+        btn.on(this.clickEvent, this.onClick, this);
         
         if(this.hidden){
             this.hide();
@@ -283,6 +290,16 @@ Ext.extend(Ext.Button, Ext.util.Observable, {
             this.el.removeClass("x-btn-over");
             this.fireEvent('mouseout', this, e);
         }
+    },
+    
+    onFocus : function(e){
+        if(!this.disabled){
+            this.el.addClass("x-btn-focus");
+        }
+    },
+    
+    onBlur : function(e){
+        this.el.removeClass("x-btn-focus");
     },
     
     onMouseDown : function(){

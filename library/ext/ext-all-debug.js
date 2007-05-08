@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -91,10 +91,10 @@ Ext.DomHelper = function(){
         if(cn){
             if(cn instanceof Array){
                 for(var i = 0, len = cn.length; i < len; i++) {
-                    createDom(cn[i], b);
+                    createDom(cn[i], el);
                 }
             }else{
-                createDom(cn, b);
+                createDom(cn, el);
             }
         }
         if(o.html){
@@ -251,25 +251,25 @@ Ext.DomHelper = function(){
                 el.parentNode.insertBefore(frag, el);
                 return el.previousSibling;
              case "afterbegin":
-                if(el.firstChild){ 
+                if(el.firstChild){
                     range.setStartBefore(el.firstChild);
+                    frag = range.createContextualFragment(html);
+                    el.insertBefore(frag, el.firstChild);
+                    return el.firstChild;
                 }else{
-                    range.selectNodeContents(el);
-                    range.collapse(true);
+                    el.innerHTML = html;
+                    return el.firstChild;
                 }
-                frag = range.createContextualFragment(html);
-                el.insertBefore(frag, el.firstChild);
-                return el.firstChild;
             case "beforeend":
                 if(el.lastChild){
-                    range.setStartAfter(el.lastChild); 
+                    range.setStartAfter(el.lastChild);
+                    frag = range.createContextualFragment(html);
+                    el.appendChild(frag);
+                    return el.lastChild;
                 }else{
-                    range.selectNodeContents(el);
-                    range.collapse(false);
+                    el.innerHTML = html;
+                    return el.lastChild;
                 }
-                frag = range.createContextualFragment(html);
-                el.appendChild(frag);
-                return el.lastChild;
             case "afterend":
                 range.setStartAfter(el);
                 frag = range.createContextualFragment(html);
@@ -440,26 +440,31 @@ Ext.Template.prototype = {
     },
     
     
-    insertBefore: function(el, values, returnElement){
-        el = Ext.getDom(el);
-        var newNode = Ext.DomHelper.insertHtml("beforeBegin", el, this.applyTemplate(values));
-        return returnElement ? Ext.get(newNode, true) : newNode;
+    insertFirst: function(el, values, returnElement){
+        return this.doInsert('afterBegin', el, values, returnElement);
     },
+
     
+    insertBefore: function(el, values, returnElement){
+        return this.doInsert('beforeBegin', el, values, returnElement);
+    },
+
     
     insertAfter : function(el, values, returnElement){
-        el = Ext.getDom(el);
-        var newNode = Ext.DomHelper.insertHtml("afterEnd", el, this.applyTemplate(values));
-        return returnElement ? Ext.get(newNode, true) : newNode;
+        return this.doInsert('afterEnd', el, values, returnElement);
     },
     
     
     append : function(el, values, returnElement){
-        el = Ext.getDom(el);
-        var newNode = Ext.DomHelper.insertHtml("beforeEnd", el, this.applyTemplate(values));
-        return returnElement ? Ext.get(newNode, true) : newNode;
+        return this.doInsert('beforeEnd', el, values, returnElement);
     },
-    
+
+    doInsert : function(where, el, values, returnEl){
+        el = Ext.getDom(el);
+        var newNode = Ext.DomHelper.insertHtml(where, el, this.applyTemplate(values));
+        return returnEl ? Ext.get(newNode, true) : newNode;
+    },
+
     
     overwrite : function(el, values, returnElement){
         el = Ext.getDom(el);
@@ -1440,6 +1445,7 @@ Ext.EventManager = function(){
     var fireDocReady = function(){
         if(!docReadyState){
             docReadyState = true;
+            Ext.isReady = true;
             if(docReadyProcId){
                 clearInterval(docReadyProcId);
             }
@@ -1460,11 +1466,14 @@ Ext.EventManager = function(){
         }else if(Ext.isIE){
             
             document.write("<s"+'cript id="ie-deferred-loader" defer="defer" src="/'+'/:"></s'+"cript>");
-            E.on("ie-deferred-loader", "readystatechange", function(){
+            var defer = document.getElementById("ie-deferred-loader");
+            defer.onreadystatechange = function(){
                 if(this.readyState == "complete"){
                     fireDocReady();
+                    defer.onreadystatechange = null;
+                    defer.parentNode.removeChild(defer);
                 }
-            });
+            };
         }else if(Ext.isSafari){ 
             docReadyProcId = setInterval(function(){
                 var rs = document.readyState;
@@ -1508,7 +1517,7 @@ Ext.EventManager = function(){
         fn = fn || o.fn; scope = scope || o.scope;
         var el = Ext.getDom(element);
         if(!el){
-            throw "Error listening for " + ename + '. Element ' + element + ' doesn\'t exist.';
+            throw "Error listening for \"" + ename + '\". Element "' + element + '" doesn\'t exist.';
         }
         var h = function(e){
             e = Ext.EventObject.setEvent(e);
@@ -1563,24 +1572,24 @@ Ext.EventManager = function(){
     };
 
     var stopListening = function(el, ename, fn){
-        var id = Ext.id(el), hds = fn._handlers;
+        var id = Ext.id(el), hds = fn._handlers, hd = fn;
         if(hds){
             for(var i = 0, len = hds.length; i < len; i++){
                 var h = hds[i];
                 if(h[0] == id && h[1] == ename){
-                    var hd = h[2];
+                    hd = h[2];
                     hds.splice(i, 1);
-                    return E.un(el, ename, hd);
+                    break;
                 }
             }
         }
-        E.un(el, ename, fn);
+        E.un(el, ename, hd);
         el = Ext.getDom(el);
         if(ename == "mousewheel" && el.addEventListener){
-            el.removeEventListener("DOMMouseScroll", fn, false);
+            el.removeEventListener("DOMMouseScroll", hd, false);
         }
         if(ename == "mousedown" && el == document){ 
-            Ext.EventManager.stoppedMouseDownEvent.removeListener(fn);
+            Ext.EventManager.stoppedMouseDownEvent.removeListener(hd);
         }
     };
 
@@ -2187,15 +2196,21 @@ El.prototype = {
     
     
     query : function(selector, unique){
-        return Ext.DomQuery.select(selector, this.dom);  
+        return Ext.DomQuery.select("#" + Ext.id(this.dom) + " " + selector);
     },
     
     
     child : function(selector, returnDom){
-        var n = Ext.DomQuery.selectNode(selector, this.dom);
+        var n = Ext.DomQuery.selectNode("#" + Ext.id(this.dom) + " " + selector);
         return returnDom ? n : Ext.get(n);
     },
+
     
+    down : function(selector, returnDom){
+        var n = Ext.DomQuery.selectNode("#" + Ext.id(this.dom) + " > " + selector);
+        return returnDom ? n : Ext.get(n);
+    },
+
     
     initDD : function(group, config, overrides){
         var dd = new Ext.dd.DD(Ext.id(this.dom), group, config);
@@ -2565,7 +2580,19 @@ El.prototype = {
     getSize : function(contentSize){
         return {width: this.getWidth(contentSize), height: this.getHeight(contentSize)};
     },
-    
+
+    getViewSize : function(){
+        var d = this.dom, doc = document, aw = 0, ah = 0;
+        if(d == doc || d == doc.body){
+            return {width : D.getViewWidth(), height: D.getViewHeight()};
+        }else{
+            return {
+                width : d.clientWidth,
+                height: d.clientHeight
+            };
+        }
+    },
+
     
     getValue : function(asNumber){
         return asNumber ? parseInt(this.dom.value, 10) : this.dom.value;
@@ -3004,7 +3031,68 @@ El.prototype = {
         }
         return [x,y];
     },
-    
+
+    getConstrainToXY : function(){
+        var os = {top:0, left:0, bottom:0, right: 0};
+
+        return function(el, local, offsets){
+            el = Ext.get(el);
+            offsets = offsets ? Ext.applyIf(offsets, os) : os;
+
+            var vw, vh, vx = 0, vy = 0;
+            if(el.dom == document.body || el.dom == document){
+                vw = Ext.lib.Dom.getViewWidth();
+                vh = Ext.lib.Dom.getViewHeight();
+            }else{
+                vw = el.dom.clientWidth;
+                vh = el.dom.clientHeight;
+                if(!local){
+                    var vxy = el.getXY();
+                    vx = vxy[0];
+                    vy = vxy[1];
+                }
+            }
+
+            var s = el.getScroll();
+
+            vx += offsets.left + s.left;
+            vy += offsets.top + s.top;
+
+            vw -= offsets.right;
+            vh -= offsets.bottom;
+
+            var vr = vx+vw;
+            var vb = vy+vh;
+
+            var xy = !local ? this.getXY() : [this.getLeft(true), this.getTop(true)];
+            var x = xy[0], y = xy[1];
+            var w = this.dom.offsetWidth, h = this.dom.offsetHeight;
+
+            
+            var moved = false;
+
+            
+            if((x + w) > vr){
+                x = vr - w;
+                moved = true;
+            }
+            if((y + h) > vb){
+                y = vb - h;
+                moved = true;
+            }
+            
+            if(x < vx){
+                x = vx;
+                moved = true;
+            }
+            if(y < vy){
+                y = vy;
+                moved = true;
+            }
+            return moved ? [x, y] : false;
+        };
+    }(),
+
     
     alignTo : function(element, position, offsets, animate){
         var xy = this.getAlignToXY(element, position, offsets);
@@ -3111,14 +3199,21 @@ El.prototype = {
         
         E.onAvailable(id, function(){
             var hd = document.getElementsByTagName("head")[0];
-            var re = /(?:<script([^>]*)?>)((\n|\r|.)*?)(?:<\/script>)/img;
+            var re = /(?:<script([^>]*)?>)((\n|\r|.)*?)(?:<\/script>)/ig;
             var srcRe = /\ssrc=([\'\"])(.*?)\1/i;
+            var typeRe = /\stype=([\'\"])(.*?)\1/i;
+            
             var match;
             while(match = re.exec(html)){
-                var srcMatch = match[1] ? match[1].match(srcRe) : false;
+                var attrs = match[1];
+                var srcMatch = attrs ? attrs.match(srcRe) : false;
                 if(srcMatch && srcMatch[2]){
                    var s = document.createElement("script");
                    s.src = srcMatch[2];
+                   var typeMatch = attrs.match(typeRe);
+                   if(typeMatch && typeMatch[2]){
+                       s.type = typeMatch[2];
+                   }
                    hd.appendChild(s);
                 }else if(match[2] && match[2].length > 0){
                    eval(match[2]);
@@ -3130,7 +3225,7 @@ El.prototype = {
                 callback();
             }
         });
-        dom.innerHTML = html.replace(/(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)/img, "");
+        dom.innerHTML = html.replace(/(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)/ig, "");
         return this;
     },
     
@@ -3186,13 +3281,13 @@ El.prototype = {
         }
         var el = this.dom, w = el.offsetWidth, h = el.offsetHeight, bx;
         if(!contentBox){
-            bx = {x: xy[0], y: xy[1], width: w, height: h};
+            bx = {x: xy[0], y: xy[1], 0: xy[0], 1: xy[1], width: w, height: h};
         }else{
             var l = this.getBorderWidth("l")+this.getPadding("l");
             var r = this.getBorderWidth("r")+this.getPadding("r");
             var t = this.getBorderWidth("t")+this.getPadding("t");
             var b = this.getBorderWidth("b")+this.getPadding("b");
-            bx = {x: xy[0]+l, y: xy[1]+t, width: w-(l+r), height: h-(t+b)};
+            bx = {x: xy[0]+l, y: xy[1]+t, 0: xy[0]+l, 1: xy[1]+t, width: w-(l+r), height: h-(t+b)};
         }
         bx.right = bx.x + bx.width;
         bx.bottom = bx.y + bx.height;
@@ -3314,19 +3409,17 @@ El.prototype = {
 
     
     createShim : function(){
-        var config = {
-            tag : "iframe",
-            frameBorder:"no",
-            cls: "yiframe-shim",
-            style: "position:absolute;visibility:hidden;left:0;top:0;overflow:hidden;",
-            src: Ext.SSL_SECURE_URL
-        };
-        var shim = Ext.DomHelper.insertBefore(this.dom, config, true);
-        shim.setOpacity(.01);
-        shim.setBox(this.getBox());
+        var el = document.createElement('iframe');
+        el.frameBorder = 'no';
+        el.className = 'ext-shim';
+        if(Ext.isIE && Ext.isSecure){
+            el.src = Ext.SSL_SECURE_URL;
+        }
+        var shim = Ext.get(this.dom.parentNode.insertBefore(el, this.dom));
+        shim.autoBoxAdjust = false;
         return shim;
     },
-    
+
     
     remove : function(){
         if(this.dom.parentNode){
@@ -3434,7 +3527,7 @@ El.prototype = {
         if(insertBefore){
             return Ext.DomHelper.insertBefore(insertBefore, config, returnDom !== true);
         }
-        return Ext.DomHelper.append(this.dom, config,  returnDom !== true);
+        return Ext.DomHelper[!this.dom.firstChild ? 'overwrite' : 'append'](this.dom, config,  returnDom !== true);
     },
     
     
@@ -3695,7 +3788,7 @@ El.prototype = {
 
     boxWrap : function(cls){
         cls = cls || 'x-box';
-        var el = Ext.get(this.insertHtml('beforeBegin', String.format('<div class="{0}"><div class="{0}-tl"><div class="{0}-tr"><div class="{0}-tc"></div></div></div><div class="{0}-ml"><div class="{0}-mr"><div class="{0}-mc"></div></div></div><div class="{0}-bl"><div class="{0}-br"><div class="{0}-bc"></div></div></div></div>', cls)));
+        var el = Ext.get(this.insertHtml('beforeBegin', String.format('<div class="{0}">'+El.boxMarkup+'</div>', cls)));
         el.child('.'+cls+'-mc').dom.appendChild(this.dom);
         return el;
     },
@@ -3743,6 +3836,8 @@ El.addUnits = function(v, defaultUnit){
     return v;
 };
 
+
+El.boxMarkup = '<div class="{0}-tl"><div class="{0}-tr"><div class="{0}-tc"></div></div></div><div class="{0}-ml"><div class="{0}-mr"><div class="{0}-mc"></div></div></div><div class="{0}-bl"><div class="{0}-br"><div class="{0}-bc"></div></div></div>';
 
 El.VISIBILITY = 1;
 
@@ -3807,6 +3902,14 @@ El.get = function(el){
     return null;
 };
 
+El.uncache = function(el){
+    for(var i = 0, a = arguments, len = a.length; i < len; i++) {
+        if(a[i]){
+            delete El.cache[a[i].id || a[i]];
+        }
+    }
+};
+
 
 El.Flyweight = function(dom){
     this.dom = dom;
@@ -3842,6 +3945,12 @@ var noBoxAdjust = Ext.isStrict ? {
 if(Ext.isIE || Ext.isGecko){
     noBoxAdjust['button'] = 1;
 }
+
+
+Ext.EventManager.on(window, 'unload', function(){
+    delete El.cache;
+    delete El._flyweights;
+});
 })();
 
 
@@ -4472,6 +4581,9 @@ Ext.Fx = {
         if(o.afterStyle){
             this.applyStyles(o.afterStyle);
         }
+        if(o.afterCls){
+            this.addClass(o.afterCls);
+        }
         if(o.remove === true){
             this.remove();
         }
@@ -4668,14 +4780,14 @@ Ext.UpdateManager = function(el, forceNew){
     
     this.defaultUrl = null;
     
-    this.events = {
+    this.addEvents({
         
         "beforeupdate": true,
         
         "update": true,
         
         "failure": true
-    };
+    });
     var d = Ext.UpdateManager.defaults;
     
     this.sslBlankUrl = d.sslBlankUrl;
@@ -5568,7 +5680,7 @@ Ext.util.MixedCollection = function(allowFunctions, keyFn){
     this.map = {};
     this.keys = [];
     this.length = 0;
-    this.events = {
+    this.addEvents({
         
         "clear" : true,
         
@@ -5578,7 +5690,7 @@ Ext.util.MixedCollection = function(allowFunctions, keyFn){
         
         "remove" : true,
         "sort" : true
-    };
+    });
     this.allowFunctions = allowFunctions === true;
     if(keyFn){
         this.getKey = keyFn;
@@ -6224,14 +6336,14 @@ Ext.util.ClickRepeater = function(el, config)
 
     Ext.apply(this, config);
 
-    this.events = {
+    this.addEvents({
     
         "mousedown" : true,
     
         "click" : true,
     
         "mouseup" : true
-    };
+    });
 
     this.el.on("mousedown", this.handleMouseDown, this);
     if(this.preventDefault || this.stopDefault){
@@ -6590,9 +6702,9 @@ Ext.Element.measureText = Ext.util.TextMetrics.measure;
 Ext.state.Provider = function(){
     Ext.state.Provider.superclass.constructor.call(this);
     
-    this.events = {
+    this.addEvents({
         "statechange": true
-    };
+    });
     this.state = {};
     Ext.state.Provider.superclass.constructor.call(this);
 };
@@ -6943,9 +7055,16 @@ Ext.dd.DragDrop.prototype = {
         pad = pad || this.defaultPadding;
         var b = Ext.get(this.getEl()).getBox();
         var ce = Ext.get(constrainTo);
-        var c = ce.dom == document.body ? { x: 0, y: 0,
-                width: Ext.lib.Dom.getViewWidth(),
-                height: Ext.lib.Dom.getViewHeight()} : ce.getBox(inContent || false);
+        var s = ce.getScroll();
+        var c, cd = ce.dom;
+        if(cd == document.body){
+            c = { x: s.left, y: s.top, width: Ext.lib.Dom.getViewWidth(), height: Ext.lib.Dom.getViewHeight()};
+        }else{
+            xy = ce.getXY();
+            c = {x : xy[0]+s.left, y: xy[1]+s.top, width: cd.clientWidth, height: cd.clientHeight};
+        }
+
+
         var topSpace = b.y - c.y;
         var leftSpace = b.x - c.x;
 
@@ -7723,7 +7842,9 @@ Ext.dd.DragDropMgr = function() {
             if (this.dragThreshMet) {
                 this.dragCurrent.b4Drag(e);
                 this.dragCurrent.onDrag(e);
-                this.fireEvents(e, false);
+                if(!this.dragCurrent.moveOnly){
+                    this.fireEvents(e, false);
+                }
             }
 
             this.stopEvent(e);
@@ -8224,13 +8345,12 @@ Ext.extend(Ext.dd.DD, Ext.dd.DragDrop, {
     
     alignElWithMouse: function(el, iPageX, iPageY) {
         var oCoord = this.getTargetCoord(iPageX, iPageY);
-        var fly = Ext.fly(el);
+        var fly = el.dom ? el : Ext.fly(el);
         if (!this.deltaSetXY) {
             var aCoord = [oCoord.x, oCoord.y];
             fly.setXY(aCoord);
             var newLeft = fly.getLeft(true);
             var newTop  = fly.getTop(true);
-
             this.deltaSetXY = [ newLeft - oCoord.x, newTop - oCoord.y ];
         } else {
             fly.setLeftTop(oCoord.x + this.deltaSetXY[0], oCoord.y + this.deltaSetXY[1]);
@@ -8238,6 +8358,7 @@ Ext.extend(Ext.dd.DD, Ext.dd.DragDrop, {
 
         this.cachePosition(oCoord.x, oCoord.y);
         this.autoScroll(oCoord.x, oCoord.y, el.offsetHeight, el.offsetWidth);
+        return oCoord;
     },
 
     
@@ -8482,18 +8603,30 @@ Ext.extend(Ext.dd.DDProxy, Ext.dd.DD, {
     
     
     endDrag: function(e) {
+
         var lel = this.getEl();
         var del = this.getDragEl();
 
         
         del.style.visibility = "";
 
+        this.beforeMove();
         
         
         lel.style.visibility = "hidden";
         Ext.dd.DDM.moveToEl(lel, del);
         del.style.visibility = "hidden";
         lel.style.visibility = "";
+
+        this.afterDrag();
+    },
+
+    beforeMove : function(){
+
+    },
+
+    afterDrag : function(){
+
     },
 
     toString: function() {
@@ -8667,7 +8800,7 @@ Ext.dd.Registry = function(){
         }
         var id = el.id;
         if(!id && autogen !== false){
-            id = "yddgen-" + (++autoIdSeed);
+            id = "extdd-" + (++autoIdSeed);
             el.id = id;
         }
         return id;
@@ -9052,20 +9185,20 @@ Ext.extend(Ext.dd.DragSource, Ext.dd.DDProxy, {
     onStartDrag : Ext.emptyFn,
 
     
-    startDrag : function(e){
+    startDrag : function(x, y){
         this.proxy.reset();
         this.dragging = true;
         this.proxy.update("");
-        this.onInitDrag(e);
+        this.onInitDrag(x, y);
         this.proxy.show();
     },
 
     
-    onInitDrag : function(e){
+    onInitDrag : function(x, y){
         var clone = this.el.dom.cloneNode(true);
         clone.id = Ext.id(); 
         this.proxy.update(clone);
-        this.onStartDrag(e);
+        this.onStartDrag(x, y);
         return true;
     },
 
@@ -9175,9 +9308,9 @@ Ext.extend(Ext.dd.DragZone, Ext.dd.DragSource, {
     },
     
     
-    onInitDrag : function(e){
+    onInitDrag : function(x, y){
         this.proxy.update(this.dragData.ddel.cloneNode(true));
-        this.onStartDrag(e);
+        this.onStartDrag(x, y);
         return true;
     },
     
@@ -9367,6 +9500,7 @@ Ext.data.Record.REJECT = 'reject';
 Ext.data.Record.COMMIT = 'commit';
 
 Ext.data.Record.prototype = {
+    
     dirty : false,
     editing : false,
     error: null,
@@ -9479,7 +9613,7 @@ Ext.data.Store = function(config){
 
     this.modified = [];
 
-    this.events = {
+    this.addEvents({
         
         datachanged : true,
         
@@ -9496,7 +9630,7 @@ Ext.data.Store = function(config){
         load : true,
         
         loadexception : true
-    };
+    });
 
     if(this.proxy){
         this.relayEvents(this.proxy,  ["loadexception"]);
@@ -9730,11 +9864,13 @@ Ext.extend(Ext.data.Store, Ext.util.Observable, {
     },
 
     
-    clearFilter : function(){
+    clearFilter : function(suppressEvent){
         if(this.snapshot && this.snapshot != this.data){
             this.data = this.snapshot;
             delete this.snapshot;
-            this.fireEvent("datachanged", this);
+            if(suppressEvent !== true){
+                this.fireEvent("datachanged", this);
+            }
         }
     },
 
@@ -9789,18 +9925,25 @@ Ext.data.SimpleStore = function(config){
     this.load();
 };
 Ext.extend(Ext.data.SimpleStore, Ext.data.Store);
+
 Ext.data.Connection = function(config){
     Ext.apply(this, config);
-    this.events = {
+    this.addEvents({
         "beforerequest" : true,
         "requestcomplete" : true,
         "requestexception" : true
-    };
+    });
     Ext.data.Connection.superclass.constructor.call(this);
 };
 
 Ext.extend(Ext.data.Connection, Ext.util.Observable, {
+    
+    
+    
+    
     timeout : 30000,
+    
+    
     request : function(options){
         if(this.fireEvent("beforerequest", this, options) !== false){
             var p = options.params;
@@ -9830,16 +9973,19 @@ Ext.extend(Ext.data.Connection, Ext.util.Observable, {
             }
         }
     },
+
     
     isLoading : function(){
         return this.transId ? true : false;  
     },
+
     
     abort : function(){
         if(this.isLoading()){
             Ext.lib.Ajax.abort(this.transId);
         }
     },
+
     
     handleResponse : function(response){
         this.transId = false;
@@ -9849,6 +9995,7 @@ Ext.extend(Ext.data.Connection, Ext.util.Observable, {
             options.callback.call(options.scope||window, options, true, response);
         }
     },
+
     
     handleFailure : function(response, e){
         this.transId = false;
@@ -9963,14 +10110,14 @@ Ext.data.DataReader.prototype = {
 };
 
 Ext.data.DataProxy = function(){
-    this.events = {
+    this.addEvents({
         
         beforeload : true,
         
         load : true,
         
         loadexception : true
-    };
+    });
     Ext.data.DataProxy.superclass.constructor.call(this);
 };
 
@@ -10382,7 +10529,7 @@ Ext.data.Tree = function(root){
    if(root){
        this.setRootNode(root);
    }
-   this.events = {
+   this.addEvents({
        
        "append" : true,
        
@@ -10399,7 +10546,7 @@ Ext.data.Tree = function(root){
        "beforemove" : true,
        
        "beforeinsert" : true
-   };
+   });
 
     Ext.data.Tree.superclass.constructor.call(this);
 };
@@ -10471,7 +10618,7 @@ Ext.data.Node = function(attributes){
     
     this.nextSibling = null;
     
-    this.events = {
+    this.addEvents({
        
        "append" : true,
        
@@ -10488,7 +10635,7 @@ Ext.data.Node = function(attributes){
        "beforemove" : true,
        
        "beforeinsert" : true
-   };
+   });
     this.listeners = this.attributes.listeners;
     Ext.data.Node.superclass.constructor.call(this);
 };
@@ -10883,6 +11030,8 @@ Ext.Component = function(config){
     config = config || {};
     if(config.tagName || config.dom || typeof config == "string"){         config = {el: config, id: config.id || config};
     }
+    this.initialConfig = config;
+
     Ext.apply(this, config);
     this.addEvents({
         
@@ -10911,6 +11060,7 @@ Ext.Component = function(config){
     }
     Ext.ComponentMgr.register(this);
     Ext.Component.superclass.constructor.call(this);
+    this.initComponent();
 };
 
 Ext.Component.AUTO_ID = 1000;
@@ -10925,6 +11075,8 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
     
     rendered : false,
 
+    allowDomMove: true,
+
         ctype : "Ext.Component",
 
         actionMode : "el",
@@ -10933,30 +11085,52 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
         return this[this.actionMode];
     },
 
+    initComponent : Ext.emptyFn,     
     
-    render : function(container){
+    render : function(container, position){
         if(!this.rendered && this.fireEvent("beforerender", this) !== false){
+            if(!container && this.el){
+                this.el = Ext.get(this.el);
+                container = this.el.dom.parentNode;
+                this.allowDomMove = false;
+            }
             this.container = Ext.get(container);
             this.rendered = true;
-            this.onRender(this.container);
+            if(position !== undefined){
+                if(typeof position == 'number'){
+                    position = this.container.dom.childNodes[position];
+                }else{
+                    position = Ext.getDom(position);
+                }
+            }
+            this.onRender(this.container, position || null);
             if(this.cls){
                 this.el.addClass(this.cls);
                 delete this.cls;
             }
+            if(this.style){
+                this.el.applyStyles(this.style);
+                delete this.style;
+            }
             this.fireEvent("render", this);
+            this.afterRender(this.container);
             if(this.hidden){
                 this.hide();
             }
             if(this.disabled){
                 this.disable();
             }
-            this.afterRender(this.container);
         }
+        return this;
     },
 
-            onRender : function(ct){
-        this.el = Ext.get(this.el);
-        ct.dom.appendChild(this.el.dom);
+            onRender : function(ct, position){
+        if(this.el){
+            this.el = Ext.get(this.el);
+            if(this.allowDomMove !== false){
+                ct.dom.insertBefore(this.el.dom, position);
+            }
+        }
     },
 
         getAutoCreate : function(){
@@ -10973,6 +11147,7 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
         destroy : function(){
         if(this.fireEvent("beforedestroy", this) !== false){
             this.purgeListeners();
+            this.beforeDestroy();
             if(this.rendered){
                 this.el.removeAllListeners();
                 this.el.remove();
@@ -10986,13 +11161,22 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
         }
     },
 
+    beforeDestroy : function(){
+
+    },
+
     onDestroy : function(){
 
     },
-    
+
     
     getEl : function(){
         return this.el;
+    },
+
+    
+    getId : function(){
+        return this.id;
     },
 
     
@@ -11003,32 +11187,44 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
                 this.el.dom.select();
             }
         }
+        return this;
     },
 
         blur : function(){
         if(this.rendered){
             this.el.blur();
         }
+        return this;
     },
 
     
     disable : function(){
         if(this.rendered){
-            this.getActionEl().addClass(this.disabledClass);
-            this.el.dom.disabled = true;
+            this.onDisable();
         }
         this.disabled = true;
         this.fireEvent("disable", this);
+        return this;
+    },
+
+    onDisable : function(){
+        this.getActionEl().addClass(this.disabledClass);
+        this.el.dom.disabled = true;
     },
 
     
     enable : function(){
         if(this.rendered){
-            this.getActionEl().removeClass(this.disabledClass);
-            this.el.dom.disabled = false;
+            this.onEnable();
         }
         this.disabled = false;
         this.fireEvent("enable", this);
+        return this;
+    },
+
+    onEnable : function(){
+        this.getActionEl().removeClass(this.disabledClass);
+        this.el.dom.disabled = false;
     },
 
     
@@ -11045,6 +11241,7 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
             }
             this.fireEvent("show", this);
         }
+        return this;
     },
 
         onShow : function(){
@@ -11062,6 +11259,7 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
             }
             this.fireEvent("hide", this);
         }
+        return this;
     },
 
         onHide : function(){
@@ -11075,6 +11273,19 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
         }else{
             this.hide();
         }
+        return this;
+    },
+
+    
+    isVisible : function(){
+        return this.getActionEl().isVisible();
+    },
+
+    cloneConfig : function(overrides){
+        overrides = overrides || {};
+        var id = overrides.id || Ext.id();
+        var cfg = Ext.applyIf(overrides, this.initialConfig);
+        cfg.id = id;         return new this.__extcls(cfg);
     }
 });
 
@@ -11100,8 +11311,8 @@ Ext.Layer = function(config, existingEl){
     }else{
         this.id = Ext.id(this.dom);
     }
-    var zindex = (config.zindex || parseInt(this.getStyle("z-index"), 10)) || 11000;
-    this.position("absolute", zindex);
+    this.zindex = config.zindex || this.getZIndex();
+    this.position("absolute", this.zindex);
     if(config.shadow){
         this.shadowOffset = config.shadowOffset || 4;
         this.shadow = new Ext.Shadow({
@@ -11111,31 +11322,88 @@ Ext.Layer = function(config, existingEl){
     }else{
         this.shadowOffset = 0;
     }
-    if(config.shim !== false && Ext.useShims){
-        this.shim = this.createShim();
-        this.shim.setOpacity(0);
-        this.shim.position("absolute", zindex-2);
-    }
+    this.useShim = config.shim !== false && Ext.useShims;
     this.useDisplay = config.useDisplay;
     this.hide();
 };
 
 var supr = Ext.Element.prototype;
 
+
+var shims = [];
+
 Ext.extend(Ext.Layer, Ext.Element, {
+
+    getZIndex : function(){
+        return this.zindex || parseInt(this.getStyle("z-index"), 10) || 11000;
+    },
+
+    getShim : function(){
+        if(!this.useShim){
+            return null;
+        }
+        if(this.shim){
+            return this.shim;
+        }
+        var shim = shims.shift();
+        if(!shim){
+            shim = this.createShim();
+            shim.enableDisplayMode('block');
+            shim.dom.style.display = 'none';
+            shim.dom.style.visibility = 'visible';
+        }
+        var pn = this.dom.parentNode;
+        if(shim.dom.parentNode != pn){
+            pn.insertBefore(shim.dom, this.dom);
+        }
+        shim.setStyle('z-index', this.getZIndex()-2);
+        this.shim = shim;
+        return shim;
+    },
+
+    hideShim : function(){
+        if(this.shim){
+            this.shim.setDisplayed(false);
+            shims.push(this.shim);
+            delete this.shim;
+        }
+    },
+
+    disableShadow : function(){
+        if(this.shadow){
+            this.shadowDisabled = true;
+            this.shadow.hide();
+            this.lastShadowOffset = this.shadowOffset;
+            this.shadowOffset = 0;
+        }
+    },
+
+    enableShadow : function(show){
+        if(this.shadow){
+            this.shadowDisabled = false;
+            this.shadowOffset = this.lastShadowOffset;
+            delete this.lastShadowOffset;
+            if(show){
+                this.sync(true);
+            }
+        }
+    },
+
     
     
     
     sync : function(doShow){
-        var sw = this.shadow, sh = this.shim;
-        if(!this.updating && this.isVisible() && (sw || sh)){
+        var sw = this.shadow;
+        if(!this.updating && this.isVisible() && (sw || this.useShim)){
+            var sh = this.getShim();
+
             var w = this.getWidth(),
                 h = this.getHeight();
 
             var l = this.getLeft(true),
                 t = this.getTop(true);
 
-            if(sw){
+            if(sw && !this.shadowDisabled){
                 if(doShow && !sw.isVisible()){
                     sw.show(this);
                 }else{
@@ -11147,8 +11415,8 @@ Ext.extend(Ext.Layer, Ext.Element, {
                     }
                     
                     var a = sw.adjusts, s = sh.dom.style;
-                    s.left = (l+a.l)+"px";
-                    s.top = (t+a.t)+"px";
+                    s.left = (Math.min(l, l+a.l))+"px";
+                    s.top = (Math.min(t, t+a.t))+"px";
                     s.width = (w+a.w)+"px";
                     s.height = (h+a.h)+"px";
                 }
@@ -11165,14 +11433,20 @@ Ext.extend(Ext.Layer, Ext.Element, {
 
     
     destroy : function(){
-        if(this.shim){
-            this.shim.remove();
-        }
+        this.hideShim();
         if(this.shadow){
             this.shadow.hide();
         }
         this.removeAllListeners();
-        this.remove();
+        var pn = this.dom.parentNode;
+        if(pn){
+            pn.removeChild(this.dom);
+        }
+        Ext.Element.uncache(this.id);
+    },
+
+    remove : function(){
+        this.destroy();
     },
 
     
@@ -11191,12 +11465,7 @@ Ext.extend(Ext.Layer, Ext.Element, {
         if(this.shadow){
             this.shadow.hide();
         }
-        if(this.shim){
-           this.shim.hide();
-           if(negOffset){
-               this.shim.setLeftTop(-10000,-10000);
-           }
-        }
+        this.hideShim();
     },
 
     
@@ -11206,7 +11475,7 @@ Ext.extend(Ext.Layer, Ext.Element, {
                 vh = Ext.lib.Dom.getViewHeight();
             var s = Ext.get(document).getScroll();
 
-            xy = this.getXY();
+            var xy = this.getXY();
             var x = xy[0], y = xy[1];   
             var w = this.dom.offsetWidth+this.shadowOffset, h = this.dom.offsetHeight+this.shadowOffset;
             
@@ -11237,24 +11506,32 @@ Ext.extend(Ext.Layer, Ext.Element, {
                     }
                 }
                 xy = [x, y];
-                this.lastXY = xy;
+                this.storeXY(xy);
                 supr.setXY.call(this, xy);
                 this.sync();
             }
         }
     },
 
+    isVisible : function(){
+        return this.visible;    
+    },
+
     
     showAction : function(){
+        this.visible = true; 
         if(this.useDisplay === true){
             this.setDisplayed("");
         }else if(this.lastXY){
             supr.setXY.call(this, this.lastXY);
+        }else if(this.lastLT){
+            supr.setLeftTop.call(this, this.lastLT[0], this.lastLT[1]);
         }
     },
 
     
     hideAction : function(){
+        this.visible = false;
         if(this.useDisplay === true){
             this.setDisplayed(false);
         }else{
@@ -11264,7 +11541,9 @@ Ext.extend(Ext.Layer, Ext.Element, {
 
     
     setVisible : function(v, a, d, c, e){
-        this.showAction();
+        if(v){
+            this.showAction();
+        }
         if(a && v){
             var cb = function(){
                 this.sync(true);
@@ -11295,6 +11574,16 @@ Ext.extend(Ext.Layer, Ext.Element, {
         }
     },
 
+    storeXY : function(xy){
+        delete this.lastLT;
+        this.lastXY = xy;
+    },
+
+    storeLeftTop : function(left, top){
+        delete this.lastXY;
+        this.lastLT = [left, top];
+    },
+
     
     beforeFx : function(){
         this.beforeAction();
@@ -11315,10 +11604,28 @@ Ext.extend(Ext.Layer, Ext.Element, {
     },
 
     
+    setLeft : function(left){
+        this.storeLeftTop(left, this.getTop(true));
+        supr.setLeft.apply(this, arguments);
+        this.sync();
+    },
+
+    setTop : function(top){
+        this.storeLeftTop(this.getLeft(true), top);
+        supr.setTop.apply(this, arguments);
+        this.sync();
+    },
+
+    setLeftTop : function(left, top){
+        this.storeLeftTop(left, top);
+        supr.setLeftTop.apply(this, arguments);
+        this.sync();
+    },
+
     setXY : function(xy, a, d, c, e){
         this.fixDisplay();
         this.beforeAction();
-        this.lastXY = xy;
+        this.storeXY(xy);
         var cb = this.createCB(c);
         supr.setXY.call(this, xy, a, d, cb, e);
         if(!a){
@@ -11383,6 +11690,7 @@ Ext.extend(Ext.Layer, Ext.Element, {
         this.beforeAction();
         var cb = this.createCB(c);
         if(!a){
+            this.storeXY([x, y]);
             supr.setXY.call(this, [x, y]);
             supr.setSize.call(this, w, h, a, d, cb, e);
             cb();
@@ -11394,6 +11702,7 @@ Ext.extend(Ext.Layer, Ext.Element, {
     
     
     setZIndex : function(zindex){
+        this.zindex = zindex;
         this.setStyle("z-index", zindex + 2);
         if(this.shadow){
             this.shadow.setZIndex(zindex + 1);
@@ -11446,6 +11755,9 @@ Ext.Shadow.prototype = {
             }
         }
         this.el.setStyle("z-index", this.zIndex || parseInt(target.getStyle("z-index"), 10)-1);
+        if(Ext.isIE){
+            this.el.dom.style.filter="progid:DXImageTransform.Microsoft.alpha(opacity=50) progid:DXImageTransform.Microsoft.Blur(pixelradius="+this.offset+")";
+        }
         this.realign(
             target.getLeft(true),
             target.getTop(true),
@@ -11462,19 +11774,28 @@ Ext.Shadow.prototype = {
 
     
     realign : function(l, t, w, h){
+        if(!this.el){
+            return;
+        }
         var a = this.adjusts, d = this.el.dom, s = d.style;
-        s.left = (l+a.l)+"px";
-        s.top = (t+a.t)+"px";
+        var iea = 0;
+        if(Ext.isIE){
+            iea = -(this.offset);
+        }
+        s.left = (l+a.l+iea)+"px";
+        s.top = (t+a.t+iea)+"px";
         var sw = (w+a.w), sh = (h+a.h), sws = sw +"px", shs = sh + "px";
         if(s.width != sws || s.height != shs){
             s.width = sws;
             s.height = shs;
-            var cn = d.childNodes;
-            var sww = Math.max(0, (sw-12))+"px";
-            cn[0].childNodes[1].style.width = sww;
-            cn[1].childNodes[1].style.width = sww;
-            cn[2].childNodes[1].style.width = sww;
-            cn[1].style.height = Math.max(0, (sh-12))+"px";
+            if(!Ext.isIE){
+                var cn = d.childNodes;
+                var sww = Math.max(0, (sw-12))+"px";
+                cn[0].childNodes[1].style.width = sww;
+                cn[1].childNodes[1].style.width = sww;
+                cn[2].childNodes[1].style.width = sww;
+                cn[1].style.height = Math.max(0, (sh-12))+"px";
+            }
         }
     },
 
@@ -11498,14 +11819,15 @@ Ext.Shadow.prototype = {
 
 Ext.Shadow.Pool = function(){
     var p = [];
-    var markup = '<div class="x-shadow"><div class="xst"><div class="xstl"></div><div class="xstc"></div><div class="xstr"></div></div><div class="xsc"><div class="xsml"></div><div class="xsmc"></div><div class="xsmr"></div></div><div class="xsb"><div class="xsbl"></div><div class="xsbc"></div><div class="xsbr"></div></div></div>';
+    var markup = Ext.isIE ?
+                 '<div class="x-ie-shadow"></div>' :
+                 '<div class="x-shadow"><div class="xst"><div class="xstl"></div><div class="xstc"></div><div class="xstr"></div></div><div class="xsc"><div class="xsml"></div><div class="xsmc"></div><div class="xsmr"></div></div><div class="xsb"><div class="xsbl"></div><div class="xsbc"></div><div class="xsbr"></div></div></div>';
     return {
         pull : function(){
             var sh = p.shift();
             if(!sh){
                 sh = Ext.get(Ext.DomHelper.insertHtml("beforeBegin", document.body.firstChild, markup));
-                if(Ext.isIE && !Ext.isIE7){                     sh.setOpacity(.3);
-                }
+                sh.autoBoxAdjust = false;
             }
             return sh;
         },
@@ -11515,6 +11837,164 @@ Ext.Shadow.Pool = function(){
         }
     };
 }();
+Ext.BoxComponent = function(config){
+    Ext.BoxComponent.superclass.constructor.call(this, config);
+    this.addEvents({
+        resize : true,
+        move : true
+    });
+};
+
+Ext.extend(Ext.BoxComponent, Ext.Component, {
+    boxReady : false,
+        deferHeight: false,
+
+    setSize : function(w, h){
+                if(typeof w == 'object'){
+            h = w.height;
+            w = w.width;
+        }
+                if(!this.boxReady){
+            this.width = w;
+            this.height = h;
+            return;
+        }
+
+                if(this.lastSize && this.lastSize.width == w && this.lastSize.height == h){
+            return;
+        }
+        this.lastSize = {width: w, height: h};
+
+        var adj = this.adjustSize(w, h);
+        var aw = adj.width, ah = adj.height;
+        if(aw !== undefined || ah !== undefined){             var rz = this.getResizeEl();
+            if(!this.deferHeight && aw !== undefined && ah !== undefined){
+                rz.setSize(aw, ah);
+            }else if(!this.deferHeight && ah !== undefined){
+                rz.setHeight(ah);
+            }else if(aw !== undefined){
+                rz.setWidth(aw);
+            }
+            this.onResize(aw, ah, w, h);
+            this.fireEvent('resize', this, aw, ah, w, h);
+        }
+        return this;
+    },
+
+    getSize : function(){
+        return this.el.getSize();
+    },
+
+    getPosition : function(local){
+        if(local === true){
+            return [this.el.getLeft(true), this.el.getTop(true)];
+        }
+        return this.xy || this.el.getXY();
+    },
+
+    getBox : function(local){
+        var s = this.el.getSize();
+        if(local){
+            s.x = this.el.getLeft(true);
+            s.y = this.el.getTop(true);
+        }else{
+            var xy = this.xy || this.el.getXY();
+            s.x = xy[0];
+            s.y = xy[1];
+        }
+        return s;
+    },
+
+    updateBox : function(box){
+        this.setSize(box.width, box.height);
+        this.setPagePosition(box.x, box.y);
+    },
+
+    getResizeEl : function(){
+        return this.resizeEl || this.el;
+    },
+
+    setPosition : function(x, y){
+        this.x = x;
+        this.y = y;
+        if(!this.boxReady){
+            return;
+        }
+        var adj = this.adjustPosition(x, y);
+        var ax = adj.x, ay = adj.y;
+
+        if(ax !== undefined || ay !== undefined){
+            if(ax !== undefined && ay !== undefined){
+                this.el.setLeftTop(ax, ay);
+            }else if(ax !== undefined){
+                this.el.setLeft(ax);
+            }else if(ay !== undefined){
+                this.el.setTop(ay);
+            }
+            this.onPosition(ax, ay);
+            this.fireEvent('move', this, ax, ay);
+        }
+        return this;
+    },
+
+    setPagePosition : function(x, y){
+        this.pageX = x;
+        this.pageY = y;
+        if(!this.boxReady){
+            return;
+        }
+        if(x === undefined || y === undefined){             return;
+        }
+        var p = this.el.translatePoints(x, y);
+        this.setPosition(p.left, p.top);
+        return this;
+    },
+
+    onRender : function(ct, position){
+        Ext.BoxComponent.superclass.onRender.call(this, ct, position);
+        if(this.resizeEl){
+            this.resizeEl = Ext.get(this.resizeEl);
+        }
+    },
+
+    afterRender : function(){
+        Ext.BoxComponent.superclass.afterRender.call(this);
+        this.boxReady = true;
+        this.setSize(this.width, this.height);
+        if(this.x || this.y){
+            this.setPosition(this.x, this.y);
+        }
+        if(this.pageX || this.pageY){
+            this.setPagePosition(this.pageX, this.pageY);
+        }
+    },
+
+    syncSize : function(){
+        this.setSize(this.el.getWidth(), this.el.getHeight());
+    },
+
+    onResize : function(adjWidth, adjHeight, rawWidth, rawHeight){
+
+    },
+
+    onPosition : function(x, y){
+
+    },
+
+    adjustSize : function(w, h){
+        if(this.autoWidth){
+            w = 'auto';
+        }
+        if(this.autoHeight){
+            h = 'auto';
+        }
+        return {width : w, height: h};
+    },
+
+    adjustPosition : function(x, y){
+        return {x : x, y: y};
+    }
+});
 
 Ext.View = function(container, tpl, config){
     this.el = Ext.get(container, true);
@@ -11528,7 +12008,7 @@ Ext.View = function(container, tpl, config){
     Ext.apply(this, config);
 
     
-    this.events = {
+    this.addEvents({
     
         "beforeclick" : true,
     
@@ -11542,7 +12022,7 @@ Ext.View = function(container, tpl, config){
 
     
         "beforeselect" : true
-    };
+    });
 
     this.el.on({
         "click": this.onClick,
@@ -11591,7 +12071,7 @@ Ext.extend(Ext.View, Ext.util.Observable, {
     },
 
     
-    prepareData : function(data, index){
+    prepareData : function(data){
         return data;
     },
 
@@ -11844,190 +12324,13 @@ Ext.JsonView = function(container, tpl, config){
     um.on("failure", this.onLoadException, this);
 
     
-    this.events["beforerender"] = true;
     
-    this.events["load"] = true;
     
-    this.events["loadexception"] = true;
-};
-Ext.extend(Ext.JsonView, Ext.View, {
-    
-    jsonRoot : "",
-
-    
-    refresh : function(){
-        this.clearSelections();
-        this.el.update("");
-        var html = [];
-        var o = this.jsonData;
-        if(o && o.length > 0){
-            for(var i = 0, len = o.length; i < len; i++){
-                var data = this.prepareData(o[i], i, o);
-                html[html.length] = this.tpl.apply(data);
-            }
-        }else{
-            html.push(this.emptyText);
-        }
-        this.el.update(html.join(""));
-        this.nodes = this.el.dom.childNodes;
-        this.updateIndexes(0);
-    },
-
-    
-    load : function(){
-        var um = this.el.getUpdateManager();
-        um.update.apply(um, arguments);
-    },
-
-    render : function(el, response){
-        this.clearSelections();
-        this.el.update("");
-        var o;
-        try{
-            o = Ext.util.JSON.decode(response.responseText);
-            if(this.jsonRoot){
-                o = eval("o." + this.jsonRoot);
-            }
-        } catch(e){
-        }
-        
-        this.jsonData = o;
-        this.beforeRender();
-        this.refresh();
-    },
-
-
-    getCount : function(){
-        return this.jsonData ? this.jsonData.length : 0;
-    },
-
-
-    getNodeData : function(node){
-        if(node instanceof Array){
-            var data = [];
-            for(var i = 0, len = node.length; i < len; i++){
-                data.push(this.getNodeData(node[i]));
-            }
-            return data;
-        }
-        return this.jsonData[this.indexOf(node)] || null;
-    },
-
-    beforeRender : function(){
-        this.snapshot = this.jsonData;
-        if(this.sortInfo){
-            this.sort.apply(this, this.sortInfo);
-        }
-        this.fireEvent("beforerender", this, this.jsonData);
-    },
-
-    onLoad : function(el, o){
-        this.fireEvent("load", this, this.jsonData, o);
-    },
-
-    onLoadException : function(el, o){
-        this.fireEvent("loadexception", this, o);
-    },
-
-
-    filter : function(property, value){
-        if(this.jsonData){
-            var data = [];
-            var ss = this.snapshot;
-            if(typeof value == "string"){
-                var vlen = value.length;
-                if(vlen == 0){
-                    this.clearFilter();
-                    return;
-                }
-                value = value.toLowerCase();
-                for(var i = 0, len = ss.length; i < len; i++){
-                    var o = ss[i];
-                    if(o[property].substr(0, vlen).toLowerCase() == value){
-                        data.push(o);
-                    }
-                }
-            } else if(value.exec){ 
-                for(var i = 0, len = ss.length; i < len; i++){
-                    var o = ss[i];
-                    if(value.test(o[property])){
-                        data.push(o);
-                    }
-                }
-            } else{
-                return;
-            }
-            this.jsonData = data;
-            this.refresh();
-        }
-    },
-
-
-    filterBy : function(fn, scope){
-        if(this.jsonData){
-            var data = [];
-            var ss = this.snapshot;
-            for(var i = 0, len = ss.length; i < len; i++){
-                var o = ss[i];
-                if(fn.call(scope || this, o)){
-                    data.push(o);
-                }
-            }
-            this.jsonData = data;
-            this.refresh();
-        }
-    },
-
-
-    clearFilter : function(){
-        if(this.snapshot && this.jsonData != this.snapshot){
-            this.jsonData = this.snapshot;
-            this.refresh();
-        }
-    },
-
-
-
-    sort : function(property, dir, sortType){
-        this.sortInfo = Array.prototype.slice.call(arguments, 0);
-        if(this.jsonData){
-            var p = property;
-            var dsc = dir && dir.toLowerCase() == "desc";
-            var f = function(o1, o2){
-                var v1 = sortType ? sortType(o1[p]) : o1[p];
-                var v2 = sortType ? sortType(o2[p]) : o2[p];
-                ;
-                if(v1 < v2){
-                    return dsc ? +1 : -1;
-                } else if(v1 > v2){
-                    return dsc ? -1 : +1;
-                } else{
-                    return 0;
-                }
-            };
-            this.jsonData.sort(f);
-            this.refresh();
-            if(this.jsonData != this.snapshot){
-                this.snapshot.sort(f);
-            }
-        }
-    }
-});
-
-Ext.JsonView = function(container, tpl, config){
-    Ext.JsonView.superclass.constructor.call(this, container, tpl, config);
-
-    var um = this.el.getUpdateManager();
-    um.setRenderer(this);
-    um.on("update", this.onLoad, this);
-    um.on("failure", this.onLoadException, this);
-
-    
-    this.events["beforerender"] = true;
-    
-    this.events["load"] = true;
-    
-    this.events["loadexception"] = true;
+    this.addEvents({
+        'beforerender' : true,
+        'load' : true,
+        'loadexception' : true
+    });
 };
 Ext.extend(Ext.JsonView, Ext.View, {
     
@@ -12221,7 +12524,7 @@ Ext.extend(Ext.ColorPalette, Ext.Component, {
         "FF99CC", "FFCC99", "FFFF99", "CCFFCC", "CCFFFF", "99CCFF", "CC99FF", "FFFFFF"
     ],
 
-        onRender : function(container){
+        onRender : function(container, position){
         var t = new Ext.MasterTemplate(
             '<tpl><a href="#" class="color-{0}" hidefocus="on"><em><span style="background:#{0}">&#160;</span></em></a></tpl>'
         );
@@ -12232,12 +12535,13 @@ Ext.extend(Ext.ColorPalette, Ext.Component, {
         var el = document.createElement("div");
         el.className = this.itemCls;
         t.overwrite(el);
-        container.dom.appendChild(el);
+        container.dom.insertBefore(el, position);
         this.el = Ext.get(el);
         this.el.on("click", this.handleClick,  this, {delegate: "a"});
     },
 
         afterRender : function(){
+        Ext.ColorPalette.superclass.afterRender.call(this);
         if(this.value){
             var s = this.value;
             this.value = null;
@@ -12270,7 +12574,9 @@ Ext.extend(Ext.ColorPalette, Ext.Component, {
 
 Ext.DatePicker = function(config){
     Ext.DatePicker.superclass.constructor.call(this, config);
-    this.value = new Date().clearTime();
+
+    this.value = config && config.value ?
+                 config.value.clearTime() : new Date().clearTime();
 
     this.addEvents({
         
@@ -12352,7 +12658,7 @@ Ext.extend(Ext.DatePicker, Ext.Component, {
     },
 
     
-    onRender : function(container){
+    onRender : function(container, position){
         var m = [
              '<table cellspacing="0">',
                 '<tr><td class="x-date-left"><a href="#" title="', this.prevText ,'">&#160;</a></td><td class="x-date-middle" align="center"></td><td class="x-date-right"><a href="#" title="', this.nextText ,'">&#160;</a></td></tr>',
@@ -12378,7 +12684,7 @@ Ext.extend(Ext.DatePicker, Ext.Component, {
         el.className = "x-date-picker";
         el.innerHTML = m.join("");
 
-        container.dom.appendChild(el);
+        container.dom.insertBefore(el, position);
 
         this.el = Ext.get(el);
         new Ext.util.ClickRepeater(this.el.child("td.x-date-left a"), {handler: this.showPrevMonth, scope: this});
@@ -12704,12 +13010,12 @@ Ext.TabPanel = function(container, config){
     this.active = null;
     this.activateDelegate = this.activate.createDelegate(this);
     
-    this.events = {
+    this.addEvents({
         
         "tabchange": true,
         
         "beforetabchange" : true
-    };
+    });
     
     Ext.EventManager.onWindowResize(this.onResize, this);
     this.cpad = this.el.getPadding("lr");
@@ -12964,6 +13270,7 @@ Ext.TabPanelItem = function(tabPanel, id, text, closable){
     this.inner = Ext.get(els.inner, true);
     this.textEl = Ext.get(this.el.dom.firstChild.firstChild.firstChild, true);
     this.pnode = Ext.get(els.el.parentNode, true);
+    this.el.on("mousedown", this.onTabMouseDown, this);
     this.el.on("click", this.onTabClick, this);
     
     if(closable){
@@ -12973,7 +13280,7 @@ Ext.TabPanelItem = function(tabPanel, id, text, closable){
         c.on("click", this.closeClick, this);
      }
     
-    this.events = {
+    this.addEvents({
          
         "activate": true,
         
@@ -12982,7 +13289,7 @@ Ext.TabPanelItem = function(tabPanel, id, text, closable){
          "close": true,
         
          "deactivate" : true
-    };
+    });
     this.hidden = false;
 
     Ext.TabPanelItem.superclass.constructor.call(this);
@@ -13043,7 +13350,12 @@ Ext.extend(Ext.TabPanelItem, Ext.util.Observable, {
         e.preventDefault();
         this.tabPanel.activate(this.id);
     },
-    
+
+    onTabMouseDown : function(e){
+        e.preventDefault();
+        this.tabPanel.activate(this.id);
+    },
+
     getWidth : function(){
         return this.inner.getWidth();  
     },
@@ -13223,7 +13535,7 @@ Ext.TabPanel.prototype.createStripElements = function(stripEl, text, closable){
 
 Ext.Button = function(renderTo, config){
     Ext.apply(this, config);
-    this.events = {
+    this.addEvents({
         
 	    "click" : true,
         
@@ -13232,7 +13544,7 @@ Ext.Button = function(renderTo, config){
         'mouseover' : true,
         
         'mouseout': true
-    };
+    });
     if(this.menu){
         this.menu = Ext.menu.MenuMgr.get(this.menu);
     }
@@ -13260,6 +13572,9 @@ Ext.extend(Ext.Button, Ext.util.Observable, {
     
     menuClassTarget: 'tr',
 
+    clickEvent : 'click',
+    handleMouseEvents : true,
+
     
     tooltipType : 'qtip',
 
@@ -13282,6 +13597,8 @@ Ext.extend(Ext.Button, Ext.util.Observable, {
             }
             btn = this.template.append(renderTo, [this.text || '&#160;'], true);
             var btnEl = btn.child("button:first");
+            btnEl.on('focus', this.onFocus, this);
+            btnEl.on('blur', this.onBlur, this);
             if(this.cls){
                 btn.addClass(this.cls);
             }
@@ -13315,10 +13632,12 @@ Ext.extend(Ext.Button, Ext.util.Observable, {
         }else{
             this.autoWidth();
         }
-        btn.on("click", this.onClick, this);
-        btn.on("mouseover", this.onMouseOver, this);
-        btn.on("mouseout", this.onMouseOut, this);
-        btn.on("mousedown", this.onMouseDown, this);
+        if(this.handleMouseEvents){
+            btn.on("mouseover", this.onMouseOver, this);
+            btn.on("mouseout", this.onMouseOut, this);
+            btn.on("mousedown", this.onMouseDown, this);
+        }
+        btn.on(this.clickEvent, this.onClick, this);
         
         if(this.hidden){
             this.hide();
@@ -13499,6 +13818,16 @@ Ext.extend(Ext.Button, Ext.util.Observable, {
         }
     },
     
+    onFocus : function(e){
+        if(!this.disabled){
+            this.el.addClass("x-btn-focus");
+        }
+    },
+    
+    onBlur : function(e){
+        this.el.removeClass("x-btn-focus");
+    },
+    
     onMouseDown : function(){
         if(!this.disabled){
             this.el.addClass("x-btn-click");
@@ -13564,7 +13893,7 @@ Ext.ButtonToggleMgr = function(){
 Ext.MenuButton = function(renderTo, config){
     Ext.MenuButton.superclass.constructor.call(this, renderTo, config);
     
-    this.events["arrowclick"] = true;
+    this.addEvents({"arrowclick":true});
 };
 
 Ext.extend(Ext.MenuButton, Ext.Button, {
@@ -13588,11 +13917,13 @@ Ext.extend(Ext.MenuButton, Ext.Button, {
         }
         this.el = btn;
         this.autoWidth();
-        btn.on("click", this.onClick, this);
-        btn.on("mouseover", this.onMouseOver, this);
-        btn.on("mouseout", this.onMouseOut, this);
-        btn.on("mousedown", this.onMouseDown, this);
-        btn.on("mouseup", this.onMouseUp, this);
+        if(this.handleMouseEvents){
+            btn.on("mouseover", this.onMouseOver, this);
+            btn.on("mouseout", this.onMouseOut, this);
+            btn.on("mousedown", this.onMouseDown, this);
+            btn.on("mouseup", this.onMouseUp, this);
+        }
+        btn.on(this.clickEvent, this.onClick, this);
         if(this.tooltip){
             var btnEl = btn.child("button:first");
             if(typeof this.tooltip == 'object'){
@@ -13699,25 +14030,38 @@ Ext.extend(Ext.MenuButton, Ext.Button, {
 });
  
  Ext.Toolbar = function(container, buttons, config){
+     if(container instanceof Array){ 
+         buttons = container;
+         config = buttons;
+         container = null;
+     }
      Ext.apply(this, config);
-     this.el = Ext.get(container);
-     if(this.cls){
-         this.el.addClass(this.cls);
+     this.buttons = buttons;
+     if(container){
+         this.render(container);
      }
-     
-     this.el.update('<div class="x-toolbar x-small-editor"><table cellspacing="0"><tr></tr></table></div>');
-     this.tr = this.el.child("tr", true);
-     var autoId = 0;
-     this.items = new Ext.util.MixedCollection(false, function(o){
-         return o.id || ("item" + (++autoId));
-     });
-     if(buttons){
-         this.add.apply(this, buttons);
-     }
-     
 };
 
 Ext.Toolbar.prototype = {
+
+    render : function(ct){
+        this.el = Ext.get(ct);
+        if(this.cls){
+            this.el.addClass(this.cls);
+        }
+        
+        this.el.update('<div class="x-toolbar x-small-editor"><table cellspacing="0"><tr></tr></table></div>');
+        this.tr = this.el.child("tr", true);
+        var autoId = 0;
+        this.items = new Ext.util.MixedCollection(false, function(o){
+            return o.id || ("item" + (++autoId));
+        });
+        if(this.buttons){
+            this.add.apply(this, this.buttons);
+            delete this.buttons;
+        }
+    },
+
     
     add : function(){
         var a = arguments, l = a.length;
@@ -14012,7 +14356,7 @@ Ext.PagingToolbar = function(el, ds, config){
     Ext.PagingToolbar.superclass.constructor.call(this, el, null, config);
     this.ds = ds;
     this.cursor = 0;
-    this.render(this.el);
+    this.renderButtons(this.el);
     this.bind(ds);
 };
 
@@ -14038,7 +14382,7 @@ Ext.extend(Ext.PagingToolbar, Ext.Toolbar, {
     
     refreshText : "Refresh",
 
-        render : function(el){
+        renderButtons : function(el){
         this.first = this.addButton({
             tooltip: this.firstText,
             cls: "x-btn-icon x-grid-page-first",
@@ -14214,472 +14558,7 @@ Ext.extend(Ext.PagingToolbar, Ext.Toolbar, {
         ds.on("loadexception", this.onLoadError, this);
     }
 });
-
-Ext.Resizable = function(el, config){
-    this.el = Ext.get(el);
-    
-    if(config && config.wrap){
-        config.resizeChild = this.el;
-        this.el = this.el.wrap(typeof config.wrap == "object" ? config.wrap : {cls:"xresizable-wrap"});
-        this.el.id = this.el.dom.id = config.resizeChild.id + "-rzwrap";
-        this.el.setStyle("overflow", "hidden");
-        this.el.setPositioning(config.resizeChild.getPositioning());
-        config.resizeChild.clearPositioning();
-        if(!config.width || !config.height){
-            var csize = config.resizeChild.getSize();
-            this.el.setSize(csize.width, csize.height);
-        }
-        if(config.pinned && !config.adjustments){
-            config.adjustments = "auto";
-        }
-    }
-    
-    this.proxy = this.el.createProxy({tag: "div", cls: "x-resizable-proxy", id: this.el.id + "-rzproxy"});
-    this.proxy.unselectable();
-    
-    this.overlay = this.el.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});
-    this.overlay.unselectable();
-    this.overlay.enableDisplayMode("block");
-    this.overlay.on("mousemove", this.onMouseMove, this);
-    this.overlay.on("mouseup", this.onMouseUp, this);
-    
-    Ext.apply(this, config);
-    
-    if(this.pinned){
-        this.disableTrackOver = true;
-        this.el.addClass("x-resizable-pinned");
-    }
-        var position = this.el.getStyle("position");
-    if(position != "absolute" && position != "fixed"){
-        this.el.setStyle("position", "relative");
-    }
-    if(!this.handles){         this.handles = 's,e,se';
-        if(this.multiDirectional){
-            this.handles += ',n,w';
-        }
-    }
-    if(this.handles == "all"){
-        this.handles = "n s e w ne nw se sw";
-    }
-    var hs = this.handles.split(/\s*?[,;]\s*?| /);
-    var ps = Ext.Resizable.positions;
-    for(var i = 0, len = hs.length; i < len; i++){
-        if(hs[i] && ps[hs[i]]){
-            var pos = ps[hs[i]];
-            this[pos] = new Ext.Resizable.Handle(this, pos, this.disableTrackOver, this.transparent);
-        }
-    }
-        this.corner = this.southeast;
-    
-    if(this.handles.indexOf("n") != -1 || this.handles.indexOf("w") != -1){
-        this.updateBox = true;
-    }   
-   
-    this.activeHandle = null;
-    
-    if(this.resizeChild){
-        if(typeof this.resizeChild == "boolean"){
-            this.resizeChild = Ext.get(this.el.dom.firstChild, true);
-        }else{
-            this.resizeChild = Ext.get(this.resizeChild, true);
-        }
-    }
-    
-    if(this.adjustments == "auto"){
-        var rc = this.resizeChild;
-        var hw = this.west, he = this.east, hn = this.north, hs = this.south;
-        if(rc && (hw || hn)){
-            rc.position("relative");
-            rc.setLeft(hw ? hw.el.getWidth() : 0);
-            rc.setTop(hn ? hn.el.getHeight() : 0);
-        }
-        this.adjustments = [
-            (he ? -he.el.getWidth() : 0) + (hw ? -hw.el.getWidth() : 0),
-            (hn ? -hn.el.getHeight() : 0) + (hs ? -hs.el.getHeight() : 0) -1 
-        ];
-    }
-    
-    if(this.draggable){
-        this.dd = this.dynamic ? 
-            this.el.initDD(null) : this.el.initDDProxy(null, {dragElId: this.proxy.id});
-        this.dd.setHandleElId(this.resizeChild ? this.resizeChild.id : this.el.id);
-    }
-    
-        this.events = {
-        
-        "beforeresize" : true,
-        
-        "resize" : true
-    };
-    
-    if(this.width !== null && this.height !== null){
-        this.resizeTo(this.width, this.height);
-    }else{
-        this.updateChildSize();
-    }
-    Ext.Resizable.superclass.constructor.call(this);
-};
-
-Ext.extend(Ext.Resizable, Ext.util.Observable, {
-        resizeChild : false,
-        adjustments : [0, 0],
-        minWidth : 5,
-        minHeight : 5,
-        maxWidth : 10000,
-        maxHeight : 10000,
-        enabled : true,
-        animate : false,
-        duration : .35,
-        dynamic : false,
-        handles : false,
-        multiDirectional : false,
-        disableTrackOver : false,
-        easing : 'easeOutStrong',
-        widthIncrement : 0,
-        heightIncrement : 0,
-        pinned : false,
-        width : null,
-        height : null,
-        preserveRatio : false,
-        transparent: false,
-        minX: 0,
-        minY: 0,
-        draggable: false,
-    
-    resizeTo : function(width, height){
-        this.el.setSize(width, height);
-        this.updateChildSize();
-        this.fireEvent("resize", this, width, height, null);
-    },
-
-        startSizing : function(e){
-        this.fireEvent("beforeresize", this, e);
-        if(this.enabled){             this.resizing = true;
-            this.startBox = this.el.getBox();
-            this.startPoint = e.getXY();
-            this.offsets = [(this.startBox.x + this.startBox.width) - this.startPoint[0],
-                            (this.startBox.y + this.startBox.height) - this.startPoint[1]];
-            this.proxy.setBox(this.startBox);
-            
-            this.overlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));
-            this.overlay.show();
-            
-            if(!this.dynamic){
-                this.proxy.show();
-            }
-        }
-    },
-
-        onMouseDown : function(handle, e){
-        if(this.enabled){
-            e.stopEvent();
-            this.activeHandle = handle;
-            this.overlay.setStyle("cursor", handle.el.getStyle("cursor"));
-            this.startSizing(e);
-        }          
-    },
-
-        onMouseUp : function(e){
-        var size = this.resizeElement();
-        this.resizing = false;
-        this.handleOut();
-        this.overlay.hide();
-        this.fireEvent("resize", this, size.width, size.height, e);
-    },
-
-        updateChildSize : function(){
-        if(this.resizeChild){
-            var el = this.el;
-            var child = this.resizeChild;
-            var adj = this.adjustments;
-            if(el.dom.offsetWidth){
-                var b = el.getSize(true);
-                child.setSize(b.width+adj[0], b.height+adj[1]);
-            }
-                                                            if(Ext.isIE){
-                setTimeout(function(){
-                    if(el.dom.offsetWidth){
-                        var b = el.getSize(true);
-                        child.setSize(b.width+adj[0], b.height+adj[1]);
-                    }
-                }, 10);
-            }
-        }
-    },
-
-        snap : function(value, inc, min){
-        if(!inc || !value) return value;
-        var newValue = value;
-        var m = value % inc;
-        if(m > 0){
-            if(m > (inc/2)){
-                newValue = value + (inc-m);
-            }else{
-                newValue = value - m;
-            }
-        }
-        return Math.max(min, newValue);
-    },
-
-        resizeElement : function(){
-        var box = this.proxy.getBox();
-        if(this.updateBox){
-            this.el.setBox(box, false, this.animate, this.duration, null, this.easing);
-        }else{
-            this.el.setSize(box.width, box.height, this.animate, this.duration, null, this.easing);
-        }
-        this.updateChildSize();
-        this.proxy.hide();
-        return box;
-    },
-
-        constrain : function(v, diff, m, mx){
-        if(v - diff < m){
-            diff = v - m;    
-        }else if(v - diff > mx){
-            diff = mx - v; 
-        }
-        return diff;                
-    },
-
-        onMouseMove : function(e){
-        if(this.enabled){
-            try{            
-                        var curSize = this.curSize || this.startBox;
-            var x = this.startBox.x, y = this.startBox.y;
-            var ox = x, oy = y;
-            var w = curSize.width, h = curSize.height;
-            var ow = w, oh = h;
-            var mw = this.minWidth, mh = this.minHeight;
-            var mxw = this.maxWidth, mxh = this.maxHeight;
-            var wi = this.widthIncrement;
-            var hi = this.heightIncrement;
-            
-            var eventXY = e.getXY();
-            var diffX = -(this.startPoint[0] - Math.max(this.minX, eventXY[0]));
-            var diffY = -(this.startPoint[1] - Math.max(this.minY, eventXY[1]));
-            
-            var pos = this.activeHandle.position;
-            
-            switch(pos){
-                case "east":
-                    w += diffX; 
-                    w = Math.min(Math.max(mw, w), mxw);
-                    break;
-                case "south":
-                    h += diffY;
-                    h = Math.min(Math.max(mh, h), mxh);
-                    break;
-                case "southeast":
-                    w += diffX; 
-                    h += diffY;
-                    w = Math.min(Math.max(mw, w), mxw);
-                    h = Math.min(Math.max(mh, h), mxh);
-                    break;
-                case "north":
-                    diffY = this.constrain(h, diffY, mh, mxh);
-                    y += diffY;
-                    h -= diffY;
-                    break;
-                case "west":
-                    diffX = this.constrain(w, diffX, mw, mxw);
-                    x += diffX;
-                    w -= diffX;
-                    break;
-                case "northeast":
-                    w += diffX; 
-                    w = Math.min(Math.max(mw, w), mxw);
-                    diffY = this.constrain(h, diffY, mh, mxh);
-                    y += diffY;
-                    h -= diffY;
-                    break;
-                case "northwest":
-                    diffX = this.constrain(w, diffX, mw, mxw);
-                    diffY = this.constrain(h, diffY, mh, mxh);
-                    y += diffY;
-                    h -= diffY;
-                    x += diffX;
-                    w -= diffX;
-                    break;
-               case "southwest":
-                    diffX = this.constrain(w, diffX, mw, mxw);
-                    h += diffY;
-                    h = Math.min(Math.max(mh, h), mxh);
-                    x += diffX;
-                    w -= diffX;
-                    break;
-            }
-            
-            var sw = this.snap(w, wi, mw);
-            var sh = this.snap(h, hi, mh);
-            if(sw != w || sh != h){
-                switch(pos){
-                    case "northeast":
-                        y -= sh - h;
-                    break;
-                    case "north":
-                        y -= sh - h;
-                        break;
-                    case "southwest":
-                        x -= sw - w;
-                    break;
-                    case "west":
-                        x -= sw - w;
-                        break;
-                    case "northwest":
-                        x -= sw - w;
-                        y -= sh - h;
-                    break;
-                }
-                w = sw;
-                h = sh;
-            }
-            
-            if(this.preserveRatio){
-                switch(pos){
-                    case "southeast":
-                    case "east":
-                        h = oh * (w/ow);
-                        h = Math.min(Math.max(mh, h), mxh);
-                        w = ow * (h/oh);
-                       break;
-                    case "south":
-                        w = ow * (h/oh);
-                        w = Math.min(Math.max(mw, w), mxw);
-                        h = oh * (w/ow);
-                        break;
-                    case "northeast":
-                        w = ow * (h/oh);
-                        w = Math.min(Math.max(mw, w), mxw);
-                        h = oh * (w/ow);
-                    break;
-                    case "north":
-                        var tw = w;
-                        w = ow * (h/oh);
-                        w = Math.min(Math.max(mw, w), mxw);
-                        h = oh * (w/ow);
-                        x += (tw - w) / 2;
-                        break;
-                    case "southwest":
-                        h = oh * (w/ow);
-                        h = Math.min(Math.max(mh, h), mxh);
-                        var tw = w;
-                        w = ow * (h/oh);
-                        x += tw - w;
-                        break;
-                    case "west":
-                        var th = h;
-                        h = oh * (w/ow);
-                        h = Math.min(Math.max(mh, h), mxh);
-                        y += (th - h) / 2;
-                        var tw = w;
-                        w = ow * (h/oh);
-                        x += tw - w;
-                       break;
-                    case "northwest":
-                        var tw = w;
-                        var th = h;
-                        h = oh * (w/ow);
-                        h = Math.min(Math.max(mh, h), mxh);
-                        w = ow * (h/oh);
-                        y += th - h;
-                         x += tw - w;
-                       break;
-                        
-                }
-            }
-            this.proxy.setBounds(x, y, w, h);
-            if(this.dynamic){
-                this.resizeElement();
-            }
-            }catch(e){}
-        }
-    },
-
-        handleOver : function(){
-        if(this.enabled){
-            this.el.addClass("x-resizable-over");
-        }
-    },
-
-        handleOut : function(){
-        if(!this.resizing){
-            this.el.removeClass("x-resizable-over");
-        }
-    },
-    
-    
-    getEl : function(){
-        return this.el;
-    },
-    
-    
-    getResizeChild : function(){
-        return this.resizeChild;
-    },
-    
-    
-    destroy : function(removeEl){
-        this.proxy.remove();
-        this.overlay.removeAllListeners();
-        this.overlay.remove();
-        var ps = Ext.Resizable.positions;
-        for(var k in ps){
-            if(typeof ps[k] != "function" && this[ps[k]]){
-                var h = this[ps[k]];
-                h.el.removeAllListeners();
-                h.el.remove();
-            }
-        }
-        if(removeEl){
-            this.el.update("");
-            this.el.remove();
-        }
-    }
-});
-
-Ext.Resizable.positions = {
-    n: "north", s: "south", e: "east", w: "west", se: "southeast", sw: "southwest", nw: "northwest", ne: "northeast"
-};
-
-Ext.Resizable.Handle = function(rz, pos, disableTrackOver, transparent){
-    if(!this.tpl){
-                var tpl = Ext.DomHelper.createTemplate(
-            {tag: "div", cls: "x-resizable-handle x-resizable-handle-{0}"}
-        );
-        tpl.compile();
-        Ext.Resizable.Handle.prototype.tpl = tpl;
-    }
-    this.position = pos;
-    this.rz = rz;
-    this.el = this.tpl.append(rz.el.dom, [this.position], true);
-    this.el.unselectable();
-    if(transparent){
-        this.el.setOpacity(0);
-    }
-    this.el.on("mousedown", this.onMouseDown, this);
-    if(!disableTrackOver){
-        this.el.on("mouseover", this.onMouseOver, this);
-        this.el.on("mouseout", this.onMouseOut, this);
-    }
-};
-
-Ext.Resizable.Handle.prototype = {
-    afterResize : function(rz){
-            },
-        onMouseDown : function(e){
-        this.rz.onMouseDown(this, e);
-    },
-        onMouseOver : function(e){
-        this.rz.handleOver(this, e);
-    },
-        onMouseOut : function(e){
-        this.rz.handleOut(this, e);
-    }  
-};
-
-
-
+Ext.Resizable = function(el, config){    this.el = Ext.get(el);        if(config && config.wrap){        config.resizeChild = this.el;        this.el = this.el.wrap(typeof config.wrap == "object" ? config.wrap : {cls:"xresizable-wrap"});        this.el.id = this.el.dom.id = config.resizeChild.id + "-rzwrap";        this.el.setStyle("overflow", "hidden");        this.el.setPositioning(config.resizeChild.getPositioning());        config.resizeChild.clearPositioning();        if(!config.width || !config.height){            var csize = config.resizeChild.getSize();            this.el.setSize(csize.width, csize.height);        }        if(config.pinned && !config.adjustments){            config.adjustments = "auto";        }    }    this.proxy = this.el.createProxy({tag: "div", cls: "x-resizable-proxy", id: this.el.id + "-rzproxy"});    this.proxy.unselectable();    this.proxy.enableDisplayMode('block');    Ext.apply(this, config);        if(this.pinned){        this.disableTrackOver = true;        this.el.addClass("x-resizable-pinned");    }        var position = this.el.getStyle("position");    if(position != "absolute" && position != "fixed"){        this.el.setStyle("position", "relative");    }    if(!this.handles){         this.handles = 's,e,se';        if(this.multiDirectional){            this.handles += ',n,w';        }    }    if(this.handles == "all"){        this.handles = "n s e w ne nw se sw";    }    var hs = this.handles.split(/\s*?[,;]\s*?| /);    var ps = Ext.Resizable.positions;    for(var i = 0, len = hs.length; i < len; i++){        if(hs[i] && ps[hs[i]]){            var pos = ps[hs[i]];            this[pos] = new Ext.Resizable.Handle(this, pos, this.disableTrackOver, this.transparent);        }    }        this.corner = this.southeast;        if(this.handles.indexOf("n") != -1 || this.handles.indexOf("w") != -1){        this.updateBox = true;    }          this.activeHandle = null;        if(this.resizeChild){        if(typeof this.resizeChild == "boolean"){            this.resizeChild = Ext.get(this.el.dom.firstChild, true);        }else{            this.resizeChild = Ext.get(this.resizeChild, true);        }    }        if(this.adjustments == "auto"){        var rc = this.resizeChild;        var hw = this.west, he = this.east, hn = this.north, hs = this.south;        if(rc && (hw || hn)){            rc.position("relative");            rc.setLeft(hw ? hw.el.getWidth() : 0);            rc.setTop(hn ? hn.el.getHeight() : 0);        }        this.adjustments = [            (he ? -he.el.getWidth() : 0) + (hw ? -hw.el.getWidth() : 0),            (hn ? -hn.el.getHeight() : 0) + (hs ? -hs.el.getHeight() : 0) -1         ];    }        if(this.draggable){        this.dd = this.dynamic ?             this.el.initDD(null) : this.el.initDDProxy(null, {dragElId: this.proxy.id});        this.dd.setHandleElId(this.resizeChild ? this.resizeChild.id : this.el.id);    }            this.addEvents({                "beforeresize" : true,                "resize" : true    });        if(this.width !== null && this.height !== null){        this.resizeTo(this.width, this.height);    }else{        this.updateChildSize();    }    if(Ext.isIE){        this.el.dom.style.zoom = 1;    }    Ext.Resizable.superclass.constructor.call(this);};Ext.extend(Ext.Resizable, Ext.util.Observable, {        resizeChild : false,        adjustments : [0, 0],        minWidth : 5,        minHeight : 5,        maxWidth : 10000,        maxHeight : 10000,        enabled : true,        animate : false,        duration : .35,        dynamic : false,        handles : false,        multiDirectional : false,        disableTrackOver : false,        easing : 'easeOutStrong',        widthIncrement : 0,        heightIncrement : 0,        pinned : false,        width : null,        height : null,        preserveRatio : false,        transparent: false,        minX: 0,        minY: 0,        draggable: false,        resizeTo : function(width, height){        this.el.setSize(width, height);        this.updateChildSize();        this.fireEvent("resize", this, width, height, null);    },        startSizing : function(e, handle){        this.fireEvent("beforeresize", this, e);        if(this.enabled){             if(!this.overlay){                this.overlay = this.el.createProxy({tag: "div", cls: "x-resizable-overlay", html: "&#160;"});                this.overlay.unselectable();                this.overlay.enableDisplayMode("block");                this.overlay.on("mousemove", this.onMouseMove, this);                this.overlay.on("mouseup", this.onMouseUp, this);            }            this.overlay.setStyle("cursor", handle.el.getStyle("cursor"));            this.resizing = true;            this.startBox = this.el.getBox();            this.startPoint = e.getXY();            this.offsets = [(this.startBox.x + this.startBox.width) - this.startPoint[0],                            (this.startBox.y + this.startBox.height) - this.startPoint[1]];            this.overlay.setSize(Ext.lib.Dom.getViewWidth(true), Ext.lib.Dom.getViewHeight(true));            this.overlay.show();            this.proxy.setStyle('visibility', 'hidden');             this.proxy.show();            this.proxy.setBox(this.startBox);            if(!this.dynamic){                this.proxy.setStyle('visibility', 'visible');            }        }    },        onMouseDown : function(handle, e){        if(this.enabled){            e.stopEvent();            this.activeHandle = handle;            this.startSizing(e, handle);        }              },        onMouseUp : function(e){        var size = this.resizeElement();        this.resizing = false;        this.handleOut();        this.overlay.hide();        this.fireEvent("resize", this, size.width, size.height, e);    },        updateChildSize : function(){        if(this.resizeChild){            var el = this.el;            var child = this.resizeChild;            var adj = this.adjustments;            if(el.dom.offsetWidth){                var b = el.getSize(true);                child.setSize(b.width+adj[0], b.height+adj[1]);            }                                                            if(Ext.isIE){                setTimeout(function(){                    if(el.dom.offsetWidth){                        var b = el.getSize(true);                        child.setSize(b.width+adj[0], b.height+adj[1]);                    }                }, 10);            }        }    },        snap : function(value, inc, min){        if(!inc || !value) return value;        var newValue = value;        var m = value % inc;        if(m > 0){            if(m > (inc/2)){                newValue = value + (inc-m);            }else{                newValue = value - m;            }        }        return Math.max(min, newValue);    },        resizeElement : function(){        var box = this.proxy.getBox();        if(this.updateBox){            this.el.setBox(box, false, this.animate, this.duration, null, this.easing);        }else{            this.el.setSize(box.width, box.height, this.animate, this.duration, null, this.easing);        }        this.updateChildSize();        this.proxy.hide();        return box;    },        constrain : function(v, diff, m, mx){        if(v - diff < m){            diff = v - m;            }else if(v - diff > mx){            diff = mx - v;         }        return diff;                    },        onMouseMove : function(e){        if(this.enabled){            try{                                    var curSize = this.curSize || this.startBox;            var x = this.startBox.x, y = this.startBox.y;            var ox = x, oy = y;            var w = curSize.width, h = curSize.height;            var ow = w, oh = h;            var mw = this.minWidth, mh = this.minHeight;            var mxw = this.maxWidth, mxh = this.maxHeight;            var wi = this.widthIncrement;            var hi = this.heightIncrement;                        var eventXY = e.getXY();            var diffX = -(this.startPoint[0] - Math.max(this.minX, eventXY[0]));            var diffY = -(this.startPoint[1] - Math.max(this.minY, eventXY[1]));                        var pos = this.activeHandle.position;                        switch(pos){                case "east":                    w += diffX;                     w = Math.min(Math.max(mw, w), mxw);                    break;                case "south":                    h += diffY;                    h = Math.min(Math.max(mh, h), mxh);                    break;                case "southeast":                    w += diffX;                     h += diffY;                    w = Math.min(Math.max(mw, w), mxw);                    h = Math.min(Math.max(mh, h), mxh);                    break;                case "north":                    diffY = this.constrain(h, diffY, mh, mxh);                    y += diffY;                    h -= diffY;                    break;                case "west":                    diffX = this.constrain(w, diffX, mw, mxw);                    x += diffX;                    w -= diffX;                    break;                case "northeast":                    w += diffX;                     w = Math.min(Math.max(mw, w), mxw);                    diffY = this.constrain(h, diffY, mh, mxh);                    y += diffY;                    h -= diffY;                    break;                case "northwest":                    diffX = this.constrain(w, diffX, mw, mxw);                    diffY = this.constrain(h, diffY, mh, mxh);                    y += diffY;                    h -= diffY;                    x += diffX;                    w -= diffX;                    break;               case "southwest":                    diffX = this.constrain(w, diffX, mw, mxw);                    h += diffY;                    h = Math.min(Math.max(mh, h), mxh);                    x += diffX;                    w -= diffX;                    break;            }                        var sw = this.snap(w, wi, mw);            var sh = this.snap(h, hi, mh);            if(sw != w || sh != h){                switch(pos){                    case "northeast":                        y -= sh - h;                    break;                    case "north":                        y -= sh - h;                        break;                    case "southwest":                        x -= sw - w;                    break;                    case "west":                        x -= sw - w;                        break;                    case "northwest":                        x -= sw - w;                        y -= sh - h;                    break;                }                w = sw;                h = sh;            }                        if(this.preserveRatio){                switch(pos){                    case "southeast":                    case "east":                        h = oh * (w/ow);                        h = Math.min(Math.max(mh, h), mxh);                        w = ow * (h/oh);                       break;                    case "south":                        w = ow * (h/oh);                        w = Math.min(Math.max(mw, w), mxw);                        h = oh * (w/ow);                        break;                    case "northeast":                        w = ow * (h/oh);                        w = Math.min(Math.max(mw, w), mxw);                        h = oh * (w/ow);                    break;                    case "north":                        var tw = w;                        w = ow * (h/oh);                        w = Math.min(Math.max(mw, w), mxw);                        h = oh * (w/ow);                        x += (tw - w) / 2;                        break;                    case "southwest":                        h = oh * (w/ow);                        h = Math.min(Math.max(mh, h), mxh);                        var tw = w;                        w = ow * (h/oh);                        x += tw - w;                        break;                    case "west":                        var th = h;                        h = oh * (w/ow);                        h = Math.min(Math.max(mh, h), mxh);                        y += (th - h) / 2;                        var tw = w;                        w = ow * (h/oh);                        x += tw - w;                       break;                    case "northwest":                        var tw = w;                        var th = h;                        h = oh * (w/ow);                        h = Math.min(Math.max(mh, h), mxh);                        w = ow * (h/oh);                        y += th - h;                         x += tw - w;                       break;                                        }            }            this.proxy.setBounds(x, y, w, h);            if(this.dynamic){                this.resizeElement();            }            }catch(e){}        }    },        handleOver : function(){        if(this.enabled){            this.el.addClass("x-resizable-over");        }    },        handleOut : function(){        if(!this.resizing){            this.el.removeClass("x-resizable-over");        }    },            getEl : function(){        return this.el;    },            getResizeChild : function(){        return this.resizeChild;    },            destroy : function(removeEl){        this.proxy.remove();        this.overlay.removeAllListeners();        this.overlay.remove();        var ps = Ext.Resizable.positions;        for(var k in ps){            if(typeof ps[k] != "function" && this[ps[k]]){                var h = this[ps[k]];                h.el.removeAllListeners();                h.el.remove();            }        }        if(removeEl){            this.el.update("");            this.el.remove();        }    }});Ext.Resizable.positions = {    n: "north", s: "south", e: "east", w: "west", se: "southeast", sw: "southwest", nw: "northwest", ne: "northeast"};Ext.Resizable.Handle = function(rz, pos, disableTrackOver, transparent){    if(!this.tpl){                var tpl = Ext.DomHelper.createTemplate(            {tag: "div", cls: "x-resizable-handle x-resizable-handle-{0}"}        );        tpl.compile();        Ext.Resizable.Handle.prototype.tpl = tpl;    }    this.position = pos;    this.rz = rz;    this.el = this.tpl.append(rz.el.dom, [this.position], true);    this.el.unselectable();    if(transparent){        this.el.setOpacity(0);    }    this.el.on("mousedown", this.onMouseDown, this);    if(!disableTrackOver){        this.el.on("mouseover", this.onMouseOver, this);        this.el.on("mouseout", this.onMouseOut, this);    }};Ext.Resizable.Handle.prototype = {    afterResize : function(rz){            },        onMouseDown : function(e){        this.rz.onMouseDown(this, e);    },        onMouseOver : function(e){        this.rz.handleOver(this, e);    },        onMouseOut : function(e){        this.rz.handleOut(this, e);    }  };
 
 Ext.SplitBar = function(dragElement, resizingElement, orientation, placement, existingProxy){
     
@@ -14739,14 +14618,16 @@ Ext.SplitBar = function(dragElement, resizingElement, orientation, placement, ex
         this.el.addClass("x-splitbar-v");
     }
     
-    this.events = {
+    this.addEvents({
         
         "resize" : true,
         
         "moved" : true,
         
-        "beforeresize" : true
-    };
+        "beforeresize" : true,
+
+        "beforeapply" : true
+    });
 
     Ext.SplitBar.superclass.constructor.call(this);
 };
@@ -14812,9 +14693,11 @@ Ext.extend(Ext.SplitBar, Ext.util.Observable, {
         }
         newSize = Math.min(Math.max(newSize, this.activeMinSize), this.activeMaxSize);
         if(newSize != this.dragSpecs.startSize){
-            this.adapter.setElementSize(this, newSize);
-            this.fireEvent("moved", this, newSize);
-            this.fireEvent("resize", this, newSize);
+            if(this.fireEvent('beforeapply', this, newSize) !== false){
+                this.adapter.setElementSize(this, newSize);
+                this.fireEvent("moved", this, newSize);
+                this.fireEvent("resize", this, newSize);
+            }
         }
     },
     
@@ -15010,7 +14893,7 @@ Ext.extend(Ext.Editor, Ext.Component, {
 
         updateEl : false,
 
-        onRender : function(ct){
+        onRender : function(ct, position){
         this.el = new Ext.Layer({
             shadow: this.shadow,
             cls: "x-editor",
@@ -15177,19 +15060,19 @@ Ext.BasicDialog = function(el, config){
                         {tag: "div", id: el, style:'visibility:hidden;'}, true);
         }
     }
-    el = this.el;
+    el = this.el;                                                                                                                                                                                                                                                                                                                                                                                                  
     el.setDisplayed(true);
     el.hide = this.hideAction;
     this.id = el.id;
     el.addClass("x-dlg");
-        
+
     Ext.apply(this, config);
-    
+
     this.proxy = el.createProxy("x-dlg-proxy");
     this.proxy.hide = this.hideAction;
     this.proxy.setOpacity(.5);
     this.proxy.hide();
-    
+
     if(config.width){
         el.setWidth(config.width);
     }
@@ -15237,8 +15120,8 @@ Ext.BasicDialog = function(el, config){
         html: '<div class="x-dlg-bg-left"><div class="x-dlg-bg-right"><div class="x-dlg-bg-center">&#160;</div></div></div>'
     });
     this.centerBg = this.bg.child("div.x-dlg-bg-center");
-    
-    
+
+
     if(this.autoScroll !== false && !this.autoTabs){
         this.body.setStyle("overflow", "auto");
     }
@@ -15260,8 +15143,8 @@ Ext.BasicDialog = function(el, config){
     if(this.resizable !== false){
         this.el.addClass("x-dlg-resizable");
         this.resizer = new Ext.Resizable(el, {
-            minWidth: this.minWidth || 80, 
-            minHeight:this.minHeight || 80, 
+            minWidth: this.minWidth || 80,
+            minHeight:this.minHeight || 80,
             handles: this.resizeHandles || "all",
             pinned: true
         });
@@ -15307,7 +15190,7 @@ Ext.BasicDialog = function(el, config){
     if(this.autoTabs){
         this.initTabs();
     }
-    this.events = {
+    this.addEvents({
         
         "keydown" : true,
         
@@ -15322,7 +15205,7 @@ Ext.BasicDialog = function(el, config){
         "beforeshow" : true,
         
         "show" : true
-    };
+    });
     el.on("keydown", this.onKeyDown, this);
     el.on("mousedown", this.toFront, this);
     Ext.EventManager.onWindowResize(this.adjustViewport, this, true);
@@ -15344,12 +15227,12 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
     
     setTitle : function(text){
         this.header.update(text);
-        return this; 
+        return this;
     },
 
     
     closeClick : function(){
-        this.hide();  
+        this.hide();
     },
 
     
@@ -15411,7 +15294,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.fireEvent("keydown", this, e);
         }
     },
-    
+
     
     resizeTo : function(width, height){
         this.el.setSize(width, height);
@@ -15427,8 +15310,8 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         this.fireEvent("resize", this, width, height);
         return this;
     },
-    
-    
+
+
     
     setContentSize : function(w, h){
         h += this.getHeaderFooterHeight() + this.body.getMargins("tb");
@@ -15444,7 +15327,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         this.resizeTo(w, h);
         return this;
     },
-    
+
     
     addKeyListener : function(key, fn, scope){
         var keyCode, shift, ctrl, alt;
@@ -15474,9 +15357,9 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             }
         };
         this.on("keydown", handler);
-        return this; 
+        return this;
     },
-    
+
     
     getTabs : function(){
         if(!this.tabs){
@@ -15484,9 +15367,9 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.body.addClass(this.tabPosition == "bottom" ? "x-tabs-bottom" : "x-tabs-top");
             this.tabs = new Ext.TabPanel(this.body.dom, this.tabPosition == "bottom");
         }
-        return this.tabs;    
+        return this.tabs;
     },
-    
+
     
     addButton : function(config, handler, scope){
         var dh = Ext.DomHelper;
@@ -15531,7 +15414,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
 
     
     setDefaultButton : function(btn){
-        this.defaultButton = btn;  
+        this.defaultButton = btn;
         return this;
     },
 
@@ -15569,7 +15452,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             }
         }
     },
-    
+
     
     restoreState : function(){
         var box = Ext.state.Manager.get(this.stateId || (this.el.id + "-state"));
@@ -15577,7 +15460,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.xy = [box.x, box.y];
             this.resizeTo(box.width, box.height);
         }
-        return this; 
+        return this;
     },
 
     
@@ -15600,10 +15483,10 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         this.proxy.setSize(b.width, b.height);
         this.proxy.setLocation(b.x, b.y);
         this.proxy.show();
-        this.proxy.setBounds(this.xy[0], this.xy[1], this.size.width, this.size.height, 
+        this.proxy.setBounds(this.xy[0], this.xy[1], this.size.width, this.size.height,
                     true, .35, this.showEl.createDelegate(this));
     },
-    
+
     
     show : function(animateTarget){
         if (this.fireEvent("beforeshow", this) === false){
@@ -15624,7 +15507,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
                 this.showEl();
             }
         }
-        return this; 
+        return this;
     },
 
     
@@ -15635,6 +15518,10 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         this.adjustAssets(true);
         this.toFront();
         this.focus();
+        
+        if(Ext.isIE){
+            this.el.repaint();
+        }
         this.fireEvent("show", this);
     },
 
@@ -15644,7 +15531,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.defaultButton.focus();
         }else{
             this.focusEl.focus();
-        }  
+        }
     },
 
     
@@ -15699,7 +15586,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         if(!this.proxyDrag){
             this.xy = this.el.getXY();
             this.adjustAssets();
-        }   
+        }
     },
 
     
@@ -15721,7 +15608,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.shim.setBounds(x, y, w, h);
         }
     },
-    
+
     
     adjustViewport : function(w, h){
         if(!w || !h){
@@ -15738,7 +15625,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.constrainXY();
         }
     },
-    
+
     
     destroy : function(removeEl){
         if(this.isVisible()){
@@ -15749,22 +15636,13 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         if(this.tabs){
             this.tabs.destroy(removeEl);
         }
-        if(this.shim){
-            this.shim.remove();
-        }
-        if(this.proxy){
-            this.proxy.remove();
-        }
-        if(this.resizer){
-            this.resizer.destroy();
-        }
-        if(this.close){
-            this.close.removeAllListeners();
-            this.close.remove();
-        }
-        if(this.mask){
-            this.mask.remove();
-        }
+        Ext.destroy(
+             this.shim,
+             this.proxy,
+             this.resizer,
+             this.close,
+             this.mask
+        );
         if(this.dd){
             this.dd.unreg();
         }
@@ -15804,26 +15682,26 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         this.focus();
         this.fireEvent("move", this, this.xy[0], this.xy[1]);
     },
-    
+
     
     toFront : function(){
-        Ext.DialogManager.bringToFront(this);  
-        return this; 
+        Ext.DialogManager.bringToFront(this);
+        return this;
     },
-    
+
     
     toBack : function(){
-        Ext.DialogManager.sendToBack(this);  
-        return this; 
+        Ext.DialogManager.sendToBack(this);
+        return this;
     },
-    
+
     
     center : function(){
         var xy = this.el.getCenterXY(true);
         this.moveTo(xy[0], xy[1]);
-        return this; 
+        return this;
     },
-    
+
     
     moveTo : function(x, y){
         this.xy = [x,y];
@@ -15861,7 +15739,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
 
     
     isVisible : function(){
-        return this.el.isVisible();    
+        return this.el.isVisible();
     },
 
     
@@ -15870,10 +15748,10 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         this.proxy.show();
         this.proxy.setBounds(this.xy[0], this.xy[1], this.size.width, this.size.height);
         this.el.hide();
-        this.proxy.setBounds(b.x, b.y, b.width, b.height, true, .35, 
+        this.proxy.setBounds(b.x, b.y, b.width, b.height, true, .35,
                     this.hideEl.createDelegate(this, [callback]));
     },
-    
+
     
     hide : function(callback){
         if (this.fireEvent("beforehide", this) === false){
@@ -15891,7 +15769,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.el.hide();
             this.hideEl(callback);
         }
-        return this; 
+        return this;
     },
 
     
@@ -15940,10 +15818,10 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         if(this.resizer){
             this.resizer.proxy.setStyle("z-index", ++index);
         }
-        
+
         this.lastZIndex = index;
     },
-    
+
     
     getEl : function(){
         return this.el;
@@ -15966,16 +15844,17 @@ Ext.DialogManager = function(){
         accessList.sort(sortDialogs);
         var seed = Ext.DialogManager.zseed;
         for(var i = 0, len = accessList.length; i < len; i++){
-            if(accessList[i]){
-                accessList[i].setZIndex(seed + (i*10));
-            }  
+            var dlg = accessList[i];
+            if(dlg){
+                dlg.setZIndex(seed + (i*10));
+            }
         }
     };
-    
+
     return {
         
         zseed : 9000,
-        
+
         
         register : function(dlg){
             list[dlg.id] = dlg;
@@ -15999,12 +15878,12 @@ Ext.DialogManager = function(){
                 }
             }
         },
-        
+
         
         get : function(id){
             return typeof id == "object" ? id : list[id];
         },
-        
+
         
         bringToFront : function(dlg){
             dlg = this.get(dlg);
@@ -16015,7 +15894,7 @@ Ext.DialogManager = function(){
             }
             return dlg;
         },
-        
+
         
         sendToBack : function(dlg){
             dlg = this.get(dlg);
@@ -16171,7 +16050,7 @@ Ext.MessageBox = function(){
                 buttons["cancel"] = dlg.addButton(bt["cancel"], handleButton.createCallback("cancel"));
                 bodyEl = dlg.body.createChild({
                     tag:"div",
-                    html:'<span class="ext-mb-text"></span><br /><input type="text" class="ext-mb-input"><textarea class="ext-mb-textarea"></textarea><div class="ext-mb-progress-wrap"><div class="ext-mb-progress"><div class="ext-mb-progress-bar">&#160;</div></div></div>'
+                    html:'<span class="ext-mb-text"></span><br /><input type="text" class="ext-mb-input" /><textarea class="ext-mb-textarea"></textarea><div class="ext-mb-progress-wrap"><div class="ext-mb-progress"><div class="ext-mb-progress-bar">&#160;</div></div></div>'
                 });
                 msgEl = bodyEl.dom.firstChild;
                 textboxEl = Ext.get(bodyEl.dom.childNodes[2]);
@@ -16519,7 +16398,7 @@ Ext.QuickTips = function(){
             }
         }
         
-        el.setWidth(w + p);
+        el.setWidth(parseInt(w, 10) + p);
         if(!ce.autoHide){
             close.setDisplayed(true);
             if(dd){
@@ -16772,9 +16651,9 @@ Ext.extend(Ext.tree.TreePanel, Ext.data.Tree, {
                 p.expandedChild.collapse();
             }
             p.expandedChild = node;
-        }    
+        }
     },
-    
+
     
     setRootNode : function(node){
         Ext.tree.TreePanel.superclass.setRootNode.call(this, node);
@@ -16783,27 +16662,27 @@ Ext.extend(Ext.tree.TreePanel, Ext.data.Tree, {
         }
         return node;
     },
-    
+
     
     getEl : function(){
-        return this.el;  
+        return this.el;
     },
-    
+
     
     getLoader : function(){
-        return this.loader;    
+        return this.loader;
     },
-    
+
     
     expandAll : function(){
         this.root.expand(true);
     },
-    
+
     
     collapseAll : function(){
-        this.root.collapse(true);  
+        this.root.collapse(true);
     },
-    
+
     
     getSelectionModel : function(){
         if(!this.selModel){
@@ -16811,7 +16690,7 @@ Ext.extend(Ext.tree.TreePanel, Ext.data.Tree, {
         }
         return this.selModel;
     },
-    
+
     
     expandPath : function(path, attr, callback){
         attr = attr || "id";
@@ -16843,7 +16722,7 @@ Ext.extend(Ext.tree.TreePanel, Ext.data.Tree, {
         };
         curNode.expand(false, false, f);
     },
-    
+
     
     selectPath : function(path, attr, callback){
         attr = attr || "id";
@@ -16873,15 +16752,15 @@ Ext.extend(Ext.tree.TreePanel, Ext.data.Tree, {
             }
         }
     },
-    
+
     
     render : function(){
         this.container = this.el.createChild({tag:"ul",
                cls:"x-tree-root-ct " +
                (this.lines ? "x-tree-lines" : "x-tree-no-lines")});
-        
+
         if(this.containerScroll){
-            Ext.dd.ScrollManager.register(this.el);    
+            Ext.dd.ScrollManager.register(this.el);
         }
         if((this.enableDD || this.enableDrop) && !this.dropZone){
            
@@ -16908,13 +16787,13 @@ Ext.extend(Ext.tree.TreePanel, Ext.data.Tree, {
 Ext.tree.DefaultSelectionModel = function(){
    this.selNode = null;
    
-   this.events = {
+   this.addEvents({
        
        "selectionchange" : true,
 
        
        "beforeselect" : true
-   };
+   });
 };
 
 Ext.extend(Ext.tree.DefaultSelectionModel, Ext.util.Observable, {
@@ -17059,10 +16938,10 @@ Ext.extend(Ext.tree.DefaultSelectionModel, Ext.util.Observable, {
 Ext.tree.MultiSelectionModel = function(){
    this.selNodes = [];
    this.selMap = {};
-   this.events = {
+   this.addEvents({
        
        "selectionchange" : true
-   };
+   });
 };
 
 Ext.extend(Ext.tree.MultiSelectionModel, Ext.util.Observable, {
@@ -17141,8 +17020,12 @@ Ext.extend(Ext.tree.MultiSelectionModel, Ext.util.Observable, {
     getSelectedNodes : function(){
         return this.selNodes;    
     },
-    
-    onKeyDown : Ext.tree.DefaultSelectionModel.prototype.onKeyDown
+
+    onKeyDown : Ext.tree.DefaultSelectionModel.prototype.onKeyDown,
+
+    selectNext : Ext.tree.DefaultSelectionModel.prototype.selectNext,
+
+    selectPrevious : Ext.tree.DefaultSelectionModel.prototype.selectPrevious
 });
 
 Ext.tree.TreeNode = function(attributes){
@@ -17157,13 +17040,13 @@ Ext.tree.TreeNode = function(attributes){
     this.isTarget = attributes.isTarget !== false;
     this.draggable = attributes.draggable !== false && attributes.allowDrag !== false;
     this.allowChildren = attributes.allowChildren !== false && attributes.allowDrop !== false;
-    
+
     
     this.text = attributes.text;
     
     this.disabled = attributes.disabled === true;
-    
-    Ext.apply(this.events, {
+
+    this.addEvents({
         
         "textchange" : true,
         
@@ -17187,9 +17070,9 @@ Ext.tree.TreeNode = function(attributes){
         
         "beforechildrenrendered":true
     });
-    
+
     var uiClass = this.attributes.uiProvider || Ext.tree.TreeNodeUI;
-    
+
     
     this.ui = new uiClass(this);
 };
@@ -17200,36 +17083,36 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
     isExpanded : function(){
         return this.expanded;
     },
-    
+
     
     getUI : function(){
-        return this.ui;    
+        return this.ui;
     },
-    
+
     
     setFirstChild : function(node){
         var of = this.firstChild;
         Ext.tree.TreeNode.superclass.setFirstChild.call(this, node);
         if(this.childrenRendered && of && node != of){
-            of.renderIndent(true, true);  
+            of.renderIndent(true, true);
         }
         if(this.rendered){
             this.renderIndent(true, true);
         }
     },
-    
+
     
     setLastChild : function(node){
         var ol = this.lastChild;
         Ext.tree.TreeNode.superclass.setLastChild.call(this, node);
         if(this.childrenRendered && ol && node != ol){
-            ol.renderIndent(true, true);    
+            ol.renderIndent(true, true);
         }
         if(this.rendered){
             this.renderIndent(true, true);
         }
     },
-    
+
     
     
     appendChild : function(){
@@ -17240,7 +17123,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
         this.ui.updateExpandIcon();
         return node;
     },
-    
+
     
     removeChild : function(node){
         this.ownerTree.getSelectionModel().unselect(node);
@@ -17256,7 +17139,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
         }
         return node;
     },
-    
+
     
     insertBefore : function(node, refNode){
         var newNode = Ext.tree.TreeNode.superclass.insertBefore.apply(this, arguments);
@@ -17266,7 +17149,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
         this.ui.updateExpandIcon();
         return newNode;
     },
-    
+
     
     setText : function(text){
         var oldText = this.text;
@@ -17277,22 +17160,22 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
         }
         this.fireEvent("textchange", this, text, oldText);
     },
-    
+
     
     select : function(){
         this.getOwnerTree().getSelectionModel().select(this);
     },
-    
+
     
     unselect : function(){
         this.getOwnerTree().getSelectionModel().unselect(this);
     },
-    
+
     
     isSelected : function(){
-        return this.getOwnerTree().getSelectionModel().isSelected(this);  
+        return this.getOwnerTree().getSelectionModel().isSelected(this);
     },
-    
+
     
     expand : function(deep, anim, callback){
         if(!this.expanded){
@@ -17324,7 +17207,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
         }else{
            if(typeof callback == "function"){
                callback(this);
-           } 
+           }
         }
         if(deep === true){
             this.expandChildNodes(true);
@@ -17362,22 +17245,22 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
             }
         }
     },
-    
+
     
     delayedExpand : function(delay){
         if(!this.expandProcId){
             this.expandProcId = this.expand.defer(delay, this);
-        } 
+        }
     },
-    
+
     
     cancelExpand : function(){
         if(this.expandProcId){
             clearTimeout(this.expandProcId);
         }
-        this.expandProcId = false; 
+        this.expandProcId = false;
     },
-    
+
     
     toggle : function(){
         if(this.expanded){
@@ -17386,7 +17269,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
             this.expand();
         }
     },
-    
+
     
     ensureVisible : function(callback){
         var tree = this.getOwnerTree();
@@ -17395,7 +17278,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
             Ext.callback(callback);
         }.createDelegate(this));
     },
-    
+
     
     expandChildNodes : function(deep){
         var cs = this.childNodes;
@@ -17403,7 +17286,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
         	cs[i].expand(deep);
         }
     },
-    
+
     
     collapseChildNodes : function(deep){
         var cs = this.childNodes;
@@ -17411,7 +17294,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
         	cs[i].collapse(deep);
         }
     },
-    
+
     
     disable : function(){
         this.disabled = true;
@@ -17421,7 +17304,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
         }
         this.fireEvent("disabledchange", this, true);
     },
-    
+
     
     enable : function(){
         this.disabled = false;
@@ -17430,7 +17313,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
         }
         this.fireEvent("disabledchange", this, false);
     },
-    
+
     
     renderChildren : function(suppressEvent){
         if(suppressEvent !== false){
@@ -17442,7 +17325,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
         }
         this.childrenRendered = true;
     },
-    
+
     
     sort : function(fn, scope){
         Ext.tree.TreeNode.superclass.sort.apply(this, arguments);
@@ -17451,9 +17334,9 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
             for(var i = 0, len = cs.length; i < len; i++){
                 cs[i].render(true);
             }
-        }  
+        }
     },
-    
+
     
     render : function(bulkRender){
         this.ui.render(bulkRender);
@@ -17465,7 +17348,7 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
             }
         }
     },
-    
+
     
     renderIndent : function(deep, refresh){
         if(refresh){
@@ -17486,9 +17369,8 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
     this.loading = false;
     Ext.tree.AsyncTreeNode.superclass.constructor.apply(this, arguments);
     
-    this.events["beforeload"] = true;
+    this.addEvents({'beforeload':true, 'load': true});
     
-    this.events["load"] = true;
     
 };
 Ext.extend(Ext.tree.AsyncTreeNode, Ext.tree.TreeNode, {
@@ -18024,11 +17906,11 @@ Ext.tree.TreeLoader = function(config){
     this.requestMethod = "POST";
     Ext.apply(this, config);
     
-    this.events = {
+    this.addEvents({
         "beforeload" : true,
         "load" : true,
         "loadexception" : true
-    };
+    });
 };
 
 Ext.extend(Ext.tree.TreeLoader, Ext.util.Observable, {
@@ -18587,7 +18469,7 @@ Ext.extend(Ext.tree.TreeEditor, Ext.Editor, {
         }
         var w = Math.min(
                 this.maxWidth,
-                td.clientWidth - Math.max(0, nd.offsetLeft-td.scrollLeft) - 5);
+                (td.clientWidth > 20 ? td.clientWidth : td.offsetWidth) - Math.max(0, nd.offsetLeft-td.scrollLeft) - 5);
         this.setSize(w, '');
     },
 
@@ -18628,7 +18510,7 @@ Ext.extend(Ext.tree.TreeEditor, Ext.Editor, {
 Ext.menu.Menu = function(config){
     Ext.apply(this, config);
     this.id = this.id || Ext.id();
-    this.events = {
+    this.addEvents({
         
         beforeshow : true,
         
@@ -18645,7 +18527,7 @@ Ext.menu.Menu = function(config){
         mouseout : true,
         
         itemclick: true
-    };
+    });
     Ext.menu.MenuMgr.register(this);
     var mis = this.items;
     this.items = new Ext.util.MixedCollection();
@@ -18973,7 +18855,7 @@ Ext.extend(Ext.menu.MenuNav, Ext.KeyNav, {
 });
 
 Ext.menu.MenuMgr = function(){
-   var menus, active, groups = {};
+   var menus, active, groups = {}, attached = false, lastShow = new Date();
 
       function init(){
        menus = {}, active = new Ext.util.MixedCollection();
@@ -18997,14 +18879,17 @@ Ext.menu.MenuMgr = function(){
        active.remove(m);
        if(active.length < 1){
            Ext.get(document).un("mousedown", onMouseDown);
+           attached = false;
        }
    }
 
       function onShow(m){
        var last = active.last();
+       lastShow = new Date();
        active.add(m);
-       if(active.length == 1){
+       if(!attached){
            Ext.get(document).on("mousedown", onMouseDown);
+           attached = true;
        }
        if(m.parentMenu){
           m.getEl().setZIndex(parseInt(m.parentMenu.getEl().getStyle("z-index"), 10) + 3);
@@ -19034,7 +18919,7 @@ Ext.menu.MenuMgr = function(){
    }
 
       function onMouseDown(e){
-       if(active.length > 0 && !e.getTarget(".x-menu")){
+       if(lastShow.getElapsed() > 50 && active.length > 0 && !e.getTarget(".x-menu")){
            hideAll();
        }
    }
@@ -19157,7 +19042,7 @@ Ext.extend(Ext.menu.BaseItem, Ext.Component, {
         this.container.menuItemId = this.id;
     },
 
-        onRender : function(container){
+        onRender : function(container, position){
         this.el = Ext.get(this.el);
         container.dom.appendChild(this.el.dom);
     },
@@ -19259,7 +19144,7 @@ Ext.extend(Ext.menu.Item, Ext.menu.BaseItem, {
 
         ctype: "Ext.menu.Item",
 
-        onRender : function(container){
+        onRender : function(container, position){
         var el = document.createElement("a");
         el.hideFocus = true;
         el.unselectable = "on";
@@ -19272,7 +19157,7 @@ Ext.extend(Ext.menu.Item, Ext.menu.BaseItem, {
                 '<img src="{0}" class="x-menu-item-icon">{1}',
                 this.icon || Ext.BLANK_IMAGE_URL, this.text);
         this.el = el;
-        Ext.menu.Item.superclass.onRender.call(this, container);
+        Ext.menu.Item.superclass.onRender.call(this, container, position);
     },
 
     
@@ -19405,7 +19290,7 @@ Ext.menu.Adapter = function(component, config){
 Ext.extend(Ext.menu.Adapter, Ext.menu.BaseItem, {
         canActivate : true,
 
-        onRender : function(container){
+        onRender : function(container, position){
         this.component.render(container);
         this.el = this.component.getEl();
     },
@@ -19518,6 +19403,8 @@ Ext.extend(Ext.form.Field, Ext.Component,  {
     
     validationEvent : "keyup",
     
+    validateOnBlur : true,
+    
     validationDelay : 250,
     
     defaultAutoCreate : {tag: "input", type: "text", size: "20", autocomplete: "off"},
@@ -19536,6 +19423,10 @@ Ext.extend(Ext.form.Field, Ext.Component,  {
         hasFocus : false,
 
     
+    value : undefined,
+
+
+    
     getName: function(){
          return this.rendered && this.el.dom.name ? this.el.dom.name : (this.hiddenName || '');
     },
@@ -19548,7 +19439,7 @@ Ext.extend(Ext.form.Field, Ext.Component,  {
         return this;
     },
 
-        onRender : function(ct){
+        onRender : function(ct, position){
         if(this.el){
             this.el = Ext.get(this.el);
             if(!this.target){
@@ -19565,7 +19456,7 @@ Ext.extend(Ext.form.Field, Ext.Component,  {
             if(this.tabIndex !== undefined){
                 cfg.tabIndex = this.tabIndex;
             }
-            this.el = ct.createChild(cfg);
+            this.el = ct.createChild(cfg, position);
         }
         var type = this.el.dom.type;
         if(type){
@@ -19576,10 +19467,6 @@ Ext.extend(Ext.form.Field, Ext.Component,  {
         }
         if(!this.customSize && (this.width || this.height)){
             this.setSize(this.width || "", this.height || "");
-        }
-        if(this.style){
-            this.el.applyStyles(this.style);
-            delete this.style;
         }
         if(this.readOnly){
             this.el.dom.readOnly = true;
@@ -19598,6 +19485,7 @@ Ext.extend(Ext.form.Field, Ext.Component,  {
     },
 
         afterRender : function(){
+        Ext.form.Field.superclass.afterRender.call(this);
         this.initEvents();
     },
 
@@ -19632,7 +19520,7 @@ Ext.extend(Ext.form.Field, Ext.Component,  {
         onBlur : function(){
         this.el.removeClass(this.focusClass);
         this.hasFocus = false;
-        if(this.validationEvent != "blur"){
+        if(this.validationEvent !== false && this.validateOnBlur && this.validationEvent != "blur"){
             this.validate();
         }
         var v = this.getValue();
@@ -19659,13 +19547,20 @@ Ext.extend(Ext.form.Field, Ext.Component,  {
         var h = this.el.dom.offsetHeight;     },
 
     
-    isValid : function(){
-        return this.validateValue(this.getRawValue());
+    isValid : function(preventMark){
+        if(this.disabled){
+            return true;
+        }
+        var restore = this.preventMark;
+        this.preventMark = preventMark === true;
+        var v = this.validateValue(this.getRawValue());
+        this.preventMark = restore;
+        return v;
     },
 
     
     validate : function(){
-        if(this.validateValue(this.getRawValue())){
+        if(this.disabled || this.validateValue(this.getRawValue())){
             this.clearInvalid();
             return true;
         }
@@ -19678,7 +19573,7 @@ Ext.extend(Ext.form.Field, Ext.Component,  {
 
     
     markInvalid : function(msg){
-        if(!this.rendered){             return;
+        if(!this.rendered || this.preventMark){             return;
         }
         this.el.addClass(this.invalidClass);
         msg = msg || this.invalidText;
@@ -19724,7 +19619,7 @@ Ext.extend(Ext.form.Field, Ext.Component,  {
 
     
     clearInvalid : function(){
-        if(!this.rendered){             return;
+        if(!this.rendered || this.preventMark){             return;
         }
         this.el.removeClass(this.invalidClass);
         switch(this.msgTarget){
@@ -19902,10 +19797,7 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
             this.on("focus", this.preFocus, this);
             if(this.emptyText){
                 this.on('blur', this.postBlur, this);
-                if(!this.value && this.getRawValue().length < 1){
-                    this.setRawValue(this.emptyText);
-                    this.el.addClass(this.emptyClass);
-                }
+                this.applyEmptyText();
             }
         }
         if(this.maskRe || (this.vtype && this.disableKeyFilter !== true && (this.maskRe = Ext.form.VTypes[this.vtype+'Mask']))){
@@ -19932,7 +19824,11 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
     
     reset : function(){
         Ext.form.TextField.superclass.reset.call(this);
-        if(this.emptyText && this.getRawValue().length < 1){
+        this.applyEmptyText();
+    },
+
+    applyEmptyText : function(){
+        if(this.rendered && this.emptyText && this.getRawValue().length < 1){
             this.setRawValue(this.emptyText);
             this.el.addClass(this.emptyClass);
         }
@@ -19951,10 +19847,7 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
     },
 
         postBlur : function(){
-        if(this.emptyText && this.getRawValue().length < 1){
-            this.setRawValue(this.emptyText);
-            this.el.addClass(this.emptyClass);
-        }
+        this.applyEmptyText();
     },
 
         filterKeys : function(e){
@@ -20069,6 +19962,8 @@ Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
     
     autoSize: Ext.emptyFn,
 
+    monitorTab : true,
+
         customSize : true,
 
         setSize : function(w, h){
@@ -20095,8 +19990,8 @@ Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
         this.errorIcon.alignTo(this.wrap, 'tl-tr', [2, 0]);
     },
 
-        onRender : function(ct){
-        Ext.form.TriggerField.superclass.onRender.call(this, ct);
+        onRender : function(ct, position){
+        Ext.form.TriggerField.superclass.onRender.call(this, ct, position);
         this.wrap = this.el.wrap({cls: "x-form-field-wrap"});
         this.trigger = this.wrap.createChild({
             tag: "img", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger "+this.triggerClass});
@@ -20124,8 +20019,10 @@ Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
         Ext.form.TriggerField.superclass.onFocus.call(this);
         if(!this.mimicing){
             this.mimicing = true;
-            Ext.get(document).on("mousedown", this.mimicBlur, this);
-            this.el.on("keydown", this.checkTab, this);
+            Ext.get(Ext.isIE ? document.body : document).on("mousedown", this.mimicBlur, this);
+            if(this.monitorTab){
+                this.el.on("keydown", this.checkTab, this);
+            }
         }
     },
 
@@ -20146,8 +20043,10 @@ Ext.extend(Ext.form.TriggerField, Ext.form.TextField,  {
 
         triggerBlur : function(){
         this.mimicing = false;
-        Ext.get(document).un("mousedown", this.mimicBlur);
-        this.el.un("keydown", this.checkTab, this);
+        Ext.get(Ext.isIE ? document.body : document).un("mousedown", this.mimicBlur);
+        if(this.monitorTab){
+            this.el.un("keydown", this.checkTab, this);
+        }
         Ext.form.TriggerField.superclass.onBlur.call(this);
     },
 
@@ -20200,7 +20099,7 @@ Ext.extend(Ext.form.TextArea, Ext.form.TextField,  {
     
     preventScrollbars: false,
 
-        onRender : function(ct){
+        onRender : function(ct, position){
         if(!this.el){
             this.defaultAutoCreate = {
                 tag: "textarea",
@@ -20208,7 +20107,7 @@ Ext.extend(Ext.form.TextArea, Ext.form.TextField,  {
                 autocomplete: "off"
             };
         }
-        Ext.form.TextArea.superclass.onRender.call(this, ct);
+        Ext.form.TextArea.superclass.onRender.call(this, ct, position);
         if(this.grow){
             this.textSizeEl = Ext.DomHelper.append(document.body, {
                 tag: "pre", cls: "x-form-grow-sizer"
@@ -20245,8 +20144,11 @@ Ext.extend(Ext.form.TextArea, Ext.form.TextField,  {
         }
         ts.innerHTML = v;
         var h = Math.min(this.growMax, Math.max(ts.offsetHeight, this.growMin));
-        this.el.setHeight(h);
-        this.fireEvent("autosize", this, h);
+        if(h != this.lastHeight){
+            this.lastHeight = h;
+            this.el.setHeight(h);
+            this.fireEvent("autosize", this, h);
+        }
     },
 
         setValue : function(v){
@@ -20309,6 +20211,7 @@ Ext.extend(Ext.form.NumberField, Ext.form.TextField,  {
         }
         if(value.length < 1){              return true;
         }
+        value = String(value).replace(this.decimalSeparator, ".");
         if(isNaN(value)){
             this.markInvalid(String.format(this.nanText, value));
             return false;
@@ -20472,7 +20375,7 @@ Ext.extend(Ext.form.DateField, Ext.form.TriggerField,  {
         if(this.menu == null){
             this.menu = new Ext.menu.DateMenu();
         }
-        Ext.apply(this.menu,  {
+        Ext.apply(this.menu.picker,  {
             minDate : this.minValue,
             maxDate : this.maxValue,
             disabledDatesRE : this.ddMatch,
@@ -20609,8 +20512,8 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
     
     valueNotFoundText : undefined,
 
-        onRender : function(ct){
-        Ext.form.ComboBox.superclass.onRender.call(this, ct);
+        onRender : function(ct, position){
+        Ext.form.ComboBox.superclass.onRender.call(this, ct, position);
         if(this.hiddenName){
             this.hiddenField = this.el.insertSibling({tag:'input', type:'hidden', name: this.hiddenName, id: this.hiddenName},
                     'before', true);
@@ -21000,6 +20903,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
         if(this.el.dom.value.length > 0){
             this.el.dom.value =
                 this.lastSelectionText === undefined ? '' : this.lastSelectionText;
+            this.applyEmptyText();
         }
     },
 
@@ -21071,7 +20975,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
 
     
     expand : function(){
-        if(this.isExpanded()){
+        if(this.isExpanded() || !this.hasFocus){
             return;
         }
         this.list.alignTo(this.el, this.listAlign);
@@ -21136,8 +21040,8 @@ Ext.extend(Ext.form.Checkbox, Ext.form.Field,  {
     },
 
     
-        onRender : function(ct){
-        Ext.form.Checkbox.superclass.onRender.call(this, ct);
+        onRender : function(ct, position){
+        Ext.form.Checkbox.superclass.onRender.call(this, ct, position);
         if(this.inputValue !== undefined){
             this.el.dom.value = this.inputValue;
         }
@@ -21215,6 +21119,9 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
 
         activeAction : null,
 
+    
+    waitMsgTarget : undefined,
+
         initEl : function(el){
         this.el = Ext.get(el);
         this.id = this.el.id || Ext.id();
@@ -21263,7 +21170,7 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         record.beginEdit();
         var fs = record.fields;
         fs.each(function(f){
-            var field = this.fieldField(f.name);
+            var field = this.findField(f.name);
             if(field){
                 record.set(f.name, field.getValue());
             }
@@ -21274,7 +21181,14 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         beforeAction : function(action){
         var o = action.options;
         if(o.waitMsg){
-            Ext.MessageBox.wait(o.waitMsg, o.waitTitle || this.waitTitle || 'Please Wait...');
+            if(this.waitMsgTarget === true){
+                this.el.mask(o.waitMsg, 'x-mask-loading');
+            }else if(this.waitMsgTarget){
+                this.waitMsgTarget = Ext.get(this.waitMsgTarget);
+                this.waitMsgTarget.mask(o.waitMsg, 'x-mask-loading');
+            }else{
+                Ext.MessageBox.wait(o.waitMsg, o.waitTitle || this.waitTitle || 'Please Wait...');
+            }
         }
     },
 
@@ -21282,8 +21196,14 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
         this.activeAction = null;
         var o = action.options;
         if(o.waitMsg){
-            Ext.MessageBox.updateProgress(1);
-            Ext.MessageBox.hide();
+            if(this.waitMsgTarget === true){
+                this.el.unmask();
+            }else if(this.waitMsgTarget){
+                this.waitMsgTarget.unmask();
+            }else{
+                Ext.MessageBox.updateProgress(1);
+                Ext.MessageBox.hide();
+            }
         }
         if(success){
             if(o.reset){
@@ -21351,8 +21271,11 @@ Ext.extend(Ext.form.BasicForm, Ext.util.Observable, {
     },
 
     
-    getValues : function(){
+    getValues : function(asString){
         var fs = Ext.lib.Ajax.serializeForm(this.el.dom);
+        if(asString === true){
+            return fs;
+        }
         return Ext.urlDecode(fs);
     },
 
@@ -21410,18 +21333,22 @@ Ext.form.Form = function(config){
     Ext.form.Form.superclass.constructor.call(this, null, config);
     this.url = this.url || this.action;
     if(!this.root){
-        this.root = new Ext.form.Layout(config);
+        this.root = new Ext.form.Layout(Ext.applyIf({
+            id: Ext.id()
+        }, config));
     }
     this.active = this.root;
     
     this.buttons = [];
+    this.addEvents({
+        
+        clientvalidation: true
+    });
 };
 
 Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
     
     
-    
-    buttonPosition:'bottom',
     
     buttonAlign:'center',
 
@@ -21430,6 +21357,12 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
 
     
     labelAlign:'left',
+
+    
+    monitorValid : false,
+
+    
+    monitorPoll : 200,
 
     
     column : function(c){
@@ -21523,6 +21456,8 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
                 b.render(tr.appendChild(td));
             }
         }
+        if(this.monitorValid){             this.startMonitoring();
+        }
         return this;
     },
 
@@ -21542,6 +21477,42 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
         var btn = new Ext.Button(null, bc);
         this.buttons.push(btn);
         return btn;
+    },
+
+    
+    startMonitoring : function(){
+        if(!this.bound){
+            this.bound = true;
+            Ext.TaskMgr.start({
+                run : this.bindHandler,
+                interval : this.monitorPoll || 200,
+                scope: this
+            });
+        }
+    },
+
+    
+    stopMonitoring : function(){
+        this.bound = false;
+    },
+
+        bindHandler : function(){
+        if(!this.bound){
+            return false;         }
+        var valid = true;
+        this.items.each(function(f){
+            if(!f.isValid(true)){
+                valid = false;
+                return false;
+            }
+        });
+        for(var i = 0, len = this.buttons.length; i < len; i++){
+            var btn = this.buttons[i];
+            if(btn.formBind === true && btn.disabled === valid){
+                btn.setDisabled(!valid);
+            }
+        }
+        this.fireEvent('clientvalidation', this, valid);
     }
 });
 
@@ -21578,6 +21549,7 @@ Ext.form.Action.prototype = {
     },
 
         failure : function(response){
+        this.response = response;
         this.failureType = Ext.form.Action.CONNECT_FAILURE;
         this.form.afterAction(this, false);
     },
@@ -21663,8 +21635,8 @@ Ext.extend(Ext.form.Action.Submit, Ext.form.Action, {
         if(result.errors){
             this.form.markInvalid(result.errors);
             this.failureType = Ext.form.Action.SERVER_INVALID;
-            this.form.afterAction(this, false);
         }
+        this.form.afterAction(this, false);
     },
 
     handleResponse : function(response){
@@ -21756,10 +21728,10 @@ Ext.extend(Ext.form.Layout, Ext.Component, {
 
         defaultAutoCreate : {tag: 'div', cls: 'x-form-ct'},
 
-        onRender : function(ct){
+        onRender : function(ct, position){
         if(this.el){             this.el = Ext.get(this.el);
         }else {              var cfg = this.getAutoCreate();
-            this.el = ct.createChild(cfg);
+            this.el = ct.createChild(cfg, position);
         }
         if(this.style){
             this.el.applyStyles(this.style);
@@ -21809,7 +21781,13 @@ Ext.extend(Ext.form.Layout, Ext.Component, {
     },
 
         renderField : function(f){
-       this.fieldTpl.append(this.el, [f.id, f.fieldLabel, f.labelStyle||this.labelStyle||'', this.elementStyle||'', f.labelSeparator||this.labelSeparator, f.itemCls||this.itemCls||'']);
+       this.fieldTpl.append(this.el, [
+               f.id, f.fieldLabel,
+               f.labelStyle||this.labelStyle||'',
+               this.elementStyle||'',
+               typeof f.labelSeparator == 'undefined' ? this.labelSeparator : f.labelSeparator,
+               f.itemCls||this.itemCls||''
+       ]);
     },
 
         renderComponent : function(c){
@@ -21828,8 +21806,8 @@ Ext.extend(Ext.form.Column, Ext.form.Layout, {
 
         defaultAutoCreate : {tag: 'div', cls: 'x-form-ct x-form-column'},
 
-        onRender : function(ct){
-        Ext.form.Column.superclass.onRender.call(this, ct);
+        onRender : function(ct, position){
+        Ext.form.Column.superclass.onRender.call(this, ct, position);
         if(this.width){
             this.el.setWidth(this.width);
         }
@@ -21847,8 +21825,8 @@ Ext.extend(Ext.form.FieldSet, Ext.form.Layout, {
 
         defaultAutoCreate : {tag: 'fieldset', cn: {tag:'legend'}},
 
-        onRender : function(ct){
-        Ext.form.FieldSet.superclass.onRender.call(this, ct);
+        onRender : function(ct, position){
+        Ext.form.FieldSet.superclass.onRender.call(this, ct, position);
         if(this.legend){
             this.setLegend(this.legend);
         }
@@ -21864,7 +21842,7 @@ Ext.extend(Ext.form.FieldSet, Ext.form.Layout, {
 Ext.form.VTypes = function(){
         var alpha = /^[a-zA-Z_]+$/;
     var alphanum = /^[a-zA-Z0-9_]+$/;
-    var email = /^([\w]+)(.[\w]+)*@([\w]+)(.[\w]{2,4}){1,2}$/;
+    var email = /^([\w]+)(.[\w]+)*@([\w-]+\.){1,5}([A-Za-z]){2,4}$/;
     var url = /(((https?)|(ftp)):\/\/([\-\w]+\.)+\w{2,3}(\/[%\-\w]+(\.\w{2,})?)*(([\w\-\.\?\\\/+@&#;`~=%!]*)(\.\w{2,})?)*\/?)/i;
 
         return {
@@ -21904,11 +21882,11 @@ Ext.form.VTypes = function(){
     };
 }();
 
-Ext.LayoutManager = function(container){
+Ext.LayoutManager = function(container, config){
     Ext.LayoutManager.superclass.constructor.call(this);
     this.el = Ext.get(container);
     
-    if(this.el.dom == document.body && Ext.isIE){
+    if(this.el.dom == document.body && Ext.isIE && !config.allowScroll){
         document.body.scroll = "no";
     }else if(this.el.dom != document.body && this.el.getStyle('position') == 'static'){
         this.el.position('relative');
@@ -21918,7 +21896,7 @@ Ext.LayoutManager = function(container){
     
     this.monitorWindowResize = true;
     this.regions = {};
-    this.events = {
+    this.addEvents({
         
         "layout" : true,
         
@@ -21927,7 +21905,7 @@ Ext.LayoutManager = function(container){
         "regioncollapsed" : true,
         
         "regionexpanded" : true
-    };
+    });
     this.updating = false;
     Ext.EventManager.onWindowResize(this.onWindowResize, this, true);
 };
@@ -22000,7 +21978,7 @@ Ext.extend(Ext.LayoutManager, Ext.util.Observable, {
 
 Ext.BorderLayout = function(container, config){
     config = config || {};
-    Ext.BorderLayout.superclass.constructor.call(this, container);
+    Ext.BorderLayout.superclass.constructor.call(this, container, config);
     this.factory = config.factory || Ext.BorderLayout.RegionFactory;
     for(var i = 0, len = this.factory.validRegions.length; i < len; i++) {
     	var target = this.factory.validRegions[i];
@@ -22015,16 +21993,21 @@ Ext.extend(Ext.BorderLayout, Ext.LayoutManager, {
     addRegion : function(target, config){
         if(!this.regions[target]){
             var r = this.factory.create(target, this, config);
-    	    this.regions[target] = r;
-    	    r.on("visibilitychange", this.layout, this);
-            r.on("paneladded", this.layout, this);
-            r.on("panelremoved", this.layout, this);
-            r.on("invalidated", this.layout, this);
-            r.on("resized", this.onRegionResized, this);
-            r.on("collapsed", this.onRegionCollapsed, this);
-            r.on("expanded", this.onRegionExpanded, this);
+    	    this.bindRegion(target, r);
         }
         return this.regions[target];
+    },
+
+    
+    bindRegion : function(name, r){
+        this.regions[name] = r;
+        r.on("visibilitychange", this.layout, this);
+        r.on("paneladded", this.layout, this);
+        r.on("panelremoved", this.layout, this);
+        r.on("invalidated", this.layout, this);
+        r.on("resized", this.onRegionResized, this);
+        r.on("collapsed", this.onRegionCollapsed, this);
+        r.on("expanded", this.onRegionExpanded, this);
     },
     
     
@@ -22037,9 +22020,9 @@ Ext.extend(Ext.BorderLayout, Ext.LayoutManager, {
         
         var rs = this.regions;
         var n = rs["north"], s = rs["south"], west = rs["west"], e = rs["east"], c = rs["center"];
-        if(this.hideOnLayout){
-            c.el.setStyle("display", "none");
-        }
+        
+            
+        
         if(n && n.isVisible()){
             var b = n.getBox();
             var m = n.getMargins();
@@ -22089,9 +22072,9 @@ Ext.extend(Ext.BorderLayout, Ext.LayoutManager, {
                 width: centerW - (m.left+m.right),
                 height: centerH - (m.top+m.bottom)
             };
-            if(this.hideOnLayout){
-                c.el.setStyle("display", "block");
-            }
+            
+                
+            
             c.updateBox(this.safeBox(centerBox));
         }
         this.el.repaint();
@@ -22306,7 +22289,7 @@ Ext.extend(Ext.BasicLayoutRegion, Ext.util.Observable, {
         var el = this.activePanel.getEl();
         el.dom.style.left = box.x + "px";
         el.dom.style.top = box.y + "px";
-        el.setSize(box.width, box.height);
+        this.activePanel.setSize(box.width, box.height);
     },
     
     
@@ -22323,7 +22306,7 @@ Ext.extend(Ext.BasicLayoutRegion, Ext.util.Observable, {
         panel = this.getPanel(panel);
         if(this.activePanel && this.activePanel != panel){
             this.activePanel.setActiveState(false);
-            this.activePanel.getEl().setStyle({left:-10000,right:-10000});
+            this.activePanel.getEl().setLeftTop(-10000,-10000);
         }
         this.activePanel = panel;
         panel.setActiveState(true);
@@ -22363,7 +22346,9 @@ Ext.extend(Ext.BasicLayoutRegion, Ext.util.Observable, {
         if(el.dom.parentNode != this.mgr.el.dom){
             this.mgr.el.dom.appendChild(el.dom);
         }
-        panel.setRegion(this);
+        if(panel.setRegion){
+            panel.setRegion(this);
+        }
         this.panels.add(panel);
         el.setStyle("position", "absolute");
         if(!panel.background){
@@ -22420,6 +22405,7 @@ Ext.LayoutRegion = function(mgr, config, pos){
     
     this.el = dh.append(mgr.el.dom, {tag: "div", cls: "x-layout-panel x-layout-panel-" + this.position}, true);
     
+
     this.titleEl = dh.append(this.el.dom, {tag: "div", unselectable: "on", cls: "x-unselectable x-layout-panel-hd x-layout-title-"+this.position, children:[
         {tag: "span", cls: "x-unselectable x-layout-panel-hd-text", unselectable: "on", html: "&#160;"},
         {tag: "div", cls: "x-unselectable x-layout-panel-hd-tools", unselectable: "on"}
@@ -22432,8 +22418,8 @@ Ext.LayoutRegion = function(mgr, config, pos){
     this.closeBtn.enableDisplayMode();
     this.closeBtn.on("click", this.closeClicked, this);
     this.closeBtn.hide();
-    
-    this.bodyEl = dh.append(this.el.dom, {tag: "div", cls: "x-layout-panel-body"}, true);
+
+    this.createBody(config);
     this.visible = true;
     this.collapsed = false;
 
@@ -22446,12 +22432,27 @@ Ext.LayoutRegion = function(mgr, config, pos){
 };
 
 Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
+
+    createBody : function(){
+        
+        this.bodyEl = this.el.createChild({tag: "div", cls: "x-layout-panel-body"});
+    },
+
     applyConfig : function(c){
         if(c.collapsible && this.position != "center" && !this.collapsedEl){
             var dh = Ext.DomHelper;
-            this.collapseBtn = this.createTool(this.tools.dom, "x-layout-collapse-"+this.position);
-            this.collapseBtn.on("click", this.collapse, this);
-            this.collapseBtn.enableDisplayMode();
+            if(c.titlebar !== false){
+                this.collapseBtn = this.createTool(this.tools.dom, "x-layout-collapse-"+this.position);
+                this.collapseBtn.on("click", this.collapse, this);
+                this.collapseBtn.enableDisplayMode();
+
+                if(c.showPin === true || this.showPin){
+                    this.stickBtn = this.createTool(this.tools.dom, "x-layout-stick");
+                    this.stickBtn.enableDisplayMode();
+                    this.stickBtn.on("click", this.expand, this);
+                    this.stickBtn.hide();
+                }
+            }
             
             this.collapsedEl = dh.append(this.mgr.el.dom, {cls: "x-layout-collapsed x-layout-collapsed-"+this.position, children:[
                 {cls: "x-layout-collapsed-tools", children:[{cls: "x-layout-ctools-inner"}]}
@@ -22460,17 +22461,12 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
                this.collapsedEl.addClassOnOver("x-layout-collapsed-over");
                this.collapsedEl.on("click", this.collapseClick, this);
             }
-            if(c.showPin === true || this.showPin == true){
-                this.stickBtn = this.createTool(this.tools.dom, "x-layout-stick");
-                this.stickBtn.enableDisplayMode();
-                this.stickBtn.on("click", this.expand, this);
-                this.stickBtn.hide();
-            }
+
             if(c.collapsedTitle && (this.position == "north" || this.position== "south")) {
                 this.collapsedTitleTextEl = dh.append(this.collapsedEl.dom, {tag: "div", cls: "x-unselectable x-layout-panel-hd-text",
                    id: "message", unselectable: "on", style:{"float":"left"}});
                this.collapsedTitleTextEl.innerHTML = c.collapsedTitle;
-             } 
+             }
             this.expandBtn = this.createTool(this.collapsedEl.dom.firstChild.firstChild, "x-layout-expand-"+this.position);
             this.expandBtn.on("click", this.expand, this);
         }
@@ -22479,7 +22475,7 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
         }
         this.cmargins = c.cmargins || this.cmargins ||
                          (this.position == "west" || this.position == "east" ?
-                             {top: 0, left: 2, right:2, bottom: 0} : 
+                             {top: 0, left: 2, right:2, bottom: 0} :
                              {top: 2, left: 0, right:0, bottom: 2});
         this.margins = c.margins || this.margins || {top: 0, left: 0, right:0, bottom: 0};
         this.bottomTabs = c.tabPosition != "top";
@@ -22489,14 +22485,16 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
         }else{
             this.bodyEl.setStyle("overflow", "hidden");
         }
-        if((!c.titlebar && !c.title) || c.titlebar === false){
-            this.titleEl.hide();
-        }else{
-            this.titleEl.show();
-            if(c.title){
-                this.titleTextEl.innerHTML = c.title;
+        
+            if((!c.titlebar && !c.title) || c.titlebar === false){
+                this.titleEl.hide();
+            }else{
+                this.titleEl.show();
+                if(c.title){
+                    this.titleTextEl.innerHTML = c.title;
+                }
             }
-        }
+        
         this.duration = c.duration || .30;
         this.slideDuration = c.slideDuration || .45;
         this.config = c;
@@ -22511,7 +22509,7 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
     isVisible : function(){
         return this.visible;
     },
-    
+
     
     setCollapsedTitle : function(title){
         title = title || "&#160;";
@@ -22519,7 +22517,7 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
             this.collapsedTitleTextEl.innerHTML = title;
         }
     },
-   
+
     getBox : function(){
         var b;
         if(!this.collapsed){
@@ -22529,19 +22527,19 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
         }
         return b;
     },
-    
+
     getMargins : function(){
         return this.collapsed ? this.cmargins : this.margins;
     },
-    
+
     highlight : function(){
         this.el.addClass("x-layout-panel-dragover");
     },
-    
+
     unhighlight : function(){
         this.el.removeClass("x-layout-panel-dragover");
     },
-    
+
     updateBox : function(box){
         this.box = box;
         if(!this.collapsed){
@@ -22562,11 +22560,17 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
         if(w !== null){
             this.el.setWidth(w);
             w -= this.el.getBorderWidth("rl");
+            if(this.config.adjustments){
+                w += this.config.adjustments[0];
+            }
         }
         if(h !== null){
             this.el.setHeight(h);
-            h = this.titleEl.isDisplayed() ? h - (this.titleEl.getHeight()||0) : h;
+            h = this.titleEl && this.titleEl.isDisplayed() ? h - (this.titleEl.getHeight()||0) : h;
             h -= this.el.getBorderWidth("tb");
+            if(this.config.adjustments){
+                h += this.config.adjustments[1];
+            }
             this.bodyEl.setHeight(h);
             if(this.tabs){
                 h = this.tabs.syncHeight(h);
@@ -22592,7 +22596,7 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
     getEl : function(){
         return this.el;
     },
-    
+
     
     hide : function(){
         if(!this.collapsed){
@@ -22605,7 +22609,7 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
         this.visible = false;
         this.fireEvent("visibilitychange", this, false);
     },
-    
+
     
     show : function(){
         if(!this.collapsed){
@@ -22616,13 +22620,13 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
         this.visible = true;
         this.fireEvent("visibilitychange", this, true);
     },
-    
+
     closeClicked : function(){
         if(this.activePanel){
             this.remove(this.activePanel);
         }
     },
-    
+
     collapseClick : function(e){
         if(this.isSlid){
            e.stopPropagation();
@@ -22632,7 +22636,7 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
            this.slideOut();
         }
     },
-    
+
     
     collapse : function(skipAnim){
         if(this.collapsed) return;
@@ -22651,11 +22655,11 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
             this.fireEvent("invalidated", this);
         }
     },
-    
+
     animateCollapse : function(){
         
     },
-    
+
     
     expand : function(e, skipAnim){
         if(e) e.stopPropagation();
@@ -22678,11 +22682,11 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
             this.fireEvent("expanded", this);
         }
     },
-    
+
     animateExpand : function(){
         
     },
-    
+
     initTabs : function(){
         this.bodyEl.setStyle("overflow", "hidden");
         var ts = new Ext.TabPanel(this.bodyEl.dom, {
@@ -22702,15 +22706,15 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
         ts.bodyEl.addClass('x-layout-tabs-body');
         this.panels.each(this.initPanelAsTab, this);
     },
-    
+
     initPanelAsTab : function(panel){
-        var ti = this.tabs.addTab(panel.getEl().id, panel.getTitle(), null, 
+        var ti = this.tabs.addTab(panel.getEl().id, panel.getTitle(), null,
                     this.config.closeOnTab && panel.isClosable());
         if(panel.tabTip !== undefined){
             ti.setTooltip(panel.tabTip);
         }
         ti.on("activate", function(){
-              this.setActivePanel(panel); 
+              this.setActivePanel(panel);
         }, this);
         if(this.config.closeOnTab){
             ti.on("beforeclose", function(t, e){
@@ -22720,7 +22724,7 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
         }
         return ti;
     },
-    
+
     updatePanelTitle : function(panel, title){
         if(this.activePanel == panel){
             this.updateTitle(title);
@@ -22733,13 +22737,13 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
             }
         }
     },
-    
+
     updateTitle : function(title){
         if(this.titleTextEl && !this.config.title){
             this.titleTextEl.innerHTML = (typeof title != "undefined" && title.length > 0 ? title : "&#160;");
         }
     },
-    
+
     setActivePanel : function(panel){
         panel = this.getPanel(panel);
         if(this.activePanel && this.activePanel != panel){
@@ -22750,14 +22754,16 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
         if(this.panelSize){
             panel.setSize(this.panelSize.width, this.panelSize.height);
         }
-        this.closeBtn.setVisible(!this.config.closeOnTab && !this.isSlid && panel.isClosable());
+        if(this.closeBtn){
+            this.closeBtn.setVisible(!this.config.closeOnTab && !this.isSlid && panel.isClosable());
+        }
         this.updateTitle(panel.getTitle());
         if(this.tabs){
             this.fireEvent("invalidated", this);
         }
         this.fireEvent("panelactivated", this, panel);
     },
-    
+
     
     showPanel : function(panel){
         if(panel = this.getPanel(panel)){
@@ -22773,12 +22779,12 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
         }
         return panel;
     },
-    
+
     
     getActivePanel : function(){
         return this.activePanel;
     },
-    
+
     validateVisibility : function(){
         if(this.panels.getCount() < 1){
             this.updateTitle("&#160;");
@@ -22790,7 +22796,7 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
             }
         }
     },
-    
+
     
     add : function(panel){
         if(arguments.length > 1){
@@ -22824,27 +22830,27 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
         this.fireEvent("paneladded", this, panel);
         return panel;
     },
-    
+
     
     hidePanel : function(panel){
         if(this.tabs && (panel = this.getPanel(panel))){
             this.tabs.hideTab(panel.getEl().id);
         }
     },
-    
+
     
     unhidePanel : function(panel){
         if(this.tabs && (panel = this.getPanel(panel))){
             this.tabs.unhideTab(panel.getEl().id);
         }
     },
-    
+
     clearPanels : function(){
         while(this.panels.getCount() > 0){
              this.remove(this.panels.first());
         }
     },
-    
+
     
     remove : function(panel, preservePanel){
         panel = this.getPanel(panel);
@@ -22889,12 +22895,12 @@ Ext.extend(Ext.LayoutRegion, Ext.BasicLayoutRegion, {
         this.fireEvent("panelremoved", this, panel);
         return panel;
     },
-    
+
     
     getTabs : function(){
-        return this.tabs;    
+        return this.tabs;
     },
-    
+
     createTool : function(parentEl, className){
         var btn = Ext.DomHelper.append(parentEl, {tag: "div", cls: "x-layout-tools-button",
             children: [{tag: "div", cls: "x-layout-tools-button-inner " + className, html: "&#160;"}]}, true);
@@ -23511,7 +23517,7 @@ Ext.ContentPanel = function(el, config, content){
     }else{
         this.resizeEl = this.el;
     }
-    this.events = {
+    this.addEvents({
         
         "activate" : true,
         
@@ -23519,7 +23525,7 @@ Ext.ContentPanel = function(el, config, content){
 
         
         "resize" : true
-    };
+    });
     if(this.autoScroll){
         this.resizeEl.setStyle("overflow", "auto");
     }
@@ -23635,7 +23641,7 @@ Ext.extend(Ext.ContentPanel, Ext.util.Observable, {
                 this.el.setSize(width, height);
             }
             var size = this.adjustForComponents(width, height);
-            this.resizeEl.setSize(this.autoWidth ? "auto" : size.width, size.height);
+            this.resizeEl.setSize(this.autoWidth ? "auto" : size.width, this.autoHeight ? "auto" : size.height);
             this.fireEvent('resize', this, size.width, size.height);
         }
     },
@@ -23890,7 +23896,7 @@ Ext.ReaderLayout = function(config, renderTo){
         }, c.listView)
     });
     this.add('center', new Ext.NestedLayoutPanel(inner,
-            Ext.apply({title: config.mainTitle || '',tabTip:''},config.innerPanelCfg)));
+            Ext.apply({title: c.mainTitle || '',tabTip:''},c.innerPanelCfg)));
 
     this.endUpdate();
 
@@ -23906,9 +23912,9 @@ Ext.grid.Grid = function(container, config){
 	this.container.update("");
 	this.container.setStyle("overflow", "hidden");
     this.container.addClass('x-grid-container');
-    
+
     this.id = this.container.id;
-	
+
     Ext.apply(this, config);
     
     if(this.ds){
@@ -23932,7 +23938,7 @@ Ext.grid.Grid = function(container, config){
         this.container.setHeight(this.height);
     }
     
-	this.events = {
+	this.addEvents({
 	    
 	    
 	    "click" : true,
@@ -23952,9 +23958,9 @@ Ext.grid.Grid = function(container, config){
 	    "keypress" : true,
 	    
 	    "keydown" : true,
+
 	    
-	    
-	    
+
 	    
 	    "cellclick" : true,
 	    
@@ -23991,32 +23997,32 @@ Ext.grid.Grid = function(container, config){
 	    "dragenter" : true,
 	    
 	    "dragout" : true
-	};
+	});
 
     Ext.grid.Grid.superclass.constructor.call(this);
 };
 Ext.extend(Ext.grid.Grid, Ext.util.Observable, {
     
 	minColumnWidth : 25,
-	
-	
+
+    
 	autoSizeColumns : false,
-	
+
 	
 	autoSizeHeaders : true,
-	
+
 	
 	monitorWindowResize : true,
-	
+
 	
 	maxRowsToMeasure : 0,
-	
+
 	
 	trackMouseOver : true,
-	
+
 	
 	enableDragDrop : false,
-	
+
 	
 	enableColumnMove : true,
 
@@ -24025,9 +24031,10 @@ Ext.extend(Ext.grid.Grid, Ext.util.Observable, {
 
 	
 	enableRowHeightSync : false,
-	
+
 	
 	stripeRows : true,
+
 	
 	autoHeight : false,
 
@@ -24042,13 +24049,14 @@ Ext.extend(Ext.grid.Grid, Ext.util.Observable, {
 
     
 	view : null,
-	
+
 	
     allowTextSelectionPattern : /INPUT|TEXTAREA|SELECT/i,
 
     
 	loadMask : false,
 
+    
     rendered : false,
 
     
@@ -24057,20 +24065,20 @@ Ext.extend(Ext.grid.Grid, Ext.util.Observable, {
         var c = this.container;
         
         if((!c.dom.offsetHeight || c.dom.offsetHeight < 20) || c.getStyle("height") == "auto"){
-    	    this.autoHeight = true;   
-    	}	       
+    	    this.autoHeight = true;
+    	}
     	var view = this.getView();
         view.init(this);
-        
+
         c.on("click", this.onClick, this);
         c.on("dblclick", this.onDblClick, this);
         c.on("contextmenu", this.onContextMenu, this);
         c.on("keydown", this.onKeyDown, this);
 
         this.relayEvents(c, ["mousedown","mouseup","mouseover","mouseout","keypress"]);
-        
+
         this.getSelectionModel().init(this);
-        
+
         view.render();
 
         if(this.loadMask){
@@ -24080,7 +24088,7 @@ Ext.extend(Ext.grid.Grid, Ext.util.Observable, {
         this.rendered = true;
         return this;
     },
-    
+
     reconfigure : function(dataSource, colModel){
         if(this.loadMask){
             this.loadMask.destroy();
@@ -24114,7 +24122,7 @@ Ext.extend(Ext.grid.Grid, Ext.util.Observable, {
             c.remove();
         }
     },
-    
+
     
     processEvent : function(name, e){
         this.fireEvent(name, e);
@@ -24134,7 +24142,7 @@ Ext.extend(Ext.grid.Grid, Ext.util.Observable, {
             }
         }
     },
-    
+
     
     onClick : function(e){
         this.processEvent("click", e);
@@ -24194,7 +24202,7 @@ Ext.extend(Ext.grid.Grid, Ext.util.Observable, {
     },
 
     getSelections : function(){
-        return this.selModel.getSelections();  
+        return this.selModel.getSelections();
     },
 
     
@@ -24206,10 +24214,10 @@ Ext.extend(Ext.grid.Grid, Ext.util.Observable, {
             }
         }
     },
-    
+
     
     stopEditing : function(){},
-    
+
     
     getSelectionModel : function(){
         if(!this.selModel){
@@ -24217,17 +24225,17 @@ Ext.extend(Ext.grid.Grid, Ext.util.Observable, {
         }
         return this.selModel;
     },
-    
+
     
     getDataSource : function(){
         return this.dataSource;
     },
-    
+
     
     getColumnModel : function(){
         return this.colModel;
     },
-    
+
     
     getView : function(){
         if(!this.view){
@@ -24273,7 +24281,6 @@ Ext.extend(Ext.grid.AbstractGridView, Ext.util.Observable, {
         this.hdSelector = "#" + cid + " ." + this.hdClass + "-";
         this.splitSelector = "#" + cid + " ." + this.splitClass + "-";
 	},
-	
 	
 	getColumnRenderers : function(){
     	var renderers = [];
@@ -24371,6 +24378,43 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
 
     findRE: /\s?(?:x-grid-hd|x-grid-col|x-grid-csplit)\s/,
 
+    bind : function(ds, cm){
+        if(this.ds){
+            this.ds.un("load", this.onLoad, this);
+            this.ds.un("datachanged", this.onDataChange);
+            this.ds.un("add", this.onAdd);
+            this.ds.un("remove", this.onRemove);
+            this.ds.un("update", this.onUpdate);
+            this.ds.un("clear", this.onClear);
+        }
+        if(ds){
+            ds.on("load", this.onLoad, this);
+            ds.on("datachanged", this.onDataChange, this);
+            ds.on("add", this.onAdd, this);
+            ds.on("remove", this.onRemove, this);
+            ds.on("update", this.onUpdate, this);
+            ds.on("clear", this.onClear, this);
+        }
+        this.ds = ds;
+
+        if(this.cm){
+            this.cm.un("widthchange", this.onColWidthChange, this);
+            this.cm.un("headerchange", this.onHeaderChange, this);
+            this.cm.un("hiddenchange", this.onHiddenChange, this);
+            this.cm.un("columnmoved", this.onColumnMove, this);
+            this.cm.un("columnlockchange", this.onColumnLock, this);
+        }
+        if(cm){
+            this.generateRules(cm);
+            cm.on("widthchange", this.onColWidthChange, this);
+            cm.on("headerchange", this.onHeaderChange, this);
+            cm.on("hiddenchange", this.onHiddenChange, this);
+            cm.on("columnmoved", this.onColumnMove, this);
+            cm.on("columnlockchange", this.onColumnLock, this);
+        }
+        this.cm = cm;
+    },
+
     init: function(grid){
 		Ext.grid.GridView.superclass.init.call(this, grid);
 
@@ -24463,41 +24507,21 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
 		this.templates = tpls;
 	},
 
-	bind : function(ds, cm){
-        if(this.ds){
-            this.ds.un("load", this.onLoad, this);
-            this.ds.un("datachanged", this.onDataChange);
-            this.ds.un("add", this.onAdd);
-            this.ds.un("remove", this.onRemove);
-            this.ds.un("update", this.onUpdate);
-            this.ds.un("clear", this.onClear);
-        }
-        if(ds){
-            ds.on("load", this.onLoad, this);
-            ds.on("datachanged", this.onDataChange, this);
-            ds.on("add", this.onAdd, this);
-            ds.on("remove", this.onRemove, this);
-            ds.on("update", this.onUpdate, this);
-            ds.on("clear", this.onClear, this);
-        }
-        this.ds = ds;
-
-        if(this.cm){
-            this.cm.un("widthchange", this.updateColumns, this);
-            this.cm.un("headerchange", this.updateHeaders, this);
-            this.cm.un("hiddenchange", this.handleHiddenChange, this);
-            this.cm.un("columnmoved", this.handleColumnMove, this);
-            this.cm.un("columnlockchange", this.handleLockChange, this);
-        }
-        if(cm){
-            this.generateRules(cm);
-            cm.on("widthchange", this.updateColumns, this);
-            cm.on("headerchange", this.updateHeaders, this);
-            cm.on("hiddenchange", this.handleHiddenChange, this);
-            cm.on("columnmoved", this.handleColumnMove, this);
-            cm.on("columnlockchange", this.handleLockChange, this);
-        }
-        this.cm = cm;
+	
+    onColWidthChange : function(){
+        this.updateColumns.apply(this, arguments);
+    },
+    onHeaderChange : function(){
+        this.updateHeaders.apply(this, arguments);
+    }, 
+    onHiddenChange : function(){
+        this.handleHiddenChange.apply(this, arguments);
+    },
+    onColumnMove : function(){
+        this.handleColumnMove.apply(this, arguments);
+    },
+    onColumnLock : function(){
+        this.handleLockChange.apply(this, arguments);
     },
 
     onDataChange : function(){
@@ -24793,7 +24817,11 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
     focusCell : function(row, col, hscroll){
         var el = this.ensureVisible(row, col, hscroll);
         this.focusEl.alignTo(el, "tl-tl");
-        this.focusEl.focus.defer(1, this.focusEl);
+        if(Ext.isGecko){
+            this.focusEl.focus();
+        }else{
+            this.focusEl.focus.defer(1, this.focusEl);
+        }
     },
 
     
@@ -25557,14 +25585,12 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
             this.hmenu = new Ext.menu.Menu({id: this.grid.id + "-hctx"});
             this.hmenu.add(
                 {id:"asc", text: this.sortAscText, cls: "xg-hmenu-sort-asc"},
-                {id:"desc", text: this.sortDescText, cls: "xg-hmenu-sort-desc"},
-                "separator"
+                {id:"desc", text: this.sortDescText, cls: "xg-hmenu-sort-desc"}
             );
             if(this.grid.enableColLock !== false){
-                this.hmenu.add(
+                this.hmenu.add('-',
                     {id:"lock", text: this.lockText, cls: "xg-hmenu-lock"},
-                    {id:"unlock", text: this.unlockText, cls: "xg-hmenu-unlock"},
-                    "separator"
+                    {id:"unlock", text: this.unlockText, cls: "xg-hmenu-unlock"}
                 );
             }
             if(this.grid.enableColumnHide !== false){
@@ -25573,7 +25599,7 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
                 this.colMenu.on("beforeshow", this.beforeColMenuShow, this);
                 this.colMenu.on("itemclick", this.handleHdMenuClick, this);
 
-                this.hmenu.add(
+                this.hmenu.add('-',
                     {id:"columns", text: this.columnsText, menu: this.colMenu}
                 );
             }
@@ -25583,7 +25609,7 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
         }
 
         if((this.grid.enableDragDrop || this.grid.enableDrag) && Ext.grid.GridDragZone){
-            var dd = new Ext.grid.GridDragZone(this.grid, {
+            this.dd = new Ext.grid.GridDragZone(this.grid, {
                 ddGroup : this.grid.ddGroup || 'GridDD'
             });
         }
@@ -25653,6 +25679,14 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
                 expandCol = g.autoExpandColumn,
                 gv = this;
         
+
+        if(!c.dom.offsetWidth){ 
+            if(initialRender){
+                this.lockedWrap.show();
+                this.mainWrap.show();
+            }
+            return;
+        }
 
         var hasLock = this.cm.isLocked(0);
 
@@ -25761,8 +25795,10 @@ Ext.grid.HeaderDragZone = function(grid, hd, hd2){
     this.view = grid.getView();
     this.ddGroup = "gridHeader" + this.grid.container.id;
     Ext.grid.HeaderDragZone.superclass.constructor.call(this, hd);
-    this.setHandleElId(Ext.id(hd));
-    this.setOuterHandleElId(Ext.id(hd2));
+    if(hd2){
+        this.setHandleElId(Ext.id(hd));
+        this.setOuterHandleElId(Ext.id(hd2));
+    }
     this.scroll = false;
 };
 Ext.extend(Ext.grid.HeaderDragZone, Ext.dd.DragZone, {
@@ -25777,10 +25813,25 @@ Ext.extend(Ext.grid.HeaderDragZone, Ext.dd.DragZone, {
     },
 
     onInitDrag : function(e){
+        this.view.headersDisabled = true;
         var clone = this.dragData.ddel.cloneNode(true);
         clone.style.width = Math.min(this.dragData.header.offsetWidth,this.maxDragWidth) + "px";
         this.proxy.update(clone);
         return true;
+    },
+
+    afterValidDrop : function(){
+        var v = this.view;
+        setTimeout(function(){
+            v.headersDisabled = false;
+        }, 50);
+    },
+
+    afterInvalidDrop : function(){
+        var v = this.view;
+        setTimeout(function(){
+            v.headersDisabled = false;
+        }, 50);
     }
 });
 
@@ -26053,14 +26104,14 @@ Ext.grid.ColumnModel = function(config){
         }
         this.lookup[config[i].id] = config[i];
     }
-    
+
     
     this.defaultWidth = 100;
-    
+
     
     this.defaultSortable = false;
-    
-    this.events = {
+
+    this.addEvents({
         
 	    "widthchange": true,
         
@@ -26071,10 +26122,18 @@ Ext.grid.ColumnModel = function(config){
         "columnmoved" : true,
         
         "columnlockchange" : true
-    };
+    });
     Ext.grid.ColumnModel.superclass.constructor.call(this);
 };
 Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
+    
+    
+    
+    
+    
+    
+    
+
     
     getColumnId : function(index){
         return this.config[index].id;
@@ -26099,12 +26158,12 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
         this.config.splice(newIndex, 0, c);
         this.dataMap = null;
         this.fireEvent("columnmoved", this, oldIndex, newIndex);
-    },    
-    
+    },
+
     isLocked : function(colIndex){
         return this.config[colIndex].locked === true;
     },
-    
+
     setLocked : function(colIndex, value, suppressEvent){
         if(this.isLocked(colIndex) == value){
             return;
@@ -26114,7 +26173,7 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
             this.fireEvent("columnlockchange", this, colIndex, value);
         }
     },
-    
+
     getTotalLockedWidth : function(){
         var totalWidth = 0;
         for(var i = 0; i < this.config.length; i++){
@@ -26132,7 +26191,7 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
             }
         }
     },
-    
+
     
     getColumnCount : function(visibleOnly){
         if(visibleOnly == true){
@@ -26146,7 +26205,7 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
         }
         return this.config.length;
     },
-        
+
     
     isSortable : function(col){
         if(typeof this.config[col].sortable == "undefined"){
@@ -26154,7 +26213,7 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
         }
         return this.config[col].sortable;
     },
-        
+
     
     getRenderer : function(col){
         if(!this.config[col].renderer){
@@ -26162,17 +26221,17 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
         }
         return this.config[col].renderer;
     },
-        
+
     
     setRenderer : function(col, fn){
         this.config[col].renderer = fn;
     },
-        
+
     
     getColumnWidth : function(col){
         return this.config[col].width || this.defaultWidth;
     },
-        
+
     
     setColumnWidth : function(col, width, suppressEvent){
         this.config[col].width = width;
@@ -26181,7 +26240,7 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
              this.fireEvent("widthchange", this, col, width);
         }
     },
-        
+
     
     getTotalWidth : function(includeHidden){
         if(!this.totalWidth){
@@ -26194,18 +26253,18 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
         }
         return this.totalWidth;
     },
-        
+
     
     getColumnHeader : function(col){
         return this.config[col].header;
     },
-         
+
     
     setColumnHeader : function(col, header){
         this.config[col].header = header;
         this.fireEvent("headerchange", this, col, header);
     },
-    
+
     
     getColumnTooltip : function(col){
             return this.config[col].tooltip;
@@ -26214,17 +26273,17 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
     setColumnTooltip : function(col, tooltip){
             this.config[col].tooltip = tooltip;
     },
-        
+
     
     getDataIndex : function(col){
         return this.config[col].dataIndex;
     },
-         
+
     
     setDataIndex : function(col, dataIndex){
         this.config[col].dataIndex = dataIndex;
     },
-    
+
     findColumnIndex : function(dataIndex){
         var c = this.config;
         for(var i = 0, len = c.length; i < len; i++){
@@ -26234,23 +26293,23 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
         }
         return -1;
     },
-    
+
     
     isCellEditable : function(colIndex, rowIndex){
         return (this.config[colIndex].editable || (typeof this.config[colIndex].editable == "undefined" && this.config[colIndex].editor)) ? true : false;
     },
-    
+
     
     getCellEditor : function(colIndex, rowIndex){
         return this.config[colIndex].editor;
     },
-       
+
     
     setEditable : function(col, editable){
         this.config[col].editable = editable;
     },
-    
-    
+
+
     
     isHidden : function(colIndex){
         return this.config[colIndex].hidden;
@@ -26261,7 +26320,7 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
     isFixed : function(colIndex){
         return this.config[colIndex].fixed;
     },
-    
+
     
     isResizable : function(colIndex){
         return this.config[colIndex].resizable !== false;
@@ -26272,7 +26331,7 @@ Ext.extend(Ext.grid.ColumnModel, Ext.util.Observable, {
         this.totalWidth = null;
         this.fireEvent("hiddenchange", this, colIndex, hidden);
     },
-    
+
     
     setEditor : function(col, editor){
         this.config[col].editor = editor;
@@ -26327,7 +26386,7 @@ Ext.grid.RowSelectionModel = function(config){
     this.last = false;
     this.lastActive = false;
 
-    this.events = {
+    this.addEvents({
         
 	    "selectionchange" : true,
         
@@ -26336,7 +26395,7 @@ Ext.grid.RowSelectionModel = function(config){
 	    "rowselect" : true,
         
         "rowdeselect" : true
-    };
+    });
     
     this.locked = false;
 };
@@ -26650,14 +26709,14 @@ Ext.grid.CellSelectionModel = function(config){
 
     this.selection = null;
 
-    this.events = {
+    this.addEvents({
         
 	    "beforecellselect" : true,
         
 	    "cellselect" : true,
         
 	    "selectionchange" : true
-    };
+    });
 };
 
 Ext.extend(Ext.grid.CellSelectionModel, Ext.grid.AbstractSelectionModel,  {
@@ -26839,7 +26898,7 @@ Ext.grid.EditorGrid = function(container, config){
 
     this.activeEditor = null;
 
-	Ext.apply(this.events, {
+	this.addEvents({
 	    
 	    "beforeedit" : true,
 	    
@@ -26878,7 +26937,7 @@ Ext.extend(Ext.grid.EditorGrid, Ext.grid.Grid, {
                 cancel:false
             };
             if(this.fireEvent("validateedit", e) !== false && !e.cancel){
-                r.set(field, value);
+                r.set(field, e.value);
                 delete e.cancel;
                 this.fireEvent("afteredit", e);
             }
@@ -26929,6 +26988,7 @@ Ext.extend(Ext.grid.EditorGrid, Ext.grid.Grid, {
 });
 Ext.grid.GridEditor = function(field, config){
     Ext.grid.GridEditor.superclass.constructor.call(this, field, config);
+    field.monitorTab = false;
 };
 
 Ext.extend(Ext.grid.GridEditor, Ext.Editor, {
@@ -27552,7 +27612,7 @@ Ext.debug = {
         for(var edType in eds){
             filterIds += eds[edType].id +'|';
         }
-        Ext.each([dlg.shim? dlg.shim.id : 'noshim', dlg.proxyDrag.id, dlg.resizer.overlay.id, dlg.resizer.proxy.id], function(id){
+        Ext.each([dlg.shim? dlg.shim.id : 'noshim', dlg.proxyDrag.id], function(id){
              filterIds += id +'|';
         });
         filterIds += dlg.el.id;

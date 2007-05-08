@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -248,8 +248,8 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
     valueNotFoundText : undefined,
 
     // private
-    onRender : function(ct){
-        Ext.form.ComboBox.superclass.onRender.call(this, ct);
+    onRender : function(ct, position){
+        Ext.form.ComboBox.superclass.onRender.call(this, ct, position);
         if(this.hiddenName){
             this.hiddenField = this.el.insertSibling({tag:'input', type:'hidden', name: this.hiddenName, id: this.hiddenName},
                     'before', true);
@@ -607,7 +607,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
     },
 
     /**
-     * Select an item in the dropdown list by it's data value
+     * Select an item in the dropdown list by its data value
      * @param {String} value The data value of the item to select
      * @param {Boolean} scrollIntoView False to prevent the dropdown list from autoscrolling to display the
      * selected item if it is not currently in view (defaults to true)
@@ -625,7 +625,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
     },
 
     /**
-     * Select an item in the dropdown list by it's numeric index in the list
+     * Select an item in the dropdown list by its numeric index in the list
      * @param {Number} index The zero-based index of the list item to select
      * @param {Boolean} scrollIntoView False to prevent the dropdown list from autoscrolling to display the
      * selected item if it is not currently in view (defaults to true)
@@ -692,6 +692,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
         if(this.el.dom.value.length > 0){
             this.el.dom.value =
                 this.lastSelectionText === undefined ? '' : this.lastSelectionText;
+            this.applyEmptyText();
         }
     },
 
@@ -777,7 +778,7 @@ Ext.extend(Ext.form.ComboBox, Ext.form.TriggerField, {
      * Expands the dropdown list if it is currently hidden. Fires the 'expand' event on completion.
      */
     expand : function(){
-        if(this.isExpanded()){
+        if(this.isExpanded() || !this.hasFocus){
             return;
         }
         this.list.alignTo(this.el, this.listAlign);

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -26,7 +26,7 @@ Ext.grid.EditorGrid = function(container, config){
 
     this.activeEditor = null;
 
-	Ext.apply(this.events, {
+	this.addEvents({
 	    /**
 	     * @event beforeedit
 	     * Fires before cell editing is triggered. The edit event object has the following properties <br />
@@ -106,7 +106,7 @@ Ext.extend(Ext.grid.EditorGrid, Ext.grid.Grid, {
                 cancel:false
             };
             if(this.fireEvent("validateedit", e) !== false && !e.cancel){
-                r.set(field, value);
+                r.set(field, e.value);
                 delete e.cancel;
                 this.fireEvent("afteredit", e);
             }

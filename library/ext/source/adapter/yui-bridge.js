@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -190,7 +190,7 @@ Ext.lib.Ajax = {
 
     formRequest : function(form, uri, cb, data, isUpload, sslUri){
         CN.setForm(form, isUpload, sslUri);
-        return CN.asyncRequest('POST', uri, cb, data);
+        return CN.asyncRequest(Ext.getDom(form).method ||'POST', uri, cb, data);
     },
 
     isCallInProgress : function(trans){

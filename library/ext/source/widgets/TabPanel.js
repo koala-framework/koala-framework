@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -82,7 +82,7 @@ Ext.TabPanel = function(container, config){
     this.active = null;
     this.activateDelegate = this.activate.createDelegate(this);
     
-    this.events = {
+    this.addEvents({
         /**
          * @event tabchange
          * Fires when the active tab changes
@@ -98,7 +98,7 @@ Ext.TabPanel = function(container, config){
          * @param {Ext.TabPanelItem} tab The tab being changed to
          */
         "beforetabchange" : true
-    };
+    });
     
     Ext.EventManager.onWindowResize(this.onResize, this);
     this.cpad = this.el.getPadding("lr");
@@ -423,6 +423,7 @@ Ext.TabPanelItem = function(tabPanel, id, text, closable){
     this.inner = Ext.get(els.inner, true);
     this.textEl = Ext.get(this.el.dom.firstChild.firstChild.firstChild, true);
     this.pnode = Ext.get(els.el.parentNode, true);
+    this.el.on("mousedown", this.onTabMouseDown, this);
     this.el.on("click", this.onTabClick, this);
     /** @private */
     if(closable){
@@ -432,7 +433,7 @@ Ext.TabPanelItem = function(tabPanel, id, text, closable){
         c.on("click", this.closeClick, this);
      }
     
-    this.events = {
+    this.addEvents({
          /**
          * @event activate
          * Fires when this tab becomes the active tab
@@ -460,7 +461,7 @@ Ext.TabPanelItem = function(tabPanel, id, text, closable){
          * @param {Ext.TabPanelItem} this
          */
          "deactivate" : true
-    };
+    });
     this.hidden = false;
 
     Ext.TabPanelItem.superclass.constructor.call(this);
@@ -531,7 +532,12 @@ Ext.extend(Ext.TabPanelItem, Ext.util.Observable, {
         e.preventDefault();
         this.tabPanel.activate(this.id);
     },
-    
+
+    onTabMouseDown : function(e){
+        e.preventDefault();
+        this.tabPanel.activate(this.id);
+    },
+
     getWidth : function(){
         return this.inner.getWidth();  
     },

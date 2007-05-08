@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -131,7 +131,7 @@ Ext.QuickTips = function(){
             }
         }
         //tipBody.setWidth(w);
-        el.setWidth(w + p);
+        el.setWidth(parseInt(w, 10) + p);
         if(!ce.autoHide){
             close.setDisplayed(true);
             if(dd){

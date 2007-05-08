@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -44,7 +44,7 @@ Ext.extend(Ext.form.TextArea, Ext.form.TextField,  {
     preventScrollbars: false,
 
     // private
-    onRender : function(ct){
+    onRender : function(ct, position){
         if(!this.el){
             this.defaultAutoCreate = {
                 tag: "textarea",
@@ -52,7 +52,7 @@ Ext.extend(Ext.form.TextArea, Ext.form.TextField,  {
                 autocomplete: "off"
             };
         }
-        Ext.form.TextArea.superclass.onRender.call(this, ct);
+        Ext.form.TextArea.superclass.onRender.call(this, ct, position);
         if(this.grow){
             this.textSizeEl = Ext.DomHelper.append(document.body, {
                 tag: "pre", cls: "x-form-grow-sizer"
@@ -93,8 +93,11 @@ Ext.extend(Ext.form.TextArea, Ext.form.TextField,  {
         }
         ts.innerHTML = v;
         var h = Math.min(this.growMax, Math.max(ts.offsetHeight, this.growMin));
-        this.el.setHeight(h);
-        this.fireEvent("autosize", this, h);
+        if(h != this.lastHeight){
+            this.lastHeight = h;
+            this.el.setHeight(h);
+            this.fireEvent("autosize", this, h);
+        }
     },
 
     // private

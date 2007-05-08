@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -32,7 +32,7 @@ Ext.form.TextField = function(config){
 
 Ext.extend(Ext.form.TextField, Ext.form.Field,  {
     /**
-     * @cfg {Boolean} grow True if this field should automatically grow and shrink to it's content
+     * @cfg {Boolean} grow True if this field should automatically grow and shrink to its content
      */
     grow : false,
     /**
@@ -123,10 +123,7 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
             this.on("focus", this.preFocus, this);
             if(this.emptyText){
                 this.on('blur', this.postBlur, this);
-                if(!this.value && this.getRawValue().length < 1){
-                    this.setRawValue(this.emptyText);
-                    this.el.addClass(this.emptyClass);
-                }
+                this.applyEmptyText();
             }
         }
         if(this.maskRe || (this.vtype && this.disableKeyFilter !== true && (this.maskRe = Ext.form.VTypes[this.vtype+'Mask']))){
@@ -157,7 +154,11 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
      */
     reset : function(){
         Ext.form.TextField.superclass.reset.call(this);
-        if(this.emptyText && this.getRawValue().length < 1){
+        this.applyEmptyText();
+    },
+
+    applyEmptyText : function(){
+        if(this.rendered && this.emptyText && this.getRawValue().length < 1){
             this.setRawValue(this.emptyText);
             this.el.addClass(this.emptyClass);
         }
@@ -178,10 +179,7 @@ Ext.extend(Ext.form.TextField, Ext.form.Field,  {
 
     // private
     postBlur : function(){
-        if(this.emptyText && this.getRawValue().length < 1){
-            this.setRawValue(this.emptyText);
-            this.el.addClass(this.emptyClass);
-        }
+        this.applyEmptyText();
     },
 
     // private

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -17,7 +17,9 @@ Ext.form.Form = function(config){
     Ext.form.Form.superclass.constructor.call(this, null, config);
     this.url = this.url || this.action;
     if(!this.root){
-        this.root = new Ext.form.Layout(config);
+        this.root = new Ext.form.Layout(Ext.applyIf({
+            id: Ext.id()
+        }, config));
     }
     this.active = this.root;
     /**
@@ -25,6 +27,15 @@ Ext.form.Form = function(config){
      * @type Array
      */
     this.buttons = [];
+    this.addEvents({
+        /**
+         * @event clientvalidation
+         * If the monitorValid config option is true, this event fires repetitively to notify of valid state
+         * @param {Form} this
+         * @param {Boolean} valid true if the form has passed client-side validation
+         */
+        clientvalidation: true
+    });
 };
 
 Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
@@ -34,10 +45,6 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
     /**
      * @cfg {String} itemCls A css class to apply to the x-form-item of fields. This property cascades to child containers.
      */
-    /*
-     * unused
-     */
-    buttonPosition:'bottom',
     /**
      * @cfg {String} buttonAlign Valid values are "left," "center" and "right" (defaults to "center")
      */
@@ -53,6 +60,18 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
      * This property cascades to child containers if not set.
      */
     labelAlign:'left',
+
+    /**
+     * @cfg {Boolean} monitorValid If true the form monitors it's valid state <b>client-side</b> and
+     * fires a looping event with that state. This is required to bind buttons to the valid
+     * state using the config value bindForm:true on the button.
+     */
+    monitorValid : false,
+
+    /**
+     * @cfg {Number} monitorPoll The milliseconds to poll valid state, ignored if monitorValid is not true (defaults to 200)
+     */
+    monitorPoll : 200,
 
     /**
      * Opens the a new {@link Ext.form.Column} container in the layout stack. If fields are passed after the config, the
@@ -195,6 +214,9 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
                 b.render(tr.appendChild(td));
             }
         }
+        if(this.monitorValid){ // initialize after render
+            this.startMonitoring();
+        }
         return this;
     },
 
@@ -221,6 +243,49 @@ Ext.extend(Ext.form.Form, Ext.form.BasicForm, {
         var btn = new Ext.Button(null, bc);
         this.buttons.push(btn);
         return btn;
+    },
+
+    /**
+     * Starts monitoring of the valid state of this form. Usually this is don't by passing the config
+     * option "monitorValid"
+     */
+    startMonitoring : function(){
+        if(!this.bound){
+            this.bound = true;
+            Ext.TaskMgr.start({
+                run : this.bindHandler,
+                interval : this.monitorPoll || 200,
+                scope: this
+            });
+        }
+    },
+
+    /**
+     * Stops monitoring of the valid state of this form
+     */
+    stopMonitoring : function(){
+        this.bound = false;
+    },
+
+    // private
+    bindHandler : function(){
+        if(!this.bound){
+            return false; // stops binding
+        }
+        var valid = true;
+        this.items.each(function(f){
+            if(!f.isValid(true)){
+                valid = false;
+                return false;
+            }
+        });
+        for(var i = 0, len = this.buttons.length; i < len; i++){
+            var btn = this.buttons[i];
+            if(btn.formBind === true && btn.disabled === valid){
+                btn.setDisabled(!valid);
+            }
+        }
+        this.fireEvent('clientvalidation', this, valid);
     }
 });
 

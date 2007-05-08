@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -17,7 +17,7 @@ Ext.grid.EditorGrid = function(container, config){
 
     this.activeEditor = null;
 
-	Ext.apply(this.events, {
+	this.addEvents({
 	    
 	    "beforeedit" : true,
 	    
@@ -56,7 +56,7 @@ Ext.extend(Ext.grid.EditorGrid, Ext.grid.Grid, {
                 cancel:false
             };
             if(this.fireEvent("validateedit", e) !== false && !e.cancel){
-                r.set(field, value);
+                r.set(field, e.value);
                 delete e.cancel;
                 this.fireEvent("afteredit", e);
             }
@@ -107,6 +107,7 @@ Ext.extend(Ext.grid.EditorGrid, Ext.grid.Grid, {
 });
 Ext.grid.GridEditor = function(field, config){
     Ext.grid.GridEditor.superclass.constructor.call(this, field, config);
+    field.monitorTab = false;
 };
 
 Ext.extend(Ext.grid.GridEditor, Ext.Editor, {

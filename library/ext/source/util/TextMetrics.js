@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -60,7 +60,7 @@ Ext.util.TextMetrics.Instance = function(bindTo, fixedWidth){
 
     var instance = {
         /**
-         * Returns the size of the specified text nased on the internal element's style and width properties
+         * Returns the size of the specified text based on the internal element's style and width properties
          * @param {String} text The text to measure
          * @return {Object} An object containing the text's size {width: (width), height: (height)}
          */

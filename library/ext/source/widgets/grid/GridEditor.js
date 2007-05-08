@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -10,6 +10,7 @@
 // This is a support class used internally by the Grid components
 Ext.grid.GridEditor = function(field, config){
     Ext.grid.GridEditor.superclass.constructor.call(this, field, config);
+    field.monitorTab = false;
 };
 
 Ext.extend(Ext.grid.GridEditor, Ext.Editor, {

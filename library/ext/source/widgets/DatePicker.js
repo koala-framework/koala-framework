@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -16,7 +16,9 @@
  */
 Ext.DatePicker = function(config){
     Ext.DatePicker.superclass.constructor.call(this, config);
-    this.value = new Date().clearTime();
+
+    this.value = config && config.value ?
+                 config.value.clearTime() : new Date().clearTime();
 
     this.addEvents({
         /**
@@ -164,7 +166,7 @@ Ext.extend(Ext.DatePicker, Ext.Component, {
     },
 
     // private
-    onRender : function(container){
+    onRender : function(container, position){
         var m = [
              '<table cellspacing="0">',
                 '<tr><td class="x-date-left"><a href="#" title="', this.prevText ,'">&#160;</a></td><td class="x-date-middle" align="center"></td><td class="x-date-right"><a href="#" title="', this.nextText ,'">&#160;</a></td></tr>',
@@ -190,7 +192,7 @@ Ext.extend(Ext.DatePicker, Ext.Component, {
         el.className = "x-date-picker";
         el.innerHTML = m.join("");
 
-        container.dom.appendChild(el);
+        container.dom.insertBefore(el, position);
 
         this.el = Ext.get(el);
         new Ext.util.ClickRepeater(this.el.child("td.x-date-left a"), {handler: this.showPrevMonth, scope: this});

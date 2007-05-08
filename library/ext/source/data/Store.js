@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -42,7 +42,7 @@ Ext.data.Store = function(config){
 
     this.modified = [];
 
-    this.events = {
+    this.addEvents({
         /**
          * @event datachanged
          * Fires when the data cache has changed, and a widget which is using this Store
@@ -107,7 +107,7 @@ Ext.data.Store = function(config){
          * Called with the signature of the Proxy's "loadexception" event.
          */
         loadexception : true
-    };
+    });
 
     if(this.proxy){
         this.relayEvents(this.proxy,  ["loadexception"]);
@@ -215,7 +215,7 @@ Ext.extend(Ext.data.Store, Ext.util.Observable, {
 
     /**
      * Get the Record at the specified index.
-     * @param {String} id The index of the Record to find.
+     * @param {String} index The index of the Record to find.
      * @return {Ext.data.Record} The Record at the passed index. Returns undefined if not found.
      */
     getAt : function(index){
@@ -357,7 +357,7 @@ Ext.extend(Ext.data.Store, Ext.util.Observable, {
      * Returns the sort state of the Store as an object with two properties:
      * <pre><code>
  field {String} The name of the field by which the Records are sorted
- dir {String} The sotr order, "ASC" or "DESC"
+ direction {String} The sort order, "ASC" or "DESC"
      * </code></pre>
      */
     getSortState : function(){
@@ -469,12 +469,15 @@ Ext.extend(Ext.data.Store, Ext.util.Observable, {
 
     /**
      * Revert to a view of the Record cache with no filtering applied.
+     * @param {Boolean} suppressEvent If true the filter is cleared silently without notifying listeners
      */
-    clearFilter : function(){
+    clearFilter : function(suppressEvent){
         if(this.snapshot && this.snapshot != this.data){
             this.data = this.snapshot;
             delete this.snapshot;
-            this.fireEvent("datachanged", this);
+            if(suppressEvent !== true){
+                this.fireEvent("datachanged", this);
+            }
         }
     },
 

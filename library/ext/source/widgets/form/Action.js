@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -40,6 +40,7 @@ Ext.form.Action.prototype = {
 
     // default connection failure
     failure : function(response){
+        this.response = response;
         this.failureType = Ext.form.Action.CONNECT_FAILURE;
         this.form.afterAction(this, false);
     },
@@ -127,8 +128,8 @@ Ext.extend(Ext.form.Action.Submit, Ext.form.Action, {
         if(result.errors){
             this.form.markInvalid(result.errors);
             this.failureType = Ext.form.Action.SERVER_INVALID;
-            this.form.afterAction(this, false);
         }
+        this.form.afterAction(this, false);
     },
 
     handleResponse : function(response){

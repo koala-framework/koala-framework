@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -52,15 +52,15 @@ Ext.lib.Dom = {
     },
 
     getY : function(el){
-        return jQuery(el).offset().top;
+        return jQuery(el).offset({scroll:false}).top;
     },
 
     getX : function(el){
-        return jQuery(el).offset().left;
+        return jQuery(el).offset({scroll:false}).left;
     },
 
     getXY : function(el){
-        var o = jQuery(el).offset();
+        var o = jQuery(el).offset({scroll:false});
         return [o.left,  o.top];
     },
 
@@ -203,7 +203,7 @@ Ext.lib.Ajax = function(){
 
         formRequest : function(form, uri, cb, data, isUpload, sslUri){
             jQuery.ajax({
-                type: 'POST',
+                type: Ext.getDom(form).method ||'POST',
                 url: uri,
                 data: jQuery(form).formSerialize()+(data?'&'+data:''),
                 timeout: cb.timeout,
@@ -248,8 +248,8 @@ Ext.lib.Anim = function(){
             // scroll anim not supported so just scroll immediately
             var anim = createAnim(cb, scope);
             el = Ext.getDom(el);
-            el.scrollLeft = args.to[0];
-            el.scrollTop = args.to[1];
+            el.scrollLeft = args.scroll.to[0];
+            el.scrollTop = args.scroll.to[1];
             anim.proxyCallback();
             return anim;
         },

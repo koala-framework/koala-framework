@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -80,6 +80,10 @@ Ext.extend(Ext.form.Field, Ext.Component,  {
      */
     validationEvent : "keyup",
     /**
+     * @cfg {String/Boolean} validateOnBlur Defaults to true.
+     */
+    validateOnBlur : true,
+    /**
      * @cfg {Number} validationDelay The length of time in milliseconds after user input begins until validation is initiated (defaults to 250)
      */
     validationDelay : 250,
@@ -122,6 +126,12 @@ side          Add an error icon to the right of the field with a popup on hover
     hasFocus : false,
 
     /**
+     * @cfg {Mixed} value A value to initialize this field with
+     */
+    value : undefined,
+
+
+    /**
      * Returns the name attribute of the field if available
      * @return {String} name The field name
      */
@@ -142,7 +152,7 @@ side          Add an error icon to the right of the field with a popup on hover
     },
 
     // private
-    onRender : function(ct){
+    onRender : function(ct, position){
         if(this.el){
             this.el = Ext.get(this.el);
             if(!this.target){
@@ -159,7 +169,7 @@ side          Add an error icon to the right of the field with a popup on hover
             if(this.tabIndex !== undefined){
                 cfg.tabIndex = this.tabIndex;
             }
-            this.el = ct.createChild(cfg);
+            this.el = ct.createChild(cfg, position);
         }
         var type = this.el.dom.type;
         if(type){
@@ -170,10 +180,6 @@ side          Add an error icon to the right of the field with a popup on hover
         }
         if(!this.customSize && (this.width || this.height)){
             this.setSize(this.width || "", this.height || "");
-        }
-        if(this.style){
-            this.el.applyStyles(this.style);
-            delete this.style;
         }
         if(this.readOnly){
             this.el.dom.readOnly = true;
@@ -194,6 +200,7 @@ side          Add an error icon to the right of the field with a popup on hover
 
     // private
     afterRender : function(){
+        Ext.form.Field.superclass.afterRender.call(this);
         this.initEvents();
     },
 
@@ -236,7 +243,7 @@ side          Add an error icon to the right of the field with a popup on hover
     onBlur : function(){
         this.el.removeClass(this.focusClass);
         this.hasFocus = false;
-        if(this.validationEvent != "blur"){
+        if(this.validationEvent !== false && this.validateOnBlur && this.validationEvent != "blur"){
             this.validate();
         }
         var v = this.getValue();
@@ -269,10 +276,18 @@ side          Add an error icon to the right of the field with a popup on hover
 
     /**
      * Returns whether or not the field value is currently valid
+     * @param {Boolean} preventMark True to disable marking the field invalid
      * @return {Boolean} True if the value is valid, else false
      */
-    isValid : function(){
-        return this.validateValue(this.getRawValue());
+    isValid : function(preventMark){
+        if(this.disabled){
+            return true;
+        }
+        var restore = this.preventMark;
+        this.preventMark = preventMark === true;
+        var v = this.validateValue(this.getRawValue());
+        this.preventMark = restore;
+        return v;
     },
 
     /**
@@ -280,7 +295,7 @@ side          Add an error icon to the right of the field with a popup on hover
      * @return {Boolean} True if the value is valid, else false
      */
     validate : function(){
-        if(this.validateValue(this.getRawValue())){
+        if(this.disabled || this.validateValue(this.getRawValue())){
             this.clearInvalid();
             return true;
         }
@@ -298,7 +313,7 @@ side          Add an error icon to the right of the field with a popup on hover
      * @param {String} msg The validation message
      */
     markInvalid : function(msg){
-        if(!this.rendered){ // not rendered
+        if(!this.rendered || this.preventMark){ // not rendered
             return;
         }
         this.el.addClass(this.invalidClass);
@@ -348,7 +363,7 @@ side          Add an error icon to the right of the field with a popup on hover
      * Clear any invalid styles/messages for this field
      */
     clearInvalid : function(){
-        if(!this.rendered){ // not rendered
+        if(!this.rendered || this.preventMark){ // not rendered
             return;
         }
         this.el.removeClass(this.invalidClass);
@@ -388,7 +403,7 @@ side          Add an error icon to the right of the field with a popup on hover
     },
 
     /**
-     * Returns the normalized data value (undefined or emptyText will be returned as '').  To return the raw value see {@link #getValue}.
+     * Returns the normalized data value (undefined or emptyText will be returned as '').  To return the raw value see {@link #getRawValue}.
      * @return {Mixed} value The field value
      */
     getValue : function(){

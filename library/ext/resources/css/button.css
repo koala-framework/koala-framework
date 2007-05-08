@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -30,6 +30,9 @@
 .ext-gecko .x-btn button {
     padding-left:0;
     padding-right:0;
+}
+.ext-ie .x-btn button {
+    padding-top:2px;
 }
 /*
  Predefined css class for buttons with only icon. Add this class (x-btn-icon) and a class with a background-image
@@ -96,15 +99,6 @@
 	padding:0 5px;
 	cursor:pointer;
 	white-space:nowrap;
-}
-.x-btn-focus .x-btn-left{
-	background-position:0 -126px;
-}
-.x-btn-focus .x-btn-right{
-	background-position:0 -147px;
-}
-.x-btn-focus .x-btn-center{
-	background-position:0 -168px;
 }
 .x-btn-over .x-btn-left{
 	background-position:0 -63px;

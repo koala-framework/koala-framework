@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -10,7 +10,7 @@
 .x-grid {
 	position:relative;
 	overflow:hidden;
-    background:#fff;
+    background-color:#fff;
 }
 .x-grid-scroller {
 	overflow:auto;
@@ -45,7 +45,7 @@
 /* Locked styles */
 
 .x-grid-locked .x-grid-body td {
-	background: #FBFDFF;
+	background-color: #FBFDFF;
 	border-right: 1px solid #deecfd;
 	border-bottom: 1px solid #deecfd !important;
 }
@@ -53,7 +53,7 @@
 	border-top:0 none;
 }
 .x-grid-locked .x-grid-row-alt td{
-	background: #F5FAFE;
+	background-color: #F5FAFE;
 }
 
 .x-grid-locked .x-grid-header table{
@@ -70,14 +70,14 @@
 	cursor: default;
 }
 .x-grid-row-alt{
-	background:#f1f1f1;
+	background-color:#f1f1f1;
 }
 .x-grid-row-over td{
-	background:#d9e8fb;
+	background-color:#d9e8fb;
 }
 .x-grid-resize-proxy {
 	width:3px;
-	background:#cccccc;
+	background-color:#cccccc;
 	cursor: e-resize;
 	cursor: col-resize;
 	position:absolute;

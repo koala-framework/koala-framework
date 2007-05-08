@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -73,6 +73,9 @@ drop     Traditional bottom-right drop shadow
             }
         }
         this.el.setStyle("z-index", this.zIndex || parseInt(target.getStyle("z-index"), 10)-1);
+        if(Ext.isIE){
+            this.el.dom.style.filter="progid:DXImageTransform.Microsoft.alpha(opacity=50) progid:DXImageTransform.Microsoft.Blur(pixelradius="+this.offset+")";
+        }
         this.realign(
             target.getLeft(true),
             target.getTop(true),
@@ -98,19 +101,28 @@ drop     Traditional bottom-right drop shadow
      * @param {Number} height The target element height
      */
     realign : function(l, t, w, h){
+        if(!this.el){
+            return;
+        }
         var a = this.adjusts, d = this.el.dom, s = d.style;
-        s.left = (l+a.l)+"px";
-        s.top = (t+a.t)+"px";
+        var iea = 0;
+        if(Ext.isIE){
+            iea = -(this.offset);
+        }
+        s.left = (l+a.l+iea)+"px";
+        s.top = (t+a.t+iea)+"px";
         var sw = (w+a.w), sh = (h+a.h), sws = sw +"px", shs = sh + "px";
         if(s.width != sws || s.height != shs){
             s.width = sws;
             s.height = shs;
-            var cn = d.childNodes;
-            var sww = Math.max(0, (sw-12))+"px";
-            cn[0].childNodes[1].style.width = sww;
-            cn[1].childNodes[1].style.width = sww;
-            cn[2].childNodes[1].style.width = sww;
-            cn[1].style.height = Math.max(0, (sh-12))+"px";
+            if(!Ext.isIE){
+                var cn = d.childNodes;
+                var sww = Math.max(0, (sw-12))+"px";
+                cn[0].childNodes[1].style.width = sww;
+                cn[1].childNodes[1].style.width = sww;
+                cn[2].childNodes[1].style.width = sww;
+                cn[1].style.height = Math.max(0, (sh-12))+"px";
+            }
         }
     },
 
@@ -140,15 +152,15 @@ drop     Traditional bottom-right drop shadow
 // Private utility class that manages the internal Shadow cache
 Ext.Shadow.Pool = function(){
     var p = [];
-    var markup = '<div class="x-shadow"><div class="xst"><div class="xstl"></div><div class="xstc"></div><div class="xstr"></div></div><div class="xsc"><div class="xsml"></div><div class="xsmc"></div><div class="xsmr"></div></div><div class="xsb"><div class="xsbl"></div><div class="xsbc"></div><div class="xsbr"></div></div></div>';
+    var markup = Ext.isIE ?
+                 '<div class="x-ie-shadow"></div>' :
+                 '<div class="x-shadow"><div class="xst"><div class="xstl"></div><div class="xstc"></div><div class="xstr"></div></div><div class="xsc"><div class="xsml"></div><div class="xsmc"></div><div class="xsmr"></div></div><div class="xsb"><div class="xsbl"></div><div class="xsbc"></div><div class="xsbr"></div></div></div>';
     return {
         pull : function(){
             var sh = p.shift();
             if(!sh){
                 sh = Ext.get(Ext.DomHelper.insertHtml("beforeBegin", document.body.firstChild, markup));
-                if(Ext.isIE && !Ext.isIE7){ //ie6 broken png
-                    sh.setOpacity(.3);
-                }
+                sh.autoBoxAdjust = false;
             }
             return sh;
         },

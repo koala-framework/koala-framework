@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -37,10 +37,6 @@ Ext.extend(Ext.grid.AbstractGridView, Ext.util.Observable, {
         this.splitSelector = "#" + cid + " ." + this.splitClass + "-";
 	},
 	
-	/**
-	 * @private
-	 * Utility method that gets an array of the cell renderers
-	 */
 	getColumnRenderers : function(){
     	var renderers = [];
     	var cm = this.grid.colModel;

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -47,12 +47,13 @@ Ext.extend(Ext.dd.DragZone, Ext.dd.DragSource, {
     /**
      * Called once drag threshold has been reached to initialize the proxy element. By default, it clones the
      * this.dragData.ddel
-     * @param {EventObject} e The current event
+     * @param {Number} x The x position of the click on the dragged object
+     * @param {Number} y The y position of the click on the dragged object
      * @return {Boolean} true to continue the drag, false to cancel
      */
-    onInitDrag : function(e){
+    onInitDrag : function(x, y){
         this.proxy.update(this.dragData.ddel.cloneNode(true));
-        this.onStartDrag(e);
+        this.onStartDrag(x, y);
         return true;
     },
     

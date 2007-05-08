@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -14,11 +14,11 @@ Ext.tree.TreeLoader = function(config){
     this.requestMethod = "POST";
     Ext.apply(this, config);
     
-    this.events = {
+    this.addEvents({
         "beforeload" : true,
         "load" : true,
         "loadexception" : true
-    };
+    });
 };
 
 Ext.extend(Ext.tree.TreeLoader, Ext.util.Observable, {

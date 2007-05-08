@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -429,7 +429,7 @@
 	background-color: #f5f5f5;
 }
 .x-grid-row-over td{
-	background:#eeeeee;
+	background-color:#eeeeee;
 }
 .x-grid-col {
 	border-right: 1px solid #eee;

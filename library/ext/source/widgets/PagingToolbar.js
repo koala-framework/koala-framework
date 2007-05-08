@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -20,7 +20,7 @@ Ext.PagingToolbar = function(el, ds, config){
     Ext.PagingToolbar.superclass.constructor.call(this, el, null, config);
     this.ds = ds;
     this.cursor = 0;
-    this.render(this.el);
+    this.renderButtons(this.el);
     this.bind(ds);
 };
 
@@ -77,7 +77,7 @@ Ext.extend(Ext.PagingToolbar, Ext.Toolbar, {
     refreshText : "Refresh",
 
     // private
-    render : function(el){
+    renderButtons : function(el){
         this.first = this.addButton({
             tooltip: this.firstText,
             cls: "x-btn-icon x-grid-page-first",

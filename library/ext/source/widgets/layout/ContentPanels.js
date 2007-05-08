@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -61,7 +61,7 @@ Ext.ContentPanel = function(el, config, content){
     }else{
         this.resizeEl = this.el;
     }
-    this.events = {
+    this.addEvents({
         /**
          * @event activate
          * Fires when this panel is activated. 
@@ -83,7 +83,7 @@ Ext.ContentPanel = function(el, config, content){
          * @param {Number} height The height after any component adjustments
          */
         "resize" : true
-    };
+    });
     if(this.autoScroll){
         this.resizeEl.setStyle("overflow", "auto");
     }
@@ -243,7 +243,7 @@ panel.load({<br/>
                 this.el.setSize(width, height);
             }
             var size = this.adjustForComponents(width, height);
-            this.resizeEl.setSize(this.autoWidth ? "auto" : size.width, size.height);
+            this.resizeEl.setSize(this.autoWidth ? "auto" : size.width, this.autoHeight ? "auto" : size.height);
             this.fireEvent('resize', this, size.width, size.height);
         }
     },

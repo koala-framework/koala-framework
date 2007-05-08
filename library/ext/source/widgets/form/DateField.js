@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -119,7 +119,7 @@ Ext.extend(Ext.form.DateField, Ext.form.TriggerField,  {
         if(!Ext.form.DateField.superclass.validateValue.call(this, value)){
             return false;
         }
-        if(value.length < 1){ // if it"s blank and textfield didn"t flag it then it's valid
+        if(value.length < 1){ // if it's blank and textfield didn't flag it then it's valid
              return true;
         }
         var svalue = value;
@@ -231,7 +231,7 @@ dateField.setValue('2006-5-4');
         if(this.menu == null){
             this.menu = new Ext.menu.DateMenu();
         }
-        Ext.apply(this.menu,  {
+        Ext.apply(this.menu.picker,  {
             minDate : this.minValue,
             maxDate : this.maxValue,
             disabledDatesRE : this.ddMatch,

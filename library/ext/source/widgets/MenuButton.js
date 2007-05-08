@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -27,7 +27,7 @@ Ext.MenuButton = function(renderTo, config){
      * @param {MenuButton} this
      * @param {EventObject} e The click event
      */
-    this.events["arrowclick"] = true;
+    this.addEvents({"arrowclick":true});
 };
 
 Ext.extend(Ext.MenuButton, Ext.Button, {
@@ -51,11 +51,13 @@ Ext.extend(Ext.MenuButton, Ext.Button, {
         }
         this.el = btn;
         this.autoWidth();
-        btn.on("click", this.onClick, this);
-        btn.on("mouseover", this.onMouseOver, this);
-        btn.on("mouseout", this.onMouseOut, this);
-        btn.on("mousedown", this.onMouseDown, this);
-        btn.on("mouseup", this.onMouseUp, this);
+        if(this.handleMouseEvents){
+            btn.on("mouseover", this.onMouseOver, this);
+            btn.on("mouseout", this.onMouseOut, this);
+            btn.on("mousedown", this.onMouseDown, this);
+            btn.on("mouseup", this.onMouseUp, this);
+        }
+        btn.on(this.clickEvent, this.onClick, this);
         if(this.tooltip){
             var btnEl = btn.child("button:first");
             if(typeof this.tooltip == 'object'){

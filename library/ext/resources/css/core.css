@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -37,6 +37,16 @@
     cursor:wait;
 }
 
+.ext-shim {
+    position:absolute;
+    visibility:hidden;
+    left:0;
+    top:0;
+    overflow:hidden;
+}
+.ext-ie .ext-shim {
+    filter: alpha(opacity=0);
+}
 
 .x-mask-loading div {
     padding:5px 10px 5px 25px;
@@ -141,10 +151,22 @@
     width: 10px;
 }
 
+.x-ie-shadow {
+    display: none;
+    position: absolute;
+    overflow: hidden;
+    left:0;
+    top:0;
+    background:#999;
+    zoom:1;
+}
+
 .x-shadow {
     display: none;
     position: absolute;
     overflow: hidden;
+    left:0;
+    top:0;
 }
 
 .x-shadow * {
@@ -186,10 +208,7 @@
 .x-shadow .xsmc {
     float: left;
     height: 100%;
-    background: #333333;
-    opacity: .35;
-    -moz-opacity: .35;
-    filter: alpha(opacity=25);
+    background: transparent url( ../images/default/shadow-c.png );
 }
 
 .x-shadow .xst, .x-shadow .xsb {

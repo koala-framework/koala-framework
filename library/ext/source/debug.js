@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -377,7 +377,7 @@
         for(var edType in eds){
             filterIds += eds[edType].id +'|';
         }
-        Ext.each([dlg.shim? dlg.shim.id : 'noshim', dlg.proxyDrag.id, dlg.resizer.overlay.id, dlg.resizer.proxy.id], function(id){
+        Ext.each([dlg.shim? dlg.shim.id : 'noshim', dlg.proxyDrag.id], function(id){
              filterIds += id +'|';
         });
         filterIds += dlg.el.id;

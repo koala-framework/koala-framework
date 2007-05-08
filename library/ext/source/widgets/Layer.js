@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -45,8 +45,8 @@ Ext.Layer = function(config, existingEl){
     }else{
         this.id = Ext.id(this.dom);
     }
-    var zindex = (config.zindex || parseInt(this.getStyle("z-index"), 10)) || 11000;
-    this.position("absolute", zindex);
+    this.zindex = config.zindex || this.getZIndex();
+    this.position("absolute", this.zindex);
     if(config.shadow){
         this.shadowOffset = config.shadowOffset || 4;
         this.shadow = new Ext.Shadow({
@@ -56,31 +56,88 @@ Ext.Layer = function(config, existingEl){
     }else{
         this.shadowOffset = 0;
     }
-    if(config.shim !== false && Ext.useShims){
-        this.shim = this.createShim();
-        this.shim.setOpacity(0);
-        this.shim.position("absolute", zindex-2);
-    }
+    this.useShim = config.shim !== false && Ext.useShims;
     this.useDisplay = config.useDisplay;
     this.hide();
 };
 
 var supr = Ext.Element.prototype;
 
+// shims are shared among layer to keep from having 100 iframes
+var shims = [];
+
 Ext.extend(Ext.Layer, Ext.Element, {
+
+    getZIndex : function(){
+        return this.zindex || parseInt(this.getStyle("z-index"), 10) || 11000;
+    },
+
+    getShim : function(){
+        if(!this.useShim){
+            return null;
+        }
+        if(this.shim){
+            return this.shim;
+        }
+        var shim = shims.shift();
+        if(!shim){
+            shim = this.createShim();
+            shim.enableDisplayMode('block');
+            shim.dom.style.display = 'none';
+            shim.dom.style.visibility = 'visible';
+        }
+        var pn = this.dom.parentNode;
+        if(shim.dom.parentNode != pn){
+            pn.insertBefore(shim.dom, this.dom);
+        }
+        shim.setStyle('z-index', this.getZIndex()-2);
+        this.shim = shim;
+        return shim;
+    },
+
+    hideShim : function(){
+        if(this.shim){
+            this.shim.setDisplayed(false);
+            shims.push(this.shim);
+            delete this.shim;
+        }
+    },
+
+    disableShadow : function(){
+        if(this.shadow){
+            this.shadowDisabled = true;
+            this.shadow.hide();
+            this.lastShadowOffset = this.shadowOffset;
+            this.shadowOffset = 0;
+        }
+    },
+
+    enableShadow : function(show){
+        if(this.shadow){
+            this.shadowDisabled = false;
+            this.shadowOffset = this.lastShadowOffset;
+            delete this.lastShadowOffset;
+            if(show){
+                this.sync(true);
+            }
+        }
+    },
+
     // private
     // this code can execute repeatedly in milliseconds (i.e. during a drag) so
     // code size was sacrificed for effeciency (e.g. no getBox/setBox, no XY calls)
     sync : function(doShow){
-        var sw = this.shadow, sh = this.shim;
-        if(!this.updating && this.isVisible() && (sw || sh)){
+        var sw = this.shadow;
+        if(!this.updating && this.isVisible() && (sw || this.useShim)){
+            var sh = this.getShim();
+
             var w = this.getWidth(),
                 h = this.getHeight();
 
             var l = this.getLeft(true),
                 t = this.getTop(true);
 
-            if(sw){
+            if(sw && !this.shadowDisabled){
                 if(doShow && !sw.isVisible()){
                     sw.show(this);
                 }else{
@@ -92,8 +149,8 @@ Ext.extend(Ext.Layer, Ext.Element, {
                     }
                     // fit the shim behind the shadow, so it is shimmed too
                     var a = sw.adjusts, s = sh.dom.style;
-                    s.left = (l+a.l)+"px";
-                    s.top = (t+a.t)+"px";
+                    s.left = (Math.min(l, l+a.l))+"px";
+                    s.top = (Math.min(t, t+a.t))+"px";
                     s.width = (w+a.w)+"px";
                     s.height = (h+a.h)+"px";
                 }
@@ -110,14 +167,20 @@ Ext.extend(Ext.Layer, Ext.Element, {
 
     // private
     destroy : function(){
-        if(this.shim){
-            this.shim.remove();
-        }
+        this.hideShim();
         if(this.shadow){
             this.shadow.hide();
         }
         this.removeAllListeners();
-        this.remove();
+        var pn = this.dom.parentNode;
+        if(pn){
+            pn.removeChild(this.dom);
+        }
+        Ext.Element.uncache(this.id);
+    },
+
+    remove : function(){
+        this.destroy();
     },
 
     // private
@@ -136,12 +199,7 @@ Ext.extend(Ext.Layer, Ext.Element, {
         if(this.shadow){
             this.shadow.hide();
         }
-        if(this.shim){
-           this.shim.hide();
-           if(negOffset){
-               this.shim.setLeftTop(-10000,-10000);
-           }
-        }
+        this.hideShim();
     },
 
     // private
@@ -151,7 +209,7 @@ Ext.extend(Ext.Layer, Ext.Element, {
                 vh = Ext.lib.Dom.getViewHeight();
             var s = Ext.get(document).getScroll();
 
-            xy = this.getXY();
+            var xy = this.getXY();
             var x = xy[0], y = xy[1];   
             var w = this.dom.offsetWidth+this.shadowOffset, h = this.dom.offsetHeight+this.shadowOffset;
             // only move it if it needs it
@@ -182,24 +240,32 @@ Ext.extend(Ext.Layer, Ext.Element, {
                     }
                 }
                 xy = [x, y];
-                this.lastXY = xy;
+                this.storeXY(xy);
                 supr.setXY.call(this, xy);
                 this.sync();
             }
         }
     },
 
+    isVisible : function(){
+        return this.visible;    
+    },
+
     // private
     showAction : function(){
+        this.visible = true; // track visibility to prevent getStyle calls
         if(this.useDisplay === true){
             this.setDisplayed("");
         }else if(this.lastXY){
             supr.setXY.call(this, this.lastXY);
+        }else if(this.lastLT){
+            supr.setLeftTop.call(this, this.lastLT[0], this.lastLT[1]);
         }
     },
 
     // private
     hideAction : function(){
+        this.visible = false;
         if(this.useDisplay === true){
             this.setDisplayed(false);
         }else{
@@ -209,7 +275,9 @@ Ext.extend(Ext.Layer, Ext.Element, {
 
     // overridden Element method
     setVisible : function(v, a, d, c, e){
-        this.showAction();
+        if(v){
+            this.showAction();
+        }
         if(a && v){
             var cb = function(){
                 this.sync(true);
@@ -240,6 +308,16 @@ Ext.extend(Ext.Layer, Ext.Element, {
         }
     },
 
+    storeXY : function(xy){
+        delete this.lastLT;
+        this.lastXY = xy;
+    },
+
+    storeLeftTop : function(left, top){
+        delete this.lastXY;
+        this.lastLT = [left, top];
+    },
+
     // private
     beforeFx : function(){
         this.beforeAction();
@@ -260,10 +338,28 @@ Ext.extend(Ext.Layer, Ext.Element, {
     },
 
     // overridden Element method
+    setLeft : function(left){
+        this.storeLeftTop(left, this.getTop(true));
+        supr.setLeft.apply(this, arguments);
+        this.sync();
+    },
+
+    setTop : function(top){
+        this.storeLeftTop(this.getLeft(true), top);
+        supr.setTop.apply(this, arguments);
+        this.sync();
+    },
+
+    setLeftTop : function(left, top){
+        this.storeLeftTop(left, top);
+        supr.setLeftTop.apply(this, arguments);
+        this.sync();
+    },
+
     setXY : function(xy, a, d, c, e){
         this.fixDisplay();
         this.beforeAction();
-        this.lastXY = xy;
+        this.storeXY(xy);
         var cb = this.createCB(c);
         supr.setXY.call(this, xy, a, d, cb, e);
         if(!a){
@@ -328,6 +424,7 @@ Ext.extend(Ext.Layer, Ext.Element, {
         this.beforeAction();
         var cb = this.createCB(c);
         if(!a){
+            this.storeXY([x, y]);
             supr.setXY.call(this, [x, y]);
             supr.setSize.call(this, w, h, a, d, cb, e);
             cb();
@@ -345,6 +442,7 @@ Ext.extend(Ext.Layer, Ext.Element, {
      * @return {this} The Layer
      */
     setZIndex : function(zindex){
+        this.zindex = zindex;
         this.setStyle("z-index", zindex + 2);
         if(this.shadow){
             this.shadow.setZIndex(zindex + 1);

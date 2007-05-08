@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -7,6 +7,7 @@
  */
 
 /**
+* @class Ext.data.Record
  * Instances of this class encapsulate both record <em>definition</em> information, and record
  * <em>value</em> information for use in {@link Ext.data.Store} objects, or any code which needs
  * to access Records cached in an {@link Ext.data.Store} object.
@@ -43,7 +44,12 @@ Ext.data.Record = function(data, id){
  * to the data item relative to the record element. If the mapping expression is the same as the field name,
  * this may be omitted.</li>
  * <li>type {String} (Optional) The data type for conversion to displayable value. Possible values are
- * "auto" (which is the default, and implies no conversion), "string", "int", "float", "boolean", "date".</li>
+ * <ul><li>auto (Default, implies no conversion)</li>
+ * <li>string</li>
+ * <li>int</li>
+ * <li>float</li>
+ * <li>boolean</li>
+ * <li>date</li></ul></li>
  * <li>sortType {Mixed} (Optional) A member of {@link Ext.data.SortTypes}.</li>
  * <li>sortDir {String} (Optional) Initial direction to sort. "ASC" or "DESC"</li>
  * <li>convert {Function} (Optional) A function which accepts a data value and returns it formatted for display.</li>
@@ -94,6 +100,10 @@ Ext.data.Record.REJECT = 'reject';
 Ext.data.Record.COMMIT = 'commit';
 
 Ext.data.Record.prototype = {
+    /**
+     * Readonly flag - true if this record has been modified.
+     * @type Boolean
+     */
     dirty : false,
     editing : false,
     error: null,

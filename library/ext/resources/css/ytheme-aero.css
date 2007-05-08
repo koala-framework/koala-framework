@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -410,7 +410,7 @@ body.x-masked #x-msg-box .x-dlg-bd, body.x-body-masked #x-msg-box .x-dlg-bd{
 	background-color: #f5f5f5;
 }
 .x-grid-row-over td, .x-grid-locked .x-grid-row-over td{
-	background:#d9e8fb;
+	background-color:#d9e8fb;
 }
 .x-grid-col {
 	border-right: 1px solid #eee;
@@ -496,4 +496,86 @@ body.x-masked #x-msg-box .x-dlg-bd, body.x-body-masked #x-msg-box .x-dlg-bd{
 }
 .x-toolbar .x-btn-click .x-btn-center, .x-toolbar .x-btn-pressed .x-btn-center, .x-toolbar .x-btn-menu-active .x-btn-center{
 	background:url(../images/aero/toolbar/tb-btn-sprite.gif) repeat-x 0 -105px;
+}
+
+
+
+
+/*************** TABS 2 *****************/
+
+
+/**
+* Tabs
+*/
+.x-tab-panel-header, .x-tab-panel-footer {
+    background:#deecfd;
+	border:1px solid #8db2e3;
+}
+.x-tab-panel-header {
+    background:#deecfd;
+	border:1px solid #8db2e3;
+	padding-bottom:2px;
+}
+.x-tab-panel-footer {
+    background:#deecfd;
+	border:1px solid #8db2e3;
+	padding-top:2px;
+}
+
+.x-tab-strip-top{
+	padding-top:1px;
+	background:#cedff5 url(../images/aero/tabs/tab-strip-bg.gif) repeat-x bottom;
+	border-bottom:1px solid #8db2e3;
+}
+.x-tab-strip-bottom{
+	padding-bottom:1px;
+	background:#cedff5 url(../images/aero/tabs/tab-strip-btm-bg.gif) repeat-x top;
+	border-top:1px solid #8db2e3;
+	border-bottom:0 none;
+}
+
+.x-tab-strip .x-tab-strip-text {
+	color:#15428b;
+	font:bold 11px tahoma,arial,verdana,sans-serif;
+}
+.x-tab-strip .x-tab-strip-active .x-tab-text {
+	cursor:default;
+	color:#15428b;
+}
+
+.x-tab-strip-top .x-tab-strip-active .x-tab-right {
+	 background: url(../images/aero/tabs/tab-sprite.gif) no-repeat right 0;
+}
+.x-tab-strip-top .x-tab-strip-active .x-tab-left {
+	 background: url(../images/aero/tabs/tab-sprite.gif) no-repeat 0 -100px;
+}
+.x-tab-strip-top .x-tab-right {
+	 background: url(../images/aero/tabs/tab-sprite.gif) no-repeat right -50px;
+}
+.x-tab-strip-top .x-tab-left {
+	 background: url(../images/aero/tabs/tab-sprite.gif) no-repeat 0 -150px;
+}
+
+
+.x-tab-strip-bottom .x-tab-right {
+	 background: url(../images/aero/tabs/tab-btm-inactive-right-bg.gif) no-repeat bottom left;
+}
+.x-tab-strip-bottom .x-tab-left {
+	 background: url(../images/aero/tabs/tab-btm-inactive-left-bg.gif) no-repeat bottom right;
+}
+.x-tab-strip-bottom .x-tab-strip-active .x-tab-right {
+	 background: url(../images/aero/tabs/tab-btm-right-bg.gif) no-repeat bottom left;
+}
+.x-tab-strip-bottom .x-tab-strip-active .x-tab-left {
+	 background: url(../images/aero/tabs/tab-btm-left-bg.gif) no-repeat bottom right;
+}
+
+.x-tab-panel-body-top {
+	border:1px solid #8db2e3;
+	border-top:0 none;
+}
+
+.x-tab-panel-body-bottom {
+	border:1px solid #8db2e3;
+	border-bottom:0 none;
 }

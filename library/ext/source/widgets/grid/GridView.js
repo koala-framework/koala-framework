@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -60,6 +60,43 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
     cellRE: /(?:.*?)x-grid-(?:hd|cell|csplit)-(?:[\d]+)-([\d]+)(?:.*?)/,
 
     findRE: /\s?(?:x-grid-hd|x-grid-col|x-grid-csplit)\s/,
+
+    bind : function(ds, cm){
+        if(this.ds){
+            this.ds.un("load", this.onLoad, this);
+            this.ds.un("datachanged", this.onDataChange);
+            this.ds.un("add", this.onAdd);
+            this.ds.un("remove", this.onRemove);
+            this.ds.un("update", this.onUpdate);
+            this.ds.un("clear", this.onClear);
+        }
+        if(ds){
+            ds.on("load", this.onLoad, this);
+            ds.on("datachanged", this.onDataChange, this);
+            ds.on("add", this.onAdd, this);
+            ds.on("remove", this.onRemove, this);
+            ds.on("update", this.onUpdate, this);
+            ds.on("clear", this.onClear, this);
+        }
+        this.ds = ds;
+
+        if(this.cm){
+            this.cm.un("widthchange", this.onColWidthChange, this);
+            this.cm.un("headerchange", this.onHeaderChange, this);
+            this.cm.un("hiddenchange", this.onHiddenChange, this);
+            this.cm.un("columnmoved", this.onColumnMove, this);
+            this.cm.un("columnlockchange", this.onColumnLock, this);
+        }
+        if(cm){
+            this.generateRules(cm);
+            cm.on("widthchange", this.onColWidthChange, this);
+            cm.on("headerchange", this.onHeaderChange, this);
+            cm.on("hiddenchange", this.onHiddenChange, this);
+            cm.on("columnmoved", this.onColumnMove, this);
+            cm.on("columnlockchange", this.onColumnLock, this);
+        }
+        this.cm = cm;
+    },
 
     init: function(grid){
 		Ext.grid.GridView.superclass.init.call(this, grid);
@@ -153,41 +190,21 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
 		this.templates = tpls;
 	},
 
-	bind : function(ds, cm){
-        if(this.ds){
-            this.ds.un("load", this.onLoad, this);
-            this.ds.un("datachanged", this.onDataChange);
-            this.ds.un("add", this.onAdd);
-            this.ds.un("remove", this.onRemove);
-            this.ds.un("update", this.onUpdate);
-            this.ds.un("clear", this.onClear);
-        }
-        if(ds){
-            ds.on("load", this.onLoad, this);
-            ds.on("datachanged", this.onDataChange, this);
-            ds.on("add", this.onAdd, this);
-            ds.on("remove", this.onRemove, this);
-            ds.on("update", this.onUpdate, this);
-            ds.on("clear", this.onClear, this);
-        }
-        this.ds = ds;
-
-        if(this.cm){
-            this.cm.un("widthchange", this.updateColumns, this);
-            this.cm.un("headerchange", this.updateHeaders, this);
-            this.cm.un("hiddenchange", this.handleHiddenChange, this);
-            this.cm.un("columnmoved", this.handleColumnMove, this);
-            this.cm.un("columnlockchange", this.handleLockChange, this);
-        }
-        if(cm){
-            this.generateRules(cm);
-            cm.on("widthchange", this.updateColumns, this);
-            cm.on("headerchange", this.updateHeaders, this);
-            cm.on("hiddenchange", this.handleHiddenChange, this);
-            cm.on("columnmoved", this.handleColumnMove, this);
-            cm.on("columnlockchange", this.handleLockChange, this);
-        }
-        this.cm = cm;
+	// remap these for backwards compat
+    onColWidthChange : function(){
+        this.updateColumns.apply(this, arguments);
+    },
+    onHeaderChange : function(){
+        this.updateHeaders.apply(this, arguments);
+    }, 
+    onHiddenChange : function(){
+        this.handleHiddenChange.apply(this, arguments);
+    },
+    onColumnMove : function(){
+        this.handleColumnMove.apply(this, arguments);
+    },
+    onColumnLock : function(){
+        this.handleLockChange.apply(this, arguments);
     },
 
     onDataChange : function(){
@@ -505,7 +522,11 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
     focusCell : function(row, col, hscroll){
         var el = this.ensureVisible(row, col, hscroll);
         this.focusEl.alignTo(el, "tl-tl");
-        this.focusEl.focus.defer(1, this.focusEl);
+        if(Ext.isGecko){
+            this.focusEl.focus();
+        }else{
+            this.focusEl.focus.defer(1, this.focusEl);
+        }
     },
 
     /**
@@ -1286,14 +1307,12 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
             this.hmenu = new Ext.menu.Menu({id: this.grid.id + "-hctx"});
             this.hmenu.add(
                 {id:"asc", text: this.sortAscText, cls: "xg-hmenu-sort-asc"},
-                {id:"desc", text: this.sortDescText, cls: "xg-hmenu-sort-desc"},
-                "separator"
+                {id:"desc", text: this.sortDescText, cls: "xg-hmenu-sort-desc"}
             );
             if(this.grid.enableColLock !== false){
-                this.hmenu.add(
+                this.hmenu.add('-',
                     {id:"lock", text: this.lockText, cls: "xg-hmenu-lock"},
-                    {id:"unlock", text: this.unlockText, cls: "xg-hmenu-unlock"},
-                    "separator"
+                    {id:"unlock", text: this.unlockText, cls: "xg-hmenu-unlock"}
                 );
             }
             if(this.grid.enableColumnHide !== false){
@@ -1302,7 +1321,7 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
                 this.colMenu.on("beforeshow", this.beforeColMenuShow, this);
                 this.colMenu.on("itemclick", this.handleHdMenuClick, this);
 
-                this.hmenu.add(
+                this.hmenu.add('-',
                     {id:"columns", text: this.columnsText, menu: this.colMenu}
                 );
             }
@@ -1312,7 +1331,7 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
         }
 
         if((this.grid.enableDragDrop || this.grid.enableDrag) && Ext.grid.GridDragZone){
-            var dd = new Ext.grid.GridDragZone(this.grid, {
+            this.dd = new Ext.grid.GridDragZone(this.grid, {
                 ddGroup : this.grid.ddGroup || 'GridDD'
             });
         }
@@ -1382,6 +1401,14 @@ Ext.extend(Ext.grid.GridView, Ext.grid.AbstractGridView, {
                 expandCol = g.autoExpandColumn,
                 gv = this;
         //c.beginMeasure();
+
+        if(!c.dom.offsetWidth){ // display:none?
+            if(initialRender){
+                this.lockedWrap.show();
+                this.mainWrap.show();
+            }
+            return;
+        }
 
         var hasLock = this.cm.isLocked(0);
 

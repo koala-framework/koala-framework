@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -14,7 +14,7 @@
 Ext.tree.DefaultSelectionModel = function(){
    this.selNode = null;
    
-   this.events = {
+   this.addEvents({
        /**
         * @event selectionchange
         * Fires when the selected node changes
@@ -31,7 +31,7 @@ Ext.tree.DefaultSelectionModel = function(){
         * @param {TreeNode} node the old selection
         */
        "beforeselect" : true
-   };
+   });
 };
 
 Ext.extend(Ext.tree.DefaultSelectionModel, Ext.util.Observable, {
@@ -202,7 +202,7 @@ Ext.extend(Ext.tree.DefaultSelectionModel, Ext.util.Observable, {
 Ext.tree.MultiSelectionModel = function(){
    this.selNodes = [];
    this.selMap = {};
-   this.events = {
+   this.addEvents({
        /**
         * @event selectionchange
         * Fires when the selected nodes change
@@ -210,7 +210,7 @@ Ext.tree.MultiSelectionModel = function(){
         * @param {Array} nodes Array of the selected nodes
         */
        "selectionchange" : true
-   };
+   });
 };
 
 Ext.extend(Ext.tree.MultiSelectionModel, Ext.util.Observable, {
@@ -307,6 +307,10 @@ Ext.extend(Ext.tree.MultiSelectionModel, Ext.util.Observable, {
     getSelectedNodes : function(){
         return this.selNodes;    
     },
-    
-    onKeyDown : Ext.tree.DefaultSelectionModel.prototype.onKeyDown
+
+    onKeyDown : Ext.tree.DefaultSelectionModel.prototype.onKeyDown,
+
+    selectNext : Ext.tree.DefaultSelectionModel.prototype.selectNext,
+
+    selectPrevious : Ext.tree.DefaultSelectionModel.prototype.selectPrevious
 });

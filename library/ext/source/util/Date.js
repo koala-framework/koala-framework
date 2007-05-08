@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -33,7 +33,7 @@ Format  Output      Description
   M      Jan        Month name abbreviation, three letters
   n      1          Numeric representation of a month, without leading zeros
   t      31         Number of days in the given month
-  L      0          Whether its a leap year (1 if it is a leap year, else 0)
+  L      0          Whether it's a leap year (1 if it is a leap year, else 0)
   Y      2007       A full numeric representation of a year, 4 digits
   y      07         A two digit representation of a year
   a      pm         Lowercase Ante meridiem and Post meridiem	

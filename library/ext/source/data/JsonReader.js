@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -14,18 +14,22 @@
  * <p>
  * The code below lists all configuration options.
  * <pre><code>
-  var myReader = new Ext.data.JsonReader({
+   var RecordDef = Ext.data.Record.create([
+       {name: 'name', mapping: 'name'},     // "mapping" property not needed if it's the same as "name"
+       {name: 'occupation'},                // This field will use "occupation" as the mapping.
+   ]);
+   var myReader = new Ext.data.JsonReader({
        totalProperty: "results",    // The property which contains the number of returned records (optional)
        root: "rows",                // The property which contains an Array of record objects
        id: "id"                     // The property within the record object that provides an ID for the record (optional)
-   }, myRecordDefinition);
+   }, RecordDef);
   </code></pre>
  * <p>
  * This would consume a JSON file like this:
  * <pre><code>
    { 'results': 2, 'rows': [
-     { 'id': 1, 'name': 'Bill' },
-     { 'id': 2, 'name': 'Ben' } ]
+     { 'id': 1, 'name': 'Bill', occupation: 'Gardener' },
+     { 'id': 2, 'name': 'Ben', occupation: 'Horticulturalist' } ]
    }
   </code></pre>
  * @cfg {String} totalProperty Name of the property from which to retrieve the total number of records

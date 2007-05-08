@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -7,6 +7,7 @@
  */
 
 /**
+ * @class Ext.data.DataProxy
  * This class is an abstract base class for implementations which provide retrieval of
  * unformatted data objects.
  * <p>
@@ -18,7 +19,7 @@
  * {@link Ext.data.HttpProxy#load}.
  */
 Ext.data.DataProxy = function(){
-    this.events = {
+    this.addEvents({
         /**
          * @event beforeload
          * Fires before a network request is made to retrieve a data object.
@@ -40,7 +41,7 @@ Ext.data.DataProxy = function(){
          * @param {Object} e The Exception.
          */
         loadexception : true
-    };
+    });
     Ext.data.DataProxy.superclass.constructor.call(this);
 };
 

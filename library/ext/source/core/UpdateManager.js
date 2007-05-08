@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -53,7 +53,7 @@ Ext.UpdateManager = function(el, forceNew){
      */
     this.defaultUrl = null;
     
-    this.events = {
+    this.addEvents({
         /**
          * @event beforeupdate
          * Fired before an update is made, return false from your handler and the update is cancelled. 
@@ -76,7 +76,7 @@ Ext.UpdateManager = function(el, forceNew){
          * @param {Object} oResponseObject The response Object
          */
         "failure": true
-    };
+    });
     var d = Ext.UpdateManager.defaults;
     /**
      * Blank page URL to use with SSL file uploads (Defaults to Ext.UpdateManager.defaults.sslBlankUrl or "about:blank").
@@ -234,7 +234,7 @@ um.update({<br/>
     },
     
     /**
-     * Performs an async form post, updating this element with the response. If the form has the attribute enctype="multipart/form-data", it assumes its a file upload.
+     * Performs an async form post, updating this element with the response. If the form has the attribute enctype="multipart/form-data", it assumes it's a file upload.
      * Uses this.sslBlankUrl for SSL file uploads to prevent IE security warning. See YUI docs for more info. 
      * @param {String/HTMLElement} form The form Id or form element
      * @param {String} url (optional) The url to pass the form to. If omitted the action attribute on the form will be used.
@@ -479,7 +479,7 @@ Ext.UpdateManager.BasicRenderer = function(){};
 
 Ext.UpdateManager.BasicRenderer.prototype = {
     /**
-     * This is called when the transaction is completed and its time to update the element - The BasicRenderer 
+     * This is called when the transaction is completed and it's time to update the element - The BasicRenderer 
      * updates the elements innerHTML with the responseText - To perform a custom render (i.e. XML or JSON processing), 
      * create an object with a "render(el, response)" method and pass it to setRenderer on the UpdateManager.
      * @param {Ext.Element} el The element being rendered

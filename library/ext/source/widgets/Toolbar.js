@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -16,25 +16,38 @@
  * @param {Object} config The config object
  */ 
  Ext.Toolbar = function(container, buttons, config){
+     if(container instanceof Array){ // omit the container for later rendering
+         buttons = container;
+         config = buttons;
+         container = null;
+     }
      Ext.apply(this, config);
-     this.el = Ext.get(container);
-     if(this.cls){
-         this.el.addClass(this.cls);
+     this.buttons = buttons;
+     if(container){
+         this.render(container);
      }
-     // using a table allows for vertical alignment
-     this.el.update('<div class="x-toolbar x-small-editor"><table cellspacing="0"><tr></tr></table></div>');
-     this.tr = this.el.child("tr", true);
-     var autoId = 0;
-     this.items = new Ext.util.MixedCollection(false, function(o){
-         return o.id || ("item" + (++autoId));
-     });
-     if(buttons){
-         this.add.apply(this, buttons);
-     }
-     
 };
 
 Ext.Toolbar.prototype = {
+
+    render : function(ct){
+        this.el = Ext.get(ct);
+        if(this.cls){
+            this.el.addClass(this.cls);
+        }
+        // using a table allows for vertical alignment
+        this.el.update('<div class="x-toolbar x-small-editor"><table cellspacing="0"><tr></tr></table></div>');
+        this.tr = this.el.child("tr", true);
+        var autoId = 0;
+        this.items = new Ext.util.MixedCollection(false, function(o){
+            return o.id || ("item" + (++autoId));
+        });
+        if(this.buttons){
+            this.add.apply(this, this.buttons);
+            delete this.buttons;
+        }
+    },
+
     /**
      * Adds element(s) to the toolbar - this function takes a variable number of 
      * arguments of mixed type and adds them to the toolbar.

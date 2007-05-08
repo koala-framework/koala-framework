@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -23,18 +23,18 @@ var myReader = new Ext.data.XmlReader({
  * <p>
  * This would consume an XML file like this:
  * <pre><code>
-<?xml?>
-<dataset>
- <results>2</results>
- <row>
-   <id>1</id>
-   <name>Bill</name>
- </row>
- <row>
-   <id>2</id>
-   <name>Ben</name>
- </row>
-</dataset>
+&lt;?xml?>
+&lt;dataset>
+ &lt;results>2&lt;/results>
+ &lt;row>
+   &lt;id>1&lt;/id>
+   &lt;name>Bill&lt;/name>
+ &lt;/row>
+ &lt;row>
+   &lt;id>2&lt;/id>
+   &lt;name>Ben&lt;/name>
+ &lt;/row>
+&lt;/dataset>
 </code></pre>
  * @cfg {String} totalRecords The DomQuery path from which to retrieve the total number of records
  * in the dataset. This is only needed if the whole dataset is not passed in one go, but is being

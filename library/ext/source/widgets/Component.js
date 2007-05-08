@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -64,6 +64,8 @@ Ext.Component = function(config){
     if(config.tagName || config.dom || typeof config == "string"){ // element object
         config = {el: config, id: config.id || config};
     }
+    this.initialConfig = config;
+
     Ext.apply(this, config);
     this.addEvents({
         /**
@@ -132,6 +134,7 @@ Ext.Component = function(config){
     }
     Ext.ComponentMgr.register(this);
     Ext.Component.superclass.constructor.call(this);
+    this.initComponent();
 };
 
 // private
@@ -155,6 +158,8 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
      */
     rendered : false,
 
+    allowDomMove: true,
+
     // private
     ctype : "Ext.Component",
 
@@ -166,35 +171,57 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
         return this[this.actionMode];
     },
 
+    initComponent : Ext.emptyFn,     
     /**
-     * If this is a lazy rendering component, render it to it's container element
-     * @param {String/HTMLElement/Element} container The element this component should be rendered into
+     * If this is a lazy rendering component, render it to its container element
+     * @param {String/HTMLElement/Element} container (optional) The element this component should be rendered into. If it is being applied to existing markup, this should be left off.
      */
-    render : function(container){
+    render : function(container, position){
         if(!this.rendered && this.fireEvent("beforerender", this) !== false){
+            if(!container && this.el){
+                this.el = Ext.get(this.el);
+                container = this.el.dom.parentNode;
+                this.allowDomMove = false;
+            }
             this.container = Ext.get(container);
             this.rendered = true;
-            this.onRender(this.container);
+            if(position !== undefined){
+                if(typeof position == 'number'){
+                    position = this.container.dom.childNodes[position];
+                }else{
+                    position = Ext.getDom(position);
+                }
+            }
+            this.onRender(this.container, position || null);
             if(this.cls){
                 this.el.addClass(this.cls);
                 delete this.cls;
             }
+            if(this.style){
+                this.el.applyStyles(this.style);
+                delete this.style;
+            }
             this.fireEvent("render", this);
+            this.afterRender(this.container);
             if(this.hidden){
                 this.hide();
             }
             if(this.disabled){
                 this.disable();
             }
-            this.afterRender(this.container);
         }
+        return this;
     },
 
     // private
     // default function is not really useful
-    onRender : function(ct){
-        this.el = Ext.get(this.el);
-        ct.dom.appendChild(this.el.dom);
+    onRender : function(ct, position){
+        if(this.el){
+            this.el = Ext.get(this.el);
+            if(this.allowDomMove !== false){
+                ct.dom.insertBefore(this.el.dom, position);
+            }
+        }
     },
 
     // private
@@ -214,6 +241,7 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
     destroy : function(){
         if(this.fireEvent("beforedestroy", this) !== false){
             this.purgeListeners();
+            this.beforeDestroy();
             if(this.rendered){
                 this.el.removeAllListeners();
                 this.el.remove();
@@ -227,16 +255,28 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
         }
     },
 
+    beforeDestroy : function(){
+
+    },
+
     onDestroy : function(){
 
     },
-    
+
     /**
      * Returns the underlying {@link Ext.Element}
      * @return {Ext.Element} The element
      */
     getEl : function(){
         return this.el;
+    },
+
+    /**
+     * Returns the id of this component
+     * @return {String}
+     */
+    getId : function(){
+        return this.id;
     },
 
     /**
@@ -250,6 +290,7 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
                 this.el.dom.select();
             }
         }
+        return this;
     },
 
     // private
@@ -257,6 +298,7 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
         if(this.rendered){
             this.el.blur();
         }
+        return this;
     },
 
     /**
@@ -264,11 +306,16 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
      */
     disable : function(){
         if(this.rendered){
-            this.getActionEl().addClass(this.disabledClass);
-            this.el.dom.disabled = true;
+            this.onDisable();
         }
         this.disabled = true;
         this.fireEvent("disable", this);
+        return this;
+    },
+
+    onDisable : function(){
+        this.getActionEl().addClass(this.disabledClass);
+        this.el.dom.disabled = true;
     },
 
     /**
@@ -276,11 +323,16 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
      */
     enable : function(){
         if(this.rendered){
-            this.getActionEl().removeClass(this.disabledClass);
-            this.el.dom.disabled = false;
+            this.onEnable();
         }
         this.disabled = false;
         this.fireEvent("enable", this);
+        return this;
+    },
+
+    onEnable : function(){
+        this.getActionEl().removeClass(this.disabledClass);
+        this.el.dom.disabled = false;
     },
 
     /**
@@ -302,6 +354,7 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
             }
             this.fireEvent("show", this);
         }
+        return this;
     },
 
     // private
@@ -322,6 +375,7 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
             }
             this.fireEvent("hide", this);
         }
+        return this;
     },
 
     // private
@@ -339,5 +393,21 @@ Ext.extend(Ext.Component, Ext.util.Observable, {
         }else{
             this.hide();
         }
+        return this;
+    },
+
+    /**
+     * Returns true if this component is visible
+     */
+    isVisible : function(){
+        return this.getActionEl().isVisible();
+    },
+
+    cloneConfig : function(overrides){
+        overrides = overrides || {};
+        var id = overrides.id || Ext.id();
+        var cfg = Ext.applyIf(overrides, this.initialConfig);
+        cfg.id = id; // prevent dup id
+        return new this.__extcls(cfg);
     }
 });

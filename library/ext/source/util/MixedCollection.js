@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -8,6 +8,7 @@
 
 /**
  * @class Ext.util.MixedCollection
+ * @extends Ext.util.Observable
  * A Collection class that maintains both numeric indexes and keys and exposes events.
  * @constructor
  * @param {Boolean} allowFunctions True if the addAll function should add function references to the
@@ -22,7 +23,7 @@ Ext.util.MixedCollection = function(allowFunctions, keyFn){
     this.map = {};
     this.keys = [];
     this.length = 0;
-    this.events = {
+    this.addEvents({
         /**
          * @event clear
          * Fires when the collection is cleared.
@@ -52,7 +53,7 @@ Ext.util.MixedCollection = function(allowFunctions, keyFn){
          */
         "remove" : true,
         "sort" : true
-    };
+    });
     this.allowFunctions = allowFunctions === true;
     if(keyFn){
         this.getKey = keyFn;

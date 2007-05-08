@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -124,14 +124,14 @@ Ext.dd.StatusProxy.prototype = {
     },
 
     /**
-     * Force the Layer to sync it's shadow and shim positions to the element
+     * Force the Layer to sync its shadow and shim positions to the element
      */
     sync : function(){
         this.el.sync();
     },
 
     /**
-     * Causes the proxy to return to it's position of origin via an animation.  Should be called after an
+     * Causes the proxy to return to its position of origin via an animation.  Should be called after an
      * invalid drop operation by the item being dragged.
      * @param {Array} xy The XY position of the element ([x, y])
      * @param {Function} callback The function to call after the repair is complete

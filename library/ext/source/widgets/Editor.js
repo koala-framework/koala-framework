@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -98,7 +98,7 @@ Ext.extend(Ext.Editor, Ext.Component, {
     updateEl : false,
 
     // private
-    onRender : function(ct){
+    onRender : function(ct, position){
         this.el = new Ext.Layer({
             shadow: this.shadow,
             cls: "x-editor",

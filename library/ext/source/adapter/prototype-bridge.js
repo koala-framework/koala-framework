@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -298,7 +298,7 @@ Ext.lib.Ajax = function(){
 
         formRequest : function(form, uri, cb, data, isUpload, sslUri){
             new Ajax.Request(uri, {
-                method: 'POST',
+                method: Ext.getDom(form).method ||'POST',
                 parameters: Form.serialize(form)+(data?'&'+data:''),
                 timeout: cb.timeout,
                 onSuccess: createSuccess(cb),

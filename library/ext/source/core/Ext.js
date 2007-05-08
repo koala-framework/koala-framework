@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -51,7 +51,8 @@ Ext.apply = function(o, c, defaults){
         isGecko = !isSafari && ua.indexOf("gecko") > -1,
         isBorderBox = isIE && !isStrict,
         isWindows = (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1),
-        isMac = (ua.indexOf("macintosh") != -1 || ua.indexOf("mac os x") != -1);
+        isMac = (ua.indexOf("macintosh") != -1 || ua.indexOf("mac os x") != -1),
+        isSecure = window.location.href.toLowerCase().indexOf("https") === 0;
 
     // remove css image flicker
 	if(isIE && !isIE7){
@@ -67,6 +68,16 @@ Ext.apply = function(o, c, defaults){
          */
         isStrict : isStrict,
         /**
+         * True if the page is running over SSL
+         * @type Boolean
+         */
+        isSecure : isSecure,
+        /**
+         * True when the document is fully initialized and ready for action
+         * @type Boolean
+         */
+        isReady : false,
+        /**
          * URL to a blank file used by Ext when in secure mode for iframe src and onReady src to prevent
          * the IE insecure content warning (defaults to javascript:false).
          * @type String
@@ -78,7 +89,7 @@ Ext.apply = function(o, c, defaults){
          * "http://extjs.com/s.gif" and you should change this to a URL on your server).
          * @type String
          */
-        BLANK_IMAGE_URL : "/files/images/s.gif",
+        BLANK_IMAGE_URL : "http:/"+"/extjs.com/s.gif",
 
         emptyFn : function(){},
 
@@ -95,6 +106,45 @@ Ext.apply = function(o, c, defaults){
                 }
             }
             return o;
+        },
+
+        /**
+         * Applies event listeners to elements by selectors when the document is ready.
+         * The event name is specified with an @ suffix.
+<pre><code>
+Ext.addBehaviors({
+   // add a listener for click on all anchors in element with id foo
+   '#foo a@click' : function(e, t){
+       // do something
+   },
+
+   // add the same listener to multiple selectors (separated by comma BEFORE the @)
+   '#foo a, #bar span.some-class@mouseover' : function(){
+       // do something
+   }
+});
+</code></pre>
+         * @param {Object} obj The list of behaviors to apply
+         */
+        addBehaviors : function(o){
+            if(!Ext.isReady){
+                Ext.onReady(function(){
+                    Ext.addBehaviors(o);
+                });
+                return;
+            }
+            var cache = {}; // simple cache for applying multiple behaviors to same selector does query multiple times
+            for(var b in o){
+                var parts = b.split('@');
+                if(parts[1]){ // for Object prototype breakers
+                    var s = parts[0];
+                    if(!cache[s]){
+                        cache[s] = Ext.select(s);
+                    }
+                    cache[s].on(parts[1], o[b]);
+                }
+            }
+            cache = null;
         },
 
         /**
@@ -125,21 +175,27 @@ Ext.apply = function(o, c, defaults){
                     this[m] = o[m];
                 }
             };
-            return function(sc, sp, overrides){
-                var F = function(){}, scp, spp = sp.prototype;
+            return function(sb, sp, overrides){
+                if(typeof sp == 'object'){
+                    overrides = sp;
+                    sp = sb;
+                    sb = function(){sp.apply(this, arguments);};
+                }
+                var F = function(){}, sbp, spp = sp.prototype;
                 F.prototype = spp;
-                scp = sc.prototype = new F();
-                scp.constructor=sc;
-                sc.superclass=spp;
+                sbp = sb.prototype = new F();
+                sbp.constructor=sb;
+                sb.superclass=spp;
                 if(spp.constructor == Object.prototype.constructor){
                     spp.constructor=sp;
                 }
-                sc.override = function(o){
-                    Ext.override(sc, o);
+                sb.override = function(o){
+                    Ext.override(sb, o);
                 };
-                scp.override = io;
-                Ext.override(sc, overrides);
-                return sc;
+                sbp.override = io;
+                sbp.__extcls = sb;
+                Ext.override(sb, overrides);
+                return sb;
             };
         }(),
 
@@ -213,8 +269,8 @@ Ext.apply = function(o, c, defaults){
             var pair, name, value;
             for(var i = 0, len = pairs.length; i < len; i++){
                 pair = pairs[i].split('=');
-                name = pair[0];
-                value = pair[1];
+                name = decodeURIComponent(pair[0]);
+                value = decodeURIComponent(pair[1]);
                 if(overwrite !== true){
                     if(typeof obj[name] == "undefined"){
                         obj[name] = value;
@@ -296,11 +352,39 @@ Ext.apply = function(o, c, defaults){
             return el.dom ? el.dom : (typeof el == 'string' ? document.getElementById(el) : el);
         },
 
+        /**
+        * Shorthand for {@link Ext.ComponentMgr#get}
+        * @param {String} id
+        * @return Ext.Component
+        */
+        getCmp : function(id){
+            return Ext.ComponentMgr.get(id);
+        },
+
         num : function(v, defaultValue){
             if(typeof v != 'number'){
                 return defaultValue;
             }
             return v;
+        },
+
+        destroy : function(){
+            for(var i = 0, a = arguments, len = a.length; i < len; i++) {
+                var as = a[i];
+                if(as){
+                    if(as.dom){
+                        as.removeAllListeners();
+                        as.remove();
+                        continue;
+                    }
+                    if(typeof as.purgeListeners == 'function'){
+                        as.purgeListeners();
+                    }
+                    if(typeof as.destroy == 'function'){
+                        as.destroy();
+                    }
+                }
+            }
         },
 
         /* @type Boolean */
@@ -332,7 +416,7 @@ Ext.apply = function(o, c, defaults){
 })();
 
 Ext.namespace("Ext", "Ext.util", "Ext.grid", "Ext.dd", "Ext.tree", "Ext.data",
-                "Ext.form", "Ext.menu", "Ext.state", "Ext.lib");
+                "Ext.form", "Ext.menu", "Ext.state", "Ext.lib", "Ext.layout");
 
 
 /**

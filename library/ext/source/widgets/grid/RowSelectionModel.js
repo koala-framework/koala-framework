@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -23,7 +23,7 @@ Ext.grid.RowSelectionModel = function(config){
     this.last = false;
     this.lastActive = false;
 
-    this.events = {
+    this.addEvents({
         /**
 	     * @event selectionchange
 	     * Fires when the selection changes 
@@ -46,7 +46,7 @@ Ext.grid.RowSelectionModel = function(config){
 	    "rowselect" : true,
         
         "rowdeselect" : true
-    };
+    });
     
     this.locked = false;
 };

@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -13,8 +13,10 @@ Ext.grid.HeaderDragZone = function(grid, hd, hd2){
     this.view = grid.getView();
     this.ddGroup = "gridHeader" + this.grid.container.id;
     Ext.grid.HeaderDragZone.superclass.constructor.call(this, hd);
-    this.setHandleElId(Ext.id(hd));
-    this.setOuterHandleElId(Ext.id(hd2));
+    if(hd2){
+        this.setHandleElId(Ext.id(hd));
+        this.setOuterHandleElId(Ext.id(hd2));
+    }
     this.scroll = false;
 };
 Ext.extend(Ext.grid.HeaderDragZone, Ext.dd.DragZone, {
@@ -29,10 +31,25 @@ Ext.extend(Ext.grid.HeaderDragZone, Ext.dd.DragZone, {
     },
 
     onInitDrag : function(e){
+        this.view.headersDisabled = true;
         var clone = this.dragData.ddel.cloneNode(true);
         clone.style.width = Math.min(this.dragData.header.offsetWidth,this.maxDragWidth) + "px";
         this.proxy.update(clone);
         return true;
+    },
+
+    afterValidDrop : function(){
+        var v = this.view;
+        setTimeout(function(){
+            v.headersDisabled = false;
+        }, 50);
+    },
+
+    afterInvalidDrop : function(){
+        var v = this.view;
+        setTimeout(function(){
+            v.headersDisabled = false;
+        }, 50);
     }
 });
 

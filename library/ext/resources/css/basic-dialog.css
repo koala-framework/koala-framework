@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -92,6 +92,7 @@ body.x-body-masked .x-dlg select {
 	padding:5px;
 	padding-bottom:0;
 }
+
 .x-dlg .x-tabs-body{
 	background:white;
 	overflow:auto;
@@ -133,6 +134,28 @@ body.x-body-masked .x-dlg select {
 .x-dlg .x-dlg-ft .x-dlg-btns-center table{
 	margin:0 auto; /*everyone else*/
 }
+
+
+.x-dlg .x-dlg-ft .x-dlg-btns .x-btn-focus .x-btn-left{
+	background-position:0 -147px;
+}
+.x-dlg .x-dlg-ft .x-dlg-btns .x-btn-focus .x-btn-right{
+	background-position:0 -168px;
+}
+.x-dlg .x-dlg-ft .x-dlg-btns .x-btn-focus .x-btn-center{
+	background-position:0 -189px;
+}
+
+.x-dlg .x-dlg-ft .x-dlg-btns .x-btn-click .x-btn-center{
+	background-position:0 -126px;
+}
+.x-dlg .x-dlg-ft .x-dlg-btns .x-btn-click .x-btn-right{
+	background-position:0 -84px;
+}
+.x-dlg .x-dlg-ft .x-dlg-btns .x-btn-click .x-btn-left{
+	background-position:0 -63px;
+}
+
 .x-dlg-draggable .x-dlg-hd{
 	cursor:move;
 }

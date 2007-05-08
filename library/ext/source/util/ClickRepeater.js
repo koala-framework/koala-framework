@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -19,7 +19,7 @@
  @cfg {String/HTMLElement/Element} el The element to act as a button.
  @cfg {Number} delay The initial delay before the repeating event begins firing.
  Similar to an autorepeat key delay.
- @cfg {Number} interval The interval between firings of the "fire" event. Default 10 ms.
+ @cfg {Number} interval The interval between firings of the "click" event. Default 10 ms.
  @cfg {String} pressClass A CSS class name to be applied to the element while pressed.
  @cfg {Boolean} accelerate True if autorepeating should start slowly and accelerate.
            "interval" and "delay" are ignored. "immediate" is honored.
@@ -42,7 +42,7 @@ Ext.util.ClickRepeater = function(el, config)
 
     Ext.apply(this, config);
 
-    this.events = {
+    this.addEvents({
     /**
      * @event mousedown
      * Fires when the mouse button is depressed.
@@ -61,7 +61,7 @@ Ext.util.ClickRepeater = function(el, config)
      * @param {Ext.util.ClickRepeater} this
      */
         "mouseup" : true
-    };
+    });
 
     this.el.on("mousedown", this.handleMouseDown, this);
     if(this.preventDefault || this.stopDefault){

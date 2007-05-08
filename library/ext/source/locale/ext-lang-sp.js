@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -22,7 +22,7 @@ if(Ext.grid.Grid){
 }
 
 if(Ext.TabPanelItem){
-   Ext.TabPanelItem.prototype.closeText = "Cerrar este pestaña";
+   Ext.TabPanelItem.prototype.closeText = "Cerrar esta pestaña";
 }
 
 if(Ext.form.Field){
@@ -81,7 +81,7 @@ if(Ext.DatePicker){
       monthNames	: Date.monthNames,
       dayNames		: Date.dayNames,
       nextText          : 'Mes Siguiente (Control+Right)',
-      prevText          : 'Mes Anterior(Control+Left)',
+      prevText          : 'Mes Anterior (Control+Left)',
       monthYearText     : 'Seleccione un mes (Control+Up/Down para desplazar el año)',
       todayTip          : "{0} (Barra espaciadora)",
       format            : "d/m/Y"
@@ -124,8 +124,8 @@ if(Ext.form.DateField){
    Ext.apply(Ext.form.DateField.prototype, {
       disabledDaysText  : "Deshabilitado",
       disabledDatesText : "Deshabilitado",
-      minText           : "La fecha para este campo debe ser después de {0}",
-      maxText           : "La fecha para este campo debe ser antes de {0}",
+      minText           : "La fecha para este campo debe ser posterior a {0}",
+      maxText           : "La fecha para este campo debe ser anterior a {0}",
       invalidText       : "{0} no es una fecha válida - debe tener el formato {1}",
       format            : "d/m/Y"
    });
@@ -140,8 +140,8 @@ if(Ext.form.ComboBox){
 
 if(Ext.form.VTypes){
    Ext.apply(Ext.form.VTypes, {
-      emailText    : 'Este campo debe ser una dirección de correo con el formato "usuario@dominio.com"',
-      urlText      : 'Este campo debe ser una con el formato "http:/'+'/www.dominio.com"',
+      emailText    : 'Este campo debe ser una dirección de correo electrónico con el formato "usuario@dominio.com"',
+      urlText      : 'Este campo debe ser una URL con el formato "http:/'+'/www.dominio.com"',
       alphaText    : 'Este campo solo debe contener letras y _',
       alphanumText : 'Este campo solo debe contener letras, números y _'
    });
@@ -168,6 +168,6 @@ if(Ext.grid.PropertyColumnModel){
 if(Ext.SplitLayoutRegion){
    Ext.apply(Ext.SplitLayoutRegion.prototype, {
       splitTip            : "Arrastre para redimensionar.",
-      collapsibleSplitTip : "Arrastre para redimensionar. Doble click para ocultar."
+      collapsibleSplitTip : "Arrastre para redimensionar. Doble clic para ocultar."
    });
 }

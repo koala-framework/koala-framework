@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project path="" name="Ext - JS Lib" author="Ext JS, LLC" version="1.0" copyright="Ext JS Library $version&#xD;&#xA;Copyright(c) 2006-2007, $author.&#xD;&#xA;licensing@extjs.com&#xD;&#xA;&#xD;&#xA;http://www.extjs.com/license" output="F:\htdocs\deploy\ext-1.0\" source="True" source-dir="$output\source" minify="True" min-dir="$output\build" doc="False" doc-dir="$output\docs" min-dair="$output\build">
+<project path="" name="Ext - JS Lib" author="Ext JS, LLC" version="1.0.1" copyright="Ext JS Library $version&#xD;&#xA;Copyright(c) 2006-2007, $author.&#xD;&#xA;licensing@extjs.com&#xD;&#xA;&#xD;&#xA;http://www.extjs.com/license" output="F:\htdocs\deploy\ext-1.0.1\" source="True" source-dir="$output\source" minify="True" min-dir="$output\build" doc="False" doc-dir="$output\docs" min-dair="$output\build">
   <directory name="" />
   <target name="Core" file="$output\ext-core.js" debug="True" shorthand="False" shorthand-list="YAHOO.util.Dom.setStyle&#xD;&#xA;YAHOO.util.Dom.getStyle&#xD;&#xA;YAHOO.util.Dom.getRegion&#xD;&#xA;YAHOO.util.Dom.getViewportHeight&#xD;&#xA;YAHOO.util.Dom.getViewportWidth&#xD;&#xA;YAHOO.util.Dom.get&#xD;&#xA;YAHOO.util.Dom.getXY&#xD;&#xA;YAHOO.util.Dom.setXY&#xD;&#xA;YAHOO.util.CustomEvent&#xD;&#xA;YAHOO.util.Event.addListener&#xD;&#xA;YAHOO.util.Event.getEvent&#xD;&#xA;YAHOO.util.Event.getTarget&#xD;&#xA;YAHOO.util.Event.preventDefault&#xD;&#xA;YAHOO.util.Event.stopEvent&#xD;&#xA;YAHOO.util.Event.stopPropagation&#xD;&#xA;YAHOO.util.Event.stopEvent&#xD;&#xA;YAHOO.util.Anim&#xD;&#xA;YAHOO.util.Motion&#xD;&#xA;YAHOO.util.Connect.asyncRequest&#xD;&#xA;YAHOO.util.Connect.setForm&#xD;&#xA;YAHOO.util.Dom&#xD;&#xA;YAHOO.util.Event">
     <include name="core\DomHelper.js" />
@@ -61,6 +61,15 @@
     <include name="widgets\Component.js" />
     <include name="widgets\Layer.js" />
     <include name="widgets\Shadow.js" />
+    <include name="widgets\BoxComponent.js" />
+    <include name="widgets\panel\Container.js" />
+    <include name="widgets\panel\ContainerLayout.js" />
+    <include name="widgets\panel\AutoLayout.js" />
+    <include name="widgets\panel\BorderLayout.js" />
+    <include name="widgets\panel\Panel.js" />
+    <include name="widgets\panel\TabPanel.js" />
+    <include name="widgets\panel\Window.js" />
+    <include name="widgets\panel\WindowManager.js" />
     <include name="widgets\View.js" />
     <include name="widgets\JsonView.js" />
     <include name="widgets\ColorPalette.js" />
@@ -128,6 +137,10 @@
     <include name="widgets\grid\ColumnDD.js" />
     <include name="widgets\grid\ColumnSplitDD.js" />
     <include name="widgets\grid\GridDD.js" />
+    <include name="experimental\GridView3.js" />
+    <include name="experimental\GridViewUI.js" />
+    <include name="experimental\UIEventHandler.js" />
+    <include name="experimental\ModelEventHandler.js" />
     <include name="widgets\grid\ColumnModel.js" />
     <include name="widgets\grid\AbstractSelectionModel.js" />
     <include name="widgets\grid\RowSelectionModel.js" />
@@ -428,6 +441,15 @@
     <include name="adapter\prototype-bridge.js" />
   </target>
   <file name="widgets\form\Validators.js" path="widgets\form" />
+  <file name="experimental\ext-lang-en.js" path="experimental" />
+  <file name="experimental\jquery-bridge.js" path="experimental" />
+  <file name="experimental\prototype-bridge.js" path="experimental" />
+  <file name="experimental\yui-bridge.js" path="experimental" />
+  <file name="widgets\Frame.js" path="widgets" />
+  <file name="widgets\.DS_Store" path="widgets" />
+  <file name="adapter\jquery-bridge.js" path="adapter" />
+  <file name="adapter\prototype-bridge.js" path="adapter" />
+  <file name="adapter\yui-bridge.js" path="adapter" />
   <file name="core\CompositeElement.js" path="core" />
   <file name="core\DomHelper.js" path="core" />
   <file name="core\DomQuery.js" path="core" />
@@ -460,10 +482,6 @@
   <file name="dd\Registry.js" path="dd" />
   <file name="dd\ScrollManager.js" path="dd" />
   <file name="dd\StatusProxy.js" path="dd" />
-  <file name="experimental\ext-lang-en.js" path="experimental" />
-  <file name="experimental\jquery-bridge.js" path="experimental" />
-  <file name="experimental\prototype-bridge.js" path="experimental" />
-  <file name="experimental\yui-bridge.js" path="experimental" />
   <file name="legacy\Actor.js" path="legacy" />
   <file name="legacy\Animator.js" path="legacy" />
   <file name="legacy\compat.js" path="legacy" />
@@ -481,12 +499,16 @@
   <file name="util\Observable.js" path="util" />
   <file name="util\TaskMgr.js" path="util" />
   <file name="util\TextMetrics.js" path="util" />
+  <file name="widgets\form\Action.js" path="widgets\form" />
+  <file name="widgets\form\BasicForm.js" path="widgets\form" />
   <file name="widgets\form\Checkbox.js" path="widgets\form" />
   <file name="widgets\form\Combo.js" path="widgets\form" />
   <file name="widgets\form\DateField.js" path="widgets\form" />
   <file name="widgets\form\Field.js" path="widgets\form" />
   <file name="widgets\form\Form.js" path="widgets\form" />
+  <file name="widgets\form\Layout.js" path="widgets\form" />
   <file name="widgets\form\NumberField.js" path="widgets\form" />
+  <file name="widgets\form\Radio.js" path="widgets\form" />
   <file name="widgets\form\TextArea.js" path="widgets\form" />
   <file name="widgets\form\TextField.js" path="widgets\form" />
   <file name="widgets\form\TriggerField.js" path="widgets\form" />
@@ -494,9 +516,12 @@
   <file name="widgets\grid\AbstractGridView.js" path="widgets\grid" />
   <file name="widgets\grid\AbstractSelectionModel.js" path="widgets\grid" />
   <file name="widgets\grid\CellSelectionModel.js" path="widgets\grid" />
+  <file name="widgets\grid\ColumnDD.js" path="widgets\grid" />
   <file name="widgets\grid\ColumnModel.js" path="widgets\grid" />
+  <file name="widgets\grid\ColumnSplitDD.js" path="widgets\grid" />
   <file name="widgets\grid\EditorGrid.js" path="widgets\grid" />
   <file name="widgets\grid\Grid.js" path="widgets\grid" />
+  <file name="widgets\grid\GridDD.js" path="widgets\grid" />
   <file name="widgets\grid\GridEditor.js" path="widgets\grid" />
   <file name="widgets\grid\GridView.js" path="widgets\grid" />
   <file name="widgets\grid\PropertyGrid.js" path="widgets\grid" />
@@ -514,6 +539,7 @@
   <file name="widgets\menu\BaseItem.js" path="widgets\menu" />
   <file name="widgets\menu\CheckItem.js" path="widgets\menu" />
   <file name="widgets\menu\ColorItem.js" path="widgets\menu" />
+  <file name="widgets\menu\ColorMenu.js" path="widgets\menu" />
   <file name="widgets\menu\DateItem.js" path="widgets\menu" />
   <file name="widgets\menu\DateMenu.js" path="widgets\menu" />
   <file name="widgets\menu\Item.js" path="widgets\menu" />
@@ -533,16 +559,20 @@
   <file name="widgets\tree\TreeSelectionModel.js" path="widgets\tree" />
   <file name="widgets\tree\TreeSorter.js" path="widgets\tree" />
   <file name="widgets\BasicDialog.js" path="widgets" />
+  <file name="widgets\BoxComponent.js" path="widgets" />
   <file name="widgets\Button.js" path="widgets" />
   <file name="widgets\ColorPalette.js" path="widgets" />
   <file name="widgets\Component.js" path="widgets" />
   <file name="widgets\Container.js" path="widgets" />
   <file name="widgets\DatePicker.js" path="widgets" />
   <file name="widgets\Editor.js" path="widgets" />
+  <file name="widgets\JsonView.js" path="widgets" />
   <file name="widgets\Layer.js" path="widgets" />
+  <file name="widgets\LoadMask.js" path="widgets" />
   <file name="widgets\MenuButton.js" path="widgets" />
   <file name="widgets\MessageBox.js" path="widgets" />
   <file name="widgets\PagingToolbar.js" path="widgets" />
+  <file name="widgets\Panel.js" path="widgets" />
   <file name="widgets\QuickTips.js" path="widgets" />
   <file name="widgets\Resizable.js" path="widgets" />
   <file name="widgets\Shadow.js" path="widgets" />
@@ -556,35 +586,7 @@
   <file name="yui\event.js" path="yui" />
   <file name="yui\yahoo.js" path="yui" />
   <file name="debug.js" path="" />
-  <file name="widgets\form\Action.js" path="widgets\form" />
-  <file name="widgets\form\BasicForm.js" path="widgets\form" />
-  <file name="widgets\form\Layout.js" path="widgets\form" />
-  <file name="widgets\menu\ColorMenu.js" path="widgets\menu" />
-  <file name="widgets\LoadMask.js" path="widgets" />
-  <file name="adapter\jquery-bridge.js" path="adapter" />
-  <file name="adapter\prototype-bridge.js" path="adapter" />
-  <file name="adapter\yui-bridge.js" path="adapter" />
-  <file name="locale\ext-lang-en.js" path="locale" />
-  <file name="locale\ext-lang-nl.js" path="locale" />
-  <file name="widgets\form\Radio.js" path="widgets\form" />
-  <file name="locale\ext-lang-da.js" path="locale" />
-  <file name="locale\ext-lang-fr_CA.js" path="locale" />
-  <file name="locale\ext-lang-it.js" path="locale" />
-  <file name="locale\ext-lang-ja.js" path="locale" />
-  <file name="locale\ext-lang-sp.js" path="locale" />
-  <file name="locale\ext-lang-tr.js" path="locale" />
-  <file name="locale\ext-lang-vn.js" path="locale" />
-  <file name="experimental\Anims.js" path="experimental" />
-  <file name="experimental\BasicDialog2.js" path="experimental" />
-  <file name="experimental\BasicGridView.js" path="experimental" />
-  <file name="experimental\TaskPanel.js" path="experimental" />
-  <file name="locale\ext-lang-hr.js" path="locale" />
-  <file name="locale\ext-lang-hu.js" path="locale" />
-  <file name="locale\ext-lang-pt_br.js" path="locale" />
-  <file name="locale\ext-lang-ru.js" path="locale" />
-  <file name="locale\ext-lang-sk.js" path="locale" />
-  <file name="widgets\JsonView.js" path="widgets" />
-  <file name="widgets\grid\ColumnDD.js" path="widgets\grid" />
-  <file name="widgets\grid\ColumnSplitDD.js" path="widgets\grid" />
-  <file name="widgets\grid\GridDD.js" path="widgets\grid" />
+  <file name="widgets\layout\AutoLayout.js" path="widgets\layout" />
+  <file name="widgets\layout\ContainerLayout.js" path="widgets\layout" />
+  <file name="widgets\TabPanel2.js" path="widgets" />
 </project>

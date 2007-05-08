@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -78,7 +78,7 @@ or you will need to add "position:relative" to the css of the element.</b>
  */
 Ext.BorderLayout = function(container, config){
     config = config || {};
-    Ext.BorderLayout.superclass.constructor.call(this, container);
+    Ext.BorderLayout.superclass.constructor.call(this, container, config);
     this.factory = config.factory || Ext.BorderLayout.RegionFactory;
     for(var i = 0, len = this.factory.validRegions.length; i < len; i++) {
     	var target = this.factory.validRegions[i];
@@ -98,16 +98,21 @@ Ext.extend(Ext.BorderLayout, Ext.LayoutManager, {
     addRegion : function(target, config){
         if(!this.regions[target]){
             var r = this.factory.create(target, this, config);
-    	    this.regions[target] = r;
-    	    r.on("visibilitychange", this.layout, this);
-            r.on("paneladded", this.layout, this);
-            r.on("panelremoved", this.layout, this);
-            r.on("invalidated", this.layout, this);
-            r.on("resized", this.onRegionResized, this);
-            r.on("collapsed", this.onRegionCollapsed, this);
-            r.on("expanded", this.onRegionExpanded, this);
+    	    this.bindRegion(target, r);
         }
         return this.regions[target];
+    },
+
+    // private (kinda)
+    bindRegion : function(name, r){
+        this.regions[name] = r;
+        r.on("visibilitychange", this.layout, this);
+        r.on("paneladded", this.layout, this);
+        r.on("panelremoved", this.layout, this);
+        r.on("invalidated", this.layout, this);
+        r.on("resized", this.onRegionResized, this);
+        r.on("collapsed", this.onRegionCollapsed, this);
+        r.on("expanded", this.onRegionExpanded, this);
     },
     
     /**
@@ -122,9 +127,9 @@ Ext.extend(Ext.BorderLayout, Ext.LayoutManager, {
         
         var rs = this.regions;
         var n = rs["north"], s = rs["south"], west = rs["west"], e = rs["east"], c = rs["center"];
-        if(this.hideOnLayout){
-            c.el.setStyle("display", "none");
-        }
+        //if(this.hideOnLayout){ // not supported anymore
+            //c.el.setStyle("display", "none");
+        //}
         if(n && n.isVisible()){
             var b = n.getBox();
             var m = n.getMargins();
@@ -174,9 +179,9 @@ Ext.extend(Ext.BorderLayout, Ext.LayoutManager, {
                 width: centerW - (m.left+m.right),
                 height: centerH - (m.top+m.bottom)
             };
-            if(this.hideOnLayout){
-                c.el.setStyle("display", "block");
-            }
+            //if(this.hideOnLayout){
+                //c.el.setStyle("display", "block");
+            //}
             c.updateBox(this.safeBox(centerBox));
         }
         this.el.repaint();

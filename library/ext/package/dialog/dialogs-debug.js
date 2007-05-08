@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -22,19 +22,19 @@ Ext.BasicDialog = function(el, config){
                         {tag: "div", id: el, style:'visibility:hidden;'}, true);
         }
     }
-    el = this.el;
+    el = this.el;                                                                                                                                                                                                                                                                                                                                                                                                  
     el.setDisplayed(true);
     el.hide = this.hideAction;
     this.id = el.id;
     el.addClass("x-dlg");
-        
+
     Ext.apply(this, config);
-    
+
     this.proxy = el.createProxy("x-dlg-proxy");
     this.proxy.hide = this.hideAction;
     this.proxy.setOpacity(.5);
     this.proxy.hide();
-    
+
     if(config.width){
         el.setWidth(config.width);
     }
@@ -82,8 +82,8 @@ Ext.BasicDialog = function(el, config){
         html: '<div class="x-dlg-bg-left"><div class="x-dlg-bg-right"><div class="x-dlg-bg-center">&#160;</div></div></div>'
     });
     this.centerBg = this.bg.child("div.x-dlg-bg-center");
-    
-    
+
+
     if(this.autoScroll !== false && !this.autoTabs){
         this.body.setStyle("overflow", "auto");
     }
@@ -105,8 +105,8 @@ Ext.BasicDialog = function(el, config){
     if(this.resizable !== false){
         this.el.addClass("x-dlg-resizable");
         this.resizer = new Ext.Resizable(el, {
-            minWidth: this.minWidth || 80, 
-            minHeight:this.minHeight || 80, 
+            minWidth: this.minWidth || 80,
+            minHeight:this.minHeight || 80,
             handles: this.resizeHandles || "all",
             pinned: true
         });
@@ -152,7 +152,7 @@ Ext.BasicDialog = function(el, config){
     if(this.autoTabs){
         this.initTabs();
     }
-    this.events = {
+    this.addEvents({
         
         "keydown" : true,
         
@@ -167,7 +167,7 @@ Ext.BasicDialog = function(el, config){
         "beforeshow" : true,
         
         "show" : true
-    };
+    });
     el.on("keydown", this.onKeyDown, this);
     el.on("mousedown", this.toFront, this);
     Ext.EventManager.onWindowResize(this.adjustViewport, this, true);
@@ -189,12 +189,12 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
     
     setTitle : function(text){
         this.header.update(text);
-        return this; 
+        return this;
     },
 
     
     closeClick : function(){
-        this.hide();  
+        this.hide();
     },
 
     
@@ -256,7 +256,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.fireEvent("keydown", this, e);
         }
     },
-    
+
     
     resizeTo : function(width, height){
         this.el.setSize(width, height);
@@ -272,8 +272,8 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         this.fireEvent("resize", this, width, height);
         return this;
     },
-    
-    
+
+
     
     setContentSize : function(w, h){
         h += this.getHeaderFooterHeight() + this.body.getMargins("tb");
@@ -289,7 +289,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         this.resizeTo(w, h);
         return this;
     },
-    
+
     
     addKeyListener : function(key, fn, scope){
         var keyCode, shift, ctrl, alt;
@@ -319,9 +319,9 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             }
         };
         this.on("keydown", handler);
-        return this; 
+        return this;
     },
-    
+
     
     getTabs : function(){
         if(!this.tabs){
@@ -329,9 +329,9 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.body.addClass(this.tabPosition == "bottom" ? "x-tabs-bottom" : "x-tabs-top");
             this.tabs = new Ext.TabPanel(this.body.dom, this.tabPosition == "bottom");
         }
-        return this.tabs;    
+        return this.tabs;
     },
-    
+
     
     addButton : function(config, handler, scope){
         var dh = Ext.DomHelper;
@@ -376,7 +376,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
 
     
     setDefaultButton : function(btn){
-        this.defaultButton = btn;  
+        this.defaultButton = btn;
         return this;
     },
 
@@ -414,7 +414,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             }
         }
     },
-    
+
     
     restoreState : function(){
         var box = Ext.state.Manager.get(this.stateId || (this.el.id + "-state"));
@@ -422,7 +422,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.xy = [box.x, box.y];
             this.resizeTo(box.width, box.height);
         }
-        return this; 
+        return this;
     },
 
     
@@ -445,10 +445,10 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         this.proxy.setSize(b.width, b.height);
         this.proxy.setLocation(b.x, b.y);
         this.proxy.show();
-        this.proxy.setBounds(this.xy[0], this.xy[1], this.size.width, this.size.height, 
+        this.proxy.setBounds(this.xy[0], this.xy[1], this.size.width, this.size.height,
                     true, .35, this.showEl.createDelegate(this));
     },
-    
+
     
     show : function(animateTarget){
         if (this.fireEvent("beforeshow", this) === false){
@@ -469,7 +469,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
                 this.showEl();
             }
         }
-        return this; 
+        return this;
     },
 
     
@@ -480,6 +480,10 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         this.adjustAssets(true);
         this.toFront();
         this.focus();
+        
+        if(Ext.isIE){
+            this.el.repaint();
+        }
         this.fireEvent("show", this);
     },
 
@@ -489,7 +493,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.defaultButton.focus();
         }else{
             this.focusEl.focus();
-        }  
+        }
     },
 
     
@@ -544,7 +548,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         if(!this.proxyDrag){
             this.xy = this.el.getXY();
             this.adjustAssets();
-        }   
+        }
     },
 
     
@@ -566,7 +570,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.shim.setBounds(x, y, w, h);
         }
     },
-    
+
     
     adjustViewport : function(w, h){
         if(!w || !h){
@@ -583,7 +587,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.constrainXY();
         }
     },
-    
+
     
     destroy : function(removeEl){
         if(this.isVisible()){
@@ -594,22 +598,13 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         if(this.tabs){
             this.tabs.destroy(removeEl);
         }
-        if(this.shim){
-            this.shim.remove();
-        }
-        if(this.proxy){
-            this.proxy.remove();
-        }
-        if(this.resizer){
-            this.resizer.destroy();
-        }
-        if(this.close){
-            this.close.removeAllListeners();
-            this.close.remove();
-        }
-        if(this.mask){
-            this.mask.remove();
-        }
+        Ext.destroy(
+             this.shim,
+             this.proxy,
+             this.resizer,
+             this.close,
+             this.mask
+        );
         if(this.dd){
             this.dd.unreg();
         }
@@ -649,26 +644,26 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         this.focus();
         this.fireEvent("move", this, this.xy[0], this.xy[1]);
     },
-    
+
     
     toFront : function(){
-        Ext.DialogManager.bringToFront(this);  
-        return this; 
+        Ext.DialogManager.bringToFront(this);
+        return this;
     },
-    
+
     
     toBack : function(){
-        Ext.DialogManager.sendToBack(this);  
-        return this; 
+        Ext.DialogManager.sendToBack(this);
+        return this;
     },
-    
+
     
     center : function(){
         var xy = this.el.getCenterXY(true);
         this.moveTo(xy[0], xy[1]);
-        return this; 
+        return this;
     },
-    
+
     
     moveTo : function(x, y){
         this.xy = [x,y];
@@ -706,7 +701,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
 
     
     isVisible : function(){
-        return this.el.isVisible();    
+        return this.el.isVisible();
     },
 
     
@@ -715,10 +710,10 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         this.proxy.show();
         this.proxy.setBounds(this.xy[0], this.xy[1], this.size.width, this.size.height);
         this.el.hide();
-        this.proxy.setBounds(b.x, b.y, b.width, b.height, true, .35, 
+        this.proxy.setBounds(b.x, b.y, b.width, b.height, true, .35,
                     this.hideEl.createDelegate(this, [callback]));
     },
-    
+
     
     hide : function(callback){
         if (this.fireEvent("beforehide", this) === false){
@@ -736,7 +731,7 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
             this.el.hide();
             this.hideEl(callback);
         }
-        return this; 
+        return this;
     },
 
     
@@ -785,10 +780,10 @@ Ext.extend(Ext.BasicDialog, Ext.util.Observable, {
         if(this.resizer){
             this.resizer.proxy.setStyle("z-index", ++index);
         }
-        
+
         this.lastZIndex = index;
     },
-    
+
     
     getEl : function(){
         return this.el;
@@ -811,16 +806,17 @@ Ext.DialogManager = function(){
         accessList.sort(sortDialogs);
         var seed = Ext.DialogManager.zseed;
         for(var i = 0, len = accessList.length; i < len; i++){
-            if(accessList[i]){
-                accessList[i].setZIndex(seed + (i*10));
-            }  
+            var dlg = accessList[i];
+            if(dlg){
+                dlg.setZIndex(seed + (i*10));
+            }
         }
     };
-    
+
     return {
         
         zseed : 9000,
-        
+
         
         register : function(dlg){
             list[dlg.id] = dlg;
@@ -844,12 +840,12 @@ Ext.DialogManager = function(){
                 }
             }
         },
-        
+
         
         get : function(id){
             return typeof id == "object" ? id : list[id];
         },
-        
+
         
         bringToFront : function(dlg){
             dlg = this.get(dlg);
@@ -860,7 +856,7 @@ Ext.DialogManager = function(){
             }
             return dlg;
         },
-        
+
         
         sendToBack : function(dlg){
             dlg = this.get(dlg);
@@ -1016,7 +1012,7 @@ Ext.MessageBox = function(){
                 buttons["cancel"] = dlg.addButton(bt["cancel"], handleButton.createCallback("cancel"));
                 bodyEl = dlg.body.createChild({
                     tag:"div",
-                    html:'<span class="ext-mb-text"></span><br /><input type="text" class="ext-mb-input"><textarea class="ext-mb-textarea"></textarea><div class="ext-mb-progress-wrap"><div class="ext-mb-progress"><div class="ext-mb-progress-bar">&#160;</div></div></div>'
+                    html:'<span class="ext-mb-text"></span><br /><input type="text" class="ext-mb-input" /><textarea class="ext-mb-textarea"></textarea><div class="ext-mb-progress-wrap"><div class="ext-mb-progress"><div class="ext-mb-progress-bar">&#160;</div></div></div>'
                 });
                 msgEl = bodyEl.dom.firstChild;
                 textboxEl = Ext.get(bodyEl.dom.childNodes[2]);

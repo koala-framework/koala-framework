@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -38,7 +38,7 @@ Ext.extend(Ext.tree.TreeEditor, Ext.Editor, {
         }
         var w = Math.min(
                 this.maxWidth,
-                td.clientWidth - Math.max(0, nd.offsetLeft-td.scrollLeft) - /*cushion*/5);
+                (td.clientWidth > 20 ? td.clientWidth : td.offsetWidth) - Math.max(0, nd.offsetLeft-td.scrollLeft) - /*cushion*/5);
         this.setSize(w, '');
     },
 

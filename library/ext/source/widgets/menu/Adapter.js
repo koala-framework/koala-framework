@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -24,7 +24,7 @@ Ext.extend(Ext.menu.Adapter, Ext.menu.BaseItem, {
     canActivate : true,
 
     // private
-    onRender : function(container){
+    onRender : function(container, position){
         this.component.render(container);
         this.el = this.component.getEl();
     },

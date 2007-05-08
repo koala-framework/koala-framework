@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -148,7 +148,7 @@ Ext.extend(Ext.BasicLayoutRegion, Ext.util.Observable, {
         var el = this.activePanel.getEl();
         el.dom.style.left = box.x + "px";
         el.dom.style.top = box.y + "px";
-        el.setSize(box.width, box.height);
+        this.activePanel.setSize(box.width, box.height);
     },
     
     /**
@@ -171,7 +171,7 @@ Ext.extend(Ext.BasicLayoutRegion, Ext.util.Observable, {
         panel = this.getPanel(panel);
         if(this.activePanel && this.activePanel != panel){
             this.activePanel.setActiveState(false);
-            this.activePanel.getEl().setStyle({left:-10000,right:-10000});
+            this.activePanel.getEl().setLeftTop(-10000,-10000);
         }
         this.activePanel = panel;
         panel.setActiveState(true);
@@ -222,7 +222,9 @@ Ext.extend(Ext.BasicLayoutRegion, Ext.util.Observable, {
         if(el.dom.parentNode != this.mgr.el.dom){
             this.mgr.el.dom.appendChild(el.dom);
         }
-        panel.setRegion(this);
+        if(panel.setRegion){
+            panel.setRegion(this);
+        }
         this.panels.add(panel);
         el.setStyle("position", "absolute");
         if(!panel.background){

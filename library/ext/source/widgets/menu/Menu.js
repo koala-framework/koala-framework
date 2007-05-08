@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -18,7 +18,7 @@
 Ext.menu.Menu = function(config){
     Ext.apply(this, config);
     this.id = this.id || Ext.id();
-    this.events = {
+    this.addEvents({
         /**
          * @event beforeshow
          * Fires before this menu is displayed
@@ -74,7 +74,7 @@ Ext.menu.Menu = function(config){
          * @param {Ext.EventObject} e
          */
         itemclick: true
-    };
+    });
     Ext.menu.MenuMgr.register(this);
     var mis = this.items;
     this.items = new Ext.util.MixedCollection();
@@ -100,7 +100,7 @@ Ext.extend(Ext.menu.Menu, Ext.util.Observable, {
     subMenuAlign : "tl-tr?",
     /**
      * @cfg {String} defaultAlign The default {@link Ext.Element#alignTo) anchor position value for this menu
-     * relative to it's element of origin (defaults to "tl-bl?")
+     * relative to its element of origin (defaults to "tl-bl?")
      */
     defaultAlign : "tl-bl?",
     /**

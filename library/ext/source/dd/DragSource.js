@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -294,25 +294,26 @@ Ext.extend(Ext.dd.DragSource, Ext.dd.DDProxy, {
     /**
      * An empty function by default, but provided so that you can perform a custom action once the initial
      * drag event has begun.  The drag cannot be canceled from this function.
-     * @param {Event} e The event object
+     * @param {Number} x The x position of the click on the dragged object
+     * @param {Number} y The y position of the click on the dragged object
      */
     onStartDrag : Ext.emptyFn,
 
-    // private
-    startDrag : function(e){
+    // private - YUI override
+    startDrag : function(x, y){
         this.proxy.reset();
         this.dragging = true;
         this.proxy.update("");
-        this.onInitDrag(e);
+        this.onInitDrag(x, y);
         this.proxy.show();
     },
 
     // private
-    onInitDrag : function(e){
+    onInitDrag : function(x, y){
         var clone = this.el.dom.cloneNode(true);
         clone.id = Ext.id(); // prevent duplicate ids
         this.proxy.update(clone);
-        this.onStartDrag(e);
+        this.onStartDrag(x, y);
         return true;
     },
 

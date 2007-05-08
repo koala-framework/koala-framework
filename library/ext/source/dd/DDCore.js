@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -502,9 +502,16 @@ Ext.dd.DragDrop.prototype = {
         pad = pad || this.defaultPadding;
         var b = Ext.get(this.getEl()).getBox();
         var ce = Ext.get(constrainTo);
-        var c = ce.dom == document.body ? { x: 0, y: 0,
-                width: Ext.lib.Dom.getViewWidth(),
-                height: Ext.lib.Dom.getViewHeight()} : ce.getBox(inContent || false);
+        var s = ce.getScroll();
+        var c, cd = ce.dom;
+        if(cd == document.body){
+            c = { x: s.left, y: s.top, width: Ext.lib.Dom.getViewWidth(), height: Ext.lib.Dom.getViewHeight()};
+        }else{
+            xy = ce.getXY();
+            c = {x : xy[0]+s.left, y: xy[1]+s.top, width: cd.clientWidth, height: cd.clientHeight};
+        }
+
+
         var topSpace = b.y - c.y;
         var leftSpace = b.x - c.x;
 
@@ -1775,7 +1782,9 @@ Ext.dd.DragDropMgr = function() {
             if (this.dragThreshMet) {
                 this.dragCurrent.b4Drag(e);
                 this.dragCurrent.onDrag(e);
-                this.fireEvents(e, false);
+                if(!this.dragCurrent.moveOnly){
+                    this.fireEvents(e, false);
+                }
             }
 
             this.stopEvent(e);
@@ -2513,13 +2522,12 @@ Ext.extend(Ext.dd.DD, Ext.dd.DragDrop, {
      */
     alignElWithMouse: function(el, iPageX, iPageY) {
         var oCoord = this.getTargetCoord(iPageX, iPageY);
-        var fly = Ext.fly(el);
+        var fly = el.dom ? el : Ext.fly(el);
         if (!this.deltaSetXY) {
             var aCoord = [oCoord.x, oCoord.y];
             fly.setXY(aCoord);
             var newLeft = fly.getLeft(true);
             var newTop  = fly.getTop(true);
-
             this.deltaSetXY = [ newLeft - oCoord.x, newTop - oCoord.y ];
         } else {
             fly.setLeftTop(oCoord.x + this.deltaSetXY[0], oCoord.y + this.deltaSetXY[1]);
@@ -2527,6 +2535,7 @@ Ext.extend(Ext.dd.DD, Ext.dd.DragDrop, {
 
         this.cachePosition(oCoord.x, oCoord.y);
         this.autoScroll(oCoord.x, oCoord.y, el.offsetHeight, el.offsetWidth);
+        return oCoord;
     },
 
     /**
@@ -2884,18 +2893,30 @@ Ext.extend(Ext.dd.DDProxy, Ext.dd.DD, {
     // By default we try to move the element to the last location of the frame.
     // This is so that the default behavior mirrors that of Ext.dd.DD.
     endDrag: function(e) {
+
         var lel = this.getEl();
         var del = this.getDragEl();
 
         // Show the drag frame briefly so we can get its position
         del.style.visibility = "";
 
+        this.beforeMove();
         // Hide the linked element before the move to get around a Safari
         // rendering bug.
         lel.style.visibility = "hidden";
         Ext.dd.DDM.moveToEl(lel, del);
         del.style.visibility = "hidden";
         lel.style.visibility = "";
+
+        this.afterDrag();
+    },
+
+    beforeMove : function(){
+
+    },
+
+    afterDrag : function(){
+
     },
 
     toString: function() {

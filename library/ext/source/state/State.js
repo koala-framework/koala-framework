@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -21,9 +21,9 @@ Ext.state.Provider = function(){
      * @param {String} key The state key which was changed
      * @param {String} value The encoded value for the state
      */
-    this.events = {
+    this.addEvents({
         "statechange": true
-    };
+    });
     this.state = {};
     Ext.state.Provider.superclass.constructor.call(this);
 };

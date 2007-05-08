@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -124,7 +124,7 @@
     border: 1px dashed #6593cf;
     position:absolute;
     overflow:hidden;
-    visibility:hidden;
+    display:none;
 	 left:0;top:0;
     z-index:50000;
 }

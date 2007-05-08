@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -12,7 +12,7 @@ Ext.enableFx = true;
 
 /**
  * @class Ext.Fx
- * <p>A class to provde basic animation and visual effects support.  <b>Note:</b> This class is automatically applied
+ * <p>A class to provide basic animation and visual effects support.  <b>Note:</b> This class is automatically applied
  * to the {@link Ext.Element} interface when included, so all effects calls should be performed via Element.
  * Conversely, since the effects are not actually defined in Element, Ext.Fx <b>must</b> be included in order for the 
  * Element effects to work.</p><br/>
@@ -25,7 +25,7 @@ Ext.enableFx = true;
  * expected results and should be done with care.</p><br/>
  *
  * <p>Motion effects support 8-way anchoring, meaning that you can choose one of 8 different anchor points on the Element
- * that will server as either the start or end point of the animation.  Following are all of the supported anchor positions:</p>
+ * that will serve as either the start or end point of the animation.  Following are all of the supported anchor positions:</p>
 <pre>
 Value  Description
 -----  -----------------------------
@@ -43,6 +43,7 @@ br     The bottom right corner
  * @cfg {Function} callback A function called when the effect is finished
  * @cfg {Object} scope The scope of the effect function
  * @cfg {String} easing A valid Easing value for the effect
+ * @cfg {String} afterCls A css class to apply after the effect
  * @cfg {Number} duration The length of time (in seconds) that the effect should last
  * @cfg {Boolean} remove Whether the Element should be removed from the DOM and destroyed after the effect finishes
  * @cfg {Boolean} useDisplay Whether to use the display style attribute instead of visibility when hiding Elements (only applies to 
@@ -346,7 +347,7 @@ el.puff({<br/>
     },
 
 	/**
-	 * Blinks the element as if it was clicked and then collapses on it's center (similar to switching off a television).
+	 * Blinks the element as if it was clicked and then collapses on its center (similar to switching off a television).
 	 * When the effect is completed, the element will be hidden (visibility = 'hidden') but block elements will still 
 	 * take up space in the document. The element must be removed from the using the 'remove' config option if desired.
 	 * Usage:
@@ -954,6 +955,9 @@ el.ghost('b', {<br/>
     afterFx : function(o){
         if(o.afterStyle){
             this.applyStyles(o.afterStyle);
+        }
+        if(o.afterCls){
+            this.addClass(o.afterCls);
         }
         if(o.remove === true){
             this.remove();

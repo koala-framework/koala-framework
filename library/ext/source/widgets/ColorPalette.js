@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -82,7 +82,7 @@ cp.colors = ["000000", "993300", "333300"];
     ],
 
     // private
-    onRender : function(container){
+    onRender : function(container, position){
         var t = new Ext.MasterTemplate(
             '<tpl><a href="#" class="color-{0}" hidefocus="on"><em><span style="background:#{0}">&#160;</span></em></a></tpl>'
         );
@@ -93,13 +93,14 @@ cp.colors = ["000000", "993300", "333300"];
         var el = document.createElement("div");
         el.className = this.itemCls;
         t.overwrite(el);
-        container.dom.appendChild(el);
+        container.dom.insertBefore(el, position);
         this.el = Ext.get(el);
         this.el.on("click", this.handleClick,  this, {delegate: "a"});
     },
 
     // private
     afterRender : function(){
+        Ext.ColorPalette.superclass.afterRender.call(this);
         if(this.value){
             var s = this.value;
             this.value = null;

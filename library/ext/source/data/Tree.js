@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -24,7 +24,7 @@ Ext.data.Tree = function(root){
    if(root){
        this.setRootNode(root);
    }
-   this.events = {
+   this.addEvents({
        /**
         * @event append
         * Fires when a new child node is appended to a node in this tree.
@@ -96,7 +96,7 @@ Ext.data.Tree = function(root){
         * @param {Node} refNode The child node the node is being inserted before
         */
        "beforeinsert" : true
-   };
+   });
 
     Ext.data.Tree.superclass.constructor.call(this);
 };
@@ -203,7 +203,7 @@ Ext.data.Node = function(attributes){
      */
     this.nextSibling = null;
     
-    this.events = {
+    this.addEvents({
        /**
         * @event append
         * Fires when a new child node is appended
@@ -275,7 +275,7 @@ Ext.data.Node = function(attributes){
         * @param {Node} refNode The child node the node is being inserted before
         */
        "beforeinsert" : true
-   };
+   });
     this.listeners = this.attributes.listeners;
     Ext.data.Node.superclass.constructor.call(this);
 };
@@ -358,7 +358,7 @@ Ext.extend(Ext.data.Node, Ext.util.Observable, {
             }
             var index = this.childNodes.length;
             var oldParent = node.parentNode;
-            // its a move, make sure we move it cleanly
+            // it's a move, make sure we move it cleanly
             if(oldParent){
                 if(node.fireEvent("beforemove", node.getOwnerTree(), node, oldParent, this, index) === false){
                     return false;

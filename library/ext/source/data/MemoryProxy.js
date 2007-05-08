@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -7,6 +7,7 @@
  */
 
 /**
+ * @class Ext.data.MemoryProxy
  * An implementation of Ext.data.DataProxy that simply passes the data specified in its constructor
  * to the Reader when its load method is called.
  * @constructor

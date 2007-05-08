@@ -1,5 +1,5 @@
 /*
- * Ext JS Library 1.0
+ * Ext JS Library 1.0.1
  * Copyright(c) 2006-2007, Ext JS, LLC.
  * licensing@extjs.com
  * 
@@ -12,7 +12,7 @@
  * @singleton
  */
 Ext.menu.MenuMgr = function(){
-   var menus, active, groups = {};
+   var menus, active, groups = {}, attached = false, lastShow = new Date();
 
    // private - called when first menu is created
    function init(){
@@ -39,15 +39,18 @@ Ext.menu.MenuMgr = function(){
        active.remove(m);
        if(active.length < 1){
            Ext.get(document).un("mousedown", onMouseDown);
+           attached = false;
        }
    }
 
    // private
    function onShow(m){
        var last = active.last();
+       lastShow = new Date();
        active.add(m);
-       if(active.length == 1){
+       if(!attached){
            Ext.get(document).on("mousedown", onMouseDown);
+           attached = true;
        }
        if(m.parentMenu){
           m.getEl().setZIndex(parseInt(m.parentMenu.getEl().getStyle("z-index"), 10) + 3);
@@ -80,7 +83,7 @@ Ext.menu.MenuMgr = function(){
 
    // private
    function onMouseDown(e){
-       if(active.length > 0 && !e.getTarget(".x-menu")){
+       if(lastShow.getElapsed() > 50 && active.length > 0 && !e.getTarget(".x-menu")){
            hideAll();
        }
    }
