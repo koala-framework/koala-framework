@@ -1,50 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.18 $"/>
-		<generation date="$Date: 2005/04/13 01:00:20 $"/>
+		<version number="$Revision: 1.30 $"/>
+		<generation date="$Date: 2006/06/24 23:27:01 $"/>
 		<language type="sa"/>
 	</identity>
 	<localeDisplayNames>
 		<languages>
-			<language type="sa" draft="true">संस्कृत</language>
+			<language type="sa" draft="unconfirmed">संस्कृत</language>
 		</languages>
 		<territories>
-			<territory type="IN" draft="true">भारतम्</territory>
+			<territory type="IN" draft="unconfirmed">भारतम्</territory>
 		</territories>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters draft="true">[ँ-ह़-्ॐ-॔ॠ-ॣ०-९ॽ‌‍]</exemplarCharacters>
+		<exemplarCharacters>[़ ँ-ः ॑-॔ ॐ अ-ऋ ॠ ऌ ॡ ए ऐ ओ-न र ल ळ व-ह ऽ-ॄ ॢ ॣ े ै ो-्]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[\u200C \u200D ०-९ ऍ ऑ ॅ ॉ]</exemplarCharacters>
 	</characters>
 	<numbers>
 		<symbols>
-			<nativeZeroDigit draft="true">०</nativeZeroDigit>
+			<nativeZeroDigit draft="unconfirmed">०</nativeZeroDigit>
 		</symbols>
 		<decimalFormats>
 			<decimalFormatLength>
 				<decimalFormat>
-					<pattern draft="true">#,##,##0.###</pattern>
+					<pattern draft="unconfirmed">#,##,##0.###</pattern>
 				</decimalFormat>
 			</decimalFormatLength>
 		</decimalFormats>
 		<percentFormats>
 			<percentFormatLength>
 				<percentFormat>
-					<pattern draft="true">#,##,##0%</pattern>
+					<pattern draft="unconfirmed">#,##,##0%</pattern>
 				</percentFormat>
 			</percentFormatLength>
 		</percentFormats>
 		<currencyFormats>
 			<currencyFormatLength>
 				<currencyFormat>
-					<pattern draft="true">¤ #,##,##0.00</pattern>
+					<pattern draft="unconfirmed">¤#,##,##0.00</pattern>
 				</currencyFormat>
 			</currencyFormatLength>
 		</currencyFormats>
 		<currencies>
 			<currency type="INR">
-				<symbol draft="true">रु</symbol>
+				<symbol draft="unconfirmed">रु</symbol>
 			</currency>
 		</currencies>
 	</numbers>

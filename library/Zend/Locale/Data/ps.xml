@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.26 $"/>
-		<generation date="$Date: 2005/03/10 19:11:17 $"/>
+		<version number="$Revision: 1.39 $"/>
+		<generation date="$Date: 2006/06/27 23:30:54 $"/>
 		<language type="ps"/>
 	</identity>
 	<localeDisplayNames>
@@ -41,6 +41,9 @@
 			<language type="uz">ازبکي</language>
 			<language type="zh">چیني</language>
 		</languages>
+		<scripts>
+			<script type="Arab" references="RP1">عربي</script>
+		</scripts>
 		<territories>
 			<territory type="AF">افغانستان</territory>
 			<territory type="AL">البانیه</territory>
@@ -67,7 +70,6 @@
 			<territory type="GN">ګیانا</territory>
 			<territory type="GR">یونان</territory>
 			<territory type="GT">ګواتیمالا</territory>
-			<territory type="HK" draft="true">هانکانګ</territory>
 			<territory type="HN">هانډوراس</territory>
 			<territory type="HU">مجارستان</territory>
 			<territory type="ID">اندونیزیا</territory>
@@ -112,7 +114,8 @@
 		<orientation characters="right-to-left"/>
 	</layout>
 	<characters>
-		<exemplarCharacters>[ء-ؤئ-غفقل-وي-ْٰٔټپځڅ-چډړږژښکګڼی-ۍې ‌‍‏‎]</exemplarCharacters>
+		<exemplarCharacters>[َ ِ ُ ً ٍ ٌ ّ ْ ٔ ٰ آ ا أ ء ب پ ت ټ ث ج ځ چ څ ح-د ډ ذ ر ړ ز ژ ږ س ش ښ ص-غ ف ق ک ګ ل-ن ڼ ه ة و ؤ ی ي ې ۍ ئ]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[\u200C \u200D]</exemplarCharacters>
 	</characters>
 	<dates>
 		<calendars>
@@ -120,18 +123,8 @@
 				<months>
 					<monthContext type="format">
 						<monthWidth type="abbreviated">
-							<month type="1">جنو</month>
-							<month type="2">فبر</month>
-							<month type="3">مار</month>
-							<month type="4">اپر</month>
 							<month type="5">مـی</month>
 							<month type="6">جون</month>
-							<month type="7">جول</month>
-							<month type="8">اګس</month>
-							<month type="9">سپت</month>
-							<month type="10">اکت</month>
-							<month type="11">نوم</month>
-							<month type="12">دسم</month>
 						</monthWidth>
 						<monthWidth type="wide">
 							<month type="1">جنوري</month>
@@ -151,15 +144,6 @@
 				</months>
 				<days>
 					<dayContext type="format">
-						<dayWidth type="abbreviated">
-							<day type="sun">ی.</day>
-							<day type="mon">د.</day>
-							<day type="tue">س.</day>
-							<day type="wed">چ.</day>
-							<day type="thu">پ.</day>
-							<day type="fri">ج.</day>
-							<day type="sat">ش.</day>
-						</dayWidth>
 						<dayWidth type="wide">
 							<day type="sun">یکشنبه</day>
 							<day type="mon">دوشنبه</day>
@@ -223,28 +207,67 @@
 						</timeFormat>
 					</timeFormatLength>
 				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMMMd" draft="provisional">d MMMM</dateFormatItem>
+						<dateFormatItem id="Md" draft="provisional">M/d</dateFormatItem>
+						<dateFormatItem id="mmss" draft="provisional">mm:ss</dateFormatItem>
+						<dateFormatItem id="yyyyM" draft="provisional">yyyy/M</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM" draft="provisional">د yyyy د MMMM</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="persian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1" references="RP1">وری</month>
+							<month type="2" references="RP1">غویی</month>
+							<month type="3" references="RP1">غبرګولی</month>
+							<month type="4" references="RP1">چنګاښ</month>
+							<month type="5" references="RP1">زمری</month>
+							<month type="6" references="RP1">وږی</month>
+							<month type="7" references="RP1">تله</month>
+							<month type="8" references="RP1">لړم</month>
+							<month type="9" references="RP1">لیندۍ</month>
+							<month type="10" references="RP1">مرغومی</month>
+							<month type="11" references="RP1">سلواغه</month>
+							<month type="12" references="RP1">کب</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1" references="RP1">وری</month>
+							<month type="2" references="RP1">غویی</month>
+							<month type="3" references="RP1">غبرګولی</month>
+							<month type="4" references="RP1">چنګاښ</month>
+							<month type="5" references="RP1">زمری</month>
+							<month type="6" references="RP1">وږی</month>
+							<month type="7" references="RP1">تله</month>
+							<month type="8" references="RP1">لړم</month>
+							<month type="9" references="RP1">لیندۍ</month>
+							<month type="10" references="RP1">مرغومی</month>
+							<month type="11" references="RP1">سلواغه</month>
+							<month type="12" references="RP1">کب</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
+			<regionFormat references="RP1">د {0} په وخت</regionFormat>
 			<zone type="Asia/Kabul">
-				<long>
-					<standard>د افغانستان په وخت</standard>
-					<daylight>د افغانستان په وخت</daylight>
-				</long>
-				<short>
-					<standard>AFT</standard>
-					<daylight>AFT</daylight>
-				</short>
 				<exemplarCity>کابل</exemplarCity>
 			</zone>
 		</timeZoneNames>
 	</dates>
 	<numbers>
 		<currencies>
-			<currency type="AFA">
+			<currency type="AFN">
 				<displayName>افغانۍ</displayName>
-				<symbol>افغانۍ</symbol>
+				<symbol references="RP1">؋</symbol>
 			</currency>
 		</currencies>
 	</numbers>
+	<references>
+		<reference type="RP1" uri="http://www.evertype.com/standards/af/">Computer Locale Requirements for Afghanistan</reference>
+	</references>
 </ldml>

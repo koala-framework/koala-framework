@@ -19,10 +19,14 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-/** Zend_Db_Statement_Exception */
-require_once 'Zend/Db/Statement/Exception.php';
+/**
+ * @see Zend_Db
+ */
+require_once 'Zend/Db.php';
 
-/** Zend_Db_Statement_Interface */
+/**
+ * @see Zend_Db_Statement_Interface
+ */
 require_once 'Zend/Db/Statement/Interface.php';
 
 /**
@@ -147,22 +151,22 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
     /**
      * Binds a PHP variable to a parameter in the prepared statement.
      *
-     * @param mixed $parameter
-     * @param string $variable
-     * @param string $type OPTIONAL
+     * @param mixed   $parameter
+     * @param string  $variable
+     * @param string  $type OPTIONAL
      * @param integer $length OPTIONAL
-     * @param array $options OPTIONAL
+     * @param array   $options OPTIONAL
      * @return void
      * @throws Zend_Db_Statement_Exception
      */
-    public function bindParam($parameter, &$variable, $type = null,
-        $length = null, $options = null)
+    public function bindParam($parameter, &$variable, $type = null, $length = null, $options = null)
     {
         if (is_integer($parameter)) {
             if ($parameter > 0 && $parameter <= count($this->_sqlParam)) {
                 // bind by position, 1-based
                 $this->_bindParam[$parameter-1] =& $variable;
             } else {
+                require_once 'Zend/Db/Statement/Exception.php';
                 throw new Zend_Db_Statement_Exception("position '$parameter' not valid");
             }
         } else {
@@ -175,6 +179,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
             if (is_integer($key)) {
                 $this->_bindParam[$key] =& $variable;
             } else {
+                require_once 'Zend/Db/Statement/Exception.php';
                 throw new Zend_Db_Statement_Exception("parameter name '$parameter' not valid");
             }
         }
@@ -206,7 +211,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
      * Returns the data from a single column in the next
      * single row of the result set.
      *
-     * @param string $col OPTIONAL
+     * @param integer $col OPTIONAL
      * @return array
      */
     public function fetchColumn($col = 0)
@@ -226,11 +231,11 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
      *
      * @param string $class OPTIONAL
      * @param array $config OPTIONAL
-     * @return stdClass
+     * @return mixed
      */
-    public function fetchObject($class = 'stdClass', $config = null)
+    public function fetchObject($class = 'stdClass', array $config = array())
     {
-        $obj = new $class();
+        $obj = new $class($config);
         $row = $this->fetch(Zend_Db::FETCH_ASSOC);
         foreach ($row as $key => $val) {
             $obj->$key = $val;
@@ -279,6 +284,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
                 $this->_fetchMode = $mode;
                 break;
             default:
+                require_once 'Zend/Db/Statement/Exception.php';
                 throw new Zend_Db_Statement_Exception('Invalid fetch mode specified');
                 break;
         }
@@ -294,6 +300,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
      */
     public function nextRowset()
     {
+        require_once 'Zend/Db/Statement/Exception.php';
         throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
     }
 
@@ -307,6 +314,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
      */
     public function rowCount()
     {
+        require_once 'Zend/Db/Statement/Exception.php';
         throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
     }
 
@@ -336,6 +344,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
      */
     public function closeCursor()
     {
+        require_once 'Zend/Db/Statement/Exception.php';
         throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
     }
 
@@ -349,6 +358,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
      */
     public function columnCount()
     {
+        require_once 'Zend/Db/Statement/Exception.php';
         throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
     }
 
@@ -362,6 +372,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
      */
     public function errorCode()
     {
+        require_once 'Zend/Db/Statement/Exception.php';
         throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
     }
 
@@ -375,6 +386,7 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
      */
     public function errorInfo()
     {
+        require_once 'Zend/Db/Statement/Exception.php';
         throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
     }
 
@@ -387,8 +399,9 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
      * @param array $params OPTIONAL
      * @throws Zend_Db_Statement_Exception
      */
-    public function execute($params = null)
+    public function execute(array $params = array())
     {
+        require_once 'Zend/Db/Statement/Exception.php';
         throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
     }
 
@@ -398,13 +411,15 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
      * @todo needs implementation or better exception message
      * @todo fix docblock for params & return types
      *
-     * @param string $style OPTIONAL
-     * @param string $cursor OPTIONAL
+     * @param string  $style OPTIONAL
+     * @param string  $cursor OPTIONAL
      * @param integer $offset OPTIONAL
+     * @return mixed
      * @throws Zend_Db_Statement_Exception
      */
     public function fetch($style = null, $cursor = null, $offset = null)
     {
+        require_once 'Zend/Db/Statement/Exception.php';
         throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
     }
 

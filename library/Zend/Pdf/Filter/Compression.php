@@ -39,7 +39,7 @@ abstract class Zend_Pdf_Filter_Compression implements Zend_Pdf_Filter
      * @param integer $c
      * @return integer
      */
-    static private function _paeth($a, $b, $c)
+    private static function _paeth($a, $b, $c)
     {
         // $a - left, $b - above, $c - upper left
         $p  = $a + $b - $c;       // initial estimate
@@ -211,7 +211,7 @@ abstract class Zend_Pdf_Filter_Compression implements Zend_Pdf_Filter
 
                         $lastSample = array_fill(0, $bytesPerSample, 0);
                         for ($count2 = 0; $count2 < $bytesPerRow; $count2++) {
-                            $newByte = ord($data{$offset++});
+                            $newByte = ord($data[$offset++]);
                             // Note. chr() automatically cuts input to 8 bit
                             $output .= chr($newByte - $lastSample[$count2 % $bytesPerSample]);
                             $lastSample[$count2 % $bytesPerSample] = $newByte;
@@ -225,7 +225,7 @@ abstract class Zend_Pdf_Filter_Compression implements Zend_Pdf_Filter
                         $output .= chr($predictor);
 
                         for ($count2 = 0; $count2 < $bytesPerRow; $count2++) {
-                            $newByte = ord($data{$offset++});
+                            $newByte = ord($data[$offset++]);
                             // Note. chr() automatically cuts input to 8 bit
                             $output .= chr($newByte - $lastRow[$count2]);
                             $lastRow[$count2] = $newByte;
@@ -240,7 +240,7 @@ abstract class Zend_Pdf_Filter_Compression implements Zend_Pdf_Filter
 
                         $lastSample = array_fill(0, $bytesPerSample, 0);
                         for ($count2 = 0; $count2 < $bytesPerRow; $count2++) {
-                            $newByte = ord($data{$offset++});
+                            $newByte = ord($data[$offset++]);
                             // Note. chr() automatically cuts input to 8 bit
                             $output .= chr($newByte - floor(( $lastSample[$count2 % $bytesPerSample] + $lastRow[$count2])/2));
                             $lastSample[$count2 % $bytesPerSample] = $lastRow[$count2] = $newByte;
@@ -256,7 +256,7 @@ abstract class Zend_Pdf_Filter_Compression implements Zend_Pdf_Filter
 
                         $lastSample = array_fill(0, $bytesPerSample, 0);
                         for ($count2 = 0; $count2 < $bytesPerRow; $count2++) {
-                            $newByte = ord($data{$offset++});
+                            $newByte = ord($data[$offset++]);
                             // Note. chr() automatically cuts input to 8 bit
                             $output .= chr($newByte - self::_paeth( $lastSample[$count2 % $bytesPerSample],
                                                                     $lastRow[$count2],
@@ -319,17 +319,17 @@ abstract class Zend_Pdf_Filter_Compression implements Zend_Pdf_Filter
             $lastRow = array_fill(0, $bytesPerRow, 0);
             for ($count = 0; $count < $rows; $count++) {
                 $lastSample = array_fill(0, $bytesPerSample, 0);
-                switch (ord($data{$offset++})) {
+                switch (ord($data[$offset++])) {
                     case 0: // None of prediction
                         $output .= substr($data, $offset, $bytesPerRow);
                         for ($count2 = 0; $count2 < $bytesPerRow  &&  $offset < strlen($data); $count2++) {
-                            $lastSample[$count2 % $bytesPerSample] = $lastRow[$count2] = ord($data{$offset++});
+                            $lastSample[$count2 % $bytesPerSample] = $lastRow[$count2] = ord($data[$offset++]);
                         }
                         break;
 
                     case 1: // Sub prediction
                         for ($count2 = 0; $count2 < $bytesPerRow  &&  $offset < strlen($data); $count2++) {
-                            $decodedByte = (ord($data{$offset++}) + $lastSample[$count2 % $bytesPerSample]) & 0xFF;
+                            $decodedByte = (ord($data[$offset++]) + $lastSample[$count2 % $bytesPerSample]) & 0xFF;
                             $lastSample[$count2 % $bytesPerSample] = $lastRow[$count2] = $decodedByte;
                             $output .= chr($decodedByte);
                         }
@@ -337,7 +337,7 @@ abstract class Zend_Pdf_Filter_Compression implements Zend_Pdf_Filter
 
                     case 2: // Up prediction
                         for ($count2 = 0; $count2 < $bytesPerRow  &&  $offset < strlen($data); $count2++) {
-                            $decodedByte = (ord($data{$offset++}) + $lastRow[$count2]) & 0xFF;
+                            $decodedByte = (ord($data[$offset++]) + $lastRow[$count2]) & 0xFF;
                             $lastSample[$count2 % $bytesPerSample] = $lastRow[$count2] = $decodedByte;
                             $output .= chr($decodedByte);
                         }
@@ -345,7 +345,7 @@ abstract class Zend_Pdf_Filter_Compression implements Zend_Pdf_Filter
 
                     case 3: // Average prediction
                         for ($count2 = 0; $count2 < $bytesPerRow  &&  $offset < strlen($data); $count2++) {
-                            $decodedByte = (ord($data{$offset++}) +
+                            $decodedByte = (ord($data[$offset++]) +
                                             floor(( $lastSample[$count2 % $bytesPerSample] + $lastRow[$count2])/2)
                                            ) & 0xFF;
                             $lastSample[$count2 % $bytesPerSample] = $lastRow[$count2] = $decodedByte;
@@ -356,7 +356,7 @@ abstract class Zend_Pdf_Filter_Compression implements Zend_Pdf_Filter
                     case 4: // Paeth prediction
                         $currentRow = array();
                         for ($count2 = 0; $count2 < $bytesPerRow  &&  $offset < strlen($data); $count2++) {
-                            $decodedByte = (ord($data{$offset++}) +
+                            $decodedByte = (ord($data[$offset++]) +
                                             self::_paeth($lastSample[$count2 % $bytesPerSample],
                                                          $lastRow[$count2],
                                                          ($count2 - $bytesPerSample  <  0)?

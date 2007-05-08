@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,6 +18,7 @@
  * @subpackage Amazon
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: CustomerReview.php 4388 2007-04-06 14:15:35Z darby $
  */
 
 
@@ -30,16 +32,20 @@
 class Zend_Service_Amazon_CustomerReview
 {
     /**
-     * Parse the given Customer Review Element
+     * Assigns values to properties relevant to CustomerReview
      *
-     * @param DomElement $dom
+     * @param  DOMElement $dom
+     * @return void
      */
-    public function __construct(DomElement $dom)
+    public function __construct(DOMElement $dom)
     {
-    	$xpath = new DOMXPath($dom->ownerDocument);
-    	$xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
-        foreach(array('Rating', 'HelpfulVotes', 'CustomerId', 'TotalVotes', 'Date', 'Summary', 'Content') as $el) {
-            $this->$el = (string) $xpath->query("./az:$el/text()", $dom)->item(0)->data;
+        $xpath = new DOMXPath($dom->ownerDocument);
+        $xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
+        foreach (array('Rating', 'HelpfulVotes', 'CustomerId', 'TotalVotes', 'Date', 'Summary', 'Content') as $el) {
+            $result = $xpath->query("./az:$el/text()", $dom);
+            if ($result->length == 1) {
+                $this->$el = (string) $result->item(0)->data;
+            }
         }
     }
 }

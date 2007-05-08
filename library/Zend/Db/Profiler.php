@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,17 +18,9 @@
  * @subpackage Profiler
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Profiler.php 4679 2007-05-02 22:17:39Z darby $
  */
 
-/**
- * Zend_Db_Profiler_Query
- */
-require_once 'Zend/Db/Profiler/Query.php';
-
-/**
- * Zend_Db_Profiler_Exception
- */
-require_once 'Zend/Db/Profiler/Exception.php';
 
 /**
  * @category   Zend
@@ -80,7 +73,7 @@ class Zend_Db_Profiler
     /**
      * Array of Zend_Db_Profiler_Query objects.
      *
-     * @var Zend_Db_Profiler_Query
+     * @var array
      */
     protected $_queryProfiles = array();
 
@@ -88,7 +81,7 @@ class Zend_Db_Profiler
      * Stores enabled state of the profiler.  If set to False, calls to
      * queryStart() will simply be ignored.
      *
-     * @var bool
+     * @var boolean
      */
     protected $_enabled = false;
 
@@ -117,9 +110,10 @@ class Zend_Db_Profiler
      * Class constructor.  The profiler is disabled by default unless it is
      * specifically enabled by passing in $enabled here or calling setEnabled().
      *
-     * @param bool $enabled
+     * @param  boolean $enabled
+     * @return void
      */
-    public function __construct($enabled=false)
+    public function __construct($enabled = false)
     {
         $this->setEnabled($enabled);
     }
@@ -128,13 +122,25 @@ class Zend_Db_Profiler
      * Enable or disable the profiler.  If $enable is false, the profiler
      * is disabled and will not log any queries sent to it.
      *
-     * @param bool $enable
-     * @return bool
+     * @param  boolean $enable
+     * @return Zend_Db_Profiler Provides a fluent interface
      */
     public function setEnabled($enable)
     {
-        $this->_enabled = $enable;
-        return true;
+        $this->_enabled = (boolean) $enable;
+
+        return $this;
+    }
+
+    /**
+     * Get the current state of enable.  If True is returned,
+     * the profiler is enabled.
+     *
+     * @return boolean
+     */
+    public function getEnabled()
+    {
+        return $this->_enabled;
     }
 
     /**
@@ -143,17 +149,29 @@ class Zend_Db_Profiler
      * $minimumSeconds will be saved.  To save all queries regardless of
      * elapsed time, set $minimumSeconds to null.
      *
-     * @param int $minimumSeconds OPTIONAL
-     * @return bool
+     * @param  integer $minimumSeconds OPTIONAL
+     * @return Zend_Db_Profiler Provides a fluent interface
      */
     public function setFilterElapsedSecs($minimumSeconds = null)
     {
-        if (is_null($minimumSeconds)) {
+        if (null === $minimumSeconds) {
             $this->_filterElapsedSecs = null;
+        } else {
+            $this->_filterElapsedSecs = (integer) $minimumSeconds;
         }
 
-        $this->_filterElapsedSecs = $minimumSeconds;
-        return true;
+        return $this;
+    }
+
+    /**
+     * Returns the minimum number of seconds for saving query profiles, or null if
+     * query profiles are saved regardless of elapsed time.
+     *
+     * @return integer|null
+     */
+    public function getFilterElapsedSecs()
+    {
+        return $this->_filterElapsedSecs;
     }
 
     /**
@@ -162,48 +180,52 @@ class Zend_Db_Profiler
      * query.  To save more than one type, logical OR them together.  To
      * save all queries regardless of type, set $queryType to null.
      *
-     * @param null|integer $queryTypes OPTIONAL
+     * @param  integer $queryTypes OPTIONAL
+     * @return Zend_Db_Profiler Provides a fluent interface
      */
     public function setFilterQueryType($queryTypes = null)
     {
         $this->_filterTypes = $queryTypes;
-        return true;
+
+        return $this;
     }
 
     /**
-     * Get the current state of enable.  If True is returned,
-     * the profiler is enabled.
+     * Returns the types of query profiles saved, or null if queries are saved regardless
+     * of their types.
      *
-     * @return bool
+     * @return integer|null
+     * @see    Zend_Db_Profiler::setFilterQueryType()
      */
-    public function getEnabled()
+    public function getFilterQueryType()
     {
-        return $this->_enabled;
+        return $this->_filterTypes;
     }
 
     /**
-     * Clears the history of any past query profiles.  This is unrelentless
+     * Clears the history of any past query profiles.  This is relentless
      * and will even clear queries that were started and may not have
      * been marked as ended.
      *
-     * @return unknown
+     * @return Zend_Db_Profiler Provides a fluent interface
      */
     public function clear()
     {
         $this->_queryProfiles = array();
-        return true;
+
+        return $this;
     }
 
     /**
-     * Start a query.  Creates a new query profile object (Zend_Db_Profiler_Query)
+     * Starts a query.  Creates a new query profile object (Zend_Db_Profiler_Query)
      * and returns the "query profiler handle".  Run the query, then call
      * queryEnd() and pass it this handle to make the query as ended and
      * record the time.  If the profiler is not enabled, this takes no
-     * action and immediately runs.
+     * action and immediately returns null.
      *
-     * @param string $queryText     SQL statement
-     * @param int $queryType        OPTIONAL Type of query, one of the Zend_Db_Profiler::* constants
-     * @return mixed
+     * @param  string  $queryText   SQL statement
+     * @param  integer $queryType   OPTIONAL Type of query, one of the Zend_Db_Profiler::* constants
+     * @return integer|null
      */
     public function queryStart($queryText, $queryType = null)
     {
@@ -212,9 +234,8 @@ class Zend_Db_Profiler
         }
 
         // make sure we have a query type
-        if (is_null($queryType)) {
-            $initial = substr($queryText, 0, 6);
-            switch (strtolower($initial)) {
+        if (null === $queryType) {
+            switch (strtolower(substr($queryText, 0, 6))) {
                 case 'insert':
                     $queryType = self::INSERT;
                     break;
@@ -233,8 +254,14 @@ class Zend_Db_Profiler
             }
         }
 
+        /**
+         * @see Zend_Db_Profiler_Query
+         */
+        require_once 'Zend/Db/Profiler/Query.php';
         $this->_queryProfiles[] = new Zend_Db_Profiler_Query($queryText, $queryType);
+
         end($this->_queryProfiles);
+
         return key($this->_queryProfiles);
     }
 
@@ -242,24 +269,35 @@ class Zend_Db_Profiler
      * Ends a query.  Pass it the handle that was returned by queryStart().
      * This will mark the query as ended and save the time.
      *
-     * @param integer $queryId
+     * @param  integer $queryId
      * @throws Zend_Db_Profiler_Exception
-     * @return boolean
+     * @return void
      */
     public function queryEnd($queryId)
     {
-        /* @var $qp Zend_Db_Profiler_Query */
-
         // Don't do anything if the Zend_Db_Profiler is not enabled.
         if (!$this->_enabled) {
-            return true;
+            return;
         }
 
         // Check for a valid query handle.
+        if (!isset($this->_queryProfiles[$queryId])) {
+            /**
+             * @see Zend_Db_Profiler_Exception
+             */
+            require_once 'Zend/Db/Profiler/Exception.php';
+            throw new Zend_Db_Profiler_Exception("Profiler has no query with handle '$queryId'.");
+        }
+
         $qp = $this->_queryProfiles[$queryId];
+
+        // Ensure that the query profile has not already ended
         if ($qp->hasEnded()) {
-            throw new Zend_Db_Profiler_Exception('Query with profiler handle "'
-                                          . $queryId .'" has already ended.');
+            /**
+             * @see Zend_Db_Profiler_Exception
+             */
+            require_once 'Zend/Db/Profiler/Exception.php';
+            throw new Zend_Db_Profiler_Exception("Query with profiler handle '$queryId' has already ended.");
         }
 
         // End the query profile so that the elapsed time can be calculated.
@@ -269,37 +307,37 @@ class Zend_Db_Profiler
          * If filtering by elapsed time is enabled, only keep the profile if
          * it ran for the minimum time.
          */
-        if (!is_null($this->_filterElapsedSecs)) {
-            if ($qp->getElapsedSecs() < $this->_filterElapsedSecs) {
-                unset($this->_queryProfiles[$queryId]);
-            }
+        if (null !== $this->_filterElapsedSecs && $qp->getElapsedSecs() < $this->_filterElapsedSecs) {
+            unset($this->_queryProfiles[$queryId]);
+            return;
         }
 
         /**
          * If filtering by query type is enabled, only keep the query if
          * it was one of the allowed types.
          */
-        if (!is_null($this->_filterTypes)) {
-            if (!($qp->getQueryType() & $this->_filterTypes)) {
-                unset($this->_queryProfiles[$queryId]);
-            }
+        if (null !== $this->_filterTypes && !($qp->getQueryType() & $this->_filterTypes)) {
+            unset($this->_queryProfiles[$queryId]);
+            return;
         }
-
-        return true;
     }
 
     /**
      * Get a profile for a query.  Pass it the same handle that was returned
      * by queryStart() and it will return a Zend_Db_Profiler_Query object.
      *
-     * @param int $queryId
+     * @param  integer $queryId
      * @throws Zend_Db_Profiler_Exception
      * @return Zend_Db_Profiler_Query
      */
     public function getQueryProfile($queryId)
     {
         if (!array_key_exists($queryId, $this->_queryProfiles)) {
-            throw new Zend_Db_Profiler_Exception("Query handle \"$queryId\" not found in profiler log.");
+            /**
+             * @see Zend_Db_Profiler_Exception
+             */
+            require_once 'Zend/Db/Profiler/Exception.php';
+            throw new Zend_Db_Profiler_Exception("Query handle '$queryId' not found in profiler log.");
         }
 
         return $this->_queryProfiles[$queryId];
@@ -310,21 +348,21 @@ class Zend_Db_Profiler
      * is set to one of the Zend_Db_Profiler::* constants then only queries of that
      * type will be returned.  Normally, queries that have not yet ended will
      * not be returned unless $showUnfinished is set to True.  If no
-     * queries were found, False is returned.
+     * queries were found, False is returned. The returned array is indexed by the query
+     * profile handles.
      *
-     * @param string $queryType
-     * @param bool $showUnfinished
-     * @return mixed
+     * @param  integer $queryType
+     * @param  boolean $showUnfinished
+     * @return array|false
      */
-    public function getQueryProfiles($queryType=null, $showUnfinished=false)
+    public function getQueryProfiles($queryType = null, $showUnfinished = false)
     {
         $queryProfiles = array();
-        foreach ($this->_queryProfiles as $key=>$qp) {
-            /* @var $qp Zend_Db_Profiler_Query */
-            if ($queryType===null) {
-                $condition=true;
+        foreach ($this->_queryProfiles as $key => $qp) {
+            if ($queryType === null) {
+                $condition = true;
             } else {
-                $condition=($qp->getQueryType() & $queryType);
+                $condition = ($qp->getQueryType() & $queryType);
             }
 
             if (($qp->hasEnded() || $showUnfinished) && $condition) {
@@ -335,24 +373,28 @@ class Zend_Db_Profiler
         if (empty($queryProfiles)) {
             $queryProfiles = false;
         }
+
         return $queryProfiles;
     }
 
     /**
      * Get the total elapsed time (in seconds) of all of the profiled queries.
      * Only queries that have ended will be counted.  If $queryType is set to
-     * one of the Zend_Db_Profiler::* constants, the elapsed time will be calculated
-     * only for queries of that type.
+     * one or more of the Zend_Db_Profiler::* constants, the elapsed time will be calculated
+     * only for queries of the given type(s).
      *
-     * @param int $queryType OPTIONAL
-     * @return int
+     * @param  integer $queryType OPTIONAL
+     * @return float
      */
     public function getTotalElapsedSecs($queryType = null)
     {
         $elapsedSecs = 0;
-        foreach ($this->_queryProfiles as $key=>$qp) {
-            /* @var $qp Zend_Db_Profiler_Query */
-            is_null($queryType)? $condition=true : $condition=($qp->getQueryType() & $queryType);
+        foreach ($this->_queryProfiles as $key => $qp) {
+            if (null === $queryType) {
+                $condition = true;
+            } else {
+                $condition = ($qp->getQueryType() & $queryType);
+            }
             if (($qp->hasEnded()) && $condition) {
                 $elapsedSecs += $qp->getElapsedSecs();
             }
@@ -365,31 +407,31 @@ class Zend_Db_Profiler
      * be counted.  If $queryType is set to one of the Zend_Db_Profiler::* constants, only queries of
      * that type will be counted.
      *
-     * @param int $queryType OPTIONAL
-     * @return int
+     * @param  integer $queryType OPTIONAL
+     * @return integer
      */
     public function getTotalNumQueries($queryType = null)
     {
-        if (is_null($queryType)) {
-            return sizeof($this->_queryProfiles);
+        if (null === $queryType) {
+            return count($this->_queryProfiles);
         }
 
         $numQueries = 0;
         foreach ($this->_queryProfiles as $qp) {
-            /* @var $qp Zend_Db_Profiler_Query */
-            is_null($queryType)? $condition=true : $condition=($qp->getQueryType() & $queryType);
-            if ($qp->hasEnded() && $condition) {
+            if ($qp->hasEnded() && ($qp->getQueryType() & $queryType)) {
                 $numQueries++;
             }
         }
+
         return $numQueries;
     }
 
     /**
      * Get the Zend_Db_Profiler_Query object for the last query that was run, regardless if it has
-     * ended or not.  If the query has not ended, it's end time will be Null.
+     * ended or not.  If the query has not ended, its end time will be null.  If no queries have
+     * been profiled, false is returned.
      *
-     * @return bool|Zend_Db_Profiler_Query
+     * @return Zend_Db_Profiler_Query|false
      */
     public function getLastQueryProfile()
     {
@@ -398,6 +440,7 @@ class Zend_Db_Profiler
         }
 
         end($this->_queryProfiles);
+
         return current($this->_queryProfiles);
     }
 

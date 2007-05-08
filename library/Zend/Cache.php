@@ -33,14 +33,14 @@ abstract class Zend_Cache
      * 
      * @var array $availableFrontends array of frontend name (string)
      */
-    static public $availableFrontends = array('Core', 'Output', 'Class', 'File', 'Function', 'Page');
+    public static $availableFrontends = array('Core', 'Output', 'Class', 'File', 'Function', 'Page');
     
     /**
      * Available backends
      * 
      * @var array $availableBackends array of backends name (string)
      */
-    static public $availableBackends = array('File', 'Sqlite', 'Memcached', 'Apc');
+    public static $availableBackends = array('File', 'Sqlite', 'Memcached', 'Apc');
     
     /**
      * Consts for clean() method
@@ -58,7 +58,7 @@ abstract class Zend_Cache
      * @param array $frontendOptions associative array of options for the corresponding frontend constructor
      * @param array $backendOptions associative array of options for the corresponding backend constructor
      */
-    static public function factory($frontend, $backend, $frontendOptions = array(), $backendOptions = array())
+    public static function factory($frontend, $backend, $frontendOptions = array(), $backendOptions = array())
     {
         
         // because lowercase will fail
@@ -94,7 +94,7 @@ abstract class Zend_Cache
      * 
      * Note : for perf reasons, the "load" of Zend/Cache/Exception is dynamic
      */
-    static public function throwException($msg)
+    public static function throwException($msg)
     {
         // For perfs reasons, we use this dynamic inclusion
         require_once 'Zend/Cache/Exception.php';

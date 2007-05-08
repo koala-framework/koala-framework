@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,17 +18,20 @@
  * @subpackage Select
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Select.php 4527 2007-04-17 22:49:14Z darby $
  */
 
+
 /**
- * Zend_Db_Adapter_Abstract
+ * @see Zend_Db_Adapter_Abstract
  */
 require_once 'Zend/Db/Adapter/Abstract.php';
 
 /**
- * Zend_Db_Expr
+ * @see Zend_Db_Expr
  */
 require_once 'Zend/Db/Expr.php';
+
 
 /**
  * Class for SQL SELECT generation and results.
@@ -284,7 +288,7 @@ class Zend_Db_Select
      * The second parameter can be a single string or Zend_Db_Expr object,
      * or else an array of strings or Zend_Db_Expr objects.
      *
-     * The first parameter can be null or an empty string, in which case 
+     * The first parameter can be null or an empty string, in which case
      * no correlation name is generated or prepended to the columns named
      * in the second parameter.
      *
@@ -367,7 +371,7 @@ class Zend_Db_Select
 
     /**
      * Generate a unique correlation name
-     * 
+     *
      * @param string|array $name A qualified identifier.
      * @return string A unique correlation name.
      */
@@ -432,7 +436,7 @@ class Zend_Db_Select
      * The $name and $cols parameters follow the same logic
      * as described in the from() method.
      *
-     * @param string $name The table name.
+     * @param string|array $name The table name.
      * @param string $cond Join on this condition.
      * @param array|string $cols The columns to select from the joined table.
      * @return Zend_Db_Select This Zend_Db_Select object.
@@ -453,7 +457,7 @@ class Zend_Db_Select
      * The $name and $cols parameters follow the same logic
      * as described in the from() method.
      *
-     * @param string $name The table name.
+     * @param string|array $name The table name.
      * @param string $cond Join on this condition.
      * @param array|string $cols The columns to select from the joined table.
      * @return Zend_Db_Select This Zend_Db_Select object.
@@ -474,7 +478,7 @@ class Zend_Db_Select
      * The $name and $cols parameters follow the same logic
      * as described in the from() method.
      *
-     * @param string $name The table name.
+     * @param string|array $name The table name.
      * @param string $cond Join on this condition.
      * @param array|string $cols The columns to select from the joined table.
      * @return Zend_Db_Select This Zend_Db_Select object.
@@ -491,7 +495,7 @@ class Zend_Db_Select
      * The $name and $cols parameters follow the same logic
      * as described in the from() method.
      *
-     * @param string $name The table name.
+     * @param string|array $name The table name.
      * @param string $cond Join on this condition.
      * @param array|string $cols The columns to select from the joined table.
      * @return Zend_Db_Select This Zend_Db_Select object.
@@ -511,7 +515,7 @@ class Zend_Db_Select
      * The $name and $cols parameters follow the same logic
      * as described in the from() method.
      *
-     * @param string $name The table name.
+     * @param string|array $name The table name.
      * @param array|string $cols The columns to select from the joined table.
      * @return Zend_Db_Select This Zend_Db_Select object.
      */
@@ -597,7 +601,7 @@ class Zend_Db_Select
     /**
      * Adds grouping to the query.
      *
-     * @param mixed $spec The column(s) to group by.
+     * @param  array|string $spec The column(s) to group by.
      * @return Zend_Db_Select This Zend_Db_Select object.
      */
     public function group($spec)
@@ -607,7 +611,7 @@ class Zend_Db_Select
         }
 
         foreach ($spec as $val) {
-            if (preg_match('/\(.*\)/', $val)) {
+            if (preg_match('/\(.*\)/', (string) $val)) {
                 $val = new Zend_Db_Expr($val);
             }
             $this->_parts[self::GROUP][] = $val;
@@ -624,7 +628,7 @@ class Zend_Db_Select
      * appears. See {@link where()} for an example
      *
      * @param string $cond The HAVING condition.
-     * @param string $val A single value to quote into the condition.
+     * @param string|Zend_Db_Expr $val A single value to quote into the condition.
      * @return Zend_Db_Select This Zend_Db_Select object.
      */
     public function having($cond)
@@ -684,9 +688,6 @@ class Zend_Db_Select
 
         // force 'ASC' or 'DESC' on each order spec, default is ASC.
         foreach ($spec as $val) {
-            if (preg_match('/\(.*\)/', $val)) {
-                $val = new Zend_Db_Expr($val);
-            }
             if ($val instanceof Zend_Db_Expr) {
                 $expr = $val->__toString();
                 if (empty($expr)) {
@@ -702,7 +703,10 @@ class Zend_Db_Select
                     $val = trim($matches[1]);
                     $direction = $matches[2];
                 }
-                $this->_parts[self::ORDER][] = array(trim($val), $direction);
+                if (preg_match('/\(.*\)/', $val)) {
+                    $val = new Zend_Db_Expr($val);
+                }
+                $this->_parts[self::ORDER][] = array($val, $direction);
             }
         }
 
@@ -712,8 +716,8 @@ class Zend_Db_Select
     /**
      * Sets a limit count and offset to the query.
      *
-     * @param int $count The number of rows to return.
-     * @param int $offset Start returning after this many rows.
+     * @param int $count OPTIONAL The number of rows to return.
+     * @param int $offset OPTIONAL Start returning after this many rows.
      * @return Zend_Db_Select This Zend_Db_Select object.
      */
     public function limit($count = null, $offset = null)
@@ -802,8 +806,7 @@ class Zend_Db_Select
      */
     public function query($fetchMode = null)
     {
-    	$stmt = $this->_adapter->query($this);
-        
+        $stmt = $this->_adapter->query($this);
         if ($fetchMode == null) {
             $fetchMode = $this->_adapter->getFetchMode();
         }

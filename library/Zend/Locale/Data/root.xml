@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.51 $"/>
-		<generation date="$Date: 2005/05/24 21:21:38 $"/>
+		<version number="$Revision: 1.84 $"/>
+		<generation date="$Date: 2006/06/29 15:44:37 $"/>
 		<language type="root"/>
 	</identity>
+	<localeDisplayNames>
+		<measurementSystemNames>
+			<measurementSystemName type="US">US</measurementSystemName>
+			<measurementSystemName type="metric">Metric</measurementSystemName>
+		</measurementSystemNames>
+	</localeDisplayNames>
 	<layout>
-		<orientation draft="true"/>
+		<orientation draft="unconfirmed"/>
 	</layout>
 	<characters>
 		<exemplarCharacters>[]</exemplarCharacters>
-		<exemplarCharacters type="auxiliary" draft="true">[]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[]</exemplarCharacters>
 	</characters>
 	<delimiters>
 		<quotationStart>“</quotationStart>
@@ -19,17 +25,10 @@
 		<alternateQuotationStart>‘</alternateQuotationStart>
 		<alternateQuotationEnd>’</alternateQuotationEnd>
 	</delimiters>
-	<measurement>
-		<measurementSystem type="metric"/>
-		<paperSize>
-			<height>297</height>
-			<width>210</width>
-		</paperSize>
-	</measurement>
 	<dates>
-		<localizedPatternChars>GyMdkHmsSEDFwWahKzYeugAZ</localizedPatternChars>
+		<localizedPatternChars>GyMdkHmsSEDFwWahKzYeugAZvcL</localizedPatternChars>
 		<calendars>
-			<default type="gregorian"/>
+			<default choice="gregorian"/>
 			<calendar type="buddhist">
 				<eras>
 					<eraAbbr>
@@ -37,7 +36,7 @@
 					</eraAbbr>
 				</eras>
 				<dateFormats>
-					<default type="medium"/>
+					<default choice="medium"/>
 					<dateFormatLength type="full">
 						<dateFormat>
 							<pattern>EEEE, MMMM d, yyyy G</pattern>
@@ -60,39 +59,15 @@
 					</dateFormatLength>
 				</dateFormats>
 				<timeFormats>
-					<default type="medium"/>
-					<timeFormatLength type="full">
-						<timeFormat>
-							<pattern>h:mm:ss a z</pattern>
-						</timeFormat>
-					</timeFormatLength>
-					<timeFormatLength type="long">
-						<timeFormat>
-							<pattern>h:mm:ss a z</pattern>
-						</timeFormat>
-					</timeFormatLength>
-					<timeFormatLength type="medium">
-						<timeFormat>
-							<pattern>h:mm:ss a</pattern>
-						</timeFormat>
-					</timeFormatLength>
-					<timeFormatLength type="short">
-						<timeFormat>
-							<pattern>h:mm a</pattern>
-						</timeFormat>
-					</timeFormatLength>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
 				</timeFormats>
 				<dateTimeFormats>
-					<dateTimeFormatLength>
-						<dateTimeFormat>
-							<pattern>{1} {0}</pattern>
-						</dateTimeFormat>
-					</dateTimeFormatLength>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
 				</dateTimeFormats>
 			</calendar>
 			<calendar type="chinese">
 				<dateFormats>
-					<default type="medium"/>
+					<default choice="medium"/>
 					<dateFormatLength type="full">
 						<dateFormat>
 							<pattern>EEEE y'x'G-Ml-d</pattern>
@@ -115,54 +90,101 @@
 					</dateFormatLength>
 				</dateFormats>
 				<timeFormats>
-					<default type="medium"/>
-					<timeFormatLength type="full">
-						<timeFormat>
-							<pattern>h:mm:ss a z</pattern>
-						</timeFormat>
-					</timeFormatLength>
-					<timeFormatLength type="long">
-						<timeFormat>
-							<pattern>h:mm:ss a z</pattern>
-						</timeFormat>
-					</timeFormatLength>
-					<timeFormatLength type="medium">
-						<timeFormat>
-							<pattern>h:mm:ss a</pattern>
-						</timeFormat>
-					</timeFormatLength>
-					<timeFormatLength type="short">
-						<timeFormat>
-							<pattern>h:mm a</pattern>
-						</timeFormat>
-					</timeFormatLength>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
 				</timeFormats>
 				<dateTimeFormats>
-					<dateTimeFormatLength>
-						<dateTimeFormat>
-							<pattern>{1} {0}</pattern>
-						</dateTimeFormat>
-					</dateTimeFormatLength>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="coptic">
+				<months>
+					<default choice="format" draft="unconfirmed"/>
+					<monthContext type="format">
+						<default choice="wide" draft="unconfirmed"/>
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../monthWidth[@type='wide']" draft="unconfirmed"/>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1" draft="unconfirmed">Tout</month>
+							<month type="2" draft="unconfirmed">Baba</month>
+							<month type="3" draft="unconfirmed">Hator</month>
+							<month type="4" draft="unconfirmed">Kiahk</month>
+							<month type="5" draft="unconfirmed">Toba</month>
+							<month type="6" draft="unconfirmed">Amshir</month>
+							<month type="7" draft="unconfirmed">Baramhat</month>
+							<month type="8" draft="unconfirmed">Baramouda</month>
+							<month type="9" draft="unconfirmed">Bashans</month>
+							<month type="10" draft="unconfirmed">Paona</month>
+							<month type="11" draft="unconfirmed">Epep</month>
+							<month type="12" draft="unconfirmed">Mesra</month>
+							<month type="13" draft="unconfirmed">Nasie</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<eras>
+					<eraAbbr>
+						<era type="0" draft="unconfirmed">ERA0</era>
+						<era type="1" draft="unconfirmed">ERA1</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateFormats" draft="unconfirmed"/>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats" draft="unconfirmed"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats" draft="unconfirmed"/>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="ethiopic">
+				<months>
+					<default choice="format" draft="unconfirmed"/>
+					<monthContext type="format">
+						<default choice="wide" draft="unconfirmed"/>
+						<monthWidth type="abbreviated">
+							<alias source="locale" path="../monthWidth[@type='wide']" draft="unconfirmed"/>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1" draft="unconfirmed">Meskerem</month>
+							<month type="2" draft="unconfirmed">Tekemt</month>
+							<month type="3" draft="unconfirmed">Hedar</month>
+							<month type="4" draft="unconfirmed">Tahsas</month>
+							<month type="5" draft="unconfirmed">Ter</month>
+							<month type="6" draft="unconfirmed">Yekatit</month>
+							<month type="7" draft="unconfirmed">Megabit</month>
+							<month type="8" draft="unconfirmed">Miazia</month>
+							<month type="9" draft="unconfirmed">Genbot</month>
+							<month type="10" draft="unconfirmed">Sene</month>
+							<month type="11" draft="unconfirmed">Hamle</month>
+							<month type="12" draft="unconfirmed">Nehasse</month>
+							<month type="13" draft="unconfirmed">Pagumen</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<eras>
+					<eraAbbr>
+						<era type="0" draft="unconfirmed">ERA0</era>
+						<era type="1" draft="unconfirmed">ERA1</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateFormats"/>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
 				</dateTimeFormats>
 			</calendar>
 			<calendar type="gregorian">
 				<months>
-					<default type="format"/>
+					<default choice="format"/>
 					<monthContext type="format">
-						<default type="wide"/>
+						<default choice="wide"/>
 						<monthWidth type="abbreviated">
-							<month type="1">1</month>
-							<month type="2">2</month>
-							<month type="3">3</month>
-							<month type="4">4</month>
-							<month type="5">5</month>
-							<month type="6">6</month>
-							<month type="7">7</month>
-							<month type="8">8</month>
-							<month type="9">9</month>
-							<month type="10">10</month>
-							<month type="11">11</month>
-							<month type="12">12</month>
+							<alias source="locale" path="../monthWidth[@type='wide']"/>
 						</monthWidth>
 						<monthWidth type="wide">
 							<month type="1">1</month>
@@ -197,9 +219,9 @@
 					</monthContext>
 				</months>
 				<days>
-					<default type="format"/>
+					<default choice="format"/>
 					<dayContext type="format">
-						<default type="wide"/>
+						<default choice="wide"/>
 						<dayWidth type="abbreviated">
 							<day type="sun">1</day>
 							<day type="mon">2</day>
@@ -231,22 +253,35 @@
 						</dayWidth>
 					</dayContext>
 				</days>
-				<week>
-					<minDays count="1"/>
-					<firstDay day="sun"/>
-					<weekendStart day="sat" draft="true"/>
-					<weekendEnd day="sun" draft="true"/>
-				</week>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">Q1</quarter>
+							<quarter type="2">Q2</quarter>
+							<quarter type="3">Q3</quarter>
+							<quarter type="4">Q4</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
 				<am>AM</am>
 				<pm>PM</pm>
 				<eras>
+					<eraNames>
+						<alias source="locale" path="../eraAbbr"/>
+					</eraNames>
 					<eraAbbr>
 						<era type="0">BCE</era>
 						<era type="1">CE</era>
 					</eraAbbr>
 				</eras>
 				<dateFormats>
-					<default type="medium"/>
+					<default choice="medium"/>
 					<dateFormatLength type="full">
 						<dateFormat>
 							<pattern>EEEE, yyyy MMMM dd</pattern>
@@ -269,7 +304,7 @@
 					</dateFormatLength>
 				</dateFormats>
 				<timeFormats>
-					<default type="medium"/>
+					<default choice="medium"/>
 					<timeFormatLength type="full">
 						<timeFormat>
 							<pattern>HH:mm:ss z</pattern>
@@ -297,6 +332,22 @@
 							<pattern>{1} {0}</pattern>
 						</dateTimeFormat>
 					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="yyQ" draft="provisional">Q yy</dateFormatItem>
+					</availableFormats>
+					<appendItems>
+						<appendItem request="Day">{0} ({2}: {1})</appendItem>
+						<appendItem request="Day-Of-Week">{0} {1}</appendItem>
+						<appendItem request="Era">{0} {1}</appendItem>
+						<appendItem request="Hour">{0} ({2}: {1})</appendItem>
+						<appendItem request="Minute">{0} ({2}: {1})</appendItem>
+						<appendItem request="Month">{0} ({2}: {1})</appendItem>
+						<appendItem request="Quarter">{0} ({2}: {1})</appendItem>
+						<appendItem request="Second">{0} ({2}: {1})</appendItem>
+						<appendItem request="Timezone">{0} {1}</appendItem>
+						<appendItem request="Week">{0} ({2}: {1})</appendItem>
+						<appendItem request="Year">{0} {1}</appendItem>
+					</appendItems>
 				</dateTimeFormats>
 				<fields>
 					<field type="era">
@@ -327,7 +378,7 @@
 						<displayName>Minute</displayName>
 					</field>
 					<field type="second">
-						<displayName draft="true">Second</displayName>
+						<displayName>Second</displayName>
 					</field>
 					<field type="zone">
 						<displayName>Zone</displayName>
@@ -336,9 +387,9 @@
 			</calendar>
 			<calendar type="hebrew">
 				<months>
-					<default type="format"/>
+					<default choice="format"/>
 					<monthContext type="format">
-						<default type="wide"/>
+						<default choice="wide"/>
 						<monthWidth type="abbreviated">
 							<alias source="locale" path="../monthWidth[@type='wide']"/>
 						</monthWidth>
@@ -367,9 +418,9 @@
 			</calendar>
 			<calendar type="islamic">
 				<months>
-					<default type="format"/>
+					<default choice="format"/>
 					<monthContext type="format">
-						<default type="wide"/>
+						<default choice="wide"/>
 						<monthWidth type="abbreviated">
 							<alias source="locale" path="../monthWidth[@type='wide']"/>
 						</monthWidth>
@@ -394,6 +445,15 @@
 						<era type="0">AH</era>
 					</eraAbbr>
 				</eras>
+				<dateFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateFormats"/>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
+				</dateTimeFormats>
 			</calendar>
 			<calendar type="islamic-civil">
 				<alias source="locale" path="../calendar[@type='islamic']"/>
@@ -638,9 +698,15 @@
 						<era type="234">Shōwa</era>
 						<era type="235">Heisei</era>
 					</eraAbbr>
+					<eraNarrow>
+						<era type="232" draft="unconfirmed">M</era>
+						<era type="233" draft="unconfirmed">T</era>
+						<era type="234" draft="unconfirmed">S</era>
+						<era type="235" draft="unconfirmed">H</era>
+					</eraNarrow>
 				</eras>
 				<dateFormats>
-					<default type="medium"/>
+					<default choice="medium"/>
 					<dateFormatLength type="full">
 						<dateFormat>
 							<pattern>EEEE, MMMM d, y G</pattern>
@@ -663,65 +729,50 @@
 					</dateFormatLength>
 				</dateFormats>
 				<timeFormats>
-					<default type="medium"/>
-					<timeFormatLength type="full">
-						<timeFormat>
-							<pattern>h:mm:ss a z</pattern>
-						</timeFormat>
-					</timeFormatLength>
-					<timeFormatLength type="long">
-						<timeFormat>
-							<pattern>h:mm:ss a z</pattern>
-						</timeFormat>
-					</timeFormatLength>
-					<timeFormatLength type="medium">
-						<timeFormat>
-							<pattern>h:mm:ss a</pattern>
-						</timeFormat>
-					</timeFormatLength>
-					<timeFormatLength type="short">
-						<timeFormat>
-							<pattern>h:mm a</pattern>
-						</timeFormat>
-					</timeFormatLength>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
 				</timeFormats>
 				<dateTimeFormats>
-					<dateTimeFormatLength>
-						<dateTimeFormat>
-							<pattern>{1} {0}</pattern>
-						</dateTimeFormat>
-					</dateTimeFormatLength>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
 				</dateTimeFormats>
 			</calendar>
 			<calendar type="persian">
 				<months>
-					<default type="format" draft="true"/>
+					<default choice="format" draft="unconfirmed"/>
 					<monthContext type="format">
-						<default type="wide" draft="true"/>
+						<default choice="wide" draft="unconfirmed"/>
 						<monthWidth type="abbreviated">
-							<alias source="locale" path="../monthWidth[@type='wide']" draft="true"/>
+							<alias source="locale" path="../monthWidth[@type='wide']" draft="unconfirmed"/>
 						</monthWidth>
 						<monthWidth type="wide">
-							<month type="1" draft="true">Farvardin</month>
-							<month type="2" draft="true">Ordibehesht</month>
-							<month type="3" draft="true">Khordad</month>
-							<month type="4" draft="true">Tir</month>
-							<month type="5" draft="true">Mordad</month>
-							<month type="6" draft="true">Shahrivar</month>
-							<month type="7" draft="true">Mehr</month>
-							<month type="8" draft="true">Aban</month>
-							<month type="9" draft="true">Azar</month>
-							<month type="10" draft="true">Dey</month>
-							<month type="11" draft="true">Bahman</month>
-							<month type="12" draft="true">Esfand</month>
+							<month type="1">Farvardin</month>
+							<month type="2">Ordibehesht</month>
+							<month type="3">Khordad</month>
+							<month type="4">Tir</month>
+							<month type="5">Mordad</month>
+							<month type="6">Shahrivar</month>
+							<month type="7">Mehr</month>
+							<month type="8">Aban</month>
+							<month type="9">Azar</month>
+							<month type="10">Dey</month>
+							<month type="11">Bahman</month>
+							<month type="12">Esfand</month>
 						</monthWidth>
 					</monthContext>
 				</months>
 				<eras>
 					<eraAbbr>
-						<era type="0" draft="true">AP</era>
+						<era type="0">AP</era>
 					</eraAbbr>
 				</eras>
+				<dateFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateFormats"/>
+				</dateFormats>
+				<timeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/timeFormats"/>
+				</timeFormats>
+				<dateTimeFormats>
+					<alias source="locale" path="../../calendar[@type='gregorian']/dateTimeFormats"/>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -730,9 +781,9 @@
 			<gmtFormat>GMT{0}</gmtFormat>
 			<regionFormat>{0}</regionFormat>
 			<fallbackFormat>{0} ({1})</fallbackFormat>
-			<abbreviationFallback type="standard" draft="true"/>
-			<preferenceOrdering type="" draft="true"/>
-			<singleCountries list="Africa/Bamako America/Godthab America/Santiago America/Guayaquil     Asia/Shanghai Asia/Tashkent Asia/Kuala_Lumpur     Europe/Madrid Europe/Lisbon Europe/London Pacific/Auckland Pacific/Tahiti" draft="true"/>
+			<abbreviationFallback choice="standard" draft="unconfirmed"/>
+			<preferenceOrdering choice="" draft="unconfirmed"/>
+			<singleCountries list="Africa/Bamako America/Godthab America/Santiago America/Guayaquil Asia/Shanghai Asia/Tashkent Asia/Kuala_Lumpur Europe/Madrid Europe/Lisbon Europe/London Pacific/Auckland Pacific/Tahiti" draft="unconfirmed"/>
 		</timeZoneNames>
 	</dates>
 	<numbers>
@@ -748,7 +799,7 @@
 			<exponential>E</exponential>
 			<perMille>‰</perMille>
 			<infinity>∞</infinity>
-			<nan>�</nan>
+			<nan>NaN</nan>
 		</symbols>
 		<decimalFormats>
 			<decimalFormatLength>
@@ -801,7 +852,7 @@
 			</currency>
 			<currency type="INR">
 				<displayName>INR</displayName>
-				<symbol>=0#Rs.|1#Re.|1&lt;Rs.</symbol>
+				<symbol choice="true">0≤Rs.|1≤Re.|1&lt;Rs.</symbol>
 			</currency>
 			<currency type="ITL">
 				<displayName>ITL</displayName>
@@ -821,8 +872,6 @@
 		<messages>
 			<yesstr>yes:y</yesstr>
 			<nostr>no:n</nostr>
-			<yesexpr>^[yY]([eE][sS])?</yesexpr>
-			<noexpr>^[nN][oO]?</noexpr>
 		</messages>
 	</posix>
 </ldml>

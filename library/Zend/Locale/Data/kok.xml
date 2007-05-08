@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.31 $"/>
-		<generation date="$Date: 2005/04/13 01:00:20 $"/>
+		<version number="$Revision: 1.42 $"/>
+		<generation date="$Date: 2006/06/24 23:27:01 $"/>
 		<language type="kok"/>
 	</identity>
 	<localeDisplayNames>
@@ -154,7 +154,8 @@
 		</territories>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[ँ-ह़-्ॐ-॔क़-ॣ०-९ॽ‌‍]</exemplarCharacters>
+		<exemplarCharacters>[़ ँ-ः ०-९ ॐ अ-ऍ ए-ऑ ओ-क {क़} ख {ख़} ग {ग़} घ-ज {ज़} झ-ड {ड़} ढ {ढ़} ण-न प फ {फ़} ब-य {य़} र ल ळ व-ह ऽ-ॅ े-ॉ ो-्]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[\u200C \u200D]</exemplarCharacters>
 	</characters>
 	<dates>
 		<calendars>

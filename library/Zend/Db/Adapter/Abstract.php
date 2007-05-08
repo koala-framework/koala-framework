@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,16 +18,25 @@
  * @subpackage Adapter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Abstract.php 4671 2007-05-02 19:19:14Z bkarwin $
  */
 
-/** Zend_Db_Adapter_Exception */
-require_once 'Zend/Db/Adapter/Exception.php';
 
-/** Zend_Db_Profiler */
+/**
+ * @see Zend_Db
+ */
+require_once 'Zend/Db.php';
+
+/**
+ * @see Zend_Db_Profiler
+ */
 require_once 'Zend/Db/Profiler.php';
 
-/** Zend_Db_Select */
+/**
+ * @see Zend_Db_Select
+ */
 require_once 'Zend/Db/Select.php';
+
 
 /**
  * Class for connecting to SQL databases and performing common operations.
@@ -79,24 +89,20 @@ abstract class Zend_Db_Adapter_Abstract
      * password => (string) Password associated with the username (optional).
      * host     => (string) What host to connect to (default 127.0.0.1).
      *
-     * @param array $config An array of configuration keys.
+     * @param  array $config An array of configuration keys.
      * @return void
      * @throws Zend_Db_Adapter_Exception
      */
-    public function __construct($config)
+    public function __construct(array $config = array())
     {
-        // make sure the config array exists
-        if (! is_array($config)) {
-            throw new Zend_Db_Adapter_Exception('Configuration must be an array.');
-        }
-
         // we need at least a dbname
         if (! array_key_exists('dbname', $config)) {
+            require_once 'Zend/Db/Adapter/Exception.php';
             throw new Zend_Db_Adapter_Exception("Configuration must have a key for 'dbname' that names the database instance.");
         }
 
         // keep the config
-        $this->_config = array_merge($this->_config, (array) $config);
+        $this->_config = array_merge($this->_config, $config);
 
         // create a profiler object
         $enabled = false;
@@ -133,8 +139,8 @@ abstract class Zend_Db_Adapter_Abstract
     /**
      * Prepares and executes an SQL statement with bound data.
      *
-     * @param string|Zend_Db_Select $sql The SQL statement with placeholders.
-     * @param array $bind An array of data to bind to the placeholders.
+     * @param  string|Zend_Db_Select $sql  The SQL statement with placeholders.
+     * @param  mixed                 $bind An array of data to bind to the placeholders.
      * @return Zend_Db_Statement (may also be PDOStatement in the case of PDO)
      */
     public function query($sql, $bind = array())
@@ -147,10 +153,17 @@ abstract class Zend_Db_Adapter_Abstract
             $sql = $sql->__toString();
         }
 
+        // make sure $bind to an array;
+        // don't use (array) typecasting because
+        // because $bind may be a Zend_Db_Expr object
+        if (!is_array($bind)) {
+            $bind = array($bind);
+        }
+
         // prepare and execute the statement with profiling
         $stmt = $this->prepare($sql);
         $q = $this->_profiler->queryStart($sql);
-        $stmt->execute((array) $bind);
+        $stmt->execute($bind);
         $this->_profiler->queryEnd($q);
 
         // return the results embedded in the prepared statement object
@@ -203,11 +216,11 @@ abstract class Zend_Db_Adapter_Abstract
     /**
      * Inserts a table row with specified data.
      *
-     * @param string|array|Zend_Db_Expr $table The table to insert data into.
+     * @param mixed $table The table to insert data into.
      * @param array $bind Column-value pairs.
      * @return int The number of affected rows.
      */
-    public function insert($table, $bind)
+    public function insert($table, array $bind)
     {
         // extract and quote col names from the array keys
         $cols = array();
@@ -237,12 +250,12 @@ abstract class Zend_Db_Adapter_Abstract
     /**
      * Updates table rows with specified data based on a WHERE clause.
      *
-     * @param string|array|Zend_Db_Expr $table The table to update.
-     * @param array $bind Column-value pairs.
-     * @param string $where UPDATE WHERE clause.
-     * @return int The number of affected rows.
+     * @param  mixed        $table The table to update.
+     * @param  array        $bind  Column-value pairs.
+     * @param  array|string $where UPDATE WHERE clause(s).
+     * @return int          The number of affected rows.
      */
-    public function update($table, $bind, $where)
+    public function update($table, array $bind, $where = '')
     {
         // build "col = ?" pairs for the statement
         $set = array();
@@ -275,11 +288,11 @@ abstract class Zend_Db_Adapter_Abstract
     /**
      * Deletes table rows based on a WHERE clause.
      *
-     * @param string|array|Zend_Db_Expr $table The table to update.
-     * @param string $where DELETE WHERE clause.
-     * @return int The number of affected rows.
+     * @param  mixed        $table The table to update.
+     * @param  array|string $where DELETE WHERE clause(s).
+     * @return int          The number of affected rows.
      */
-    public function delete($table, $where)
+    public function delete($table, $where = '')
     {
         if (is_array($where)) {
             $where = implode(' AND ', $where);
@@ -320,8 +333,8 @@ abstract class Zend_Db_Adapter_Abstract
      * Fetches all SQL result rows as a sequential array.
      * Uses the current fetchMode for the adapter.
      *
-     * @param string|Zend_Db_Select $sql An SQL SELECT statement.
-     * @param array $bind Data to bind into SELECT placeholders.
+     * @param  string|Zend_Db_Select $sql  An SQL SELECT statement.
+     * @param  mixed                 $bind Data to bind into SELECT placeholders.
      * @return array
      */
     public function fetchAll($sql, $bind = array())
@@ -338,7 +351,7 @@ abstract class Zend_Db_Adapter_Abstract
      * value.
      *
      * @param string|Zend_Db_Select $sql An SQL SELECT statement.
-     * @param array $bind Data to bind into SELECT placeholders.
+     * @param mixed $bind Data to bind into SELECT placeholders.
      * @return string
      */
     public function fetchAssoc($sql, $bind = array())
@@ -358,7 +371,7 @@ abstract class Zend_Db_Adapter_Abstract
      * The first column in each row is used as the array key.
      *
      * @param string|Zend_Db_Select $sql An SQL SELECT statement.
-     * @param array $bind Data to bind into SELECT placeholders.
+     * @param mixed $bind Data to bind into SELECT placeholders.
      * @return array
      */
     public function fetchCol($sql, $bind = array())
@@ -375,7 +388,7 @@ abstract class Zend_Db_Adapter_Abstract
      * value.
      *
      * @param string|Zend_Db_Select $sql An SQL SELECT statement.
-     * @param array $bind Data to bind into SELECT placeholders.
+     * @param mixed $bind Data to bind into SELECT placeholders.
      * @return string
      */
     public function fetchPairs($sql, $bind = array())
@@ -392,7 +405,7 @@ abstract class Zend_Db_Adapter_Abstract
      * Fetches the first column of the first row of the SQL result.
      *
      * @param string|Zend_Db_Select $sql An SQL SELECT statement.
-     * @param array $bind Data to bind into SELECT placeholders.
+     * @param mixed $bind Data to bind into SELECT placeholders.
      * @return string
      */
     public function fetchOne($sql, $bind = array())
@@ -407,7 +420,7 @@ abstract class Zend_Db_Adapter_Abstract
      * Uses the current fetchMode for the adapter.
      *
      * @param string|Zend_Db_Select $sql An SQL SELECT statement.
-     * @param array $bind Data to bind into SELECT placeholders.
+     * @param mixed $bind Data to bind into SELECT placeholders.
      * @return array
      */
     public function fetchRow($sql, $bind = array())
@@ -590,6 +603,32 @@ abstract class Zend_Db_Adapter_Abstract
     }
 
     /**
+     * Return the most recent value from the specified sequence in the database.
+     * This is supported only on RDBMS brands that support sequences
+     * (e.g. Oracle, PostgreSQL, DB2).  Other RDBMS brands return null.
+     *
+     * @param string $sequenceName
+     * @return integer
+     */
+    public function lastSequenceId($sequenceName)
+    {
+        return null;
+    }
+
+    /**
+     * Generate a new value from the specified sequence in the database, and return it.
+     * This is supported only on RDBMS brands that support sequences
+     * (e.g. Oracle, PostgreSQL, DB2).  Other RDBMS brands return null.
+     *
+     * @param string $sequenceName
+     * @return integer
+     */
+    public function nextSequenceId($sequenceName)
+    {
+        return null;
+    }
+
+    /**
      * Returns the column descriptions for a table, using a query against
      * the ISO SQL standard INFORMATION_SCHEMA system views, for RDBMS
      * implementations that support that feature.
@@ -704,6 +743,13 @@ abstract class Zend_Db_Adapter_Abstract
     abstract protected function _connect();
 
     /**
+     * Force the connection to close.
+     *
+     * @return void
+     */
+    abstract public function closeConnection();
+
+    /**
      * Prepare a statement and return a PDOStatement-like object.
      *
      * @param string|Zend_Db_Select $sql SQL query
@@ -712,12 +758,20 @@ abstract class Zend_Db_Adapter_Abstract
     abstract public function prepare($sql);
 
     /**
-     * Gets the last inserted ID.
+     * Gets the last ID generated automatically by an IDENTITY/AUTOINCREMENT column.
      *
-     * @param string $sequenceName   Name of sequence from which to get the last value generated.
+     * As a convention, on RDBMS brands that support sequences
+     * (e.g. Oracle, PostgreSQL, DB2), this method forms the name of a sequence
+     * from the arguments and returns the last id generated by that sequence.
+     * On RDBMS brands that support IDENTITY/AUTOINCREMENT columns, this method
+     * returns the last value generated for such a column, and the table name
+     * argument is disregarded.
+     *
+     * @param string $tableName   OPTIONAL Name of table.
+     * @param string $primaryKey  OPTIONAL Name of primary key column.
      * @return integer
      */
-    abstract public function lastInsertId($sequenceName = null);
+    abstract public function lastInsertId($tableName = null, $primaryKey = null);
 
     /**
      * Begin a transaction.

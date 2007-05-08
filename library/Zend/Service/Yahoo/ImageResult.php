@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,67 +18,94 @@
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: ImageResult.php 4462 2007-04-11 04:10:16Z darby $
  */
 
 
 /**
- * @todo coding standards: naming of instance variables
+ * @see Zend_Service_Yahoo_Result
+ */
+require_once 'Zend/Service/Yahoo/Result.php';
+
+
+/**
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Yahoo_ImageResult extends Zend_Service_Yahoo_Result {
+class Zend_Service_Yahoo_ImageResult extends Zend_Service_Yahoo_Result
+{
     /**
-     * @var string $Summary  summary info for the image
+     * Summary info for the image
+     *
+     * @var string
      */
     public $Summary;
-    
+
     /**
-     * @var string $RefererUrl the URL of the webpage hosting the image
+     * The URL of the webpage hosting the image
+     *
+     * @var string
      */
     public $RefererUrl;
-    
+
     /**
-     * @var int $FileSize the size of the files in bytes
+     * The size of the files in bytes
+     *
+     * @var string
      */
-    public  $FileSize;
-    
+    public $FileSize;
+
     /**
-     * @var string $FileFormat  the type of file (bmp,gif,jpeg, etc.)
+     * The type of file (bmp, gif, jpeg, etc.)
+     *
+     * @var string
      */
     public $FileFormat;
-    
+
     /**
-     * @var int $Height the height of the image in pixels
+     * The height of the image in pixels
+     *
+     * @var string
      */
     public $Height;
-    
+
     /**
-     * @var int $Width the width of the image in pixels
+     * The width of the image in pixels
+     *
+     * @var string
      */
     public $Width;
 
     /**
-     * @var Zend_Service_Yahoo_Image $Thumbnail the thubmnail image for the article, if it exists
+     * The thubmnail image for the article, if it exists
+     *
+     * @var Zend_Service_Yahoo_Image
      */
     public $Thumbnail;
-    
+
     /**
-     * @todo docblock
+     * Image result namespace
+     *
+     * @var string
      */
-    protected $_namespace = "urn:yahoo:srchmi";
+    protected $_namespace = 'urn:yahoo:srchmi';
 
 
     /**
-     * @todo docblock
+     * Initializes the image result
+     *
+     * @param  DOMElement $result
+     * @return void
      */
-    public function __construct(DomElement $result) {
-        $this->_fields = array('Summary', 'RefererUrl', 'FileSize',
-                              'FileFormat', 'Height', 'Width', 'Thumbnail');
+    public function __construct(DOMElement $result)
+    {
+        $this->_fields = array('Summary', 'RefererUrl', 'FileSize', 'FileFormat', 'Height', 'Width', 'Thumbnail');
 
         parent::__construct($result);
-        $this->setThumbnail();
+
+        $this->_setThumbnail();
     }
 }

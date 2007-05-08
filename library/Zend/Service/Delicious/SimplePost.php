@@ -23,6 +23,8 @@
 
 
 /**
+ * Represents a publicly available post
+ *
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Delicious

@@ -16,7 +16,7 @@
  * @package    Zend_Locale
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: PhpMath.php 3333 2007-02-10 11:48:21Z thomas $
+ * @version    $Id: PhpMath.php 4223 2007-03-24 10:20:34Z thomas $
  */
 
 
@@ -37,7 +37,7 @@ require_once 'Zend/Locale/Math/Exception.php';
 
 class Zend_Locale_Math_PhpMath extends Zend_Locale_Math
 {
-    static public function disable()
+    public static function disable()
     {
         self::$_bcmathDisabled = true;
         self::$add   = 'Zend_Locale_Math_Add';

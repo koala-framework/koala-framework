@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Locale
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Locale.php 3834 2007-03-09 05:12:52Z bkarwin $
+ * @version    $Id: Locale.php 4433 2007-04-09 13:23:58Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -743,7 +743,8 @@ class Zend_Locale {
      * Supported types are:
      * 'language', 'script', 'country', 'territory', 'calendar', 'month', 'month_short',
      * 'month_narrow', 'day', 'day_short', 'day_narrow', 'dateformat', 'timeformat',
-     * 'timezone', 'currency', 'currency_sign', 'currency_detail', 'territory_detail', 'language_detail'
+     * 'timezone', 'currency', 'currency_sign', 'currency_detail', 'territory_detail'
+     * 'language_detail', 'characters'
      * For detailed information about the types look into the documentation
      * 
      * @param  string         $type    OPTIONAL Type of information to return
@@ -848,11 +849,14 @@ class Zend_Locale {
             case 'language_detail' :
                 return Zend_Locale_Data::getContent($locale, 'territoryforlanguagelist');
                 break;
+            case 'characters' :
+                return Zend_Locale_Data::getContent($locale, 'characters');
+                break;
             default :
                 return array('language', 'script', 'country', 'territory', 'calendar', 'month', 'month_short',
                              'month_narrow', 'day', 'day_short', 'day_narrow', 'dateformat', 'timeformat',
                              'timezone', 'currency', 'currency_sign', 'currency_detail', 'territory_detail',
-                             'language_detail');
+                             'language_detail', 'characters');
         }
         return false;
     }
@@ -913,7 +917,7 @@ class Zend_Locale {
      * Supported types are:
      * 'language', 'script', 'country', 'territory', 'calendar', 'month', 'month_short',
      * 'month_narrow', 'day', 'day_short', 'day_narrow', 'dateformat', 'timeformat',
-     * 'timezone', 'currency', 'currency_sign', 'currency_detail', 'territory_detail', 'language_detail'
+     * 'timezone', 'currency', 'currency_sign', 'currency_detail', 'territory_detail', 'language_detail', 'characters'
      * For detailed information about the types look into the documentation
      * 
      * @param  string         $what    Name to get detailed information about
@@ -1042,11 +1046,15 @@ class Zend_Locale {
                     return explode(' ', $list[$what]);
                 }
                 break;
+            case 'characters' :
+                $list = Zend_Locale_Data::getContent($locale, 'characters');
+                return $list[0];
+                break;
             default :
                 return array('language', 'script', 'country', 'territory', 'calendar', 'month', 'month_short',
                              'month_narrow', 'day', 'day_short', 'day_narrow', 'dateformat', 'timeformat',
                              'timezone', 'currency', 'currency_sign', 'currency_detail', 'territory_detail',
-                             'language_detail');
+                             'language_detail', 'characters');
         }
         return false;
     }

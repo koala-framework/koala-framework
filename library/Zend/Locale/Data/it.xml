@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.48 $"/>
-		<generation date="$Date: 2005/05/24 21:21:38 $"/>
+		<version number="$Revision: 1.70 $"/>
+		<generation date="$Date: 2006/06/28 10:58:36 $"/>
 		<language type="it"/>
 	</identity>
 	<localeDisplayNames>
@@ -18,6 +18,7 @@
 			<language type="af">afrikaans</language>
 			<language type="afa">afro-asiatica (altra lingua)</language>
 			<language type="afh">afrihili</language>
+			<language type="ain" references="RP2">ainu</language>
 			<language type="ak">akan</language>
 			<language type="akk">accado</language>
 			<language type="ale">aleuto</language>
@@ -133,9 +134,11 @@
 			<language type="eu">basco</language>
 			<language type="ewo">ewondo</language>
 			<language type="fa">persiano</language>
+			<language type="fan" references="RP2">fang</language>
 			<language type="fat">fanti</language>
 			<language type="ff">fulah</language>
 			<language type="fi">finlandese</language>
+			<language type="fil">filippino</language>
 			<language type="fiu">ugrofinnica (altra lingua)</language>
 			<language type="fj">figiano</language>
 			<language type="fo">faroese</language>
@@ -224,7 +227,7 @@
 			<language type="kn">kannada</language>
 			<language type="ko">coreano</language>
 			<language type="kok">konkani</language>
-			<language type="kos">Kosraean</language>
+			<language type="kos">kosraean</language>
 			<language type="kpe">kpelle</language>
 			<language type="kr">kanuri</language>
 			<language type="krc">karachay-Balkar</language>
@@ -290,6 +293,7 @@
 			<language type="mul">multilingua</language>
 			<language type="mun">munda (altra lingua)</language>
 			<language type="mus">creek</language>
+			<language type="mwl" references="RP2">mirandese</language>
 			<language type="mwr">marwari</language>
 			<language type="my">birmano</language>
 			<language type="myn">lingue maya</language>
@@ -298,7 +302,7 @@
 			<language type="nah">nahuatl</language>
 			<language type="nai">indiano del Nord America (altra lingua)</language>
 			<language type="nap">napoletano</language>
-			<language type="nb">norvegese bokmål</language>
+			<language type="nb" references="RP1" draft="provisional">norvegese bokmal</language>
 			<language type="nd">ndebele del nord</language>
 			<language type="nds">basso tedesco; basso sassone</language>
 			<language type="ne">nepalese</language>
@@ -355,6 +359,7 @@
 			<language type="roa">lingua romanza (altra lingua)</language>
 			<language type="rom">romani</language>
 			<language type="ru">russo</language>
+			<language type="rup" references="RP3">arumeno</language>
 			<language type="rw">kinyarwanda</language>
 			<language type="sa">sanscrito</language>
 			<language type="sad">sandawe</language>
@@ -365,6 +370,7 @@
 			<language type="sas">sasak</language>
 			<language type="sat">santali</language>
 			<language type="sc">sardo</language>
+			<language type="scn">siciliano</language>
 			<language type="sco">scozzese</language>
 			<language type="sd">sindhi</language>
 			<language type="se">sami del nord</language>
@@ -419,6 +425,7 @@
 			<language type="tk">turcomanno</language>
 			<language type="tkl">tokelau</language>
 			<language type="tl">tagalog</language>
+			<language type="tlh" references="RP2">klingon</language>
 			<language type="tli">tlingit</language>
 			<language type="tmh">tamashek</language>
 			<language type="tn">tswana</language>
@@ -431,7 +438,7 @@
 			<language type="tt">tatarico</language>
 			<language type="tum">tumbuka</language>
 			<language type="tup">lingue tupi</language>
-			<language type="tut">turco-tatarica (altra lingua)</language>
+			<language type="tut" references="RP2">altaica (altra lingua)</language>
 			<language type="tvl">tuvalu</language>
 			<language type="tw">ci</language>
 			<language type="ty">taitiano</language>
@@ -446,7 +453,7 @@
 			<language type="uz">usbeco</language>
 			<language type="ve">venda</language>
 			<language type="vi">vietnamita</language>
-			<language type="vo">volapük</language>
+			<language type="vo" references="RP2">volapük</language>
 			<language type="vot">voto</language>
 			<language type="wa">vallone</language>
 			<language type="wak">lingue wakash</language>
@@ -458,7 +465,7 @@
 			<language type="xal">kalmyk</language>
 			<language type="xh">xosa</language>
 			<language type="yao">yao (bantu)</language>
-			<language type="yap">Yapese</language>
+			<language type="yap">yapese</language>
 			<language type="yi">yiddish</language>
 			<language type="yo">yoruba</language>
 			<language type="ypk">lingue yupik</language>
@@ -472,20 +479,33 @@
 		</languages>
 		<scripts>
 			<script type="Arab">arabo</script>
-			<script type="Armn">armenio</script>
+			<script type="Armn">armeno</script>
+			<script type="Bali">balinese</script>
+			<script type="Batk">batak</script>
 			<script type="Beng">bengali</script>
+			<script type="Blis">simboli bliss</script>
 			<script type="Bopo">bopomofo</script>
+			<script type="Brah">brahmi</script>
 			<script type="Brai">braille</script>
+			<script type="Bugi">buginese</script>
 			<script type="Buhd">buhid</script>
 			<script type="Cans">simboli aborigeni canadesi unificati</script>
+			<script type="Cham">cham</script>
 			<script type="Cher">cherokee</script>
+			<script type="Cirt">cirth</script>
 			<script type="Copt">copto</script>
 			<script type="Cprt">cipriota</script>
 			<script type="Cyrl">cirillico</script>
+			<script type="Cyrs" references="RP4">cirillico (variante antica chiesa slavonica)</script>
 			<script type="Deva">devanagari</script>
 			<script type="Dsrt">deseret</script>
+			<script type="Egyd">egiziano demotico</script>
+			<script type="Egyh">ieratico egiziano</script>
+			<script type="Egyp">geroglifici egiziani</script>
 			<script type="Ethi">etiope</script>
+			<script type="Geok">kutsuri</script>
 			<script type="Geor">georgiano</script>
+			<script type="Glag" references="RP2">glagolitico</script>
 			<script type="Goth">gotico</script>
 			<script type="Grek">greco</script>
 			<script type="Gujr">gujarati</script>
@@ -495,16 +515,24 @@
 			<script type="Hano">hanunoo</script>
 			<script type="Hans">han semplificato</script>
 			<script type="Hant">han tradizionale</script>
-			<script type="Hebr">ebreo</script>
+			<script type="Hebr">ebraico</script>
 			<script type="Hira">hiragana</script>
+			<script type="Hmng">pahawn hmong</script>
+			<script type="Hrkt">katanaka o hiragana</script>
+			<script type="Hung">antico ungherese</script>
+			<script type="Inds">indu</script>
 			<script type="Ital">italico antico</script>
+			<script type="Java">javanese</script>
 			<script type="Kana">katakana</script>
 			<script type="Khmr">khmer</script>
 			<script type="Knda">kannada</script>
 			<script type="Laoo">lao</script>
+			<script type="Latf">latino (variante fraktur)</script>
+			<script type="Latg">latino (variante gaelica)</script>
 			<script type="Latn">latino</script>
 			<script type="Limb">limbu</script>
-			<script type="Linb">B lineare</script>
+			<script type="Lina">lineare A</script>
+			<script type="Linb">lineare B</script>
 			<script type="Mlym">malayalam</script>
 			<script type="Mong">mongolo</script>
 			<script type="Mymr">myanmar</script>
@@ -529,6 +557,36 @@
 			<script type="Zyyy">comune</script>
 		</scripts>
 		<territories>
+			<territory type="001" references="RP4">Mondo</territory>
+			<territory type="002" references="RP4">Africa</territory>
+			<territory type="005" references="RP4">America del Sud</territory>
+			<territory type="009" references="RP4">Oceania</territory>
+			<territory type="011" references="RP4">Africa occidentale</territory>
+			<territory type="013" references="RP4">America centrale</territory>
+			<territory type="014" references="RP4">Africa orientale</territory>
+			<territory type="015" references="RP4">Africa del Nord</territory>
+			<territory type="017" references="RP4">Africa centrale</territory>
+			<territory type="018" references="RP4">Africa del Sud</territory>
+			<territory type="019" references="RP4">Americhe</territory>
+			<territory type="021" references="RP4">America del Nord</territory>
+			<territory type="029" references="RP4">Caraibi</territory>
+			<territory type="030">Asia orientale</territory>
+			<territory type="034" references="RP4">Asia del Sud</territory>
+			<territory type="035" references="RP4">Asia sudorientale</territory>
+			<territory type="039" references="RP4">Europa del Sud</territory>
+			<territory type="053" references="RP4">Australia e Nuova Zelanda</territory>
+			<territory type="054" references="RP4">Melanesia</territory>
+			<territory type="057" references="RP4">Regione Micronesiana</territory>
+			<territory type="061" references="RP4">Polinesia</territory>
+			<territory type="142" references="RP4">Asia</territory>
+			<territory type="143" references="RP4">Asia centrale</territory>
+			<territory type="145" references="RP4">Asia occidentale</territory>
+			<territory type="150" references="RP4">Europa</territory>
+			<territory type="151" references="RP4">Europa orientale</territory>
+			<territory type="154" references="RP4">Europa del Nord</territory>
+			<territory type="155" references="RP4">Europa occidentale</territory>
+			<territory type="172" references="RP4">Comunità di Stati Indipendenti</territory>
+			<territory type="419" references="RP4">America Latina e Caraibi</territory>
 			<territory type="AD">Andorra</territory>
 			<territory type="AE">Emirati Arabi Uniti</territory>
 			<territory type="AF">Afghanistan</territory>
@@ -580,8 +638,7 @@
 			<territory type="CS">Serbia e Montenegro</territory>
 			<territory type="CU">Cuba</territory>
 			<territory type="CV">Capo Verde</territory>
-			<territory type="CX">Isola Christmas</territory>
-			<territory type="CX" alt="proposed" draft="true">Isola di Christmas</territory>
+			<territory type="CX">Isola di Christmas</territory>
 			<territory type="CY">Cipro</territory>
 			<territory type="CZ">Repubblica Ceca</territory>
 			<territory type="DE">Germania</territory>
@@ -677,12 +734,10 @@
 			<territory type="MS">Montserrat</territory>
 			<territory type="MT">Malta</territory>
 			<territory type="MU">Mauritius</territory>
-			<territory type="MU" alt="proposed" draft="true">Maurizio</territory>
 			<territory type="MV">Maldive</territory>
 			<territory type="MW">Malawi</territory>
 			<territory type="MX">Messico</territory>
 			<territory type="MY">Malesia</territory>
-			<territory type="MY" alt="proposed" draft="true">Malaysia</territory>
 			<territory type="MZ">Mozambico</territory>
 			<territory type="NA">Namibia</territory>
 			<territory type="NC">Nuova Caledonia</territory>
@@ -712,6 +767,7 @@
 			<territory type="PW">Palau</territory>
 			<territory type="PY">Paraguay</territory>
 			<territory type="QA">Qatar</territory>
+			<territory type="QO" references="RP2">Oceania lontana</territory>
 			<territory type="RE">Réunion</territory>
 			<territory type="RO">Romania</territory>
 			<territory type="RU">Federazione Russa</territory>
@@ -731,7 +787,7 @@
 			<territory type="SN">Senegal</territory>
 			<territory type="SO">Somalia</territory>
 			<territory type="SR">Suriname</territory>
-			<territory type="ST">São Tomé e Príncipe</territory>
+			<territory type="ST">Sao Tomé e Príncipe</territory>
 			<territory type="SV">El Salvador</territory>
 			<territory type="SY">Siria</territory>
 			<territory type="SZ">Swaziland</territory>
@@ -773,7 +829,13 @@
 			<territory type="ZW">Zimbabwe</territory>
 		</territories>
 		<variants>
-			<variant type="REVISED">Modificato</variant>
+			<variant type="1901">ortografia tradizionale tedesca</variant>
+			<variant type="1996">ortografia tedesca del 1996</variant>
+			<variant type="NEDIS">dialetto del Natisone</variant>
+			<variant type="POLYTONI">politonico</variant>
+			<variant type="REVISED">ortografia revisionata</variant>
+			<variant type="ROZAJ">resiano</variant>
+			<variant type="SAAHO">saho</variant>
 		</variants>
 		<keys>
 			<key type="calendar">Calendario</key>
@@ -781,9 +843,11 @@
 			<key type="currency">Valuta</key>
 		</keys>
 		<types>
+			<type type="big5han" key="collation">Cinese Tradizionale</type>
 			<type type="buddhist" key="calendar">Calendario Buddista</type>
 			<type type="chinese" key="calendar">Calendario Cinese</type>
 			<type type="direct" key="collation">Ordine Diretto</type>
+			<type type="gb2312han" key="collation">Cinese Semplificato</type>
 			<type type="gregorian" key="calendar">Calendario Gregoriano</type>
 			<type type="hebrew" key="calendar">Calendario Ebraico</type>
 			<type type="islamic" key="calendar">Calendario Islamico</type>
@@ -794,9 +858,14 @@
 			<type type="stroke" key="collation">Ordine Segni</type>
 			<type type="traditional" key="collation">Ordine Tradizionale</type>
 		</types>
+		<measurementSystemNames>
+			<measurementSystemName type="US">USA</measurementSystemName>
+			<measurementSystemName type="metric">Metrico</measurementSystemName>
+		</measurementSystemNames>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-zéóàèìòíúùï]</exemplarCharacters>
+		<exemplarCharacters>[a à b-e é è f-i ì j-o ó ò p-u ù v-z]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[í ï ú]</exemplarCharacters>
 	</characters>
 	<delimiters>
 		<quotationStart>‘</quotationStart>
@@ -888,10 +957,22 @@
 						</dayWidth>
 					</dayContext>
 				</days>
-				<week>
-					<minDays count="4"/>
-					<firstDay day="mon"/>
-				</week>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">T1</quarter>
+							<quarter type="2">T2</quarter>
+							<quarter type="3">T3</quarter>
+							<quarter type="4">T4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">1o trimestre</quarter>
+							<quarter type="2">2o trimestre</quarter>
+							<quarter type="3">3o trimestre</quarter>
+							<quarter type="4">4o trimestre</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
 				<am>m.</am>
 				<pm>p.</pm>
 				<eras>
@@ -922,9 +1003,60 @@
 						</dateFormat>
 					</dateFormatLength>
 				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="HHmm" draft="provisional">HH.mm</dateFormatItem>
+						<dateFormatItem id="HHmmss" draft="provisional">HH.mm.ss</dateFormatItem>
+						<dateFormatItem id="MMMMdd" draft="provisional">dd MMMM</dateFormatItem>
+						<dateFormatItem id="MMdd" draft="provisional">dd/MM</dateFormatItem>
+						<dateFormatItem id="hhmm" draft="provisional">hh.mm a</dateFormatItem>
+						<dateFormatItem id="hhmmss" draft="provisional">hh.mm.ss a</dateFormatItem>
+						<dateFormatItem id="yyMM" draft="provisional">MM/yy</dateFormatItem>
+						<dateFormatItem id="yyQQQQ" draft="provisional">QQQQ yy</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM" draft="provisional">MMMM yyyy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+				<fields>
+					<field type="era">
+						<displayName>era</displayName>
+					</field>
+					<field type="year">
+						<displayName>anno</displayName>
+					</field>
+					<field type="month">
+						<displayName>mese</displayName>
+					</field>
+					<field type="week">
+						<displayName>settimana</displayName>
+					</field>
+					<field type="day">
+						<displayName>giorno</displayName>
+					</field>
+					<field type="weekday">
+						<displayName>giorno della settimana</displayName>
+					</field>
+					<field type="dayperiod">
+						<displayName>periodo del giorno</displayName>
+					</field>
+					<field type="hour">
+						<displayName>ora</displayName>
+					</field>
+					<field type="minute">
+						<displayName>minuto</displayName>
+					</field>
+					<field type="second">
+						<displayName>secondo</displayName>
+					</field>
+					<field type="zone">
+						<displayName>zona</displayName>
+					</field>
+				</fields>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
+			<zone type="Africa/Timbuktu">
+				<exemplarCity>Timbuctu</exemplarCity>
+			</zone>
 			<zone type="Antarctica/South_Pole">
 				<exemplarCity>Polo Sud</exemplarCity>
 			</zone>
@@ -934,25 +1066,7 @@
 			<zone type="America/Sao_Paulo">
 				<exemplarCity>San Paolo</exemplarCity>
 			</zone>
-			<zone type="America/Halifax">
-				<long>
-					<standard>Ora Standard Atlantico</standard>
-					<daylight>Ora Legale Atlantico</daylight>
-				</long>
-				<short>
-					<standard>AST</standard>
-					<daylight>ADT</daylight>
-				</short>
-			</zone>
 			<zone type="America/St_Johns">
-				<long>
-					<standard>Ora Standard Newfoundland</standard>
-					<daylight>Ora Legale Newfoundland</daylight>
-				</long>
-				<short>
-					<standard>CNT</standard>
-					<daylight>CDT</daylight>
-				</short>
 				<exemplarCity>St. Johns</exemplarCity>
 			</zone>
 			<zone type="Pacific/Easter">
@@ -973,12 +1087,12 @@
 			</zone>
 			<zone type="Europe/Paris">
 				<long>
-					<standard>Ora Standard Centrale Europeo</standard>
-					<daylight>Ora Legale Centrale Europeo</daylight>
+					<standard>Ora Standard Europa Centrale</standard>
+					<daylight>Ora Legale Europa Centrale</daylight>
 				</long>
 				<short>
 					<standard>CET</standard>
-					<daylight>CEST</daylight>
+					<daylight>CEDT</daylight>
 				</short>
 				<exemplarCity>Parigi</exemplarCity>
 			</zone>
@@ -1011,18 +1125,7 @@
 				<exemplarCity>Tokyo</exemplarCity>
 			</zone>
 			<zone type="Africa/Casablanca">
-				<long>
-					<standard>Ora Meridiano Greenwich</standard>
-					<daylight>Ora Meridiano Greenwich</daylight>
-				</long>
-				<short>
-					<standard>GMT</standard>
-					<daylight>GMT</daylight>
-				</short>
 				<exemplarCity>Casablanca</exemplarCity>
-			</zone>
-			<zone type="Africa/Timbuktu">
-				<exemplarCity>Timbuctu</exemplarCity>
 			</zone>
 			<zone type="America/Mexico_City">
 				<exemplarCity>Città del Messico</exemplarCity>
@@ -1040,7 +1143,7 @@
 				</long>
 				<short>
 					<standard>EET</standard>
-					<daylight>EEST</daylight>
+					<daylight>EEDT</daylight>
 				</short>
 				<exemplarCity>Bucarest</exemplarCity>
 			</zone>
@@ -1062,70 +1165,6 @@
 					<standard>Ora Standard Alaska</standard>
 					<daylight>Ora Legale Alaska</daylight>
 				</long>
-				<short>
-					<standard>AST</standard>
-					<daylight>ADT</daylight>
-				</short>
-			</zone>
-			<zone type="America/Los_Angeles">
-				<long>
-					<standard>Ora Standard Pacifico</standard>
-					<daylight>Ora Legale Pacifico</daylight>
-				</long>
-				<short>
-					<standard>PST</standard>
-					<daylight>PDT</daylight>
-				</short>
-			</zone>
-			<zone type="America/Phoenix">
-				<long>
-					<standard>Ora Standard Mountain</standard>
-					<daylight>Ora Standard Mountain</daylight>
-				</long>
-				<short>
-					<standard>MST</standard>
-					<daylight>MST</daylight>
-				</short>
-			</zone>
-			<zone type="America/Denver">
-				<long>
-					<standard>Ora Standard Mountain</standard>
-					<daylight>Ora Legale Mountain</daylight>
-				</long>
-				<short>
-					<standard>MST</standard>
-					<daylight>MDT</daylight>
-				</short>
-			</zone>
-			<zone type="America/Chicago">
-				<long>
-					<standard>Ora Standard Centrale</standard>
-					<daylight>Ora Legale Centrale</daylight>
-				</long>
-				<short>
-					<standard>CST</standard>
-					<daylight>CDT</daylight>
-				</short>
-			</zone>
-			<zone type="America/Indianapolis">
-				<long>
-					<standard>Ora Standard Orientale</standard>
-					<daylight>Ora Standard Orientale</daylight>
-				</long>
-				<short>
-					<standard>EST</standard>
-					<daylight>EST</daylight>
-				</short>
-			</zone>
-			<zone type="America/New_York">
-				<long>
-					<standard>Ora Standard Orientale</standard>
-					<daylight>Ora Legale Orientale</daylight>
-				</long>
-				<short>
-					<standard>EST</standard>
-					<daylight>EDT</daylight>
-				</short>
 			</zone>
 			<zone type="Asia/Samarkand">
 				<exemplarCity>Samarcanda</exemplarCity>
@@ -1161,7 +1200,6 @@
 			</currency>
 			<currency type="ANG">
 				<displayName>Fiorino delle Antille Olandesi</displayName>
-				<symbol>NA f.</symbol>
 			</currency>
 			<currency type="AOA">
 				<displayName>Kwanza Angolano</displayName>
@@ -1320,6 +1358,9 @@
 				<displayName>Colón Costaricano</displayName>
 				<symbol>C</symbol>
 			</currency>
+			<currency type="CSD">
+				<displayName>Dinaro serbo</displayName>
+			</currency>
 			<currency type="CSK">
 				<displayName>Corona forte cecoslovacca</displayName>
 			</currency>
@@ -1461,7 +1502,7 @@
 				<displayName>Fiorino Ungherese</displayName>
 			</currency>
 			<currency type="IDR">
-				<displayName>Rupia Indiana</displayName>
+				<displayName>Rupia Indonesiana</displayName>
 				<symbol>Rp</symbol>
 			</currency>
 			<currency type="IEP">
@@ -1772,7 +1813,7 @@
 				<symbol>Sf</symbol>
 			</currency>
 			<currency type="STD">
-				<displayName>Dobra di São Tomé e Principe</displayName>
+				<displayName>Dobra di Sao Tomé e Principe</displayName>
 				<symbol>Db</symbol>
 			</currency>
 			<currency type="SUR">
@@ -1913,6 +1954,9 @@
 				<displayName>Franco CFP</displayName>
 				<symbol>CFPF</symbol>
 			</currency>
+			<currency type="XXX">
+				<displayName>Nessuna valuta</displayName>
+			</currency>
 			<currency type="YDD">
 				<displayName>Dinaro dello Yemen</displayName>
 			</currency>
@@ -1953,7 +1997,12 @@
 	<posix>
 		<messages>
 			<yesstr>sì:si:s</yesstr>
-			<yesexpr>^([yY]([eE][sS])?)|([sS][ìÌiI]?)</yesexpr>
 		</messages>
 	</posix>
+	<references>
+		<reference type="RP1" uri="http://www.intercultura.it/">RF1</reference>
+		<reference type="RP2" uri="http://it.wikipedia.org/wiki/Pagina_principale">Wikipedia</reference>
+		<reference type="RP3" uri="http://www.portalingua.info/it/recherche/recherche_avancee/1/index.php">Portalingua</reference>
+		<reference type="RP4" uri="WWW.google.com">Google results</reference>
+	</references>
 </ldml>

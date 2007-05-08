@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,6 +18,7 @@
  * @subpackage Amazon
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Offer.php 4357 2007-04-04 22:32:40Z darby $
  */
 
 
@@ -32,19 +34,23 @@ class Zend_Service_Amazon_Offer
     /**
      * Parse the given Offer element
      *
-     * @param DomElement $dom
+     * @param  DOMElement $dom
+     * @return void
      */
-    public function __construct(DomElement $dom)
+    public function __construct(DOMElement $dom)
     {
-    	$xpath = new DOMXPath($dom->ownerDocument);
-    	$xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
-    	$this->MerchantId = (string) $xpath->query('./az:Merchant/az:MerchantId/text()', $dom)->item(0)->data;
+        $xpath = new DOMXPath($dom->ownerDocument);
+        $xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
+        $this->MerchantId = (string) $xpath->query('./az:Merchant/az:MerchantId/text()', $dom)->item(0)->data;
         $this->GlancePage = (string) $xpath->query('./az:Merchant/az:GlancePage/text()', $dom)->item(0)->data;
         $this->Condition = (string) $xpath->query('./az:OfferAttributes/az:Condition/text()', $dom)->item(0)->data;
         $this->OfferListingId = (string) $xpath->query('./az:OfferListing/az:OfferListingId/text()', $dom)->item(0)->data;
         $this->Price = (int) $xpath->query('./az:OfferListing/az:Price/az:Amount/text()', $dom)->item(0)->data;
         $this->CurrencyCode = (string) $xpath->query('./az:OfferListing/az:Price/az:CurrencyCode/text()', $dom)->item(0)->data;
         $this->Availability = (string) $xpath->query('./az:OfferListing/az:Availability/text()', $dom)->item(0)->data;
-        $this->IsEligibleForSuperSaverShipping = (bool) $xpath->query('./az:OfferListing/az:isEligibleForSuperSaverShipping/text()', $dom)->item(0)->data;
+        $result = $xpath->query('./az:OfferListing/az:IsEligibleForSuperSaverShipping/text()', $dom);
+        if ($result->length >= 1) {
+            $this->IsEligibleForSuperSaverShipping = (bool) $result->item(0)->data;
+        }
     }
 }

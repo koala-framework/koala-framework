@@ -339,11 +339,26 @@ abstract class Zend_Controller_Response_Abstract
 
     /**
      * Clear body array
+     *
+     * With no arguments, clears the entire body array. Given a $name, clears 
+     * just that named segment; if no segment matching $name exists, returns 
+     * false to indicate an error.
      * 
-     * @return true
+     * @param  string $name Named segment to clear
+     * @return boolean
      */
-    public function clearBody()
+    public function clearBody($name = null)
     {
+        if (null !== $name) {
+            $name = (string) $name;
+            if (isset($this->_body[$name])) {
+                unset($this->_body[$name]);
+                return true;
+            }
+
+            return false;
+        }
+
         $this->_body = array();
         return true;
     }
@@ -425,6 +440,16 @@ abstract class Zend_Controller_Response_Abstract
         return $this;
     }
 
+    /**
+     * Insert a named segment into the body content array
+     * 
+     * @param  string $name 
+     * @param  string $content 
+     * @param  string $parent 
+     * @param  boolean $before Whether to insert the new segment before or 
+     * after the parent. Defaults to false (after)
+     * @return Zend_Controller_Response_Abstract
+     */
     public function insert($name, $content, $parent = null, $before = false)
     {
         if (!is_string($name)) {
@@ -442,23 +467,29 @@ abstract class Zend_Controller_Response_Abstract
         }
 
         if ((null === $parent) || !isset($this->_body[$parent])) {
-            if (!$before) {
-                return $this->append($name, $content);
-            } else {
-                return $this->prepend($name, $content);
-            }
+            return $this->append($name, $content);
         }
 
         $ins  = array($name => (string) $content);
         $keys = array_keys($this->_body);
         $loc  = array_search($parent, $keys);
-        if ($before) {
-            --$loc;
+        if (!$before) {
+            // Increment location if not inserting before
+            ++$loc;
         }
-        $pre  = array_slice($this->_body, 0, $loc);
-        $post = array_slice($this->_body, $loc);
 
-        $this->_body = $pre + $ins + $post;
+        if (0 === $loc) {
+            // If location of key is 0, we're prepending
+            $this->_body = $ins + $this->_body;
+        } elseif ($loc >= (count($this->_body))) {
+            // If location of key is maximal, we're appending
+            $this->_body = $this->_body + $ins;
+        } else {
+            // Otherwise, insert at location specified
+            $pre  = array_slice($this->_body, 0, $loc);
+            $post = array_slice($this->_body, $loc);
+            $this->_body = $pre + $ins + $post;
+        }
 
         return $this;
     }

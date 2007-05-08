@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.17 $"/>
-		<generation date="$Date: 2005/05/19 20:41:03 $"/>
+		<version number="$Revision: 1.32 $"/>
+		<generation date="$Date: 2006/07/11 19:31:56 $"/>
 		<language type="zh"/>
 		<script type="Hans"/>
 		<territory type="SG"/>
@@ -18,16 +18,15 @@
 			<territory type="CZ">捷克</territory>
 			<territory type="ID">印尼</territory>
 			<territory type="KR">南韩</territory>
-			<territory type="MK">马其顿</territory>
 			<territory type="NZ">纽西兰</territory>
 			<territory type="SA">沙地阿拉伯</territory>
 		</territories>
 	</localeDisplayNames>
 	<delimiters>
-		<quotationStart draft="true">‘</quotationStart>
-		<quotationEnd draft="true">’</quotationEnd>
-		<alternateQuotationStart draft="true">“</alternateQuotationStart>
-		<alternateQuotationEnd draft="true">”</alternateQuotationEnd>
+		<quotationStart draft="unconfirmed">‘</quotationStart>
+		<quotationEnd draft="unconfirmed">’</quotationEnd>
+		<alternateQuotationStart draft="unconfirmed">“</alternateQuotationStart>
+		<alternateQuotationEnd draft="unconfirmed">”</alternateQuotationEnd>
 	</delimiters>
 	<dates>
 		<calendars>
@@ -76,6 +75,14 @@
 						</timeFormat>
 					</timeFormatLength>
 				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMMMdd" draft="provisional">dd MMMM</dateFormatItem>
+						<dateFormatItem id="MMdd" draft="provisional">dd/MM</dateFormatItem>
+						<dateFormatItem id="yyMM" draft="provisional">MM/yy</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM" draft="provisional">MMMM yyyy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 	</dates>
@@ -88,5 +95,8 @@
 			</currencyFormatLength>
 		</currencyFormats>
 	</numbers>
+	<references>
+		<reference type="RP1">Chinese (Simplified Han, Singapore): languages: &quot;Root&quot; propose &quot;Root&quot;</reference>
+	</references>
 </ldml>
 

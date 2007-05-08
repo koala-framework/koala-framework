@@ -16,7 +16,7 @@
  * @category   Zend
  * @package    Zend_Http
  * @subpackage Client
- * @version    $Id: Client.php 4183 2007-03-22 20:29:39Z darby $
+ * @version    $Id: Client.php 4251 2007-03-29 00:08:39Z rboyd $
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -490,7 +490,7 @@ class Zend_Http_Client
      * A cookie jar is an object that holds and maintains cookies across HTTP requests
      * and responses.
      *
-     * @param Zend_Http_CookieJar|boolean $cookiejar Exisitng cookiejar object, true to create a new one, false to disable
+     * @param Zend_Http_CookieJar|boolean $cookiejar Existing cookiejar object, true to create a new one, false to disable
      * @return Zend_Http_Client
      */
     public function setCookieJar($cookiejar = true)
@@ -992,7 +992,7 @@ class Zend_Http_Client
      * @param array $headers Associative array of optional headers @example ("Content-transfer-encoding" => "binary")
      * @return string
      */
-    static public function encodeFormData($boundary, $name, $value, $filename = null, $headers = array()) {
+    public static function encodeFormData($boundary, $name, $value, $filename = null, $headers = array()) {
         $ret = "--{$boundary}\r\n" .
             'Content-Disposition: form-data; name="' . $name .'"';
 
@@ -1019,7 +1019,7 @@ class Zend_Http_Client
      * @param string $type
      * @return string
      */
-    static public function encodeAuthHeader($user, $password, $type = self::AUTH_BASIC)
+    public static function encodeAuthHeader($user, $password, $type = self::AUTH_BASIC)
     {
         $authHeader = null;
 

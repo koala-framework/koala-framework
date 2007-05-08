@@ -52,7 +52,7 @@ class Zend_Search_Lucene_Index_DictionaryLoader
      * @return array
      * @throws Zend_Search_Lucene_Exception
      */
-    static public function load($data)
+    public static function load($data)
     {
         $termDictionary = array();
         $termInfos      = array();

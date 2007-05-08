@@ -19,6 +19,11 @@
  */
 
 /**
+ * Zend_Gdata
+ */
+require_once 'Zend/Gdata.php';
+
+/**
  * Zend_Gdata_BadMethodCallException
  */
 require_once 'Zend/Gdata/BadMethodCallException.php';

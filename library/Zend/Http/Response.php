@@ -16,10 +16,12 @@
  * @category   Zend
  * @package    Zend_Http
  * @subpackage Response
- * @version    $Id: Response.php 3834 2007-03-09 05:12:52Z bkarwin $
+ * @version    $Id: Response.php 4261 2007-03-29 16:57:59Z shahar $
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
+
+require_once 'Zend/Http/Exception.php';
 
 /**
  * Zend_Http_Response represents an HTTP 1.0 / 1.1 response message. It 
@@ -33,6 +35,66 @@
  */
 class Zend_Http_Response
 {
+	/**
+	 * List of all known HTTP response codes - used by responseCodeAsText() to
+	 * translate numeric codes to messages.
+	 *
+	 * @var array
+	 */
+	protected static $messages = array(
+        // Informational 1xx
+        100 => 'Continue',
+        101 => 'Switching Protocols',
+        
+        // Success 2xx
+        200 => 'OK',
+        201 => 'Created',
+        202 => 'Accepted',
+        203 => 'Non-Authoritative Information',
+        204 => 'No Content',
+        205 => 'Reset Content',
+        206 => 'Partial Content',
+        
+        // Redirection 3xx
+        300 => 'Multiple Choices',
+        301 => 'Moved Permanently',
+        302 => 'Found',  // 1.1
+        303 => 'See Other',
+        304 => 'Not Modified',
+        305 => 'Use Proxy',
+        // 306 is deprecated but reserved
+        307 => 'Temporary Redirect',
+        
+        // Client Error 4xx
+        400 => 'Bad Request',
+        401 => 'Unauthorized',
+        402 => 'Payment Required',
+        403 => 'Forbidden',
+        404 => 'Not Found',
+        405 => 'Method Not Allowed',
+        406 => 'Not Acceptable',
+        407 => 'Proxy Authentication Required',
+        408 => 'Request Timeout',
+        409 => 'Conflict',
+        410 => 'Gone',
+        411 => 'Length Required',
+        412 => 'Precondition Failed',
+        413 => 'Request Entity Too Large',
+        414 => 'Request-URI Too Long',
+        415 => 'Unsupported Media Type',
+        416 => 'Requested Range Not Satisfiable',
+        417 => 'Expectation Failed',
+        
+        // Server Error 5xx
+        500 => 'Internal Server Error',
+        501 => 'Not Implemented',
+        502 => 'Bad Gateway',
+        503 => 'Service Unavailable',
+        504 => 'Gateway Timeout',
+        505 => 'HTTP Version Not Supported',
+        509 => 'Bandwidth Limit Exceeded'
+    );
+	
     /**
      * The HTTP version (1.0, 1.1)
      *
@@ -72,7 +134,7 @@ class Zend_Http_Response
     /**
      * HTTP response constructor
      * 
-     * In most cases, you would use Zend_Http_Response::factory to parse an HTTP 
+     * In most cases, you would use Zend_Http_Response::fromString to parse an HTTP 
      * response string and create a new Zend_Http_Response object.
      * 
      * NOTE: The constructor no longer accepts nulls or empty values for the code and
@@ -334,6 +396,7 @@ class Zend_Http_Response
     /**
      * A convenience function that returns a text representation of
      * HTTP response codes. Returns 'Unknown' for unknown codes.
+     * Returns array of all codes, if $code is not specified.
      *
      * Conforms to HTTP/1.1 as defined in RFC 2616 (except for 'Unknown')
      * See http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10 for reference
@@ -342,61 +405,14 @@ class Zend_Http_Response
      * @param boolean $http11 Use HTTP version 1.1 
      * @return string
      */ 
-    static public function responseCodeAsText($code, $http11 = true)
+    public static function responseCodeAsText($code = null, $http11 = true)
     {
-        $messages = array (
-            // Informational 1xx
-            100 => 'Continue',
-            101 => 'Switching Protocols',
-            // Success 2xx
-            200 => 'OK',
-            201 => 'Created',
-            202 => 'Accepted',
-            203 => 'Non-Authoritative Information',
-            204 => 'No Content',
-            205 => 'Reset Content',
-            206 => 'Partial Content',
-            // Redirection 3xx
-            300 => 'Multiple Choices',
-            301 => 'Moved Permanently',
-            302 => 'Found',  // 1.1
-            303 => 'See Other',
-            304 => 'Not Modified',
-            305 => 'Use Proxy',
-            // 306 is deprecated but reserved
-            307 => 'Temporary Redirect',
-            // Client Error 4xx
-            400 => 'Bad Request',
-            401 => 'Unauthorized',
-            402 => 'Payment Required',
-            403 => 'Forbidden',
-            404 => 'Not Found',
-            405 => 'Method Not Allowed',
-            406 => 'Not Acceptable',
-            407 => 'Proxy Authentication Required',
-            408 => 'Request Timeout',
-            409 => 'Conflict',
-            410 => 'Gone',
-            411 => 'Length Required',
-            412 => 'Precondition Failed',
-            413 => 'Request Entity Too Large',
-            414 => 'Request-URI Too Long',
-            415 => 'Unsupported Media Type',
-            416 => 'Requested Range Not Satisfiable',
-            417 => 'Expectation Failed',
-            // Server Error 5xx
-            500 => 'Internal Server Error',
-            501 => 'Not Implemented',
-            502 => 'Bad Gateway',
-            503 => 'Service Unavailable',
-            504 => 'Gateway Timeout',
-            505 => 'HTTP Version Not Supported',
-            509 => 'Bandwidth Limit Exceeded'
-        );
-
+        $messages = self::$messages;
         if (! $http11) $messages[302] = 'Moved Temporarily';
 
-        if (isset($messages[$code])) {
+        if ($code === null) {
+            return $messages;
+        } elseif (isset($messages[$code])) {
             return $messages[$code];
         } else {
             return 'Unknown';
@@ -409,7 +425,7 @@ class Zend_Http_Response
      * @param string $response_str
      * @return int
      */
-    static public function extractCode($response_str)
+    public static function extractCode($response_str)
     {
         preg_match("|^HTTP/[\d\.x]+ (\d+)|", $response_str, $m);
 
@@ -426,7 +442,7 @@ class Zend_Http_Response
      * @param string $response_str
      * @return string
      */
-    static public function extractMessage($response_str)
+    public static function extractMessage($response_str)
     {
         preg_match("|^HTTP/[\d\.x]+ \d+ ([^\r\n]+)|", $response_str, $m);
 
@@ -443,7 +459,7 @@ class Zend_Http_Response
      * @param string $response_str
      * @return string
      */
-    static public function extractVersion($response_str)
+    public static function extractVersion($response_str)
     {
         preg_match("|^HTTP/([\d\.x]+) \d+|", $response_str, $m);
 
@@ -460,7 +476,7 @@ class Zend_Http_Response
      * @param string $response_str
      * @return array
      */
-    static public function extractHeaders($response_str)
+    public static function extractHeaders($response_str)
     {
         $headers = array();
         $lines = explode("\n", $response_str);
@@ -505,7 +521,7 @@ class Zend_Http_Response
      * @param string $response_str
      * @return string
      */
-    static public function extractBody($response_str)
+    public static function extractBody($response_str)
     {
         list(, $body) = preg_split('/^\r?$/m', $response_str, 2);
         $body = ltrim($body);
@@ -519,7 +535,7 @@ class Zend_Http_Response
      * @param string $body
      * @return string
      */
-    static public function decodeChunkedBody($body)
+    public static function decodeChunkedBody($body)
     {
         $decBody = '';
 
@@ -546,7 +562,7 @@ class Zend_Http_Response
      * @param string $body
      * @return string
      */
-    static public function decodeGzip($body)
+    public static function decodeGzip($body)
     {
         return gzinflate(substr($body, 10));
     }
@@ -559,7 +575,7 @@ class Zend_Http_Response
      * @param string $body
      * @return string
      */
-    static public function decodeDeflate($body)
+    public static function decodeDeflate($body)
     {
         return gzuncompress($body);
     }
@@ -570,7 +586,7 @@ class Zend_Http_Response
      * @param string $response_str
      * @return Zend_Http_Response
      */
-    static public function fromString($response_str)
+    public static function fromString($response_str)
     {
         $code    = self::extractCode($response_str);
         $headers = self::extractHeaders($response_str);

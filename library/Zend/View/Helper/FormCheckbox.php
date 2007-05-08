@@ -96,6 +96,7 @@ class Zend_View_Helper_FormCheckbox extends Zend_View_Helper_FormElement {
             $xhtml = $this->_hidden($name, $options[1]) 
                    . '<input type="checkbox"'
                    . ' name="' . htmlspecialchars($name, ENT_COMPAT, 'UTF-8') . '"'
+                   . ' id="' . htmlspecialchars($id, ENT_COMPAT, 'UTF-8') . '"'
                    . ' value="' . htmlspecialchars($options[0], ENT_COMPAT, 'UTF-8') . '"';
             
             // is it checked already?
@@ -104,7 +105,7 @@ class Zend_View_Helper_FormCheckbox extends Zend_View_Helper_FormElement {
             }
             
             // add attributes and close.
-            $xhtml .= $this->_htmlAttribs($attribs) . ' />';
+            $xhtml .= ' ' . $this->_htmlAttribs($attribs) . ' />';
         }
         return $xhtml;
     }

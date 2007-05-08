@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,12 +18,15 @@
  * @subpackage Profiler
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Exception.php 4679 2007-05-02 22:17:39Z darby $
  */
 
+
 /**
- * Zend_Db_Exception
+ * @see Zend_Db_Exception
  */
 require_once 'Zend/Db/Exception.php';
+
 
 /**
  * @category   Zend

@@ -90,8 +90,8 @@ class Zend_Mail_Storage_Pop3 extends Zend_Mail_Storage_Abstract
         $bodyLines = 0;
         $message = $this->_protocol->top($id, $bodyLines, true);
 
-        return new Zend_Mail_Message(array('handler' => $this, 'id' => $id, 'headers' => $message,
-                                           'noToplines' => $bodyLines < 1));
+        return new $this->_messageClass(array('handler' => $this, 'id' => $id, 'headers' => $message,
+                                              'noToplines' => $bodyLines < 1));
     }
 
     /*

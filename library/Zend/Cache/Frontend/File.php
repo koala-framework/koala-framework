@@ -39,14 +39,14 @@ class Zend_Cache_Frontend_File extends Zend_Cache_Core
     /**
      * Available options
      * 
-     * ====> (string) masterFile :
+     * ====> (string) master_file :
      * - the complete path and name of the master file 
      * - this option has to be set ! 
      * 
      * @var array available options
      */
     protected $_specificOptions = array(
-    	'masterFile' => ''
+        'master_file' => ''
     ); 
     
     /**
@@ -63,15 +63,15 @@ class Zend_Cache_Frontend_File extends Zend_Cache_Core
      */
     public function __construct($options = array())
     {
-        if (!isset($options['masterFile'])) {
-            Zend_Cache::throwException('masterFile option must be set');
-        }
         while (list($name, $value) = each($options)) {
             $this->setOption($name, $value);
         }
+        if (!isset($this->_specificOptions['master_file'])) {
+            Zend_Cache::throwException('master_file option must be set');
+        }
         clearstatcache();
-        if (!($this->_masterFile_mtime = @filemtime($options['masterFile']))) {
-            Zend_Cache::throwException('Unable to read masterFile : '.$this->_specificOptions['masterFile']);
+        if (!($this->_masterFile_mtime = @filemtime($this->_specificOptions['master_file']))) {
+            Zend_Cache::throwException('Unable to read master_file : '.$this->_specificOptions['master_file']);
         }
     }    
        
@@ -80,7 +80,7 @@ class Zend_Cache_Frontend_File extends Zend_Cache_Core
      * 
      * @param string $id cache id
      * @param boolean $doNotTestCacheValidity if set to true, the cache validity won't be tested
-     * @param boolean $doNotUnserialize do not serialize (even if automaticSerialization is true) => for internal use
+     * @param boolean $doNotUnserialize do not serialize (even if automatic_serialization is true) => for internal use
      * @return mixed cached datas (or false)
      */
     public function load($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)

@@ -342,8 +342,10 @@ class Zend_Search_Lucene_Search_QueryParserContext
 
             $conjuctions = $expressionRecognizer->finishExpression();
         } catch (Zend_Search_Exception $e) {
-            throw new Zend_Search_Lucene_Search_QueryParserException('Boolean expression error. Error message: \'' .
-                                                                     $e->getMessage() . '\'.' );
+            // throw new Zend_Search_Lucene_Search_QueryParserException('Boolean expression error. Error message: \'' .
+            //                                                          $e->getMessage() . '\'.' );
+            // It's query syntax error message and it should be user friendly. So FSM message is omitted
+            throw new Zend_Search_Lucene_Search_QueryParserException('Boolean expression error.');
         }
 
         // Remove 'only negative' conjunctions

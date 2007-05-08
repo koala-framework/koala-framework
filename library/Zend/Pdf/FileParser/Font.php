@@ -21,10 +21,6 @@
 /** Zend_Pdf_FileParser */
 require_once 'Zend/Pdf/FileParser.php';
 
-/** Zend_Log */
-require_once 'Zend/Log.php';
-
-
 /**
  * Abstract helper class for {@link Zend_Pdf_Font} that parses font files.
  *
@@ -73,14 +69,6 @@ abstract class Zend_Pdf_FileParser_Font extends Zend_Pdf_FileParser
     public function __construct(Zend_Pdf_FileParserDataSource $dataSource)
     {
         parent::__construct($dataSource);
-
-        /* Enable debug logging if the shared framework debug logger exists.
-         * See discussion about this special logger in Zend_Log.
-         */
-        if (Zend_Log::hasLogger('ZF')) {
-            $this->_debug = true;
-            $this->_debugLog('Parsing font: ' . $dataSource->__toString());
-        }
         $this->fontType = Zend_Pdf_Font::TYPE_UNKNOWN;
     }
 

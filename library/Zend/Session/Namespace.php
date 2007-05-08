@@ -16,16 +16,28 @@
  * @package    Zend_Session
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Namespace.php 3971 2007-03-15 20:29:58Z gavin $
+ * @version    $Id: Namespace.php 4666 2007-05-02 17:12:28Z darby $
  * @since      Preview Release 0.2
  */
 
 
 /**
+ * @see Zend_Session
+ */
+require_once 'Zend/Session.php';
+
+
+/**
+ * @see Zend_Session_Abstract
+ */
+require_once 'Zend/Session/Abstract.php';
+
+
+/**
  * Zend_Session_Namespace
  *
- * @category Zend
- * @package Zend_Session
+ * @category   Zend
+ * @package    Zend_Session
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -49,14 +61,14 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
      *
      * @var array
      */
-    static protected $_namespaceLocks = array();
+    protected static $_namespaceLocks = array();
 
     /**
      * Single instance namespace array to ensure data security.
      *
      * @var array
      */
-    static protected $_singleInstances = array();
+    protected static $_singleInstances = array();
 
     /**
      * __construct() - Returns an instance object bound to a particular, isolated section
@@ -71,14 +83,26 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
     public function __construct($namespace = 'Default', $singleInstance = false)
     {
         if ($namespace === '') {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception('Session namespace must be a non-empty string.');
         }
 
         if ($namespace[0] == "_") {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception('Session namespace must not start with an underscore.');
         }
 
         if (isset(self::$_singleInstances[$namespace])) {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception("A session namespace object already exists for this namespace ('$namespace'), and no additional accessors (session namespace objects) for this namespace are permitted.");
         }
 
@@ -92,6 +116,10 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
         Zend_Session::start(true); // attempt auto-start (throws exception if strict option set)
 
         if (self::$_readable === false) {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception(self::_THROW_NOT_READABLE_MSG);
         }
 
@@ -102,11 +130,11 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
         // do not allow write access to namespaces, after stop() or writeClose()
         if (parent::$_writable === true) {
             if (isset($_SESSION['__ZF'][$namespace])) {
-    
+
                 // Expire Namespace by Namespace Hop (ENNH)
                 if (isset($_SESSION['__ZF'][$namespace]['ENNH'])) {
                     $_SESSION['__ZF'][$namespace]['ENNH']--;
-    
+
                     if ($_SESSION['__ZF'][$namespace]['ENNH'] === 0) {
                         if (isset($_SESSION[$namespace])) {
                             self::$_expiringData[$namespace] = $_SESSION[$namespace];
@@ -115,12 +143,12 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
                         unset($_SESSION['__ZF'][$namespace]['ENNH']);
                     }
                 }
-    
+
                 // Expire Namespace Variables by Namespace Hop (ENVNH)
                 if (isset($_SESSION['__ZF'][$namespace]['ENVNH'])) {
                     foreach ($_SESSION['__ZF'][$namespace]['ENVNH'] as $variable => $hops) {
                         $_SESSION['__ZF'][$namespace]['ENVNH'][$variable]--;
-    
+
                         if ($_SESSION['__ZF'][$namespace]['ENVNH'][$variable] === 0) {
                             if (isset($_SESSION[$namespace][$variable])) {
                                 self::$_expiringData[$namespace][$variable] = $_SESSION[$namespace][$variable];
@@ -131,11 +159,11 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
                     }
                 }
             }
-    
+
             if (empty($_SESSION['__ZF'][$namespace])) {
                 unset($_SESSION['__ZF'][$namespace]);
             }
-    
+
             if (empty($_SESSION['__ZF'])) {
                 unset($_SESSION['__ZF']);
             }
@@ -182,7 +210,7 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
      *
      * @return void
      */
-    static public function unlockAll()
+    public static function unlockAll()
     {
         self::$_namespaceLocks = array();
     }
@@ -219,6 +247,10 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
     protected function & __get($name)
     {
         if ($name === '') {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception("The '$name' key must be a non-empty string");
         }
 
@@ -237,20 +269,78 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
     protected function __set($name, $value)
     {
         if (isset(self::$_namespaceLocks[$this->_namespace])) {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception('This session/namespace has been marked as read-only.');
         }
 
         if ($name === '') {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception("The '$name' key must be a non-empty string");
         }
 
         if (parent::$_writable === false) {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception(parent::_THROW_NOT_WRITABLE_MSG);
         }
 
         $name = (string) $name;
 
         $_SESSION[$this->_namespace][$name] = $value;
+    }
+
+
+    /**
+     * apply() - enables applying user-selected function, such as array_merge() to the namespace
+     * Caveat: ignores members expiring now.
+     *
+     * Example:
+     *   $namespace->apply('array_merge', array('tree' => 'apple', 'fruit' => 'peach'), array('flower' => 'rose'));
+     *   $namespace->apply('count');
+     *
+     * @param string $callback - callback function
+     * @param mixed  OPTIONAL arguments passed to the callback function
+     */
+    public function apply($callback)
+    {
+        $arg_list = func_get_args();
+        $arg_list[0] = $_SESSION[$this->_namespace];
+        return call_user_func_array($callback, $arg_list);
+    }
+
+
+    /**
+     * applySet() - enables applying user-selected function, and sets entire namespace to the result
+     * Result of $callback must be an array. Caveat: ignores members expiring now.
+     *
+     * Example:
+     *   $namespace->applySet('array_merge', array('tree' => 'apple', 'fruit' => 'peach'), array('flower' => 'rose'));
+     *
+     * @param string $callback - callback function
+     * @param mixed  OPTIONAL arguments passed to the callback function
+     */
+    public function applySet($callback)
+    {
+        $arg_list = func_get_args();
+        $arg_list[0] = $_SESSION[$this->_namespace];
+        $result = call_user_func_array($callback, $arg_list);
+        if (!is_array($result)) {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
+            throw new Zend_Session_Exception("Result must be an array. Got: " . gettype($result));
+        }
+        $_SESSION[$this->_namespace] = $result;
+        return $result;
     }
 
 
@@ -263,6 +353,10 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
     protected function __isset($name)
     {
         if ($name === '') {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception("The '$name' key must be a non-empty string");
         }
 
@@ -279,6 +373,10 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
     protected function __unset($name)
     {
         if ($name === '') {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception("The '$name' key must be a non-empty string");
         }
 
@@ -298,10 +396,18 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
     public function setExpirationSeconds($seconds, $variables = null)
     {
         if (parent::$_writable === false) {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception(parent::_THROW_NOT_WRITABLE_MSG);
         }
 
         if ($seconds <= 0) {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception('Seconds must be positive.');
         }
 
@@ -338,10 +444,18 @@ class Zend_Session_Namespace extends Zend_Session_Abstract implements IteratorAg
     public function setExpirationHops($hops, $variables = null, $hopCountOnUsageOnly = false)
     {
         if (parent::$_writable === false) {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception(parent::_THROW_NOT_WRITABLE_MSG);
         }
 
         if ($hops <= 0) {
+            /**
+             * @see Zend_Session_Exception
+             */
+            require_once 'Zend/Session/Exception.php';
             throw new Zend_Session_Exception('Hops must be positive number.');
         }
 

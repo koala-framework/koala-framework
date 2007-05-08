@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,12 +18,15 @@
  * @subpackage Statement
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Mysqli.php 4671 2007-05-02 19:19:14Z bkarwin $
  */
 
+
 /**
- * Zend_Db_Statement
+ * @see Zend_Db_Statement
  */
 require_once 'Zend/Db/Statement.php';
+
 
 /**
  * Extends for Mysqli
@@ -61,7 +65,6 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
      * Returns the number of rows that were affected by the execution of an SQL statement.
      *
      * @return int Number of rows affected.
-     * @throws Zend_Db_Adapter_Exception
      */
     public function rowCount()
     {
@@ -123,7 +126,7 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
      * @param array $params OPTIONAL values to supply as input to statement parameters
      * @return void
      */
-    public function execute($params = array())
+    public function execute(array $params = array())
     {
         // prepare for mysqli
         $sql = $this->_joinSql();
@@ -253,6 +256,5 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
 
         return $data;
     }
-
 
 }

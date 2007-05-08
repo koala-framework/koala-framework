@@ -72,7 +72,7 @@ abstract class Zend_Search_Lucene_Analysis_Analyzer
      *
      * @var Zend_Search_Lucene_Analysis_Analyzer
      */
-    static private $_defaultImpl;
+    private static $_defaultImpl;
 
     /**
      * Input string
@@ -147,7 +147,7 @@ abstract class Zend_Search_Lucene_Analysis_Analyzer
      *
      * @param Zend_Search_Lucene_Analysis_Analyzer $similarity
      */
-    static public function setDefault(Zend_Search_Lucene_Analysis_Analyzer $analyzer)
+    public static function setDefault(Zend_Search_Lucene_Analysis_Analyzer $analyzer)
     {
         self::$_defaultImpl = $analyzer;
     }
@@ -158,7 +158,7 @@ abstract class Zend_Search_Lucene_Analysis_Analyzer
      *
      * @return Zend_Search_Lucene_Analysis_Analyzer
      */
-    static public function getDefault()
+    public static function getDefault()
     {
         if (!self::$_defaultImpl instanceof Zend_Search_Lucene_Analysis_Analyzer) {
             self::$_defaultImpl = new Zend_Search_Lucene_Analysis_Analyzer_Common_Text_CaseInsensitive();

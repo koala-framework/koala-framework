@@ -180,7 +180,7 @@ abstract class Zend_XmlRpc_Value
      * @return Zend_XmlRpc_Value
      * @static
      */
-    static public function getXmlRpcValue($value, $type = self::AUTO_DETECT_TYPE)
+    public static function getXmlRpcValue($value, $type = self::AUTO_DETECT_TYPE)
     {
         switch ($type) {
             case self::AUTO_DETECT_TYPE:
@@ -231,7 +231,7 @@ abstract class Zend_XmlRpc_Value
      * @return Zend_XmlRpc_Value
      * @static
      */
-    static private function _phpVarToNativeXmlRpc($value)
+    private static function _phpVarToNativeXmlRpc($value)
     {
         switch (gettype($value)) {
             case 'object':
@@ -284,7 +284,7 @@ abstract class Zend_XmlRpc_Value
      * @return Zend_XmlRpc_Value
      * @static
      */
-    static private function _xmlStringToNativeXmlRpc($simple_xml)
+    private static function _xmlStringToNativeXmlRpc($simple_xml)
     {
         if (!$simple_xml instanceof SimpleXMLElement) {
             try {

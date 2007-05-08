@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.47 $"/>
-		<generation date="$Date: 2005/05/24 21:21:37 $"/>
+		<version number="$Revision: 1.67 $"/>
+		<generation date="$Date: 2006/06/27 23:30:53 $"/>
 		<language type="ca"/>
 	</identity>
 	<localeDisplayNames>
@@ -12,8 +12,7 @@
 			<language type="ab">abkhaz</language>
 			<language type="af">afrikaans</language>
 			<language type="am">amhàric</language>
-			<language type="ar">ârab</language>
-			<language type="ar" alt="proposed" draft="true">àrab</language>
+			<language type="ar">àrab</language>
 			<language type="as">assamès</language>
 			<language type="ay">aimara</language>
 			<language type="az">àzeri</language>
@@ -162,8 +161,7 @@
 			<territory type="AN">Antilles Holandeses</territory>
 			<territory type="AO">Angola</territory>
 			<territory type="AR">Argentina</territory>
-			<territory type="AT">Âustria</territory>
-			<territory type="AT" alt="proposed" draft="true">Àustria</territory>
+			<territory type="AT">Àustria</territory>
 			<territory type="AU">Austràlia</territory>
 			<territory type="AW">Aruba</territory>
 			<territory type="AZ">Azerbaidjan</territory>
@@ -353,10 +351,11 @@
 		</territories>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-z é í ó ú à è ò ï ü ŀ ç ñ]</exemplarCharacters>
+		<exemplarCharacters>[a à b c ç d e é è f-i í ï j-n ñ o ó ò p-u ú ü v-z]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary" draft="unconfirmed">[ŀ]</exemplarCharacters>
 	</characters>
 	<dates>
-		<localizedPatternChars>GuMtkHmsSEDFwWahKzUeygAZ</localizedPatternChars>
+		<localizedPatternChars>GuMtkHmsSEDFwWahKzUeygAZvcL</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
 				<months>
@@ -413,9 +412,22 @@
 						</dayWidth>
 					</dayContext>
 				</days>
-				<week>
-					<firstDay day="mon" draft="true"/>
-				</week>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">1T</quarter>
+							<quarter type="2">2T</quarter>
+							<quarter type="3">3T</quarter>
+							<quarter type="4">4T</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">1r trimestre</quarter>
+							<quarter type="2">2n trimestre</quarter>
+							<quarter type="3">3r trimestre</quarter>
+							<quarter type="4">4t trimestre</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
 				<eras>
 					<eraAbbr>
 						<era type="0" references="R1">aC</era>
@@ -426,13 +438,11 @@
 					<dateFormatLength type="full">
 						<dateFormat>
 							<pattern>EEEE d 'de' MMMM 'de' yyyy</pattern>
-							<pattern alt="proposed" draft="true">EEEE d 'd’'MMMM 'de' yyyy</pattern>
 						</dateFormat>
 					</dateFormatLength>
 					<dateFormatLength type="long">
 						<dateFormat>
 							<pattern>d 'de' MMMM 'de' yyyy</pattern>
-							<pattern alt="proposed" draft="true">d 'd’'MMMM 'de' yyyy</pattern>
 						</dateFormat>
 					</dateFormatLength>
 					<dateFormatLength type="medium">
@@ -468,6 +478,14 @@
 						</timeFormat>
 					</timeFormatLength>
 				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="hhmm" draft="provisional">hh:mm a</dateFormatItem>
+						<dateFormatItem id="hhmmss" draft="provisional">hh:mm:ss a</dateFormatItem>
+						<dateFormatItem id="mmss" draft="provisional">mm:ss</dateFormatItem>
+						<dateFormatItem id="yyyyMM" draft="provisional">MM/yyyy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 	</dates>
@@ -511,9 +529,7 @@
 	</numbers>
 	<posix>
 		<messages>
-			<yesstr draft="true">sí:si:s</yesstr>
-			<yesexpr draft="true">^([yY]([eE][sS])?)|([sS][iIíÍ]?)</yesexpr>
-			<noexpr draft="true">^([nN][oO]?)</noexpr>
+			<yesstr draft="unconfirmed">sí:si:s</yesstr>
 		</messages>
 	</posix>
 	<references>

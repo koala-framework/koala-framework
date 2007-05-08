@@ -1,4 +1,4 @@
-<?php   
+<?php
 /**
  * Zend Framework
  *
@@ -15,7 +15,7 @@
  * @package    Zend_Controller
  * @subpackage Router
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Route.php 4175 2007-03-22 11:46:52Z martel $
+ * @version    $Id: Route.php 4637 2007-05-01 13:32:51Z martel $
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
@@ -37,11 +37,11 @@ require_once 'Zend/Controller/Router/Route/Interface.php';
 class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Interface
 {
 
-    const URL_VARIABLE = ':';
-    const URI_DELIMITER = '/';
-    const REGEX_DELIMITER = '#';
-    const DEFAULT_REGEX = '.+';
-    
+    protected $_urlVariable = ':';
+    protected $_urlDelimiter = '/';
+    protected $_regexDelimiter = '#';
+    protected $_defaultRegex = null;
+
     protected $_parts;
     protected $_defaults = array();
     protected $_requirements = array();
@@ -49,56 +49,56 @@ class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Inter
     protected $_vars = array();
     protected $_params = array();
     protected $_values = array();
-    
+
     /**
      * Instantiates route based on passed Zend_Config structure
      */
-    public static function getInstance(Zend_Config $config) 
+    public static function getInstance(Zend_Config $config)
     {
-        $reqs = ($config->reqs instanceof Zend_Config) ? $config->reqs->asArray() : array();
-        $defs = ($config->defaults instanceof Zend_Config) ? $config->defaults->asArray() : array();
+        $reqs = ($config->reqs instanceof Zend_Config) ? $config->reqs->toArray() : array();
+        $defs = ($config->defaults instanceof Zend_Config) ? $config->defaults->toArray() : array();
         return new self($config->route, $defs, $reqs);
     }
 
     /**
-     * Prepares the route for mapping by splitting (exploding) it 
-     * to a corresponding atomic parts. These parts are assigned 
-     * a position which is later used for matching and preparing values.  
+     * Prepares the route for mapping by splitting (exploding) it
+     * to a corresponding atomic parts. These parts are assigned
+     * a position which is later used for matching and preparing values.
      *
-     * @param string Map used to match with later submitted URL path 
+     * @param string Map used to match with later submitted URL path
      * @param array Defaults for map variables with keys as variable names
      * @param array Regular expression requirements for variables (keys as variable names)
      */
     public function __construct($route, $defaults = array(), $reqs = array())
     {
 
-        $route = trim($route, self::URI_DELIMITER);
+        $route = trim($route, $this->_urlDelimiter);
         $this->_defaults = (array) $defaults;
         $this->_requirements = (array) $reqs;
 
-        if ($route != '') { 
-    
-            foreach (explode(self::URI_DELIMITER, $route) as $pos => $part) {
-    
-                if (substr($part, 0, 1) == self::URL_VARIABLE) {
+        if ($route != '') {
+
+            foreach (explode($this->_urlDelimiter, $route) as $pos => $part) {
+
+                if (substr($part, 0, 1) == $this->_urlVariable) {
                     $name = substr($part, 1);
-                    $regex = (isset($reqs[$name]) ? $reqs[$name] : self::DEFAULT_REGEX);
+                    $regex = (isset($reqs[$name]) ? $reqs[$name] : $this->_defaultRegex);
                     $this->_parts[$pos] = array('name' => $name, 'regex' => $regex);
                     $this->_vars[] = $name;
                 } else {
-                    $this->_parts[$pos] = array('regex' => preg_quote($part, self::REGEX_DELIMITER));
+                    $this->_parts[$pos] = array('regex' => $part);
                     if ($part != '*') {
                         $this->_staticCount++;
                     }
                 }
-    
+
             }
 
         }
 
     }
 
-    protected function _getWildcardData($parts, $unique) 
+    protected function _getWildcardData($parts, $unique)
     {
         $pos = count($parts);
         if ($pos % 2) {
@@ -115,10 +115,10 @@ class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Inter
     }
 
     /**
-     * Matches a user submitted path with parts defined by a map. Assigns and 
-     * returns an array of variables on a successful match.  
+     * Matches a user submitted path with parts defined by a map. Assigns and
+     * returns an array of variables on a successful match.
      *
-     * @param string Path used to match against this routing map 
+     * @param string Path used to match against this routing map
      * @return array|false An array of assigned values or a false on a mismatch
      */
     public function match($path)
@@ -126,41 +126,50 @@ class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Inter
 
         $pathStaticCount = 0;
         $defaults = $this->_defaults;
-        
+
         if (count($defaults)) {
         	$unique = array_combine(array_keys($defaults), array_fill(0, count($defaults), true));
         } else {
         	$unique = array();
         }
 
-        $path = trim($path, self::URI_DELIMITER);
+        $path = trim($path, $this->_urlDelimiter);
 
         if ($path != '') {
-        
-            $path = explode(self::URI_DELIMITER, $path);
-        
+
+            $path = explode($this->_urlDelimiter, $path);
+
             foreach ($path as $pos => $pathPart) {
-                
+
                 if (!isset($this->_parts[$pos])) {
                     return false;
                 }
-                
-                if ($this->_parts[$pos]['regex'] == '\*') {
+
+                if ($this->_parts[$pos]['regex'] == '*') {
                     $parts = array_slice($path, $pos);
                     $this->_getWildcardData($parts, $unique);
                     break;
                 }
-                
+
                 $part = $this->_parts[$pos];
                 $name = isset($part['name']) ? $part['name'] : null;
-                $regex = self::REGEX_DELIMITER . '^' . $part['regex'] . '$' . self::REGEX_DELIMITER . 'iu';
-    
                 $pathPart = urldecode($pathPart);
-    
-                if (!preg_match($regex, $pathPart)) {
-                    return false;
-                }
                 
+                if ($name === null) {
+                    if ($part['regex'] != $pathPart) {
+                        return false;
+                    }
+                } elseif ($part['regex'] === null) {
+                    if (strlen($pathPart) == 0) {
+                        return false;
+                    } 
+                } else {
+                    $regex = $this->_regexDelimiter . '^' . $part['regex'] . '$' . $this->_regexDelimiter . 'iu';
+                    if (!preg_match($regex, $pathPart)) {
+                        return false;
+                    }
+                }
+
                 if ($name !== null) {
                     // It's a variable. Setting a value
                     $this->_values[$name] = $pathPart;
@@ -168,18 +177,18 @@ class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Inter
                 } else {
                     $pathStaticCount++;
                 }
-    
+
             }
-            
+
         }
-        
+
         $return = $this->_values + $this->_params + $this->_defaults;
 
         // Check if all static mappings have been met
         if ($this->_staticCount != $pathStaticCount) {
             return false;
         }
-        
+
         // Check if all map variables have been initialized
         foreach ($this->_vars as $var) {
             if (!array_key_exists($var, $return)) {
@@ -192,23 +201,24 @@ class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Inter
     }
 
     /**
-     * Assembles user submitted parameters forming a URL path defined by this route 
+     * Assembles user submitted parameters forming a URL path defined by this route
      *
-     * @param array An array of variable and value pairs used as parameters 
+     * @param array An array of variable and value pairs used as parameters
      * @return string Route path with user submitted parameters
      */
     public function assemble($data = array(), $reset = false)
     {
 
         $url = array();
+        $flag = false;
         
         foreach ($this->_parts as $key => $part) {
-            
+
             $resetPart = false;
             if (isset($part['name']) && array_key_exists($part['name'], $data) && $data[$part['name']] === null) {
                 $resetPart = true;
             }
-            
+
             if (isset($part['name'])) {
 
                 if (isset($data[$part['name']]) && !$resetPart) {
@@ -224,30 +234,40 @@ class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Inter
                     throw new Zend_Controller_Router_Exception($part['name'] . ' is not specified');
 
             } else {
-                
-                if ($part['regex'] != '\*') {
+
+                if ($part['regex'] != '*') {
                     $url[$key] = $part['regex'];
                 } else {
                     if (!$reset) $data += $this->_params;
                     foreach ($data as $var => $value) {
                         if ($value !== null) {
-                            $url[$var] = $var . self::URI_DELIMITER . $value;
+                            $url[$var] = $var . $this->_urlDelimiter . $value;
+                            $flag = true;
                         }
-                    } 
+                    }
                 }
 
             }
-            
+
+        }
+        
+        $return = '';
+        
+        foreach (array_reverse($url, true) as $key => $value) {
+            if ($flag || !isset($this->_parts[$key]['name']) || $value !== $this->getDefault($this->_parts[$key]['name'])) {
+                $return = '/' . $value . $return;
+                $flag = true;
+            }
         }
 
-        return implode(self::URI_DELIMITER, $url);
+        return trim($return, '/');
 
     }
-    
+
     /**
-     * Return a single parameter of route's defaults 
+     * Return a single parameter of route's defaults
      *
-     * @param name Array key of the parameter 
+     * @param name Array key of the parameter
      * @return string Previously set default
      */
     public function getDefault($name) {
@@ -258,7 +278,7 @@ class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Inter
     }
 
     /**
-     * Return an array of defaults 
+     * Return an array of defaults
      *
      * @return array Route defaults
      */

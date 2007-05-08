@@ -98,8 +98,8 @@ class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Ca
             Zend_Cache::throwException('The memcache extension must be loaded for using this backend !');
         }
         parent::__construct($options);
-        if (isset($options['servers'])) {
-            $value= $options['servers'];
+        if (isset($this->_options['servers'])) {
+            $value= $this->_options['servers'];
             if (isset($value['host'])) {
                 // in this case, $value seems to be a simple associative array (one server only)
                 $value = array(0 => $value); // let's transform it into a classical array of associative arrays
@@ -129,9 +129,7 @@ class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Ca
     {
         // WARNING : $doNotTestCacheValidity is not supported !!!
         if ($doNotTestCacheValidity) {
-            if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_Memcached::load() : \$doNotTestCacheValidity=true is unsupported by the Memcached backend", Zend_Log::LEVEL_WARNING);
-            }
+            $this->_log("Zend_Cache_Backend_Memcached::load() : \$doNotTestCacheValidity=true is unsupported by the Memcached backend");
         }
         $tmp = $this->_memcache->get($id);
         if (is_array($tmp)) {
@@ -177,9 +175,7 @@ class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Ca
         }
         $result = $this->_memcache->set($id, array($data, time()), $flag, $lifetime);
         if (count($tags) > 0) {
-            if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_Memcached::save() : tags are unsupported by the Memcached backend", Zend_Log::LEVEL_WARNING);
-            }
+            $this->_log("Zend_Cache_Backend_Memcached::save() : tags are unsupported by the Memcached backend");
         }
         return $result;       
     }
@@ -216,19 +212,13 @@ class Zend_Cache_Backend_Memcached extends Zend_Cache_Backend implements Zend_Ca
             return $this->_memcache->flush();
         }
         if ($mode==Zend_Cache::CLEANING_MODE_OLD) {
-            if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_Memcached::clean() : CLEANING_MODE_OLD is unsupported by the Memcached backend", Zend_Log::LEVEL_WARNING);
-            }
+            $this->_log("Zend_Cache_Backend_Memcached::clean() : CLEANING_MODE_OLD is unsupported by the Memcached backend");
         }
         if ($mode==Zend_Cache::CLEANING_MODE_MATCHING_TAG) {
-            if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_Memcached::clean() : tags are unsupported by the Memcached backend", Zend_Log::LEVEL_WARNING);
-            }
+            $this->_log("Zend_Cache_Backend_Memcached::clean() : tags are unsupported by the Memcached backend");
         }
         if ($mode==Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG) {
-            if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_Memcached::clean() : tags are unsupported by the Memcached backend", Zend_Log::LEVEL_WARNING);
-            }
+            $this->_log("Zend_Cache_Backend_Memcached::clean() : tags are unsupported by the Memcached backend");
         }
     }
         

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,12 +18,15 @@
  * @subpackage Table
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Abstract.php 4697 2007-05-03 21:23:16Z bkarwin $
  */
 
+
 /**
- * Zend_Db_Table_Row
+ * @see Zend_Db_Table_Row
  */
 require_once 'Zend/Db/Table/Row.php';
+
 
 /**
  * @category   Zend
@@ -41,7 +45,7 @@ abstract class Zend_Db_Table_Rowset_Abstract implements Iterator, Countable
     protected $_data = array();
 
     /**
-     * Zend_Db_Table object.
+     * Zend_Db_Table_Abstract object.
      *
      * @var Zend_Db_Table_Abstract
      */
@@ -57,7 +61,7 @@ abstract class Zend_Db_Table_Rowset_Abstract implements Iterator, Countable
     protected $_connected = true;
 
     /**
-     * Zend_Db_Table class name.
+     * Zend_Db_Table_Abstract class name.
      *
      * @var string
      */
@@ -92,6 +96,11 @@ abstract class Zend_Db_Table_Rowset_Abstract implements Iterator, Countable
     protected $_rows = array();
 
     /**
+     * @var boolean
+     */
+    protected $_stored = false;
+
+    /**
      * Constructor.
      */
     public function __construct(array $config)
@@ -106,6 +115,9 @@ abstract class Zend_Db_Table_Rowset_Abstract implements Iterator, Countable
         if (isset($config['data'])) {
             $this->_data       = $config['data'];
         }
+        if (isset($config['stored'])) {
+            $this->_stored     = $config['stored'];
+        }
 
         // set the count of rows
         $this->_count = count($this->_data);
@@ -118,7 +130,7 @@ abstract class Zend_Db_Table_Rowset_Abstract implements Iterator, Countable
      */
     public function __sleep()
     {
-        return array('_data', '_tableClass', '_rowClass', '_pointer', '_count', '_rows');
+        return array('_data', '_tableClass', '_rowClass', '_pointer', '_count', '_rows', '_stored');
     }
 
     /**
@@ -131,6 +143,16 @@ abstract class Zend_Db_Table_Rowset_Abstract implements Iterator, Countable
     public function __wakeup()
     {
         $this->_connected = false;
+    }
+
+    /**
+     * Returns the table object, or null if this is disconnected rowset
+     *
+     * @return Zend_Db_Table_Abstract|null
+     */
+    public function getTable()
+    {
+        return $this->_table;
     }
 
     /**
@@ -184,13 +206,12 @@ abstract class Zend_Db_Table_Rowset_Abstract implements Iterator, Countable
      * Similar to the current() function for arrays in PHP
      * Required by interface Iterator.
      *
-     * @return mixed current element from the collection
+     * @return Zend_Db_Table_Row_Abstract current element from the collection
      */
     public function current()
     {
-        // is the pointer at a valid position?
-        if (! $this->valid()) {
-            return false;
+        if ($this->valid() === false) {
+            return null;
         }
 
         // do we already have a row object for this position?
@@ -198,7 +219,8 @@ abstract class Zend_Db_Table_Rowset_Abstract implements Iterator, Countable
             $this->_rows[$this->_pointer] = new $this->_rowClass(
                 array(
                     'table'   => $this->_table,
-                    'data'    => $this->_data[$this->_pointer]
+                    'data'    => $this->_data[$this->_pointer],
+                    'stored'  => $this->_stored
                 )
             );
         }
@@ -224,11 +246,11 @@ abstract class Zend_Db_Table_Rowset_Abstract implements Iterator, Countable
      * Similar to the next() function for arrays in PHP.
      * Required by interface Iterator.
      *
-     * @return int The next pointer value.
+     * @return void
      */
     public function next()
     {
-        return ++$this->_pointer;
+        ++$this->_pointer;
     }
 
     /**
@@ -240,11 +262,13 @@ abstract class Zend_Db_Table_Rowset_Abstract implements Iterator, Countable
      */
     public function valid()
     {
-        return $this->_pointer < $this->count();
+        return $this->_pointer < $this->_count;
     }
 
     /**
      * Returns the number of elements in the collection.
+     *
+     * Implements Countable::count()
      *
      * @return int
      */
@@ -254,10 +278,10 @@ abstract class Zend_Db_Table_Rowset_Abstract implements Iterator, Countable
     }
 
     /**
-     * Returns true if $this->count > 0, false otherwise.
-     * Required by interface Countable.
+     * Returns true if and only if count($this) > 0.
      *
      * @return bool
+     * @deprecated since 0.9.3; use count() instead
      */
     public function exists()
     {

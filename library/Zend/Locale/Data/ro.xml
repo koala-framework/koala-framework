@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.45 $"/>
-		<generation date="$Date: 2005/05/24 21:21:38 $"/>
+		<version number="$Revision: 1.66 $"/>
+		<generation date="$Date: 2006/06/27 23:30:54 $"/>
 		<language type="ro"/>
 	</identity>
 	<localeDisplayNames>
@@ -58,7 +58,7 @@
 			<territory type="054">Melanezia</territory>
 			<territory type="057">Micronezia</territory>
 			<territory type="061">Polinezia</territory>
-			<territory type="062">Asia centrala şi de Sud</territory>
+			<territory type="062">Asia centrala și de Sud</territory>
 			<territory type="145">Asia occidentală</territory>
 			<territory type="150">Europa</territory>
 			<territory type="151">Europa de Est</territory>
@@ -68,7 +68,7 @@
 			<territory type="AD">Andora</territory>
 			<territory type="AE">Emiratele Arabe Unite</territory>
 			<territory type="AF">Afganistan</territory>
-			<territory type="AG">Antigua şi Barbuda</territory>
+			<territory type="AG">Antigua și Barbuda</territory>
 			<territory type="AI">Anguilla</territory>
 			<territory type="AL">Albania</territory>
 			<territory type="AM">Armenia</territory>
@@ -82,7 +82,7 @@
 			<territory type="AW">Aruba</territory>
 			<territory type="AX">Insulele Aland</territory>
 			<territory type="AZ">Azerbaidjan</territory>
-			<territory type="BA">Bosnia şi Herzegovina</territory>
+			<territory type="BA">Bosnia și Herzegovina</territory>
 			<territory type="BB">Barbados</territory>
 			<territory type="BD">Bangladesh</territory>
 			<territory type="BE">Belgia</territory>
@@ -106,15 +106,15 @@
 			<territory type="CD">Congo, Republica Democratică</territory>
 			<territory type="CF">Republica Central Africană</territory>
 			<territory type="CG">Congo</territory>
-			<territory type="CH">Eleveţia</territory>
-			<territory type="CI">Coasta de Fildeş</territory>
+			<territory type="CH">Eleveția</territory>
+			<territory type="CI">Coasta de Fildeș</territory>
 			<territory type="CK">Insulele Cook</territory>
 			<territory type="CL">Chile</territory>
 			<territory type="CM">Camerun</territory>
 			<territory type="CN">China</territory>
 			<territory type="CO">Columbia</territory>
 			<territory type="CR">Costa Rica</territory>
-			<territory type="CS">Serbia şi Muntenegru</territory>
+			<territory type="CS">Serbia și Muntenegru</territory>
 			<territory type="CU">Cuba</territory>
 			<territory type="CV">Capul Verde</territory>
 			<territory type="CX">Insula Christmas</territory>
@@ -138,10 +138,9 @@
 			<territory type="FK">Insulele Falkland</territory>
 			<territory type="FM">Micronezia, Statele Federate</territory>
 			<territory type="FO">Insulele Feroe</territory>
-			<territory type="FR">Franţa</territory>
+			<territory type="FR">Franța</territory>
 			<territory type="GA">Gabon</territory>
-			<territory type="GB">Regatul Unit</territory>
-			<territory type="GB" alt="proposed" draft="true">Marea Britanie</territory>
+			<territory type="GB" draft="unconfirmed">Regatul Unit</territory>
 			<territory type="GD">Grenada</territory>
 			<territory type="GE">Georgia</territory>
 			<territory type="GF">Guyana Franceză</territory>
@@ -153,15 +152,15 @@
 			<territory type="GP">Guadeloupe</territory>
 			<territory type="GQ">Guineea Ecuatorială</territory>
 			<territory type="GR">Grecia</territory>
-			<territory type="GS">Insulele South Georgia şi South Sandwich</territory>
+			<territory type="GS">Insulele South Georgia și South Sandwich</territory>
 			<territory type="GT">Guatemala</territory>
 			<territory type="GU">Guam</territory>
 			<territory type="GW">Guineea-Bissau</territory>
 			<territory type="GY">Guyana</territory>
 			<territory type="HK">R.A.S. Hong Kong a Chinei</territory>
-			<territory type="HM">Insula Heard şi Insulele McDonald</territory>
+			<territory type="HM">Insula Heard și Insulele McDonald</territory>
 			<territory type="HN">Honduras</territory>
-			<territory type="HR">Croaţia</territory>
+			<territory type="HR">Croația</territory>
 			<territory type="HT">Haiti</territory>
 			<territory type="HU">Ungaria</territory>
 			<territory type="ID">Indonezia</territory>
@@ -181,7 +180,7 @@
 			<territory type="KH">Cambodgia</territory>
 			<territory type="KI">Kiribati</territory>
 			<territory type="KM">Comoros</territory>
-			<territory type="KN">Saint Kitts şi Nevis</territory>
+			<territory type="KN">Saint Kitts și Nevis</territory>
 			<territory type="KP">Coreea de Nord</territory>
 			<territory type="KR">Coreea de Sud</territory>
 			<territory type="KW">Kuweit</territory>
@@ -239,7 +238,7 @@
 			<territory type="PH">Filipine</territory>
 			<territory type="PK">Pakistan</territory>
 			<territory type="PL">Polonia</territory>
-			<territory type="PM">Saint Pierre şi Miquelon</territory>
+			<territory type="PM">Saint Pierre și Miquelon</territory>
 			<territory type="PN">Pitcairn</territory>
 			<territory type="PR">Porto Rico</territory>
 			<territory type="PS">Teritoriul Palestinian</territory>
@@ -250,8 +249,7 @@
 			<territory type="QO">Altă Oceania</territory>
 			<territory type="RE">Reunion</territory>
 			<territory type="RO">România</territory>
-			<territory type="RU">Federaţia Rusă</territory>
-			<territory type="RU" alt="proposed" draft="true">Rusia</territory>
+			<territory type="RU">Federația Rusă</territory>
 			<territory type="RW">Rwanda</territory>
 			<territory type="SA">Arabia Saudită</territory>
 			<territory type="SB">Insulele Solomon</territory>
@@ -261,18 +259,18 @@
 			<territory type="SG">Singapore</territory>
 			<territory type="SH">Saint Helena</territory>
 			<territory type="SI">Slovenia</territory>
-			<territory type="SJ">Svalbard şi Jan Mayen</territory>
+			<territory type="SJ">Svalbard și Jan Mayen</territory>
 			<territory type="SK">Slovacia</territory>
 			<territory type="SL">Sierra Leone</territory>
 			<territory type="SM">San Marino</territory>
 			<territory type="SN">Senegal</territory>
 			<territory type="SO">Somalia</territory>
 			<territory type="SR">Surinam</territory>
-			<territory type="ST">Sao Tome şi Principe</territory>
+			<territory type="ST">Sao Tome și Principe</territory>
 			<territory type="SV">El Salvador</territory>
 			<territory type="SY">Siria</territory>
 			<territory type="SZ">Swaziland</territory>
-			<territory type="TC">Insulele Turks şi Caicos</territory>
+			<territory type="TC">Insulele Turks și Caicos</territory>
 			<territory type="TD">Ciad</territory>
 			<territory type="TF">Teritoriile Franceze de Sud</territory>
 			<territory type="TG">Togo</territory>
@@ -311,10 +309,11 @@
 		</territories>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-z â î ă ş ţ]</exemplarCharacters>
+		<exemplarCharacters>[a ă â b-i î j-p r s ș t ț u-x z]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[q w y]</exemplarCharacters>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZvcL</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
 				<months>
@@ -379,7 +378,7 @@
 						<dayWidth type="wide">
 							<day type="sun">duminică</day>
 							<day type="mon">luni</day>
-							<day type="tue">marţi</day>
+							<day type="tue">marți</day>
 							<day type="wed">miercuri</day>
 							<day type="thu">joi</day>
 							<day type="fri">vineri</day>
@@ -398,9 +397,22 @@
 						</dayWidth>
 					</dayContext>
 				</days>
-				<week>
-					<firstDay day="mon"/>
-				</week>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1" draft="unconfirmed">T1</quarter>
+							<quarter type="2" draft="unconfirmed">T2</quarter>
+							<quarter type="3" draft="unconfirmed">T3</quarter>
+							<quarter type="4" draft="unconfirmed">T4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1" draft="unconfirmed">trimestrul 1</quarter>
+							<quarter type="2" draft="unconfirmed">trimestrul 2</quarter>
+							<quarter type="3" draft="unconfirmed">trimestrul 3</quarter>
+							<quarter type="4" draft="unconfirmed">trimestrul 4</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
 				<eras>
 					<eraAbbr>
 						<era type="0">d.C.</era>
@@ -429,6 +441,14 @@
 						</dateFormat>
 					</dateFormatLength>
 				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMMMd" draft="provisional">d MMMM</dateFormatItem>
+						<dateFormatItem id="MMdd" draft="provisional">dd.MM</dateFormatItem>
+						<dateFormatItem id="yyyyMM" draft="provisional">MM.yyyy</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM" draft="provisional">MMMM yyyy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -477,31 +497,31 @@
 		</symbols>
 		<currencies>
 			<currency type="BRL">
-				<displayName draft="true">Real brazilian</displayName>
+				<displayName draft="unconfirmed">Real brazilian</displayName>
 			</currency>
 			<currency type="CNY">
-				<displayName draft="true">Yuan Renminbi chinezesc</displayName>
+				<displayName draft="unconfirmed">Yuan Renminbi chinezesc</displayName>
 			</currency>
 			<currency type="GBP">
-				<displayName draft="true">Liră sterlină britanică</displayName>
+				<displayName draft="unconfirmed">Liră sterlină britanică</displayName>
 			</currency>
 			<currency type="INR">
-				<displayName draft="true">Rupie indiană</displayName>
+				<displayName draft="unconfirmed">Rupie indiană</displayName>
 			</currency>
 			<currency type="JPY">
-				<displayName draft="true">Yen japonez</displayName>
+				<displayName draft="unconfirmed">Yen japonez</displayName>
 			</currency>
 			<currency type="ROL">
-				<symbol>lei</symbol>
+				<symbol draft="unconfirmed">lei</symbol>
 			</currency>
 			<currency type="RUB">
-				<displayName draft="true">Rublă rusească</displayName>
+				<displayName draft="unconfirmed">Rublă rusească</displayName>
 			</currency>
 			<currency type="TRY">
-				<displayName draft="true">Noua liră turcească</displayName>
+				<displayName draft="unconfirmed">Noua liră turcească</displayName>
 			</currency>
 			<currency type="USD">
-				<displayName draft="true">Dolar SUA</displayName>
+				<displayName draft="unconfirmed">Dolar SUA</displayName>
 			</currency>
 		</currencies>
 	</numbers>
@@ -509,8 +529,6 @@
 		<messages>
 			<yesstr>da:d</yesstr>
 			<nostr>nu:n</nostr>
-			<yesexpr>^([yY]([eE][sS])?)|([dD][aA]?)</yesexpr>
-			<noexpr>^[nN][oOuU]?</noexpr>
 		</messages>
 	</posix>
 </ldml>

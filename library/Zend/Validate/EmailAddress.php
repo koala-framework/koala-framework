@@ -17,7 +17,7 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: EmailAddress.php 4135 2007-03-20 12:46:11Z darby $
+ * @version    $Id: EmailAddress.php 4648 2007-05-01 20:30:54Z studio24 $
  */
 
 
@@ -147,8 +147,7 @@ class Zend_Validate_EmailAddress implements Zend_Validate_Interface
         if ($this->_validateMx) {
             if ($this->validateMxSupported()) {
                 $result = dns_get_mx($hostname, $mxHosts);
-                var_dump($result, $mxHosts);
-                if (count($result) < 1) {
+                if (count($mxHosts) < 1) {
                     $hostnameResult = false;
                     $this->_messages[] = "'$hostname' does not appear to have a valid MX record for the email address"
                                        . "'$valueString'";

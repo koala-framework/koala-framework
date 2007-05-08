@@ -77,7 +77,7 @@ class Zend_Search_Lucene_Index_Term
      * @param integer $length
      * @return string
      */
-    static public function getPrefix($str, $length)
+    public static function getPrefix($str, $length)
     {
         $prefixBytes = 0;
         $prefixChars = 0;

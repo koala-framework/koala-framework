@@ -55,7 +55,7 @@ class Zend_Mail_Storage_Writable_Maildir extends    Zend_Mail_Storage_Folder_Mai
      */
     public function createFolder($name, $parentFolder = null)
     {
-        if ($parentFolder instanceof Zend_Mail_Folder) {
+        if ($parentFolder instanceof Zend_Mail_Storage_Folder) {
             $folder = $parentFolder->getGlobalName() . $this->_delim . $name;
         } else if ($parentFolder != null) {
             $folder = rtrim($parentFolder, $this->_delim) . $this->_delim . $name;
@@ -105,7 +105,7 @@ class Zend_Mail_Storage_Writable_Maildir extends    Zend_Mail_Storage_Folder_Mai
             }
         }
 
-        if (!mkdir($fulldir) || !mkdir($fulldir . DIRECTORY_SEPARATOR . 'cur')) {
+        if (!@mkdir($fulldir) || !@mkdir($fulldir . DIRECTORY_SEPARATOR . 'cur')) {
             throw new Zend_Mail_Storage_Exception('error while creating new folder, may be created incompletly');
         }
 
@@ -133,7 +133,7 @@ class Zend_Mail_Storage_Writable_Maildir extends    Zend_Mail_Storage_Folder_Mai
         // all parent folders must be created. What we could do is add a dash to the front of the
         // directory name and it should be ignored as long as other processes obey the standard.
 
-        if ($name instanceof Zend_Mail_Folder) {
+        if ($name instanceof Zend_Mail_Storage_Folder) {
             $name = $name->getGlobalName();
         }
 
@@ -205,7 +205,7 @@ class Zend_Mail_Storage_Writable_Maildir extends    Zend_Mail_Storage_Folder_Mai
     {
         // TODO: This is also not atomar and has similar problems as removeFolder()
 
-        if ($oldName instanceof Zend_Mail_Folder) {
+        if ($oldName instanceof Zend_Mail_Storage_Folder) {
             $oldName = $oldName->getGlobalName();
         }
 
@@ -367,11 +367,13 @@ class Zend_Mail_Storage_Writable_Maildir extends    Zend_Mail_Storage_Folder_Mai
     /**
      * append a new message to mail storage
      *
-     * @param string|Zend_Mail_Message|Zend_Mime_Message $message message as string or instance of message class
+     * @param string                                     $message message as string or instance of message class
      * @param null|string|Zend_Mail_Storage_Folder       $folder  folder for new message, else current folder is taken
      * @param null|array                                 $flags   set flags for new message, else a default set is used
      * @throw Zend_Mail_Storage_Exception
      */
+     // not yet * @param string|Zend_Mail_Message|Zend_Mime_Message $message message as string or instance of message class
+
     public function appendMessage($message, $folder = null, $flags = null)
     {
         if ($folder === null) {
@@ -492,7 +494,7 @@ class Zend_Mail_Storage_Writable_Maildir extends    Zend_Mail_Storage_Folder_Mai
         // TODO: move file from new to cur
         $new_filename = dirname($filedata['filename']) . "/$filedata[uniq]$info";
 
-        if (!rename($filedata['filename'], $new_filename)) {
+        if (!@rename($filedata['filename'], $new_filename)) {
             throw new Zend_Mail_Storage_Exception('cannot rename file');
         }
 
@@ -512,7 +514,7 @@ class Zend_Mail_Storage_Writable_Maildir extends    Zend_Mail_Storage_Folder_Mai
     public function removeMessage($id)
     {
         $filename = $this->_getFileData($id, 'filename');
-        if (!unlink($filename)) {
+        if (!@unlink($filename)) {
             throw new Zend_Mail_Storage_Exception('cannot remove message');
         }
         unset($this->_files[$id - 1]);

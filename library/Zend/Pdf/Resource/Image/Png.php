@@ -18,7 +18,7 @@
  */
 
 
-/** Zend_Pdf_Image */
+/** Zend_Pdf_Resource_Image */
 require_once 'Zend/Pdf/Resource/Image.php';
 
 /** Zend_Pdf_Exception */
@@ -38,7 +38,7 @@ require_once 'Zend/Pdf/Element/Name.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Pdf_Image_Png extends Zend_Pdf_Image
+class Zend_Pdf_Resource_Image_Png extends Zend_Pdf_Resource_Image
 {
     const PNG_COMPRESSION_DEFAULT_STRATEGY = 0;
     const PNG_COMPRESSION_FILTERED = 1;
@@ -100,7 +100,7 @@ class Zend_Pdf_Image_Png extends Zend_Pdf_Image
         $compression = ord(fread($imageFile, 1));
         $prefilter = ord(fread($imageFile,1));
 
-        if (($interlacing = ord(fread($imageFile,1))) != Zend_Pdf_Image_Png::PNG_INTERLACING_DISABLED) {
+        if (($interlacing = ord(fread($imageFile,1))) != Zend_Pdf_Resource_Image_Png::PNG_INTERLACING_DISABLED) {
             throw new Zend_Pdf_Exception( "Only non-interlaced images are currently supported." );
         }
 
@@ -144,29 +144,29 @@ class Zend_Pdf_Image_Png extends Zend_Pdf_Image
                 case 'tRNS': //Basic (non-alpha channel) transparency.
                     $trnsData = fread($imageFile, $chunkLength);
                     switch ($color) {
-                        case Zend_Pdf_Image_Png::PNG_CHANNEL_GRAY:
+                        case Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_GRAY:
                             $baseColor = ord(substr($trnsData, 1, 1));
                             $transparencyData = array(new Zend_Pdf_Element_Numeric($baseColor), new Zend_Pdf_Element_Numeric($baseColor));
                             break;
 
-                        case Zend_Pdf_Image_Png::PNG_CHANNEL_RGB:
+                        case Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB:
                             $red = ord(substr($trnsData,1,1));
                             $green = ord(substr($trnsData,3,1));
                             $blue = ord(substr($trnsData,5,1));
                             $transparencyData = array(new Zend_Pdf_Element_Numeric($red), new Zend_Pdf_Element_Numeric($red), new Zend_Pdf_Element_Numeric($green), new Zend_Pdf_Element_Numeric($green), new Zend_Pdf_Element_Numeric($blue), new Zend_Pdf_Element_Numeric($blue));
                             break;
 
-                        case Zend_Pdf_Image_Png::PNG_CHANNEL_INDEXED:
+                        case Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_INDEXED:
                             //Find the first transparent color in the index, we will mask that. (This is a bit of a hack. This should be a SMask and mask all entries values).
                             if(($trnsIdx = strpos($trnsData, chr(0))) !== false) {
                                 $transparencyData = array(new Zend_Pdf_Element_Numeric($trnsIdx), new Zend_Pdf_Element_Numeric($trnsIdx));
                             }
                             break;
 
-                        case Zend_Pdf_Image_Png::PNG_CHANNEL_GRAY_ALPHA:
+                        case Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_GRAY_ALPHA:
                             // Fall through to the next case
 
-                        case Zend_Pdf_Image_Png::PNG_CHANNEL_RGB_ALPHA:
+                        case Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB_ALPHA:
                             throw new Zend_Pdf_Exception( "tRNS chunk illegal for Alpha Channel Images" );
                             break;
                     }
@@ -187,15 +187,15 @@ class Zend_Pdf_Image_Png extends Zend_Pdf_Image
         $imageDataTmp = '';
         $smaskData = '';
         switch ($color) {
-            case Zend_Pdf_Image_Png::PNG_CHANNEL_RGB:
+            case Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB:
                 $colorSpace = new Zend_Pdf_Element_Name('DeviceRGB');
                 break;
 
-            case Zend_Pdf_Image_Png::PNG_CHANNEL_GRAY:
+            case Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_GRAY:
                 $colorSpace = new Zend_Pdf_Element_Name('DeviceGray');
                 break;
 
-            case Zend_Pdf_Image_Png::PNG_CHANNEL_INDEXED:
+            case Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_INDEXED:
                 if(empty($paletteData)) {
                     throw new Zend_Pdf_Exception( "PNG Corruption: No palette data read for indexed type PNG." );
                 }
@@ -207,7 +207,7 @@ class Zend_Pdf_Image_Png extends Zend_Pdf_Image
                 $colorSpace->items[] = $paletteObject;
                 break;
 
-            case Zend_Pdf_Image_Png::PNG_CHANNEL_GRAY_ALPHA:
+            case Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_GRAY_ALPHA:
                 /*
                  * To decode PNG's with alpha data we must create two images from one. One image will contain the Gray data
                  * the other will contain the Gray transparency overlay data. The former will become the object data and the latter
@@ -240,7 +240,7 @@ class Zend_Pdf_Image_Png extends Zend_Pdf_Image
                 $imageData  = $imageDataTmp; //Overwrite image data with the gray channel without alpha
                 break;
 
-            case Zend_Pdf_Image_Png::PNG_CHANNEL_RGB_ALPHA:
+            case Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB_ALPHA:
                 /*
                  * To decode PNG's with alpha data we must create two images from one. One image will contain the RGB data
                  * the other will contain the Gray transparency overlay data. The former will become the object data and the latter
@@ -320,7 +320,7 @@ class Zend_Pdf_Image_Png extends Zend_Pdf_Image
         $decodeParms = array();
         $decodeParms['Predictor']        = new Zend_Pdf_Element_Numeric(15); // Optimal prediction
         $decodeParms['Columns']          = new Zend_Pdf_Element_Numeric($width);
-        $decodeParms['Colors']           = new Zend_Pdf_Element_Numeric((($color==Zend_Pdf_Image_Png::PNG_CHANNEL_RGB || $color==Zend_Pdf_Image_Png::PNG_CHANNEL_RGB_ALPHA)?(3):(1)));
+        $decodeParms['Colors']           = new Zend_Pdf_Element_Numeric((($color==Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB || $color==Zend_Pdf_Resource_Image_Png::PNG_CHANNEL_RGB_ALPHA)?(3):(1)));
         $decodeParms['BitsPerComponent'] = new Zend_Pdf_Element_Numeric($bits);
         $imageDictionary->DecodeParms  = new Zend_Pdf_Element_Dictionary($decodeParms);
 

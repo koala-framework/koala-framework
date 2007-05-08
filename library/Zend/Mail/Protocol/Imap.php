@@ -745,4 +745,26 @@ class Zend_Mail_Protocol_Imap
     {
         return $this->requestAndResponse('DELETE', array($this->escapeString($folder)), true);
     }
+
+    /**
+     * permanently remove messages
+     *
+     * @return bool success
+     */
+    public function expunge()
+    {
+        // TODO: parse response?
+        return $this->requestAndResponse('EXPUNGE');
+    }
+
+    /**
+     * send noop
+     *
+     * @return bool success
+     */
+    public function noop()
+    {
+        // TODO: parse response
+        return $this->requestAndResponse('NOOP');
+    }
 }

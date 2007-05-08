@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Date
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: DateObject.php 3877 2007-03-12 21:24:41Z thomas $
+ * @version    $Id: DateObject.php 4289 2007-03-31 10:52:07Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -543,25 +543,26 @@ abstract class Zend_Date_DateObject {
                 case 'c':  // ISO 8601 date format
                     $difference = $this->_offset;
                     $difference = sprintf('%s%04d', ($difference <= 0) ? '+' : '-', abs($difference) / 36);
-                    $output .= $date['year'] . '-' . $date['mon'] . '-'
-                             . (($date['mday'] < 10) ? '0' . $date['mday'] : $date['mday']) . 'T'
-                             . (($date['hours'] < 10) ? '0' . $date['hours'] : $date['hours'])
-                             . ':' . (($date['minutes'] < 10) ? '0' . $date['minutes'] : $date['minutes'])
-                             . ':' . (($date['seconds'] < 10) ? '0' . $date['seconds'] : $date['seconds'])
+                    $output .= $date['year'] . '-'
+                             . (($date['mon']     < 10) ? '0' . $date['mon']     : $date['mon'])     . '-'
+                             . (($date['mday']    < 10) ? '0' . $date['mday']    : $date['mday'])    . 'T'
+                             . (($date['hours']   < 10) ? '0' . $date['hours']   : $date['hours'])   . ':'
+                             . (($date['minutes'] < 10) ? '0' . $date['minutes'] : $date['minutes']) . ':'
+                             . (($date['seconds'] < 10) ? '0' . $date['seconds'] : $date['seconds'])
                              . $difference;
                     break;
 
                 case 'r':  // RFC 2822 date format
                     $difference = $this->_offset;
                     $difference = sprintf('%s%04d', ($difference <= 0) ? '+' : '-', abs($difference) / 36);
-                    $output .= gmdate('D', 86400 * (3 + self::dayOfWeek($date['year'], $date['mon'], $date['mday']))) .
-                               ', ' . (($date['mday'] < 10) ? '0' . $date['mday'] : $date['mday']) .
-                               ' ' . date('M',mktime(0, 0, 0, $date['mon'], 2, 1971)) .
-                               ' ' . $date['year'] .
-                               ' ' . (($date['hours'] < 10) ? '0'.$date['hours'] : $date['hours']) .
-                               ':' . (($date['minutes'] < 10) ? '0'.$date['minutes'] : $date['minutes']) .
-                               ':' . (($date['seconds'] < 10) ? '0'.$date['seconds'] : $date['seconds']) .
-                               ' ' . $difference;
+                    $output .= gmdate('D', 86400 * (3 + self::dayOfWeek($date['year'], $date['mon'], $date['mday']))) . ', '
+                             . (($date['mday']    < 10) ? '0' . $date['mday']    : $date['mday'])    . ' '
+                             . date('M', mktime(0, 0, 0, $date['mon'], 2, 1971)) . ' '
+                             . $date['year'] . ' '
+                             . (($date['hours']   < 10) ? '0' . $date['hours']   : $date['hours'])   . ':'
+                             . (($date['minutes'] < 10) ? '0' . $date['minutes'] : $date['minutes']) . ':'
+                             . (($date['seconds'] < 10) ? '0' . $date['seconds'] : $date['seconds']) . ' '
+                             . $difference;
                     break;
 
                 case 'U':  // Unix timestamp

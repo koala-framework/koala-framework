@@ -37,16 +37,21 @@ require_once 'Zend/Translate/Adapter.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Translate_Adapter_Csv extends Zend_Translate_Adapter {
+
     /**
      * Generates the adapter
      *
-     * @param  array               $options  Options for this adapter
+     * @param  string              $data     Translation data
      * @param  string|Zend_Locale  $locale   OPTIONAL Locale/Language to set, identical with locale identifier,
      *                                       see Zend_Locale for more information
+     * @param  array               $options  Options for this adapter
      */
-    public function __construct($options, $locale = null)
+    public function __construct($data, $locale = null, array $options = array())
     {
-        parent::__construct($options, $locale);
+        $this->_options['separator'] = ";";
+        $options = array_merge($this->_options, $options);
+
+        parent::__construct($data, $locale, $options);
     }
 
     /**
@@ -55,11 +60,13 @@ class Zend_Translate_Adapter_Csv extends Zend_Translate_Adapter {
      * @param  string|array  $filename  Filename and full path to the translation source
      * @param  string        $locale    Locale/Language to add data for, identical with locale identifier,
      *                                  see Zend_Locale for more information
-     * @param  boolean       $option    OPTIONAL If true, the Translation is erased before adding it
+     * @param  array         $option    OPTIONAL Options to use
      */
-    protected function _loadTranslationData($filename, $locale, $option = null)
+    protected function _loadTranslationData($filename, $locale, array $options = array())
     {
-        if ($option  ||  !isset($this->_translate[$locale])) {
+        $options = array_merge($this->_options, $options);
+
+        if ($options['clear']  ||  !isset($this->_translate[$locale])) {
             $this->_translate[$locale] = array();
         }
 
@@ -70,14 +77,29 @@ class Zend_Translate_Adapter_Csv extends Zend_Translate_Adapter {
 
         while(!feof($this->_file)) {
             $content = fgets($this->_file);
-            $content = explode(";", $content);
+            $content = explode($options['separator'], $content);
+            for ($x = 0; $x < count($content); ++$x) {
+                if (isset($content[$x+1]) and (empty($content[$x+1]))) {
+                    $content[$x] .= $options['separator'];
+                    $length = 1;
+                    if (isset($content[$x+2])) {
+                        $content[$x] .= $content[$x+2];
+                        $length = 2;
+                    }
+                    array_splice($content, $x + 1, $length);
+                }
+            }
             // # marks a comment in the translation source
             if ((!is_array($content) and (substr(trim($content), 0, 1) == "#")) or
                  (is_array($content) and (substr(trim($content[0]), 0, 1) == "#"))) {
                 continue;
             }
             if (!empty($content[1])) {
-                $this->_translate[$locale][$content[0]] = substr($content[1], 0, -2);
+                if (feof($this->_file)) {
+                    $this->_translate[$locale][$content[0]] = substr($content[1], 0);
+                } else {
+                    $this->_translate[$locale][$content[0]] = substr($content[1], 0, -2);
+                }
             }
         }
     }

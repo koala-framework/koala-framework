@@ -70,7 +70,7 @@ class Zend_Uri_Http extends Zend_Uri
         // are to be used with slash-delimited regular expression strings.
         $this->_regex['alphanum']   = '[^\W_]';
         $this->_regex['escaped']    = '(?:%[\da-fA-F]{2})';
-        $this->_regex['mark']       = '[-_.!~*\'()]';
+        $this->_regex['mark']       = '[-_.!~*\'()\[\]]';
         $this->_regex['reserved']   = '[;\/?:@&=+$,]';
         $this->_regex['unreserved'] = '(?:' . $this->_regex['alphanum'] . '|' . $this->_regex['mark'] . ')';
         $this->_regex['segment']    = '(?:(?:' . $this->_regex['unreserved'] . '|' . $this->_regex['escaped']

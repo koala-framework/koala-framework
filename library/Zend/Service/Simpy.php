@@ -100,8 +100,7 @@ class Zend_Service_Simpy
      */
     public function __construct($username, $password)
     {
-        $this->_rest = new Zend_Rest_Client();
-        $this->_rest->setUri(Zend_Uri::factory($this->_baseUri));
+        $this->_rest = new Zend_Rest_Client($this->_baseUri);
         $http = $this->_rest->getHttpClient();
         $http->setAuth($username, $password);
     }
@@ -279,8 +278,9 @@ class Zend_Service_Simpy
      * @param  string $title       Title of the page to save
      * @param  string $href        URL of the page to save
      * @param  int    $accessType  ACCESSTYPE_PUBLIC or ACCESSTYPE_PRIVATE
-     * @param  mixed  $tags        String containing a comma-separated list of tags
-     *                             or array of strings containing tags (optional)
+     * @param  mixed  $tags        String containing a comma-separated list of 
+     *                             tags or array of strings containing tags 
+     *                             (optional)
      * @param  string $urlNickname Alternative custom title (optional)
      * @param  string $note        Free text note (optional)
      * @link   Zend_Service_Simpy::ACCESSTYPE_PUBLIC
@@ -381,16 +381,20 @@ class Zend_Service_Simpy
     }
 
     /**
-     * Saves a new note.
+     * Saves a note.
      *
      * @param  string $title       Title of the note
-     * @param  mixed  $tags        String containing a comma-separated list of tags
-     *                             or array of strings containing tags (optional)
+     * @param  mixed  $tags        String containing a comma-separated list of 
+     *                             tags or array of strings containing tags 
+     *                             (optional)
      * @param  string $description Free-text note (optional)
+     * @param  int    $noteId      Unique identifier for an existing note to 
+     *                             update (optional)
      * @see    http://www.simpy.com/doc/api/rest/SaveNote
      * @return Zend_Service_Simpy Provides a fluent interface
      */
-    public function saveNote($title, $tags = null, $description = null)
+    public function saveNote($title, $tags = null, $description = null, 
+        $noteId = null)
     {
         if (is_array($tags)) {
             $tags = implode(',', $tags);
@@ -399,7 +403,8 @@ class Zend_Service_Simpy
         $query = array(
             'title'       => $title,
             'tags'        => $tags,
-            'description' => $description
+            'description' => $description,
+            'noteId'      => $noteId
         );
 
         $this->_makeRequest('SaveNote', $query);

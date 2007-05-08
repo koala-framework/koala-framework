@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,45 +18,67 @@
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: LocalResultSet.php 4462 2007-04-11 04:10:16Z darby $
  */
 
 
 /**
- * @todo coding standards: naming of instance variables
+ * @see Zend_Service_Yahoo_ResultSet
+ */
+require_once 'Zend/Service/Yahoo/ResultSet.php';
+
+
+/**
+ * @see Zend_Service_Yahoo_LocalResult
+ */
+require_once 'Zend/Service/Yahoo/LocalResult.php';
+
+
+/**
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Yahoo_LocalResultSet extends Zend_Service_Yahoo_ResultSet {
+class Zend_Service_Yahoo_LocalResultSet extends Zend_Service_Yahoo_ResultSet
+{
     /**
-     * @var string resultSetMapUrl the URL of a webpage containing a map
-     *      graphic with all returned results plotted on it.
+     * The URL of a webpage containing a map graphic with all returned results plotted on it.
+     *
+     * @var string
      */
     public $resultSetMapURL;
 
     /**
-     * @todo docblock
+     * Local result set namespace
+     *
+     * @var string
      */
-    protected $_namespace = "urn:yahoo:lcl";
+    protected $_namespace = 'urn:yahoo:lcl';
 
-    
+
     /**
-     * @todo docblock
+     * Initializes the local result set
+     *
+     * @param  DOMDocument $dom
+     * @return void
      */
-    public function __construct(DomDocument $dom) {
+    public function __construct(DOMDocument $dom)
+    {
         parent::__construct($dom);
 
         $this->resultSetMapURL = $this->_xpath->query('//yh:ResultSetMapUrl/text()')->item(0)->data;
     }
 
-    
+
     /**
-     * @todo docblock
+     * Overrides Zend_Service_Yahoo_ResultSet::current()
+     *
+     * @return Zend_Service_Yahoo_LocalResult
      */
     public function current()
     {
-        return new Zend_Service_Yahoo_LocalResult($this->_results->item($this->_currentItem));
+        return new Zend_Service_Yahoo_LocalResult($this->_results->item($this->_currentIndex));
     }
 }

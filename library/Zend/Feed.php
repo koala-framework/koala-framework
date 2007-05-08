@@ -17,7 +17,7 @@
  * @package    Zend_Feed
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Feed.php 3941 2007-03-14 21:36:13Z darby $
+ * @version    $Id: Feed.php 4304 2007-04-02 16:13:58Z slaanesh $
  */
 
 
@@ -299,6 +299,10 @@ class Zend_Feed
         $feeds = array();
         if (isset($matches[1]) && count($matches[1]) > 0) {
             foreach ($matches[1] as $link) {
+                // force string to be an utf-8 one
+                if (!mb_check_encoding($link, 'UTF-8')) {
+                    $link = mb_convert_encoding($link, 'UTF-8');
+                }
                 $xml = @simplexml_load_string(rtrim($link, ' /') . ' />');
                 if ($xml === false) {
                     continue;
@@ -315,7 +319,30 @@ class Zend_Feed
                     continue;
                 }
                 try {
-                    $feed = self::import($attributes['href']);
+                    // checks if we need to canonize the given uri
+                    try {
+                        $uri = Zend_Uri::factory($attributes['href']);
+                    } catch (Zend_Uri_Exception $e) {
+                        // canonize the uri
+                        $path = (string) $attributes['href'];
+                        $query = $fragment = '';
+                        if (substr($path, 0, 1) != '/') {
+                            // add the current root path to this one
+                            $path = rtrim($client->getUri()->getPath(), '/') . '/' . $path;
+                        }
+                        if (strpos($path, '?') !== false) {
+                            list($path, $query) = explode('?', $path, 2);
+                        }
+                        if (strpos($query, '#') !== false) {
+                            list($query, $fragment) = explode('#', $query, 2);
+                        }
+                        $uri = Zend_Uri::factory($client->getUri(true));
+                        $uri->setPath($path);
+                        $uri->setQuery($query);
+                        $uri->setFragment($fragment);
+                    }
+
+                    $feed = self::import($uri);
                 } catch (Exception $e) {
                     continue;
                 }

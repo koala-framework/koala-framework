@@ -20,7 +20,10 @@
 
 
 /** Zend_Controller_Exception */
-require_once 'Zend/Controller/Exception.php';
+require_once 'Zend/Controller/Action/Exception.php';
+
+/** Zend_Controller_Action_HelperBroker */
+require_once 'Zend/Controller/Action/HelperBroker.php';
 
 /** Zend_Controller_Front */
 require_once 'Zend/Controller/Front.php';
@@ -54,25 +57,6 @@ abstract class Zend_Controller_Action
     protected $_frontController;
 
     /**
-     * HTTP status code for redirects
-     * @var int
-     */
-    protected $_redirectCode = 302;
-
-    /**
-     * Whether or not calls to _redirect() should exit script execution
-     * @var bool
-     */
-    protected $_redirectExit = true;
-
-    /**
-     * Whether or not _redirect() should attempt to prepend the base URL to the 
-     * passed URL (if it's a relative URL)
-     * @var bool
-     */
-    protected $_redirectPrependBase = true;
-
-    /**
      * Zend_Controller_Request_Abstract object wrapping the request environment
      * @var Zend_Controller_Request_Abstract
      */
@@ -98,6 +82,13 @@ abstract class Zend_Controller_Action
     public $view;
 
     /**
+     * Helper Broker to assist in routing help requests to the proper object
+     *
+     * @var Zend_Controller_Action_HelperBroker
+     */
+    protected $_helper = null;
+
+    /**
      * Class constructor
      *
      * The request and response objects should be registered with the 
@@ -106,9 +97,14 @@ abstract class Zend_Controller_Action
      * {@link getInvokeArgs()}, respectively.
      *
      * When overriding the constructor, please consider this usage as a best 
-     * practice and ensure that each is registered appropriately.
+     * practice and ensure that each is registered appropriately; the easiest 
+     * way to do so is to simply call parent::__construct($request, $response, 
+     * $invokeArgs).
      *
-     * Additionally, {@link init()} is called as the final action of 
+     * After the request, response, and invokeArgs are set, the 
+     * {@link $_helper helper broker} is initialized.
+     *
+     * Finally, {@link init()} is called as the final action of 
      * instantiation, and may be safely overridden to perform initialization 
      * tasks; as a general rule, override {@link init()} instead of the 
      * constructor to customize an action controller's instantiation.
@@ -122,8 +118,9 @@ abstract class Zend_Controller_Action
     {
         $this->setRequest($request)
              ->setResponse($response)
-             ->_setInvokeArgs($invokeArgs)
-             ->init();
+             ->_setInvokeArgs($invokeArgs);
+        $this->_helper = new Zend_Controller_Action_HelperBroker($this);
+        $this->init();
     }
 
     /**
@@ -172,11 +169,7 @@ abstract class Zend_Controller_Action
         }
 
         require_once 'Zend/View.php';
-        $this->view = new Zend_View(array(
-            'scriptPath' => $baseDir . DIRECTORY_SEPARATOR . 'scripts',
-            'helperPath' => $baseDir . DIRECTORY_SEPARATOR . 'helpers',
-            'filterPath' => $baseDir . DIRECTORY_SEPARATOR . 'filters'
-        ));
+        $this->view = new Zend_View(array('basePath' => $baseDir));
 
         return $this->view;
     }
@@ -193,16 +186,37 @@ abstract class Zend_Controller_Action
      * specify the named body content segment to set by specifying a $name.
      *
      * @see Zend_Controller_Response_Abstract::appendBody()
-     * @param string|null $action 
-     * @param string|null $name 
-     * @param boolean $noController 
+     * @param  string|null $action Defaults to action registered in request object
+     * @param  string|null $name Response object named path segment to use; defaults to null
+     * @param  bool $noController  Defaults to false; i.e. use controller name as subdir in which to search for view script
      * @return void
-     * @throws Zend_Controller_Exception with bad $action
      */
     public function render($action = null, $name = null, $noController = false)
     {
+        $view   = $this->initView();
+        $script = $this->getViewScript($action, $noController);
+
+        $this->getResponse()->appendBody(
+            $view->render($script),
+            $name
+        );
+    }
+
+    /**
+     * Construct view script path
+     *
+     * Used by render() to determine the path to the view script.
+     * 
+     * @param  string $action Defaults to action registered in request object
+     * @param  bool $noController  Defaults to false; i.e. use controller name as subdir in which to search for view script
+     * @return string
+     * @throws Zend_Controller_Exception with bad $action
+     */
+    public function getViewScript($action = null, $noController = false)
+    {
+        $request = $this->getRequest();
         if (null === $action) {
-            $action = $this->getRequest()->getActionName();
+            $action = $request->getActionName();
         } elseif (!is_string($action)) {
             throw new Zend_Controller_Exception('Invalid action specifier for view render');
         }
@@ -210,14 +224,10 @@ abstract class Zend_Controller_Action
         $script = $action . '.' . $this->viewSuffix;
 
         if (!$noController) {
-            $script = $this->getRequest()->getControllerName() . DIRECTORY_SEPARATOR . $script;
+            $script = $request->getControllerName() . DIRECTORY_SEPARATOR . $script;
         }
 
-        $view = $this->initView();
-        $this->getResponse()->appendBody(
-            $view->render($script),
-            $name
-        );
+        return $script;
     }
 
     /**
@@ -302,6 +312,28 @@ abstract class Zend_Controller_Action
     }
 
     /**
+     * Get a helper by name
+     *
+     * @param  string $helperName
+     * @return Zend_Controller_Action_Helper_Abstract
+     */
+    public function getHelper($helperName)
+    {
+        return $this->_helper->{$helperName};
+    }
+
+    /**
+     * Get a clone of a helper by name
+     *
+     * @param  string $helperName
+     * @return Zend_Controller_Action_Helper_Abstract
+     */
+    public function getHelperCopy($helperName)
+    {
+        return clone $this->_helper->{$helperName};
+    }
+
+    /**
      * Set the front controller instance
      * 
      * @param Zend_Controller_Front $front 
@@ -334,91 +366,6 @@ abstract class Zend_Controller_Action
         // Throw exception in all other cases
         require_once 'Zend/Controller/Exception.php';
         throw new Zend_Controller_Exception('Front controller class has not been loaded');
-    }
-
-
-    /**
-     * Retrieve HTTP status code to emit on {@link _redirect()} call
-     * 
-     * @return int
-     */
-    public function getRedirectCode()
-    {
-        return $this->_redirectCode;
-    }
-
-    /**
-     * Validate HTTP status redirect code
-     * 
-     * @param int $code 
-     * @return true
-     */
-    protected function _checkRedirectCode($code)
-    {
-        if (!is_int($code) || (300 > $code) || (307 < $code)) {
-            require_once 'Zend/Controller/Exception.php';
-            throw new Zend_Controller_Exception('Invalid redirect HTTP status code (' . $code  . ')');
-        }
-
-        return true;
-    }
-
-    /**
-     * Retrieve HTTP status code for {@link _redirect()} behaviour
-     * 
-     * @param int $code 
-     * @return Zend_Controller_Action
-     */
-    public function setRedirectCode($code)
-    {
-        $this->_checkRedirectCode($code);
-        $this->_redirectCode = $code;
-        return $this;
-    }
-
-    /**
-     * Retrieve flag for whether or not {@link _redirect()} will exit when finished.
-     * 
-     * @return bool
-     */
-    public function getRedirectExit()
-    {
-        return $this->_redirectExit;
-    }
-
-    /**
-     * Retrieve exit flag for {@link _redirect()} behaviour
-     * 
-     * @param bool $flag 
-     * @return Zend_Controller_Action
-     */
-    public function setRedirectExit($flag)
-    {
-        $this->_redirectExit = ($flag) ? true : false;
-        return $this;
-    }
-
-    /**
-     * Retrieve flag for whether or not {@link _redirect()} will prepend the 
-     * base URL on relative URLs
-     * 
-     * @return bool
-     */
-    public function getRedirectPrependBase()
-    {
-        return $this->_redirectPrependBase;
-    }
-
-    /**
-     * Retrieve 'prepend base' flag for {@link _redirect()} behaviour
-     * 
-     * @param bool $flag 
-     * @return Zend_Controller_Action
-     */
-    public function setRedirectPrependBase($flag)
-    {
-        $this->_redirectPrependBase = ($flag) ? true : false;
-        return $this;
     }
 
     /**
@@ -482,12 +429,20 @@ abstract class Zend_Controller_Action
      */
     public function dispatch($action)
     {
+        // Notify helpers of action preDispatch state
+        $this->_helper->notifyPreDispatch();
+
         $this->preDispatch();
         if ($this->getRequest()->isDispatched()) {
             // preDispatch() didn't change the action, so we can continue
             $this->$action();
             $this->postDispatch();
         }
+
+        // whats actually important here is that this action controller is 
+        // shutting down, regardless of dispatching; notify the helpers of this 
+        // state
+        $this->_helper->notifyPostDispatch();
     }
 
     /**
@@ -639,79 +594,17 @@ abstract class Zend_Controller_Action
                 ->setDispatched(false);
     }
 
-
     /**
      * Redirect to another URL
      *
-     * By default, emits a 302 HTTP status header, prepends base URL as defined 
-     * in request object if url is relative, and halts script execution by 
-     * calling exit().
-     *
-     * $options is an optional associative array that can be used to control 
-     * redirect behaviour. The available option keys are:
-     * - exit: boolean flag indicating whether or not to halt script execution when done
-     * - prependBase: boolean flag indicating whether or not to prepend the base URL when a relative URL is provided
-     * - code: integer HTTP status code to use with redirect. Should be between 300 and 307.
-     *
-     * _redirect() sets the Location header in the response object. If you set 
-     * the exit flag to false, you can override this header later in code 
-     * execution.
-     *
-     * If the exit flag is true (true by default), _redirect() will write and 
-     * close the current session, if any.
+     * Proxies to {@link Zend_Controller_Action_Helper_Redirector::gotoUrl()}. 
      *
      * @param string $url
      * @param array $options Options to be used when redirecting
      * @return void
      */
-    protected function _redirect($url, array $options = null)
+    protected function _redirect($url, array $options = array())
     {
-        // prevent header injections
-        $url = str_replace(array("\n", "\r"), '', $url);
-
-        $exit        = $this->getRedirectExit();
-        $prependBase = $this->getRedirectPrependBase();
-        $code        = $this->getRedirectCode();
-        if (null !== $options) {
-            if (isset($options['exit'])) {
-                $exit = ($options['exit']) ? true : false;
-            }
-            if (isset($options['prependBase'])) {
-                $prependBase = ($options['prependBase']) ? true : false;
-            }
-            if (isset($options['code'])) {
-                $this->_checkRedirectCode($options['code']);
-                $code = $options['code'];
-            }
-        }
-
-        // If relative URL, decide if we should prepend base URL
-        if ($prependBase && !preg_match('|^[a-z]+://|', $url)) {
-            $request = $this->getRequest();
-            if ($request instanceof Zend_Controller_Request_Http) {
-                $base = $request->getBaseUrl();
-                if (('/' != substr($base, -1)) && ('/' != substr($url, 0, 1))) {
-                    $url = $base . '/' . $url;
-                } else {
-                    $url = $base . $url;
-                }
-            }
-        }
-
-        // Set response redirect
-        $response = $this->getResponse();
-        $response->setRedirect($url, $code);
-
-        if ($exit) {
-            // Close session, if started
-            if (class_exists('Zend_Session', false) && Zend_Session::isStarted()) {
-                Zend_Session::writeClose();
-            } elseif (isset($_SESSION)) {
-                session_write_close();
-            }
-
-            $response->sendHeaders();
-            exit();
-        }
+        $this->_helper->redirector->gotoUrl($url, $options);
     }
 }

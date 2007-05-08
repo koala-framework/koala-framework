@@ -23,6 +23,8 @@ require_once 'Zend/Pdf/Element.php';
 /** Zend_Pdf_Element_Object */
 require_once 'Zend/Pdf/Element/Object.php';
 
+/** Zend_Memory */
+require_once 'Zend/Memory.php';
 
 
 /**
@@ -59,9 +61,9 @@ class Zend_Pdf_UpdateInfoContainer
     /**
      * String representation of the object
      *
-     * @var string
+     * @var Zend_Memory_Container|null
      */
-    private $_dump;
+    private $_dump = null;
 
     /**
      * Object constructor
@@ -73,7 +75,14 @@ class Zend_Pdf_UpdateInfoContainer
         $this->_objNum = $objNum;
         $this->_genNum = $genNum;
         $this->_isFree = $isFree;
-        $this->_dump   = $dump;
+
+        if ($dump !== null) {
+            if (strlen($dump) > 1024) {
+                $this->_dump = Zend_Pdf::getMemoryManager()->create($dump);
+            } else {
+                $this->_dump = $dump;
+            }
+        }
     }
 
 
@@ -114,7 +123,15 @@ class Zend_Pdf_UpdateInfoContainer
      */
     public function getObjectDump()
     {
-        return $this->_dump;
+        if ($this->_dump === null) {
+            return '';
+        }
+
+        if (is_string($this->_dump)) {
+            return $this->_dump;
+        }
+
+        return $this->_dump->getRef();
     }
 }
 

@@ -17,7 +17,7 @@
  * @package    Zend_Feed
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Rss.php 3941 2007-03-14 21:36:13Z darby $
+ * @version    $Id: Rss.php 4300 2007-04-02 13:35:41Z slaanesh $
  */
 
 
@@ -125,14 +125,16 @@ class Zend_Feed_Rss extends Zend_Feed_Abstract
     {
         $channel = $this->_element->createElement('channel');
 
-        $title = $this->_element->createElement('title', $array->title);
+        $title = $this->_element->createElement('title');
+        $title->appendChild($this->_element->createCDATASection($array->title));
         $channel->appendChild($title);
 
         $link = $this->_element->createElement('link', $array->link);
         $channel->appendChild($link);
 
-        $description = isset($array->description) ? $array->description : '';
-        $description = $this->_element->createElement('description', $description);
+        $desc = isset($array->description) ? $array->description : '';
+        $description = $this->_element->createElement('description');
+        $description->appendChild($this->_element->createCDATASection($desc));
         $channel->appendChild($description);
 
         $pubdate = isset($array->lastUpdate) ? $array->lastUpdate : time();
@@ -374,7 +376,8 @@ class Zend_Feed_Rss extends Zend_Feed_Abstract
         foreach ($array as $dataentry) {
             $item = $this->_element->createElement('item');
 
-            $title = $this->_element->createElement('title', $dataentry->title);
+            $title = $this->_element->createElement('title');
+            $title->appendChild($this->_element->createCDATASection($dataentry->title));
             $item->appendChild($title);
 
             $link = $this->_element->createElement('link', $dataentry->link);

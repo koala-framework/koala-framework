@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,6 +18,7 @@
  * @subpackage Amazon
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Accessories.php 4357 2007-04-04 22:32:40Z darby $
  */
 
 
@@ -29,10 +31,16 @@
  */
 class Zend_Service_Amazon_Accessories
 {
-    public function __construct(DomElement $dom)
+    /**
+     * Assigns values to properties relevant to Accessories
+     *
+     * @param  DOMElement $dom
+     * @return void
+     */
+    public function __construct(DOMElement $dom)
     {
-    	$xpath = new DOMXPath($dom->ownerDocument);
-    	$xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
+        $xpath = new DOMXPath($dom->ownerDocument);
+        $xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
         foreach (array('ASIN', 'Title') as $el) {
             $this->$el = (string) $xpath->query("./az:$el/text()", $dom)->item(0)->data;
         }

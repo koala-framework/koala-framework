@@ -15,7 +15,7 @@
  * @package    Zend_Controller
  * @subpackage Router
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Rewrite.php 3834 2007-03-09 05:12:52Z bkarwin $
+ * @version    $Id: Rewrite.php 4635 2007-05-01 12:54:13Z martel $
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
@@ -262,13 +262,13 @@ class Zend_Controller_Router_Rewrite extends Zend_Controller_Router_Abstract
 
             $request->setParam($param, $value);
             
-            if ($param == $request->getModuleKey()) {
+            if ($param === $request->getModuleKey()) {
                 $request->setModuleName($value);
             }
-            if ($param == $request->getControllerKey()) {
+            if ($param === $request->getControllerKey()) {
                 $request->setControllerName($value);
             }
-            if ($param == $request->getActionKey()) {
+            if ($param === $request->getActionKey()) {
                 $request->setActionName($value);
             }
                      

@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.44 $"/>
-		<generation date="$Date: 2005/06/01 01:24:23 $"/>
+		<version number="$Revision: 1.71 $"/>
+		<generation date="$Date: 2006/06/28 04:18:18 $"/>
 		<language type="lt"/>
 	</identity>
 	<localeDisplayNames>
 		<languages>
 			<language type="ar">Arabų</language>
 			<language type="bg">Bulgarų</language>
+			<language type="bn">Bengalų</language>
 			<language type="cs">Čekų</language>
 			<language type="da">Danų</language>
 			<language type="de">Vokiečių</language>
@@ -37,6 +38,7 @@
 			<language type="sk">Slovakų</language>
 			<language type="sl">Slovėnų</language>
 			<language type="sv">Švedų</language>
+			<language type="th">Tajų</language>
 			<language type="tr">Turkų</language>
 			<language type="zh">Kinų</language>
 		</languages>
@@ -44,8 +46,36 @@
 			<script type="Latn">Latin</script>
 		</scripts>
 		<territories>
+			<territory type="001">Pasaulis</territory>
+			<territory type="002">Afrika</territory>
+			<territory type="005">Pietų Amerika</territory>
+			<territory type="009" draft="provisional">Okeanija</territory>
+			<territory type="011">Vakarų Afrika</territory>
+			<territory type="013">Centrinė Amerika</territory>
+			<territory type="014">Rytų Afrika</territory>
+			<territory type="015">Šiaurės Afrika</territory>
+			<territory type="017">Vidurio Afrika</territory>
+			<territory type="018">Pietų Afrika [018]</territory>
+			<territory type="019">Amerika</territory>
+			<territory type="021" draft="provisional">Šiaurės Amerika</territory>
+			<territory type="029">Karibai</territory>
+			<territory type="030">Rytų Azija</territory>
+			<territory type="034">Pietų Azija</territory>
+			<territory type="035">Pietryčių Azija</territory>
+			<territory type="039">Pietų Europa</territory>
+			<territory type="053">Australija ir Naujoji Zelandija</territory>
+			<territory type="054">Melanezija</territory>
+			<territory type="057">Mikronezija [057]</territory>
+			<territory type="061">Polinezija</territory>
+			<territory type="142">Azija</territory>
+			<territory type="143">Centrinė Azija</territory>
+			<territory type="145">Vakarų Azija</territory>
+			<territory type="150">Europa</territory>
+			<territory type="151">Rytų Europa</territory>
+			<territory type="154">Šiaurės Europa</territory>
+			<territory type="155">Vakarų Europa</territory>
 			<territory type="200">Čekoslovakija</territory>
-			<territory type="200" alt="proposed" draft="true">Serbija ir Juodkalnija</territory>
+			<territory type="419">Lotynų Amerika ir Karibai</territory>
 			<territory type="AD">Andora</territory>
 			<territory type="AE">Jungtiniai Arabų Emyratai</territory>
 			<territory type="AF">Afganistanas</territory>
@@ -83,7 +113,7 @@
 			<territory type="BZ">Belizas</territory>
 			<territory type="CA">Kanada</territory>
 			<territory type="CC">Kokosų salos</territory>
-			<territory type="CC" alt="proposed" draft="true">Kokosų (Keelingo) salos</territory>
+			<territory type="CC" alt="proposed" draft="provisional">Kokosų (Keelingo) salos</territory>
 			<territory type="CD">Kongo Demokratinė Respublika</territory>
 			<territory type="CF">Centrinės Afrikos Respublika</territory>
 			<territory type="CG">Kongas</territory>
@@ -95,7 +125,7 @@
 			<territory type="CN">Kinija</territory>
 			<territory type="CO">Kolumbija</territory>
 			<territory type="CR">Kosta Rika</territory>
-			<territory type="CS" draft="true">Serbija ir Juodkalnija</territory>
+			<territory type="CS">Serbija ir Juodkalnija</territory>
 			<territory type="CU">Kuba</territory>
 			<territory type="CV">Žaliasis Kyšulys</territory>
 			<territory type="CX">Kalėdų sala</territory>
@@ -134,13 +164,14 @@
 			<territory type="GQ">Pusiaujo Gvinėja</territory>
 			<territory type="GR">Graikija</territory>
 			<territory type="GS">Rytų Džordžija ir Rytų Sandwich salos</territory>
-			<territory type="GS" alt="proposed" draft="true">Pietų Georgijos ir Pietų Sandwicho Salos</territory>
+			<territory type="GS" alt="proposed" draft="provisional">Pietų Georgijos ir Pietų Sandwicho Salos</territory>
 			<territory type="GT">Gvatemala</territory>
 			<territory type="GU">Guamas</territory>
 			<territory type="GW">Bisau Gvinėja</territory>
 			<territory type="GY">Gajana</territory>
 			<territory type="HK">Kinijos S.A.R.Honkongas</territory>
-			<territory type="HM">Heardo salos</territory>
+			<territory type="HK" alt="proposed" draft="provisional">Honkongas</territory>
+			<territory type="HM">Heardo ir McDonaldo Salų Sritis</territory>
 			<territory type="HN">Hondūras</territory>
 			<territory type="HR">Kroatija</territory>
 			<territory type="HT">Haitis</territory>
@@ -171,7 +202,7 @@
 			<territory type="LA">Laosas</territory>
 			<territory type="LB">Libanas</territory>
 			<territory type="LC">Šventoji Liucija</territory>
-			<territory type="LC" alt="proposed" draft="true">Sent Lusija</territory>
+			<territory type="LC" alt="proposed" draft="provisional">Sent Lusija</territory>
 			<territory type="LI">Lichtenšteinas</territory>
 			<territory type="LK">Šri Lanka</territory>
 			<territory type="LR">Liberija</territory>
@@ -189,7 +220,7 @@
 			<territory type="ML">Malis</territory>
 			<territory type="MM">Mianmaras</territory>
 			<territory type="MN">Mongolija</territory>
-			<territory type="MO">Kinijos S.A.R. Makao</territory>
+			<territory type="MO">Macao</territory>
 			<territory type="MP">Marianos šiaurinės salos</territory>
 			<territory type="MQ">Martinika</territory>
 			<territory type="MR">Mauritanija</territory>
@@ -211,7 +242,6 @@
 			<territory type="NO">Norvegija</territory>
 			<territory type="NP">Nepalas</territory>
 			<territory type="NR">Nauru</territory>
-			<territory type="NR" alt="proposed" draft="true">Nauru Respublika</territory>
 			<territory type="NU">Niue</territory>
 			<territory type="NZ">Naujoji Zelandija</territory>
 			<territory type="OM">Omanas</territory>
@@ -224,17 +254,15 @@
 			<territory type="PL">Lenkija</territory>
 			<territory type="PM">Sen Pjeras ir Mikelonas</territory>
 			<territory type="PN">Pitkernas</territory>
-			<territory type="PN" alt="proposed" draft="true">Pitcairnas</territory>
 			<territory type="PR">Puerto Rikas</territory>
 			<territory type="PS">Palestinos teritorija</territory>
 			<territory type="PT">Portugalija</territory>
 			<territory type="PW">Palau</territory>
 			<territory type="PY">Paragvajus</territory>
 			<territory type="QA">Kataras</territory>
-			<territory type="RE">Rejunjonas</territory>
+			<territory type="RE" draft="provisional">Reunionas</territory>
 			<territory type="RO">Rumunija</territory>
 			<territory type="RU">Rusijos Federacija</territory>
-			<territory type="RU" alt="proposed" draft="true">Rusija</territory>
 			<territory type="RW">Ruanda</territory>
 			<territory type="SA">Saudo Arabija</territory>
 			<territory type="SB">Saliamono salos</territory>
@@ -243,7 +271,7 @@
 			<territory type="SE">Švedija</territory>
 			<territory type="SG">Singapūras</territory>
 			<territory type="SH">Šventoji Elena</territory>
-			<territory type="SH" alt="proposed" draft="true">Šv. Elenos sala</territory>
+			<territory type="SH" alt="proposed" draft="provisional">Šv. Elenos sala</territory>
 			<territory type="SI">Slovėnija</territory>
 			<territory type="SJ">Svalbardo ir Jan Majen salos</territory>
 			<territory type="SK">Slovakia</territory>
@@ -262,7 +290,6 @@
 			<territory type="TG">Togas</territory>
 			<territory type="TH">Tailandas</territory>
 			<territory type="TJ">Tadžikistanas</territory>
-			<territory type="TJ" alt="proposed" draft="true">Tadžikistas</territory>
 			<territory type="TK">Tokelau</territory>
 			<territory type="TL">Rytų Timoras</territory>
 			<territory type="TM">Turkmėnistanas</territory>
@@ -277,11 +304,11 @@
 			<territory type="UG">Uganda</territory>
 			<territory type="UM">Jungtinių Valstijų mažosios aplinkinės salos</territory>
 			<territory type="US">Jungtinės Valstijos</territory>
-			<territory type="US" alt="proposed" draft="true">Jungtinės Valstijos US</territory>
 			<territory type="UY">Urugvajus</territory>
 			<territory type="UZ">Uzbekistanas</territory>
 			<territory type="VA">Vatikanas</territory>
 			<territory type="VC">Šventasis Vincentas ir Grenadinai</territory>
+			<territory type="VC" alt="proposed" draft="provisional">Sent Vinsentas ir Grenadinai</territory>
 			<territory type="VE">Venesuela</territory>
 			<territory type="VG">Didžiosios Britanijos Mergelių salos</territory>
 			<territory type="VI">Mergelių salos (JAV)</territory>
@@ -295,12 +322,25 @@
 			<territory type="ZM">Zambija</territory>
 			<territory type="ZW">Zimbabvė</territory>
 		</territories>
+		<keys>
+			<key type="calendar">kalendorius</key>
+			<key type="collation" draft="provisional">gretinimas</key>
+			<key type="currency">valiuta</key>
+		</keys>
+		<types>
+			<type type="gregorian" key="calendar" draft="provisional">Grigaliaus</type>
+		</types>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-z ą ę į ų ė ū č š ž]</exemplarCharacters>
+		<exemplarCharacters>[a ą b c č d e ę ė f-i į y j-p r s š t u ų ū v z ž]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[q w x]</exemplarCharacters>
 	</characters>
+	<delimiters>
+		<quotationStart>„</quotationStart>
+		<quotationEnd>“</quotationEnd>
+	</delimiters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZvcL</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
 				<months>
@@ -398,10 +438,22 @@
 						</dayWidth>
 					</dayContext>
 				</days>
-				<week>
-					<minDays count="4"/>
-					<firstDay day="mon"/>
-				</week>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">K1</quarter>
+							<quarter type="2">K2</quarter>
+							<quarter type="3">K3</quarter>
+							<quarter type="4">K4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">pirmas ketvirtis</quarter>
+							<quarter type="2">antras ketvirtis</quarter>
+							<quarter type="3">trečias ketvirtis</quarter>
+							<quarter type="4">ketvirtas ketvirtis</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
 				<am>priešpiet</am>
 				<pm>popiet</pm>
 				<eras>
@@ -432,8 +484,80 @@
 						</dateFormat>
 					</dateFormatLength>
 				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="HHmm" draft="provisional">HH:mm</dateFormatItem>
+						<dateFormatItem id="HHmmss" draft="provisional">HH:mm:ss</dateFormatItem>
+						<dateFormatItem id="MMMdd" draft="provisional">MMM-dd</dateFormatItem>
+						<dateFormatItem id="MMdd" draft="provisional">MM.dd</dateFormatItem>
+						<dateFormatItem id="hhmm" draft="provisional">hh:mm a</dateFormatItem>
+						<dateFormatItem id="hhmmss" draft="provisional">hh:mm:ss a</dateFormatItem>
+						<dateFormatItem id="yyyyMM" draft="provisional">yyyy.MM</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+				<fields>
+					<field type="era">
+						<displayName>era</displayName>
+					</field>
+					<field type="year">
+						<displayName>metai</displayName>
+					</field>
+					<field type="month">
+						<displayName>mėnuo</displayName>
+					</field>
+					<field type="week">
+						<displayName>savaitė</displayName>
+					</field>
+					<field type="day">
+						<displayName>diena</displayName>
+					</field>
+					<field type="weekday">
+						<displayName>savaitės diena</displayName>
+					</field>
+					<field type="dayperiod">
+						<displayName>dienos metas</displayName>
+					</field>
+					<field type="hour">
+						<displayName>valanda</displayName>
+					</field>
+					<field type="minute">
+						<displayName>minutė</displayName>
+					</field>
+					<field type="second">
+						<displayName>Sekundė</displayName>
+					</field>
+					<field type="zone">
+						<displayName>juosta</displayName>
+					</field>
+				</fields>
 			</calendar>
 		</calendars>
+		<timeZoneNames>
+			<zone type="America/Sao_Paulo">
+				<exemplarCity>San Paulas</exemplarCity>
+			</zone>
+			<zone type="America/Moncton">
+				<exemplarCity>Monktonas</exemplarCity>
+			</zone>
+			<zone type="America/Los_Angeles">
+				<exemplarCity>Los Andželas</exemplarCity>
+			</zone>
+			<zone type="America/Phoenix">
+				<exemplarCity>Fyniksas</exemplarCity>
+			</zone>
+			<zone type="America/Denver">
+				<exemplarCity>Denveris</exemplarCity>
+			</zone>
+			<zone type="America/Chicago">
+				<exemplarCity>Čikaga</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Petersburg">
+				<exemplarCity>Peterburgas</exemplarCity>
+			</zone>
+			<zone type="America/New_York">
+				<exemplarCity>Niujorkas</exemplarCity>
+			</zone>
+		</timeZoneNames>
 	</dates>
 	<numbers>
 		<symbols>
@@ -475,8 +599,10 @@
 		<messages>
 			<yesstr>taip:t</yesstr>
 			<nostr>ne:n</nostr>
-			<yesexpr>^([yY]([eE][sS])?)|([tT]([aA][iI][pP])?)</yesexpr>
-			<noexpr>^[nN][oOeE]?</noexpr>
 		</messages>
 	</posix>
+	<references>
+		<reference type="RP1" uri="http://eur-lex.europa.eu/LexUriServ/site/lt/oj/2005/l_158/l_15820050621lt00060009.pdf">European Commision Reglament EB Nr. 936/2005</reference>
+		<reference type="RP2" uri="http://europa.eu.int/constitution/lt/ptoc133_lt.htm">Constitution of Europe</reference>
+	</references>
 </ldml>

@@ -150,7 +150,7 @@ class Zend_Config implements Countable, Iterator
      *
      * @return array
      */
-    public function asArray()
+    public function toArray()
     {
         $array = array();
         foreach ($this->_data as $key => $value) {
@@ -163,6 +163,17 @@ class Zend_Config implements Countable, Iterator
         return $array;
     }
 
+    /**
+     * Return an associative array of the stored data.
+     *
+     * @deprecated 
+     * @return array
+     */
+    public function asArray()
+    {
+        return $this->toArray();
+    }
+    
     /**
      * Support isset() overloading on PHP 5.1
      *

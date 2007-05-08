@@ -45,7 +45,7 @@ require_once 'Zend/Pdf/Resource.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-abstract class Zend_Pdf_Image extends Zend_Pdf_Resource
+abstract class Zend_Pdf_Resource_Image extends Zend_Pdf_Resource
 {
     /**
      * Object constructor.
@@ -77,6 +77,5 @@ abstract class Zend_Pdf_Image extends Zend_Pdf_Resource
      * @return array
      */
     abstract public function getProperties();
-
 }
 

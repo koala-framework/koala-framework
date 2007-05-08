@@ -68,7 +68,7 @@ class Zend_Mail extends Zend_Mime_Message
      * @var Zend_Mail_Transport_Abstract
      * @static
      */
-    static protected $_defaultTransport = null;
+    protected static $_defaultTransport = null;
 
     /**
      * Mail character set
@@ -130,14 +130,20 @@ class Zend_Mail extends Zend_Mime_Message
      */
     protected $_mimeBoundary = null;
 
+    /**
+     * Content type of the message
+     * @var string
+     */
+    protected $_type = null;
+
     /**#@-*/
 
     /**
      * Flag: whether or not email has attachments
      * @var boolean
-     * @access public
      */
     public $hasAttachments = false;
+
 
     /**
      * Sets the default mail transport for all following uses of
@@ -147,7 +153,7 @@ class Zend_Mail extends Zend_Mime_Message
      * @todo Allow passing in optional options for the transport to load
      * @param  Zend_Mail_Transport_Abstract $transport
      */
-    static public function setDefaultTransport(Zend_Mail_Transport_Abstract $transport)
+    public static function setDefaultTransport(Zend_Mail_Transport_Abstract $transport)
     {
         self::$_defaultTransport = $transport;
     }
@@ -165,7 +171,6 @@ class Zend_Mail extends Zend_Mime_Message
     /**
      * Return charset string
      * 
-     * @access public
      * @return string
      */
     public function getCharset()
@@ -174,11 +179,46 @@ class Zend_Mail extends Zend_Mime_Message
     }
 
     /**
+     * Set content type
+     *
+     * Should only be used for manually setting multipart content types.
+     * 
+     * @param  string $type Content type
+     * @return Zend_Mail Implements fluent interface
+     * @throws Zend_Mail_Exception for types not supported by Zend_Mime
+     */
+    public function setType($type)
+    {
+        $allowed = array(
+            Zend_Mime::MULTIPART_ALTERNATIVE,
+            Zend_Mime::MULTIPART_MIXED,
+            Zend_Mime::MULTIPART_RELATED,
+        );
+        if (!in_array($type, $allowed)) {
+            throw new Zend_Mail_Exception('Invalid content type "' . $type . '"');
+        }
+
+        $this->_type = $type;
+        return $this;
+    }
+
+    /**
+     * Get content type of the message
+     * 
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->_type;
+    }
+
+    /**
      * Set an arbitrary mime boundary for the message
      *
      * If not set, Zend_Mime will generate one.
      *
-     * @param string $boundary
+     * @param  string    $boundary
+     * @return Zend_Mail Provides fluent interface
      */
     public function setMimeBoundary($boundary)
     {
@@ -198,9 +238,9 @@ class Zend_Mail extends Zend_Mime_Message
     /**
      * Sets the text body for the message.
      *
-     * @param string $txt
-     * @param string $charset
-     * @return Zend_Mime_Part
+     * @param  string $txt
+     * @param  string $charset
+     * @return Zend_Mail Provides fluent interface
     */
     public function setBodyText($txt, $charset=null)
     {
@@ -215,26 +255,32 @@ class Zend_Mail extends Zend_Mime_Message
         $mp->charset = $charset;
 
         $this->_bodyText = $mp;
-        return $mp;
+
+        return $this;
     }
 
     /**
-     * Return text body Zend_Mime_Part
-     * 
-     * @access public
-     * @return false|Zend_Mime_Part
+     * Return text body Zend_Mime_Part or string
+     *
+     * @param  bool textOnly Whether to return just the body text content or the MIME part; defaults to false, the MIME part
+     * @return false|Zend_Mime_Part|string
      */
-    public function getBodyText()
+    public function getBodyText($textOnly = false)
     {
+        if ($textOnly && $this->_bodyText) {
+            $body = $this->_bodyText;
+            return $body->getContent();
+        }
+
         return $this->_bodyText;
     }
 
     /**
      * Sets the HTML body for the message
      *
-     * @param string $html
-     * @param string $charset
-     * @return Zend_Mime_Part
+     * @param  string    $html
+     * @param  string    $charset
+     * @return Zend_Mail Provides fluent interface
      */
     public function setBodyHtml($html, $charset=null)
     {
@@ -249,43 +295,68 @@ class Zend_Mail extends Zend_Mime_Message
         $mp->charset = $charset;
 
         $this->_bodyHtml = $mp;
-        return $mp;
+
+        return $this;
     }
 
     /**
      * Return Zend_Mime_Part representing body HTML
      * 
-     * @access public
-     * @return false|Zend_Mime_Part
+     * @param  bool $htmlOnly Whether to return the body HTML only, or the MIME part; defaults to false, the MIME part
+     * @return false|Zend_Mime_Part|string
      */
-    public function getBodyHtml()
+    public function getBodyHtml($htmlOnly = false)
     {
+        if ($htmlOnly && $this->_bodyHtml) {
+            $body = $this->_bodyHtml;
+            return $body->getContent();
+        }
+
         return $this->_bodyHtml;
     }
 
     /**
-     * Adds an attachment to the message
+     * Adds an existing attachment to the mail message
      *
-     * @param string $body
-     * @param string $mimeType
-     * @param string $disposition
-     * @param string $encoding
+     * @param  Zend_Mime_Part $attachment
+     * @return Zend_Mail Provides fluent interface
+     */
+    public function addAttachment(Zend_Mime_Part $attachment)
+    {
+        $this->addPart($attachment);
+        $this->hasAttachments = true;
+
+        return $this;
+    }
+
+    /**
+     * Creates a Zend_Mime_Part attachment
+     *
+     * Attachment is automatically added to the mail object after creation. The 
+     * attachment object is returned to allow for further manipulation.
+     *
+     * @param  string         $body
+     * @param  string         $mimeType
+     * @param  string         $disposition
+     * @param  string         $encoding
+     * @param  string         $filename OPTIONAL A filename for the attachment
      * @return Zend_Mime_Part Newly created Zend_Mime_Part object (to allow
      * advanced settings)
      */
-    public function addAttachment($body,
-                                  $mimeType    = Zend_Mime::TYPE_OCTETSTREAM,
-                                  $disposition = Zend_Mime::DISPOSITION_ATTACHMENT,
-                                  $encoding    = Zend_Mime::ENCODING_BASE64)
+    public function createAttachment($body,
+                                     $mimeType    = Zend_Mime::TYPE_OCTETSTREAM,
+                                     $disposition = Zend_Mime::DISPOSITION_ATTACHMENT,
+                                     $encoding    = Zend_Mime::ENCODING_BASE64,
+                                     $filename    = null)
     {
 
         $mp = new Zend_Mime_Part($body);
         $mp->encoding = $encoding;
         $mp->type = $mimeType;
         $mp->disposition = $disposition;
+        $mp->filename = $filename;
 
-        $this->addPart($mp);
-        $this->hasAttachments = true;
+        $this->addAttachment($mp);
 
         return $mp;
     }
@@ -293,7 +364,6 @@ class Zend_Mail extends Zend_Mime_Message
     /**
      * Return a count of message parts
      * 
-     * @access public
      * @return void
      */
     public function getPartCount()
@@ -307,7 +377,7 @@ class Zend_Mail extends Zend_Mime_Message
      * Encodes header content according to RFC1522 if it contains non-printable
      * characters.
      *
-     * @param string $value
+     * @param  string $value
      * @return string
      */
     protected function _encodeHeader($value)
@@ -327,8 +397,8 @@ class Zend_Mail extends Zend_Mime_Message
      * Adds a header to this message. If append is true and the header already
      * exists, raises a flag indicating that the header should be appended.
      *
-     * @param string $headerName
-     * @param string $value
+     * @param string  $headerName
+     * @param string  $value
      * @param boolean $append
      */
     protected function _storeHeader($headerName, $value, $append=false)
@@ -382,33 +452,39 @@ class Zend_Mail extends Zend_Mime_Message
     /**
      * Adds To-header and recipient
      *
-     * @param string $name
-     * @param string $email
+     * @param  string $name
+     * @param  string $email
+     * @return Zend_Mail Provides fluent interface
      */
     public function addTo($email, $name='')
     {
         $this->_addRecipientAndHeader('To', $name, $email);
+        return $this;
     }
 
     /**
      * Adds Cc-header and recipient
      *
-     * @param string $name
-     * @param string $email
+     * @param  string    $name
+     * @param  string    $email
+     * @return Zend_Mail Provides fluent interface
      */
     public function addCc($email, $name='')
     {
         $this->_addRecipientAndHeader('Cc', $name, $email);
+        return $this;
     }
 
     /**
      * Adds Bcc recipient
      *
-     * @param string $email
+     * @param  string    $email
+     * @return Zend_Mail Provides fluent interface
      */
     public function addBcc($email)
     {
         $this->_addRecipientAndHeader('Bcc', '', $email);
+        return $this;
     }
 
     /**
@@ -424,8 +500,9 @@ class Zend_Mail extends Zend_Mime_Message
     /**
      * Sets From-header and sender of the message
      *
-     * @param string $email
-     * @param string $name
+     * @param  string    $email
+     * @param  string    $name
+     * @return Zend_Mail Provides fluent interface
      * @throws Zend_Mail_Exception if called subsequent times
      */
     public function setFrom($email, $name = '')
@@ -437,6 +514,7 @@ class Zend_Mail extends Zend_Mime_Message
         } else {
             throw new Zend_Mail_Exception('From Header set twice');
         }
+        return $this;
     }
 
     /**
@@ -452,9 +530,8 @@ class Zend_Mail extends Zend_Mime_Message
     /**
      * Sets the Return-Path header for an email
      * 
-     * @access public
-     * @param string $email 
-     * @return void
+     * @param  string    $email 
+     * @return Zend_Mail Provides fluent interface
      * @throws Zend_Mail_Exception if set multiple times
      */
     public function setReturnPath($email)
@@ -466,6 +543,7 @@ class Zend_Mail extends Zend_Mime_Message
         } else {
             throw new Zend_Mail_Exception('Return-Path Header set twice');
         }
+        return $this;
     }
 
     /**
@@ -473,7 +551,6 @@ class Zend_Mail extends Zend_Mime_Message
      *
      * If no Return-Path header is set, returns the value of {@link $_from}.
      * 
-     * @access public
      * @return string
      */
     public function getReturnPath()
@@ -488,7 +565,8 @@ class Zend_Mail extends Zend_Mime_Message
     /**
      * Sets the subject of the message
      *
-     * @param string $subject
+     * @param  string    $subject
+     * @return Zend_Mail Provides fluent interface
      */
     public function setSubject($subject)
     {
@@ -499,6 +577,7 @@ class Zend_Mail extends Zend_Mime_Message
         } else {
             throw new Zend_Mail_Exception('Subject set twice');
         }
+        return $this;
     }
 
     /**
@@ -514,12 +593,13 @@ class Zend_Mail extends Zend_Mime_Message
     /**
      * Add a custom header to the message
      *
-     * @param string $name
-     * @param string $value
-     * @param boolean $append
+     * @param  string              $name
+     * @param  string              $value
+     * @param  boolean             $append
+     * @return Zend_Mail           Provides fluent interface
      * @throws Zend_Mail_Exception on attempts to create standard headers
      */
-    public function addHeader($name, $value, $append=false)
+    public function addHeader($name, $value, $append = false)
     {
         if (in_array(strtolower($name), array('to', 'cc', 'bcc', 'from', 'subject', 'return-path'))) {
             throw new Zend_Mail_Exception('Cannot set standard header from addHeader()');
@@ -533,7 +613,6 @@ class Zend_Mail extends Zend_Mime_Message
     /**
      * Return mail headers
      * 
-     * @access public
      * @return void
      */
     public function getHeaders()
@@ -546,10 +625,10 @@ class Zend_Mail extends Zend_Mime_Message
      * set DefaultTransport or the internal mail function if no
      * default transport had been set.
      *
-     * @param Zend_Mail_Transport_Abstract $transport
-     * @return void
+     * @param  Zend_Mail_Transport_Abstract $transport
+     * @return Zend_Mail                    Provides fluent interface
      */
-    public function send($transport=null)
+    public function send($transport = null)
     {
         if ($transport === null) {
             if (! self::$_defaultTransport instanceof Zend_Mail_Transport_Abstract) {
@@ -561,6 +640,8 @@ class Zend_Mail extends Zend_Mime_Message
         }
 
         $transport->send($this);
+
+        return $this;
     }
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,12 +18,15 @@
  * @subpackage Table
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Rowset.php 4527 2007-04-17 22:49:14Z darby $
  */
 
+
 /**
- * Zend_Db_Table_Rowset_Abstract
+ * @see Zend_Db_Table_Rowset_Abstract
  */
 require_once 'Zend/Db/Table/Rowset/Abstract.php';
+
 
 /**
  * Reference concrete class that extends Zend_Db_Table_Rowset_Abstract.

@@ -11,7 +11,7 @@ $frontendOptions = array(
 );
 
 $backendOptions = array(
-    'cacheDir' => '/tmp/' // Directory where to put the cache files (make sure to add a trailing slash)
+    'cache_dir' => '/tmp/' // Directory where to put the cache files (make sure to add a trailing slash)
 );
 
 $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
@@ -52,7 +52,7 @@ if (!($cache->test($id))) {
 // =================================================
 
 // This is ok if you store only strings into the cache
-// (because with "automaticSerialization" option, it's possible to store
+// (because with "automatic_serialization" option, it's possible to store
 //  some booleans into cache)
 
 <?php
@@ -85,7 +85,7 @@ echo($data);
 // =================================================
 
 // This is ok if you store only strings into the cache
-// (because with "automaticSerialization" option, it's possible to store
+// (because with "automatic_serialization" option, it's possible to store
 //  some booleans into cache)
 
 <?php
@@ -191,7 +191,7 @@ $frontendOptions = array(
 );
 
 $backendOptions = array(
-    'cacheDir' => '/tmp/' // Directory where to put the cache files (make sure to add a trailing slash)
+    'cache_dir' => '/tmp/' // Directory where to put the cache files (make sure to add a trailing slash)
 );
 
 $cache = Zend_Cache::factory('Output', 'File', $frontendOptions, $backendOptions);
@@ -226,7 +226,7 @@ $frontendOptions = array(
 );
 
 $backendOptions = array(
-    'cacheDir' => '/tmp/' // Directory where to put the cache files (make sure to add a trailing slash)
+    'cache_dir' => '/tmp/' // Directory where to put the cache files (make sure to add a trailing slash)
 );
 
 $cache = Zend_Cache::factory('Function', 'File', $frontendOptions, $backendOptions);
@@ -272,11 +272,11 @@ require_once 'Zend/Cache.php';
 
 $frontendOptions = array(
     'lifetime' => 7200 // cache lifetime of 2 hours,
-    'cachedEntity' => 'test'
+    'cached_entity' => 'test'
 );
 
 $backendOptions = array(
-    'cacheDir' => '/tmp/' // Directory where to put the cache files (make sure to add a trailing slash)
+    'cache_dir' => '/tmp/' // Directory where to put the cache files (make sure to add a trailing slash)
 );
 
 $cache = Zend_Cache::factory('Class', 'File', $frontendOptions, $backendOptions);
@@ -320,11 +320,11 @@ require_once 'Zend/Cache.php';
 
 $frontendOptions = array(
     'lifetime' => 7200 // cache lifetime of 2 hours,
-    'cachedEntity' => new test()
+    'cached_entity' => new test()
 );
 
 $backendOptions = array(
-    'cacheDir' => '/tmp/' // Directory where to put the cache files (make sure to add a trailing slash)
+    'cache_dir' => '/tmp/' // Directory where to put the cache files (make sure to add a trailing slash)
 );
 
 $cache = Zend_Cache::factory('Class', 'File', $frontendOptions, $backendOptions);
@@ -359,11 +359,11 @@ require_once 'Zend/Cache.php';
 
 $frontendOptions = array(
     'lifetime' => null // no lifetime,
-    'masterFile' => '/path/to/your/master.file' // your master file here
+    'master_file' => '/path/to/your/master.file' // your master file here
 );
 
 $backendOptions = array(
-    'cacheDir' => '/tmp/' // Directory where to put the cache files (make sure to add a trailing slash)
+    'cache_dir' => '/tmp/' // Directory where to put the cache files (make sure to add a trailing slash)
 );
 
 $cache = Zend_Cache::factory('File', 'File', $frontendOptions, $backendOptions);

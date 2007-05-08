@@ -49,13 +49,13 @@ class Zend_Translate_Adapter_Tmx extends Zend_Translate_Adapter {
      * Generates the tmx adapter
      * This adapter reads with php's xml_parser
      *
-     * @param  array               $options  Options for this adapter
+     * @param  string              $data     Translation data
      * @param  string|Zend_Locale  $locale   OPTIONAL Locale/Language to set, identical with locale identifier,
      *                                       see Zend_Locale for more information
      */
-    public function __construct($options, $locale = null)
+    public function __construct($data, $locale = null)
     {
-        parent::__construct($options, $locale);
+        parent::__construct($data, $locale);
     }
 
 
@@ -65,12 +65,14 @@ class Zend_Translate_Adapter_Tmx extends Zend_Translate_Adapter {
      * @param  string  $filename  TMX file to add, full path must be given for access
      * @param  string  $locale    Locale has no effect for TMX because TMX defines all languages within 
      *                            the source file
-     * @param  boolean $option    Clears the complete translation, because TMX defines all languages in one file
+     * @param  array   $option    OPTIONAL Options to use
      * @throws Zend_Translation_Exception
      */
-    protected function _loadTranslationData($filename, $locale, $option = null)
+    protected function _loadTranslationData($filename, $locale, array $options = array())
     {
-        if ($option) {
+        $options = array_merge($this->_options, $options);
+
+        if ($options['clear']) {
             $this->_translate = array();
         }
 

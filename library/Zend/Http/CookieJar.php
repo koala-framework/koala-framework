@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Http
  * @subpackage CookieJar
- * @version    $Id: CookieJar.php 3834 2007-03-09 05:12:52Z bkarwin $
+ * @version    $Id: CookieJar.php 4223 2007-03-24 10:20:34Z thomas $
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com/)
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
@@ -332,7 +332,7 @@ class Zend_Http_CookieJar
      * @return Zend_Http_CookieJar
      * @todo Add the $uri functionality. 
      */
-    static public function fromResponse(Zend_Http_Response $response, $ref_uri)
+    public static function fromResponse(Zend_Http_Response $response, $ref_uri)
     {
         $jar = new Zend_Http_CookieJar();
         $jar->addCookiesFromResponse($response, $ref_uri);

@@ -63,7 +63,7 @@ class Zend_Search_Lucene_Search_QueryToken
      *
      * @return array
      */
-    static public function getTypes()
+    public static function getTypes()
     {
         return array(   self::TT_WORD,
                         self::TT_PHRASE,

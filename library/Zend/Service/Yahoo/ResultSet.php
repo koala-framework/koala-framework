@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,73 +18,87 @@
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: ResultSet.php 4462 2007-04-11 04:10:16Z darby $
  */
 
 
 /**
- * @todo Discussed this with Chuck and other Zenders.  Why was SeekableIterator
- *       implemented here?  Does seek() gain us anything in this context?  Why
- *       not use just Iterator or ArrayAccess + Iterator?
- *
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Yahoo_ResultSet implements SeekableIterator {
+class Zend_Service_Yahoo_ResultSet implements SeekableIterator
+{
     /**
-     * @var DomNodeList $_result A DomNodeList of results
+     * Total number of results available
+     *
+     * @var int
+     */
+    public $totalResultsAvailable;
+
+    /**
+     * The number of results in this result set
+     *
+     * @var int
+     */
+    public $totalResultsReturned;
+
+    /**
+     * The offset in the total result set of this search set
+     *
+     * @var int
+     */
+    public $firstResultPosition;
+
+    /**
+     * A DOMNodeList of results
+     *
+     * @var DOMNodeList
      */
     protected $_results;
 
     /**
-     * @var DomDocument Yahoo Web Service Return Document
+     * Yahoo Web Service Return Document
+     *
+     * @var DOMDocument
      */
     protected $_dom;
 
     /**
-     * @var DOMXpath Xpath Object for $this->_dom
+     * Xpath Object for $this->_dom
+     *
+     * @var DOMXPath
      */
     protected $_xpath;
 
     /**
-     * @var int Current Item
+     * Current Index for SeekableIterator
+     *
+     * @var int
      */
-    protected $_currentItem = 0;
-
-    /**
-     * @var int  $totalResultsAvailable the total number of results available
-     */
-    public $totalResultsAvailable;
-
-    /*
-     * @var int $totalResultsReturned the number of results in this result set
-     */
-    public $totalResultsReturned;
-
-    /*
-     * @var int $firstResultPosition the offset in the total result set of this search set
-     */
-    public $firstResultPosition;
+    protected $_currentIndex = 0;
 
 
     /**
      * Parse the search response and retrieve the results for iteration
      *
-     * @param DomDocument $dom the ReST fragment for this object
+     * @param  DOMDocument $dom the REST fragment for this object
+     * @return void
      */
-    public function __construct(DomDocument $dom) {
+    public function __construct(DOMDocument $dom)
+    {
         $this->totalResultsAvailable = (int) $dom->documentElement->getAttribute('totalResultsAvailable');
         $this->totalResultsReturned = (int) $dom->documentElement->getAttribute('totalResultsReturned');
         $this->firstResultPosition = (int) $dom->documentElement->getAttribute('firstResultPosition');
 
         $this->_dom = $dom;
-    	$this->_xpath = new DOMXPath($dom);
+        $this->_xpath = new DOMXPath($dom);
 
-    	$this->_xpath->registerNamespace("yh", $this->_namespace);
+        $this->_xpath->registerNamespace('yh', $this->_namespace);
 
-    	$this->_results = $this->_xpath->query("//yh:Result");
+        $this->_results = $this->_xpath->query('//yh:Result');
     }
 
 
@@ -94,87 +109,87 @@ class Zend_Service_Yahoo_ResultSet implements SeekableIterator {
      */
     public function totalResults()
     {
-		return (int) $this->totalResultsReturned;
+        return $this->totalResultsReturned;
     }
 
 
     /**
-     * Implement SeekableIterator::current
+     * Implement SeekableIterator::current()
      *
+     * Must be implemented by child classes
+     *
+     * @throws Zend_Service_Exception
      * @return Zend_Service_Yahoo_Result
      */
     public function current()
     {
-    	throw new Zend_Service_Exception("Zend_Service_Yahoo_ResultSet::current() should be overwritten in child classes");
-    	//return new Zend_Service_Yahoo_Result($this->_results->item($this->_currentItem));
+        /**
+         * @see Zend_Service_Exception
+         */
+        require_once 'Zend/Service/Exception.php';
+        throw new Zend_Service_Exception('Zend_Service_Yahoo_ResultSet::current() must be implemented by child '
+                                       . 'classes');
     }
 
 
     /**
-     * Implement SeekableIterator::key
+     * Implement SeekableIterator::key()
      *
      * @return int
      */
     public function key()
     {
-    	return $this->_currentItem;
+        return $this->_currentIndex;
     }
 
 
     /**
-     * Implement SeekableIterator::next
+     * Implement SeekableIterator::next()
+     *
+     * @return void
      */
     public function next()
     {
-    	$this->_currentItem += 1;
+        $this->_currentIndex += 1;
     }
 
 
     /**
-     * Implement SeekableIterator::rewind
+     * Implement SeekableIterator::rewind()
      *
-     * @return boolean
+     * @return void
      */
     public function rewind()
     {
-    	$this->_currentItem = 0;
-    	return true;
+        $this->_currentIndex = 0;
     }
 
 
     /**
-     * Implement SeekableIterator::sek
+     * Implement SeekableIterator::seek()
      *
-     * @param int $item
-     * @return Zend_Service_Yahoo_Result
+     * @param  int $index
      * @throws Zend_Service_Exception
+     * @return Zend_Service_Yahoo_Result
      */
-    public function seek($item)
+    public function seek($index)
     {
-    	if ($this->valid($item)) {
-    		$this->_currentItem = $item;
-    		return $this->current();
-    	} else {
-    		/* @todo Should be an OutOfBoundsException but that was only added in PHP 5.1 */
-    		throw new Zend_Service_Exception('Item not found');
-    	}
+        $indexInt = (int) $index;
+        if ($indexInt >= 0 && $indexInt < $this->_results->length) {
+            $this->_currentIndex = $indexInt;
+        } else {
+            throw new OutOfBoundsException("Illegal index '$index'");
+        }
     }
 
 
     /**
-     * Implement SeekableIterator::valid
+     * Implement SeekableIterator::valid()
      *
-     * @param int $item
      * @return boolean
      */
-    public function valid($item = null)
+    public function valid()
     {
-    	if (null === $item && $this->_currentItem < $this->_results->length) {
-    		return true;
-    	} elseif (null !== $item && $item <= $this->_results->length) {
-    		return true;
-    	} else {
-    		return false;
-    	}
+        return $this->_currentIndex < $this->_results->length;
     }
 }

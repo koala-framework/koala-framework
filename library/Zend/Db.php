@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -16,17 +17,20 @@
  * @package    Zend_Db
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Db.php 4535 2007-04-18 20:34:32Z darby $
  */
 
+
 /**
- * Zend_Loader
+ * @see Zend_Loader
  */
 require_once 'Zend/Loader.php';
 
 /**
- * Zend_Db_Exception
+ * @see Zend_Db_Exception
  */
 require_once 'Zend/Db/Exception.php';
+
 
 /**
  * Class for connecting to SQL databases and performing common operations.
@@ -36,8 +40,8 @@ require_once 'Zend/Db/Exception.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Db {
-
+class Zend_Db
+{
     /**
      * PDO constant values discovered by this script result:
      *
@@ -145,22 +149,15 @@ class Zend_Db {
      *
      * Additional keys are processed as key-value pairs for the adapter config array.
      *
-     * @param string $adapterName   Name of the adapter to return:
-     *                              'pdo_mysql' -> Zend_Db_Adapter_Pdo_Mysql
-     *
-     * @param array  $config        OPTIONAL; an array of adapter configuration keys.
-     *
+     * @param  string $adapterName   Name of the adapter to return: 'pdo_mysql' -> Zend_Db_Adapter_Pdo_Mysql
+     * @param  array  $config        OPTIONAL; an array of adapter configuration keys.
      * @return Zend_Db_Adapter_Abstract
      * @throws Zend_Db_Exception
      */
-    static public function factory($adapterName, $config = array())
+    public static function factory($adapterName, array $config = array())
     {
         if (!is_string($adapterName) or !strlen($adapterName)) {
             throw new Zend_Db_Exception('Adapter name must be specified in a string.');
-        }
-
-        if (!is_array($config)) {
-            throw new Zend_Db_Exception('Configuration must be an array.');
         }
 
         $adapterName = strtolower($adapterName); // normalize input

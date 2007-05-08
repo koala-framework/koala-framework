@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,12 +18,15 @@
  * @subpackage Table
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Row.php 4527 2007-04-17 22:49:14Z darby $
  */
 
+
 /**
- * Zend_Db_Table_Row_Abstract
+ * @see Zend_Db_Table_Row_Abstract
  */
 require_once 'Zend/Db/Table/Row/Abstract.php';
+
 
 /**
  * Reference concrete class that extends Zend_Db_Table_Row_Abstract.

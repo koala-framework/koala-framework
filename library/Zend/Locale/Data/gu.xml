@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.27 $"/>
-		<generation date="$Date: 2005/05/19 20:41:03 $"/>
+		<version number="$Revision: 1.44 $"/>
+		<generation date="$Date: 2006/06/27 23:30:54 $"/>
 		<language type="gu"/>
 	</identity>
 	<localeDisplayNames>
@@ -24,7 +24,8 @@
 		</territories>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[ઁ-ઃઅ-ઍએ-ઑઓ-નપ-રલળવ-હ઼-ૅે-ૉો-્ૐૠ-ૣ૦-૯૱‌‍]</exemplarCharacters>
+		<exemplarCharacters>[૦-૯ ૐ અ-ઋ ૠ ઍ એ-ઑ ઓ-ન પ-ર લ ળ વ-હ ઼ ઁ-ઃ ઽ ્ ા-ૅ ે-ૉ ો ૌ]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[\u200C \u200D]</exemplarCharacters>
 	</characters>
 	<dates>
 		<calendars>
@@ -83,12 +84,22 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="wide">
+							<quarter type="1" draft="unconfirmed">પેહલા હંત 1</quarter>
+							<quarter type="2" draft="unconfirmed">ડૂસઋા હંત 2</quarter>
+							<quarter type="3" draft="unconfirmed">તીસઋા હંત 3</quarter>
+							<quarter type="4" draft="unconfirmed">ચૌતા હંત 4</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
 				<am>પૂર્વ મધ્યાહ્ન</am>
 				<pm>ઉત્તર મધ્યાહ્ન</pm>
 				<eras>
 					<eraNames>
-						<era type="0" draft="true">ઈસાપૂઋ્વ.</era>
-						<era type="1" draft="true">સન.</era>
+						<era type="0" draft="unconfirmed">ઈસાપૂઋ્વ.</era>
+						<era type="1" draft="unconfirmed">સન.</era>
 					</eraNames>
 				</eras>
 			</calendar>
@@ -106,11 +117,12 @@
 	</numbers>
 	<posix>
 		<messages>
-			<yesstr draft="true">હા</yesstr>
-			<nostr draft="true">ના</nostr>
-			<yesexpr draft="true">^([yY]([eE][sS])?)|હા</yesexpr>
-			<noexpr draft="true">^([nN][oO]?)|ના</noexpr>
+			<yesstr>હા</yesstr>
+			<nostr>ના</nostr>
 		</messages>
 	</posix>
+	<references>
+		<reference type="RP1" uri="isbn:0781800579">Learn Gujarati in 30 Days</reference>
+	</references>
 </ldml>
 

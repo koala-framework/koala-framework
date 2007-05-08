@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.27 $"/>
-		<generation date="$Date: 2005/04/21 15:45:02 $"/>
+		<version number="$Revision: 1.38 $"/>
+		<generation date="$Date: 2006/06/27 23:30:54 $"/>
 		<language type="et"/>
 		<territory type="EE"/>
 	</identity>
 	<delimiters>
-		<quotationStart draft="true">„</quotationStart>
-		<quotationEnd draft="true">“</quotationEnd>
-		<alternateQuotationStart draft="true">„</alternateQuotationStart>
-		<alternateQuotationEnd draft="true">“</alternateQuotationEnd>
+		<quotationStart draft="unconfirmed">„</quotationStart>
+		<quotationEnd draft="unconfirmed">“</quotationEnd>
+		<alternateQuotationStart draft="unconfirmed">„</alternateQuotationStart>
+		<alternateQuotationEnd draft="unconfirmed">“</alternateQuotationEnd>
 	</delimiters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
 				<eras>
 					<eraNames>
-						<era type="0" draft="true">enne meie aega</era>
-						<era type="1" draft="true">meie aja järgi</era>
+						<era type="0" draft="unconfirmed">enne meie aega</era>
+						<era type="1" draft="unconfirmed">meie aja järgi</era>
 					</eraNames>
 				</eras>
 			</calendar>

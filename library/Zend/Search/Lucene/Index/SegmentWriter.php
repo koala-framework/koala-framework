@@ -51,7 +51,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
      *
      * @var integer
      */
-    static public $indexInterval = 128;
+    public static $indexInterval = 128;
 
     /** Expert: The fraction of TermDocs entries stored in skip tables.
      * Larger values result in smaller indexes, greater acceleration, but fewer
@@ -64,7 +64,7 @@ abstract class Zend_Search_Lucene_Index_SegmentWriter
      *
      * @var integer
      */
-    static public $skipInterval = 0x7FFFFFFF;
+    public static $skipInterval = 0x7FFFFFFF;
 
     /**
      * Number of docs in a segment

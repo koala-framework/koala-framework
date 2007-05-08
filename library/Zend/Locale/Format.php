@@ -16,7 +16,7 @@
  * @package    Zend_Locale
  * @subpackage Format
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Format.php 4173 2007-03-22 10:36:09Z thomas $
+ * @version    $Id: Format.php 4425 2007-04-08 20:55:45Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -48,8 +48,7 @@ class Zend_Locale_Format
                                      'precision'     => null);
 
     private static $_signs = array(
-        'Default'=>array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'), // Default == Latin
-        'Latin'=> array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'), // Latin == Default
+        'Latn' => array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'), // Latn - default latin
         'Arab' => array( '٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'), // 0660 - 0669 arabic
         'Deva' => array( '०', '१', '२', '३', '४', '५', '६', '७', '८', '९'), // 0966 - 096F devanagari
         'Beng' => array( '০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'), // 09E6 - 09EF bengali
@@ -194,7 +193,7 @@ class Zend_Locale_Format
      * Examples for conversion from Arabic to Latin numerals:
      *   convertNumerals('١١٠ Tests', 'Arab'); -> returns '100 Tests'
      * Example for conversion from Latin to Arabic numerals:
-     *   convertNumerals('100 Tests', 'Latin', 'Arab'); -> returns '١١٠ Tests'
+     *   convertNumerals('100 Tests', 'Latn', 'Arab'); -> returns '١١٠ Tests'
      * 
      * @param  string  $input  String to convert
      * @param  string  $from   Script to parse, see {@link Zend_Locale::getScriptList()} for details.
@@ -204,11 +203,17 @@ class Zend_Locale_Format
      */
     public static function convertNumerals($input, $from, $to = null)
     {
+        if (is_string($from)) {
+            $from = ucfirst(strtolower($from));
+        }
         if (!array_key_exists($from, self::$_signs)) {
-            throw new Zend_Locale_Exception("script ($from) is no known script, use 'Latin' for 0-9");
+            throw new Zend_Locale_Exception("Unknown script '$from'. Use 'Latn' for digits 0,1,2,3,4,5,6,7,8,9.");
+        }
+        if (is_string($to)) {
+            $to = ucfirst(strtolower($to));
         }
         if (($to !== null) and (!array_key_exists($to, self::$_signs))) {
-            throw new Zend_Locale_Exception("script ($to) is no known script, use 'Latin' for 0-9");
+            throw new Zend_Locale_Exception("Unknown script '$to'. Use 'Latn' for digits 0,1,2,3,4,5,6,7,8,9.");
         }
         
         if (isset(self::$_signs[$from])) {
@@ -814,7 +819,7 @@ class Zend_Locale_Format
             // fix false month
             if (isset($result['day']) and isset($result['month'])) {
                 if (($position !== false) and ((iconv_strpos($date, $result['day']) === false) or
-                                               (iconv_strpos($date, $result['year']) === false))) {
+                                               (isset($result['year']) and (iconv_strpos($date, $result['year']) === false)))) {
                     if ($options['fix_date'] !== true) {
                         throw new Zend_Locale_Exception("unable to parse date '$date' using '" . $format
                             . "' (false month, $position, $month)");
@@ -880,7 +885,7 @@ class Zend_Locale_Format
      *
      * @return int|false           Position of replaced string (false if nothing replaced) 
      */
-    static protected function _replaceMonth(&$number, $monthlist)
+    protected static function _replaceMonth(&$number, $monthlist)
     {
         // If $locale was invalid, $monthlist will default to a "root" identity
         // mapping for each month number from 1 to 12.

@@ -323,7 +323,7 @@ class Zend_Pdf_Page
 
         $idCounter = 1;
         do {
-            $newResName = $type{0} . $idCounter++;
+            $newResName = $type[0] . $idCounter++;
         } while ($this->_pageDictionary->Resources->$type->$newResName !== null);
 
         $this->_pageDictionary->Resources->$type->$newResName = $resObject;
@@ -941,7 +941,7 @@ class Zend_Pdf_Page
      * @param float $x2
      * @param float $y2
      */
-    public function drawImage(Zend_Pdf_Image $image, $x1, $y1, $x2, $y2)
+    public function drawImage(Zend_Pdf_Resource_Image $image, $x1, $y1, $x2, $y2)
     {
         $this->_addProcSet('PDF');
 

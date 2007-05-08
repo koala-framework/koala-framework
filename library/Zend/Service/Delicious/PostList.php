@@ -23,7 +23,7 @@
 
 
 /**
- * Zend_Service_Delicious is a concrete implementation of the del.icio.us web service
+ * List of posts retrived from the del.icio.us web service
  *
  * @category   Zend
  * @package    Zend_Service

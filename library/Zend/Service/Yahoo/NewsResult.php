@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,67 +18,95 @@
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: NewsResult.php 4462 2007-04-11 04:10:16Z darby $
  */
 
 
 /**
- * @todo coding standards: naming of instance variables
+ * @see Zend_Service_Yahoo_Result
+ */
+require_once 'Zend/Service/Yahoo/Result.php';
+
+
+/**
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Yahoo_NewsResult extends Zend_Service_Yahoo_Result {
+class Zend_Service_Yahoo_NewsResult extends Zend_Service_Yahoo_Result
+{
     /**
-     * @var string $Summary Sumamry text associated with the result article
+     * Sumamry text associated with the result article
+     *
+     * @var string
      */
     public $Summary;
-    
+
     /**
-     * @var string $NewsSource the company who distributed the article
+     * The company who distributed the article
+     *
+     * @var string
      */
-    
     public $NewsSource;
+
     /**
-     *  @var string $NewsSourceUrl the URL for the company who distributed the article
+     * The URL for the company who distributed the article
+     *
+     * @var string
      */
     public $NewsSourceUrl;
 
     /**
-     * @var string $Language the language the article is in
+     * The language the article is in
+     *
+     * @var string
      */
     public $Language;
-    
+
     /**
-     * @var string $PublishDate the date the article was published (in unix timestamp format)
+     * The date the article was published (in unix timestamp format)
+     *
+     * @var string
      */
     public $PublishDate;
-    
+
     /**
-     * @var string $ModificationDate the date the article was modified (in unix timestamp format)
+     * The date the article was modified (in unix timestamp format)
+     *
+     * @var string
      */
     public $ModificationDate;
-    
+
     /**
-     * @var Zend_Service_Yahoo_Image $Thumbnail the thubmnail image for the article, if it exists
+     * The thubmnail image for the article, if it exists
+     *
+     * @var Zend_Service_Yahoo_Image
      */
     public $Thumbnail;
 
     /**
-     * @todo docblock
+     * News result namespace
+     *
+     * @var string
      */
-    protected $_namespace = "urn:yahoo:yn";
+    protected $_namespace = 'urn:yahoo:yn';
 
 
     /**
-     * @todo docblock
+     * Initializes the news result
+     *
+     * @param  DOMElement $result
+     * @return void
      */
-    public function __construct(DomElement $result) {
-        $this->_fields = array('Summary','NewsSource','NewsSourceUrl','Language','PublishDate',
-                        'ModificationDate','Thumbnail');
+    public function __construct(DOMElement $result)
+    {
+        $this->_fields = array('Summary', 'NewsSource', 'NewsSourceUrl', 'Language', 'PublishDate',
+                               'ModificationDate', 'Thumbnail');
+
         parent::__construct($result);
 
-        $this->setThumbnail();
+        $this->_setThumbnail();
     }
 }

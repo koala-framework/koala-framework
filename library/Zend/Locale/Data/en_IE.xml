@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.29 $"/>
-		<generation date="$Date: 2005/04/21 15:45:02 $"/>
+		<version number="$Revision: 1.45 $"/>
+		<generation date="$Date: 2006/06/28 01:23:32 $"/>
 		<language type="en"/>
 		<territory type="IE"/>
 	</identity>
@@ -56,24 +56,24 @@
 						</timeFormat>
 					</timeFormatLength>
 				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMMMd" draft="provisional">d MMMM</dateFormatItem>
+						<dateFormatItem id="MMdd" draft="provisional">dd/MM</dateFormatItem>
+						<dateFormatItem id="hhmm" draft="provisional">hh:mm a</dateFormatItem>
+						<dateFormatItem id="hhmmss" draft="provisional">hh:mm:ss a</dateFormatItem>
+						<dateFormatItem id="yyyyMM" draft="provisional">MM/yyyy</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM" draft="provisional">MMMM yyyy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
-		<timeZoneNames>
-			<zone type="Europe/Dublin">
-				<long>
-					<standard>Greenwich Mean Time</standard>
-					<daylight>Irish Summer Time</daylight>
-				</long>
-				<short>
-					<standard>GMT</standard>
-					<daylight>IST</daylight>
-				</short>
-				<exemplarCity>Dublin</exemplarCity>
-			</zone>
-		</timeZoneNames>
 	</dates>
 	<numbers>
 		<currencies>
+			<currency type="GBP">
+				<symbol>GBP</symbol>
+			</currency>
 			<currency type="IEP">
 				<symbol>£</symbol>
 			</currency>

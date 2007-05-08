@@ -42,6 +42,7 @@ class Zend_Db_Inflector
      *
      * @param string $name
      * @return string
+     * @deprecated Since Zend Framework 0.9.0
      */
     public function camelize($name)
     {
@@ -59,6 +60,7 @@ class Zend_Db_Inflector
      *
      * @param string $name
      * @return string
+     * @deprecated Since Zend Framework 0.9.0
      */
     public function underscore($name)
     {
@@ -70,6 +72,7 @@ class Zend_Db_Inflector
      *
      * @param string $name Plural name.
      * @return string Singular form of the original plural name.
+     * @deprecated Since Zend Framework 0.9.0
      */
     public function singular($name)
     {
@@ -93,6 +96,7 @@ class Zend_Db_Inflector
      *
      * @param string $name Singular name
      * @return string Plural form of the original singular name
+     * @deprecated Since Zend Framework 0.9.0
      */
     public function plural($name)
     {

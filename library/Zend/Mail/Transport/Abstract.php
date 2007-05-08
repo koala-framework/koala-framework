@@ -129,12 +129,15 @@ abstract class Zend_Mail_Transport_Abstract {
     {
         if (null !== $boundary) {
             // Build multipart mail
-            if ($this->_mail->hasAttachments) {
-                $type = Zend_Mime::MULTIPART_MIXED;
-            } elseif ($this->_mail->getBodyText() && $this->_mail->getBodyHtml()) {
-                $type = Zend_Mime::MULTIPART_ALTERNATIVE;
-            } else {
-                $type = Zend_Mime::MULTIPART_MIXED;
+            $type = $this->_mail->getType();
+            if (!$type) {
+                if ($this->_mail->hasAttachments) {
+                    $type = Zend_Mime::MULTIPART_MIXED;
+                } elseif ($this->_mail->getBodyText() && $this->_mail->getBodyHtml()) {
+                    $type = Zend_Mime::MULTIPART_ALTERNATIVE;
+                } else {
+                    $type = Zend_Mime::MULTIPART_MIXED;
+                }
             }
 
             $this->_headers['Content-Type'] = array(

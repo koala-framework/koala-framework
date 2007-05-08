@@ -462,7 +462,7 @@ abstract class Zend_Pdf_Resource_Font extends Zend_Pdf_Resource
      * Returns the widths of the glyphs.
      *
      * The widths are expressed in the font's glyph space. You are responsible
-     * for converting to user space as necessary. See {$link unitsPerEm()}.
+     * for converting to user space as necessary. See {@link unitsPerEm()}.
      *
      * Throws an exception if the glyph number is out of range.
      *

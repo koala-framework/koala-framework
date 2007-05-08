@@ -85,7 +85,7 @@ class Zend_Pdf_Color_Html extends Zend_Pdf_Color
      *    #rrggbb or one of the 140 well-known names (black, white, blue, etc.)
      * @return Zend_Pdf_Color
      */
-    static public function color($color)
+    public static function color($color)
     {
         $pattern = '/^#([A-Fa-f0-9]{2})([A-Fa-f0-9]{2})([A-Fa-f0-9]{2})$/';
         if (preg_match($pattern, $color, $matches)) {
@@ -109,7 +109,7 @@ class Zend_Pdf_Color_Html extends Zend_Pdf_Color
      *    blue, etc.)
      * @return Zend_Pdf_Color
      */
-    static public function namedColor($color)
+    public static function namedColor($color)
     {
         switch ($color) {
             case 'aqua':

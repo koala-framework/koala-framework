@@ -44,9 +44,6 @@ require_once 'Zend/Pdf/Element/Object.php';
 /** Zend_Pdf_Element_Reference */
 require_once 'Zend/Pdf/Element/Reference.php';
 
-/** Zend_Pdf_Element_Stream */
-require_once 'Zend/Pdf/Element/Stream.php';
-
 /** Zend_Pdf_Element_Object_Stream */
 require_once 'Zend/Pdf/Element/Object/Stream.php';
 

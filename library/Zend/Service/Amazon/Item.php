@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,6 +18,7 @@
  * @subpackage Amazon
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Item.php 4357 2007-04-04 22:32:40Z darby $
  */
 
 
@@ -36,7 +38,6 @@ class Zend_Service_Amazon_Item
     public $MediumImage;
     public $LargeImage;
     public $Subjects;
-    public $OfferSummary;
     public $Offers;
     public $CustomerReviews;
     public $SimilarProducts;
@@ -44,15 +45,17 @@ class Zend_Service_Amazon_Item
     public $Tracks;
     public $ListmaniaLists;
     public $PromotionalTag;
-    private $_dom;
+
+    protected $_dom;
 
 
     /**
      * Parse the given <Item> element
      *
-     * @param DomElement $dom
+     * @param  DOMElement $dom
+     * @return void
      */
-    function __construct(DomElement $dom)
+    public function __construct(DOMElement $dom)
     {
         $xpath = new DOMXPath($dom->ownerDocument);
         $xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
@@ -64,7 +67,7 @@ class Zend_Service_Amazon_Item
         }
 
         if ($xpath->query('./az:ItemAttributes/az:ListPrice', $dom)->length >= 1) {
-            $this->CurrenyCode = (string) $xpath->query('./az:ItemAttributes/az:ListPrice/az:CurrencyCode/text()', $dom)->item(0)->data;
+            $this->CurrencyCode = (string) $xpath->query('./az:ItemAttributes/az:ListPrice/az:CurrencyCode/text()', $dom)->item(0)->data;
             $this->Amount = (int) $xpath->query('./az:ItemAttributes/az:ListPrice/az:Amount/text()', $dom)->item(0)->data;
             $this->FormattedPrice = (string) $xpath->query('./az:ItemAttributes/az:ListPrice/az:FormattedPrice/text()', $dom)->item(0)->data;
         }
@@ -74,19 +77,23 @@ class Zend_Service_Amazon_Item
             foreach ($result as $v) {
                 if (isset($this->{$v->parentNode->tagName})) {
                     if (is_array($this->{$v->parentNode->tagName})) {
-						array_push($this->{$v->parentNode->tagName}, (string) $v->data);
-					} else {
-						$this->{$v->parentNode->tagName} = array($this->{$v->parentNode->tagName}, (string) $v->data);
-					}
+                        array_push($this->{$v->parentNode->tagName}, (string) $v->data);
+                    } else {
+                        $this->{$v->parentNode->tagName} = array($this->{$v->parentNode->tagName}, (string) $v->data);
+                    }
                 } else {
                     $this->{$v->parentNode->tagName} = (string) $v->data;
                 }
             }
         }
 
-        foreach(array('SmallImage', 'MediumImage', 'LargeImage') as $im) {
+        foreach (array('SmallImage', 'MediumImage', 'LargeImage') as $im) {
             $result = $xpath->query("./az:ImageSets/az:ImageSet[position() = 1]/az:$im", $dom);
             if ($result->length == 1) {
+                /**
+                 * @see Zend_Service_Amazon_Image
+                 */
+                require_once 'Zend/Service/Amazon/Image.php';
                 $this->$im = new Zend_Service_Amazon_Image($result->item(0));
             }
         }
@@ -98,6 +105,10 @@ class Zend_Service_Amazon_Item
 
         $result = $xpath->query('./az:CustomerReviews/az:Review', $dom);
         if ($result->length >= 1) {
+            /**
+             * @see Zend_Service_Amazon_CustomerReview
+             */
+            require_once 'Zend/Service/Amazon/CustomerReview.php';
             foreach ($result as $review) {
                 $this->CustomerReviews[] = new Zend_Service_Amazon_CustomerReview($review);
             }
@@ -106,21 +117,33 @@ class Zend_Service_Amazon_Item
         }
 
         $result = $xpath->query('./az:EditorialReviews/az:*', $dom);
-        if ($result->length == 1) {
+        if ($result->length >= 1) {
+            /**
+             * @see Zend_Service_Amazon_EditorialReview
+             */
+            require_once 'Zend/Service/Amazon/EditorialReview.php';
             foreach ($result as $r) {
                 $this->EditorialReviews[] = new Zend_Service_Amazon_EditorialReview($r);
             }
         }
 
         $result = $xpath->query('./az:SimilarProducts/az:*', $dom);
-        if ($result->length == 1) {
+        if ($result->length >= 1) {
+            /**
+             * @see Zend_Service_Amazon_SimilarProduct
+             */
+            require_once 'Zend/Service/Amazon/SimilarProduct.php';
             foreach ($result as $r) {
                 $this->SimilarProducts[] = new Zend_Service_Amazon_SimilarProduct($r);
             }
         }
 
         $result = $xpath->query('./az:ListmaniaLists/*', $dom);
-        if ($result->length == 1) {
+        if ($result->length >= 1) {
+            /**
+             * @see Zend_Service_Amazon_ListmaniaList
+             */
+            require_once 'Zend/Service/Amazon/ListmaniaList.php';
             foreach ($result as $r) {
                 $this->ListmaniaLists[] = new Zend_Service_Amazon_ListmaniaList($r);
             }
@@ -135,18 +158,27 @@ class Zend_Service_Amazon_Item
             }
         } else if ($result->length == 1) {
             foreach ($xpath->query('./*/text()', $result->item(0)) as $t) {
-                $this->Tracks[] = (string) $t->firstChild->data;
+                $this->Tracks[] = (string) $t->data;
             }
         }
 
         $result = $xpath->query('./az:Offers', $dom);
-        if ($result->length > 1) {
+        $resultSummary = $xpath->query('./az:OfferSummary', $dom);
+        if ($result->length > 1 || $resultSummary->length == 1) {
+            /**
+             * @see Zend_Service_Amazon_OfferSet
+             */
+            require_once 'Zend/Service/Amazon/OfferSet.php';
             $this->Offers = new Zend_Service_Amazon_OfferSet($dom);
         }
 
         $result = $xpath->query('./az:Accessories/*', $dom);
         if ($result->length > 1) {
-            foreach ($result->childNodes as $r) {
+            /**
+             * @see Zend_Service_Amazon_Accessories
+             */
+            require_once 'Zend/Service/Amazon/Accessories.php';
+            foreach ($result as $r) {
                 $this->Accessories[] = new Zend_Service_Amazon_Accessories($r);
             }
         }
@@ -156,13 +188,12 @@ class Zend_Service_Amazon_Item
 
 
     /**
-     * Return the Items original XML
+     * Returns the item's original XML
      *
      * @return string
      */
-    function asXML()
+    public function asXml()
     {
         return $this->_dom->ownerDocument->saveXML($this->_dom);
     }
 }
-

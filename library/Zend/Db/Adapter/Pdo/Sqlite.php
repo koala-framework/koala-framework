@@ -30,7 +30,7 @@ require_once 'Zend/Db/Adapter/Pdo/Abstract.php';
 require_once 'Zend/Db/Adapter/Exception.php';
 
 /**
- * Class for connecting to MySQL databases and performing common operations.
+ * Class for connecting to SQLite2 and SQLite3 databases and performing common operations.
  *
  * @category   Zend
  * @package    Zend_Db
@@ -86,6 +86,38 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
     }
 
     /**
+     * Special configuration for SQLite behavior: make sure that result sets
+     * contain keys like 'column' instead of 'table.column'.
+     *
+     * @throws Zend_Db_Adapter_Exception
+     */
+    protected function _connect()
+    {
+        /**
+         * if we already have a PDO object, no need to re-connect.
+         */
+        if ($this->_connection) {
+            return;
+        }
+
+        parent::_connect();
+
+        $retval = $this->_connection->exec('PRAGMA full_column_names=0');
+        if ($retval === false) {
+            $error = $this->_connection->errorInfo();
+            require_once 'Zend/Db/Adapter/Exception.php';
+            throw new Zend_Db_Adapter_Exception($error[2]);
+        }
+
+        $retval = $this->_connection->exec('PRAGMA short_column_names=1');
+        if ($retval === false) {
+            $error = $this->_connection->errorInfo();
+            require_once 'Zend/Db/Adapter/Exception.php';
+            throw new Zend_Db_Adapter_Exception($error[2]);
+        }
+    }
+
+    /**
      * Returns a list of the tables in the database.
      *
      * @return array
@@ -135,28 +167,36 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
         }
 
         $stmt = $this->query($sql);
-        $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        // Use FETCH_NUM so we are not dependent on the CASE attribute of the PDO connection
+        $result = $stmt->fetchAll(Zend_Db::FETCH_NUM);
+
+        $cid        = 0;
+        $name       = 1;
+        $type       = 2;
+        $notnull    = 3;
+        $dflt_value = 4;
+        $pk         = 5;
+
         $desc = array();
 
-        $i = 1;
         $p = 1;
         foreach ($result as $key => $row) {
-            $desc[$row['name']] = array(
+            $desc[$row[$name]] = array(
                 'SCHEMA_NAME'      => $schemaName,
                 'TABLE_NAME'       => $tableName,
-                'COLUMN_NAME'      => $row['name'],
-                'COLUMN_POSITION'  => $i,
-                'DATA_TYPE'        => $row['type'],
-                'DEFAULT'          => $row['dflt_value'],
-                'NULLABLE'         => ! (bool) $row['notnull'],
+                'COLUMN_NAME'      => $row[$name],
+                'COLUMN_POSITION'  => $row[$cid]+1,
+                'DATA_TYPE'        => $row[$type],
+                'DEFAULT'          => $row[$dflt_value],
+                'NULLABLE'         => ! (bool) $row[$notnull],
                 'LENGTH'           => null, // @todo
                 'SCALE'            => null, // @todo
                 'PRECISION'        => null, // @todo
                 'UNSIGNED'         => null, // @todo
-                'PRIMARY'          => (bool) $row['pk'],
-                'PRIMARY_POSITION' => ((bool) $row['pk']) ? $p++ : 0
+                'PRIMARY'          => (bool) $row[$pk],
+                'PRIMARY_POSITION' => ((bool) $row[$pk]) ? $p++ : 0
             );
-            ++$i;
         }
         return $desc;
     }

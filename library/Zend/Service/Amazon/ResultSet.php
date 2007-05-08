@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,7 +18,14 @@
  * @subpackage Amazon
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: ResultSet.php 4357 2007-04-04 22:32:40Z darby $
  */
+
+
+/**
+ * @see Zend_Service_Amazon_Item
+ */
+require_once 'Zend/Service/Amazon/Item.php';
 
 
 /**
@@ -30,36 +38,45 @@
 class Zend_Service_Amazon_ResultSet implements SeekableIterator
 {
     /**
-     * @var DomNodeList $_result A DomNodeList of <Item> elements
+     * A DOMNodeList of <Item> elements
+     *
+     * @var DOMNodeList
      */
-    protected $_results;
+    protected $_results = null;
 
     /**
-     * @var DomDocument Amazon Web Service Return Document
+     * Amazon Web Service Return Document
+     *
+     * @var DOMDocument
      */
     protected $_dom;
 
     /**
-     * @var DOMXpath Xpath Object for $this->_dom
+     * XPath Object for $this->_dom
+     *
+     * @var DOMXPath
      */
     protected $_xpath;
 
     /**
-     * @var int Current Item
+     * Current index for SeekableIterator
+     *
+     * @var int
      */
-    protected $_currentItem = 0;
+    protected $_currentIndex = 0;
 
     /**
      * Create an instance of Zend_Service_Amazon_ResultSet and create the necessary data objects
      *
-     * @param DOMDocument $dom
+     * @param  DOMDocument $dom
+     * @return void
      */
     public function __construct(DOMDocument $dom)
     {
-    	$this->_dom = $dom;
-    	$this->_xpath = new DOMXPath($dom);
-    	$this->_xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
-    	$this->_results = $this->_xpath->query('//az:Item');
+        $this->_dom = $dom;
+        $this->_xpath = new DOMXPath($dom);
+        $this->_xpath->registerNamespace('az', 'http://webservices.amazon.com/AWSECommerceService/2005-10-05');
+        $this->_results = $this->_xpath->query('//az:Item');
     }
 
     /**
@@ -69,10 +86,10 @@ class Zend_Service_Amazon_ResultSet implements SeekableIterator
      */
     public function totalResults()
     {
-		$result = $this->_xpath->query('//az:TotalResults/text()');
-		return (int) $result->item(0)->data;
+        $result = $this->_xpath->query('//az:TotalResults/text()');
+        return (int) $result->item(0)->data;
     }
-    
+
     /**
      * Total Number of pages returned
      *
@@ -80,82 +97,74 @@ class Zend_Service_Amazon_ResultSet implements SeekableIterator
      */
     public function totalPages()
     {
-		$result = $this->_xpath->query('//az:TotalPages/text()');
-		return (int) $result->item(0)->data;
+        $result = $this->_xpath->query('//az:TotalPages/text()');
+        return (int) $result->item(0)->data;
     }
 
     /**
-     * Implement SeekableIterator::current
+     * Implement SeekableIterator::current()
      *
      * @return Zend_Service_Amazon_Item
      */
     public function current()
     {
-    	return new Zend_Service_Amazon_Item($this->_results->item($this->_currentItem));
+        return new Zend_Service_Amazon_Item($this->_results->item($this->_currentIndex));
     }
 
     /**
-     * Implement SeekableIterator::key
+     * Implement SeekableIterator::key()
      *
      * @return int
      */
     public function key()
     {
-    	return $this->_currentItem;
+        return $this->_currentIndex;
     }
 
     /**
-     * Implement SeekableIterator::next
+     * Implement SeekableIterator::next()
+     *
+     * @return void
      */
     public function next()
     {
-    	$this->_currentItem += 1;
+        $this->_currentIndex += 1;
     }
 
     /**
-     * Implement SeekableIterator::rewind
+     * Implement SeekableIterator::rewind()
      *
-     * @return boolean
+     * @return void
      */
     public function rewind()
     {
-    	$this->_currentItem = 0;
-    	return true;
+        $this->_currentIndex = 0;
     }
 
     /**
-     * Implement SeekableIterator::sek
+     * Implement SeekableIterator::seek()
      *
-     * @param int $item
-     * @return Zend_Service_Amazon_Item
-     * @throws Zend_Service_Exception
+     * @param  int $index
+     * @throws OutOfBoundsException
+     * @return void
      */
-    public function seek($item)
+    public function seek($index)
     {
-    	if ($this->valid($item)) {
-    		$this->_currentItem = $item;
-    		return $this->current();
-    	} else {
-    		/* @todo Should be an OutOfBoundsException but that was only added in PHP 5.1 */
-    		throw new Zend_Service_Exception('Item not found');
-    	}
+        $indexInt = (int) $index;
+        if ($indexInt >= 0 && (null === $this->_results || $indexInt < $this->_results->length)) {
+            $this->_currentIndex = $indexInt;
+        } else {
+            throw new OutOfBoundsException("Illegal index '$index'");
+        }
     }
 
     /**
-     * Implement SeekableIterator::valid
+     * Implement SeekableIterator::valid()
      *
-     * @param int $item
      * @return boolean
      */
-    public function valid($item = null)
+    public function valid()
     {
-    	if ($item === null && $this->_currentItem < $this->_results->length) {
-    		return true;
-    	} else if ($item !== null && $item <= $this->_results->length) {
-    		return true;
-    	} else {
-    		return false;
-    	}
+        return null !== $this->_results && $this->_currentIndex < $this->_results->length;
     }
 }
-

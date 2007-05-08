@@ -48,26 +48,26 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
     /**
      * Available options
      * 
-     * =====> (string) cacheDir :
+     * =====> (string) cache_dir :
      * - Directory where to put the cache files
      * 
-     * =====> (boolean) fileLocking :
-     * - Enable / disable fileLocking
+     * =====> (boolean) file_locking :
+     * - Enable / disable file_locking
      * - Can avoid cache corruption under bad circumstances but it doesn't work on multithread
      * webservers and on NFS filesystems for example
      * 
-     * =====> (boolean) readControl :
+     * =====> (boolean) read_control :
      * - Enable / disable read control
      * - If enabled, a control key is embeded in cache file and this key is compared with the one
      * calculated after the reading.
      * 
-     * =====> (string) readControlType :
+     * =====> (string) read_control_type :
      * - Type of read control (only if read control is enabled). Available values are :
      *   'md5' for a md5 hash control (best but slowest)
      *   'crc32' for a crc32 hash control (lightly less safe but faster, better choice)
      *   'strlen' for a length only test (fastest)
      *   
-     * =====> (int) hashedDirectoryLevel :
+     * =====> (int) hashed_directory_level :
      * - Hashed directory level
      * - Set the hashed directory structure level. 0 means "no hashed directory 
      * structure", 1 means "one level of directory", 2 means "two levels"... 
@@ -75,10 +75,10 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
      * cache file. Only specific benchs can help you to choose the perfect value 
      * for you. Maybe, 1 or 2 is a good start.
      * 
-     * =====> (int) hashedDirectoryUmask :
+     * =====> (int) hashed_directory_umask :
      * - Umask for hashed directory structure
      * 
-     * =====> (string) fileNamePrefix :
+     * =====> (string) file_name_prefix :
      * - prefix for cache files 
      * - be really carefull with this option because a too generic value in a system cache dir
      *   (like /tmp) can cause disasters when cleaning the cache
@@ -86,13 +86,28 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
      * @var array available options
      */
     protected $_options = array(
-        'cacheDir' => '/tmp',
-        'fileLocking' => true,
-        'readControl' => true,
-        'readControlType' => 'crc32',
-        'hashedDirectoryLevel' => 0,
-        'hashedDirectoryUmask' => 0700,
-        'fileNamePrefix' => 'zend_cache'
+        'cache_dir' => null,
+        'file_locking' => true,
+        'read_control' => true,
+        'read_control_type' => 'crc32',
+        'hashed_directory_level' => 0,
+        'hashed_directory_umask' => 0700,
+        'file_name_prefix' => 'zend_cache'
+    );
+    
+    /**
+     * backward compatibility becase of ZF-879 and ZF-1172 (it will be removed in ZF 1.1)
+     *
+     * @var array 
+     */
+    protected $_backwardCompatibilityArray = array(
+        'cacheDir' => 'cache_dir',
+        'fileLocking' => 'file_locking',
+        'readControl' => 'read_control',
+        'readControlType' => 'read_control_type',
+        'hashedDirectoryLevel' => 'hashed_directory_level',
+        'hashedDirectoryUmask' => 'hashed_directory_umask',
+        'fileNamePrefix' => 'file_name_prefix'
     );
     
     // ----------------------
@@ -107,20 +122,20 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
     public function __construct($options = array())
     {   
         parent::__construct($options);
-        if (isset($options['cacheDir'])) { // particular case for this option
-            $this->setCacheDir($options['cacheDir']);
+        if (!is_null($this->_options['cache_dir'])) { // particular case for this option
+            $this->setCacheDir($this->_options['cache_dir']);
         } else {
-            $this->_options['cacheDir'] = self::getTmpDir() . DIRECTORY_SEPARATOR;
+            $this->_options['cache_dir'] = self::getTmpDir() . DIRECTORY_SEPARATOR;
         }
-        if (isset($options['fileNamePrefix'])) { // particular case for this option
-            if (!preg_match('~^[\w]+$~', $options['fileNamePrefix'])) {
-                Zend_Cache::throwException('Invalid fileNamePrefix : must use only [a-zA-A0-9_]');
+        if (isset($this->_options['file_name_prefix'])) { // particular case for this option
+            if (!preg_match('~^[\w]+$~', $this->_options['file_name_prefix'])) {
+                Zend_Cache::throwException('Invalid file_name_prefix : must use only [a-zA-A0-9_]');
             }
         }
     }  
     
     /**
-     * Set the cacheDir (particular case of setOption() method)
+     * Set the cache_dir (particular case of setOption() method)
      * 
      * @param mixed $value
      */
@@ -128,7 +143,7 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
     {
         // add a trailing DIRECTORY_SEPARATOR if necessary 
         $value = rtrim($value, '\\/') . DIRECTORY_SEPARATOR;
-        $this->setOption('cacheDir', $value);
+        $this->setOption('cache_dir', $value);
     }
        
     /**
@@ -151,11 +166,11 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
         // There is an available cache file !
         $fp = @fopen($file, 'rb');
         if (!$fp) return false;
-        if ($this->_options['fileLocking']) @flock($fp, LOCK_SH);
+        if ($this->_options['file_locking']) @flock($fp, LOCK_SH);
         $length = @filesize($file);
         $mqr = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
-        if ($this->_options['readControl']) {
+        if ($this->_options['read_control']) {
             $hashControl = @fread($fp, 32);
             $length = $length - 32;
         } 
@@ -165,15 +180,13 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
             $data = '';
         }
         set_magic_quotes_runtime($mqr);
-        if ($this->_options['fileLocking']) @flock($fp, LOCK_UN);
+        if ($this->_options['file_locking']) @flock($fp, LOCK_UN);
         @fclose($fp);
-        if ($this->_options['readControl']) {
-            $hashData = $this->_hash($data, $this->_options['readControlType']);
+        if ($this->_options['read_control']) {
+            $hashData = $this->_hash($data, $this->_options['read_control_type']);
             if ($hashData != $hashControl) {
                 // Problem detected by the read control !
-                if ($this->_directives['logging']) {
-                    Zend_Log::log('Zend_Cache_Backend_File::load() / readControl : stored hash and computed hash do not match', Zend_Log::LEVEL_WARNING);
-                }
+                $this->_log('Zend_Cache_Backend_File::load() / read_control : stored hash and computed hash do not match');
                 $this->_remove($file);
                 return false;    
             }
@@ -206,10 +219,8 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
      */
     public function save($data, $id, $tags = array(), $specificLifetime = false)
     {
-        if ((!is_dir($this->_options['cacheDir'])) or (!is_writable($this->_options['cacheDir']))) {
-            if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_File::save() : cacheDir doesn't exist or is not writable", Zend_Log::LEVEL_WARNING);
-            }
+        if ((!is_dir($this->_options['cache_dir'])) or (!is_writable($this->_options['cache_dir']))) {
+            $this->_log("Zend_Cache_Backend_File::save() : cache_dir doesn't exist or is not writable");
         }
         $this->remove($id); // to avoid multiple files with the same cache id
         $lifetime = $this->getLifetime($specificLifetime);
@@ -221,14 +232,14 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
             $fp = @fopen($file, "wb");
             if ($fp) {
                 // we can open the file, so the directory structure is ok
-                if ($this->_options['fileLocking']) @flock($fp, LOCK_EX);
-                if ($this->_options['readControl']) {
-                    @fwrite($fp, $this->_hash($data, $this->_options['readControlType']), 32);
+                if ($this->_options['file_locking']) @flock($fp, LOCK_EX);
+                if ($this->_options['read_control']) {
+                    @fwrite($fp, $this->_hash($data, $this->_options['read_control_type']), 32);
                 }
                 $mqr = get_magic_quotes_runtime();
                 set_magic_quotes_runtime(0);
                 @fwrite($fp, $data);
-                if ($this->_options['fileLocking']) @flock($fp, LOCK_UN);
+                if ($this->_options['file_locking']) @flock($fp, LOCK_UN);
                 @fclose($fp);
                 set_magic_quotes_runtime($mqr);
                 $result = true;
@@ -236,15 +247,15 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
             }         
             // we can't open the file but it's maybe only the directory structure
             // which has to be built
-            if ($this->_options['hashedDirectoryLevel']==0) break;
-            if ((!$firstTry) || ($this->_options['hashedDirectoryLevel'] == 0)) {
+            if ($this->_options['hashed_directory_level']==0) break;
+            if ((!$firstTry) || ($this->_options['hashed_directory_level'] == 0)) {
                 // it's not a problem of directory structure
                 break;
             } 
             $firstTry = false;
             // In this case, maybe we just need to create the corresponding directory
-            @mkdir($this->_path($id), $this->_options['hashedDirectoryUmask'], true);    
-            @chmod($this->_options['hashedDirectoryUmask']); // see #ZF-320 (this line is required in some configurations)
+            @mkdir($this->_path($id), $this->_options['hashed_directory_umask'], true);    
+            @chmod($this->_options['hashed_directory_umask']); // see #ZF-320 (this line is required in some configurations)
         }
         if ($result) {
             foreach ($tags as $tag) {
@@ -293,7 +304,7 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
     {
         // We use this private method to hide the recursive stuff
         clearstatcache();
-        return $this->_clean($this->_options['cacheDir'], $mode, $tags);
+        return $this->_clean($this->_options['cache_dir'], $mode, $tags);
     }
     
     /**
@@ -329,9 +340,7 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
     {
         if (!@unlink($file)) {
             # we can't remove the file (because of locks or any problem)
-            if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_File::_remove() : we can't remove $file => we are going to try to invalidate it", Zend_Log::LEVEL_WARNING);
-            }
+            $this->_log("Zend_Cache_Backend_File::_remove() : we can't remove $file => we are going to try to invalidate it");
             return false;
         } 
         return true;
@@ -384,7 +393,7 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
             return false;
         }
         $result = true;
-        $prefix = $this->_options['fileNamePrefix'];
+        $prefix = $this->_options['file_name_prefix'];
         $glob = @glob($dir . $prefix . '--*');
         foreach ($glob as $file)  {
             if (is_file($file)) {
@@ -429,7 +438,7 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
                     }                               
                 }
             }
-            if ((is_dir($file)) and ($this->_options['hashedDirectoryLevel']>0)) {
+            if ((is_dir($file)) and ($this->_options['hashed_directory_level']>0)) {
                 // Recursive call
                 $result = ($result) && ($this->_clean($file . DIRECTORY_SEPARATOR, $mode, $tags));
                 if ($mode=='all') {
@@ -552,7 +561,7 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
      */
     private function _idToFileName($id, $expire)
     {
-        $prefix = $this->_options['fileNamePrefix'];
+        $prefix = $this->_options['file_name_prefix'];
         $result = $prefix . '---' . $id . '---' . $expire;
         return $result;
     }
@@ -576,7 +585,7 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
      */
     private function _fileNameToExpireField($fileName)
     {
-        $prefix = $this->_options['fileNamePrefix'];
+        $prefix = $this->_options['file_name_prefix'];
         return preg_replace('~^' . $prefix . '---.*---(\d*)$~', '$1', $fileName);
     }
     
@@ -588,7 +597,7 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
      */
     private function _fileNameToId($fileName) 
     {       
-        $prefix = $this->_options['fileNamePrefix'];
+        $prefix = $this->_options['file_name_prefix'];
         return preg_replace('~^' . $prefix . '---(.*)---.*$~', '$1', $fileName);
     }
     
@@ -600,9 +609,9 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
      */
     private function _path($id)
     {
-        $root = $this->_options['cacheDir'];
-        $prefix = $this->_options['fileNamePrefix'];
-        if ($this->_options['hashedDirectoryLevel']>0) {
+        $root = $this->_options['cache_dir'];
+        $prefix = $this->_options['file_name_prefix'];
+        if ($this->_options['hashed_directory_level']>0) {
             if ($this->_isATag($id)) {
                 // we store tags in the same directory than the father
                 $id2 = $this->_tagCacheIdToFatherCacheId($id);
@@ -610,7 +619,7 @@ class Zend_Cache_Backend_File extends Zend_Cache_Backend implements Zend_Cache_B
             } else {
                 $hash = md5($id);
             }
-            for ($i=0 ; $i<$this->_options['hashedDirectoryLevel'] ; $i++) {
+            for ($i=0 ; $i<$this->_options['hashed_directory_level'] ; $i++) {
                 $root = $root . $prefix . '--' . substr($hash, 0, $i + 1) . DIRECTORY_SEPARATOR;
             }             
         }

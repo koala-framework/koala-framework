@@ -43,7 +43,7 @@ abstract class Zend_Service_Abstract
      *
      * @var Zend_Http_Client
      */
-    static protected $_httpClient = null;
+    protected static $_httpClient = null;
 
 
     /**
@@ -52,7 +52,7 @@ abstract class Zend_Service_Abstract
      *
      * @param Zend_Http_Client $httpClient
      */
-	final static public function setHttpClient(Zend_Http_Client $httpClient)
+	final public static function setHttpClient(Zend_Http_Client $httpClient)
 	{
 		self::$_httpClient = $httpClient;
 	}
@@ -63,7 +63,7 @@ abstract class Zend_Service_Abstract
 	 *
 	 * @return Zend_Http_Client
 	 */
-	final static public function getHttpClient()
+	final public static function getHttpClient()
 	{
 		if (!self::$_httpClient instanceof Zend_Http_Client) {
 			self::$_httpClient = new Zend_Http_Client();

@@ -142,7 +142,7 @@ class Zend_Mail_Storage_Imap extends Zend_Mail_Storage_Abstract
             $flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
         }
 
-        return new Zend_Mail_Message(array('handler' => $this, 'id' => $id, 'headers' => $header, 'flags' => $flags));
+        return new $this->_messageClass(array('handler' => $this, 'id' => $id, 'headers' => $header, 'flags' => $flags));
     }
 
     /*
@@ -248,9 +248,9 @@ class Zend_Mail_Storage_Imap extends Zend_Mail_Storage_Abstract
      */
     public function noop()
     {
-        // TODO: real noop
-        return false;
-//        return $this->_protocol->noop();
+        if (!$this->_protocol->noop()) {
+            throw new Zend_Mail_Storage_Exception('could not do nothing');
+        }
     }
 
     /**
@@ -263,9 +263,13 @@ class Zend_Mail_Storage_Imap extends Zend_Mail_Storage_Abstract
      */
     public function removeMessage($id)
     {
-        // TODO: real remove
-        return false;
-//        $this->_protocol->delete($id);
+        if (!$this->_protocol->store(array(Zend_Mail_Storage::FLAG_DELETED), $id, null, '+')) {
+            throw new Zend_Mail_Storage_Exception('cannot set deleted flag');
+        }
+        // TODO: expunge here or at close? we can handle an error here better and are more fail safe
+        if (!$this->_protocol->expunge()) {
+            throw new Zend_Mail_Storage_Exception('message marked as deleted, but could not expunge');
+        }
     }
 
     /**
@@ -463,11 +467,12 @@ class Zend_Mail_Storage_Imap extends Zend_Mail_Storage_Abstract
     /**
      * append a new message to mail storage
      *
-     * @param string|Zend_Mail_Message|Zend_Mime_Message $message message as string or instance of message class
+     * @param string                                     $message message as string or instance of message class
      * @param null|string|Zend_Mail_Storage_Folder       $folder  folder for new message, else current folder is taken
      * @param null|array                                 $flags   set flags for new message, else a default set is used
      * @throw Zend_Mail_Storage_Exception
      */
+     // not yet * @param string|Zend_Mail_Message|Zend_Mime_Message $message message as string or instance of message class
     public function appendMessage($message, $folder = null, $flags = null)
     {
         if ($folder === null) {
@@ -516,3 +521,4 @@ class Zend_Mail_Storage_Imap extends Zend_Mail_Storage_Abstract
         }
     }
 }
+

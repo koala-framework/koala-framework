@@ -95,9 +95,8 @@ require_once 'Zend/Server/Reflection/Method.php';
  *     // Attach Some_Service_Class in 'some' namespace
  *     $server->setClass('Some_Service_Class', 'some');
  *
- *     // Attach Another_Service_Class in 'another' namespace; use only static 
- *     // methods
- *     $server->setClass('Another_Service_Class', 'another', false);
+ *     // Attach Another_Service_Class in 'another' namespace
+ *     $server->setClass('Another_Service_Class', 'another');
  *
  *     // Create dispatch table cache file
  *     Zend_XmlRpc_Server_Cache::save($filename, $server);

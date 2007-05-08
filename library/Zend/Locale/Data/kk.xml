@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.25 $"/>
-		<generation date="$Date: 2005/05/24 21:21:38 $"/>
+		<version number="$Revision: 1.39 $"/>
+		<generation date="$Date: 2006/06/27 23:30:54 $"/>
 		<language type="kk"/>
 	</identity>
 	<localeDisplayNames>
@@ -15,7 +15,8 @@
 		</territories>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[а-яыэёіқңүұә]</exemplarCharacters>
+		<exemplarCharacters>[а ә б-е ё ж-й і к қ л-н ң о-у ұ ү ф-я]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[һ]</exemplarCharacters>
 	</characters>
 	<dates>
 		<calendars>
@@ -74,9 +75,6 @@
 						</dayWidth>
 					</dayContext>
 				</days>
-				<week>
-					<firstDay day="mon"/>
-				</week>
 				<dateFormats>
 					<dateFormatLength type="full">
 						<dateFormat>
@@ -99,6 +97,13 @@
 						</dateFormat>
 					</dateFormatLength>
 				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMdd" draft="provisional">dd.MM</dateFormatItem>
+						<dateFormatItem id="yyyyMM" draft="provisional">MM.yyyy</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM" draft="provisional">MMMM yyyy 'ж.'</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 	</dates>
@@ -117,8 +122,6 @@
 		<messages>
 			<yesstr>иә:и</yesstr>
 			<nostr>жоқ:ж</nostr>
-			<yesexpr>^([yY]([eE][sS])?)|([иИ][әӘ]?)</yesexpr>
-			<noexpr>^([nN][oO]?)|([жЖ]([оО][қҚ])?)</noexpr>
 		</messages>
 	</posix>
 </ldml>

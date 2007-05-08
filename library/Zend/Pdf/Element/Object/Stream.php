@@ -194,23 +194,25 @@ class Zend_Pdf_Element_Object_Stream extends Zend_Pdf_Element_Object
         }
 
         foreach ($this->_originalDictionary['Filter'] as $id => $filterName ) {
+            $valueRef = &$this->_value->value->getRef();
+            $this->_value->value->touch();
             switch ($filterName) {
                 case 'ASCIIHexDecode':
-                    $this->_value->value = Zend_Pdf_Filter_AsciiHex::decode($this->_value->value);
+                    $valueRef = Zend_Pdf_Filter_AsciiHex::decode($valueRef);
                     break;
 
                 case 'ASCII85Decode':
-                    $this->_value->value = Zend_Pdf_Filter_Ascii85::decode($this->_value->value);
+                    $valueRef = Zend_Pdf_Filter_Ascii85::decode($valueRef);
                     break;
 
                 case 'FlateDecode':
-                    $this->_value->value = Zend_Pdf_Filter_Compression_Flate::decode($this->_value->value,
-                                                                                     $this->_originalDictionary['DecodeParms'][$id]);
+                    $valueRef = Zend_Pdf_Filter_Compression_Flate::decode($valueRef,
+                                                                          $this->_originalDictionary['DecodeParms'][$id]);
                     break;
 
                 case 'LZWDecode':
-                    $this->_value->value = Zend_Pdf_Filter_Compression_Lzw::decode($this->_value->value,
-                                                                                   $this->_originalDictionary['DecodeParms'][$id]);
+                    $valueRef = Zend_Pdf_Filter_Compression_Lzw::decode($valueRef,
+                                                                        $this->_originalDictionary['DecodeParms'][$id]);
                     break;
 
                 default:
@@ -240,23 +242,25 @@ class Zend_Pdf_Element_Object_Stream extends Zend_Pdf_Element_Object
         $filters = array_reverse($this->_originalDictionary['Filter'], true);
 
         foreach ($filters as $id => $filterName ) {
+            $valueRef = &$this->_value->value->getRef();
+            $this->_value->value->touch();
             switch ($filterName) {
                 case 'ASCIIHexDecode':
-                    $this->_value->value = Zend_Pdf_Filter_AsciiHex::encode($this->_value->value);
+                    $valueRef = Zend_Pdf_Filter_AsciiHex::encode($valueRef);
                     break;
 
                 case 'ASCII85Decode':
-                    $this->_value->value = Zend_Pdf_Filter_Ascii85::encode($this->_value->value);
+                    $valueRef = Zend_Pdf_Filter_Ascii85::encode($valueRef);
                     break;
 
                 case 'FlateDecode':
-                    $this->_value->value = Zend_Pdf_Filter_Compression_Flate::encode($this->_value->value,
-                                                                                     $this->_originalDictionary['DecodeParms'][$id]);
+                    $valueRef = Zend_Pdf_Filter_Compression_Flate::encode($valueRef,
+                                                                          $this->_originalDictionary['DecodeParms'][$id]);
                     break;
 
                 case 'LZWDecode':
-                    $this->_value->value = Zend_Pdf_Filter_Compression_Lzw::encode($this->_value->value,
-                                                                                   $this->_originalDictionary['DecodeParms'][$id]);
+                    $valueRef = Zend_Pdf_Filter_Compression_Lzw::encode($valueRef,
+                                                                        $this->_originalDictionary['DecodeParms'][$id]);
                     break;
 
                 default:
@@ -292,7 +296,7 @@ class Zend_Pdf_Element_Object_Stream extends Zend_Pdf_Element_Object
                 $this->_decodeStream();
             }
 
-            return $this->_value->value;
+            return $this->_value->value->getRef();
         }
 
         throw new Zend_Pdf_Exception('Unknown stream object property requested.');
@@ -308,7 +312,10 @@ class Zend_Pdf_Element_Object_Stream extends Zend_Pdf_Element_Object
     public function __set($property, $value)
     {
         if ($property == 'value') {
-            $this->_value->value  = $value;
+            $valueRef = &$this->_value->value->getRef();
+            $valueRef = $value;
+            $this->_value->value->touch();
+
             $this->_streamDecoded = true;
 
             return;

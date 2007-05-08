@@ -1,12 +1,41 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.28 $"/>
-		<generation date="$Date: 2005/04/21 15:45:02 $"/>
+		<version number="$Revision: 1.43 $"/>
+		<generation date="$Date: 2006/06/28 02:00:53 $"/>
 		<language type="es"/>
 		<territory type="CL"/>
 	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="arn" draft="provisional">mapudungun</language>
+			<language type="ira" draft="provisional">iraníes</language>
+		</languages>
+		<scripts>
+			<script type="Bali">balinés</script>
+		</scripts>
+		<territories>
+			<territory type="005">Sudamérica</territory>
+			<territory type="AN" draft="provisional">Antillas Holandesas</territory>
+			<territory type="AZ" draft="provisional">Azerbayán</territory>
+			<territory type="EH">Sahara Occidental</territory>
+			<territory type="PS" draft="provisional">Territorio Palestino</territory>
+			<territory type="RO" draft="provisional">Rumania</territory>
+			<territory type="SA" draft="provisional">Arabia Saudita</territory>
+			<territory type="TT">Trinidad y Tobago</territory>
+			<territory type="TZ" draft="provisional">Tanzanía</territory>
+		</territories>
+		<variants>
+			<variant type="1996">Ortografía alemana de 1996</variant>
+		</variants>
+		<keys>
+			<key type="currency" draft="provisional">divisa</key>
+		</keys>
+		<types>
+			<type type="phonebook" key="collation">orden de directorio telefónico</type>
+		</types>
+	</localeDisplayNames>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
@@ -44,6 +73,11 @@
 						</timeFormat>
 					</timeFormatLength>
 				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="mmss" draft="provisional">mm:ss</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 	</dates>

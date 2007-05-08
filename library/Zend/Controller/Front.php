@@ -195,7 +195,7 @@ class Zend_Controller_Front
      * @return void
      * @throws Zend_Controller_Exception if called from an object instance
      */
-    static public function run($controllerDirectory)
+    public static function run($controllerDirectory)
     {
         self::getInstance()
             ->setControllerDirectory($controllerDirectory)
@@ -447,7 +447,7 @@ class Zend_Controller_Front
     /**
      * Return the dispatcher object.
      *
-     * @return Zend_Controller_DispatcherInteface
+     * @return Zend_Controller_Dispatcher_Interface
      */
     public function getDispatcher()
     {
@@ -750,7 +750,14 @@ class Zend_Controller_Front
                 /**
                  * Dispatch request
                  */
-                $dispatcher->dispatch($request, $response);
+                try {
+                    $dispatcher->dispatch($request, $response);
+                } catch (Exception $e) {
+                    if ($this->throwExceptions()) {
+                        throw $e;
+                    }
+                    $response->setException($e);
+                }
 
                 /**
                  * Notify plugins of dispatch completion
@@ -782,7 +789,6 @@ class Zend_Controller_Front
             return $response;
         }
 
-        $response->sendHeaders();
-        $response->outputBody();
+        $response->sendResponse();
     }
 }

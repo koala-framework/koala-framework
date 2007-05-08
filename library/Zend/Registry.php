@@ -16,7 +16,7 @@
  * @package    Zend_Registry
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Registry.php 4049 2007-03-17 02:52:12Z bkarwin $
+ * @version    $Id: Registry.php 4223 2007-03-24 10:20:34Z thomas $
  */
 
 /**
@@ -173,7 +173,7 @@ class Zend_Registry extends ArrayObject
      * @param  string $index
      * @return boolean
      */
-    static public function isRegistered($index)
+    public static function isRegistered($index)
     {
         if (self::$_registry === null) {
             return false;

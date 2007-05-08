@@ -187,7 +187,7 @@ class Zend_Mail_Storage_Folder implements RecursiveIterator
      */
     public function __toString()
     {
-        return $this->getGlobalName();
+        return (string)$this->getGlobalName();
     }
 
     /**

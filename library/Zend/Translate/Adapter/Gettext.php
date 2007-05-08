@@ -44,13 +44,13 @@ class Zend_Translate_Adapter_Gettext extends Zend_Translate_Adapter {
     /**
      * Generates the  adapter
      *
-     * @param  array               $options  Options for this adapter
+     * @param  string              $data     Translation data
      * @param  string|Zend_Locale  $locale   OPTIONAL Locale/Language to set, identical with locale identifier,
      *                                       see Zend_Locale for more information
      */
-    public function __construct($options, $locale = null)
+    public function __construct($data, $locale = null)
     {
-        parent::__construct($options, $locale);
+        parent::__construct($data, $locale);
     }
 
 
@@ -75,12 +75,14 @@ class Zend_Translate_Adapter_Gettext extends Zend_Translate_Adapter {
      * @param  string  $filename  MO file to add, full path must be given for access
      * @param  string  $locale    New Locale/Language to set, identical with locale identifier,
      *                            see Zend_Locale for more information
-     * @param  boolean $option    Not used for gettext
+     * @param  array   $option    OPTIONAL Options to use
      * @throws Zend_Translation_Exception
      */
-    protected function _loadTranslationData($filename, $locale, $option = null)
+    protected function _loadTranslationData($filename, $locale, array $options = array())
     {
-        if ($option  ||  !isset($this->_translate[$locale])) {
+        $options = array_merge($this->_options, $options);
+
+        if ($options['clear']  ||  !isset($this->_translate[$locale])) {
             $this->_translate[$locale] = array();
         }
 

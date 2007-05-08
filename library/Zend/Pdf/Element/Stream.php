@@ -19,9 +19,20 @@
  */
 
 
-/** Zend_Pdf_Element */
+/**
+ * @see Zend_Pdf
+ */
+require_once 'Zend/Pdf.php';
+
+/**
+ * @see Zend_Pdf_Element
+ */
 require_once 'Zend/Pdf/Element.php';
 
+/**
+ * @see Zend_Memory
+ */
+require_once 'Zend/Memory.php';
 
 /**
  * PDF file 'stream' element implementation
@@ -36,7 +47,7 @@ class Zend_Pdf_Element_Stream extends Zend_Pdf_Element
     /**
      * Object value
      *
-     * @var string
+     * @var Zend_Memory_Container
      */
     public $value;
 
@@ -48,7 +59,7 @@ class Zend_Pdf_Element_Stream extends Zend_Pdf_Element
      */
     public function __construct($val)
     {
-        $this->value   = (string)$val;
+        $this->value = Zend_Pdf::getMemoryManager()->create($val);
     }
 
 
@@ -71,7 +82,7 @@ class Zend_Pdf_Element_Stream extends Zend_Pdf_Element
      */
     public function length()
     {
-        return strlen($this->value);
+        return strlen($this->value->getRef());
     }
 
 
@@ -81,7 +92,9 @@ class Zend_Pdf_Element_Stream extends Zend_Pdf_Element
      */
     public function clear()
     {
-        $this->value = '';
+        $ref = &$this->value->getRef();
+        $ref = '';
+        $this->value->touch();
     }
 
 
@@ -92,7 +105,9 @@ class Zend_Pdf_Element_Stream extends Zend_Pdf_Element
      */
     public function append($val)
     {
-        $this->value .= (string)$val;
+        $ref = &$this->value->getRef();
+        $ref .= (string)$val;
+        $this->value->touch();
     }
 
 
@@ -104,6 +119,6 @@ class Zend_Pdf_Element_Stream extends Zend_Pdf_Element
      */
     public function toString($factory = null)
     {
-        return "stream\n" . $this->value . "\nendstream";
+        return "stream\n" . $this->value->getRef() . "\nendstream";
     }
 }

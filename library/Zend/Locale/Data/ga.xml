@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.35 $"/>
-		<generation date="$Date: 2005/04/16 06:25:58 $"/>
+		<version number="$Revision: 1.51 $"/>
+		<generation date="$Date: 2006/06/27 23:30:54 $"/>
 		<language type="ga"/>
 	</identity>
 	<localeDisplayNames>
@@ -93,6 +93,7 @@
 			<language type="no">Ioruais</language>
 			<language type="nv">Navachóis</language>
 			<language type="oc">Ocatáinis (tar éis 1500); Provençal</language>
+			<language type="oc" alt="proposed-u216-1" draft="unconfirmed">Ocatáinis (tar éis 1500); Proibhinsis</language>
 			<language type="os">Óiséitis</language>
 			<language type="pa">Puinseaibis</language>
 			<language type="pl">Polainnis</language>
@@ -129,7 +130,44 @@
 			<language type="zh">Sínis</language>
 			<language type="zu">Súlúis</language>
 		</languages>
+		<scripts>
+			<script type="Arab" draft="unconfirmed">Arabach</script>
+			<script type="Armn" draft="unconfirmed">Airméanach</script>
+			<script type="Beng" draft="unconfirmed">Beangálach</script>
+			<script type="Cyrl" draft="unconfirmed">Coireallach</script>
+			<script type="Deva" draft="unconfirmed">Déiveanágrach</script>
+			<script type="Ethi" draft="unconfirmed">Aetópach</script>
+			<script type="Goth" draft="unconfirmed">Gotach</script>
+			<script type="Grek" draft="unconfirmed">Gréagach</script>
+			<script type="Gujr" draft="unconfirmed">Gúisearátach</script>
+			<script type="Guru" draft="unconfirmed">Gurmúcach</script>
+			<script type="Hang" draft="unconfirmed">Hangalach</script>
+			<script type="Hani" draft="unconfirmed">Han</script>
+			<script type="Hans" draft="unconfirmed">Han Símplithe</script>
+			<script type="Hant" draft="unconfirmed">Han Traidisiúnta</script>
+			<script type="Hebr" draft="unconfirmed">Eabhrach</script>
+			<script type="Hira" draft="unconfirmed">Híreagánach</script>
+			<script type="Hrkt" draft="unconfirmed">Catacánach nó Híreagánach</script>
+			<script type="Kana" draft="unconfirmed">Catacánach</script>
+			<script type="Knda" draft="unconfirmed">Cannadach</script>
+			<script type="Latg" draft="unconfirmed">Laidineach (Cló Gaelach)</script>
+			<script type="Latn" draft="unconfirmed">Laidineach</script>
+			<script type="Mlym" draft="unconfirmed">Mailéalamach</script>
+			<script type="Mong" draft="unconfirmed">Mongólach</script>
+			<script type="Ogam" draft="unconfirmed">Ogham</script>
+			<script type="Orya" draft="unconfirmed">Oiríseach</script>
+			<script type="Runr" draft="unconfirmed">Rúnach</script>
+			<script type="Taml" draft="unconfirmed">Tamalach</script>
+			<script type="Telu" draft="unconfirmed">Teileagúch</script>
+			<script type="Thai" draft="unconfirmed">Téallanach</script>
+			<script type="Tibt" draft="unconfirmed">Tibéadach</script>
+		</scripts>
 		<territories>
+			<territory type="001" draft="unconfirmed">An Domhan</territory>
+			<territory type="002" draft="unconfirmed">An Afraic</territory>
+			<territory type="053" draft="unconfirmed">An Astráil agus an Nua-Shéalainn</territory>
+			<territory type="142" draft="unconfirmed">An Áise</territory>
+			<territory type="150" draft="unconfirmed">An Eoraip</territory>
 			<territory type="AD">Andóra</territory>
 			<territory type="AE">Aontas na nÉimíríochtaí Arabacha</territory>
 			<territory type="AF">An Afganastáin</territory>
@@ -145,8 +183,11 @@
 			<territory type="AT">An Ostair</territory>
 			<territory type="AU">An Astráil</territory>
 			<territory type="AW">Aruba</territory>
+			<territory type="AW" alt="proposed-u216-1" draft="unconfirmed">Arúba</territory>
+			<territory type="AX" draft="unconfirmed">Oileáin Alaind</territory>
 			<territory type="AZ">An Asarbaiseáin</territory>
 			<territory type="BA">An Bhoisnia-Heirseagaivéin</territory>
+			<territory type="BA" alt="proposed-u216-1" draft="unconfirmed">An Bhoisnia agus Heirseagóvéin</territory>
 			<territory type="BB">Barbadós</territory>
 			<territory type="BD">An Bhanglaidéis</territory>
 			<territory type="BE">An Bheilg</territory>
@@ -162,11 +203,13 @@
 			<territory type="BS">Na Bahámaí</territory>
 			<territory type="BT">An Bhútáin</territory>
 			<territory type="BV">Oileáin Bouvet</territory>
+			<territory type="BV" alt="proposed-u216-1" draft="unconfirmed">Oileán Bouvet</territory>
 			<territory type="BW">An Bhotsuáin</territory>
 			<territory type="BY">An Bhealarúis</territory>
 			<territory type="BZ">An Bheilís</territory>
 			<territory type="CA">Ceanada</territory>
 			<territory type="CC">Oileáin Cocos (Keeling)</territory>
+			<territory type="CC" alt="proposed-u216-1" draft="unconfirmed">Oileáin na gCócónna (Keeling)</territory>
 			<territory type="CD">Poblacht Dhaonlathach an Chongó</territory>
 			<territory type="CF">Poblacht na hAfraice Láir</territory>
 			<territory type="CG">An Congó</territory>
@@ -178,9 +221,10 @@
 			<territory type="CN">An tSín</territory>
 			<territory type="CO">An Cholóim</territory>
 			<territory type="CR">Cósta Ríce</territory>
-			<territory type="CS" draft="true">An tSeirbia</territory>
+			<territory type="CS" draft="unconfirmed">An tSeirbia agus Montainéagró</territory>
 			<territory type="CU">Cúba</territory>
 			<territory type="CV">Rinn Verde</territory>
+			<territory type="CV" alt="proposed-u216-1" draft="unconfirmed">An Rinn Ghlas</territory>
 			<territory type="CX">Oileán na Nollag</territory>
 			<territory type="CY">An Chipir</territory>
 			<territory type="CZ">Poblacht na Seice</territory>
@@ -195,6 +239,7 @@
 			<territory type="EG">An Éigipt</territory>
 			<territory type="EH">An Sahára Thiar</territory>
 			<territory type="ER">Eritrea</territory>
+			<territory type="ER" alt="proposed-u216-1" draft="unconfirmed">An Eiritré</territory>
 			<territory type="ES">An Spáinn</territory>
 			<territory type="ET">An Aetóip</territory>
 			<territory type="FI">An Fhionlainn</territory>
@@ -221,7 +266,7 @@
 			<territory type="GU">Guam</territory>
 			<territory type="GW">An Ghuine-Bhissau</territory>
 			<territory type="GY">An Ghuáin</territory>
-			<territory type="HK" draft="true">Hong Cong (R.R.S. na Síne)</territory>
+			<territory type="HK" draft="unconfirmed">Hong Cong (R.R.S. na Síne)</territory>
 			<territory type="HM">Oileán Heard agus Oileáin McDonald</territory>
 			<territory type="HN">Hondúras</territory>
 			<territory type="HR">An Chróit</territory>
@@ -243,16 +288,19 @@
 			<territory type="KG">An Chirgeastáin</territory>
 			<territory type="KH">An Chambóid</territory>
 			<territory type="KI">Cireabaití</territory>
+			<territory type="KI" alt="proposed-u216-1" draft="unconfirmed">Ciribeas</territory>
 			<territory type="KM">Oileáin Chomóra</territory>
 			<territory type="KN">Saint Kitts agus Nevis</territory>
 			<territory type="KP">An Chóiré Thuaidh</territory>
 			<territory type="KR">An Chóiré Theas</territory>
 			<territory type="KW">Cuáit</territory>
 			<territory type="KY">Oileáin Cayman</territory>
+			<territory type="KY" alt="proposed-u216-1" draft="unconfirmed">Oileáin na gCadhman</territory>
 			<territory type="KZ">An Chasacstáin</territory>
 			<territory type="LA">Laos</territory>
 			<territory type="LB">An Liobáin</territory>
 			<territory type="LC">Saint Lucia</territory>
+			<territory type="LC" alt="proposed-u216-1" draft="unconfirmed">San Lúisia</territory>
 			<territory type="LI">Lichtinstéin</territory>
 			<territory type="LK">Srí Lanca</territory>
 			<territory type="LR">An Libéir</territory>
@@ -270,14 +318,16 @@
 			<territory type="ML">Mailí</territory>
 			<territory type="MM">Maenmar</territory>
 			<territory type="MN">An Mhongóil</territory>
-			<territory type="MO" draft="true">Macáó (R.R.S. na Síne)</territory>
+			<territory type="MO" draft="unconfirmed">Macáó (R.R.S. na Síne)</territory>
 			<territory type="MP">Oileáin Mariana Thuaidh</territory>
 			<territory type="MQ">Martinique</territory>
+			<territory type="MQ" alt="proposed-u216-1" draft="unconfirmed">Martainíc</territory>
 			<territory type="MR">An Mharatáin</territory>
 			<territory type="MS">Montsarat</territory>
 			<territory type="MT">Málta</territory>
 			<territory type="MU">Oileán Mhuirís</territory>
 			<territory type="MV">Mhaildiví</territory>
+			<territory type="MV" alt="proposed-u216-1" draft="unconfirmed">Na Maildiví</territory>
 			<territory type="MW">An Mhaláiv</territory>
 			<territory type="MX">Meicsiceo</territory>
 			<territory type="MY">An Mhalaeisia</territory>
@@ -316,6 +366,7 @@
 			<territory type="RW">Ruanda</territory>
 			<territory type="SA">An Araib Shádach</territory>
 			<territory type="SB">Oileáin Solomon</territory>
+			<territory type="SB" alt="proposed-u216-1" draft="unconfirmed">Oileáin Sholaimh</territory>
 			<territory type="SC">Na Séiséil</territory>
 			<territory type="SD">An tSúdáin</territory>
 			<territory type="SE">An tSualainn</territory>
@@ -341,6 +392,7 @@
 			<territory type="TJ">An Táidsíceastáin</territory>
 			<territory type="TK">Tócalá</territory>
 			<territory type="TL">Tíomór-Leste</territory>
+			<territory type="TL" alt="proposed-u216-1" draft="unconfirmed">Tíomór Thoir</territory>
 			<territory type="TM">An Tuircméanastáin</territory>
 			<territory type="TN">An Túinéis</territory>
 			<territory type="TO">Tonga</territory>
@@ -361,6 +413,7 @@
 			<territory type="VG">Oileáin Bhriotanacha na Maighdean</territory>
 			<territory type="VI">Oileáin na Maighdean S.A.M.</territory>
 			<territory type="VN">Vítneam</territory>
+			<territory type="VN" alt="proposed-u216-1" draft="unconfirmed">Vít Neam</territory>
 			<territory type="VU">Vanuatú</territory>
 			<territory type="WF">Oileáin Vailís agus Futúna</territory>
 			<territory type="WS">Samó</territory>
@@ -370,12 +423,36 @@
 			<territory type="ZM">An tSaimbia</territory>
 			<territory type="ZW">An tSiombáib</territory>
 		</territories>
+		<keys>
+			<key type="calendar" draft="unconfirmed">Féilire</key>
+			<key type="collation" draft="unconfirmed">Comhordú</key>
+			<key type="currency" draft="unconfirmed">Airgeadra</key>
+		</keys>
+		<types>
+			<type type="big5han" key="collation" draft="unconfirmed">Síneach Traidisiúnta (Big5)</type>
+			<type type="buddhist" key="calendar" draft="unconfirmed">Féilire Búdaíoch</type>
+			<type type="chinese" key="calendar" draft="unconfirmed">Féilire Síneach</type>
+			<type type="gb2312han" key="collation" draft="unconfirmed">Síneach Símplithe (GB2312)</type>
+			<type type="gregorian" key="calendar" draft="unconfirmed">Féilire Greagórach</type>
+			<type type="hebrew" key="calendar" draft="unconfirmed">Féilire Eabhrach</type>
+			<type type="islamic" key="calendar" draft="unconfirmed">Féilire Ioslamach</type>
+			<type type="islamic-civil" key="calendar" draft="unconfirmed">Féilire Ioslamach Sibhialta</type>
+			<type type="japanese" key="calendar" draft="unconfirmed">Féilire Seapánach</type>
+			<type type="traditional" key="collation" draft="unconfirmed">Traidisiúnta</type>
+		</types>
+		<measurementSystemNames>
+			<measurementSystemName type="US" draft="unconfirmed">Meiriceánach</measurementSystemName>
+			<measurementSystemName type="metric" draft="unconfirmed">Méadrach</measurementSystemName>
+		</measurementSystemNames>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-z á é í ó ú]</exemplarCharacters>
+		<exemplarCharacters>[a á b-e é f-i í j-o ó p-u ú v-z]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[ḃ ċ ḋ ḟ ġ ṁ ṗ ṡ ṫ]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary" alt="proposed-u216-1" draft="unconfirmed">[ḃ ċ ḋ ḟ ġ ṁ ṗ ṡ ṫ]</exemplarCharacters>
+		<exemplarCharacters alt="proposed-u216-1" draft="unconfirmed">[a á b-e é f-i í j-o ó p-u ú v-z]</exemplarCharacters>
 	</characters>
 	<dates>
-		<localizedPatternChars>RbMLkUnsSElFtTauKcBeyrAC</localizedPatternChars>
+		<localizedPatternChars>RbMLkUnsSElFtTauKcBeyrACvdz</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
 				<months>
@@ -409,6 +486,22 @@
 							<month type="12">Nollaig</month>
 						</monthWidth>
 					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="narrow">
+							<month type="1">E</month>
+							<month type="2">F</month>
+							<month type="3">M</month>
+							<month type="4">A</month>
+							<month type="5">B</month>
+							<month type="6">M</month>
+							<month type="7">I</month>
+							<month type="8">L</month>
+							<month type="9">M</month>
+							<month type="10">D</month>
+							<month type="11">S</month>
+							<month type="12">N</month>
+						</monthWidth>
+					</monthContext>
 				</months>
 				<days>
 					<dayContext type="format">
@@ -432,6 +525,22 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">R1</quarter>
+							<quarter type="2">R2</quarter>
+							<quarter type="3">R3</quarter>
+							<quarter type="4">R4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">1ú ráithe</quarter>
+							<quarter type="2">2ú ráithe</quarter>
+							<quarter type="3">3ú ráithe</quarter>
+							<quarter type="4">4ú ráithe</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
 				<am>a.m.</am>
 				<pm>p.m.</pm>
 				<eras>
@@ -440,6 +549,12 @@
 						<era type="1">AD</era>
 					</eraAbbr>
 				</eras>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="HHmm" draft="provisional">HH:mm</dateFormatItem>
+						<dateFormatItem id="HHmmss" draft="provisional">HH:mm:ss</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>

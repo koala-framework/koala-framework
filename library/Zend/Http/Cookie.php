@@ -16,7 +16,7 @@
  * @package    Zend_Http
  * @subpackage Cookie
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com/)
- * @version    $Id: Cookie.php 3834 2007-03-09 05:12:52Z bkarwin $
+ * @version    $Id: Cookie.php 4223 2007-03-24 10:20:34Z thomas $
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
@@ -251,7 +251,7 @@ class Zend_Http_Cookie
      * @param Zend_Uri_Http|string $ref_uri Reference URI for default values (domain, path)
      * @return Zend_Http_Cookie A new Zend_Http_Cookie object or false on failure.
      */
-    static public function fromString($cookieStr, $ref_uri = null)
+    public static function fromString($cookieStr, $ref_uri = null)
     {
         // Set default values
         if (is_string($ref_uri)) {

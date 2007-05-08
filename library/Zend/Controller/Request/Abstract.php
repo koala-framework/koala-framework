@@ -263,6 +263,8 @@ abstract class Zend_Controller_Request_Abstract
 
     /**
      * Set an action parameter
+     *
+     * A $value of null will unset the $key if it exists
      * 
      * @param string $key 
      * @param mixed $value 
@@ -271,7 +273,13 @@ abstract class Zend_Controller_Request_Abstract
     public function setParam($key, $value)
     {
         $key = (string) $key;
-        $this->_params[$key] = $value;
+
+        if ((null === $value) && isset($this->_params[$key])) {
+            unset($this->_params[$key]);
+        } elseif (null !== $value) {
+            $this->_params[$key] = $value;
+        }
+
         return $this;
     }
 
@@ -287,6 +295,8 @@ abstract class Zend_Controller_Request_Abstract
 
     /**
      * Set action parameters en masse; does not overwrite
+     *
+     * Null values will unset the associated key.
      * 
      * @param array $array 
      * @return Zend_Controller_Request_Abstract
@@ -294,6 +304,13 @@ abstract class Zend_Controller_Request_Abstract
     public function setParams(array $array)
     {
         $this->_params = $this->_params + (array) $array;
+
+        foreach ($this->_params as $key => $value) {
+            if (null === $value) {
+                unset($this->_params[$key]);
+            }
+        }
+
         return $this;
     }
 

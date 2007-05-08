@@ -48,7 +48,8 @@ class Zend_Cache_Backend
      */
     protected $_directives = array(
         'lifetime' => 3600,
-        'logging' => false
+        'logging'  => false,
+        'logger'   => null
     );  
     
     /**
@@ -58,6 +59,12 @@ class Zend_Cache_Backend
      */
     protected $_options = array();
     
+    /**
+     * backward compatibility becase of ZF-879 and ZF-1172 (it will be removed in ZF 1.1)
+     *
+     * @var array 
+     */
+    protected $_backwardCompatibilityArray = array();
     
     // ----------------------
     // --- Public methods ---
@@ -87,17 +94,15 @@ class Zend_Cache_Backend
         while (list($name, $value) = each($directives)) {
             if (!is_string($name)) {
                 Zend_Cache::throwException("Incorrect option name : $name");
-            }
+            } 
+            $name = strtolower($name);
             if (array_key_exists($name, $this->_directives)) {
                 $this->_directives[$name] = $value;
             }
-            // specific test for the logging directive
-            if ($name == 'logging') {
-                if ((!class_exists('Zend_Log', false)) && ($value)) {
-                    Zend_Cache::throwException('logging feature is on but Zend_Log is not "loaded"');
-                }
-            }
+
         }
+
+        $this->_loggerSanity();
     } 
     
     /**
@@ -108,7 +113,17 @@ class Zend_Cache_Backend
      */ 
     public function setOption($name, $value)
     {
-        if (!is_string($name) || !array_key_exists($name, $this->_options)) {
+        if (!is_string($name)) {
+            Zend_Cache::throwException("Incorrect option name : $name");
+        }
+        if (array_key_exists($name, $this->_backwardCompatibilityArray)) {
+            $tmp = $this->_backwardCompatibilityArray[$name];
+            $this->_log("$name option is deprecated, use $tmp instead (same syntax) !");
+            $name = $tmp;
+        } else {
+            $name = strtolower($name);
+        }
+        if (!array_key_exists($name, $this->_options)) {
             Zend_Cache::throwException("Incorrect option name : $name");
         }
         $this->_options[$name] = $value;
@@ -157,6 +172,53 @@ class Zend_Cache_Backend
             if (isset($_SERVER['TMPDIR'])) return $_SERVER['TMPDIR'];
             return '/tmp';
         }
+    }
+
+    /**
+     * Make sure if we enable logging that the Zend_Log class
+     * is available.
+     * Create a default log object if none is set.
+     *
+     * @return void
+     * @throws Zend_Cache_Exception
+     */
+    protected function _loggerSanity()
+    {
+        if (!isset($this->_directives['logging']) || !$this->_directives['logging']) {
+            return;
+        }
+        try {
+            require_once 'Zend/Loader.php';
+            Zend_Loader::loadClass('Zend_Log');
+        } catch (Zend_Exception $e) {
+            Zend_Cache::throwException('Logging feature is enabled but the Zend_Log class is not available');
+        }
+        if (isset($this->_directives['logger']) && $this->_directives['logger'] instanceof Zend_Log) {
+            return;
+        }
+        // Create a default logger to the standard output stream
+        Zend_Loader::loadClass('Zend_Log_Writer_Stream');
+        $logger = new Zend_Log(new Zend_Log_Writer_Stream('php://output'));
+        $this->_directives['logger'] = $logger;
+    }
+
+    /**
+     * Log a message at the WARN (4) priority.
+     *
+     * @param string $message
+     * @return void
+     * @throws Zend_Cache_Exception
+     */
+    protected function _log($message, $priority = 4)
+    {
+        if (!$this->_directives['logging']) {
+            return;
+        }
+        if (!(isset($this->_directives['logger']) || $this->_directives['logger'] instanceof Zend_Log)) {
+            Zend_Cache::throwException('Logging is enabled but logger is not set');
+        }
+        $logger = $this->_directives['logger'];
+        $logger->log($message, $priority);
     }
     
 }

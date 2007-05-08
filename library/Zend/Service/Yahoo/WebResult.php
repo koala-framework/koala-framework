@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,60 +18,83 @@
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: WebResult.php 4462 2007-04-11 04:10:16Z darby $
  */
 
 
 /**
- * @todo coding standards: naming of instance variables
+ * @see Zend_Service_Yahoo_Result
+ */
+require_once 'Zend/Service/Yahoo/Result.php';
+
+
+/**
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Yahoo_WebResult extends Zend_Service_Yahoo_Result {
+class Zend_Service_Yahoo_WebResult extends Zend_Service_Yahoo_Result
+{
     /**
-     * @var string $Summary a summary of the result
+     * A summary of the result
+     *
+     * @var string
      */
     public $Summary;
-    
+
     /**
-     * @var string MimeType the file type of the result (text, html, pdf, etc.)
+     * The file type of the result (text, html, pdf, etc.)
+     *
+     * @var string
      */
     public $MimeType;
-    
+
     /**
-     * @var string $ModificationDate the modification time of the result (as a unix timestamp)
+     * The modification time of the result (as a unix timestamp)
+     *
+     * @var string
      */
     public $ModificationDate;
-    
+
     /**
-     * @var string $CacheUrl the URL for the Yahoo cache of this page, if it exists
+     * The URL for the Yahoo cache of this page, if it exists
+     *
+     * @var string
      */
     public $CacheUrl;
-    
+
     /**
-     * @var int $CacheSize the size of the cache entry
+     * The size of the cache entry
+     *
+     * @var int
      */
     public $CacheSize;
 
     /**
-     * @todo docblock
+     * Web result namespace
+     *
+     * @var string
      */
-    protected $_namespace = "urn:yahoo:srch";
+    protected $_namespace = 'urn:yahoo:srch';
 
-    
+
     /**
-     * @todo dockblock
+     * Initializes the web result
+     *
+     * @param  DOMElement $result
+     * @return void
      */
-    public function __construct(DomElement $result) {
-        $this->_fields = array('Summary','MimeType','ModificationDate');
+    public function __construct(DOMElement $result)
+    {
+        $this->_fields = array('Summary', 'MimeType', 'ModificationDate');
         parent::__construct($result);
 
         $this->_xpath = new DOMXPath($result->ownerDocument);
-    	$this->_xpath->registerNamespace("yh", $this->_namespace);
+    	$this->_xpath->registerNamespace('yh', $this->_namespace);
 
-        $this->CacheUrl = (string) $this->_xpath->query("//yh:Cache/yh:Url/text()")->item(0)->data;
-        $this->CacheSize = (string) $this->_xpath->query("//yh:Cache/yh:Size/text()")->item(0)->data;
+        $this->CacheUrl = $this->_xpath->query('//yh:Cache/yh:Url/text()')->item(0)->data;
+        $this->CacheSize = (int) $this->_xpath->query('//yh:Cache/yh:Size/text()')->item(0)->data;
     }
 }

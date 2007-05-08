@@ -48,7 +48,7 @@ class Zend_Json
      * objects. See {@link ZJsonDecoder::decode()} for details.
      * @return mixed
      */
-    static public function decode($encodedValue, $objectDecodeType = Zend_Json::TYPE_ARRAY)
+    public static function decode($encodedValue, $objectDecodeType = Zend_Json::TYPE_ARRAY)
     {
         if (function_exists('json_decode')) {
             return json_decode($encodedValue, $objectDecodeType);
@@ -73,7 +73,7 @@ class Zend_Json
      * @param boolean $cycleCheck Optional; whether or not to check for object recursion; off by default
      * @return string JSON encoded object
      */
-    static public function encode($valueToEncode, $cycleCheck = false)
+    public static function encode($valueToEncode, $cycleCheck = false)
     {
         if (function_exists('json_encode')) {
             return json_encode($valueToEncode);

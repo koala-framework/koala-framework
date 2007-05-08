@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.39 $"/>
-		<generation date="$Date: 2005/05/24 21:21:38 $"/>
+		<version number="$Revision: 1.55 $"/>
+		<generation date="$Date: 2006/06/27 23:30:54 $"/>
 		<language type="sq"/>
 	</identity>
 	<localeDisplayNames>
@@ -79,7 +79,7 @@
 			<territory type="FM">Mikronezi</territory>
 			<territory type="FR">Francë</territory>
 			<territory type="GA">Gjabon</territory>
-			<territory type="GB" draft="true">Mbretëria e Bashkuar</territory>
+			<territory type="GB">Mbretëria e Bashkuar</territory>
 			<territory type="GE">Gjeorgji</territory>
 			<territory type="GH">Ganë</territory>
 			<territory type="GM">Gambi</territory>
@@ -182,10 +182,11 @@
 		</territories>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-zçë{dh}{gj}{ll}{nj}{rr}{sh}{th}{xh}{zh}]</exemplarCharacters>
+		<exemplarCharacters>[a-c ç d {dh} e ë f g {gj} h-l {ll} m n {nj} o-r {rr} s {sh} t {th} u v x {xh} y z {zh}]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[w]</exemplarCharacters>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZvcL</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
 				<months>
@@ -269,9 +270,6 @@
 						</dayWidth>
 					</dayContext>
 				</days>
-				<week>
-					<firstDay day="mon"/>
-				</week>
 				<am>PD</am>
 				<pm>MD</pm>
 				<eras>
@@ -324,6 +322,14 @@
 						</timeFormat>
 					</timeFormatLength>
 				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMMMdd" draft="provisional">dd MMMM</dateFormatItem>
+						<dateFormatItem id="MMdd" draft="provisional">MM-dd</dateFormatItem>
+						<dateFormatItem id="yyyyMM" draft="provisional">yyyy-MM</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM" draft="provisional">MMMM yyyy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 	</dates>
@@ -366,8 +372,6 @@
 		<messages>
 			<yesstr>po:p</yesstr>
 			<nostr>jo:j</nostr>
-			<yesexpr>^([yY]([eE][sS])?)|([pP][oO]?)</yesexpr>
-			<noexpr>^[nNjJ][oO]?</noexpr>
 		</messages>
 	</posix>
 </ldml>

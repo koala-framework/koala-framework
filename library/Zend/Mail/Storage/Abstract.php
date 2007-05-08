@@ -51,6 +51,12 @@ abstract class Zend_Mail_Storage_Abstract implements Countable, ArrayAccess, See
      * @var null|int
      */
     protected $_iterationMax = null;
+    
+    /**
+     * used message class, change it in an extened class to extend the returned message class
+     * @var string
+     */
+    protected $_messageClass = 'Zend_Mail_Message';
 
     /**
      * Getter for has-properties. The standard has properties

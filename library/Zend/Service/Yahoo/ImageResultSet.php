@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,7 +18,20 @@
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: ImageResultSet.php 4462 2007-04-11 04:10:16Z darby $
  */
+
+
+/**
+ * @see Zend_Service_Yahoo_ResultSet
+ */
+require_once 'Zend/Service/Yahoo/ResultSet.php';
+
+
+/**
+ * @see Zend_Service_Yahoo_ImageResult
+ */
+require_once 'Zend/Service/Yahoo/ImageResult.php';
 
 
 /**
@@ -27,18 +41,23 @@
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Yahoo_ImageResultSet extends Zend_Service_Yahoo_ResultSet {
+class Zend_Service_Yahoo_ImageResultSet extends Zend_Service_Yahoo_ResultSet
+{
     /**
-     * @todo docblock
+     * Image result set namespace
+     *
+     * @var string
      */
-    protected $_namespace = "urn:yahoo:srchmi";
+    protected $_namespace = 'urn:yahoo:srchmi';
 
-    
+
     /**
-     * @todo docblock
+     * Overrides Zend_Service_Yahoo_ResultSet::current()
+     *
+     * @return Zend_Service_Yahoo_ImageResult
      */
     public function current()
     {
-    	return new Zend_Service_Yahoo_ImageResult($this->_results->item($this->_currentItem));
+        return new Zend_Service_Yahoo_ImageResult($this->_results->item($this->_currentIndex));
     }
 }

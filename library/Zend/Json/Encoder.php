@@ -251,7 +251,7 @@ class Zend_Json_Encoder
      * @param $cls ReflectionClass
      * @return string Encoded constant block in class2 format
      */
-    static private function _encodeConstants(ReflectionClass $cls)
+    private static function _encodeConstants(ReflectionClass $cls)
     {
     	$result    = "constants : {";
     	$constants = $cls->getConstants();
@@ -277,7 +277,7 @@ class Zend_Json_Encoder
      * @return string Encoded method fragment
      *
      */
-    static private function _encodeMethods(ReflectionClass $cls)
+    private static function _encodeMethods(ReflectionClass $cls)
     {
     	$methods = $cls->getMethods();
     	$result = 'methods:{';
@@ -341,7 +341,7 @@ class Zend_Json_Encoder
      * @return string Encode properties list
      *
      */
-    static private function _encodeVariables(ReflectionClass $cls)
+    private static function _encodeVariables(ReflectionClass $cls)
     {
     	$properties = $cls->getProperties();
     	$propValues = get_class_vars($cls->getName());
@@ -376,7 +376,7 @@ class Zend_Json_Encoder
      * @return string The class2 (JavaScript) encoding of the class
      * @throws Zend_Json_Exception
      */
-    static public function encodeClass($className, $package = '')
+    public static function encodeClass($className, $package = '')
     {
     	$cls = new ReflectionClass($className);
     	if (! $cls->isInstantiable()) {
@@ -399,7 +399,7 @@ class Zend_Json_Encoder
      * @param string $package
      * @return string
      */
-    static public function encodeClasses(array $classNames, $package = '')
+    public static function encodeClasses(array $classNames, $package = '')
     {
     	$result = '';
     	foreach ($classNames as $className) {

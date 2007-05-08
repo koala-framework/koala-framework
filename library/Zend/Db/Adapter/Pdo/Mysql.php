@@ -95,8 +95,9 @@ class Zend_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Abstract
      */
     public function describeTable($tableName, $schemaName = null)
     {
-        // @todo: use INFORMATION_SCHEMA someday when
-        // MySQL's implementation isn't dog slow.
+        // @todo: use INFORMATION_SCHEMA someday when MySQL's
+        // implementation has reasonably good performance and
+        // the version with this improvement is in wide use.
 
         if ($schemaName) {
             $sql = 'DESCRIBE ' . $this->quoteIdentifier("$schemaName.$tableName");
@@ -104,48 +105,51 @@ class Zend_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Abstract
             $sql = 'DESCRIBE ' . $this->quoteIdentifier($tableName);
         }
         $stmt = $this->query($sql);
-        $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        $desc = array();
 
-        $row_defaults = array(
-            'Length'    => null,
-            'Scale'     => null,
-            'Precision' => null,
-            'Unsigned'  => null
-        );
+        // Use FETCH_NUM so we are not dependent on the CASE attribute of the PDO connection
+        $result = $stmt->fetchAll(Zend_Db::FETCH_NUM);
+
+        $field   = 0;
+        $type    = 1;
+        $null    = 2;
+        $key     = 3;
+        $default = 4;
+        $extra   = 5;
+
+        $desc = array();
         $i = 1;
         $p = 1;
-        foreach ($result as $key => $row) {
-            $row = array_merge($row_defaults, $row);
-            if (preg_match('/unsigned/', $row['Type'])) {
-                $row['Unsigned'] = true;
+        foreach ($result as $row) {
+            list($length, $scale, $precision, $unsigned) = array(null, null, null, null);
+            if (preg_match('/unsigned/', $row[$type])) {
+                $unsigned = true;
             }
-            if (preg_match('/^((?:var)?char)\((\d+)\)/', $row['Type'], $matches)) {
-                $row['Type'] = $matches[1];
-                $row['Length'] = $matches[2];
-            } else if (preg_match('/^decimal\((\d+),(\d+)\)/', $row['Type'], $matches)) {
-                $row['Type'] = 'decimal';
-                $row['Precision'] = $matches[1];
-                $row['Scale'] = $matches[2];
-            } else if (preg_match('/^((?:big|medium|small)?int)\((\d+)\)/', $row['Type'], $matches)) {
-                $row['Type'] = $matches[1];
+            if (preg_match('/^((?:var)?char)\((\d+)\)/', $row[$type], $matches)) {
+                $row[$type] = $matches[1];
+                $length = $matches[2];
+            } else if (preg_match('/^decimal\((\d+),(\d+)\)/', $row[$type], $matches)) {
+                $row[$type] = 'decimal';
+                $precision = $matches[1];
+                $scale = $matches[2];
+            } else if (preg_match('/^((?:big|medium|small)?int)\((\d+)\)/', $row[$type], $matches)) {
+                $row[$type] = $matches[1];
                 // The optional argument of a MySQL int type is not precision
                 // or length; it is only a hint for display width.
             }
-            $desc[$row['Field']] = array(
+            $desc[$row[$field]] = array(
                 'SCHEMA_NAME'      => null,
                 'TABLE_NAME'       => $tableName,
-                'COLUMN_NAME'      => $row['Field'],
+                'COLUMN_NAME'      => $row[$field],
                 'COLUMN_POSITION'  => $i,
-                'DATA_TYPE'        => $row['Type'],
-                'DEFAULT'          => $row['Default'],
-                'NULLABLE'         => (bool) ($row['Null'] == 'YES'),
-                'LENGTH'           => $row['Length'],
-                'PRECISION'        => $row['Precision'],
-                'SCALE'            => $row['Scale'],
-                'UNSIGNED'         => $row['Unsigned'],
-                'PRIMARY'          => (bool) (strtoupper($row['Key']) == 'PRI'),
-                'PRIMARY_POSITION' => ((bool) (strtoupper($row['Key']) == 'PRI') ? $p++ : 0)
+                'DATA_TYPE'        => $row[$type],
+                'DEFAULT'          => $row[$default],
+                'NULLABLE'         => (bool) ($row[$null] == 'YES'),
+                'LENGTH'           => $length,
+                'SCALE'            => $scale,
+                'PRECISION'        => $precision,
+                'UNSIGNED'         => $unsigned,
+                'PRIMARY'          => (bool) (strtoupper($row[$key]) == 'PRI'),
+                'PRIMARY_POSITION' => ((bool) (strtoupper($row[$key]) == 'PRI') ? $p++ : 0)
             );
             ++$i;
         }

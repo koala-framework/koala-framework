@@ -19,7 +19,7 @@
  */
 
 /**
- * 
+ * Class to store and retrieve the version of Zend Framework.
  *
  * @category   Zend
  * @package    Zend_Version
@@ -31,7 +31,7 @@ final class Zend_Version
     /**
      * Zend Framework version identification - see compareVersion()
      */
-    const VERSION = '0.9.1';
+    const VERSION = '0.9.3beta';
 
     /**
      * Compare the specified Zend Framework version string $version
@@ -43,7 +43,7 @@ final class Zend_Version
      *                           and +1 if $version is newer.
      *
      */
-    static public function compareVersion($version)
+    public static function compareVersion($version)
     {
         return version_compare($version, self::VERSION);
     }

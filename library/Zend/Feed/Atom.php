@@ -17,7 +17,7 @@
  * @package    Zend_Feed
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Atom.php 3941 2007-03-14 21:36:13Z darby $
+ * @version    $Id: Atom.php 4300 2007-04-02 13:35:41Z slaanesh $
  */
 
 
@@ -189,7 +189,8 @@ class Zend_Feed_Atom extends Zend_Feed_Abstract
         $id = $this->_element->createElement('id', $array->link);
         $feed->appendChild($id);
 
-        $title = $this->_element->createElement('title', $array->title);
+        $title = $this->_element->createElement('title');
+        $title->appendChild($this->_element->createCDATASection($array->title));
         $feed->appendChild($title);
 
         if (isset($array->author)) {
@@ -221,7 +222,8 @@ class Zend_Feed_Atom extends Zend_Feed_Abstract
         $feed->appendChild($link);
 
         if (isset($array->description)) {
-            $subtitle = $this->_element->createElement('subtitle', $array->description);
+            $subtitle = $this->_element->createElement('subtitle');
+            $subtitle->appendChild($this->_element->createCDATASection($array->description));
             $feed->appendChild($subtitle);
         }
 
@@ -267,10 +269,11 @@ class Zend_Feed_Atom extends Zend_Feed_Abstract
             $id = $this->_element->createElement('id', isset($dataentry->guid) ? $dataentry->guid : $dataentry->link);
             $entry->appendChild($id);
 
-            $title = $this->_element->createElement('title', $dataentry->title);
+            $title = $this->_element->createElement('title');
+            $title->appendChild($this->_element->createCDATASection($dataentry->title));
             $entry->appendChild($title);
 
-            $updated = isset($array->lastUpdate) ? $array->lastUpdate : time();
+            $updated = isset($dataentry->lastUpdate) ? $dataentry->lastUpdate : time();
             $updated = $this->_element->createElement('updated', date(DATE_ATOM, $updated));
             $entry->appendChild($updated);
 

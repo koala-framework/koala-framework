@@ -308,7 +308,7 @@ class Zend_Search_Lucene_Index_SegmentInfo
      * Returns field info for specified field
      *
      * @param integer $fieldNum
-     * @return ZSearchFieldInfo
+     * @return Zend_Search_Lucene_Index_FieldInfo
      */
     public function getField($fieldNum)
     {

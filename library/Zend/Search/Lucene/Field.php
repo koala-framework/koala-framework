@@ -109,7 +109,7 @@ class Zend_Search_Lucene_Field
      * @param string $encoding
      * @return Zend_Search_Lucene_Field
      */
-    static public function Keyword($name, $value, $encoding = '')
+    public static function Keyword($name, $value, $encoding = '')
     {
         return new self($name, $value, $encoding, true, true, false);
     }
@@ -124,7 +124,7 @@ class Zend_Search_Lucene_Field
      * @param string $encoding
      * @return Zend_Search_Lucene_Field
      */
-    static public function UnIndexed($name, $value, $encoding = '')
+    public static function UnIndexed($name, $value, $encoding = '')
     {
         return new self($name, $value, $encoding, true, false, false);
     }
@@ -139,7 +139,7 @@ class Zend_Search_Lucene_Field
      * @param string $encoding
      * @return Zend_Search_Lucene_Field
      */
-    static public function Binary($name, $value)
+    public static function Binary($name, $value)
     {
         return new self($name, $value, '', true, false, false, true);
     }
@@ -154,7 +154,7 @@ class Zend_Search_Lucene_Field
      * @param string $encoding
      * @return Zend_Search_Lucene_Field
      */
-    static public function Text($name, $value, $encoding = '')
+    public static function Text($name, $value, $encoding = '')
     {
         return new self($name, $value, $encoding, true, true, true);
     }
@@ -169,7 +169,7 @@ class Zend_Search_Lucene_Field
      * @param string $encoding
      * @return Zend_Search_Lucene_Field
      */
-    static public function UnStored($name, $value, $encoding = '')
+    public static function UnStored($name, $value, $encoding = '')
     {
         return new self($name, $value, $encoding, false, true, true);
     }

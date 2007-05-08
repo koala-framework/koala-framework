@@ -16,7 +16,7 @@
  * @package    Zend_Session
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Session.php 4193 2007-03-22 23:25:57Z gavin $
+ * @version    $Id: Session.php 4534 2007-04-18 17:35:45Z ralph $
  * @since      Preview Release 0.2
  */
 
@@ -60,7 +60,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @var bool
      */
-    static private $_sessionStarted = false;
+    private static $_sessionStarted = false;
 
     /**
      * Whether or not the session id has been regenerated this request.
@@ -72,7 +72,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @var int
      */
-    static private $_regenerateIdState = 0;
+    private static $_regenerateIdState = 0;
 
     /**
      * Private list of php's ini values for ext/session
@@ -82,7 +82,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @var array
      */
-    static private $_defaultOptions = array(
+    private static $_defaultOptions = array(
         'save_path'                 => null,
         'name'                      => null, /* this should be set to a unique value for each application */
         'save_handler'              => null,
@@ -116,9 +116,10 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @var array
      */
-    static private $_localOptions = array(
+    private static $_localOptions = array(
         'strict'                => '_strict',
-        'remember_me_seconds'   => '_rememberMeSeconds'
+        'remember_me_seconds'   => '_rememberMeSeconds',
+        'ignore_save_path'      => '_ignore_save_path'
     );
 
     /**
@@ -126,42 +127,49 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @var bool
      */
-    static private $_writeClosed = false;
+    private static $_writeClosed = false;
 
     /**
      * Whether or not session id cookie has been deleted
      *
      * @var bool
      */
-    static private $_sessionCookieDeleted = false;
+    private static $_sessionCookieDeleted = false;
 
     /**
      * Whether or not session has been destroyed via session_destroy()
      *
      * @var bool
      */
-    static private $_destroyed = false;
+    private static $_destroyed = false;
+
+    /**
+     * Whether or not session save_path must be writable (false = must be writable)
+     *
+     * @var bool
+     */
+    private static $_ignore_save_path = false;
 
     /**
      * Whether or not session must be initiated before usage
      *
      * @var bool
      */
-    static private $_strict = false;
+    private static $_strict = false;
 
     /**
      * Default number of seconds the session will be remembered for when asked to be remembered
      *
      * @var unknown_type
      */
-    static private $_rememberMeSeconds = 1209600; // 2 weeks
+    private static $_rememberMeSeconds = 1209600; // 2 weeks
 
     /**
      * Whether the default options listed in Zend_Session::$_localOptions have been set
      *
      * @var unknown_type
      */
-    static private $_defaultOptionsSet = false;
+    private static $_defaultOptionsSet = false;
 
 
     /**
@@ -179,7 +187,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @throws Zend_Session_Exception
      * @return void
      */
-    static public function setOptions(Array $userOptions = array())
+    public static function setOptions(Array $userOptions = array())
     {
         // set default options on first run only (before applying user settings)
         if (!self::$_defaultOptionsSet) {
@@ -208,8 +216,13 @@ class Zend_Session extends Zend_Session_Abstract
                 throw new Zend_Session_Exception("Unknown option: $user_option_name = $user_option_value");
             }
         }
-        if (!is_writable(ini_get('session.save_path'))) {
-            throw new Zend_Session_Exception("Unwritable session.save_path: ". ini_get('session.save_path'));
+        $savePath = ini_get('session.save_path');
+        if (strpos($savePath, ';') !== false) {
+            $savePath = explode(';', $savePath);
+            $savePath = realpath(array_pop($savePath));
+        }
+        if (self::$_ignore_save_path !== true && !is_writable($savePath)) {
+            throw new Zend_Session_Exception("Unwritable session.save_path: $savePath");
         }
     }
 
@@ -220,7 +233,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @param Zend_Session_SaveHandler_Interface $interface
      * @return void
      */
-    static public function setSaveHandler(Zend_Session_SaveHandler_Interface $interface)
+    public static function setSaveHandler(Zend_Session_SaveHandler_Interface $interface)
     {
         session_set_save_handler(
             array(&$interface, 'open'),
@@ -241,7 +254,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @throws Zend_Session_Exception
      * @return void
      */
-    static public function regenerateId()
+    public static function regenerateId()
     {
         if (headers_sent($filename, $linenum)) {
             throw new Zend_Session_Exception("You must call ".__CLASS__.'::'.__FUNCTION__.
@@ -277,7 +290,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @param $seconds integer - OPTIONAL specifies TTL for cookie in seconds from present time()
      * @return void
      */
-    static public function rememberMe($seconds = null)
+    public static function rememberMe($seconds = null)
     {
         $seconds = (int) $seconds;
         $seconds = ($seconds > 0) ? $seconds : self::$_rememberMeSeconds;
@@ -291,7 +304,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @return void
      */
-    static public function forgetMe()
+    public static function forgetMe()
     {
         self::rememberUntil(0); // this will make sure the session is not 'session based'
     }
@@ -304,7 +317,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @param int $seconds
      * @return void
      */
-    static public function rememberUntil($seconds = 0)
+    public static function rememberUntil($seconds = 0)
     {
         $cookie_params = session_get_cookie_params();
 
@@ -325,7 +338,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @return bool
      */
-    static public function sessionExists()
+    public static function sessionExists()
     {
         if (ini_get('session.use_cookies') == '1' && isset($_COOKIE[session_name()])) {
             return true;
@@ -344,7 +357,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @throws Zend_Session_Exception
      * @return void
      */
-    static public function start($options = false)
+    public static function start($options = false)
     {
         if (self::$_sessionStarted) {
             return; // already started
@@ -393,7 +406,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @return void
      */
-    static private function _processStartupMetadataGlobal()
+    private static function _processStartupMetadataGlobal()
     {
         // process global metadata
         if (isset($_SESSION['__ZF'])) {
@@ -467,7 +480,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @return bool
      */
-    static public function isStarted()
+    public static function isStarted()
     {
         return self::$_sessionStarted;
     }
@@ -479,7 +492,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @return bool
      */
-    static public function isRegenerated()
+    public static function isRegenerated()
     {
         return ( (self::$_regenerateIdState > 0) ? true : false );
     }
@@ -490,7 +503,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @return string
      */
-    static public function getId()
+    public static function getId()
     {
         return session_id();
     }
@@ -503,7 +516,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @param string $id
      * @return void
      */
-    static public function setId($id)
+    public static function setId($id)
     {
         if (defined('SID')) {
             throw new Zend_Session_Exception('The session has already been started.  The session id must be set first.');
@@ -529,7 +542,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @param Zend_Session_Validator_Interface $validator
      * @return void
      */
-    static public function registerValidator(Zend_Session_Validator_Interface $validator)
+    public static function registerValidator(Zend_Session_Validator_Interface $validator)
     {
         $validator->setup();
     }
@@ -540,7 +553,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @return void
      */
-    static public function stop()
+    public static function stop()
     {
         parent::$_writable = false;
     }
@@ -553,7 +566,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @param bool $readonly - OPTIONAL remove write access (i.e. throw error if Zend_Session's attempt writes)
      * @return void
      */
-    static public function writeClose($readonly = true)
+    public static function writeClose($readonly = true)
     {
         if (self::$_writeClosed) {
             return;
@@ -575,7 +588,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @param bool $readonly - OPTIONAL remove write access (i.e. throw error if Zend_Session's attempt writes)
      * @return void
      */
-    static public function destroy($remove_cookie = true, $readonly = true)
+    public static function destroy($remove_cookie = true, $readonly = true)
     {
         if (self::$_destroyed) {
             return;
@@ -599,7 +612,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @return void
      */
-    static public function expireSessionCookie()
+    public static function expireSessionCookie()
     {
         if (self::$_sessionCookieDeleted) {
             return;
@@ -628,7 +641,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @throws Zend_Session_Exception
      * @return void
      */
-    static private function _processValidators()
+    private static function _processValidators()
     {
         foreach ($_SESSION['__ZF']['VALID'] as $validator_name => $valid_data) {
             Zend_Loader::loadClass($validator_name);
@@ -646,7 +659,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @param string $namespace
      * @return bool
      */
-    static public function namespaceIsset($namespace)
+    public static function namespaceIsset($namespace)
     {
         return parent::_namespaceIsset($namespace);
     }
@@ -659,7 +672,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @throws Zend_Session_Exception
      * @return void
      */
-    static public function namespaceUnset($namespace)
+    public static function namespaceUnset($namespace)
     {
         parent::_namespaceUnset($namespace);
     }
@@ -672,7 +685,7 @@ class Zend_Session extends Zend_Session_Abstract
      * @param string $namespace
      * @return array
      */
-    static public function namespaceGet($namespace)
+    public static function namespaceGet($namespace)
     {
         return parent::_namespaceGetAll($namespace);
     }
@@ -684,7 +697,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @return ArrayObject
      */
-    static public function getIterator()
+    public static function getIterator()
     {
         if (parent::$_readable === false) {
             throw new Zend_Session_Exception(parent::_THROW_NOT_READABLE_MSG);
@@ -709,7 +722,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @return bool
      */
-    static public function isWritable()
+    public static function isWritable()
     {
         return parent::$_writable;
     }
@@ -720,7 +733,7 @@ class Zend_Session extends Zend_Session_Abstract
      *
      * @return bool
      */
-    static public function isReadable()
+    public static function isReadable()
     {
         return parent::$_readable;
     }

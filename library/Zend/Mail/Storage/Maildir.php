@@ -134,8 +134,8 @@ class Zend_Mail_Storage_Maildir extends Zend_Mail_Storage_Abstract
      */
     public function getMessage($id)
     {
-        return new Zend_Mail_Message(array('handler' => $this, 'id' => $id, 'headers' => $this->getRawHeader($id),
-                                           'flags'   => $this->_getFileData($id, 'flags')));
+        return new $this->_messageClass(array('handler' => $this, 'id' => $id, 'headers' => $this->getRawHeader($id),
+                                              'flags'   => $this->_getFileData($id, 'flags')));
     }
 
     /*

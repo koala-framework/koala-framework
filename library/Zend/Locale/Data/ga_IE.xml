@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.26 $"/>
-		<generation date="$Date: 2005/05/18 16:40:56 $"/>
+		<version number="$Revision: 1.39 $"/>
+		<generation date="$Date: 2006/06/28 01:23:33 $"/>
 		<language type="ga"/>
 		<territory type="IE"/>
 	</identity>
-	<delimiters>
-		<quotationStart draft="true">‘</quotationStart>
-		<quotationEnd draft="true">’</quotationEnd>
-		<alternateQuotationStart draft="true">“</alternateQuotationStart>
-		<alternateQuotationEnd draft="true">”</alternateQuotationEnd>
-	</delimiters>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
@@ -38,6 +32,14 @@
 						</dateFormat>
 					</dateFormatLength>
 				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMMMd" draft="provisional">d MMMM</dateFormatItem>
+						<dateFormatItem id="MMdd" draft="provisional">dd/MM</dateFormatItem>
+						<dateFormatItem id="yyyyMM" draft="provisional">MM/yyyy</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM" draft="provisional">MMMM yyyy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 	</dates>
@@ -50,6 +52,9 @@
 			</currencyFormatLength>
 		</currencyFormats>
 		<currencies>
+			<currency type="GBP">
+				<symbol draft="provisional">UK£</symbol>
+			</currency>
 			<currency type="IEP">
 				<symbol>£</symbol>
 			</currency>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,7 +18,9 @@
  * @subpackage Expr
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Expr.php 4527 2007-04-17 22:49:14Z darby $
  */
+
 
 /**
  * Class for SQL SELECT fragments.
@@ -30,7 +33,7 @@
  * row, some RDBMS brands may require you to use an expression to generate the
  * new value of a sequence.  If this expression is treated as an identifier,
  * it will be quoted and the expression will not be evaluated.  Another example
- * is that you can use Zend_Db_Expr in the Zend_Db_Select::order() method to 
+ * is that you can use Zend_Db_Expr in the Zend_Db_Select::order() method to
  * order by an expression instead of simply a column name.
  *
  * The way this works is that in each context in which a column name can be
@@ -61,7 +64,7 @@ class Zend_Db_Expr
      */
     public function __construct($expression)
     {
-        $this->_expression = $expression;
+        $this->_expression = (string) $expression;
     }
 
     /**

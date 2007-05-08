@@ -178,6 +178,14 @@ abstract class Zend_Pdf_FileParser
         $this->_dataSource->moveToOffset($offset);
     }
 
+    public function getOffset() {
+       return $this->_dataSource->getOffset();
+    }
+
+    public function getSize() {
+       return $this->_dataSource->getSize();
+    }
+
     /**
      * Convenience wrapper for the data source object's readBytes() method.
      *

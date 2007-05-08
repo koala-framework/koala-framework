@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.29 $"/>
-		<generation date="$Date: 2005/05/24 21:21:37 $"/>
+		<version number="$Revision: 1.40 $"/>
+		<generation date="$Date: 2006/06/27 23:30:53 $"/>
 		<language type="cs"/>
 		<territory type="CZ"/>
 	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="lb">Lucemburština</language>
+		</languages>
+		<territories>
+			<territory type="018" draft="provisional">jižní Afrika</territory>
+			<territory type="419" draft="provisional">Latinská Amerika a Karibské moře</territory>
+		</territories>
+	</localeDisplayNames>
 	<numbers>
 		<currencyFormats>
 			<currencyFormatLength>

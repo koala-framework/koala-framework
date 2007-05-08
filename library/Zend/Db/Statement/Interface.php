@@ -39,8 +39,7 @@ interface Zend_Db_Statement_Interface
     /**
      * binds a PHP variable to a parameter in the prepared statement
      */
-    public function bindParam($parameter, &$variable, $type = null,
-        $length = null, $options = null);
+    public function bindParam($parameter, &$variable, $type = null, $length = null, $options = null);
 
     /**
      * binds a value to a parameter in the prepared statement
@@ -70,7 +69,7 @@ interface Zend_Db_Statement_Interface
     /**
      * executes a prepared statement
      */
-    public function execute($params = null);
+    public function execute(array $params = array());
 
     /**
      * fetches a row from a result set
@@ -90,7 +89,7 @@ interface Zend_Db_Statement_Interface
     /**
      * fetches the next row and returns it as an object
      */
-    public function fetchObject($class = 'stdClass', $config = null);
+    public function fetchObject($class = 'stdClass', array $config = array());
 
     /**
      * retrieves a Zend_Db_Statement attribute

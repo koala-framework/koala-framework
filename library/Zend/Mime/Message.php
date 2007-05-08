@@ -198,7 +198,7 @@ class Zend_Mime_Message
      * @param string $boundary
      * @return array
      */
-    static protected function _disassembleMime($body, $boundary)
+    protected static function _disassembleMime($body, $boundary)
     {
         $start = 0;
         $res = array();

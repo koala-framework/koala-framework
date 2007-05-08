@@ -20,7 +20,7 @@
  */
 
 /**
- * Zend_Db_Exception
+ * @see Zend_Db_Exception
  */
 require_once 'Zend/Db/Exception.php';
 

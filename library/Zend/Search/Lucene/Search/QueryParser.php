@@ -70,7 +70,7 @@ class Zend_Search_Lucene_Search_QueryParser extends Zend_Search_Lucene_FSM
      *
      * @var Zend_Search_Lucene_Search_QueryParser
      */
-    static private $_instance = null;
+    private static $_instance = null;
 
 
     /**
@@ -321,7 +321,7 @@ class Zend_Search_Lucene_Search_QueryParser extends Zend_Search_Lucene_FSM
      * @return Zend_Search_Lucene_Search_Query
      * @throws Zend_Search_Lucene_Search_QueryParserException
      */
-    static public function parse($strQuery, $encoding = null)
+    public static function parse($strQuery, $encoding = null)
     {
         if (self::$_instance === null) {
             self::$_instance = new Zend_Search_Lucene_Search_QueryParser();

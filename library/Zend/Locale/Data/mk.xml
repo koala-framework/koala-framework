@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.42 $"/>
-		<generation date="$Date: 2005/05/24 21:21:38 $"/>
+		<version number="$Revision: 1.58 $"/>
+		<generation date="$Date: 2006/06/27 23:30:54 $"/>
 		<language type="mk"/>
 	</identity>
 	<localeDisplayNames>
 		<languages>
+			<language type="de">германски</language>
+			<language type="en">англиски</language>
+			<language type="es">шпански</language>
+			<language type="fr">француски</language>
+			<language type="it">италијански</language>
+			<language type="ja">јапонски</language>
 			<language type="mk">македонски</language>
+			<language type="pt">португалски</language>
+			<language type="ru">руски</language>
+			<language type="zh">кинески</language>
 		</languages>
 		<territories>
 			<territory type="AD">Андора</territory>
@@ -271,10 +280,11 @@
 		</types>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[а-и к-ш ѐ ѓ ѕ ј љ њ ќ ѝ џ]</exemplarCharacters>
+		<exemplarCharacters>[а-г ѓ д-з ѕ и ј к ќ л љ м н њ о-ч џ ш]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[ѐ ѝ]</exemplarCharacters>
 	</characters>
 	<dates>
-		<localizedPatternChars>GuMtkHmsSEDFwWahKzUeygAZ</localizedPatternChars>
+		<localizedPatternChars>GuMtkHmsSEDFwWahKzUeygAZvcL</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
 				<months>
@@ -358,9 +368,6 @@
 						</dayWidth>
 					</dayContext>
 				</days>
-				<week>
-					<firstDay day="mon"/>
-				</week>
 				<eras>
 					<eraAbbr>
 						<era type="0">пр.н.е.</era>
@@ -389,6 +396,14 @@
 						</dateFormat>
 					</dateFormatLength>
 				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="MMMMdd" draft="provisional">dd MMMM</dateFormatItem>
+						<dateFormatItem id="Mdd" draft="provisional">dd.M</dateFormatItem>
+						<dateFormatItem id="yyyyM" draft="provisional">M.yyyy</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM" draft="provisional">MMMM yyyy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 	</dates>
@@ -1026,8 +1041,6 @@
 		<messages>
 			<yesstr>да:д</yesstr>
 			<nostr>не:н</nostr>
-			<yesexpr>^([yY]([eE][sS])?)|([дД][аА]?)</yesexpr>
-			<noexpr>^([nN][oO]?)|([нН][еЕ]?)</noexpr>
 		</messages>
 	</posix>
 </ldml>

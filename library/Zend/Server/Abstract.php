@@ -28,14 +28,14 @@ require_once 'Zend/Server/Interface.php';
  * @package  Zend_Server
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version $Id: Abstract.php 3452 2007-02-15 18:14:15Z matthew $
+ * @version $Id: Abstract.php 4223 2007-03-24 10:20:34Z thomas $
  */
 abstract class Zend_Server_Abstract implements Zend_Server_Interface 
 {
 	/**
      * @var array PHP's Magic Methods, these are ignored
      */
-    static protected $magic_methods = array(
+    protected static $magic_methods = array(
         '__construct',
         '__destruct',
         '__get',
@@ -59,7 +59,7 @@ abstract class Zend_Server_Abstract implements Zend_Server_Interface
 	 * @param string $key
 	 * @return string Lower cased string
 	 */
-	static public function lowerCase(&$value, &$key)
+	public static function lowerCase(&$value, &$key)
 	{
 		return $value = strtolower($value);
 	}

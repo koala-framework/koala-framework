@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.47 $"/>
-		<generation date="$Date: 2005/05/24 21:21:38 $"/>
+		<version number="$Revision: 1.68 $"/>
+		<generation date="$Date: 2006/10/26 22:46:08 $"/>
 		<language type="hr"/>
 	</identity>
 	<localeDisplayNames>
@@ -104,7 +104,7 @@
 			<territory type="054">Melanezija</territory>
 			<territory type="057">Micronezija</territory>
 			<territory type="061">Polinezija</territory>
-			<territory type="062">Južno-centralna Azija</territory>
+			<territory type="062">Južna Azija</territory>
 			<territory type="142">Azija</territory>
 			<territory type="145">Zapadna Azija</territory>
 			<territory type="150">Europa</territory>
@@ -112,7 +112,7 @@
 			<territory type="154">Sjeverna Europa</territory>
 			<territory type="155">Zapadna Europa</territory>
 			<territory type="830">Kanalski otoci</territory>
-			<territory type="833">Otok Man</territory>
+			<territory type="IM">Otok Man</territory>
 			<territory type="AD">Andora</territory>
 			<territory type="AE">Ujedinjeni Arapski Emirati</territory>
 			<territory type="AF">Afganistan</territory>
@@ -140,7 +140,7 @@
 			<territory type="BI">Burundi</territory>
 			<territory type="BJ">Benin</territory>
 			<territory type="BM">Bermuda</territory>
-			<territory type="BN">Brunei Darussalam</territory>
+			<territory type="BN">Brunei</territory>
 			<territory type="BO">Bolivija</territory>
 			<territory type="BR">Brazil</territory>
 			<territory type="BS">Bahami</territory>
@@ -351,7 +351,7 @@
 			<territory type="WS">Samoa</territory>
 			<territory type="YE">Jemen</territory>
 			<territory type="YT">Majote</territory>
-			<territory type="ZA">Južna Afrika</territory>
+			<territory type="ZA">Južnoafrička Republika</territory>
 			<territory type="ZM">Zambija</territory>
 			<territory type="ZW">Zimbabve</territory>
 		</territories>
@@ -376,10 +376,10 @@
 		</types>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-p r-v z đ ć č ž š {lj} {nj} {dž}]</exemplarCharacters>
+		<exemplarCharacters>[a-c č ć d đ {dž} e-l {lj} m n {nj} o p r s š t-v z ž]</exemplarCharacters>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZvcL</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
 				<months>
@@ -505,14 +505,31 @@
 						</dayWidth>
 					</dayContext>
 				</days>
-				<week>
-					<firstDay day="mon"/>
-				</week>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">1kv</quarter>
+							<quarter type="2">2kv</quarter>
+							<quarter type="3">3kv</quarter>
+							<quarter type="4">4kv</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">1. kvartal</quarter>
+							<quarter type="2">2. kvartal</quarter>
+							<quarter type="3">3. kvartal</quarter>
+							<quarter type="4">4. kvartal</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
 				<eras>
 					<eraNames>
-						<era type="0" draft="true">Prije Krista</era>
-						<era type="1" draft="true">Poslije Krista</era>
+						<era type="0">Prije Krista</era>
+						<era type="1">Poslije Krista</era>
 					</eraNames>
+					<eraAbbr>
+						<era type="0">pr.n.e.</era>
+						<era type="1">AD</era>
+					</eraAbbr>
 				</eras>
 				<dateFormats>
 					<dateFormatLength type="full">
@@ -536,6 +553,20 @@
 						</dateFormat>
 					</dateFormatLength>
 				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="HHmm" draft="provisional">HH:mm</dateFormatItem>
+						<dateFormatItem id="HHmmss" draft="provisional">HH:mm:ss</dateFormatItem>
+						<dateFormatItem id="MMMMdd" draft="provisional">MMMM dd</dateFormatItem>
+						<dateFormatItem id="MMdd" draft="provisional">MM.dd</dateFormatItem>
+						<dateFormatItem id="hhmm" draft="provisional">hh:mm a</dateFormatItem>
+						<dateFormatItem id="hhmmss" draft="provisional">hh:mm:ss a</dateFormatItem>
+						<dateFormatItem id="yyMMMEEEd" draft="provisional">EEE yy.MMM d</dateFormatItem>
+						<dateFormatItem id="yyQQQQ" draft="provisional">QQQQ yy</dateFormatItem>
+						<dateFormatItem id="yyyyMM" draft="provisional">yyyy.MM</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM" draft="provisional">yyyy. MMMM</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -800,6 +831,7 @@
 			</currency>
 			<currency type="HRK">
 				<displayName>Kuna</displayName>
+				<symbol>Kn</symbol>
 			</currency>
 			<currency type="HTG">
 				<displayName>Haitian Gourde</displayName>
@@ -1198,8 +1230,6 @@
 		<messages>
 			<yesstr>da:d</yesstr>
 			<nostr>ne:n</nostr>
-			<yesexpr>^([yY]([eE][sS])?)|([dD][aA]?)</yesexpr>
-			<noexpr>^[nN][oOeE]?</noexpr>
 		</messages>
 	</posix>
 </ldml>

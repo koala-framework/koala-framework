@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.11 $"/>
-		<generation date="$Date: 2005/05/24 21:21:38 $"/>
+		<version number="$Revision: 1.26 $"/>
+		<generation date="$Date: 2006/06/28 01:23:33 $"/>
 		<language type="sr"/>
 		<script type="Cyrl"/>
 	</identity>
@@ -12,23 +12,24 @@
 			<calendar type="gregorian">
 				<eras>
 					<eraNames>
-						<era type="0" draft="true">Пре Христа</era>
-						<era type="1" draft="true">После Христа</era>
+						<era type="0" draft="provisional">Прије нове ере</era>
+						<era type="1" draft="provisional">Нове ере</era>
 					</eraNames>
 				</eras>
 			</calendar>
 		</calendars>
+		<timeZoneNames>
+			<zone type="Europe/Sarajevo">
+				<long>
+					<standard>Средње Европско Вријеме</standard>
+				</long>
+			</zone>
+		</timeZoneNames>
 	</dates>
 	<numbers>
 		<currencies>
 			<currency type="BRL">
 				<symbol>R$</symbol>
-			</currency>
-			<currency type="CNY">
-				<symbol>Y</symbol>
-			</currency>
-			<currency type="CSD">
-				<symbol>CSD</symbol>
 			</currency>
 		</currencies>
 	</numbers>

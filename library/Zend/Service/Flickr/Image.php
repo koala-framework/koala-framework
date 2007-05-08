@@ -18,7 +18,7 @@
  * @subpackage Flickr
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Image.php 4186 2007-03-22 20:52:47Z darby $
+ * @version    $Id: Image.php 4303 2007-04-02 15:52:32Z darby $
  */
 
 
@@ -32,31 +32,40 @@
 class Zend_Service_Flickr_Image
 {
     /**
-     * @var string $uri the URI of the image
+     * The URI of the image
+     *
+     * @var string
      */
     public $uri;
 
     /**
-     * @var string $clickUri the URI for linking to the photo on Flickr
+     * The URI for linking to the photo on Flickr
+     *
+     * @var string
      */
     public $clickUri;
 
     /**
-     * @var string $height the height of the image in pixels
+     * The height of the image in pixels
+     *
+     * @var string
      */
     public $height;
 
     /**
-     * @var string $width the width of the image in pixels
+     * The width of the image in pixels
+     *
+     * @var string
      */
     public $width;
 
     /**
      * Parse given Flickr Image element
      *
-     * @param DomElement $image
+     * @param  DOMElement $image
+     * @return void
      */
-    public function __construct(DomElement $image)
+    public function __construct(DOMElement $image)
     {
         $this->uri      = (string) $image->getAttribute('source');
         $this->clickUri = (string) $image->getAttribute('url');

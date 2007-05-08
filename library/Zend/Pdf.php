@@ -65,7 +65,7 @@ require_once 'Zend/Pdf/Color/Html.php';
 require_once 'Zend/Pdf/Resource/Image.php';
 
 /** Zend_Pdf_Image */
-require_once 'Zend/Pdf/Resource/ImageFactory.php';
+require_once 'Zend/Pdf/Image.php';
 
 /** Zend_Pdf_Image_Jpeg */
 require_once 'Zend/Pdf/Resource/Image/Jpeg.php';
@@ -75,6 +75,10 @@ require_once 'Zend/Pdf/Resource/Image/Tiff.php';
 
 /** Zend_Pdf_Image_Png */
 require_once 'Zend/Pdf/Resource/Image/Png.php';
+
+
+/** Zend_Memory */
+require_once 'Zend/Memory.php';
 
 
 /**
@@ -95,19 +99,19 @@ require_once 'Zend/Pdf/Resource/Image/Png.php';
 class Zend_Pdf
 {
   /**** Class Constants ****/
-  
+
     /**
      * Version number of generated PDF documents.
      */
     const PDF_VERSION = 1.4;
-    
+
     /**
      * PDF file header.
      */
     const PDF_HEADER  = "%PDF-1.4\n%\xE2\xE3\xCF\xD3\n";
-     
-  
-  
+
+
+
     /**
      * Pages collection
      *
@@ -158,6 +162,38 @@ class Zend_Pdf
      */
     private $_objFactory = null;
 
+    /**
+     * Memory manager for stream objects
+     *
+     * @var Zend_Memory_Manager|null
+     */
+    private static $_memoryManager = null;
+
+
+    /**
+     * Request used memory manager
+     *
+     * @return Zend_Memory_Manager
+     */
+    static public function getMemoryManager()
+    {
+        if (self::$_memoryManager === null) {
+            self::$_memoryManager = Zend_Memory::factory('none');
+        }
+
+        return self::$_memoryManager;
+    }
+
+    /**
+     * Set user defined memory manager
+     *
+     * @param Zend_Memory_Manager $memoryManager
+     */
+    static public function setMemoryManager(Zend_Memory_Manager $memoryManager)
+    {
+        self::$_memoryManager = $memoryManager;
+    }
+
 
     /**
      * Create new PDF document from a $source string
@@ -166,7 +202,7 @@ class Zend_Pdf
      * @param integer $revision
      * @return Zend_Pdf
      */
-    static public function parse(&$source = null, $revision = null)
+    public static function parse(&$source = null, $revision = null)
     {
         return new Zend_Pdf($source, $revision);
     }
@@ -178,7 +214,7 @@ class Zend_Pdf
      * @param integer $revision
      * @return Zend_Pdf
      */
-    static public function load($source = null, $revision = null)
+    public static function load($source = null, $revision = null)
     {
         return new Zend_Pdf($source, $revision, true);
     }
@@ -198,11 +234,7 @@ class Zend_Pdf
             throw new Zend_Pdf_Exception( "Can not open '$filename' file for writing." );
         }
 
-        $pdfData = $this->render($updateOnly);
-
-        while ( strlen($pdfData) > 0 && ($byteCount = fwrite($file, $pdfData)) != false ) {
-            $pdfData = substr($pdfData, $byteCount);
-        }
+        $this->render($updateOnly, $file);
 
         fclose($file);
     }
@@ -226,7 +258,7 @@ class Zend_Pdf
      * @throws Zend_Pdf_Exception
      * @return Zend_Pdf
      */
-    public function __construct(&$source = null, $revision = null, $load = false)
+    public function __construct($source = null, $revision = null, $load = false)
     {
         $this->_objFactory = new Zend_Pdf_ElementFactory(1);
 
@@ -318,25 +350,30 @@ class Zend_Pdf
         $this->_loadPages($this->_trailer->Root->Pages);
     }
 
+
+
+    /**
+     * List of inheritable attributesfor pages tree
+     *
+     * @var array
+     */
+    private static $_inheritableAttributes = array('Resources', 'MediaBox', 'CropBox', 'Rotate');
+
+
     /**
      * Load pages recursively
      *
      * @param Zend_Pdf_Element_Reference $pages
      * @param array|null $attributes
      */
-    private function _loadPages(Zend_Pdf_Element_Reference $pages, $attributes = null)
+    private function _loadPages(Zend_Pdf_Element_Reference $pages, $attributes = array())
     {
-        static $inheritable = array('Resources', 'MediaBox', 'CropBox', 'Rotate');
-
         if ($pages->getType() != Zend_Pdf_Element::TYPE_DICTIONARY) {
             throw new Zend_Pdf_Exception('Wrong argument');
         }
 
-        if ($attributes === null) {
-            $attributes = array();
-        }
         foreach ($pages->getKeys() as $property) {
-            if (in_array($property, $inheritable)) {
+            if (in_array($property, self::$_inheritableAttributes)) {
                 $attributes[$property] = $pages->$property;
                 $pages->$property = null;
             }
@@ -347,7 +384,7 @@ class Zend_Pdf
             if ($child->Type->value == 'Pages') {
                 $this->_loadPages($child, $attributes);
             } else if ($child->Type->value == 'Page') {
-                foreach ($inheritable as $property) {
+                foreach (self::$_inheritableAttributes as $property) {
                     if ($child->$property === null && array_key_exists($property, $attributes)) {
                         /**
                          * Important note.
@@ -476,9 +513,10 @@ class Zend_Pdf
      * If $newSegmentOnly is true, then only appended part of PDF is returned.
      *
      * @param boolean $newSegmentOnly
+     * @param resource $outputStream
      * @return string
      */
-    public function render($newSegmentOnly = false)
+    public function render($newSegmentOnly = false, $outputStream = null)
     {
         $this->_dumpPages();
 
@@ -486,16 +524,24 @@ class Zend_Pdf
         // File is always modified by _dumpPages() now, but future implementations may eliminate this.
         if (!$this->_objFactory->isModified()) {
             if ($newSegmentOnly) {
+                // Do nothing, return
                 return '';
-            } else {
+            }
+
+            if ($outputStream === null) {
                 return $this->_trailer->getPDFString();
+            } else {
+                $pdfData = $this->_trailer->getPDFString();
+                while ( strlen($pdfData) > 0 && ($byteCount = fwrite($outputStream, $pdfData)) != false ) {
+                    $pdfData = substr($pdfData, $byteCount);
+                }
+
+                return '';
             }
         }
 
         // offset (from a start of PDF file) of new PDF file segment
-        $segmentOffset = $this->_trailer->getPDFLength();
-        // new PDF file segment itself
-        $pdfSegment = '';
+        $offset = $this->_trailer->getPDFLength();
         // Last Object number in a list of free objects
         $lastFreeObject = $this->_trailer->getLastFreeObject();
 
@@ -514,6 +560,17 @@ class Zend_Pdf
         // Initialized by zero (specail case - header of linked list of free objects).
         $lastObjNum = 0;
 
+        if ($outputStream !== null) {
+            if (!$newSegmentOnly) {
+                $pdfData = $this->_trailer->getPDFString();
+                while ( strlen($pdfData) > 0 && ($byteCount = fwrite($outputStream, $pdfData)) != false ) {
+                    $pdfData = substr($pdfData, $byteCount);
+                }
+            }
+        } else {
+            $pdfSegmentBlocks = ($newSegmentOnly) ? array() : array($this->_trailer->getPDFString());
+        }
+
         // Iterate objects to create new reference table
         foreach ($this->_objFactory->listModifiedObjects() as $updateInfo) {
             $objNum = $updateInfo->getObjNum();
@@ -531,8 +588,18 @@ class Zend_Pdf
                 $lastFreeObject = $objNum;
             } else {
                 // In-use object cross-reference table entry
-                $xrefSection[]  = sprintf("%010d %05d n \n", $segmentOffset + strlen($pdfSegment), $updateInfo->getGenNum());
-                $pdfSegment .= $updateInfo->getObjectDump();
+                $xrefSection[]  = sprintf("%010d %05d n \n", $offset, $updateInfo->getGenNum());
+
+                $pdfBlock = $updateInfo->getObjectDump();
+                $offset += strlen($pdfBlock);
+
+                if ($outputStream === null) {
+                    $pdfSegmentBlocks[] = $pdfBlock;
+                } else {
+                    while ( strlen($pdfBlock) > 0 && ($byteCount = fwrite($outputStream, $pdfBlock)) != false ) {
+                        $pdfBlock = substr($pdfBlock, $byteCount);
+                    }
+                }
             }
             $lastObjNum = $objNum;
         }
@@ -550,18 +617,23 @@ class Zend_Pdf
             }
         }
 
-        $xrefStartOffset = $segmentOffset + strlen($pdfSegment);
         $this->_trailer->Size->value = $this->_objFactory->getObjectCount();
 
-        $pdfSegment .= $xrefTableStr
-                    .  $this->_trailer->toString()
-                    . "startxref\n" . $xrefStartOffset . "\n"
-                    . "%%EOF\n";
+        $pdfBlock = $xrefTableStr
+                 .  $this->_trailer->toString()
+                 . "startxref\n" . $offset . "\n"
+                 . "%%EOF\n";
 
-        if ($newSegmentOnly) {
-            return $pdfSegment;
+        if ($outputStream === null) {
+            $pdfSegmentBlocks[] = $pdfBlock;
+
+            return implode('', $pdfSegmentBlocks);
         } else {
-            return $this->_trailer->getPDFString() . $pdfSegment;
+            while ( strlen($pdfBlock) > 0 && ($byteCount = fwrite($outputStream, $pdfBlock)) != false ) {
+                $pdfBlock = substr($pdfBlock, $byteCount);
+            }
+
+            return '';
         }
     }
 
@@ -575,8 +647,8 @@ class Zend_Pdf
     {
         $this->_javaScript = $javascript;
     }
-    
-    
+
+
     /**
      * Convert date to PDF format (it's close to ASN.1 (Abstract Syntax Notation
      * One) defined in ISO/IEC 8824).
@@ -603,5 +675,5 @@ class Zend_Pdf
         }
         return substr_replace($date, '\'', -2, 0) . '\'';
     }
-     
+
 }

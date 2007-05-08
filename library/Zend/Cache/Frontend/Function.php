@@ -43,21 +43,21 @@ class Zend_Cache_Frontend_Function extends Zend_Cache_Core
     /**
      * This frontend specific options
      * 
-     * ====> (boolean) cacheByDefault : 
+     * ====> (boolean) cache_by_default : 
      * - if true, function calls will be cached by default
      * 
-     * ====> (array) cachedFunctions :
-     * - an array of function names which will be cached (even if cacheByDefault = false)
+     * ====> (array) cached_functions :
+     * - an array of function names which will be cached (even if cache_by_default = false)
      * 
-     * ====> (array) nonCachedFunctions :
-     * - an array of function names which won't be cached (even if cacheByDefault = true)
+     * ====> (array) non_cached_functions :
+     * - an array of function names which won't be cached (even if cache_by_default = true)
      * 
      * @var array options
      */
     protected $_specificOptions = array(
-        'cacheByDefault' => true, 
-        'cachedFunctions' => array(),
-        'nonCachedFunctions' => array()
+        'cache_by_default' => true, 
+        'cached_functions' => array(),
+        'non_cached_functions' => array()
     ); 
     
     
@@ -75,7 +75,7 @@ class Zend_Cache_Frontend_Function extends Zend_Cache_Core
         while (list($name, $value) = each($options)) {
             $this->setOption($name, $value);
         }
-        $this->setOption('automaticSerialization', true);
+        $this->setOption('automatic_serialization', true);
     }    
         
     /**
@@ -89,9 +89,9 @@ class Zend_Cache_Frontend_Function extends Zend_Cache_Core
      */
     public function call($name, $parameters = array(), $tags = array(), $specificLifetime = false) 
     {
-        $cacheBool1 = $this->_specificOptions['cacheByDefault'];
-        $cacheBool2 = in_array($name, $this->_specificOptions['cachedFunctions']);
-        $cacheBool3 = in_array($name, $this->_specificOptions['nonCachedFunctions']);
+        $cacheBool1 = $this->_specificOptions['cache_by_default'];
+        $cacheBool2 = in_array($name, $this->_specificOptions['cached_functions']);
+        $cacheBool3 = in_array($name, $this->_specificOptions['non_cached_functions']);
         $cache = (($cacheBool1 || $cacheBool2) && (!$cacheBool3));
         if (!$cache) {
             // We do not have not cache

@@ -38,7 +38,7 @@ abstract class Zend_Search_Lucene_Search_Similarity
      *
      * @var Zend_Search_Lucene_Search_Similarity
      */
-    static private $_defaultImpl;
+    private static $_defaultImpl;
 
     /**
      * Cache of decoded bytes.
@@ -46,7 +46,7 @@ abstract class Zend_Search_Lucene_Search_Similarity
      *
      * @var array
      */
-    static private $_normTable = array( 0   => 0.0,
+    private static $_normTable = array( 0   => 0.0,
                                         1   => 5.820766E-10,
                                         2   => 6.9849193E-10,
                                         3   => 8.1490725E-10,
@@ -310,7 +310,7 @@ abstract class Zend_Search_Lucene_Search_Similarity
      *
      * @param Zend_Search_Lucene_Search_Similarity $similarity
      */
-    static public function setDefault(Zend_Search_Lucene_Search_Similarity $similarity)
+    public static function setDefault(Zend_Search_Lucene_Search_Similarity $similarity)
     {
         self::$_defaultImpl = $similarity;
     }
@@ -322,7 +322,7 @@ abstract class Zend_Search_Lucene_Search_Similarity
      *
      * @return Zend_Search_Lucene_Search_Similarity
      */
-    static public function getDefault()
+    public static function getDefault()
     {
         if (!self::$_defaultImpl instanceof Zend_Search_Lucene_Search_Similarity) {
             self::$_defaultImpl = new Zend_Search_Lucene_Search_Similarity_Default();
@@ -381,7 +381,7 @@ abstract class Zend_Search_Lucene_Search_Similarity
      * @param integer $byte
      * @return float
      */
-    static public function decodeNorm($byte)
+    public static function decodeNorm($byte)
     {
         return self::$_normTable[$byte & 0xFF];
     }
@@ -412,7 +412,7 @@ abstract class Zend_Search_Lucene_Search_Similarity
      * @param integer $b
      * @return float
      */
-    static private function _floatToByte($f)
+    private static function _floatToByte($f)
     {
         // round negatives up to zero
         if ($f <= 0.0) {

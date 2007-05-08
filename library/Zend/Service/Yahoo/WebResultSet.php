@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,7 +18,20 @@
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: WebResultSet.php 4462 2007-04-11 04:10:16Z darby $
  */
+
+
+/**
+ * @see Zend_Service_Yahoo_ResultSet
+ */
+require_once 'Zend/Service/Yahoo/ResultSet.php';
+
+
+/**
+ * @see Zend_Service_Yahoo_WebResult
+ */
+require_once 'Zend/Service/Yahoo/WebResult.php';
 
 
 /**
@@ -27,18 +41,23 @@
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Yahoo_WebResultSet extends Zend_Service_Yahoo_ResultSet {
+class Zend_Service_Yahoo_WebResultSet extends Zend_Service_Yahoo_ResultSet
+{
     /**
-     * @todo docblock
+     * Web result set namespace
+     *
+     * @var string
      */
-    protected $_namespace = "urn:yahoo:srch";
+    protected $_namespace = 'urn:yahoo:srch';
 
 
     /**
-     * @todo docblock
+     * Overrides Zend_Service_Yahoo_ResultSet::current()
+     *
+     * @return Zend_Service_Yahoo_WebResult
      */
     public function current()
     {
-        return new Zend_Service_Yahoo_WebResult($this->_results->item($this->_currentItem));
+        return new Zend_Service_Yahoo_WebResult($this->_results->item($this->_currentIndex));
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.36 $"/>
-		<generation date="$Date: 2005/04/16 06:22:54 $"/>
+		<version number="$Revision: 1.50 $"/>
+		<generation date="$Date: 2006/06/27 23:30:54 $"/>
 		<language type="vi"/>
 	</identity>
 	<localeDisplayNames>
@@ -106,7 +106,7 @@
 			<territory type="CN">Trung Quốc</territory>
 			<territory type="CO">Cô-lôm-bi-a</territory>
 			<territory type="CR">Cốt-xta Ri-ca</territory>
-			<territory type="CS" draft="true">Séc-bia</territory>
+			<territory type="CS">Séc-bia</territory>
 			<territory type="CU">Cu Ba</territory>
 			<territory type="CV">Cáp-ve</territory>
 			<territory type="CY">Síp</territory>
@@ -259,7 +259,7 @@
 		</territories>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[a-zẠ-ỹđơà-ãè-êìíò-õùúýăĩũư]</exemplarCharacters>
+		<exemplarCharacters>[a à ả ã á ạ ă ằ ẳ ẵ ắ ặ â ầ ẩ ẫ ấ ậ b-d đ e è ẻ ẽ é ẹ ê ề ể ễ ế ệ f-i ì ỉ ĩ í ị j-o ò ỏ õ ó ọ ô ồ ổ ỗ ố ộ ơ ờ ở ỡ ớ ợ p-u ù ủ ũ ú ụ ư ừ ử ữ ứ ự v-y ỳ ỷ ỹ ý ỵ z]</exemplarCharacters>
 	</characters>
 	<dates>
 		<calendars>
@@ -318,9 +318,6 @@
 						</dayWidth>
 					</dayContext>
 				</days>
-				<week>
-					<firstDay day="mon"/>
-				</week>
 				<am>SA</am>
 				<pm>CH</pm>
 				<eras>
@@ -357,6 +354,10 @@
 							<pattern>{0} {1}</pattern>
 						</dateTimeFormat>
 					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="MMdd" draft="provisional">dd-MM</dateFormatItem>
+						<dateFormatItem id="yyyyMM" draft="provisional">MM-yyyy</dateFormatItem>
+					</availableFormats>
 				</dateTimeFormats>
 			</calendar>
 		</calendars>
@@ -382,10 +383,8 @@
 	</numbers>
 	<posix>
 		<messages>
-			<yesstr draft="true">сó:co:c</yesstr>
-			<nostr draft="true">không:khong:k</nostr>
-			<yesexpr draft="true">^([yY]([eE][sS])?)|([cC][óÓoO]?)</yesexpr>
-			<noexpr draft="true">^([nN][oO]?)|([kK]([hH][ôÔoO][nN][gG])?)</noexpr>
+			<yesstr draft="unconfirmed">сó:co:c</yesstr>
+			<nostr draft="unconfirmed">không:khong:k</nostr>
 		</messages>
 	</posix>
 </ldml>

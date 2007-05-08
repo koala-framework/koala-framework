@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.28 $"/>
-		<generation date="$Date: 2005/04/21 15:45:02 $"/>
+		<version number="$Revision: 1.39 $"/>
+		<generation date="$Date: 2006/06/27 23:30:53 $"/>
 		<language type="ar"/>
 		<territory type="SA"/>
 	</identity>
 	<delimiters>
-		<quotationStart draft="true">‘</quotationStart>
-		<quotationEnd draft="true">’</quotationEnd>
-		<alternateQuotationStart draft="true">&quot;</alternateQuotationStart>
-		<alternateQuotationEnd draft="true">&quot;</alternateQuotationEnd>
+		<quotationStart draft="unconfirmed">‘</quotationStart>
+		<quotationEnd draft="unconfirmed">’</quotationEnd>
+		<alternateQuotationStart draft="unconfirmed">&quot;</alternateQuotationStart>
+		<alternateQuotationEnd draft="unconfirmed">&quot;</alternateQuotationEnd>
 	</delimiters>
 	<dates>
 		<calendars>
@@ -31,8 +31,8 @@
 				</days>
 				<eras>
 					<eraNames>
-						<era type="0" draft="true">قبل الميلاد</era>
-						<era type="1" draft="true">ميلادي</era>
+						<era type="0" draft="unconfirmed">قبل الميلاد</era>
+						<era type="1" draft="unconfirmed">ميلادي</era>
 					</eraNames>
 				</eras>
 			</calendar>

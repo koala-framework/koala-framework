@@ -16,7 +16,7 @@
  * @package    Zend_Locale
  * @subpackage Data
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Data.php 3675 2007-02-28 21:12:38Z thomas $
+ * @version    $Id: Data.php 4521 2007-04-17 09:41:35Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -146,7 +146,11 @@ class Zend_Locale_Data
         if (!empty(self::$_ldml[(string) $locale])) {
             while ($tok !== false) {
                 $search = $search . '/' . $tok;
-                $result = @self::$_ldml[(string) $locale]->xpath($search . '/alias');
+                if ((strpos($tok, '[@') !== false) and (strpos($tok, ']') === false)) {
+                    $tok = strtok('/');
+                    continue;
+                }
+                $result = self::$_ldml[(string) $locale]->xpath($search . '/alias');
 
                 // alias found
                 if (!empty($result)) {
@@ -428,7 +432,7 @@ class Zend_Locale_Data
 
             case 'defdateformat':
                 self::_getFile($locale, '/ldml/dates/calendars/calendar[@type=\''
-                             . $value . '\']/dateFormats/default', 'type', 'default');
+                             . $value . '\']/dateFormats/default', 'choice', 'default');
                 break;
 
             case 'dateformat':
@@ -439,7 +443,7 @@ class Zend_Locale_Data
 
             case 'deftimeformat':
                 self::_getFile($locale, '/ldml/dates/calendars/calendar[@type=\''
-                             . $value . '\']/timeFormats/default', 'type', 'default');
+                             . $value . '\']/timeFormats/default', 'choice', 'default');
                 break;
 
             case 'timeformat':

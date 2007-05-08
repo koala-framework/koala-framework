@@ -42,26 +42,26 @@ class Zend_Cache_Frontend_Class extends Zend_Cache_Core
     /**
      * Available options
      * 
-     * ====> (mixed) cachedEntity :
+     * ====> (mixed) cached_entity :
      * - if set to a class name, we will cache an abstract class and will use only static calls
      * - if set to an object, we will cache this object methods
      * 
-     * ====> (boolean) cacheByDefault : 
+     * ====> (boolean) cache_by_default : 
      * - if true, method calls will be cached by default
      * 
-     * ====> (array) cachedMethods :
-     * - an array of method names which will be cached (even if cacheByDefault = false)
+     * ====> (array) cached_methods :
+     * - an array of method names which will be cached (even if cache_by_default = false)
      * 
-     * ====> (array) nonCachedMethods :
-     * - an array of method names which won't be cached (even if cacheByDefault = true)
+     * ====> (array) non_cached_methods :
+     * - an array of method names which won't be cached (even if cache_by_default = true)
      * 
      * @var array available options
      */
     protected $_specificOptions = array(
-        'cachedEntity' => null,
-        'cacheByDefault' => true,
-        'cachedMethods' => array(),
-        'nonCachedMethods' => array()
+        'cached_entity' => null,
+        'cache_by_default' => true,
+        'cached_methods' => array(),
+        'non_cached_methods' => array()
     );
     
     /**
@@ -99,18 +99,18 @@ class Zend_Cache_Frontend_Class extends Zend_Cache_Core
      */
     public function __construct($options = array())
     {
-        if (!isset($options['cachedEntity'])) {
-            Zend_Cache::throwException('cachedEntity must be set !');
-        } else {
-            if (!is_string($options['cachedEntity']) && !is_object($options['cachedEntity'])) {
-                Zend_Cache::throwException('cachedEntity must be an object or a class name');
-            }
-        }
-        $this->_cachedEntity = $options['cachedEntity'];
         while (list($name, $value) = each($options)) {
             $this->setOption($name, $value);
         }
-        $this->setOption('automaticSerialization', true);
+        if (is_null($this->_specificOptions['cached_entity'])) {
+            Zend_Cache::throwException('cached_entity must be set !');
+        } else {
+            if (!is_string($this->_specificOptions['cached_entity']) && !is_object($this->_specificOptions['cached_entity'])) {
+                Zend_Cache::throwException('cached_entity must be an object or a class name');
+            }
+        }
+        $this->_cachedEntity = $this->_specificOptions['cached_entity'];
+        $this->setOption('automatic_serialization', true);
     }    
     
     /**
@@ -142,9 +142,9 @@ class Zend_Cache_Frontend_Class extends Zend_Cache_Core
      */
     public function __call($name, $parameters) 
     {
-        $cacheBool1 = $this->_specificOptions['cacheByDefault'];
-        $cacheBool2 = in_array($name, $this->_specificOptions['cachedMethods']);
-        $cacheBool3 = in_array($name, $this->_specificOptions['nonCachedMethods']);
+        $cacheBool1 = $this->_specificOptions['cache_by_default'];
+        $cacheBool2 = in_array($name, $this->_specificOptions['cached_methods']);
+        $cacheBool3 = in_array($name, $this->_specificOptions['non_cached_methods']);
         $cache = (($cacheBool1 || $cacheBool2) && (!$cacheBool3));
         if (!$cache) {
             // We do not have not cache

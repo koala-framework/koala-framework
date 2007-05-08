@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,11 +18,12 @@
  * @subpackage Amazon
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Query.php 4357 2007-04-04 22:32:40Z darby $
  */
 
 
 /**
- * Zend_Service_Amazon
+ * @see Zend_Service_Amazon
  */
 require_once 'Zend/Service/Amazon.php';
 
@@ -35,48 +37,62 @@ require_once 'Zend/Service/Amazon.php';
  */
 class Zend_Service_Amazon_Query extends Zend_Service_Amazon
 {
-	private $_search = array();
-	private $_searchIndex = null;
+    /**
+     * Search parameters
+     *
+     * @var array
+     */
+    protected $_search = array();
 
-	function __call($method, $args)
-	{
-	    /**
-	     * @todo revisit this - also add some bounds checking for $args
-	     */
+    /**
+     * Search index
+     *
+     * @var string
+     */
+    protected $_searchIndex = null;
 
-		if (strtolower($method) == 'asin') {
-			$this->_searchIndex = 'asin';
-			$this->_search['itemId'] = $args[0];
-			return $this;
-		}
+    /**
+     * Prepares query parameters
+     *
+     * @param  string $method
+     * @param  array  $args
+     * @throws Zend_Service_Exception
+     * @return Zend_Service_Amazon_Query Provides a fluent interface
+     */
+    public function __call($method, $args)
+    {
+        if (strtolower($method) === 'asin') {
+            $this->_searchIndex = 'asin';
+            $this->_search['ItemId'] = $args[0];
+            return $this;
+        }
 
-		if (strtolower($method) == 'category') {
-			if (isset(self::$_searchParams[$args[0]])) {
-			    $this->_searchIndex = $args[0];
-				$this->_search['SearchIndex'] = $args[0];
-			} else {
-				throw new Zend_Service_Exception('Unknown Search Category');
-			}
-		} else if ($this->_search['SearchIndex'] !== null || $this->_searchIndex !== null || $this->_searchIndex == 'asin') {
-			$this->_search[$method] = $args[0];
-		} else {
-			throw new Zend_Service_Exception('You must set a category before setting the search parameters');
-		}
+        if (strtolower($method) === 'category') {
+            $this->_searchIndex = $args[0];
+            $this->_search['SearchIndex'] = $args[0];
+        } else if (isset($this->_search['SearchIndex']) || $this->_searchIndex !== null || $this->_searchIndex === 'asin') {
+            $this->_search[$method] = $args[0];
+        } else {
+            /**
+             * @see Zend_Service_Exception
+             */
+            require_once 'Zend/Service/Exception.php';
+            throw new Zend_Service_Exception('You must set a category before setting the search parameters');
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * Search using the prepared query
      *
      * @return Zend_Service_Amazon_Item|Zend_Service_Amazon_ResultSet
      */
-	function search()
-	{
-		if ($this->_searchIndex == 'asin') {
-			return $this->itemLookup($this->_searchIndex['itemId'], $this->_search);
-		}
-		return $this->itemSearch($this->_search);
-	}
+    public function search()
+    {
+        if ($this->_searchIndex === 'asin') {
+            return $this->itemLookup($this->_search['ItemId'], $this->_search);
+        }
+        return $this->itemSearch($this->_search);
+    }
 }
-

@@ -1,27 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.29 $"/>
-		<generation date="$Date: 2005/05/18 16:40:56 $"/>
+		<version number="$Revision: 1.43 $"/>
+		<generation date="$Date: 2006/06/28 01:23:33 $"/>
 		<language type="ru"/>
 		<territory type="RU"/>
 	</identity>
-	<delimiters>
-		<quotationStart draft="true">„</quotationStart>
-		<quotationEnd draft="true">“</quotationEnd>
-		<alternateQuotationStart draft="true">«</alternateQuotationStart>
-		<alternateQuotationEnd draft="true">»</alternateQuotationEnd>
-	</delimiters>
+	<localeDisplayNames>
+		<languages>
+			<language type="apa">апачские языки</language>
+			<language type="den" draft="provisional">славянский</language>
+			<language type="mh" draft="provisional">маршаллийский</language>
+			<language type="tlh">клингонский</language>
+		</languages>
+		<scripts>
+			<script type="Xsux" draft="provisional">Шумер-Аккадская клинопись</script>
+		</scripts>
+		<types>
+			<type type="buddhist" key="calendar">Буддийский кадендарь</type>
+		</types>
+		<measurementSystemNames>
+			<measurementSystemName type="US">Англо-американская</measurementSystemName>
+			<measurementSystemName type="metric">Метрическая</measurementSystemName>
+		</measurementSystemNames>
+	</localeDisplayNames>
 	<numbers>
-		<currencyFormats>
-			<currencyFormatLength>
-				<currencyFormat>
-					<pattern>#,##0.00¤</pattern>
-					<pattern alt="proposed" draft="true">#,##0.00 ¤</pattern>
-				</currencyFormat>
-			</currencyFormatLength>
-		</currencyFormats>
+		<currencies>
+			<currency type="BAM">
+				<displayName draft="provisional">Конвертируемая марка Боснии и Герциговины</displayName>
+			</currency>
+			<currency type="ESB">
+				<displayName>Испанская песета (А) ()</displayName>
+			</currency>
+			<currency type="RHD">
+				<displayName>Родезийский доллар</displayName>
+			</currency>
+			<currency type="YUM">
+				<displayName>Югославский новый динар</displayName>
+			</currency>
+		</currencies>
 	</numbers>
+	<references>
+		<reference type="R1">http://www.gsnti-norms.ru/norms/common/doc.asp?0&amp;/norms/stands/7_12.htm</reference>
+	</references>
 </ldml>
 

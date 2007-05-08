@@ -292,7 +292,7 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
     public function isValidModule($module)
     {
         $controllerDir = $this->getControllerDirectory();
-        return ((null !== $module) && ('default' != $module) && isset($controllerDir[$module]));
+        return ((null !== $module) && isset($controllerDir[$module]));
     }
 
     /**

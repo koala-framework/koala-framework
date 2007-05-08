@@ -30,7 +30,7 @@ require_once 'Zend/Db/Adapter/Pdo/Abstract.php';
 require_once 'Zend/Db/Adapter/Exception.php';
 
 /**
- * Class for connecting to MySQL databases and performing common operations.
+ * Class for connecting to PostgreSQL databases and performing common operations.
  *
  * @category   Zend
  * @package    Zend_Db
@@ -124,38 +124,54 @@ class Zend_Db_Adapter_Pdo_Pgsql extends Zend_Db_Adapter_Pdo_Abstract
                     AND a.attnum = ANY(co.conkey) AND co.contype = 'p')
                 LEFT OUTER JOIN pg_attrdef AS d ON d.adrelid = c.oid AND d.adnum = a.attnum
             WHERE a.attnum > 0 AND c.relname = ".$this->quote($tableName);
-
         if ($schemaName) {
-            $sql .= " AND ... n.nspname = ".$this->quote($schemaName);
+            $sql .= " AND n.nspname = ".$this->quote($schemaName);
         }
+        $sql .= ' ORDER BY a.attnum';
 
         $stmt = $this->query($sql);
-        $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
+        // Use FETCH_NUM so we are not dependent on the CASE attribute of the PDO connection
+        $result = $stmt->fetchAll(Zend_Db::FETCH_NUM);
+
+        $attnum        = 0;
+        $nspname       = 1;
+        $relname       = 2;
+        $colname       = 3;
+        $type          = 4;
+        $atttypemod    = 5;
+        $complete_type = 6;
+        $default_value = 7;
+        $notnull       = 8;
+        $length        = 9;
+        $contype       = 10;
+        $conkey        = 11;
+
         $desc = array();
         foreach ($result as $key => $row) {
-            if ($row['type'] == 'varchar') {
-                if (preg_match('/character varying(?:\((\d+)\))?/', $row['complete_type'], $matches)) {
+            if ($row[$type] == 'varchar') {
+                if (preg_match('/character varying(?:\((\d+)\))?/', $row[$complete_type], $matches)) {
                     if (isset($matches[1])) {
-                        $row['length'] = $matches[1];
+                        $row[$length] = $matches[1];
                     } else {
-                        $row['length'] = null; // unlimited
+                        $row[$length] = null; // unlimited
                     }
                 }
             }
-            $desc[$row['colname']] = array(
-                'SCHEMA_NAME'      => $row['nspname'],
-                'TABLE_NAME'       => $row['relname'],
-                'COLUMN_NAME'      => $row['colname'],
-                'COLUMN_POSITION'  => $row['attnum'],
-                'DATA_TYPE'        => $row['type'],
-                'DEFAULT'          => $row['default_value'],
-                'NULLABLE'         => (bool) ($row['notnull'] != 't'),
-                'LENGTH'           => $row['length'],
+            $desc[$row[$colname]] = array(
+                'SCHEMA_NAME'      => $row[$nspname],
+                'TABLE_NAME'       => $row[$relname],
+                'COLUMN_NAME'      => $row[$colname],
+                'COLUMN_POSITION'  => $row[$attnum],
+                'DATA_TYPE'        => $row[$type],
+                'DEFAULT'          => $row[$default_value],
+                'NULLABLE'         => (bool) ($row[$notnull] != 't'),
+                'LENGTH'           => $row[$length],
                 'SCALE'            => null, // @todo
                 'PRECISION'        => null, // @todo
                 'UNSIGNED'         => null, // @todo
-                'PRIMARY'          => (bool) ($row['contype'] == 'p'),
-                'PRIMARY_POSITION' => isset($row['conkey']) ? array_search($row['attnum'], explode(',', $row['conkey'])) + 1 : null
+                'PRIMARY'          => (bool) ($row[$contype] == 'p'),
+                'PRIMARY_POSITION' => isset($row[$conkey]) ? array_search($row[$attnum], explode(',', $row[$conkey])) + 1 : null
             );
         }
         return $desc;
@@ -191,20 +207,60 @@ class Zend_Db_Adapter_Pdo_Pgsql extends Zend_Db_Adapter_Pdo_Abstract
     }
 
     /**
-     * Gets the last inserted ID.
+     * Return the most recent value from the specified sequence in the database.
+     * This is supported only on RDBMS brands that support sequences
+     * (e.g. Oracle, PostgreSQL, DB2).  Other RDBMS brands return null.
      *
-     * @param  string $tableName   table or sequence name needed for some PDO drivers
-     * @param  string $primaryKey  primary key in $tableName need for some PDO drivers
+     * @param string $sequenceName
      * @return integer
      */
-    public function lastInsertId($tableName = null, $primaryKey = 'id')
+    public function lastSequenceId($sequenceName)
     {
-        if (!$tableName) {
-            throw new Zend_Db_Adapter_Exception("Sequence name must be specified");
-        }
         $this->_connect();
-        $sequenceName = "{$tableName}_{$primaryKey}_seq";
-        return $this->_connection->lastInsertId($sequenceName);
+        $value = $this->fetchOne("SELECT CURRVAL(".$this->quote($sequenceName).")");
+        return $value;
+    }
+
+    /**
+     * Generate a new value from the specified sequence in the database, and return it.
+     * This is supported only on RDBMS brands that support sequences
+     * (e.g. Oracle, PostgreSQL, DB2).  Other RDBMS brands return null.
+     *
+     * @param string $sequenceName
+     * @return integer
+     */
+    public function nextSequenceId($sequenceName)
+    {
+        $this->_connect();
+        $value = $this->fetchOne("SELECT NEXTVAL(".$this->quote($sequenceName).")");
+        return $value;
+    }
+
+    /**
+     * Gets the last ID generated automatically by an IDENTITY/AUTOINCREMENT column.
+     *
+     * As a convention, on RDBMS brands that support sequences
+     * (e.g. Oracle, PostgreSQL, DB2), this method forms the name of a sequence
+     * from the arguments and returns the last id generated by that sequence.
+     * On RDBMS brands that support IDENTITY/AUTOINCREMENT columns, this method
+     * returns the last value generated for such a column, and the table name
+     * argument is disregarded.
+     *
+     * @param string $tableName   OPTIONAL Name of table.
+     * @param string $primaryKey  OPTIONAL Name of primary key column.
+     * @return integer
+     */
+    public function lastInsertId($tableName = null, $primaryKey = null)
+    {
+        if ($tableName !== null) {
+            $sequenceName = $tableName;
+            if ($primaryKey) {
+                $sequenceName .= "_$primaryKey";
+            }
+            $sequenceName .= '_seq';
+            return $this->lastSequenceId($sequenceName);
+        }
+        return $this->_connection->lastInsertId($tableName);
     }
 
 }

@@ -16,9 +16,16 @@
  * @package    Zend_Session
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Exception.php 3267 2007-02-07 17:34:54Z gavin $
+ * @version    $Id: Exception.php 4471 2007-04-11 19:10:52Z gavin $
  * @since      Preview Release 0.2
  */
+
+
+/**
+ * Zend_Exception
+ */
+require_once 'Zend/Exception.php';
+
 
 /**
  * Zend_Session_Exception

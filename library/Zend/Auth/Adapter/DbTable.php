@@ -18,7 +18,7 @@
  * @subpackage Zend_Auth_Adapter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: DbTable.php 4194 2007-03-22 23:50:34Z darby $
+ * @version    $Id: DbTable.php 4246 2007-03-27 22:35:56Z ralph $
  */
 
 
@@ -228,8 +228,9 @@ class Zend_Auth_Adapter_DbTable implements Zend_Auth_Adapter_Interface
 
         if (null !== $returnColumns) {
 
+            $availableColumns = array_keys($this->_resultRow);
             foreach ( (array) $returnColumns as $returnColumn) {
-                if (isset($this->_resultRow[$returnColumn])) {
+                if (in_array($returnColumn, $availableColumns)) {
                     $returnObject->{$returnColumn} = $this->_resultRow[$returnColumn];
                 }
             }

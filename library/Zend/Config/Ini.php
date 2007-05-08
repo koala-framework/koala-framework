@@ -17,11 +17,12 @@
  * @package    Zend_Config
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Ini.php 4532 2007-04-18 16:52:34Z darby $
  */
 
 
 /**
- * Zend_Config
+ * @see Zend_Config
  */
 require_once 'Zend/Config.php';
 
@@ -34,8 +35,13 @@ require_once 'Zend/Config.php';
  */
 class Zend_Config_Ini extends Zend_Config
 {
-    protected $_nestSeparator= '.';
-    
+    /**
+     * String that separates nesting levels of configuration data identifiers
+     *
+     * @var string
+     */
+    protected $_nestSeparator = '.';
+
     /**
      * Loads the section $section from the config file $filename for
      * access facilitated by nested object properties.
@@ -61,9 +67,18 @@ class Zend_Config_Ini extends Zend_Config
      *      $data->hostname === "staging"
      *      $data->db->connection === "database"
      *
-     * @param string $filename
-     * @param mixed $section
-     * @param boolean $allowModifications
+     * The $config parameter may be provided as either a boolean or an array. If provided as a boolean, this sets the
+     * $allowModifications option of Zend_Config. If provided as an array, there are two configuration directives that
+     * may be set. For example:
+     *
+     * $config = array(
+     *     'allowModifications' => false,
+     *     'nestSeparator'      => '->'
+     *      );
+     *
+     * @param  string        $filename
+     * @param  mixed         $section
+     * @param  boolean|array $config
      * @throws Zend_Config_Exception
      */
     public function __construct($filename, $section, $config = false)
@@ -71,16 +86,16 @@ class Zend_Config_Ini extends Zend_Config
         if (empty($filename)) {
             throw new Zend_Config_Exception('Filename is not set');
         }
-        
+
         $allowModifications = false;
         if (is_bool($config)) {
             $allowModifications = $config;
         } elseif (is_array($config)) {
             if (isset($config['allowModifications'])) {
-                $allowModifications = (bool)$config['allowModifications'];
+                $allowModifications = (bool) $config['allowModifications'];
             }
             if (isset($config['nestSeparator'])) {
-                $this->_nestSeparator = $config['nestSeparator'];
+                $this->_nestSeparator = (string) $config['nestSeparator'];
             }
         }
 

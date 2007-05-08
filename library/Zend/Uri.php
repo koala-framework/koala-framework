@@ -67,7 +67,7 @@ abstract class Zend_Uri
      * @param string $uri
      * @return boolean
      */
-    static public function check($uri)
+    public static function check($uri)
     {
         try {
             $uri = self::factory($uri);
@@ -86,7 +86,7 @@ abstract class Zend_Uri
      * @throws Zend_Uri_Exception
      * @return Zend_Uri
      */
-    static public function factory($uri = 'http')
+    public static function factory($uri = 'http')
     {
         /**
          * Separate the scheme from the scheme-specific parts

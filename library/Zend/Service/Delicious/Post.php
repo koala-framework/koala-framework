@@ -27,9 +27,14 @@
  */
 require_once 'Zend/Date.php';
 
+/**
+ * @see Zend_Service_Delicious_SimplePost
+ */
+require_once 'Zend/Service/Delicious/SimplePost.php';
+
 
 /**
- * Zend_Service_Delicious is a concrete implementation of the del.icio.us web service
+ * Zend_Service_Delicious_Post represents a post of a user that can be edited
  *
  * @category   Zend
  * @package    Zend_Service

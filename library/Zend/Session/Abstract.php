@@ -16,7 +16,7 @@
  * @package    Zend_Session
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Abstract.php 3702 2007-03-02 23:31:09Z gavin $
+ * @version    $Id: Abstract.php 4223 2007-03-24 10:20:34Z thomas $
  * @since      Preview Release 0.2
  */
 
@@ -35,14 +35,14 @@ abstract class Zend_Session_Abstract
      *
      * @var bool
      */
-    static protected $_writable = false;
+    protected static $_writable = false;
 
     /**
      * Whether or not session permits reading (reading data in $_SESSION[])
      *
      * @var bool
      */
-    static protected $_readable = false;
+    protected static $_readable = false;
 
     /**
      * Since expiring data is handled at startup to avoid __destruct difficulties,
@@ -50,7 +50,7 @@ abstract class Zend_Session_Abstract
      *
      * @var array
      */
-    static protected $_expiringData = array();
+    protected static $_expiringData = array();
 
 
     /**
@@ -74,7 +74,7 @@ abstract class Zend_Session_Abstract
      * @param string $name
      * @return bool
      */
-    static protected function _namespaceIsset($namespace, $name = null)
+    protected static function _namespaceIsset($namespace, $name = null)
     {
         if (self::$_readable === false) {
             throw new Zend_Session_Exception(self::_THROW_NOT_READABLE_MSG);
@@ -98,7 +98,7 @@ abstract class Zend_Session_Abstract
      * @throws Zend_Session_Exception
      * @return void
      */
-    static protected function _namespaceUnset($namespace, $name = null)
+    protected static function _namespaceUnset($namespace, $name = null)
     {
         if (self::$_writable === false) {
             throw new Zend_Session_Exception(self::_THROW_NOT_WRITABLE_MSG);
@@ -129,7 +129,7 @@ abstract class Zend_Session_Abstract
      * @param string $name
      * @return mixed
      */
-    static protected function & _namespaceGet($namespace, $name = null)
+    protected static function & _namespaceGet($namespace, $name = null)
     {
         if (self::$_readable === false) {
             throw new Zend_Session_Exception(self::_THROW_NOT_READABLE_MSG);
@@ -162,7 +162,7 @@ abstract class Zend_Session_Abstract
      * @param string $name
      * @return mixed
      */
-    static protected function _namespaceGetAll($namespace)
+    protected static function _namespaceGetAll($namespace)
     {
         $current_data  = (isset($_SESSION[$namespace]) && is_array($_SESSION[$namespace])) ?
             $_SESSION[$namespace] : array();

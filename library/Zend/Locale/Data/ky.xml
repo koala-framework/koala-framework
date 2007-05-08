@@ -1,30 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.16 $"/>
-		<generation date="$Date: 2005/04/02 23:43:14 $"/>
+		<version number="$Revision: 1.26 $"/>
+		<generation date="$Date: 2006/06/24 23:27:01 $"/>
 		<language type="ky"/>
 	</identity>
 	<localeDisplayNames>
 		<languages>
-			<language type="ky" draft="true">Кыргыз</language>
+			<language type="de">немисче</language>
+			<language type="en">англисче</language>
+			<language type="es">испанча</language>
+			<language type="fr">французча</language>
+			<language type="it">италиянча</language>
+			<language type="ja">япончо</language>
+			<language type="ky" draft="unconfirmed">Кыргыз</language>
+			<language type="pt">португалча</language>
+			<language type="ru">орусча</language>
+			<language type="zh">кытайча</language>
 		</languages>
 		<territories>
-			<territory type="KG" draft="true">Кыргызстан</territory>
+			<territory type="KG" draft="unconfirmed">Кыргызстан</territory>
 		</territories>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters draft="true">[а-я і є ї ґ]</exemplarCharacters>
+		<exemplarCharacters>[а б г-е ё ж-н ӊ о ө п-у ү х ч ш ъ ы э-я]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[в ф ц щ ь]</exemplarCharacters>
 	</characters>
 	<numbers>
 		<symbols>
-			<decimal draft="true">,</decimal>
-			<group draft="true"> </group>
+			<decimal draft="unconfirmed">,</decimal>
+			<group draft="unconfirmed"> </group>
 		</symbols>
 		<currencies>
 			<currency type="KGS">
-				<symbol draft="true">сом</symbol>
+				<symbol draft="unconfirmed">сом</symbol>
 			</currency>
 		</currencies>
 	</numbers>

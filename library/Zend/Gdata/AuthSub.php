@@ -71,7 +71,7 @@ class Zend_Gdata_AuthSub
       * @param int $session (optional) Boolean flag indicating whether the one-time-use 
       *  token may be exchanged for a session token (1) or not (0).
       */
-     static public function getAuthSubTokenUri($next, $scope, $secure=0, $session=0)
+     public static function getAuthSubTokenUri($next, $scope, $secure=0, $session=0)
      {
          $querystring = '?next=' . urlencode($next)
              . '&scope=' . urldecode($scope)
@@ -88,7 +88,7 @@ class Zend_Gdata_AuthSub
      * @throws Zend_Gdata_AuthException
      * @throws Zend_Gdata_HttpException
      */
-    static public function getAuthSubSessionToken($token, $client = null)
+    public static function getAuthSubSessionToken($token, $client = null)
     {
         if ($client == null) {
             $client = new Zend_Http_Client();
@@ -129,7 +129,7 @@ class Zend_Gdata_AuthSub
      * @return boolean
      * @throws Zend_Gdata_HttpException
      */
-    static public function AuthSubRevokeToken($token, $client = null)
+    public static function AuthSubRevokeToken($token, $client = null)
     {
         if ($client == null) {
             $client = new Zend_Http_Client();
@@ -161,7 +161,7 @@ class Zend_Gdata_AuthSub
      *
      * @param string $token
      */
-    static public function getAuthSubTokenInfo($token, $client = null)
+    public static function getAuthSubTokenInfo($token, $client = null)
     {
         if ($client == null) {
             $client = new Zend_Http_Client();
@@ -182,7 +182,7 @@ class Zend_Gdata_AuthSub
         return $response->getBody();
     }
 
-    static public function getHttpClient($token, $client = null)
+    public static function getHttpClient($token, $client = null)
     {
         if ($client == null) {
             $client = new Zend_Http_Client();

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.51 $"/>
-		<generation date="$Date: 2005/05/24 21:21:38 $"/>
+		<version number="$Revision: 1.71 $"/>
+		<generation date="$Date: 2006/07/11 19:26:44 $"/>
 		<language type="ko"/>
 	</identity>
 	<localeDisplayNames>
@@ -135,6 +135,7 @@
 			<language type="fat">판티어</language>
 			<language type="ff">풀라어</language>
 			<language type="fi">핀란드어</language>
+			<language type="fil">필리핀어</language>
 			<language type="fiu">피노우그리아어 (기타)</language>
 			<language type="fj">피지어</language>
 			<language type="fo">페로스어</language>
@@ -193,7 +194,7 @@
 			<language type="ine">인도유럽어 (기타)</language>
 			<language type="inh">인귀시어</language>
 			<language type="io">이도어</language>
-			<language type="ira">이란어</language>
+			<language type="ira">이란어 [ira]</language>
 			<language type="iro">이러쿼이어</language>
 			<language type="is">아이슬란드어</language>
 			<language type="it">이탈리아어</language>
@@ -428,7 +429,7 @@
 			<language type="tog">통가어 (니아살랜드)</language>
 			<language type="tpi">토크 피신어</language>
 			<language type="tr">터키어</language>
-			<language type="ts">통가어</language>
+			<language type="ts">총가어</language>
 			<language type="tsi">트심시안어</language>
 			<language type="tt">타타르어</language>
 			<language type="tum">툼부카어</language>
@@ -545,6 +546,7 @@
 			<territory type="AT">오스트리아</territory>
 			<territory type="AU">오스트레일리아</territory>
 			<territory type="AW">아루바</territory>
+			<territory type="AX">올란드 제도</territory>
 			<territory type="AZ">아제르바이잔</territory>
 			<territory type="BA">보스니아 헤르체고비나</territory>
 			<territory type="BB">바베이도스</territory>
@@ -794,11 +796,10 @@
 		</types>
 	</localeDisplayNames>
 	<characters>
-		<exemplarCharacters>[가-힣]</exemplarCharacters>
-		<exemplarCharacters alt="proposed" draft="true">[가-각간갇-갊감-갗같-객갠갤갬-갭갯-갱갸-갹갼걀걋걍걔걘걜거-걱건걷-걸걺검-겁것-겆겉-게겐겔겜-겝겟-겡겨-겪견겯-결겸-겹겻-경곁계곈곌곕곗고-곡곤곧-골곪곬곯-곱곳공-곶과-곽관괄괆괌-괍괏광괘괜괠괩괬-괭괴-괵괸괼굄-굅굇굉교굔굘굡굣구-국군굳-굶굻-굽굿궁-궂궈-궉권궐궜-궝궤궷귀-귁귄귈귐-귑귓규균귤그-극근귿-긁금-급긋긍긔기-긱긴긷-길긺김-깁깃깅-깆깊까-깎깐깔깖깜-깝깟-깡깥깨-깩깬깰깸-깹깻-깽꺄-꺅꺌꺼-꺾껀껄껌-껍껏-껑께-껙껜껨껫껭껴껸껼꼇-꼈꼍꼐꼬-꼭꼰꼲꼴꼼-꼽꼿꽁-꽃꽈-꽉꽐꽜-꽝꽤-꽥꽹꾀꾄꾈꾐-꾑꾕꾜꾸-꾹꾼꿀꿇-꿉꿋꿍-꿎꿔꿜꿨-꿩꿰-꿱꿴꿸뀀-뀁뀄뀌뀐뀔뀜-뀝뀨끄-끅끈끊끌끎끓-끕끗끙끝끼-끽낀낄낌-낍낏낑나-낚난낟-낢남-납낫-낯낱낳-낵낸낼냄-냅냇-냉냐-냑냔냘냠냥너-넉넋-넌널넒-넓넘-넙넛-넝넣-넥넨넬넴-넵넷-넹녀-녁년녈념-녑녔-녕녘녜녠노-녹논놀놂놈-놉놋농높-놔놘놜놨뇌뇐뇔뇜-뇝뇟뇨-뇩뇬뇰뇹뇻뇽누-눅눈눋-눌눔-눕눗눙눠눴눼뉘뉜뉠뉨-뉩뉴-뉵뉼늄-늅늉느-늑는늘-늚늠-늡늣능-늦늪늬늰늴니-닉닌닐닖님-닙닛닝닢다-닦단닫-닯닳-답닷-닻닿-댁댄댈댐-댑댓-댕댜더-덖던덛-덜덞-덟덤-덥덧덩덫덮데-덱덴델뎀-뎁뎃-뎅뎌뎐뎔뎠-뎡뎨뎬도-독돈돋-돌돎돐돔-돕돗동돛돝돠돤돨돼됐되된될됨-됩됫됴두-둑둔둘둠-둡둣둥둬뒀뒈뒝뒤뒨뒬뒵뒷뒹듀듄듈듐듕드-득든듣-들듦듬-듭듯등듸디-딕딘딛-딜딤-딥딧-딪따-딱딴딸땀-땁땃-땅땋-땍땐땔땜-땝땟-땡떠-떡떤떨떪-떫떰-떱떳-떵떻-떽뗀뗄뗌-뗍뗏-뗑뗘뗬또-똑똔똘똥똬똴뙈뙤뙨뚜-뚝뚠뚤뚫-뚬뚱뛔뛰뛴뛸뜀-뜁뜅뜨-뜩뜬뜯-뜰뜸-뜹뜻띄띈띌띔-띕띠띤띨띰-띱띳띵라-락란랄람-랍랏-랒랖-랙랜랠램-랩랫-랭랴-략랸럇량러-럭런럴럼-럽럿-렁렇-렉렌렐렘-렙렛렝려-력련렬렴-렵렷-령례롄롑롓로-록론롤롬-롭롯롱롸롼뢍뢨뢰뢴뢸룀-룁룃룅료룐룔룝룟룡루-룩룬룰룸-룹룻룽뤄뤘뤠뤼-뤽륀륄륌륏륑류-륙륜률륨-륩륫륭르-륵른를름-릅릇릉-릊릍-릎리-릭린릴림-립릿링마-막만많-맒맘-맙맛망-맞맡맣-맥맨맬맴-맵맷-맺먀-먁먈먕머-먹먼멀멂멈-멉멋멍-멎멓-멕멘멜멤-멥멧-멩며-멱면멸몃-명몇몌모-목몫-몬몰몲몸-몹못몽뫄뫈뫘-뫙뫼묀묄묍묏묑묘묜묠묩묫무-묶문묻-묾뭄-뭅뭇뭉뭍뭏-뭐뭔뭘뭡뭣뭬뮈뮌뮐뮤뮨뮬뮴뮷므믄믈믐믓미-믹민믿-밀밂밈-밉밋-밍및밑바-반받-밟밤-밥밧방밭배-백밴밸뱀-뱁뱃-뱅뱉뱌-뱍뱐뱝버-벅번벋-벌벎범-법벗벙-벚베-벡벤벧-벨벰-벱벳-벵벼-벽변별볍볏-병볕볘볜보-볶본볼봄-봅봇봉봐봔봤봬뵀뵈-뵉뵌뵐뵘-뵙뵤뵨부-북분붇-붊붐-붑붓붕붙-붚붜붤붰붸뷔-뷕뷘뷜뷩뷰뷴뷸븀븃븅브-븍븐블븜-븝븟비-빅빈빌빎빔-빕빗빙-빛빠-빡빤빨빪빰-빱빳-빵빻-빽뺀뺄뺌-뺍뺏-뺑뺘-뺙뺨뻐-뻑뻔뻗-뻘뻠뻣-뻥뻬뼁뼈-뼉뼘-뼙뼛-뼝뽀-뽁뽄뽈뽐-뽑뽕뾔뾰뿅뿌-뿍뿐뿔뿜뿟뿡쀼쁑쁘쁜쁠쁨-쁩삐-삑삔삘삠-삡삣삥사-삭삯-산삳-삶삼-삽삿-상샅새-색샌샐샘-샙샛-생샤-샥샨샬샴-샵샷샹섀섄섈섐섕서-선섣-설섦-섧섬-섭섯-성섶세-섹센셀셈-셉셋-셍셔-셕션셜셤-셥셧-셩셰셴셸솅소-솎손솔솖솜-솝솟송솥솨-솩솬솰솽쇄쇈쇌쇔쇗-쇘쇠쇤쇨쇰-쇱쇳쇼-쇽숀숄숌-숍숏숑수-숙순숟-술숨-숩숫숭숯숱-숲숴쉈쉐-쉑쉔쉘쉠쉥쉬-쉭쉰쉴쉼-쉽쉿슁슈-슉슐슘슛슝스-슥슨슬-슭슴-습슷승시-식신싣-실싫-십싯싱싶싸-싹싻-싼쌀쌈-쌉쌌-쌍쌓-쌕쌘쌜쌤-쌥쌨-쌩썅써-썩썬썰썲썸-썹썼-썽쎄쎈쎌쏀쏘-쏙쏜쏟-쏠쏢쏨-쏩쏭쏴-쏵쏸쐈쐐쐤쐬쐰쐴쐼-쐽쑈쑤-쑥쑨쑬쑴-쑵쑹쒀쒔쒜쒸쒼쓩쓰-쓱쓴쓸쓺쓿-씁씌씐씔씜씨-씩씬씰씸-씹씻씽아-악안-않알-앎앓-압앗-앙앝-앞애-액앤앨앰-앱앳-앵야-약얀얄얇얌-얍얏양얕얗-얘얜얠얩어-억언-얹얻-얾엄-엊엌엎에-엑엔엘엠-엡엣엥여-엮연열엶-엷염-영옅-예옌옐옘-옙옛-옜오-옥온올-옮옰옳-옵옷옹옻와-왁완왈왐-왑왓-왕왜-왝왠왬왯왱외-왹왼욀욈-욉욋욍요-욕욘욜욤-욥욧용우-욱운울-욺움-웁웃웅워-웍원월웜-웝웠-웡웨-웩웬웰웸-웹웽위-윅윈윌윔-윕윗윙유-육윤율윰-윱윳융윷으-윽은을읊음-읍읏응-의읜읠읨읫이-익인일-읾잃-입잇-잊잎자-작잔잖-잘잚잠-잡잣-잦재-잭잰잴잼-잽잿-쟁쟈-쟉쟌쟎쟐쟘쟝쟤쟨쟬저-적전절젊점-접젓정-젖제-젝젠젤젬-젭젯젱져젼졀졈-졉졌-졍졔조-족존졸졺좀-좁좃종-좇좋-좍좔좝좟좡좨좼-좽죄죈죌죔-죕죗죙죠-죡죤죵주-죽준줄-줆줌-줍줏중줘줬줴쥐-쥑쥔쥘쥠-쥡쥣쥬쥰쥴쥼즈-즉즌즐즘-즙즛증지-직진짇-질짊짐-집짓징-짖짙-짚짜-짝짠짢짤짧짬-짭짯-짱째-짹짼쨀쨈-쨉쨋-쨍쨔쨘쨩쩌-쩍쩐쩔쩜-쩝쩟-쩡쩨쩽쪄쪘쪼-쪽쫀쫄쫌-쫍쫏쫑쫓쫘-쫙쫠쫬쫴쬈쬐쬔쬘쬠-쬡쭁쭈-쭉쭌쭐쭘-쭙쭝쭤쭸-쭹쮜쮸쯔쯤쯧쯩찌-찍찐찔찜-찝찡-찢찧-착찬찮찰참-찹찻-찾채-책챈챌챔-챕챗-챙챠챤챦챨챰챵처-척천철첨-첩첫-청체-첵첸첼쳄-쳅쳇쳉쳐쳔쳤쳬쳰촁초-촉촌촐촘-촙촛총촤촨촬촹최쵠쵤쵬-쵭쵯쵱쵸춈추-축춘출춤-춥춧충춰췄췌췐취췬췰췸-췹췻췽츄츈츌츔츙츠-측츤츨츰-츱츳층치-칙친칟-칡침-칩칫칭카-칵칸칼캄-캅캇캉캐-캑캔캘캠-캡캣-캥캬-캭컁커-컥컨컫-컬컴-컵컷-컹케-켁켄켈켐-켑켓켕켜켠켤켬-켭켯-켱켸코-콕콘콜콤-콥콧콩콰-콱콴콸쾀쾅쾌쾡쾨쾰쿄쿠-쿡쿤쿨쿰-쿱쿳쿵쿼퀀퀄퀑퀘퀭퀴-퀵퀸퀼큄-큅큇큉큐큔큘큠크-큭큰클큼-큽킁키-킥킨킬킴-킵킷킹타-탁탄탈-탉탐-탑탓-탕태-택탠탤탬-탭탯-탱탸턍터-턱턴털턺텀-텁텃-텅테-텍텐텔템-텝텟텡텨텬텼톄톈토-톡톤톨톰-톱톳통톺톼퇀퇘퇴퇸툇툉툐투-툭툰툴툼-툽툿퉁퉈퉜퉤튀-튁튄튈튐-튑튕튜튠튤튬튱트-특튼튿-틀틂틈-틉틋틔틘틜틤-틥티-틱틴틸팀-팁팃팅파-팎판팔팖팜-팝팟-팡팥패-팩팬팰팸-팹팻-팽퍄-퍅퍼-퍽펀펄펌-펍펏-펑페-펙펜펠펨-펩펫펭펴편펼폄-폅폈-평폐폘폡폣포-폭폰폴폼-폽폿퐁퐈퐝푀푄표푠푤푭푯푸-푹푼푿-풀풂품-풉풋풍풔풩퓌퓐퓔퓜퓟퓨퓬퓰퓸퓻퓽프픈플픔-픕픗피-픽핀필핌-핍핏핑하-학한할핥함-합핫항해-핵핸핼햄-햅햇-행햐향허-헉헌헐헒험-헙헛헝헤-헥헨헬헴-헵헷헹혀-혁현혈혐-협혓-형혜혠혤혭호-혹혼홀홅홈-홉홋홍홑화-확환활홧황홰-홱홴횃횅회-획횐횔횝횟횡효횬횰횹횻후-훅훈훌훑훔훗훙훠훤훨훰훵훼-훽휀휄휑휘-휙휜휠휨-휩휫휭휴-휵휸휼흄흇흉흐-흑흔흖-흙흠-흡흣흥흩희흰흴흼-흽힁히-힉힌힐힘-힙힛힝]</exemplarCharacters>
+		<exemplarCharacters>[가 각 간 갇-갊 감-갗 같-객 갠 갤 갬 갭 갯-갱 갸 갹 갼 걀 걋 걍 걔 걘 걜 거 걱 건 걷 걸 걺 검 겁 것-겆 겉-게 겐 겔 겜 겝 겟-겡 겨-겪 견 겯 결 겸 겹 겻-경 곁 계 곈 곌 곕 곗 고 곡 곤 곧 골 곪 곬 곯-곱 곳 공 곶 과 곽 관 괄 괆 괌 괍 괏 광 괘 괜 괠 괩 괬 괭 괴 괵 괸 괼 굄 굅 굇 굉 교 굔 굘 굡 굣 구 국 군 굳-굶 굻-굽 굿 궁 궂 궈 궉 권 궐 궜 궝 궤 궷 귀 귁 귄 귈 귐 귑 귓 규 균 귤 그 극 근 귿-긁 금 급 긋 긍 긔 기 긱 긴 긷 길 긺 김 깁 깃 깅 깆 깊 까-깎 깐 깔 깖 깜 깝 깟-깡 깥 깨 깩 깬 깰 깸 깹 깻-깽 꺄 꺅 꺌 꺼-꺾 껀 껄 껌 껍 껏-껑 께 껙 껜 껨 껫 껭 껴 껸 껼 꼇 꼈 꼍 꼐 꼬 꼭 꼰 꼲 꼴 꼼 꼽 꼿 꽁-꽃 꽈 꽉 꽐 꽜 꽝 꽤 꽥 꽹 꾀 꾄 꾈 꾐 꾑 꾕 꾜 꾸 꾹 꾼 꿀 꿇-꿉 꿋 꿍 꿎 꿔 꿜 꿨 꿩 꿰 꿱 꿴 꿸 뀀 뀁 뀄 뀌 뀐 뀔 뀜 뀝 뀨 끄 끅 끈 끊 끌 끎 끓-끕 끗 끙 끝 끼 끽 낀 낄 낌 낍 낏 낑 나-낚 난 낟-낢 남 납 낫-낯 낱 낳-낵 낸 낼 냄 냅 냇-냉 냐 냑 냔 냘 냠 냥 너 넉 넋 넌 널 넒 넓 넘 넙 넛-넝 넣-넥 넨 넬 넴 넵 넷-넹 녀 녁 년 녈 념 녑 녔 녕 녘 녜 녠 노 녹 논 놀 놂 놈 놉 놋 농 높-놔 놘 놜 놨 뇌 뇐 뇔 뇜 뇝 뇟 뇨 뇩 뇬 뇰 뇹 뇻 뇽 누 눅 눈 눋 눌 눔 눕 눗 눙 눠 눴 눼 뉘 뉜 뉠 뉨 뉩 뉴 뉵 뉼 늄 늅 늉 느 늑 는 늘-늚 늠 늡 늣 능 늦 늪 늬 늰 늴 니 닉 닌 닐 닒 님 닙 닛 닝 닢 다-닦 단 닫-닯 닳-답 닷-닻 닿-댁 댄 댈 댐 댑 댓-댕 댜 더-덖 던 덛 덜 덞 덟 덤 덥 덧 덩 덫 덮 데 덱 덴 델 뎀 뎁 뎃-뎅 뎌 뎐 뎔 뎠 뎡 뎨 뎬 도 독 돈 돋 돌 돎 돐 돔 돕 돗 동 돛 돝 돠 돤 돨 돼 됐 되 된 될 됨 됩 됫 됴 두 둑 둔 둘 둠 둡 둣 둥 둬 뒀 뒈 뒝 뒤 뒨 뒬 뒵 뒷 뒹 듀 듄 듈 듐 듕 드 득 든 듣 들 듦 듬 듭 듯 등 듸 디 딕 딘 딛 딜 딤 딥 딧-딪 따 딱 딴 딸 땀 땁 땃-땅 땋-땍 땐 땔 땜 땝 땟-땡 떠 떡 떤 떨 떪 떫 떰 떱 떳-떵 떻-떽 뗀 뗄 뗌 뗍 뗏-뗑 뗘 뗬 또 똑 똔 똘 똥 똬 똴 뙈 뙤 뙨 뚜 뚝 뚠 뚤 뚫 뚬 뚱 뛔 뛰 뛴 뛸 뜀 뜁 뜅 뜨 뜩 뜬 뜯 뜰 뜸 뜹 뜻 띄 띈 띌 띔 띕 띠 띤 띨 띰 띱 띳 띵 라 락 란 랄 람 랍 랏-랒 랖-랙 랜 랠 램 랩 랫-랭 랴 략 랸 럇 량 러 럭 런 럴 럼 럽 럿-렁 렇-렉 렌 렐 렘 렙 렛 렝 려 력 련 렬 렴 렵 렷-령 례 롄 롑 롓 로 록 론 롤 롬 롭 롯 롱 롸 롼 뢍 뢨 뢰 뢴 뢸 룀 룁 룃 룅 료 룐 룔 룝 룟 룡 루 룩 룬 룰 룸 룹 룻 룽 뤄 뤘 뤠 뤼 뤽 륀 륄 륌 륏 륑 류 륙 륜 률 륨 륩 륫 륭 르 륵 른 를 름 릅 릇 릉 릊 릍 릎 리 릭 린 릴 림 립 릿 링 마 막 만 많-맒 맘 맙 맛 망 맞 맡 맣-맥 맨 맬 맴 맵 맷-맺 먀 먁 먈 먕 머 먹 먼 멀 멂 멈 멉 멋 멍 멎 멓-멕 멘 멜 멤 멥 멧-멩 며 멱 면 멸 몃-명 몇 몌 모 목 몫 몬 몰 몲 몸 몹 못 몽 뫄 뫈 뫘 뫙 뫼 묀 묄 묍 묏 묑 묘 묜 묠 묩 묫 무-묶 문 묻-묾 뭄 뭅 뭇 뭉 뭍 뭏 뭐 뭔 뭘 뭡 뭣 뭬 뮈 뮌 뮐 뮤 뮨 뮬 뮴 뮷 므 믄 믈 믐 믓 미 믹 민 믿 밀 밂 밈 밉 밋-밍 및 밑 바-반 받-밟 밤 밥 밧 방 밭 배 백 밴 밸 뱀 뱁 뱃-뱅 뱉 뱌 뱍 뱐 뱝 버 벅 번 벋 벌 벎 범 법 벗 벙 벚 베 벡 벤 벧 벨 벰 벱 벳-벵 벼 벽 변 별 볍 볏-병 볕 볘 볜 보-볶 본 볼 봄 봅 봇 봉 봐 봔 봤 봬 뵀 뵈 뵉 뵌 뵐 뵘 뵙 뵤 뵨 부 북 분 붇-붊 붐 붑 붓 붕 붙 붚 붜 붤 붰 붸 뷔 뷕 뷘 뷜 뷩 뷰 뷴 뷸 븀 븃 븅 브 븍 븐 블 븜 븝 븟 비 빅 빈 빌 빎 빔 빕 빗 빙-빛 빠 빡 빤 빨 빪 빰 빱 빳-빵 빻-빽 뺀 뺄 뺌 뺍 뺏-뺑 뺘 뺙 뺨 뻐 뻑 뻔 뻗 뻘 뻠 뻣-뻥 뻬 뼁 뼈 뼉 뼘 뼙 뼛-뼝 뽀 뽁 뽄 뽈 뽐 뽑 뽕 뾔 뾰 뿅 뿌 뿍 뿐 뿔 뿜 뿟 뿡 쀼 쁑 쁘 쁜 쁠 쁨 쁩 삐 삑 삔 삘 삠 삡 삣 삥 사 삭 삯 산 삳-삶 삼 삽 삿-상 샅 새 색 샌 샐 샘 샙 샛-생 샤 샥 샨 샬 샴 샵 샷 샹 섀 섄 섈 섐 섕 서-선 섣 설 섦 섧 섬 섭 섯-성 섶 세 섹 센 셀 셈 셉 셋-셍 셔 셕 션 셜 셤 셥 셧-셩 셰 셴 셸 솅 소-솎 손 솔 솖 솜 솝 솟 송 솥 솨 솩 솬 솰 솽 쇄 쇈 쇌 쇔 쇗 쇘 쇠 쇤 쇨 쇰 쇱 쇳 쇼 쇽 숀 숄 숌 숍 숏 숑 수 숙 순 숟 술 숨 숩 숫 숭 숯 숱 숲 숴 쉈 쉐 쉑 쉔 쉘 쉠 쉥 쉬 쉭 쉰 쉴 쉼 쉽 쉿 슁 슈 슉 슐 슘 슛 슝 스 슥 슨 슬 슭 슴 습 슷 승 시 식 신 싣 실 싫-십 싯 싱 싶 싸 싹 싻 싼 쌀 쌈 쌉 쌌 쌍 쌓-쌕 쌘 쌜 쌤 쌥 쌨 쌩 썅 써 썩 썬 썰 썲 썸 썹 썼 썽 쎄 쎈 쎌 쏀 쏘 쏙 쏜 쏟 쏠 쏢 쏨 쏩 쏭 쏴 쏵 쏸 쐈 쐐 쐤 쐬 쐰 쐴 쐼 쐽 쑈 쑤 쑥 쑨 쑬 쑴 쑵 쑹 쒀 쒔 쒜 쒸 쒼 쓩 쓰 쓱 쓴 쓸 쓺 쓿-씁 씌 씐 씔 씜 씨 씩 씬 씰 씸 씹 씻 씽 아 악 안-않 알-앎 앓-압 앗-앙 앝 앞 애 액 앤 앨 앰 앱 앳-앵 야 약 얀 얄 얇 얌 얍 얏 양 얕 얗 얘 얜 얠 얩 어 억 언 얹 얻-얾 엄-엊 엌 엎 에 엑 엔 엘 엠 엡 엣 엥 여-엮 연 열 엶 엷 염-영 옅-예 옌 옐 옘 옙 옛 옜 오 옥 온 올-옮 옰 옳-옵 옷 옹 옻 와 왁 완 왈 왐 왑 왓-왕 왜 왝 왠 왬 왯 왱 외 왹 왼 욀 욈 욉 욋 욍 요 욕 욘 욜 욤 욥 욧 용 우 욱 운 울-욺 움 웁 웃 웅 워 웍 원 월 웜 웝 웠 웡 웨 웩 웬 웰 웸 웹 웽 위 윅 윈 윌 윔 윕 윗 윙 유 육 윤 율 윰 윱 윳 융 윷 으 윽 은 을 읊 음 읍 읏 응-의 읜 읠 읨 읫 이 익 인 일-읾 잃-입 잇-잊 잎 자 작 잔 잖-잘 잚 잠 잡 잣-잦 재 잭 잰 잴 잼 잽 잿-쟁 쟈 쟉 쟌 쟎 쟐 쟘 쟝 쟤 쟨 쟬 저 적 전 절 젊 점 접 젓 정 젖 제 젝 젠 젤 젬 젭 젯 젱 져 젼 졀 졈 졉 졌 졍 졔 조 족 존 졸 졺 좀 좁 좃 종-좇 좋-좍 좔 좝 좟 좡 좨 좼 좽 죄 죈 죌 죔 죕 죗 죙 죠 죡 죤 죵 주 죽 준 줄-줆 줌 줍 줏 중 줘 줬 줴 쥐 쥑 쥔 쥘 쥠 쥡 쥣 쥬 쥰 쥴 쥼 즈 즉 즌 즐 즘 즙 즛 증 지 직 진 짇 질 짊 짐 집 짓 징 짖 짙 짚 짜 짝 짠 짢 짤 짧 짬 짭 짯-짱 째 짹 짼 쨀 쨈 쨉 쨋-쨍 쨔 쨘 쨩 쩌 쩍 쩐 쩔 쩜 쩝 쩟-쩡 쩨 쩽 쪄 쪘 쪼 쪽 쫀 쫄 쫌 쫍 쫏 쫑 쫓 쫘 쫙 쫠 쫬 쫴 쬈 쬐 쬔 쬘 쬠 쬡 쭁 쭈 쭉 쭌 쭐 쭘 쭙 쭝 쭤 쭸 쭹 쮜 쮸 쯔 쯤 쯧 쯩 찌 찍 찐 찔 찜 찝 찡 찢 찧-착 찬 찮 찰 참 찹 찻-찾 채 책 챈 챌 챔 챕 챗-챙 챠 챤 챦 챨 챰 챵 처 척 천 철 첨 첩 첫-청 체 첵 첸 첼 쳄 쳅 쳇 쳉 쳐 쳔 쳤 쳬 쳰 촁 초 촉 촌 촐 촘 촙 촛 총 촤 촨 촬 촹 최 쵠 쵤 쵬 쵭 쵯 쵱 쵸 춈 추 축 춘 출 춤 춥 춧 충 춰 췄 췌 췐 취 췬 췰 췸 췹 췻 췽 츄 츈 츌 츔 츙 츠 측 츤 츨 츰 츱 츳 층 치 칙 친 칟-칡 침 칩 칫 칭 카 칵 칸 칼 캄 캅 캇 캉 캐 캑 캔 캘 캠 캡 캣-캥 캬 캭 컁 커 컥 컨 컫 컬 컴 컵 컷-컹 케 켁 켄 켈 켐 켑 켓 켕 켜 켠 켤 켬 켭 켯-켱 켸 코 콕 콘 콜 콤 콥 콧 콩 콰 콱 콴 콸 쾀 쾅 쾌 쾡 쾨 쾰 쿄 쿠 쿡 쿤 쿨 쿰 쿱 쿳 쿵 쿼 퀀 퀄 퀑 퀘 퀭 퀴 퀵 퀸 퀼 큄 큅 큇 큉 큐 큔 큘 큠 크 큭 큰 클 큼 큽 킁 키 킥 킨 킬 킴 킵 킷 킹 타 탁 탄 탈 탉 탐 탑 탓-탕 태 택 탠 탤 탬 탭 탯-탱 탸 턍 터 턱 턴 털 턺 텀 텁 텃-텅 테 텍 텐 텔 템 텝 텟 텡 텨 텬 텼 톄 톈 토 톡 톤 톨 톰 톱 톳 통 톺 톼 퇀 퇘 퇴 퇸 툇 툉 툐 투 툭 툰 툴 툼 툽 툿 퉁 퉈 퉜 퉤 튀 튁 튄 튈 튐 튑 튕 튜 튠 튤 튬 튱 트 특 튼 튿 틀 틂 틈 틉 틋 틔 틘 틜 틤 틥 티 틱 틴 틸 팀 팁 팃 팅 파-팎 판 팔 팖 팜 팝 팟-팡 팥 패 팩 팬 팰 팸 팹 팻-팽 퍄 퍅 퍼 퍽 펀 펄 펌 펍 펏-펑 페 펙 펜 펠 펨 펩 펫 펭 펴 편 펼 폄 폅 폈 평 폐 폘 폡 폣 포 폭 폰 폴 폼 폽 폿 퐁 퐈 퐝 푀 푄 표 푠 푤 푭 푯 푸 푹 푼 푿 풀 풂 품 풉 풋 풍 풔 풩 퓌 퓐 퓔 퓜 퓟 퓨 퓬 퓰 퓸 퓻 퓽 프 픈 플 픔 픕 픗 피 픽 핀 필 핌 핍 핏 핑 하 학 한 할 핥 함 합 핫 항 해 핵 핸 핼 햄 햅 햇-행 햐 향 허 헉 헌 헐 헒 험 헙 헛 헝 헤 헥 헨 헬 헴 헵 헷 헹 혀 혁 현 혈 혐 협 혓-형 혜 혠 혤 혭 호 혹 혼 홀 홅 홈 홉 홋 홍 홑 화 확 환 활 홧 황 홰 홱 홴 횃 횅 회 획 횐 횔 횝 횟 횡 효 횬 횰 횹 횻 후 훅 훈 훌 훑 훔 훗 훙 훠 훤 훨 훰 훵 훼 훽 휀 휄 휑 휘 휙 휜 휠 휨 휩 휫 휭 휴 휵 휸 휼 흄 흇 흉 흐 흑 흔 흖-흙 흠 흡 흣 흥 흩 희 흰 흴 흼 흽 힁 히 힉 힌 힐 힘 힙 힛 힝]</exemplarCharacters>
 	</characters>
 	<dates>
-		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZvcL</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
 				<months>
@@ -882,12 +883,28 @@
 						</dayWidth>
 					</dayContext>
 				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1" draft="unconfirmed">일</quarter>
+							<quarter type="2" draft="unconfirmed">이</quarter>
+							<quarter type="3" draft="unconfirmed">삼</quarter>
+							<quarter type="4" draft="unconfirmed">사</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1" draft="unconfirmed">1</quarter>
+							<quarter type="2" draft="unconfirmed">2</quarter>
+							<quarter type="3" draft="unconfirmed">3</quarter>
+							<quarter type="4" draft="unconfirmed">4</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
 				<am>오전</am>
 				<pm>오후</pm>
 				<eras>
 					<eraNames>
-						<era type="0" draft="true">서력기원전</era>
-						<era type="1" draft="true">서력기원</era>
+						<era type="0">서력기원전</era>
+						<era type="1">서력기원</era>
 					</eraNames>
 					<eraAbbr>
 						<era type="0">기원전</era>
@@ -902,17 +919,17 @@
 					</dateFormatLength>
 					<dateFormatLength type="long">
 						<dateFormat>
-							<pattern>yyyy'년' M'월' d'일' EE</pattern>
+							<pattern>yyyy'년' M'월' d'일'</pattern>
 						</dateFormat>
 					</dateFormatLength>
 					<dateFormatLength type="medium">
 						<dateFormat>
-							<pattern>yyyy-MM-dd</pattern>
+							<pattern>yyyy. MM. dd</pattern>
 						</dateFormat>
 					</dateFormatLength>
 					<dateFormatLength type="short">
 						<dateFormat>
-							<pattern>yy-MM-dd</pattern>
+							<pattern>yy. MM. dd</pattern>
 						</dateFormat>
 					</dateFormatLength>
 				</dateFormats>
@@ -938,6 +955,13 @@
 						</timeFormat>
 					</timeFormatLength>
 				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="Hms" draft="provisional">H'시' m'분' s'초'</dateFormatItem>
+						<dateFormatItem id="MMdd" draft="provisional">MM. dd</dateFormatItem>
+						<dateFormatItem id="yyyyMM" draft="provisional">yyyy. MM</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -958,8 +982,8 @@
 					<daylight>뉴펀들랜드 기준시</daylight>
 				</long>
 				<short>
-					<standard>CNT</standard>
-					<daylight>CDT</daylight>
+					<standard>NST</standard>
+					<daylight>NDT</daylight>
 				</short>
 				<exemplarCity>St. Johns</exemplarCity>
 			</zone>
@@ -970,7 +994,6 @@
 				</long>
 				<short>
 					<standard>CTT</standard>
-					<daylight>CDT</daylight>
 				</short>
 				<exemplarCity>상하이</exemplarCity>
 			</zone>
@@ -1057,8 +1080,8 @@
 					<daylight>알래스카 기준시</daylight>
 				</long>
 				<short>
-					<standard>AST</standard>
-					<daylight>ADT</daylight>
+					<standard>AKST</standard>
+					<daylight>AKDT</daylight>
 				</short>
 				<exemplarCity>앵커리지</exemplarCity>
 			</zone>
@@ -1108,12 +1131,12 @@
 			</zone>
 			<zone type="America/Indianapolis">
 				<long>
-					<standard>동부 표준시</standard>
-					<daylight>동부 표준시</daylight>
+					<standard>동부 표준시 (인디애나폴리스)</standard>
+					<daylight>동부 기준시 (인디애나폴리스)</daylight>
 				</long>
 				<short>
-					<standard>EST</standard>
-					<daylight>EST</daylight>
+					<standard>EST (IN)</standard>
+					<daylight>EDT (IN)</daylight>
 				</short>
 				<exemplarCity>인디애나폴리스</exemplarCity>
 			</zone>
@@ -1831,8 +1854,106 @@
 		<messages>
 			<yesstr>예</yesstr>
 			<nostr>아니오</nostr>
-			<yesexpr>^([yY]([eE][sS])?)|예</yesexpr>
-			<noexpr>^([nN][oO]?)|아니오</noexpr>
 		</messages>
 	</posix>
+	<references>
+		<reference type="RP1" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Old English ( Change from &quot;이전 영어 (ca.450-1100)&quot; to &quot;영어 (고대) (450년-1100년경)&quot; )</reference>
+		<reference type="RP10" uri="http://endic.naver.com/endic.naver?docid=25760&amp;rd=s">Language: Ainu ( Change from &quot;ain&quot; to &quot;아이누어&quot; )</reference>
+		<reference type="RP11" uri="http://100.empas.com/dicsearch/pentry.html?i=166595&amp;v=47">Language: Algonquian Languages ( Change from &quot;알콘킨어&quot; to &quot;알공킨어족&quot; )</reference>
+		<reference type="RP12" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Southern Altai ( Change from &quot;alt&quot; to &quot;남부 알타이어&quot; )</reference>
+		<reference type="RP13" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Athapascan Languages ( Change from &quot;아타바스카어&quot; to &quot;아타파스카어군&quot; )</reference>
+		<reference type="RP14" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Australian Languages ( Change from &quot;오스트레일리아어&quot; to &quot;오스트레일리아어족&quot; )</reference>
+		<reference type="RP16" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Braj ( Change from &quot;브라어&quot; to &quot;브라지어&quot; )</reference>
+		<reference type="RP17" uri="http://endic.naver.com/endic.naver?docid=198910&amp;rd=s">Language: Chechen ( Change from &quot;ce&quot; to &quot;체첸어&quot; )</reference>
+		<reference type="RP18" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Chuukese ( Change from &quot;츄케스어&quot; to &quot;추크어&quot; )</reference>
+		<reference type="RP19" uri="http://100.empas.com/dicsearch/pentry.html?i=187759&amp;v=43">Language: Chamic languages ( Change from &quot;카믹어&quot; to &quot;참어군&quot; )</reference>
+		<reference type="RP2" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Middle Dutch ( Change from &quot;네덜란드, 중세 (ca.1050-1350)&quot; to &quot;네덜란드 (중세) (1050년-1350년경)&quot; )</reference>
+		<reference type="RP20" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Other English-based Creoles and Pidgins ( Change from &quot;크레오리스와 피긴스어, 영어-기반 (기타)&quot; to &quot;크리올어 및 피진어 (영어를 기반으로 한 기타)&quot; )</reference>
+		<reference type="RP21" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Other French-based Creoles and Pidgins ( Change from &quot;크레오리스와 피긴스어, 프랑스어-기반 (기타)&quot; to &quot;크리올어 및 피진어 (프랑스어를 기반으로 한 기타)&quot; )</reference>
+		<reference type="RP22" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Other Portuguese-based Creoles and Pidgins ( Change from &quot;크레오리스와 피긴스어, 포르투갈어-기반 (기타)&quot; to &quot;크리올어 및 피진어 (포르투갈어를 기반으로 한 기타)&quot; )</reference>
+		<reference type="RP23" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Creoles and Pidgins (Other) ( Change from &quot;크레오스와 피긴스어 (기타)&quot; to &quot;크리올어 및 피진어 (기타)&quot; )</reference>
+		<reference type="RP24" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Church Slavic ( Change from &quot;교회슬라브어&quot; to &quot;교회 슬라브어&quot; )</reference>
+		<reference type="RP25" uri="http://endic.naver.com/endic.naver?docid=285640">Language: Cushitic (Other) ( Change from &quot;쿠시트제족어(기타)&quot; to &quot;쿠시어파 (기타)&quot; )</reference>
+		<reference type="RP26" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Lower Sorbian ( Change from &quot;저급 소르비안어&quot; to &quot;소르비아어 (저지)&quot; )</reference>
+		<reference type="RP27" uri="http://100.naver.com/100.php?id=714678">Language: Dzongkha ( Change from &quot;부탄어&quot; to &quot;종카어&quot; )</reference>
+		<reference type="RP28" uri="http://100.naver.com/100.php?id=99022">Language: Scottish Gaelic ( Change from &quot;스코갤릭어&quot; to &quot;스코틀랜드 게일어&quot; )</reference>
+		<reference type="RP29" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Upper Sorbian ( Change from &quot;위 소르비안어&quot; to &quot;소르비아어 (고지)&quot; )</reference>
+		<reference type="RP3" uri="http://endic.naver.com/endic.naver?docid=851860&amp;rd=s">Language: Persian ( Change from &quot;이란어&quot; to &quot;페르시아어&quot; )</reference>
+		<reference type="RP30" uri="http://endic.naver.com/endic.naver?docid=539580&amp;rd=s">Language: Herero ( Change from &quot;hz&quot; to &quot;헤레로어&quot; )</reference>
+		<reference type="RP31" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Sichuan Yi ( Change from &quot;시츄안 이어&quot; to &quot;쓰촨 이어&quot; )</reference>
+		<reference type="RP32" uri="http://100.empas.com/dicsearch/pentry.html?i=152427&amp;v=47">Language: Khotanese ( Change from &quot;코탄스어&quot; to &quot;호탄어&quot; )</reference>
+		<reference type="RP33" uri="http://100.empas.com/dicsearch/pentry.html?i=196896&amp;v=44">Language: Kimbundu ( Change from &quot;킴분누어&quot; to &quot;킴분두어&quot; )</reference>
+		<reference type="RP34" uri="http://100.empas.com/dicsearch/pentry.html?i=192788&amp;v=42">Language: Kannada ( Change from &quot;카나다어&quot; to &quot;칸나다어&quot; )</reference>
+		<reference type="RP35" uri="http://100.empas.com/dicsearch/pentry.html?i=196202&amp;v=45">Language: Kpelle ( Change from &quot;코펠레&quot; to &quot;크펠레어&quot; )</reference>
+		<reference type="RP36" uri="http://100.empas.com/dicsearch/pentry.html?i=130907&amp;v=46">Language: Madurese ( Change from &quot;마두레세&quot; to &quot;마두라어&quot; )</reference>
+		<reference type="RP37" uri="http://ko.wikipedia.org/wiki/ISO_639">Language : Mirandese ( Change from &quot;mwl&quot; to &quot;미란데어&quot;)</reference>
+		<reference type="RP38" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Low German; Low Saxon ( Change from &quot;저급 독일어; 저급 색슨어&quot; to &quot;저지 독일어; 저지 색슨어&quot; )</reference>
+		<reference type="RP39" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Newari ( Change from &quot;네와리어&quot; to &quot;네와르어&quot; )</reference>
+		<reference type="RP4" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Middle French ( Change from &quot;프랑스어, 중세 (ca.1400-1600)&quot; to &quot;프랑스어 (중세) (1400년-1600년경&quot; )</reference>
+		<reference type="RP40" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Classical Newari ( Change from &quot;nwc&quot; to &quot;네와르어(고전)&quot; )</reference>
+		<reference type="RP41" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Occitan (post 1500); Provençal ( Change from &quot;옥시트어&quot; to &quot;오크어 (1500년 이후); 프로방스어&quot; )</reference>
+		<reference type="RP42" uri="http://100.empas.com/dicsearch/pentry.html?i=200765&amp;v=45">Language: Pahlavi ( Change from &quot;팔빌레어&quot; to &quot;팔레비어&quot; )</reference>
+		<reference type="RP43" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Old Provençal ( Change from &quot;프로벤칼어, 고대 (1500년 까지)&quot; to &quot;프로방스어 (고대) (1500년 이전)&quot; )</reference>
+		<reference type="RP44" uri="http://100.empas.com/dicsearch/pentry.html?i=202305&amp;v=44">Language: Portuguese ( Change from &quot;포르투칼어&quot; to &quot;포르투갈어&quot; )</reference>
+		<reference type="RP45" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Rarotongan ( Change from &quot;파로톤간어&quot; to &quot;라로통가어&quot; )</reference>
+		<reference type="RP46" uri="http://endic.naver.com/endic.naver?docid=992780&amp;rd=s">Language: Rundi ( Change from &quot;반투어(부룬디)&quot; to &quot;룬디어&quot; )</reference>
+		<reference type="RP47" uri="http://endic.naver.com/endic.naver?docid=984990">Language: Root ( Change from &quot;root&quot; to &quot;어근&quot; )</reference>
+		<reference type="RP48" uri="http://endic.naver.com/endic.naver?docid=1048270&amp;rd=s">Language: Sicilian ( Change from &quot;scn&quot; to &quot;시칠리아어&quot; )</reference>
+		<reference type="RP49" uri="http://100.empas.com/dicsearch/pentry.html?i=160218&amp;v=42">Language: Sranan Tongo ( Change from &quot;srn&quot; to &quot;스라난 통가어&quot; )</reference>
+		<reference type="RP5" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Old French ( Change from &quot;프랑스어, 고대 (842-ca.1400)&quot; to &quot;프랑스어 (고대) (842년-1400년경)&quot; )</reference>
+		<reference type="RP50" uri="http://100.empas.com/dicsearch/pentry.html?i=156732&amp;v=46">Language: Serer ( Change from &quot;세셀어&quot; to &quot;세레르어&quot; )</reference>
+		<reference type="RP51" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Southern Sotho ( Change from &quot;소토어&quot; to &quot;소토어 (남부)&quot; )</reference>
+		<reference type="RP52" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Klingon ( Change from &quot;tlh&quot; to &quot;클링온어&quot; )</reference>
+		<reference type="RP53" uri="http://100.empas.com/dicsearch/pentry.html?i=167061&amp;v=44">Language: Altaic (Other) ( Change from &quot;알타이어 (기타)&quot; to &quot;알타이어족 (기타)&quot; )</reference>
+		<reference type="RP54" uri="http://endic.naver.com/endic.naver?docid=88880&amp;rd=s">script: Balinese ( Change from &quot;Bali&quot; to &quot;발리어&quot; )</reference>
+		<reference type="RP55" uri="http://endic.naver.com/endic.naver?docid=97750&amp;rd=s">script: Batak ( Change from &quot;Batk&quot; to &quot;바타크어&quot; )</reference>
+		<reference type="RP56" uri="http://janghammo.com/board/kimsboard.php3?table=news&amp;action=re&amp;l=125&amp;de=123&amp;p=9">script: Blissymbols ( Change from &quot;Blis&quot; to &quot;블리스 상징&quot; )&quot; )  </reference>
+		<reference type="RP57" uri="http://100.empas.com/dicsearch/pentry.html?i=149189&amp;v=44">script: Brahmi ( Change from &quot;Brah&quot; to &quot; 브라미&quot; )</reference>
+		<reference type="RP58" uri="http://100.empas.com/dicsearch/pentry.html?i=184421&amp;v=43">script: Braille ( Change from &quot;브라유&quot; to &quot;브라유 점자&quot; )</reference>
+		<reference type="RP59" uri="http://endic.naver.com/endic.naver?docid=155060&amp;rd=s">script: Buginese ( Change from &quot;Bugi&quot; to &quot;부기어&quot; )</reference>
+		<reference type="RP6" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Middle High German  ( Change from &quot;독일어, 중세 고급 (ca.1050-1500)&quot; to &quot;독일어 (중세 고지) (1050년-1500년경)&quot; )</reference>
+		<reference type="RP60" uri="http://endic.naver.com/endic.naver?docid=194580">script: Cham ( Change from &quot;Cham&quot; to &quot;칸 고어&quot; )</reference>
+		<reference type="RP61" uri="http://fan.theonering.net/lotrlab/lab/pron.html">script: Cirth ( Change from &quot;Cirt&quot; to &quot;키르쓰&quot; )</reference>
+		<reference type="RP62" uri="http://100.empas.com/dicsearch/pentry.html?i=112962&amp;v=43">script: Cyrillic (Old Church Slavonic variant) ( Change from &quot;cyrs&quot; to &quot;키릴어 (고대 교회 슬라브어 변형)&quot; )</reference>
+		<reference type="RP63" uri="http://100.empas.com/dicsearch/pentry.html?i=124761&amp;v=43">script: Devanagari ( Change from &quot;데바니가리어&quot; to &quot;데바나가리&quot; )</reference>
+		<reference type="RP64" uri="http://endic.naver.com/endic.naver?docid=308300&amp;rd=s">script: Egyptian demotic ( Change from &quot;Egyd&quot; to &quot;고대 이집트 민간 문자&quot; )</reference>
+		<reference type="RP65" uri="http://endic.naver.com/endic.naver?docid=543060">script: Egyptian hieratic ( Change from &quot;Egyh&quot; to &quot;고대 이집트 신관 문자&quot; )</reference>
+		<reference type="RP66" uri="http://endic.naver.com/endic.naver?docid=543110&amp;rd=s">script: Egyptian hieroglyphs ( Change from &quot;Egyp&quot; to &quot;고대 이집트 상형 문자&quot; )</reference>
+		<reference type="RP67" uri="http://endic.naver.com/endic.naver?docid=483050">script: Georgian ( Change from &quot;그루지아어&quot; to &quot;그루지야어&quot; )</reference>
+		<reference type="RP68" uri="http://100.empas.com/dicsearch/pentry.html?i=117844&amp;v=46">script: Glagolitic ( Change from &quot;Glag&quot; to &quot;글라골 문자&quot; )</reference>
+		<reference type="RP69" uri="http://endic.naver.com/endic.naver?docid=523870&amp;rd=s">script: Hangul ( Change from &quot;한국어&quot; to &quot;한글&quot; )  </reference>
+		<reference type="RP7" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Old High German ( Change from &quot;독일어, 고대 저급 (ca.750-1050)&quot; to &quot;독일어 (고대 고지) (750년-1050년경)&quot; )</reference>
+		<reference type="RP70" uri="http://endic.naver.com/endic.naver?docid=563300">script: Old Hungarian ( Change from &quot;Hung&quot; to &quot;고대 헝가리어&quot; )</reference>
+		<reference type="RP71" uri="http://100.empas.com/dicsearch/pentry.html?i=180989&amp;v=47">script: Indus (Harappan) ( Change from &quot;Inds&quot; to &quot;인더스 (하라파어)&quot; )</reference>
+		<reference type="RP72" uri="http://endic.naver.com/endic.naver?docid=617800&amp;rd=s">script: Javanese ( Change from &quot;Java&quot; to &quot;자바어&quot; )</reference>
+		<reference type="RP73" uri="http://endic.naver.com/endic.naver?docid=456700">script: Latin (Fraktur variant) ( Change from &quot;Latf&quot; to &quot;라틴어 (독일어 변형)&quot; )</reference>
+		<reference type="RP74" uri="http://endic.naver.com/endic.naver?docid=470210&amp;rd=s">script: Latin (Gaelic variant) ( Change from &quot;Latg&quot; to &quot;라틴어 (게일어 변형)&quot; )</reference>
+		<reference type="RP75" uri="http://100.empas.com/dicsearch/pentry.html?i=131928&amp;v=47">script: Lepcha (Rong) ( Change from &quot;Lepc&quot; to &quot;렙차어 (롱어)&quot; )</reference>
+		<reference type="RP76" uri="http://endic.naver.com/endic.naver?docid=664860&amp;rd=s">script: Linear A ( Change from &quot;Lina&quot; to &quot;선형 문자 A&quot; )</reference>
+		<reference type="RP77" uri="http://endic.naver.com/endic.naver?docid=543110&amp;rd=s">script: Mayan hieroglyphs ( Change from &quot;Maya&quot; to &quot;마야 상형 문자&quot; )</reference>
+		<reference type="RP78" uri="http://100.naver.com/100.php?id=61395">script: Meroitic ( Change from &quot;Mero&quot; to &quot;메로에 문자&quot; )</reference>
+		<reference type="RP79" uri="http://100.empas.com/dicsearch/pentry.html?i=172213&amp;v=42">script: Ogham ( Change from &quot; 오그함어&quot; to &quot;오검 문자&quot; )</reference>
+		<reference type="RP8" uri="http://ko.wikipedia.org/wiki/ISO_639">Language: Tonga (Tonga Islands) ( Change from &quot;통가어&quot; to &quot;통아어 (통아 제도) &quot; )</reference>
+		<reference type="RP80" uri="http://100.naver.com/100.php?id=115106 ">script: Orkhon ( Change from &quot;Orkh&quot; to &quot;오르콘&quot; )</reference>
+		<reference type="RP81" uri="http://preview.britannica.co.kr/bol/topic.asp?article_id=b23p2162a">script: Old Permic ( Change from &quot;Perm&quot; to &quot;고대 페름어&quot; )</reference>
+		<reference type="RP82" uri="http://www.encyber.com/search_w/ctdetail.php?gs=ws&amp;gd=&amp;cd=&amp;d=&amp;k=&amp;inqr=&amp;indme=&amp;p=1&amp;q=phags-pa&amp;masterno=180091&amp;contentno=180091">script: Phags-pa ( Change from &quot;Phag&quot; to &quot;파스파 문자&quot; )</reference>
+		<reference type="RP83" uri="http://www.encyber.com/search_w/ctdetail.php?gs=ws&amp;gd=&amp;cd=&amp;d=&amp;k=&amp;inqr=&amp;indme=&amp;p=1&amp;q=phoenician&amp;masterno=181056&amp;contentno=181056">script: Phoenician ( Change from &quot;Phnx&quot; to &quot;페니키아 문자&quot; )</reference>
+		<reference type="RP84" uri="http://endic.naver.com/endic.naver?docid=858180&amp;rd=s">script: Pollard Phonetic ( Change from &quot;Plrd&quot; to &quot;폴라드 표음문자&quot; )</reference>
+		<reference type="RP85" uri="http://san.chosun.com/wdata/html/news/200410/20041003000003.html">script: Rongorongo ( Change from &quot;Roro&quot; to &quot;롱고롱고&quot; )</reference>
+		<reference type="RP86" uri="http://ko.wikipedia.org/wiki/꿰냐">script: Sarati ( Change from &quot;Sara&quot; to &quot;사라티&quot; )</reference>
+		<reference type="RP87" uri="http://preview.britannica.co.kr/bol/topic.asp?article_id=b13s1747a">script: Syriac (Estrangelo variant) ( Change from &quot;Syre&quot; to &quot;시리아어 (에스트랑겔라 변형)&quot; )</reference>
+		<reference type="RP88" uri="http://preview.britannica.co.kr/bol/topic.asp?article_id=b13s1747a">script: Syriac (Western variant) ( Change from &quot;Syrj&quot; to &quot;시리아어 (서부어 변형)&quot; )</reference>
+		<reference type="RP89" uri="http://preview.britannica.co.kr/bol/topic.asp?article_id=b13s1747a">script: Syriac (Estern variant) ( Change from &quot;Syrn&quot; to &quot;시리아어 (동부어 변형)&quot; )</reference>
+		<reference type="RP9" uri="http://endic.naver.com/endic.naver?docid=81090">Language: Avestan ( Change from &quot;ae&quot; to &quot;아베스타어&quot; )</reference>
+		<reference type="RP90" uri="http://ko.wikipedia.org/wiki/꿰냐">script: Tengwar ( Change from &quot;Teng&quot; to &quot;탱과르&quot; )</reference>
+		<reference type="RP91" uri="http://preview.britannica.co.kr/bol/topic.asp?article_id=k96s0366">script: Tifinagh (Berber) ( Change from &quot;Tfng&quot; to &quot;티피나그 (베르베르어)&quot; )</reference>
+		<reference type="RP92" uri="http://www.encyber.com/search_w/ctdetail.php?gs=ws&amp;gd=&amp;cd=&amp;d=&amp;k=&amp;inqr=&amp;indme=&amp;p=1&amp;q=vai&amp;masterno=68962&amp;contentno=68962">script: Vai ( Change from &quot;Vaii&quot; to &quot;바이어&quot; )</reference>
+		<reference type="RP93" uri="http://endic.naver.com/endic.naver?docid=1251940&amp;rd=s">script: Visible Speech ( Change from &quot;Visp&quot; to &quot;시화법&quot; )</reference>
+		<reference type="RP94" uri="http://endic.naver.com/endic.naver?docid=797430&amp;rd=s">script: Old Persian ( Change from &quot;Xpeo&quot; to &quot;고대 페르시아어&quot; )</reference>
+		<reference type="RP95" uri="http://100.empas.com/dicsearch/pentry.html?i=156093">script: Sumero-Akkadian Cuneiform ( Change from &quot;Xsux&quot; to &quot;수메르-아카드어 설형문자&quot; )</reference>
+		<reference type="RP96" uri="http://en.wikipedia.org/wiki/Brazilian_Reals">Currency : Brazilian Real (symbol) ( Change from &quot;BRL&quot; to &quot;R$&quot; )</reference>
+		<reference type="RP97" uri="http://en.wikipedia.org/wiki/Renminbi">Currency : Chinese Yuan Renminbi (symbol) ( Change from &quot;CNY&quot; to &quot;¥&quot; )</reference>
+		<reference type="RP98" uri="http://en.wikipedia.org/wiki/Italian_Lira">Currency : Italian Lira (symbol) ( Change from &quot;ITL&quot; to &quot;₤&quot; )</reference>
+		<reference type="RP99" uri="http://en.wikipedia.org/wiki/North_Korean_Won">Currency : North Korean Won (symbol) ( Change from &quot;KPW&quot; to &quot;₩&quot; )</reference>
+	</references>
 </ldml>

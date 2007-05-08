@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,76 +18,107 @@
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: LocalResult.php 4462 2007-04-11 04:10:16Z darby $
  */
 
 
 /**
- * @todo coding standards: naming of instance variables
+ * @see Zend_Service_Yahoo_Result
+ */
+require_once 'Zend/Service/Yahoo/Result.php';
+
+
+/**
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Yahoo_LocalResult extends Zend_Service_Yahoo_Result {
+class Zend_Service_Yahoo_LocalResult extends Zend_Service_Yahoo_Result
+{
     /**
-     * @var string $Address Street address of the result
+     * Street address of the result
+     *
+     * @var string
      */
     public $Address;
-    
+
     /**
-     * @var string $City City in which the result resides
+     * City in which the result resides
+     *
+     * @var string
      */
     public $City;
-    
+
     /**
-     * @var string $State State in which the result resides
+     * State in which the result resides
+     *
+     * @var string
      */
     public $State;
-    
+
     /**
-     * @var string $Phone Phone number for the result
+     * Phone number for the result
+     *
+     * @var string
      */
     public $Phone;
-    
+
     /**
-     * @var int $Rating User-submitted rating for the result
+     * User-submitted rating for the result
+     *
+     * @var string
      */
     public $Rating;
-    
+
     /**
-     * @var float $Distance The distance to the result from your specified location
+     * The distance to the result from your specified location
+     *
+     * @var string
      */
     public $Distance;
-    
+
     /**
-     * @var string $MapUrl A URL of a map for the result.
+     * A URL of a map for the result
+     *
+     * @var string
      */
     public $MapUrl;
-    
+
     /**
-     * @var string $BusinessUrl The URL for the business website, if known
+     * The URL for the business website, if known
+     *
+     * @var string
      */
     public $BusinessUrl;
-    
+
     /**
-     * @var string $BusinessClickUrl The URL for linking to the business website, if known
+     * The URL for linking to the business website, if known
+     *
+     * @var string
      */
     public $BusinessClickUrl;
-    
-    
-    /**
-     * @todo docblock
-     */
-    protected $_namespace = "urn:yahoo:lcl";
 
-    
     /**
-     * @todo docblock
+     * Local result namespace
+     *
+     * @var string
      */
-    public function __construct(DomElement $result) {
-        $this->_fields = array('Address','City', 'City', 'State', 'Phone','Rating','Distance','MapUrl',
-                            'BusinessUrl', 'BusinessClickUrl');
+    protected $_namespace = 'urn:yahoo:lcl';
+
+
+    /**
+     * Initializes the local result
+     *
+     * @param  DOMElement $result
+     * @return void
+     */
+    public function __construct(DOMElement $result)
+    {
+        $this->_fields = array('Address','City', 'City', 'State', 'Phone', 'Rating', 'Distance', 'MapUrl',
+                               'BusinessUrl', 'BusinessClickUrl');
+
         parent::__construct($result);
     }
 }

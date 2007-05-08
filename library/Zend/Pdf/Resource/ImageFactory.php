@@ -34,7 +34,7 @@ require_once 'Zend/Pdf.php';
  */
 class Zend_Pdf_ImageFactory
 {
-    static public function factory($filename) {
+    public static function factory($filename) {
         if(!is_file($filename)) {
             throw new Zend_Pdf_Exception("Cannot create image resource. File not found.");
         }
@@ -47,17 +47,17 @@ class Zend_Pdf_ImageFactory
             case 'tif':
                 //Fall through to next case;
             case 'tiff':
-                return new Zend_Pdf_Image_Tiff($filename);
+                return new Zend_Pdf_Resource_Image_Tiff($filename);
                 break;
             case 'png':
-                return new Zend_Pdf_Image_Png($filename);
+                return new Zend_Pdf_Resource_Image_Png($filename);
                 break;
             case 'jpg':
                 //Fall through to next case;
             case 'jpe':
                 //Fall through to next case;
             case 'jpeg':
-                return new Zend_Pdf_Image_Jpeg($filename);
+                return new Zend_Pdf_Resource_Image_Jpeg($filename);
                 break;
             default:
                 throw new Zend_Pdf_Exception("Cannot create image resource. File extension not known or unsupported type.");
@@ -65,4 +65,4 @@ class Zend_Pdf_ImageFactory
         }
     }
 }
-?>
+

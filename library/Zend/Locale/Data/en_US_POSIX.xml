@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
-	<!-- This is a special purpose locale so that a user can request the C or POSIX
-		 style formatting. This does not include grouping separators in numbers, nor
-		 unusual characters for infinity or NaN. Some people have known this to be the
-		 invariant locale, which is different from the root locale.
-
-		 This locale should not be modified to create some sort of custom collation to
-		 represent a specific codepage. Many users complained when the C locale was
-		 being used, and multi-level UCA collation was expected.
-	-->
 	<identity>
-		<version number="$Revision: 1.32 $"/>
-		<generation date="$Date: 2005/04/21 06:35:48 $"/>
+		<version number="$Revision: 1.47 $"/>
+		<generation date="$Date: 2006/06/28 01:23:32 $"/>
 		<language type="en"/>
 		<territory type="US"/>
 		<variant type="POSIX"/>
@@ -21,7 +12,6 @@
 		<symbols>
 			<perMille>0/00</perMille>
 			<infinity>INF</infinity>
-			<nan>NaN</nan>
 		</symbols>
 		<decimalFormats>
 			<decimalFormatLength>

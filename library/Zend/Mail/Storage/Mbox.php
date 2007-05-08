@@ -143,7 +143,7 @@ class Zend_Mail_Storage_Mbox extends Zend_Mail_Storage_Abstract
             }
         }
 
-        return new Zend_Mail_Message(array('handler' => $this, 'id' => $id, 'headers' => $message));
+        return new $this->_messageClass(array('handler' => $this, 'id' => $id, 'headers' => $message));
     }
 
     /*

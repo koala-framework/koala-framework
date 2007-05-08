@@ -49,38 +49,38 @@ require_once 'Zend/Exception.php';
 class Zend_Pdf_Exception extends Zend_Exception
 {
   /**** Class Constants ****/
-  
-  
+
+
   /* Generic Exceptions */
-  
+
     /**
      * The feature or option is planned but has not yet been implemented. It
      * should be available in a future revision of the framework.
      */
     const NOT_IMPLEMENTED = 0x0001;
-    
+
     /**
      * The feature or option has been deprecated and will be removed in a future
-     * revision of the framework. The descriptive text accompanying this 
+     * revision of the framework. The descriptive text accompanying this
      * exception should explain how to use the replacement features or options.
      */
     const DEPRECATED = 0x0002;
-    
+
     /**
      * Not enough paramaters were supplied to the method.
      */
     const TOO_FEW_PARAMETERS = 0x0003;
-    
+
     /**
      * A parameter was of the wrong data type.
      */
     const BAD_PARAMETER_TYPE = 0x0004;
-    
+
     /**
      * A parameter contained an unusable value.
      */
     const BAD_PARAMETER_VALUE = 0x0005;
-    
+
     /**
      * A parameter value was not within the expected range.
      */
@@ -321,7 +321,6 @@ class Zend_Pdf_Exception extends Zend_Exception
     const CANT_DETERMINE_FONT_TYPE = 0x0602;
 
 
-
   /* Text Layout System */
 
     /**
@@ -330,4 +329,13 @@ class Zend_Pdf_Exception extends Zend_Exception
     const BAD_ATTRIBUTE_VALUE = 0x0701;
 
 
+  /* Zend_Pdf_Image and Subclasses */
+
+    const CANT_DETERMINE_IMAGE_TYPE = 0x0801;
+    const WRONG_IMAGE_TYPE = 0x0802;
+    const UNSUPPORTED_IMAGE_ENCODING_OPTIONS = 0x0803;
+    const IMAGE_FILE_CORRUPT = 0x0804;
+
+
 }
+

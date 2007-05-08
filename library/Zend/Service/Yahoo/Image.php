@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,42 +18,54 @@
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Image.php 4462 2007-04-11 04:10:16Z darby $
  */
 
 
 /**
- * @todo coding standards: naming of instance variables
  * @category   Zend
  * @package    Zend_Service
  * @subpackage Yahoo
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_Yahoo_Image {
+class Zend_Service_Yahoo_Image
+{
     /**
-     * @var string Image Url
+     * Image URL
+     *
+     * @var string
      */
     public $Url;
 
     /**
-     * @var int Image Height
+     * Image height in pixels
+     *
+     * @var int
      */
     public $Height;
 
     /**
-     * @var int Image Width
+     * Image width in pixels
+     *
+     * @var int
      */
     public $Width;
 
 
     /**
-     * @todo docblock
+     * Initializes the image
+     *
+     * @param  DOMNode $dom
+     * @param  string  $namespace
+     * @return void
      */
-    public function __construct($dom, $namespace) {
+    public function __construct(DOMNode $dom, $namespace)
+    {
     	$xpath = new DOMXPath($dom->ownerDocument);
-    	$xpath->registerNamespace("yh", $namespace);
-        $this->Url = Zend_Uri::factory($xpath->query("./yh:Url/text()", $dom)->item(0)->data);
-        $this->Height = (int) $xpath->query("./yh:Height/text()", $dom)->item(0)->data;
-        $this->Width = (int) $xpath->query("./yh:Width/text()", $dom)->item(0)->data;
+    	$xpath->registerNamespace('yh', $namespace);
+        $this->Url = Zend_Uri::factory($xpath->query('./yh:Url/text()', $dom)->item(0)->data);
+        $this->Height = (int) $xpath->query('./yh:Height/text()', $dom)->item(0)->data;
+        $this->Width = (int) $xpath->query('./yh:Width/text()', $dom)->item(0)->data;
     }
 }

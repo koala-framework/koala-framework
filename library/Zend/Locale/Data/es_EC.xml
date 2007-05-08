@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.3/ldml.dtd">
+<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.4/ldml.dtd">
 <ldml>
 	<identity>
-		<version number="$Revision: 1.29 $"/>
-		<generation date="$Date: 2005/05/18 09:22:34 $"/>
+		<version number="$Revision: 1.43 $"/>
+		<generation date="$Date: 2006/06/28 01:23:33 $"/>
 		<language type="es"/>
 		<territory type="EC"/>
 	</identity>
@@ -44,14 +44,16 @@
 						</timeFormat>
 					</timeFormatLength>
 				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="mmss" draft="provisional">mm:ss</dateFormatItem>
+						<dateFormatItem id="yyyyMM" draft="provisional">MM/yyyy</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 	</dates>
 	<numbers>
-		<symbols>
-			<decimal draft="true">.</decimal>
-			<group draft="true">,</group>
-		</symbols>
 		<currencyFormats>
 			<currencyFormatLength>
 				<currencyFormat>
@@ -63,7 +65,7 @@
 			<currency type="USD">
 				<symbol>$</symbol>
 			</currency>
-        </currencies>
+		</currencies>
 	</numbers>
 </ldml>
 

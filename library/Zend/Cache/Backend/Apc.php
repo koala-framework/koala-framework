@@ -70,9 +70,7 @@ class Zend_Cache_Backend_APC extends Zend_Cache_Backend implements Zend_Cache_Ba
     public function load($id, $doNotTestCacheValidity = false) 
     {
         if ($doNotTestCacheValidity) {
-            if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_APC::load() : \$doNotTestCacheValidity=true is unsupported by the APC backend", Zend_Log::LEVEL_WARNING);
-            }
+            $this->_log("Zend_Cache_Backend_APC::load() : \$doNotTestCacheValidity=true is unsupported by the APC backend");
         }
         $tmp = apc_fetch($id);
         if (is_array($tmp)) {
@@ -113,9 +111,7 @@ class Zend_Cache_Backend_APC extends Zend_Cache_Backend implements Zend_Cache_Ba
         $lifetime = $this->getLifetime($specificLifetime);
         $result = apc_store($id, array($data, time()), $lifetime);
         if (count($tags) > 0) {
-            if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_APC::save() : tags are unsupported by the APC backend", Zend_Log::LEVEL_WARNING);
-            }
+            $this->_log("Zend_Cache_Backend_APC::save() : tags are unsupported by the APC backend");
         }
         return $result;       
     }
@@ -152,19 +148,13 @@ class Zend_Cache_Backend_APC extends Zend_Cache_Backend implements Zend_Cache_Ba
             return apc_clear_cache('user');
         }
         if ($mode==Zend_Cache::CLEANING_MODE_OLD) {
-            if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_APC::clean() : CLEANING_MODE_OLD is unsupported by the APC backend", Zend_Log::LEVEL_WARNING);
-            }
+            $this->_log("Zend_Cache_Backend_APC::clean() : CLEANING_MODE_OLD is unsupported by the APC backend");
         }
         if ($mode==Zend_Cache::CLEANING_MODE_MATCHING_TAG) {
-            if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_APC::clean() : tags are unsupported by the APC backend", Zend_Log::LEVEL_WARNING);
-            }
+            $this->_log("Zend_Cache_Backend_APC::clean() : tags are unsupported by the APC backend");
         }
         if ($mode==Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG) {
-            if ($this->_directives['logging']) {
-                Zend_Log::log("Zend_Cache_Backend_APC::clean() : tags are unsupported by the APC backend", Zend_Log::LEVEL_WARNING);
-            }
+            $this->_log("Zend_Cache_Backend_APC::clean() : tags are unsupported by the APC backend");
         }
     }
         
