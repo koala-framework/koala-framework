@@ -27,6 +27,11 @@ abstract class Vps_PageCollection_Abstract
         }
     }
     
+    public function getDao()
+    {
+        return $this->_dao;
+    }
+    
     public static function getInstance()
     {
         if (null === self::$_instance) {
@@ -47,8 +52,23 @@ abstract class Vps_PageCollection_Abstract
         return self::$_instance;
     }
 
-    public function addPage(Vps_Component_Abstract $component, $filename)
+    public function addPage($component, $filename = '')
     {
+        if (is_int($component)) {
+            $componentId = $component;
+            $pageData = $this->_dao->retrievePageData($componentId);
+            if (!empty($pageData)) {
+                $className = $pageData['component'];
+                $component = new $className($this->_dao, $componentId);
+                $component->setPageCollection($this);
+                $filename = $pageData['filename'];
+            }
+        }
+
+        if (!$component instanceof Vps_Component_Abstract) {
+            throw new Vps_PageCollection_Exception("Component must be instance of Vps_Component_Abstract.");
+        }
+        
         if ($filename == '') {
             throw new Vps_PageCollection_Exception("Pagename must not be empty.");
         }
@@ -61,6 +81,7 @@ abstract class Vps_PageCollection_Abstract
         }
         
         $this->_setPage($decoratedComponent, $filename);
+        return $decoratedComponent;
     }
     
     protected function _removePage($id)
@@ -113,14 +134,9 @@ abstract class Vps_PageCollection_Abstract
         if (!isset($this->_pages[$id])) {
             try {
                 $parts = Vps_Component_Abstract::parseId($id);
-                $componentId = $parts['componentId'];
-                $pageRow = $this->_dao->getPageData($componentId);
-                if (!empty($pageRow)) {
-                    $className = $pageRow['component'];
-                    $component = new $className($this->_dao, $pageRow['component_id']);
-                    $component->setPageCollection($this);
-                    $this->addPage($component, $pageRow['filename']);
-                    $id = $component->getId();
+                $page = $this->addPage($parts['componentId']);
+                if ($page != null) {
+                    $id = $page->getId();
                     foreach ($parts['pageKeys'] as $pageKey) {
                         $this->_pages[$id]->generateHierarchy();
                         $id .= $id == $component->getId() ? '_' : '.';
@@ -142,7 +158,7 @@ abstract class Vps_PageCollection_Abstract
     public function getRootPage()
     {
         if (!isset($this->_rootPageId)) {
-            $data = $this->_dao->getRootPageData();
+            $data = $this->_dao->retrieveRootPageData();
             $classname = $data['component'];
             $rootPage = new $classname($this->_dao, $data['component_id']);
             $rootPage->setPageCollection($this);
@@ -169,5 +185,20 @@ abstract class Vps_PageCollection_Abstract
         return $this->_currentPage;
     }
     
+    public function getPath($page)
+    {
+        return '';
+    }
+
+    public function getPageData(Vps_Component_Interface $page)
+    {
+        $pageId = $page->getId();
+        $rootId = $this->getRootPage()->getId();
+        $id = $page->getId();
+        $data = $this->_dao->retrievePageData($id);
+        $data['path'] = $this->getPath($page);
+        return $data;
+    }
+
     abstract public function getPageByPath($path);
 }

@@ -13,28 +13,32 @@
     .x-tree-node-leaf .x-tree-node-icon{
       background-image:url(/files/ext/resources/images/default/tree/leaf.gif);
     }
+    
+    .offline a span { color:#888888; }
 </style>
 
-<div id="tabs" />
+<div id="content">
+    <div id="west" />
+    <div id="center" />
+</div>
  
 <script type="text/javascript">
-function initTabs() {
-    var jtabs = new Ext.TabPanel('tabs');
+TreeTabs = function(el, form) {
+    var jtabs = new Ext.TabPanel(el);
     
     var tabs = new Array();
     
-    tabs[1] = jtabs.addTab('tab1', 'Seitenbaum', '<div id="treeDiv" />');
-    tabs[1].on('activate', function() { initTree('treeDiv'); });
+    tabs[1] = jtabs.addTab('tab1', 'Seitenbaum', '<div id="tree1" />');
+    tabs[1].on('activate', function() { PageTree('tree1', form); });
 
     jtabs.activate('tab1');
 }
 
-function initTree(div) {
+PageTree = function(el, form) {
     var Tree = Ext.tree;
-    var dialog = new PageDialog('booking-dialog');
 
     var tree = new Tree.TreePanel(
-        div,
+        el,
         {
             animate:true, 
             loader: new Tree.TreeLoader({dataUrl:'/admin/pages/ajaxGetNodes'}),
@@ -46,75 +50,127 @@ function initTree(div) {
 
     // set the root node
     var root = new Tree.AsyncTreeNode({
-        text: 'yui-ext',
+        text: '',
         draggable:false,
-        id:'source'
+        id:'root'
     });
     tree.setRootNode(root);
 
-    tree.on('nodedrop', function(e){
-        alert('drop');
-    });
-    /*
-    tree.getLoader().createNode = function(attr){
-          if(attr.someNonLeafAttr){
-               return new TreeNode(attr);
-          }
-          return Ext.tree.TreeLoader.createNode.call(this, attr);
-    };
-    */
+    tree.on(
+        'nodedrop',
+        function(e){
+
+            
+            var callback = function(option, success, response)
+            {
+                if (success) {
+                    
+                } else {
+                    // TODO: node zurÃ¼cksetzen
+                }
+            }
+            
+            var params = {
+                command: 'move',
+                source: e.dropNode.id,
+                target: e.target.id,
+                point: e.point
+            }
+            var config = {
+                url: '/admin/pages/ajaxSavePageData',
+                params: params,
+                method: 'post',
+                callback: callback,
+                scope: this
+            }
+
+            var conn = new Ext.data.Connection();
+            conn.request(config);
+        }
+    );
     
-    tree.on('click', function (node, e) { dialog.edit() });
+    tree.getSelectionModel().on(
+        'selectionchange',
+        function (e, node) {
+            if (node) { form.edit(node); }
+        }
+    );
     
     // render the tree
     tree.render();
+    form.setTree(tree);
     root.expand();
-    
+
 }
 
-PageDialog = function(el) {
-    
-    var self = this;
-    var dialog = new Ext.BasicDialog('booking-dialog', 
-        {
-            height: 200, 
-            width: 400, 
-            modal: true,
-            proxyDrag: true,
-            shadow: true,
-            autoCreate: true
+MyNodeUI = function(node){
+    MyNodeUI.superclass.constructor.call(this, node);
+}
+Ext.extend(MyNodeUI, Ext.tree.TreeNodeUI, {
+    initEvents : function(){
+        MyNodeUI.superclass.initEvents.call(this);
+        if(this.node.attributes.status == '0'){
+            this.addClass('offline');
         }
-    )
-    dialog.addKeyListener(27, dialog.hide, dialog); // ESC
+    }
+});
+
+PageForm = function(el) {
     
-    form = new Ext.form.Form({
-        labelWidth: 100,
-        url: '/admin/pages/save',
-        baseParams: {id: 0}
-    });
+    var tree;
+    
+    init = function(el) {
+        form = new Ext.form.Form({
+            labelWidth: 100,
+            url: '/admin/pages/ajaxSavePageData',
+            baseParams: {id: 0}
+        });
+    
+        form.fieldset(
+            {legend: 'Seiteneigenschaften'},
+            new Ext.form.TextField({
+                allowBlank: false,
+                blankText: 'Seitenname wird benÃ¶tigt',
+                fieldLabel: 'Seitenname',
+                name: 'name',
+                minLength: 1,
+                maxLength: 255,
+                width: 200
+            }),
+            new Ext.form.Checkbox({
+                fieldLabel: 'Status',
+                name: 'status'
+            })
+        );
+        
+        toolbar = new Ext.Toolbar(Ext.get(el).createChild());
+        toolbar.addButton({
+            disabled: true,
+            text    : 'Speichern',
+            handler : save,
+            scope   : this
+        });
+        toolbar.addButton({
+            text    : 'LÃ¶schen',
+            handler : remove,
+            disabled: true,
+            scope   : this
+        });
+        toolbar.addButton({
+            text    : 'Als neue Seite speichern',
+            handler : add,
+            scope   : this
+        });
+        form.render(el);
+    }
 
-    form.fieldset(
-        {legend: 'Seiteneigenschaften'},
-        new Ext.form.TextField({
-            allowBlank: false,
-            blankText: 'Seitenname wird benötigt',
-            fieldLabel: 'Seitenname',
-            name: 'name',
-            minLength: 1,
-            maxLength: 255,
-            width: 200
-        }),
-        new Ext.form.Checkbox({
-            fieldLabel: 'Status',
-            name: 'status'
-        })
-    );
-
-    form.addButton('OK', function() {
-        this.form.submit({
+    remove = function(o, e) {
+        form.baseParams.command = 'delete';
+        form.submit({
             success: function(form, a) {
-                console.log()
-                dialog.hide();
+                nextNode = form.node.nextSibling;
+                form.tree.getSelectionModel().selNode.parentNode.removeChild(form.node);
+                form.tree.getSelectionModel().select(nextNode);
             },
             invalid: function(form, type) {
                 alert('invalid');
@@ -122,35 +178,93 @@ PageDialog = function(el) {
             failure: function(form, a) {
                 alert('failure');
             }
-        });
-    }, dialog);
-    form.addButton('Cancel', function() { this.hide() } , dialog);
-    dialog.form = form;
-    form.render(dialog.body);
-
-    this.edit = function () {
-        dialog.setTitle('Seite bearbeiten');
-        //console.log(data);
-        //form.setValues(data);
-        //form.baseParams.id = data.id;
-        dialog.show();
+        })
+    }
+        
+    save = function(o, e) {
+        form.baseParams.command = 'save';
+        form.submit({
+            success: function(form, a) {
+                form.node.setText(a.result.name);
+                form.node.ui.removeClass('offline');
+                if(a.result.status == '0'){
+                    form.node.ui.addClass('offline');
+                }
+            },
+            invalid: function(form, type) {
+                alert('invalid');
+            },
+            failure: function(form, a) {
+                alert('failure');
+            }
+        })
+    }
+        
+    add = function(o, e) {
+        form.baseParams.command = 'add';
+        parentNode = form.tree.getSelectionModel().getSelectedNode();
+        if (parentNode == null) {
+            parentNode = form.tree.getRootNode();
+        }
+        form.parentNode = parentNode;
+        form.baseParams.id = 0;
+        form.baseParams.parentId = parentNode.id;
+        form.submit({
+            success: function(form, a) {
+                node = form.tree.getLoader().createNode(a.result.data);
+                form.parentNode.appendChild(node);
+                form.parentNode.expand();
+            },
+            invalid: function(form, type) {
+                alert('invalid');
+            },
+            failure: function(form, a) {
+                alert('failure');
+            }
+        })
+    }
+        
+    this.edit = function (node) {
+        toolbar.items.each(function(b) { b.enable(); });
+        form.baseParams.id = node.id;
+        form.node = node;
+        form.load({url:'/admin/pages/ajaxLoadPageData'});
     }
 
-    this.add = function () {
-        this.dialog.setTitle('Seite hinzufügen');
-        this.dialog.form.setValues(data);
-        this.dialog.form.baseParams.id = 0;
-        this.dialog.show();
+    this.setTree = function (tree) {
+        form.tree = tree;
     }
+
+    init(el);
 
 };
 
-Ext.BLANK_IMAGE_URL = '/files/ext/resources/images/default/s.gif';
-Ext.EventManager.onDocumentReady(initTabs);
-</script>
+init = function() {
+    var layout = new Ext.BorderLayout('content', {
+            west: {
+                split:true,
+                initialSize: 400,
+                minSize: 200,
+                maxSize: 600
+            },
+            center: {
+                autoScroll: false
+            }
+        });
+    layout.beginUpdate();
+    layout.add('west', new Ext.ContentPanel('west', 'West'));
+    layout.add('center', new Ext.ContentPanel('center', 'Center'));
+    layout.endUpdate();
+    
+    var form = new PageForm('center');
 
-<div id="hello-dlg">
-    <div id="form-ct" />
-</div>
+    var treeTabs = new TreeTabs('west', form);
+}
+
+
+Ext.BLANK_IMAGE_URL = '/files/ext/resources/images/default/s.gif';
+//Ext.QuickTips.init();
+Ext.EventManager.onDocumentReady(init);
+</script>
 
 {/literal}

@@ -34,7 +34,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
             if (!in_array('', $this->_hasGeneratedForFilename) && !in_array($filename, $this->_hasGeneratedForFilename)) {
 
                 // Hierarchie aus Seitenbaum immer erstellen
-                $rows = $this->_dao->getChildPagesData($this->getComponentId());
+                $rows = $this->_dao->retrieveChildPagesData($this->getComponentId());
                 foreach($rows as $pageRow) {
                     if ($filename != '' && $filename != $pageRow['filename']) { continue; }
                     $component = $this->createComponent($pageRow['component'], $pageRow['component_id']);
@@ -76,7 +76,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         }
         
         if ($className == '') {
-            $data = $this->_dao->getPageData($componentId);
+            $data = $this->_dao->retrievePageData($componentId);
             $className = $data['component'];
         } else if ($componentId == 0) {
             $componentId = $this->getComponentId();
@@ -143,7 +143,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         }
 
         $parts['id'] = $keys[0];
-        $parts['componentId'] = $keys[1];
+        $parts['componentId'] = (int)$keys[1];
         $parts['pageKey'] = isset($keys[2]) ? substr($keys[2], 1) : '';
         $parts['componentKey'] = isset($keys[4]) ? substr($keys[4], 1) : '';
         $parts['pageKeys'] = $parts['pageKey'] != '' ? explode('.', $parts['pageKey']) : array();

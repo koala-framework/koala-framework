@@ -85,16 +85,18 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
                 return $this->_pages[$parentId];
             }
         } else if ($id != $this->getRootPage()->getId()) {
-            // Wird jetzt hier gemacht
-            $data = $this->_dao->getParentPageData($id); // id==componentId
-            if ($data['component_id'] == $this->getRootPage()->getId()) {
-                return $this->getRootPage();
-            } else {
-                $component = new $data['component']($this->getDao(), $data['component_id']);
-                $parentPage = $this->addPage($component, $data['filename']);
-                $this->setParentPage($page, $parentPage);
-                return $parentPage;
+            $data = $this->_dao->retrieveParentPageData($id);
+            if (!empty($data)) {
+                if ($data['component_id'] == $this->getRootPage()->getId()) {
+                    return $this->getRootPage();
+                } else {
+                    $component = new $data['component']($this->_dao, $data['component_id']);
+                    $parentPage = $this->addPage($component, $data['filename']);
+                    $this->setParentPage($page, $parentPage);
+                    return $parentPage;
+                }
             }
+            return null;
         } else { // ParentPage von RootPage
             return null;
         }
@@ -146,13 +148,4 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         return $path;
     }
 
-    public function getPageData(Vps_Component_Interface $page)
-    {
-        $pageId = $page->getId();
-        $rootId = $this->getRootPage()->getId();
-        $id = $page->getId();
-        $data = $this->_dao->getPageData($id);
-        $data['path'] = $this->getPath($page);
-        return $data;
-    }
 }
