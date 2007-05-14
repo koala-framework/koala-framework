@@ -1,5 +1,183 @@
 <?php
-class Vps_Dao_Pages extends Zend_Db_Table
+class Vps_Dao_Pages extends Vps_Db_Table
 {
     protected $_name = 'pages';
+
+    public function retrievePageData($componentId)
+    {
+        $data = $this->_retrievePageData();
+        return isset($data[$componentId]) ? $data[$componentId] : array();
+    }
+
+    public function retrieveParentPageData($componentId)
+    {
+        $data = $this->_retrievePageData();
+        if (isset($data[$componentId])) {
+            $parentId = $data[$componentId]['parent_id'];
+            if (isset($data[$parentId])) {
+                return $data[$parentId];
+            } else {
+                return array();
+            }
+        } else {
+            return array();
+        }
+    }
+
+    public function retrieveChildPagesData($componentId, $type = null)
+    {
+        $return = array();
+
+        $data = $this->_retrievePageData();
+        if (isset($data[$componentId])) {
+            $parent_id = $data[$componentId]['id'];
+            foreach ($data as $d) {
+                if ($d['parent_id'] == $parent_id) {
+                    if (is_null($type) || $d['type'] == $type) {
+                        $return[] = $d;
+                    }
+                }
+            }
+        }
+        return $return;
+    }
+
+    public function retrieveRootPageData()
+    {
+        foreach ($this->_retrievePageData() as $d) {
+            if ($d['parent_id'] == '0') {
+                return $d;
+            }
+        }
+    }
+
+    private function _retrievePageData()
+    {
+        if (empty($this->_pageData)) {
+            $sql = '
+                SELECT components.id component_id, components.component, pages.id, pages.parent_id, pages.type, pages.status, pages.name, pages.filename
+                FROM components
+                LEFT JOIN pages
+                ON components.id=pages.component_id
+                ORDER BY pages.nr
+            ';
+            $this->_pageData = $this->getAdapter()->fetchAssoc($sql);
+        }
+        return $this->_pageData;
+    }
+
+    public function savePageName($componentId, $name)
+    {
+        $pageData = $this->retrievePageData($componentId);
+        if (!empty($pageData)) {
+            $row = $this->fetchRow('id = ' . $pageData['id']);
+            $row->name = $name;
+            $row->filename = $row->getUniqueString($name, 'filename', 'parent_id = ' . $pageData['parent_id']);
+            $row->save();
+            unset($this->_pageData);
+            return true;
+        }
+        return false;
+    }
+
+    public function savePageStatus($componentId, $status)
+    {
+        $data = $this->retrievePageData($componentId);
+        if (!empty($data)) {
+            $row = $this->fetchRow('id = ' . $data['id']);
+            $row->status = $status ? '1' : '0';
+            $row->save();
+            unset($this->_pageData);
+            return true;
+        }
+        return false;
+    }
+
+    public function createPage($parentComponentId, $type = '')
+    {
+        $data = $this->retrievePageData($parentComponentId);
+        if (!empty($data)) {
+            // Leere Komponente hinzufügen
+            $table = $this->getDao()->getTable('Vps_Dao_Components');
+            $componentId = $table->addComponent();
+
+            // Eintrag in Pages-Tabelle
+            $parentData = $this->retrievePageData($parentComponentId);
+            if (empty($parentData)) {
+                $parentData = $this->retrieveRootPageData();
+            }
+            $parentId = $parentData['id'];
+            $nr = sizeof($this->retrieveChildPagesData($parentId)) + 1;
+
+            $insert = array();
+            $insert['name'] = 'New Page';
+            $insert['filename'] = 'newpage';
+            $insert['component_id'] = $componentId;
+            $insert['parent_id'] = $parentId;
+            $insert['nr'] = $nr;
+            $insert['type'] = $parentData['type'] != '' ? $parentData['type'] : $type;
+            $this->insert($insert);
+
+            unset($this->_pageData);
+            return (int)$componentId;
+        }
+        return 0;
+    }
+
+    public function deletePage($componentId)
+    {
+        $data = $this->retrievePageData($componentId);
+        if (!empty($data)) {
+
+            // Unterseiten rekursiv löschen
+            $childPageData = $this->retrieveChildPagesData($componentId);
+            foreach ($childPageData as $cd) {
+                $this->deletePage($cd['component_id']);
+            }
+
+            // Komponenten löschen
+            $table = $this->getDao()->getTable('Vps_Dao_Components');
+            $table->deleteComponent($componentId);
+
+            // Eintrag in Pages-Tabelle löschen
+            $where = $this->getAdapter()->quoteInto('component_id = ?', $componentId);
+            $rows = $this->delete($where);
+
+            // Daten zurücksetzen
+            unset($this->_pageData);
+            return $rows;
+        }
+        return 0;
+    }
+
+    public function movePage($sourceComponentId, $targetComponentId, $point, $type = '')
+    {
+        $sourceData = $this->retrievePageData($sourceComponentId);
+        $targetData = $this->retrievePageData($targetComponentId);
+        if ($point == 'append') {
+            $parentId = $targetData['id'];
+            $nr = '1';
+        } else {
+            $parentData = $this->retrieveParentPageData($targetData['component_id']);
+            $parentId = $parentData['id'];
+            $siblings = $this->retrieveChildPagesData($parentData['component_id']);
+            for ($x=0; $x<sizeof($siblings); $x++) {
+                if ($siblings[$x]['id'] == $targetData['id']) {
+                    if ($point == 'above') {
+                        $nr = $x;
+                    } else if ($point == 'below') {
+                        $nr = $x + 2;
+                    }
+                }
+            }
+        }
+        $row = $this->fetchRow('id = ' . $sourceData['id']);
+        $row->parent_id = $parentId;
+        $row->type = $targetData['type'] != '' ? $targetData['type'] : $type;
+        $row->save();
+        $row->numberize($nr, 'parent_id = ' . $parentId);
+
+        unset($this->_pageData);
+        return true;
+    }
 }

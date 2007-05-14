@@ -56,7 +56,7 @@ abstract class Vps_PageCollection_Abstract
     {
         if (is_int($component)) {
             $componentId = $component;
-            $pageData = $this->_dao->retrievePageData($componentId);
+            $pageData = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
             if (!empty($pageData)) {
                 $className = $pageData['component'];
                 $component = new $className($this->_dao, $componentId);
@@ -158,7 +158,7 @@ abstract class Vps_PageCollection_Abstract
     public function getRootPage()
     {
         if (!isset($this->_rootPageId)) {
-            $data = $this->_dao->retrieveRootPageData();
+            $data = $this->_dao->getTable('Vps_Dao_Pages')->retrieveRootPageData();
             $classname = $data['component'];
             $rootPage = new $classname($this->_dao, $data['component_id']);
             $rootPage->setPageCollection($this);
@@ -195,7 +195,7 @@ abstract class Vps_PageCollection_Abstract
         $pageId = $page->getId();
         $rootId = $this->getRootPage()->getId();
         $id = $page->getId();
-        $data = $this->_dao->retrievePageData($id);
+        $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($id);
         $data['path'] = $this->getPath($page);
         return $data;
     }
