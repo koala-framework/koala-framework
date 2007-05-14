@@ -34,7 +34,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
             if (!in_array('', $this->_hasGeneratedForFilename) && !in_array($filename, $this->_hasGeneratedForFilename)) {
 
                 // Hierarchie aus Seitenbaum immer erstellen
-                $rows = $this->_dao->retrieveChildPagesData($this->getComponentId());
+                $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData($this->getComponentId());
                 foreach($rows as $pageRow) {
                     if ($filename != '' && $filename != $pageRow['filename']) { continue; }
                     $component = $this->createComponent($pageRow['component'], $pageRow['component_id']);
@@ -76,7 +76,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         }
         
         if ($className == '') {
-            $data = $this->_dao->retrievePageData($componentId);
+            $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
             $className = $data['component'];
         } else if ($componentId == 0) {
             $componentId = $this->getComponentId();

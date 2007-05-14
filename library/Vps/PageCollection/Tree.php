@@ -85,7 +85,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
                 return $this->_pages[$parentId];
             }
         } else if ($id != $this->getRootPage()->getId()) {
-            $data = $this->_dao->retrieveParentPageData($id);
+            $data = $this->_dao->getTable('Vps_Dao_Pages')->retrieveParentPageData($id);
             if (!empty($data)) {
                 if ($data['component_id'] == $this->getRootPage()->getId()) {
                     return $this->getRootPage();

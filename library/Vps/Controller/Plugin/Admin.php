@@ -7,7 +7,6 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity()) {
             $identity = $auth->getIdentity();
-
             // TODO: get role of user
             $role = 'admin';
             $acl = new Vps_Acl();

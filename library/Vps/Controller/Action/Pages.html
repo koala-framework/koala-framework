@@ -4,14 +4,12 @@
 <script type="text/javascript" src="/files/ext/adapter/yui/ext-yui-adapter.js"></script>
 <script type="text/javascript" src="/files/ext/ext-all.js"></script>
 <style type="text/css">
-    .x-tree-node-collapsed .x-tree-node-icon{
-      background-image:url(/files/ext/resources/images/default/tree/leaf.gif);
+    .x-tree-node-el .x-tree-node-icon{
+        background-image:url(/files/ext/resources/images/default/tree/leaf.gif);
     }
-    .x-tree-node-expanded .x-tree-node-icon{
-      background-image:url(/files/ext/resources/images/default/tree/leaf.gif);
-    }
-    .x-tree-node-leaf .x-tree-node-icon{
-      background-image:url(/files/ext/resources/images/default/tree/leaf.gif);
+    
+    .folder .x-tree-node-icon {
+        background-image:url(/files/ext/resources/images/default/tree/folder.gif);
     }
     
     .offline a span { color:#888888; }
@@ -53,23 +51,32 @@ PageTree = function(el, form) {
         text: '',
         draggable:false,
         id:'root'
-    });
+   });
     tree.setRootNode(root);
 
     tree.on(
+        'collapse',
+        function(e){
+            var conn = new Ext.data.Connection();
+            conn.request({
+                url: '/admin/pages/ajaxCollapseNode',
+                params: {id: e.id},
+                method: 'post'
+            });
+        }
+    );
+    
+    tree.on(
         'nodedrop',
         function(e){
-
-            
             var callback = function(option, success, response)
             {
-                if (success) {
-                    
-                } else {
-                    // TODO: node zurücksetzen
+                eval('result = ' + response.responseText);
+                if (!result.success) {
+                    // Falls Fehler aufgetreten ist, einfach neu laden
+                    document.location.href = '/admin/pages';
                 }
             }
-            
             var params = {
                 command: 'move',
                 source: e.dropNode.id,
@@ -77,7 +84,7 @@ PageTree = function(el, form) {
                 point: e.point
             }
             var config = {
-                url: '/admin/pages/ajaxSavePageData',
+                url: '/admin/pages/ajaxProcessPageData',
                 params: params,
                 method: 'post',
                 callback: callback,
@@ -122,7 +129,7 @@ PageForm = function(el) {
     init = function(el) {
         form = new Ext.form.Form({
             labelWidth: 100,
-            url: '/admin/pages/ajaxSavePageData',
+            url: '/admin/pages/ajaxProcessPageData',
             baseParams: {id: 0}
         });
     
@@ -145,20 +152,24 @@ PageForm = function(el) {
         
         toolbar = new Ext.Toolbar(Ext.get(el).createChild());
         toolbar.addButton({
+            id: 'save',
             disabled: true,
             text    : 'Speichern',
             handler : save,
             scope   : this
         });
         toolbar.addButton({
+            id: 'delete',
             text    : 'Löschen',
             handler : remove,
             disabled: true,
             scope   : this
         });
         toolbar.addButton({
+            id: 'add',
             text    : 'Als neue Seite speichern',
             handler : add,
+            disabled: true,
             scope   : this
         });
         form.render(el);
@@ -172,12 +183,8 @@ PageForm = function(el) {
                 form.tree.getSelectionModel().selNode.parentNode.removeChild(form.node);
                 form.tree.getSelectionModel().select(nextNode);
             },
-            invalid: function(form, type) {
-                alert('invalid');
-            },
-            failure: function(form, a) {
-                alert('failure');
-            }
+            invalid: ajaxInvalid,
+            failure: ajaxFailure
         })
     }
         
@@ -191,12 +198,8 @@ PageForm = function(el) {
                     form.node.ui.addClass('offline');
                 }
             },
-            invalid: function(form, type) {
-                alert('invalid');
-            },
-            failure: function(form, a) {
-                alert('failure');
-            }
+            invalid: ajaxInvalid,
+            failure: ajaxFailure
         })
     }
         
@@ -215,17 +218,19 @@ PageForm = function(el) {
                 form.parentNode.appendChild(node);
                 form.parentNode.expand();
             },
-            invalid: function(form, type) {
-                alert('invalid');
-            },
-            failure: function(form, a) {
-                alert('failure');
-            }
+            invalid: ajaxInvalid,
+            failure: ajaxFailure
         })
     }
         
     this.edit = function (node) {
-        toolbar.items.each(function(b) { b.enable(); });
+        if (isNaN(node.id)) {
+            toolbar.items.get('add').enable(); 
+            toolbar.items.get('delete').disable(); 
+            toolbar.items.get('save').disable(); 
+        } else {
+            toolbar.items.each(function(b) { b.enable(); });
+        }
         form.baseParams.id = node.id;
         form.node = node;
         form.load({url:'/admin/pages/ajaxLoadPageData'});
@@ -236,21 +241,20 @@ PageForm = function(el) {
     }
 
     init(el);
-
 };
 
 init = function() {
     var layout = new Ext.BorderLayout('content', {
-            west: {
-                split:true,
-                initialSize: 400,
-                minSize: 200,
-                maxSize: 600
-            },
-            center: {
-                autoScroll: false
-            }
-        });
+        west: {
+            split:true,
+            initialSize: 400,
+            minSize: 200,
+            maxSize: 600
+        },
+        center: {
+            autoScroll: false
+        }
+    });
     layout.beginUpdate();
     layout.add('west', new Ext.ContentPanel('west', 'West'));
     layout.add('center', new Ext.ContentPanel('center', 'Center'));
@@ -261,7 +265,13 @@ init = function() {
     var treeTabs = new TreeTabs('west', form);
 }
 
-
+ajaxInvalid = function(form, type) {
+    alert('invalid');
+}
+ajaxFailure = function(form, type) {
+    alert('failure');
+}
+            
 Ext.BLANK_IMAGE_URL = '/files/ext/resources/images/default/s.gif';
 //Ext.QuickTips.init();
 Ext.EventManager.onDocumentReady(init);
