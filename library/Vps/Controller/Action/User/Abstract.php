@@ -1,7 +1,7 @@
 <?php
-class Vps_Controller_Action_Login_Abstract extends Vps_Controller_Action
+class Vps_Controller_Action_User_Abstract extends Vps_Controller_Action
 {
-    protected function _showLoginForm($adapter, $action = '/admin/login')
+    protected function _showLoginForm($adapter, $action = '/user/login')
     {
         require_once 'HTML/QuickForm.php';
 

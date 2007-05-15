@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Admin extends Vps_Controller_Action_Login_Abstract
+class Vps_Controller_Action_User extends Vps_Controller_Action_User_Abstract
 {
     public function loginAction()
     {
