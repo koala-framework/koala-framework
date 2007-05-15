@@ -55,4 +55,9 @@ class Vps_Controller_Action_User_Abstract extends Vps_Controller_Action
         $adminSession->unsetAll();
         echo "You are now logged out.";
     }
+    
+    protected function _password($usersTable)
+    {
+        
+    }
 }
