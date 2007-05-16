@@ -99,4 +99,11 @@ class Vps_Component_Textbox extends Vps_Component_Abstract
         }*/
         return $ret;
     }
+    
+    public function getFrontendEditingData()
+    {
+        $data = array();
+        $data['data'][] = array('id' => 'content', 'value' => $this->_getContent());
+        return $data;
+    }
 }

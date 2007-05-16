@@ -1,10 +1,11 @@
-YAHOO.Vps.Component.Paragraphs = function(componentId, componentClass) {
-    YAHOO.Vps.Component.Paragraphs.superclass.constructor.call(this, componentId, componentClass);
+Vps.Component.Paragraphs = function(componentId, componentClass, pageId) {
+    Vps.Component.Paragraphs.superclass.constructor.call(this, componentId, componentClass, pageId);
     
 };
-YAHOO.lang.extend(YAHOO.Vps.Component.Paragraphs, YAHOO.Vps.Component.Abstract);
+Ext.extend(Vps.Component.Paragraphs, Vps.Component.Abstract);
 
-YAHOO.Vps.Component.Paragraphs.prototype.handleSave = function() {
+Vps.Component.Paragraphs.prototype.handleSave = function()
+{
     var data = 'order=';
     for (var i = 0; i < this.containers.length; i++) {
         data += this.containers[i].id+';';
@@ -13,38 +14,41 @@ YAHOO.Vps.Component.Paragraphs.prototype.handleSave = function() {
     YAHOO.util.Connect.asyncRequest('POST', '/ajax/fe/save?componentId='+this.componentId+'&componentClass='+this.componentClass+'&currentPageId='+currentPageId,
             {failure: this.handleFailure, scope: this}, data);
 }
-YAHOO.Vps.Component.Paragraphs.prototype.init = function() {
-	this.containers = new Array();
-	
-	for(var i = 0; i < this.htmlelement.childNodes.length; i++) {
-	    var node = this.htmlelement.childNodes[i];
-	    if(node.nodeName.toLowerCase() == "div" && 
-	        node.id.substr(0, 10) == "container_" &&
-	        !node.isInEditMode) {
-	        var container = new Object();
-		    container.component = this;
-		    container.node = node;
-		    container.id = node.id.substr(10);
-	        this.containers.push(container);
-    		
+
+Vps.Component.Paragraphs.prototype.init = function() {
+    this.containers = new Array();
+    
+    for(var i = 0; i < this.htmlelement.childNodes.length; i++) {
+        var node = this.htmlelement.childNodes[i];
+        if (node.nodeName.toLowerCase() == "div" && 
+            node.id.substr(0, 10) == "container_" &&
+            !node.isInEditMode)
+        {
+            var container = new Object();
+            container.component = this;
+            container.node = node;
+            container.id = node.id.substr(10);
+            this.containers.push(container);
+            
             container.moveButton = document.createElement('div');
-            container.moveButton.innerHTML = 'move...';
+            container.moveButton.innerHTML = 'Move';
             container.moveButton.className = 'VpsParagraphsMoveButton';
             
             container.node.insertBefore(container.moveButton, container.node.firstChild);
-
+            
             var e = new YAHOO.util.Element(container.node);
             e.on('mouseover', function(o, scope) { scope.moveButton.style.display = 'block'; }, container);
             e.on('mouseout', function(o, scope) { scope.moveButton.style.display = 'none'; }, container);
-
-    		
-    		var dd = new YAHOO.Vps.ParagraphDragDrop(container);
-	    }
-	}
+            
+            
+            var dd = new Vps.ParagraphDragDrop(container);
+        }
+    }
 }
-YAHOO.namespace('YAHOO.Vps.ParagraphDragDrop');
 
-YAHOO.Vps.ParagraphDragDrop = function (container, sGroup, config) {
+Vps.ParagraphDragDrop = function(){};
+
+Vps.ParagraphDragDrop = function (container, sGroup, config) {
     if (container) {
         this.init(container.node, sGroup, config);
         this.setHandleElId(container.moveButton);
@@ -61,9 +65,9 @@ YAHOO.Vps.ParagraphDragDrop = function (container, sGroup, config) {
     this.lastY = 0;
 }
 
-YAHOO.Vps.ParagraphDragDrop.prototype = new YAHOO.util.DDProxy();
+Vps.ParagraphDragDrop.prototype = new YAHOO.util.DDProxy();
 
-YAHOO.Vps.ParagraphDragDrop.prototype.startDrag = function(x, y) {
+Vps.ParagraphDragDrop.prototype.startDrag = function(x, y) {
     var dragEl = this.getDragEl();
     var clickEl = this.getEl();
     YAHOO.util.Dom.setStyle(clickEl, "visibility", "hidden");
@@ -77,7 +81,7 @@ YAHOO.Vps.ParagraphDragDrop.prototype.startDrag = function(x, y) {
 }
 
 
-YAHOO.Vps.ParagraphDragDrop.prototype.endDrag = function(e) {
+Vps.ParagraphDragDrop.prototype.endDrag = function(e) {
     var el = this.getEl();
     var srcEl = this.getEl();
     var proxy = this.getDragEl();
@@ -105,7 +109,7 @@ YAHOO.Vps.ParagraphDragDrop.prototype.endDrag = function(e) {
      this.container.component.handleSave();
 };
 
-YAHOO.Vps.ParagraphDragDrop.prototype.onDrag = function(e, id) {
+Vps.ParagraphDragDrop.prototype.onDrag = function(e, id) {
 
     var y = YAHOO.util.Event.getPageY(e);
 
@@ -118,7 +122,7 @@ YAHOO.Vps.ParagraphDragDrop.prototype.onDrag = function(e, id) {
     this.lastY = y;
 };
 
-YAHOO.Vps.ParagraphDragDrop.prototype.onDragOver = function(e, id)
+Vps.ParagraphDragDrop.prototype.onDragOver = function(e, id)
 {
     var srcEl = this.getEl();
     var destEl;

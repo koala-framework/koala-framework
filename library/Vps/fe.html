@@ -3,8 +3,8 @@
 <script type="text/javascript" src="/files/Vps/Component/Abstract.js"></script> 
 <!-- Komponenten aktivieren -->
 <script type="text/javascript">
-  var currentPageId = '{$currentPageId}';
-{foreach from=$componentsInfo key=id item=component}
+    currentPageId = '{$currentPageId}';
+    {foreach from=$componentsInfo key=id item=component}
     Vps.createComponent('{$id}', '{$component}');
-{/foreach}
+    {/foreach}
 </script>
