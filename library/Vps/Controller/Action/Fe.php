@@ -18,11 +18,9 @@ class Vps_Controller_Action_Fe extends Vps_Controller_Action_Web
                     unset($ret['createComponents'][$key]);
                 }
             }
-
+            $ret['success'] = true;
             $body = Zend_Json::encode($ret);
-            $this->getResponse()
-                ->setHeader('Content-Type', 'application/json')
-                ->appendBody($body);
+            $this->getResponse()->appendBody($body);
         }
     }
 
@@ -52,12 +50,17 @@ class Vps_Controller_Action_Fe extends Vps_Controller_Action_Web
     public function editAction()
     {
         $component = $this->_createComponent();
+        $data = $component->getFrontendEditingData();
+        $data['success'] = true;
+        $this->getResponse()->setBody(Zend_Json::encode($data));
+        /*
         if (!is_null($component)) {
             $body = $this->_renderPage($component, 'edit', true);
             $this->getResponse()
                 ->setHeader('Content-Type', 'text/html')
                 ->appendBody($body);
         }
+        */
     }
 
     public function statusAction()
@@ -73,10 +76,10 @@ class Vps_Controller_Action_Fe extends Vps_Controller_Action_Web
 
     private function _createComponent()
     {
-        $id = $this->getRequest()->getQuery('componentId');
+        $id = $this->getRequest()->getParam('componentId');
         if (is_null($id)) return null;
         $dao = Zend_Registry::get('dao');
-        $className = str_replace(".", "_", $this->getRequest()->getQuery('componentClass'));
+        $className = str_replace(".", "_", $this->getRequest()->getParam('componentClass'));
         $parts = Vps_Component_Abstract::parseId($id);
         $component = new $className($dao, $parts['componentId'], $parts['pageKey'], $parts['componentKey']);
         return $component;

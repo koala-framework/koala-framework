@@ -1,20 +1,56 @@
-YAHOO.Vps.Component.Pic = function(componentId, componentClass) {
-    YAHOO.Vps.Component.Pic.superclass.constructor.call(this, componentId, componentClass);
+Vps.Component.Pic = function(componentId, componentClass, pageId) {
+    Vps.Component.Pic.superclass.constructor.call(this, componentId, componentClass, pageId);
 };
-YAHOO.lang.extend(YAHOO.Vps.Component.Pic, YAHOO.Vps.Component.Abstract);
+YAHOO.lang.extend(Vps.Component.Pic, Vps.Component.Abstract);
 
-YAHOO.Vps.Component.Pic.prototype.handleSuccess = function(o) {
+Vps.Component.Pic.prototype.handleSuccess = function(o) {
     this.progressBar = null;
     this.progressPercent = null;
     this.progressText = null;
-    YAHOO.Vps.Component.Pic.superclass.handleSuccess.call(this, o);
+    var resp = eval('(' + o.responseText + ')');
+    debugger;
+    if(resp.html) this.htmlelement.innerHTML = resp.html;
+    if (resp.createComponents) {
+        for(var id in resp.createComponents) {
+            YAHOO.Vps.createComponent(id, resp.createComponents[id]);
+        }
+    }
 };
-YAHOO.Vps.Component.Pic.prototype.handleSave = function() {
-    var form = this.htmlelement.getElementsByTagName('form')[0];
-    YAHOO.util.Connect.setForm(form, true);
+
+/*
+Vps.Component.Abstract.prototype.handleSave = function() {
+    YAHOO.util.Connect.setForm(this.form.el, true);
+    //YAHOO.util.Connect.asyncRequest('POST', '/ajax/fe/save?componentId='+this.componentId+'&componentClass='+this.componentClass+'&currentPageId='+currentPageId, 
+    //    {success: this.handleSuccess, failure: this.handleFailure, upload: this.handleSuccess, scope: this});
+};
+*/
+Vps.Component.Pic.prototype.handleEdit = function() {
+    form = this.form;
+    form.baseParams.UPLOAD_IDENTIFIER = Math.round(Math.random() * 1000000);
+    form.baseParams.MAX_FILE_SIZE = 64388608;
+    form.add(
+        new Ext.form.Field({
+            name: 'upload',
+            inputType: 'file',
+            allowBlank:false
+        })
+    );
+    
+    form.addButton('Save', this.handleSave, this);
+    form.addButton('Cancel', this.handleCancel, this);
+};
+
+Vps.Component.Pic.prototype.handleSave = function() {
+    this.htmlelement.isInEditMode = false;
+    //debugger;
+    YAHOO.util.Connect.setForm(this.form.el.dom, true);
     YAHOO.util.Connect.asyncRequest('POST', '/ajax/fe/save?componentId='+this.componentId+'&componentClass='+this.componentClass+'&currentPageId='+currentPageId, 
         {success: this.handleSuccess, failure: this.handleFailure, upload: this.handleSuccess, scope: this});
-    this.progressKey = form.UPLOAD_IDENTIFIER.value;
+}
+/*
+Vps.Component.Pic.prototype.handleSave = function() {
+    this.progressKey = this.form.baseParams.UPLOAD_IDENTIFIER.value;
+    this.submitForm('save');
 
     var progressDiv = document.createElement('div');
     progressDiv.style.height = '1em';
@@ -47,13 +83,13 @@ YAHOO.Vps.Component.Pic.prototype.handleSave = function() {
     this.htmlelement.isInEditMode = false;
 };
 
-YAHOO.Vps.Component.Pic.prototype.updateProgress = function() {
-  YAHOO.util.Connect.asyncRequest('POST','/ajax/fe/status?componentId='+this.componentId+'&componentClass='+this.componentClass+'&currentPageId='+currentPageId,
+Vps.Component.Pic.prototype.updateProgress = function() {
+  YAHOO.util.Connect.asyncRequest('POST','/ajax/fe/status?componentId='+this.componentId+'&componentClass='+this.componentClass+'&currentPageId='+this.pageId,
     {success: this.progressHandler, scope: this},
     'progress_upload='+this.progressKey);
 };
 
-YAHOO.Vps.Component.Pic.prototype.progressHandler = function(o) {
+Vps.Component.Pic.prototype.progressHandler = function(o) {
   var resp = eval('(' + o.responseText + ')');
   if(resp.progress_upload) resp = resp.progress_upload;
   
@@ -65,3 +101,4 @@ YAHOO.Vps.Component.Pic.prototype.progressHandler = function(o) {
     setTimeout(function() { scope.updateProgress(); }, 500);
   }
 };
+*/

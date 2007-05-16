@@ -18,14 +18,14 @@ class Vps_Component_Pic extends Vps_Component_Abstract
     }
     public function saveFrontendEditing(Zend_Controller_Request_Http $request)
     {
-        if(file_exists($_FILES['upload']['tmp_name'])) {
+        if(isset($_FILES['upload']) && file_exists($_FILES['upload']['tmp_name'])) {
             move_uploaded_file($_FILES['upload']['tmp_name'], 'files/pics/'.$this->getId().'.jpg');
         }
         return parent::saveFrontendEditing($request);
     }
 
-  public function getStatus()
-  {    
+    public function getStatus()
+    {    
         $upId = $_POST['progress_upload'];
     
         $ret =  new stdClass();
@@ -58,5 +58,10 @@ class Vps_Component_Pic extends Vps_Component_Abstract
         $ret->percent = $percent;
     
         return $ret;
-  }
+    }
+  
+    public function getFrontendEditingData()
+    {
+        return array();
+    }
 }
