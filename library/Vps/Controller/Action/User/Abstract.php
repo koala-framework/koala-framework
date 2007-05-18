@@ -37,9 +37,11 @@ class Vps_Controller_Action_User_Abstract extends Vps_Controller_Action
                     echo "$message\n";
                 }
             } else {
-                echo "You are now logged in.";
-                return $result;
+                //echo "You are now logged in.";
+                //return $result;
                 // TODO: redirect auf HP?
+	            header("Location: http://". $_SERVER["HTTP_HOST"]);
+	            die;
             }
             
         }

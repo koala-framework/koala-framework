@@ -5,6 +5,7 @@ class Vps_User_User extends Zend_Db_Table_Row_Abstract
     {
         $newPassword = substr(md5(uniqid(mt_rand(), true)), 0, 6);
         if (!$this->password_salt) {
+            mt_srand((double)microtime()*1000000);
             $this->password_salt = substr(md5(uniqid(mt_rand(), true)), 0, 10);
         }
         $this->password = md5($newPassword.$this->password_salt);
