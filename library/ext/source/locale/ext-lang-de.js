@@ -95,7 +95,7 @@ if(Ext.PagingToolbar){
       afterPageText  : "von {0}",
       firstText      : "Erste Seite",
       prevText       : "vorherige Seite",
-      nextText       : "nchste Siete",
+      nextText       : "n\xe4chste Seite",
       lastText       : "letzte Seite",
       refreshText    : "Aktualisieren",
       displayMsg     : "Anzeige Eintrag {0} - {1} von {2}",
@@ -107,7 +107,7 @@ if(Ext.form.TextField){
    Ext.apply(Ext.form.TextField.prototype, {
       minLengthText : "Bitte geben Sie mindestens {0} Zeichen ein",
       maxLengthText : "Bitte geben Sie maximal {0} Zeichen ein",
-      blankText     : "Dieses Feld darf nich leer sein",
+      blankText     : "Dieses Feld darf nicht leer sein",
       regexText     : "",
       emptyText     : null
    });
