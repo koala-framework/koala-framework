@@ -3,13 +3,20 @@ abstract class Vps_Component_Decorator_Abstract implements Vps_Component_Interfa
 {
     protected $_component;
     protected $_dao;
+    protected $_pageCollection;
 
-    public function __construct(Vps_Dao $dao, Vps_Component_Interface $component, Vps_PageCollection_Abstract $pageCollection = null)
+    public function __construct(Vps_Dao $dao, Vps_Component_Interface $component)
     {
         $this->_dao = $dao;
         $this->_component = $component;
     }
     
+    public function setPageCollection(Vps_PageCollection_Abstract $pageCollection)
+    {
+        $this->_pageCollection = $pageCollection;
+        $this->_component->setPageCollection($pageCollection);
+    }
+
     public function getTemplateVars($mode)
     {
         return $this->_component->getTemplateVars($mode);
@@ -42,6 +49,15 @@ abstract class Vps_Component_Decorator_Abstract implements Vps_Component_Interfa
     
     public function getChildComponents()
     {
-        return $this->_component;
+        return array($this->_component);
+    }
+    
+    public function findComponent($id, $findDecorators = false)
+    {
+        if ($findDecorators && $id == $this->getId()) {
+            return $this;
+        } else {
+            return $this->_component->findComponent($id);
+        }
     }
 }

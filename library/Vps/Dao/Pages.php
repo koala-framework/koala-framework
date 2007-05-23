@@ -2,6 +2,8 @@
 class Vps_Dao_Pages extends Vps_Db_Table
 {
     protected $_name = 'pages';
+    private $_pageData = null;
+    private $_decoratorData = null;
 
     public function retrievePageData($componentId)
     {
@@ -53,7 +55,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
 
     private function _retrievePageData()
     {
-        if (empty($this->_pageData)) {
+        if ($this->_pageData == null) {
             $sql = '
                 SELECT components.id component_id, components.component, pages.id, pages.parent_id, pages.type, pages.status, pages.name, pages.filename
                 FROM components
@@ -64,6 +66,24 @@ class Vps_Dao_Pages extends Vps_Db_Table
             $this->_pageData = $this->getAdapter()->fetchAssoc($sql);
         }
         return $this->_pageData;
+    }
+
+    public function retrieveDecoratorData($id)
+    {
+        if ($this->_decoratorData == null) {
+            $this->_decoratorData = array();
+            $sql = '
+                SELECT id, decorator, page_id
+                FROM decorators
+            ';
+            $data = $this->getAdapter()->fetchAll($sql);
+            foreach ($data as $d) {
+                $pageId = $d['page_id'];
+                unset($d['page_id']);
+                $this->_decoratorData[$pageId][] = $d['decorator'];
+            }
+        }
+        return isset($this->_decoratorData[$id]) ? $this->_decoratorData[$id] : array() ;
     }
 
     public function savePageName($componentId, $name)
@@ -78,6 +98,29 @@ class Vps_Dao_Pages extends Vps_Db_Table
             return true;
         }
         return false;
+    }
+
+    public function saveDecorators($id, $decorators)
+    {
+        $delete = array();
+        $add = array();
+        $existingDecorators = $this->retrieveDecoratorData($id);
+        foreach ($existingDecorators as $d) {
+            if (!in_array($d, $decorators)) {
+                $delete[] = $d;
+            }
+        }
+        foreach ($decorators as $d) {
+            if (!in_array($d, $existingDecorators)) {
+                $add[] = $d;
+            }
+        }
+        $sql = "DELETE FROM decorators WHERE page_id='$id' AND decorator IN ('" . implode("', '", $delete) . "')";
+        $this->getAdapter()->query($sql);
+        foreach ($add as $d) {
+            $sql = "INSERT INTO decorators SET page_id='$id', decorator='$d'";
+            $this->getAdapter()->query($sql);
+        }
     }
 
     public function savePageStatus($componentId, $status)

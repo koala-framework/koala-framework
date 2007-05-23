@@ -16,34 +16,45 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         $this->_componentKey = $componentKey;
         $this->setup();
     }
+    
+    protected function setup() {}
 
-    public static function getInstance($dao, $id)
+    public static function getInstance($dao, $id, $className = '', $pageKey = '', $componentKey = '')
     {
         try {
             $parsedId = Vps_Component_Abstract::parseId($id);
-            $componentId = 0; $pageKey = 0; $componentKey = 0;
-            extract($parsedId);
-            $pageData = $dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
-            if (!empty($pageData)) {
-                $className = $pageData['component'];
-                $page = new $className($dao, $componentId);
-                if ($page) {
-                    return $page->findComponent($id);
+            $componentId = $parsedId['componentId'];
+            
+            if ($className == '') {
+                $data = $dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
+                $className = $data['component'];
+            }
+
+            // Komponente erstellen
+            $component = new $className($dao, $componentId, $pageKey, $componentKey);
+    
+            // Decorators hinzufügen
+            if (!is_null($component)) {
+                $decoratorData = $dao->getTable('Vps_Dao_Pages')->retrieveDecoratorData($component->getId());
+                foreach ($decoratorData as $decorator) {
+                    $component = new $decorator($dao, $component);
                 }
             }
-            return null;
+    
+            return $component;
+
         } catch (Exception $e) {
             return null;
         }
     }
-
-    public function findComponent($id)
+    
+    public function findComponent($id, $findDecorators = false)
     {
         if ($this->getId() == $id) {
             return $this;
         } else {
             foreach ($this->getChildComponents() as $childComponent) {
-                $component = $childComponent->findComponent($id);
+                $component = $childComponent->findComponent($id, $findDecorators);
                 if ($component != null) {
                     return $component;
                 }
@@ -55,10 +66,6 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
     public function setPageCollection(Vps_PageCollection_Abstract $pageCollection)
     {
         $this->_pageCollection = $pageCollection;
-    }
-
-    protected function setup()
-    {
     }
 
     public final function generateHierarchy($filename = '')
@@ -106,30 +113,40 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
 
     protected function createComponent($className, $componentId = 0, $pageKeySuffix = '', $componentKeySuffix = '')
     {
+        // Exceptions
         if ($className == '' && $componentId == 0) {
             throw new Vps_Component_Exception('Either className or componentId must not be empty.');
         }
 
-        if ($className == '') {
-            $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
-            $className = $data['component'];
-        } else if ($componentId == 0) {
+        // Falls neue componentId, nach Decoratorn suchen (werden unten hinzugefügt)
+        $decoratorData = array();
+        if ($componentId > 0) {
+            $decoratorData = $this->_dao->getTable('Vps_Dao_Pages')->retrieveDecoratorData($componentId);
+        }
+
+        // Benötige Daten ggf. holen
+        if ($componentId == 0) {
             $componentId = $this->getComponentId();
         }
 
+        // Keys holen
         $pageKey = $this->getPageKey();
         if ($pageKey != '' && $pageKeySuffix != '') { $pageKey .= '.'; }
         $pageKey .= $pageKeySuffix;
-
 
         $componentKey = $this->getComponentKey();
         if ($componentKey != '' && $componentKeySuffix != '') { $componentKey .= '.'; }
         $componentKey .= $componentKeySuffix;
 
-        $component = new $className($this->getDao(), $componentId, $pageKey, $componentKey);
-        if (!is_null($this->_pageCollection)) {
+        // Komponente erstellen
+        $component = Vps_Component_Abstract::getInstance($this->getDao(), $componentId, $className, $pageKey, $componentKey);
+
+        // Zu Komponente ggf. PageCollection hinzufügen
+        if (!is_null($component) && !is_null($this->_pageCollection)) {
             $component->setPageCollection($this->_pageCollection);
         }
+        
+        // Erstellte Komponente hinzufügen
         return $component;
     }
 
