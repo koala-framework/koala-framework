@@ -26,4 +26,13 @@ class Vps_Component_TextPic extends Vps_Component_Abstract
       $info += $this->_picComponent->getComponentInfo();
       return $info;
     }
+
+    public function getChildComponents()
+    {
+        $this->setup();
+        $return[$this->_textboxComponent->getId()] = $this->_textboxComponent;
+        $return[$this->_picComponent->getId()] = $this->_picComponent;
+        return $return;
+    }
+
 }

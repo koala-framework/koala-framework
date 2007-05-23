@@ -16,12 +16,47 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         $this->_componentKey = $componentKey;
         $this->setup();
     }
-    
+
+    public static function getInstance($dao, $id)
+    {
+        try {
+            $parsedId = Vps_Component_Abstract::parseId($id);
+            $componentId = 0; $pageKey = 0; $componentKey = 0;
+            extract($parsedId);
+            $pageData = $dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
+            if (!empty($pageData)) {
+                $className = $pageData['component'];
+                $page = new $className($dao, $componentId);
+                if ($page) {
+                    return $page->findComponent($id);
+                }
+            }
+            return null;
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    public function findComponent($id)
+    {
+        if ($this->getId() == $id) {
+            return $this;
+        } else {
+            foreach ($this->getChildComponents() as $childComponent) {
+                $component = $childComponent->findComponent($id);
+                if ($component != null) {
+                    return $component;
+                }
+            }
+        }
+        return null;
+    }
+
     public function setPageCollection(Vps_PageCollection_Abstract $pageCollection)
     {
         $this->_pageCollection = $pageCollection;
     }
-    
+
     protected function setup()
     {
     }
@@ -61,10 +96,10 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
             throw new Vps_Component_Exception('Until now, generateHierarchy only works for instances of Vps_PageCollection_Tree');
 
         }
-        
+
         return $pages;
     }
-    
+
     protected function createComponents($filename) {
         return array();
     }
@@ -74,7 +109,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         if ($className == '' && $componentId == 0) {
             throw new Vps_Component_Exception('Either className or componentId must not be empty.');
         }
-        
+
         if ($className == '') {
             $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
             $className = $data['component'];
@@ -110,7 +145,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
     {
         return $this->_pageKey;
     }
-    
+
     public function getId()
     {
         $ret = (string)$this->getComponentId();
@@ -122,7 +157,7 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
         }
         return $ret;
     }
-    
+
     protected function getPath()
     {
         return $this->_pageCollection->getPath($this);
@@ -168,6 +203,11 @@ abstract class Vps_Component_Abstract implements Vps_Component_Interface
     }
 
     public function saveFrontendEditing(Zend_Controller_Request_Http $request)
+    {
+        return array();
+    }
+
+    public function getChildComponents()
     {
         return array();
     }

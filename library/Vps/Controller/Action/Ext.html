@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <!-- Ext -->
+        <link rel="stylesheet" type="text/css" href="/files/ext/resources/css/ext-all.css" />
+        <script type="text/javascript" src="/files/ext/adapter/yui/yui-utilities.js"></script>
+        <script type="text/javascript" src="/files/ext/adapter/yui/ext-yui-adapter.js"></script>
+        <script type="text/javascript" src="/files/ext/ext-all.js"></script>
+        
+        <!-- Styles -->
+        <style type="text/css">
+            .x-tree-node-el .x-tree-node-icon {ldelim}
+                background-image:url(/files/ext/resources/images/default/tree/leaf.gif);
+            {rdelim}
+            
+            .folder .x-tree-node-icon {ldelim}
+                background-image:url(/files/ext/resources/images/default/tree/folder.gif);
+            {rdelim}
+            
+            .paragraphs .x-tree-node-icon {ldelim}
+                background-image:url(/files/ext/resources/images/default/tree/paragraphs.gif);
+            {rdelim}
+            
+            .paragraphs_decorated .x-tree-node-icon {ldelim}
+                background-image:url(/files/ext/resources/images/default/tree/paragraphs_decorated.gif);
+            {rdelim}
+            
+            .leaf_decorated .x-tree-node-icon {ldelim}
+                background-image:url(/files/ext/resources/images/default/tree/leaf_decorated.gif);
+            {rdelim}
+            
+            .offline a span {ldelim} color:#888888; {rdelim}
+        </style>
+
+        <!-- Controller -->
+        <script type="text/javascript" src="{$file}"></script> 
+        <script type="text/javascript">
+            Ext.BLANK_IMAGE_URL = '/files/ext/resources/images/default/s.gif';
+            Ext.onReady(function() {ldelim}
+                new {$function}({$config});
+            {rdelim});
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

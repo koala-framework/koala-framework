@@ -76,6 +76,9 @@ class Vps_Controller_Action_Fe extends Vps_Controller_Action_Web
 
     private function _createComponent()
     {
+        // besser:
+//        $componentId = $this->getRequest()->getParam('componentId');
+//        return Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $componentId);
         $id = $this->getRequest()->getParam('componentId');
         if (is_null($id)) return null;
         $dao = Zend_Registry::get('dao');

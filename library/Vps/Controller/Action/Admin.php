@@ -1,8 +1,8 @@
 <?php
-class Vps_Controller_Action_Admin extends Vps_Controller_Action_Login_Abstract
+class Vps_Controller_Action_Admin extends Vps_Controller_Action
 {
     // Ajax
-    public function sessionAction()
+    public function ajaxSessionAction()
     {
         $param = $this->getRequest()->getParam("param");
         $value = $this->getRequest()->getParam("value");

@@ -29,6 +29,7 @@ $router->addConfig(new Zend_Config_Ini('../application/config.ini', 'routes'), '
 
 $front->registerPlugin(new Vps_Controller_Plugin_Admin());
 $front->setControllerDirectory('../application/controllers');
+$front->addControllerDirectory('../library', 'component');
 $front->returnResponse(true);
 
 $response = $front->dispatch();

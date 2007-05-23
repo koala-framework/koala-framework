@@ -1,7 +1,7 @@
 <?php
-class Vps_Component_Textbox extends Vps_Component_Abstract
+class Vps_Component_Simple_Textbox_Textbox extends Vps_Component_Abstract
 {
-    private $_components;
+    private $_components = array();
     private $_content;
     private $_contentParts;
 
@@ -19,7 +19,7 @@ class Vps_Component_Textbox extends Vps_Component_Abstract
         return $this->_content;
     }
 
-    private function _getContentParts($mode)
+    private function _getContentParts($mode = 'fe')
     {
         if (!isset($this->_contentParts))
         {
@@ -75,6 +75,34 @@ class Vps_Component_Textbox extends Vps_Component_Abstract
       }
       return $info;
     }
+    
+    public function getChildComponents()
+    {
+        $this->_getContentParts('fe'); //um components zu laden
+        return $this->_components;
+    }
+
+    public function retrieveContent() {
+        return $this->_getContent();
+    }
+    
+    public function saveContent($content) {
+        $table = $this->_dao->getTable('Vps_Dao_Textbox');
+        $rowset = $table->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
+        if ($rowset->count() == 1) {
+            $row = $rowset->current();
+        } else {
+            $row = $table->createRow();
+            $row->component_id = $this->getComponentId();
+            $row->page_key = $this->getPageKey();
+            $row->component_key = $this->getComponentKey();
+        }
+        
+        $row->content = $content;
+        $result = $row->save();
+        return is_array($result);
+    }
+    
     public function saveFrontendEditing(Zend_Controller_Request_Http $request)
     {
         $rowset = $this->_dao->getTable('Vps_Dao_Textbox')
@@ -106,4 +134,5 @@ class Vps_Component_Textbox extends Vps_Component_Abstract
         $data['data'][] = array('id' => 'content', 'value' => $this->_getContent());
         return $data;
     }
+
 }

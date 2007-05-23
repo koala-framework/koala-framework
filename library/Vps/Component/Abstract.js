@@ -25,7 +25,7 @@ Vps.createComponent = function(componentId, componentClass) {
     
 Vps.createComponentCallback = function(data) {
     command = 'new '+data.componentClass.replace(/_/g, '.')+'(\''+data.componentId+'\', \''+data.componentClass+'\', \''+data.pageId+'\');';
-    //console.log(command);
+    console.log(command);
     eval(command);
 };
 

@@ -57,4 +57,9 @@ class Vps_Component_Paragraphs extends Vps_Component_Abstract
         $ret['html'] = false;
         return $ret;
     }
+
+    public function getChildComponents()
+    {
+        return $this->_getParagraphs();
+    }
 }
