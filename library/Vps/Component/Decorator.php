@@ -26,4 +26,8 @@ class Vps_Component_Decorator extends Vps_Component_Abstract
       return parent::getComponentInfo() + $this->_getDecorated()->getComponentInfo();
     }
     
+    public function getChildComponents()
+    {
+        return array($this->_getDecorated());
+    }
 }

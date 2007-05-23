@@ -39,4 +39,9 @@ abstract class Vps_Component_Decorator_Abstract implements Vps_Component_Interfa
     {
         return $this->_component->saveFrontendEditing($request);
     }
+    
+    public function getChildComponents()
+    {
+        return $this->_component;
+    }
 }

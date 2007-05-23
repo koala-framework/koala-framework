@@ -3,7 +3,7 @@ class Vps_Component_Product_Categories extends Vps_Component_Abstract
 {
     private $_names;
     
-    protected function createComponents($filename)
+    protected function createComponents($filename = '')
     {
         $dao = $this->getDao();
         $where = $dao->getDb()->quoteInto('visible = ?', '1');
@@ -33,5 +33,10 @@ class Vps_Component_Product_Categories extends Vps_Component_Abstract
 
         $ret['template'] = 'Product/Categories.html';
         return $ret;
+    }
+
+    public function getChildComponents()
+    {
+        return $this->createComponents();
     }
 }

@@ -58,4 +58,10 @@ class Vps_Component_Product_Details extends Vps_Component_Abstract
         $ret['createComponents'] = $this->_content->getComponentInfo();
         return $ret;
     }
+    
+    public function getChildComponents()
+    {
+        $this->setup();
+        return array($this->_content);
+    }
 }

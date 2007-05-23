@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <!-- Ext -->
+        <link rel="stylesheet" type="text/css" href="/files/ext/resources/css/ext-all.css" />
+        <script type="text/javascript" src="/files/ext/adapter/yui/yui-utilities.js"></script>
+        <script type="text/javascript" src="/files/ext/adapter/yui/ext-yui-adapter.js"></script>
+        <script type="text/javascript" src="/files/ext/ext-all.js"></script>
+        
+        <!-- Controller -->
+        <script type="text/javascript" src="/files/Vps/Component/{$controllerFile}"></script> 
+        <script type="text/javascript">
+            Ext.BLANK_IMAGE_URL = '/files/ext/resources/images/default/s.gif';
+            var config = {$config};
+            Ext.onReady(function() {ldelim}
+                new {$controller}(Ext.get('container'), '{$id}', config);
+            {rdelim});
+        </script>
+    </head>
+    <body>
+        <div id="container" />
+    </body>
+</html>

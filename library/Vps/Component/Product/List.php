@@ -10,14 +10,14 @@ class Vps_Component_Product_List extends Vps_Component_Abstract
         $this->_categoryId = $id;
     }
 
-    protected function createComponents($filename)
+    protected function createComponents($filename = '')
     {
         $dao = $this->getDao();
         $categories = $dao->getTable('Vps_Dao_ProductCategories')->find($this->_categoryId);
         //todo: raise error?
         $category = $categories->current();
         $rows = $category->findManyToManyRowset('Vps_Dao_ProductProducts', 'Vps_Dao_ProductProductsToCategories');
-        //todo: visible berücksichtigen
+        //todo: visible berï¿½cksichtigen
 
         $components = array();
         foreach($rows as $row) {
@@ -58,5 +58,10 @@ class Vps_Component_Product_List extends Vps_Component_Abstract
             $ret += $component->getComponentInfo();
         }
         return $ret;
+    }
+    
+    public function getChildComponents()
+    {
+        return $this->createComponents();
     }
 }

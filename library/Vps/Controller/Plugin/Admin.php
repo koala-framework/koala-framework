@@ -28,8 +28,12 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
             die();
         }
 
+        if (substr($request->getPathInfo(), 0, 6) == '/admin') {
+            return;
+        }
+
         if ($request->getControllerName() == 'fe' || strpos($request->getActionName(), 'ajax') !== false) {
-            return false;
+            return;
         }
 
         if ($this->_isAllowed('admin')) {

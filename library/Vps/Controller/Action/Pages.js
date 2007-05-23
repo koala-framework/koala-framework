@@ -1,26 +1,29 @@
-{literal}
-<link rel="stylesheet" type="text/css" href="/files/ext/resources/css/ext-all.css" />
-<script type="text/javascript" src="/files/ext/adapter/yui/yui-utilities.js"></script>
-<script type="text/javascript" src="/files/ext/adapter/yui/ext-yui-adapter.js"></script>
-<script type="text/javascript" src="/files/ext/ext-all.js"></script>
-<style type="text/css">
-    .x-tree-node-el .x-tree-node-icon{
-        background-image:url(/files/ext/resources/images/default/tree/leaf.gif);
-    }
+Pages = function() {
+    content = Ext.DomHelper.append(document.body, '<div />', true);
+    west = Ext.DomHelper.append(content, '<div />', true);
+    center = Ext.DomHelper.append(content, '<div />', true);
     
-    .folder .x-tree-node-icon {
-        background-image:url(/files/ext/resources/images/default/tree/folder.gif);
-    }
+    var layout = new Ext.BorderLayout(content, {
+        west: {
+            split:true,
+            initialSize: 400,
+            minSize: 200,
+            maxSize: 600
+        },
+        center: {
+            autoScroll: false
+        }
+    });
+    layout.beginUpdate();
+    layout.add('west', new Ext.ContentPanel(west, 'West'));
+    layout.add('center', new Ext.ContentPanel(center, 'Center'));
+    layout.endUpdate();
     
-    .offline a span { color:#888888; }
-</style>
+    var form = new PageForm(center);
 
-<div id="content">
-    <div id="west" />
-    <div id="center" />
-</div>
- 
-<script type="text/javascript">
+    var treeTabs = new TreeTabs(west, form);
+}
+
 TreeTabs = function(el, form) {
     var jtabs = new Ext.TabPanel(el);
     
@@ -99,7 +102,7 @@ PageTree = function(el, form) {
     tree.getSelectionModel().on(
         'selectionchange',
         function (e, node) {
-            if (node) { form.edit(node); }
+            if (node) { form.loadPage(node); }
         }
     );
     
@@ -172,6 +175,13 @@ PageForm = function(el) {
             disabled: true,
             scope   : this
         });
+        toolbar.addButton({
+            id: 'edit',
+            text    : 'Seite bearbeiten',
+            handler : edit,
+            disabled: true,
+            scope   : this
+        });
         form.render(el);
     }
 
@@ -203,6 +213,10 @@ PageForm = function(el) {
         })
     }
         
+    edit = function(o, e) {
+        document.location.href = '/admin/page?id=' + form.node.id;
+    }
+        
     add = function(o, e) {
         form.baseParams.command = 'add';
         parentNode = form.tree.getSelectionModel().getSelectedNode();
@@ -223,11 +237,12 @@ PageForm = function(el) {
         })
     }
         
-    this.edit = function (node) {
+    this.loadPage = function (node) {
         if (isNaN(node.id)) {
             toolbar.items.get('add').enable(); 
             toolbar.items.get('delete').disable(); 
             toolbar.items.get('save').disable(); 
+            toolbar.items.get('edit').disable(); 
         } else {
             toolbar.items.each(function(b) { b.enable(); });
         }
@@ -243,38 +258,9 @@ PageForm = function(el) {
     init(el);
 };
 
-init = function() {
-    var layout = new Ext.BorderLayout('content', {
-        west: {
-            split:true,
-            initialSize: 400,
-            minSize: 200,
-            maxSize: 600
-        },
-        center: {
-            autoScroll: false
-        }
-    });
-    layout.beginUpdate();
-    layout.add('west', new Ext.ContentPanel('west', 'West'));
-    layout.add('center', new Ext.ContentPanel('center', 'Center'));
-    layout.endUpdate();
-    
-    var form = new PageForm('center');
-
-    var treeTabs = new TreeTabs('west', form);
-}
-
 ajaxInvalid = function(form, type) {
     alert('invalid');
 }
 ajaxFailure = function(form, type) {
     alert('failure');
 }
-            
-Ext.BLANK_IMAGE_URL = '/files/ext/resources/images/default/s.gif';
-//Ext.QuickTips.init();
-Ext.EventManager.onDocumentReady(init);
-</script>
-
-{/literal}
