@@ -4,6 +4,7 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
     public function actionAction()
     {
         $iniComponents = new Zend_Config_Ini('../application/config.ini', 'components');
+        // Todo: Decorators abchecken, ob es sie gibt
         $iniDecorators = new Zend_Config_Ini('../application/config.ini', 'decorators');
 
         $cfg = array();
@@ -17,10 +18,12 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
         $body = $view->render('Ext.html');
         $this->getResponse()->appendBody($body);
     }
-    
+
     public function componentAction()
     {
-        $component = Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $this->getRequest()->getParam('id'));
+        $id = $this->getRequest()->getParam('id');
+        $component = Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $id);
+        $component = $component->findComponent($id);
         $action = str_replace('/admin/component', '', $this->getRequest()->getPathInfo());
         if (substr($action, 0, 1) == '/') { $action = substr($action, 1); }
         $controller = substr(get_class($component), 0, strrpos(get_class($component), '_') + 1) . 'Controller';
@@ -31,15 +34,24 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
             $this->getResponse()->setBody('Editing does not exist for this component. Try Frontend-Editing instead.');
         }
     }
-    
+
     public function ajaxAddParagraphAction()
     {
         $pageId = $this->getRequest()->getParam('pageId');
         $page = Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $pageId);
         $components = $this->_inspectPage($page, 'Vps_Component_Decorator');
-        p($components);
+        //p($components);
     }
-    
+
+    public function ajaxSaveComponentAction()
+    {
+        $decorators = $this->getRequest()->getParam('decorators');
+        if (!is_array($decorators)) { $decorators = array(); }
+        $id = $this->getRequest()->getParam('id');
+        $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
+        $table->saveDecorators($id, array_keys($decorators));
+    }
+
     private function _inspectPage($page)
     {
         $return = array();
@@ -58,23 +70,24 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
     public function ajaxGetNodesAction()
     {
         $pageId = $this->getRequest()->getParam('pageId');
-        $id = $this->getRequest()->getParam('node');
-        if ($id == 'root') {
-            $components[] = Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $pageId);
+        $componentId = $this->getRequest()->getParam('node');
+
+        $page = Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $pageId);
+        if ($componentId == 'root') {
+            $components = array($page);
         } else {
-            $component = Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $id);
+            $component = $page->findComponent($componentId);
             $components = $component->getChildComponents();
         }
-        
+
         $data = array();
         foreach ($components as $component) {
 
             // Decorators nicht anzeigen
-            $d['decorators'] = array();
-            while ($component instanceof Vps_Component_Decorator) {
-                $d['decorators'][] = get_class($components[0]);
-                $childComponents = $component->getChildComponents();
-                $component = $childComponents[0];
+            $d['selectedDecorators'] = array();
+            while ($component instanceof Vps_Component_Decorator_Abstract) {
+                $d['selectedDecorators'][] = get_class($component);
+                $component = array_shift($component->getChildComponents());
             }
 
             $d['id'] = $component->getId();
@@ -84,22 +97,21 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
             } else {
                 $d['cls'] = 'leaf';
             }
-            if (sizeof($d['decorators']) > 0) {
+            if (sizeof($d['selectedDecorators']) > 0) {
                 $d['cls'] .= '_decorated';
             }
             $d['leaf'] = false;
-            //$d['uiProvider'] = 'MyNodeUI';
-            //$d['parentComponentIds'] = $parentComponentIds . ',' . $component->getId();
             $d['expanded'] = true;
             $data[] = $d;
         }
+
         $body = Zend_Json::encode($data);
         $this->getResponse()->setBody($body);
     }
-    
+
     public function ajaxGetDecorators()
     {
-        
+
     }
-    
+
 }

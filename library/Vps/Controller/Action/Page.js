@@ -19,9 +19,12 @@ Page = function(config) {
     
         tree.getSelectionModel().on('selectionchange',
             function (e, node) {
-                toolbar.items.each(function(b) { b.enable(); });
-                Ext.get('main').dom.src = '/admin/component?id=' + node.id;
-                form.selectDecorators(node.attributes.decorators);
+                if (node) {
+                    toolbar.items.each(function(b) { b.enable(); });
+                    //console.log('/admin/component?id=' + node.id);
+                    Ext.get('main').dom.src = '/admin/component?id=' + node.id;
+                    form.setup(node.id, node.attributes.selectedDecorators);
+                }
             }
         );
         
@@ -50,7 +53,7 @@ Page = function(config) {
                             throw 'Invalid server response';
                         }
                         if(true === o.success) {
-                            tree.getRootNode().reload()
+                            tree.getRootNode().reload();
                         } else {
                         }
                     }
@@ -72,33 +75,51 @@ Page = function(config) {
     // Form
     var Form = function(el, decorators) {
         
-        this.selectDecorators = function(decorators) {
+        this.setup = function(id, decorators) {
+            form.items.each(function(b) { b.enable(); });
+            form.buttons[0].enable();
+            form.baseParams.id = id;
             form.reset();
             for (var i in decorators) {
-                var d = form.findField(decorators[i]);
+                var d = form.findField('decorators[' + decorators[i] + ']');
                 if (d) { d.setValue(true); }
             }
         }
         
         var form = new Ext.form.Form({
             labelAlign: 'right',
-            labelWidth: 75
+            labelWidth: 75,
+            url: '/admin/page/ajaxSaveComponent',
+            baseParams: {}
         });
         
         // Decorators
         form.fieldset({legend:'Decorators', hideLabels:true});
         for (var dName in decorators) {
             form.add(new Ext.form.Checkbox({
-                boxLabel: dName,
-                name: decorators[dName]
+                boxLabel: decorators[dName],
+                name: 'decorators[' + dName + ']',
+                disabled: true
             }));
         }
         form.end();
     
-        form.addButton('Save');
-        form.addButton('Cancel');
+        form.addButton({
+            id: 'save',
+            disabled: true,
+            text    : 'Speichern',
+            handler : function(o, e) {
+                form.submit({
+                    success: function(form, a) { tree.getSelectionModel().getSelectedNode().parentNode.reload(); },
+                    invalid: function(form, a) { alert('invalid') },
+                    failure: function(form, a) { alert('failure') }
+                })
+            },
+            scope   : this
+        });
     
         form.render(el);
+
     }
 
     // Konstruktor

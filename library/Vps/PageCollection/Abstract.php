@@ -65,8 +65,8 @@ abstract class Vps_PageCollection_Abstract
             }
         }
 
-        if (!$component instanceof Vps_Component_Abstract) {
-            throw new Vps_PageCollection_Exception("Component must be instance of Vps_Component_Abstract.");
+        if (!$component instanceof Vps_Component_Interface) {
+            throw new Vps_PageCollection_Exception("Component must be instance of Vps_Component_Interface.");
         }
         
         if ($filename == '') {
@@ -101,13 +101,13 @@ abstract class Vps_PageCollection_Abstract
         $this->_addDecorator = $decorator;
     }
 
-    protected function addDecoratorsToComponent(Vps_Component_Abstract $component)
+    protected function addDecoratorsToComponent(Vps_Component_Interface $component)
     {
         if ($this->_addDecorator) {
-            return new $this->_addDecorator($this->_dao, $component, $this);
-        } else {
-            return $component;
+            $component = new $this->_addDecorator($this->_dao, $component);
+            $component->setPageCollection($this);
         }
+        return $component;
     }
 
     private function _setPage(Vps_Component_Interface $component, $filename)
