@@ -11,7 +11,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         return parent::_removePage($id);
     }
 
-    public function setParentPage(Vps_Component_Interface $page, Vps_Component_Interface $parentPage)
+    public function setParentPage(Vpc_Interface $page, Vpc_Interface $parentPage)
     {
         $id = $page->getId();
         $parentId = $parentPage->getId();
@@ -73,7 +73,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         return $ids;
     }
 
-    public function getParentPage(Vps_Component_Interface $page)
+    public function getParentPage(Vpc_Interface $page)
     {
         $id = $page->getId();
         if (isset($this->_pageParentIds[$id])) {
@@ -102,7 +102,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         }
     }
 
-    public function getChildPages(Vps_Component_Interface $page)
+    public function getChildPages(Vpc_Interface $page)
     {
         $page->generateHierarchy();
         $childs = array();
@@ -115,7 +115,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         return $childs;
     }
 
-    public function getChildPage(Vps_Component_Interface $page, $filename)
+    public function getChildPage(Vpc_Interface $page, $filename)
     {
         $page->generateHierarchy($filename);
         $searchId = $page->getId();

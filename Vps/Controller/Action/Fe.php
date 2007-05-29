@@ -78,12 +78,12 @@ class Vps_Controller_Action_Fe extends Vps_Controller_Action_Web
     {
         // besser:
 //        $componentId = $this->getRequest()->getParam('componentId');
-//        return Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $componentId);
+//        return Vpc_Abstract::getInstance(Zend_Registry::get('dao'), $componentId);
         $id = $this->getRequest()->getParam('componentId');
         if (is_null($id)) return null;
         $dao = Zend_Registry::get('dao');
         $className = str_replace(".", "_", $this->getRequest()->getParam('componentClass'));
-        $parts = Vps_Component_Abstract::parseId($id);
+        $parts = Vpc_Abstract::parseId($id);
         $component = new $className($dao, $parts['componentId'], $parts['pageKey'], $parts['componentKey']);
         return $component;
     }

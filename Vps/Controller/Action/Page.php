@@ -8,7 +8,7 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
         $iniDecorators = new Zend_Config_Ini('../application/config.ini', 'decorators');
 
         $cfg = array();
-        $view = new Vps_View_Smarty('../library/Vps/Controller/Action');
+        $view = new Vps_View_Smarty(VPS_PATH . '/Vps/Controller/Action');
         $cfg['pageId'] = $this->getRequest()->getParam('id');
         $cfg['components'] = $iniComponents->components->toArray();
         $cfg['decorators'] = $iniDecorators->decorators->toArray();
@@ -22,7 +22,7 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
     public function componentAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $component = Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $id);
+        $component = Vpc_Abstract::getInstance(Zend_Registry::get('dao'), $id);
         $component = $component->findComponent($id);
         $action = str_replace('/admin/component', '', $this->getRequest()->getPathInfo());
         if (substr($action, 0, 1) == '/') { $action = substr($action, 1); }
@@ -38,8 +38,8 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
     public function ajaxAddParagraphAction()
     {
         $pageId = $this->getRequest()->getParam('pageId');
-        $page = Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $pageId);
-        $components = $this->_inspectPage($page, 'Vps_Component_Decorator');
+        $page = Vpc_Abstract::getInstance(Zend_Registry::get('dao'), $pageId);
+        $components = $this->_inspectPage($page, 'Vpc_Decorator');
         //p($components);
     }
 
@@ -55,9 +55,9 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
     private function _inspectPage($page)
     {
         $return = array();
-        if ($page instanceof Vps_Component_Decorator) {
+        if ($page instanceof Vpc_Decorator) {
             $return['decorator'] = $this;
-        } else if ($page instanceof Vps_Component_Paragraphs) {
+        } else if ($page instanceof Vpc_Paragraphs) {
             $return['decorator'] = $this;
         } else {
             foreach ($page->getChildComponents() as $childComponent) {
@@ -72,7 +72,7 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
         $pageId = $this->getRequest()->getParam('pageId');
         $componentId = $this->getRequest()->getParam('node');
 
-        $page = Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $pageId);
+        $page = Vpc_Abstract::getInstance(Zend_Registry::get('dao'), $pageId);
         if ($componentId == 'root') {
             $components = array($page);
         } else {
@@ -85,14 +85,14 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
 
             // Decorators nicht anzeigen
             $d['selectedDecorators'] = array();
-            while ($component instanceof Vps_Component_Decorator_Abstract) {
+            while ($component instanceof Vpc_Decorator_Abstract) {
                 $d['selectedDecorators'][] = get_class($component);
                 $component = array_shift($component->getChildComponents());
             }
 
             $d['id'] = $component->getId();
-            $d['text'] = str_replace('Vps_Component_', '', get_class($component));
-            if ($component instanceof Vps_Component_Paragraphs) {
+            $d['text'] = str_replace('Vpc_', '', get_class($component));
+            if ($component instanceof Vpc_Paragraphs) {
                 $d['cls'] = 'paragraphs';
             } else {
                 $d['cls'] = 'leaf';
