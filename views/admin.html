@@ -1,0 +1,98 @@
+<!-- Yahoo UI -->
+<script type="text/javascript" src="{$libraryDomain}/files/yui/yahoo/yahoo-min.js"></script> 
+<script type="text/javascript" src="{$libraryDomain}/files/yui/event/event-min.js"></script> 
+<script type="text/javascript" src="{$libraryDomain}/files/yui/connection/connection-min.js"></script> 
+<script type="text/javascript" src="{$libraryDomain}/files/yui/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script type="text/javascript" src="{$libraryDomain}/files/yui/element/element-beta-min.js"></script>
+<script type="text/javascript" src="{$libraryDomain}/files/yui/button/button-beta-min.js"></script> 
+<script type="text/javascript" src="{$libraryDomain}/files/yui/dom/dom-min.js"></script>
+<script type="text/javascript" src="{$libraryDomain}/files/yui/dragdrop/dragdrop-min.js" ></script>
+<script type="text/javascript" src="{$libraryDomain}/files/yui/animation/animation-min.js"></script>
+<script type="text/javascript" src="{$libraryDomain}/files/yui/container/container-min.js"></script>
+<link rel="stylesheet" type="text/css" href="{$libraryDomain}/files/yui/container/assets/container.css" />
+
+<!-- Ext -->
+<link rel="stylesheet" type="text/css" href="{$libraryDomain}/files/ext/resources/css/button.css" />
+<link rel="stylesheet" type="text/css" href="{$libraryDomain}/files/ext/resources/css/form.css" />
+<script type="text/javascript" src="{$libraryDomain}/files/ext/adapter/yui/files/yui-utilities.js"></script>
+<script type="text/javascript" src="{$libraryDomain}/files/ext/adapter/yui/ext-yui-adapter.js"></script>
+<script type="text/javascript" src="{$libraryDomain}/files/ext/ext-all.js"></script>
+
+
+{literal}
+<script type="text/javascript">
+    function hideConsole(id)
+    {
+        document.cookie = id+"Console=hidden; path=/";
+        document.getElementById(id+'Console').className = 'debugHidden';
+    }
+    
+    function showConsole(id)
+    {
+        document.cookie = id+"Console=visible; path=/";
+        document.getElementById(id+'Console').className = 'debugVisible';
+    }
+    
+    function switchMode(mode)
+    {
+        var callback = 
+        { 
+            success: function(o) { document.location.reload(); }, 
+            failure: function(o) { document.location.reload(); }
+        };
+        YAHOO.util.Connect.asyncRequest('get', '/admin/ajaxSession/?param=mode&value=' + mode, callback);
+    }
+    
+    
+</script>
+<style type="text/css">
+    div.debugContent { position: absolute; z-index: 100; right: 0; top: 0; border: 1px solid black; background-color: white; padding-bottom: 5px; font-size: 10px; text-align: left; color: black; }
+    div.debugContent h1 { height: auto; line-height: 17px; background-image: none; padding: 0; text-align: center; background-color: black; color: white; font-size: 12px; font-weight: bold; margin: 0; margin-top: 5px; }
+    div.debugContent h1 a { display: block; color: white; text-decoration: none;}
+    div.debugContent h1 a:hover { text-decoration: none; }
+    div.debugContent h1.first { margin: 0; }
+    div.debugContent td { font-size: 10px; }
+    div.debugContent a { background-image: none; color: black; padding: 0; margin: 0; }
+    div.debugContent table { border-collapse: collapse; }
+    div.debugContent table td { border: 1px dotted gray; }
+    
+    div.debugVisible a.show,
+    div.debugHidden a.show { font-size: 10px; font-family: Arial; background-image: none; padding: 0; border: 1px solid white; z-index: 101; background-color: black; width: 50px; color: white; text-decoration: none; font-weight: bold; position: absolute; top: 0; right: 0; }
+    
+    div#debugConsole div.debugContent { width: 250px; }
+    div#smartyConsole a.show { margin-top: 20px; }
+    div#sqlConsole a.show { margin-top: 40px; }
+    div#sitesConsole a.show { margin-top: 60px; }
+    
+    div.debugVisible div.debugContent { display: block; }
+    div.debugVisible a.show { display: none; }
+    div.debugHidden div.debugContent { display: none; }
+    div.debugHidden a.show { display: block; }
+    
+</style>
+{/literal}
+
+<div id="debugConsole" class="debug {if isset($smarty.cookies.debugConsole) && $smarty.cookies.debugConsole=="visible"}debugVisible{else}debugHidden{/if}">
+    <a title="Debug einblenden" class="show" href="javascript:showConsole('debug');">&#171; Admin</a>
+    <div class="debugContent">
+        <h1 class="first hide"><a title="ausblenden" href="javascript:hideConsole('debug');">&#187;Admin Panel</a></h1>
+
+        <a href="/">Home</a>
+        <br />
+        <a href="/admin/logout">Logout</a>
+        <br />
+        <a href="/admin/pages?path={$path}">Seitenbaum</a>
+
+        <h1>Frontend Editing</h1>
+        <fieldset>
+            <legend>Frontend-Editing</legend>
+            <input type="radio" name="mode" value="" onclick="switchMode('')" {if $mode==""}checked="checked"{/if}>Aus<br>
+            <input type="radio" name="mode" value="fe" onclick="switchMode('fe')" {if $mode=="fe"}checked="checked"{/if}>An<br>
+            </table>
+        </fieldset>
+
+        <h1>Allgemein</h1>
+        Memory-Usage: {$_debugMemoryUsage/1024|string_format:"%.2f"} KB<br />
+    </div>
+</div>
+

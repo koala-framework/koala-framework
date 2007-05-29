@@ -65,8 +65,8 @@ abstract class Vps_PageCollection_Abstract
             }
         }
 
-        if (!$component instanceof Vps_Component_Interface) {
-            throw new Vps_PageCollection_Exception("Component must be instance of Vps_Component_Interface.");
+        if (!$component instanceof Vpc_Interface) {
+            throw new Vps_PageCollection_Exception("Component must be instance of Vpc_Interface.");
         }
         
         if ($filename == '') {
@@ -97,11 +97,11 @@ abstract class Vps_PageCollection_Abstract
 
     public function setAddDecorator($decorator)
     {
-        //todo: raise exception if no string, or class does'nt exist, or class doesn't inherit Vps_Component_Decorator_Abstract
+        //todo: raise exception if no string, or class does'nt exist, or class doesn't inherit Vpc_Decorator_Abstract
         $this->_addDecorator = $decorator;
     }
 
-    protected function addDecoratorsToComponent(Vps_Component_Interface $component)
+    protected function addDecoratorsToComponent(Vpc_Interface $component)
     {
         if ($this->_addDecorator) {
             $component = new $this->_addDecorator($this->_dao, $component);
@@ -110,7 +110,7 @@ abstract class Vps_PageCollection_Abstract
         return $component;
     }
 
-    private function _setPage(Vps_Component_Interface $component, $filename)
+    private function _setPage(Vpc_Interface $component, $filename)
     {
         $id = (string)$component->getId();
 
@@ -122,7 +122,7 @@ abstract class Vps_PageCollection_Abstract
         $this->_pageFilenames[$id] = $filename;
     }
 
-    public function setRootPage(Vps_Component_Interface $component)
+    public function setRootPage(Vpc_Interface $component)
     {
         $this->_setPage($this->addDecoratorsToComponent($component), '');
         $this->_rootPageId = $component->getId();
@@ -133,7 +133,7 @@ abstract class Vps_PageCollection_Abstract
         $this->getRootPage(); // Muss hier gemacht werden
         if (!isset($this->_pages[$id])) {
             try {
-                $parts = Vps_Component_Abstract::parseId($id);
+                $parts = Vpc_Abstract::parseId($id);
                 $page = $this->addPage($parts['componentId']);
                 if ($page != null) {
                     $id = $page->getId();
@@ -143,7 +143,7 @@ abstract class Vps_PageCollection_Abstract
                         $id .= $pageKey;
                     }
                 }
-            } catch (Vps_Component_Exception $e) {
+            } catch (Vpc_Exception $e) {
                 return null;
             }
         }
@@ -190,7 +190,7 @@ abstract class Vps_PageCollection_Abstract
         return '';
     }
 
-    public function getPageData(Vps_Component_Interface $page)
+    public function getPageData(Vpc_Interface $page)
     {
         $pageId = $page->getId();
         $rootId = $this->getRootPage()->getId();

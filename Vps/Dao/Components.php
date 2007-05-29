@@ -3,7 +3,7 @@ class Vps_Dao_Components extends Zend_Db_Table
 {
     protected $_name = 'components';
     
-    public function addComponent($class = 'Vps_Component_Empty')
+    public function addComponent($class = 'Vpc_Empty')
     {
         // TODO: Componentclass checken
         $data['component'] = $class;

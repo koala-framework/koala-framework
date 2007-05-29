@@ -44,7 +44,7 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
                 $path = $this->getRequest()->getPathInfo();
             }
 
-            $view = new Vps_View_Smarty('../library/Vps');
+            $view = new Vps_View_Smarty(VPS_PATH . '/views');
             $view->assign('mode', $mode);
             $view->assign('path', $path);
             $view->assign('_debugMemoryUsage', memory_get_usage());
@@ -58,7 +58,7 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
     {
         $session = new Zend_Session_Namespace('admin');
         if ($this->_isAllowed('fe') && $session->mode == 'fe') {
-            $view = new Vps_View_Smarty('../library/Vps');
+            $view = new Vps_View_Smarty(VPS_PATH . '/views');
             $pageCollection = Vps_PageCollection_Abstract::getInstance();
             $page = $pageCollection->getPageByPath($this->getRequest()->getPathInfo());
             $componentsInfo = array();
