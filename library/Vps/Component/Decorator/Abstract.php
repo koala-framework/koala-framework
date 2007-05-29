@@ -57,7 +57,7 @@ abstract class Vps_Component_Decorator_Abstract implements Vps_Component_Interfa
         if ($findDecorators && $id == $this->getId()) {
             return $this;
         } else {
-            return $this->_component->findComponent($id);
+            return $this->_component->findComponent($id, $findDecorators);
         }
     }
 }

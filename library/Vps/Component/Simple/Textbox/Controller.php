@@ -16,7 +16,8 @@ class Vps_Component_Simple_Textbox_Controller extends Vps_Controller_Action
     
     protected function _createComponent()
     {
-        $component = Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $this->getRequest()->getParam('id'));
+        $id = $this->getRequest()->getParam('id');
+        $component = Vps_Component_Abstract::getInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
         if (!$component) {
             throw new Vps_Component_Exception('Component not found.');
         }
