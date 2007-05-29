@@ -1,5 +1,5 @@
 <?php
-class Vpc_TagCloud extends Vpc_Abstract
+class Vpc_TagCloud_Index extends Vpc_Abstract
 {
     public function getTemplateVars($mode)
     {

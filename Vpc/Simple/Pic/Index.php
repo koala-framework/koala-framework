@@ -1,5 +1,5 @@
 <?php
-class Vpc_Pic extends Vpc_Abstract
+class Vpc_Simple_Pic_Index extends Vpc_Abstract
 {
     public function getTemplateVars($mode)
     {

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Product_Categories extends Vpc_Abstract
+class Vpc_Product_Index extends Vpc_Abstract
 {
     private $_names;
     

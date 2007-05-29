@@ -1,5 +1,5 @@
 <?php
-class Vpc_Simple_Textbox_Textbox extends Vpc_Abstract
+class Vpc_Simple_Textbox_Index extends Vpc_Abstract
 {
     private $_components = array();
     private $_content;

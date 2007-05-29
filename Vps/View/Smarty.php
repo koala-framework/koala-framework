@@ -24,6 +24,10 @@ class Vps_View_Smarty implements Zend_View_Interface
         if (null !== $tmplPath) {
             $this->setScriptPath($tmplPath);
         }
+        
+        if (defined('VPS_PATH_HTTP')) {
+            $this->assign('libraryDomain', VPS_PATH_HTTP);
+        }
 
         if (!isset($extraParams['compile_dir'])) { $extraParams['compile_dir'] = '../application/views_c'; }
         //if (!isset($extraParams['debugging'])) { $extraParams['debugging'] = 'true'; } // TODO: Ein-/ausschaltbar machen

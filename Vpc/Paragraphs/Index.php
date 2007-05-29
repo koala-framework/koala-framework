@@ -1,5 +1,5 @@
 <?php
-class Vpc_Paragraphs extends Vpc_Abstract
+class Vpc_Paragraphs_Index extends Vpc_Abstract
 {
     protected $_paragraphs;
 

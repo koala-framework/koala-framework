@@ -40,7 +40,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
                     $component = new $decorator($dao, $component);
                 }
             }
-    
+
             return $component;
 
         } catch (Exception $e) {
