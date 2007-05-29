@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Aktuelle extends Vpc_Abstract
+class Vpc_News_Index extends Vpc_Abstract
 {
     private $_titles;
     

@@ -1,5 +1,5 @@
 <?php
-class Vpc_TextPic extends Vpc_Abstract
+class Vpc_TextPic_Index extends Vpc_Abstract
 {
     private $_textboxComponent;
     private $_picComponent;

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Events extends Vpc_Abstract
+class Vpc_Events_Index extends Vpc_Abstract
 {
     private $_paragraphs;
 
