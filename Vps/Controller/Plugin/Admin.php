@@ -4,6 +4,7 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
 
     private function _isAllowed($resource)
     {
+        /*
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity()) {
             $identity = $auth->getIdentity();
@@ -14,6 +15,8 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
             return $acl->isAllowed($role, $resource);
         }
         return false;
+        */
+        return true;
     }
 
     public function preDispatch(Zend_Controller_Request_Http $request)
@@ -21,11 +24,6 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
         if ($this->_isAllowed('fe')) {
             $session = new Zend_Session_Namespace('admin');
             $request->setParam('mode', $session->mode);
-        }
-
-        if (substr($request->getPathInfo(), 0, 6) == '/admin' && $request->getActionName() != 'login' && !$this->_isAllowed('admin')) {
-            header('Location: /admin/login'); // hab ich mir dem Response-Objekt nicht geschafft
-            die();
         }
 
         if (substr($request->getPathInfo(), 0, 6) == '/admin') {
@@ -36,6 +34,7 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
             return;
         }
 
+        // Admin Panel
         if ($this->_isAllowed('admin')) {
             $session = new Zend_Session_Namespace('admin');
             $mode = $session->mode;
@@ -56,6 +55,7 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
 
     public function postDispatch(Zend_Controller_Request_Http $request)
     {
+        // Frontend Editing
         $session = new Zend_Session_Namespace('admin');
         if ($this->_isAllowed('fe') && $session->mode == 'fe') {
             $view = new Vps_View_Smarty(VPS_PATH . '/views');

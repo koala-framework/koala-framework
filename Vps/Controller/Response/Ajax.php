@@ -1,39 +1,44 @@
 <?php
 class Vps_Controller_Response_Ajax extends Zend_Controller_Response_Abstract
 {
-    private $_jsonBody;
+    private $_jsonBody = array();
     private $_outputFormat = '';
-    public function appendJson($name, $content)
+    public function appendJson($name, $content = null)
     {
-        if (!is_string($name)) {
-            require_once 'Zend/Controller/Response/Exception.php';
+        if (!is_string($name) && !is_array($name)) {
             throw new Zend_Controller_Response_Exception('Invalid body segment key ("' . gettype($name) . '")');
         }
 
-        if (isset($this->_jsonBody[$name])) {
-            unset($this->_jsonBody[$name]);
+        if (is_array($name)) {
+            $this->_jsonBody += $name;
+        } else {
+            if (isset($this->_jsonBody[$name])) {
+                unset($this->_jsonBody[$name]);
+            }
+            $this->_jsonBody[$name] = $content;
         }
-        $this->_jsonBody[$name] = $content;
+        
         return $this;
     }
+    
     public function outputBody()
     {
         if ($this->_outputFormat == 'json') {
-
-            parent::outputBody();
-
-            $out = $this->_jsonBody;
-            foreach ($this->getException() as $exception) {
-                $out['exceptions'][] = $exception->__toString();
+            if (!empty($this->_body)) {
+                parent::outputBody();
+            } else {
+                $out = $this->_jsonBody;
+                foreach ($this->getException() as $exception) {
+                    $out['exceptions'][] = $exception->__toString();
+                }
+                if (isset($out['exceptions'])) {
+                    $out['success'] = false;
+                }
+                if (!isset($out['success'])) {
+                    $out['success'] = true;
+                }
+                echo Zend_Json::encode($out);
             }
-            if (isset($out['exceptions'])) {
-                $out['success'] = false;
-            }
-            if (!isset($out['success'])) {
-                $out['success'] = true;
-            }
-            echo Zend_Json::encode($out);
-            
         } else {
             foreach ($this->getException() as $exception) {
                 echo $exception->__toString();

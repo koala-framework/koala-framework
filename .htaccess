@@ -3,6 +3,7 @@ RewriteEngine on
 RewriteRule ^files/ext/(.*)$ /ext/$1 [L]
 RewriteRule ^files/yui/(.*)$ /YUI/$1 [L]
 RewriteRule ^files/Vpc/(.*\.js)$ /Vpc/$1 [L]
+RewriteRule ^files/Vps/(.*\.js)$ /Vps_js/$1 [L]
 RewriteRule ^Vps/(.*\.js)$ /Vps_js/$1 [L]
 
 RewriteCond %{REQUEST_URI} !^/*(YUI|ext|Vps_js|Vpc|public/index.php|public/files)/?

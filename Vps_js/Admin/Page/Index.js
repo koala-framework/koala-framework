@@ -1,4 +1,4 @@
-Page = function(config) {
+Vps.Admin.Page.Index = function(config) {
     
     // Pagetree
     var PageTree = function(el) {
