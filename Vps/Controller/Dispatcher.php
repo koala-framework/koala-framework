@@ -13,8 +13,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
         if ($this->_isOverwritten()) {
             return parent::loadClass($className);
         } else if ($this->_isComponent()) {
-            $unformatted = str_replace('Controller', '', ucfirst($className));
-            return "Vpc_Component_$unformatted";
+            return str_replace('_ControllerController', '_Controller', $className);
         } else {
             $unformatted = str_replace('Controller', '', ucfirst($className));
             return "Vps_Controller_Action_$unformatted";

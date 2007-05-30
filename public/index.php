@@ -4,10 +4,10 @@ error_reporting(E_ALL); // wg. HTML_QuickForm (PEAR)
 date_default_timezone_set('Europe/Berlin');
 
 $include_path  = get_include_path();
-$include_path .= PATH_SEPARATOR . '../library';
-$include_path .= PATH_SEPARATOR . '../application/models';
+$include_path .= PATH_SEPARATOR . '../';
 set_include_path($include_path);
 
+/*
 require_once 'Zend/Loader.php';
 function __autoload($class)
 {
@@ -56,3 +56,4 @@ function p($src, $max_depth = 3) {
         echo "</pre>";
     }
 }
+*/

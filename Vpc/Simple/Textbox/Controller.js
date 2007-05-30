@@ -1,4 +1,4 @@
-var Textbox = function(renderTo, id, config) {
+var Textbox = function(config) {
     var handleSave = function()
     {
         var handleFailure = function() {
@@ -17,7 +17,7 @@ var Textbox = function(renderTo, id, config) {
         labelAlign: '',
         labelWidth: '75',
         buttonAlign: 'left',
-        baseParams: { id: id }
+        baseParams: { id: config.id }
     });
     
     form.add(
@@ -32,5 +32,5 @@ var Textbox = function(renderTo, id, config) {
     );
     form.addButton('Save', handleSave, this);
     
-    form.render(renderTo);
+    form.render(document.body);
 }

@@ -57,9 +57,8 @@ abstract class Vps_PageCollection_Abstract
         if (is_int($component)) {
             $componentId = $component;
             $pageData = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
-            if (!empty($pageData)) {
-                $className = $pageData['component'];
-                $component = new $className($this->_dao, $componentId);
+            $component = Vpc_Abstract::getInstance($this->_dao, $componentId, $pageData['component']);
+            if ($component) {
                 $component->setPageCollection($this);
                 $filename = $pageData['filename'];
             }
@@ -159,8 +158,7 @@ abstract class Vps_PageCollection_Abstract
     {
         if (!isset($this->_rootPageId)) {
             $data = $this->_dao->getTable('Vps_Dao_Pages')->retrieveRootPageData();
-            $classname = $data['component'];
-            $rootPage = new $classname($this->_dao, $data['component_id']);
+            $rootPage = Vpc_Abstract::getInstance($this->_dao, $data['component_id'], $data['component']);
             $rootPage->setPageCollection($this);
             $this->setRootPage($rootPage);
         }

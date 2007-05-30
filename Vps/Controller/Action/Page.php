@@ -8,7 +8,7 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
         $iniDecorators = new Zend_Config_Ini('../application/config.ini', 'decorators');
 
         $cfg = array();
-        $view = new Vps_View_Smarty(VPS_PATH . '/Vps/Controller/Action');
+        $view = new Vps_View_Smarty(VPS_PATH . '/views');
         $cfg['pageId'] = $this->getRequest()->getParam('id');
         $cfg['components'] = $iniComponents->components->toArray();
         $cfg['decorators'] = $iniDecorators->decorators->toArray();
@@ -69,6 +69,9 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
 
     public function ajaxGetNodesAction()
     {
+        $iniComponents = new Zend_Config_Ini('../application/config.ini', 'components');
+        $componentNames = $iniComponents->components->toArray();
+
         $pageId = $this->getRequest()->getParam('pageId');
         $componentId = $this->getRequest()->getParam('node');
 
@@ -91,7 +94,11 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
             }
 
             $d['id'] = $component->getId();
-            $d['text'] = str_replace('Vpc_', '', get_class($component));
+            if (isset($componentNames[get_class($component)])) {
+                $d['text'] = $componentNames[get_class($component)];
+            } else {
+                $d['text'] = str_replace('Vpc_', '', str_replace('_Index', '', get_class($component)));
+            }
             if ($component instanceof Vpc_Paragraphs) {
                 $d['cls'] = 'paragraphs';
             } else {
@@ -107,11 +114,6 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
 
         $body = Zend_Json::encode($data);
         $this->getResponse()->setBody($body);
-    }
-
-    public function ajaxGetDecorators()
-    {
-
     }
 
 }

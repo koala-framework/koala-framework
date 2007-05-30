@@ -3,7 +3,7 @@ class Vps_Controller_Action_Pages extends Vps_Controller_Action
 {
     public function actionAction()
     {
-        $view = new Vps_View_Smarty(VPS_PATH . '/Vps/Controller/Action');
+        $view = new Vps_View_Smarty(VPS_PATH . '/views');
         $view->assign('file', VPS_PATH_HTTP . '/Vps/Pages.js');
         $view->assign('function', 'Pages');
         $body = $view->render('Ext.html');
