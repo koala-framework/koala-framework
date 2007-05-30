@@ -2,18 +2,8 @@ RewriteEngine on
 
 RewriteRule ^files/ext/(.*)$ /ext/$1 [L]
 RewriteRule ^files/yui/(.*)$ /YUI/$1 [L]
+RewriteRule ^files/Vpc/(.*\.js)$ /Vpc/$1 [L]
 RewriteRule ^Vps/(.*\.js)$ /Vps_js/$1 [L]
-RewriteRule ^Vpc/(.*\.js)$ /Vpc/$1 [L]
-#RewriteRule ^files/library/(.*\.)(js|css|jpg|gif)$ /library/files/$1$2 [L]
 
-#RewriteRule ^files/(.*)$ /public/files/$1 [L]
-
-RewriteCond %{REQUEST_URI} !^/*(YUI|ext|Vps_js|public/index.php|public/files)/?
+RewriteCond %{REQUEST_URI} !^/*(YUI|ext|Vps_js|Vpc|public/index.php|public/files)/?
 RewriteRule ^(.*)$ /public/index.php [L]
-
-
-
-
-#RewriteCond %{REQUEST_URI} !^/+(index.php|test|admin|admin_kunden|files|css|zwischenseiten|heading.php|test.html|syncdata.php|webspecial|test.php|include.php|cron|webservice|specialsites)/?
-#RewriteCond %{QUERY_STRING} ^(.*)$
-#RewriteRule ^(.*)$     /index.php?site=$1&%1 [L]

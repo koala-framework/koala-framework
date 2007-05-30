@@ -21,31 +21,36 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     public static function getInstance($dao, $id, $className = '', $pageKey = '', $componentKey = '')
     {
-        try {
-            $parsedId = Vpc_Abstract::parseId($id);
-            $componentId = $parsedId['componentId'];
+        $parsedId = Vpc_Abstract::parseId($id);
+        $componentId = $parsedId['componentId'];
             
-            if ($className == '') {
-                $data = $dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
-                $className = $data['component'];
+        if ($className == '') {
+            $data = $dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
+            $className = $data['component'];
+        }
+
+        // Komponente erstellen
+        try {
+            
+            if (class_exists($className)) {
+                $component = new $className($dao, $componentId, $pageKey, $componentKey);
             }
 
-            // Komponente erstellen
-            $component = new $className($dao, $componentId, $pageKey, $componentKey);
-    
             // Decorators hinzufügen
             if (!is_null($component)) {
                 $decoratorData = $dao->getTable('Vps_Dao_Pages')->retrieveDecoratorData($component->getId());
-                foreach ($decoratorData as $decorator) {
-                    $component = new $decorator($dao, $component);
+                foreach ($decoratorData as $className) {
+                    if (class_exists($className)) {
+                        $component = new $className($dao, $component);
+                    }
                 }
             }
 
-            return $component;
-
-        } catch (Exception $e) {
-            return null;
+        } catch (Zend_Exception $e) {
+            throw new Vpc_ComponentNotFoundException("Component $className not found.");
         }
+
+        return $component;
     }
     
     public function findComponent($id, $findDecorators = false)

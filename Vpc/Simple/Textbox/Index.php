@@ -34,12 +34,14 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
             while(preg_match('#^(.*?)\{([a-zA-Z0-9_]+)\}(.*)$#s', $content, $m)) {
                 $this->_contentParts[] = array('type'=>'content', 'content'=>$m[1]);
                 $className = $m[2];
-                if (class_exists($className)) {
-                    $componentNr++;
+                $componentNr++;
+                try {
                     $component = $this->createComponent($className, 0, '', $componentNr);
-                    $this->_components[] = $component;
-                    $this->_contentParts[] = array('type'=>'component', 'component'=>$component->getTemplateVars($mode));
+                } catch (Vpc_ComponentNotFoundException $e) {
+                    $component = $this->createComponent('Vpc_Empty_Index', 0, '', $componentNr);
                 }
+                $this->_components[] = $component;
+                $this->_contentParts[] = array('type'=>'component', 'component'=>$component->getTemplateVars($mode));
                 $content = $m[3];
             }
             if(!$m) $this->_contentParts[] = array('type'=>'content', 'content'=>$content);

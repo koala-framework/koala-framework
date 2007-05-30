@@ -1,5 +1,5 @@
 <?php
-class Vpc_Decorator_Color_Color extends Vpc_Decorator_Abstract
+class Vpc_Decorator_Simple_Color_Index extends Vpc_Decorator_Abstract
 {
     protected $_decorated;
 

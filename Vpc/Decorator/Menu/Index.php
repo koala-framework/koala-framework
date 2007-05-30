@@ -1,5 +1,5 @@
 <?php
-class Vpc_Decorator_Menu extends Vpc_Decorator_Abstract
+class Vpc_Decorator_Menu_Index extends Vpc_Decorator_Abstract
 {
     var $_pageCollection = null;
     
