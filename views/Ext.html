@@ -31,12 +31,17 @@
             .offline a span {ldelim} color:#888888; {rdelim}
         </style>
 
+        <!-- Vps -->
+        <script type="text/javascript" src="{$libraryDomain}/files/Vps/Vps.js"></script>
+
         <!-- Controller -->
-        <script type="text/javascript" src="{$file}"></script> 
+        {foreach item=file from=$files}
+        <script type="text/javascript" src="{$file}"></script>
+        {/foreach} 
         <script type="text/javascript">
             Ext.BLANK_IMAGE_URL = '{$libraryDomain}/files/ext/resources/images/default/s.gif';
             Ext.onReady(function() {ldelim}
-                new {$function}({$config});
+                new {$class}({$config});
             {rdelim});
         </script>
     </head>

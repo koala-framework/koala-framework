@@ -4,8 +4,8 @@ class Vps_Controller_Action_Pages extends Vps_Controller_Action
     public function actionAction()
     {
         $view = new Vps_View_Smarty(VPS_PATH . '/views');
-        $view->assign('file', VPS_PATH_HTTP . '/Vps/Pages.js');
-        $view->assign('function', 'Pages');
+        $view->assign('files', array(VPS_PATH_HTTP . '/Vps/Admin/Pages/Index.js'));
+        $view->assign('class', 'Vps.Admin.Pages.Index');
         $body = $view->render('Ext.html');
         $this->getResponse()->appendBody($body);
     }
@@ -80,7 +80,7 @@ class Vps_Controller_Action_Pages extends Vps_Controller_Action
         $return['success'] = true;
         $return['data'] = $data;
 
-        $this->getResponse()->setBody(Zend_Json::encode($return));
+        $this->getResponse()->appendJson($return);
     }
 
     public function ajaxGetNodesAction()

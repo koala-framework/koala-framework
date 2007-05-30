@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Page extends Vps_Controller_Action
+class Vps_Controller_Action_Page extends Vps_Controller_AuthAction
 {
     public function actionAction()
     {
@@ -12,8 +12,8 @@ class Vps_Controller_Action_Page extends Vps_Controller_Action
         $cfg['pageId'] = $this->getRequest()->getParam('id');
         $cfg['components'] = $iniComponents->components->toArray();
         $cfg['decorators'] = $iniDecorators->decorators->toArray();
-        $view->assign('file', VPS_PATH_HTTP . '/Vps/Page.js');
-        $view->assign('function', 'Page');
+        $view->assign('files', array(VPS_PATH_HTTP . '/Vps/Admin/Page/Index.js'));
+        $view->assign('class', 'Vps.Admin.Page.Index');
         $view->assign('config', Zend_Json::encode($cfg));
         $body = $view->render('Ext.html');
         $this->getResponse()->appendBody($body);

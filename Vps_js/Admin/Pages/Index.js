@@ -1,4 +1,4 @@
-Pages = function() {
+Vps.Admin.Pages.Index = function() {
     content = Ext.DomHelper.append(document.body, '<div />', true);
     west = Ext.DomHelper.append(content, '<div />', true);
     center = Ext.DomHelper.append(content, '<div />', true);
