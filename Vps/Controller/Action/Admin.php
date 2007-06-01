@@ -10,4 +10,5 @@ class Vps_Controller_Action_Admin extends Vps_Controller_Action
         $adminSession = new Zend_Session_Namespace('admin');
         $adminSession->$param = $value;
     }
+
 }

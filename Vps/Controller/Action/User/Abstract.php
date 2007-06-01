@@ -1,65 +1,57 @@
 <?php
 class Vps_Controller_Action_User_Abstract extends Vps_Controller_Action
 {
-    protected function _showLoginForm($adapter, $action = '/user/login')
+    public function loginAction()
     {
-        require_once 'HTML/QuickForm.php';
-
-        $form = new HTML_QuickForm('firstForm', 'post', $action);
-        $form->setDefaults(array(
-            'name' => 'Joe User'
-        ));
-        $form->addElement('header', null, 'Login');
-        $form->addElement('text', 'username', 'Benutzername:', array('size' => 50, 'maxlength' => 255));
-        $form->addElement('password', 'password', 'Kennwort:', array('size' => 50, 'maxlength' => 255));
-        $form->addElement('submit', null, 'Send');
-
-        $form->applyFilter('username', 'trim');
-        $form->applyFilter('password', 'password');
-
-        $form->addRule('username', 'Bitte einen Benutzernamen eingeben.', 'required', null, 'client');
-        $form->addRule('password', 'Bitte ein Kennwort eingeben.', 'required', null, 'client');
-        $form->addRule('username', 'Bitte einen Benutzernamen eingeben.', 'required', null, 'server');
-        $form->addRule('password', 'Bitte ein Kennwort eingeben.', 'required', null, 'server');
-
-        if ($form->validate()) {
-            $username = $form->exportValue('username');
-            $password = $form->exportValue('password');
-            
-            $auth = Zend_Auth::getInstance();
-            $adapter->setIdentity($username);
-            $adapter->setCredential($password);
-            $result = $auth->authenticate($adapter);
-            
-            
-            if (!$result->isValid()) {
-                foreach ($result->getMessages() as $message) {
-                    echo "$message\n";
-                }
-            } else {
-                //echo "You are now logged in.";
-                //return $result;
-                // TODO: redirect auf HP?
-	            header("Location: http://". $_SERVER["HTTP_HOST"]);
-	            die;
-            }
-            
-        }
-
-        $form->display();
-        echo "Einloggen mit test / test";
+        $files[] = '/Vps/Login/Index.js';
+        $files[] = '/Vps/Login/Dialog.js';
+        
+        $view = new Vps_View_Smarty_Ext($files, 'Vps.Login.Index');
+        $this->getResponse()->appendBody($view->render(''));
     }
 
-    protected function _logout()
+    public function ajaxLoginAction()
     {
-        Zend_Auth::getInstance()->clearIdentity();
-        $adminSession = new Zend_Session_Namespace('admin');
-        $adminSession->unsetAll();
-        echo "You are now logged out.";
+        $username = $this->getRequest()->getParam('username');
+        $password = $this->getRequest()->getParam('password');
+        $adapter = $this->_createAuthAdapter();
+
+        if (!$adapter instanceof Zend_Auth_Adapter_DbTable) {
+            throw new Vps_Controller_Exception('_createAuthAdapter didn\'t return instancee of Zend_Auth_Adapter_DbTable');
+        }
+        
+        $auth = Zend_Auth::getInstance();
+        $adapter->setIdentity($username);
+        $adapter->setCredential($password);
+        $result = $auth->authenticate($adapter);
+
+        if (!$result->isValid()) {
+            $errors = $result->getMessages();
+            $this->getResponse()->appendJson('error', implode("<br />", $errors));
+            $success = false;
+        } else {
+            $this->_onLogin($adapter->getResultRowObject());
+            $success = true;
+        }
+        $this->getResponse()->appendJson('success', $success);
     }
     
-    protected function _password($usersTable)
+    public function ajaxLogoutAction()
     {
-        
+        Zend_Auth::getInstance()->clearIdentity();
+        $this->_onLogout();
+        $this->getResponse()->appendJson('success', true);
+    }
+
+    protected function _createAuthAdapter()
+    {
+    }
+
+    protected function _onLogin($resultRow)
+    {
+    }
+
+    protected function _onLogout()
+    {
     }
 }

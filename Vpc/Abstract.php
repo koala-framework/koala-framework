@@ -112,7 +112,8 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return $pages;
     }
 
-    protected function createComponents($filename) {
+    protected function createComponents($filename = '')
+    {
         return array();
     }
 

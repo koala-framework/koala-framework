@@ -110,7 +110,12 @@ Vps.Admin.Page.Index = function(config) {
             text    : 'Speichern',
             handler : function(o, e) {
                 form.submit({
-                    success: function(form, a) { tree.getSelectionModel().getSelectedNode().parentNode.reload(); },
+                    success: function(form, a) {
+                        //debugger;
+                        selectedNode = tree.getSelectionModel().getSelectedNode(); 
+                        selectedNode.parentNode.reload();
+                        //console.log(tree.getSelectionModel().select(selectedNode));
+                    },
                     invalid: function(form, a) { alert('invalid') },
                     failure: function(form, a) { alert('failure') }
                 })

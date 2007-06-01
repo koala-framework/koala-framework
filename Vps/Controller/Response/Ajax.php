@@ -3,6 +3,7 @@ class Vps_Controller_Response_Ajax extends Zend_Controller_Response_Abstract
 {
     private $_jsonBody = array();
     private $_outputFormat = '';
+    
     public function appendJson($name, $content = null)
     {
         if (!is_string($name) && !is_array($name)) {
@@ -17,28 +18,25 @@ class Vps_Controller_Response_Ajax extends Zend_Controller_Response_Abstract
             }
             $this->_jsonBody[$name] = $content;
         }
+        $this->_outputFormat = 'json';
         
         return $this;
     }
-    
+
     public function outputBody()
     {
         if ($this->_outputFormat == 'json') {
-            if (!empty($this->_body)) {
-                parent::outputBody();
-            } else {
-                $out = $this->_jsonBody;
-                foreach ($this->getException() as $exception) {
-                    $out['exceptions'][] = $exception->__toString();
-                }
-                if (isset($out['exceptions'])) {
-                    $out['success'] = false;
-                }
-                if (!isset($out['success'])) {
-                    $out['success'] = true;
-                }
-                echo Zend_Json::encode($out);
+            $out = $this->_jsonBody;
+            foreach ($this->getException() as $exception) {
+                $out['exceptions'][] = $exception->__toString();
             }
+            if (isset($out['exceptions'])) {
+                $out['success'] = false;
+            }
+            if (!isset($out['success'])) {
+                $out['success'] = true;
+            }
+            echo Zend_Json::encode($out);
         } else {
             foreach ($this->getException() as $exception) {
                 echo $exception->__toString();
@@ -49,6 +47,6 @@ class Vps_Controller_Response_Ajax extends Zend_Controller_Response_Abstract
 
     public function setOutputFormat($format)
     {
-        $this->_outputFormat = $format;
+        //$this->_outputFormat = $format;
     }
 }

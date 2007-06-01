@@ -1,7 +1,16 @@
+{if !$noHead}
 <html>
     <head>
+{/if}
         <!-- Ext -->
+        {if !$noHead}
         <link rel="stylesheet" type="text/css" href="{$libraryDomain}/files/ext/resources/css/ext-all.css" />
+        {else}
+        <link rel="stylesheet" type="text/css" href="{$libraryDomain}/files/ext/resources/css/button.css" />
+        <link rel="stylesheet" type="text/css" href="{$libraryDomain}/files/ext/resources/css/menu.css" />
+        <link rel="stylesheet" type="text/css" href="{$libraryDomain}/files/ext/resources/css/button.css" />
+        {/if}
+
         <script type="text/javascript" src="{$libraryDomain}/files/ext/adapter/yui/yui-utilities.js"></script>
         <script type="text/javascript" src="{$libraryDomain}/files/ext/adapter/yui/ext-yui-adapter.js"></script>
         <script type="text/javascript" src="{$libraryDomain}/files/ext/ext-all.js"></script>
@@ -33,6 +42,8 @@
 
         <!-- Vps -->
         <script type="text/javascript" src="{$libraryDomain}/files/Vps/Vps.js"></script>
+        <script type="text/javascript" src="{$libraryDomain}/files/Vps/Connection.js"></script>
+        <script type="text/javascript" src="{$libraryDomain}/files/Vps/SubmitAction.js"></script>
 
         <!-- Controller -->
         {foreach item=file from=$files}
@@ -44,7 +55,9 @@
                 new {$class}({$config});
             {rdelim});
         </script>
+{if !$noHead}
     </head>
     <body>
     </body>
 </html>
+{/if}

@@ -31,13 +31,8 @@ class Vpc_Simple_Textbox_Controller extends Vps_Controller_Action
         $controllername = substr($controllername, strrpos($controllername, '_') + 1);
         $config['id'] = $this->getRequest()->getParam('id');
         
-        $view = new Vps_View_Smarty(VPS_PATH . '/views');
-        $view->assign('files', array(VPS_PATH_HTTP . '/files/Vpc/' . $controllerpath));
-        $view->assign('class', $controllername);
-        $view->assign('config', Zend_Json::encode($config));
-        $body = $view->render('Ext.html');
-        
-        $this->getResponse()->setBody($body);
+        $view = new Vps_View_Smarty_Ext(array('/Vpc/' . $controllerpath), $controllername, $config);
+        $this->getResponse()->setBody($view->render(''));
     }
     
 }

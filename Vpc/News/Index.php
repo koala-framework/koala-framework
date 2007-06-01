@@ -3,7 +3,7 @@ class Vpc_News_Index extends Vpc_Abstract
 {
     private $_titles;
     
-    protected function createComponents($filename)
+    protected function createComponents($filename = '')
     {
         $components = array();
         foreach($this->getDao()->getTable('Vps_Dao_News')->fetchAll() as $row) {

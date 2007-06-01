@@ -1,6 +1,8 @@
 <?php
-class Vps_Controller_Action_Page extends Vps_Controller_AuthAction
+class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
 {
+    protected $_auth = true;
+
     public function actionAction()
     {
         $iniComponents = new Zend_Config_Ini('../application/config.ini', 'components');
@@ -8,31 +10,11 @@ class Vps_Controller_Action_Page extends Vps_Controller_AuthAction
         $iniDecorators = new Zend_Config_Ini('../application/config.ini', 'decorators');
 
         $cfg = array();
-        $view = new Vps_View_Smarty(VPS_PATH . '/views');
         $cfg['pageId'] = $this->getRequest()->getParam('id');
         $cfg['components'] = $iniComponents->components->toArray();
         $cfg['decorators'] = $iniDecorators->decorators->toArray();
-        $view->assign('files', array(VPS_PATH_HTTP . '/Vps/Admin/Page/Index.js'));
-        $view->assign('class', 'Vps.Admin.Page.Index');
-        $view->assign('config', Zend_Json::encode($cfg));
-        $body = $view->render('Ext.html');
-        $this->getResponse()->appendBody($body);
-    }
-
-    public function componentAction()
-    {
-        $id = $this->getRequest()->getParam('id');
-        $component = Vpc_Abstract::getInstance(Zend_Registry::get('dao'), $id);
-        $component = $component->findComponent($id);
-        $action = str_replace('/admin/component', '', $this->getRequest()->getPathInfo());
-        if (substr($action, 0, 1) == '/') { $action = substr($action, 1); }
-        $controller = substr(get_class($component), 0, strrpos(get_class($component), '_') + 1) . 'Controller';
-        try {
-            Zend_Loader::LoadClass($controller);
-            $this->_forward($action, $controller, 'component', $this->getRequest()->getParams());
-        } catch (Zend_Exception $e) {
-            $this->getResponse()->setBody('Editing does not exist for this component. Try Frontend-Editing instead.');
-        }
+        $view = new Vps_View_Smarty_Ext(array('/Vps/Admin/Page/Index.js'), 'Vps.Admin.Page.Index', $cfg);
+        $this->getResponse()->appendBody($view->render(''));
     }
 
     public function ajaxAddParagraphAction()
@@ -90,7 +72,8 @@ class Vps_Controller_Action_Page extends Vps_Controller_AuthAction
             $d['selectedDecorators'] = array();
             while ($component instanceof Vpc_Decorator_Abstract) {
                 $d['selectedDecorators'][] = get_class($component);
-                $component = array_shift($component->getChildComponents());
+                $cc = $component->getChildComponents();
+                $component = $cc[0];
             }
 
             $d['id'] = $component->getId();
