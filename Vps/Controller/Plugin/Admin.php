@@ -19,42 +19,30 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
         return true;
     }
 
-    public function preDispatch(Zend_Controller_Request_Http $request)
+    public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
+        if (substr($request->getActionName(), 0, 4) == 'ajax') {
+            return;
+        }
+
+        /*
         if ($this->_isAllowed('fe')) {
             $session = new Zend_Session_Namespace('admin');
             $request->setParam('mode', $session->mode);
         }
 
-        if (substr($request->getPathInfo(), 0, 6) == '/admin') {
+        if ($request->getControllerName() == 'fe') {
             return;
         }
-
-        if ($request->getControllerName() == 'fe' || strpos($request->getActionName(), 'ajax') !== false) {
-            return;
-        }
-
-        // Admin Panel
-        if ($this->_isAllowed('admin')) {
-            $session = new Zend_Session_Namespace('admin');
-            $mode = $session->mode;
-            $path = $this->getRequest()->getParam('path');
-            if ($path == null) {
-                $path = $this->getRequest()->getPathInfo();
-            }
-
-            $view = new Vps_View_Smarty(VPS_PATH . '/views');
-            $view->assign('mode', $mode);
-            $view->assign('path', $path);
-            $view->assign('_debugMemoryUsage', memory_get_usage());
-            $body = $view->render('admin.html');
-            $this->getResponse()->appendBody($body);
-        }
-
+        */
     }
 
-    public function postDispatch(Zend_Controller_Request_Http $request)
+    public function postDispatch(Zend_Controller_Request_Abstract $request)
     {
+        $userNamespace = new Zend_Session_Namespace('User');
+//        return $userNamespace->role;
+
+        /*
         // Frontend Editing
         $session = new Zend_Session_Namespace('admin');
         if ($this->_isAllowed('fe') && $session->mode == 'fe') {
@@ -77,6 +65,7 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
                 $this->getResponse()->appendBody($body);
             }
         }
+        */
     }
 
 }

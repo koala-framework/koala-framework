@@ -15,8 +15,12 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
         } else if ($this->_isComponent()) {
             return str_replace('_ControllerController', '_Controller', $className);
         } else {
-            $unformatted = str_replace('Controller', '', ucfirst($className));
-            return "Vps_Controller_Action_$unformatted";
+            $className = str_replace('Controller', '', ucfirst($className));
+            $module = ucfirst($this->getFrontController()->getRequest()->getModuleName());
+            if ($module != 'Default' && $module != '') {
+                $className = $module . '_' . $className;
+            }
+            return "Vps_Controller_Action_$className";
         }
     }
 

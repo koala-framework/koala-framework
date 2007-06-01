@@ -1,13 +1,12 @@
 <?php
-class Vps_Controller_Action_Pages extends Vps_Controller_Action
+class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
 {
+    protected $_auth = true;
+
     public function actionAction()
     {
-        $view = new Vps_View_Smarty(VPS_PATH . '/views');
-        $view->assign('files', array(VPS_PATH_HTTP . '/Vps/Admin/Pages/Index.js'));
-        $view->assign('class', 'Vps.Admin.Pages.Index');
-        $body = $view->render('Ext.html');
-        $this->getResponse()->appendBody($body);
+        $view = new Vps_View_Smarty_Ext(array('/Vps/Admin/Pages/Index.js'), 'Vps.Admin.Pages.Index');
+        $this->getResponse()->appendBody($view->render(''));
     }
 
     public function ajaxProcessPageDataAction()
@@ -61,8 +60,7 @@ class Vps_Controller_Action_Pages extends Vps_Controller_Action
             }
         }
 
-        $body = str_replace('"[]"', '[]', Zend_Json::encode($return));
-        $this->getResponse()->setBody($body);
+        $this->getResponse()->setBody(Zend_Json::encode($return));
     }
 
     public function ajaxLoadPageDataAction()
@@ -80,7 +78,7 @@ class Vps_Controller_Action_Pages extends Vps_Controller_Action
         $return['success'] = true;
         $return['data'] = $data;
 
-        $this->getResponse()->appendJson($return);
+        $this->getResponse()->setBody(Zend_Json::encode($return));
     }
 
     public function ajaxGetNodesAction()
@@ -126,8 +124,7 @@ class Vps_Controller_Action_Pages extends Vps_Controller_Action
             }
         }
 
-        $body = str_replace('"[]"', '[]', Zend_Json::encode($return));
-        $this->getResponse()->setBody($body);
+        $this->getResponse()->setBody(Zend_Json::encode($return));
     }
     
     public function ajaxCollapseNodeAction()
@@ -159,7 +156,7 @@ class Vps_Controller_Action_Pages extends Vps_Controller_Action
                 $d['expanded'] = false;
             }
         } else {
-            $d['children'] = '[]';
+            $d['children'] = array();
             $d['expanded'] = true;
         }
         return $d;
