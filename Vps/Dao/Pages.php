@@ -121,6 +121,8 @@ class Vps_Dao_Pages extends Vps_Db_Table
             $sql = "INSERT INTO decorators SET page_id='$id', decorator='$d'";
             $this->getAdapter()->query($sql);
         }
+        $this->_decoratorData = null;
+        return $this->retrieveDecoratorData($id);
     }
 
     public function savePageStatus($componentId, $status)

@@ -26,9 +26,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
             
         if ($className == '') {
             $data = $dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
-            $className = $data['component'];
+            if ($data) {
+                $className = $data['component'];
+            }
         }
-
+        
         // Komponente erstellen
         try {
             
@@ -47,7 +49,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
             }
 
         } catch (Zend_Exception $e) {
-            throw new Vpc_ComponentNotFoundException("Component $className not found.");
+            throw new Vpc_ComponentNotFoundException("Component '$className' not found.");
         }
 
         return $component;

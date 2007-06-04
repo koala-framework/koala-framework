@@ -1,5 +1,5 @@
 <?php
-class Vpc_Simple_Textbox_Controller extends Vps_Controller_Action
+class Vpc_Simple_Textbox_Controller extends Vpc_Controller
 {
     public function indexAction()
     {

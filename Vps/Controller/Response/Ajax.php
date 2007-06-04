@@ -47,6 +47,6 @@ class Vps_Controller_Response_Ajax extends Zend_Controller_Response_Abstract
 
     public function setOutputFormat($format)
     {
-        //$this->_outputFormat = $format;
+        $this->_outputFormat = $format;
     }
 }
