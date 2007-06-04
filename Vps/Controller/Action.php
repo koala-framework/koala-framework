@@ -30,10 +30,12 @@ class Vps_Controller_Action extends Zend_Controller_Action
     {
         // Menu
         $role = $this->_getUserRole();
-        if ($role != '' && !$this->_isAjax()) {
+        // Nur im Frontend
+        if ($role != '' && $this instanceof Vps_Controller_Action_Web) {
             $files[] = '/Vps/Menu/Index.js';
             $view = new Vps_View_Smarty_Ext($files, 'Vps.Menu.Index');
             $view->assign('noHead', true);
+            $view->assign('renderTo', 'Ext.DomHelper.insertFirst(document.body, \'<div \/>\', true)');
             //$view->assign('_debugMemoryUsage', memory_get_usage());
             $this->getResponse()->appendBody($view->render(''));
         }
@@ -53,10 +55,10 @@ class Vps_Controller_Action extends Zend_Controller_Action
         $acl->addRole(new Vps_Acl_Role('admin'));
         
         // Resources
-        $acl->add(new Vps_Acl_Resource('admin'));
-            $acl->add(new Vps_Acl_Resource('admin_pages', 'Seitenbaum'), 'admin');
-            $acl->add(new Vps_Acl_Resource('admin_page'), 'admin');
-            $acl->add(new Vps_Acl_Resource('admin_component'), 'admin');
+        $acl->add(new Vps_Acl_Resource('admin', 'Admin'));
+            $acl->add(new Vps_Acl_Resource('admin_pages', 'Seitenbaum', '/admin/pages'), 'admin');
+            $acl->add(new Zend_Acl_Resource('admin_page'), 'admin');
+            $acl->add(new Zend_Acl_Resource('admin_component'), 'admin');
         
         // Berechtigungen
         $acl->allow('admin', 'admin');

@@ -1,11 +1,8 @@
-Vps.Menu.Index = function(config)
+Vps.Menu.Index = function(renderTo, config)
 {
     Ext.apply(this, config);
 
-    if (config.el == undefined) {
-        config.el = Ext.DomHelper.append(document.body, '<div \/>', true);   
-    }
-    this.tb = new Ext.Toolbar(config.el);
+    this.tb = new Ext.Toolbar(renderTo);
     var conn = new Vps.Connection();
     conn.request({
         url: '/admin/menu/ajaxData',

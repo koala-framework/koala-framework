@@ -62,4 +62,14 @@ class Vpc_Paragraphs_Index extends Vpc_Abstract
     {
         return $this->_getParagraphs();
     }
+    
+    public function createParagraph($componentClass, $position = 0) {
+        $table = $this->_dao->getTable('Vps_Dao_Paragraphs');
+        return $table->createParagraph($this->getComponentId(), $componentClass, $position, $this->getPageKey(), $this->getComponentKey());
+    }
+    
+    public function deleteParagraph($componentId) {
+        $table = $this->_dao->getTable('Vps_Dao_Paragraphs');
+        return $table->deleteParagraph($componentId);
+    }
 }

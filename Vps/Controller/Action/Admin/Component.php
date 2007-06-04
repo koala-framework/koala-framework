@@ -18,5 +18,7 @@ class Vps_Controller_Action_Admin_Component extends Vps_Controller_Action
             $this->getResponse()->setBody('Editing does not exist for this component. Try Frontend-Editing instead.');
         }
     }
+    
+    public function postDispatch() {}
 
 }

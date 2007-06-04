@@ -6,6 +6,7 @@
         {if !$noHead}
         <link rel="stylesheet" type="text/css" href="{$libraryDomain}/files/ext/resources/css/ext-all.css" />
         {else}
+        <link rel="stylesheet" type="text/css" href="{$libraryDomain}/files/ext/resources/css/toolbar.css" />
         <link rel="stylesheet" type="text/css" href="{$libraryDomain}/files/ext/resources/css/button.css" />
         <link rel="stylesheet" type="text/css" href="{$libraryDomain}/files/ext/resources/css/menu.css" />
         <link rel="stylesheet" type="text/css" href="{$libraryDomain}/files/ext/resources/css/button.css" />
@@ -42,6 +43,7 @@
 
         <!-- Vps -->
         <script type="text/javascript" src="{$libraryDomain}/files/Vps/Vps.js"></script>
+        <script type="text/javascript" src="{$libraryDomain}/files/Vps/Menu/Index.js"></script>
         <script type="text/javascript" src="{$libraryDomain}/files/Vps/Connection.js"></script>
         <script type="text/javascript" src="{$libraryDomain}/files/Vps/SubmitAction.js"></script>
 
@@ -52,7 +54,7 @@
         <script type="text/javascript">
             Ext.BLANK_IMAGE_URL = '{$libraryDomain}/files/ext/resources/images/default/s.gif';
             Ext.onReady(function() {ldelim}
-                new {$class}({$config});
+                new {$class}({if $renderTo != ''}{$renderTo}{else}document.body{/if}, {$config});
             {rdelim});
         </script>
 {if !$noHead}
