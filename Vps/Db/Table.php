@@ -13,6 +13,10 @@ abstract class Vps_Db_Table extends Zend_Db_Table
     {
         return $this->_dao;
     }
-    
+
+    public function numberize($id, $fieldname, $value, $where = '')
+    {
+        return true;
+    }
 }
 ?>

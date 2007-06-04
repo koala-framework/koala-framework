@@ -4,7 +4,7 @@ class Vps_Dao_Paragraphs extends Vps_Db_Table
     protected $_name = 'component_paragraphs';
     protected $_primary = array('component_id');
     
-    public function fetchParagraphs($componentId, $pageKey, $componentKey)
+    public function fetchParagraphs($componentId, $pageKey = '', $componentKey = '')
     {
         $db = $this->getAdapter();
         $where = $db->quoteInto('parent_component_id = ?', $componentId);
@@ -13,25 +13,69 @@ class Vps_Dao_Paragraphs extends Vps_Db_Table
         return $this->fetchAll($where, 'nr');
     }
     
-    public function createParagraph($parentComponentId, $componentClass, $nr = 0, $pageKey = '', $componentKey = '')
+    public function fetchParagraphsData($id, $componentId = 0)
     {
+        if ($componentId == 0) {
+            $where = $this->getAdapter()->quoteInto('p.parent_component_id = ?', $id);
+        } else {
+            $where = $this->getAdapter()->quoteInto('p.component_id = ?', $componentId);
+        }
+        $sql = '
+            SELECT p.component_id id, p.nr, c.component, c.status
+            FROM component_paragraphs p
+            LEFT JOIN components c
+            ON p.component_id=c.id
+            WHERE ' . $where . '
+            ORDER BY p.nr
+        ';
+        $data = $this->getAdapter()->fetchAll($sql);
+        if ($componentId > 0 && isset($data[0])) {
+            return $data[0];
+        } else if ($componentId == 0){
+            return $data;
+        } else {
+            return null;
+        }
+    }
+
+    public function createParagraph($id, $componentClass, $lastSiblingId = 0, $pageKey = '', $componentKey = '')
+    {
+        $db = $this->getAdapter();
+        $db->beginTransaction();
+
         // Leere Komponente hinzufügen
         $table = $this->getDao()->getTable('Vps_Dao_Components');
         $componentId = $table->addComponent($componentClass);
 
-        // Eintrag in Pages-Tabelle
-        $insert = array();
-        $insert['component_id'] = $componentId;
-        $insert['parent_component_id'] = $parentComponentId;
-        $insert['parent_page_key'] = $pageKey;
-        $insert['parent_component_key'] = $componentKey;
-        $foo = $this->insert($insert);
+        if ($componentId > 0) {
 
-        // Nummerieren
-        $row = $this->fetchRow('component_id = ' . $componentId);
-        $row->numberize($nr, 'parent_component_id = ' . $parentComponentId);
-        
-        return $componentId;
+            // Eintrag in Paragraphs-Tabelle
+            $insert = array();
+            $insert['component_id'] = $componentId;
+            $insert['parent_component_id'] = $id;
+            $insert['parent_page_key'] = $pageKey;
+            $insert['parent_component_key'] = $componentKey;
+
+            if ($this->insert($insert) == $componentId) {
+                // Nummerieren
+                $row = $this->fetchRow('component_id = ' . $componentId);
+                $lastSibling = $this->fetchParagraphsData($id, $lastSiblingId);
+                $nr = sizeof($lastSibling) + 1;
+                if ($lastSiblingId == 0) {
+                    $lastSibling = $this->fetchParagraphsData($id, $lastSiblingId);
+                    if (isset($lastSibling['nr'])) {
+                        $nr = $lastSibling['nr'] + 1;
+                    }
+                }
+                $row->numberize('nr', $nr, 'parent_component_id = ' . $id);
+                
+                $db->commit();
+                return $componentId;
+            }
+        }
+
+        $db->rollBack();
+        throw new Vps_Dao_Exception('Couldn\'t create Paragraph.');
     }
     
     public function deleteParagraph($componentId)
@@ -47,5 +91,22 @@ class Vps_Dao_Paragraphs extends Vps_Db_Table
         }
         $db->rollBack();
         return false;
+    }
+    
+    public function moveParagraph($id, $componentId, $direction)
+    {
+        if ($direction != 'up' && $direction != 'down') {
+            throw new Vps_Dao_Exception('Direction must be either "up" or "down".');
+        }
+        $componentData = $this->fetchParagraphsData($id, $componentId);
+        if (!$componentData) {
+            throw new Vps_Dao_Exception('Paragraph with id ' . $componentId . ' not found');
+        }
+        if ($direction == 'up') {
+            $nr = $componentData['nr'] + 1;
+        } else if ($direction = 'down') {
+            $nr = $componentData['nr'] - 1;
+        }
+        return $this->numberize($componentId, 'nr', $nr, 'parent_component_id = ' . $id);
     }
 }

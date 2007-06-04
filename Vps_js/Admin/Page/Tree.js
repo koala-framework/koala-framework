@@ -26,13 +26,10 @@ Vps.Admin.Page.Tree = function(renderTo, config)
             if (node != undefined) {
                 if (node.attributes.isParagraphs) {
                     this.addButton.enable();
-                    this.deleteButton.disable();
-                }else if (node.parentNode.attributes.isParagraphs) {
+                } else if (node.parentNode.attributes.isParagraphs) {
                     this.addButton.enable();
-                    this.deleteButton.enable();
                 } else {
                     this.addButton.disable();
-                    this.deleteButton.disable();
                 }
                 this.fireEvent('selectionchange', node)
             }
@@ -62,13 +59,6 @@ Vps.Admin.Page.Tree = function(renderTo, config)
         menu: componentMenu
     });
 
-    this.deleteButton = this.toolbar.addButton({
-        disabled: true,
-        text    : 'Absatz löschen',
-        handler : this.onDelete,
-        scope   : this
-    });
-    
 }
 
 Ext.extend(Vps.Admin.Page.Tree, Ext.util.Observable,
@@ -92,22 +82,16 @@ Ext.extend(Vps.Admin.Page.Tree, Ext.util.Observable,
         });
     },
 
-    onDelete : function(o, p) {
-        new Vps.Connection().request({
-            url: '/admin/page/ajaxDeleteParagraph',
-            method: 'post',
-            scope: this,
-            params: {
-                pageId : this.pageId,
-                componentId : this.tree.getSelectionModel().getSelectedNode().id,
-                parentComponentId : this.tree.getSelectionModel().getSelectedNode().parentNode.id
-            },
-            callback: function(options, bSuccess, response) {
-                var node = this.tree.getSelectionModel().select(this.tree.getNodeById(options.params.parentComponentId));
-                this.tree.getSelectionModel().select(node);
-                node.reload();
-            }
-        });
-    }
+});
 
+MyNodeUI = function(node){
+    MyNodeUI.superclass.constructor.call(this, node);
+}
+Ext.extend(MyNodeUI, Ext.tree.TreeNodeUI, {
+    initEvents : function(){
+        MyNodeUI.superclass.initEvents.call(this);
+        if(this.node.attributes.status == '0'){
+            this.addClass('offline');
+        }
+    }
 });

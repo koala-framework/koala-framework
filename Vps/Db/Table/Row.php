@@ -59,6 +59,7 @@ class Vps_Db_Table_Row extends Zend_Db_Table_Row
      */
     public function numberize($fieldname, $value, $where = '')
     {
+        return true;
     }
 }
 ?>
