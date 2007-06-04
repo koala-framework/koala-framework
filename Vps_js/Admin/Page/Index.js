@@ -1,12 +1,5 @@
 Vps.Admin.Page.Index = function(renderTo, config) {
     
-    // Form
-    // Konstruktor
-    //west = Ext.DomHelper.append(document.body, '<div />', true);
-    //west1 = Ext.DomHelper.append(west, '<div />', true);
-    //west2 = Ext.DomHelper.append(west, '<div />', true);
-    center = Ext.DomHelper.append(document.body, '<iframe id="main" frameborder="no" />', true);
-    
     var layout = new Ext.BorderLayout(renderTo, {
         north: {
             split: false, initialSize: 30
@@ -47,22 +40,22 @@ Vps.Admin.Page.Index = function(renderTo, config) {
     
     layout.add('north', new Ext.ContentPanel('menuContainer', {autoCreate: true, fitToFrame:true}));
     layout.add('west', new Ext.NestedLayoutPanel(innerLayout, {autoCreate:true, title: 'Aufbau der aktuellen Seite', fitToFrame:true}));
-    layout.add('center', new Ext.ContentPanel(center, {title: 'Inhalt des gewählten Seitenbausteins', fitToFrame:true}));
+    layout.add('center', new Ext.ContentPanel(Ext.DomHelper.append(document.body, '<iframe id="main" frameborder="no" />', true), {title: 'Inhalt des gewählten Seitenbausteins', fitToFrame:true}));
     layout.restoreState();
     layout.endUpdate();
     
     new Vps.Menu.Index('menuContainer', {role: this.role});
-    var tree = new Vps.Admin.Page.Tree('treeContainer', config);
+    this.tree = new Vps.Admin.Page.Tree('treeContainer', config);
     var form = new Vps.Admin.Page.Form('formContainer', config);
 
-    tree.on('selectionchange', function (node) { 
+    this.tree.on('selectionchange', function (node) { 
         if (node) {
             Ext.get('main').dom.src = '/admin/component?id=' + node.id;
-            form.setup(node.id, node.attributes.selectedDecorators);
+            form.setup(node.id, node.attributes.selectedDecorators, node.attributes.status);
         }
     });
     form.on('saved', function (result) {
-        node = tree.tree.getSelectionModel().select(tree.tree.getNodeById(result.componentId));
+        node = this.tree.tree.getSelectionModel().select(this.tree.tree.getNodeById(result.componentId));
         node.parentNode.select();
         node.parentNode.reload();
     });

@@ -32,47 +32,30 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
         $position = 0;
         if ($component instanceof Vpc_Paragraphs_Index) {
             $paragraphsComponent = $component;
+            $lastSiblingId = 0;
         } else if ($parentComponent instanceof Vpc_Paragraphs_Index) {
             $paragraphsComponent = $parentComponent;
-            foreach ($paragraphsComponent->getChildComponents() as $c) {
-                $position++;
-                if ($c->getId() == $component->getId()) {
-                    break;
-                }
-            }
+            $lastSiblingId = $componentId;
         } else {
             $this->getResponse()->setOutputFormat('json');
             throw new Vps_Exception('Either component or parentComponent must be an instance of Vpc_Paragraphs_Index');
         }
-        $componentId = $paragraphsComponent->createParagraph($componentClass, $position);
+        $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Paragraphs');
+        $componentId = $table->createParagraph($paragraphsComponent->getId(), $componentClass, $lastSiblingId);
         $this->getResponse()->appendJson('parentComponentId', $paragraphsComponent->getId());
         $this->getResponse()->appendJson('componentId', $componentId);
     }
 
-    public function ajaxDeleteParagraphAction()
-    {
-        $pageId = $this->getRequest()->getParam('pageId');
-        $componentId = $this->getRequest()->getParam('componentId');
-        $parentComponentId = $this->getRequest()->getParam('parentComponentId');
-        $page = Vpc_Abstract::getInstance(Zend_Registry::get('dao'), $pageId);
-        $parentComponent = $page->findComponent($parentComponentId);
-        if ($parentComponent instanceof Vpc_Paragraphs_Index) {
-            $result = $parentComponent->deleteParagraph($componentId);
-            $this->getResponse()->appendJson('success', $result);
-            if (!$result) {
-                $this->getResponse()->appendJson('error', 'Database Error: Couldn\'t delete component.');
-            }
-        } else {
-            $this->getResponse()->setOutputFormat('json');
-            throw new Vps_Exception('Either parentComponent must be an instance of Vpc_Paragraphs_Index');
-        }
-    }
-
     public function ajaxSaveComponentAction()
     {
+        $id = $this->getRequest()->getParam('id');
+
+        $status = $this->getRequest()->getParam('status');
+        $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Components');
+        $currentDecorators = $table->setStatus($id, $status);
+        
         $decorators = $this->getRequest()->getParam('decorators');
         if (!is_array($decorators)) { $decorators = array(); }
-        $id = $this->getRequest()->getParam('id');
         $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
         $currentDecorators = $table->saveDecorators($id, array_keys($decorators));
         $this->getResponse()->appendJson('componentId', $id);
@@ -81,6 +64,8 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
 
     public function ajaxGetNodesAction()
     {
+        $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Components');
+
         $iniComponents = new Zend_Config_Ini('../application/config.ini', 'components');
         $componentNames = $iniComponents->components->toArray();
 
@@ -89,6 +74,7 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
 
         $page = Vpc_Abstract::getInstance(Zend_Registry::get('dao'), $pageId);
         if ($componentId == 'root') {
+            $comonent = null;
             $components = array($page);
         } else {
             $component = $page->findComponent($componentId);
@@ -98,6 +84,9 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
         $data = array();
         foreach ($components as $component) {
 
+            $componentId = $component->getId();
+            $d = array();
+
             // Decorators nicht anzeigen
             $d['selectedDecorators'] = array();
             while ($component instanceof Vpc_Decorator_Abstract) {
@@ -106,7 +95,7 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
                 $component = $cc[0];
             }
 
-            $d['id'] = $component->getId();
+            $d['id'] = $componentId;
             if (isset($componentNames[get_class($component)])) {
                 $d['text'] = $componentNames[get_class($component)];
             } else {
@@ -114,19 +103,27 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
             }
             if ($component instanceof Vpc_Paragraphs_Index) {
                 $d['cls'] = 'paragraphs';
+                $d['isParagraphs'] = true;
+                $d['expanded'] = true;
             } else {
                 $d['cls'] = 'leaf';
+                $d['isParagraphs'] = false;
+                if (sizeof($component->getChildComponents()) > 0) {
+                    $d['expanded'] = false;
+                } else {
+                    $d['expanded'] = true;
+                    $d['children'] = array();
+                }
             }
             if (sizeof($d['selectedDecorators']) > 0) {
                 $d['cls'] .= '_decorated';
             }
+            $d['uiProvider'] = 'MyNodeUI';
+            $d['status'] = $table->getStatus($componentId);
             $d['leaf'] = false;
             $d['class'] = get_class($component);
-            $d['isParagraphs'] = ($component instanceof Vpc_Paragraphs_Index);
-            $d['expanded'] = true;
             $data[] = $d;
         }
-
         $body = Zend_Json::encode($data);
         $this->getResponse()->setBody($body);
     }

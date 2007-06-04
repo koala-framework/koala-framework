@@ -94,7 +94,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
             $row->name = $name;
             $row->filename = $row->getUniqueString($name, 'filename', 'parent_id = ' . $pageData['parent_id']);
             $row->save();
-            unset($this->_pageData);
+            $this->_pageData = null;
             return true;
         }
         return false;
@@ -132,7 +132,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
             $row = $this->fetchRow('id = ' . $data['id']);
             $row->status = $status ? '1' : '0';
             $row->save();
-            unset($this->_pageData);
+            $this->_pageData = null;
             return true;
         }
         return false;
@@ -163,7 +163,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
             $insert['type'] = $parentData['type'] != '' ? $parentData['type'] : $type;
             $this->insert($insert);
 
-            unset($this->_pageData);
+            $this->_pageData = null;
             return (int)$componentId;
         }
         return 0;
@@ -189,7 +189,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
             $rows = $this->delete($where);
 
             // Daten zurücksetzen
-            unset($this->_pageData);
+            $this->_pageData = null;
             return $rows;
         }
         return 0;
@@ -222,7 +222,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
         $row->save();
         $row->numberize($nr, 'parent_id = ' . $parentId);
 
-        unset($this->_pageData);
+        $this->_pageData = null;
         return true;
     }
 }

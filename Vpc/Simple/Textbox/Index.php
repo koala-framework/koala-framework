@@ -5,7 +5,7 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
     private $_content;
     private $_contentParts;
 
-    private function _getContent()
+    public function getContent()
     {
         if (!isset($this->_content)) {
             $rowset = $this->_dao->getTable('Vps_Dao_Textbox')
@@ -23,7 +23,7 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
     {
         if (!isset($this->_contentParts))
         {
-            $content = $this->_getContent();
+            $content = $this->getContent();
             $this->_contentParts = array();
     
             $componentKey = $this->getComponentKey();
@@ -55,7 +55,7 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
         $ret = parent::getTemplateVars($mode);
 
         if ($mode == "edit") {
-            $ret['content'] = $this->_getContent();
+            $ret['content'] = $this->getContent();
         } else {
             $ret['contentParts'] = $this->_getContentParts($mode);
         }
@@ -84,10 +84,6 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
         return $this->_components;
     }
 
-    public function retrieveContent() {
-        return $this->_getContent();
-    }
-    
     public function saveContent($content) {
         $table = $this->_dao->getTable('Vps_Dao_Textbox');
         $rowset = $table->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
@@ -133,7 +129,7 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
     public function getFrontendEditingData()
     {
         $data = array();
-        $data['data'][] = array('id' => 'content', 'value' => $this->_getContent());
+        $data['data'][] = array('id' => 'content', 'value' => $this->getContent());
         return $data;
     }
 

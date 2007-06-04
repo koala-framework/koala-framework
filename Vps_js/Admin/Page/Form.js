@@ -13,6 +13,14 @@ Vps.Admin.Page.Form = function(renderTo, config)
     });
     
 
+    this.form.fieldset({legend:'Status', hideLabels:true});
+    this.form.add(new Ext.form.Checkbox({
+        boxLabel: 'online',
+        name: 'status',
+        disabled: true
+    }));
+    this.form.end();
+
     this.form.fieldset({legend:'Decorators', hideLabels:true});
     for (var dName in config.decorators) {
         this.form.add(new Ext.form.Checkbox({
@@ -33,7 +41,7 @@ Vps.Admin.Page.Form = function(renderTo, config)
 
     this.form.render(renderTo);
     
-    this.setup = function(id, selectedDecorators) {
+    this.setup = function(id, selectedDecorators, status) {
         this.form.items.each(function(b) { b.enable(); });
         this.form.buttons[0].enable();
         this.form.baseParams.id = id;
@@ -41,6 +49,9 @@ Vps.Admin.Page.Form = function(renderTo, config)
         for (var i in selectedDecorators) {
             var d = this.form.findField('decorators[' + selectedDecorators[i] + ']');
             if (d) { d.setValue(true); }
+        }
+        if (status) {
+            this.form.findField('status').setValue(true);
         }
     }
 }
