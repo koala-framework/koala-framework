@@ -33,7 +33,7 @@ class Vps_Controller_Action extends Zend_Controller_Action
         // Nur im Frontend
         if ($role != '' && $this instanceof Vps_Controller_Action_Web) {
             $files[] = '/Vps/Menu/Index.js';
-            $view = new Vps_View_Smarty_Ext($files, 'Vps.Menu.Index');
+            $view = new Vps_View_Smarty_Ext($files, 'Vps.Menu.Index', array('url' => $this->getRequest()->getPathInfo()));
             $view->assign('noHead', true);
             $view->assign('renderTo', 'Ext.DomHelper.insertFirst(document.body, \'<div \/>\', true)');
             //$view->assign('_debugMemoryUsage', memory_get_usage());
@@ -62,7 +62,28 @@ class Vps_Controller_Action extends Zend_Controller_Action
         
         // Berechtigungen
         $acl->allow('admin', 'admin');
-        
+
+        // Seite bearbeiten-Button
+        $pageId = $this->getRequest()->getParam('pageId');
+        $url = $this->getRequest()->getParam('url');
+        if ($pageId != '') {
+            $pageCollection = Vps_PageCollection_Abstract::getInstance();
+            $page = $pageCollection->getPageById($pageId);
+            $path = $pageCollection->getPath($page);
+            $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite betrachten', $path));
+            $acl->allow('admin', 'page');
+        } else if ($url != '') {
+            $pageCollection = Vps_PageCollection_Abstract::getInstance();
+            $page = $pageCollection->getPageByPath($url);
+            if ($page) {
+                $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite bearbeiten', '/admin/page?id=' . $page->getId()));
+                $acl->allow('admin', 'page');
+            }
+        } else {
+            $pageId = 0;
+        }
+
+
         return $acl;
     }
     

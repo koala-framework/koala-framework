@@ -97,7 +97,7 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
         } else {
             $config = new Zend_Config_Ini('../application/config.ini', 'pagecollection');
             $types = $config->pagecollection->pagetypes->toArray();
-            if (sizeof($types) > 1) {
+            if (sizeof($types) > 0) {
                 if ($id == 'root') {
                     foreach ($types as $type => $text) {
                         $data['id'] = $type;

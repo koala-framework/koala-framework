@@ -43,8 +43,8 @@ Vps.Admin.Page.Index = function(renderTo, config) {
     layout.add('center', new Ext.ContentPanel(Ext.DomHelper.append(document.body, '<iframe id="main" frameborder="no" />', true), {title: 'Inhalt des gewählten Seitenbausteins', fitToFrame:true}));
     layout.restoreState();
     layout.endUpdate();
-    
-    new Vps.Menu.Index('menuContainer', {role: this.role});
+
+    new Vps.Menu.Index('menuContainer', {role: this.role, pageId: config.pageId});
     this.tree = new Vps.Admin.Page.Tree('treeContainer', config);
     var form = new Vps.Admin.Page.Form('formContainer', config);
 

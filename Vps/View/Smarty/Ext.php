@@ -35,8 +35,8 @@ class Vps_View_Smarty_Ext extends Vps_View_Smarty
         // View einrichten
         parent::__construct(VPS_PATH . '/views');
         $this->assign('files', $files);
-        $this->assign('files', $files);
         $this->assign('class', $class);
+        $this->assign('noHead', false);
         $this->assign('libraryDomain', $libraryDomain);
         $this->assign('config', Zend_Json::encode($config));
     }
