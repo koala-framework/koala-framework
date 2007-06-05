@@ -59,6 +59,72 @@ class Vps_Db_Table_Row extends Zend_Db_Table_Row
      */
     public function numberize($fieldname, $value, $where = '')
     {
+        $where_and = $where;
+        if ($where_and != '') {
+            $where_and .= ' AND ';
+        }
+
+        $table = $this->getTable();
+        $db = $table->getAdapter();
+        $select = new Zend_Db_Select($db);
+        $info = $table->info();
+
+        $tablename = $info['name'];
+        $primaryKey = key($this->_getPrimaryKey());
+        $primaryValue = current($this->_getPrimaryKey());
+
+        // Überprüfen ob Tabellenfeld korrekt definiert ist
+        $rowAnzahl = (int)$db->fetchOne("SELECT COUNT(*) FROM $tablename");
+
+        $colMeta = $db->fetchRow("DESCRIBE $tablename $fieldname");
+        if (strpos($colMeta['Type'], 'unsigned') !== false) {
+            throw new Zend_Db_Exception("Attribute 'unsigned' is not allowed in Sortfield '$fieldname'.");
+        }
+        if (strpos($colMeta['Type'], 'tinyint') !== false) {
+            if ($rowAnzahl >= 120) {
+                throw new Zend_Db_Exception("Type of Sortfield '$fieldname' ('tinyint') too small. Try 'smallint'.");
+            }
+            if ($value > 127) {
+                $value = 127;
+            } else if ($value < -128) {
+                $value = -128;
+            }
+        } else if (strpos($colMeta['Type'], 'smallint') !== false) {
+            if ($rowAnzahl >= 32750) {
+                throw new Zend_Db_Exception("Type of Sortfield '$fieldname' ('smallint') too small. Try 'mediumint'.");
+            }
+            if ($value > 32767) {
+                $value = 32767;
+            } else if ($value < -32768) {
+                $value = -32768;
+            }
+        }
+
+        // Alle um 1 raufsetzen / runtersetzen, je nach Verschiebrichtung
+        if ($this->$fieldname > $value) {
+            $db->query("UPDATE $tablename SET $fieldname = $fieldname + 1 WHERE $where_and $fieldname >= $value");
+        } else if ($this->$fieldname < $value) {
+            $db->query("UPDATE $tablename SET $fieldname = $fieldname - 1 WHERE $where_and $fieldname <= $value");
+        }
+        // Zu bearbeitende Zeile ändern
+        $db->update($tablename, array($fieldname => $value), "$primaryKey = '$primaryValue'");
+
+        // Alle Elemente selecten
+        $sel = $select->from($tablename, array($primaryKey, $fieldname))->order($fieldname.' ASC');
+        if ($where != '') {
+            $sel->where($where);
+        }
+        $rows = $sel->query()->fetchAll();
+
+        // Alle Elemente von 1 aufwärts sortieren
+        $i = 1;
+        foreach ($rows as $row) {
+            if ($row[$fieldname] != $i) {
+                $db->update($tablename, array($fieldname => $i), "$primaryKey = '".$row[$primaryKey]."'");
+            }
+            $i++;
+        }
+
         return true;
     }
 }
