@@ -1,7 +1,7 @@
 <?php
 class Vps_Dao_Components extends Zend_Db_Table
 {
-    protected $_name = 'components';
+    protected $_name = 'vps_components';
     
     public function addComponent($class = 'Vpc_Empty')
     {
