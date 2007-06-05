@@ -1,7 +1,7 @@
 <?php
 class Vps_Dao_Pages extends Vps_Db_Table
 {
-    protected $_name = 'pages';
+    protected $_name = 'vps_pages';
     private $_pageData = null;
     private $_decoratorData = null;
 
@@ -57,11 +57,11 @@ class Vps_Dao_Pages extends Vps_Db_Table
     {
         if ($this->_pageData == null) {
             $sql = '
-                SELECT components.id component_id, components.component, pages.id, pages.parent_id, pages.type, pages.status, pages.name, pages.filename
-                FROM components
-                LEFT JOIN pages
-                ON components.id=pages.component_id
-                ORDER BY pages.nr
+                SELECT c.id component_id, c.component, p.id, p.parent_id, p.type, p.status, p.name, p.filename
+                FROM vps_components c
+                LEFT JOIN vps_pages p
+                ON c.id=p.component_id
+                ORDER BY p.nr
             ';
             $this->_pageData = $this->getAdapter()->fetchAssoc($sql);
         }
@@ -74,7 +74,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
             $this->_decoratorData = array();
             $sql = '
                 SELECT id, decorator, page_id
-                FROM decorators
+                FROM vps_decorators
             ';
             $data = $this->getAdapter()->fetchAll($sql);
             foreach ($data as $d) {
@@ -115,10 +115,10 @@ class Vps_Dao_Pages extends Vps_Db_Table
                 $add[] = $d;
             }
         }
-        $sql = "DELETE FROM decorators WHERE page_id='$id' AND decorator IN ('" . implode("', '", $delete) . "')";
+        $sql = "DELETE FROM vps_decorators WHERE page_id='$id' AND decorator IN ('" . implode("', '", $delete) . "')";
         $this->getAdapter()->query($sql);
         foreach ($add as $d) {
-            $sql = "INSERT INTO decorators SET page_id='$id', decorator='$d'";
+            $sql = "INSERT INTO vps_decorators SET page_id='$id', decorator='$d'";
             $this->getAdapter()->query($sql);
         }
         $this->_decoratorData = null;
