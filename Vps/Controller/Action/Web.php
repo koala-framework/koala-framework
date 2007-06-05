@@ -7,25 +7,14 @@ class Vps_Controller_Action_Web extends Vps_Controller_Action
         $page = $pageCollection->getPageByPath($this->getRequest()->getPathInfo());
         $mode = $this->getRequest()->getParam('mode');
         
-        $body = $this->_renderPage($page, $mode, false);
-        $this->getResponse()
-            ->setHeader('Content-Type', 'text/html')
-            ->appendBody($body);
-    }
-
-
-    protected function _renderPage($page, $mode, $usePageTemplate)
-    {
         $templateVars = $page->getTemplateVars($mode);
         $view = new Vps_View_Smarty();
         $view->assign('component', $templateVars);
+        $view->assign('title', $pageCollection->getTitle($page));
         $view->assign('mode', $mode);
-        if ($usePageTemplate) {
-            $body = $view->render($templateVars['template']);
-        } else {
-            $body = $view->render('master/default.html');
-        }
-        return $body;
+        $body = $view->render('master/default.html');
+        $this->getResponse()->appendBody($body);
     }
+
 
 }

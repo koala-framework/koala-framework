@@ -48,23 +48,29 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
     {
         $ids = array();
         $matches = array();
-        if (preg_match('/^\/[a-z0-9]+_[a-z0-9]+_([0-9\_\.]+)\/(\w+\/)?$/', $path, $matches)) {
-            if (isset($matches[2]) && $matches[2] != '') {
-                $ids = $this->getIdsForPath('/' . $matches[2], $this->getPageById($matches[1]));
+        if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_FLAT) {
+            if (preg_match('/^\/[a-z0-9]+_[a-z0-9]+_([0-9\_\.]+)\.html?$/', $path, $matches)) {
+                if (isset($matches[2]) && $matches[2] != '') {
+                    $ids = $this->getIdsForPath('/' . $matches[2], $this->getPageById($matches[1]));
+                } else {
+                    $ids[] = $matches[1];
+                }
             } else {
-                $ids[] = $matches[1];
+                $ids[] = $this->getRootPage()->getId();
             }
-        } else if (preg_match('/^(\/\w+)*\/$/', $path)) { // hierarchische URLs, Format /x/y/z/
-            $page = $this->getRootPage();
-            $ids[] = $page->getId();
-            $pathParts = explode('/', substr($path, 1, -1));
-            foreach($pathParts as $pathPart) {
-                if ($pathPart != '') {
-                    $page = $this->getChildPage($page, $pathPart);
-                    if (!$page) {
-                        return array();
-                    } else {
-                        $ids[] = $page->getId();
+        } else if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL) {
+            if (preg_match('/^(\/\w+)*\/$/', $path)) { // hierarchische URLs, Format /x/y/z/
+                $page = $this->getRootPage();
+                $ids[] = $page->getId();
+                $pathParts = explode('/', substr($path, 1, -1));
+                foreach($pathParts as $pathPart) {
+                    if ($pathPart != '') {
+                        $page = $this->getChildPage($page, $pathPart);
+                        if (!$page) {
+                            return array();
+                        } else {
+                            $ids[] = $page->getId();
+                        }
                     }
                 }
             }
@@ -141,11 +147,22 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
             }
         } else {
             if ($pageId != $rootId) {
-                $path .= 'de_' . $this->_pageFilenames[$pageId] . '_' . $pageId;
+                $path .= 'de_' . $this->_pageFilenames[$pageId] . '_' . $pageId . '.html';
             }
         }
 
         return $path;
     }
-
+    
+    public function getTitle($page)
+    {
+        $title = array();
+        while ($page) {
+            $data = $this->getPageData($page);
+            $title[] = $data['name'];
+            $page = $this->getParentPage($page);
+        }
+        return implode(' - ', $title);
+    }
+    
 }

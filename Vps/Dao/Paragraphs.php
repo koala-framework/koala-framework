@@ -23,7 +23,7 @@ class Vps_Dao_Paragraphs extends Vps_Db_Table
         $sql = '
             SELECT p.component_id id, p.nr, c.component, c.status
             FROM component_paragraphs p
-            LEFT JOIN components c
+            LEFT JOIN vps_components c
             ON p.component_id=c.id
             WHERE ' . $where . '
             ORDER BY p.nr
@@ -103,10 +103,11 @@ class Vps_Dao_Paragraphs extends Vps_Db_Table
             throw new Vps_Dao_Exception('Paragraph with id ' . $componentId . ' not found');
         }
         if ($direction == 'up') {
-            $nr = $componentData['nr'] + 1;
-        } else if ($direction = 'down') {
             $nr = $componentData['nr'] - 1;
+        } else if ($direction = 'down') {
+            $nr = $componentData['nr'] + 1;
         }
-        return $this->numberize($componentId, 'nr', $nr, 'parent_component_id = ' . $id);
+        $where = $this->getAdapter()->quoteInto('component_id = ?', $componentId);
+        return $this->numberize($where, 'nr', $nr, 'parent_component_id = ' . $id);
     }
 }

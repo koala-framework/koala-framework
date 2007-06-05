@@ -23,7 +23,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         $parsedId = Vpc_Abstract::parseId($id);
         $componentId = $parsedId['componentId'];
-            
+
         if ($className == '') {
             $data = $dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
             if ($data) {

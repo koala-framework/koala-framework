@@ -39,7 +39,7 @@ class Vps_Controller_Response_Ajax extends Zend_Controller_Response_Abstract
             echo Zend_Json::encode($out);
         } else {
             foreach ($this->getException() as $exception) {
-                echo $exception->__toString();
+                p($exception);
             }
             parent::outputBody();
         }

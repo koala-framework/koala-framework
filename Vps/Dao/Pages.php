@@ -51,6 +51,14 @@ class Vps_Dao_Pages extends Vps_Db_Table
                 return $d;
             }
         }
+        $componentId = $this->createPage(0);
+        if ($componentId > 0) {
+            $this->savePageName($componentId, 'Home');
+            $this->_pageData = null;
+            return $this->retrieveRootPageData();
+        }
+
+        throw new Vps_Exception('Could not find nor create Root Page');
     }
 
     private function _retrievePageData()
@@ -140,33 +148,45 @@ class Vps_Dao_Pages extends Vps_Db_Table
 
     public function createPage($parentComponentId, $type = '')
     {
-        $data = $this->retrievePageData($parentComponentId);
-        if (!empty($data)) {
-            // Leere Komponente hinzufügen
-            $table = $this->getDao()->getTable('Vps_Dao_Components');
-            $componentId = $table->addComponent();
+        // Leere Komponente hinzufügen
+        $table = $this->getDao()->getTable('Vps_Dao_Components');
+        $componentId = $table->addComponent();
 
-            // Eintrag in Pages-Tabelle
+        // Eintrag in Pages-Tabelle
+        if ($parentComponentId > 0) {
             $parentData = $this->retrievePageData($parentComponentId);
             if (empty($parentData)) {
                 $parentData = $this->retrieveRootPageData();
             }
             $parentId = $parentData['id'];
             $nr = sizeof($this->retrieveChildPagesData($parentId)) + 1;
-
-            $insert = array();
-            $insert['name'] = 'New Page';
-            $insert['filename'] = 'newpage';
-            $insert['component_id'] = $componentId;
-            $insert['parent_id'] = $parentId;
-            $insert['nr'] = $nr;
-            $insert['type'] = $parentData['type'] != '' ? $parentData['type'] : $type;
-            $this->insert($insert);
-
-            $this->_pageData = null;
-            return (int)$componentId;
+            $name = 'New Page';
+            $filename = 'newpage';
+            $type = $parentData['type'] != '' ? $parentData['type'] : $type;
+        } else {
+            foreach ($this->_retrievePageData() as $d) {
+                if ($d['parent_id'] == '0') {
+                    throw new Vps_Exception('Cannot create RootPage because already existing.');
+                }
+            }
+            $nr = 1;
+            $parentId = 0;
+            $name = 'Home';
+            $filename = 'home';
+            $type = '';
         }
-        return 0;
+
+        $insert = array();
+        $insert['name'] = $name;
+        $insert['filename'] = $filename;
+        $insert['component_id'] = $componentId;
+        $insert['parent_id'] = $parentId;
+        $insert['nr'] = $nr;
+        $insert['type'] = $type;
+        $this->insert($insert);
+
+        $this->_pageData = null;
+        return (int)$componentId;
     }
 
     public function deletePage($componentId)
@@ -220,7 +240,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
         $row->parent_id = $parentId;
         $row->type = $targetData['type'] != '' ? $targetData['type'] : $type;
         $row->save();
-        $row->numberize($nr, 'parent_id = ' . $parentId);
+        $row->numberize('nr', $nr, 'parent_id = ' . $parentId);
 
         $this->_pageData = null;
         return true;
