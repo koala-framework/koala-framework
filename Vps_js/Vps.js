@@ -5,3 +5,9 @@ Ext.namespace(
 'Vps.Menu'
 );
 
+
+Ext.applyIf(Array.prototype, {
+    each : function(fn, scope){
+        Ext.each(this, fn, scope);
+    }
+});

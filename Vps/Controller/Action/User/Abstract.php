@@ -24,23 +24,24 @@ class Vps_Controller_Action_User_Abstract extends Vps_Controller_Action
         $adapter->setIdentity($username);
         $adapter->setCredential($password);
         $result = $auth->authenticate($adapter);
-
         if (!$result->isValid()) {
             $errors = $result->getMessages();
-            $this->getResponse()->appendJson('error', implode("<br />", $errors));
+            $this->_helper->json('error', implode("<br />", $errors));
             $success = false;
         } else {
             $this->_onLogin($adapter->getResultRowObject());
             $success = true;
         }
-        $this->getResponse()->appendJson('success', $success);
+// p('foo');
+// exit;
+        $this->_helper->json('success', $success);
     }
     
     public function ajaxLogoutAction()
     {
         Zend_Auth::getInstance()->clearIdentity();
         $this->_onLogout();
-        $this->getResponse()->appendJson('success', true);
+        $this->_helper->json('success', true);
     }
 
     protected function _createAuthAdapter()
