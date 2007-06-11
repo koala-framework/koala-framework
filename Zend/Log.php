@@ -16,7 +16,7 @@
  * @package    Zend_Log
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Log.php 4560 2007-04-20 08:01:32Z mike $
+ * @version    $Id: Log.php 5112 2007-06-04 23:28:58Z mike $
  */
 
 /** Zend_Log_Filter_Priority */
@@ -27,7 +27,7 @@ require_once 'Zend/Log/Filter/Priority.php';
  * @package    Zend_Log
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Log.php 4560 2007-04-20 08:01:32Z mike $
+ * @version    $Id: Log.php 5112 2007-06-04 23:28:58Z mike $
  */ 
 class Zend_Log
 {
@@ -65,7 +65,6 @@ class Zend_Log
      * Class constructor.  Create a new logger
      *
      * @param Zend_Log_Writer_Abstract|null  $writer  default writer
-     * @param array                          $extras  extra event
      */
     public function __construct($writer = null)
     {

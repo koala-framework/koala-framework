@@ -18,7 +18,7 @@
  * @subpackage Table
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Abstract.php 4697 2007-05-03 21:23:16Z bkarwin $
+ * @version    $Id: Abstract.php 5100 2007-06-04 19:02:22Z bkarwin $
  */
 
 /**
@@ -132,65 +132,65 @@ abstract class Zend_Db_Table_Row_Abstract
      * You can override this method in a custom Row class
      * to implement column name mappings, for example inflection.
      *
-     * @param string $key Column name given.
+     * @param string $columnName Column name given.
      * @return string The column name after transformation applied (none by default).
-     * @throws Zend_Db_Table_Row_Exception if the $key is not a string.
+     * @throws Zend_Db_Table_Row_Exception if the $columnName is not a string.
      */
-    protected function _transformColumn($key)
+    protected function _transformColumn($columnName)
     {
-        if (!is_string($key)) {
+        if (!is_string($columnName)) {
             require_once 'Zend/Db/Table/Row/Exception.php';
             throw new Zend_Db_Table_Row_Exception('Specified column is not a string');
         }
         // Perform no transformation by default
-        return $key;
+        return $columnName;
     }
 
     /**
      * Retrieve row field value
      *
-     * @param  string $key The user-specified column name.
-     * @return string      The corresponding column value.
-     * @throws Zend_Db_Table_Row_Exception if the $key is not a column in the row.
+     * @param  string $columnName The user-specified column name.
+     * @return string             The corresponding column value.
+     * @throws Zend_Db_Table_Row_Exception if the $columnName is not a column in the row.
      */
-    public function __get($key)
+    public function __get($columnName)
     {
-        $key = $this->_transformColumn($key);
-        if (!array_key_exists($key, $this->_data)) {
+        $columnName = $this->_transformColumn($columnName);
+        if (!array_key_exists($columnName, $this->_data)) {
             require_once 'Zend/Db/Table/Row/Exception.php';
-            throw new Zend_Db_Table_Row_Exception("Specified column \"$key\" is not in the row");
+            throw new Zend_Db_Table_Row_Exception("Specified column \"$columnName\" is not in the row");
         }
-        return $this->_data[$key];
+        return $this->_data[$columnName];
     }
 
     /**
      * Set row field value
      *
-     * @param  string $key   The column key.
-     * @param  mixed  $value The value for the property.
+     * @param  string $columnName The column key.
+     * @param  mixed  $value      The value for the property.
      * @return void
      * @throws Zend_Db_Table_Row_Exception
      */
-    public function __set($key, $value)
+    public function __set($columnName, $value)
     {
-        $key = $this->_transformColumn($key);
-        if (!array_key_exists($key, $this->_data)) {
+        $columnName = $this->_transformColumn($columnName);
+        if (!array_key_exists($columnName, $this->_data)) {
             require_once 'Zend/Db/Table/Row/Exception.php';
-            throw new Zend_Db_Table_Row_Exception("Specified column \"$key\" is not in the row");
+            throw new Zend_Db_Table_Row_Exception("Specified column \"$columnName\" is not in the row");
         }
-        $this->_data[$key] = $value;
+        $this->_data[$columnName] = $value;
     }
 
     /**
      * Test existence of row field
      *
-     * @param  string  $key   The column key.
+     * @param  string  $columnName   The column key.
      * @return boolean
      */
-    public function __isset($key)
+    public function __isset($columnName)
     {
-        $key = $this->_transformColumn($key);
-        return array_key_exists($key, $this->_data);
+        $columnName = $this->_transformColumn($columnName);
+        return array_key_exists($columnName, $this->_data);
     }
 
     /**
@@ -501,8 +501,8 @@ abstract class Zend_Db_Table_Row_Abstract
      */
     public function setFromArray(array $data)
     {
-        foreach ($data as $key => $value) {
-            $this->$key = $value;
+        foreach ($data as $columnName => $value) {
+            $this->$columnName = $value;
         }
 
         return $this;
@@ -547,11 +547,11 @@ abstract class Zend_Db_Table_Row_Abstract
     {
         $where = array();
         $db = $this->_getTable()->getAdapter();
-        $keys = $this->_getPrimaryKey($dirty);
+        $primaryKey = $this->_getPrimaryKey($dirty);
 
         // retrieve recently updated row using primary keys
-        foreach ($keys as $key => $val) {
-            $where[] = $db->quoteInto($db->quoteIdentifier($key) . ' = ?', $val);
+        foreach ($primaryKey as $columnName => $val) {
+            $where[] = $db->quoteInto($db->quoteIdentifier($columnName, true) . ' = ?', $val);
         }
 
         return $where;
@@ -699,7 +699,7 @@ abstract class Zend_Db_Table_Row_Abstract
         $map = $this->_prepareReference($dependentTable, $this->_getTable(), $ruleKey);
 
         for ($i = 0; $i < count($map[Zend_Db_Table_Abstract::COLUMNS]); ++$i) {
-            $cond = $db->quoteIdentifier($map[Zend_Db_Table_Abstract::COLUMNS][$i]) . ' = ?';
+            $cond = $db->quoteIdentifier($map[Zend_Db_Table_Abstract::COLUMNS][$i], true) . ' = ?';
             $where[$cond] = $this->_data[$map[Zend_Db_Table_Abstract::REF_COLUMNS][$i]];
         }
         return $dependentTable->fetchAll($where);
@@ -738,7 +738,7 @@ abstract class Zend_Db_Table_Row_Abstract
         $map = $this->_prepareReference($this->_getTable(), $parentTable, $ruleKey);
 
         for ($i = 0; $i < count($map[Zend_Db_Table_Abstract::COLUMNS]); ++$i) {
-            $cond = $db->quoteIdentifier($map[Zend_Db_Table_Abstract::REF_COLUMNS][$i]) . ' = ?';
+            $cond = $db->quoteIdentifier($map[Zend_Db_Table_Abstract::REF_COLUMNS][$i], true) . ' = ?';
             $where[$cond] = $this->_data[$map[Zend_Db_Table_Abstract::COLUMNS][$i]];
         }
         return $parentTable->fetchRow($where);
@@ -800,8 +800,8 @@ abstract class Zend_Db_Table_Row_Abstract
         $matchMap = $this->_prepareReference($intersectionTable, $matchTable, $matchRefRule);
 
         for ($i = 0; $i < count($matchMap[Zend_Db_Table_Abstract::COLUMNS]); ++$i) {
-            $interCol = $db->quoteIdentifier('i') . '.' . $db->quoteIdentifier($matchMap[Zend_Db_Table_Abstract::COLUMNS][$i]);
-            $matchCol = $db->quoteIdentifier('m') . '.' . $db->quoteIdentifier($matchMap[Zend_Db_Table_Abstract::REF_COLUMNS][$i]);
+            $interCol = $db->quoteIdentifier('i', true) . '.' . $db->quoteIdentifier($matchMap[Zend_Db_Table_Abstract::COLUMNS][$i], true);
+            $matchCol = $db->quoteIdentifier('m', true) . '.' . $db->quoteIdentifier($matchMap[Zend_Db_Table_Abstract::REF_COLUMNS][$i], true);
             $joinCond[] = "$interCol = $matchCol";
         }
         $joinCond = implode(' AND ', $joinCond);
@@ -813,7 +813,7 @@ abstract class Zend_Db_Table_Row_Abstract
         $callerMap = $this->_prepareReference($intersectionTable, $this->_getTable(), $callerRefRule);
 
         for ($i = 0; $i < count($callerMap[Zend_Db_Table_Abstract::COLUMNS]); ++$i) {
-            $interCol = $db->quoteIdentifier('i') . '.' . $db->quoteIdentifier($callerMap[Zend_Db_Table_Abstract::COLUMNS][$i]);
+            $interCol = $db->quoteIdentifier('i', true) . '.' . $db->quoteIdentifier($callerMap[Zend_Db_Table_Abstract::COLUMNS][$i], true);
             $value = $this->_data[$callerMap[Zend_Db_Table_Abstract::REF_COLUMNS][$i]];
             $select->where("$interCol = ?", $value);
         }
@@ -823,7 +823,7 @@ abstract class Zend_Db_Table_Row_Abstract
             'table'    => $matchTable,
             'data'     => $stmt->fetchAll(Zend_Db::FETCH_ASSOC),
             'rowClass' => $matchTable->getRowClass(),
-            'clean'    => true
+            'stored'   => true
         );
 
         $rowsetClass = $matchTable->getRowsetClass();

@@ -100,19 +100,20 @@ class Zend_XmlRpc_Client
     /**
      * Create a new XML-RPC client to a remote server
      *
-     * @param string $server      Full address of the XML-RPC service
-     *                            (e.g. http://time.xmlrpc.com/RPC2)
+     * @param  string $server      Full address of the XML-RPC service
+     *                             (e.g. http://time.xmlrpc.com/RPC2)
+     * @param  Zend_Http_Client $httpClient HTTP Client to use for requests
+     * @return void
      */
-    public function __construct($server, $httpClient = null, $introspector = null)
+    public function __construct($server, Zend_Http_Client $httpClient = null)
     {
         if ($httpClient === null) {
 			$this->_httpClient = new Zend_Http_Client();
+        } else {
+            $this->_httpClient = $httpClient;
         }
 
-        if ($introspector === null) {
-            $this->_introspector = new Zend_XmlRpc_Client_ServerIntrospection($this);
-        }
-        
+        $this->_introspector  = new Zend_XmlRpc_Client_ServerIntrospection($this);
         $this->_serverAddress = $server;
     }
 
@@ -120,10 +121,10 @@ class Zend_XmlRpc_Client
     /**
      * Sets the HTTP client object to use for connecting the XML-RPC server.
      *
-     * @param  Zend_Http_Client_Abstract $httpClient
-     * @return Zend_Http_Client_Abstract
+     * @param  Zend_Http_Client $httpClient
+     * @return Zend_Http_Client
      */
-    public function setHttpClient($httpClient)
+    public function setHttpClient(Zend_Http_Client $httpClient)
     {
         return $this->_httpClient = $httpClient;
     }
@@ -146,7 +147,7 @@ class Zend_XmlRpc_Client
 	 * @param  Zend_XmlRpc_Client_ServerIntrospection
 	 * @return Zend_XmlRpc_Client_ServerIntrospection
 	 */
-	public function setIntrospector($introspector)
+	public function setIntrospector(Zend_XmlRpc_Client_ServerIntrospection $introspector)
 	{
 	    return $this->_introspector = $introspector;
 	}

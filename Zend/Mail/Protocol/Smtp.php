@@ -309,7 +309,8 @@ class Zend_Mail_Protocol_Smtp extends Zend_Mail_Protocol_Abstract
     public function rset()
     {
         $this->_send('RSET');
-        $this->_expect(250);
+        // MS ESMTP doesn't follow RFC, see [ZF-1377]
+        $this->_expect(array(250, 220));
 
         $this->_mail = false;
         $this->_rcpt = false;

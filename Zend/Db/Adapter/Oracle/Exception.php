@@ -49,6 +49,8 @@ class Zend_Db_Adapter_Oracle_Exception extends Zend_Db_Adapter_Exception
                                . substr($error['sqltext'], $error['offset']);
             }
             $this->code = $error['code'];
+       } else if (is_string($error)) {
+           $this->message = $error;
        }
        if (!$this->code && $code) {
            $this->code = $code;

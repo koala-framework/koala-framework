@@ -39,10 +39,10 @@ class Zend_Search_Lucene_Search_Query_Empty extends Zend_Search_Lucene_Search_Qu
     /**
      * Re-write query into primitive queries in the context of specified index
      *
-     * @param Zend_Search_Lucene $index
+     * @param Zend_Search_Lucene_Interface $index
      * @return Zend_Search_Lucene_Search_Query
      */
-    public function rewrite(Zend_Search_Lucene $index)
+    public function rewrite(Zend_Search_Lucene_Interface $index)
     {
         return $this;
     }
@@ -50,10 +50,10 @@ class Zend_Search_Lucene_Search_Query_Empty extends Zend_Search_Lucene_Search_Qu
     /**
      * Optimize query in the context of specified index
      *
-     * @param Zend_Search_Lucene $index
+     * @param Zend_Search_Lucene_Interface $index
      * @return Zend_Search_Lucene_Search_Query
      */
-    public function optimize(Zend_Search_Lucene $index)
+    public function optimize(Zend_Search_Lucene_Interface $index)
     {
         // "Empty" query is a primitive query and don't need to be optimized
         return $this;
@@ -62,10 +62,10 @@ class Zend_Search_Lucene_Search_Query_Empty extends Zend_Search_Lucene_Search_Qu
     /**
      * Constructs an appropriate Weight implementation for this query.
      *
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return Zend_Search_Lucene_Search_Weight
      */
-    public function createWeight($reader)
+    public function createWeight(Zend_Search_Lucene_Interface $reader)
     {
         return new Zend_Search_Lucene_Search_Weight_Empty();
     }
@@ -74,9 +74,9 @@ class Zend_Search_Lucene_Search_Query_Empty extends Zend_Search_Lucene_Search_Qu
      * Execute query in context of index reader
      * It also initializes necessary internal structures
      *
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      */
-    public function execute($reader)
+    public function execute(Zend_Search_Lucene_Interface $reader)
     {
         // Do nothing
     }
@@ -97,10 +97,10 @@ class Zend_Search_Lucene_Search_Query_Empty extends Zend_Search_Lucene_Search_Qu
      * Score specified document
      *
      * @param integer $docId
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return float
      */
-    public function score($docId, $reader)
+    public function score($docId, Zend_Search_Lucene_Interface $reader)
     {
         return 0;
     }

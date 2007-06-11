@@ -17,14 +17,14 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Between.php 3278 2007-02-07 21:54:50Z darby $
+ * @version    $Id: Between.php 5134 2007-06-06 17:54:16Z darby $
  */
 
 
 /**
- * @see Zend_Validate_Interface
+ * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Interface.php';
+require_once 'Zend/Validate/Abstract.php';
 
 
 /**
@@ -33,8 +33,38 @@ require_once 'Zend/Validate/Interface.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Validate_Between implements Zend_Validate_Interface
+class Zend_Validate_Between extends Zend_Validate_Abstract
 {
+    /**
+     * Validation failure message key for when the value is not between the min and max, inclusively
+     */
+    const NOT_BETWEEN        = 'notBetween';
+
+    /**
+     * Validation failure message key for when the value is not strictly between the min and max
+     */
+    const NOT_BETWEEN_STRICT = 'notBetweenStrict';
+
+    /**
+     * Validation failure message template definitions
+     *
+     * @var array
+     */
+    protected $_messageTemplates = array(
+        self::NOT_BETWEEN        => "'%value%' is not between '%min%' and '%max%', inclusively",
+        self::NOT_BETWEEN_STRICT => "'%value%' is not strictly between '%min%' and '%max%'"
+    );
+
+    /**
+     * Additional variables available for validation failure messages
+     *
+     * @var array
+     */
+    protected $_messageVariables = array(
+        'min' => '_min',
+        'max' => '_max'
+    );
+
     /**
      * Minimum value
      *
@@ -53,18 +83,11 @@ class Zend_Validate_Between implements Zend_Validate_Interface
      * Whether to do inclusive comparisons, allowing equivalence to min and/or max
      *
      * If false, then strict comparisons are done, and the value may equal neither
-     * the min or max options
+     * the min nor max options
      *
      * @var boolean
      */
     protected $_inclusive;
-
-    /**
-     * Array of validation failure messages
-     *
-     * @var array
-     */
-    protected $_messages = array();
 
     /**
      * Sets validator options
@@ -158,30 +181,20 @@ class Zend_Validate_Between implements Zend_Validate_Interface
      */
     public function isValid($value)
     {
-        $this->_messages = array();
+        $this->_setValue($value);
+
         if ($this->_inclusive) {
             if ($this->_min > $value || $value > $this->_max) {
-                $this->_messages[] = "'$value' is not between '$this->_min' and '$this->_max', inclusively";
+                $this->_error(self::NOT_BETWEEN);
                 return false;
             }
         } else {
             if ($this->_min >= $value || $value >= $this->_max) {
-                $this->_messages[] = "'$value' is not strictly between '$this->_min' and '$this->_max'";
+                $this->_error(self::NOT_BETWEEN_STRICT);
                 return false;
             }
         }
         return true;
     }
 
-    /**
-     * Defined by Zend_Validate_Interface
-     *
-     * Returns array of validation failure messages
-     *
-     * @return array
-     */
-    public function getMessages()
-    {
-        return $this->_messages;
-    }
 }

@@ -1,29 +1,24 @@
 <?php
 class Vps_Controller_Action extends Zend_Controller_Action
 {
-    protected $_auth = false;
-    
     public function preDispatch()
     {
-        if ($this->_auth) {
-            $acl = $this->_getAcl();
-            $role = $this->_getUserRole();
-            $resource = strtolower(str_replace('Controller', '', str_replace('Vps_Controller_Action_', '', get_class($this))));
-            
-            if (!($this instanceof Vps_Controller_Action_User) &&
-                !$acl->isAllowed($role, $resource))
-            {
-                if ($this->_isAjax()) {
-                    $ret['success'] = false;
-                    $ret['login'] = true;
-                    echo Zend_Json::encode($ret);
-                    die();
-                } else {
-                    $this->_forward('login', 'user', '');
-                }
+        $acl = $this->_getAcl();
+        $role = $this->_getUserRole();
+        $resource = strtolower(str_replace('Controller', '', str_replace('Vps_Controller_Action_', '', get_class($this))));
+        if (!($this instanceof Vps_Controller_Action_User_Abstract) &&
+            !($this instanceof Vps_Controller_Action_Error) &&
+            !$acl->isAllowed($role, $resource))
+        {
+            if ($this->_isAjax()) {
+                $ret['success'] = false;
+                $ret['login'] = true;
+                echo Zend_Json::encode($ret);
+                die();
+            } else {
+                $this->_forward('login', 'user');
             }
         }
-
     }
     
     public function postDispatch()
@@ -46,45 +41,10 @@ class Vps_Controller_Action extends Zend_Controller_Action
         $userNamespace = new Zend_Session_Namespace('User');
         return $userNamespace->role;
     }
-    
+
     protected function _getAcl()
     {
-        $acl = new Vps_Acl();
-        
-        // Roles
-        $acl->addRole(new Vps_Acl_Role('admin'));
-        
-        // Resources
-        $acl->add(new Vps_Acl_Resource('admin', 'Admin'));
-            $acl->add(new Vps_Acl_Resource('admin_pages', 'Seitenbaum', '/admin/pages'), 'admin');
-            $acl->add(new Zend_Acl_Resource('admin_page'), 'admin');
-            $acl->add(new Zend_Acl_Resource('admin_component'), 'admin');
-        
-        // Berechtigungen
-        $acl->allow('admin', 'admin');
-
-        // Seite bearbeiten-Button
-        $pageId = $this->getRequest()->getParam('pageId');
-        $url = $this->getRequest()->getParam('url');
-        if ($pageId != '') {
-            $pageCollection = Vps_PageCollection_Abstract::getInstance();
-            $page = $pageCollection->getPageById($pageId);
-            $path = $pageCollection->getPath($page);
-            $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite betrachten', $path));
-            $acl->allow('admin', 'page');
-        } else if ($url != '') {
-            $pageCollection = Vps_PageCollection_Abstract::getInstance();
-            $page = $pageCollection->getPageByPath($url);
-            if ($page) {
-                $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite bearbeiten', '/admin/page?id=' . $page->getId()));
-                $acl->allow('admin', 'page');
-            }
-        } else {
-            $pageId = 0;
-        }
-
-
-        return $acl;
+        return Zend_Registry::get('acl');
     }
     
     protected function _isAjax()

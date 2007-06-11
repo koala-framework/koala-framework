@@ -35,8 +35,8 @@ require_once 'Zend/View/Helper/FormElement.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_View_Helper_FormImage extends Zend_View_Helper_FormElement {
-    
+class Zend_View_Helper_FormImage extends Zend_View_Helper_FormElement 
+{
     /**
      * Generates an 'image' element.
      * 
@@ -71,15 +71,15 @@ class Zend_View_Helper_FormImage extends Zend_View_Helper_FormElement {
         if ($disable) {
             // disabled, just an image tag
             $xhtml = '<image'
-                   . ' alt="' . htmlspecialchars($name, ENT_COMPAT, 'UTF-8') . '"'
-                   . ' src="' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '"'
+                   . ' alt="' . $this->view->escape($name) . '"'
+                   . ' src="' . $this->view->escape($value) . '"'
                    . $this->_htmlAttribs($attribs) . ' />';
         } else {
             // enabled
             $xhtml = '<input type="image"'
-                   . ' name="' . htmlspecialchars($name, ENT_COMPAT, 'UTF-8') . '"'
-                   . ' id="' . htmlspecialchars($id, ENT_COMPAT, 'UTF-8') . '"'
-                   . ' src="' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '"'
+                   . ' name="' . $this->view->escape($name) . '"'
+                   . ' id="' . $this->view->escape($id) . '"'
+                   . ' src="' . $this->view->escape($value) . '"'
                    . $this->_htmlAttribs($attribs) . ' />';
         }
         

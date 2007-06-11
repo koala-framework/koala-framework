@@ -49,18 +49,18 @@ class Zend_Search_Lucene_Proxy implements Zend_Search_Lucene_Interface
     public function __construct(Zend_Search_Lucene_Interface $index)
     {
         $this->_index = $index;
+        $this->_index->addReference();
     }
 
     /**
-     * Close current index and free resources
-     *
-     * Should be invoked only just before destruction.
-     *
-     * @internal
+     * Object destructor
      */
-    public function close()
+    public function __destruct()
     {
-        $this->_index->close();
+        if ($this->_index !== null) {
+            // This code is invoked if Zend_Search_Lucene_Interface object constructor throws an exception
+            $this->_index->removeReference();
+        }
         $this->_index = null;
     }
 
@@ -129,7 +129,7 @@ class Zend_Search_Lucene_Proxy implements Zend_Search_Lucene_Interface
      */
     public static function setDefaultSearchField($fieldName)
     {
-        $this->_index->setDefaultSearchField($fieldName);
+        Zend_Search_Lucene::setDefaultSearchField($fieldName);
     }
 
     /**
@@ -141,7 +141,7 @@ class Zend_Search_Lucene_Proxy implements Zend_Search_Lucene_Interface
      */
     public static function getDefaultSearchField()
     {
-        return $this->_index->getDefaultSearchField();
+        return Zend_Search_Lucene::getDefaultSearchField();
     }
 
     /**
@@ -265,7 +265,11 @@ class Zend_Search_Lucene_Proxy implements Zend_Search_Lucene_Interface
      */
     public function find($query)
     {
-        return $this->_index->find($query);
+        // actual parameter list
+        $parameters = func_get_args();
+
+        // invoke $this->_index->find() method with specified parameters
+        return call_user_func_array(array(&$this->_index, 'find'), $parameters);
     }
 
     /**
@@ -313,6 +317,18 @@ class Zend_Search_Lucene_Proxy implements Zend_Search_Lucene_Interface
     public function termDocs(Zend_Search_Lucene_Index_Term $term)
     {
         return $this->_index->termDocs($term);
+    }
+
+    /**
+     * Returns an array of all term freqs.
+     * Return array structure: array( docId => freq, ...)
+     *
+     * @param Zend_Search_Lucene_Index_Term $term
+     * @return integer
+     */
+    public function termFreqs(Zend_Search_Lucene_Index_Term $term)
+    {
+        return $this->_index->termFreqs($term);
     }
 
     /**
@@ -426,5 +442,27 @@ class Zend_Search_Lucene_Proxy implements Zend_Search_Lucene_Interface
     public function undeleteAll()
     {
         return $this->_index->undeleteAll();
+    }
+
+    /**
+     * Add reference to the index object
+     *
+     * @internal
+     */
+    public function addReference()
+    {
+        return $this->_index->addReference();
+    }
+
+    /**
+     * Remove reference from the index object
+     *
+     * When reference count becomes zero, index is closed and resources are cleaned up
+     *
+     * @internal
+     */
+    public function removeReference()
+    {
+        return $this->_index->removeReference();
     }
 }

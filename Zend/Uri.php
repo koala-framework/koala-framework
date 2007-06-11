@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -16,22 +17,20 @@
  * @package    Zend_Uri
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Uri.php 5051 2007-05-29 19:31:09Z darby $
  */
 
+
 /**
- * Zend_Uri_Exception
+ * @see Zend_Uri_Exception
  */
 require_once 'Zend/Uri/Exception.php';
 
-/**
- * Zend_Uri_Http
- */
-require_once 'Zend/Uri/Http.php';
 
 /**
- * Zend_Uri_Mailto
+ * @see Zend_Loader
  */
-require_once 'Zend/Uri/Mailto.php';
+require_once 'Zend/Loader.php';
 
 
 /**
@@ -42,11 +41,11 @@ require_once 'Zend/Uri/Mailto.php';
  */
 abstract class Zend_Uri
 {
-	/**
-	 * Scheme of this URI (http, ftp, etc.)
-	 * @var string
-	 */
-	protected $_scheme = '';
+    /**
+     * Scheme of this URI (http, ftp, etc.)
+     * @var string
+     */
+    protected $_scheme = '';
 
     /**
      * Return a string representation of this URI.
@@ -120,9 +119,10 @@ abstract class Zend_Uri
                 } else {
                     $className = 'Zend_Uri_' . ucfirst($scheme);
                 }
+                Zend_Loader::loadClass($className);
                 return new $className($scheme, $schemeSpecific);
             default:
-				throw new Zend_Uri_Exception("Scheme \"$scheme\" is not supported");
+                throw new Zend_Uri_Exception("Scheme \"$scheme\" is not supported");
         }
 
     }
@@ -134,11 +134,11 @@ abstract class Zend_Uri
      */
     public function getScheme()
     {
-    	if (!empty($this->_scheme)) {
-    		return $this->_scheme;
-    	} else {
-    		return false;
-    	}
+        if (!empty($this->_scheme)) {
+            return $this->_scheme;
+        } else {
+            return false;
+        }
     }
 
     /******************************************************************************

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,7 +18,9 @@
  * @subpackage Profiler
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Query.php 4779 2007-05-11 18:28:57Z darby $
  */
+
 
 /**
  * @category   Zend
@@ -26,7 +29,6 @@
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-
 class Zend_Db_Profiler_Query
 {
 
@@ -35,7 +37,7 @@ class Zend_Db_Profiler_Query
      *
      * @var string
      */
-    protected $_query ='';
+    protected $_query = '';
 
     /**
      * One of the Zend_Db_Profiler constants for query type, set by $queryType argument in constructor.
@@ -54,7 +56,7 @@ class Zend_Db_Profiler_Query
     /**
      * Unix timestamp with microseconds when self::queryEnd() was called.
      *
-     * @var null|integer
+     * @var integer
      */
     protected $_endedMicrotime = null;
 
@@ -62,37 +64,35 @@ class Zend_Db_Profiler_Query
      * Class constructor.  A query is about to be started, save the query text ($query) and its
      * type (one of the Zend_Db_Profiler::* constants).
      *
-     * @param string $query
-     * @param int $queryType
-     * @return bool
+     * @param  string  $query
+     * @param  integer $queryType
+     * @return void
      */
     public function __construct($query, $queryType)
     {
         $this->_query = $query;
         $this->_queryType = $queryType;
         $this->_startedMicrotime = microtime(true);
-        return true;
     }
 
     /**
-     * The query has ended.  Record the time so that the elapsed time can be determined later.
+     * Ends the query and records the time so that the elapsed time can be determined later.
      *
-     * @return bool
+     * @return void
      */
     public function end()
     {
         $this->_endedMicrotime = microtime(true);
-        return true;
     }
 
     /**
-     * Has this query ended?
+     * Returns true if and only if the query has ended.
      *
-     * @return bool
+     * @return boolean
      */
     public function hasEnded()
     {
-        return ($this->_endedMicrotime != null);
+        return $this->_endedMicrotime !== null;
     }
 
     /**
@@ -108,7 +108,7 @@ class Zend_Db_Profiler_Query
     /**
      * Get the type of this query (one of the Zend_Db_Profiler::* constants)
      *
-     * @return int
+     * @return integer
      */
     public function getQueryType()
     {
@@ -117,17 +117,17 @@ class Zend_Db_Profiler_Query
 
     /**
      * Get the elapsed time (in seconds) that the query ran.
-     * If the query has not yet ended, return false.
+     * If the query has not yet ended, false is returned.
      *
-     * @return mixed
+     * @return float|false
      */
     public function getElapsedSecs()
     {
-        if (is_null($this->_endedMicrotime)) {
+        if (null === $this->_endedMicrotime) {
             return false;
         }
 
-        return ($this->_endedMicrotime - $this->_startedMicrotime);
+        return $this->_endedMicrotime - $this->_startedMicrotime;
     }
 }
 

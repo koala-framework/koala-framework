@@ -17,7 +17,7 @@
  * @package    Zend_Db
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Db.php 4535 2007-04-18 20:34:32Z darby $
+ * @version    $Id: Db.php 5100 2007-06-04 19:02:22Z bkarwin $
  */
 
 
@@ -42,6 +42,11 @@ require_once 'Zend/Db/Exception.php';
  */
 class Zend_Db
 {
+
+    const CASE_FOLDING = 'caseFolding';
+
+    const AUTO_QUOTE_IDENTIFIERS = 'autoQuoteIdentifiers';
+
     /**
      * PDO constant values discovered by this script result:
      *

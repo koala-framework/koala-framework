@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,17 +18,15 @@
  * @subpackage Adapter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Pgsql.php 4969 2007-05-25 19:16:50Z darby $
  */
 
+
 /**
- * Zend_Db_Adapter_Abstract
+ * @see Zend_Db_Adapter_Pdo_Abstract
  */
 require_once 'Zend/Db/Adapter/Pdo/Abstract.php';
 
-/**
- * Zend_Db_Adapter_Exception
- */
-require_once 'Zend/Db/Adapter/Exception.php';
 
 /**
  * Class for connecting to PostgreSQL databases and performing common operations.
@@ -94,11 +93,12 @@ class Zend_Db_Adapter_Pdo_Pgsql extends Zend_Db_Adapter_Pdo_Abstract
      * UNSIGNED         => boolean; unsigned property of an integer type
      * PRIMARY          => boolean; true if column is part of the primary key
      * PRIMARY_POSITION => integer; position of column in primary key
+     * IDENTITY         => integer; true if column is auto-generated with unique values
      *
      * @todo Discover integer unsigned property.
      *
-     * @param string $tableName
-     * @param string $schemaName OPTIONAL
+     * @param  string $tableName
+     * @param  string $schemaName OPTIONAL
      * @return array
      */
     public function describeTable($tableName, $schemaName = null)
@@ -158,6 +158,12 @@ class Zend_Db_Adapter_Pdo_Pgsql extends Zend_Db_Adapter_Pdo_Abstract
                     }
                 }
             }
+            list($primary, $primaryPosition, $identity) = array(false, null, false);
+            if ($row[$contype] == 'p') {
+                $primary = true;
+                $primaryPosition = array_search($row[$attnum], explode(',', $row[$conkey])) + 1;
+                $identity = (bool) (preg_match('/^nextval/', $row[$default_value]));
+            }
             $desc[$row[$colname]] = array(
                 'SCHEMA_NAME'      => $row[$nspname],
                 'TABLE_NAME'       => $row[$relname],
@@ -170,8 +176,9 @@ class Zend_Db_Adapter_Pdo_Pgsql extends Zend_Db_Adapter_Pdo_Abstract
                 'SCALE'            => null, // @todo
                 'PRECISION'        => null, // @todo
                 'UNSIGNED'         => null, // @todo
-                'PRIMARY'          => (bool) ($row[$contype] == 'p'),
-                'PRIMARY_POSITION' => isset($row[$conkey]) ? array_search($row[$attnum], explode(',', $row[$conkey])) + 1 : null
+                'PRIMARY'          => $primary,
+                'PRIMARY_POSITION' => $primaryPosition,
+                'IDENTITY'         => $identity
             );
         }
         return $desc;
@@ -190,11 +197,19 @@ class Zend_Db_Adapter_Pdo_Pgsql extends Zend_Db_Adapter_Pdo_Abstract
     {
         $count = intval($count);
         if ($count <= 0) {
+            /**
+             * @see Zend_Db_Adapter_Exception
+             */
+            require_once 'Zend/Db/Adapter/Exception.php';
             throw new Zend_Db_Adapter_Exception("LIMIT argument count=$count is not valid");
         }
 
         $offset = intval($offset);
         if ($offset < 0) {
+            /**
+             * @see Zend_Db_Adapter_Exception
+             */
+            require_once 'Zend/Db/Adapter/Exception.php';
             throw new Zend_Db_Adapter_Exception("LIMIT argument offset=$offset is not valid");
         }
 

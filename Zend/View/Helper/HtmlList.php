@@ -46,7 +46,7 @@ class Zend_View_Helper_HtmlList extends Zend_View_Helper_FormElement
      * @param array   $attribs Attributes for the ol/ul tag.
      * @return string The list XHTML.
      */
-    public function htmlList($items, $ordered = false, $attribs = false)
+    public function htmlList(array $items, $ordered = false, $attribs = false)
     {
         if (!is_array($items)) {
             require_once 'Zend/View/Exception.php';

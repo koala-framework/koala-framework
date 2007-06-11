@@ -15,7 +15,7 @@
  * @package    Zend_Controller
  * @subpackage Router
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Module.php 4634 2007-05-01 12:40:59Z martel $
+ * @version    $Id: Module.php 5017 2007-05-27 15:01:58Z martel $
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
@@ -120,7 +120,7 @@ class Zend_Controller_Router_Route_Module implements Zend_Controller_Router_Rout
             $this->_defaults += array(
                 $this->_controllerKey => $this->_dispatcher->getDefaultControllerName(),
                 $this->_actionKey     => $this->_dispatcher->getDefaultAction(),
-                $this->_moduleKey     => 'default'
+                $this->_moduleKey     => $this->_dispatcher->getDefaultModule()
             );
         }
 
@@ -204,7 +204,9 @@ class Zend_Controller_Router_Route_Module implements Zend_Controller_Router_Rout
         $url = '';
 
         if ($this->_moduleValid || array_key_exists($this->_moduleKey, $data)) {
-            $module = $params[$this->_moduleKey];
+            if ($params[$this->_moduleKey] != $this->_defaults[$this->_moduleKey]) {
+                $module = $params[$this->_moduleKey];
+            }
         }
         unset($params[$this->_moduleKey]);
 
@@ -227,7 +229,7 @@ class Zend_Controller_Router_Route_Module implements Zend_Controller_Router_Rout
             $url = '/' . $controller . $url;
         }
 
-        if (isset($module) && (!empty($url) || $module !== $this->_defaults[$this->_moduleKey])) {
+        if (isset($module)) {        
             $url = '/' . $module . $url;
         }
 

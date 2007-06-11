@@ -132,6 +132,7 @@ class Zend_Controller_Action_HelperBroker
     {        
         $this->_actionController = $actionController;
         foreach (self::$_helpers as $helper) {
+            $helper->setActionController($actionController);
             $helper->init();
         }
     }
@@ -159,6 +160,21 @@ class Zend_Controller_Action_HelperBroker
             $helper->postDispatch();
         }        
     }
+
+    /**
+     * Normalize helper name for lookups
+     * 
+     * @param  string $name 
+     * @return string
+     */
+    protected static function _normalizeHelperName($name)
+    {
+        if (strpos($name, '_') !== false) {
+            $name = str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
+        }
+        
+        return ucfirst($name);
+    }
     
     /**
      * getHelper() - get helper by name
@@ -168,30 +184,90 @@ class Zend_Controller_Action_HelperBroker
      */
     public function getHelper($name)
     {
-        if (strpos($name, '_') !== false) {
-            $name = str_replace(' ', '', ucwords(str_replace('_', ' ', $name)));
-        }
-        
-        $name = ucfirst($name);
+        $name = self::_normalizeHelperName($name);
         
         if (!array_key_exists($name, self::$_helpers)) {
-            $this->_loadHelper($name);
+            self::_loadHelper($name);
         }
         
         $helper = self::$_helpers[$name];
-        $helper->setActionController($this->_actionController);
+
+        $initialize = false;
+        if (null === ($actionController = $helper->getActionController())) {
+            $initialize = true;
+        } elseif ($actionController !== $this->_actionController) {
+            $initialize = true;
+        }
+
+        if ($initialize) {
+            $helper->setActionController($this->_actionController)
+                ->init();
+        }
         
         return $helper;
     }
     
+    /**
+     * getExistingHelper() - get helper by name
+     *
+     * Static method to retrieve helper object. Only retrieves helpers already
+     * initialized with the broker (either via addHelper() or on-demand loading
+     * via getHelper()).
+     *
+     * Throws an exception if the referenced helper does not exist in the 
+     * stack; use {@link hasHelper()} to check if the helper is registered
+     * prior to retrieving it.
+     *
+     * @param  string $name
+     * @return Zend_Controller_Action_Helper_Abstract
+     * @throws Zend_Controller_Action_Exception
+     */
+    public static function getExistingHelper($name)
+    {
+        $name = self::_normalizeHelperName($name);
+        
+        if (array_key_exists($name, self::$_helpers)) {
+            return self::$_helpers[$name];
+        }
+
+        throw new Zend_Controller_Action_Exception('Action helper "' . $name . '" has not been registered with the helper broker');
+    }
+     /**
+     * Is a particular helper loaded in the broker?
+     * 
+     * @param  string $name 
+     * @return boolean
+     */
+    public static function hasHelper($name)
+    {
+        $name = self::_normalizeHelperName($name);
+        return array_key_exists($name, self::$_helpers);
+    }
     
+    /**
+     * Remove a particular helper from the broker
+     * 
+     * @param  string $name 
+     * @return boolean
+     */
+    public static function removeHelper($name)
+    {
+        $name = self::_normalizeHelperName($name);
+        if (array_key_exists($name, self::$_helpers)) {
+            unset(self::$_helpers[$name]);
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * _loadHelper()
      *
      * @param  string $name
      * @return void
      */
-    protected function _loadHelper($name)
+    protected static function _loadHelper($name)
     {
         $file = $name . '.php';
         
@@ -201,7 +277,7 @@ class Zend_Controller_Action_HelperBroker
 
             $class = $prefix . $name;
                         
-            if (class_exists($class)) {
+            if (class_exists($class, false)) {
                 $helper = new $class();
                 
                 if (!$helper instanceof Zend_Controller_Action_Helper_Abstract) {

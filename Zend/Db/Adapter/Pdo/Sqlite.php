@@ -64,7 +64,7 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
      *
      * @param array $config An array of configuration keys.
      */
-    public function __construct($config)
+    public function __construct(array $config = array())
     {
         if (isset($config['sqlite2']) && $config['sqlite2']) {
             $this->_pdoType = 'sqlite2';
@@ -75,6 +75,22 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
         $this->_config['password'] = null;
 
         return parent::__construct($config);
+    }
+
+    /**
+     * Check for config options that are mandatory.
+     * Throw exceptions if any are missing.
+     *
+     * @param array $config
+     * @throws Zend_Db_Adapter_Exception
+     */
+    protected function _checkRequiredOptions(array $config)
+    {
+        // we need at least a dbname
+        if (! array_key_exists('dbname', $config)) {
+            require_once 'Zend/Db/Adapter/Exception.php';
+            throw new Zend_Db_Adapter_Exception("Configuration array must have a key for 'dbname' that names the database instance.");
+        }
     }
 
     /**
@@ -153,6 +169,7 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
      * UNSIGNED         => boolean; unsigned property of an integer type
      * PRIMARY          => boolean; true if column is part of the primary key
      * PRIMARY_POSITION => integer; position of column in primary key
+     * IDENTITY         => integer; true if column is auto-generated with unique values
      *
      * @param string $tableName
      * @param string $schemaName OPTIONAL
@@ -168,7 +185,9 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
 
         $stmt = $this->query($sql);
 
-        // Use FETCH_NUM so we are not dependent on the CASE attribute of the PDO connection
+        /**
+         * Use FETCH_NUM so we are not dependent on the CASE attribute of the PDO connection
+         */
         $result = $stmt->fetchAll(Zend_Db::FETCH_NUM);
 
         $cid        = 0;
@@ -182,6 +201,16 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
 
         $p = 1;
         foreach ($result as $key => $row) {
+            list($primary, $primaryPosition, $identity) = array(false, null, false);
+            if ((bool) $row[$pk]) {
+                $primary = true;
+                $primaryPosition = $p;
+                /**
+                 * SQLite INTEGER primary key is always auto-increment.
+                 */
+                $identity = (bool) ($row[$type] == 'INTEGER');
+                ++$p;
+            }
             $desc[$row[$name]] = array(
                 'SCHEMA_NAME'      => $schemaName,
                 'TABLE_NAME'       => $tableName,
@@ -194,8 +223,9 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
                 'SCALE'            => null, // @todo
                 'PRECISION'        => null, // @todo
                 'UNSIGNED'         => null, // @todo
-                'PRIMARY'          => (bool) $row[$pk],
-                'PRIMARY_POSITION' => ((bool) $row[$pk]) ? $p++ : 0
+                'PRIMARY'          => $primary,
+                'PRIMARY_POSITION' => $primaryPosition,
+                'IDENTITY'         => $identity
             );
         }
         return $desc;

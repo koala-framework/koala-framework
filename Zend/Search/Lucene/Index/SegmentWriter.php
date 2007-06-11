@@ -26,12 +26,6 @@ require_once 'Zend/Search/Lucene/Exception.php';
 /** Zend_Search_Lucene_Index_SegmentInfo */
 require_once 'Zend/Search/Lucene/Index/SegmentInfo.php';
 
-/** Zend_Search_Lucene_Index_SegmentWriter_DocumentWriter */
-require_once 'Zend/Search/Lucene/Index/SegmentWriter/DocumentWriter.php';
-
-/** Zend_Search_Lucene_Index_SegmentWriter_StreamWriter */
-require_once 'Zend/Search/Lucene/Index/SegmentWriter/StreamWriter.php';
-
 
 /**
  * @category   Zend

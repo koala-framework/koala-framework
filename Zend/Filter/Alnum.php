@@ -17,7 +17,7 @@
  * @package    Zend_Filter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Alnum.php 4135 2007-03-20 12:46:11Z darby $
+ * @version    $Id: Alnum.php 5134 2007-06-06 17:54:16Z darby $
  */
 
 
@@ -45,6 +45,6 @@ class Zend_Filter_Alnum implements Zend_Filter_Interface
      */
     public function filter($value)
     {
-        return preg_replace('/[^[:alnum:]]/', '', (string) $value);
+        return preg_replace('/[^\p{L}\p{N}]/u', '', (string) $value);
     }
 }

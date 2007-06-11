@@ -166,7 +166,7 @@ class Zend_Translate {
 
 
     /**
-     * Returns all avaiable locales/anguages from this adapter
+     * Returns all avaiable locales/languages from this adapter
      *
      * @return array
      */
@@ -177,7 +177,7 @@ class Zend_Translate {
 
 
     /**
-     * is the wished language avaiable ?
+     * Is the wished language avaiable ?
      *
      * @param  string|Zend_Locale  $locale  Is the locale/language avaiable
      * @return boolean
@@ -211,5 +211,23 @@ class Zend_Translate {
     public function translate($messageId, $locale = null)
     {
         return $this->_adapter->translate($messageId, $locale);
+    }
+
+
+    /**
+     * Checks if a given string can be translated
+     * returns boolean
+     * 
+     * @param  string              $messageId  Translation string
+     * @param  boolean             $original   OPTIONAL Allow translation only for original language
+     *                                         when true, a translation for 'en_US' would give false when it can
+     *                                         be translated with 'en' only
+     * @param  string|Zend_Locale  $locale     OPTIONAL Locale/Language to use, identical with locale identifier,
+     *                                         see Zend_Locale for more information
+     * @return boolean
+     */
+    public function isTranslated($messageId, $original = false, $locale = null)
+    {
+        return $this->_adapter->isTranslated($messageId, $original, $locale);
     }
 }

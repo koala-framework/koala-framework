@@ -35,8 +35,8 @@ require_once 'Zend/View/Helper/FormElement.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_View_Helper_FormRadio extends Zend_View_Helper_FormElement {
-    
+class Zend_View_Helper_FormRadio extends Zend_View_Helper_FormElement 
+{
     /**
      * Generates a set of radio button elements.
      * 
@@ -112,8 +112,8 @@ class Zend_View_Helper_FormRadio extends Zend_View_Helper_FormElement {
                 $radio = '<label'
                        . $this->_htmlAttribs($label_attribs) . '>'
                        . '<input type="radio"'
-                       . ' name="' . htmlspecialchars($name, ENT_COMPAT, 'UTF-8') . '"'
-                       . ' value="' . htmlspecialchars($opt_value, ENT_COMPAT, 'UTF-8') . '"';
+                       . ' name="' . $this->view->escape($name) . '"'
+                       . ' value="' . $this->view->escape($opt_value) . '"';
                 
                 // is it checked?
                 if ($opt_value == $value) {
@@ -123,7 +123,7 @@ class Zend_View_Helper_FormRadio extends Zend_View_Helper_FormElement {
                 // add attribs, end the radio, end the label
                 $radio .= $this->_htmlAttribs($attribs) .
                           ' />' .
-                          htmlspecialchars($opt_label, ENT_COMPAT, 'UTF-8') .
+                          $this->view->escape($opt_label) .
                           '</label>';
                 
                 // add to the array of radio buttons

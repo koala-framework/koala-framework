@@ -356,14 +356,10 @@ class Zend_Mail_Protocol_Pop3
         }
         $this->hasTop = true;
 
-        if (!$lines || (int)$lines < 1) {
-            $request = "TOP $msgno";
-        } else {
-            $request = "TOP $msgno $lines";
-        }
+        $lines = (!$lines || $lines < 1) ? 0 : (int)$lines;
 
         try {
-            $result = $this->request($request, true);
+            $result = $this->request("TOP $msgno $lines", true);
         } catch (Zend_Mail_Protocol_Exception $e) {
             $this->hasTop = false;
             if ($fallback) {

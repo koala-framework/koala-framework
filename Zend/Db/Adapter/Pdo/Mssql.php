@@ -60,6 +60,7 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
         // don't pass the username and password in the DSN
         unset($dsn['username']);
         unset($dsn['password']);
+        unset($dsn['driver_options']);
         if (isset($dsn['port'])) {
             $dsn['host'] .= ',' . $port;
             unset($dsn['port']);
@@ -73,6 +74,18 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
         // $dsn = $this->_pdoType . ':' . implode(';', $dsn);
         $dsn = 'mssql' . ':' . implode(';', $dsn);
         return $dsn;
+    }
+
+    /**
+     * @return void
+     */
+    protected function _connect()
+    {
+        if ($this->_connection) {
+            return;
+        }
+        parent::_connect();
+        $this->_connection->exec('SET QUOTED_IDENTIFIER ON');
     }
 
     /**
@@ -108,9 +121,8 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
      * UNSIGNED         => boolean; unsigned property of an integer type
      * PRIMARY          => boolean; true if column is part of the primary key
      * PRIMARY_POSITION => integer; position of column in primary key
+     * PRIMARY_AUTO     => integer; position of auto-generated column in primary key
      *
-     * @todo [ZF-1268] use FETCH_NUM instead of FETCH_ASSOC to avoid PDO_CASE conflicts.
-     * @todo Discover column position.
      * @todo Discover column primary key position.
      * @todo Discover integer unsigned property.
      *
@@ -120,46 +132,59 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
      */
     public function describeTable($tableName, $schemaName = null)
     {
+        /**
+         * Discover metadata information about this table.
+         */
         $sql = "exec sp_columns @table_name = " . $this->quoteIdentifier($tableName);
         $stmt = $this->query($sql);
-        // @todo: change to FETCH_NUM
-        $result = $stmt->fetchAll(Zend_Db::FETCH_BOTH);
+        $result = $stmt->fetchAll(Zend_Db::FETCH_NUM);
 
-        // @todo: change to integers according to keys returned in FETCH_NUM result set
-        $column_name = 'column_name';
-        $table_name  = 'table_name';
-        $column_def  = 'column_def';
-        $type_name   = 'type_name';
-        $nullable    = 'nullable';
-        $length      = 'length';
-        $scale       = 'scale';
-        $precision   = 'precision';
+        $table_name  = 2;
+        $column_name = 3;
+        $type_name   = 5;
+        $precision   = 6;
+        $length      = 7;
+        $scale       = 8;
+        $nullable    = 10;
+        $column_def  = 12;
+        $column_position = 16;
 
+        /**
+         * Discover primary key column(s) for this table.
+         */
         $sql = "exec sp_pkeys @table_name = " . $this->quoteIdentifier($tableName);
         $stmt = $this->query($sql);
-        // @todo: change to FETCH_NUM
-        $primaryKeysResult = $stmt->fetchAll(Zend_Db::FETCH_BOTH);
-
-        // @todo: change to integers according to keys returned in FETCH_NUM result set
-        $pkey_column_name = 'coumn_name';
-
-        foreach ($primaryKeysResult as $row) {
-            $primaryKeyColumn[$row[$pkey_column_name]] = true;
+        $primaryKeysResult = $stmt->fetchAll(Zend_Db::FETCH_NUM);
+        $pkey_column_name = 3;
+        $pkey_key_seq = 4;
+        foreach ($primaryKeysResult as $pkeysRow) {
+            $primaryKeyColumn[$pkeysRow[$pkey_column_name]] = $pkeysRow[$pkey_key_seq];
         }
 
         $desc = array();
+        $p = 1;
         foreach ($result as $key => $row) {
-            list($type, $rest) = explode(' ', $row[$type_name], 2);
+            $identity = false;
+            $words = explode(' ', $row[$type_name], 2);
+            if (isset($words[0])) {
+                $type = $words[0];
+                if (isset($words[1])) {
+                    $identity = (bool) preg_match('/identity/', $words[1]);
+                }
+            }
 
-            if (array_key_exists($primaryKeyColumn, $row[$column_name])) {
-                $is_primary = true;
+            $isPrimary = array_key_exists($row[$column_name], $primaryKeyColumn);
+            if ($isPrimary) {
+                $primaryPosition = $primaryKeyColumn[$row[$column_name]];
+            } else {
+                $primaryPosition = null;
             }
 
             $desc[$row[$column_name]] = array(
                 'SCHEMA_NAME'      => null, // @todo
                 'TABLE_NAME'       => $row[$table_name],
                 'COLUMN_NAME'      => $row[$column_name],
-                'COLUMN_POSITION'  => null, // @todo
+                'COLUMN_POSITION'  => (int) $row[$column_position],
                 'DATA_TYPE'        => $type,
                 'DEFAULT'          => $row[$column_def],
                 'NULLABLE'         => (bool) $row[$nullable],
@@ -167,8 +192,9 @@ class Zend_Db_Adapter_Pdo_Mssql extends Zend_Db_Adapter_Pdo_Abstract
                 'SCALE'            => $row[$scale],
                 'PRECISION'        => $row[$precision],
                 'UNSIGNED'         => null, // @todo
-                'PRIMARY'          => (bool) $is_primary,
-                'PRIMARY_POSITION' => null // @todo
+                'PRIMARY'          => $isPrimary,
+                'PRIMARY_POSITION' => $primaryPosition,
+                'IDENTITY'         => $identity
             );
         }
         return $desc;

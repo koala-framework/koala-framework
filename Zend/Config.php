@@ -109,6 +109,22 @@ class Zend_Config implements Countable, Iterator
     }
 
     /**
+     * Retrieve a value and return $default if there is no element set.
+     *
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    public function get($name, $default = null)
+    {
+        $result = $default;
+        if (array_key_exists($name, $this->_data)) {
+            $result = $this->_data[$name];
+        }
+        return $result;
+    }
+    
+    /**
      * Magic function so that $obj->value will work.
      *
      * @param string $name
@@ -116,11 +132,7 @@ class Zend_Config implements Countable, Iterator
      */
     public function __get($name)
     {
-        $result = null;
-        if (isset($this->_data[$name])) {
-            $result = $this->_data[$name];
-        }
-        return $result;
+        return $this->get($name);
     }
 
     /**
@@ -155,23 +167,12 @@ class Zend_Config implements Countable, Iterator
         $array = array();
         foreach ($this->_data as $key => $value) {
             if (is_object($value)) {
-                $array[$key] = $value->asArray();
+                $array[$key] = $value->toArray();
             } else {
                 $array[$key] = $value;
             }
         }
         return $array;
-    }
-
-    /**
-     * Return an associative array of the stored data.
-     *
-     * @deprecated 
-     * @return array
-     */
-    public function asArray()
-    {
-        return $this->toArray();
     }
     
     /**
@@ -277,7 +278,7 @@ class Zend_Config implements Countable, Iterator
     {
         // detect circular section inheritance
         $extendedSectionCurrent = $extendedSection;
-        while (isset($this->_extends[$extendedSectionCurrent])) {
+        while (array_key_exists($extendedSectionCurrent, $this->_extends)) {
             if ($this->_extends[$extendedSectionCurrent] == $extendingSection) {
                 throw new Zend_Config_Exception('Illegal circular inheritance detected');
             }

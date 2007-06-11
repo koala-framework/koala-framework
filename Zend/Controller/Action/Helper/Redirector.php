@@ -163,6 +163,27 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
     {
         return $this->_redirectUrl;
     }
+
+    /**
+     * Determine if the baseUrl should be prepended, and prepend if necessary
+     * 
+     * @param  string $url 
+     * @return string
+     */
+    protected function _prependBase($url)
+    {
+        if ($this->getPrependBase()) {
+            $request = $this->getRequest();
+            if ($request instanceof Zend_Controller_Request_Http) {
+                $base = rtrim($request->getBaseUrl(), '/');
+                if (!empty($base) && ('/' != $base)) {
+                    $url = $base . '/' . ltrim($url, '/');
+                }
+            }
+        }
+
+        return $url;
+    }
     
     /**
      * Set a redirect URL of the form /module/controller/action/params
@@ -180,7 +201,7 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
 
         if (null === $module) {
             $module = $request->getModuleName();
-            if ('default' == $module) {
+            if ($module == $dispatcher->getDefaultModule()) {
                 $module = '';
             }
         }
@@ -200,6 +221,8 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
 
         $url = $module . '/' . $controller . '/' . $action . '/' . $paramsString;
         $url = '/' . trim($url, '/');
+
+        $url = $this->_prependBase($url);
 
         $this->_redirect($url);
     }
@@ -280,16 +303,8 @@ class Zend_Controller_Action_Helper_Redirector extends Zend_Controller_Action_He
         }
 
         // If relative URL, decide if we should prepend base URL
-        if ($prependBase && !preg_match('|^[a-z]+://|', $url)) {
-            $request = $this->getRequest();
-            if ($request instanceof Zend_Controller_Request_Http) {
-                $base = $request->getBaseUrl();
-                if (('/' != substr($base, -1)) && ('/' != substr($url, 0, 1))) {
-                    $url = $base . '/' . $url;
-                } else {
-                    $url = $base . $url;
-                }
-            }
+        if (!preg_match('|^[a-z]+://|', $url)) {
+            $url = $this->_prependBase($url);
         }
 
         $this->_redirect($url);

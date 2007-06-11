@@ -111,7 +111,7 @@ class Zend_Pdf_Color_Html extends Zend_Pdf_Color
      */
     public static function namedColor($color)
     {
-        switch ($color) {
+        switch (strtolower($color)) {
             case 'aqua':
                 $r = 0.0;   $g = 1.0;   $b = 1.0;   break;
             case 'black':

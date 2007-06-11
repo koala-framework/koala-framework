@@ -17,14 +17,14 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Ip.php 4135 2007-03-20 12:46:11Z darby $
+ * @version    $Id: Ip.php 4974 2007-05-25 21:11:56Z bkarwin $
  */
 
 
 /**
- * @see Zend_Validate_Interface
+ * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Interface.php';
+require_once 'Zend/Validate/Abstract.php';
 
 
 /**
@@ -33,14 +33,17 @@ require_once 'Zend/Validate/Interface.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Validate_Ip implements Zend_Validate_Interface
+class Zend_Validate_Ip extends Zend_Validate_Abstract
 {
+
+    const NOT_IP_ADDRESS = 'notIpAddress';
+
     /**
-     * Array of validation failure messages
-     *
      * @var array
      */
-    protected $_messages = array();
+    protected $_messageTemplates = array(
+        self::NOT_IP_ADDRESS => "'%value%' does not appear to be a valid IP address"
+    );
 
     /**
      * Defined by Zend_Validate_Interface
@@ -52,27 +55,16 @@ class Zend_Validate_Ip implements Zend_Validate_Interface
      */
     public function isValid($value)
     {
-        $this->_messages = array();
-
         $valueString = (string) $value;
 
+        $this->_setValue($valueString);
+
         if (!ip2long($valueString)) {
-            $this->_messages[] = "'$valueString' does not appear to be a valid IP address";
+            $this->_error();
             return false;
         }
 
         return true;
     }
 
-    /**
-     * Defined by Zend_Validate_Interface
-     *
-     * Returns array of validation failure messages
-     *
-     * @return array
-     */
-    public function getMessages()
-    {
-        return $this->_messages;
-    }
 }

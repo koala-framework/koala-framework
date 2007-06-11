@@ -35,8 +35,8 @@ require_once 'Zend/View/Helper/FormElement.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_View_Helper_FormTextarea extends Zend_View_Helper_FormElement {
-    
+class Zend_View_Helper_FormTextarea extends Zend_View_Helper_FormElement 
+{
     /**
      * The default number of rows for a textarea.
      * 
@@ -80,7 +80,7 @@ class Zend_View_Helper_FormTextarea extends Zend_View_Helper_FormElement {
         
             // disabled.
             $xhtml = $this->_hidden($name, $value)
-                   . nl2br(htmlspecialchars($value, ENT_COMPAT, 'UTF-8'));
+                   . nl2br($this->view->escape($value));
             
         } else {
         
@@ -97,10 +97,10 @@ class Zend_View_Helper_FormTextarea extends Zend_View_Helper_FormElement {
             }
             
             // now build the element.
-            $xhtml = '<textarea name="' . htmlspecialchars($name, ENT_COMPAT, 'UTF-8') . '"'
-                   . ' id="' . htmlspecialchars($id, ENT_COMPAT, 'UTF-8') . '"'
+            $xhtml = '<textarea name="' . $this->view->escape($name) . '"'
+                   . ' id="' . $this->view->escape($id) . '"'
                    . $this->_htmlAttribs($attribs) . '>'
-                   . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '</textarea>';
+                   . $this->view->escape($value) . '</textarea>';
             
         }
         

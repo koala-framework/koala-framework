@@ -144,10 +144,18 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
     private $_closed = false;
 
     /**
+     * Number of references to the index object
+     *
+     * @var integer
+     */
+    private $_refCount = 0;
+
+
+    /**
      * Create index
      *
      * @param mixed $directory
-     * @return Zend_Search_Lucene
+     * @return Zend_Search_Lucene_Interface
      */
     public static function create($directory)
     {
@@ -158,11 +166,11 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
      * Open index
      *
      * @param mixed $directory
-     * @return Zend_Search_Lucene
+     * @return Zend_Search_Lucene_Interface
      */
     public static function open($directory)
     {
-        return new Zend_Search_Lucene($directory);
+        return new Zend_Search_Lucene_Proxy(new Zend_Search_Lucene($directory, false));
     }
 
     /**
@@ -249,11 +257,14 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
 
     /**
      * Close current index and free resources
-     *
-     * @internal
      */
-    public function close()
+    private function _close()
     {
+        if ($this->_closed) {
+            // index is already closed and resources are cleaned up
+            return;
+        }
+
         $this->commit();
 
         // Free shared lock
@@ -266,6 +277,34 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
         $this->_directory    = null;
         $this->_writer       = null;
         $this->_segmentInfos = null;
+
+        $this->_closed = true;
+    }
+
+    /**
+     * Add reference to the index object
+     *
+     * @internal
+     */
+    public function addReference()
+    {
+        $this->_refCount++;
+    }
+
+    /**
+     * Remove reference from the index object
+     *
+     * When reference count becomes zero, index is closed and resources are cleaned up
+     *
+     * @internal
+     */
+    public function removeReference()
+    {
+        $this->_refCount--;
+
+        if ($this->_refCount == 0) {
+            $this->_close();
+        }
     }
 
     /**
@@ -273,9 +312,7 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
      */
     public function __destruct()
     {
-        if (!$this->_closed) {
-            $this->close();
-        }
+        $this->_close();
     }
 
     /**
@@ -781,8 +818,28 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
 
 
     /**
+     * Returns an array of all term freqs.
+     * Result array structure: array(docId => freq, ...)
+     *
+     * @param Zend_Search_Lucene_Index_Term $term
+     * @return integer
+     */
+    public function termFreqs(Zend_Search_Lucene_Index_Term $term)
+    {
+        $result = array();
+        $segmentStartDocId = 0;
+        foreach ($this->_segmentInfos as $segmentInfo) {
+            $result += $segmentInfo->termFreqs($term, $segmentStartDocId);
+
+            $segmentStartDocId += $segmentInfo->count();
+        }
+
+        return $result;
+    }
+
+    /**
      * Returns an array of all term positions in the documents.
-     * Return array structure: array( docId => array( pos1, pos2, ...), ...)
+     * Result array structure: array(docId => array(pos1, pos2, ...), ...)
      *
      * @param Zend_Search_Lucene_Index_Term $term
      * @return array
@@ -791,45 +848,10 @@ class Zend_Search_Lucene implements Zend_Search_Lucene_Interface
     {
         $result = array();
         $segmentStartDocId = 0;
-        foreach( $this->_segmentInfos as $segInfo ) {
-            $termInfo = $segInfo->getTermInfo($term);
+        foreach ($this->_segmentInfos as $segmentInfo) {
+            $result += $segmentInfo->termPositions($term, $segmentStartDocId);
 
-            if (!$termInfo instanceof Zend_Search_Lucene_Index_TermInfo) {
-                $segmentStartDocId += $segInfo->count();
-                continue;
-            }
-
-            $frqFile = $segInfo->openCompoundFile('.frq');
-            $frqFile->seek($termInfo->freqPointer,SEEK_CUR);
-            $freqs = array();
-            $docId = 0;
-
-            for( $count = 0; $count < $termInfo->docFreq; $count++ ) {
-                $docDelta = $frqFile->readVInt();
-                if( $docDelta % 2 == 1 ) {
-                    $docId += ($docDelta-1)/2;
-                    $freqs[ $docId ] = 1;
-                } else {
-                    $docId += $docDelta/2;
-                    $freqs[ $docId ] = $frqFile->readVInt();
-                }
-            }
-
-            $prxFile = $segInfo->openCompoundFile('.prx');
-            $prxFile->seek($termInfo->proxPointer,SEEK_CUR);
-            foreach ($freqs as $docId => $freq) {
-                $termPosition = 0;
-                $positions = array();
-
-                for ($count = 0; $count < $freq; $count++ ) {
-                    $termPosition += $prxFile->readVInt();
-                    $positions[] = $termPosition;
-                }
-
-                $result[ $segmentStartDocId + $docId ] = $positions;
-            }
-
-            $segmentStartDocId += $segInfo->count();
+            $segmentStartDocId += $segmentInfo->count();
         }
 
         return $result;

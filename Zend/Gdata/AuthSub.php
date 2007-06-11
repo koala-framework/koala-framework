@@ -24,15 +24,14 @@
 require_once 'Zend/Http/Client.php';
 
 /**
- * Zend_Gdata_AuthException
+ * Zend_Http_Client_Exception
  */
-require_once 'Zend/Gdata/AuthException.php';
+require_once 'Zend/Http/Client/Exception.php';
 
 /**
- * Zend_Gdata_HttpException
+ * Zend_Version
  */
-require_once 'Zend/Gdata/HttpException.php';
-
+require_once 'Zend/Version.php';
 
 /**
  * Wrapper around Zend_Http_Client to facilitate Google's "Account Authentication 
@@ -85,8 +84,8 @@ class Zend_Gdata_AuthSub
      * Upgrades a single use token to a session token
      *
      * @param string $token
-     * @throws Zend_Gdata_AuthException
-     * @throws Zend_Gdata_HttpException
+     * @throws Zend_Gdata_App_AuthException
+     * @throws Zend_Gdata_App_HttpException
      */
     public static function getAuthSubSessionToken($token, $client = null)
     {
@@ -94,16 +93,24 @@ class Zend_Gdata_AuthSub
             $client = new Zend_Http_Client();
         }
         if (!$client instanceof Zend_Http_Client) {
-            throw new Zend_Gdata_HttpException('Client is not an instance of Zend_Http_Client.');
+            require_once 'Zend/Gdata/App/HttpException.php';
+            throw new Zend_Gdata_App_HttpException('Client is not an instance of Zend_Http_Client.');
         }
         $client->setUri(self::AUTHSUB_SESSION_TOKEN_URI);
         $headers['authorization'] = 'AuthSub token="' . $token . '"';
+        $useragent = 'Zend_Framework_Gdata/' . Zend_Version::VERSION;
+        $client->setConfig(array(
+                'strictredirects' => true,
+                'useragent' => $useragent
+            )
+        );
         $client->setHeaders($headers);
 
         try {
             $response = $client->request('GET');
         } catch (Zend_Http_Client_Exception $e) {
-            throw new Zend_Gdata_HttpException($e->getMessage(), $e);
+            require_once 'Zend/Gdata/App/HttpException.php';
+            throw new Zend_Gdata_App_HttpException($e->getMessage(), $e);
         }
 
         // Parse Google's response
@@ -118,7 +125,8 @@ class Zend_Gdata_AuthSub
             }
             return $goog_resp['Token'];
         } else {
-            throw new Zend_Gdata_AuthException('Token upgrade failed. Reason: ' . $response->getBody());
+            require_once 'Zend/Gdata/App/AuthException.php';
+            throw new Zend_Gdata_App_AuthException('Token upgrade failed. Reason: ' . $response->getBody());
         }
     }
 
@@ -127,7 +135,7 @@ class Zend_Gdata_AuthSub
      *
      * @param string $token
      * @return boolean
-     * @throws Zend_Gdata_HttpException
+     * @throws Zend_Gdata_App_HttpException
      */
     public static function AuthSubRevokeToken($token, $client = null)
     {
@@ -135,16 +143,25 @@ class Zend_Gdata_AuthSub
             $client = new Zend_Http_Client();
         }
         if (!$client instanceof Zend_Http_Client) {
-            throw new Zend_Gdata_HttpException('Client is not an instance of Zend_Http_Client.');
+            require_once 'Zend/Gdata/App/HttpException.php';
+            throw new Zend_Gdata_App_HttpException('Client is not an instance of Zend_Http_Client.');
         }
         $client->setUri(self::AUTHSUB_REVOKE_TOKEN_URI);
         $headers['authorization'] = 'AuthSub token="' . $token . '"';
+        $useragent = 'Zend_Framework_Gdata/' . Zend_Version::VERSION .
+                ' ' . $source;
+        $client->setConfig(array(
+                'strictredirects' => true,
+                'useragent' => $useragent
+            )
+        );
         $client->setHeaders($headers);
         ob_start();
         try {
             $response = $client->request('GET');
         } catch (Zend_Http_Client_Exception $e) {
-            throw new Zend_Gdata_HttpException($e->getMessage(), $e);
+            require_once 'Zend/Gdata/App/HttpException.php';
+            throw new Zend_Gdata_App_HttpException($e->getMessage(), $e);
         }
         ob_end_clean();
         // Parse Google's response
@@ -167,7 +184,8 @@ class Zend_Gdata_AuthSub
             $client = new Zend_Http_Client();
         }
         if (!$client instanceof Zend_Http_Client) {
-            throw new Zend_Gdata_HttpException('Client is not an instance of Zend_Http_Client.');
+            require_once 'Zend/Gdata/App/HttpException.php';
+            throw new Zend_Gdata_App_HttpException('Client is not an instance of Zend_Http_Client.');
         }
         $client->setUri(self::AUTHSUB_TOKEN_INFO_URI);
         $headers['authorization'] = 'AuthSub token="' . $token . '"';
@@ -176,7 +194,8 @@ class Zend_Gdata_AuthSub
         try {
             $response = $client->request('GET');
         } catch (Zend_Http_Client_Exception $e) {
-            throw new Zend_Gdata_HttpException($e->getMessage(), $e);
+            require_once 'Zend/Gdata/App/HttpException.php';
+            throw new Zend_Gdata_App_HttpException($e->getMessage(), $e);
         }
         ob_end_clean();
         return $response->getBody();
@@ -188,9 +207,15 @@ class Zend_Gdata_AuthSub
             $client = new Zend_Http_Client();
         }
         if (!$client instanceof Zend_Http_Client) {
-            throw new Zend_Gdata_HttpException('Client is not an instance of Zend_Http_Client.');
+            require_once 'Zend/Gdata/App/HttpException.php';
+            throw new Zend_Gdata_App_HttpException('Client is not an instance of Zend_Http_Client.');
         }
-        $client->setConfig(array('strictredirects' => true));
+        $useragent = 'Zend_Framework_Gdata/' . Zend_Version::VERSION;
+        $client->setConfig(array(
+                'strictredirects' => true,
+                'useragent' => $useragent
+            )
+        );
         $headers['authorization'] = 'AuthSub token="' . $token . '"';
         $client->setHeaders($headers);
         return $client;

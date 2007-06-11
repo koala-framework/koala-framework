@@ -17,7 +17,7 @@
  * @package    Zend_Feed
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Feed.php 4304 2007-04-02 16:13:58Z slaanesh $
+ * @version    $Id: Feed.php 4729 2007-05-06 14:01:06Z thomas $
  */
 
 
@@ -321,7 +321,7 @@ class Zend_Feed
                 try {
                     // checks if we need to canonize the given uri
                     try {
-                        $uri = Zend_Uri::factory($attributes['href']);
+                        $uri = Zend_Uri::factory((string) $attributes['href']);
                     } catch (Zend_Uri_Exception $e) {
                         // canonize the uri
                         $path = (string) $attributes['href'];

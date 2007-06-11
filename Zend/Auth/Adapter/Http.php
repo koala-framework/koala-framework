@@ -18,7 +18,7 @@
  * @subpackage Zend_Auth_Adapter_Http
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Http.php 4531 2007-04-18 06:01:52Z gearhead $
+ * @version    $Id: Http.php 5182 2007-06-08 02:53:45Z gearhead $
  */
 
 
@@ -410,6 +410,66 @@ class Zend_Auth_Adapter_Http implements Zend_Auth_Adapter_Interface
     }
 
     /**
+     * Logout
+     *
+     * Attempts to force the user agent to forget the HTTP login credentials.  
+     * Firefox will forget the credentials if it receives a 401+WWW-Authenticate 
+     * for the same Realm, but Opera's WWW-Authenticate must be for a different 
+     * Realm, or it won't forget the credentials. IE won't forget the 
+     * credientials either way, so there's no server-side way to make it 
+     * cooperate. It can be done with JavaScript, however: {@link 
+     * http://www.berenddeboer.net/rest/authentication.html}. This has not been 
+     * tested with Safari; hopefully it's as nice as Firefox. Any feedback/bug 
+     * reports on this would be welcomed.
+     *
+     * @param void
+     * @returns void
+     * @throws Zend_Auth_Adapter_Exception
+     */
+    public function logout()
+    {
+        if ($this->_imaProxy) {
+            $statusCode = 407;
+            $headerName = 'Proxy-Authenticate';
+        } else {
+            $statusCode = 401;
+            $headerName = 'WWW-Authenticate';
+        }
+
+        $this->_response->setHttpResponseCode($statusCode);
+
+        $ua = $this->_request->getServer('HTTP_USER_AGENT');
+        if (!$ua) {
+            require_once 'Zend/Auth/Adapter/Exception.php';
+            throw new Zend_Auth_Adapter_Exception('Could not get User Agent string from Request');
+        }
+
+        // Change the realm for Opera
+        $tmpRealm = $this->_realm;
+        if (false !== strpos($ua, 'Opera')) {
+            $this->_realm = 'Logout-' . $this->_realm;
+        }
+
+        // Send a challenge in each acceptable authentication scheme
+        if (in_array('basic', $this->_acceptSchemes)) {
+            $this->_response->setHeader($headerName, $this->_basicHeader());
+        }
+        if (in_array('digest', $this->_acceptSchemes)) {
+            $this->_response->setHeader($headerName, $this->_digestHeader());
+        }
+
+        // Set the realm back to the proper value
+        $this->_realm = $tmpRealm;
+
+        // Always return an invalid identity
+        return new Zend_Auth_Result(
+            Zend_Auth_Result::FAILURE_UNCATEGORIZED,
+            array(),
+            array('Logging user out; invalidating previous identity')
+        );
+    }
+
+    /**
      * Challenge Client
      *
      * Sets a 401 or 407 Unauthorized response code, and creates the
@@ -688,10 +748,9 @@ class Zend_Auth_Adapter_Http implements Zend_Auth_Adapter_Interface
         // See ZF-1052. Detect invalid usernames instead of just returning a 
         // 400 code.
         $ret = preg_match('/username="([^"]+)"/', $header, $temp);
-        if (!$ret || empty($temp[1])) {
-            $data['username'] = '::invalid::';
-        }
-        if (!ctype_print($temp[1]) || strpos($temp[1], ':') !== false) {
+        if (!$ret || empty($temp[1]) ||
+            !ctype_print($temp[1]) || 
+            strpos($temp[1], ':') !== false) {
             $data['username'] = '::invalid::';
         } else {
             $data['username'] = $temp[1];

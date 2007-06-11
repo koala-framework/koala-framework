@@ -17,7 +17,7 @@
  * @package    Zend_Filter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Filter.php 3693 2007-03-02 18:13:36Z darby $
+ * @version    $Id: Filter.php 4974 2007-05-25 21:11:56Z bkarwin $
  */
 
 
@@ -70,4 +70,38 @@ class Zend_Filter implements Zend_Filter_Interface
         }
         return $valueFiltered;
     }
+
+    /**
+     * @param mixed    $value
+     * @param string   $classBaseName
+     * @param array    $args          OPTIONAL
+     * @param mixed    $namespaces    OPTIONAL
+     * @return boolean
+     * @throws Zend_Filter_Exception
+     */
+    public static function get($value, $classBaseName, array $args = array(), $namespaces = array())
+    {
+        $namespaces = array_merge(array('Zend_Filter'), (array) $namespaces);
+        foreach ($namespaces as $namespace) {
+            $className = $namespace . '_' . ucfirst($classBaseName);
+            try {
+                require_once 'Zend/Loader.php';
+                Zend_Loader::loadClass($className);
+                $class = new ReflectionClass($className);
+                if ($class->implementsInterface('Zend_Filter_Interface')) {
+                    if ($class->hasMethod('__construct')) {
+                        $object = $class->newInstanceArgs($args);
+                    } else {
+                        $object = $class->newInstance();
+                    }
+                    return $object->filter($value);
+                }
+            } catch (Zend_Exception $ze) {
+                // fallthrough and continue
+            }
+        }
+        require_once 'Zend/Filter/Exception.php';
+        throw new Zend_Filter_Exception("Filter class not found from basename '$classBaseName'");
+    }
+
 }

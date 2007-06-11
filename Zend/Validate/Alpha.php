@@ -17,14 +17,14 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Alpha.php 4135 2007-03-20 12:46:11Z darby $
+ * @version    $Id: Alpha.php 5159 2007-06-07 18:23:05Z darby $
  */
 
 
 /**
- * @see Zend_Validate_Interface
+ * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Interface.php';
+require_once 'Zend/Validate/Abstract.php';
 
 
 /**
@@ -33,14 +33,34 @@ require_once 'Zend/Validate/Interface.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Validate_Alpha implements Zend_Validate_Interface
+class Zend_Validate_Alpha extends Zend_Validate_Abstract
 {
     /**
-     * Array of validation failure messages
+     * Validation failure message key for when the value contains non-alphabetic characters
+     */
+    const NOT_ALPHA = 'notAlpha';
+
+    /**
+     * Validation failure message key for when the value is an empty string
+     */
+    const STRING_EMPTY = 'stringEmpty';
+
+    /**
+     * Alphabetic filter used for validation
+     *
+     * @var Zend_Filter_Alpha
+     */
+    protected static $_filter = null;
+
+    /**
+     * Validation failure message template definitions
      *
      * @var array
      */
-    protected $_messages = array();
+    protected $_messageTemplates = array(
+        self::NOT_ALPHA    => "'%value%' has not only alphabetic characters",
+        self::STRING_EMPTY => "'%value%' is an empty string"
+    );
 
     /**
      * Defined by Zend_Validate_Interface
@@ -52,27 +72,29 @@ class Zend_Validate_Alpha implements Zend_Validate_Interface
      */
     public function isValid($value)
     {
-        $this->_messages = array();
-
         $valueString = (string) $value;
 
-        if (!ctype_alpha($valueString)) {
-            $this->_messages[] = "'$valueString' has not only alphabetic characters";
+        $this->_setValue($valueString);
+
+        if ('' === $valueString) {
+            $this->_error(self::STRING_EMPTY);
+            return false;
+        }
+
+        if (null === self::$_filter) {
+            /**
+             * @see Zend_Filter_Alpha
+             */
+            require_once 'Zend/Filter/Alpha.php';
+            self::$_filter = new Zend_Filter_Alpha();
+        }
+
+        if ($valueString !== self::$_filter->filter($valueString)) {
+            $this->_error(self::NOT_ALPHA);
             return false;
         }
 
         return true;
     }
 
-    /**
-     * Defined by Zend_Validate_Interface
-     *
-     * Returns array of validation failure messages
-     *
-     * @return array
-     */
-    public function getMessages()
-    {
-        return $this->_messages;
-    }
 }

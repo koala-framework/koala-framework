@@ -187,7 +187,7 @@ class Zend_Loader
      */
     public static function isReadable($filename)
     {
-        if (is_readable($filename)) {
+        if (@is_readable($filename)) {
             return true;
         }
 
@@ -200,7 +200,7 @@ class Zend_Loader
                 continue;
             }
 
-            if (is_readable($dir . DIRECTORY_SEPARATOR . $filename)) {
+            if (@is_readable($dir . DIRECTORY_SEPARATOR . $filename)) {
                 return true;
             }
         }

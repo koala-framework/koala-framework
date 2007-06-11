@@ -48,7 +48,7 @@ require_once 'Zend/XmlRpc/Fault.php';
  * @package  Zend_XmlRpc
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version $Id: Request.php 4524 2007-04-17 16:06:13Z matthew $
+ * @version $Id: Request.php 4901 2007-05-23 15:46:16Z matthew $
  */
 class Zend_XmlRpc_Request
 {
@@ -330,9 +330,9 @@ class Zend_XmlRpc_Request
         if (is_array($this->_xmlRpcParams)) {
             foreach ($this->_xmlRpcParams as $param) {
                 $value = $param['value'];
-                $type  = isset($param['type']) ? $param['type'] : null;
+                $type  = isset($param['type']) ? $param['type'] : Zend_XmlRpc_Value::AUTO_DETECT_TYPE;
 
-                $params[] = Zend_XmlRpc_Value::getXmlRpcValue($value);
+                $params[] = Zend_XmlRpc_Value::getXmlRpcValue($value, $type);
             }
         }
 

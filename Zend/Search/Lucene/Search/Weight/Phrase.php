@@ -38,7 +38,7 @@ class Zend_Search_Lucene_Search_Weight_Phrase extends Zend_Search_Lucene_Search_
     /**
      * IndexReader.
      *
-     * @var Zend_Search_Lucene
+     * @var Zend_Search_Lucene_Interface
      */
     private $_reader;
 
@@ -60,9 +60,10 @@ class Zend_Search_Lucene_Search_Weight_Phrase extends Zend_Search_Lucene_Search_
      * Zend_Search_Lucene_Search_Weight_Phrase constructor
      *
      * @param Zend_Search_Lucene_Search_Query_Phrase $query
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface           $reader
      */
-    public function __construct(Zend_Search_Lucene_Search_Query_Phrase $query, Zend_Search_Lucene $reader)
+    public function __construct(Zend_Search_Lucene_Search_Query_Phrase $query,
+                                Zend_Search_Lucene_Interface           $reader)
     {
         $this->_query  = $query;
         $this->_reader = $reader;

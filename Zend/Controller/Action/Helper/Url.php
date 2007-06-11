@@ -16,20 +16,27 @@
  * @package    Zend_Controller
  * @subpackage Zend_Controller_Action
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Url.php 4422 2007-04-07 10:08:32Z matthew $
+ * @version    $Id: Url.php 4826 2007-05-16 19:52:21Z matthew $
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
+
+/** Zend_Controller_Action_Helper_Abstract */
+require_once 'Zend/Controller/Action/Helper/Abstract.php';
+
+/** Zend_Controller_Front */
+require_once 'Zend/Controller/Front.php';
 
 /**
  * Helper for creating URLs for redirects and other tasks
  * 
+ * @uses       Zend_Controller_Action_Helper_Abstract
  * @category   Zend
  * @package    Zend_Controller
  * @subpackage Zend_Controller_Action
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
-class Zend_Controller_Action_Helper_Url 
+class Zend_Controller_Action_Helper_Url extends Zend_Controller_Action_Helper_Abstract
 {
     /**
      * Create URL based on default route
@@ -53,7 +60,7 @@ class Zend_Controller_Action_Helper_Url
         }
 
         $url = $controller . '/' . $action;
-        if ('default' != $module) {
+        if ($module != Zend_Controller_Front::getInstance()->getDispatcher()->getDefaultModule()) {
             $url = $module . '/' . $url;
         }
 

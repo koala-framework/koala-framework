@@ -128,7 +128,7 @@ abstract class Zend_Pdf_Image
          * @todo switch to new implementation
          */
         require_once 'Zend/Pdf/Resource/ImageFactory.php';
-        return Zend_Pdf_ImageFactory::factory($filePath);
+        return Zend_Pdf_Resource_ImageFactory::factory($filePath);
 
 
         /* Create a file parser data source object for this file. File path and

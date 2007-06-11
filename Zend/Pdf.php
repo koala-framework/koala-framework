@@ -475,6 +475,8 @@ class Zend_Pdf
      * that created document, if it was converted from other format), Trapped (must be
      * true, false or null, can not be null for PDF/X documents)
      *
+     * @todo implementation
+     *
      * @return array
      */
     public function properties()

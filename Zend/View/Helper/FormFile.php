@@ -35,9 +35,8 @@ require_once 'Zend/View/Helper/FormElement.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_View_Helper_FormFile extends Zend_View_Helper_FormElement {
-
-
+class Zend_View_Helper_FormFile extends Zend_View_Helper_FormElement 
+{
     /**
      * Generates a 'file' element.
      * 
@@ -61,13 +60,13 @@ class Zend_View_Helper_FormFile extends Zend_View_Helper_FormElement {
         // build the element
         if ($disable) {
             // disabled
-            $xhtml = $this->_hidden($name, $value) . htmlspecialchars($value, ENT_COMPAT, 'UTF-8');
+            $xhtml = $this->_hidden($name, $value) . $this->view->escape($value);
         } else {
             // enabled
             $xhtml = '<input type="file"'
-                   . ' name="' . htmlspecialchars($name, ENT_COMPAT, 'UTF-8') . '"'
-                   . ' id="' . htmlspecialchars($id, ENT_COMPAT, 'UTF-8') . '"'
-                   . ' value="' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '"'
+                   . ' name="' . $this->view->escape($name) . '"'
+                   . ' id="' . $this->view->escape($id) . '"'
+                   . ' value="' . $this->view->escape($value) . '"'
                    . $this->_htmlAttribs($attribs) . ' />';
         }
         

@@ -184,10 +184,10 @@ class Zend_Search_Lucene_Search_Query_Phrase extends Zend_Search_Lucene_Search_Q
     /**
      * Re-write query into primitive queries in the context of specified index
      *
-     * @param Zend_Search_Lucene $index
+     * @param Zend_Search_Lucene_Interface $index
      * @return Zend_Search_Lucene_Search_Query
      */
-    public function rewrite(Zend_Search_Lucene $index)
+    public function rewrite(Zend_Search_Lucene_Interface $index)
     {
         if (count($this->_terms) == 0) {
             return new Zend_Search_Lucene_Search_Query_Empty();
@@ -217,10 +217,10 @@ class Zend_Search_Lucene_Search_Query_Phrase extends Zend_Search_Lucene_Search_Q
     /**
      * Optimize query in the context of specified index
      *
-     * @param Zend_Search_Lucene $index
+     * @param Zend_Search_Lucene_Interface $index
      * @return Zend_Search_Lucene_Search_Query
      */
-    public function optimize(Zend_Search_Lucene $index)
+    public function optimize(Zend_Search_Lucene_Interface $index)
     {
         // Check, that index contains all phrase terms
         foreach ($this->_terms as $term) {
@@ -271,10 +271,10 @@ class Zend_Search_Lucene_Search_Query_Phrase extends Zend_Search_Lucene_Search_Q
     /**
      * Constructs an appropriate Weight implementation for this query.
      *
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return Zend_Search_Lucene_Search_Weight
      */
-    public function createWeight($reader)
+    public function createWeight(Zend_Search_Lucene_Interface $reader)
     {
         $this->_weight = new Zend_Search_Lucene_Search_Weight_Phrase($this, $reader);
         return $this->_weight;
@@ -330,10 +330,10 @@ class Zend_Search_Lucene_Search_Query_Phrase extends Zend_Search_Lucene_Search_Q
      * Score calculator for sloppy phrase queries (terms sequence is fixed)
      *
      * @param integer $docId
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return float
      */
-    public function _sloppyPhraseFreq($docId, Zend_Search_Lucene $reader)
+    public function _sloppyPhraseFreq($docId, Zend_Search_Lucene_Interface $reader)
     {
         $freq = 0;
 
@@ -406,9 +406,9 @@ class Zend_Search_Lucene_Search_Query_Phrase extends Zend_Search_Lucene_Search_Q
      * Execute query in context of index reader
      * It also initializes necessary internal structures
      *
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      */
-    public function execute($reader)
+    public function execute(Zend_Search_Lucene_Interface $reader)
     {
         $this->_resVector = null;
 
@@ -453,10 +453,10 @@ class Zend_Search_Lucene_Search_Query_Phrase extends Zend_Search_Lucene_Search_Q
      * Score specified document
      *
      * @param integer $docId
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return float
      */
-    public function score($docId, $reader)
+    public function score($docId, Zend_Search_Lucene_Interface $reader)
     {
         if (isset($this->_resVector[$docId])) {
             if ($this->_slop == 0) {

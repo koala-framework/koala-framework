@@ -15,7 +15,7 @@
  * @category   Zend
  * @package    Zend_Date
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: DateObject.php 4289 2007-03-31 10:52:07Z thomas $
+ * @version    $Id: DateObject.php 4786 2007-05-12 15:31:30Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -246,7 +246,7 @@ abstract class Zend_Date_DateObject {
             }
 
             $date += (self::$_monthTable[$month - 1] - $day);
-            $date = -(($date * 86400) + (86400 - (($hour * 3600) + ($minute * 60) + $second)) + $difference);
+            $date = -(($date * 86400) + (86400 - (($hour * 3600) + ($minute * 60) + $second))) + $difference;
 
             // gregorian correction for 5.Oct.1582
             if ($date < -12220185600) {

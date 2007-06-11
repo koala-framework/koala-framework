@@ -578,6 +578,91 @@ class Zend_Search_Lucene_Index_SegmentInfo
     }
 
     /**
+     * Returns term freqs array.
+     * Result array structure: array(docId => freq, ...)
+     *
+     * @param Zend_Search_Lucene_Index_Term $term
+     * @param integer $shift
+     * @return Zend_Search_Lucene_Index_TermInfo
+     */
+    public function termFreqs(Zend_Search_Lucene_Index_Term $term, $shift = 0)
+    {
+        $termInfo = $this->getTermInfo($term);
+
+        if (!$termInfo instanceof Zend_Search_Lucene_Index_TermInfo) {
+            return array();
+        }
+
+        $frqFile = $this->openCompoundFile('.frq');
+        $frqFile->seek($termInfo->freqPointer,SEEK_CUR);
+        $result = array();
+        $docId = 0;
+
+        for ($count = 0; $count < $termInfo->docFreq; $count++) {
+            $docDelta = $frqFile->readVInt();
+            if ($docDelta % 2 == 1) {
+                $docId += ($docDelta-1)/2;
+                $result[$shift + $docId] = 1;
+            } else {
+                $docId += $docDelta/2;
+                $result[$shift + $docId] = $frqFile->readVInt();
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns term positions array.
+     * Result array structure: array(docId => array(pos1, pos2, ...), ...)
+     *
+     * @param Zend_Search_Lucene_Index_Term $term
+     * @param integer $shift
+     * @return Zend_Search_Lucene_Index_TermInfo
+     */
+    public function termPositions(Zend_Search_Lucene_Index_Term $term, $shift = 0)
+    {
+        $termInfo = $this->getTermInfo($term);
+
+        if (!$termInfo instanceof Zend_Search_Lucene_Index_TermInfo) {
+            return array();
+        }
+
+        $frqFile = $this->openCompoundFile('.frq');
+        $frqFile->seek($termInfo->freqPointer,SEEK_CUR);
+        $freqs = array();
+        $docId = 0;
+
+        for ($count = 0; $count < $termInfo->docFreq; $count++) {
+            $docDelta = $frqFile->readVInt();
+            if ($docDelta % 2 == 1) {
+                $docId += ($docDelta-1)/2;
+                $freqs[$docId] = 1;
+            } else {
+                $docId += $docDelta/2;
+                $freqs[$docId] = $frqFile->readVInt();
+            }
+        }
+
+        $result = array();
+        $prxFile = $this->openCompoundFile('.prx');
+        $prxFile->seek($termInfo->proxPointer, SEEK_CUR);
+        foreach ($freqs as $docId => $freq) {
+            $termPosition = 0;
+            $positions = array();
+
+            for ($count = 0; $count < $freq; $count++ ) {
+                $termPosition += $prxFile->readVInt();
+                $positions[] = $termPosition;
+            }
+
+            $result[$shift + $docId] = $positions;
+        }
+
+        return $result;
+    }
+
+    /**
      * Load normalizatin factors from an index file
      *
      * @param integer $fieldNum

@@ -66,6 +66,69 @@ class Zend_Controller_Plugin_Broker extends Zend_Controller_Plugin_Abstract
     }
 
     /**
+     * Unregister a plugin.
+     *
+     * @param string|Zend_Controller_Plugin_Abstract $plugin Plugin object or class name
+     * @return Zend_Controller_Plugin_Broker
+     */
+    public function unregisterPlugin($plugin)
+    {
+        if ($plugin instanceof Zend_Controller_Plugin_Abstract) {
+            // Given a plugin object, find it in the array
+            $key = array_search($plugin, $this->_plugins, true);
+            if (false === $key) {
+                throw new Zend_Controller_Exception('Plugin never registered.');
+            }
+            unset($this->_plugins[$key]);
+        } elseif (is_string($plugin)) {
+            // Given a plugin class, find all plugins of that class and unset them
+            foreach ($this->_plugins as $key => $_plugin) {
+                $type = get_class($_plugin);
+                if ($plugin == $type) {
+                    unset($this->_plugins[$key]);
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Retrieve a plugin or plugins by class
+     * 
+     * @param  string $class Class name of plugin(s) desired
+     * @return false|Zend_Controller_Plugin_Abstract|array Returns false if none found, plugin if only one found, and array of plugins if multiple plugins of same class found
+     */
+    public function getPlugin($class)
+    {
+        $found = array();
+        foreach ($this->_plugins as $plugin) {
+            $type = get_class($plugin);
+            if ($class == $type) {
+                $found[] = $plugin;
+            }
+        }
+
+        switch (count($found)) {
+            case 0:
+                return false;
+            case 1:
+                return $found[0];
+            default:
+                return $found;
+        }
+    }
+
+    /**
+     * Retrieve all plugins
+     * 
+     * @return array
+     */
+    public function getPlugins()
+    {
+        return $this->_plugins;
+    }
+
+    /**
      * Set request object, and register with each plugin
      * 
      * @param Zend_Controller_Request_Abstract $request 
@@ -118,24 +181,6 @@ class Zend_Controller_Plugin_Broker extends Zend_Controller_Plugin_Abstract
     public function getResponse() 
     {
         return $this->_response;
-    }
-
-
-
-    /**
-     * Unregister a plugin.
-     *
-     * @param Zend_Controller_Plugin_Abstract $plugin
-     * @return Zend_Controller_Plugin_Broker
-     */
-    public function unregisterPlugin(Zend_Controller_Plugin_Abstract $plugin)
-    {
-        $key = array_search($plugin, $this->_plugins, true);
-        if (false === $key) {
-            throw new Zend_Controller_Exception('Plugin never registered.');
-        }
-        unset($this->_plugins[$key]);
-        return $this;
     }
 
 

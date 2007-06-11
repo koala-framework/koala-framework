@@ -68,6 +68,16 @@ abstract class Zend_Controller_Action_Helper_Abstract
         $this->_actionController = $actionController;
         return $this;
     }
+
+    /**
+     * Retrieve current action controller
+     * 
+     * @return Zend_Controller_Action
+     */
+    public function getActionController()
+    {
+        return $this->_actionController;
+    }
     
     /**
      * Hook into action controller initialization

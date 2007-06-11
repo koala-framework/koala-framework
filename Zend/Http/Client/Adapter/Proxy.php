@@ -16,7 +16,7 @@
  * @category   Zend
  * @package    Zend_Http
  * @subpackage Client_Adapter
- * @version    $Id: Proxy.php 3348 2007-02-12 09:06:02Z shahar $
+ * @version    $Id: Proxy.php 4797 2007-05-14 19:18:13Z shahar $
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -49,7 +49,7 @@ class Zend_Http_Client_Adapter_Proxy extends Zend_Http_Client_Adapter_Socket
      * @var array
      */
     protected $config = array(
-        'ssltransport'  => 'sslv2',
+        'ssltransport'  => 'ssl',
         'proxy_host'    => '',
         'proxy_port'    => 8080,
         'proxy_user'    => '',
@@ -148,7 +148,7 @@ class Zend_Http_Client_Adapter_Proxy extends Zend_Http_Client_Adapter_Socket
         $request .= "\r\n" . $body;
         
         // Send the request
-        if (! fwrite($this->socket, $request)) {
+        if (! @fwrite($this->socket, $request)) {
             throw new Zend_Http_Client_Adapter_Exception("Error writing request to proxy server");
         }
         

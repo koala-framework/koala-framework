@@ -88,6 +88,7 @@ class Zend_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Abstract
      * UNSIGNED         => boolean; unsigned property of an integer type
      * PRIMARY          => boolean; true if column is part of the primary key
      * PRIMARY_POSITION => integer; position of column in primary key
+     * IDENTITY         => integer; true if column is auto-generated with unique values
      *
      * @param string $tableName
      * @param string $schemaName OPTIONAL
@@ -120,7 +121,8 @@ class Zend_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Abstract
         $i = 1;
         $p = 1;
         foreach ($result as $row) {
-            list($length, $scale, $precision, $unsigned) = array(null, null, null, null);
+            list($length, $scale, $precision, $unsigned, $primary, $primaryPosition, $identity)
+                = array(null, null, null, null, false, null, false);
             if (preg_match('/unsigned/', $row[$type])) {
                 $unsigned = true;
             }
@@ -136,6 +138,16 @@ class Zend_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Abstract
                 // The optional argument of a MySQL int type is not precision
                 // or length; it is only a hint for display width.
             }
+            if (strtoupper($row[$key]) == 'PRI') {
+                $primary = true;
+                $primaryPosition = $p;
+                if ($row[$extra] == 'auto_increment') {
+                    $identity = true;
+                } else {
+                    $identity = false;
+                }
+                ++$p;
+            }
             $desc[$row[$field]] = array(
                 'SCHEMA_NAME'      => null,
                 'TABLE_NAME'       => $tableName,
@@ -148,8 +160,9 @@ class Zend_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Abstract
                 'SCALE'            => $scale,
                 'PRECISION'        => $precision,
                 'UNSIGNED'         => $unsigned,
-                'PRIMARY'          => (bool) (strtoupper($row[$key]) == 'PRI'),
-                'PRIMARY_POSITION' => ((bool) (strtoupper($row[$key]) == 'PRI') ? $p++ : 0)
+                'PRIMARY'          => $primary,
+                'PRIMARY_POSITION' => $primaryPosition,
+                'IDENTITY'         => $identity
             );
             ++$i;
         }

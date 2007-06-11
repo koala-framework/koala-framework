@@ -18,7 +18,7 @@
  * @subpackage Statement
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Mysqli.php 4671 2007-05-02 19:19:14Z bkarwin $
+ * @version    $Id: Mysqli.php 5065 2007-05-31 05:04:21Z bkarwin $
  */
 
 
@@ -62,59 +62,82 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
     protected $_values;
 
     /**
-     * Returns the number of rows that were affected by the execution of an SQL statement.
-     *
-     * @return int Number of rows affected.
+     * @param  string $sql
+     * @return void
+     * @throws Zend_Db_Statement_Mysqli_Exception
      */
-    public function rowCount()
+    public function _prepSql($sql)
     {
-        $mysqli = $this->_connection->getConnection();
-        return $mysqli->affected_rows;
+        parent::_prepSql($sql);
+
+        $mysqli = $this->_adapter->getConnection();
+
+        $this->_stmt = $mysqli->prepare($sql);
+
+        if ($this->_stmt === false || $mysqli->errno) {
+            /**
+             * @see Zend_Db_Statement_Mysqli_Exception
+             */
+            require_once 'Zend/Db/Statement/Mysqli/Exception.php';
+            throw new Zend_Db_Statement_Mysqli_Exception("Mysqli prepare error: " . $mysqli->error);
+        }
     }
 
     /**
      * Closes the cursor, allowing the statement to be executed again.
      *
-     * @return void
+     * @return bool
      */
     public function closeCursor()
     {
+        if (!$this->_stmt) {
+            return false;
+        }
         $this->_stmt->close();
+        return true;
     }
 
     /**
      * Returns the number of columns in the result set.
      * Returns null if the statement has no result set metadata.
      *
-     * @return int|null field count.
+     * @return int The number of columns.
      */
     public function columnCount()
     {
-        if ($this->_meta) {
+        if (isset($this->_meta) && $this->_meta) {
             return $this->_meta->field_count;
         }
-        return null;
+        return 0;
     }
 
     /**
-     * Retrieves an error code, if any, from the statement.
+     * Retrieves the error code, if any, associated with the last operation on
+     * the statement handle.
      *
      * @return string error code.
      */
     public function errorCode()
     {
+        if (!$this->_stmt) {
+            return null;
+        }
         return substr($this->_stmt->sqlstate, 0, 5);
     }
 
     /**
-     * Retrieves an array of error information, if any, from the statement.
+     * Retrieves an array of error information, if any, associated with the
+     * last operation on the statement handle.
      *
      * @return array
      */
     public function errorInfo()
     {
+        if (!$this->_stmt) {
+            return null;
+        }
         return array(
-            substr($this->_stmt->sqlstate, 5),
+            substr($this->_stmt->sqlstate, 0, 5),
             $this->_stmt->errno,
             $this->_stmt->error,
         );
@@ -123,26 +146,23 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
     /**
      * Executes a prepared statement.
      *
-     * @param array $params OPTIONAL values to supply as input to statement parameters
-     * @return void
+     * @param array $params OPTIONAL Values to bind to parameter placeholders.
+     * @return bool
+     * @throws Zend_Db_Statement_Mysqli_Exception
      */
-    public function execute(array $params = array())
+    public function execute(array $params = null)
     {
-        // prepare for mysqli
-        $sql = $this->_joinSql();
-        $mysqli = $this->_connection->getConnection();
-
-        $this->_stmt = $mysqli->prepare($sql);
-        if ($this->_stmt === false || $mysqli->errno) {
-            require_once 'Zend/Db/Statement/Mysqli/Exception.php';
-            throw new Zend_Db_Statement_Mysqli_Exception("Mysqli prepare error: " . $mysqli->error);
+        if (!$this->_stmt) {
+            return false;
         }
-
         // retain metadata
         $this->_meta = $this->_stmt->result_metadata();
         if ($this->_stmt->errno) {
+            /**
+             * @see Zend_Db_Statement_Mysqli_Exception
+             */
             require_once 'Zend/Db/Statement/Mysqli/Exception.php';
-            throw new Zend_Db_Statement_Mysqli_Exception("Mysqli statement metadata error for SQL = \"$sql\": " . $this->_stmt->error);
+            throw new Zend_Db_Statement_Mysqli_Exception("Mysqli statement metadata error: " . $this->_stmt->error);
         }
 
         // statements that have no result set do not return metadata
@@ -151,7 +171,7 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
             // get the column names that will result
             $this->_keys = array();
             foreach ($this->_meta->fetch_fields() as $col) {
-                $this->_keys[] = $col->name;
+                $this->_keys[] = $this->_adapter->foldCase($col->name);
             }
 
             // set up a binding space for result variables
@@ -172,6 +192,11 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
             );
         }
 
+        // if no params were given as an argument to execute(),
+        // then default to the _bindParam array
+        if (!$params) {
+            $params = $this->_bindParam;
+        }
         // send $params as input parameters to the statement
         if ($params) {
             array_unshift($params, str_repeat('s', count($params)));
@@ -182,21 +207,31 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
         }
 
         // execute the statement
-        $this->_stmt->execute();
+        $retval = $this->_stmt->execute();
+        if ($retval === false) {
+            /**
+             * @see Zend_Db_Statement_Mysqli_Exception
+             */
+            require_once 'Zend/Db/Statement/Mysqli/Exception.php';
+            throw new Zend_Db_Statement_Mysqli_Exception("Mysqli statement execute error : " . $this->_stmt->error);
+        }
+        return $retval;
     }
-
 
     /**
      * Fetches a row from the result set.
      *
-     * @param $style
-     * @param $cursor
-     * @param $offset
-     * @return $data
+     * @param int $style  OPTIONAL Fetch mode for this fetch operation.
+     * @param int $cursor OPTIONAL Absolute, relative, or other.
+     * @param int $offset OPTIONAL Number for absolute or relative cursors.
+     * @return mixed Array, object, or scalar depending on fetch mode.
      * @throws Zend_Db_Statement_Mysqli_Exception
      */
     public function fetch($style = null, $cursor = null, $offset = null)
     {
+        if (!$this->_stmt) {
+            return null;
+        }
         // fetch the next result
         $retval = $this->_stmt->fetch();
         switch ($retval) {
@@ -248,13 +283,56 @@ class Zend_Db_Statement_Mysqli extends Zend_Db_Statement
             case Zend_Db::FETCH_OBJ:
                 $data = (object) array_combine($this->_keys, $values);
                 break;
+            case Zend_Db::FETCH_BOUND:
+                /**
+                 * @see Zend_Db_Statement_Mysqli_Exception
+                 */
+                require_once 'Zend/Db/Statement/Mysqli/Exception.php';
+                throw new Zend_Db_Statement_Mysqli_Exception("FETCH_BOUND is not supported yet");
+                break;
             default:
+                /**
+                 * @see Zend_Db_Statement_Mysqli_Exception
+                 */
                 require_once 'Zend/Db/Statement/Mysqli/Exception.php';
                 throw new Zend_Db_Statement_Mysqli_Exception("Invalid fetch mode specified");
                 break;
         }
 
         return $data;
+    }
+
+    /**
+     * Retrieves the next rowset (result set) for a SQL statement that has
+     * multiple result sets.  An example is a stored procedure that returns
+     * the results of multiple queries.
+     *
+     * @return bool
+     * @throws Zend_Db_Statement_Mysqli_Exception
+     */
+    public function nextRowset()
+    {
+        /**
+         * @see Zend_Db_Statement_Mysqli_Exception
+         */
+        require_once 'Zend/Db/Statement/Mysqli/Exception.php';
+        throw new Zend_Db_Statement_Mysqli_Exception(__FUNCTION__.'() is not implemented');
+    }
+
+    /**
+     * Returns the number of rows affected by the execution of the
+     * last INSERT, DELETE, or UPDATE statement executed by this
+     * statement object.
+     *
+     * @return int     The number of rows affected.
+     */
+    public function rowCount()
+    {
+        if (!$this->_adapter) {
+            return null;
+        }
+        $mysqli = $this->_adapter->getConnection();
+        return $mysqli->affected_rows;
     }
 
 }

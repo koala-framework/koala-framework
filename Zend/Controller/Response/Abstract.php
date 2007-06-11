@@ -56,10 +56,15 @@ abstract class Zend_Controller_Response_Abstract
 
     /**
      * HTTP response code to use in headers
-     * 
      * @var int
      */
     protected $_httpResponseCode = 200;
+
+    /**
+     * Flag; is this response a redirect?
+     * @var boolean
+     */
+    protected $_isRedirect = false;
 
     /**
      * Whether or not to render exceptions; off by default
@@ -130,6 +135,16 @@ abstract class Zend_Controller_Response_Abstract
     }
 
     /**
+     * Is this a redirect?
+     * 
+     * @return boolean
+     */
+    public function isRedirect()
+    {
+        return $this->_isRedirect;
+    }
+
+    /**
      * Return array of headers; see {@link $_headers} for format
      *
      * @return array
@@ -162,6 +177,9 @@ abstract class Zend_Controller_Response_Abstract
     public function setRawHeader($value)
     {
         $this->canSendHeaders(true);
+        if ('Location' == substr($value, 0, 8)) {
+            $this->_isRedirect = true;
+        }
         $this->_headersRaw[] = (string) $value;
         return $this;
     }
@@ -209,6 +227,12 @@ abstract class Zend_Controller_Response_Abstract
         if (!is_int($code) || (100 > $code) || (599 < $code)) {
             require_once 'Zend/Controller/Response/Exception.php';
             throw new Zend_Controller_Response_Exception('Invalid HTTP response code');
+        }
+
+        if ((300 <= $code) || (307 >= $code)) {
+            $this->_isRedirect = true;
+        } else {
+            $this->_isRedirect = false;
         }
 
         $this->_httpResponseCode = $code;

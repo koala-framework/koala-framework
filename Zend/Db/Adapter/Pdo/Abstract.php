@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -17,10 +18,21 @@
  * @subpackage Adapter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Abstract.php 5139 2007-06-06 21:01:50Z bkarwin $
  */
 
-/** Zend_Db_Adapter_Abstract */
+
+/**
+ * @see Zend_Db_Adapter_Abstract
+ */
 require_once 'Zend/Db/Adapter/Abstract.php';
+
+
+/**
+ * @see Zend_Db_Statement_Pdo
+ */
+require_once 'Zend/Db/Statement/Pdo.php';
+
 
 /**
  * Class for connecting to SQL databases and performing common operations using PDO.
@@ -44,9 +56,11 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
         // baseline of DSN parts
         $dsn = $this->_config;
 
-        // don't pass the username and password in the DSN
+        // don't pass the username, password, and driver_options in the DSN
         unset($dsn['username']);
         unset($dsn['password']);
+        unset($dsn['options']);
+        unset($dsn['driver_options']);
 
         // use all remaining parts in the DSN
         foreach ($dsn as $key => $val) {
@@ -71,11 +85,19 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
 
         // check for PDO extension
         if (!extension_loaded('pdo')) {
+            /**
+             * @see Zend_Db_Adapter_Exception
+             */
+            require_once 'Zend/Db/Adapter/Exception.php';
             throw new Zend_Db_Adapter_Exception('The PDO extension is required for this adapter but not loaded');
         }
 
         // check the PDO driver is available
         if (!in_array($this->_pdoType, PDO::getAvailableDrivers())) {
+            /**
+             * @see Zend_Db_Adapter_Exception
+             */
+            require_once 'Zend/Db/Adapter/Exception.php';
             throw new Zend_Db_Adapter_Exception('The ' . $this->_pdoType . ' driver is not currently installed');
         }
 
@@ -86,19 +108,23 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
             $this->_connection = new PDO(
                 $this->_dsn(),
                 $this->_config['username'],
-                $this->_config['password']
+                $this->_config['password'],
+                $this->_config['driver_options']
             );
 
             $this->_profiler->queryEnd($q);
 
-            // force names to lower case
-            $this->_connection->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+            // set the PDO connection to perform case-folding on array keys, or not
+            $this->_connection->setAttribute(PDO::ATTR_CASE, $this->_caseFolding);
 
             // always use exceptions.
             $this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            /** @todo Are there other portability attribs to consider? */
         } catch (PDOException $e) {
+            /**
+             * @see Zend_Db_Adapter_Exception
+             */
+            require_once 'Zend/Db/Adapter/Exception.php';
             throw new Zend_Db_Adapter_Exception($e->getMessage(), $e);
         }
 
@@ -124,7 +150,9 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
     public function prepare($sql)
     {
         $this->_connect();
-        return $this->_connection->prepare($sql);
+        $stmt = new Zend_Db_Statement_Pdo($this, $sql);
+        $stmt->setFetchMode($this->_fetchMode);
+        return $stmt;
     }
 
     /**
@@ -174,7 +202,11 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
         try {
             return parent::query($sql, $bind);
         } catch (PDOException $e) {
-            throw new Zend_Db_Adapter_Exception($e->getMessage(), $e);
+            /**
+             * @see Zend_Db_Statement_Exception
+             */
+            require_once 'Zend/Db/Statement/Exception.php';
+            throw new Zend_Db_Statement_Exception($e->getMessage());
         }
     }
 
@@ -236,8 +268,28 @@ abstract class Zend_Db_Adapter_Pdo_Abstract extends Zend_Db_Adapter_Abstract
                 $this->_fetchMode = $mode;
                 break;
             default:
-                throw new Zend_Db_Adapter_Exception('Invalid fetch mode specified');
+                /**
+                 * @see Zend_Db_Adapter_Exception
+                 */
+                require_once 'Zend/Db/Adapter/Exception.php';
+                throw new Zend_Db_Adapter_Exception("Invalid fetch mode '$mode' specified");
                 break;
+        }
+    }
+
+    /**
+     * Check if the adapter supports real SQL parameters.
+     *
+     * @param string $type 'positional' or 'named'
+     * @return bool
+     */
+    public function supportsParameters($type)
+    {
+        switch ($type) {
+            case 'positional':
+            case 'named':
+            default:
+                return true;
         }
     }
 

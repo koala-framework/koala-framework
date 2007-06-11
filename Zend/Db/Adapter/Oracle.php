@@ -19,13 +19,14 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-/** Zend_Db_Adapter_Abstract */
+/**
+ * @see Zend_Db_Adapter_Abstract
+ */
 require_once 'Zend/Db/Adapter/Abstract.php';
 
-/** Zend_Db_Adapter_Oracle_Exception */
-require_once 'Zend/Db/Adapter/Oracle/Exception.php';
-
-/** Zend_Db_Statement_Oracle */
+/**
+ * @see Zend_Db_Statement_Oracle
+ */
 require_once 'Zend/Db/Statement/Oracle.php';
 
 /**
@@ -61,46 +62,6 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     protected $_execute_mode = OCI_COMMIT_ON_SUCCESS;
 
     /**
-     * Constructor.
-     *
-     * $config is an array of key/value pairs containing configuration
-     * options.  These options are common to most adapters:
-     *
-     * username => (string) Connect to the database as this username.
-     * password => (string) Password associated with the username.
-     * dbname   => Either the name of the local Oracle instance, or the
-     *             name of the entry in tnsnames.ora to which you want to connect.
-     *
-     * @param array $config An array of configuration keys.
-     * @throws Zend_Db_Adapter_Exception
-     */
-    public function __construct(array $config)
-    {
-        if (! array_key_exists('password', $config) || ! array_key_exists('username', $config)) {
-            throw new Zend_Db_Adapter_Exception('config array must have at least a username and a password');
-        }
-
-        // @todo Let this protect backward-compatibility for one release, then remove
-        if (array_key_exists('database', $config) || ! array_key_exists('dbname', $config)) {
-            $config['dbname'] = $config['database'];
-            unset($config['database']);
-            trigger_error("Deprecated config key 'database', use 'dbname' instead.", E_USER_NOTICE);
-        }
-
-        // keep the config
-        $this->_config = array_merge($this->_config, (array) $config);
-
-        // create a profiler object
-        $enabled = false;
-        if (array_key_exists('profiler', $this->_config)) {
-            $enabled = (bool) $this->_config['profiler'];
-            unset($this->_config['profiler']);
-        }
-
-        $this->_profiler = new Zend_Db_Profiler($enabled);
-    }
-
-    /**
      * Creates a connection resource.
      *
      * @return void
@@ -114,11 +75,15 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
         }
 
         if (!extension_loaded('oci8')) {
+            /**
+             * @see Zend_Db_Adapter_Oracle_Exception
+             */
+            require_once 'Zend/Db/Adapter/Oracle/Exception.php';
             throw new Zend_DB_Adapter_Oracle_Exception('The OCI8 extension is required for this adapter but not loaded');
         }
 
         if (isset($this->_config['dbname'])) {
-            $this->_connection = oci_connect(
+            $this->_connection = @oci_connect(
                 $this->_config['username'],
                 $this->_config['password'],
                 $this->_config['dbname']);
@@ -130,6 +95,10 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
 
         // check the connection
         if (!$this->_connection) {
+            /**
+             * @see Zend_Db_Adapter_Oracle_Exception
+             */
+            require_once 'Zend/Db/Adapter/Oracle/Exception.php';
             throw new Zend_Db_Adapter_Oracle_Exception(oci_error());
         }
     }
@@ -162,16 +131,29 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     }
 
     /**
+     * Quote a raw string.
+     *
+     * @param string $value     Raw string
+     * @return string           Quoted string
+     */
+    protected function _quote($value)
+    {
+        $value = str_replace("'", "''", $value);
+        return "'" . addcslashes($value, "\000\n\r\\\032") . "'";
+    }
+
+    /**
      * Quote a table identifier and alias.
      *
      * @param string|array|Zend_Db_Expr $ident The identifier or expression.
      * @param string $alias An alias for the table.
+     * @param boolean $auto If true, heed the AUTO_QUOTE_IDENTIFIERS config option.
      * @return string The quoted identifier and alias.
      */
-    public function quoteTableAs($ident, $alias)
+    public function quoteTableAs($ident, $alias, $auto=false)
     {
         // Oracle doesn't allow the 'AS' keyword between the table identifier/expression and alias.
-        return $this->_quoteIdentifierAs($ident, $alias, ' ');
+        return $this->_quoteIdentifierAs($ident, $alias, $auto, ' ');
     }
 
     /**
@@ -185,7 +167,8 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     public function lastSequenceId($sequenceName)
     {
         $this->_connect();
-        $value = $this->fetchOne('SELECT '.$this->quoteIdentifier($sequenceName).'.CURRVAL FROM dual');
+        $sql = 'SELECT '.$this->quoteIdentifier($sequenceName, true).'.CURRVAL FROM dual';
+        $value = $this->fetchOne($sql);
         return $value;
     }
 
@@ -200,7 +183,8 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     public function nextSequenceId($sequenceName)
     {
         $this->_connect();
-        $value = $this->fetchOne('SELECT '.$this->quoteIdentifier($sequenceName).'.NEXTVAL FROM dual');
+        $sql = 'SELECT '.$this->quoteIdentifier($sequenceName, true).'.NEXTVAL FROM dual';
+        $value = $this->fetchOne($sql);
         return $value;
     }
 
@@ -220,7 +204,6 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
      * @param string $tableName   OPTIONAL Name of table.
      * @param string $primaryKey  OPTIONAL Name of primary key column.
      * @return integer
-     * @throws Zend_Db_Adapter_Oracle_Exception
      */
     public function lastInsertId($tableName = null, $primaryKey = null)
     {
@@ -258,7 +241,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
      * The value of each array element is an associative array
      * with the following keys:
      *
-     * SCHEMA_NAME      => string; name of database or schema
+     * SCHEMA_NAME      => string; name of schema
      * TABLE_NAME       => string;
      * COLUMN_NAME      => string; column name
      * COLUMN_POSITION  => number; ordinal position of column in table
@@ -271,6 +254,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
      * UNSIGNED         => boolean; unsigned property of an integer type
      * PRIMARY          => boolean; true if column is part of the primary key
      * PRIMARY_POSITION => integer; position of column in primary key
+     * IDENTITY         => integer; true if column is auto-generated with unique values
      *
      * @todo Discover integer unsigned property.
      *
@@ -280,27 +264,29 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
      */
     public function describeTable($tableName, $schemaName = null)
     {
-        $sql = "SELECT TC.TABLE_NAME, TB.TABLESPACE_NAME, TC.COLUMN_NAME, TC.DATA_TYPE,
+        $sql = "SELECT TC.TABLE_NAME, TB.OWNER, TC.COLUMN_NAME, TC.DATA_TYPE,
                 TC.DATA_DEFAULT, TC.NULLABLE, TC.COLUMN_ID, TC.DATA_LENGTH,
                 TC.DATA_SCALE, TC.DATA_PRECISION, C.CONSTRAINT_TYPE, CC.POSITION
             FROM ALL_TAB_COLUMNS TC
             LEFT JOIN (ALL_CONS_COLUMNS CC JOIN ALL_CONSTRAINTS C
                 ON (CC.CONSTRAINT_NAME = C.CONSTRAINT_NAME AND CC.TABLE_NAME = C.TABLE_NAME AND C.CONSTRAINT_TYPE = 'P'))
               ON TC.TABLE_NAME = CC.TABLE_NAME AND TC.COLUMN_NAME = CC.COLUMN_NAME
-            JOIN ALL_TABLES TB ON (TB.TABLE_NAME = TC.TABLE_NAME)
+            JOIN ALL_TABLES TB ON (TB.TABLE_NAME = TC.TABLE_NAME AND TB.OWNER = TC.OWNER)
             WHERE TC.TABLE_NAME = ".$this->quote($tableName);
         if ($schemaName) {
-            $sql .= " AND TB.TABLESPACE_NAME = ".$this->quote($schemaName);
+            $sql .= " AND TB.OWNER = ".$this->quote($schemaName);
         }
         $sql .= ' ORDER BY TC.COLUMN_ID';
 
         $stmt = $this->query($sql);
 
-        // Use FETCH_NUM so we are not dependent on the CASE attribute of the PDO connection
+        /**
+         * Use FETCH_NUM so we are not dependent on the CASE attribute of the PDO connection
+         */
         $result = $stmt->fetchAll(Zend_Db::FETCH_NUM);
 
         $table_name      = 0;
-        $tablespace_name = 1;
+        $owner           = 1;
         $column_name     = 2;
         $data_type       = 3;
         $data_default    = 4;
@@ -314,8 +300,17 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
 
         $desc = array();
         foreach ($result as $key => $row) {
+            list ($primary, $primaryPosition, $identity) = array(false, null, false);
+            if ($row[$constraint_type] == 'P') {
+                $primary = true;
+                $primaryPosition = $row[$position];
+                /**
+                 * Oracle does not support auto-increment keys.
+                 */
+                $identity = false;
+            }
             $desc[$row[$column_name]] = array(
-                'SCHEMA_NAME'      => $row[$tablespace_name],
+                'SCHEMA_NAME'      => $row[$owner],
                 'TABLE_NAME'       => $row[$table_name],
                 'COLUMN_NAME'      => $row[$column_name],
                 'COLUMN_POSITION'  => $row[$column_id],
@@ -326,8 +321,9 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                 'SCALE'            => $row[$data_scale],
                 'PRECISION'        => $row[$data_precision],
                 'UNSIGNED'         => null, // @todo
-                'PRIMARY'          => (bool) ($row[$constraint_type] == 'P'),
-                'PRIMARY_POSITION' => $row[$position]
+                'PRIMARY'          => $primary,
+                'PRIMARY_POSITION' => $primaryPosition,
+                'IDENTITY'         => $identity
             );
         }
         return $desc;
@@ -352,6 +348,10 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     protected function _commit()
     {
         if (!oci_commit($this->_connection)) {
+            /**
+             * @see Zend_Db_Adapter_Oracle_Exception
+             */
+            require_once 'Zend/Db/Adapter/Oracle/Exception.php';
             throw new Zend_Db_Adapter_Oracle_Exception(oci_error($this->_connection));
         }
         $this->_setExecuteMode(OCI_COMMIT_ON_SUCCESS);
@@ -366,6 +366,10 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     protected function _rollBack()
     {
         if (!oci_rollback($this->_connection)) {
+            /**
+             * @see Zend_Db_Adapter_Oracle_Exception
+             */
+            require_once 'Zend/Db/Adapter/Oracle/Exception.php';
             throw new Zend_Db_Adapter_Oracle_Exception(oci_error($this->_connection));
         }
         $this->_setExecuteMode(OCI_COMMIT_ON_SUCCESS);
@@ -389,8 +393,19 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
             case Zend_Db::FETCH_OBJ:   // object
                 $this->_fetchMode = $mode;
                 break;
+            case Zend_Db::FETCH_BOUND: // bound to PHP variable
+                /**
+                 * @see Zend_Db_Adapter_Oracle_Exception
+                 */
+                require_once 'Zend/Db/Adapter/Oracle/Exception.php';
+                throw new Zend_Db_Adapter_Oracle_Exception('FETCH_BOUND is not supported yet');
+                break;
             default:
-                throw new Zend_Db_Adapter_Exception('Invalid fetch mode specified');
+                /**
+                 * @see Zend_Db_Adapter_Oracle_Exception
+                 */
+                require_once 'Zend/Db/Adapter/Oracle/Exception.php';
+                throw new Zend_Db_Adapter_Oracle_Exception("Invalid fetch mode '$mode' specified");
                 break;
         }
     }
@@ -408,11 +423,19 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     {
         $count = intval($count);
         if ($count <= 0) {
+            /**
+             * @see Zend_Db_Adapter_Oracle_Exception
+             */
+            require_once 'Zend/Db/Adapter/Oracle/Exception.php';
             throw new Zend_Db_Adapter_Oracle_Exception("LIMIT argument count=$count is not valid");
         }
 
         $offset = intval($offset);
         if ($offset < 0) {
+            /**
+             * @see Zend_Db_Adapter_Oracle_Exception
+             */
+            require_once 'Zend/Db/Adapter/Oracle/Exception.php';
             throw new Zend_Db_Adapter_Oracle_Exception("LIMIT argument offset=$offset is not valid");
         }
 
@@ -435,7 +458,7 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
 
     /**
      * @param integer $mode
-     * @throws Zend_Db_Adapter_Exception
+     * @throws Zend_Db_Adapter_Oracle_Exception
      */
     private function _setExecuteMode($mode)
     {
@@ -446,7 +469,11 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
                 $this->_execute_mode = $mode;
                 break;
             default:
-                throw new Zend_Db_Adapter_Exception('wrong execution mode specified');
+                /**
+                 * @see Zend_Db_Adapter_Oracle_Exception
+                 */
+                require_once 'Zend/Db/Adapter/Oracle/Exception.php';
+                throw new Zend_Db_Adapter_Oracle_Exception("Invalid execution mode '$mode' specified");
                 break;
         }
     }
@@ -457,6 +484,105 @@ class Zend_Db_Adapter_Oracle extends Zend_Db_Adapter_Abstract
     public function _getExecuteMode()
     {
         return $this->_execute_mode;
+    }
+
+    /**
+     * Inserts a table row with specified data.
+     *
+     * Oracle does not support anonymous ('?') binds.
+     *
+     * @param mixed $table The table to insert data into.
+     * @param array $bind Column-value pairs.
+     * @return int The number of affected rows.
+     */
+    public function insert($table, array $bind)
+    {
+        $i = 0;
+        // extract and quote col names from the array keys
+        $cols = array();
+        $vals = array();
+        foreach ($bind as $col => $val) {
+            $cols[] = $this->quoteIdentifier($col, true);
+            if ($val instanceof Zend_Db_Expr) {
+                $vals[] = $val->__toString();
+                unset($bind[$col]);
+            } else {
+                $vals[] = ':'.$col.$i;
+                unset($bind[$col]);
+                $bind[':'.$col.$i] = $val;
+            }
+            $i++;
+        }
+
+        // build the statement
+        $sql = "INSERT INTO "
+             . $this->quoteIdentifier($table, true)
+             . ' (' . implode(', ', $cols) . ') '
+             . 'VALUES (' . implode(', ', $vals) . ')';
+
+        // execute the statement and return the number of affected rows
+        $stmt = $this->query($sql, $bind);
+        $result = $stmt->rowCount();
+        return $result;
+    }
+
+    /**
+     * Updates table rows with specified data based on a WHERE clause.
+     *
+     * @param  mixed        $table The table to update.
+     * @param  array        $bind  Column-value pairs.
+     * @param  array|string $where UPDATE WHERE clause(s).
+     * @return int          The number of affected rows.
+     */
+    public function update($table, array $bind, $where = '')
+    {
+        $i = 0;
+        // build "col = ?" pairs for the statement
+        $set = array();
+        foreach ($bind as $col => $val) {
+            if ($val instanceof Zend_Db_Expr) {
+                $val = $val->__toString();
+                unset($bind[$col]);
+            } else {
+                unset($bind[$col]);
+                $bind[':'.$col.$i] = $val;
+                $val = ':'.$col.$i;
+            }
+            $set[] = $this->quoteIdentifier($col, true) . ' = ' . $val;
+            $i++;
+        }
+
+        if (is_array($where)) {
+            $where = implode(' AND ', $where);
+        }
+
+        // build the statement
+        $sql = "UPDATE "
+             . $this->quoteIdentifier($table, true)
+             . ' SET ' . implode(', ', $set)
+             . (($where) ? " WHERE $where" : '');
+
+        // execute the statement and return the number of affected rows
+        $stmt = $this->query($sql, $bind);
+        $result = $stmt->rowCount();
+        return $result;
+    }
+
+    /**
+     * Check if the adapter supports real SQL parameters.
+     *
+     * @param string $type 'positional' or 'named'
+     * @return bool
+     */
+    public function supportsParameters($type)
+    {
+        switch ($type) {
+            case 'named':
+                return true;
+            case 'positional':
+            default:
+                return false;
+        }
     }
 
 }

@@ -20,8 +20,8 @@
  */
 
 
-/** Zend_Search_Lucene_Index_SegmentWriter */
-require_once 'Zend/Search/Lucene/Index/SegmentWriter.php';
+/** Zend_Search_Lucene_Index_SegmentWriter_ */
+require_once 'Zend/Search/Lucene/Index/SegmentWriter/DocumentWriter.php';
 
 /** Zend_Search_Lucene_Index_SegmentInfo */
 require_once 'Zend/Search/Lucene/Index/SegmentInfo.php';

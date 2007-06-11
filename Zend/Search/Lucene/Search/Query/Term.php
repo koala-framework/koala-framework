@@ -51,12 +51,12 @@ class Zend_Search_Lucene_Search_Query_Term extends Zend_Search_Lucene_Search_Que
     private $_docVector = null;
 
     /**
-     * Term positions vector.
-     * Array: docId => array( pos1, pos2, ... )
+     * Term freqs vector.
+     * array(docId => freq, ...)
      *
      * @var array
      */
-    private $_termPositions;
+    private $_termFreqs;
 
 
     /**
@@ -73,10 +73,10 @@ class Zend_Search_Lucene_Search_Query_Term extends Zend_Search_Lucene_Search_Que
     /**
      * Re-write query into primitive queries in the context of specified index
      *
-     * @param Zend_Search_Lucene $index
+     * @param Zend_Search_Lucene_Interface $index
      * @return Zend_Search_Lucene_Search_Query
      */
-    public function rewrite(Zend_Search_Lucene $index)
+    public function rewrite(Zend_Search_Lucene_Interface $index)
     {
         if ($this->_term->field != null) {
             return $this;
@@ -97,10 +97,10 @@ class Zend_Search_Lucene_Search_Query_Term extends Zend_Search_Lucene_Search_Que
     /**
      * Optimize query in the context of specified index
      *
-     * @param Zend_Search_Lucene $index
+     * @param Zend_Search_Lucene_Interface $index
      * @return Zend_Search_Lucene_Search_Query
      */
-    public function optimize(Zend_Search_Lucene $index)
+    public function optimize(Zend_Search_Lucene_Interface $index)
     {
         // Check, that index contains specified term
         if (!$index->hasTerm($this->_term)) {
@@ -114,10 +114,10 @@ class Zend_Search_Lucene_Search_Query_Term extends Zend_Search_Lucene_Search_Que
     /**
      * Constructs an appropriate Weight implementation for this query.
      *
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return Zend_Search_Lucene_Search_Weight
      */
-    public function createWeight($reader)
+    public function createWeight(Zend_Search_Lucene_Interface $reader)
     {
         $this->_weight = new Zend_Search_Lucene_Search_Weight_Term($this->_term, $this, $reader);
         return $this->_weight;
@@ -127,12 +127,12 @@ class Zend_Search_Lucene_Search_Query_Term extends Zend_Search_Lucene_Search_Que
      * Execute query in context of index reader
      * It also initializes necessary internal structures
      *
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      */
-    public function execute($reader)
+    public function execute(Zend_Search_Lucene_Interface $reader)
     {
         $this->_docVector = array_flip($reader->termDocs($this->_term));
-        $this->_termPositions = $reader->termPositions($this->_term);
+        $this->_termFreqs = $reader->termFreqs($this->_term);
 
         // Initialize weight if it's not done yet
         $this->_initWeight($reader);
@@ -154,13 +154,13 @@ class Zend_Search_Lucene_Search_Query_Term extends Zend_Search_Lucene_Search_Que
      * Score specified document
      *
      * @param integer $docId
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return float
      */
-    public function score( $docId, $reader )
+    public function score($docId, Zend_Search_Lucene_Interface $reader)
     {
         if (isset($this->_docVector[$docId])) {
-            return $reader->getSimilarity()->tf(count($this->_termPositions[$docId]) ) *
+            return $reader->getSimilarity()->tf($this->_termFreqs[$docId]) *
                    $this->_weight->getValue() *
                    $reader->norm($docId, $this->_term->field) *
                    $this->getBoost();

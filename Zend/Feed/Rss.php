@@ -17,7 +17,7 @@
  * @package    Zend_Feed
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Rss.php 4300 2007-04-02 13:35:41Z slaanesh $
+ * @version    $Id: Rss.php 4733 2007-05-06 19:41:25Z thomas $
  */
 
 
@@ -27,9 +27,9 @@
 require_once 'Zend/Feed/Abstract.php';
 
 /**
- * @see Zend_Feed_EntryRss
+ * @see Zend_Feed_Entry_Rss
  */
-require_once 'Zend/Feed/EntryRss.php';
+require_once 'Zend/Feed/Entry/Rss.php';
 
 
 /**
@@ -53,7 +53,7 @@ class Zend_Feed_Rss extends Zend_Feed_Abstract
      *
      * @var string
      */
-    protected $_entryClassName = 'Zend_Feed_EntryRss';
+    protected $_entryClassName = 'Zend_Feed_Entry_Rss';
 
     /**
      * The element name for individual channel elements (RSS <item>s).

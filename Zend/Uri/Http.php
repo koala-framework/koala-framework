@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -16,17 +17,21 @@
  * @package    Zend_Uri
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id: Http.php 5051 2007-05-29 19:31:09Z darby $
  */
 
+
 /**
- * Zend_Uri base class
+ * @see Zend_Uri
  */
 require_once 'Zend/Uri.php';
 
+
 /**
- * Zend_Filter
+ * @see Zend_Validate_Hostname
  */
 require_once 'Zend/Validate/Hostname.php';
+
 
 /**
  * @category   Zend
@@ -39,28 +44,28 @@ class Zend_Uri_Http extends Zend_Uri
     /**
      * URI parts are divided among these instance variables
      */
-	protected $_username	= '';
-	protected $_password	= '';
-	protected $_host		= '';
-	protected $_port        = '';
-	protected $_path 		= '';
-	protected $_query		= '';
-	protected $_fragment 	= '';
+    protected $_username    = '';
+    protected $_password    = '';
+    protected $_host        = '';
+    protected $_port        = '';
+    protected $_path        = '';
+    protected $_query       = '';
+    protected $_fragment    = '';
 
-	/**
-	 * Regular expression grammar rules for validation; values added by constructor
-	 */
-	protected $_regex = array();
+    /**
+     * Regular expression grammar rules for validation; values added by constructor
+     */
+    protected $_regex = array();
 
-	/**
-	 * Constructor accepts a string $scheme (e.g., http, https) and a scheme-specific part of the URI
-	 * (e.g., example.com/path/to/resource?query=param#fragment)
-	 *
-	 * @param string $scheme
-	 * @param string $schemeSpecific
-	 * @throws Zend_Uri_Exception
-	 * @return void
-	 */
+    /**
+     * Constructor accepts a string $scheme (e.g., http, https) and a scheme-specific part of the URI
+     * (e.g., example.com/path/to/resource?query=param#fragment)
+     *
+     * @param string $scheme
+     * @param string $schemeSpecific
+     * @throws Zend_Uri_Exception
+     * @return void
+     */
     protected function __construct($scheme, $schemeSpecific = '')
     {
         // Set the scheme
@@ -75,7 +80,7 @@ class Zend_Uri_Http extends Zend_Uri
         $this->_regex['unreserved'] = '(?:' . $this->_regex['alphanum'] . '|' . $this->_regex['mark'] . ')';
         $this->_regex['segment']    = '(?:(?:' . $this->_regex['unreserved'] . '|' . $this->_regex['escaped']
                                     . '|[:@&=+$,;])*)';
-        $this->_regex['path']       = '(?:\/' . $this->_regex['segment'] . ')+';
+        $this->_regex['path']       = '(?:\/' . $this->_regex['segment'] . '?)+';
         $this->_regex['uric']       = '(?:' . $this->_regex['reserved'] . '|' . $this->_regex['unreserved'] . '|'
                                     . $this->_regex['escaped'] . ')';
         // If no scheme-specific part was supplied, the user intends to create
@@ -180,24 +185,24 @@ class Zend_Uri_Http extends Zend_Uri
             && $this->validateFragment();
     }
 
-	/**
-	 * Returns the username portion of the URL, or FALSE if none.
-	 *
-	 * @return string
-	 */
-	public function getUsername()
-	{
-		return strlen($this->_username) ? $this->_username : false;
-	}
+    /**
+     * Returns the username portion of the URL, or FALSE if none.
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return strlen($this->_username) ? $this->_username : false;
+    }
 
-	/**
-	 * Returns true if and only if the username passes validation. If no username is passed,
-	 * then the username contained in the instance variable is used.
-	 *
-	 * @param string $username
-	 * @throws Zend_Uri_Exception
-	 * @return boolean
-	 */
+    /**
+     * Returns true if and only if the username passes validation. If no username is passed,
+     * then the username contained in the instance variable is used.
+     *
+     * @param string $username
+     * @throws Zend_Uri_Exception
+     * @return boolean
+     */
     public function validateUsername($username = null)
     {
         if ($username === null) {
@@ -218,7 +223,7 @@ class Zend_Uri_Http extends Zend_Uri
         if ($status === false) {
             throw new Zend_Uri_Exception('Internal error: username validation failed');
         }
-        
+
         return $status == 1;
     }
 
@@ -239,30 +244,30 @@ class Zend_Uri_Http extends Zend_Uri
         return $oldUsername;
     }
 
-	/**
-	 * Returns the password portion of the URL, or FALSE if none.
-	 *
-	 * @return string
-	 */
-	public function getPassword()
-	{
-		return strlen($this->_password) ? $this->_password : false;
-	}
+    /**
+     * Returns the password portion of the URL, or FALSE if none.
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return strlen($this->_password) ? $this->_password : false;
+    }
 
-	/**
-	 * Returns true if and only if the password passes validation. If no password is passed,
-	 * then the password contained in the instance variable is used.
-	 *
-	 * @param string $password
-	 * @throws Zend_Uri_Exception
-	 * @return boolean
-	 */
+    /**
+     * Returns true if and only if the password passes validation. If no password is passed,
+     * then the password contained in the instance variable is used.
+     *
+     * @param string $password
+     * @throws Zend_Uri_Exception
+     * @return boolean
+     */
     public function validatePassword($password = null)
     {
         if ($password === null) {
             $password = $this->_password;
         }
-        
+
         // If the password is empty, then it is considered valid
         if (strlen($password) == 0) {
             return true;
@@ -272,7 +277,7 @@ class Zend_Uri_Http extends Zend_Uri
         if (strlen($password) > 0 && strlen($this->_username) == 0) {
             return false;
         }
-        
+
         /**
          * Check the password against the allowed values
          *
@@ -303,37 +308,37 @@ class Zend_Uri_Http extends Zend_Uri
         return $oldPassword;
     }
 
-	/**
-	 * Returns the domain or host IP portion of the URL, or FALSE if none.
-	 *
-	 * @return string
-	 */
-	public function getHost()
-	{
-		return strlen($this->_host) ? $this->_host : false;
-	}
+    /**
+     * Returns the domain or host IP portion of the URL, or FALSE if none.
+     *
+     * @return string
+     */
+    public function getHost()
+    {
+        return strlen($this->_host) ? $this->_host : false;
+    }
 
-	/**
-	 * Returns true if and only if the host string passes validation. If no host is passed,
-	 * then the host contained in the instance variable is used.
-	 *
-	 * @param string $host
-	 * @return boolean
-	 * @uses Zend_Filter
-	 */
+    /**
+     * Returns true if and only if the host string passes validation. If no host is passed,
+     * then the host contained in the instance variable is used.
+     *
+     * @param string $host
+     * @return boolean
+     * @uses Zend_Filter
+     */
     public function validateHost($host = null)
     {
         if ($host === null) {
             $host = $this->_host;
         }
-        
+
         /**
          * If the host is empty, then it is considered invalid
          */
         if (strlen($host) == 0) {
             return false;
         }
-        
+
         /**
          * Check the host against the allowed values; delegated to Zend_Filter.
          */
@@ -358,29 +363,29 @@ class Zend_Uri_Http extends Zend_Uri
         return $oldHost;
     }
 
-	/**
-	 * Returns the TCP port, or FALSE if none.
-	 *
-	 * @return string
-	 */
-	public function getPort()
-	{
-		return strlen($this->_port) ? $this->_port : false;
-	}
+    /**
+     * Returns the TCP port, or FALSE if none.
+     *
+     * @return string
+     */
+    public function getPort()
+    {
+        return strlen($this->_port) ? $this->_port : false;
+    }
 
-	/**
-	 * Returns true if and only if the TCP port string passes validation. If no port is passed,
-	 * then the port contained in the instance variable is used.
-	 *
-	 * @param string $port
-	 * @return boolean
-	 */
+    /**
+     * Returns true if and only if the TCP port string passes validation. If no port is passed,
+     * then the port contained in the instance variable is used.
+     *
+     * @param string $port
+     * @return boolean
+     */
     public function validatePort($port = null)
     {
         if ($port === null) {
             $port = $this->_port;
         }
-        
+
         // If the port is empty, then it is considered valid
         if (!strlen($port)) {
             return true;
@@ -407,24 +412,24 @@ class Zend_Uri_Http extends Zend_Uri
         return $oldPort;
     }
 
-	/**
-	 * Returns the path and filename portion of the URL, or FALSE if none.
-	 *
-	 * @return string
-	 */
-	public function getPath()
-	{
-		return strlen($this->_path) ? $this->_path : '/';
-	}
+    /**
+     * Returns the path and filename portion of the URL, or FALSE if none.
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+        return strlen($this->_path) ? $this->_path : '/';
+    }
 
-	/**
-	 * Returns true if and only if the path string passes validation. If no path is passed,
-	 * then the path contained in the instance variable is used.
-	 *
-	 * @param string $path
-	 * @throws Zend_Uri_Exception
-	 * @return boolean
-	 */
+    /**
+     * Returns true if and only if the path string passes validation. If no path is passed,
+     * then the path contained in the instance variable is used.
+     *
+     * @param string $path
+     * @throws Zend_Uri_Exception
+     * @return boolean
+     */
     public function validatePath($path = null)
     {
         if ($path === null) {
@@ -443,6 +448,9 @@ class Zend_Uri_Http extends Zend_Uri
         $status = @preg_match($pattern, $path);
         if ($status === false) {
             throw new Zend_Uri_Exception('Internal error: path validation failed');
+        }
+        if (!$status) {
+            echo "'$path' does not match pattern '$pattern'\n";
         }
         return (boolean) $status;
     }
@@ -464,24 +472,24 @@ class Zend_Uri_Http extends Zend_Uri
         return $oldPath;
     }
 
-	/**
-	 * Returns the query portion of the URL (after ?), or FALSE if none.
-	 *
-	 * @return string
-	 */
-	public function getQuery()
-	{
-		return strlen($this->_query) ? $this->_query : false;
-	}
+    /**
+     * Returns the query portion of the URL (after ?), or FALSE if none.
+     *
+     * @return string
+     */
+    public function getQuery()
+    {
+        return strlen($this->_query) ? $this->_query : false;
+    }
 
-	/**
-	 * Returns true if and only if the query string passes validation. If no query is passed,
-	 * then the query string contained in the instance variable is used.
-	 *
-	 * @param string $query
-	 * @throws Zend_Uri_Exception
-	 * @return boolean
-	 */
+    /**
+     * Returns true if and only if the query string passes validation. If no query is passed,
+     * then the query string contained in the instance variable is used.
+     *
+     * @param string $query
+     * @throws Zend_Uri_Exception
+     * @return boolean
+     */
     public function validateQuery($query = null)
     {
         if ($query === null) {
@@ -492,7 +500,7 @@ class Zend_Uri_Http extends Zend_Uri
         if (strlen($query) == 0) {
             return true;
         }
-        
+
         /**
          * Determine whether the query is well-formed
          *
@@ -503,12 +511,12 @@ class Zend_Uri_Http extends Zend_Uri
         if ($status === false) {
             throw new Zend_Uri_Exception('Internal error: query validation failed');
         }
-        
+
         return $status == 1;
     }
 
     /**
-     * Set the query string for the current URI, and return the old query 
+     * Set the query string for the current URI, and return the old query
      * string This method accepts both strings and arrays.
      *
      * @param string|array $query The query string or array
@@ -516,7 +524,7 @@ class Zend_Uri_Http extends Zend_Uri
      */
     public function setQuery($query)
     {
-    	$oldQuery = $this->_query;
+        $oldQuery = $this->_query;
         $this->_query = $this->_parseQuery($query);
         return $oldQuery;
     }
@@ -529,54 +537,54 @@ class Zend_Uri_Http extends Zend_Uri
      */
     protected function _parseQuery($query)
     {
-    	// If query is empty, return an empty string
+        // If query is empty, return an empty string
         if (empty($query)) {
             return '';
         }
-        
+
         // If query is an array, make a string out of it
         if (is_array($query)) {
-        	// fails on PHP < 5.1.2
-        	$query_str = @http_build_query($query, '', '&');
-        	// If it failed, try calling with only 2 args
-        	if (!$query_str) {
-        		$query_str = http_build_query($query, '');
-        	}
-        	// Just in case they use &amp; in their php.ini, replace it with &
-       		$query_str = str_replace("&amp;", "&", $query_str);
-       		
-        	$query = $query_str;
+            // fails on PHP < 5.1.2
+            $query_str = @http_build_query($query, '', '&');
+            // If it failed, try calling with only 2 args
+            if (!$query_str) {
+                $query_str = http_build_query($query, '');
+            }
+            // Just in case they use &amp; in their php.ini, replace it with &
+               $query_str = str_replace("&amp;", "&", $query_str);
+
+            $query = $query_str;
         } else {
-        	$query = (string) $query;
+            $query = (string) $query;
         }
-        
+
         // Make sure the query is valid, and set it
-       	if ($this->validateQuery($query)) {
-       		return $query;
-       	} else {
-       		throw new Zend_Uri_Exception("'$query' is not a valid query string");
-       	}
+           if ($this->validateQuery($query)) {
+               return $query;
+           } else {
+               throw new Zend_Uri_Exception("'$query' is not a valid query string");
+           }
         return $query;
     }
 
-	/**
-	 * Returns the fragment portion of the URL (after #), or FALSE if none.
-	 *
-	 * @return string|false
-	 */
-	public function getFragment()
-	{
-		return strlen($this->_fragment) ? $this->_fragment : false;
-	}
+    /**
+     * Returns the fragment portion of the URL (after #), or FALSE if none.
+     *
+     * @return string|false
+     */
+    public function getFragment()
+    {
+        return strlen($this->_fragment) ? $this->_fragment : false;
+    }
 
-	/**
-	 * Returns true if and only if the fragment passes validation. If no fragment is passed,
-	 * then the fragment contained in the instance variable is used.
-	 *
-	 * @param string $fragment
-	 * @throws Zend_Uri_Exception
-	 * @return boolean
-	 */
+    /**
+     * Returns true if and only if the fragment passes validation. If no fragment is passed,
+     * then the fragment contained in the instance variable is used.
+     *
+     * @param string $fragment
+     * @throws Zend_Uri_Exception
+     * @return boolean
+     */
     public function validateFragment($fragment = null)
     {
         if ($fragment === null) {
@@ -587,7 +595,7 @@ class Zend_Uri_Http extends Zend_Uri
         if (strlen($fragment) == 0) {
             return true;
         }
-        
+
         /**
          * Determine whether the fragment is well-formed
          *
@@ -598,7 +606,7 @@ class Zend_Uri_Http extends Zend_Uri
         if ($status === false) {
             throw new Zend_Uri_Exception('Internal error: fragment validation failed');
         }
-        
+
         return (boolean) $status;
     }
 

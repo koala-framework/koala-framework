@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -16,34 +17,31 @@
  * @package    Zend_Session
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Session.php 4534 2007-04-18 17:35:45Z ralph $
+ * @version    $Id: Session.php 4773 2007-05-09 19:33:10Z darby $
  * @since      Preview Release 0.2
  */
 
-/**
- * Zend
- */
-require_once 'Zend/Loader.php';
 
 /**
- * Zend_Session_Abstract
+ * @see Zend_Session_Abstract
  */
 require_once 'Zend/Session/Abstract.php';
 
 /**
- * Zend_Session_Namespace
+ * @see Zend_Session_Namespace
  */
 require_once 'Zend/Session/Namespace.php';
 
 /**
- * Zend_Session_Exception
+ * @see Zend_Session_Exception
  */
 require_once 'Zend/Session/Exception.php';
 
 /**
- * Zend_Session_SaveHandler_Interface
+ * @see Zend_Session_SaveHandler_Interface
  */
 require_once 'Zend/Session/SaveHandler/Interface.php';
+
 
 /**
  * Zend_Session
@@ -118,8 +116,7 @@ class Zend_Session extends Zend_Session_Abstract
      */
     private static $_localOptions = array(
         'strict'                => '_strict',
-        'remember_me_seconds'   => '_rememberMeSeconds',
-        'ignore_save_path'      => '_ignore_save_path'
+        'remember_me_seconds'   => '_rememberMeSeconds'
     );
 
     /**
@@ -142,13 +139,6 @@ class Zend_Session extends Zend_Session_Abstract
      * @var bool
      */
     private static $_destroyed = false;
-
-    /**
-     * Whether or not session save_path must be writable (false = must be writable)
-     *
-     * @var bool
-     */
-    private static $_ignore_save_path = false;
 
     /**
      * Whether or not session must be initiated before usage
@@ -183,17 +173,17 @@ class Zend_Session extends Zend_Session_Abstract
     /**
      * setOptions - set both the class specified
      *
-     * @param array $userOptions - pass-by-keyword style array of <option name, option value> pairs
+     * @param  array $userOptions - pass-by-keyword style array of <option name, option value> pairs
      * @throws Zend_Session_Exception
      * @return void
      */
-    public static function setOptions(Array $userOptions = array())
+    public static function setOptions(array $userOptions = array())
     {
         // set default options on first run only (before applying user settings)
         if (!self::$_defaultOptionsSet) {
-            foreach (self::$_defaultOptions as $default_option_name => $default_option_value) {
-                if (isset(self::$_defaultOptions[$default_option_name])) {
-                    ini_set('session.' . $default_option_name, $default_option_value);
+            foreach (self::$_defaultOptions as $defaultOptionName => $defaultOptionValue) {
+                if (isset(self::$_defaultOptions[$defaultOptionName])) {
+                    ini_set("session.$defaultOptionName", $defaultOptionValue);
                 }
             }
 
@@ -201,28 +191,20 @@ class Zend_Session extends Zend_Session_Abstract
         }
 
         // set the options the user has requested to set
-        foreach ($userOptions as $user_option_name => $user_option_value) {
+        foreach ($userOptions as $userOptionName => $userOptionValue) {
 
-            $user_option_name = strtolower($user_option_name);
+            $userOptionName = strtolower($userOptionName);
 
             // set the ini based values
-            if (array_key_exists($user_option_name, self::$_defaultOptions)) {
-                ini_set('session.' . $user_option_name, $user_option_value);
+            if (array_key_exists($userOptionName, self::$_defaultOptions)) {
+                ini_set("session.$userOptionName", $userOptionValue);
             }
-            elseif (isset(self::$_localOptions[$user_option_name])) {
-                self::${self::$_localOptions[$user_option_name]} = $user_option_value;
+            elseif (isset(self::$_localOptions[$userOptionName])) {
+                self::${self::$_localOptions[$userOptionName]} = $userOptionValue;
             }
             else {
-                throw new Zend_Session_Exception("Unknown option: $user_option_name = $user_option_value");
+                throw new Zend_Session_Exception("Unknown option: $userOptionName = $userOptionValue");
             }
-        }
-        $savePath = ini_get('session.save_path');
-        if (strpos($savePath, ';') !== false) {
-            $savePath = explode(';', $savePath);
-            $savePath = realpath(array_pop($savePath));
-        }
-        if (self::$_ignore_save_path !== true && !is_writable($savePath)) {
-            throw new Zend_Session_Exception("Unwritable session.save_path: $savePath");
         }
     }
 
@@ -383,7 +365,20 @@ class Zend_Session extends Zend_Session_Abstract
             throw new Zend_Session_Exception('session has already been started by session.auto-start or session_start()');
         }
 
+        /**
+         * Hack to throw exceptions on start instead of php errors
+         * @see http://framework.zend.com/issues/browse/ZF-1325
+         */
+        set_error_handler(array('Zend_Session_Exception', 'handleSessionStartError'), E_ALL);
         session_start();
+        restore_error_handler();
+        if (Zend_Session_Exception::$sessionStartError !== null) {
+           set_error_handler(array('Zend_Session_Exception', 'handleSilentWriteClose'), E_ALL);
+           session_write_close();
+           restore_error_handler();
+           throw new Zend_Session_Exception(__CLASS__ . '::' . __FUNCTION__ . '() - ' . Zend_Session_Exception::$sessionStartError);
+        }
+
         parent::$_readable = true;
         parent::$_writable = true;
         self::$_sessionStarted = true;
@@ -643,6 +638,13 @@ class Zend_Session extends Zend_Session_Abstract
      */
     private static function _processValidators()
     {
+        if (count($_SESSION['__ZF']['VALID']) > 0) {
+            /**
+             * @see Zend_Loader
+             */
+            require_once 'Zend/Loader.php';
+        }
+
         foreach ($_SESSION['__ZF']['VALID'] as $validator_name => $valid_data) {
             Zend_Loader::loadClass($validator_name);
             $validator = new $validator_name;
@@ -737,4 +739,5 @@ class Zend_Session extends Zend_Session_Abstract
     {
         return parent::$_readable;
     }
+
 }

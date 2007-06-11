@@ -16,7 +16,7 @@
  * @category   Zend
  * @package    Zend_Http
  * @subpackage Client
- * @version    $Id: Client.php 4251 2007-03-29 00:08:39Z rboyd $
+ * @version    $Id: Client.php 5052 2007-05-29 19:38:17Z darby $
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -213,25 +213,26 @@ class Zend_Http_Client
     /**
      * Set the URI for the next request
      *
-     * @param Zend_Uri_Http|string $uri
+     * @param  Zend_Uri_Http|string $uri
      * @return Zend_Http_Client
+     * @throws Zend_Http_Client_Exception
      */
     public function setUri($uri)
     {
-        if (is_string($uri) && Zend_Uri_Http::check($uri)) {
+        if (is_string($uri)) {
             $uri = Zend_Uri::factory($uri);
         }
 
-        if ($uri instanceof Zend_Uri_Http) {
-            // We have no ports, set the defaults
-            if (! $uri->getPort()) {
-                $uri->setPort(($uri->getScheme() == 'https' ? 443 : 80));
-            }
-
-            $this->uri = $uri;
-        } else {
+        if (!$uri instanceof Zend_Uri_Http) {
             throw new Zend_Http_Client_Exception('Passed parameter is not a valid HTTP URI.');
         }
+
+        // We have no ports, set the defaults
+        if (! $uri->getPort()) {
+            $uri->setPort(($uri->getScheme() == 'https' ? 443 : 80));
+        }
+
+        $this->uri = $uri;
 
         return $this;
     }

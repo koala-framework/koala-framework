@@ -70,40 +70,24 @@ class Zend_Search_Lucene_Analysis_Analyzer_Common_Text extends Zend_Search_Lucen
             return null;
         }
 
-        while ($this->_position < strlen($this->_input)) {
-            // skip white space
-            while ($this->_position < strlen($this->_input) &&
-                   !ctype_alpha( $this->_input[$this->_position] )) {
-                $this->_position++;
+
+        do {
+            if (! preg_match('/[a-zA-Z]+/', $this->_input, $match, PREG_OFFSET_CAPTURE, $this->_position)) {
+                // It covers both cases a) there are no matches (preg_match(...) === 0)
+                // b) error occured (preg_match(...) === FALSE)
+            	return null;
             }
 
-            $termStartPosition = $this->_position;
+            $str = $match[0][0];
+            $pos = $match[0][1];
+            $endpos = $pos + strlen($str);
 
-            // read token
-            while ($this->_position < strlen($this->_input) &&
-                   ctype_alpha( $this->_input[$this->_position] )) {
-                $this->_position++;
-            }
+            $this->_position = $endpos;
 
-            // Empty token, end of stream.
-            if ($this->_position == $termStartPosition) {
-                return null;
-            }
+            $token = $this->normalize(new Zend_Search_Lucene_Analysis_Token($str, $pos, $endpos));
+        } while ($token === null); // try again if token is skipped
 
-            $token = new Zend_Search_Lucene_Analysis_Token(
-                                      substr($this->_input,
-                                             $termStartPosition,
-                                             $this->_position - $termStartPosition),
-                                      $termStartPosition,
-                                      $this->_position);
-            $token = $this->normalize($token);
-            if ($token !== null) {
-                return $token;
-            }
-            // Continue if token is skipped
-        }
-
-        return null;
+        return $token;
     }
 }
 

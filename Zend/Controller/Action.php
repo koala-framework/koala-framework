@@ -44,6 +44,12 @@ require_once 'Zend/Controller/Response/Abstract.php';
 abstract class Zend_Controller_Action
 {
     /**
+     * Word delimiters (used for normalizing view script paths)
+     * @var array
+     */
+    protected $_delimiters;
+
+    /**
      * Array of arguments provided to the constructor, minus the 
      * {@link $_request Request object}.
      * @var array 
@@ -152,6 +158,10 @@ abstract class Zend_Controller_Action
      */
     public function initView()
     {
+        if (!$this->getInvokeArg('noViewRenderer') && $this->_helper->hasHelper('viewRenderer')) {
+            return $this->view;
+        }
+
         require_once 'Zend/View/Interface.php';
         if (isset($this->view) && ($this->view instanceof Zend_View_Interface)) {
             return $this->view;
@@ -161,7 +171,7 @@ abstract class Zend_Controller_Action
         $module  = $request->getModuleName();
         $dirs    = $this->getFrontController()->getControllerDirectory();
         if (empty($module) || !isset($dirs[$module])) {
-            $module = 'default';
+            $module = $this->getFrontController()->getDispatcher()->getDefaultModule();
         }
         $baseDir = dirname($dirs[$module]) . DIRECTORY_SEPARATOR . 'views';
         if (!file_exists($baseDir) || !is_dir($baseDir)) {
@@ -193,9 +203,42 @@ abstract class Zend_Controller_Action
      */
     public function render($action = null, $name = null, $noController = false)
     {
+        if (!$this->getInvokeArg('noViewRenderer') && $this->_helper->hasHelper('viewRenderer')) {
+            return $this->_helper->viewRenderer->render($action, $name, $noController);
+        }
+
         $view   = $this->initView();
         $script = $this->getViewScript($action, $noController);
 
+        $this->getResponse()->appendBody(
+            $view->render($script),
+            $name
+        );
+    }
+
+    /**
+     * Render a given view script
+     *
+     * Similar to {@link render()}, this method renders a view script. Unlike render(), 
+     * however, it does not autodetermine the view script via {@link getViewScript()},
+     * but instead renders the script passed to it. Use this if you know the 
+     * exact view script name and path you wish to use, or if using paths that do not
+     * conform to the spec defined with getViewScript().
+     *
+     * By default, the rendered contents are appended to the response. You may 
+     * specify the named body content segment to set by specifying a $name.
+     * 
+     * @param  string $script 
+     * @param  string $name 
+     * @return void
+     */
+    public function renderScript($script, $name = null)
+    {
+        if (!$this->getInvokeArg('noViewRenderer') && $this->_helper->hasHelper('viewRenderer')) {
+            return $this->_helper->viewRenderer->renderScript($script, $name);
+        }
+
+        $view = $this->initView();
         $this->getResponse()->appendBody(
             $view->render($script),
             $name
@@ -212,8 +255,14 @@ abstract class Zend_Controller_Action
      * @return string
      * @throws Zend_Controller_Exception with bad $action
      */
-    public function getViewScript($action = null, $noController = false)
+    public function getViewScript($action = null, $noController = null)
     {
+        if (!$this->getInvokeArg('noViewRenderer') && $this->_helper->hasHelper('viewRenderer')) {
+            $viewRenderer = $this->_helper->getHelper('viewRenderer');
+            $viewRenderer->setNoController($noController);
+            return $viewRenderer->getViewScript($action);
+        }
+
         $request = $this->getRequest();
         if (null === $action) {
             $action = $request->getActionName();
@@ -221,10 +270,20 @@ abstract class Zend_Controller_Action
             throw new Zend_Controller_Exception('Invalid action specifier for view render');
         }
 
+        if (null === $this->_delimiters) {
+            $dispatcher = Zend_Controller_Front::getInstance()->getDispatcher();
+            $wordDelimiters = $dispatcher->getWordDelimiter();
+            $pathDelimiters = $dispatcher->getPathDelimiter();
+            $this->_delimiters = array_unique(array_merge($wordDelimiters, (array) $pathDelimiters));
+        }
+
+        $action = str_replace($this->_delimiters, '-', $action);
         $script = $action . '.' . $this->viewSuffix;
 
         if (!$noController) {
-            $script = $request->getControllerName() . DIRECTORY_SEPARATOR . $script;
+            $controller = $request->getControllerName();
+            $controller = str_replace($this->_delimiters, '-', $controller);
+            $script = $controller . DIRECTORY_SEPARATOR . $script;
         }
 
         return $script;
@@ -418,7 +477,7 @@ abstract class Zend_Controller_Action
                  .'() does not exist and was not trapped in __call()';
         }
 
-        throw new Zend_Controller_Exception($msg);
+        throw new Zend_Controller_Action_Exception($msg);
     }
 
     /**

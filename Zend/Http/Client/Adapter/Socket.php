@@ -16,7 +16,7 @@
  * @category   Zend
  * @package    Zend_Http
  * @subpackage Client_Adapter
- * @version    $Id: Socket.php 3348 2007-02-12 09:06:02Z shahar $
+ * @version    $Id: Socket.php 4797 2007-05-14 19:18:13Z shahar $
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -119,7 +119,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
             }
             
             // Set the stream timeout
-            if (!stream_set_timeout($this->socket, (int) $this->config['timeout'])) {
+            if (! stream_set_timeout($this->socket, (int) $this->config['timeout'])) {
                 throw new Zend_Http_Client_Adapter_Exception('Unable to set the connection timeout');
             }
             
@@ -165,7 +165,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
         $request .= "\r\n" . $body;
         
         // Send the request
-        if (! fwrite($this->socket, $request)) {
+        if (! @fwrite($this->socket, $request)) {
             throw new Zend_Http_Client_Adapter_Exception('Error writing request to server');
         }
         
@@ -182,7 +182,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
         // First, read headers only
         $response = '';
         $gotStatus = false;
-        while ($line = fgets($this->socket)) {
+        while ($line = @fgets($this->socket)) {
             $gotStatus = $gotStatus || (strpos($line, 'HTTP') !== false);
             if ($gotStatus) {
                 $response .= $line;
@@ -202,7 +202,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
         
         // if the connection is set to close, just read until socket closes
         if (isset($headers['connection']) && $headers['connection'] == 'close') {
-            while ($buff = fread($this->socket, 8192)) {
+            while ($buff = @fread($this->socket, 8192)) {
                 $response .= $buff;
             }
             
@@ -213,7 +213,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
             if ($headers['transfer-encoding'] == 'chunked') {
                 do {
                     $chunk = '';
-                    $line = fgets($this->socket);
+                    $line = @fgets($this->socket);
                     $chunk .= $line;
 
                     $hexchunksize = chop($line);
@@ -221,19 +221,19 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
                     
                     $chunksize = hexdec(chop($line));
                     if (dechex($chunksize) != $hexchunksize) {            
-                        fclose($this->socket);
+                        @fclose($this->socket);
                         throw new Zend_Http_Client_Adapter_Exception('Invalid chunk size "' . 
                             $hexchunksize . '" unable to read chunked body');
                     }
         
                     $left_to_read = $chunksize;
                     while ($left_to_read > 0) {
-                        $line = fread($this->socket, $left_to_read);
+                        $line = @fread($this->socket, $left_to_read);
                         $chunk .= $line;
                         $left_to_read -= strlen($line);
                     }
 
-                    $chunk .= fgets($this->socket);
+                    $chunk .= @fgets($this->socket);
                     $response .= $chunk;
                 } while ($chunksize > 0);
             } else {
@@ -246,14 +246,14 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
             $left_to_read = $headers['content-length'];
             $chunk = '';
             while ($left_to_read > 0) {
-                $chunk = fread($this->socket, $left_to_read);
+                $chunk = @fread($this->socket, $left_to_read);
                 $left_to_read -= strlen($chunk);
                 $response .= $chunk;
             }
             
         // Fallback: just read the response (should not happen)
         } else {
-            while ($buff = fread($this->socket, 8192)) {
+            while ($buff = @fread($this->socket, 8192)) {
                 $response .= $buff;
             }
             
@@ -269,7 +269,7 @@ class Zend_Http_Client_Adapter_Socket implements Zend_Http_Client_Adapter_Interf
      */
     public function close()
     {
-        if (is_resource($this->socket)) fclose($this->socket);
+        if (is_resource($this->socket)) @fclose($this->socket);
         $this->socket = null;
         $this->connected_to = array(null, null);
     }

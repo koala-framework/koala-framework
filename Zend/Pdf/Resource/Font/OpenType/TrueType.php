@@ -87,8 +87,8 @@ class Zend_Pdf_Resource_Font_OpenType_TrueType extends Zend_Pdf_Resource_Font_Op
         if ($fontParser->isScriptFont) {    // bit 4: Script
             $flags |= 1 << 3;
         }
-        if ($fontParser->isAdobeLatinSubset) {    // bit 5: Nonsymbolic
-            $flags |= 1 << 4;
+        if ($fontParser->isAdobeLatinSubset) {    // bit 6: Nonsymbolic
+            $flags |= 1 << 5;
         }
         if ($fontParser->isItalic) {    // bit 7: Italic
             $flags |= 1 << 6;

@@ -15,7 +15,7 @@
  * @package    Zend_Controller
  * @subpackage Router
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Route.php 4637 2007-05-01 13:32:51Z martel $
+ * @version    $Id: Route.php 4806 2007-05-15 18:06:12Z matthew $
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
@@ -203,7 +203,8 @@ class Zend_Controller_Router_Route implements Zend_Controller_Router_Route_Inter
     /**
      * Assembles user submitted parameters forming a URL path defined by this route
      *
-     * @param array An array of variable and value pairs used as parameters
+     * @param  array $data An array of variable and value pairs used as parameters
+     * @param  boolean $reset Whether or not to set route defaults with those provided in $data
      * @return string Route path with user submitted parameters
      */
     public function assemble($data = array(), $reset = false)

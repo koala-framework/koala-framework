@@ -17,7 +17,7 @@
  * @package    Zend_Filter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Alpha.php 4135 2007-03-20 12:46:11Z darby $
+ * @version    $Id: Alpha.php 5098 2007-06-04 18:26:17Z darby $
  */
 
 
@@ -45,6 +45,6 @@ class Zend_Filter_Alpha implements Zend_Filter_Interface
      */
     public function filter($value)
     {
-        return preg_replace('/[^[:alpha:]]/', '', (string) $value);
+        return preg_replace('/[\p{^L}]/u', '', (string) $value);
     }
 }

@@ -66,7 +66,7 @@ class Zend_Controller_Router_Route_Regex implements Zend_Controller_Router_Route
      */
     public function match($path)
     {
-        $path = ltrim(urldecode($path), '/');
+        $path = trim(urldecode($path), '/');
         $res = preg_match($this->_regex, $path, $values);
 
         if ($res === 0) return false; 

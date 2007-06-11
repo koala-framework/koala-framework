@@ -63,11 +63,11 @@ class Zend_Translate_Adapter_Xliff extends Zend_Translate_Adapter {
 
 
     /**
-     * Load translation data (TMX file reader)
+     * Load translation data (XLIFF file reader)
      *
-     * @param  string  $locale    Locale has no effect for TMX because TMX defines all languages within 
-     *                            the source file
-     * @param  string  $filename  TMX file to add, full path must be given for access
+     * @param  string  $locale    Locale/Language to add data for, identical with locale identifier,
+     *                            see Zend_Locale for more information
+     * @param  string  $filename  XLIFF file to add, full path must be given for access
      * @param  array   $option    OPTIONAL Options to use
      * @throws Zend_Translation_Exception
      */

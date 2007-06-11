@@ -44,7 +44,7 @@ class Zend_XmlRpc_Client_ServerIntrospection
     /**
      * @param Zend_XmlRpc_Client $client 
      */
-    public function __construct($client)
+    public function __construct(Zend_XmlRpc_Client $client)
     {
         $this->_system = $client->getProxy('system');
     }

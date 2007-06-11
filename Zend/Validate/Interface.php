@@ -17,7 +17,7 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Interface.php 3278 2007-02-07 21:54:50Z darby $
+ * @version    $Id: Interface.php 4974 2007-05-25 21:11:56Z bkarwin $
  */
 
 
@@ -32,22 +32,36 @@ interface Zend_Validate_Interface
     /**
      * Returns true if and only if $value meets the validation requirements
      *
-     * If $value fails validation, then this method returns false, and $messages will contain an array of
-     * messages that explain why the validation failed.
+     * If $value fails validation, then this method returns false, and
+     * $messages will contain an array of messages that explain why the
+     * validation failed.
      *
      * @param  mixed $value
-     * @throws Zend_Valid_Exception If validation of $value is impossible
      * @return boolean
+     * @throws Zend_Valid_Exception If validation of $value is impossible
      */
     public function isValid($value);
 
     /**
-     * Returns an array of messages that explain why a previous isValid() call returned false
+     * Returns an array of messages that explain why a previous isValid()
+     * call returned false.
      *
-     * If isValid() was never called or if the most recent isValid() call returned true, then
-     * this method returns an empty array.
+     * If isValid() was never called or if the most recent isValid() call
+     * returned true, then this method returns an empty array.
      *
      * @return array
      */
     public function getMessages();
+
+    /**
+     * Returns an array of errors that explain why a previous isValid() call
+     * returned false.
+     *
+     * If isValid() was never called or if the most recent isValid() call
+     * returned true, then this method returns an empty array.
+     *
+     * @return array
+     */
+    public function getErrors();
+
 }

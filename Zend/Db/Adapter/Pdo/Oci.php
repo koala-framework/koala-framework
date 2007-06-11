@@ -92,10 +92,10 @@ class Zend_Db_Adapter_Pdo_Oci extends Zend_Db_Adapter_Pdo_Abstract
      * @param string $alias An alias for the table.
      * @return string The quoted identifier and alias.
      */
-    public function quoteTableAs($ident, $alias)
+    public function quoteTableAs($ident, $alias, $auto=false)
     {
         // Oracle doesn't allow the 'AS' keyword between the table identifier/expression and alias.
-        return $this->_quoteIdentifierAs($ident, $alias, ' ');
+        return $this->_quoteIdentifierAs($ident, $alias, $auto, ' ');
     }
 
     /**
@@ -118,7 +118,7 @@ class Zend_Db_Adapter_Pdo_Oci extends Zend_Db_Adapter_Pdo_Abstract
      * The value of each array element is an associative array
      * with the following keys:
      *
-     * SCHEMA_NAME      => string; name of database or schema
+     * SCHEMA_NAME      => string; name of schema
      * TABLE_NAME       => string;
      * COLUMN_NAME      => string; column name
      * COLUMN_POSITION  => number; ordinal position of column in table
@@ -131,6 +131,7 @@ class Zend_Db_Adapter_Pdo_Oci extends Zend_Db_Adapter_Pdo_Abstract
      * UNSIGNED         => boolean; unsigned property of an integer type
      * PRIMARY          => boolean; true if column is part of the primary key
      * PRIMARY_POSITION => integer; position of column in primary key
+     * IDENTITY         => integer; true if column is auto-generated with unique values
      *
      * @todo Discover integer unsigned property.
      *
@@ -140,27 +141,29 @@ class Zend_Db_Adapter_Pdo_Oci extends Zend_Db_Adapter_Pdo_Abstract
      */
     public function describeTable($tableName, $schemaName = null)
     {
-        $sql = "SELECT TC.TABLE_NAME, TB.TABLESPACE_NAME, TC.COLUMN_NAME, TC.DATA_TYPE,
+        $sql = "SELECT TC.TABLE_NAME, TB.OWNER, TC.COLUMN_NAME, TC.DATA_TYPE,
                 TC.DATA_DEFAULT, TC.NULLABLE, TC.COLUMN_ID, TC.DATA_LENGTH,
                 TC.DATA_SCALE, TC.DATA_PRECISION, C.CONSTRAINT_TYPE, CC.POSITION
             FROM ALL_TAB_COLUMNS TC
             LEFT JOIN (ALL_CONS_COLUMNS CC JOIN ALL_CONSTRAINTS C
                 ON (CC.CONSTRAINT_NAME = C.CONSTRAINT_NAME AND CC.TABLE_NAME = C.TABLE_NAME AND C.CONSTRAINT_TYPE = 'P'))
               ON TC.TABLE_NAME = CC.TABLE_NAME AND TC.COLUMN_NAME = CC.COLUMN_NAME
-            JOIN ALL_TABLES TB ON (TB.TABLE_NAME = TC.TABLE_NAME)
+            JOIN ALL_TABLES TB ON (TB.TABLE_NAME = TC.TABLE_NAME AND TB.OWNER = TC.OWNER)
             WHERE TC.TABLE_NAME = ".$this->quote($tableName);
         if ($schemaName) {
-            $sql .= " AND TB.TABLESPACE_NAME = ".$this->quote($schemaName);
+            $sql .= " AND TB.OWNER = ".$this->quote($schemaName);
         }
         $sql .= ' ORDER BY TC.COLUMN_ID';
 
         $stmt = $this->query($sql);
 
-        // Use FETCH_NUM so we are not dependent on the CASE attribute of the PDO connection
+        /**
+         * Use FETCH_NUM so we are not dependent on the CASE attribute of the PDO connection
+         */
         $result = $stmt->fetchAll(Zend_Db::FETCH_NUM);
 
         $table_name      = 0;
-        $tablespace_name = 1;
+        $owner           = 1;
         $column_name     = 2;
         $data_type       = 3;
         $data_default    = 4;
@@ -174,8 +177,17 @@ class Zend_Db_Adapter_Pdo_Oci extends Zend_Db_Adapter_Pdo_Abstract
 
         $desc = array();
         foreach ($result as $key => $row) {
+            list ($primary, $primaryPosition, $identity) = array(false, null, false);
+            if ($row[$constraint_type] == 'P') {
+                $primary = true;
+                $primaryPosition = $row[$position];
+                /**
+                 * Oracle does not support auto-increment keys.
+                 */
+                $identity = false;
+            }
             $desc[$row[$column_name]] = array(
-                'SCHEMA_NAME'      => $row[$tablespace_name],
+                'SCHEMA_NAME'      => $row[$owner],
                 'TABLE_NAME'       => $row[$table_name],
                 'COLUMN_NAME'      => $row[$column_name],
                 'COLUMN_POSITION'  => $row[$column_id],
@@ -186,8 +198,9 @@ class Zend_Db_Adapter_Pdo_Oci extends Zend_Db_Adapter_Pdo_Abstract
                 'SCALE'            => $row[$data_scale],
                 'PRECISION'        => $row[$data_precision],
                 'UNSIGNED'         => null, // @todo
-                'PRIMARY'          => (bool) ($row[$constraint_type] == 'P'),
-                'PRIMARY_POSITION' => $row[$position]
+                'PRIMARY'          => $primary,
+                'PRIMARY_POSITION' => $primaryPosition,
+                'IDENTITY'         => $identity
             );
         }
         return $desc;

@@ -17,14 +17,14 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: StringLength.php 4135 2007-03-20 12:46:11Z darby $
+ * @version    $Id: StringLength.php 4974 2007-05-25 21:11:56Z bkarwin $
  */
 
 
 /**
- * @see Zend_Validate_Interface
+ * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Interface.php';
+require_once 'Zend/Validate/Abstract.php';
 
 
 /**
@@ -33,8 +33,28 @@ require_once 'Zend/Validate/Interface.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Validate_StringLength implements Zend_Validate_Interface
+class Zend_Validate_StringLength extends Zend_Validate_Abstract
 {
+
+    const TOO_SHORT = 'stringLengthTooShort';
+    const TOO_LONG  = 'stringLengthTooLong';
+
+    /**
+     * @var array
+     */
+    protected $_messageTemplates = array(
+        self::TOO_SHORT => "'%value%' is less than %min% characters long",
+        self::TOO_LONG  => "'%value%' is greater than %max% characters long"
+    );
+
+    /**
+     * @var array
+     */
+    protected $_messageVariables = array(
+        'min' => '_min',
+        'max' => '_max'
+    );
+
     /**
      * Minimum length
      *
@@ -50,13 +70,6 @@ class Zend_Validate_StringLength implements Zend_Validate_Interface
      * @var integer|null
      */
     protected $_max;
-
-    /**
-     * Array of validation failure messages
-     *
-     * @var array
-     */
-    protected $_messages = array();
 
     /**
      * Sets validator options
@@ -131,14 +144,14 @@ class Zend_Validate_StringLength implements Zend_Validate_Interface
      */
     public function isValid($value)
     {
-        $this->_messages = array();
         $valueString = (string) $value;
+        $this->_setValue($valueString);
         $length = strlen($valueString);
         if ($length < $this->_min) {
-            $this->_messages[] = "'$valueString' is less than $this->_min characters long";
+            $this->_error(self::TOO_SHORT);
         }
         if (null !== $this->_max && $this->_max < $length) {
-            $this->_messages[] = "'$valueString' is greater than $this->_max characters long";
+            $this->_error(self::TOO_LONG);
         }
         if (count($this->_messages)) {
             return false;
@@ -147,15 +160,4 @@ class Zend_Validate_StringLength implements Zend_Validate_Interface
         }
     }
 
-    /**
-     * Defined by Zend_Validate_Interface
-     *
-     * Returns array of validation failure messages
-     *
-     * @return array
-     */
-    public function getMessages()
-    {
-        return $this->_messages;
-    }
 }

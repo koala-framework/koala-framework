@@ -17,14 +17,14 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Regex.php 4135 2007-03-20 12:46:11Z darby $
+ * @version    $Id: Regex.php 4974 2007-05-25 21:11:56Z bkarwin $
  */
 
 
 /**
- * @see Zend_Validate_Interface
+ * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Interface.php';
+require_once 'Zend/Validate/Abstract.php';
 
 
 /**
@@ -33,21 +33,31 @@ require_once 'Zend/Validate/Interface.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Validate_Regex implements Zend_Validate_Interface
+class Zend_Validate_Regex extends Zend_Validate_Abstract
 {
+
+    const NOT_MATCH = 'regexNotMatch';
+
+    /**
+     * @var array
+     */
+    protected $_messageTemplates = array(
+        self::NOT_MATCH => "'%value%' does not match against pattern '%pattern%'"
+    );
+
+    /**
+     * @var array
+     */
+    protected $_messageVariables = array(
+        'pattern' => '_pattern'
+    );
+
     /**
      * Regular expression pattern
      *
      * @var string
      */
     protected $_pattern;
-
-    /**
-     * Array of validation failure messages
-     *
-     * @var array
-     */
-    protected $_messages = array();
 
     /**
      * Sets validator options
@@ -93,9 +103,9 @@ class Zend_Validate_Regex implements Zend_Validate_Interface
      */
     public function isValid($value)
     {
-        $this->_messages = array();
-
         $valueString = (string) $value;
+
+        $this->_setValue($valueString);
 
         $status = @preg_match($this->_pattern, $valueString);
         if (false === $status) {
@@ -106,21 +116,10 @@ class Zend_Validate_Regex implements Zend_Validate_Interface
             throw new Zend_Validate_Exception("Internal error matching pattern '$this->_pattern' against value '$valueString'");
         }
         if (!$status) {
-            $this->_messages[] = "'$valueString' does not match against pattern '$this->_pattern'";
+            $this->_error();
             return false;
         }
         return true;
     }
 
-    /**
-     * Defined by Zend_Validate_Interface
-     *
-     * Returns array of validation failure messages
-     *
-     * @return array
-     */
-    public function getMessages()
-    {
-        return $this->_messages;
-    }
 }

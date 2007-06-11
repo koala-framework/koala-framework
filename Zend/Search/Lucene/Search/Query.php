@@ -91,10 +91,10 @@ abstract class Zend_Search_Lucene_Search_Query
      * Score specified document
      *
      * @param integer $docId
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return float
      */
-    abstract public function score($docId, $reader);
+    abstract public function score($docId, Zend_Search_Lucene_Interface $reader);
 
     /**
      * Get document ids likely matching the query
@@ -111,24 +111,24 @@ abstract class Zend_Search_Lucene_Search_Query
      *
      * Query specific implementation
      *
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      */
-    abstract public function execute($reader);
+    abstract public function execute(Zend_Search_Lucene_Interface $reader);
 
     /**
      * Constructs an appropriate Weight implementation for this query.
      *
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return Zend_Search_Lucene_Search_Weight
      */
-    abstract public function createWeight($reader);
+    abstract public function createWeight(Zend_Search_Lucene_Interface $reader);
 
     /**
      * Constructs an initializes a Weight for a _top-level_query_.
      *
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      */
-    protected function _initWeight($reader)
+    protected function _initWeight(Zend_Search_Lucene_Interface $reader)
     {
         // Check, that it's a top-level query and query weight is not initialized yet.
         if ($this->_weight !== null) {
@@ -144,18 +144,18 @@ abstract class Zend_Search_Lucene_Search_Query
     /**
      * Re-write query into primitive queries in the context of specified index
      *
-     * @param Zend_Search_Lucene $index
+     * @param Zend_Search_Lucene_Interface $index
      * @return Zend_Search_Lucene_Search_Query
      */
-    abstract public function rewrite(Zend_Search_Lucene $index);
+    abstract public function rewrite(Zend_Search_Lucene_Interface $index);
 
     /**
      * Optimize query in the context of specified index
      *
-     * @param Zend_Search_Lucene $index
+     * @param Zend_Search_Lucene_Interface $index
      * @return Zend_Search_Lucene_Search_Query
      */
-    abstract public function optimize(Zend_Search_Lucene $index);
+    abstract public function optimize(Zend_Search_Lucene_Interface $index);
 
     /**
      * Reset query, so it can be reused within other queries or

@@ -17,7 +17,7 @@
  * @package    Zend_Filter
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: StringToLower.php 4135 2007-03-20 12:46:11Z darby $
+ * @version    $Id: StringToLower.php 5125 2007-06-05 20:12:16Z andries $
  */
 
 
@@ -36,6 +36,28 @@ require_once 'Zend/Filter/Interface.php';
 class Zend_Filter_StringToLower implements Zend_Filter_Interface
 {
     /**
+     * Encoding for the input string
+     *
+     * @var string
+     */
+    protected $_encoding = null;
+
+    /**
+     * Set the input encoding for the given string
+     *
+     * @param  string $encoding
+     * @throws Zend_Filter_Exception
+     */
+    public function setEncoding($encoding = null)
+    {
+        if (!function_exists('mb_strtolower')) {
+            require_once 'Zend/Filter/Exception.php';
+            throw new Zend_Filter_Exception('mbstring is required for this feature');
+        }
+        $this->_encoding = $encoding;
+    }
+
+    /**
      * Defined by Zend_Filter_Interface
      *
      * Returns the string $value, converting characters to lowercase as necessary
@@ -45,6 +67,10 @@ class Zend_Filter_StringToLower implements Zend_Filter_Interface
      */
     public function filter($value)
     {
+        if ($this->_encoding) {
+            return mb_strtolower((string) $value, $this->_encoding);
+        }
+
         return strtolower((string) $value);
     }
 }

@@ -36,14 +36,14 @@ class Zend_Search_Lucene_Search_Weight_Boolean extends Zend_Search_Lucene_Search
     /**
      * IndexReader.
      *
-     * @var Zend_Search_Lucene
+     * @var Zend_Search_Lucene_Interface
      */
     private $_reader;
 
     /**
      * The query that this concerns.
      *
-     * @var Zend_Search_Lucene_Search_Query_Boolean
+     * @var Zend_Search_Lucene_Search_Query
      */
     private $_query;
 
@@ -61,10 +61,11 @@ class Zend_Search_Lucene_Search_Weight_Boolean extends Zend_Search_Lucene_Search
      * query - the query that this concerns.
      * reader - index reader
      *
-     * @param Zend_Search_Lucene_Search_Query_Boolean $query
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Search_Query $query
+     * @param Zend_Search_Lucene_Interface    $reader
      */
-    public function __construct($query, $reader)
+    public function __construct(Zend_Search_Lucene_Search_Query $query,
+                                Zend_Search_Lucene_Interface    $reader)
     {
         $this->_query   = $query;
         $this->_reader  = $reader;

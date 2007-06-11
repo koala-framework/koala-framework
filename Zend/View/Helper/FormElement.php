@@ -29,7 +29,12 @@
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-abstract class Zend_View_Helper_FormElement {
+abstract class Zend_View_Helper_FormElement 
+{
+    /**
+     * @var Zend_View_Interface
+     */
+    public $view;
     
     /**
      * Converts an associative array to a string of tag attributes.
@@ -45,11 +50,11 @@ abstract class Zend_View_Helper_FormElement {
     {
         $xhtml = '';
         foreach ((array) $attribs as $key => $val) {
-            $key = htmlspecialchars($key, ENT_COMPAT, 'UTF-8');
+            $key = $this->view->escape($key);
             if (is_array($val)) {
                 $val = implode(' ', $val);
             }
-            $val = htmlspecialchars($val, ENT_COMPAT, 'UTF-8');
+            $val = $this->view->escape($val);
             $xhtml .= " $key=\"$val\"";
         }
         return $xhtml;
@@ -151,8 +156,19 @@ abstract class Zend_View_Helper_FormElement {
     protected function _hidden($name, $value = null, $attribs = null)
     {
         return '<input type="hidden"'
-             . ' name="' . htmlspecialchars($name, ENT_COMPAT, 'UTF-8') . '"'
-             . ' value="' . htmlspecialchars($value, ENT_COMPAT, 'UTF-8') . '"'
+             . ' name="' . $this->view->escape($name) . '"'
+             . ' value="' . $this->view->escape($value) . '"'
              . $this->_htmlAttribs($attribs) . ' />';
+    }
+
+    /**
+     * Set the view object
+     * 
+     * @param Zend_View_Interface $view 
+     * @return void
+     */
+    public function setView(Zend_View_Interface $view)
+    {
+        $this->view = $view;
     }
 }

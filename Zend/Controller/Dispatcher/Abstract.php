@@ -53,6 +53,12 @@ abstract class Zend_Controller_Dispatcher_Abstract implements Zend_Controller_Di
     protected $_defaultController = 'index';
 
     /**
+     * Default module
+     * @var string
+     */
+    protected $_defaultModule = 'default';
+
+    /**
      * Front Controller instance
      * @var Zend_Controller_Front
      */
@@ -416,5 +422,27 @@ abstract class Zend_Controller_Dispatcher_Abstract implements Zend_Controller_Di
     public function getDefaultAction()
     {
         return $this->_defaultAction;
+    }
+
+    /**
+     * Set the default module
+     * 
+     * @param string $module 
+     * @return Zend_Controller_Dispatcher_Abstract
+     */
+    public function setDefaultModule($module)
+    {
+        $this->_defaultModule = (string) $module;
+        return $this;
+    }
+
+    /**
+     * Retrieve the default module
+     * 
+     * @return string
+     */
+    public function getDefaultModule()
+    {
+        return $this->_defaultModule;
     }
 }

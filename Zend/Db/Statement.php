@@ -42,6 +42,11 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
 {
 
     /**
+     * @var Zend_Db_Adapter_Abstract
+     */
+    protected $_adapter = null;
+
+    /**
      * The current fetch mode.
      *
      * @var integer
@@ -84,26 +89,35 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
     protected $_sqlParam = array();
 
     /**
-     * Constructor.
+     * Constructor for a statement.
      *
-     * @param Zend_Db_Adapter_Abstract $connection
-     * @param string|Zend_Db_Select $sql
-     * @return void
+     * @param Zend_Db_Adapter_Abstract $adapter
+     * @param mixed $sql Either a string or Zend_Db_Select.
      */
-    public function __construct($connection, $sql)
+    public function __construct($adapter, $sql)
     {
-        $this->_connection = $connection;
+        $this->_adapter = $adapter;
+        if ($sql instanceof Zend_Db_Select) {
+            $sql = $sql->__toString();
+        }
         $this->_prepSql($sql);
     }
 
     /**
-     * Splits SQL into text and params, sets up $this->_bindParam for replacements.
+     * Splits SQL into text and params, sets up $this->_bindParam
+     * for replacements.
      *
-     * @param string|Zend_Db_Select $sql
+     * @param string $sql
      * @return void
+     *
+     * @todo: Parse the string more faithfully so that strings that resemble
+     * parameter placeholders but that appear inside string literals or other
+     * expressions are not treated as placeholders.
      */
     protected function _prepSql($sql)
     {
+        $sql = $this->_stripQuoted($sql);
+
         // split into text and params
         $this->_sqlSplit = preg_split('/(\?|\:[a-z_]+)/',
             $sql, -1, PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY);
@@ -111,9 +125,24 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
         // map params
         $this->_sqlParam = array();
         foreach ($this->_sqlSplit as $key => $val) {
-            if ($val[0] == ':' || $val[0] == '?') {
-                $this->_sqlParam[] = $val; // key *2 +1 is the parsed position
+            if ($val == '?') {
+                if ($this->_adapter->supportsParameters('positional') === false) {
+                    /**
+                     * @see Zend_Db_Statement_Exception
+                     */
+                    require_once 'Zend/Db/Statement/Exception.php';
+                    throw new Zend_Db_Statement_Exception("Invalid bind-variable position '$val'");
+                }
+            } else if ($val[0] == ':') {
+                if ($this->_adapter->supportsParameters('named') === false) {
+                    /**
+                     * @see Zend_Db_Statement_Exception
+                     */
+                    require_once 'Zend/Db/Statement/Exception.php';
+                    throw new Zend_Db_Statement_Exception("Invalid bind-variable position '$val'");
+                }
             }
+            $this->_sqlParam[] = $val;
         }
 
         // set up for binding
@@ -121,80 +150,166 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
     }
 
     /**
-     * Joins SQL text and bound params into a string.
+     * Remove parts of a SQL string that contain quoted strings
+     * of values or identifiers.
      *
+     * @param string $sql
      * @return string
      */
-    protected function _joinSql()
+    protected function _stripQuoted($sql)
     {
-        $sql = $this->_sqlSplit;
-        foreach ($this->_bindParam as $key => $val) {
-            $pos = $key *2 +1; // always an odd position, right?
-            $sql[$pos] = $this->_connection->quote($val);
-        }
-        return implode('', $sql);
+        // get the character for delimited id quotes,
+        // this is usually " but in MySQL is `
+        $d = $this->_adapter->quoteIdentifier('a');
+        $d = $d[0];
+        // get the value used as an escaped delimited id quote,
+        // e.g. \" or "" or \`
+        $de = $this->_adapter->quoteIdentifier($d);
+        $de = substr($de, 1, 2);
+        $de = str_replace('\\', '\\\\', $de);
+
+        // get the character for value quoting
+        // this should be '
+        $q = $this->_adapter->quote('a');
+        $q = $q[0];
+        // get the value used as an escaped quote,
+        // e.g. \' or ''
+        $qe = $this->_adapter->quote($q);
+        $qe = substr($q, 1, 2);
+        $qe = str_replace('\\', '\\\\', $qe);
+
+        // get a version of the SQL statement with all quoted
+        // values and delimited identifiers stripped out
+        // remove "foo\"bar"
+        $sql = preg_replace("/$d($de|[^$d])*$d/", '', $sql);
+        // remove 'foo\'bar'
+        $sql = preg_replace("/$q($qe|[^$q])*$q/", '', $sql);
+
+        return $sql;
     }
 
     /**
-     * Binds a PHP variable to an output column in a result set.
+     * Bind a column of the statement result set to a PHP variable.
      *
-     * @param string $column
-     * @param string $param
-     * @param string $type OPTIONAL
-     * @return void
+     * @param string $column Name the column in the result set, either by
+     *                       position or by name.
+     * @param mixed  $param  Reference to the PHP variable containing the value.
+     * @param mixed  $type   OPTIONAL
+     * @return bool
      */
     public function bindColumn($column, &$param, $type = null)
     {
         $this->_bindColumn[$column] =& $param;
+        return true;
     }
 
     /**
-     * Binds a PHP variable to a parameter in the prepared statement.
+     * Check sanity of bind parameters.  Throw exceptions if params are
+     * not valid.  
      *
-     * @param mixed   $parameter
-     * @param string  $variable
-     * @param string  $type OPTIONAL
-     * @param integer $length OPTIONAL
-     * @param array   $options OPTIONAL
-     * @return void
+     * @param mixed $parameter Name the parameter, either integer or string.
+     * @param mixed $variable Reference to PHP variable containing the value.
+     * @return integer
      * @throws Zend_Db_Statement_Exception
      */
-    public function bindParam($parameter, &$variable, $type = null, $length = null, $options = null)
+    protected function _normalizeBindParam($parameter, &$variable)
     {
-        if (is_integer($parameter)) {
+        $position = null;
+        if ((int) $parameter > 0) {
+            if ($this->_adapter->supportsParameters('positional') === false) {
+                /**
+                 * @see Zend_Db_Statement_Exception
+                 */
+                require_once 'Zend/Db/Statement/Exception.php';
+                throw new Zend_Db_Statement_Exception("Invalid bind-variable position '$parameter'");
+            }
             if ($parameter > 0 && $parameter <= count($this->_sqlParam)) {
                 // bind by position, 1-based
-                $this->_bindParam[$parameter-1] =& $variable;
+                $position = $parameter - 1;
+                $this->_bindParam[$position] =& $variable;
             } else {
+                /**
+                 * @see Zend_Db_Statement_Exception
+                 */
                 require_once 'Zend/Db/Statement/Exception.php';
-                throw new Zend_Db_Statement_Exception("position '$parameter' not valid");
+                throw new Zend_Db_Statement_Exception("Invalid bind-variable position '$parameter'");
             }
-        } else {
+        } else if (is_string($parameter))  {
+            if ($this->_adapter->supportsParameters('named') === false) {
+                /**
+                 * @see Zend_Db_Statement_Exception
+                 */
+                require_once 'Zend/Db/Statement/Exception.php';
+                throw new Zend_Db_Statement_Exception("Invalid bind-variable position '$parameter'");
+            }
             // bind by name. make sure it has a colon on it.
             if ($parameter[0] != ':') {
                 $parameter = ":$parameter";
             }
             // look up its position in the params.
-            $key = array_search($parameter, $this->_sqlParam);
-            if (is_integer($key)) {
-                $this->_bindParam[$key] =& $variable;
+            $position = array_search($parameter, $this->_sqlParam);
+            if (is_integer($position)) {
+                $this->_bindParam[$position] =& $variable;
             } else {
+                /**
+                 * @see Zend_Db_Statement_Exception
+                 */
                 require_once 'Zend/Db/Statement/Exception.php';
-                throw new Zend_Db_Statement_Exception("parameter name '$parameter' not valid");
+                throw new Zend_Db_Statement_Exception("Invalid bind-variable position '$parameter'");
             }
+        } else {
+            /**
+             * @see Zend_Db_Statement_Exception
+             */
+            require_once 'Zend/Db/Statement/Exception.php';
+            throw new Zend_Db_Statement_Exception('Invalid bind-variable position');
         }
+
+        return $position;
     }
 
     /**
-     * Fetches an array containing all of the rows from a result set.
+     * Binds a parameter to the specified variable name.
      *
-     * @param integer $style OPTIONAL
-     * @param string $col OPTIONAL
-     * @return array
+     * @param mixed $parameter Name the parameter, either integer or string.
+     * @param mixed $variable  Reference to PHP variable containing the value.
+     * @param mixed $type      OPTIONAL Datatype of SQL parameter.
+     * @param mixed $length    OPTIONAL Length of SQL parameter.
+     * @param mixed $options   OPTIONAL Other options.
+     * @return bool
+     */
+    public function bindParam($parameter, &$variable, $type = null, $length = null, $options = null)
+    {
+        $this->_normalizeBindParam($parameter, $variable);
+        return true;
+    }
+
+    /**
+     * Binds a value to a parameter.
+     *
+     * @param mixed $parameter Name the parameter, either integer or string.
+     * @param mixed $value     Scalar value to bind to the parameter.
+     * @param mixed $type      OPTIONAL Datatype of the parameter.
+     * @return bool
+     */
+    public function bindValue($parameter, $value, $type = null)
+    {
+        return $this->bindParam($parameter, $value);
+    }
+
+    /**
+     * Returns an array containing all of the result set rows.
+     *
+     * @param int $style OPTIONAL Fetch mode.
+     * @param int $col   OPTIONAL Column number, if fetch mode is by column.
+     * @return array Collection of rows, each in a format by the fetch mode.
      */
     public function fetchAll($style = null, $col = null)
     {
         $data = array();
+        if ($style === Zend_Db::FETCH_COLUMN && $col === null) {
+            $col = 0;
+        }
         if ($col === null) {
             while ($row = $this->fetch($style)) {
                 $data[] = $row;
@@ -208,11 +323,10 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
     }
 
     /**
-     * Returns the data from a single column in the next
-     * single row of the result set.
+     * Returns a single column from the next row of a result set.
      *
-     * @param integer $col OPTIONAL
-     * @return array
+     * @param int $col OPTIONAL Position of the column to fetch.
+     * @return string
      */
     public function fetchColumn($col = 0)
     {
@@ -229,9 +343,9 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
     /**
      * Fetches the next row and returns it as an object.
      *
-     * @param string $class OPTIONAL
-     * @param array $config OPTIONAL
-     * @return mixed
+     * @param string $class  OPTIONAL Name of the class to create.
+     * @param array  $config OPTIONAL Constructor arguments for the class.
+     * @return mixed One object instance of the specified class.
      */
     public function fetchObject($class = 'stdClass', array $config = array())
     {
@@ -244,10 +358,10 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
     }
 
     /**
-     * Retrieves a Zend_Db_Statement attribute.
+     * Retrieve a statement attribute.
      *
-     * @param string $key
-     * @return mixed
+     * @param string $key Attribute name.
+     * @return mixed      Attribute value.
      */
     public function getAttribute($key)
     {
@@ -257,11 +371,11 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
     }
 
     /**
-     * Sets a Zend_Db_Statement attribute.
+     * Set a statement attribute.
      *
-     * @param string $key
-     * @param mixed $val
-     * @return void
+     * @param string $key Attribute name.
+     * @param mixed  $val Attribute value.
+     * @return bool
      */
     public function setAttribute($key, $val)
     {
@@ -269,10 +383,11 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
     }
 
     /**
-     * Sets the fetch mode for a Zend_Db_Statement.
+     * Set the default fetch mode for this statement.
      *
-     * @param integer $mode
-     * @return void
+     * @param int   $mode The fetch mode.
+     * @return bool
+     * @throws Zend_Db_Statement_Exception
      */
     public function setFetchMode($mode)
     {
@@ -283,144 +398,15 @@ abstract class Zend_Db_Statement implements Zend_Db_Statement_Interface
             case Zend_Db::FETCH_OBJ:
                 $this->_fetchMode = $mode;
                 break;
+            case Zend_Db::FETCH_BOUND:
             default:
+                /**
+                 * @see Zend_Db_Statement_Exception
+                 */
                 require_once 'Zend/Db/Statement/Exception.php';
-                throw new Zend_Db_Statement_Exception('Invalid fetch mode specified');
+                throw new Zend_Db_Statement_Exception('invalid fetch mode');
                 break;
         }
-    }
-
-    /**
-     * Retrieves the next rowset (result set).
-     *
-     * @todo needs implementation or better exception message
-     * @todo fix docblock for params & return types
-     *
-     * @throws Zend_Db_Statement_Exception
-     */
-    public function nextRowset()
-    {
-        require_once 'Zend/Db/Statement/Exception.php';
-        throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
-    }
-
-    /**
-     * returns the number of rows that were affected by the execution of an SQL statement
-     * @todo needs implementation or better exception message
-     * @todo fix docblock for params & return types
-     *
-     * @return int Number of rows affected.
-     * @throws Zend_Db_Statement_Exception
-     */
-    public function rowCount()
-    {
-        require_once 'Zend/Db/Statement/Exception.php';
-        throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
-    }
-
-    /**
-     * Binds a value to a parameter in the prepared statement.
-     *
-     * @todo needs implementation or better exception message
-     * @todo fix docblock for params & return types
-     *
-     * @param string $parameter
-     * @param string $value
-     * @param string $type OPTIONAL
-     * @return void
-     */
-    public function bindValue($parameter, $value, $type = null)
-    {
-        $this->bindParam($parameter, $value);
-    }
-
-    /**
-     * Closes the cursor, allowing the statement to be executed again.
-     *
-     * @todo needs implementation or better exception message
-     * @todo fix docblock for params & return types
-     *
-     * @throws Zend_Db_Statement_Exception
-     */
-    public function closeCursor()
-    {
-        require_once 'Zend/Db/Statement/Exception.php';
-        throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
-    }
-
-    /**
-     * Returns the number of columns in the result set.
-     *
-     * @todo needs implementation or better exception message
-     * @todo fix docblock for params & return types
-     *
-     * @throws Zend_Db_Statement_Exception
-     */
-    public function columnCount()
-    {
-        require_once 'Zend/Db/Statement/Exception.php';
-        throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
-    }
-
-    /**
-     * Retrieves an error code, if any, from the statement.
-     *
-     * @todo needs implementation or better exception message
-     * @todo fix docblock for params & return types
-     *
-     * @throws Zend_Db_Statement_Exception
-     */
-    public function errorCode()
-    {
-        require_once 'Zend/Db/Statement/Exception.php';
-        throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
-    }
-
-    /**
-     * Retrieves an array of error information, if any, from the statement.
-     *
-     * @todo needs implementation or better exception message
-     * @todo fix docblock for params & return types
-     *
-     * @throws Zend_Db_Statement_Exception
-     */
-    public function errorInfo()
-    {
-        require_once 'Zend/Db/Statement/Exception.php';
-        throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
-    }
-
-    /**
-     * Executes a prepared statement.
-     *
-     * @todo needs implementation or better exception message
-     * @todo fix docblock for params & return types
-     *
-     * @param array $params OPTIONAL
-     * @throws Zend_Db_Statement_Exception
-     */
-    public function execute(array $params = array())
-    {
-        require_once 'Zend/Db/Statement/Exception.php';
-        throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
-    }
-
-    /**
-     * Fetches a row from a result set.
-     *
-     * @todo needs implementation or better exception message
-     * @todo fix docblock for params & return types
-     *
-     * @param string  $style OPTIONAL
-     * @param string  $cursor OPTIONAL
-     * @param integer $offset OPTIONAL
-     * @return mixed
-     * @throws Zend_Db_Statement_Exception
-     */
-    public function fetch($style = null, $cursor = null, $offset = null)
-    {
-        require_once 'Zend/Db/Statement/Exception.php';
-        throw new Zend_Db_Statement_Exception(__FUNCTION__ . ' not implemented');
     }
 
 }

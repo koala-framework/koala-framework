@@ -132,10 +132,10 @@ class Zend_Search_Lucene_Search_Query_Boolean extends Zend_Search_Lucene_Search_
     /**
      * Re-write queries into primitive queries
      *
-     * @param Zend_Search_Lucene $index
+     * @param Zend_Search_Lucene_Interface $index
      * @return Zend_Search_Lucene_Search_Query
      */
-    public function rewrite(Zend_Search_Lucene $index)
+    public function rewrite(Zend_Search_Lucene_Interface $index)
     {
         $query = new Zend_Search_Lucene_Search_Query_Boolean();
         $query->setBoost($this->getBoost());
@@ -151,10 +151,10 @@ class Zend_Search_Lucene_Search_Query_Boolean extends Zend_Search_Lucene_Search_
     /**
      * Optimize query in the context of specified index
      *
-     * @param Zend_Search_Lucene $index
+     * @param Zend_Search_Lucene_Interface $index
      * @return Zend_Search_Lucene_Search_Query
      */
-    public function optimize(Zend_Search_Lucene $index)
+    public function optimize(Zend_Search_Lucene_Interface $index)
     {
         $subqueries = array();
         $signs      = array();
@@ -434,10 +434,10 @@ class Zend_Search_Lucene_Search_Query_Boolean extends Zend_Search_Lucene_Search_
     /**
      * Constructs an appropriate Weight implementation for this query.
      *
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return Zend_Search_Lucene_Search_Weight
      */
-    public function createWeight($reader)
+    public function createWeight(Zend_Search_Lucene_Interface $reader)
     {
         $this->_weight = new Zend_Search_Lucene_Search_Weight_Boolean($this, $reader);
         return $this->_weight;
@@ -517,10 +517,10 @@ class Zend_Search_Lucene_Search_Query_Boolean extends Zend_Search_Lucene_Search_
      * Score calculator for conjunction queries (all subqueries are required)
      *
      * @param integer $docId
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return float
      */
-    public function _conjunctionScore($docId, $reader)
+    public function _conjunctionScore($docId, Zend_Search_Lucene_Interface $reader)
     {
         if ($this->_coord === null) {
             $this->_coord = $reader->getSimilarity()->coord(count($this->_subqueries),
@@ -541,10 +541,10 @@ class Zend_Search_Lucene_Search_Query_Boolean extends Zend_Search_Lucene_Search_
      * Score calculator for non conjunction queries (not all subqueries are required)
      *
      * @param integer $docId
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return float
      */
-    public function _nonConjunctionScore($docId, $reader)
+    public function _nonConjunctionScore($docId, Zend_Search_Lucene_Interface $reader)
     {
         if ($this->_coord === null) {
             $this->_coord = array();
@@ -589,9 +589,9 @@ class Zend_Search_Lucene_Search_Query_Boolean extends Zend_Search_Lucene_Search_
      * Execute query in context of index reader
      * It also initializes necessary internal structures
      *
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      */
-    public function execute($reader)
+    public function execute(Zend_Search_Lucene_Interface $reader)
     {
         // Initialize weight if it's not done yet
         $this->_initWeight($reader);
@@ -625,10 +625,10 @@ class Zend_Search_Lucene_Search_Query_Boolean extends Zend_Search_Lucene_Search_
      * Score specified document
      *
      * @param integer $docId
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return float
      */
-    public function score($docId, $reader)
+    public function score($docId, Zend_Search_Lucene_Interface $reader)
     {
         if (isset($this->_resVector[$docId])) {
             if ($this->_signs === null) {

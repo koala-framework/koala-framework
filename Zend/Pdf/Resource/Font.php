@@ -219,7 +219,7 @@ abstract class Zend_Pdf_Resource_Font extends Zend_Pdf_Resource
      *  <li>{@link Zend_Pdf_Font::NAME_STYLE}
      *  <li>{@link Zend_Pdf_Font::NAME_PREFERRED_STYLE}
      *  <li>{@link Zend_Pdf_Font::NAME_DESCRIPTION}
-     *  <li>{@link Zend_Pdf_Font::NAME_SAMPLETEXT}
+     *  <li>{@link Zend_Pdf_Font::NAME_SAMPLE_TEXT}
      *  <li>{@link Zend_Pdf_Font::NAME_ID}
      *  <li>{@link Zend_Pdf_Font::NAME_VERSION}
      *  <li>{@link Zend_Pdf_Font::NAME_POSTSCRIPT}

@@ -253,6 +253,55 @@ abstract class Zend_Translate_Adapter {
 
 
     /**
+     * Checks if a string is translated within the source or not
+     * returns boolean
+     * 
+     * @param  string              $messageId  Translation string
+     * @param  boolean             $original   OPTIONAL Allow translation only for original language
+     *                                         when true, a translation for 'en_US' would give false when it can
+     *                                         be translated with 'en' only
+     * @param  string|Zend_Locale  $locale     OPTIONAL Locale/Language to use, identical with locale identifier,
+     *                                         see Zend_Locale for more information
+     * @return boolean
+     */
+    public function isTranslated($messageId, $original = false, $locale = null)
+    {
+        if (($original !== false) and ($original !== true)) {
+            $locale = $original;
+            $original = false;
+        }
+        if ($locale === null) {
+            $locale = $this->_locale;
+        } else {
+            if (!$locale = Zend_Locale::isLocale($locale)) {
+                // language does not exist, return original string
+                return false;
+            }
+        }
+
+        if (array_key_exists($locale, $this->_translate)) {
+           if (array_key_exists($messageId, $this->_translate[$locale])) {
+                // return original translation
+                return true;
+           }
+        } else if ((strlen($locale) != 2) and ($original === false)) {
+            // faster than creating a new locale and separate the leading part
+            $locale = substr($locale, 0, -strlen(strrchr($locale, '_')));
+
+            if (array_key_exists($locale, $this->_translate)) {
+                if (array_key_exists($messageId, $this->_translate[$locale])) {
+                    // return regionless translation (en_US -> en)
+                    return true;
+                }
+            }
+        }
+
+        // no translation found, return original
+        return false;
+    }
+
+
+    /**
      * Returns the adapter name
      *
      * @return string

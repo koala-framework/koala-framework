@@ -17,14 +17,14 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: EmailAddress.php 4648 2007-05-01 20:30:54Z studio24 $
+ * @version    $Id: EmailAddress.php 4974 2007-05-25 21:11:56Z bkarwin $
  */
 
 
 /**
- * @see Zend_Validate_Interface
+ * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Interface.php';
+require_once 'Zend/Validate/Abstract.php';
 
 
 /**
@@ -39,14 +39,35 @@ require_once 'Zend/Validate/Hostname.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Validate_EmailAddress implements Zend_Validate_Interface
+class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
 {
+
+    const INVALID            = 'emailAddressInvalid';
+    const INVALID_HOSTNAME   = 'emailAddressInvalidHostname';
+    const INVALID_MX_RECORD  = 'emailAddressInvalidMxRecord';
+    const DOT_ATOM           = 'emailAddressDotAtom';
+    const QUOTED_STRING      = 'emailAddressQuotedString';
+    const INVALID_LOCAL_PART = 'emailAddressInvalidLocalPart';
+
     /**
-     * Array of validation failure messages
-     *
      * @var array
      */
-    protected $_messages = array();
+    protected $_messageTemplates = array(
+        self::INVALID            => "'%value%' is not a valid email address in the basic format local-part@hostname",
+        self::INVALID_HOSTNAME   => "'%hostname%' is not a valid hostname for email address '%value%'",
+        self::INVALID_MX_RECORD  => "'%hostname%' does not appear to have a valid MX record for the email address '%value%'",
+        self::DOT_ATOM           => "'%localpart%' not matched against dot-atom format",
+        self::QUOTED_STRING      => "'%localpart%' not matched against quoted-string format",
+        self::INVALID_LOCAL_PART => "'%localpart%' is not a valid local part for email address '%value%'"
+    );
+
+    /**
+     * @var array
+     */
+    protected $_messageVariables = array(
+        'hostname'  => '_hostname',
+        'localPart' => '_localPart'
+    );
 
     /**
      * Local object for validating the hostname part of an email address
@@ -63,23 +84,44 @@ class Zend_Validate_EmailAddress implements Zend_Validate_Interface
     protected $_validateMx = false;
 
     /**
+     * @var string
+     */
+    protected $_hostname;
+
+    /**
+     * @var string
+     */
+    protected $_localPart;
+
+    /**
      * Instantiates hostname validator for local use
      *
      * You can pass a bitfield to determine what types of hostnames are allowed.
      * These bitfields are defined by the ALLOW_* constants in Zend_Validate_Hostname
      * The default is to allow DNS hostnames only
      *
-     * @see Zend_Validate_Hostname
-     * @param integer $allow
+     * @param integer                $allow             OPTIONAL
+     * @param bool                   $validateMx        OPTIONAL
+     * @param Zend_Validate_Hostname $hostnameValidator OPTIONAL
      * @return void
      */
-    public function __construct($allow = Zend_Validate_Hostname::ALLOW_DNS, $validateMx = false)
+    public function __construct($allow = Zend_Validate_Hostname::ALLOW_DNS, $validateMx = false, Zend_Validate_Hostname $hostnameValidator = null)
     {
-        // Initialise Zend_Validate_Hostname
-        $this->hostnameValidator = new Zend_Validate_Hostname($allow);
+        $this->setValidateMx($validateMx);
+        $this->setHostnameValidator($hostnameValidator, $allow);
+    }
 
-        // Set validation options
-        $this->_validateMx = $validateMx;
+    /**
+     * @param Zend_Validate_Hostname $hostnameValidator OPTIONAL
+     * @param int                    $allow             OPTIONAL
+     * @return void
+     */
+    public function setHostnameValidator(Zend_Validate_Hostname $hostnameValidator = null, $allow = Zend_Validate_Hostname::ALLOW_DNS)
+    {
+        if ($hostnameValidator === null) {
+            $hostnameValidator = new Zend_Validate_Hostname($allow);
+        }
+        $this->hostnameValidator = $hostnameValidator;
     }
 
     /**
@@ -119,38 +161,40 @@ class Zend_Validate_EmailAddress implements Zend_Validate_Interface
      */
     public function isValid($value)
     {
-        $this->_messages = array();
-
         $valueString = (string) $value;
+
+        $this->_setValue($valueString);
 
         // Split email address up
         if (!preg_match('/^(.+)@([^@]+)$/', $valueString, $matches)) {
-            $this->_messages[] = "'$valueString' is not a valid email address in the basic format local-part@hostname";
+            $this->_error(self::INVALID);
             return false;
         }
 
-        $localPart	= $matches[1];
-        $hostname 	= $matches[2];
+        $this->_localPart = $matches[1];
+        $this->_hostname  = $matches[2];
 
         // Match hostname part
-        $hostnameResult = $this->hostnameValidator->isValid($hostname);
+        $hostnameResult = $this->hostnameValidator->isValid($this->_hostname);
         if (!$hostnameResult) {
-            $this->_messages[] = "'$hostname' is not a valid hostname for email address '$valueString'";
+            $this->_error(self::INVALID_HOSTNAME);
 
-            // Get messages from hostnameValidator
+            // Get messages and errors from hostnameValidator
             foreach ($this->hostnameValidator->getMessages() as $message) {
                 $this->_messages[] = $message;
+            }
+            foreach ($this->hostnameValidator->getErrors() as $error) {
+                $this->_errors[] = $error;
             }
         }
 
         // MX check on hostname via dns_get_record()
         if ($this->_validateMx) {
             if ($this->validateMxSupported()) {
-                $result = dns_get_mx($hostname, $mxHosts);
+                $result = dns_get_mx($this->_hostname, $mxHosts);
                 if (count($mxHosts) < 1) {
                     $hostnameResult = false;
-                    $this->_messages[] = "'$hostname' does not appear to have a valid MX record for the email address"
-                                       . "'$valueString'";
+                    $this->_error(self::INVALID_MX_RECORD);
                 }
             } else {
                 /**
@@ -169,10 +213,10 @@ class Zend_Validate_EmailAddress implements Zend_Validate_Interface
         // atext: ALPHA / DIGIT / and "!", "#", "$", "%", "&", "'", "*",
         //        "-", "/", "=", "?", "^", "_", "`", "{", "|", "}", "~"
         $atext = 'a-zA-Z0-9\x21\x23\x24\x25\x26\x27\x2a\x2b\x2d\x2f\x3d\x3f\x5e\x5f\x60\x7b\x7c\x7d';
-        if (preg_match('/^[' . $atext . ']+(\x2e+[' . $atext . ']+)*$/', $localPart)) {
+        if (preg_match('/^[' . $atext . ']+(\x2e+[' . $atext . ']+)*$/', $this->_localPart)) {
             $localResult = true;
         } else {
-            $this->_messages[] = "'$localPart' not matched against dot-atom format";
+            $this->_error(self::DOT_ATOM);
         }
 
         // If not matched, try quoted string format
@@ -184,15 +228,15 @@ class Zend_Validate_EmailAddress implements Zend_Validate_Interface
             $noWsCtl    = '\x01-\x08\x0b\x0c\x0e-\x1f\x7f';
             $qtext      = $noWsCtl . '\x21\x23-\x5b\x5d-\x7e';
             $ws         = '\x20\x09';
-            if (preg_match('/^\x22([' . $ws . $qtext . '])*[$ws]?\x22$/', $localPart)) {
+            if (preg_match('/^\x22([' . $ws . $qtext . '])*[$ws]?\x22$/', $this->_localPart)) {
                 $localResult = true;
             } else {
-                $this->_messages[] = "'$localPart' not matched against quoted-string format";
+                $this->_error(self::QUOTED_STRING);
             }
         }
 
         if (!$localResult) {
-            $this->_messages[] = "'$localPart' is not a valid local part for email address '$valueString'";
+            $this->_error(self::INVALID_LOCAL_PART);
         }
 
         // If both parts valid, return true
@@ -201,19 +245,6 @@ class Zend_Validate_EmailAddress implements Zend_Validate_Interface
         } else {
             return false;
         }
-    }
-
-
-    /**
-     * Defined by Zend_Validate_Interface
-     *
-     * Returns array of validation failure messages
-     *
-     * @return array
-     */
-    public function getMessages()
-    {
-        return $this->_messages;
     }
 
 }

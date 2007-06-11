@@ -26,8 +26,8 @@ require_once 'Zend/Search/Lucene/Exception.php';
 /** Zend_Search_Lucene_Index_SegmentInfo */
 require_once 'Zend/Search/Lucene/Index/SegmentInfo.php';
 
-/** Zend_Search_Lucene_Index_SegmentWriter */
-require_once 'Zend/Search/Lucene/Index/SegmentWriter.php';
+/** Zend_Search_Lucene_Index_SegmentWriter_StreamWriter */
+require_once 'Zend/Search/Lucene/Index/SegmentWriter/StreamWriter.php';
 
 /** Zend_Search_Lucene_Index_SegmentInfoPriorityQueue */
 require_once 'Zend/Search/Lucene/Index/SegmentInfoPriorityQueue.php';
@@ -45,7 +45,7 @@ class Zend_Search_Lucene_Index_SegmentMerger
     /**
      * Target segment writer
      *
-     * @var Zend_Search_Lucene_Index_SegmentStreamWriter
+     * @var Zend_Search_Lucene_Index_SegmentWriter_StreamWriter
      */
     private $_writer;
 
@@ -186,37 +186,36 @@ class Zend_Search_Lucene_Index_SegmentMerger
             $fdtFile = $segmentInfo->openCompoundFile('.fdt');
 
             for ($count = 0; $count < $segmentInfo->count(); $count++) {
+                $fieldCount = $fdtFile->readVInt();
+                $storedFields = array();
+
+                for ($count2 = 0; $count2 < $fieldCount; $count2++) {
+                    $fieldNum = $fdtFile->readVInt();
+                    $bits = $fdtFile->readByte();
+                    $fieldInfo = $segmentInfo->getField($fieldNum);
+
+                    if (!($bits & 2)) { // Text data
+                        $storedFields[] =
+                                 new Zend_Search_Lucene_Field($fieldInfo->name,
+                                                              $fdtFile->readString(),
+                                                              'UTF-8',
+                                                              true,
+                                                              $fieldInfo->isIndexed,
+                                                              $bits & 1 );
+                    } else {            // Binary data
+                        $storedFields[] =
+                                 new Zend_Search_Lucene_Field($fieldInfo->name,
+                                                              $fdtFile->readBinary(),
+                                                              '',
+                                                              true,
+                                                              $fieldInfo->isIndexed,
+                                                              $bits & 1,
+                                                              true);
+                    }
+                }
+
                 if (!$segmentInfo->isDeleted($count)) {
                     $this->_docCount++;
-
-                    $fieldCount = $fdtFile->readVInt();
-                    $storedFields = array();
-
-                    for ($count2 = 0; $count2 < $fieldCount; $count2++) {
-                        $fieldNum = $fdtFile->readVInt();
-                        $bits = $fdtFile->readByte();
-                        $fieldInfo = $segmentInfo->getField($fieldNum);
-
-                        if (!($bits & 2)) { // Text data
-                            $storedFields[] =
-                                     new Zend_Search_Lucene_Field($fieldInfo->name,
-                                                                  $fdtFile->readString(),
-                                                                  'UTF-8',
-                                                                  true,
-                                                                  $fieldInfo->isIndexed,
-                                                                  $bits & 1 );
-                        } else {            // Binary data
-                            $storedFields[] =
-                                     new Zend_Search_Lucene_Field($fieldInfo->name,
-                                                                  $fdtFile->readBinary(),
-                                                                  '',
-                                                                  true,
-                                                                  $fieldInfo->isIndexed,
-                                                                  $bits & 1,
-                                                                  true);
-                        }
-                    }
-
                     $this->_writer->addStoredFields($storedFields);
                 }
             }

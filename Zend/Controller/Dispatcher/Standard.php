@@ -53,7 +53,19 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
      * Current module (formatted)
      * @var string
      */
-    protected $_curModule = 'default';
+    protected $_curModule;
+
+    /**
+     * Constructor: Set current module to default value
+     * 
+     * @param  array $params 
+     * @return void
+     */
+    public function __construct(array $params = array())
+    {
+        parent::__construct($params);
+        $this->_curModule = $this->getDefaultModule();
+    }
 
     /**
      * Add a single path to the controller directory stack
@@ -62,8 +74,12 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
      * @param string $module
      * @return Zend_Controller_Dispatcher_Standard
      */
-    public function addControllerDirectory($path, $module = 'default')
+    public function addControllerDirectory($path, $module = null)
     {
+        if (null === $module) {
+            $module = $this->_defaultModule;
+        }
+
         $this->getFrontController()->addControllerDirectory($path, $module);
         return $this;
     }
@@ -185,7 +201,7 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
          * Load the controller class file
          */
         $className = $this->loadClass($className);
-        
+
         /**
          * Instantiate controller with request, response, and invocation 
          * arguments; throw exception if it's not an action controller
@@ -239,9 +255,14 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
         $loadFile    = $dispatchDir . DIRECTORY_SEPARATOR . $this->classToFilename($className);
         $dir         = dirname($loadFile);
         $file        = basename($loadFile);
-        Zend_Loader::loadFile($file, $dir, true);
 
-        if ('default' != $this->_curModule) {
+        try {
+            Zend_Loader::loadFile($file, $dir, true);
+        } catch (Zend_Exception $e) {
+            throw new Zend_Controller_Dispatcher_Exception('Cannot load controller class "' . $className . '" from file "' . $file . '" in directory "' . $dir . '"');
+        }
+
+        if ($this->_defaultModule != $this->_curModule) {
             $className = $this->formatModuleName($this->_curModule) . '_' . $className;
         }
 
@@ -272,8 +293,8 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
         $className = $this->formatControllerName($controllerName);
 
         $controllerDirs      = $this->getControllerDirectory();
-        $this->_curModule    = 'default';
-        $this->_curDirectory = $controllerDirs['default'];
+        $this->_curModule    = $this->_defaultModule;
+        $this->_curDirectory = $controllerDirs[$this->_defaultModule];
         $module = $request->getModuleName();
         if ($this->isValidModule($module)) {
             $this->_curModule    = $module;
@@ -317,8 +338,8 @@ class Zend_Controller_Dispatcher_Standard extends Zend_Controller_Dispatcher_Abs
 
         $module              = $request->getModuleName();
         $controllerDirs      = $this->getControllerDirectory();
-        $this->_curModule    = 'default';
-        $this->_curDirectory = $controllerDirs['default'];
+        $this->_curModule    = $this->_defaultModule;
+        $this->_curDirectory = $controllerDirs[$this->_defaultModule];
         if ($this->isValidModule($module)) {
             $moduleDir = $controllerDirs[$module];
             $fileSpec  = $moduleDir . DIRECTORY_SEPARATOR . $this->classToFilename($default);

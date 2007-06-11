@@ -240,16 +240,17 @@ class Zend_Mail extends Zend_Mime_Message
      *
      * @param  string $txt
      * @param  string $charset
+     * @param  string $encoding
      * @return Zend_Mail Provides fluent interface
     */
-    public function setBodyText($txt, $charset=null)
+    public function setBodyText($txt, $charset = null, $encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE)
     {
         if ($charset === null) {
             $charset = $this->_charset;
         }
 
         $mp = new Zend_Mime_Part($txt);
-        $mp->encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE;
+        $mp->encoding = $encoding;
         $mp->type = Zend_Mime::TYPE_TEXT;
         $mp->disposition = Zend_Mime::DISPOSITION_INLINE;
         $mp->charset = $charset;
@@ -280,16 +281,17 @@ class Zend_Mail extends Zend_Mime_Message
      *
      * @param  string    $html
      * @param  string    $charset
+     * @param  string    $encoding
      * @return Zend_Mail Provides fluent interface
      */
-    public function setBodyHtml($html, $charset=null)
+    public function setBodyHtml($html, $charset = null, $encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE)
     {
         if ($charset === null) {
             $charset = $this->_charset;
         }
 
         $mp = new Zend_Mime_Part($html);
-        $mp->encoding = Zend_Mime::ENCODING_QUOTEDPRINTABLE;
+        $mp->encoding = $encoding;
         $mp->type = Zend_Mime::TYPE_HTML;
         $mp->disposition = Zend_Mime::DISPOSITION_INLINE;
         $mp->charset = $charset;
@@ -386,7 +388,7 @@ class Zend_Mail extends Zend_Mime_Message
           return $value;
       } else {
           $quotedValue = Zend_Mime::encodeQuotedPrintable($value);
-          $quotedValue = str_replace('?', '=3F', $quotedValue);
+          $quotedValue = str_replace(array('?', ' '), array('=3F', '=20'), $quotedValue);
           return '=?' . $this->_charset . '?Q?' . $quotedValue . '?=';
       }
     }

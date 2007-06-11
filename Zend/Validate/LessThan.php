@@ -17,14 +17,14 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: LessThan.php 3278 2007-02-07 21:54:50Z darby $
+ * @version    $Id: LessThan.php 5152 2007-06-07 14:19:06Z darby $
  */
 
 
 /**
- * @see Zend_Validate_Interface
+ * @see Zend_Validate_Abstract
  */
-require_once 'Zend/Validate/Interface.php';
+require_once 'Zend/Validate/Abstract.php';
 
 
 /**
@@ -33,21 +33,31 @@ require_once 'Zend/Validate/Interface.php';
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Validate_LessThan implements Zend_Validate_Interface
+class Zend_Validate_LessThan extends Zend_Validate_Abstract
 {
+
+    const NOT_LESS = 'notLessThan';
+
+    /**
+     * @var array
+     */
+    protected $_messageTemplates = array(
+        self::NOT_LESS => "'%value%' is not less than '%max%'"
+    );
+
+    /**
+     * @var array
+     */
+    protected $_messageVariables = array(
+        'max' => '_max'
+    );
+
     /**
      * Maximum value
      *
      * @var mixed
      */
     protected $_max;
-
-    /**
-     * Array of validation failure messages
-     *
-     * @var array
-     */
-    protected $_messages = array();
 
     /**
      * Sets validator options
@@ -92,23 +102,12 @@ class Zend_Validate_LessThan implements Zend_Validate_Interface
      */
     public function isValid($value)
     {
-        $this->_messages = array();
+        $this->_setValue($value);
         if ($this->_max <= $value) {
-            $this->_messages[] = "'$value' is not less than '$this->_max'";
+            $this->_error();
             return false;
         }
         return true;
     }
 
-    /**
-     * Defined by Zend_Validate_Interface
-     *
-     * Returns array of validation failure messages
-     *
-     * @return array
-     */
-    public function getMessages()
-    {
-        return $this->_messages;
-    }
 }

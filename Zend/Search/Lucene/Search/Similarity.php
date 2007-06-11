@@ -495,10 +495,10 @@ abstract class Zend_Search_Lucene_Search_Similarity
      * Returns a score factor for the term
      *
      * @param mixed $input
-     * @param Zend_Search_Lucene $reader
+     * @param Zend_Search_Lucene_Interface $reader
      * @return a score factor for the term
      */
-    public function idf($input, $reader)
+    public function idf($input, Zend_Search_Lucene_Interface $reader)
     {
         if (!is_array($input)) {
             return $this->idfFreq($reader->docFreq($input), $reader->count());

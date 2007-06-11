@@ -15,7 +15,7 @@
  * @package    Zend_View
  * @subpackage Helpers
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Url.php 3420 2007-02-15 09:09:43Z martel $
+ * @version    $Id: Url.php 4802 2007-05-15 17:03:58Z matthew $
  * @license    http://www.zend.com/license/framework/1_0.txt Zend Framework License version 1.0
  */
 
@@ -34,12 +34,12 @@ class Zend_View_Helper_Url {
      * 
      * @access public
      * 
-     * @param array $urlOptions Options passed to the assemble method of the Route object.
-     * @param mixed $name The name of a Route to use. If null it will use the current Route
-     * 
+     * @param  array $urlOptions Options passed to the assemble method of the Route object.
+     * @param  mixed $name The name of a Route to use. If null it will use the current Route
+     * @param  bool $reset Whether or not to reset the route defaults with those provided
      * @return string Url for the link href attribute.
      */
-    public function url($urlOptions = array(), $name = null, $reset = false)
+    public function url(array $urlOptions = array(), $name = null, $reset = false)
     {
         
         $ctrl = Zend_Controller_Front::getInstance();
