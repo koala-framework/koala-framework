@@ -86,7 +86,7 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
             this.fireEvent('rowdblclick', data, selModel, rowIndex);
         }, this);
 
-//         this.grid.restoreState();
+        this.grid.restoreState();
         this.grid.render();
 
         if (meta.gridPaging) {

@@ -2,9 +2,9 @@ Vps.Menu.Index = function(renderTo, config)
 {
     Ext.apply(this, config);
     this.tb = new Ext.Toolbar(renderTo);
-    var conn = new Vps.Connection();
-    conn.request({
-        url: '/admin/menu/ajaxData',
+
+    Ext.Ajax.request({
+        url: this.dataUrl,
         params: config,
         success: this.loadMenu,
         scope: this
@@ -13,8 +13,11 @@ Vps.Menu.Index = function(renderTo, config)
 
 Ext.extend(Vps.Menu.Index, Ext.util.Observable,
 {
-    loadMenu: function(response)
+    dataUrl: '/admin/menu/ajaxData',
+
+    loadMenu: function(r)
     {
+        var response = Ext.decode(r.responseText)
         for (var i=0; i<response.menus.length; i++) {
             var m = response.menus[i];
             if (m.url) {

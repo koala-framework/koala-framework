@@ -1,15 +1,14 @@
 <?php
-class Vps_Controller_Action_Admin_Menu extends Vps_Controller_Action {
-    
+class Vps_Controller_Action_Admin_Menu extends Vps_Controller_Action
+{
     public function ajaxDataAction()
     {
-        $userNamespace = new Zend_Session_Namespace('User');
-        $currentRole = $userNamespace->role;
+        $currentRole = $this->_getUserRole();
         $menus = array();
         $acl = $this->_getAcl();
         $resources = $acl->getResources();
         foreach ($resources as $resource) {
-            if ($acl->isAllowed($currentRole, $resource)) {
+            if ($acl->isAllowed($currentRole, $resource) && $resource->getMenuText()) {
                 $childResources = $acl->getResources($resource);
                 $menu = array();
                 $menu['text'] = $resource->getMenuText();
@@ -26,8 +25,6 @@ class Vps_Controller_Action_Admin_Menu extends Vps_Controller_Action {
                 $menus[] = $menu;
             }
         }
-
-        $this->getResponse()->appendJson('menus', $menus);
+        $this->_helper->json('menus', $menus);
     }
-
 }
