@@ -29,8 +29,7 @@ Vps.AutoGrid = function(renderTo, config)
         scope: this,
         delay: 1  //damit das catch vom JsonReader nicht fehler schluckt
     }});
-    this.ds.load({params: {meta: true, start: 0}});
-    delete this.ds.lastOptions.params.meta; //löschen, damit bei einem reload/paging/sort nicht meta=true mitgeschickt wird
+    this.ds.load({params: {start: 0}});
 };
 
 Ext.extend(Vps.AutoGrid, Ext.util.Observable,
