@@ -8,7 +8,7 @@ class Vps_Controller_Action_Admin_Menu extends Vps_Controller_Action
         $acl = $this->_getAcl();
         $resources = $acl->getResources();
         foreach ($resources as $resource) {
-            if ($acl->isAllowed($currentRole, $resource) && $resource->getMenuText()) {
+            if ($resource instanceof Vps_Acl_Resource && $acl->isAllowed($currentRole, $resource) && $resource->getMenuText()) {
                 $childResources = $acl->getResources($resource);
                 $menu = array();
                 $menu['text'] = $resource->getMenuText();
@@ -25,6 +25,6 @@ class Vps_Controller_Action_Admin_Menu extends Vps_Controller_Action
                 $menus[] = $menu;
             }
         }
-        $this->_helper->json('menus', $menus);
+        $this->view->menus = $menus;
     }
 }

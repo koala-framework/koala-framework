@@ -21,6 +21,48 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
 
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
+        $acl = new Vps_Acl();
+        
+        // Roles
+        $acl->addRole(new Vps_Acl_Role('guest'));
+        $acl->addRole(new Vps_Acl_Role('admin'));
+        
+        // Resources
+        $acl->add(new Zend_Acl_Resource('web'));
+        $acl->add(new Vps_Acl_Resource('admin', 'Admin'));
+            $acl->add(new Vps_Acl_Resource('admin_pages', 'Seitenbaum', '/admin/pages'), 'admin');
+            $acl->add(new Zend_Acl_Resource('admin_page'), 'admin');
+            $acl->add(new Zend_Acl_Resource('admin_component'), 'admin');
+            $acl->add(new Zend_Acl_Resource('admin_menu'), 'admin');
+        
+        // Berechtigungen
+        $acl->allow('admin', 'admin');
+        $acl->allow('admin', 'web');
+        $acl->allow('guest', 'web');
+
+        // Seite bearbeiten-Button
+        $pageId = $this->getRequest()->getParam('pageId');
+        $url = $this->getRequest()->getParam('url');
+        if ($pageId != '') {
+            $pageCollection = Vps_PageCollection_Abstract::getInstance();
+            $page = $pageCollection->getPageById($pageId);
+            $path = $pageCollection->getPath($page);
+            $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite betrachten', $path));
+            $acl->allow('admin', 'page');
+        } else if ($url != '') {
+            $pageCollection = Vps_PageCollection_Abstract::getInstance();
+            $page = $pageCollection->getPageByPath($url);
+            if ($page) {
+                $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite bearbeiten', '/admin/page?id=' . $page->getId()));
+                $acl->allow('admin', 'page');
+            }
+        } else {
+            $pageId = 0;
+        }
+
+        Zend_Registry::set('acl', $acl);
+
+
         if (substr($request->getActionName(), 0, 4) == 'ajax') {
             return;
         }

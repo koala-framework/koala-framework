@@ -1,13 +1,9 @@
 <?php
-class Vps_Controller_Action_User_Abstract extends Vps_Controller_Action
+class Vps_Controller_Action_Admin_User extends Vps_Controller_Action
 {
     public function loginAction()
     {
-        $files[] = '/Vps/Login/Index.js';
-        $files[] = '/Vps/Login/Dialog.js';
-        
-        $view = new Vps_View_Smarty_Ext($files, 'Vps.Login.Index');
-        $this->getResponse()->appendBody($view->render(''));
+        $this->view->ext('Vps.Login.Index');
     }
 
     public function ajaxLoginAction()
@@ -26,33 +22,36 @@ class Vps_Controller_Action_User_Abstract extends Vps_Controller_Action
         $result = $auth->authenticate($adapter);
         if (!$result->isValid()) {
             $errors = $result->getMessages();
-            $this->_helper->json('error', implode("<br />", $errors));
-            $success = false;
+            $this->view->error = implode("<br />", $errors);
         } else {
             $this->_onLogin($adapter->getResultRowObject());
-            $success = true;
         }
-// p('foo');
-// exit;
-        $this->_helper->json('success', $success);
+
     }
     
     public function ajaxLogoutAction()
     {
         Zend_Auth::getInstance()->clearIdentity();
         $this->_onLogout();
-        $this->_helper->json('success', true);
     }
 
     protected function _createAuthAdapter()
     {
+        $dao = Zend_Registry::get('dao');
+        $adapter = new Zend_Auth_Adapter_DbTable($dao->getDb(), 'vps_users', 'username', 'password', 'PASSWORD(?)');
+        return $adapter;
     }
 
     protected function _onLogin($resultRow)
     {
+        $userNamespace = new Zend_Session_Namespace('User');
+        $userNamespace->role = $resultRow->role;
+        $userNamespace->id = $resultRow->id;
     }
 
     protected function _onLogout()
     {
+        $userNamespace = new Zend_Session_Namespace('User');
+        $userNamespace->unsetAll();
     }
 }

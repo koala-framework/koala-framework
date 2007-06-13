@@ -3,10 +3,12 @@ class Vps_Controller_Action extends Zend_Controller_Action
 {
     public function preDispatch()
     {
+        /*
         $acl = $this->_getAcl();
         $role = $this->_getUserRole();
         $resource = strtolower(str_replace('Controller', '', str_replace('Vps_Controller_Action_', '', get_class($this))));
-        if (!($this instanceof Vps_Controller_Action_User_Abstract) &&
+        if ($role != 'guest' &&
+            !($this instanceof Vps_Controller_Action_User_Abstract) &&
             !($this instanceof Vps_Controller_Action_Error) &&
             !$acl->isAllowed($role, $resource))
         {
@@ -19,6 +21,7 @@ class Vps_Controller_Action extends Zend_Controller_Action
                 $this->_forward('login', 'user');
             }
         }
+        */
     }
     
     public function postDispatch()
@@ -27,19 +30,17 @@ class Vps_Controller_Action extends Zend_Controller_Action
         $role = $this->_getUserRole();
         // Nur im Frontend
         if ($role != '' && $this instanceof Vps_Controller_Action_Web) {
-            $files[] = '/Vps/Menu/Index.js';
-            $view = new Vps_View_Smarty_Ext($files, 'Vps.Menu.Index', array('url' => $this->getRequest()->getPathInfo()));
-            $view->assign('noHead', true);
-            $view->assign('renderTo', 'Ext.DomHelper.insertFirst(document.body, \'<div \/>\', true)');
-            //$view->assign('_debugMemoryUsage', memory_get_usage());
-            $this->getResponse()->appendBody($view->render(''));
+            $config['url'] = $this->getRequest()->getPathInfo();
+            //$config['_debugMemoryUsage'] = memory_get_usage();
+            $renderTo = 'Ext.DomHelper.insertFirst(document.body, \'<div \/>\', true)';
+            $this->view->ext('Vps.Menu.Index', $config, $renderTo);
         }
     }
     
     protected function _getUserRole()
     {
         $userNamespace = new Zend_Session_Namespace('User');
-        return $userNamespace->role;
+        return $userNamespace->role ? $userNamespace->role : 'guest';
     }
 
     protected function _getAcl()

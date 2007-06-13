@@ -34,7 +34,7 @@ class Vps_Dao
                 throw new Vps_Dao_Exception("Connection \"$db\" in config.db.ini not found.
                         Please add $db.host, $db.username, $db.password and $db.dbname under the sction [database].");
             }
-            $dbConfig = $this->_config->$db->asArray();
+            $dbConfig = $this->_config->$db->toArray();
             $this->_db[$db] = Zend_Db::factory('PDO_MYSQL', $dbConfig);
         }
         return $this->_db[$db];

@@ -6,7 +6,7 @@ Ext.extend(Ext.form.Action.VpsSubmit, Ext.form.Action.Submit, {
     handleResponse : function(response){
         var r = Ext.decode(response.responseText);
         if (r.exceptions) {
-            Ext.Msg.alert('Exceptions', "Folgende Exceptions sind aufgetreten:\n"+o.exceptions);
+            Ext.Msg.alert('Exceptions', "Folgende Exceptions sind aufgetreten:\n"+r.exceptions);
             return { success: false };
         }
         if (!r.success) {

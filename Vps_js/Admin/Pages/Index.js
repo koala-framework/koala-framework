@@ -60,8 +60,7 @@ PageTree = function(el, form) {
     tree.on(
         'collapse',
         function(e){
-            var conn = new Ext.data.Connection();
-            conn.request({
+            var conn = new Ext.Ajax.request({
                 url: '/admin/pages/ajaxCollapseNode',
                 params: {id: e.id},
                 method: 'post'
