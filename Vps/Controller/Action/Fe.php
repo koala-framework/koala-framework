@@ -88,4 +88,3 @@ class Vps_Controller_Action_Fe extends Vps_Controller_Action_Web
         return $component;
     }
 }
-?>

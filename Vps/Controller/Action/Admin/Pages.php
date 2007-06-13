@@ -5,20 +5,20 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
 
     public function actionAction()
     {
-        $view = new Vps_View_Smarty_Ext(array('/Vps/Admin/Pages/Index.js'), 'Vps.Admin.Pages.Index');
-        $this->getResponse()->appendBody($view->render(''));
+        $this->view->ext('Vps.Admin.Pages.Index', array(), '', array('/Vps/Admin/Pages/Index.js'));
     }
 
     public function ajaxProcessPageDataAction()
     {
-        $return['success'] = false;
+        $view = $this->view;
+        $view->success = false;
 
         $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
         
         $action = $this->getRequest()->getParam('command');
         if ($action == 'delete') {
             $result = $table->deletePage($this->getRequest()->getParam('id'));
-            $return['success'] = $result > 0;
+            $view->success = $result > 0;
         } else if ($action == 'move') {
             $source = $this->getRequest()->getParam('source');
             $target = $this->getRequest()->getParam('target');
@@ -29,7 +29,7 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
                 $type = $target;
                 $target = $rootData['component_id'];
             }
-            $return['success'] = $table->movePage($source, $target, $point, $type);
+            $view->success = $table->movePage($source, $target, $point, $type);
         } else {
             if ($action == 'add') {
                 $type = '';
@@ -53,14 +53,12 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
                 $table->savePageStatus($pageData['component_id'], $this->getRequest()->getParam('status') == 'on');
                 
                 $pageData = $table->retrievePageData($id);
-                $return['data'] = $this->_getNodeData($pageData);
-                $return['name'] = $pageData['name'];
-                $return['status'] = $pageData['status'];
-                $return['success'] = true;
+                $view->data = $this->_getNodeData($pageData);
+                $view->name = $pageData['name'];
+                $view->status = $pageData['status'];
+                $view->success = true;
             }
         }
-
-        $this->getResponse()->setBody(Zend_Json::encode($return));
     }
 
     public function ajaxLoadPageDataAction()
@@ -75,10 +73,7 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
         }
         $data[] = array('id' => 'name', 'value' => $name);
         $data[] = array('id' => 'status', 'value' => $status);
-        $return['success'] = true;
-        $return['data'] = $data;
-
-        $this->getResponse()->setBody(Zend_Json::encode($return));
+        $this->view->data = $data;
     }
 
     public function ajaxGetNodesAction()
@@ -124,7 +119,7 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
             }
         }
 
-        $this->getResponse()->setBody(Zend_Json::encode($return));
+        $this->view->nodes = $return;
     }
     
     public function ajaxCollapseNodeAction()

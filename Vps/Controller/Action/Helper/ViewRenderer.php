@@ -1,56 +1,66 @@
 <?php
-class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_Helper_ViewRenderer
+class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_Helper_Abstract
 {
-    /**
-     * Name of layout script to render. Defaults to 'master.html'.
-     *
-     * @var string
-     */
-    protected $_layoutScript = 'master.html';
+    var $view = null;
+    var $_noRender = false;
+    
+    public function __construct(Zend_View_Interface $view = null)
+    {
+        if (null !== $view) {
+            $this->setView($view);
+        }
+    }
 
-    /**
-     * Set the layout script to be rendered.
-     *
-     * @param string $script
-     */
-    public function setLayoutScript($script)
+    public function setView(Zend_View_Interface $view)
     {
-        $this->_layoutScript = $script;
+        $this->view = $view;
+        return $this;
     }
     
-    /**
-     * Retreive the name of the layout script to be rendered.
-     *
-     * @return string
-     */
-    public function getLayoutScript()
+    public function setNoRender($noRender = true)
     {
-        return $this->_layoutScript;
+        $this->_noRender = $noRender;
     }
-    
-    /**
-     * Render the action script and assign the the view for use
-     * in the layout script. Render the layout script and append
-     * to the Response's body.
-     *
-     * @param string $script
-     * @param string $name
-     */
-    public function renderScript($script, $name = null)
-    {
-        $this->view->baseUrl = $this->_request->getBaseUrl();
-        if (null === $name) {
-            $name = $this->getResponseSegment();
+
+    public function preDispatch() {
+        if ($this->_isJson()) {
+            $this->view = new Vps_View_Json();
+        } else {
+            $this->view = new Vps_View_Smarty();
+            if ($this->getRequest()->getModuleName() == 'admin') {
+                $this->view->setScriptPath(VPS_PATH . '/views');
+                $this->view->setCompilePath(VPS_PATH . '/views_c');
+            }
         }
 
-        // assign action script name to view.
-        $this->view->actionScript = $script;
+        if ((null !== $this->_actionController) && (null === $this->_actionController->view)) {
+            $this->_actionController->view = $this->view;
+        }
+    }
 
-        // render layout script and append to Response's body
-        $layoutScript = $this->getLayoutScript();        
-        $layoutContent = $this->view->render($layoutScript);
-        $this->getResponse()->appendBody($layoutContent, $name);
-
-        $this->setNoRender();
+    public function postDispatch()
+    {
+        if (!$this->_noRender) {
+            if ($this->_isJson()) {
+                if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+                    $body = $this->view->render('');
+                } else {
+                    echo '<pre>';
+                    print_r($this->view->getOutput());
+                    echo '</pre>';
+                    die();
+                }
+                $this->getResponse()->setHeader('Content-Type', 'text/javascript');
+                $this->getResponse()->setBody($body);
+            } else {
+                $this->getResponse()->appendBody($this->view->render(''));
+            }
+        }
+    }
+    
+    private function _isJson()
+    {
+        $prefix = substr($this->getRequest()->getActionName(), 0, 4);
+        return ($prefix == 'ajax' || $prefix == 'json');
     }
 }

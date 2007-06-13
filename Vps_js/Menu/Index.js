@@ -17,7 +17,7 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
 
     loadMenu: function(r)
     {
-        var response = Ext.decode(r.responseText)
+        var response = Ext.decode(r.responseText);
         for (var i=0; i<response.menus.length; i++) {
             var m = response.menus[i];
             if (m.url) {

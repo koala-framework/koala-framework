@@ -13,4 +13,5 @@ class Vps_CustomException extends Vps_Exception {
     {
         $this->_file = $file;
     }
+    
 }

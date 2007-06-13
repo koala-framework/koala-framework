@@ -10,7 +10,7 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
             callback: options.callback,
             scope: options.scope
         };
-//         console.info(options.url || this.url, options.vpsCallback);
+        // console.info(options.url || this.url, options.vpsCallback);
         options.success = this.vpsSuccess;
         options.failure = this.vpsFailure;
         options.callback = this.vpsCallback;
