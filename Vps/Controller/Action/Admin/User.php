@@ -3,7 +3,7 @@ class Vps_Controller_Action_Admin_User extends Vps_Controller_Action
 {
     public function loginAction()
     {
-        $this->view->ext('Vps.Login.Index');
+        $this->view->ext('Vps.Login.Index', array('location' => '/'));
     }
 
     public function ajaxLoginAction()

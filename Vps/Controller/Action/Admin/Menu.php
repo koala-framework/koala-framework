@@ -3,6 +3,7 @@ class Vps_Controller_Action_Admin_Menu extends Vps_Controller_Action
 {
     public function ajaxDataAction()
     {
+        $showLogout = true;
         $userRole = $this->_getUserRole();
         $menus = array();
         $acl = $this->_getAcl();
@@ -33,8 +34,11 @@ class Vps_Controller_Action_Admin_Menu extends Vps_Controller_Action
             $menu['url'] = '/user/login';
             $menu['children'] = array();
             $menus[] = $menu;
+            $showLogout = false;
         }
         
+        
         $this->view->menus = $menus;
+        $this->view->showLogout = $showLogout;
     }
 }
