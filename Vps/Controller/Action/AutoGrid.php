@@ -82,12 +82,12 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
                 $rows[] = $r;
             }
 
-            $this->_helper->json('rows', $rows);
+            $this->view->rows = $rows;
             
             if ($this->_gridPaging) {
-                $this->_helper->json('total', $this->_fetchCount());
+                $this->view->total = $this->_fetchCount();
             } else {
-                $this->_helper->json('total', sizeof($rows));
+                $this->view->total = sizeof($rows);
             }
         }
 
@@ -138,7 +138,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         $sortInfo = array();
         $sortInfo['field'] = $this->_gridDefaultOrder;
 
-        $this->_helper->json('metaData',
+        $this->view->metaData =
             array('fields'=>$metaData,
                     'root'=>'rows',
                     'id'=>$primaryKey,
@@ -149,7 +149,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
                     'gridButtons'=>$this->_gridButtons,
                     'gridPaging'=>$this->_gridPaging,
                     'gridUseEditor'=>$this->_gridUseEditor,
-                    'gridFilters'=>$this->_gridFilters));
+                    'gridFilters'=>$this->_gridFilters);
     }
     protected function _beforeSave(Zend_Db_Table_Row_Abstract $row)
     {
@@ -222,9 +222,9 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         $success = true;
 
         if ($addedIds) {
-            $this->_helper->json('addedIds', $addedIds);
+            $this->view->addedIds = $addedIds;
         }
-        $this->_helper->json('success', $success);
+        $this->view->success = $success;
     }
 
     public function ajaxDeleteAction()
@@ -240,10 +240,10 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
                 $row->delete();
                 $success = true;
             } catch (Avs_Exception $e) {
-                $this->_helper->json('error', $e->getMessage());
+                $this->view->error = $e->getMessage();
             }
         }
 
-        $this->_helper->json('success', $success);
+        $this->view->success = $success;
     }
 }

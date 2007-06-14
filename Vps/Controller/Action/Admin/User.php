@@ -13,7 +13,7 @@ class Vps_Controller_Action_Admin_User extends Vps_Controller_Action
         $adapter = $this->_createAuthAdapter();
 
         if (!$adapter instanceof Zend_Auth_Adapter_DbTable) {
-            throw new Vps_Controller_Exception('_createAuthAdapter didn\'t return instancee of Zend_Auth_Adapter_DbTable');
+            throw new Vps_Controller_Exception('_createAuthAdapter didn\'t return instance of Zend_Auth_Adapter_DbTable');
         }
         
         $auth = Zend_Auth::getInstance();
