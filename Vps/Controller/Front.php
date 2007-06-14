@@ -51,8 +51,6 @@ class Vps_Controller_Front extends Zend_Controller_Front
         Zend_Registry::set('config', $config);
 
         $router = $front->getRouter();
-        $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'controller', 'action' => 'action')));
-
         if ($isComponentsWeb) {
             $router->AddRoute('default', new Zend_Controller_Router_Route('*', array('controller' => 'web', 'action' => 'index')));
             $router->AddRoute('ajax', new Zend_Controller_Router_Route('ajax/*', array('controller' => 'web', 'action' => 'ajax')));
@@ -65,6 +63,8 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $dao = new Vps_Dao(new Zend_Config_Ini('../application/config.db.ini', 'database'));
             Zend_Registry::set('dao', $dao);
         }
+
+        $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'controller', 'action' => 'action')));
 
         return $front;
     }

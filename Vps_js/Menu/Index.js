@@ -51,18 +51,19 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
         }
 
         this.tb.addSpacer().getEl().parentNode.style.width = '100%';
-        this.tb.addButton({
+        if (response.showLogout) {
+            this.tb.addButton({
                 text: 'Logout',
                 handler: function() {
                     var logoutForm = new Ext.BasicForm(Ext.get(document.body).createChild({tag: 'form'}));
                     logoutForm.submit({
-                        url:'/user/ajaxLogout',
-                        success:function(form, action) {
-                            location.href = '/';
+                    url:'/user/ajaxLogout',
+                    success:function(form, action) {
+                        location.href = '/';
                         }
                     });
                 }
-            }
-          );
+            });
+        }
     }
 });
