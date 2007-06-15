@@ -2,23 +2,6 @@
 class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
 {
 
-    private function _isAllowed($resource)
-    {
-        /*
-        $auth = Zend_Auth::getInstance();
-        if ($auth->hasIdentity()) {
-            $identity = $auth->getIdentity();
-            // TODO: get role of user
-            $role = 'admin';
-            $acl = new Vps_Acl();
-
-            return $acl->isAllowed($role, $resource);
-        }
-        return false;
-        */
-        return true;
-    }
-
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
         $acl = new Vps_Acl();

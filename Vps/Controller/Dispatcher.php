@@ -11,17 +11,25 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     public function loadClass($className)
     {
         if ($this->_isOverwritten()) {
-            return parent::loadClass($className);
+            $className = parent::loadClass($className);
         } else if ($this->_isComponent()) {
-            return str_replace('_ControllerController', '_Controller', $className);
+            $className = str_replace('_ControllerController', '_Controller', $className);
         } else {
             $className = str_replace('Controller', '', ucfirst($className));
             $module = ucfirst($this->getFrontController()->getRequest()->getModuleName());
             if ($module != 'Default' && $module != '') {
                 $className = $module . '_' . $className;
             }
-            return "Vps_Controller_Action_$className";
+            $className = "Vps_Controller_Action_$className";
         }
+
+        try {
+            Zend_Loader::loadClass($className);
+        } catch (Zend_Exception $e) {
+            throw new Zend_Controller_Dispatcher_Exception('Invalid controller class ("' . $className . '")');
+        }
+        
+        return $className;
     }
 
     private function _isOverwritten()

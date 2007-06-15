@@ -1,6 +1,6 @@
 <?php
 
-class Vps_User_Users extends Zend_Db_Table_Abstract
+class Vps_Model_User_Users extends Zend_Db_Table_Abstract
 {
     protected $_name = 'users';
     protected $_primary = 'id';
