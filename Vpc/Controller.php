@@ -19,8 +19,8 @@ class Vpc_Controller extends Vps_Controller_Action {
         }
 
         $config['id'] = $this->getRequest()->getParam('id');
-        $view = new Vps_View_Smarty_Ext($paths, $class, $config);
-        $this->getResponse()->setBody($view->render(''));
+        $this->view->setScriptPath(VPS_PATH . '/views');
+        $this->view->ext($class, $config, null, $paths);
     }
     
 }

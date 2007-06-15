@@ -16,8 +16,7 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
         $files[] = '/Vps/Admin/Page/Tree.js';
         $files[] = '/Vps/Admin/Page/Form.js';
         $files[] = '/Vps/Admin/Page/Index.js';
-        $view = new Vps_View_Smarty_Ext($files, 'Vps.Admin.Page.Index', $cfg);
-        $this->getResponse()->appendBody($view->render(''));
+        $this->view->ext('Vps.Admin.Page.Index', $cfg, null, $files);
     }
 
     public function ajaxCreateParagraphAction()
@@ -37,13 +36,12 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
             $paragraphsComponent = $parentComponent;
             $lastSiblingId = $componentId;
         } else {
-            $this->getResponse()->setOutputFormat('json');
             throw new Vps_Exception('Either component or parentComponent must be an instance of Vpc_Paragraphs_Index');
         }
         $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Paragraphs');
         $componentId = $table->createParagraph($paragraphsComponent->getId(), $componentClass, $lastSiblingId);
-        $this->getResponse()->appendJson('parentComponentId', $paragraphsComponent->getId());
-        $this->getResponse()->appendJson('componentId', $componentId);
+        $this->view->parentComponentId = $paragraphsComponent->getId();
+        $this->view->componentId = $componentId;
     }
 
     public function ajaxSaveComponentAction()
@@ -58,8 +56,8 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
         if (!is_array($decorators)) { $decorators = array(); }
         $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
         $currentDecorators = $table->saveDecorators($id, array_keys($decorators));
-        $this->getResponse()->appendJson('componentId', $id);
-        $this->getResponse()->appendJson('decorators', $currentDecorators);
+        $this->view->componentId = $id;
+        $this->view->decorators = $currentDecorators;
     }
 
     public function ajaxGetNodesAction()
@@ -124,8 +122,7 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
             $d['class'] = get_class($component);
             $data[] = $d;
         }
-        $body = Zend_Json::encode($data);
-        $this->getResponse()->setBody($body);
+        $this->view->nodes = $data;
     }
 
 }

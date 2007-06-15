@@ -25,7 +25,7 @@ class Vpc_Paragraphs_Controller extends Vpc_Controller
                 $paragraphs[$key]['component'] = $components[$paragraph['component']];
             }
         }
-        $this->getResponse()->appendJson('rows', $paragraphs);
+        $this->view->rows = $paragraphs;
     }
        
     public function ajaxCreateAction()
@@ -37,7 +37,7 @@ class Vpc_Paragraphs_Controller extends Vpc_Controller
         $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Paragraphs');
 
         $componentId = $table->createParagraph($id, $componentClass, $lastSiblingId);
-        $this->getResponse()->appendJson('componentId', $componentId);
+        $this->view->componentId = $componentId;
     }
 
     public function ajaxDeleteAction()
@@ -47,7 +47,7 @@ class Vpc_Paragraphs_Controller extends Vpc_Controller
         foreach ($componentIds as $componentId) {
             $table->deleteParagraph($componentId);
         }
-        $this->getResponse()->appendJson('success', true);
+        $this->view->success = true;
     }
 
     public function ajaxMoveAction()
@@ -58,7 +58,7 @@ class Vpc_Paragraphs_Controller extends Vpc_Controller
         foreach ($componentIds as $componentId) {
             $table->moveParagraph($id, $componentId, $this->getRequest()->getParam('direction'));
         }
-        $this->getResponse()->appendJson('success', true);
+        $this->view->success = true;
     }
 
     public function ajaxStatusAction()
@@ -73,7 +73,7 @@ class Vpc_Paragraphs_Controller extends Vpc_Controller
         foreach ($componentIds as $componentId) {
             $table->setStatus($componentId, $status == 'online');
         }
-        $this->getResponse()->appendJson('success', true);
+        $this->view->success = true;
     }
 
 }
