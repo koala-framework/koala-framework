@@ -1,39 +1,19 @@
 <?php
 class Vps_Controller_Action extends Zend_Controller_Action
 {
+    protected $_auth = false;
+    
     public function preDispatch()
     {
-        /*
         $acl = $this->_getAcl();
         $role = $this->_getUserRole();
         $resource = strtolower(str_replace('Controller', '', str_replace('Vps_Controller_Action_', '', get_class($this))));
-        if ($role != 'guest' &&
-            !($this instanceof Vps_Controller_Action_User_Abstract) &&
-            !($this instanceof Vps_Controller_Action_Error) &&
-            !$acl->isAllowed($role, $resource))
-        {
-            if ($this->_isAjax()) {
-                $ret['success'] = false;
-                $ret['login'] = true;
-                echo Zend_Json::encode($ret);
-                die();
+        if ($this->_auth && !$acl->isAllowed($role, $resource)) {
+            if ($this->getHelper('ViewRenderer')->isJson()) {
+                $this->_forward('jsonLogin', 'user');
             } else {
-                $this->_forward('login', 'user');
+                $this->_forward('login', 'user', null, array('location' => $this->getRequest()->getPathInfo()));
             }
-        }
-        */
-    }
-    
-    public function postDispatch()
-    {
-        // Menu
-        $role = $this->_getUserRole();
-        // Nur im Frontend
-        if ($role != '' && $this instanceof Vps_Controller_Action_Web) {
-            $config['url'] = $this->getRequest()->getPathInfo();
-            //$config['_debugMemoryUsage'] = memory_get_usage();
-            $renderTo = 'Ext.DomHelper.insertFirst(document.body, \'<div \/>\', true)';
-            $this->view->ext('Vps.Menu.Index', $config, $renderTo);
         }
     }
     
@@ -46,11 +26,6 @@ class Vps_Controller_Action extends Zend_Controller_Action
     protected function _getAcl()
     {
         return Zend_Registry::get('acl');
-    }
-    
-    protected function _isAjax()
-    {
-        return substr($this->getRequest()->getActionName(), 0, 4) == 'ajax';
     }
     
 }

@@ -4,7 +4,7 @@ require_once 'Smarty/Smarty.class.php';
 class Vps_View_Smarty extends Zend_View_Abstract
 {
     protected $_smarty;
-    protected $_renderFile = 'master.html';
+    protected $_renderFile = 'Master.html';
 
     public function __construct($config = array())
     {
@@ -62,14 +62,14 @@ class Vps_View_Smarty extends Zend_View_Abstract
     }
 
 
-    public function setLayoutScript($script)
+    public function setRenderFile($renderFile)
     {
-        $this->_layoutScript = $script;
+        $this->_renderFile = $renderFile;
     }
 
-    public function getLayoutScript()
+    public function getRenderFile()
     {
-        return $this->_layoutScript;
+        return $this->_renderFile;
     }
 
     public function getEngine()
@@ -81,7 +81,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
     {
         $this->_smarty->compile_dir = $path;
     }
-    
+
     protected function _run()
     {
         $this->strictVars(true);
@@ -102,8 +102,8 @@ class Vps_View_Smarty extends Zend_View_Abstract
         
         //smarty needs a template_dir, and can only use templates,
         //found in that directory, so we have to strip it from the filename
-        if ($this->_renderFile) {
-            $file = $this->_renderFile;
+        if ($this->getRenderFile() != '') {
+            $file = $this->getRenderFile();
         } else {
             $file = substr(func_get_arg(0), strlen($path[0]));
         }

@@ -1,7 +1,7 @@
 <?php
 class Vps_Controller_Action_Admin_Menu extends Vps_Controller_Action
 {
-    public function ajaxDataAction()
+    public function jsonDataAction()
     {
         $showLogout = true;
         $userRole = $this->_getUserRole();
@@ -29,7 +29,6 @@ class Vps_Controller_Action_Admin_Menu extends Vps_Controller_Action
         
         if (empty($menus) && $userRole == 'guest') {
             $menu = array();
-            $menu['type'] = 'js';
             $menu['text'] = 'Login';
             $menu['url'] = '/user/login';
             $menu['children'] = array();

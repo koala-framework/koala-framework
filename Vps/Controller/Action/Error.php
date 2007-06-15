@@ -6,41 +6,29 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
         $prefix = substr($this->getRequest()->getParam('action'), 0, 4);
         $isHttpRequest = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
         if (($prefix == 'ajax' || $prefix == 'json') && $isHttpRequest) {
-            $this->_helper->viewRenderer->setView(new Vps_View_Json()); // er läuft in ViewRenderer nicht nochmal in preDispatch() rein
             $this->_forward('jsonError');
         } else {
+
             $errors = $this->getRequest()->error_handler;
-    /*
-            switch ($errors->type) {
-                case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
-                case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
-                    // 404 error -- controller or action not found
-                    $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
-    
-                    $content =<<<EOH
-    <h1>Error!</h1>
-    <p>The page you requested was not found.</p>
-    <p>{$errors->exception->getMessage()}</p>
-    EOH;
-                    break;
-                default:
-                    // application error
-                    $content =<<<EOH
-    <h1>Error!</h1>
-    <p>{$errors->exception->getMessage()}</p>
-    EOH;
-                    break;
+            if ($errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER ||
+                $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION ||
+                $errors->exception instanceof Vps_Controller_Action_Web_Exception)
+            {
+                $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
+                $file = 'Error404.html';
+            } else {
+                $file = 'Error.html';
             }
-            $viewRenderer = $this->getHelper('ViewRenderer');
-            $viewRenderer->setLayoutScript('error.html');
-            $this->view->content = $content;
-            */
-            /*
-            echo '<pre>';
-            echo ($errors->exception);
-            echo '</pre>';
-            */
-            throw($errors->exception);
+
+            $paths = $this->view->getAllPaths();
+            $scriptPath = $paths['script'][0];
+            $path = '';
+            if (!is_file($scriptPath . $file)) {
+                $path = VPS_PATH . '/views/';
+            }
+            $this->view->setRenderFile($path . $file);
+            $this->view->type = $errors->type;                    
+            $this->view->exception = $errors->exception;                    
         }
 
     }

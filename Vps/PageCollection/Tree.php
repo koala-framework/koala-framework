@@ -55,7 +55,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
                 } else {
                     $ids[] = $matches[1];
                 }
-            } else {
+            } else if ($path == '/') {
                 $ids[] = $this->getRootPage()->getId();
             }
         } else if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL) {

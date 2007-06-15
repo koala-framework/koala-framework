@@ -3,10 +3,18 @@ class Vps_Controller_Action_Admin_User extends Vps_Controller_Action
 {
     public function loginAction()
     {
-        $this->view->ext('Vps.Login.Index', array('location' => '/'));
+        $location = $this->getRequest()->getParam('location');
+        if ($location == '') { $location = '/'; }
+        $this->view->ext('Vps.Login.Index', array('location' => $location));
     }
 
-    public function ajaxLoginAction()
+    public function jsonLoginAction()
+    {
+        $this->view->login = true;
+        $this->view->success = false;
+    }
+
+    public function jsonLoginUserAction()
     {
         $username = $this->getRequest()->getParam('username');
         $password = $this->getRequest()->getParam('password');
@@ -29,7 +37,7 @@ class Vps_Controller_Action_Admin_User extends Vps_Controller_Action
 
     }
     
-    public function ajaxLogoutAction()
+    public function jsonLogoutUserAction()
     {
         Zend_Auth::getInstance()->clearIdentity();
         $this->_onLogout();
@@ -38,7 +46,7 @@ class Vps_Controller_Action_Admin_User extends Vps_Controller_Action
     protected function _createAuthAdapter()
     {
         $dao = Zend_Registry::get('dao');
-        $adapter = new Zend_Auth_Adapter_DbTable($dao->getDb(), 'vps_users', 'username', 'password', 'PASSWORD(?)');
+        $adapter = new Zend_Auth_Adapter_DbTable($dao->getDb(), 'vps_users', 'username', 'password', 'MD5(CONCAT(?, password_salt))');
         return $adapter;
     }
 

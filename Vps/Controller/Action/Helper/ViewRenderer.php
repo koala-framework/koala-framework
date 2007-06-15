@@ -23,7 +23,7 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
     }
 
     public function preDispatch() {
-        if ($this->_isJson()) {
+        if ($this->isJson()) {
             $this->view = new Vps_View_Json();
         } else {
             $this->view = new Vps_View_Smarty();
@@ -40,8 +40,12 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
 
     public function postDispatch()
     {
-        if (!$this->_noRender) {
-            if ($this->_isJson()) {
+        if (!$this->_noRender 
+            && (null !== $this->_actionController)
+            && $this->getRequest()->isDispatched()
+            && !$this->getResponse()->isRedirect())
+        {
+            if ($this->isJson()) {
                 if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
                     $body = $this->view->render('');
                 } else {
@@ -57,8 +61,8 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
             }
         }
     }
-    
-    private function _isJson()
+
+    public function isJson()
     {
         $prefix = substr($this->getRequest()->getActionName(), 0, 4);
         return ($prefix == 'ajax' || $prefix == 'json');
