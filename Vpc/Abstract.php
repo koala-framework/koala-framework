@@ -7,6 +7,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     private $_pageKey;
     private $_hasGeneratedForFilename = array();
     private $_pageCollection = null;
+    private $_pageId = null;
 
     public function __construct(Vps_Dao $dao, $componentId, $pageKey='', $componentKey='')
     {
@@ -15,6 +16,23 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_pageKey = $pageKey;
         $this->_componentKey = $componentKey;
         $this->setup();
+    }
+    
+    public function setPageId($pageId)
+    {
+        $this->_pageId = (string)$pageId;
+    }
+    
+    public function getPageId($ignorePageKey = false)
+    {
+        if (!$this->_pageId) {
+            $this->setPageId($this->getId());
+        }
+        $pageId = (string)$this->_pageId;
+        if (!$ignorePageKey && $this->getPageKey() != '') {
+            $pageId .= '_' . $this->getPageKey();
+        }
+        return $pageId;
     }
     
     protected function setup() {}
@@ -75,6 +93,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_pageCollection = $pageCollection;
     }
 
+    protected function getPageCollection()
+    {
+        return $this->_pageCollection;
+    }
+
     public final function generateHierarchy($filename = '')
     {
         $pages = array();
@@ -87,6 +110,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
                 foreach($rows as $pageRow) {
                     if ($filename != '' && $filename != $pageRow['filename']) { continue; }
                     $component = $this->createComponent($pageRow['component'], $pageRow['component_id']);
+                    $component->setPageId($pageRow['id']);
                     $this->_pageCollection->addPage($component, $pageRow['filename']);
                     $this->_pageCollection->setParentPage($component, $this);
                     $pages[$pageRow['filename']] = $component;
@@ -94,7 +118,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
                 // Hierarchie von aktueller Komponente nur erstellen, wenn die dynamischen Seiten auch angezeigt werden sollen
                 if ($this->_pageCollection->getCreateDynamicPages()) {
-                    $components = $this->createComponents($filename);
+                    $components = $this->getChildPages($filename);
                     foreach ($components as $fn => $component) {
                         $this->_pageCollection->addPage($component, $fn);
                         $this->_pageCollection->setParentPage($component, $this);
@@ -114,7 +138,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return $pages;
     }
 
-    protected function createComponents($filename = '')
+    protected function getChildPages($filename = '')
     {
         return array();
     }
@@ -143,11 +167,12 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $pageKey .= $pageKeySuffix;
 
         $componentKey = $this->getComponentKey();
-        if ($componentKey != '' && $componentKeySuffix != '') { $componentKey .= '.'; }
+        if ($componentKey != '' && $componentKeySuffix != '') { $componentKey .= '_'; }
         $componentKey .= $componentKeySuffix;
 
         // Komponente erstellen
         $component = Vpc_Abstract::getInstance($this->getDao(), $componentId, $className, $pageKey, $componentKey);
+        $component->setPageId($this->getPageId(true));
 
         // Zu Komponente ggf. PageCollection hinzufügen
         if (!is_null($component) && !is_null($this->_pageCollection)) {

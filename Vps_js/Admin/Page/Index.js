@@ -50,6 +50,9 @@ Vps.Admin.Page.Index = function(renderTo, config) {
 
     this.tree.on('selectionchange', function (node) { 
         if (node) {
+            if (console != undefined) {
+                console.log('/admin/component?id=' + node.id);
+            }
             Ext.get('main').dom.src = '/admin/component?id=' + node.id;
             form.setup(node.id, node.attributes.selectedDecorators, node.attributes.status);
         }
