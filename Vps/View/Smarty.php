@@ -5,6 +5,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
 {
     protected $_smarty;
     protected $_renderFile = 'Master.html';
+    public $ext = array();
 
     public function __construct($config = array())
     {
@@ -47,18 +48,31 @@ class Vps_View_Smarty extends Zend_View_Abstract
             $extPath = $cfg->path->vps->http . '/files/ext';
         }
         
+        if (is_array($this->ext['files'])) {
+            $files = array_merge($this->ext['files'], $files);
+        }
         foreach ($files as $x => $file) {
             $files[$x] = $vpsPath . $file;
         }
 
+        if (is_array($this->ext['config'])) {
+            $config = array_merge($this->ext['config'], $config);
+        }
+
         // View einrichten
         $ext['files'] = $files;
-        $ext['class'] = $class;
+        $ext['class'] = isset($this->ext['class']) ? $this->ext['class'] : $class;
         $ext['vpsPath'] = $vpsPath;
         $ext['extPath'] = $extPath;
         $ext['config'] = Zend_Json::encode($config);
         $ext['renderTo'] = $renderTo;
         $this->ext = $ext;
+    }
+    
+    public function vpc($config = array())
+    {
+        // View einrichten
+        $this->ext('', $config);
     }
 
 
