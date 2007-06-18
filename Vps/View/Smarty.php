@@ -48,14 +48,14 @@ class Vps_View_Smarty extends Zend_View_Abstract
             $extPath = $cfg->path->vps->http . '/files/ext';
         }
         
-        if (is_array($this->ext['files'])) {
+        if (isset($this->ext['files']) && is_array($this->ext['files'])) {
             $files = array_merge($this->ext['files'], $files);
         }
         foreach ($files as $x => $file) {
             $files[$x] = $vpsPath . $file;
         }
 
-        if (is_array($this->ext['config'])) {
+        if (isset($this->ext['config']) && is_array($this->ext['config'])) {
             $config = array_merge($this->ext['config'], $config);
         }
 
