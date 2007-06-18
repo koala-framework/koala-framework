@@ -3,7 +3,7 @@ class Vpc_Events_Index extends Vpc_Abstract
 {
     private $_paragraphs;
 
-    protected function createComponents($filename = '')
+    protected function getChildPages($filename = '')
     {
         $components = array();
         for ($i = 2000; $i <= 2007; $i++) {
@@ -24,9 +24,5 @@ class Vpc_Events_Index extends Vpc_Abstract
         return $ret;
     }
     
-    public function getChildComponents()
-    {
-        return $this->createComponents();
-    }
 }
  

@@ -62,6 +62,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
 
             $dao = new Vps_Dao(new Zend_Config_Ini('../application/config.db.ini', 'database'));
             Zend_Registry::set('dao', $dao);
+            Zend_Registry::set('db', $dao->getDb());
         }
 
         $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'controller', 'action' => 'action')));

@@ -10,7 +10,7 @@ class Vpc_Product_List extends Vpc_Abstract
         $this->_categoryId = $id;
     }
 
-    protected function createComponents($filename = '')
+    protected function getChildPages($filename = '')
     {
         $dao = $this->getDao();
         $categories = $dao->getTable('Vps_Dao_ProductCategories')->find($this->_categoryId);
@@ -62,6 +62,6 @@ class Vpc_Product_List extends Vpc_Abstract
     
     public function getChildComponents()
     {
-        return $this->createComponents();
+        return $this->getChildPages();
     }
 }

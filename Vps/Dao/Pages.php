@@ -29,12 +29,11 @@ class Vps_Dao_Pages extends Vps_Db_Table
     public function retrieveChildPagesData($componentId, $type = null)
     {
         $return = array();
-
         $data = $this->_retrievePageData();
         if (isset($data[$componentId])) {
-            $parent_id = $data[$componentId]['id'];
+            $parentId = $data[$componentId]['id'];
             foreach ($data as $d) {
-                if ($d['parent_id'] == $parent_id) {
+                if ($parentId && $d['parent_id'] == $parentId) {
                     if (is_null($type) || $d['type'] == $type) {
                         $return[] = $d;
                     }

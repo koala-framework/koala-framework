@@ -3,7 +3,7 @@ class Vpc_Product_Index extends Vpc_Abstract
 {
     private $_names;
     
-    protected function createComponents($filename = '')
+    protected function getChildPages($filename = '')
     {
         $dao = $this->getDao();
         $where = $dao->getDb()->quoteInto('visible = ?', '1');
@@ -37,6 +37,6 @@ class Vpc_Product_Index extends Vpc_Abstract
 
     public function getChildComponents()
     {
-        return $this->createComponents();
+        return $this->getChildPages();
     }
 }

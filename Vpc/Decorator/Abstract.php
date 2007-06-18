@@ -27,6 +27,11 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
         return $this->_component->getId();
     }
     
+    public function getPageId()
+    {
+        return $this->_component->getPageId();
+    }
+    
     public function getComponentInfo()
     {
         return $this->_component->getComponentInfo();
