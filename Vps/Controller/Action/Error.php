@@ -30,6 +30,7 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
             $this->view->type = $errors->type;                    
             $this->view->exception = $errors->exception;                    
         }
+        p($errors->exception);
 
     }
 

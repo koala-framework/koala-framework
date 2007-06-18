@@ -29,30 +29,25 @@ class Vps_View_Smarty extends Zend_View_Abstract
         if (!is_string($class)) {
             throw new Vps_View_Exception('Class must be a string.');
         }
-        
-        // Pfade zu den Files hinzufügen
-        if (preg_match('#/www/usr/([0-9a-z]+)/#', __FILE__, $m)) {
-            $user = $m[1];
-        } else if (substr(__FILE__, strlen('/www/public/')) == '/www/public/') {
-            $user = 'vivid';
-        } else {
-            $user = 'production';
-        }
 
         // Ext-Pfad
-        $cfg = new Zend_Config_Ini('../application/config.ini', $user);
-        $vpsPath = $cfg->path->vps->http;
-        if (isset($cfg->path->ext->http)) {
-            $extPath = $cfg->path->ext->http;
-        } else {
-            $extPath = $cfg->path->vps->http . '/files/ext';
-        }
-        
+        $config = Zend_Registry::get('config');
+        $vpsPath = $config->asset->vps->http;
+        $extPath = $config->asset->ext->http;
+
         if (isset($this->ext['files']) && is_array($this->ext['files'])) {
             $files = array_merge($this->ext['files'], $files);
         }
         foreach ($files as $x => $file) {
             $files[$x] = $vpsPath . $file;
+        }
+
+        $dep = new Vps_Assets_JavaScriptDependencies($config->asset);
+        $dep->addDependencies(new Zend_Config_Ini('../application/config.ini', 'dependencies'));
+        if (Zend_Registry::get('config')->debug) {
+            $files = array_merge($files, $dep->getHttpFiles());
+        } else {
+            $files[] = '/assets/js/';
         }
 
         if (isset($this->ext['config']) && is_array($this->ext['config'])) {
