@@ -5,7 +5,7 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
 
     public function actionAction()
     {
-        $this->view->ext('Vps.Admin.Pages.Index', array(), '', array('/Vps/Admin/Pages/Index.js'));
+        $this->view->ext('Vps.Admin.Pages.Index');
     }
 
     public function ajaxProcessPageDataAction()
