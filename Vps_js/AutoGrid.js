@@ -39,14 +39,19 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
         for (var i=0; i<meta.gridColumns.length; i++) {
             var column = meta.gridColumns[i];
             if (!column.header) continue;
-            if (column.editor == 'checkbox') {
+            if (column.editor == 'Checkbox') {
                 column.editor = new Ext.grid.GridEditor(new Ext.form.Checkbox());
-            } else if (column.editor == 'textfield') {
+            } else if (column.editor == 'TextField') {
                 column.editor = new Ext.grid.GridEditor(new Ext.form.TextField())
-            } else if (column.editor == 'datefield') {
+            } else if (column.editor == 'DateField') {
                 column.editor = new Ext.grid.GridEditor(new Ext.form.DateField({
                                                         format: "d.m.Y"
                                                     }))
+            } else if (column.editor == 'NumberField') {
+                column.editor = new Ext.grid.GridEditor(new Ext.form.NumberField({
+                                    decimalSeparator: ",",
+                                    msgTarget: "qtip"
+                                    }))
             } else if (column.editor != '') {
                 try {
                     column.editor = eval(column.editor);
