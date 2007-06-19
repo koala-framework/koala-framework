@@ -24,32 +24,21 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $this->extTemplate = VPS_PATH . '/views/Ext.html';
     }
     
-    public function ext($class, $config = array(), $renderTo = '', $files = array())
+    public function ext($class, $config = array(), $renderTo = '')
     {
         if (!is_string($class)) {
             throw new Vps_View_Exception('Class must be a string.');
         }
 
-        // Ext-Pfad
-        $cfg = Zend_Registry::get('config');
-        $vpsPath = $cfg->asset->vps->http;
-        $extPath = $cfg->asset->ext->http;
-
-        if (isset($this->ext['files']) && is_array($this->ext['files'])) {
-            $files = array_merge($this->ext['files'], $files);
-        }
-        foreach ($files as $x => $file) {
-            $files[$x] = $vpsPath . $file;
-        }
-
-        $dep = new Vps_Assets_JavaScriptDependencies($cfg->asset);
+        $dep = new Vps_Assets_Dependencies(Zend_Registry::get('config')->asset);
         $dep->addDependencies(new Zend_Config_Ini('application/config.ini', 'dependencies'));
         if (Zend_Registry::get('config')->debug) {
-            $files = array_merge($files, $dep->getHttpFiles());
+            $jsFiles = $dep->getAssetFiles('js');
+            $cssFiles = $dep->getAssetFiles('css');
         } else {
-            $files[] = '/assets/js/';
+            $jsFiles = array('/assets/all.js');
+            $cssFiles = array('/assets/all.css');
         }
-
         if (isset($this->ext['config']) && is_array($this->ext['config'])) {
             $config = array_merge($this->ext['config'], $config);
         }
@@ -59,10 +48,9 @@ class Vps_View_Smarty extends Zend_View_Abstract
         }
 
         // View einrichten
-        $ext['files'] = $files;
+        $ext['files']['js'] = $jsFiles;
+        $ext['files']['css'] = $cssFiles;
         $ext['class'] = $class;
-        $ext['vpsPath'] = $vpsPath;
-        $ext['extPath'] = $extPath;
         $ext['config'] = Zend_Json::encode($config);
         $ext['renderTo'] = $renderTo;
         $this->ext = $ext;

@@ -1,0 +1,21 @@
+.x-tree-node-el .x-tree-node-icon {
+    background-image:url(/assets/ext/resources/images/default/tree/leaf.gif);
+}
+
+.folder .x-tree-node-icon {
+    background-image:url(/assets/ext/resources/images/default/tree/folder.gif);
+}
+
+.paragraphs .x-tree-node-icon {
+    background-image:url(/assets/ext/resources/images/default/tree/paragraphs.gif);
+}
+
+.paragraphs_decorated .x-tree-node-icon {
+    background-image:url(/assets/ext/resources/images/default/tree/paragraphs_decorated.gif);
+}
+
+.leaf_decorated .x-tree-node-icon {
+    background-image:url(/assets/ext/resources/images/default/tree/leaf_decorated.gif);
+}
+
+.offline a span { color:#888888; }
