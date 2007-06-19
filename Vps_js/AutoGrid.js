@@ -10,7 +10,7 @@ Vps.AutoGrid = function(renderTo, config)
     this.renderTo = renderTo;
 
     this.ds = new Ext.data.Store({
-        proxy: new Ext.data.HttpProxy({url: this.controllerUrl+'ajaxData'}),
+        proxy: new Ext.data.HttpProxy({url: this.controllerUrl + 'ajaxData'}),
         reader: new Ext.data.JsonReader(),
         remoteSort: true
     });

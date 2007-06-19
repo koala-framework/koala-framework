@@ -40,7 +40,7 @@ Vps.Admin.Page.Index = function(renderTo, config) {
     
     layout.add('north', new Ext.ContentPanel('menuContainer', {autoCreate: true, fitToFrame:true}));
     layout.add('west', new Ext.NestedLayoutPanel(innerLayout, {autoCreate:true, title: 'Aufbau der aktuellen Seite', fitToFrame:true}));
-    layout.add('center', new Ext.ContentPanel(Ext.DomHelper.append(document.body, '<iframe id="main" frameborder="no" />', true), {title: 'Inhalt des gewählten Seitenbausteins', fitToFrame:true}));
+    layout.add('center', new Ext.ContentPanel('component', {autoCreate: true, title: 'Inhalt des gewählten Seitenbausteins', fitToFrame:true}));
     layout.restoreState();
     layout.endUpdate();
 
@@ -50,11 +50,18 @@ Vps.Admin.Page.Index = function(renderTo, config) {
 
     this.tree.on('selectionchange', function (node) { 
         if (node) {
-            if (console != undefined) {
-                console.log('/admin/component?id=' + node.id);
-            }
-            Ext.get('main').dom.src = '/admin/component?id=' + node.id;
-            form.setup(node.id, node.attributes.selectedDecorators, node.attributes.status);
+            Ext.DomHelper.overwrite('component', '');
+            Ext.get(document.body).mask('Komponente wird geladen...');
+            Ext.Ajax.request({
+                url: '/component/' + node.id + '/jsonIndex',
+                success: function(r) {
+                    Ext.get(document.body).unmask();
+                    response = Ext.decode(r.responseText);
+                    class = eval(response.class);
+                    new class('component', response.config);
+                },
+                scope: this
+            });
         }
     });
     form.on('saved', function (result) {

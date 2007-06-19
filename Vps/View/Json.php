@@ -13,6 +13,11 @@ class Vps_View_Json extends Zend_View_Abstract
         return $this->_run();
     }
     
+    public function ext($class, $config = array()) {
+        $this->class = $class;
+        $this->config = $config;
+    }
+    
     public function getOutput()
     {
         $this->strictVars(true);
