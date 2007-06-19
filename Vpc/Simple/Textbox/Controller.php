@@ -4,7 +4,12 @@ class Vpc_Simple_Textbox_Controller extends Vps_Controller_Action
     public function indexAction()
     {
         $config['content'] = $this->component->getContent();
-        $this->view->vpc($config);
+        $this->view->ext('Vpc.Simple.Textbox.Index', $config);
+    }
+    
+    public function jsonIndexAction()
+    {
+        $this->indexAction();
     }
     
     public function ajaxSaveDataAction()

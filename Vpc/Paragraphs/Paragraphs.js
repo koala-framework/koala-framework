@@ -1,3 +1,4 @@
+/*
 Vps.Component.Paragraphs = function(componentId, componentClass, pageId) {
     Vps.Component.Paragraphs.superclass.constructor.call(this, componentId, componentClass, pageId);
     
@@ -166,3 +167,4 @@ Vps.ParagraphDragDrop.prototype.onDragOver = function(e, id)
 
     YAHOO.util.DragDropMgr.refreshCache();
 };
+*/

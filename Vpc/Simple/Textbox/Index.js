@@ -14,11 +14,10 @@ Vpc.Simple.Textbox.Index = function(renderTo, config) {
     }
 
     var form = new Ext.form.Form({
-        url:'/admin/component/ajaxSaveData',
+        url:'ajaxSaveData',
         labelAlign: '',
         labelWidth: '75',
-        buttonAlign: 'left',
-        baseParams: { id: config.id }
+        buttonAlign: 'left'
     });
     
     form.add(

@@ -40,19 +40,12 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                 $this->getRequest()->getParam('controller') == 'component')
             {
                 $id = $this->getRequest()->getParam('id');
-
                 $component = Vpc_Abstract::getInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
                 if (!$component) {
                     throw new Vpc_Exception('Component not found.');
                 } else {
                     $this->_actionController->component = $component;
                 }
-                
-                $class = str_replace('_', '.', str_replace('_Controller', '_Index', get_class($this->_actionController)));
-                $files[] = '/' . str_replace('.', '/', $class) . '.js';
-                $this->view->ext['class'] = $class;
-                $this->view->ext['files'] = $files;
-                $this->view->ext['config']['id'] = $id;
             }
             
         }

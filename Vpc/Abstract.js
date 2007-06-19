@@ -1,3 +1,4 @@
+/*
 Vps = function(){};
 
 Vps.createComponent = function(componentId, componentClass) {
@@ -7,7 +8,7 @@ Vps.createComponent = function(componentId, componentClass) {
         this.loadedFiles[componentClass] = { 'finished': false, 'data': [componentData] }
         var file = '/files/'+componentClass.replace(/_/g, '/')+'.js';
         YAHOO.util.Connect.asyncRequest('GET', file,
-                { failure: function() { /*alert('error loading '+file);*/ }, scope: this,
+                { failure: function() { }, scope: this,
                   success: function(o) {
                     eval(o.responseText);
                     this.loadedFiles[componentClass].finished = true;
@@ -32,7 +33,7 @@ Vps.createComponentCallback = function(data) {
 
 
 Vps.Component = function(){};
-
+*/
 Vps.Component.Abstract = function(componentId, componentClass, pageId)
 {
     this.pageId = pageId;
