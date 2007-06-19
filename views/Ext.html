@@ -1,37 +1,11 @@
 {if isset($ext) && !empty($ext)}
-    <link rel="stylesheet" type="text/css" href="{$ext.extPath}resources/css/ext-all.css" />
-
-    <!-- Styles -->
-    <style type="text/css">
-        .x-tree-node-el .x-tree-node-icon {ldelim}
-            background-image:url({$ext.extPath}resources/images/default/tree/leaf.gif);
-        {rdelim}
-        
-        .folder .x-tree-node-icon {ldelim}
-            background-image:url({$ext.extPath}resources/images/default/tree/folder.gif);
-        {rdelim}
-        
-        .paragraphs .x-tree-node-icon {ldelim}
-            background-image:url({$ext.extPath}resources/images/default/tree/paragraphs.gif);
-        {rdelim}
-        
-        .paragraphs_decorated .x-tree-node-icon {ldelim}
-            background-image:url({$ext.extPath}resources/images/default/tree/paragraphs_decorated.gif);
-        {rdelim}
-        
-        .leaf_decorated .x-tree-node-icon {ldelim}
-            background-image:url({$ext.extPath}resources/images/default/tree/leaf_decorated.gif);
-        {rdelim}
-        
-        .offline a span {ldelim} color:#888888; {rdelim}
-    </style>
-
-    <!-- Controller -->
-    {foreach item=file from=$ext.files}
+    {foreach item=file from=$ext.files.css}
+    <link rel="stylesheet" type="text/css" href="{$file}" />
+    {/foreach} 
+    {foreach item=file from=$ext.files.js}
     <script type="text/javascript" src="{$file}"></script>
     {/foreach} 
     <script type="text/javascript">
-        Ext.BLANK_IMAGE_URL = '{$ext.extPath}resources/images/default/s.gif';
         Ext.onReady(function() {ldelim}
             Vps.Page = new {$ext.class}({if $ext.renderTo != ''}{$ext.renderTo}{else}document.body{/if}, {$ext.config});
         {rdelim});

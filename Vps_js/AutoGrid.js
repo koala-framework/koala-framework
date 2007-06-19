@@ -43,6 +43,10 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
                 column.editor = new Ext.grid.GridEditor(new Ext.form.Checkbox());
             } else if (column.editor == 'textfield') {
                 column.editor = new Ext.grid.GridEditor(new Ext.form.TextField())
+            } else if (column.editor == 'datefield') {
+                column.editor = new Ext.grid.GridEditor(new Ext.form.DateField({
+                                                        format: "d.m.Y"
+                                                    }))
             } else if (column.editor != '') {
                 try {
                     column.editor = eval(column.editor);

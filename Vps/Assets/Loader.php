@@ -1,0 +1,48 @@
+<?php
+class Vps_Assets_Loader
+{
+    static public function load()
+    {
+        if (substr($_SERVER['SCRIPT_URL'], 0, 8)=='/assets/') {
+            require_once 'Vps/Setup.php';
+            $config = Vps_Setup::createConfig();
+            $url = substr($_SERVER['SCRIPT_URL'], 8);
+
+            if ($url == 'all.js') {
+                require_once 'Vps/Assets/Dependencies.php';
+                $dep = new Vps_Assets_Dependencies($config->asset);
+                $dep->addDependencies(new Zend_Config_Ini('application/config.ini', 'dependencies'));
+                header('Content-Type: text/javascript');
+                //echo $dep->getPackedAll('js');
+                echo $dep->getContentsAll('js');
+            } else if ($url == 'all.css') {
+                require_once 'Vps/Assets/Dependencies.php';
+                $dep = new Vps_Assets_Dependencies($config->asset);
+                $dep->addDependencies(new Zend_Config_Ini('application/config.ini', 'dependencies'));
+                header('Content-Type: text/css');
+                echo $dep->getContentsAll('css');
+            } else {
+                $type = substr($url, 0, strpos($url, '/'));
+                $url = substr($url, strpos($url, '/')+1);
+
+                if (isset($config->asset->$type)) {
+                    if (substr($url, -4)=='.gif') {
+                        header('Content-Type: image/gif');
+                    } else if (substr($url, -4)=='.png') {
+                        header('Content-Type: image/png');
+                    } else if (substr($url, -4)=='.jpg') {
+                        header('Content-Type: image/jpeg');
+                    } else if (substr($url, -4)=='.css') {
+                        header('Content-Type: text/css');
+                    } else if (substr($url, -3)=='.js') {
+                        header('Content-Type: text/javascript');
+                    }
+                    readfile($config->asset->$type.$url);
+                } else {
+                    die("unknown asset-type");
+                }
+            }
+            exit;
+        }
+    }
+}
