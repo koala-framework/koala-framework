@@ -6,7 +6,7 @@ class Vps_Controller_Action_Assets extends Vps_Controller_Action
         $config = Zend_Registry::get('config');
         $dep = new Vps_Assets_JavaScriptDependencies($config->asset->js);
 
-        $dep->addDependencies(new Zend_Config_Ini('../application/config.ini', 'dependencies'));
+        $dep->addDependencies(new Zend_Config_Ini('application/config.ini', 'dependencies'));
         $body = $dep->getPackedAll();
 //        $body = $dep->getContentsAll();
 

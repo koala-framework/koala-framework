@@ -90,7 +90,7 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
             $openedPages[$id] = true;
             $session->openedPages = $openedPages;
         } else {
-            $config = new Zend_Config_Ini('../application/config.ini', 'pagecollection');
+            $config = new Zend_Config_Ini('application/config.ini', 'pagecollection');
             $types = $config->pagecollection->pagetypes->toArray();
             if (sizeof($types) > 0) {
                 if ($id == 'root') {

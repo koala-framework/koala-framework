@@ -3,7 +3,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action
 {
     public function indexAction()
     {
-        $iniComponents = new Zend_Config_Ini('../application/config.ini', 'components');
+        $iniComponents = new Zend_Config_Ini('application/config.ini', 'components');
 
         $cfg = array();
         $cfg['components'] = $iniComponents->components->toArray();
@@ -16,7 +16,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Paragraphs');
 
-        $iniComponents = new Zend_Config_Ini('../application/config.ini', 'components');
+        $iniComponents = new Zend_Config_Ini('application/config.ini', 'components');
         $components = $iniComponents->components->toArray();
         
         $paragraphs = $table->fetchParagraphsData($id);
