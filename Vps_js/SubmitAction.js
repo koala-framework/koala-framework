@@ -5,7 +5,8 @@ Vps.SubmitAction = function(form, options){
 Ext.extend(Vps.SubmitAction, Ext.form.Action.Submit, {
     run : function(){
         if (!this.options.params) this.options.params = {};
-        debugger;
+
+        //manually add date-value and checkbox-state and clear name to submit it only once
         this.form.items.each(function(field) {
             if (field instanceof Ext.form.DateField) {
                 this.options.params[field.getName()] = field.getValue().dateFormat("Y-m-d");
