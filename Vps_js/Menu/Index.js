@@ -1,3 +1,5 @@
+Ext.namespace('Vps.Menu');
+
 Vps.Menu.Index = function(renderTo, config)
 {
     Ext.apply(this, config);

@@ -1,3 +1,5 @@
+Ext.namespace('Vps.Login');
+
 Vps.Login.Index = function(renderTo, config)
 {
     Ext.apply(this, config);
