@@ -5,18 +5,15 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
 
     public function actionAction()
     {
-        $iniComponents = new Zend_Config_Ini('../application/config.ini', 'components');
+        $iniComponents = new Zend_Config_Ini('application/config.ini', 'components');
         // Todo: Decorators abchecken, ob es sie gibt
-        $iniDecorators = new Zend_Config_Ini('../application/config.ini', 'decorators');
+        $iniDecorators = new Zend_Config_Ini('application/config.ini', 'decorators');
 
         $cfg = array();
         $cfg['pageId'] = $this->getRequest()->getParam('id');
         $cfg['components'] = $iniComponents->components->toArray();
         $cfg['decorators'] = $iniDecorators->decorators->toArray();
-        $files[] = '/Vps/Admin/Page/Tree.js';
-        $files[] = '/Vps/Admin/Page/Form.js';
-        $files[] = '/Vps/Admin/Page/Index.js';
-        $this->view->ext('Vps.Admin.Page.Index', $cfg, null, $files);
+        $this->view->ext('Vps.Admin.Page.Index', $cfg);
     }
 
     public function ajaxCreateParagraphAction()
@@ -64,7 +61,7 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
     {
         $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Components');
 
-        $iniComponents = new Zend_Config_Ini('../application/config.ini', 'components');
+        $iniComponents = new Zend_Config_Ini('application/config.ini', 'components');
         $componentNames = $iniComponents->components->toArray();
 
         $pageId = $this->getRequest()->getParam('pageId');

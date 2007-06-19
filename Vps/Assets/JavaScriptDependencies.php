@@ -11,6 +11,7 @@ class Vps_Assets_JavaScriptDependencies
         }
         $this->_paths = $paths;
     }
+    
     private function _getFilePath($file, $http=false)
     {
         $pathType = substr($file, 0, strpos($file, '/'));
@@ -18,12 +19,12 @@ class Vps_Assets_JavaScriptDependencies
             throw new Vps_Exception("JS-Path-Type '$pathType' not found in config.");
         }
         if (!$http) {
-            $path = $this->_paths[$pathType]['file'].substr($file, strpos($file, '/'));
+            $path = $this->_paths[$pathType]['file'] . substr($file, strpos($file, '/') + 1);
             if(!file_exists($path)) {
                 throw new Vps_Exception("JS-File '$path' does not exist.");
             }
         } else {
-            $path = $this->_paths[$pathType]['http'].substr($file, strpos($file, '/'));
+            $path = $this->_paths[$pathType]['http'].substr($file, strpos($file, '/') + 1);
         }
         return $path;
     }
@@ -63,7 +64,7 @@ class Vps_Assets_JavaScriptDependencies
             'lifetime' => null
         );
         $backendOptions = array(
-            'cache_dir' => '../application/cache/assets/'
+            'cache_dir' => 'application/cache/assets/'
         );
         $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
 
@@ -99,7 +100,7 @@ class Vps_Assets_JavaScriptDependencies
     {
         static $vpsDependencies;
         if(!isset($vpsDependencies)) {
-            $vpsDependencies = new Zend_Config_Ini(VPS_PATH.'/Vps_js/dependencies.ini', 'dependencies');
+            $vpsDependencies = new Zend_Config_Ini(VPS_PATH.'Vps_js/dependencies.ini', 'dependencies');
         }
         if (isset($dependency->dep)) {
             foreach ($dependency->dep as $x=>$d) {
@@ -116,7 +117,7 @@ class Vps_Assets_JavaScriptDependencies
                     if (!isset($this->_paths[$pathType])) {
                         throw new Vps_Exception("JS-Path-Type '$pathType' not found in config.");
                     }
-                    $file = substr($file, strpos($file, '/')); //pathtype abschneiden
+                    $file = substr($file, strpos($file, '/') + 1); //pathtype abschneiden
                     $file = substr($file, 0, -1); //* abschneiden
                     $path = $this->_paths[$pathType]['file'].$file;
                     $DirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
@@ -124,7 +125,7 @@ class Vps_Assets_JavaScriptDependencies
                         if (!preg_match('#/\\.svn/#', $file->getPathname())
                             && substr($file->getPathname(), -3) == '.js') {
                             $f = $file->getPathname();
-                            $f = substr($f, strlen($this->_paths[$pathType]['file']));
+                            $f = substr($f, strlen($this->_paths[$pathType]['file']) - 1);
                             $f = $pathType . $f;
                             if (!in_array($f, $this->_files)) {
                                 $this->_files[] = $f;

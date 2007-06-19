@@ -37,7 +37,7 @@ abstract class Vps_PageCollection_Abstract
         if (null === self::$_instance) {
             $dao = Zend_Registry::get('dao');
             
-            $pageCollectionConfig = new Zend_Config_Ini('../application/config.ini', 'pagecollection');
+            $pageCollectionConfig = new Zend_Config_Ini('application/config.ini', 'pagecollection');
             if ($pageCollectionConfig->pagecollection->urlscheme == 'flat') {
                 $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_FLAT;
             } else {

@@ -14,9 +14,9 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $this->_smarty = new Smarty();
         $this->_smarty->plugins_dir[] = 'SmartyPlugins/';
 
-        $this->setScriptPath('../application/views');
+        $this->setScriptPath('application/views');
         if (!isset($config['compile_dir'])) {
-            $config['compile_dir'] = '../application/views_c';
+            $config['compile_dir'] = 'application/views_c';
         }
         foreach ($config as $key => $value) {
             $this->_smarty->$key = $value;
@@ -31,9 +31,9 @@ class Vps_View_Smarty extends Zend_View_Abstract
         }
 
         // Ext-Pfad
-        $config = Zend_Registry::get('config');
-        $vpsPath = $config->asset->vps->http;
-        $extPath = $config->asset->ext->http;
+        $cfg = Zend_Registry::get('config');
+        $vpsPath = $cfg->asset->vps->http;
+        $extPath = $cfg->asset->ext->http;
 
         if (isset($this->ext['files']) && is_array($this->ext['files'])) {
             $files = array_merge($this->ext['files'], $files);
@@ -42,8 +42,8 @@ class Vps_View_Smarty extends Zend_View_Abstract
             $files[$x] = $vpsPath . $file;
         }
 
-        $dep = new Vps_Assets_JavaScriptDependencies($config->asset);
-        $dep->addDependencies(new Zend_Config_Ini('../application/config.ini', 'dependencies'));
+        $dep = new Vps_Assets_JavaScriptDependencies($cfg->asset);
+        $dep->addDependencies(new Zend_Config_Ini('application/config.ini', 'dependencies'));
         if (Zend_Registry::get('config')->debug) {
             $files = array_merge($files, $dep->getHttpFiles());
         } else {
@@ -53,10 +53,14 @@ class Vps_View_Smarty extends Zend_View_Abstract
         if (isset($this->ext['config']) && is_array($this->ext['config'])) {
             $config = array_merge($this->ext['config'], $config);
         }
+        
+        if ($class == '' && isset($this->ext['class'])) {
+            $class = $this->ext['class'];
+        }
 
         // View einrichten
         $ext['files'] = $files;
-        $ext['class'] = isset($this->ext['class']) ? $this->ext['class'] : $class;
+        $ext['class'] = $class;
         $ext['vpsPath'] = $vpsPath;
         $ext['extPath'] = $extPath;
         $ext['config'] = Zend_Json::encode($config);
@@ -66,7 +70,6 @@ class Vps_View_Smarty extends Zend_View_Abstract
     
     public function vpc($config = array())
     {
-        // View einrichten
         $this->ext('', $config);
     }
 
