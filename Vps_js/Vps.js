@@ -1,12 +1,11 @@
 Ext.BLANK_IMAGE_URL = '/assets/ext/resources/images/default/s.gif';
 
 Ext.namespace(
-'Vps', 'Vpc',
-'Vps.Admin', 'Vps.Admin.Pages', 'Vps.Admin.Page',
-'Vps.Login',
-'Vps.Menu'
+'Vps', 'Vpc'
 );
-
+Ext.namespace('Vps.Login');
+Ext.namespace();
+Ext.namespace();
 Ext.applyIf(Array.prototype, {
     each : function(fn, scope){
         Ext.each(this, fn, scope);
