@@ -26,18 +26,32 @@ class Vps_Assets_Loader
                 $url = substr($url, strpos($url, '/')+1);
 
                 if (isset($config->asset->$type)) {
-                    if (substr($url, -4)=='.gif') {
-                        header('Content-Type: image/gif');
-                    } else if (substr($url, -4)=='.png') {
-                        header('Content-Type: image/png');
-                    } else if (substr($url, -4)=='.jpg') {
-                        header('Content-Type: image/jpeg');
-                    } else if (substr($url, -4)=='.css') {
-                        header('Content-Type: text/css');
-                    } else if (substr($url, -3)=='.js') {
-                        header('Content-Type: text/javascript');
+
+                    $headers = apache_request_headers();
+                    $if_modified_since = $if_none_match = "";
+                    if (isset($headers['If-Modified-Since'])) $if_modified_since = preg_replace('/;.*$/', '', $headers['If-Modified-Since']);
+                    $lastModified = gmdate("D, d M Y H:i:s", filemtime($config->asset->$type.$url))." GMT";
+                    if ($if_modified_since == $lastModified) {
+                        header("HTTP/1.1 304 Not Modified");
+                        header("Expires: ".gmdate("D, d M Y H:i:s",time()+24*60*60)." GMT");
+                        header("Cache-Control: public, max-age=".(24*60*60));
+                    } else {
+                        header('Last-Modiefied: '.$lastModified);
+                        header("Expires: ".gmdate("D, d M Y H:i:s",time()+24*60*60)." GMT");
+                        header("Cache-Control: public, max-age=".(24*60*60));
+                        if (substr($url, -4)=='.gif') {
+                            header('Content-Type: image/gif');
+                        } else if (substr($url, -4)=='.png') {
+                            header('Content-Type: image/png');
+                        } else if (substr($url, -4)=='.jpg') {
+                            header('Content-Type: image/jpeg');
+                        } else if (substr($url, -4)=='.css') {
+                            header('Content-Type: text/css');
+                        } else if (substr($url, -3)=='.js') {
+                            header('Content-Type: text/javascript');
+                        }
+                        readfile($config->asset->$type.$url);
                     }
-                    readfile($config->asset->$type.$url);
                 } else {
                     die("unknown asset-type");
                 }
