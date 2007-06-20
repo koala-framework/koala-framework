@@ -208,11 +208,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return $ret;
     }
 
-    protected function getPath()
-    {
-        return $this->_pageCollection->getPath($this);
-    }
-
     public static function parseId($id)
     {
         $keys = array();
@@ -260,5 +255,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
     public function getChildComponents()
     {
         return array();
+    }
+    
+    protected function getPath($component = null)
+    {
+        if ($component == null) { $component = $this; }
+        return $this->getPageCollection()->getPath($component);
     }
 }

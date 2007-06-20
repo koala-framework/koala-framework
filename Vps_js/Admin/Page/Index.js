@@ -60,6 +60,9 @@ Vps.Admin.Page.Index = function(renderTo, config) {
                     class = eval(response.class);
                     new class('component', response.config);
                 },
+                failure: function(r) {
+                    Ext.get(document.body).unmask();
+                },
                 scope: this
             });
         }

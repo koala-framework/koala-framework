@@ -7,8 +7,14 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action
 
         $cfg = array();
         $cfg['components'] = $iniComponents->components->toArray();
+        $cfg['path'] = '/component/' . $this->component->getId() . '/';
 
-        $this->_render(array(), '', $cfg);
+        $this->view->ext('Vpc.Paragraphs.Index', $cfg);
+    }
+       
+    public function jsonIndexAction()
+    {
+        $this->indexAction();
     }
        
     public function ajaxDataAction()

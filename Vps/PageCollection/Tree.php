@@ -56,7 +56,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
                     $ids[] = $matches[1];
                 }
             } else if ($path == '/') {
-                $ids[] = $this->getRootPage()->getId();
+                $ids[] = $this->getRootPage()->getPageId();
             }
         } else if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL) {
             if (preg_match('/^(\/\w+)*\/$/', $path)) { // hierarchische URLs, Format /x/y/z/
@@ -69,7 +69,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
                         if (!$page) {
                             return array();
                         } else {
-                            $ids[] = $page->getId();
+                            $ids[] = $page->getPageId();
                         }
                     }
                 }
