@@ -1,6 +1,7 @@
 Ext.namespace('Vpc.Paragraphs');
 Vpc.Paragraphs.Index = function(renderTo, config)
 {
+    this.config = config;
     var Paragraph = Ext.data.Record.create([
         {name: 'id', type: 'int'},
         {name: 'nr', type: 'int'},
@@ -9,7 +10,7 @@ Vpc.Paragraphs.Index = function(renderTo, config)
     ]);
     
     this.ds = new Ext.data.Store({
-        proxy: new Ext.data.HttpProxy(new Vps.Connection({url: '/admin/component/ajaxData?id=' + config.id})),
+        proxy: new Ext.data.HttpProxy(new Vps.Connection({url: this.config.path + 'ajaxData'})),
         reader: new Ext.data.JsonReader({root: 'rows', id: 'id'}, Paragraph)
     });
     this.ds.load();
@@ -128,7 +129,7 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
             componentId = 0;
         }
         new Vps.Connection().request({
-            url: '/admin/component/ajaxCreate',
+            url: this.config.path + 'ajaxCreate',
             method: 'post',
             scope: this,
             params: {
@@ -154,7 +155,7 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
                 fn: function(button) {
                     if (button == 'yes'){
                         new Vps.Connection().request({
-                            url: '/admin/component/ajaxDelete',
+                            url: this.config.path + 'ajaxDelete',
                             method: 'post',
                             scope: this,
                             params: {
@@ -176,7 +177,7 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
         componentIds = this.getSelectedIds();
         if (componentIds != '') {
             new Vps.Connection().request({
-                url: '/admin/component/ajaxStatus',
+                url: this.config.path + 'ajaxStatus',
                 method: 'post',
                 scope: this,
                 params: {
@@ -196,7 +197,7 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
         componentIds = this.getSelectedIds();
         if (componentIds != '') {
             new Vps.Connection().request({
-                url: '/admin/component/ajaxMove',
+                url: this.config.path + 'ajaxMove',
                 method: 'post',
                 scope: this,
                 params: {

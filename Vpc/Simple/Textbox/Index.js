@@ -14,7 +14,7 @@ Vpc.Simple.Textbox.Index = function(renderTo, config) {
     }
 
     var form = new Ext.form.Form({
-        url:'ajaxSaveData',
+        url:config.path + 'ajaxSaveData',
         labelAlign: '',
         labelWidth: '75',
         buttonAlign: 'left'
