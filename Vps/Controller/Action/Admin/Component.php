@@ -6,7 +6,7 @@ class Vps_Controller_Action_Admin_Component extends Vps_Controller_Action
     public function __call($action, $args)
     {
         $id = $this->getRequest()->getParam('id');
-        $component = Vpc_Abstract::getInstance(Zend_Registry::get('dao'), $id);
+        $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id);
         $component = $component->findComponent($id);
         $controller = substr(get_class($component), 0, strrpos(get_class($component), '_') + 1) . 'Controller';
         $action = str_replace('Action', '', $action);

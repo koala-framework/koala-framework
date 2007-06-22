@@ -18,11 +18,16 @@ class Vpc_Paragraphs_Abstract extends Vpc_Abstract
     {
         $return = array();
         foreach ($this->_getParagraphs() as $p) {
-            $return = array_merge($return, $p->generateHierarchy($filename));
+            $return = array_merge($return, $p->getChildPages($filename));
         }
         return $return;
     }
 
+    public function getChildComponents()
+    {
+        return $this->_getParagraphs();
+    }
+    
     private function _getParagraphs()
     {
         if (!isset($this->_paragraphs)) {
@@ -32,7 +37,8 @@ class Vpc_Paragraphs_Abstract extends Vpc_Abstract
                         ->fetchParagraphs($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
     
             foreach($rows as $row) {
-                $this->_paragraphs[] = $this->createComponent('', $row->component_id);
+                $c = $this->createComponent('', $row->component_id);
+                $this->_paragraphs[] = $c;
             }
         }
         return $this->_paragraphs;
@@ -67,9 +73,4 @@ class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         return $ret;
     }
 
-    public function getChildComponents()
-    {
-        return $this->_getParagraphs();
-    }
-    
 }

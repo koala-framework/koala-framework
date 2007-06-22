@@ -6,8 +6,8 @@ class Vpc_TextPic_Index extends Vpc_Abstract
 
     protected function setup()
     {
-        $this->_textboxComponent = $this->createComponent('Vpc_Textbox', 0, '', '1');
-        $this->_picComponent = $this->createComponent('Vpc_Pic', 0, '', '2');
+        $this->_textboxComponent = $this->createComponent('Vpc_Textbox', 0, '1');
+        $this->_picComponent = $this->createComponent('Vpc_Pic', 0, '2');
     }
     
     public function getTemplateVars($mode)

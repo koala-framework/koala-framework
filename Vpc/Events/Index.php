@@ -1,19 +1,14 @@
 <?php
 class Vpc_Events_Index extends Vpc_Abstract
 {
-    private $_paragraphs;
-
     protected function getChildPages($filename = '')
     {
-        $components = array();
+        $pages = array();
         for ($i = 2000; $i <= 2007; $i++) {
             if ($filename != '' && $filename != $i) continue;
-
-            $component = $this->createComponent('Vpc_TextPic', 0, $i-1999);
-            $components[$i] = $component;
+            $pages[$i] = $this->createPage('Vpc_TextPic', 0, $i-1999);
         }
-        $this->_paragraphs = $components;
-        return $components;
+        return $pages;
     }
    
     public function getTemplateVars($mode)
