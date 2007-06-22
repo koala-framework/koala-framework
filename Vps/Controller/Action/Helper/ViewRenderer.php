@@ -40,7 +40,7 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                 $this->getRequest()->getParam('controller') == 'component')
             {
                 $id = $this->getRequest()->getParam('id');
-                $component = Vpc_Abstract::getInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
+                $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
                 if (!$component) {
                     throw new Vpc_Exception('Component not found.');
                 } else {

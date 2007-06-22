@@ -19,16 +19,16 @@ class Vpc_Product_List extends Vpc_Abstract
         $rows = $category->findManyToManyRowset('Vps_Dao_ProductProducts', 'Vps_Dao_ProductProductsToCategories');
         //todo: visible ber�cksichtigen
 
-        $components = array();
+        $pages = array();
         foreach($rows as $row) {
             if ($filename != '' && $filename != $row->filename) continue;
 
-            $component = $this->createComponent('Vpc_Product_Details', 0, $row->id);
-            $component->setProductId($row->id);
-            $components[$row->filename] = $component;
+            $page = $this->createPage('Vpc_Product_Details', 0, $row->id);
+            $page->setProductId($row->id);
+            $pages[$row->filename] = $page;
             $this->_products[$row->filename] = $row;
         }
-        return $components;
+        return $pages;
     }
     
     public function getTemplateVars($mode)
@@ -39,7 +39,7 @@ class Vpc_Product_List extends Vpc_Abstract
         foreach ($pages as $filename => $page) {
             $row = $this->_products[$filename];
             
-            $teaser = $this->createComponent('Vpc_Product_Teaser', 0, '', $row->id);
+            $teaser = $this->createComponent('Vpc_Product_Teaser', 0, $row->id);
             $product = array('name'=>$row->name, 'filename'=>$row->filename,
                              'price'=>$row->price, 'vat'=>$row->vat);
             $teaser->setProductData($product);

@@ -49,12 +49,9 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         $ids = array();
         $matches = array();
         if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_FLAT) {
-            if (preg_match('/^\/[a-z0-9]+_[A-Za-z0-9]+_(.+)\.html?$/', $path, $matches)) {
-                if (isset($matches[2]) && $matches[2] != '') {
-                    $ids = $this->getIdsForPath('/' . $matches[2], $this->getPageById($matches[1]));
-                } else {
-                    $ids[] = $matches[1];
-                }
+            $pattern = '/^\/.*?_(' . Vpc_Abstract::getPageIdPattern() . ')\.html$/';
+            if (preg_match($pattern, $path, $matches)) {
+                $ids[] = $matches[1];
             } else if ($path == '/') {
                 $ids[] = $this->getRootPage()->getPageId();
             }
@@ -153,6 +150,29 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         return $path;
     }
     
+    public function findComponentByClass($class, $startPage = null)
+    {
+        if (!$startPage) {
+            $startPage = $this->getRootPage();
+        }
+        if (!$startPage instanceof Vpc_Interface) {
+            throw new Vps_PageCollection_Exception('startPage must be an instance of Vpc_Interface, ' . get_class($startPage) . ' given.');
+        }
+        
+        $component = $startPage->findComponentByClass($class);
+        if ($component) {
+            return $component;
+        } else {
+            foreach ($this->getChildPages($startPage) as $page) {
+                $component = $page->findComponentByClass($class);
+                if ($component != null) {
+                    return $component;
+                }
+            }
+        }
+        return null;
+    }
+
     public function getTitle($page)
     {
         $title = array();

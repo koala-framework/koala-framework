@@ -36,9 +36,9 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
                 $className = $m[2];
                 $componentNr++;
                 try {
-                    $component = $this->createComponent($className, 0, '', $componentNr);
+                    $component = $this->createComponent($className, 0, $componentNr);
                 } catch (Vpc_ComponentNotFoundException $e) {
-                    $component = $this->createComponent('Vpc_Empty_Index', 0, '', $componentNr);
+                    $component = $this->createComponent('Vpc_Empty_Index', 0, $componentNr);
                 }
                 $this->_components[] = $component;
                 $this->_contentParts[] = array('type'=>'component', 'component'=>$component->getTemplateVars($mode));

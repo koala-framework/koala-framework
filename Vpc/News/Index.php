@@ -5,16 +5,16 @@ class Vpc_News_Index extends Vpc_Abstract
     
     protected function getChildPages($filename = '')
     {
-        $components = array();
+        $pages = array();
         foreach($this->getDao()->getTable('Vps_Dao_News')->fetchAll() as $row) {
             if ($filename != '' && $filename != $row->filename) continue;
 
-            $component = $this->createComponent('Vpc_News_Details', 0, $row->id);
-            $component->setNewsId($row->id);
-            $components[$row->filename] = $component;
+            $page = $this->createPage('Vpc_News_Details', 0, $row->id);
+            $page->setNewsId($row->id);
+            $pages[$row->filename] = $page;
             $this->_titles[$row->filename] = $row->title;
         }
-        return $components;
+        return $pages;
     }
     
     public function getTemplateVars($mode)

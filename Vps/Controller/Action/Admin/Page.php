@@ -22,7 +22,7 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
         $componentClass = $this->getRequest()->getParam('componentClass');
         $componentId = $this->getRequest()->getParam('componentId');
         $parentComponentId = $this->getRequest()->getParam('parentComponentId');
-        $page = Vpc_Abstract::getInstance(Zend_Registry::get('dao'), $pageId);
+        $page = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $pageId);
         $parentComponent = $page->findComponent($parentComponentId);
         $component = $page->findComponent($componentId);
         $position = 0;
@@ -67,7 +67,7 @@ class Vps_Controller_Action_Admin_Page extends Vps_Controller_Action
         $pageId = $this->getRequest()->getParam('pageId');
         $componentId = $this->getRequest()->getParam('node');
 
-        $page = Vpc_Abstract::getInstance(Zend_Registry::get('dao'), $pageId);
+        $page = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $pageId);
         if ($componentId == 'root') {
             $comonent = null;
             $components = array($page);

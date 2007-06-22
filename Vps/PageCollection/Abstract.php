@@ -52,21 +52,21 @@ abstract class Vps_PageCollection_Abstract
         return self::$_instance;
     }
 
-    public function addPage($component, $filename = '')
+    public function addPage($page, $filename = '')
     {
-        if (is_int($component)) {
-            $componentId = $component;
+        if (is_int($page)) {
+            $componentId = $page;
             $pageData = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
-            $component = Vpc_Abstract::getInstance($this->_dao, $componentId, $pageData['component']);
-            if ($component) {
-                $component->setPageCollection($this);
+            $page = Vpc_Abstract::createInstance($this->_dao, $componentId);
+            if ($page) {
+                $page->setPageCollection($this);
                 $filename = $pageData['filename'];
             } else {
                 throw new Vps_Page_Collection_Exception("Couldn\'t create Component with id $componentId");
             }
         }
 
-        if (!$component instanceof Vpc_Interface) {
+        if (!$page instanceof Vpc_Interface) {
             throw new Vps_PageCollection_Exception("Component must be instance of Vpc_Interface.");
         }
         
@@ -74,13 +74,13 @@ abstract class Vps_PageCollection_Abstract
             throw new Vps_PageCollection_Exception("Pagename must not be empty. Probably Component is not a Page.");
         }
         
-        $id = $component->getPageId();
+        $id = $page->getPageId();
         if (isset($this->_pages[$id])) {
             $decoratedComponent = $this->_removePage($id);
         } else {
-            $decoratedComponent = $this->addDecoratorsToComponent($component);
+            $decoratedComponent = $this->addDecoratorsToComponent($page);
         }
-        
+
         $this->_setPage($decoratedComponent, $filename);
         return $decoratedComponent;
     }
@@ -111,15 +111,15 @@ abstract class Vps_PageCollection_Abstract
         return $component;
     }
 
-    private function _setPage(Vpc_Interface $component, $filename)
+    private function _setPage(Vpc_Interface $page, $filename)
     {
-        $id = $component->getPageId();
+        $id = $page->getPageId();
 
         if (isset($this->_pages[$id])) {
-          throw new Vps_PageCollection_Exception('A page with the same componentId already exists.');
+            throw new Vps_PageCollection_Exception('A page with the same componentId already exists.');
         }
 
-        $this->_pages[$id] = $component;
+        $this->_pages[$id] = $page;
         $this->_pageFilenames[$id] = $filename;
     }
 
@@ -134,8 +134,8 @@ abstract class Vps_PageCollection_Abstract
         $this->getRootPage(); // Muss hier gemacht werden
         if (!isset($this->_pages[$pageId])) {
             try {
-                $parts = Vpc_Abstract::parseId($pageId);
-                $page = $this->addPage($parts['componentId']);
+                $parts = Vpc_Abstract::parsePageId($pageId);
+                $page = $this->addPage($parts['topComponentId']);
                 if ($page != null) {
                     $id = $page->getPageId();
                     foreach ($parts['pageKeys'] as $pageKey) {
@@ -160,8 +160,7 @@ abstract class Vps_PageCollection_Abstract
     {
         if (!isset($this->_rootPageId)) {
             $data = $this->_dao->getTable('Vps_Dao_Pages')->retrieveRootPageData();
-            $rootPage = Vpc_Abstract::getInstance($this->_dao, $data['component_id'], $data['component']);
-            $rootPage->setPageId($rootPage->getId());
+            $rootPage = Vpc_Abstract::createInstance($this->_dao, $data['component_id']);
             $rootPage->setPageCollection($this);
             $this->setRootPage($rootPage);
         }
@@ -199,6 +198,6 @@ abstract class Vps_PageCollection_Abstract
         $data['path'] = $this->getPath($page);
         return $data;
     }
-
+    
     abstract public function getPageByPath($path);
 }
