@@ -199,5 +199,10 @@ abstract class Vps_PageCollection_Abstract
         return $data;
     }
     
+    public function getFilename(Vpc_Interface $page)
+    {
+        return isset($this->_pageFilenames[$page->getPageId()]) ? $this->_pageFilenames[$page->getPageId()] : '';
+    }
+    
     abstract public function getPageByPath($path);
 }

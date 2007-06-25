@@ -31,7 +31,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         // Benötige Daten ggf. holen
         if ($componentId == 0) {
-            $componentId = $this->getComponentId();
+            $componentId = $this->getTopComponentId();
         }
         
         if ($pageKeySuffix != '' && $pageTagSuffix != '') {

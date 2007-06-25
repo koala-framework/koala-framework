@@ -12,6 +12,7 @@ class Vps_Controller_Action_Web extends Vps_Controller_Action
         $mode = $this->getRequest()->getParam('mode');
         $templateVars = $page->getTemplateVars($mode);
 
+        $this->view->url = $this->getRequest()->getPathInfo();
         $this->view->component = $templateVars;
         $this->view->title = $pageCollection->getTitle($page);
         $this->view->mode = $mode;
