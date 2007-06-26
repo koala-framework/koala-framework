@@ -26,7 +26,9 @@ class Vps_Assets_Loader
                 $url = substr($url, strpos($url, '/')+1);
 
                 if (isset($config->asset->$type)) {
-
+                    if(!file_exists($config->asset->$type.$url)) {
+                        die("file not found");
+                    }
                     $headers = apache_request_headers();
                     $if_modified_since = $if_none_match = "";
                     if (isset($headers['If-Modified-Since'])) $if_modified_since = preg_replace('/;.*$/', '', $headers['If-Modified-Since']);

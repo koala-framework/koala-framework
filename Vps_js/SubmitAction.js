@@ -8,10 +8,14 @@ Ext.extend(Vps.SubmitAction, Ext.form.Action.Submit, {
 
         //manually add date-value and checkbox-state and clear name to submit it only once
         this.form.items.each(function(field) {
-            if (field instanceof Ext.form.DateField) {
+            if (field instanceof Ext.form.DateField && field.getValue() instanceof Date) {
                 this.options.params[field.getName()] = field.getValue().dateFormat("Y-m-d");
             } else if (field instanceof Ext.form.Checkbox) {
-                this.options.params[field.getName()] = field.getValue();
+                if (field.getValue()) {
+                    this.options.params[field.getName()] = 1;
+                } else {
+                    this.options.params[field.getName()] = 0;
+                }
             }
             if(this.options.params[field.getName()]) {
                 field.realName = field.getName();

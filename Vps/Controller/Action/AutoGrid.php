@@ -12,6 +12,11 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
     protected $_gridUseEditor;
     protected $_gridFilters = array();
 
+    //deprecated:
+    public function ajaxLoadAction() { $this->jsonLoadAction(); }
+    public function ajaxSaveAction() { $this->jsonSaveAction(); }
+    public function ajaxDeleteAction() { $this->jsonDeleteAction(); }
+
     public function init()
     {
         if (!isset($this->_gridUseEditor)) {
@@ -49,7 +54,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         return $this->_gridTable->fetchCount();
     }
 
-    public function ajaxDataAction()
+    public function jsonDataAction()
     {
         $limit = null; $start = null;
         if ($this->_gridPaging) {
@@ -89,6 +94,9 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
             } else {
                 $this->view->total = sizeof($rows);
             }
+        } else {
+            $this->view->total = 0;
+            $this->view->rows = array();
         }
 
         if ($this->getRequest()->getParam('meta')) {
@@ -110,7 +118,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         $info = $this->_gridTable->info();
         $metaData = array();
         $primaryFound = false;
-        $primaryKey = $info['primary'][1];
+        $primaryKey = $this->_getPrimaryKey();;
 
         foreach ($this->_gridColumns as $col) {
             $d = array();
@@ -131,7 +139,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
             //primary key hinzufügen falls er noch nicht in gridColumns existiert
             $d = array();
             $d['name'] = $primaryKey;
-            $d['type'] = $this->_getTypeFromDbType($info['metadata'][$d['name']]['DATA_TYPE']);
+            $d['type'] = $this->_getTypeFromDbType($info['metadata'][$primaryKey]['DATA_TYPE']);
             $metaData[] = $d;
         }
 
@@ -151,6 +159,13 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
                     'gridUseEditor'=>$this->_gridUseEditor,
                     'gridFilters'=>$this->_gridFilters);
     }
+
+    protected function _getPrimaryKey()
+    {
+        $info = $this->_gridTable->info();
+        return $info['primary'][1];
+    }
+
     protected function _beforeSave(Zend_Db_Table_Row_Abstract $row)
     {
     }
@@ -159,48 +174,34 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
     {
     }
     
-    public function ajaxSaveAction()
+    public function jsonSaveAction()
     {
         if(!isset($this->_gridPermissions['save']) || !$this->_gridPermissions['save']) {
-            throw new Avs_Exception("Save is not allowed.");
+            throw new Vps_Exception("Save is not allowed.");
         }
         $success = false;
-        
-        if($this->getRequest()->getParam("data")) {
-            //a grid submit
-            //todo: was ist wenn eine form einenn eintrag namens data hat?
-            $data = Zend_Json::decode(stripslashes($this->getRequest()->getParam("data")));
-        } else {
-            //a form submit (only one record)
-            $data = array($this->getRequest()->getParams());
-        }
+
+        $data = Zend_Json::decode(stripslashes($this->getRequest()->getParam("data")));
         $addedIds = array();
         foreach ($data as $submitRow) {
-            if ($submitRow['id']) {
-                $row = $this->_gridTable->find($submitRow['id'])->current();
+            $id = $submitRow[$this->_getPrimaryKey()];
+            if ($id) {
+                $row = $this->_gridTable->find($id)->current();
             } else {
                 if(!isset($this->_gridPermissions['add']) || !$this->_gridPermissions['add']) {
-                    throw new Avs_Exception("Add is not allowed.");
+                    throw new Vps_Exception("Add is not allowed.");
                 }
                 $row = $this->_gridTable->fetchNew();
             }
             if(!$row) {
-                throw new Avs_Exception("Can't find row with id '$submitRow[id]'.");
+                throw new Vps_Exception("Can't find row with id '$id'.");
             }
             foreach ($this->_gridColumns as $col) {
                 if ((isset($col['allowSave']) && $col['allowSave'])
                     || (isset($col['editor']) && $col['editor']))
                 {
                     if (isset($submitRow[$col['dataIndex']])) {
-                        $val = $submitRow[$col['dataIndex']];
-                        if ($col['type'] == 'date') {
-                            if ($val != "") {
-                                $val = date("Y-m-d", strtotime($val));
-                            } else {
-                                $val = '0000-00-00';
-                            }
-                        }
-                        $row->$col['dataIndex'] = $val;
+                        $row->$col['dataIndex'] = $submitRow[$col['dataIndex']];
                     }
                     if ($col['type'] == 'boolean') {
                         if(isset($submitRow[$col['dataIndex']])) {
@@ -215,7 +216,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
             $this->_beforeSave($row);
             $row->save();
             $this->_afterSave($row);
-            if (!$submitRow['id']) {
+            if (!$id) {
                 $addedIds[] = $row->id;
             }
         }
@@ -227,21 +228,23 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         $this->view->success = $success;
     }
 
-    public function ajaxDeleteAction()
+    public function jsonDeleteAction()
     {
         if(!isset($this->_gridPermissions['delete']) || !$this->_gridPermissions['delete']) {
-            throw new Avs_Exception("Delete is not allowed.");
+            throw new Vps_Exception("Delete is not allowed.");
         }
         $success = false;
-        $id = $this->getRequest()->getPost('id');
+        $id = $this->getRequest()->getParam($this->_getPrimaryKey());
 
-        if ($row = $this->_gridTable->find($id)->current()) {
-            try {
-                $row->delete();
-                $success = true;
-            } catch (Avs_Exception $e) {
-                $this->view->error = $e->getMessage();
-            }
+        $row = $this->_gridTable->find($id)->current();
+        if(!$row) {
+            throw new Vps_Exception("Can't find row with id '$id'.");
+        }
+        try {
+            $row->delete();
+            $success = true;
+        } catch (Vps_Exception $e) { //todo: nicht nur Vps_Exception fangen
+            $this->view->error = $e->getMessage();
         }
 
         $this->view->success = $success;
