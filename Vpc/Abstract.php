@@ -33,7 +33,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         if ($componentId == 0) {
             $componentId = $this->getTopComponentId();
         }
-        
+
         if ($pageKeySuffix != '' && $pageTagSuffix != '') {
             throw new Vpc_Exception('Only one of $pageKeySuffix and $pageTagSuffix can have a value.');
         }
@@ -49,7 +49,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         }
 
         // Page erstellen
-        $page = self::_createInstance($this->getDao(), $componentId, $componentId, $pageKey);
+        $page = self::_createInstance($this->getDao(), $componentId, $componentId, $pageKey, '', $className);
         
         // Zu Komponente ggf. PageCollection hinzufügen
         if (!is_null($page) && !is_null($this->_pageCollection)) {
@@ -283,10 +283,10 @@ abstract class Vpc_Abstract implements Vpc_Interface
                 $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData($this->getComponentId());
                 foreach($rows as $pageRow) {
                     if ($filename != '' && $filename != $pageRow['filename']) { continue; }
-                    $component = self::createPage($this->_dao, $pageRow['component_id']);
-                    $this->_pageCollection->addPage($component, $pageRow['filename']);
-                    $this->_pageCollection->setParentPage($component, $this);
-                    $return[$pageRow['filename']] = $component;
+                    $page = $this->createPage('', $pageRow['component_id']);
+                    $this->_pageCollection->addPage($page, $pageRow['filename']);
+                    $this->_pageCollection->setParentPage($page, $this);
+                    $return[$pageRow['filename']] = $page;
                 }
 
                 // Hierarchie von aktueller Komponente nur erstellen, wenn die dynamischen Seiten auch angezeigt werden sollen
