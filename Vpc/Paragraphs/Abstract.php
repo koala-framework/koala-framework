@@ -14,13 +14,12 @@ class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         return $ret;
     }
 
-    protected function getChildPages($filename = '')
+    public function generateHierarchy($filename = '')
     {
-        $return = array();
+        parent::generateHierarchy($filename);
         foreach ($this->_getParagraphs() as $p) {
-            $return = array_merge($return, $p->getChildPages($filename));
+            $p->generateHierarchy($filename);
         }
-        return $return;
     }
 
     public function getChildComponents()

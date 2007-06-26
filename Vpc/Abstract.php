@@ -27,7 +27,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return self::_createInstance($dao, $parsedId['componentId'], $parsedId['componentId'], $parsedId['pageKey'], '', $parsedId['componentKey']);
     }
     
-    protected function createPage($className, $componentId = 0, $pageKeySuffix = '', $pageTagSuffix = '')
+    protected function createPage($className, $componentId = 0, $pageKeySuffix = '', $pageTagSuffix = '', $pageTag = '')
     {
         // Benötige Daten ggf. holen
         if ($componentId == 0) {
@@ -38,14 +38,18 @@ abstract class Vpc_Abstract implements Vpc_Interface
             throw new Vpc_Exception('Only one of $pageKeySuffix and $pageTagSuffix can have a value.');
         }
 
-        $pageKey = $this->_pageKey;
-        if ($pageKeySuffix != '') {
-            if ($pageKey != '') { $pageKey .= '.'; }
-            $pageKey .= $pageKeySuffix;
-        }
-        if ($pageTagSuffix != '') {
-            if ($pageKey != '') { $pageKey .= '.'; }
-            $pageKey .= $pageTagSuffix . 't';
+        if ($pageTag != '') {
+            $pageKey = $pageTag . 't';
+        } else {
+            $pageKey = $this->_pageKey;
+            if ($pageKeySuffix != '') {
+                if ($pageKey != '') { $pageKey .= '.'; }
+                $pageKey .= $pageKeySuffix;
+            }
+            if ($pageTagSuffix != '') {
+                if ($pageKey != '') { $pageKey .= '.'; }
+                $pageKey .= $pageTagSuffix . 't';
+            }
         }
 
         // Page erstellen
@@ -272,40 +276,22 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return $this->_pageCollection;
     }
 
-    public final function generateHierarchy($filename = '')
+    public function generateHierarchy($filename = '')
     {
         $return = array();
-        if ($this->_pageCollection instanceof Vps_PageCollection_Tree) {
-            // Erstellt hier nur ChildPages, ParentPages werden bei bedarf in Vps_PageCollection_Tree erstellt
-            if (!in_array('', $this->_hasGeneratedForFilename) && !in_array($filename, $this->_hasGeneratedForFilename)) {
+        if (!in_array('', $this->_hasGeneratedForFilename) && !in_array($filename, $this->_hasGeneratedForFilename)) {
 
-                // Hierarchie aus Seitenbaum immer erstellen
-                $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData($this->getComponentId());
-                foreach($rows as $pageRow) {
-                    if ($filename != '' && $filename != $pageRow['filename']) { continue; }
-                    $page = $this->createPage('', $pageRow['component_id']);
-                    $this->_pageCollection->addPage($page, $pageRow['filename']);
-                    $this->_pageCollection->setParentPage($page, $this);
-                    $return[$pageRow['filename']] = $page;
-                }
-
-                // Hierarchie von aktueller Komponente nur erstellen, wenn die dynamischen Seiten auch angezeigt werden sollen
-                if ($this->_pageCollection->getCreateDynamicPages()) {
-                    $pages = $this->getChildPages($filename);
-                    foreach ($pages as $fn => $page) {
-                        $this->_pageCollection->addPage($page, $fn);
-                        $this->_pageCollection->setParentPage($page, $this);
-                        $return[$fn] = $page;
-                    }
-                }
-
-                $this->_hasGeneratedForFilename[] = $filename;
+            $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData($this->getComponentId());
+            foreach($rows as $pageRow) {
+                if ($filename != '' && $filename != $pageRow['filename']) { continue; }
+                $page = $this->createPage('', $pageRow['component_id']);
+                $this->getPageCollection()->addPage($page, $pageRow['filename'], $this);
+                $r['page'] = $page;
+                $r['filename'] = $pageRow['filename'];
+                $return[] = $r;
             }
 
-        } else if ($this->_pageCollection != null){
-
-            throw new Vpc_Exception('Until now, generateHierarchy only works for instances of Vps_PageCollection_Tree');
-
+            $this->_hasGeneratedForFilename[] = $filename;
         }
 
         return $return;

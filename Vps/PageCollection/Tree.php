@@ -11,6 +11,15 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         return parent::_removePage($id);
     }
 
+    public function addPage($page, $filename = '', Vpc_Interface $parentPage = null)
+    {
+        $page = parent::addPage($page, $filename);
+        if ($parentPage) {
+            $this->setParentPage($page, $parentPage);
+        }
+        return $page;
+    }
+    
     public function setParentPage(Vpc_Interface $page, Vpc_Interface $parentPage)
     {
         $id = $page->getPageId();

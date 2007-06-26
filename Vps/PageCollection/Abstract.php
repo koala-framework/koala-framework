@@ -52,7 +52,7 @@ abstract class Vps_PageCollection_Abstract
         return self::$_instance;
     }
 
-    public function addPage($page, $filename = '')
+    public function addPage($page, $filename = '', Vpc_Interface $parentPage = null)
     {
         if (is_int($page)) {
             $componentId = $page;
