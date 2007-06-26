@@ -64,11 +64,17 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
                     throw "invalid editor: "+column.editor;
                 }
             }
-            try {
-                column.renderer = eval(column.renderer);
-            } catch(e) {
-                throw "invalid renderer: "+column.renderer;
-                delete column.renderer;
+            
+            if (Vps.Renderer[column.renderer]) {
+                column.renderer = Vps.Renderer[column.renderer];
+            } else if (Ext.util.Format[column.renderer]) {
+                column.renderer = Ext.util.Format[column.renderer];
+            } else {
+                try {
+                    column.renderer = eval(column.renderer);
+                } catch(e) {
+                    throw "invalid renderer: "+column.renderer;
+                }
             }
             if (column.defaultValue) delete column.defaultValue;
             if (column.dateFormat) delete column.dateFormat;

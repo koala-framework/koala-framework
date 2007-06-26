@@ -23,19 +23,3 @@ Ext.onReady(function()
 
     Ext.QuickTips.init();
 });
-
-function formatBoolean(value){
-    return value ? 'Ja' : 'Nein';
-}
-function formatPassword(value){
-    return value||true ? '******' : '';
-}
-function formatMoney(v)
-{
-    if (v == 0) return "";
-    v = v.toString().replace(",", ".");
-    v = (Math.round((v-0)*100))/100;
-    v = (v == Math.floor(v)) ? v + ".00" : ((v*10 == Math.floor(v*10)) ? v + "0" : v);
-    v = v.toString().replace(".", ",");
-    return v + " €";
-}
