@@ -2,15 +2,16 @@ Vps.AutoGrid = function(renderTo, config)
 {
     Ext.apply(this, config);
     this.events = {
-        'generatetoolbar' : true,
-        'rowselect' : true,
-        'rowdblclick' : true
+        'generatetoolbar': true,
+        'rowselect': true,
+        'rowdblclick': true,
+        'beforerowselect': true
     };
 
     this.renderTo = renderTo;
 
     this.ds = new Ext.data.Store({
-        proxy: new Ext.data.HttpProxy({url: this.controllerUrl + 'ajaxData'}),
+        proxy: new Ext.data.HttpProxy({url: this.controllerUrl + 'jsonData'}),
         reader: new Ext.data.JsonReader(),
         remoteSort: true
     });
@@ -29,11 +30,15 @@ Vps.AutoGrid = function(renderTo, config)
         scope: this,
         delay: 1  //damit das catch vom JsonReader nicht fehler schluckt
     }});
-    this.ds.load({params: {start: 0}});
+
+    if(this.autoload) {
+        this.ds.load({params: {start: 0}});
+    }
 };
 
 Ext.extend(Vps.AutoGrid, Ext.util.Observable,
 {
+    autoload: true,
     onMetaChange : function(store, meta) {
         var config = [];
         for (var i=0; i<meta.gridColumns.length; i++) {
@@ -57,7 +62,6 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
                     column.editor = eval(column.editor);
                 } catch(e) {
                     throw "invalid editor: "+column.editor;
-                    delete column.editor;
                 }
             }
             try {
@@ -87,6 +91,10 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
         this.grid.getSelectionModel().on('rowselect', function(selData, gridRow, currentRow) {
             if(this.deleteButton) this.deleteButton.enable();
             this.fireEvent('rowselect', selData, gridRow, currentRow);
+        }, this);
+
+        this.grid.getSelectionModel().on('beforerowselect', function(selData, gridRow, currentRow) {
+            return this.fireEvent('beforerowselect', selData, gridRow, currentRow);
         }, this);
 
         this.grid.on('rowdblclick', function(selModel, rowIndex) {
@@ -171,7 +179,7 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
         var params = this.loadParams || {};
         params.data = Ext.util.JSON.encode(data);
         Ext.Ajax.request({
-            url: this.controllerUrl+'ajaxSave',
+            url: this.controllerUrl+'jsonSave',
             params: params,
             success: function() {
                 this.reload();
@@ -188,10 +196,10 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
     onAdd : function() {
 
         //this should be in Ext.data.Record: fixme: send patch to ext.js
-/*        var data = {};
+        var data = {};
         for(var i=0; i<this.ds.recordType.prototype.fields.items.length; i++) {
             data[this.ds.recordType.prototype.fields.items[i].name] = this.ds.recordType.prototype.fields.items[i].defaultValue;
-        }*/
+        }
         var record = new this.ds.recordType({});
 
         this.grid.stopEditing();
@@ -222,7 +230,7 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
                         var params = {};
                         params[this.ds.reader.meta.id] = selectedRow.id;
                         Ext.Ajax.request({
-                            url: this.controllerUrl+'ajaxDelete',
+                            url: this.controllerUrl+'jsonDelete',
                             params: params,
                             success: function() {
                                 this.ds.remove(selectedRow);
@@ -244,6 +252,12 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
     getSelected: function() {
         return this.grid.getSelectionModel().getSelected();
     },
+    clearSelections: function() {
+        this.grid.getSelectionModel().clearSelections();
+    },
+    selectRow: function(row) {
+        this.grid.getSelectionModel().selectRow(row);
+    },
     reload: function() {
         this.ds.reload();
         this.ds.commitChanges();
@@ -257,9 +271,11 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
         if(this.newButton) this.newButton.enable();
     },
     disable: function() {
-        this.toolbar.items.each(function(b) {
-            b.disable();
-        }, this);
+        if (this.toolbar) {
+            this.toolbar.items.each(function(b) {
+                b.disable();
+            }, this);
+        }
         this.ds.removeAll();
     }
 });
