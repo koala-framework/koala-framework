@@ -30,6 +30,8 @@ Vps.AutoForm.Form = function(renderTo, config)
 
 Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
 {
+    checkDirty: false,
+
     renderButtons: function()
     {
         var layout = new Ext.BorderLayout(this.renderTo, {
@@ -51,7 +53,9 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
         if (this.meta.formButtons.save) {
             this.saveButton = this.toolbar.addButton({
                 text    : 'Speichern',
-                handler : this.onSubmit,
+                handler : function() {
+                    this.onSubmit();
+                },
                 scope   : this
             });
         }
@@ -59,7 +63,9 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
         if (this.meta.formButtons.delete) {
             this.deleteButton = this.toolbar.addButton({
                 text    : 'Löschen',
-                handler : this.onDelete,
+                handler : function() {
+                    this.onDelete();
+                },
                 scope   : this
             });
         }
@@ -68,7 +74,9 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
             this.toolbar.addSeparator();
             this.addButton = this.toolbar.addButton({
                 text    : 'Neuer Eintrag',
-                handler : this.onAdd,
+                handler : function() {
+                    this.onAdd();
+                },
                 scope   : this
             });
         }
@@ -220,7 +228,7 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
     mabySave : function(callback, callCallbackIfNotDirty)
     {
         if(typeof callCallbackIfNotDirty == 'undefined') callCallbackIfNotDirty = true;
-        if (this.form.isDirty()) {
+        if (this.checkDirty && this.form.isDirty()) {
             Ext.Msg.show({
             title:'speichern?',
             msg: 'Möchten Sie diesen Eintrag speichern?',
@@ -243,6 +251,7 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
     },
     onSubmit : function(options, successCallback) {
         this.saveButton.disable();
+        if (!options) options = {};
         this.form.submit(Ext.applyIf(options, {
             waitMsg: 'speichern...',
             success: function(form, action) {
@@ -297,6 +306,8 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
             callback: function() {
                 this.enable();
                 if (this.deleteButton) this.deleteButton.disable();
+                this.form.baseParams.id = 0;
+                debugger;
                 this.form.setDefaultValues();
                 this.fireEvent("add", this);
             },

@@ -21,7 +21,9 @@ Ext.extend(Vps.AutoForm.Dialog, Vps.AutoForm.Form,
         if (this.meta.formButtons.save) {
             this.saveButton = this.dialog.addButton({
                 text    : 'Speichern',
-                handler : this.onSubmit,
+                handler : function() {
+                    this.onSubmit();
+                },
                 scope   : this
             });
         }
@@ -29,7 +31,9 @@ Ext.extend(Vps.AutoForm.Dialog, Vps.AutoForm.Form,
         if (this.meta.formButtons.delete) {
             this.deleteButton = this.dialog.addButton({
                 text    : 'Löschen',
-                handler : this.onDelete,
+                handler : function() {
+                    this.onDelete();
+                },
                 scope   : this
             });
         }
@@ -37,7 +41,9 @@ Ext.extend(Vps.AutoForm.Dialog, Vps.AutoForm.Form,
         if (this.meta.formButtons.add) {
             this.addButton = this.dialog.addButton({
                 text    : 'Neuer Eintrag',
-                handler : this.onMabyAdd,
+                handler : function() {
+                    this.onMabyAdd();
+                },
                 scope   : this
             });
         }
@@ -72,5 +78,8 @@ Ext.extend(Vps.AutoForm.Dialog, Vps.AutoForm.Form,
     onSubmitSuccess: function(form, action) {
         Vps.AutoForm.Dialog.superclass.onSubmitSuccess.call(this, form, action);
         this.hide();
+    },
+    clearInvalid: function() {
+        this.form.clearInvalid();
     }
 });
