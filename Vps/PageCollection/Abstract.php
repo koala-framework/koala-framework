@@ -2,6 +2,7 @@
 abstract class Vps_PageCollection_Abstract
 {
     protected $_pageFilenames = array();
+    protected $_pageNames = array();
     protected $_pages = array();
     protected $_rootPageId;
     protected $_addDecorator = false;
@@ -26,17 +27,17 @@ abstract class Vps_PageCollection_Abstract
                 throw new Vps_PageCollection_Exception('Invalid urlScheme specified');
         }
     }
-    
+
     public function getDao()
     {
         return $this->_dao;
     }
-    
+
     public static function getInstance()
     {
         if (null === self::$_instance) {
             $dao = Zend_Registry::get('dao');
-            
+
             $pageCollectionConfig = new Zend_Config_Ini('application/config.ini', 'pagecollection');
             if ($pageCollectionConfig->pagecollection->urlscheme == 'flat') {
                 $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_FLAT;
@@ -45,14 +46,14 @@ abstract class Vps_PageCollection_Abstract
             }
             $pageCollection = new $pageCollectionConfig->pagecollection->type($dao, $urlScheme);
             $pageCollection->setAddDecorator($pageCollectionConfig->pagecollection->addDecorator);
-            
+
             self::$_instance = $pageCollection;
         }
 
         return self::$_instance;
     }
 
-    public function addPage($page, $filename = '', Vpc_Interface $parentPage = null)
+    public function addPage($page, $filename = '', $name = '')
     {
         if (is_int($page)) {
             $componentId = $page;
@@ -61,6 +62,7 @@ abstract class Vps_PageCollection_Abstract
             if ($page) {
                 $page->setPageCollection($this);
                 $filename = $pageData['filename'];
+                $name = $pageData['name'];
             } else {
                 throw new Vps_Page_Collection_Exception("Couldn\'t create Component with id $componentId");
             }
@@ -69,11 +71,11 @@ abstract class Vps_PageCollection_Abstract
         if (!$page instanceof Vpc_Interface) {
             throw new Vps_PageCollection_Exception("Component must be instance of Vpc_Interface.");
         }
-        
-        if ($filename == '') {
-            throw new Vps_PageCollection_Exception("Pagename must not be empty. Probably Component is not a Page.");
+
+        if ($filename == '' || $name == '') {
+            throw new Vps_PageCollection_Exception("Pagename and Name must not be empty. Probably Component is not a Page.");
         }
-        
+
         $id = $page->getPageId();
         if (isset($this->_pages[$id])) {
             $decoratedComponent = $this->_removePage($id);
@@ -81,10 +83,10 @@ abstract class Vps_PageCollection_Abstract
             $decoratedComponent = $this->addDecoratorsToComponent($page);
         }
 
-        $this->_setPage($decoratedComponent, $filename);
+        $this->_setPage($decoratedComponent, $filename, $name);
         return $decoratedComponent;
     }
-    
+
     protected function _removePage($id)
     {
         $page = null;
@@ -111,7 +113,7 @@ abstract class Vps_PageCollection_Abstract
         return $component;
     }
 
-    private function _setPage(Vpc_Interface $page, $filename)
+    private function _setPage(Vpc_Interface $page, $filename, $name)
     {
         $id = $page->getPageId();
 
@@ -121,11 +123,12 @@ abstract class Vps_PageCollection_Abstract
 
         $this->_pages[$id] = $page;
         $this->_pageFilenames[$id] = $filename;
+        $this->_pageNames[$id] = $name;
     }
 
     public function setRootPage(Vpc_Interface $component)
     {
-        $this->_setPage($this->addDecoratorsToComponent($component), '');
+        $this->_setPage($this->addDecoratorsToComponent($component), '', 'Home');
         $this->_rootPageId = $component->getId();
     }
 
@@ -166,7 +169,7 @@ abstract class Vps_PageCollection_Abstract
         }
         return $this->_pages[$this->_rootPageId];
     }
-    
+
     public function setCreateDynamicPages($create)
     {
         if (!is_bool($create)) {
@@ -174,20 +177,35 @@ abstract class Vps_PageCollection_Abstract
         }
         $this->_createDynamicPages = $create;
     }
-    
+
+    public function ignoreVisible()
+    {
+        $this->_ignoreVisible = true;
+    }
+
     public function getCreateDynamicPages()
     {
         return $this->_createDynamicPages;
     }
-    
+
     public function getCurrentPage()
     {
         return $this->_currentPage;
     }
-    
+
     public function getPath($page)
     {
         return '';
+    }
+
+    public function getName($page)
+    {
+        $id = $page->getPageId();
+        if (isset($this->_pageNames[$id])) {
+            return $this->_pageNames[$id];
+        } else {
+            return ''; 
+        }
     }
 
     public function getPageData(Vpc_Interface $page)
@@ -198,11 +216,11 @@ abstract class Vps_PageCollection_Abstract
         $data['path'] = $this->getPath($page);
         return $data;
     }
-    
+
     public function getFilename(Vpc_Interface $page)
     {
         return isset($this->_pageFilenames[$page->getPageId()]) ? $this->_pageFilenames[$page->getPageId()] : '';
     }
-    
+
     abstract public function getPageByPath($path);
 }

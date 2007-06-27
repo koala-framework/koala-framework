@@ -1,21 +1,11 @@
 .x-tree-node-el .x-tree-node-icon {
-    background-image:url(/assets/ext/resources/images/default/tree/leaf.gif);
+    background-image:url(/assets/vps/images/silkicons/page.png);
 }
 
 .folder .x-tree-node-icon {
-    background-image:url(/assets/ext/resources/images/default/tree/folder.gif);
+    background-image:url(/assets/vps/images/silkicons/folder_page.png);
 }
 
-.paragraphs .x-tree-node-icon {
-    background-image:url(/assets/ext/resources/images/default/tree/paragraphs.gif);
+.offline .x-tree-node-icon {
+    background-image:url(/assets/vps/images/silkicons/page_red.png);
 }
-
-.paragraphs_decorated .x-tree-node-icon {
-    background-image:url(/assets/ext/resources/images/default/tree/paragraphs_decorated.gif);
-}
-
-.leaf_decorated .x-tree-node-icon {
-    background-image:url(/assets/ext/resources/images/default/tree/leaf_decorated.gif);
-}
-
-.offline a span { color:#888888; }

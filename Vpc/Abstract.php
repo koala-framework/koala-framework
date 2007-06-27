@@ -285,7 +285,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
             foreach($rows as $pageRow) {
                 if ($filename != '' && $filename != $pageRow['filename']) { continue; }
                 $page = $this->createPage('', $pageRow['component_id']);
-                $this->getPageCollection()->addPage($page, $pageRow['filename'], $this);
+                $this->getPageCollection()->addTreePage($page, $pageRow['filename'], $pageRow['name'], $this);
                 $r['page'] = $page;
                 $r['filename'] = $pageRow['filename'];
                 $return[] = $r;
