@@ -188,7 +188,8 @@ class Vps_Assets_Dependencies
                     $DirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
                     foreach ($DirIterator as $file) {
                         if (!preg_match('#/\\.svn/#', $file->getPathname())
-                            && substr($file->getPathname(), -3) == '.js') {
+                            && (substr($file->getPathname(), -3) == '.js'
+                                || substr($file->getPathname(), -4) == '.css')) {
                             $f = $file->getPathname();
                             $f = substr($f, strlen($this->_paths[$pathType]));
                             $f = $pathType . $f;
