@@ -50,6 +50,8 @@ class Vps_Assets_Loader
                             header('Content-Type: text/css');
                         } else if (substr($url, -3)=='.js') {
                             header('Content-Type: text/javascript');
+                        } else {
+                            die("invalid file type");
                         }
                         readfile($paths[$type].$url);
                     }
