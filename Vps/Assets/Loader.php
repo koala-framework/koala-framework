@@ -10,29 +10,28 @@ class Vps_Assets_Loader
 
             if ($url == 'all.js') {
                 require_once 'Vps/Assets/Dependencies.php';
-                $dep = new Vps_Assets_Dependencies($config->asset);
-                $dep->addDependencies(new Zend_Config_Ini('application/config.ini', 'dependencies'));
+                $dep = new Vps_Assets_Dependencies($config->asset, 'application/config.ini', 'dependencies');
                 header('Content-Type: text/javascript');
                 //echo $dep->getPackedAll('js');
                 echo $dep->getContentsAll('js');
             } else if ($url == 'all.css') {
                 require_once 'Vps/Assets/Dependencies.php';
-                $dep = new Vps_Assets_Dependencies($config->asset);
-                $dep->addDependencies(new Zend_Config_Ini('application/config.ini', 'dependencies'));
+                $dep = new Vps_Assets_Dependencies($config->asset, 'application/config.ini', 'dependencies');
                 header('Content-Type: text/css');
                 echo $dep->getContentsAll('css');
             } else {
                 $type = substr($url, 0, strpos($url, '/'));
                 $url = substr($url, strpos($url, '/')+1);
-
-                if (isset($config->asset->$type)) {
-                    if(!file_exists($config->asset->$type.$url)) {
+                require_once 'Vps/Assets/Dependencies.php';
+                $paths = Vps_Assets_Dependencies::resolveAssetPaths($config->asset->toArray());
+                if (isset($paths[$type])) {
+                    if(!file_exists($paths[$type].$url)) {
                         die("file not found");
                     }
                     $headers = apache_request_headers();
                     $if_modified_since = $if_none_match = "";
                     if (isset($headers['If-Modified-Since'])) $if_modified_since = preg_replace('/;.*$/', '', $headers['If-Modified-Since']);
-                    $lastModified = gmdate("D, d M Y H:i:s", filemtime($config->asset->$type.$url))." GMT";
+                    $lastModified = gmdate("D, d M Y H:i:s", filemtime($paths[$type].$url))." GMT";
                     if ($if_modified_since == $lastModified) {
                         header("HTTP/1.1 304 Not Modified");
                         header("Expires: ".gmdate("D, d M Y H:i:s",time()+24*60*60)." GMT");
@@ -52,7 +51,7 @@ class Vps_Assets_Loader
                         } else if (substr($url, -3)=='.js') {
                             header('Content-Type: text/javascript');
                         }
-                        readfile($config->asset->$type.$url);
+                        readfile($paths[$type].$url);
                     }
                 } else {
                     die("unknown asset-type");

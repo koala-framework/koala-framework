@@ -30,8 +30,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
             throw new Vps_View_Exception('Class must be a string.');
         }
 
-        $dep = new Vps_Assets_Dependencies(Zend_Registry::get('config')->asset);
-        $dep->addDependencies(new Zend_Config_Ini('application/config.ini', 'dependencies'));
+        $dep = new Vps_Assets_Dependencies(Zend_Registry::get('config')->asset, 'application/config.ini', 'dependencies');
         if (Zend_Registry::get('config')->debug) {
             $jsFiles = $dep->getAssetFiles('js');
             $cssFiles = $dep->getAssetFiles('css');
