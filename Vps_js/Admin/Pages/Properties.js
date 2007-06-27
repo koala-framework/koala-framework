@@ -1,4 +1,4 @@
-Vps.Admin.Pages.PageProperties = function(renderTo, config)
+Vps.Admin.Pages.Properties = function(renderTo, config)
 {    
     Ext.apply(this, config);
     this.events = {
@@ -32,27 +32,20 @@ Vps.Admin.Pages.PageProperties = function(renderTo, config)
         id: 'save',
         disabled: true,
         text    : 'Speichern',
-        handler : save,
+        handler : this.save,
         scope   : this
     });
     this.toolbar.addButton({
         id: 'delete',
         text    : 'Löschen',
-        handler : remove,
+        handler : this.remove,
         disabled: true,
         scope   : this
     });
     this.toolbar.addButton({
         id: 'add',
         text    : 'Als neue Seite speichern',
-        handler : add,
-        disabled: true,
-        scope   : this
-    });
-    this.toolbar.addButton({
-        id: 'edit',
-        text    : 'Seite bearbeiten',
-        handler : edit,
+        handler : this.add,
         disabled: true,
         scope   : this
     });
@@ -60,72 +53,62 @@ Vps.Admin.Pages.PageProperties = function(renderTo, config)
     this.form.render(renderTo);
 }
 
-Ext.extend(Vps.Admin.Pages.PageProperties, Ext.util.Observable,
+Ext.extend(Vps.Admin.Pages.Properties, Ext.util.Observable,
 {
     remove: function(o, e) {
-        form.baseParams.command = 'delete';
-        form.submit({
+        this.form.baseParams.command = 'delete';
+        this.form.submit({
             success: function(form, a) {
                 nextNode = form.node.nextSibling;
                 form.tree.getSelectionModel().selNode.parentNode.removeChild(form.node);
                 form.tree.getSelectionModel().select(nextNode);
-            },
-            invalid: ajaxInvalid,
-            failure: ajaxFailure
+            }
         })
     },
         
     save: function(o, e) {
-        form.baseParams.command = 'save';
-        form.submit({
+        this.form.baseParams.command = 'save';
+        this.form.submit({
             success: function(form, a) {
                 form.node.setText(a.result.name);
                 form.node.ui.removeClass('offline');
                 if(a.result.status == '0'){
                     form.node.ui.addClass('offline');
                 }
-            },
-            invalid: ajaxInvalid,
-            failure: ajaxFailure
+            }
         })
     },
         
-    edit: function(o, e) {
-        document.location.href = '/admin/page?id=' + form.node.id;
-    },
-        
     add: function(o, e) {
-        form.baseParams.command = 'add';
-        parentNode = form.tree.getSelectionModel().getSelectedNode();
+        this.form.baseParams.command = 'add';
+        parentNode = this.form.tree.getSelectionModel().getSelectedNode();
         if (parentNode == null) {
-            parentNode = form.tree.getRootNode();
+            parentNode = this.form.tree.getRootNode();
         }
-        form.parentNode = parentNode;
-        form.baseParams.id = 0;
-        form.baseParams.parentId = parentNode.id;
-        form.submit({
+        this.form.parentNode = parentNode;
+        this.form.baseParams.id = 0;
+        this.form.baseParams.parentId = parentNode.id;
+        this.form.submit({
             success: function(form, a) {
                 node = form.tree.getLoader().createNode(a.result.data);
                 form.parentNode.appendChild(node);
                 form.parentNode.expand();
-            },
-            invalid: ajaxInvalid,
-            failure: ajaxFailure
+            }
         })
     },
         
-    loadPage: function (node) {
+    load: function (node) {
         if (isNaN(node.id)) {
-            toolbar.items.get('add').enable(); 
-            toolbar.items.get('delete').disable(); 
-            toolbar.items.get('save').disable(); 
-            toolbar.items.get('edit').disable(); 
+            this.toolbar.items.get('add').enable(); 
+            this.toolbar.items.get('delete').disable(); 
+            this.toolbar.items.get('save').disable(); 
+            this.toolbar.items.get('edit').disable(); 
         } else {
-            toolbar.items.each(function(b) { b.enable(); });
+            this.toolbar.items.each(function(b) { b.enable(); });
         }
-        form.baseParams.id = node.id;
-        form.node = node;
-        form.load({url:'/admin/pages/ajaxLoadPageData'});
+        this.form.baseParams.id = node.id;
+        this.form.node = node;
+        this.form.load({url:'/admin/pages/ajaxLoadPageData'});
     }
 
 })

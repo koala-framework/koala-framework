@@ -2,114 +2,167 @@
 class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
 {
     protected $_auth = true;
+    private $_pc = null;
+    private $_openedPages;
+    private $_table;
 
     public function actionAction()
     {
         $this->view->ext('Vps.Admin.Pages.Index');
     }
-
-    public function ajaxProcessPageDataAction()
+    
+    public function init()
     {
-        $view = $this->view;
-        $view->success = false;
-
-        $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
+        $this->_pc = Vps_PageCollection_Abstract::getInstance();
+        $this->_pc->ignoreVisible();
         
-        $action = $this->getRequest()->getParam('command');
-        if ($action == 'delete') {
-            $result = $table->deletePage($this->getRequest()->getParam('id'));
-            $view->success = $result > 0;
-        } else if ($action == 'move') {
+        $session = new Zend_Session_Namespace('admin');
+        $this->openedPages = is_array($session->openedPages) ? $session->openedPages : array();
+
+        $this->_table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
+    }
+
+    public function jsonOnlineAction()
+    {
+        try {
+            $id = $this->getRequest()->getParam('id');
+            $online = $this->getRequest()->getParam('online') == 'true';
+            
+            $this->view->success = $this->_table->saveOnline($id, $online);
+            $pageData = $this->_table->retrievePageData($id);
+            $this->view->online = $pageData['online'] == '1';
+        } catch (Vps_ClientException $e) {
+            $this->view->error = $e->getMessage();
+        }
+    }
+    
+    public function jsonSavePageAction()
+    {
+        try {
+            $id = $this->getRequest()->getParam('id');
+            $this->_table->savePageName($id, $this->getRequest()->getParam('name'));
+            $pageData = $this->_table->retrievePageData($id);
+            $this->view->name = $pageData['name'];
+            $this->view->success = true;
+        } catch (Vps_ClientException $e) {
+            $this->view->error = $e->getMessage();
+        }
+    }
+
+    public function jsonDeletePageAction()
+    {
+        try {
+            $this->_table->deletePage($this->getRequest()->getParam('id'));
+            $this->view->success = true;
+        } catch (Vps_ClientException $e) {
+            $this->view->error = $e->getMessage();
+        }
+    }
+    
+    public function jsonAddPageAction()
+    {
+        try {
+            $parentId = $this->getRequest()->getParam('parentId');
+            $name = $this->getRequest()->getParam('name');
+
+            if ((int)$parentId == 0) {
+                $rootPageData = $this->_table->retrieveRootPageData();
+                $type = $parentId;
+                $parentId = $rootPageData['component_id'];
+            } else {
+                $type = '';
+            }
+
+            $id = $this->_table->createPage($parentId, $type);
+            $this->_table->savePageName($id, $name);
+
+            $pageData = $this->_table->retrievePageData($id);
+            $this->view->config = $this->_getNodeData($pageData);
+            $this->view->success = true;
+
+        } catch (Vps_ClientException $e) {
+            $this->view->error = $e->getMessage();
+        }
+    }
+    public function jsonMovePageAction()
+    {
+        try {
             $source = $this->getRequest()->getParam('source');
             $target = $this->getRequest()->getParam('target');
             $point  = $this->getRequest()->getParam('point');
             $type = '';
             if ((int)$target == 0) {
-                $rootData = $table->retrieveRootPageData();
+                $rootData = $this->_table->retrieveRootPageData();
                 $type = $target;
                 $target = $rootData['component_id'];
             }
-            $view->success = $table->movePage($source, $target, $point, $type);
-        } else {
-            if ($action == 'add') {
-                $type = '';
-                $parentId = $this->getRequest()->getParam('parentId');
-                $parentPageData = $table->retrievePageData($parentId);
-                if (empty($parentPageData)) {
-                    $parentPageData = $table->retrieveRootPageData();
-                    if ((int)$parentId == 0) {
-                        $type = $parentId;
-                    }
-                }
-                if (!empty($parentPageData)) {
-                    $id = $table->createPage($parentPageData['component_id'], $type);
-                }
-            } else if ($action == 'save') {
-                $id = $this->getRequest()->getParam('id');
-            }
-            $pageData = $table->retrievePageData($id);
-            if (!empty($pageData)) {
-                $table->savePageName($pageData['component_id'], $this->getRequest()->getParam('name'));
-                $table->savePageStatus($pageData['component_id'], $this->getRequest()->getParam('status') == 'on');
-                
-                $pageData = $table->retrievePageData($id);
-                $view->data = $this->_getNodeData($pageData);
-                $view->name = $pageData['name'];
-                $view->status = $pageData['status'];
-                $view->success = true;
-            }
+            $this->view->success = $this->_table->movePage($source, $target, $point, $type);
+        } catch (Vps_ClientException $e) {
+            $this->view->error = $e->getMessage();
         }
     }
 
-    public function ajaxLoadPageDataAction()
+    public function jsonLoadPageDataAction()
     {
         $name = '';
-        $status = false;
+        $online = false;
         $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
         $pageData = $table->retrievePageData($this->getRequest()->getParam('id'));
         if (!empty($pageData)) {
             $name = $pageData['name'];
-            $status = $pageData['status'];
+            $online = $pageData['online'];
         }
         $data[] = array('id' => 'name', 'value' => $name);
-        $data[] = array('id' => 'status', 'value' => $status);
+        $data[] = array('id' => 'online', 'value' => $online);
         $this->view->data = $data;
     }
 
-    public function ajaxGetNodesAction()
+    public function jsonGetNodesAction()
     {
         $return = array();
         $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
         $type = null;
 
         $id = $this->getRequest()->getParam('node');
-        if ((int)$id > 0){
+        if ((int)$id > 0) {
+            
             $parentPageData = $table->retrievePageData($id);
             $session = new Zend_Session_Namespace('admin');
             $openedPages = is_array($session->openedPages) ? $session->openedPages : array();
             $openedPages[$id] = true;
             $session->openedPages = $openedPages;
-        } else {
+        
+        } else if ($id == 'root') {
+            
+            $pageData = $table->retrieveRootPageData();
+            $data = $this->_getNodeData($pageData);
+            $data['children'] = array();
+            $data['expanded'] = true;
+            $data['allowDrop'] = false;
+            $data['allowDrag'] = false;
+            $data['type'] = 'root';
+            $return[] = $data;
+
             $config = new Zend_Config_Ini('application/config.ini', 'pagecollection');
             $types = $config->pagecollection->pagetypes->toArray();
-            if (sizeof($types) > 0) {
-                if ($id == 'root') {
-                    foreach ($types as $type => $text) {
-                        $data['id'] = $type;
-                        $data['text'] = $text;
-                        $data['leaf'] = false;
-                        $data['cls'] = 'folder';
-                        $data['expanded'] = true;
-                        $data['allowDrag'] = false;
-                        $return[] = $data;
-                    }
-                } else {
-                    $type = $id;
-                    $parentPageData = $table->retrieveRootPageData();
-                }
-            } else {
-                $parentPageData = $table->retrieveRootPageData();
+            if (sizeof($types) == 0) { $types[''] = 'Seiten'; }
+            foreach ($types as $type => $text) {
+                $data = array();
+                $data['id'] = $type;
+                $data['text'] = $text;
+                $data['leaf'] = false;
+                $data['cls'] = 'folder';
+                $data['expanded'] = true;
+                $data['allowDrag'] = false;
+                $data['type'] = 'category';
+                $return[] = $data;
             }
+
+        } else {
+
+            $type = $id;
+            $parentPageData = $table->retrieveRootPageData();
+
         }
 
         if (!empty($parentPageData)) {
@@ -122,7 +175,7 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
         $this->view->nodes = $return;
     }
     
-    public function ajaxCollapseNodeAction()
+    public function jsonCollapseNodeAction()
     {
         $session = new Zend_Session_Namespace('admin');
         $openedPages = is_array($session->openedPages) ? $session->openedPages : array();
@@ -142,8 +195,11 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
         $d['id'] = $pageData['component_id'];
         $d['text'] = $pageData['name'];
         $d['leaf'] = false;
-        $d['uiProvider'] = 'MyNodeUI';
-        $d['status'] = $pageData['status'];
+        $d['online'] = $pageData['online'] == '1';
+        if (!$d['online']) {
+            $d['cls'] = 'offline';
+        }
+        $d['type'] = 'default';
         if (sizeof($table->retrieveChildPagesData($d['id'])) > 0) {
             if (isset($openedPages[$d['id']])) {
                 $d['expanded'] = true;
