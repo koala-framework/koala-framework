@@ -286,7 +286,7 @@ class Zend_Date_Cities {
      * Returns the location from the selected city
      *
      * @param string $city    - city to get location for
-     * @param string $horizon - horizon to use : 
+     * @param string $horizon - horizon to use :
      *                          default: effective
      *                          others are civil, nautic, astronomic
      * @return array
@@ -300,12 +300,12 @@ class Zend_Date_Cities {
                 return $return;
             }
         }
-        throw Zend_Date_Exception('unknown city');
+        throw new Zend_Date_Exception('unknown city');
     }
 
     /**
      * Return a list with all known cities
-     * 
+     *
      * @return array
      */
     public static function getCityList() {

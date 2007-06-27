@@ -230,6 +230,9 @@ class Zend_Db_Adapter_Db2 extends Zend_Db_Adapter_Abstract
      */
     protected function _quote($value)
     {
+        if (is_int($value) || is_float($value)) {
+            return $value;
+        }
         /**
          * Some releases of the IBM DB2 extension appear
          * to be missing the db2_escape_string() method.
@@ -238,7 +241,7 @@ class Zend_Db_Adapter_Db2 extends Zend_Db_Adapter_Abstract
          * not present in my build of PHP 5.2.1.
          */
         if (function_exists('db2_escape_string')) {
-            return db2_escape_string($value);
+            return "'" . db2_escape_string($value) . "'";
         }
         return parent::_quote($value);
     }
@@ -319,9 +322,10 @@ class Zend_Db_Adapter_Db2 extends Zend_Db_Adapter_Abstract
               ON (c.tabschema = k.tabschema
                 AND c.tabname = k.tabname
                 AND c.colname = k.colname)
-            WHERE c.tabname = ".$this->quote($tableName);
+            WHERE "
+            . $this->quoteInto('UPPER(c.tabname) = UPPER(?)', $tableName);
         if ($schemaName) {
-            $sql .= " AND c.tabschema = ".$this->quote($schemaName);
+            $sql .= $this->quoteInto(' AND UPPER(c.tabschema) = UPPER(?)', $schemaName);
         }
         $sql .= " ORDER BY c.colno";
 
@@ -364,12 +368,11 @@ class Zend_Db_Adapter_Db2 extends Zend_Db_Adapter_Abstract
                 $identity = true;
             }
 
-
             // only colname needs to be case adjusted
             $desc[$this->foldCase($row[$colname])] = array(
-                'SCHEMA_NAME'      => $row[$tabschema],
-                'TABLE_NAME'       => $row[$tabname],
-                'COLUMN_NAME'      => $row[$colname],
+                'SCHEMA_NAME'      => $this->foldCase($row[$tabschema]),
+                'TABLE_NAME'       => $this->foldCase($row[$tabname]),
+                'COLUMN_NAME'      => $this->foldCase($row[$colname]),
                 'COLUMN_POSITION'  => $row[$colno]+1,
                 'DATA_TYPE'        => $row[$typename],
                 'DEFAULT'          => $row[$default],

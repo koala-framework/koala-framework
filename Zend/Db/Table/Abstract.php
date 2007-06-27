@@ -18,7 +18,7 @@
  * @subpackage Table
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Abstract.php 5113 2007-06-04 23:42:36Z bkarwin $
+ * @version    $Id: Abstract.php 5296 2007-06-13 23:20:37Z bkarwin $
  */
 
 /**
@@ -822,12 +822,14 @@ abstract class Zend_Db_Table_Abstract
                     case self::CASCADE:
                         $newRefs = array();
                         for ($i = 0; $i < count($map[self::COLUMNS]); ++$i) {
-                            if (array_key_exists($map[self::REF_COLUMNS][$i], $newPrimaryKey)) {
-                                $newRefs[$map[self::COLUMNS][$i]] = $newPrimaryKey[$map[self::REF_COLUMNS][$i]];
+                            $col = $this->_db->foldCase($map[self::COLUMNS][$i]);
+                            $refCol = $this->_db->foldCase($map[self::REF_COLUMNS][$i]);
+                            if (array_key_exists($refCol, $newPrimaryKey)) {
+                                $newRefs[$col] = $newPrimaryKey[$refCol];
                             }
                             $where[] = $this->_db->quoteInto(
-                                $this->_db->quoteIdentifier($map[self::COLUMNS][$i], true) . ' = ?',
-                                $oldPrimaryKey[$map[self::REF_COLUMNS][$i]]
+                                $this->_db->quoteIdentifier($col, true) . ' = ?',
+                                $oldPrimaryKey[$refCol]
                             );
                         }
                         $rowsAffected += $this->update($newRefs, $where);
@@ -867,9 +869,11 @@ abstract class Zend_Db_Table_Abstract
                 switch ($map[self::ON_DELETE]) {
                     case self::CASCADE:
                         for ($i = 0; $i < count($map[self::COLUMNS]); ++$i) {
+                            $col = $this->_db->foldCase($map[self::COLUMNS][$i]);
+                            $refCol = $this->_db->foldCase($map[self::REF_COLUMNS][$i]);
                             $where[] = $this->_db->quoteInto(
-                                $this->_db->quoteIdentifier($map[self::COLUMNS][$i], true) . ' = ?',
-                                $primaryKey[$map[self::REF_COLUMNS][$i]]
+                                $this->_db->quoteIdentifier($col, true) . ' = ?',
+                                $primaryKey[$refCol]
                             );
                         }
                         $rowsAffected += $this->delete($where);

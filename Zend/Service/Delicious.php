@@ -284,7 +284,7 @@ class Zend_Service_Delicious
      * @throws Zend_Service_Delicious_Exception
      * @return Zend_Service_Delicious_PostList
      */
-    public function getPosts($tag = null, $dt = null, $url = null)
+    public function getPosts($tag = null, Zend_Date $dt = null, $url = null)
     {
         $parms = array();
         if ($tag) {
@@ -294,13 +294,6 @@ class Zend_Service_Delicious
             $parms['url'] = $url;
         }
         if ($dt) {
-            if (!$dt instanceof Zend_Date) {
-                /**
-                 * @see Zend_Service_Delicious_Exception
-                 */
-                require_once 'Zend/Service/Delicious/Exception.php';
-                throw new Zend_Service_Delicious_Exception('Second argument has to be a instance of Zend_Date');
-            }
             $parms['dt'] = $dt->get('Y-m-d\TH:i:s\Z');
         }
 

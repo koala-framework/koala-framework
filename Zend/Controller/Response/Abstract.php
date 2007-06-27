@@ -229,7 +229,7 @@ abstract class Zend_Controller_Response_Abstract
             throw new Zend_Controller_Response_Exception('Invalid HTTP response code');
         }
 
-        if ((300 <= $code) || (307 >= $code)) {
+        if ((300 <= $code) && (307 >= $code)) {
             $this->_isRedirect = true;
         } else {
             $this->_isRedirect = false;

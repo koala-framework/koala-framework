@@ -16,7 +16,7 @@
  * @category   Zend
  * @package    Zend_Http
  * @subpackage Client
- * @version    $Id: Client.php 5052 2007-05-29 19:38:17Z darby $
+ * @version    $Id: Client.php 5278 2007-06-13 10:43:26Z shahar $
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -326,8 +326,10 @@ class Zend_Http_Client
             if ($value === null && (strpos($name, ':') > 0))
                 list($name, $value) = explode(':', $name, 2);
 
+            $name = strtolower($name);
+            
             // Make sure the name is valid
-            if (! preg_match('/^[A-Za-z0-9-]+$/', $name)) {
+            if (! preg_match('/^[a-z0-9-]+$/', $name)) {
                 throw new Zend_Http_Client_Exception("{$name} is not a valid HTTP header name");
             }
 
@@ -338,7 +340,6 @@ class Zend_Http_Client
             // Else, set the header
             } else {
                 // Header names are storred lowercase internally.
-                $name = strtolower($name);
                 if (is_string($value)) $value = trim($value);
                 $this->headers[$name] = $value;
             }

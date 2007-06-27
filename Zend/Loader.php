@@ -244,8 +244,9 @@ class Zend_Loader
             throw new Zend_Exception('spl_autoload does not exist in this PHP installation');
         }
 
+        self::loadClass($class);
         $methods = get_class_methods($class);
-        if (!in_array('autoload', $methods)) {
+        if (!in_array('autoload', (array) $methods)) {
             require_once 'Zend/Exception.php';
             throw new Zend_Exception("The class \"$class\" does not have an autoload() method");
         }

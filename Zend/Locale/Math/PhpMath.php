@@ -16,7 +16,7 @@
  * @package    Zend_Locale
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: PhpMath.php 4223 2007-03-24 10:20:34Z thomas $
+ * @version    $Id: PhpMath.php 5208 2007-06-10 16:13:45Z thomas $
  */
 
 
@@ -75,6 +75,8 @@ function Zend_Locale_Math_Sub($op1, $op2, $op3 = null)
     }
     if ($op3 !== null) {
         $result = round($result, $op3);
+    } else {
+        $result = floor($result);
     }
     if ($op3 > 0) {
         if ((string) $result == "0")  {
@@ -94,7 +96,7 @@ function Zend_Locale_Math_Pow($base, $exp)
         throw new Zend_Locale_Math_Exception("power overflow: $op1 ^ $op2", $op1, $op2, $result);
     }
     return $result;
-} 
+}
 
 function Zend_Locale_Math_Mul($op1, $op2)
 {

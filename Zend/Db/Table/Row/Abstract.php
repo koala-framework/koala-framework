@@ -18,7 +18,7 @@
  * @subpackage Table
  * @copyright  Copyright (c) 2005-2007 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Abstract.php 5100 2007-06-04 19:02:22Z bkarwin $
+ * @version    $Id: Abstract.php 5296 2007-06-13 23:20:37Z bkarwin $
  */
 
 /**
@@ -389,7 +389,12 @@ abstract class Zend_Db_Table_Row_Abstract
                 $pkOld = $this->_getPrimaryKey(false);
                 $thisClass = get_class($this);
                 foreach ($depTables as $tableClass) {
-                    Zend_Loader::loadClass($tableClass);
+                    try {
+                        Zend_Loader::loadClass($tableClass);
+                    } catch (Zend_Exception $e) {
+                        require_once 'Zend/Db/Table/Row/Exception.php';
+                        throw new Zend_Db_Table_Row_Exception($e->getMessage());
+                    }
                     $t = new $tableClass(array('db' => $db));
                     $t->_cascadeUpdate($this->getTableClass(), $pkOld, $pkNew);
                 }
@@ -456,7 +461,12 @@ abstract class Zend_Db_Table_Row_Abstract
             $pk = $this->_getPrimaryKey();
             $thisClass = get_class($this);
             foreach ($depTables as $tableClass) {
-                Zend_Loader::loadClass($tableClass);
+                try {
+                    Zend_Loader::loadClass($tableClass);
+                } catch (Zend_Exception $e) {
+                    require_once 'Zend/Db/Table/Row/Exception.php';
+                    throw new Zend_Db_Table_Row_Exception($e->getMessage());
+                }
                 $t = new $tableClass(array('db' => $db));
                 $t->_cascadeDelete($this->getTableClass(), $pk);
             }
@@ -700,7 +710,7 @@ abstract class Zend_Db_Table_Row_Abstract
 
         for ($i = 0; $i < count($map[Zend_Db_Table_Abstract::COLUMNS]); ++$i) {
             $cond = $db->quoteIdentifier($map[Zend_Db_Table_Abstract::COLUMNS][$i], true) . ' = ?';
-            $where[$cond] = $this->_data[$map[Zend_Db_Table_Abstract::REF_COLUMNS][$i]];
+            $where[$cond] = $this->_data[$db->foldCase($map[Zend_Db_Table_Abstract::REF_COLUMNS][$i])];
         }
         return $dependentTable->fetchAll($where);
     }
@@ -739,7 +749,7 @@ abstract class Zend_Db_Table_Row_Abstract
 
         for ($i = 0; $i < count($map[Zend_Db_Table_Abstract::COLUMNS]); ++$i) {
             $cond = $db->quoteIdentifier($map[Zend_Db_Table_Abstract::REF_COLUMNS][$i], true) . ' = ?';
-            $where[$cond] = $this->_data[$map[Zend_Db_Table_Abstract::COLUMNS][$i]];
+            $where[$cond] = $this->_data[$db->foldCase($map[Zend_Db_Table_Abstract::COLUMNS][$i])];
         }
         return $parentTable->fetchRow($where);
     }
@@ -814,7 +824,7 @@ abstract class Zend_Db_Table_Row_Abstract
 
         for ($i = 0; $i < count($callerMap[Zend_Db_Table_Abstract::COLUMNS]); ++$i) {
             $interCol = $db->quoteIdentifier('i', true) . '.' . $db->quoteIdentifier($callerMap[Zend_Db_Table_Abstract::COLUMNS][$i], true);
-            $value = $this->_data[$callerMap[Zend_Db_Table_Abstract::REF_COLUMNS][$i]];
+            $value = $this->_data[$db->foldCase($callerMap[Zend_Db_Table_Abstract::REF_COLUMNS][$i])];
             $select->where("$interCol = ?", $value);
         }
         $stmt = $select->query();
@@ -827,6 +837,12 @@ abstract class Zend_Db_Table_Row_Abstract
         );
 
         $rowsetClass = $matchTable->getRowsetClass();
+        try {
+            Zend_Loader::loadClass($rowsetClass);
+        } catch (Zend_Exception $e) {
+            require_once 'Zend/Db/Table/Row/Exception.php';
+            throw new Zend_Db_Table_Row_Exception($e->getMessage());
+        }
         $rowset = new $rowsetClass($config);
         return $rowset;
     }

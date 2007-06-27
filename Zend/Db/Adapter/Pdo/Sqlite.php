@@ -211,10 +211,10 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
                 $identity = (bool) ($row[$type] == 'INTEGER');
                 ++$p;
             }
-            $desc[$row[$name]] = array(
-                'SCHEMA_NAME'      => $schemaName,
-                'TABLE_NAME'       => $tableName,
-                'COLUMN_NAME'      => $row[$name],
+            $desc[$this->foldCase($row[$name])] = array(
+                'SCHEMA_NAME'      => $this->foldCase($schemaName),
+                'TABLE_NAME'       => $this->foldCase($tableName),
+                'COLUMN_NAME'      => $this->foldCase($row[$name]),
                 'COLUMN_POSITION'  => $row[$cid]+1,
                 'DATA_TYPE'        => $row[$type],
                 'DEFAULT'          => $row[$dflt_value],
@@ -257,6 +257,18 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
         }
 
         return $sql;
+    }
+
+    /**
+     * Quote a raw string.
+     *
+     * @param string $value     Raw string
+     * @return string           Quoted string
+     */
+    protected function _quote($value)
+    {
+        $this->_connect();
+        return $this->_connection->quote($value);
     }
 
 }

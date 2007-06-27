@@ -135,9 +135,12 @@ class Zend_Cache_Backend_ZendPlatform extends Zend_Cache_Backend implements Zend
         if (!($specificLifetime === false)) {
             $this->_log("Zend_Cache_Backend_ZendPlatform::save() : non false specifc lifetime is unsuported for this backend");
         }
+
         $lifetime = $this->_directives['lifetime'];
-        $result1 = output_cache_put($id, array($data, time()));
-        foreach($tags as $tag) {
+        $result1  = output_cache_put($id, array($data, time()));
+        $result2  = (count($tags) == 0);
+        
+        foreach ($tags as $tag) {
             $tagid = self::TAGS_PREFIX.$tag;
             $old_tags = output_cache_get($tagid, $lifetime);
             if ($old_tags === false) {
@@ -146,6 +149,7 @@ class Zend_Cache_Backend_ZendPlatform extends Zend_Cache_Backend implements Zend
             $old_tags[$id] = $id;
             $result2 = output_cache_put($tagid, $old_tags);
         }
+
         return $result1 && $result2;
     }
 

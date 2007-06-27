@@ -93,6 +93,25 @@ class Zend_Controller_Plugin_Broker extends Zend_Controller_Plugin_Abstract
     }
 
     /**
+     * Is a plugin of a particular class registered?
+     * 
+     * @param  string $class 
+     * @return bool
+     */
+    public function hasPlugin($class)
+    {
+        $found = array();
+        foreach ($this->_plugins as $plugin) {
+            $type = get_class($plugin);
+            if ($class == $type) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Retrieve a plugin or plugins by class
      * 
      * @param  string $class Class name of plugin(s) desired

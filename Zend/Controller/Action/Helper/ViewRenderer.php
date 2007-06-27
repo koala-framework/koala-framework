@@ -43,7 +43,7 @@ require_once 'Zend/View.php';
  * determines the path to the class file, and then determines the view base 
  * directory from there. It also uses the module name as a class prefix for 
  * helpers and views such that if your module name is 'Search', it will set the 
- * helper class prefix to 'Search_View_Helper' and the filter class prefix to 
+ * helper class prefix to 'Search_View_Helper' and the filter class prefix to ;
  * 'Search_View_Filter'.
  *
  * Usage:
@@ -86,6 +86,13 @@ class Zend_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_
      * @var Zend_Controller_Front
      */
     protected $_frontController;
+
+    /**
+     * Whether or not to autorender using controller name as subdirectory; 
+     * global setting (not reset at next invocation)
+     * @var boolean
+     */
+    protected $_neverController = false;
 
     /**
      * Whether or not to autorender postDispatch; global setting (not reset at 
@@ -197,7 +204,7 @@ class Zend_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_
     protected function _generateDefaultPrefix()
     {
         if ((null === $this->_actionController) || !strstr(get_class($this->_actionController), '_')) {
-            $prefix = 'Zend_View_Helper';
+            $prefix = 'Zend_View';
         } else {
             $class = get_class($this->_actionController);
             $prefix = substr($class, 0, strpos($class, '_')) . '_View';
@@ -233,6 +240,7 @@ class Zend_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_
         {
             switch ($key) {
                 case 'neverRender':
+                case 'neverController':
                 case 'noController':
                 case 'noRender':
                     $property = '_' . $key;
@@ -447,7 +455,7 @@ class Zend_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_
             $vars['action'] = $action;
         }
 
-        $path = ($this->getNoController())
+        $path = ($this->getNoController() || $this->getNeverController())
               ? $this->_translateSpec($this->getViewScriptPathNoControllerSpec(), $vars)
               : $this->_translateSpec($this->getViewScriptPathSpec(), $vars);
 
@@ -567,6 +575,28 @@ class Zend_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_
     public function getNoController()
     {
         return $this->_noController;
+    }
+
+    /**
+     * Set the neverController flag (i.e., whether or not to render into controller subdirectories)
+     * 
+     * @param  boolean $flag 
+     * @return Zend_Controller_Action_Helper_ViewRenderer
+     */
+    public function setNeverController($flag = true)
+    {
+        $this->_neverController = ($flag) ? true : false;
+        return $this;
+    }
+
+    /**
+     * Retrieve neverController flag value
+     * 
+     * @return boolean
+     */
+    public function getNeverController()
+    {
+        return $this->_neverController;
     }
 
     /**
