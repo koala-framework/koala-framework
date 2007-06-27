@@ -3,14 +3,67 @@ class Vps_Assets_Dependencies
 {
     private $_files = array();
     private $_paths;
-    
-    public function __construct($paths)
+
+    //löst pfade wie "asset.vps/images/" auf
+    public static function resolveAssetPaths($paths)
+    {
+        foreach($paths as $k=>$p) {
+            if (substr($p, 0, 6)=='asset.') {
+                $p = substr($p, 6);
+                $i = substr($p, 0, strpos($p, '/'));
+                if (!isset($paths[$i])) {
+                    throw new Vps_Exception("Can't resolve asset-path: 'asset.$i' is unknown.");
+                }
+                $p = substr($p, strpos($p, '/')+1);
+                $paths[$k] = $paths[$i].$p;
+            }
+        }
+        return $paths;
+    }
+
+    public function __construct($paths, $configFile, $configSection)
     {
         if (!is_array($paths)) {
             $paths = $paths->toArray();
         }
-        $this->_paths = $paths;
+        $this->_paths = self::resolveAssetPaths($paths);
+
+        $frontendOptions = array(
+            'lifetime' => null,
+            'automatic_serialization' => true
+        );
+        $backendOptions = array(
+            'cache_dir' => 'application/cache/assets/'
+        );
+        require_once 'Zend/Cache.php';
+        $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+
+        if ($cacheContents = $cache->load('dependencies')) {
+            if ($cacheContents['dependenciesIniMTime'] != filemtime(VPS_PATH.'/Vps_js/dependencies.ini')
+                || $cacheContents['configMTime'] != filemtime($configFile)
+                || $cacheContents['configSection'] != $configSection
+                || $cacheContents['paths'] != $paths) {
+                $cacheContents = false;
+            }
+        }
+
+        if(!$cacheContents) {
+            $cacheContents = array();
+            $cacheContents['dependenciesIniMTime'] = filemtime(VPS_PATH.'/Vps_js/dependencies.ini');
+            $cacheContents['configMTime'] = filemtime($configFile);
+            $cacheContents['configSection'] = $configSection;
+            $cacheContents['paths'] = $paths;
+            $dependencies = new Zend_Config_Ini($configFile, $configSection);
+            foreach($dependencies as $d) {
+                $this->_processDependency($d);
+            }
+            $cacheContents['files'] = $this->_files;
+            $cache->save($cacheContents, 'dependencies');
+        } else {
+            $this->_files = $cacheContents['files'];
+        }
     }
+
     private function _getFilePath($file)
     {
         $pathType = substr($file, 0, strpos($file, '/'));
@@ -106,13 +159,6 @@ class Vps_Assets_Dependencies
         }
         return $contents;
     }
-    public function addDependencies($dependencies)
-    {
-        foreach($dependencies as $d) {
-            $this->_processDependency($d);
-        }
-    }
-
     protected function _processDependency($dependency)
     {
         static $vpsDependencies;
