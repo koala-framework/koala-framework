@@ -173,7 +173,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
             return $component;
         } else {
             foreach ($this->getChildPages($startPage) as $page) {
-                $component = $page->findComponentByClass($class);
+                $component = $this->findComponentByClass($class, $page);
                 if ($component != null) {
                     return $component;
                 }

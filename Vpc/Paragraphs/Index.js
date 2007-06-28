@@ -1,12 +1,16 @@
 Ext.namespace('Vpc.Paragraphs');
 Vpc.Paragraphs.Index = function(renderTo, config)
 {
+    Ext.apply(this, config);
+    this.events = {
+        'editcomponent' : true
+    };
     this.config = config;
     var Paragraph = Ext.data.Record.create([
         {name: 'id', type: 'int'},
         {name: 'nr', type: 'int'},
         {name: 'component', type: 'string'},
-        {name: 'status', type: 'boolean'}
+        {name: 'visible', type: 'boolean'}
     ]);
     
     this.ds = new Ext.data.Store({
@@ -20,13 +24,12 @@ Vpc.Paragraphs.Index = function(renderTo, config)
                 width: 300, 
                 dataIndex: 'component'
             },{
-                header: "Status", 
+                header: "Sichtbar", 
                 width: 100, 
-                dataIndex: 'status',
-                editor: new Ext.grid.GridEditor(new Ext.form.Checkbox())
+                dataIndex: 'visible'
             }
     ]);
-
+    
     this.grid = new Ext.grid.EditorGrid(renderTo, {
         ds: this.ds,
         selModel: new Ext.grid.RowSelectionModel(),
@@ -52,35 +55,30 @@ Vpc.Paragraphs.Index = function(renderTo, config)
             })
         );
     }
-
     this.addButton = toolbar.addButton({
-        text    : 'Add Paragraph',
+        text    : 'Absatz hinzufügen',
         menu: componentMenu
     });
-
     toolbar.addSeparator();
     this.deleteButton = toolbar.addButton({
-        text    : 'Delete Paragraphs',
+        text    : 'Absatz löschen',
         handler : this.onDelete,
         baseParams: {id: config.id},
         scope   : this
     });
-
     toolbar.addSeparator();
-    this.onlineButton = toolbar.addButton({
-        text    : 'Set Online',
-        handler : this.onStatus,
-        baseParams: {id: config.id, status:'online'},
+    this.visibleButton = toolbar.addButton({
+        text    : 'Sichtbar',
+        handler : this.onVisible,
+        baseParams: {id: config.id, visible:'visible'},
         scope   : this
     });
-    
-    this.offlineButton = toolbar.addButton({
-        text    : 'Set Offline',
-        handler : this.onStatus,
-        baseParams: {id: config.id, status:'offline'},
+    this.invisibleButton = toolbar.addButton({
+        text    : 'Unsichtbar',
+        handler : this.onVisible,
+        baseParams: {id: config.id, visible:'invisible'},
         scope   : this
     });
-
     toolbar.addSeparator();
     this.downButton = toolbar.addButton({
         text    : '˅',
@@ -88,14 +86,19 @@ Vpc.Paragraphs.Index = function(renderTo, config)
         baseParams: {id: config.id, direction:'down'},
         scope   : this
     });
-
     this.upButton = toolbar.addButton({
         text    : '˄',
         handler : this.move,
         baseParams: {id: config.id, direction:'up'},
         scope   : this
     });
-    
+    toolbar.addSeparator();
+    this.editButton = toolbar.addButton({
+        text    : 'Absatz Bearbeiten',
+        handler : this.edit,
+        scope   : this
+    });
+
     this.getSelectedIds = function()
     {
         var selectedRows = this.grid.getSelectionModel().getSelections();
@@ -111,12 +114,6 @@ Vpc.Paragraphs.Index = function(renderTo, config)
         }
     }
     
-    this.reloadPage = function() {
-        if (top.Vps.Page.tree != undefined) {
-            top.Vps.Page.tree.tree.getSelectionModel().getSelectedNode().reload();
-        }
-    }
-
 };
 
 Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
@@ -139,7 +136,6 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
             },
             callback: function(options, bSuccess, response) {
                 this.ds.reload();
-                this.reloadPage();
             }
         });
     },
@@ -164,7 +160,6 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
                             },
                             callback: function(options, bSuccess, response) {
                                 this.ds.reload();
-                                this.reloadPage();
                             }
                         });
                     }
@@ -173,21 +168,20 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
         }
     },
 
-    onStatus : function(o, p) {
+    onVisible : function(o, p) {
         componentIds = this.getSelectedIds();
         if (componentIds != '') {
             new Vps.Connection().request({
-                url: this.config.path + 'ajaxStatus',
+                url: this.config.path + 'ajaxVisible',
                 method: 'post',
                 scope: this,
                 params: {
                     componentIds : componentIds,
                     id : o.baseParams.id,
-                    status : o.baseParams.status
+                    visible : o.baseParams.visible
                 },
                 callback: function(options, bSuccess, response) {
                     this.ds.reload();
-                    this.reloadPage();
                 }
             });
         }
@@ -207,10 +201,18 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
                 },
                 callback: function(options, bSuccess, response) {
                     this.ds.reload();
-                    this.reloadPage();
                 }
             });
         }
     },
+
+    edit : function(o, p) {
+        componentIds = this.getSelectedIds();
+        
+        if (componentIds != '') {
+            row = this.grid.getSelectionModel().getSelections().shift();
+            this.fireEvent('editcomponent', {id: row.id, text:'foo'})
+        }
+    }
 
 });

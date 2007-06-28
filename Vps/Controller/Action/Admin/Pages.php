@@ -22,15 +22,15 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
         $this->_table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
     }
 
-    public function jsonOnlineAction()
+    public function jsonVisibleAction()
     {
         try {
             $id = $this->getRequest()->getParam('id');
-            $online = $this->getRequest()->getParam('online') == 'true';
+            $visible = $this->getRequest()->getParam('visible') == 'true';
             
-            $this->view->success = $this->_table->saveOnline($id, $online);
+            $this->view->success = $this->_table->saveVisible($id, $visible);
             $pageData = $this->_table->retrievePageData($id);
-            $this->view->online = $pageData['online'] == '1';
+            $this->view->visible = $pageData['visible'] == '1';
         } catch (Vps_ClientException $e) {
             $this->view->error = $e->getMessage();
         }
@@ -105,15 +105,15 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
     public function jsonLoadPageDataAction()
     {
         $name = '';
-        $online = false;
+        $visible = false;
         $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
         $pageData = $table->retrievePageData($this->getRequest()->getParam('id'));
         if (!empty($pageData)) {
             $name = $pageData['name'];
-            $online = $pageData['online'];
+            $visible = $pageData['visible'];
         }
         $data[] = array('id' => 'name', 'value' => $name);
-        $data[] = array('id' => 'online', 'value' => $online);
+        $data[] = array('id' => 'visible', 'value' => $visible);
         $this->view->data = $data;
     }
 
@@ -195,9 +195,9 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
         $d['id'] = $pageData['component_id'];
         $d['text'] = $pageData['name'];
         $d['leaf'] = false;
-        $d['online'] = $pageData['online'] == '1';
-        if (!$d['online']) {
-            $d['cls'] = 'offline';
+        $d['visible'] = $pageData['visible'] == '1';
+        if (!$d['visible']) {
+            $d['cls'] = 'invisible';
         }
         $d['type'] = 'default';
         if (sizeof($table->retrieveChildPagesData($d['id'])) > 0) {

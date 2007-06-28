@@ -67,17 +67,17 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action
         $this->view->success = true;
     }
 
-    public function ajaxStatusAction()
+    public function ajaxVisibleAction()
     {
-        $status = $this->getRequest()->getParam('status');
-        if ($status != 'online' && $status != 'offline') {
-            throw new Vpc_Exception('Status must either be online or offline.');
+        $visible = $this->getRequest()->getParam('visible');
+        if ($visible != 'visible' && $visible != 'invisible') {
+            throw new Vpc_Exception('Visible must either be visible or invisible.');
         }
         
         $componentIds = explode(',', $this->getRequest()->getParam('componentIds'));
         $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Components');
         foreach ($componentIds as $componentId) {
-            $table->setStatus($componentId, $status == 'online');
+            $table->setVisible($componentId, $visible == 'visible');
         }
         $this->view->success = true;
     }
