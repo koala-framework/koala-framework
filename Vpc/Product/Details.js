@@ -1,3 +1,4 @@
+/*
 Vps.Component.Product = function(componentId, componentClass) {
     Vps.Component.Product.superclass.constructor.call(this, componentId, componentClass);
     
@@ -10,3 +11,4 @@ Vps.Component.Product.Details = function(componentId, componentClass) {
 };
 YAHOO.lang.extend(Vps.Component.Product.Details, Vps.Component.Abstract);
 
+*/

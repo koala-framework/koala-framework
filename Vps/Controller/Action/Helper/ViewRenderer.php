@@ -3,7 +3,7 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
 {
     var $view = null;
     var $_noRender = false;
-    
+
     public function __construct(Zend_View_Interface $view = null)
     {
         if (null !== $view) {
@@ -16,18 +16,19 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
         $this->view = $view;
         return $this;
     }
-    
+
     public function setNoRender($noRender = true)
     {
         $this->_noRender = $noRender;
     }
 
     public function preDispatch() {
+        $module = $this->getRequest()->getParam('module');
         if ($this->isJson()) {
             $this->view = new Vps_View_Json();
         } else {
             $this->view = new Vps_View_Smarty();
-            if ($this->getRequest()->getParam('module') == 'admin') {
+            if ($module == 'admin' || $module == 'component') {
                 $this->view->setScriptPath(VPS_PATH . '/views');
                 $this->view->setCompilePath(VPS_PATH . '/views_c');
             }
@@ -35,10 +36,8 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
 
         if ((null !== $this->_actionController) && (null === $this->_actionController->view)) {
             $this->_actionController->view = $this->view;
-            
-            if ($this->getRequest()->getParam('module') == 'admin' && 
-                $this->getRequest()->getParam('controller') == 'component')
-            {
+
+            if ($module == 'component') {
                 $id = $this->getRequest()->getParam('id');
                 $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
                 if (!$component) {
@@ -47,14 +46,14 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                     $this->_actionController->component = $component;
                 }
             }
-            
+
         }
-        
+
     }
 
     public function postDispatch()
     {
-        if (!$this->_noRender 
+        if (!$this->_noRender
             && (null !== $this->_actionController)
             && $this->getRequest()->isDispatched()
             && !$this->getResponse()->isRedirect())
