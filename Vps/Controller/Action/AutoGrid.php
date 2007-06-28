@@ -65,7 +65,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
             foreach($this->_gridQueryFields as $f) {
                 $where[] = $db->quoteInto("$f LIKE ?", "%$query%");
             }
-            $where = implode(' OR ', $where);
+            $where = '(' . implode(' OR ', $where) . ')';
         }
         return $where;
     }

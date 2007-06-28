@@ -1,5 +1,5 @@
 <?php
-class Vpc_Paragraphs_Controller extends Vps_Controller_Action
+class Vpc_Paragraphs_IndexController extends Vps_Controller_Action
 {
     public function indexAction()
     {
