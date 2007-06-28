@@ -36,7 +36,7 @@ Vps.AutoGrid = function(renderTo, config)
         selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
         colModel: new Ext.grid.ColumnModel([{header: "", hidden:true}]), //workaround weil es ain columnmodel geben muss
         id: this.controllerUrl.replace(/\//g, '-').replace(/^-|-$/g, '') //um eine eindeutige id für den stateManager zu haben
-    });
+    }));
 
     this.grid.getSelectionModel().on('rowselect', function(selData, gridRow, currentRow) {
         if(this.deleteButton) this.deleteButton.enable();
