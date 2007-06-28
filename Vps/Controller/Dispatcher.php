@@ -11,16 +11,27 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     public function loadClass($className)
     {
         if ($this->_isOverwritten()) {
+            
             $className = parent::loadClass($className);
-        } else if ($this->_isComponent()) {
-            $className = str_replace('_ControllerController', '_Controller', $className);
+            
+        } else if ($this->getFrontController()->getRequest()->getModuleName() == 'component') {
+
+            $controllerName = $this->getFrontController()->getRequest()->getControllerName();
+            $controllerName = ucfirst($controllerName) . 'Controller';
+            $id = $this->getFrontController()->getRequest()->getParam('id');
+            $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id);
+            $component = $component->findComponent($id);
+            $className = substr(get_class($component), 0, strrpos(get_class($component), '_') + 1) . $controllerName;
+            
         } else {
+            
             $className = str_replace('Controller', '', ucfirst($className));
             $module = ucfirst($this->getFrontController()->getRequest()->getModuleName());
             if ($module != 'Default' && $module != '') {
                 $className = $module . '_' . $className;
             }
             $className = "Vps_Controller_Action_$className";
+            
         }
 
         try {
@@ -44,11 +55,5 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
         return $this->_isOverwritten;
     }
 
-    private function _isComponent()
-    {
-        $frontController = $this->getFrontController();
-        $request = $frontController->getRequest();
-        return $request->getModuleName() == 'component';
-    }
 }
 ?>

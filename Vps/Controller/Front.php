@@ -51,7 +51,9 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $router->AddRoute('ajax', new Zend_Controller_Router_Route('ajax/*', array('controller' => 'web', 'action' => 'ajax')));
             $router->AddRoute('ajaxfe', new Zend_Controller_Router_Route('ajax/fe/:action', array('controller' => 'fe', 'action' => 'action')));
             $router->AddRoute('user', new Zend_Controller_Router_Route('user/:action', array('module' => 'admin', 'controller' => 'user', 'action' => 'action')));
-            $router->AddRoute('component', new Zend_Controller_Router_Route('component/:id/:action', array('module' => 'admin', 'controller' => 'component', 'action' => 'action')));
+            $router->AddRoute('subcomponent', new Zend_Controller_Router_Route('component/:id/:controller/:action', array('module' => 'component', 'controller' => 'controller', 'action' => 'action')));
+            $router->AddRoute('component', new Zend_Controller_Router_Route('component/:id/:action', array('module' => 'component', 'controller' => 'index', 'action' => 'action')));
+            $router->AddRoute('indexcomponent', new Zend_Controller_Router_Route('component/:id', array('module' => 'component', 'controller' => 'index', 'action' => 'index')));
             
             $front->registerPlugin(new Vps_Controller_Plugin_Admin());
 

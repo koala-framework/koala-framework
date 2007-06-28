@@ -1,3 +1,4 @@
+/*
 Vps.Component.Pic = function(componentId, componentClass, pageId) {
     Vps.Component.Pic.superclass.constructor.call(this, componentId, componentClass, pageId);
 };
@@ -16,7 +17,7 @@ Vps.Component.Pic.prototype.handleSuccess = function(o) {
         }
     }
 };
-
+*/
 /*
 Vps.Component.Abstract.prototype.handleSave = function() {
     YAHOO.util.Connect.setForm(this.form.el, true);
@@ -24,6 +25,7 @@ Vps.Component.Abstract.prototype.handleSave = function() {
     //    {success: this.handleSuccess, failure: this.handleFailure, upload: this.handleSuccess, scope: this});
 };
 */
+/*
 Vps.Component.Pic.prototype.handleEdit = function() {
     form = this.form;
     form.baseParams.UPLOAD_IDENTIFIER = Math.round(Math.random() * 1000000);
