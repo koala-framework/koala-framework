@@ -1,9 +1,7 @@
 Vps.Admin.Pages.Tree = function(renderTo, config)
 {
-    Ext.apply(this, config);
-    this.renderTo = renderTo;
     this.events = {
-        'selectionchange' : true
+        'editcomponent' : true
     };
 
     toolbar = new Ext.Toolbar(Ext.get(renderTo).createChild());
@@ -31,13 +29,13 @@ Vps.Admin.Pages.Tree = function(renderTo, config)
         text    : 'Bearbeiten',
         handler : 
             function (o, e) {
-                this.fireEvent('editPage', this.tree.getSelectionModel().getSelectedNode());
+                node = this.tree.getSelectionModel().getSelectedNode();
+                this.fireEvent('editcomponent', {id: node.id, text: node.text});
             },
         icon : '/assets/vps/images/silkicons/page_edit.png',
         cls: "x-btn-text-icon",
         scope   : this
     });
-    Ext.get(Ext.get(toolbar.addSpacer().getEl()).dom.parentNode).setStyle('width', '100%');
     this.propertiesButton = toolbar2.addButton({
         disabled: true,
         text    : 'Eigenschaften',
@@ -46,16 +44,15 @@ Vps.Admin.Pages.Tree = function(renderTo, config)
         cls: "x-btn-text-icon",
         scope   : this
     });
-    this.onlineButton = toolbar2.addButton({
+    this.visibleButton = toolbar2.addButton({
         disabled: true,
-        text    : 'Online',
+        text    : 'Sichtbar',
         enableToggle : true,
-        handler : this.online,
+        handler : this.visible,
         icon : '/assets/vps/images/silkicons/world.png',
         cls: "x-btn-text-icon",
         scope : this
     });
-    Ext.get(Ext.get(toolbar2.addSpacer().getEl()).dom.parentNode).setStyle('width', '100%');
     toolbar2.addButton({
         text    : '',
         handler :
@@ -96,22 +93,22 @@ Ext.extend(Vps.Admin.Pages.Tree, Ext.util.Observable,
     selectionchange: function (e, node) {
         if (node) {
             if (node.attributes.type == 'default') {
-                this.onlineButton.enable();
-                this.onlineButton.toggle(node.attributes.online);
+                this.visibleButton.enable();
+                this.visibleButton.toggle(node.attributes.visible);
                 this.editButton.enable();
                 this.propertiesButton.enable();
                 this.addButton.enable();
                 this.deleteButton.enable();
             } else if (node.attributes.type == 'root') {
-                this.onlineButton.enable();
-                this.onlineButton.toggle(node.attributes.online);
+                this.visibleButton.enable();
+                this.visibleButton.toggle(node.attributes.visible);
                 this.editButton.enable();
                 this.propertiesButton.enable();
                 this.addButton.disable();
                 this.deleteButton.disable();
             } else {
-                this.onlineButton.disable();
-                this.onlineButton.toggle(true);
+                this.visibleButton.disable();
+                this.visibleButton.toggle(true);
                 this.propertiesButton.disable();
                 this.editButton.disable();
                 this.addButton.enable();
@@ -147,33 +144,33 @@ Ext.extend(Vps.Admin.Pages.Tree, Ext.util.Observable,
         }
     },
 
-    online : function (o, e) {
+    visible : function (o, e) {
         Ext.Ajax.request({
-            url: '/admin/pages/jsonOnline',
+            url: '/admin/pages/jsonVisible',
             params: {
                 id: this.tree.getSelectionModel().getSelectedNode().id,
-                online: this.onlineButton.pressed
+                visible: this.visibleButton.pressed
             },
             success: function(r) {
                 response = Ext.decode(r.responseText);
-                this.setOnline(response.online);
+                this.setVisible(response.visible);
             },
             failure: function(r) {
                 response = Ext.decode(r.responseText);
-                this.setOnline(response.online);
+                this.setVisible(response.visible);
             },
             scope: this
         })
     },
     
-    setOnline: function (online) {
-        this.onlineButton.toggle(online);
+    setVisible: function (visible) {
+        this.visibleButton.toggle(visible);
         node = this.tree.getSelectionModel().getSelectedNode();
-        node.attributes.online = online;
-        if (online) {
-            node.ui.removeClass('offline');
+        node.attributes.visible = visible;
+        if (visible) {
+            node.ui.removeClass('unvisible');
         } else {
-            node.ui.addClass('offline');
+            node.ui.addClass('unvisible');
         }
     },
     
@@ -263,7 +260,7 @@ Ext.extend(Vps.Admin.Pages.Tree, Ext.util.Observable,
                     success: function(form, a) {
                         node = this.tree.getSelectionModel().getSelectedNode();
                         node.setText(a.result.name);
-                        this.setOnline(a.result.online);
+                        this.setVisible(a.result.visible);
                     },
                     scope: this
                 })

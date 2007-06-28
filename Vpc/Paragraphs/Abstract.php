@@ -8,7 +8,10 @@ class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         $ret = parent::getTemplateVars($mode);
         $ret['paragraphs'] = array();
         foreach($this->_getParagraphs() as $paragraph) {
-            $ret['paragraphs'][] = $paragraph->getTemplateVars($mode);
+            $vars = $paragraph->getTemplateVars($mode);
+            if (isset($vars['template'])) {
+                $ret['paragraphs'][] = $vars;
+            }
         }
         $ret['template'] = 'Paragraphs.html';
         return $ret;

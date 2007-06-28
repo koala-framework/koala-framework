@@ -65,7 +65,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
     {
         if ($this->_pageData == null) {
             $sql = '
-                SELECT c.id component_id, c.component, p.id, p.parent_id, p.type, p.online, p.name, p.filename
+                SELECT c.id component_id, c.component, p.id, p.parent_id, p.type, p.visible, p.name, p.filename
                 FROM vps_components c
                 LEFT JOIN vps_pages p
                 ON c.id=p.component_id
@@ -129,12 +129,12 @@ class Vps_Dao_Pages extends Vps_Db_Table
         return $this->retrieveDecoratorData($id);
     }
 
-    public function saveOnline($componentId, $online)
+    public function saveVisible($componentId, $visible)
     {
         $data = $this->retrievePageData($componentId);
         if (!empty($data)) {
             $row = $this->fetchRow('id = ' . $data['id']);
-            $row->online = $online ? '1' : '0';
+            $row->visible = $visible ? '1' : '0';
             $row->save();
             $this->_pageData = null;
             return true;

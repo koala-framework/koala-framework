@@ -21,7 +21,7 @@ class Vps_Dao_Paragraphs extends Vps_Db_Table
             $where = $this->getAdapter()->quoteInto('p.component_id = ?', $componentId);
         }
         $sql = '
-            SELECT p.component_id id, p.nr, c.component, c.status
+            SELECT p.component_id id, p.nr, c.component, c.visible
             FROM component_paragraphs p
             LEFT JOIN vps_components c
             ON p.component_id=c.id

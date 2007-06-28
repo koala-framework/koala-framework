@@ -6,6 +6,6 @@
     background-image:url(/assets/vps/images/silkicons/folder_page.png);
 }
 
-.offline .x-tree-node-icon {
+.invisible .x-tree-node-icon {
     background-image:url(/assets/vps/images/silkicons/page_red.png);
 }
