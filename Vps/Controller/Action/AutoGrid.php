@@ -7,10 +7,11 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
                                     'delete'=>true);
     protected $_gridPermissions; //todo: Zend_Acl ??
     protected $_gridPaging = 0;
-    protected $_gridTable = null;
-    protected $_gridDefaultOrder = null;
-    protected $_gridUseEditor;
+    protected $_gridTable;
+    protected $_gridTableName;
+    protected $_gridDefaultOrder;
     protected $_gridFilters = array();
+    protected $_gridQueryFields;
 
     //deprecated:
     public function ajaxLoadAction() { $this->jsonLoadAction(); }
@@ -19,13 +20,8 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
 
     public function init()
     {
-        if (!isset($this->_gridUseEditor)) {
-            foreach ($this->_gridColumns as $c) {
-                if (isset($c['editor'])) {
-                    $this->_gridUseEditor = true;
-                    break;
-                }
-            }
+        if (!isset($this->_gridTable)) {
+            $this->_gridTable = new $this->_gridTableName();
         }
 
         $info = $this->_gridTable->info();
@@ -42,16 +38,51 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         if (!isset($this->_gridPermissions)) {
             $this->_gridPermissions = $this->_gridButtons;
         }
+
+        //default durchsucht alle angezeigten felder
+        if (!isset($this->_gridQueryFields)) {
+            $this->_gridQueryFields = array();
+            foreach ($this->_gridColumns as $k=>$col) {
+                $this->_gridQueryFields[] = $col['dataIndex'];
+            }
+        }
+
+        if (!isset($this->_gridDefaultOrder)) {
+            $this->_gridDefaultOrder = $this->_gridColumns[0]['dataIndex'];
+        }
+    }
+
+    protected function _getWhere()
+    {
+        $where = null;
+        $query = $this->getRequest()->getParam('query');
+        if ($query) {
+            if (!isset($this->_gridQueryFields)) {
+                throw new Vps_Exception("gridQueryFields which is required to use query-filters is not set.");
+            }
+            $where = array();
+            $db = $this->_gridTable->getAdapter();
+            foreach($this->_gridQueryFields as $f) {
+                $where[] = $db->quoteInto("$f LIKE ?", "%$query%");
+            }
+            $where = implode(' OR ', $where);
+        }
+        return $where;
     }
 
     protected function _fetchData($order, $limit, $start)
     {
-        return $this->_gridTable->fetchAll(null, $order, $limit, $start);
+        return $this->_gridTable->fetchAll($this->_getWhere(), $order, $limit, $start);
     }
 
     protected function _fetchCount()
     {
-        return $this->_gridTable->fetchCount();
+        $db = $this->_gridTable->getAdapter();
+
+        $where = $this->_getWhere();
+        $sql = "SELECT COUNT(*) FROM customers c";
+        if($where) $sql .= " WHERE $where";
+        return $db->fetchOne($sql);
     }
 
     public function jsonDataAction()
@@ -64,7 +95,9 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         }
         $order = $this->getRequest()->getParam("sort");
         if (!$order) $order = $this->_gridDefaultOrder;
-        $order .= " ".$this->getRequest()->getParam("dir");
+        if($this->getRequest()->getParam("dir")!='UNDEFINED') {
+            $order .= " ".$this->getRequest()->getParam("dir");
+        }
         $order = trim($order);
 
         $info = $this->_gridTable->info();
@@ -143,21 +176,26 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
             $metaData[] = $d;
         }
 
-        $sortInfo = array();
-        $sortInfo['field'] = $this->_gridDefaultOrder;
 
-        $this->view->metaData =
-            array('fields'=>$metaData,
-                    'root'=>'rows',
-                    'id'=>$primaryKey,
-                    'totalProperty'=>'total',
-                    'successProperty'=>'success',
-                    'sortInfo'=>$sortInfo,
-                    'gridColumns'=>$this->_gridColumns,
-                    'gridButtons'=>$this->_gridButtons,
-                    'gridPaging'=>$this->_gridPaging,
-                    'gridUseEditor'=>$this->_gridUseEditor,
-                    'gridFilters'=>$this->_gridFilters);
+        $this->view->metaData = array();
+        $this->view->metaData['fields'] = $metaData;
+        $this->view->metaData['root'] = 'rows';
+        $this->view->metaData['id'] = $primaryKey;
+        $this->view->metaData['totalProperty'] = 'total';
+        $this->view->metaData['successProperty'] = 'success';
+        $this->view->metaData['sortInfo'] = array();
+        if (!$this->getRequest()->getParam('sort')) {
+            //sandard-sortierung
+            $this->view->metaData['sortInfo']['field'] = $this->_gridDefaultOrder;
+            $this->view->metaData['sortInfo']['dir'] = 'ASC';
+        } else {
+            $this->view->metaData['sortInfo']['field'] = $this->getRequest()->getParam('sort');
+            $this->view->metaData['sortInfo']['dir'] = $this->getRequest()->getParam('dir');
+        }
+        $this->view->metaData['gridColumns'] = $this->_gridColumns;
+        $this->view->metaData['gridButtons'] = $this->_gridButtons;
+        $this->view->metaData['gridPaging'] = $this->_gridPaging;
+        $this->view->metaData['gridFilters'] = $this->_gridFilters;
     }
 
     protected function _getPrimaryKey()
@@ -243,7 +281,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         try {
             $row->delete();
             $success = true;
-        } catch (Vps_Exception $e) { //todo: nicht nur Vps_Exception fangen
+        } catch (Vps_ClientException $e) { //todo: nicht nur Vps_Exception fangen
             $this->view->error = $e->getMessage();
         }
 

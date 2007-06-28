@@ -1,16 +1,16 @@
 Ext.namespace('Vps.Renderer');
 
-Vps.Renderer.date = Ext.util.Format.dateRenderer('d.m.Y');
+Vps.Renderer.Date = Ext.util.Format.dateRenderer('d.m.Y');
 
-Vps.Renderer.boolean = function(value) {
+Vps.Renderer.Boolean = function(value) {
     return value ? 'Ja' : 'Nein';
 };
 
-Vps.Renderer.password = function(value) {
+Vps.Renderer.Password = function(value) {
     return value||true ? '******' : '';
 };
 
-Vps.Renderer.moneyEuro = function(v) {
+Vps.Renderer.MoneyEuro = function(v) {
     if (v == 0) return "";
     v = v.toString().replace(",", ".");
     v = (Math.round((v-0)*100))/100;
