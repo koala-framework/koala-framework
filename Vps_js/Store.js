@@ -1,8 +1,8 @@
 Ext.data.Store.prototype.originalLoad = Ext.data.Store.prototype.load;
 Ext.override(Ext.data.Store, {
     load : function(options) {
-        //wenn meta nicht gesetzt meta-parameter schicken
-        if(!this.reader.meta) {
+        //wenn recordType nicht gesetzt meta-parameter schicken um ihn vom Server zu bekommen
+        if(!this.recordType) {
             this.baseParams.meta = true;
         }
         this.originalLoad(options);

@@ -31,6 +31,29 @@ Vps.AutoGrid = function(renderTo, config)
         delay: 1  //damit das catch vom JsonReader nicht fehler schluckt
     }});
 
+    this.grid = new Ext.grid.EditorGrid(this.renderTo, {
+        dataSource: this.ds,
+        selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
+        colModel: new Ext.grid.ColumnModel([{header: "", hidden:true}]), //workaround weil es ain columnmodel geben muss
+        id: this.controllerUrl.replace(/\//g, '-').replace(/^-|-$/g, '') //um eine eindeutige id für den stateManager zu haben
+    });
+
+    this.grid.getSelectionModel().on('rowselect', function(selData, gridRow, currentRow) {
+        if(this.deleteButton) this.deleteButton.enable();
+        this.fireEvent('rowselect', selData, gridRow, currentRow);
+    }, this);
+
+    this.grid.getSelectionModel().on('beforerowselect', function(selData, gridRow, currentRow) {
+        return this.fireEvent('beforerowselect', selData, gridRow, currentRow);
+    }, this);
+
+    this.grid.on('rowdblclick', function(selModel, rowIndex) {
+        var data = this.grid.dataSource.data.items[rowIndex].data;
+        this.fireEvent('rowdblclick', data, selModel, rowIndex);
+    }, this);
+
+    this.grid.restoreState();
+
     if(this.autoload) {
         this.ds.load({params: {start: 0}});
     }
@@ -64,7 +87,7 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
                     throw "invalid editor: "+column.editor;
                 }
             }
-            
+
             if (Vps.Renderer[column.renderer]) {
                 column.renderer = Vps.Renderer[column.renderer];
             } else if (Ext.util.Format[column.renderer]) {
@@ -83,33 +106,9 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
         var colModel = new Ext.grid.ColumnModel(config);
         colModel.defaultSortable = true;
 
-        var gridConfig = {
-            dataSource: store,
-            selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
-            colModel: colModel
-        };
-        if (meta.gridUseEditor) {
-            this.grid = new Ext.grid.EditorGrid(this.renderTo, gridConfig);
-        } else {
-            this.grid = new Ext.grid.Grid(this.renderTo, gridConfig);
-        }
-
-        this.grid.getSelectionModel().on('rowselect', function(selData, gridRow, currentRow) {
-            if(this.deleteButton) this.deleteButton.enable();
-            this.fireEvent('rowselect', selData, gridRow, currentRow);
-        }, this);
-
-        this.grid.getSelectionModel().on('beforerowselect', function(selData, gridRow, currentRow) {
-            return this.fireEvent('beforerowselect', selData, gridRow, currentRow);
-        }, this);
-
-        this.grid.on('rowdblclick', function(selModel, rowIndex) {
-            var data = this.grid.dataSource.data.items[rowIndex].data;
-            this.fireEvent('rowdblclick', data, selModel, rowIndex);
-        }, this);
-
-        this.grid.restoreState();
+        this.grid.colModel = colModel;
         this.grid.render();
+        this.grid.restoreState();
 
         if (meta.gridPaging) {
             var paging = new Ext.PagingToolbar(this.grid.getView().getFooterPanel(true),
@@ -120,9 +119,11 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
         }
 
         this.toolbar = new Ext.Toolbar(this.grid.getView().getHeaderPanel(true));
-        if (meta.gridButtons.save && meta.gridUseEditor) {
+        if (meta.gridButtons.save) {
             this.saveButton = this.toolbar.addButton({
                 text    : 'Speichern',
+                icon    : '/assets/vps/images/silkicons/table_save.png',
+                cls     : 'x-btn-text-icon',
                 disabled: true,
                 handler : this.onSave,
                 scope: this
@@ -130,9 +131,11 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
             this.toolbar.addSeparator();
         }
 
-        if (meta.gridButtons.add && meta.gridUseEditor) {
+        if (meta.gridButtons.add) {
             this.newButton = this.toolbar.addButton({
                 text    : 'Neu',
+                icon    : '/assets/vps/images/silkicons/table_add.png',
+                cls     : 'x-btn-text-icon',
                 handler : this.onAdd,
                 scope: this
             });
@@ -141,18 +144,21 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
         if (meta.gridButtons.delete) {
             this.deleteButton = this.toolbar.addButton({
                 text    : 'Löschen',
+                icon    : '/assets/vps/images/silkicons/table_delete.png',
+                cls     : 'x-btn-text-icon',
                 disabled: true,
                 handler : this.onDelete,
                 scope: this
             });
         }
         if (meta.gridFilters.text) {
+            this.toolbar.addSeparator();
             this.toolbar.addText("Filter:");
             this.toolbar.el.swallowEvent(['keypress','keydown']);
             var textfield = new Ext.form.TextField();
             this.toolbar.addField(textfield);
             textfield.getEl().on('keypress', function() {
-                store.baseParams.filterText = textfield.getValue();
+                store.baseParams.query = textfield.getValue();
                 if (store.reader.meta.gridPaging) {
                     store.load({params:{start:0}});
                 } else {

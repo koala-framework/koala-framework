@@ -1,16 +1,18 @@
 Ext.namespace('Vps.AutoForm');
 
-Vps.AutoForm.Form = function(renderTo, config)
+Vps.AutoForm.Form = function(config)
 {
-    this.renderTo = renderTo;
+    this.renderTo = config.renderTo;
     this.controllerUrl = config.controllerUrl;
     delete config.controllerUrl;
+    delete config.renderTo;
 
-    config = Ext.applyIf({
+    config = Ext.applyIf(config, {
         url: this.controllerUrl+'jsonSave',
         waitMsgTarget: document.body,
-        trackResetOnLoad: true
-    }, config);
+        trackResetOnLoad: true,
+        baseParams: {}
+    });
     this.form = new Ext.form.Form(config);
     
     this.addEvents({
@@ -18,7 +20,8 @@ Vps.AutoForm.Form = function(renderTo, config)
         dataChanged: true,
         formRendered: true,
         deleted: true,
-        add: true
+        add: true,
+        loaded: true
     });
 
     this.form.doAction('loadAutoForm', {
@@ -72,13 +75,17 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
 
         if (this.meta.formButtons.add) {
             this.toolbar.addSeparator();
-            this.addButton = this.toolbar.addButton({
+            var c = {};
+            if(typeof this.meta.formButtons.add == 'object') {
+                c = this.meta.formButtons.add;
+            }
+            this.addButton = this.toolbar.addButton(Ext.applyIf(c, {
                 text    : 'Neuer Eintrag',
                 handler : function() {
                     this.onAdd();
                 },
                 scope   : this
-            });
+            }));
         }
         this.fireEvent('generatetoolbar', this.toolbar);
     },
@@ -113,7 +120,9 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
             } else {
                 var fieldType = field.type;
                 delete field.type;
-                if (fieldType == 'column') {
+                if (!fieldType) {
+                    //ignore field
+                } else if (fieldType == 'column') {
                     this.form.column(field);
                 } else if (fieldType == 'fieldset') {
                     this.form.fieldset(field);
@@ -222,7 +231,11 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
         if (!options) options = {};
         this.form.load(Ext.applyIf(options, {
             url: this.controllerUrl+'jsonLoad',
-            waitMsg: 'laden...'
+            waitMsg: 'laden...',
+            success: function(form, action) {
+                this.fireEvent("loaded", form, action);
+            },
+            scope: this
         }));
     },
     mabySave : function(callback, callCallbackIfNotDirty)
@@ -307,7 +320,6 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
                 this.enable();
                 if (this.deleteButton) this.deleteButton.disable();
                 this.form.baseParams.id = 0;
-                debugger;
                 this.form.setDefaultValues();
                 this.fireEvent("add", this);
             },

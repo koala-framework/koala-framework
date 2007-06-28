@@ -4,6 +4,7 @@ abstract class Vps_Controller_Action_AutoForm extends Vps_Controller_Action
     protected $_formFields = array();
     protected $_formButtons = array('save' => true);
     protected $_formTable;
+    protected $_formTableName;
     protected $_formPermissions; //todo: Zend_Acl ??
 
     //deprecated:
@@ -13,6 +14,9 @@ abstract class Vps_Controller_Action_AutoForm extends Vps_Controller_Action
 
     public function init()
     {
+        if (!isset($this->_formTable)) {
+            $this->_formTable = new $this->_formTableName();
+        }
         if (!isset($this->_formPermissions)) {
             $this->_formPermissions = $this->_formButtons;
         }

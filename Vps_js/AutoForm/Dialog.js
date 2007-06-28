@@ -1,6 +1,13 @@
-Vps.AutoForm.Dialog = function(renderTo, config)
+Vps.AutoForm.Dialog = function(config)
 {
-    this.dialog = new Ext.BasicDialog(renderTo, {
+    var renderTo;
+    if(config.renderTo) {
+        renderTo = config.renderTo;
+        delete config.renderTo;
+    } else {
+        renderTo = Ext.get(document.body).createChild();
+    }
+    this.dialog = new Ext.BasicDialog(renderTo, Ext.applyIf(config, {
         height: 420,
         width: 450,
         minHeight: 100,
@@ -8,9 +15,11 @@ Vps.AutoForm.Dialog = function(renderTo, config)
         modal: true,
         proxyDrag: true,
         shadow: true
-    });
+    }));
 
-    Vps.AutoForm.Dialog.superclass.constructor.call(this, this.dialog.body, config);
+    config.renderTo = this.dialog.body;
+
+    Vps.AutoForm.Dialog.superclass.constructor.call(this, config);
 
 
 };
@@ -65,6 +74,7 @@ Ext.extend(Vps.AutoForm.Dialog, Vps.AutoForm.Form,
         this.dialog.hide();
     },
     add: function(options) {
+        if(!options) options = {};
         if(options.baseParams) this.form.baseParams = options.baseParams
         this.onAdd();
         this.dialog.setTitle('hinzufügen');
