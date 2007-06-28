@@ -37,10 +37,14 @@ class Vps_Assets_Dependencies
         );
         require_once 'Zend/Cache.php';
         $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-
+        
+        $checksums = array(
+            md5_file(VPS_PATH.'/Vps_js/dependencies.ini'),
+            md5_file($configFile)
+        );
+        
         if ($cacheContents = $cache->load('dependencies')) {
-            if ($cacheContents['dependenciesIniMTime'] != filemtime(VPS_PATH.'/Vps_js/dependencies.ini')
-                || $cacheContents['configMTime'] != filemtime($configFile)
+            if ($cacheContents['checksums'] != $checksums
                 || $cacheContents['configSection'] != $configSection
                 || $cacheContents['paths'] != $paths) {
                 $cacheContents = false;
@@ -48,9 +52,9 @@ class Vps_Assets_Dependencies
         }
 
         if(!$cacheContents) {
+            echo "regen cache";
             $cacheContents = array();
-            $cacheContents['dependenciesIniMTime'] = filemtime(VPS_PATH.'/Vps_js/dependencies.ini');
-            $cacheContents['configMTime'] = filemtime($configFile);
+            $cacheContents['checksums'] = $checksums;
             $cacheContents['configSection'] = $configSection;
             $cacheContents['paths'] = $paths;
             $dependencies = new Zend_Config_Ini($configFile, $configSection);
@@ -60,8 +64,10 @@ class Vps_Assets_Dependencies
             $cacheContents['files'] = $this->_files;
             $cache->save($cacheContents, 'dependencies');
         } else {
+            echo "use cache";
             $this->_files = $cacheContents['files'];
         }
+        d('');
     }
 
     private function _getFilePath($file)
