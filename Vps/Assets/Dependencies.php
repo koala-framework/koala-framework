@@ -52,7 +52,6 @@ class Vps_Assets_Dependencies
         }
 
         if(!$cacheContents) {
-            echo "regen cache";
             $cacheContents = array();
             $cacheContents['checksums'] = $checksums;
             $cacheContents['configSection'] = $configSection;
@@ -64,10 +63,8 @@ class Vps_Assets_Dependencies
             $cacheContents['files'] = $this->_files;
             $cache->save($cacheContents, 'dependencies');
         } else {
-            echo "use cache";
             $this->_files = $cacheContents['files'];
         }
-        d('');
     }
 
     private function _getFilePath($file)
