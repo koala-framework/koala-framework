@@ -170,6 +170,8 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
                             var proxyType = Ext.data.HttpProxy;
                         }
                         var proxy = new proxyType(field.store.proxy);
+                    } else if (field.store.data) {
+                        var proxy = new Ext.data.MemoryProxy(field.store.data);
                     } else {
                         var proxy = new Ext.data.HttpProxy(field.store);
                     }

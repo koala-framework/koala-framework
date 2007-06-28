@@ -80,7 +80,8 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         $db = $this->_gridTable->getAdapter();
 
         $where = $this->_getWhere();
-        $sql = "SELECT COUNT(*) FROM customers c";
+        $info = $this->_gridTable->info();
+        $sql = "SELECT COUNT(*) FROM $info[name]";
         if($where) $sql .= " WHERE $where";
         return $db->fetchOne($sql);
     }
