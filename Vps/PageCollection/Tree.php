@@ -167,13 +167,13 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         if (!$startPage instanceof Vpc_Interface) {
             throw new Vps_PageCollection_Exception('startPage must be an instance of Vpc_Interface, ' . get_class($startPage) . ' given.');
         }
-        
+
         $component = $startPage->findComponentByClass($class);
         if ($component) {
             return $component;
         } else {
             foreach ($this->getChildPages($startPage) as $page) {
-                $component = $this->findComponentByClass($class, $page);
+                $component = $page->findComponentByClass($class);
                 if ($component != null) {
                     return $component;
                 }
