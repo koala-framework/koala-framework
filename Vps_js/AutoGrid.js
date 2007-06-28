@@ -31,7 +31,7 @@ Vps.AutoGrid = function(renderTo, config)
         delay: 1  //damit das catch vom JsonReader nicht fehler schluckt
     }});
 
-    this.grid = new Ext.grid.EditorGrid(this.renderTo, {
+    this.grid = new Ext.grid.EditorGrid(this.renderTo, Ext.applyIf(config, {
         dataSource: this.ds,
         selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
         colModel: new Ext.grid.ColumnModel([{header: "", hidden:true}]), //workaround weil es ain columnmodel geben muss
