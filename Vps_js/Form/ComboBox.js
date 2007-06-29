@@ -81,7 +81,6 @@ Vps.Form.ComboBox = function(config)
         valueField: 'id',
         triggerAction: 'all'
     });
-    console.log(config);
     Vps.Form.ComboBox.superclass.constructor.call(this, config);
 };
 Ext.extend(Vps.Form.ComboBox, Ext.form.ComboBox,
