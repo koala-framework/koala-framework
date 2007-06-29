@@ -1,10 +1,10 @@
-Vps.Form.DateField = function(config)
+Vps.Form.NumberField = function(config)
 {
     config = Ext.applyIf(config, {
         decimalSeparator: ","
     });
-    Vps.Form.DateField.superclass.constructor.call(this, config);
+    Vps.Form.NumberField.superclass.constructor.call(this, config);
 };
-Ext.extend(Vps.Form.DateField, Ext.form.DateField,
+Ext.extend(Vps.Form.NumberField, Ext.form.NumberField,
 {
 });
