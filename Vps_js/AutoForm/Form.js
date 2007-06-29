@@ -132,78 +132,8 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
                     tabContainers.push(this.container({
                         el: Ext.DomHelper.append(formRenderTo, {tag:'div', style:'padding:20px'})
                     }));
-                } else if (fieldType == 'ComboBox') {
-                    if(!field.store) throw "no store set";
-                    if (field.store.reader) {
-                        if (field.store.reader.type && Ext.data[field.store.reader.type]) {
-                            var readerType = Ext.data[field.store.reader.type];
-                            delete field.store.reader.type;
-                        } else if (field.store.reader.type) {
-                            try {
-                                var readerType = eval(field.store.reader.type);
-                            } catch(e) {
-                                throw "invalid readerType: "+field.store.reader.type;
-                            }
-                            delete field.store.reader.type;
-                        } else {
-                            var readerType = Ext.data.JsonReader;
-                        }
-                        if (!field.store.reader.rows) throw "no rows defined, required if reader does not configure through meta data";
-                        var rows = field.store.reader.rows;
-                        delete field.store.reader.rows;
-                        var reader = new readerType(field.store.reader, rows);
-                    } else {
-                        var reader = new Ext.data.JsonReader(); //reader configuriert sich autom. durch meta-daten
-                    }
-                    if (field.store.proxy) {
-                        if (field.store.proxy.type && Ext.data[field.store.proxy.type]) {
-                            var proxyType = Ext.data[field.store.proxy.type];
-                            delete field.store.proxy.type;
-                        } else if (field.store.proxy.type) {
-                            try {
-                                var proxyType = eval(field.store.proxy.type);
-                            } catch(e) {
-                                throw "invalid proxyType: "+field.store.proxy.type;
-                            }
-                            delete field.store.proxy.type;
-                        } else {
-                            var proxyType = Ext.data.HttpProxy;
-                        }
-                        var proxy = new proxyType(field.store.proxy);
-                    } else if (field.store.data) {
-                        var proxy = new Ext.data.MemoryProxy(field.store.data);
-                    } else {
-                        var proxy = new Ext.data.HttpProxy(field.store);
-                    }
-                    if (field.store.type && Ext.data[field.store.type]) {
-                        var store = new Ext.data[field.store.type]({
-                            proxy: proxy,
-                            reader: reader
-                        });
-                    } else if (field.store.type) {
-                        try {
-                            var storeType = eval(field.store.type)
-                        } catch(e) {
-                            throw "invalid storeType: "+field.store.type;
-                        }
-                        var store = new storeType({
-                            proxy: proxy,
-                            reader: reader
-                        });
-                    } else {
-                        var store = new Ext.data.Store({
-                            proxy: proxy,
-                            reader: reader
-                        });
-                    }
-                    delete field.store;
-                    this.form.add(new Ext.form[fieldType](Ext.applyIf(field, {
-                        store: store,
-                        displayField: 'name',
-                        valueField: 'id',
-                        mode: 'remote',
-                        triggerAction: 'all'
-                        })));
+                } else if (Vps.Form[fieldType]) {
+                    this.form.add(new Vps.Form[fieldType](field))
                 } else if (Ext.form[fieldType]) {
                     this.form.add(new Ext.form[fieldType](field))
                 } else {

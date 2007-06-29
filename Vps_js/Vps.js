@@ -3,9 +3,10 @@ Ext.BLANK_IMAGE_URL = '/assets/ext/resources/images/default/s.gif';
 Ext.namespace(
 'Vps', 'Vpc',
 'Vps.Component',
-'Vps.Admin', 'Vps.Admin.Pages', 'Vps.Admin.Page',
+'Vps.Admin.Pages', 'Vps.Admin.Page',
 'Vps.Login',
-'Vps.Menu'
+'Vps.Menu',
+'Vps.Form'
 );
 
 Ext.applyIf(Array.prototype, {

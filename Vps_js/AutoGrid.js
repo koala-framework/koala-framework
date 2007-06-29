@@ -67,24 +67,27 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
         for (var i=0; i<meta.gridColumns.length; i++) {
             var column = meta.gridColumns[i];
             if (!column.header) continue;
-            if (column.editor == 'Checkbox') {
-                column.editor = new Ext.grid.GridEditor(new Ext.form.Checkbox());
-            } else if (column.editor == 'TextField') {
-                column.editor = new Ext.grid.GridEditor(new Ext.form.TextField())
-            } else if (column.editor == 'DateField') {
-                column.editor = new Ext.grid.GridEditor(new Ext.form.DateField({
-                                                        format: "d.m.Y"
-                                                    }))
-            } else if (column.editor == 'NumberField') {
-                column.editor = new Ext.grid.GridEditor(new Ext.form.NumberField({
-                                    decimalSeparator: ",",
-                                    msgTarget: "qtip"
-                                    }))
-            } else if (column.editor != '') {
-                try {
-                    column.editor = eval(column.editor);
-                } catch(e) {
-                    throw "invalid editor: "+column.editor;
+
+            if (column.editor) {
+                var editorConfig = { msgTarget: 'qtip' };
+                var type;
+                if (typeof column.editor == 'String') {
+                    type = column.editor;
+                } else {
+                    type = column.editor.type;
+                    delete column.editor.type;
+                    editorConfig = Ext.applyIf(column.editor, editorConfig);
+                }
+                if (Vps.Form[type]) {
+                    column.editor = new Ext.grid.GridEditor(new Vps.Form[type](editorConfig));
+                } else if (Ext.form[type]) {
+                    column.editor = new Ext.grid.GridEditor(new Ext.form[type](editorConfig));
+                } else if (type != '') {
+                    try {
+                        column.editor = eval(column.editor);
+                    } catch(e) {
+                        throw "invalid editor: "+column.editor;
+                    }
                 }
             }
 
