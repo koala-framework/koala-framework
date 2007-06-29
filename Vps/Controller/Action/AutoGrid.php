@@ -54,18 +54,22 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
 
     protected function _getWhere()
     {
-        $where = null;
+        $where = array();
         $query = $this->getRequest()->getParam('query');
         if ($query) {
             if (!isset($this->_gridQueryFields)) {
                 throw new Vps_Exception("gridQueryFields which is required to use query-filters is not set.");
             }
-            $where = array();
+            $whereQuery = array();
             $db = $this->_gridTable->getAdapter();
             foreach($this->_gridQueryFields as $f) {
-                $where[] = $db->quoteInto("$f LIKE ?", "%$query%");
+                $whereQuery[] = $db->quoteInto("$f LIKE ?", "%$query%");
             }
-            $where = '(' . implode(' OR ', $where) . ')';
+            $where[] = implode(' OR ', $where);
+        }
+        $queryId = $this->getRequest()->getParam('queryId');
+        if ($queryId) {
+            $where[$this->_getPrimaryKey().' = ?'] = $queryId;
         }
         return $where;
     }
@@ -77,13 +81,27 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
 
     protected function _fetchCount()
     {
-        $db = $this->_gridTable->getAdapter();
-
-        $where = $this->_getWhere();
+        $select = $this->_gridTable->getAdapter()->select();
         $info = $this->_gridTable->info();
-        $sql = "SELECT COUNT(*) FROM $info[name]";
-        if($where) $sql .= " WHERE $where";
-        return $db->fetchOne($sql);
+
+        $select->from($info['name'], 'COUNT(*)', $info['schema']);
+
+        $where = (array) $this->_getWhere();
+        foreach ($where as $key => $val) {
+            // is $key an int?
+            if (is_int($key)) {
+                // $val is the full condition
+                $select->where($val);
+            } else {
+                // $key is the condition with placeholder,
+                // and $val is quoted into the condition
+                $select->where($key, $val);
+            }
+        }
+
+        // return the results
+        $stmt = $this->_gridTable->getAdapter()->query($select);
+        return $stmt->fetchColumn();
     }
 
     public function jsonDataAction()
