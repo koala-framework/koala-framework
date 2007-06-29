@@ -170,24 +170,6 @@ abstract class Vps_PageCollection_Abstract
         return $this->_pages[$this->_rootPageId];
     }
 
-    public function setCreateDynamicPages($create)
-    {
-        if (!is_bool($create)) {
-            throw new Vps_PageCollection_Exception('$create must be boolean.');
-        }
-        $this->_createDynamicPages = $create;
-    }
-
-    public function ignoreVisible()
-    {
-        $this->_ignoreVisible = true;
-    }
-
-    public function getCreateDynamicPages()
-    {
-        return $this->_createDynamicPages;
-    }
-
     public function getCurrentPage()
     {
         return $this->_currentPage;
@@ -211,8 +193,7 @@ abstract class Vps_PageCollection_Abstract
     public function getPageData(Vpc_Interface $page)
     {
         $pageId = $page->getPageId();
-        $rootId = $this->getRootPage()->getPageId();
-        $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($pageId);
+        $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($pageId, false);
         $data['path'] = $this->getPath($page);
         return $data;
     }
@@ -223,4 +204,29 @@ abstract class Vps_PageCollection_Abstract
     }
 
     abstract public function getPageByPath($path);
+
+    public function findComponentByClass($class, $startPage = null, $findDynamic = false)
+    {
+        // In Datenbank suchen
+        if (!$findDynamic) {
+            $pageIds = $this->_dao->getTable('Vps_Dao_Pages')->findPagesByClass($class);
+            $pageId = (int)array_shift($pageIds);
+            if ($pageId > 0) {
+                $page = $this->getPageById($pageId);
+                if ($page) {
+                    $component = $page->findComponentByClass($class);
+                    if ($component) {
+                        return $component;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public function getTitle($page)
+    {
+        $data = $this->getPageData($page);
+        return isset($data['name']) ? $data['name'] : '';
+    }
 }
