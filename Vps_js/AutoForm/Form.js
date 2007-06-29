@@ -56,6 +56,8 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
         if (this.meta.formButtons.save) {
             this.saveButton = this.toolbar.addButton({
                 text    : 'Speichern',
+                icon    : '/assets/vps/images/silkicons/table_save.png',
+                cls     : 'x-btn-text-icon',
                 handler : function() {
                     this.onSubmit();
                 },
@@ -66,6 +68,8 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
         if (this.meta.formButtons.delete) {
             this.deleteButton = this.toolbar.addButton({
                 text    : 'Löschen',
+                icon    : '/assets/vps/images/silkicons/table_delete.png',
+                cls     : 'x-btn-text-icon',
                 handler : function() {
                     this.onDelete();
                 },
@@ -81,6 +85,8 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
             }
             this.addButton = this.toolbar.addButton(Ext.applyIf(c, {
                 text    : 'Neuer Eintrag',
+                icon    : '/assets/vps/images/silkicons/table_add.png',
+                cls     : 'x-btn-text-icon',
                 handler : function() {
                     this.onAdd();
                 },

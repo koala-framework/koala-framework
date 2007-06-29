@@ -62,10 +62,13 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
             }
             $whereQuery = array();
             $db = $this->_gridTable->getAdapter();
-            foreach($this->_gridQueryFields as $f) {
-                $whereQuery[] = $db->quoteInto("$f LIKE ?", "%$query%");
+            $query = explode(' ', $query);
+            foreach($query as $q) {
+                foreach($this->_gridQueryFields as $f) {
+                    $whereQuery[] = $db->quoteInto("$f LIKE ?", "%$q%");
+                }
             }
-            $where[] = implode(' OR ', $where);
+            $where[] = implode(' OR ', $whereQuery);
         }
         $queryId = $this->getRequest()->getParam('queryId');
         if ($queryId) {

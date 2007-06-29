@@ -71,7 +71,7 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
             if (column.editor) {
                 var editorConfig = { msgTarget: 'qtip' };
                 var type;
-                if (typeof column.editor == 'String') {
+                if (typeof column.editor == 'string') {
                     type = column.editor;
                 } else {
                     type = column.editor.type;
@@ -155,7 +155,9 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
             });
         }
         if (meta.gridFilters.text) {
-            this.toolbar.addSeparator();
+            if(this.toolbar.items.length > 0) {
+                this.toolbar.addSeparator();
+            }
             this.toolbar.addText("Filter:");
             this.toolbar.el.swallowEvent(['keypress','keydown']);
             var textfield = new Ext.form.TextField();

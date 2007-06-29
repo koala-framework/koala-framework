@@ -79,7 +79,7 @@ Vps.Form.ComboBox = function(config)
         store: store,
         displayField: 'name',
         valueField: 'id',
-        triggerAction: 'all'
+        triggerAction: 'query'
     });
     Vps.Form.ComboBox.superclass.constructor.call(this, config);
 };
