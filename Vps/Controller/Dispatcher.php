@@ -45,14 +45,11 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
     private function _isOverwritten()
     {
-        if (is_null($this->_isOverwritten)) {
-            $frontController = $this->getFrontController();
-            $request = $frontController->getRequest();
-            $controllerDir = $frontController->getControllerDirectory();
-            $controllerFile = $controllerDir['default'] . '/' . $this->classToFilename(parent::formatControllerName($request->getControllerName()));
-            $this->_isOverwritten = is_file($controllerFile);
-        }
-        return $this->_isOverwritten;
+        $frontController = $this->getFrontController();
+        $request = $frontController->getRequest();
+        $controllerDir = $frontController->getControllerDirectory();
+        $controllerFile = $controllerDir['default'] . '/' . $this->classToFilename(parent::formatControllerName($request->getControllerName()));
+        return is_file($controllerFile);
     }
 
 }

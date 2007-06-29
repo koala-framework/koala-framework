@@ -4,24 +4,7 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
 
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-        $acl = new Vps_Acl();
-        
-        // Roles
-        $acl->addRole(new Vps_Acl_Role('guest'));
-        $acl->addRole(new Vps_Acl_Role('admin'));
-        
-        // Resources
-        $acl->add(new Zend_Acl_Resource('web'));
-        $acl->add(new Vps_Acl_Resource('admin', 'Admin'));
-            $acl->add(new Vps_Acl_Resource('admin_pages', 'Seitenbaum', '/admin/pages'), 'admin');
-            $acl->add(new Zend_Acl_Resource('admin_page'), 'admin');
-            $acl->add(new Zend_Acl_Resource('admin_component'), 'admin');
-            $acl->add(new Zend_Acl_Resource('admin_menu'), 'admin');
-        
-        // Berechtigungen
-        $acl->allow('admin', 'admin');
-        $acl->allow('admin', 'web');
-        $acl->allow('guest', 'web');
+        $acl = Zend_Registry::get('acl');
 
         // Seite bearbeiten-Button
         $pageId = $this->getRequest()->getParam('pageId');

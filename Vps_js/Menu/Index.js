@@ -3,6 +3,9 @@ Ext.namespace('Vps.Menu');
 Vps.Menu.Index = function(renderTo, config)
 {
     Ext.apply(this, config);
+    this.events = {
+        'loadpage' : true
+    };
     this.tb = new Ext.Toolbar(renderTo);
 
     Ext.Ajax.request({
@@ -11,6 +14,15 @@ Vps.Menu.Index = function(renderTo, config)
         success: this.loadMenu,
         scope: this
     });
+    
+    this.handleClick = function (o, e) {
+        if (o.asEvent) {
+            this.fireEvent('loadpage', {url: o.url, text: o.text});
+        } else {
+            location.href = o.url;
+        }
+    }
+        
 };
 
 Ext.extend(Vps.Menu.Index, Ext.util.Observable,
@@ -25,20 +37,20 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
             if (m.url) {
                 this.tb.add({
                     text: m.text,
-                    handler: function() {
-                        location.href = this.url;
-                    },
-                    url: m.url
+                    handler: this.handleClick,
+                    url: m.url,
+                    asEvent: m.asEvent,
+                    scope: this
                 });
             } else {
                 var menuItems = [];
                 for (var j=0; j<m.children.length; j++) {
                     menuItems.push({
                         text: m.children[j].text,
-                        handler: function() {
-                            location.href = this.url;
-                        },
-                        url: m.children[j].url
+                        handler: this.handleClick,
+                        url: m.children[j].url,
+                        asEvent: m.children[j].asEvent,
+                        scope: this
                     });
                 }
                 var menu = new Ext.menu.Menu({
@@ -67,5 +79,6 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
                 }
             });
         }
-    }
+    },
+    
 });

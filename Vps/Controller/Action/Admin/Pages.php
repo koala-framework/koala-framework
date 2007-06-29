@@ -81,6 +81,7 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
             $this->view->error = $e->getMessage();
         }
     }
+    
     public function jsonMovePageAction()
     {
         try {
@@ -148,10 +149,10 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
                 $data['id'] = $type;
                 $data['text'] = $text;
                 $data['leaf'] = false;
-                $data['cls'] = 'folder';
                 $data['expanded'] = true;
                 $data['allowDrag'] = false;
                 $data['type'] = 'category';
+                $data['cls'] = 'folder';
                 $return[] = $data;
             }
 
@@ -194,7 +195,9 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
         $d['leaf'] = false;
         $d['visible'] = $pageData['visible'] == '1';
         if (!$d['visible']) {
-            $d['cls'] = 'invisible';
+            $d['cls'] = 'page_red';
+        } else {
+            $d['cls'] = 'page';
         }
         $d['type'] = 'default';
         if (sizeof($table->retrieveChildPagesData($d['id'])) > 0) {

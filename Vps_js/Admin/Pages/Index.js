@@ -26,15 +26,19 @@ Vps.Admin.Pages.Index = function(renderTo, config)
     layout.restoreState();
     layout.endUpdate();
 
-    new Vps.Menu.Index('menuContainer', {role: this.role, pageId: config.pageId});
+    this.menu = new Vps.Menu.Index('menuContainer', {role: this.role, pageId: config.pageId});
     this.tree = new Vps.Admin.Pages.Tree('treeContainer', {panel: 'center' });
     
-    
     this.loadComponent = function (data) { 
+        if (!data.id) { data.id = data.url; }
+        if (!data.url) {
+            data.url = '/component/' + data.id + '/';
+        }
+        data.url += 'jsonIndex/';
         Ext.Ajax.request({
-            url: '/component/' + data.id + '/jsonIndex',
+            url: data.url,
             success: function(r) {
-                layout.add('center', new Ext.ContentPanel('component' + data.id, {autoCreate:true, title: data.text, fitToFrame:true, closable:true}));
+                layout.add('center', new Ext.ContentPanel('component' + data.id, {autoCreate:true, title: data.text, fitToFrame:true, closable:true, autoScroll: true}));
                 response = Ext.decode(r.responseText);
                 class = eval(response.class);
                 if (class) {
@@ -48,4 +52,5 @@ Vps.Admin.Pages.Index = function(renderTo, config)
         });
     }
     this.tree.on('editcomponent', this.loadComponent, this);
+    this.menu.on('loadpage', this.loadComponent, this);
 }
