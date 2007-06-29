@@ -13,9 +13,6 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
     
     public function init()
     {
-        $this->_pc = Vps_PageCollection_Abstract::getInstance();
-        $this->_pc->ignoreVisible();
-        
         $session = new Zend_Session_Namespace('admin');
         $this->openedPages = is_array($session->openedPages) ? $session->openedPages : array();
 
