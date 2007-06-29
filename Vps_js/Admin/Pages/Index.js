@@ -1,3 +1,4 @@
+Ext.namespace('Vps.Admin.Pages');
 Vps.Admin.Pages.Index = function(renderTo, config)
 {
     var layout = new Ext.BorderLayout(renderTo, {
