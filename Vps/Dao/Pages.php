@@ -5,13 +5,13 @@ class Vps_Dao_Pages extends Vps_Db_Table
     private $_pageData = null;
     private $_decoratorData = null;
 
-    public function retrievePageData($componentId)
+    public function retrievePageData($componentId, $throwError = true)
     {
         $data = $this->_retrievePageData();
-        if (!isset($data[$componentId])) {
+        if ($throwError && !isset($data[$componentId])) {
             throw new Vps_ClientException('Page width id "' . $componentId . '" not found');
         }
-        return $data[$componentId];
+        return isset($data[$componentId]) ? $data[$componentId] : array();
     }
 
     public function retrieveParentPageData($componentId)
@@ -61,11 +61,22 @@ class Vps_Dao_Pages extends Vps_Db_Table
         throw new Vps_Exception('Could not find nor create Root Page');
     }
 
+    public function findPagesByClass($class)
+    {
+        $return = array();
+        foreach ($this->_retrievePageData() as $componentId => $data) {
+            if ($data['component'] == $class) {
+                $return[] = $data['page_id'];
+            }
+        }
+        return $return;
+    }
+
     private function _retrievePageData()
     {
         if ($this->_pageData == null) {
             $sql = '
-                SELECT c.id component_id, c.component, p.id, p.parent_id, p.type, p.visible, p.name, p.filename
+                SELECT c.id component_id, c.component, c.page_id, p.id, p.parent_id, p.type, p.visible, p.name, p.filename
                 FROM vps_components c
                 LEFT JOIN vps_pages p
                 ON c.id=p.component_id

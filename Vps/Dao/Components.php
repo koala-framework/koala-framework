@@ -3,12 +3,21 @@ class Vps_Dao_Components extends Zend_Db_Table
 {
     protected $_name = 'vps_components';
     
-    public function addComponent($class = 'Vpc_Paragraphs_Index', $visible = false)
+    public function addComponent($addingComponentId = 0, $class = 'Vpc_Paragraphs_Index', $visible = false)
     {
         // TODO: Componentclass checken
         $data['component'] = $class;
         $data['visible'] = $visible ? 1 : 0;
-        return $this->insert($data);
+        $componentId = $this->insert($data);
+        if ($addingComponentId == 0) {
+            $pageId = $componentId;
+        } else {
+            $pageId = $this->find($addingComponentId)->current()->top_id;
+        }
+        $row = $this->find($componentId);
+        $row->pageId = $pageId;
+        $row->save();
+        return $componentId;        
     }
     
     public function deleteComponent($componentId)

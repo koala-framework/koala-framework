@@ -45,7 +45,7 @@ class Vps_Dao_Paragraphs extends Vps_Db_Table
 
         // Leere Komponente hinzufügen
         $table = $this->getDao()->getTable('Vps_Dao_Components');
-        $componentId = $table->addComponent($componentClass);
+        $componentId = $table->addComponent($id, $componentClass);
 
         if ($componentId > 0) {
 
