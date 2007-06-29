@@ -1,11 +1,11 @@
-.x-tree-node-el .x-tree-node-icon {
+.page .x-tree-node-icon {
     background-image:url(/assets/vps/images/silkicons/page.png);
+}
+
+.page_red .x-tree-node-icon {
+    background-image:url(/assets/vps/images/silkicons/page_red.png);
 }
 
 .folder .x-tree-node-icon {
     background-image:url(/assets/vps/images/silkicons/folder_page.png);
-}
-
-.invisible .x-tree-node-icon {
-    background-image:url(/assets/vps/images/silkicons/page_red.png);
 }

@@ -14,12 +14,14 @@ class Vps_Controller_Action_Admin_Menu extends Vps_Controller_Action
                 $menu = array();
                 $menu['text'] = $resource->getMenuText();
                 $menu['url'] = $resource->getMenuUrl();
+                $menu['asEvent'] = $resource->asEvent();
                 $menu['children'] = array();
                 foreach ($childResources as $cr) {
                     if ($cr instanceof Vps_Acl_Resource && $acl->isAllowed($userRole, $cr)) {
                         $m = array();
                         $m['text'] = $cr->getMenuText();
                         $m['url'] = $cr->getMenuUrl();
+                        $m['asEvent'] = $cr->asEvent();
                         $menu['children'][] = $m;
                     }
                 }

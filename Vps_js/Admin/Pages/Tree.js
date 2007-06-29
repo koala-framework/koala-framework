@@ -168,9 +168,11 @@ Ext.extend(Vps.Admin.Pages.Tree, Ext.util.Observable,
         node = this.tree.getSelectionModel().getSelectedNode();
         node.attributes.visible = visible;
         if (visible) {
-            node.ui.removeClass('unvisible');
+            node.ui.removeClass('page_red');
+            node.ui.addClass('page');
         } else {
-            node.ui.addClass('unvisible');
+            node.ui.removeClass('page');
+            node.ui.addClass('page_red');
         }
     },
     

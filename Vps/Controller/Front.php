@@ -63,6 +63,28 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $db->query('SET names UTF8');
             Zend_Registry::set('db', $db);
             Zend_Db_Table_Abstract::setDefaultAdapter($db);
+
+            // ACL
+            $acl = new Vps_Acl();
+    
+            // Roles
+            $acl->addRole(new Vps_Acl_Role('guest'));
+            $acl->addRole(new Vps_Acl_Role('admin'));
+            
+            // Resources
+            $acl->add(new Zend_Acl_Resource('web'));
+            $acl->add(new Vps_Acl_Resource('admin', 'Admin'));
+                $acl->add(new Vps_Acl_Resource('admin_pages', 'Seitenbaum', '/admin/pages'), 'admin');
+                $acl->add(new Zend_Acl_Resource('admin_page'), 'admin');
+                $acl->add(new Zend_Acl_Resource('admin_component'), 'admin');
+                $acl->add(new Zend_Acl_Resource('admin_menu'), 'admin');
+            
+            // Berechtigungen
+            $acl->allow('admin', 'admin');
+            $acl->allow('admin', 'web');
+            $acl->allow('guest', 'web');
+            
+            Zend_Registry::set('acl', $acl);
         }
 
         $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'controller', 'action' => 'action')));
