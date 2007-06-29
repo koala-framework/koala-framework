@@ -25,11 +25,10 @@ Vps.AutoGrid = function(renderTo, config)
         if(this.saveButton) this.saveButton.enable();
     }, this);
 
-    this.ds.on({'metachange' : {
-        fn: this.onMetaChange,
-        scope: this,
-        delay: 1  //damit das catch vom JsonReader nicht fehler schluckt
-    }});
+    this.ds.on('metachange', this.onMetaChange, this);
+    this.ds.on('loadexception', function(proxy, o, response, e) {
+        throw e; //re-throw
+    }, this);
 
     this.grid = new Ext.grid.EditorGrid(this.renderTo, Ext.applyIf(config, {
         dataSource: this.ds,
@@ -109,13 +108,14 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
         var colModel = new Ext.grid.ColumnModel(config);
         colModel.defaultSortable = true;
 
+
         this.grid.colModel = colModel;
         this.grid.render();
         this.grid.restoreState();
 
         if (meta.gridPaging) {
             var paging = new Ext.PagingToolbar(this.grid.getView().getFooterPanel(true),
-                store, {
+                this.ds, {
                     pageSize: meta.gridPaging,
                     displayInfo: true
                 });
@@ -163,11 +163,11 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
             var textfield = new Ext.form.TextField();
             this.toolbar.addField(textfield);
             textfield.getEl().on('keypress', function() {
-                store.baseParams.query = textfield.getValue();
-                if (store.reader.meta.gridPaging) {
-                    store.load({params:{start:0}});
+                this.ds.baseParams.query = textfield.getValue();
+                if (this.ds.reader.meta.gridPaging) {
+                    this.ds.load({params:{start:0}});
                 } else {
-                    store.load();
+                    this.ds.load();
                 }
             }, this, {buffer: 500});
         }
