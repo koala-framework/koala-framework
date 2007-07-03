@@ -4,6 +4,11 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     private $_isOverwritten = null;
     private $_isComponent = null;
 
+    public function isDispatchable(Zend_Controller_Request_Abstract $request)
+    {
+        return true;
+    }
+    
     public function loadClass($className)
     {
         if ($this->_isOverwritten()) {
