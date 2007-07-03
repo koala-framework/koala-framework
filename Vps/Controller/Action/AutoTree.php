@@ -7,6 +7,7 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
         'root' => 'folder',
         'default' => 'table',
         'invisible' => 'table_key',
+        'reload' => 'control_repeat_blue',
         'add' => 'table_add',
         'delete' => 'table_delete'
     );
@@ -14,7 +15,8 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
     protected $_treeButtons = array(
         'add' => true,
         'delete' => true,
-        'invisible' => null
+        'invisible' => null,
+        'reload' => true
     );
     protected $_rootText = 'Root';
     protected $_rootVisible = true;
@@ -55,14 +57,20 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
         $parentId = $this->getRequest()->getParam('node');
         $this->_saveSessionNodeOpened($parentId, true);
         
-        $where[] = $this->_treeTable->getAdapter()->quoteInto('parent_id = ?', $parentId);
-        $rowset = $this->_treeTable->fetchAll($where, $this->_treeOrder);
+        $rowset = $this->_treeTable->fetchAll($this->_getWhere(), $this->_treeOrder);
         
         $nodes = array();
         foreach ($rowset as $row) {
             $nodes[] = $this->_formatNode($row);
         }
         $this->view->nodes = $nodes;
+    }
+    
+    protected function _getWhere()
+    {
+        $parentId = $this->getRequest()->getParam('node');
+        $where[] = $this->_treeTable->getAdapter()->quoteInto('parent_id = ?', $parentId);
+        return $where;
     }
     
     protected function _formatNode($row)
@@ -128,8 +136,8 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
             $insert['parent_id'] = $this->getRequest()->getParam('parentId');
             $insert[$this->_treeTextField] = $this->getRequest()->getParam('name');
             $id = $this->_treeTable->insert($insert);
+            $this->view->parentId = $insert['parent_id'];
             $this->view->config = $this->_formatNode($this->_treeTable->find($id)->current());
-            $this->view->success = true;
         } catch (Vps_ClientException $e) {
             $this->view->error = $e->getMessage();
         }
@@ -142,7 +150,6 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
             $where = $this->_treeTable->getAdapter()->quoteInto('id = ?', $id);
             if ($this->_treeTable->delete($where) > 0) {
                 $this->view->id = $id;
-                $this->view->success = true;
             } else {
                 $this->view->error = 'Kein Eintrag gelöscht.';
             }

@@ -2,6 +2,9 @@ Vps.AutoTree = function(renderTo, config)
 {
     Ext.apply(this, config);
     this.renderTo = renderTo;
+    this.events = {
+        selectionchange: true
+    };
 
     Ext.Ajax.request({
         url: this.controllerUrl + 'jsonMeta',
@@ -57,6 +60,16 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
                 scope   : this
             });
         }
+        if (r.buttons['reload']) {
+            toolbar.addButton({
+                text    : '',
+                handler : function () { this.tree.getRootNode().reload(); },
+                icon : '/assets/vps/images/silkicons/' + r.icons['reload'] + '.png',
+                cls: "x-btn-icon",
+                scope   : this
+            });
+        }
+        this.toolbar = toolbar;
 
         // Tree
         this.tree = new Ext.tree.TreePanel(this.renderTo, {
@@ -82,13 +95,15 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
         this.tree.on('expand', this.expand, this);
 
         this.tree.render();
-        this.tree.getRootNode().select();
+        if (r.rootVisible) {
+            this.tree.getRootNode().select();
+        }
         this.tree.getRootNode().expand();
 
     },
 
     selectionchange: function (e, node) {
-        if (node.id != 0) {
+        if (node && node.id != 0) {
             if (this.visibleButton) {
                 this.visibleButton.enable();
                 this.setvisible(node);
@@ -105,6 +120,7 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
                 this.deleteButton.disable();
             }
         }
+        this.fireEvent('selectionchange', node);
     },
     
     add: function (o, e) {
@@ -119,9 +135,18 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
                         },
                         success: function(r) {
                             response = Ext.decode(r.responseText);
-                            node = new Ext.tree.AsyncTreeNode(response.config);
-                            this.tree.getSelectionModel().getSelectedNode().appendChild(node);
-                            this.tree.getSelectionModel().select(this.tree.getNodeById(response.config.id));
+                            parentNode = this.tree.getNodeById(response.parentId);
+                            if (parentNode.isExpanded()) {
+                                node = new Ext.tree.AsyncTreeNode(response.config);
+                                if (parentNode.firstChild) {
+                                    this.tree.getSelectionModel().getSelectedNode().insertBefore(node, parentNode.firstChild);
+                                } else {
+                                    this.tree.getSelectionModel().getSelectedNode().appendChild(node);
+                                }
+                                this.tree.getSelectionModel().select(this.tree.getNodeById(response.config.id));
+                            } else {
+                                parentNode.expand();
+                            }
                         },
                         scope: this
                     })
@@ -132,26 +157,33 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
     },
     
     del: function (o, e) {
-        Ext.Ajax.request({
-            url: this.controllerUrl + 'jsonDelete',
-            params: {
-                id: this.tree.getSelectionModel().getSelectedNode().id
-            },
-            success: function(r) {
-                response = Ext.decode(r.responseText);
-                node = this.tree.getNodeById(response.id);
-                if (node.nextSibling) {
-                    sibling = node.nextSibling;
-                } else if (node.previousSibling) {
-                    sibling = node.previousSibling;
-                } else if (node.parentNode) {
-                    sibling = node.parentNode;
+        Ext.MessageBox.confirm('Löschen', 'Wollen Sie diesen Eintrag wirklich löschen:\n\n"' + this.tree.getSelectionModel().getSelectedNode().text + '"', 
+            function  (button) {
+                if (button == 'yes') {
+                    Ext.Ajax.request({
+                        url: this.controllerUrl + 'jsonDelete',
+                        params: {
+                            id: this.tree.getSelectionModel().getSelectedNode().id
+                        },
+                        success: function(r) {
+                            response = Ext.decode(r.responseText);
+                            node = this.tree.getNodeById(response.id);
+                            if (node.nextSibling) {
+                                sibling = node.nextSibling;
+                            } else if (node.previousSibling) {
+                                sibling = node.previousSibling;
+                            } else if (node.parentNode) {
+                                sibling = node.parentNode;
+                            }
+                            this.tree.getSelectionModel().select(sibling);
+                            node.parentNode.removeChild(node);
+                        },
+                        scope: this
+                    })
                 }
-                this.tree.getSelectionModel().select(sibling);
-                node.parentNode.removeChild(node);
             },
-            scope: this
-        })
+            this
+        );
     },
 
     move : function(e){
