@@ -40,7 +40,6 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action
             $this->_table->savePageName($id, $this->getRequest()->getParam('name'));
             $pageData = $this->_table->retrievePageData($id);
             $this->view->name = $pageData['name'];
-            $this->view->success = true;
         } catch (Vps_ClientException $e) {
             $this->view->error = $e->getMessage();
         }

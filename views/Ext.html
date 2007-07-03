@@ -2,6 +2,9 @@
     {foreach item=file from=$ext.files.css}
     <link rel="stylesheet" type="text/css" href="{$file}" />
     {/foreach} 
+
+    <style id="treeStyles" type="text/css" />
+
     {foreach item=file from=$ext.files.js}
     <script type="text/javascript" src="{$file}"></script>
     {/foreach} 
