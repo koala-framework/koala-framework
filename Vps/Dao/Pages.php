@@ -80,7 +80,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
                 FROM vps_components c
                 LEFT JOIN vps_pages p
                 ON c.id=p.component_id
-                ORDER BY p.nr
+                ORDER BY p.position
             ';
             $this->_pageData = $this->getAdapter()->fetchAssoc($sql);
         }
@@ -156,7 +156,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
     public function createPage($parentComponentId, $type = '')
     {
         // Leere Komponente hinzufügen
-        $table = $this->getDao()->getTable('Vps_Dao_Components');
+        $table = new Vps_Dao_Components();
         $componentId = $table->addComponent();
 
         // Eintrag in Pages-Tabelle
@@ -166,7 +166,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
                 $parentData = $this->retrieveRootPageData();
             }
             $parentId = $parentData['id'];
-            $nr = sizeof($this->retrieveChildPagesData($parentId)) + 1;
+            $position = sizeof($this->retrieveChildPagesData($parentId)) + 1;
             $name = 'New Page';
             $filename = 'newpage';
             $type = $parentData['type'] != '' ? $parentData['type'] : $type;
@@ -176,7 +176,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
                     throw new Vps_Exception('Cannot create RootPage because already existing.');
                 }
             }
-            $nr = 1;
+            $position = 1;
             $parentId = 0;
             $name = 'Home';
             $filename = 'home';
@@ -188,7 +188,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
         $insert['filename'] = $filename;
         $insert['component_id'] = $componentId;
         $insert['parent_id'] = $parentId;
-        $insert['nr'] = $nr;
+        $insert['position'] = $position;
         $insert['type'] = $type;
         $this->insert($insert);
 
@@ -225,7 +225,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
         $targetData = $this->retrievePageData($targetComponentId);
         if ($point == 'append') {
             $parentId = $targetData['id'];
-            $nr = '1';
+            $position = '1';
         } else {
             $parentData = $this->retrieveParentPageData($targetData['component_id']);
             $parentId = $parentData['id'];
@@ -233,9 +233,9 @@ class Vps_Dao_Pages extends Vps_Db_Table
             for ($x=0; $x<sizeof($siblings); $x++) {
                 if ($siblings[$x]['id'] == $targetData['id']) {
                     if ($point == 'above') {
-                        $nr = $x;
+                        $position = $x;
                     } else if ($point == 'below') {
-                        $nr = $x + 2;
+                        $position = $x + 2;
                     }
                 }
             }
@@ -244,7 +244,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
         $row->parent_id = $parentId;
         $row->type = $targetData['type'] != '' ? $targetData['type'] : $type;
         $row->save();
-        $row->numberize('nr', $nr, 'parent_id = ' . $parentId);
+        $row->numberize('position', $position, 'parent_id = ' . $parentId);
 
         $this->_pageData = null;
         return true;
