@@ -14,8 +14,8 @@ class Vps_Dao_Components extends Zend_Db_Table
         } else {
             $pageId = $this->find($addingComponentId)->current()->top_id;
         }
-        $row = $this->find($componentId);
-        $row->pageId = $pageId;
+        $row = $this->find($componentId)->current();
+        $row->page_id = $pageId;
         $row->save();
         return $componentId;        
     }
