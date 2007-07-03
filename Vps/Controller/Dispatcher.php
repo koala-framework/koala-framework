@@ -4,10 +4,6 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     private $_isOverwritten = null;
     private $_isComponent = null;
 
-    public function isDispatchable(Zend_Controller_Request_Abstract $request) {
-        return true;
-    }
-
     public function loadClass($className)
     {
         if ($this->_isOverwritten()) {
@@ -45,10 +41,11 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
     private function _isOverwritten()
     {
-        $frontController = $this->getFrontController();
-        $request = $frontController->getRequest();
-        $controllerDir = $frontController->getControllerDirectory();
-        $controllerFile = $controllerDir['default'] . '/' . $this->classToFilename(parent::formatControllerName($request->getControllerName()));
+        $front = $this->getFrontController();
+        $request = $front->getRequest();
+        $controllerDir = $front->getControllerDirectory();
+        $moduleDir = $request->getModuleName() == 'default' ? '' : $request->getModuleName() . '/' ;
+        $controllerFile = $controllerDir['default'] . '/' . $moduleDir . $this->classToFilename(parent::formatControllerName($request->getControllerName()));
         return is_file($controllerFile);
     }
 
