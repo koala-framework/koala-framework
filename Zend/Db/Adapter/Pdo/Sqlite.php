@@ -259,16 +259,4 @@ class Zend_Db_Adapter_Pdo_Sqlite extends Zend_Db_Adapter_Pdo_Abstract
         return $sql;
     }
 
-    /**
-     * Quote a raw string.
-     *
-     * @param string $value     Raw string
-     * @return string           Quoted string
-     */
-    protected function _quote($value)
-    {
-        $this->_connect();
-        return $this->_connection->quote($value);
-    }
-
 }
