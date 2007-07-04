@@ -136,8 +136,12 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
             $insert['parent_id'] = $this->getRequest()->getParam('parentId');
             $insert[$this->_treeTextField] = $this->getRequest()->getParam('name');
             $id = $this->_treeTable->insert($insert);
-            $this->view->parentId = $insert['parent_id'];
-            $this->view->config = $this->_formatNode($this->_treeTable->find($id)->current());
+            if ($id) {
+                $this->view->parentId = $insert['parent_id'];
+                $this->view->config = $this->_formatNode($this->_treeTable->find($id)->current());
+            } else {
+                $this->view->error = 'Couldn\'t insert row.'; 
+            }
         } catch (Vps_ClientException $e) {
             $this->view->error = $e->getMessage();
         }
