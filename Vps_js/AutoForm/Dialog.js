@@ -3,6 +3,7 @@ Vps.AutoForm.Dialog = function(renderTo, config)
     if(!Ext.get(renderTo)) {
         renderTo = Ext.get(document.body).createChild();
     }
+    config = config || {};
     this.dialog = new Ext.BasicDialog(renderTo, Ext.applyIf(config, {
         height: 420,
         width: 450,

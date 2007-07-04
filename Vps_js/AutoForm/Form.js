@@ -171,6 +171,7 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
             url: this.controllerUrl+'jsonLoad',
             waitMsg: 'laden...',
             success: function(form, action) {
+                if (this.deleteButton) this.deleteButton.enable();
                 this.fireEvent("loaded", form, action);
             },
             scope: this
@@ -239,7 +240,7 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
             if (button == 'yes') {
                 Ext.Ajax.request({
                         url: this.controllerUrl+'jsonDelete',
-                        params: {id: this.baseParams.id},
+                        params: {id: this.form.baseParams.id},
                         success: function(response, options, r) {
                             this.fireEvent("dataChanged", r);
                             this.form.clearValues();

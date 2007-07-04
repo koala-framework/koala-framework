@@ -12,6 +12,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
     protected $_gridDefaultOrder;
     protected $_gridFilters = array();
     protected $_gridQueryFields;
+    protected $_gridPrimaryKey;
 
     //deprecated:
     public function ajaxLoadAction() { $this->jsonLoadAction(); }
@@ -20,19 +21,37 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
 
     public function init()
     {
-        if (!isset($this->_gridTable)) {
+        if (!isset($this->_gridTable) && isset($this->_gridTableName)) {
             $this->_gridTable = new $this->_gridTableName();
         }
 
-        $info = $this->_gridTable->info();
-        foreach ($this->_gridColumns as $k=>$col) {
-            if (!isset($col['type']) && isset($info['metadata'][$col['dataIndex']])) {
-                $this->_gridColumns[$k]['type'] = $this->_getTypeFromDbType($info['metadata'][$col['dataIndex']]['DATA_TYPE']);
-            } else {
-                $this->_gridColumns[$k]['type'] = null;
+        if (isset($this->_gridTable)) {
+            $info = $this->_gridTable->info();
+            if(!isset($this->_gridPrimaryKey)) {
+                $info = $this->_gridTable->info();
+                $this->_gridPrimaryKey = $info['primary'][1];
             }
-            if ($this->_gridColumns[$k]['type'] == 'date' && !isset($col['dateFormat'])) {
-                $this->_gridColumns[$k]['dateFormat'] = 'Y-m-d';
+
+            $primaryFound = false;
+            foreach ($this->_gridColumns as $k=>$col) {
+                if (!isset($col['type']) && isset($info['metadata'][$col['dataIndex']])) {
+                    $this->_gridColumns[$k]['type'] = $this->_getTypeFromDbType($info['metadata'][$col['dataIndex']]['DATA_TYPE']);
+                } else {
+                    $this->_gridColumns[$k]['type'] = null;
+                }
+                if ($this->_gridColumns[$k]['type'] == 'date' && !isset($col['dateFormat'])) {
+                    $this->_gridColumns[$k]['dateFormat'] = 'Y-m-d';
+                }
+                if ($col['dataIndex'] == $this->_gridPrimaryKey) {
+                    $primaryFound = true;
+                }
+            }
+            if (!$primaryFound) {
+                //primary key hinzufügen falls er noch nicht in gridColumns existiert
+                $c = array();
+                $c['dataIndex'] = $this->_gridPrimaryKey;
+                $d['type'] = $this->_getTypeFromDbType($info['metadata'][$this->_gridPrimaryKey]['DATA_TYPE']);
+                $this->_gridColumns[] = $c;
             }
         }
         if (!isset($this->_gridPermissions)) {
@@ -72,18 +91,24 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         }
         $queryId = $this->getRequest()->getParam('queryId');
         if ($queryId) {
-            $where[$this->_getPrimaryKey().' = ?'] = $queryId;
+            $where[$this->_gridPrimaryKey.' = ?'] = $queryId;
         }
         return $where;
     }
 
     protected function _fetchData($order, $limit, $start)
     {
+        if (!isset($this->_gridTable)) {
+            throw new Vps_Exception("Either _gridTable has to be set or _fetchData has to be overwritten.");
+        }
         return $this->_gridTable->fetchAll($this->_getWhere(), $order, $limit, $start);
     }
 
     protected function _fetchCount()
     {
+        if (!isset($this->_gridTable)) {
+            throw new Vps_Exception("Either _gridTable has to be set or _fetchData has to be overwritten.");
+        }
         $select = $this->_gridTable->getAdapter()->select();
         $info = $this->_gridTable->info();
 
@@ -122,8 +147,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         }
         $order = trim($order);
 
-        $info = $this->_gridTable->info();
-        $primaryKey = $info['primary'][1];
+        $primaryKey = $this->_gridPrimaryKey;
 
         $rowSet = $this->_fetchData($order, $limit, $start);
         if (!is_null($rowSet)) {
@@ -170,39 +194,26 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
 
     protected function _appendMetaData()
     {
-        $info = $this->_gridTable->info();
-        $metaData = array();
-        $primaryFound = false;
-        $primaryKey = $this->_getPrimaryKey();;
-
+        $fields = array();
         foreach ($this->_gridColumns as $col) {
             $d = array();
             $d['name'] = $col['dataIndex'];
-            if ($col['type']) $d['type'] = $col['type'];
+            if (isset($col['type']) && $col['type']) {
+                $d['type'] = $col['type'];
+            }
             if (isset($col['dateFormat'])) {
                 $d['dateFormat'] = $col['dateFormat'];
             }
             if (isset($col['defaultValue'])) {
                 $d['defaultValue'] = $col['defaultValue'];
             }
-            $metaData[] = $d;
-            if ($col['dataIndex'] == $primaryKey) {
-                $primaryFound = true;
-            }
+            $fields[] = $d;
         }
-        if (!$primaryFound) {
-            //primary key hinzufügen falls er noch nicht in gridColumns existiert
-            $d = array();
-            $d['name'] = $primaryKey;
-            $d['type'] = $this->_getTypeFromDbType($info['metadata'][$primaryKey]['DATA_TYPE']);
-            $metaData[] = $d;
-        }
-
 
         $this->view->metaData = array();
-        $this->view->metaData['fields'] = $metaData;
+        $this->view->metaData['fields'] = $fields;
         $this->view->metaData['root'] = 'rows';
-        $this->view->metaData['id'] = $primaryKey;
+        $this->view->metaData['id'] = $this->_gridPrimaryKey;
         $this->view->metaData['totalProperty'] = 'total';
         $this->view->metaData['successProperty'] = 'success';
         $this->view->metaData['sortInfo'] = array();
@@ -218,12 +229,6 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         $this->view->metaData['gridButtons'] = $this->_gridButtons;
         $this->view->metaData['gridPaging'] = $this->_gridPaging;
         $this->view->metaData['gridFilters'] = $this->_gridFilters;
-    }
-
-    protected function _getPrimaryKey()
-    {
-        $info = $this->_gridTable->info();
-        return $info['primary'][1];
     }
 
     protected function _beforeSave(Zend_Db_Table_Row_Abstract $row)
@@ -244,7 +249,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         $data = Zend_Json::decode(stripslashes($this->getRequest()->getParam("data")));
         $addedIds = array();
         foreach ($data as $submitRow) {
-            $id = $submitRow[$this->_getPrimaryKey()];
+            $id = $submitRow[$this->_gridPrimaryKey];
             if ($id) {
                 $row = $this->_gridTable->find($id)->current();
             } else {
@@ -294,7 +299,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
             throw new Vps_Exception("Delete is not allowed.");
         }
         $success = false;
-        $id = $this->getRequest()->getParam($this->_getPrimaryKey());
+        $id = $this->getRequest()->getParam($this->_gridPrimaryKey);
 
         $row = $this->_gridTable->find($id)->current();
         if(!$row) {
