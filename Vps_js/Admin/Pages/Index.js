@@ -16,7 +16,8 @@ Vps.Admin.Pages.Index = function(renderTo, config)
         center: {
             tabPosition: 'top',
             closeOnTab: true,
-            alwaysShowTabs : true
+            alwaysShowTabs : true,
+            autoScroll: false
         }
     });
     
@@ -26,6 +27,8 @@ Vps.Admin.Pages.Index = function(renderTo, config)
     layout.restoreState();
     layout.endUpdate();
 
+    //layout.add('center', new Ext.ContentPanel('component', {autoCreate:true, title: 'Betriebe', fitToFrame:true, closable:true, autoScroll: true}));
+    //new Vps.AutoGrid('component', {controllerUrl: '/admin/betriebe/'});
 
     var menu = new Vps.Menu.Index('menuContainer', {role: this.role, pageId: config.pageId});
     var tree = new Vps.AutoTree('treeContainer', {controllerUrl: '/admin/pages/' });
@@ -55,7 +58,9 @@ Vps.Admin.Pages.Index = function(renderTo, config)
     
 
     this.loadComponent = function (data) { 
-        if (!data.id) { data.id = data.url; }
+        if (!data.id) {
+            data.id = data.url.replace(/\//g, '_');   
+        }
         if (!data.url) {
             data.url = '/component/' + data.id + '/';
         }
@@ -63,13 +68,14 @@ Vps.Admin.Pages.Index = function(renderTo, config)
         Ext.Ajax.request({
             url: data.url,
             success: function(r) {
-                layout.add('center', new Ext.ContentPanel('component' + data.id, {autoCreate:true, title: data.text, fitToFrame:true, closable:true, autoScroll: true}));
+                var name = 'component' + data.id;
+                layout.add('center', new Ext.ContentPanel(name, {autoCreate:true, title: data.text, fitToFrame:true, closable:true/*, autoScroll: true*/}));
                 response = Ext.decode(r.responseText);
                 cls = eval(response['class']);
                 if (cls) {
-                    component = new cls('component' + data.id, response.config);
+                    component = new cls(name, response.config);
                     if (component.on) {
-                        component.on('editcomponent', this.loadComponent, this);
+                        //component.on('editcomponent', this.loadComponent, this);
                     }
                 }
             },
