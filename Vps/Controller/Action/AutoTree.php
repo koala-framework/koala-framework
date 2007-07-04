@@ -82,10 +82,10 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
         $data['text'] = $row->name;
         $data['leaf'] = false;
         $data['visible'] = true;
-        $data['cls'] = 'default';
+        $data['bIcon'] = $this->_treeIcons['default'];
         if ($this->_hasInvisible != '' && $row->visible == '0') {
             $data['visible'] = false;
-            $data['cls'] = 'invisible';
+            $data['bIcon'] = $this->_treeIcons['invisible'];
         }
         if ($this->_treeTable->fetchAll('parent_id = ' . $row->id)->count() > 0) {
             if (isset($openedNodes[$row->id])) {
@@ -97,6 +97,7 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
             $data['children'] = array();
             $data['expanded'] = true;
         }
+        $data['uiProvider'] = 'Vps.AutoTree.Node';
         return $data;
     }
     

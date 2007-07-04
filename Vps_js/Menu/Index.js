@@ -79,6 +79,6 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
                 }
             });
         }
-    },
+    }
     
 });

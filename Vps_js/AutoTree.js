@@ -19,15 +19,6 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
         r = Ext.decode(response.responseText);
         this.icons = r.icons;
         
-        // Icons
-        var st = '';
-        for (var key in r.icons) {
-            if (key != 'add' && key != 'delete') {
-                st += '.' + key + ' .x-tree-node-icon {\n background-image:url(/assets/vps/images/silkicons/' + r.icons[key] + '.png);\n }\n\n'
-            }
-        }
-        Ext.DomHelper.overwrite('treeStyles', st);
-
         // Toolbar
         toolbar = new Ext.Toolbar(Ext.get(this.renderTo).createChild());
         if (r.buttons['add']) {
@@ -84,8 +75,7 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
             new Ext.tree.AsyncTreeNode({
                 text: r.rootText,
                 id: '0',
-                allowDrag: false,
-                cls: 'root'
+                allowDrag: false
             })
         );
 
@@ -96,12 +86,21 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
 
         this.tree.render();
         if (r.rootVisible) {
+            this.tree.getRootNode().ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + r.icons.root + '.png)';
             this.tree.getRootNode().select();
         }
         this.tree.getRootNode().expand();
 
     },
-
+/*
+    load1: function (tree, parent, node) {
+        node.on('append', function(tree, parent, node) { alert(node.attributes.text); }, this);
+    },
+    
+    load: function (node) {
+        node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/page_red.png)';
+    },
+*/    
     selectionchange: function (e, node) {
         if (node && node.id != 0) {
             if (this.visibleButton) {
@@ -238,13 +237,24 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
     setvisible : function (node) {
         if (node.attributes.visible) {
             this.visibleButton.toggle(false);
-            node.ui.removeClass('invisible');
-            node.ui.addClass('default');
+            node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.icons['default'] + '.png)';
         } else {
             this.visibleButton.toggle(true);
-            node.ui.removeClass('default');
-            node.ui.addClass('invisible');
+            node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.icons['invisible'] + '.png)';
         }
     }
     
 });
+
+Ext.namespace('Vps.AutoTree');
+Vps.AutoTree.Node = function(node){
+    Vps.AutoTree.Node.superclass.constructor.call(this, node);
+}
+
+Ext.extend(Vps.AutoTree.Node, Ext.tree.TreeNodeUI, {
+    initEvents : function(){
+        Vps.AutoTree.Node.superclass.initEvents.call(this);
+        this.node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.node.attributes.bIcon + '.png)';
+    }
+});
+

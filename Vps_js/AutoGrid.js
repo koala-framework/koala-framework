@@ -144,7 +144,7 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
             });
         }
 
-        if (meta.gridButtons.delete) {
+        if (meta.gridButtons['delete']) {
             this.deleteButton = this.toolbar.addButton({
                 text    : 'Löschen',
                 icon    : '/assets/vps/images/silkicons/table_delete.png',

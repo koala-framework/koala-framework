@@ -37,7 +37,7 @@ class Vps_Assets_Loader
                         header("Expires: ".gmdate("D, d M Y H:i:s",time()+24*60*60)." GMT");
                         header("Cache-Control: public, max-age=".(24*60*60));
                     } else {
-                        header('Last-Modiefied: '.$lastModified);
+                        header('Last-Modified: '.$lastModified);
                         header("Expires: ".gmdate("D, d M Y H:i:s",time()+24*60*60)." GMT");
                         header("Cache-Control: public, max-age=".(24*60*60));
                         if (substr($url, -4)=='.gif') {
