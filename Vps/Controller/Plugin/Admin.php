@@ -4,29 +4,31 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
 
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-        $acl = Zend_Registry::get('acl');
-
         // Seite bearbeiten-Button
-        $pageId = $this->getRequest()->getParam('pageId');
-        $url = $this->getRequest()->getParam('url');
-        if ($pageId != '') {
-            $pageCollection = Vps_PageCollection_Abstract::getInstance();
-            $page = $pageCollection->getPageById($pageId);
-            $path = $pageCollection->getPath($page);
-            $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite betrachten', $path));
-            $acl->allow('admin', 'page');
-        } else if ($url != '') {
-            $pageCollection = Vps_PageCollection_Abstract::getInstance();
-            $page = $pageCollection->getPageByPath($url);
-            if ($page) {
-                $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite bearbeiten', '/admin/page?id=' . $page->getId()));
-                $acl->allow('admin', 'page');
-            }
-        } else {
-            $pageId = 0;
-        }
+        if ($this->getRequest()->getModuleName() != 'admin') {
+            $acl = Zend_Registry::get('acl');
 
-        Zend_Registry::set('acl', $acl);
+            $pageId = $this->getRequest()->getParam('pageId');
+            $url = $this->getRequest()->getParam('url');
+            if ($pageId != '') {
+                $pageCollection = Vps_PageCollection_Abstract::getInstance();
+                $page = $pageCollection->getPageById($pageId);
+                $path = $pageCollection->getPath($page);
+                $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite betrachten', $path));
+                $acl->allow('admin', 'page');
+            } else if ($url != '') {
+                $pageCollection = Vps_PageCollection_Abstract::getInstance();
+                $page = $pageCollection->getPageByPath($url);
+                if ($page) {
+                    $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite bearbeiten', '/admin/page?id=' . $page->getId()));
+                    $acl->allow('admin', 'page');
+                }
+            } else {
+                $pageId = 0;
+            }
+    
+            Zend_Registry::set('acl', $acl);
+        }
 
 
         if (substr($request->getActionName(), 0, 4) == 'ajax') {
