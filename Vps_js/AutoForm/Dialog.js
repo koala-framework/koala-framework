@@ -1,10 +1,6 @@
-Vps.AutoForm.Dialog = function(config)
+Vps.AutoForm.Dialog = function(renderTo, config)
 {
-    var renderTo;
-    if(config.renderTo) {
-        renderTo = config.renderTo;
-        delete config.renderTo;
-    } else {
+    if(!Ext.get(renderTo)) {
         renderTo = Ext.get(document.body).createChild();
     }
     this.dialog = new Ext.BasicDialog(renderTo, Ext.applyIf(config, {
@@ -17,12 +13,11 @@ Vps.AutoForm.Dialog = function(config)
         shadow: true
     }));
 
-    config.renderTo = this.dialog.body;
-
-    Vps.AutoForm.Dialog.superclass.constructor.call(this, config);
-
-
+    Vps.AutoForm.Dialog.superclass.constructor.call(this, this.dialog.body, config);
+    
+    this.dialog.restoreState();
 };
+
 Ext.extend(Vps.AutoForm.Dialog, Vps.AutoForm.Form,
 {
     renderButtons: function()
