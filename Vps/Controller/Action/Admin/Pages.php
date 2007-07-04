@@ -1,7 +1,6 @@
 <?php
 class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action_AutoTree
 {
-    protected $_treeTableName = 'Vps_Dao_Pages';
     protected $_treeTextField = 'name';
     protected $_rootVisible = false;
     protected $_treeIcons = array (
@@ -18,6 +17,12 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action_AutoTree
         $this->view->ext('Vps.Admin.Pages.Index');
     }
     
+    public function init()
+    {
+        $this->_treeTable = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
+        parent::init();
+    }
+    
     public function jsonSavePageAction()
     {
         try {
@@ -31,18 +36,7 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action_AutoTree
         }
     }
 
-    public function jsonDeleteAction()
-    {
-        try {
-            $id = $this->getRequest()->getParam('id');
-            $this->_table->deletePage($id);
-            $this->view->id = $id;
-        } catch (Vps_ClientException $e) {
-            $this->view->error = $e->getMessage();
-        }
-    }
-    
-    public function jsonAddAction()
+    public function jsonAddActio1n()
     {
         try {
             $parentId = $this->getRequest()->getParam('parentId');

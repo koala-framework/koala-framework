@@ -51,25 +51,19 @@ class Vps_Dao_Pages extends Vps_Db_Table
                 return $d;
             }
         }
-        $componentId = $this->createPage(0);
-        if ($componentId > 0) {
-            $this->savePageName($componentId, 'Home');
-            $this->_pageData = null;
-            return $this->retrieveRootPageData();
+        $row = $this->fetchRow('parent_id = 0');
+        if (!$row) {
+            $id = $this->createPage(0);
+            if ($id > 0) {
+                $this->savePageName($id, 'Home');
+                $this->_pageData = null;
+                return $this->retrieveRootPageData();
+            }
+        } else {
+            return null;
         }
 
         throw new Vps_Exception('Could not find nor create Root Page');
-    }
-
-    public function findPagesByClass($class)
-    {
-        $return = array();
-        foreach ($this->_retrievePageData() as $componentId => $data) {
-            if ($data['component'] == $class) {
-                $return[] = $data['page_id'];
-            }
-        }
-        return $return;
     }
 
     private function _retrievePageData()
@@ -105,14 +99,15 @@ class Vps_Dao_Pages extends Vps_Db_Table
         return isset($this->_decoratorData[$id]) ? $this->_decoratorData[$id] : array() ;
     }
 
-    public function savePageName($componentId, $name)
+    public function findPagesByClass($class)
     {
-        $pageData = $this->retrievePageData($componentId);
-        $row = $this->fetchRow('id = ' . $pageData['id']);
-        $row->name = $name;
-        $row->filename = $row->getUniqueString($name, 'filename', 'parent_id = ' . $pageData['parent_id']);
-        $row->save();
-        $this->_pageData = null;
+        $return = array();
+        foreach ($this->_retrievePageData() as $componentId => $data) {
+            if ($data['component'] == $class) {
+                $return[] = $data['page_id'];
+            }
+        }
+        return $return;
     }
 
     public function saveDecorators($id, $decorators)
@@ -140,41 +135,40 @@ class Vps_Dao_Pages extends Vps_Db_Table
         return $this->retrieveDecoratorData($id);
     }
 
-    public function saveVisible($componentId, $visible)
+    public function insert(array $data)
     {
-        $data = $this->retrievePageData($componentId);
-        if (!empty($data)) {
-            $row = $this->fetchRow('id = ' . $data['id']);
-            $row->visible = $visible ? '1' : '0';
-            $row->save();
-            $this->_pageData = null;
-            return true;
+        $parentId = $data['parent_id'];
+        $name = $data['name'];
+        $type = '';
+        if ((int)$parentId == 0) {
+            $type = $parentId;
+            $row = $this->fetchRow('parent_id = 0');
+            $parentId = $row->id;
         }
-        return false;
-    }
 
-    public function createPage($parentComponentId, $type = '')
+        $id = $this->createPage($parentId, $type, $name);
+        $this->savePageName($id, $name);
+        return $id;
+    }
+    
+    public function createPage($parentId, $type = '')
     {
+        $this->_pageData = null;
+
         // Leere Komponente hinzufügen
         $table = new Vps_Dao_Components();
         $componentId = $table->addComponent();
 
         // Eintrag in Pages-Tabelle
-        if ($parentComponentId > 0) {
-            $parentData = $this->retrievePageData($parentComponentId);
-            if (empty($parentData)) {
-                $parentData = $this->retrieveRootPageData();
-            }
-            $parentId = $parentData['id'];
-            $position = sizeof($this->retrieveChildPagesData($parentId)) + 1;
+        if ($parentId > 0) {
+            $position = 1;
             $name = 'New Page';
             $filename = 'newpage';
-            $type = $parentData['type'] != '' ? $parentData['type'] : $type;
+            $parentRow = $this->find($parentId)->current();
+            $type = $parentRow->type != '' ? $parentRow->type : $type;
         } else {
-            foreach ($this->_retrievePageData() as $d) {
-                if ($d['parent_id'] == '0') {
-                    throw new Vps_Exception('Cannot create RootPage because already existing.');
-                }
+            if ($this->fetchRow('parent_id = 0')) {
+                throw new Vps_Exception('Cannot create RootPage because already existing.');
             }
             $position = 1;
             $parentId = 0;
@@ -190,10 +184,16 @@ class Vps_Dao_Pages extends Vps_Db_Table
         $insert['parent_id'] = $parentId;
         $insert['position'] = $position;
         $insert['type'] = $type;
-        $this->insert($insert);
-
+        return parent::insert($insert);
+    }
+    
+    public function savePageName($id, $name)
+    {
+        $row = $this->find($id)->current();
+        $row->name = $name;
+        $row->filename = $row->getUniqueString($name, 'filename', 'parent_id = ' . $row->parent_id);
+        $row->save();
         $this->_pageData = null;
-        return (int)$componentId;
     }
 
     public function deletePage($componentId)
@@ -212,41 +212,19 @@ class Vps_Dao_Pages extends Vps_Db_Table
 
         // Eintrag in Pages-Tabelle löschen
         $where = $this->getAdapter()->quoteInto('component_id = ?', $componentId);
-        $rows = $this->delete($where);
+        $rows = parent::delete($where);
 
         // Daten zurücksetzen
         $this->_pageData = null;
         return $rows;
     }
 
-    public function movePage($sourceComponentId, $targetComponentId, $point, $type = '')
+    public function delete($where)
     {
-        $sourceData = $this->retrievePageData($sourceComponentId);
-        $targetData = $this->retrievePageData($targetComponentId);
-        if ($point == 'append') {
-            $parentId = $targetData['id'];
-            $position = '1';
-        } else {
-            $parentData = $this->retrieveParentPageData($targetData['component_id']);
-            $parentId = $parentData['id'];
-            $siblings = $this->retrieveChildPagesData($parentData['component_id']);
-            for ($x=0; $x<sizeof($siblings); $x++) {
-                if ($siblings[$x]['id'] == $targetData['id']) {
-                    if ($point == 'above') {
-                        $position = $x;
-                    } else if ($point == 'below') {
-                        $position = $x + 2;
-                    }
-                }
-            }
+        $row = $this->fetchRow($where);
+        if ($row) {
+            return $this->deletePage($row->component_id);
         }
-        $row = $this->fetchRow('id = ' . $sourceData['id']);
-        $row->parent_id = $parentId;
-        $row->type = $targetData['type'] != '' ? $targetData['type'] : $type;
-        $row->save();
-        $row->numberize('position', $position, 'parent_id = ' . $parentId);
-
-        $this->_pageData = null;
-        return true;
     }
+
 }
