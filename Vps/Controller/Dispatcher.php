@@ -49,7 +49,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
         $front = $this->getFrontController();
         $request = $front->getRequest();
         $controllerDir = $front->getControllerDirectory();
-        $moduleDir = $request->getModuleName() == 'default' ? '' : $request->getModuleName() . '/' ;
+        $moduleDir = $request->getModuleName() == 'default' || $request->getModuleName() == 'admin' ? '' : $request->getModuleName() . '/' ;
         $controllerFile = $controllerDir['default'] . '/' . $moduleDir . $this->classToFilename(parent::formatControllerName($request->getControllerName()));
         return is_file($controllerFile);
     }
