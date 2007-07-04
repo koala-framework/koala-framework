@@ -1,11 +1,10 @@
 Ext.namespace('Vps.AutoForm');
 
-Vps.AutoForm.Form = function(config)
+Vps.AutoForm.Form = function(renderTo, config)
 {
-    this.renderTo = config.renderTo;
+    this.renderTo = renderTo;
     this.controllerUrl = config.controllerUrl;
     delete config.controllerUrl;
-    delete config.renderTo;
 
     config = Ext.applyIf(config, {
         url: this.controllerUrl+'jsonSave',
