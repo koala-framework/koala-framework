@@ -64,7 +64,7 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
             });
         }
     
-        if (this.meta.formButtons.delete) {
+        if (this.meta.formButtons['delete']) {
             this.deleteButton = this.toolbar.addButton({
                 text    : 'Löschen',
                 icon    : '/assets/vps/images/silkicons/table_delete.png',
@@ -162,6 +162,7 @@ Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
 
         this.fireEvent("formRendered", this);
     },
+    
     load : function(id, options) {
         if (!this.form.baseParams) this.form.baseParams = {};
         this.form.baseParams.id = id;
