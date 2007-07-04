@@ -32,7 +32,7 @@ class Vps_Assets_Loader
                     $if_modified_since = $if_none_match = "";
                     if (isset($headers['If-Modified-Since'])) $if_modified_since = preg_replace('/;.*$/', '', $headers['If-Modified-Since']);
                     $lastModified = gmdate("D, d M Y H:i:s", filemtime($paths[$type].$url))." GMT";
-                    if ($if_modified_since == $lastModified) {
+                    if (false && $if_modified_since == $lastModified) {
                         header("HTTP/1.1 304 Not Modified");
                         header("Expires: ".gmdate("D, d M Y H:i:s",time()+24*60*60)." GMT");
                         header("Cache-Control: public, max-age=".(24*60*60));

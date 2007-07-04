@@ -6,7 +6,6 @@ Ext.override(Ext.data.Store, {
             this.baseParams.meta = true;
         }
         this.originalLoad(options);
-        if (this.baseParams.meta) delete this.baseParams.meta;
-        if (this.lastOptions.params && this.lastOptions.params.meta) delete this.lastOptions.params.meta;
+        this.baseParams.meta = undefined;
     }
 });

@@ -5,7 +5,8 @@ Vps.AutoGrid = function(renderTo, config)
         'generatetoolbar': true,
         'rowselect': true,
         'rowdblclick': true,
-        'beforerowselect': true
+        'beforerowselect': true,
+        'load': true
     };
 
     this.renderTo = renderTo;
@@ -28,6 +29,10 @@ Vps.AutoGrid = function(renderTo, config)
     this.ds.on('metachange', this.onMetaChange, this);
     this.ds.on('loadexception', function(proxy, o, response, e) {
         throw e; //re-throw
+    }, this);
+
+    this.ds.on('load', function(store, records, options) {
+        this.fireEvent('load', store, records, options);
     }, this);
 
     this.grid = new Ext.grid.EditorGrid(this.renderTo, Ext.applyIf(config, {
