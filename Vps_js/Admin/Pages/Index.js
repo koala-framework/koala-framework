@@ -28,7 +28,6 @@ Vps.Admin.Pages.Index = function(renderTo, config)
 
 
     var menu = new Vps.Menu.Index('menuContainer', {role: this.role, pageId: config.pageId});
-    //this.tree = new Vps.Admin.Pages.Tree('treeContainer');
     var tree = new Vps.AutoTree('treeContainer', {controllerUrl: '/admin/pages/' });
     tree.toolbar2 = new Ext.Toolbar(Ext.get('treeContainer').createChild());
     tree.editButton = tree.toolbar2.addButton({
@@ -66,9 +65,9 @@ Vps.Admin.Pages.Index = function(renderTo, config)
             success: function(r) {
                 layout.add('center', new Ext.ContentPanel('component' + data.id, {autoCreate:true, title: data.text, fitToFrame:true, closable:true, autoScroll: true}));
                 response = Ext.decode(r.responseText);
-                class = eval(response.class);
-                if (class) {
-                    component = new class('component' + data.id, response.config);
+                cls = eval(response['class']);
+                if (cls) {
+                    component = new cls('component' + data.id, response.config);
                     if (component.on) {
                         component.on('editcomponent', this.loadComponent, this);
                     }
