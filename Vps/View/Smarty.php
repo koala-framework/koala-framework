@@ -21,7 +21,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
         foreach ($config as $key => $value) {
             $this->_smarty->$key = $value;
         }
-        $this->extTemplate = VPS_PATH . '/views/Ext.html';
+        $this->extTemplate = VPS_PATH . 'views/Ext.html';
     }
     
     public function ext($class, $config = array(), $renderTo = '')

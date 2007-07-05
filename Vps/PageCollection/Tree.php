@@ -182,7 +182,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         return $ids;
     }
 
-    public function getPath($page)
+    public function getgetUrl($page)
     {
         $pageId = $page->getPageId();
         $rootId = $this->getRootPage()->getPageId();

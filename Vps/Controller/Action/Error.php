@@ -24,7 +24,7 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
             $scriptPath = $paths['script'][0];
             $path = '';
             if (!is_file($scriptPath . $file)) {
-                $path = VPS_PATH . '/views/';
+                $path = VPS_PATH . 'views/';
             }
             $this->view->setRenderFile($path . $file);
             $this->view->type = $errors->type;                    

@@ -13,7 +13,7 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
             if ($pageId != '') {
                 $pageCollection = Vps_PageCollection_Abstract::getInstance();
                 $page = $pageCollection->getPageById($pageId);
-                $path = $pageCollection->getPath($page);
+                $path = $pageCollection->getUrl($page);
                 $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite betrachten', $path));
                 $acl->allow('admin', 'page');
             } else if ($url != '') {

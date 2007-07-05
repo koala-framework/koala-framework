@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Vpc
+ * @subpackage Simple
+ */
 class Vpc_Simple_Pic_Index extends Vpc_Abstract
 {
     public function getTemplateVars($mode)

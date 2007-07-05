@@ -1,4 +1,10 @@
 <?php
+/**
+ * Eventskomponente
+ * 
+ * @package Vpc
+ * @subpackage Components
+ */
 class Vpc_Events_Index extends Vpc_Abstract
 {
     protected function getChildPages($filename = '')

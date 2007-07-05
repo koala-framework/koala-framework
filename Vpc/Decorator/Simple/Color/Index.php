@@ -1,4 +1,10 @@
 <?php
+/**
+ * Beispieldecorator
+ *
+ * @package Vpc
+ * @subpackage Decorator
+ */
 class Vpc_Decorator_Simple_Color_Index extends Vpc_Decorator_Abstract
 {
     protected $_decorated;

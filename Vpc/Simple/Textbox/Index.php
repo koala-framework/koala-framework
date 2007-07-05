@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Vpc
+ * @subpackage Simple
+ */
 class Vpc_Simple_Textbox_Index extends Vpc_Abstract
 {
     private $_components = array();

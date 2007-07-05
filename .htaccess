@@ -1,7 +1,6 @@
 RewriteEngine on
+RewriteRule ^files(.*)$ /public/files$1 [L]
+RewriteCond %{REQUEST_URI} !^/*(docs|files|library|bootstrap.php|public/files|Prosalzburg)/?
+RewriteRule ^(.*)$ /bootstrap.php [L]
 
-RewriteRule ^files/Vps/(.*\.js)$ /Vps_js/$1 [L]
-RewriteRule ^Vps/(.*\.js)$ /Vps_js/$1 [L]
-
-RewriteCond %{REQUEST_URI} !^/*(YUI|ext|Vps_js|Vpc|public/index.php|public/files|images)/?
-RewriteRule ^(.*)$ /public/index.php [L]
+php_flag magic_quotes_gpc off

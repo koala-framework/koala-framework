@@ -1,5 +1,5 @@
 <?php
-class Vpc_Product_Teaser extends Vpc_TextPic
+class Vpc_Product_Teaser extends Vpc_Abstract
 {
     private $_productData;
 

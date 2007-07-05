@@ -175,7 +175,7 @@ abstract class Vps_PageCollection_Abstract
         return $this->_currentPage;
     }
 
-    public function getPath($page)
+    public function getUrl($page)
     {
         return '';
     }
@@ -194,7 +194,7 @@ abstract class Vps_PageCollection_Abstract
     {
         $pageId = $page->getPageId();
         $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($pageId, false);
-        $data['path'] = $this->getPath($page);
+        $data['url'] = $this->getUrl($page);
         return $data;
     }
 
