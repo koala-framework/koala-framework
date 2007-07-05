@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Vpc
+ * @subpackage Components
+ */
 class Vpc_Product_Index extends Vpc_Abstract
 {
     private $_names;
@@ -27,7 +31,7 @@ class Vpc_Product_Index extends Vpc_Abstract
         $pages = $this->generateHierarchy();
         foreach($pages as $filename => $page) {
             $data['name'] = $this->_names[$filename];
-            $data['filename'] = $page->getPath();
+            $data['filename'] = $page->getUrl();
             $ret['categories'][] = $data;
         }
 

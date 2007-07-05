@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Vpc
+ * @subpackage Components
+ */
 class Vpc_TextPic_Index extends Vpc_Abstract
 {
     private $_textboxComponent;

@@ -1,4 +1,10 @@
 <?php
+/**
+ * Newskomponente
+ * 
+ * @package Vpc
+ * @subpackage Components
+ */
 class Vpc_News_Index extends Vpc_Abstract
 {
     private $_titles;
@@ -24,7 +30,7 @@ class Vpc_News_Index extends Vpc_Abstract
         $news = $this->generateHierarchy();
         foreach($news as $filename => $n) {
             $data['title'] = $this->_titles[$filename];
-            $data['filename'] = $n->getPath();
+            $data['filename'] = $n->getUrl();
             $ret['news'][] = $data;
         }
         $ret['id'] = $this->getComponentId();

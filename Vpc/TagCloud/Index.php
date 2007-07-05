@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Vpc
+ * @subpackage Components
+ */
 class Vpc_TagCloud_Index extends Vpc_Abstract
 {
     public function getTemplateVars($mode)

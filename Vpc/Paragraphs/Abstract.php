@@ -1,4 +1,8 @@
 <?php
+/**
+ * @package Vpc
+ * @subpackage Paragraphs
+ */
 class Vpc_Paragraphs_Abstract extends Vpc_Abstract
 {
     protected $_paragraphs;

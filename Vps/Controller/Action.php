@@ -25,6 +25,10 @@ class Vps_Controller_Action extends Zend_Controller_Action
 
     protected function _getAcl()
     {
+        if (!Zend_Registry::isRegistered('acl')) {
+            $acl = new Vps_Acl();
+            Zend_Registry::set('acl', $acl);
+        }
         return Zend_Registry::get('acl');
     }
     
