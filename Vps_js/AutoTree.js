@@ -21,9 +21,10 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
         this.icons = r.icons;
         
         // Toolbar
-        if (r.buttons.length > 0) {
+        b = r.buttons;
+        if (b['add'] || b['delete'] || b['invisible'] || b['reload']) {
             toolbar = new Ext.Toolbar(Ext.get(this.renderTo).createChild());
-            if (r.buttons['add']) {
+            if (b['add']) {
                 this.addButton = toolbar.addButton({
                     text    : 'Hinzufügen',
                     handler : this.add,
@@ -32,7 +33,7 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
                     scope   : this
                 });
             }
-            if (r.buttons['delete']) {
+            if (b['delete']) {
                 this.deleteButton = toolbar.addButton({
                     text    : 'Löschen',
                     handler : this.del,
@@ -42,7 +43,7 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
                     scope   : this
                 });
             }
-            if (r.buttons['invisible']) {
+            if (b['invisible']) {
                 this.visibleButton = toolbar.addButton({
                     text    : 'Unsichtbar',
                     handler : this.visible,
@@ -53,11 +54,29 @@ Ext.extend(Vps.AutoTree, Ext.util.Observable,
                     scope   : this
                 });
             }
-            if (r.buttons['reload']) {
+            if (b['reload']) {
                 toolbar.addButton({
                     text    : '',
                     handler : function () { this.tree.getRootNode().reload(); },
-                    icon : '/assets/vps/images/silkicons/' + r.icons['reload'] + '.png',
+                    icon : '/assets/vps/images/silkicons/bullet_star.png',
+                    cls: "x-btn-icon",
+                    scope   : this
+                });
+            }
+            if (b['expand']) {
+                toolbar.addButton({
+                    text    : '',
+                    handler : function () { this.tree.expandAll(); },
+                    icon : '/assets/vps/images/silkicons/bullet_add.png',
+                    cls: "x-btn-icon",
+                    scope   : this
+                });
+            }
+            if (b['reload']) {
+                toolbar.addButton({
+                    text    : '',
+                    handler : function () { this.tree.collapseAll(); },
+                    icon : '/assets/vps/images/silkicons/bullet_delete.png',
                     cls: "x-btn-icon",
                     scope   : this
                 });

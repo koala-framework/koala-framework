@@ -45,8 +45,8 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action_AutoTree
             $data = $this->_formatNode($this->_treeTable->find($pageData['id'])->current());
             $data['children'] = array();
             $data['expanded'] = true;
-            $data['allowDrop'] = false;
             $data['allowDrag'] = false;
+            $data['allowDrop'] = false;
             $data['type'] = 'root';
             $return[] = $data;
 
