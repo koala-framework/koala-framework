@@ -189,6 +189,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         else if (substr($type, 0, 7) == 'tinyint') $type = 'boolean';
         else if ($type == 'text') $type = 'string';
         else if ($type == 'tinytext') $type = 'string';
+        else if (substr($type, -3) == 'int') $type = 'int';
         return $type;
     }
 

@@ -40,4 +40,6 @@ class Vps_Dao_Components extends Zend_Db_Table
         }
         return false;
     }
+    
+    
 }
