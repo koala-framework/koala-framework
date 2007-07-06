@@ -33,7 +33,7 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
         $info = $this->_treeTable->info();
         if (!$this->_hasInvisible) {
             $this->_hasInvisible = in_array('visible', $info['cols']);
-            if (!$this->_treeButtons['invisible']) {
+            if (isset($this->_treeButtons['invisible']) && !$this->_treeButtons['invisible']) {
                 $this->_treeButtons['invisible'] = true;
             }
         }
