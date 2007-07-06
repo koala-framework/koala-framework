@@ -41,5 +41,13 @@ class Vps_Dao_Components extends Zend_Db_Table
         return false;
     }
     
+    public function getAvailableComponents()
+    {
+        $ini = new Zend_Config_Ini('application/components.ini', 'Vpc_Simple_Textbox_Index', true);
+        $ini->test = 'foo';
+        p($ini->toArray());
+        p($ini->areAllSectionsLoaded ());
+    }
+    
     
 }
