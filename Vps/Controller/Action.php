@@ -8,7 +8,10 @@ class Vps_Controller_Action extends Zend_Controller_Action
         $acl = $this->_getAcl();
         $role = $this->_getUserRole();
         $resource = strtolower(str_replace('Controller', '', str_replace('Vps_Controller_Action_', '', get_class($this))));
-        if ($this->_auth && !$acl->isAllowed($role, $resource)) {
+        if (($this->_auth || substr($resource, 0, 5) == 'admin') && 
+            $resource != 'admin_user' &&
+            !$acl->isAllowed($role, $resource))
+        {
             if ($this->getHelper('ViewRenderer')->isJson()) {
                 $this->_forward('jsonLogin', 'user');
             } else {

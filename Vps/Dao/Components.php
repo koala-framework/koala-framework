@@ -12,7 +12,7 @@ class Vps_Dao_Components extends Zend_Db_Table
         if ($addingComponentId == 0) {
             $pageId = $componentId;
         } else {
-            $pageId = $this->find($addingComponentId)->current()->top_id;
+            $pageId = $this->find($addingComponentId)->current()->page_id;
         }
         $row = $this->find($componentId)->current();
         $row->page_id = $pageId;
