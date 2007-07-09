@@ -1,4 +1,4 @@
-Vps.AutoGrid = function(renderTo, config)
+Vps.Auto.Grid = function(renderTo, config)
 {
     Ext.apply(this, config);
     this.events = {
@@ -63,7 +63,7 @@ Vps.AutoGrid = function(renderTo, config)
     }
 };
 
-Ext.extend(Vps.AutoGrid, Ext.util.Observable,
+Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
 {
     autoload: true,
     onMetaChange : function(store, meta) {

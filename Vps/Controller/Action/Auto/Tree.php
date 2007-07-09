@@ -1,11 +1,12 @@
 <?php
-abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
+abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
 {
     protected $_treeTableName;
     protected $_treeTable;
     protected $_treeIcons = array (
         'root' => 'folder',
         'default' => 'table',
+        'edit' => 'table_edit',
         'invisible' => 'table_key',
         'add' => 'table_add',
         'delete' => 'table_delete'
@@ -13,6 +14,7 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
     protected $_treeTextField = 'text';
     protected $_treeButtons = array(
         'add' => true,
+        'edit' => false,
         'delete' => true,
         'invisible' => null,
         'reload' => true,
@@ -23,7 +25,6 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
     protected $_rootVisible = true;
     protected $_treeOrder = null;
     protected $_hasPosition = null;
-    protected $_hasInvisible = null;
     
     public function init()
     {
@@ -32,12 +33,16 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
         }
         
         $info = $this->_treeTable->info();
-        if (!$this->_hasInvisible) {
-            $this->_hasInvisible = in_array('visible', $info['cols']);
-            if (!isset($this->_treeButtons['invisible']) && !$this->_treeButtons['invisible']) {
-                $this->_treeButtons['invisible'] = true;
-            }
+
+        // Invisible-Button hinzufügen falls nicht überschrieben und in DB
+        if (array_key_exists('invisible', $this->_treeButtons) && 
+            is_null($this->_treeButtons['invisible']) && 
+            in_array('visible', $info['cols']))
+        {
+            $this->_treeButtons['invisible'] = true;
         }
+
+        // Sortierung aktivieren wenn in DB
         if (!$this->_hasPosition) {
             $this->_hasPosition = in_array('position', $info['cols']);
             $this->_treeOrder = 'position';
@@ -84,7 +89,7 @@ abstract class Vps_Controller_Action_AutoTree extends Vps_Controller_Action
         $data['leaf'] = false;
         $data['visible'] = true;
         $data['bIcon'] = $this->_treeIcons['default'];
-        if ($this->_hasInvisible != '' && $row->visible == '0') {
+        if ($this->_treeButtons['invisible'] && $row->visible == '0') {
             $data['visible'] = false;
             $data['bIcon'] = $this->_treeIcons['invisible'];
         }

@@ -5,9 +5,14 @@ Vps.Menu.Index = function(renderTo, config)
         'loadpage' : true
     };
     this.tb = new Ext.Toolbar(renderTo);
+    
+    if (!this.controllerUrl) {
+        this.controllerUrl = '/menu/';
+    }
+    this.controllerUrl += 'jsonData',
 
     Ext.Ajax.request({
-        url: this.dataUrl,
+        url: this.controllerUrl,
         params: config,
         success: this.loadMenu,
         scope: this
@@ -25,8 +30,6 @@ Vps.Menu.Index = function(renderTo, config)
 
 Ext.extend(Vps.Menu.Index, Ext.util.Observable,
 {
-    dataUrl: '/menu/jsonData',
-
     loadMenu: function(r)
     {
         var response = Ext.decode(r.responseText);

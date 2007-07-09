@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action_AutoTree
+class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_Tree
 {
     protected $_treeTextField = 'name';
     protected $_rootVisible = false;
@@ -14,7 +14,7 @@ class Vps_Controller_Action_Admin_Pages extends Vps_Controller_Action_AutoTree
     
     public function actionAction()
     {
-        $this->view->ext('Vps.Admin.Pages.Index');
+        $this->view->ext('Vps.Component.Pages');
     }
     
     public function init()
