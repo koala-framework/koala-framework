@@ -34,4 +34,17 @@ class Vps_Acl extends Zend_Acl
         }
         return $ret;
     }
+
+    protected function _getRoleRegistry()
+    {
+        if (null === $this->_roleRegistry) {
+            $this->_roleRegistry = new Vps_Acl_Role_Registry();
+        }
+        return $this->_roleRegistry;
+    }
+
+    public function getRoles()
+    {
+        return $this->_getRoleRegistry()->getRoles();
+    }
 }
