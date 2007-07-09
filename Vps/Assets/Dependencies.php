@@ -188,6 +188,10 @@ class Vps_Assets_Dependencies
                     $file = substr($file, strpos($file, '/')); //pathtype abschneiden
                     $file = substr($file, 0, -1); //* abschneiden
                     $path = $this->_paths[$pathType].$file;
+                    if (!file_exists($path)) {
+                        require_once 'Vps/Exception.php';
+                        throw new Vps_Exception("Path '$path' does not exist.");
+                    }
                     $DirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
                     foreach ($DirIterator as $file) {
                         if (!preg_match('#/\\.svn/#', $file->getPathname())

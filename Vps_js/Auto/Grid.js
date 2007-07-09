@@ -78,6 +78,7 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                 if (typeof column.editor == 'string') {
                     type = column.editor;
                 } else {
+                debugger;
                     type = column.editor.type;
                     delete column.editor.type;
                     editorConfig = Ext.applyIf(column.editor, editorConfig);

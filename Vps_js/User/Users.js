@@ -3,7 +3,7 @@ Vps.User.Users = function(renderTo, config)
 {
     Ext.apply(this, config);
 
-    this.grid = new Vps.AutoGrid(null, {controllerUrl: '/users/'});
+    this.grid = new Vps.Auto.Grid(null, {controllerUrl: '/users/'});
 
     this.grid.on('generatetoolbar', function(tb) {
         tb.addSeparator();
