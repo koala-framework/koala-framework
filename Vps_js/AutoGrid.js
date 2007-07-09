@@ -9,7 +9,7 @@ Vps.AutoGrid = function(renderTo, config)
         'load': true
     };
 
-    this.renderTo = renderTo;
+    this.renderTo = renderTo || Ext.get(document.body).createChild();
 
     this.ds = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({url: this.controllerUrl + 'jsonData'}),
@@ -59,7 +59,7 @@ Vps.AutoGrid = function(renderTo, config)
     this.grid.restoreState();
 
     if(this.autoload) {
-        this.ds.load({params: {start: 0}});
+        this.ds.load();
     }
 };
 
@@ -111,7 +111,7 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
             config.push(column);
         }
         var colModel = new Ext.grid.ColumnModel(config);
-        colModel.defaultSortable = true;
+        colModel.defaultSortable = meta.gridSortable;
 
 
         this.grid.colModel = colModel;
@@ -119,16 +119,38 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
         this.grid.restoreState();
 
         if (meta.gridPaging) {
-            var paging = new Ext.PagingToolbar(this.grid.getView().getFooterPanel(true),
-                this.ds, {
-                    pageSize: meta.gridPaging,
-                    displayInfo: true
-                });
+            if (typeof meta.gridPaging == 'object') {
+                var t;
+                if (meta.gridPaging.type && Vps.PagingToolbar[meta.gridPaging.type]) {
+                    this.pagingType = meta.gridPaging.type;
+                    t = Vps.PagingToolbar[meta.gridPaging.type];
+                } else if(meta.gridPaging.type) {
+                    try {
+                        t = eval(meta.gridPaging.type);
+                    } catch(e) {
+                        throw "invalid paging-toolbar: "+meta.gridPaging.type;
+                    }
+                    this.pagingType = meta.gridPaging.type;
+                } else {
+                    this.pagingType = 'Ext.PagingToolbar';
+                    t = Ext.PagingToolbar;
+                }
+                delete meta.gridPaging.type;
+                new t(this.grid.getView().getFooterPanel(true),
+                    this.ds, meta.gridPaging);
+            } else {
+                this.pagingType = 'Ext.PagingToolbar';
+                new Ext.PagingToolbar(this.grid.getView().getFooterPanel(true),
+                    this.ds, {
+                        pageSize: meta.gridPaging,
+                        displayInfo: true
+                    });
+            }
+        } else {
+            this.pagingType = false;
         }
-
-        this.toolbar = new Ext.Toolbar(this.grid.getView().getHeaderPanel(true));
         if (meta.gridButtons.save) {
-            this.saveButton = this.toolbar.addButton({
+            this.saveButton = this.getToolbar().addButton({
                 text    : 'Speichern',
                 icon    : '/assets/vps/images/silkicons/table_save.png',
                 cls     : 'x-btn-text-icon',
@@ -136,11 +158,11 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
                 handler : this.onSave,
                 scope: this
             });
-            this.toolbar.addSeparator();
+            this.getToolbar().addSeparator();
         }
 
         if (meta.gridButtons.add) {
-            this.newButton = this.toolbar.addButton({
+            this.newButton = this.getToolbar().addButton({
                 text    : 'Neu',
                 icon    : '/assets/vps/images/silkicons/table_add.png',
                 cls     : 'x-btn-text-icon',
@@ -150,7 +172,7 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
         }
 
         if (meta.gridButtons['delete']) {
-            this.deleteButton = this.toolbar.addButton({
+            this.deleteButton = this.getToolbar().addButton({
                 text    : 'Löschen',
                 icon    : '/assets/vps/images/silkicons/table_delete.png',
                 cls     : 'x-btn-text-icon',
@@ -160,23 +182,22 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
             });
         }
         if (meta.gridFilters.text) {
-            if(this.toolbar.items.length > 0) {
-                this.toolbar.addSeparator();
+            if(this.getToolbar().items.length > 0) {
+                this.getToolbar().addSeparator();
             }
-            this.toolbar.addText("Filter:");
-            this.toolbar.el.swallowEvent(['keypress','keydown']);
+            this.getToolbar().addText("Filter:");
+            this.getToolbar().el.swallowEvent(['keypress','keydown']);
             var textfield = new Ext.form.TextField();
-            this.toolbar.addField(textfield);
+            this.getToolbar().addField(textfield);
             textfield.getEl().on('keypress', function() {
                 this.ds.baseParams.query = textfield.getValue();
-                if (this.ds.reader.meta.gridPaging) {
+                if (this.pagingType && this.pagingType != 'Date') {
                     this.ds.load({params:{start:0}});
                 } else {
                     this.ds.load();
                 }
             }, this, {buffer: 500});
         }
-
         this.fireEvent('generatetoolbar', this.toolbar);
     },
     onSave : function()
@@ -299,5 +320,11 @@ Ext.extend(Vps.AutoGrid, Ext.util.Observable,
             }, this);
         }
         this.ds.removeAll();
+    },
+    getToolbar: function() {
+        if (!this.toolbar) {
+            this.toolbar = new Ext.Toolbar(this.grid.getView().getHeaderPanel(true));
+        }
+        return this.toolbar;
     }
 });

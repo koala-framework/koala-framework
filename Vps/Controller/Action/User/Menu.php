@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Admin_Menu extends Vps_Controller_Action
+class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
 {
     public function jsonDataAction()
     {
@@ -32,7 +32,7 @@ class Vps_Controller_Action_Admin_Menu extends Vps_Controller_Action
         if (empty($menus) && $userRole == 'guest') {
             $menu = array();
             $menu['text'] = 'Login';
-            $menu['url'] = '/user/login';
+            $menu['url'] = '/login/';
             $menu['children'] = array();
             $menus[] = $menu;
             $showLogout = false;

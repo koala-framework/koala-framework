@@ -1,5 +1,3 @@
-Ext.namespace('Vps.Menu');
-
 Vps.Menu.Index = function(renderTo, config)
 {
     Ext.apply(this, config);
@@ -27,7 +25,7 @@ Vps.Menu.Index = function(renderTo, config)
 
 Ext.extend(Vps.Menu.Index, Ext.util.Observable,
 {
-    dataUrl: '/admin/menu/jsonData',
+    dataUrl: '/menu/jsonData',
 
     loadMenu: function(r)
     {
@@ -71,7 +69,7 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
                 handler: function() {
                     var logoutForm = new Ext.BasicForm(Ext.get(document.body).createChild({tag: 'form'}));
                     logoutForm.submit({
-                    url:'/user/jsonLogoutUser',
+                    url:'/login/jsonLogoutUser',
                     success:function(form, action) {
                         location.href = '/';
                         }

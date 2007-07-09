@@ -3,8 +3,7 @@ Ext.BLANK_IMAGE_URL = '/assets/ext/resources/images/default/s.gif';
 Ext.namespace(
 'Vps', 'Vpc',
 'Vps.Component',
-'Vps.Admin.Pages', 'Vps.Admin.Page',
-'Vps.Login',
+'Vps.User.Login',
 'Vps.Menu',
 'Vps.Form'
 );
