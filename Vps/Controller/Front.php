@@ -41,12 +41,13 @@ class Vps_Controller_Front extends Zend_Controller_Front
         Zend_Controller_Action_HelperBroker::removeHelper('viewRenderer');
         Zend_Controller_Action_HelperBroker::addHelper(new Vps_Controller_Action_Helper_ViewRenderer());
 
-        $front->setDispatcher(new Vps_Controller_Dispatcher());
         $front->setControllerDirectory('application/controllers');
         $front->returnResponse(true);
 
         $router = $front->getRouter();
         if ($isComponentsWeb) {
+            $front->setDispatcher(new Vps_Controller_Dispatcher());
+
             $router->AddRoute('default', new Zend_Controller_Router_Route('*', array('controller' => 'web', 'action' => 'index')));
             $router->AddRoute('ajax', new Zend_Controller_Router_Route('ajax/*', array('controller' => 'web', 'action' => 'ajax')));
             $router->AddRoute('ajaxfe', new Zend_Controller_Router_Route('ajax/fe/:action', array('controller' => 'fe', 'action' => 'action')));
