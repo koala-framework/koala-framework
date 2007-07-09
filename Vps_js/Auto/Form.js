@@ -1,6 +1,6 @@
-Ext.namespace('Vps.AutoForm');
+Ext.namespace('Vps.Auto');
 
-Vps.AutoForm.Form = function(renderTo, config)
+Vps.Auto.Form = function(renderTo, config)
 {
     this.renderTo = renderTo;
     this.controllerUrl = config.controllerUrl;
@@ -30,7 +30,7 @@ Vps.AutoForm.Form = function(renderTo, config)
     });
 };
 
-Ext.extend(Vps.AutoForm.Form, Ext.util.Observable,
+Ext.extend(Vps.Auto.Form, Ext.util.Observable,
 {
     checkDirty: false,
 

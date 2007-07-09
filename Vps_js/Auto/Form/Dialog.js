@@ -1,4 +1,4 @@
-Vps.AutoForm.Dialog = function(renderTo, config)
+Vps.Auto.Form.Dialog = function(renderTo, config)
 {
     if(!Ext.get(renderTo)) {
         renderTo = Ext.get(document.body).createChild();
@@ -14,12 +14,12 @@ Vps.AutoForm.Dialog = function(renderTo, config)
         shadow: true
     }));
 
-    Vps.AutoForm.Dialog.superclass.constructor.call(this, this.dialog.body, config);
+    Vps.Auto.Form.Dialog.superclass.constructor.call(this, this.dialog.body, config);
     
     this.dialog.restoreState();
 };
 
-Ext.extend(Vps.AutoForm.Dialog, Vps.AutoForm.Form,
+Ext.extend(Vps.Auto.Form.Dialog, Vps.Auto.Form,
 {
     renderButtons: function()
     {
@@ -33,7 +33,7 @@ Ext.extend(Vps.AutoForm.Dialog, Vps.AutoForm.Form,
             });
         }
     
-        if (this.meta.formButtons.delete) {
+        if (this.meta.formButtons['delete']) {
             this.deleteButton = this.dialog.addButton({
                 text    : 'Löschen',
                 handler : function() {

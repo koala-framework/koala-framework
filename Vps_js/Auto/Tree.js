@@ -1,4 +1,4 @@
-Vps.AutoTree = function(renderTo, config)
+Vps.Auto.Tree = function(renderTo, config)
 {
     Ext.apply(this, config);
     this.renderTo = renderTo;
@@ -15,7 +15,7 @@ Vps.AutoTree = function(renderTo, config)
     })
 };
 
-Ext.extend(Vps.AutoTree, Ext.util.Observable,
+Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
 {
     init: function(response) {
         r = Ext.decode(response.responseText);

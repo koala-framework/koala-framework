@@ -54,8 +54,12 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $router->AddRoute('subcomponent', new Zend_Controller_Router_Route('component/:id/:controller/:action', array('module' => 'component', 'controller' => 'controller', 'action' => 'action')));
             $router->AddRoute('component', new Zend_Controller_Router_Route('component/:id/:action', array('module' => 'component', 'controller' => 'index', 'action' => 'action')));
             $router->AddRoute('indexcomponent', new Zend_Controller_Router_Route('component/:id', array('module' => 'component', 'controller' => 'index', 'action' => 'index')));
+            $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'controller', 'action' => 'action')));
             
             $front->registerPlugin(new Vps_Controller_Plugin_Admin());
+            $plugin = new Zend_Controller_Plugin_ErrorHandler();
+            $plugin->setErrorHandlerModule('admin');
+            $front->registerPlugin($plugin);
 
             $dao = new Vps_Dao(new Zend_Config_Ini('application/config.db.ini', 'database'));
             Zend_Registry::set('dao', $dao);
@@ -87,7 +91,6 @@ class Vps_Controller_Front extends Zend_Controller_Front
             Zend_Registry::set('acl', $acl);
         }
 
-        $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'controller', 'action' => 'action')));
 
         return $front;
     }

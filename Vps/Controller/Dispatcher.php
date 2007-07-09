@@ -11,11 +11,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     
     public function loadClass($className)
     {
-        if ($this->_isOverwritten()) {
-            
-            $className = parent::loadClass($className);
-            
-        } else if ($this->getFrontController()->getRequest()->getModuleName() == 'component') {
+        if ($this->getFrontController()->getRequest()->getModuleName() == 'component') {
 
             $controllerName = $this->getFrontController()->getRequest()->getControllerName();
             $controllerName = ucfirst($controllerName) . 'Controller';
@@ -24,12 +20,12 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             $component = $component->findComponent($id);
             $className = substr(get_class($component), 0, strrpos(get_class($component), '_') + 1) . $controllerName;
             
-        } else {
+        } else if ($this->getFrontController()->getRequest()->getModuleName() == 'admin') {
             
             $className = str_replace('Controller', '', ucfirst($className));
             $module = ucfirst($this->getFrontController()->getRequest()->getModuleName());
             if ($module != 'Default' && $module != '') {
-                $className = $module . '_' . $className;
+                $className = 'Component_' . $className;
             }
             $className = "Vps_Controller_Action_$className";
             
@@ -42,16 +38,6 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
         }
         
         return $className;
-    }
-
-    private function _isOverwritten()
-    {
-        $front = $this->getFrontController();
-        $request = $front->getRequest();
-        $controllerDir = $front->getControllerDirectory();
-        $moduleDir = $request->getModuleName() == 'default' || $request->getModuleName() == 'admin' ? '' : $request->getModuleName() . '/' ;
-        $controllerFile = $controllerDir['default'] . '/' . $moduleDir . $this->classToFilename(parent::formatControllerName($request->getControllerName()));
-        return is_file($controllerFile);
     }
 
 }

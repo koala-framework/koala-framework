@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Admin_ComponentsConfig extends Vps_Controller_Action_AutoForm
+class Vps_Controller_Action_Component_ComponentsConfig extends Vps_Controller_Action_AutoForm
 {
     protected $_formFields = array();
     protected $_formButtons = array('save'   => true);

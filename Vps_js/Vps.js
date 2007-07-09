@@ -5,6 +5,7 @@ Ext.namespace(
 'Vps.Component',
 'Vps.User.Login',
 'Vps.Menu',
+'Vps.Auto',
 'Vps.Form'
 );
 
