@@ -9,6 +9,14 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
     private $_content;
     private $_contentParts;
 
+    public function getParams()
+    {
+        $config = array();
+        $config['width'] = 400;
+        $config['height'] = 400;
+        return $config;
+    }
+    
     public function getContent()
     {
         if (!isset($this->_content)) {
