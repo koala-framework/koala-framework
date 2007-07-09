@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
+abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
 {
     protected $_gridColumns = array();
     protected $_gridButtons = array('save'=>true,
@@ -13,6 +13,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
     protected $_gridFilters = array();
     protected $_gridQueryFields;
     protected $_gridPrimaryKey;
+    protected $_gridSortable = true;
 
     //deprecated:
     public function ajaxLoadAction() { $this->jsonLoadAction(); }
@@ -36,11 +37,6 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
             foreach ($this->_gridColumns as $k=>$col) {
                 if (!isset($col['type']) && isset($info['metadata'][$col['dataIndex']])) {
                     $this->_gridColumns[$k]['type'] = $this->_getTypeFromDbType($info['metadata'][$col['dataIndex']]['DATA_TYPE']);
-                } else {
-                    $this->_gridColumns[$k]['type'] = null;
-                }
-                if ($this->_gridColumns[$k]['type'] == 'date' && !isset($col['dateFormat'])) {
-                    $this->_gridColumns[$k]['dateFormat'] = 'Y-m-d';
                 }
                 if ($col['dataIndex'] == $this->_gridPrimaryKey) {
                     $primaryFound = true;
@@ -54,6 +50,19 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
                 $this->_gridColumns[] = $c;
             }
         }
+
+        foreach ($this->_gridColumns as $k=>$col) {
+            if (!isset($col['type'])) {
+                $this->_gridColumns[$k]['type'] = null;
+            }
+            if ($this->_gridColumns[$k]['type'] == 'date' && !isset($col['dateFormat'])) {
+                $this->_gridColumns[$k]['dateFormat'] = 'Y-m-d';
+            }
+            if ($this->_gridColumns[$k]['type'] == 'date' && !isset($col['renderer'])) {
+                $this->_gridColumns[$k]['renderer'] = 'Date';
+            }
+        }
+
         if (!isset($this->_gridPermissions)) {
             $this->_gridPermissions = $this->_gridButtons;
         }
@@ -66,7 +75,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
             }
         }
 
-        if (!isset($this->_gridDefaultOrder)) {
+        if ($this->_gridSortable && !isset($this->_gridDefaultOrder)) {
             $this->_gridDefaultOrder = $this->_gridColumns[0]['dataIndex'];
         }
     }
@@ -138,7 +147,15 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         if ($this->_gridPaging) {
             $limit = $this->getRequest()->getParam("limit");
             $start = $this->getRequest()->getParam('start');
-            if(!$limit) $limit = $this->_gridPaging;
+            if(!$limit) {
+                if(!is_array($this->_gridPaging) && $this->_gridPaging > 0) {
+                    $limit = $this->_gridPaging;
+                } else if (is_array($this->_gridPaging) && isset($this->_gridPaging['pageSize'])) {
+                    $limit = $this->_gridPaging['pageSize'];
+                } else {
+                    $limit = $this->_gridPaging;
+                }
+            }
         }
         $order = $this->getRequest()->getParam("sort");
         if (!$order) $order = $this->_gridDefaultOrder;
@@ -158,6 +175,9 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
                     $row = $row->toArray();
                 }
                 foreach ($this->_gridColumns as $col) {
+                    if(!isset($row[$col['dataIndex']])) {
+                        throw new Vps_Exception("Index '$col[dataIndex]' not found in row.");
+                    }
                     $r[$col['dataIndex']] = $row[$col['dataIndex']];
                 }
                 if (!isset($r[$primaryKey]) && isset($row[$primaryKey])) {
@@ -167,8 +187,9 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
             }
 
             $this->view->rows = $rows;
-            
-            if ($this->_gridPaging) {
+            if (isset($this->_gridPaging['type']) && $this->_gridPaging['type'] == 'Date') {
+                //nix zu tun
+            } else if ($this->_gridPaging) {
                 $this->view->total = $this->_fetchCount();
             } else {
                 $this->view->total = sizeof($rows);
@@ -215,14 +236,17 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         $this->view->metaData['fields'] = $fields;
         $this->view->metaData['root'] = 'rows';
         $this->view->metaData['id'] = $this->_gridPrimaryKey;
-        $this->view->metaData['totalProperty'] = 'total';
+        if (isset($this->_gridPaging['type']) && $this->_gridPaging['type'] == 'Date') {
+            //nix zu tun
+        } else {
+            $this->view->metaData['totalProperty'] = 'total';
+        }
         $this->view->metaData['successProperty'] = 'success';
-        $this->view->metaData['sortInfo'] = array();
-        if (!$this->getRequest()->getParam('sort')) {
+        if ($this->_gridSortable && !$this->getRequest()->getParam('sort')) {
             //sandard-sortierung
             $this->view->metaData['sortInfo']['field'] = $this->_gridDefaultOrder;
             $this->view->metaData['sortInfo']['dir'] = 'ASC';
-        } else {
+        } else if ($this->_gridSortable) {
             $this->view->metaData['sortInfo']['field'] = $this->getRequest()->getParam('sort');
             $this->view->metaData['sortInfo']['dir'] = $this->getRequest()->getParam('dir');
         }
@@ -230,6 +254,7 @@ abstract class Vps_Controller_Action_AutoGrid extends Vps_Controller_Action
         $this->view->metaData['gridButtons'] = $this->_gridButtons;
         $this->view->metaData['gridPaging'] = $this->_gridPaging;
         $this->view->metaData['gridFilters'] = $this->_gridFilters;
+        $this->view->metaData['gridSortable'] = $this->_gridSortable;
     }
 
     protected function _beforeSave(Zend_Db_Table_Row_Abstract $row)

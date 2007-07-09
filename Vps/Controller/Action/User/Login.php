@@ -1,11 +1,11 @@
 <?php
-class Vps_Controller_Action_Admin_User extends Vps_Controller_Action
+class Vps_Controller_Action_User_Login extends Vps_Controller_Action
 {
-    public function loginAction()
+    public function indexAction()
     {
         $location = $this->getRequest()->getParam('location');
         if ($location == '') { $location = '/'; }
-        $this->view->ext('Vps.Login.Index', array('location' => $location));
+        $this->view->ext('Vps.User.Login.Index', array('location' => $location));
     }
 
     public function jsonLoginAction()

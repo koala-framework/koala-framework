@@ -1,6 +1,6 @@
 RewriteEngine on
 RewriteRule ^files(.*)$ /public/files$1 [L]
-RewriteCond %{REQUEST_URI} !^/*(docs|files|library|bootstrap.php|public/files|Prosalzburg)/?
+RewriteCond %{REQUEST_URI} !^/*(docs|files|library|bootstrap.php|public/files|Prosalzburg|images)/?
 RewriteRule ^(.*)$ /bootstrap.php [L]
 
 php_flag magic_quotes_gpc off

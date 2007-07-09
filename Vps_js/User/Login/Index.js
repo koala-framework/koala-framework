@@ -1,9 +1,9 @@
-Ext.namespace('Vps.Login');
+Ext.namespace('Vps.User.Login');
 
-Vps.Login.Index = function(renderTo, config)
+Vps.User.Login.Index = function(renderTo, config)
 {
     Ext.apply(this, config);
-    dlg = new Vps.Login.Dialog(Ext.get(document.body).createChild(), {
+    dlg = new Vps.User.Login.Dialog(Ext.get(document.body).createChild(), {
         success: function() {
             //reload nach login
             if (config.location != undefined) {
@@ -17,7 +17,7 @@ Vps.Login.Index = function(renderTo, config)
     dlg.showLogin();
 };
 
-Ext.extend(Vps.Login.Index, Ext.util.Observable,
+Ext.extend(Vps.User.Login.Index, Ext.util.Observable,
 {
 });
 

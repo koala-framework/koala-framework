@@ -1,4 +1,4 @@
-Vps.Login.Dialog = function(renderTo, config)
+Vps.User.Login.Dialog = function(renderTo, config)
 {
     Ext.apply(this, config);
 
@@ -18,7 +18,7 @@ Vps.Login.Dialog = function(renderTo, config)
 
     this.form = new Ext.form.Form({
             labelWidth: 110, 
-            url:'/user/jsonLoginUser'
+            url:'/login/jsonLoginUser'
         });
 
     this.form.add(
@@ -48,7 +48,7 @@ Vps.Login.Dialog = function(renderTo, config)
 };
 
 
-Ext.extend(Vps.Login.Dialog, Ext.util.Observable,
+Ext.extend(Vps.User.Login.Dialog, Ext.util.Observable,
 {
     showLogin: function() {
         this.dialog.show();

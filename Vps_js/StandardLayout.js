@@ -13,11 +13,10 @@ Vps.StandardLayout = function(renderTo, config)
     this.add('north', new Ext.ContentPanel('menusContainer', {autoCreate: true, fitToFrame:true, closable:false}));
     new Vps.Menu.Index('menusContainer');
     
-    if (config.createWorkspaceContainer) {
-        this.add('center', new Ext.ContentPanel('workspaceContainer', {autoCreate: true, fitToFrame:true, closable:false}));
-    }
-
     this.endUpdate();
+//     if (config.createWorkspaceContainer) {
+//         this.add('center', new Ext.ContentPanel('workspaceContainer', {autoCreate: true, fitToFrame:true, closable:false}));
+//     }
 
 };
 
