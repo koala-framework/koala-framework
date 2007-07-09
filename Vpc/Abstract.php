@@ -13,19 +13,20 @@ abstract class Vpc_Abstract implements Vpc_Interface
     private $_componentKey;
     private $_hasGeneratedForFilename = array();
     private $_pageCollection = null;
+    private $_params = array();
 
     /**
      * Sollte nicht direkt aufgerufen werden, sondern über statische Methoden der Klasse. Kann nicht
      * überschrieben werden, stattdessen sollte setup() verwendet werden.
-     * 
+     *
      * @see createInstance
      * @see createPage
-     * 
+     *
      * @param Vps_Dao DAO
      * @param int Falls Komponenten geschachtelt werden, die componentId der obersten Komponente
      * @param int Id der aktuellen Komponente
      * @param string Falls dynamische Unterseite
-     * @param string Falls dynamische Unterkomponente 
+     * @param string Falls dynamische Unterkomponente
      */
     protected final function __construct(Vps_Dao $dao, $topComponentId, $componentId, $pageKey = '', $componentKey = '')
     {
@@ -34,9 +35,12 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_componentId = (int)$componentId;
         $this->_pageKey = $pageKey;
         $this->_componentKey = $componentKey;
+        $params = $this->getParams();
+        // TODO: aus components.ini Parameter auslesen
+        $this->_params = $params;
         $this->setup();
     }
-    
+
     /**
      * Wird nach dem Konstruktor aufgerufen. Initialisierungscode in Unterklassen ist hier richtig.
      */
@@ -44,7 +48,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     /**
      * Erstellt aus der ID der Komponente die Komponente.
-     * 
+     *
      * @param Vps_Dao DAO
      * @param string ID der Komponenten (nicht die componentId, sonder die gesamte ID)
      * @return Vpc_Abstract
@@ -54,18 +58,18 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $parsedId = self::parseId($id);
         return self::_createInstance($dao, $parsedId['componentId'], $parsedId['componentId'], $parsedId['pageKey'], '', $parsedId['componentKey']);
     }
-    
+
     /**
      * Erstellt eine Komponente, die als neue Seite in den Seitenbaum eingefügt werden
      * kann.
-     * 
+     *
      * Wird von generateHierarchy() verwendet. Wenn eine Unterseite erstellt wird, muss dieser eine
      * neue pageId zugewiesen werden. Diese pageId besteht aus topComponentId und pageKeys/pageTags.
      * Die pageKeys/pageTags dienen zur Unterscheidung bei gleicher topComponentId. pageKeys werden
      * verwendet, wenn bei gleichen Seitenaufbau der Unterseite unterschiedliche Inhalte angezeigt
      * werden sollen, pageTags, wenn die gleichen Inhalte angezeigt werden sollen bzw. nur darauf
      * spezialisierte Komponenten auf den pageTag reagieren und unterschiedliche Inhalte liefern.
-     * 
+     *
      * @see generateHierarchy
      * @param string Klassenname der Komponente, die erstellt werden soll
      * @param int Falls bestehende Komponente aus DB erstellt werden soll (className wird bei Werten != 0 wirkungslos!)
@@ -102,20 +106,20 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
         // Page erstellen
         $page = self::_createInstance($this->getDao(), $componentId, $componentId, $pageKey, '', $className);
-        
+
         // Zu Komponente ggf. PageCollection hinzufügen
         if (!is_null($page) && !is_null($this->_pageCollection)) {
             $page->setPageCollection($this->_pageCollection);
         }
-        
+
         // Erstellte Komponente hinzufügen
         return $page;
     }
-    
+
     /**
      * Falls eine Komponente Unterkomponenten hat (zB. TextPic hat eine Textbox- und
      * ein Pic-Komponente), werden diese hier erstellt.
-     * 
+     *
      * @param string Klassenname der Komponente, die erstellt werden soll
      * @param int Falls bestehende Komponente aus DB erstellt werden soll (className wird bei Werten != 0 wirkungslos!)
      * @param int Für Unterscheidung des Komponenteninhalts
@@ -139,7 +143,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         if (!is_null($component) && !is_null($this->_pageCollection)) {
             $component->setPageCollection($this->_pageCollection);
         }
-        
+
         // Erstellte Komponente hinzufügen
         return $component;
     }
@@ -156,10 +160,10 @@ abstract class Vpc_Abstract implements Vpc_Interface
                 $className = $data['component'];
             }
         }
-        
+
         // Komponente erstellen
         try {
-            
+
             if (class_exists($className)) {
                 $component = new $className($dao, $topComponentId, $componentId, $pageKey, $componentKey);
             }
@@ -180,16 +184,16 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
         return $component;
     }
-    
+
     /**
      * Die id identifiziert jede Komponente (auch Unterkomponente) und kann
      * hier in ihre Bestandteile zerlegt werden.
-     * 
+     *
      * Die id besteht aus componentId_pageKey-componentKey, wobei der pageKey und
      * der componentKey optional sein können und der pageKey aus pageKey und pageTag
      * zusammengesetzt wird. Der pageKey und der componentKey können bei geschachtelt
      * werden (Trennzeichen .).
-     * 
+     *
      * @param string id
      * @return array Array mit Bestandteilen der id
      * @throws Vpc_Exception Falls id nicht auf Muster passt
@@ -220,7 +224,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     /**
      * Da das pageIdPattern auch zum Parsen der URL im Seitenbaum verwendet wird,
      * hier zentral gespeichert.
-     * 
+     *
      * @return string Regulärer Ausdruck für das Parsen der pageId
      */
     public static function getPageIdPattern()
@@ -233,11 +237,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
     /**
      * Die pageId identifiziert jede Seite im Seitenbaum und kann hier in ihre
      * Bestandteile zerlegt werden.
-     * 
+     *
      * Die pageId besteht aus topComponentId_pageKey, wobei der pageKey optional sein
      * und aus pageKey und pageTag zusammgengesetzt sein kann. Der pageKey kann bei
      * mehreren Ebenen von dynamischen Unterseiten geschachtelt werden (Trennzeichen .).
-     * 
+     *
      * @param string pageId
      * @return array Array mit Bestandteilen der pageId
      * @throws Vpc_Exception Falls pageId nicht auf Muster passt
@@ -286,7 +290,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         }
         return $pageId;
     }
-    
+
     /**
      * @return int componentId in der Tabelle vps_components
      */
@@ -294,7 +298,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         return (int)$this->_componentId;
     }
-    
+
     /**
      * @return int Falls Komponenten verschachtelt wurden, componentId der obersten Komponente
      */
@@ -302,7 +306,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         return (int)$this->_topComponentId;
     }
-    
+
     /**
      * @return string componentKey
      */
@@ -310,11 +314,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         return $this->_componentKey;
     }
-    
+
     /**
-     * Da der pageKey in der URL auch die pageTags beinhalten kann, 
+     * Da der pageKey in der URL auch die pageTags beinhalten kann,
      * wird er hier zerlegt und nur die pageKeys zurückgegeben.
-     * 
+     *
      * @return string pageKey, falls es mehrere gibt, durch . aneinandergekettet
      */
     protected function getPageKey()
@@ -327,11 +331,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
         }
         return implode('.', $parts);
     }
-    
+
     /**
-     * Da der pageKey in der URL auch die pageTags beinhaltet, 
+     * Da der pageKey in der URL auch die pageTags beinhaltet,
      * wird er hier zerlegt und nur die pageTags zurückgegeben.
-     * 
+     *
      * @return string pageTag, falls es mehrere gibt, durch . aneinandergekettet
      */
     protected function getPageTag()
@@ -348,7 +352,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     /**
      * Der pageKey wird in Normalfall hierarchisch gespeichert. Hier
      * wird nur der letzte pageKey zurückgegeben.
-     * 
+     *
      * @return string pageTag
      */
     protected function getCurrentPageKey()
@@ -356,11 +360,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $pageKeys = explode('.', $this->getPageKey());
         return array_pop($pageKeys);
     }
-    
+
     /**
      * Der pageKey wird in Normalfall hierarchisch gespeichert. Hier
      * wird nur der letzte pageTag zurückgegeben.
-     * 
+     *
      * @return string pageTag
      */
     protected function getCurrentPageTag()
@@ -372,7 +376,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     /**
      * Durchsucht die aktuelle Komponente und deren Unterkomponenten nach der
      * Komponente mit der entsprechenden id.
-     * 
+     *
      * @param string id der Komponente
      * @return Vpc_Abstract/null
      */
@@ -394,7 +398,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     /**
      * Durchsucht die aktuelle Komponente und deren Unterkomponenten nach der
      * Komponente mit der entsprechenden Klasse.
-     * 
+     *
      * @param string Klassenname der gesuchten Komponente
      * @return Vpc_Abstract/null
      */
@@ -432,11 +436,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     /**
      * Falls eine Komponente Unterseiten im Seitenbaum erstellt, wird das hier gemacht.
-     * 
+     *
      * Standardmäßig werden die Seiten aus dem als Unterseite im Seitenbaum hinzugefügt. Falls
      * eine Komponente dynamisch Unterseiten erstellen will, sollte das in dieser Methode erfolgen.
      * parent::generateHierarchy sollte dennoch aufgerufen werden.
-     * 
+     *
      * @param string Nächster Bestandteil der URL für lazy loading, damit nicht immer alle Unterseiten erstellt werden müssen
      * @return Array mit erstellten Unterseiten
      */
@@ -463,19 +467,19 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     /**
      * Falls eine Komponente Unterkomponente erstellt, wird das hier gemacht.
-     * 
+     *
      * @return Array mit erstellten Unterkomponente
      */
     public function getChildComponents()
     {
         return array();
     }
-    
+
     /**
      * Gibt die Variablen für View zurück.
-     * 
+     *
      * Variable 'template' muss immer gesetzt werden.
-     * 
+     *
      * @param mode Für Frontend-Editing, noch nicht fertig
      * @return array Template-Variablen
      */
@@ -487,11 +491,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     /**
      * Informationen über den Aufbau der aktuellen Komponente.
-     * 
+     *
      * Falls eine Komponente Unterkomponenten hat, deren Informationen
      * einschließen. Für jede Komponente wird im Array ein Eintrag mit
      * dem Schlüssel id und dem Wert Klassenname angehängt.
-     * 
+     *
      * @return array ComponentInfo
      */
     public function getComponentInfo()
@@ -517,7 +521,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     /**
      * Shortcut, fragt vom Seitenbaum die Url für eine Komponente ab
-     * 
+     *
      * @param Vpc_Abstract Komponente, für die man die URL wissen will
      * @return string URL der Seite
      */
@@ -526,5 +530,28 @@ abstract class Vpc_Abstract implements Vpc_Interface
         if ($component == null) { $component = $this; }
         return $this->getPageCollection()->getUrl($component);
     }
-    
+
+    /**
+     * @return Array mit Schlüssel Parameter und Wert Parameterwert
+     */
+    public function getParams()
+    {
+        return array();
+    }
+
+    /**
+     * Überschreibt manuell einen Wert für einen Parameter
+     *
+     * @param string Parameter
+     * @param mixed Wert
+     */
+    public final function setParam($key, $val)
+    {
+        $params = $this->getParams();
+        if (!isset($params[$key])) {
+            throw new Vpc_Exception('Parameter for Component ' . get_class($this) . ' not valid: ' . $key);
+        }
+        
+        $this->_params[$key] = $val;
+    }
 }
