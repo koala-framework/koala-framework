@@ -14,11 +14,13 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
                   'editor'    => 'TextField'),
             array('dataIndex' => 'role',
                   'header'    => 'Berechtigung',
-                  'editor'    => array('type'=>'ComboBox',
+                  'editor'    => array('type'      => 'ComboBox',
                                        'mode'      => 'local',
                                        'store'     => array('data' => array()),
                                        'editable'  => false,
-                                       'triggerAction'=>'all')),
+                                       'triggerAction'=>'all',
+                                       'lazyRender' => true),
+                  'showDataIndex' => 'role_name'),
             array('dataIndex' => 'realname',
                   'header'    => 'Name',
                   'width'     => 200,
@@ -30,8 +32,7 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
             array('dataIndex' => 'password_mailed',
                   'header'    => 'Passwort gemailt',
                   'width'     => 100,
-                  'renderer'  => 'Boolean',
-                  'editor'    => 'TextField')
+                  'renderer'  => 'Boolean')
             );
     protected $_gridButtons = array('save'=>true,
                                     'add'=>true,
@@ -39,26 +40,45 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
     protected $_gridPaging = 0;
     protected $_gridDefaultOrder = 'username';
     protected $_gridTableName = 'Vps_Model_User_Users';
-    
+    protected $_roles = array();
+
     public function init()
     {
-        foreach ($this->_gridColumns as $k=>$c) {
-            if (isset($c['dataIndex']) && $c['dataIndex'] == 'role') {
-                $acl = Zend_Registry::get('acl');
-                $roles = $acl->getRoles();
-                foreach($roles as $role) {
-                    if($role instanceof Vps_Acl_Role) {
-                        $this->_gridColumns[$k]['editor']['store']['data'][] = array($role->getRoleId(), $role->getRoleName());
-                    }
-                }
+        $acl = Zend_Registry::get('acl');
+        $roles = $acl->getRoles();
+        foreach($roles as $role) {
+            if($role instanceof Vps_Acl_Role) {
+                $this->_roles[$role->getRoleId()] = $role->getRoleName();
             }
         }
+
+        $data = array();
+        foreach($this->_roles as $id=>$name) {
+            $data[] = array($id, $name);
+        }
+        $this->_gridColumns[$this->_getColumnIndex('role')]['editor']['store']['data'] = $data;
         parent::init();
     }
 
     public function indexAction()
     {
         $this->view->ext('Vps.User.Users');
+    }
+    
+    protected function _fetchData($order, $limit, $start)
+    {
+        $users = parent::_fetchData($order, $limit, $start);
+        $data = array();
+        foreach ($users as $user) {
+            $d = $user->toArray();
+            if (isset($this->_roles[$user->role])) {
+                $d['role_name'] = $this->_roles[$user->role];
+            } else {
+                $d['role_name'] = $user->role;
+            }
+            $data[] = $d;
+        }
+        return $data;
     }
 
     public function jsonMailsendAction()

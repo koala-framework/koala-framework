@@ -61,6 +61,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
             if ($this->_gridColumns[$k]['type'] == 'date' && !isset($col['renderer'])) {
                 $this->_gridColumns[$k]['renderer'] = 'Date';
             }
+            if (isset($col['showDataIndex']) && $col['showDataIndex'] && !$this->_getColumnIndex($col['showDataIndex'])) {
+                $this->_gridColumns[] = array('dataIndex' => $col['showDataIndex']);
+            }
         }
 
         if (!isset($this->_gridPermissions)) {
@@ -78,6 +81,25 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
         if ($this->_gridSortable && !isset($this->_gridDefaultOrder)) {
             $this->_gridDefaultOrder = $this->_gridColumns[0]['dataIndex'];
         }
+    }
+
+    protected function _getColumnIndex($name)
+    {
+        foreach ($this->_gridColumns as $k=>$c) {
+            if (isset($c['dataIndex']) && $c['dataIndex'] == $name) {
+                return $k;
+            }
+        }
+        return false;
+    }
+    
+    protected function _insertColumn($where, $column)
+    {
+        $where = $this->_getColumnIndex($where);
+        if (!$where) {
+            throw new Vps_Exception("Can't insert Column after '$where' which does not exist.");
+        }
+        array_splice($this->_gridColumns, $where+1, 0, array($column));
     }
 
     protected function _getWhere()
@@ -175,7 +197,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
                     $row = $row->toArray();
                 }
                 foreach ($this->_gridColumns as $col) {
-                    if(!isset($row[$col['dataIndex']])) {
+                    if(!is_null($row[$col['dataIndex']]) && !isset($row[$col['dataIndex']])) {
                         throw new Vps_Exception("Index '$col[dataIndex]' not found in row.");
                     }
                     $r[$col['dataIndex']] = $row[$col['dataIndex']];
