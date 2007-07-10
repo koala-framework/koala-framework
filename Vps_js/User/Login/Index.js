@@ -3,6 +3,10 @@ Ext.namespace('Vps.User.Login');
 Vps.User.Login.Index = function(renderTo, config)
 {
     Ext.apply(this, config);
+    controllerUrl = config.controllerUrl;
+    if (controllerUrl == '') {
+        controllerUrl = document.location.href;
+    }
     dlg = new Vps.User.Login.Dialog(Ext.get(document.body).createChild(), {
         success: function() {
             //reload nach login
@@ -12,7 +16,8 @@ Vps.User.Login.Index = function(renderTo, config)
                 location.reload();
             }
         },
-        scope: this
+        scope: this,
+        controllerUrl: controllerUrl
     });
     dlg.showLogin();
 };

@@ -8,14 +8,17 @@ class Vps_Controller_Action extends Zend_Controller_Action
         $acl = $this->_getAcl();
         $role = $this->_getUserRole();
         $resource = strtolower(str_replace('Controller', '', str_replace('Vps_Controller_Action_', '', get_class($this))));
-        if (($this->_auth || substr($resource, 0, 5) == 'admin') && 
-            $resource != 'admin_user' &&
+        $module = $this->getRequest()->getModuleName();
+        if (($this->_auth || $module == 'admin') && 
+            $resource != 'component_login' &&
             !$acl->isAllowed($role, $resource))
         {
             if ($this->getHelper('ViewRenderer')->isJson()) {
                 $this->_forward('jsonLogin', 'user');
             } else {
-                $this->_forward('login', 'user', null, array('location' => $this->getRequest()->getPathInfo()));
+                $controllerUrl = $module == 'admin' ? '/admin/login/' : '/login/';
+                $params = array('location' => $this->getRequest()->getPathInfo(), 'controllerUrl' => $controllerUrl);
+                $this->_forward('index', 'login', null, $params);
             }
         }
     }

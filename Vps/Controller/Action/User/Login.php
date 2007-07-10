@@ -3,9 +3,12 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
 {
     public function indexAction()
     {
-        $location = $this->getRequest()->getParam('location');
+        $location = $this->_getParam('location');
+        $controllerUrl = $this->_getParam('controllerUrl');
+        if (!$controllerUrl) { $controllerUrl = ''; }
         if ($location == '') { $location = '/'; }
-        $this->view->ext('Vps.User.Login.Index', array('location' => $location));
+        $config = array('location' => $location, 'controllerUrl' => $controllerUrl);
+        $this->view->ext('Vps.User.Login.Index', $config);
     }
 
     public function jsonLoginAction()
@@ -41,6 +44,11 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
     {
         Zend_Auth::getInstance()->clearIdentity();
         $this->_onLogout();
+    }
+    
+    public function logoutAction()
+    {
+        $this->jsonLogoutUserAction();
     }
 
     protected function _createAuthAdapter()

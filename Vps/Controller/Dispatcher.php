@@ -27,14 +27,10 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                 $component = $component->findComponent($id);
                 $className = substr(get_class($component), 0, strrpos(get_class($component), '_') + 1) . $controllerName;
                 
-            } else if ($module == 'admin') {
+            } else {
                 
                 $className = str_replace('Controller', '', ucfirst($className));
-                $module = ucfirst($this->getFrontController()->getRequest()->getModuleName());
-                if ($module != 'Default' && $module != '') {
-                    $className = 'Component_' . $className;
-                }
-                $className = "Vps_Controller_Action_$className";
+                $className = "Vps_Controller_Action_Component_$className";
                 
             }
 
@@ -43,7 +39,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             require_once($controllerFile);
             
         }
-        
+
         try {
             Zend_Loader::loadClass($className);
         } catch (Zend_Exception $e) {

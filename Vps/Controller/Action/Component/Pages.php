@@ -12,7 +12,7 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
         'folder' => 'folder'
     );
     
-    public function actionAction()
+    public function indexAction()
     {
         $this->view->ext('Vps.Component.Pages');
     }

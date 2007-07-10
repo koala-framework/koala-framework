@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Web extends Vps_Controller_Action
+class Vps_Controller_Action_Component_Web extends Vps_Controller_Action
 {
     public function indexAction()
     {
@@ -26,6 +26,7 @@ class Vps_Controller_Action_Web extends Vps_Controller_Action
 
         if ($showMenu) {
             $config['url'] = $this->getRequest()->getPathInfo();
+            $config['controllerUrl'] = '/admin/menu/';
             //$config['_debugMemoryUsage'] = memory_get_usage();
             $renderTo = 'Ext.DomHelper.insertFirst(document.body, \'<div \/>\', true)';
             $this->view->ext('Vps.Menu.Index', $config, $renderTo);
