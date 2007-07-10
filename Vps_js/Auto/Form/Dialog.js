@@ -23,7 +23,7 @@ Ext.extend(Vps.Auto.Form.Dialog, Vps.Auto.Form,
 {
     renderButtons: function()
     {
-        if (this.meta.formButtons.save) {
+        if (this.meta.buttons.save) {
             this.saveButton = this.dialog.addButton({
                 text    : 'Speichern',
                 handler : function() {
@@ -33,7 +33,7 @@ Ext.extend(Vps.Auto.Form.Dialog, Vps.Auto.Form,
             });
         }
     
-        if (this.meta.formButtons['delete']) {
+        if (this.meta.buttons['delete']) {
             this.deleteButton = this.dialog.addButton({
                 text    : 'Löschen',
                 handler : function() {
@@ -43,7 +43,7 @@ Ext.extend(Vps.Auto.Form.Dialog, Vps.Auto.Form,
             });
         }
 
-        if (this.meta.formButtons.add) {
+        if (this.meta.buttons.add) {
             this.addButton = this.dialog.addButton({
                 text    : 'Neuer Eintrag',
                 handler : function() {
@@ -53,7 +53,7 @@ Ext.extend(Vps.Auto.Form.Dialog, Vps.Auto.Form,
             });
         }
 
-        if (this.meta.formButtons.cancel) {
+        if (this.meta.buttons.cancel) {
             this.cancelButton = this.dialog.addButton({
                 text    : 'Abbrechen',
                 handler : function() {
@@ -82,7 +82,7 @@ Ext.extend(Vps.Auto.Form.Dialog, Vps.Auto.Form,
         this.show();
     },
     onSubmitSuccess: function(form, action) {
-        Vps.AutoForm.Dialog.superclass.onSubmitSuccess.call(this, form, action);
+        Vps.Auto.Form.Dialog.superclass.onSubmitSuccess.call(this, form, action);
         this.hide();
     },
     clearInvalid: function() {

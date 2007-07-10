@@ -1,11 +1,11 @@
 <?php
 abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
 {
-    protected $_formFields = array();
-    protected $_formButtons = array('save' => true);
-    protected $_formTable;
-    protected $_formTableName;
-    protected $_formPermissions; //todo: Zend_Acl ??
+    protected $_fields = array();
+    protected $_buttons = array('save' => true);
+    protected $_table;
+    protected $_tableName;
+    protected $_permissions; //todo: Zend_Acl ??
 
     //deprecated:
     public function ajaxLoadAction() { $this->jsonLoadAction(); }
@@ -14,17 +14,35 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
 
     public function init()
     {
-        if (!isset($this->_formTable)) {
-            $this->_formTable = new $this->_formTableName();
+        if (!isset($this->_table)) {
+            $this->_table = new $this->_tableName();
         }
-        if (!isset($this->_formPermissions)) {
-            $this->_formPermissions = $this->_formButtons;
+        if (!isset($this->_permissions)) {
+            $this->_permissions = $this->_buttons;
         }
+    }
+    protected function _getFieldIndex($name)
+    {
+        foreach ($this->_fields as $k=>$c) {
+            if (isset($c['name']) && $c['name'] == $name || isset($c['hiddenName']) && $c['hiddenName'] == $name) {
+                return $k;
+            }
+        }
+        return false;
+    }
+    
+    protected function _insertField($where, $field)
+    {
+        $where = $this->_getFieldIndex($where);
+        if (!$where) {
+            throw new Vps_Exception("Can't insert Field after '$where' which does not exist.");
+        }
+        array_splice($this->_fields, $where+1, 0, array($field));
     }
 
     protected function _fetchData($id)
     {
-        return $this->_formTable->find($id)->current();
+        return $this->_table->find($id)->current();
     }
 
     public function jsonLoadAction()
@@ -37,7 +55,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
             }
             if (!is_array($row)) $row = $row->toArray();
             $this->view->data = array();
-            foreach ($this->_formFields as $field) {
+            foreach ($this->_fields as $field) {
                 if(isset($field['name'])) {
                     $this->view->data[$field['name']] = $row[$field['name']];
                 }
@@ -53,13 +71,13 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
     protected function _appendMetaData()
     {
         $this->view->meta = array();
-        $this->view->meta['formFields'] = $this->_formFields;
-        $this->view->meta['formButtons'] = $this->_formButtons;
+        $this->view->meta['fields'] = $this->_fields;
+        $this->view->meta['buttons'] = $this->_buttons;
     }
 
     protected function _getPrimaryKey()
     {
-        $info = $this->_formTable->info();
+        $info = $this->_table->info();
         return $primaryKey = $info['primary'][1];
     }
 
@@ -73,24 +91,24 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
     
     public function jsonSaveAction()
     {
-        if(!isset($this->_formPermissions['save']) || !$this->_formPermissions['save']) {
+        if(!isset($this->_permissions['save']) || !$this->_permissions['save']) {
             throw new Vps_Exception("Save is not allowed.");
         }
 
         $primaryKey = $this->_getPrimaryKey();
         $id = $this->getRequest()->getParam($primaryKey);
         if ($id) {
-            $row = $this->_formTable->find($id)->current();
+            $row = $this->_table->find($id)->current();
         } else {
-            if(!isset($this->_formPermissions['add']) || !$this->_formPermissions['add']) {
+            if(!isset($this->_permissions['add']) || !$this->_permissions['add']) {
                 throw new Vps_Exception("Add is not allowed.");
             }
-            $row = $this->_formTable->fetchNew();
+            $row = $this->_table->fetchNew();
         }
         if(!$row) {
             throw new Vps_Exception("Can't find row with id '$id'.");
         }
-        foreach ($this->_formFields as $field) {
+        foreach ($this->_fields as $field) {
             $name = false;
             if (isset($field['name'])) $name = $field['name'];
             else if (isset($field['hiddenName'])) $name = $field['hiddenName'];
@@ -108,13 +126,13 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
 
     public function jsonDeleteAction()
     {
-        if(!isset($this->_formPermissions['delete']) || !$this->_formPermissions['delete']) {
+        if(!isset($this->_permissions['delete']) || !$this->_permissions['delete']) {
             throw new Vps_Exception("Delete is not allowed.");
         }
         $success = false;
         $id = $this->getRequest()->getParam($this->_getPrimaryKey());
 
-        $row = $this->_formTable->find($id)->current();
+        $row = $this->_table->find($id)->current();
         if(!$row) {
             throw new Vps_Exception("Can't find row with id '$id'.");
         }

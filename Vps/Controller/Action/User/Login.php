@@ -35,7 +35,11 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
             $errors = $result->getMessages();
             $this->view->error = implode("<br />", $errors);
         } else {
-            $this->_onLogin($adapter->getResultRowObject());
+            $resultRow = $adapter->getResultRowObject();
+            $userNamespace = new Zend_Session_Namespace('User');
+            $userNamespace->role = $resultRow->role;
+            $userNamespace->id = $resultRow->id;
+            $this->_onLogin($resultRow, $userNamespace);
         }
 
     }
@@ -43,6 +47,8 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
     public function jsonLogoutUserAction()
     {
         Zend_Auth::getInstance()->clearIdentity();
+        $userNamespace = new Zend_Session_Namespace('User');
+        $userNamespace->unsetAll();
         $this->_onLogout();
     }
     
@@ -58,16 +64,11 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
         return $adapter;
     }
 
-    protected function _onLogin($resultRow)
+    protected function _onLogin($resultRow, Zend_Session_Namespace $userNamespace)
     {
-        $userNamespace = new Zend_Session_Namespace('User');
-        $userNamespace->role = $resultRow->role;
-        $userNamespace->id = $resultRow->id;
     }
 
     protected function _onLogout()
     {
-        $userNamespace = new Zend_Session_Namespace('User');
-        $userNamespace->unsetAll();
     }
 }
