@@ -1,6 +1,11 @@
 <?php
 class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
 {
+    public function __toString()
+    {
+        return $this->realname;
+    }
+
     public function generateNewPassword()
     {
         $newPassword = substr(md5(uniqid(mt_rand(), true)), 0, 6);
@@ -23,11 +28,11 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
         if ($this->email) {
             $this->password_mailed = 1;
             $mailtext = "Hallo ".$this->realname."!\n\n"
-                ."Folgendes Login ist ab sofort für Sie in der Ärzteverwaltung aktiv.\n\n"
+                ."Folgendes Login ist ab sofort für Sie aktiv.\n\n"
                 ."Benutzername: ".$this->username."\n"
                 ."Passwort: ".$newPassword."\n\n"
                 ."---\nDiese Email wurde automatisch erstellt - bitte nicht antworten.";
-            return mail($this->email, 'Ihr Account in der Ärzteverwaltung', $mailtext, 'From: no-reply@aerzteverwaltung.de');
+            return mail($this->email, 'Ihr Account', $mailtext, 'From: no-reply@vivid-planet.com');
         }
         return false;
     }
@@ -38,5 +43,4 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
         unset($user['password'], $user['password_salt']);
         return $user;
     }
-
 }

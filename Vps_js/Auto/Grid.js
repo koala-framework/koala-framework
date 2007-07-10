@@ -36,6 +36,7 @@ Vps.Auto.Grid = function(renderTo, config)
     }, this);
 
     this.grid = new Ext.grid.EditorGrid(this.renderTo, Ext.applyIf(config, {
+        clicksToEdit: 1,
         dataSource: this.ds,
         selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
         colModel: new Ext.grid.ColumnModel([{header: "", hidden:true}]), //workaround weil es ain columnmodel geben muss
@@ -72,13 +73,13 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
             var column = meta.gridColumns[i];
             if (!column.header) continue;
 
+
             if (column.editor) {
                 var editorConfig = { msgTarget: 'qtip' };
                 var type;
                 if (typeof column.editor == 'string') {
                     type = column.editor;
                 } else {
-                debugger;
                     type = column.editor.type;
                     delete column.editor.type;
                     editorConfig = Ext.applyIf(column.editor, editorConfig);
@@ -94,19 +95,30 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                         throw "invalid editor: "+column.editor;
                     }
                 }
+                var field = column.editor.field;
+                if(field instanceof Ext.form.ComboBox) {
+                    this.grid.on('validateedit', function(e) {
+                        if(e.field == this.column.dataIndex){
+                            e.record.data[this.column.showDataIndex] = this.field.getRawValue();
+                        }
+                    }, {field: field, column: column});
+                }
             }
 
             if (Vps.Renderer[column.renderer]) {
                 column.renderer = Vps.Renderer[column.renderer];
             } else if (Ext.util.Format[column.renderer]) {
                 column.renderer = Ext.util.Format[column.renderer];
-            } else {
+            } else if (column.renderer) {
                 try {
                     column.renderer = eval(column.renderer);
                 } catch(e) {
                     throw "invalid renderer: "+column.renderer;
                 }
+            } else if (column.showDataIndex) {
+                column.renderer = Vps.Renderer.ShowField(column.showDataIndex);
             }
+
             if (column.defaultValue) delete column.defaultValue;
             if (column.dateFormat) delete column.dateFormat;
             config.push(column);

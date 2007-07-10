@@ -16,6 +16,12 @@ function p($src, $max_depth = 5) {
     }
 }
 
+function d($src, $max_depth = 5)
+{
+    p($src, $max_depth);
+    exit;
+}
+
 function exceptionsHandler($code, $string, $file, $line) { 
     $exception = new Vps_CustomException($string, $code);
     $exception->setLine($line);

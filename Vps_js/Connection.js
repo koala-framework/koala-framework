@@ -3,14 +3,13 @@ Vps.Connection = function(config){
 };
 Ext.extend(Vps.Connection, Ext.data.Connection, {
     request: function(options) {
-        
+
         options.vpsCallback = {
             success: options.success,
             failure: options.failure,
             callback: options.callback,
             scope: options.scope
         };
-        // console.info(options.url || this.url, options.vpsCallback);
         options.success = this.vpsSuccess;
         options.failure = this.vpsFailure;
         options.callback = this.vpsCallback;
@@ -23,7 +22,6 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
     },
     vpsSuccess: function(response, options)
     {
-//         console.info('vpsSuccess: ', options.url || this.url, options.vpsCallback);
         options.vpsIsSuccess = false;
         var r = Ext.decode(response.responseText);
         if (r.exceptions) {
@@ -34,7 +32,7 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
 
         if (!r.success) {
             if (r.login && r.login===true) {
-                dlg = new Vps.Login.Dialog(Ext.get(document.body).createChild(), {
+                dlg = new Vps.User.Login.Dialog(Ext.get(document.body).createChild(), {
                     success: function() {
                         //redo action...
                         this.repeatRequest(options);
@@ -60,7 +58,6 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
 
     vpsFailure: function(response, options)
     {
-//         console.info('vpsFailure: ', options.url || this.url, options.vpsCallback);
         options.vpsIsSuccess = false;
         Ext.Msg.alert('Fehler', "Ein Verbindungsfehler ist aufgetreten.");
         Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
@@ -69,7 +66,6 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
     
     vpsCallback: function(options, success, response)
     {
-//         console.info('vpsCallback: ', options.url || this.url, options.vpsCallback);
         if(success && !options.vpsIsSuccess) {
             success = false;
         }
