@@ -58,4 +58,20 @@ class Vps_Config_Ini extends Zend_Config_Ini
 		fclose($handle);
     }
     
+    /**
+     * überprüft ob der Wert und section vorhanden sind 
+     *
+     * @param string $section
+     * @param string $element
+     * @return true wenn der key bereits existiert
+     */
+    public function checkKeyExists ($section, $element){
+        
+        if ($this->$section->$element == ''){
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
 }
