@@ -133,7 +133,6 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
             }
             if (this.visibleButton) {
                 this.visibleButton.enable();
-                this.setvisible(node);
             }
             if (this.deleteButton) {
                 this.deleteButton.enable();
@@ -143,7 +142,6 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
                 this.editButton.disable();
             }
             if (this.visibleButton) {
-                this.visibleButton.toggle(false);
                 this.visibleButton.disable();
             }
             if (this.deleteButton) {

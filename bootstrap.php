@@ -10,7 +10,14 @@ try {
     Vps_Assets_Loader::load();
     require_once VPS_PATH . '/Vps/Controller/Front.php';
     Vps_Controller_Front::setUp();
+    Vps_Controller_Front::setUpDb();
     $front = Vps_Controller_Front::getInstance(false);
+    
+    $acl = new Vps_Acl();
+    $acl->add(new Zend_Acl_Resource('components'));
+    $acl->allow('guest', 'components');
+    Zend_Registry::set('acl', $acl);
+    
     $response = $front->dispatch();
     $response->setHeader('Content-Type', 'text/html; charset=utf-8');
     $response->sendHeaders();

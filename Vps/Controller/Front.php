@@ -39,6 +39,16 @@ class Vps_Controller_Front extends Zend_Controller_Front
         Zend_Registry::set('config', Vps_Setup::createConfig());
     }
     
+    public static function setUpDb()
+    {
+        $dao = new Vps_Dao(new Zend_Config_Ini('application/config.db.ini', 'database'));
+        Zend_Registry::set('dao', $dao);
+        $db = $dao->getDb();
+        $db->query('SET names UTF8');
+        Zend_Registry::set('db', $db);
+        Zend_Db_Table_Abstract::setDefaultAdapter($db);
+    }
+    
     public static function getInstance($isComponentsWeb = true)
     {
         self::setUp();
@@ -62,37 +72,31 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $router->AddRoute('componentindex', new Zend_Controller_Router_Route('component/:id', array('module' => 'component', 'controller' => 'index', 'action' => 'index')));
             $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'controller', 'action' => 'action')));
             $router->AddRoute('adminindem', new Zend_Controller_Router_Route('admin/:controller', array('module' => 'admin', 'controller' => 'controller', 'action' => 'index')));
+            $router->AddRoute('login', new Zend_Controller_Router_Route('login/:action', array('module' => 'admin', 'controller' => 'login', 'action' => 'action')));
+            $router->AddRoute('loginindex', new Zend_Controller_Router_Route('login', array('module' => 'admin', 'controller' => 'login', 'action' => 'index')));
             
             $front->registerPlugin(new Vps_Controller_Plugin_Admin());
             $plugin = new Zend_Controller_Plugin_ErrorHandler();
             $plugin->setErrorHandlerModule('admin');
             $front->registerPlugin($plugin);
-
-            $dao = new Vps_Dao(new Zend_Config_Ini('application/config.db.ini', 'database'));
-            Zend_Registry::set('dao', $dao);
-            $db = $dao->getDb();
-            $db->query('SET names UTF8');
-            Zend_Registry::set('db', $db);
-            Zend_Db_Table_Abstract::setDefaultAdapter($db);
+            
+            self::setUpDb();
 
             // ACL
             $acl = new Vps_Acl();
     
             // Roles
-            $acl->addRole(new Vps_Acl_Role('guest'));
-            $acl->addRole(new Vps_Acl_Role('admin'));
+            $acl->addRole(new Vps_Acl_Role('admin'), 'guest');
             
             // Resources
             $acl->add(new Zend_Acl_Resource('web'));
-            $acl->add(new Vps_Acl_Resource('component', 'Admin'));
-                $acl->add(new Vps_Acl_Resource('component_pages', 'Seitenbaum', '/admin/pages'), 'component');
-                $acl->add(new Zend_Acl_Resource('component_component'), 'component');
-                $acl->add(new Zend_Acl_Resource('component_menu'), 'component');
-                $acl->add(new Zend_Acl_Resource('component_error'), 'component');
-                $acl->add(new Zend_Acl_Resource('component_login'), 'component');
+            $acl->add(new Vps_Acl_Resource('admin', 'Admin'));
+                $acl->add(new Vps_Acl_Resource('pages', 'Seitenbaum', '/admin/pages/'), 'admin');
+                $acl->add(new Vps_Acl_Resource('components', 'Komponentenübersicht', '/admin/components/'), 'admin');
+                $acl->add(new Zend_Acl_Resource('component'), 'admin');
             
             // Berechtigungen
-            $acl->allow('admin', 'component');
+            $acl->allow('admin', 'admin');
             $acl->allow('admin', 'web');
             $acl->allow('guest', 'web');
             

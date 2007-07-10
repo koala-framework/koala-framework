@@ -28,7 +28,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string Falls dynamische Unterseite
      * @param string Falls dynamische Unterkomponente
      */
-    protected final function __construct(Vps_Dao $dao, $topComponentId, $componentId, $pageKey = '', $componentKey = '')
+    public final function __construct(Vps_Dao $dao, $topComponentId, $componentId, $pageKey = '', $componentKey = '')
     {
         $this->_dao = $dao;
         $this->_topComponentId = (int)$topComponentId;
@@ -534,7 +534,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     /**
      * @return Array mit Schlüssel Parameter und Wert Parameterwert
      */
-    public function getParams()
+    public static function getParams()
     {
         return array();
     }
