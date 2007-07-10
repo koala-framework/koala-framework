@@ -4,6 +4,7 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
     public function jsonDataAction()
     {
         $showLogout = true;
+        $loginControllerUrl = $this->getRequest()->getModulename() == 'admin' ? '/admin/login/' : '/login/' ;
         $userRole = $this->_getUserRole();
         $menus = array();
         $acl = $this->_getAcl();
@@ -32,7 +33,7 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
         if (empty($menus) && $userRole == 'guest') {
             $menu = array();
             $menu['text'] = 'Login';
-            $menu['url'] = '/login/';
+            $menu['url'] = $loginControllerUrl;
             $menu['children'] = array();
             $menus[] = $menu;
             $showLogout = false;
@@ -40,6 +41,7 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
         
         
         $this->view->menus = $menus;
+        $this->view->loginControllerUrl = $loginControllerUrl;
         $this->view->showLogout = $showLogout;
     }
 }

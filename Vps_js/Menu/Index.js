@@ -72,9 +72,9 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
                 handler: function() {
                     var logoutForm = new Ext.BasicForm(Ext.get(document.body).createChild({tag: 'form'}));
                     logoutForm.submit({
-                    url:'/login/jsonLogoutUser',
-                    success:function(form, action) {
-                        location.href = '/';
+                        url : response.loginControllerUrl + 'jsonLogoutUser',
+                        success : function(form, action) {
+                            location.href = '/';
                         }
                     });
                 }

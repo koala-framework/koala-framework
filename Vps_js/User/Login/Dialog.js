@@ -18,7 +18,7 @@ Vps.User.Login.Dialog = function(renderTo, config)
 
     this.form = new Ext.form.Form({
             labelWidth: 110, 
-            url:'/login/jsonLoginUser'
+            url: this.controllerUrl + 'jsonLoginUser'
         });
 
     this.form.add(
