@@ -69,8 +69,8 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
     autoload: true,
     onMetaChange : function(store, meta) {
         var config = [];
-        for (var i=0; i<meta.gridColumns.length; i++) {
-            var column = meta.gridColumns[i];
+        for (var i=0; i<meta.columns.length; i++) {
+            var column = meta.columns[i];
             if (!column.header) continue;
 
 
@@ -124,45 +124,45 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
             config.push(column);
         }
         var colModel = new Ext.grid.ColumnModel(config);
-        colModel.defaultSortable = meta.gridSortable;
+        colModel.defaultSortable = meta.sortable;
 
 
         this.grid.colModel = colModel;
         this.grid.render();
         this.grid.restoreState();
 
-        if (meta.gridPaging) {
-            if (typeof meta.gridPaging == 'object') {
+        if (meta.paging) {
+            if (typeof meta.paging == 'object') {
                 var t;
-                if (meta.gridPaging.type && Vps.PagingToolbar[meta.gridPaging.type]) {
-                    this.pagingType = meta.gridPaging.type;
-                    t = Vps.PagingToolbar[meta.gridPaging.type];
-                } else if(meta.gridPaging.type) {
+                if (meta.paging.type && Vps.PagingToolbar[meta.paging.type]) {
+                    this.pagingType = meta.paging.type;
+                    t = Vps.PagingToolbar[meta.paging.type];
+                } else if(meta.paging.type) {
                     try {
-                        t = eval(meta.gridPaging.type);
+                        t = eval(meta.paging.type);
                     } catch(e) {
-                        throw "invalid paging-toolbar: "+meta.gridPaging.type;
+                        throw "invalid paging-toolbar: "+meta.paging.type;
                     }
-                    this.pagingType = meta.gridPaging.type;
+                    this.pagingType = meta.paging.type;
                 } else {
                     this.pagingType = 'Ext.PagingToolbar';
                     t = Ext.PagingToolbar;
                 }
-                delete meta.gridPaging.type;
+                delete meta.paging.type;
                 new t(this.grid.getView().getFooterPanel(true),
-                    this.ds, meta.gridPaging);
+                    this.ds, meta.paging);
             } else {
                 this.pagingType = 'Ext.PagingToolbar';
                 new Ext.PagingToolbar(this.grid.getView().getFooterPanel(true),
                     this.ds, {
-                        pageSize: meta.gridPaging,
+                        pageSize: meta.paging,
                         displayInfo: true
                     });
             }
         } else {
             this.pagingType = false;
         }
-        if (meta.gridButtons.save) {
+        if (meta.buttons.save) {
             this.saveButton = this.getToolbar().addButton({
                 text    : 'Speichern',
                 icon    : '/assets/vps/images/silkicons/table_save.png',
@@ -174,7 +174,7 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
             this.getToolbar().addSeparator();
         }
 
-        if (meta.gridButtons.add) {
+        if (meta.buttons.add) {
             this.newButton = this.getToolbar().addButton({
                 text    : 'Neu',
                 icon    : '/assets/vps/images/silkicons/table_add.png',
@@ -184,7 +184,7 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
             });
         }
 
-        if (meta.gridButtons['delete']) {
+        if (meta.buttons['delete']) {
             this.deleteButton = this.getToolbar().addButton({
                 text    : 'Löschen',
                 icon    : '/assets/vps/images/silkicons/table_delete.png',
@@ -194,7 +194,7 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                 scope: this
             });
         }
-        if (meta.gridFilters.text) {
+        if (meta.filters.text) {
             if(this.getToolbar().items.length > 0) {
                 this.getToolbar().addSeparator();
             }

@@ -52,7 +52,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
         layout.endUpdate();
 
         this.toolbar = new Ext.Toolbar(ToolbarContentPanel.getEl());
-        if (this.meta.formButtons.save) {
+        if (this.meta.buttons.save) {
             this.saveButton = this.toolbar.addButton({
                 text    : 'Speichern',
                 icon    : '/assets/vps/images/silkicons/table_save.png',
@@ -64,7 +64,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
             });
         }
     
-        if (this.meta.formButtons['delete']) {
+        if (this.meta.buttons['delete']) {
             this.deleteButton = this.toolbar.addButton({
                 text    : 'Löschen',
                 icon    : '/assets/vps/images/silkicons/table_delete.png',
@@ -76,11 +76,11 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
             });
         }
 
-        if (this.meta.formButtons.add) {
+        if (this.meta.buttons.add) {
             this.toolbar.addSeparator();
             var c = {};
-            if(typeof this.meta.formButtons.add == 'object') {
-                c = this.meta.formButtons.add;
+            if(typeof this.meta.buttons.add == 'object') {
+                c = this.meta.buttons.add;
             }
             this.addButton = this.toolbar.addButton(Ext.applyIf(c, {
                 text    : 'Neuer Eintrag',
@@ -97,12 +97,12 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
     onMetaChange : function(meta)
     {
         this.meta = meta;
-        if (meta.formButtons) {
+        if (meta.buttons) {
             this.renderButtons();
         }
 
         var hasTabs = false;
-        meta.formFields.each(function(field) {
+        meta.fields.each(function(field) {
             for (var i in field) {
                 if (i == 'tab') {
                     hasTabs = true;
@@ -115,7 +115,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
             this.end();
         }
 
-        meta.formFields.each(function(field) {
+        meta.fields.each(function(field) {
             if (typeof field == 'String') {
                 try {
                     this.form.add(eval(field));
