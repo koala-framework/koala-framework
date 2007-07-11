@@ -49,9 +49,6 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
 
     public function postDispatch(Zend_Controller_Request_Abstract $request)
     {
-        $userNamespace = new Zend_Session_Namespace('User');
-//        return $userNamespace->role;
-
         /*
         // Frontend Editing
         $session = new Zend_Session_Namespace('admin');
