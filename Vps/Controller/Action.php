@@ -24,8 +24,12 @@ class Vps_Controller_Action extends Zend_Controller_Action
     
     protected function _getUserRole()
     {
-        $userNamespace = new Zend_Session_Namespace('User');
-        return $userNamespace->role ? $userNamespace->role : 'guest';
+        return $this->_getAuthData() ? $this->_getAuthData()->role : 'guest';
+    }
+    
+    protected function _getAuthData()
+    {
+        return Zend_Auth::getInstance()->getStorage()->read();
     }
 
     protected function _getAcl()
