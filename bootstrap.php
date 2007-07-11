@@ -12,7 +12,12 @@ try {
     Vps_Controller_Front::setUp();
     Vps_Controller_Front::setUpDb();
     $front = Vps_Controller_Front::getInstance(false);
-    
+
+    $router = $front->getRouter();
+    $front->setDispatcher(new Vps_Controller_Dispatcher());
+    $router->AddRoute('componentedit', new Zend_Controller_Router_Route('component/edit/:controller/:id/:action', array('module' => 'componentedit', 'controller' => 'controller', 'action' => 'index')));
+    $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/show/:class/:id', array('controller' => 'components', 'action' => 'show')));
+
     $acl = new Vps_Acl();
     $acl->add(new Zend_Acl_Resource('components'));
     $acl->allow('guest', 'components');
