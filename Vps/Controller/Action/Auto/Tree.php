@@ -110,7 +110,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
     private function _saveSessionNodeOpened($id, $activate)
     {
         $session = new Zend_Session_Namespace('admin');
-        $key = 'treeNodes_' . get_class($this->_treeTable);
+        $key = 'treeNodes_' . get_class($this->_table);
         $ids = is_array($session->$key) ? $session->$key : array();
         if ($id) {
             if (!$activate && isset($ids[$id])) {
