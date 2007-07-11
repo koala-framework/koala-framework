@@ -14,11 +14,16 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
         $class = $this->_getParam('class');
         $id = $this->_getParam('id');
         $component = new $class(Zend_Registry::get('dao'), $id, $id);
-        $filename = $this->getFrontController()->getDispatcher()->classToFilename($class);
-        $filename = str_replace('/Index.php', '/', $filename);
 
         $templateVars = $component->getTemplateVars('');
-        $templateVars['template'] = VPS_PATH . $filename . '/' . $templateVars['template'];
+        
+        $template = $_SERVER['DOCUMENT_ROOT'] . 'application/views/' . $templateVars['template'];
+        if (!is_file($template)) {
+            $filename = $this->getFrontController()->getDispatcher()->classToFilename($class);
+            $filename = str_replace('/Index.php', '/', $filename);
+            $template = VPS_PATH . $filename . '/' . $templateVars['template'];
+        }
+        $templateVars['template'] = $template;
         
         $this->view->setRenderFile(VPS_PATH . '/views/Component.html');
         $this->view->component = $templateVars;

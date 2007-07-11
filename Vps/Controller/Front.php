@@ -68,12 +68,11 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $router->AddRoute('ajax', new Zend_Controller_Router_Route('ajax/*', array('controller' => 'web', 'action' => 'ajax')));
             $router->AddRoute('ajaxfe', new Zend_Controller_Router_Route('ajax/fe/:action', array('controller' => 'fe', 'action' => 'action')));
             $router->AddRoute('subcomponent', new Zend_Controller_Router_Route('component/:id/:controller/:action', array('module' => 'component', 'controller' => 'controller', 'action' => 'action')));
-            $router->AddRoute('component', new Zend_Controller_Router_Route('component/:id/:action', array('module' => 'component', 'controller' => 'index', 'action' => 'action')));
-            $router->AddRoute('componentindex', new Zend_Controller_Router_Route('component/:id', array('module' => 'component', 'controller' => 'index', 'action' => 'index')));
-            $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'controller', 'action' => 'action')));
-            $router->AddRoute('adminindem', new Zend_Controller_Router_Route('admin/:controller', array('module' => 'admin', 'controller' => 'controller', 'action' => 'index')));
-            $router->AddRoute('login', new Zend_Controller_Router_Route('login/:action', array('module' => 'admin', 'controller' => 'login', 'action' => 'action')));
-            $router->AddRoute('loginindex', new Zend_Controller_Router_Route('login', array('module' => 'admin', 'controller' => 'login', 'action' => 'index')));
+            $router->AddRoute('component', new Zend_Controller_Router_Route('component/:id/:action', array('module' => 'component', 'controller' => 'index', 'action' => 'index')));
+            $router->AddRoute('componentedit', new Zend_Controller_Router_Route('component/edit/:controller/:id/:action', array('module' => 'componentedit', 'controller' => 'controller', 'action' => 'index')));
+            $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/show/:class/:id', array('module' => 'admin', 'controller' => 'components', 'action' => 'show')));
+            $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'controller', 'action' => 'index')));
+            $router->AddRoute('login', new Zend_Controller_Router_Route('login/:action', array('module' => 'admin', 'controller' => 'login', 'action' => 'index')));
             
             $front->registerPlugin(new Vps_Controller_Plugin_Admin());
             $plugin = new Zend_Controller_Plugin_ErrorHandler();

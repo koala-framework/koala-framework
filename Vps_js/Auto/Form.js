@@ -3,7 +3,7 @@ Ext.namespace('Vps.Auto');
 Vps.Auto.Form = function(renderTo, config)
 {
     this.renderTo = renderTo;
-    this.controllerUrl = config.controllerUrl;
+    this.controllerUrl = config.controllerUrl ? config.controllerUrl : '';
     delete config.controllerUrl;
 
     config = Ext.applyIf(config, {

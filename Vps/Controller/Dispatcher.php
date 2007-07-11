@@ -27,6 +27,10 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                 $component = $component->findComponent($id);
                 $className = substr(get_class($component), 0, strrpos(get_class($component), '_') + 1) . $controllerName;
                 
+            } else if ($module == 'componentedit') { // Für /component/*-Route
+
+                return $className;
+                
             } else {
                 
                 $className = str_replace('Controller', '', ucfirst($className));
