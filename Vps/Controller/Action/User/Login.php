@@ -49,7 +49,7 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
     
     public function jsonLogoutUserAction()
     {
-        $this->logoutUserAction();
+        $this->logoutAction();
     }
     
     protected function _createAuthAdapter()
