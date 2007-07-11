@@ -5,7 +5,7 @@ abstract class Vps_PageCollection_Abstract
     protected $_pageNames = array();
     protected $_pages = array();
     protected $_rootPageId;
-    protected $_addDecorator = false;
+    protected $_decoratorClasses = array();
     protected $_dao;
     protected static $_instance = null;
     private $_createDynamicPages = true;
@@ -15,7 +15,7 @@ abstract class Vps_PageCollection_Abstract
     const URL_SCHEME_HIERARCHICAL = 0;
     const URL_SCHEME_FLAT = 1;
 
-    function __construct(Vps_Dao $dao, $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL)
+    public function __construct(Vps_Dao $dao, $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL, $decoratorClasses = array())
     {
         $this->_dao = $dao;
         switch ($urlScheme) {
@@ -26,6 +26,7 @@ abstract class Vps_PageCollection_Abstract
             default:
                 throw new Vps_PageCollection_Exception('Invalid urlScheme specified');
         }
+        $this->_decoratorClasses = $decoratorClasses;
     }
 
     public function getDao()
@@ -44,9 +45,8 @@ abstract class Vps_PageCollection_Abstract
             } else {
                 $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL;
             }
-            $pageCollection = new $pageCollectionConfig->pagecollection->type($dao, $urlScheme);
-            $pageCollection->setAddDecorator($pageCollectionConfig->pagecollection->addDecorator);
-
+            $decoratorClasses = $pageCollectionConfig->pagecollection->addDecorators->toArray();
+            $pageCollection = new $pageCollectionConfig->pagecollection->type($dao, $urlScheme, $decoratorClasses);
             self::$_instance = $pageCollection;
         }
 
@@ -80,7 +80,7 @@ abstract class Vps_PageCollection_Abstract
         if (isset($this->_pages[$id])) {
             $decoratedComponent = $this->_removePage($id);
         } else {
-            $decoratedComponent = $this->addDecoratorsToComponent($page);
+            $decoratedComponent = $this->addDecorators($page);
         }
 
         $this->_setPage($decoratedComponent, $filename, $name);
@@ -98,19 +98,19 @@ abstract class Vps_PageCollection_Abstract
         return $page;
     }
 
-    public function setAddDecorator($decorator)
+    protected function addDecorators(Vpc_Interface $page)
     {
-        //todo: raise exception if no string, or class does'nt exist, or class doesn't inherit Vpc_Decorator_Abstract
-        $this->_addDecorator = $decorator;
-    }
-
-    protected function addDecoratorsToComponent(Vpc_Interface $component)
-    {
-        if ($this->_addDecorator) {
-            $component = new $this->_addDecorator($this->_dao, $component);
-            $component->setPageCollection($this);
+        foreach ($this->_decoratorClasses as $class) {
+            try {
+                if (class_exists($class)) {
+                    $page = new $class($this->_dao, $page);
+                    $page->setPageCollection($this);
+                }
+            } catch (Zend_Exception $e) {
+                throw new Vpc_ComponentNotFoundException("Decorator '$class' not found.");
+            }
         }
-        return $component;
+        return $page;
     }
 
     private function _setPage(Vpc_Interface $page, $filename, $name)
@@ -126,10 +126,10 @@ abstract class Vps_PageCollection_Abstract
         $this->_pageNames[$id] = $name;
     }
 
-    public function setRootPage(Vpc_Interface $component)
+    public function setRootPage(Vpc_Interface $page)
     {
-        $this->_setPage($this->addDecoratorsToComponent($component), '', 'Home');
-        $this->_rootPageId = $component->getId();
+        $this->_setPage($this->addDecorators($page), '', 'Home');
+        $this->_rootPageId = $page->getId();
     }
 
     public function getPageById($pageId)

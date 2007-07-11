@@ -99,10 +99,16 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
     {
         $page->generateHierarchy($filename);
         $searchId = $page->getPageId();
+        // Nach gleichem Filename suchen
         foreach($this->_pageParentIds as $id => $parentId) {
             if($parentId == $searchId && $filename == $this->_pageFilenames[$id]) {
                 return $this->_pages[$id];
             }
+        }
+        // Wenn nicht mit gleichem Filename gefunden, erste Unterseite liefern
+        $id = array_search($searchId, $this->_pageParentIds);
+        if ($id) {
+            return $this->getPageById($id);
         }
         return null;
     }
