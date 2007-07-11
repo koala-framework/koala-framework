@@ -1,9 +1,9 @@
 <?php
 class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_Tree
 {
-    protected $_treeTextField = 'name';
+    protected $_textField = 'name';
     protected $_rootVisible = false;
-    protected $_treeIcons = array (
+    protected $_icons = array (
         'default' => 'page',
         'invisible' => 'page_red',
         'reload' => 'control_repeat_blue',
@@ -19,7 +19,7 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
     
     public function init()
     {
-        $this->_treeTable = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
+        $this->_table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
         parent::init();
     }
     
@@ -27,8 +27,8 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
     {
         try {
             $id = $this->getRequest()->getParam('id');
-            $this->_treeTable->savePageName($id, $this->getRequest()->getParam('name'));
-            $pageData = $this->_treeTable->retrievePageData($id);
+            $this->_table->savePageName($id, $this->getRequest()->getParam('name'));
+            $pageData = $this->_table->retrievePageData($id);
             $this->view->id = $id;
             $this->view->name = $pageData['name'];
         } catch (Vps_ClientException $e) {
@@ -41,8 +41,8 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
         $id = $this->getRequest()->getParam('node');
         if ($id === '0') {
             
-            $pageData = $this->_treeTable->retrieveRootPageData();
-            $data = $this->_formatNode($this->_treeTable->find($pageData['id'])->current());
+            $pageData = $this->_table->retrieveRootPageData();
+            $data = $this->_formatNode($this->_table->find($pageData['id'])->current());
             $data['children'] = array();
             $data['expanded'] = true;
             $data['allowDrag'] = false;
@@ -79,7 +79,7 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
         $where = array();
         $node = $this->getRequest()->getParam('node');
         if ((int)$node === 0 && $node !== '0') {
-            $rootPageData = $this->_treeTable->retrieveRootPageData();
+            $rootPageData = $this->_table->retrieveRootPageData();
             $where['parent_id = ?'] = $rootPageData['id'];
             $where['type = ?'] = $node;
         } else {
