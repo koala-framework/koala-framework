@@ -28,7 +28,7 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
             $this->view = new Vps_View_Json();
         } else {
             $this->view = new Vps_View_Smarty();
-            if ($module == 'admin' || $module == 'component') {
+            if ($module == 'admin' || $module == 'component' || $module == 'componentedit') {
                 $this->view->setScriptPath(VPS_PATH . 'views');
                 $this->view->setCompilePath(VPS_PATH . 'views_c');
             }
@@ -70,6 +70,11 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                 $this->getResponse()->setHeader('Content-Type', 'text/javascript');
                 $this->getResponse()->setBody($body);
             } else {
+                $session = new Zend_Session_Namespace('admin');
+                if ($session->mode == 'fe' || $this->getRequest()->getParam('fe')) {
+                    $this->view->ext('Vps.FrontendEditing.Index');
+                    $this->view->mode = 'fe';
+                }
                 $this->getResponse()->appendBody($this->view->render(''));
             }
         }

@@ -14,10 +14,10 @@ class Vps_Controller_Action extends Zend_Controller_Action
         $module = $this->getRequest()->getModuleName();
         if (!$acl->isAllowed($role, $resource)) {
             if ($this->getHelper('ViewRenderer')->isJson()) {
-                $this->_forward('jsonLogin', 'login');
+                $this->_forward('jsonLogin', 'login', '');
             } else {
                 $params = array('location' => $this->getRequest()->getPathInfo());
-                $this->_forward('index', 'login', null, $params);
+                $this->_forward('index', 'login', '', $params);
             }
         }
     }

@@ -69,8 +69,8 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $router->AddRoute('ajaxfe', new Zend_Controller_Router_Route('ajax/fe/:action', array('controller' => 'fe', 'action' => 'action')));
             $router->AddRoute('subcomponent', new Zend_Controller_Router_Route('component/:id/:controller/:action', array('module' => 'component', 'controller' => 'controller', 'action' => 'action')));
             $router->AddRoute('component', new Zend_Controller_Router_Route('component/:id/:action', array('module' => 'component', 'controller' => 'index', 'action' => 'index')));
+            $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/:action/:class/:id', array('module' => 'admin', 'controller' => 'components', 'action' => 'show')));
             $router->AddRoute('componentedit', new Zend_Controller_Router_Route('component/edit/:controller/:id/:action', array('module' => 'componentedit', 'controller' => 'controller', 'action' => 'index')));
-            $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/show/:class/:id', array('module' => 'admin', 'controller' => 'components', 'action' => 'show')));
             $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'controller', 'action' => 'index')));
             $router->AddRoute('login', new Zend_Controller_Router_Route('login/:action', array('module' => 'admin', 'controller' => 'login', 'action' => 'index')));
             
