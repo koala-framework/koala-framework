@@ -554,4 +554,15 @@ abstract class Vpc_Abstract implements Vpc_Interface
         
         $this->_params[$key] = $val;
     }
+
+    protected function _getDbRow()
+    {
+        $table = $this->_dao->getTable(get_class($this) . 'Model');
+        $rowset = $table->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
+        if ($rowset) {
+            return $rowset->current();
+        }
+        return null;
+    }
+    
 }
