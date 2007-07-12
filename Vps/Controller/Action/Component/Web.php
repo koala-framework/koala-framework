@@ -20,6 +20,7 @@ class Vps_Controller_Action_Component_Web extends Vps_Controller_Action
 
     public function postDispatch()
     {
+        /*
         // Menu
         $role = $this->_getUserRole();
         $showMenu = substr($_SERVER['HTTP_HOST'], 0, 4) == 'cms.' || $role != 'guest';
@@ -31,6 +32,7 @@ class Vps_Controller_Action_Component_Web extends Vps_Controller_Action
             $renderTo = 'Ext.DomHelper.insertFirst(document.body, \'<div \/>\', true)';
             $this->view->ext('Vps.Menu.Index', $config, $renderTo);
         }
+        */
     }
 
 }

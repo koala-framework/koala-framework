@@ -530,6 +530,15 @@ abstract class Vpc_Abstract implements Vpc_Interface
         if ($component == null) { $component = $this; }
         return $this->getPageCollection()->getUrl($component);
     }
+    
+    /**
+     * Shortcut für $this->_dao->getTable($tablename)
+     * @param string Name des Models
+     */
+    protected function _getTable($tablename)
+    {
+        return $this->_dao->getTable($tablename);
+    }
 
     /**
      * @return Array mit Schlüssel Parameter und Wert Parameterwert

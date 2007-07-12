@@ -121,4 +121,13 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
         }
     }
 
+    /**
+     * Shortcut für $this->_dao->getTable($tablename)
+     * @param string Name des Models
+     */
+    protected function _getTable($tablename)
+    {
+        return $this->_dao->getTable($tablename);
+    }
+
 }

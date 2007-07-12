@@ -15,8 +15,12 @@ Vps.Auto.Form.Dialog = function(renderTo, config)
     }));
 
     Vps.Auto.Form.Dialog.superclass.constructor.call(this, this.dialog.body, config);
-    
+
     this.dialog.restoreState();
+
+    if (config.showOnCreate) {
+        this.show();
+    }
 };
 
 Ext.extend(Vps.Auto.Form.Dialog, Vps.Auto.Form,
@@ -32,7 +36,7 @@ Ext.extend(Vps.Auto.Form.Dialog, Vps.Auto.Form,
                 scope   : this
             });
         }
-    
+
         if (this.meta.buttons['delete']) {
             this.deleteButton = this.dialog.addButton({
                 text    : 'Löschen',

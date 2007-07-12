@@ -5,6 +5,7 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
         // Seite bearbeiten-Button
+        /*
         if ($this->getRequest()->getModuleName() != 'admin') {
             $acl = Zend_Registry::get('acl');
 
@@ -26,10 +27,10 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
             } else {
                 $pageId = 0;
             }
-    
+
             Zend_Registry::set('acl', $acl);
         }
-
+*/
 
         if (substr($request->getActionName(), 0, 4) == 'ajax') {
             return;
@@ -49,30 +50,28 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
 
     public function postDispatch(Zend_Controller_Request_Abstract $request)
     {
-        /*
         // Frontend Editing
         $session = new Zend_Session_Namespace('admin');
-        if ($this->_isAllowed('fe') && $session->mode == 'fe') {
-            $view = new Vps_View_Smarty(VPS_PATH . '/views');
-            $pageCollection = Vps_PageCollection_Abstract::getInstance();
-            $page = $pageCollection->getPageByPath($this->getRequest()->getPathInfo());
-            $componentsInfo = array();
-            $components = array();
-            if ($page != null) {
-                $componentsInfo = $page->getComponentInfo();
-                foreach ($componentsInfo as $key => $component) {
-                    $filename = str_replace('_', '/', $component) . '.js';
-                    if (!is_file('../library/' . $filename)) {
-                        unset($componentsInfo[$key]);
-                    }
-                }
-                $view->assign('componentsInfo', $componentsInfo);
-                $view->assign('currentPageId', $page->getId());
-                $body = $view->render('fe.html');
-                $this->getResponse()->appendBody($body);
-            }
+        if ($session->mode == 'fe' || $request->getParam('fe')) {
+//            $view = new Vps_View_Smarty(VPS_PATH . '/views');
+//            $pageCollection = Vps_PageCollection_Abstract::getInstance();
+//            $page = $pageCollection->getPageByPath($this->getRequest()->getPathInfo());
+//            $componentsInfo = array();
+//            $components = array();
+//            if ($page != null) {
+//                $componentsInfo = $page->getComponentInfo();
+//                foreach ($componentsInfo as $key => $component) {
+//                    $filename = str_replace('_', '/', $component) . '.js';
+//                    if (!is_file('../library/' . $filename)) {
+//                        unset($componentsInfo[$key]);
+//                    }
+//                }
+//                $view->assign('componentsInfo', $componentsInfo);
+//                $view->assign('currentPageId', $page->getId());
+//                $body = $view->render('fe.html');
+//                $this->getResponse()->appendBody($body);
+//            }
         }
-        */
     }
 
 }
