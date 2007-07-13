@@ -39,8 +39,7 @@ class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         if (!isset($this->_paragraphs)) {
             $this->_paragraphs = array();
     
-            $rows = $this->_dao->getTable('Vps_Dao_Paragraphs')
-                        ->fetchParagraphs($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
+            $rows = $this->_getTable()->fetchParagraphs($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
     
             foreach($rows as $row) {
                 $c = $this->createComponent('', $row->component_id);
@@ -61,8 +60,7 @@ class Vpc_Paragraphs_Abstract extends Vpc_Abstract
 
     public function saveFrontendEditing(Zend_Controller_Request_Http $request)
     {
-        $rows = $this->_dao->getTable('Vps_Dao_Paragraphs')
-                    ->fetchParagraphs($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
+        $rows = $this->_getTable()->fetchParagraphs($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
         $order = $request->getPost('order');
         if (!is_null($order)) {
             $orders = explode(";", $order);

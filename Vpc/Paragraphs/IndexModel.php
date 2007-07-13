@@ -1,8 +1,7 @@
 <?php
-class Vps_Dao_Paragraphs extends Vps_Db_Table
+class Vpc_Paragraphs_IndexModel extends Vpc_Table
 {
     protected $_name = 'component_paragraphs';
-    protected $_primary = array('component_id');
     
     public function fetchParagraphs($componentId, $pageKey = '', $componentKey = '')
     {
@@ -22,7 +21,7 @@ class Vps_Dao_Paragraphs extends Vps_Db_Table
         }
         $sql = '
             SELECT p.component_id id, p.nr, c.component, c.visible
-            FROM component_paragraphs p
+            FROM ' . $this->_name . ' p
             LEFT JOIN vps_components c
             ON p.component_id=c.id
             WHERE ' . $where . '

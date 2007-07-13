@@ -14,7 +14,7 @@ Vpc.Paragraphs.Index = function(renderTo, config)
     ]);
     
     this.ds = new Ext.data.Store({
-        proxy: new Ext.data.HttpProxy(new Vps.Connection({url: this.config.path + 'ajaxData'})),
+        proxy: new Ext.data.HttpProxy(new Vps.Connection({url: this.config.controllerUrl + 'ajaxData'})),
         reader: new Ext.data.JsonReader({root: 'rows', id: 'id'}, Paragraph)
     });
     this.ds.load();
@@ -126,7 +126,7 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
             componentId = 0;
         }
         new Vps.Connection().request({
-            url: this.config.path + 'ajaxCreate',
+            url: this.config.controllerUrl + 'ajaxCreate',
             method: 'post',
             scope: this,
             params: {
@@ -151,7 +151,7 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
                 fn: function(button) {
                     if (button == 'yes'){
                         new Vps.Connection().request({
-                            url: this.config.path + 'ajaxDelete',
+                            url: this.config.controllerUrl + 'ajaxDelete',
                             method: 'post',
                             scope: this,
                             params: {
@@ -172,7 +172,7 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
         componentIds = this.getSelectedIds();
         if (componentIds != '') {
             new Vps.Connection().request({
-                url: this.config.path + 'ajaxVisible',
+                url: this.config.controllerUrl + 'ajaxVisible',
                 method: 'post',
                 scope: this,
                 params: {
@@ -191,7 +191,7 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
         componentIds = this.getSelectedIds();
         if (componentIds != '') {
             new Vps.Connection().request({
-                url: this.config.path + 'ajaxMove',
+                url: this.config.controllerUrl + 'ajaxMove',
                 method: 'post',
                 scope: this,
                 params: {

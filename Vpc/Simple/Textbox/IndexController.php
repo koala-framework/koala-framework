@@ -4,7 +4,6 @@ class Vpc_Simple_Textbox_IndexController extends Vps_Controller_Action
     public function indexAction()
     {
         $config['content'] = $this->component->getContent();
-        $config['path'] = '/component/' . $this->component->getId() . '/';
         $this->view->ext('Vpc.Simple.Textbox.Index', $config);
     }
     

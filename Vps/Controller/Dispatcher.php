@@ -8,40 +8,40 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     {
         return true;
     }
-    
+
     public function loadClass($className)
     {
         $request = $this->getFrontController()->getRequest();
-        $controllerDir = $this->getFrontController()->getControllerDirectory();
-        $controllerName = $request->getControllerName();
-        $controllerFile = $controllerDir['default'] . '/' . $this->classToFilename(parent::formatControllerName($controllerName));
-        if (!is_file($controllerFile)) {
+        $module = $request->getModuleName();
+        if ($module == 'component') {
 
-            $module = $request->getModuleName();
-            if ($module == 'component') {
-    
-                $controllerName = $this->getFrontController()->getRequest()->getControllerName();
-                $controllerName = ucfirst($controllerName) . 'Controller';
-                $id = $this->getFrontController()->getRequest()->getParam('id');
-                $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id);
-                $component = $component->findComponent($id);
-                $className = substr(get_class($component), 0, strrpos(get_class($component), '_') + 1) . $controllerName;
-                
-            } else if ($module == 'componentedit') { // Für /component/*-Route
-
-                return $className;
-                
+            $id = $this->getFrontController()->getRequest()->getParam('id');
+            $parts = Vpc_Abstract::parseId($id);
+            if ($parts['pageKey'] != '') {
+                $component = Vps_PageCollection_Abstract::getInstance()->findComponent($id);
             } else {
-                
-                $className = str_replace('Controller', '', ucfirst($className));
-                $className = "Vps_Controller_Action_Component_$className";
-                
+                $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
             }
+            $className = get_class($component) . 'Controller';
 
         } else {
+
+            $controllerDir = $this->getFrontController()->getControllerDirectory();
+            $controllerName = $request->getControllerName();
+            $controllerFile = $controllerDir['default'] . '/' . $this->classToFilename(parent::formatControllerName($controllerName));
             
-            require_once($controllerFile);
-            
+            if (is_file($controllerFile)) {
+                
+                require_once($controllerFile);
+
+            } else {
+
+                $className = str_replace('Controller', '', ucfirst($className));
+                $className = "Vps_Controller_Action_Component_$className";
+
+            }
+     
+
         }
 
         try {

@@ -28,7 +28,7 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
             $this->view = new Vps_View_Json();
         } else {
             $this->view = new Vps_View_Smarty();
-            if ($module == 'admin' || $module == 'component' || $module == 'componentedit') {
+            if ($module == 'admin' || $module == 'component') {
                 $this->view->setScriptPath(VPS_PATH . 'views');
                 $this->view->setCompilePath(VPS_PATH . 'views_c');
             }
@@ -39,7 +39,7 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
 
             if ($module == 'component') {
                 $id = $this->getRequest()->getParam('id');
-                $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
+                $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id);
                 if (!$component) {
                     throw new Vpc_Exception('Component not found.');
                 } else {
