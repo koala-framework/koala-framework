@@ -28,7 +28,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string Falls dynamische Unterseite
      * @param string Falls dynamische Unterkomponente
      */
-    public final function __construct(Vps_Dao $dao, $topComponentId, $componentId, $pageKey = '', $componentKey = '')
+    protected final function __construct(Vps_Dao $dao, $topComponentId, $componentId, $pageKey = '', $componentKey = '')
     {
         $this->_dao = $dao;
         $this->_topComponentId = (int)$topComponentId;
@@ -56,7 +56,8 @@ abstract class Vpc_Abstract implements Vpc_Interface
     public static function createInstance(Vps_Dao $dao, $id)
     {
         $parsedId = self::parseId($id);
-        return self::_createInstance($dao, $parsedId['componentId'], $parsedId['componentId'], $parsedId['pageKey'], '', $parsedId['componentKey']);
+        $component = self::_createInstance($dao, $parsedId['componentId'], $parsedId['componentId'], $parsedId['pageKey'], '', $parsedId['componentKey']);
+        return $component->findComponent($id);
     }
 
     /**
@@ -83,7 +84,10 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         // Benötige Daten ggf. holen
         if ($componentId == 0) {
-            $componentId = $this->getTopComponentId();
+            $topComponentId = $this->getTopComponentId();
+            $componentId = $this->getComponentId();
+        } else {
+            $topComponentId = $componentId;
         }
 
         if ($pageKeySuffix != '' && $pageTagSuffix != '') {
@@ -105,7 +109,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         }
 
         // Page erstellen
-        $page = self::_createInstance($this->getDao(), $componentId, $componentId, $pageKey, '', $className);
+        $page = self::_createInstance($this->getDao(), $topComponentId, $componentId, $pageKey, '', $className);
 
         // Zu Komponente ggf. PageCollection hinzufügen
         if (!is_null($page) && !is_null($this->_pageCollection)) {
@@ -535,8 +539,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Shortcut für $this->_dao->getTable($tablename)
      * @param string Name des Models
      */
-    protected function _getTable($tablename)
+    protected function _getTable($tablename = '')
     {
+        if ($tablename == '') {
+            $tablename = get_class($this) . 'Model';
+        }
         return $this->_dao->getTable($tablename);
     }
 
@@ -566,8 +573,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     protected function _getDbRow()
     {
-        $table = $this->_dao->getTable(get_class($this) . 'Model');
-        $rowset = $table->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
+        $rowset = $this->_getTable()->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
         if ($rowset) {
             return $rowset->current();
         }

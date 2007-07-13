@@ -3,11 +3,25 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
 {
     public function indexAction()
     {
+        $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Components');
         $path = $this->getRequest()->getPathInfo();
         if (substr($path, -1) != '/') { $path .= '/'; }
         $components = $this->_traverseDirectory ('Vpc/');
         foreach (array_reverse($components) as $component) {
-            echo '<a href="' . $path . 'show?id=1&class=' . $component . '">' . $component . '</a><br />';
+            
+            echo $component . '<br />';
+            $rowset = $table->fetchAll("component='$component'");
+            $show = array(); $edit = array();
+            foreach ($rowset as $row) {
+                $show[] = '<a href="/component/show/' . $row->id . '/">' . $row->id . '</a>';
+                $edit[] = '<a href="/component/edit/' . $row->id . '/">' . $row->id . '</a>';
+            }
+            if ($rowset->count() > 0) {
+                echo 'edit: ' . implode(',&nbsp;', $edit);
+                echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+                echo 'show: ' . implode(',&nbsp;', $show);
+                echo '<br />';
+            }
         }
     }
     
@@ -33,46 +47,36 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
     
     public function showAction()
     {
-        $class = $this->_getParam('class');
         $id = $this->_getParam('id');
-        $component = new $class(Zend_Registry::get('dao'), $id, $id);
-
-        $templateVars = $component->getTemplateVars('');
-        
-        $template = $_SERVER['DOCUMENT_ROOT'] . 'application/views/' . $templateVars['template'];
-        if (!is_file($template)) {
-            $filename = $this->getFrontController()->getDispatcher()->classToFilename($class);
-            $filename = str_replace('/Index.php', '/', $filename);
-            $template = VPS_PATH . $filename . '/' . $templateVars['template'];
+        $parts = Vpc_Abstract::parseId($id);
+        if ($parts['pageKey'] != '') {
+            $component = Vps_PageCollection_Abstract::getInstance()->findComponent($id);
+        } else {
+            $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
         }
-        $templateVars['template'] = $template;
-        
+
         $this->view->setRenderFile(VPS_PATH . '/views/Component.html');
-        $this->view->component = $templateVars;
+        $this->view->setCompilePath('application/views_c');
+        $this->view->setScriptPath('application/views');
+        $this->view->setScriptPath('application/views');
+        $this->view->component = $component->getTemplateVars('');
         $this->view->mode = '';
     }
 
     public function jsonShowAction()
     {
-        $class = $this->_getParam('class');
         $id = $this->_getParam('id');
-        $component = new $class(Zend_Registry::get('dao'), $id, $id);
-        
-        $templateVars = $component->getTemplateVars('');
-        $template = $_SERVER['DOCUMENT_ROOT'] . 'application/views/' . $templateVars['template'];
-        if (!is_file($template)) {
-            $filename = $this->getFrontController()->getDispatcher()->classToFilename($class);
-            $filename = str_replace('/Index.php', '/', $filename);
-            $template = VPS_PATH . $filename . '/' . $templateVars['template'];
-        }
-        $templateVars['template'] = $template;
+        $component = Vps_PageCollection_Abstract::getInstance()->findComponent($id);
         
         $view = new Vps_View_Smarty();
         $view->setRenderFile(VPS_PATH . '/views/Component.html');
+        $view->setCompilePath('application/views_c');
+        $view->setScriptPath('application/views');
+        $view->setScriptPath('application/views');
+        $view->component = $component->getTemplateVars('');
         $view->mode = '';
-        $view->component = $templateVars;
+
         $this->view->content = $view->render('');
-        
     }
 
     public function updateAction()

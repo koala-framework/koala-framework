@@ -223,6 +223,18 @@ abstract class Vps_PageCollection_Abstract
         }
         return null;
     }
+    
+    public function findComponent($id)
+    {
+        $parts = Vpc_Abstract::parseId($id);
+        $row = $this->_dao->getTable('Vps_Dao_Components')->find($parts['componentId'])->current();
+        $pageId = $row->page_id;
+        if ($parts['pageKey'] != '') {
+            $pageId .= '_' . $parts['pageKey'];
+        }
+        $page = $this->getPageById($pageId);
+        return $page->findComponent($id);
+    }
 
     public function getTitle($page)
     {

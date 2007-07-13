@@ -5,23 +5,21 @@ class Vpc_Formular_Textbox_Index extends Vpc_Abstract
     {
         $row = $this->_getDbRow();
         if ($row) {
-            $length = $row->length;
-            $text = $row->text;
-            $size = $row->size;
+            $maxlength = $row->maxlength;
+            $width = $row->width;
             $name = $row->name;
         } else {
             
-            $text = "";
-            $size = 50;
-            $length = 255;
-            $name = "textBox";
+            $width = 50;
+            $maxlength = 255;
+            $name = 'text';
         }
         
-        $return['length'] = $length;
-        $return['text'] = $text;
-        $return['size'] = $size;
+        $return['text'] = '';
+        $return['maxlength'] = $maxlength;
+        $return['width'] = $width;
         $return['name'] = $name;
-        $return['template'] = 'Textbox.html';
+        $return['template'] = 'Formular/Textbox.html';
         return $return;
     }
 }

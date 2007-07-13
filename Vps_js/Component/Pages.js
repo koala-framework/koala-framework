@@ -58,8 +58,9 @@ Vps.Component.Pages = function(renderTo, config)
             data.id = data.url.replace(/\//g, '_');   
         }
         if (!data.url) {
-            data.url = '/component/' + data.id + '/';
+            data.url = '/component/edit/' + data.id + '/';
         }
+        controllerUrl = data.url;
         data.url += 'jsonIndex/';
         Ext.Ajax.request({
             url: data.url,
@@ -70,7 +71,7 @@ Vps.Component.Pages = function(renderTo, config)
                 response = Ext.decode(r.responseText);
                 cls = eval(response['class']);
                 if (cls) {
-                    component = new cls(name, response.config);
+                    component = new cls(name, Ext.applyIf(response.config, {controllerUrl: controllerUrl}));
                     if (component.on) {
                         component.on('editcomponent', this.loadComponent, this);
                     }

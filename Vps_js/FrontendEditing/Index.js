@@ -20,15 +20,13 @@ Ext.extend(Vps.FrontendEditing.Index, Ext.util.Observable,
     
     edit : function(o, e) {
         el = o.baseParams.container;
-        parts = el.dom.id.split('+');
-        className = parts[0];
-        id = parts[1];
+        id = el.dom.id;
 
-        controllerUrl = '/component/edit/' + className + '/' + id + '/';
+        controllerUrl = '/component/edit/' + id + '/';
         Ext.Ajax.request({
             url: controllerUrl + 'jsonIndex/',
             success: this.showEditing,
-            params: { container: el, className: className, id:id },
+            params: { container: el },
             scope: this
         });
     },
@@ -52,7 +50,7 @@ Ext.extend(Vps.FrontendEditing.Index, Ext.util.Observable,
                     icon    : '/assets/vps/images/silkicons/arrow_up.png',
                     cls     : 'x-btn-text-icon',
                     handler : this.showContent,
-                    params: { container: el, className: o.params.className, id:o.params.id },
+                    params: { container: el },
                     scope   : this
                 });
                 renderTo = content.el.createChild();
@@ -67,7 +65,7 @@ Ext.extend(Vps.FrontendEditing.Index, Ext.util.Observable,
     showContent : function(o, e)
     {
         Ext.Ajax.request({
-            url: '/component/jsonShow/' + o.params.className + '/' + o.params.id + '/',
+            url: '/component/jsonShow/' + o.params.container.dom.id + '/',
             success: function (o, e) {
                 r = Ext.decode(o.responseText);
                 Ext.DomHelper.overwrite(e.params.container, r.content);
