@@ -489,8 +489,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
      */
     public function getTemplateVars($mode)
     {
-        $ret['id'] = $this->getId();
-        return $ret;
+        $vars['class'] = get_class($this);
+        $vars['id'] = $this->getId();
+        return $vars;
     }
 
     /**
