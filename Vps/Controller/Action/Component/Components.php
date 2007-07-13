@@ -66,7 +66,12 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
     public function jsonShowAction()
     {
         $id = $this->_getParam('id');
-        $component = Vps_PageCollection_Abstract::getInstance()->findComponent($id);
+        $parts = Vpc_Abstract::parseId($id);
+        if ($parts['pageKey'] != '') {
+            $component = Vps_PageCollection_Abstract::getInstance()->findComponent($id);
+        } else {
+            $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
+        }
         
         $view = new Vps_View_Smarty();
         $view->setRenderFile(VPS_PATH . '/views/Component.html');
