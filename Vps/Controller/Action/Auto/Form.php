@@ -3,6 +3,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
 {
     protected $_fields = array();
     protected $_buttons = array('save' => true);
+    protected $_primaryKey;
     protected $_table;
     protected $_tableName;
     protected $_permissions; //todo: Zend_Acl ??
@@ -19,6 +20,10 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
         }
         if (!isset($this->_permissions)) {
             $this->_permissions = $this->_buttons;
+        }
+        if (!isset($this->_primaryKey)) {
+            $info = $this->_table->info();
+            $this->_primaryKey = $info['primary'][1];
         }
     }
     protected function _getFieldIndex($name)
@@ -75,12 +80,6 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
         $this->view->meta['buttons'] = $this->_buttons;
     }
 
-    protected function _getPrimaryKey()
-    {
-        $info = $this->_table->info();
-        return $primaryKey = $info['primary'][1];
-    }
-
     protected function _beforeSave(Zend_Db_Table_Row_Abstract $row)
     {
     }
@@ -95,7 +94,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
             throw new Vps_Exception("Save is not allowed.");
         }
 
-        $primaryKey = $this->_getPrimaryKey();
+        $primaryKey = $this->_primaryKey;
         $id = $this->getRequest()->getParam($primaryKey);
         if ($id) {
             $row = $this->_table->find($id)->current();
@@ -130,7 +129,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
             throw new Vps_Exception("Delete is not allowed.");
         }
         $success = false;
-        $id = $this->getRequest()->getParam($this->_getPrimaryKey());
+        $id = $this->getRequest()->getParam($this->_primaryKey);
 
         $row = $this->_table->find($id)->current();
         if(!$row) {
