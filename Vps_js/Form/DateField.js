@@ -14,10 +14,12 @@ Ext.extend(Vps.Form.DateField, Ext.form.DateField,
         this.addEvents({
             menuhidden : true,
         });
-        this.menuListeners.oldHide = this.menuListeners.hide;
-        this.menuListeners.hide = function() {
-            this.menuListeners.oldHide.call(this);
-            this.fireEvent('menuhidden', this);
-        };
+        if (!this.menuListeners.oldHide) {
+            this.menuListeners.oldHide = this.menuListeners.hide;
+            this.menuListeners.hide = function() {
+                this.menuListeners.oldHide.call(this);
+                this.fireEvent('menuhidden', this);
+            };
+        }
     }
 });

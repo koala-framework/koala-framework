@@ -1,7 +1,7 @@
 Ext.namespace('Vps.Component');
 Vps.Component.Pages = function(renderTo, config)
 {
-    var layout = new Ext.BorderLayout(renderTo, {
+    Vps.mainLayout = new Ext.BorderLayout(renderTo, {
         north: {
             split: false, initialSize: 30
         },
@@ -21,11 +21,11 @@ Vps.Component.Pages = function(renderTo, config)
         }
     });
     
-    layout.beginUpdate();
-    layout.add('north', new Ext.ContentPanel('menuContainer', {autoCreate: true, fitToFrame:true}));
-    layout.add('west', new Ext.ContentPanel('treeContainer', {autoCreate:true, title: 'Seitenbaum', fitToFrame:true}));
-    layout.restoreState();
-    layout.endUpdate();
+    Vps.mainLayout.beginUpdate();
+    Vps.mainLayout.add('north', new Ext.ContentPanel('menuContainer', {autoCreate: true, fitToFrame:true}));
+    Vps.mainLayout.add('west', new Ext.ContentPanel('treeContainer', {autoCreate:true, title: 'Seitenbaum', fitToFrame:true}));
+    Vps.mainLayout.restoreState();
+    Vps.mainLayout.endUpdate();
 
     var menu = new Vps.Menu.Index('menuContainer', {role: this.role, pageId: config.pageId, controllerUrl: '/admin/menu/'});
     var tree = new Vps.Auto.Tree('treeContainer', {controllerUrl: '/admin/pages/' });
@@ -53,20 +53,28 @@ Vps.Component.Pages = function(renderTo, config)
 
     tree.on('selectionchange', this.treeSelectionchange, this.tree);
 
-    this.loadComponent = function (data) { 
+    tree.on('editcomponent', this.loadComponent, this);
+    menu.on('menuevent', this.loadComponent, this);
+}
+
+Ext.extend(Vps.Component.Pages, Ext.util.Observable,
+{
+    loadComponent: function (data)
+    {
         if (!data.id) {
             data.id = data.url.replace(/\//g, '_');   
         }
         if (!data.url) {
             data.url = '/component/edit/' + data.id + '/';
         }
-        controllerUrl = data.url;
+        data.title = data.title || data.text;
+        var controllerUrl = data.url;
         data.url += 'jsonIndex/';
         Ext.Ajax.request({
             url: data.url,
             success: function(r) {
                 var name = 'component' + data.id;
-                layout.add('center', new Ext.ContentPanel(name, {autoCreate:true, title: data.text, fitToFrame:true, closable:true, autoScroll: true, fitContainer: true}));
+                Vps.mainLayout.add('center', new Ext.ContentPanel(name, {autoCreate:true, title: data.title, fitToFrame:true, closable:true, autoScroll: true, fitContainer: true}));
                 Ext.DomHelper.overwrite(name, '');
                 response = Ext.decode(r.responseText);
                 cls = eval(response['class']);
@@ -79,13 +87,7 @@ Vps.Component.Pages = function(renderTo, config)
             },
             scope: this
         });
-    }
-    tree.on('editcomponent', this.loadComponent, this);
-    menu.on('loadpage', this.loadComponent, this);
-}
-
-Ext.extend(Vps.Component.Pages, Ext.util.Observable,
-{
+    },
     treeEditProperties : function (o, e) {
         var dlg = new Ext.BasicDialog('dialog', {
             height: 200,

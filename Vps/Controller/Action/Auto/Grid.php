@@ -1,38 +1,22 @@
 <?php
-abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
+abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Auto_Abstract
 {
     protected $_columns = array();
     protected $_buttons = array('save'=>true,
                                     'add'=>true,
                                     'delete'=>true);
-    protected $_permissions; //todo: Zend_Acl ??
     protected $_paging = 0;
-    protected $_table;
-    protected $_tableName;
     protected $_defaultOrder;
     protected $_filters = array();
     protected $_queryFields;
-    protected $_primaryKey;
     protected $_sortable = true;
-
-    //deprecated:
-    public function ajaxLoadAction() { $this->jsonLoadAction(); }
-    public function ajaxSaveAction() { $this->jsonSaveAction(); }
-    public function ajaxDeleteAction() { $this->jsonDeleteAction(); }
 
     public function init()
     {
-        if (!isset($this->_table) && isset($this->_tableName)) {
-            $this->_table = new $this->_tableName();
-        }
+        parent::init();
 
         if (isset($this->_table)) {
             $info = $this->_table->info();
-            if(!isset($this->_primaryKey)) {
-                $info = $this->_table->info();
-                $this->_primaryKey = $info['primary'][1];
-            }
-
             $primaryFound = false;
             foreach ($this->_columns as $k=>$col) {
                 if (!isset($col['type']) && isset($info['metadata'][$col['dataIndex']])) {
@@ -55,7 +39,13 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
             if (!isset($col['type'])) {
                 $this->_columns[$k]['type'] = null;
             }
-            if ($this->_columns[$k]['type'] == 'date' && !isset($col['dateFormat'])) {
+            if (isset($info)
+                && isset($info['metadata'][$col['dataIndex']])
+                && strtolower($info['metadata'][$col['dataIndex']]['DATA_TYPE']) == 'datetime'
+                && !isset($this->_columns[$k]['dateFormat'])) {
+                $this->_columns[$k]['dateFormat'] = 'Y-m-d H:i:s';
+            }
+            if ($this->_columns[$k]['type'] == 'date' && !isset($this->_columns[$k]['dateFormat'])) {
                 $this->_columns[$k]['dateFormat'] = 'Y-m-d';
             }
             if ($this->_columns[$k]['type'] == 'date' && !isset($col['renderer'])) {
@@ -64,10 +54,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
             if (isset($col['showDataIndex']) && $col['showDataIndex'] && !$this->_getColumnIndex($col['showDataIndex'])) {
                 $this->_columns[] = array('dataIndex' => $col['showDataIndex']);
             }
-        }
-
-        if (!isset($this->_permissions)) {
-            $this->_permissions = $this->_buttons;
         }
 
         //default durchsucht alle angezeigten felder
@@ -81,6 +67,13 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
         if ($this->_sortable && !isset($this->_defaultOrder)) {
             $this->_defaultOrder = $this->_columns[0]['dataIndex'];
         }
+        
+        if (is_string($this->_defaultOrder)) {
+            $o = $this->_defaultOrder;
+            $this->_defaultOrder = array();
+            $this->_defaultOrder['field'] = $o;
+            $this->_defaultOrder['direction'] = 'ASC';
+        }
     }
 
     protected function _getColumnIndex($name)
@@ -92,12 +85,21 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
         }
         return false;
     }
-    
-    protected function _insertColumn($where, $column)
+
+    protected function _removeColumn($name)
     {
-        $where = $this->_getColumnIndex($where);
-        if (!$where) {
-            throw new Vps_Exception("Can't insert Column after '$where' which does not exist.");
+        $where = $this->_getColumnIndex($name);
+        if ($where === false) {
+            throw new Vps_Exception("Can't delete Column '$name' as it does not exist.");
+        }
+        array_splice($this->_columns, $where, 1);
+    }
+
+    protected function _insertColumn($name, $column)
+    {
+        $where = $this->_getColumnIndex($name);
+        if ($where === false) {
+            throw new Vps_Exception("Can't insert Column after '$name' which does not exist.");
         }
         array_splice($this->_columns, $where+1, 0, array($column));
     }
@@ -167,7 +169,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
     {
         $limit = null; $start = null;
         if ($this->_paging) {
-            $limit = $this->getRequest()->getParam("limit");
+            $limit = $this->getRequest()->getParam('limit');
             $start = $this->getRequest()->getParam('start');
             if(!$limit) {
                 if(!is_array($this->_paging) && $this->_paging > 0) {
@@ -179,12 +181,15 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
                 }
             }
         }
-        $order = $this->getRequest()->getParam("sort");
-        if (!$order) $order = $this->_defaultOrder;
-        if($this->getRequest()->getParam("dir")!='UNDEFINED') {
-            $order .= " ".$this->getRequest()->getParam("dir");
+        $order = $this->getRequest()->getParam('sort');
+        if (!$order) $order = $this->_defaultOrder['field'];
+        if($this->_getParam("dir") && $this->_getParam('dir')!='UNDEFINED') {
+            $order .= ' '.$this->_getParam('dir');
+        } else {
+            $order .= ' '.$this->_defaultOrder['direction'];
         }
         $order = trim($order);
+        $this->view->order = $order;
 
         $primaryKey = $this->_primaryKey;
 
@@ -193,17 +198,18 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
             $rows = array();
             foreach ($rowSet as $row) {
                 $r = array();
-                if ($row instanceof Zend_Db_Table_Row_Abstract) {
-                    $row = $row->toArray();
+                if (is_array($row)) {
+                    $row = (object)$row;
                 }
                 foreach ($this->_columns as $col) {
-                    if(!is_null($row[$col['dataIndex']]) && !isset($row[$col['dataIndex']])) {
-                        throw new Vps_Exception("Index '$col[dataIndex]' not found in row.");
+                    if (isset($col['findParent'])) {
+                        $r[$col['dataIndex']] = $this->_fetchFromParentRow($row, $col['findParent']);
+                    } else {
+                        $r[$col['dataIndex']] = $this->_fetchFromRow($row, $col['dataIndex']);
                     }
-                    $r[$col['dataIndex']] = $row[$col['dataIndex']];
                 }
-                if (!isset($r[$primaryKey]) && isset($row[$primaryKey])) {
-                    $r[$primaryKey] = $row[$primaryKey];
+                if (!isset($r[$primaryKey]) && isset($row->$primaryKey)) {
+                    $r[$primaryKey] = $row->$primaryKey;
                 }
                 $rows[] = $r;
             }
@@ -233,6 +239,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
         else if ($type == 'text') $type = 'string';
         else if ($type == 'tinytext') $type = 'string';
         else if (substr($type, -3) == 'int') $type = 'int';
+        else if ($type == 'datetime') $type = 'date';
+        else if ($type == 'time') $type = '';
         return $type;
     }
 
@@ -264,13 +272,12 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
             $this->view->metaData['totalProperty'] = 'total';
         }
         $this->view->metaData['successProperty'] = 'success';
-        if ($this->_sortable && !$this->getRequest()->getParam('sort')) {
+        if ($this->_sortable && !$this->_getParam('sort')) {
             //sandard-sortierung
-            $this->view->metaData['sortInfo']['field'] = $this->_defaultOrder;
-            $this->view->metaData['sortInfo']['dir'] = 'ASC';
+            $this->view->metaData['sortInfo'] = $this->_defaultOrder;
         } else if ($this->_sortable) {
-            $this->view->metaData['sortInfo']['field'] = $this->getRequest()->getParam('sort');
-            $this->view->metaData['sortInfo']['dir'] = $this->getRequest()->getParam('dir');
+            $this->view->metaData['sortInfo']['field'] = $this->_getParam('sort');
+            $this->view->metaData['sortInfo']['direction'] = $this->_getParam('dir');
         }
         $this->view->metaData['columns'] = $this->_columns;
         $this->view->metaData['buttons'] = $this->_buttons;
@@ -301,7 +308,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
         }
         $success = false;
 
-        $data = Zend_Json::decode(stripslashes($this->getRequest()->getParam("data")));
+        $data = Zend_Json::decode($this->getRequest()->getParam("data"));
         $addedIds = array();
         foreach ($data as $submitRow) {
             $id = $submitRow[$this->_primaryKey];
@@ -311,7 +318,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action
                 if(!isset($this->_permissions['add']) || !$this->_permissions['add']) {
                     throw new Vps_Exception("Add is not allowed.");
                 }
-                $row = $this->_table->fetchNew();
+                $row = $this->_table->createRow();
             }
             if(!$row) {
                 throw new Vps_Exception("Can't find row with id '$id'.");

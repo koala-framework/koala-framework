@@ -1,47 +1,62 @@
 <?php
 class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
 {
-    public function jsonDataAction()
+    protected function _processResources($resources)
     {
-        $showLogout = true;
-        $loginControllerUrl = $this->getRequest()->getModulename() == 'admin' ? '/admin/login/' : '/login/' ;
-        $userRole = $this->_getUserRole();
-        $menus = array();
         $acl = $this->_getAcl();
-        $resources = $acl->getResources();
+
+        $menus = array();
         foreach ($resources as $resource) {
-            if ($resource instanceof Vps_Acl_Resource && $acl->isAllowed($userRole, $resource) && $resource->getMenuText()) {
-                $childResources = $acl->getResources($resource);
+            if ($acl->isAllowed($this->_getUserRole(), $resource)) {
                 $menu = array();
-                $menu['text'] = $resource->getMenuText();
-                $menu['url'] = $resource->getMenuUrl();
-                $menu['asEvent'] = $resource->asEvent();
-                $menu['children'] = array();
-                foreach ($childResources as $cr) {
-                    if ($cr instanceof Vps_Acl_Resource && $acl->isAllowed($userRole, $cr)) {
-                        $m = array();
-                        $m['text'] = $cr->getMenuText();
-                        $m['url'] = $cr->getMenuUrl();
-                        $m['asEvent'] = $cr->asEvent();
-                        $menu['children'][] = $m;
-                    }
+                if ($resource instanceof Vps_Acl_Resource_MenuDropdown) {
+                    $menu['type'] = 'dropdown';
+                    $menu['text'] = $resource->getMenuText();
+                    $menu['children'] = $this->_processResources($acl->getResources($resource));
+                } else if ($resource instanceof Vps_Acl_Resource_MenuEvent) {
+                    $menu['type'] = 'event';
+                    $menu['text'] = $resource->getMenuText();
+                    $menu['config'] = $resource->getMenuConfig();
+                } else if ($resource instanceof Vps_Acl_Resource_MenuUrl) {
+                    $menu['type'] = 'url';
+                    $menu['text'] = $resource->getMenuText();
+                    $menu['url'] = $resource->getMenuUrl();
+                } else if ($resource instanceof Vps_Acl_Resource_MenuCommandDialog) {
+                    $menu['type'] = 'commandDialog';
+                    $menu['text'] = $resource->getMenuText();
+                    $menu['commandClass'] = $resource->getMenuCommandClass();
+                    $menu['config'] = $resource->getMenuConfig();
+                } else if ($resource instanceof Vps_Acl_Resource_MenuCommand) {
+                    $menu['type'] = 'command';
+                    $menu['text'] = $resource->getMenuText();
+                    $menu['commandClass'] = $resource->getMenuCommandClass();
+                    $menu['config'] = $resource->getMenuConfig();
+                } else if ($resource instanceof Zend_Acl_Resource) {
+                    continue; //nicht im menü anzeigen
+                } else {
+                    throw new Vps_Exception("Unknown resource-type '".get_class($resource)."'");
                 }
                 $menus[] = $menu;
             }
         }
-        
-        if (empty($menus) && $userRole == 'guest') {
+        return $menus;
+    }
+    public function jsonDataAction()
+    {
+        $showLogout = true;
+        $resources = $this->_getAcl()->getResources();
+        $menus = $this->_processResources($resources);
+
+        if (empty($menus) && $this->_getUserRole() == 'guest') {
             $menu = array();
+            $menu['type'] = 'commandDialog';
             $menu['text'] = 'Login';
-            $menu['url'] = $loginControllerUrl;
-            $menu['children'] = array();
+            $menu['commandClass'] = 'Vps.User.Login.Dialog';
             $menus[] = $menu;
             $showLogout = false;
         }
-        
-        
+
         $this->view->menus = $menus;
-        $this->view->loginControllerUrl = $loginControllerUrl;
         $this->view->showLogout = $showLogout;
     }
 }

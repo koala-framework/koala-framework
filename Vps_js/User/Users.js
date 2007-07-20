@@ -1,9 +1,9 @@
 Ext.namespace('Vps.User');
 Vps.User.Users = function(renderTo, config)
 {
-    Ext.apply(this, config);
+    config = Ext.applyIf(config || {}, {controllerUrl: '/users/'});
 
-    this.grid = new Vps.Auto.Grid(null, {controllerUrl: '/users/'});
+    this.grid = new Vps.Auto.Grid(null, config);
 
     this.grid.on('generatetoolbar', function(tb) {
         tb.addSeparator();

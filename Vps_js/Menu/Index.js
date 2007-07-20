@@ -1,78 +1,112 @@
 Vps.Menu.Index = function(renderTo, config)
 {
     Ext.apply(this, config);
+    this.renderTo = renderTo;
     this.events = {
-        'loadpage' : true
+        'menuevent' : true
     };
     this.tb = new Ext.Toolbar(renderTo);
     
     if (!this.controllerUrl) {
         this.controllerUrl = '/menu/';
     }
-    this.controllerUrl += 'jsonData',
-
-    Ext.Ajax.request({
-        url: this.controllerUrl,
-        params: config,
-        success: this.loadMenu,
-        scope: this
-    });
-    
-    this.handleClick = function (o, e) {
-        if (o.asEvent) {
-            this.fireEvent('loadpage', {url: o.url, text: o.text});
-        } else {
-            location.href = o.url;
-        }
-    }
-        
+    this.reload();
 };
 
 Ext.extend(Vps.Menu.Index, Ext.util.Observable,
 {
-    loadMenu: function(r)
+    reload: function()
     {
-        var response = Ext.decode(r.responseText);
-        for (var i=0; i<response.menus.length; i++) {
-            var m = response.menus[i];
-            if (m.url) {
-                this.tb.add({
-                    text: m.text,
-                    handler: this.handleClick,
-                    url: m.url,
-                    asEvent: m.asEvent,
-                    scope: this
-                });
-            } else {
-                var menuItems = [];
-                for (var j=0; j<m.children.length; j++) {
-                    menuItems.push({
-                        text: m.children[j].text,
-                        handler: this.handleClick,
-                        url: m.children[j].url,
-                        asEvent: m.children[j].asEvent,
-                        scope: this
-                    });
-                }
+        Ext.Ajax.request({
+            url: this.controllerUrl+'jsonData',
+            params: this.params,
+            success: this.loadMenu,
+            scope: this
+        });
+    },
+    _processMenus: function(menus)
+    {
+        var menuItems = [];
+        for (var i=0; i<menus.length; i++) {
+            var m = menus[i];
+            if (m.type == 'dropdown') {
+                var childMenuItems = this._processMenus(m.children);
                 var menu = new Ext.menu.Menu({
-                    id: 'mainMenu',
-                    items: menuItems
+                    items: childMenuItems
                 });
-                this.tb.add({
+                menuItems.push({
                     text: m.text,
                     menu: menu
                 });
+            } else if (m.type == 'url') {
+                menuItems.push({
+                    text: m.text,
+                    handler: function(o) {
+                        location.href = o.url;
+                    },
+                    url: m.url
+                });
+            } else if (m.type == 'event') {
+                menuItems.push({
+                    text: m.text,
+                    handler: function(o) {
+                        if(!o.config.title) o.config.title = o.text;
+                        this.fireEvent('menuevent', o.config);
+                    },
+                    scope: this,
+                    config: m.config
+                });
+            } else if (m.type == 'commandDialog') {
+                menuItems.push({
+                    text: m.text,
+                    handler: function(o) {
+                        var c = eval(o.commandClass);
+                        var dlg = new c(null, o.config);
+                        dlg.show();
+                    },
+                    scope: this,
+                    commandClass: m.commandClass,
+                    config: m.config
+                });
+            } else if (m.type == 'command') {
+                menuItems.push({
+                    text: m.text,
+                    handler: function(o) {
+                        if (o.object && o.object.activate) {
+                            o.object.activate();
+                        } else {
+                            var c = eval(o.commandClass);
+                            o.object = new c(null, o.config);
+                        }
+                    },
+                    scope: this,
+                    commandClass: m.commandClass,
+                    config: m.config
+                });
             }
         }
+        return menuItems;
+    },
+    loadMenu: function(r)
+    {
+        if (this.tb.items.getCount() > 0) {
+            //tolbar komplett löschen und neu erstellen
+            this.tb.destroy();
+            this.tb.render(this.renderTo);
+        }
+        var response = Ext.decode(r.responseText);
+        var menuItems = this._processMenus(response.menus);
+        menuItems.each(function(menuItem) {
+            this.tb.add(menuItem);
+        }, this);
 
-        this.tb.addSpacer().getEl().parentNode.style.width = '100%';
         if (response.showLogout) {
+            this.tb.addButton(new Ext.Toolbar.Fill());
             this.tb.addButton({
                 text: 'Logout',
                 handler: function() {
-                    var logoutForm = new Ext.BasicForm(Ext.get(document.body).createChild({tag: 'form'}));
-                    logoutForm.submit({
-                        url : response.loginControllerUrl + 'jsonLogoutUser',
+                    Ext.Ajax.request({
+                        url : '/login/jsonLogoutUser',
                         success : function(form, action) {
                             location.href = '/';
                         }

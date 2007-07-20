@@ -11,7 +11,8 @@ Vps.Auto.Form.Dialog = function(renderTo, config)
         minWidth: 150,
         modal: true,
         proxyDrag: true,
-        shadow: true
+        shadow: true,
+        stateId: 'dialog-'+config.controllerUrl.replace(/\//g, '-').replace(/^-|-$/g, '') //um eine eindeutige id für den stateManager zu haben
     }));
 
     Vps.Auto.Form.Dialog.superclass.constructor.call(this, this.dialog.body, config);
