@@ -2,7 +2,7 @@
 
 class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_gridColumns = array(
+    protected $_columns = array(
             array('dataIndex' => 'active',
                   'header'    => 'Aktiv',
                   'width'     => 40,
@@ -34,12 +34,12 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
                   'width'     => 100,
                   'renderer'  => 'Boolean')
             );
-    protected $_gridButtons = array('save'=>true,
+    protected $_buttons = array('save'=>true,
                                     'add'=>true,
                                     'delete'=>true);
-    protected $_gridPaging = 0;
-    protected $_gridDefaultOrder = 'username';
-    protected $_gridTableName = 'Vps_Model_User_Users';
+    protected $_paging = 0;
+    protected $_defaultOrder = 'username';
+    protected $_tableName = 'Vps_Model_User_Users';
     protected $_roles = array();
 
     public function init()
@@ -56,29 +56,25 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
         foreach($this->_roles as $id=>$name) {
             $data[] = array($id, $name);
         }
-        $this->_gridColumns[$this->_getColumnIndex('role')]['editor']['store']['data'] = $data;
+        $this->_columns[$this->_getColumnIndex('role')]['editor']['store']['data'] = $data;
         parent::init();
     }
 
     public function indexAction()
     {
-        $this->view->ext('Vps.User.Users');
+        $this->view->ext('Vps.User.Users', array('controllerUrl'=>'/settings/users/'));
     }
-    
-    protected function _fetchData($order, $limit, $start)
+
+    protected function _fetchFromRow($row, $field)
     {
-        $users = parent::_fetchData($order, $limit, $start);
-        $data = array();
-        foreach ($users as $user) {
-            $d = $user->toArray();
-            if (isset($this->_roles[$user->role])) {
-                $d['role_name'] = $this->_roles[$user->role];
+        if ($field == 'role_name') {
+            if (isset($this->_roles[$row->role])) {
+                return $this->_roles[$row->role];
             } else {
-                $d['role_name'] = $user->role;
+                return $row->role;
             }
-            $data[] = $d;
         }
-        return $data;
+        return parent::_fetchFromRow($row, $field);
     }
 
     public function jsonMailsendAction()
@@ -87,7 +83,7 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
         $request = $this->getRequest();
         $id = $request->getParam('id');
 
-        if ($user = $this->_gridTable->find($id)->current()) {
+        if ($user = $this->_table->find($id)->current()) {
             if ($user->email) {
                 $user->sendPasswordMail();
                 $user->save();

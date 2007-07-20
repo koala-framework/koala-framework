@@ -87,10 +87,10 @@ class Vps_Controller_Front extends Zend_Controller_Front
             
             // Resources
             $acl->add(new Zend_Acl_Resource('web'));
-            $acl->add(new Vps_Acl_Resource('admin', 'Admin'));
-                $acl->add(new Vps_Acl_Resource('pages', 'Seitenbaum', '/admin/pages/'), 'admin');
-                $acl->add(new Vps_Acl_Resource('components', 'Komponentenübersicht', '/admin/components/'), 'admin');
-                $acl->add(new Zend_Acl_Resource('component'), 'admin');
+            $acl->add(new Vps_Acl_Resource_MenuDropdown('admin', 'Admin'));
+                $acl->add(new Vps_Acl_Resource_MenuUrl('pages', 'Seitenbaum', '/admin/pages/'), 'admin');
+                $acl->add(new Vps_Acl_Resource_MenuUrl('components', 'Komponentenübersicht', '/admin/components/'), 'admin');
+                    $acl->add(new Zend_Acl_Resource('component'), 'admin');
             
             // Berechtigungen
             $acl->allow('admin', 'admin');

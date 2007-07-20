@@ -251,12 +251,11 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
     },
     onAdd : function() {
 
-        //this should be in Ext.data.Record: fixme: send patch to ext.js
         var data = {};
         for(var i=0; i<this.ds.recordType.prototype.fields.items.length; i++) {
             data[this.ds.recordType.prototype.fields.items[i].name] = this.ds.recordType.prototype.fields.items[i].defaultValue;
         }
-        var record = new this.ds.recordType({});
+        var record = new this.ds.recordType(data);
 
         this.grid.stopEditing();
         this.ds.insert(0, record);

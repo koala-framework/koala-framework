@@ -36,20 +36,20 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
 
     renderButtons: function()
     {
-        var layout = new Ext.BorderLayout(this.renderTo, {
+        this.layout = new Ext.BorderLayout(this.renderTo, {
                 north: {split: false, initialSize: 30},
                 center: { autoScroll: true }
             });
-        layout.beginUpdate();
+        this.layout.beginUpdate();
 
         var ToolbarContentPanel = new Ext.ContentPanel({autoCreate: true, fitToFrame:true, closable:false});
-        layout.add('north', ToolbarContentPanel);
+        this.layout.add('north', ToolbarContentPanel);
 
         var FormContentPanel = new Ext.ContentPanel({autoCreate: true, fitToFrame:true, closable:false});
-        layout.add('center', FormContentPanel);
+        this.layout.add('center', FormContentPanel);
         this.renderTo = FormContentPanel.getEl();
 
-        layout.endUpdate();
+        this.layout.endUpdate();
 
         this.toolbar = new Ext.Toolbar(ToolbarContentPanel.getEl());
         if (this.meta.buttons.save) {
@@ -160,19 +160,20 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
             tabPanel.activate(0);
         }
 
-        this.fireEvent("formRendered", this);
+        this.fireEvent('formRendered', this);
     },
     
     load : function(id, options) {
         if (!this.form.baseParams) this.form.baseParams = {};
         this.form.baseParams.id = id;
         if (!options) options = {};
+        this.form.clearValues();
         this.form.load(Ext.applyIf(options, {
             url: this.controllerUrl+'jsonLoad',
             waitMsg: 'laden...',
             success: function(form, action) {
                 if (this.deleteButton) this.deleteButton.enable();
-                this.fireEvent("loaded", form, action);
+                this.fireEvent('loaded', form, action);
             },
             scope: this
         }));
@@ -223,7 +224,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
     },
     onSubmitSuccess: function(form, action) {
         this.form.resetDirty();
-        this.fireEvent("dataChanged", action.result);
+        this.fireEvent('dataChanged', action.result);
 
         var reEnableSubmitButton = function() {
             this.saveButton.enable();;
@@ -242,10 +243,10 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
                         url: this.controllerUrl+'jsonDelete',
                         params: {id: this.form.baseParams.id},
                         success: function(response, options, r) {
-                            this.fireEvent("dataChanged", r);
+                            this.fireEvent('dataChanged', r);
                             this.form.clearValues();
                             this.disable();
-                            this.fireEvent("deleted", this);
+                            this.fireEvent('deleted', this);
                         },
                         scope: this
                     });
@@ -260,7 +261,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
                 if (this.deleteButton) this.deleteButton.disable();
                 this.form.baseParams.id = 0;
                 this.form.setDefaultValues();
-                this.fireEvent("add", this);
+                this.fireEvent('add', this);
             },
             scope: this
         });

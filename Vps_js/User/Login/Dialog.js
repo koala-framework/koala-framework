@@ -1,5 +1,7 @@
 Vps.User.Login.Dialog = function(renderTo, config)
 {
+    renderTo = renderTo || Ext.get(document.body).createChild();
+
     Ext.apply(this, config);
 
     this.dialog = new Ext.BasicDialog(renderTo, {
@@ -50,11 +52,17 @@ Vps.User.Login.Dialog = function(renderTo, config)
 
 Ext.extend(Vps.User.Login.Dialog, Ext.util.Observable,
 {
+    show: function() {
+        this.showLogin();
+    },
     showLogin: function() {
         this.dialog.show();
     },
     onSubmitSuccess: function() {
         this.dialog.hide();
-        Ext.callback(this.success, this.scope);
+        if(Vps.menu) Vps.menu.reload();
+        if(this.success) {
+            Ext.callback(this.success, this.scope);
+        }
     }
 });

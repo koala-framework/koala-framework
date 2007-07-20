@@ -27,3 +27,7 @@ Vps.Renderer.ShowField = function(fieldName) {
         return record.data[fieldName];
     };
 };
+
+Vps.Renderer.Nl2Br = function(v) {
+    return v.replace(/\n/g, "<br />");
+};

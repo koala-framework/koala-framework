@@ -1,35 +1,22 @@
 <?php
-abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
+abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Auto_Abstract
 {
     protected $_fields = array();
     protected $_buttons = array('save' => true);
-    protected $_primaryKey;
-    protected $_table;
-    protected $_tableName;
-    protected $_permissions; //todo: Zend_Acl ??
-
-    //deprecated:
-    public function ajaxLoadAction() { $this->jsonLoadAction(); }
-    public function ajaxSaveAction() { $this->jsonSaveAction(); }
-    public function ajaxDeleteAction() { $this->jsonDeleteAction(); }
 
     public function init()
     {
-        if (!isset($this->_table)) {
-            $this->_table = new $this->_tableName();
-        }
-        if (!isset($this->_permissions)) {
-            $this->_permissions = $this->_buttons;
-        }
-        if (!isset($this->_primaryKey)) {
-            $info = $this->_table->info();
-            $this->_primaryKey = $info['primary'][1];
-        }
+        parent::init();
     }
     protected function _getFieldIndex($name)
     {
         foreach ($this->_fields as $k=>$c) {
             if (isset($c['name']) && $c['name'] == $name || isset($c['hiddenName']) && $c['hiddenName'] == $name) {
+                return $k;
+            }
+        }
+        foreach ($this->_fields as $k=>$c) {
+            if (isset($c['id']) && $c['id'] == $name) {
                 return $k;
             }
         }
@@ -47,7 +34,15 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
 
     protected function _fetchData($id)
     {
+        if (!isset($this->_table)) {
+            throw new Vps_Exception("Either _table has to be set or _fetchData has to be overwritten.");
+        }
         return $this->_table->find($id)->current();
+    }
+
+    protected function _hasPermissions($row, $action)
+    {
+        return true;
     }
 
     public function jsonLoadAction()
@@ -58,14 +53,27 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
             if (!$row) {
                 throw new Vps_Exception("No database-entry with id '$id' found");
             }
-            if (!is_array($row)) $row = $row->toArray();
+            if (!$this->_hasPermissions((object)$row, 'load')) {
+                throw new Vps_Exception("You don't have the permission to load id '$id'.");
+            }
+            if (is_array($row)) $row = (object)$row;
             $this->view->data = array();
             foreach ($this->_fields as $field) {
-                if(isset($field['name'])) {
-                    $this->view->data[$field['name']] = $row[$field['name']];
+                if (isset($field['name'])) {
+                    $name = $field['name'];
+                } else if (isset($field['hiddenName'])) {
+                    $name = $field['hiddenName'];
+                } else {
+                    $name = false;
+                }
+                if ($name) {
+                    if (isset($field['findParent'])) {
+                        $this->view->data[$name] = $this->_fetchFromParentRow($row, $field['findParent']);
+                    } else {
+                        $this->view->data[$name] = $this->_fetchFromRow($row, $name);
+                    }
                 }
             }
-            $this->view->data = $row;
         }
 
         if ($this->getRequest()->getParam('meta')) {
@@ -87,7 +95,15 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
     protected function _afterSave(Zend_Db_Table_Row_Abstract $row)
     {
     }
-    
+
+    protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row)
+    {
+    }
+
+    protected function _afterInsert(Zend_Db_Table_Row_Abstract $row)
+    {
+    }
+
     public function jsonSaveAction()
     {
         if(!isset($this->_permissions['save']) || !$this->_permissions['save']) {
@@ -102,7 +118,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
             if(!isset($this->_permissions['add']) || !$this->_permissions['add']) {
                 throw new Vps_Exception("Add is not allowed.");
             }
-            $row = $this->_table->fetchNew();
+            $row = $this->_table->createRow();
         }
         if(!$row) {
             throw new Vps_Exception("Can't find row with id '$id'.");
@@ -116,9 +132,16 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action
             }
         }
         $this->_beforeSave($row);
+        if (!$id) {
+            $this->_beforeInsert($row);
+        }
+        if ($id && !$this->_hasPermissions($row, 'save')) {
+            throw new Vps_Exception("You don't have the permission to save id '$id'.");
+        }
         $row->save();
         $this->_afterSave($row);
         if (!$id) {
+            $this->_afterInsert($row);
             $this->view->addedId = $row->$primaryKey;
         }
     }
