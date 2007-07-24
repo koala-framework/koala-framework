@@ -1,5 +1,22 @@
-<form>
-{foreach from=$component.paragraphs item=paragraph}
-    {component component=$paragraph}<br />
+{foreach from=$component.errors item=error}
+ <font color="#cc0000" size=2> -> {$error}  </font><br/>
 {/foreach}
+<br/>
+<form action="{$component.action}" method="POST" ENCTYPE = "{if $component.upload}multipart/form-data{else}application/x-www-form-urlencoded {/if}">
+<table>
+{foreach from=$component.paragraphs item=paragraph}
+	{foreach from=$component.names item=name}
+		{if $paragraph.id == $name.id} 
+		<tr $component.name>
+			{if $name.noCols}
+				<td colspan = 2 > {component component=$paragraph}</td>
+			{else}			
+				<td {if !$name.isValid} bgcolor="#cc0000" {/if} ><b>{if $name.mandatory} * {/if} {$name.name}  </b></td>
+			    <td> {component component=$paragraph}</td>
+		    {/if}
+	    {/if}
+	{/foreach}
+{/foreach }	
+{if !$component.submit}<tr> <td colspan = 2 > <input type="submit" name="submit" value="Absenden"/> </td></tr>{/if}
+</table>
 </form>
