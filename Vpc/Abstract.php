@@ -13,8 +13,12 @@ abstract class Vpc_Abstract implements Vpc_Interface
     private $_componentKey;
     private $_hasGeneratedForFilename = array();
     private $_pageCollection = null;
-    private $_params = array();
-
+    //private $_params;
+    private $_staticSettings = array();
+    private $_settings = array();
+    protected $_defaultSettings = array();
+    private $_settingsDbRow;
+    
     /**
      * Sollte nicht direkt aufgerufen werden, sondern über statische Methoden der Klasse. Kann nicht
      * überschrieben werden, stattdessen sollte setup() verwendet werden.
@@ -35,9 +39,19 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_componentId = (int)$componentId;
         $this->_pageKey = $pageKey;
         $this->_componentKey = $componentKey;
-        $params = $this->getParams();
-        // TODO: aus components.ini Parameter auslesen
-        $this->_params = $params;
+        
+        $components = new Vps_Config_Ini('application/components.ini');       
+        $db = $dao->getDb();
+ 	    $componentName = get_class($this); 
+        foreach ($components as $component => $compData) {
+	        if ($component == $componentName){	              
+		        foreach ($compData as $dataKey => $dataValue){
+		            $this->_staticSettings[$dataKey] = $dataValue;
+		        }
+		        break;
+	        }
+	    }
+
         $this->setup();
     }
 
@@ -129,10 +143,10 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param int Für Unterscheidung des Komponenteninhalts
      * @return Vpc_Abstract Komponente
      */
-    protected function createComponent($className, $componentId = 0, $componentKeySuffix = '')
+    protected function createComponent($className, $componentId = null, $componentKeySuffix = '')
     {
         // Benötige Daten ggf. holen
-        if ($componentId == 0) {
+        if (is_null($componentId)) {
             $componentId = $this->getComponentId();
         }
 
@@ -183,7 +197,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
             }
 
         } catch (Zend_Exception $e) {
-            throw new Vpc_ComponentNotFoundException("Component '$className' not found.");
+            throw new Vpc_ComponentNotFoundException("Component '$className' not found. ($e)");
         }
 
         return $component;
@@ -551,9 +565,18 @@ abstract class Vpc_Abstract implements Vpc_Interface
     /**
      * @return Array mit Schlüssel Parameter und Wert Parameterwert
      */
-    public static function getParams()
+    public static function getStaticSettings()
     {
+       // return $this->_staticSettings;
         return array();
+    }
+    
+    /**
+     * @return Array mit Schlüssel Parameter und Wert Parameterwert
+     */
+    public function getStaticSetting($value)
+    {
+        return $this->_staticSettings[$value];
     }
 
     /**
@@ -562,23 +585,46 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string Parameter
      * @param mixed Wert
      */
-    public final function setParam($key, $val)
+    public final function setStaticSetting($key, $val)
     {
-        $params = $this->getParams();
-        if (!isset($params[$key])) {
+        $staticSettings = $this->getStaticSettings();
+        if (!isset($staticSettings[$key])) {
             throw new Vpc_Exception('Parameter for Component ' . get_class($this) . ' not valid: ' . $key);
         }
         
-        $this->_params[$key] = $val;
+        $this->_staticSettings[$key] = $val;
     }
 
-    protected function _getDbRow()
+    protected function _getSettingsDbRow()
     {
-        $rowset = $this->_getTable()->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
-        if ($rowset) {
-            return $rowset->current();
+        if (!$this->_settingsDbRow) {
+           
+            $this->_settingsDbRow = $this->_getTable()->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey())->current();
+               
         }
-        return null;
+        return $this->_settingsDbRow;
     }
     
+    protected function getSetting($field) { 
+        $row = $this->_getSettingsDbRow();
+        
+        if (isset($this->_settings[$field])) {
+           return $this->_settings[$field];
+        } else if (!is_null($row) && isset($row->$field)) {
+            
+            return ($row->$field);
+        } else {                       
+            return $this->_defaultSettings[$field];
+        }   
+    }
+    
+    public function setSetting($field, $value)
+    {
+        $this->_settings[$field] = $value;
+    }
+    
+    public function getDefaultSettings()
+    {
+        return $this->_defaultSettings;
+    }
 }

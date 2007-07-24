@@ -1,11 +1,11 @@
 <?php
 class Vpc_Setup_Abstract 
 {
-    protected $_standard = array(   "id" => "int(10) unsigned NOT NULL", 
+    protected $_standard = array(   "component_id" => "int(10) unsigned NOT NULL", 
                                 	"page_key" => "varchar(255) NOT NULL", 
                                 	"component_key" => "varchar(255) NOT NULL");
                                 	
-    protected $_keys = array('id', 'page_key', 'component_key');
+    protected $_keys = array('component_id', 'page_key', 'component_key');
                                               	
     protected $_db;
     
@@ -47,7 +47,7 @@ class Vpc_Setup_Abstract
     }
     
     
-    private function _tableExits ($tablename){       
+    protected function _tableExits ($tablename){       
 		 $tableList = $this->_db->listTables();   
 		 return in_array($tablename, $tableList);
     }  

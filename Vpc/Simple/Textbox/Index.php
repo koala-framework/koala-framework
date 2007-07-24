@@ -9,11 +9,12 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
     private $_content;
     private $_contentParts;
 
-    public static function getParams()
+    public static function getStaticSettings()
     {
         $config = array();
         $config['width'] = 400;
         $config['height'] = 400;
+        $config['value'] = "test";
         return $config;
     }
     
@@ -76,7 +77,7 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
         } else {
              $ret['template'] = 'Textbox.html';
         }
-
+        $ret['id'] = $this->getComponentId(); //test
         return $ret;
     }
 

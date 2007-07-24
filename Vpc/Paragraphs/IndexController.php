@@ -15,11 +15,16 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action
     {
         $this->indexAction();
     }
+    
+    protected function _getTable()
+    {
+        return Zend_Registry::get('dao')->getTable('Vpc_Paragraphs_IndexModel');
+    }
        
     public function ajaxDataAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $table = Zend_Registry::get('dao')->getTable('Vpc_Paragraphs_IndexModel');
+        $table = $this->_getTable();
 
         $iniComponents = new Zend_Config_Ini('application/config.ini', 'components');
         $components = $iniComponents->components->toArray();
@@ -39,7 +44,7 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action
         $lastSiblingId = $this->getRequest()->getParam('componentId');
         $id = $this->getRequest()->getParam('id');
 
-        $table = Zend_Registry::get('dao')->getTable('Vpc_Paragraphs_IndexModel');
+        $table = $this->_getTable();
 
         $componentId = $table->createParagraph($id, $componentClass, $lastSiblingId);
         $this->view->componentId = $componentId;
@@ -47,7 +52,7 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action
 
     public function ajaxDeleteAction()
     {
-        $table = Zend_Registry::get('dao')->getTable('Vpc_Paragraphs_IndexModel');
+        $table = $this->_getTable();
         $componentIds = explode(',', $this->getRequest()->getParam('componentIds'));
         foreach ($componentIds as $componentId) {
             $table->deleteParagraph($componentId);
@@ -57,7 +62,7 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action
 
     public function ajaxMoveAction()
     {
-        $table = Zend_Registry::get('dao')->getTable('Vpc_Paragraphs_IndexModel');
+        $table = $this->_getTable();
         $id = $this->getRequest()->getParam('id');
         $componentIds = explode(',', $this->getRequest()->getParam('componentIds'));
         foreach ($componentIds as $componentId) {
@@ -74,7 +79,7 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action
         }
         
         $componentIds = explode(',', $this->getRequest()->getParam('componentIds'));
-        $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Components');
+        $table = $this->_getTable();
         foreach ($componentIds as $componentId) {
             $table->setVisible($componentId, $visible == 'visible');
         }
