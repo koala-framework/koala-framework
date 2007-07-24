@@ -1,25 +1,33 @@
 <?php
-class Vpc_Formular_Textbox_Index extends Vpc_Abstract
+class Vpc_Formular_Textbox_Index extends Vpc_Formular_Field_Simple_Abstract
 {
-    function getTemplateVars($mode)
+    protected $_defaultSettings = array('maxlength' => '255', 'name' => '', 'width' => '50', 'value' => '', 'validator' => '');
+    
+    public function getTemplateVars($mode)
     {
-        $row = $this->_getDbRow();
-        if ($row) {
-            $maxlength = $row->maxlength;
-            $width = $row->width;
-            $name = $row->name;
-        } else {
-            
-            $width = 50;
-            $maxlength = 255;
-            $name = 'text';
-        }
-        
-        $return['text'] = '';
-        $return['maxlength'] = $maxlength;
-        $return['width'] = $width;
-        $return['name'] = $name;
+        $return['value'] = $this->getSetting('value');
+        $return['maxlength'] = $this->getSetting('maxlength');
+        $return['width'] = $this->getSetting('width');
+        $return['name'] = $this->getSetting('name');
+        $return['id'] = $this->getComponentId();
         $return['template'] = 'Formular/Textbox.html';
         return $return;
+    }
+    
+    public function setWidth($width)
+    {
+        $this->_width = (int)$width;
+    }
+    
+    public function validateField($mandatory)
+    {
+       
+        $validatorString = $this->getSetting('validator');
+        if ($validatorString != '' && $this->getSetting('value') != ''){
+            $validator = new $validatorString();
+            if (!$validator->isValid($this->getSetting('value'))) return 'Das Feld '.$this->_errorField.' entspricht nicht der geforderten Formattierung';
+        }
+        return parent::validateField($mandatory);
+        
     }
 }

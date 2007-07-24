@@ -1,30 +1,73 @@
 <?php
-class Vpc_Formular_Checkbox_Index extends Vpc_Abstract
+class Vpc_Formular_Checkbox_Index extends Vpc_Formular_Field_Abstract
 {
-    function getTemplateVars($mode)
+    protected $_defaultSettings = array('name' => '', 'text' => '', 'checked' => false, 'value' => '');
+    
+    public function getTemplateVars($mode)
     {
-        $row = $this->_getDbRow();
-        if ($row) {
-            
-            $value = $row->value;
-            $name = $row->name;
-            $text = $row->text;
-            if($row->checked == 1){
-                $checked = "checked";
-            }
-        } else {
-            
-            $checked = "";
-            $value = "test";
-            $name = "test";
-            $text = "default";
-        }
+        $name = $this->getSetting('name');
+        $value = $this->getSetting('value');
+        $text = $this->getSetting('text');
+        $checked = $this->getSetting('checked');
         
         $return['value'] = $value;
-        $return['checked'] = $checked;   
+        $return['checked'] = $checked;
         $return['name'] = $name;
         $return['text'] = $text;
-        $return['template'] = 'Checkbox.html';
+        $return['id'] = $this->getComponentId();
+        $return['template'] = 'Formular/Checkbox.html';
         return $return;
     }
+    
+    /* protected function setup()
+    {
+        $this->setSetting('checked', isset($_POST[$this->getSetting('name')]));
+    }
+    */
+    
+    public function processInput(){
+        if (isset($_POST[$this->getSetting('name')])) {
+            $this->setSetting('checked', 1);
+            $check = $this->getSetting('name');
+            if ($this instanceof  Vpc_Formular_Option_Index) {
+                
+                if ($this->getSetting('value') == $_POST[$this->getSetting('name')]) {
+                    $this->setSetting('checked', 1);
+                } else {
+                    $this->setSetting('checked', 0);
+                }
+            }
+        } else {
+            $this->setSetting('checked', 0);
+            $check = $this->getSetting('name');
+        }
+    }
+    
+    public function validateField($mandatory)
+    {
+        if ($mandatory && !$this->getSetting('checked')) {
+            return 'Feld '.$this->_errorField.' ist ein Pflichtfeld, bitte ausfüllen';
+        } else {
+            return true;
+        }
+        
+        
+        /* if (isset($_POST[$this->getSetting('name')])) {
+            
+            p($_POST[$this->getSetting('name')]);
+            
+        } else {
+            if ($mandatory == 1) {
+                return false;
+            }
+            $isset = false;
+            
+        }
+        */
+        
+        
+        return true;
+    }
+    
+    
 }

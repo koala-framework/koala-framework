@@ -1,45 +1,36 @@
 <?php
-class Vpc_Formular_Select_Index extends Vpc_Abstract
+class Vpc_Formular_Select_Index extends Vpc_Formular_Field_Decide_Abstract
 {
-    function getTemplateVars($mode)
+    protected $_defaultSettings = array('rows' => '10', 'name' => '');
+    protected $_options = array();
+    
+    public function getTemplateVars($mode)
     {
-        $row = $this->_getDbRow();
-        if ($row) {       
-            $size = $row->size;
-            $name = $row->name;
-           if($row->multiple == 1) {
-                $multiple = "multiple";
-           }
-        } else {            
-            $size = 10;
-            $multiple = "";
-            $name = "select";
-        }
-        $this->getOptions($name);
-       
-        $return['multiple'] = $multiple;
-        $return['size'] = $size;
+        $rows = $this->getSetting('rows');
+        $name = $this->getSetting('name');
+
+        $return['rows'] = $rows;
         $return['name'] = $name;
-        $return['options'] = $this->getOptions($name);
-        $return['template'] = 'Select.html';
+        if ($this->_options == null) $this->getOptions();
+		
+        $return['options'] = $this->_options;
+        $return['id'] = $this->getComponentId();
+		
+        $return['template'] = 'Formular/Select.html';
         return $return;
     }
-    
-    private function getOptions ($name){
-        $db = Zend_Registry::get('db');
-        $sql = "SELECT * FROM `component_formular_select_options` WHERE `select_name` = '$name'";
-        $options = $db->fetchAll($sql);
-        $optionsString = "";
-        foreach ($options as $row){          
-          //  p ($row);
-            $cnt = 0;
-            foreach ($row as $value => $data){
-                if ($cnt == 1)
-                 $optionsString .= "<option> $data </option>";
-                
-                $cnt++;
-            }
-        }
-		return $optionsString;
+        
+    public function getOptions ()
+    {
+        $table = $this->_getTable('Vpc_Formular_Select_OptionsModel');
+        $select = $table->fetchAll(array('component_id = ?'  => $this->getComponentId(),
+                                             'page_key = ?'      => $this->getPageKey(),
+                                             'component_key = ?' => $this->getComponentKey()));        
+        //values werden rausgeschrieben
+        $values = array();
+        foreach ($select as $option) {
+            $this->_options[] = array('value' => $option->value, 'text' => $option->value, 'selected' => $option->selected, 'id' => $option->id);
+        } 
+       
     }
 }

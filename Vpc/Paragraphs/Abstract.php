@@ -34,6 +34,12 @@ class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         return $this->_getParagraphs();
     }
     
+    protected function addChildComponent($newcomponent)
+    {
+        return $this->_paragraphs[] = $newcomponent;
+    }  
+    
+    
     private function _getParagraphs()
     {
         if (!isset($this->_paragraphs)) {
