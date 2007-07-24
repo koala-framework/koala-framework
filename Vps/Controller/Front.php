@@ -33,7 +33,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
 {
     public static function setUp()
     {
-        error_reporting(E_ALL|E_STRICT);
+        error_reporting(E_ALL);
         date_default_timezone_set('Europe/Berlin');
         set_error_handler('exceptionsHandler', E_ALL);
         Zend_Registry::set('config', Vps_Setup::createConfig());
