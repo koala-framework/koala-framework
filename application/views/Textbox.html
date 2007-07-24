@@ -1,0 +1,7 @@
+{foreach from=$component.contentParts item=part}
+  {if $part.type=="content"}
+    {$part.content}
+  {elseif $part.type=="component"}
+    {component component=$part.component}
+  {/if}
+{/foreach}

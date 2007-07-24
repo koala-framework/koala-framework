@@ -1,0 +1,3 @@
+{foreach from=$component.multicheckbox item=checkbox}
+	{component component=$checkbox} {if !$component.horizontal} <br> {/if}
+{/foreach}

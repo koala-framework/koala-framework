@@ -91,7 +91,7 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
         
         foreach ($components as $component => $compData) {
             try {
-                $config = call_user_func(array($component, 'getParams'));  
+                $config = call_user_func(array($component, 'getStaticSettings'));  
             } catch (Zend_Exception $e){
                 p("Component $component was not found");
             }
@@ -111,21 +111,21 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
 
     public function initAction()
     {
-    $filename = "application/components.ini";    
+    $filename = 'application/components.ini';    
     $components = new Vps_Config_Ini($filename);
     $db = Zend_Registry::get('db');
-        $config;
+
     foreach ($components as $component => $compData) {
       try {
-          $config = call_user_func(array($component, 'getParams')); 
+          $config = call_user_func(array($component, 'getStaticSettings')); 
           p ($component);
       } catch (Zend_Exception $e){
           p("Component $component was not found");
       }   
       //Index wird auf Setup geändert             
-      $setup = str_replace("Index", "Setup", $component);  
+      $setup = str_replace('Index', 'Setup', $component);  
       //Pfad wird erstellt         
-      $setupPath = str_replace("_", "/", $setup);
+      $setupPath = str_replace('_', '/', $setup);
     
       
         if (file_exists("./$setupPath.php")){
