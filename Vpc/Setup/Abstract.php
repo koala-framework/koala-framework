@@ -2,11 +2,11 @@
 class Vpc_Setup_Abstract 
 {
     protected $_standard = array(   "component_id" => "int(10) unsigned NOT NULL", 
-                                	"page_key" => "varchar(255) NOT NULL", 
-                                	"component_key" => "varchar(255) NOT NULL");
-                                	
+                                  "page_key" => "varchar(255) NOT NULL", 
+                                  "component_key" => "varchar(255) NOT NULL");
+                                  
     protected $_keys = array('component_id', 'page_key', 'component_key');
-                                              	
+                                                
     protected $_db;
     
     
@@ -42,13 +42,47 @@ class Vpc_Setup_Abstract
              //add end of statement
             $sql .= ")) ENGINE=InnoDB DEFAULT CHARSET=utf8;";          
             $this->_db->query($sql);
-             p ("Tabelle $name wurde angelegt");
         }
     }
     
     
     protected function _tableExits ($tablename){       
-		 $tableList = $this->_db->listTables();   
-		 return in_array($tablename, $tableList);
-    }  
+     $tableList = $this->_db->listTables();   
+     return in_array($tablename, $tableList);
+    }
+    
+    public static function getAvailableComponents($path = '')
+    {
+        $path = 'Vpc/' . $path;
+        $return = array();
+        if (is_dir($path)) {
+            $return = array_merge($return, self::_getAvailableComponents($path));
+        }
+        if (is_dir(VPS_PATH . $path)) {
+            $return = array_merge($return, self::_getAvailableComponents(VPS_PATH . $path));
+        }
+        return $return;
+    }
+    
+    private static function _getAvailableComponents($path)
+    {
+        $return = array();
+        foreach (new DirectoryIterator($path) as $item) {
+            if ($item->getFilename() != '.' && $item->getFilename() != '..' && $item->getFilename() != '.svn'){
+                if ($item->isDir()){
+                    $pathNew = "$path$item/";
+                    $return = array_merge(self::_getAvailableComponents($pathNew), $return);
+                } else {
+                    if ($item->getFilename() == 'Index.php'){
+                        $component = str_replace('/', '_', $item->getPath());
+                        $component = strrchr($component, 'Vpc_');
+                        $component .= '_Index';             
+                        $return[] = $component;
+                    }
+                }
+            }
+        }
+        return $return;
+    }
+    
 }

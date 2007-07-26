@@ -3,11 +3,15 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action
 {
     public function indexAction()
     {
-        $iniComponents = new Zend_Config_Ini('application/config.ini', 'components');
+        $ini = new Vps_Config_Ini('application/components.ini');
+        foreach ($ini->toArray() as $component => $data) {
+            $components[$component] = $data['name'];
+        }
+        
 
         $cfg = array();
-        $cfg['components'] = $iniComponents->components->toArray();
-
+        $cfg['components'] = $components;
+        $cfg['controllerUrl'] = $this->getRequest()->getPathInfo();
         $this->view->ext('Vpc.Paragraphs.Index', $cfg);
     }
        
@@ -79,11 +83,10 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action
         }
         
         $componentIds = explode(',', $this->getRequest()->getParam('componentIds'));
-        $table = $this->_getTable();
         foreach ($componentIds as $componentId) {
-            $table->setVisible($componentId, $visible == 'visible');
+            $row = $this->_getTable()->find($componentId)->current();
+            $row->visible = $visible == 'visible' ? '1' : '0';
+            $row->save();
         }
-        $this->view->success = true;
     }
-
 }
