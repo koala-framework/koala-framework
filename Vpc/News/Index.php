@@ -13,7 +13,10 @@ class Vpc_News_Index extends Vpc_Abstract
         foreach($this->getDao()->getTable('Vpc_News_IndexModel')->fetchAll() as $row) {
             if ($filename != '' && $filename != $row->filename) continue;
             $page = $this->createPage('Vpc_News_Details', 0, $row->id);
-            $this->getPagecollection()->addTreePage($page, 'Details', $row->title, $this);
+            $page->setNewsId($row->id);
+            $page->title = $row->title;
+            $this->getPagecollection()->addTreePage($page, $row->filename, $row->title, $this);
+            $pages[] = $page;
         }
         return $pages;
     }
@@ -21,11 +24,9 @@ class Vpc_News_Index extends Vpc_Abstract
     public function getTemplateVars($mode)
     {
         $ret = parent::getTemplateVars($mode);
-
-        $news = $this->generateHierarchy();
         $ret['news'] = array();
-        foreach($news as $filename => $n) {
-            $data['title'] = $this->_titles[$filename];
+        foreach($this->generateHierarchy() as $n) {
+            $data['title'] = $n->title;
             $data['filename'] = $n->getUrl();
             $ret['news'][] = $data;
         }

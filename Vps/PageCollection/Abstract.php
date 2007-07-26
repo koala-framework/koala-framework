@@ -80,7 +80,7 @@ abstract class Vps_PageCollection_Abstract
         if (isset($this->_pages[$id])) {
             $decoratedComponent = $this->_removePage($id);
         } else {
-            $decoratedComponent = $this->addDecorators($page);
+            $decoratedComponent = $this->_addDecorators($page);
         }
 
         $this->_setPage($decoratedComponent, $filename, $name);
@@ -98,7 +98,7 @@ abstract class Vps_PageCollection_Abstract
         return $page;
     }
 
-    protected function addDecorators(Vpc_Interface $page)
+    protected function _addDecorators(Vpc_Interface $page)
     {
         foreach ($this->_decoratorClasses as $class) {
             try {
@@ -128,7 +128,9 @@ abstract class Vps_PageCollection_Abstract
 
     public function setRootPage(Vpc_Interface $page)
     {
-        $this->_setPage($this->addDecorators($page), '', 'Home');
+        $page = $this->_addDecorators($page);
+        $this->_setPage($page, '', 'Home');
+        $page->setPageCollection($this);
         $this->_rootPageId = $page->getId();
     }
 
@@ -164,7 +166,6 @@ abstract class Vps_PageCollection_Abstract
         if (!isset($this->_rootPageId)) {
             $data = $this->_dao->getTable('Vps_Dao_Pages')->retrieveRootPageData();
             $rootPage = Vpc_Abstract::createInstance($this->_dao, $data['component_id']);
-            $rootPage->setPageCollection($this);
             $this->setRootPage($rootPage);
         }
         return $this->_pages[$this->_rootPageId];

@@ -1,12 +1,13 @@
 <?php
 class Vpc_News_Details extends Vpc_Abstract
 {
-    private $_newsId;
+    private $_id;
+    public $title;
     private $_content;
     
     public function setNewsId($id)
     {
-        $this->_newsId = $id;
+        $this->_id = $id;
     }
     
     public function getTemplateVars($mode)
@@ -27,4 +28,5 @@ class Vpc_News_Details extends Vpc_Abstract
     {
         return parent::getComponentInfo() + $this->_content->getComponentInfo();
     }
+    
 }

@@ -29,12 +29,13 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
     {
         $id = $this->_getParam('id');
         $parts = Vpc_Abstract::parseId($id);
-        if ($parts['pageKey'] != '') {
-            $component = Vps_PageCollection_Abstract::getInstance()->findComponent($id);
-        } else {
-            $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
-        }
-
+        $componentId = $parts['componentId'];
+        $pageCollection = new Vps_PageCollection_TreeBase(Zend_Registry::get('dao'));
+        $rootPage = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $componentId);
+        $pageCollection->setRootPage($rootPage);
+        
+        $component = $pageCollection->getPageById($id);
+        
         $this->view->setRenderFile(VPS_PATH . '/views/Component.html');
         $this->view->setCompilePath('application/views_c');
         $this->view->setScriptPath('application/views');

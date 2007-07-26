@@ -13,7 +13,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
     private $_componentKey;
     private $_hasGeneratedForFilename = array();
     private $_pageCollection = null;
-    //private $_params;
     private $_staticSettings = array();
     private $_settings = array();
     protected $_defaultSettings = array();
@@ -32,7 +31,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string Falls dynamische Unterseite
      * @param string Falls dynamische Unterkomponente
      */
-    protected final function __construct(Vps_Dao $dao, $topComponentId, $componentId, $pageKey = '', $componentKey = '')
+    public final function __construct(Vps_Dao $dao, $topComponentId, $componentId, $pageKey = '', $componentKey = '')
     {
         $this->_dao = $dao;
         $this->_topComponentId = (int)$topComponentId;
@@ -42,15 +41,15 @@ abstract class Vpc_Abstract implements Vpc_Interface
         
         $components = new Vps_Config_Ini('application/components.ini');       
         $db = $dao->getDb();
- 	    $componentName = get_class($this); 
+       $componentName = get_class($this); 
         foreach ($components as $component => $compData) {
-	        if ($component == $componentName){	              
-		        foreach ($compData as $dataKey => $dataValue){
-		            $this->_staticSettings[$dataKey] = $dataValue;
-		        }
-		        break;
-	        }
-	    }
+          if ($component == $componentName){	              
+            foreach ($compData as $dataKey => $dataValue){
+                $this->_staticSettings[$dataKey] = $dataValue;
+            }
+            break;
+          }
+      }
 
         $this->setup();
     }
