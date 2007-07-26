@@ -74,6 +74,13 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
 
     }
     
+    protected function _formatNode($row)
+    {
+        $data = parent::_formatNode($row);
+        $data['componentId'] = $row->component_id;
+        return $data;
+    }
+    
     protected function _getWhere()
     {
         $where = array();

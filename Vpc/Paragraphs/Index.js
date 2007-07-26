@@ -9,7 +9,7 @@ Vpc.Paragraphs.Index = function(renderTo, config)
     this.config.controllerUrl = this.config.controllerUrl || '';
     var Paragraph = Ext.data.Record.create([
         {name: 'id', type: 'int'},
-        {name: 'nr', type: 'int'},
+        {name: 'pos', type: 'int'},
         {name: 'component', type: 'string'},
         {name: 'visible', type: 'boolean'}
     ]);
@@ -216,12 +216,4 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
         }
     }
 
-})Ext.namespace('Vpc.Formular');
-Vpc.Formular.Index = function(renderTo, config)
-{
-	Vpc.Formular.Index.superclass.constructor(renderTo, config);    
-};
-
-Ext.extend(Vpc.Formular.Index, Vpc.Paragraphs.Index,
-{
-}); 
+})

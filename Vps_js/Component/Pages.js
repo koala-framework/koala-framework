@@ -36,7 +36,7 @@ Vps.Component.Pages = function(renderTo, config)
         handler : 
             function (o, e) {
                 node = this.tree.getSelectionModel().getSelectedNode();
-                this.fireEvent('editcomponent', {id: node.id, text: node.text});
+                this.fireEvent('editcomponent', {id: node.attributes.componentId, text: node.text});
             },
         icon : '/assets/vps/images/silkicons/page_edit.png',
         cls: "x-btn-text-icon",

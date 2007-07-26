@@ -5,6 +5,25 @@ class Vps_Dao_Components extends Zend_Db_Table
     
     public function addComponent($addingComponentId = 0, $class = 'Vpc_Paragraphs_Index', $visible = false)
     {
+        // Setup
+        try {
+            $setupClass = str_replace('_Index', '_Setup', $class);
+            if (class_exists($setupClass)) {
+                $setup = new $setupClass($this->getAdapter());
+                $setup->setup();
+            }
+        } catch (Zend_Exception $e) {
+        }
+
+        $components = new Vps_Config_Ini('application/components.ini');
+        $config = call_user_func(array($class, 'getStaticSettings')); 
+        foreach ($config as $element => $value){
+            if (!$components->checkKeyExists($class, $element)) {
+                $components->setValue($class, $element, (string)$value);       
+            }       
+        }     
+        $components->write();
+
         // TODO: Componentclass checken
         $data['component'] = $class;
         $data['visible'] = $visible ? 1 : 0;
@@ -17,6 +36,7 @@ class Vps_Dao_Components extends Zend_Db_Table
         $row = $this->find($componentId)->current();
         $row->page_id = $pageId;
         $row->save();
+
         return $componentId;        
     }
     

@@ -1,7 +1,8 @@
 <?php
-class Vpc_Paragraphs_IndexModel extends Vpc_Table
+class Vpc_Paragraphs_IndexModel extends Vps_Db_Table
 {
     protected $_name = 'component_paragraphs';
+    protected $_primary = array('component_id');
     
     public function fetchParagraphs($componentId, $pageKey = '', $componentKey = '')
     {
@@ -9,7 +10,7 @@ class Vpc_Paragraphs_IndexModel extends Vpc_Table
         $where = $db->quoteInto('parent_component_id = ?', $componentId);
         $where .=  $db->quoteInto(' AND parent_page_key = ?', $pageKey);
         $where .=  $db->quoteInto(' AND parent_component_key = ?', $componentKey);
-        return $this->fetchAll($where, 'nr');
+        return $this->fetchAll($where, 'pos');
     }
     
     public function fetchParagraphsData($id, $componentId = 0)
@@ -20,12 +21,12 @@ class Vpc_Paragraphs_IndexModel extends Vpc_Table
             $where = $this->getAdapter()->quoteInto('p.component_id = ?', $componentId);
         }
         $sql = '
-            SELECT p.component_id id, p.nr, c.component, c.visible
+            SELECT p.component_id id, p.pos, c.component, c.visible
             FROM ' . $this->_name . ' p
             LEFT JOIN vps_components c
             ON p.component_id=c.id
             WHERE ' . $where . '
-            ORDER BY p.nr
+            ORDER BY p.pos
         ';
         $data = $this->getAdapter()->fetchAll($sql);
         if ($componentId > 0 && isset($data[0])) {
@@ -59,14 +60,14 @@ class Vpc_Paragraphs_IndexModel extends Vpc_Table
                 // Nummerieren
                 $row = $this->fetchRow('component_id = ' . $componentId);
                 $lastSibling = $this->fetchParagraphsData($id, $lastSiblingId);
-                $nr = sizeof($lastSibling) + 1;
+                $pos = sizeof($lastSibling) + 1;
                 if ($lastSiblingId == 0) {
                     $lastSibling = $this->fetchParagraphsData($id, $lastSiblingId);
-                    if (isset($lastSibling['nr'])) {
-                        $nr = $lastSibling['nr'] + 1;
+                    if (isset($lastSibling['pos'])) {
+                        $pos = $lastSibling['pos'] + 1;
                     }
                 }
-                $row->numberize('nr', $nr, 'parent_component_id = ' . $id);
+                $row->numberize('pos', $pos, 'parent_component_id = ' . $id);
                 
                 $db->commit();
                 return $componentId;
@@ -102,11 +103,11 @@ class Vpc_Paragraphs_IndexModel extends Vpc_Table
             throw new Vps_Dao_Exception('Paragraph with id ' . $componentId . ' not found');
         }
         if ($direction == 'up') {
-            $nr = $componentData['nr'] - 1;
+            $pos = $componentData['pos'] - 1;
         } else if ($direction = 'down') {
-            $nr = $componentData['nr'] + 1;
+            $pos = $componentData['pos'] + 1;
         }
         $where = $this->getAdapter()->quoteInto('component_id = ?', $componentId);
-        return $this->numberize($where, 'nr', $nr, 'parent_component_id = ' . $id);
+        return $this->numberize($where, 'pos', $pos, 'parent_component_id = ' . $id);
     }
 }
