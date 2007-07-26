@@ -84,9 +84,8 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action
         
         $componentIds = explode(',', $this->getRequest()->getParam('componentIds'));
         foreach ($componentIds as $componentId) {
-            $row = $this->_getTable()->find($componentId)->current();
-            $row->visible = $visible == 'visible' ? '1' : '0';
-            $row->save();
+            $table = Zend_Registry::get('dao')->getTable('Vps_Dao_Components');
+            $table->setVisible($componentId, $visible == 'visible');
         }
     }
 }
