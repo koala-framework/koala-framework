@@ -4,7 +4,7 @@ abstract class Vps_Controller_Action_Auto_Form_Vpc extends Vps_Controller_Action
     {
        $this->view->ext('Vps.Auto.Form');
     }
-       
+
     public function jsonIndexAction()
     {
        $this->indexAction();

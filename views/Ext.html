@@ -1,11 +1,11 @@
 {if isset($ext) && !empty($ext)}
     {foreach item=file from=$ext.files.css}
     <link rel="stylesheet" type="text/css" href="{$file}" />
-    {/foreach} 
+    {/foreach}
 
     {foreach item=file from=$ext.files.js}
     <script type="text/javascript" src="{$file}"></script>
-    {/foreach} 
+    {/foreach}
     <script type="text/javascript">
         Ext.onReady(function() {ldelim}
             Vps.Page = new {$ext.class}({if $ext.renderTo != ''}{$ext.renderTo}{else}document.body{/if}, {$ext.config});
