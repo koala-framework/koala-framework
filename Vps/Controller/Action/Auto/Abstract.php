@@ -42,7 +42,7 @@ class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
             }
             return $parentRow->__toString();
         }
-        if (!is_null($row->$findParent['field']) && !isset($row->$findParent['field'])) {
+        if (!is_null($parentRow->$findParent['field']) && !isset($parentRow->$findParent['field'])) {
             throw new Vps_Exception("Index '$findParent[field]' for parent-table '$findParent[table]' not found");
         }
         return $parentRow->$findParent['field'];
