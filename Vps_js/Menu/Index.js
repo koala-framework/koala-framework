@@ -15,6 +15,7 @@ Vps.Menu.Index = function(renderTo, config)
 
 Ext.extend(Vps.Menu.Index, Ext.util.Observable,
 {
+    userRole: null,
     reload: function()
     {
         Ext.Ajax.request({
@@ -95,6 +96,7 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
             this.tb.render(this.renderTo);
         }
         var response = Ext.decode(r.responseText);
+        Vps.Menu.userRole = response.userRole;
         var menuItems = this._processMenus(response.menus);
         menuItems.each(function(menuItem) {
             this.tb.add(menuItem);
