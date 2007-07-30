@@ -13,7 +13,7 @@ class Vpc_Formular_Textbox_IndexController extends Vps_Controller_Action_Auto_Fo
            array('type'       => 'TextField',
                  'fieldLabel' => 'Standardeingabe',
                  'name'       => 'value',
-                 'width'      => 50),
+                 'width'      => 150),
            array('type'       => 'ComboBox',
                  'fieldLabel' => 'Validierer',
                  'store'      => array('data'=>array(array('',                           'keiner'),

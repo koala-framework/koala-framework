@@ -23,15 +23,19 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                 $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
             }
             $className = get_class($component) . 'Controller';
+            $controllerName = $this->getFrontController()->getRequest()->getParam('controller');
+            if ($controllerName) {
+            	$className = str_replace('_IndexController', '_' . $controllerName . 'Controller', $className);
+            }
 
         } else {
 
             $controllerDir = $this->getFrontController()->getControllerDirectory();
             $controllerName = $request->getControllerName();
             $controllerFile = $controllerDir['default'] . '/' . $this->classToFilename(parent::formatControllerName($controllerName));
-            
+
             if (is_file($controllerFile)) {
-                
+
                 require_once($controllerFile);
 
             } else {
@@ -40,7 +44,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                 $className = "Vps_Controller_Action_Component_$className";
 
             }
-     
+
 
         }
 

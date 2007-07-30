@@ -1,14 +1,13 @@
 <?php
-class Vpc_Formular_Option_Setup extends Vpc_Setup_Abstract 
+class Vpc_Formular_Option_Setup extends Vpc_Setup_Abstract
 {
-        
+
     public function setup()
-    {   
-	    $fields['horziontal'] = 'tinyint(4) NOT NULL';
-	 
+    {
+	    $fields['horizontal'] = 'tinyint(4) NOT NULL';
 	    $this->createTable('component_formular_option', $fields);
-	    
-    $tablename = 'component_formular_option_options';
+
+    	$tablename = 'component_formular_option_options';
         if (!$this->_tableExits($tablename)) {
 	        $this->_db->query("CREATE TABLE `$tablename` (
 							  `id` int(11) NOT NULL auto_increment,
@@ -23,6 +22,6 @@ class Vpc_Formular_Option_Setup extends Vpc_Setup_Abstract
 							  ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;");
 	        }
 
-	 
+
     }
 }

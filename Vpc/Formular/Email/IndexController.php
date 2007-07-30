@@ -13,15 +13,11 @@ class Vpc_Formular_Email_IndexController extends Vps_Controller_Action_Auto_Form
             array('type'       => 'TextField',
                   'fieldLabel' => 'Standardwert',
                   'name'       => 'value',
-                  'width'      => 50),
+                  'width'      => 150),
     );
 
     protected $_buttons = array('save'   => true);
     protected $_tableName = 'Vpc_Formular_Email_IndexModel';
     protected $_primaryKey = 'id';
 
-   /* public function init()
-    {
-        parent::init();        
-    }*/
 }

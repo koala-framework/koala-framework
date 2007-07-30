@@ -10,7 +10,7 @@ class Vpc_Formular_Password_IndexController extends Vps_Controller_Action_Auto_F
                   'fieldLabel' => 'Maximale Textlänge',
                   'name'       => 'maxlength',
                   'width'      => 50),
-        );
+            );
 
     protected $_buttons = array('save'   => true);
     protected $_tableName = 'Vpc_Formular_Password_IndexModel';
