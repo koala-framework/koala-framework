@@ -1,15 +1,15 @@
 <?php
-class Vpc_Formular_Option_IndexController extends Vps_Controller_Action_Auto_Form_Vpc
+class Vpc_Formular_Select_IndexController extends Vps_Controller_Action_Auto_Form_Vpc
 {
     protected $_fields = array(
             array('type'       => 'TextField',
-                  'fieldLabel' => 'horizontal',
-                  'name'       => 'horizontal'
+                  'fieldLabel' => 'Anzahl der angezeigten Reihen',
+                  'name'       => 'rows'
             )
     );
 
     protected $_buttons = array('save'   => true);
-    protected $_tableName = 'Vpc_Formular_Option_IndexModel';
+    protected $_tableName = 'Vpc_Formular_Select_IndexModel';
     protected $_primaryKey = 'id';
 
    	public function indexAction()
@@ -20,7 +20,7 @@ class Vpc_Formular_Option_IndexController extends Vps_Controller_Action_Auto_For
 		$controllerUrl = str_replace('index/', '', $controllerUrl);
 		$cfg['controllerUrl'] = $controllerUrl;
 		$cfg['optionsControllerUrl'] = $controllerUrl . 'Options/';
-		$this->view->ext('Vpc.Formular.Option.Index', $cfg);
+		$this->view->ext('Vpc.Formular.Select.Index', $cfg);
 	}
 
 

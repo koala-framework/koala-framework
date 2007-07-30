@@ -1,15 +1,15 @@
 <?php
 class Vpc_Formular_Checkbox_Index extends Vpc_Formular_Field_Abstract
 {
-    protected $_defaultSettings = array('text' => '', 'checked' => false, 'value' => '');
-    
+    protected $_defaultSettings = array('text' => '', 'checked' => false, 'value' => '', 'name' => '');
+
     public function getTemplateVars($mode)
     {
         $name = $this->getSetting('name');
         $value = $this->getSetting('value');
         $text = $this->getSetting('text');
         $checked = $this->getSetting('checked');
-        
+
         $return['value'] = $value;
         $return['checked'] = $checked;
         $return['name'] = $name;
@@ -18,19 +18,13 @@ class Vpc_Formular_Checkbox_Index extends Vpc_Formular_Field_Abstract
         $return['template'] = 'Formular/Checkbox.html';
         return $return;
     }
-    
-    /* protected function setup()
-    {
-        $this->setSetting('checked', isset($_POST[$this->getSetting('name')]));
-    }
-    */
-    
+
     public function processInput(){
         if (isset($_POST[$this->getSetting('name')])) {
             $this->setSetting('checked', 1);
             $check = $this->getSetting('name');
             if ($this instanceof  Vpc_Formular_Option_Index) {
-                
+
                 if ($this->getSetting('value') == $_POST[$this->getSetting('name')]) {
                     $this->setSetting('checked', 1);
                 } else {
@@ -42,7 +36,7 @@ class Vpc_Formular_Checkbox_Index extends Vpc_Formular_Field_Abstract
             $check = $this->getSetting('name');
         }
     }
-    
+
     public function validateField($mandatory)
     {
         if ($mandatory && !$this->getSetting('checked')) {
@@ -50,24 +44,5 @@ class Vpc_Formular_Checkbox_Index extends Vpc_Formular_Field_Abstract
         } else {
             return true;
         }
-        
-        
-        /* if (isset($_POST[$this->getSetting('name')])) {
-            
-            p($_POST[$this->getSetting('name')]);
-            
-        } else {
-            if ($mandatory == 1) {
-                return false;
-            }
-            $isset = false;
-            
-        }
-        */
-        
-        
-        return true;
     }
-    
-    
 }

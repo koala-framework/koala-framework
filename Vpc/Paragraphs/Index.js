@@ -7,30 +7,50 @@ Vpc.Paragraphs.Index = function(renderTo, config)
     };
     this.config = config;
     this.config.controllerUrl = this.config.controllerUrl || '';
+
     var Paragraph = Ext.data.Record.create([
         {name: 'id', type: 'int'},
         {name: 'pos', type: 'int'},
         {name: 'component', type: 'string'},
-        {name: 'visible', type: 'boolean'}
+        {name: 'visible', type: 'boolean'},
+		{name: 'name', type: 'string'},
+		{name: 'mandatory', type: 'boolean'}
     ]);
-    
+
     this.ds = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy(new Vps.Connection({url: this.config.controllerUrl + 'ajaxData'})),
         reader: new Ext.data.JsonReader({root: 'rows', id: 'id'}, Paragraph)
     });
     this.ds.load();
 
+	var fm = Ext.form; Ed = Ext.grid.GridEditor;
+
     var colModel = new Ext.grid.ColumnModel([
-            {   header: "Type", 
-                width: 300, 
-                dataIndex: 'component'
+            {   header: "Type",
+                width: 300,
+                dataIndex: 'component',
+				//editor : new Ed(new fm.TextField({allowBlankd : false}))
+
+       		},{
+                header: "Sichtbar",
+                width: 100,
+                dataIndex: 'visible',
+				editor : new Ed(new fm.Checkbox())
             },{
-                header: "Sichtbar", 
-                width: 100, 
-                dataIndex: 'visible'
+                header: "Name",
+                width: 150,
+                dataIndex: 'name',
+				editor : new Ed(new fm.TextField({allowBlankd : false}))
+
+            },{
+                header: "Verpflichtend",
+                width: 150,
+                dataIndex: 'mandatory',
+				editor : new Ed(new fm.Checkbox())
             }
+
     ]);
-    
+
     this.grid = new Ext.grid.EditorGrid(renderTo, {
         ds: this.ds,
         selModel: new Ext.grid.RowSelectionModel(),
@@ -114,7 +134,7 @@ Vpc.Paragraphs.Index = function(renderTo, config)
             return '';
         }
     }
-    
+
 };
 
 Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
@@ -209,7 +229,7 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
 
     edit : function(o, p) {
         componentIds = this.getSelectedIds();
-        
+
         if (componentIds != '') {
             row = this.grid.getSelectionModel().getSelections().shift();
             this.fireEvent('editcomponent', {id: row.id, text:'foo'})

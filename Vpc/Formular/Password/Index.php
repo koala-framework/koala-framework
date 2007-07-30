@@ -2,7 +2,7 @@
 class Vpc_Formular_Password_Index extends Vpc_Formular_Field_Simple_Abstract
 {
     protected $_defaultSettings = array('maxlength' => '255', 'name' => '', 'width' => '50');
-    
+
     function getTemplateVars($mode)
     {
         $return['maxlength'] = $this->getSetting('maxlength');
@@ -12,6 +12,4 @@ class Vpc_Formular_Password_Index extends Vpc_Formular_Field_Simple_Abstract
         $return['template'] = 'Formular/Password.html';
         return $return;
     }
-    
-    
 }
