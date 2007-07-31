@@ -7,17 +7,14 @@
 abstract class Vpc_Abstract implements Vpc_Interface
 {
     protected $_dao;
-    private $_topComponentId;
-    private $_componentId;
-    protected $_pageKey;
-    private $_componentKey;
+    private $_id;
     private $_hasGeneratedForFilename = array();
     private $_pageCollection = null;
     private $_staticSettings = array();
     private $_settings = array();
     protected $_defaultSettings = array();
     private $_settingsDbRow;
-    
+
     /**
      * Sollte nicht direkt aufgerufen werden, sondern über statische Methoden der Klasse. Kann nicht
      * überschrieben werden, stattdessen sollte setup() verwendet werden.
@@ -31,26 +28,25 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string Falls dynamische Unterseite
      * @param string Falls dynamische Unterkomponente
      */
-    public final function __construct(Vps_Dao $dao, $topComponentId, $componentId, $pageKey = '', $componentKey = '')
+    public final function __construct(Vps_Dao $dao, $id, $pageCollection = null)
     {
         $this->_dao = $dao;
-        $this->_topComponentId = (int)$topComponentId;
-        $this->_componentId = (int)$componentId;
-        $this->_pageKey = $pageKey;
-        $this->_componentKey = $componentKey;
-        
-        $components = new Vps_Config_Ini('application/components.ini');       
-        $db = $dao->getDb();
-       $componentName = get_class($this); 
-        foreach ($components as $component => $compData) {
-          if ($component == $componentName){	              
-            foreach ($compData as $dataKey => $dataValue){
-                $this->_staticSettings[$dataKey] = $dataValue;
-            }
-            break;
-          }
-      }
+        $this->_pageCollection = $pageCollection;
+        $this->_id = $this->parseId($id);
 
+/*
+        $components = new Vps_Config_Ini('application/components.ini');
+        $db = $dao->getDb();
+        $componentName = get_class($this);
+        foreach ($components as $component => $compData) {
+            if ($component == $componentName){
+                foreach ($compData as $dataKey => $dataValue){
+                    $this->_staticSettings[$dataKey] = $dataValue;
+                }
+                break;
+            }
+        }
+*/
         $this->setup();
     }
 
@@ -63,14 +59,12 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Erstellt aus der ID der Komponente die Komponente.
      *
      * @param Vps_Dao DAO
-     * @param string ID der Komponenten (nicht die componentId, sonder die gesamte ID)
+     * @param string ID der Komponente
      * @return Vpc_Abstract
      */
-    public static function createInstance(Vps_Dao $dao, $id)
+    public static function createInstance(Vps_Dao $dao, $class, $id)
     {
-        $parsedId = self::parseId($id);
-        $component = self::_createInstance($dao, $parsedId['componentId'], $parsedId['componentId'], $parsedId['pageKey'], '', $parsedId['componentKey']);
-        return $component->findComponent($id);
+        return self::_createInstance($dao, $class, $id);
     }
 
     /**
@@ -93,41 +87,19 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @return Vpc_Abstract Komponente, die als Seite im Seitenbaum hinzugefügt werden kann
      * @throws Vpc_Exception Falls pageKeySuffix und pageTagSuffix gleichzeit gesetzt werden
      */
-    protected function createPage($className, $componentId = 0, $pageKeySuffix = '', $pageTagSuffix = '', $pageTag = '')
+    protected function createPage($class, $pageKeySuffix = '', $pageTagSuffix = '')
     {
-        // Benötige Daten ggf. holen
-        if ($componentId == 0) {
-            $topComponentId = $this->getTopComponentId();
-            $componentId = $this->getComponentId();
-        } else {
-            $topComponentId = $componentId;
+        $id = $this->getId();
+        if ($pageKeySuffix != '') {
+            $id .= '_' . $pageKeySuffix;
         }
 
-        if ($pageKeySuffix != '' && $pageTagSuffix != '') {
-            throw new Vpc_Exception('Only one of $pageKeySuffix and $pageTagSuffix can have a value.');
-        }
-
-        if ($pageTag != '') {
-            $pageKey = $pageTag . 't';
-        } else {
-            $pageKey = $this->_pageKey;
-            if ($pageKeySuffix != '') {
-                if ($pageKey != '') { $pageKey .= '.'; }
-                $pageKey .= $pageKeySuffix;
-            }
-            if ($pageTagSuffix != '') {
-                if ($pageKey != '') { $pageKey .= '.'; }
-                $pageKey .= $pageTagSuffix . 't';
-            }
+        if ($pageTagSuffix != '') {
+            $id .= ',' . $pageTagSuffix;
         }
 
         // Page erstellen
-        $page = self::_createInstance($this->getDao(), $topComponentId, $componentId, $pageKey, '', $className);
-
-        // Zu Komponente ggf. PageCollection hinzufügen
-        if (!is_null($page) && !is_null($this->_pageCollection)) {
-            $page->setPageCollection($this->_pageCollection);
-        }
+        $page = self::_createInstance($this->getDao(), $class, $id, $this->getPageCollection());
 
         // Erstellte Komponente hinzufügen
         return $page;
@@ -142,24 +114,15 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param int Für Unterscheidung des Komponenteninhalts
      * @return Vpc_Abstract Komponente
      */
-    protected function createComponent($className, $componentId = null, $componentKeySuffix = '')
+    protected function createComponent($class, $pageKeySuffix = '')
     {
-        // Benötige Daten ggf. holen
-        if (is_null($componentId)) {
-            $componentId = $this->getComponentId();
+        $id = $this->getId();
+        if ($pageKeySuffix != '') {
+            $id .= '-' . $pageKeySuffix;
         }
-
-        $componentKey = $this->getComponentKey();
-        if ($componentKey != '' && $componentKeySuffix != '') { $componentKey .= '_'; }
-        $componentKey .= $componentKeySuffix;
 
         // Komponente erstellen
-        $component = self::_createInstance($this->getDao(), $this->getTopComponentId(), $componentId, $this->_pageKey, $componentKey, $className);
-
-        // Zu Komponente ggf. PageCollection hinzufügen
-        if (!is_null($component) && !is_null($this->_pageCollection)) {
-            $component->setPageCollection($this->_pageCollection);
-        }
+        $component = self::_createInstance($this->getDao(), $class, $id, $this->getPageCollection());
 
         // Erstellte Komponente hinzufügen
         return $component;
@@ -169,34 +132,27 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Erstellt die Komponente tatsächlich.
      * @throws Vpc_ComponentNotFoundException Falls Klasse für Komponente nicht gefunden wird
      */
-    private static function _createInstance(Vps_Dao $dao, $topComponentId, $componentId, $pageKey = '', $componentKey = '', $className = '')
+    private static function _createInstance(Vps_Dao $dao, $class, $id, $pageCollection = null)
     {
-        if ($className == '') {
-            $data = $dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
-            if ($data) {
-                $className = $data['component'];
-            }
-        }
-
         // Komponente erstellen
         try {
 
-            if (class_exists($className)) {
-                $component = new $className($dao, $topComponentId, $componentId, $pageKey, $componentKey);
+            if (class_exists($class)) {
+                $component = new $class($dao, $id, $pageCollection);
             }
 
             // Decorators hinzufügen
             if (!is_null($component)) {
                 $decoratorData = $dao->getTable('Vps_Dao_Pages')->retrieveDecoratorData($component->getId());
-                foreach ($decoratorData as $className) {
-                    if (class_exists($className)) {
-                        $component = new $className($dao, $component);
+                foreach ($decoratorData as $decoratorClass) {
+                    if (class_exists($decoratorClass)) {
+                        $component = new $decoratorClass($dao, $component);
                     }
                 }
             }
 
         } catch (Zend_Exception $e) {
-            throw new Vpc_ComponentNotFoundException("Component '$className' not found. ($e)");
+            throw new Vpc_ComponentNotFoundException("Component '$class' not found. ($e)");
         }
 
         return $component;
@@ -218,65 +174,62 @@ abstract class Vpc_Abstract implements Vpc_Interface
     public static function parseId($id)
     {
         $keys = array();
-        $pattern  = '^';
-        $pattern .= '(\d+)'; // ComponentId
-        $pattern .= '(_\d+(\.\d+)*)?'; // PageKey
-        $pattern .= '(-\d+(\.\d+)*)?'; // ComponentKey
-        $pattern .= '$';
-        preg_match("#$pattern#", $id, $keys);
+        $pattern = self::getIdPattern();
+        preg_match("#^$pattern\$#", $id, $keys);
 
         if ($keys == null) {
             throw new Vpc_Exception("ID $id doesn't match pattern for Id: $pattern");
         }
 
-        $parts['id'] = $keys[0];
-        $parts['componentId'] = (int)$keys[1];
-        $parts['pageKey'] = isset($keys[2]) ? substr($keys[2], 1) : '';
-        $parts['componentKey'] = isset($keys[4]) ? substr($keys[4], 1) : '';
-        $parts['pageKeys'] = $parts['pageKey'] != '' ? explode('.', $parts['pageKey']) : array();
-        $parts['componentKeys'] = $parts['componentKey'] != '' ? explode('.', $parts['componentKey']) : array();
-        return $parts;
-    }
+        $parts['dbId'] = (int)$keys[1];
+        $parts['componentId'] = $keys[0];
+        $parts['pageId'] = '';
+        $parts['componentKey'] = $keys[2];
+        $parts['pageKey'] = '';
+        $parts['pageKeys'] = array();
+        $parts['currentPageKey'] = '';
+        $parts['currentPageTag'] = '';
 
-    /**
-     * Da das pageIdPattern auch zum Parsen der URL im Seitenbaum verwendet wird,
-     * hier zentral gespeichert.
-     *
-     * @return string Regulärer Ausdruck für das Parsen der pageId
-     */
-    public static function getPageIdPattern()
-    {
-        $pattern = '(\d+)'; // TopComponentId
-        $pattern .= '(_\d+t?(\.\d+t?)*)?'; // PageKey
-        return $pattern;
-    }
-
-    /**
-     * Die pageId identifiziert jede Seite im Seitenbaum und kann hier in ihre
-     * Bestandteile zerlegt werden.
-     *
-     * Die pageId besteht aus topComponentId_pageKey, wobei der pageKey optional sein
-     * und aus pageKey und pageTag zusammgengesetzt sein kann. Der pageKey kann bei
-     * mehreren Ebenen von dynamischen Unterseiten geschachtelt werden (Trennzeichen .).
-     *
-     * @param string pageId
-     * @return array Array mit Bestandteilen der pageId
-     * @throws Vpc_Exception Falls pageId nicht auf Muster passt
-     */
-    public static function parsePageId($id)
-    {
-        $keys = array();
-        preg_match('#^' . self::getPageIdPattern() . '$#', $id, $keys);
-
-        if ($keys == null) {
-            throw new Vpc_Exception("ID $id doesn't match pattern for pageId: $pattern");
+        $pageKey = isset($keys[2]) ? $keys[2] : '';
+        $pageKeys = array();
+        $currentPageKey = '';
+        foreach (str_split($pageKey) as $pos => $key) {
+            if ($key == ',' || $key == '-' || $key == '_') {
+                if ($currentPageKey != '') {
+                    $pageKeys[substr($pageKey, 0, $pos)] = $currentPageKey;
+                }
+                $currentPageKey = $key;
+            } else {
+                $currentPageKey .= $key;
+            }
         }
-
-        $parts['id'] = $keys[0];
-        $parts['topComponentId'] = (int)$keys[1];
-        $parts['pageKey'] = isset($keys[2]) && $keys[2] != '' ? substr($keys[2], 1) : '';
-        $parts['pageKeys'] = $parts['pageKey'] != '' ? explode('.', $parts['pageKey']) : array();
+        if ($currentPageKey != '') {
+            $pageKeys[$pageKey] = $currentPageKey;
+        }
+        foreach ($pageKeys as $currentPageKey => $value) {
+            $key = substr($value, 0, 1);
+            $value = substr($value, 1);
+            if ($key != '-') {
+                $parts['pageKeys'][$currentPageKey] = $value;
+                $parts['pageKey'] = $currentPageKey;
+                if ($key == ',') {
+                    $parts['currentPageTag'] = $value;
+                    $parts['currentPageKey'] = '';
+                } else if ($key == '_') {
+                    $parts['currentPageKey'] = $value;
+                    $parts['currentPageTag'] = '';
+                }
+            }
+        }
+        $parts['pageId'] = $parts['dbId'] . $parts['pageKey'];
         return $parts;
+    }
+
+    public static function getIdPattern()
+    {
+        $pattern = '(\d+)'; // PageId
+        $pattern .= '(((-|_|,)\d+)*)?'; // PageKey
+        return $pattern;
     }
 
     /**
@@ -285,14 +238,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      */
     public function getId()
     {
-        $ret = (string)$this->getComponentId();
-        if ($this->getPageKey() != '') {
-            $ret .= '_' . $this->getPageKey();
-        }
-        if ($this->getComponentKey() != '') {
-            $ret .= '-' . $this->getComponentKey();
-        }
-        return $ret;
+        return (string)$this->_id['componentId'];
     }
 
     /**
@@ -301,35 +247,16 @@ abstract class Vpc_Abstract implements Vpc_Interface
      */
     public function getPageId()
     {
-        $pageId = (string)$this->_topComponentId;
-        if ($this->_pageKey != '') {
-            $pageId .= '_' . $this->_pageKey;
-        }
-        return $pageId;
+        return (string)$this->_id['pageId'];
     }
 
     /**
-     * @return int componentId in der Tabelle vps_components
+     * @return string pageId der Komponente.
+     * @see parsePageId
      */
-    protected function getComponentId()
+    public function getDbId()
     {
-        return (int)$this->_componentId;
-    }
-
-    /**
-     * @return int Falls Komponenten verschachtelt wurden, componentId der obersten Komponente
-     */
-    protected function getTopComponentId()
-    {
-        return (int)$this->_topComponentId;
-    }
-
-    /**
-     * @return string componentKey
-     */
-    protected function getComponentKey()
-    {
-        return $this->_componentKey;
+        return (int)$this->_id['dbId'];
     }
 
     /**
@@ -338,32 +265,14 @@ abstract class Vpc_Abstract implements Vpc_Interface
      *
      * @return string pageKey, falls es mehrere gibt, durch . aneinandergekettet
      */
-    protected function getPageKey()
+    public function getPageKey()
     {
-        $parts = array();
-        foreach (explode('.', $this->_pageKey) as $part) {
-            if (substr($part, -1) != 't') {
-                $parts[] = $part;
-            }
-        }
-        return implode('.', $parts);
+        return (string)$this->_id['pageKey'];
     }
 
-    /**
-     * Da der pageKey in der URL auch die pageTags beinhaltet,
-     * wird er hier zerlegt und nur die pageTags zurückgegeben.
-     *
-     * @return string pageTag, falls es mehrere gibt, durch . aneinandergekettet
-     */
-    protected function getPageTag()
+    public function getComponentKey()
     {
-        $parts = array();
-        foreach (explode('.', $this->_pageKey) as $part) {
-            if (substr($part, -1) == 't') {
-                $parts[] = substr($part, 0, -1);
-            }
-        }
-        return implode('.', $parts);
+        return (string)$this->_id['componentKey'];
     }
 
     /**
@@ -372,10 +281,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
      *
      * @return string pageTag
      */
-    protected function getCurrentPageKey()
+    public function getCurrentPageKey()
     {
-        $pageKeys = explode('.', $this->getPageKey());
-        return array_pop($pageKeys);
+        return (string)$this->_id['currentPageKey'];
     }
 
     /**
@@ -384,10 +292,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
      *
      * @return string pageTag
      */
-    protected function getCurrentPageTag()
+    public function getCurrentPageTag()
     {
-        $pageKeys = explode('.', $this->getPageTag());
-        return array_pop($pageKeys);
+        return (string)$this->_id['currentPageTag'];
     }
 
     /**
@@ -466,10 +373,10 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $return = array();
         if (!in_array('', $this->_hasGeneratedForFilename) && !in_array($filename, $this->_hasGeneratedForFilename)) {
 
-            $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData($this->getComponentId());
+            $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData($this->getId());
             foreach($rows as $pageRow) {
                 if ($filename != '' && $filename != $pageRow['filename']) { continue; }
-                $page = $this->createPage('', $pageRow['component_id']);
+                $page = self::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id']);
                 $this->getPageCollection()->addTreePage($page, $pageRow['filename'], $pageRow['name'], $this);
                 $r['page'] = $page;
                 $r['filename'] = $pageRow['filename'];
@@ -548,7 +455,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         if ($component == null) { $component = $this; }
         return $this->getPageCollection()->getUrl($component);
     }
-    
+
     /**
      * Shortcut für $this->_dao->getTable($tablename)
      * @param string Name des Models
@@ -569,7 +476,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
        // return $this->_staticSettings;
         return array();
     }
-    
+
     /**
      * @return Array mit Schlüssel Parameter und Wert Parameterwert
      */
@@ -590,38 +497,38 @@ abstract class Vpc_Abstract implements Vpc_Interface
         if (!isset($staticSettings[$key])) {
             throw new Vpc_Exception('Parameter for Component ' . get_class($this) . ' not valid: ' . $key);
         }
-        
+
         $this->_staticSettings[$key] = $val;
     }
 
     protected function _getSettingsDbRow()
     {
         if (!$this->_settingsDbRow) {
-           
-            $this->_settingsDbRow = $this->_getTable()->find($this->getComponentId(), $this->getPageKey(), $this->getComponentKey())->current();
-               
+
+            $this->_settingsDbRow = $this->_getTable()->find($this->getPageId(), $this->getPageKey(), $this->getComponentKey())->current();
+
         }
         return $this->_settingsDbRow;
     }
-    
-    protected function getSetting($field) { 
+
+    protected function getSetting($field) {
         $row = $this->_getSettingsDbRow();
-        
+
         if (isset($this->_settings[$field])) {
            return $this->_settings[$field];
         } else if (!is_null($row) && isset($row->$field)) {
-            
+
             return ($row->$field);
-        } else {                       
+        } else {
             return $this->_defaultSettings[$field];
-        }   
+        }
     }
-    
+
     public function setSetting($field, $value)
     {
         $this->_settings[$field] = $value;
     }
-    
+
     public function getDefaultSettings()
     {
         return $this->_defaultSettings;

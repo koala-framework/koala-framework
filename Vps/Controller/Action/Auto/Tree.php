@@ -86,6 +86,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         $data = array();
         $data['id'] = $row->id;
         $data['text'] = $row->name;
+        $data['data'] = $row->toArray();
         $data['leaf'] = false;
         $data['visible'] = true;
         $data['bIcon'] = $this->_icons['default'];

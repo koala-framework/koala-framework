@@ -5,34 +5,34 @@ class Vps_Dao_Pages extends Vps_Db_Table
     private $_pageData = null;
     private $_decoratorData = null;
 
-    public function retrievePageData($componentId, $throwError = true)
+    public function retrievePageData($id, $throwError = true)
     {
         $data = $this->_retrievePageData();
-        if ($throwError && !isset($data[$componentId])) {
-            throw new Vps_ClientException('Page width id "' . $componentId . '" not found');
+        if ($throwError && !isset($data[$id])) {
+            throw new Vps_ClientException('Page width id "' . $id . '" not found');
         }
-        return isset($data[$componentId]) ? $data[$componentId] : array();
+        return isset($data[$id]) ? $data[$id] : array();
     }
 
-    public function retrieveParentPageData($componentId)
+    public function retrieveParentPageData($id)
     {
         $data = $this->_retrievePageData();
-        if (isset($data[$componentId])) {
-            $parentId = $data[$componentId]['parent_id'];
+        if (isset($data[$id])) {
+            $parentId = $data[$id]['parent_id'];
             if (isset($data[$parentId])) {
                 return $data[$parentId];
             }
         }
 
-        throw new Vps_ClientException('ParentPage width id "' . $componentId . '" not found');
+        throw new Vps_ClientException('ParentPage width id "' . $id . '" not found');
     }
 
-    public function retrieveChildPagesData($componentId, $type = null)
+    public function retrieveChildPagesData($id, $type = null)
     {
         $return = array();
         $data = $this->_retrievePageData();
-        if (isset($data[$componentId])) {
-            $parentId = $data[$componentId]['id'];
+        if (isset($data[$id])) {
+            $parentId = $data[$id]['id'];
             foreach ($data as $d) {
                 if ($parentId && $d['parent_id'] == $parentId) {
                     if (is_null($type) || $d['type'] == $type) {
@@ -70,11 +70,9 @@ class Vps_Dao_Pages extends Vps_Db_Table
     {
         if ($this->_pageData == null) {
             $sql = '
-                SELECT c.id component_id, c.component, c.page_id, p.id, p.parent_id, p.type, p.visible, p.name, p.filename
-                FROM vps_components c
-                LEFT JOIN vps_pages p
-                ON c.id=p.component_id
-                ORDER BY p.position
+                SELECT id, parent_id, type, visible, name, filename, component_class
+                FROM vps_pages
+                ORDER BY position
             ';
             $this->_pageData = $this->getAdapter()->fetchAssoc($sql);
         }
@@ -102,8 +100,8 @@ class Vps_Dao_Pages extends Vps_Db_Table
     public function findPagesByClass($class)
     {
         $return = array();
-        foreach ($this->_retrievePageData() as $componentId => $data) {
-            if ($data['component'] == $class) {
+        foreach ($this->_retrievePageData() as $id => $data) {
+            if ($data['component_class'] == $class) {
                 $return[] = $data['page_id'];
             }
         }
@@ -153,12 +151,6 @@ class Vps_Dao_Pages extends Vps_Db_Table
     
     public function createPage($parentId, $type = '')
     {
-        $this->_pageData = null;
-
-        // Leere Komponente hinzufügen
-        $table = new Vps_Dao_Components();
-        $componentId = $table->addComponent();
-
         // Eintrag in Pages-Tabelle
         if ($parentId > 0) {
             $position = 1;
@@ -176,14 +168,16 @@ class Vps_Dao_Pages extends Vps_Db_Table
             $filename = 'home';
             $type = '';
         }
+        $componentClass = 'Vpc_Paragraphs_Index';
 
+        $this->_pageData = null;
         $insert = array();
         $insert['name'] = $name;
         $insert['filename'] = $filename;
-        $insert['component_id'] = $componentId;
         $insert['parent_id'] = $parentId;
         $insert['position'] = $position;
         $insert['type'] = $type;
+        $insert['component_class'] = $componentClass;
         return parent::insert($insert);
     }
     
@@ -196,22 +190,18 @@ class Vps_Dao_Pages extends Vps_Db_Table
         $this->_pageData = null;
     }
 
-    public function deletePage($componentId)
+    public function deletePage($id)
     {
-        $data = $this->retrievePageData($componentId);
+        $data = $this->retrievePageData($id);
 
         // Unterseiten rekursiv löschen
-        $childPageData = $this->retrieveChildPagesData($componentId);
+        $childPageData = $this->retrieveChildPagesData($id);
         foreach ($childPageData as $cd) {
-            $this->deletePage($cd['component_id']);
+            $this->deletePage($cd['id']);
         }
 
-        // Komponenten löschen
-        $table = $this->getDao()->getTable('Vps_Dao_Components');
-        $table->deleteComponent($componentId);
-
         // Eintrag in Pages-Tabelle löschen
-        $where = $this->getAdapter()->quoteInto('component_id = ?', $componentId);
+        $where = $this->getAdapter()->quoteInto('id = ?', $id);
         $rows = parent::delete($where);
 
         // Daten zurücksetzen
@@ -223,7 +213,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
     {
         $row = $this->fetchRow($where);
         if ($row) {
-            return $this->deletePage($row->component_id);
+            return $this->deletePage($row->id);
         }
     }
 

@@ -16,17 +16,10 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
         if ($module == 'component') {
 
             $id = $this->getFrontController()->getRequest()->getParam('id');
-            $parts = Vpc_Abstract::parseId($id);
-            if ($parts['pageKey'] != '') {
-                $component = Vps_PageCollection_Abstract::getInstance()->findComponent($id);
-            } else {
-                $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
-            }
-            $className = get_class($component) . 'Controller';
             $controllerName = $this->getFrontController()->getRequest()->getParam('controller');
-            if ($controllerName) {
-            	$className = str_replace('_IndexController', '_' . $controllerName . 'Controller', $className);
-            }
+            $className = $this->getFrontController()->getRequest()->getParam('class');
+            $className = $className . 'Controller';
+            $className = str_replace('_IndexController', '_' . $controllerName . 'Controller', $className);
 
         } else {
 
@@ -35,16 +28,11 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             $controllerFile = $controllerDir['default'] . '/' . $this->classToFilename(parent::formatControllerName($controllerName));
 
             if (is_file($controllerFile)) {
-
                 require_once($controllerFile);
-
             } else {
-
                 $className = str_replace('Controller', '', ucfirst($className));
                 $className = "Vps_Controller_Action_Component_$className";
-
             }
-
 
         }
 

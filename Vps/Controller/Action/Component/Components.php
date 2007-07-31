@@ -28,13 +28,8 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
     public function showAction()
     {
         $id = $this->_getParam('id');
-        $parts = Vpc_Abstract::parseId($id);
-        $componentId = $parts['componentId'];
-        $pageCollection = new Vps_PageCollection_TreeBase(Zend_Registry::get('dao'));
-        $rootPage = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $componentId);
-        $pageCollection->setRootPage($rootPage);
-        
-        $component = $pageCollection->getPageById($id);
+        $class = $this->_getParam('class');
+        $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $class, $id);
         
         $this->view->setRenderFile(VPS_PATH . '/views/Component.html');
         $this->view->setCompilePath('application/views_c');
@@ -47,12 +42,8 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
     public function jsonShowAction()
     {
         $id = $this->_getParam('id');
-        $parts = Vpc_Abstract::parseId($id);
-        if ($parts['pageKey'] != '') {
-            $component = Vps_PageCollection_Abstract::getInstance()->findComponent($id);
-        } else {
-            $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id)->findComponent($id);
-        }
+        $class = $this->_getParam('class');
+        $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $class, $id);
         
         $view = new Vps_View_Smarty();
         $view->setRenderFile(VPS_PATH . '/views/Component.html');

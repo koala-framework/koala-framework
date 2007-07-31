@@ -1,7 +1,7 @@
 <?php
 abstract class Vpc_Table extends Vps_Db_Table
 {
-    protected $_primary = array('component_id', 'page_key', 'component_key');
+    protected $_primary = array('page_id', 'component_key');
     
     public function createDefaultRow($key, $values)
     {
@@ -14,27 +14,5 @@ abstract class Vpc_Table extends Vps_Db_Table
         }
     }
 
-    public function find()
-    {
-        $componentId = 0;
-        $pageKey = '';
-        $componentKey = '';
-
-        $args = func_get_args();
-        if (sizeof($args) == 1) {
-            $parts = Vpc_Abstract::parseId($args[0]);
-            $componentId = $parts['componentId'];
-            $pageKey = $parts['pageKey'];
-            $componentKey = $parts['componentKey'];
-        } else if (sizeof($args) == 3) {
-            $componentId = $args[0];
-            $pageKey = $args[1];
-            $componentKey = $args[2];
-        } else {
-            throw new Vps_Exception("You must call find with one (complete componentId) or three (componentId, pageKey, componentKey) arguments.");
-        }
-        
-        return parent::find($componentId, $pageKey, $componentKey);
-    }
 }
     

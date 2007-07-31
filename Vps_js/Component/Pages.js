@@ -36,7 +36,7 @@ Vps.Component.Pages = function(renderTo, config)
         handler : 
             function (o, e) {
                 node = this.tree.getSelectionModel().getSelectedNode();
-                this.fireEvent('editcomponent', {id: node.attributes.componentId, text: node.text});
+                this.fireEvent('editcomponent', {id: node.attributes.id, cls: node.attributes.data.component_class, text: node.text});
             },
         icon : '/assets/vps/images/silkicons/page_edit.png',
         cls: "x-btn-text-icon",
@@ -61,20 +61,12 @@ Ext.extend(Vps.Component.Pages, Ext.util.Observable,
 {
     loadComponent: function (data)
     {
-        if (!data.id) {
-            data.id = data.url.replace(/\//g, '_');   
-        }
-        if (!data.url) {
-            data.url = '/component/edit/' + data.id + '/';
-        }
-        data.title = data.title || data.text;
-        var controllerUrl = data.url;
-        data.url += 'jsonIndex/';
+        controllerUrl = '/component/edit/' + data.cls + '/' + data.id + '/';
         Ext.Ajax.request({
-            url: data.url,
+            url: controllerUrl + 'jsonIndex/',
             success: function(r) {
-                var name = 'component' + data.id;
-                Vps.mainLayout.add('center', new Ext.ContentPanel(name, {autoCreate:true, title: data.title, fitToFrame:true, closable:true, autoScroll: true, fitContainer: true}));
+                var name = 'component' + data.cls + data.id;
+                Vps.mainLayout.add('center', new Ext.ContentPanel(name, {autoCreate:true, title: data.text, fitToFrame:true, closable:true, autoScroll: true, fitContainer: true}));
                 Ext.DomHelper.overwrite(name, '');
                 response = Ext.decode(r.responseText);
                 cls = eval(response['class']);
