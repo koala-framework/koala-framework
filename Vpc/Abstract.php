@@ -181,10 +181,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
             throw new Vpc_Exception("ID $id doesn't match pattern for Id: $pattern");
         }
 
+        $parts['id'] = $keys[0];
         $parts['dbId'] = (int)$keys[1];
-        $parts['componentId'] = $keys[0];
+        $parts['componentId'] = '';
         $parts['pageId'] = '';
-        $parts['componentKey'] = $keys[2];
+        $parts['componentKey'] = '';
         $parts['pageKey'] = '';
         $parts['pageKeys'] = array();
         $parts['currentPageKey'] = '';
@@ -208,19 +209,23 @@ abstract class Vpc_Abstract implements Vpc_Interface
         }
         foreach ($pageKeys as $currentPageKey => $value) {
             $key = substr($value, 0, 1);
-            $value = substr($value, 1);
+            $val = substr($value, 1);
             if ($key != '-') {
-                $parts['pageKeys'][$currentPageKey] = $value;
+                $parts['pageKeys'][$currentPageKey] = $val;
                 $parts['pageKey'] = $currentPageKey;
                 if ($key == ',') {
-                    $parts['currentPageTag'] = $value;
+                    $parts['currentPageTag'] = $val;
                     $parts['currentPageKey'] = '';
                 } else if ($key == '_') {
-                    $parts['currentPageKey'] = $value;
+                    $parts['currentPageKey'] = $val;
                     $parts['currentPageTag'] = '';
                 }
             }
+            if ($key != ',') {
+                $parts['componentKey'] .= $value;
+            }
         }
+        $parts['componentId'] = $parts['dbId'] . $parts['componentKey'];
         $parts['pageId'] = $parts['dbId'] . $parts['pageKey'];
         return $parts;
     }
@@ -238,7 +243,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      */
     public function getId()
     {
-        return (string)$this->_id['componentId'];
+        return (string)$this->_id['id'];
     }
 
     /**
