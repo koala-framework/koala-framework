@@ -3,6 +3,7 @@ class Vps_Assets_Dependencies
 {
     private $_files = array();
     private $_paths;
+    private $_useExtAll = false;
 
     //löst pfade wie "asset.vps/images/" auf
     public static function resolveAssetPaths($paths)
@@ -26,6 +27,10 @@ class Vps_Assets_Dependencies
         if (!is_array($paths)) {
             $paths = $paths->toArray();
         }
+        if (isset($paths['useExtAll'])) {
+            $this->_useExtAll = $paths['useExtAll'] == '1';
+            unset($paths['useExtAll']);
+        }
         $this->_paths = self::resolveAssetPaths($paths);
 
         $frontendOptions = array(
@@ -42,7 +47,6 @@ class Vps_Assets_Dependencies
             md5_file(VPS_PATH.'/Vps_js/dependencies.ini'),
             md5_file($configFile)
         );
-        
         if ($cacheContents = $cache->load('dependencies')) {
             if ($cacheContents['checksums'] != $checksums
                 || $cacheContents['configSection'] != $configSection
@@ -56,6 +60,11 @@ class Vps_Assets_Dependencies
             $cacheContents['checksums'] = $checksums;
             $cacheContents['configSection'] = $configSection;
             $cacheContents['paths'] = $paths;
+            if ($this->_useExtAll) {
+                $this->_files[] = 'ext/adapter/ext/ext-base.js';
+                $this->_files[] = 'ext/ext-all.js';
+                $this->_files[] = 'ext/resources/css/ext-all.css';
+            }
             $dependencies = new Zend_Config_Ini($configFile, $configSection);
             foreach($dependencies as $d) {
                 $this->_processDependency($d);
@@ -162,6 +171,7 @@ class Vps_Assets_Dependencies
         }
         return $contents;
     }
+    
     protected function _processDependency($dependency)
     {
         static $vpsDependencies;
@@ -179,6 +189,9 @@ class Vps_Assets_Dependencies
         }
         if (isset($dependency->files)) {
             foreach ($dependency->files as $file) {
+                if ($this->_useExtAll && substr($file, 0, 4) == 'ext/') { 
+                    continue;
+                }
                 if (substr($file, -2)=="/*") {
                     $pathType = substr($file, 0, strpos($file, '/'));
                     if (!isset($this->_paths[$pathType])) {
