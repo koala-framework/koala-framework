@@ -24,6 +24,10 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $this->extTemplate = VPS_PATH . 'views/Ext.html';
     }
     
+    public function setExtConfig($param, $value) {
+        $this->ext['config'][$param] = $value;
+    }
+    
     public function ext($class, $config = array(), $renderTo = '')
     {
         if (!is_string($class)) {

@@ -4,7 +4,7 @@ class Vps_Controller_Action_Component_Web extends Vps_Controller_Action
     public function indexAction()
     {
         $pageCollection = Vps_PageCollection_Abstract::getInstance();
-        $page = $pageCollection->getPageByPath($this->getRequest()->getPathInfo());
+        $page = $pageCollection->findPageByPath($this->getRequest()->getPathInfo());
         if (!$page) {
             throw new Vps_Controller_Action_Web_Exception('Page not found for path ' . $this->getRequest()->getPathInfo());
         }

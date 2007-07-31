@@ -4,7 +4,7 @@ abstract class Vps_PageCollection_Abstract
     protected $_pageFilenames = array();
     protected $_pageNames = array();
     protected $_pages = array();
-    protected $_rootPageId;
+    protected $_rootId;
     protected $_decoratorClasses = array();
     protected $_dao;
     protected static $_instance = null;
@@ -55,19 +55,18 @@ abstract class Vps_PageCollection_Abstract
 
     public function addPage($page, $filename = '', $name = '')
     {
-        if (is_int($page)) {
-            $componentId = $page;
-            $pageData = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($componentId);
-            $page = Vpc_Abstract::createInstance($this->_dao, $componentId);
+        if (!$page instanceof Vpc_Interface && (int)$page > 0) {
+            $id = (int)$page;
+            $pageData = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($id);
+            $page = Vpc_Abstract::createInstance($this->_dao, $pageData['component_class'], $id);
             if ($page) {
                 $page->setPageCollection($this);
                 $filename = $pageData['filename'];
                 $name = $pageData['name'];
             } else {
-                throw new Vps_Page_Collection_Exception("Couldn\'t create Component with id $componentId");
+                throw new Vps_Page_Collection_Exception("Couldn\'t create Page with id $id");
             }
         }
-
         if (!$page instanceof Vpc_Interface) {
             throw new Vps_PageCollection_Exception("Component must be instance of Vpc_Interface.");
         }
@@ -131,44 +130,52 @@ abstract class Vps_PageCollection_Abstract
         $page = $this->_addDecorators($page);
         $this->_setPage($page, '', 'Home');
         $page->setPageCollection($this);
-        $this->_rootPageId = $page->getId();
+        $this->_rootId = $page->getPageId();
     }
 
-    public function getPageById($pageId)
+    public function findPage($id)
     {
-        $this->getRootPage(); // Muss hier gemacht werden
-        if (!isset($this->_pages[$pageId])) {
+        $this->getRootPage();
+        $parts = Vpc_Abstract::parseId($id);
+        $id = $parts['pageId'];
+        if (!isset($this->_pages[$id])) {
             try {
-                $parts = Vpc_Abstract::parsePageId($pageId);
-                $page = $this->addPage($parts['topComponentId']);
+                $currentId = $parts['dbId'];
+                $page = $this->addPage($currentId);
                 if ($page != null) {
-                    $id = $page->getPageId();
-                    foreach ($parts['pageKeys'] as $pageKey) {
-                        $this->_pages[$id]->generateHierarchy($pageKey);
-                        $id .= $id == $page->getPageId() ? '_' : '.';
-                        $id .= $pageKey;
+                    foreach ($parts['pageKeys'] as $currentPageKey => $pageKey) {
+                        $this->_pages[$currentId]->generateHierarchy($pageKey);
+                        $currentId = $parts['dbId'] . $currentPageKey;
                     }
                 }
             } catch (Vpc_Exception $e) {
                 return null;
             }
         }
-
-        if (isset($this->_pages[$pageId])) {
-            return $this->_pages[$pageId];
+        if (isset($this->_pages[$id])) {
+            return $this->_pages[$id];
         } else {
             return null;
         }
     }
 
+    public function findComponent($id)
+    {
+        $page = $this->findPage($id);
+        if ($page) {
+            return $page->findComponent($id);
+        }
+        return null;
+    }
+
     public function getRootPage()
     {
-        if (!isset($this->_rootPageId)) {
+        if (!isset($this->_rootId)) {
             $data = $this->_dao->getTable('Vps_Dao_Pages')->retrieveRootPageData();
-            $rootPage = Vpc_Abstract::createInstance($this->_dao, $data['component_id']);
+            $rootPage = Vpc_Abstract::createInstance($this->_dao, $data['component_class'], $data['id']);
             $this->setRootPage($rootPage);
         }
-        return $this->_pages[$this->_rootPageId];
+        return $this->_pages[$this->_rootId];
     }
 
     public function getCurrentPage()
@@ -193,8 +200,8 @@ abstract class Vps_PageCollection_Abstract
 
     public function getPageData(Vpc_Interface $page)
     {
-        $pageId = $page->getPageId();
-        $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($pageId, false);
+        $id = $page->getPageId();
+        $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($id, false);
         $data['url'] = $this->getUrl($page);
         return $data;
     }
@@ -204,39 +211,24 @@ abstract class Vps_PageCollection_Abstract
         return isset($this->_pageFilenames[$page->getPageId()]) ? $this->_pageFilenames[$page->getPageId()] : '';
     }
 
-    abstract public function getPageByPath($path);
+    abstract public function findPageByPath($path);
 
-    public function findComponentByClass($class, $startPage = null, $findDynamic = false)
+    public function findComponentByClass($class, $startPage = null)
     {
-        // In Datenbank suchen
-        if (!$findDynamic) {
-            $pageIds = $this->_dao->getTable('Vps_Dao_Pages')->findPagesByClass($class);
-            $pageId = (int)array_shift($pageIds);
-            if ($pageId > 0) {
-                $page = $this->getPageById($pageId);
-                if ($page) {
-                    $component = $page->findComponentByClass($class);
-                    if ($component) {
-                        return $component;
-                    }
+        $ids = $this->_dao->getTable('Vps_Dao_Pages')->findPagesByClass($class);
+        $id = (int)array_shift($ids);
+        if ($id > 0) {
+            $page = $this->findPage($id);
+            if ($page) {
+                $component = $page->findComponentByClass($class);
+                if ($component) {
+                    return $component;
                 }
             }
         }
         return null;
     }
     
-    public function findComponent($id)
-    {
-        $parts = Vpc_Abstract::parseId($id);
-        $row = $this->_dao->getTable('Vps_Dao_Components')->find($parts['componentId'])->current();
-        $pageId = $row->page_id;
-        if ($parts['pageKey'] != '') {
-            $pageId .= '_' . $parts['pageKey'];
-        }
-        $page = $this->getPageById($pageId);
-        return $page->findComponent($id);
-    }
-
     public function getTitle($page)
     {
         $data = $this->getPageData($page);

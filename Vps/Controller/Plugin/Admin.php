@@ -13,13 +13,13 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
             $url = $this->getRequest()->getParam('url');
             if ($pageId != '') {
                 $pageCollection = Vps_PageCollection_Abstract::getInstance();
-                $page = $pageCollection->getPageById($pageId);
+                $page = $pageCollection->findPage($pageId);
                 $path = $pageCollection->getUrl($page);
                 $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite betrachten', $path));
                 $acl->allow('admin', 'page');
             } else if ($url != '') {
                 $pageCollection = Vps_PageCollection_Abstract::getInstance();
-                $page = $pageCollection->getPageByPath($url);
+                $page = $pageCollection->findPageByPath($url);
                 if ($page) {
                     $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite bearbeiten', '/admin/page?id=' . $page->getId()));
                     $acl->allow('admin', 'page');
@@ -55,7 +55,7 @@ class Vps_Controller_Plugin_Admin extends Zend_Controller_Plugin_Abstract
         if ($session->mode == 'fe' || $request->getParam('fe')) {
 //            $view = new Vps_View_Smarty(VPS_PATH . '/views');
 //            $pageCollection = Vps_PageCollection_Abstract::getInstance();
-//            $page = $pageCollection->getPageByPath($this->getRequest()->getPathInfo());
+//            $page = $pageCollection->findPageByPath($this->getRequest()->getPathInfo());
 //            $componentsInfo = array();
 //            $components = array();
 //            if ($page != null) {

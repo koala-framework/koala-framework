@@ -39,11 +39,21 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
 
             if ($module == 'component') {
                 $id = $this->getRequest()->getParam('id');
-                $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $id);
+                $class = $this->getRequest()->getParam('class');
+                $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $class, $id);
                 if (!$component) {
                     throw new Vpc_Exception('Component not found.');
                 } else {
                     $this->_actionController->component = $component;
+                }
+                $action = $this->getRequest()->getActionName();
+                if ($action == 'index' || $action == 'jsonIndex') {
+                    $controllerUrl = $this->getRequest()->getPathInfo();
+                    if ($action == 'jsonIndex') {
+                        $controllerUrl = str_replace('/jsonIndex', '', $controllerUrl);
+                    }
+                    if (substr($controllerUrl, -1) != '/') { $controllerUrl .= '/'; }
+                    $this->view->setExtConfig('controllerUrl', $controllerUrl);
                 }
             }
 

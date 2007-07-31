@@ -45,10 +45,13 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         if (!isset($this->_paragraphs)) {
             $this->_paragraphs = array();
     
-            $rows = $this->_getTable()->fetchParagraphs($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
+            $db = $this->_getTable()->getAdapter();
+            $where = "page_id='" . $this->getDbId() . "'";
+            $where .= " AND component_key='" . $this->getComponentKey() . "'";
+            $rows = $this->_getTable()->fetchAll($where, 'pos');
     
             foreach($rows as $row) {
-                $c = $this->createComponent('', $row->component_id);
+                $c = $this->createComponent($row->component_class, $row->id);
                 $this->_paragraphs[] = $c;
             }
         }
@@ -62,25 +65,6 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         $info += $p->getComponentInfo();
       }
       return $info;
-    }
-
-    public function saveFrontendEditing(Zend_Controller_Request_Http $request)
-    {
-        $rows = $this->_getTable()->fetchParagraphs($this->getComponentId(), $this->getPageKey(), $this->getComponentKey());
-        $order = $request->getPost('order');
-        if (!is_null($order)) {
-            $orders = explode(";", $order);
-            foreach($rows as $row) {
-                if (in_array($row->component_id, $orders)) {
-                    $row->nr = array_search($row->component_id, $orders)+1;
-                    $row->save();
-                }
-            }
-        }
-
-        $ret = parent::saveFrontendEditing($request);
-        $ret['html'] = false;
-        return $ret;
     }
 
 }
