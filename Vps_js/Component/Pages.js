@@ -61,11 +61,16 @@ Ext.extend(Vps.Component.Pages, Ext.util.Observable,
 {
     loadComponent: function (data)
     {
-        controllerUrl = '/component/edit/' + data.cls + '/' + data.id + '/';
+        if (data.url != undefined) { // Falls von MenuEvent kommt
+            controllerUrl = data.url;
+            data.text = data.title;
+        } else {
+            controllerUrl = '/component/edit/' + data.cls + '/' + data.id + '/';
+        }
         Ext.Ajax.request({
             url: controllerUrl + 'jsonIndex/',
             success: function(r) {
-                var name = 'component' + data.cls + data.id;
+                var name = controllerUrl;
                 Vps.mainLayout.add('center', new Ext.ContentPanel(name, {autoCreate:true, title: data.text, fitToFrame:true, closable:true, autoScroll: true, fitContainer: true}));
                 Ext.DomHelper.overwrite(name, '');
                 response = Ext.decode(r.responseText);
