@@ -1,33 +1,32 @@
 <?php
-class Vpc_Setup_Abstract 
+class Vpc_Setup_Abstract
 {
-    protected $_standard = array(   "component_id" => "int(10) unsigned NOT NULL", 
-                                  "page_key" => "varchar(255) NOT NULL", 
+    protected $_standard = array( "page_id" => "int(10) unsigned NOT NULL",
                                   "component_key" => "varchar(255) NOT NULL");
-                                  
-    protected $_keys = array('component_id', 'page_key', 'component_key');
-                                                
+
+    protected $_keys = array('page_id', 'component_key');
+
     protected $_db;
-    
-    
+
+
     public function __construct(Zend_Db_Adapter_Pdo_Mysql $db){
         $this->_db = $db;
     }
-    
-    
+
+
     function createTable ($name, $fields){
         if (!$this->_tableExits($name)) {
-           
-             
+
+
             $allFields = array_merge($this->_standard, $fields);
-              
+
             $sql = "CREATE TABLE `$name` (";
-            
+
             //add fields
-            foreach ($allFields as $field => $data) {              
-                $sql .= " `$field` $data," ;                
+            foreach ($allFields as $field => $data) {
+                $sql .= " `$field` $data," ;
             }
-            
+
             //add keys
             $cnt = 0;
             $sql .= " PRIMARY KEY  (";
@@ -40,17 +39,17 @@ class Vpc_Setup_Abstract
                 $cnt++;
             }
              //add end of statement
-            $sql .= ")) ENGINE=InnoDB DEFAULT CHARSET=utf8;";          
+            $sql .= ")) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
             $this->_db->query($sql);
         }
     }
-    
-    
-    protected function _tableExits ($tablename){       
-     $tableList = $this->_db->listTables();   
+
+
+    protected function _tableExits ($tablename){
+     $tableList = $this->_db->listTables();
      return in_array($tablename, $tableList);
     }
-    
+
     public static function getAvailableComponents($path = '')
     {
         $path = 'Vpc/' . $path;
@@ -63,7 +62,7 @@ class Vpc_Setup_Abstract
         }
         return $return;
     }
-    
+
     private static function _getAvailableComponents($path)
     {
         $return = array();
@@ -76,7 +75,7 @@ class Vpc_Setup_Abstract
                     if ($item->getFilename() == 'Index.php'){
                         $component = str_replace('/', '_', $item->getPath());
                         $component = strrchr($component, 'Vpc_');
-                        $component .= '_Index';             
+                        $component .= '_Index';
                         $return[] = $component;
                     }
                 }
@@ -84,5 +83,5 @@ class Vpc_Setup_Abstract
         }
         return $return;
     }
-    
+
 }

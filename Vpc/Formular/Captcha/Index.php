@@ -20,7 +20,7 @@ class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Fi
             die();
         } else {
             //component id ist noch hard coded
-            $path = "http://vps.lorenz.vivid/component/show/11/?showPic=";
+            $path = "/component/show/Vpc_Formular_Captcha_Index/".$this->getDbId().$this->getComponentKey()."/?showPic=";
             $value = $this->_generateValue();
             $encrypt = $this->myEncryption($value);
             $path .= $encrypt;
@@ -30,7 +30,7 @@ class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Fi
             $return['encrypt'] = $encrypt;
             $return['value'] = $value;
             $return['path'] = $path;
-            $return['id'] = $this->getComponentId();
+            $return['id'] = $this->getDbId().$this->getComponentKey();
             $return['captcha'] = "CaptchaTest";
             $return['template'] = 'Formular/Captcha.html';
             return $return;

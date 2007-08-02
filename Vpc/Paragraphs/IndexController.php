@@ -14,18 +14,18 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     protected $_paging = 0;
     protected $_defaultOrder = 'pos';
     protected $_tableName = 'Vpc_Paragraphs_IndexModel';
-    
+
     public function indexAction()
     {
         $ini = new Vps_Config_Ini('application/components.ini');
         foreach ($ini->toArray() as $component => $data) {
             $components[$component] = $data['name'];
         }
-        
+
         $config = array('components' => $components);
         $this->view->ext('Vpc.Paragraphs.Index', $config);
     }
-       
+
     public function jsonIndexAction()
     {
         $this->indexAction();

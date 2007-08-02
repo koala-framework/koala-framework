@@ -2,7 +2,7 @@
 class Vpc_Formular_SelectMultiple_IndexController extends Vps_Controller_Action_Auto_Form_Vpc
 {
     protected $_fields = array(
-            array('type'       => 'TextField',
+            array('type'       => 'Checkbox',
                   'fieldLabel' => 'Anzahl der angezeigten Reihen',
                   'name'       => 'rows'
             )

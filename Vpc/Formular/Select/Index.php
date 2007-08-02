@@ -14,7 +14,7 @@ class Vpc_Formular_Select_Index extends Vpc_Formular_Field_Decide_Abstract
         if ($this->_options == null) $this->getOptions();
 
         $return['options'] = $this->_options;
-        $return['id'] = $this->getComponentId();
+        $return['id'] = $this->getDbId().$this->getComponentKey();
 
         $return['template'] = 'Formular/Select.html';
         return $return;
@@ -23,8 +23,7 @@ class Vpc_Formular_Select_Index extends Vpc_Formular_Field_Decide_Abstract
     public function getOptions ()
     {
         $table = $this->_getTable('Vpc_Formular_Select_OptionsModel');
-        $select = $table->fetchAll(array(    'component_id = ?'  => $this->getComponentId(),
-                                             'page_key = ?'      => $this->getPageKey(),
+        $select = $table->fetchAll(array(    'page_id = ?'      => $this->getDbId(),
                                              'component_key = ?' => $this->getComponentKey()));
         //values werden rausgeschrieben
         $values = array();

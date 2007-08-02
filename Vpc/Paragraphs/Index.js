@@ -17,7 +17,7 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
                 new Ext.menu.Item({
                     id: i,
                     text: this.components[i],
-                    handler: this.onAdd,
+                    handler: this.add,
                     baseParams: {id: this.id},
                     scope: this
                 })
@@ -25,7 +25,8 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
         }
         this.addButton = toolbar.addButton({
             text    : 'Absatz hinzufügen',
-            menu: componentMenu
+            menu: componentMenu,
+			handler: this.add
         });
         toolbar.addSeparator();
         this.editButton = toolbar.addButton({
@@ -34,10 +35,14 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
             scope   : this
         });
     },
-    
+
     edit : function(o, p) {
         var row = this.grid.grid.getSelectionModel().getSelected();
-        this.fireEvent('editcomponent', {id: row.data.id, cls: row.data.component_class, text:row.data.component_class})
-    }
+        this.fireEvent('editcomponent', {id: row.data.id, pid: row.data.page_id, cls: row.data.component_class,  text:row.data.component_class})
+    },
+
+	add : function(o, e) {
+        this.fireEvent('addcomponent', o.id, this.grid);
+	}
 
 })

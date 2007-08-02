@@ -1,10 +1,7 @@
 <?php
-class Vpc_Formular_Select_OptionsController extends Vps_Controller_Action_Auto_Grid
+class Vpc_Formular_Select_OptionsController extends Vpc_Formular_Field_FormGrid
 {
-    protected $_columns = array(array('dataIndex' => 'component_id',
-                                      'header'    => 'component_id',
-                                      'hidden'    => false),
-				                array('dataIndex' => 'value',
+    protected $_columns = array(array('dataIndex' => 'value',
 				                      'header'    => 'Wert',
 				                      'width'     => 100,
 				                      'editor'    => array('type' => 'TextField',
@@ -21,7 +18,7 @@ class Vpc_Formular_Select_OptionsController extends Vps_Controller_Action_Auto_G
 
    // protected $_buttons = array();
     //protected $_paging = 20;
-    protected $_defaultOrder = 'component_id';
+    protected $_defaultOrder = 'page_id';
     protected $_tableName = 'Vpc_Formular_Select_OptionsModel';
     //protected $_primaryKey = array ('component_key', 'page_key');
     protected $_primaryKey = 'id';
@@ -29,7 +26,7 @@ class Vpc_Formular_Select_OptionsController extends Vps_Controller_Action_Auto_G
     protected function _getWhere()
     {
     	$where = parent::_getWhere();
-    	$where['component_id = ?'] = $this->_getParam('id');
+    	$where['page_id = ?'] = $this->component->getDbId();
     	return $where;
     }
 }

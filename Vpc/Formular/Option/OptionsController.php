@@ -1,20 +1,26 @@
 <?php
-class Vpc_Formular_SelectMultiple_OptionsController extends Vpc_Formular_Field_FormGrid
+class Vpc_Formular_Option_OptionsController extends Vpc_Formular_Field_FormGrid
 {
     protected $_columns = array(array('dataIndex' => 'value',
 				                      'header'    => 'Wert',
 				                      'width'     => 100,
 				                      'editor'    => array('type' => 'TextField',
 				                  					      'allowBlank' => false)),
-				                array('dataIndex' => 'selected',
+				                array('dataIndex' => 'text',
+				                      'header'    => 'Bezeichnung',
+				                      'width'     => 200,
+				                      'editor'    => array('type' => 'TextField',
+				                  					      'allowBlank' => true)),
+				                array('dataIndex' => 'checked',
 				                      'header'    => 'Angehakt',
 				                      'width'     => 50,
-				                      'editor'    => 'Checkbox'));
+				                      'editor'    => 'Checkbox',
+				                      ));
 
    // protected $_buttons = array();
     //protected $_paging = 20;
     protected $_defaultOrder = 'page_id';
-    protected $_tableName = 'Vpc_Formular_SelectMultiple_OptionsModel';
+    protected $_tableName = 'Vpc_Formular_Option_OptionsModel';
     //protected $_primaryKey = array ('component_key', 'page_key');
     protected $_primaryKey = 'id';
 
@@ -22,6 +28,7 @@ class Vpc_Formular_SelectMultiple_OptionsController extends Vpc_Formular_Field_F
     {
     	$where = parent::_getWhere();
     	$where['page_id = ?'] = $this->component->getDbId();
+    	$where['component_key = ?'] = $this->component->getComponentkey();
     	return $where;
     }
 }

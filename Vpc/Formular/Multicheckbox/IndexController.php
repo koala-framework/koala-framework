@@ -9,7 +9,7 @@ class Vpc_Formular_Multicheckbox_IndexController extends Vps_Controller_Action_A
 
     protected $_buttons = array('save'   => true);
     protected $_tableName = 'Vpc_Formular_Multicheckbox_IndexModel';
-    protected $_primaryKey = 'id';
+    protected $_primaryKey = 'page_id';
 
 	public function indexAction()
 	{

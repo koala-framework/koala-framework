@@ -7,7 +7,7 @@ class Vpc_Formular_FileUpload_IndexController extends Vps_Controller_Action_Auto
                   'name'       => 'width',
                   'width'      => 50),
             array('type'       => 'TextField',
-                  'fieldLabel' => 'Max. Anzahl an Zeichen',
+                  'fieldLabel' => 'Max. Dateigröße',
                   'name'       => 'maxSize',
                   'width'      => 50),
             array('type'       => 'TextField',

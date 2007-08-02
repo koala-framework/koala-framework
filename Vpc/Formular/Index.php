@@ -1,5 +1,5 @@
 <?php
-class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract 
+class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
 {
     //protected $_defaultSettings = array('names' => array());
     private $_errors = array();
@@ -7,84 +7,89 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
     private $_components = array();
     public function getTemplateVars()
     {
-        
-        //$this->_checkForm();
-        
         if ($_POST != array()) {
             if ($this->_validateFields()) {
                 d("Formular wurde abgeschickt");
-                
+
             } else {
                 p("Fehler in der Eingabe");
             }
         } else {
-           
-             $this->_getFormFields();
-        }        
-       
+            $this->getChildComponents();
+        }
+
         $vars = parent::getTemplateVars();
         $vars['action'] = $_SERVER['REQUEST_URI'];
         $vars['errors'] = $this->_errors;
         $vars['names'] = $this->_fields;
-        $vars['id'] = $this->getComponentId(); 
+        $vars['id'] = $this->getDbId().$this->getComponentKey();
         $vars['upload'] = $this->_checkUpload();
-        $vars['submit'] = $this->_checkIfSubmit();  
+        $vars['submit'] = $this->_checkIfSubmit();
         $vars['template'] = 'Formular.html';
         return $vars;
     }
-    
+
+
+
+
+
     /**
-     * Holt die Formularfelder und setzt den Namen für das jeweilige Feld auf 
+     * Holt die Formularfelder und setzt den Namen für das jeweilige Feld auf
      * Basis der Formulartabelle -> es wird ein eintrag in die Datenbank vorgenommen
      */
-    private function _getFormFields () {
+    public function getChildComponents() {
+    	if ($this->_components) {
+    		return $this->_components;
+    	}
         $fields = array();
-        $this->_components = $this->getChildComponents();
         $names = array();
-        
-        foreach ($this->_components AS $componentKey => $component){            
-              $rows = $this->_getTable()->fetchAll(array('component_id = ?'  => $component->getComponentId()));
-            foreach ($rows AS $row) {
-               //--------
-                $filter = new Zend_Filter_Alpha();
-                $newName = $filter->filter($row->name);
-                $tempName = $newName;
-                $cnt = 1;
-                while (in_array($newName, $names)){
-                    $newName = $tempName.$cnt;
-                    $cnt++;
-                }
-                
-                $names[] = $newName;
-                if ($component instanceof Vpc_Formular_Field_Interface ) {	               
-                  $component->setName($newName);
-                  $component->setErrorField($row->name);
-                  $this->_components[$componentKey] = $component;
-                }           
-              $fields[] = array ('name' => $row->name, 'id' => $row->component_id, 'mandatory' => $row->mandatory, 'noCols' => $row->no_cols, 'isValid' => 1);    
+        $components = array();
+
+        foreach ($this->_getData() as $row){
+            $filter = new Zend_Filter_Alpha();
+            $newName = $filter->filter($row->name);
+            $tempName = $newName;
+            $cnt = 1;
+            while (in_array($newName, $names)){
+                $newName = $tempName.$cnt;
+                $cnt++;
             }
-            
+
+            $names[] = $newName;
+	        $component = $this->createComponent($row->component_class, $row->id);
+
+            if ($component instanceof Vpc_Formular_Field_Interface ) {
+                $component->setName($newName);
+                $component->setErrorField($row->name);
+                //$this->_components[$component->getComponentKey()] = $component;
+
+            }
+             $this->_components[$component->getComponentKey()] = $component;
+            //TODO nachfragen ob das so gemacht werden darf
+            $fields[] = array ('name' => $row->name, 'id' => ($row->page_id.'-'.$row->id), 'mandatory' => $row->mandatory, 'noCols' => $row->no_cols, 'isValid' => 1);
         }
-        $this->_fields = $fields;
+        //soll hier nur einmmal aufgerufen werden
+        if ($this->_fields == array())$this->_fields = $fields;
+        return $this->_components;
     }
-    
-    
+
+
     /*private function _checkForm()
     {
-        
+
         if (!$this->_checkIfSubmit()) {
-             
+
             $submit = $this->createComponent('Vpc_Formular_Submit_Index', $this->getComponentId(), 2);
             $submit->setSetting('name', 'Absenden');
             $submit->setSetting('value', 'Absenden');
             $this->addChildComponent($submit);
         }
     }*/
-    
+
     private function _checkIfSubmit()
     {
-        $this->_components = $this->getChildComponents();           
-        
+        $this->_components = $this->getChildComponents();
+
         foreach($this->_components as $value => $component) {
             if ($component instanceof Vpc_Formular_Submit_Index) {
                 return true;
@@ -92,11 +97,11 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
         }
         return false;
     }
-    
+
     private function _checkUpload()
     {
-        $this->_components = $this->getChildComponents();           
-        
+        $this->_components = $this->getChildComponents();
+
         foreach($this->_components as $value => $component) {
             if ($component instanceof Vpc_Formular_FileUpload_Index) {
                 return true;
@@ -104,39 +109,47 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
         }
         return false;
     }
-    
+
     private function _validateFields()
     {
-        $this->_getFormFields();
+    	//$this->getChildComponents();
+
+        $this->_fields;
         $return = true;
-        
-       // $components = $this->getChildComponents();
+
+        $components = array();
+
+
+        $components = $this->getChildComponents();
+
         foreach($this->_components as $value => $component) {
             if ($component instanceof Vpc_Formular_Field_Interface) {
-                $row = $this->_getTable()->fetchAll(array('component_id = ?'  => $component->getComponentId()))->current();               
-                //if ($component instanceof Vpc_Formular_Field_Decide_Abstract)
+            	$id = str_replace('-', '', $component->getComponentKey());
+                $row = $this->_getTable()->fetchAll(array('page_id = ?'  => $component->getDbId(),
+            										      'id = ?'       => $id))->current();
                 $component->processInput();
+
                 if ($component->validateField($row->mandatory) !== true) {
                     $return = false;
-                  //  $fieldname = $rows = $this->_getTable()->fetchAll(array('component_id = ?'  => $component->getComponentId()))->current();
                     $this->_errors[] = $component->validateField($row->mandatory);
-                    $this->_notValid($component->getComponentId());
+                    $this->_notValid($component->getDbId().'-'.$id);
                 }
-            }            
+            }
+            $components[$value] = $component;
         }
+        $this->_components = $components;
         return $return;
     }
-    
+
     private function _notValid ($id){
         foreach ($this->_fields AS $fieldkey => $field){
-            
             if ($field['id'] == $id){
                 $field['isValid'] = 0;
-            }           
+            }
             $this->_fields[$fieldkey] = $field;
-          
+
         }
-    }    
+    }
 }
 
 

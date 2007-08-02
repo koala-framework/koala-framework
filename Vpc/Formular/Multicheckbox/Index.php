@@ -9,7 +9,7 @@ class Vpc_Formular_Multicheckbox_Index extends Vpc_Formular_Field_Abstract
 
         $return['horizontal'] = $this->getSetting('horizontal');
         $return['multicheckbox'] = $this->getSetting('multicheckbox');
-        $return['id'] = $this->getComponentId();
+        $return['id'] = $this->getDbId().$this->getComponentKey();
 
         $return['template'] = 'Formular/Multicheckbox.html';
         return $return;
@@ -37,24 +37,36 @@ class Vpc_Formular_Multicheckbox_Index extends Vpc_Formular_Field_Abstract
     //erstellt Checkboxen mittels der Component Id's
     private function _setMulitcheckboxbyIds()
     {
-        //ComponentId, PageKey und ComponentKey werden aus der Datenbank geholt
-        $table = $this->_getTable('Vpc_Formular_Multicheckbox_CheckboxesModel');
-        $checkboxes = $table->fetchAll(array('component_id = ?'  => $this->getComponentId(),
-        'page_key = ?'      => $this->getPageKey(),
-        'component_key = ?' => $this->getComponentKey()));
-        //ids werden rausgeschrieben
-        $ids = array();
-        foreach($checkboxes as $checkbox) {
-            $ids[] = $checkbox->id;
+		$component_key = $this->getComponentKey();
+		$multicheckbox = array();
+		$table = $this->_getTable('Vpc_Formular_Checkbox_IndexModel');
+        $checkboxes = $table->fetchAll(array('page_id = ?'  => $this->getDbId(),
+                                             'component_key LIKE ?' => "$component_key-%"));
+
+
+        foreach ($checkboxes as $checkboxKey => $checkboxData){
+        	$id = substr(strrchr($checkboxData->component_key, '-'), 1);
+        	$multicheckbox[] = $this->createComponent('Vpc_Formular_Checkbox_Index', $id)->getTemplateVars('');
         }
 
-    $multicheckbox = array();
+        return $multicheckbox;
+
+
+
+
+		/*$multicheckbox = array();
         //instanzen der Komponentenwerden erzeugt
+
         foreach($ids as $id){
-            $temp = $this->createComponent('Vpc_Formular_Checkbox_Index', null, $id);
+
+        	//$id = substr($this->getDbId(), 0, 1);
+			//d ($id);
+			$id = '2-2-1';
+            $temp = $this->createComponent('Vpc_Formular_Checkbox_Index', $id);
+
             $multicheckbox[] = $temp->getTemplateVars('');
         }
-        return $multicheckbox;
+        return $multicheckbox;*/
     }
 
     //erstellt Checkboxen mittels der übergebenen Werte

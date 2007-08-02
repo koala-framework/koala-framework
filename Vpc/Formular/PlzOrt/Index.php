@@ -10,7 +10,7 @@ class Vpc_Formular_PlzOrt_Index extends Vpc_Formular_Field_Abstract
     {
         $return['c1'] = $this->_plz->getTemplateVars('');
         $return['c2'] = $this->_ort->getTemplateVars('');
-        $return['id'] = $this->getComponentId();
+        $return['id'] = $this->getDbId().$this->getComponentKey();
         $return['template'] = 'Formular/PlzOrt.html';
 
         return $return;
@@ -18,8 +18,8 @@ class Vpc_Formular_PlzOrt_Index extends Vpc_Formular_Field_Abstract
 
     public function setUp ()
     {
-        $this->_plz = $this->createComponent('Vpc_Formular_Textbox_Index', $this->getComponentId(), 1);
-        $this->_ort = $this->createComponent('Vpc_Formular_Textbox_Index', $this->getComponentId(), 2);
+        $this->_plz = $this->createComponent('Vpc_Formular_Textbox_Index',$this->getDbId() , 1);
+        $this->_ort = $this->createComponent('Vpc_Formular_Textbox_Index', $this->getDbId(), 2);
         $this->_plz->setSetting('width', 40);
         $this->_plz->setSetting('name', 'plz');
         $this->_plz->setSetting('maxlength', 4);
