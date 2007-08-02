@@ -39,9 +39,9 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
     /**
      * Schleift die Methode auf auf dekorierte Komponente durch.
      */
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        return $this->_component->getTemplateVars($mode);
+        return $this->_component->getTemplateVars();
     }
     
     /**

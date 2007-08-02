@@ -3,7 +3,7 @@ class Vpc_Formular_Checkbox_Index extends Vpc_Formular_Field_Abstract
 {
     protected $_defaultSettings = array('text' => '', 'checked' => false, 'value' => '', 'name' => '');
 
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
         $name = $this->getSetting('name');
         $value = $this->getSetting('value');

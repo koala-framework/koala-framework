@@ -6,7 +6,7 @@ class Vpc_Formular_PlzOrt_Index extends Vpc_Formular_Field_Abstract
 
     protected $_defaultSettings = array('name' => '');
 
-    function getTemplateVars($mode)
+    function getTemplateVars()
     {
         $return['c1'] = $this->_plz->getTemplateVars('');
         $return['c2'] = $this->_ort->getTemplateVars('');
@@ -31,10 +31,10 @@ class Vpc_Formular_PlzOrt_Index extends Vpc_Formular_Field_Abstract
     public function processInput()
     {
         if (isset($_POST[$this->getName().'plz'])){
-	         $this->_plz->setSetting('value', $_POST[$this->getName().'plz']);
+           $this->_plz->setSetting('value', $_POST[$this->getName().'plz']);
         }
         if (isset($_POST[$this->getName().'ort'])){
-	         $this->_ort->setSetting('value', $_POST[$this->getName().'ort']);
+           $this->_ort->setSetting('value', $_POST[$this->getName().'ort']);
         } else {
 
         }

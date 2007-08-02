@@ -1,9 +1,9 @@
 <?php
 class Vpc_Rte_Index extends Vpc_Abstract
 {
-	protected $_defaultSettings = array('text' => '');
+  protected $_defaultSettings = array('text' => '');
 
-    function getTemplateVars($mode)
+    function getTemplateVars()
     {
         $return['text'] = $this->getSetting('text');
         $return['id'] = $this->getComponentId();

@@ -17,9 +17,9 @@ class Vpc_Events_Index extends Vpc_Abstract
         return $pages;
     }
    
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars($mode);
+        $ret = parent::getTemplateVars();
         $ret['years']= array(2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007);
         $ret['template'] = 'Events.html';
         return $ret;

@@ -72,7 +72,6 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'controller', 'action' => 'index')));
             $router->AddRoute('login', new Zend_Controller_Router_Route('login/:action', array('module' => 'admin', 'controller' => 'login', 'action' => 'index')));
             
-            $front->registerPlugin(new Vps_Controller_Plugin_Admin());
             $plugin = new Zend_Controller_Plugin_ErrorHandler();
             $plugin->setErrorHandlerModule('admin');
             $front->registerPlugin($plugin);
@@ -83,18 +82,22 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $acl = new Vps_Acl();
     
             // Roles
-            $acl->addRole(new Vps_Acl_Role('admin'), 'guest');
+            $acl->addRole(new Vps_Acl_Role('member'), 'guest');
+            $acl->addRole(new Vps_Acl_Role('admin'), 'member');
             
             // Resources
             $acl->add(new Zend_Acl_Resource('web'));
+            $acl->add(new Zend_Acl_Resource('fe'));
             $acl->add(new Vps_Acl_Resource_MenuDropdown('admin', 'Admin'));
                 $acl->add(new Vps_Acl_Resource_MenuUrl('pages', 'Seitenbaum', '/admin/pages/'), 'admin');
                 $acl->add(new Vps_Acl_Resource_MenuUrl('components', 'Komponentenübersicht', '/admin/components/'), 'admin');
                     $acl->add(new Zend_Acl_Resource('component'), 'admin');
             
             // Berechtigungen
-            $acl->allow('admin', 'admin');
             $acl->allow('admin', 'web');
+            $acl->allow('admin', 'fe');
+            $acl->allow('admin', 'admin');
+            $acl->allow('member', 'fe');
             $acl->allow('guest', 'web');
             
             Zend_Registry::set('acl', $acl);

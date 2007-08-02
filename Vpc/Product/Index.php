@@ -25,9 +25,9 @@ class Vpc_Product_Index extends Vpc_Abstract
         return $pages;
     }
     
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars($mode);
+        $ret = parent::getTemplateVars();
         $pages = $this->generateHierarchy();
         foreach($pages as $filename => $page) {
             $data['name'] = $this->_names[$filename];

@@ -3,7 +3,7 @@ class Vpc_Formular_Multicheckbox_Index extends Vpc_Formular_Field_Abstract
 {
     protected $_defaultSettings = array('multicheckbox' => array(), 'name' => '', 'horizontal' => 0);
 
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
         $this->start();
 
@@ -48,7 +48,7 @@ class Vpc_Formular_Multicheckbox_Index extends Vpc_Formular_Field_Abstract
             $ids[] = $checkbox->id;
         }
 
-		$multicheckbox = array();
+    $multicheckbox = array();
         //instanzen der Komponentenwerden erzeugt
         foreach($ids as $id){
             $temp = $this->createComponent('Vpc_Formular_Checkbox_Index', null, $id);

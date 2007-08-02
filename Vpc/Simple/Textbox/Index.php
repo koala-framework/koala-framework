@@ -32,7 +32,7 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
         return $this->_content;
     }
 
-    private function _getContentParts($mode = 'fe')
+    private function _getContentParts()
     {
         if (!isset($this->_contentParts))
         {
@@ -51,7 +51,7 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
                     $component = $this->createComponent('Vpc_Empty_Index', $componentNr);
                 }
                 $this->_components[] = $component;
-                $this->_contentParts[] = array('type'=>'component', 'component'=>$component->getTemplateVars($mode));
+                $this->_contentParts[] = array('type'=>'component', 'component'=>$component->getTemplateVars());
                 $content = $m[3];
             }
             if(!$m) $this->_contentParts[] = array('type'=>'content', 'content'=>$content);
@@ -60,20 +60,11 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
         return $this->_contentParts;
     }
 
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars($mode);
-
-        if ($mode == "edit") {
-            $ret['content'] = $this->getContent();
-        } else {
-            $ret['contentParts'] = $this->_getContentParts($mode);
-        }
-        if ($mode == 'edit') {
-            $ret['template'] = dirname(__FILE__).'/Textbox.html';
-        } else {
-             $ret['template'] = 'Textbox.html';
-        }
+        $ret = parent::getTemplateVars();
+        $ret['contentParts'] = $this->_getContentParts();
+        $ret['template'] = 'Textbox.html';
         return $ret;
     }
 

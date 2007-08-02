@@ -83,6 +83,9 @@ abstract class Vps_PageCollection_Abstract
         }
 
         $this->_setPage($decoratedComponent, $filename, $name);
+        if (Zend_Registry::isRegistered('infolog')) {
+            Zend_Registry::get('infolog')->createPage($decoratedComponent->getId());
+        }
         return $decoratedComponent;
     }
 

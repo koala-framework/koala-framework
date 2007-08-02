@@ -48,6 +48,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
         }
 */
         $this->setup();
+        if (Zend_Registry::isRegistered('infolog')) {
+            Zend_Registry::get('infolog')->createComponent(get_class($this) . ' - ' . $id);
+        }
     }
 
     /**
@@ -412,7 +415,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param mode Für Frontend-Editing, noch nicht fertig
      * @return array Template-Variablen
      */
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
         $vars['class'] = get_class($this);
         $vars['id'] = $this->getId();

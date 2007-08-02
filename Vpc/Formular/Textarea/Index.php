@@ -3,7 +3,7 @@ class Vpc_Formular_Textarea_Index extends Vpc_Formular_Field_Simple_Abstract
 {
     protected $_defaultSettings = array('cols' => '20', 'rows' => '5', 'name' => '', 'value' => '');
     
-    function getTemplateVars($mode)
+    function getTemplateVars()
     {
         $return['cols'] = $this->getSetting('cols');
         $return['rows'] = $this->getSetting('rows');

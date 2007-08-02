@@ -3,7 +3,7 @@ class Vpc_Formular_Textbox_Index extends Vpc_Formular_Field_Simple_Abstract
 {
     protected $_defaultSettings = array('maxlength' => '255',  'width' => '50','name' => '', 'value' => '', 'validator' => '');
 
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
         $return['value'] = $this->getSetting('value');
         $return['maxlength'] = $this->getSetting('maxlength');

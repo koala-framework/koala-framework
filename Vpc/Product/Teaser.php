@@ -7,9 +7,9 @@ class Vpc_Product_Teaser extends Vpc_Abstract
     {
         $this->_productData = $data;
     }
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars($mode);
+        $ret = parent::getTemplateVars();
         $ret['product'] = $this->_productData;
         return $ret;
     }

@@ -14,7 +14,7 @@ interface Vpc_Interface
     public function getPageId();
     public function generateHierarchy($filename = '');
     public function setPageCollection(Vps_PageCollection_Abstract $pageCollection);
-    public function getTemplateVars($mode);
+    public function getTemplateVars();
     public function findComponent($id);
     public function findComponentByClass($class);
     // Fe
