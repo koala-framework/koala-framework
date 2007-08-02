@@ -513,7 +513,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         if (!$this->_settingsDbRow) {
 
-            $this->_settingsDbRow = $this->_getTable()->find($this->getPageId(), $this->getPageKey(), $this->getComponentKey())->current();
+            $this->_settingsDbRow = $this->_getTable()->find($this->getPageId(), $this->getComponentKey())->current();
 
         }
         return $this->_settingsDbRow;
