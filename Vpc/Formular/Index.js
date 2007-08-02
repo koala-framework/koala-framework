@@ -15,7 +15,7 @@ Vpc.Formular.Index = function(renderTo, config)
 				        },
 						east: {
 				            split:true,
-				            initialSize: 400,
+				            initialSize: 500,
 				            titlebar: true,
 				            collapsible: true,
 				            minSize: 200,
@@ -24,19 +24,18 @@ Vpc.Formular.Index = function(renderTo, config)
 					});
 	this.layout.add("center", new Ext.ContentPanel("form", {autoCreate: true, title: 'Formular Elemente'}));
 	this.layout.add("east", new Ext.ContentPanel("generalProperties", {autoCreate: true, title: 'Einstellungen'}));
-	var form = new Vpc.Paragraphs.Index('form', config);
-	form.on('editcomponent', this.edit, this);
+	this.form = new Vpc.Paragraphs.Index('form', config);
+	this.form.on('editcomponent', this.edit, this);
+	this.form.on('addcomponent', this.add, this);
 
 
 };
 
 
-
-
 Ext.extend(Vpc.Formular.Index, Ext.util.Observable,
 {
     edit : function(o) {
-        var controllerUrl = '/component/edit/' + o.id + '/';
+        var controllerUrl = '/component/edit/' + o.cls + '/' + o.pid + '-' + o.id + '/';
         Ext.Ajax.request({
             url: controllerUrl + 'jsonIndex/',
             success: function(r) {
@@ -48,41 +47,39 @@ Ext.extend(Vpc.Formular.Index, Ext.util.Observable,
             },
             scope: this
         });
-    }
+    },
+	add : function(id, grid) {
+      var Row = Ext.data.Record.create([
+           {name: 'component_class', type: 'string'},
+           {name: 'visible', type: 'bool'},
+           {name: 'name', type: 'string'},
+           {name: 'mandatory', type: 'bool'},
+           {name: 'no_cols', type: 'bool'},
+           {name: 'page_id', type: 'int'},
+		   {name: 'id', type: 'int'}
+      ]);
+
+		if (typeof id == 'undefined'){
+			alert ('undefined');
+		}
+		else {
+			var entry = new Row ({
+				component_class: id,
+				visible: true,
+				name: 'undefined',
+				mandatory: false,
+				no_cols: false,
+				page_id: 0,
+				id: 0
+			});
+
+			grid.grid.stopEditing();
+            grid.ds.insert(0, entry);
+            grid.grid.startEditing(0, 0);
+		}
+	}
 })
 
-/*
-Ext.extend(Vpc.Formular.Index, Ext.util.Observable,
-{
-    edit : function(o) {
-        var controllerUrl = '/component/edit/' + o.id + '/';
-        Ext.Ajax.request({
-            url: controllerUrl + 'jsonIndex/',
-            success: function(r) {
-                response = Ext.decode(r.responseText);
-                cls = eval(response['class']);
-                if (cls) {
-                    var dialog = new Ext.LayoutDialog('name', {
-                        autoCreate: true,
-						autoScroll: false,
-                        width:300,
-                        height:300,
-                        shadow:true,
-                        minWidth:300,
-                        minHeight:300,
-                        proxyDrag: true,
-						syncHeightBeforeShow: true
-                    });
 
-					component = new cls(dialog.body, Ext.applyIf(response.config, {controllerUrl: controllerUrl, fitToFrame:true}));
-
-					dialog.show();
-                }
-
-            },
-            scope: this
-        });
-    }
-}) */
 
 

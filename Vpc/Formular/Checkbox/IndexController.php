@@ -13,12 +13,12 @@ class Vpc_Formular_Checkbox_IndexController extends Vps_Controller_Action_Auto_F
             array('type'       => 'TextField',
                   'fieldLabel' => 'Checked',
                   'name'       => 'checked',
-                  'width'      => 50),
+                  'width'      => 50)
     );
 
     protected $_buttons = array('save'   => true);
     protected $_tableName = 'Vpc_Formular_Checkbox_IndexModel';
-    protected $_primaryKey = 'id';
+    protected $_primaryKey = 'page_id';
 }
 
 

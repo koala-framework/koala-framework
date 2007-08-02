@@ -5,16 +5,16 @@ class Vpc_Formular_Checkbox_Index extends Vpc_Formular_Field_Abstract
 
     public function getTemplateVars()
     {
-        $name = $this->getSetting('name');
+    	$name = $this->getSetting('name');
         $value = $this->getSetting('value');
         $text = $this->getSetting('text');
         $checked = $this->getSetting('checked');
 
         $return['value'] = $value;
         $return['checked'] = $checked;
-        $return['name'] = $name;
         $return['text'] = $text;
-        $return['id'] = $this->getComponentId();
+        $return['name'] = $name;
+        $return['id'] = $this->getDbId().$this->getComponentKey();
         $return['template'] = 'Formular/Checkbox.html';
         return $return;
     }

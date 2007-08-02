@@ -9,7 +9,7 @@ class Vpc_Formular_Textbox_Index extends Vpc_Formular_Field_Simple_Abstract
         $return['maxlength'] = $this->getSetting('maxlength');
         $return['width'] = $this->getSetting('width');
         $return['name'] = $this->getSetting('name');
-        $return['id'] = $this->getComponentId();
+        $return['id'] = $this->getDbId().$this->getComponentKey();
         $return['template'] = 'Formular/Textbox.html';
         return $return;
     }

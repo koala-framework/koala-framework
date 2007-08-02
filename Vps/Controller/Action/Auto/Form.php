@@ -22,7 +22,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         }
         return false;
     }
-    
+
     protected function _insertField($where, $field)
     {
         $where = $this->_getFieldIndex($where);
