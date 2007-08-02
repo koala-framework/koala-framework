@@ -5,19 +5,14 @@
  */
 class Vpc_Simple_Pic_Index extends Vpc_Abstract
 {
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars($mode);
+        $ret = parent::getTemplateVars();
         $ret['pic'] = 'files/pics/'.$this->getId().'.jpg';
         if(!file_exists($ret['pic'])) {
             $ret['pic'] = false;
         }
-        if ($mode == 'edit') {
-            $ret['template'] = dirname(__FILE__).'/Pic.html';
-            $ret['uniqid'] = rand() . '.' . time();
-        } else {
-             $ret['template'] = 'Pic.html';
-         }
+        $ret['template'] = 'Pic.html';
         return $ret;
     }
     public function saveFrontendEditing(Zend_Controller_Request_Http $request)

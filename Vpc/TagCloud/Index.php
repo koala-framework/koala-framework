@@ -5,7 +5,7 @@
  */
 class Vpc_TagCloud_Index extends Vpc_Abstract
 {
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
         $db = $this->getDao()->getDb('beyars');
         $select = $db->select()

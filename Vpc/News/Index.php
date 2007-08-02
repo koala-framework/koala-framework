@@ -21,9 +21,9 @@ class Vpc_News_Index extends Vpc_Abstract
         return $pages;
     }
 
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars($mode);
+        $ret = parent::getTemplateVars();
         $ret['news'] = array();
         foreach($this->generateHierarchy() as $n) {
             $data['title'] = $n->title;

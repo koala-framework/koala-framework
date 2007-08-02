@@ -22,22 +22,16 @@ class Vpc_Product_Details extends Vpc_Abstract
         $this->_content = $this->createComponent('', $this->_product->component_id);
     }
 
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars($mode);
+        $ret = parent::getTemplateVars();
 
         $ret['name'] = $this->_product->name;
         $ret['filename'] = $this->_product->filename;
         $ret['price'] = $this->_product->price;
         $ret['vat'] = $this->_product->vat;
-
-        $ret['content'] = $this->_content->getTemplateVars($mode);
-
-        if ($mode == 'edit') {
-            $ret['template'] = dirname(__FILE__).'/Details.html';
-        } else {
-             $ret['template'] = 'Product/Details.html';
-        }
+        $ret['content'] = $this->_content->getTemplateVars();
+        $ret['template'] = 'Product/Details.html';
 
         return $ret;
     }

@@ -31,9 +31,9 @@ class Vpc_Product_List extends Vpc_Abstract
         return $pages;
     }
     
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars($mode);
+        $ret = parent::getTemplateVars();
 
         $pages = $this->generateHierarchy();
         foreach ($pages as $filename => $page) {
@@ -44,7 +44,7 @@ class Vpc_Product_List extends Vpc_Abstract
                              'price'=>$row->price, 'vat'=>$row->vat);
             $teaser->setProductData($product);
             $this->_productTeasers[] = $teaser;
-            $ret['products'][] = $teaser->getTemplateVars($mode);
+            $ret['products'][] = $teaser->getTemplateVars();
         }
         $ret['template'] = 'Product/List.html';
         

@@ -3,7 +3,7 @@ class Vpc_Formular_FileUpload_Index extends Vpc_Formular_Field_Abstract
 {
     protected $_defaultSettings = array('types_allowed' => '', 'name' => '', 'width' => '50', 'maxSize' => 2000);
     
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {       
         $return['width'] = $this->getSetting('width');
         $return['name'] = $this->getSetting('name');
@@ -23,21 +23,21 @@ class Vpc_Formular_FileUpload_Index extends Vpc_Formular_Field_Abstract
         if ($this->getSetting('maxSize') < ($file['size']/1024)) return 'Es dürfen Daten max. bis '.$this->getSetting('maxSize').' verwendet werden';
         
         if ($file['error'] != 4) {
-			//zerlegt den Dateinamen
-			$file = $file['name'];
-			$start = strripos($file, '.');
-			$fileextension = substr($file, $start+1);
-			
-			//zerlegt den Datenbankeintrag
-			$extensionsString = $this->getSetting('types_allowed');
-			$extenstions = array();
-			$delims = ',';
-			$word = strtok($extensionsString, $delims);
-			while (is_string($word)){
-			    if ($word){
-			        $extensions[] = trim($word);
-			    }
-			    $word = strtok($delims);
+      //zerlegt den Dateinamen
+      $file = $file['name'];
+      $start = strripos($file, '.');
+      $fileextension = substr($file, $start+1);
+      
+      //zerlegt den Datenbankeintrag
+      $extensionsString = $this->getSetting('types_allowed');
+      $extenstions = array();
+      $delims = ',';
+      $word = strtok($extensionsString, $delims);
+      while (is_string($word)){
+          if ($word){
+              $extensions[] = trim($word);
+          }
+          $word = strtok($delims);
             }
             if (!in_array($fileextension, $extensions)) return 'ungültiges Format in Feld '.$this->getName().', zulässige Formate: '.$this->getSetting('types_allowed');
         } 

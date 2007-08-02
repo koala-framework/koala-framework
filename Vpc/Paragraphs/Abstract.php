@@ -7,12 +7,12 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
 {
     protected $_paragraphs;
 
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars($mode);
+        $ret = parent::getTemplateVars();
         $ret['paragraphs'] = array();
         foreach($this->_getParagraphs() as $paragraph) {
-            $vars = $paragraph->getTemplateVars($mode);
+            $vars = $paragraph->getTemplateVars();
             if (isset($vars['template'])) {
                 $ret['paragraphs'][] = $vars;
             }

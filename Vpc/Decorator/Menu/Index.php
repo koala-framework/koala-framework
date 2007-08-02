@@ -7,9 +7,9 @@
  */
 class Vpc_Decorator_Menu_Index extends Vpc_Decorator_Abstract
 {
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $return = parent::getTemplateVars($mode);
+        $return = parent::getTemplateVars();
         $pc = $this->_pageCollection;
         $rootPage = $pc->getRootPage();
 

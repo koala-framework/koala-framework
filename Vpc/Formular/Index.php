@@ -5,7 +5,7 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
     private $_errors = array();
     private $_fields = array();
     private $_components = array();
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
         
         //$this->_checkForm();
@@ -22,7 +22,7 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
              $this->_getFormFields();
         }        
        
-        $vars = parent::getTemplateVars($mode);
+        $vars = parent::getTemplateVars();
         $vars['action'] = $_SERVER['REQUEST_URI'];
         $vars['errors'] = $this->_errors;
         $vars['names'] = $this->_fields;
@@ -57,11 +57,11 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
                 
                 $names[] = $newName;
                 if ($component instanceof Vpc_Formular_Field_Interface ) {	               
-	                $component->setName($newName);
-	                $component->setErrorField($row->name);
-	                $this->_components[$componentKey] = $component;
+                  $component->setName($newName);
+                  $component->setErrorField($row->name);
+                  $this->_components[$componentKey] = $component;
                 }           
-	            $fields[] = array ('name' => $row->name, 'id' => $row->component_id, 'mandatory' => $row->mandatory, 'noCols' => $row->no_cols, 'isValid' => 1);    
+              $fields[] = array ('name' => $row->name, 'id' => $row->component_id, 'mandatory' => $row->mandatory, 'noCols' => $row->no_cols, 'isValid' => 1);    
             }
             
         }

@@ -7,7 +7,7 @@ class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Fi
     var $height      = 40;
     var $jpg_quality = 30;
 
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
 
         if (isset($_GET['showPic'])) {
@@ -108,9 +108,9 @@ class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Fi
     }
 
 
-	/**
-	 * Algorithmus zum Verschlüsseln
-	 */
+  /**
+   * Algorithmus zum Verschlüsseln
+   */
 
     public function myEncryption($value)
     {

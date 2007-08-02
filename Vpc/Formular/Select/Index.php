@@ -4,7 +4,7 @@ class Vpc_Formular_Select_Index extends Vpc_Formular_Field_Decide_Abstract
     protected $_defaultSettings = array('rows' => '10', 'name' => '');
     protected $_options = array();
 
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
         $rows = $this->getSetting('rows');
         $name = $this->getSetting('name');

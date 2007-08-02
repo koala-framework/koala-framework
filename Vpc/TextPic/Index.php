@@ -14,11 +14,11 @@ class Vpc_TextPic_Index extends Vpc_Abstract
         $this->_picComponent = $this->createComponent('Vpc_Pic', 0, '2');
     }
     
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars($mode);
-        $ret['textbox'] = $this->_textboxComponent->getTemplateVars($mode);
-        $ret['pic'] = $this->_picComponent->getTemplateVars($mode);
+        $ret = parent::getTemplateVars();
+        $ret['textbox'] = $this->_textboxComponent->getTemplateVars();
+        $ret['pic'] = $this->_picComponent->getTemplateVars();
         $ret['template'] = 'TextPic.html';
         return $ret;
     }

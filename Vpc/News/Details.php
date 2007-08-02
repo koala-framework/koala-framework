@@ -10,16 +10,16 @@ class Vpc_News_Details extends Vpc_Abstract
         $this->_id = $id;
     }
     
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars($mode);
+        $ret = parent::getTemplateVars();
 
         $rows = $this->getDao()->getTable('Vps_Dao_News')->find($this->_newsId);
         $row = $rows->current();
         
         $this->_content = $this->createComponent('', $row->component_id);
 
-        $ret['content'] = $this->_content->getTemplateVars($mode);
+        $ret['content'] = $this->_content->getTemplateVars();
         $ret['template'] = 'News/Details.html';
         return $ret;
     }

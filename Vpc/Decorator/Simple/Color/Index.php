@@ -9,10 +9,10 @@ class Vpc_Decorator_Simple_Color_Index extends Vpc_Decorator_Abstract
 {
     protected $_decorated;
 
-    public function getTemplateVars($mode)
+    public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars($mode);
-        $ret['decorated'] = $this->_component->getTemplateVars($mode);
+        $ret = parent::getTemplateVars();
+        $ret['decorated'] = $this->_component->getTemplateVars();
         $ret['color'] = 'blue';
         $ret['template'] = 'Decorator.html';
         return $ret;
