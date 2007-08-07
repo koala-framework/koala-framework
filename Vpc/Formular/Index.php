@@ -32,18 +32,14 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
         return $vars;
     }
 
-
-
-
-
     /**
      * Holt die Formularfelder und setzt den Namen für das jeweilige Feld auf
      * Basis der Formulartabelle -> es wird ein eintrag in die Datenbank vorgenommen
      */
     public function getChildComponents() {
-    	if ($this->_components) {
-    		return $this->_components;
-    	}
+      if ($this->_components) {
+        return $this->_components;
+      }
         $fields = array();
         $names = array();
         $components = array();
@@ -59,7 +55,7 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
             }
 
             $names[] = $newName;
-	        $component = $this->createComponent($row->component_class, $row->id);
+          $component = $this->createComponent($row->component_class, $row->id);
 
             if ($component instanceof Vpc_Formular_Field_Interface ) {
                 $component->setName($newName);
@@ -115,7 +111,7 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
 
     private function _validateFields()
     {
-    	//$this->getChildComponents();
+      //$this->getChildComponents();
 
         $this->_fields;
         $return = true;
@@ -127,9 +123,9 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
 
         foreach($this->_components as $value => $component) {
             if ($component instanceof Vpc_Formular_Field_Interface) {
-            	$id = str_replace('-', '', $component->getComponentKey());
+              $id = str_replace('-', '', $component->getComponentKey());
                 $row = $this->_getTable()->fetchAll(array('page_id = ?'  => $component->getDbId(),
-            										      'id = ?'       => $id))->current();
+                                      'id = ?'       => $id))->current();
                 $component->processInput();
 
                 if ($component->validateField($row->mandatory) !== true) {

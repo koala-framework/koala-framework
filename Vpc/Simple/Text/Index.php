@@ -15,7 +15,7 @@ class Vpc_Simple_Text_Index extends Vpc_Abstract
     );
     protected $_tablename = 'Vpc_Simple_Text_IndexModel';
     public $controllerClass = 'Vpc_Simple_Text_IndexController';
-    const NAME = 'Standard.Text'; //Formular.Textbox
+    const NAME = 'Standard.Text';
 
     private function _getContentParts()
     {

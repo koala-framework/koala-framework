@@ -21,22 +21,23 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     protected $_paging = 0;
     protected $_defaultOrder = 'pos';
     protected $_tableName = 'Vpc_Paragraphs_IndexModel';
-    private $_ini;
+    private $_components;
 
     public function init()
     {
         parent::init();
-        $this->_ini = new Vps_Config_Ini('application/components.ini');
+        $this->_components = Vpc_Setup_Abstract::getAvailableComponents('Vpc/');
     }
     public function indexAction()
     {
-        $components = array();
-        foreach ($this->_ini->toArray() as $component => $data) {
-            $str = '$components["' . str_replace('.', '"]["', $component) . '"] = "' . $component . '";';
+        $componentList = array();
+        foreach ($this->_components as $component) {
+            $name = constant("$component::NAME");
+            $str = '$componentList["' . str_replace('.', '"]["', $name) . '"] = "' . $component . '";';
             eval($str);
         }
-        
-        $config = array('components' => $components);
+
+        $config = array('components' => $componentList);
         $this->view->ext('Vpc.Paragraphs.Index', $config);
     }
 
@@ -65,11 +66,9 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     public function jsonAddParagraphAction()
     {
         $componentName = $this->_getParam('component');
-        $ini = $this->_ini->$componentName;
-        if ($ini) {
-            $class = $ini->class;
+        if (array_search($componentName, $this->_components)) {
             try {
-                $setupClass = str_replace('_Index', '_Setup', $class);
+                $setupClass = str_replace('_Index', '_Setup', get_class($this->component));
                 if (class_exists($setupClass)) {
                     $setup = new $setupClass($this->getAdapter());
                     $setup->setup();
@@ -77,21 +76,16 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
             } catch (Zend_Exception $e) {
             }
     
-            $config = call_user_func(array($class, 'getStaticSettings')); 
-            foreach ($config as $element => $value){
-                if (!$this->_ini->checkKeyExists($class, $element)) {
-                    $this->_ini->setValue($class, $element, (string)$value);       
-                }       
-            }     
-            $this->_ini->write();
-    
             $insert['page_id'] = $this->component->getDbId();
             $insert['component_key'] = $this->component->getComponentKey();
-            $insert['component'] = $componentName;
+            $insert['component_class'] = $componentName;
+            $this->_table->insert($insert);
             
         } else {
             $this->view->error = 'Component not found: ' . $componentName;
         }
     }
+    
+    
 
 }

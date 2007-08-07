@@ -6,6 +6,7 @@
 class Vpc_Product_Index extends Vpc_Abstract
 {
     private $_names;
+    const NAME = 'Produktkatalog';
     
     protected function getChildPages($filename = '')
     {

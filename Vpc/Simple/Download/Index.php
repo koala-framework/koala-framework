@@ -1,7 +1,7 @@
 <?php
 class Vpc_Simple_Download_Index extends Vpc_Abstract
 {
-
+    const NAME = 'Standard.Download';
     protected $_defaultSettings = array('path' => '', 'text' => '', 'info' => '', 'filesize' => '');
     protected $_extensions  = array ('pdf' => '/files/icons/acrobat.png',
                        'doc' => '/files/icons/word.png',

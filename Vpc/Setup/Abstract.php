@@ -52,31 +52,24 @@ class Vpc_Setup_Abstract
 
     public static function getAvailableComponents($path = '')
     {
-        $path = 'Vpc/' . $path;
-        $return = array();
-        if (is_dir($path)) {
-            $return = array_merge($return, self::_getAvailableComponents($path));
+        if ($path == '') {
+            $path = VPS_PATH . 'Vpc/';
         }
-        if (is_dir(VPS_PATH . $path)) {
-            $return = array_merge($return, self::_getAvailableComponents(VPS_PATH . $path));
-        }
-        return $return;
-    }
-
-    private static function _getAvailableComponents($path)
-    {
         $return = array();
         foreach (new DirectoryIterator($path) as $item) {
             if ($item->getFilename() != '.' && $item->getFilename() != '..' && $item->getFilename() != '.svn'){
                 if ($item->isDir()){
                     $pathNew = "$path$item/";
-                    $return = array_merge(self::_getAvailableComponents($pathNew), $return);
+                    $return = array_merge(self::getAvailableComponents($pathNew), $return);
                 } else {
-                    if ($item->getFilename() == 'Index.php'){
+                    if (substr($item->getFilename(), -4) == '.php') {
                         $component = str_replace('/', '_', $item->getPath());
-                        $component = strrchr($component, 'Vpc_');
-                        $component .= '_Index';
-                        $return[] = $component;
+                        $component .= '_' . str_replace('.php', '', $item->getFilename());
+                        try {
+                            $name = constant("$component::NAME");
+                            $return[$name] = $component;
+                        } catch (Vps_CustomException $e) {
+                        }
                     }
                 }
             }
