@@ -10,7 +10,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     private $_id;
     private $_hasGeneratedForFilename = array();
     private $_pageCollection = null;
-    
+
     protected $_settings = array();
     protected $_tablename;
     protected $_table;
@@ -40,7 +40,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
             Zend_Registry::get('infolog')->createComponent(get_class($this) . ' - ' . $id);
         }
     }
-    
+
     /**
      * Wird nach dem Konstruktor aufgerufen. Initialisierungscode in Unterklassen ist hier richtig.
      */
@@ -456,9 +456,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Shortcut für $this->_dao->getTable($tablename)
      * @param string Name des Models
      */
-    protected function _getTable()
+    protected function _getTable($tablename = '')
     {
-        $tablename = $this->_tablename;
+        if ($tablename == '') {
+	        $tablename = $this->_tablename;
+        }
         if ($tablename == '') {
             $tablename = get_class($this) . 'Model';
         }
@@ -467,19 +469,8 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     public function getSetting($setting)
     {
-        $rows = $this->_getTable()->find($this->getPageId(), $this->getComponentKey());
-        if ($rows->count() == 1) {
-            $row = $rows->current()->toArray();
-            if (isset($row[$setting])) {
-                return $row[$setting];
-            }
-        }
-        
-        if (isset($this->_settings[$setting])) {
-            return $this->_settings[$setting];
-        }
-        
-        return '';
+    	$settings = $this->getSettings();
+    	return isset($settings[$setting]) ? $settings[$setting] : '' ;
     }
 
     public function setSetting($field, $value)
@@ -487,8 +478,17 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_settings[$field] = $value;
     }
 
-    public function getDefaultSettings()
+    public function getSettings()
     {
-        return $this->_defaultSettings;
+        $rows = $this->_getTable()->find($this->getPageId(), $this->getComponentKey());
+        if ($rows->count() == 1) {
+            return array_merge($this->_settings, $rows->current()->toArray());
+        }
+
+        if (isset($this->_settings)) {
+            return $this->_settings;
+        }
+
+        return array();
     }
 }
