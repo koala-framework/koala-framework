@@ -7,6 +7,7 @@
  */
 class Vpc_News_Index extends Vpc_Abstract
 {
+    const NAME = 'News';
     public function generateHierarchy($filename = '')
     {
         $pages = array();

@@ -1,7 +1,8 @@
 <?php
 class Vpc_Rte_Index extends Vpc_Abstract
 {
-  protected $_defaultSettings = array('text' => '');
+    protected $_defaultSettings = array('text' => '');
+    const NAME = 'Standard.RTE';
 
    protected $_settings = array(
         'text' => '',

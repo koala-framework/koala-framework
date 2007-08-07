@@ -7,6 +7,7 @@
  */
 class Vpc_Events_Index extends Vpc_Abstract
 {
+    const NAME = 'Events';
     protected function getChildPages($filename = '')
     {
         $pages = array();

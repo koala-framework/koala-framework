@@ -5,6 +5,8 @@
  */
 class Vpc_Simple_Pic_Index extends Vpc_Abstract
 {
+    public $name = 'Standard.Bild';
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

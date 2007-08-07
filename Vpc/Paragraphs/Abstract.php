@@ -9,6 +9,7 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
     protected $_paragraphs;
     protected $_tablename = 'Vpc_Paragraphs_IndexModel';
     public $controllerClass = 'Vpc_Paragraphs_IndexController';
+    const NAME = 'Absätze';
 
     public function getTemplateVars()
     {

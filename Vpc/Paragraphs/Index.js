@@ -54,6 +54,7 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
     edit : function(o, p) {
         var row = this.grid.grid.getSelectionModel().getSelected();
         controllerUrl = row.id.replace(/\/show\//, '/edit/');
+        debugger;
         this.fireEvent('editcomponent', {controllerUrl: controllerUrl, text: this.text + ': ' + row.data.pos});
     },
 
@@ -62,8 +63,8 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
             url: this.controllerUrl + 'jsonAddParagraph/',
             params: {component : o.id},
             success: function(r) {
-                response = Ext.decode(r.responseText);
-                //debugger;
+                debugger;
+                this.grid.reload();
             },
             scope: this
         });
