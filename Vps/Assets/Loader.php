@@ -7,7 +7,6 @@ class Vps_Assets_Loader
             require_once 'Vps/Setup.php';
             $config = Vps_Setup::createConfig();
             $url = substr($_SERVER['SCRIPT_URL'], 8);
-
             if ($url == 'all.js') {
                 require_once 'Vps/Assets/Dependencies.php';
                 $dep = new Vps_Assets_Dependencies($config->asset, 'application/config.ini', 'dependencies');
@@ -50,6 +49,8 @@ class Vps_Assets_Loader
                             header('Content-Type: text/css');
                         } else if (substr($url, -3)=='.js') {
                             header('Content-Type: text/javascript');
+                        } else if (substr($url, -4)=='.swf') {
+                            header('Content-Type: application/flash');
                         } else {
                             die("invalid file type");
                         }
