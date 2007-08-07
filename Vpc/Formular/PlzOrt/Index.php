@@ -4,7 +4,10 @@ class Vpc_Formular_PlzOrt_Index extends Vpc_Formular_Field_Abstract
     protected $_plz;
     protected $_ort;
 
-    protected $_defaultSettings = array('name' => '');
+    protected $_settings = array('name' => '');
+
+	 protected $_tablename = '';
+    const NAME = 'Formular.PlzOrt';
 
     function getTemplateVars()
     {
@@ -16,7 +19,7 @@ class Vpc_Formular_PlzOrt_Index extends Vpc_Formular_Field_Abstract
         return $return;
     }
 
-    public function setUp ()
+    public function init ()
     {
         $this->_plz = $this->createComponent('Vpc_Formular_Textbox_Index',$this->getDbId() , 1);
         $this->_ort = $this->createComponent('Vpc_Formular_Textbox_Index', $this->getDbId(), 2);
@@ -25,6 +28,7 @@ class Vpc_Formular_PlzOrt_Index extends Vpc_Formular_Field_Abstract
         $this->_plz->setSetting('maxlength', 4);
         $this->_ort->setSetting('width', 100);
         $this->_ort->setSetting('name', 'ort');
+
     }
 
 
@@ -55,6 +59,11 @@ class Vpc_Formular_PlzOrt_Index extends Vpc_Formular_Field_Abstract
         $this->setSetting('name', $name);
         $this->_ort->setSetting('name', $name.'ort');
         $this->_plz->setSetting('name', $name.'plz');
+    }
+
+    public function getName()
+    {
+        return $this->getSetting('name');
     }
 
 

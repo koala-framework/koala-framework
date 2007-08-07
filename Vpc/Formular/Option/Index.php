@@ -1,13 +1,17 @@
 <?php
 class Vpc_Formular_Option_Index extends Vpc_Formular_Field_Decide_Abstract
 {
-	protected $_defaultSettings = array (
-		'text' => '',
-		'value' => '',
-		'name' => '',
-		'checked' => 0,
-		'horizontal' => 0
-	);
+	protected $_settings = array (
+								'text' => '',
+								'value' => '',
+								'name' => '',
+								'checked' => 0,
+								'horizontal' => 0);
+
+	protected $_tablename = 'Vpc_Formular_Option_IndexModel';
+    public $controllerClass = 'Vpc_Formular_Option_IndexController';
+    const NAME = 'Formular.Option';
+
 	protected $_options = array ();
 
 	public function getTemplateVars()
@@ -27,6 +31,7 @@ class Vpc_Formular_Option_Index extends Vpc_Formular_Field_Decide_Abstract
 		$table = $this->_getTable('Vpc_Formular_Option_OptionsModel');
 		$select = $table->fetchAll(array ('page_id = ?' => $this->getDbId(), 'component_key = ?' => $this->getComponentKey()));
 		//values werden rausgeschrieben
+
 		foreach ($select as $option)
 		{
 			$this->_options[] = array (

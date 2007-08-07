@@ -5,7 +5,7 @@ class Vpc_Formular_Submit_IndexController extends Vps_Controller_Action_Auto_For
             array('type'       => 'TextField',
                   'fieldLabel' => 'Value',
                   'name'       => 'value',
-                  'width'      => 50),
+                  'width'      => 150),
             );
 
     protected $_buttons = array('save'   => true);

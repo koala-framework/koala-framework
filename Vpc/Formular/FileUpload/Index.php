@@ -1,7 +1,14 @@
 <?php
 class Vpc_Formular_FileUpload_Index extends Vpc_Formular_Field_Abstract
 {
-    protected $_defaultSettings = array('types_allowed' => '', 'name' => '', 'width' => '50', 'maxSize' => 2000);
+    protected $_settings = array('types_allowed' => '',
+								 'name' => '',
+								 'width' => '50',
+								 'maxSize' => 2000);
+
+	protected $_tablename = 'Vpc_Formular_FileUpload_IndexModel';
+    public $controllerClass = 'Vpc_Formular_FileUpload_IndexController';
+    const NAME = 'Formular.FileUpload';
 
     public function getTemplateVars()
     {

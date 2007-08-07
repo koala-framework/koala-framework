@@ -19,7 +19,7 @@ class Vpc_Formular_Option_IndexController extends Vps_Controller_Action_Auto_For
 		$controllerUrl = str_replace('jsonIndex/', '', $controllerUrl);
 		$controllerUrl = str_replace('index/', '', $controllerUrl);
 		$cfg['controllerUrl'] = $controllerUrl;
-		$cfg['optionsControllerUrl'] = $controllerUrl . 'Options/';
+		$cfg['optionsControllerUrl'] = str_replace('_Index', '_Options', $controllerUrl);
 		$this->view->ext('Vpc.Formular.Option.Index', $cfg);
 	}
 

@@ -2,7 +2,7 @@
 class Vpc_Formular_SelectMultiple_IndexController extends Vps_Controller_Action_Auto_Form_Vpc
 {
     protected $_fields = array(
-            array('type'       => 'Checkbox',
+            array('type'       => 'TextField',
                   'fieldLabel' => 'Anzahl der angezeigten Reihen',
                   'name'       => 'rows'
             )
@@ -19,7 +19,7 @@ class Vpc_Formular_SelectMultiple_IndexController extends Vps_Controller_Action_
 		$controllerUrl = str_replace('jsonIndex/', '', $controllerUrl);
 		$controllerUrl = str_replace('index/', '', $controllerUrl);
 		$cfg['controllerUrl'] = $controllerUrl;
-		$cfg['optionsControllerUrl'] = $controllerUrl . 'Options/';
+		$cfg['optionsControllerUrl'] = str_replace('_Index', '_Options', $controllerUrl);
 		$this->view->ext('Vpc.Formular.SelectMultiple.Index', $cfg);
 	}
 

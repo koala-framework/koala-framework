@@ -21,8 +21,8 @@ Vpc.Formular.Index = function(renderTo, config)
             }
         }
     );
-    this.grid = new Vps.Auto.Grid(renderTo.createChild(), config);
-    this.layout.add("center", new Ext.ContentPanel(this.grid, {autoCreate: true, title: 'Formular Elemente'}));
+    this.grid = new Vps.Auto.Grid(this.layout.el.createChild(), config);
+    this.layout.add("center", new Ext.GridPanel(this.grid.grid, {autoCreate: true, title: 'Formular Elemente'}));
     this.layout.add("east", new Ext.ContentPanel("generalProperties", {autoCreate: true, title: 'Einstellungen'}));
     this.grid.on('generatetoolbar', this.addButtons, this);
 };
@@ -56,9 +56,11 @@ Ext.extend(Vpc.Formular.Index, Ext.util.Observable,
             scope   : this
         });
     },
-    
+
     edit : function(o) {
-        var controllerUrl = '/component/edit/' + o.cls + '/' + o.pid + '-' + o.id + '/';
+        var row = this.grid.grid.getSelectionModel().getSelected();
+        var controllerUrl = '/component/edit/' + row.data.component_class + '/' + row.data.page_id + '-' + row.data.id + '/';
+		debugger;
         Ext.Ajax.request({
             url: controllerUrl + 'jsonIndex/',
             success: function(r) {
@@ -71,7 +73,7 @@ Ext.extend(Vpc.Formular.Index, Ext.util.Observable,
             scope: this
         });
     },
-    
+
     add : function(id, grid) {
       var Row = Ext.data.Record.create([
            {name: 'component_class', type: 'string'},

@@ -10,16 +10,20 @@ public function jsonSaveAction()
         $success = false;
         $data = Zend_Json::decode($this->getRequest()->getParam("data"));
         $addedIds = array();
+
+
         foreach ($data as $submitRow) {
             $id = $submitRow[$this->_primaryKey];
             if ($id) {
             	//hier eine kleine änderung
                 //$row = $this->_table->find($id)->current();
                  $pageId = $this->component->getDbId();
-				 $componentKey = $this->component->getComponentKey();
-
-                $row = $this->_table->fetchall(array('page_id = ?' => $pageId,
-													 'component_key = ?' => $componentKey))->current();
+				 if ($this->component instanceof Vpc_Formular_Multicheckbox_Index)
+                 	$row = $this->_table->fetchall(array('page_id = ?' => $pageId,
+													 'component_key = ?' => $id))->current();
+				 else
+				 	$row = $this->_table->fetchall(array('id = ?' => $id))->current();
+            	//d ($row);
             } else {
                 if(!isset($this->_permissions['add']) || !$this->_permissions['add']) {
                     throw new Vps_Exception("Add is not allowed.");
@@ -99,9 +103,18 @@ public function jsonSaveAction()
             throw new Vps_Exception("Delete is not allowed.");
         }
         $success = false;
-        $id = $this->getRequest()->getParam($this->_primaryKey);
 
-        $row = $this->_table->find($this->component->getDbId(), $id)->current();
+
+
+		//d ($id);
+		if ($this->component instanceof Vpc_Formular_Multicheckbox_Index){
+			$id = $this->getRequest()->getParam($this->_primaryKey);
+        	$row = $this->_table->find($this->component->getDbId(), $id)->current();
+		}
+        else {
+        	$id = $_REQUEST['id'];
+        	$row = $this->_table->find($id)->current();
+        }
         if(!$row) {
             throw new Vps_Exception("Can't find row with id '$id'.");
         }
