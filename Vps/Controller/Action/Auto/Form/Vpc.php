@@ -33,12 +33,12 @@ abstract class Vps_Controller_Action_Auto_Form_Vpc extends Vps_Controller_Action
 	//Override
     public function jsonLoadAction()
     {
-        $defaultSettings = $this->component->getDefaultSettings(); // Komponente ist unter $this->component zu finden
+        $defaultSettings = $this->component->getSettings(); // Komponente ist unter $this->component zu finden
         $info = $this->_table->info();
 		$check = $info['cols'];
 		$keys = array_keys($defaultSettings);
 
-		//Überprüfung ob default Settingsu nd values übereinstimmen
+		//Überprüfung ob default Settings und values übereinstimmen
 		$values = array();
 		foreach ($check AS $checkKey => $checkValue){
 			if (in_array($checkValue, $keys)){
@@ -48,7 +48,7 @@ abstract class Vps_Controller_Action_Auto_Form_Vpc extends Vps_Controller_Action
 		$pageId = $this->component->getDbId();
 		$componentKey = $this->component->getComponentKey();
 
-		// Zeilie wird in der Datenbank angelegt, falls es sie noch nicht gibt
+		// Zeile wird in der Datenbank angelegt, falls es sie noch nicht gibt
         if ($this->_table->find($pageId, $componentKey)->count() == 0) {
             $values['page_id'] = $pageId;
             $values['component_key'] = $componentKey;
