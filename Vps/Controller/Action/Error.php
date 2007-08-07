@@ -4,8 +4,8 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
     public function errorAction()
     {
         $errors = $this->getRequest()->error_handler;
-        
-        if ($this->_getParam('module') == 'component' && 
+
+        if ($this->_getParam('module') == 'component' &&
             $this->_getParam('action') == 'jsonIndex' &&
             $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER)
         {
@@ -13,8 +13,9 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
         }
 
         $prefix = substr($this->_getParam('action'), 0, 4);
-        $isHttpRequest = isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
-        if (($prefix == 'ajax' || $prefix == 'json') && 
+        $isHttpRequest = $_SERVER['REQUEST_METHOD'] == 'POST' ||
+        			isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+        if (($prefix == 'ajax' || $prefix == 'json') &&
             ($isHttpRequest || $errors->exception instanceof Vps_ClientException))
         {
             $this->_forward('jsonError');
@@ -37,8 +38,8 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
                 $path = VPS_PATH . 'views/';
             }
             $this->view->setRenderFile($path . $file);
-            $this->view->type = $errors->type;                    
-            $this->view->exception = $errors->exception;                    
+            $this->view->type = $errors->type;
+            $this->view->exception = $errors->exception;
         }
     }
 

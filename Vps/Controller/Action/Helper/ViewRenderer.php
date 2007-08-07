@@ -41,6 +41,8 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                 $id = $this->getRequest()->getParam('componentId');
                 $class = $this->getRequest()->getParam('class');
                 if ($class) {
+                	$last = strrchr($class, '_');
+                	$class = str_replace($last, '_Index', $class);
                     $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $class, $id);
                 } else {
                     $pageCollection = Vps_PageCollection_TreeBase::getInstance();
@@ -74,7 +76,8 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
             && !$this->getResponse()->isRedirect())
         {
             if ($this->isJson()) {
-                if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+                if ($_SERVER['REQUEST_METHOD'] == 'POST'
+                    || isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
                     $body = $this->view->render('');
                 } else {
                     echo '<pre>';
