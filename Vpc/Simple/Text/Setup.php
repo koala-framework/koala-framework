@@ -1,5 +1,5 @@
 <?php
-class Vpc_Simple_Textbox_Setup extends Vpc_Setup_Abstract 
+class Vpc_Simple_Text_Setup extends Vpc_Setup_Abstract 
 {
     
     //habe hier das static entfernt .. problem

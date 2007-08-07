@@ -3,40 +3,24 @@
  * @package Vpc
  * @subpackage Simple
  */
-class Vpc_Simple_Textbox_Index extends Vpc_Abstract
+class Vpc_Simple_Text_Index extends Vpc_Abstract
 {
     private $_components = array();
     private $_content;
     private $_contentParts;
-
-    public static function getStaticSettings()
-    {
-        $config = array();
-        $config['width'] = 400;
-        $config['height'] = 400;
-        $config['value'] = "test";
-        return $config;
-    }
-    
-    public function getContent()
-    {
-        if (!isset($this->_content)) {
-            $rowset = $this->_dao->getTable('Vpc_Simple_Textbox_IndexModel')
-                  ->find($this->getDbId(), $this->getComponentKey());
-            if ($rowset->count() == 1) {
-                $this->_content = $rowset->current()->content;
-            } else {
-                $this->_content = '';
-            }
-        }
-        return $this->_content;
-    }
+    protected $_settings = array(
+        'width' => 400,
+        'height' => 400,
+        'content' => 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.'
+    );
+    protected $_tablename = 'Vpc_Simple_Text_IndexModel';
+    public $controllerClass = 'Vpc_Simple_Text_IndexController';
 
     private function _getContentParts()
     {
         if (!isset($this->_contentParts))
         {
-            $content = $this->getContent();
+            $content = $this->getSetting('content');
             $this->_contentParts = array();
     
             $componentNr = 0;
@@ -70,7 +54,7 @@ class Vpc_Simple_Textbox_Index extends Vpc_Abstract
 
     public function getChildComponents()
     {
-        $this->_getContentParts('fe'); //um components zu laden
+        $this->_getContentParts(); //um components zu laden
         return $this->_components;
     }
 

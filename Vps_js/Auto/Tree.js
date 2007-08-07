@@ -1,3 +1,15 @@
+Ext.namespace('Vps.AutoTree');
+Vps.AutoTree.Node = function(node){
+    Vps.AutoTree.Node.superclass.constructor.call(this, node);
+}
+
+Ext.extend(Vps.AutoTree.Node, Ext.tree.TreeNodeUI, {
+    initEvents : function(){
+        Vps.AutoTree.Node.superclass.initEvents.call(this);
+        this.node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.node.attributes.bIcon + '.png)';
+    }
+});
+
 Vps.Auto.Tree = function(renderTo, config)
 {
     Ext.apply(this, config);
@@ -165,6 +177,7 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
                             response = Ext.decode(r.responseText);
                             parentNode = this.tree.getNodeById(response.parentId);
                             if (parentNode.isExpanded()) {
+                                response.config.uiProvider = eval(response.config.uiProvider);
                                 node = new Ext.tree.AsyncTreeNode(response.config);
                                 if (parentNode.firstChild) {
                                     this.tree.getSelectionModel().getSelectedNode().insertBefore(node, parentNode.firstChild);
@@ -277,17 +290,5 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
         this.fireEvent('edit', this.tree.getSelectionModel().getSelectedNode());
     }
     
-});
-
-Ext.namespace('Vps.AutoTree');
-Vps.AutoTree.Node = function(node){
-    Vps.AutoTree.Node.superclass.constructor.call(this, node);
-}
-
-Ext.extend(Vps.AutoTree.Node, Ext.tree.TreeNodeUI, {
-    initEvents : function(){
-        Vps.AutoTree.Node.superclass.initEvents.call(this);
-        this.node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.node.attributes.bIcon + '.png)';
-    }
 });
 

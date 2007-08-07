@@ -31,12 +31,10 @@ Ext.extend(Vps.Component.FrontendEditing.Index, Ext.util.Observable,
     showEditing : function(r, o)
     {
         el = r.params.container;
-        parts = el.dom.className.split(' ');
-        cls = parts[1];
         id = el.dom.id.substr(10);
         Ext.DomHelper.overwrite(el, '');
         config = {
-            controllerUrl: '/component/edit/' + cls + '/' + id + '/',
+            controllerUrl: '/component/edit/' + id + '/',
             caller : this
         }
         component = new r.params.obj(el, config);
@@ -45,10 +43,8 @@ Ext.extend(Vps.Component.FrontendEditing.Index, Ext.util.Observable,
     showContent : function(o, e)
     {
         el = o.params.container.dom;
-        parts = el.className.split(' ');
-        cls = parts[1];
         Ext.Ajax.request({
-            url: '/component/jsonShow/' + cls + '/' + el.id.substr(10) + '/',
+            url: '/component/jsonShow/' + el.id.substr(10) + '/',
             success: function (o, e) {
                 r = Ext.decode(o.responseText);
                 Ext.DomHelper.overwrite(e.params.container, r.content);

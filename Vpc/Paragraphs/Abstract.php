@@ -7,6 +7,8 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
 {
     protected $_data;
     protected $_paragraphs;
+    protected $_tablename = 'Vpc_Paragraphs_IndexModel';
+    public $controllerClass = 'Vpc_Paragraphs_IndexController';
 
     public function getTemplateVars()
     {
@@ -33,10 +35,11 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
     public function getChildComponents()
     {
         if (!isset($this->_paragraphs)) {
-	        foreach($this->_getData() as $row) {
-	            $c = $this->createComponent($row->component_class, $row->id);
-	            $this->_paragraphs[] = $c;
-	        }
+            $this->_paragraphs = array();
+            foreach($this->_getData() as $row) {
+                $c = $this->createComponent($row->component_class, $row->id);
+                $this->_paragraphs[] = $c;
+            }
         }
         return $this->_paragraphs;
     }
