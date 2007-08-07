@@ -15,11 +15,15 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
         $module = $request->getModuleName();
         if ($module == 'component') {
 
-            $id = $this->getFrontController()->getRequest()->getParam('id');
-            $controllerName = $this->getFrontController()->getRequest()->getParam('controller');
+            $id = $this->getFrontController()->getRequest()->getParam('componentId');
             $className = $this->getFrontController()->getRequest()->getParam('class');
-            $className = $className . 'Controller';
-            $className = str_replace('_IndexController', '_' . $controllerName . 'Controller', $className);
+            if ($className) {
+                $className .= 'Controller';
+            } else {
+                $pageCollection = Vps_PageCollection_TreeBase::getInstance();
+                $component = $pageCollection->findComponent($id);
+                $className = $component->controllerClass;
+            }
 
         } else {
 

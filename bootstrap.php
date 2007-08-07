@@ -15,9 +15,8 @@ try {
 
     $router = $front->getRouter();
     $front->setDispatcher(new Vps_Controller_Dispatcher());
-    $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/:action/:class/:id', array('module' => 'admin', 'controller' => 'components', 'action' => 'show')));
-    $router->AddRoute('componentedit2', new Zend_Controller_Router_Route('component/edit/:class/:id/:controller/:action', array('module' => 'component', 'controller' => 'index', 'action' => 'index')));
-    $router->AddRoute('componentedit', new Zend_Controller_Router_Route('component/edit/:class/:id/:action', array('module' => 'component', 'controller' => 'Index', 'action' => 'index')));
+    $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/:action/:class/:componentId', array('module' => 'admin', 'controller' => 'components', 'action' => 'show')));
+    $router->AddRoute('componentedit', new Zend_Controller_Router_Route('component/edit/:class/:componentId/:action', array('module' => 'component', 'controller' => 'Index', 'action' => 'index')));
 
     $acl = new Vps_Acl();
     $acl->add(new Zend_Acl_Resource('component'));

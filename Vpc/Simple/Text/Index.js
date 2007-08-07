@@ -1,5 +1,5 @@
-Ext.namespace('Vpc.Simple', 'Vpc.Simple.Textbox');
-Vpc.Simple.Textbox.Index = function(renderTo, config) {
+Ext.namespace('Vpc.Simple', 'Vpc.Simple.Text');
+Vpc.Simple.Text.Index = function(renderTo, config) {
     var handleSave = function()
     {
         var handleFailure = function() {

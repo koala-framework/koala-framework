@@ -27,10 +27,23 @@ Vps.Component.Pages = function(renderTo, config)
     Vps.mainLayout.restoreState();
     Vps.mainLayout.endUpdate();
 
-    var menu = new Vps.Menu.Index('menuContainer', {role: this.role, pageId: config.pageId, controllerUrl: '/admin/menu/'});
-    var tree = new Vps.Auto.Tree('treeContainer', {controllerUrl: '/admin/pages/' });
-    tree.toolbar2 = new Ext.Toolbar(Ext.get('treeContainer').createChild());
-    tree.editButton = tree.toolbar2.addButton({
+    this.menu = new Vps.Menu.Index('menuContainer', {role: this.role, pageId: config.pageId, controllerUrl: '/admin/menu/'});
+    this.menu.on('menuevent', this.loadComponent, this, {componentName : 'cc'});
+
+    this.editform = new Vps.Auto.Form.Dialog(null, {controllerUrl: '/admin/pageedit/', width: 400, height: 200});
+    this.editform.on(
+        'dataChanged',
+        function(o, e) {
+            values = this.editform.form.getValues();
+            id = this.tree.tree.getSelectionModel().getSelectedNode().id;
+            node = this.tree.tree.getNodeById(id).setText(values.name);
+        },
+        this
+    );
+
+    this.tree = new Vps.Auto.Tree('treeContainer', {controllerUrl: '/admin/pages/' });
+    this.tree.toolbar2 = new Ext.Toolbar(Ext.get('treeContainer').createChild());
+    this.tree.editButton = this.tree.toolbar2.addButton({
         disabled: true,
         text    : 'Bearbeiten',
         handler : 
@@ -40,103 +53,71 @@ Vps.Component.Pages = function(renderTo, config)
             },
         icon : '/assets/vps/images/silkicons/page_edit.png',
         cls: "x-btn-text-icon",
-        scope   : tree
+        scope   : this.tree
     });
-    tree.propertiesButton = tree.toolbar2.addButton({
+    this.tree.propertiesButton = this.tree.toolbar2.addButton({
         disabled: true,
         text    : 'Eigenschaften',
-        handler : this.treeEditProperties,
+        handler :
+            function (o, e) {
+                this.editform.load(this.tree.tree.getSelectionModel().getSelectedNode().id);
+                this.editform.show();
+            },
         icon : '/assets/vps/images/silkicons/page_gear.png',
         cls: "x-btn-text-icon",
-        scope   : tree
+        scope   : this
     });
 
-    tree.on('selectionchange', this.treeSelectionchange, this.tree);
+    this.tree.on('selectionchange', this.treeSelectionchange, this.tree);
+    this.tree.on('editcomponent', this.loadComponent, this);
 
-    tree.on('editcomponent', this.loadComponent, this);
-    menu.on('menuevent', this.loadComponent, this);
+    this.created = new Array();
 }
 
 Ext.extend(Vps.Component.Pages, Ext.util.Observable,
 {
-    loadComponent: function (data)
+    loadComponent: function (data, options)
     {
-        if (data.url != undefined) { // Falls von MenuEvent kommt
-            controllerUrl = data.url;
-            data.text = data.title;
+        if (data.controllerUrl != undefined) { // Falls von MenuEvent kommt
+            controllerUrl = data.controllerUrl;
         } else {
-            controllerUrl = '/component/edit/' + data.cls + '/' + data.id + '/';
+            controllerUrl = '/component/edit/' + data.id + '/';
         }
         Ext.Ajax.request({
             url: controllerUrl + 'jsonIndex/',
             success: function(r) {
-                var name = controllerUrl;
-                Vps.mainLayout.add('center', new Ext.ContentPanel(name, {autoCreate:true, title: data.text, fitToFrame:true, closable:true, autoScroll: true, fitContainer: true}));
-                Ext.DomHelper.overwrite(name, '');
                 response = Ext.decode(r.responseText);
                 cls = eval(response['class']);
                 if (cls) {
-                    component = new cls(name, Ext.applyIf(response.config, {controllerUrl: controllerUrl}));
-                    if (component.on) {
-                        component.on('editcomponent', this.loadComponent, this);
+                    if (cls.prototype.getPanel) {
+                        if (this.created[controllerUrl] != undefined && this.created[controllerUrl].getGrid() != undefined) {
+                            panel = this.created[controllerUrl];
+                            panel.refresh();
+                        } else {
+                            component = new cls(Vps.mainLayout.el.createChild(), Ext.applyIf(response.config, {controllerUrl: controllerUrl}));
+                            component.text = data.text;
+                            var panel = component.getPanel(data.text);
+                            this.created[controllerUrl] = panel;
+                            if (component.on) {
+                                component.on('editcomponent', this.loadComponent, this, {componentName : data.text});
+                            }
+                        }
+                    } else {
+                        var name = controllerUrl;
+                        var panel = new Ext.ContentPanel(name, {autoCreate:true, title: data.text, fitToFrame:true, closable:true, autoScroll: true, fitContainer: true});
+                        Ext.DomHelper.overwrite(name, '');
+                        component = new cls(name, Ext.applyIf(response.config, {controllerUrl: controllerUrl}));
+                        component.text = data.text;
+                        Vps.mainLayout.add('center', panel);
+                        if (component.on) {
+                            component.on('editcomponent', this.loadComponent, this, {componentName : data.text});
+                        }
                     }
+                    Vps.mainLayout.add('center', panel);
                 }
             },
             scope: this
         });
-    },
-    treeEditProperties : function (o, e) {
-        var dlg = new Ext.BasicDialog('dialog', {
-            height: 200,
-            width: 350,
-            minHeight: 100,
-            minWidth: 150,
-            modal: true,
-            proxyDrag: true,
-            shadow: true,
-            autoCreate: true
-        });
-        dlg.addKeyListener(27, dlg.hide, dlg);
-
-        form = new Ext.form.Form({
-            labelWidth: 100,
-            url: '/admin/pages/jsonSavePage',
-            baseParams: {
-                id: this.tree.getSelectionModel().getSelectedNode().id
-            }
-        });
-    
-        form.add(
-            new Ext.form.TextField({
-                allowBlank: false,
-                blankText: 'Seitenname wird benötigt',
-                fieldLabel: 'Seitenname',
-                name: 'name',
-                minLength: 1,
-                maxLength: 255,
-                width: 200,
-                value: this.tree.getSelectionModel().getSelectedNode().attributes.text
-            })
-        );
-        
-        dlg.addButton(
-            'Speichern',
-            function (o, e) {
-                form.submit({
-                    success: function(form, a) {
-                        node = this.tree.getNodeById(a.result.id);
-                        node.setText(a.result.name);
-                    },
-                    scope: this
-                })
-                dlg.hide();
-            },
-            this
-        );
-            
-        dlg.addButton('Abbrechen', dlg.hide, dlg);
-        form.render(dlg.body);
-        dlg.show();
     },
     
     treeSelectionchange : function (node) {

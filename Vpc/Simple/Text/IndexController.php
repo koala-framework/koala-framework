@@ -1,10 +1,10 @@
 <?php
-class Vpc_Simple_Textbox_IndexController extends Vps_Controller_Action
+class Vpc_Simple_Text_IndexController extends Vps_Controller_Action
 {
     public function indexAction()
     {
-        $config['content'] = $this->component->getContent();
-        $this->view->ext('Vpc.Simple.Textbox.Index', $config);
+        $config['content'] = $this->component->getSetting('content');
+        $this->view->ext('Vpc.Simple.Text.Index', $config);
     }
     
     public function jsonIndexAction()

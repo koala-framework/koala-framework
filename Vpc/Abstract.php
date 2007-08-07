@@ -10,10 +10,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
     private $_id;
     private $_hasGeneratedForFilename = array();
     private $_pageCollection = null;
-    private $_staticSettings = array();
-    private $_settings = array();
-    protected $_defaultSettings = array();
-    private $_settingsDbRow;
+    
+    protected $_settings = array();
+    protected $_tablename;
+    protected $_table;
+    public $controllerClass;
 
     /**
      * Sollte nicht direkt aufgerufen werden, sondern über statische Methoden der Klasse. Kann nicht
@@ -34,29 +35,16 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_pageCollection = $pageCollection;
         $this->_id = $this->parseId($id);
 
-/*
-        $components = new Vps_Config_Ini('application/components.ini');
-        $db = $dao->getDb();
-        $componentName = get_class($this);
-        foreach ($components as $component => $compData) {
-            if ($component == $componentName){
-                foreach ($compData as $dataKey => $dataValue){
-                    $this->_staticSettings[$dataKey] = $dataValue;
-                }
-                break;
-            }
-        }
-*/
-        $this->setup();
+        $this->init();
         if (Zend_Registry::isRegistered('infolog')) {
             Zend_Registry::get('infolog')->createComponent(get_class($this) . ' - ' . $id);
         }
     }
-
+    
     /**
      * Wird nach dem Konstruktor aufgerufen. Initialisierungscode in Unterklassen ist hier richtig.
      */
-    protected function setup() {}
+    protected function init() {}
 
     /**
      * Erstellt aus der ID der Komponente die Komponente.
@@ -468,68 +456,30 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Shortcut für $this->_dao->getTable($tablename)
      * @param string Name des Models
      */
-    protected function _getTable($tablename = '')
+    protected function _getTable()
     {
+        $tablename = $this->_tablename;
         if ($tablename == '') {
             $tablename = get_class($this) . 'Model';
         }
         return $this->_dao->getTable($tablename);
     }
 
-    /**
-     * @return Array mit Schlüssel Parameter und Wert Parameterwert
-     */
-    public static function getStaticSettings()
+    public function getSetting($setting)
     {
-       // return $this->_staticSettings;
-        return array();
-    }
-
-    /**
-     * @return Array mit Schlüssel Parameter und Wert Parameterwert
-     */
-    public function getStaticSetting($value)
-    {
-        return $this->_staticSettings[$value];
-    }
-
-    /**
-     * Überschreibt manuell einen Wert für einen Parameter
-     *
-     * @param string Parameter
-     * @param mixed Wert
-     */
-    public final function setStaticSetting($key, $val)
-    {
-        $staticSettings = $this->getStaticSettings();
-        if (!isset($staticSettings[$key])) {
-            throw new Vpc_Exception('Parameter for Component ' . get_class($this) . ' not valid: ' . $key);
+        $rows = $this->_getTable()->find($this->getPageId(), $this->getComponentKey());
+        if ($rows->count() == 1) {
+            $row = $rows->current()->toArray();
+            if (isset($row[$setting])) {
+                return $row[$setting];
+            }
         }
-
-        $this->_staticSettings[$key] = $val;
-    }
-
-    protected function _getSettingsDbRow()
-    {
-        if (!$this->_settingsDbRow) {
-
-            $this->_settingsDbRow = $this->_getTable()->find($this->getPageId(), $this->getComponentKey())->current();
-
+        
+        if (isset($this->_settings[$setting])) {
+            return $this->_settings[$setting];
         }
-        return $this->_settingsDbRow;
-    }
-
-    protected function getSetting($field) {
-        $row = $this->_getSettingsDbRow();
-
-        if (isset($this->_settings[$field])) {
-           return $this->_settings[$field];
-        } else if (!is_null($row) && isset($row->$field)) {
-
-            return ($row->$field);
-        } else {
-            return $this->_defaultSettings[$field];
-        }
+        
+        return '';
     }
 
     public function setSetting($field, $value)

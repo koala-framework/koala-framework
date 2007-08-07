@@ -61,7 +61,8 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
                 $data['expanded'] = true;
                 $data['allowDrag'] = false;
                 $data['type'] = 'category';
-                $data['cls'] = 'folder';
+                $data['bIcon'] = 'folder_page';
+                $data['uiProvider'] = 'Vps.AutoTree.Node';
                 $return[] = $data;
             }
             $this->view->nodes = $return;
