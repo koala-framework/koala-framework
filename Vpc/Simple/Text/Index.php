@@ -15,6 +15,7 @@ class Vpc_Simple_Text_Index extends Vpc_Abstract
     );
     protected $_tablename = 'Vpc_Simple_Text_IndexModel';
     public $controllerClass = 'Vpc_Simple_Text_IndexController';
+    const NAME = 'Standard.Text'; //Formular.Textbox
 
     private function _getContentParts()
     {
@@ -22,7 +23,7 @@ class Vpc_Simple_Text_Index extends Vpc_Abstract
         {
             $content = $this->getSetting('content');
             $this->_contentParts = array();
-    
+
             $componentNr = 0;
             $this->_components = array();
             while(preg_match('#^(.*?)\{([a-zA-Z0-9_]+)\}(.*)$#s', $content, $m)) {
