@@ -21,17 +21,16 @@ class Vpc_Rte_IndexController extends  Vps_Controller_Action_Auto_Form_Vpc
     protected $_tableName = 'Vpc_Rte_IndexModel';
     protected $_primaryKey = 'id';
 
-	public function init()
+	public function preDispatch()
 	{
-		$components = new Vps_Config_Ini('application/components.ini');
-		$component = $components->Vpc_Rte_Index;
 		$fields = $this->_fields[0];
-		foreach ($component AS $key => $data){
-		   if ($key == 'fieldLabel')$fields[$key] = $data;
-		   else $fields[$key] = (int)$data;
+		$newSettings = $this->component->getSettings();
+		foreach ($fields as  $fieldKey => $fieldData){
+			if (array_key_exists($fieldKey, $newSettings)){
+				$fields[$fieldKey] = $newSettings[$fieldKey];
+			}
 		}
 		$this->_fields[0] = $fields;
-		parent::init();
 	}
 
 
