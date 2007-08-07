@@ -57,7 +57,7 @@ class Vpc_Formular_IndexController extends Vps_Controller_Action_Auto_Grid
         $cfg['components'] = $components;
         $this->view->ext('Vpc.Formular.Index', $cfg);
     }
-    
+
     public function jsonIndexAction()
     {
         $this->indexAction();
@@ -69,6 +69,14 @@ class Vpc_Formular_IndexController extends Vps_Controller_Action_Auto_Grid
         $row->component_key = $this->component->getComponentKey();
         $row->pos = $this->_getPosition();
         $row->save();
+    }
+
+    protected function _getWhere()
+    {
+    	$where = parent::_getWhere();
+    	$where['page_id = ?'] = $this->component->getDbId();
+    	$where['component_key = ?'] = $this->component->getComponentKey();
+    	return $where;
     }
 
     private function _getPosition ()

@@ -7,6 +7,9 @@ class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Fi
     var $height      = 40;
     var $jpg_quality = 30;
 
+    const NAME = 'Formular.Captcha'; //Formular.Textbox
+
+
     public function getTemplateVars()
     {
 

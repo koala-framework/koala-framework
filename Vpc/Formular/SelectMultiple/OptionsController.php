@@ -22,6 +22,7 @@ class Vpc_Formular_SelectMultiple_OptionsController extends Vpc_Formular_Field_F
     {
     	$where = parent::_getWhere();
     	$where['page_id = ?'] = $this->component->getDbId();
+    	$where['component_key = ?'] = $this->component->getComponentKey();
     	return $where;
     }
 }

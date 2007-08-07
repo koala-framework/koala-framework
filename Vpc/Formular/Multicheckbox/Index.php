@@ -1,7 +1,13 @@
 <?php
 class Vpc_Formular_Multicheckbox_Index extends Vpc_Formular_Field_Abstract
 {
-    protected $_defaultSettings = array('multicheckbox' => array(), 'name' => '', 'horizontal' => 0);
+    protected $_settings = array('multicheckbox' => array(),
+								 'name' => '',
+								 'horizontal' => 0);
+
+	protected $_tablename = 'Vpc_Formular_Multicheckbox_IndexModel';
+    public $controllerClass = 'Vpc_Formular_Multicheckbox_IndexController';
+    const NAME = 'Formular.Multicheckbox';
 
     public function getTemplateVars()
     {

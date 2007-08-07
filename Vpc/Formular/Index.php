@@ -1,7 +1,10 @@
 <?php
 class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
 {
-    //protected $_defaultSettings = array('names' => array());
+    protected $_tablename = 'Vpc_Formular_IndexModel';
+    public $controllerClass = 'Vpc_Formular_IndexController';
+    const NAME = 'Formular.Formular';
+
     private $_errors = array();
     private $_fields = array();
     private $_components = array();

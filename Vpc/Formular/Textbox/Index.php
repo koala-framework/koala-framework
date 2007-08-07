@@ -1,7 +1,14 @@
 <?php
 class Vpc_Formular_Textbox_Index extends Vpc_Formular_Field_Simple_Abstract
 {
-    protected $_defaultSettings = array('maxlength' => '255',  'width' => '50','name' => '', 'value' => '', 'validator' => '');
+    protected $_defaultSettings = array('maxlength' => '255',
+										'width' => '50',
+										'name' => '', 'value' => '',
+										'validator' => '');
+
+	protected $_tablename = 'Vpc_Formular_Textbox_IndexModel';
+    public $controllerClass = 'Vpc_Formular_Textbox_IndexController';
+    const NAME = 'Formular.Textbox';
 
     public function getTemplateVars()
     {

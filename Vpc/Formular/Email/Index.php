@@ -1,7 +1,13 @@
 <?php
 class Vpc_Formular_Email_Index extends Vpc_Formular_Field_Simple_Abstract
 {
-    protected $_defaultSettings = array('maxlength' => '255', 'width' => '20', 'name' => '', 'value' => '');
+    protected $_settings = array('maxlength' => '255',
+								 'width' => '20',
+								 'name' => '',
+								 'value' => '');
+	protected $_tablename = 'Vpc_Formular_Email_IndexModel';
+    public $controllerClass = 'Vpc_Formular_Email_IndexController';
+    const NAME = 'Formular.Checkbox';
 
     public function getTemplateVars()
     {

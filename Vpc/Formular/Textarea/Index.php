@@ -1,7 +1,14 @@
 <?php
 class Vpc_Formular_Textarea_Index extends Vpc_Formular_Field_Simple_Abstract
 {
-    protected $_defaultSettings = array('cols' => '20', 'rows' => '5', 'name' => '', 'value' => '');
+    protected $_settings = array('cols' => '20',
+								 'rows' => '5',
+								 'name' => '',
+								 'value' => '');
+
+	protected $_tablename = 'Vpc_Formular_Textarea_IndexModel';
+    public $controllerClass = 'Vpc_Formular_Textarea_IndexController';
+    const NAME = 'Formular.Textarea';
 
     function getTemplateVars()
     {

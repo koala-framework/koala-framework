@@ -1,8 +1,13 @@
 <?php
 class Vpc_Formular_SelectMultiple_Index extends Vpc_Formular_Field_Decide_Abstract
 {
-    protected $_defaultSettings = array('rows' => '10', 'name' => '');
+    protected $_defaultSettings = array('rows' => '10',
+										'name' => '');
     protected $_options = array();
+
+	 protected $_tablename = 'Vpc_Formular_SelectMultiple_IndexModel';
+    public $controllerClass = 'Vpc_Formular_SelectMultiple_IndexController';
+    const NAME = 'Formular.SelectMultiple';
 
     public function getTemplateVars()
     {
@@ -38,10 +43,13 @@ class Vpc_Formular_SelectMultiple_Index extends Vpc_Formular_Field_Decide_Abstra
 	    if (isset($_POST[$this->getSetting('name')])){
 	        $this->getOptions();
 
+
 	        $selectedValues = $_POST[$this->getName()];
+
 
 	        foreach ($this->_options AS $key => $option) {
 	            $option['selected'] = '0';
+	            $this->_options[$key] = $option;
 	        }
 	        foreach ($this->_options AS $key => $option) {
 			    if (in_array($option['value'], $selectedValues)){
