@@ -65,6 +65,10 @@ class Vpc_Formular_IndexController extends Vps_Controller_Action_Auto_Grid
 
     protected function _beforeSave($row)
     {
+    	$data = Zend_Json::decode($this->getRequest()->getParam("data"));
+        $row->visible = $data[0]['visible'];
+        $row->mandatory = $data[0]['mandatory'];
+        $row->no_cols = $data[0]['no_cols'];
         $row->page_id = $this->component->getDbId();
         $row->component_key = $this->component->getComponentKey();
         $row->pos = $this->_getPosition();

@@ -60,7 +60,6 @@ Ext.extend(Vpc.Formular.Index, Ext.util.Observable,
     edit : function(o) {
         var row = this.grid.grid.getSelectionModel().getSelected();
         var controllerUrl = '/component/edit/' + row.data.component_class + '/' + row.data.page_id + '-' + row.data.id + '/';
-		debugger;
         Ext.Ajax.request({
             url: controllerUrl + 'jsonIndex/',
             success: function(r) {
@@ -75,6 +74,7 @@ Ext.extend(Vpc.Formular.Index, Ext.util.Observable,
     },
 
     add : function(id, grid) {
+
       var Row = Ext.data.Record.create([
            {name: 'component_class', type: 'string'},
            {name: 'visible', type: 'bool'},
@@ -82,7 +82,7 @@ Ext.extend(Vpc.Formular.Index, Ext.util.Observable,
            {name: 'mandatory', type: 'bool'},
            {name: 'no_cols', type: 'bool'},
            {name: 'page_id', type: 'int'},
-       {name: 'id', type: 'int'}
+       	   {name: 'id', type: 'int'}
       ]);
 
     if (typeof id == 'undefined'){
@@ -99,9 +99,9 @@ Ext.extend(Vpc.Formular.Index, Ext.util.Observable,
         id: 0
       });
 
-      grid.grid.stopEditing();
-            grid.ds.insert(0, entry);
-            grid.grid.startEditing(0, 0);
+    /*  grid.stopEditing();
+      grid.ds.insert(0, entry);
+      grid.startEditing(0, 0);*/
     }
   }
 })

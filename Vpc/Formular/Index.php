@@ -3,7 +3,7 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
 {
     protected $_tablename = 'Vpc_Formular_IndexModel';
     public $controllerClass = 'Vpc_Formular_IndexController';
-    const NAME = 'Formular.Formular';
+    const NAME = 'Formular';
 
     private $_errors = array();
     private $_fields = array();
@@ -65,7 +65,7 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
             }
              $this->_components[$component->getComponentKey()] = $component;
             //TODO nachfragen ob das so gemacht werden darf
-            $fields[] = array ('name' => $row->name, 'id' => ($row->page_id.'-'.$row->id), 'mandatory' => $row->mandatory, 'noCols' => $row->no_cols, 'isValid' => 1);
+            $fields[] = array ('name' => $row->name,'visible' => $row->visible, 'id' => ($row->page_id.'-'.$row->id), 'mandatory' => $row->mandatory, 'noCols' => $row->no_cols, 'isValid' => 1);
         }
         //soll hier nur einmmal aufgerufen werden
         if ($this->_fields == array())$this->_fields = $fields;
