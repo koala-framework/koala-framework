@@ -169,7 +169,7 @@ class Vpc_Simple_Image_IndexController extends Vps_Controller_Action_Auto_Form_V
 
 		//---- Überprüfung ob korrekter Dateityp
 
-		$extensionsString = $this->component->getStaticSetting('typesAllowed');
+		$extensionsString = $this->component->getSetting('typesAllowed');
 		$extenstions = array ();
 		$delims = ',';
 		$word = strtok($extensionsString, $delims);
@@ -187,11 +187,11 @@ class Vpc_Simple_Image_IndexController extends Vps_Controller_Action_Auto_Form_V
 		$tablename = 'Vpc_Simple_Image_IndexModel';
 		$this->_table = new $tablename;
 		$id = $this->_table->insert(array (
-			'path' => $this->component->getStaticSetting('directory'
+			'path' => $this->component->getSetting('directory'
 		) . $file_name));
 
 		$config = Zend_Registry :: get('config');
-		move_uploaded_file($newFile['tmp_name'], $config->uploads . $this->component->getStaticSetting('directory') . $file_name);
+		move_uploaded_file($newFile['tmp_name'], $config->uploads . $this->component->getSetting('directory') . $file_name);
 
 		return $id;
 	}
