@@ -6,17 +6,17 @@
 <table>
 {foreach from=$component.paragraphs item=paragraph}
 	{foreach from=$component.names item=name}
-		{* paragraph: {$paragraph.id} <br>
-		 name: {$name.id} <br> *}
-		{if $paragraph.id == $name.id}
-		<tr $component.name>
-			{if $name.noCols}
-				<td colspan = 2 > {component component=$paragraph}</td>
-			{else}
-				<td {if !$name.isValid} bgcolor="#cc0000" {/if} ><b>{if $name.mandatory} * {/if} {$name.name}  </b></td>
-			    <td> {component component=$paragraph}</td>
+		{if $name.visible}
+			{if $paragraph.id == $name.id}
+			<tr $component.name>
+				{if $name.noCols}
+					<td colspan = 2 > {component component=$paragraph}</td>
+				{else}
+					<td {if !$name.isValid} bgcolor="#cc0000" {/if} ><b>{if $name.mandatory} * {/if} {$name.name}  </b></td>
+				    <td> {component component=$paragraph}</td>
+			    {/if}
 		    {/if}
-	    {/if}
+		 {/if}
 	{/foreach}
 {/foreach }
 {if !$component.submit}<tr> <td colspan = 2 > <input type="submit" name="submit" value="Absenden"/> </td></tr>{/if}
