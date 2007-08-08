@@ -40,11 +40,12 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
             if ($module == 'component') {
                 $id = $this->getRequest()->getParam('componentId');
                 $class = $this->getRequest()->getParam('class');
-                if ($class) {
-                	$last = strrchr($class, '_');
-                	$class = str_replace($last, '_Index', $class);
+                $last = strrchr($class, '_');
+                $class = str_replace($last, '_Index', $class);
+                try {
+                    Zend_Loader::loadClass($class);
                     $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $class, $id);
-                } else {
+                } catch (Zend_Exception $e) {
                     $pageCollection = Vps_PageCollection_TreeBase::getInstance();
                     $component = $pageCollection->findComponent($id);
                 }

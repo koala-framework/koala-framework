@@ -4,10 +4,26 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     protected $_fields = array();
     protected $_buttons = array('save' => true);
 
+    public function indexAction()
+    {
+       $this->view->ext('Vps.Auto.Form');
+    }
+
+    public function jsonIndexAction()
+    {
+       $this->indexAction();
+    }
+
     public function init()
     {
         parent::init();
     }
+    
+    protected function _getId()
+    {
+        return array($this->getRequest()->getParam('id'));
+    }
+    
     protected function _getFieldIndex($name)
     {
         foreach ($this->_fields as $k=>$c) {
@@ -32,12 +48,22 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         array_splice($this->_fields, $where+1, 0, array($field));
     }
 
-    protected function _fetchData($id)
+    protected function _fetchData()
     {
         if (!isset($this->_table)) {
-            throw new Vps_Exception("Either _table has to be set or _fetchData has to be overwritten.");
+            throw new Vps_Exception('Either _table has to be set or _fetchData has to be overwritten.');
         }
-        return $this->_table->find($id)->current();
+        if (is_array($this->_primaryKey)) {
+            $where = array();
+            foreach ($this->_primaryKey as $key) {
+                $where[$key . ' = ?'] = $this->_getParam($key);
+            }
+            $rowset = $this->_table->fetchAll($where);
+        } else {
+            $id = $this->_getParam($this->_primaryKey);
+            $rowset = $this->_table->find($id);
+        }
+        return $rowset->current();
     }
 
     protected function _hasPermissions($row, $action)
@@ -47,31 +73,27 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
     public function jsonLoadAction()
     {
-        $id = $this->getRequest()->getParam('id');
-        if ($id) {
-            $row = $this->_fetchData($id);
-            if (!$row) {
-                throw new Vps_Exception("No database-entry with id '$id' found");
+        $row = (object)$this->_fetchData();
+        if (!$row) {
+            throw new Vps_Controller_Action_Auto_Exception('No entry found');
+        }
+        if (!$this->_hasPermissions($row, 'load')) {
+            throw new Vps_Exception('You don\'t have the permission to this entry.');
+        }
+        $this->view->data = array();
+        foreach ($this->_fields as $field) {
+            if (isset($field['name'])) {
+                $name = $field['name'];
+            } else if (isset($field['hiddenName'])) {
+                $name = $field['hiddenName'];
+            } else {
+                $name = false;
             }
-            if (!$this->_hasPermissions((object)$row, 'load')) {
-                throw new Vps_Exception("You don't have the permission to load id '$id'.");
-            }
-            if (is_array($row)) $row = (object)$row;
-            $this->view->data = array();
-            foreach ($this->_fields as $field) {
-                if (isset($field['name'])) {
-                    $name = $field['name'];
-                } else if (isset($field['hiddenName'])) {
-                    $name = $field['hiddenName'];
+            if ($name) {
+                if (isset($field['findParent'])) {
+                    $this->view->data[$name] = $this->_fetchFromParentRow($row, $field['findParent']);
                 } else {
-                    $name = false;
-                }
-                if ($name) {
-                    if (isset($field['findParent'])) {
-                        $this->view->data[$name] = $this->_fetchFromParentRow($row, $field['findParent']);
-                    } else {
-                        $this->view->data[$name] = $this->_fetchFromRow($row, $name);
-                    }
+                    $this->view->data[$name] = $this->_fetchFromRow($row, $name);
                 }
             }
         }
@@ -107,21 +129,20 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     public function jsonSaveAction()
     {
         if(!isset($this->_permissions['save']) || !$this->_permissions['save']) {
-            throw new Vps_Exception("Save is not allowed.");
+            throw new Vps_Exception('Save is not allowed.');
         }
 
-        $primaryKey = $this->_primaryKey;
-        $id = $this->getRequest()->getParam($primaryKey);
-        if ($id) {
-            $row = $this->_table->find($id)->current();
-        } else {
+        $row = (object)$this->_fetchData();
+        $add = false;
+        if (!$row) {
             if(!isset($this->_permissions['add']) || !$this->_permissions['add']) {
-                throw new Vps_Exception("Add is not allowed.");
+                throw new Vps_Exception('Add is not allowed.');
             }
+            $add = true;
             $row = $this->_table->createRow();
         }
         if(!$row) {
-            throw new Vps_Exception("Can't find row with id '$id'.");
+            throw new Vps_Exception('Can\'t find row.');
         }
         foreach ($this->_fields as $field) {
             $name = false;
@@ -132,31 +153,39 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             }
         }
         $this->_beforeSave($row);
-        if (!$id) {
+        if ($add) {
             $this->_beforeInsert($row);
         }
-        if ($id && !$this->_hasPermissions($row, 'save')) {
-            throw new Vps_Exception("You don't have the permission to save id '$id'.");
+        if (!$add && !$this->_hasPermissions($row, 'save')) {
+            throw new Vps_Exception('You don\'t have the permission to save current row.');
         }
         $row->save();
         $this->_afterSave($row);
-        if (!$id) {
+        if ($add) {
             $this->_afterInsert($row);
-            $this->view->addedId = $row->$primaryKey;
+            $primaryKey = $this->_primaryKey;
+            if (is_array($primaryKey)) {
+                $addedId = array();
+                foreach ($primaryKey as $key) {
+                    $addedId[$key] = $row->$key;
+                }
+            } else {
+                $addedId = $row->$primaryKey;
+            }
+            $this->view->addedId = $addedId;
         }
     }
 
     public function jsonDeleteAction()
     {
         if(!isset($this->_permissions['delete']) || !$this->_permissions['delete']) {
-            throw new Vps_Exception("Delete is not allowed.");
+            throw new Vps_Exception('Delete is not allowed.');
         }
         $success = false;
-        $id = $this->getRequest()->getParam($this->_primaryKey);
 
-        $row = $this->_table->find($id)->current();
+        $row = $this->_fetchData();
         if(!$row) {
-            throw new Vps_Exception("Can't find row with id '$id'.");
+            throw new Vps_Exception('Can\'t find row to delete.');
         }
         try {
             $row->delete();

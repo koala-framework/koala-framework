@@ -26,5 +26,4 @@ class Vpc_Formular_Textbox_IndexController extends Vps_Controller_Action_Auto_Fo
 
     protected $_buttons = array('save'   => true);
     protected $_tableName = 'Vpc_Formular_Textbox_IndexModel';
-    protected $_primaryKey = 'id';
 }

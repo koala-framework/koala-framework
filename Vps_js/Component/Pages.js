@@ -81,7 +81,7 @@ Ext.extend(Vps.Component.Pages, Ext.util.Observable,
         if (data.controllerUrl != undefined) { // Falls von MenuEvent kommt
             controllerUrl = data.controllerUrl;
         } else {
-            controllerUrl = '/component/edit/' + data.id + '/';
+            controllerUrl = '/component/edit/' + data.cls + '/' + data.id + '/';;
         }
         Ext.Ajax.request({
             url: controllerUrl + 'jsonIndex/',

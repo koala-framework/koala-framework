@@ -48,14 +48,14 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
     
     private function _getComponent()
     {
-        $class = $this->_getParam('class');
         $id = $this->_getParam('componentId');
-        if ($class) {
-            return Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $class, $id);
-        } else {
-            $pageCollection = new Vps_PageCollection_TreeBase(Zend_Registry::get('dao'));
-            return $pageCollection->findComponent($id);
+        $pageCollection = new Vps_PageCollection_TreeBase(Zend_Registry::get('dao'));
+        $component = $pageCollection->findComponent($id);
+        if (!$component) {
+            $class = $this->_getParam('class');
+            $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $class, $id);
         }
+        return $component;
     }
     
     public function updateAction()

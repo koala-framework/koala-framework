@@ -459,19 +459,19 @@ abstract class Vpc_Abstract implements Vpc_Interface
     protected function _getTable($tablename = '')
     {
         if ($tablename == '') {
-	        $tablename = $this->_tablename;
+          $tablename = $this->_tablename;
         }
         try {
-	        return $this->_dao->getTable($tablename);
+          return $this->_dao->getTable($tablename);
         } catch (Vps_Dao_Exception $e) {
-        	return null;
+          return null;
         }
     }
 
     public function getSetting($setting)
     {
-    	$settings = $this->getSettings();
-    	return isset($settings[$setting]) ? $settings[$setting] : '' ;
+      $settings = $this->getSettings();
+      return isset($settings[$setting]) ? $settings[$setting] : null ;
     }
 
     public function setSetting($field, $value)
@@ -481,13 +481,13 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     public function getSettings()
     {
-		$table = $this->_getTable();
-		if ($table) {
-	        $rows = $table->find($this->getPageId(), $this->getComponentKey());
-	        if ($rows->count() == 1) {
-	            return array_merge($this->_settings, $rows->current()->toArray());
-	        }
-		}
+    $table = $this->_getTable();
+    if ($table) {
+          $rows = $table->find($this->getPageId(), $this->getComponentKey());
+          if ($rows->count() == 1) {
+              return array_merge($this->_settings, $rows->current()->toArray());
+          }
+    }
 
         if (isset($this->_settings)) {
             return $this->_settings;

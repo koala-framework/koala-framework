@@ -1,5 +1,5 @@
 <?php
-class Vpc_Formular_IndexController extends Vps_Controller_Action_Auto_Grid
+class Vpc_Formular_IndexController extends Vpc_Paragraphs_IndexController
 {
    protected $_columns = array(
             array('dataIndex' => 'component_class',
@@ -10,7 +10,7 @@ class Vpc_Formular_IndexController extends Vps_Controller_Action_Auto_Grid
                   'width'     => 50,
                   'editor'    => 'Checkbox',
                   ),
-      array('dataIndex' => 'name',
+            array('dataIndex' => 'name',
                   'header'    => 'Bezeichnung',
                   'width'     => 150,
                   'editor'    => 'TextField',
@@ -27,6 +27,7 @@ class Vpc_Formular_IndexController extends Vps_Controller_Action_Auto_Grid
                   ),
             array('dataIndex' => 'page_id',
                   'header'    => 'page_id',
+                  'type'      => 'string',
                   'width'     => 50,
                   'hidden'   =>  true,
                   ),
@@ -37,64 +38,20 @@ class Vpc_Formular_IndexController extends Vps_Controller_Action_Auto_Grid
                   )
 
             );
-    protected $_buttons = array('save'=>true,
-                                    'add'=>true,
-                                    'delete'=>true);
-    protected $_paging = 0;
-    protected $_defaultOrder = 'pos';
     protected $_tableName = 'Vpc_Formular_IndexModel';
+    protected $_jsClass = 'Vpc.Formular.Index';
 
-    public function indexAction()
+    public function init()
     {
-        $components = array();
-        foreach (Vpc_Setup_Abstract::getAvailableComponents('Formular/') as $component) {
-            if ($component != 'Vpc_Formular_Index') {
-                $components[$component] = $component;
+        parent::init();
+        $c = Vpc_Setup_Abstract::getAvailableComponents(VPS_PATH . 'Vpc/Formular/');
+        $this->_components = array();
+        foreach ($c as $key => $val) {
+            if ($key != 'Formular.Formular') {
+                $key = str_replace('Formular.', '', $key);
+                $this->_components[$key] = $val;
             }
         }
-
-        $cfg = array();
-        $cfg['components'] = $components;
-        $this->view->ext('Vpc.Formular.Index', $cfg);
     }
 
-    public function jsonIndexAction()
-    {
-        $this->indexAction();
-    }
-
-    protected function _beforeSave($row)
-    {
-    	$data = Zend_Json::decode($this->getRequest()->getParam("data"));
-        $row->visible = $data[0]['visible'];
-        $row->mandatory = $data[0]['mandatory'];
-        $row->no_cols = $data[0]['no_cols'];
-        $row->page_id = $this->component->getDbId();
-        $row->component_key = $this->component->getComponentKey();
-        $row->pos = $this->_getPosition();
-        $row->save();
-    }
-
-    protected function _getWhere()
-    {
-    	$where = parent::_getWhere();
-    	$where['page_id = ?'] = $this->component->getDbId();
-    	$where['component_key = ?'] = $this->component->getComponentKey();
-    	return $where;
-    }
-
-    private function _getPosition ()
-    {
-        $rows = $this->_table->fetchAll(array('page_id = ?'  => $this->component->getDbId(),
-                                             'component_key = ?' => $this->component->getComponentKey()));
-        $ids = array();
-        foreach ($rows as $rowKey => $rowData){
-            $id =$rowData->pos;
-            $ids[] = $id;
-        }
-        rsort($ids);
-        if ($ids == array()) $id = 1;
-        else $id = $ids[0] + 1;
-        return $id;
-    }
 }

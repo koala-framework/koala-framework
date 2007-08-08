@@ -63,7 +63,7 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
                 //$this->_components[$component->getComponentKey()] = $component;
 
             }
-             $this->_components[$component->getComponentKey()] = $component;
+             $this->_components[] = $component;
             //TODO nachfragen ob das so gemacht werden darf
             $fields[] = array ('name' => $row->name,'visible' => $row->visible, 'id' => ($row->page_id.'-'.$row->id), 'mandatory' => $row->mandatory, 'noCols' => $row->no_cols, 'isValid' => 1);
         }
