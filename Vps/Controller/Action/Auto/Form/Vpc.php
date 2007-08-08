@@ -5,23 +5,6 @@ abstract class Vps_Controller_Action_Auto_Form_Vpc extends Vps_Controller_Action
        $this->view->ext('Vps.Auto.Form');
     }
 
-    /*public function jsonIndexAction()
-    {
-    	 $info = $this->_table->info();
-		$check = $info['cols'];
-		d ($check);
-       $this->indexAction();
-    }
-    public function jsonLoadAction()
-    {
-        $defaultSettings = $this->component->getDefaultSettings(); // Komponente ist unter $this->component zu finden
-        $info = $this->_table->info();
-		$check = $info['cols'];
-		$newarray = array_intersect_key($defaultSettings, $check);
-        $this->_table->createDefaultRow($this->_getParam('id'), $newarray);
-        parent::jsonLoadAction();
-    }*/
-
 	//Override
     public function jsonIndexAction()
     {
