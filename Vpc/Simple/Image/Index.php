@@ -1,7 +1,11 @@
 <?php
 class Vpc_Simple_Image_Index extends Vpc_Abstract
 {
-	public static function getStaticSettings()
+	protected $_tablename = 'Vpc_Simple_Image_FileDataModel';
+    public $controllerClass = 'Vpc_Simple_Image_IndexController';
+   	const NAME = 'Standard.Image';
+
+	/*public static function getStaticSettings()
 	{
 		$config = array ();
 		$config['path'] = 'simpleimage/';
@@ -12,7 +16,13 @@ class Vpc_Simple_Image_Index extends Vpc_Abstract
 		$config['typesAllowed'] = 'jpg, png, gif';
 
 		return $config;
-	}
+	}*/
+
+	protected $_settings = array(
+        'typesAllowed' => 'jpg, gif, png',
+        'directory'    => 'SimpleImage/'
+        );
+
 
 	public function getTemplateVars()
 	{
