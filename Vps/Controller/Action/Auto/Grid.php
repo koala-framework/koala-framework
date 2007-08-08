@@ -3,17 +3,30 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 {
     protected $_columns = array();
     protected $_buttons = array('save'=>true,
-                                    'add'=>true,
-                                    'delete'=>true);
+                                'add'=>true,
+                                'delete'=>true);
     protected $_paging = 0;
     protected $_defaultOrder;
     protected $_filters = array();
     protected $_queryFields;
     protected $_sortable = true;
 
+    public function indexAction()
+    {
+       $this->view->ext('Vps.Auto.Grid');
+    }
+
+    public function jsonIndexAction()
+    {
+       $this->indexAction();
+    }
+
     public function init()
     {
         parent::init();
+        if (is_array($this->_primaryKey)) {
+            $this->_primaryKey = $this->_primaryKey[1];
+        }
 
         if (isset($this->_table)) {
             $info = $this->_table->info();

@@ -19,10 +19,11 @@ class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
             $info = $this->_table->info();
             if(!isset($this->_primaryKey)) {
                 $info = $this->_table->info();
-                $this->_primaryKey = $info['primary'][1];
+                $this->_primaryKey = $info['primary'];
             }
         }
     }
+    
     protected function _fetchFromParentRow($row, $findParent)
     {
         if (!$row instanceof Zend_Db_Table_Row_Abstract) {

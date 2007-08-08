@@ -64,11 +64,14 @@ class Vpc_Setup_Abstract
                 } else {
                     if (substr($item->getFilename(), -4) == '.php') {
                         $component = str_replace('/', '_', $item->getPath());
+                        $component = strrchr($component, 'Vpc_');
                         $component .= '_' . str_replace('.php', '', $item->getFilename());
-                        try {
-                            $name = constant("$component::NAME");
-                            $return[$name] = $component;
-                        } catch (Vps_CustomException $e) {
+                        if (is_subclass_of($component, 'Vpc_Abstract')) {
+                            try {
+                                $name = constant("$component::NAME");
+                                $return[$name] = $component;
+                            } catch (Vps_CustomException $e) {
+                            }
                         }
                     }
                 }

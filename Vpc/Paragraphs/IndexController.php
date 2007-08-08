@@ -2,7 +2,7 @@
 class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
 {
     protected $_columns = array(
-            array('dataIndex' => 'id',
+            array('dataIndex' => 'page_id',
                   'header'    => 'Vorschau',
                   'type'      => 'string',
                   'width'     => 410,
@@ -14,31 +14,34 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
                   'header'    => 'Position',
                   'width'     => 50),
             array('dataIndex' => 'visible',
-                  'header'    => 'Sichtbar')
+                  'header'    => 'Sichtbar',
+                  'editor'    => 'Checkbox')
             );
-    protected $_buttons = array('add' => true,
-                                'delete' => true);
+    protected $_buttons = array(
+        'save' => true,
+        'delete' => true
+    );
     protected $_paging = 0;
     protected $_defaultOrder = 'pos';
     protected $_tableName = 'Vpc_Paragraphs_IndexModel';
-    private $_components;
+    protected $_jsClass = 'Vpc.Paragraphs.Index';
+    protected $_components;
 
     public function init()
     {
         parent::init();
         $this->_components = Vpc_Setup_Abstract::getAvailableComponents('Vpc/');
     }
+    
     public function indexAction()
     {
         $componentList = array();
-        foreach ($this->_components as $component) {
-            $name = constant("$component::NAME");
+        foreach ($this->_components as $name => $component) {
             $str = '$componentList["' . str_replace('.', '"]["', $name) . '"] = "' . $component . '";';
             eval($str);
         }
-
         $config = array('components' => $componentList);
-        $this->view->ext('Vpc.Paragraphs.Index', $config);
+        $this->view->ext($this->_jsClass, $config);
     }
 
     public function jsonIndexAction()
@@ -50,27 +53,32 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     {
         parent::jsonDataAction();
         foreach ($this->component->getChildComponents() as $key => $c) {
-            $src = '/component/show/' . $c->getId() . '/';
-            $this->view->rows[$key]['id'] = $src;
+            $src = '/component/show/' . get_class($c) . '/' . $c->getId() . '/';
+            if (isset($this->view->rows[$key]['page_id'])) {
+                $this->view->rows[$key]['page_id'] = $src;
+            }
+        }
+        $components = $this->_components;
+        foreach ($this->view->rows as $key => $val) {
+            $componentClass = array_search($val['component_class'], $components);
+            $componentClass = str_replace('.', ' -> ', $componentClass);
+            if ($componentClass == '') {
+                $componentClass = $val;
+            }
+            if (isset($this->view->rows[$key]['component_class'])) {
+                $this->view->rows[$key]['component_class'] = $componentClass;
+            }
         }
     }
 
-    protected function _getWhere()
-    {
-        $where = array();
-        $where[] = "page_id='" . $this->component->getDbId() . "'";
-        $where[] = "component_key='" . $this->component->getComponentKey() . "'";
-        return $where;
-    }
-    
     public function jsonAddParagraphAction()
     {
         $componentName = $this->_getParam('component');
         if (array_search($componentName, $this->_components)) {
             try {
-                $setupClass = str_replace('_Index', '_Setup', get_class($this->component));
+                $setupClass = str_replace('_Index', '_Setup', $componentName);
                 if (class_exists($setupClass)) {
-                    $setup = new $setupClass($this->getAdapter());
+                    $setup = new $setupClass($this->_table->getAdapter());
                     $setup->setup();
                 }
             } catch (Zend_Exception $e) {
@@ -79,13 +87,47 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
             $insert['page_id'] = $this->component->getDbId();
             $insert['component_key'] = $this->component->getComponentKey();
             $insert['component_class'] = $componentName;
-            $this->_table->insert($insert);
+            $id = $this->_table->insert($insert);
+            $where = 'page_id = ' . $this->component->getDbId();
+            $where .= ' AND component_key=\'' . $this->component->getComponentKey() . '\'';
+            $this->_table->numberize($id, 'pos', 0, $where);
             
         } else {
             $this->view->error = 'Component not found: ' . $componentName;
         }
     }
-    
-    
+
+    protected function _beforeSave($row)
+    {
+        $row->page_id = $this->component->getDbId();
+        $row->component_key = $this->component->getComponentKey();
+        $row->save();
+    }
+
+    protected function _getWhere()
+    {
+        $where = parent::_getWhere();
+        $where['page_id = ?'] = $this->component->getDbId();
+        $where['component_key = ?'] = $this->component->getComponentKey();
+        return $where;
+    }
+
+    private function _getPosition()
+    {
+        $where = array();
+        $where['page_id = ?']  = $this->component->getDbId();
+        $where['component_key = ?']  = $this->component->getComponentKey();
+        $rows = $this->_table->fetchAll($where);
+        
+        $ids = array();
+        foreach ($rows as $rowKey => $rowData){
+            $id =$rowData->pos;
+            $ids[] = $id;
+        }
+        rsort($ids);
+        if ($ids == array()) $id = 1;
+        else $id = $ids[0] + 1;
+        return $id;
+    }
 
 }
