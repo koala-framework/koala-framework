@@ -1,7 +1,7 @@
 <?php
 class Vpc_Formular_Textbox_Index extends Vpc_Formular_Field_Simple_Abstract
 {
-    protected $_defaultSettings = array('maxlength' => '255',
+    protected $_settings = array('maxlength' => '255',
 										'width' => '50',
 										'name' => '', 'value' => '',
 										'validator' => '');
