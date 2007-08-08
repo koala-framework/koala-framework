@@ -461,10 +461,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
         if ($tablename == '') {
 	        $tablename = $this->_tablename;
         }
-        if ($tablename == '') {
-            $tablename = get_class($this) . 'Model';
+        try {
+	        return $this->_dao->getTable($tablename);
+        } catch (Vps_Dao_Exception $e) {
+        	return null;
         }
-        return $this->_dao->getTable($tablename);
     }
 
     public function getSetting($setting)
@@ -480,10 +481,13 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     public function getSettings()
     {
-        $rows = $this->_getTable()->find($this->getPageId(), $this->getComponentKey());
-        if ($rows->count() == 1) {
-            return array_merge($this->_settings, $rows->current()->toArray());
-        }
+		$table = $this->_getTable();
+		if ($table) {
+	        $rows = $table->find($this->getPageId(), $this->getComponentKey());
+	        if ($rows->count() == 1) {
+	            return array_merge($this->_settings, $rows->current()->toArray());
+	        }
+		}
 
         if (isset($this->_settings)) {
             return $this->_settings;
