@@ -13,7 +13,7 @@ Vps.Auto.Form = function(renderTo, config)
         baseParams: {}
     });
     this.form = new Ext.form.Form(config);
-    
+
     this.addEvents({
         generatetoolbar: true,
         dataChanged: true,
@@ -26,6 +26,13 @@ Vps.Auto.Form = function(renderTo, config)
     this.form.doAction('loadAutoForm', {
         url: this.controllerUrl+'jsonLoad',
         meta: this.onMetaChange,
+		success: function(form, action) {
+			if (action.result.data) {
+				//loaded-event nur wenn daten vom server geladen wurden
+				//(nicht nur meta-daten)
+				this.fireEvent('loaded', form, action);
+			}
+		},
         scope: this
     });
 };
@@ -63,7 +70,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
                 scope   : this
             });
         }
-    
+
         if (this.meta.buttons['delete']) {
             this.deleteButton = this.toolbar.addButton({
                 text    : 'Löschen',
@@ -162,7 +169,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
 
         this.fireEvent('formRendered', this);
     },
-    
+
     load : function(id, options) {
         if (!this.form.baseParams) this.form.baseParams = {};
         this.form.baseParams.id = id;
