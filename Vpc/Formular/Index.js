@@ -1,6 +1,7 @@
 Ext.namespace('Vpc.Formular');
 Vpc.Formular.Index = function(renderTo, config)
 {
+	this.events = {};
     this.layout = new Ext.BorderLayout(
         renderTo,
         {
