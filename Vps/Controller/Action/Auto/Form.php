@@ -18,12 +18,12 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     {
         parent::init();
     }
-    
+
     protected function _getId()
     {
         return array($this->getRequest()->getParam('id'));
     }
-    
+
     protected function _getFieldIndex($name)
     {
         foreach ($this->_fields as $k=>$c) {
