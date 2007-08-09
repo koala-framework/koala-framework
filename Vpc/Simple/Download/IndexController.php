@@ -1,23 +1,19 @@
 <?php
-class Vpc_Simple_Download_IndexController extends Vps_Controller_Action_Auto_Form_Vpc
+class Vpc_Simple_Download_IndexController extends Vps_Controller_Action
 {
-	protected $_fields = array(
-            array('type'       => 'TextField',
-            	 // 'inputType'  => 'file',
-                  'fieldLabel' => 'Pfad',
-                  'name'       => 'path',
-                  'width'      => 200),
-            array('type'       => 'TextField',
-                  'fieldLabel' => 'Dargestellter Text',
-                  'name'       => 'text',
-                  'width'      => 200),
-            array('type'       => 'TextArea',
-                 'fieldLabel' => 'Standardeingabe',
-                 'name'       => 'info',
-                 'width'      => 200),
-                 );
+	public function indexAction()
+	{
+		//d (file_exists('/www/usr/lorenz/vps/Vpc/Simple/Download/jscripts/SWFUpload/SWFUpload.swf'));
+		/*p ('war da');
+		$cfg['url'] = 'dd';
+        $this->view->ext('Vpc.Simple.uploadform', $cfg);*/
 
-    protected $_buttons = array('save'   => true);
-    protected $_tableName = 'Vpc_Simple_Download_IndexModel';
-    protected $_primaryKey = 'id';
+		$cfg['url'] = 'url';
+        $this->view->ext('Vpc.Simple.Download.Index', $cfg);
+    }
+
+
+
+
+
 }
