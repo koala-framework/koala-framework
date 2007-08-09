@@ -53,17 +53,35 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         if (!isset($this->_table)) {
             throw new Vps_Exception('Either _table has to be set or _fetchData has to be overwritten.');
         }
+        $rowset = null;
         if (is_array($this->_primaryKey)) {
             $where = array();
             foreach ($this->_primaryKey as $key) {
-                $where[$key . ' = ?'] = $this->_getParam($key);
+                $id = $this->_getParam($key);
+                if ($id) {
+                    $where[$key . ' = ?'] = $id;
+                }
             }
-            $rowset = $this->_table->fetchAll($where);
+            if (!empty($where)) {
+                $rowset = $this->_table->fetchAll($where);
+            }
         } else {
             $id = $this->_getParam($this->_primaryKey);
-            $rowset = $this->_table->find($id);
+            if ($id) {
+                $rowset = $this->_table->find($id);
+            }
         }
-        return $rowset->current();
+        if (!$rowset) {
+            return null;
+        } else {
+            if ($rowset->count() == 0) {
+                throw new Vps_ClientException('No database-entry found.');
+            } else if ($rowset->count() > 1) {
+                throw new Vps_ClientException('More than one database-entry found.');
+            } else {
+                return $rowset->current();
+            }
+        }
     }
 
     protected function _hasPermissions($row, $action)
@@ -73,27 +91,27 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
     public function jsonLoadAction()
     {
-        $row = (object)$this->_fetchData();
-        if (!$row) {
-            throw new Vps_Controller_Action_Auto_Exception('No entry found');
-        }
-        if (!$this->_hasPermissions($row, 'load')) {
-            throw new Vps_Exception('You don\'t have the permission to this entry.');
-        }
-        $this->view->data = array();
-        foreach ($this->_fields as $field) {
-            if (isset($field['name'])) {
-                $name = $field['name'];
-            } else if (isset($field['hiddenName'])) {
-                $name = $field['hiddenName'];
-            } else {
-                $name = false;
+        $row = $this->_fetchData();
+        if ($row) {
+            $row = (object)$row;
+            if (!$this->_hasPermissions($row, 'load')) {
+                throw new Vps_Exception('You don\'t have the permission to this entry.');
             }
-            if ($name) {
-                if (isset($field['findParent'])) {
-                    $this->view->data[$name] = $this->_fetchFromParentRow($row, $field['findParent']);
+            $this->view->data = array();
+            foreach ($this->_fields as $field) {
+                if (isset($field['name'])) {
+                    $name = $field['name'];
+                } else if (isset($field['hiddenName'])) {
+                    $name = $field['hiddenName'];
                 } else {
-                    $this->view->data[$name] = $this->_fetchFromRow($row, $name);
+                    $name = false;
+                }
+                if ($name) {
+                    if (isset($field['findParent'])) {
+                        $this->view->data[$name] = $this->_fetchFromParentRow($row, $field['findParent']);
+                    } else {
+                        $this->view->data[$name] = $this->_fetchFromRow($row, $name);
+                    }
                 }
             }
         }
