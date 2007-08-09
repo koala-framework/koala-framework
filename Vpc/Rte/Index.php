@@ -1,9 +1,6 @@
 <?php
 class Vpc_Rte_Index extends Vpc_Abstract
 {
-    protected $_defaultSettings = array('text' => '');
-    const NAME = 'Standard.RTE';
-
    protected $_settings = array(
         'text' => '',
         'fieldLabel' => 'Rich Text Editor',
@@ -20,7 +17,7 @@ class Vpc_Rte_Index extends Vpc_Abstract
 
     protected $_tablename = 'Vpc_Rte_IndexModel';
     public $controllerClass = 'Vpc_Rte_IndexController';
-   	const NAME = 'Rte';
+   	const NAME = 'Standard.Rte';
 
     function getTemplateVars()
     {
