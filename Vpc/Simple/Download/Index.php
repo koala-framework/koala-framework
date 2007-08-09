@@ -1,21 +1,34 @@
 <?php
 class Vpc_Simple_Download_Index extends Vpc_Abstract
 {
-    const NAME = 'Standard.Download';
-    protected $_defaultSettings = array('path' => '', 'text' => '', 'info' => '', 'filesize' => '');
-    protected $_extensions  = array ('pdf' => '/files/icons/acrobat.png',
-                       'doc' => '/files/icons/word.png',
-                       'mp3' => '/files/icons/music.png',
-                       'xls' => '/files/icons/excel.png',
-                       'png' => '/files/icons/picture.png',
-                       'jpg' => '/files/icons/picture.png',
-                       'tif' => '/files/icons/picture.png',
-                       'gif' => '/files/icons/picture.png',
-                       'ppt' => '/files/icons/powerpoint.png',
-                       'default' => '/files/icons/page.png'
-                       );
+    protected $_tablename = 'Vpc_Simple_Download_IndexModel';
+    public $controllerClass = 'Vpc_Simple_Download_IndexController';
+   	const NAME = 'Standard.Download';
 
-  public static function getStaticSettings()
+    protected $_settings = array('path' => '',
+								 'text' => '',
+								 'info' => '',
+								 'filesize' => '',
+								 'filesizeshow' => 1,
+								 'infoshow' => 1,
+								 'iconshow' => 1,
+								 'downloadshow' => 1,
+								 'icon' => '/files/download.gif'
+								 );
+
+    protected $_extensions  = array (  'pdf' => '/files/icons/acrobat.png',
+				                       'doc' => '/files/icons/word.png',
+				                       'mp3' => '/files/icons/music.png',
+				                       'xls' => '/files/icons/excel.png',
+				                       'png' => '/files/icons/picture.png',
+				                       'jpg' => '/files/icons/picture.png',
+				                       'tif' => '/files/icons/picture.png',
+				                       'gif' => '/files/icons/picture.png',
+				                       'ppt' => '/files/icons/powerpoint.png',
+				                       'default' => '/files/icons/page.png'
+				                       );
+
+  /*public static function getStaticSettings()
     {
         $config = array();
         $config['filesizeshow'] = 1;
@@ -24,24 +37,24 @@ class Vpc_Simple_Download_Index extends Vpc_Abstract
         $config['downloadshow'] = 1;
         $config['icon'] = '/files/download.gif';
         return $config;
-    }
+    }*/
 
   public function getTemplateVars()
     {
-      $return['filesizeshow'] = $this->getStaticSetting('filesizeshow');
-      $return['iconshow'] = $this->getStaticSetting('iconshow');
-      $return['downloadshow'] = $this->getStaticSetting('downloadshow');
-      $return['infoshow'] = $this->getStaticSetting('infoshow');
+      $return['filesizeshow'] = $this->getSetting('filesizeshow');
+      $return['iconshow'] = $this->getSetting('iconshow');
+      $return['downloadshow'] = $this->getSetting('downloadshow');
+      $return['infoshow'] = $this->getSetting('infoshow');
     if (file_exists('./public'.$this->getSetting('path')))
           $return['filesize'] = round((filesize('./public'.$this->getSetting('path')) /1024), 2);
     else
       $return['filesize'] = '-';
       $return['icon'] = $this->getIcon($this->getSetting('path'));
       $return['info'] = $this->getSetting('info');
-      $return['downloadicon'] = $this->getStaticSetting('icon');
-        $return['path'] = $this->getSetting('path');
-        $return['text'] = $this->getSetting('text');
-        $return['template'] = 'Simple/Download.html';
+      $return['downloadicon'] = $this->getSetting('icon');
+      $return['path'] = $this->getSetting('path');
+      $return['text'] = $this->getSetting('text');
+      $return['template'] = 'Simple/Download.html';
         return $return;
     }
 
