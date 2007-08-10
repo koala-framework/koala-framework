@@ -74,16 +74,21 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     public function jsonAddParagraphAction()
     {
         $componentName = $this->_getParam('component');
-        if (array_search($componentName, $this->_components)) {
-            try {
-                $setupClass = str_replace('_Index', '_Setup', $componentName);
-                if (class_exists($setupClass)) {
-                    $setup = new $setupClass($this->_table->getAdapter());
-                    $setup->setup();
+        if (array_search($componentName, $this->_components) && is_subclass_of($componentName, 'Vpc_Abstract')) {
+            $class = $componentName;
+            while ($class != 'Vpc_Abstract') {
+                $len = strlen(strrchr($class, '_'));
+                $setupClass = substr($class, 0, -$len) . '_Setup';
+                try {
+                    if (class_exists($setupClass)) {
+                        $setup = new $setupClass($this->_table->getAdapter());
+                        $setup->setup();
+                    }
+                } catch (Zend_Exception $e) {
                 }
-            } catch (Zend_Exception $e) {
+                $class = get_parent_class($class);
             }
-    
+
             $insert['page_id'] = $this->component->getDbId();
             $insert['component_key'] = $this->component->getComponentKey();
             $insert['component_class'] = $componentName;
