@@ -32,7 +32,7 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
         parent::init();
         $this->_components = Vpc_Setup_Abstract::getAvailableComponents('Vpc/');
     }
-    
+
     public function indexAction()
     {
         $componentList = array();
@@ -52,18 +52,14 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     public function jsonDataAction()
     {
         parent::jsonDataAction();
-        foreach ($this->component->getChildComponents() as $key => $c) {
-            $src = '/component/show/' . get_class($c) . '/' . $c->getId() . '/';
-            if (isset($this->view->rows[$key]['page_id'])) {
-                $this->view->rows[$key]['page_id'] = $src;
-            }
-        }
-        $components = $this->_components;
-        foreach ($this->view->rows as $key => $val) {
-            $componentClass = array_search($val['component_class'], $components);
+        foreach ($this->view->rows as $key => $row) {
+        	$src = '/component/show/' . $row['component_class'] . '/' . $this->component->getId() . '-' . $row['id'] . '/';
+            $this->view->rows[$key]['page_id'] = $src;
+
+            $componentClass = array_search($row['component_class'], $this->_components);
             $componentClass = str_replace('.', ' -> ', $componentClass);
             if ($componentClass == '') {
-                $componentClass = $val;
+                $componentClass = $row;
             }
             if (isset($this->view->rows[$key]['component_class'])) {
                 $this->view->rows[$key]['component_class'] = $componentClass;
@@ -96,7 +92,7 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
             $where = 'page_id = ' . $this->component->getDbId();
             $where .= ' AND component_key=\'' . $this->component->getComponentKey() . '\'';
             $this->_table->numberize($id, 'pos', 0, $where);
-            
+
         } else {
             $this->view->error = 'Component not found: ' . $componentName;
         }
@@ -123,7 +119,7 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
         $where['page_id = ?']  = $this->component->getDbId();
         $where['component_key = ?']  = $this->component->getComponentKey();
         $rows = $this->_table->fetchAll($where);
-        
+
         $ids = array();
         foreach ($rows as $rowKey => $rowData){
             $id =$rowData->pos;
