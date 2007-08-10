@@ -36,6 +36,18 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_id = $this->parseId($id);
 
         $this->init();
+
+		$table = $this->_getTable();
+		if ($table) {
+			$info = $table->info();
+			if ($info['primary'] == array(1 => 'page_id', 2 => 'component_key')) {
+				$rowset = $table->find($this->getPageId(), $this->getComponentKey());
+				if ($rowset->count() == 1) {
+					$this->_settings = array_merge($this->_settings, $rowset->current()->toArray());
+				}
+			}
+		}
+
         if (Zend_Registry::isRegistered('infolog')) {
             Zend_Registry::get('infolog')->createComponent(get_class($this) . ' - ' . $id);
         }
@@ -470,8 +482,8 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     public function getSetting($setting)
     {
-      $settings = $this->getSettings();
-      return isset($settings[$setting]) ? $settings[$setting] : null ;
+    	$settings = $this->getSettings();
+        return isset($settings[$setting]) ? $settings[$setting] : null ;
     }
 
     public function setSetting($field, $value)
@@ -481,18 +493,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     public function getSettings()
     {
-    $table = $this->_getTable();
-    if ($table) {
-          $rows = $table->find($this->getPageId(), $this->getComponentKey());
-          if ($rows->count() == 1) {
-              return array_merge($this->_settings, $rows->current()->toArray());
-          }
-    }
-
-        if (isset($this->_settings)) {
-            return $this->_settings;
-        }
-
-        return array();
+        return $this->_settings;
     }
 }
