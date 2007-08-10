@@ -5,7 +5,7 @@
  */
 class Vpc_Simple_Pic_Index extends Vpc_Abstract
 {
-    public $name = 'Standard.Bild';
+    const NAME = 'Standard.Bild';
 
     public function getTemplateVars()
     {
