@@ -80,7 +80,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if ($this->_sortable && !isset($this->_defaultOrder)) {
             $this->_defaultOrder = $this->_columns[0]['dataIndex'];
         }
-        
+
         if (is_string($this->_defaultOrder)) {
             $o = $this->_defaultOrder;
             $this->_defaultOrder = array();
@@ -342,14 +342,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 {
                     if (isset($submitRow[$col['dataIndex']])) {
                         $row->$col['dataIndex'] = $submitRow[$col['dataIndex']];
-                    }
-                    if ($col['type'] == 'boolean') {
-                        if(isset($submitRow[$col['dataIndex']])) {
-                            $val = 1;
-                        } else {
-                            $val = 0;
-                        }
-                        $row->$col['dataIndex'] = $val;
                     }
                 }
             }
