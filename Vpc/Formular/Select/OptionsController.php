@@ -7,7 +7,7 @@ class Vpc_Formular_Select_OptionsController extends Vpc_Formular_Field_FormGrid
 				                      'editor'    => array('type' => 'TextField',
 				                  					      'allowBlank' => false)),
 				                array('dataIndex' => 'text',
-				                      'header'    => 'Wert',
+				                      'header'    => 'Ausgabe',
 				                      'width'     => 100,
 				                      'editor'    => array('type' => 'TextField',
 				                  					      'allowBlank' => false)),

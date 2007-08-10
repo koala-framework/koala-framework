@@ -7,7 +7,7 @@ class Vpc_Formular_FileUpload_IndexController extends Vps_Controller_Action_Auto
                   'name'       => 'width',
                   'width'      => 50),
             array('type'       => 'TextField',
-                  'fieldLabel' => 'Max. Dateigröße',
+                  'fieldLabel' => 'Max. Dateigröße (in kb)',
                   'name'       => 'maxSize',
                   'width'      => 50),
             array('type'       => 'TextField',
@@ -18,6 +18,5 @@ class Vpc_Formular_FileUpload_IndexController extends Vps_Controller_Action_Auto
 
     protected $_buttons = array('save'   => true);
     protected $_tableName = 'Vpc_Formular_FileUpload_IndexModel';
-    protected $_primaryKey = 'id';
 
 }

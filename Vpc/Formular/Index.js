@@ -6,7 +6,7 @@ Vpc.Formular.Index = function(renderTo, config)
         renderTo,
         {
             center: {
-                initialSize: 700,
+                initialSize: 400,
                 titlebar: true,
                 collapsible: true,
                 minSize: 200,
@@ -14,11 +14,11 @@ Vpc.Formular.Index = function(renderTo, config)
             },
             east: {
                 split:true,
-                initialSize: 500,
+                initialSize: 300,
                 titlebar: true,
                 collapsible: true,
                 minSize: 200,
-                maxSize: 600
+                maxSize: 400
             }
         }
     );

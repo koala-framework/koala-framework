@@ -18,7 +18,6 @@ class Vpc_Formular_Checkbox_IndexController extends Vps_Controller_Action_Auto_F
 
     protected $_buttons = array('save'   => true);
     protected $_tableName = 'Vpc_Formular_Checkbox_IndexModel';
-    protected $_primaryKey = 'page_id';
 }
 
 

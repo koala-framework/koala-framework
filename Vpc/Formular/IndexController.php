@@ -34,7 +34,7 @@ class Vpc_Formular_IndexController extends Vpc_Paragraphs_IndexController
             array('dataIndex' => 'id',
                   'header'    => 'id',
                   'width'     => 50,
-                  'hidden'   =>  true,
+                  'hidden'   =>  false,
                   )
 
             );

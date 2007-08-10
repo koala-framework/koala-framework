@@ -34,7 +34,7 @@ class Vpc_Formular_Select_Index extends Vpc_Formular_Field_Decide_Abstract
         //values werden rausgeschrieben
         $values = array();
         foreach ($select as $option) {
-            $this->_options[] = array('value' => $option->value, 'text' => $option->value, 'selected' => $option->selected, 'id' => $option->id);
+            $this->_options[] = array('value' => $option->value, 'text' => $option->text, 'selected' => $option->selected, 'id' => $option->id);
         }
 
     }
