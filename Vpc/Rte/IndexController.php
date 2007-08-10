@@ -19,10 +19,10 @@ class Vpc_Rte_IndexController extends  Vps_Controller_Action_Auto_Form_Vpc
 
     protected $_buttons = array('save'   => true);
     protected $_tableName = 'Vpc_Rte_IndexModel';
-    protected $_primaryKey = 'id';
 
 	public function preDispatch()
 	{
+		parent::preDispatch();
 		$fields = $this->_fields[0];
 		$newSettings = $this->component->getSettings();
 		foreach ($fields as  $fieldKey => $fieldData){

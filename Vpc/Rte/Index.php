@@ -21,7 +21,6 @@ class Vpc_Rte_Index extends Vpc_Abstract
 
     function getTemplateVars()
     {
-    	d ($this->getSettings());
         $return['text'] = $this->getSetting('text');
         $return['id'] = $this->getDbId().$this->getComponentKey();
         $return['template'] = 'Rte.html';
