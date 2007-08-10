@@ -10,7 +10,6 @@ abstract class Vpc_Formular_Field_Simple_Abstract extends Vpc_Formular_Field_Abs
     }
 
     public function validateField($mandatory){
-
         if($mandatory == true && $this->getSetting('value') == ''){
             return 'Feld '.$this->_errorField.' ist ein Pflichtfeld, bitte ausfüllen';
         }

@@ -17,11 +17,9 @@ class Vpc_Formular_Option_OptionsController extends Vpc_Formular_Field_FormGrid
 				                      'editor'    => 'Checkbox',
 				                      ));
 
-   // protected $_buttons = array();
-    //protected $_paging = 20;
+
     protected $_defaultOrder = 'page_id';
     protected $_tableName = 'Vpc_Formular_Option_OptionsModel';
-    //protected $_primaryKey = array ('component_key', 'page_key');
     protected $_primaryKey = 'id';
 
     protected function _getWhere()

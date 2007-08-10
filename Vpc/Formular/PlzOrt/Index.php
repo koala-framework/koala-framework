@@ -47,6 +47,7 @@ class Vpc_Formular_PlzOrt_Index extends Vpc_Formular_Field_Abstract
     public function validateField($mandatory)
     {
         $names = $this->getName();
+
         if (($_POST[$this->getName().'plz'] == '' ||  $_POST[$this->getName().'ort'] == '') && $mandatory == true){
             return 'Feld '.$this->_errorField.' ist ein Pflichtfeld, bitte alles ausfüllen';
         }

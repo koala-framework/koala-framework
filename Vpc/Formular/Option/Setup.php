@@ -11,15 +11,14 @@ class Vpc_Formular_Option_Setup extends Vpc_Setup_Abstract
         if (!$this->_tableExits($tablename)) {
 	        $this->_db->query("CREATE TABLE `$tablename` (
 							  `id` int(11) NOT NULL auto_increment,
-							  `component_id` varchar(255) NOT NULL,
-							  `page_key` varchar(255) NOT NULL,
+							  `page_id` int(11) NOT NULL,
 							  `component_key` varchar(255) NOT NULL,
 							  `value` varchar(255) NOT NULL,
 							  `text` varchar(255) NOT NULL,
 							  `checked` tinyint(4) NOT NULL,
 							  PRIMARY KEY  (`id`),
-							  KEY `KEY` (`component_id`,`page_key`,`component_key`)
-							  ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;");
+							  KEY `KEY` (`page_id`,`component_key`)
+							) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 	        }
 
 

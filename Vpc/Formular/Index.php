@@ -10,18 +10,18 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
     private $_components = array();
     public function getTemplateVars()
     {
+    	$sent = 1;
         if ($_POST != array()) {
             if ($this->_validateFields()) {
-                d("Formular wurde abgeschickt");
-
+                $sent = 3;
             } else {
-                p("Fehler in der Eingabe");
+                $sent = 2;
             }
         } else {
             $this->getChildComponents();
         }
-
         $vars = parent::getTemplateVars();
+        $vars['sent'] = $sent;
         $vars['action'] = $_SERVER['REQUEST_URI'];
         $vars['errors'] = $this->_errors;
         $vars['names'] = $this->_fields;
@@ -55,8 +55,7 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
             }
 
             $names[] = $newName;
-          $component = $this->createComponent($row->component_class, $row->id);
-
+          	$component = $this->createComponent($row->component_class, $row->id);
             if ($component instanceof Vpc_Formular_Field_Interface ) {
                 $component->setName($newName);
                 $component->setErrorField($row->name);
@@ -65,7 +64,7 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
             }
              $this->_components[] = $component;
             //TODO nachfragen ob das so gemacht werden darf
-            $fields[] = array ('name' => $row->name,'visible' => $row->visible, 'id' => ($row->page_id.'-'.$row->id), 'mandatory' => $row->mandatory, 'noCols' => $row->no_cols, 'isValid' => 1);
+            $fields[] = array ('name' => $row->name,'visible' => $row->visible, 'id' => ($component->getId()), 'mandatory' => $row->mandatory, 'noCols' => $row->no_cols, 'isValid' => 1);
         }
         //soll hier nur einmmal aufgerufen werden
         if ($this->_fields == array())$this->_fields = $fields;
@@ -123,15 +122,18 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
 
         foreach($this->_components as $value => $component) {
             if ($component instanceof Vpc_Formular_Field_Interface) {
-              $id = str_replace('-', '', $component->getComponentKey());
+            	$start=	strripos ( $component->getComponentKey(), '-');
+              	$id = substr($component->getComponentKey(), $start+1);
+
+
                 $row = $this->_getTable()->fetchAll(array('page_id = ?'  => $component->getDbId(),
                                       'id = ?'       => $id))->current();
                 $component->processInput();
 
-                if ($component->validateField($row->mandatory) !== true) {
+                if ($component->validateField($row->mandatory) !== true && $row->visible) {
                     $return = false;
                     $this->_errors[] = $component->validateField($row->mandatory);
-                    $this->_notValid($component->getDbId().'-'.$id);
+                    $this->_notValid($component->getId());
                 }
             }
             $components[$value] = $component;
@@ -141,6 +143,7 @@ class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
     }
 
     private function _notValid ($id){
+
         foreach ($this->_fields AS $fieldkey => $field){
             if ($field['id'] == $id){
                 $field['isValid'] = 0;
