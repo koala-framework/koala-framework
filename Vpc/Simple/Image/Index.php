@@ -35,8 +35,44 @@ class Vpc_Simple_Image_Index extends Vpc_Abstract
 
 	public function getTemplateVars()
 	{
+		$newFilename = $this->_getTable()->find($this->getDbId(), $this->getComponentKey())->current()->file_name;
+		$pw = 'jupidu';
+		$filename = 'pic';
+		if ($newFilename != '') $filename = $newFilename;
+
+		$path = '/media/' . $this->getId() . '/' . MD5($pw . $this->getId()) . '/'.$filename.'.'.$this->_getExtension();
+
+
+		$return['path']		= $path;
 		$return['template'] = 'Simple/Image.html';
 		return $return;
+	}
+
+	private function _getExtensions()
+	{
+		$extensionsString = $this->getSetting('typesAllowed');
+		$extenstions = array ();
+		$delims = ',';
+		$word = strtok($extensionsString, $delims);
+		while (is_string($word)) {
+			if ($word) {
+				$extensions[] = trim($word);
+			}
+			$word = strtok($delims);
+		}
+		return $extensions;
+	}
+
+	//liefert die Extension des files
+	private function _getExtension()
+	{
+		$extensions = $this->_getExtensions();
+		foreach ($extensions as $data) {
+			$filename = $this->getId() . '.' . $data;
+			if (file_exists('./public/media/' . $filename)) {
+				return $data;
+			}
+		}
 	}
 
 }
