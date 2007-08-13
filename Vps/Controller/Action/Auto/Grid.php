@@ -10,6 +10,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected $_filters = array();
     protected $_queryFields;
     protected $_sortable = true;
+    protected $_position;
 
     public function indexAction()
     {
@@ -30,6 +31,17 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         if (isset($this->_table)) {
             $info = $this->_table->info();
+            if ($this->_position && array_search($this->_position, $info['cols'])) {
+                $c = array();
+                $c['dataIndex'] = $this->_position;
+                $c['header'] = ' ';
+                $c['width'] = 30;
+                $c['type'] = 'int';
+                $c['editor'] = 'PosField';
+                array_unshift($this->_columns, $c);
+                $this->_sortable = false;
+                $this->_defaultOrder = $this->_position;
+            }
             $primaryFound = false;
             foreach ($this->_columns as $k=>$col) {
                 if (!isset($col['type']) && isset($info['metadata'][$col['dataIndex']])) {
@@ -47,7 +59,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $this->_columns[] = $c;
             }
         }
-
         foreach ($this->_columns as $k=>$col) {
             if (!isset($col['type'])) {
                 $this->_columns[$k]['type'] = null;
@@ -314,6 +325,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected function _afterInsert(Zend_Db_Table_Row_Abstract $row)
     {
     }
+    
     public function jsonSaveAction()
     {
         if(!isset($this->_permissions['save']) || !$this->_permissions['save']) {
@@ -337,7 +349,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 throw new Vps_Exception("Can't find row with id '$id'.");
             }
             foreach ($this->_columns as $col) {
-                if ((isset($col['allowSave']) && $col['allowSave'])
+                if ($col['dataIndex'] == $this->_position) {
+                    $row->numberize($col['dataIndex'], $submitRow[$col['dataIndex']], $this->_getWhere());
+                } else if ((isset($col['allowSave']) && $col['allowSave'])
                     || (isset($col['editor']) && $col['editor']))
                 {
                     if (isset($submitRow[$col['dataIndex']])) {
@@ -380,6 +394,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         }
         try {
             $row->delete();
+            if ($this->_position) {
+                $this->_table->numberizeAll($this->_position, $this->_getWhere());
+            }
             $success = true;
         } catch (Vps_ClientException $e) { //todo: nicht nur Vps_Exception fangen
             $this->view->error = $e->getMessage();

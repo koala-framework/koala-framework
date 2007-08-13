@@ -24,5 +24,20 @@ abstract class Vps_Db_Table extends Zend_Db_Table
             return false;
         }
     }
+    
+    public function numberizeAll($fieldname, $where = array())
+    {
+        // Alle Elemente selecten
+        $rows = $this->fetchAll($where, $fieldname);
+        $i = 1;
+        foreach ($rows as $row) {
+            if ($row->$fieldname != $i) {
+                $row->$fieldname = $i;
+                $row->save();
+            }
+            $i++;
+        }
+
+    }
 }
 ?>
