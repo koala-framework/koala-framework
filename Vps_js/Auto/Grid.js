@@ -36,6 +36,7 @@ Vps.Auto.Grid = function(renderTo, config)
     }, this);
 
     this.grid = new Ext.grid.EditorGrid(this.renderTo, Ext.applyIf(config, {
+        //enableDragDrop: true, // für DD
         clicksToEdit: 1,
         dataSource: this.ds,
         selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
@@ -121,13 +122,35 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
 
             if (column.defaultValue) delete column.defaultValue;
             if (column.dateFormat) delete column.dateFormat;
+            column.sortable = meta.sortable;
             config.push(column);
         }
         var colModel = new Ext.grid.ColumnModel(config);
-        colModel.defaultSortable = meta.sortable;
-
 
         this.grid.colModel = colModel;
+
+        /* * Für DD
+        var ddrow = new Ext.dd.DropTarget(this.grid.container, {
+            ddGroup : 'GridDD',
+            copy:false,
+            notifyDrop : function(dd, e, data){
+                var sm=data.grid.getSelectionModel();
+                var rows=sm.getSelections();
+                ds = data.grid.getDataSource();
+        
+                var cindex=dd.getDragData(e).rowIndex;
+                for (i = 0; i < rows.length; i++) {
+                    rowData=ds.getById(rows[i].id);
+                    if(!this.copy) {
+                        ds.remove(ds.getById(rows[i].id));
+                        ds.insert(cindex,rowData);
+                    }
+                };
+            },
+            scope:this
+        });
+        */
+
         this.grid.render();
         this.grid.restoreState();
 
@@ -288,7 +311,7 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                             url: this.controllerUrl+'jsonDelete',
                             params: params,
                             success: function() {
-                                this.ds.remove(selectedRow);
+                                this.reload();
                                 this.deleteButton.disable();
                             },
                             failure: function() {

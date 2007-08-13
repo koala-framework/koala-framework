@@ -59,6 +59,13 @@ class Vps_Db_Table_Row extends Zend_Db_Table_Row
      */
     public function numberize($fieldname, $value, $where = '')
     {
+        $origWhere = $where;
+        if (is_array($origWhere)) {
+            foreach ($origWhere as $key => $val) {
+                $w[] = $this->getTable()->getAdapter()->quoteInto($key, $val);
+            }
+            $where = implode(' AND ', $w);
+        }
         $where_and = $where;
         if ($where_and != '') {
             $where_and .= ' AND ';
@@ -66,7 +73,6 @@ class Vps_Db_Table_Row extends Zend_Db_Table_Row
 
         $table = $this->getTable();
         $db = $table->getAdapter();
-        $select = new Zend_Db_Select($db);
         $info = $table->info();
 
         $tablename = $info['name'];
@@ -108,22 +114,8 @@ class Vps_Db_Table_Row extends Zend_Db_Table_Row
         }
         // Zu bearbeitende Zeile ändern
         $db->update($tablename, array($fieldname => $value), "$primaryKey = '$primaryValue'");
-
-        // Alle Elemente selecten
-        $sel = $select->from($tablename, array($primaryKey, $fieldname))->order($fieldname.' ASC');
-        if ($where != '') {
-            $sel->where($where);
-        }
-        $rows = $sel->query()->fetchAll();
-
-        // Alle Elemente von 1 aufwärts sortieren
-        $i = 1;
-        foreach ($rows as $row) {
-            if ($row[$fieldname] != $i) {
-                $db->update($tablename, array($fieldname => $i), "$primaryKey = '".$row[$primaryKey]."'");
-            }
-            $i++;
-        }
+        
+        $table->numberizeAll($fieldname, $origWhere);
 
         return true;
     }
