@@ -1,0 +1,16 @@
+<?php
+class Vpc_Formular_Captcha_ShowController extends Vps_Controller_Action
+{
+    // Einloggen ausschalten
+    public function preDispatch() {}
+    
+    public function indexAction()
+    {
+        $path = $this->component->decrypt($this->_getParam('showPic'));
+        $img = $this->component->generateImage($path);
+        header('Content-type: image/png');
+        imagepng($img);
+        imagedestroy($img);
+        die();
+    }
+}

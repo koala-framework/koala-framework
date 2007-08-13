@@ -2,48 +2,32 @@
 
 class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Field_Interface
 {
-    private $path = "";
+    private $path = '';
     var $width       = 142;
     var $height      = 40;
     var $jpg_quality = 30;
 
-    const NAME = 'Formular.Captcha'; //Formular.Textbox
-
+    const NAME = 'Formular.Captcha';
 
     public function getTemplateVars()
     {
+        $value = $this->_generateValue();
+        $encrypt = $this->encrypt($value);
+        $path = '/component/edit/Vpc_Formular_Captcha_Show/' . $this->getId() . '/';
+        $path .= '?showPic=' . $encrypt;
 
-        if (isset($_GET['showPic'])) {
-            $path = $this->myDecryption($_GET['showPic']);
-            $img = $this->_generateImage($path);
-            $this->_encrypt = $path;
-            header("Content-type: image/png");
-            imagepng($img);
-            imagedestroy($img);
-            die();
-        } else {
-            //component id ist noch hard coded
-            $path = "/component/show/Vpc_Formular_Captcha_Index/".$this->getDbId().$this->getComponentKey()."/?showPic=";
-            $value = $this->_generateValue();
-            $encrypt = $this->myEncryption($value);
-            $path .= $encrypt;
-            $this->_encrypt = $encrypt;
-
-
-            $return['encrypt'] = $encrypt;
-            $return['value'] = $value;
-            $return['path'] = $path;
-            $return['id'] = $this->getDbId().$this->getComponentKey();
-            $return['captcha'] = "CaptchaTest";
-            $return['template'] = 'Formular/Captcha.html';
-            return $return;
-        }
+        $return['encrypt'] = $encrypt;
+        $return['value'] = $value;
+        $return['path'] = $path;
+        $return['id'] = $this->getId();
+        $return['captcha'] = 'CaptchaTest';
+        $return['template'] = 'Formular/Captcha.html';
+        return $return;
     }
 
     /**
      * Generiert 5 Zufallswerte
      */
-
     private function _generateValue()
     {
         $num_chars = 5;
@@ -67,8 +51,7 @@ class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Fi
     /**
      * generiert ein Bild
      */
-
-    private function _generateImage($char_seq )
+    public function generateImage($char_seq )
     {
         $num_chars = strlen($char_seq);
         $img = imagecreatetruecolor($this->width, $this->height );
@@ -114,8 +97,7 @@ class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Fi
   /**
    * Algorithmus zum Verschlüsseln
    */
-
-    public function myEncryption($value)
+    public function encrypt($value)
     {
         $value = str_replace('2', '301', $value);
         $value = str_replace('1', '302', $value);
@@ -195,7 +177,7 @@ class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Fi
         return $finalString;
     }
 
-    public function myDecryption($newString)
+    public function decrypt($newString)
     {
         $value = "";
         $check = '';
@@ -274,7 +256,7 @@ class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Fi
         if (isset($_POST['hidden']) && isset($_POST['captcha'])) {
             $code = $_POST['hidden'];
             $captcha = $_POST['captcha'];
-            if ($code == $this->myEncryption($captcha)) {
+            if ($code == $this->encrypt($captcha)) {
                 return true;
             } else {
                 return 'Das Captcha Feld muss korrekt ausgefüllt werden';
