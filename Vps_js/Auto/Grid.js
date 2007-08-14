@@ -217,6 +217,18 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                 scope: this
             });
         }
+        if (meta.buttons.pdf) {
+            if(this.getToolbar().items.length > 0) {
+                this.getToolbar().addSeparator();
+            }
+            this.newButton = this.getToolbar().addButton({
+                text    : 'Drucken',
+                icon    : '/assets/vps/images/silkicons/printer.png',
+                cls     : 'x-btn-text-icon',
+                handler : this.onPdf,
+                scope: this
+            });
+        }
         if (meta.filters.text) {
             if(this.getToolbar().items.length > 0) {
                 this.getToolbar().addSeparator();
@@ -326,6 +338,10 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                 }
             }
         });
+    },
+    onPdf : function()
+    {
+        window.open(this.controllerUrl+'pdf');
     },
     getSelected: function() {
         return this.grid.getSelectionModel().getSelected();
