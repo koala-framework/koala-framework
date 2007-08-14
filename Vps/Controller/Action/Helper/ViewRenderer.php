@@ -89,6 +89,7 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                 $this->getResponse()->setHeader('Content-Type', 'text/javascript');
                 $this->getResponse()->setBody($body);
             } else {
+                $this->getResponse()->setHeader('Content-Type', 'text/html; charset=utf-8');
                 $this->getResponse()->appendBody($this->view->render(''));
             }
         }

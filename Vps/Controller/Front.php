@@ -1,9 +1,6 @@
 <?php
 require_once 'Zend/Loader.php';
-function __autoload($class)
-{
-    Zend_Loader::loadClass($class);
-}
+Zend_Loader::registerAutoload();
 
 function p($src, $max_depth = 5) {
     ini_set('xdebug.var_display_max_depth', $max_depth);

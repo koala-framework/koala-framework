@@ -404,4 +404,95 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         $this->view->success = $success;
     }
+
+
+    public function pdfAction()
+    {
+        if(!isset($this->_permissions['pdf']) || !$this->_permissions['pdf']) {
+            throw new Vps_Exception("Pdf is not allowed.");
+        }
+        $pdf = new Zend_Pdf();
+
+        $pdf->pages[] = $pdfPage = new Vps_Pdf_Page(Zend_Pdf_Page::SIZE_A4);
+
+        $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD);
+        $pdfPage->setFont($font, 11);
+
+        $pageMargin = 20;
+        $padding = 5;
+
+        $numColumnsAutoWidth = 0;
+        $remainingAutoWidth = $pdfPage->getWidth() - $pageMargin * 2;
+        foreach ($this->_columns as $column) {
+            if (!isset($column['pdfWidth'])) {
+                $numColumnsAutoWidth++;
+            } else {
+                $remainingAutoWidth -= $column['pdfWidth'] + $padding * 2;
+            }
+        }
+
+        $pdfPage->setLineWidth(0.1);
+        $x = $pageMargin;
+        foreach ($this->_columns as $k=>$column) {
+            if (!isset($column['pdfWidth'])) {
+                $w = $remainingAutoWidth / $numColumnsAutoWidth - $padding * 2;
+                $this->_columns[$k]['pdfWidth'] = $w;
+            } else {
+                $w = $column['pdfWidth'];
+            }
+            $h = $pdfPage->getTextHeight();
+            $text = $column['header'];
+            while ($pdfPage->getTextWidth($text) > $w) {
+                $text = substr(rtrim($text, '.'), 0, -1) . '...';
+            }
+            $pdfPage->drawText($text, $x+$padding, $pdfPage->getHeight()-$pageMargin-$padding, 'utf8');
+            $pdfPage->drawRectangle($x, $pdfPage->getHeight()-$pageMargin-$padding*2, $x+$w+$padding*2, $pdfPage->getHeight()-$pageMargin+$h-$padding, Zend_Pdf_Page::SHAPE_DRAW_STROKE);
+            $x += $w + $padding * 2;
+        }
+
+
+        $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA);
+        $pdfPage->setFont($font, 11);
+
+        $order = trim($this->_defaultOrder['field'].' '.$this->_defaultOrder['direction']);
+        $rowSet = $this->_fetchData($order, null, null);
+
+        if (!is_null($rowSet)) {
+            $rows = array();
+            $y = $pdfPage->getHeight() - $pageMargin - $padding*3 - $pdfPage->getTextHeight();
+            foreach ($rowSet as $row) {
+                if (is_array($row)) {
+                    $row = (object)$row;
+                }
+                $x = $pageMargin;
+                $minY = $pdfPage->getHeight();
+                foreach ($this->_columns as $col) {
+                    if (isset($col['findParent'])) {
+                        $text = $this->_fetchFromParentRow($row, $col['findParent']);
+                    } else {
+                        $text = $this->_fetchFromRow($row, $col['dataIndex']);
+                    }
+                    $w = $col['pdfWidth'];
+                    $o = array('wrap'        => Vps_Pdf_Page::OPTIONS_WRAP_ENABLED,
+                               'wrap-indent' => $x+$padding,
+                               'wrap-pad'    => $pdfPage->getWidth() - ($x + $padding*2 + $w)
+                               );
+                    $yText = $pdfPage->drawText($text, $x+$padding, $y, 'utf8', $o);
+                    if ($yText < $minY) $minY = $yText;
+                    $x += $w + $padding * 2;
+                }
+                $x = $pageMargin;
+                foreach ($this->_columns as $col) {
+                    $w = $col['pdfWidth'];
+                    $pdfPage->drawRectangle($x, $minY-$padding*1, $x+$w+$padding*2, $y+$padding*2, Zend_Pdf_Page::SHAPE_DRAW_STROKE);
+                    $x += $w + $padding * 2;
+                }
+                $y = $minY - $padding*3;
+            }
+        }
+
+        $this->_helper->viewRenderer->setNoRender();
+        $this->getResponse()->setHeader('Content-Type', 'application/pdf')
+                            ->setBody($pdf->render());
+    }
 }

@@ -29,7 +29,6 @@ try {
     Zend_Registry::set('acl', $acl);
 
     $response = $front->dispatch();
-    $response->setHeader('Content-Type', 'text/html; charset=utf-8');
     $response->sendHeaders();
     $response->outputBody();
 } catch (Exception $e){
