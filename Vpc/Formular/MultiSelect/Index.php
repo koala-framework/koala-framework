@@ -1,13 +1,13 @@
 <?php
-class Vpc_Formular_SelectMulti_Index extends Vpc_Formular_Field_Abstract
+class Vpc_Formular_MultiSelect_Index extends Vpc_Formular_Field_Abstract
 {
     protected $_settings = array(
         'name' => '',
         'horizontal' => 0
     );
-    protected $_tablename = 'Vpc_Formular_Multicheckbox_IndexModel';
-    public $controllerClass = 'Vpc_Formular_Multicheckbox_IndexController';
-    const NAME = 'Formular.SelectMulti';
+    protected $_tablename = 'Vpc_Formular_MultiSelect_IndexModel';
+    public $controllerClass = 'Vpc_Formular_MultiSelect_IndexController';
+    const NAME = 'Formular.MultiSelect';
     private $_checkboxes;
 
     public function getTemplateVars()
@@ -17,14 +17,14 @@ class Vpc_Formular_SelectMulti_Index extends Vpc_Formular_Field_Abstract
         foreach ($this->getChildComponents() as $component) {
             $return['checkboxes'][] = $component->getTemplateVars();
         }
-        $return['template'] = 'Formular/SelectMulti.html';
+        $return['template'] = 'Formular/MultiSelect.html';
         return $return;
     }
 
     public function getChildComponents()
     {
         if (!$this->_checkboxes) {
-            $table = $this->_getTable('Vpc_Formular_Multicheckbox_CheckboxesModel');
+            $table = $this->_getTable('Vpc_Formular_MultiSelect_OptionsModel');
             $where = array(
                 'page_id = ?' => $this->getDbId(),
                 'component_key = ?' => $this->getComponentKey()

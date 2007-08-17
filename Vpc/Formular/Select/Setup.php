@@ -1,12 +1,12 @@
 <?php
-class Vpc_Formular_Option_Setup extends Vpc_Setup_Abstract
+class Vpc_Formular_Select_Setup extends Vpc_Setup_Abstract
 {
     public function setup()
     {
         $fields['type'] = 'varchar(20) NOT NULL';
-        $this->createTable('component_formular_option', $fields);
+        $this->createTable('component_formular_select', $fields);
 
-        $tablename = 'component_formular_option_options';
+        $tablename = 'component_formular_select_options';
         if (!$this->_tableExits($tablename)) {
             $this->_db->query("CREATE TABLE `$tablename` (
                 `id` int(11) NOT NULL auto_increment,
@@ -26,9 +26,9 @@ class Vpc_Formular_Option_Setup extends Vpc_Setup_Abstract
         $where = array();
         $where['page_id = ?'] = $pageId;
         $where['component_key = ?'] = $componentKey;
-        $table = new Vpc_Formular_Option_IndexModel(array('db'=>$this->_db));
+        $table = new Vpc_Formular_Select_IndexModel(array('db'=>$this->_db));
         $table->delete($where);
-        $table = new Vpc_Formular_Option_OptionsModel(array('db'=>$this->_db));
+        $table = new Vpc_Formular_Select_OptionsModel(array('db'=>$this->_db));
         $table->delete($where);
     }
 }

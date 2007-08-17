@@ -1,5 +1,5 @@
 <?php
-class Vpc_Formular_Option_Index extends Vpc_Formular_Field_Abstract
+class Vpc_Formular_Select_Index extends Vpc_Formular_Field_Abstract
 {
     protected $_settings = array(
         'text' => '',
@@ -8,10 +8,9 @@ class Vpc_Formular_Option_Index extends Vpc_Formular_Field_Abstract
         'checked' => 0,
         'type' => 'radio'
     );
-
-    protected $_tablename = 'Vpc_Formular_Option_IndexModel';
-    public $controllerClass = 'Vpc_Formular_Option_IndexController';
-    const NAME = 'Formular.Option';
+    protected $_tablename = 'Vpc_Formular_Select_IndexModel';
+    public $controllerClass = 'Vpc_Formular_Select_IndexController';
+    const NAME = 'Formular.Select';
     protected $_options;
 
     public function getTemplateVars()
@@ -20,14 +19,14 @@ class Vpc_Formular_Option_Index extends Vpc_Formular_Field_Abstract
         $return['options'] = $this->getOptions();
         $return['type'] = $this->getSetting('type');
         $return['name'] = $this->getSetting('name');
-        $return['template'] = 'Formular/Option.html';
+        $return['template'] = 'Formular/Select.html';
         return $return;
     }
 
     public function getOptions()
     {
         if (!$this->_options) {
-            $table = $this->_getTable('Vpc_Formular_Option_OptionsModel');
+            $table = $this->_getTable('Vpc_Formular_Select_OptionsModel');
             $where = array(
                 'page_id = ?' => $this->getDbId(),
                 'component_key = ?' => $this->getComponentKey()
