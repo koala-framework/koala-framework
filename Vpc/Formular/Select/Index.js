@@ -1,5 +1,5 @@
-Ext.namespace('Vpc.Formular.SelectMulti');
-Vpc.Formular.SelectMulti.Index = function(renderTo, config)
+Ext.namespace('Vpc.Formular.Select');
+Vpc.Formular.Select.Index = function(renderTo, config)
 {
     var layout = new Ext.BorderLayout(renderTo, {
         center: {
@@ -12,10 +12,10 @@ Vpc.Formular.SelectMulti.Index = function(renderTo, config)
     
     layout.beginUpdate();
     layout.add("center", new Ext.ContentPanel("properties1", {autoCreate: true, title: 'Properties'}));
-    layout.add("center", new Ext.ContentPanel ("checkboxes1", {autoCreate: true, fitToFrame:true, title: 'Checkboxes'}));
+    layout.add("center", new Ext.ContentPanel ("checkboxes1", {autoCreate: true, fitToFrame:true, title: 'Options'}));
     var cb = new Vps.Auto.Form("properties1", {controllerUrl: config.controllerUrl, fitToFrame:true});
-    var cb = new Vps.Auto.Grid("checkboxes1", {controllerUrl: config.checkboxesControllerUrl});
+    var cb = new Vps.Auto.Grid("checkboxes1", {controllerUrl: config.optionsControllerUrl, fitToFrame:true});
     layout.endUpdate();
 };
 
-Ext.extend(Vpc.Formular.SelectMulti.Index, Ext.util.Observable,{})
+Ext.extend(Vpc.Formular.Select.Index, Ext.util.Observable,{})

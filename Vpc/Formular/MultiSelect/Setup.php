@@ -1,12 +1,12 @@
 <?php
-class Vpc_Formular_SelectMulti_Setup extends Vpc_Setup_Abstract
+class Vpc_Formular_MultiSelect_Setup extends Vpc_Setup_Abstract
 {
     public function setup()
     {
         $fields['horizontal'] = 'tinyint(4) NOT NULL';
-        $this->createTable('component_formular_selectmulti', $fields);
+        $this->createTable('component_formular_multiselect', $fields);
         
-        $tablename = 'component_formular_selectmulti_selects';
+        $tablename = 'component_formular_multiselect_options';
         if (!$this->_tableExits($tablename)) {
             $this->_db->query("CREATE TABLE `$tablename` (
                   `id` int(10) unsigned NOT NULL auto_increment,
@@ -25,9 +25,9 @@ class Vpc_Formular_SelectMulti_Setup extends Vpc_Setup_Abstract
         $where = array();
         $where['page_id = ?'] = $pageId;
         $where['component_key = ?'] = $componentKey;
-        $table = new Vpc_Formular_SelectMulti_IndexModel(array('db'=>$this->_db));
+        $table = new Vpc_Formular_MultiSelect_IndexModel(array('db'=>$this->_db));
         $table->delete($where);
-        $table = new Vpc_Formular_SelectMulti_CheckboxesModel(array('db'=>$this->_db));
+        $table = new Vpc_Formular_MultiSelect_OptionsModel(array('db'=>$this->_db));
         $table->delete($where);
     }
 }

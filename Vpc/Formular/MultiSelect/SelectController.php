@@ -1,5 +1,5 @@
 <?php
-class Vpc_Formular_SelectMulti_SelectController extends Vps_Controller_Action_Auto_Grid_Vpc
+class Vpc_Formular_MultiSelect_OptionsController extends Vps_Controller_Action_Auto_Grid_Vpc
 {
     protected $_columns = array(
                         array('dataIndex' => 'text',
@@ -12,6 +12,6 @@ class Vpc_Formular_SelectMulti_SelectController extends Vps_Controller_Action_Au
                               'width'     => 60,
                               'editor'    => 'Checkbox'));
 
-    protected $_tableName = 'Vpc_Formular_SelectMulti_SelectModel';
+    protected $_tableName = 'Vpc_Formular_MultiSelect_OptionsModel';
     protected $_position = 'pos';
 }

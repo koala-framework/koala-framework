@@ -1,5 +1,5 @@
 <?php
-class Vpc_Formular_Option_OptionsController extends Vps_Controller_Action_Auto_Grid_Vpc
+class Vpc_Formular_Select_OptionsController extends Vps_Controller_Action_Auto_Grid_Vpc
 {
     protected $_columns = array(
         array('dataIndex' => 'text',
@@ -12,7 +12,7 @@ class Vpc_Formular_Option_OptionsController extends Vps_Controller_Action_Auto_G
               'width'     => 60,
               'editor'    => 'Checkbox',
               ));
-    protected $_tableName = 'Vpc_Formular_Option_OptionsModel';
+    protected $_tableName = 'Vpc_Formular_Select_OptionsModel';
     protected $_position = 'pos';
 
 }
