@@ -2,27 +2,28 @@
 class Vpc_Formular_SelectMultiple_Index extends Vpc_Formular_Field_Decide_Abstract
 {
     protected $_defaultSettings = array('rows' => '10',
-										'name' => '');
+                    'name' => '');
     protected $_options = array();
 
-	 protected $_tablename = 'Vpc_Formular_SelectMultiple_IndexModel';
+    protected $_tablename = 'Vpc_Formular_SelectMultiple_IndexModel';
     public $controllerClass = 'Vpc_Formular_SelectMultiple_IndexController';
     const NAME = 'Formular.SelectMultiple';
 
     public function getTemplateVars()
     {
-		$rows = $this->getSetting('rows');
-		$name = $this->getSetting('name');
+        $rows = $this->getSetting('rows');
+        $name = $this->getSetting('name');
 
-		$return['rows'] = $rows;
-		$return['name'] = $name;
-		if ($this->_options == null) $this->getOptions();
-
-		$return['options'] = $this->_options;
-		$return['id'] = $this->getDbId().$this->getComponentKey();
-
-		$return['template'] = 'Formular/SelectMultiple.html';
-		return $return;
+        $return = parent::getTemplateVars();
+        $return['rows'] = $rows;
+        $return['name'] = $name;
+        if ($this->_options == null) $this->getOptions();
+    
+        $return['options'] = $this->_options;
+        $return['id'] = $this->getDbId().$this->getComponentKey();
+    
+        $return['template'] = 'Formular/SelectMultiple.html';
+        return $return;
     }
 
     public function getOptions ()
@@ -40,23 +41,23 @@ class Vpc_Formular_SelectMultiple_Index extends Vpc_Formular_Field_Decide_Abstra
 
     public function processInput()
     {
-	    if (isset($_POST[$this->getSetting('name')])){
-	        $this->getOptions();
+      if (isset($_POST[$this->getSetting('name')])){
+          $this->getOptions();
 
 
-	        $selectedValues = $_POST[$this->getName()];
+          $selectedValues = $_POST[$this->getName()];
 
 
-	        foreach ($this->_options AS $key => $option) {
-	            $option['selected'] = '0';
-	            $this->_options[$key] = $option;
-	        }
-	        foreach ($this->_options AS $key => $option) {
-			    if (in_array($option['value'], $selectedValues)){
-			       $option['selected'] = '1';
-			    }
-			    $this->_options[$key] = $option;
-		    }
-	    }
+          foreach ($this->_options AS $key => $option) {
+              $option['selected'] = '0';
+              $this->_options[$key] = $option;
+          }
+          foreach ($this->_options AS $key => $option) {
+          if (in_array($option['value'], $selectedValues)){
+             $option['selected'] = '1';
+          }
+          $this->_options[$key] = $option;
+        }
+      }
     }
 }

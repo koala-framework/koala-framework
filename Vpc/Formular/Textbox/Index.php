@@ -1,39 +1,51 @@
 <?php
-class Vpc_Formular_Textbox_Index extends Vpc_Formular_Field_Simple_Abstract
+class Vpc_Formular_Textbox_Index extends Vpc_Formular_Field_Abstract
 {
-    protected $_settings = array(       'maxlength' => '255',
-										'width' => '50',
-										'name' => '', 'value' => '',
-										'validator' => '');
-
-	protected $_tablename = 'Vpc_Formular_Textbox_IndexModel';
+    protected $_settings = array(
+        'maxlength' => '255',
+        'width' => '50',
+        'name' => '',
+        'value' => '',
+        'validator' => ''
+    );
+    protected $_tablename = 'Vpc_Formular_Textbox_IndexModel';
     public $controllerClass = 'Vpc_Formular_Textbox_IndexController';
     const NAME = 'Formular.Textbox';
 
     public function getTemplateVars()
     {
+        $return = parent::getTemplateVars();
         $return['value'] = $this->getSetting('value');
         $return['maxlength'] = $this->getSetting('maxlength');
         $return['width'] = $this->getSetting('width');
         $return['name'] = $this->getSetting('name');
-        $return['id'] = $this->getDbId().$this->getComponentKey();
         $return['template'] = 'Formular/Textbox.html';
         return $return;
     }
 
-    public function setWidth($width)
+    public function processInput()
     {
-        $this->_width = (int)$width;
+        $name = $this->getSetting('name');
+        if (isset($_POST[$name])){
+            $value = $_POST[$name];
+        }
+        $this->setSetting('value', $value);
     }
 
     public function validateField($mandatory)
     {
-
+        $value = $this->getSetting('value');
         $validatorString = $this->getSetting('validator');
-        if ($validatorString != '' && $this->getSetting('value') != ''){
+        if ($validatorString != '' && $value != ''){
             $validator = new $validatorString();
-            if (!$validator->isValid($this->getSetting('value'))) return 'Das Feld '.$this->_errorField.' entspricht nicht der geforderten Formattierung';
+            if (!$validator->isValid($value)) {
+                $v = str_replace('Zend_Validate_', '', $validatorString);
+                return 'Das Feld ' . $this->getStore('description') . ' entspricht nicht der geforderten Formatierung (' . $v . ')';
+            }
         }
-        return parent::validateField($mandatory);
+        if($mandatory && $value == ''){
+            return 'Feld ' . $this->getStore('description') . ' ist ein Pflichtfeld, bitte ausfüllen';
+        }
+        return '';
     }
 }
