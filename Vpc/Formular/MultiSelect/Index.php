@@ -1,69 +1,28 @@
 <?php
-class Vpc_Formular_MultiSelect_Index extends Vpc_Formular_Field_Abstract
+class Vpc_Formular_MultiSelect_Index extends Vpc_Formular_Select_Index
 {
     protected $_settings = array(
         'name' => '',
-        'horizontal' => 0
+        'type' => 'checkbox',
+        'size' => '5'
     );
     protected $_tablename = 'Vpc_Formular_MultiSelect_IndexModel';
     public $controllerClass = 'Vpc_Formular_MultiSelect_IndexController';
     const NAME = 'Formular.MultiSelect';
-    private $_checkboxes;
 
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $return['horizontal'] = $this->getSetting('horizontal');
-        foreach ($this->getChildComponents() as $component) {
-            $return['checkboxes'][] = $component->getTemplateVars();
-        }
         $return['template'] = 'Formular/MultiSelect.html';
         return $return;
     }
-
-    public function getChildComponents()
-    {
-        if (!$this->_checkboxes) {
-            $table = $this->_getTable('Vpc_Formular_MultiSelect_OptionsModel');
-            $where = array(
-                'page_id = ?' => $this->getDbId(),
-                'component_key = ?' => $this->getComponentKey()
-            );
-            $rows = $table->fetchAll($where);
-            $components = array();
-            foreach ($rows as $row){
-                $component = $this->createComponent('Vpc_Formular_Checkbox_Index', $row->id);
-                $component->setSetting('name', $this->getSetting('name') . '[]');
-                $component->setSetting('value', $component->getId());
-                $component->setSetting('checked', $row->checked == 1);
-                $component->setSetting('text', $row->text);
-                $this->_checkboxes[] = $component;
-            }
-        }
-
-        return $this->_checkboxes;
-    }
-
+    
     public function processInput()
-    {
-        if (isset($_POST)) {
-            $values = isset($_POST[$this->getSetting('name')]) ? $_POST[$this->getSetting('name')] : array();
-            foreach ($this->getChildComponents() as $component) {
-                if (array_search($component->getSetting('value'), $values) !== false) {
-                    $component->setSetting('checked', true);
-                } else {
-                    $component->setSetting('checked', false);
-                }
-            }
+    {        
+        $name = $this->getSetting('name');
+        foreach($this->getOptions() AS $key => $option) {
+            $this->_options[$key]['checked'] = isset($_POST[$name]) && in_array($option['value'], $_POST[$name]);
         }
-    }
-
-    public function validateField($mandatory)
-    {
-        if ($mandatory && !isset($_POST[$this->getSetting('name')])) {
-            return 'Feld ' . $this->getStore('description') . ' ist ein Pflichtfeld, zumindest ein Feld markieren';
-        }
-        return '';
     }
     
 }

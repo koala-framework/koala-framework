@@ -2,10 +2,7 @@
 class Vpc_Formular_Select_Index extends Vpc_Formular_Field_Abstract
 {
     protected $_settings = array(
-        'text' => '',
-        'value' => '',
         'name' => '',
-        'checked' => 0,
         'type' => 'radio'
     );
     protected $_tablename = 'Vpc_Formular_Select_IndexModel';
@@ -19,6 +16,7 @@ class Vpc_Formular_Select_Index extends Vpc_Formular_Field_Abstract
         $return['options'] = $this->getOptions();
         $return['type'] = $this->getSetting('type');
         $return['name'] = $this->getSetting('name');
+        $return['size'] = $this->getSetting('size');
         $return['template'] = 'Formular/Select.html';
         return $return;
     }
@@ -53,5 +51,13 @@ class Vpc_Formular_Select_Index extends Vpc_Formular_Field_Abstract
                 $this->_options[$key]['checked'] = $option['value'] == $_POST[$this->getSetting('name')];
             }
         }
+    }
+    
+    public function validateField($mandatory)
+    {
+        if($mandatory && !isset($_POST[$this->getSetting('name')])){
+            return 'Feld ' . $this->getStore('description') . ' ist ein Pflichtfeld, bitte ausfüllen';
+        }
+        return '';
     }
 }

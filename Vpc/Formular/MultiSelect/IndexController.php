@@ -1,24 +1,21 @@
 <?php
-class Vpc_Formular_MultiSelect_IndexController extends Vps_Controller_Action_Auto_Form_Vpc
+class Vpc_Formular_MultiSelect_IndexController extends Vpc_Formular_Select_IndexController
 {
     protected $_fields = array(
-            array('type'       => 'Checkbox',
-                  'fieldLabel' => 'Horizontal',
-                  'name'       => 'horizontal')
+            array('type'       => 'ComboBox',
+                  'fieldLabel' => 'Typ',
+                  'hiddenName' => 'type',
+                  'mode'       => 'local',
+                  'store'      => array('data' => array(array('checkbox', 'Checkboxen'),
+                                                        array('checkbox_horizontal', 'Checkboxen horizontal'),
+                                                        array('select', 'Select-Feld')),
+                                       ),
+                  'editable'   => false,
+                  'triggerAction'=>'all'),
+            array('type'       => 'TextField',
+                  'fieldLabel' => 'Größe des Select-Felds',
+                  'name'       => 'size',
+                  'width'      => 60)
     );
-
-    protected $_buttons = array('save'   => true);
     protected $_tableName = 'Vpc_Formular_MultiSelect_IndexModel';
-
-  public function indexAction()
-  {
-    $controllerUrl = $this->getRequest()->getPathInfo();
-    $controllerUrl = str_replace('jsonIndex/', '', $controllerUrl);
-    $controllerUrl = str_replace('index/', '', $controllerUrl);
-    $cfg['controllerUrl'] = $controllerUrl;
-    $cfg['checkboxesControllerUrl'] = str_replace('_Index', '_Options', $controllerUrl);
-    $this->view->ext('Vpc.Formular.MultiSelect.Index', $cfg);
-  }
-
-
 }
