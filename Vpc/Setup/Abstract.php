@@ -13,6 +13,25 @@ class Vpc_Setup_Abstract
         $this->_db = $db;
     }
 
+    public function createInstance($componentClass)
+    {
+        if (is_subclass_of($componentClass, 'Vpc_Abstract')) {
+            $class = $componentClass;
+            while ($class != 'Vpc_Abstract') {
+                $len = strlen(strrchr($class, '_'));
+                $setupClass = substr($class, 0, -$len) . '_Setup';
+                try {
+                    if (class_exists($setupClass)) {
+                        return new $setupClass(Zend_Registry::get('dao')->getDb());
+                    }
+                } catch (Zend_Exception $e) {
+                }
+                $class = get_parent_class($class);
+            }
+        }
+        return null;
+    }
+    
 
     function createTable ($name, $fields){
         if (!$this->_tableExits($name)) {
@@ -46,8 +65,8 @@ class Vpc_Setup_Abstract
 
 
     protected function _tableExits ($tablename){
-     $tableList = $this->_db->listTables();
-     return in_array($tablename, $tableList);
+        $tableList = $this->_db->listTables();
+        return in_array($tablename, $tableList);
     }
 
     public static function getAvailableComponents($path = '')
@@ -80,4 +99,5 @@ class Vpc_Setup_Abstract
         return $return;
     }
 
+    public function deleteEntry($pageId, $componentKey) {}
 }

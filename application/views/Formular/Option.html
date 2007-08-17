@@ -1,3 +1,0 @@
-{foreach from=$component.options item=option}
-<input type="radio" name="{$component.name}" value="{$option.value}" {if $option.checked} checked {/if}/>{$option.text} {if !$component.horizontal} <br> {/if}
-{/foreach}

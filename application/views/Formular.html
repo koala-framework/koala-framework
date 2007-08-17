@@ -1,34 +1,27 @@
 {if $component.sent != 3}
-	{foreach from=$component.errors item=error}
-	 <font color="#cc0000" size=2> -> {$error}  </font><br/>
-	{/foreach}
-	<br/>
-	<form action="{$component.action}" method="POST" ENCTYPE = "{if $component.upload}multipart/form-data{else}application/x-www-form-urlencoded {/if}">
-	<table>
-
-	{foreach from=$component.paragraphs item=paragraph}
-		{foreach from=$component.names item=name}
-			{if $name.visible}
-				{if $paragraph.id == $name.id}
-				<tr $component.name>
-					{if $name.noCols}
-						<td colspan = 2 > {component component=$paragraph}</td>
-					{else}
-						<td {if !$name.isValid} bgcolor="#cc0000" {/if} ><b>{if $name.mandatory} * {/if} {$name.name}  </b></td>
-					    <td> {component component=$paragraph}</td>
-				    {/if}
-			    {/if}
-			 {/if}
-		{/foreach}
-	{/foreach }
-	{if !$component.submit}<tr> <td colspan = 2 > <input type="submit" name="submit" value="Absenden"/> </td></tr>{/if}
-	</table>
-	</form>
-	{if $component.sent == 2}
-		<br>Bitter überprüfen Sie Ihre Eingabe, es traten Fehler auf.
-	{/if}
+    {foreach from=$component.errors item=error}
+        <font color="#cc0000" size=2> -> {$error}  </font><br/>
+    {/foreach}
+    <br/>
+    <form action="{$component.action}" method="POST" ENCTYPE = "{if $component.upload}multipart/form-data{else}application/x-www-form-urlencoded {/if}">
+        <table>
+            {foreach from=$component.paragraphs item=paragraph}
+                <tr>
+                {if $component.store.noCols}
+                    <td colspan = 2 > {component component=$paragraph}</td>
+                {else}
+                    <td {if !$component.store.isValid} bgcolor="#cc0000" {/if} ><b>{if $component.store.mandatory} * {/if} {$component.store.description}  </b></td>
+                    <td> {component component=$paragraph}</td>
+                {/if}
+                </tr>
+            {/foreach }
+        </table>
+    </form>
+    {if $component.sent == 2}
+        <br>Bitte überprüfen Sie Ihre Eingabe, es traten Fehler auf.
+    {/if}
 {else}
-	<br> Ihr Formular wurde erfolgreich abgeschickt.
+    <br> Ihr Formular wurde erfolgreich abgeschickt.
 {/if}
 
 
