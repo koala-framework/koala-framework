@@ -6,12 +6,16 @@ class Vpc_Formular_Select_IndexController extends Vps_Controller_Action_Auto_For
                   'fieldLabel' => 'Typ',
                   'hiddenName' => 'type',
                   'mode'       => 'local',
-                  'store'      => array('data' => array(array('select', 'ComboBox'),
-                                                        array('radio', 'Radio-Buttons'),
-                                                        array('radio_horizontal', 'Radio-Buttons horizontal')),
+                  'store'      => array('data' => array(array('radio', 'Radio-Buttons'),
+                                                        array('radio_horizontal', 'Radio-Buttons horizontal'),
+                                                        array('select', 'Select-Feld')),
                                        ),
                   'editable'   => false,
                   'triggerAction'=>'all'),
+            array('type'       => 'TextField',
+                  'fieldLabel' => 'Größe des Select-Feldes',
+                  'name'       => 'size',
+                  'width'      => 60)
     );
     protected $_buttons = array('save'   => true);
     protected $_tableName = 'Vpc_Formular_Select_IndexModel';

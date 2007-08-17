@@ -3,7 +3,7 @@ class Vpc_Formular_MultiSelect_Setup extends Vpc_Setup_Abstract
 {
     public function setup()
     {
-        $fields['horizontal'] = 'tinyint(4) NOT NULL';
+        $fields['type'] = 'varchar(20) NOT NULL';
         $this->createTable('component_formular_multiselect', $fields);
         
         $tablename = 'component_formular_multiselect_options';
