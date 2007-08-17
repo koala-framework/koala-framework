@@ -185,6 +185,17 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
         } else {
             this.pagingType = false;
         }
+
+        if (meta.buttons['reload']) {
+            this.getToolbar().addButton({
+                text    : '',
+                handler : function () { this.reload(); },
+                icon : '/assets/vps/images/silkicons/bullet_star.png',
+                cls: 'x-btn-icon',
+                scope   : this
+            });
+        }
+        
         if (meta.buttons.save) {
             this.saveButton = this.getToolbar().addButton({
                 text    : 'Speichern',
@@ -246,6 +257,7 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                 }
             }, this, {buffer: 500});
         }
+        
         this.fireEvent('generatetoolbar', this.toolbar);
     },
     onSave : function()

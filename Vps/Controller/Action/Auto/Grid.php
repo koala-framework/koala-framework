@@ -4,7 +4,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected $_columns = array();
     protected $_buttons = array('save'=>true,
                                 'add'=>true,
-                                'delete'=>true);
+                                'delete'=>true,
+                                'reload'=>true);
     protected $_paging = 0;
     protected $_defaultOrder;
     protected $_filters = array();
@@ -326,6 +327,14 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     {
     }
     
+    protected function _beforeDelete(Zend_Db_Table_Row_Abstract $row)
+    {
+    }
+
+    protected function _afterDelete()
+    {
+    }
+    
     public function jsonSaveAction()
     {
         if(!isset($this->_permissions['save']) || !$this->_permissions['save']) {
@@ -349,7 +358,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 throw new Vps_Exception("Can't find row with id '$id'.");
             }
             foreach ($this->_columns as $col) {
-                if ($col['dataIndex'] == $this->_position) {
+                if ($id && $col['dataIndex'] == $this->_position) {
                     $row->numberize($col['dataIndex'], $submitRow[$col['dataIndex']], $this->_getWhere());
                 } else if ((isset($col['allowSave']) && $col['allowSave'])
                     || (isset($col['editor']) && $col['editor']))
@@ -369,6 +378,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
             $this->_afterSave($row);
             if (!$id) {
+                if ($this->_position) {
+                    $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
+                }
                 $addedIds[] = $row->id;
             }
         }
@@ -393,7 +405,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             throw new Vps_Exception("Can't find row with id '$id'.");
         }
         try {
+            $this->_beforeDelete($row);
             $row->delete();
+            $this->_afterDelete();
             if ($this->_position) {
                 $this->_table->numberizeAll($this->_position, $this->_getWhere());
             }

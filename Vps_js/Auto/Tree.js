@@ -95,7 +95,7 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
                     scope   : this
                 });
             }
-            if (b['reload']) {
+            if (b['collapse']) {
                 toolbar.addButton({
                     text    : '',
                     handler : function () { this.tree.collapseAll(); },
