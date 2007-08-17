@@ -1,6 +1,0 @@
-<select  name="{$component.name}[]"  size="{$component.rows}"  multiple> 
-{foreach from=$component.options item=option}
-	<option {$option.value} {if $option.selected} selected{/if}> {$option.text} </option>
-{/foreach}
-
-</select>

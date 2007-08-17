@@ -1,11 +1,12 @@
 <?php
 class Vpc_Formular_FileUpload_Index extends Vpc_Formular_Field_Abstract
 {
-    protected $_settings = array('types_allowed' => '',
-                 'name' => '',
-                 'width' => '50',
-                 'maxSize' => 2000);
-
+    protected $_settings = array(
+        'types_allowed' => '',
+         'name' => '',
+         'width' => '50',
+         'maxSize' => 2000
+    );
     protected $_tablename = 'Vpc_Formular_FileUpload_IndexModel';
     public $controllerClass = 'Vpc_Formular_FileUpload_IndexController';
     const NAME = 'Formular.FileUpload';
@@ -15,41 +16,36 @@ class Vpc_Formular_FileUpload_Index extends Vpc_Formular_Field_Abstract
         $return = parent::getTemplateVars();
         $return['width'] = $this->getSetting('width');
         $return['name'] = $this->getSetting('name');
-        $return['id'] = $this->getDbId().$this->getComponentKey();
         $return['template'] = 'Formular/FileUpload.html';
         return $return;
     }
 
     public function validateField($mandatory)
     {
-        $file = $_FILES[$this->getName()];
+        $file = $_FILES[$this->getSetting('name')];
 
-        if ($file['error'] != 0 && $mandatory == 1) return 'Feld '.$this->getName().' ist ein Pflichtfeld, bitte ausfüllen';
+        if ($file['error'] == 4 && $mandatory) {
+            return 'Feld ' . $this->getStore('description') . ' ist ein Pflichtfeld, bitte ausfüllen';
+        }
+        
+        if ($file['error'] != 0 && $file['error'] != 4) {
+            return 'Beim Dateiupload ist ein Fehler aufgetreten';
+        }
 
-        if ($file['error'] != 0 && $file['error'] != 4) return 'Beim Feld '.$this->getName().' ist ein Fehler aufgetreten';
-
-        if ($this->getSetting('maxSize') < ($file['size']/1024)) return 'Es dürfen Daten max. bis '.$this->getSetting('maxSize').' verwendet werden';
+        if ($this->getSetting('maxSize') < ($file['size']/1024)) {
+            return 'Es dürfen Dateien bis max. '.$this->getSetting('maxSize').' kB hochgeladen werden';
+        }
 
         if ($file['error'] != 4) {
-            //zerlegt den Dateinamen
-            $file = $file['name'];
-            $start = strripos($file, '.');
-            $fileextension = substr($file, $start+1);
-    
-            //zerlegt den Datenbankeintrag
-            $extensionsString = $this->getSetting('types_allowed');
-            $extenstions = array();
-            $delims = ',';
-            $word = strtok($extensionsString, $delims);
-            while (is_string($word)){
-                if ($word){
-                    $extensions[] = trim($word);
-                }
-                $word = strtok($delims);
+            $extension = strtolower(substr($file['name'], strripos($file['name'], '.') + 1));
+            $extensions = explode(',', $this->getSetting('types_allowed'));
+            foreach ($extensions as $key => $val) { $extensions[$key] = strtolower(trim($val)); }
+            if (!in_array($extension, $extensions)) {
+                return 'Ungültiges Format in Feld ' . $this->getStore('description') . ', zulässige Formate: ' . $this->getSetting('types_allowed');
             }
-            if (!in_array($fileextension, $extensions)) return 'ungültiges Format in Feld '.$this->getName().', zulässige Formate: '.$this->getSetting('types_allowed');
         }
-        return true;
+        
+        return '';
     }
 
 }

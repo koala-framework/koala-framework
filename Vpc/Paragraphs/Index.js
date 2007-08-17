@@ -53,8 +53,10 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
 
     edit : function(o, p) {
         var row = this.grid.grid.getSelectionModel().getSelected();
-        controllerUrl = row.data.page_id.replace(/\/show\//, '/edit/');
-        this.fireEvent('editcomponent', {controllerUrl: controllerUrl, text: this.text + ': ' + row.data.pos});
+        if (row != undefined) {
+            controllerUrl = row.data.page_id.replace(/\/show\//, '/edit/');
+            this.fireEvent('editcomponent', {controllerUrl: controllerUrl, text: this.text + ': ' + row.data.pos});
+        }
     },
 
     add : function(o, e) {

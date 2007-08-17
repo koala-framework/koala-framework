@@ -3,8 +3,8 @@ class Vpc_Formular_Submit_IndexController extends Vps_Controller_Action_Auto_For
 {
     protected $_fields = array(
             array('type'       => 'TextField',
-                  'fieldLabel' => 'Value',
-                  'name'       => 'value',
+                  'fieldLabel' => 'Text',
+                  'name'       => 'text',
                   'width'      => 150),
             );
 

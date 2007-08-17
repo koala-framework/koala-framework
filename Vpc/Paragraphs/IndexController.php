@@ -10,19 +10,18 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
             array('dataIndex' => 'component_class',
                   'header'    => 'Komponente',
                   'width'     => 200),
-            array('dataIndex' => 'pos',
-                  'header'    => 'Position',
-                  'width'     => 50),
             array('dataIndex' => 'visible',
                   'header'    => 'Sichtbar',
-                  'editor'    => 'Checkbox')
+                  'editor'    => 'Checkbox',
+                  'width'     => 30)
             );
     protected $_buttons = array(
         'save' => true,
-        'delete' => true
+        'delete' => true,
+        'reload' => true
     );
     protected $_paging = 0;
-    protected $_defaultOrder = 'pos';
+    protected $_position = 'pos';
     protected $_tableName = 'Vpc_Paragraphs_IndexModel';
     protected $_jsClass = 'Vpc.Paragraphs.Index';
     protected $_components;
@@ -48,12 +47,20 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     {
         $this->indexAction();
     }
+    
+    protected function _beforeDelete(Zend_Db_Table_Row_Abstract $row)
+    {
+        $setup = Vpc_Setup_Abstract::createInstance($row->component_class);
+        if ($setup) {
+            $setup->deleteEntry($row->page_id, $row->component_key . '-' . $row->id);
+        }
+    }
 
     public function jsonDataAction()
     {
         parent::jsonDataAction();
         foreach ($this->view->rows as $key => $row) {
-        	$src = '/component/show/' . $row['component_class'] . '/' . $this->component->getId() . '-' . $row['id'] . '/';
+          $src = '/component/show/' . $row['component_class'] . '/' . $this->component->getId() . '-' . $row['id'] . '/';
             $this->view->rows[$key]['page_id'] = $src;
 
             $componentClass = array_search($row['component_class'], $this->_components);
@@ -69,32 +76,22 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
 
     public function jsonAddParagraphAction()
     {
-        $componentName = $this->_getParam('component');
-        if (array_search($componentName, $this->_components) && is_subclass_of($componentName, 'Vpc_Abstract')) {
-            $class = $componentName;
-            while ($class != 'Vpc_Abstract') {
-                $len = strlen(strrchr($class, '_'));
-                $setupClass = substr($class, 0, -$len) . '_Setup';
-                try {
-                    if (class_exists($setupClass)) {
-                        $setup = new $setupClass($this->_table->getAdapter());
-                        $setup->setup();
-                    }
-                } catch (Zend_Exception $e) {
-                }
-                $class = get_parent_class($class);
+        $componentClass = $this->_getParam('component');
+        if (array_search($componentClass, $this->_components)) {
+            $setup = Vpc_Setup_Abstract::createInstance($componentClass);
+            if ($setup) {
+                $setup->setup();
             }
-
             $insert['page_id'] = $this->component->getDbId();
             $insert['component_key'] = $this->component->getComponentKey();
-            $insert['component_class'] = $componentName;
+            $insert['component_class'] = $componentClass;
             $id = $this->_table->insert($insert);
             $where = 'page_id = ' . $this->component->getDbId();
             $where .= ' AND component_key=\'' . $this->component->getComponentKey() . '\'';
             $this->_table->numberize($id, 'pos', 0, $where);
 
         } else {
-            $this->view->error = 'Component not found: ' . $componentName;
+            $this->view->error = 'Component not found: ' . $componentClass;
         }
     }
 

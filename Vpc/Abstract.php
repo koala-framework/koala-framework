@@ -10,6 +10,8 @@ abstract class Vpc_Abstract implements Vpc_Interface
     private $_id;
     private $_hasGeneratedForFilename = array();
     private $_pageCollection = null;
+    
+    private $_store;
 
     protected $_settings = array();
     protected $_tablename;
@@ -37,16 +39,16 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
         $this->init();
 
-		$table = $this->_getTable();
-		if ($table) {
-			$info = $table->info();
-			if ($info['primary'] == array(1 => 'page_id', 2 => 'component_key')) {
-				$rowset = $table->find($this->getPageId(), $this->getComponentKey());
-				if ($rowset->count() == 1) {
-					$this->_settings = array_merge($this->_settings, $rowset->current()->toArray());
-				}
-			}
-		}
+        $table = $this->_getTable();
+        if ($table) {
+            $info = $table->info();
+            if ($info['primary'] == array(1 => 'page_id', 2 => 'component_key')) {
+                $rowset = $table->find($this->getPageId(), $this->getComponentKey());
+                if ($rowset->count() == 1) {
+                    $this->_settings = array_merge($this->_settings, $rowset->current()->toArray());
+                }
+            }
+        }
 
         if (Zend_Registry::isRegistered('infolog')) {
             Zend_Registry::get('infolog')->createComponent(get_class($this) . ' - ' . $id);
@@ -191,6 +193,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $parts['componentKey'] = '';
         $parts['pageKey'] = '';
         $parts['pageKeys'] = array();
+        $parts['currentComponentKey'] = '';
         $parts['currentPageKey'] = '';
         $parts['currentPageTag'] = '';
 
@@ -226,6 +229,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
             }
             if ($key != ',') {
                 $parts['componentKey'] .= $value;
+            }
+            if ($key == '-') {
+                $parts['currentComponentKey'] = $value;
             }
         }
         $parts['componentId'] = $parts['dbId'] . $parts['componentKey'];
@@ -281,6 +287,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
     public function getComponentKey()
     {
         return (string)$this->_id['componentKey'];
+    }
+
+    public function getCurrentComponentKey()
+    {
+        return (string)$this->_id['currentComponentKey'];
     }
 
     /**
@@ -412,13 +423,13 @@ abstract class Vpc_Abstract implements Vpc_Interface
      *
      * Variable 'template' muss immer gesetzt werden.
      *
-     * @param mode Für Frontend-Editing, noch nicht fertig
      * @return array Template-Variablen
      */
     public function getTemplateVars()
     {
         $vars['class'] = get_class($this);
         $vars['id'] = $this->getId();
+        $vars['store'] = $this->_store;
         return $vars;
     }
 
@@ -482,7 +493,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     public function getSetting($setting)
     {
-    	$settings = $this->getSettings();
+        $settings = $this->getSettings();
         return isset($settings[$setting]) ? $settings[$setting] : null ;
     }
 
@@ -495,4 +506,20 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         return $this->_settings;
     }
+    
+    public function store($key, $val)
+    {
+        $this->_store[$key] = $val;
+    }
+    
+    public function getStore($key)
+    {
+        if (isset($this->_store[$key])) {
+            return $this->_store[$key];
+        } else {
+            return null;
+        }
+    }
+    
+    public function onDelete() {}
 }

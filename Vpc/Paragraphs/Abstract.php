@@ -53,9 +53,10 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
     protected function _getData()
     {
         if (!isset($this->_data)) {
-            $db = $this->_getTable()->getAdapter();
-            $where = "page_id='" . $this->getDbId() . "'";
-            $where .= " AND component_key='" . $this->getComponentKey() . "'";
+            $where = array();
+            $where['page_id = ?'] = $this->getDbId();
+            $where['component_key = ?'] = $this->getComponentKey();
+            $where['visible = ?'] = 1;
             $this->_data = $this->_getTable()->fetchAll($where, 'pos');
         }
         return $this->_data;
