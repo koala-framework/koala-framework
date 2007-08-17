@@ -1,6 +1,6 @@
 <?php
 
-class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Field_Interface
+class Vpc_Formular_Captcha_Index extends Vpc_Formular_Field_Abstract
 {
     private $path = '';
     var $width       = 142;
@@ -16,6 +16,7 @@ class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Fi
         $path = '/component/edit/Vpc_Formular_Captcha_Show/' . $this->getId() . '/';
         $path .= '?showPic=' . $encrypt;
 
+        $return = parent::getTemplateVars();
         $return['encrypt'] = $encrypt;
         $return['value'] = $value;
         $return['path'] = $path;
@@ -256,28 +257,11 @@ class Vpc_Formular_Captcha_Index extends Vpc_Abstract implements Vpc_Formular_Fi
         if (isset($_POST['hidden']) && isset($_POST['captcha'])) {
             $code = $_POST['hidden'];
             $captcha = $_POST['captcha'];
-            if ($code == $this->encrypt($captcha)) {
-                return true;
-            } else {
+            if ($code != $this->encrypt($captcha)) {
                 return 'Das Captcha Feld muss korrekt ausgefüllt werden';
             }
         }
-    }
-
-    public function getName(){
-        return 'captcha';
-    }
-
-    public function setName($name){
-        //Nothing
-    }
-
-    public function processInput(){
-        //Nothing
-    }
-
-    public function setErrorField($fieldname){
-        //Nothing
+        return '';
     }
 
 }

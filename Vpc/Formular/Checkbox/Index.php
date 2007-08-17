@@ -1,11 +1,12 @@
 <?php
 class Vpc_Formular_Checkbox_Index extends Vpc_Formular_Field_Abstract
 {
-    protected $_settings = array('text' => '',
-								 'checked' => false,
-								 'value' => '',
-								 'name' => '');
-
+    protected $_settings = array(
+        'text' => '',
+        'checked' => false,
+        'value' => '',
+        'name' => ''
+    );
     protected $_tablename = 'Vpc_Formular_Checkbox_IndexModel';
     public $controllerClass = 'Vpc_Formular_Checkbox_IndexController';
     const NAME = 'Formular.Checkbox';
@@ -13,16 +14,11 @@ class Vpc_Formular_Checkbox_Index extends Vpc_Formular_Field_Abstract
 
     public function getTemplateVars()
     {
-    	$name = $this->getSetting('name');
-        $value = $this->getSetting('value');
-        $text = $this->getSetting('text');
-        $checked = $this->getSetting('checked');
-
-        $return['value'] = $value;
-        $return['checked'] = $checked;
-        $return['text'] = $text;
-        $return['name'] = $name;
-        $return['id'] = $this->getDbId().$this->getComponentKey();
+        $return = parent::getTemplateVars();
+        $return['value'] = $this->getSetting('value');
+        $return['checked'] = $this->getSetting('checked');
+        $return['text'] = $this->getSetting('text');
+        $return['name'] = $this->getSetting('name');
         $return['template'] = 'Formular/Checkbox.html';
         return $return;
     }
@@ -32,7 +28,6 @@ class Vpc_Formular_Checkbox_Index extends Vpc_Formular_Field_Abstract
             $this->setSetting('checked', 1);
             $check = $this->getSetting('name');
             if ($this instanceof  Vpc_Formular_Option_Index) {
-
                 if ($this->getSetting('value') == $_POST[$this->getSetting('name')]) {
                     $this->setSetting('checked', 1);
                 } else {
@@ -48,9 +43,8 @@ class Vpc_Formular_Checkbox_Index extends Vpc_Formular_Field_Abstract
     public function validateField($mandatory)
     {
         if ($mandatory && !$this->getSetting('checked')) {
-            return 'Feld '.$this->_errorField.' ist ein Pflichtfeld, bitte ausfüllen';
-        } else {
-            return true;
+            return 'Feld ' . $this->getStore('description') . ' ist ein Pflichtfeld, bitte ausfüllen';
         }
+        return '';
     }
 }

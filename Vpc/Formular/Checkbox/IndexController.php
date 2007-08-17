@@ -6,11 +6,7 @@ class Vpc_Formular_Checkbox_IndexController extends Vps_Controller_Action_Auto_F
                   'fieldLabel' => 'Text',
                   'name'       => 'text',
                   'width'      => 150),
-            array('type'       => 'TextField',
-                  'fieldLabel' => 'Value',
-                  'name'       => 'value',
-                  'width'      => 150),
-            array('type'       => 'TextField',
+            array('type'       => 'Checkbox',
                   'fieldLabel' => 'Checked',
                   'name'       => 'checked',
                   'width'      => 50)

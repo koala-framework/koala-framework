@@ -2,7 +2,7 @@
 class Vpc_Formular_Field_FormGrid extends Vps_Controller_Action_Auto_Grid
 {
 
-public function jsonSaveAction()
+    public function jsonSaveAction()
     {
         if(!isset($this->_permissions['save']) || !$this->_permissions['save']) {
             throw new Vps_Exception("Save is not allowed.");
@@ -15,30 +15,30 @@ public function jsonSaveAction()
         foreach ($data as $submitRow) {
             $id = $submitRow[$this->_primaryKey];
             if ($id) {
-            	//hier eine kleine änderung
+              //hier eine kleine änderung
                 //$row = $this->_table->find($id)->current();
                  $pageId = $this->component->getDbId();
-				 if ($this->component instanceof Vpc_Formular_Multicheckbox_Index)
-                 	$row = $this->_table->fetchall(array('page_id = ?' => $pageId,
-													 'component_key = ?' => $id))->current();
-				 else
-				 	$row = $this->_table->fetchall(array('id = ?' => $id))->current();
-            	//d ($row);
+         if ($this->component instanceof Vpc_Formular_Multicheckbox_Index)
+                   $row = $this->_table->fetchall(array('page_id = ?' => $pageId,
+                           'component_key = ?' => $id))->current();
+         else
+           $row = $this->_table->fetchall(array('id = ?' => $id))->current();
+              //d ($row);
             } else {
                 if(!isset($this->_permissions['add']) || !$this->_permissions['add']) {
                     throw new Vps_Exception("Add is not allowed.");
                 }
-				$submitRow['page_id'] = $this->component->getDbId();
+        $submitRow['page_id'] = $this->component->getDbId();
 
-				if ($this->component instanceof Vpc_Formular_Multicheckbox_Index){
-					$componentKey = $this->_generateComponentKey($this->component->getComponentKey());
-				} else {
-					$componentKey = $this->component->getComponentKey();
-				}
+        if ($this->component instanceof Vpc_Formular_Multicheckbox_Index){
+          $componentKey = $this->_generateComponentKey($this->component->getComponentKey());
+        } else {
+          $componentKey = $this->component->getComponentKey();
+        }
 
-        		$submitRow['component_key'] = $componentKey;
-        		if (!$this->component instanceof Vpc_Formular_Multicheckbox_Index)
-        		unset($submitRow['id']);
+            $submitRow['component_key'] = $componentKey;
+            if (!$this->component instanceof Vpc_Formular_Multicheckbox_Index)
+            unset($submitRow['id']);
                 $row = $this->_table->createRow($submitRow);
             }
             if(!$row) {
@@ -84,17 +84,17 @@ public function jsonSaveAction()
 
     private function _generateComponentKey ($componentKey){
 
-    	$rows = $this->_table->fetchAll(array('page_id = ?'  => $this->component->getDbId(),
+      $rows = $this->_table->fetchAll(array('page_id = ?'  => $this->component->getDbId(),
                                              'component_key LIKE ?' => "$componentKey-%"));
-		$ids = array();
-    	foreach ($rows as $rowKey => $rowData){
-        	$id = substr(strrchr($rowData->component_key, '-'), 1);
-        	$ids[] = $id;
+    $ids = array();
+      foreach ($rows as $rowKey => $rowData){
+          $id = substr(strrchr($rowData->component_key, '-'), 1);
+          $ids[] = $id;
         }
-		rsort($ids);
-		if ($ids == array()) $id = 1;
-		else $id = $ids[0] + 1;
-		return "$componentKey-$id";
+    rsort($ids);
+    if ($ids == array()) $id = 1;
+    else $id = $ids[0] + 1;
+    return "$componentKey-$id";
     }
 
      public function jsonDeleteAction()
@@ -106,14 +106,14 @@ public function jsonSaveAction()
 
 
 
-		//d ($id);
-		if ($this->component instanceof Vpc_Formular_Multicheckbox_Index){
-			$id = $this->getRequest()->getParam($this->_primaryKey);
-        	$row = $this->_table->find($this->component->getDbId(), $id)->current();
-		}
+    //d ($id);
+    if ($this->component instanceof Vpc_Formular_Multicheckbox_Index){
+      $id = $this->getRequest()->getParam($this->_primaryKey);
+          $row = $this->_table->find($this->component->getDbId(), $id)->current();
+    }
         else {
-        	$id = $_REQUEST['id'];
-        	$row = $this->_table->find($id)->current();
+          $id = $_REQUEST['id'];
+          $row = $this->_table->find($id)->current();
         }
         if(!$row) {
             throw new Vps_Exception("Can't find row with id '$id'.");

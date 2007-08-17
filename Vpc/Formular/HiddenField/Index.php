@@ -9,6 +9,7 @@ class Vpc_Formular_HiddenField_Index extends Vpc_Abstract
 
     public function getTemplateVars()
     {
+        $return = parent::getTemplateVars();
         $return['name'] = $this->getSetting('name');
         $return['id'] = $this->getDbId().$this->getComponentKey();
         $return['template'] = 'Formular/HiddenField.html';

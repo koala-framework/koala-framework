@@ -20,7 +20,7 @@ class Vpc_Formular_Setup extends Vpc_Setup_Abstract
         }
 
         if (!file_exists('application/views/Formular.html')){
-          copy(VPS_PATH . '/application/views/Formular.html', 'application/views/Formular.html');
+            copy(VPS_PATH . '/application/views/Formular.html', 'application/views/Formular.html');
         }
     }
 }

@@ -10,7 +10,7 @@ class Vpc_Formular_IndexController extends Vpc_Paragraphs_IndexController
                   'width'     => 50,
                   'editor'    => 'Checkbox',
                   ),
-            array('dataIndex' => 'name',
+            array('dataIndex' => 'description',
                   'header'    => 'Bezeichnung',
                   'width'     => 150,
                   'editor'    => 'TextField',
@@ -21,7 +21,7 @@ class Vpc_Formular_IndexController extends Vpc_Paragraphs_IndexController
                   'editor'    => 'Checkbox',
                   ),
             array('dataIndex' => 'no_cols',
-                  'header'    => 'noCols',
+                  'header'    => 'Ganze Breite',
                   'width'     => 50,
                   'editor'    => 'Checkbox',
                   ),
@@ -34,7 +34,7 @@ class Vpc_Formular_IndexController extends Vpc_Paragraphs_IndexController
             array('dataIndex' => 'id',
                   'header'    => 'id',
                   'width'     => 50,
-                  'hidden'   =>  false,
+                  'hidden'   =>  true,
                   )
 
             );
@@ -46,13 +46,20 @@ class Vpc_Formular_IndexController extends Vpc_Paragraphs_IndexController
     {
         parent::init();
         $c = Vpc_Setup_Abstract::getAvailableComponents(VPS_PATH . 'Vpc/Formular/');
-        $this->_components = array();
+        $components = array();
         foreach ($c as $key => $val) {
-            if ($key != 'Formular.Formular') {
+            if ($key != 'Formular') {
                 $key = str_replace('Formular.', '', $key);
-                $this->_components[$key] = $val;
+                $components[$key] = $val;
             }
         }
+        asort($components);
+        foreach ($this->_components as $key => $val) {
+            if ($key != 'Formular') {
+                $components['Nicht Formular.' . $key] = $val;
+            }
+        }
+        $this->_components = $components;
     }
 
 }
