@@ -6,7 +6,6 @@ class Vpc_Formular_Submit_Index extends Vpc_Abstract
         'text' => 'Senden'
     );
     protected $_tablename = 'Vpc_Formular_Submit_IndexModel';
-    public $controllerClass = 'Vpc_Formular_Submit_IndexController';
     const NAME = 'Formular.Submit';
 
     function getTemplateVars()

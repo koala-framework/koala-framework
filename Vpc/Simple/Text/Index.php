@@ -14,7 +14,6 @@ class Vpc_Simple_Text_Index extends Vpc_Abstract
         'content' => 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.'
     );
     protected $_tablename = 'Vpc_Simple_Text_IndexModel';
-    public $controllerClass = 'Vpc_Simple_Text_IndexController';
     const NAME = 'Standard.Text';
 
     private function _getContentParts()

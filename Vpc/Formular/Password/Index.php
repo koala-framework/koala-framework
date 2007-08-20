@@ -7,7 +7,6 @@ class Vpc_Formular_Password_Index extends Vpc_Formular_Field_Abstract
         'width' => '50'
     );
     protected $_tablename = 'Vpc_Formular_Password_IndexModel';
-    public $controllerClass = 'Vpc_Formular_Password_IndexController';
     const NAME = 'Formular.Password';
 
     function getTemplateVars()

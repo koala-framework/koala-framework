@@ -99,5 +99,6 @@ class Vpc_Setup_Abstract
         return $return;
     }
 
+    public function setup() {}
     public function deleteEntry($pageId, $componentKey) {}
 }

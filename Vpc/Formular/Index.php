@@ -2,7 +2,6 @@
 class Vpc_Formular_Index extends Vpc_Paragraphs_Abstract
 {
     protected $_tablename = 'Vpc_Formular_IndexModel';
-    public $controllerClass = 'Vpc_Formular_IndexController';
     const NAME = 'Formular';
 
     private $_errors = array();

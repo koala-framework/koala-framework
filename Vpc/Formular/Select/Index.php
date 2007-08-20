@@ -6,7 +6,6 @@ class Vpc_Formular_Select_Index extends Vpc_Formular_Field_Abstract
         'type' => 'radio'
     );
     protected $_tablename = 'Vpc_Formular_Select_IndexModel';
-    public $controllerClass = 'Vpc_Formular_Select_IndexController';
     const NAME = 'Formular.Select';
     protected $_options;
 
