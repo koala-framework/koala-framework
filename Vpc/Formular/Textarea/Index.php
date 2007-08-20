@@ -8,7 +8,6 @@ class Vpc_Formular_Textarea_Index extends Vpc_Formular_Textbox_Index
         'value' => ''
     );
     protected $_tablename = 'Vpc_Formular_Textarea_IndexModel';
-    public $controllerClass = 'Vpc_Formular_Textarea_IndexController';
     const NAME = 'Formular.Textarea';
 
     function getTemplateVars()

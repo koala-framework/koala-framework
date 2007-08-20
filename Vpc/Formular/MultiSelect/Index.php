@@ -7,7 +7,6 @@ class Vpc_Formular_MultiSelect_Index extends Vpc_Formular_Select_Index
         'size' => '5'
     );
     protected $_tablename = 'Vpc_Formular_MultiSelect_IndexModel';
-    public $controllerClass = 'Vpc_Formular_MultiSelect_IndexController';
     const NAME = 'Formular.MultiSelect';
 
     public function getTemplateVars()

@@ -8,7 +8,6 @@ class Vpc_Formular_Checkbox_Index extends Vpc_Formular_Field_Abstract
         'name' => ''
     );
     protected $_tablename = 'Vpc_Formular_Checkbox_IndexModel';
-    public $controllerClass = 'Vpc_Formular_Checkbox_IndexController';
     const NAME = 'Formular.Checkbox';
 
 

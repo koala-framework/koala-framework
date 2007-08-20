@@ -22,8 +22,20 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             } catch (Zend_Exception $e) {
                 $id = $this->getFrontController()->getRequest()->getParam('componentId');
                 $pageCollection = Vps_PageCollection_TreeBase::getInstance();
-                $component = $pageCollection->findComponent($id);
-                $className = $component->controllerClass;
+                $componentClass = get_class($pageCollection->findComponent($id));
+                if (is_subclass_of($componentClass, 'Vpc_Abstract')) {
+                    $class = $componentClass;
+                    $className = '';
+                    while ($class != 'Vpc_Abstract' && $className == '') {
+                        try {
+                            if (class_exists($class . 'Controller')) {
+                                $className = $class . 'Controller';
+                            }
+                        } catch (Zend_Exception $e) {
+                        }
+                        $class = get_parent_class($class);
+                    }
+                }
             }
             
         } else {

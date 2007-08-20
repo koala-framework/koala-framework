@@ -16,7 +16,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
     protected $_settings = array();
     protected $_tablename;
     protected $_table;
-    public $controllerClass;
 
     /**
      * Sollte nicht direkt aufgerufen werden, sondern über statische Methoden der Klasse. Kann nicht
