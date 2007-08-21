@@ -2,6 +2,7 @@ Ext.namespace('Vpc.Paragraphs');
 Vpc.Paragraphs.Index = function(renderTo, config)
 {
     Ext.apply(this, config);
+    this.renderTo = renderTo;
     this.events = {};
     this.grid = new Vps.Auto.Grid(renderTo, config);
     this.grid.on('generatetoolbar', this.addButtons, this);
@@ -55,7 +56,7 @@ Ext.extend(Vpc.Paragraphs.Index, Ext.util.Observable,
         var row = this.grid.grid.getSelectionModel().getSelected();
         if (row != undefined) {
             controllerUrl = row.data.page_id.replace(/\/show\//, '/edit/');
-            this.fireEvent('editcomponent', {controllerUrl: controllerUrl, text: this.text + ': ' + row.data.pos});
+            this.fireEvent('editcomponent', {controllerUrl: controllerUrl, text: row.data.component_class});
         }
     },
 

@@ -90,7 +90,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         $data['leaf'] = false;
         $data['visible'] = true;
         $data['bIcon'] = $this->_icons['default'];
-        if ($this->_buttons['invisible'] && $row->visible == '0') {
+        if ($row->visible == '0') {
             $data['visible'] = false;
             $data['bIcon'] = $this->_icons['invisible'];
         }
