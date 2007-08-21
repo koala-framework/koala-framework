@@ -16,7 +16,9 @@ Vps.Auto.Tree = function(renderTo, config)
     this.renderTo = renderTo;
     this.events = {
         selectionchange: true,
-        edit: true
+        edit: true,
+        generatetoolbar: true,
+        generatetoolbarstart: true
     };
 
     Ext.Ajax.request({
@@ -37,9 +39,12 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
         b = r.buttons;
         if (b['add'] || b['delete'] || b['invisible'] || b['reload']) {
             toolbar = new Ext.Toolbar(Ext.get(this.renderTo).createChild());
+            this.toolbar = toolbar;
+            this.fireEvent('generatetoolbarstart', this.toolbar);
             if (b['add']) {
                 this.addButton = toolbar.addButton({
                     text    : 'Hinzufügen',
+                    tooltip : 'Hinzufügen',
                     handler : this.add,
                     icon : '/assets/vps/images/silkicons/' + r.icons['add'] + '.png',
                     cls: "x-btn-text-icon",
@@ -104,8 +109,8 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
                     scope   : this
                 });
             }
-            this.toolbar = toolbar;
         }
+        this.fireEvent('generatetoolbar', this.toolbar);
 
         // Tree
         this.tree = new Ext.tree.TreePanel(this.renderTo, {
