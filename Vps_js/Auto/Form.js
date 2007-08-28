@@ -26,13 +26,13 @@ Vps.Auto.Form = function(renderTo, config)
     this.form.doAction('loadAutoForm', {
         url: this.controllerUrl+'jsonLoad',
         meta: this.onMetaChange,
-		success: function(form, action) {
-			if (action.result.data) {
-				//loaded-event nur wenn daten vom server geladen wurden
-				//(nicht nur meta-daten)
-				this.fireEvent('loaded', form, action);
-			}
-		},
+    success: function(form, action) {
+      if (action.result.data) {
+        //loaded-event nur wenn daten vom server geladen wurden
+        //(nicht nur meta-daten)
+        this.fireEvent('loaded', form, action);
+      }
+    },
         scope: this
     });
 };

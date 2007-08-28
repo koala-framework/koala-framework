@@ -11,23 +11,7 @@ try {
     require_once VPS_PATH . '/Vps/Controller/Front.php';
     Vps_Controller_Front::setUp();
     Vps_Controller_Front::setUpDb();
-    $front = Vps_Controller_Front::getInstance(false);
-
-    $router = $front->getRouter();
-    $front->setDispatcher(new Vps_Controller_Dispatcher());
-    $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/:action/:class/:componentId', array('module' => 'admin', 'controller' => 'components', 'action' => 'show')));
-    $router->AddRoute('componentedit', new Zend_Controller_Router_Route('component/edit/:class/:componentId/:action', array('module' => 'component', 'controller' => 'Index', 'action' => 'index')));
-    $router->AddRoute('media', new Zend_Controller_Router_Route('media/:componentId/:hash/*', array('controller' => 'Media', 'action' => 'index')));
-
-    $acl = new Vps_Acl();
-    $acl->add(new Zend_Acl_Resource('media'));
-    $acl->add(new Zend_Acl_Resource('component'));
-    $acl->add(new Zend_Acl_Resource('components'));
-    $acl->allow('guest', 'media');
-    $acl->allow('guest', 'component');
-    $acl->allow('guest', 'components');
-    Zend_Registry::set('acl', $acl);
-
+    $front = Vps_Controller_Front::getInstance();
     $response = $front->dispatch();
     $response->sendHeaders();
     $response->outputBody();

@@ -36,8 +36,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_pageCollection = $pageCollection;
         $this->_id = $this->parseId($id);
 
-        $this->init();
-
         $table = $this->_getTable();
         if ($table) {
             $info = $table->info();
@@ -48,6 +46,8 @@ abstract class Vpc_Abstract implements Vpc_Interface
                 }
             }
         }
+
+        $this->init();
 
         if (Zend_Registry::isRegistered('infolog')) {
             Zend_Registry::get('infolog')->createComponent(get_class($this) . ' - ' . $id);

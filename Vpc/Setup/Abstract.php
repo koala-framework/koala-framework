@@ -98,6 +98,14 @@ class Vpc_Setup_Abstract
         }
         return $return;
     }
+    
+    public function copyTemplate($path)
+    {
+        $path = 'application/views/' . $path;
+        if (!file_exists($path)){
+            copy(VPS_PATH . '/' . $path, $path);
+        }
+    }
 
     public function setup() {}
     public function deleteEntry($pageId, $componentKey) {}

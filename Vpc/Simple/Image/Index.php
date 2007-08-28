@@ -3,61 +3,57 @@ class Vpc_Simple_Image_Index extends Vpc_Abstract
 {
     protected $_tablename = 'Vpc_Simple_Image_IndexModel';
     const NAME = 'Standard.Image';
-
     protected $_settings = array(
         'typesAllowed' 	    => 'jpg, gif, png',
         'directory'   	    => 'SimpleImage/',
-        'filesize'	   	    => 'free',
+        'size'              => array(), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
         'default_style'		=> 'crop',
-        'enableName' 		=> 1,
         'style' 	        => '',
         'allow'		        => array('crop', 'scale', 'scale_bg', 'deform'), //keywords: crop, scale, scale_bg, deform
         'default_color'		=> 'black',
         'allow_color'		=> 1,
         'color'				=> '',
     );
-
-
+    const SIZE_NORMAL = '';
+    const SIZE_THUMB = '.thumb';
+    const SIZE_ORIGINAL = '.original';
+    
+    
     public function getTemplateVars()
     {
-        $newFilename = $this->_getTable()->find($this->getDbId(), $this->getComponentKey())->current()->file_name;
-        $pw = 'jupidu';
-        $filename = 'pic';
-        if ($newFilename != '') $filename = $newFilename;
-    
-        $path = '/media/' . $this->getId() . '/' . MD5($pw . $this->getId()) . '/'.$filename.'.'.$this->_getExtension();
-    
-    
-        $return['path']		= $path;
+        $return['url'] = $this->getImageUrl();
         $return['template'] = 'Simple/Image.html';
         return $return;
     }
     
-    private function _getExtensions()
+    public function getImageUrl($size = self::SIZE_NORMAL)
     {
-        $extensionsString = $this->getSetting('typesAllowed');
-        $extenstions = array ();
-        $delims = ',';
-        $word = strtok($extensionsString, $delims);
-        while (is_string($word)) {
-          if ($word) {
-            $extensions[] = trim($word);
-          }
-          $word = strtok($delims);
+        $rowset = $this->_getTable()->find($this->getDbId(), $this->getComponentKey());
+        if ($rowset->count() == 1) {
+            $row = $rowset->current();
+            $filename = $row->name != '' ? $row->name : 'unnamed';
+            $filename .= $size;
+            $id = $this->getId();
+            $checksum = md5('l4Gx8SFe' . $id);
+            $rowset2 = $this->_getTable('Vps_Dao_File')->find($row->vps_upload_id);
+            if ($rowset2->count() == 1) {
+                $extension = substr(strrchr($rowset2->current()->path, '.'), 1);
+                return "/media/$id/$checksum/$filename.$extension";
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+    
+    public function getExtensions()
+    {
+        $extensions = array();
+        foreach (explode(',', $this->getSetting('typesAllowed')) as $extension) {
+            $extensions[] = trim(strtolower($extension));
         }
         return $extensions;
     }
     
-    //liefert die Extension des files
-    private function _getExtension()
-    {
-        $extensions = $this->_getExtensions();
-        foreach ($extensions as $data) {
-          $filename = $this->getId() . '.' . $data;
-          if (file_exists('./public/media/' . $filename)) {
-            return $data;
-          }
-        }
-    }
-
 }

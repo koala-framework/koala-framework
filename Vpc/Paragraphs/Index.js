@@ -2,6 +2,7 @@ Ext.namespace('Vpc.Paragraphs');
 Vpc.Paragraphs.Index = function(renderTo, config)
 {
     Ext.apply(this, config);
+    this.events = {};
     this.renderTo = renderTo;
     this.events = {};
     this.grid = new Vps.Auto.Grid(renderTo, config);

@@ -4,7 +4,8 @@ Vps.Component.Pages = function(renderTo, config)
     this.renderTo = renderTo;
     this.mainLayout = new Ext.BorderLayout(renderTo, {
         north: {
-            split: false, initialSize: 30
+            split: false,
+            initialSize: 30
         },
         west: {
             split:true,
@@ -106,7 +107,7 @@ Ext.extend(Vps.Component.Pages, Ext.util.Observable,
                                 component = new cls(data.controllerUrl, Ext.applyIf(response.config, {controllerUrl: data.controllerUrl}));
                             }
                     
-                            if (component.on) {
+                            if (component.events != undefined && component.on) {
                                 component.on('editcomponent', this.loadComponent, this);
                             }
                             this.add('center', panel);
@@ -122,8 +123,8 @@ Ext.extend(Vps.Component.Pages, Ext.util.Observable,
                 del = count;
                 for (var x=0; x<count; x++){
                     var item = toolbar.items.itemAt(x);
-                    if (item.params.controllerUrl == data.controllerUrl) {
-                        del = x;
+                    if (item.params != undefined && item.params.controllerUrl == data.controllerUrl) {
+                        del = x > 0 ? x - 1 : x;
                         x = count;
                     }
                 }
@@ -131,6 +132,9 @@ Ext.extend(Vps.Component.Pages, Ext.util.Observable,
                     var item = toolbar.items.itemAt(x);
                     toolbar.items.removeAt(x);
                     item.destroy();
+                }
+                if (toolbar.items.getCount() >= 1) {
+                     toolbar.addSeparator();
                 }
                 toolbar.addButton({
                     text    : data.text,

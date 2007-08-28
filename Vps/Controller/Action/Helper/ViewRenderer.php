@@ -50,7 +50,7 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                     $component = $pageCollection->findComponent($id);
                 }
                 if (!$component) {
-                    throw new Vpc_Exception('Component not found.');
+                    throw new Vpc_Exception('Component not found: ' . $id);
                 } else {
                     $this->_actionController->component = $component;
                 }
