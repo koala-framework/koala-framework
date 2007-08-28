@@ -39,7 +39,7 @@ class Vpc_Formular_IndexController extends Vpc_Paragraphs_IndexController
 
             );
     protected $_tableName = 'Vpc_Formular_IndexModel';
-    protected $_jsClass = 'Vpc.Formular.Index';
+    protected $_jsClass = 'Vpc.Paragraphs.Index';
     protected $_position = 'pos';
 
     public function init()

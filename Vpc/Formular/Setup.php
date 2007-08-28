@@ -19,8 +19,6 @@ class Vpc_Formular_Setup extends Vpc_Setup_Abstract
                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;");
         }
 
-        if (!file_exists('application/views/Formular.html')){
-            copy(VPS_PATH . '/application/views/Formular.html', 'application/views/Formular.html');
-        }
+        $this->copyTemplate('Formular.html');
     }
 }
