@@ -76,7 +76,6 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
                     text    : 'Unsichtbar',
                     handler : this.visible,
                     disabled: true,
-                    enableToggle : true,
                     icon : '/assets/vps/images/silkicons/' + r.icons['invisible'] + '.png',
                     cls: "x-btn-text-icon",
                     scope   : this
@@ -268,8 +267,7 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
         Ext.Ajax.request({
             url: this.controllerUrl + 'jsonVisible',
             params: {
-                id: this.tree.getSelectionModel().getSelectedNode().id,
-                visible: !this.visibleButton.pressed
+                id: this.tree.getSelectionModel().getSelectedNode().id
             },
             success: function(r) {
                 response = Ext.decode(r.responseText);
@@ -283,10 +281,8 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
     
     setvisible : function (node) {
         if (node.attributes.visible) {
-            this.visibleButton.toggle(false);
             node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.icons['default'] + '.png)';
         } else {
-            this.visibleButton.toggle(true);
             node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.icons['invisible'] + '.png)';
         }
     },

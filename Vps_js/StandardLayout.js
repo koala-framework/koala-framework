@@ -13,7 +13,7 @@ Vps.StandardLayout = function(renderTo, config)
     this.add('north', new Ext.ContentPanel('menusContainer', {autoCreate: true, fitToFrame:true, closable:false}));
     
     //global verfügbare variable für menü (um es zB neuladen zu können)
-    Vps.menu = new Vps.Menu.Index('menusContainer');
+    Vps.menu = new Vps.Menu.Index('menusContainer', config.menuConfig);
     
     this.endUpdate();
 };

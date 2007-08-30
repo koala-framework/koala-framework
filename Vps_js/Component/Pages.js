@@ -2,11 +2,7 @@ Ext.namespace('Vps.Component');
 Vps.Component.Pages = function(renderTo, config)
 {
     this.renderTo = renderTo;
-    this.mainLayout = new Ext.BorderLayout(renderTo, {
-        north: {
-            split: false,
-            initialSize: 30
-        },
+    this.layout = new Ext.BorderLayout(this.renderTo, {
         west: {
             split:true,
             initialSize: 400,
@@ -22,16 +18,11 @@ Vps.Component.Pages = function(renderTo, config)
         }
     });
     
-    this.mainLayout.beginUpdate();
-    this.mainLayout.add('north', new Ext.ContentPanel('menuContainer', {autoCreate: true, fitToFrame:true}));
-    this.mainLayout.add('west', new Ext.ContentPanel('treeContainer', {autoCreate:true, title: 'Seitenbaum', fitToFrame:true}));
-    this.mainLayout.restoreState();
-    this.mainLayout.endUpdate();
+    this.layout.beginUpdate();
+    this.layout.add('west', new Ext.ContentPanel('treeContainer', {autoCreate:true, title: 'Seitenbaum', fitToFrame:true}));
+    this.layout.restoreState();
+    this.layout.endUpdate();
     
-
-    this.menu = new Vps.Menu.Index('menuContainer', {role: this.role, pageId: config.pageId, controllerUrl: '/admin/menu/'});
-    this.menu.on('menuevent', this.loadComponent, this, {componentName : 'cc'});
-
     this.editform = new Vps.Auto.Form.Dialog(null, {controllerUrl: '/admin/pageedit/', width: 400, height: 200});
     this.editform.on(
         'dataChanged',
@@ -79,10 +70,16 @@ Vps.Component.Pages = function(renderTo, config)
 
 Ext.extend(Vps.Component.Pages, Ext.util.Observable,
 {
+    getPanel : function()
+    {
+        //Vps.mainLayout.getRegion('center').remove(Vps.mainLayout.getRegion('center').getActivePanel(), false)
+        return new Ext.NestedLayoutPanel(this.layout);
+    },
+    
     createLayoutInstance: function(id)
     {
         if (this.created[id] == undefined) {
-            layout = new Ext.BorderLayout(Ext.get(this.renderTo).createChild(), {
+            var layout = new Ext.BorderLayout(Ext.get(this.renderTo).createChild(), {
                 north: { initialSize: 30 },
                 center: { }
             });
@@ -148,20 +145,18 @@ Ext.extend(Vps.Component.Pages, Ext.util.Observable,
 
             var panel = new Ext.NestedLayoutPanel(layout, {autoCreate: true, title: id, fitToFrame:true, closable:true, autoScroll: true});
             panel.setTitle(id);
-            this.mainLayout.add('center', panel);
-            this.mainLayout.getRegion('center').on('panelremoved', function(o, e) { this.created[e.getTitle()] = undefined; }, this);
+            this.layout.add('center', panel);
+            this.layout.getRegion('center').on('panelremoved', function(o, e) { this.created[e.getTitle()] = undefined; }, this);
             this.created[id] = layout;
         } else {
-            this.mainLayout.getRegion('center').showPanel(this.created[id]);
+            this.layout.getRegion('center').showPanel(this.created[id]);
         }
         return this.created[id];
     },
     
     loadComponent: function (data)
     {
-        if (data.controllerUrl == undefined) { // Falls von MenuEvent kommt
-            data.controllerUrl = '/component/edit/' + data.cls + '/' + data.id + '/';;
-        }
+        data.controllerUrl = '/component/edit/' + data.cls + '/' + data.id + '/';;
         var layout = this.createLayoutInstance(data.text);
         layout.loadComponent(data);
     },
