@@ -2,7 +2,7 @@
 class Vpc_Rte_Index extends Vpc_Abstract
 {
    protected $_settings = array(
-        'text' => '',
+        'text' => 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.',
         'fieldLabel' => 'Rich Text Editor',
         'width' => 500,
         'height' => 200,
@@ -22,7 +22,6 @@ class Vpc_Rte_Index extends Vpc_Abstract
     function getTemplateVars()
     {
         $return['text'] = $this->getSetting('text');
-        $return['id'] = $this->getDbId().$this->getComponentKey();
         $return['template'] = 'Rte.html';
         return $return;
     }
