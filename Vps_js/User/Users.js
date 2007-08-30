@@ -3,7 +3,7 @@ Vps.User.Users = function(renderTo, config)
 {
     config = Ext.applyIf(config || {}, {controllerUrl: '/users/'});
 
-    this.grid = new Vps.Auto.Grid(null, config);
+    this.grid = new Vps.Auto.Grid(renderTo, config);
 
     this.grid.on('generatetoolbar', function(tb) {
         tb.addSeparator();
@@ -24,13 +24,15 @@ Vps.User.Users = function(renderTo, config)
         }
     }, this);
 
-    var layout = new Vps.StandardLayout(renderTo);
-    layout.add('center', new Ext.GridPanel(this.grid.grid));
-    layout.endUpdate();
 };
 
 Ext.extend(Vps.User.Users, Ext.util.Observable,
 {
+    getPanel : function()
+    {
+        return new Ext.GridPanel(this.grid.grid); 
+    },
+    
     onMailsend : function() {
         Ext.Msg.show({
             title:'Benutzerdaten senden?',
