@@ -17,7 +17,7 @@ Ext.extend(Vps.Component.FrontendEditing.Index, Ext.util.Observable,
         if (parts[1]) {
             cls = parts[1].replace(/_/g, '.') + 'Fe';
             obj = eval(cls);
-            if (obj) {
+            if (obj != undefined) {
                 button = new Ext.Button (el.createChild(), {
                     text: 'Bearbeiten',
                     handler: this.showEditing,
@@ -45,7 +45,7 @@ Ext.extend(Vps.Component.FrontendEditing.Index, Ext.util.Observable,
     showContent : function(o, e)
     {
         el = o.params.container.dom;
-        parts = el.dom.className.split(' ');
+        parts = el.className.split(' ');
         cls = parts[1];
         Ext.Ajax.request({
             url: '/component/jsonShow/' + cls + '/' + el.id.substr(10) + '/',

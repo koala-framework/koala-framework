@@ -72,7 +72,7 @@ class Vps_Controller_Action_Component_Web extends Vps_Controller_Action
         $config['fe'] = false;
 
         if ($acl->isAllowed($role, 'admin')) {
-            $config['menu'] = true;
+            //$config['menu'] = true;
         }
 
         if ($acl->isAllowed($role, 'fe')) {
