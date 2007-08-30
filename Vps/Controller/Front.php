@@ -64,7 +64,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $router->AddRoute('default', new Zend_Controller_Router_Route('*', array('controller' => 'web', 'action' => 'index')));
             $router->AddRoute('ajax', new Zend_Controller_Router_Route('ajax/*', array('controller' => 'web', 'action' => 'ajax')));
             $router->AddRoute('ajaxfe', new Zend_Controller_Router_Route('ajax/fe/:action', array('controller' => 'fe', 'action' => 'action')));
-            $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'controller', 'action' => 'index')));
+            $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'index', 'action' => 'index')));
             $router->AddRoute('login', new Zend_Controller_Router_Route('login/:action', array('module' => 'admin', 'controller' => 'login', 'action' => 'index')));
 
             $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/:action/:class/:componentId', array('module' => 'admin', 'controller' => 'components', 'action' => 'show')));
@@ -89,10 +89,10 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $acl->add(new Zend_Acl_Resource('media'));
             $acl->add(new Zend_Acl_Resource('fe'));
             $acl->add(new Vps_Acl_Resource_MenuDropdown('admin', 'Admin'));
-                $acl->add(new Vps_Acl_Resource_MenuUrl('pages', 'Seitenbaum', '/admin/pages/'), 'admin');
+                $acl->add(new Vps_Acl_Resource_MenuEvent('pages', 'Seitenbaum', array('commandClass' => 'Vps.Component.Pages', 'config' => array('controllerUrl'=>'/admin/pages/'), 'title' => 'Seitenbaum')), 'admin');
                 $acl->add(new Zend_Acl_Resource('pageedit'), 'admin');
-                $acl->add(new Vps_Acl_Resource_MenuUrl('components', 'Komponentenübersicht', '/admin/components/'), 'admin');
-                    $acl->add(new Zend_Acl_Resource('component'), 'admin');
+                $acl->add(new Zend_Acl_Resource('components', 'Komponentenübersicht', '/admin/components/'), 'admin'); // für /component/show
+                $acl->add(new Zend_Acl_Resource('component'), 'admin'); // für /component/edit
             
             // Berechtigungen
             $acl->allow('admin', 'web');

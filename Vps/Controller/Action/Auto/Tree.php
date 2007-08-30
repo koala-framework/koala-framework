@@ -129,7 +129,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         $visible = $this->getRequest()->getParam('visible') == 'true';
         $id = $this->getRequest()->getParam('id');
         $row = $this->_table->find($id)->current();
-        $row->visible = $visible ? '1' : '0';
+        $row->visible = $row->visible == '0' ? '1' : '0';
         $this->view->id = $row->save();
         $this->view->visible = $row->visible == '1';
     }
