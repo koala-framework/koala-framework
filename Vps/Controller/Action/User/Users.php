@@ -62,7 +62,7 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
 
     public function indexAction()
     {
-        $this->view->ext('Vps.User.Users', array('controllerUrl'=>'/settings/users/'));
+        $this->view->ext('Vps.User.Users');
     }
 
     protected function _fetchFromRow($row, $field)
