@@ -99,7 +99,6 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     {
         $row->page_id = $this->component->getDbId();
         $row->component_key = $this->component->getComponentKey();
-        $row->save();
     }
 
     protected function _getWhere()

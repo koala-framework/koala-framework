@@ -1,7 +1,7 @@
 <?php
 abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Auto_Abstract
 {
-    protected $_columns = array();
+    protected $_columns = null;
     protected $_buttons = array('save'=>true,
                                 'add'=>true,
                                 'delete'=>true,
@@ -13,6 +13,10 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected $_sortable = true;
     protected $_position;
 
+    protected $_primaryKey;
+    protected $_table;
+    protected $_tableName;
+
     public function indexAction()
     {
        $this->view->ext('Vps.Auto.Grid');
@@ -23,74 +27,84 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
        $this->indexAction();
     }
 
+    protected function _initColumns()
+    {
+    }
     public function init()
     {
         parent::init();
+
+        if (!isset($this->_table) && isset($this->_tableName)) {
+            $this->_table = new $this->_tableName();
+        }
+
+        if (isset($this->_table)) {
+            $info = $this->_table->info();
+            if(!isset($this->_primaryKey)) {
+                $info = $this->_table->info();
+                $this->_primaryKey = $info['primary'];
+            }
+        }
+
+        $addColumns = array();
+        if (is_array($this->_columns)) $addColumns = $this->_columns;
+        $this->_columns = new Vps_Collection();
+        foreach ($addColumns as $k=>$column) {
+            if (is_array($column)) {
+                $columnObject = new Vps_Auto_Grid_Column();
+                foreach ($column as $propName => $propValue) {
+                    $columnObject->setProperty($propName, $propValue);
+                }
+                $this->_columns[] = $columnObject;
+            } else {
+                $this->_columns[] = $column;
+            }
+        }
+        $this->_initColumns();
+
         if (is_array($this->_primaryKey)) {
             $this->_primaryKey = $this->_primaryKey[1];
         }
 
         if (isset($this->_table)) {
-            $info = $this->_table->info();
+            $info = $this->_getTableInfo();
             if ($this->_position && array_search($this->_position, $info['cols'])) {
-                $c = array();
-                $c['dataIndex'] = $this->_position;
-                $c['header'] = ' ';
-                $c['width'] = 30;
-                $c['type'] = 'int';
-                $c['editor'] = 'PosField';
-                array_unshift($this->_columns, $c);
+                $columnObject = new Vps_Auto_Grid_Column($this->_position);
+                $columnObject->setHeader(' ')
+                             ->setWidth(30)
+                             ->setType('int')
+                             ->setEditor('PosField');
+                $this->_columns->prepend($columnObject);
                 $this->_sortable = false;
                 $this->_defaultOrder = $this->_position;
             }
             $primaryFound = false;
-            foreach ($this->_columns as $k=>$col) {
-                if (!isset($col['type']) && isset($info['metadata'][$col['dataIndex']])) {
-                    $this->_columns[$k]['type'] = $this->_getTypeFromDbType($info['metadata'][$col['dataIndex']]['DATA_TYPE']);
+            foreach ($this->_columns as $column) {
+                if (!$column->getType() && isset($info['metadata'][$column->getDataIndex()])) {
+                    $column->setType($this->_getTypeFromDbType($info['metadata'][$column->getDataIndex()]['DATA_TYPE']));
                 }
-                if ($col['dataIndex'] == $this->_primaryKey) {
+                if ($column->getDataIndex() == $this->_primaryKey) {
                     $primaryFound = true;
                 }
             }
             if (!$primaryFound) {
                 //primary key hinzufügen falls er noch nicht in gridColumns existiert
-                $c = array();
-                $c['dataIndex'] = $this->_primaryKey;
-                $d['type'] = $this->_getTypeFromDbType($info['metadata'][$this->_primaryKey]['DATA_TYPE']);
-                $this->_columns[] = $c;
-            }
-        }
-        foreach ($this->_columns as $k=>$col) {
-            if (!isset($col['type'])) {
-                $this->_columns[$k]['type'] = null;
-            }
-            if (isset($info)
-                && isset($info['metadata'][$col['dataIndex']])
-                && strtolower($info['metadata'][$col['dataIndex']]['DATA_TYPE']) == 'datetime'
-                && !isset($this->_columns[$k]['dateFormat'])) {
-                $this->_columns[$k]['dateFormat'] = 'Y-m-d H:i:s';
-            }
-            if ($this->_columns[$k]['type'] == 'date' && !isset($this->_columns[$k]['dateFormat'])) {
-                $this->_columns[$k]['dateFormat'] = 'Y-m-d';
-            }
-            if ($this->_columns[$k]['type'] == 'date' && !isset($col['renderer'])) {
-                $this->_columns[$k]['renderer'] = 'Date';
-            }
-            if (isset($col['showDataIndex']) && $col['showDataIndex'] && !$this->_getColumnIndex($col['showDataIndex'])) {
-                $this->_columns[] = array('dataIndex' => $col['showDataIndex']);
+                $columnObject = new Vps_Auto_Grid_Column($this->_primaryKey);
+                $columnObject->setType($this->_getTypeFromDbType($info['metadata'][$this->_primaryKey]['DATA_TYPE']));
+                $this->_columns[] = $columnObject;
             }
         }
 
         //default durchsucht alle angezeigten felder
         if (!isset($this->_queryFields)) {
             $this->_queryFields = array();
-            foreach ($this->_columns as $k=>$col) {
-                $this->_queryFields[] = $col['dataIndex'];
+            foreach ($this->_columns as $column) {
+                $this->_queryFields[] = $column->getDataIndex();
             }
         }
 
         if ($this->_sortable && !isset($this->_defaultOrder)) {
-            $this->_defaultOrder = $this->_columns[0]['dataIndex'];
+            $this->_defaultOrder = $this->_columns->first()->getDataIndex();
         }
 
         if (is_string($this->_defaultOrder)) {
@@ -99,34 +113,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->_defaultOrder['field'] = $o;
             $this->_defaultOrder['direction'] = 'ASC';
         }
-    }
-
-    protected function _getColumnIndex($name)
-    {
-        foreach ($this->_columns as $k=>$c) {
-            if (isset($c['dataIndex']) && $c['dataIndex'] == $name) {
-                return $k;
-            }
-        }
-        return false;
-    }
-
-    protected function _removeColumn($name)
-    {
-        $where = $this->_getColumnIndex($name);
-        if ($where === false) {
-            throw new Vps_Exception("Can't delete Column '$name' as it does not exist.");
-        }
-        array_splice($this->_columns, $where, 1);
-    }
-
-    protected function _insertColumn($name, $column)
-    {
-        $where = $this->_getColumnIndex($name);
-        if ($where === false) {
-            throw new Vps_Exception("Can't insert Column after '$name' which does not exist.");
-        }
-        array_splice($this->_columns, $where+1, 0, array($column));
     }
 
     protected function _getWhere()
@@ -162,13 +148,19 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         return $this->_table->fetchAll($this->_getWhere(), $order, $limit, $start);
     }
 
+    private function _getTableInfo()
+    {
+        if (!isset($this->_table)) return null;
+        return $this->_table->info();
+    }
+
     protected function _fetchCount()
     {
         if (!isset($this->_table)) {
             throw new Vps_Exception("Either _gridTable has to be set or _fetchData has to be overwritten.");
         }
         $select = $this->_table->getAdapter()->select();
-        $info = $this->_table->info();
+        $info = $this->_getTableInfo();
 
         $select->from($info['name'], 'COUNT(*)', $info['schema']);
 
@@ -226,12 +218,13 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 if (is_array($row)) {
                     $row = (object)$row;
                 }
-                foreach ($this->_columns as $col) {
-                    if (isset($col['findParent'])) {
-                        $r[$col['dataIndex']] = $this->_fetchFromParentRow($row, $col['findParent']);
+                foreach ($this->_columns as $column) {
+                    if ($column->getFindParent()) {
+                        $data = $this->_fetchFromParentRow($row, $column->getFindParent());
                     } else {
-                        $r[$col['dataIndex']] = $this->_fetchFromRow($row, $col['dataIndex']);
+                        $data = $this->_fetchFromRow($row, $column->getDataIndex());
                     }
+                    $r[$column->getDataIndex()] = $data;
                 }
                 if (!isset($r[$primaryKey]) && isset($row->$primaryKey)) {
                     $r[$primaryKey] = $row->$primaryKey;
@@ -271,24 +264,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
     protected function _appendMetaData()
     {
-        $fields = array();
-        foreach ($this->_columns as $col) {
-            $d = array();
-            $d['name'] = $col['dataIndex'];
-            if (isset($col['type']) && $col['type']) {
-                $d['type'] = $col['type'];
-            }
-            if (isset($col['dateFormat'])) {
-                $d['dateFormat'] = $col['dateFormat'];
-            }
-            if (isset($col['defaultValue'])) {
-                $d['defaultValue'] = $col['defaultValue'];
-            }
-            $fields[] = $d;
-        }
-
         $this->view->metaData = array();
-        $this->view->metaData['fields'] = $fields;
+
         $this->view->metaData['root'] = 'rows';
         $this->view->metaData['id'] = $this->_primaryKey;
         if (isset($this->_paging['type']) && $this->_paging['type'] == 'Date') {
@@ -304,7 +281,34 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->view->metaData['sortInfo']['field'] = $this->_getParam('sort');
             $this->view->metaData['sortInfo']['direction'] = $this->_getParam('dir');
         }
-        $this->view->metaData['columns'] = $this->_columns;
+        $this->view->metaData['columns'] = array();
+        $this->view->metaData['fields'] = array();
+        foreach ($this->_columns as $column) {
+            $data = $column->getMetaData($this->_getTableInfo());
+            if ($data) {
+                $this->view->metaData['columns'][] = $data;
+
+                $d = array();
+                if (isset($data['dataIndex'])) {
+                    $d['name'] = $data['dataIndex'];
+                }
+                if (isset($data['type'])) {
+                    $d['type'] = $data['type'];
+                }
+
+                if (isset($data['dateFormat'])) {
+                    $d['dateFormat'] = $data['dateFormat'];
+                }
+                if (isset($data['dateFormat'])) {
+                    $d['dateFormat'] = $data['dateFormat'];
+                }
+                if (isset($data['defaultValue'])) {
+                    $d['defaultValue'] = $data['defaultValue'];
+                }
+                $this->view->metaData['fields'][] = $d;
+            }
+
+        }
         $this->view->metaData['buttons'] = $this->_buttons;
         $this->view->metaData['paging'] = $this->_paging;
         $this->view->metaData['filters'] = $this->_filters;
@@ -357,15 +361,12 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             if(!$row) {
                 throw new Vps_Exception("Can't find row with id '$id'.");
             }
-            foreach ($this->_columns as $col) {
-                if ($id && $col['dataIndex'] == $this->_position) {
+            foreach ($this->_columns as $column) {
+                if ($id && $column->getDataIndex() == $this->_position) {
                     $row->numberize($col['dataIndex'], $submitRow[$col['dataIndex']], $this->_getWhere());
-                } else if ((isset($col['allowSave']) && $col['allowSave'])
-                    || (isset($col['editor']) && $col['editor']))
+                } else if ($column->getEditor())
                 {
-                    if (isset($submitRow[$col['dataIndex']])) {
-                        $row->$col['dataIndex'] = $submitRow[$col['dataIndex']];
-                    }
+                    $column->getEditor()->save($row, $submitRow);
                 }
             }
             if (!$id) {
@@ -438,24 +439,24 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $numColumnsAutoWidth = 0;
         $remainingAutoWidth = $pdfPage->getWidth() - $pageMargin * 2;
         foreach ($this->_columns as $column) {
-            if (!isset($column['pdfWidth'])) {
+            if (!$column->getPdfWidth()) {
                 $numColumnsAutoWidth++;
             } else {
-                $remainingAutoWidth -= $column['pdfWidth'] + $padding * 2;
+                $remainingAutoWidth -= $column->getPdfWidth() + $padding * 2;
             }
         }
 
         $pdfPage->setLineWidth(0.1);
         $x = $pageMargin;
-        foreach ($this->_columns as $k=>$column) {
-            if (!isset($column['pdfWidth'])) {
+        foreach ($this->_columns as $column) {
+            if (!$column->getPdfWidth()) {
                 $w = $remainingAutoWidth / $numColumnsAutoWidth - $padding * 2;
-                $this->_columns[$k]['pdfWidth'] = $w;
+                $column->setPdfWidth($w);
             } else {
-                $w = $column['pdfWidth'];
+                $w = $column->getPdfWidth();
             }
             $h = $pdfPage->getTextHeight();
-            $text = $column['header'];
+            $text = $column->getHeader();
             while ($pdfPage->getTextWidth($text) > $w) {
                 $text = substr(rtrim($text, '.'), 0, -1) . '...';
             }
@@ -480,13 +481,13 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 }
                 $x = $pageMargin;
                 $minY = $pdfPage->getHeight();
-                foreach ($this->_columns as $col) {
-                    if (isset($col['findParent'])) {
-                        $text = $this->_fetchFromParentRow($row, $col['findParent']);
+                foreach ($this->_columns as $column) {
+                    if ($column->findParent()) {
+                        $text = $this->_fetchFromParentRow($row, $column->getFindParent());
                     } else {
-                        $text = $this->_fetchFromRow($row, $col['dataIndex']);
+                        $text = $this->_fetchFromRow($row, $column->getDataIndex());
                     }
-                    $w = $col['pdfWidth'];
+                    $w = $column->getPdfWidth();
                     $o = array('wrap'        => Vps_Pdf_Page::OPTIONS_WRAP_ENABLED,
                                'wrap-indent' => $x+$padding,
                                'wrap-pad'    => $pdfPage->getWidth() - ($x + $padding*2 + $w)
@@ -496,8 +497,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                     $x += $w + $padding * 2;
                 }
                 $x = $pageMargin;
-                foreach ($this->_columns as $col) {
-                    $w = $col['pdfWidth'];
+                foreach ($this->_columns as $column) {
+                    $w = $column->getPdfWidth();
                     $pdfPage->drawRectangle($x, $minY-$padding*1, $x+$w+$padding*2, $y+$padding*2, Zend_Pdf_Page::SHAPE_DRAW_STROKE);
                     $x += $w + $padding * 2;
                 }

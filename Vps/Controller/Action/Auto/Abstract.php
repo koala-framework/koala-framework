@@ -1,26 +1,13 @@
 <?php
 class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
 {
-    protected $_primaryKey;
-    protected $_table;
-    protected $_tableName;
     protected $_buttons = array();
     protected $_permissions; //todo: Zend_Acl ??
 
     public function init()
     {
-        if (!isset($this->_table) && isset($this->_tableName)) {
-            $this->_table = new $this->_tableName();
-        }
         if (!isset($this->_permissions)) {
             $this->_permissions = $this->_buttons;
-        }
-        if (isset($this->_table)) {
-            $info = $this->_table->info();
-            if(!isset($this->_primaryKey)) {
-                $info = $this->_table->info();
-                $this->_primaryKey = $info['primary'];
-            }
         }
     }
     

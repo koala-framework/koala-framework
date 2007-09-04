@@ -15,7 +15,7 @@ Vps.User.Login.Dialog = function(renderTo, config)
         title: 'Login',
         closable: false
     });
-    this.dialog.addKeyListener(27, this.dialog.hide, this); // ESC can also close the dialog
+    this.dialog.addKeyListener(13, this.onOk, this); // ESC can also close the dialog
 
 
     this.form = new Ext.form.Form({
@@ -39,12 +39,7 @@ Vps.User.Login.Dialog = function(renderTo, config)
                 })
     );
 
-    this.dialog.addButton('OK', function() {
-        this.form.submit({
-            success: this.onSubmitSuccess,
-            scope: this
-            });
-    }, this);
+    this.dialog.addButton('OK', this.onOk, this);
 
     this.form.render(this.dialog.body);
 };
@@ -52,6 +47,12 @@ Vps.User.Login.Dialog = function(renderTo, config)
 
 Ext.extend(Vps.User.Login.Dialog, Ext.util.Observable,
 {
+    onOk: function() {
+        this.form.submit({
+            success: this.onSubmitSuccess,
+            scope: this
+            });
+    },
     show: function() {
         this.showLogin();
     },

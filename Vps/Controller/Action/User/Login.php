@@ -55,7 +55,7 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
     protected function _createAuthAdapter()
     {
         $dao = Zend_Registry::get('dao');
-        $adapter = new Zend_Auth_Adapter_DbTable($dao->getDb(), 'users', 'username', 'password', 'MD5(CONCAT(?, password_salt))');
+        $adapter = new Zend_Auth_Adapter_DbTable($dao->getDb(), 'vps_users', 'username', 'password', 'MD5(CONCAT(?, password_salt))');
         return $adapter;
     }
 
