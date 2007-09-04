@@ -26,6 +26,7 @@ Vps.Auto.Form = function(renderTo, config)
     this.form.doAction('loadAutoForm', {
         url: this.controllerUrl+'jsonLoad',
         meta: this.onMetaChange,
+
     success: function(form, action) {
       if (action.result.data) {
         //loaded-event nur wenn daten vom server geladen wurden
@@ -121,8 +122,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
             var frmContainerTabs = this.container();
             this.end();
         }
-
-        meta.fields.each(function(field) {
+        var addFieldFunction = function(field) {
             if (typeof field == 'String') {
                 try {
                     this.form.add(eval(field));
@@ -135,11 +135,27 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
                 if (!fieldType) {
                     //ignore field
                 } else if (fieldType == 'column') {
+                    var subFields = field.fields;
+                    delete field.fields;
                     this.form.column(field);
-                } else if (fieldType == 'fieldset') {
-                    this.form.fieldset(field);
-                } else if (fieldType == 'end') {
+                    for (var i=0; i<subFields.length; i++) {
+                        this.form.add(subFields[i]);
+                    }
                     this.form.end();
+                } else if (fieldType == 'Fieldset') {
+                    var subFields = field.fields;
+                    delete field.fields;
+                    this.form.fieldset(field);
+                    for (var i=0; i<subFields.length; i++) {+
+                        addFieldFunction.call(this, subFields[i]);
+                    }
+                    this.form.end();
+                } else if (fieldType == 'MultiCheckbox') {
+                    //todo: ist ein hack, besser sollte hier ein eigener feldtyp gemacht werden
+                    var subFields = field.fields;
+                    for (var i=0; i<subFields.length; i++) {+
+                        addFieldFunction.call(this, subFields[i]);
+                    }
                 } else if (fieldType == 'tab') {
                     tabContainers.push(this.container({
                         el: Ext.DomHelper.append(formRenderTo, {tag:'div', style:'padding:20px'})
@@ -157,7 +173,10 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
                     }
                 }
             }
-        }, this);
+        }
+
+        meta.fields.each(addFieldFunction, this);
+
         this.form.render(this.renderTo);
         if (hasTabs) {
             var tabPanel = new Ext.TabPanel(frmContainerTabs.el);

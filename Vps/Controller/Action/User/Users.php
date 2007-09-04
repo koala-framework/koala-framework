@@ -2,47 +2,15 @@
 
 class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_columns = array(
-            array('dataIndex' => 'active',
-                  'header'    => 'Aktiv',
-                  'width'     => 40,
-                  'renderer'  => 'Boolean',
-                  'editor'    => 'Checkbox'),
-            array('dataIndex' => 'username',
-                  'header'    => 'Benutzer',
-                  'width'     => 140,
-                  'editor'    => 'TextField'),
-            array('dataIndex' => 'role',
-                  'header'    => 'Berechtigung',
-                  'editor'    => array('type'      => 'ComboBox',
-                                       'mode'      => 'local',
-                                       'store'     => array('data' => array()),
-                                       'editable'  => false,
-                                       'triggerAction'=>'all',
-                                       'lazyRender' => true),
-                  'showDataIndex' => 'role_name'),
-            array('dataIndex' => 'realname',
-                  'header'    => 'Name',
-                  'width'     => 200,
-                  'editor'    => 'TextField'),
-            array('dataIndex' => 'email',
-                  'header'    => 'E-Mail',
-                  'width'     => 250,
-                  'editor'    => 'TextField'),
-            array('dataIndex' => 'password_mailed',
-                  'header'    => 'Passwort gemailt',
-                  'width'     => 100,
-                  'renderer'  => 'Boolean')
-            );
     protected $_buttons = array('save'=>true,
-                                    'add'=>true,
-                                    'delete'=>true);
+                                'add'=>true,
+                                'delete'=>true);
     protected $_paging = 0;
     protected $_defaultOrder = 'username';
     protected $_tableName = 'Vps_Model_User_Users';
     protected $_roles = array();
 
-    public function init()
+    protected function _initColumns()
     {
         $acl = Zend_Registry::get('acl');
         $roles = $acl->getRoles();
@@ -52,12 +20,32 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
             }
         }
 
-        $data = array();
-        foreach($this->_roles as $id=>$name) {
-            $data[] = array($id, $name);
-        }
-        $this->_columns[$this->_getColumnIndex('role')]['editor']['store']['data'] = $data;
-        parent::init();
+        $this->_columns->add(new Vps_Auto_Grid_Column('active', 'Active', 40))
+                ->setRenderer('Boolean')
+                ->setEditor(new Vps_Auto_Field_Checkbox());
+        $this->_columns->add(new Vps_Auto_Grid_Column('username', 'Username', 140))
+                ->setEditor(new Vps_Auto_Field_TextField());
+
+        $this->_columns->add(new Vps_Auto_Grid_Column('role_name'));
+
+        $editor = new Vps_Auto_Field_ComboBox();
+        $editor->setStoreData($this->_roles)
+               ->setEditable(false)
+               ->setTriggerAction('all')
+               ->setLazyRender(true);
+        $this->_columns->add(new Vps_Auto_Grid_Column('role', 'Rights'))
+                ->setShowDataIndex('role_name')
+                ->setEditor($editor);
+
+        $this->_columns->add(new Vps_Auto_Grid_Column('realname', 'Name', 200))
+                ->setEditor(new Vps_Auto_Field_TextField());
+
+        $this->_columns->add(new Vps_Auto_Grid_Column('email', 'E-Mail', 250))
+                ->setEditor(new Vps_Auto_Field_TextField())
+                ->getEditor()->setVtype('email');
+            
+        $this->_columns->add(new Vps_Auto_Grid_Column('password_mailed', 'Password mailed', 40))
+                ->setRenderer('Boolean');
     }
 
     public function indexAction()

@@ -11,9 +11,9 @@ abstract class Vps_Controller_Action_Auto_Form_Vpc extends Vps_Controller_Action
         $this->_setParam('component_key', $componentKey);
 
         // Zeile wird in der Datenbank angelegt, falls es sie noch nicht gibt
-        if ($this->_table->find($pageId, $componentKey)->count() == 0) {
+        if ($this->_form->getTable()->find($pageId, $componentKey)->count() == 0) {
             // Defaultwerte aus Setting auslesen
-            $info = $this->_table->info();
+            $info = $this->_form->getTable()->info();
             $insert = array();
             foreach ($info['cols'] as $col) {
                 $setting = $this->component->getSetting($col);
@@ -25,5 +25,7 @@ abstract class Vps_Controller_Action_Auto_Form_Vpc extends Vps_Controller_Action
             $insert['component_key'] = $componentKey;
             $this->_table->insert($insert);
         }
+
+        parent::preDispatch();
     }
 }
