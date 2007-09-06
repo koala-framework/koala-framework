@@ -23,54 +23,45 @@ class Vps_Dao_Pages extends Vps_Db_Table
                 return $data[$parentId];
             }
         }
-
-        throw new Vps_ClientException('ParentPage width id "' . $id . '" not found');
+        return null;
     }
 
-    public function retrieveChildPagesData($id, $type = null)
+    public function retrieveChildPagesData($id = null, $type = null)
     {
         $return = array();
         $data = $this->_retrievePageData();
-        if (isset($data[$id])) {
-            $parentId = $data[$id]['id'];
-            foreach ($data as $d) {
-                if ($parentId && $d['parent_id'] == $parentId) {
-                    if (is_null($type) || $d['type'] == $type) {
-                        $return[] = $d;
-                    }
-                }
+        if (is_null($id)) {
+            $parentId = null;
+        } else {
+            if (isset($data[$id])) {
+                $parentId = $data[$id]['id'];
+            } else {
+                $parentId = -1;
+            }
+        }
+        foreach ($data as $d) {
+            if ($d['parent_id'] == $parentId && (is_null($type) || $d['type'] == $type)) {
+                $return[] = $d;
             }
         }
         return $return;
     }
 
-    public function retrieveRootPageData()
+    public function retrieveHomePageData()
     {
         foreach ($this->_retrievePageData() as $d) {
-            if ($d['parent_id'] == '0') {
+            if ($d['is_home'] == 1) {
                 return $d;
             }
         }
-        $row = $this->fetchRow('parent_id = 0');
-        if (!$row) {
-            $id = $this->createPage(0);
-            if ($id > 0) {
-                $this->savePageName($id, 'Home');
-                $this->_pageData = null;
-                return $this->retrieveRootPageData();
-            }
-        } else {
-            return null;
-        }
-
-        throw new Vps_Exception('Could not find nor create Root Page');
+        throw new Vps_Exception('Could not find Root Page');
     }
 
     private function _retrievePageData()
     {
         if ($this->_pageData == null) {
             $sql = '
-                SELECT id, parent_id, type, visible, name, filename, component_class
+                SELECT id, parent_id, type, is_home, visible, name, filename, component_class
                 FROM vps_pages
                 ORDER BY position
             ';
@@ -136,38 +127,21 @@ class Vps_Dao_Pages extends Vps_Db_Table
     public function insert(array $data)
     {
         $parentId = $data['parent_id'];
+        
         $name = $data['name'];
         $type = '';
         if ((int)$parentId == 0) {
             $type = $parentId;
-            $row = $this->fetchRow('parent_id = 0');
+            $row = $this->fetchRow('type = \'home\'');
             $parentId = $row->id;
         }
 
-        $id = $this->createPage($parentId, $type, $name);
-        $this->savePageName($id, $name);
-        return $id;
-    }
-    
-    public function createPage($parentId, $type = '')
-    {
         // Eintrag in Pages-Tabelle
-        if ($parentId > 0) {
-            $position = 1;
-            $name = 'New Page';
-            $filename = 'newpage';
-            $parentRow = $this->find($parentId)->current();
-            $type = $parentRow->type != '' ? $parentRow->type : $type;
-        } else {
-            if ($this->fetchRow('parent_id = 0')) {
-                throw new Vps_Exception('Cannot create RootPage because already existing.');
-            }
-            $position = 1;
-            $parentId = 0;
-            $name = 'Home';
-            $filename = 'home';
-            $type = '';
-        }
+        $position = 1;
+        $name = 'New Page';
+        $filename = 'newpage';
+        $parentRow = $this->find($parentId)->current();
+        $type = $parentRow->type != 'home' && $parentRow->type != '' ? $parentRow->type : $type;
         $componentClass = 'Vpc_Paragraphs_Index';
 
         $this->_pageData = null;
@@ -175,6 +149,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
         $insert['name'] = $name;
         $insert['filename'] = $filename;
         $insert['parent_id'] = $parentId;
+        $insert['is_home'] = $isHome;
         $insert['position'] = $position;
         $insert['type'] = $type;
         $insert['component_class'] = $componentClass;

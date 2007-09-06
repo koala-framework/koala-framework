@@ -14,38 +14,29 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
     public function addTreePage($page, $filename = '', $name = '', $parentPage = null)
     {
         $page = parent::addPage($page, $filename, $name);
-        if ($parentPage) {
-            $this->setParentPage($page, $parentPage);
-        }
+        $this->setParentPage($page, $parentPage);
         return $page;
     }
 
-    public function setParentPage(Vpc_Interface $page, $parentPage)
+    public function setParentPage(Vpc_Interface $page, Vpc_Interface $parentPage = null)
     {
         $id = $page->getPageId();
-        if (!$parentPage instanceof Vpc_Interface) {
-            $parentPage = $this->findPage($parentPage);
-        }
-        if (!$parentPage instanceof Vpc_Interface) {
-            throw new Vps_PageCollection_Exception('Parent Page not valid.');
-        }
-        $parentId = $parentPage->getPageId();
-        $rootId = $this->getRootPage()->getPageId();
-
-        if ($parentId == $id) {
-            throw new Vps_PageCollection_Exception('Cannot set Parent Page for the same object: ' . $id);
-        }
-
-        if (!isset($this->_pages[$parentId]) && $rootId != $parentId) {
-            throw new Vps_PageCollection_Exception('Parent Page does not exist: ' . $parentId);
-        }
-
-        if (!isset($this->_pages[$id])) {
-            throw new Vps_PageCollection_Exception('Page does not exist: ' . $id);
-        }
-
-        if ($id == $rootId) {
-            throw new Vps_PageCollection_Exception('Cannot set Parent for Root Page.');
+        if (is_null($parentPage)) {
+            $parentId = null;
+        } else {
+            $parentId = $parentPage->getPageId();
+    
+            if ($parentId == $id) {
+                throw new Vps_PageCollection_Exception('Cannot set Parent Page for the same object: ' . $id);
+            }
+    
+            if (!isset($this->_pages[$parentId])) {
+                throw new Vps_PageCollection_Exception('Parent Page does not exist: ' . $parentId);
+            }
+    
+            if (!isset($this->_pages[$id])) {
+                throw new Vps_PageCollection_Exception('Page does not exist: ' . $id);
+            }
         }
 
         $this->_pageParentIds[$id] = $parentId;
@@ -62,51 +53,41 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
     public function getParentPage(Vpc_Interface $page)
     {
         $id = $page->getPageId();
-        if (isset($this->_pageParentIds[$id])) {
+        if (isset($this->_pageParentIds[$id])) { // Page gibt es und es ist eine ParentId gesetzt
             $parentId = $this->_pageParentIds[$id];
-            if (!isset($this->_pages[$parentId])) {
-                unset($this->_pageParentIds[$id]);
-                return $this->getParentPage($page);
-            } else {
+            if (isset($this->_pages[$parentId])) {
                 return $this->_pages[$parentId];
             }
-        } else if ($id != $this->getRootPage()->getPageId()) {
+        } else { // Page gibt es nicht, wird erstellt
             $data = $this->_dao->getTable('Vps_Dao_Pages')->retrieveParentPageData($id);
-            if (!empty($data)) {
-                if ($data['component_id'] == $this->getRootPage()->getPageId()) {
-                    return $this->getRootPage();
-                } else {
-                    $component = new $data['component']($this->_dao, $data['component_id']);
-                    $parentPage = $this->addPage($component, $data['filename']);
-                    $this->setParentPage($page, $parentPage);
-                    return $parentPage;
-                }
-            }
-            return null;
-        } else { // ParentPage von RootPage
-            return null;
-        }
-    }
-
-    public function getChildPages(Vpc_Interface $page)
-    {
-        $page->generateHierarchy();
-        $childs = array();
-        $searchId = $page->getPageId();
-        foreach($this->_pageParentIds as $id=>$parentId) {
-            if($parentId == $searchId) {
-                $childs[] = $this->_pages[$id];
+            if ($data) {
+                $parentPage = $this->findPage($data['id']);
+                $this->setParentPage($page, $parentPage);
+                return $parentPage;
             }
         }
-        return $childs;
+        return null;
     }
 
-    public function getChildPage(Vpc_Interface $page, $filename)
+    public function getChildPages(Vpc_Interface $page = null)
     {
-        $page->generateHierarchy($filename);
-        $searchId = $page->getPageId();
+        $this->_generateHierarchy($page);
+        $searchId = $page ? $page->getPageId() : null ;
+        $childPages = array();
+        foreach ($this->_pageParentIds as $id => $parentId) {
+            if ($parentId == $searchId) {
+                $childPages[] = $this->_pages[$id];
+            }
+        }
+        return $childPages;
+    }
+
+    public function getChildPage(Vpc_Interface $page = null, $filename = '')
+    {
+        $this->generateHierarchy($page, $filename);
+        $searchId = $page ? $page->getPageId() : null;
         // Nach gleichem Filename suchen
-        foreach($this->_pageParentIds as $id => $parentId) {
+        foreach ($this->_pageParentIds as $id => $parentId) {
             if($parentId == $searchId && $filename == $this->_pageFilenames[$id]) {
                 return $this->_pages[$id];
             }
@@ -119,7 +100,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         return null;
     }
     
-    public function findComponentByClass($class, $startPage = null)
+    public function findComponentByClass($class, Vpc_Interface $startPage = null)
     {
         $rowset = $this->_dao->getTable('Vps_Dao_Pages')->fetchAll("component_class = '$class'");
         if ($rowset->count() > 0) {
@@ -129,23 +110,18 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         if ($rowset->count() > 0) {
             $startPage = $this->findPage($rowset->current()->page_id);
         }
-        
         if (!$startPage) {
-            $startPage = $this->getRootPage();
+            $startPage = $this;
         }
-        if (!$startPage instanceof Vpc_Interface) {
-            throw new Vps_PageCollection_Exception('startPage must be an instance of Vpc_Interface, ' . get_class($startPage) . ' given.');
-        }
-
         $component = $startPage->findComponentByClass($class);
         if ($component) {
             return $component;
-        } else {
-            foreach ($this->getChildPages($startPage) as $page) {
-                $component = $this->findComponentByClass($class, $page);
-                if ($component != null) {
-                    return $component;
-                }
+        }
+        
+        foreach ($this->getChildPages($startPage) as $page) {
+            $component = $this->findComponentByClass($class, $page);
+            if ($component != null) {
+                return $component;
             }
         }
 
@@ -171,13 +147,10 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
             $pattern = '/^\/.*?_(' . Vpc_Abstract::getIdPattern() . ')\.html$/';
             if (preg_match($pattern, $path, $matches)) {
                 $ids[] = $matches[1];
-            } else if ($path == '/') {
-                $ids[] = $this->getRootPage()->getPageId();
             }
         } else if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL) {
             if (preg_match('/^(\/\w+)*\/$/', $path)) { // hierarchische URLs, Format /x/y/z/
-                $page = $this->getRootPage();
-                $ids[] = $page->getPageId();
+                $page = null;
                 $pathParts = explode('/', substr($path, 1, -1));
                 foreach($pathParts as $pathPart) {
                     if ($pathPart != '') {
@@ -197,17 +170,19 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
     public function getUrl($page)
     {
         $id = $page->getPageId();
-        $rootId = $this->getRootPage()->getPageId();
 
         $path = '/';
+        if ($this->getHomePage()->getPageId() == $id) {
+            return $path;
+        }
         if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL) {
-            while ($id != $rootId) {
+            while ($id) {
                 $path = '/' . $this->_pageFilenames[$id] . $path;
                 $page = $this->getParentPage($page);
-                $id = $page ? $page->getPageId() : $rootId;
+                $id = $page ? $page->getPageId() : null;
             }
         } else {
-            if ($id != $rootId && isset($this->_pageFilenames[$id])) {
+            if (isset($this->_pageFilenames[$id])) {
                 $path .= 'de_' . $this->_pageFilenames[$id] . '_' . $id . '.html';
             }
         }

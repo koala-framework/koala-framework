@@ -89,16 +89,16 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $acl->add(new Zend_Acl_Resource('media'));
             $acl->add(new Zend_Acl_Resource('fe'));
             $acl->add(new Vps_Acl_Resource_MenuDropdown('admin', 'Admin'));
-                $acl->add(new Vps_Acl_Resource_MenuEvent('pages', 'Sitetree', array('commandClass' => 'Vps.Component.Pages', 'config' => array('controllerUrl'=>'/admin/pages/'), 'title' => 'Sitetree')), 'admin');
-                //$acl->add(new Vps_Acl_Resource_MenuEvent('user', 'User', array('commandClass' => 'Vps.StandardLayoutAutoGrid', 'config' => array('controllerUrl'=>'/admin/user/'), 'title' => 'User')), 'admin');
-                $acl->add(new Zend_Acl_Resource('pageedit'), 'admin');
-                $acl->add(new Zend_Acl_Resource('components', 'Komponentenübersicht', '/admin/components/'), 'admin'); // für /component/show
-                $acl->add(new Zend_Acl_Resource('component'), 'admin'); // für /component/edit
+            $acl->add(new Vps_Acl_Resource_MenuEvent('pages', 'Sitetree', array('commandClass' => 'Vps.Component.Pages', 'config' => array('controllerUrl'=>'/admin/pages/'), 'title' => 'Sitetree')));
+            $acl->add(new Zend_Acl_Resource('pageedit'), 'admin');
+            $acl->add(new Zend_Acl_Resource('components', 'Komponentenübersicht', '/admin/components/'), 'admin'); // für /component/show
+            $acl->add(new Zend_Acl_Resource('component'), 'admin'); // für /component/edit
             
             // Berechtigungen
             $acl->allow('admin', 'web');
             $acl->allow('admin', 'fe');
             $acl->allow('admin', 'admin');
+            $acl->allow('admin', 'pages');
             $acl->allow('member', 'fe');
             $acl->allow('guest', 'web');
             $acl->allow('guest', 'media');

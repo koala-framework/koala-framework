@@ -4,7 +4,7 @@ abstract class Vps_PageCollection_Abstract
     protected $_pageFilenames = array();
     protected $_pageNames = array();
     protected $_pages = array();
-    protected $_rootId;
+    protected $_homeId;
     protected $_decoratorClasses = array();
     protected $_dao;
     protected static $_instance = null;
@@ -128,17 +128,12 @@ abstract class Vps_PageCollection_Abstract
         $this->_pageNames[$id] = $name;
     }
 
-    public function setRootPage(Vpc_Interface $page)
-    {
-        $page = $this->_addDecorators($page);
-        $this->_setPage($page, '', 'Home');
-        $page->setPageCollection($this);
-        $this->_rootId = $page->getPageId();
-    }
-
     public function findPage($id)
     {
-        $this->getRootPage();
+        if (is_null($id)) {
+            return $this->getHomePage();
+        }
+
         $parts = Vpc_Abstract::parseId($id);
         $id = $parts['pageId'];
         if (!isset($this->_pages[$id])) {
@@ -171,14 +166,28 @@ abstract class Vps_PageCollection_Abstract
         return null;
     }
 
-    public function getRootPage()
+    public function getHomePage()
     {
-        if (!isset($this->_rootId)) {
-            $data = $this->_dao->getTable('Vps_Dao_Pages')->retrieveRootPageData();
-            $rootPage = Vpc_Abstract::createInstance($this->_dao, $data['component_class'], $data['id']);
-            $this->setRootPage($rootPage);
+        if (!isset($this->_homeId)) {
+            $data = $this->_dao->getTable('Vps_Dao_Pages')->retrieveHomePageData();
+            $page = $this->findPage($data['id']);
+            $this->_homeId = $page->getPageId();
         }
-        return $this->_pages[$this->_rootId];
+        return $this->_pages[$this->_homeId];
+    }
+    
+    protected function _generateHierarchy(Vpc_Abstract $page = null, $filename = '')
+    {
+        if (is_null($page)) {
+            $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData(null);
+            foreach($rows as $pageRow) {
+                if ($filename != '' && $filename != $pageRow['filename']) { continue; }
+                $page = Vpc_Abstract::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id']);
+                $this->addTreePage($page, $pageRow['filename'], $pageRow['name'], null);
+            }
+        } else {
+            $page->generateHierarchy($filename);
+        }
     }
 
     public function getCurrentPage()

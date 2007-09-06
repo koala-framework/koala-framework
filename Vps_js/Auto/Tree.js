@@ -18,7 +18,8 @@ Vps.Auto.Tree = function(renderTo, config)
         selectionchange: true,
         edit: true,
         generatetoolbar: true,
-        generatetoolbarstart: true
+        generatetoolbarstart: true,
+        loaded: true
     };
 
     Ext.Ajax.request({
@@ -139,7 +140,7 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
             this.tree.getRootNode().select();
         }
         this.tree.getRootNode().expand();
-
+        this.fireEvent('loaded', this.tree);
     },
 
     selectionchange: function (e, node) {
