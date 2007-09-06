@@ -4,7 +4,7 @@ class Vpc_Formular_Submit_Setup extends Vpc_Setup_Abstract
     public function setup()
     {
        $fields['text'] = 'varchar(255) NOT NULL';
-       $this->createTable('component_formular_submit', $fields);
+       $this->createTable('vpc_formular_submit', $fields);
     }
 
     public function deleteEntry($pageId, $componentKey)

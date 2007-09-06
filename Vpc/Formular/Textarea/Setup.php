@@ -5,7 +5,7 @@ class Vpc_Formular_Textarea_Setup extends Vpc_Setup_Abstract
     {
        $fields['cols'] = 'smallint(6) NOT NULL';
        $fields['rows'] = 'smallint(6) NOT NULL';
-       $this->createTable('component_formular_textarea', $fields);
+       $this->createTable('vpc_formular_textarea', $fields);
     }
     
     public function deleteEntry($pageId, $componentKey)

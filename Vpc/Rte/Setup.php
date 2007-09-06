@@ -6,7 +6,7 @@ class Vpc_Rte_Setup extends Vpc_Setup_Abstract
         $this->copyTemplate('Rte.html');
 
         $fields['text'] = 'text NOT NULL';
-        $this->createTable('component_rte', $fields);
+        $this->createTable('vpc_rte', $fields);
     }
 
     public function deleteEntry($pageId, $componentKey)

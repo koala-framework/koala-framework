@@ -4,9 +4,9 @@ class Vpc_Formular_MultiSelect_Setup extends Vpc_Setup_Abstract
     public function setup()
     {
         $fields['type'] = 'varchar(20) NOT NULL';
-        $this->createTable('component_formular_multiselect', $fields);
+        $this->createTable('vpc_formular_multiselect', $fields);
         
-        $tablename = 'component_formular_multiselect_options';
+        $tablename = 'vpc_formular_multiselect_options';
         if (!$this->_tableExits($tablename)) {
             $this->_db->query("CREATE TABLE `$tablename` (
                   `id` int(10) unsigned NOT NULL auto_increment,
