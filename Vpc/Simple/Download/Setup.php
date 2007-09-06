@@ -6,6 +6,6 @@ class Vpc_Simple_Download_Setup extends Vpc_Setup_Abstract
     public function setup()
     {
         $fields['path'] = 'varchar(255) NOT NULL';
-        $this->createTable('component_simple_download', $fields);
+        $this->createTable('vpc_simple_download', $fields);
     }
 }

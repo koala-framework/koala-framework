@@ -4,9 +4,9 @@ class Vpc_Formular_Select_Setup extends Vpc_Setup_Abstract
     public function setup()
     {
         $fields['type'] = 'varchar(20) NOT NULL';
-        $this->createTable('component_formular_select', $fields);
+        $this->createTable('vpc_formular_select', $fields);
 
-        $tablename = 'component_formular_select_options';
+        $tablename = 'vpc_formular_select_options';
         if (!$this->_tableExits($tablename)) {
             $this->_db->query("CREATE TABLE `$tablename` (
                 `id` int(11) NOT NULL auto_increment,

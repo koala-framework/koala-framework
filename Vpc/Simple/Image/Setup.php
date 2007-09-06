@@ -16,7 +16,7 @@ class Vpc_Simple_Image_Setup extends Vpc_Setup_Abstract
         $fields['height'] = 'int(11) NOT NULL';
         $fields['style'] = 'varchar(255) NOT NULL';
         $fields['color'] = 'varchar(255) NOT NULL';
-        $this->createTable('component_simple_image', $fields);
+        $this->createTable('vpc_simple_image', $fields);
     }
 
     public function deleteEntry($pageId, $componentKey)

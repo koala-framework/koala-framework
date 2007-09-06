@@ -3,7 +3,7 @@ class Vpc_Paragraphs_Setup extends Vpc_Setup_Abstract
 {
     public function setup()
     {
-        $tablename = 'component_paragraphs';
+        $tablename = 'vpc_paragraphs';
         if (!$this->_tableExits($tablename)) {
           $this->_db->query("CREATE TABLE `$tablename` (
                   `id` int(10) unsigned NOT NULL auto_increment,

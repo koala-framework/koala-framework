@@ -6,7 +6,7 @@ class Vpc_Formular_Checkbox_Setup extends Vpc_Setup_Abstract
         $fields['value'] = 'varchar(255) NOT NULL';
         $fields['text'] = 'varchar(255) NOT NULL';
         $fields['checked'] = 'tinyint(4) NOT NULL';
-        $this->createTable('component_formular_checkbox', $fields);
+        $this->createTable('vpc_formular_checkbox', $fields);
     }
 
     public function deleteEntry($pageId, $componentKey)
