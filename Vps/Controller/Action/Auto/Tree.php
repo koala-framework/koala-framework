@@ -24,6 +24,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
     protected $_rootText = 'Root';
     protected $_rootVisible = true;
     protected $_order = null;
+    protected $_enableDD;
     protected $_hasPosition;
     
     public function init()
@@ -47,12 +48,17 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
             $this->_hasPosition = in_array('position', $info['cols']);
             $this->_order = 'position';
         }
+
+        // Drag&Drop standardmäßig aktivieren wenn _hasPosition aktiviert ist
+        if (!isset($this->_enableDD)) {
+            $this->_enableDD = $this->_hasPosition;
+        }
     }
     
     protected function jsonMetaAction()
     {
         $this->view->icons = $this->_icons;
-        $this->view->enableDD = $this->_hasPosition;
+        $this->view->enableDD = $this->_enableDD;
         $this->view->rootText = $this->_rootText;
         $this->view->rootVisible = $this->_rootVisible;
         $this->view->buttons = $this->_buttons;
@@ -75,7 +81,11 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
     protected function _getWhere()
     {
         $parentId = $this->getRequest()->getParam('node');
-        $where[] = $this->_table->getAdapter()->quoteInto('parent_id = ?', $parentId);
+        if (!$parentId) {
+            $where[] = 'parent_id IS NULL';
+        } else {
+            $where[] = $this->_table->getAdapter()->quoteInto('parent_id = ?', $parentId);
+        }
         return $where;
     }
     
@@ -137,6 +147,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
     public function jsonAddAction()
     {
         $insert['parent_id'] = $this->getRequest()->getParam('parentId');
+        if (!$insert['parent_id']) $insert['parent_id'] = null;
         $insert[$this->_textField] = $this->getRequest()->getParam('name');
         $id = $this->_table->insert($insert);
         if ($id) {
