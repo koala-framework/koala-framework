@@ -1,4 +1,5 @@
 Ext.namespace('Vps.Component');
+
 Vps.Component.Pages = function(renderTo, config)
 {
     this.renderTo = renderTo;
@@ -35,44 +36,132 @@ Vps.Component.Pages = function(renderTo, config)
     );
 
     this.tree = new Vps.Auto.Tree('treeContainer', {controllerUrl: '/admin/pages/' });
-    this.tree.on('generatetoolbarstart', function(o, e) {
-        this.tree.editButton = this.tree.toolbar.addButton({
-            tooltip: 'Bearbeiten',
-            disabled: true,
-            handler : 
-                function (o, e) {
-                    node = this.tree.getSelectionModel().getSelectedNode();
-                    this.fireEvent('editcomponent', {id: node.attributes.id, cls: node.attributes.data.component_class, text: node.text});
-                },
-            icon : '/assets/vps/images/silkicons/page_edit.png',
-            cls: "x-btn-icon",
-            scope   : this.tree
-        });
-        this.tree.propertiesButton = this.tree.toolbar.addButton({
-            disabled: true,
-            tooltip    : 'Eigenschaften',
-            handler :
-                function (o, e) {
-                    this.editform.load(this.tree.tree.getSelectionModel().getSelectedNode().id);
-                    this.editform.show();
-                },
-            icon : '/assets/vps/images/silkicons/page_gear.png',
-            cls: "x-btn-icon",
-            scope   : this
-        })
-    }, this);
+    
+    this.createButtons();    
+    var toolbar = new Ext.Toolbar(Ext.get('treeContainer').createChild());
+    this.tree.editButton = new Ext.Toolbar.Button(this.buttons.edit);
+    this.tree.pageButton = new Ext.Toolbar.Button({
+        cls: 'x-btn-text-icon bmenu',
+        text:'Page',
+        menu: [this.buttons.properties, this.buttons.add, this.buttons.del, this.buttons.visible],
+        icon : '/assets/vps/images/silkicons/page.png',
+        disabled: true
+    });
+    this.tree.navigationButton = new Ext.Toolbar.Button({
+        cls: 'x-btn-text-icon bmenu',
+        text:'Navigation',
+        icon : '/assets/vps/images/silkicons/weather_sun.png',
+        menu: [this.buttons.reloadAll, this.buttons.expandAll, this.buttons.collapseAll]
+    });
+    toolbar.add(
+        this.tree.editButton, '-',
+        this.tree.pageButton, '-',
+        this.tree.navigationButton
+    );
 
     this.tree.on('selectionchange', this.treeSelectionchange, this.tree);
     this.tree.on('editcomponent', this.loadComponent, this);
+    this.tree.on('loaded', function(o, e) {
+        this.tree.tree.on('contextmenu', function (node) {
+            node.select();
+            var menu = new Ext.menu.Menu({
+                 items: [this.buttons.edit, '-', this.buttons.properties, this.buttons.add, this.buttons.del, this.buttons.visible, '-', this.buttons.reloadAll, this.buttons.expand, this.buttons.collapse]   
+            });
+            menu.show(node.ui.getAnchor());
+        }, this);
+
+        this.tree.tree.on('dblclick', function (o, e) {
+            this.fireEvent('editcomponent', {id: o.attributes.id, cls: o.attributes.data.component_class, text: o.text})
+        }, this.tree);
+    }, this)
 
     this.created = new Array();
 }
 
 Ext.extend(Vps.Component.Pages, Ext.util.Observable,
 {
+    createButtons : function()
+    {
+        this.buttons = {};
+        this.buttons.edit = {
+            text: 'Edit Content',
+            handler : function (o, e) {
+                node = this.tree.getSelectionModel().getSelectedNode();
+                this.fireEvent('editcomponent', {id: node.attributes.id, cls: node.attributes.data.component_class, text: node.text});
+            },
+            icon : '/assets/vps/images/silkicons/page_edit.png',
+            cls: 'x-btn-text-icon',
+            scope   : this.tree
+        };
+        this.buttons.properties = {
+            text    : 'Properties of selected Page',
+            handler : function (o, e) {
+                this.editform.load(this.tree.tree.getSelectionModel().getSelectedNode().id);
+                this.editform.show();
+            },
+            icon : '/assets/vps/images/silkicons/page_gear.png',
+            cls: 'x-btn-text-icon',
+            scope   : this
+        }
+        this.buttons.add = {
+            text    : 'Add new Subpage',
+            handler : this.tree.add,
+            icon : '/assets/vps/images/silkicons/page_add.png',
+            cls: 'x-btn-text-icon',
+            scope   : this.tree
+        }
+        this.buttons.del = {
+            text    : 'Delete selected Page',
+            handler : this.tree.del,
+            icon : '/assets/vps/images/silkicons/page_delete.png',
+            cls: 'x-btn-text-icon',
+            scope   : this.tree
+        }
+        this.buttons.visible = {
+            text    : 'Toggle Visibility of selected Page',
+            handler : this.tree.visible,
+            icon : '/assets/vps/images/silkicons/page_red.png',
+            cls: 'x-btn-text-icon',
+            scope   : this.tree
+        }
+        this.buttons.reloadAll = {
+            text    : 'Reload all',
+            handler : function () { this.tree.getRootNode().reload(); },
+            icon : '/assets/vps/images/silkicons/bullet_star.png',
+            cls: 'x-btn-text-icon',
+            scope   : this.tree
+        };
+        this.buttons.expand = {
+            text    : 'Expand here',
+            handler : function () { this.tree.getSelectionModel().getSelectedNode().expand(true); },
+            icon : '/assets/vps/images/silkicons/bullet_add.png',
+            cls: 'x-btn-text-icon',
+            scope   : this.tree
+        };
+        this.buttons.collapse = {
+            text    : 'Collapse here',
+            handler : function () { this.tree.getSelectionModel().getSelectedNode().collapse(true); },
+            icon : '/assets/vps/images/silkicons/bullet_delete.png',
+            cls: 'x-btn-text-icon',
+            scope   : this.tree
+        };
+        this.buttons.expandAll = {
+            text    : 'Expand All',
+            handler : function () { this.tree.expandAll(); },
+            icon : '/assets/vps/images/silkicons/bullet_add.png',
+            cls: 'x-btn-text-icon',
+            scope   : this.tree
+        };
+        this.buttons.collapseAll = {
+            text    : 'Collapse all',
+            handler : function () { this.tree.collapseAll(); },
+            icon : '/assets/vps/images/silkicons/bullet_delete.png',
+            cls: 'x-btn-text-icon',
+            scope   : this.tree
+        };
+    },
     getPanel : function()
     {
-        //Vps.mainLayout.getRegion('center').remove(Vps.mainLayout.getRegion('center').getActivePanel(), false)
         return new Ext.NestedLayoutPanel(this.layout);
     },
     
@@ -164,25 +253,25 @@ Ext.extend(Vps.Component.Pages, Ext.util.Observable,
     treeSelectionchange : function (node) {
         if (node) {
             if (node.attributes.type == 'root') {
-                this.visibleButton.enable();
-                this.editButton.enable();
-                this.propertiesButton.enable();
-                this.addButton.disable();
-                this.deleteButton.disable();
             } else if (node.attributes.type == 'category') {
-                this.visibleButton.disable();
-                this.propertiesButton.disable();
-                this.editButton.disable();
-                this.addButton.enable();
-                this.deleteButton.disable();
+                debugger;
+                this.pageButton.enable();
             } else {
-                this.visibleButton.enable();
-                this.editButton.enable();
-                this.propertiesButton.enable();
-                this.addButton.enable();
-                this.deleteButton.enable();
+                this.pageButton.enable();
             }
         }
     }
 }
 )
+
+Ext.namespace('Vps.AutoTree');
+Vps.AutoTree.PagesNode = function(node){
+    Vps.AutoTree.PagesNode.superclass.constructor.call(this, node);
+}
+
+Ext.extend(Vps.AutoTree.PagesNode, Vps.AutoTree.Node, {
+    onDblClick : function(e){
+        e.preventDefault();
+        this.fireEvent("dblclick", this.node, e);
+    }
+});

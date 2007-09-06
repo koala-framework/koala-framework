@@ -382,8 +382,13 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Standardmäßig werden die Seiten aus dem als Unterseite im Seitenbaum hinzugefügt. Falls
      * eine Komponente dynamisch Unterseiten erstellen will, sollte das in dieser Methode erfolgen.
      * parent::generateHierarchy sollte dennoch aufgerufen werden.
+     * 
+     * Der zweite Parameter bestimmt, ob die Seite als Home ausgeführt wird. Falls die Seite
+     * also Home ausgeführt wird, werden die Unterseiten der obersten Ebene hinzugefügt, die
+     * Seite fungiert also als Rootpage.
      *
      * @param string Nächster Bestandteil der URL für lazy loading, damit nicht immer alle Unterseiten erstellt werden müssen
+     * @param boolean Hierarchie wird im Kontext der Homepage erstellt
      * @return Array mit erstellten Unterseiten
      */
     public function generateHierarchy($filename = '')

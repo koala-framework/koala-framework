@@ -11,11 +11,9 @@ class Vpc_Decorator_Menu_Index extends Vpc_Decorator_Abstract
     {
         $return = parent::getTemplateVars();
         $pc = $this->_pageCollection;
-        $rootPage = $pc->getRootPage();
 
         $menus = array();
-        $pages = $pc->getChildPages($rootPage);
-        array_unshift($pages, $rootPage);
+        $pages = $pc->getChildPages();
         $return['menu']['menu'] = array();
         foreach ($pages as $page) {
             $data = $pc->getPageData($page);
@@ -27,9 +25,6 @@ class Vpc_Decorator_Menu_Index extends Vpc_Decorator_Abstract
         while ($page) {
             $url = $pc->getUrl($page);
             $text = $pc->getFilename($page);
-            if ($page === $rootPage && $text == '') {
-                $text = 'home';
-            }
             $return['menu']['breadcrumbs'][] = array('url' => $url, 'text' => $text);
             $page = $pc->getParentPage($page);
         }

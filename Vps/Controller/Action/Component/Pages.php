@@ -11,6 +11,7 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
         'delete' => 'page_delete',
         'folder' => 'folder'
     );
+    protected $_buttons = array();
     
     public function indexAction()
     {
@@ -23,6 +24,13 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
         parent::init();
     }
     
+    protected function _formatNode($row)
+    {
+        $data = parent::_formatNode($row);
+        $data['uiProvider'] = 'Vps.AutoTree.PagesNode';
+        return $data;
+    }
+
     public function jsonSavePageAction()
     {
         try {
@@ -41,15 +49,6 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
         $id = $this->getRequest()->getParam('node');
         if ($id === '0') {
             
-            $pageData = $this->_table->retrieveRootPageData();
-            $data = $this->_formatNode($this->_table->find($pageData['id'])->current());
-            $data['children'] = array();
-            $data['expanded'] = true;
-            $data['allowDrag'] = false;
-            $data['allowDrop'] = false;
-            $data['type'] = 'root';
-            $return[] = $data;
-
             $config = new Zend_Config_Ini('application/config.ini', 'pagecollection');
             $types = $config->pagecollection->pagetypes->toArray();
             if (sizeof($types) == 0) { $types[''] = 'Seiten'; }
@@ -80,8 +79,7 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
         $where = array();
         $node = $this->getRequest()->getParam('node');
         if ((int)$node === 0 && $node !== '0') {
-            $rootPageData = $this->_table->retrieveRootPageData();
-            $where['parent_id = ?'] = $rootPageData['id'];
+            $where['parent_id IS NULL'] = '';
             $where['type = ?'] = $node;
         } else {
             $where['parent_id = ?'] = $node;

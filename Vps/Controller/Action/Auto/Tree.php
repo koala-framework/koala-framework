@@ -194,7 +194,8 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         $row->parent_id = $parentId;
         $row->save();
         if ($this->_hasPosition) {
-            $row->numberize('position', $position, 'parent_id = ' . $parentId);
+            $where = $parentId ? 'parent_id=' . $parentId : 'parent_id IS NULL';
+            $row->numberize('position', $position, $where);
         }
     }
     
