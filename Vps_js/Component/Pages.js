@@ -43,7 +43,7 @@ Vps.Component.Pages = function(renderTo, config)
     this.tree.pageButton = new Ext.Toolbar.Button({
         cls: 'x-btn-text-icon bmenu',
         text:'Page',
-        menu: [this.buttons.properties, this.buttons.add, this.buttons.del, this.buttons.visible],
+        menu: [this.buttons.properties, this.buttons.add, this.buttons.del, this.buttons.visible, this.buttons.makeHome],
         icon : '/assets/vps/images/silkicons/page.png',
         disabled: true
     });
@@ -65,7 +65,7 @@ Vps.Component.Pages = function(renderTo, config)
         this.tree.tree.on('contextmenu', function (node) {
             node.select();
             var menu = new Ext.menu.Menu({
-                 items: [this.buttons.edit, '-', this.buttons.properties, this.buttons.add, this.buttons.del, this.buttons.visible, '-', this.buttons.reloadAll, this.buttons.expand, this.buttons.collapse]   
+                 items: [this.buttons.edit, '-', this.buttons.properties, this.buttons.add, this.buttons.del, this.buttons.visible, this.buttons.makeHome, '-', this.buttons.reloadAll, this.buttons.expand, this.buttons.collapse]   
             });
             menu.show(node.ui.getAnchor());
         }, this);
@@ -121,6 +121,27 @@ Ext.extend(Vps.Component.Pages, Ext.util.Observable,
             text    : 'Toggle Visibility of selected Page',
             handler : this.tree.visible,
             icon : '/assets/vps/images/silkicons/page_red.png',
+            cls: 'x-btn-text-icon',
+            scope   : this.tree
+        }
+        this.buttons.makeHome = {
+            text    : 'Make selected Page Homepage',
+            handler : function (o, e) {
+                Ext.Ajax.request({
+                    url: '/admin/pages/jsonMakeHome/',
+                    success: function(r) {
+                        response = Ext.decode(r.responseText);
+                        var oldhome = this.tree.getNodeById(response.oldhome);
+                        oldhome.attributes.visible = response.oldhomeVisible;
+                        this.setvisible(oldhome);
+                        var home = this.tree.getNodeById(response.home);
+                        home.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/application_home.png)';
+                    },
+                    params: {id: this.tree.getSelectionModel().getSelectedNode().id },
+                    scope: this
+                });
+            },
+            icon : '/assets/vps/images/silkicons/application_home.png',
             cls: 'x-btn-text-icon',
             scope   : this.tree
         }
