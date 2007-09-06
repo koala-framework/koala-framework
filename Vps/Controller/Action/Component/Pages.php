@@ -27,6 +27,9 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
     protected function _formatNode($row)
     {
         $data = parent::_formatNode($row);
+        if ($data['data']['is_home']) {
+            $data['bIcon'] = 'application_home';
+        }
         $data['uiProvider'] = 'Vps.AutoTree.PagesNode';
         return $data;
     }
@@ -87,4 +90,38 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
         return $where;
     }
     
+    public function jsonVisibleAction()
+    {
+        $visible = $this->getRequest()->getParam('visible') == 'true';
+        $id = $this->getRequest()->getParam('id');
+        $row = $this->_table->find($id)->current();
+        if ($row->is_home) {
+            throw new Vps_ClientException('Cannot set Home Page invisible');
+        } else {
+            parent::jsonVisibleAction();
+        }
+    }
+
+    public function jsonMakeHomeAction()
+    {
+        $id = $this->_getParam('id');
+        $row = $this->_table->find($id)->current();
+        if ($row) {
+            $oldRows = $this->_table->fetchAll('is_home=1');
+            foreach ($oldRows as $oldRow) {
+                $oldId = $oldRow->id;
+                $oldVisible = $oldRow->visible;
+                $oldRow->is_home = 0;
+                $oldRow->save();
+            }
+            
+            $row->is_home = 1;
+            $row->save();
+            $this->view->home = $id;
+            $this->view->oldhome = $oldId;
+            $this->view->oldhomeVisible = $oldVisible;
+        } else {
+            $this->view->error = 'Node not found';
+        }
+    }
 }
