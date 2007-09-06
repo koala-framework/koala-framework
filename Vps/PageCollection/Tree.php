@@ -84,7 +84,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
 
     public function getChildPage(Vpc_Interface $page = null, $filename = '')
     {
-        $this->generateHierarchy($page, $filename);
+        $this->_generateHierarchy($page, $filename);
         $searchId = $page ? $page->getPageId() : null;
         // Nach gleichem Filename suchen
         foreach ($this->_pageParentIds as $id => $parentId) {
