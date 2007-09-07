@@ -99,7 +99,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (!isset($this->_queryFields)) {
             $this->_queryFields = array();
             foreach ($this->_columns as $column) {
-                $this->_queryFields[] = $column->getDataIndex();
+                if (!$column->getFindParent()) {
+                    $this->_queryFields[] = $column->getDataIndex();
+                }
             }
         }
 
@@ -136,6 +138,12 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $queryId = $this->getRequest()->getParam('queryId');
         if ($queryId) {
             $where[$this->_primaryKey.' = ?'] = $queryId;
+        }
+        foreach($this->_filters as $field=>$filter) {
+            if($field=='text') continue; //handled above
+            if ($this->_getParam('query_'.$field)) {
+                $where[$field.' = ?'] = $this->_getParam('query_'.$field);
+            }
         }
         return $where;
     }
@@ -219,11 +227,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                     $row = (object)$row;
                 }
                 foreach ($this->_columns as $column) {
-                    if ($column->getFindParent()) {
-                        $data = $this->_fetchFromParentRow($row, $column->getFindParent());
-                    } else {
-                        $data = $this->_fetchFromRow($row, $column->getDataIndex());
-                    }
+                    $data = $column->getData($row, Vps_Auto_Grid_Column::ROLE_DISPLAY);
                     $r[$column->getDataIndex()] = $data;
                 }
                 if (!isset($r[$primaryKey]) && isset($row->$primaryKey)) {
@@ -258,7 +262,10 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         else if ($type == 'tinytext') $type = 'string';
         else if (substr($type, -3) == 'int') $type = 'int';
         else if ($type == 'datetime') $type = 'date';
-        else if ($type == 'time') $type = '';
+        else if ($type == 'decimal') $type = 'string';
+        else if (substr($type, 0, 6) == 'double') $type = 'float';
+        else if ($type == 'time') $type = ''; //auto
+        else $Type = ''; //auto
         return $type;
     }
 

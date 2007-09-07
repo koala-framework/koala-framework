@@ -35,3 +35,4 @@ Vps.Renderer.Nl2Br = function(v) {
 Vps.Renderer.Component = function(v) {
     return '<iframe height="100" width="100%" frameborder="0" style="border: 1px solid darkgrey" src="' + v + '"></iframe>';
 };
+

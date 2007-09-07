@@ -1,4 +1,6 @@
+
 Ext.namespace('Vps.User');
+
 Vps.User.Users = function(renderTo, config)
 {
     config = Ext.applyIf(config || {}, {controllerUrl: '/users/'});
@@ -32,7 +34,7 @@ Ext.extend(Vps.User.Users, Ext.util.Observable,
     {
         return new Ext.GridPanel(this.grid.grid); 
     },
-    
+
     onMailsend : function() {
         Ext.Msg.show({
             title:'Benutzerdaten senden?',
@@ -67,5 +69,5 @@ Ext.extend(Vps.User.Users, Ext.util.Observable,
                 }
             }
         });
-    },
+    }
 });

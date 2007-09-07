@@ -3,10 +3,10 @@ class Vps_Acl_Resource_MenuUrl extends Vps_Acl_Resource_Abstract
 {
     protected $_menuUrl;
 
-    public function __construct($resourceId, $menuText = null, $menuUrl = null)
+    public function __construct($resourceId, $menuConfig = null, $menuUrl = null)
     {
         $this->_menuUrl = $menuUrl;
-        parent::__construct($resourceId, $menuText);
+        parent::__construct($resourceId, $menuConfig);
     }
 
     public function setMenuUrl($menuUrl)
