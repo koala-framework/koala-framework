@@ -256,8 +256,36 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                     this.ds.load();
                 }
             }, this, {buffer: 500});
+            delete meta.filters.text;
         }
-        
+        for(var filter in meta.filters) {
+            if (meta.filters[filter].type == 'ComboBox') {
+                var data = meta.filters[filter].data;
+                data.unshift([0, 'alle']);
+                var filterStore = new Ext.data.SimpleStore({
+                    id: 0,
+                    fields: ['id', 'name'],
+                    data: data
+                });
+                var combo = new Ext.form.ComboBox({
+                        store: filterStore,
+                        displayField: 'name',
+                        valueField: 'id',
+                        mode: 'local',
+                        triggerAction: 'all',
+                        editable: false,
+                        width: 200
+                    });
+                combo.setValue(0);
+                this.getToolbar().addText(" ");
+                this.getToolbar().addField(combo);
+                combo.on('select', function(combo, record, index) {
+                    this.ds.baseParams['query_'+filter] = record.id;
+                    this.load({start:0});
+                }, this);
+            }
+        }
+
         this.fireEvent('generatetoolbar', this.toolbar);
     },
     onSave : function()

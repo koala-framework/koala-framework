@@ -7,6 +7,8 @@ class Vps_Auto_Form implements Vps_Collection_Item_Interface
     private $_table;
     private $_primaryKey;
 
+    private $_row;
+
     public function __construct($name = null, $id = null)
     {
         $this->fields = new Vps_Collection_FormFields();
@@ -17,13 +19,9 @@ class Vps_Auto_Form implements Vps_Collection_Item_Interface
     public function prepareSave($parentRow, $postData)
     {
         $row = (object)$this->getRow();
-        if (!$row) {
-            $row = $this->_table->createRow();
-        }
         if(!$row) {
             throw new Vps_Exception('Can\'t find row.');
         }
-
 
         foreach($this->fields as $field) {
             $field->save($row, $postData);
@@ -68,7 +66,6 @@ class Vps_Auto_Form implements Vps_Collection_Item_Interface
     {
         $ret = array();
         $row = (object)$this->getRow();
-//         $it = new RecursiveIteratorIterator(new Vps_Collection_Iterator_RecursiveFormFields($this->fields));
         foreach($this->fields as $field) {
             $ret = array_merge($ret, $field->load($row));
         }
@@ -79,11 +76,9 @@ class Vps_Auto_Form implements Vps_Collection_Item_Interface
     {
         $ret = array();
         $row = (object)$this->_fetchData();
-//         $it = new RecursiveIteratorIterator(new Vps_Collection_Iterator_RecursiveFormFields($this->fields));
         foreach($this->fields as $field) {
             $field->delete($row);
         }
-        
         return $ret;
     }
 
@@ -154,6 +149,8 @@ class Vps_Auto_Form implements Vps_Collection_Item_Interface
 
     public function getRow()
     {
+        if (isset($this->_row)) return $this->_row;
+
         if (!isset($this->_table)) {
             throw new Vps_Exception('Either _table has to be set or _fetchData has to be overwritten.');
         }
@@ -170,6 +167,9 @@ class Vps_Auto_Form implements Vps_Collection_Item_Interface
             if (!empty($where)) {
                 $rowset = $this->_table->fetchAll($where);
             }
+        } else if ($id == 0) {
+            $this->_row = $this->_table->createRow();
+            return $this->_row;
         } else if ($id) {
             $rowset = $this->_table->find($id);
         }
@@ -181,9 +181,10 @@ class Vps_Auto_Form implements Vps_Collection_Item_Interface
             } else if ($rowset->count() > 1) {
                 throw new Vps_ClientException('More than one database-entry found.');
             } else {
-                return $rowset->current();
+                $this->_row = $rowset->current();
             }
         }
+        return $this->_row;
     }
 
     public function getMetaData()

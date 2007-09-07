@@ -77,6 +77,7 @@ Ext.extend(Vps.Auto.Form.Dialog, Vps.Auto.Form,
     add: function(options) {
         if(!options) options = {};
         if(options.baseParams) this.form.baseParams = options.baseParams
+        this.form.baseParams.id = 0;
         this.onAdd();
         this.dialog.setTitle('hinzufügen');
         this.show();

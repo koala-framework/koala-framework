@@ -5,34 +5,45 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
     {
         $acl = $this->_getAcl();
 
+        $config = Zend_Registry::get('config');
+        $assetPaths = Vps_Assets_Dependencies::resolveAssetPaths($config->asset->toArray());
+
         $menus = array();
         foreach ($resources as $resource) {
             if ($acl->isAllowed($this->_getUserRole(), $resource)) {
+                if (!$resource instanceof Vps_Acl_Resource_Abstract) {
+                    //nur Vps-Resourcen im Menü anzeigen
+                    continue;
+                }
                 $menu = array();
+                $menu['menuConfig'] = $resource->getMenuConfig();
+                if (is_string($menu['menuConfig'])) {
+                    $menu['menuConfig'] = array('text' => $menu['menuConfig']);
+                }
+                //wenn ein kompletter assets-pfad angegeben wurde keine änderung
+                if (isset($menu['menuConfig']['icon'])
+                    && !Vps_Assets_Loader::getAssetPath(substr($menu['menuConfig']['icon'], 8), $assetPaths)) {
+                    //sonst den standard-prefix dazugeben
+                    $menu['menuConfig']['icon'] = '/assets/vps/images/silkicons/'.$menu['menuConfig']['icon'];
+                }
+
                 if ($resource instanceof Vps_Acl_Resource_MenuDropdown) {
                     $menu['type'] = 'dropdown';
-                    $menu['text'] = $resource->getMenuText();
                     $menu['children'] = $this->_processResources($acl->getResources($resource));
                 } else if ($resource instanceof Vps_Acl_Resource_MenuEvent) {
                     $menu['type'] = 'event';
-                    $menu['text'] = $resource->getMenuText();
                     $menu['config'] = $resource->getMenuConfig();
                 } else if ($resource instanceof Vps_Acl_Resource_MenuUrl) {
                     $menu['type'] = 'url';
-                    $menu['text'] = $resource->getMenuText();
                     $menu['url'] = $resource->getMenuUrl();
                 } else if ($resource instanceof Vps_Acl_Resource_MenuCommandDialog) {
                     $menu['type'] = 'commandDialog';
-                    $menu['text'] = $resource->getMenuText();
                     $menu['commandClass'] = $resource->getMenuCommandClass();
                     $menu['config'] = $resource->getMenuConfig();
                 } else if ($resource instanceof Vps_Acl_Resource_MenuCommand) {
                     $menu['type'] = 'command';
-                    $menu['text'] = $resource->getMenuText();
                     $menu['commandClass'] = $resource->getMenuCommandClass();
                     $menu['config'] = $resource->getMenuConfig();
-                } else if ($resource instanceof Zend_Acl_Resource) {
-                    continue; //nicht im menü anzeigen
                 } else {
                     throw new Vps_Exception("Unknown resource-type '".get_class($resource)."'");
                 }
@@ -50,7 +61,7 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
         if (empty($menus) && $this->_getUserRole() == 'guest') {
             $menu = array();
             $menu['type'] = 'commandDialog';
-            $menu['text'] = 'Login';
+            $menu['menuConfig']['text'] = 'Login';
             $menu['commandClass'] = 'Vps.User.Login.Dialog';
             $menus[] = $menu;
             $showLogout = false;

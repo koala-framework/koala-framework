@@ -1,9 +1,11 @@
 <?php
 class Vps_Assets_Dependencies
 {
-    private $_files = array();
+    private $_files;
     private $_paths;
     private $_useExtAll = false;
+    private $_configFile;
+    private $_configSection;
 
     //löst pfade wie "asset.vps/images/" auf
     public static function resolveAssetPaths($paths)
@@ -32,48 +34,8 @@ class Vps_Assets_Dependencies
             unset($paths['useExtAll']);
         }
         $this->_paths = self::resolveAssetPaths($paths);
-
-        $frontendOptions = array(
-            'lifetime' => null,
-            'automatic_serialization' => true
-        );
-        $backendOptions = array(
-            'cache_dir' => 'application/cache/assets/'
-        );
-        require_once 'Zend/Cache.php';
-        $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-        
-        $checksums = array(
-            md5_file(VPS_PATH.'/Vps_js/dependencies.ini'),
-            md5_file($configFile)
-        );
-        if ($cacheContents = $cache->load('dependencies')) {
-            if ($cacheContents['checksums'] != $checksums
-                || $cacheContents['configSection'] != $configSection
-                || $cacheContents['paths'] != $paths) {
-                $cacheContents = false;
-            }
-        }
-
-        if(!$cacheContents) {
-            $cacheContents = array();
-            $cacheContents['checksums'] = $checksums;
-            $cacheContents['configSection'] = $configSection;
-            $cacheContents['paths'] = $paths;
-            if ($this->_useExtAll) {
-                $this->_files[] = 'ext/adapter/ext/ext-base.js';
-                $this->_files[] = 'ext/ext-all.js';
-                $this->_files[] = 'ext/resources/css/ext-all.css';
-            }
-            $dependencies = new Zend_Config_Ini($configFile, $configSection);
-            foreach($dependencies as $d) {
-                $this->_processDependency($d);
-            }
-            $cacheContents['files'] = $this->_files;
-            $cache->save($cacheContents, 'dependencies');
-        } else {
-            $this->_files = $cacheContents['files'];
-        }
+        $this->_configFile = $configFile;
+        $this->_configSection = $configSection;
     }
 
     private function _getFilePath($file)
@@ -81,12 +43,12 @@ class Vps_Assets_Dependencies
         $pathType = substr($file, 0, strpos($file, '/'));
         if (!isset($this->_paths[$pathType])) {
             require_once 'Vps/Exception.php';
-            throw new Vps_Exception("JS-Path-Type '$pathType' not found in config.");
+            throw new Vps_Exception("Assets-Path-Type '$pathType' not found in config.");
         }
         $path = $this->_paths[$pathType].substr($file, strpos($file, '/'));
         if(!file_exists($path)) {
             require_once 'Vps/Exception.php';
-            throw new Vps_Exception("JS-File '$path' does not exist.");
+            throw new Vps_Exception("Asset-File '$path' does not exist.");
         }
         return $path;
     }
@@ -102,7 +64,53 @@ class Vps_Assets_Dependencies
     }
     public function getFiles($fileType = null)
     {
+        if (!isset($this->_files)) {
+            $frontendOptions = array(
+                'lifetime' => null,
+                'automatic_serialization' => true
+            );
+            $backendOptions = array(
+                'cache_dir' => 'application/cache/assets/'
+            );
+            require_once 'Zend/Cache.php';
+            $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+            
+            $checksums = array(
+                md5_file(VPS_PATH.'/Vps_js/dependencies.ini'),
+                md5_file($configFile)
+            );
+            if ($cacheContents = $cache->load('dependencies')) {
+                if ($cacheContents['checksums'] != $checksums
+                    || $cacheContents['configSection'] != $configSection
+                    || $cacheContents['paths'] != $paths) {
+                    $cacheContents = false;
+                }
+            }
+
+            if(!$cacheContents) {
+                $this->_files = array();
+                $cacheContents = array();
+                $cacheContents['checksums'] = $checksums;
+                $cacheContents['configSection'] = $configSection;
+                $cacheContents['paths'] = $paths;
+                if ($this->_useExtAll) {
+                    $this->_files[] = 'ext/adapter/ext/ext-base.js';
+                    $this->_files[] = 'ext/ext-all.js';
+                    $this->_files[] = 'ext/resources/css/ext-all.css';
+                }
+                $dependencies = new Zend_Config_Ini($this->_configFile, $this->_configSection);
+                foreach($dependencies as $d) {
+                    $this->_processDependency($d);
+                }
+                $cacheContents['files'] = $this->_files;
+                $cache->save($cacheContents, 'dependencies');
+            } else {
+                $this->_files = $cacheContents['files'];
+            }
+        }
+
         if (is_null($fileType)) return $this->_files;
+
         $files = array();
         foreach ($this->_files as $file) {
             if (substr($file, -strlen($fileType)) == $fileType) {
@@ -134,20 +142,8 @@ class Vps_Assets_Dependencies
 
     public function getPackedAll($fileType)
     {
-        $frontendOptions = array(
-            'lifetime' => null
-        );
-        $backendOptions = array(
-            'cache_dir' => 'application/cache/assets/'
-        );
-        require_once 'Zend/Cache.php';
-        $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-
-        if (!$contents = $cache->load($fileType.'AllPacked')) {
-            $contents = $this->_pack($this->getContentsAll($fileType), $fileType);
-            $cache->save($contents, $fileType.'AllPacked');
-        }
-
+        $contents = $this->getContentsAll($fileType);
+//         $contents = $this->_pack($contents, $fileType);
         return $contents;
     }
 
@@ -164,10 +160,8 @@ class Vps_Assets_Dependencies
     public function getContentsAll($fileType)
     {
         $contents = '';
-        foreach($this->_files as $file) {
-            if (substr($file, -strlen($fileType)) == $fileType) {
-                $contents .= $this->getFileContents($file) . "\n";
-            }
+        foreach($this->getFiles($fileType) as $file) {
+            $contents .= $this->getFileContents($file) . "\n";
         }
         return $contents;
     }

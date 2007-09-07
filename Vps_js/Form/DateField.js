@@ -12,7 +12,7 @@ Ext.extend(Vps.Form.DateField, Ext.form.DateField,
     initComponent : function(){
         Vps.Form.DateField.superclass.initComponent.call(this);
         this.addEvents({
-            menuhidden : true,
+            menuhidden : true
         });
         if (!this.menuListeners.oldHide) {
             this.menuListeners.oldHide = this.menuListeners.hide;

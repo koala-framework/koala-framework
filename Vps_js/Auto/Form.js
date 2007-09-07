@@ -194,6 +194,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
         this.form.baseParams.id = id;
         if (!options) options = {};
         this.form.clearValues();
+        this.form.clearInvalid();
         this.form.load(Ext.applyIf(options, {
             url: this.controllerUrl+'jsonLoad',
             waitMsg: 'laden...',
@@ -287,6 +288,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
                 if (this.deleteButton) this.deleteButton.disable();
                 this.form.baseParams.id = 0;
                 this.form.setDefaultValues();
+                this.form.clearInvalid();
                 this.fireEvent('add', this);
             },
             scope: this

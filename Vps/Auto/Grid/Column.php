@@ -2,6 +2,9 @@
 class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
 {
     private $_properties;
+    const ROLE_DISPLAY = 1;
+    const ROLE_EXPORT = 2;
+    const ROLE_PDF = 3;
 
     public function __construct($dataIndex = null, $header = null, $width = null)
     {
@@ -72,6 +75,15 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
 //             $this->_columns[] = array('dataIndex' => $col['showDataIndex']);
 //         }
         return $ret;
+    }
+
+    public function getData($row, $role)
+    {
+        $dataIndex = $this->getDataIndex();
+        if (!is_null($row->$dataIndex) && !isset($row->$dataIndex)) {
+            throw new Vps_Exception("Index '$dataIndex' not found in row");
+        }
+        return $row->$dataIndex;
     }
 
     public function setEditor($editor)
