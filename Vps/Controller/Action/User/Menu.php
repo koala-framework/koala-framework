@@ -33,18 +33,18 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
                     $menu['children'] = $this->_processResources($acl->getResources($resource));
                 } else if ($resource instanceof Vps_Acl_Resource_MenuEvent) {
                     $menu['type'] = 'event';
-                    $menu['config'] = $resource->getMenuConfig();
+                    $menu['eventConfig'] = $resource->getMenuEventConfig();
                 } else if ($resource instanceof Vps_Acl_Resource_MenuUrl) {
                     $menu['type'] = 'url';
                     $menu['url'] = $resource->getMenuUrl();
                 } else if ($resource instanceof Vps_Acl_Resource_MenuCommandDialog) {
                     $menu['type'] = 'commandDialog';
                     $menu['commandClass'] = $resource->getMenuCommandClass();
-                    $menu['config'] = $resource->getMenuConfig();
+                    $menu['commandConfig'] = $resource->getMenuCommandConfig();
                 } else if ($resource instanceof Vps_Acl_Resource_MenuCommand) {
                     $menu['type'] = 'command';
                     $menu['commandClass'] = $resource->getMenuCommandClass();
-                    $menu['config'] = $resource->getMenuConfig();
+                    $menu['commandConfig'] = $resource->getMenuCommandConfig();
                 } else {
                     throw new Vps_Exception("Unknown resource-type '".get_class($resource)."'");
                 }

@@ -41,7 +41,7 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
                 subMenu.href = m.url;
             } else if (m.type == 'event') {
                 subMenu.handler = function(o) {
-                                if(!o.config.title) o.config.title = o.text;
+                                if(o.eventConfig && !o.eventConfig.title) o.eventConfig.title = o.text;
                                 this.fireEvent('menuevent', o.eventConfig);
                             };
                 subMenu.scope = this;
