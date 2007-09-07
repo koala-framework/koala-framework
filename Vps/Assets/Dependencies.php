@@ -77,12 +77,12 @@ class Vps_Assets_Dependencies
             
             $checksums = array(
                 md5_file(VPS_PATH.'/Vps_js/dependencies.ini'),
-                md5_file($configFile)
+                md5_file($this->_configFile)
             );
             if ($cacheContents = $cache->load('dependencies')) {
                 if ($cacheContents['checksums'] != $checksums
-                    || $cacheContents['configSection'] != $configSection
-                    || $cacheContents['paths'] != $paths) {
+                    || $cacheContents['configSection'] != $this->_configSection
+                    || $cacheContents['paths'] != $this->_paths) {
                     $cacheContents = false;
                 }
             }

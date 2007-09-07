@@ -1,4 +1,5 @@
 <?php
+
 class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
 {
     protected function _processResources($resources)
