@@ -8,7 +8,7 @@ function p($src, $max_depth = 5) {
         xdebug_var_dump($src);
     } else {
         echo "<pre>";
-        print_r($src);
+        var_dump($src);
         echo "</pre>";
     }
 }
