@@ -42,12 +42,10 @@ class Vps_Assets_Dependencies
     {
         $pathType = substr($file, 0, strpos($file, '/'));
         if (!isset($this->_paths[$pathType])) {
-            require_once 'Vps/Exception.php';
             throw new Vps_Exception("Assets-Path-Type '$pathType' not found in config.");
         }
         $path = $this->_paths[$pathType].substr($file, strpos($file, '/'));
         if(!file_exists($path)) {
-            require_once 'Vps/Exception.php';
             throw new Vps_Exception("Asset-File '$path' does not exist.");
         }
         return $path;
@@ -72,7 +70,6 @@ class Vps_Assets_Dependencies
             $backendOptions = array(
                 'cache_dir' => 'application/cache/assets/'
             );
-            require_once 'Zend/Cache.php';
             $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
             
             $checksums = array(
@@ -132,7 +129,6 @@ class Vps_Assets_Dependencies
     private function _pack($contents, $fileType)
     {
         if ($fileType == 'js') {
-            require_once 'Vps/Assets/JavaScriptPacker.php';
             $packer = new Vps_Assets_JavaScriptPacker($contents, 'Normal', true, false);
             return $packer->pack();
         } else {
@@ -175,7 +171,6 @@ class Vps_Assets_Dependencies
         if (isset($dependency->dep)) {
             foreach ($dependency->dep as $x=>$d) {
                 if (!isset($vpsDependencies->$d)) {
-                    require_once 'Vps/Exception.php';
                     throw new Vps_Exception("Can't resolve dependency '$d'.");
                 }
                 $this->_processDependency($vpsDependencies->$d);
@@ -189,14 +184,12 @@ class Vps_Assets_Dependencies
                 if (substr($file, -2)=="/*") {
                     $pathType = substr($file, 0, strpos($file, '/'));
                     if (!isset($this->_paths[$pathType])) {
-                        require_once 'Vps/Exception.php';
                         throw new Vps_Exception("JS-Path-Type '$pathType' not found in config.");
                     }
                     $file = substr($file, strpos($file, '/')); //pathtype abschneiden
                     $file = substr($file, 0, -1); //* abschneiden
                     $path = $this->_paths[$pathType].$file;
                     if (!file_exists($path)) {
-                        require_once 'Vps/Exception.php';
                         throw new Vps_Exception("Path '$path' does not exist.");
                     }
                     $DirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));

@@ -17,6 +17,8 @@ class Vps_Assets_Loader
 
     static public function load()
     {
+        require_once 'Vps/Loader.php';
+        Vps_Loader::registerAutoload();
         if (substr($_SERVER['SCRIPT_URL'], 0, 8)=='/assets/') {
 
             $headers = apache_request_headers();
@@ -27,7 +29,6 @@ class Vps_Assets_Loader
                         ? 'gzip' : (strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate')
                         ? 'deflate' : 'none');
 
-            require_once 'Vps/Setup.php';
             $config = Vps_Setup::createConfig();
             $url = substr($_SERVER['SCRIPT_URL'], 8);
             if ($url == 'all.js' || $url == 'all.css') {
@@ -45,13 +46,11 @@ class Vps_Assets_Loader
                 $backendOptions = array(
                     'cache_dir' => 'application/cache/assets/'
                 );
-                require_once 'Zend/Cache.php';
                 $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
 
                 if ((!$lastModified = $cache->load($fileType.$encoding.'AllLastModified'))
                     || !$cache->test($fileType.$encoding.'AllPacked')) {
 
-                    require_once 'Vps/Assets/Dependencies.php';
                     $dep = new Vps_Assets_Dependencies($config->asset, 'application/config.ini', 'dependencies');
                     $contents = $dep->getPackedAll($fileType);
                     $contents = self::_encode($contents, $encoding);
@@ -74,7 +73,6 @@ class Vps_Assets_Loader
                 header ("Content-Encoding: " . $encoding);
                 echo $contents;
             } else {
-                require_once 'Vps/Assets/Dependencies.php';
                 $paths = Vps_Assets_Dependencies::resolveAssetPaths($config->asset->toArray());
                 $assetPath = self::getAssetPath($url, $paths);
                 if (!$assetPath) {
