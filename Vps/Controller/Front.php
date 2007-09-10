@@ -1,19 +1,6 @@
 <?php
-if (file_exists(VPS_PATH.'include_path')) {
-    $zendPath = VPS_PATH.'include_path';
-} else if (file_exists('/docs/vpcms/zend/')) {
-    $zendPath = '/docs/vpcms/zend/';
-} else if (file_exists('/www/public/zend/')) {
-    $zendPath = '/www/public/zend/';
-} else {
-    die ('zend not found');
-}
-$include_path  = get_include_path();
-$include_path .= PATH_SEPARATOR . $zendPath;
-set_include_path($include_path);
-
-require_once 'Zend/Loader.php';
-Zend_Loader::registerAutoload();
+require_once 'Vps/Loader.php';
+Vps_Loader::registerAutoload();
 
 function p($src, $max_depth = 5) {
     ini_set('xdebug.var_display_max_depth', $max_depth);
