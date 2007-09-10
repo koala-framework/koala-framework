@@ -1,9 +1,0 @@
-/*
- * Ext JS Library 1.0.1
- * Copyright(c) 2006-2007, Ext JS, LLC.
- * licensing@extjs.com
- * 
- * http://www.extjs.com/license
- */
-
-Ext.util.CSS=function(){var _1=null;var _2=document;var _3=/(-[a-z])/gi;var _4=function(m,a){return a.charAt(1).toUpperCase();};return {createStyleSheet:function(_7){var ss;if(Ext.isIE){ss=_2.createStyleSheet();ss.cssText=_7;}else{var _9=_2.getElementsByTagName("head")[0];var _a=_2.createElement("style");_a.setAttribute("type","text/css");try{_a.appendChild(_2.createTextNode(_7));}catch(e){_a.cssText=_7;}_9.appendChild(_a);ss=_a.styleSheet?_a.styleSheet:(_a.sheet||_2.styleSheets[_2.styleSheets.length-1]);}this.cacheStyleSheet(ss);return ss;},removeStyleSheet:function(id){var _c=_2.getElementById(id);if(_c){_c.parentNode.removeChild(_c);}},swapStyleSheet:function(id,_e){this.removeStyleSheet(id);var ss=_2.createElement("link");ss.setAttribute("rel","stylesheet");ss.setAttribute("type","text/css");ss.setAttribute("id",id);ss.setAttribute("href",_e);_2.getElementsByTagName("head")[0].appendChild(ss);},refreshCache:function(){return this.getRules(true);},cacheStyleSheet:function(ss){if(!_1){_1={};}try{var _11=ss.cssRules||ss.rules;for(var j=_11.length-1;j>=0;--j){_1[_11[j].selectorText]=_11[j];}}catch(e){}},getRules:function(_13){if(_1==null||_13){_1={};var ds=_2.styleSheets;for(var i=0,len=ds.length;i<len;i++){try{this.cacheStyleSheet(ds[i]);}catch(e){}}}return _1;},getRule:function(_17,_18){var rs=this.getRules(_18);if(!(_17 instanceof Array)){return rs[_17];}for(var i=0;i<_17.length;i++){if(rs[_17[i]]){return rs[_17[i]];}}return null;},updateRule:function(_1b,_1c,_1d){if(!(_1b instanceof Array)){var _1e=this.getRule(_1b);if(_1e){_1e.style[_1c.replace(_3,_4)]=_1d;return true;}}else{for(var i=0;i<_1b.length;i++){if(this.updateRule(_1b[i],_1c,_1d)){return true;}}}return false;}};}();

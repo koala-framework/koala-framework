@@ -1,9 +1,0 @@
-/*
- * Ext JS Library 1.0.1
- * Copyright(c) 2006-2007, Ext JS, LLC.
- * licensing@extjs.com
- * 
- * http://www.extjs.com/license
- */
-
-Ext.data.JsonReader=function(_1,_2){Ext.data.JsonReader.superclass.constructor.call(this,_1,_2);};Ext.extend(Ext.data.JsonReader,Ext.data.DataReader,{read:function(_3){var _4=_3.responseText;var o=eval("("+_4+")");if(!o){throw {message:"JsonReader.read: Json object not found"};}return this.readRecords(o);},simpleAccess:function(_6,_7){return _6[_7];},getJsonAccessor:function(){var re=/[\[\.]/;return function(_9){try{return (re.test(_9))?new Function("obj","return obj."+_9):function(_a){return _a[_9];};}catch(e){}return Ext.emptyFn;};}(),readRecords:function(o){this.jsonData=o;var s=this.meta,_d=this.recordType,f=_d.prototype.fields,fi=f.items,fl=f.length;if(!this.ef){if(s.totalProperty){this.getTotal=this.getJsonAccessor(s.totalProperty);}if(s.successProperty){this.getSuccess=this.getJsonAccessor(s.successProperty);}this.getRoot=s.root?this.getJsonAccessor(s.root):function(p){return p;};if(s.id){var g=this.getJsonAccessor(s.id);this.getId=function(rec){var r=g(rec);return (r===undefined||r==="")?null:r;};}else{this.getId=function(){return null;};}this.ef=[];for(var i=0;i<fl;i++){f=fi[i];var map=(f.mapping!==undefined&&f.mapping!==null)?f.mapping:f.name;this.ef[i]=this.getJsonAccessor(map);}}var _17=this.getRoot(o),c=_17.length,_19=c,_1a=true;if(s.totalProperty){var v=parseInt(this.getTotal(o),10);if(!isNaN(v)){_19=v;}}if(s.successProperty){var v=this.getSuccess(o);if(v===false||v==="false"){_1a=false;}}var _1c=[];for(var i=0;i<c;i++){var n=_17[i];var _1e={};var id=this.getId(n);for(var j=0;j<fl;j++){f=fi[j];var v=this.ef[j](n);_1e[f.name]=f.convert((v!==undefined)?v:f.defaultValue);}var _21=new _d(_1e,id);_21.json=n;_1c[i]=_21;}return {success:_1a,records:_1c,totalRecords:_19};}});

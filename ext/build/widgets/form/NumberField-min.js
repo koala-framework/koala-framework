@@ -1,9 +1,0 @@
-/*
- * Ext JS Library 1.0.1
- * Copyright(c) 2006-2007, Ext JS, LLC.
- * licensing@extjs.com
- * 
- * http://www.extjs.com/license
- */
-
-Ext.form.NumberField=function(_1){Ext.form.NumberField.superclass.constructor.call(this,_1);};Ext.extend(Ext.form.NumberField,Ext.form.TextField,{fieldClass:"x-form-field x-form-num-field",allowDecimals:true,decimalSeparator:".",decimalPrecision:2,allowNegative:true,minValue:Number.NEGATIVE_INFINITY,maxValue:Number.MAX_VALUE,minText:"The minimum value for this field is {0}",maxText:"The maximum value for this field is {0}",nanText:"{0} is not a valid number",initEvents:function(){Ext.form.NumberField.superclass.initEvents.call(this);var _2="0123456789";if(this.allowDecimals){_2+=this.decimalSeparator;}if(this.allowNegative){_2+="-";}var _3=function(e){var k=e.getKey();if(!Ext.isIE&&(e.isNavKeyPress()||k==e.BACKSPACE||(k==e.DELETE&&e.button==-1))){return;}var c=e.getCharCode();if(_2.indexOf(String.fromCharCode(c))===-1){e.stopEvent();}};this.el.on("keypress",_3,this);},validateValue:function(_7){if(!Ext.form.NumberField.superclass.validateValue.call(this,_7)){return false;}if(_7.length<1){return true;}_7=String(_7).replace(this.decimalSeparator,".");if(isNaN(_7)){this.markInvalid(String.format(this.nanText,_7));return false;}var _8=this.parseValue(_7);if(_8<this.minValue){this.markInvalid(String.format(this.minText,this.minValue));return false;}if(_8>this.maxValue){this.markInvalid(String.format(this.maxText,this.maxValue));return false;}return true;},parseValue:function(_9){return parseFloat(String(_9).replace(this.decimalSeparator,"."));},fixPrecision:function(_a){if(!this.allowDecimals||this.decimalPrecision==-1||isNaN(_a)||_a==0||!_a){return _a;}var _b=Math.pow(10,this.decimalPrecision+1);var _c=this.decimalPrecisionFcn(_a*_b);_c=this.decimalPrecisionFcn(_c/10);return _c/(_b/10);},decimalPrecisionFcn:function(v){return Math.floor(v);}});
