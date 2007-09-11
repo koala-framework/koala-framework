@@ -88,8 +88,8 @@ class Vps_Assets_Dependencies
                 $this->_files = array();
                 $cacheContents = array();
                 $cacheContents['checksums'] = $checksums;
-                $cacheContents['configSection'] = $configSection;
-                $cacheContents['paths'] = $paths;
+                $cacheContents['configSection'] = $this->_configSection;
+                $cacheContents['paths'] = $this->_paths;
                 if ($this->_useExtAll) {
                     $this->_files[] = 'ext/adapter/ext/ext-base.js';
                     $this->_files[] = 'ext/ext-all.js';

@@ -1,69 +1,51 @@
+Ext.namespace('Vps.User', 'Vps.User.Login');
 Vps.User.Login.Dialog = function(renderTo, config)
 {
+    Ext.apply(this, config);
     renderTo = renderTo || Ext.get(document.body).createChild();
 
-    Ext.apply(this, config);
-
     this.dialog = new Ext.BasicDialog(renderTo, {
-        height: 150,
+        height: 160,
         width: 310,
-        minHeight: 100,
-        minWidth: 150,
-        model: true,
+        modal: true,
         proxyDrag: true,
         shadow: true,
         title: 'Login',
-        closable: false
+        closable: false,
+        collapsible: false,
+        resizable: false
     });
-    this.dialog.addKeyListener(13, this.onOk, this); // ESC can also close the dialog
+    
+    Ext.DomHelper.append(this.dialog.body, '<iframe id="loginframe" scrolling="no" src="/login/showForm" width="100%" height="100%" style="border: 0px"></iframe>');
+    var frame = Ext.get('loginframe');
 
+    function cb(){
+        if(Ext.isIE){
+            doc = frame.dom.contentWindow.document;
+        }else {
+            doc = (frame.dom.contentDocument || window.frames[id].document);
+        }
+        if(doc && doc.body){
+            if (doc.body.innerHTML.match(/successful/)) {
+                this.dialog.hide();
+                if(Vps.menu) Vps.menu.reload();
+                if(this.success) {
+                    Ext.callback(this.success, this.scope);
+                }
+            }
+        }
+    }
 
-    this.form = new Ext.form.Form({
-            labelWidth: 110, 
-            url: '/login/jsonLoginUser'
-        });
-
-    this.form.add(
-            new Ext.form.TextField({
-                    fieldLabel: 'Benutzername',
-                    name: 'username',
-                    width: 150,
-                    allowBlank: false
-                }),
-            new Ext.form.TextField({
-                    inputType: 'password',
-                    fieldLabel: 'Passwort',
-                    name: 'password',
-                    width: 150,
-                    allowBlank: false
-                })
-    );
-
-    this.dialog.addButton('OK', this.onOk, this);
-
-    this.form.render(this.dialog.body);
+    Ext.EventManager.on(frame, 'load', cb, this);
 };
 
 
 Ext.extend(Vps.User.Login.Dialog, Ext.util.Observable,
 {
-    onOk: function() {
-        this.form.submit({
-            success: this.onSubmitSuccess,
-            scope: this
-            });
-    },
     show: function() {
-        this.showLogin();
+        this.dialog.show();
     },
     showLogin: function() {
         this.dialog.show();
-    },
-    onSubmitSuccess: function() {
-        this.dialog.hide();
-        if(Vps.menu) Vps.menu.reload();
-        if(this.success) {
-            Ext.callback(this.success, this.scope);
-        }
     }
 });

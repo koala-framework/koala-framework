@@ -1,0 +1,39 @@
+<html>
+    <head>
+        {foreach item=file from=$ext.files.css}
+        <link rel="stylesheet" type="text/css" href="{$file}" />
+        {/foreach}
+    </head>
+    <body>
+        <div id="ext-gen25" class="x-dlg x-dlg-resizable x-resizable-pinned x-dlg-draggable" style="width: 100%; height: 100%; left: 0px; top: 0px; visibility: visible; z-index: 9002;">
+            <div class="x-dlg-dlg-body" id="ext-gen33" style="left: 0px; top: 0px; width:100%; height:100%; border:0px">
+                <form class="x-form" method="post" id="ext-gen81" action="/login/showForm">
+                    <div style="overflow: auto; height: 60px; width: 288px;" id="ext-gen28" class="x-dlg-bd">
+                        <div class="x-form-ct" id="ext-gen70">
+                            <div class="x-form-item">
+                                <label for="ext-comp-1001" style="width: 110px;">Benutzername:</label>
+                                <div class="x-form-element" id="x-form-el-ext-comp-1001" style="padding-left: 115px;">
+                                    <input style="width: 150px;" class="x-form-text x-form-field" size="20" autocomplete="on" id="ext-comp-1001" name="username" type="text" value="{$username}">
+                                </div>
+                            </div>
+                            <div class="x-form-clear-left"></div>
+                            <div class="x-form-item">
+                                <label for="ext-comp-1002" style="width: 110px;">Passwort:</label>
+                                <div class="x-form-element" id="x-form-el-ext-comp-1002" style="padding-left: 115px;">
+                                    <input style="width: 150px;" class="x-form-text x-form-field" size="20" autocomplete="on" id="ext-comp-1002" name="password" type="password"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="x-dlg-ft" id="ext-gen71">
+                            <div class="x-dlg-btns x-dlg-btns-right" style="margin-left:220px">
+                                <input type="submit" class="x-btn-text" id="ext-gen74" value="Login">
+                                <div class="x-clear"/></div>
+                            </div>
+                            <div class="x-form-item">{$text}</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
