@@ -6,9 +6,12 @@
     {foreach item=file from=$ext.files.js}
     <script type="text/javascript" src="{$file}"></script>
     {/foreach}
+
+
     <script type="text/javascript">
         Ext.onReady(function() {ldelim}
             Vps.Page = new {$ext.class}({if $ext.renderTo != ''}{$ext.renderTo}{else}document.body{/if}, {$ext.config});
         {rdelim});
     </script>
+
 {/if}

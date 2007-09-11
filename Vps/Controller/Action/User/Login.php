@@ -11,6 +11,24 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
         $this->view->ext('Vps.User.Login.Index', $config);
     }
 
+    public function showFormAction()
+    {
+        $this->view->ext('');
+        $this->view->setRenderFile('Login.html');
+        $this->view->username = '';
+        if ($this->_getParam('username')) {
+            $result = $this->_login();
+            $this->view->username = $this->_getParam('username');
+            if ($result->isValid()) {
+                $this->view->text = 'Login successful.<!--successful->';
+            } else {
+                $this->view->text = 'Login failed';
+            }
+        } else {
+            $this->view->text = '';
+        }
+    }
+
     public function logoutAction()
     {
         Zend_Auth::getInstance()->clearIdentity();
@@ -25,26 +43,10 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
 
     public function jsonLoginUserAction()
     {
-        $username = $this->getRequest()->getParam('username');
-        $password = $this->getRequest()->getParam('password');
-        $adapter = $this->_createAuthAdapter();
-
-        if (!$adapter instanceof Zend_Auth_Adapter_DbTable) {
-            throw new Vps_Controller_Exception('_createAuthAdapter didn\'t return instance of Zend_Auth_Adapter_DbTable');
-        }
-        
-        $auth = Zend_Auth::getInstance();
-        $adapter->setIdentity($username);
-        $adapter->setCredential($password);
-        $result = $auth->authenticate($adapter);
+        $result = $this->_login();
         if (!$result->isValid()) {
             $this->view->error = implode("<br />", $result->getMessages());
-        } else {
-            $resultRow = $adapter->getResultRowObject(null, array('password', 'password_salt'));
-            $auth->getStorage()->write($resultRow);
-            $this->_onLogin();
         }
-
     }
     
     public function jsonLogoutUserAction()
@@ -57,6 +59,28 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
         $dao = Zend_Registry::get('dao');
         $adapter = new Zend_Auth_Adapter_DbTable($dao->getDb(), 'vps_users', 'username', 'password', 'MD5(CONCAT(?, password_salt))');
         return $adapter;
+    }
+    
+    private function _login()
+    {
+        $username = $this->getRequest()->getParam('username');
+        $password = $this->getRequest()->getParam('password');
+        $adapter = $this->_createAuthAdapter();
+
+        if (!$adapter instanceof Zend_Auth_Adapter_DbTable) {
+            throw new Vps_Controller_Exception('_createAuthAdapter didn\'t return instance of Zend_Auth_Adapter_DbTable');
+        }
+        
+        $auth = Zend_Auth::getInstance();
+        $adapter->setIdentity($username);
+        $adapter->setCredential($password);
+        $result = $auth->authenticate($adapter);
+        if ($result->isValid()) {
+            $resultRow = $adapter->getResultRowObject(null, array('password', 'password_salt'));
+            $auth->getStorage()->write($resultRow);
+            $this->_onLogin();
+        }
+        return $result;
     }
 
     protected function _onLogin()
