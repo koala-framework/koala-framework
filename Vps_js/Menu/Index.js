@@ -55,6 +55,9 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
                 subMenu.scope = this;
                 subMenu.commandClass = m.commandClass;
                 subMenu.commandConfig = m.commandConfig;
+                if (m.command != undefined) {
+                    eval(m.command + '();');
+                }
             } else if (m.type == 'command') {
                 subMenu.handler = function(o) {
                                 if (o.object && o.object.activate) {
@@ -101,7 +104,7 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
                     Ext.Ajax.request({
                         url : '/login/jsonLogoutUser',
                         success : function(form, action) {
-                            location.href = '/';
+                            document.location.reload();
                         }
                     });
                 }

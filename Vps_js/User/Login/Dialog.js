@@ -7,11 +7,11 @@ Vps.User.Login.Dialog = function(renderTo, config)
     this.dialog = new Ext.BasicDialog(renderTo, {
         height: 160,
         width: 310,
-        modal: true,
+        modal: false,
         proxyDrag: true,
         shadow: true,
         title: 'Login',
-        closable: false,
+        closable: true,
         collapsible: false,
         resizable: false
     });
