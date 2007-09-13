@@ -28,9 +28,13 @@ Vps.Component.Pages = function(renderTo, config)
     this.editform.on(
         'dataChanged',
         function(o, e) {
-            values = this.editform.form.getValues();
-            id = this.tree.tree.getSelectionModel().getSelectedNode().id;
-            node = this.tree.tree.getNodeById(id).setText(values.name);
+            if (this.editform.form.baseParams.parent_id != undefined) {
+                this.tree.tree.getSelectionModel().getSelectedNode().parentNode.reload();
+            } else {
+                values = this.editform.form.getValues();
+                id = this.tree.tree.getSelectionModel().getSelectedNode().id;
+                node = this.tree.tree.getNodeById(id).setText(values.name);
+            }
         },
         this
     );
@@ -39,42 +43,43 @@ Vps.Component.Pages = function(renderTo, config)
     
     this.createButtons();    
     var toolbar = new Ext.Toolbar(Ext.get('treeContainer').createChild());
-    this.tree.editButton = new Ext.Toolbar.Button(this.buttons.edit);
-    this.tree.pageButton = new Ext.Toolbar.Button({
+    this.editButton = new Ext.Toolbar.Button(this.buttons.edit);
+    this.pageButton = new Ext.Toolbar.Button({
         cls: 'x-btn-text-icon bmenu',
         text:'Page',
-        menu: [this.buttons.properties, this.buttons.add, this.buttons.del, this.buttons.visible, this.buttons.makeHome],
+        menu: [],
         icon : '/assets/vps/images/silkicons/page.png',
         disabled: true
     });
-    this.tree.navigationButton = new Ext.Toolbar.Button({
+    this.navigationButton = new Ext.Toolbar.Button({
         cls: 'x-btn-text-icon bmenu',
         text:'Navigation',
         icon : '/assets/vps/images/silkicons/weather_sun.png',
         menu: [this.buttons.reloadAll, this.buttons.expandAll, this.buttons.collapseAll]
     });
     toolbar.add(
-        this.tree.editButton, '-',
-        this.tree.pageButton, '-',
-        this.tree.navigationButton
+        this.editButton, '-',
+        this.pageButton, '-',
+        this.navigationButton
     );
 
-    this.tree.on('selectionchange', this.treeSelectionchange, this.tree);
+    this.contextMenu = new Ext.menu.Menu({
+         items: []   
+    });
+    
+    this.tree.on('selectionchange', this.treeSelectionchange, this);
     this.tree.on('editcomponent', this.loadComponent, this);
     this.tree.on('loaded', function(o, e) {
         this.tree.tree.on('contextmenu', function (node) {
             node.select();
-            var menu = new Ext.menu.Menu({
-                 items: [this.buttons.edit, '-', this.buttons.properties, this.buttons.add, this.buttons.del, this.buttons.visible, this.buttons.makeHome, '-', this.buttons.reloadAll, this.buttons.expand, this.buttons.collapse]   
-            });
-            menu.show(node.ui.getAnchor());
+            this.contextMenu.show(node.ui.getAnchor());
         }, this);
 
         this.tree.tree.on('dblclick', function (o, e) {
             this.fireEvent('editcomponent', {id: o.attributes.id, cls: o.attributes.data.component_class, text: o.text})
         }, this.tree);
-    }, this)
-
+    }, this);
+    
     this.created = new Array();
 }
 
@@ -85,6 +90,7 @@ Ext.extend(Vps.Component.Pages, Ext.util.Observable,
         this.buttons = {};
         this.buttons.edit = {
             text: 'Edit Content',
+            disabled: true,
             handler : function (o, e) {
                 node = this.tree.getSelectionModel().getSelectedNode();
                 this.fireEvent('editcomponent', {id: node.attributes.id, cls: node.attributes.data.component_class, text: node.text});
@@ -95,20 +101,17 @@ Ext.extend(Vps.Component.Pages, Ext.util.Observable,
         };
         this.buttons.properties = {
             text    : 'Properties of selected Page',
-            handler : function (o, e) {
-                this.editform.load(this.tree.tree.getSelectionModel().getSelectedNode().id);
-                this.editform.show();
-            },
+            handler : this.editPage,
             icon : '/assets/vps/images/silkicons/page_gear.png',
             cls: 'x-btn-text-icon',
             scope   : this
         }
         this.buttons.add = {
             text    : 'Add new Subpage',
-            handler : this.tree.add,
+            handler : this.addPage,
             icon : '/assets/vps/images/silkicons/page_add.png',
             cls: 'x-btn-text-icon',
-            scope   : this.tree
+            scope   : this
         }
         this.buttons.del = {
             text    : 'Delete selected Page',
@@ -271,15 +274,40 @@ Ext.extend(Vps.Component.Pages, Ext.util.Observable,
         layout.loadComponent(data);
     },
     
+    editPage: function ()
+    {
+        this.editform.form.baseParams = { }
+        this.editform.load(this.tree.tree.getSelectionModel().getSelectedNode().id);
+        this.editform.show();
+    },
+
+    addPage: function ()
+    {
+        this.editform.load();
+        this.editform.form.baseParams.parent_id = this.tree.tree.getSelectionModel().getSelectedNode().id;
+        this.editform.show();
+    },
+
     treeSelectionchange : function (node) {
         if (node) {
-            if (node.attributes.type == 'root') {
-            } else if (node.attributes.type == 'category') {
-                debugger;
-                this.pageButton.enable();
+            this.pageButton.enable();
+            if (node.attributes.type == 'category') {
+                this.editButton.disable();
+                this.buttons.properties.disabled = true;
+                this.buttons.del.disabled = true;
+                this.buttons.visible.disabled = true;
+                this.buttons.makeHome.disabled = true;
             } else {
-                this.pageButton.enable();
+                this.editButton.enable();
+                this.buttons.properties.disabled = false;
+                this.buttons.del.disabled = false;
+                this.buttons.visible.disabled = false;
+                this.buttons.makeHome.disabled = false;
             }
+            this.pageButton.menu.removeAll();
+            this.pageButton.menu.add(this.buttons.properties, this.buttons.add, this.buttons.del, this.buttons.visible, this.buttons.makeHome);
+            this.contextMenu.removeAll();
+            this.contextMenu.add(this.buttons.edit, '-', this.buttons.properties, this.buttons.add, this.buttons.del, this.buttons.visible, this.buttons.makeHome, '-', this.buttons.reloadAll, this.buttons.expand, this.buttons.collapse);
         }
     }
 }

@@ -175,27 +175,31 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         $target = $this->getRequest()->getParam('target');
         $point  = $this->getRequest()->getParam('point');
 
+        $row = $this->_table->find($source)->current();
         if ($point == 'append') {
-            $parentId = $target;
-            $position = '1';
+            $row->parent_id = (int)$target == 0 ? null : $target;
+            $row->position = '1';
         } else {
             $targetRow = $this->_table->find($target)->current();
-            $parentId = $targetRow->parent_id;
-            if ($this->_hasPosition) {
-                $targetPosition = $targetRow->position;
-                if ($point == 'above') {
-                    $position = $targetPosition - 1;
-                } else {
-                    $position = $targetPosition;
+            if ($targetRow) {
+                $row->parent_id = $targetRow->parent_id;
+                if ($this->_hasPosition) {
+                    $targetPosition = $targetRow->position;
+                    if ($point == 'above') {
+                        $row->position = $targetPosition - 1;
+                    } else {
+                        $row->position = $targetPosition;
+                    }
                 }
+            } else {
+                $this->view->error = 'Cannot move here.';
             }
         }
-        $row = $this->_table->find($source)->current();
-        $row->parent_id = $parentId;
+
         $row->save();
         if ($this->_hasPosition) {
-            $where = $parentId ? 'parent_id=' . $parentId : 'parent_id IS NULL';
-            $row->numberize('position', $position, $where);
+            $where = $row->parent_id ? 'parent_id=' . $row->parent_id : 'parent_id IS NULL';
+            $row->numberize('position', $row->position, $where);
         }
     }
     
