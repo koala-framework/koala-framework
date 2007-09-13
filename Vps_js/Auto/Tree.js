@@ -180,19 +180,7 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
                         },
                         success: function(r) {
                             response = Ext.decode(r.responseText);
-                            parentNode = this.tree.getNodeById(response.parentId);
-                            if (parentNode.isExpanded()) {
-                                response.config.uiProvider = eval(response.config.uiProvider);
-                                node = new Ext.tree.AsyncTreeNode(response.config);
-                                if (parentNode.firstChild) {
-                                    this.tree.getSelectionModel().getSelectedNode().insertBefore(node, parentNode.firstChild);
-                                } else {
-                                    this.tree.getSelectionModel().getSelectedNode().appendChild(node);
-                                }
-                                this.tree.getSelectionModel().select(this.tree.getNodeById(response.config.id));
-                            } else {
-                                parentNode.expand();
-                            }
+                            this.onAdd(response);
                         },
                         scope: this
                     })
@@ -200,6 +188,23 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
             },
             this
         );
+    },
+    
+    onAdd: function(response)
+    {
+        parentNode = this.tree.getNodeById(response.parentId);
+        if (parentNode.isExpanded()) {
+            response.config.uiProvider = eval(response.config.uiProvider);
+            node = new Ext.tree.AsyncTreeNode(response.config);
+            if (parentNode.firstChild) {
+                this.tree.getSelectionModel().getSelectedNode().insertBefore(node, parentNode.firstChild);
+            } else {
+                this.tree.getSelectionModel().getSelectedNode().appendChild(node);
+            }
+            this.tree.getSelectionModel().select(this.tree.getNodeById(response.config.id));
+        } else {
+            parentNode.expand();
+        }
     },
     
     del: function (o, e) {
@@ -225,7 +230,7 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
                             node.parentNode.removeChild(node);
                         },
                         scope: this
-                    })
+                    });
                 }
             },
             this

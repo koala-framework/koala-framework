@@ -126,34 +126,28 @@ class Vps_Dao_Pages extends Vps_Db_Table
 
     public function insert(array $data)
     {
-        $parentId = $data['parent_id'];
-        
-        $name = $data['name'];
-        $type = '';
-        if ((int)$parentId == 0) {
-            $type = $parentId;
-            $row = $this->fetchRow('type = \'home\'');
-            $parentId = $row->id;
+        if ((int)$data['parent_id'] == 0) {
+            $data['type'] = $data['parent_id'];
+            $data['parent_id'] = null;
+        } else {
+            $parentRow = $this->retrievePageData($data['parent_id']);
+            $data['type'] = $parentRow['type'];
         }
 
-        // Eintrag in Pages-Tabelle
-        $position = 1;
-        $name = 'New Page';
-        $filename = 'newpage';
-        $parentRow = $this->find($parentId)->current();
-        $type = $parentRow->type != 'home' && $parentRow->type != '' ? $parentRow->type : $type;
-        $componentClass = 'Vpc_Paragraphs_Index';
+        $data['is_home'] = 0;
+        $data['filename'] = '';
+        $data['visible'] = 0;
+        $data['position'] = 1;
+        $id = parent::insert($data);
+        if ($id) {
+            $row = $this->find($id)->current();
+            $row->filename = $row->getUniqueString($data['name'], 'filename', 'parent_id = ' . $row->parent_id);
+            $row->save();
+            $row->numberize('position', 1, 'parent_id = ' . $row->parent_id);
+        }
 
         $this->_pageData = null;
-        $insert = array();
-        $insert['name'] = $name;
-        $insert['filename'] = $filename;
-        $insert['parent_id'] = $parentId;
-        $insert['is_home'] = $isHome;
-        $insert['position'] = $position;
-        $insert['type'] = $type;
-        $insert['component_class'] = $componentClass;
-        return parent::insert($insert);
+        return $id;
     }
     
     public function savePageName($id, $name)
