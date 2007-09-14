@@ -15,8 +15,13 @@ class Vps_Dao_File extends Vps_Db_Table
         return $uploadDir;
     }
     
-    public function uploadFile($filedata, $directory)
+    /**
+     * Wenn id==null, wird neuer Datensatz angelegt, sonst bestehender geändert.
+     */
+    public function uploadFile($filedata, $directory, $id = null)
     {
+        $row = $id ? $this->find($id)->current() : null;
+        
         if ($filedata['error'] == UPLOAD_ERR_NO_FILE) {
             throw new Vps_Exception('Es wurde keine Datei hochgeladen.');
         }
@@ -33,20 +38,42 @@ class Vps_Dao_File extends Vps_Db_Table
         if (!is_dir($uploadDir) || !is_writable($uploadDir)) {
             throw new Vps_Exception('Dateiupload kann nicht in folgendes Verzeichnis schreiben: ' . $uploadDir);
         }
-
+        
+        // Falls überschrieben wird, alte Datei löschen
+        if ($row) {
+            $this->deleteFile($id);
+        }
+        
+        // Falls Datei existiert, _1... anhängen
         $origName = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
         $extension = substr(strrchr($filedata['name'], '.'), 1);
         $x = 1; $name = $origName;
-        while (file_exists($uploadDir . $directory . $name . '.' . $extension)) {
-            $name = $origName . '_' . $x++;
+        while (is_file($uploadDir . $directory . $name . '.' . $extension)) {
+            $rename = true;
+            // Falls bestehende Datei gleich groß ist, bestehende Datei löschen
+            if (filesize($uploadDir . $directory . $name . '.' . $extension) == filesize($filedata['tmp_name'])) {
+                if (unlink($uploadDir . $directory . $name . '.' . $extension)) {
+                    $rename = false;
+                }
+            }
+            if ($rename) {
+                $name = $origName . '_' . $x++;
+            }
         }
 
+        // Datei hochlade
         $filename = $uploadDir . $directory . $name . '.' . $extension;
         if (move_uploaded_file($filedata['tmp_name'], $filename)) {
-            $insert = array('path' => $directory . $name . '.' . $extension);
-            return $this->insert($insert);
+            chmod($filename, 0664);
+            // Hochgeladene Datei als Pfad in DB eintragen
+            $path = $directory . $name . '.' . $extension;
+            if ($row) {
+                $row->path = $path;
+                $row->save();
+            } else {
+                return $this->insert(array('path' => $path));
+            }
         }
-
         return null;
     }
     
@@ -58,24 +85,36 @@ class Vps_Dao_File extends Vps_Db_Table
             if (is_file($filename)) {
                 unlink($filename);
             }
+            $this->deleteCache($id);
         }
-        $this->delete("id = '$id'");
     }
     
-    public function deleteCacheFile($id, $componentId)
+    public function deleteCache($id)
     {
-        $row = $this->find($id)->current();
-        if ($row) {
-            $extension = strrchr($row->path, '.');
-            $filename = $this->_getUploadDir() . $componentId . $extension;
-            if (is_file($filename)) {
-                unlink($filename);
+        $this->_recursiveRemoveDirectory($this->_getUploadDir() . 'cache/' . $id);
+    }
+    
+    private function _recursiveRemoveDirectory( $dir )
+    {
+        $d = dir($dir);
+        while (FALSE !== ($entry = $d->read())) {
+            if ( $entry == '.' || $entry == '..' ) { continue; }
+            $entry = $dir . '/' . $entry;
+            if (is_dir($entry)) {
+                if (!$this->_recursiveRemoveDirectory($entry)) {
+                    return false;
+                }
+                continue;
             }
-            $filename = $this->_getUploadDir() . $componentId . '.thumb' . $extension;
-            if (is_file($filename)) {
-                unlink($filename);
+            if (!@unlink($entry)) {
+                $d->close();
+                return false;
             }
         }
+       
+        $d->close();
+        rmdir($dir);
+        return true;
     }
 
 }

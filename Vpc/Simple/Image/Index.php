@@ -1,5 +1,5 @@
 <?php
-class Vpc_Simple_Image_Index extends Vpc_Abstract
+class Vpc_Simple_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
 {
     protected $_tablename = 'Vpc_Simple_Image_IndexModel';
     const NAME = 'Standard.Image';
@@ -8,11 +8,7 @@ class Vpc_Simple_Image_Index extends Vpc_Abstract
         'directory'   	    => 'SimpleImage/',
         'size'              => array(), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
         'default_style'		=> 'crop',
-        'style' 	        => '',
-        'allow'		        => array('crop', 'scale', 'scale_bg', 'deform'), //keywords: crop, scale, scale_bg, deform
-        'default_color'		=> 'black',
-        'allow_color'		=> 1,
-        'color'				=> '',
+        'allow'		        => array('crop', 'scale', 'bestfit') //keywords: crop, scale, bestfit
     );
     const SIZE_NORMAL = '';
     const SIZE_THUMB = '.thumb';
@@ -38,7 +34,8 @@ class Vpc_Simple_Image_Index extends Vpc_Abstract
             $rowset2 = $this->_getTable('Vps_Dao_File')->find($row->vps_upload_id);
             if ($rowset2->count() == 1) {
                 $extension = substr(strrchr($rowset2->current()->path, '.'), 1);
-                return "/media/$id/$checksum/$filename.$extension";
+                $uploadId = $row->vps_upload_id;
+                return "/media/$uploadId/$id/$checksum/$filename.$extension";
             } else {
                 return null;
             }
@@ -56,4 +53,60 @@ class Vpc_Simple_Image_Index extends Vpc_Abstract
         return $extensions;
     }
     
+    public function createCacheFile($source, $target)
+    {
+        if (strpos($target, '.thumb.')) {
+            $this->setSetting('width', 100);
+            $this->setSetting('height', 100);
+        }
+
+        $width = $this->getSetting('width');
+        $height = $this->getSetting('height');
+        $style = $this->getSetting('style');
+        if ($width <= 0) { $width = 100; }
+        if ($height <= 0) { $height = 100; }
+        if ($style == '') { $style = $this->getSetting('default_style'); }
+
+        $im = new Imagick();
+        $im->readImage($source);
+        if ($style == 'crop'){ // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
+            
+            $scale = $im->getImageGeometry();
+            if ($scale['width'] > $width) { // Wenn hochgeladenes Bild breiter als anzuzeigendes Bild ist
+                $x = ($scale['width'] - $width) / 2; // Ursprungs-X berechnen
+            } else {
+                $x = 0; // Bei 0 mit Beschneiden beginnen
+                $width = $scale['width']; // Breite auf Originalgröße begrenzen
+            }
+            if ($scale['height'] > $height) {
+                $y = ($scale['height'] - $height) / 2;
+            } else {
+                $y = 0;
+                $height = $scale['height'];
+            }
+            $im->cropImage($width, $height, $x, $y);
+          
+        } elseif ($style == 'bestfit') { // Bild wird auf größte Maximale Ausdehnung skaliert
+            
+            $scale = $im->getImageGeometry();
+            $widthRatio = $scale['width'] / $width;
+            $heightRatio = $scale['height'] / $height;
+            if ($widthRatio > $heightRatio){
+                $width = $scale['width'] / $widthRatio;
+                $height = $scale['height'] / $widthRatio;
+            } else {
+                $width = $scale['width'] / $heightRatio;
+                $height = $scale['height'] / $heightRatio;
+            }
+            $im->thumbnailImage($width, $height);
+          
+        } elseif ($style == 'deform'){
+            
+            $im->thumbnailImage($width, $height);
+          
+        }
+        
+        $im->writeImage($target);
+        $im->destroy();
+    }
 }

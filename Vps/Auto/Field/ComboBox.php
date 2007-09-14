@@ -3,7 +3,6 @@ class Vps_Auto_Field_ComboBox extends Vps_Auto_Field_SimpleAbstract
 {
     public function __construct($field_name = null)
     {
-//         p($field_name);
         if ($field_name) $this->setProperty('hiddenName', $field_name);
         parent::__construct(null);
     }
