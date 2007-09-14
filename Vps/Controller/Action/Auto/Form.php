@@ -19,9 +19,8 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     {
     }
 
-    public function init()
+    public function preDispatch()
     {
-        parent::init();
         $this->_form = new Vps_Auto_Form();
 
         foreach ($this->_fields as $k=>$field) {
@@ -42,11 +41,9 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
                 $this->_form->setTable(new $this->_tableName);
             }
         }
-        $this->_initFields();
-    }
 
-    public function preDispatch()
-    {
+        $this->_initFields();
+
         if (is_array($this->_form->getPrimaryKey())) {
             foreach ($this->_form->getPrimaryKey() as $key) {
                 $id[$key] = $this->_getParam($key);

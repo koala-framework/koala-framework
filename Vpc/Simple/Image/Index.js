@@ -14,7 +14,7 @@ Vpc.Simple.Image.Index = function(renderTo, config)
         }
     }
 
-    this.form = new Vps.Auto.Form(renderTo, { fileUpload: true, controllerUrl: config.controllerUrl });
+    this.form = new Vps.Auto.Form(renderTo, { fileUpload: true, method:'POST', controllerUrl: config.controllerUrl });
     this.form.on('loaded', function(form, action) {
         if (action.result.url != ''){
             this.urlbig = action.result.urlbig;

@@ -3,6 +3,7 @@ abstract class Vps_Controller_Action_Auto_Form_Vpc extends Vps_Controller_Action
 {
     public function preDispatch()
     {
+        parent::preDispatch();
         $pageId = $this->component->getDbId();
         $componentKey = $this->component->getComponentKey();
 

@@ -77,17 +77,18 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
             && !$this->getResponse()->isRedirect())
         {
             if ($this->isJson()) {
-                if ($_SERVER['REQUEST_METHOD'] == 'POST'
-                    || isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-                    $body = $this->view->render('');
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    $this->getResponse()->setHeader('Content-Type', 'text/html');
+                    $this->getResponse()->setBody($this->view->render(''));
+                } else if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
+                    $this->getResponse()->setHeader('Content-Type', 'text/javascript');
+                    $this->getResponse()->setBody($this->view->render(''));
                 } else {
                     echo '<pre>';
                     print_r($this->view->getOutput());
                     echo '</pre>';
                     die();
                 }
-                $this->getResponse()->setHeader('Content-Type', 'text/javascript');
-                $this->getResponse()->setBody($body);
             } else {
                 $this->getResponse()->setHeader('Content-Type', 'text/html; charset=utf-8');
                 $this->getResponse()->appendBody($this->view->render(''));
