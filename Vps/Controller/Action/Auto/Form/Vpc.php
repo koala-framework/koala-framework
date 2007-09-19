@@ -24,7 +24,7 @@ abstract class Vps_Controller_Action_Auto_Form_Vpc extends Vps_Controller_Action
             }
             $insert['page_id'] = $pageId;
             $insert['component_key'] = $componentKey;
-            $this->_table->insert($insert);
+            $this->_form->getTable()->insert($insert);
         }
 
         parent::preDispatch();

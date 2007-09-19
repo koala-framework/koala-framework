@@ -12,11 +12,11 @@ class Vpc_Simple_Image_IndexController extends Vps_Controller_Action_Auto_Form_V
     public function _initFields()
     {
         $this->_form->setTable(new Vpc_Simple_Image_IndexModel());
-        //$this->_form->setFileUpload(true);
+        $this->_form->setFileUpload(true);
         $fields = $this->_form->fields;
         $fields->add(new Vps_Auto_Field_TextField('name'))
             ->setFieldLabel('Filename');
-        $fields->add(new Vps_Auto_Field_File($this->component->getSetting('directory'), $this->component->getExtensions()))
+        $fields->add(new Vps_Auto_Field_File('SimpleImage/', $this->component->getSetting('extensions')))
             ->setFieldLabel('File');
 
         //Einstellungen für die Veränderbarkeit der Höhe und Breite
@@ -56,10 +56,5 @@ class Vpc_Simple_Image_IndexController extends Vps_Controller_Action_Auto_Form_V
         parent::jsonLoadAction();
         $this->view->urlbig = $this->component->getImageUrl();
         $this->view->url = $this->component->getImageUrl(Vpc_Simple_Image_Index::SIZE_THUMB);
-    }
-
-    protected function _afterSave(Zend_Db_Table_Row_Abstract $row)
-    {
-        
     }
 }

@@ -15,8 +15,13 @@ class Vpc_Simple_Image_Setup extends Vpc_Setup_Abstract
         $fields['width'] = 'int(11) NOT NULL';
         $fields['height'] = 'int(11) NOT NULL';
         $fields['style'] = 'varchar(255) NOT NULL';
-        $fields['color'] = 'varchar(255) NOT NULL';
+        $fields['vps_upload_id'] = 'int';
         $this->createTable('vpc_simple_image', $fields);
+        $this->_db->query('ALTER TABLE vpc_simple_image ADD INDEX (vps_upload_id)');
+        $this->_db->query('ALTER TABLE vpc_simple_image
+            ADD FOREIGN KEY (vps_upload_id)
+            REFERENCES vps_uploads (id)
+            ON DELETE SET NULL ON UPDATE SET NULL');
     }
 
     public function deleteEntry($pageId, $componentKey)
