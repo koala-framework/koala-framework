@@ -160,6 +160,11 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
                     tabContainers.push(this.container({
                         el: Ext.DomHelper.append(formRenderTo, {tag:'div', style:'padding:20px'})
                     }));
+                } else if (fieldType == 'File') {
+                    this.form.add(new Ext.form.TextField(field));
+                    if (field.media) {
+                        this.form.add(new Ext.form.Checkbox({name: field.name + '_delete', fieldLabel: 'Fileinfo', boxLabel: 'Delete File&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="' + field.media + '" target="#blank"><img src="/assets/vps/images/silkicons/eye.png" /></a>&nbsp;Show File'}));
+                    }
                 } else if (Vps.Form[fieldType]) {
                     this.form.add(new Vps.Form[fieldType](field))
                 } else if (Ext.form[fieldType]) {

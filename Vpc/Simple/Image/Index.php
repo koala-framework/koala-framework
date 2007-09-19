@@ -4,16 +4,13 @@ class Vpc_Simple_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
     protected $_tablename = 'Vpc_Simple_Image_IndexModel';
     const NAME = 'Standard.Image';
     protected $_settings = array(
-        'typesAllowed' 	    => 'jpg, gif, png',
-        'directory'   	    => 'SimpleImage/',
+        'extensions' 	    => array('jpg', 'gif', 'png'),
         'size'              => array(), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
-        'default_style'		=> 'crop',
         'allow'		        => array('crop', 'scale', 'bestfit') //keywords: crop, scale, bestfit
     );
     const SIZE_NORMAL = '';
     const SIZE_THUMB = '.thumb';
     const SIZE_ORIGINAL = '.original';
-    
     
     public function getTemplateVars()
     {
@@ -44,18 +41,9 @@ class Vpc_Simple_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
         }
     }
     
-    public function getExtensions()
-    {
-        $extensions = array();
-        foreach (explode(',', $this->getSetting('typesAllowed')) as $extension) {
-            $extensions[] = trim(strtolower($extension));
-        }
-        return $extensions;
-    }
-    
     public function createCacheFile($source, $target)
     {
-        if (strpos($target, '.thumb.')) {
+        if (strpos($target, self::SIZE_THUMB)) {
             $this->setSetting('width', 100);
             $this->setSetting('height', 100);
         }
@@ -65,7 +53,6 @@ class Vpc_Simple_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
         $style = $this->getSetting('style');
         if ($width <= 0) { $width = 100; }
         if ($height <= 0) { $height = 100; }
-        if ($style == '') { $style = $this->getSetting('default_style'); }
 
         $im = new Imagick();
         $im->readImage($source);

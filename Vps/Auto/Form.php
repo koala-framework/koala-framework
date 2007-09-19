@@ -8,12 +8,37 @@ class Vps_Auto_Form implements Vps_Collection_Item_Interface
     private $_primaryKey;
 
     private $_row;
+    private $_properties;
 
     public function __construct($name = null, $id = null)
     {
         $this->fields = new Vps_Collection_FormFields();
         $this->setName($name);
         $this->setId($id);
+    }
+
+    public function __call($method, $arguments)
+    {
+        if (substr($method, 0, 3) == 'set') {
+            if (!isset($arguments[0])) {
+                throw new Vps_Exception("Missing argument 1 (value)");
+            }
+            $name = strtolower(substr($method, 3, 1)) . substr($method, 4);
+            return $this->setProperty($name, $arguments[0]);
+        } else {
+            throw new Vps_Exception("Invalid method called: '$method'");
+        }
+    }
+
+    public function setProperty($name, $value)
+    {
+        $this->_properties[$name] = $value;
+        return $this;
+    }
+    
+    public function getProperties()
+    {
+        return $this->_properties;
     }
 
     public function prepareSave($parentRow, $postData)

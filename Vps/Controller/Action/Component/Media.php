@@ -1,6 +1,17 @@
 <?php
 class Vps_Controller_Action_Component_Media extends Vps_Controller_Action
 {
+    public function originalAction()
+    {
+        $uploadId = $this->_getParam('uploadId');
+        $filename = $this->_getParam('filename');
+        $config = Zend_Registry::get('config');
+        $uploadDir = $config->uploads;
+
+        $target = $uploadDir . $this->_getSourcePath($uploadId);
+        $this->_showFile($target);
+    }
+    
     public function indexAction()
     {
         $uploadId = $this->_getParam('uploadId');
@@ -44,9 +55,23 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action
 
             }
         }
-        
+        $this->_showFile($target);
+    }
+    
+    private function _getSourcePath($uploadId = 0)
+    {
+        $table = new Vps_Dao_File();
+        $row = $table->find($uploadId)->current();
+        if ($row) {
+            return $row->path;
+        }
+        return '';
+    }
+    
+    private function _showFile($target)
+    {
         if (is_file($target)) {
-            $extension = substr(strrchr($this->_getParam('filename'), '.'), 1);
+            $extension = substr(strrchr($target, '.'), 1);
             switch ($extension) {
                 case "pdf": $ctype="application/pdf"; break;
                 case "zip": $ctype="application/zip"; break;
@@ -71,16 +96,6 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action
         } else {
             throw new Vps_Controller_Action_Web_Exception('File not found.');
         }
-    }
-    
-    private function _getSourcePath($uploadId = 0)
-    {
-        $table = new Vps_Dao_File();
-        $row = $table->find($uploadId)->current();
-        if ($row) {
-            return $row->path;
-        }
-        return '';
     }
 
 }

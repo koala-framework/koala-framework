@@ -1,19 +1,21 @@
 <?php
-class Vpc_Simple_Download_IndexController extends Vps_Controller_Action
+class Vpc_Simple_Download_IndexController extends Vps_Controller_Action_Auto_Form_Vpc
 {
-	public function indexAction()
-	{
-		//d (file_exists('/www/usr/lorenz/vps/Vpc/Simple/Download/jscripts/SWFUpload/SWFUpload.swf'));
-		/*p ('war da');
-		$cfg['url'] = 'dd';
-        $this->view->ext('Vpc.Simple.uploadform', $cfg);*/
+    protected $_buttons = array (
+        'save' => true
+    );
 
-		$cfg['url'] = 'url';
-        $this->view->ext('Vpc.Simple.Download.Index', $cfg);
+    public function _initFields()
+    {
+        $this->_form->setTable(new Vpc_Simple_Download_IndexModel());
+        $this->_form->setFileUpload(true);
+        $fields = $this->_form->fields;
+        $fields->add(new Vps_Auto_Field_TextField('name'))
+            ->setFieldLabel('Filename');
+        $fields->add(new Vps_Auto_Field_TextArea('info'))
+            ->setFieldLabel('Info');
+        $fields->add(new Vps_Auto_Field_File('SimpleDownload/', $this->component->getSetting('extensions')))
+            ->setFieldLabel('File');
     }
-
-
-
-
-
+    
 }

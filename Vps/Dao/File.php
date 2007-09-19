@@ -77,6 +77,15 @@ class Vps_Dao_File extends Vps_Db_Table
         return null;
     }
     
+    public function delete($id)
+    {
+        $row = $this->find($id)->current();
+        if ($row) {
+            $row->delete();
+            $this->deleteFile($id);
+        }
+    }
+    
     public function deleteFile($id)
     {
         $row = $this->find($id)->current();
@@ -96,24 +105,25 @@ class Vps_Dao_File extends Vps_Db_Table
     
     private function _recursiveRemoveDirectory( $dir )
     {
-        $d = dir($dir);
-        while (FALSE !== ($entry = $d->read())) {
-            if ( $entry == '.' || $entry == '..' ) { continue; }
-            $entry = $dir . '/' . $entry;
-            if (is_dir($entry)) {
-                if (!$this->_recursiveRemoveDirectory($entry)) {
+        if (is_dir($dir)) {
+            $d = dir($dir);
+            while (FALSE !== ($entry = $d->read())) {
+                if ( $entry == '.' || $entry == '..' ) { continue; }
+                $entry = $dir . '/' . $entry;
+                if (is_dir($entry)) {
+                    if (!$this->_recursiveRemoveDirectory($entry)) {
+                        return false;
+                    }
+                    continue;
+                }
+                if (!@unlink($entry)) {
+                    $d->close();
                     return false;
                 }
-                continue;
             }
-            if (!@unlink($entry)) {
-                $d->close();
-                return false;
-            }
+            $d->close();
+            rmdir($dir);
         }
-       
-        $d->close();
-        rmdir($dir);
         return true;
     }
 
