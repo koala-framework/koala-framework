@@ -1,5 +1,10 @@
-<a href="{$component.path}">
-{if $component.iconshow}  <img src="{$component.icon}"> {/if}
-{$component.text} </a> {if $component.downloadshow} <a href="{$component.path}"> <img src="{$component.downloadicon}"> </a> {/if}
-{if $component.filesizeshow} ({$component.filesize} Kb) {/if}
-{if $component.infoshow} <br> {$component.info} {/if}
+{if $component.url != ''}
+{strip}
+<a href="{$component.url}">
+    {if $component.icon != ''}<img src="{$component.icon}">{/if}
+    {$component.text}
+    {if $component.filesize != ''} ({$component.filesize} Kb) {/if}
+</a>
+{if $component.info != ''}<br>{$component.info}{/if}
+{/strip}
+{/if}

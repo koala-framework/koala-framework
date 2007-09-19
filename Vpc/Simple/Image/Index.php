@@ -21,21 +21,11 @@ class Vpc_Simple_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
     
     public function getImageUrl($size = self::SIZE_NORMAL)
     {
-        $rowset = $this->_getTable()->find($this->getDbId(), $this->getComponentKey());
-        if ($rowset->count() == 1) {
-            $row = $rowset->current();
+        $row = $this->_getTable()->find($this->getDbId(), $this->getComponentKey())->current();
+        if ($row) {
             $filename = $row->name != '' ? $row->name : 'unnamed';
             $filename .= $size;
-            $id = $this->getId();
-            $checksum = md5('l4Gx8SFe' . $id);
-            $rowset2 = $this->_getTable('Vps_Dao_File')->find($row->vps_upload_id);
-            if ($rowset2->count() == 1) {
-                $extension = substr(strrchr($rowset2->current()->path, '.'), 1);
-                $uploadId = $row->vps_upload_id;
-                return "/media/$uploadId/$id/$checksum/$filename.$extension";
-            } else {
-                return null;
-            }
+            return $this->_getTable('Vps_Dao_File')->generateUrl($row->vps_upload_id, $this->getId(), $filename);
         } else {
             return null;
         }
