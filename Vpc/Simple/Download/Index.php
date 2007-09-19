@@ -8,54 +8,32 @@ class Vpc_Simple_Download_Index extends Vpc_Abstract
         'extensions' => array('pdf', 'doc', 'mp3', 'xls', 'ppt'),
         'name' => 'Filename',
         'info' => '',
-        'iconshow' => 1,
-        'filesizeshow' => 1,
-        'downloadshow' => 1
+        'showIcon' => true,
+        'showFilesize' => true
     );
 
-    protected $_extensions  = array (
-        'pdf' => '/files/icons/acrobat.png',
-        'doc' => '/files/icons/word.png',
-        'mp3' => '/files/icons/music.png',
-        'xls' => '/files/icons/excel.png',
-        'png' => '/files/icons/picture.png',
-        'jpg' => '/files/icons/picture.png',
-        'tif' => '/files/icons/picture.png',
-        'gif' => '/files/icons/picture.png',
-        'ppt' => '/files/icons/powerpoint.png',
-        'default' => '/files/icons/page.png'
-    );
-
-  public function getTemplateVars()
+    public function getTemplateVars()
     {
-      $return['filesizeshow'] = $this->getSetting('filesizeshow');
-      $return['iconshow'] = $this->getSetting('iconshow');
-      $return['downloadshow'] = $this->getSetting('downloadshow');
-      $return['infoshow'] = $this->getSetting('infoshow');
-    if (file_exists('./public'.$this->getSetting('path')))
-          $return['filesize'] = round((filesize('./public'.$this->getSetting('path')) /1024), 2);
-    else
-      $return['filesize'] = '-';
-      $return['icon'] = $this->getIcon($this->getSetting('path'));
-      $return['info'] = $this->getSetting('info');
-      $return['downloadicon'] = $this->getSetting('icon');
-      $return['path'] = $this->getSetting('path');
-      $return['text'] = $this->getSetting('text');
-      $return['template'] = 'Simple/Download.html';
+        $return['url'] = '';
+        $return['icon'] = '';
+        $return['text'] = '';
+        $return['filesize'] = '';
+        $return['template'] = 'Simple/Download.html';
+
+        $row = $this->_getTable()->find($this->getDbId(), $this->getComponentKey())->current();
+        if ($row) {
+            $filename = $row->name != '' ? $row->name : 'unnamed';
+            $return['url'] = $this->_getTable('Vps_Dao_File')->generateUrl($row->vps_upload_id, $this->getId(), $filename, Vps_Dao_File::DOWNLOAD);
+            if ($this->getSetting('showIcon')) {
+                $return['icon'] = '';
+            }
+            if ($this->getSetting('showFilesize')) {
+                $return['filesize'] = $this->_getTable('Vps_Dao_File')->getFilesize($row->vps_upload_id);
+            }
+            $return['text'] = $this->getSetting('name');
+            $return['info'] = $this->getSetting('info');
+        }
+
         return $return;
     }
-
-
-    private function getIcon ($file){
-      $start = strripos($file, '.');
-      $fileextension = substr($file, $start+1);
-
-      if (!in_array($fileextension, array_keys($this->_extensions)))
-      $fileextension = 'default';
-
-      return $this->_extensions[$fileextension];
-
-    }
-
 }
-

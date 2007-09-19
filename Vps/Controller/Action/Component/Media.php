@@ -21,12 +21,13 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action
         $uploadDir = $config->uploads;
 
         $checksum = md5('l4Gx8SFe' . $id);
-        if ($checksum != $this->_getParam('checksum')) {
+        $downloadChecksum = md5('k4Xjgw9f' . $id);
+        if ($checksum != $this->_getParam('checksum') && $downloadChecksum != $this->_getParam('checksum')) {
             throw new Vps_Controller_Action_Web_Exception('File not found.');
         }
         
         $target = '';
-        if (strpos($filename, '.original.')) {
+        if (strpos($filename, '.original.') || $checksum == $downloadChecksum) {
             $target = $uploadDir . $this->_getSourcePath($uploadId);
         } else {
             $extra = strpos($filename, '.thumb.') ? '.thumb' : '' ;

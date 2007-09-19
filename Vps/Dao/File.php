@@ -2,6 +2,8 @@
 class Vps_Dao_File extends Vps_Db_Table
 {
     protected $_name = 'vps_uploads';
+    const SHOW = 1;
+    const DOWNLOAD = 2;
     
     private function _getUploadDir()
     {
@@ -13,6 +15,34 @@ class Vps_Dao_File extends Vps_Db_Table
         }
         
         return $uploadDir;
+    }
+    
+    public function getFileSize($uploadId)
+    {
+        $row = $this->find($uploadId)->current();
+        if ($row) {
+            $file = $this->_getUploadDir() . $row->path;
+            if (is_file($file)) {
+                return round((filesize($file) /1024), 2);
+            }
+        }
+        return null;
+    }
+    
+    public function generateUrl($uploadId, $id, $filename, $type = self::SHOW)
+    {
+        $row = $this->find($uploadId)->current();
+        if ($row) {
+            $extension = substr(strrchr($row->path, '.'), 1);
+            if ($type == self::SHOW) {
+                $checksum = md5('l4Gx8SFe' . $id);
+            } else {
+                $checksum = md5('k4Xjgw9f' . $id);
+            }
+            return "/media/$uploadId/$id/$checksum/$filename.$extension";
+        } else {
+            return null;
+        }
     }
     
     /**
