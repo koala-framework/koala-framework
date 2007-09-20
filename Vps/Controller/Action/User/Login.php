@@ -14,7 +14,7 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
     public function showFormAction()
     {
         $this->view->ext('');
-        $this->view->setRenderFile('Login.html');
+        $this->view->setRenderFile(VPS_PATH . '/views/Login.html');
         $this->view->username = '';
         if ($this->_getParam('username')) {
             $result = $this->_login();

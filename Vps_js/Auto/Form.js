@@ -1,215 +1,118 @@
-Ext.namespace('Vps.Auto');
+Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 
-Vps.Auto.Form = function(renderTo, config)
-{
-    this.renderTo = renderTo;
-    this.controllerUrl = config.controllerUrl ? config.controllerUrl : '';
-    delete config.controllerUrl;
+    controllerUrl: '',
+    actions : {},
 
-    config = Ext.applyIf(config, {
-        url: this.controllerUrl+'jsonSave',
-        waitMsgTarget: document.body,
-        trackResetOnLoad: true,
-        baseParams: {}
-    });
-    this.form = new Ext.form.Form(config);
+//     checkDirty: false,
 
-    this.addEvents({
-        generatetoolbar: true,
-        dataChanged: true,
-        formRendered: true,
-        deleted: true,
-        add: true,
-        loaded: true
-    });
-
-    this.form.doAction('loadAutoForm', {
-        url: this.controllerUrl+'jsonLoad',
-        meta: this.onMetaChange,
-
-    success: function(form, action) {
-      if (action.result.data) {
-        //loaded-event nur wenn daten vom server geladen wurden
-        //(nicht nur meta-daten)
-        this.fireEvent('loaded', form, action);
-      }
-    },
-        scope: this
-    });
-};
-
-Ext.extend(Vps.Auto.Form, Ext.util.Observable,
-{
-    checkDirty: false,
-
-    renderButtons: function()
+    initComponent: function()
     {
-        this.layout = new Ext.BorderLayout(this.renderTo, {
-                north: {split: false, initialSize: 30},
-                center: { autoScroll: true }
-            });
-        this.layout.beginUpdate();
+        //um scrollbars zu bekommen
+        if (!this.autoScroll) this.autoScroll = true;
+        if (!this.border) this.border = false;
 
-        var ToolbarContentPanel = new Ext.ContentPanel({autoCreate: true, fitToFrame:true, closable:false});
-        this.layout.add('north', ToolbarContentPanel);
+//         if (!this.waitMsgTarget) this.waitMsgTarget = document.body;
+//         trackResetOnLoad: true,
+    this.addEvents({
+        formRendered: true,
+        loaded: true,
+        //generatetoolbar: true,
+        dataChanged: true,
+        deleted: true,
+        add: true
+    });
+        Vps.Auto.FormPanel.superclass.initComponent.call(this);
 
-        var FormContentPanel = new Ext.ContentPanel({autoCreate: true, fitToFrame:true, closable:false});
-        this.layout.add('center', FormContentPanel);
-        this.renderTo = FormContentPanel.getEl();
+        if (!this.formConfig) this.formConfig = {};
+        Ext.applyIf(this.formConfig, {
+            baseParams : {},
+            url : this.controllerUrl+'jsonSave'
+        });
+        this.form = new Ext.FormPanel(this.formConfig);
 
-        this.layout.endUpdate();
-
-        this.toolbar = new Ext.Toolbar(ToolbarContentPanel.getEl());
-        if (this.meta.buttons.save) {
-            this.saveButton = this.toolbar.addButton({
-                text    : 'Speichern',
-                icon    : '/assets/vps/images/silkicons/table_save.png',
-                cls     : 'x-btn-text-icon',
-                handler : function() {
-                    this.onSubmit();
-                },
-                scope   : this
-            });
-        }
-
-        if (this.meta.buttons['delete']) {
-            this.deleteButton = this.toolbar.addButton({
-                text    : 'Löschen',
-                icon    : '/assets/vps/images/silkicons/table_delete.png',
-                cls     : 'x-btn-text-icon',
-                handler : function() {
-                    this.onDelete();
-                },
-                scope   : this
-            });
-        }
-
-        if (this.meta.buttons.add) {
-            this.toolbar.addSeparator();
-            var c = {};
-            if(typeof this.meta.buttons.add == 'object') {
-                c = this.meta.buttons.add;
-            }
-            this.addButton = this.toolbar.addButton(Ext.applyIf(c, {
-                text    : 'Neuer Eintrag',
-                icon    : '/assets/vps/images/silkicons/table_add.png',
-                cls     : 'x-btn-text-icon',
-                handler : function() {
-                    this.onAdd();
-                },
-                scope   : this
-            }));
-        }
-        this.fireEvent('generatetoolbar', this.toolbar);
+        this.form.getForm().doAction('loadAutoForm', {
+            url: this.controllerUrl+'jsonLoad',
+            meta: this.onMetaChange,
+            success: function(form, action) {
+                if (action.result.data) {
+                    //loaded-event nur wenn daten vom server geladen wurden
+                    //(nicht nur meta-daten)
+                    this.fireEvent('loaded', form, action);
+                }
+            },
+            scope: this
+        });
     },
+
     onMetaChange : function(meta)
     {
         this.meta = meta;
-        if (meta.buttons) {
-            this.renderButtons();
-        }
+//         if (meta.buttons) {
+//             this.renderButtons();
+//         }
 
-        var hasTabs = false;
         meta.fields.each(function(field) {
-            for (var i in field) {
-                if (i == 'tab') {
-                    hasTabs = true;
-                }
-            }
-        });
-        if (hasTabs) {
-            var tabContainers = [];
-            var frmContainerTabs = this.container();
-            this.end();
-        }
-        var addFieldFunction = function(field) {
-            if (typeof field == 'String') {
-                try {
-                    this.form.add(eval(field));
-                } catch(e) {
-                    throw "invalid field: "+field;
-                }
-            } else {
-                var fieldType = field.type;
-                delete field.type;
-                if (!fieldType) {
-                    //ignore field
-                } else if (fieldType == 'column') {
-                    var subFields = field.fields;
-                    delete field.fields;
-                    this.form.column(field);
-                    for (var i=0; i<subFields.length; i++) {
-                        this.form.add(subFields[i]);
-                    }
-                    this.form.end();
-                } else if (fieldType == 'Fieldset') {
-                    var subFields = field.fields;
-                    delete field.fields;
-                    this.form.fieldset(field);
-                    for (var i=0; i<subFields.length; i++) {+
-                        addFieldFunction.call(this, subFields[i]);
-                    }
-                    this.form.end();
-                } else if (fieldType == 'MultiCheckbox') {
-                    //todo: ist ein hack, besser sollte hier ein eigener feldtyp gemacht werden
-                    var subFields = field.fields;
-                    for (var i=0; i<subFields.length; i++) {+
-                        addFieldFunction.call(this, subFields[i]);
-                    }
-                } else if (fieldType == 'tab') {
-                    tabContainers.push(this.container({
-                        el: Ext.DomHelper.append(formRenderTo, {tag:'div', style:'padding:20px'})
-                    }));
-                } else if (fieldType == 'File') {
-                    this.form.add(new Ext.form.TextField(field));
-                    if (field.media) {
-                        this.form.add(new Ext.form.Checkbox({name: field.name + '_delete', fieldLabel: 'Fileinfo', boxLabel: 'Delete File&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="' + field.media + '" target="#blank"><img src="/assets/vps/images/silkicons/eye.png" /></a>&nbsp;Show File'}));
-                    }
-                } else if (Vps.Form[fieldType]) {
-                    this.form.add(new Vps.Form[fieldType](field))
-                } else if (Ext.form[fieldType]) {
-                    this.form.add(new Ext.form[fieldType](field))
-                } else {
-                    try {
-                        fieldType = eval(fieldType);
-                        this.form.add(new fieldType(field))
-                    } catch(e) {
-                        throw "invalid field: "+fieldType;
-                    }
-                }
-            }
-        }
+            this.form.add(field);
+        }, this);
+        this.add(this.form);
 
-        meta.fields.each(addFieldFunction, this);
-
-        this.form.render(this.renderTo);
-        if (hasTabs) {
-            var tabPanel = new Ext.TabPanel(frmContainerTabs.el);
-            tabContainers.each(function(tabContainer) {
-                tabPanel.addTab(tabContainer.getEl(), 'Tab');
-            });
-            tabPanel.activate(0);
-        }
-
+        this.doLayout();
         this.fireEvent('formRendered', this);
     },
 
+    getAction : function(type)
+    {
+        if (this.actions[type]) return this.actions[type];
+
+        if (type == 'save') {
+            this.actions[type] = new Ext.Action({
+                id      : 'save',
+                text    : 'Save',
+                icon    : '/assets/vps/images/silkicons/table_save.png',
+                cls     : 'x-btn-text-icon',
+                handler : this.onSubmit,
+                scope   : this
+            });
+        } else if (type == 'delete') {
+            this.actions[type] = new Ext.Action({
+                id      : 'delete',
+                text    : 'Delete',
+                icon    : '/assets/vps/images/silkicons/table_delete.png',
+                cls     : 'x-btn-text-icon',
+                handler : this.onDelete,
+                scope   : this
+            });
+        } else if (type == 'add') {
+            this.actions[type] = new Ext.Action({
+                id      : 'add',
+                text    : 'New Entry',
+                icon    : '/assets/vps/images/silkicons/table_add.png',
+                cls     : 'x-btn-text-icon',
+                handler : this.onAdd,
+                scope   : this
+            });
+        } else {
+            throw "unknown action-type: "+type;
+        }
+        return this.actions[type];
+    },
+    
     load : function(id, options) {
-        if (!this.form.baseParams) this.form.baseParams = {};
         this.form.baseParams.id = id;
         if (!options) options = {};
-        this.form.clearValues();
-        this.form.clearInvalid();
+        this.form.getForm().clearValues();
+        this.form.getForm().clearInvalid();
         this.form.load(Ext.applyIf(options, {
             url: this.controllerUrl+'jsonLoad',
-            waitMsg: 'laden...',
+//             waitMsg: 'loading...',
             success: function(form, action) {
-                if (this.deleteButton) this.deleteButton.enable();
+                if (this.actions['delete']) this.actions['delete'].enable();
                 this.fireEvent('loaded', form, action);
             },
             scope: this
         }));
     },
+
     mabySave : function(callback, callCallbackIfNotDirty)
     {
         if(typeof callCallbackIfNotDirty == 'undefined') callCallbackIfNotDirty = true;
@@ -235,7 +138,8 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
         return true;
     },
     onSubmit : function(options, successCallback) {
-        this.saveButton.disable();
+        if (this.actions.save) this.actions.save.disable();
+
         if (!options) options = {};
         this.form.submit(Ext.applyIf(options, {
             waitMsg: 'speichern...',
@@ -249,7 +153,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
                 if(action.failureType == Ext.form.Action.CLIENT_INVALID) {
                     Ext.Msg.alert('Speichern', 'Es konnte nicht gespeichert werden, bitte alle Felder korrekt ausfüllen.');
                 }
-                this.saveButton.enable();
+                if (this.actions.save) this.actions.save.enable();
             },
             scope: this
         }));
@@ -259,7 +163,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
         this.fireEvent('dataChanged', action.result);
 
         var reEnableSubmitButton = function() {
-            this.saveButton.enable();;
+            if (this.actions.save) this.actions.save.enable();
         };
         reEnableSubmitButton.defer(1000, this);
     },
@@ -291,6 +195,7 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
             callback: function() {
                 this.enable();
                 if (this.deleteButton) this.deleteButton.disable();
+                if (this.actions['delete']) this.actions['delete'].disable();
                 this.form.baseParams.id = 0;
                 this.form.setDefaultValues();
                 this.form.clearInvalid();
@@ -303,17 +208,15 @@ Ext.extend(Vps.Auto.Form, Ext.util.Observable,
         return this.form.findField(id);
     },
     disable : function() {
-        if(this.saveButton) this.saveButton.disable();
-        if(this.deleteButton) this.deleteButton.disable();
+        if (this.actions.save) this.actions.save.disable();
+        if (this.actions['delete']) this.actions['delete'].disable();
         this.form.items.each(function(b) {
             b.disable();
         });
     },
     enable : function() {
-        if (this.toolbar) {
-            this.toolbar.items.each(function(b) {
-                b.enable();
-            });
+        for (var i in this.actions) {
+            this.actions[i].enable();
         }
         this.form.items.each(function(b) {
             b.enable();

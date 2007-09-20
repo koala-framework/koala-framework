@@ -11,3 +11,4 @@ Vps.Form.PosField = function(config)
 Ext.extend(Vps.Form.PosField, Ext.form.TextField,
 {
 });
+Ext.reg('posfield', Vps.Form.PosField);

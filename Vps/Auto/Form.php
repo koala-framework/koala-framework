@@ -242,4 +242,9 @@ class Vps_Auto_Form implements Vps_Collection_Item_Interface
     protected function _afterInsert(Zend_Db_Table_Row_Abstract $row)
     {
     }
+
+    public function add($v = null)
+    {
+        return $this->fields->add($v);
+    }
 }

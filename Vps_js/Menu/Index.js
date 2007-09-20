@@ -1,21 +1,20 @@
-Vps.Menu.Index = function(renderTo, config)
-{
-    Ext.apply(this, config);
-    this.renderTo = renderTo;
-    this.events = {
-        'menuevent' : true
-    };
-    this.tb = new Ext.Toolbar(renderTo);
-    
-    if (!this.controllerUrl) {
-        this.controllerUrl = '/menu/';
-    }
-    this.reload();
-};
+Ext.namespace('Vps.Menu');
 
-Ext.extend(Vps.Menu.Index, Ext.util.Observable,
-{
+Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
     userRole: null,
+    initComponent : function()
+    {
+        this.addEvents({
+            'menuevent' : true
+        });
+
+        if (!this.controllerUrl) {
+            this.controllerUrl = '/menu/';
+        }
+        this.reload();
+
+        Vps.Menu.Index.superclass.initComponent.call(this);
+    },
     reload: function()
     {
         Ext.Ajax.request({
@@ -79,10 +78,10 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
     },
     loadMenu: function(r)
     {
-        if (this.tb.items.getCount() > 0) {
+        if (this.items.getCount() > 0) {
             //tolbar komplett löschen und neu erstellen
-            this.tb.destroy();
-            this.tb.render(this.renderTo);
+            this.destroy();
+            this.render(this.renderTo);
         }
         var response = Ext.decode(r.responseText);
         Vps.Menu.userRole = response.userRole;
@@ -93,23 +92,24 @@ Ext.extend(Vps.Menu.Index, Ext.util.Observable,
             } else if (menuItem.icon) {
                 menuItem.cls = 'x-btn-icon';
             }
-            this.tb.add(menuItem);
+            this.add(menuItem);
         }, this);
 
         if (response.showLogout) {
-            this.tb.addButton(new Ext.Toolbar.Fill());
-            this.tb.addButton({
+            this.add(new Ext.Toolbar.Fill());
+            this.add({
                 text: 'Logout',
                 handler: function() {
                     Ext.Ajax.request({
                         url : '/login/jsonLogoutUser',
                         success : function(form, action) {
-                            document.location.reload();
-                        }
+                            this.reload();
+                        },
+                        scope: this
                     });
-                }
+                },
+                scope: this
             });
         }
     }
-    
 });

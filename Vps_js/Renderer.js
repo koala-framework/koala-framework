@@ -2,9 +2,9 @@ Ext.namespace('Vps.Renderer');
 
 Vps.Renderer.Date = Ext.util.Format.dateRenderer('d.m.Y');
 
-Vps.Renderer.Boolean = function(value)
-{
-    return value ? 'Ja' : 'Nein';
+Vps.Renderer.Boolean = function(v, p, record) {
+    p.css += ' x-grid3-check-col-td'; 
+    return '<div class="x-grid3-check-col'+(v?'-on':'')+'">&#160;</div>';
 };
 
 Vps.Renderer.Password = function(value)

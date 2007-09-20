@@ -1,4 +1,20 @@
 <?php
+class Vps_Controller_Action_User_Users_RoleColumn extends Vps_Auto_Grid_Column
+{
+    private $_roles;
+    public function getData($row, $role)
+    {
+        if (isset($this->_roles[$row->role])) {
+            return $this->_roles[$row->role];
+        } else {
+            return $row->role;
+        }
+    }
+    public function setRoles($roles)
+    {
+        $this->_roles = $roles;
+    }
+}
 
 class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
 {
@@ -8,15 +24,14 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
     protected $_paging = 0;
     protected $_defaultOrder = 'username';
     protected $_tableName = 'Vps_Model_User_Users';
-    protected $_roles = array();
 
     protected function _initColumns()
     {
         $acl = Zend_Registry::get('acl');
-        $roles = $acl->getRoles();
-        foreach($roles as $role) {
+        $roles = array();
+        foreach($acl->getRoles() as $role) {
             if($role instanceof Vps_Acl_Role) {
-                $this->_roles[$role->getRoleId()] = $role->getRoleName();
+                $roles[$role->getRoleId()] = $role->getRoleName();
             }
         }
 
@@ -26,10 +41,11 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
         $this->_columns->add(new Vps_Auto_Grid_Column('username', 'Username', 140))
                 ->setEditor(new Vps_Auto_Field_TextField());
 
-        $this->_columns->add(new Vps_Auto_Grid_Column('role_name'));
+        $this->_columns->add(new Vps_Controller_Action_User_Users_RoleColumn('role_name'))
+                             ->setRoles($roles);
 
         $editor = new Vps_Auto_Field_ComboBox();
-        $editor->setStoreData($this->_roles)
+        $editor->setStore($roles)
                ->setEditable(false)
                ->setTriggerAction('all')
                ->setLazyRender(true);
@@ -51,18 +67,6 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
     public function indexAction()
     {
         $this->view->ext('Vps.User.Users');
-    }
-
-    protected function _fetchFromRow($row, $field)
-    {
-        if ($field == 'role_name') {
-            if (isset($this->_roles[$row->role])) {
-                return $this->_roles[$row->role];
-            } else {
-                return $row->role;
-            }
-        }
-        return parent::_fetchFromRow($row, $field);
     }
 
     public function jsonMailsendAction()

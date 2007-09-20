@@ -1,3 +1,4 @@
+/*
 Vps.Auto.Form.Dialog = function(renderTo, config)
 {
     if(!Ext.get(renderTo)) {
@@ -94,4 +95,4 @@ Ext.extend(Vps.Auto.Form.Dialog, Vps.Auto.Form,
     clearInvalid: function() {
         this.form.clearInvalid();
     }
-});
+});*/

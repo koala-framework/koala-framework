@@ -1,4 +1,4 @@
-Ext.form.Form.override({
+Ext.form.BasicForm.override({
     resetDirty: function() {
         this.items.each(function(field) {
             field.originalValue = field.getValue();

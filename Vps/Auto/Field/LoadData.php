@@ -1,7 +1,6 @@
 <?php
 class Vps_Auto_Field_LoadData extends Vps_Auto_Field_SimpleAbstract
 {
-
     public function getMetaData()
     {
         $ret = parent::getMetaData();

@@ -1,6 +1,8 @@
 <?php
 class Vps_Auto_Field_ComboBox extends Vps_Auto_Field_SimpleAbstract
 {
+    protected $_xtype = 'combobox';
+
     public function __construct($field_name = null)
     {
         if ($field_name) $this->setProperty('hiddenName', $field_name);

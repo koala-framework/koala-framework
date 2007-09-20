@@ -2,6 +2,7 @@
 class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
 {
     protected $_fields;
+    protected $_xtype = 'fieldset';
 
     public function __construct($tableName = null)
     {
@@ -12,11 +13,15 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
     public function getMetaData()
     {
         $ret = parent::getMetaData();
-        $ret['fields'] = array();
+        $ret['items'] = array();
         foreach ($this->_getFields() as $field) {
-            $ret['fields'][] = $field->getMetaData();
+            $ret['items'][] = $field->getMetaData();
         }
-        unset($ret['data']);
+        if (!isset($ret['hideLabels'])) $ret['hideLabels'] = true;
+        if (!isset($ret['autoHeight'])) $ret['autoHeight'] = true;
+
+        if (isset($ret['data'])) unset($ret['data']);
+        if (isset($ret['tableName'])) unset($ret['tableName']);
         return $ret;
     }
 
@@ -31,7 +36,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
                 if (!is_string($i)) $i = $i->__toString();
                 $this->_fields->add(new Vps_Auto_Field_Checkbox($this->getName()."[$k]"))
                     ->setKey($k)
-                    ->setFieldLabel($i);
+                    ->setBoxLabel($i);
             }
         }
         return $this->_fields;

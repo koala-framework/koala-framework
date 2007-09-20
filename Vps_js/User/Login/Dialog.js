@@ -1,10 +1,7 @@
-Ext.namespace('Vps.User', 'Vps.User.Login');
-Vps.User.Login.Dialog = function(renderTo, config)
+Ext.namespace('Vps.User.Login');
+Vps.User.Login.Dialog = function(config)
 {
-    Ext.apply(this, config);
-    renderTo = renderTo || Ext.get(document.body).createChild();
-
-    this.dialog = new Ext.BasicDialog(renderTo, {
+    this.dialog = new Ext.Window({
         height: 160,
         width: 310,
         modal: false,
@@ -15,7 +12,8 @@ Vps.User.Login.Dialog = function(renderTo, config)
         collapsible: false,
         resizable: false
     });
-    
+    this.dialog.render(Ext.getBody());
+
     Ext.DomHelper.append(this.dialog.body, '<iframe id="loginframe" scrolling="no" src="/login/showForm" width="100%" height="100%" style="border: 0px"></iframe>');
     var frame = Ext.get('loginframe');
 
@@ -37,6 +35,8 @@ Vps.User.Login.Dialog = function(renderTo, config)
     }
 
     Ext.EventManager.on(frame, 'load', cb, this);
+
+    Vps.User.Login.Dialog.superclass.constructor.call(this, config);
 };
 
 

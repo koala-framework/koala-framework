@@ -28,7 +28,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $this->ext['config'][$param] = $value;
     }
     
-    public function ext($class, $config = array(), $renderTo = '')
+    public function ext($class, $config = array(), $viewport = null)
     {
         if (!is_string($class)) {
             throw new Vps_View_Exception('Class must be a string.');
@@ -50,12 +50,24 @@ class Vps_View_Smarty extends Zend_View_Abstract
             $class = $this->ext['class'];
         }
 
+        if (!$viewport) {
+            if (Zend_Registry::get('config')->ext && Zend_Registry::get('config')->ext->defaultViewport) {
+                $viewport = Zend_Registry::get('config')->ext->defaultViewport;
+            } else {
+                $viewport = 'Vps.Viewport';
+            }
+        }
+
+        //das ist nötig weil wenn $config ein leeres Array ist, kommt sonst []
+        //raus aber {} wird benötigt (array als config ist ungültig)
+        $config = (object)$config;
+
         // View einrichten
         $ext['files']['js'] = $jsFiles;
         $ext['files']['css'] = $cssFiles;
         $ext['class'] = $class;
         $ext['config'] = Zend_Json::encode($config);
-        $ext['renderTo'] = $renderTo;
+        $ext['viewport'] = $viewport;
         $this->ext = $ext;
     }
     

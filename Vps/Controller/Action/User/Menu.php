@@ -64,7 +64,6 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
             $menu['type'] = 'commandDialog';
             $menu['menuConfig']['text'] = 'Login';
             $menu['commandClass'] = 'Vps.User.Login.Dialog';
-            $menu['command'] = 'Vps.User.Login.Index';
             $menus[] = $menu;
             $showLogout = false;
         }
