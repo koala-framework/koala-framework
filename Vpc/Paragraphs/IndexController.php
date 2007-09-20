@@ -50,10 +50,7 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     
     protected function _beforeDelete(Zend_Db_Table_Row_Abstract $row)
     {
-        $setup = Vpc_Setup_Abstract::createInstance($row->component_class);
-        if ($setup) {
-            $setup->deleteEntry($row->page_id, $row->component_key . '-' . $row->id);
-        }
+        Vpc_Setup_Abstract::staticDelete($row->component_class, $row->page_id, $row->component_key . '-' . $row->id);
     }
 
     public function jsonDataAction()
@@ -78,10 +75,7 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     {
         $componentClass = $this->_getParam('component');
         if (array_search($componentClass, $this->_components)) {
-            $setup = Vpc_Setup_Abstract::createInstance($componentClass);
-            if ($setup) {
-                $setup->setup();
-            }
+            Vpc_Setup_Abstract::staticSetup($componentClass);
             $insert['page_id'] = $this->component->getDbId();
             $insert['component_key'] = $this->component->getComponentKey();
             $insert['component_class'] = $componentClass;

@@ -1,26 +1,20 @@
 <?php
-class Vpc_Simple_Image_IndexController extends Vps_Controller_Action_Auto_Form_Vpc
+class Vps_Auto_Form_Image extends Vps_Auto_Form
 {
-    protected $_buttons = array (
-        'save' => true
-    );
-
-    public function indexAction() {
-        $this->view->ext('Vpc.Simple.Image.Index');
-    }
-
-    public function _initFields()
+    public function __construct($name = null, $id = null, Vpc_Basic_Image_Index $component)
     {
-        $this->_form->setTable(new Vpc_Simple_Image_IndexModel());
-        $this->_form->setFileUpload(true);
-        $fields = $this->_form->fields;
+        parent::__construct($name, $id);
+        $this->setTable(new Vpc_Basic_Image_IndexModel());
+        $this->setFileUpload(true);
+        $fields = $this->fields;
         $fields->add(new Vps_Auto_Field_TextField('name'))
             ->setFieldLabel('Filename');
-        $fields->add(new Vps_Auto_Field_File('SimpleImage/', $this->component->getSetting('extensions')))
+
+        $fields->add(new Vps_Auto_Field_File('BasicImage/', $component->getSetting('extensions')))
             ->setFieldLabel('File');
 
         //Einstellungen für die Veränderbarkeit der Höhe und Breite
-        $sizes = $this->component->getSetting('size');
+        $sizes = $component->getSetting('size');
         if (empty($sizes)) {
             $fields->add(new Vps_Auto_Field_TextField('width'))
                 ->setFieldLabel('Width');
@@ -32,8 +26,8 @@ class Vpc_Simple_Image_IndexController extends Vps_Controller_Action_Auto_Form_V
                 ->setSizes($sizes);
         }
         
-        if ($this->component->getSetting('allow') != '' && $this->component->getSetting('allow') != array()) {
-            $styles = $this->component->getSetting('allow');
+        if ($component->getSetting('allow') != '' && $component->getSetting('allow') != array()) {
+            $styles = $component->getSetting('allow');
             $newStyles = array ();
             foreach ($styles as $data) {
                 $newStyles[] = array($data, $data);
@@ -49,12 +43,5 @@ class Vpc_Simple_Image_IndexController extends Vps_Controller_Action_Auto_Form_V
                 'triggerAction' => 'all'
             );
         }
-    }
-    
-    public function jsonLoadAction()
-    {
-        parent::jsonLoadAction();
-        $this->view->urlbig = $this->component->getImageUrl();
-        $this->view->url = $this->component->getImageUrl(Vpc_Simple_Image_Index::SIZE_THUMB);
     }
 }

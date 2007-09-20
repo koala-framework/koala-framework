@@ -1,24 +1,22 @@
 <?php
-class Vpc_Simple_Image_Setup extends Vpc_Setup_Abstract
+class Vpc_Basic_Download_Setup extends Vpc_Setup_Abstract
 {
     public function setup()
     {
-        $this->copyTemplate('Simple/Image.html');
+        $this->copyTemplate('Basic/Download.html');
         
         $config = Zend_Registry::get('config');
         $uploadDir = $config->uploads;
-        if (!is_dir($uploadDir . 'SimpleImage/')) {
-            mkdir($uploadDir . 'SimpleImage/');
+        if (!is_dir($uploadDir . 'BasicDownload/')) {
+            mkdir($uploadDir . 'BasicDownload/');
         }
         
         $fields['name'] = 'varchar(255) NOT NULL';
-        $fields['width'] = 'int(11) NOT NULL';
-        $fields['height'] = 'int(11) NOT NULL';
-        $fields['style'] = 'varchar(255) NOT NULL';
+        $fields['info'] = 'text';
         $fields['vps_upload_id'] = 'int';
-        $this->createTable('vpc_simple_image', $fields);
-        $this->_db->query('ALTER TABLE vpc_simple_image ADD INDEX (vps_upload_id)');
-        $this->_db->query('ALTER TABLE vpc_simple_image
+        $this->createTable('vpc_Basic_download', $fields);
+        $this->_db->query('ALTER TABLE vpc_basic_download ADD INDEX (vps_upload_id)');
+        $this->_db->query('ALTER TABLE vpc_basic_download
             ADD FOREIGN KEY (vps_upload_id)
             REFERENCES vps_uploads (id)
             ON DELETE SET NULL ON UPDATE SET NULL');
@@ -29,7 +27,7 @@ class Vpc_Simple_Image_Setup extends Vpc_Setup_Abstract
         $where = array();
         $where['page_id = ?'] = $pageId;
         $where['component_key = ?'] = $componentKey;
-        $table = new Vpc_Simple_Image_IndexModel(array('db'=>$this->_db));
+        $table = new Vpc_Basic_Download_IndexModel(array('db'=>$this->_db));
         $row = $table->fetchAll($where)->current();
         if ($row) {
             $uploadId = $row->vps_upload_id;

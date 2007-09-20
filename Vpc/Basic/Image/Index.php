@@ -1,7 +1,7 @@
 <?php
-class Vpc_Simple_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
+class Vpc_Basic_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
 {
-    protected $_tablename = 'Vpc_Simple_Image_IndexModel';
+    protected $_tablename = 'Vpc_Basic_Image_IndexModel';
     const NAME = 'Standard.Image';
     protected $_settings = array(
         'extensions' 	    => array('jpg', 'gif', 'png'),
@@ -14,8 +14,9 @@ class Vpc_Simple_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
     
     public function getTemplateVars()
     {
+        $return = parent::getTemplateVars();
         $return['url'] = $this->getImageUrl();
-        $return['template'] = 'Simple/Image.html';
+        $return['template'] = 'Basic/Image.html';
         return $return;
     }
     

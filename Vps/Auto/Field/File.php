@@ -15,7 +15,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_SimpleAbstract
 
     public function load($row)
     {
-        $this->_media = $row->vps_upload_id ? '/media/' . $row->vps_upload_id : '' ;
+        $this->_media = isset($row->vps_upload_id) ? '/media/' . $row->vps_upload_id : '' ;
         return array();
     }
     

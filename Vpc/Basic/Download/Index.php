@@ -1,7 +1,7 @@
 <?php
-class Vpc_Simple_Download_Index extends Vpc_Abstract
+class Vpc_Basic_Download_Index extends Vpc_Abstract
 {
-    protected $_tablename = 'Vpc_Simple_Download_IndexModel';
+    protected $_tablename = 'Vpc_Basic_Download_IndexModel';
     const NAME = 'Standard.Download';
 
     protected $_settings = array(
@@ -18,7 +18,7 @@ class Vpc_Simple_Download_Index extends Vpc_Abstract
         $return['icon'] = '';
         $return['text'] = '';
         $return['filesize'] = '';
-        $return['template'] = 'Simple/Download.html';
+        $return['template'] = 'Basic/Download.html';
 
         $row = $this->_getTable()->find($this->getDbId(), $this->getComponentKey())->current();
         if ($row) {
