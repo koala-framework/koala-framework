@@ -28,17 +28,15 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             baseParams : {},
             url : this.controllerUrl+'jsonSave'
         });
-        this.form = new Ext.FormPanel(this.formConfig);
 
-        this.form.getForm().doAction('loadAutoForm', {
+        Ext.Ajax.request({
             url: this.controllerUrl+'jsonLoad',
-            meta: this.onMetaChange,
-            success: function(form, action) {
-                if (action.result.data) {
-                    //loaded-event nur wenn daten vom server geladen wurden
-                    //(nicht nur meta-daten)
-                    this.fireEvent('loaded', form, action);
-                }
+            params: {meta: true},
+            success: function(response, options, r) {
+                var result = Ext.decode(response.responseText);
+                this.onMetaChange(result.meta);
+                this.form.clearInvalid();
+                this.form.setValues(result.data);
             },
             scope: this
         });
@@ -46,18 +44,9 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 
     onMetaChange : function(meta)
     {
-        this.meta = meta;
-//         if (meta.buttons) {
-//             this.renderButtons();
-//         }
-
-        meta.fields.each(function(field) {
-            this.form.add(field);
-        }, this);
+        this.form = new Ext.FormPanel(meta.form);
         this.add(this.form);
-
         this.doLayout();
-        this.fireEvent('formRendered', this);
     },
 
     getAction : function(type)

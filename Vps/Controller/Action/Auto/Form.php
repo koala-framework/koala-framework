@@ -72,7 +72,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     protected function _appendMetaData()
     {
         $this->view->meta = array();
-        $this->view->meta['fields'] = $this->_form->getMetaData();
+        $this->view->meta['form'] = $this->_form->getMetaData();
         $this->view->meta['buttons'] = $this->_buttons;
     }
 
@@ -89,6 +89,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         $data = $this->_form->prepareSave(null, $this->getRequest()->getParams());
 
         $this->_beforeSave($row);
+        $this->_form->_beforeSave($row);
 
         $primaryKey = $this->_form->getPrimaryKey();
         if (is_array($primaryKey)) $primaryKey = $primaryKey[1];
@@ -97,13 +98,16 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
                 throw new Vps_Exception('Add is not allowed.');
             }
             $this->_beforeInsert($row);
+            $this->_form->_beforeInsert($row);
         }
 
         $data = $this->_form->save(null);
 
         $this->_afterSave($row);
+        $this->__form->afterSave($row);
         if (!$row->$primaryKey) {
             $this->_afterInsert($row);
+            $this->__form->_afterInsert($row);
         }
         $this->view->data = $data;
     }

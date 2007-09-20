@@ -22,7 +22,7 @@ abstract class Vps_Auto_Field_SimpleAbstract extends Vps_Auto_Field_Abstract
         return array_merge($ret, parent::load($row));
     }
 
-    public function save(Zend_Db_Table_Row_Abstract $row, $postData)
+    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
     {
         $name = $this->getName();
         $fieldName = $this->getFieldName();
@@ -35,6 +35,6 @@ abstract class Vps_Auto_Field_SimpleAbstract extends Vps_Auto_Field_Abstract
                 $field->save($row, $postData);
             }
         }
-        parent::load($row);
+        parent::prepareSave($row, $postData);
     }
 }

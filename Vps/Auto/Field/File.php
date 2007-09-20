@@ -26,7 +26,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_SimpleAbstract
         return $data;
     }
 
-    public function save(Zend_Db_Table_Row_Abstract $row, $postData)
+    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
     {
         $file = isset($_FILES['vps_upload_id']) ? $_FILES['vps_upload_id'] : array();
         $fileTable = new Vps_Dao_File();
