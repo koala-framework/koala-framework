@@ -35,8 +35,8 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             success: function(response, options, r) {
                 var result = Ext.decode(response.responseText);
                 this.onMetaChange(result.meta);
-                this.form.clearInvalid();
-                this.form.setValues(result.data);
+                this.form.form.clearInvalid();
+                this.form.form.setValues(result.data);
             },
             scope: this
         });
