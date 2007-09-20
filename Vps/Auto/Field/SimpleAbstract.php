@@ -21,6 +21,7 @@ abstract class Vps_Auto_Field_SimpleAbstract extends Vps_Auto_Field_Abstract
         }
         return array_merge($ret, parent::load($row));
     }
+
     public function save(Zend_Db_Table_Row_Abstract $row, $postData)
     {
         $name = $this->getName();

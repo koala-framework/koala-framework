@@ -4,11 +4,11 @@ class Vps_Auto_Grid_Column_Parent extends Vps_Auto_Grid_Column
     public function getMetaData($tableInfo = null)
     {
         $ret = parent::getMetaData($tableInfo);
-        if (isset($ret['findParent'])) unset($ret['findParent']);
+        if (isset($ret['parentTable'])) unset($ret['parentTable']);
         return $ret;
     }
 
-    public function getData($row)
+    public function getData(Zend_Db_Table_Row_Abstract $row, $role)
     {
         if (!$this->getParentTable()) {
             throw new Vps_Exception("Parent Table not set.");

@@ -1,6 +1,8 @@
 <?php
 class Vps_Auto_Field_DateField extends Vps_Auto_Field_SimpleAbstract
 {
+    protected $_xtype = 'datefield';
+
     public function save(Zend_Db_Table_Row_Abstract $row, $postData)
     {
         $name = $this->getName();

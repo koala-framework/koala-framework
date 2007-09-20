@@ -1,81 +1,87 @@
-Vps.Auto.Grid = function(renderTo, config)
+Vps.Auto.GridPanel = Ext.extend(Ext.grid.EditorGridPanel,
 {
-    Ext.apply(this, config);
-    this.events = {
-        'generatetoolbar': true,
-        'rowselect': true,
-        'rowdblclick': true,
-        'beforerowselect': true,
-        'load': true
-    };
+    controllerUrl: '',
 
-    this.renderTo = renderTo || Ext.get(document.body).createChild();
-
-    this.ds = new Ext.data.Store({
-        proxy: new Ext.data.HttpProxy({url: this.controllerUrl + 'jsonData'}),
-        reader: new Ext.data.JsonReader(),
-        remoteSort: true
-    });
-    this.ds.newRecords = []; //hier werden neue records gespeichert die nicht dirty sind
-    this.ds.on('update', function(store, record, operation) {
-        if (operation == Ext.data.Record.EDIT) {
-            if(this.saveButton) this.saveButton.enable();
-        }
-    }, this);
-    this.ds.on('add', function(store, records, index) {
-        if(this.saveButton) this.saveButton.enable();
-    }, this);
-
-    this.ds.on('metachange', this.onMetaChange, this);
-    this.ds.on('loadexception', function(proxy, o, response, e) {
-        throw e; //re-throw
-    }, this);
-
-    this.ds.on('load', function(store, records, options) {
-        this.fireEvent('load', store, records, options);
-    }, this);
-
-    this.grid = new Ext.grid.EditorGrid(this.renderTo, Ext.applyIf(config, {
-        //enableDragDrop: true, // für DD
-        clicksToEdit: 1,
-        dataSource: this.ds,
-        selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
-        colModel: new Ext.grid.ColumnModel([{header: "", hidden:true}]), //workaround weil es ain columnmodel geben muss
-        id: this.controllerUrl.replace(/\//g, '-').replace(/^-|-$/g, '') //um eine eindeutige id für den stateManager zu haben
-    }));
-
-    this.grid.getSelectionModel().on('rowselect', function(selData, gridRow, currentRow) {
-        if(this.deleteButton) this.deleteButton.enable();
-        this.fireEvent('rowselect', selData, gridRow, currentRow);
-    }, this);
-
-    this.grid.getSelectionModel().on('beforerowselect', function(selData, gridRow, currentRow) {
-        return this.fireEvent('beforerowselect', selData, gridRow, currentRow);
-    }, this);
-
-    this.grid.on('rowdblclick', function(selModel, rowIndex) {
-        var data = this.grid.dataSource.data.items[rowIndex].data;
-        this.fireEvent('rowdblclick', data, selModel, rowIndex);
-    }, this);
-
-    this.grid.restoreState();
-
-    if(this.autoload) {
-        this.ds.load();
-    }
-};
-
-Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
-{
     autoload: true,
+
+    clicksToEdit: 1,
+
+    initComponent : function(){
+//todo:        id: this.controllerUrl.replace(/\//g, '-').replace(/^-|-$/g, '') //um eine eindeutige id für den stateManager zu haben
+
+        //toolbars oben und unten immer erstellen
+        this.elements += ',tbar';
+        this.elements += ',bbar';
+
+        if (!this.store) {
+            this.store = new Ext.data.Store({
+                proxy: new Ext.data.HttpProxy({url: this.controllerUrl + 'jsonData'}),
+                reader: new Ext.data.JsonReader(),
+                remoteSort: true
+            });
+        }
+        this.store.newRecords = []; //hier werden neue records gespeichert die nicht dirty sind
+        this.store.on('update', function(store, record, operation) {
+            if (operation == Ext.data.Record.EDIT) {
+                if (this.getTopToolbar().items.item('save')) {
+                    this.getTopToolbar().items.item('save').enable();
+                }
+            }
+        }, this);
+        this.store.on('add', function(store, records, index) {
+            if (this.getTopToolbar().items.item('save')) {
+                this.getTopToolbar().items.item('save').enable();
+            }
+        }, this);
+
+        this.store.on('metachange', this.onMetaChange, this);
+        this.store.on('loadexception', function(proxy, o, response, e) {
+            throw e; //re-throw
+        }, this);
+
+        this.store.on('load', function(store, records, options) {
+            this.fireEvent('load', store, records, options);
+        }, this);
+
+        if (!this.selModel) {
+            this.selModel = new Ext.grid.RowSelectionModel({singleSelect:true});
+        }
+        if (!this.colModel) {
+            this.colModel = new Ext.grid.ColumnModel([{header: "", hidden:true}]); //workaround weil es ein columnmodel geben muss
+        }
+
+        this.selModel.on('rowselect', function(selData, gridRow, currentRow) {
+            if (this.getTopToolbar().items.item('delete')) {
+                this.getTopToolbar().items.item('delete').enable();
+            }
+        }, this);
+
+        this.addEvents({
+            'generatetoolbar': true,
+//             'rowselect': true,
+//             'beforerowselect': true,
+            'load': true
+        });
+//todo:     this.grid.restoreState();
+        if(this.autoload) {
+            this.store.load();
+        }
+
+        Vps.Auto.GridPanel.superclass.initComponent.call(this);
+    },
+
     onMetaChange : function(store, meta) {
         var config = [];
         for (var i=0; i<meta.columns.length; i++) {
             var column = meta.columns[i];
             if (!column.header) continue;
 
-
-            if (column.editor) {
+            if (column.editor && column.editor.type == 'Checkbox') {
+                delete column.editor;
+                if (column.renderer) delete column.renderer;
+                column = new Vps.Grid.CheckColumn(column);
+                column.init(this);
+            } else if (column.editor) {
                 var editorConfig = { msgTarget: 'qtip' };
                 var type;
                 if (typeof column.editor == 'string') {
@@ -98,7 +104,7 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                 }
                 var field = column.editor.field;
                 if(field instanceof Ext.form.ComboBox) {
-                    this.grid.on('validateedit', function(e) {
+                    this.on('validateedit', function(e) {
                         if(e.field == this.column.dataIndex){
                             e.record.data[this.column.showDataIndex] = this.field.getRawValue();
                         }
@@ -106,7 +112,9 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                 }
             }
 
-            if (Vps.Renderer[column.renderer]) {
+            if (typeof column.renderer == 'function') {
+                //do nothing
+            } else if (Vps.Renderer[column.renderer]) {
                 column.renderer = Vps.Renderer[column.renderer];
             } else if (Ext.util.Format[column.renderer]) {
                 column.renderer = Ext.util.Format[column.renderer];
@@ -125,9 +133,7 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
             column.sortable = meta.sortable;
             config.push(column);
         }
-        var colModel = new Ext.grid.ColumnModel(config);
-
-        this.grid.colModel = colModel;
+        this.colModel = new Ext.grid.ColumnModel(config);
 
         /* * Für DD
         var ddrow = new Ext.dd.DropTarget(this.grid.container, {
@@ -151,8 +157,10 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
         });
         */
 
-        this.grid.render();
-        this.grid.restoreState();
+        this.view.initData(this.store, this.colModel);
+        this.view.refresh(true);
+//reconfigure macht im prinzip das gleiche wie das oben, funktionert aber irgendwie nicht richtig
+//         this.reconfigure(this.store, this.colModel);
 
         if (meta.paging) {
             if (typeof meta.paging == 'object') {
@@ -172,22 +180,33 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                     t = Ext.PagingToolbar;
                 }
                 delete meta.paging.type;
-                new t(this.grid.getView().getFooterPanel(true),
-                    this.ds, meta.paging);
+                var pagingConfig = meta.paging;
+                pagingConfig.store = this.store;
+                pagingConfig.renderTo = this.bbar;
+                this.bottomToolbar = new t(pagingConfig);
+                this.syncSize(); //workaround, should be fixed in ext (funkt owa eh ned)
             } else {
                 this.pagingType = 'Ext.PagingToolbar';
-                new Ext.PagingToolbar(this.grid.getView().getFooterPanel(true),
-                    this.ds, {
+                this.bottomToolbar = new Ext.PagingToolbar({
+                        store: this.store,
                         pageSize: meta.paging,
-                        displayInfo: true
+                        displayInfo: true,
+                        renderTo: this.bbar
                     });
+                this.syncSize(); //workaround, should be fixed in ext (funkt owa eh ned)
             }
         } else {
             this.pagingType = false;
         }
 
-        if (meta.buttons['reload']) {
-            this.getToolbar().addButton({
+        //toolaber erstellen falls es noch keine gibt und buttons definiert sind
+        if (!this.topToolbar && meta.buttons != {}) {
+            this.topToolbar = new Ext.Toolbar({renderTo: this.tbar});
+        }
+
+        if (meta.buttons.reload) {
+            this.getTopToolbar().add({
+                id      : 'reload',
                 text    : '',
                 handler : function () { this.reload(); },
                 icon : '/assets/vps/images/silkicons/bullet_star.png',
@@ -197,20 +216,22 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
         }
         
         if (meta.buttons.save) {
-            this.saveButton = this.getToolbar().addButton({
-                text    : 'Speichern',
+            this.getTopToolbar().add({
+                id      : 'save',
+                text    : 'Save',
                 icon    : '/assets/vps/images/silkicons/table_save.png',
                 cls     : 'x-btn-text-icon',
                 disabled: true,
                 handler : this.onSave,
                 scope: this
             });
-            this.getToolbar().addSeparator();
+            this.getTopToolbar().addSeparator();
         }
 
         if (meta.buttons.add) {
-            this.newButton = this.getToolbar().addButton({
-                text    : 'Neu',
+            this.getTopToolbar().add({
+                id      : 'add',
+                text    : 'Add',
                 icon    : '/assets/vps/images/silkicons/table_add.png',
                 cls     : 'x-btn-text-icon',
                 handler : this.onAdd,
@@ -219,8 +240,9 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
         }
 
         if (meta.buttons['delete']) {
-            this.deleteButton = this.getToolbar().addButton({
-                text    : 'Löschen',
+            this.getTopToolbar().add({
+                id      : 'delete',
+                text    : 'Delete',
                 icon    : '/assets/vps/images/silkicons/table_delete.png',
                 cls     : 'x-btn-text-icon',
                 disabled: true,
@@ -229,10 +251,10 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
             });
         }
         if (meta.buttons.pdf) {
-            if(this.getToolbar().items.length > 0) {
-                this.getToolbar().addSeparator();
+            if(this.getTopToolbar().items.length > 0) {
+                this.getTopToolbar().addSeparator();
             }
-            this.newButton = this.getToolbar().addButton({
+            this.getTopToolbar().add({
                 text    : 'Drucken',
                 icon    : '/assets/vps/images/silkicons/printer.png',
                 cls     : 'x-btn-text-icon',
@@ -240,24 +262,26 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                 scope: this
             });
         }
+
         if (meta.filters.text) {
-            if(this.getToolbar().items.length > 0) {
-                this.getToolbar().addSeparator();
+            if(this.getTopToolbar().items.length > 0) {
+                this.getTopToolbar().addSeparator();
             }
-            this.getToolbar().addText("Filter:");
-            this.getToolbar().el.swallowEvent(['keypress','keydown']);
+            this.getTopToolbar().addText("Filter:");
+            this.getTopToolbar().el.swallowEvent(['keypress','keydown']);
             var textfield = new Ext.form.TextField();
-            this.getToolbar().addField(textfield);
+            this.getTopToolbar().addField(textfield);
             textfield.getEl().on('keypress', function() {
-                this.ds.baseParams.query = textfield.getValue();
+                this.store.baseParams.query = textfield.getValue();
                 if (this.pagingType && this.pagingType != 'Date') {
-                    this.ds.load({params:{start:0}});
+                    this.store.load({params:{start:0}});
                 } else {
-                    this.ds.load();
+                    this.store.load();
                 }
             }, this, {buffer: 500});
             delete meta.filters.text;
         }
+
         for(var filter in meta.filters) {
             if (meta.filters[filter].type == 'ComboBox') {
                 var data = meta.filters[filter].data;
@@ -277,32 +301,30 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                         width: 200
                     });
                 combo.setValue(0);
-                this.getToolbar().addText(" ");
-                this.getToolbar().addField(combo);
+                this.getTopToolbar().addText(" ");
+                this.getTopToolbar().addField(combo);
                 combo.on('select', function(combo, record, index) {
-                    this.ds.baseParams['query_'+filter] = record.id;
+                    this.store.baseParams['query_'+filter] = record.id;
                     this.load({start:0});
                 }, this);
             }
         }
-
-        this.fireEvent('generatetoolbar', this.toolbar);
+        this.fireEvent('generatetoolbar');
     },
     onSave : function()
     {
-        this.saveButton.disable();
+        this.getTopToolbar().items.item('save').disable();
         var data = [];
-        var modified = this.ds.getModifiedRecords();
+        var modified = this.store.getModifiedRecords();
         if (!modified.length) return;
-
         //geänderte records
         modified.each(function(r) {
-            this.ds.newRecords.remove(r); //nur einmal speichern
+            this.store.newRecords.remove(r); //nur einmal speichern
             data.push(r.data);
         }, this);
 
         //neue, ungeänderte records
-        this.ds.newRecords.each(function(r) {
+        this.store.newRecords.each(function(r) {
             data.push(r.data);
         }, this);
 
@@ -316,7 +338,7 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                 this.reload();
             },
             failure: function() {
-                this.saveButton.enable();
+                this.getTopToolbar().items.item('save').enable();
             },
             callback: function() {
                 Ext.get(document.body).unmask();
@@ -327,18 +349,18 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
     onAdd : function() {
 
         var data = {};
-        for(var i=0; i<this.ds.recordType.prototype.fields.items.length; i++) {
-            data[this.ds.recordType.prototype.fields.items[i].name] = this.ds.recordType.prototype.fields.items[i].defaultValue;
+        for(var i=0; i<this.store.recordType.prototype.fields.items.length; i++) {
+            data[this.store.recordType.prototype.fields.items[i].name] = this.store.recordType.prototype.fields.items[i].defaultValue;
         }
-        var record = new this.ds.recordType(data);
+        var record = new this.store.recordType(data);
 
-        this.grid.stopEditing();
-        this.ds.insert(0, record);
-        this.ds.newRecords.push(record);
+        this.stopEditing();
+        this.store.insert(0, record);
+        this.store.newRecords.push(record);
         
-        for(var i=0; i<this.grid.getColumnModel().getColumnCount(); i++) {
-            if(!this.grid.getColumnModel().isHidden(i) && this.grid.getColumnModel().isCellEditable(i, 0)) {
-                this.grid.startEditing(0, i);
+        for(var i=0; i<this.getColumnModel().getColumnCount(); i++) {
+            if(!this.getColumnModel().isHidden(i) && this.getColumnModel().isCellEditable(i, 0)) {
+                this.startEditing(0, i);
                 break;
             }
         }
@@ -351,23 +373,23 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
             scope: this,
             fn: function(button) {
                 if (button == 'yes') {
-                    var selectedRow = this.grid.getSelectionModel().getSelected();
+                    var selectedRow = this.getSelectionModel().getSelected();
                     if (!selectedRow) return;
                     if (selectedRow.data.id == 0) {
-                        this.ds.remove(selectedRow);
+                        this.store.remove(selectedRow);
                     } else {
                         Ext.get(document.body).mask('löschen...', 'x-mask-loading');
                         var params = {};
-                        params[this.ds.reader.meta.id] = selectedRow.id;
+                        params[this.store.reader.meta.id] = selectedRow.id;
                         Ext.Ajax.request({
                             url: this.controllerUrl+'jsonDelete',
                             params: params,
                             success: function() {
                                 this.reload();
-                                this.deleteButton.disable();
+                                this.getTopToolbar().items.item('delete').disable();
                             },
                             failure: function() {
-                                this.deleteButton.enable();
+                                this.getTopToolbar().items.item('delete').enable();
                             },
                             callback: function() {
                                 Ext.get(document.body).unmask();
@@ -384,22 +406,22 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
         window.open(this.controllerUrl+'pdf');
     },
     getSelected: function() {
-        return this.grid.getSelectionModel().getSelected();
+        return this.getSelectionModel().getSelected();
     },
     clearSelections: function() {
-        this.grid.getSelectionModel().clearSelections();
+        this.getSelectionModel().clearSelections();
     },
     selectRow: function(row) {
-        this.grid.getSelectionModel().selectRow(row);
+        this.getSelectionModel().selectRow(row);
     },
     reload: function() {
-        this.ds.reload();
-        this.ds.commitChanges();
+        this.store.reload();
+        this.store.commitChanges();
     },
     load : function(params) {
         if(!params) params = {};
         this.loadParams = params; //submit them again on save
-        this.ds.load({params:params});
+        this.store.load({params:params});
     },
     enable: function() {
         if(this.newButton) this.newButton.enable();
@@ -410,12 +432,6 @@ Ext.extend(Vps.Auto.Grid, Ext.util.Observable,
                 b.disable();
             }, this);
         }
-        this.ds.removeAll();
-    },
-    getToolbar: function() {
-        if (!this.toolbar) {
-            this.toolbar = new Ext.Toolbar(this.grid.getView().getHeaderPanel(true));
-        }
-        return this.toolbar;
+        this.store.removeAll();
     }
 });

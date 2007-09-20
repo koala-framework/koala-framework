@@ -1,5 +1,10 @@
 <?php
-class Vps_Auto_Field_Fieldset extends Vps_Auto_Field_Abstract
+/**
+ * Basisklasse für Fields die andere Fields beinhalten
+ *
+ * zB FieldSet
+ **/
+abstract class Vps_Auto_Field_Container_Abstract extends Vps_Auto_Field_Abstract
 {
     public $fields;
 
@@ -12,9 +17,18 @@ class Vps_Auto_Field_Fieldset extends Vps_Auto_Field_Abstract
     public function getMetaData()
     {
         $ret = parent::getMetaData();
-        $ret['fields'] = array();
+        $ret['items'] = array();
         foreach ($this->fields as $field) {
-            $ret['fields'][] = $field->getMetaData();
+            $ret['items'][] = $field->getMetaData();
+        }
+        return $ret;
+    }
+
+    public function load($row)
+    {
+        $ret = parent::load($row);
+        foreach($this->fields as $field) {
+            $ret = array_merge($ret, $field->load($row));
         }
         return $ret;
     }
@@ -33,5 +47,10 @@ class Vps_Auto_Field_Fieldset extends Vps_Auto_Field_Abstract
     public function getChildren()
     {
         return $this->fields;
+    }
+
+    public function add($v = null)
+    {
+        return $this->fields->add($v);
     }
 }

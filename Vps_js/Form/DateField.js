@@ -23,3 +23,4 @@ Ext.extend(Vps.Form.DateField, Ext.form.DateField,
         }
     }
 });
+Ext.reg('datefield', Vps.Form.DateField);

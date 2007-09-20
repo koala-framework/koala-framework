@@ -86,3 +86,4 @@ Vps.Form.ComboBox = function(config)
 Ext.extend(Vps.Form.ComboBox, Ext.form.ComboBox,
 {
 });
+Ext.reg('combobox', Vps.Form.ComboBox);

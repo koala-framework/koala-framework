@@ -1,38 +1,30 @@
-
 Ext.namespace('Vps.User');
 
-Vps.User.Users = function(renderTo, config)
-{
-    config = Ext.applyIf(config || {}, {controllerUrl: '/users/'});
-
-    this.grid = new Vps.Auto.Grid(renderTo, config);
-
-    this.grid.on('generatetoolbar', function(tb) {
-        tb.addSeparator();
-        this.passwordButton = tb.addButton({
-            icon    : '/assets/vps/images/silkicons/email_go.png',
-            cls     : 'x-btn-text-icon',
-            text    : 'Neue Zugangsdaten mailen',
-            disabled: true,
-            handler : this.onMailsend,
-            scope: this
-        });
-    }, this);
-    this.grid.on('rowselect', function(selData, gridRow, currentRow) {
-        if (currentRow.data.email != '') {
-            this.passwordButton.enable();
-        } else {
-            this.passwordButton.disable();
-        }
-    }, this);
-
-};
-
-Ext.extend(Vps.User.Users, Ext.util.Observable,
-{
-    getPanel : function()
+Vps.User.Users = Ext.extend(Vps.Auto.GridPanel, {
+    initComponent: function()
     {
-        return new Ext.GridPanel(this.grid.grid); 
+        if (!this.controllerUrl) this.controllerUrl = '/users/';
+
+        this.tbar = [
+            {
+                id      : 'password',
+                icon    : '/assets/vps/images/silkicons/email_go.png',
+                cls     : 'x-btn-text-icon',
+                text    : 'Neue Zugangsdaten mailen',
+                disabled: true,
+                handler : this.onMailsend,
+                scope: this
+            }];
+
+        Vps.User.Users.superclass.initComponent.call(this);
+
+        this.selModel.on('rowselect', function(selData, gridRow, currentRow) {
+            if (currentRow.data.email != '' && currentRow.data.id != 0) {
+                this.getTopToolbar().items.item('password').enable();
+            } else {
+                this.getTopToolbar().items.item('password').disable();
+            }
+        }, this);
     },
 
     onMailsend : function() {
@@ -44,28 +36,24 @@ Ext.extend(Vps.User.Users, Ext.util.Observable,
             scope: this,
             fn: function(button) {
                 if (button == 'yes') {
-                    var selectedRow = this.grid.getSelected();
+                    var selectedRow = this.getSelected();
                     if (!selectedRow) return;
-                    if (selectedRow.data.id == 0) {
-                        Ext.Msg.alert('Senden nicht möglich', 'Bitte klicken Sie erst auf speichern, bevor Sie neue Logindaten senden.<br><br>'
-                                        +'<i>Info: Wird ein Account neu angelegt, werden die Logindaten automatisch gesendet, sofern eine gültige Email-Adresse angegeben wurde.');
-                    } else {
-                        Ext.get(document.body).mask('senden...', 'x-mask-loading');
-                        Ext.Ajax.request({
-                            url:'/users/jsonMailsend',
-                            params:{id:selectedRow.id},
-                            success:function() {
-                                this.grid.reload();
-                            },
-                            failure: function() {
-                                this.passwordButton.enable();
-                            },
-                            callback: function() {
-                                Ext.get(document.body).unmask();
-                            },
-                            scope : this
-                        });
-                    }
+                    if (selectedRow.data.id == 0) return;
+                    Ext.get(document.body).mask('senden...', 'x-mask-loading');
+                    Ext.Ajax.request({
+                        url:'/users/jsonMailsend',
+                        params:{id:selectedRow.id},
+                        success:function() {
+                            this.reload();
+                        },
+                        failure: function() {
+                            this.passwordButton.enable();
+                        },
+                        callback: function() {
+                            Ext.get(document.body).unmask();
+                        },
+                        scope : this
+                    });
                 }
             }
         });

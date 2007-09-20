@@ -2,6 +2,7 @@
 abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
 {
     private $_properties;
+    protected $_xtype = null;
 
     public function __construct($field_name = null)
     {
@@ -42,8 +43,7 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
     public function getMetaData()
     {
         $ret = $this->_properties;
-        $type = str_replace('Vps_Auto_Field_', '', get_class($this));
-        $ret['type'] = $type;
+        $ret['type'] = str_replace('Vps_Auto_Field_', '', get_class($this));
         if (isset($ret['name'])) {
             $ret['name'] = $this->getFieldName();
         }
@@ -52,6 +52,9 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
         }
         if (isset($ret['namePrefix'])) unset($ret['namePrefix']);
         if (isset($ret['findParent'])) unset($ret['findParent']);
+        if (!is_null($this->_xtype)) {
+            $ret['xtype'] = $this->_xtype;
+        }
         return $ret;
     }
 

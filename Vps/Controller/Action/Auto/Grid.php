@@ -322,23 +322,23 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->view->metaData['sortable'] = $this->_sortable;
     }
 
-    protected function _beforeSave(Zend_Db_Table_Row_Abstract $row)
+    protected function _beforeSave(Zend_Db_Table_Row_Abstract $row, $submitRow)
     {
     }
 
-    protected function _afterSave(Zend_Db_Table_Row_Abstract $row)
+    protected function _afterSave(Zend_Db_Table_Row_Abstract $row, $submitRow)
     {
     }
 
-    protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row)
+    protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row, $submitRow)
     {
     }
 
-    protected function _afterInsert(Zend_Db_Table_Row_Abstract $row)
+    protected function _afterInsert(Zend_Db_Table_Row_Abstract $row, $submitRow)
     {
     }
     
-    protected function _beforeDelete(Zend_Db_Table_Row_Abstract $row)
+    protected function _beforeDelete(Zend_Db_Table_Row_Abstract $row, $submitRow)
     {
     }
 
@@ -370,21 +370,20 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
             foreach ($this->_columns as $column) {
                 if ($id && $column->getDataIndex() == $this->_position) {
-                    $row->numberize($col['dataIndex'], $submitRow[$col['dataIndex']], $this->_getWhere());
-                } else if ($column->getEditor())
-                {
-                    $column->getEditor()->save($row, $submitRow);
+                    $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
+                } else {
+                    $column->save($row, $submitRow);
                 }
             }
             if (!$id) {
-                $this->_beforeInsert($row);
+                $this->_beforeInsert($row, $submitRow);
             }
-            $this->_beforeSave($row);
+            $this->_beforeSave($row, $submitRow);
             $row->save();
             if (!$id) {
-                $this->_afterInsert($row);
+                $this->_afterInsert($row, $submitRow);
             }
-            $this->_afterSave($row);
+            $this->_afterSave($row, $submitRow);
             if (!$id) {
                 if ($this->_position) {
                     $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());

@@ -10,7 +10,11 @@
 
     <script type="text/javascript">
         Ext.onReady(function() {ldelim}
-            Vps.Page = new {$ext.class}({if $ext.renderTo != ''}{$ext.renderTo}{else}document.body{/if}, {$ext.config});
+            var panel = new {$ext.class}({$ext.config});
+            if (!panel.region) panel.region = 'center'
+            Vps.currentViewport = new Vps.Viewport({ldelim}
+                items: [panel]
+            {rdelim});
         {rdelim});
     </script>
 
