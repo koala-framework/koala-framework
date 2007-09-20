@@ -6,7 +6,7 @@ class Vpc_Simple_Text_Setup extends Vpc_Setup_Abstract
         $this->copyTemplate('Simple/Text.html');
 
         $fields['content'] = 'text NOT NULL';
-        $this->createTable('vpc_text', $fields);       
+        $this->createTable('vpc_basic_text', $fields);       
     }
     
     public function deleteEntry($pageId, $componentKey)

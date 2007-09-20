@@ -13,7 +13,7 @@ class Vpc_Setup_Abstract
         $this->_db = $db;
     }
 
-    public function createInstance($componentClass)
+    static public function createInstance($componentClass)
     {
         if (is_subclass_of($componentClass, 'Vpc_Abstract')) {
             $class = $componentClass;
@@ -32,7 +32,22 @@ class Vpc_Setup_Abstract
         return null;
     }
     
-
+    static public function staticSetup($componentClass)
+    {
+        $setup = self::createInstance($componentClass);
+        if ($setup) {
+            $setup->setup();
+        }
+    }
+    
+    static public function staticDelete($componentClass, $pageId, $componentKey)
+    {
+        $setup = self::createInstance($componentClass);
+        if ($setup) {
+            $setup->delete($pageId, $componentKey);
+        }
+    }
+    
     function createTable ($name, $fields){
         if (!$this->_tableExits($name)) {
 
@@ -102,7 +117,10 @@ class Vpc_Setup_Abstract
     public function copyTemplate($path)
     {
         $path = 'application/views/' . $path;
-        if (!file_exists($path)){
+        if (!is_file($path)){
+            if (!is_dir(dirname($path))) {
+                mkdir(dirname($path));
+            }
             copy(VPS_PATH . '/' . $path, $path);
         }
     }

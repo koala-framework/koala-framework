@@ -1,5 +1,5 @@
-Ext.namespace('Vpc.Simple.Image');
-Vpc.Simple.Image.Index = function(renderTo, config)
+Ext.namespace('Vpc.Basic.Image');
+Vpc.Basic.Image.Index = function(renderTo, config)
 {
     this.createImage = function()
     {
@@ -27,6 +27,6 @@ Vpc.Simple.Image.Index = function(renderTo, config)
     }, this);
 };
 
-Ext.extend(Vpc.Simple.Image.Index, Ext.util.Observable,
+Ext.extend(Vpc.Basic.Image.Index, Ext.util.Observable,
 {
 });

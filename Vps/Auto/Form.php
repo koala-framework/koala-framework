@@ -8,7 +8,7 @@ class Vps_Auto_Form implements Vps_Collection_Item_Interface
     private $_primaryKey;
 
     private $_row;
-    private $_properties;
+    private $_properties = array();
 
     public function __construct($name = null, $id = null)
     {
@@ -16,7 +16,7 @@ class Vps_Auto_Form implements Vps_Collection_Item_Interface
         $this->setName($name);
         $this->setId($id);
     }
-
+    
     public function __call($method, $arguments)
     {
         if (substr($method, 0, 3) == 'set') {
