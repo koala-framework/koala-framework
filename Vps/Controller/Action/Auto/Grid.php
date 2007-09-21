@@ -316,7 +316,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
 
         }
-        $this->view->metaData['buttons'] = $this->_buttons;
+        $this->view->metaData['buttons'] = (object)$this->_buttons;
         $this->view->metaData['paging'] = $this->_paging;
         $this->view->metaData['filters'] = $this->_filters;
         $this->view->metaData['sortable'] = $this->_sortable;
@@ -337,15 +337,15 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected function _afterInsert(Zend_Db_Table_Row_Abstract $row, $submitRow)
     {
     }
-    
-    protected function _beforeDelete(Zend_Db_Table_Row_Abstract $row, $submitRow)
+
+    protected function _beforeDelete(Zend_Db_Table_Row_Abstract $row)
     {
     }
 
     protected function _afterDelete()
     {
     }
-    
+
     public function jsonSaveAction()
     {
         if(!isset($this->_permissions['save']) || !$this->_permissions['save']) {
@@ -372,13 +372,15 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 if ($id && $column->getDataIndex() == $this->_position) {
                     $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
                 } else {
-                    $column->save($row, $submitRow);
+                    $column->prepareSave($row, $submitRow);
                 }
             }
             if (!$id) {
                 $this->_beforeInsert($row, $submitRow);
             }
             $this->_beforeSave($row, $submitRow);
+
+
             $row->save();
             if (!$id) {
                 $this->_afterInsert($row, $submitRow);

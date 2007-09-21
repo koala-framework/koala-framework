@@ -92,6 +92,13 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
             } else if (menuItem.icon) {
                 menuItem.cls = 'x-btn-icon';
             }
+
+            //button (in oberster ebene) kann kein href, darum mit handler faken
+            if (menuItem.href) {
+                menuItem.handler = function(menu) {
+                    location.href = menu.href;
+                }
+            }
             this.add(menuItem);
         }, this);
 

@@ -5,26 +5,29 @@ Vps.User.Users = Ext.extend(Vps.Auto.GridPanel, {
     {
         if (!this.controllerUrl) this.controllerUrl = '/users/';
 
-        this.tbar = [
-            {
-                id      : 'password',
+        var passwordAction = new Ext.Action({
                 icon    : '/assets/vps/images/silkicons/email_go.png',
                 cls     : 'x-btn-text-icon',
                 text    : 'Neue Zugangsdaten mailen',
                 disabled: true,
                 handler : this.onMailsend,
                 scope: this
-            }];
+            });
 
         Vps.User.Users.superclass.initComponent.call(this);
 
-        this.selModel.on('rowselect', function(selData, gridRow, currentRow) {
+        this.on('rendergrid', function(grid) {
+            grid.getTopToolbar().add('-');
+            grid.getTopToolbar().add(passwordAction);
+        }, this);
+        this.on('rowselect', function(selData, gridRow, currentRow) {
             if (currentRow.data.email != '' && currentRow.data.id != 0) {
-                this.getTopToolbar().items.item('password').enable();
+                passwordAction.enable();
             } else {
-                this.getTopToolbar().items.item('password').disable();
+                passwordAction.disable();
             }
         }, this);
+
     },
 
     onMailsend : function() {
