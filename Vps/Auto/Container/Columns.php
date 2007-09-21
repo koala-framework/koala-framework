@@ -1,11 +1,11 @@
 <?php
-class Vps_Auto_Field_Columns extends Vps_Auto_Field_Abstract
+class Vps_Auto_Container_Columns extends Vps_Auto_Container_Abstract
 {
     public $columns;
 
     public function __construct($name = null)
     {
-        $this->columns = new Vps_Collection('Vps_Auto_Field_Column');
+        $this->columns = new Vps_Collection('Vps_Auto_Container_Column');
         parent::__construct($name);
     }
 

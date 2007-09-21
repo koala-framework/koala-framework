@@ -8,7 +8,7 @@ class Vps_Auto_Field_LoadData extends Vps_Auto_Field_SimpleAbstract
         return $ret;
     }
 
-    public function save(Zend_Db_Table_Row_Abstract $row, $postData)
+    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
     {
     }
 }

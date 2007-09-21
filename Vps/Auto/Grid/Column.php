@@ -119,6 +119,13 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
         return array();
     }
 
+    public function prepareSave($row, $submitRow)
+    {
+        if ($this->getEditor()) {
+            $this->getEditor()->prepareSave($row, $submitRow);
+        }
+    }
+
     public function save($row, $submitRow)
     {
         if ($this->getEditor()) {

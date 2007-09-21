@@ -1,12 +1,12 @@
 <?php
-class Vps_Auto_Field_Tabs extends Vps_Auto_Field_Abstract
+class Vps_Auto_Container_Tabs extends Vps_Auto_Container_Abstract
 {
     protected $_xtype = 'tabpanel';
     public $tabs;
 
     public function __construct($name = null)
     {
-        $this->tabs = new Vps_Collection('Vps_Auto_Field_Tab');
+        $this->tabs = new Vps_Collection('Vps_Auto_Container_Tab');
         parent::__construct($name);
     }
 

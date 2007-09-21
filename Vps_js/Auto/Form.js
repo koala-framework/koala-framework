@@ -1,9 +1,10 @@
 Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 
     controllerUrl: '',
+    formConfig: {},
     actions : {},
 
-//     checkDirty: false,
+    checkDirty: false,
 
     initComponent: function()
     {
@@ -35,8 +36,8 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             success: function(response, options, r) {
                 var result = Ext.decode(response.responseText);
                 this.onMetaChange(result.meta);
-                this.form.form.clearInvalid();
-                this.form.form.setValues(result.data);
+                this.getForm().clearInvalid();
+                this.getForm().setValues(result.data);
             },
             scope: this
         });
@@ -44,9 +45,13 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 
     onMetaChange : function(meta)
     {
-        this.form = new Ext.FormPanel(meta.form);
-        this.add(this.form);
+        Ext.applyIf(meta.form, this.formConfig);
+
+        if (this.baseCls) meta.form.baseCls = this.baseCls; //use the same
+        this.formPanel = new Ext.FormPanel(meta.form);
+        this.add(this.formPanel);
         this.doLayout();
+        this.getForm().baseParams = {};
     },
 
     getAction : function(type)
@@ -55,7 +60,6 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 
         if (type == 'save') {
             this.actions[type] = new Ext.Action({
-                id      : 'save',
                 text    : 'Save',
                 icon    : '/assets/vps/images/silkicons/table_save.png',
                 cls     : 'x-btn-text-icon',
@@ -64,7 +68,6 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'delete') {
             this.actions[type] = new Ext.Action({
-                id      : 'delete',
                 text    : 'Delete',
                 icon    : '/assets/vps/images/silkicons/table_delete.png',
                 cls     : 'x-btn-text-icon',
@@ -73,7 +76,6 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'add') {
             this.actions[type] = new Ext.Action({
-                id      : 'add',
                 text    : 'New Entry',
                 icon    : '/assets/vps/images/silkicons/table_add.png',
                 cls     : 'x-btn-text-icon',
@@ -87,11 +89,11 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
     },
     
     load : function(id, options) {
-        this.form.baseParams.id = id;
+        this.getForm().baseParams.id = id;
         if (!options) options = {};
-        this.form.getForm().clearValues();
-        this.form.getForm().clearInvalid();
-        this.form.load(Ext.applyIf(options, {
+        this.getForm().clearValues();
+        this.getForm().clearInvalid();
+        this.getForm().load(Ext.applyIf(options, {
             url: this.controllerUrl+'jsonLoad',
 //             waitMsg: 'loading...',
             success: function(form, action) {
@@ -105,7 +107,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
     mabySave : function(callback, callCallbackIfNotDirty)
     {
         if(typeof callCallbackIfNotDirty == 'undefined') callCallbackIfNotDirty = true;
-        if (this.checkDirty && this.form.isDirty()) {
+        if (this.checkDirty && this.getForm().isDirty()) {
             Ext.Msg.show({
             title:'speichern?',
             msg: 'Möchten Sie diesen Eintrag speichern?',
@@ -127,10 +129,10 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         return true;
     },
     onSubmit : function(options, successCallback) {
-        if (this.actions.save) this.actions.save.disable();
+        this.getAction('save').disable();
 
         if (!options) options = {};
-        this.form.submit(Ext.applyIf(options, {
+        this.getForm().submit(Ext.applyIf(options, {
             waitMsg: 'speichern...',
             success: function(form, action) {
                 this.onSubmitSuccess(form, action);
@@ -142,17 +144,17 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
                 if(action.failureType == Ext.form.Action.CLIENT_INVALID) {
                     Ext.Msg.alert('Speichern', 'Es konnte nicht gespeichert werden, bitte alle Felder korrekt ausfüllen.');
                 }
-                if (this.actions.save) this.actions.save.enable();
+                this.getAction('save').enable();
             },
             scope: this
         }));
     },
     onSubmitSuccess: function(form, action) {
-        this.form.resetDirty();
+        this.getForm().resetDirty();
         this.fireEvent('dataChanged', action.result);
 
         var reEnableSubmitButton = function() {
-            if (this.actions.save) this.actions.save.enable();
+            this.getAction('save').enable();
         };
         reEnableSubmitButton.defer(1000, this);
     },
@@ -166,10 +168,10 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             if (button == 'yes') {
                 Ext.Ajax.request({
                         url: this.controllerUrl+'jsonDelete',
-                        params: {id: this.form.baseParams.id},
+                        params: {id: this.getForm().baseParams.id},
                         success: function(response, options, r) {
                             this.fireEvent('dataChanged', r);
-                            this.form.clearValues();
+                            this.getForm().clearValues();
                             this.disable();
                             this.fireEvent('deleted', this);
                         },
@@ -184,22 +186,22 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             callback: function() {
                 this.enable();
                 if (this.deleteButton) this.deleteButton.disable();
-                if (this.actions['delete']) this.actions['delete'].disable();
-                this.form.baseParams.id = 0;
-                this.form.setDefaultValues();
-                this.form.clearInvalid();
+                this.getAction('delete').disable();
+                this.getForm().baseParams.id = 0;
+                this.getForm().setDefaultValues();
+                this.getForm().clearInvalid();
                 this.fireEvent('add', this);
             },
             scope: this
         });
     },
     findField: function(id) {
-        return this.form.findField(id);
+        return this.getForm().findField(id);
     },
     disable : function() {
-        if (this.actions.save) this.actions.save.disable();
-        if (this.actions['delete']) this.actions['delete'].disable();
-        this.form.items.each(function(b) {
+        this.getAction('save').disable();
+        this.getAction('delete').disable();
+        this.getForm().items.each(function(b) {
             b.disable();
         });
     },
@@ -207,8 +209,14 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         for (var i in this.actions) {
             this.actions[i].enable();
         }
-        this.form.items.each(function(b) {
+        this.getForm().items.each(function(b) {
             b.enable();
         });
+    },
+    getForm : function() {
+        return this.getFormPanel().getForm();
+    },
+    getFormPanel : function() {
+        return this.formPanel;
     }
 });
