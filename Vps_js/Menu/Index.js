@@ -9,7 +9,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
         });
 
         if (!this.controllerUrl) {
-            this.controllerUrl = '/menu/';
+            this.controllerUrl = '/admin/menu/';
         }
         this.reload();
 
@@ -59,13 +59,15 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                 }
             } else if (m.type == 'command') {
                 subMenu.handler = function(o) {
-                                if (o.object && o.object.activate) {
-                                    o.object.activate();
-                                } else {
-                                    var c = eval(o.commandClass);
-                                    o.object = new c(null, o.commandConfig);
-                                }
-                            };
+                            Vps.currentViewport.remove(Vps.currentViewport.items.item('mainPanel'));
+                            var c = eval(o.commandClass);
+                            var panel = new c(o.commandConfig);
+                            panel.region = 'center';
+                            panel.id = 'mainPanel';
+                            Vps.currentViewport.add(panel);
+                            Vps.currentViewport.layout.rendered = false;
+                            Vps.currentViewport.doLayout();
+                };
                 subMenu.scope = this;
                 subMenu.commandClass = m.commandClass;
                 subMenu.commandConfig = m.commandConfig;

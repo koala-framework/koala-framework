@@ -90,10 +90,12 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $acl->add(new Zend_Acl_Resource('media'));
             $acl->add(new Zend_Acl_Resource('fe'));
             $acl->add(new Vps_Acl_Resource_MenuDropdown('admin', 'Admin'));
-            $acl->add(new Vps_Acl_Resource_MenuEvent('pages', 'Sitetree',
-                    array('commandClass' => 'Vps.Component.Pages',
-                          'config'       => array('controllerUrl'=>'/admin/pages/'),
-                          'title'        => 'Sitetree')));
+            $acl->add(new Vps_Acl_Resource_MenuCommand(
+                'pages',
+                array('text' => 'Sitetree', 'icon' => 'application_side_tree.png'),
+                'Vps.Component.Pages',
+                array('controllerUrl'=>'/admin/pages/'))
+            );
             $acl->add(new Zend_Acl_Resource('pageedit'), 'admin');
             $acl->add(new Zend_Acl_Resource('components', 'Komponentenübersicht',
                                             '/admin/components/'), 'admin'); // für /component/show
