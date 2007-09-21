@@ -1,124 +1,124 @@
 Ext.namespace('Vps.AutoTree');
-Vps.AutoTree.Node = function(node){
-    Vps.AutoTree.Node.superclass.constructor.call(this, node);
-}
-
-Ext.extend(Vps.AutoTree.Node, Ext.tree.TreeNodeUI, {
+Vps.AutoTree.Node = Ext.extend(Ext.tree.TreeNodeUI, {
     initEvents : function(){
         Vps.AutoTree.Node.superclass.initEvents.call(this);
         this.node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.node.attributes.bIcon + '.png)';
     }
 });
 
-Vps.Auto.Tree = function(renderTo, config)
-{
-    Ext.apply(this, config);
-    this.renderTo = renderTo;
-    this.events = {
-        selectionchange: true,
-        edit: true,
-        generatetoolbar: true,
-        generatetoolbarstart: true,
-        loaded: true
-    };
+Vps.Auto.TreePanel = Ext.extend(Ext.Panel, {
+    initComponent : function()
+    {
+	    this.addEvents({
+	        selectionchange: true,
+	        edit: true,
+	        generatetoolbar: true,
+	        generatetoolbarstart: true,
+	        loaded: true
+	    });
 
-    Ext.Ajax.request({
-        url: this.controllerUrl + 'jsonMeta',
-        params: config.baseParams,
-        success: this.init,
-        scope: this
-    })
-};
+	    Ext.Ajax.request({
+	        url: this.controllerUrl + 'jsonMeta',
+	        params: this.baseParams,
+	        success: this.init,
+	        scope: this
+	    });
+        this.actions = {};
+        this.autoScroll = true;
 
-Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
-{
+        Vps.Auto.TreePanel.superclass.initComponent.call(this);
+    },
+
+    getAction : function(type)
+    {
+        if (this.actions[type]) return this.actions[type];
+
+        if (type == 'delete') {
+            this.actions[type] = new Ext.Action({
+                text    : 'Delete',
+                handler : this.onDelete,
+                icon    : '/assets/vps/images/silkicons/' + this.icons['delete'] + '.png',
+                cls     : 'x-btn-text-icon',
+                disabled: true,
+                scope   : this
+            });
+        } else if (type == 'add') {
+            this.actions[type] = new Ext.Action({
+                text    : 'Add',
+                handler : this.onAdd,
+                icon    : '/assets/vps/images/silkicons/' + this.icons['add'] + '.png',
+                cls     : 'x-btn-text-icon',
+                scope   : this
+            });
+        } else if (type == 'edit') {
+            this.actions[type] = new Ext.Action({
+                text    : 'Edit',
+                handler : this.onEdit,
+                icon    : '/assets/vps/images/silkicons/' + this.icons['edit'] + '.png',
+                cls     : 'x-btn-text-icon',
+                disabled: true,
+                scope   : this
+            });
+        } else if (type == 'invisible') {
+            this.actions[type] = new Ext.Action({
+                text    : 'Toggle Visibility',
+                handler : this.onVisible,
+                icon    : '/assets/vps/images/silkicons/' + this.icons['invisible'] + '.png',
+                cls     : 'x-btn-text-icon',
+                disabled: true,
+                scope   : this
+            });
+        } else if (type == 'reload') {
+            this.actions[type] = new Ext.Action({
+                text    : '',
+                handler : function () { this.tree.getRootNode().reload(); },
+                icon    : '/assets/vps/images/silkicons/bullet_star.png',
+                cls     : 'x-btn-icon',
+                scope   : this
+            });
+        } else if (type == 'expand') {
+            this.actions[type] = new Ext.Action({
+                text    : '',
+                handler : function () { this.tree.expandAll(); },
+                icon    : '/assets/vps/images/silkicons/bullet_add.png',
+                cls     : 'x-btn-icon',
+                scope   : this
+            });
+        } else if (type == 'collapse') {
+            this.actions[type] = new Ext.Action({
+                text    : '',
+                handler : function () { this.tree.collapseAll(); },
+                icon    : '/assets/vps/images/silkicons/bullet_delete.png',
+                cls     : 'x-btn-icon',
+                scope   : this
+            });
+        } else {
+            throw 'unknown action-type: ' + type;
+        }
+        return this.actions[type];
+    },
+
     init: function(response) {
         r = Ext.decode(response.responseText);
         this.icons = r.icons;
-        
+
         // Toolbar
-        b = r.buttons;
-        if (b['add'] || b['delete'] || b['invisible'] || b['reload']) {
-            toolbar = new Ext.Toolbar(Ext.get(this.renderTo).createChild());
-            this.toolbar = toolbar;
-            this.fireEvent('generatetoolbarstart', this.toolbar);
-            if (b['add']) {
-                this.addButton = toolbar.addButton({
-                    text    : 'Hinzufügen',
-                    tooltip : 'Hinzufügen',
-                    handler : this.add,
-                    icon : '/assets/vps/images/silkicons/' + r.icons['add'] + '.png',
-                    cls: "x-btn-text-icon",
-                    scope   : this
-                });
-            }
-            if (b['edit']) {
-                this.editButton = toolbar.addButton({
-                    text    : 'Bearbeiten',
-                    handler : this.edit,
-                    icon : '/assets/vps/images/silkicons/' + r.icons['edit'] + '.png',
-                    cls: "x-btn-text-icon",
-                    disabled: true,
-                    scope   : this
-                });
-            }
-            if (b['delete']) {
-                this.deleteButton = toolbar.addButton({
-                    text    : 'Löschen',
-                    handler : this.del,
-                    icon : '/assets/vps/images/silkicons/' + r.icons['delete'] + '.png',
-                    cls: "x-btn-text-icon",
-                    disabled: true,
-                    scope   : this
-                });
-            }
-            if (b['invisible']) {
-                this.visibleButton = toolbar.addButton({
-                    text    : 'Unsichtbar',
-                    handler : this.visible,
-                    disabled: true,
-                    icon : '/assets/vps/images/silkicons/' + r.icons['invisible'] + '.png',
-                    cls: "x-btn-text-icon",
-                    scope   : this
-                });
-            }
-            if (b['reload']) {
-                toolbar.addButton({
-                    text    : '',
-                    handler : function () { this.tree.getRootNode().reload(); },
-                    icon : '/assets/vps/images/silkicons/bullet_star.png',
-                    cls: "x-btn-icon",
-                    scope   : this
-                });
-            }
-            if (b['expand']) {
-                toolbar.addButton({
-                    text    : '',
-                    handler : function () { this.tree.expandAll(); },
-                    icon : '/assets/vps/images/silkicons/bullet_add.png',
-                    cls: "x-btn-icon",
-                    scope   : this
-                });
-            }
-            if (b['collapse']) {
-                toolbar.addButton({
-                    text    : '',
-                    handler : function () { this.tree.collapseAll(); },
-                    icon : '/assets/vps/images/silkicons/bullet_delete.png',
-                    cls: "x-btn-icon",
-                    scope   : this
-                });
+        if (r.buttons.each == undefined) { // Abfrage nötig, falls keine Buttons geliefert
+            var tbar = [];
+            for (var button in r.buttons) {
+                tbar.add(this.getAction(button));
             }
         }
-        this.fireEvent('generatetoolbar', this.toolbar);
 
         // Tree
-        this.tree = new Ext.tree.TreePanel(this.renderTo, {
-            animate: true,
-            loader: new Ext.tree.TreeLoader({dataUrl: this.controllerUrl + 'jsonData'}),
-            enableDD: r.enableDD,
+        this.tree = new Ext.tree.TreePanel({
+            border      : false,
+            animate     : true,
+            loader      : new Ext.tree.TreeLoader({dataUrl: this.controllerUrl + 'jsonData'}),
+            enableDD    : r.enableDD,
             containerScroll: true,
-            rootVisible: r.rootVisible
+            rootVisible : r.rootVisible,
+            tbar        : tbar
         });
 
         this.tree.setRootNode(
@@ -129,46 +129,36 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
             })
         );
 
-        this.tree.getSelectionModel().on('selectionchange', this.selectionchange, this);
-        this.tree.on('beforenodedrop', this.move, this);
-        this.tree.on('collapse', this.collapse, this);
-        this.tree.on('expand', this.expand, this);
+        this.tree.getSelectionModel().on('selectionchange', this.onSelectionchange, this);
+        this.tree.on('beforenodedrop', this.onMove, this);
+        this.tree.on('collapsenode', this.onCollapse, this);
+        this.tree.on('expandnode', this.onExpand, this);
 
-        this.tree.render();
+        this.add(this.tree);
+        this.doLayout();
+
         if (r.rootVisible) {
             this.tree.getRootNode().ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + r.icons.root + '.png)';
-            this.tree.getRootNode().select();
+            //this.tree.getRootNode().select();
         }
         this.tree.getRootNode().expand();
         this.fireEvent('loaded', this.tree);
     },
 
-    selectionchange: function (e, node) {
+    onSelectionchange: function (e, node) {
         if (node && node.id != 0) {
-            if (this.editButton) {
-                this.editButton.enable();
-            }
-            if (this.visibleButton) {
-                this.visibleButton.enable();
-            }
-            if (this.deleteButton) {
-                this.deleteButton.enable();
-            }
+            this.getAction('edit').enable();
+            this.getAction('invisible').enable();
+            this.getAction('delete').enable();
         } else {
-            if (this.editButton) {
-                this.editButton.disable();
-            }
-            if (this.visibleButton) {
-                this.visibleButton.disable();
-            }
-            if (this.deleteButton) {
-                this.deleteButton.disable();
-            }
+            this.getAction('edit').disable();
+            this.getAction('invisible').disable();
+            this.getAction('delete').disable();
         }
         this.fireEvent('selectionchange', node);
     },
-    
-    add: function (o, e) {
+
+    onAdd: function (o, e) {
         Ext.MessageBox.prompt('Hinzufügen', 'Geben Sie einen Namen ein.',
             function  (button, name) {
                 if (button == 'ok') {
@@ -180,7 +170,7 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
                         },
                         success: function(r) {
                             response = Ext.decode(r.responseText);
-                            this.onAdd(response);
+                            this.addNode(response);
                         },
                         scope: this
                     })
@@ -189,8 +179,8 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
             this
         );
     },
-    
-    onAdd: function(response)
+
+    addNode: function(response)
     {
         parentNode = this.tree.getNodeById(response.parentId);
         if (parentNode.isExpanded()) {
@@ -206,9 +196,9 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
             parentNode.expand();
         }
     },
-    
-    del: function (o, e) {
-        Ext.MessageBox.confirm('Löschen', 'Wollen Sie diesen Eintrag wirklich löschen:\n\n"' + this.tree.getSelectionModel().getSelectedNode().text + '"', 
+
+    onDelete: function (o, e) {
+        Ext.MessageBox.confirm('Löschen', 'Wollen Sie diesen Eintrag wirklich löschen:\n\n"' + this.tree.getSelectionModel().getSelectedNode().text + '"',
             function  (button) {
                 if (button == 'yes') {
                     Ext.Ajax.request({
@@ -237,7 +227,7 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
         );
     },
 
-    move : function(e){
+    onMove : function(e){
         Ext.Ajax.request({
             url: this.controllerUrl + 'jsonMove',
             params: {
@@ -253,14 +243,14 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
         return true;
     },
 
-    collapse : function(node) {
+    onCollapse : function(node) {
         Ext.Ajax.request({
             url: this.controllerUrl + 'jsonCollapse',
             params: {id: node.id}
         });
     },
-    
-    expand : function(node) {
+
+    onExpand : function(node) {
         if (!node.attributes.children) {
             Ext.Ajax.request({
                 url: this.controllerUrl + 'jsonExpand',
@@ -268,8 +258,8 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
             });
         }
     },
-    
-    visible : function (o, e) {
+
+    onVisible : function (o, e) {
         Ext.Ajax.request({
             url: this.controllerUrl + 'jsonVisible',
             params: {
@@ -279,23 +269,22 @@ Ext.extend(Vps.Auto.Tree, Ext.util.Observable,
                 response = Ext.decode(r.responseText);
                 node = this.tree.getNodeById(response.id);
                 node.attributes.visible = response.visible;
-                this.setvisible(node);
+                this.setVisible(node);
             },
             scope: this
         })
     },
-    
-    setvisible : function (node) {
+
+    setVisible : function (node) {
         if (node.attributes.visible) {
             node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.icons['default'] + '.png)';
         } else {
             node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.icons['invisible'] + '.png)';
         }
     },
-    
-    edit : function (o, e) {
+
+    onEdit : function (o, e) {
         this.fireEvent('edit', this.tree.getSelectionModel().getSelectedNode());
     }
-    
-});
 
+});

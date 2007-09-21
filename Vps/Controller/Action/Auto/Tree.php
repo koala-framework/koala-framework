@@ -4,40 +4,40 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
     protected $_tableName;
     protected $_table;
     protected $_icons = array (
-        'root' => 'folder',
-        'default' => 'table',
-        'edit' => 'table_edit',
+        'root'      => 'folder',
+        'default'   => 'table',
+        'edit'      => 'table_edit',
         'invisible' => 'table_key',
-        'add' => 'table_add',
-        'delete' => 'table_delete'
+        'add'       => 'table_add',
+        'delete'    => 'table_delete'
     );
     protected $_textField = 'text';
     protected $_buttons = array(
-        'add' => true,
-        'edit' => false,
-        'delete' => true,
+        'add'       => true,
+        'edit'      => false,
+        'delete'    => true,
         'invisible' => null,
-        'reload' => true,
-        'expand' => true,
-        'collapse' => true
+        'reload'    => true,
+        'expand'    => true,
+        'collapse'  => true
     );
     protected $_rootText = 'Root';
     protected $_rootVisible = true;
     protected $_order = null;
     protected $_enableDD;
     protected $_hasPosition;
-    
+
     public function init()
     {
         if (!isset($this->_table)) {
             $this->_table = new $this->_tableName();
         }
-        
+
         $info = $this->_table->info();
 
         // Invisible-Button hinzufügen falls nicht überschrieben und in DB
-        if (array_key_exists('invisible', $this->_buttons) && 
-            is_null($this->_buttons['invisible']) && 
+        if (array_key_exists('invisible', $this->_buttons) &&
+            is_null($this->_buttons['invisible']) &&
             in_array('visible', $info['cols']))
         {
             $this->_buttons['invisible'] = true;
@@ -54,7 +54,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
             $this->_enableDD = $this->_hasPosition;
         }
     }
-    
+
     protected function jsonMetaAction()
     {
         $this->view->icons = $this->_icons;
@@ -68,16 +68,16 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
     {
         $parentId = $this->getRequest()->getParam('node');
         $this->_saveSessionNodeOpened($parentId, true);
-        
+
         $rowset = $this->_table->fetchAll($this->_getWhere(), $this->_order);
-        
+
         $nodes = array();
         foreach ($rowset as $row) {
             $nodes[] = $this->_formatNode($row);
         }
         $this->view->nodes = $nodes;
     }
-    
+
     protected function _getWhere()
     {
         $parentId = $this->getRequest()->getParam('node');
@@ -88,7 +88,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         }
         return $where;
     }
-    
+
     protected function _formatNode($row)
     {
         $openedNodes = $this->_saveSessionNodeOpened(null, null);
@@ -117,7 +117,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         $data['uiProvider'] = 'Vps.AutoTree.Node';
         return $data;
     }
-    
+
     private function _saveSessionNodeOpened($id, $activate)
     {
         $session = new Zend_Session_Namespace('admin');
@@ -154,7 +154,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
             $this->view->parentId = $insert['parent_id'];
             $this->view->config = $this->_formatNode($this->_table->find($id)->current());
         } else {
-            $this->view->error = 'Couldn\'t insert row.'; 
+            $this->view->error = 'Couldn\'t insert row.';
         }
     }
 
@@ -202,13 +202,13 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
             $row->numberize('position', $row->position, $where);
         }
     }
-    
+
     public function jsonCollapseAction()
     {
         $id = $this->getRequest()->getParam('id');
         $this->_saveSessionNodeOpened($id, false);
     }
-    
+
     public function jsonExpandAction()
     {
         $id = $this->getRequest()->getParam('id');
