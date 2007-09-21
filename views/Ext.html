@@ -11,7 +11,8 @@
     <script type="text/javascript">
         Ext.onReady(function() {ldelim}
             var panel = new {$ext.class}({$ext.config});
-            if (!panel.region) panel.region = 'center'
+            if (!panel.region) panel.region = 'center';
+            panel.id = 'mainPanel';
             Vps.currentViewport = new Vps.Viewport({ldelim}
                 items: [panel]
             {rdelim});

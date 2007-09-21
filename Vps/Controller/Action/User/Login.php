@@ -48,19 +48,19 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
             $this->view->error = implode("<br />", $result->getMessages());
         }
     }
-    
+
     public function jsonLogoutUserAction()
     {
         $this->logoutAction();
     }
-    
+
     protected function _createAuthAdapter()
     {
         $dao = Zend_Registry::get('dao');
         $adapter = new Zend_Auth_Adapter_DbTable($dao->getDb(), 'vps_users', 'username', 'password', 'MD5(CONCAT(?, password_salt))');
         return $adapter;
     }
-    
+
     private function _login()
     {
         $username = $this->getRequest()->getParam('username');
@@ -70,7 +70,7 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
         if (!$adapter instanceof Zend_Auth_Adapter_DbTable) {
             throw new Vps_Controller_Exception('_createAuthAdapter didn\'t return instance of Zend_Auth_Adapter_DbTable');
         }
-        
+
         $auth = Zend_Auth::getInstance();
         $adapter->setIdentity($username);
         $adapter->setCredential($password);

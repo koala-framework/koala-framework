@@ -82,7 +82,7 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
     {
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
-                $field->save($row, $postData);
+                $field->save($row);
             }
         }
     }
