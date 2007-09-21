@@ -20,7 +20,8 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         //generatetoolbar: true,
         dataChanged: true,
         deleted: true,
-        add: true
+        add: true,
+        renderform: true
     });
         Vps.Auto.FormPanel.superclass.initComponent.call(this);
 
@@ -52,6 +53,8 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         this.add(this.formPanel);
         this.doLayout();
         this.getForm().baseParams = {};
+        this.fireEvent('renderform', this.getForm());
+        debugger;
     },
 
     getAction : function(type)
@@ -87,7 +90,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         }
         return this.actions[type];
     },
-    
+
     load : function(id, options) {
         this.getForm().baseParams.id = id;
         if (!options) options = {};
