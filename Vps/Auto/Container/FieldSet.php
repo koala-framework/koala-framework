@@ -1,5 +1,5 @@
 <?php
-class Vps_Auto_Field_FieldSet extends Vps_Auto_Field_Container_Abstract
+class Vps_Auto_Container_FieldSet extends Vps_Auto_Container_Abstract
 {
     protected $_xtype = 'fieldset';
 

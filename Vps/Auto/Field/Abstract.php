@@ -96,43 +96,6 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
         }
     }
 
-
-    protected function _beforeSave(Zend_Db_Table_Row_Abstract $row)
-    {
-        if ($this->hasChildren()) {
-            foreach ($this->getChildren() as $field) {
-                $field->_beforeSave($row);
-            }
-        }
-    }
-
-    protected function _afterSave(Zend_Db_Table_Row_Abstract $row)
-    {
-        if ($this->hasChildren()) {
-            foreach ($this->getChildren() as $field) {
-                $field->_afterSave($row);
-            }
-        }
-    }
-
-    protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row)
-    {
-        if ($this->hasChildren()) {
-            foreach ($this->getChildren() as $field) {
-                $field->_beforeInsert($row);
-            }
-        }
-    }
-
-    protected function _afterInsert(Zend_Db_Table_Row_Abstract $row)
-    {
-        if ($this->hasChildren()) {
-            foreach ($this->getChildren() as $field) {
-                $field->_afterInsert($row);
-            }
-        }
-    }
-
     public function getName()
     {
         if (isset($this->_properties['name'])) {

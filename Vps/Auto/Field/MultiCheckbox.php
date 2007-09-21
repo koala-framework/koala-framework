@@ -79,7 +79,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
 
         return $ret;
     }
-    public function save(Zend_Db_Table_Row_Abstract $row, $postData)
+    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
     {
         $new = array();
         if ($postData[$this->getFieldName()]) {

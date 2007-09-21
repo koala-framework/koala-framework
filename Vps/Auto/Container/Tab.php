@@ -1,5 +1,5 @@
 <?php
-class Vps_Auto_Field_Tab extends Vps_Auto_Field_Container_Abstract
+class Vps_Auto_Container_Tab extends Vps_Auto_Container_Abstract
 {
     public function getMetaData()
     {
