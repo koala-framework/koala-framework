@@ -4,10 +4,10 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
     autoload: true,
 
-    actions : {},
-
     initComponent : function()
     {
+        this.actions = {};
+
         this.layout = 'fit';
         this.border = false;
 //  id: this.controllerUrl.replace(/\//g, '-').replace(/^-|-$/g, '') //um eine eindeutige id für den stateManager zu haben
@@ -44,6 +44,9 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
         this.relayEvents(this.store, ['load']);
         this.relayEvents(this.selModel, ['rowselect', 'beforerowselect']);
+        this.addEvents({
+            'rendergrid': true
+        });
 
 //todo:     this.grid.restoreState();
         if(this.autoload) {
@@ -257,6 +260,8 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         this.add(this.grid);
         this.doLayout();
 
+        this.fireEvent('rendergrid', this.grid);
+
         this.relayEvents(this.grid, ['rowdblclick']);
     },
 
@@ -411,7 +416,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         return this.getSelectionModel().getSelected();
     },
     clearSelections: function() {
-        this.getSelectionModel().clearSelections();
+        this.getGrid().getSelectionModel().clearSelections();
     },
     selectRow: function(row) {
         this.getSelectionModel().selectRow(row);
@@ -423,7 +428,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     load : function(params) {
         if(!params) params = {};
         this.loadParams = params; //submit them again on save
-        this.store.load({params:params});
+        this.getStore().load({params:params});
     },
     enable: function() {
         this.getAction('add').enable();
@@ -436,5 +441,11 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     },
     getGrid : function() {
         return this.grid;
+    },
+    getSelectionModel : function() {
+        return this.getGrid().getSelectionModel();
+    },
+    getStore : function() {
+        return this.store;
     }
 });

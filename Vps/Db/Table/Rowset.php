@@ -1,15 +1,4 @@
 <?php
-class Vps_Db_Table_Rowset extends Zend_Db_Table_Rowset
+class Vps_Db_Table_Rowset extends Vps_Db_Table_Rowset_Abstract
 {
-    /**
-     * Rowset in Array wie es für Ext.store.ArrayReader benötigt wird umwandeln.
-     */
-    public function toStringDataArray($key = 'id')
-    {
-        $data = array();
-        foreach ($this as $row) {
-            $data[] = array($row->$key, $row->__toString());
-        }
-        return $data;
-    }
 }

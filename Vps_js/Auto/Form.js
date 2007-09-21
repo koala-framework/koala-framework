@@ -2,12 +2,13 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 
     controllerUrl: '',
     formConfig: {},
-    actions : {},
 
     checkDirty: false,
 
     initComponent: function()
     {
+        this.actions = {};
+
         //um scrollbars zu bekommen
         if (!this.autoScroll) this.autoScroll = true;
         if (!this.border) this.border = false;
@@ -15,12 +16,10 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 //         if (!this.waitMsgTarget) this.waitMsgTarget = document.body;
 //         trackResetOnLoad: true,
     this.addEvents({
-        formRendered: true,
-        loaded: true,
-        //generatetoolbar: true,
-        dataChanged: true,
-        deleted: true,
-        add: true,
+        loadform: true,
+        datachange: true,
+        deleteaction: true,
+        addaction: true,
         renderform: true
     });
         Vps.Auto.FormPanel.superclass.initComponent.call(this);
@@ -37,8 +36,11 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             success: function(response, options, r) {
                 var result = Ext.decode(response.responseText);
                 this.onMetaChange(result.meta);
-                this.getForm().clearInvalid();
-                this.getForm().setValues(result.data);
+                if (result.data) {
+                    this.fireEvent('loadform', this.getForm());
+                    this.getForm().clearInvalid();
+                    this.getForm().setValues(result.data);
+                }
             },
             scope: this
         });
@@ -54,7 +56,6 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         this.doLayout();
         this.getForm().baseParams = {};
         this.fireEvent('renderform', this.getForm());
-        debugger;
     },
 
     getAction : function(type)
@@ -101,7 +102,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 //             waitMsg: 'loading...',
             success: function(form, action) {
                 if (this.actions['delete']) this.actions['delete'].enable();
-                this.fireEvent('loaded', form, action);
+                this.fireEvent('loadform', this.getForm());
             },
             scope: this
         }));
@@ -154,7 +155,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
     },
     onSubmitSuccess: function(form, action) {
         this.getForm().resetDirty();
-        this.fireEvent('dataChanged', action.result);
+        this.fireEvent('datachange', action.result);
 
         var reEnableSubmitButton = function() {
             this.getAction('save').enable();
@@ -173,10 +174,10 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
                         url: this.controllerUrl+'jsonDelete',
                         params: {id: this.getForm().baseParams.id},
                         success: function(response, options, r) {
-                            this.fireEvent('dataChanged', r);
+                            this.fireEvent('datachange', r);
                             this.getForm().clearValues();
                             this.disable();
-                            this.fireEvent('deleted', this);
+                            this.fireEvent('deleteaction', this);
                         },
                         scope: this
                     });
@@ -193,7 +194,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
                 this.getForm().baseParams.id = 0;
                 this.getForm().setDefaultValues();
                 this.getForm().clearInvalid();
-                this.fireEvent('add', this);
+                this.fireEvent('addaction', this);
             },
             scope: this
         });

@@ -31,6 +31,13 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
 
     public function setProperty($name, $value)
     {
+        if ($name == 'editor' && is_string($value)) {
+            $value = 'Vps_Auto_Field_'.$value;
+            $value = new $value();
+        }
+        if ($name == 'editor') {
+            if (!$value->getName()) $value->setName($this->getDataIndex());
+        }
         $this->_properties[$name] = $value;
         return $this;
     }
@@ -84,16 +91,6 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
             throw new Vps_Exception("Index '$dataIndex' not found in row");
         }
         return $row->$dataIndex;
-    }
-
-    public function setEditor($editor)
-    {
-        if (is_string($editor)) {
-            $editor = 'Vps_Auto_Field_'.$editor;
-            $editor = new $editor();
-        }
-        if (!$editor->getName()) $editor->setName($this->getDataIndex());
-        return $this->setProperty('editor', $editor);
     }
 
     public function getName() {
