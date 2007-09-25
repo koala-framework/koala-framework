@@ -104,8 +104,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
             $id = $savedRow->$key2;
             if (in_array($id, $avaliableKeys)) {
                 if (!in_array($id, $new)) {
-                    d($idRow);
-                    $idRow->delete();
+                    $savedRow->delete();
                     continue;
                 } else {
                     unset($new[array_search($id, $new)]);
@@ -127,6 +126,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
 
     public function delete(Zend_Db_Table_Row_Abstract $row)
     {
+        //todo
         //ist das nicht aufgabe des models oder der datenbank?
     }
 }

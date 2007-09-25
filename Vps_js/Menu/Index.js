@@ -9,7 +9,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
         });
 
         if (!this.controllerUrl) {
-            this.controllerUrl = '/admin/menu/';
+            this.controllerUrl = '/menu/';
         }
         this.reload();
 
