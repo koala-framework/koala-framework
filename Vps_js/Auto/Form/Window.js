@@ -12,7 +12,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
             controllerUrl: this.controllerUrl
         });
         this.autoForm = new Vps.Auto.FormPanel(this.formConfig);
-        this.on('render', function() {
+        this.on('renderform', function() {
             this.getForm().waitMsgTarget = this.el;
         }, this);
         
@@ -25,6 +25,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
             modal: true,
             buttons: [this.getAction('cancel'), this.getAction('save')]
         });
+        this.closeAction = 'hide';
 
         this.items = [this.autoForm];
 
@@ -42,14 +43,14 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
 
         if (type == 'save') {
             var action = this.getAutoForm().getAction('save');
-            action.handler = function() {
-                this.getForm().onSubmit(null, {
+            action.setHandler(function() {
+                this.getAutoForm().onSubmit({}, {
                     callback: function() {
                         this.hide();
                     },
                     scope: this
                 });
-            };
+            }, this);
             this.actions[type] = action;
         } else if (type == 'cancel') {
             this.actions[type] = new Ext.Action({
