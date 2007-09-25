@@ -29,10 +29,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
 
         this.items = [this.autoForm];
 
-        this.relayEvents(this.autoForm, ['renderform']);
-        this.addEvents({
-            datachange: true
-        });
+        this.relayEvents(this.autoForm, ['renderform', 'datachange']);
 
         Vps.Auto.Form.Window.superclass.initComponent.call(this);
     },

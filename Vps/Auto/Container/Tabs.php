@@ -18,7 +18,7 @@ class Vps_Auto_Container_Tabs extends Vps_Auto_Container_Abstract
             $ret['items'][] = $field->getMetaData();
         }
         if (!isset($ret['defaults']['autoHeight'])) $ret['defaults']['autoHeight'] = true;
-       if (!isset($ret['defaults']['bodyStyle'])) $ret['defaults']['bodyStyle'] = 'padding:10px';
+        if (!isset($ret['defaults']['bodyStyle'])) $ret['defaults']['bodyStyle'] = 'padding:10px';
         return $ret;
     }
 
