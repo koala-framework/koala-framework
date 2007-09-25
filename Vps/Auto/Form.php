@@ -37,7 +37,7 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
 
         $primaryKey = $this->getPrimaryKey();
         if (is_array($primaryKey)) $primaryKey = $primaryKey[1];
-        if ($row->$primaryKey) {
+        if ($this->getId() == 0) {
             if (is_array($primaryKey)) {
                 $addedId = array();
                 foreach ($primaryKey as $key) {
