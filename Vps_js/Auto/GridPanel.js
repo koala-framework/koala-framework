@@ -58,12 +58,15 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
     onMetaChange : function(store, meta)
     {
-        var gridConfig = {
+        if (!this.gridConfig) this.gridConfig = {};
+        var gridConfig = Ext.applyIf(this.gridConfig, {
             store: this.store,
             selModel: this.selModel,
             clicksToEdit: 1,
-            plugins: []
-        };
+            loadMask: true,
+            plugins: [],
+            tbar: []
+        });
 
         var config = [];
         for (var i=0; i<meta.columns.length; i++) {
@@ -184,8 +187,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             this.pagingType = false;
         }
 
-        gridConfig.tbar = [];
-
         if (meta.buttons.reload) {
             gridConfig.tbar.add(this.getAction('reload'));
         }
@@ -255,6 +256,23 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             }
         }
 
+        //editDialog kann entweder von config übergeben werden oder von meta-daten kommen
+        if (!this.editDialog && meta.editDialog) {
+            this.editDialog = meta.editDialog;
+        }
+        if (this.editDialog && !(this.editDialog instanceof Vps.Auto.Form.Window)) {
+            this.editDialog = new Vps.Auto.Form.Window(meta.editDialog);
+        }
+        if (this.editDialog) {
+        
+            this.editDialog.on('datachange', function() {
+                this.reload();
+            }, this);
+            this.on('rowdblclick', function(grid, rowIndex) {
+                this.editDialog.showEdit(this.store.getAt(rowIndex).id);
+            }, this);
+        }
+
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
 
         this.add(this.grid);
@@ -263,6 +281,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         this.fireEvent('rendergrid', this.grid);
 
         this.relayEvents(this.grid, ['rowdblclick']);
+
     },
 
     getAction : function(type)
@@ -334,7 +353,8 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             data.push(r.data);
         }, this);
 
-        Ext.get(document.body).mask('speichern...', 'x-mask-loading');
+        this.el.mask('Saving...');
+
         var params = this.loadParams || {};
         params.data = Ext.util.JSON.encode(data);
         Ext.Ajax.request({
@@ -347,27 +367,32 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                 this.getAction('save').enable();
             },
             callback: function() {
-                Ext.get(document.body).unmask();
+                this.el.unmask();
             },
             scope  : this
         });
     },
-    onAdd : function() {
 
-        var data = {};
-        for(var i=0; i<this.store.recordType.prototype.fields.items.length; i++) {
-            data[this.store.recordType.prototype.fields.items[i].name] = this.store.recordType.prototype.fields.items[i].defaultValue;
-        }
-        var record = new this.store.recordType(data);
+    onAdd : function()
+    {
+        if (this.editDialog) {
+            this.editDialog.showAdd();
+        } else {
+            var data = {};
+            for(var i=0; i<this.store.recordType.prototype.fields.items.length; i++) {
+                data[this.store.recordType.prototype.fields.items[i].name] = this.store.recordType.prototype.fields.items[i].defaultValue;
+            }
+            var record = new this.store.recordType(data);
 
-        this.getGrid().stopEditing();
-        this.store.insert(0, record);
-        this.store.newRecords.push(record);
-        
-        for(var i=0; i<this.getGrid().getColumnModel().getColumnCount(); i++) {
-            if(!this.getGrid().getColumnModel().isHidden(i) && this.getGrid().getColumnModel().isCellEditable(i, 0)) {
-                this.getGrid().startEditing(0, i);
-                break;
+            this.getGrid().stopEditing();
+            this.store.insert(0, record);
+            this.store.newRecords.push(record);
+            
+            for(var i=0; i<this.getGrid().getColumnModel().getColumnCount(); i++) {
+                if(!this.getGrid().getColumnModel().isHidden(i) && this.getGrid().getColumnModel().isCellEditable(i, 0)) {
+                    this.getGrid().startEditing(0, i);
+                    break;
+                }
             }
         }
     },
@@ -385,7 +410,8 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                     if (selectedRow.data.id == 0) {
                         this.store.remove(selectedRow);
                     } else {
-                        Ext.get(document.body).mask('löschen...', 'x-mask-loading');
+                        this.el.mask('Deleting...');
+
                         var params = {};
                         params[this.store.reader.meta.id] = selectedRow.id;
                         Ext.Ajax.request({
@@ -399,7 +425,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                                 this.getAction('delete').enable();
                             },
                             callback: function() {
-                                Ext.get(document.body).unmask();
+                                this.el.unmask();
                             },
                             scope : this
                         });

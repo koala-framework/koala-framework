@@ -1,35 +1,36 @@
 Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 
-    controllerUrl: '',
-    formConfig: {},
-
-    checkDirty: false,
-
     initComponent: function()
     {
         this.actions = {};
 
         //um scrollbars zu bekommen
         if (!this.autoScroll) this.autoScroll = true;
-        if (!this.border) this.border = false;
 
-//         if (!this.waitMsgTarget) this.waitMsgTarget = document.body;
-//         trackResetOnLoad: true,
-    this.addEvents({
-        loadform: true,
-        datachange: true,
-        deleteaction: true,
-        addaction: true,
-        renderform: true
-    });
+        if (!this.border) this.border = false;
+        if (!this.formConfig) this.formConfig = {};
+        if (!this.checkDirty) this.checkDirty = false;
+        this.maskDisabled = false;
+
+        this.addEvents({
+            loadform: true,
+            datachange: true,
+            deleteaction: true,
+            addaction: true,
+            renderform: true
+        });
+
         Vps.Auto.FormPanel.superclass.initComponent.call(this);
 
         if (!this.formConfig) this.formConfig = {};
         Ext.applyIf(this.formConfig, {
-            baseParams : {},
-            url : this.controllerUrl+'jsonSave'
+            baseParams       : {},
+            trackResetOnLoad : true,
+            maskDisabled     : false,
+            url              : this.controllerUrl+'jsonSave'
         });
 
+        Ext.getBody().mask('Loading...');
         Ext.Ajax.request({
             url: this.controllerUrl+'jsonLoad',
             params: {meta: true},
@@ -42,6 +43,9 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
                     this.getForm().setValues(result.data);
                 }
             },
+            callback: function() {
+                Ext.getBody().unmask();
+            },
             scope: this
         });
     },
@@ -52,10 +56,13 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 
         if (this.baseCls) meta.form.baseCls = this.baseCls; //use the same
         this.formPanel = new Ext.FormPanel(meta.form);
+        this.formPanel.on('render', function() {
+            if (!this.getForm().waitMsgTarget) this.getForm().waitMsgTarget = this.el;
+            this.fireEvent('renderform', this.getForm());
+        }, this);
         this.add(this.formPanel);
         this.doLayout();
         this.getForm().baseParams = {};
-        this.fireEvent('renderform', this.getForm());
     },
 
     getAction : function(type)
@@ -99,7 +106,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         this.getForm().clearInvalid();
         this.getForm().load(Ext.applyIf(options, {
             url: this.controllerUrl+'jsonLoad',
-//             waitMsg: 'loading...',
+            waitMsg: 'Loading...',
             success: function(form, action) {
                 if (this.actions['delete']) this.actions['delete'].enable();
                 this.fireEvent('loadform', this.getForm());
@@ -128,7 +135,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             }});
             return false;
         } else if (callCallbackIfNotDirty) {
-            Ext.callback(callback.callback, callback.scope);
+            callback.callback.apply(callback.scope);
         }
         return true;
     },
@@ -144,15 +151,17 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
                     Ext.callback(successCallback.callback, successCallback.scope);
                 }
             },
-            failure: function(form, action) {
-                if(action.failureType == Ext.form.Action.CLIENT_INVALID) {
-                    Ext.Msg.alert('Speichern', 'Es konnte nicht gespeichert werden, bitte alle Felder korrekt ausfüllen.');
-                }
-                this.getAction('save').enable();
-            },
+            failure: this.onSubmitFailure,
             scope: this
         }));
     },
+    onSubmitFailure: function(form, action) {
+        if(action.failureType == Ext.form.Action.CLIENT_INVALID) {
+            Ext.Msg.alert('Speichern', 'Es konnte nicht gespeichert werden, bitte alle Felder korrekt ausfüllen.');
+        }
+        this.getAction('save').enable();
+    },
+    
     onSubmitSuccess: function(form, action) {
         this.getForm().resetDirty();
         this.fireEvent('datachange', action.result);
@@ -161,6 +170,13 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             this.getAction('save').enable();
         };
         reEnableSubmitButton.defer(1000, this);
+
+        if(action.result && action.result.data && action.result.data.addedId) {
+            this.getForm().baseParams.id = action.result.data.addedId;
+            this.getAction('delete').enable();
+            this.getAction('save').enable();
+        }
+
     },
     onDelete : function() {
         Ext.Msg.show({
@@ -170,12 +186,14 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         scope: this,
         fn: function(button) {
             if (button == 'yes') {
+        
                 Ext.Ajax.request({
                         url: this.controllerUrl+'jsonDelete',
                         params: {id: this.getForm().baseParams.id},
                         success: function(response, options, r) {
                             this.fireEvent('datachange', r);
                             this.getForm().clearValues();
+                            this.getForm().clearInvalid();
                             this.disable();
                             this.fireEvent('deleteaction', this);
                         },
@@ -202,12 +220,14 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
     findField: function(id) {
         return this.getForm().findField(id);
     },
+
     disable : function() {
         this.getAction('save').disable();
         this.getAction('delete').disable();
         this.getForm().items.each(function(b) {
             b.disable();
         });
+        Vps.Auto.FormPanel.superclass.disable.call(this);
     },
     enable : function() {
         for (var i in this.actions) {
@@ -216,6 +236,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         this.getForm().items.each(function(b) {
             b.enable();
         });
+        Vps.Auto.FormPanel.superclass.enable.call(this);
     },
     getForm : function() {
         return this.getFormPanel().getForm();

@@ -6,6 +6,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                                 'add'=>true,
                                 'delete'=>true,
                                 'reload'=>true);
+    protected $_editDialog = null;
     protected $_paging = 0;
     protected $_defaultOrder;
     protected $_filters = array();
@@ -320,6 +321,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->view->metaData['paging'] = $this->_paging;
         $this->view->metaData['filters'] = $this->_filters;
         $this->view->metaData['sortable'] = $this->_sortable;
+        $this->view->metaData['editDialog'] = $this->_editDialog;
     }
 
     protected function _beforeSave(Zend_Db_Table_Row_Abstract $row, $submitRow)

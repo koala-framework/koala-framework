@@ -78,8 +78,7 @@ Vps.Form.ComboBox = function(config)
     config = Ext.applyIf(config, {
         store: store,
         displayField: 'name',
-        valueField: 'id',
-        triggerAction: 'query'
+        valueField: 'id'
     });
     Vps.Form.ComboBox.superclass.constructor.call(this, config);
 };

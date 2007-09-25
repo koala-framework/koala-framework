@@ -11,7 +11,12 @@ abstract class Vps_Auto_Field_SimpleAbstract extends Vps_Auto_Field_Abstract
         if ($this->getFindParent()) {
             $parentRow = $row->findParentRow($this->getFindParent());
             if (!$parentRow) throw new Vps_Exception("Can't find parent row.");
-            $ret[$fieldName] = $parentRow->__toString();
+            if ($this->getFindParentField()) {
+                $f = $this->getFindParentField();
+                $ret[$fieldName] = $parentRow->$f;
+            } else {
+                $ret[$fieldName] = $parentRow->__toString();
+            }
         } else {
             $name = $this->getName();
             if (!isset($row->$name)) {
@@ -24,15 +29,17 @@ abstract class Vps_Auto_Field_SimpleAbstract extends Vps_Auto_Field_Abstract
 
     public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
     {
-        $name = $this->getName();
-        $fieldName = $this->getFieldName();
-        
-        if (isset($postData[$fieldName])) {
-            $row->$name = $postData[$fieldName];
-        }
-        if ($this->hasChildren()) {
-            foreach ($this->getChildren() as $field) {
-                $field->save($row, $postData);
+        if ($this->getSave() !== false) {
+            $name = $this->getName();
+            $fieldName = $this->getFieldName();
+            
+            if (isset($postData[$fieldName])) {
+                $row->$name = $postData[$fieldName];
+            }
+            if ($this->hasChildren()) {
+                foreach ($this->getChildren() as $field) {
+                    $field->save($row, $postData);
+                }
             }
         }
         parent::prepareSave($row, $postData);

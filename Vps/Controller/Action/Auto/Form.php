@@ -61,8 +61,9 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             throw new Vps_Exception('You don\'t have the permission for this entry.');
         }
 
-        $data = $this->_form->load();
-        $this->view->data = $data;
+        if ($this->_form->getId()) {
+            $this->view->data = $this->_form->load();
+        }
 
         if ($this->getRequest()->getParam('meta')) {
             $this->_appendMetaData();

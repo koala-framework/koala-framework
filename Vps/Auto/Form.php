@@ -14,18 +14,22 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
     }
     public function prepareSave($parentRow, $postData)
     {
-        $row = (object)$this->getRow();
+        $row = $this->getRow();
         if(!$row) {
             throw new Vps_Exception('Can\'t find row.');
+        } else if(!$row instanceof Zend_Db_Table_Row_Abstract) {
+            throw new Vps_Exception('Row must be a Zend_Db_Table_Row_Abstract.');
         }
         parent::prepareSave($row, $postData);
     }
 
     public function save($parentRow)
     {
-        $row = (object)$this->getRow();
+        $row = $this->getRow();
         if(!$row) {
             throw new Vps_Exception('Can\'t find row.');
+        } else if(!$row instanceof Zend_Db_Table_Row_Abstract) {
+            throw new Vps_Exception('Row must be a Zend_Db_Table_Row_Abstract.');
         }
 
         parent::save($row);
@@ -33,7 +37,7 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
 
         $primaryKey = $this->getPrimaryKey();
         if (is_array($primaryKey)) $primaryKey = $primaryKey[1];
-        if (!$row->$primaryKey) {
+        if ($row->$primaryKey) {
             if (is_array($primaryKey)) {
                 $addedId = array();
                 foreach ($primaryKey as $key) {
@@ -59,11 +63,14 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
 
     public function delete($parentRow)
     {
-        $row = (object)$this->getRow();
+        $row = $this->getRow();
         if(!$row) {
             throw new Vps_Exception('Can\'t find row.');
+        } else if(!$row instanceof Zend_Db_Table_Row_Abstract) {
+            throw new Vps_Exception('Row must be a Zend_Db_Table_Row_Abstract.');
         }
         parent::delete($row);
+        $row->delete();
     }
 
     public function getName()
