@@ -22,6 +22,11 @@ Vps.Renderer.MoneyEuro = function(v)
     return v + " €";
 };
 
+Vps.Renderer.Percent = function(v)
+{
+    return v + "%";
+};
+
 Vps.Renderer.ShowField = function(fieldName) {
     return function(value, p, record) {
         return record.data[fieldName];

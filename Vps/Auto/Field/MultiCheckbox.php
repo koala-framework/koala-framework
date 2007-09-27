@@ -1,4 +1,5 @@
 <?php
+//todo: validators
 class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
 {
     protected $_fields;

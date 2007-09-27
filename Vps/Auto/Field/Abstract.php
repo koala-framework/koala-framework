@@ -3,6 +3,7 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
 {
     private $_properties;
     protected $_xtype = null;
+    protected $_validators = array();
 
     public function __construct($field_name = null)
     {
@@ -43,7 +44,6 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
     public function getMetaData()
     {
         $ret = $this->_properties;
-        $ret['type'] = str_replace('Vps_Auto_Field_', '', get_class($this));
         if (isset($ret['name'])) {
             $ret['name'] = $this->getFieldName();
         }
@@ -71,6 +71,8 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
 
     public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
     {
+        $this->_addValidators();
+
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
                 $field->prepareSave($row, $postData);
@@ -133,5 +135,22 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
     public function getChildren()
     {
         return array();
+    }
+
+    public function getValidators()
+    {
+        return $this->_validators;
+    }
+    public function addValidator(Zend_Validate_Interface $v)
+    {
+        $this->_validators[] = $v;
+    }
+
+    /**
+     * Fügt die Standard-Validatoren für dieses Feld hinzu.
+     * wird aufgerufen in prepareSave
+    **/
+    protected function _addValidators()
+    {
     }
 }

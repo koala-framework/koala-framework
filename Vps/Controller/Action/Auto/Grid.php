@@ -18,6 +18,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected $_table;
     protected $_tableName;
 
+    protected $_grouping = null;
+
     public function indexAction()
     {
        $this->view->ext('Vps.Auto.Grid');
@@ -263,7 +265,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         else if ($type == 'tinytext') $type = 'string';
         else if (substr($type, -3) == 'int') $type = 'int';
         else if ($type == 'datetime') $type = 'date';
-        else if ($type == 'decimal') $type = 'string';
+        else if ($type == 'decimal') $type = 'float';
         else if (substr($type, 0, 6) == 'double') $type = 'float';
         else if ($type == 'time') $type = ''; //auto
         else $Type = ''; //auto
@@ -322,6 +324,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->view->metaData['filters'] = $this->_filters;
         $this->view->metaData['sortable'] = $this->_sortable;
         $this->view->metaData['editDialog'] = $this->_editDialog;
+        $this->view->metaData['grouping'] = $this->_grouping;
     }
 
     protected function _beforeSave(Zend_Db_Table_Row_Abstract $row, $submitRow)

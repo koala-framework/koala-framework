@@ -38,6 +38,8 @@ class Vps_Auto_Field_ComboBoxSize extends Vps_Auto_Field_ComboBox
 
     public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
     {
+        Vps_Auto_Field_Abstract::prepareSave($row, $postData);
+
         $values = explode('x', $postData['size']);
         $row->width = (int)$values[0];
         $row->height = (int)$values[1];
