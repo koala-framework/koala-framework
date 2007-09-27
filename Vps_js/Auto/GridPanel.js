@@ -4,21 +4,69 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
     autoload: true,
 
+    gridConfig: { plugins: [] },
+
     initComponent : function()
     {
         this.actions = {};
 
         this.layout = 'fit';
         this.border = false;
-//  id: this.controllerUrl.replace(/\//g, '-').replace(/^-|-$/g, '') //um eine eindeutige id für den stateManager zu haben
+
+//         if(this.autoload) {
+        //todo: wos bosiat bei !autoload
+            Ext.getBody().mask('Loading...');
+            Ext.Ajax.request({
+                url: this.controllerUrl+'jsonData',
+                params: {meta: true},
+                success: function(response, options, r) {
+                    var result = Ext.decode(response.responseText);
+                    this.onMetaLoad(result);
+                },
+                callback: function() {
+                    Ext.getBody().unmask();
+                },
+                scope: this
+            });
+//         }
+
+        this.addEvents({
+            'rendergrid': true,
+            'beforerendergrid': true
+        });
+
+        Vps.Auto.GridPanel.superclass.initComponent.call(this);
+    },
+
+    onMetaLoad : function(result)
+    {
+        var meta = result.metaData;
 
         if (!this.store) {
-            this.store = new Ext.data.Store({
+            var storeConfig = {
                 proxy: new Ext.data.HttpProxy({url: this.controllerUrl + 'jsonData'}),
-                reader: new Ext.data.JsonReader(),
-                remoteSort: true
-            });
+                reader: new Ext.data.JsonReader({
+                    totalProperty: meta.totalProperty,
+                    root: meta.root,
+                    id: meta.id,
+                    sucessProperty: meta.successProperty
+                }, meta.fields),
+                remoteSort: true,
+                sortInfo: meta.sortInfo
+            };
+            if (meta.grouping) {
+                var storeType = Ext.data.GroupingStore;
+                storeConfig.groupField = meta.grouping.groupField;
+                delete meta.grouping.groupField;
+            } else {
+                var storeType = Ext.data.Store;
+            }
+            this.store = new storeType(storeConfig);
         }
+        if (result.rows) {
+            this.store.loadData(result);
+        }
+
         this.store.newRecords = []; //hier werden neue records gespeichert die nicht dirty sind
         this.store.on('update', function(store, record, operation) {
             if (operation == Ext.data.Record.EDIT) {
@@ -29,7 +77,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             this.getAction('save').enable();
         }, this);
 
-        this.store.on('metachange', this.onMetaChange, this);
         this.store.on('loadexception', function(proxy, o, response, e) {
             throw e; //re-throw
         }, this);
@@ -44,21 +91,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
         this.relayEvents(this.store, ['load']);
         this.relayEvents(this.selModel, ['rowselect', 'beforerowselect']);
-        this.addEvents({
-            'rendergrid': true
-        });
 
-//todo:     this.grid.restoreState();
-        if(this.autoload) {
-            this.store.load();
-        }
-
-        Vps.Auto.GridPanel.superclass.initComponent.call(this);
-    },
-
-    onMetaChange : function(store, meta)
-    {
-        if (!this.gridConfig) this.gridConfig = {};
         var gridConfig = Ext.applyIf(this.gridConfig, {
             store: this.store,
             selModel: this.selModel,
@@ -68,6 +101,28 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             tbar: []
         });
 
+        if (meta.grouping) {
+            gridConfig.view = new Ext.grid.GroupingView(Ext.applyIf(meta.grouping, {
+                forceFit: true
+            }));
+
+            var found = false;
+            gridConfig.plugins.each(function(p) {
+                if (p instanceof Ext.grid.GroupSummary) {
+                    found = true;
+                    return false;
+                }
+            });
+            if (!found) {
+                //todo: plugin nicht immer laden?!
+                gridConfig.plugins.push(new Ext.grid.GroupSummary());
+            }
+        } else {
+            gridConfig.view = new Ext.grid.GridView({
+                forceFit: true
+            });
+        }
+
         var config = [];
         for (var i=0; i<meta.columns.length; i++) {
             var column = meta.columns[i];
@@ -76,29 +131,12 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             if (column.editor && column.editor.type == 'Checkbox') {
                 delete column.editor;
                 if (column.renderer) delete column.renderer;
-                column = new Vps.Grid.CheckColumn(column);
+                column = new Ext.grid.CheckColumn(column);
                 gridConfig.plugins.push(column);
             } else if (column.editor) {
-                var editorConfig = { msgTarget: 'qtip' };
-                var type;
-                if (typeof column.editor == 'string') {
-                    type = column.editor;
-                } else {
-                    type = column.editor.type;
-                    delete column.editor.type;
-                    editorConfig = Ext.applyIf(column.editor, editorConfig);
-                }
-                if (Vps.Form[type]) {
-                    column.editor = new Ext.grid.GridEditor(new Vps.Form[type](editorConfig));
-                } else if (Ext.form[type]) {
-                    column.editor = new Ext.grid.GridEditor(new Ext.form[type](editorConfig));
-                } else if (type != '') {
-                    try {
-                        column.editor = eval(column.editor);
-                    } catch(e) {
-                        throw "invalid editor: "+column.editor;
-                    }
-                }
+                Ext.applyIf(column.editor, { msgTarget: 'qtip' });
+
+                column.editor = new Ext.grid.GridEditor(Ext.ComponentMgr.create(column.editor, 'textfield'));
                 var field = column.editor.field;
                 if(field instanceof Ext.form.ComboBox) {
                     this.on('validateedit', function(e) {
@@ -127,7 +165,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
             if (column.defaultValue) delete column.defaultValue;
             if (column.dateFormat) delete column.dateFormat;
-            column.sortable = meta.sortable;
             config.push(column);
         }
         gridConfig.colModel = new Ext.grid.ColumnModel(config);
@@ -275,6 +312,8 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
 
+        this.fireEvent('beforerendergrid', this.grid);
+        
         this.add(this.grid);
         this.doLayout();
 
@@ -470,6 +509,9 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     },
     getSelectionModel : function() {
         return this.getGrid().getSelectionModel();
+    },
+    getColumnModel : function() {
+        return this.getGrid().getColumnModel();
     },
     getStore : function() {
         return this.store;

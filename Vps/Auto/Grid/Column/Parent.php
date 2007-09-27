@@ -5,6 +5,7 @@ class Vps_Auto_Grid_Column_Parent extends Vps_Auto_Grid_Column
     {
         $ret = parent::getMetaData($tableInfo);
         if (isset($ret['parentTable'])) unset($ret['parentTable']);
+        if (isset($ret['parentField'])) unset($ret['parentField']);
         return $ret;
     }
 
@@ -14,6 +15,11 @@ class Vps_Auto_Grid_Column_Parent extends Vps_Auto_Grid_Column
             throw new Vps_Exception("Parent Table not set.");
         }
         $row = $row->findParentRow($this->getParentTable());
-        return $row->__toString();
+        if ($this->getParentField()) {
+            $f = $this->getParentField();
+            return $row->$f;
+        } else {
+            return $row->__toString();
+        }
     }
 }

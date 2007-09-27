@@ -1,5 +1,5 @@
 <?php
-class Vps_Auto_Field_File extends Vps_Auto_Field_SimpleAbstract
+class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
 {
     private $_directory;
     private $_extensions;
@@ -28,6 +28,8 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_SimpleAbstract
 
     public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
     {
+        parent::prepareSave($row, $postData);
+
         $file = isset($_FILES['vps_upload_id']) ? $_FILES['vps_upload_id'] : array();
         $fileTable = new Vps_Dao_File();
 
@@ -55,9 +57,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_SimpleAbstract
                 throw new Vps_ClientException($e->getMessage());
             }
         }
-        
-        $fileTable->deleteCache($row->vps_upload_id);
 
-        parent::load($row);
+        $fileTable->deleteCache($row->vps_upload_id);
     }
 }

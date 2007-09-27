@@ -62,6 +62,9 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
             }
         }
 
+        if (!isset($ret['sortable'])) {
+            $ret['sortable'] = true;
+        }
         if (!isset($ret['type'])) {
             $ret['type'] = null;
         }

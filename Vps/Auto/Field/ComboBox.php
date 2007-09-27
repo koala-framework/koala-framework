@@ -9,6 +9,22 @@ class Vps_Auto_Field_ComboBox extends Vps_Auto_Field_SimpleAbstract
         parent::__construct(null);
     }
 
+    protected function _addValidators()
+    {
+        parent::_addValidators();
+        $store = $this->getStore();
+        if (isset($store['data'])) {
+            $a = array();
+            foreach ($store['data'] as $r) {
+                $a[] = $r[1];
+            }
+            $this->addValidator(new Zend_Validate_InArray($a));
+        } else if (isset($store['url'])) {
+            //todo, keine ahnung wie :D
+        }
+
+    }
+
     public function getMetaData()
     {
         $ret = parent::getMetaData();
