@@ -495,11 +495,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $x = $pageMargin;
                 $minY = $pdfPage->getHeight();
                 foreach ($this->_columns as $column) {
-                    if ($column->findParent()) {
-                        $text = $this->_fetchFromParentRow($row, $column->getFindParent());
-                    } else {
-                        $text = $this->_fetchFromRow($row, $column->getDataIndex());
-                    }
+                    $text = $column->getData($row, Vps_Auto_Grid_Column::ROLE_PDF);
                     $w = $column->getPdfWidth();
                     $o = array('wrap'        => Vps_Pdf_Page::OPTIONS_WRAP_ENABLED,
                                'wrap-indent' => $x+$padding,

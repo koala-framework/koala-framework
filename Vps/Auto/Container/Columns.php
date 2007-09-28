@@ -18,6 +18,7 @@ class Vps_Auto_Container_Columns extends Vps_Auto_Container_Abstract
         }
         if (!isset($ret['layout'])) $ret['layout'] = 'column';
         if (!isset($ret['border'])) $ret['border'] = false;
+        if (!isset($ret['baseCls'])) $ret['baseCls'] = 'x-plain';
         return $ret;
     }
 
