@@ -23,11 +23,11 @@ class Vps_View_Smarty extends Zend_View_Abstract
         }
         $this->extTemplate = VPS_PATH . 'views/Ext.html';
     }
-    
+
     public function setExtConfig($param, $value) {
         $this->ext['config'][$param] = $value;
     }
-    
+
     public function ext($class, $config = array(), $viewport = null)
     {
         if (!is_string($class)) {
@@ -42,10 +42,11 @@ class Vps_View_Smarty extends Zend_View_Abstract
             $jsFiles = array('/assets/all.js');
             $cssFiles = array('/assets/all.css');
         }
+        if (!$config) { $config = array(); }
         if (isset($this->ext['config']) && is_array($this->ext['config'])) {
             $config = array_merge($this->ext['config'], $config);
         }
-        
+
         if ($class == '' && isset($this->ext['class'])) {
             $class = $this->ext['class'];
         }
@@ -70,7 +71,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $ext['viewport'] = $viewport;
         $this->ext = $ext;
     }
-    
+
     public function vpc($config = array())
     {
         $this->ext('', $config);
@@ -91,7 +92,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
     {
         return $this->_smarty;
     }
-    
+
     public function setCompilePath($path)
     {
         $this->_smarty->compile_dir = $path;
@@ -114,7 +115,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $this->_smarty->assign_by_ref('this', $this);
 
         $path = $this->getScriptPaths();
-        
+
         //smarty needs a template_dir, and can only use templates,
         //found in that directory, so we have to strip it from the filename
         if ($this->getRenderFile() != '') {

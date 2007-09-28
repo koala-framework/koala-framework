@@ -2,7 +2,7 @@
 class Vps_View_Json extends Zend_View_Abstract
 {
     private $_outputFormat = 'vpsConnection';
-    
+
     public function setPlainOutputFormat()
     {
         $this->_outputFormat = '';
@@ -12,18 +12,19 @@ class Vps_View_Json extends Zend_View_Abstract
     {
         return $this->_run();
     }
-    
+
     public function setExtConfig($param, $value) {
         if (!isset($this->config)) { $this->config = array(); }
         $this->config[$param] = $value;
     }
 
     public function ext($class, $config = array()) {
+        if (!$config) { $config = array(); }
         if (!isset($this->config)) { $this->config = array(); }
         $this->class = $class;
         $this->config = array_merge($this->config, $config);
     }
-    
+
     public function getOutput()
     {
         $this->strictVars(true);
@@ -39,7 +40,7 @@ class Vps_View_Json extends Zend_View_Abstract
         }
         return $out;
     }
-    
+
     protected function _run()
     {
         return Zend_Json::encode($this->getOutput());

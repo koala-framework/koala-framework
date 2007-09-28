@@ -19,7 +19,7 @@ function d($src, $max_depth = 5)
     exit;
 }
 
-function exceptionsHandler($code, $string, $file, $line) { 
+function exceptionsHandler($code, $string, $file, $line) {
     $exception = new Vps_CustomException($string, $code);
     $exception->setLine($line);
     $exception->setFile($file);
@@ -35,7 +35,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
         set_error_handler('exceptionsHandler', E_ALL);
         Zend_Registry::set('config', Vps_Setup::createConfig());
     }
-    
+
     public static function setUpDb()
     {
         $dao = new Vps_Dao(new Zend_Config_Ini('application/config.db.ini', 'database'));
@@ -45,7 +45,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
         Zend_Registry::set('db', $db);
         Zend_Db_Table_Abstract::setDefaultAdapter($db);
     }
-    
+
     public static function getInstance($isComponentsWeb = true)
     {
         self::setUp();
@@ -66,25 +66,26 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $router->AddRoute('ajaxfe', new Zend_Controller_Router_Route('ajax/fe/:action', array('controller' => 'fe', 'action' => 'action')));
             $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'index', 'action' => 'index')));
             $router->AddRoute('login', new Zend_Controller_Router_Route('login/:action', array('module' => 'admin', 'controller' => 'login', 'action' => 'index')));
+            $router->AddRoute('menu', new Zend_Controller_Router_Route('menu/:action', array('module' => 'admin', 'controller' => 'menu', 'action' => 'index')));
 
             $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/:action/:class/:componentId', array('module' => 'admin', 'controller' => 'components', 'action' => 'show')));
             $router->AddRoute('componentedit', new Zend_Controller_Router_Route('component/edit/:class/:componentId/:action', array('module' => 'component', 'controller' => 'Index', 'action' => 'index')));
             $router->AddRoute('media', new Zend_Controller_Router_Route('media/:uploadId/:componentId/:checksum/:filename', array('controller' => 'Media', 'action' => 'index')));
             $router->AddRoute('mediaoriginal', new Zend_Controller_Router_Route('media/:uploadId', array('controller' => 'Media', 'action' => 'original')));
-            
+
             $plugin = new Zend_Controller_Plugin_ErrorHandler();
             $plugin->setErrorHandlerModule('admin');
             $front->registerPlugin($plugin);
-            
+
             self::setUpDb();
 
             // ACL
             $acl = new Vps_Acl();
-    
+
             // Roles
             $acl->addRole(new Vps_Acl_Role('member'), 'guest');
             $acl->addRole(new Vps_Acl_Role('admin'), 'member');
-            
+
             // Resources
             $acl->add(new Zend_Acl_Resource('web'));
             $acl->add(new Zend_Acl_Resource('media'));
@@ -100,7 +101,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $acl->add(new Zend_Acl_Resource('components', 'Komponentenübersicht',
                                             '/admin/components/'), 'admin'); // für /component/show
             $acl->add(new Zend_Acl_Resource('component'), 'admin'); // für /component/edit
-            
+
             // Berechtigungen
             $acl->allow('admin', 'web');
             $acl->allow('admin', 'fe');
@@ -109,7 +110,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $acl->allow('member', 'fe');
             $acl->allow('guest', 'web');
             $acl->allow('guest', 'media');
-            
+
             Zend_Registry::set('acl', $acl);
         }
 

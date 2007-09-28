@@ -26,6 +26,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
     protected $_order = null;
     protected $_enableDD;
     protected $_hasPosition;
+    protected $_editDialog;
 
     public function init()
     {
@@ -62,6 +63,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         $this->view->rootText = $this->_rootText;
         $this->view->rootVisible = $this->_rootVisible;
         $this->view->buttons = $this->_buttons;
+        $this->view->editDialog = $this->_editDialog;
     }
 
     public function jsonDataAction()
@@ -76,6 +78,17 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
             $nodes[] = $this->_formatNode($row);
         }
         $this->view->nodes = $nodes;
+    }
+
+    public function jsonNodeDataAction()
+    {
+        $id = $this->getRequest()->getParam('node');
+        $row = $this->_table->find($id)->current();
+        if ($row) {
+            $this->view->data = $this->_formatNode($row);
+        } else {
+            throw new Vps_ClientException('Couldn\'t find row with id ' . $id);
+        }
     }
 
     protected function _getWhere()
@@ -114,7 +127,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
             $data['children'] = array();
             $data['expanded'] = true;
         }
-        $data['uiProvider'] = 'Vps.AutoTree.Node';
+        $data['uiProvider'] = 'Vps.Auto.TreeNode';
         return $data;
     }
 
@@ -151,8 +164,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         $insert[$this->_textField] = $this->getRequest()->getParam('name');
         $id = $this->_table->insert($insert);
         if ($id) {
-            $this->view->parentId = $insert['parent_id'];
-            $this->view->config = $this->_formatNode($this->_table->find($id)->current());
+            $this->view->data = $this->_formatNode($this->_table->find($id)->current());
         } else {
             $this->view->error = 'Couldn\'t insert row.';
         }

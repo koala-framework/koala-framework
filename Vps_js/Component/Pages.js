@@ -680,8 +680,7 @@ Ext.extend(Vps.AutoTree.PagesNode, Vps.AutoTree.Node, {
     }
 });
 */
-Ext.namespace('Vps.AutoTree');
-Vps.AutoTree.PagesNode = Ext.extend(Vps.AutoTree.Node, {
+Vps.Component.PagesNode = Ext.extend(Vps.Auto.TreeNode, {
     onDblClick : function(e){
         e.preventDefault();
         this.fireEvent("dblclick", this.node, e);

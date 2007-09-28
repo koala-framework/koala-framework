@@ -161,7 +161,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         }
         this.getAction('save').enable();
     },
-    
+
     onSubmitSuccess: function(form, action) {
         this.getForm().resetDirty();
         this.fireEvent('datachange', action.result);
@@ -186,7 +186,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         scope: this,
         fn: function(button) {
             if (button == 'yes') {
-        
+
                 Ext.Ajax.request({
                         url: this.controllerUrl+'jsonDelete',
                         params: {id: this.getForm().baseParams.id},
