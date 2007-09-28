@@ -22,7 +22,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
     public function indexAction()
     {
-       $this->view->ext('Vps.Auto.Grid');
+       $this->view->ext('Vps.Auto.GridPanel');
     }
 
     public function jsonIndexAction()

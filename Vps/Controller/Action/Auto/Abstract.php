@@ -10,7 +10,7 @@ class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
             $this->_permissions = $this->_buttons;
         }
     }
-    
+
     protected function _fetchFromParentRow($row, $findParent)
     {
         if (!$row instanceof Zend_Db_Table_Row_Abstract) {

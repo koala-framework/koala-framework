@@ -12,25 +12,25 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
         'folder' => 'folder'
     );
     protected $_buttons = array();
-    
+
     public function indexAction()
     {
         $this->view->ext('Vps.Component.Pages');
     }
-    
+
     public function init()
     {
         $this->_table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
         parent::init();
     }
-    
+
     protected function _formatNode($row)
     {
         $data = parent::_formatNode($row);
         if ($data['data']['is_home']) {
             $data['bIcon'] = 'application_home';
         }
-        $data['uiProvider'] = 'Vps.AutoTree.PagesNode';
+        $data['uiProvider'] = 'Vps.Component.PagesNode';
         return $data;
     }
 
@@ -51,7 +51,7 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
     {
         $id = $this->getRequest()->getParam('node');
         if ($id === '0') {
-            
+
             $config = new Zend_Config_Ini('application/config.ini', 'pagecollection');
             $types = $config->pagecollection->pagetypes->toArray();
             if (sizeof($types) == 0) { $types[''] = 'Seiten'; }
@@ -64,7 +64,7 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
                 $data['allowDrag'] = false;
                 $data['type'] = 'category';
                 $data['bIcon'] = 'folder_page';
-                $data['uiProvider'] = 'Vps.AutoTree.Node';
+                $data['uiProvider'] = 'Vps.Component.PagesNode';
                 $return[] = $data;
             }
             $this->view->nodes = $return;
@@ -76,7 +76,7 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
         }
 
     }
-    
+
     protected function _getWhere()
     {
         $where = array();
@@ -89,7 +89,7 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
         }
         return $where;
     }
-    
+
     public function jsonVisibleAction()
     {
         $visible = $this->getRequest()->getParam('visible') == 'true';
@@ -114,7 +114,7 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
                 $oldRow->is_home = 0;
                 $oldRow->save();
             }
-            
+
             $row->is_home = 1;
             $row->save();
             $this->view->home = $id;

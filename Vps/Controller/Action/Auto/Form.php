@@ -7,7 +7,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
     public function indexAction()
     {
-       $this->view->ext('Vps.Auto.Form', $this->_form->getProperties());
+       $this->view->ext('Vps.Auto.FormPanel', $this->_form->getProperties());
     }
 
     public function jsonIndexAction()
