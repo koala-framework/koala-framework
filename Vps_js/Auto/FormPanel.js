@@ -55,7 +55,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         Ext.applyIf(meta.form, this.formConfig);
 
         if (this.baseCls) meta.form.baseCls = this.baseCls; //use the same
-        if (meta.buttons) {
+        if (meta.buttons && meta.buttons != {}) {
             if (!meta.form.tbar) meta.form.tbar = [];
             for (var b in meta.buttons) {
                 meta.form.tbar.push(this.getAction(b));
