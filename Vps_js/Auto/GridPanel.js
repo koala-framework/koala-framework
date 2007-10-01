@@ -41,6 +41,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     onMetaLoad : function(result)
     {
         var meta = result.metaData;
+        this.metaData = meta;
 
         if (!this.store) {
             var storeConfig = {
@@ -106,16 +107,17 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                 forceFit: true
             }));
 
-            var found = false;
-            gridConfig.plugins.each(function(p) {
-                if (p instanceof Ext.grid.GroupSummary) {
-                    found = true;
-                    return false;
+            if (!meta.grouping.noGroupSummary) {
+                var found = false;
+                gridConfig.plugins.each(function(p) {
+                    if (p instanceof Ext.grid.GroupSummary) {
+                        found = true;
+                        return false;
+                    }
+                });
+                if (!found) {
+                    gridConfig.plugins.push(new Ext.grid.GroupSummary());
                 }
-            });
-            if (!found) {
-                //todo: plugin nicht immer laden?!
-                gridConfig.plugins.push(new Ext.grid.GroupSummary());
             }
         } else {
             gridConfig.view = new Ext.grid.GridView({
@@ -375,12 +377,12 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         return this.actions[type];
     },
 
-    onSave : function()
+    //protected, zum überschreiben in unterklassen um zusäztliche daten zu speichern
+    getSaveParams : function()
     {
-        this.getAction('save').disable();
         var data = [];
         var modified = this.store.getModifiedRecords();
-        if (!modified.length) return;
+        if (!modified.length) return {};
         //geänderte records
         modified.each(function(r) {
             this.store.newRecords.remove(r); //nur einmal speichern
@@ -396,6 +398,14 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
         var params = this.loadParams || {};
         params.data = Ext.util.JSON.encode(data);
+        return params;
+    },
+    onSave : function()
+    {
+        this.getAction('save').disable();
+        var params = this.getSaveParams();
+        if (params == {}) return;
+
         Ext.Ajax.request({
             url: this.controllerUrl+'jsonSave',
             params: params,
