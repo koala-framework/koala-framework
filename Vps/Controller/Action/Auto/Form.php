@@ -3,7 +3,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 {
     protected $_form = null;
     protected $_fields = array(); //deprecated
-    protected $_buttons = array('save' => true);
+    protected $_buttons = array();
 
     public function indexAction()
     {
@@ -74,7 +74,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     {
         $this->view->meta = array();
         $this->view->meta['form'] = $this->_form->getMetaData();
-        $this->view->meta['buttons'] = $this->_buttons;
+        $this->view->meta['buttons'] = (object)$this->_buttons; //in objekt casten damit json kein [] sondern {} ausgibt
     }
 
     public function jsonSaveAction()
