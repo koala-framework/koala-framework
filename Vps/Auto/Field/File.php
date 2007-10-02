@@ -43,7 +43,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         $return = array();
         $return['url'] = $table->getOriginalUrl($row->$name);
         $return['uploaded'] = !is_null($return['url']);
-        return array($this->getName() . '_delete' => $return);
+        return array($this->getFieldName() . '_delete' => $return);
     }
 
     public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)

@@ -8,6 +8,6 @@ class Vps_Auto_Field_ImageViewer extends Vps_Auto_Field_SimpleAbstract
         $data = array();
         $data['imageUrl'] = $this->getImageUrl();
         $data['previewUrl'] = $this->getPreviewUrl();
-        return array($this->getName() => $data);
+        return array($this->getFieldName() => $data);
     }
 }

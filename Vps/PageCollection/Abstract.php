@@ -175,7 +175,7 @@ abstract class Vps_PageCollection_Abstract
         }
         return $this->_pages[$this->_homeId];
     }
-    
+
     protected function _generateHierarchy(Vpc_Abstract $page = null, $filename = '')
     {
         if (is_null($page)) {
@@ -206,7 +206,7 @@ abstract class Vps_PageCollection_Abstract
         if (isset($this->_pageNames[$id])) {
             return $this->_pageNames[$id];
         } else {
-            return ''; 
+            return '';
         }
     }
 
@@ -240,7 +240,7 @@ abstract class Vps_PageCollection_Abstract
         }
         return null;
     }
-    
+
     public function getTitle($page)
     {
         $data = $this->getPageData($page);

@@ -75,7 +75,7 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
         return $ret;
     }
 
-    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
+    public function prepareSave($row, $postData)
     {
         $this->_addValidators();
 
@@ -86,7 +86,7 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
         }
     }
 
-    public function save(Zend_Db_Table_Row_Abstract $row)
+    public function save($row)
     {
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {

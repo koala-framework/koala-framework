@@ -10,7 +10,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     private $_id;
     private $_hasGeneratedForFilename = array();
     private $_pageCollection = null;
-    
+
     private $_store;
 
     protected $_settings = array();
@@ -139,24 +139,20 @@ abstract class Vpc_Abstract implements Vpc_Interface
     private static function _createInstance(Vps_Dao $dao, $class, $id, $pageCollection = null)
     {
         // Komponente erstellen
-        try {
+        if (class_exists($class)) {
+            $component = new $class($dao, $id, $pageCollection);
+        } else {
+            throw new Vpc_ComponentNotFoundException("Component '$class' not found.");
+        }
 
-            if (class_exists($class)) {
-                $component = new $class($dao, $id, $pageCollection);
-            }
-
-            // Decorators hinzufügen
-            if (!is_null($component)) {
-                $decoratorData = $dao->getTable('Vps_Dao_Pages')->retrieveDecoratorData($component->getId());
-                foreach ($decoratorData as $decoratorClass) {
-                    if (class_exists($decoratorClass)) {
-                        $component = new $decoratorClass($dao, $component);
-                    }
+        // Decorators hinzufügen
+        if (!is_null($component)) {
+            $decoratorData = $dao->getTable('Vps_Dao_Pages')->retrieveDecoratorData($component->getId());
+            foreach ($decoratorData as $decoratorClass) {
+                if (class_exists($decoratorClass)) {
+                    $component = new $decoratorClass($dao, $component);
                 }
             }
-
-        } catch (Zend_Exception $e) {
-            throw new Vpc_ComponentNotFoundException("Component '$class' not found. ($e)");
         }
 
         return $component;
@@ -382,7 +378,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Standardmäßig werden die Seiten aus dem als Unterseite im Seitenbaum hinzugefügt. Falls
      * eine Komponente dynamisch Unterseiten erstellen will, sollte das in dieser Methode erfolgen.
      * parent::generateHierarchy sollte dennoch aufgerufen werden.
-     * 
+     *
      * Der zweite Parameter bestimmt, ob die Seite als Home ausgeführt wird. Falls die Seite
      * also Home ausgeführt wird, werden die Unterseiten der obersten Ebene hinzugefügt, die
      * Seite fungiert also als Rootpage.
@@ -510,12 +506,12 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         return $this->_settings;
     }
-    
+
     public function store($key, $val)
     {
         $this->_store[$key] = $val;
     }
-    
+
     public function getStore($key)
     {
         if (isset($this->_store[$key])) {
@@ -524,6 +520,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
             return null;
         }
     }
-    
+
     public function onDelete() {}
 }
