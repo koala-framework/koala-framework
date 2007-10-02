@@ -1,5 +1,5 @@
 <?php
-class Vps_Auto_Form_Text extends Vps_Auto_Form
+class Vpc_Basic_Text_Form extends Vps_Auto_Form
 {
     public function __construct($name = null, $id = null)
     {

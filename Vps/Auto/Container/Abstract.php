@@ -24,15 +24,6 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract
         return $ret;
     }
 
-    public function load($row)
-    {
-        $ret = parent::load($row);
-        foreach($this->fields as $field) {
-            $ret = array_merge($ret, $field->load($row));
-        }
-        return $ret;
-    }
-
     public function getByName($name)
     {
         $ret = parent::getByName($name);

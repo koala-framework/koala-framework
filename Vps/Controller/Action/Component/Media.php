@@ -4,14 +4,13 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action
     public function originalAction()
     {
         $uploadId = $this->_getParam('uploadId');
-        $filename = $this->_getParam('filename');
         $config = Zend_Registry::get('config');
         $uploadDir = $config->uploads;
 
         $target = $uploadDir . $this->_getSourcePath($uploadId);
         $this->_showFile($target);
     }
-    
+
     public function indexAction()
     {
         $uploadId = $this->_getParam('uploadId');
@@ -25,7 +24,7 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action
         if ($checksum != $this->_getParam('checksum') && $downloadChecksum != $this->_getParam('checksum')) {
             throw new Vps_Controller_Action_Web_Exception('File not found.');
         }
-        
+
         $target = '';
         if (strpos($filename, '.original.') || $checksum == $downloadChecksum) {
             $target = $uploadDir . $this->_getSourcePath($uploadId);
@@ -37,7 +36,7 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action
                 $source = $uploadDir . $this->_getSourcePath($uploadId);
                 $pageCollection = Vps_PageCollection_TreeBase::getInstance();
                 $component = $pageCollection->findComponent($id);
-                
+
                 if ($component instanceof Vpc_FileInterface) {
                     if (!is_dir($uploadDir . 'cache/')) {
                         mkdir($uploadDir . 'cache/', 0775);
@@ -58,7 +57,7 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action
         }
         $this->_showFile($target);
     }
-    
+
     private function _getSourcePath($uploadId = 0)
     {
         $table = new Vps_Dao_File();
@@ -68,7 +67,7 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action
         }
         return '';
     }
-    
+
     private function _showFile($target)
     {
         if (is_file($target)) {

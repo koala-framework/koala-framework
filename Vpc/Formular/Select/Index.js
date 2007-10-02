@@ -1,21 +1,21 @@
 Ext.namespace('Vpc.Formular.Select');
-Vpc.Formular.Select.Index = function(renderTo, config)
+Vpc.Formular.Select.Index = Ext.extend(Ext.TabPanel,
 {
-    var layout = new Ext.BorderLayout(renderTo, {
-        center: {
-            tabPosition: 'top',
-            closeOnTab: true,
-            alwaysShowTabs : true,
-            autoScroll: true
-        }
-    });
-    
-    layout.beginUpdate();
-    layout.add("center", new Ext.ContentPanel("properties1", {autoCreate: true, title: 'Properties'}));
-    layout.add("center", new Ext.ContentPanel ("checkboxes1", {autoCreate: true, fitToFrame:true, title: 'Options'}));
-    var cb = new Vps.Auto.Form("properties1", {controllerUrl: config.controllerUrl, fitToFrame:true});
-    var cb = new Vps.Auto.Grid("checkboxes1", {controllerUrl: config.optionsControllerUrl, fitToFrame:true});
-    layout.endUpdate();
-};
-
-Ext.extend(Vpc.Formular.Select.Index, Ext.util.Observable,{})
+    initComponent : function()
+    {
+        this.items = [
+            new Vps.Auto.FormPanel({
+                controllerUrl: this.controllerUrl,
+                fitToFrame: true,
+                title: 'Properties',
+                bodyStyle : 'padding: 10px;'
+            }),
+            new Vps.Auto.GridPanel({
+                controllerUrl: this.optionsControllerUrl,
+                title: 'Options'
+            })
+        ];
+        this.activeTab = 0;
+        Vpc.Formular.Select.Index.superclass.initComponent.call(this);
+    }
+});

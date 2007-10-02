@@ -154,6 +154,19 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
     loadComponent: function(data)
     {
+        if (this.contentPanel.getItem(data.text)) {
+            var panel = this.contentPanel.getItem(data.text);
+        } else {
+            var panel = this.createComponentPanel(data);
+            this.contentPanel.add(panel);
+            this.contentPanel.setActiveTab(panel);
+        }
+        data.controllerUrl = '/component/edit/' + data.cls + '/' + data.id + '/';
+        panel.loadComponent(data);
+    },
+
+    createComponentPanel: function(data)
+    {
         var panel = new Ext.Panel({
             layout      : 'fit',
             region      : 'center',
@@ -174,19 +187,18 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                     response = Ext.decode(r.responseText);
                     cls = eval(response['class']);
                     if (cls) {
-
-                        var panel = new cls(Ext.applyIf(response.config, {
+                        var panel2 = new cls(Ext.applyIf(response.config, {
                             controllerUrl   : data.controllerUrl,
                             region          : 'center',
                             autoScroll      : true,
                             closable        : true,
                             id              : 'componentPanel'
                         }));
-                        panel.on('editcomponent', this.loadComponent, this);
+                        panel2.on('editcomponent', this.loadComponent, this);
                         this.addToolbarButton(data);
 
                         this.remove(this.items.item('componentPanel'));
-                        this.add(panel);
+                        this.add(panel2);
                         this.layout.rendered = false;
                         this.doLayout();
                     }
@@ -224,10 +236,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         }
 
-        this.contentPanel.add(panel);
-        this.contentPanel.setActiveTab(panel);
-        data.controllerUrl = '/component/edit/' + data.cls + '/' + data.id + '/';
-        panel.loadComponent(data);
+        return panel;
     },
 
     getAction : function(type)

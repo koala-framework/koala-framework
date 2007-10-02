@@ -58,7 +58,7 @@ Vpc.Paragraphs.Index = Ext.extend(Vps.Auto.GridPanel,
             url: this.controllerUrl + 'jsonAddParagraph/',
             params: {component : o.id},
             success: function(r) {
-                this.grid.reload();
+                this.reload();
             },
             scope: this
         });
