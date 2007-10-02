@@ -102,9 +102,12 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (!isset($this->_queryFields)) {
             $this->_queryFields = array();
             foreach ($this->_columns as $column) {
-                if (!$column->getFindParent()) {
-                    $this->_queryFields[] = $column->getDataIndex();
+                $index = $column->getDataIndex();
+                if (isset($this->_table)) {
+                    $info = $this->_getTableInfo();
+                    if (!isset($info['metadata'][$index])) continue;
                 }
+                $this->_queryFields[] = $index;
             }
         }
 
@@ -119,7 +122,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->_defaultOrder['direction'] = 'ASC';
         }
     }
-
     protected function _getWhere()
     {
         $where = array();
@@ -193,6 +195,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         return $stmt->fetchColumn();
     }
 
+
     public function jsonDataAction()
     {
         $limit = null; $start = null;
@@ -230,7 +233,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                     $row = (object)$row;
                 }
                 foreach ($this->_columns as $column) {
-                    $data = $column->getData($row, Vps_Auto_Grid_Column::ROLE_DISPLAY);
+                    $data = $column->load($row, Vps_Auto_Grid_Column::ROLE_DISPLAY);
                     $r[$column->getDataIndex()] = $data;
                 }
                 if (!isset($r[$primaryKey]) && isset($row->$primaryKey)) {
@@ -495,7 +498,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $x = $pageMargin;
                 $minY = $pdfPage->getHeight();
                 foreach ($this->_columns as $column) {
-                    $text = $column->getData($row, Vps_Auto_Grid_Column::ROLE_PDF);
+                    $text = $column->load($row, Vps_Auto_Grid_Column::ROLE_PDF);
                     $w = $column->getPdfWidth();
                     $o = array('wrap'        => Vps_Pdf_Page::OPTIONS_WRAP_ENABLED,
                                'wrap-indent' => $x+$padding,

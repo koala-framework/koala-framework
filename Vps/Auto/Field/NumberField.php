@@ -14,7 +14,7 @@ class Vps_Auto_Field_NumberField extends Vps_Auto_Field_SimpleAbstract
             $this->addValidator(new Zend_Validate_GreaterThan($this->getMinValue()));
         }
         if ($this->getAllowNegative() === false) {
-            $this->addValidator(new Zend_Validate_GreaterThan(0));
+            $this->addValidator(new Zend_Validate_GreaterThan(-1));
         }
         if ($this->getAllowDecimals() === false) {
             $this->addValidator(new Zend_Validate_Digits());

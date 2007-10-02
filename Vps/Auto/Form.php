@@ -63,6 +63,7 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
     {
         $ret = array();
         $row = (object)$this->getRow();
+
         foreach($this->fields as $field) {
             $ret = array_merge($ret, $field->load($row));
         }
