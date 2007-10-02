@@ -52,6 +52,14 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         } else {
             $this->_form->setId($this->_getParam($this->_form->getPrimaryKey()));
         }
+
+        foreach(new RecursiveIteratorIterator(
+                new Vps_Collection_Iterator_Recursive($this->_form->fields))
+                    as $field) {
+            if ($field instanceof Vps_Auto_Field_File) {
+                $this->_form->setFileUpload(true);
+            }
+        }
     }
 
     public function jsonLoadAction()

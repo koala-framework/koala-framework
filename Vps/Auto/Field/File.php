@@ -8,6 +8,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         parent::__construct($fieldname, $title);
         $this->setLayout('form');
         $this->setBorder(false);
+        $this->setBaseCls('x-plain');
     }
 
     protected function _getFields()

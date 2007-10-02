@@ -150,8 +150,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
             if (typeof column.renderer == 'function') {
                 //do nothing
-            } else if (Vps.Renderer[column.renderer]) {
-                column.renderer = Vps.Renderer[column.renderer];
             } else if (Ext.util.Format[column.renderer]) {
                 column.renderer = Ext.util.Format[column.renderer];
             } else if (column.renderer) {
@@ -400,17 +398,22 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         params.data = Ext.util.JSON.encode(data);
         return params;
     },
-    onSave : function()
+    onSave : function(callback, addParams)
     {
         this.getAction('save').disable();
         var params = this.getSaveParams();
+        Ext.apply(params, addParams);
+
         if (params == {}) return;
 
         Ext.Ajax.request({
             url: this.controllerUrl+'jsonSave',
             params: params,
-            success: function() {
+            success: function(response, options, r) {
                 this.reload();
+                if (callback && callback.callback) {
+                    callback.callback.call(callback.scope||this, response, options, r);
+                }
             },
             failure: function() {
                 this.getAction('save').enable();

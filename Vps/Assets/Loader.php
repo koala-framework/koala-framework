@@ -76,6 +76,7 @@ class Vps_Assets_Loader
                 $paths = Vps_Assets_Dependencies::resolveAssetPaths($config->asset->toArray());
                 $assetPath = self::getAssetPath($url, $paths);
                 if (!$assetPath) {
+                    header("HTTP/1.0 404 Not Found");
                     die("file not found");
                 }
                 $lastModified = gmdate("D, d M Y H:i:s \G\M\T", filemtime($assetPath));
@@ -97,6 +98,7 @@ class Vps_Assets_Loader
                     } else if (substr($url, -4)=='.swf') {
                         header('Content-Type: application/flash');
                     } else {
+                        header("HTTP/1.0 404 Not Found");
                         die("invalid file type");
                     }
                     $contents = file_get_contents($assetPath);

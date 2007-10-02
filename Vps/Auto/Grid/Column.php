@@ -79,7 +79,7 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
             $ret['dateFormat'] = 'Y-m-d';
         }
         if ($ret['type'] == 'date' && !isset($ret['renderer'])) {
-            $ret['renderer'] = 'Date';
+            $ret['renderer'] = 'localizedDate';
         }
 //todo:
 //         if (isset($col['showDataIndex']) && $col['showDataIndex'] && !$this->_getColumnIndex($col['showDataIndex'])) {
