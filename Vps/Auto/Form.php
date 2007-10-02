@@ -11,6 +11,7 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
         $this->fields = new Vps_Collection_FormFields();
         $this->setName($name);
         $this->setId($id);
+        $this->setLayout('form');
     }
 
     public function getMetaData()
@@ -61,13 +62,8 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
 
     public function load()
     {
-        $ret = array();
         $row = (object)$this->getRow();
-
-        foreach($this->fields as $field) {
-            $ret = array_merge($ret, $field->load($row));
-        }
-        return $ret;
+        return parent::load($row);
     }
 
     public function delete($parentRow)

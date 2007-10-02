@@ -1,7 +1,7 @@
 <?php
 class Vpc_Basic_Text_Form extends Vps_Auto_Form
 {
-    public function __construct($name = null, $id = null)
+    public function __construct($name = null, $id = null, Vpc_Basic_Text_Index $component)
     {
         parent::__construct($name, $id);
         $this->setTable(new Vpc_Simple_Text_IndexModel());
