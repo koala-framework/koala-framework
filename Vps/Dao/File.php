@@ -4,19 +4,19 @@ class Vps_Dao_File extends Vps_Db_Table
     protected $_name = 'vps_uploads';
     const SHOW = 1;
     const DOWNLOAD = 2;
-    
+
     private function _getUploadDir()
     {
         $config = Zend_Registry::get('config');
         $uploadDir = $config->uploads;
-        
+
         if (!$uploadDir) {
             throw new Vps_Exception('Param "uploads" has to be set in the file application/config.ini.');
         }
-        
+
         return $uploadDir;
     }
-    
+
     public function getFileSize($uploadId)
     {
         $row = $this->find($uploadId)->current();
@@ -28,7 +28,7 @@ class Vps_Dao_File extends Vps_Db_Table
         }
         return null;
     }
-    
+
     public function generateUrl($uploadId, $id, $filename, $type = self::SHOW)
     {
         $row = $this->find($uploadId)->current();
@@ -44,14 +44,27 @@ class Vps_Dao_File extends Vps_Db_Table
             return null;
         }
     }
-    
+
+    public function getOriginalUrl($uploadId)
+    {
+        $row = $this->find($uploadId)->current();
+        $return = null;
+        if ($row) {
+            if (is_file($this->_getUploadDir() . $row->path)) {
+                $extension = substr(strrchr($row->path, '.'), 1);
+                $return = "/media/$uploadId.$extension";
+            }
+        }
+        return $return;
+    }
+
     /**
      * Wenn id==null, wird neuer Datensatz angelegt, sonst bestehender geändert.
      */
     public function uploadFile($filedata, $directory, $id = null)
     {
         $row = $id ? $this->find($id)->current() : null;
-        
+
         if ($filedata['error'] == UPLOAD_ERR_NO_FILE) {
             throw new Vps_Exception('Es wurde keine Datei hochgeladen.');
         }
@@ -68,12 +81,12 @@ class Vps_Dao_File extends Vps_Db_Table
         if (!is_dir($uploadDir) || !is_writable($uploadDir)) {
             throw new Vps_Exception('Dateiupload kann nicht in folgendes Verzeichnis schreiben: ' . $uploadDir);
         }
-        
+
         // Falls überschrieben wird, alte Datei löschen
         if ($row) {
             $this->deleteFile($id);
         }
-        
+
         // Falls Datei existiert, _1... anhängen
         $origName = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
         $extension = substr(strrchr($filedata['name'], '.'), 1);
@@ -106,7 +119,7 @@ class Vps_Dao_File extends Vps_Db_Table
         }
         return null;
     }
-    
+
     public function delete($id)
     {
         $row = $this->find($id)->current();
@@ -115,7 +128,7 @@ class Vps_Dao_File extends Vps_Db_Table
             $this->deleteFile($id);
         }
     }
-    
+
     public function deleteFile($id)
     {
         $row = $this->find($id)->current();
@@ -127,12 +140,12 @@ class Vps_Dao_File extends Vps_Db_Table
             $this->deleteCache($id);
         }
     }
-    
+
     public function deleteCache($id)
     {
         $this->_recursiveRemoveDirectory($this->_getUploadDir() . 'cache/' . $id);
     }
-    
+
     private function _recursiveRemoveDirectory( $dir )
     {
         if (is_dir($dir)) {

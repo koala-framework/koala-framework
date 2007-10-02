@@ -1,17 +1,8 @@
 <?php
 class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 {
-    private $_isOverwritten = null;
-    private $_isComponent = null;
-
-    public function isDispatchable(Zend_Controller_Request_Abstract $request)
+    public function getControllerClass(Zend_Controller_Request_Abstract $request)
     {
-        return true;
-    }
-
-    public function loadClass($className)
-    {
-        $request = $this->getFrontController()->getRequest();
         $module = $request->getModuleName();
         if ($module == 'component') {
 
@@ -37,22 +28,25 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                     }
                 }
             }
-            
+
         } else {
 
+            $className = $request->getControllerName();
             $controllerDir = $this->getFrontController()->getControllerDirectory();
             $controllerName = $request->getControllerName();
             $controllerFile = $controllerDir['default'] . '/' . $this->classToFilename(parent::formatControllerName($controllerName));
-
-            if (is_file($controllerFile)) {
-                require_once($controllerFile);
-            } else {
+            if (!is_file($controllerFile)) {
                 $className = str_replace('Controller', '', ucfirst($className));
                 $className = "Vps_Controller_Action_Component_$className";
             }
 
         }
 
+        return $className;
+    }
+
+    public function loadClass($className)
+    {
         try {
             Zend_Loader::loadClass($className);
         } catch (Zend_Exception $e) {

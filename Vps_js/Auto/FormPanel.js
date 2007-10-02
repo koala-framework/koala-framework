@@ -182,7 +182,9 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             this.getAction('delete').enable();
             this.getAction('save').enable();
         }
-
+        if (this.getForm().loadAfterSave) {
+            this.load();
+        }
     },
     onDelete : function() {
         Ext.Msg.show({

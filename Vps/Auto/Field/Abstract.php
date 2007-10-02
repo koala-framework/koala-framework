@@ -15,7 +15,7 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
     public function __call($method, $arguments)
     {
         if (substr($method, 0, 3) == 'set') {
-            if (!isset($arguments[0])) {
+            if (!isset($arguments[0]) && !is_null($arguments[0])) {
                 throw new Vps_Exception("Missing argument 1 (value)");
             }
             $name = strtolower(substr($method, 3, 1)) . substr($method, 4);
@@ -26,6 +26,11 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
         } else {
             throw new Vps_Exception("Invalid method called: '$method'");
         }
+    }
+
+    public function setXType($xtype)
+    {
+        $this->_xtype = $xtype;
     }
 
     public function setProperty($name, $value)

@@ -31,7 +31,7 @@ class Vpc_Setup_Abstract
         }
         return null;
     }
-    
+
     static public function staticSetup($componentClass)
     {
         $setup = self::createInstance($componentClass);
@@ -39,15 +39,15 @@ class Vpc_Setup_Abstract
             $setup->setup();
         }
     }
-    
+
     static public function staticDelete($componentClass, $pageId, $componentKey)
     {
         $setup = self::createInstance($componentClass);
         if ($setup) {
-            $setup->delete($pageId, $componentKey);
+            $setup->deleteEntry($pageId, $componentKey);
         }
     }
-    
+
     function createTable ($name, $fields){
         if (!$this->_tableExits($name)) {
 
@@ -113,7 +113,7 @@ class Vpc_Setup_Abstract
         }
         return $return;
     }
-    
+
     public function copyTemplate($path)
     {
         $path = 'application/views/' . $path;

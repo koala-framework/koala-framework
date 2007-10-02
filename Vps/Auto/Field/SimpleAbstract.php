@@ -22,7 +22,7 @@ abstract class Vps_Auto_Field_SimpleAbstract extends Vps_Auto_Field_Abstract
 
         if ($this->getSave() !== false) {
             $fieldName = $this->getFieldName();
-            
+
             if (isset($postData[$fieldName])) {
                 $data = $postData[$fieldName];
                 foreach($this->getValidators() as $v) {
