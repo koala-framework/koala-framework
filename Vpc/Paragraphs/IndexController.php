@@ -6,7 +6,7 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
                   'header'    => 'Vorschau',
                   'type'      => 'string',
                   'width'     => 410,
-                  'renderer'  => 'Component'),
+                  'renderer'  => 'component'),
             array('dataIndex' => 'component_class',
                   'header'    => 'Komponente',
                   'width'     => 200),

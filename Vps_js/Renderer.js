@@ -1,18 +1,16 @@
 Ext.namespace('Vps.Renderer');
 
-Vps.Renderer.Date = Ext.util.Format.dateRenderer('d.m.Y');
-
-Vps.Renderer.Boolean = function(v, p, record) {
+Ext.util.Format.boolean = function(v, p, record) {
     p.css += ' x-grid3-check-col-td'; 
     return '<div class="x-grid3-check-col'+(v?'-on':'')+'">&#160;</div>';
 };
 
-Vps.Renderer.Password = function(value)
+Ext.util.Format.password = function(value)
 {
     return value||true ? '******' : '';
 };
 
-Vps.Renderer.MoneyEuro = function(v)
+Ext.util.Format.euroMoney = function(v)
 {
     if (v == 0) return "";
     v = v.toString().replace(",", ".");
@@ -22,22 +20,23 @@ Vps.Renderer.MoneyEuro = function(v)
     return v + " €";
 };
 
-Vps.Renderer.Percent = function(v)
+Ext.util.Format.percent = function(v)
 {
     return v + "%";
 };
 
-Vps.Renderer.ShowField = function(fieldName) {
+Ext.util.Format.showField = function(fieldName) {
     return function(value, p, record) {
         return record.data[fieldName];
     };
 };
 
-Vps.Renderer.Nl2Br = function(v) {
+Ext.util.Format.nl2Br = function(v) {
     return v.replace(/\n/g, "<br />");
 };
 
-Vps.Renderer.Component = function(v) {
+Ext.util.Format.component = function(v) {
     return '<iframe height="100" width="100%" frameborder="0" style="border: 1px solid darkgrey" src="' + v + '"></iframe>';
 };
 
+Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer('d.m.Y');

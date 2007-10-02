@@ -63,7 +63,6 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         }
         this.formPanel = new Ext.FormPanel(meta.form);
         this.formPanel.on('render', function() {
-            if (!this.getForm().waitMsgTarget) this.getForm().waitMsgTarget = this.el;
             this.fireEvent('renderform', this.getForm());
         }, this);
         this.add(this.formPanel);
@@ -110,6 +109,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         if (!options) options = {};
         this.getForm().clearValues();
         this.getForm().clearInvalid();
+        this.getForm().waitMsgTarget = this.el;
         this.getForm().load(Ext.applyIf(options, {
             url: this.controllerUrl+'jsonLoad',
             waitMsg: 'Loading...',
@@ -149,6 +149,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         this.getAction('save').disable();
 
         if (!options) options = {};
+        this.getForm().waitMsgTarget = this.el;
         this.getForm().submit(Ext.applyIf(options, {
             waitMsg: 'speichern...',
             success: function(form, action) {

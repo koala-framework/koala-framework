@@ -16,7 +16,7 @@ class Vps_Auto_Field_ComboBox extends Vps_Auto_Field_SimpleAbstract
         if (isset($store['data'])) {
             $a = array();
             foreach ($store['data'] as $r) {
-                $a[] = $r[1];
+                $a[] = $r[0];
             }
             $this->addValidator(new Zend_Validate_InArray($a));
         } else if (isset($store['url'])) {
