@@ -4,10 +4,12 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
     private $_properties;
     protected $_xtype = null;
     protected $_validators = array();
+    private $_data;
 
-    public function __construct($field_name = null)
+    public function __construct($field_name = null, $field_label = null)
     {
         if ($field_name) $this->setProperty('name', $field_name);
+        if ($field_label) $this->setProperty('fieldLabel', $field_label);
     }
 
     public function __call($method, $arguments)
@@ -51,7 +53,6 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
             $ret['hiddenName'] = $this->getNamePrefix() . '_' . $ret['hiddenName'];
         }
         if (isset($ret['namePrefix'])) unset($ret['namePrefix']);
-        if (isset($ret['findParent'])) unset($ret['findParent']);
         if (!is_null($this->_xtype)) {
             $ret['xtype'] = $this->_xtype;
         }
@@ -152,5 +153,20 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
     **/
     protected function _addValidators()
     {
+    }
+
+    public function getData()
+    {
+        if (!isset($this->_data)) {
+            $this->setData(new Vps_Auto_Data_Table());
+        }
+        return $this->_data;
+    }
+
+    public function setData(Vps_Auto_Data_Interface $data)
+    {
+        $this->_data = $data;
+        $data->setFieldname($this->getName());
+        return $this;
     }
 }

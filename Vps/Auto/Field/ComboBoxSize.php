@@ -1,9 +1,9 @@
 <?php
 class Vps_Auto_Field_ComboBoxSize extends Vps_Auto_Field_ComboBox
 {
-    public function __construct()
+    public function __construct($field_name = null, $field_label = null)
     {
-        parent::__construct('size');
+        parent::__construct('size', $field_label);
     }
 
     public function setSizes($sizes)

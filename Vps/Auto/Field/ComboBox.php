@@ -3,10 +3,10 @@ class Vps_Auto_Field_ComboBox extends Vps_Auto_Field_SimpleAbstract
 {
     protected $_xtype = 'combobox';
 
-    public function __construct($field_name = null)
+    public function __construct($field_name = null, $field_label = null)
     {
         if ($field_name) $this->setProperty('hiddenName', $field_name);
-        parent::__construct(null);
+        parent::__construct(null, $field_label);
     }
 
     protected function _addValidators()
@@ -34,7 +34,7 @@ class Vps_Auto_Field_ComboBox extends Vps_Auto_Field_SimpleAbstract
         return $ret;
     }
 
-    public function setData($data)
+    public function setValues($data)
     {
         if (is_string($data)) {
             return $this->setStore(array('url' => $data));
@@ -52,23 +52,5 @@ class Vps_Auto_Field_ComboBox extends Vps_Auto_Field_SimpleAbstract
             }
             return $this->setStore(array('data' => $d));
         }
-    }
-
-//deprecated
-    public function setStoreUrl($url)
-    {
-        return $this->setData($url);
-    }
-
-//deprecated
-    public function setStoreRowset(Vps_Db_Table_Rowset $rowset)
-    {
-        return $this->setData($rowset);
-    }
-
-//deprecated
-    public function setStoreData($data)
-    {
-        return $this->setData($data);
     }
 }

@@ -4,11 +4,10 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
     autoload: true,
 
-    gridConfig: { plugins: [] },
-
     initComponent : function()
     {
         this.actions = {};
+        if (!this.gridConfig) this.gridConfig = { plugins: [] };
 
         this.layout = 'fit';
         this.border = false;
@@ -247,6 +246,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         }
 
         if (meta.filters.text) {
+//         debugger;
             if(gridConfig.tbar.length > 0) {
                 gridConfig.tbar.add('-');
             }

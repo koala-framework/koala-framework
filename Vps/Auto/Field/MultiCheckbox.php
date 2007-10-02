@@ -5,10 +5,11 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
     protected $_fields;
     protected $_xtype = 'fieldset';
 
-    public function __construct($tableName = null)
+    public function __construct($tableName = null, $title = null)
     {
         parent::__construct();
         $this->setTableName($tableName);
+        if ($title) $this->setTitle($title);
     }
 
     public function getMetaData()
@@ -30,9 +31,9 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
     {
         if (!isset($this->_fields)) {
             $this->_fields = new Vps_Collection();
-            $info = $this->getData()->getTable()->info();
+            $info = $this->getValues()->getTable()->info();
             $pk = $info['primary'][1];
-            foreach ($this->getData() as $i) {
+            foreach ($this->getValues() as $i) {
                 $k = $i->$pk;
                 if (!is_string($i)) $i = $i->__toString();
                 $this->_fields->add(new Vps_Auto_Field_Checkbox($this->getName()."[$k]"))
@@ -66,7 +67,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
         if ((array)$row == array()) return array();
 
         $selected = $row->findDependentRowset($this->getTableName());
-        $ref = $selected->getTable()->getReference(get_class($this->getData()->getTable()));
+        $ref = $selected->getTable()->getReference(get_class($this->getValues()->getTable()));
         $key = $ref['columns'][0];
 
         $selectedIds = array();
@@ -93,7 +94,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
         $ref = $saved->getTable()->getReference(get_class($row->getTable()));
         $key1 = $ref['columns'][0];
         
-        $ref = $saved->getTable()->getReference(get_class($this->getData()->getTable()));
+        $ref = $saved->getTable()->getReference(get_class($this->getValues()->getTable()));
         $key2 = $ref['columns'][0];
 
         $avaliableKeys = array();

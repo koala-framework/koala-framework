@@ -5,6 +5,7 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
     const ROLE_DISPLAY = 1;
     const ROLE_EXPORT = 2;
     const ROLE_PDF = 3;
+    private $_data;
 
     public function __construct($dataIndex = null, $header = null, $width = null)
     {
@@ -87,13 +88,9 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
         return $ret;
     }
 
-    public function getData($row, $role)
+    public function load($row, $role)
     {
-        $dataIndex = $this->getDataIndex();
-        if (!is_null($row->$dataIndex) && !isset($row->$dataIndex)) {
-            throw new Vps_Exception("Index '$dataIndex' not found in row");
-        }
-        return $row->$dataIndex;
+        return $this->getData()->load($row);
     }
 
     public function getName() {
@@ -131,5 +128,20 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
         if ($this->getEditor()) {
             $this->getEditor()->save($row, $submitRow);
         }
+    }
+
+    public function getData()
+    {
+        if (!isset($this->_data)) {
+            $this->setData(new Vps_Auto_Data_Table());
+        }
+        return $this->_data;
+    }
+
+    public function setData(Vps_Auto_Data_Interface $data)
+    {
+        $this->_data = $data;
+        $data->setFieldname($this->getDataIndex());
+        return $this;
     }
 }
