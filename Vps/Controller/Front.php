@@ -70,7 +70,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
 
             $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/:action/:class/:componentId', array('module' => 'admin', 'controller' => 'components', 'action' => 'show')));
             $router->AddRoute('componentedit', new Zend_Controller_Router_Route('component/edit/:class/:componentId/:action', array('module' => 'component', 'controller' => 'Index', 'action' => 'index')));
-            $router->AddRoute('media', new Zend_Controller_Router_Route('media/:uploadId/:componentId/:checksum/:filename', array('controller' => 'Media', 'action' => 'index')));
+            $router->AddRoute('media', new Zend_Controller_Router_Route('media/:uploadId/:componentId/:checksum/:filename', array('controller' => 'Media', 'action' => 'password')));
             $router->AddRoute('mediaoriginal', new Zend_Controller_Router_Route('media/:uploadId', array('controller' => 'Media', 'action' => 'original')));
 
             $plugin = new Zend_Controller_Plugin_ErrorHandler();
@@ -89,6 +89,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
             // Resources
             $acl->add(new Zend_Acl_Resource('web'));
             $acl->add(new Zend_Acl_Resource('media'));
+            $acl->add(new Zend_Acl_Resource('mediaoriginal'));
             $acl->add(new Zend_Acl_Resource('fe'));
             $acl->add(new Vps_Acl_Resource_MenuDropdown('admin', 'Admin'));
             $acl->add(new Vps_Acl_Resource_MenuCommand(
@@ -110,6 +111,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $acl->allow('member', 'fe');
             $acl->allow('guest', 'web');
             $acl->allow('guest', 'media');
+            $acl->allow('admin', 'mediaoriginal');
 
             Zend_Registry::set('acl', $acl);
         }
