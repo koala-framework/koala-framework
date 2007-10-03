@@ -5,35 +5,39 @@
         {/foreach}
     </head>
     <body>
-        <div id="ext-gen25" class="x-dlg x-dlg-resizable x-resizable-pinned x-dlg-draggable" style="width: 100%; height: 100%; left: 0px; top: 0px; visibility: visible; z-index: 9002;">
-            <div class="x-dlg-dlg-body" id="ext-gen33" style="left: 0px; top: 0px; width:100%; height:100%; border:0px">
-                <form class="x-form" method="post" id="ext-gen81" action="/login/showForm">
-                    <div style="overflow: auto; height: 60px; width: 288px;" id="ext-gen28" class="x-dlg-bd">
-                        <div class="x-form-ct" id="ext-gen70">
-                            <div class="x-form-item">
-                                <label for="ext-comp-1001" style="width: 110px;">Benutzername:</label>
-                                <div class="x-form-element" id="x-form-el-ext-comp-1001" style="padding-left: 115px;">
-                                    <input style="width: 150px;" class="x-form-text x-form-field" size="20" autocomplete="on" id="ext-comp-1001" name="username" type="text" value="{$username}">
-                                </div>
-                            </div>
-                            <div class="x-form-clear-left"></div>
-                            <div class="x-form-item">
-                                <label for="ext-comp-1002" style="width: 110px;">Passwort:</label>
-                                <div class="x-form-element" id="x-form-el-ext-comp-1002" style="padding-left: 115px;">
-                                    <input style="width: 150px;" class="x-form-text x-form-field" size="20" autocomplete="on" id="ext-comp-1002" name="password" type="password">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="x-dlg-ft" id="ext-gen71">
-                            <div class="x-dlg-btns x-dlg-btns-right" style="margin-left:220px">
-                                <input type="submit" class="x-btn-text" id="ext-gen74" value="Login">
-                                <div class="x-clear"></div>
-                            </div>
-                            <div class="x-form-item">{$text}</div>
+
+        <div class="x-panel-bwrap" id="ext-gen12">
+            <form id="ext-gen34" method="post" class="x-form" action="/login/showForm">
+                <div class="x-panel-mc" style="padding: 10px; height:100%">
+                    <div tabindex="-1" class="x-form-item">
+                        <label class="x-form-item-label" style="width: 75px;" for="ext-comp-1004">Username:</label>
+                        <div style="padding-left: 80px;" id="x-form-el-ext-comp-1004" class="x-form-element">
+                            <input type="text" name="username" autocomplete="on" size="20" class="x-form-text x-form-field" style="width: 180px;"/>
                         </div>
                     </div>
-                </form>
-            </div>
+                    <div tabindex="-1" class="x-form-item">
+                        <label class="x-form-item-label" style="width: 75px;" for="ext-comp-1004">Password:</label>
+                        <div style="padding-left: 80px;" id="x-form-el-ext-comp-1004" class="x-form-element">
+                            <input type="password" name="password" autocomplete="on" size="20" class="x-form-text x-form-field" style="width: 180px;"/>
+                        </div>
+                    </div>
+                    <div tabindex="-1" class="x-form-item"></div>
+                    <div class="x-form-clear-left"></div>
+                    <table cellspacing="0" cellpadding="0" border="0" class="x-btn-wrap x-btn" id="ext-comp-1008" style="margin-left:184px; margin-top:20px; width: 75px;">
+                        <tbody>
+                            <tr>
+                                <td class="x-btn-left"></td>
+                                <td class="x-btn-center">
+                                    <button type="submit" class="x-btn-text" id="ext-gen18">Login</button>
+                                </td>
+                                <td class="x-btn-right"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="x-clear"></div>
+                </div>
+            </form>
         </div>
+
     </body>
 </html>
