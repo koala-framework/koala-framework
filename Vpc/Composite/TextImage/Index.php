@@ -14,10 +14,15 @@ class Vpc_Composite_TextImage_Index extends Vpc_Abstract
         return $return;
     }
 
-    public function init ()
+    public function init()
     {
         $this->text = $this->createComponent('Vpc_Basic_Text_Index', 1);
         $this->image = $this->createComponent('Vpc_Basic_Image_Index', 2);
+    }
+
+    public function getChildComponents()
+    {
+        return array($this->text, $this->image);
     }
 
 }
