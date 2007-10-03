@@ -71,6 +71,8 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                 subMenu.scope = this;
                 subMenu.commandClass = m.commandClass;
                 subMenu.commandConfig = m.commandConfig;
+            } else if (m.type == 'separator') {
+                subMenu = '-';
             } else {
                 throw "unknown menu-type: "+m.type;
             }

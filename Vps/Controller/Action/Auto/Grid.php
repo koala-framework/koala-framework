@@ -271,7 +271,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         else if ($type == 'decimal') $type = 'float';
         else if (substr($type, 0, 6) == 'double') $type = 'float';
         else if ($type == 'time') $type = ''; //auto
-        else $Type = ''; //auto
+        else $type = ''; //auto
         return $type;
     }
 

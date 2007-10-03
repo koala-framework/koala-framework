@@ -85,10 +85,6 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
     public function jsonSaveAction()
     {
-        if(!isset($this->_permissions['save']) || !$this->_permissions['save']) {
-            throw new Vps_Exception('Save is not allowed.');
-        }
-
         $row = $this->_form->getRow();
         if (!$this->_hasPermissions($row, 'save')) {
             throw new Vps_Exception("Save is not allowed for this row.");
@@ -96,25 +92,34 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
         $data = $this->_form->prepareSave(null, $this->getRequest()->getParams());
 
+        $insert = false;
+
         if ($row) {
-            $this->_beforeSave($row);
             $primaryKey = $this->_form->getPrimaryKey();
             if (is_array($primaryKey)) $primaryKey = $primaryKey[1];
             if (!$row->$primaryKey) {
+                $insert = true;
+            }
+            if ($insert) {
                 if(!isset($this->_permissions['add']) || !$this->_permissions['add']) {
                     throw new Vps_Exception('Add is not allowed.');
                 }
                 $this->_beforeInsert($row);
+            } else {
+                if(!isset($this->_permissions['save']) || !$this->_permissions['save']) {
+                    throw new Vps_Exception('Save is not allowed.');
+                }
             }
+            $this->_beforeSave($row);
         }
 
         $data = $this->_form->save(null);
 
         if ($row) {
-            $this->_afterSave($row);
-            if (!$row->$primaryKey) {
-                $this->afterInsert($row);
+            if ($insert) {
+                $this->_afterInsert($row);
             }
+            $this->_afterSave($row);
         }
 
         $this->view->data = $data;
