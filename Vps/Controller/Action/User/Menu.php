@@ -45,6 +45,8 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
                     $menu['type'] = 'command';
                     $menu['commandClass'] = $resource->getMenuCommandClass();
                     $menu['commandConfig'] = $resource->getMenuCommandConfig();
+                } else if ($resource instanceof Vps_Acl_Resource_MenuSeparator) {
+                    $menu['type'] = 'separator';
                 } else {
                     throw new Vps_Exception("Unknown resource-type '".get_class($resource)."'");
                 }

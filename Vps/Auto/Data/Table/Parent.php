@@ -20,6 +20,7 @@ class Vps_Auto_Data_Table_Parent extends Vps_Auto_Data_Table
         }
         foreach ($tables as $t) {
             $row = $row->findParentRow($t);
+            if (!$row) return '';
         }
         if (!$this->_dataIndex) {
             return $row->__toString();

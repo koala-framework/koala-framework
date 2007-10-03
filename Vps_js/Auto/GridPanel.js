@@ -129,7 +129,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             var column = meta.columns[i];
             if (!column.header) continue;
 
-            if (column.editor && column.editor.type == 'Checkbox') {
+            if (column.editor && column.editor.xtype == 'checkbox') {
                 delete column.editor;
                 if (column.renderer) delete column.renderer;
                 column = new Ext.grid.CheckColumn(column);
@@ -159,7 +159,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                     throw "invalid renderer: "+column.renderer;
                 }
             } else if (column.showDataIndex) {
-                column.renderer = Vps.Renderer.ShowField(column.showDataIndex);
+                column.renderer = Ext.util.Format.showField(column.showDataIndex);
             }
 
             if (column.defaultValue) delete column.defaultValue;
@@ -394,11 +394,15 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
         this.el.mask('Saving...');
 
-        var params = this.loadParams || {};
+        var params = this.baseParams || {};
         params.data = Ext.util.JSON.encode(data);
         return params;
     },
-    onSave : function(callback, addParams)
+    onSave : function()
+    {
+        this.submit();
+    },
+    submit : function(callback, addParams)
     {
         this.getAction('save').disable();
         var params = this.getSaveParams();
@@ -503,10 +507,11 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         this.store.reload();
         this.store.commitChanges();
     },
-    load : function(params) {
-        if(!params) params = {};
-        this.loadParams = params; //submit them again on save
-        this.getStore().load({params:params});
+    load : function(baseParams) {
+        if (baseParams) {
+            this.setBaseParams(baseParams);
+        }
+        this.getStore().load({params: this.baseParams});
     },
     enable: function() {
         this.getAction('add').enable();
@@ -515,7 +520,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         for (var i in this.actions) {
             this.actions[i].disable();
         }
-        this.store.removeAll();
+        if (this.store) this.store.removeAll();
     },
     getGrid : function() {
         return this.grid;
@@ -528,5 +533,14 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     },
     getStore : function() {
         return this.store;
+    },
+    getEditDialog : function() {
+        return this.editDialog;
+    },
+    setBaseParams : function(baseParams) {
+        this.baseParams = baseParams;
+        if (this.editDialog && this.editDialog.getForm()) {
+            this.editDialog.getForm().baseParams = baseParams;
+        }
     }
 });

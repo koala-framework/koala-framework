@@ -2,7 +2,7 @@
 class Vps_Controller_Action_User_Users_RoleColumn extends Vps_Auto_Grid_Column
 {
     private $_roles;
-    public function getData($row, $role)
+    public function load($row, $role)
     {
         if (isset($this->_roles[$row->role])) {
             return $this->_roles[$row->role];
@@ -36,7 +36,6 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
         }
 
         $this->_columns->add(new Vps_Auto_Grid_Column('active', 'Active', 40))
-                ->setRenderer('Boolean')
                 ->setEditor(new Vps_Auto_Field_Checkbox());
         $this->_columns->add(new Vps_Auto_Grid_Column('username', 'Username', 140))
                 ->setEditor(new Vps_Auto_Field_TextField());
@@ -45,7 +44,7 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
                              ->setRoles($roles);
 
         $editor = new Vps_Auto_Field_ComboBox();
-        $editor->setStore($roles)
+        $editor->setValues($roles)
                ->setEditable(false)
                ->setTriggerAction('all')
                ->setLazyRender(true);
@@ -61,7 +60,7 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
                 ->getEditor()->setVtype('email');
             
         $this->_columns->add(new Vps_Auto_Grid_Column('password_mailed', 'Password mailed', 40))
-                ->setRenderer('Boolean');
+                ->setRenderer('boolean');
     }
 
     public function indexAction()
