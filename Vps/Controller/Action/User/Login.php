@@ -4,10 +4,8 @@ class Vps_Controller_Action_User_Login extends Vps_Controller_Action
     public function indexAction()
     {
         $location = $this->_getParam('location');
-        $controllerUrl = $this->_getParam('controllerUrl');
-        if (!$controllerUrl) { $controllerUrl = ''; }
         if ($location == '') { $location = '/'; }
-        $config = array('location' => $location, 'controllerUrl' => $controllerUrl);
+        $config = array('location' => $location);
         $this->view->ext('Vps.User.Login.Index', $config);
     }
 

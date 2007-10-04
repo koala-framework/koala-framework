@@ -48,7 +48,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
             } else if (m.type == 'commandDialog') {
                 subMenu.handler = function(o) {
                                 var c = eval(o.commandClass);
-                                var dlg = new c(null, o.commandConfig);
+                                var dlg = new c(o.commandConfig);
                                 dlg.show();
                             };
                 subMenu.scope = this;
@@ -85,7 +85,8 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
         if (this.items.getCount() > 0) {
             //tolbar komplett löschen und neu erstellen
             this.destroy();
-            this.render(this.renderTo);
+            this.render();
+            this.items.clear();
         }
         var response = Ext.decode(r.responseText);
         Vps.Menu.userRole = response.userRole;
@@ -125,7 +126,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                     Ext.Ajax.request({
                         url : '/login/jsonLogoutUser',
                         success : function(form, action) {
-                            this.reload();
+                            location.reload();
                         },
                         scope: this
                     });
