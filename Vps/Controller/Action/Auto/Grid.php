@@ -158,7 +158,13 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (!isset($this->_table)) {
             throw new Vps_Exception("Either _table has to be set or _fetchData has to be overwritten.");
         }
-        return $this->_table->fetchAll($this->_getWhere(), $order, $limit, $start);
+
+        $where = $this->_getWhere();
+
+        //wenn getWhere null zurückliefert nichts laden
+        if (is_null($where)) return null;
+
+        return $this->_table->fetchAll($where, $order, $limit, $start);
     }
 
     private function _getTableInfo()
@@ -178,6 +184,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $select->from($info['name'], 'COUNT(*)', $info['schema']);
 
         $where = (array) $this->_getWhere();
+        if (is_null($where)) return 0;
+
         foreach ($where as $key => $val) {
             // is $key an int?
             if (is_int($key)) {

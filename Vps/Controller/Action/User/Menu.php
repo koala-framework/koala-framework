@@ -73,5 +73,6 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
         $this->view->menus = $menus;
         $this->view->showLogout = $showLogout;
         $this->view->userRole = $this->_getUserRole();
+        $this->view->authData = $this->_getAuthData();
     }
 }

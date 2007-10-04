@@ -106,8 +106,19 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
             this.add(menuItem);
         }, this);
 
+        this.add(new Ext.Toolbar.Fill());
+        if (response.authData && response.authData.realname) {
+            this.add({
+                text: response.authData.realname,
+                cls: 'x-btn-text-icon',
+                icon: '/assets/vps/images/silkicons/user.png',
+                handler: function() {
+                    //todo: display user settings dialog
+                },
+                scope: this
+            });
+        }
         if (response.showLogout) {
-            this.add(new Ext.Toolbar.Fill());
             this.add({
                 text: 'Logout',
                 handler: function() {

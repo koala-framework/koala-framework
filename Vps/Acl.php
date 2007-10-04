@@ -3,15 +3,16 @@ class Vps_Acl extends Zend_Acl
 {
     public function __construct()
     {
+        $this->addRole(new Zend_Acl_Role('guest'));
+
         $this->add(new Zend_Acl_Resource('index'));
         $this->add(new Zend_Acl_Resource('menu'));
         $this->add(new Zend_Acl_Resource('login'));
         $this->add(new Zend_Acl_Resource('error'));
-        $this->addRole(new Zend_Acl_Role('guest'));
-        $this->allow('guest', 'index');
-        $this->allow('guest', 'login');
-        $this->allow('guest', 'error');
-        $this->allow('guest', 'menu');
+        $this->allow(null, 'index');
+        $this->allow(null, 'login');
+        $this->allow(null, 'error');
+        $this->allow(null, 'menu');
     }
 
     public function getResources($parent = null)
