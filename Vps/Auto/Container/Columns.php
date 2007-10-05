@@ -12,10 +12,7 @@ class Vps_Auto_Container_Columns extends Vps_Auto_Container_Abstract
     public function getMetaData()
     {
         $ret = parent::getMetaData();
-        $ret['items'] = array();
-        foreach ($this->columns as $field) {
-            $ret['items'][] = $field->getMetaData();
-        }
+        $ret['items'] = $this->columns->getMetaData();
         if (!isset($ret['layout'])) $ret['layout'] = 'column';
         if (!isset($ret['border'])) $ret['border'] = false;
         if (!isset($ret['baseCls'])) $ret['baseCls'] = 'x-plain';
