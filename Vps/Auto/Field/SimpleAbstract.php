@@ -27,7 +27,9 @@ abstract class Vps_Auto_Field_SimpleAbstract extends Vps_Auto_Field_Abstract
                 $data = $postData[$fieldName];
                 foreach($this->getValidators() as $v) {
                     if (!$v->isValid($data)) {
-                        throw new Vps_ClientException(implode("<br />\n", $v->getMessages()));
+                        if ($this->getFieldLabel()) $name = $this->getFieldLabel();
+                        if ($this->getFieldLabel()) $name = $this->getName();
+                        throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages()));
                     }
                 }
                 $this->getData()->save($row, $data);

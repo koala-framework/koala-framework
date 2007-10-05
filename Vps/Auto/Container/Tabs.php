@@ -6,20 +6,16 @@ class Vps_Auto_Container_Tabs extends Vps_Auto_Container_Abstract
 
     public function __construct($name = null)
     {
-        $this->tabs = new Vps_Collection('Vps_Auto_Container_Tab');
         parent::__construct($name);
+        $this->tabs = new Vps_Collection('Vps_Auto_Container_Tab');
+        $this->setDeferredRender(false);
+        $this->setBaseCls('x-plain');
     }
 
     public function getMetaData()
     {
         $ret = parent::getMetaData();
-        $ret['items'] = array();
-        foreach ($this->tabs as $field) {
-            $ret['items'][] = $field->getMetaData();
-        }
-        if (!isset($ret['defaults']['autoHeight'])) $ret['defaults']['autoHeight'] = true;
-        if (!isset($ret['defaults']['bodyStyle'])) $ret['defaults']['bodyStyle'] = 'padding:10px';
-        if (!isset($ret['baseCls'])) $ret['baseCls'] = 'x-plain';
+        $ret['items'] = $this->tabs->getMetaData();
         return $ret;
     }
 

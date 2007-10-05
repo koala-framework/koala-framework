@@ -17,10 +17,7 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract
     public function getMetaData()
     {
         $ret = parent::getMetaData();
-        $ret['items'] = array();
-        foreach ($this->fields as $field) {
-            $ret['items'][] = $field->getMetaData();
-        }
+        $ret['items'] = $this->fields->getMetaData();
         return $ret;
     }
 

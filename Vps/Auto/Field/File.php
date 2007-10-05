@@ -3,9 +3,10 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
 {
     private $_fields;
 
-    public function __construct($fieldname = null, $title = '')
+    public function __construct($fieldname = null, $title = null)
     {
-        parent::__construct($fieldname, $title);
+        parent::__construct($fieldname);
+        $this->setFileFieldLabel($title);
         $this->setLayout('form');
         $this->setBorder(false);
         $this->setBaseCls('x-plain');
@@ -15,8 +16,10 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
     {
         if (!isset($this->_fields)) {
             $this->_fields = new Vps_Collection();
+            $title = $this->getFileFieldLabel();
+            if (!$title) $title = 'Upload new File';
             $this->_fields->add(new Vps_Auto_Field_TextField($this->getName(), 'Upload new File'))
-                ->setFieldLabel('Upload new File')
+                ->setFieldLabel($title)
                 ->setInputType('file');
             $this->_fields->add(new Vps_Auto_Field_Checkbox($this->getName() . '_delete', 'Existing File'))
                 ->setFieldLabel('Existing File')
@@ -29,10 +32,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
     public function getMetaData()
     {
         $ret = parent::getMetaData();
-        $ret['items'] = array();
-        foreach ($this->_getFields() as $field) {
-            $ret['items'][] = $field->getMetaData();
-        }
+        $ret['items'] = $this->_getFields()->getMetaData();
         return $ret;
     }
 
@@ -55,7 +55,11 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         $fileTable = new Vps_Dao_File();
 
         if ($row->$name == 0 && (!isset($file['error']) || $file['error'] == UPLOAD_ERR_NO_FILE)) {
-            throw new Vps_ClientException('Please select a file');
+            if (!is_null($this->getAllowBlank()) && $this->getAllowBlank() == false) {
+                throw new Vps_ClientException('Please select a file');
+            } else {
+                return;
+            }
         }
 
         if (isset($postData[$name . '_delete']) && $postData[$name . '_delete'] == '1') {

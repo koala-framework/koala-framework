@@ -126,7 +126,9 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                     Ext.Ajax.request({
                         url : '/login/jsonLogoutUser',
                         success : function(form, action) {
-                            location.reload();
+                            //nicht reload, weil user nach erneutem login vielleicht
+                            //die aktuelle seite gar nicht mehr sehen darf
+                            location.href = '/'; 
                         },
                         scope: this
                     });

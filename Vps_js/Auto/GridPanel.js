@@ -98,7 +98,8 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             clicksToEdit: 1,
             loadMask: true,
             plugins: [],
-            tbar: []
+            tbar: [],
+            listeners: { scope: this }
         });
 
         if (meta.grouping) {
@@ -124,6 +125,8 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             });
         }
 
+        this.comboBoxes = [];
+
         var config = [];
         for (var i=0; i<meta.columns.length; i++) {
             var column = meta.columns[i];
@@ -140,11 +143,10 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                 column.editor = new Ext.grid.GridEditor(Ext.ComponentMgr.create(column.editor, 'textfield'));
                 var field = column.editor.field;
                 if(field instanceof Ext.form.ComboBox) {
-                    this.on('validateedit', function(e) {
-                        if(e.field == this.column.dataIndex){
-                            e.record.data[this.column.showDataIndex] = this.field.getRawValue();
-                        }
-                    }, {field: field, column: column});
+                    this.comboBoxes.push({
+                        field: field,
+                        column: column
+                    });
                 }
             }
 
@@ -167,6 +169,15 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             config.push(column);
         }
         gridConfig.colModel = new Ext.grid.ColumnModel(config);
+
+        this.gridConfig.listeners.validateedit = function(e) {
+            this.comboBoxes.each(function(box) {
+                if(e.field == box.column.dataIndex && box.column.showDataIndex) {
+                    e.record.data[box.column.showDataIndex] = box.field.getRawValue();
+                }
+            }, this);
+        };
+
 
         /* * Für DD
         var ddrow = new Ext.dd.DropTarget(this.grid.container, {
