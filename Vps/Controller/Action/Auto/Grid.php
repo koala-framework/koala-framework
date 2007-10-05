@@ -530,4 +530,97 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->getResponse()->setHeader('Content-Type', 'application/pdf')
                             ->setBody($pdf->render());
     }
+
+    private function _getExportData()
+    {
+        $order = trim($this->_defaultOrder['field'].' '.$this->_defaultOrder['direction']);
+        $rowSet = $this->_fetchData($order, null, null);
+
+        if (!is_null($rowSet)) {
+            // $exportData = array( row => array( col => 'data' ) )
+            // Index 0 reserved for column headers
+            $exportData = array(0 => array());
+            foreach ($rowSet as $row) {
+                if (is_array($row)) {
+                    $row = (object)$row;
+                }
+
+                $columns = $headerColumns = array();
+                foreach ($this->_columns as $column) {
+                    $currentColumnHeader = $column->getHeader();
+                    if (!is_null($currentColumnHeader)) {
+                        $columnsHeader[] = $currentColumnHeader;
+                        $columns[] = $column->load($row, Vps_Auto_Grid_Column::ROLE_EXPORT);
+                    }
+                }
+
+                $exportData[] = $columns;
+            }
+
+            $exportData[0] = $columnsHeader;
+        } else {
+            return null;
+        }
+
+        return $exportData;
+    }
+
+    public function csvAction()
+    {
+        if (!isset($this->_permissions['csv']) || !$this->_permissions['csv']) {
+            throw new Vps_Exception("CSV is not allowed.");
+        }
+
+        $data = $this->_getExportData();
+
+        if (!is_null($data)) {
+            $csvRows = array();
+            foreach ($data as $row => $cols) {
+                $cols = str_replace('"', '""', $cols);
+                $csvRows[] = '"'. implode('";"', $cols) .'"';
+            }
+
+            $csvReturn = implode("\r\n", $csvRows);
+        }
+
+        $this->_helper->viewRenderer->setNoRender();
+        $this->getResponse()->setHeader('Content-Description', 'File Transfer')
+                            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')
+                            ->setHeader('Content-Type', 'text/csv')
+                            ->setHeader('Content-Disposition', 'attachment; filename="csv_export_'.date('Y-m-d_Hi').'.csv"')
+                            ->setBody($csvReturn);
+    }
+
+    public function xlsAction()
+    {
+        if (!isset($this->_permissions['xls']) || !$this->_permissions['xls']) {
+            throw new Vps_Exception("XLS is not allowed.");
+        }
+        require_once 'Spreadsheet/Excel/Writer.php';
+
+        $xls = new Spreadsheet_Excel_Writer();
+        $xls->setVersion(8);
+        $xls->send('xls_export_'.date('Y-m-d_Hi').'.xls');
+
+        $sheet = $xls->addWorksheet('Export '. date('d.m.Y, H:i'));
+        $sheet->setInputEncoding('UTF-8');
+
+        $data = $this->_getExportData();
+        if (!is_null($data)) {
+            foreach ($data as $row => $cols) {
+                foreach ($cols as $col => $text) {
+                    if ($row == 0) {
+                        $format = $xls->addFormat();
+                        $format->setBold();
+                        $sheet->write($row, $col, $text, $format);
+                    } else {
+                        $sheet->write($row, $col, $text);
+                    }
+                }
+            }
+        }
+
+        $xls->close();
+        $this->_helper->viewRenderer->setNoRender();
+    }
 }

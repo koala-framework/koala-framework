@@ -244,7 +244,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         }
 
         if (meta.filters.text) {
-//         debugger;
             if(gridConfig.tbar.length > 0) {
                 gridConfig.tbar.add('-');
             }
@@ -263,6 +262,15 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                 }, this, {buffer: 500});
             }, this);
             delete meta.filters.text;
+        }
+
+        if (meta.buttons.csv) {
+            gridConfig.tbar.add('->');
+            gridConfig.tbar.add(this.getAction('csv'));
+        }
+        if (meta.buttons.xls) {
+            gridConfig.tbar.add('->');
+            gridConfig.tbar.add(this.getAction('xls'));
         }
 
         for(var filter in meta.filters) {
@@ -367,6 +375,22 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                 icon    : '/assets/vps/images/silkicons/printer.png',
                 cls     : 'x-btn-text-icon',
                 handler : this.onPdf,
+                scope: this
+            });
+        } else if (type == 'csv') {
+            this.actions[type] = new Ext.Action({
+                text    : 'CSV Export',
+                icon    : '/assets/vps/images/silkicons/page_code.png',
+                cls     : 'x-btn-text-icon',
+                handler : this.onCsv,
+                scope: this
+            });
+        } else if (type == 'xls') {
+            this.actions[type] = new Ext.Action({
+                text    : 'Excel Export',
+                icon    : '/assets/vps/images/silkicons/page_excel.png',
+                cls     : 'x-btn-text-icon',
+                handler : this.onXls,
                 scope: this
             });
         } else {
@@ -493,6 +517,14 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     onPdf : function()
     {
         window.open(this.controllerUrl+'pdf');
+    },
+    onCsv : function()
+    {
+        window.open(this.controllerUrl+'csv');
+    },
+    onXls : function()
+    {
+        window.open(this.controllerUrl+'xls');
     },
     getSelected: function() {
         return this.getSelectionModel().getSelected();
