@@ -545,7 +545,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                     $row = (object)$row;
                 }
 
-                $columns = $headerColumns = array();
+                $columns = $columnsHeader = array();
                 foreach ($this->_columns as $column) {
                     $currentColumnHeader = $column->getHeader();
                     if (!is_null($currentColumnHeader)) {
