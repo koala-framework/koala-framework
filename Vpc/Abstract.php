@@ -482,12 +482,12 @@ abstract class Vpc_Abstract implements Vpc_Interface
     protected function _getTable($tablename = '')
     {
         if ($tablename == '') {
-          $tablename = $this->_tablename;
+            $tablename = $this->_tablename;
         }
         try {
-          return $this->_dao->getTable($tablename);
+            return $this->_dao->getTable($tablename);
         } catch (Vps_Dao_Exception $e) {
-          return null;
+            return null;
         }
     }
 

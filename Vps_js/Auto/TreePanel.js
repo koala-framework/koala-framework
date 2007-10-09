@@ -56,8 +56,8 @@ Vps.Auto.TreePanel = Ext.extend(Ext.Panel, {
 
         this.tree.getSelectionModel().on('selectionchange', this.onSelectionchange, this);
         this.tree.on('beforenodedrop', this.onMove, this);
-        this.tree.on('collapsenode', this.onCollapse, this);
-        this.tree.on('expandnode', this.onExpand, this);
+        this.tree.on('collapsenode', this.onCollapseNode, this);
+        this.tree.on('expandnode', this.onExpandNode, this);
 
         this.add(this.tree);
         this.doLayout();
@@ -202,14 +202,14 @@ Vps.Auto.TreePanel = Ext.extend(Ext.Panel, {
         return true;
     },
 
-    onCollapse : function(node) {
+    onCollapseNode : function(node) {
         Ext.Ajax.request({
             url: this.controllerUrl + 'jsonCollapse',
             params: {id: node.id}
         });
     },
 
-    onExpand : function(node) {
+    onExpandNode : function(node) {
         if (!node.attributes.children) {
             Ext.Ajax.request({
                 url: this.controllerUrl + 'jsonExpand',
@@ -289,7 +289,7 @@ Vps.Auto.TreePanel = Ext.extend(Ext.Panel, {
                 cls     : 'x-btn-icon',
                 scope   : this
             });
-        } else if (type == 'expand') {
+        } else if (type == 'expandAll') {
             this.actions[type] = new Ext.Action({
                 text    : '',
                 handler : function () { this.tree.expandAll(); },
@@ -297,7 +297,7 @@ Vps.Auto.TreePanel = Ext.extend(Ext.Panel, {
                 cls     : 'x-btn-icon',
                 scope   : this
             });
-        } else if (type == 'collapse') {
+        } else if (type == 'collapseAll') {
             this.actions[type] = new Ext.Action({
                 text    : '',
                 handler : function () { this.tree.collapseAll(); },

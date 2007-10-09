@@ -14,6 +14,10 @@ class Vps_Media_Image
             return false;
         }
 
+        if ($style == '') {
+            $style = self::SCALE_BESTFIT;
+        }
+
         $im = new Imagick();
         $im->readImage($source);
 

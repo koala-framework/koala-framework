@@ -3,6 +3,11 @@ class Vps_Controller_Action extends Zend_Controller_Action
 {
     protected $_auth = false;
 
+    public function jsonIndexAction()
+    {
+        $this->indexAction();
+    }
+
     public function preDispatch()
     {
         $acl = $this->_getAcl();
