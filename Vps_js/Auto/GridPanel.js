@@ -10,7 +10,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
 
         this.layout = 'fit';
-        this.border = false;
 
 //         if(this.autoload) {
         //todo: wos bosiat bei !autoload
@@ -43,6 +42,8 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         this.metaData = meta;
 
         if (!this.store) {
+            var remoteSort = false;
+            if (meta.paging) remoteSort = true;
             var storeConfig = {
                 proxy: new Ext.data.HttpProxy({url: this.controllerUrl + 'jsonData'}),
                 reader: new Ext.data.JsonReader({
@@ -51,7 +52,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                     id: meta.id,
                     sucessProperty: meta.successProperty
                 }, meta.fields),
-                remoteSort: true,
+                remoteSort: remoteSort,
                 sortInfo: meta.sortInfo
             };
             if (meta.grouping) {
@@ -96,6 +97,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             store: this.store,
             selModel: this.selModel,
             clicksToEdit: 1,
+            border: false,
             loadMask: true,
             plugins: [],
             tbar: [],
@@ -166,6 +168,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
             if (column.defaultValue) delete column.defaultValue;
             if (column.dateFormat) delete column.dateFormat;
+            if (typeof column.sortable == 'undefined') column.sortable = meta.sortable;
             config.push(column);
         }
         gridConfig.colModel = new Ext.grid.ColumnModel(config);
@@ -247,13 +250,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         if (meta.buttons['delete']) {
             gridConfig.tbar.add(this.getAction('delete'));
         }
-        if (meta.buttons.pdf) {
-            if(gridConfig.tbar.length > 0) {
-                gridConfig.tbar.add('-');
-            }
-            gridConfig.tbar.add(this.getAction('pdf'));
-        }
-
         if (meta.filters.text) {
             if(gridConfig.tbar.length > 0) {
                 gridConfig.tbar.add('-');
@@ -273,15 +269,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                 }, this, {buffer: 500});
             }, this);
             delete meta.filters.text;
-        }
-
-        if (meta.buttons.csv) {
-            gridConfig.tbar.add('->');
-            gridConfig.tbar.add(this.getAction('csv'));
-        }
-        if (meta.buttons.xls) {
-            gridConfig.tbar.add('->');
-            gridConfig.tbar.add(this.getAction('xls'));
         }
 
         for(var filter in meta.filters) {
@@ -309,7 +296,43 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                     this.store.baseParams['query_'+filter] = record.id;
                     this.load({start:0});
                 }, this);
+            } else if (meta.filters[filter].type == 'DateRange') {
+                var fieldFrom = new Vps.Form.DateField({
+                    width: 80,
+                    value: meta.filters[filter].from
+                });
+                var fieldTo = new Vps.Form.DateField({
+                    width: 80,
+                    value: meta.filters[filter].to
+                });
+                gridConfig.tbar.add(fieldFrom);
+                gridConfig.tbar.add(' - ');
+                gridConfig.tbar.add(fieldTo);
+                gridConfig.tbar.add(new Ext.Button({
+                    text: '»',
+                    handler: function() {
+                        this.store.baseParams[filter+'_from'] = fieldFrom.getValue().format('Y-m-d');
+                        this.store.baseParams[filter+'_to'] = fieldTo.getValue().format('Y-m-d');
+                        if (this.pagingType && this.pagingType != 'Date') {
+                            this.store.load({params:{start:0}});
+                        } else {
+                            this.store.load();
+                        }
+                    },
+                    scope: this
+                }));
             }
+        }
+
+        gridConfig.tbar.add('->');
+        if (meta.buttons.pdf) {
+            gridConfig.tbar.add(this.getAction('pdf'));
+        }
+        if (meta.buttons.csv) {
+            gridConfig.tbar.add(this.getAction('csv'));
+        }
+        if (meta.buttons.xls) {
+            gridConfig.tbar.add(this.getAction('xls'));
         }
 
         //editDialog kann entweder von config übergeben werden oder von meta-daten kommen
@@ -324,10 +347,16 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             this.editDialog.on('datachange', function() {
                 this.reload();
             }, this);
-            this.on('rowdblclick', function(grid, rowIndex) {
-                this.editDialog.showEdit(this.store.getAt(rowIndex).id);
-            }, this);
+
+            if (this.editDialog.allowEdit !== false) {
+                this.on('rowdblclick', function(grid, rowIndex) {
+                    this.editDialog.showEdit(this.store.getAt(rowIndex).id);
+                }, this);
+            }
         }
+
+        //nur -> ? - wenn ja gar keine toolbar erstellen
+        if (gridConfig.tbar.length == 1) delete gridConfig.tbar;
 
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
 
@@ -527,15 +556,15 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     },
     onPdf : function()
     {
-        window.open(this.controllerUrl+'pdf');
+        window.open(this.controllerUrl+'pdf?'+Ext.urlEncode(this.store.baseParams));
     },
     onCsv : function()
     {
-        window.open(this.controllerUrl+'csv');
+        window.open(this.controllerUrl+'csv?'+Ext.urlEncode(this.store.baseParams));
     },
     onXls : function()
     {
-        window.open(this.controllerUrl+'xls');
+        window.open(this.controllerUrl+'xls?'+Ext.urlEncode(this.store.baseParams));
     },
     getSelected: function() {
         return this.getSelectionModel().getSelected();
@@ -556,15 +585,15 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         }
         this.getStore().load({params: this.baseParams});
     },
-    enable: function() {
-        this.getAction('add').enable();
-    },
-    disable: function() {
-        for (var i in this.actions) {
-            this.actions[i].disable();
-        }
-        if (this.store) this.store.removeAll();
-    },
+//     enable: function() {
+//         this.getAction('add').enable();
+//     },
+//     disable: function() {
+//         for (var i in this.actions) {
+//             this.actions[i].disable();
+//         }
+//         if (this.store) this.store.removeAll();
+//     },
     getGrid : function() {
         return this.grid;
     },

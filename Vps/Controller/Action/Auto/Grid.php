@@ -11,7 +11,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected $_defaultOrder;
     protected $_filters = array();
     protected $_queryFields;
-    protected $_sortable = true;
+    protected $_sortable = true; //ob felder vom user sortiert werden können
     protected $_position;
 
     protected $_primaryKey;
@@ -111,7 +111,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
         }
 
-        if ($this->_sortable && !isset($this->_defaultOrder)) {
+        if (!isset($this->_defaultOrder)) {
             $this->_defaultOrder = $this->_columns->first()->getDataIndex();
         }
 
@@ -124,6 +124,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     }
     protected function _getWhere()
     {
+        $db = $this->_table->getAdapter();
         $where = array();
         $query = $this->getRequest()->getParam('query');
         if ($query) {
@@ -131,7 +132,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 throw new Vps_Exception("queryFields which is required to use query-filters is not set.");
             }
             $whereQuery = array();
-            $db = $this->_table->getAdapter();
             $query = explode(' ', $query);
             foreach($query as $q) {
                 foreach($this->_queryFields as $f) {
@@ -145,9 +145,17 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $where[$this->_primaryKey.' = ?'] = $queryId;
         }
         foreach($this->_filters as $field=>$filter) {
-            if($field=='text') continue; //handled above
+            if ($field=='text') continue; //handled above
+            if (isset($filter['skipWhere']) && $filter['skipWhere']) continue;
             if ($this->_getParam('query_'.$field)) {
                 $where[$field.' = ?'] = $this->_getParam('query_'.$field);
+            }
+            if ($filter['type'] == 'DateRange' && $this->_getParam($field.'_from')
+                                               && $this->_getParam($field.'_to')) {
+                $where[] = $field.' BETWEEN '
+                        .$db->quote($this->_getParam($field.'_from'))
+                        .' AND '
+                        .$db->quote($this->_getParam($field.'_to'));
             }
         }
         return $where;
@@ -206,7 +214,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
     public function jsonDataAction()
     {
-        $limit = null; $start = null;
+        $limit = null; $start = null; $order = 0;
         if ($this->_paging) {
             $limit = $this->getRequest()->getParam('limit');
             $start = $this->getRequest()->getParam('start');
@@ -219,16 +227,17 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                     $limit = $this->_paging;
                 }
             }
+
+            $order = $this->getRequest()->getParam('sort');
+            if (!$order) $order = $this->_defaultOrder['field'];
+            if($this->_getParam("dir") && $this->_getParam('dir')!='UNDEFINED') {
+                $order .= ' '.$this->_getParam('dir');
+            } else {
+                $order .= ' '.$this->_defaultOrder['direction'];
+            }
+            $order = trim($order);
+            $this->view->order = $order;
         }
-        $order = $this->getRequest()->getParam('sort');
-        if (!$order) $order = $this->_defaultOrder['field'];
-        if($this->_getParam("dir") && $this->_getParam('dir')!='UNDEFINED') {
-            $order .= ' '.$this->_getParam('dir');
-        } else {
-            $order .= ' '.$this->_defaultOrder['direction'];
-        }
-        $order = trim($order);
-        $this->view->order = $order;
 
         $primaryKey = $this->_primaryKey;
 
@@ -295,10 +304,10 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->view->metaData['totalProperty'] = 'total';
         }
         $this->view->metaData['successProperty'] = 'success';
-        if ($this->_sortable && !$this->_getParam('sort')) {
+        if (!$this->_sortable || !$this->_getParam('sort')) {
             //sandard-sortierung
             $this->view->metaData['sortInfo'] = $this->_defaultOrder;
-        } else if ($this->_sortable) {
+        } else {
             $this->view->metaData['sortInfo']['field'] = $this->_getParam('sort');
             $this->view->metaData['sortInfo']['direction'] = $this->_getParam('dir');
         }
@@ -332,7 +341,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         }
         $this->view->metaData['buttons'] = (object)$this->_buttons;
         $this->view->metaData['paging'] = $this->_paging;
-        $this->view->metaData['filters'] = $this->_filters;
+        $this->view->metaData['filters'] = (object)$this->_filters;
         $this->view->metaData['sortable'] = $this->_sortable;
         $this->view->metaData['editDialog'] = $this->_editDialog;
         $this->view->metaData['grouping'] = $this->_grouping;

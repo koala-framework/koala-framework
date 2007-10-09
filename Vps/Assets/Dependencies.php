@@ -129,17 +129,43 @@ class Vps_Assets_Dependencies
     private function _pack($contents, $fileType)
     {
         if ($fileType == 'js') {
-            $packer = new Vps_Assets_JavaScriptPacker($contents, 'Normal', true, false);
-            return $packer->pack();
-        } else {
-            return $contents;
+            $contents = str_replace("\r", "\n", $contents);
+
+            // remove comments
+            $contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
+            $contents = preg_replace('!//[^\n]*!', '', $contents);
+
+            // remove tabs, spaces, newlines, etc. - funktioniert nicht - da fehlen hinundwider ;
+            //$contents = str_replace(array("\r", "\n", "\t"), "", $contents);
+
+            // multiple whitespaces
+            $contents = str_replace("\t", " ", $contents);
+            $contents = preg_replace('/(\n)\n+/', '$1', $contents);
+            $contents = preg_replace('/(\n)\ +/', '$1', $contents);
+            $contents = preg_replace('/(\ )\ +/', '$1', $contents);
+
+        } else if ($fileType == 'css') {
+
+            $contents = str_replace("\r", "\n", $contents);
+
+            // remove comments
+            $contents = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $contents);
+
+            // multiple whitespaces
+            $contents = str_replace("\t", " ", $contents);
+            $contents = preg_replace('/(\n)\n+/', '$1', $contents);
+            $contents = preg_replace('/(\n)\ +/', '$1', $contents);
+            $contents = preg_replace('/(\ )\ +/', '$1', $contents);
         }
+        return $contents;
     }
 
     public function getPackedAll($fileType)
     {
-        $contents = $this->getContentsAll($fileType);
-//         $contents = $this->_pack($contents, $fileType);
+        $contents = '';
+        foreach($this->getFiles($fileType) as $file) {
+            $contents .= $this->_pack($this->getFileContents($file), $fileType) . "\n";
+        }
         return $contents;
     }
 
