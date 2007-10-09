@@ -10,20 +10,18 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
         parent::__construct();
         $this->setTableName($tableName);
         if ($title) $this->setTitle($title);
+        $this->setHideLabels(true);
+        $this->setAutoHeight(true);
+        $this->setLayout('form');
+        $this->setBaseCls('x-plain');
     }
 
     public function getMetaData()
     {
         $ret = parent::getMetaData();
-        $ret['items'] = array();
-        foreach ($this->_getFields() as $field) {
-            $ret['items'][] = $field->getMetaData();
-        }
-        if (!isset($ret['hideLabels'])) $ret['hideLabels'] = true;
-        if (!isset($ret['autoHeight'])) $ret['autoHeight'] = true;
-
-        if (isset($ret['data'])) unset($ret['data']);
+        $ret['items'] = $this->_getFields()->getMetaData();
         if (isset($ret['tableName'])) unset($ret['tableName']);
+        if (isset($ret['values'])) unset($ret['values']);
         return $ret;
     }
 
