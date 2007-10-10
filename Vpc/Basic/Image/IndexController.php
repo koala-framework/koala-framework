@@ -3,8 +3,8 @@ class Vpc_Basic_Image_IndexController extends Vps_Controller_Action_Auto_Form_Vp
 {
     protected $_buttons = array('save' => true);
 
-    public function _initFields()
+    public function preDispatch()
     {
-        $this->_form = new Vpc_Basic_Image_Form(null, null, $this->component);
+        $this->_form = new Vpc_Basic_Image_Form($this->component);
     }
 }

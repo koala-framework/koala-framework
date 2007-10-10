@@ -36,7 +36,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_pageCollection = $pageCollection;
         $this->_id = $this->parseId($id);
 
-        $table = $this->_getTable();
+        $table = $this->getTable();
         if ($table) {
             $info = $table->info();
             if ($info['primary'] == array(1 => 'page_id', 2 => 'component_key')) {
@@ -479,7 +479,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Shortcut für $this->_dao->getTable($tablename)
      * @param string Name des Models
      */
-    protected function _getTable($tablename = '')
+    public function getTable($tablename = '')
     {
         if ($tablename == '') {
             $tablename = $this->_tablename;

@@ -1,5 +1,6 @@
+/*
 Ext.namespace('Vpc.Rte');
-Vpc.Rte.Index = function(renderTo, config) {
+Vpc.Basic.Rte.Index = function(renderTo, config) {
     var form = new Vps.Auto.Form(renderTo, { controllerUrl: config.controllerUrl });
     form.on('loaded', function(o) {
         var field = this.form.findField('text');
@@ -7,7 +8,7 @@ Vpc.Rte.Index = function(renderTo, config) {
         toolbar.addButton({
             tooltip: 'Bearbeiten',
             disabled: true,
-            handler : 
+            handler :
                 function (o, e) {
                     alert('foo');
                 },
@@ -15,6 +16,7 @@ Vpc.Rte.Index = function(renderTo, config) {
             cls: "x-btn-icon",
             scope   : this
         });
-        
+
     }, form)
 }
+*/

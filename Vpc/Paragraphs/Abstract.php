@@ -38,15 +38,20 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
             $this->_paragraphs = array();
             foreach($this->_getData() as $row) {
                 $c = $this->createComponent($row->component_class, $row->id);
-                $this->_paragraphs[] = $c;
+                $this->_paragraphs[$row->id] = $c;
             }
         }
         return $this->_paragraphs;
     }
 
-    protected function addChildComponent($newcomponent)
+    public function getChildComponent($id)
     {
-        return $this->_paragraphs[] = $newcomponent;
+        $childComponents = $this->getChildComponents();
+        if (isset($childComponents[$id])) {
+            return $childComponents[$id];
+        } else {
+            return null;
+        }
     }
 
     protected function _getData()
@@ -56,7 +61,7 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
             $where['page_id = ?'] = $this->getDbId();
             $where['component_key = ?'] = $this->getComponentKey();
             $where['visible = ?'] = 1;
-            $this->_data = $this->_getTable()->fetchAll($where, 'pos');
+            $this->_data = $this->getTable()->fetchAll($where, 'pos');
         }
         return $this->_data;
     }

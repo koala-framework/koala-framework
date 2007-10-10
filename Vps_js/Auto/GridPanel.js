@@ -190,7 +190,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                 var sm=data.grid.getSelectionModel();
                 var rows=sm.getSelections();
                 ds = data.grid.getDataSource();
-        
+
                 var cindex=dd.getDragData(e).rowIndex;
                 for (i = 0; i < rows.length; i++) {
                     rowData=ds.getById(rows[i].id);
@@ -345,7 +345,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             this.editDialog = new Vps.Auto.Form.Window(meta.editDialog);
         }
         if (this.editDialog) {
-        
+
             this.editDialog.on('datachange', function() {
                 this.reload();
             }, this);
@@ -357,13 +357,13 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             }
         }
 
-        //nur -> ? - wenn ja gar keine toolbar erstellen
-        if (gridConfig.tbar.length == 1) delete gridConfig.tbar;
+        //wenn toolbar leer nicht erstellen
+        if (gridConfig.tbar.length == 0) delete gridConfig.tbar;
 
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
 
         this.fireEvent('beforerendergrid', this.grid);
-        
+
         this.add(this.grid);
         this.doLayout();
 
@@ -509,7 +509,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             this.getGrid().stopEditing();
             this.store.insert(0, record);
             this.store.newRecords.push(record);
-            
+
             for(var i=0; i<this.getGrid().getColumnModel().getColumnCount(); i++) {
                 if(!this.getGrid().getColumnModel().isHidden(i) && this.getGrid().getColumnModel().isCellEditable(i, 0)) {
                     this.getGrid().startEditing(0, i);

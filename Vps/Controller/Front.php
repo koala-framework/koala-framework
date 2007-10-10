@@ -70,6 +70,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
 
             $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/:action/:class/:componentId', array('module' => 'admin', 'controller' => 'components', 'action' => 'show')));
             $router->AddRoute('componentedit', new Zend_Controller_Router_Route('component/edit/:class/:componentId/:action', array('module' => 'component', 'controller' => 'Index', 'action' => 'index')));
+            $router->AddRoute('componentsetup', new Zend_Controller_Router_Route('component/setup/:class', array('module' => 'admin', 'controller' => 'components', 'action' => 'setup')));
             $router->AddRoute('media', new Zend_Controller_Router_Route('media/:uploadId/:componentId/:checksum/:filename', array('controller' => 'Media', 'action' => 'password')));
             $router->AddRoute('mediaoriginal', new Zend_Controller_Router_Route('media/:uploadId', array('controller' => 'Media', 'action' => 'original')));
 

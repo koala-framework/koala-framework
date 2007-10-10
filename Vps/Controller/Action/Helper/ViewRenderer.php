@@ -54,15 +54,6 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                 } else {
                     $this->_actionController->component = $component;
                 }
-                $action = $this->getRequest()->getActionName();
-                if ($action == 'index' || $action == 'jsonIndex') {
-                    $controllerUrl = $this->getRequest()->getPathInfo();
-                    if ($action == 'jsonIndex') {
-                        $controllerUrl = str_replace('/jsonIndex', '', $controllerUrl);
-                    }
-                    if (substr($controllerUrl, -1) != '/') { $controllerUrl .= '/'; }
-                    $this->view->setExtConfig('controllerUrl', $controllerUrl);
-                }
             }
 
         }

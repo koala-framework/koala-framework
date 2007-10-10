@@ -23,34 +23,28 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     protected $_paging = 0;
     protected $_position = 'pos';
     protected $_tableName = 'Vpc_Paragraphs_IndexModel';
-    protected $_jsClass = 'Vpc.Paragraphs.Index';
     protected $_components;
 
     public function init()
     {
         parent::init();
-        $this->_components = Vpc_Setup_Abstract::getAvailableComponents('Vpc/');
+        $this->_components = Vpc_Admin::getAvailableComponents('Vpc/');
     }
 
     public function indexAction()
     {
-        $componentList = array();
-        foreach ($this->_components as $name => $component) {
-            $str = '$componentList["' . str_replace('.', '"]["', $name) . '"] = "' . $component . '";';
-            eval($str);
-        }
-        $config = array('components' => $componentList);
-        $this->view->ext($this->_jsClass, $config);
+       $this->view->ext($this->component);
     }
 
     public function jsonIndexAction()
     {
         $this->indexAction();
     }
-    
+
     protected function _beforeDelete(Zend_Db_Table_Row_Abstract $row)
     {
-        Vpc_Setup_Abstract::staticDelete($row->component_class, $row->page_id, $row->component_key . '-' . $row->id);
+        $component = $this->component->getChildComponent($row->id);
+        Vpc_Admin::getInstance($component)->delete($component);
     }
 
     public function jsonDataAction()
@@ -75,7 +69,7 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     {
         $componentClass = $this->_getParam('component');
         if (array_search($componentClass, $this->_components)) {
-            Vpc_Setup_Abstract::staticSetup($componentClass);
+            Vpc_Admin::getInstance($componentClass)->setup();
             $insert['page_id'] = $this->component->getDbId();
             $insert['component_key'] = $this->component->getComponentKey();
             $insert['component_class'] = $componentClass;
@@ -102,23 +96,4 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
         $where['component_key = ?'] = $this->component->getComponentKey();
         return $where;
     }
-
-    private function _getPosition()
-    {
-        $where = array();
-        $where['page_id = ?']  = $this->component->getDbId();
-        $where['component_key = ?']  = $this->component->getComponentKey();
-        $rows = $this->_table->fetchAll($where);
-
-        $ids = array();
-        foreach ($rows as $rowKey => $rowData){
-            $id =$rowData->pos;
-            $ids[] = $id;
-        }
-        rsort($ids);
-        if ($ids == array()) $id = 1;
-        else $id = $ids[0] + 1;
-        return $id;
-    }
-
 }

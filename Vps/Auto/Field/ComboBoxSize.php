@@ -1,21 +1,11 @@
 <?php
 class Vps_Auto_Field_ComboBoxSize extends Vps_Auto_Field_ComboBox
 {
-    public function __construct($field_name = null, $field_label = null)
-    {
-        parent::__construct('size', $field_label);
-    }
-
     public function setSizes($sizes)
     {
         $data = array();
-        if (is_array($sizes[0])) {
-            foreach ($sizes as $key => $val) {
-                $str = $val[0] . ' x ' . $val[1];
-                $data[] = array($str, $str);
-            }
-        } else {
-            $str = $sizes[0] . ' x ' . $sizes[1];
+        foreach ($sizes as $key => $val) {
+            $str = $val[0] . ' x ' . $val[1];
             $data[] = array($str, $str);
         }
         $this->setForceSelection(true)
@@ -23,7 +13,7 @@ class Vps_Auto_Field_ComboBoxSize extends Vps_Auto_Field_ComboBox
             ->setTriggerAction('all')
             ->setEditable(false);
     }
-    
+
     public function getMetaData()
     {
         $ret = parent::getMetaData();
@@ -33,14 +23,19 @@ class Vps_Auto_Field_ComboBoxSize extends Vps_Auto_Field_ComboBox
 
     public function load($row)
     {
-        return array();
+        $store = $this->getStore();
+        foreach ($store['data'] as $key => $val) {
+            if ($val[0] == $row->width . ' x ' . $row->height) {
+                $value = $val[0];
+            }
+        }
+        return array($this->getFieldName() => $value);
     }
 
     public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
     {
         Vps_Auto_Field_Abstract::prepareSave($row, $postData);
-
-        $values = explode('x', $postData['size']);
+        $values = explode('x', $postData[$this->getFieldName()]);
         $row->width = (int)$values[0];
         $row->height = (int)$values[1];
 

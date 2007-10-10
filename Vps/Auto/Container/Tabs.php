@@ -36,6 +36,8 @@ class Vps_Auto_Container_Tabs extends Vps_Auto_Container_Abstract
 
     public function add($v = null)
     {
-        return $this->tabs->add($v);
+        $return = $this->tabs->add($v);
+        $return->setTitle($v);
+        return $return;
     }
 }
