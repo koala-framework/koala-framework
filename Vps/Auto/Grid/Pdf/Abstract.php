@@ -1,0 +1,21 @@
+<?php
+
+require_once VPS_PATH.'tcpdf/tcpdf.php';
+
+abstract class Vps_Auto_Grid_Pdf_Abstract extends TCPDF
+{
+
+    protected $_fields = array();
+
+    public function setFields($fields)
+    {
+        $this->_fields = $fields;
+    }
+
+    public function footer()
+    {
+//         $this->setXY($this->GetPageHeight() - 80, $this->GetPageWidth() - 80);
+        $this->SetY($this->GetPageHeight() - 15);
+        $this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'R');
+    }
+}
