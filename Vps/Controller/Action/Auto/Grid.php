@@ -249,6 +249,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 if (is_array($row)) {
                     $row = (object)$row;
                 }
+                if (!$this->_hasPermissions($row, 'load')) {
+                    throw new Vps_Exception("You don't have the permissions to load this row");
+                }
                 foreach ($this->_columns as $column) {
                     $data = $column->load($row, Vps_Auto_Grid_Column::ROLE_DISPLAY);
                     $r[$column->getDataIndex()] = $data;
@@ -347,6 +350,11 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->view->metaData['grouping'] = $this->_grouping;
     }
 
+    protected function _hasPermissions($row, $action)
+    {
+        return true;
+    }
+
     protected function _beforeSave(Zend_Db_Table_Row_Abstract $row, $submitRow)
     {
     }
@@ -393,6 +401,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             if(!$row) {
                 throw new Vps_Exception("Can't find row with id '$id'.");
             }
+            if (!$this->_hasPermissions($row, 'save')) {
+                throw new Vps_Exception("You don't have the permissions to save this row.");
+            }
             foreach ($this->_columns as $column) {
                 if ($id && $column->getDataIndex() == $this->_position) {
                     $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
@@ -437,6 +448,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $row = $this->_table->find($id)->current();
         if(!$row) {
             throw new Vps_Exception("Can't find row with id '$id'.");
+        }
+        if (!$this->_hasPermissions($row, 'delete')) {
+            throw new Vps_Exception("You don't have the permissions to delete this row.");
         }
         try {
             $this->_beforeDelete($row);
@@ -553,7 +567,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 if (is_array($row)) {
                     $row = (object)$row;
                 }
-
+                if (!$this->_hasPermissions($row, 'load')) {
+                    throw new Vps_Exception("You don't have the permissions to load this row");
+                }
                 $columns = $columnsHeader = array();
                 foreach ($this->_columns as $column) {
                     $currentColumnHeader = $column->getHeader();
