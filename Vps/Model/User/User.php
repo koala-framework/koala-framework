@@ -27,12 +27,18 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
         $newPassword = $this->generateNewPassword();
         if ($this->email) {
             $this->password_mailed = 1;
-            $mailtext = "Hallo ".$this->realname."!\n\n"
+            $mail = new Zend_Mail('utf-8');
+            $bodyText = "Hallo ".$this->__toString()."!\n\n"
                 ."Folgendes Login ist ab sofort für Sie aktiv.\n\n"
                 ."Benutzername: ".$this->username."\n"
                 ."Passwort: ".$newPassword."\n\n"
                 ."---\nDiese Email wurde automatisch erstellt - bitte nicht antworten.";
-            return mail($this->email, 'Ihr Account', $mailtext, 'From: no-reply@vivid-planet.com');
+            $mail->setBodyText($bodyText);
+            $mail->setFrom('noreply@vivid-planet.com', 'Vivid Planet Software');
+            $mail->addTo($this->email, $this->__toString());
+            $mail->setSubject('Ihr Account');
+            $mail->send();
+            return true;
         }
         return false;
     }
