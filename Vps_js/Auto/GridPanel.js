@@ -616,3 +616,5 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         }
     }
 });
+
+Ext.reg('autogrid', Vps.Auto.GridPanel);
