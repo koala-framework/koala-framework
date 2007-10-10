@@ -87,6 +87,9 @@ class Vps_Dao_File extends Vps_Db_Table
             $this->deleteFile($id);
         }
 
+        // Verzeichnis erstellen, falls nicht existiert
+        $this->_createDirectory($uploadDir . $directory);
+
         // Falls Datei existiert, _1... anhängen
         $origName = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
         $extension = substr(strrchr($filedata['name'], '.'), 1);
@@ -122,10 +125,14 @@ class Vps_Dao_File extends Vps_Db_Table
 
     public function delete($id)
     {
-        $row = $this->find($id)->current();
-        if ($row) {
-            $row->delete();
-            $this->deleteFile($id);
+        if (is_array($id)) { // Datensatz tatsächlich löschen
+            parent::delete($id);
+        } else {
+            $row = $this->find($id)->current();
+            if ($row) {
+                $this->deleteFile($id);
+                $x = $row->delete();
+            }
         }
     }
 
@@ -146,7 +153,7 @@ class Vps_Dao_File extends Vps_Db_Table
         $this->_recursiveRemoveDirectory($this->_getUploadDir() . 'cache/' . $id);
     }
 
-    private function _recursiveRemoveDirectory( $dir )
+    private function _recursiveRemoveDirectory($dir)
     {
         if (is_dir($dir)) {
             $d = dir($dir);
@@ -168,6 +175,14 @@ class Vps_Dao_File extends Vps_Db_Table
             rmdir($dir);
         }
         return true;
+    }
+
+    private function _createDirectory($dir)
+    {
+        if (!is_dir($dir)) {
+            mkdir($dir, 0775);
+            chmod($dir, 0775);
+        }
     }
 
 }

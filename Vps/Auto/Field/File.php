@@ -53,6 +53,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
 
         $file = isset($_FILES[$name]) ? $_FILES[$name] : array();
         $fileTable = new Vps_Dao_File();
+        $fileTable->deleteCache($row->$name);
 
         if ($row->$name == 0 && (!isset($file['error']) || $file['error'] == UPLOAD_ERR_NO_FILE)) {
             if (!is_null($this->getAllowBlank()) && $this->getAllowBlank() == false) {
@@ -60,11 +61,6 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
             } else {
                 return;
             }
-        }
-
-        if (isset($postData[$name . '_delete']) && $postData[$name . '_delete'] == '1') {
-            $fileTable->deleteFile($row->$name);
-            $row->$name = null;
         }
 
         if (isset($file['tmp_name']) && is_file($file['tmp_name'])) {
@@ -81,6 +77,9 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
             } catch (Vps_Exception $e) {
                 throw new Vps_ClientException($e->getMessage());
             }
+        } else if (isset($postData[$name . '_delete']) && $postData[$name . '_delete'] == '1') {
+            $fileTable->delete($row->$name);
+            $row->$name = null;
         }
 
         $fileTable->deleteCache($row->$name);

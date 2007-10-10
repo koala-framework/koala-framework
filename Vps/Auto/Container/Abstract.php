@@ -16,6 +16,13 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract
 
     public function getMetaData()
     {
+        $iterator = new RecursiveIteratorIterator(new Vps_Collection_Iterator_Recursive($this->fields));
+        foreach ($iterator as $field) {
+            if ($field instanceof Vps_Auto_Field_File) {
+                $this->setFileUpload(true);
+                $this->setLoadAfterSave(true);
+            }
+        }
         $ret = parent::getMetaData();
         $ret['items'] = $this->fields->getMetaData();
         return $ret;

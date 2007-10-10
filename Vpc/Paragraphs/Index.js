@@ -13,6 +13,7 @@ Vpc.Paragraphs.Index = Ext.extend(Vps.Auto.GridPanel,
     addButtons : function()
     {
         var toolbar = this.grid.getTopToolbar();
+        toolbar.addSeparator();
         var componentMenu = new Ext.menu.Menu({id: 'componentMenu'});
         this.addComponents(this.components, componentMenu);
         this.addButton = toolbar.addButton({
@@ -66,5 +67,4 @@ Vpc.Paragraphs.Index = Ext.extend(Vps.Auto.GridPanel,
             scope: this
         });
     }
-
 });

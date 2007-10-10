@@ -5,7 +5,7 @@ class Vps_Media_Image
     const SCALE_CROP = 'crop';
     const SCALE_DEFORM = 'deform';
 
-    public static function scale($source, $target, $size, $style = self::SCALE_BESTFIT)
+    public static function scale($source, $target, $size, $scale = self::SCALE_BESTFIT)
     {
         $width  = !isset($size['width'])  && isset($size[0]) ? $size[0] : 0 ;
         $height = !isset($size['height']) && isset($size[0]) ? $size[0] : 0 ;
@@ -14,14 +14,10 @@ class Vps_Media_Image
             return false;
         }
 
-        if ($style == '') {
-            $style = self::SCALE_BESTFIT;
-        }
-
         $im = new Imagick();
         $im->readImage($source);
 
-        if ($style == self::SCALE_CROP){ // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
+        if ($scale == self::SCALE_CROP){ // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
 
             $size = $im->getImageGeometry();
             if ($size['width'] > $width) { // Wenn hochgeladenes Bild breiter als anzuzeigendes Bild ist
@@ -38,7 +34,7 @@ class Vps_Media_Image
             }
             $im->cropImage($width, $height, $x, $y);
 
-        } elseif ($style == self::SCALE_BESTFIT) { // Bild wird auf größte Maximale Ausdehnung skaliert
+        } elseif ($scale == self::SCALE_BESTFIT) { // Bild wird auf größte Maximale Ausdehnung skaliert
 
             $size = $im->getImageGeometry();
             $widthRatio = $size['width'] / $width;
@@ -52,9 +48,13 @@ class Vps_Media_Image
             }
             $im->thumbnailImage($width, $height);
 
-        } elseif ($style == self::SCALE_DEFORM){
+        } elseif ($scale == self::SCALE_DEFORM){
 
             $im->thumbnailImage($width, $height);
+
+        } else {
+
+            return false;
 
         }
 

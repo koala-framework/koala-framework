@@ -23,7 +23,7 @@ class Vpc_Formular_Select_Index extends Vpc_Formular_Field_Abstract
     public function getOptions()
     {
         if (!$this->_options) {
-            $table = $this->_getTable('Vpc_Formular_Select_OptionsModel');
+            $table = $this->getTable('Vpc_Formular_Select_OptionsModel');
             $where = array(
                 'page_id = ?' => $this->getDbId(),
                 'component_key = ?' => $this->getComponentKey()
@@ -39,19 +39,19 @@ class Vpc_Formular_Select_Index extends Vpc_Formular_Field_Abstract
                 );
             }
         }
-        
+
         return $this->_options;
     }
 
     public function processInput()
-    {        
+    {
         if (isset($_POST[$this->getSetting('name')])) {
             foreach($this->getOptions() AS $key => $option) {
                 $this->_options[$key]['checked'] = $option['value'] == $_POST[$this->getSetting('name')];
             }
         }
     }
-    
+
     public function validateField($mandatory)
     {
         if($mandatory && !isset($_POST[$this->getSetting('name')])){

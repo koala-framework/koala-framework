@@ -1,11 +1,10 @@
 <?php
 require_once 'Smarty/Smarty.class.php';
 
-class Vps_View_Smarty extends Zend_View_Abstract
+class Vps_View_Smarty extends Vps_View
 {
     protected $_smarty;
     protected $_renderFile = 'Master.html';
-    public $ext = array();
 
     public function __construct($config = array())
     {
@@ -24,12 +23,13 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $this->extTemplate = VPS_PATH . 'views/Ext.html';
     }
 
-    public function setExtConfig($param, $value) {
-        $this->ext['config'][$param] = $value;
-    }
-
     public function ext($class, $config = array(), $viewport = null)
     {
+        if ($class instanceof Vpc_Abstract) {
+            if (!is_array($config)) { $config = array(); }
+            $config = array_merge($config, $this->getConfig($class, array(), false));
+            $class = $this->getClass($class);
+        }
         if (!is_string($class)) {
             throw new Vps_View_Exception('Class must be a string.');
         }
@@ -41,14 +41,6 @@ class Vps_View_Smarty extends Zend_View_Abstract
         } else {
             $jsFiles = array('/assets/all.js');
             $cssFiles = array('/assets/all.css');
-        }
-        if (!$config) { $config = array(); }
-        if (isset($this->ext['config']) && is_array($this->ext['config'])) {
-            $config = array_merge($this->ext['config'], $config);
-        }
-
-        if ($class == '' && isset($this->ext['class'])) {
-            $class = $this->ext['class'];
         }
 
         if (!$viewport) {
@@ -71,12 +63,6 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $ext['viewport'] = $viewport;
         $this->ext = $ext;
     }
-
-    public function vpc($config = array())
-    {
-        $this->ext('', $config);
-    }
-
 
     public function setRenderFile($renderFile)
     {

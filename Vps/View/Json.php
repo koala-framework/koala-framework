@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Json extends Zend_View_Abstract
+class Vps_View_Json extends Vps_View
 {
     private $_outputFormat = 'vpsConnection';
 
@@ -8,21 +8,19 @@ class Vps_View_Json extends Zend_View_Abstract
         $this->_outputFormat = '';
     }
 
+    public function ext($class, $config = array()) {
+        if ($class instanceof Vpc_Abstract) {
+            if (!is_array($config)) { $config = array(); }
+            $config = array_merge($config, $this->getConfig($class, array(), false));
+            $class = $this->getClass($class);
+        }
+        $this->class = $class;
+        $this->config = $config;
+    }
+
     public function render($name)
     {
         return $this->_run();
-    }
-
-    public function setExtConfig($param, $value) {
-        if (!isset($this->config)) { $this->config = array(); }
-        $this->config[$param] = $value;
-    }
-
-    public function ext($class, $config = array()) {
-        if (!$config) { $config = array(); }
-        if (!isset($this->config)) { $this->config = array(); }
-        $this->class = $class;
-        $this->config = array_merge($this->config, $config);
     }
 
     public function getOutput()
