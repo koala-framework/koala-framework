@@ -324,7 +324,9 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             }
         }
 
-        gridConfig.tbar.add('->');
+        if (meta.buttons.pdf || meta.buttons.csv || meta.buttons.xls) {
+            gridConfig.tbar.add('->');
+        }
         if (meta.buttons.pdf) {
             gridConfig.tbar.add(this.getAction('pdf'));
         }

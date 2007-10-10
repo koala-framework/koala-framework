@@ -44,7 +44,7 @@ Vps.User.Users = Ext.extend(Vps.Auto.GridPanel, {
                     if (selectedRow.data.id == 0) return;
                     Ext.get(document.body).mask('senden...', 'x-mask-loading');
                     Ext.Ajax.request({
-                        url:'/users/jsonMailsend',
+                        url: this.controllerUrl+'jsonMailsend',
                         params:{id:selectedRow.id},
                         success:function() {
                             this.reload();
