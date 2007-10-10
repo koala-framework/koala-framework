@@ -20,6 +20,15 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
     protected $_grouping = null;
 
+    protected $_pdf = array();
+
+    const PDF_ORIENTATION_PORTRAIT  = 'P';
+    const PDF_ORIENTATION_LANDSCAPE = 'L';
+    const PDF_FORMAT_A3 = 'A3';
+    const PDF_FORMAT_A4 = 'A4';
+    const PDF_EXPORTTYPE_TABLE = 1;
+    const PDF_EXPORTTYPE_CONTAINER = 2;
+
     public function indexAction()
     {
        $this->view->ext('Vps.Auto.GridPanel');
@@ -473,85 +482,109 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if(!isset($this->_permissions['pdf']) || !$this->_permissions['pdf']) {
             throw new Vps_Exception("Pdf is not allowed.");
         }
-        $pdf = new Zend_Pdf();
 
-        $pdf->pages[] = $pdfPage = new Vps_Pdf_Page(Zend_Pdf_Page::SIZE_A4);
+        $pageMargin = 10;
 
-        $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD);
-        $pdfPage->setFont($font, 11);
-
-        $pageMargin = 20;
-        $padding = 5;
-
-        $numColumnsAutoWidth = 0;
-        $remainingAutoWidth = $pdfPage->getWidth() - $pageMargin * 2;
-        foreach ($this->_columns as $column) {
-            if (!$column->getPdfWidth()) {
-                $numColumnsAutoWidth++;
-            } else {
-                $remainingAutoWidth -= $column->getPdfWidth() + $padding * 2;
+        if (empty($this->_pdf['orientation'])) {
+            $this->_pdf['orientation'] = self::PDF_ORIENTATION_PORTRAIT;
+        }
+        if (empty($this->_pdf['format'])) {
+            $this->_pdf['format'] = self::PDF_FORMAT_A4;
+        }
+        if (!isset($this->_pdf['ignoreFields'])) {
+            $this->_pdf['ignoreFields'] = array();
+        }
+        if (!isset($this->_pdf['fields'])) {
+            $this->_pdf['fields'] = array();
+            foreach ($this->_columns as $column) {
+                if ($column->getHeader()) {
+                    $this->_pdf['fields'][] = $column->getName();
+                }
             }
         }
 
-        $pdfPage->setLineWidth(0.1);
-        $x = $pageMargin;
-        foreach ($this->_columns as $column) {
-            if (!$column->getPdfWidth()) {
-                $w = $remainingAutoWidth / $numColumnsAutoWidth - $padding * 2;
-                $column->setPdfWidth($w);
-            } else {
-                $w = $column->getPdfWidth();
-            }
-            $h = $pdfPage->getTextHeight();
-            $text = $column->getHeader();
-            while ($pdfPage->getTextWidth($text) > $w) {
-                $text = substr(rtrim($text, '.'), 0, -1) . '...';
-            }
-            $pdfPage->drawText($text, $x+$padding, $pdfPage->getHeight()-$pageMargin-$padding, 'utf8');
-            $pdfPage->drawRectangle($x, $pdfPage->getHeight()-$pageMargin-$padding*2, $x+$w+$padding*2, $pdfPage->getHeight()-$pageMargin+$h-$padding, Zend_Pdf_Page::SHAPE_DRAW_STROKE);
-            $x += $w + $padding * 2;
+        if (!is_array($this->_pdf['fields'])) {
+            throw new Vps_Exception("PDF export fields must be of type `array`");
         }
-
-
-        $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA);
-        $pdfPage->setFont($font, 11);
-
-        $order = trim($this->_defaultOrder['field'].' '.$this->_defaultOrder['direction']);
-        $rowSet = $this->_fetchData($order, null, null);
-
-        if (!is_null($rowSet)) {
-            $rows = array();
-            $y = $pdfPage->getHeight() - $pageMargin - $padding*3 - $pdfPage->getTextHeight();
-            foreach ($rowSet as $row) {
-                if (is_array($row)) {
-                    $row = (object)$row;
+        if (!is_array($this->_pdf['ignoreFields'])) {
+            throw new Vps_Exception("PDF export `ignoreFields` must be of type `array`");
+        }
+        if (isset($this->_pdf['columns'])) {
+            throw new Vps_Exception("PDF export fields key is labeld `fields`, not `columns`");
+        }
+        $tmpFields = array(); // Needed for correct sorting
+        foreach ($this->_pdf['fields'] as $key => $mixed) {
+            if (!is_array($mixed) && !is_string($mixed)) {
+                throw new Vps_Exception("PDF export field `$mixed` must not be of type "
+                                        .'`'.gettype($mixed).'`, only `string` or `array` allowed.');
+            }
+            if (is_string($mixed) && $this->_columns[$mixed] && !in_array($mixed, $this->_pdf['ignoreFields'])) {
+                $tmpFields[$mixed] = array('header' => $this->_columns[$mixed]->getHeader(),
+                                            'width'  => 0);
+            } else if (is_array($mixed) && $this->_columns[$key] && !in_array($key, $this->_pdf['ignoreFields'])) {
+                if (!isset($mixed['header'])) {
+                    $this->_pdf['fields'][$key]['header'] =
+                        $this->_columns[$key]->getHeader();
                 }
-                $x = $pageMargin;
-                $minY = $pdfPage->getHeight();
-                foreach ($this->_columns as $column) {
-                    $text = $column->load($row, Vps_Auto_Grid_Column::ROLE_PDF);
-                    $w = $column->getPdfWidth();
-                    $o = array('wrap'        => Vps_Pdf_Page::OPTIONS_WRAP_ENABLED,
-                               'wrap-indent' => $x+$padding,
-                               'wrap-pad'    => $pdfPage->getWidth() - ($x + $padding*2 + $w)
-                               );
-                    $yText = $pdfPage->drawText($text, $x+$padding, $y, 'utf8', $o);
-                    if ($yText < $minY) $minY = $yText;
-                    $x += $w + $padding * 2;
+                if (!isset($mixed['width'])) {
+                    $this->_pdf['fields'][$key]['width'] = 0;
                 }
-                $x = $pageMargin;
-                foreach ($this->_columns as $column) {
-                    $w = $column->getPdfWidth();
-                    $pdfPage->drawRectangle($x, $minY-$padding*1, $x+$w+$padding*2, $y+$padding*2, Zend_Pdf_Page::SHAPE_DRAW_STROKE);
-                    $x += $w + $padding * 2;
-                }
-                $y = $minY - $padding*3;
+                $tmpFields[$key] = $this->_pdf['fields'][$key];
             }
         }
+        $this->_pdf['fields'] = $tmpFields;
 
+        // Generate two times for correct page braking
+        $breakBeforeRow = array();
+        for ($i = 1; $i <= 2; $i++) {
+            $pdf = new Vps_Auto_Grid_Pdf_Table($this->_pdf['orientation'], 'mm', $this->_pdf['format']);
+            $pdf->SetFont('vera', '', 8);
+            $pdf->SetMargins($pageMargin, 20, $pageMargin);
+            $pdf->SetFooterMargin(5);
+            $pdf->SetAutoPageBreak(true, 20);
+            $pdf->SetPrintHeader(false);
+            $pdf->AliasNbPages();
+            $pdf->AddPage();
+
+            $pdf->setFields($this->_pdf['fields']);
+
+    //         $pdf->SetBarcode(date("Y-m-d H:i:s", time()));
+
+            $pdf->writeHeader();
+
+            $order = trim($this->_defaultOrder['field'].' '.$this->_defaultOrder['direction']);
+            $rowSet = $this->_fetchData($order, null, null);
+
+            if (!is_null($rowSet)) {
+                $rowCount = 1;
+                foreach ($rowSet as $row) {
+                    if (is_array($row)) {
+                        $row = (object)$row;
+                    }
+
+                    if ($i === 1) $pageNoBefore = $pdf->PageNo();
+
+                    if ($i === 2 && in_array($rowCount, $breakBeforeRow)) {
+                        $pdf->drawLines();
+                        $pdf->AddPage();
+                        $pdf->writeHeader();
+                    }
+                    $pdf->writeRow($row);
+
+                    if ($i === 1 && $pageNoBefore != $pdf->PageNo()) {
+                        $breakBeforeRow[] = $rowCount;
+                        $pdf->AddPage();
+                        $pdf->writeRow($row);
+                    }
+                    $rowCount++;
+                }
+            }
+        }
+
+        $pdf->drawLines();
+
+        $pdf->output();
         $this->_helper->viewRenderer->setNoRender();
-        $this->getResponse()->setHeader('Content-Type', 'application/pdf')
-                            ->setBody($pdf->render());
     }
 
     private function _getExportData()
