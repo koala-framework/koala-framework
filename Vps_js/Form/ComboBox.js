@@ -1,6 +1,8 @@
 Vps.Form.ComboBox = function(config)
 {
-    if(!config.store) throw "no store set";
+    if(!config.store) {
+        throw "no store set";
+    }
     var store;
     if (config.store.data) {
         config.store = Ext.applyIf(config.store, {

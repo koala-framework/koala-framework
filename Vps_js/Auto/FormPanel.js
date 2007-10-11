@@ -2,7 +2,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 
     initComponent: function()
     {
-        this.actions = {};
+        if (!this.actions) this.actions = {};
 
         //um scrollbars zu bekommen
         if (!this.autoScroll) this.autoScroll = true;
@@ -30,8 +30,8 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             url              : this.controllerUrl+'jsonSave'
         });
 
-        Ext.getBody().mask('Loading...');
         Ext.Ajax.request({
+            mask: true,
             url: this.controllerUrl+'jsonLoad',
             params: {meta: true},
             success: function(response, options, r) {
@@ -42,9 +42,6 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
                     this.getForm().clearInvalid();
                     this.getForm().setValues(result.data);
                 }
-            },
-            callback: function() {
-                Ext.getBody().unmask();
             },
             scope: this
         });

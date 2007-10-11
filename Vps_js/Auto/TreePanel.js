@@ -12,12 +12,13 @@ Vps.Auto.TreePanel = Ext.extend(Ext.Panel, {
 	    });
 
 	    Ext.Ajax.request({
+            mask: true,
 	        url: this.controllerUrl + 'jsonMeta',
 	        params: this.baseParams,
 	        success: this.onMetaChange,
 	        scope: this
 	    });
-        this.actions = {};
+        if (!this.actions) this.actions = {};
         this.autoScroll = true;
 
         Vps.Auto.TreePanel.superclass.initComponent.call(this);

@@ -1,9 +1,16 @@
 Vps.Connection = function(config){
    Vps.Connection.superclass.constructor.call(this, config);
 };
+Vps.Connection.masks = 0; //static var that hols number of masked requests
 Ext.extend(Vps.Connection, Ext.data.Connection, {
-    request: function(options) {
-
+    request: function(options)
+    {
+        if (options.mask) {
+            if (Vps.Connection.masks == 0) {
+                Ext.getBody().mask('Loading...');
+            }
+            Vps.Connection.masks++;
+        }
         options.vpsCallback = {
             success: options.success,
             failure: options.failure,
@@ -22,6 +29,10 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
     },
     vpsSuccess: function(response, options)
     {
+        Vps.Connection.masks--;
+        if (Vps.Connection.masks == 0) {
+            Ext.getBody().unmask();
+        }
         options.vpsIsSuccess = false;
         var r = Ext.decode(response.responseText);
         if (r.exceptions) {
