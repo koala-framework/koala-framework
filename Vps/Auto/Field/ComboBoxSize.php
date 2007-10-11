@@ -24,6 +24,7 @@ class Vps_Auto_Field_ComboBoxSize extends Vps_Auto_Field_ComboBox
     public function load($row)
     {
         $store = $this->getStore();
+        $value = '';
         foreach ($store['data'] as $key => $val) {
             if ($val[0] == $row->width . ' x ' . $row->height) {
                 $value = $val[0];

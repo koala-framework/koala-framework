@@ -1,11 +1,15 @@
 <?php
 class Vpc_Paragraphs_Admin extends Vpc_Admin
 {
+    public function getComponents()
+    {
+        return $this->getAvailableComponents('Vpc/');
+    }
+
     public function getControllerConfig($component)
     {
-        $components = Vpc_Admin::getAvailableComponents('Vpc/');
         $componentList = array();
-        foreach ($components as $name => $component) {
+        foreach ($this->getComponents() as $name => $component) {
             $str = '$componentList["' . str_replace('.', '"]["', $name) . '"] = "' . $component . '";';
             eval($str);
         }

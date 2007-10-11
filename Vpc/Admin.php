@@ -75,7 +75,7 @@ class Vpc_Admin
     }
 
     function createTable($tablename, $fields) {
-        if (!in_array($tablename, $this->_db->listTables())) {
+        if (!$this->_tableExists($tablename)) {
             $fields['page_id'] = 'int(10) unsigned NOT NULL';
             $fields['component_key'] = 'varchar(255) NOT NULL';
 
@@ -89,6 +89,11 @@ class Vpc_Admin
             return true;
         }
         return false;
+    }
+
+    protected function _tableExists($tablename)
+    {
+        return in_array($tablename, $this->_db->listTables());
     }
 
     public static function getAvailableComponents($path = '')

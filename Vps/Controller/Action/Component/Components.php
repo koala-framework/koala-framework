@@ -3,11 +3,29 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
 {
     public function indexAction()
     {
-        $path = $this->getRequest()->getPathInfo();
-        if (substr($path, -1) != '/') { $path .= '/'; }
-        $components = Vpc_Setup_Abstract::getAvailableComponents();
-        foreach (array_reverse($components) as $component) {
-            echo $component . '<br />';
+        $pageCollection = new Vps_PageCollection_TreeBase(Zend_Registry::get('dao'));
+        $page = $pageCollection->getHomePage();
+        $this->_showPages(null, $pageCollection);
+    }
+
+    private function _showComponents($component, $step = 0)
+    {
+        if ($component) {
+            $url = '/component/edit/' . get_class($component) . '/' . $component->getId();
+            echo '<span style="margin-left:' . $step*10 . 'px"></span>';
+            echo '<a href="' . $url . '">' . $url . '</a><br />';
+            foreach ($component->getChildComponents() as $c) {
+                $this->_showComponents($c, $step + 1);
+            }
+        }
+    }
+
+    private function _showPages($page, $pageCollection)
+    {
+        $this->_showComponents($page);
+        echo '<br />';
+        foreach ($pageCollection->getChildPages($page) as $cp) {
+            $this->_showPages($cp, $pageCollection);
         }
     }
 
@@ -86,7 +104,7 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
         $components = new Vps_Config_Ini('application/components.ini');
         foreach ($components as $component => $compData) {
 
-            $setupClass = str_replace('_Index', '_Setup', $component);
+            $setupClass = str_replace('_Index', '_Admin', $component);
             if (file_exists('./' . str_replace('_', '/', $setupClass) . '.php')){
                 $obj = new $setupClass(Zend_Registry::get('db'));
                 $obj->setup();
