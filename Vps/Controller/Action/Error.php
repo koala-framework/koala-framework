@@ -45,6 +45,8 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
             if ($config->debug->errormail != '') {
                 Vps_Debug::sendErrorMail($errors->exception, $config->debug->errormail);
                 $this->view->debug = false;
+            } else {
+                $this->view->debug = true;
             }
         }
     }
