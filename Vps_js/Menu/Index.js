@@ -1,7 +1,6 @@
 Ext.namespace('Vps.Menu');
 
 Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
-    userRole: null,
     initComponent : function()
     {
         this.addEvents({
@@ -89,7 +88,6 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
             this.items.clear();
         }
         var response = Ext.decode(r.responseText);
-        Vps.Menu.userRole = response.userRole;
         var menuItems = this._processMenus(response.menus);
         menuItems.each(function(menuItem) {
             if (menuItem.icon && menuItem.text) {

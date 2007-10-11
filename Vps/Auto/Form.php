@@ -12,13 +12,7 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
         $this->setName($name);
         $this->setId($id);
         $this->setLayout('form');
-    }
-
-    public function getMetaData()
-    {
-        $ret = parent::getMetaData();
-        if (!isset($ret['border'])) $ret['border'] = false;
-        return $ret;
+        $this->setBorder(false);
     }
 
     public function prepareSave($parentRow, $postData)

@@ -28,6 +28,7 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
         if ($this->email) {
             $this->password_mailed = 1;
             $mail = new Zend_Mail('utf-8');
+            //todo: smarty template verwenden für mailtext
             $bodyText = "Hallo ".$this->__toString()."!\n\n"
                 ."Folgendes Login ist ab sofort für Sie aktiv.\n\n"
                 ."Benutzername: ".$this->username."\n"
