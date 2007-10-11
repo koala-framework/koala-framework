@@ -19,20 +19,13 @@ function d($src, $max_depth = 5)
     exit;
 }
 
-function exceptionsHandler($code, $string, $file, $line) {
-    $exception = new Vps_CustomException($string, $code);
-    $exception->setLine($line);
-    $exception->setFile($file);
-    throw $exception;
-}
-
 class Vps_Controller_Front extends Zend_Controller_Front
 {
     public static function setUp()
     {
         error_reporting(E_ALL);
         date_default_timezone_set('Europe/Berlin');
-        set_error_handler('exceptionsHandler', E_ALL);
+        set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
         Zend_Registry::set('config', Vps_Setup::createConfig());
     }
 
