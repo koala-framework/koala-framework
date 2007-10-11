@@ -660,7 +660,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $xls->setVersion(8);
         $xls->send('xls_export_'.date('Y-m-d_Hi').'.xls');
 
-        $sheet = $xls->addWorksheet('Export '. date('d.m.Y, H:i'));
+        $sheet = $xls->addWorksheet('export_'. date('Y-m-d_H-i'));
         $sheet->setInputEncoding('UTF-8');
 
         $data = $this->_getExportData();
