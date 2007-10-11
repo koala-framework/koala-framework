@@ -39,27 +39,4 @@ class Vpc_Formular_IndexController extends Vpc_Paragraphs_IndexController
 
             );
     protected $_tableName = 'Vpc_Formular_IndexModel';
-    protected $_jsClass = 'Vpc.Paragraphs.Index';
-    protected $_position = 'pos';
-
-    public function init()
-    {
-        parent::init();
-        $c = Vpc_Setup_Abstract::getAvailableComponents(VPS_PATH . 'Vpc/Formular/');
-        $components = array();
-        foreach ($c as $key => $val) {
-            if ($key != 'Formular') {
-                $key = str_replace('Formular.', '', $key);
-                $components[$key] = $val;
-            }
-        }
-        asort($components);
-        foreach ($this->_components as $key => $val) {
-            if ($key != 'Formular') {
-                $components['Nicht Formular.' . $key] = $val;
-            }
-        }
-        $this->_components = $components;
-    }
-
 }

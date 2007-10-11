@@ -60,7 +60,6 @@ abstract class Vps_PageCollection_Abstract
             $pageData = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($id);
             $page = Vpc_Abstract::createInstance($this->_dao, $pageData['component_class'], $id);
             if ($page) {
-                $page->setPageCollection($this);
                 $filename = $pageData['filename'];
                 $name = $pageData['name'];
             } else {
@@ -75,6 +74,7 @@ abstract class Vps_PageCollection_Abstract
             throw new Vps_PageCollection_Exception("Pagename and Name must not be empty. Probably Component is not a Page.");
         }
 
+        $page->setPageCollection($this);
         $id = $page->getPageId();
         if (isset($this->_pages[$id])) {
             $decoratedComponent = $this->_removePage($id);

@@ -1,0 +1,14 @@
+<?php
+class Vpc_Formular_Textbox_Admin extends Vpc_Admin
+{
+    public function setup()
+    {
+        $this->copyTemplate('Index.html', 'Formular/Textbox.html');
+
+        $fields['width'] = 'varchar(255) NOT NULL';
+        $fields['value'] = 'varchar(255) NOT NULL';
+        $fields['maxlength'] = 'smallint(6) NOT NULL default 50';
+        $fields['validator'] = 'varchar(255) NOT NULL';
+        $this->createTable('vpc_formular_textbox', $fields);
+    }
+}

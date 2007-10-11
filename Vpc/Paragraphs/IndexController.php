@@ -25,10 +25,10 @@ class Vpc_Paragraphs_IndexController extends Vps_Controller_Action_Auto_Grid
     protected $_tableName = 'Vpc_Paragraphs_IndexModel';
     protected $_components;
 
-    public function init()
+    public function preDispatch()
     {
-        parent::init();
-        $this->_components = Vpc_Admin::getAvailableComponents('Vpc/');
+        $this->_components = Vpc_Admin::getInstance($this->component)->getComponents();
+        parent::preDispatch();
     }
 
     public function indexAction()

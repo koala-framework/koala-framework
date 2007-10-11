@@ -1,8 +1,29 @@
 <?php
-class Vpc_Formular_Setup extends Vpc_Setup_Abstract
+class Vpc_Formular_Admin extends Vpc_Paragraphs_Admin
 {
+    public function getComponents()
+    {
+        $c = $this->getAvailableComponents(VPS_PATH . 'Vpc/Formular/');
+        $components = array();
+        foreach ($c as $key => $val) {
+            if ($key != 'Formular') {
+                $key = str_replace('Formular.', '', $key);
+                $components[$key] = $val;
+            }
+        }
+        asort($components);
+        foreach (parent::getComponents() as $key => $val) {
+            if ($key != 'Formular') {
+                $components['Nicht Formular.' . $key] = $val;
+            }
+        }
+        return $components;
+    }
+
     public function setup()
     {
+        $this->copyTemplate('Index.html', 'Formular.html');
+
         $tablename = 'vpc_formular';
         if (!$this->_tableExits($tablename)) {
           $this->_db->query("CREATE TABLE `$tablename` (
@@ -18,7 +39,5 @@ class Vpc_Formular_Setup extends Vpc_Setup_Abstract
                    PRIMARY KEY  (`id`)
                      ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;");
         }
-
-        $this->copyTemplate('Formular.html');
     }
 }

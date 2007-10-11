@@ -68,6 +68,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $router->AddRoute('login', new Zend_Controller_Router_Route('login/:action', array('module' => 'admin', 'controller' => 'login', 'action' => 'index')));
             $router->AddRoute('menu', new Zend_Controller_Router_Route('menu/:action', array('module' => 'admin', 'controller' => 'menu', 'action' => 'index')));
 
+            $router->AddRoute('components', new Zend_Controller_Router_Route('components/:action', array('module' => 'admin', 'controller' => 'components', 'action' => 'index')));
             $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/:action/:class/:componentId', array('module' => 'admin', 'controller' => 'components', 'action' => 'show')));
             $router->AddRoute('componentedit', new Zend_Controller_Router_Route('component/edit/:class/:componentId/:action', array('module' => 'component', 'controller' => 'Index', 'action' => 'index')));
             $router->AddRoute('componentsetup', new Zend_Controller_Router_Route('component/setup/:class', array('module' => 'admin', 'controller' => 'components', 'action' => 'setup')));

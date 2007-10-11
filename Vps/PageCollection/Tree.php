@@ -25,15 +25,15 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
             $parentId = null;
         } else {
             $parentId = $parentPage->getPageId();
-    
+
             if ($parentId == $id) {
                 throw new Vps_PageCollection_Exception('Cannot set Parent Page for the same object: ' . $id);
             }
-    
+
             if (!isset($this->_pages[$parentId])) {
                 throw new Vps_PageCollection_Exception('Parent Page does not exist: ' . $parentId);
             }
-    
+
             if (!isset($this->_pages[$id])) {
                 throw new Vps_PageCollection_Exception('Page does not exist: ' . $id);
             }
@@ -99,7 +99,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         }
         return null;
     }
-    
+
     public function findComponentByClass($class, Vpc_Interface $startPage = null)
     {
         $rowset = $this->_dao->getTable('Vps_Dao_Pages')->fetchAll("component_class = '$class'");
@@ -117,7 +117,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         if ($component) {
             return $component;
         }
-        
+
         foreach ($this->getChildPages($startPage) as $page) {
             $component = $this->findComponentByClass($class, $page);
             if ($component != null) {
@@ -137,7 +137,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         }
         return implode(' - ', $title);
     }
-    
+
     // ********** URL-abhängige Methoden ***********
     public function getIdsForPath($path)
     {
@@ -189,5 +189,5 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
 
         return $path;
     }
-    
+
 }
