@@ -1,5 +1,5 @@
 <?php
-class Vpc_Formular_Password_IndexModel extends Vpc_Table
+class Vpc_Formular_Password_IndexModel extends Vps_Db_Table
 {
     protected $_name = 'vpc_formular_password';
 }

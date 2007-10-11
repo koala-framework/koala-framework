@@ -476,6 +476,17 @@ abstract class Vpc_Abstract implements Vpc_Interface
     }
 
     /**
+     * Shortcut, fragt vom Seitenbaum, ob die unsichtbaren Einträge
+     * auch angezeige werden
+     *
+     * @return boolean
+     */
+    protected function showInvisible()
+    {
+        return $this->getPageCollection()->showInvisible();
+    }
+
+    /**
      * Shortcut für $this->_dao->getTable($tablename)
      * @param string Name des Models
      */

@@ -14,6 +14,7 @@ abstract class Vps_PageCollection_Abstract
     protected $_urlScheme = 0;
     const URL_SCHEME_HIERARCHICAL = 0;
     const URL_SCHEME_FLAT = 1;
+    private $_showInvisible = false;
 
     public function __construct(Vps_Dao $dao, $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL, $decoratorClasses = array())
     {
@@ -32,6 +33,15 @@ abstract class Vps_PageCollection_Abstract
     public function getDao()
     {
         return $this->_dao;
+    }
+
+    public function showInvisible($show = null)
+    {
+        if ($show === true || $show === false) {
+            $this->_showInvisible = $show;
+            $this->_dao->getTable('Vps_Dao_Pages')->showInvisible($show);
+        }
+        return $this->_showInvisible;
     }
 
     public static function getInstance()
