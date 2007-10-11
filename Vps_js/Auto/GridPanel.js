@@ -357,8 +357,8 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             }
         }
 
-        //wenn toolbar leer nicht erstellen
-        if (gridConfig.tbar.length == 0) delete gridConfig.tbar;
+        //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
+        if (gridConfig.tbar.length == 0 && !this.gridConfig.tbar) delete gridConfig.tbar;
 
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
 
