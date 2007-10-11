@@ -6,23 +6,20 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
     initComponent : function()
     {
-        this.actions = {};
+        if (!this.actions) this.actions = {};
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
 
         this.layout = 'fit';
 
 //         if(this.autoload) {
         //todo: wos bosiat bei !autoload
-            Ext.getBody().mask('Loading...');
             Ext.Ajax.request({
+                mask: true,
                 url: this.controllerUrl+'jsonData',
                 params: {meta: true},
                 success: function(response, options, r) {
                     var result = Ext.decode(response.responseText);
                     this.onMetaLoad(result);
-                },
-                callback: function() {
-                    Ext.getBody().unmask();
                 },
                 scope: this
             });

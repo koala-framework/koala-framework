@@ -125,9 +125,6 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
         if ($this->_defaultClass && !is_object($value)) {
             $value = new $this->_defaultClass($value);
         }
-        if ($this->_defaultClass && !$value instanceof $this->_defaultClass) {
-            throw new Vps_Exception("You can only add {$this->_defaultClass} to this collection.");
-        }
         if (!$value instanceof Vps_Collection_Item_Interface) {
             throw new Vps_Exception("Vps_Collection can hold only items with Vps_Collection_Item_Interface");
         }
