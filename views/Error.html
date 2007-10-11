@@ -2,15 +2,19 @@
     <head>
     </head>
     <body>
-        <h1>Fehler</h1>
-        
-        Fehlertyp:<br />
-        <pre>{$type}</pre>
-        
-        <br />
-        
-        Meldung:<br />
-        <pre>{$exception}</pre>
-        
+        <h1>Error</h1>
+
+        {if $debug}
+            Errortype:<br />
+            <pre>{$type}</pre>
+
+            <br />
+
+            Message:<br />
+            <pre>{$exception}</pre>
+        {else}
+            An Error ocurred. Please try again later.
+        {/if}
+
     </body>
 </html>

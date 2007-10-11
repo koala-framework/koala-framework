@@ -38,18 +38,31 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
                 $path = VPS_PATH . 'views/';
             }
             $this->view->setRenderFile($path . $file);
+
+            $config = Zend_Registry::get('config');
             $this->view->type = $errors->type;
             $this->view->exception = $errors->exception;
+            if ($config->debug->errormail != '') {
+                Vps_Debug::sendErrorMail($errors->exception, $config->debug->errormail);
+                $this->view->debug = false;
+            }
         }
     }
 
     public function jsonErrorAction()
     {
         $errors = $this->getRequest()->error_handler;
-        if ($errors->exception instanceof Vps_ClientException) {
-            $this->view->error = $errors->exception->getMessage();
+        $exception = $errors->exception;
+        if ($exception instanceof Vps_ClientException) {
+            $this->view->error = $exception->getMessage();
         } else {
-            $this->view->exceptions = $errors->exception->__toString();
+            $config = Zend_Registry::get('config');
+            if ($config->debug->errormail != '') {
+                Vps_Debug::sendErrorMail($exception, $config->debug->errormail);
+                $this->view->error = 'An error occured. Please try again later.';
+            } else {
+                $this->view->exceptions = $exception->__toString();
+            }
         }
     }
 }

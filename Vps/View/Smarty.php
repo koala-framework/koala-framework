@@ -35,7 +35,7 @@ class Vps_View_Smarty extends Vps_View
         }
 
         $dep = new Vps_Assets_Dependencies(Zend_Registry::get('config')->asset, 'application/config.ini', 'dependencies');
-        if (Zend_Registry::get('config')->debug) {
+        if (Zend_Registry::get('config')->debug->assets) {
             $jsFiles = $dep->getAssetFiles('js');
             $cssFiles = $dep->getAssetFiles('css');
         } else {
