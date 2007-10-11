@@ -5,16 +5,10 @@ class Vps_Dao
     private $_tables = array();
     private $_db = array();
     private $_pageData = array();
-    private $_invisibleMode = false;
-    
+
     public function __construct(Zend_Config $config)
     {
         $this->_config = $config;
-    }
-    
-    public function setInvisibleMode($mode)
-    {
-        $this->_invisibleMode = $mode;
     }
 
     public function getTable($tablename)
@@ -26,9 +20,6 @@ class Vps_Dao
               if ($table instanceof Vps_Db_Table) {
                   $table->setDao($this);
               }
-              if ($table instanceof Vpc_Table && $this->_invisibleMode) {
-                  $table->setInvisibleMode(true);
-              }
               $this->_tables[$tablename] = $table;
             } catch (Zend_Exception $e){
               throw new Vps_Dao_Exception('Dao not found: ' . $e->getMessage());
@@ -36,7 +27,7 @@ class Vps_Dao
         }
         return $this->_tables[$tablename];
     }
-    
+
     public function getDb($db = 'web')
     {
         if (!isset($this->_db[$db])) {
@@ -49,6 +40,6 @@ class Vps_Dao
         }
         return $this->_db[$db];
     }
-    
+
 
 }

@@ -4,6 +4,12 @@ class Vps_Dao_Pages extends Vps_Db_Table
     protected $_name = 'vps_pages';
     private $_pageData = null;
     private $_decoratorData = null;
+    private $_showInvisible = false;
+
+    public function showInvisible($show)
+    {
+        $this->_showInvisible = $show;
+    }
 
     public function retrievePageData($id, $throwError = true)
     {
@@ -60,9 +66,11 @@ class Vps_Dao_Pages extends Vps_Db_Table
     private function _retrievePageData()
     {
         if ($this->_pageData == null) {
+            $where = $this->_showInvisible ? '' : 'WHERE visible=1';
             $sql = '
                 SELECT id, parent_id, type, is_home, visible, name, filename, component_class
                 FROM vps_pages
+                ' . $where . '
                 ORDER BY position
             ';
             $this->_pageData = $this->getAdapter()->fetchAssoc($sql);
@@ -149,7 +157,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
         $this->_pageData = null;
         return $id;
     }
-    
+
     public function savePageName($id, $name)
     {
         $row = $this->find($id)->current();
