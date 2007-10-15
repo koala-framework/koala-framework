@@ -18,11 +18,10 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
             $this->_fields = new Vps_Collection();
             $title = $this->getFileFieldLabel();
             if (!$title) $title = 'Upload new File';
-            $this->_fields->add(new Vps_Auto_Field_TextField($this->getName(), 'Upload new File'))
+            $this->_fields->add(new Vps_Auto_Field_TextField($this->getFieldName(), 'Upload new File'))
                 ->setFieldLabel($title)
                 ->setInputType('file');
-            $this->_fields->add(new Vps_Auto_Field_Checkbox($this->getName() . '_delete', 'Existing File'))
-                ->setFieldLabel('Existing File')
+            $this->_fields->add(new Vps_Auto_Field_Checkbox($this->getFieldName() . '_delete', ''))
                 ->setBoxLabel('Delete')
                 ->setXType('filecheckbox');
         }
@@ -49,9 +48,11 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
     public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
     {
         parent::prepareSave($row, $postData);
+        $fieldName = $this->getFieldName();
         $name = $this->getName();
 
-        $file = isset($_FILES[$name]) ? $_FILES[$name] : array();
+
+        $file = isset($_FILES[$fieldName]) ? $_FILES[$fieldName] : array();
         $fileTable = new Vps_Dao_File();
         $fileTable->deleteCache($row->$name);
 
@@ -77,7 +78,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
             } catch (Vps_Exception $e) {
                 throw new Vps_ClientException($e->getMessage());
             }
-        } else if (isset($postData[$name . '_delete']) && $postData[$name . '_delete'] == '1') {
+        } else if (isset($postData[$fieldName . '_delete']) && $postData[$fieldName . '_delete'] == '1') {
             $fileTable->delete($row->$name);
             $row->$name = null;
         }

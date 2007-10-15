@@ -1,5 +1,5 @@
 <?php
-class Vpc_Formular_Password_IndexController extends Vps_Controller_Action_Auto_Form_Vpc
+class Vpc_Formular_Password_IndexController extends Vps_Controller_Action_Auto_Vpc_Form
 {
     protected $_fields = array(
             array('type'       => 'TextField',

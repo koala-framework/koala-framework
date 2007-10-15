@@ -3,14 +3,13 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
 {
     public function __construct($component)
     {
-        $this->setBodyStyle('padding: 10px 10px 0px 10px');
+        $table = $component->getTable();
+        $this->setTable($table);
 
         $pageId = $component->getDbId();
         $componentKey = $component->getComponentKey();
 
         // Falls Eintrag nicht existiert, mit Defaultwerten eintragen
-        $table = $component->getTable();
-        $this->setTable($table);
         if ($table->find($pageId, $componentKey)->count() == 0) {
             $info = $table->info();
             $insert = array();

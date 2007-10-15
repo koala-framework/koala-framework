@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Rte_IndexController extends Vps_Controller_Action_Auto_Form_Vpc
+class Vpc_Basic_Rte_IndexController extends Vps_Controller_Action_Auto_Vpc_Form
 {
     protected $_buttons = array('save'   => true);
 
