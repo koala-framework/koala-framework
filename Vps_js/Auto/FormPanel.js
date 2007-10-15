@@ -30,6 +30,14 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             url              : this.controllerUrl+'jsonSave'
         });
 
+        //if (this.autoload == undefined || (this.autoload != undefined && this.autoload)) {
+            this.loadForm(this.controllerUrl);
+        //}
+    },
+
+    loadForm : function(controllerUrl)
+    {
+        this.controllerUrl = controllerUrl;
         Ext.Ajax.request({
             mask: true,
             url: this.controllerUrl+'jsonLoad',

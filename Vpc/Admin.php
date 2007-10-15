@@ -21,7 +21,9 @@ class Vpc_Admin
 
     public function delete(Vpc_Abstract $component) {
         $row = $this->_getRow($component);
-        $row->delete();
+        if ($row) {
+            $row->delete();
+        }
     }
 
     public function duplicate($component) {}
@@ -76,11 +78,13 @@ class Vpc_Admin
 
     function createTable($tablename, $fields) {
         if (!$this->_tableExists($tablename)) {
-            $fields['page_id'] = 'int(10) unsigned NOT NULL';
-            $fields['component_key'] = 'varchar(255) NOT NULL';
+            $f = array();
+            $f['page_id'] = 'int(10) unsigned NOT NULL';
+            $f['component_key'] = 'varchar(255) NOT NULL';
+            $f = array_merge($f, $fields);
 
-            $sql = "CREATE TABLE `$name` (";
-            foreach ($fields as $field => $data) {
+            $sql = "CREATE TABLE `$tablename` (";
+            foreach ($f as $field => $data) {
                 $sql .= " `$field` $data," ;
             }
             $sql .= 'PRIMARY KEY (page_id, component_key))';

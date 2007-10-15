@@ -1,5 +1,5 @@
 <?php
-class Vpc_Formular_Select_OptionsController extends Vps_Controller_Action_Auto_Grid_Vpc
+class Vpc_Formular_Select_OptionsController extends Vps_Controller_Action_Auto_Vpc_Grid
 {
     protected $_tableName = 'Vpc_Formular_Select_OptionsModel';
     protected $_position = 'pos';

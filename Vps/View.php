@@ -3,7 +3,7 @@ abstract class Vps_View extends Zend_View_Abstract
 {
     public function getConfig(Vpc_Abstract $component, $config = array(), $includeClass = true)
     {
-        $setup = $this->getSetup($component);
+        $setup = $this->getAdmin($component);
         $config = array_merge($config, $setup->getControllerConfig($component, $this));
         if (!isset($config['controllerUrl'])) {
             $config['controllerUrl'] = $this->getControllerUrl($component);
@@ -17,18 +17,19 @@ abstract class Vps_View extends Zend_View_Abstract
         }
     }
 
-    public function getControllerUrl(Vpc_Abstract $component)
+    public function getControllerUrl(Vpc_Abstract $component, $class = '')
     {
-        return '/component/edit/' . get_class($component) . '/' . $component->getId() . '/';
+        if ($class == '') { $class = get_class($component); }
+        return '/component/edit/' . $class . '/' . $component->getId() . '/';
     }
 
     public function getClass(Vpc_Abstract $component)
     {
-        $setup = $this->getSetup($component);
+        $setup = $this->getAdmin($component);
         return $setup->getControllerClass();
     }
 
-    public function getSetup($component)
+    public function getAdmin($component)
     {
         return Vpc_Admin::getInstance(get_class($component));
     }

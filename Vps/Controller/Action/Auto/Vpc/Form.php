@@ -1,9 +1,10 @@
 <?php
-abstract class Vps_Controller_Action_Auto_Form_Vpc extends Vps_Controller_Action_Auto_Form
+abstract class Vps_Controller_Action_Auto_Vpc_Form extends Vps_Controller_Action_Auto_Form
 {
     public function preDispatch()
     {
         $this->_form = new Vps_Auto_Vpc_Form($this->component);
+        $this->_form->setBodyStyle('padding: 10px');
         $this->_initFields();
     }
 

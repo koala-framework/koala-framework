@@ -1,8 +1,8 @@
 <?php
 class Vps_Auto_Data_Table_Parent extends Vps_Auto_Data_Table
 {
-    private $_dataIndex;
-    private $_parentTable;
+    protected $_dataIndex;
+    protected $_parentTable;
 
     public function __construct($parentTable, $dataIndex = null)
     {

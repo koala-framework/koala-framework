@@ -15,7 +15,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
         this.on('renderform', function() {
             this.getForm().waitMsgTarget = this.el;
         }, this);
-        
+
         Ext.applyIf(this, {
             width: 300,
             height: 200,

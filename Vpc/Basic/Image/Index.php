@@ -23,7 +23,7 @@ class Vpc_Basic_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
     public function getSettings()
     {
         $settings = parent::getSettings();
-        if (!isset($settings['width']) || $settings['width'] == '') {
+        if ((!isset($settings['width']) || $settings['width'] == '') && isset($settings['size'][0])) {
             if (is_array($settings['size'][0])) {
                 $settings['width'] = $settings['size'][0][0];
                 $settings['height'] = $settings['size'][0][1];

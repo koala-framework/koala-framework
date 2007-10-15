@@ -1,14 +1,12 @@
 <?php
-class Vpc_Composite_TextImage_Index extends Vpc_Abstract
+class Vpc_Composite_TextImages_Index extends Vpc_Abstract
 {
-    const NAME = 'Standard.TextImage';
+    const NAME = 'Standard.TextImages';
     public $text;
-    public $image;
-    public $imagebig;
+    public $images;
     protected $_settings = array(
         'text' => array(),
-        'image' => array(),
-        'imagebig' => array(),
+        'images' => array(),
         'enlarge' => false,
         'image_position' => 'alternate' // 'left', 'right', 'alternate'
     );
@@ -28,17 +26,25 @@ class Vpc_Composite_TextImage_Index extends Vpc_Abstract
 
     public function init()
     {
+        // Text
         $st = isset($this->_settings['text']) ? $this->_settings['text'] : array();
-        $si = isset($this->_settings['image']) ? $this->_settings['image'] : array();
-        $sb = isset($this->_settings['imagebig']) ? $this->_settings['imagebig'] : array();
-        $this->text = $this->createComponent('Vpc_Basic_Text_Index', 1, $st);
-        $this->image = $this->createComponent('Vpc_Basic_Image_Index', 2, $si);
-        $this->imagebig = $this->createComponent('Vpc_Basic_Image_Index', 3, $sb);
+        $this->text = $this->createComponent('Vpc_Basic_Text_Index', 0, $st);
+
+        // Images
+        $si = isset($this->_settings['images']) ? $this->_settings['images'] : array();
+        $table = $this->getTable('Vpc_Composite_TextImages_ImagesModel');
+        $where = array(
+            'page_id = ?' => $this->getDbId(),
+            'component_key = ?' => $this->getComponentKey()
+        );
+        foreach ($table->fetchAll($where) as $row) {
+            $this->images[] = $this->createComponent('Vpc_Basic_Image_Index', $row->id, $si);
+        }
     }
 
     public function getChildComponents()
     {
-        return array($this->text, $this->image, $this->imagebig);
+        return array_merge(array($this->text), $this->images);
     }
 
 }

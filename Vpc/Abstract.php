@@ -30,7 +30,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string Falls dynamische Unterseite
      * @param string Falls dynamische Unterkomponente
      */
-    public final function __construct(Vps_Dao $dao, $id, $pageCollection = null)
+    public final function __construct(Vps_Dao $dao, $id, $pageCollection = null, $settings = array())
     {
         $this->_dao = $dao;
         $this->_pageCollection = $pageCollection;
@@ -42,7 +42,8 @@ abstract class Vpc_Abstract implements Vpc_Interface
             if ($info['primary'] == array(1 => 'page_id', 2 => 'component_key')) {
                 $rowset = $table->find($this->getPageId(), $this->getComponentKey());
                 if ($rowset->count() == 1) {
-                    $this->_settings = array_merge($this->_settings, $rowset->current()->toArray());
+                    $settings = array_merge($this->_settings, $settings);
+                    $this->_settings = array_merge($settings, $rowset->current()->toArray());
                 }
             }
         }
@@ -66,9 +67,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string ID der Komponente
      * @return Vpc_Abstract
      */
-    public static function createInstance(Vps_Dao $dao, $class, $id)
+    public static function createInstance(Vps_Dao $dao, $class, $id, $settings = array())
     {
-        return self::_createInstance($dao, $class, $id);
+        return self::_createInstance($dao, $class, $id, null, $settings);
     }
 
     /**
@@ -118,7 +119,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param int Für Unterscheidung des Komponenteninhalts
      * @return Vpc_Abstract Komponente
      */
-    protected function createComponent($class, $pageKeySuffix = '')
+    protected function createComponent($class, $pageKeySuffix = '', $settings = array())
     {
         $id = $this->getId();
         if ($pageKeySuffix != '') {
@@ -126,7 +127,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         }
 
         // Komponente erstellen
-        $component = self::_createInstance($this->getDao(), $class, $id, $this->getPageCollection());
+        $component = self::_createInstance($this->getDao(), $class, $id, $this->getPageCollection(), $settings);
 
         // Erstellte Komponente hinzufügen
         return $component;
@@ -136,11 +137,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Erstellt die Komponente tatsächlich.
      * @throws Vpc_ComponentNotFoundException Falls Klasse für Komponente nicht gefunden wird
      */
-    private static function _createInstance(Vps_Dao $dao, $class, $id, $pageCollection = null)
+    private static function _createInstance(Vps_Dao $dao, $class, $id, $pageCollection = null, $settings = array())
     {
         // Komponente erstellen
         if (class_exists($class)) {
-            $component = new $class($dao, $id, $pageCollection);
+            $component = new $class($dao, $id, $pageCollection, $settings);
         } else {
             throw new Vpc_ComponentNotFoundException("Component '$class' not found.");
         }
@@ -367,7 +368,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     /**
      * @return Vpc_PageCollection_Abstract/null Vorsicht! In einer Komponente nicht darauf verlassen, dass es die PageCollection gibt!
      */
-    protected function getPageCollection()
+    public function getPageCollection()
     {
         return $this->_pageCollection;
     }
@@ -450,7 +451,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     /**
      * @return DAO der Komponente
      */
-    protected function getDao()
+    public function getDao()
     {
         return $this->_dao;
     }
