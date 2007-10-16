@@ -234,24 +234,6 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
     findField: function(id) {
         return this.getForm().findField(id);
     },
-
-    disable : function() {
-        this.getAction('save').disable();
-        this.getAction('delete').disable();
-        this.getForm().items.each(function(b) {
-            b.disable();
-        });
-        Vps.Auto.FormPanel.superclass.disable.call(this);
-    },
-    enable : function() {
-        for (var i in this.actions) {
-            this.actions[i].enable();
-        }
-        this.getForm().items.each(function(b) {
-            b.enable();
-        });
-        Vps.Auto.FormPanel.superclass.enable.call(this);
-    },
     getForm : function() {
         return this.getFormPanel().getForm();
     },

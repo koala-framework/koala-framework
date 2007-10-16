@@ -584,15 +584,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         }
         this.getStore().load({params: this.baseParams});
     },
-//     enable: function() {
-//         this.getAction('add').enable();
-//     },
-//     disable: function() {
-//         for (var i in this.actions) {
-//             this.actions[i].disable();
-//         }
-//         if (this.store) this.store.removeAll();
-//     },
     getGrid : function() {
         return this.grid;
     },
