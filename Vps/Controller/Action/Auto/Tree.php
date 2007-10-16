@@ -47,6 +47,8 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         // Sortierung aktivieren wenn in DB
         if (!isset($this->_hasPosition)) {
             $this->_hasPosition = in_array('position', $info['cols']);
+        }
+        if ($this->_hasPosition) {
             $this->_order = 'position';
         }
 
