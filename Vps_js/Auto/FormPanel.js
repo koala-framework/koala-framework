@@ -84,7 +84,9 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
                 text    : 'Save',
                 icon    : '/assets/vps/images/silkicons/table_save.png',
                 cls     : 'x-btn-text-icon',
-                handler : this.onSubmit,
+                handler : function() {
+                    this.onSubmit();
+                },
                 scope   : this
             });
         } else if (type == 'delete') {
@@ -115,6 +117,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         this.getForm().clearValues();
         this.getForm().clearInvalid();
         this.getForm().waitMsgTarget = this.el;
+        this.enable();
         this.getForm().load(Ext.applyIf(options, {
             url: this.controllerUrl+'jsonLoad',
             waitMsg: 'Loading...',
