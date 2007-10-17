@@ -612,10 +612,11 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         return this.editDialog;
     },
     setBaseParams : function(baseParams) {
-        this.baseParams = baseParams;
         if (this.editDialog && this.editDialog.getForm()) {
             this.editDialog.getForm().baseParams = baseParams;
         }
+        if (!baseParams.start) baseParams.start = 0;
+        this.baseParams = baseParams;
     }
 });
 
