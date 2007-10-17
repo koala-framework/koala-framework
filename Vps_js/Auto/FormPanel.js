@@ -248,6 +248,11 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
     },
     getFormPanel : function() {
         return this.formPanel;
+    },
+    setBaseParams : function(baseParams) {
+        if (this.getForm()) {
+            this.getForm().baseParams = baseParams;
+        }
     }
 });
 
