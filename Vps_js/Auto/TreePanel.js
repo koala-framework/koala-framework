@@ -310,6 +310,15 @@ Vps.Auto.TreePanel = Ext.extend(Ext.Panel, {
             throw 'unknown action-type: ' + type;
         }
         return this.actions[type];
+    },
+    getTree() : function() {
+        return this.tree;
+    },
+    getSelectionModel() : function() {
+        return this.getTree().getSelectionModel();
+    },
+    getSelectedNode : function() {
+        return this.getSelectionModel().getSelectedNode();
     }
 
 });
