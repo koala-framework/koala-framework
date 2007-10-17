@@ -13,6 +13,10 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
 //         if(this.autoload) {
         //todo: wos bosiat bei !autoload
+
+            if (!this.controllerUrl) {
+                throw 'No controllerUrl specified for AutoGrid.';
+            }
             Ext.Ajax.request({
                 mask: true,
                 url: this.controllerUrl+'jsonData',
@@ -60,9 +64,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                 var storeType = Ext.data.Store;
             }
             this.store = new storeType(storeConfig);
-        }
-        if (result.rows) {
-            this.store.loadData(result);
         }
 
         this.store.newRecords = []; //hier werden neue records gespeichert die nicht dirty sind
@@ -247,12 +248,17 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         if (meta.buttons['delete']) {
             gridConfig.tbar.add(this.getAction('delete'));
         }
-        if (meta.filters.text) {
+
+        var filtersEmpty = true;
+        for (var i in meta.filters) filtersEmpty = false; //durch was einfacheres ersetzen :D
+        if (!filtersEmpty) {
             if(gridConfig.tbar.length > 0) {
                 gridConfig.tbar.add('-');
             }
             gridConfig.tbar.add('Filter:');
-//             this.getTopToolbar().el.swallowEvent(['keypress','keydown']);
+        }
+
+        if (meta.filters.text) {
             var textfield = new Ext.form.TextField();
             gridConfig.tbar.add(textfield);
             textfield.on('render', function(textfield) {
@@ -338,7 +344,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         if (!this.editDialog && meta.editDialog) {
             this.editDialog = meta.editDialog;
         }
-        if (this.editDialog && !(this.editDialog instanceof Vps.Auto.Form.Window)) {
+        if (this.editDialog && !(this.editDialog instanceof Ext.Window)) {
             this.editDialog = new Vps.Auto.Form.Window(meta.editDialog);
         }
         if (this.editDialog) {
@@ -355,7 +361,10 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         }
 
         //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
-        if (gridConfig.tbar.length == 0 && !this.gridConfig.tbar) delete gridConfig.tbar;
+        if (gridConfig.tbar.length == 0 && (!this.initialConfig.gridConfig ||
+                                            !this.initialConfig.gridConfig.tbar)) {
+            delete gridConfig.tbar;
+        }
 
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
 
@@ -368,6 +377,9 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
         this.relayEvents(this.grid, ['rowdblclick']);
 
+        if (result.rows) {
+            this.store.loadData(result);
+        }
     },
 
     getAction : function(type)
@@ -555,15 +567,15 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     },
     onPdf : function()
     {
-        window.open(this.controllerUrl+'pdf?'+Ext.urlEncode(this.store.baseParams));
+        window.open(this.controllerUrl+'pdf?'+Ext.urlEncode(this.baseParams));
     },
     onCsv : function()
     {
-        window.open(this.controllerUrl+'csv?'+Ext.urlEncode(this.store.baseParams));
+        window.open(this.controllerUrl+'csv?'+Ext.urlEncode(this.baseParams));
     },
     onXls : function()
     {
-        window.open(this.controllerUrl+'xls?'+Ext.urlEncode(this.store.baseParams));
+        window.open(this.controllerUrl+'xls?'+Ext.urlEncode(this.baseParams));
     },
     getSelected: function() {
         return this.getSelectionModel().getSelected();
