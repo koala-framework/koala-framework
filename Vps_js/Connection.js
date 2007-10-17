@@ -46,6 +46,7 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
                     },
                     scope: this
                 });
+                Ext.getBody().unmask();
                 dlg.showLogin();
                 Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
                 return;
