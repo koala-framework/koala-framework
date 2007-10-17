@@ -48,6 +48,9 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         if (!isset($this->_hasPosition)) {
             $this->_hasPosition = in_array('position', $info['cols']);
         }
+        if ($this->_hasPosition && !$this->_order != 'position') {
+            throw new Vps_Exception("If _hasposition is enabled, order must be position");
+        }
         if ($this->_hasPosition) {
             $this->_order = 'position';
         }
@@ -175,11 +178,11 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
     public function jsonDeleteAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $where = $this->_table->getAdapter()->quoteInto('id = ?', $id);
-        if ($this->_table->delete($where) > 0) {
+        $row = $this->_table->find($id)->current();
+        if (!$row) throw new Vps_Exception("No entry with id '$id' found");
+        if ($row) {
+            $row->delete();
             $this->view->id = $id;
-        } else {
-            $this->view->error = 'Kein Eintrag gelöscht.';
         }
     }
 
@@ -192,7 +195,9 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         $row = $this->_table->find($source)->current();
         if ($point == 'append') {
             $row->parent_id = (int)$target == 0 ? null : $target;
-            $row->position = '1';
+            if ($this->_hasPosition) {
+                $row->position = '1';
+            }
         } else {
             $targetRow = $this->_table->find($target)->current();
             if ($targetRow) {
