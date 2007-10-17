@@ -8,6 +8,7 @@ Ext.extend(Vps.SubmitAction, Ext.form.Action.Submit, {
 
         //manually add date-value and checkbox-state and clear name to submit it only once
         this.form.items.each(function(field) {
+            debugger;
             if (Ext.form.DateField && field instanceof Ext.form.DateField && field.getValue() instanceof Date) {
                 this.options.params[field.getName()] = field.getValue().dateFormat("Y-m-d");
             } else if (Ext.form.Checkbox && field instanceof Ext.form.Checkbox) {
@@ -16,8 +17,13 @@ Ext.extend(Vps.SubmitAction, Ext.form.Action.Submit, {
                 } else {
                     this.options.params[field.getName()] = 0;
                 }
+            } else if (field.rendered && field.el.dom.type == 'file') {
+                //überspringen, file-upload muss direkt submitted werden
+                return;
+            } else {
+                this.options.params[field.getName()] = field.getValue();
             }
-            if(this.options.params[field.getName()]) {
+            if (field.rendered) {
                 field.realName = field.getName();
                 field.el.dom.name = '';
             }
@@ -27,7 +33,7 @@ Ext.extend(Vps.SubmitAction, Ext.form.Action.Submit, {
 
         //restore names
         this.form.items.each(function(field) {
-            if(field.realName) {
+            if (field.realName) {
                 field.el.dom.name = field.realName;
                 delete field.realName;
             }

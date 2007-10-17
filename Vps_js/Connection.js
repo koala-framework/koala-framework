@@ -29,10 +29,6 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
     },
     vpsSuccess: function(response, options)
     {
-        Vps.Connection.masks--;
-        if (Vps.Connection.masks == 0) {
-            Ext.getBody().unmask();
-        }
         options.vpsIsSuccess = false;
         var r = Ext.decode(response.responseText);
         if (r.exceptions) {
@@ -77,6 +73,13 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
     
     vpsCallback: function(options, success, response)
     {
+        if (options.mask) {
+            Vps.Connection.masks--;
+            if (Vps.Connection.masks == 0) {
+                Ext.getBody().unmask();
+            }
+        }
+
         if(success && !options.vpsIsSuccess) {
             success = false;
         }

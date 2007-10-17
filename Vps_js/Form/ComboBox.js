@@ -1,90 +1,140 @@
-Vps.Form.ComboBox = function(config)
+Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
 {
-    if(!config.store) {
-        throw "no store set";
-    }
-    var store;
-    if (config.store.data) {
-        config.store = Ext.applyIf(config.store, {
-            fields: ['id', 'name'],
-            id: 'id'
-        });
-        store = new Ext.data.SimpleStore(config.store);
-        config.mode = 'local';
-    } else {
-        if (config.store.reader) {
-            if (config.store.reader.type && Ext.data[config.store.reader.type]) {
-                var readerType = Ext.data[config.store.reader.type];
-                delete config.store.reader.type;
-            } else if (config.store.reader.type) {
-                try {
-                    var readerType = eval(config.store.reader.type);
-                } catch(e) {
-                    throw "invalid readerType: "+config.store.reader.type;
+    initComponent : function()
+    {
+        if(!this.store) {
+            throw "no store set";
+        }
+        var store;
+        if (this.store.data) {
+            this.store = Ext.applyIf(this.store, {
+                fields: ['id', 'name'],
+                id: 'id'
+            });
+            store = new Ext.data.SimpleStore(this.store);
+            this.mode = 'local';
+        } else {
+            if (this.store.reader) {
+                if (this.store.reader.type && Ext.data[this.store.reader.type]) {
+                    var readerType = Ext.data[this.store.reader.type];
+                    delete this.store.reader.type;
+                } else if (this.store.reader.type) {
+                    try {
+                        var readerType = eval(this.store.reader.type);
+                    } catch(e) {
+                        throw "invalid readerType: "+this.store.reader.type;
+                    }
+                    delete this.store.reader.type;
+                } else {
+                    var readerType = Ext.data.JsonReader;
                 }
-                delete config.store.reader.type;
+                if (!this.store.reader.rows) throw "no rows defined, required if reader does not thisure through meta data";
+                var rows = this.store.reader.rows;
+                delete this.store.reader.rows;
+                var reader = new readerType(this.store.reader, rows);
             } else {
-                var readerType = Ext.data.JsonReader;
+                var reader = new Ext.data.JsonReader(); //reader thisuriert sich autom. durch meta-daten
             }
-            if (!config.store.reader.rows) throw "no rows defined, required if reader does not configure through meta data";
-            var rows = config.store.reader.rows;
-            delete config.store.reader.rows;
-            var reader = new readerType(config.store.reader, rows);
-        } else {
-            var reader = new Ext.data.JsonReader(); //reader configuriert sich autom. durch meta-daten
-        }
-        if (config.store.proxy) {
-            if (config.store.proxy.type && Ext.data[config.store.proxy.type]) {
-                var proxyType = Ext.data[config.store.proxy.type];
-                delete config.store.proxy.type;
-            } else if (config.store.proxy.type) {
-                try {
-                    var proxyType = eval(config.store.proxy.type);
-                } catch(e) {
-                    throw "invalid proxyType: "+config.store.proxy.type;
+            if (this.store.proxy) {
+                if (this.store.proxy.type && Ext.data[this.store.proxy.type]) {
+                    var proxyType = Ext.data[this.store.proxy.type];
+                    delete this.store.proxy.type;
+                } else if (this.store.proxy.type) {
+                    try {
+                        var proxyType = eval(this.store.proxy.type);
+                    } catch(e) {
+                        throw "invalid proxyType: "+this.store.proxy.type;
+                    }
+                    delete this.store.proxy.type;
+                } else {
+                    var proxyType = Ext.data.HttpProxy;
                 }
-                delete config.store.proxy.type;
+                var proxy = new proxyType(this.store.proxy);
+            } else if (this.store.data) {
+                var proxy = new Ext.data.MemoryProxy(this.store.data);
             } else {
-                var proxyType = Ext.data.HttpProxy;
+                var proxy = new Ext.data.HttpProxy(this.store);
             }
-            var proxy = new proxyType(config.store.proxy);
-        } else if (config.store.data) {
-            var proxy = new Ext.data.MemoryProxy(config.store.data);
-        } else {
-            var proxy = new Ext.data.HttpProxy(config.store);
-        }
-        if (config.store.type && Ext.data[config.store.type]) {
-            store = new Ext.data[config.store.type]({
-                proxy: proxy,
-                reader: reader
-            });
-        } else if (config.store.type) {
-            try {
-                var storeType = eval(config.store.type)
-            } catch(e) {
-                throw "invalid storeType: "+config.store.type;
+            if (this.store.type && Ext.data[this.store.type]) {
+                store = new Ext.data[this.store.type]({
+                    proxy: proxy,
+                    reader: reader
+                });
+            } else if (this.store.type) {
+                try {
+                    var storeType = eval(this.store.type)
+                } catch(e) {
+                    throw "invalid storeType: "+this.store.type;
+                }
+                store = new storeType({
+                    proxy: proxy,
+                    reader: reader
+                });
+            } else {
+                store = new Ext.data.Store({
+                    proxy: proxy,
+                    reader: reader
+                });
             }
-            store = new storeType({
-                proxy: proxy,
-                reader: reader
-            });
-        } else {
-            store = new Ext.data.Store({
-                proxy: proxy,
-                reader: reader
-            });
         }
-    }
-    delete config.store;
+        delete this.store;
 
-    config = Ext.applyIf(config, {
-        store: store,
-        displayField: 'name',
-        valueField: 'id'
-    });
-    Vps.Form.ComboBox.superclass.constructor.call(this, config);
-};
-Ext.extend(Vps.Form.ComboBox, Ext.form.ComboBox,
-{
+        Ext.applyIf(this, {
+            store: store,
+            displayField: 'name',
+            valueField: 'id'
+        });
+
+        if (this.store.proxy) {
+            //wenn proxy vorhanden können daten nachgeladen werden
+            //also loading anzeigen (siehe setValue)
+            this.valueNotFoundText = 'loading...';
+        }
+
+        if (this.addDialog) {
+            this.addDialog = new Vps.Auto.Form.Window(this.addDialog);
+            this.addDialog.on('datachange', function(result) {
+                if (result.data.addedId) {
+                    //neuen Eintrag auswählen
+                    this.setValue(result.data.addedId);
+                }
+            }, this);
+        }
+
+        Vps.Form.ComboBox.superclass.initComponent.call(this);
+    },
+    setValue : function(v)
+    {
+        Vps.Form.ComboBox.superclass.setValue.apply(this, arguments);
+        if (v != '' && this.valueField
+                && !this.findRecord(this.valueField, v) //record nicht gefunden
+                && this.store.proxy) { //proxy vorhanden (dh. daten können nachgeladen werden)
+            this.store.baseParams[this.queryParam] = v;
+            this.store.load({
+                params: this.getParams(v),
+                callback: function(r, options, success) {
+                    if (success && this.findRecord(this.valueField, this.value)) {
+                        this.setValue(this.value);
+                    }
+                },
+                scope: this
+            });
+        }
+    },
+    onRender : function(ct, position)
+    {
+        Vps.Form.ComboBox.superclass.onRender.call(this, ct, position);
+        if (this.addDialog) {
+            var c = this.el.up('div.x-form-field-wrap').insertSibling({style: 'float: right'}, 'before');
+            var button = new Ext.Button({
+                renderTo: c,
+                text: this.addDialog.text || 'add new entry',
+                handler: function() {
+                    this.addDialog.showAdd();
+                },
+                scope: this
+            });
+        }
+    }
 });
 Ext.reg('combobox', Vps.Form.ComboBox);

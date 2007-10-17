@@ -30,6 +30,10 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             url              : this.controllerUrl+'jsonSave'
         });
 
+        if (!this.controllerUrl) {
+            throw 'No controllerUrl specified for AutoForm.';
+        }
+
         //if (this.autoload == undefined || (this.autoload != undefined && this.autoload)) {
             this.loadForm(this.controllerUrl);
         //}
@@ -38,6 +42,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
     loadForm : function(controllerUrl)
     {
         this.controllerUrl = controllerUrl;
+
         Ext.Ajax.request({
             mask: true,
             url: this.controllerUrl+'jsonLoad',
@@ -191,7 +196,8 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
             this.getAction('delete').enable();
             this.getAction('save').enable();
         }
-        if (this.getForm().loadAfterSave && !(this instanceof Vps.Auto.Form.Window)) {
+        if (this.getForm().loadAfterSave) {
+            //bei file-upload neu laden
             this.load();
         }
     },
@@ -244,3 +250,5 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         return this.formPanel;
     }
 });
+
+Ext.reg('autoform', Vps.Auto.FormPanel);

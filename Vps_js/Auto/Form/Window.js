@@ -14,6 +14,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
         this.autoForm = new Vps.Auto.FormPanel(this.formConfig);
         this.on('renderform', function() {
             this.getForm().waitMsgTarget = this.el;
+            this.getForm().loadAfterSave = false; //dialog wird geschlossen nach speichern, ist also nicht nötig
         }, this);
 
         Ext.applyIf(this, {

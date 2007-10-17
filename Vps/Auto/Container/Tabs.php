@@ -8,7 +8,7 @@ class Vps_Auto_Container_Tabs extends Vps_Auto_Container_Abstract
     {
         parent::__construct($name);
         $this->tabs = new Vps_Collection('Vps_Auto_Container_Tab');
-        $this->setDeferredRender(false);
+        //$this->setDeferredRender(false); auskommentiert wegen combobox-view-breite-bug
         $this->setBaseCls('x-plain');
     }
 
