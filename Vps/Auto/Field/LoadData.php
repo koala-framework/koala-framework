@@ -3,9 +3,7 @@ class Vps_Auto_Field_LoadData extends Vps_Auto_Field_SimpleAbstract
 {
     public function getMetaData()
     {
-        $ret = parent::getMetaData();
-        unset($ret['type']);
-        return $ret;
+        return null;
     }
 
     public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)

@@ -4,8 +4,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected $_columns = null;
     protected $_buttons = array('save'=>true,
                                 'add'=>true,
-                                'delete'=>true,
-                                'reload'=>true);
+                                'delete'=>true);
     protected $_editDialog = null;
     protected $_paging = 0;
     protected $_defaultOrder;
@@ -118,6 +117,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 }
                 $this->_queryFields[] = $index;
             }
+        }
+        if (!in_array($this->_primaryKey, $this->_queryFields)) {
+            $this->_queryFields[] = $this->_primaryKey;
         }
 
         if (!isset($this->_defaultOrder)) {

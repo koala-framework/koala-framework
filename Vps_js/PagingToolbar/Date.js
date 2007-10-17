@@ -1,24 +1,23 @@
 Ext.namespace('Vps.PagingToolbar');
-Vps.PagingToolbar.Date = function(el, ds, config){
-    this.cursor = new Date();
-    Vps.PagingToolbar.Date.superclass.constructor.call(this, el, ds, config);
-};
 
-Ext.extend(Vps.PagingToolbar.Date, Ext.PagingToolbar, {
+Vps.PagingToolbar.Date = Ext.extend(Ext.PagingToolbar, {
+    initComponent: function() {
+        Vps.PagingToolbar.Date.superclass.initComponent.call(this);
+        this.cursor = new Date();
+    },
     // private
-    renderButtons : function(el){
-        Ext.PagingToolbar.superclass.render.call(this, el);
+    onRender : function(ct, position){
+        Ext.PagingToolbar.superclass.onRender.call(this, ct, position);
 
         this.prev = this.addButton({
             tooltip: this.prevText,
-            cls: "x-btn-icon x-grid-page-prev",
+            iconCls: "x-tbar-page-prev",
             handler: this.onClick.createDelegate(this, ["prev"])
         });
         this.addSeparator();
 
         this.field = new Vps.Form.DateField({
-            width: 80,
-            msgTarget: 'qtip'
+            width: 80
         });
         this.add(this.field);
         this.field.el.on("keydown", this.onPagingKeydown, this);
@@ -28,25 +27,36 @@ Ext.extend(Vps.PagingToolbar.Date, Ext.PagingToolbar, {
         this.addSeparator();
         this.next = this.addButton({
             tooltip: this.nextText,
-            cls: "x-btn-icon x-grid-page-next",
+            iconCls: "x-tbar-page-next",
             handler: this.onClick.createDelegate(this, ["next"])
         });
 
         this.addSeparator();
         this.loading = this.addButton({
             tooltip: this.refreshText,
-            cls: "x-btn-icon x-grid-loading",
-            disabled: true,
+            iconCls: "x-tbar-loading",
             handler: this.onClick.createDelegate(this, ["refresh"])
         });
+
+        if(this.displayInfo){
+            this.displayEl = Ext.fly(this.el.dom).createChild({cls:'x-paging-info'});
+        }
+
+        if(this.dsLoaded){
+            this.onLoad.apply(this, this.dsLoaded);
+        }
     },
 
     // private
     onLoad : function(ds, r, o){
-       this.cursor = o.params ? Date.parseDate(o.params.start, 'Y-m-d') : new Date();
-       this.field.setValue(this.cursor);
-       this.loading.enable();
-       this.updateInfo();
+        if(!this.rendered){
+            this.dsLoaded = [store, r, o];
+            return;
+        }
+        this.cursor = o.params ? Date.parseDate(o.params.start, 'Y-m-d') : new Date();
+        this.field.setValue(this.cursor);
+        this.loading.enable();
+        this.updateInfo();
     },
 
     // private
@@ -58,7 +68,7 @@ Ext.extend(Vps.PagingToolbar.Date, Ext.PagingToolbar, {
                 this.field.setValue(this.cursor);
                 return;
             }
-            this.ds.load({params:{start: this.field.getValue().format('Y-m-d'), limit: this.pageSize}});
+            this.store.load({params:{start: this.field.getValue().format('Y-m-d'), limit: this.pageSize}});
             e.stopEvent();
         } else if(k == e.UP || k == e.RIGHT || k == e.PAGEUP || k == e.DOWN || k == e.LEFT || k == e.PAGEDOWN) {
             var increment = (e.shiftKey) ? 10 : 1;
@@ -68,14 +78,14 @@ Ext.extend(Vps.PagingToolbar.Date, Ext.PagingToolbar, {
                 this.field.setValue(this.cursor);
                 return;
             }
-            this.ds.load({params:{start: this.cursor.add(Date.DAY, increment*this.pageSize).format('Y-m-d'), limit: this.pageSize}});
+            this.store.load({params:{start: this.cursor.add(Date.DAY, increment*this.pageSize).format('Y-m-d'), limit: this.pageSize}});
             e.stopEvent();
         }
     },
 
     // private
     onClick : function(which){
-        var ds = this.ds;
+        var ds = this.store;
         switch(which){
             case "prev":
                 ds.load({params:{start: this.cursor.add(Date.DAY, -this.pageSize).format('Y-m-d'), limit: this.pageSize}});
