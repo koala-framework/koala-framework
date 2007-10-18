@@ -589,15 +589,12 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         this.store.reload();
         this.store.commitChanges();
     },
-    load : function(baseParams) {
-        if (baseParams) {
-            this.setBaseParams(baseParams);
+    load : function(params) {
+        if (!params) params = {};
+        if (this.pagingType && this.pagingType != 'Date' && !params.start) {
+            params.start = 0;
         }
-        this.baseParams = this.baseParams || {};
-        if (this.pagingType && this.pagingType != 'Date' && !this.baseParams.start) {
-            this.baseParams.start = 0;
-        }
-        this.getStore().load({params: this.baseParams});
+        this.getStore().load({ params: params });
     },
     getGrid : function() {
         return this.grid;
@@ -618,17 +615,19 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         if (this.editDialog) {
             this.editDialog.setBaseParams(baseParams);
         }
-        this.baseParams = baseParams;
+        this.getStore().baseParams = baseParams;
     },
     applyBaseParams : function(baseParams) {
         if (this.editDialog) {
             this.editDialog.applyBaseParams(baseParams);
         }
-        Ext.apply(this.baseParams, baseParams);
+        Ext.apply(this.getStore().baseParams, baseParams);
     },
     resetFilters: function() {
+        if (this.getStore().baseParams.query) delete this.getStore().baseParams.query;
         this.filters.each(function(f) {
             f.setValue(f.defaultValue || '');
+            
         }, this);
     }
 });
