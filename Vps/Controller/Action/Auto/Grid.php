@@ -544,7 +544,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $pdf->SetMargins($pageMargin, 20, $pageMargin);
             $pdf->SetFooterMargin(5);
             $pdf->SetAutoPageBreak(true, 20);
-            $pdf->SetPrintHeader(false);
             $pdf->AliasNbPages();
             $pdf->AddPage();
 
