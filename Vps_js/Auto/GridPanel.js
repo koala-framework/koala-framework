@@ -6,6 +6,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
     initComponent : function()
     {
+        this.filters = [];
         if (!this.actions) this.actions = {};
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
 
@@ -268,6 +269,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                 }, this, {buffer: 500});
             }, this);
             delete meta.filters.text;
+            this.filters.push(textfield);
         }
 
         for(var filter in meta.filters) {
@@ -297,6 +299,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                     this.applyBaseParams(params);
                     this.load();
                 }, this);
+                this.filters.push(combo);
             } else if (meta.filters[filter].type == 'DateRange') {
                 var fieldFrom = new Vps.Form.DateField({
                     width: 80,
@@ -319,6 +322,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                     },
                     scope: this
                 }));
+                //todo: this.filters.push(textfield);
             }
         }
 
@@ -589,6 +593,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         if (baseParams) {
             this.setBaseParams(baseParams);
         }
+        this.baseParams = this.baseParams || {};
         if (this.pagingType && this.pagingType != 'Date' && !this.baseParams.start) {
             this.baseParams.start = 0;
         }
@@ -620,6 +625,11 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             this.editDialog.applyBaseParams(baseParams);
         }
         Ext.apply(this.baseParams, baseParams);
+    },
+    resetFilters: function() {
+        this.filters.each(function(f) {
+            f.setValue(f.defaultValue || '');
+        }, this);
     }
 });
 
