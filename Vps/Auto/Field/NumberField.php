@@ -1,8 +1,11 @@
 <?php
 class Vps_Auto_Field_NumberField extends Vps_Auto_Field_SimpleAbstract
 {
-    protected $_xtype = 'numberfield';
-
+    public function __construct($field_name = null, $field_label = null)
+    {
+        parent::__construct($field_name, $field_label);
+        $this->setXtype('numberfield');
+    }
     protected function _addValidators()
     {
         parent::_addValidators();

@@ -2,7 +2,6 @@
 abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
 {
     private $_properties;
-    protected $_xtype = null;
     protected $_validators = array();
     private $_data;
 
@@ -26,11 +25,6 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
         } else {
             throw new Vps_Exception("Invalid method called: '$method'");
         }
-    }
-
-    public function setXType($xtype)
-    {
-        $this->_xtype = $xtype;
     }
 
     public function setProperty($name, $value)
@@ -58,9 +52,6 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
             $ret['hiddenName'] = $this->getNamePrefix() . '_' . $ret['hiddenName'];
         }
         if (isset($ret['namePrefix'])) unset($ret['namePrefix']);
-        if (!is_null($this->_xtype)) {
-            $ret['xtype'] = $this->_xtype;
-        }
         return $ret;
     }
 
