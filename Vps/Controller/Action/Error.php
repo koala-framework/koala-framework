@@ -63,7 +63,7 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
                 Vps_Debug::sendErrorMail($exception, $config->debug->errormail);
                 $this->view->error = 'An error occured. Please try again later.';
             } else {
-                $this->view->exceptions = $exception->__toString();
+                $this->view->exception = $exception->__toString();
             }
         }
     }

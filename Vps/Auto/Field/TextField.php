@@ -1,7 +1,11 @@
 <?php
 class Vps_Auto_Field_TextField extends Vps_Auto_Field_SimpleAbstract
 {
-    protected $_xtype = 'textfield';
+    public function __construct($field_name = null, $field_label = null)
+    {
+        parent::__construct($field_name, $field_label);
+        $this->setXtype('textfield');
+    }
 
     protected function _addValidators()
     {

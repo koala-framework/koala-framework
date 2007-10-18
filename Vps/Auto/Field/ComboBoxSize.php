@@ -14,13 +14,6 @@ class Vps_Auto_Field_ComboBoxSize extends Vps_Auto_Field_ComboBox
             ->setEditable(false);
     }
 
-    public function getMetaData()
-    {
-        $ret = parent::getMetaData();
-        $ret['type'] = 'ComboBox';
-        return $ret;
-    }
-
     public function load($row)
     {
         $store = $this->getStore();

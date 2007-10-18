@@ -1,7 +1,6 @@
 <?php
 class Vps_Auto_Container_Tabs extends Vps_Auto_Container_Abstract
 {
-    protected $_xtype = 'tabpanel';
     public $tabs;
 
     public function __construct($name = null)
@@ -10,6 +9,7 @@ class Vps_Auto_Container_Tabs extends Vps_Auto_Container_Abstract
         $this->tabs = new Vps_Collection('Vps_Auto_Container_Tab');
         //$this->setDeferredRender(false); auskommentiert wegen combobox-view-breite-bug
         $this->setBaseCls('x-plain');
+        $this->setXtype('tabpanel');
     }
 
     public function getMetaData()

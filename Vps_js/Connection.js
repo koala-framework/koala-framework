@@ -1,8 +1,4 @@
-Vps.Connection = function(config){
-   Vps.Connection.superclass.constructor.call(this, config);
-};
-Vps.Connection.masks = 0; //static var that hols number of masked requests
-Ext.extend(Vps.Connection, Ext.data.Connection, {
+Vps.Connection = Ext.extend(Ext.data.Connection, {
     request: function(options)
     {
         if (options.mask) {
@@ -30,16 +26,28 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
     vpsSuccess: function(response, options)
     {
         options.vpsIsSuccess = false;
-        var r = Ext.decode(response.responseText);
-        if (r.exceptions) {
-            Ext.Msg.alert('Exceptions', "Folgende Exceptions sind aufgetreten:\n"+r.exceptions);
+        options.vpsLogin = false;
+        try {
+            var r = Ext.decode(response.responseText);
+        } catch(e) {
+            var msg = '<a href="'+options.url+'?'+Ext.urlEncode(options.params)+'">request-url</a><br />';
+            msg += e.toString()+': <br />'+response.responseText;
+            Ext.Msg.alert('Javascript Parse Exception', msg);
+            Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
+            return;
+        }
+        if (r.exception) {
+            var msg = '<a href="'+options.url+'?'+Ext.urlEncode(options.params)+'">request-url</a><br />';
+            msg += r.exception;
+            Ext.Msg.alert('PHP Exception', msg);
             Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
             return;
         }
 
         if (!r.success) {
             if (r.login && r.login===true) {
-                dlg = new Vps.User.Login.Dialog(Ext.get(document.body).createChild(), {
+                options.vpsLogin = true;
+                var dlg = new Vps.User.Login.Dialog({
                     success: function() {
                         //redo action...
                         this.repeatRequest(options);
@@ -48,7 +56,6 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
                 });
                 Ext.getBody().unmask();
                 dlg.showLogin();
-                Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
                 return;
             }
             if (r.error) {
@@ -74,6 +81,10 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
     
     vpsCallback: function(options, success, response)
     {
+        //wenn login-fenster angezeigt wird keinen callback aufrufen - weil der request
+        //wird ja erneut gesendet und da dann der callback aufgerufen.
+        if (options.vpsLogin) return;
+
         if (options.mask) {
             Vps.Connection.masks--;
             if (Vps.Connection.masks == 0) {
@@ -87,6 +98,7 @@ Ext.extend(Vps.Connection, Ext.data.Connection, {
         Ext.callback(options.vpsCallback.callback, options.vpsCallback.scope, [options, success, response]);
     }
 });
+Vps.Connection.masks = 0; //static var that hols number of masked requests
 
 Ext.Ajax = new Vps.Connection({
     /**

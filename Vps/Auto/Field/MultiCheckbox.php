@@ -3,7 +3,6 @@
 class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
 {
     protected $_fields;
-    protected $_xtype = 'fieldset';
 
     public function __construct($tableName = null, $title = null)
     {
@@ -14,6 +13,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
         $this->setAutoHeight(true);
         $this->setLayout('form');
         $this->setBaseCls('x-plain');
+        $this->setXtype('fieldset');
     }
 
     public function getMetaData()

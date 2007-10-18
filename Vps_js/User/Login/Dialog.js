@@ -1,19 +1,22 @@
 Ext.namespace('Vps.User.Login');
 Vps.User.Login.Dialog = Ext.extend(Ext.Window,
 {
-    initComponent: function() {
+    initComponent: function()
+    {
         this.height = 160;
         this.width = 310;
         this.modal = true;
-        this.proxyDrag = true;
         this.title = 'Login';
         this.resizable = false;
+        this.closable = false;
         Vps.User.Login.Dialog.superclass.initComponent.call(this);
-
-        this.render(Ext.getBody());
-
-        Ext.DomHelper.append(this.body, '<iframe id="loginframe" scrolling="no" src="/login/showForm" width="100%" height="100%" style="border: 0px"></iframe>');
-        var frame = Ext.get('loginframe');
+    },
+    afterRender : function()
+    {
+        Vps.User.Login.Dialog.superclass.afterRender.call(this);
+        var frameHtml = '<iframe scrolling="no" src="/login/showForm" width="100%" '+
+                        'height="100%" style="border: 0px"></iframe>';
+        var frame = Ext.DomHelper.append(this.body, frameHtml, true);
         function cb(){
             if(Ext.isIE){
                 doc = frame.dom.contentWindow.document;
