@@ -264,7 +264,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             textfield.on('render', function(textfield) {
                 textfield.getEl().on('keypress', function() {
                     this.applyBaseParams({query: textfield.getValue()});
-                    this.store.load();
+                    this.load();
                 }, this, {buffer: 500});
             }, this);
             delete meta.filters.text;
