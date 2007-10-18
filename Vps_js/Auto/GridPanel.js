@@ -264,11 +264,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             textfield.on('render', function(textfield) {
                 textfield.getEl().on('keypress', function() {
                     this.applyBaseParams({query: textfield.getValue()});
-                    if (this.pagingType && this.pagingType != 'Date') {
-                        this.store.load({params:{start:0}});
-                    } else {
-                        this.store.load();
-                    }
+                    this.store.load();
                 }, this, {buffer: 500});
             }, this);
             delete meta.filters.text;
@@ -296,8 +292,10 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                 gridConfig.tbar.add(' ');
                 gridConfig.tbar.add(combo);
                 combo.on('select', function(combo, record, index) {
-                    this.store.baseParams['query_'+filter] = record.id;
-                    this.load({start:0});
+                    var params = {};
+                    params['query_'+filter] = record.id;
+                    this.applyBaseParams(params);
+                    this.load();
                 }, this);
             } else if (meta.filters[filter].type == 'DateRange') {
                 var fieldFrom = new Vps.Form.DateField({
@@ -314,13 +312,10 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                 gridConfig.tbar.add(new Ext.Button({
                     text: '»',
                     handler: function() {
-                        this.store.baseParams[filter+'_from'] = fieldFrom.getValue().format('Y-m-d');
-                        this.store.baseParams[filter+'_to'] = fieldTo.getValue().format('Y-m-d');
-                        if (this.pagingType && this.pagingType != 'Date') {
-                            this.store.load({params:{start:0}});
-                        } else {
-                            this.store.load();
-                        }
+                        var params = {};
+                        params[filter+'_from'] = fieldFrom.getValue().format('Y-m-d');
+                        params[filter+'_to'] = fieldTo.getValue().format('Y-m-d');
+                        this.load();
                     },
                     scope: this
                 }));
@@ -594,6 +589,9 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         if (baseParams) {
             this.setBaseParams(baseParams);
         }
+        if (this.pagingType && this.pagingType != 'Date' && !this.baseParams.start) {
+            this.baseParams.start = 0;
+        }
         this.getStore().load({params: this.baseParams});
     },
     getGrid : function() {
@@ -615,7 +613,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         if (this.editDialog) {
             this.editDialog.setBaseParams(baseParams);
         }
-        if (!baseParams.start) baseParams.start = 0;
         this.baseParams = baseParams;
     },
     applyBaseParams : function(baseParams) {
