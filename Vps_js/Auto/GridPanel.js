@@ -263,7 +263,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             gridConfig.tbar.add(textfield);
             textfield.on('render', function(textfield) {
                 textfield.getEl().on('keypress', function() {
-                    this.store.baseParams.query = textfield.getValue();
+                    this.applyBaseParams({query: textfield.getValue()});
                     if (this.pagingType && this.pagingType != 'Date') {
                         this.store.load({params:{start:0}});
                     } else {
@@ -617,6 +617,12 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         }
         if (!baseParams.start) baseParams.start = 0;
         this.baseParams = baseParams;
+    },
+    applyBaseParams : function(baseParams) {
+        if (this.editDialog) {
+            this.editDialog.applyBaseParams(baseParams);
+        }
+        Ext.apply(this.baseParams, baseParams);
     }
 });
 
