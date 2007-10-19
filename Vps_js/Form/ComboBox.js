@@ -85,12 +85,6 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             valueField: 'id'
         });
 
-        if (this.store.proxy) {
-            //wenn proxy vorhanden können daten nachgeladen werden
-            //also loading anzeigen (siehe setValue)
-            this.valueNotFoundText = 'loading...';
-        }
-
         if (this.addDialog) {
             this.addDialog = new Vps.Auto.Form.Window(this.addDialog);
             this.addDialog.on('datachange', function(result) {
@@ -105,8 +99,15 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
     },
     setValue : function(v)
     {
+        if (this.store.proxy && v!=='' && this.valueField) {
+            //wenn proxy vorhanden können daten nachgeladen werden
+            //also loading anzeigen (siehe setValue)
+            this.valueNotFoundText = 'loading...';
+        } else {
+            this.valueNotFoundText = '';
+        }
         Vps.Form.ComboBox.superclass.setValue.apply(this, arguments);
-        if (v != '' && this.valueField
+        if (v !== '' && this.valueField
                 && !this.findRecord(this.valueField, v) //record nicht gefunden
                 && this.store.proxy) { //proxy vorhanden (dh. daten können nachgeladen werden)
             this.store.baseParams[this.queryParam] = v;

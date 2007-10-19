@@ -1,6 +1,5 @@
 Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
     autoload: true,
-    actions: {},
     autoScroll: true, //um scrollbars zu bekommen
     border: false,
     checkDirty: false,
@@ -9,6 +8,8 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 
     initComponent: function()
     {
+        this.actions = {};
+
         this.addEvents({
             loadform: true,
             datachange: true,
@@ -159,6 +160,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         if (!options) options = {};
         this.getForm().waitMsgTarget = this.el;
         this.getForm().submit(Ext.applyIf(options, {
+            url: this.controllerUrl+'jsonSave',
             waitMsg: 'speichern...',
             success: function(form, action) {
                 this.onSubmitSuccess(form, action);

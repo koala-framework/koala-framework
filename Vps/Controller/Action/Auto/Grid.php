@@ -43,7 +43,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     }
     public function preDispatch()
     {
-        parent::init();
+        parent::preDispatch();
 
         if (!isset($this->_table) && isset($this->_tableName)) {
             $this->_table = new $this->_tableName();

@@ -81,12 +81,9 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
     },
     loadMenu: function(r)
     {
-        if (this.items.getCount() > 0) {
-            //tolbar komplett löschen und neu erstellen
-            this.destroy();
-            this.render();
-            this.items.clear();
-        }
+        this.items.each(function(i) {
+            i.destroy();
+        });
         var response = Ext.decode(r.responseText);
         var menuItems = this._processMenus(response.menus);
         menuItems.each(function(menuItem) {
