@@ -30,16 +30,24 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         try {
             var r = Ext.decode(response.responseText);
         } catch(e) {
-            var msg = '<a href="'+options.url+'?'+Ext.urlEncode(options.params)+'">request-url</a><br />';
-            msg += e.toString()+': <br />'+response.responseText;
-            Ext.Msg.alert('Javascript Parse Exception', msg);
-            Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
-            return;
+            var errorMsg = '<a href="'+options.url+'?'+Ext.urlEncode(options.params)+'">request-url</a><br />';
+            errorMsg += e.toString()+': <br />'+response.responseText;
+            var errorMsgTitle = 'Javascript Parse Exception';
         }
-        if (r.exception) {
-            var msg = '<a href="'+options.url+'?'+Ext.urlEncode(options.params)+'">request-url</a><br />';
-            msg += r.exception;
-            Ext.Msg.alert('PHP Exception', msg);
+
+        if (!errorMsg && r.exception) {
+            var errorMsg = '<a href="'+options.url+'?'+Ext.urlEncode(options.params)+'">request-url</a><br />';
+            errorMsg += r.exception;
+            var errorMsgTitle = 'PHP Exception';
+        }
+        if (errorMsg) {
+            Ext.Msg.show({
+                title: errorMsgTitle,
+                msg: errorMsg,
+                buttons: Ext.Msg.OK,
+                modal: true,
+                width: 800
+            });
             Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
             return;
         }

@@ -40,16 +40,18 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
         if (this.actions[type]) return this.actions[type];
 
         if (type == 'save') {
-            var action = this.getAutoForm().getAction('save');
-            action.setHandler(function() {
-                this.getAutoForm().onSubmit({}, {
-                    callback: function() {
-                        this.hide();
-                    },
-                    scope: this
-                });
-            }, this);
-            this.actions[type] = action;
+            this.actions[type] = new Ext.Action({
+                text    : 'Save',
+                handler : function() {
+                    this.getAutoForm().onSubmit({}, {
+                        callback: function() {
+                            this.hide();
+                        },
+                        scope: this
+                    });
+                },
+                scope   : this
+            });
         } else if (type == 'cancel') {
             this.actions[type] = new Ext.Action({
                 text    : 'Cancel',

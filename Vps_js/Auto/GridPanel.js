@@ -1,16 +1,14 @@
 Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 {
     controllerUrl: '',
-
-    autoload: true,
+    //autoload: true,
+    layout: 'fit',
+    actions: {},
+    filters: [],
 
     initComponent : function()
     {
-        this.filters = [];
-        if (!this.actions) this.actions = {};
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
-
-        this.layout = 'fit';
 
 //         if(this.autoload) {
         //todo: wos bosiat bei !autoload
