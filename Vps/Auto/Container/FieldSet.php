@@ -9,9 +9,9 @@ class Vps_Auto_Container_FieldSet extends Vps_Auto_Container_Abstract
         $this->setXtype('fieldset');
     }
 
-//     public function setCheckboxName($name)
-//     {
-//         $this->fields->add(new Vps_Auto_Field_FieldSet_Checkbox($name));
-//         return $this->setProperty('checkboxName', $name);
-//     }
+    public function setCheckboxName($name)
+    {
+        $this->fields->add(new Vps_Auto_Field_Hidden($name));
+        return $this->setProperty('checkboxName', $name);
+    }
 }

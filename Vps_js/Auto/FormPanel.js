@@ -1,17 +1,14 @@
-Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
-
+Vps.Auto.FormPanel = Ext.extend(Ext.Panel,
+{
+    actions: {},
+    autoScroll: true, //um scrollbars zu bekommen
+    border: false,
+    checkDirty: false,
+    formConfig: {},
+    maskDisabled: false,
+    
     initComponent: function()
     {
-        if (!this.actions) this.actions = {};
-
-        //um scrollbars zu bekommen
-        if (!this.autoScroll) this.autoScroll = true;
-
-        if (!this.border) this.border = false;
-        if (!this.formConfig) this.formConfig = {};
-        if (!this.checkDirty) this.checkDirty = false;
-        this.maskDisabled = false;
-
         this.addEvents({
             loadform: true,
             datachange: true,
