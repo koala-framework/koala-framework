@@ -20,7 +20,8 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action_Media
     {
         $id = $this->_getParam('componentId');
         $filename = $this->_getParam('filename');
-        $extra = strpos($filename, '.thumb.') ? '.thumb' : '' ;
+        $parts = explode('.', $filename);
+        $extra = sizeof($parts) == 3 ? '.' . $parts[1] : '';
         return $id . $extra;
     }
 

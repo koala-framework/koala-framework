@@ -8,11 +8,10 @@ class Vpc_Composite_TextImages_Admin extends Vpc_Admin
 
     public function getControllerConfig($component, $view)
     {
-        $config['tabs']['Text']['config']['controllerUrl'] = $view->getControllerUrl($component, 'Vpc_Composite_TextImages_Text');
-        $config['tabs']['Text']['class'] = 'Vps.Auto.FormPanel';
-        $config['tabs']['Images']['config']['controllerUrl'] = $view->getControllerUrl($component, 'Vpc_Composite_TextImages_Images');
-        $config['tabs']['Images']['class'] = 'Vps.Auto.GridPanel';
-        $config['activeItem'] = 'Text';
+        $config['tabs']['Images'] = $view->getConfig($component->images);
+        $config['tabs']['Text'] = $view->getConfig($component->text);
+        $config['tabs']['Properties'] = $view->getNoAdminConfig($component, 'Vps.Auto.FormPanel');
+        $config['activeItem'] = 'Images';
         return $config;
     }
 

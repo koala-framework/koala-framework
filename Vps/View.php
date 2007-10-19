@@ -17,6 +17,14 @@ abstract class Vps_View extends Zend_View_Abstract
         }
     }
 
+    public function getNoAdminConfig(Vpc_Abstract $component, $controllerClass, $config = array())
+    {
+        $config['controllerUrl'] = $this->getControllerUrl($component);
+        $return['config'] = $config;
+        $return['class'] = $controllerClass;
+        return $return;
+    }
+
     public function getControllerUrl(Vpc_Abstract $component, $class = '')
     {
         if ($class == '') { $class = get_class($component); }

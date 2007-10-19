@@ -1,5 +1,5 @@
 <?php
-class Vps_Auto_Field_ImageViewer extends Vps_Auto_Field_SimpleAbstract
+class Vps_Auto_Field_ImageViewer extends Vps_Auto_Field_Abstract
 {
     public function __construct($field_name = null, $field_label = null)
     {

@@ -1,5 +1,5 @@
 <?php
-class Vps_Auto_Data_Table_Vpc extends Vps_Auto_Data_Table_Parent
+class Vps_Auto_Data_Vpc_Table extends Vps_Auto_Data_Table_Parent
 {
     public function load($row)
     {

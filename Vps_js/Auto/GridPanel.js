@@ -30,7 +30,8 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
 
         this.addEvents({
             'rendergrid': true,
-            'beforerendergrid': true
+            'beforerendergrid': true,
+            'deleterow': true
         });
 
         Vps.Auto.GridPanel.superclass.initComponent.call(this);
@@ -548,6 +549,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                             success: function() {
                                 this.reload();
                                 this.getAction('delete').disable();
+                                this.fireEvent('deleterow', this.grid);
                             },
                             failure: function() {
                                 this.getAction('delete').enable();
@@ -583,8 +585,8 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     selectRow: function(row) {
         this.getSelectionModel().selectRow(row);
     },
-    reload: function() {
-        this.store.reload();
+    reload: function(options) {
+        this.store.reload(options);
         this.store.commitChanges();
     },
     load : function(params) {
