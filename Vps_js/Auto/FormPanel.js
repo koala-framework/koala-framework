@@ -1,12 +1,12 @@
-Vps.Auto.FormPanel = Ext.extend(Ext.Panel,
-{
+Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
+    autoload: true,
     actions: {},
     autoScroll: true, //um scrollbars zu bekommen
     border: false,
     checkDirty: false,
     formConfig: {},
     maskDisabled: false,
-    
+
     initComponent: function()
     {
         this.addEvents({
@@ -23,23 +23,18 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel,
         Ext.applyIf(this.formConfig, {
             baseParams       : {},
             trackResetOnLoad : true,
-            maskDisabled     : false,
-            url              : this.controllerUrl+'jsonSave'
+            maskDisabled     : false
         });
 
-        if (!this.controllerUrl) {
-            throw 'No controllerUrl specified for AutoForm.';
-        }
-
-        //if (this.autoload == undefined || (this.autoload != undefined && this.autoload)) {
+        if (this.autoload) {
             this.loadForm(this.controllerUrl);
-        //}
+        }
     },
 
     loadForm : function(controllerUrl)
     {
         this.controllerUrl = controllerUrl;
-
+        this.formConfig.url = controllerUrl + 'jsonSave';
         Ext.Ajax.request({
             mask: true,
             url: this.controllerUrl+'jsonLoad',
@@ -67,6 +62,9 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel,
                 if (!meta.form.tbar) meta.form.tbar = [];
                 meta.form.tbar.push(this.getAction(b));
             }
+        }
+        if (this.formPanel != undefined) {
+            this.remove(this.formPanel, true);
         }
         this.formPanel = new Ext.FormPanel(meta.form);
         this.formPanel.on('render', function() {

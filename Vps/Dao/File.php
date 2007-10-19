@@ -29,7 +29,7 @@ class Vps_Dao_File extends Vps_Db_Table
         return null;
     }
 
-    public function generateUrl($uploadId, $id, $filename, $type = self::SHOW)
+    public function generateUrl($uploadId, $id, $filename, $type = self::SHOW, $addRandom = false)
     {
         $row = $this->find($uploadId)->current();
         if ($row) {
@@ -39,7 +39,8 @@ class Vps_Dao_File extends Vps_Db_Table
             } else {
                 $checksum = md5('k4Xjgw9f' . $id);
             }
-            return "/media/$uploadId/$id/$checksum/$filename.$extension";
+            $random = $addRandom ? '?' . uniqid() : '';
+            return "/media/$uploadId/$id/$checksum/$filename.$extension$random";
         } else {
             return null;
         }

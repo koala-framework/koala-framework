@@ -41,7 +41,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected function _initColumns()
     {
     }
-    public function init()
+    public function preDispatch()
     {
         parent::init();
 

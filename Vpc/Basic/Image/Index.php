@@ -5,12 +5,13 @@ class Vpc_Basic_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
     const NAME = 'Standard.Image';
     protected $_settings = array(
         'extensions' 	    => array('jpg', 'gif', 'png'),
-        'size'              => array(), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
-        'allow'		        => array(Vps_Media_Image::SCALE_BESTFIT, Vps_Media_Image::SCALE_CROP, Vps_Media_Image::SCALE_DEFORM),
+        'size'              => array(400, 300), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
+        'allow'		        => array(Vps_Media_Image::SCALE_BESTFIT),
         'filename'          => 'filename'
     );
     const SIZE_NORMAL = '';
     const SIZE_THUMB = '.thumb';
+    const SIZE_MINI = '.mini';
 
     public function getTemplateVars()
     {
@@ -38,13 +39,13 @@ class Vpc_Basic_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
         return $settings;
     }
 
-    public function getImageUrl($size = self::SIZE_NORMAL)
+    public function getImageUrl($size = self::SIZE_NORMAL, $addRandom = false)
     {
         $row = $this->getTable()->find($this->getDbId(), $this->getComponentKey())->current();
         if ($row) {
             $filename = $row->filename != '' ? $row->filename : 'unnamed';
             $filename .= $size;
-            return $this->getTable('Vps_Dao_File')->generateUrl($row->vps_upload_id, $this->getId(), $filename);
+            return $this->getTable('Vps_Dao_File')->generateUrl($row->vps_upload_id, $this->getId(), $filename, Vps_Dao_File::SHOW, $addRandom);
         } else {
             return null;
         }
@@ -65,6 +66,8 @@ class Vpc_Basic_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
 
         if (strpos($target, self::SIZE_THUMB)) {
             Vps_Media_Image::scale($target, $target, array(100, 100), Vps_Media_Image::SCALE_BESTFIT);
+        } else if (strpos($target, self::SIZE_MINI)) {
+            Vps_Media_Image::scale($target, $target, array(20, 20), Vps_Media_Image::SCALE_BESTFIT);
         }
     }
 }
