@@ -26,7 +26,7 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
         parent::prepareSave($row, $postData);
     }
 
-    public function save($parentRow)
+    public function save($parentRow, $postData)
     {
         $row = $this->getRow();
         if(!$row) {
@@ -35,8 +35,8 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
             throw new Vps_Exception('Row must be a Zend_Db_Table_Row_Abstract.');
         }
 
-        parent::save($row);
         $row->save();
+        parent::save($row, $postData);
 
         $primaryKey = $this->getPrimaryKey();
         if (is_array($primaryKey)) $primaryKey = $primaryKey[1];

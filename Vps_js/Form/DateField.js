@@ -2,7 +2,7 @@ Vps.Form.DateField = function(config)
 {
     config = config || {};
     config = Ext.applyIf(config, {
-        format: 'd.m.Y'
+        format: 'Y-m-d'
     });
     Vps.Form.DateField.superclass.constructor.call(this, config);
 };

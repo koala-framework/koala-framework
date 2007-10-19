@@ -51,12 +51,14 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
     public function jsonLoadAction()
     {
-        $row = $this->_form->getRow();
-        if (!$this->_hasPermissions($row, 'load')) {
-            throw new Vps_Exception('You don\'t have the permission for this entry.');
-        }
+        if ($this->_form->getId()) { //nur laden wennn einen id über get daherkommt
+            $row = $this->_form->getRow();
 
-        $this->view->data = $this->_form->load(null);
+            if (!$this->_hasPermissions($row, 'load')) {
+                throw new Vps_Exception('You don\'t have the permission for this entry.');
+            }
+            $this->view->data = $this->_form->load(null);
+        }
 
         if ($this->getRequest()->getParam('meta')) {
             $this->_appendMetaData();
@@ -73,9 +75,6 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     public function jsonSaveAction()
     {
         $row = $this->_form->getRow();
-        if (!$this->_hasPermissions($row, 'save')) {
-            throw new Vps_Exception("Save is not allowed for this row.");
-        }
 
         $data = $this->_form->prepareSave(null, $this->getRequest()->getParams());
 
@@ -100,7 +99,13 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             $this->_beforeSave($row);
         }
 
-        $data = $this->_form->save(null);
+        //erst hier unten Berechtigungen überprüfen, damit beforeInsert usw vorher noch ausgeführt
+        //wird und eventuelle Daten gesetzt werden
+        if (!$this->_hasPermissions($row, 'save')) {
+            throw new Vps_Exception("Save is not allowed for this row.");
+        }
+
+        $data = $this->_form->save(null, $this->getRequest()->getParams());
 
         if ($row) {
             if ($insert) {
