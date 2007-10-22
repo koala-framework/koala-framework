@@ -2,14 +2,12 @@ Ext.namespace('Vps.Auto');
 Vps.Auto.TreePanel = Ext.extend(Ext.Panel, {
     initComponent : function()
     {
-	    this.addEvents({
-	        selectionchange: true,
-	        editaction: true,
-            addaction: true,
-	        generatetoolbar: true,
-	        generatetoolbarstart: true,
-	        loaded: true
-	    });
+	    this.addEvents(
+	        'selectionchange',
+	        'editaction',
+            'addaction',
+	        'loaded'
+	    );
 
 	    Ext.Ajax.request({
             mask: true,

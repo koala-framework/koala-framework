@@ -9,7 +9,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     initComponent : function()
     {
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
-
 //         if(this.autoload) {
         //todo: wos bosiat bei !autoload
 
@@ -28,11 +27,11 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             });
 //         }
 
-        this.addEvents({
-            'rendergrid': true,
-            'beforerendergrid': true,
-            'deleterow': true
-        });
+        this.addEvents(
+            'rendergrid',
+            'beforerendergrid',
+            'deleterow'
+        );
 
         Vps.Auto.GridPanel.superclass.initComponent.call(this);
     },
@@ -51,8 +50,9 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                     totalProperty: meta.totalProperty,
                     root: meta.root,
                     id: meta.id,
-                    sucessProperty: meta.successProperty
-                }, meta.fields),
+                    sucessProperty: meta.successProperty,
+                    fields: meta.fields
+                }),
                 remoteSort: remoteSort,
                 sortInfo: meta.sortInfo
             };

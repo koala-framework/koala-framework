@@ -9,7 +9,6 @@ class Vps_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('menu'));
         $this->add(new Zend_Acl_Resource('login'));
         $this->add(new Zend_Acl_Resource('error'));
-        $this->allow(null, 'index');
         $this->allow(null, 'login');
         $this->allow(null, 'error');
         $this->allow(null, 'menu');

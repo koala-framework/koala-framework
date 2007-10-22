@@ -146,7 +146,7 @@ class Smarty
      *
      * @var boolean
      */
-    var $force_compile   =  false;
+    var $force_compile   =  true;
 
     /**
      * This enables template caching.
@@ -1453,6 +1453,7 @@ class Smarty
             require_once(SMARTY_DIR . $this->compiler_file);
         } else {
             // use include_path
+            
             require_once($this->compiler_file);
         }
 
@@ -1587,6 +1588,7 @@ class Smarty
         }
 
         if (!$_return) {
+
             if (!$params['quiet']) {
                 $this->trigger_error('unable to read resource: "' . $params['resource_name'] . '"');
             }

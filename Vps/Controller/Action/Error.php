@@ -31,13 +31,7 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
                 $file = 'Error.html';
             }
 
-            $paths = $this->view->getAllPaths();
-            $scriptPath = $paths['script'][0];
-            $path = '';
-            if (!is_file($scriptPath . $file)) {
-                $path = VPS_PATH . 'views/';
-            }
-            $this->view->setRenderFile($path . $file);
+            $this->view->setRenderFile($file);
 
             $config = Zend_Registry::get('config');
             $this->view->type = $errors->type;
@@ -66,5 +60,11 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
                 $this->view->exception = $exception->__toString();
             }
         }
+    }
+
+    public function jsonMailAction()
+    {
+        $exception = new Vps_JavaScriptException($this->_getParam('msg'));
+        Vps_Debug::sendErrorMail($exception, Zend_Registry::get('config')->debug->errormail);
     }
 }

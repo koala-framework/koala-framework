@@ -10,13 +10,13 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
     {
         this.actions = {};
 
-        this.addEvents({
-            loadform: true,
-            datachange: true,
-            deleteaction: true,
-            addaction: true,
-            renderform: true
-        });
+        this.addEvents(
+            'loadform',
+            'datachange',
+            'deleteaction',
+            'addaction',
+            'renderform'
+        );
 
         Vps.Auto.FormPanel.superclass.initComponent.call(this);
 

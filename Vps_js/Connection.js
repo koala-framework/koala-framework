@@ -41,13 +41,21 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             var errorMsgTitle = 'PHP Exception';
         }
         if (errorMsg) {
-            Ext.Msg.show({
-                title: errorMsgTitle,
-                msg: errorMsg,
-                buttons: Ext.Msg.OK,
-                modal: true,
-                width: 800
-            });
+            if (Vps.debug) {
+                Ext.Msg.show({
+                    title: errorMsgTitle,
+                    msg: errorMsg,
+                    buttons: Ext.Msg.OK,
+                    modal: true,
+                    width: 800
+                });
+            } else {
+                Ext.Msg.alert('Error', "Ein Serverfehler ist aufgetreten.");
+                Ext.Ajax.request({
+                    url: '/error/jsonMail',
+                    params: {msg: errorMsg}
+                });
+            }
             Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
             return;
         }
@@ -67,16 +75,20 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 return;
             }
             if (r.error) {
-                Ext.Msg.alert('Fehler', r.error);
+                Ext.Msg.alert('Error', r.error);
             } else if (!r.login) {
-                Ext.Msg.alert('Fehler', "Ein Serverfehler ist aufgetreten.");
+                Ext.Msg.alert('Error', "Ein Serverfehler ist aufgetreten.");
             }
             Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
             return;
         }
         options.vpsIsSuccess = true;
 
-        Ext.callback(options.vpsCallback.success, options.vpsCallback.scope, [response, options, r]);
+        try {
+            Ext.callback(options.vpsCallback.success, options.vpsCallback.scope, [response, options, r]);
+        } catch(e) {
+            Vps.handleError(e);
+        }
     },
 
     vpsFailure: function(response, options)

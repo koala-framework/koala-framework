@@ -29,3 +29,18 @@ Ext.onReady(function()
 
 //     Ext.QuickTips.init();
 });
+
+Vps.handleError = function(e)
+{
+    if (e.toString) e = e.toString();
+    if (e.message) e = e.message;
+    if (Vps.debug) {
+        Ext.Msg.alert('Error', e);
+    } else {
+        Ext.Msg.alert('Error', "Ein Fehler ist aufgetreten.");
+        Ext.Ajax.request({
+            url: '/error/jsonMail',
+            params: {msg: e}
+        });
+    }
+};

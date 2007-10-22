@@ -3,9 +3,7 @@ Vpc.Paragraphs.Index = Ext.extend(Vps.Auto.GridPanel,
 {
     initComponent : function()
     {
-        this.addEvents({
-            editcomponent: true
-        });
+        this.addEvents('editcomponent');
         Vpc.Paragraphs.Index.superclass.initComponent.call(this);
         this.on('rendergrid', this.addButtons, this);
     },
