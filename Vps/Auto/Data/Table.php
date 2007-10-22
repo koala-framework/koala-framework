@@ -1,9 +1,20 @@
 <?php
 class Vps_Auto_Data_Table extends Vps_Auto_Data_Abstract
 {
+    protected $_dataIndex;
+
+    /**
+     * @param string Spaltenname in Tabelle, standard ist Feldname
+     **/
+    public function __construct($dataIndex = null)
+    {
+        $this->_dataIndex = $dataIndex;
+    }
+
     public function load($row)
     {
-        $name = $this->getFieldname();
+        $name = $this->_dataIndex;
+        if (!$name) $name = $this->getFieldname();
         if (!isset($row->$name) && !is_null($row->$name)) { //scheiß php
             throw new Vps_Exception("Index '$name' doesn't exist in row.");
         }

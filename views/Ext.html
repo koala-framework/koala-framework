@@ -2,7 +2,7 @@
 
     {literal}
     <style type="text/css">
-    #loading{
+    #loading {
         position:absolute;
         left:45%;
         top:40%;
@@ -10,9 +10,6 @@
         z-index:20001;
         height:auto;
         border:1px solid #ccc;
-    }
-    #loading a {
-        color:#225588;
     }
     #loading .loading-indicator{
         background:white;
@@ -30,7 +27,7 @@
     <script type="text/javascript">
         document.write('<div id="loading">');
           document.write('<div class="loading-indicator">');
-            document.write('<img src="/assets/ext/resources/images/default/shared/large-loading.gif" width="32" height="32" style="margin-right:8px;float:left;vertical-align:top;"/>');
+            document.write('<img src="/assets/ext/resources/images/default/shared/large-loading.gif" width="32" height="32" style="margin-right:8px;float:left;vertical-align:top;" />');
             document.write('{$config->application->name}<br /><span id="loading-msg">Loading...</span></div>');
         document.write('</div>');
     </script>
@@ -57,7 +54,7 @@
                 Vps.currentViewport = new Vps.Viewport({
                     items: [panel]
                 });
-                if(Ext.get('loading')) {
+                if(Vps.Connection.masks == 0  && Ext.get('loading')) {
                     Ext.get('loading').fadeOut({remove: true});
                 }
             } catch(e) {

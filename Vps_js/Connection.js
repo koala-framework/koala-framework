@@ -3,7 +3,11 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
     {
         if (options.mask) {
             if (Vps.Connection.masks == 0) {
-                Ext.getBody().mask('Loading...');
+                if (Ext.get('loading')) {
+                    Ext.getBody().mask();
+                } else {
+                    Ext.getBody().mask('Loading...');
+                }
             }
             Vps.Connection.masks++;
         }
@@ -109,6 +113,9 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             Vps.Connection.masks--;
             if (Vps.Connection.masks == 0) {
                 Ext.getBody().unmask();
+                if (Ext.get('loading')) {
+                    Ext.get('loading').fadeOut({remove: true});
+                }
             }
         }
 
