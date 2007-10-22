@@ -54,19 +54,63 @@ class Vps_Controller_Front extends Zend_Controller_Front
         if ($isComponentsWeb) {
             $front->setDispatcher(new Vps_Controller_Dispatcher());
 
-            $router->AddRoute('default', new Zend_Controller_Router_Route('*', array('controller' => 'web', 'action' => 'index')));
-            $router->AddRoute('ajax', new Zend_Controller_Router_Route('ajax/*', array('controller' => 'web', 'action' => 'ajax')));
-            $router->AddRoute('ajaxfe', new Zend_Controller_Router_Route('ajax/fe/:action', array('controller' => 'fe', 'action' => 'action')));
-            $router->AddRoute('admin', new Zend_Controller_Router_Route('admin/:controller/:action', array('module' => 'admin', 'controller' => 'index', 'action' => 'index')));
-            $router->AddRoute('login', new Zend_Controller_Router_Route('login/:action', array('module' => 'admin', 'controller' => 'login', 'action' => 'index')));
-            $router->AddRoute('menu', new Zend_Controller_Router_Route('menu/:action', array('module' => 'admin', 'controller' => 'menu', 'action' => 'index')));
+            $router->AddRoute('default', new Zend_Controller_Router_Route(
+                        '*',
+                        array('controller' => 'web',
+                              'action' => 'index')));
+            $router->AddRoute('ajax', new Zend_Controller_Router_Route(
+                        'ajax/*',
+                        array('controller' => 'web',
+                              'action' => 'ajax')));
+            $router->AddRoute('ajaxfe', new Zend_Controller_Router_Route(
+                        'ajax/fe/:action',
+                        array('controller' => 'fe',
+                              'action' => 'action')));
+            $router->AddRoute('admin', new Zend_Controller_Router_Route(
+                        'admin/:controller/:action',
+                        array('module' => 'admin',
+                              'controller' => 'index',
+                              'action' => 'index')));
+            $router->AddRoute('login', new Zend_Controller_Router_Route(
+                        'login/:action',
+                        array('module' => 'admin',
+                              'controller' => 'login',
+                              'action' => 'index')));
+            $router->AddRoute('menu', new Zend_Controller_Router_Route(
+                        'menu/:action',
+                        array('module' => 'admin',
+                              'controller' => 'menu',
+                              'action' => 'index')));
 
-            $router->AddRoute('components', new Zend_Controller_Router_Route('components/:action', array('module' => 'admin', 'controller' => 'components', 'action' => 'index')));
-            $router->AddRoute('componentshow', new Zend_Controller_Router_Route('component/:action/:class/:componentId', array('module' => 'admin', 'controller' => 'components', 'action' => 'show')));
-            $router->AddRoute('componentedit', new Zend_Controller_Router_Route('component/edit/:class/:componentId/:action', array('module' => 'component', 'controller' => 'Index', 'action' => 'index')));
-            $router->AddRoute('componentsetup', new Zend_Controller_Router_Route('component/setup/:class', array('module' => 'admin', 'controller' => 'components', 'action' => 'setup')));
-            $router->AddRoute('media', new Zend_Controller_Router_Route('media/:uploadId/:componentId/:checksum/:filename', array('controller' => 'Media', 'action' => 'password')));
-            $router->AddRoute('mediaoriginal', new Zend_Controller_Router_Route('media/:uploadId', array('controller' => 'Media', 'action' => 'original')));
+            $router->AddRoute('components', new Zend_Controller_Router_Route(
+                        'components/:action',
+                        array('module' => 'admin',
+                              'controller' => 'components',
+                              'action' => 'index')));
+            $router->AddRoute('componentshow', new Zend_Controller_Router_Route(
+                        'component/:action/:class/:componentId',
+                        array('module' => 'admin',
+                              'controller' => 'components',
+                              'action' => 'show')));
+            $router->AddRoute('componentedit', new Zend_Controller_Router_Route(
+                        'component/edit/:class/:componentId/:action',
+                        array('module' => 'component',
+                              'controller' => 'Index',
+                              'action' => 'index')));
+            $router->AddRoute('componentsetup', new Zend_Controller_Router_Route(
+                        'component/setup/:class',
+                        array('module' => 'admin',
+                              'controller' => 'components',
+                              'action' => 'setup')));
+
+            $router->AddRoute('media', new Zend_Controller_Router_Route(
+                        'media/:uploadId/:componentId/:checksum/:filename',
+                        array('controller' => 'Media',
+                              'action' => 'password')));
+            $router->AddRoute('mediaoriginal', new Zend_Controller_Router_Route(
+                        'media/:uploadId',
+                        array('controller' => 'Media',
+                        'action' => 'original')));
 
             $plugin = new Zend_Controller_Plugin_ErrorHandler();
             $plugin->setErrorHandlerModule('admin');
@@ -78,7 +122,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $acl = new Vps_Acl();
 
             // Roles
-            $acl->addRole(new Vps_Acl_Role('member'), 'guest');
+            $acl->addRole(new Vps_Acl_Role('member'));
             $acl->addRole(new Vps_Acl_Role('admin'), 'member');
 
             // Resources
