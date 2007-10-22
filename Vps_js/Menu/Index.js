@@ -3,9 +3,9 @@ Ext.namespace('Vps.Menu');
 Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
     initComponent : function()
     {
-        this.addEvents({
-            'menuevent' : true
-        });
+        this.addEvents(
+            'menuevent'
+        );
 
         if (!this.controllerUrl) {
             this.controllerUrl = '/menu/';

@@ -1,4 +1,40 @@
 {if isset($ext) && !empty($ext)}
+
+    {literal}
+    <style type="text/css">
+    #loading{
+        position:absolute;
+        left:45%;
+        top:40%;
+        padding:2px;
+        z-index:20001;
+        height:auto;
+        border:1px solid #ccc;
+    }
+    #loading a {
+        color:#225588;
+    }
+    #loading .loading-indicator{
+        background:white;
+        color:#444;
+        font:bold 13px tahoma,arial,helvetica;
+        padding:10px;
+        margin:0;
+        height:auto;
+    }
+    #loading-msg {
+        font: normal 10px arial,tahoma,sans-serif;
+    }
+    </style>
+    {/literal}
+    <script type="text/javascript">
+        document.write('<div id="loading">');
+          document.write('<div class="loading-indicator">');
+            document.write('<img src="/assets/ext/resources/images/default/shared/large-loading.gif" width="32" height="32" style="margin-right:8px;float:left;vertical-align:top;"/>');
+            document.write('{$config->application->name}<br /><span id="loading-msg">Loading...</span></div>');
+        document.write('</div>');
+    </script>
+
     {foreach item=file from=$ext.files.css}
     <link rel="stylesheet" type="text/css" href="{$file}" />
     {/foreach}
@@ -9,14 +45,26 @@
 
 
     <script type="text/javascript">
-        Ext.onReady(function() {ldelim}
-            var panel = new {$ext.class}({$ext.config});
-            if (!panel.region) panel.region = 'center';
-            panel.id = 'mainPanel';
-            Vps.currentViewport = new Vps.Viewport({ldelim}
-                items: [panel]
-            {rdelim});
-        {rdelim});
+    {literal}
+        Ext.onReady(function() {
+            try {
+                {/literal}
+                Vps.debug = {$ext.debug};
+                var panel = new {$ext.class}({$ext.config});
+                {literal}
+                if (!panel.region) panel.region = 'center';
+                panel.id = 'mainPanel';
+                Vps.currentViewport = new Vps.Viewport({
+                    items: [panel]
+                });
+                if(Ext.get('loading')) {
+                    Ext.get('loading').fadeOut({remove: true});
+                }
+            } catch(e) {
+                Vps.handleError(e);
+            }
+        });
+    {/literal}
     </script>
 
 {/if}

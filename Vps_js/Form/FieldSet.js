@@ -23,9 +23,7 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
 
 Vps.Form.FieldSetHiddenCheckboxValue = Ext.extend(Ext.form.Hidden, {
     initComponent: function() {
-        this.addEvents({
-            'valuechange': true
-        });
+        this.addEvents('valuechange');
         Vps.Form.FieldSetHiddenCheckboxValue.superclass.initComponent.call(this);
     },
     setValue : function(v) {

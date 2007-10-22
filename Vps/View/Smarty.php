@@ -13,14 +13,18 @@ class Vps_View_Smarty extends Vps_View
         $this->_smarty = new Smarty();
         $this->_smarty->plugins_dir[] = 'SmartyPlugins/';
 
-        $this->setScriptPath('application/views');
+        $this->addScriptPath('application/views/');
+        $this->addScriptPath(VPS_PATH.'/views/');
+
         if (!isset($config['compile_dir'])) {
-            $config['compile_dir'] = 'application/views_c';
+            $config['compile_dir'] = 'application/views_c/';
         }
         foreach ($config as $key => $value) {
             $this->_smarty->$key = $value;
         }
         $this->extTemplate = VPS_PATH . 'views/Ext.html';
+
+        $this->config = Zend_Registry::get('config');
     }
 
     public function ext($class, $config = array(), $viewport = null)
@@ -61,6 +65,7 @@ class Vps_View_Smarty extends Vps_View
         $ext['class'] = $class;
         $ext['config'] = Zend_Json::encode($config);
         $ext['viewport'] = $viewport;
+        $ext['debug'] = Zend_Json::encode(!Zend_Registry::get('config')->debug->errormail);
         $this->ext = $ext;
     }
 
@@ -100,18 +105,20 @@ class Vps_View_Smarty extends Vps_View
         //doesn't mess up smarty in any way
         $this->_smarty->assign_by_ref('this', $this);
 
-        $path = $this->getScriptPaths();
-
         //smarty needs a template_dir, and can only use templates,
         //found in that directory, so we have to strip it from the filename
         if ($this->getRenderFile() != '') {
             $file = $this->getRenderFile();
+            foreach ($this->getScriptPaths() as $path) {
+                if (file_exists($path.$file)) {
+                    $this->_smarty->template_dir = $path;
+                    break;
+                }
+            }
         } else {
-            $file = substr(func_get_arg(0), strlen($path[0]));
+            throw new Vps_Exception("Not Implemented");
+            //$file = substr(func_get_arg(0), strlen($path));
         }
-
-        //set the template diretory as the first directory from the path
-        $this->_smarty->template_dir = $path[0];
 
         //process the template (and filter the output)
         $this->_smarty->display($file);
