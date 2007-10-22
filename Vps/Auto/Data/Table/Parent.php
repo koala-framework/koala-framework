@@ -1,5 +1,5 @@
 <?php
-class Vps_Auto_Data_Table_Parent extends Vps_Auto_Data_Table
+class Vps_Auto_Data_Table_Parent extends Vps_Auto_Data_Abstract
 {
     protected $_dataIndex;
     protected $_parentTable;
