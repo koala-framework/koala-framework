@@ -16,6 +16,7 @@ class Vps_Controller_Action extends Zend_Controller_Action
         if (substr($resource, 0, 4) == 'vpc_') {
             $resource = 'component';
         }
+
         $module = $this->getRequest()->getModuleName();
         if (!$acl->isAllowed($role, $resource)) {
             if ($this->getHelper('ViewRenderer')->isJson()) {
