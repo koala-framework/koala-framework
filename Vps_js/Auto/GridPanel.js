@@ -566,15 +566,15 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     },
     onPdf : function()
     {
-        window.open(this.controllerUrl+'pdf?'+Ext.urlEncode(this.baseParams));
+        window.open(this.controllerUrl+'pdf?'+Ext.urlEncode(this.getStore().baseParams));
     },
     onCsv : function()
     {
-        window.open(this.controllerUrl+'csv?'+Ext.urlEncode(this.baseParams));
+        window.open(this.controllerUrl+'csv?'+Ext.urlEncode(this.getStore().baseParams));
     },
     onXls : function()
     {
-        window.open(this.controllerUrl+'xls?'+Ext.urlEncode(this.baseParams));
+        window.open(this.controllerUrl+'xls?'+Ext.urlEncode(this.getStore().baseParams));
     },
     getSelected: function() {
         return this.getSelectionModel().getSelected();
