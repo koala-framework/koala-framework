@@ -40,15 +40,16 @@ abstract class Vpc_Abstract implements Vpc_Interface
         if ($table) {
             $info = $table->info();
             if ($info['primary'] == array(1 => 'page_id', 2 => 'component_key')) {
-                $rowset = $table->find($this->getPageId(), $this->getComponentKey());
-                if ($rowset->count() == 1) {
-                    $settings = array_merge($this->_settings, $settings);
-                    $this->_settings = array_merge($settings, $rowset->current()->toArray());
+                if (!is_array($settings)) { $settings = array(); }
+                $this->_settings = array_merge($this->_settings, $settings);
+                $row = $table->find($this->getPageId(), $this->getComponentKey())->current();
+                if ($row) {
+                    $this->_settings = array_merge($this->_settings, $row->toArray());
                 }
             }
         }
 
-        $this->init();
+        $this->_init();
 
         if (Zend_Registry::isRegistered('infolog')) {
             Zend_Registry::get('infolog')->createComponent(get_class($this) . ' - ' . $id);
@@ -58,7 +59,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     /**
      * Wird nach dem Konstruktor aufgerufen. Initialisierungscode in Unterklassen ist hier richtig.
      */
-    protected function init() {}
+    protected function _init() {}
 
     /**
      * Erstellt aus der ID der Komponente die Komponente.
@@ -67,9 +68,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string ID der Komponente
      * @return Vpc_Abstract
      */
-    public static function createInstance(Vps_Dao $dao, $class, $id, $settings = array())
+    public static function createInstance(Vps_Dao $dao, $class, $id, $pageCollection = null, $settings = array())
     {
-        return self::_createInstance($dao, $class, $id, null, $settings);
+        return self::_createInstance($dao, $class, $id, $pageCollection, $settings);
     }
 
     /**
@@ -396,7 +397,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
             $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData($this->getId());
             foreach($rows as $pageRow) {
                 if ($filename != '' && $filename != $pageRow['filename']) { continue; }
-                $page = self::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id']);
+                $page = self::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id'], $this->getPageCollection());
                 $this->getPageCollection()->addTreePage($page, $pageRow['filename'], $pageRow['name'], $this);
                 $r['page'] = $page;
                 $r['filename'] = $pageRow['filename'];
@@ -484,7 +485,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
      */
     protected function showInvisible()
     {
-        return $this->getPageCollection()->showInvisible();
+        if ($this->getPageCollection()) {
+            return $this->getPageCollection()->showInvisible();
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -517,6 +522,14 @@ abstract class Vpc_Abstract implements Vpc_Interface
     public function getSettings()
     {
         return $this->_settings;
+    }
+
+    protected function _getClassFromSetting($setting, $parentClass) {
+        $class = $this->getSetting($setting);
+        if ($class != $parentClass && !is_subclass_of($class, $parentClass)) {
+            throw new Vpc_Exception("$setting '$class' must be a subclass of $parentClass.");
+        }
+        return $class;
     }
 
     public function store($key, $val)

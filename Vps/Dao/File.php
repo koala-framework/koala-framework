@@ -132,7 +132,7 @@ class Vps_Dao_File extends Vps_Db_Table
             $row = $this->find($id)->current();
             if ($row) {
                 $this->deleteFile($id);
-                $x = $row->delete();
+                $x = $row->delete(); // ruft delete mit Array auf (siehe oben)
             }
         }
     }

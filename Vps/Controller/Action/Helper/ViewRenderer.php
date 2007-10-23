@@ -43,8 +43,6 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                 $component = $pageCollection->findComponent($id);
                 if (!$component) {
                     $class = $this->getRequest()->getParam('class');
-                    $last = strrchr($class, '_');
-                    $class = str_replace($last, '_Index', $class);
                     Zend_Loader::loadClass($class);
                     $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $class, $id);
                 }

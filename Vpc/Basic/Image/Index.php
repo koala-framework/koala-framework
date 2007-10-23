@@ -5,13 +5,35 @@ class Vpc_Basic_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
     const NAME = 'Standard.Image';
     protected $_settings = array(
         'extensions' 	    => array('jpg', 'gif', 'png'),
-        'size'              => array(400, 300), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
-        'allow'		        => array(Vps_Media_Image::SCALE_BESTFIT),
-        'filename'          => 'filename'
+        'size'              => array(300, 200), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
+        'allow'             => array(Vps_Media_Image::SCALE_BESTFIT),
+        'filename'          => 'filename',
+        'editFilename'      => true,
+        'hasEnlarge'        => true,
+        'enlargeClass'      => 'Vpc_Basic_Image_Index',
+        'enlargeSettings'   => array(
+            'extensions'        => array('jpg', 'gif', 'png'),
+            'size'              => array(800, 600), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
+            'allow'             => array(Vps_Media_Image::SCALE_BESTFIT),
+            'filename'          => 'filename',
+            'editFilename'      => true
+        )
     );
     const SIZE_NORMAL = '';
     const SIZE_THUMB = '.thumb';
     const SIZE_MINI = '.mini';
+    public $imagebig = null;
+
+    protected function _init()
+    {
+        if (!$this->imagebig && $this->getSetting('hasEnlarge')) {
+            $enlargeClass = $this->_getClassFromSetting('enlargeClass', 'Vpc_Basic_Image_Index');
+            $settings = $this->getSetting('enlargeSettings');
+            if (!is_array($settings)) { $settings = array(); }
+            $settings['hasEnlarge'] = false;
+            $this->imagebig = $this->createComponent($enlargeClass, 1, $settings);
+        }
+    }
 
     public function getTemplateVars()
     {
@@ -37,6 +59,11 @@ class Vpc_Basic_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
             $settings['scale'] = isset($settings['allow'][0]) ? $settings['allow'][0] : Vps_Media_Image::SCALE_BESTFIT;
         }
         return $settings;
+    }
+
+    public function getChildComponents()
+    {
+        return $this->imagebig ? array($this->imagebig) : array();
     }
 
     public function getImageUrl($size = self::SIZE_NORMAL, $addRandom = false)

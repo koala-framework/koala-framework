@@ -4,6 +4,7 @@ class Vps_Media_Image
     const SCALE_BESTFIT = 'bestfit';
     const SCALE_CROP = 'crop';
     const SCALE_DEFORM = 'deform';
+    const SCALE_ORIGINAL = 'original';
 
     public static function scale($source, $target, $size, $scale = self::SCALE_BESTFIT)
     {
@@ -13,6 +14,8 @@ class Vps_Media_Image
         if ($width == 0 && $height == 0) {
             return false;
         }
+
+        $writeImage = true;
 
         $im = new Imagick();
         $im->readImage($source);
@@ -52,13 +55,20 @@ class Vps_Media_Image
 
             $im->thumbnailImage($width, $height);
 
+        } elseif ($scale == self::SCALE_ORIGINAL){
+
+            copy($source, $target);
+            $writeImage = false;
+
         } else {
 
             return false;
 
         }
 
-        $im->writeImage($target);
+        if ($writeImage) {
+            $im->writeImage($target);
+        }
         $im->destroy();
         chmod($target, 0644);
         return true;

@@ -26,6 +26,6 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
 
         $name = get_class($component);
         $id = array('page_id' => $pageId, 'component_key' => $componentKey);
-        parent::__construct($name, $id);
+        parent::__construct('component' . $component->getId(), $id);
     }
 }

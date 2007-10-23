@@ -32,15 +32,17 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         }
     }
 
+    protected function _init()
+    {
+        $this->_paragraphs = array();
+        foreach($this->_getData() as $row) {
+            $c = $this->createComponent($row->component_class, $row->id);
+            $this->_paragraphs[$row->id] = $c;
+        }
+    }
+
     public function getChildComponents()
     {
-        if (!isset($this->_paragraphs)) {
-            $this->_paragraphs = array();
-            foreach($this->_getData() as $row) {
-                $c = $this->createComponent($row->component_class, $row->id);
-                $this->_paragraphs[$row->id] = $c;
-            }
-        }
         return $this->_paragraphs;
     }
 
