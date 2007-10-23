@@ -650,6 +650,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
     getEditDialog : function() {
         return this.editDialog;
     },
+    getBaseParams : function() {
+        return this.getStore().baseParams;
+    },
     setBaseParams : function(baseParams) {
         if (this.editDialog) {
             this.editDialog.getAutoForm().setBaseParams(baseParams);
