@@ -34,6 +34,8 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
                             Ext.callback(this.success, this.scope);
                         }
                     }
+                } else {
+                    doc.getElementsByName('username')[0].focus();
                 }
             }
         }
