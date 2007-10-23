@@ -1,5 +1,4 @@
-Ext.namespace('Vps.Auto');
-Vps.Auto.TreePanel = Ext.extend(Ext.Panel, {
+Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
     initComponent : function()
     {
 	    this.addEvents(
@@ -54,6 +53,9 @@ Vps.Auto.TreePanel = Ext.extend(Ext.Panel, {
         );
 
         this.tree.getSelectionModel().on('selectionchange', this.onSelectionchange, this);
+        this.tree.getSelectionModel().on('beforeselect', function(selModel, newNode, oldNode) {
+            return this.fireEvent('beforeselectionchange', newNode.attributes.id);
+        }, this);
         this.tree.on('beforenodedrop', this.onMove, this);
         this.tree.on('collapsenode', this.onCollapseNode, this);
         this.tree.on('expandnode', this.onExpandNode, this);
@@ -142,7 +144,7 @@ Vps.Auto.TreePanel = Ext.extend(Ext.Panel, {
         })
     },
 
-    onSelectionchange: function (e, node) {
+    onSelectionchange: function (selModel, node) {
         if (node && node.id != 0) {
             this.getAction('edit').enable();
             this.getAction('invisible').enable();
@@ -317,7 +319,20 @@ Vps.Auto.TreePanel = Ext.extend(Ext.Panel, {
     },
     getSelectedNode : function() {
         return this.getSelectionModel().getSelectedNode();
-    }
+    },
+
+    //für AbstractPanel
+    getSelectedId: function() {
+        var s = this.getSelectedNode();
+        if (s) return s.id;
+        return null;
+    },
+
+    //für AbstractPanel
+    selectId: function(id) {
+        this.getTree().getNodeById(id).select();
+    },
+
 
 });
 

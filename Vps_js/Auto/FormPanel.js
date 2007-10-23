@@ -1,8 +1,7 @@
-Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
+Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     autoload: true,
     autoScroll: true, //um scrollbars zu bekommen
     border: false,
-    checkDirty: false,
     formConfig: {},
     maskDisabled: false,
 
@@ -12,7 +11,6 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
 
         this.addEvents(
             'loadform',
-            'datachange',
             'deleteaction',
             'addaction',
             'renderform'
@@ -76,6 +74,10 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         this.getForm().baseParams = {};
     },
 
+    isDirty : function() {
+        return this.getForm().isDirty();
+    },
+
     getAction : function(type)
     {
         if (this.actions[type]) return this.actions[type];
@@ -86,7 +88,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
                 icon    : '/assets/vps/images/silkicons/table_save.png',
                 cls     : 'x-btn-text-icon',
                 handler : function() {
-                    this.onSubmit();
+                    this.onSave();
                 },
                 scope   : this
             });
@@ -107,13 +109,16 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
                 scope   : this
             });
         } else {
-            throw "unknown action-type: "+type;
+            throw 'unknown action-type: ' + type;
         }
         return this.actions[type];
     },
 
-    load : function(id, options) {
-        this.getForm().baseParams.id = id;
+    load : function(params, options) {
+        if (typeof params != 'object') params = { id: params };
+
+        Ext.apply(this.getForm().baseParams, params);
+
         if (!options) options = {};
         this.getForm().clearValues();
         this.getForm().clearInvalid();
@@ -130,45 +135,62 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         }));
     },
 
-    mabySave : function(callback, callCallbackIfNotDirty)
-    {
-        if(typeof callCallbackIfNotDirty == 'undefined') callCallbackIfNotDirty = true;
-        if (this.checkDirty && this.getForm().isDirty()) {
-            Ext.Msg.show({
-            title:'speichern?',
-            msg: 'Möchten Sie diesen Eintrag speichern?',
-            buttons: Ext.Msg.YESNOCANCEL,
-            scope: this,
-            fn: function(button) {
-                if (button == 'yes') {
-                    this.onSubmit({}, callback);
-                } else if (button == 'no') {
-                    Ext.callback(callback.callback, callback.scope);
-                } else if (button == 'cancel') {
-                    //nothing to do, action allread canceled
-                }
-            }});
-            return false;
-        } else if (callCallbackIfNotDirty) {
-            callback.callback.apply(callback.scope);
-        }
-        return true;
+    reload : function(options) {
+        this.load(this.getForm().baseParams.id, options);
     },
-    onSubmit : function(options, successCallback) {
-        this.getAction('save').disable();
 
+    
+    //für AbstractPanel
+    reset : function() {
+        this.getForm().reset();
+    },
+
+    //deprecated
+    onSubmit : function(options, successCallback) {
         if (!options) options = {};
+        options.success = successCallback.callback;
+        this.submit(options, successCallback);
+    },
+
+    //private
+    onSave : function() {
+        this.submit();
+    },
+
+    //für AbstractPanel
+    submit: function(options)
+    {
+        this.getAction('save').disable();
+        if (!options) options = {};
+
+        var cb = {
+            success: options.success,
+            failure: options.failure,
+            callback: options.callback,
+            scope: options.scope || this
+        };
+
         this.getForm().waitMsgTarget = this.el;
-        this.getForm().submit(Ext.applyIf(options, {
+        this.getForm().submit(Ext.apply(options, {
             url: this.controllerUrl+'jsonSave',
-            waitMsg: 'speichern...',
-            success: function(form, action) {
-                this.onSubmitSuccess(form, action);
-                if (successCallback) {
-                    Ext.callback(successCallback.callback, successCallback.scope);
+            waitMsg: 'saveing...',
+            success: function() {
+                this.onSubmitSuccess.apply(this, arguments);
+                if (cb.success) {
+                    cb.success.apply(cb.scope, arguments)
                 }
             },
-            failure: this.onSubmitFailure,
+            failure: function() {
+                this.onSubmitFailure.apply(this, arguments);
+                if (cb.failure) {
+                    cb.failure.apply(cb.scope, arguments)
+                }
+            },
+            callback: function() {
+                if (cb.callback) {
+                    cb.callback.apply(cb.scope, arguments)
+                }
+            },
             scope: this
         }));
     },
@@ -195,7 +217,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
         }
         if (this.getForm().loadAfterSave) {
             //bei file-upload neu laden
-            this.load();
+            this.reload();
         }
     },
     onDelete : function() {
@@ -229,7 +251,7 @@ Vps.Auto.FormPanel = Ext.extend(Ext.Panel, {
                 this.enable();
                 if (this.deleteButton) this.deleteButton.disable();
                 this.getAction('delete').disable();
-                this.getForm().baseParams.id = 0;
+                this.applyBaseParams({id: 0});
                 this.getForm().setDefaultValues();
                 this.getForm().clearInvalid();
                 this.fireEvent('addaction', this);

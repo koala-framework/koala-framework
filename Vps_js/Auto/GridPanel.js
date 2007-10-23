@@ -1,4 +1,4 @@
-Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
+Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 {
     controllerUrl: '',
     //autoload: true,
@@ -8,6 +8,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     initComponent : function()
     {
         this.actions = {};
+
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
 //         if(this.autoload) {
         //todo: wos bosiat bei !autoload
@@ -80,20 +81,21 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
             throw e; //re-throw
         }, this);
 
-        if (!this.selModel) {
-            this.selModel = new Ext.grid.RowSelectionModel({singleSelect:true});
-        }
+        var selModel = new Ext.grid.RowSelectionModel({singleSelect:true});
 
-        this.selModel.on('rowselect', function(selData, gridRow, currentRow) {
+        selModel.on('rowselect', function(selData, gridRow, currentRow) {
             this.getAction('delete').enable();
         }, this);
 
         this.relayEvents(this.store, ['load']);
-        this.relayEvents(this.selModel, ['rowselect', 'beforerowselect']);
+        this.relayEvents(selModel, ['selectionchange', 'rowselect', 'beforerowselect']);
+        selModel.on('beforerowselect', function(selModel, rowIndex, keepExisting, record) {
+            return this.fireEvent('beforeselectionchange', record.id);
+        }, this);
 
         var gridConfig = Ext.applyIf(this.gridConfig, {
             store: this.store,
-            selModel: this.selModel,
+            selModel: selModel,
             clicksToEdit: 1,
             border: false,
             loadMask: true,
@@ -443,7 +445,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
                 scope: this
             });
         } else {
-            throw "unknown action-type: "+type;
+            throw 'unknown action-type: ' + type;
         }
         return this.actions[type];
     },
@@ -475,28 +477,44 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     {
         this.submit();
     },
-    submit : function(callback, addParams)
+    submit : function(options)
     {
+        if (arguments[1]) options.params = arguments[1]; //backwards compatibility
+
         this.getAction('save').disable();
         var params = this.getSaveParams();
-        Ext.apply(params, addParams);
+        if (options.params) Ext.apply(params, options.params);
 
         if (params == {}) return;
+
+        var cb = {
+            success: options.success,
+            failure: options.failulre,
+            callback: options.callback,
+            scope: options.scope || this
+        };
 
         Ext.Ajax.request({
             url: this.controllerUrl+'jsonSave',
             params: params,
             success: function(response, options, r) {
                 this.reload();
-                if (callback && callback.callback) {
-                    callback.callback.call(callback.scope||this, response, options, r);
+                this.fireEvent('datachange', r);
+                if (cb.success) {
+                    cb.success.apply(cb.scope, arguments)
                 }
             },
             failure: function() {
                 this.getAction('save').enable();
+                if (cb.failure) {
+                    cb.failure.apply(cb.scope, arguments)
+                }
             },
             callback: function() {
                 this.el.unmask();
+                if (cb.callback) {
+                    cb.callback.apply(cb.scope, arguments)
+                }
             },
             scope  : this
         });
@@ -579,12 +597,32 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     getSelected: function() {
         return this.getSelectionModel().getSelected();
     },
+
+    //für AbstractPanel
+    getSelectedId: function() {
+        var s = this.getSelected();
+        if (s) return s.id;
+        return null;
+    },
     clearSelections: function() {
         this.getGrid().getSelectionModel().clearSelections();
     },
     selectRow: function(row) {
         this.getSelectionModel().selectRow(row);
     },
+
+    //für AbstractPanel
+    selectId: function(id) {
+        var r = this.getStore().getById(id);
+        this.getSelectionModel().selectRecords([r]);
+    },
+
+    //für AbstractPanel
+    reset: function() {
+        this.getStore().modified = [];
+        this.store.newRecords = [];
+    },
+
     reload: function(options) {
         this.store.reload(options);
         this.store.commitChanges();
@@ -596,6 +634,7 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         }
         this.getStore().load({ params: params });
     },
+
     getGrid : function() {
         return this.grid;
     },
@@ -627,7 +666,15 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         if (this.getStore().baseParams.query) delete this.getStore().baseParams.query;
         this.filters.each(function(f) {
             f.setValue(f.defaultValue || '');
+            
         }, this);
+    },
+    isDirty: function() {
+        if (this.store.getModifiedRecords().length || this.store.newRecords.legth) {
+            return true;
+        } else {
+            return false;
+        }
     }
 });
 

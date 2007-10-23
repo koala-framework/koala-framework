@@ -43,8 +43,8 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
             this.actions[type] = new Ext.Action({
                 text    : 'Save',
                 handler : function() {
-                    this.getAutoForm().onSubmit({}, {
-                        callback: function() {
+                    this.getAutoForm().submit({
+                        success: function() {
                             this.hide();
                         },
                         scope: this
@@ -61,7 +61,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
                 scope   : this
             });
         } else {
-            throw "unknown action-type: "+type;
+            throw 'unknown action-type: ' + type;
         }
         return this.actions[type];
     },
