@@ -124,4 +124,12 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
             $this->view->error = 'Node not found';
         }
     }
+
+    public function jsonDeleteAction()
+    {
+        $id = $this->getRequest()->getParam('id');
+        if ($this->_table->deletePage($id)) {
+            $this->view->id = $id;
+        }
+    }
 }

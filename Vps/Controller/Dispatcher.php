@@ -31,10 +31,11 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
         } else {
 
-            $className = $request->getControllerName();
+            $className = $request->getControllerName() . 'Controller';
             $controllerDir = $this->getFrontController()->getControllerDirectory();
             $controllerName = $request->getControllerName();
             $controllerFile = $controllerDir['default'] . '/' . $this->classToFilename(parent::formatControllerName($controllerName));
+
             if (!is_file($controllerFile)) {
                 $className = str_replace('Controller', '', ucfirst($className));
                 $className = "Vps_Controller_Action_Component_$className";
