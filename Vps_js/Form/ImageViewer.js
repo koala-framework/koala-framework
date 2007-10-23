@@ -8,14 +8,14 @@ Vps.Form.ImageViewer = Ext.extend(Ext.form.Field,
 
     setValue : function(value)
     {
-        var src = '<input style="visibility:hidden">';
+        var src = '';
         if (value.previewUrl) {
             var rand = Math.floor((Math.random()*1000000));
-            src = '';
             if (value.imageUrl) { src += '<a href="' + value.imageUrl + '?' + rand + '" target="_blank">'; }
             src += '<img src="' + value.previewUrl + '?' + rand + '" />'
             if (value.imageUrl) { src += '</a>'; }
         }
+        src += '<input style="visibility:hidden; width:0px;">';
         Ext.get(this.name).dom.innerHTML = src;
     }
 

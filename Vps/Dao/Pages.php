@@ -169,6 +169,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
 
     public function deletePage($id)
     {
+        $this->_showInvisible = true;
         $data = $this->retrievePageData($id);
 
         // Unterseiten rekursiv löschen

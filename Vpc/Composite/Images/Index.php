@@ -12,6 +12,7 @@ class Vpc_Composite_Images_Index extends Vpc_Abstract
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
+        $return['images'] = array();
         foreach ($this->images as $c) {
             $return['images'][] = $c->getTemplateVars();
         }
