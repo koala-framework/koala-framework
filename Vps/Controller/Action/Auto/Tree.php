@@ -18,8 +18,8 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         'delete'    => true,
         'invisible' => null,
         'reload'    => true,
-        'expand'    => true,
-        'collapse'  => true
+        'expandAll' => true,
+        'collapseAll'=> true
     );
     protected $_rootText = 'Root';
     protected $_rootVisible = true;

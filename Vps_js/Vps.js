@@ -38,7 +38,6 @@ Vps.handleError = function(e)
         Ext.get('loading').fadeOut({remove: true});
     }
     if (Vps.debug) {
-        Ext.Msg.alert('JavaScript Exception', e);
         throw e; //re-throw
     } else {
         Ext.Msg.alert('Error', "Ein Fehler ist aufgetreten.");
