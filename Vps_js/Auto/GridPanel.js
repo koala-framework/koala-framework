@@ -3,11 +3,11 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     controllerUrl: '',
     //autoload: true,
     layout: 'fit',
-    actions: {},
     filters: [],
 
     initComponent : function()
     {
+        this.actions = {};
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
 //         if(this.autoload) {
         //todo: wos bosiat bei !autoload
@@ -613,13 +613,13 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
     },
     setBaseParams : function(baseParams) {
         if (this.editDialog) {
-            this.editDialog.setBaseParams(baseParams);
+            this.editDialog.getAutoForm().setBaseParams(baseParams);
         }
         this.getStore().baseParams = baseParams;
     },
     applyBaseParams : function(baseParams) {
         if (this.editDialog) {
-            this.editDialog.applyBaseParams(baseParams);
+            this.editDialog.getAutoForm().applyBaseParams(baseParams);
         }
         Ext.apply(this.getStore().baseParams, baseParams);
     },
@@ -627,7 +627,6 @@ Vps.Auto.GridPanel = Ext.extend(Ext.Panel,
         if (this.getStore().baseParams.query) delete this.getStore().baseParams.query;
         this.filters.each(function(f) {
             f.setValue(f.defaultValue || '');
-            
         }, this);
     }
 });
