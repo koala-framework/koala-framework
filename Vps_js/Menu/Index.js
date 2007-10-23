@@ -117,6 +117,8 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
         if (response.showLogout) {
             this.add({
                 text: 'Logout',
+                cls: 'x-btn-text-icon',
+                icon: '/assets/vps/images/silkicons/door_out.png',
                 handler: function() {
                     Ext.Ajax.request({
                         url : '/login/jsonLogoutUser',
@@ -128,6 +130,29 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                         scope: this
                     });
                 },
+                scope: this
+            });
+        }
+        if (Vps.debug) {
+            this.add('-');
+            this.add({
+                text: 'Debug',
+                cls: 'x-btn-text-icon',
+                icon: '/assets/vps/images/silkicons/bug.png',
+                menu: [{
+                    text: 'clear assets-cache',
+                    icon: '/assets/vps/images/silkicons/database_delete.png',
+                    cls: 'x-btn-text-icon',
+                    scope: this,
+                    handler: function() {
+                        Ext.Ajax.request({
+                            url: this.controllerUrl+'jsonClearAssetsCache/',
+                            success: function() {
+                                Ext.Msg.alert('Clear Assets Cache', 'successfully cleared');
+                            }
+                        });
+                    }
+                }],
                 scope: this
             });
         }

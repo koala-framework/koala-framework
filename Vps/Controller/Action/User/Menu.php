@@ -75,4 +75,18 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
         $this->view->userRole = $this->_getUserRole();
         $this->view->authData = $this->_getAuthData();
     }
+
+    public function jsonClearAssetsCacheAction()
+    {
+        $config = Zend_Registry::get('config');
+        if ($config->debug->errormail) { //todo, besserer debug-modus
+            throw new Vps_Exception("Debug is not enabled");
+        }
+        foreach(new DirectoryIterator('application/cache/assets') as $file)
+        {
+            if ($file->isFile()) {
+                unlink($file->getPathname());
+            }
+        }
+    }
 }
