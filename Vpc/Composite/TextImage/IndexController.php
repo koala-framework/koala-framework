@@ -17,13 +17,5 @@ class Vpc_Composite_TextImage_IndexController extends Vps_Controller_Action_Auto
         // Image
         $this->_form->add(new Vps_Auto_Container_FieldSet('Image'))
             ->add(new Vpc_Basic_Image_Form($this->component->image));
-
-        // Enlarged Image
-        $imagebig = new Vpc_Basic_Image_Form($this->component->imagebig);
-        $imagebig->fields->getByName('vps_upload_id')->setFileFieldLabel('File (optional)');
-        $this->_form->add(new Vps_Auto_Container_FieldSet('Enlarged Image (will be shown as popup)'))
-            ->setCheckboxToggle(true)
-            ->setCollapsed(!$this->component->getSetting('enlarge'))
-            ->add($imagebig);
     }
 }

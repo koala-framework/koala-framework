@@ -68,7 +68,7 @@ abstract class Vps_PageCollection_Abstract
         if (!$page instanceof Vpc_Interface && (int)$page > 0) {
             $id = (int)$page;
             $pageData = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($id);
-            $page = Vpc_Abstract::createInstance($this->_dao, $pageData['component_class'], $id);
+            $page = Vpc_Abstract::createInstance($this->_dao, $pageData['component_class'], $id, $this);
             if ($page) {
                 $filename = $pageData['filename'];
                 $name = $pageData['name'];
@@ -147,17 +147,13 @@ abstract class Vps_PageCollection_Abstract
         $parts = Vpc_Abstract::parseId($id);
         $id = $parts['pageId'];
         if (!isset($this->_pages[$id])) {
-            try {
-                $currentId = $parts['dbId'];
-                $page = $this->addPage($currentId);
-                if ($page != null) {
-                    foreach ($parts['pageKeys'] as $currentPageKey => $pageKey) {
-                        $this->_pages[$currentId]->generateHierarchy($pageKey);
-                        $currentId = $parts['dbId'] . $currentPageKey;
-                    }
+            $currentId = $parts['dbId'];
+            $page = $this->addPage($currentId);
+            if ($page != null) {
+                foreach ($parts['pageKeys'] as $currentPageKey => $pageKey) {
+                    $this->_pages[$currentId]->generateHierarchy($pageKey);
+                    $currentId = $parts['dbId'] . $currentPageKey;
                 }
-            } catch (Vpc_Exception $e) {
-                return null;
             }
         }
         if (isset($this->_pages[$id])) {
@@ -192,7 +188,7 @@ abstract class Vps_PageCollection_Abstract
             $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData(null);
             foreach($rows as $pageRow) {
                 if ($filename != '' && $filename != $pageRow['filename']) { continue; }
-                $page = Vpc_Abstract::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id']);
+                $page = Vpc_Abstract::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id'], $this);
                 $this->addTreePage($page, $pageRow['filename'], $pageRow['name'], null);
             }
         } else {

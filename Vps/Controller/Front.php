@@ -148,9 +148,11 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $acl->allow('admin', 'admin');
             $acl->allow('admin', 'pages');
             $acl->allow('member', 'fe');
+            $acl->allow('admin', 'mediaoriginal');
+            $acl->allow('admin', 'media');
+
             $acl->allow('guest', 'web');
             $acl->allow('guest', 'media');
-            $acl->allow('admin', 'mediaoriginal');
 
             Zend_Registry::set('acl', $acl);
         }

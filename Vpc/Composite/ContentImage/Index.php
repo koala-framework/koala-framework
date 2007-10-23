@@ -2,6 +2,12 @@
 class Vpc_Composite_ContentImage_Index extends Vpc_Abstract
 {
     const NAME = 'Standard.ContentImage';
+    protected $_settings = array(
+        'contentClass'      => 'Vpc_Paragraphs_Index',
+        'contentSettings'   => array(),
+        'imageClass'        => 'Vpc_Basic_Image_Index',
+        'imageSettings'     => array()
+    );
     public $content;
     public $image;
 
@@ -14,10 +20,12 @@ class Vpc_Composite_ContentImage_Index extends Vpc_Abstract
         return $return;
     }
 
-    public function init()
+    protected function _init()
     {
-        $this->content = $this->createComponent('Vpc_Paragraphs_Index', 1);
-        $this->image = $this->createComponent('Vpc_Basic_Image_Index', 2);
+        $contentClass = $this->_getClassFromSetting('contentClass', 'Vpc_Paragraphs_Index');
+        $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Index');
+        $this->content = $this->createComponent($contentClass, 1, $this->getSetting('contentSettings'));
+        $this->image = $this->createComponent($imageClass, 2, $this->getSetting('imageSettings'));
     }
 
     public function getChildComponents()

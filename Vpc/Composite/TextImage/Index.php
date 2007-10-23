@@ -6,11 +6,11 @@ class Vpc_Composite_TextImage_Index extends Vpc_Abstract
     public $image;
     public $imagebig;
     protected $_settings = array(
-        'text' => array(),
-        'image' => array(),
-        'imagebig' => array(),
-        'enlarge' => false,
-        'image_position' => 'alternate' // 'left', 'right', 'alternate'
+        'textClass'         => 'Vpc_Basic_Text_Index',
+        'textSettings'      => array(),
+        'imageClass'        => 'Vpc_Basic_Image_Index',
+        'imageSettings'     => array(),
+        'image_position'    => 'alternate' // 'left', 'right', 'alternate'
     );
     protected $_tablename = 'Vpc_Composite_TextImage_IndexModel';
 
@@ -19,26 +19,23 @@ class Vpc_Composite_TextImage_Index extends Vpc_Abstract
         $return = parent::getTemplateVars();
         $return['text'] = $this->text->getTemplateVars('');
         $return['image'] = $this->image->getTemplateVars('');
-        $return['imagebig'] = $this->imagebig->getTemplateVars('');
         $return['image_position'] = 'right'; // TODO
         $return['enlarge'] = $this->getSetting('enlarge');
         $return['template'] = 'Composite/TextImage.html';
         return $return;
     }
 
-    public function init()
+    protected function _init()
     {
-        $st = isset($this->_settings['text']) ? $this->_settings['text'] : array();
-        $si = isset($this->_settings['image']) ? $this->_settings['image'] : array();
-        $sb = isset($this->_settings['imagebig']) ? $this->_settings['imagebig'] : array();
-        $this->text = $this->createComponent('Vpc_Basic_Text_Index', 1, $st);
-        $this->image = $this->createComponent('Vpc_Basic_Image_Index', 2, $si);
-        $this->imagebig = $this->createComponent('Vpc_Basic_Image_Index', 3, $sb);
+        $textClass = $this->_getClassFromSetting('textClass', 'Vpc_Basic_Text_Index');
+        $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Index');
+        $this->text = $this->createComponent($textClass, 1, $this->getSetting('textSettings'));
+        $this->image = $this->createComponent($imageClass, 2, $this->getSetting('imageSettings'));
     }
 
     public function getChildComponents()
     {
-        return array($this->text, $this->image, $this->imagebig);
+        return array($this->text, $this->image);
     }
 
 }

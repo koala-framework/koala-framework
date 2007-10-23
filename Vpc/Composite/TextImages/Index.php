@@ -5,8 +5,12 @@ class Vpc_Composite_TextImages_Index extends Vpc_Abstract
     public $text;
     public $images;
     protected $_settings = array(
-        'text' => array(),
-        'images' => array(),
+        'textClass'         => 'Vpc_Basic_Text_Index',
+        'textSettings'      => array(),
+        'imagesClass'       => 'Vpc_Composite_Images_Index',
+        'imagesSettings'    => array(),
+        'imageClass'        => 'Vpc_Basic_Image_Index',
+        'imageSettings'     => array(),
         'image_position' => 'alternate' // 'left', 'right', 'alternate'
     );
     protected $_tablename = 'Vpc_Composite_TextImage_IndexModel';
@@ -21,15 +25,16 @@ class Vpc_Composite_TextImages_Index extends Vpc_Abstract
         return $return;
     }
 
-    public function init()
+    protected function _init()
     {
-        // Text
-        $st = isset($this->_settings['text']) ? $this->_settings['text'] : array();
-        $this->text = $this->createComponent('Vpc_Basic_Text_Index', 1, $st);
-
-        // Images
-        $si = isset($this->_settings['images']) ? $this->_settings['images'] : array();
-        $this->images = $this->createComponent('Vpc_Composite_Images_Index', 2, $si);
+        $textClass = $this->_getClassFromSetting('textClass', 'Vpc_Basic_Text_Index');
+        $imagesClass = $this->_getClassFromSetting('imagesClass', 'Vpc_Composite_Images_Index');
+        $imagesSettings = $this->getSetting('imageSettings');
+        if (!is_array($imagesSettings)) { $imagesSettings = array(); }
+        $imagesSettings['imageClass'] = $this->getSetting('imageClass');
+        $imagesSettings['imageSettings'] = $this->getSetting('imageSettings');
+        $this->text = $this->createComponent($textClass, 1, $this->getSetting('textSettings'));
+        $this->images = $this->createComponent($imagesClass, 2, $imagesSettings);
     }
 
     public function getChildComponents()

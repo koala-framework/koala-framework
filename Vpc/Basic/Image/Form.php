@@ -5,10 +5,14 @@ class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
     {
         parent::__construct($component);
 
-        $this->add(new Vps_Auto_Field_TextField('filename', 'Filename'))
-            ->setAllowBlank(false);
+        // Dateiname
+        if ($component->getSetting('editFilename')) {
+            $this->add(new Vps_Auto_Field_TextField('filename', 'Filename'))
+                ->setAllowBlank(false)
+                ->setVtype('alphanum');
+        }
 
-        //Einstellungen für die Veränderbarkeit der Höhe und Breite
+        // Höhe, Breite
         $sizes = $component->getSetting('size');
         if (empty($sizes)) {
             $this->add(new Vps_Auto_Field_TextField('width', 'Width'));
@@ -18,24 +22,32 @@ class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
                 ->setSizes($sizes);
         }
 
-        if (is_array($component->getSetting('allow'))) {
-            $data = array ();
-            foreach ($component->getSetting('allow') as $val) {
-                $data[] = array($val, $val);
-            }
-            $this->add(new Vps_Auto_Field_ComboBox('scale', 'Scaling'))
-                ->setForceSelection(true)
-                ->setStore(array('data' => $data))
-                ->setTriggerAction('all')
-                ->setEditable(false);
+        // Skalierungstyp
+        $allow = $component->getSetting('allow');
+        if (is_array($allow) && sizeof($allow) > 1) {
+            $this->add(new Vps_Auto_Field_Select('scale', 'Scaling'))
+                ->setValues($allow);
         }
 
+        // Fileupload
         $this->add(new Vps_Auto_Field_File('vps_upload_id', 'File'))
             ->setDirectory('BasicImage/')
             ->setExtensions($component->getSetting('extensions'));
 
+        // Bildvorschau
         $this->add(new Vps_Auto_Field_ImageViewer('vps_upload_id_image', 'Preview'))
             ->setImageUrl($component->getImageUrl())
             ->setPreviewUrl($component->getImageUrl(Vpc_Basic_Image_Index::SIZE_THUMB));
+
+        // Enlarged Image
+        if ($component->getSetting('hasEnlarge')) {
+            $imagebig = new Vpc_Basic_Image_Form($component->imagebig);
+            $imagebig->fields->getByName('vps_upload_id')->setFileFieldLabel('File (optional)');
+            $this->add(new Vps_Auto_Container_FieldSet('Enlarged Image'))
+                ->setCheckboxToggle(true)
+                ->setCheckboxName('enlarge')
+                ->setCollapsed(!$component->getSetting('enlarge'))
+                ->add($imagebig);
+        }
     }
 }
