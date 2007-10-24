@@ -367,6 +367,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         }
         $this->view->metaData['buttons'] = (object)$this->_buttons;
+        $this->view->metaData['permissions'] = (object)$this->_permissions;
         $this->view->metaData['paging'] = $this->_paging;
         $this->view->metaData['filters'] = (object)$this->_filters;
         $this->view->metaData['sortable'] = $this->_sortable;

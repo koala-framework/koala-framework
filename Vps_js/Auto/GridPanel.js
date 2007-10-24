@@ -42,6 +42,12 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         var meta = result.metaData;
         this.metaData = meta;
 
+        for (var i in this.actions) {
+            if (!meta.permissions[i]) {
+                this.getAction(i).hide();
+            }
+        }
+
         if (!this.store) {
             var remoteSort = false;
             if (meta.paging) remoteSort = true;
