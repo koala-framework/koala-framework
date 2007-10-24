@@ -1,5 +1,5 @@
 <?php
-class Vpc_Composite_ContentImage_IndexController extends Vps_Controller_Action
+class Vpc_Composite_ParagraphsImage_IndexController extends Vps_Controller_Action
 {
     public function indexAction()
     {

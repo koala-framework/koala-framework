@@ -1,5 +1,5 @@
 <?php
-class Vpc_Composite_ContentImage_Admin extends Vpc_Admin
+class Vpc_Composite_ParagraphsImage_Admin extends Vpc_Admin
 {
     public function getControllerClass()
     {
@@ -9,14 +9,14 @@ class Vpc_Composite_ContentImage_Admin extends Vpc_Admin
     public function getControllerConfig($component, $view)
     {
         $config['tabs']['Image'] = $view->getConfig($component->image);
-        $config['tabs']['Content'] = $view->getConfig($component->content);
-        $config['activeItem'] = 'Content';
+        $config['tabs']['Paragraphs'] = $view->getConfig($component->paragraphs);
+        $config['activeItem'] = 'Paragraphs';
         return $config;
     }
 
     public function setup()
     {
-        $this->copyTemplate('Index.html', 'Composite/ContentImage.html');
+        $this->copyTemplate('Index.html', 'Composite/ParagraphsImage.html');
 
         Vpc_Admin::getInstance('Vpc_Paragraphs_Index')->setup();
         Vpc_Admin::getInstance('Vpc_Basic_Image_Index')->setup();
@@ -24,7 +24,7 @@ class Vpc_Composite_ContentImage_Admin extends Vpc_Admin
 
     public function delete($component)
     {
-        Vpc_Admin::getInstance($component->content)->delete($component->content);
+        Vpc_Admin::getInstance($component->paragraphs)->delete($component->paragraphs);
         Vpc_Admin::getInstance($component->image)->delete($component->image);
     }
 }
