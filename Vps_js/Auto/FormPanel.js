@@ -137,11 +137,6 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         }));
     },
 
-    reload : function(options) {
-        this.load(null, options);
-    },
-
-    
     //für AbstractPanel
     reset : function() {
         this.getForm().reset();
