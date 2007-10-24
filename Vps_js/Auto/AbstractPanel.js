@@ -39,7 +39,7 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
                     b.item.disable();
                 }, this);
             }
-        }, this, {buffer: 300});
+        }, this, {buffer: 500});
         this.on('beforeselectionchange', function(id) {
             var ret = true;
             this.bindings.each(function(b) {
@@ -71,8 +71,7 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
 
             b.item.on('datachange', function(result)
             {
-                if (b.item instanceof Vps.Auto.FormPanel
-                    && result.data && result.data.addedId) {
+                if (result.data && result.data.addedId) {
 
                     //nachdem ein neuer eintrag hinzugefügt wurde die anderen reloaden
                     this.activeId = result.data.addedId;
@@ -101,12 +100,12 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
             }, this);
 
             if (b.item instanceof Vps.Auto.FormPanel) {
-                b.item.on('addaction', function() {
+                b.item.on('addaction', function(form) {
                     this.activeId = 0;
                     this.selectId(0);
                     //bei addaction die anderen disablen
                     this.bindings.each(function(i) {
-                        if (i.item != b.item) {
+                        if (i.item != form) {
                             i.item.disable();
                         }
                     }, this);
@@ -158,9 +157,10 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
     },
     reset: function() {
     },
-    load: function(params) {
+    load: function(params, options) {
     },
-    reload: function() {
+    reload : function(options) {
+        this.load(null, options);
     },
     getSelectedId: function() {
     },
