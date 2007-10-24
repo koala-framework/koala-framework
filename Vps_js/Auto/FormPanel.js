@@ -56,6 +56,13 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         Ext.applyIf(meta.form, this.formConfig);
 
         if (this.baseCls) meta.form.baseCls = this.baseCls; //use the same
+
+        for (var i in this.actions) {
+            if (!meta.permissions[i]) {
+                this.getAction(i).hide();
+            }
+        }
+
         if (meta.buttons) {
             for (var b in meta.buttons) {
                 if (!meta.form.tbar) meta.form.tbar = [];
