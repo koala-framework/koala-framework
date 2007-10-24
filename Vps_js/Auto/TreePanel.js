@@ -330,8 +330,15 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
     //für AbstractPanel
     selectId: function(id) {
-        this.getTree().getNodeById(id).select();
-    },
+        if (id) {
+            var n = this.getTree().getNodeById(id);
+            if (n) {
+                n.select();
+            }
+        } else {
+            this.getSelectionModel().clearSelections();
+        }
+    }
 
 
 });

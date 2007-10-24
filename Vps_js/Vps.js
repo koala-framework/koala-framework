@@ -27,7 +27,10 @@ Ext.onReady(function()
 
 //     Ext.form.Field.prototype.msgTarget = 'side';// turn on validation errors beside the field globally
 
-//     Ext.QuickTips.init();
+    if (Ext.QuickTips) {
+        //init quicktips when loaded
+        Ext.QuickTips.init();
+    }
 });
 
 Vps.handleError = function(e)
