@@ -66,6 +66,8 @@ class Vps_View_Smarty extends Vps_View
         $ext['config'] = Zend_Json::encode($config);
         $ext['viewport'] = $viewport;
         $ext['debug'] = Zend_Json::encode(!Zend_Registry::get('config')->debug->errormail);
+        $userRole = Zend_Auth::getInstance()->getStorage()->read();
+        $ext['userRole'] = $userRole ? $userRole->role : 'guest';
         $this->ext = $ext;
     }
 

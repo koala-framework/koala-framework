@@ -52,6 +52,7 @@
             try {
                 {/literal}
                 Vps.debug = {$ext.debug};
+                Vps.userRole = '{$ext.userRole}';
                 var panel = new {$ext.class}({$ext.config});
                 {literal}
                 if (!panel.region) panel.region = 'center';
