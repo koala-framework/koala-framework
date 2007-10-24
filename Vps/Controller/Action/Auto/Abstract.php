@@ -2,45 +2,50 @@
 class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
 {
     protected $_buttons = array();
-    protected $_permissions; //todo: Zend_Acl ??
+    protected $_permissions;
 
-    public function init()
+    public function preDispatch()
     {
+        parent::preDispatch();
+
         if (!isset($this->_permissions)) {
             $this->_permissions = $this->_buttons;
         }
-    }
 
-    protected function _fetchFromParentRow($row, $findParent)
-    {
-        if (!$row instanceof Zend_Db_Table_Row_Abstract) {
-            throw new Vps_Exception("Can use findParent only if _fetchData returns a RowSet object");
-        }
-        if (is_string($findParent)) {
-            $findParent = array('table'=>$findParent);
-        }
-        if (!isset($findParent['rule'])) $findParent['rule'] = null;
-        $parentRow = $row->findParentRow($findParent['table'], $findParent['rule']);
-        if (!$parentRow) {
-            return null;
-        }
-        if (!isset($findParent['field'])) {
-            if (!method_exists($parentRow, '__toString')) {
-                throw new Vps_Exception("Method __toString ".get_class($parentRow)." for row of parent-table '$findParent[table]' does not exist, implement the function or specify a field");
+        $btns = array();
+        foreach ($this->_buttons as $k=>$i) {
+            if (is_int($k)) {
+                $btns[$i] = true;
+            } else {
+                $btns[$k] = $i;
             }
-            return $parentRow->__toString();
         }
-        if (!is_null($parentRow->$findParent['field']) && !isset($parentRow->$findParent['field'])) {
-            throw new Vps_Exception("Index '$findParent[field]' for parent-table '$findParent[table]' not found");
-        }
-        return $parentRow->$findParent['field'];
-    }
+        $this->_buttons = $btns;
 
-    protected function _fetchFromRow($row, $dataIndex)
-    {
-        if (!is_null($row->$dataIndex) && !isset($row->$dataIndex)) {
-            throw new Vps_Exception("Index '$dataIndex' not found in row");
+        $perms = array();
+        foreach ($this->_permissions as $k=>$i) {
+            if (is_int($k)) {
+                $perms[$i] = true;
+            } else {
+                $perms[$k] = $i;
+            }
         }
-        return $row->$dataIndex;
+        $this->_permissions = $perms;
+
+        //buttons/permissions abhängig von privileges in avl ausblenden/löschen
+        $acl = $this->_getAcl();
+        $role = $this->_getUserRole();
+        $resource = $this->_getResourceName();
+
+        foreach ($this->_buttons as $k=>$i) {
+            if (!$acl->isAllowed($role, $resource, $k)) {
+                unset($this->_buttons[$k]);
+            }
+        }
+        foreach ($this->_permissions as $k=>$i) {
+            if (!$acl->isAllowed($role, $resource, $k)) {
+                unset($this->_permissions[$k]);
+            }
+        }
     }
 }

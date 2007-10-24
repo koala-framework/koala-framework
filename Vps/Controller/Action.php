@@ -12,13 +12,9 @@ class Vps_Controller_Action extends Zend_Controller_Action
     {
         $acl = $this->_getAcl();
         $role = $this->_getUserRole();
-        $resource = strtolower(str_replace('Controller', '', str_replace('Vps_Controller_Action_Component_', '', get_class($this))));
-        if (substr($resource, 0, 4) == 'vpc_') {
-            $resource = 'component';
-        }
+        $resource = $this->_getResourceName();
 
-        $module = $this->getRequest()->getModuleName();
-        if (!$acl->isAllowed($role, $resource)) {
+        if (!$acl->isAllowed($role, $resource, 'view')) {
             if ($this->getHelper('ViewRenderer')->isJson()) {
                 $this->_forward('jsonLogin', 'login', '');
             } else {
@@ -26,6 +22,15 @@ class Vps_Controller_Action extends Zend_Controller_Action
                 $this->_forward('index', 'login', '', $params);
             }
         }
+    }
+
+    protected function _getResourceName()
+    {
+        $resource = strtolower(str_replace('Controller', '', str_replace('Vps_Controller_Action_Component_', '', get_class($this))));
+        if (substr($resource, 0, 4) == 'vpc_') {
+            $resource = 'component';
+        }
+        return $resource;
     }
 
     protected function _getUserRole()
