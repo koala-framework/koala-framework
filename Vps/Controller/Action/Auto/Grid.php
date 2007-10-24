@@ -142,11 +142,12 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             if (!isset($this->_queryFields)) {
                 throw new Vps_Exception("queryFields which is required to use query-filters is not set.");
             }
+
             $whereQuery = array();
             $query = explode(' ', $query);
             foreach($query as $q) {
-                foreach($this->_queryFields as $f) {
-                    $whereQuery[] = $db->quoteInto("$f LIKE ?", "%$q%");
+                foreach ($this->_getWhereQuery($q) as $i) {
+                    $whereQuery[] = $db->quoteInto($i, "%$q%");
                 }
             }
             $where[] = implode(' OR ', $whereQuery);
@@ -170,6 +171,18 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
         }
         return $where;
+    }
+
+    protected function _getWhereQuery($q)
+    {
+        if (!isset($this->_queryFields)) {
+            throw new Vps_Exception("queryFields which is required to use query-filters is not set.");
+        }
+        $whereQuery = array();
+        foreach($this->_queryFields as $f) {
+            $whereQuery[] = "$f LIKE ?";
+        }
+        return $whereQuery;
     }
 
     protected function _fetchData($order, $limit, $start)
