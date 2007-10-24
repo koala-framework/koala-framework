@@ -115,7 +115,9 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     },
 
     load : function(params, options) {
-        if (typeof params != 'object') params = { id: params };
+
+        //es kann auch direkt die id übergeben werden
+        if (params && typeof params != 'object') params = { id: params };
 
         Ext.apply(this.getForm().baseParams, params);
 
@@ -136,7 +138,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     },
 
     reload : function(options) {
-        this.load(this.getForm().baseParams.id, options);
+        this.load(null, options);
     },
 
     
@@ -277,6 +279,9 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         if (this.getForm()) {
             Ext.apply(this.getForm().baseParams, baseParams);
         }
+    },
+    getBaseParams : function() {
+        return this.getForm().baseParams;
     }
 });
 

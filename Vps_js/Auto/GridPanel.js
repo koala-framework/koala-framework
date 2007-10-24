@@ -469,7 +469,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 
         this.el.mask('Saving...');
 
-        var params = this.baseParams || {};
+        var params = this.getBaseParams() || {};
         params.data = Ext.util.JSON.encode(data);
         return params;
     },
@@ -479,6 +479,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
     },
     submit : function(options)
     {
+        if (!options) options = {};
+
         if (arguments[1]) options.params = arguments[1]; //backwards compatibility
 
         this.getAction('save').disable();
@@ -613,8 +615,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 
     //für AbstractPanel
     selectId: function(id) {
-        var r = this.getStore().getById(id);
-        this.getSelectionModel().selectRecords([r]);
+        if (id) {
+            var r = this.getStore().getById(id);
+            if (r) {
+                this.getSelectionModel().selectRecords([r]);
+            }
+        } else {
+            this.getSelectionModel().clearSelections();
+        }
     },
 
     //für AbstractPanel
