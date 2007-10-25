@@ -42,12 +42,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         var meta = result.metaData;
         this.metaData = meta;
 
-        for (var i in this.actions) {
-            if (!meta.permissions[i]) {
-                this.getAction(i).hide();
-            }
-        }
-
         if (!this.store) {
             var remoteSort = false;
             if (meta.paging) remoteSort = true;
@@ -188,6 +182,32 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         };
 
 
+        //editDialog kann entweder von config übergeben werden oder von meta-daten kommen
+        if (!this.editDialog && meta.editDialog) {
+            this.editDialog = meta.editDialog;
+        }
+        if (this.editDialog && !(this.editDialog instanceof Ext.Window)) {
+            this.editDialog = new Vps.Auto.Form.Window(meta.editDialog);
+        }
+        if (this.editDialog) {
+
+            this.editDialog.on('datachange', function() {
+                this.reload();
+            }, this);
+
+            if (this.editDialog.allowEdit !== false) {
+                this.on('rowdblclick', function(grid, rowIndex) {
+                    this.editDialog.showEdit(this.store.getAt(rowIndex).id);
+                }, this);
+            }
+        }
+
+        for (var i in this.actions) {
+            if (i == 'add' && this.editDialog) continue; //add-button anzeigen auch wenn keine permissions da die add-permissions im dialog sein müssen
+            if (!meta.permissions[i]) {
+                this.getAction(i).hide();
+            }
+        }
         /* * Für DD
         var ddrow = new Ext.dd.DropTarget(this.grid.container, {
             ddGroup : 'GridDD',
@@ -344,26 +364,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         }
         if (meta.buttons.xls) {
             gridConfig.tbar.add(this.getAction('xls'));
-        }
-
-        //editDialog kann entweder von config übergeben werden oder von meta-daten kommen
-        if (!this.editDialog && meta.editDialog) {
-            this.editDialog = meta.editDialog;
-        }
-        if (this.editDialog && !(this.editDialog instanceof Ext.Window)) {
-            this.editDialog = new Vps.Auto.Form.Window(meta.editDialog);
-        }
-        if (this.editDialog) {
-
-            this.editDialog.on('datachange', function() {
-                this.reload();
-            }, this);
-
-            if (this.editDialog.allowEdit !== false) {
-                this.on('rowdblclick', function(grid, rowIndex) {
-                    this.editDialog.showEdit(this.store.getAt(rowIndex).id);
-                }, this);
-            }
         }
 
         //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
