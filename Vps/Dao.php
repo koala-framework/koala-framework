@@ -13,17 +13,14 @@ class Vps_Dao
 
     public function getTable($tablename)
     {
+        if (!$tablename) { return null; };
+
         if (!isset($this->_tables[$tablename])) {
-            try {
-              Zend_Loader::loadClass($tablename);
-              $table = new $tablename(array('db'=>$this->getDb()));
-              if ($table instanceof Vps_Db_Table) {
-                  $table->setDao($this);
-              }
-              $this->_tables[$tablename] = $table;
-            } catch (Zend_Exception $e){
-              throw new Vps_Dao_Exception('Dao not found: ' . $e->getMessage());
+            $table = new $tablename(array('db'=>$this->getDb()));
+            if ($table instanceof Vps_Db_Table) {
+                $table->setDao($this);
             }
+            $this->_tables[$tablename] = $table;
         }
         return $this->_tables[$tablename];
     }
