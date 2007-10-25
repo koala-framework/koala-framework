@@ -103,8 +103,10 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
     onAdd: function (o, e) {
         if (this.editDialog != undefined) {
-            this.editDialog.showEdit(0);
-            this.editDialog.getForm().baseParams.parent_id = this.tree.getSelectionModel().getSelectedNode().id;
+            this.editDialog.showAdd();
+            this.editDialog.getAutoForm().applyBaseParams({
+                parent_id: this.tree.getSelectionModel().getSelectedNode().id
+            });
         } else {
             this.fireEvent('addaction', this.tree.getSelectionModel().getSelectedNode());
         }
