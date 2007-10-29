@@ -12,7 +12,15 @@ class Vpc_Basic_Rte_IndexController extends Vps_Controller_Action_Auto_Vpc_Form
                 $field->$method($val);
             }
         }
+        $field->setControllerUrl($this->view->getControllerUrl($this->component));
         $this->_form->add($field);
     }
 
+    public function jsonAddImageAction()
+    {
+        $html = $this->_getParam('html');
+        $this->component->saveSetting('text_edit', $html);
+        $image = $this->component->addImage();
+        $this->view->config = $this->view->getConfig($image);
+    }
 }

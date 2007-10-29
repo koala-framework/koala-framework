@@ -9,7 +9,7 @@ class Vpc_Basic_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
         'allow'             => array(Vps_Media_Image::SCALE_BESTFIT),
         'filename'          => 'filename',
         'editFilename'      => true,
-        'hasEnlarge'        => true,
+        'hasEnlarge'        => false,
         'enlargeClass'      => 'Vpc_Basic_Image_Index',
         'enlargeSettings'   => array(
             'extensions'        => array('jpg', 'gif', 'png'),

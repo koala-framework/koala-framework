@@ -519,6 +519,24 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_settings[$field] = $value;
     }
 
+    public function saveSetting($field, $value)
+    {
+        $table = $this->getTable();
+        if (!$table) throw new Vps_Exception("Table not found");
+        $info = $table->info();
+        if ($info['primary'] != array(1 => 'page_id', 2 => 'component_key')) {
+            throw new Vps_Exception("Invalid primary keys for table");
+        }
+        $row = $table->find($this->getPageId(), $this->getComponentKey())->current();
+        if (!$row) {
+            throw new Vps_Exception("Row for page_id '".$this->getPageId()."' ".
+                    "and component_key '".$this->getComponentKey()."' not found");
+        }
+        $row->$field = $value;
+        $row->save();
+        $this->setSetting($field, $value);
+    }
+
     public function getSettings()
     {
         return $this->_settings;

@@ -38,7 +38,7 @@ class Vps_View_Smarty extends Vps_View
             throw new Vps_View_Exception('Class must be a string.');
         }
 
-        $dep = new Vps_Assets_Dependencies(Zend_Registry::get('config')->asset, 'application/config.ini', 'dependencies');
+        $dep = new Vps_Assets_Dependencies(Zend_Registry::get('config'));
         if (Zend_Registry::get('config')->debug->assets) {
             $jsFiles = $dep->getAssetFiles('js');
             $cssFiles = $dep->getAssetFiles('css');
@@ -48,11 +48,7 @@ class Vps_View_Smarty extends Vps_View
         }
 
         if (!$viewport) {
-            if (Zend_Registry::get('config')->ext && Zend_Registry::get('config')->ext->defaultViewport) {
-                $viewport = Zend_Registry::get('config')->ext->defaultViewport;
-            } else {
-                $viewport = 'Vps.Viewport';
-            }
+            $viewport = Zend_Registry::get('config')->ext->defaultViewport;
         }
 
         //das ist nötig weil wenn $config ein leeres Array ist, kommt sonst []

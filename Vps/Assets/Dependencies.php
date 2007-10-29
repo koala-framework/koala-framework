@@ -2,49 +2,21 @@
 class Vps_Assets_Dependencies
 {
     private $_files;
-    private $_paths;
-    private $_useExtAll = false;
-    private $_configFile;
-    private $_configSection;
+    private $_config;
+    private $_dependenciesConfig;
 
-    //löst pfade wie "asset.vps/images/" auf
-    public static function resolveAssetPaths($paths)
+    public function __construct($config)
     {
-        foreach($paths as $k=>$p) {
-            if (substr($p, 0, 6)=='asset.') {
-                $p = substr($p, 6);
-                $i = substr($p, 0, strpos($p, '/'));
-                if (!isset($paths[$i])) {
-                    throw new Vps_Exception("Can't resolve asset-path: 'asset.$i' is unknown.");
-                }
-                $p = substr($p, strpos($p, '/')+1);
-                $paths[$k] = $paths[$i].$p;
-            }
-        }
-        return $paths;
-    }
-
-    public function __construct($paths, $configFile, $configSection)
-    {
-        if (!is_array($paths)) {
-            $paths = $paths->toArray();
-        }
-        if (isset($paths['useExtAll'])) {
-            $this->_useExtAll = $paths['useExtAll'] == '1';
-            unset($paths['useExtAll']);
-        }
-        $this->_paths = self::resolveAssetPaths($paths);
-        $this->_configFile = $configFile;
-        $this->_configSection = $configSection;
+        $this->_config = $config;
     }
 
     private function _getFilePath($file)
     {
         $pathType = substr($file, 0, strpos($file, '/'));
-        if (!isset($this->_paths[$pathType])) {
+        if (!isset($this->_config->path->$pathType)) {
             throw new Vps_Exception("Assets-Path-Type '$pathType' not found in config.");
         }
-        $path = $this->_paths[$pathType].substr($file, strpos($file, '/'));
+        $path = $this->_config->path->$pathType.substr($file, strpos($file, '/'));
         if(!file_exists($path)) {
             throw new Vps_Exception("Asset-File '$path' does not exist.");
         }
@@ -73,31 +45,23 @@ class Vps_Assets_Dependencies
             $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
             
             $checksums = array(
-                md5_file(VPS_PATH.'/Vps_js/dependencies.ini'),
-                md5_file($this->_configFile)
+                md5_file(VPS_PATH.'/config.ini'),
+                md5_file('application/config.ini')
             );
             if ($cacheContents = $cache->load('dependencies')) {
-                if ($cacheContents['checksums'] != $checksums
-                    || $cacheContents['configSection'] != $this->_configSection
-                    || $cacheContents['paths'] != $this->_paths) {
+                if ($cacheContents['checksums'] != $checksums) {
                     $cacheContents = false;
                 }
             }
 
-            if(!$cacheContents) {
+            if(!$cacheContents || true) {
                 $this->_files = array();
                 $cacheContents = array();
                 $cacheContents['checksums'] = $checksums;
-                $cacheContents['configSection'] = $this->_configSection;
-                $cacheContents['paths'] = $this->_paths;
-                if ($this->_useExtAll) {
-                    $this->_files[] = 'ext/adapter/ext/ext-base.js';
-                    $this->_files[] = 'ext/ext-all.js';
-                    $this->_files[] = 'ext/resources/css/ext-all.css';
-                }
-                $dependencies = new Zend_Config_Ini($this->_configFile, $this->_configSection);
-                foreach($dependencies as $d) {
-                    $this->_processDependency($d);
+                foreach($this->_config->assets as $d=>$v) {
+                    if ($v) {
+                        $this->_processDependency($d);
+                    }
                 }
                 $cacheContents['files'] = $this->_files;
                 $cache->save($cacheContents, 'dependencies');
@@ -187,34 +151,39 @@ class Vps_Assets_Dependencies
         }
         return $contents;
     }
-    
+
+    private function _getDependenciesConfig() {
+        if(!isset($this->_dependenciesConfig)) {
+            $this->_dependenciesConfig = new Zend_Config_Ini(VPS_PATH.'/config.ini', 'dependencies',
+                                                array('allowModifications'=>true));
+            $this->_dependenciesConfig->merge(new Zend_Config_Ini('application/config.ini', 'dependencies'));
+        }
+        return $this->_dependenciesConfig;
+    }
+
     protected function _processDependency($dependency)
     {
-        static $vpsDependencies;
-        if(!isset($vpsDependencies)) {
-            $vpsDependencies = new Zend_Config_Ini(VPS_PATH.'/Vps_js/dependencies.ini', 'dependencies');
+        if (!isset($this->_getDependenciesConfig()->$dependency)) {
+            throw new Vps_Exception("Can't resolve dependency '$dependency'.");
         }
-        if (isset($dependency->dep)) {
-            foreach ($dependency->dep as $x=>$d) {
-                if (!isset($vpsDependencies->$d)) {
-                    throw new Vps_Exception("Can't resolve dependency '$d'.");
-                }
-                $this->_processDependency($vpsDependencies->$d);
+        $deps = $this->_getDependenciesConfig()->$dependency;
+
+        if (isset($deps->dep)) {
+            foreach ($deps->dep as $d) {
+                $this->_processDependency($d);
             }
         }
-        if (isset($dependency->files)) {
-            foreach ($dependency->files as $file) {
-                if ($this->_useExtAll && substr($file, 0, 4) == 'ext/') { 
-                    continue;
-                }
+
+        if (isset($deps->files)) {
+            foreach ($deps->files as $file) {
                 if (substr($file, -2)=="/*") {
                     $pathType = substr($file, 0, strpos($file, '/'));
-                    if (!isset($this->_paths[$pathType])) {
-                        throw new Vps_Exception("JS-Path-Type '$pathType' not found in config.");
+                    if (!isset($this->_config->path->$pathType)) {
+                        throw new Vps_Exception("Assets-Path-Type '$pathType' not found in config.");
                     }
                     $file = substr($file, strpos($file, '/')); //pathtype abschneiden
                     $file = substr($file, 0, -1); //* abschneiden
-                    $path = $this->_paths[$pathType].$file;
+                    $path = $this->_config->path->$pathType.$file;
                     if (!file_exists($path)) {
                         throw new Vps_Exception("Path '$path' does not exist.");
                     }
@@ -224,7 +193,7 @@ class Vps_Assets_Dependencies
                             && (substr($file->getPathname(), -3) == '.js'
                                 || substr($file->getPathname(), -4) == '.css')) {
                             $f = $file->getPathname();
-                            $f = substr($f, strlen($this->_paths[$pathType]));
+                            $f = substr($f, strlen($this->_config->path->$pathType));
                             $f = $pathType . $f;
                             if (!in_array($f, $this->_files)) {
                                 $this->_files[] = $f;
