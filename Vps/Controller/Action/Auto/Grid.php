@@ -607,10 +607,13 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $order = trim($this->_defaultOrder['field'].' '.$this->_defaultOrder['direction']);
         $rowSet = $this->_fetchData($order, null, null);
 
-        if (!is_null($rowSet)) {
+        if (!$rowSet) {
+            return null;
+        } else {
             // $exportData = array( row => array( col => 'data' ) )
             // Index 0 reserved for column headers
             $exportData = array(0 => array());
+            $columns = $columnsHeader = array();
             foreach ($rowSet as $row) {
                 if (is_array($row)) {
                     $row = (object)$row;
@@ -631,8 +634,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
 
             $exportData[0] = $columnsHeader;
-        } else {
-            return null;
         }
 
         return $exportData;
