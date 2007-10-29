@@ -4,9 +4,9 @@ class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
     protected $_buttons = array();
     protected $_permissions;
 
-    public function preDispatch()
+    public function init()
     {
-        parent::preDispatch();
+        parent::init();
 
         if (!isset($this->_permissions)) {
             $this->_permissions = $this->_buttons;
@@ -32,7 +32,7 @@ class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
         }
         $this->_permissions = $perms;
 
-        //buttons/permissions abhängig von privileges in avl ausblenden/löschen
+        //buttons/permissions abhängig von privileges in acl ausblenden/löschen
         $acl = $this->_getAcl();
         $role = $this->_getUserRole();
         $resource = $this->_getResourceName();
