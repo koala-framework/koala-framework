@@ -1,7 +1,7 @@
 <?php
 abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Auto_Abstract
 {
-    protected $_form = null;
+    protected $_form;
     protected $_fields = array(); //deprecated
     protected $_buttons = array();
 
@@ -18,7 +18,9 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     {
         parent::preDispatch();
 
-        $this->_form = new Vps_Auto_Form();
+        if (!isset($this->_form)) {
+            $this->_form = new Vps_Auto_Form();
+        }
 
         foreach ($this->_fields as $k=>$field) {
             if (!isset($field['type'])) throw new Vps_Exception("no type for field no $k specified");
