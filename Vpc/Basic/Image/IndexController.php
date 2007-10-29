@@ -7,4 +7,10 @@ class Vpc_Basic_Image_IndexController extends Vps_Controller_Action_Auto_Vpc_For
     {
         $this->_form = new Vpc_Basic_Image_Form($this->component);
     }
+
+    public function jsonSaveAction()
+    {
+        parent::jsonSaveAction();
+        $this->view->imageUrl = $this->component->getImageUrl();
+    }
 }

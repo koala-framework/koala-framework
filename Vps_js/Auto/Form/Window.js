@@ -5,21 +5,29 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
     {
         this.actions = {};
 
-        if (!this.formConfig) this.formConfig = {};
+        if (!this.autoForm) {
+            if (!this.formConfig) this.formConfig = {};
 
-        Ext.applyIf(this.formConfig, {
-            baseCls: 'x-plain',
-            controllerUrl: this.controllerUrl
-        });
-        this.autoForm = new Vps.Auto.FormPanel(this.formConfig);
-        this.on('renderform', function() {
+            Ext.applyIf(this.formConfig, {
+                baseCls: 'x-plain',
+                controllerUrl: this.controllerUrl
+            });
+            this.autoForm = new Vps.Auto.FormPanel(this.formConfig);
+        }
+
+        var onRender = function() {
             this.getForm().waitMsgTarget = this.el;
             this.getForm().loadAfterSave = false; //dialog wird geschlossen nach speichern, ist also nicht nötig
-        }, this);
+        };
+        if (!this.autoForm.rendered) {
+            this.on('renderform', onRender, this);
+        } else {
+            onRender();
+        }
 
         Ext.applyIf(this, {
-            width: 300,
-            height: 200,
+            width: 400,
+            height: 300,
             layout: 'fit',
             bodyStyle:'padding:5px;',
             plain: true,
@@ -77,7 +85,9 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
     {
         this.setTitle('edit');
         this.show();
-        this.getAutoForm().load(id, options);
+        if (id) {
+            this.getAutoForm().load(id, options);
+        }
     },
 
     getAutoForm : function()

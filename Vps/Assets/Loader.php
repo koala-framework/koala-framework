@@ -51,7 +51,7 @@ class Vps_Assets_Loader
                 if ((!$lastModified = $cache->load($fileType.$encoding.'AllLastModified'))
                     || !$cache->test($fileType.$encoding.'AllPacked')) {
 
-                    $dep = new Vps_Assets_Dependencies($config->asset, 'application/config.ini', 'dependencies');
+                    $dep = new Vps_Assets_Dependencies($config);
                     $contents = $dep->getPackedAll($fileType);
                     $contents = self::_encode($contents, $encoding);
                     $cache->save($contents, $fileType.$encoding.'AllPacked');
@@ -73,7 +73,7 @@ class Vps_Assets_Loader
                 header ("Content-Encoding: " . $encoding);
                 echo $contents;
             } else {
-                $paths = Vps_Assets_Dependencies::resolveAssetPaths($config->asset->toArray());
+                $paths = $config->path->toArray();
                 $assetPath = self::getAssetPath($url, $paths);
                 if (!$assetPath) {
                     header("HTTP/1.0 404 Not Found");

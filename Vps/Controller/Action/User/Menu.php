@@ -6,8 +6,7 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
     {
         $acl = $this->_getAcl();
 
-        $config = Zend_Registry::get('config');
-        $assetPaths = Vps_Assets_Dependencies::resolveAssetPaths($config->asset->toArray());
+        $assetPaths = Zend_Registry::get('config')->path->toArray();
 
         $menus = array();
         foreach ($resources as $resource) {
@@ -72,7 +71,6 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
 
         $this->view->menus = $menus;
         $this->view->showLogout = $showLogout;
-        $this->view->userRole = $this->_getUserRole();
         $this->view->authData = $this->_getAuthData();
     }
 

@@ -80,7 +80,6 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
 
         $target = $this->_getCachePath($uploadId, $this->_getCacheFilename());
         if (!is_file($target)) {
-
             // Verzeichnisse anlegen, falls nicht existent
             if (!is_dir($this->_getUploadDir() . 'cache/')) {
                 mkdir($this->_getUploadDir() . 'cache/', 0775);
@@ -95,6 +94,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
             $source = $this->_getSourcePath($uploadId);
             try {
                 $this->_createCacheFile($source, $target);
+                d($target);
             } catch (Exception $e) {
                 throw new Vps_Controller_Action_Web_Exception($e->getMessage()); // immer 404 auswerfen
             }
@@ -194,7 +194,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
             $response->setHeader("Content-type", $ctype);
             $response->setBody(file_get_contents($target));
         } else {
-            throw new Vps_Controller_Action_Web_Exception('File not found.');
+            throw new Vps_Controller_Action_Web_Exception("File '$target' not found.");
         }
     }
 
