@@ -149,8 +149,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 foreach ($this->_getWhereQuery($q) as $i) {
                     $whereQuery[] = $db->quoteInto($i, "%$q%");
                 }
+                $where[] = implode(' OR ', $whereQuery);
             }
-            $where[] = implode(' OR ', $whereQuery);
         }
         $queryId = $this->getRequest()->getParam('queryId');
         if ($queryId) {
