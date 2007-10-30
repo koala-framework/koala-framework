@@ -302,13 +302,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         for(var filter in meta.filters) {
             if (meta.filters[filter].type == 'ComboBox') {
                 var data = meta.filters[filter].data;
-                data.unshift([0, 'alle']);
+                data.unshift([0, 'all']);
                 var filterStore = new Ext.data.SimpleStore({
                     id: 0,
                     fields: ['id', 'name'],
                     data: data
                 });
-                var combo = new Ext.form.ComboBox({
+                delete meta.filters[filter].data;
+                var combo = new Ext.form.ComboBox(Ext.applyIf(meta.filters[filter], {
                         store: filterStore,
                         displayField: 'name',
                         valueField: 'id',
@@ -316,7 +317,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
                         triggerAction: 'all',
                         editable: false,
                         width: 200
-                    });
+                    }));
                 combo.setValue(0);
                 gridConfig.tbar.add(' ');
                 gridConfig.tbar.add(combo);
