@@ -9,6 +9,7 @@ class Vpc_Basic_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
         'allow'             => array(Vps_Media_Image::SCALE_BESTFIT),
         'filename'          => 'filename',
         'editFilename'      => true,
+        'allowBlank'        => true,
         'hasEnlarge'        => false,
         'enlargeClass'      => 'Vpc_Basic_Image_Index',
         'enlargeSettings'   => array(
@@ -56,7 +57,8 @@ class Vpc_Basic_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
             }
         }
         if (!isset($settings['scale']) || $settings['scale'] == '') {
-            $settings['scale'] = isset($settings['allow'][0]) ? $settings['allow'][0] : Vps_Media_Image::SCALE_BESTFIT;
+            $settings['scale'] = isset($settings['allow'][0]) ?
+                            $settings['allow'][0] : Vps_Media_Image::SCALE_BESTFIT;
         }
         return $settings;
     }
@@ -68,11 +70,14 @@ class Vpc_Basic_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
 
     public function getImageUrl($size = self::SIZE_NORMAL, $addRandom = false)
     {
-        $row = $this->getTable()->find($this->getDbId(), $this->getComponentKey())->current();
+        $row = $this->getTable()->find($this->getDbId(),
+                                        $this->getComponentKey())->current();
         if ($row) {
             $filename = $row->filename != '' ? $row->filename : 'unnamed';
             $filename .= $size;
-            return $this->getTable('Vps_Dao_File')->generateUrl($row->vps_upload_id, $this->getId(), $filename, Vps_Dao_File::SHOW, $addRandom);
+            return $this->getTable('Vps_Dao_File')
+                    ->generateUrl($row->vps_upload_id, $this->getId(), $filename,
+                                  Vps_Dao_File::SHOW, $addRandom);
         } else {
             return null;
         }

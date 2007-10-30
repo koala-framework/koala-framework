@@ -3,7 +3,8 @@ class Vpc_Admin
 {
     protected $_db;
 
-    protected function __construct(Zend_Db_Adapter_Pdo_Mysql $db){
+    protected function __construct(Zend_Db_Adapter_Pdo_Mysql $db)
+    {
         $this->_db = $db;
     }
 
@@ -19,10 +20,14 @@ class Vpc_Admin
 
     public function setup() {}
 
-    public function delete(Vpc_Abstract $component) {
+    public function delete(Vpc_Abstract $component)
+    {
         $row = $this->_getRow($component);
         if ($row) {
             $row->delete();
+        }
+        foreach ($component->getChildComponents() as $cc) {
+            Vpc_Admin::getInstance($component)->delete($component);
         }
     }
 
@@ -76,7 +81,8 @@ class Vpc_Admin
         return null;
     }
 
-    function createTable($tablename, $fields) {
+    function createTable($tablename, $fields)
+    {
         if (!$this->_tableExists($tablename)) {
             $f = array();
             $f['page_id'] = 'int(10) unsigned NOT NULL';

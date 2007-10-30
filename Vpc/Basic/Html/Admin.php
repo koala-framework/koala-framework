@@ -1,9 +1,9 @@
 <?php
-class Vpc_Basic_Text_Admin extends Vpc_Admin
+class Vpc_Basic_Html_Admin extends Vpc_Admin
 {
     public function setup()
     {
-        $this->copyTemplate('Index.html', 'Basic/Text.html');
+        $this->copyTemplate('Index.html', 'Basic/Html.html');
 
         $fields['content'] = 'text NOT NULL';
         $this->createTable('vpc_basic_text', $fields);

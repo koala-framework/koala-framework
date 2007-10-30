@@ -1,1 +1,7 @@
-{$component.text}
+{foreach from=$component.contentParts item=part}
+  {if is_string($part)}
+    {$part}
+  {else}
+    {component component=$part.component}
+  {/if}
+{/foreach}

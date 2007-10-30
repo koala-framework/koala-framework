@@ -63,7 +63,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             }
         }
 
-        if (meta.buttons) {
+        if (meta.buttons && typeof meta.form.tbar == 'undefined') {
             for (var b in meta.buttons) {
                 if (!meta.form.tbar) meta.form.tbar = [];
                 meta.form.tbar.push(this.getAction(b));

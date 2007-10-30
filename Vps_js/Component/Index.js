@@ -3,7 +3,7 @@ Vps.Component.Index = Ext.extend(Ext.Panel, {
     initComponent : function()
     {
 	    this.html = 'Willkommen bei VPS.';
-
+	    console.log('foo');
         Vps.Component.Index.superclass.initComponent.call(this);
     }
 });

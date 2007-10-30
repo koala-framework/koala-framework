@@ -94,7 +94,6 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
             $source = $this->_getSourcePath($uploadId);
             try {
                 $this->_createCacheFile($source, $target);
-                d($target);
             } catch (Exception $e) {
                 throw new Vps_Controller_Action_Web_Exception($e->getMessage()); // immer 404 auswerfen
             }

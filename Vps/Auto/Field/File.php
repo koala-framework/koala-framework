@@ -10,6 +10,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         $this->setLayout('form');
         $this->setBorder(false);
         $this->setBaseCls('x-plain');
+        $this->setAllowBlank(true); //standardwert für getAllowBlank
     }
 
     protected function _getFields()
@@ -21,9 +22,11 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
             $this->_fields->add(new Vps_Auto_Field_TextField($this->getFieldName(), 'Upload new File'))
                 ->setFieldLabel($title)
                 ->setInputType('file');
-            $this->_fields->add(new Vps_Auto_Field_Checkbox($this->getFieldName() . '_delete', ''))
-                ->setBoxLabel('Delete')
-                ->setXType('filecheckbox');
+            if ($this->getAllowBlank()) {
+                $this->_fields->add(new Vps_Auto_Field_Checkbox($this->getFieldName() . '_delete', ''))
+                    ->setBoxLabel('Delete')
+                    ->setXType('filecheckbox');
+            }
         }
         return $this->_fields;
     }
@@ -78,7 +81,9 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
             } catch (Vps_Exception $e) {
                 throw new Vps_ClientException($e->getMessage());
             }
-        } else if (isset($postData[$fieldName . '_delete']) && $postData[$fieldName . '_delete'] == '1') {
+        } else if ($this->getAllowBlank()
+                    && isset($postData[$fieldName . '_delete'])
+                    && $postData[$fieldName . '_delete'] == '1') {
             $fileTable->delete($row->$name);
             $row->$name = null;
         }

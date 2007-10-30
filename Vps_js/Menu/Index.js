@@ -152,6 +152,14 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                             }
                         });
                     }
+                },{
+                    text: 'show debug console',
+                    icon: '/assets/vps/images/silkicons/bug.png',
+                    cls: 'x-btn-text-icon',
+                    scope: this,
+                    handler: function() {
+                        Ext.log();
+                    }
                 }],
                 scope: this
             });

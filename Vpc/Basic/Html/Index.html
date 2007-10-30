@@ -1,7 +1,7 @@
 {foreach from=$component.contentParts item=part}
-  {if $part.type=="content"}
-    {$part.content}
-  {elseif $part.type=="component"}
+  {if is_string($part)}
+    {$part}
+  {else}
     {component component=$part.component}
   {/if}
 {/foreach}

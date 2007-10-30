@@ -2,20 +2,20 @@
 class Vpc_Basic_Rte_Index extends Vpc_Abstract
 {
    protected $_settings = array(
-        'text' => 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.',
+        'content' => 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.',
         'fieldLabel' => 'Rich Text Editor',
-        'width' => 500,
-        'height' => 200,
+        'width' => 550,
+        'height' => 400,
         'enableAlignments' => true,
-        'enableColors' => true,
-        'enableFont' => true,
-        'enableFontSize' => true,
+        'enableColors' => false,
+        'enableFont' => false,
+        'enableFontSize' => false,
         'enableFormat' => true,
         'enableLinks' => true,
         'enableLists' => true,
         'enableSourceEdit' => true,
         'imageClass'        => 'Vpc_Basic_Image_Index',
-        'imageSettings'     => array()
+        'imageSettings'     => array('allowBlank' => false)
     );
 
     protected $_tablename = 'Vpc_Basic_Rte_IndexModel';
@@ -25,7 +25,7 @@ class Vpc_Basic_Rte_Index extends Vpc_Abstract
 
     function getTemplateVars()
     {
-        $return['text'] = $this->getSetting('text');
+        $return['content'] = $this->getSetting('content');
         $return['template'] = 'Rte.html';
         return $return;
     }
@@ -33,50 +33,80 @@ class Vpc_Basic_Rte_Index extends Vpc_Abstract
     {
     }
 
-    private function _getSessionContent()
-    {
-        $s = new Zend_Session_Namespace('Vpc_Basic_Rte_Index');
-        if ($s->html) {
-            return $s->html;
-        } else {
-            $this->getSetting('text')
-        }
-    }
-
     public function getChildComponents()
     {
-        return $this->getImageComponents();
+        return $this->_getImageComponents();
     }
 
     protected function _getImageComponents()
     {
         if (isset($this->_images)) return $this->_images;
 
+        $ids = array_unique(
+            array_merge($this->_parseHtmlImageComponentIds($this->getSetting('content_edit')),
+                    $this->_parseHtmlImageComponentIds($this->getSetting('content'))));
+
         $this->_images = array();
-        $this->parse($this->_getSessionContent());
-        $this->images = array();
-        preg_match_all('#<img.+src="([^"]+)"[^>]*>#', $html, $m);
-        foreach ($m[1] as $k=>$src) {
-            $k = $k+1;
-            //todo: $k aus src auslesen, nicht einfach mitzählen
-            $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Index');
-            $this->images[$k] = $this->createComponent($imageClass, $k,
-                                            $this->getSetting('imageSettings'));
+        foreach ($ids as $id) {
+            $this->_images[$id] = $this->_createImageComponent($id);
         }
         return $this->_images;
     }
-    
-    public function setSessionHtml($html)
+
+    private function _createImageComponent($id)
     {
-        $s = new Zend_Session_Namespace('Vpc_Basic_Rte_Index');
-        $s->html = $html;
-        $this->_parse
+        $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Index');
+        return $this->createComponent($imageClass, $id, $this->getSetting('imageSettings'));
     }
 
-    public function addImage()
+    private function _parseHtmlImageComponentIds($html)
     {
-        if (count($this->_getImageComponents())) {
-            $k = max(array_keys($this->_getImageComponents()));
+        $ret = array();
+        preg_match_all('#<img.+src="([^"]*)"[^>]*>#', $html, $m);
+        foreach ($m[1] as $src) {
+            $id = $this->_getImageIdBySrc($src);
+            if ($id) {
+                $ret[] = $id;
+            }
+        }
+        preg_match_all('#<img.+componentkey="([^"]+)"[^>]*>#', $html, $m);
+        foreach ($m[1] as $id) {
+            $ret[] = $id;
+        }
+        return array_unique($ret);
+    }
+
+    private function _getImageIdBySrc($src)
+    {
+        //media/:uploadId/:componentId/:checksum/:filename
+        if (preg_match('#/media/([0-9]+)/'
+            .preg_quote($this->getId())
+            .'-([0-9]+)/#', $src, $m)) {
+            return $m[2];
+        }
+        return false;
+    }
+
+    public function getImageBySrc($src)
+    {
+        $id = $this->_getImageIdBySrc($src);
+        if (!$id) return null;
+        return $this->_createImageComponent($id);
+    }
+
+    public function addImage($html)
+    {
+        $newIds = $this->_parseHtmlImageComponentIds($html);
+        $contentIds = $this->_parseHtmlImageComponentIds($this->getSetting('content'));
+        $contentEditIds = $this->_parseHtmlImageComponentIds($this->getSetting('content_edit'));
+        foreach ($contentEditIds as $id) {
+            if (!in_array($id, $contentIds) && !in_array($id, $newIds)) {
+                $component = $this->_createImageComponent($id);
+                Vpc_Admin::getInstance($component)->delete($component);
+            }
+        }
+        if (array_merge($newIds, $contentIds)) {
+            $k = max(array_merge($newIds, $contentIds));
         } else {
             $k = 0;
         }
@@ -84,8 +114,23 @@ class Vpc_Basic_Rte_Index extends Vpc_Abstract
         $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Index');
         $this->images[$k] = $this->createComponent($imageClass, $k,
                                             $this->getSetting('imageSettings'));
+        $html .= '<img componentkey="'.$k.'" />';
+
+        $this->saveSetting('content_edit', $html);
         return $this->images[$k];
     }
 
-
+    public function beforeSave($html)
+    {
+        $newIds = $this->_parseHtmlImageComponentIds($html);
+        $contentIds = $this->_parseHtmlImageComponentIds($this->getSetting('content'));
+        $contentEditIds = $this->_parseHtmlImageComponentIds($this->getSetting('content_edit'));
+        $ids = array_unique(array_merge($contentIds, $contentEditIds));
+        foreach ($ids as $id) {
+            if (!in_array($id, $newIds)) {
+                $component = $this->_createImageComponent($id);
+                Vpc_Admin::getInstance($component)->delete($component);
+            }
+        }
+    }
 }

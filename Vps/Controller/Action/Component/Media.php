@@ -31,8 +31,6 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action_Media
 
         $pageCollection = Vps_PageCollection_TreeBase::getInstance();
         $component = $pageCollection->findComponent($id);
-p($id);
-p($component);
         if ($component instanceof Vpc_FileInterface) {
             $component->createCacheFile($source, $target);
         }
