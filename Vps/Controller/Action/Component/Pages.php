@@ -21,6 +21,7 @@ class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_T
     public function init()
     {
         $this->_table = Zend_Registry::get('dao')->getTable('Vps_Dao_Pages');
+        $this->_table->showInvisible(true);
         parent::init();
     }
 

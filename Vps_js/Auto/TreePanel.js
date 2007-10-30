@@ -34,10 +34,15 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
         }
 
         // Tree
+        baseParams = {};
+        if (this.openedId != undefined) { baseParams.openedId = this.openedId; }
         this.tree = new Ext.tree.TreePanel({
             border      : false,
             animate     : true,
-            loader      : new Ext.tree.TreeLoader({dataUrl: this.controllerUrl + 'jsonData'}),
+            loader      : new Ext.tree.TreeLoader({
+                baseParams  : baseParams,
+                dataUrl     : this.controllerUrl + 'jsonData'
+            }),
             enableDD    : meta.enableDD,
             containerScroll: true,
             rootVisible : meta.rootVisible,
@@ -59,6 +64,13 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
         this.tree.on('beforenodedrop', this.onMove, this);
         this.tree.on('collapsenode', this.onCollapseNode, this);
         this.tree.on('expandnode', this.onExpandNode, this);
+
+        this.tree.on('load', function(node) {
+            if (this.openedId == node.id) {
+                node.select();
+            }
+            return true;
+        }, this);
 
         this.add(this.tree);
         this.doLayout();

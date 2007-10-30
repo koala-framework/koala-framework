@@ -6,5 +6,6 @@ class Vpc_Basic_Link_IndexController extends Vps_Controller_Action_Auto_Vpc_Form
     public function preDispatch()
     {
         $this->_form = new Vpc_Basic_Link_Form($this->component);
+        parent::preDispatch();
     }
 }

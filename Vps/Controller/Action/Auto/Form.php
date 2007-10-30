@@ -43,13 +43,15 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
         $this->_initFields();
 
-        if (is_array($this->_form->getPrimaryKey())) {
-            foreach ($this->_form->getPrimaryKey() as $key) {
-                $id[$key] = $this->_getParam($key);
+        if (!$this->_form->getId()) {
+            if (is_array($this->_form->getPrimaryKey())) {
+                foreach ($this->_form->getPrimaryKey() as $key) {
+                    $id[$key] = $this->_getParam($key);
+                }
+                $this->_form->setId($id);
+            } else {
+                $this->_form->setId($this->_getParam($this->_form->getPrimaryKey()));
             }
-            $this->_form->setId($id);
-        } else {
-            $this->_form->setId($this->_getParam($this->_form->getPrimaryKey()));
         }
     }
 

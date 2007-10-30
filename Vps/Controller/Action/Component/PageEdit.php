@@ -15,7 +15,10 @@ class Vps_Controller_Action_Component_PageEdit extends Vps_Controller_Action_Aut
             //}
         }
 
-        $this->_form->setTable(new Vps_Dao_Pages());
+        $table = new Vps_Dao_Pages();
+        $table->showInvisible(true);
+
+        $this->_form->setTable($table);
         $fields = $this->_form->fields;
         $fields->add(new Vps_Auto_Field_TextField('name'))
             ->setFieldLabel('Name of Page');
