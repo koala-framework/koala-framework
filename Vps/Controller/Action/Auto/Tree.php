@@ -47,13 +47,13 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
 
         // Sortierung aktivieren wenn in DB
         if (!isset($this->_hasPosition)) {
-            $this->_hasPosition = in_array('position', $info['cols']);
+            $this->_hasPosition = in_array('pos', $info['cols']);
         }
-        if ($this->_hasPosition && !$this->_order != 'position') {
+        if ($this->_hasPosition && !$this->_order != 'pos') {
             throw new Vps_Exception("If _hasposition is enabled, order must be position");
         }
         if ($this->_hasPosition) {
-            $this->_order = 'position';
+            $this->_order = 'pos';
         }
 
         // Drag&Drop standardmäßig aktivieren wenn _hasPosition aktiviert ist
@@ -141,7 +141,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         return $data;
     }
 
-    private function _saveSessionNodeOpened($id, $activate)
+    protected function _saveSessionNodeOpened($id, $activate)
     {
         $session = new Zend_Session_Namespace('admin');
         $key = 'treeNodes_' . get_class($this->_table);
@@ -157,7 +157,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         return $ids;
     }
 
-    private function _saveNodeOpened()
+    protected function _saveNodeOpened()
     {
         $openedId = $this->_getParam('openedId');
         $this->_openedNodes = array();
@@ -219,11 +219,11 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
             if ($targetRow) {
                 $row->parent_id = $targetRow->parent_id;
                 if ($this->_hasPosition) {
-                    $targetPosition = $targetRow->position;
+                    $targetPosition = $targetRow->pos;
                     if ($point == 'above') {
-                        $row->position = $targetPosition - 1;
+                        $row->pos = $targetPosition - 1;
                     } else {
-                        $row->position = $targetPosition;
+                        $row->pos = $targetPosition;
                     }
                 }
             } else {
@@ -234,7 +234,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         $row->save();
         if ($this->_hasPosition) {
             $where = $row->parent_id ? 'parent_id=' . $row->parent_id : 'parent_id IS NULL';
-            $row->numberize('position', $row->position, $where);
+            $row->numberize('pos', $row->pos, $where);
         }
     }
 

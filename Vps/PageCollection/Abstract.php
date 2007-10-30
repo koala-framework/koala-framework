@@ -182,10 +182,10 @@ abstract class Vps_PageCollection_Abstract
         return $this->_pages[$this->_homeId];
     }
 
-    protected function _generateHierarchy(Vpc_Abstract $page = null, $filename = '')
+    protected function _generateHierarchy(Vpc_Abstract $page = null, $filename = '', $type = null)
     {
         if (is_null($page)) {
-            $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData(null);
+            $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData(null, $type);
             foreach($rows as $pageRow) {
                 if ($filename != '' && $filename != $pageRow['filename']) { continue; }
                 $page = Vpc_Abstract::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id'], $this);

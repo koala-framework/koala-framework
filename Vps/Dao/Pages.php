@@ -71,7 +71,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
                 SELECT id, parent_id, type, is_home, visible, name, filename, component_class
                 FROM vps_pages
                 ' . $where . '
-                ORDER BY position
+                ORDER BY pos
             ';
             $this->_pageData = $this->getAdapter()->fetchAssoc($sql);
         }
@@ -145,13 +145,13 @@ class Vps_Dao_Pages extends Vps_Db_Table
         $data['is_home'] = 0;
         $data['filename'] = '';
         $data['visible'] = 0;
-        $data['position'] = 1;
+        $data['pos'] = 1;
         $id = parent::insert($data);
         if ($id) {
             $row = $this->find($id)->current();
             $row->filename = $row->getUniqueString($data['name'], 'filename', 'parent_id = ' . $row->parent_id);
             $row->save();
-            $row->numberize('position', 1, 'parent_id = ' . $row->parent_id);
+            $row->numberize('pos', 1, 'parent_id = ' . $row->parent_id);
         }
 
         $this->_pageData = null;
