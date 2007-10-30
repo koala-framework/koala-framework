@@ -9,24 +9,14 @@ class Vps_Auto_Field_DateField extends Vps_Auto_Field_SimpleAbstract
 
     protected function _addValidators()
     {
-        if ($this->getAllowBlank() === false) {
-            $this->addValidator(new Zend_Validate_Date());
-        }
+        parent::_addValidators();
+        $this->addValidator(new Zend_Validate_Date());
     }
 
-    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
+    protected function _getValueFromPostData($postData)
     {
-        Vps_Auto_Field_Abstract::prepareSave($row, $postData);
-
-        $name = $this->getName();
-        $fieldName = $this->getFieldName();
-
-        if (isset($postData[$fieldName])) {
-            if ($postData[$fieldName]) {
-                $row->$name = $postData[$fieldName];
-            } else {
-                $row->$name = null;
-            }
-        }
+        $ret = parent::_getValueFromPostData($postData);
+        if ($ret == '') $ret = null;
+        return $ret;
     }
 }

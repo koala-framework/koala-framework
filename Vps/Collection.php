@@ -33,7 +33,6 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
                 return $ret;
             }
         }
-        throw new Vps_Exception("Item '$name' not found.");
     }
 
     //ArrayAccess
@@ -63,7 +62,13 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
     //ArrayAccess
     public function offsetUnset($offset)
     {
-        throw new Vps_Exception("Not yet Implemented.");
+        foreach ($this->_array as $k=>$v) {
+            if ($ret = $v->getByName($name)) {
+                unset($k);
+                return;
+            }
+        }
+        throw new Vps_Exception("Offset '$offset' not found");
     }
 
     //IteratorAggregate

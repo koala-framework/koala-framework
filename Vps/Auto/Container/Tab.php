@@ -9,4 +9,9 @@ class Vps_Auto_Container_Tab extends Vps_Auto_Container_Abstract
         $this->setAutoHeight(true);
         $this->setBodyStyle('padding:10px');
     }
+    public function getByName($name)
+    {
+        $ret = parent::getByName($name);
+        return $ret;
+    }
 }

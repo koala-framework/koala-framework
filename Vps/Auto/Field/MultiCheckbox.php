@@ -55,7 +55,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
     {
         $name = parent::getName();
         if (!$name) {
-            $name = strtolower($this->getTableName());
+            $name = $this->getTableName();
         }
         return $name;
     }
@@ -86,6 +86,9 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
             foreach($postData[$this->getFieldName()] as $key=>$value) {
                 if ($value) $new[] = $key;
             }
+        }
+        if ($this->getAllowBlank() === false && $new == array()) {
+            throw new Vps_ClientException("Please select at least one ".$this->getTitle().".");
         }
         $saved = $row->findDependentRowset($this->getTableName());
 

@@ -5,14 +5,15 @@ class Vps_Assets_Loader
     {
         $type = substr($url, 0, strpos($url, '/'));
         $url = substr($url, strpos($url, '/')+1);
-        if (isset($paths[$type])) {
-            if(!file_exists($paths[$type].$url)) {
-                return null;
-            }
-        } else {
-            return null;
+        if (!isset($paths->$type)) {
+            throw new Vps_Assets_NotFoundException("Assets-Path-Type '$type' not found in config.");
         }
-        return $paths[$type].$url;
+        $p = $paths->$type;
+        if ($p == 'VPS_PATH') $p = VPS_PATH;
+        if (!file_exists($p.$url)) {
+            throw new Vps_Assets_NotFoundException("Asset-File '$p$url' does not exist.");
+        }
+        return $p.$url;
     }
 
     static public function load()
@@ -73,8 +74,7 @@ class Vps_Assets_Loader
                 header ("Content-Encoding: " . $encoding);
                 echo $contents;
             } else {
-                $paths = $config->path->toArray();
-                $assetPath = self::getAssetPath($url, $paths);
+                $assetPath = self::getAssetPath($url, $config->path);
                 if (!$assetPath) {
                     header("HTTP/1.0 404 Not Found");
                     die("file not found");

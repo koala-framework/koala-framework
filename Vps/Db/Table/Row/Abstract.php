@@ -61,6 +61,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     {
         $origWhere = $where;
         if (is_array($origWhere)) {
+            $w = array();
             foreach ($origWhere as $key => $val) {
                 $w[] = $this->getTable()->getAdapter()->quoteInto($key, $val);
             }
