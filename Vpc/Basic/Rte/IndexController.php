@@ -16,11 +16,25 @@ class Vpc_Basic_Rte_IndexController extends Vps_Controller_Action_Auto_Vpc_Form
         $this->_form->add($field);
     }
 
+    protected function _beforeSave(Zend_Db_Table_Row_Abstract $row)
+    {
+        parent::_beforeSave($row);
+        $this->component->beforeSave($row->text);
+        $row->text_edit = '';
+    }
+
     public function jsonAddImageAction()
     {
-        $html = $this->_getParam('html');
-        $this->component->saveSetting('text_edit', $html);
-        $image = $this->component->addImage();
+        $image = $this->component->addImage($this->_getParam('html'));
+        $this->view->config = $this->view->getConfig($image);
+    }
+
+    public function jsonEditImageAction()
+    {
+        $image = $this->component->getImageBySrc($this->_getParam('src'));
+        if (!$image) {
+            throw new Vps_Exception("Can't find image component");
+        }
         $this->view->config = $this->view->getConfig($image);
     }
 }
