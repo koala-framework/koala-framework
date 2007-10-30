@@ -24,6 +24,7 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract
             }
         }
         $ret = parent::getMetaData();
+        $ret['name'] = $this->getName();
         $ret['items'] = $this->fields->getMetaData();
         return $ret;
     }

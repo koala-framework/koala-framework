@@ -27,6 +27,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
     protected $_enableDD;
     protected $_hasPosition;
     protected $_editDialog;
+    private $_openedNodes = array();
 
     public function init()
     {
@@ -73,8 +74,10 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
 
     public function jsonDataAction()
     {
-        $parentId = $this->getRequest()->getParam('node');
+        $parentId = $this->_getParam('node');
+
         $this->_saveSessionNodeOpened($parentId, true);
+        $this->_saveNodeOpened();
 
         $rowset = $this->_table->fetchAll($this->_getWhere(), $this->_order);
 
@@ -98,6 +101,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
 
     protected function _getWhere()
     {
+        $where = array();
         $parentId = $this->getRequest()->getParam('node');
         if (!$parentId) {
             $where[] = 'parent_id IS NULL';
@@ -109,8 +113,6 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
 
     protected function _formatNode($row)
     {
-        $openedNodes = $this->_saveSessionNodeOpened(null, null);
-
         $data = array();
         $data['id'] = $row->id;
         $data['text'] = $row->name;
@@ -122,8 +124,11 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
             $data['visible'] = false;
             $data['bIcon'] = $this->_icons['invisible'];
         }
+        $openedNodes = $this->_saveSessionNodeOpened(null, null);
         if ($this->_table->fetchAll('parent_id = ' . $row->id)->count() > 0) {
-            if (isset($openedNodes[$row->id])) {
+            if (isset($openedNodes[$row->id]) ||
+                isset($this->_openedNodes[$row->id])
+            ) {
                 $data['expanded'] = true;
             } else {
                 $data['expanded'] = false;
@@ -150,6 +155,17 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
             $session->$key = $ids;
         }
         return $ids;
+    }
+
+    private function _saveNodeOpened()
+    {
+        $openedId = $this->_getParam('openedId');
+        $this->_openedNodes = array();
+        while ($openedId) {
+            $row = $this->_table->find($openedId)->current();
+            $this->_openedNodes[$openedId] = true;
+            $openedId = $row ? $row->parent_id : null;
+        }
     }
 
     public function jsonVisibleAction()

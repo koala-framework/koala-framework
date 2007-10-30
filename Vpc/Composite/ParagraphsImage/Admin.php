@@ -6,10 +6,10 @@ class Vpc_Composite_ParagraphsImage_Admin extends Vpc_Admin
         return 'Vps.Component.TabPanel';
     }
 
-    public function getControllerConfig($component, $view)
+    public function getControllerConfig($component)
     {
-        $config['tabs']['Image'] = $view->getConfig($component->image);
-        $config['tabs']['Paragraphs'] = $view->getConfig($component->paragraphs);
+        $config['tabs']['Image'] = $this->getConfig($component->image);
+        $config['tabs']['Paragraphs'] = $this->getConfig($component->paragraphs);
         $config['activeItem'] = 'Paragraphs';
         return $config;
     }

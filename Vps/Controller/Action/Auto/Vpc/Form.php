@@ -3,9 +3,11 @@ abstract class Vps_Controller_Action_Auto_Vpc_Form extends Vps_Controller_Action
 {
     public function preDispatch()
     {
-        $this->_form = new Vps_Auto_Vpc_Form($this->component);
-        $this->_form->setBodyStyle('padding: 10px');
-        $this->_initFields();
+        if (!isset($this->_form)) {
+            $this->_form = new Vps_Auto_Vpc_Form($this->component);
+            $this->_form->setBodyStyle('padding: 10px');
+        }
+        parent::preDispatch();
     }
 
     public function indexAction()

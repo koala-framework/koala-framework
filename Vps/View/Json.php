@@ -1,5 +1,5 @@
 <?php
-class Vps_View_Json extends Vps_View
+class Vps_View_Json extends Zend_View_Abstract
 {
     private $_outputFormat = 'vpsConnection';
 
@@ -11,8 +11,10 @@ class Vps_View_Json extends Vps_View
     public function ext($class, $config = array()) {
         if ($class instanceof Vpc_Abstract) {
             if (!is_array($config)) { $config = array(); }
-            $config = array_merge($config, $this->getConfig($class, array(), false));
-            $class = $this->getClass($class);
+            $admin = Vpc_Admin::getInstance($class);
+            $adminConfig = $admin->getConfig($class, array(), false);
+            $config = array_merge($config, $adminConfig);
+            $class = $admin->getControllerClass($class);
         }
         $this->class = $class;
         $this->config = $config;

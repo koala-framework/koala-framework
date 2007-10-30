@@ -1,7 +1,7 @@
 <?php
 require_once 'Smarty/Smarty.class.php';
 
-class Vps_View_Smarty extends Vps_View
+class Vps_View_Smarty extends Zend_View_Abstract
 {
     protected $_smarty;
     protected $_renderFile = 'Master.html';
@@ -31,8 +31,10 @@ class Vps_View_Smarty extends Vps_View
     {
         if ($class instanceof Vpc_Abstract) {
             if (!is_array($config)) { $config = array(); }
-            $config = array_merge($config, $this->getConfig($class, array(), false));
-            $class = $this->getClass($class);
+            $admin = Vpc_Admin::getInstance($class);
+            $adminConfig = $admin->getConfig($class, array(), false);
+            $config = array_merge($config, $adminConfig);
+            $class = $admin->getControllerClass();
         }
         if (!is_string($class)) {
             throw new Vps_View_Exception('Class must be a string.');

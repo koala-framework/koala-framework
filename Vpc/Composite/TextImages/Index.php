@@ -5,7 +5,7 @@ class Vpc_Composite_TextImages_Index extends Vpc_Abstract
     public $text;
     public $images;
     protected $_settings = array(
-        'textClass'         => 'Vpc_Basic_Text_Index',
+        'textClass'         => 'Vpc_Basic_Html_Index',
         'textSettings'      => array(),
         'imagesClass'       => 'Vpc_Composite_Images_Index',
         'imagesSettings'    => array(),
@@ -27,7 +27,7 @@ class Vpc_Composite_TextImages_Index extends Vpc_Abstract
 
     protected function _init()
     {
-        $textClass = $this->_getClassFromSetting('textClass', 'Vpc_Basic_Text_Index');
+        $textClass = $this->_getClassFromSetting('textClass', 'Vpc_Basic_Html_Index');
         $imagesClass = $this->_getClassFromSetting('imagesClass', 'Vpc_Composite_Images_Index');
         $imagesSettings = $this->getSetting('imageSettings');
         if (!is_array($imagesSettings)) { $imagesSettings = array(); }

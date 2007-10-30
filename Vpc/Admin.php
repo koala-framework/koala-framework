@@ -8,7 +8,7 @@ class Vpc_Admin
         $this->_db = $db;
     }
 
-    public function getControllerConfig($component, $view)
+    public function getControllerConfig($component)
     {
         return array();
     }
@@ -17,6 +17,41 @@ class Vpc_Admin
     {
         return 'Vps.Auto.FormPanel';
     }
+
+    // ****************
+    public function getConfig(Vpc_Abstract $component, $config = array(), $includeClass = true)
+    {
+        $config = array_merge($config, $this->getControllerConfig($component));
+        if (!isset($config['controllerUrl'])) {
+            $config['controllerUrl'] = $this->getControllerUrl($component);
+        }
+        if ($includeClass) {
+            $return['config'] = $config;
+            $return['class'] = $this->getControllerClass($component);
+            return $return;
+        } else {
+            return $config;
+        }
+    }
+
+    public function getNoAdminConfig(Vpc_Abstract $component, $controllerClass, $config = array())
+    {
+        $config['controllerUrl'] = $this->getControllerUrl($component);
+        $return['config'] = $config;
+        $return['class'] = $controllerClass;
+        return $return;
+    }
+
+    public function getControllerUrl(Vpc_Abstract $component, $class = '')
+    {
+        if ($class == '') { $class = get_class($component); }
+        if (substr($class, -10) == 'Controller') {
+            $class = substr($class, 0, -10);
+        }
+        return '/component/edit/' . $class . '/' . $component->getId() . '/';
+    }
+
+    // ****************
 
     public function setup() {}
 
