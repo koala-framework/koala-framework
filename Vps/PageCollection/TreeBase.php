@@ -1,6 +1,8 @@
 <?php
 class Vps_PageCollection_TreeBase extends Vps_PageCollection_Tree
 {
+    public $overwriteGetUrl = true;
+
     public function __construct(Vps_Dao $dao, $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL, $decoratorClasses = array())
     {
         parent::__construct($dao, $urlScheme, $decoratorClasses);
@@ -17,7 +19,11 @@ class Vps_PageCollection_TreeBase extends Vps_PageCollection_Tree
 
     public function getUrl($page)
     {
-        return '/component/show/' . get_class($page) . '/' . $page->getId() . '/';
+        if ($this->overwriteGetUrl) {
+            return '/component/show/' . get_class($page) . '/' . $page->getId() . '/';
+        } else {
+            return parent::getUrl($page);
+        }
     }
 
     protected function _addDecorators(Vpc_Interface $page)

@@ -69,9 +69,9 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         return null;
     }
 
-    public function getChildPages(Vpc_Interface $page = null)
+    public function getChildPages(Vpc_Interface $page = null, $type = null)
     {
-        $this->_generateHierarchy($page);
+        $this->_generateHierarchy($page, '', $type);
         $searchId = $page ? $page->getPageId() : null ;
         $childPages = array();
         foreach ($this->_pageParentIds as $id => $parentId) {

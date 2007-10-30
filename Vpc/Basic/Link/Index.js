@@ -80,14 +80,7 @@ Vpc.Basic.Link.Index = Ext.extend(Vps.Auto.FormPanel, {
                 this.pages.on('loaded', function() {
                     this.pages.tree.on('dblclick', function(node, e) {
                         targetField.setValue(node.id);
-                        var text = '';
-                        var n = node;
-                        while (n && n.text != 'Root') {
-                            if (text != '') { text = ' -> ' + text; }
-                            text = n.text + text;
-                            n = n.parentNode;
-                        }
-                        textField.setValue(text);
+                        textField.setValue(node.attributes.data.url);
                         this.window.close();
                     }, this);
                 }, this);
