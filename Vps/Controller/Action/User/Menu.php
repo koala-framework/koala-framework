@@ -6,7 +6,7 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
     {
         $acl = $this->_getAcl();
 
-        $assetPaths = Zend_Registry::get('config')->path->toArray();
+        $assetPaths = Zend_Registry::get('config')->path;
 
         $menus = array();
         foreach ($resources as $resource) {
@@ -20,11 +20,13 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
                 if (is_string($menu['menuConfig'])) {
                     $menu['menuConfig'] = array('text' => $menu['menuConfig']);
                 }
-                //wenn ein kompletter assets-pfad angegeben wurde keine änderung
-                if (isset($menu['menuConfig']['icon'])
-                    && !Vps_Assets_Loader::getAssetPath(substr($menu['menuConfig']['icon'], 8), $assetPaths)) {
-                    //sonst den standard-prefix dazugeben
-                    $menu['menuConfig']['icon'] = '/assets/vps/images/silkicons/'.$menu['menuConfig']['icon'];
+
+                if (isset($menu['menuConfig']['icon'])) {
+                    try {
+                        $menu['menuConfig']['icon'] = Vps_Assets_Loader::getAssetPath(substr($menu['menuConfig']['icon'], 8), $assetPaths);
+                    } catch (Vps_Assets_NotFoundException $e) {
+                        $menu['menuConfig']['icon'] = '/assets/vps/images/silkicons/'.$menu['menuConfig']['icon'];
+                    }
                 }
 
                 if ($resource instanceof Vps_Acl_Resource_MenuDropdown) {

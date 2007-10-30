@@ -12,15 +12,7 @@ class Vps_Assets_Dependencies
 
     private function _getFilePath($file)
     {
-        $pathType = substr($file, 0, strpos($file, '/'));
-        if (!isset($this->_config->path->$pathType)) {
-            throw new Vps_Exception("Assets-Path-Type '$pathType' not found in config.");
-        }
-        $path = $this->_config->path->$pathType.substr($file, strpos($file, '/'));
-        if(!file_exists($path)) {
-            throw new Vps_Exception("Asset-File '$path' does not exist.");
-        }
-        return $path;
+        return Vps_Assets_Loader::getAssetPath($file, $this->_config->path);
     }
 
     public function getAssetFiles($fileType = null)

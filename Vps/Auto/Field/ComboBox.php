@@ -51,27 +51,10 @@ class Vps_Auto_Field_ComboBox extends Vps_Auto_Field_SimpleAbstract
             return $this->setStore(array('data' => $d));
         }
     }
-
-    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
+    protected function _getValueFromPostData($postData)
     {
-        Vps_Auto_Field_Abstract::prepareSave($row, $postData);
-
-        if ($this->getSave() !== false) {
-            $fieldName = $this->getFieldName();
-
-            if (isset($postData[$fieldName])) {
-                $data = $postData[$fieldName];
-                foreach($this->getValidators() as $v) {
-                    if (!$v->isValid($data)) {
-                        if ($this->getFieldLabel()) $name = $this->getFieldLabel();
-                        if ($this->getFieldLabel()) $name = $this->getName();
-                        throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages()));
-                    }
-                }
-                if ($data=='') $data = null;
-                $this->getData()->save($row, $data);
-            }
-        }
+        $ret = parent::_getValueFromPostData($postData);
+        if ($ret == '') $ret = null;
+        return $ret;
     }
-
 }
