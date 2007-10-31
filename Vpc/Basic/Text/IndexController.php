@@ -5,28 +5,31 @@ class Vpc_Basic_Text_IndexController extends Vps_Controller_Action_Auto_Vpc_Form
 
     public function _initFields()
     {
-        $field = new Vps_Auto_Field_HtmlEditor('text', 'Content');
+        $field = new Vps_Auto_Field_HtmlEditor('content', 'Content');
         foreach ($this->component->getSettings() as $key => $val) {
-            if ($key != 'text') {
+            if ($key != 'content') {
                 $method = 'set' . ucfirst($key);
                 $field->$method($val);
             }
         }
-        $field->setControllerUrl($this->view->getControllerUrl($this->component));
+        $controllerUrl = Vpc_Admin::getInstance($this->component)
+                            ->getControllerUrl($this->component);
+        $field->setControllerUrl($controllerUrl);
         $this->_form->add($field);
     }
 
     protected function _beforeSave(Zend_Db_Table_Row_Abstract $row)
     {
         parent::_beforeSave($row);
-        $this->component->beforeSave($row->text);
-        $row->text_edit = '';
+        $this->component->beforeSave($row->content);
+        $row->content_edit = '';
     }
 
     public function jsonAddImageAction()
     {
-        $image = $this->component->addImage($this->_getParam('html'));
-        $this->view->config = $this->view->getConfig($image);
+        $image = $this->component->addImage($this->_getParam('content'));
+        $this->view->config = Vpc_Admin::getInstance($image)
+                            ->getConfig($image);
     }
 
     public function jsonEditImageAction()
@@ -35,6 +38,7 @@ class Vpc_Basic_Text_IndexController extends Vps_Controller_Action_Auto_Vpc_Form
         if (!$image) {
             throw new Vps_Exception("Can't find image component");
         }
-        $this->view->config = $this->view->getConfig($image);
+        $this->view->config = Vpc_Admin::getInstance($image)
+                            ->getConfig($image);
     }
 }
