@@ -17,15 +17,11 @@ class Vpc_Basic_Link_Intern_PagesController extends Vps_Controller_Action_Compon
 
         } else {
 
-            $parentId = $this->_getParam('node');
-            $this->_saveSessionNodeOpened($parentId, true);
-
-            $page = $this->_pc->findPageByPath($this->_getParam('openedUrl'));
-            $openedId = $page ? $page->getId() : null ;
             $this->_openedNodes = array();
+            $openedId = $this->_getParam('openedId');
             while ($openedId) {
-                $page = $this->_pc->findPage($openedId);
                 $this->_openedNodes[$openedId] = true;
+                $page = $this->_pc->findPage($openedId);
                 if ($page) {
                     $page = $this->_pc->getParentPage($page);
                 }
@@ -41,6 +37,7 @@ class Vpc_Basic_Link_Intern_PagesController extends Vps_Controller_Action_Compon
             }
 
             $this->_pc->overwriteGetUrl = false;
+
             $childPages = $this->_pc->getChildPages($page, $type);
             $nodes = array();
             foreach ($childPages as $page) {
@@ -63,9 +60,7 @@ class Vpc_Basic_Link_Intern_PagesController extends Vps_Controller_Action_Compon
         $data['bIcon'] = $this->_icons['default'];
         $openedNodes = $this->_saveSessionNodeOpened(null, null);
         if (sizeof($this->_pc->getChildpages($page)) > 0) {
-            if (isset($openedNodes[$id]) ||
-                isset($this->_openedNodes[$id])
-            ) {
+            if (isset($this->_openedNodes[$id])) {
                 $data['expanded'] = true;
             } else {
                 $data['expanded'] = false;

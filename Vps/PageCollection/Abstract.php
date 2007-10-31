@@ -15,6 +15,7 @@ abstract class Vps_PageCollection_Abstract
     const URL_SCHEME_HIERARCHICAL = 0;
     const URL_SCHEME_FLAT = 1;
     private $_showInvisible = false;
+    protected $_type = array();
 
     public function __construct(Vps_Dao $dao, $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL, $decoratorClasses = array())
     {
@@ -186,14 +187,14 @@ abstract class Vps_PageCollection_Abstract
         return $this->_pages[$this->_homeId];
     }
 
-    protected function _generateHierarchy(Vpc_Abstract $page = null, $filename = '', $type = null)
+    protected function _generateHierarchy(Vpc_Abstract $page = null, $filename = '')
     {
         if (is_null($page)) {
-            $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData(null, $type);
+            $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData(null);
             foreach($rows as $pageRow) {
-                if ($filename != '' && $filename != $pageRow['filename']) { continue; }
                 $page = Vpc_Abstract::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id'], $this);
                 $this->addTreePage($page, $pageRow['filename'], $pageRow['name'], null);
+                $this->_types[$page->getId()] = $pageRow['type'];
             }
         } else {
             $page->generateHierarchy($filename);

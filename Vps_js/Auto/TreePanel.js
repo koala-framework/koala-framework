@@ -35,7 +35,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
         }
 
         // Tree
-        baseParams = {};
+        baseParams = this.baseParams != undefined ? this.baseParams : {};
         if (this.openedId != undefined) { baseParams.openedId = this.openedId; }
         this.tree = new Ext.tree.TreePanel({
             border      : false,
