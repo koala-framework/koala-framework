@@ -39,7 +39,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                     var dialog = new Vps.Auto.Form.Window({
                         autoForm: new c(r.config.config),
                         width: 450,
-                        height: 200
+                        height: 400
                     });
                     dialog.on('datachange', function(r) {
                         img.src = r.imageUrl;
@@ -61,7 +61,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                     var dialog = new Vps.Auto.Form.Window({
                         autoForm: new c(r.config.config),
                         width: 450,
-                        height: 200
+                        height: 400
                     });
                     dialog.on('datachange', function(r) {
                         this.relayCmd('insertimage', r.imageUrl);

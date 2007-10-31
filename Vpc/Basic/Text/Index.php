@@ -15,7 +15,8 @@ class Vpc_Basic_Text_Index extends Vpc_Basic_Html_Index
         'enableLists' => true,
         'enableSourceEdit' => true,
         'imageClass'        => 'Vpc_Basic_Image_Index',
-        'imageSettings'     => array('allowBlank' => false)
+        'imageSettings'     => array('allowBlank' => false,
+                                     'size'       => array())
     );
 
     protected $_tablename = 'Vpc_Basic_Text_IndexModel';
