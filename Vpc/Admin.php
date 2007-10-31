@@ -21,13 +21,14 @@ class Vpc_Admin
     // ****************
     public function getConfig(Vpc_Abstract $component, $config = array(), $includeClass = true)
     {
-        $config = array_merge($config, $this->getControllerConfig($component));
+        $admin = Vpc_Admin::getInstance($component);
+        $config = array_merge($config, $admin->getControllerConfig($component));
         if (!isset($config['controllerUrl'])) {
-            $config['controllerUrl'] = $this->getControllerUrl($component);
+            $config['controllerUrl'] = $admin->getControllerUrl($component);
         }
         if ($includeClass) {
             $return['config'] = $config;
-            $return['class'] = $this->getControllerClass($component);
+            $return['class'] = $admin->getControllerClass($component);
             return $return;
         } else {
             return $config;
@@ -36,7 +37,8 @@ class Vpc_Admin
 
     public function getNoAdminConfig(Vpc_Abstract $component, $controllerClass, $config = array())
     {
-        $config['controllerUrl'] = $this->getControllerUrl($component);
+        $admin = Vpc_Admin::getInstance($component);
+        $config['controllerUrl'] = $admin->getControllerUrl($component);
         $return['config'] = $config;
         $return['class'] = $controllerClass;
         return $return;

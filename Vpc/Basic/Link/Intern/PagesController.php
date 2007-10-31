@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Link_PagesController extends Vps_Controller_Action_Component_Pages
+class Vpc_Basic_Link_Intern_PagesController extends Vps_Controller_Action_Component_Pages
 {
     private $_pc;
 
@@ -20,12 +20,15 @@ class Vpc_Basic_Link_PagesController extends Vps_Controller_Action_Component_Pag
             $parentId = $this->_getParam('node');
             $this->_saveSessionNodeOpened($parentId, true);
 
-            $openedId = $this->_getParam('openedId');
+            $page = $this->_pc->findPageByPath($this->_getParam('openedUrl'));
+            $openedId = $page ? $page->getId() : null ;
             $this->_openedNodes = array();
             while ($openedId) {
                 $page = $this->_pc->findPage($openedId);
                 $this->_openedNodes[$openedId] = true;
-                $page = $this->_pc->getParentPage($page);
+                if ($page) {
+                    $page = $this->_pc->getParentPage($page);
+                }
                 $openedId = $page ? $page->getId() : null;
             }
 
