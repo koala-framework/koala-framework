@@ -144,7 +144,11 @@ abstract class Vps_PageCollection_Abstract
             return $this->getHomePage();
         }
 
-        $parts = Vpc_Abstract::parseId($id);
+        try {
+            $parts = Vpc_Abstract::parseId($id);
+        } catch (Vpc_Exception $e) {
+            return null;
+        }
         $id = $parts['pageId'];
         if (!isset($this->_pages[$id])) {
             $currentId = $parts['dbId'];
