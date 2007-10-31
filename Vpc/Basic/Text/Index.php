@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Rte_Index extends Vpc_Abstract
+class Vpc_Basic_Text_Index extends Vpc_Basic_Html_Index
 {
    protected $_settings = array(
         'content' => 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.',
@@ -18,24 +18,48 @@ class Vpc_Basic_Rte_Index extends Vpc_Abstract
         'imageSettings'     => array('allowBlank' => false)
     );
 
-    protected $_tablename = 'Vpc_Basic_Rte_IndexModel';
-    const NAME = 'Standard.Rte';
+    protected $_tablename = 'Vpc_Basic_Text_IndexModel';
+    const NAME = 'Standard.Text';
 
     private $_images;
 
     function getTemplateVars()
     {
-        $return['content'] = $this->getSetting('content');
-        $return['template'] = 'Rte.html';
+        $return = parent::getTemplateVars();
+        $return['template'] = 'Text.html';
         return $return;
     }
     protected function _init()
     {
     }
+    protected function _parseContentParts($content)
+    {
+        $ret = array();
+        foreach (parent::_parseContentParts($content) as $part) {
+            if (is_string($part)) {
+                $componentNr = 0;
+                while(preg_match('#^(.*?)\{([a-zA-Z0-9_]+)\}(.*)$#s', $content, $m)) {
+                    $ret[] = $m[1];
+                    $className = $m[2];
+                    $componentNr++; //todo: wie nr ermitteln?? verträgt sich das mit rte bildern?
+                    $component = $this->createComponent($className, $componentNr);
+                    $ret[] = $component;
+                    $content = $m[3];
+                }
 
+                if(!$m) $ret[] = $content;
+            } else {
+                $ret[] = $part;
+            }
+        }
+        return $ret;
+    }
+/*
     public function getChildComponents()
     {
-        return $this->_getImageComponents();
+        $return = parent::getChildComponents();
+        $return = array_merge($return, $this->_getImageComponents());
+        return $return;
     }
 
     protected function _getImageComponents()
@@ -51,6 +75,10 @@ class Vpc_Basic_Rte_Index extends Vpc_Abstract
             $this->_images[$id] = $this->_createImageComponent($id);
         }
         return $this->_images;
+    }*/
+    protected function _getEditContent()
+    {
+        return $this->getSetting('content').$this->getSetting('content_edit');
     }
 
     private function _createImageComponent($id)
