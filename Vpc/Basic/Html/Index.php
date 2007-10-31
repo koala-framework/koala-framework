@@ -54,7 +54,7 @@ class Vpc_Basic_Html_Index extends Vpc_Abstract
                 $ret['contentParts'][] = $part->getTemplateVars();
             }
         }
-        $ret['template'] = 'Html.html';
+        $ret['template'] = 'Basic/Html.html';
         return $ret;
     }
 

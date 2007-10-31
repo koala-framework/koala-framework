@@ -10,7 +10,7 @@ class Vpc_Basic_Image_Index extends Vpc_Abstract implements Vpc_FileInterface
         'filename'          => 'filename',
         'editFilename'      => true,
         'allowBlank'        => true,
-        'hasEnlarge'        => false,
+        'hasEnlarge'        => true,
         'enlargeClass'      => 'Vpc_Basic_Image_Index',
         'enlargeSettings'   => array(
             'extensions'        => array('jpg', 'gif', 'png'),
