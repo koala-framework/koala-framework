@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Rte_Admin extends Vpc_Admin
+class Vpc_Basic_Text_Admin extends Vpc_Admin
 {
     /*
     public function getControllerClass()
@@ -13,6 +13,6 @@ class Vpc_Basic_Rte_Admin extends Vpc_Admin
         $this->copyTemplate('Index.html', 'Basic/Rte.html');
 
         $fields['text'] = 'text NOT NULL';
-        $this->createTable('vpc_basic_rte', $fields);
+        $this->createTable('vpc_rte', $fields);
     }
 }

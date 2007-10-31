@@ -5,8 +5,6 @@
  */
 class Vpc_Basic_Html_Index extends Vpc_Abstract
 {
-    private $_components = array();
-    private $_content;
     private $_contentParts;
     protected $_settings = array(
         'width' => 400,
@@ -15,47 +13,65 @@ class Vpc_Basic_Html_Index extends Vpc_Abstract
     );
     protected $_tablename = 'Vpc_Basic_Html_IndexModel';
     const NAME = 'Standard.Html';
+    protected $_components = array();
 
-    private function _getContentParts()
+    protected function _parseContentParts($content)
     {
-        if (!isset($this->_contentParts))
-        {
-            $content = $this->getSetting('content');
-            $this->_contentParts = array();
-
-            $componentNr = 0;
-            $this->_components = array();
-            while(preg_match('#^(.*?)\{([a-zA-Z0-9_]+)\}(.*)$#s', $content, $m)) {
-                $this->_contentParts[] = $m[1];
-                $className = $m[2];
-                $componentNr++;
-                try {
-                    $component = $this->createComponent($className, $componentNr);
-                } catch (Vpc_ComponentNotFoundException $e) {
-                    $component = $this->createComponent('Vpc_Empty_Index', $componentNr);
-                }
-                $this->_components[] = $component;
-                $this->_contentParts[] = array('component'=>$component->getTemplateVars());
-                $content = $m[3];
+        $ret = array();
+        $componentNr = 0;
+        while(preg_match('#^(.*?)\{([a-zA-Z0-9_]+)\}(.*)$#s', $content, $m)) {
+            $ret[] = $m[1];
+            $className = $m[2];
+            $componentNr++; //todo: wie nr ermitteln?? verträgt sich das mit rte bildern?
+            try {
+                $component = $this->createComponent($className, $componentNr);
+            } catch (Vpc_ComponentNotFoundException $e) {
+                $component = $this->createComponent('Vpc_Empty_Index', $componentNr);
             }
-            if(!$m) $this->_contentParts[] = $content;
+            $this->_components[$componentNr] = $component;
+            $ret[] = $component;
+            $content = $m[3];
         }
 
+        if(!$m) $ret[] = $content;
+        return $ret;
+    }
+
+    private function _getContentParts($content)
+    {
+        $this->_contentParts = $this->_parseContentParts($content);
         return $this->_contentParts;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['contentParts'] = $this->_getContentParts();
+        $ret['contentParts'] = array();
+        foreach ($this->_getContentParts($this->getSetting('content')) as $part) {
+            if (is_string($part)) {
+                $ret['contentParts'][] = $part;
+            } else {
+                $ret['contentParts'][] = $part->getTemplateVars();
+            }
+        }
         $ret['template'] = 'Html.html';
         return $ret;
     }
 
-    public function getChildComponents()
+    protected function _getEditContent()
     {
-        $this->_getContentParts(); //um components zu laden
-        return $this->_components;
+        return $this->getSetting('content');
     }
 
+    public function getChildComponents()
+    {
+        $ret = array();
+        $content = $this->_getEditContent();
+        foreach ($this->_getContentParts($content) as $part) {
+            if (!is_string($part)) {
+                $ret[] = $part;
+            }
+        }
+        return $ret;
+    }
 }
