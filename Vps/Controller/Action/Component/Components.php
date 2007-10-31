@@ -4,8 +4,6 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
     public function indexAction()
     {
         $pageCollection = new Vps_PageCollection_TreeBase(Zend_Registry::get('dao'));
-        $page = $pageCollection->getHomePage();
-        //$this->_showPages(null, $pageCollection);
         $components = $this->_getComponents(null, $pageCollection);
         asort($components);
         foreach ($components as $class => $ids) {
@@ -39,12 +37,12 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
         }
     }
 
-    private function _getComponents1($component, $return)
+    private function _getComponentsForPage($component, $return)
     {
         if ($component) {
             $return[get_class($component)][] = $component->getId();
             foreach ($component->getChildComponents() as $c) {
-                $return = $this->_getComponents1($c, $return);
+                $return = $this->_getComponentsForPage($c, $return);
             }
         }
         return $return;
@@ -52,9 +50,9 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
 
     private function _getComponents($page, $pageCollection, $return = array())
     {
-        $return = $this->_getComponents1($page, $return);
-        foreach ($pageCollection->getChildPages($page, $pageCollection) as $cp) {
-            $return = $this->_getComponents1($cp, $return);
+        $return = $this->_getComponentsForPage($page, $return);
+        foreach ($pageCollection->getChildPages($page) as $cp) {
+            $return = $this->_getComponentsForPage($cp, $return);
         }
         return $return;
     }
