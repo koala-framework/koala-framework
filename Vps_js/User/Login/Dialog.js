@@ -8,7 +8,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
         this.modal = true;
         this.title = 'Login';
         this.resizable = false;
-        this.closable = false;
+        this.closable = true;
         Vps.User.Login.Dialog.superclass.initComponent.call(this);
     },
     afterRender : function()
