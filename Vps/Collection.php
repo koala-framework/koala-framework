@@ -63,7 +63,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
     public function offsetUnset($offset)
     {
         foreach ($this->_array as $k=>$v) {
-            if ($ret = $v->getByName($name)) {
+            if ($ret = $v->getByName($offset)) {
                 unset($k);
                 return;
             }

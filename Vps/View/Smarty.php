@@ -1,5 +1,5 @@
 <?php
-require_once 'Smarty/Smarty.class.php';
+require_once 'Smarty.class.php';
 
 class Vps_View_Smarty extends Zend_View_Abstract
 {
