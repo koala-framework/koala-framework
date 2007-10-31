@@ -71,12 +71,21 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
 
     public function getChildPages(Vpc_Interface $page = null, $type = null)
     {
-        $this->_generateHierarchy($page, '', $type);
+        $this->_generateHierarchy($page, '');
         $searchId = $page ? $page->getPageId() : null ;
         $childPages = array();
         foreach ($this->_pageParentIds as $id => $parentId) {
-            if ($parentId == $searchId) {
-                $childPages[] = $this->_pages[$id];
+            if ($type && !$page) {
+                if ($parentId == $searchId &&
+                    isset($this->_types[$id]) &&
+                    $this->_types[$id] == $type
+                ) {
+                    $childPages[] = $this->_pages[$id];
+                }
+            } else {
+                if ($parentId == $searchId) {
+                    $childPages[] = $this->_pages[$id];
+                }
             }
         }
         return $childPages;
