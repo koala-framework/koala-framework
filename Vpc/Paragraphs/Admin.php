@@ -18,12 +18,12 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
 
     public function getControllerClass()
     {
-        return 'Vpc.Paragraphs.Index';
+        return 'Vpc.Paragraphs.Panel';
     }
 
     public function setup()
     {
-        $this->copyTemplate('Index.html', 'Paragraphs.html');
+        $this->copyTemplate('Template.html', 'Paragraphs.html');
 
         $tablename = 'vpc_paragraphs';
         if (!in_array($tablename, $this->_db->listTables())) {

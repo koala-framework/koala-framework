@@ -3,7 +3,7 @@ class Vpc_Formular_Textbox_Admin extends Vpc_Admin
 {
     public function setup()
     {
-        $this->copyTemplate('Index.html', 'Formular/Textbox.html');
+        $this->copyTemplate('Template.html', 'Formular/Textbox.html');
 
         $fields['width'] = 'varchar(255) NOT NULL';
         $fields['value'] = 'varchar(255) NOT NULL';

@@ -3,7 +3,7 @@ class Vpc_Formular_Checkbox_Admin extends Vpc_Admin
 {
     public function setup()
     {
-        $this->copyTemplate('Index.html', 'Formular/Checkbox.html');
+        $this->copyTemplate('Template.html', 'Formular/Checkbox.html');
 
         $fields['value'] = 'varchar(255) NOT NULL';
         $fields['text'] = 'varchar(255) NOT NULL';

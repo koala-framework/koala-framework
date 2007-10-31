@@ -12,12 +12,12 @@ class Vpc_Basic_Link_Intern_Admin extends Vpc_Admin
 
     public function getControllerClass()
     {
-        return 'Vpc.Basic.Link.Index';
+        return 'Vpc.Basic.Link.Panel';
     }
 
     public function setup()
     {
-        $this->copyTemplate('Index.html', 'Basic/Link.html');
+        $this->copyTemplate('Template.html', 'Basic/Link.html');
 
         $fields['type'] = "enum('intern','extern','mailto') NOT NULL";
         $fields['target'] = "varchar(255) NOT NULL";
