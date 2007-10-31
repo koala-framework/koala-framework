@@ -43,6 +43,8 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                     });
                     dialog.on('datachange', function(r) {
                         img.src = r.imageUrl;
+                        if (r.size.width) img.size.width = r.size.width;
+                        if (r.size.height) img.size.height = r.size.height;
                     }, this);
                     dialog.showEdit();
                 },
@@ -107,8 +109,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             }
 
             return elm;
-
-//             return tinyMCE.getParentElement(elm);
         }
     }
 });
