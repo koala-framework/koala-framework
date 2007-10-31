@@ -7,7 +7,7 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
 {
     protected $_data;
     protected $_paragraphs;
-    protected $_tablename = 'Vpc_Paragraphs_IndexModel';
+    protected $_tablename = 'Vpc_Paragraphs_Model';
     const NAME = 'Paragraphs';
 
     public function getTemplateVars()

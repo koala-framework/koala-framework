@@ -3,14 +3,14 @@ class Vpc_Composite_Images_Admin extends Vpc_Admin
 {
     public function getControllerClass()
     {
-        return 'Vpc.Composite.Images.Index';
+        return 'Vpc.Composite.Images.Panel';
     }
 
     public function setup()
     {
-        $this->copyTemplate('Index.html', 'Composite/Images.html');
+        $this->copyTemplate('Template.html', 'Composite/Images.html');
 
-        Vpc_Admin::getInstance('Vpc_Basic_Image_Index')->setup();
+        Vpc_Admin::getInstance('Vpc_Basic_Image_Component')->setup();
 
         if (!$this->_tableExists('vpc_composite_images')) {
             $sql = 'CREATE TABLE IF NOT EXISTS `vpc_composite_images` (

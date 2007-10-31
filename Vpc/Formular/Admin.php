@@ -22,7 +22,7 @@ class Vpc_Formular_Admin extends Vpc_Paragraphs_Admin
 
     public function setup()
     {
-        $this->copyTemplate('Index.html', 'Formular.html');
+        $this->copyTemplate('Template.html', 'Formular.html');
 
         $tablename = 'vpc_formular';
         if (!$this->_tableExits($tablename)) {

@@ -16,10 +16,10 @@ class Vpc_Composite_ParagraphsImage_Admin extends Vpc_Admin
 
     public function setup()
     {
-        $this->copyTemplate('Index.html', 'Composite/ParagraphsImage.html');
+        $this->copyTemplate('Template.html', 'Composite/ParagraphsImage.html');
 
-        Vpc_Admin::getInstance('Vpc_Paragraphs_Index')->setup();
-        Vpc_Admin::getInstance('Vpc_Basic_Image_Index')->setup();
+        Vpc_Admin::getInstance('Vpc_Paragraphs_Component')->setup();
+        Vpc_Admin::getInstance('Vpc_Basic_Image_Component')->setup();
     }
 
     public function delete($component)

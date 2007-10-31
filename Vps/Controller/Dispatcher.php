@@ -7,6 +7,9 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
         if ($module == 'component') {
 
             $className = $this->getFrontController()->getRequest()->getParam('class');
+            if (substr($className, -9) == 'Component') {
+                $className = substr($className, 0, -9);
+            }
             $className .= 'Controller';
             try {
                 Zend_Loader::loadClass($className);
@@ -19,6 +22,9 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                     $className = '';
                     while ($class != 'Vpc_Abstract' && $className == '') {
                         try {
+                            if (substr($class, -9) == 'Component') {
+                                $class = substr($class, 0, -9);
+                            }
                             if (class_exists($class . 'Controller')) {
                                 $className = $class . 'Controller';
                             }

@@ -3,7 +3,7 @@ class Vpc_Formular_Select_Admin extends Vpc_Admin
 {
     public function setup()
     {
-        $this->copyTemplate('Index.html', 'Formular/Select.html');
+        $this->copyTemplate('Template.html', 'Formular/Select.html');
 
         $fields['type'] = 'varchar(20) NOT NULL';
         $this->createTable('vpc_formular_select', $fields);
@@ -28,7 +28,7 @@ class Vpc_Formular_Select_Admin extends Vpc_Admin
         $where = array();
         $where['page_id = ?'] = $component->getDbId();
         $where['component_key = ?'] = $component->getComponentKey();
-        $table = new Vpc_Formular_Select_IndexModel(array('db'=>$this->_db));
+        $table = new Vpc_Formular_Select_Model(array('db'=>$this->_db));
         $table->delete($where);
         $table = new Vpc_Formular_Select_OptionsModel(array('db'=>$this->_db));
         $table->delete($where);

@@ -1,7 +1,7 @@
 <?php
 class Vpc_Basic_Link_Intern_Form extends Vps_Auto_Vpc_Form
 {
-    public function __construct(Vpc_Basic_Link_Intern_Index $component)
+    public function __construct(Vpc_Basic_Link_Intern_Component $component)
     {
         parent::__construct($component);
         $this->add(new Vps_Auto_Field_Select('type', 'Linktype'))

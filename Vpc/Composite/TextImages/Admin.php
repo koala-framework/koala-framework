@@ -17,10 +17,10 @@ class Vpc_Composite_TextImages_Admin extends Vpc_Admin
 
     public function setup()
     {
-        $this->copyTemplate('Index.html', 'Composite/TextImages.html');
+        $this->copyTemplate('Template.html', 'Composite/TextImages.html');
 
-        Vpc_Admin::getInstance('Vpc_Basic_Html_Index')->setup();
-        Vpc_Admin::getInstance('Vpc_Basic_Image_Index')->setup();
+        Vpc_Admin::getInstance('Vpc_Basic_Html_Component')->setup();
+        Vpc_Admin::getInstance('Vpc_Basic_Image_Component')->setup();
 
         $fields['image_position'] = "enum('left', 'right', 'alternate') default NULL";
         $fields['enlarge'] = 'tinyint(3) NOT NULL';
