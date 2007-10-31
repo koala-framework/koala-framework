@@ -37,7 +37,7 @@ class Vpc_Basic_Html_Index extends Vpc_Abstract
         return $ret;
     }
 
-    private function _getContentParts($content)
+    protected function _getContentParts($content)
     {
         $this->_contentParts = $this->_parseContentParts($content);
         return $this->_contentParts;
@@ -67,11 +67,7 @@ class Vpc_Basic_Html_Index extends Vpc_Abstract
     {
         $ret = array();
         $content = $this->_getEditContent();
-        foreach ($this->_getContentParts($content) as $part) {
-            if (!is_string($part)) {
-                $ret[] = $part;
-            }
-        }
-        return $ret;
+        $this->_getContentParts($content); //um components zu laden
+        return $this->_components;
     }
 }

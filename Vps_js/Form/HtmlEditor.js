@@ -8,7 +8,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         var tb = this.getToolbar();
         tb.add('-');
         tb.add({
-            icon: '/assets/vps/images/silkicons/image_add.png',
+            icon: '/assets/vps/images/silkicons/image.png',
             handler: this.insertImage,
             scope: this,
             tooltip: {
@@ -50,7 +50,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             });
         } else {
             Ext.Ajax.request({
-                params: { html: this.getValue() },
+                params: { content: this.getValue() },
                 url: this.controllerUrl+'jsonAddImage/',
                 success: function(response, options, r) {
                     var c = eval(r.config.class);

@@ -35,25 +35,36 @@ class Vpc_Basic_Text_Index extends Vpc_Basic_Html_Index
     protected function _parseContentParts($content)
     {
         $ret = array();
-        foreach (parent::_parseContentParts($content) as $part) {
+        $parts = parent::_parseContentParts($content);
+        foreach ($parts as $part) {
             if (is_string($part)) {
-                $componentNr = 0;
-                while(preg_match('#^(.*?)\{([a-zA-Z0-9_]+)\}(.*)$#s', $content, $m)) {
+                while(preg_match('#^(.*)<img.+(src|componentkey)="([^"]*)"[^>]*>(.*)$#Us', $part, $m)) {
                     $ret[] = $m[1];
-                    $className = $m[2];
-                    $componentNr++; //todo: wie nr ermitteln?? verträgt sich das mit rte bildern?
-                    $component = $this->createComponent($className, $componentNr);
-                    $ret[] = $component;
-                    $content = $m[3];
+
+                    $id = false;
+                    if ($m[2] == 'src') {
+                        $id = $this->_getImageIdBySrc($m[3]);
+                    } elseif ($m[2] == 'componentkey') {
+                        $id = $m[3];
+                    }
+                    if ($id && isset($this->_components[$id])) {
+                        $ret[] = $this->_components[$id];
+                    } elseif ($id) {
+                        $component = $this->_createImageComponent($id);
+                        $ret[] = $component;
+                        $this->_components[$id] = $component;
+                    }
+                    $part = $m[4];
                 }
 
-                if(!$m) $ret[] = $content;
+                if(!$m) $ret[] = $part;
             } else {
                 $ret[] = $part;
             }
         }
         return $ret;
     }
+
 /*
     public function getChildComponents()
     {
@@ -86,7 +97,7 @@ class Vpc_Basic_Text_Index extends Vpc_Basic_Html_Index
         $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Index');
         return $this->createComponent($imageClass, $id, $this->getSetting('imageSettings'));
     }
-
+/*
     private function _parseHtmlImageComponentIds($html)
     {
         $ret = array();
@@ -103,14 +114,21 @@ class Vpc_Basic_Text_Index extends Vpc_Basic_Html_Index
         }
         return array_unique($ret);
     }
-
+*/
     private function _getImageIdBySrc($src)
     {
         //media/:uploadId/:componentId/:checksum/:filename
-        if (preg_match('#/media/([0-9]+)/'
-            .preg_quote($this->getId())
-            .'-([0-9]+)/#', $src, $m)) {
-            return $m[2];
+        if (preg_match('#/media/([0-9]+)/([^/]+)/#', $src, $m)) {
+            return $this->_getChildComponentNrById($m[2]);
+        }
+        return false;
+    }
+
+    private function _getChildComponentNrById($id)
+    {
+        if (substr($id, 0, strlen($this->getId())) == $this->getId()) {
+            $ret = substr($id, strlen($this->getId())+1);
+            return (int)$ret;
         }
         return false;
     }
@@ -120,6 +138,18 @@ class Vpc_Basic_Text_Index extends Vpc_Basic_Html_Index
         $id = $this->_getImageIdBySrc($src);
         if (!$id) return null;
         return $this->_createImageComponent($id);
+    }
+
+    protected function _parseHtmlImageComponentIds($html)
+    {
+        $parts = $this->_parseContentParts($html);
+        $ret = array();
+        foreach ($parts as $part) {
+            if ($part instanceof Vpc_Basic_Image_Index) {
+                $ret[] = $this->_getChildComponentNrById($part->getId());
+            }
+        }
+        return $ret;
     }
 
     public function addImage($html)
