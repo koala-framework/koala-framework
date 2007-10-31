@@ -26,7 +26,13 @@ class Vps_Controller_Front extends Zend_Controller_Front
         error_reporting(E_ALL);
         date_default_timezone_set('Europe/Berlin');
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
-        Zend_Registry::set('config', Vps_Setup::createConfig());
+        $config = Vps_Setup::createConfig();
+        Zend_Registry::set('config', $config);
+        $ip = get_include_path();
+        foreach ($config->includepath as $p) {
+            $ip .= PATH_SEPARATOR . $p;
+        }
+        set_include_path($ip);
     }
 
     public static function setUpDb()

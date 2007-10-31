@@ -1,6 +1,6 @@
 <?php
 
-require_once VPS_PATH.'tcpdf/tcpdf.php';
+require_once 'tcpdf.php';
 
 abstract class Vps_Auto_Grid_Pdf_Abstract extends TCPDF
 {
