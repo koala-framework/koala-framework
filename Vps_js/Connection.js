@@ -54,7 +54,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                     width: 800
                 });
             } else {
-                Ext.Msg.alert('Error', "Ein Serverfehler ist aufgetreten.");
+                Ext.Msg.alert('Error', "A Server failure occured.");
                 Ext.Ajax.request({
                     url: '/error/jsonMail',
                     params: {msg: errorMsg}
@@ -81,7 +81,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             if (r.error) {
                 Ext.Msg.alert('Error', r.error);
             } else if (!r.login) {
-                Ext.Msg.alert('Error', "Ein Serverfehler ist aufgetreten.");
+                Ext.Msg.alert('Error', "A Server failure occured.");
             }
             Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
             return;
@@ -98,7 +98,12 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
     vpsFailure: function(response, options)
     {
         options.vpsIsSuccess = false;
-        Ext.Msg.alert('Fehler', "Ein Verbindungsfehler ist aufgetreten.");
+        var debugString = '';
+        for (var dbg in options.params) {
+            debugString += '<br />params.' + dbg + ' = ' + options.params[dbg];
+        }
+        Ext.Msg.alert('Error', "A connection problem occured.<br /><br /><b>Debug info:</b><br />"
+            + "url: " + options.url + debugString);
         Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
         return;
     },
