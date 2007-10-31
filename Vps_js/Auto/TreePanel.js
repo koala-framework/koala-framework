@@ -1,4 +1,7 @@
 Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
+
+    layout: 'fit',
+
     initComponent : function()
     {
 	    this.addEvents(
@@ -16,8 +19,6 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
 	        scope: this
 	    });
         if (!this.actions) this.actions = {};
-        this.autoScroll = true;
-
         Vps.Auto.TreePanel.superclass.initComponent.call(this);
     },
 
@@ -38,13 +39,13 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
         if (this.openedId != undefined) { baseParams.openedId = this.openedId; }
         this.tree = new Ext.tree.TreePanel({
             border      : false,
-            animate     : true,
+//            animate     : true,
             loader      : new Ext.tree.TreeLoader({
                 baseParams  : baseParams,
                 dataUrl     : this.controllerUrl + 'jsonData'
             }),
             enableDD    : meta.enableDD,
-            containerScroll: true,
+            autoScroll: true,
             rootVisible : meta.rootVisible,
             tbar        : tbar
         });
