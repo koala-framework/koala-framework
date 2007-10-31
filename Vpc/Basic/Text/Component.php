@@ -21,101 +21,64 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
 
     protected $_tablename = 'Vpc_Basic_Text_Model';
     const NAME = 'Standard.Text';
+    protected $_components = array();
 
-    private $_images;
-
-    function getTemplateVars()
-    {
-        $return = parent::getTemplateVars();
-        $return['template'] = 'Text.html';
-        return $return;
-    }
-    protected function _init()
-    {
-    }
-    protected function _parseContentParts($content)
+    public function getChildComponents()
     {
         $ret = array();
-        $parts = parent::_parseContentParts($content);
-        foreach ($parts as $part) {
+        $content = $this->getSetting('content').$this->getSetting('content_edit');
+        $this->_parseContentParts($content); //um components zu laden
+        return $this->_components;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['contentParts'] = array();
+        foreach ($this->_parseContentParts($this->getSetting('content')) as $part) {
             if (is_string($part)) {
-                while(preg_match('#^(.*)<img.+(src|componentkey)="([^"]*)"[^>]*>(.*)$#Us', $part, $m)) {
-                    $ret[] = $m[1];
-
-                    $id = false;
-                    if ($m[2] == 'src') {
-                        $id = $this->_getImageIdBySrc($m[3]);
-                    } elseif ($m[2] == 'componentkey') {
-                        $id = $m[3];
-                    }
-                    if ($id && isset($this->_components[$id])) {
-                        $ret[] = $this->_components[$id];
-                    } elseif ($id) {
-                        $component = $this->_createImageComponent($id);
-                        $ret[] = $component;
-                        $this->_components[$id] = $component;
-                    }
-                    $part = $m[4];
-                }
-
-                if(!$m) $ret[] = $part;
+                $ret['contentParts'][] = $part;
             } else {
-                $ret[] = $part;
+                $ret['contentParts'][] = $part->getTemplateVars();
             }
         }
+        $ret['template'] = 'Basic/Text.html';
         return $ret;
     }
 
-/*
-    public function getChildComponents()
+    protected function _parseContentParts($content)
     {
-        $return = parent::getChildComponents();
-        $return = array_merge($return, $this->_getImageComponents());
-        return $return;
-    }
+        $ret = array();
+        while(preg_match('#^(.*)<img.+(src|componentkey)="([^"]*)"[^>]*>(.*)$#Us', $content, $m)) {
+            $ret[] = $m[1];
 
-    protected function _getImageComponents()
-    {
-        if (isset($this->_images)) return $this->_images;
-
-        $ids = array_unique(
-            array_merge($this->_parseHtmlImageComponentIds($this->getSetting('content_edit')),
-                    $this->_parseHtmlImageComponentIds($this->getSetting('content'))));
-
-        $this->_images = array();
-        foreach ($ids as $id) {
-            $this->_images[$id] = $this->_createImageComponent($id);
+            $id = false;
+            if ($m[2] == 'src') {
+                $id = $this->_getImageIdBySrc($m[3]);
+            } elseif ($m[2] == 'componentkey') {
+                $id = $m[3];
+            }
+            if ($id && isset($this->_components[$id])) {
+                $ret[] = $this->_components[$id];
+            } elseif ($id) {
+                $component = $this->_createImageComponent($id);
+                $ret[] = $component;
+            }
+            $content = $m[4];
         }
-        return $this->_images;
-    }*/
-    protected function _getEditContent()
-    {
-        return $this->getSetting('content').$this->getSetting('content_edit');
+
+        if(!$m) $ret[] = $content;
+        return $ret;
     }
 
     private function _createImageComponent($id)
     {
         $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Component');
-        return $this->createComponent($imageClass, $id, $this->getSetting('imageSettings'));
+        $component = $this->createComponent($imageClass, $id, $this->getSetting('imageSettings'));
+        $this->_components[$id] = $component;
+        return $component;
     }
-/*
-    private function _parseHtmlImageComponentIds($html)
-    {
-        $ret = array();
-        preg_match_all('#<img.+src="([^"]*)"[^>]*>#', $html, $m);
-        foreach ($m[1] as $src) {
-            $id = $this->_getImageIdBySrc($src);
-            if ($id) {
-                $ret[] = $id;
-            }
-        }
-        preg_match_all('#<img.+componentkey="([^"]+)"[^>]*>#', $html, $m);
-        foreach ($m[1] as $id) {
-            $ret[] = $id;
-        }
-        return array_unique($ret);
-    }
-*/
+
     private function _getImageIdBySrc($src)
     {
         //media/:uploadId/:componentId/:checksum/:filename
@@ -141,7 +104,7 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
         return $this->_createImageComponent($id);
     }
 
-    protected function _parseHtmlImageComponentIds($html)
+    protected function _parseImageComponentKey($html)
     {
         $parts = $this->_parseContentParts($html);
         $ret = array();
@@ -155,9 +118,9 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
 
     public function addImage($html)
     {
-        $newIds = $this->_parseHtmlImageComponentIds($html);
-        $contentIds = $this->_parseHtmlImageComponentIds($this->getSetting('content'));
-        $contentEditIds = $this->_parseHtmlImageComponentIds($this->getSetting('content_edit'));
+        $newIds = $this->_parseImageComponentKey($html);
+        $contentIds = $this->_parseImageComponentKey($this->getSetting('content'));
+        $contentEditIds = $this->_parseImageComponentKey($this->getSetting('content_edit'));
         foreach ($contentEditIds as $id) {
             if (!in_array($id, $contentIds) && !in_array($id, $newIds)) {
                 $component = $this->_createImageComponent($id);
@@ -170,20 +133,18 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
             $k = 0;
         }
         $k++;
-        $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Component');
-        $this->images[$k] = $this->createComponent($imageClass, $k,
-                                            $this->getSetting('imageSettings'));
+        $component = $this->_createImageComponent($k);
         $html .= '<img componentkey="'.$k.'" />';
 
         $this->saveSetting('content_edit', $html);
-        return $this->images[$k];
+        return $component;
     }
 
     public function beforeSave($html)
     {
-        $newIds = $this->_parseHtmlImageComponentIds($html);
-        $contentIds = $this->_parseHtmlImageComponentIds($this->getSetting('content'));
-        $contentEditIds = $this->_parseHtmlImageComponentIds($this->getSetting('content_edit'));
+        $newIds = $this->_parseImageComponentKey($html);
+        $contentIds = $this->_parseImageComponentKey($this->getSetting('content'));
+        $contentEditIds = $this->_parseImageComponentKey($this->getSetting('content_edit'));
         $ids = array_unique(array_merge($contentIds, $contentEditIds));
         foreach ($ids as $id) {
             if (!in_array($id, $newIds)) {

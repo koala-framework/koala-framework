@@ -40,6 +40,14 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vpc_FileInterfac
     {
         $return = parent::getTemplateVars();
         $return['url'] = $this->getImageUrl();
+        $s = $this->getImageSize();
+        $return['width'] = $s['width'];
+        $return['height'] = $s['height'];
+
+        if ($this->getSetting('hasEnlarge') && $this->imagebig) {
+            $return['enlargeUrl'] = $this->imagebig->getImageUrl();
+        }
+
         $return['template'] = 'Basic/Image.html';
         return $return;
     }
@@ -83,7 +91,13 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vpc_FileInterfac
         }
     }
 
-    public function createCacheFile($source, $target)
+    public function getImageSize()
+    {
+        $scale = $this->getSetting('scale');
+        return Vps_Media_Image::calculateScaleDimensions($source, $this->_getImageSizeSetting(), $scale);
+    }
+
+    private function _getImageSizeSetting()
     {
         $sizes = $this->getSetting('size');
         if (sizeof($sizes) == 2 && !is_array($sizes[0])) {
@@ -93,8 +107,13 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vpc_FileInterfac
             $width = $this->getSetting('width');
             $height = $this->getSetting('height');
         }
+        return array($width, $height);
+    }
+
+    public function createCacheFile($source, $target)
+    {
         $scale = $this->getSetting('scale');
-        Vps_Media_Image::scale($source, $target, array($width, $height), $scale);
+        Vps_Media_Image::scale($source, $target, $this->_getImageSizeSetting(), $scale);
 
         if (strpos($target, self::SIZE_THUMB)) {
             Vps_Media_Image::scale($target, $target, array(100, 100), Vps_Media_Image::SCALE_BESTFIT);
