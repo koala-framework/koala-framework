@@ -15,7 +15,8 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
         'enableLists' => true,
         'enableSourceEdit' => true,
         'imageClass'        => 'Vpc_Basic_Image_Component',
-        'imageSettings'     => array('allowBlank' => false)
+        'imageSettings'     => array('allowBlank' => false,
+                                     'size'       => array())
     );
 
     protected $_tablename = 'Vpc_Basic_Text_Model';
