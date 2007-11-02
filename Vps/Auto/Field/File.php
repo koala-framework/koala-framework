@@ -54,7 +54,6 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         $fieldName = $this->getFieldName();
         $name = $this->getName();
 
-
         $file = isset($_FILES[$fieldName]) ? $_FILES[$fieldName] : array();
         $fileTable = new Vps_Dao_File();
         $fileTable->deleteCache($row->$name);
@@ -74,7 +73,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
             }
 
             try {
-                $id = $fileTable->uploadFile($file, $this->getDirectory(), $row->$name);
+                $id = $fileTable->uploadFile($file, $row->$name);
                 if ($id) {
                     $row->$name = $id;
                 }

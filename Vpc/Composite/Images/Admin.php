@@ -1,11 +1,21 @@
 <?php
 class Vpc_Composite_Images_Admin extends Vpc_Admin
 {
+    public function getControllerConfig($component)
+    {
+        $config = parent::getControllerConfig($component);
+        $imageClass = $component->getSetting('imageClass');
+        $url = $this->getControllerUrl($component, $imageClass);
+        $url = str_replace($component->getId(), $component->getId() . '-*', $url);
+        $config['imageControllerUrlTemplate'] = $url;
+        return $config;
+    }
+    
     public function getControllerClass()
     {
         return 'Vpc.Composite.Images.Panel';
     }
-
+    
     public function setup()
     {
         $this->copyTemplate('Template.html', 'Composite/Images.html');

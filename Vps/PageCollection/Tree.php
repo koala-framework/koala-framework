@@ -115,7 +115,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         if ($rowset->count() > 0) {
             $startPage = $this->findPage($rowset->current()->id);
         }
-        $rowset = $this->_dao->getTable('Vpc_Paragraphs_IndexModel')->fetchAll("component_class = '$class'");
+        $rowset = $this->_dao->getTable('Vpc_Paragraphs_Model')->fetchAll("component_class = '$class'");
         if ($rowset->count() > 0) {
             $startPage = $this->findPage($rowset->current()->page_id);
         }

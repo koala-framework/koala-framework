@@ -31,7 +31,6 @@ class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
 
         // Fileupload
         $this->add(new Vps_Auto_Field_File('vps_upload_id', 'File'))
-            ->setDirectory('BasicImage/')
             ->setExtensions($component->getSetting('extensions'))
             ->setAllowBlank($component->getSetting('allowBlank'));
 

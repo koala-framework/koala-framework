@@ -144,7 +144,7 @@ abstract class Vps_PageCollection_Abstract
         if (is_null($id)) {
             return $this->getHomePage();
         }
-
+        
         try {
             $parts = Vpc_Abstract::parseId($id);
         } catch (Vpc_Exception $e) {

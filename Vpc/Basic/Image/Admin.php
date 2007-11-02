@@ -15,7 +15,7 @@ class Vpc_Basic_Image_Admin extends Vpc_Admin
             $this->_db->query('ALTER TABLE vpc_basic_image
                 ADD FOREIGN KEY (vps_upload_id)
                 REFERENCES vps_uploads (id)
-                ON DELETE SET NULL ON UPDATE SET NULL');
+                ON DELETE RESTRICT ON UPDATE RESTRICT');
         }
     }
 

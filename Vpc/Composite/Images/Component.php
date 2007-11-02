@@ -31,6 +31,7 @@ class Vpc_Composite_Images_Component extends Vpc_Abstract
             $where['visible = ?'] = 1;
         }
         $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Component');
+        $this->setSetting('imageClass', $imageClass);
         foreach ($table->fetchAll($where) as $row) {
             $this->images[$row->id] = $this->createComponent($imageClass, $row->id, $this->getSetting('imageSettings'));
         }
