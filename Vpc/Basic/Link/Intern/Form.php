@@ -5,12 +5,11 @@ class Vpc_Basic_Link_Intern_Form extends Vps_Auto_Vpc_Form
     {
         parent::__construct($component);
 
-        $this->add(new Vps_Auto_Field_Select('type', 'Linktype'))
-            ->setValues(array(
-                'intern' => 'Intern',
-                'extern' => 'Extern',
-                'mailto' => 'Mail'
-            ));
+        if ($component->getSetting('hasLinktext')) {
+            $this->add(new Vps_Auto_Field_TextField('text', 'Linktext'))
+                ->setWidth(500)
+                ->setAllowBlank(false);
+        }
 
         $this->add(new Vps_Auto_Field_TextField('rel', 'Rel'))
             ->setWidth(500);

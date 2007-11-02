@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Link_Intern_Admin extends Vpc_Basic_Link_Admin
+class Vpc_Basic_Link_Mail_Admin extends Vpc_Basic_Link_Admin
 {
     public function setup()
     {

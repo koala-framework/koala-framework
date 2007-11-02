@@ -3,14 +3,17 @@
  * @package Vpc
  * @subpackage Basic
  */
-class Vpc_Basic_Link_Intern_Component extends Vpc_Abstract
+class Vpc_Basic_Link_Extern_Component extends Vpc_Abstract
 {
     protected $_settings = array(
-        'hasLinktext'  => true,
+        'hasLinktext'   => true,
         'text'          => 'Linktext',
+        'target'        => 'http://',
+        'width'         => '400',
+        'height'        => '400'
     );
-    protected $_tablename = 'Vpc_Basic_Link_Intern_Model';
-    const NAME = 'Standard.Link.Intern';
+    protected $_tablename = 'Vpc_Basic_Link_Extern_Model';
+    const NAME = 'Standard.Link.Extern';
 
     public function getTemplateVars()
     {
