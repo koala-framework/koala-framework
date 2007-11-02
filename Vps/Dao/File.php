@@ -21,7 +21,7 @@ class Vps_Dao_File extends Vps_Db_Table
     {
         $row = $this->find($uploadId)->current();
         if ($row) {
-            $file = $this->_getUploadDir() . $row->path;
+            $file = $this->_getUploadDir() . $row->id;
             if (is_file($file)) {
                 return round((filesize($file) /1024), 2);
             }
@@ -33,12 +33,12 @@ class Vps_Dao_File extends Vps_Db_Table
     {
         $row = $this->find($uploadId)->current();
         if ($row) {
-            $extension = substr(strrchr($row->path, '.'), 1);
             if ($type == self::SHOW) {
                 $checksum = md5('l4Gx8SFe' . $id);
             } else {
                 $checksum = md5('k4Xjgw9f' . $id);
             }
+            $extension = $row->extension;
             $random = $addRandom ? '?' . uniqid() : '';
             return "/media/$uploadId/$id/$checksum/$filename.$extension$random";
         } else {
@@ -49,23 +49,18 @@ class Vps_Dao_File extends Vps_Db_Table
     public function getOriginalUrl($uploadId)
     {
         $row = $this->find($uploadId)->current();
-        $return = null;
-        if ($row) {
-            if (is_file($this->_getUploadDir() . $row->path)) {
-                $extension = substr(strrchr($row->path, '.'), 1);
-                $return = "/media/$uploadId.$extension";
-            }
+        if ($row && is_file($this->_getUploadDir() . $uploadId)) {
+            $extension = $row->extension;
+            return "/media/$uploadId.$extension";
         }
-        return $return;
+        return null;
     }
 
     /**
      * Wenn id==null, wird neuer Datensatz angelegt, sonst bestehender geändert.
      */
-    public function uploadFile($filedata, $directory, $id = null)
+    public function uploadFile($filedata, $id = null)
     {
-        $row = $id ? $this->find($id)->current() : null;
-
         if ($filedata['error'] == UPLOAD_ERR_NO_FILE) {
             throw new Vps_Exception('Es wurde keine Datei hochgeladen.');
         }
@@ -83,43 +78,24 @@ class Vps_Dao_File extends Vps_Db_Table
             throw new Vps_Exception('Dateiupload kann nicht in folgendes Verzeichnis schreiben: ' . $uploadDir);
         }
 
+        $filename = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
+        $extension = substr(strrchr($filedata['name'], '.'), 1);
+        
         // Falls überschrieben wird, alte Datei löschen
+        $row = $id ? $this->find($id)->current() : null;
         if ($row) {
             $this->deleteFile($id);
+        } else {
+            $row = $this->createRow();
         }
-
-        // Verzeichnis erstellen, falls nicht existiert
-        $this->_createDirectory($uploadDir . $directory);
-
-        // Falls Datei existiert, _1... anhängen
-        $origName = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
-        $extension = substr(strrchr($filedata['name'], '.'), 1);
-        $x = 1; $name = $origName;
-        while (is_file($uploadDir . $directory . $name . '.' . $extension)) {
-            $rename = true;
-            // Falls bestehende Datei gleich groß ist, bestehende Datei löschen
-            if (filesize($uploadDir . $directory . $name . '.' . $extension) == filesize($filedata['tmp_name'])) {
-                if (unlink($uploadDir . $directory . $name . '.' . $extension)) {
-                    $rename = false;
-                }
-            }
-            if ($rename) {
-                $name = $origName . '_' . $x++;
-            }
-        }
-
-        // Datei hochlade
-        $filename = $uploadDir . $directory . $name . '.' . $extension;
+        $row->filename = $filename;
+        $row->extension = $extension;
+        $id = $row->save();
+    
+        $filename = $uploadDir . $id;
         if (move_uploaded_file($filedata['tmp_name'], $filename)) {
             chmod($filename, 0664);
-            // Hochgeladene Datei als Pfad in DB eintragen
-            $path = $directory . $name . '.' . $extension;
-            if ($row) {
-                $row->path = $path;
-                $row->save();
-            } else {
-                return $this->insert(array('path' => $path));
-            }
+            return $id;
         }
         return null;
     }
@@ -139,14 +115,11 @@ class Vps_Dao_File extends Vps_Db_Table
 
     public function deleteFile($id)
     {
-        $row = $this->find($id)->current();
-        if ($row) {
-            $filename = $this->_getUploadDir() . $row->path;
-            if (is_file($filename)) {
-                unlink($filename);
-            }
-            $this->deleteCache($id);
+        $filename = $this->_getUploadDir() . $id;
+        if (is_file($filename)) {
+            unlink($filename);
         }
+        $this->deleteCache($id);
     }
 
     public function deleteCache($id)

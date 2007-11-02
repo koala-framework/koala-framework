@@ -5,7 +5,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     {
         $module = $request->getModuleName();
         if ($module == 'component') {
-
+            
             $className = $this->getFrontController()->getRequest()->getParam('class');
             if (substr($className, -9) == 'Component') {
                 $className = substr($className, 0, -9);
@@ -34,7 +34,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                     }
                 }
             }
-
+            
         } else {
 
             $className = $request->getControllerName() . 'Controller';
@@ -46,7 +46,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                 $className = str_replace('Controller', '', ucfirst($className));
                 $className = "Vps_Controller_Action_Component_$className";
             }
-
+            
         }
 
         return $className;

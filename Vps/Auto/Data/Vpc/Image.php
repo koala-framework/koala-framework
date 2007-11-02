@@ -12,7 +12,7 @@ class Vps_Auto_Data_Vpc_Image extends Vps_Auto_Data_Abstract
     {
         foreach ($this->_component->getChildComponents() as $c) {
             if ($c->getCurrentComponentKey() == '-' . $row->id) {
-                $url = $c->getImageUrl(Vpc_Basic_Image_Index::SIZE_MINI, true);
+                $url = $c->getImageUrl(Vpc_Basic_Image_Component::SIZE_MINI, true);
             }
         }
         if (isset($url)) {

@@ -22,7 +22,9 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
     public function originalAction()
     {
         $uploadId = $this->_getParam('uploadId');
-        $this->_showFile($this->_getSourcePath($uploadId));
+        $path = $this->_getSourcePath($uploadId);
+        $extension = $this->_getExtension($uploadId);
+        $this->_showFile($path, $extension);
     }
 
     /**
@@ -47,8 +49,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
         // Direkt auf Originaldatei springen
         $password = Vps_Media_Password::get(Vps_Media_Password::ORIGINAL);
         if ($checksum == $this->_createChecksum($password)) {
-            $uploadId = $this->_getParam('uploadId');
-            $this->_showFile($this->_getSourcePath($uploadId));
+            $this->originalAction();
             return;
         }
 
@@ -146,9 +147,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
     // Ab hier Final
     protected final function _getCachePath($uploadId, $filename)
     {
-        $source = $this->_getSourcePath($uploadId);
-        $extension = strrchr($source, '.');
-        return $this->_getUploadDir() . 'cache/' . $uploadId . '/' . $filename . $extension;
+        return $this->_getUploadDir() . 'cache/' . $uploadId . '/' . $filename;
     }
 
     protected final function _getSourcePath($uploadId)
@@ -156,7 +155,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
         $table = new Vps_Dao_File();
         $row = $table->find($uploadId)->current();
         if ($row) {
-            return $this->_getUploadDir() . $row->path;
+            return $this->_getUploadDir() . $row->id;
         }
         return '';
     }
@@ -170,27 +169,10 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
     protected final function _showFile($target)
     {
         if (is_file($target)) {
-            $extension = substr(strrchr($target, '.'), 1);
-            switch ($extension) {
-                case "pdf": $ctype="application/pdf"; break;
-                case "zip": $ctype="application/zip"; break;
-                case "doc": $ctype="application/msword"; break;
-                case "xls": $ctype="application/vnd.ms-excel"; break;
-                case "ppt": $ctype="application/vnd.ms-powerpoint"; break;
-                case "gif": $ctype="image/gif"; break;
-                case "png": $ctype="image/png"; break;
-                case "jpeg": case "jpg": $ctype="image/jpg"; break;
-                case "mp3": $ctype="audio/mpeg"; break;
-                case "wav": $ctype="audio/x-wav"; break;
-                case "mpeg": case "mpg": case "mpe": $ctype="video/mpeg"; break;
-                case "mov": $ctype="video/quicktime"; break;
-                case "avi": $ctype="video/x-msvideo"; break;
-                default: $ctype="application/octet-stream"; break;
-            }
             Zend_Controller_Action_HelperBroker::removeHelper('ViewRenderer');
             chmod($target, 0664);
             $response = $this->getResponse();
-            $response->setHeader("Content-type", $ctype);
+            $response->setHeader("Content-type", mime_content_type($target));
             $response->setBody(file_get_contents($target));
         } else {
             throw new Vps_Controller_Action_Web_Exception("File '$target' not found.");

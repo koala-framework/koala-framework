@@ -24,9 +24,8 @@ Vpc.Composite.Images.Panel = Ext.extend(Ext.Panel,
         }, this);
 
         this.grid.on('rowselect', function(model, rowIndex, selected) {
-            var controllerUrl = this.controllerUrl.substr(0, this.controllerUrl.length - 1);
-            controllerUrl = controllerUrl.replace(/Vpc_Composite_Images_Component/, 'Vpc_Composite_Images_Edit');
-            controllerUrl = controllerUrl + '-' + selected.data.id + '/';
+            var controllerUrl = this.imageControllerUrlTemplate;
+            controllerUrl = controllerUrl.replace(/\*/, selected.data.id);
             this.imagePanel.loadForm(controllerUrl);
         }, this);
 
