@@ -77,7 +77,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
         this.doLayout();
 
         if (meta.rootVisible) {
-            this.tree.getRootNode().ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + meta.icons.root + '.png)';
+            this.tree.getRootNode().ui.iconNode.style.backgroundImage = 'url(/assets/silkicons/' + meta.icons.root + '.png)';
             this.tree.getRootNode().select();
         }
         this.tree.getRootNode().expand();
@@ -252,9 +252,9 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
     setVisible : function (node) {
         if (node.attributes.visible) {
-            node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.icons['default'] + '.png)';
+            node.ui.iconNode.style.backgroundImage = 'url(/assets/silkicons/' + this.icons['default'] + '.png)';
         } else {
-            node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.icons['invisible'] + '.png)';
+            node.ui.iconNode.style.backgroundImage = 'url(/assets/silkicons/' + this.icons['invisible'] + '.png)';
         }
     },
 
@@ -266,7 +266,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Delete',
                 handler : this.onDelete,
-                icon    : '/assets/vps/images/silkicons/' + this.icons['delete'] + '.png',
+                icon    : '/assets/silkicons/' + this.icons['delete'] + '.png',
                 cls     : 'x-btn-text-icon',
                 disabled: true,
                 scope   : this
@@ -275,7 +275,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Add',
                 handler : this.onAdd,
-                icon    : '/assets/vps/images/silkicons/' + this.icons['add'] + '.png',
+                icon    : '/assets/silkicons/' + this.icons['add'] + '.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });
@@ -283,7 +283,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Edit',
                 handler : this.onEdit,
-                icon    : '/assets/vps/images/silkicons/' + this.icons['edit'] + '.png',
+                icon    : '/assets/silkicons/' + this.icons['edit'] + '.png',
                 cls     : 'x-btn-text-icon',
                 disabled: true,
                 scope   : this
@@ -292,7 +292,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Toggle Visibility',
                 handler : this.onVisible,
-                icon    : '/assets/vps/images/silkicons/' + this.icons['invisible'] + '.png',
+                icon    : '/assets/silkicons/' + this.icons['invisible'] + '.png',
                 cls     : 'x-btn-text-icon',
                 disabled: true,
                 scope   : this
@@ -301,7 +301,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
             this.actions[type] = new Ext.Action({
                 text    : '',
                 handler : function () { this.tree.getRootNode().reload(); },
-                icon    : '/assets/vps/images/silkicons/bullet_star.png',
+                icon    : '/assets/silkicons/bullet_star.png',
                 cls     : 'x-btn-icon',
                 scope   : this
             });
@@ -309,7 +309,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
             this.actions[type] = new Ext.Action({
                 text    : '',
                 handler : function () { this.tree.expandAll(); },
-                icon    : '/assets/vps/images/silkicons/bullet_add.png',
+                icon    : '/assets/silkicons/bullet_add.png',
                 cls     : 'x-btn-icon',
                 scope   : this
             });
@@ -317,7 +317,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
             this.actions[type] = new Ext.Action({
                 text    : '',
                 handler : function () { this.tree.collapseAll(); },
-                icon    : '/assets/vps/images/silkicons/bullet_delete.png',
+                icon    : '/assets/silkicons/bullet_delete.png',
                 cls     : 'x-btn-icon',
                 scope   : this
             });
@@ -361,7 +361,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
 Vps.Auto.TreeNode = Ext.extend(Ext.tree.TreeNodeUI, {
     initEvents : function(){
         Vps.Auto.TreeNode.superclass.initEvents.call(this);
-        this.node.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/' + this.node.attributes.bIcon + '.png)';
+        this.node.ui.iconNode.style.backgroundImage = 'url(/assets/silkicons/' + this.node.attributes.bIcon + '.png)';
     },
     onDblClick : function(e){
         e.preventDefault();

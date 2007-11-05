@@ -92,7 +92,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         if (type == 'save') {
             this.actions[type] = new Ext.Action({
                 text    : 'Save',
-                icon    : '/assets/vps/images/silkicons/table_save.png',
+                icon    : '/assets/silkicons/table_save.png',
                 cls     : 'x-btn-text-icon',
                 handler : function() {
                     this.onSave();
@@ -102,7 +102,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         } else if (type == 'delete') {
             this.actions[type] = new Ext.Action({
                 text    : 'Delete',
-                icon    : '/assets/vps/images/silkicons/table_delete.png',
+                icon    : '/assets/silkicons/table_delete.png',
                 cls     : 'x-btn-text-icon',
                 handler : this.onDelete,
                 scope   : this
@@ -110,7 +110,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         } else if (type == 'add') {
             this.actions[type] = new Ext.Action({
                 text    : 'New Entry',
-                icon    : '/assets/vps/images/silkicons/table_add.png',
+                icon    : '/assets/silkicons/table_add.png',
                 cls     : 'x-btn-text-icon',
                 handler : this.onAdd,
                 scope   : this

@@ -80,7 +80,7 @@ class Vpc_Admin
 
     public function copyTemplate($source, $target)
     {
-        $source = VPS_PATH . str_replace('_', '/', substr(get_class($this), 0, strrpos(get_class($this), '_'))) . '/' . $source;
+        $source = VPS_PATH . '/'. str_replace('_', '/', substr(get_class($this), 0, strrpos(get_class($this), '_'))) . '/' . $source;
         if (is_file($source)) {
             $target = 'application/views/' . $target;
             if (!is_file($target)){

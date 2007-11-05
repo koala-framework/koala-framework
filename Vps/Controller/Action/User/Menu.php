@@ -25,7 +25,7 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
                     try {
                         $menu['menuConfig']['icon'] = Vps_Assets_Loader::getAssetPath(substr($menu['menuConfig']['icon'], 8), $assetPaths);
                     } catch (Vps_Assets_NotFoundException $e) {
-                        $menu['menuConfig']['icon'] = '/assets/vps/images/silkicons/'.$menu['menuConfig']['icon'];
+                        $menu['menuConfig']['icon'] = '/assets/silkicons/'.$menu['menuConfig']['icon'];
                     }
                 }
 

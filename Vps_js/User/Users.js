@@ -6,7 +6,7 @@ Vps.User.Users = Ext.extend(Vps.Auto.GridPanel, {
         if (!this.controllerUrl) this.controllerUrl = '/users/';
 
         var passwordAction = new Ext.Action({
-                icon    : '/assets/vps/images/silkicons/email_go.png',
+                icon    : '/assets/silkicons/email_go.png',
                 cls     : 'x-btn-text-icon',
                 text    : 'Neue Zugangsdaten mailen',
                 disabled: true,

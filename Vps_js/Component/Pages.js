@@ -79,7 +79,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 this.getAction('visible'),
                 this.getAction('makeHome')
             ],
-            icon    : '/assets/vps/images/silkicons/page.png',
+            icon    : '/assets/silkicons/page.png',
             disabled: true
         });
 
@@ -91,7 +91,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             new Ext.Toolbar.Button({
                 cls: 'x-btn-text-icon bmenu',
                 text:'Navigation',
-                icon : '/assets/vps/images/silkicons/weather_sun.png',
+                icon : '/assets/silkicons/weather_sun.png',
                 menu: [
                     this.getAction('reloadAll'),
                     this.getAction('expandAll'),
@@ -246,7 +246,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                     node = this.treePanel.tree.getSelectionModel().getSelectedNode();
                     this.fireEvent('editcomponent', {id: node.attributes.id, cls: node.attributes.data.component_class, text: node.text});
                 },
-                icon    : '/assets/vps/images/silkicons/page_edit.png',
+                icon    : '/assets/silkicons/page_edit.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });
@@ -257,7 +257,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                     this.editform.load(this.treePanel.tree.getSelectionModel().getSelectedNode().id);
                     this.editDialog.show();
                 },
-                icon    : '/assets/vps/images/silkicons/page_gear.png',
+                icon    : '/assets/silkicons/page_gear.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });
@@ -269,7 +269,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                     this.editform.getForm().baseParams.parent_id = this.treePanel.tree.getSelectionModel().getSelectedNode().id;
                     this.editDialog.show();
                 },
-                icon    : '/assets/vps/images/silkicons/page_add.png',
+                icon    : '/assets/silkicons/page_add.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });
@@ -277,7 +277,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Delete selected Page',
                 handler : this.treePanel.onDelete,
-                icon    : '/assets/vps/images/silkicons/page_delete.png',
+                icon    : '/assets/silkicons/page_delete.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this.treePanel
             });
@@ -285,7 +285,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Toggle Visibility of selected Page',
                 handler : this.treePanel.onVisible,
-                icon    : '/assets/vps/images/silkicons/page_red.png',
+                icon    : '/assets/silkicons/page_red.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this.treePanel
             });
@@ -301,13 +301,13 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                             oldhome.attributes.visible = response.oldhomeVisible;
                             this.treePanel.setVisible(oldhome);
                             var home = this.treePanel.tree.getNodeById(response.home);
-                            home.ui.iconNode.style.backgroundImage = 'url(/assets/vps/images/silkicons/application_home.png)';
+                            home.ui.iconNode.style.backgroundImage = 'url(/assets/silkicons/application_home.png)';
                         },
                         params: {id: this.treePanel.tree.getSelectionModel().getSelectedNode().id },
                         scope: this
                     });
                 },
-                icon    : '/assets/vps/images/silkicons/application_home.png',
+                icon    : '/assets/silkicons/application_home.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });
@@ -315,7 +315,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Reload all',
                 handler : function () { this.treePanel.tree.getRootNode().reload(); },
-                icon    : '/assets/vps/images/silkicons/bullet_star.png',
+                icon    : '/assets/silkicons/bullet_star.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });
@@ -323,7 +323,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Expand here',
                 handler : function () { this.treePanel.tree.getSelectionModel().getSelectedNode().expand(true); },
-                icon    : '/assets/vps/images/silkicons/bullet_add.png',
+                icon    : '/assets/silkicons/bullet_add.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });
@@ -331,7 +331,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Collapse here',
                 handler : function () { this.treePanel.tree.getSelectionModel().getSelectedNode().collapse(true); },
-                icon    : '/assets/vps/images/silkicons/bullet_delete.png',
+                icon    : '/assets/silkicons/bullet_delete.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });
@@ -339,7 +339,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Expand All',
                 handler : function () { this.treePanel.tree.expandAll(); },
-                icon    : '/assets/vps/images/silkicons/bullet_add.png',
+                icon    : '/assets/silkicons/bullet_add.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });
@@ -347,7 +347,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Collapse all',
                 handler : function () { this.treePanel.tree.collapseAll(); },
-                icon    : '/assets/vps/images/silkicons/bullet_delete.png',
+                icon    : '/assets/silkicons/bullet_delete.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });

@@ -8,7 +8,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         var tb = this.getToolbar();
         tb.add('-');
         tb.add({
-            icon: '/assets/vps/images/silkicons/image.png',
+            icon: '/assets/silkicons/image.png',
             handler: this.insertImage,
             scope: this,
             tooltip: {
