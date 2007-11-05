@@ -29,8 +29,8 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
         } else {
             $this->view = new Vps_View_Smarty();
             if ($module == 'admin' || $module == 'component') {
-                $this->view->setScriptPath(VPS_PATH . 'views');
-                $this->view->setCompilePath(VPS_PATH . 'views_c');
+                $this->view->setScriptPath(VPS_PATH . '/views');
+                $this->view->setCompilePath(VPS_PATH . '/views_c');
             }
         }
 

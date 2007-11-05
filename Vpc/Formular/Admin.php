@@ -3,7 +3,7 @@ class Vpc_Formular_Admin extends Vpc_Paragraphs_Admin
 {
     public function getComponents()
     {
-        $c = $this->getAvailableComponents(VPS_PATH . 'Vpc/Formular/');
+        $c = $this->getAvailableComponents(VPS_PATH . '/Vpc/Formular/');
         $components = array();
         foreach ($c as $key => $val) {
             if ($key != 'Formular') {

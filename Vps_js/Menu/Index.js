@@ -107,7 +107,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
             this.add({
                 text: response.authData.realname,
                 cls: 'x-btn-text-icon',
-                icon: '/assets/vps/images/silkicons/user.png',
+                icon: '/assets/silkicons/user.png',
                 handler: function() {
                     //todo: display user settings dialog
                 },
@@ -118,7 +118,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
             this.add({
                 text: 'Logout',
                 cls: 'x-btn-text-icon',
-                icon: '/assets/vps/images/silkicons/door_out.png',
+                icon: '/assets/silkicons/door_out.png',
                 handler: function() {
                     Ext.Ajax.request({
                         url : '/login/jsonLogoutUser',
@@ -138,10 +138,10 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
             this.add({
                 text: 'Debug',
                 cls: 'x-btn-text-icon',
-                icon: '/assets/vps/images/silkicons/bug.png',
+                icon: '/assets/silkicons/bug.png',
                 menu: [{
                     text: 'clear assets-cache',
-                    icon: '/assets/vps/images/silkicons/database_delete.png',
+                    icon: '/assets/silkicons/database_delete.png',
                     cls: 'x-btn-text-icon',
                     scope: this,
                     handler: function() {
@@ -154,7 +154,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                     }
                 },{
                     text: 'show debug console',
-                    icon: '/assets/vps/images/silkicons/bug.png',
+                    icon: '/assets/silkicons/bug.png',
                     cls: 'x-btn-text-icon',
                     scope: this,
                     handler: function() {

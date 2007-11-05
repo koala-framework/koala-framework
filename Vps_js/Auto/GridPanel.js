@@ -397,14 +397,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             this.actions[type] = new Ext.Action({
                 text    : '',
                 handler : this.reload,
-                icon    : '/assets/vps/images/silkicons/bullet_star.png',
+                icon    : '/assets/silkicons/bullet_star.png',
                 cls     : 'x-btn-icon',
                 scope   : this
             });
         } else if (type == 'save') {
             this.actions[type] = new Ext.Action({
                 text    : 'Save',
-                icon    : '/assets/vps/images/silkicons/table_save.png',
+                icon    : '/assets/silkicons/table_save.png',
                 cls     : 'x-btn-text-icon',
                 disabled: true, //?? passt des?
                 handler : this.onSave,
@@ -413,7 +413,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         } else if (type == 'add') {
             this.actions[type] = new Ext.Action({
                 text    : 'Add',
-                icon    : '/assets/vps/images/silkicons/table_add.png',
+                icon    : '/assets/silkicons/table_add.png',
                 cls     : 'x-btn-text-icon',
                 handler : this.onAdd,
                 scope: this
@@ -421,7 +421,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         } else if (type == 'delete') {
             this.actions[type] = new Ext.Action({
                 text    : 'Delete',
-                icon    : '/assets/vps/images/silkicons/table_delete.png',
+                icon    : '/assets/silkicons/table_delete.png',
                 cls     : 'x-btn-text-icon',
                 disabled: true,
                 handler : this.onDelete,
@@ -430,7 +430,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         } else if (type == 'pdf') {
             this.actions[type] = new Ext.Action({
                 text    : 'Drucken',
-                icon    : '/assets/vps/images/silkicons/printer.png',
+                icon    : '/assets/silkicons/printer.png',
                 cls     : 'x-btn-text-icon',
                 handler : this.onPdf,
                 scope: this
@@ -438,7 +438,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         } else if (type == 'csv') {
             this.actions[type] = new Ext.Action({
                 text    : 'CSV Export',
-                icon    : '/assets/vps/images/silkicons/page_code.png',
+                icon    : '/assets/silkicons/page_code.png',
                 cls     : 'x-btn-text-icon',
                 handler : this.onCsv,
                 scope: this
@@ -446,7 +446,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         } else if (type == 'xls') {
             this.actions[type] = new Ext.Action({
                 text    : 'Excel Export',
-                icon    : '/assets/vps/images/silkicons/page_excel.png',
+                icon    : '/assets/silkicons/page_excel.png',
                 cls     : 'x-btn-text-icon',
                 handler : this.onXls,
                 scope: this

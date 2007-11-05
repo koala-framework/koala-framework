@@ -11,18 +11,18 @@ class Vps_View_Smarty extends Zend_View_Abstract
         parent::__construct($config);
 
         $this->_smarty = new Smarty();
-        $this->_smarty->plugins_dir[] = 'SmartyPlugins/';
+        $this->_smarty->plugins_dir[] = 'SmartyPlugins';
 
-        $this->addScriptPath('application/views/');
-        $this->addScriptPath(VPS_PATH.'/views/');
+        $this->addScriptPath('application/views');
+        $this->addScriptPath(VPS_PATH.'/views');
 
         if (!isset($config['compile_dir'])) {
-            $config['compile_dir'] = 'application/views_c/';
+            $config['compile_dir'] = 'application/views_c';
         }
         foreach ($config as $key => $value) {
             $this->_smarty->$key = $value;
         }
-        $this->extTemplate = VPS_PATH . 'views/Ext.html';
+        $this->extTemplate = VPS_PATH . '/views/Ext.html';
 
         $this->config = Zend_Registry::get('config');
     }

@@ -9,7 +9,7 @@ Vps.Form.FileCheckBox = Ext.extend(Ext.form.Checkbox,
             if (value.url) {
                 var text = '<span id="' + this.name + '_show' + '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 text += '<a href="' + value.url + '" target="#blank">';
-                text += '<img src="/assets/vps/images/silkicons/eye.png" />';
+                text += '<img src="/assets/silkicons/eye.png" />';
                 text += '</a>&nbsp;Show';
                 text += '</span>';
                 if (el) {
