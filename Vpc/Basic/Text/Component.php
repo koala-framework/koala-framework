@@ -1,22 +1,28 @@
 <?php
 class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
 {
-   protected $_settings = array(
-        'content' => 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.',
-        'fieldLabel' => 'Rich Text Editor',
-        'width' => 550,
-        'height' => 400,
-        'enableAlignments' => true,
-        'enableColors' => false,
-        'enableFont' => false,
-        'enableFontSize' => false,
-        'enableFormat' => true,
-        'enableLinks' => true,
-        'enableLists' => true,
-        'enableSourceEdit' => true,
-        'imageClass'        => 'Vpc_Basic_Image_Component',
-        'imageSettings'     => array('allowBlank' => false,
-                                     'size'       => array())
+    public static function getStaticSettings()
+    {
+        return array_merge(parent::getStaticSettings(), array(
+            'fieldLabel' => 'Rich Text Editor',
+            'width' => 550,
+            'height' => 400,
+            'enableAlignments' => true,
+            'enableColors' => false,
+            'enableFont' => false,
+            'enableFontSize' => false,
+            'enableFormat' => true,
+            'enableLinks' => true,
+            'enableLists' => true,
+            'enableSourceEdit' => true,
+            'imageClass'        => 'Vpc_Basic_Image_Component',
+            'linkClass'         => 'Vpc_Basic_Link_Intern_Component',
+            'defaultContent' => 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.'
+        ));
+    }
+
+
+    protected $_settings = array(
     );
 
     protected $_tablename = 'Vpc_Basic_Text_Model';
@@ -49,37 +55,72 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
     protected function _parseContentParts($content)
     {
         $ret = array();
-        while(preg_match('#^(.*)<img.+(src|componentkey)="([^"]*)"[^>]*>(.*)$#Us', $content, $m)) {
-            $ret[] = $m[1];
+        //while(preg_match('#^(.*)<img.+(src|componentkey)="([^"]*)"[^>]*>(.*)$#Us', $content, $m)) {
+        while(preg_match('#^(.*)(<img.+(src|componentkey)="([^"]*)"[^>]*>|<a.+href="([^"]*)"[^>]*>)(.*)$#Us', $content, $m)) {
 
-            $id = false;
-            if ($m[2] == 'src') {
-                $id = $this->_getImageIdBySrc($m[3]);
-            } elseif ($m[2] == 'componentkey') {
-                $id = $m[3];
+            if ($m[1] != '') {
+                $ret[] = $m[1];
             }
-            if ($id && isset($this->_components[$id])) {
-                $ret[] = $this->_components[$id];
-            } elseif ($id) {
-                $component = $this->_createImageComponent($id);
-                $ret[] = $component;
+
+            $nr = false;
+            if ($m[3] == 'src') {
+                $nr = $this->_getImageNrBySrc($m[4]);
+            } elseif ($m[3] == 'componentkey') {
+                $nr = $m[4];
             }
-            $content = $m[4];
+            if ($nr) {
+                $ret[] = $this->_createImageComponent($nr);
+            }
+
+            if ($m[5] != '') {
+                $component = $this->getLinkByHref($m[5]);
+                if ($component) {
+                    $ret[] = $component;
+                } else {
+                    //todo: neue link-komponente erstellen, aber mit welcher nr?
+                    //kann womöglich auch in getLinkByHref funktion gemacht werden
+                    $ret[] = $m[2]; //vorerst einfach html anhängen
+                }
+            }
+
+            $content = $m[6];
         }
-
         if(!$m) $ret[] = $content;
         return $ret;
     }
-
-    private function _createImageComponent($id)
+    private function _getLinkComponentDataByHref($href)
     {
-        $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Component');
-        $component = $this->createComponent($imageClass, $id, $this->getSetting('imageSettings'));
-        $this->_components[$id] = $component;
+        if (substr($href, 0, 7) == 'http://') $href = substr($href, 7);
+        if (preg_match('#([A-Za-z_0-9]+):(.+)$#', $href, $m)) {
+            $ret['class'] = $m[1];
+            if (!is_subclass_of($ret['class'], 'Vpc_Basic_Link_Component')) {
+                return null;
+            }
+            $ret['nr'] = $this->_getChildComponentNrById($m[2]);
+            if (!$ret['nr']) return null;
+            return $ret;
+        }
+        return null;
+    }
+
+    private function _createLinkComponent($nr, $linkClass)
+    {
+        if (isset($this->_components[$nr])) return $this->_components[$nr];
+        $component = $this->createComponent($linkClass, $nr, $this->getSetting('linkSettings'));
+        $this->_components[$nr] = $component;
         return $component;
     }
 
-    private function _getImageIdBySrc($src)
+    private function _createImageComponent($nr)
+    {
+        if (isset($this->_components[$nr])) return $this->_components[$nr];
+        $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Component');
+        $component = $this->createComponent($imageClass, $nr, $this->getSetting('imageSettings'));
+        $this->_components[$nr] = $component;
+        return $component;
+    }
+
+    private function _getImageNrBySrc($src)
     {
         //media/:uploadId/:componentId/:checksum/:filename
         if (preg_match('#/media/([0-9]+)/([^/]+)/#', $src, $m)) {
@@ -99,17 +140,24 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
 
     public function getImageBySrc($src)
     {
-        $id = $this->_getImageIdBySrc($src);
-        if (!$id) return null;
-        return $this->_createImageComponent($id);
+        $nr = $this->_getImageNrBySrc($src);
+        if (!$nr) return null;
+        return $this->_createImageComponent($nr);
     }
 
-    protected function _parseImageComponentKey($html)
+    public function getLinkByHref($href)
+    {
+        $d = $this->_getLinkComponentDataByHref($href);
+        if (!$d) return null;
+        return $this->_createLinkComponent($d['nr'], $d['class']);
+    }
+
+    protected function _parseChildComponentKey($html)
     {
         $parts = $this->_parseContentParts($html);
         $ret = array();
         foreach ($parts as $part) {
-            if ($part instanceof Vpc_Basic_Image_Component) {
+            if ($part instanceof Vpc_Abstract) {
                 $ret[] = $this->_getChildComponentNrById($part->getId());
             }
         }
@@ -118,17 +166,18 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
 
     public function addImage($html)
     {
-        $newIds = $this->_parseImageComponentKey($html);
-        $contentIds = $this->_parseImageComponentKey($this->getSetting('content'));
-        $contentEditIds = $this->_parseImageComponentKey($this->getSetting('content_edit'));
-        foreach ($contentEditIds as $id) {
-            if (!in_array($id, $contentIds) && !in_array($id, $newIds)) {
-                $component = $this->_createImageComponent($id);
+        $newNrs = $this->_parseChildComponentKey($html);
+        $contentNrs = $this->_parseChildComponentKey($this->getSetting('content'));
+        $contentEditNrs = $this->_parseChildComponentKey($this->getSetting('content_edit'));
+        foreach ($contentEditNrs as $nr) {
+            if (!in_array($nr, $contentNrs) && !in_array($nr, $newNrs)) {
+                $component = $this->_components[$nr];
                 Vpc_Admin::getInstance($component)->delete($component);
+                unset($this->_components[$nr]);
             }
         }
-        if (array_merge($newIds, $contentIds)) {
-            $k = max(array_merge($newIds, $contentIds));
+        if (count($this->_components)) {
+            $k = max(array_keys($this->_components));
         } else {
             $k = 0;
         }
@@ -140,16 +189,43 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
         return $component;
     }
 
+    public function addLink($html)
+    {
+        $newNrs = $this->_parseChildComponentKey($html);
+        $contentNrs = $this->_parseChildComponentKey($this->getSetting('content'));
+        $contentEditNrs = $this->_parseChildComponentKey($this->getSetting('content_edit'));
+        foreach ($contentEditNrs as $nr) {
+            if (!in_array($nr, $contentNrs) && !in_array($nr, $newNrs)) {
+                $component = $this->_components[$nr];
+                Vpc_Admin::getInstance($component)->delete($component);
+                unset($this->_components[$nr]);
+            }
+        }
+        if (count($this->_components)) {
+            $k = max(array_keys($this->_components));
+        } else {
+            $k = 0;
+        }
+        $k++;
+        $linkClass = $this->_getClassFromSetting('linkClass', 'Vpc_Basic_Link_Component');
+        $component = $this->_createLinkComponent($k, $linkClass);
+        $html .= '<a href="'.$linkClass.':'.$component->getId().'" />';
+
+        $this->saveSetting('content_edit', $html);
+        return $component;
+    }
+
     public function beforeSave($html)
     {
-        $newIds = $this->_parseImageComponentKey($html);
-        $contentIds = $this->_parseImageComponentKey($this->getSetting('content'));
-        $contentEditIds = $this->_parseImageComponentKey($this->getSetting('content_edit'));
-        $ids = array_unique(array_merge($contentIds, $contentEditIds));
-        foreach ($ids as $id) {
-            if (!in_array($id, $newIds)) {
-                $component = $this->_createImageComponent($id);
+        $newNrs = $this->_parseChildComponentKey($html);
+        $contentNrs = $this->_parseChildComponentKey($this->getSetting('content'));
+        $contentEditNrs = $this->_parseChildComponentKey($this->getSetting('content_edit'));
+        $nrs = array_unique(array_merge($contentNrs, $contentEditNrs));
+        foreach ($nrs as $nr) {
+            if (!in_array($nr, $newNrs)) {
+                $component = $this->_components[$nr];
                 Vpc_Admin::getInstance($component)->delete($component);
+                unset($this->_components[$nr]);
             }
         }
     }

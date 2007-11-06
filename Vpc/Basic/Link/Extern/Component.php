@@ -3,7 +3,7 @@
  * @package Vpc
  * @subpackage Basic
  */
-class Vpc_Basic_Link_Extern_Component extends Vpc_Abstract
+class Vpc_Basic_Link_Extern_Component extends Vpc_Basic_Link_Component
 {
     protected $_settings = array(
         'hasLinktext'   => true,

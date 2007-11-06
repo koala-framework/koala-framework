@@ -15,6 +15,10 @@ class Vps_Media_Image
             return false;
         }
 
+        if (!file_exists($source)) {
+            return false;
+        }
+
         if ($scale == self::SCALE_CROP){ // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
 
             $size = getimagesize($source);

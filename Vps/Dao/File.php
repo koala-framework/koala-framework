@@ -17,11 +17,16 @@ class Vps_Dao_File extends Vps_Db_Table
         return $uploadDir;
     }
 
+    public function getFileSource($uploadId)
+    {
+        return $this->_getUploadDir() . '/' . $uploadId;
+    }
+
     public function getFileSize($uploadId)
     {
         $row = $this->find($uploadId)->current();
         if ($row) {
-            $file = $this->_getUploadDir() . $row->id;
+            $file = $this->getFileSource($uploadId);
             if (is_file($file)) {
                 return round((filesize($file) /1024), 2);
             }
@@ -49,7 +54,7 @@ class Vps_Dao_File extends Vps_Db_Table
     public function getOriginalUrl($uploadId)
     {
         $row = $this->find($uploadId)->current();
-        if ($row && is_file($this->_getUploadDir() . $uploadId)) {
+        if ($row && is_file($this->getFileSource($uploadId))) {
             $extension = $row->extension;
             return "/media/$uploadId.$extension";
         }
@@ -115,7 +120,7 @@ class Vps_Dao_File extends Vps_Db_Table
 
     public function deleteFile($id)
     {
-        $filename = $this->_getUploadDir() . $id;
+        $filename = $this->getFileSource($uploadId);
         if (is_file($filename)) {
             unlink($filename);
         }
@@ -124,7 +129,7 @@ class Vps_Dao_File extends Vps_Db_Table
 
     public function deleteCache($id)
     {
-        $this->_recursiveRemoveDirectory($this->_getUploadDir() . 'cache/' . $id);
+        $this->_recursiveRemoveDirectory($this->_getUploadDir() . '/cache/' . $id);
     }
 
     private function _recursiveRemoveDirectory($dir)

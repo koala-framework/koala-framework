@@ -28,8 +28,7 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
     public function jsonAddImageAction()
     {
         $image = $this->component->addImage($this->_getParam('content'));
-        $this->view->config = Vpc_Admin::getInstance($image)
-                            ->getConfig($image);
+        $this->view->config = Vpc_Admin::getInstance($image)->getConfig($image);
     }
 
     public function jsonEditImageAction()
@@ -38,7 +37,21 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         if (!$image) {
             throw new Vps_Exception("Can't find image component");
         }
-        $this->view->config = Vpc_Admin::getInstance($image)
-                            ->getConfig($image);
+        $this->view->config = Vpc_Admin::getInstance($image)->getConfig($image);
+    }
+
+    public function jsonAddLinkAction()
+    {
+        $link = $this->component->addLink($this->_getParam('content'));
+        $this->view->config = Vpc_Admin::getInstance($link)->getConfig($link);
+    }
+
+    public function jsonEditLinkAction()
+    {
+        $link = $this->component->getLinkByHref($this->_getParam('href'));
+        if (!$link) {
+            throw new Vps_Exception("Can't find link component");
+        }
+        $this->view->config = Vpc_Admin::getInstance($link)->getConfig($link);
     }
 }

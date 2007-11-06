@@ -18,7 +18,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             }
             Ext.Ajax.request({
                 mask: true,
-                url: this.controllerUrl+'jsonData',
+                url: this.controllerUrl+'/jsonData',
                 params: {meta: true},
                 success: function(response, options, r) {
                     var result = Ext.decode(response.responseText);
@@ -46,7 +46,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             var remoteSort = false;
             if (meta.paging) remoteSort = true;
             var storeConfig = {
-                proxy: new Ext.data.HttpProxy({url: this.controllerUrl + 'jsonData'}),
+                proxy: new Ext.data.HttpProxy({url: this.controllerUrl + '/jsonData'}),
                 reader: new Ext.data.JsonReader({
                     totalProperty: meta.totalProperty,
                     root: meta.root,
@@ -504,7 +504,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         };
 
         Ext.Ajax.request({
-            url: this.controllerUrl+'jsonSave',
+            url: this.controllerUrl+'/jsonSave',
             params: params,
             success: function(response, options, r) {
                 this.reload();
@@ -571,7 +571,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
                         var params = {};
                         params[this.store.reader.meta.id] = selectedRow.id;
                         Ext.Ajax.request({
-                            url: this.controllerUrl+'jsonDelete',
+                            url: this.controllerUrl+'/jsonDelete',
                             params: params,
                             success: function() {
                                 this.reload();
@@ -593,15 +593,15 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
     },
     onPdf : function()
     {
-        window.open(this.controllerUrl+'pdf?'+Ext.urlEncode(this.getStore().baseParams));
+        window.open(this.controllerUrl+'/pdf?'+Ext.urlEncode(this.getStore().baseParams));
     },
     onCsv : function()
     {
-        window.open(this.controllerUrl+'csv?'+Ext.urlEncode(this.getStore().baseParams));
+        window.open(this.controllerUrl+'/csv?'+Ext.urlEncode(this.getStore().baseParams));
     },
     onXls : function()
     {
-        window.open(this.controllerUrl+'xls?'+Ext.urlEncode(this.getStore().baseParams));
+        window.open(this.controllerUrl+'/xls?'+Ext.urlEncode(this.getStore().baseParams));
     },
     getSelected: function() {
         return this.getSelectionModel().getSelected();
