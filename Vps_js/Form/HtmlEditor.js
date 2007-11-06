@@ -1,6 +1,17 @@
 Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
+    formatBlocks : {
+        'h1': 'Heading 1',
+        'h2': 'Heading 2',
+        'h3': 'Heading 3',
+        'h4': 'Heading 4',
+        'h5': 'Heading 5',
+        'h6': 'Heading 6',
+        'p': 'Normal',
+        'address': 'Address',
+        'pre': 'Formatted'
+    },
+
     initComponent : function() {
-        
         Vps.Form.HtmlEditor.superclass.initComponent.call(this);
     },
     createToolbar: function(editor){
@@ -46,6 +57,69 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             clickEvent: 'mousedown',
             tabIndex: -1
         });
+        tb.add({
+            icon: '/assets/silkicons/html_valid.png',
+            handler: this.tidyHtml,
+            scope: this,
+            tooltip: {
+                cls: 'x-html-editor-tip',
+                title: 'Clean Html',
+                text: 'Clean up Html and remove formatings.'
+            },
+            cls: 'x-btn-icon',
+            clickEvent: 'mousedown',
+            tabIndex: -1
+        });
+        this.blockSelect = tb.el.createChild({
+            tag:'select',
+            cls:'x-font-select',
+            html: this.createBlockOptions()
+        });
+        this.blockSelect.on('change', function(){
+            var v = this.blockSelect.dom.value;
+            if (Ext.isIE) {
+                v = '<'+v+'>';
+            }
+            this.relayCmd('formatblock', v);
+            this.deferFocus();
+        }, this);
+
+    },
+
+    createBlockOptions : function(){
+        var buf = [];
+        for (var i in this.formatBlocks) {
+            fb = this.formatBlocks[i];
+            buf.push(
+                '<option value="',i,'"', /*style="font-family:',ff,';"',*/
+                    (i == 'p' ? ' selected="true">' : '>'),
+                    fb,
+                '</option>'
+            );
+        }
+        return buf.join('');
+    },
+    updateToolbar: function(){
+        Vps.Form.HtmlEditor.superclass.updateToolbar.call(this);
+        if (Ext.isIE) {
+            var el = this.getFocusElement();
+            while (el) {
+                for(var i in this.formatBlocks) {
+                    if (el.tagName && i == el.tagName.toLowerCase()) {
+                        if(i != this.blockSelect.dom.value){
+                            this.blockSelect.dom.value = i;
+                        }
+                        return;
+                    }
+                }
+                el = el.parentNode;
+            }
+        } else {
+            var name = (this.doc.queryCommandValue('FormatBlock')||'p').toLowerCase();
+            if(name != this.blockSelect.dom.value){
+                this.blockSelect.dom.value = name;
+            }
+        }
     },
 //     getDocMarkup : function(){
 //         return '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style></head><body></body></html>';
@@ -57,7 +131,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 params: { src: img.src },
                 url: this.controllerUrl+'/jsonEditImage',
                 success: function(response, options, r) {
-                    var c = eval(r.config.class);
+                    var c = eval(r.config['class']);
                     Ext.apply(r.config.config, {
                         formConfig: { tbar: false },
                         baseCls: 'x-plain'
@@ -81,7 +155,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 params: { content: this.getValue() },
                 url: this.controllerUrl+'/jsonAddImage',
                 success: function(response, options, r) {
-                    var c = eval(r.config.class);
+                    var c = eval(r.config['class']);
                     Ext.apply(r.config.config, {
                         formConfig: { tbar: false },
                         baseCls: 'x-plain'
@@ -105,13 +179,12 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         if (a && a.parentNode && (!a.tagName || a.tagName.toLowerCase() != 'a')) {
             a = a.parentNode;
         }
-        console.log(a);
         if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
             Ext.Ajax.request({
                 params: { href: a.href },
                 url: this.controllerUrl+'/jsonEditLink',
                 success: function(response, options, r) {
-                    var c = eval(r.config.class);
+                    var c = eval(r.config['class']);
                     Ext.apply(r.config.config, {
                         formConfig: { tbar: false },
                         baseCls: 'x-plain'
@@ -133,7 +206,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 params: { content: this.getValue() },
                 url: this.controllerUrl+'/jsonAddLink',
                 success: function(response, options, r) {
-                    var c = eval(r.config.class);
+                    var c = eval(r.config['class']);
                     Ext.apply(r.config.config, {
                         formConfig: { tbar: false },
                         baseCls: 'x-plain'
@@ -183,10 +256,20 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             }, this, true);
     },
 
-    cleanHtml : function(html){
-        html = Vps.Form.HtmlEditor.superclass.cleanHtml.call(this, html);
-        html = html.replace(/\sclass="(?:Mso.+)"/g, ''); //Word-Scheiß
-        return html;
+    tidyHtml: function()
+    {
+        Ext.getBody().mask('Cleaning...');
+        Ext.Ajax.request({
+            url: this.controllerUrl+'/jsonTidyHtml',
+            params: { html: this.getValue() },
+            success: function(response, options, r) {
+                this.setValue(r.html);
+            },
+            callback: function() {
+                Ext.getBody().unmask();
+            },
+            scope: this
+        });
     },
 
     //private

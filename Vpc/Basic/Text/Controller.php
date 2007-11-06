@@ -14,6 +14,7 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         }
         $field->setEnableFont(false);
         $field->setEnableFontSize(false);
+        $field->setEnableColors(false);
         $controllerUrl = Vpc_Admin::getInstance($this->component)
                             ->getControllerUrl($this->component);
         $field->setControllerUrl($controllerUrl);
@@ -32,7 +33,7 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         $tidy = new tidy;
         $tidy->parseString($row->content, $config, 'utf8');
         $tidy->cleanRepair();
-        $row->content = $tidy;
+        $row->content = $tidy->__toString();
 
         $this->component->beforeSave($row->content);
         $row->content_edit = '';
@@ -66,5 +67,34 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
             throw new Vps_Exception("Can't find link component");
         }
         $this->view->config = Vpc_Admin::getInstance($link)->getConfig($link);
+    }
+
+    public function jsonTidyHtmlAction()
+    {
+        $html = $this->_getParam('html');
+
+        $html = preg_replace('#(<o:p.*>)#', '', $html);
+
+        $stripProps = array('style', 'class', 'width', 'valign');
+        foreach ($stripProps as $i) {
+            $html = preg_replace('#(<.+)'.preg_quote($i).'="[^"]*"(.*>)#', '\\1\\2', $html);
+        }
+
+        $config = array(
+                    'indent'         => true,
+                    'output-xhtml'   => true,
+                    'clean'          => true,
+                    'wrap'           => 200,
+                    'doctype'        => 'omit',
+                    'drop-proprietary-attributes' => true,
+                    'drop-font-tags' => true,
+                    'word-2000'      => true,
+                    'show-body-only' => true,
+                    'bare'           => true);
+        $tidy = new tidy;
+        $tidy->parseString($html, $config, 'utf8');
+        $tidy->cleanRepair();
+        $html = $tidy->value;
+        $this->view->html = $html;
     }
 }
