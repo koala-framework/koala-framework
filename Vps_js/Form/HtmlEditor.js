@@ -20,6 +20,32 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             clickEvent: 'mousedown',
             tabIndex: -1
         });
+        tb.add({
+            icon: '/assets/silkicons/text_letter_omega.png',
+            handler: this.insertChar,
+            scope: this,
+            tooltip: {
+                cls: 'x-html-editor-tip',
+                title: 'Character',
+                text: 'Insert a custom character.'
+            },
+            cls: 'x-btn-icon',
+            clickEvent: 'mousedown',
+            tabIndex: -1
+        });
+        tb.add({
+            icon: '/assets/silkicons/paste_plain.png',
+            handler: this.insertPlainText,
+            scope: this,
+            tooltip: {
+                cls: 'x-html-editor-tip',
+                title: 'Insert Plain Text',
+                text: 'Insert text without formating.'
+            },
+            cls: 'x-btn-icon',
+            clickEvent: 'mousedown',
+            tabIndex: -1
+        });
     },
 //     getDocMarkup : function(){
 //         return '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style></head><body></body></html>';
@@ -127,6 +153,36 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
     },
 
+    insertChar: function()
+    {
+        var win = Vps.Form.HtmlEditor.insertCharWindow; //statische var, nur ein window erstellen
+        if (!win) {
+            win = new Vps.Form.InsertCharWindow({
+                modal: true,
+                title: 'Insert Custom Character',
+                width: 500,
+                closeAction: 'hide',
+                autoScroll: true
+            });
+            win.on('insertchar', function(win, char) {
+                this.insertAtCursor(char);
+                win.hide();
+            }, this);
+            Vps.Form.HtmlEditor.insertCharWindow = win;
+        }
+        win.show();
+    },
+
+    insertPlainText: function()
+    {
+        Ext.Msg.prompt('Insert Plain Text', '',
+            function(btn, text) {
+                if (btn == 'ok') {
+                    this.insertAtCursor(text);
+                }
+            }, this, true);
+    },
+
     cleanHtml : function(html){
         html = Vps.Form.HtmlEditor.superclass.cleanHtml.call(this, html);
         html = html.replace(/\sclass="(?:Mso.+)"/g, ''); //Word-Scheiß
@@ -147,7 +203,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
             var rng = sel.getRangeAt(0);
             if (!rng) return null;
-debugger;
 
             var elm = rng.commonAncestorContainer;
 
