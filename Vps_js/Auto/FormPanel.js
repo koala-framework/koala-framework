@@ -33,10 +33,10 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     loadForm : function(controllerUrl)
     {
         this.controllerUrl = controllerUrl;
-        this.formConfig.url = controllerUrl + 'jsonSave';
+        this.formConfig.url = controllerUrl + '/jsonSave';
         Ext.Ajax.request({
             mask: true,
-            url: this.controllerUrl+'jsonLoad',
+            url: this.controllerUrl+'/jsonLoad',
             params: {meta: true},
             success: function(response, options, r) {
                 var result = Ext.decode(response.responseText);
@@ -134,7 +134,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         this.getForm().waitMsgTarget = this.el;
         this.enable();
         this.getForm().load(Ext.applyIf(options, {
-            url: this.controllerUrl+'jsonLoad',
+            url: this.controllerUrl+'/jsonLoad',
             waitMsg: 'Loading...',
             success: function(form, action) {
                 if (this.actions['delete']) this.actions['delete'].enable();
@@ -176,7 +176,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
         this.getForm().waitMsgTarget = this.el;
         this.getForm().submit(Ext.apply(options, {
-            url: this.controllerUrl+'jsonSave',
+            url: this.controllerUrl+'/jsonSave',
             waitMsg: 'saveing...',
             success: function() {
                 this.onSubmitSuccess.apply(this, arguments);
@@ -234,7 +234,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             if (button == 'yes') {
 
                 Ext.Ajax.request({
-                        url: this.controllerUrl+'jsonDelete',
+                        url: this.controllerUrl+'/jsonDelete',
                         params: {id: this.getForm().baseParams.id},
                         success: function(response, options, r) {
                             this.fireEvent('datachange', r);

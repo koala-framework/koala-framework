@@ -5,7 +5,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vpc_FileInterfac
     const NAME = 'Standard.Image';
     protected $_settings = array(
         'extensions' 	    => array('jpg', 'gif', 'png'),
-        'size'              => array(300, 200), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
+        'dimension'         => array(300, 200), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
         'allow'             => array(Vps_Media_Image::SCALE_BESTFIT),
         'filename'          => 'filename',
         'editFilename'      => true,
@@ -14,15 +14,15 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vpc_FileInterfac
         'enlargeClass'      => 'Vpc_Basic_Image_Component',
         'enlargeSettings'   => array(
             'extensions'        => array('jpg', 'gif', 'png'),
-            'size'              => array(800, 600), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
+            'dimension'         => array(800, 600), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
             'allow'             => array(Vps_Media_Image::SCALE_BESTFIT),
             'filename'          => 'filename',
             'editFilename'      => true
         )
     );
-    const SIZE_NORMAL = '';
-    const SIZE_THUMB = '.thumb';
-    const SIZE_MINI = '.mini';
+    const DIMENSION_NORMAL = '';
+    const DIMENSION_THUMB = '.thumb';
+    const DIMENSION_MINI = '.mini';
     public $imagebig = null;
 
     protected function _init()
@@ -40,7 +40,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vpc_FileInterfac
     {
         $return = parent::getTemplateVars();
         $return['url'] = $this->getImageUrl();
-        $s = $this->getImageSize();
+        $s = $this->getImageDimension();
         $return['width'] = $s['width'];
         $return['height'] = $s['height'];
 
@@ -55,13 +55,13 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vpc_FileInterfac
     public function getSettings()
     {
         $settings = parent::getSettings();
-        if ((!isset($settings['width']) || $settings['width'] == '') && isset($settings['size'][0])) {
-            if (is_array($settings['size'][0])) {
-                $settings['width'] = $settings['size'][0][0];
-                $settings['height'] = $settings['size'][0][1];
+        if ((!isset($settings['width']) || $settings['width'] == '') && isset($settings['dimension'][0])) {
+            if (is_array($settings['dimension'][0])) {
+                $settings['width'] = $settings['dimension'][0][0];
+                $settings['height'] = $settings['dimension'][0][1];
             } else {
-                $settings['width'] = $settings['size'][0];
-                $settings['height'] = $settings['size'][1];
+                $settings['width'] = $settings['dimension'][0];
+                $settings['height'] = $settings['dimension'][1];
             }
         }
         if (!isset($settings['scale']) || $settings['scale'] == '') {
@@ -76,13 +76,14 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vpc_FileInterfac
         return $this->imagebig ? array($this->imagebig) : array();
     }
 
-    public function getImageUrl($size = self::SIZE_NORMAL, $addRandom = false)
+    public function getImageUrl($dimension = self::DIMENSION_NORMAL, $addRandom = false)
     {
         $row = $this->getTable()->find($this->getDbId(),
                                         $this->getComponentKey())->current();
+
         if ($row) {
             $filename = $row->filename != '' ? $row->filename : 'unnamed';
-            $filename .= $size;
+            $filename .= $dimension;
             return $this->getTable('Vps_Dao_File')
                     ->generateUrl($row->vps_upload_id, $this->getId(), $filename,
                                   Vps_Dao_File::SHOW, $addRandom);
@@ -91,18 +92,24 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vpc_FileInterfac
         }
     }
 
-    public function getImageSize()
+    public function getImageDimension()
     {
+        $row = $this->getTable()->find($this->getDbId(),
+                                        $this->getComponentKey())->current();
+        if (!$row || !$row->vps_upload_id) return false;
         $scale = $this->getSetting('scale');
-        return Vps_Media_Image::calculateScaleDimensions($source, $this->_getImageSizeSetting(), $scale);
+        return Vps_Media_Image::calculateScaleDimensions(
+                    $this->getTable('Vps_Dao_File')->getFileSource($row->vps_upload_id),
+                    $this->_getImageDimensionSetting(),
+                    $scale);
     }
 
-    private function _getImageSizeSetting()
+    private function _getImageDimensionSetting()
     {
-        $sizes = $this->getSetting('size');
-        if (sizeof($sizes) == 2 && !is_array($sizes[0])) {
-            $width = $sizes[0];
-            $height = $sizes[1];
+        $dimensions = $this->getSetting('dimension');
+        if (sizeof($dimensions) == 2 && !is_array($dimensions[0])) {
+            $width = $dimensions[0];
+            $height = $dimensions[1];
         } else {
             $width = $this->getSetting('width');
             $height = $this->getSetting('height');
@@ -113,11 +120,11 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vpc_FileInterfac
     public function createCacheFile($source, $target)
     {
         $scale = $this->getSetting('scale');
-        Vps_Media_Image::scale($source, $target, $this->_getImageSizeSetting(), $scale);
+        Vps_Media_Image::scale($source, $target, $this->_getImageDimensionSetting(), $scale);
 
-        if (strpos($target, self::SIZE_THUMB)) {
+        if (strpos($target, self::DIMENSION_THUMB)) {
             Vps_Media_Image::scale($target, $target, array(100, 100), Vps_Media_Image::SCALE_BESTFIT);
-        } else if (strpos($target, self::SIZE_MINI)) {
+        } else if (strpos($target, self::DIMENSION_MINI)) {
             Vps_Media_Image::scale($target, $target, array(20, 20), Vps_Media_Image::SCALE_BESTFIT);
         }
     }

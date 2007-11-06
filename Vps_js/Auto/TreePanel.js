@@ -13,7 +13,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
 	    Ext.Ajax.request({
             mask: true,
-	        url: this.controllerUrl + 'jsonMeta',
+	        url: this.controllerUrl + '/jsonMeta',
 	        params: this.baseParams,
 	        success: this.onMetaChange,
 	        scope: this
@@ -42,7 +42,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
 //            animate     : true,
             loader      : new Ext.tree.TreeLoader({
                 baseParams  : baseParams,
-                dataUrl     : this.controllerUrl + 'jsonData'
+                dataUrl     : this.controllerUrl + '/jsonData'
             }),
             enableDD    : meta.enableDD,
             autoScroll: true,
@@ -128,7 +128,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
     onSave : function (id)
     {
         Ext.Ajax.request({
-            url: this.controllerUrl + 'jsonNodeData',
+            url: this.controllerUrl + '/jsonNodeData',
             params: { node: id },
             success: function(r) {
                 var response = Ext.decode(r.responseText).data;
@@ -177,7 +177,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
             function  (button) {
                 if (button == 'yes') {
                     Ext.Ajax.request({
-                        url: this.controllerUrl + 'jsonDelete',
+                        url: this.controllerUrl + '/jsonDelete',
                         params: {
                             id: this.tree.getSelectionModel().getSelectedNode().id
                         },
@@ -204,7 +204,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
     onMove : function(e){
         Ext.Ajax.request({
-            url: this.controllerUrl + 'jsonMove',
+            url: this.controllerUrl + '/jsonMove',
             params: {
                 source: e.dropNode.id,
                 target: e.target.id,
@@ -220,7 +220,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
     onCollapseNode : function(node) {
         Ext.Ajax.request({
-            url: this.controllerUrl + 'jsonCollapse',
+            url: this.controllerUrl + '/jsonCollapse',
             params: {id: node.id}
         });
     },
@@ -228,7 +228,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
     onExpandNode : function(node) {
         if (!node.attributes.children) {
             Ext.Ajax.request({
-                url: this.controllerUrl + 'jsonExpand',
+                url: this.controllerUrl + '/jsonExpand',
                 params: {id: node.id}
             });
         }
@@ -236,7 +236,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
     onVisible : function (o, e) {
         Ext.Ajax.request({
-            url: this.controllerUrl + 'jsonVisible',
+            url: this.controllerUrl + '/jsonVisible',
             params: {
                 id: this.tree.getSelectionModel().getSelectedNode().id
             },

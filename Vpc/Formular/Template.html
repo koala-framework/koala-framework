@@ -1,6 +1,6 @@
 {if $component.sent != 3}
     {foreach from=$component.errors item=error}
-        <font color="#cc0000" size=2> -> {$error}  </font><br/>
+        <font color="#cc0000" size=2> » {$error}  </font><br/>
     {/foreach}
     <br/>
     <form action="{$component.action}" method="POST" ENCTYPE = "{if $component.upload}multipart/form-data{else}application/x-www-form-urlencoded {/if}">

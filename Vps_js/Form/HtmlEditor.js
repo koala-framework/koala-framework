@@ -9,7 +9,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         tb.add('-');
         tb.add({
             icon: '/assets/silkicons/image.png',
-            handler: this.insertImage,
+            handler: this.createImage,
             scope: this,
             tooltip: {
                 cls: 'x-html-editor-tip',
@@ -24,12 +24,12 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 //     getDocMarkup : function(){
 //         return '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style></head><body></body></html>';
 //     },
-    insertImage: function() {
+    createImage: function() {
         var img = this.getFocusElement();
         if (img && img.tagName && img.tagName.toLowerCase() == 'img') {
             Ext.Ajax.request({
                 params: { src: img.src },
-                url: this.controllerUrl+'jsonEditImage/',
+                url: this.controllerUrl+'/jsonEditImage',
                 success: function(response, options, r) {
                     var c = eval(r.config.class);
                     Ext.apply(r.config.config, {
@@ -53,7 +53,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         } else {
             Ext.Ajax.request({
                 params: { content: this.getValue() },
-                url: this.controllerUrl+'jsonAddImage/',
+                url: this.controllerUrl+'/jsonAddImage',
                 success: function(response, options, r) {
                     var c = eval(r.config.class);
                     Ext.apply(r.config.config, {
@@ -74,6 +74,59 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             });
         }
     },
+    createLink: function() {
+        var a = this.getFocusElement();
+        if (a && a.parentNode && (!a.tagName || a.tagName.toLowerCase() != 'a')) {
+            a = a.parentNode;
+        }
+        console.log(a);
+        if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
+            Ext.Ajax.request({
+                params: { href: a.href },
+                url: this.controllerUrl+'/jsonEditLink',
+                success: function(response, options, r) {
+                    var c = eval(r.config.class);
+                    Ext.apply(r.config.config, {
+                        formConfig: { tbar: false },
+                        baseCls: 'x-plain'
+                    });
+                    var dialog = new Vps.Auto.Form.Window({
+                        autoForm: new c(r.config.config),
+                        width: 660,
+                        height: 300
+                    });
+                    dialog.on('datachange', function(r) {
+                        img.href = r.href;
+                    }, this);
+                    dialog.showEdit();
+                },
+                scope: this
+            });
+        } else {
+            Ext.Ajax.request({
+                params: { content: this.getValue() },
+                url: this.controllerUrl+'/jsonAddLink',
+                success: function(response, options, r) {
+                    var c = eval(r.config.class);
+                    Ext.apply(r.config.config, {
+                        formConfig: { tbar: false },
+                        baseCls: 'x-plain'
+                    });
+                    var dialog = new Vps.Auto.Form.Window({
+                        autoForm: new c(r.config.config),
+                        width: 660,
+                        height: 300
+                    });
+                    dialog.on('datachange', function(r) {
+                        this.relayCmd('createlink', r.href);
+                    }, this);
+                    dialog.showEdit();
+                },
+                scope: this
+            });
+        }
+    },
+
     cleanHtml : function(html){
         html = Vps.Form.HtmlEditor.superclass.cleanHtml.call(this, html);
         html = html.replace(/\sclass="(?:Mso.+)"/g, ''); //Word-Scheiß
@@ -94,8 +147,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
             var rng = sel.getRangeAt(0);
             if (!rng) return null;
+debugger;
 
-            elm = rng.commonAncestorContainer;
+            var elm = rng.commonAncestorContainer;
 
             // Handle selection a image or other control like element such as anchors
             if (!rng.collapsed) {

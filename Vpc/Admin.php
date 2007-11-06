@@ -50,7 +50,7 @@ class Vpc_Admin
         if (substr($class, -10) == 'Controller') {
             $class = substr($class, 0, -10);
         }
-        return '/component/edit/' . $class . '/' . $component->getId() . '/';
+        return '/component/edit/' . $class . '/' . $component->getId() . '';
     }
 
     // ****************
@@ -146,7 +146,7 @@ class Vpc_Admin
     public static function getAvailableComponents($path = '')
     {
         if ($path == '') {
-            $path = VPS_PATH . 'Vpc/';
+            $path = VPS_PATH . '/Vpc';
         }
         $return = array();
         foreach (new DirectoryIterator($path) as $item) {

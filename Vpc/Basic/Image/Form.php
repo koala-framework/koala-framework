@@ -13,13 +13,13 @@ class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
         }
 
         // Höhe, Breite
-        $sizes = $component->getSetting('size');
-        if (empty($sizes)) {
+        $dimensions = $component->getSetting('dimension');
+        if (empty($dimensions)) {
             $this->add(new Vps_Auto_Field_TextField('width', 'Width'));
             $this->add(new Vps_Auto_Field_TextField('height','Height'));
-        } else if (is_array($sizes[0])) {
-            $this->add(new Vps_Auto_Field_ComboBoxSize('size', 'Size'))
-                ->setSizes($sizes);
+        } else if (is_array($dimensions[0])) {
+            $this->add(new Vps_Auto_Field_ComboBoxSize('dimension', 'Size'))
+                ->setSizes($dimensions);
         }
 
         // Skalierungstyp
@@ -37,7 +37,7 @@ class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
         // Bildvorschau
         $this->add(new Vps_Auto_Field_ImageViewer('vps_upload_id_image', 'Preview'))
             ->setImageUrl($component->getImageUrl())
-            ->setPreviewUrl($component->getImageUrl(Vpc_Basic_Image_Component::SIZE_THUMB));
+            ->setPreviewUrl($component->getImageUrl(Vpc_Basic_Image_Component::DIMENSION_THUMB));
 
         // Enlarged Image
         if ($component->getSetting('hasEnlarge')) {

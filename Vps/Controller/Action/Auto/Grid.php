@@ -133,6 +133,18 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->_defaultOrder['direction'] = 'ASC';
         }
     }
+/*
+$this->_table->select() aus incubator verwenden
+http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-+Simon+Mundy
+    protected function _select()
+    {
+        $select = $this->_table->select();
+        $select->where($this->_getWhere()); //todo: ged so ned, siehe fetchCount
+        $select->order($order);
+        $select->limit($start, $limit);
+        return $select;
+    }
+*/
     protected function _getWhere()
     {
         $db = $this->_table->getAdapter();

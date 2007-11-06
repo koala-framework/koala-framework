@@ -3,14 +3,12 @@
  * @package Vpc
  * @subpackage Basic
  */
-class Vpc_Basic_Link_Mail_Component extends Vpc_Abstract
+class Vpc_Basic_Link_Mail_Component extends Vpc_Basic_Link_Component
 {
     protected $_settings = array(
         'hasLinktext'   => true,
         'text'          => 'Linktext',
-        'target'        => 'http://',
-        'width'         => '400',
-        'height'        => '400'
+        'target'        => ''
     );
     protected $_tablename = 'Vpc_Basic_Link_Mail_Model';
     const NAME = 'Standard.Link.Mail';
