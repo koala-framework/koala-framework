@@ -12,6 +12,8 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
                 $field->$method($val);
             }
         }
+        $field->setEnableFont(false);
+        $field->setEnableFontSize(false);
         $controllerUrl = Vpc_Admin::getInstance($this->component)
                             ->getControllerUrl($this->component);
         $field->setControllerUrl($controllerUrl);
@@ -21,6 +23,17 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
     protected function _beforeSave(Zend_Db_Table_Row_Abstract $row)
     {
         parent::_beforeSave($row);
+
+        $config = array(
+                    'indent'         => true,
+                    'output-xhtml'   => true,
+                    'clean'          => true,
+                    'wrap'           => 200);
+        $tidy = new tidy;
+        $tidy->parseString($row->content, $config, 'utf8');
+        $tidy->cleanRepair();
+        $row->content = $tidy;
+
         $this->component->beforeSave($row->content);
         $row->content_edit = '';
     }
