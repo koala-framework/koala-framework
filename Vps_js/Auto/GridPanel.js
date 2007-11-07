@@ -81,21 +81,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             throw e; //re-throw
         }, this);
 
-        var selModel = new Ext.grid.RowSelectionModel({singleSelect:true});
-
-        selModel.on('rowselect', function(selData, gridRow, currentRow) {
-            this.getAction('delete').enable();
-        }, this);
-
-        this.relayEvents(this.store, ['load']);
-        this.relayEvents(selModel, ['selectionchange', 'rowselect', 'beforerowselect']);
-        selModel.on('beforerowselect', function(selModel, rowIndex, keepExisting, record) {
-            return this.fireEvent('beforeselectionchange', record.id);
-        }, this);
-
         var gridConfig = Ext.applyIf(this.gridConfig, {
             store: this.store,
-            selModel: selModel,
+            selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
             clicksToEdit: 1,
             border: false,
             loadMask: true,
@@ -103,6 +91,17 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             tbar: [],
             listeners: { scope: this }
         });
+
+        this.relayEvents(this.store, ['load']);
+        this.relayEvents(gridConfig.selModel, ['selectionchange', 'rowselect', 'beforerowselect']);
+
+        gridConfig.selModel.on('rowselect', function(selData, gridRow, currentRow) {
+            this.getAction('delete').enable();
+        }, this);
+
+        gridConfig.selModel.on('beforerowselect', function(selModel, rowIndex, keepExisting, record) {
+            return this.fireEvent('beforeselectionchange', record.id);
+        }, this);
 
         if (meta.grouping) {
             gridConfig.view = new Ext.grid.GroupingView(Ext.applyIf(meta.grouping, {
@@ -130,6 +129,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         this.comboBoxes = [];
 
         var config = [];
+        if (this.gridConfig.selModel instanceof Ext.grid.CheckboxSelectionModel) {
+            config.push(this.gridConfig.selModel);
+        }
         for (var i=0; i<meta.columns.length; i++) {
             var column = meta.columns[i];
             if (!column.header) continue;
