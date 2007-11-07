@@ -16,6 +16,26 @@ class Vps_Assets_Loader
         return $p.'/'.$url;
     }
 
+    static public function getFileContents($file, $paths)
+    {
+        $contents = file_get_contents(self::getAssetPath($file, $paths));
+        if (substr($file, 0, 4)=='ext/') {
+            //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
+            $contents = str_replace('../images/', '/assets/ext/resources/images/', $contents);
+        }
+
+        if (substr($file, -4) == '.css') {
+            static $cssConfig;
+            if (!isset($cssConfig)) {
+                $cssConfig = new Zend_Config_Ini('application/config.ini', 'css');
+            }
+            foreach($cssConfig as $k=>$i) {
+                $contents = str_replace('#'.$k, $i, $contents);
+            }
+        }
+        return $contents;
+    }
+
     static public function load()
     {
         require_once 'Vps/Loader.php';
@@ -32,14 +52,15 @@ class Vps_Assets_Loader
 
             $config = Vps_Setup::createConfig();
             $url = substr($_SERVER['SCRIPT_URL'], 8);
-            if ($url == 'all.js' || $url == 'all.css') {
-                if ($url == 'all.js') {
+            if (preg_match('#^All([a-z]+)\\.(js|css)$#i', $url, $m)) {
+                if ($m[2] == 'js') {
                     header('Content-Type: text/javascript');
                     $fileType = 'js';
                 } else {
                     header('Content-Type: text/css');
                     $fileType = 'css';
                 }
+                $section = $m[1];
 
                 $frontendOptions = array(
                     'lifetime' => null
@@ -49,17 +70,17 @@ class Vps_Assets_Loader
                 );
                 $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
 
-                if ((!$lastModified = $cache->load($fileType.$encoding.'AllLastModified'))
-                    || !$cache->test($fileType.$encoding.'AllPacked')) {
+                if ((!$lastModified = $cache->load($fileType.$encoding.$section.'LastModified'))
+                    || !$cache->test($fileType.$encoding.$section.'Packed')) {
 
-                    $dep = new Vps_Assets_Dependencies($config);
+                    $dep = new Vps_Assets_Dependencies($config->assets->$section, $config);
                     $contents = $dep->getPackedAll($fileType);
                     $contents = self::_encode($contents, $encoding);
-                    $cache->save($contents, $fileType.$encoding.'AllPacked');
+                    $cache->save($contents, $fileType.$encoding.$section.'Packed');
 
                     $lm = gmdate("D, d M Y H:i:s \G\M\T", time());
                     header('Last-Modified: '.$lm);
-                    $cache->save($lm, $fileType.$encoding.'AllLastModified');
+                    $cache->save($lm, $fileType.$encoding.$section.'LastModified');
                 } else {
                     header('Last-Modified: '.$lastModified);
                 }
@@ -69,7 +90,7 @@ class Vps_Assets_Loader
                 }
                 header('Cache-Control: must-revalidate, max-age='.(24*60*60));
                 if (!isset($contents)) {
-                    $contents = $cache->load($fileType.$encoding.'AllPacked');
+                    $contents = $cache->load($fileType.$encoding.$section.'Packed');
                 }
                 header ("Content-Encoding: " . $encoding);
                 echo $contents;
@@ -101,7 +122,7 @@ class Vps_Assets_Loader
                         header("HTTP/1.0 404 Not Found");
                         die("invalid file type");
                     }
-                    $contents = file_get_contents($assetPath);
+                    $contents = self::getFileContents($url, $config->path);
                     header ("Content-Encoding: " . $encoding);
                     echo self::_encode($contents, $encoding);
                 }

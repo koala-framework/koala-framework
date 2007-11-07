@@ -13,8 +13,8 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $this->_smarty = new Smarty();
         $this->_smarty->plugins_dir[] = 'SmartyPlugins';
 
-        $this->addScriptPath('application/views');
         $this->addScriptPath(VPS_PATH.'/views');
+        $this->addScriptPath('application/views');
 
         if (!isset($config['compile_dir'])) {
             $config['compile_dir'] = 'application/views_c';
@@ -40,13 +40,13 @@ class Vps_View_Smarty extends Zend_View_Abstract
             throw new Vps_View_Exception('Class must be a string.');
         }
 
-        $dep = new Vps_Assets_Dependencies(Zend_Registry::get('config'));
         if (Zend_Registry::get('config')->debug->assets) {
+            $dep = new Vps_Assets_Dependencies(Zend_Registry::get('config')->assets->Admin);
             $jsFiles = $dep->getAssetFiles('js');
             $cssFiles = $dep->getAssetFiles('css');
         } else {
-            $jsFiles = array('/assets/all.js');
-            $cssFiles = array('/assets/all.css');
+            $jsFiles = array('/assets/AllAdmin.js');
+            $cssFiles = array('/assets/AllAdmin.css');
         }
 
         if (!$viewport) {
@@ -109,6 +109,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
         //found in that directory, so we have to strip it from the filename
         if ($this->getRenderFile() != '') {
             $file = $this->getRenderFile();
+
             foreach ($this->getScriptPaths() as $path) {
                 if (file_exists($path.$file)) {
                     $this->_smarty->template_dir = $path;

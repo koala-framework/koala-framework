@@ -3,7 +3,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     initComponent : function()
     {
         this.treePanel = new Vps.Auto.TreePanel({
-            controllerUrl: '/admin/pages/',
+            controllerUrl: '/admin/pages',
             title       : 'Seitenbaum',
             region      : 'west',
             split       : true,
@@ -30,7 +30,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
     setupEditform : function ()
     {
-        this.editform = new Vps.Auto.FormPanel({baseCls: 'x-plain', controllerUrl: '/admin/pageedit/'});
+        this.editform = new Vps.Auto.FormPanel({baseCls: 'x-plain', controllerUrl: '/admin/pageedit'});
         this.editDialog = new Ext.Window({
             width: 400,
             height: 200,

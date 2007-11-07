@@ -7,7 +7,7 @@ class Vps_Controller_Action_Component_PageEdit extends Vps_Controller_Action_Aut
     protected function _initFields()
     {
         $components = Vpc_Admin::getAvailableComponents('Vpc/');
-        $types = array('Vpc_Paragraphs_Index' => 'Content');
+        $types = array('Vpc_Paragraphs_Component' => 'Content');
         foreach ($components as $name => $component) {
             //$type = constant("$component::TYPE");
             //if ($type != '') {

@@ -36,7 +36,7 @@ Ext.extend(Vps.Component.FrontendEditing.Index, Ext.util.Observable,
         id = el.dom.id.substr(10);
         Ext.DomHelper.overwrite(el, '');
         config = {
-            controllerUrl: '/component/edit/' + cls + '/' + id + '/',
+            controllerUrl: '/component/edit/' + cls + '/' + id,
             caller : this
         }
         component = new r.params.obj(el, config);
@@ -48,7 +48,7 @@ Ext.extend(Vps.Component.FrontendEditing.Index, Ext.util.Observable,
         parts = el.className.split(' ');
         cls = parts[1];
         Ext.Ajax.request({
-            url: '/component/jsonShow/' + cls + '/' + el.id.substr(10) + '/',
+            url: '/component/jsonShow/' + cls + '/' + el.id.substr(10),
             success: function (o, e) {
                 r = Ext.decode(o.responseText);
                 Ext.DomHelper.overwrite(e.params.container, r.content);

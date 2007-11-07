@@ -25,15 +25,7 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
     {
         parent::_beforeSave($row);
 
-        $config = array(
-                    'indent'         => true,
-                    'output-xhtml'   => true,
-                    'clean'          => true,
-                    'wrap'           => 200);
-        $tidy = new tidy;
-        $tidy->parseString($row->content, $config, 'utf8');
-        $tidy->cleanRepair();
-        $row->content = $tidy->__toString();
+        $row->content = $this->_tidy($row->content);
 
         $this->component->beforeSave($row->content);
         $row->content_edit = '';
@@ -79,7 +71,11 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         foreach ($stripProps as $i) {
             $html = preg_replace('#(<.+)'.preg_quote($i).'="[^"]*"(.*>)#', '\\1\\2', $html);
         }
+        $this->view->html = $this->_tidy($html);
+    }
 
+    private function _tidy($html)
+    {
         $config = array(
                     'indent'         => true,
                     'output-xhtml'   => true,
@@ -94,7 +90,6 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         $tidy = new tidy;
         $tidy->parseString($html, $config, 'utf8');
         $tidy->cleanRepair();
-        $html = $tidy->value;
-        $this->view->html = $html;
+        return $tidy->value;
     }
 }
