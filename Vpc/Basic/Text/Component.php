@@ -42,10 +42,10 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
         $ret = parent::getTemplateVars();
         $ret['contentParts'] = array();
         foreach ($this->_parseContentParts($this->getSetting('content')) as $part) {
-            if (is_string($part)) {
-                $ret['contentParts'][] = $part;
-            } else {
+            if ($part instanceof Vpc_Abstract) {
                 $ret['contentParts'][] = $part->getTemplateVars();
+            } else {
+                $ret['contentParts'][] = $part;
             }
         }
         $ret['template'] = 'Basic/Text.html';

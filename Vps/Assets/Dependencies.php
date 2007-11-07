@@ -3,11 +3,17 @@ class Vps_Assets_Dependencies
 {
     private $_files;
     private $_config;
+    private $_assets;
     private $_dependenciesConfig;
 
-    public function __construct($config)
+    public function __construct($assets, $config = null)
     {
+        if (!isset($config)) {
+            $config = Zend_Registry::get('config');
+        }
         $this->_config = $config;
+
+        $this->_assets = $assets;
     }
 
     private function _getFilePath($file)
@@ -27,38 +33,11 @@ class Vps_Assets_Dependencies
     public function getFiles($fileType = null)
     {
         if (!isset($this->_files)) {
-            $frontendOptions = array(
-                'lifetime' => null,
-                'automatic_serialization' => true
-            );
-            $backendOptions = array(
-                'cache_dir' => 'application/cache/assets/'
-            );
-            $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-            
-            $checksums = array(
-                md5_file(VPS_PATH.'/config.ini'),
-                md5_file('application/config.ini')
-            );
-            if ($cacheContents = $cache->load('dependencies')) {
-                if ($cacheContents['checksums'] != $checksums) {
-                    $cacheContents = false;
+            $this->_files = array();
+            foreach($this->_assets as $d=>$v) {
+                if ($v) {
+                    $this->_processDependency($d);
                 }
-            }
-
-            if(!$cacheContents || true) {
-                $this->_files = array();
-                $cacheContents = array();
-                $cacheContents['checksums'] = $checksums;
-                foreach($this->_config->assets as $d=>$v) {
-                    if ($v) {
-                        $this->_processDependency($d);
-                    }
-                }
-                $cacheContents['files'] = $this->_files;
-                $cache->save($cacheContents, 'dependencies');
-            } else {
-                $this->_files = $cacheContents['files'];
             }
         }
 
@@ -127,12 +106,7 @@ class Vps_Assets_Dependencies
 
     public function getFileContents($file)
     {
-        $contents = file_get_contents($this->_getFilePath($file));
-        if (substr($file, 0, 4)=='ext/') {
-            //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
-            $contents = str_replace('../images/', '/assets/ext/resources/images/', $contents);
-        }
-        return $contents;
+        Vps_Assets_Loader::getFileContents($file, $this->_config->path);
     }
 
     public function getContentsAll($fileType)

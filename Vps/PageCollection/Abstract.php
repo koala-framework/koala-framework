@@ -15,7 +15,7 @@ abstract class Vps_PageCollection_Abstract
     const URL_SCHEME_HIERARCHICAL = 0;
     const URL_SCHEME_FLAT = 1;
     private $_showInvisible = false;
-    protected $_type = array();
+    protected $_types = array();
 
     public function __construct(Vps_Dao $dao, $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL, $decoratorClasses = array())
     {
@@ -187,7 +187,7 @@ abstract class Vps_PageCollection_Abstract
         return $this->_pages[$this->_homeId];
     }
 
-    protected function _generateHierarchy(Vpc_Abstract $page = null, $filename = '')
+    protected function _generateHierarchy(Vpc_Interface $page = null, $filename = '')
     {
         if (is_null($page)) {
             $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData(null);
