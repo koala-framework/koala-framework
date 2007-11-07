@@ -129,7 +129,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         this.comboBoxes = [];
 
         var config = [];
-        if (this.gridConfig.selModel instanceof Ext.grid.CheckboxSelectionModel) {
+        if (Ext.grid.CheckboxSelectionModel && this.gridConfig.selModel instanceof Ext.grid.CheckboxSelectionModel) {
             config.push(this.gridConfig.selModel);
         }
         for (var i=0; i<meta.columns.length; i++) {
