@@ -16,10 +16,10 @@ class Vps_Controller_Action extends Zend_Controller_Action
 
         if (!$acl->isAllowed($role, $resource, 'view')) {
             if ($this->getHelper('ViewRenderer')->isJson()) {
-                $this->_forward('jsonLogin', 'login', '');
+                $this->_forward('jsonLogin', 'login', 'vps');
             } else {
                 $params = array('location' => $this->getRequest()->getPathInfo());
-                $this->_forward('index', 'login', '', $params);
+                $this->_forward('index', 'login', 'vps', $params);
             }
         }
     }

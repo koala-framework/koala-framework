@@ -62,11 +62,13 @@ class Vps_Controller_Front extends Zend_Controller_Front
 
             $router->AddRoute('default', new Zend_Controller_Router_Route(
                         '*',
-                        array('controller' => 'web',
+                        array('module' => 'component',
+                              'controller' => 'web',
                               'action' => 'index')));
             $router->AddRoute('admin', new Zend_Controller_Router_Route(
                         'admin/:module/:controller/:action',
-                        array('controller' => 'index',
+                        array('module'=>'component',
+                              'controller' => 'index',
                               'action' => 'index')));
             $router->AddRoute('components', new Zend_Controller_Router_Route(
                         'admin/components/:action',
@@ -90,25 +92,27 @@ class Vps_Controller_Front extends Zend_Controller_Front
                               'action' => 'setup')));
             $router->AddRoute('login', new Zend_Controller_Router_Route(
                         'login/:action',
-                        array('module' => 'component',
+                        array('module' => 'vps',
                               'controller' => 'login',
                               'action' => 'index')));
             $router->AddRoute('menu', new Zend_Controller_Router_Route(
                         'menu/:action',
-                        array('module' => 'component',
+                        array('module' => 'vps',
                               'controller' => 'menu',
                               'action' => 'index')));
 
             $router->AddRoute('media', new Zend_Controller_Router_Route(
                         'media/:uploadId/:componentId/:checksum/:filename',
-                        array('controller' => 'Media',
+                        array('module' => 'vps',
+                              'controller' => 'Media',
                               'action' => 'password')));
             $router->AddRoute('mediaoriginal', new Zend_Controller_Router_Route(
                         'media/:uploadId',
-                        array('controller' => 'Media',
-                        'action' => 'original')));
+                        array('module' => 'vps',
+                              'controller' => 'Media',
+                              'action' => 'original')));
             $plugin = new Zend_Controller_Plugin_ErrorHandler();
-            $plugin->setErrorHandlerModule('admin');
+            $plugin->setErrorHandlerModule('component');
             $front->registerPlugin($plugin);
 
             self::setUpDb();
