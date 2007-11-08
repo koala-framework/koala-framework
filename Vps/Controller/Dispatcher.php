@@ -4,7 +4,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     public function getControllerClass(Zend_Controller_Request_Abstract $request)
     {
         $module = $request->getModuleName();
-        if ($module == 'component') {
+        if ($module == 'component' && $request->getControllerName() == 'component') {
             
             $className = $this->getFrontController()->getRequest()->getParam('class');
             if (substr($className, -9) == 'Component') {
@@ -34,9 +34,12 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                     }
                 }
             }
-            
+        } else if ($module == 'component') {
+            $className = ucfirst($request->getControllerName());
+            $className = "Vps_Controller_Action_Component_$className";
+//             d($className);
         } else {
-
+return parent::getControllerClass($request);
             $className = $request->getControllerName() . 'Controller';
             $controllerDir = $this->getFrontController()->getControllerDirectory();
             $controllerName = $request->getControllerName();
@@ -54,14 +57,18 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
     public function loadClass($className)
     {
-        try {
-            Zend_Loader::loadClass($className);
-        } catch (Zend_Exception $e) {
-            throw new Zend_Controller_Dispatcher_Exception('Invalid controller class ("' . $className . '")');
+        if (substr($className, 0, 32) == 'Vps_Controller_Action_Component_'
+            || substr($className, 0, 4) == 'Vpc_') {
+            try {
+                Zend_Loader::loadClass($className);
+            } catch (Zend_Exception $e) {
+                throw new Zend_Controller_Dispatcher_Exception('Invalid controller class ("' . $className . '")');
+            }
+
+            return $className;
+        } else {
+            return parent::loadClass($className);
         }
-
-        return $className;
     }
-
 }
 ?>

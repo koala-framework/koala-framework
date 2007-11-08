@@ -3,7 +3,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     initComponent : function()
     {
         this.treePanel = new Vps.Auto.TreePanel({
-            controllerUrl: '/admin/pages',
+            controllerUrl: '/admin/component/pages',
             title       : 'Seitenbaum',
             region      : 'west',
             split       : true,
@@ -30,7 +30,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
     setupEditform : function ()
     {
-        this.editform = new Vps.Auto.FormPanel({baseCls: 'x-plain', controllerUrl: '/admin/pageedit'});
+        this.editform = new Vps.Auto.FormPanel({baseCls: 'x-plain', controllerUrl: '/admin/component/pageedit'});
         this.editDialog = new Ext.Window({
             width: 400,
             height: 200,
@@ -156,7 +156,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.contentPanel.add(panel);
             this.contentPanel.setActiveTab(panel);
         }
-        data.controllerUrl = '/component/edit/' + data.cls + '/' + data.id + '/';
+        data.controllerUrl = '/admin/component/edit/' + data.cls + '/' + data.id;
         panel.loadComponent(data);
     },
 
@@ -177,7 +177,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
         panel.loadComponent = function(data){
             Ext.Ajax.request({
-                url: data.controllerUrl + 'jsonIndex/',
+                url: data.controllerUrl + '/jsonIndex',
                 success: function(r) {
                     response = Ext.decode(r.responseText);
                     cls = eval(response['class']);
@@ -294,7 +294,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 text    : 'Make selected Page Homepage',
                 handler : function (o, e) {
                     Ext.Ajax.request({
-                        url: '/admin/pages/jsonMakeHome/',
+                        url: '/admin/component/pages/jsonMakeHome',
                         success: function(r) {
                             response = Ext.decode(r.responseText);
                             var oldhome = this.treePanel.tree.getNodeById(response.oldhome);

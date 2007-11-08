@@ -51,7 +51,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Grid
     {
         parent::jsonDataAction();
         foreach ($this->view->rows as $key => $row) {
-          $src = '/component/show/' . $row['component_class'] . '/' . $this->component->getId() . '-' . $row['id'] . '/';
+          $src = '/admin/component/show/' . $row['component_class'] . '/' . $this->component->getId() . '-' . $row['id'];
             $this->view->rows[$key]['page_id'] = $src;
 
             $componentClass = array_search($row['component_class'], $this->_components);

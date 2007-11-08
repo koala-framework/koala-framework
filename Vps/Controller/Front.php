@@ -64,50 +64,40 @@ class Vps_Controller_Front extends Zend_Controller_Front
                         '*',
                         array('controller' => 'web',
                               'action' => 'index')));
-            $router->AddRoute('ajax', new Zend_Controller_Router_Route(
-                        'ajax/*',
-                        array('controller' => 'web',
-                              'action' => 'ajax')));
-            $router->AddRoute('ajaxfe', new Zend_Controller_Router_Route(
-                        'ajax/fe/:action',
-                        array('controller' => 'fe',
-                              'action' => 'action')));
             $router->AddRoute('admin', new Zend_Controller_Router_Route(
-                        'admin/:controller/:action',
-                        array('module' => 'admin',
-                              'controller' => 'index',
+                        'admin/:module/:controller/:action',
+                        array('controller' => 'index',
                               'action' => 'index')));
+            $router->AddRoute('components', new Zend_Controller_Router_Route(
+                        'admin/components/:action',
+                        array('module' => 'component',
+                              'controller' => 'components',
+                              'action' => 'index')));
+            $router->AddRoute('componentshow', new Zend_Controller_Router_Route(
+                        'admin/component/show/:class/:componentId',
+                        array('module' => 'component',
+                              'controller' => 'components',
+                              'action' => 'show')));
+            $router->AddRoute('componentedit', new Zend_Controller_Router_Route(
+                        'admin/component/edit/:class/:componentId/:action',
+                        array('module' => 'component',
+                              'controller' => 'component',
+                              'action' => 'edit')));
+            $router->AddRoute('componentsetup', new Zend_Controller_Router_Route(
+                        'admin/component/setup/:class',
+                        array('module' => 'component',
+                              'controller' => 'components',
+                              'action' => 'setup')));
             $router->AddRoute('login', new Zend_Controller_Router_Route(
                         'login/:action',
-                        array('module' => 'admin',
+                        array('module' => 'component',
                               'controller' => 'login',
                               'action' => 'index')));
             $router->AddRoute('menu', new Zend_Controller_Router_Route(
                         'menu/:action',
-                        array('module' => 'admin',
+                        array('module' => 'component',
                               'controller' => 'menu',
                               'action' => 'index')));
-
-            $router->AddRoute('components', new Zend_Controller_Router_Route(
-                        'components/:action',
-                        array('module' => 'admin',
-                              'controller' => 'components',
-                              'action' => 'index')));
-            $router->AddRoute('componentshow', new Zend_Controller_Router_Route(
-                        'component/:action/:class/:componentId',
-                        array('module' => 'admin',
-                              'controller' => 'components',
-                              'action' => 'show')));
-            $router->AddRoute('componentedit', new Zend_Controller_Router_Route(
-                        'component/edit/:class/:componentId/:action',
-                        array('module' => 'component',
-                              'controller' => 'Index',
-                              'action' => 'index')));
-            $router->AddRoute('componentsetup', new Zend_Controller_Router_Route(
-                        'component/setup/:class',
-                        array('module' => 'admin',
-                              'controller' => 'components',
-                              'action' => 'setup')));
 
             $router->AddRoute('media', new Zend_Controller_Router_Route(
                         'media/:uploadId/:componentId/:checksum/:filename',
@@ -117,7 +107,6 @@ class Vps_Controller_Front extends Zend_Controller_Front
                         'media/:uploadId',
                         array('controller' => 'Media',
                         'action' => 'original')));
-
             $plugin = new Zend_Controller_Plugin_ErrorHandler();
             $plugin->setErrorHandlerModule('admin');
             $front->registerPlugin($plugin);
@@ -128,37 +117,27 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $acl = new Vps_Acl();
 
             // Roles
-            $acl->addRole(new Vps_Acl_Role('member'));
-            $acl->addRole(new Vps_Acl_Role('admin'), 'member');
+            $acl->addRole(new Vps_Acl_Role('admin', 'Admin'));
 
             // Resources
             $acl->add(new Zend_Acl_Resource('web'));
             $acl->add(new Zend_Acl_Resource('media'));
             $acl->add(new Zend_Acl_Resource('mediaoriginal'));
-            $acl->add(new Zend_Acl_Resource('fe'));
-            $acl->add(new Vps_Acl_Resource_MenuDropdown('admin', 'Admin'));
-            $acl->add(new Vps_Acl_Resource_MenuCommand(
-                'pages',
-                array('text' => 'Sitetree', 'icon' => 'application_side_tree.png'),
-                'Vps.Component.Pages',
-                array('controllerUrl'=>'/admin/pages/'))
-            );
-            $acl->add(new Zend_Acl_Resource('pageedit'), 'admin');
-            $acl->add(new Zend_Acl_Resource('components', 'Komponentenübersicht',
-                                            '/admin/components/'), 'admin'); // für /component/show
-            $acl->add(new Zend_Acl_Resource('component'), 'admin'); // für /component/edit
+            //$acl->add(new Zend_Acl_Resource('fe'));
+
+            $acl->add(new Vps_Acl_Resource_MenuUrl('pages',
+                array('text'=>'Sitetree', 'icon'=>'application_side_tree.png'),
+                '/admin/component/pages/'));
+                $acl->add(new Zend_Acl_Resource('pageedit'), 'pages');
+                $acl->add(new Zend_Acl_Resource('components'), 'pages'); // für /component/show
+                $acl->add(new Zend_Acl_Resource('component'), 'pages'); // für /component/edit
 
             // Berechtigungen
-            $acl->allow('admin', 'web');
-            $acl->allow('admin', 'fe');
-            $acl->allow('admin', 'admin');
-            $acl->allow('admin', 'pages');
-            $acl->allow('member', 'fe');
-            $acl->allow('admin', 'mediaoriginal');
-            $acl->allow('admin', 'media');
+            $acl->allow(null, 'web');
+            $acl->allow(null, 'media');
 
-            $acl->allow('guest', 'web');
-            $acl->allow('guest', 'media');
+            $acl->allow('admin', 'pages');
+            $acl->allow('admin', 'mediaoriginal');
 
             Zend_Registry::set('acl', $acl);
         }

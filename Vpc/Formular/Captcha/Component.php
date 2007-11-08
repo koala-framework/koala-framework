@@ -13,7 +13,7 @@ class Vpc_Formular_Captcha_Component extends Vpc_Formular_Field_Abstract
     {
         $value = $this->_generateValue();
         $encrypt = $this->encrypt($value);
-        $path = '/component/edit/Vpc_Formular_Captcha_Show/' . $this->getId() . '/';
+        $path = '/admin/component/edit/Vpc_Formular_Captcha_Show/' . $this->getId() . '/';
         $path .= '?showPic=' . $encrypt;
 
         $return = parent::getTemplateVars();

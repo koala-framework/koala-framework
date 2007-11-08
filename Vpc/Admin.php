@@ -50,7 +50,7 @@ class Vpc_Admin
         if (substr($class, -10) == 'Controller') {
             $class = substr($class, 0, -10);
         }
-        return '/component/edit/' . $class . '/' . $component->getId() . '';
+        return '/admin/component/edit/' . $class . '/' . $component->getId() . '';
     }
 
     // ****************
