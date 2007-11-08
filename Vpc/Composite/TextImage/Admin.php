@@ -3,8 +3,6 @@ class Vpc_Composite_TextImage_Admin extends Vpc_Admin
 {
     public function setup()
     {
-        $this->copyTemplate('Template.html', 'Composite/TextImage.html');
-
         Vpc_Admin::getInstance('Vpc_Basic_Html_Component')->setup();
         Vpc_Admin::getInstance('Vpc_Basic_Image_Component')->setup();
 

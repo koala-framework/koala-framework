@@ -116,10 +116,6 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
         $id = $this->_getParam('componentId');
         $pageCollection = new Vps_PageCollection_TreeBase(Zend_Registry::get('dao'));
         $component = $pageCollection->findComponent($id);
-        if (!$component) {
-            $class = $this->_getParam('class');
-            $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $class, $id);
-        }
         return $component;
     }
 

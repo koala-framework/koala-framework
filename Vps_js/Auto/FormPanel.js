@@ -34,14 +34,16 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     {
         this.controllerUrl = controllerUrl;
         this.formConfig.url = controllerUrl + '/jsonSave';
+
         Ext.Ajax.request({
             mask: true,
             url: this.controllerUrl+'/jsonLoad',
-            params: {meta: true},
+            params: Ext.apply({ meta: true }, this.baseParams),
             success: function(response, options, r) {
                 var result = Ext.decode(response.responseText);
                 this.onMetaChange(result.meta);
                 if (result.data) {
+                    Ext.apply(this.getForm().baseParams, this.baseParams);
                     this.fireEvent('loadform', this.getForm());
                     this.getForm().clearInvalid();
                     this.getForm().setValues(result.data);
@@ -177,7 +179,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         this.getForm().waitMsgTarget = this.el;
         this.getForm().submit(Ext.apply(options, {
             url: this.controllerUrl+'/jsonSave',
-            waitMsg: 'saveing...',
+            waitMsg: 'saving...',
             success: function() {
                 this.onSubmitSuccess.apply(this, arguments);
                 if (cb.success) {

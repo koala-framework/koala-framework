@@ -3,7 +3,8 @@ class Vpc_Composite_ParagraphsImage_Controller extends Vps_Controller_Action
 {
     public function indexAction()
     {
-       $this->view->ext($this->component);
+        $config = Vpc_Admin::getConfig($this->class, $this->pageId, $this->componentKey);
+        $this->view->vpc($config);
     }
 
     public function jsonIndexAction()

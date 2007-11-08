@@ -8,14 +8,14 @@ class Vps_View_Json extends Zend_View_Abstract
         $this->_outputFormat = '';
     }
 
-    public function ext($class, $config = array()) {
-        if ($class instanceof Vpc_Abstract) {
-            if (!is_array($config)) { $config = array(); }
-            $admin = Vpc_Admin::getInstance($class);
-            $adminConfig = $admin->getConfig($class, array(), false);
-            $config = array_merge($config, $adminConfig);
-            $class = $admin->getControllerClass($class);
+    public function vpc($config)
+    {
+        foreach ($config as $key => $val) {
+            $this->$key = $val;
         }
+    }
+
+    public function ext($class, $config = array()) {
         $this->class = $class;
         $this->config = $config;
     }

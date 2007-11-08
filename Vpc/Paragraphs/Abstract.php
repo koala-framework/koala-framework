@@ -5,22 +5,38 @@
  */
 abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
 {
-    protected $_data;
-    protected $_paragraphs;
-    protected $_tablename = 'Vpc_Paragraphs_Model';
-    const NAME = 'Paragraphs';
+    protected $_paragraphs = array();
+
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName' => 'Paragraphs',
+            'tablename' => 'Vpc_Paragraphs_Model'
+        ));
+    }
+
+    protected function _init()
+    {
+        $where = array();
+        $where['page_id = ?'] = $this->getDbId();
+        $where['component_key = ?'] = $this->getComponentKey();
+        if (!$this->showInvisible()) {
+            $where['visible = ?'] = 1;
+        }
+        $rows = $this->getTable()->fetchAll($where, 'pos');
+        foreach($rows as $row) {
+            $c = $this->createComponent($row->component_class, $row->id);
+            $this->_paragraphs[$row->id] = $c;
+        }
+    }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
         $ret['paragraphs'] = array();
         foreach($this->getChildComponents() as $paragraph) {
-            $vars = $paragraph->getTemplateVars();
-            if (isset($vars['template'])) {
-                $ret['paragraphs'][] = $vars;
-            }
+            $ret['paragraphs'][] = $paragraph->getTemplateVars();
         }
-        $ret['template'] = 'Paragraphs.html';
         return $ret;
     }
 
@@ -29,15 +45,6 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         parent::generateHierarchy($filename);
         foreach ($this->getChildComponents() as $p) {
             $p->generateHierarchy($filename);
-        }
-    }
-
-    protected function _init()
-    {
-        $this->_paragraphs = array();
-        foreach($this->_getData() as $row) {
-            $c = $this->createComponent($row->component_class, $row->id);
-            $this->_paragraphs[$row->id] = $c;
         }
     }
 
@@ -54,20 +61,6 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         } else {
             return null;
         }
-    }
-
-    protected function _getData()
-    {
-        if (!isset($this->_data)) {
-            $where = array();
-            $where['page_id = ?'] = $this->getDbId();
-            $where['component_key = ?'] = $this->getComponentKey();
-            if (!$this->showInvisible()) {
-                $where['visible = ?'] = 1;
-            }
-            $this->_data = $this->getTable()->fetchAll($where, 'pos');
-        }
-        return $this->_data;
     }
 
 }

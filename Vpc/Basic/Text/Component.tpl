@@ -1,3 +1,4 @@
+{$component.content}
 {foreach from=$component.contentParts item=part}
   {if is_string($part)}
     {$part}

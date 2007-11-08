@@ -50,15 +50,19 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
     onEdit : function(o, p) {
         var row = this.grid.getSelectionModel().getSelected();
         if (row != undefined) {
-            var controllerUrl = row.data.page_id.replace(/\/show\//, '/edit/');
-            this.fireEvent('editcomponent', {controllerUrl: controllerUrl, text: row.data.component_class});
+            this.fireEvent('editcomponent', {
+                componentClass: row.data.component_class,
+                pageId: this.baseParams.page_id, 
+                componentKey: this.baseParams.component_key + '-' + row.data.id, 
+                text: row.data.component_class
+            });
         }
     },
 
     onAdd : function(o, e) {
         Ext.Ajax.request({
             url: this.controllerUrl + '/jsonAddParagraph',
-            params: {component : o.id},
+            params: Ext.apply ({ component : o.id}, this.baseParams),
             success: function(r) {
                 this.reload();
             },

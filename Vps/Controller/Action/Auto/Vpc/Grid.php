@@ -1,23 +1,35 @@
 <?php
 abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action_Auto_Grid
 {
+    public function preDispatch()
+    {
+        $tablename = Vpc_Abstract::getSetting($this->class, 'tablename');
+        if ($tablename) {
+            $this->_table = new $tablename();
+        } else {
+            throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
+        }
+        parent::preDispatch();
+    }
+    
     protected function _getWhere()
     {
         $where = parent::_getWhere();
-        $where['page_id = ?'] = $this->component->getDbId();
-        $where['component_key = ?'] = $this->component->getComponentKey();
+        $where['page_id = ?'] = $this->pageId;
+        $where['component_key = ?'] = $this->componentKey;
         return $where;
     }
 
     protected function _beforeSave($row)
     {
-        $row->page_id = $this->component->getDbId();
-        $row->component_key = $this->component->getComponentKey();
+        $row->page_id = $this->pageId;
+        $row->component_key = $this->componentKey;
     }
 
     public function indexAction()
     {
-       $this->view->ext($this->component);
+        $config = Vpc_Admin::getConfig($this->class, $this->pageId, $this->componentKey);
+        $this->view->vpc($config);
     }
 
     public function jsonInsertAction()
@@ -37,10 +49,12 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
 
     protected function _beforeDelete($row)
     {
+        /*
         $component = $this->component->images[$row->id];
         if ($component) {
             Vpc_Admin::getInstance($component)->delete($component);
         }
+*/
     }
 
 }

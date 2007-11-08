@@ -8,49 +8,51 @@ class Vpc_Admin
         $this->_db = $db;
     }
 
-    public function getControllerConfig($component)
-    {
-        return array();
-    }
-
     public function getControllerClass()
     {
         return 'Vps.Auto.FormPanel';
     }
 
-    // ****************
-    public function getConfig(Vpc_Abstract $component, $config = array(), $includeClass = true)
+    public function getControllerConfig($class)
     {
-        $admin = Vpc_Admin::getInstance($component);
-        $config = array_merge($config, $admin->getControllerConfig($component));
-        if (!isset($config['controllerUrl'])) {
-            $config['controllerUrl'] = $admin->getControllerUrl($component);
-        }
-        if ($includeClass) {
-            $return['config'] = $config;
-            $return['class'] = $admin->getControllerClass($component);
-            return $return;
-        } else {
-            return $config;
-        }
+        return array();
     }
 
-    public function getNoAdminConfig(Vpc_Abstract $component, $controllerClass, $config = array())
+    public function getControllerUrl($class)
     {
-        $admin = Vpc_Admin::getInstance($component);
-        $config['controllerUrl'] = $admin->getControllerUrl($component);
-        $return['config'] = $config;
-        $return['class'] = $controllerClass;
-        return $return;
-    }
-
-    public function getControllerUrl(Vpc_Abstract $component, $class = '')
-    {
-        if ($class == '') { $class = get_class($component); }
         if (substr($class, -10) == 'Controller') {
             $class = substr($class, 0, -10);
         }
-        return '/admin/component/edit/' . $class . '/' . $component->getId() . '';
+        return '/admin/component/edit/' . $class;
+    }
+
+    // ****************
+    public static final function getConfig($class, $pageId = null, $componentKey = null, $config = array())
+    {
+        $admin = Vpc_Admin::getInstance($class);
+        $adminConfig = $admin->getControllerConfig($class, $pageId, $componentKey);
+        $config = array_merge($config, $adminConfig);
+        $controllerClass = $admin->getControllerClass($class);
+        $controllerUrl = $admin->getControllerUrl($class);
+        return Vpc_Admin::createConfig($controllerClass, $controllerUrl, $config, $pageId, $componentKey);
+    }
+
+    public static final function createConfig($controllerClass, $controllerUrl, $config = array(), $pageId = null, $componentKey = null)
+    {
+        if (!is_array($config)) { $config = array(); }
+        if (!isset($config['controllerUrl'])) {
+            $config['controllerUrl'] = $controllerUrl;
+        }
+        if ($pageId) {
+            if (!isset($config['baseParams'])) {
+                $config['baseParams'] = array();
+            }
+            $config['baseParams']['page_id'] = $pageId;
+            $config['baseParams']['component_key'] = $componentKey;
+        }
+        $return['config'] = $config;
+        $return['class'] = $controllerClass;
+        return $return;
     }
 
     // ****************

@@ -6,7 +6,7 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
         return $this->getAvailableComponents('Vpc/');
     }
 
-    public function getControllerConfig($component)
+    public function getControllerConfig()
     {
         $componentList = array();
         foreach ($this->getComponents() as $name => $component) {

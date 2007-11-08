@@ -81,10 +81,10 @@ class Vps_Controller_Front extends Zend_Controller_Front
                               'controller' => 'components',
                               'action' => 'show')));
             $router->AddRoute('componentedit', new Zend_Controller_Router_Route(
-                        'admin/component/edit/:class/:componentId/:action',
+                        'admin/component/edit/:class/:action',
                         array('module' => 'component',
                               'controller' => 'component',
-                              'action' => 'edit')));
+                              'action' => 'index')));
             $router->AddRoute('componentsetup', new Zend_Controller_Router_Route(
                         'admin/component/setup/:class',
                         array('module' => 'component',
@@ -111,6 +111,12 @@ class Vps_Controller_Front extends Zend_Controller_Front
                         array('module' => 'vps',
                               'controller' => 'Media',
                               'action' => 'original')));
+            $router->AddRoute('mediavpc', new Zend_Controller_Router_Route(
+                        'media/:class/:componentId/:filename',
+                        array('module' => 'component',
+                              'controller' => 'Media',
+                              'action' => 'vpc')));
+
             $plugin = new Zend_Controller_Plugin_ErrorHandler();
             $plugin->setErrorHandlerModule('component');
             $front->registerPlugin($plugin);
@@ -127,8 +133,8 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $acl->add(new Zend_Acl_Resource('web'));
             $acl->add(new Zend_Acl_Resource('media'));
             $acl->add(new Zend_Acl_Resource('mediaoriginal'));
+            $acl->add(new Zend_Acl_Resource('mediavpc'));
             //$acl->add(new Zend_Acl_Resource('fe'));
-
             $acl->add(new Vps_Acl_Resource_MenuUrl('pages',
                 array('text'=>'Sitetree', 'icon'=>'application_side_tree.png'),
                 '/admin/component/pages/'));
@@ -142,6 +148,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
 
             $acl->allow('admin', 'pages');
             $acl->allow('admin', 'mediaoriginal');
+            $acl->allow('admin', 'mediavpc');
 
             Zend_Registry::set('acl', $acl);
         }

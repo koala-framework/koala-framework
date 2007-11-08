@@ -57,7 +57,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         $file = isset($_FILES[$fieldName]) ? $_FILES[$fieldName] : array();
         $fileTable = new Vps_Dao_File();
         $fileTable->deleteCache($row->$name);
-
+        
         if ($row->$name == 0 && (!isset($file['error']) || $file['error'] == UPLOAD_ERR_NO_FILE)) {
             if (!is_null($this->getAllowBlank()) && $this->getAllowBlank() == false) {
                 throw new Vps_ClientException('Please select a file');
@@ -65,13 +65,13 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
                 return;
             }
         }
-
+        
         if (isset($file['tmp_name']) && is_file($file['tmp_name'])) {
             $extension = substr(strrchr($file['name'], '.'), 1);
             if (!in_array($extension, $this->getExtensions())) {
                 throw new Vps_ClientException('File-extension not allowed. Allowed: ' . implode(', ', $this->getExtensions()));
             }
-
+            
             try {
                 $id = $fileTable->uploadFile($file, $row->$name);
                 if ($id) {
@@ -83,8 +83,8 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         } else if ($this->getAllowBlank()
                     && isset($postData[$fieldName . '_delete'])
                     && $postData[$fieldName . '_delete'] == '1') {
-            $fileTable->delete($row->$name);
             $row->$name = null;
+            $fileTable->delete($row->$name);
         }
 
         $fileTable->deleteCache($row->$name);

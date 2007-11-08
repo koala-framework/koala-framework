@@ -1,31 +1,30 @@
 <?php
 class Vps_Auto_Vpc_Form extends Vps_Auto_Form
 {
-    public function __construct($component)
+    public function __construct($class, $pageId = null, $componentKey = null)
     {
-        $table = $component->getTable();
-        $this->setTable($table);
-
-        $pageId = $component->getDbId();
-        $componentKey = $component->getComponentKey();
-
-        // Falls Eintrag nicht existiert, mit Defaultwerten eintragen
-        if ($table->find($pageId, $componentKey)->count() == 0) {
-            $info = $table->info();
-            $insert = array();
-            foreach ($info['cols'] as $col) {
-                $setting = $component->getSetting($col);
-                if (!is_null($setting)) {
-                    $insert[$col] = $component->getSetting($col);
-                }
+        $tablename = Vpc_Abstract::getSetting($class, 'tablename');
+        if ($tablename) {
+            $this->setTable(new $tablename());
+        } else {
+            throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
+        }
+        
+        $table = $this->getTable();
+        if ($pageId) {
+            $this->_row = $table->find($pageId, $componentKey)->current();
+            $id = array(
+                'page_id' => $pageId,
+                'component_key' => $componentKey
+            );
+            if (!$this->_row) {
+                $this->_row = $table->createRow($class, $id);
             }
-            $insert['page_id'] = $pageId;
-            $insert['component_key'] = $componentKey;
-            $table->insert($insert);
+        } else {
+            $this->_row = $table->createRow($class);
+            $id = 0;
         }
 
-        $name = get_class($component);
-        $id = array('page_id' => $pageId, 'component_key' => $componentKey);
-        parent::__construct('component' . $component->getId(), $id);
+        parent::__construct($class, $id);
     }
 }

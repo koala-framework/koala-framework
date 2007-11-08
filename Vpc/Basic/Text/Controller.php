@@ -1,12 +1,10 @@
 <?php
 class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
 {
-    protected $_buttons = array('save'   => true);
-
     public function _initFields()
     {
         $field = new Vps_Auto_Field_HtmlEditor('content', 'Content');
-        foreach ($this->component->getSettings() as $key => $val) {
+        foreach (call_user_func(array($this->class, 'getSettings')) as $key => $val) {
             if ($key != 'content') {
                 $method = 'set' . ucfirst($key);
                 $field->$method($val);
@@ -15,8 +13,8 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         $field->setEnableFont(false);
         $field->setEnableFontSize(false);
         $field->setEnableColors(false);
-        $controllerUrl = Vpc_Admin::getInstance($this->component)
-                            ->getControllerUrl($this->component);
+        $controllerUrl = Vpc_Admin::getInstance($this->class)
+                            ->getControllerUrl($this->class);
         $field->setControllerUrl($controllerUrl);
         $this->_form->add($field);
     }

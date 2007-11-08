@@ -15,7 +15,7 @@ class Vps_Media_Image
             return false;
         }
 
-        if (!file_exists($source)) {
+        if (!is_file($source)) {
             return false;
         }
 

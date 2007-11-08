@@ -1,28 +1,19 @@
 <?php
 class Vpc_Composite_Images_Component extends Vpc_Abstract
 {
-    const NAME = 'Standard.Images';
     public $images = array();
-    protected $_settings = array(
-        'imageClass'        => 'Vpc_Basic_Image_Component',
-        'imageSettings'     => array()
-    );
-    protected $_tablename = 'Vpc_Composite_Images_Model';
-
-    public function getTemplateVars()
+    
+    public static function getSettings()
     {
-        $return = parent::getTemplateVars();
-        $return['images'] = array();
-        foreach ($this->images as $c) {
-            $return['images'][] = $c->getTemplateVars();
-        }
-        $return['template'] = 'Composite/Images.html';
-        return $return;
+        return array_merge(parent::getSettings(), array(
+            'componentName' => 'Standard.Images',
+            'tablename'     => 'Vpc_Composite_Images_Model',
+            'imageClass'    => 'Vpc_Basic_Image_Component'
+        ));
     }
-
+    
     protected function _init()
     {
-        $table = $this->getTable('Vpc_Composite_Images_Model');
         $where = array(
             'page_id = ?' => $this->getDbId(),
             'component_key = ?' => $this->getComponentKey()
@@ -31,10 +22,19 @@ class Vpc_Composite_Images_Component extends Vpc_Abstract
             $where['visible = ?'] = 1;
         }
         $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Component');
-        $this->setSetting('imageClass', $imageClass);
-        foreach ($table->fetchAll($where) as $row) {
-            $this->images[$row->id] = $this->createComponent($imageClass, $row->id, $this->getSetting('imageSettings'));
+        foreach ($this->getTable()->fetchAll($where) as $row) {
+            $this->images[$row->id] = $this->createComponent($imageClass, $row->id);
         }
+    }
+
+    public function getTemplateVars()
+    {
+        $return = parent::getTemplateVars();
+        $return['images'] = array();
+        foreach ($this->images as $c) {
+            $return['images'][] = $c->getTemplateVars();
+        }
+        return $return;
     }
 
     public function getChildComponents()

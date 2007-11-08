@@ -1,14 +1,14 @@
 <?php
 class Vps_Controller_Action_Component_Media extends Vps_Controller_Action_Media
 {
-    public function originalAction()
+    public function vpcAction()
     {
-        $acl = $this->_getAcl();
-        $role = $this->_getUserRole();
-        if (!$acl->isAllowed($role, 'mediaoriginal')) {
-            throw new Vps_Controller_Action_Web_Exception('Access to file not allowed.');
-        }
-        parent::originalAction();
+        $id = $this->_getParam('componentId');
+        $class = $this->_getParam('class');
+        $tablename = Vpc_Abstract::getSetting($class, 'tablename');
+        $table = new $tablename();
+        $row = $table->findRow($id);
+        $this->cacheAction($row->vps_upload_id);
     }
 
     protected function _createChecksum($password)
@@ -20,19 +20,26 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action_Media
     {
         $id = $this->_getParam('componentId');
         $filename = $this->_getParam('filename');
-        $parts = explode('.', $filename);
-        $extra = sizeof($parts) == 3 ? '.' . $parts[1] : '';
+        if ($this->_getParam('class')) {
+            $extra = '.' . $filename;
+        } else {
+            $parts = explode('.', $filename);
+            $extra = sizeof($parts) == 3 ? '.' . $parts[1] : '';
+        }
         return $id . $extra;
     }
 
     protected function _createCacheFile($source, $target)
     {
         $id = $this->_getParam('componentId');
-
-        $pageCollection = Vps_PageCollection_TreeBase::getInstance();
-        $component = $pageCollection->findComponent($id);
-        if ($component instanceof Vpc_FileInterface) {
-            $component->createCacheFile($source, $target);
+        $class = $this->_getParam('class');
+        if (!$class) {
+            $pageCollection = Vps_PageCollection_TreeBase::getInstance();
+            $class = get_class($pageCollection->findComponent($id));
         }
+        $tablename = Vpc_Abstract::getSetting($class, 'tablename');
+        $table = new $tablename();
+        $row = $table->findRow($id);
+        $row->createCacheFile($source, $target);
     }
 }

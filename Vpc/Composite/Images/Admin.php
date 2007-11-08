@@ -1,16 +1,14 @@
 <?php
 class Vpc_Composite_Images_Admin extends Vpc_Admin
 {
-    public function getControllerConfig($component)
+    public function getControllerConfig($class)
     {
-        $config = parent::getControllerConfig($component);
-        $imageClass = $component->getSetting('imageClass');
-        $url = $this->getControllerUrl($component, $imageClass);
-        $url = str_replace($component->getId(), $component->getId() . '-*', $url);
-        $config['imageControllerUrlTemplate'] = $url;
-        return $config;
+        $imageClass = Vpc_Abstract::getSetting($class, 'imageClass');
+        return array(
+            'imageConfig' => Vpc_Admin::getConfig($imageClass)
+        );
     }
-    
+
     public function getControllerClass()
     {
         return 'Vpc.Composite.Images.Panel';
@@ -18,8 +16,6 @@ class Vpc_Composite_Images_Admin extends Vpc_Admin
     
     public function setup()
     {
-        $this->copyTemplate('Template.html', 'Composite/Images.html');
-
         Vpc_Admin::getInstance('Vpc_Basic_Image_Component')->setup();
 
         if (!$this->_tableExists('vpc_composite_images')) {

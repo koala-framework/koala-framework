@@ -156,7 +156,9 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.contentPanel.add(panel);
             this.contentPanel.setActiveTab(panel);
         }
-        data.controllerUrl = '/admin/component/edit/' + data.cls + '/' + data.id;
+        data.componentClass = data.cls;
+        data.pageId = data.id;
+        data.componentKey = '';
         panel.loadComponent(data);
     },
 
@@ -177,13 +179,13 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
         panel.loadComponent = function(data){
             Ext.Ajax.request({
-                url: data.controllerUrl + '/jsonIndex',
+                url: '/admin/component/edit/' + data.componentClass + '/jsonIndex/',
+                params: { page_id: data.pageId, component_key: data.componentKey },
                 success: function(r) {
                     response = Ext.decode(r.responseText);
                     cls = eval(response['class']);
                     if (cls) {
                         var panel2 = new cls(Ext.applyIf(response.config, {
-                            controllerUrl   : data.controllerUrl,
                             region          : 'center',
                             autoScroll      : true,
                             closable        : true,
@@ -208,7 +210,10 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             del = count;
             for (var x=0; x<count; x++){
                 var item = toolbar.items.itemAt(x);
-                if (item.params != undefined && item.params.controllerUrl == data.controllerUrl) {
+                if (item.params != undefined && 
+                    item.params.pageId == data.pageId && 
+                    item.params.componentKey == data.componentKey
+                ) {
                     del = x > 0 ? x - 1 : x;
                     x = count;
                 }

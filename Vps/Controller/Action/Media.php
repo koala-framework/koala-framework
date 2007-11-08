@@ -47,16 +47,16 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
         $checksum = $this->_getParam('checksum');
 
         // Direkt auf Originaldatei springen
-        $password = Vps_Media_Password::get(Vps_Media_Password::ORIGINAL);
+        $password = Vps_Media_Password::ORIGINAL;
         if ($checksum == $this->_createChecksum($password)) {
             $this->originalAction();
             return;
         }
 
         // Cache
-        $password = Vps_Media_Password::get();
+        $password = Vps_Media_Password::CACHE;
         if ($checksum == $this->_createChecksum($password)) {
-            $this->cacheAction();
+            $this->cacheAction($this->_getParam('uploadId'));
             return;
         }
 
@@ -75,16 +75,14 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
      * Das Erstellen der Cache-Datei sollte durch Überschreiben von
      * $this->createCacheFile() geschehen.
      */
-    public function cacheAction()
+    public function cacheAction($uploadId)
     {
-        $uploadId = $this->_getParam('uploadId');
-
         $target = $this->_getCachePath($uploadId, $this->_getCacheFilename());
         if (!is_file($target)) {
             // Verzeichnisse anlegen, falls nicht existent
-            if (!is_dir($this->_getUploadDir() . 'cache/')) {
-                mkdir($this->_getUploadDir() . 'cache/', 0775);
-                chmod($this->_getUploadDir() . 'cache/', 0775);
+            if (!is_dir($this->_getUploadDir() . '/cache')) {
+                mkdir($this->_getUploadDir() . '/cache', 0775);
+                chmod($this->_getUploadDir() . '/cache', 0775);
             }
             if (!is_dir(dirname($target))) {
                 mkdir(dirname($target), 0775);
@@ -147,7 +145,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
     // Ab hier Final
     protected final function _getCachePath($uploadId, $filename)
     {
-        return $this->_getUploadDir() . 'cache/' . $uploadId . '/' . $filename;
+        return $this->_getUploadDir() . '/cache/' . $uploadId . '/' . $filename;
     }
 
     protected final function _getSourcePath($uploadId)
@@ -155,7 +153,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
         $table = new Vps_Dao_File();
         $row = $table->find($uploadId)->current();
         if ($row) {
-            return $this->_getUploadDir() . $row->id;
+            return $this->_getUploadDir() . '/' . $row->id;
         }
         return '';
     }
