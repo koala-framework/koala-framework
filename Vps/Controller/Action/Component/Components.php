@@ -66,10 +66,8 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
         } else {
             $this->view->setRenderFile(VPS_PATH . '/views/Component.html');
         }
-        $this->view->setCompilePath('application/views_c');
         $this->view->setScriptPath('application/views');
-        $this->view->setScriptPath('application/views');
-        $this->view->component = $component->getTemplateVars('');
+        $this->view->component = $component->getTemplateVars();
         $this->view->mode = '';
     }
 
@@ -83,10 +81,8 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
         } else {
             $view->setRenderFile(VPS_PATH . '/views/Component.html');
         }
-        $view->setCompilePath('application/views_c');
         $view->setScriptPath('application/views');
-        $view->setScriptPath('application/views');
-        $view->component = $component->getTemplateVars('');
+        $view->component = $component->getTemplateVars();
         $view->mode = '';
 
         $this->view->content = $view->render('');

@@ -17,7 +17,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $this->addScriptPath('application/views');
 
         if (!isset($config['compile_dir'])) {
-            $config['compile_dir'] = 'application/views_c';
+            $config['compile_dir'] = 'application/cache/views_c';
         }
         foreach ($config as $key => $value) {
             $this->_smarty->$key = $value;
