@@ -37,17 +37,5 @@ class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
         // Bildvorschau
         $this->add(new Vps_Auto_Field_ImageViewer('vps_upload_id_image', 'Preview'))
             ->setClass($class);
-
-        // Enlarged Image
-        /*
-        if (Vpc_Abstract::getSetting($class, 'hasEnlarge')) {
-            $imagebig = new Vpc_Basic_Image_Form(Vpc_Abstract::getSetting($class, 'enlargeClass'));
-            $imagebig->fields->getByName('vps_upload_id')->setFileFieldLabel('File (optional)');
-            $this->add(new Vps_Auto_Container_FieldSet('Enlarged Image'))
-                ->setCheckboxToggle(true)
-                ->setCheckboxName('enlarge')
-                ->add($imagebig);
-        }
-*/
     }
 }
