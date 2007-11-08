@@ -7,23 +7,16 @@
  */
 class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Abstract
 {
-
-    //verbesserungswürdig, da wird der komplette seitenbaum durchgelaufen
-    private function _isChildPageCurrent($page)
-    {
-        if ($this->_pageCollection->getCurrentPage()->getPageId() == $page->getPageId()) return true;
-
-        $pages = $this->_pageCollection->getChildPages($page);
-        foreach ($pages as $p) {
-            if ($this->_isChildPageCurrent($p)) return true;
-        }
-        return false;
-    }
-
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
         $pc = $this->_pageCollection;
+
+        $currentPageIds = array();
+        $p = $this->_pageCollection->getCurrentPage();
+        do {
+            $currentPageIds[] = $p->getPageId();
+        } while($p = $pc->getParentPage($p));
 
         $pageCollectionConfig = new Zend_Config_Ini('application/config.ini', 'pagecollection');
         foreach ($pageCollectionConfig->pagecollection->pagetypes as $type=>$i) {
@@ -34,7 +27,7 @@ class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Abstract
                 $class = '';
                 if ($i==0) $class .= ' first';
                 if ($i==sizeof($pages)-1) $class .= ' last';
-                $isCurrent = $this->_isChildPageCurrent($page);
+                $isCurrent = in_array($page->getPageId(), $currentPageIds);
                 if ($isCurrent) $class .= ' current';
                 $return['menu'][$type][] = array('href'    => $data['url'],
                                                  'text'    => $data['name'],
@@ -56,7 +49,7 @@ class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Abstract
                 $class = '';
                 if ($i==0) $class .= ' first';
                 if ($i==sizeof($pages)-1) $class .= ' last';
-                $isCurrent = $this->_isChildPageCurrent($p);
+                $isCurrent = in_array($page->getPageId(), $currentPageIds);
                 if ($isCurrent) $class .= ' current';
                 $return['submenus'][$level][] = array('href' => $data['url'],
                                                       'text' => $data['name'],
