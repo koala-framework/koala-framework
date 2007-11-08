@@ -50,7 +50,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
     onEdit : function(o, p) {
         var row = this.grid.getSelectionModel().getSelected();
         if (row != undefined) {
-            controllerUrl = row.data.page_id.replace(/\/show\//, '/edit/');
+            var controllerUrl = row.data.page_id.replace(/\/show\//, '/edit/');
             this.fireEvent('editcomponent', {controllerUrl: controllerUrl, text: row.data.component_class});
         }
     },

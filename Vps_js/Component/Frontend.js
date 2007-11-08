@@ -13,6 +13,6 @@ Vps.Component.Frontend.Index = function(renderTo, config)
 Ext.extend(Vps.Component.Frontend.Index, Ext.util.Observable,
 {
     loadComponent : function(data) {
-        document.location.href = 'admin/pages/?url=' + data.url + '&name=' + data.name;
+        document.location.href = '/admin/pages/?url=' + data.url + '&name=' + data.name;
     }
 })

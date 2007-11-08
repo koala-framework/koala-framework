@@ -67,6 +67,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $userRole = Zend_Auth::getInstance()->getStorage()->read();
         $ext['userRole'] = $userRole ? $userRole->role : 'guest';
         $this->ext = $ext;
+        $this->_renderFile = VPS_PATH.'/views/Master.html';
     }
 
     public function setRenderFile($renderFile)

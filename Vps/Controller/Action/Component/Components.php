@@ -10,7 +10,7 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
             echo $class;
             echo '<br />';
             foreach ($ids as $id) {
-                echo "<a href=\"/component/edit/$class/$id\">$id</a>&nbsp;&nbsp;&nbsp;";
+                echo "<a href=\"/admin/component/edit/$class/$id\">$id</a>&nbsp;&nbsp;&nbsp;";
             }
             echo '<br /><br />';
         }
@@ -19,7 +19,7 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
     private function _showComponents($component, $step = 0)
     {
         if ($component) {
-            $url = '/component/edit/' . get_class($component) . '/' . $component->getId();
+            $url = '/admin/component/edit/' . get_class($component) . '/' . $component->getId();
             echo '<span style="margin-left:' . $step*10 . 'px"></span>';
             echo '<a href="' . $url . '">' . $url . '</a><br />';
             foreach ($component->getChildComponents() as $c) {
