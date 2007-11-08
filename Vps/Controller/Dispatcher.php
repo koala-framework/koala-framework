@@ -9,11 +9,13 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             $class = $request->getParam('class');
             Zend_Loader::loadClass($class);
             while ($className == '' && is_subclass_of($class, 'Vpc_Abstract')) {
-                if (substr($class, -9) == 'Component') {
-                    $class = substr($class, 0, -9);
+                $cc = $class;
+                if (substr($cc, -9) == 'Component') {
+                    $cc = substr($cc, 0, -9);
                 }
-                if (class_exists($class . 'Controller')) {
-                    $className = $class . 'Controller';
+                $cc .= 'Controller';
+                if (class_exists($cc)) {
+                    $className = $cc;
                 }
                 $class = get_parent_class($class);
             }

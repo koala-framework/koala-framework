@@ -82,7 +82,7 @@ class Vps_Dao_File extends Vps_Db_Table
         if (!is_dir($uploadDir) || !is_writable($uploadDir)) {
             throw new Vps_Exception('Dateiupload kann nicht in folgendes Verzeichnis schreiben: ' . $uploadDir);
         }
-        
+
         $filename = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
         $extension = substr(strrchr($filedata['name'], '.'), 1);
         
@@ -97,12 +97,14 @@ class Vps_Dao_File extends Vps_Db_Table
         $row->extension = $extension;
         $id = $row->save();
         
-        $filename = $uploadDir . $id;
+        $filename = $uploadDir . '/' . $id;
         if (move_uploaded_file($filedata['tmp_name'], $filename)) {
             chmod($filename, 0664);
             return $id;
+        } else {
+            $row->delete();
+            return null;
         }
-        return null;
     }
 
     public function delete($id)
