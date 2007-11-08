@@ -5,14 +5,16 @@ Vpc.Composite.Images.Panel = Ext.extend(Ext.Panel,
     {
         this.grid = new Vps.Auto.GridPanel({
             controllerUrl: this.controllerUrl,
+            baseParams: this.baseParams,
             width: 300,
             split: true,
             region: 'west'
         });
 
-        this.imagePanel = new Vps.Auto.FormPanel({
-            region: 'center',
-            autoload: false
+        var cls = eval(this.imageConfig['class']);
+        this.imagePanel = new cls({
+            controllerUrl: this.imageConfig.config.controllerUrl,
+            region: 'center'
         });
 
         this.imagePanel.on('datachange', function(i) {
@@ -24,9 +26,10 @@ Vpc.Composite.Images.Panel = Ext.extend(Ext.Panel,
         }, this);
 
         this.grid.on('rowselect', function(model, rowIndex, selected) {
-            var controllerUrl = this.imageControllerUrlTemplate;
-            controllerUrl = controllerUrl.replace(/\*/, selected.data.id);
-            this.imagePanel.loadForm(controllerUrl);
+            var params = {};
+            params.page_id = this.baseParams.page_id;
+            params.component_key = this.baseParams.component_key + '-' + selected.data.id;
+            this.imagePanel.load(params);
         }, this);
 
         this.grid.onAdd = this.onAdd;
@@ -39,10 +42,9 @@ Vpc.Composite.Images.Panel = Ext.extend(Ext.Panel,
     {
         Ext.Ajax.request({
             mask: true,
-            url: this.controllerUrl + 'jsonInsert',
+            url: this.controllerUrl + '/jsonInsert',
+            params: this.baseParams,
             success: function(response, options, r) {
-                var result = Ext.decode(response.responseText);
-                id = result.id;
                 this.getSelectionModel().clearSelections();
                 this.reload({
                     callback: function(o, r, s) {

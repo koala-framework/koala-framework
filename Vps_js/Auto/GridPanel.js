@@ -19,7 +19,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             Ext.Ajax.request({
                 mask: true,
                 url: this.controllerUrl+'/jsonData',
-                params: {meta: true},
+                params: Ext.apply({ meta: true }, this.baseParams),
                 success: function(response, options, r) {
                     var result = Ext.decode(response.responseText);
                     this.onMetaLoad(result);
@@ -46,7 +46,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             var remoteSort = false;
             if (meta.paging) remoteSort = true;
             var storeConfig = {
-                proxy: new Ext.data.HttpProxy({url: this.controllerUrl + '/jsonData'}),
+                proxy: new Ext.data.HttpProxy({ url: this.controllerUrl + '/jsonData' }),
                 reader: new Ext.data.JsonReader({
                     totalProperty: meta.totalProperty,
                     root: meta.root,
@@ -64,7 +64,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             } else {
                 var storeType = Ext.data.Store;
             }
+            storeConfig.baseParams = this.baseParams;
             this.store = new storeType(storeConfig);
+
         }
 
         this.store.newRecords = []; //hier werden neue records gespeichert die nicht dirty sind
@@ -192,7 +194,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             this.editDialog = new Vps.Auto.Form.Window(meta.editDialog);
         }
         if (this.editDialog) {
-
             this.editDialog.on('datachange', function() {
                 this.reload();
             }, this);

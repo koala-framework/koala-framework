@@ -1,27 +1,28 @@
 <?php
 class Vpc_Composite_TextImages_Component extends Vpc_Abstract
 {
-    const NAME = 'Standard.TextImages';
     public $text;
     public $images;
-    protected $_settings = array(
-        'textClass'         => 'Vpc_Basic_Html_Component',
-        'textSettings'      => array(),
-        'imagesClass'       => 'Vpc_Composite_Images_Component',
-        'imagesSettings'    => array(),
-        'imageClass'        => 'Vpc_Basic_Image_Component',
-        'imageSettings'     => array(),
-        'image_position' => 'alternate' // 'left', 'right', 'alternate'
-    );
-    protected $_tablename = 'Vpc_Composite_TextImage_Model';
 
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName'     => 'Standard.TextImages',
+            'tablename'         => 'Vpc_Composite_TextImage_Model',
+            'textClass'         => 'Vpc_Basic_Html_Component',
+            'imagesClass'       => 'Vpc_Composite_Images_Component',
+            'default'           => array(
+                'image_position'    => 'alternate' // 'left', 'right', 'alternate'
+            )
+        ));
+    }
+    
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
         $return['text'] = $this->text->getTemplateVars('');
         $return['images'] = $this->images->getTemplateVars('');
-        $return['imagePosition'] = $this->getSetting('image_position');
-        $return['template'] = 'Composite/TextImages.html';
+        $return['imagePosition'] = $this->_row->image_position;
         return $return;
     }
 
@@ -29,12 +30,8 @@ class Vpc_Composite_TextImages_Component extends Vpc_Abstract
     {
         $textClass = $this->_getClassFromSetting('textClass', 'Vpc_Basic_Html_Component');
         $imagesClass = $this->_getClassFromSetting('imagesClass', 'Vpc_Composite_Images_Component');
-        $imagesSettings = $this->getSetting('imageSettings');
-        if (!is_array($imagesSettings)) { $imagesSettings = array(); }
-        $imagesSettings['imageClass'] = $this->getSetting('imageClass');
-        $imagesSettings['imageSettings'] = $this->getSetting('imageSettings');
-        $this->text = $this->createComponent($textClass, 1, $this->getSetting('textSettings'));
-        $this->images = $this->createComponent($imagesClass, 2, $imagesSettings);
+        $this->text = $this->createComponent($textClass, 1);
+        $this->images = $this->createComponent($imagesClass, 2);
     }
 
     public function getChildComponents()

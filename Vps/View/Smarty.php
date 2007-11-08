@@ -27,15 +27,13 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $this->config = Zend_Registry::get('config');
     }
 
+    public function vpc($config)
+    {
+        $this->ext($config['class'], $config['config']);
+    }
+
     public function ext($class, $config = array(), $viewport = null)
     {
-        if ($class instanceof Vpc_Abstract) {
-            if (!is_array($config)) { $config = array(); }
-            $admin = Vpc_Admin::getInstance($class);
-            $adminConfig = $admin->getConfig($class, array(), false);
-            $config = array_merge($config, $adminConfig);
-            $class = $admin->getControllerClass();
-        }
         if (!is_string($class)) {
             throw new Vps_View_Exception('Class must be a string.');
         }

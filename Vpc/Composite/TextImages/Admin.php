@@ -6,11 +6,25 @@ class Vpc_Composite_TextImages_Admin extends Vpc_Admin
         return 'Vps.Component.TabPanel';
     }
 
-    public function getControllerConfig($component)
+    public function getControllerConfig($class, $pageId, $componentKey)
     {
-        $config['tabs']['Images'] = $this->getConfig($component->images);
-        $config['tabs']['Text'] = $this->getConfig($component->text);
-        $config['tabs']['Properties'] = $this->getNoAdminConfig($component, 'Vps.Auto.FormPanel');
+        $cls = Vpc_Abstract::getSetting($class, 'imagesClass');
+        $conf = Vpc_Admin::getConfig($cls, $pageId, $componentKey . '-1');
+        $config['tabs']['Images'] = $conf; 
+        
+        $cls = Vpc_Abstract::getSetting($class, 'textClass');
+        $conf = Vpc_Admin::getConfig($cls, $pageId, $componentKey . '-2');
+        $config['tabs']['Text'] = $conf; 
+        
+        $conf = Vpc_Admin::createConfig(
+            'Vps.Auto.FormPanel', 
+            $this->getControllerUrl($class), 
+            array(), 
+            $pageId, 
+            $componentKey
+        );
+        $config['tabs']['Properties'] = $conf; 
+
         $config['activeItem'] = 'Images';
         return $config;
     }

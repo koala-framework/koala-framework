@@ -1,54 +1,55 @@
 <?php
 class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
 {
-    public static function getStaticSettings()
+    protected $_components = array();
+
+    public static function getSettings()
     {
-        return array_merge(parent::getStaticSettings(), array(
-            'fieldLabel' => 'Rich Text Editor',
-            'width' => 550,
-            'height' => 400,
-            'enableAlignments' => true,
-            'enableColors' => false,
-            'enableFont' => false,
-            'enableFontSize' => false,
-            'enableFormat' => true,
-            'enableLinks' => true,
-            'enableLists' => true,
-            'enableSourceEdit' => true,
+        return array_merge(parent::getSettings(), array(
+            'tablename'         => 'Vpc_Basic_Text_Model',
+            'componentName'     => 'Standard.Text',
+            'fieldLabel'        => 'Rich Text Editor',
+            'width'             => 550,
+            'height'            => 400,
+            'enableAlignments'  => true,
+            'enableColors'      => false,
+            'enableFont'        => false,
+            'enableFontSize'    => false,
+            'enableFormat'      => true,
+            'enableLinks'       => true,
+            'enableLists'       => true,
+            'enableSourceEdit'  => true,
             'imageClass'        => 'Vpc_Basic_Image_Component',
             'linkClass'         => 'Vpc_Basic_Link_Intern_Component',
-            'defaultContent' => 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.'
+            'default'           => array(
+                'content'       => Vpc_Abstract::LOREM_IPSUM
+            )
         ));
     }
 
-
-    protected $_settings = array(
-    );
-
-    protected $_tablename = 'Vpc_Basic_Text_Model';
-    const NAME = 'Standard.Text';
-    protected $_components = array();
-
     public function getChildComponents()
     {
-        $ret = array();
-        $content = $this->getSetting('content').$this->getSetting('content_edit');
+        return array();
+        /*
+        $content = $this->getSetting('content').$this->_getSetting('content_edit');
         $this->_parseContentParts($content); //um components zu laden
         return $this->_components;
+        */
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
         $ret['contentParts'] = array();
-        foreach ($this->_parseContentParts($this->getSetting('content')) as $part) {
+        /*
+        foreach ($this->_parseContentParts($this->_getSetting('content')) as $part) {
             if ($part instanceof Vpc_Abstract) {
                 $ret['contentParts'][] = $part->getTemplateVars();
             } else {
                 $ret['contentParts'][] = $part;
             }
         }
-        $ret['template'] = 'Basic/Text.html';
+        */
         return $ret;
     }
 

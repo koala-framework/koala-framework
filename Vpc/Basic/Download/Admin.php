@@ -3,8 +3,6 @@ class Vpc_Basic_Download_Admin extends Vpc_Admin
 {
     public function setup()
     {
-        $this->copyTemplate('Template.html', 'Basic/Download.html');
-
         $fields['name'] = 'varchar(255) NOT NULL';
         $fields['info'] = 'text';
         $fields['vps_upload_id'] = 'int';

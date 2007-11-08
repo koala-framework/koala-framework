@@ -5,6 +5,7 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
     private $_id;
     private $_table;
     private $_primaryKey;
+    protected $_row;
 
     public function __construct($name = null, $id = null)
     {

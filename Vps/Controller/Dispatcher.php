@@ -5,34 +5,17 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     {
         $module = $request->getModuleName();
         if ($module == 'component' && $request->getControllerName() == 'component') {
-            
-            $className = $this->getFrontController()->getRequest()->getParam('class');
-            if (substr($className, -9) == 'Component') {
-                $className = substr($className, 0, -9);
-            }
-            $className .= 'Controller';
-            try {
-                Zend_Loader::loadClass($className);
-            } catch (Zend_Exception $e) {
-                $id = $this->getFrontController()->getRequest()->getParam('componentId');
-                $pageCollection = Vps_PageCollection_TreeBase::getInstance();
-                $componentClass = get_class($pageCollection->findComponent($id));
-                if (is_subclass_of($componentClass, 'Vpc_Abstract')) {
-                    $class = $componentClass;
-                    $className = '';
-                    while ($class != 'Vpc_Abstract' && $className == '') {
-                        try {
-                            if (substr($class, -9) == 'Component') {
-                                $class = substr($class, 0, -9);
-                            }
-                            if (class_exists($class . 'Controller')) {
-                                $className = $class . 'Controller';
-                            }
-                        } catch (Zend_Exception $e) {
-                        }
-                        $class = get_parent_class($class);
-                    }
+            $className = '';
+            $class = $request->getParam('class');
+            Zend_Loader::loadClass($class);
+            while ($className == '' && is_subclass_of($class, 'Vpc_Abstract')) {
+                if (substr($class, -9) == 'Component') {
+                    $class = substr($class, 0, -9);
                 }
+                if (class_exists($class . 'Controller')) {
+                    $className = $class . 'Controller';
+                }
+                $class = get_parent_class($class);
             }
         } else if ($module == 'component' || $module == 'vps') {
             $className = ucfirst($request->getControllerName());

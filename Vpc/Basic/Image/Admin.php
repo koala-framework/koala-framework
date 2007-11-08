@@ -3,8 +3,6 @@ class Vpc_Basic_Image_Admin extends Vpc_Admin
 {
     public function setup()
     {
-        $this->copyTemplate('Template.html', 'Basic/Image.html');
-
         $fields['name'] = 'varchar(255) NOT NULL';
         $fields['width'] = 'int(11) NOT NULL';
         $fields['height'] = 'int(11) NOT NULL';

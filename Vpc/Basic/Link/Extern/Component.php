@@ -5,24 +5,30 @@
  */
 class Vpc_Basic_Link_Extern_Component extends Vpc_Basic_Link_Component
 {
-    protected $_settings = array(
-        'hasLinktext'   => true,
-        'text'          => 'Linktext',
-        'target'        => 'http://',
-        'width'         => '400',
-        'height'        => '400'
-    );
-    protected $_tablename = 'Vpc_Basic_Link_Extern_Model';
-    const NAME = 'Standard.Link.Extern';
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'tablename'     => 'Vpc_Basic_Link_Extern_Model',
+            'componentName' => 'Standard.Link.Extern',
+            'hasLinktext'   => true,
+            'default'       => array(
+                'text'          => 'Linktext',
+                'target'        => 'http://',
+                'is_popup'      => false,
+                'width'         => '400',
+                'height'        => '400'
+            )
+        )); 
+    }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret += $this->getSettings();
-        $ret['template'] = 'Basic/Link.html';
-        $target = $this->getSetting('target');
-        $page = $this->getPageCollection()->findPage($target);
-        $ret['href'] = $this->getPageCollection()->getUrl($page);
+        $ret['hasLinktext'] = $this->_getSetting('hasLinktext');
+        $ret['href'] = $this->_row->target;
+        $ret['param'] = $this->_row->param;
+        $ret['rel'] = $this->_row->rel;
+        $ret['text'] = $this->_row->text;
         return $ret;
     }
 }

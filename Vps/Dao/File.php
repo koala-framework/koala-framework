@@ -39,9 +39,9 @@ class Vps_Dao_File extends Vps_Db_Table
         $row = $this->find($uploadId)->current();
         if ($row) {
             if ($type == self::SHOW) {
-                $checksum = md5('l4Gx8SFe' . $id);
+                $checksum = md5(Vps_Media_Password::CACHE . $id);
             } else {
-                $checksum = md5('k4Xjgw9f' . $id);
+                $checksum = md5(Vps_Media_Password::ORIGINAL . $id);
             }
             $extension = $row->extension;
             $random = $addRandom ? '?' . uniqid() : '';
@@ -82,7 +82,7 @@ class Vps_Dao_File extends Vps_Db_Table
         if (!is_dir($uploadDir) || !is_writable($uploadDir)) {
             throw new Vps_Exception('Dateiupload kann nicht in folgendes Verzeichnis schreiben: ' . $uploadDir);
         }
-
+        
         $filename = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
         $extension = substr(strrchr($filedata['name'], '.'), 1);
         
@@ -96,7 +96,7 @@ class Vps_Dao_File extends Vps_Db_Table
         $row->filename = $filename;
         $row->extension = $extension;
         $id = $row->save();
-    
+        
         $filename = $uploadDir . $id;
         if (move_uploaded_file($filedata['tmp_name'], $filename)) {
             chmod($filename, 0664);
@@ -120,7 +120,7 @@ class Vps_Dao_File extends Vps_Db_Table
 
     public function deleteFile($id)
     {
-        $filename = $this->getFileSource($uploadId);
+        $filename = $this->getFileSource($id);
         if (is_file($filename)) {
             unlink($filename);
         }

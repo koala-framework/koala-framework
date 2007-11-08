@@ -10,8 +10,6 @@ class Vpc_Basic_Text_Admin extends Vpc_Admin
 
     public function setup()
     {
-        $this->copyTemplate('Template.html', 'Basic/Rte.html');
-
         $fields['text'] = 'text NOT NULL';
         $this->createTable('vpc_rte', $fields);
     }

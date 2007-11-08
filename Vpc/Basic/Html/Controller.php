@@ -1,10 +1,5 @@
 <?php
 class Vpc_Basic_Html_Controller extends Vps_Controller_Action_Auto_Vpc_Form
 {
-    protected $_buttons = array('save' => true);
-
-    public function preDispatch()
-    {
-        $this->_form = new Vpc_Basic_Html_Form($this->component);
-    }
+    protected $_formName = 'Vpc_Basic_Html_Form';
 }

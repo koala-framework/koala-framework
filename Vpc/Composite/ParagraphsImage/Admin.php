@@ -6,18 +6,22 @@ class Vpc_Composite_ParagraphsImage_Admin extends Vpc_Admin
         return 'Vps.Component.TabPanel';
     }
 
-    public function getControllerConfig($component)
+    public function getControllerConfig($class, $pageId, $componentKey)
     {
-        $config['tabs']['Image'] = $this->getConfig($component->image);
-        $config['tabs']['Paragraphs'] = $this->getConfig($component->paragraphs);
+        $pClass = Vpc_Abstract::getSetting($class, 'paragraphsClass');
+        $conf = Vpc_Admin::getConfig($pClass, $pageId, $componentKey . '-1');
+        $config['tabs']['Paragraphs'] = $conf; 
+        
+        $iClass = Vpc_Abstract::getSetting($class, 'imageClass');
+        $conf = Vpc_Admin::getConfig($iClass, $pageId, $componentKey . '-2');
+        $config['tabs']['Image'] = $conf; 
+        
         $config['activeItem'] = 'Paragraphs';
         return $config;
     }
 
     public function setup()
     {
-        $this->copyTemplate('Template.html', 'Composite/ParagraphsImage.html');
-
         Vpc_Admin::getInstance('Vpc_Paragraphs_Component')->setup();
         Vpc_Admin::getInstance('Vpc_Basic_Image_Component')->setup();
     }

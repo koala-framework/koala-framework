@@ -1,16 +1,16 @@
 <?php
 class Vpc_Basic_Link_Mail_Form extends Vps_Auto_Vpc_Form
 {
-    public function __construct(Vpc_Basic_Link_Mail_Component $component)
+    public function __construct($class, $pageId = null, $componentKey = null)
     {
-        parent::__construct($component);
+        parent::__construct($class, $pageId, $componentKey);
 
-        if ($component->getSetting('hasLinktext')) {
+        if (Vpc_Abstract::getSetting($class, 'hasLinktext')) {
             $this->add(new Vps_Auto_Field_TextField('text', 'Linktext'))
                 ->setWidth(500)
                 ->setAllowBlank(false);
         }
-        $this->add(new Vps_Auto_Field_TextField('target', 'Target'))
+        $this->add(new Vps_Auto_Field_TextField('target', 'E-Mail Address'))
             ->setWidth(500)
             ->setAllowBlank(false);
         $this->add(new Vps_Auto_Field_TextField('mailsubject', 'Predefined Subject for Mail'))

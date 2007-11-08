@@ -12,10 +12,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
     private $_pageCollection = null;
 
     private $_store;
+    protected $_row;
 
-    protected $_settings = array();
-    protected $_tablename;
     protected $_table;
+    
+    const LOREM_IPSUM = 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.';
 
     /**
      * Sollte nicht direkt aufgerufen werden, sondern über statische Methoden der Klasse. Kann nicht
@@ -30,8 +31,10 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string Falls dynamische Unterseite
      * @param string Falls dynamische Unterkomponente
      */
-    public final function __construct(Vps_Dao $dao, $id, $pageCollection = null, $settings = array())
+    public final function __construct(Vps_Dao $dao = null, $id = null, $pageCollection = null)
     {
+        if (is_null($dao)) { return; }
+        
         $this->_dao = $dao;
         $this->_pageCollection = $pageCollection;
         $this->_id = $this->parseId($id);
@@ -40,11 +43,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
         if ($table) {
             $info = $table->info();
             if ($info['primary'] == array(1 => 'page_id', 2 => 'component_key')) {
-                if (!is_array($settings)) { $settings = array(); }
-                $this->_settings = array_merge($this->_settings, $settings);
-                $row = $table->find($this->getPageId(), $this->getComponentKey())->current();
-                if ($row) {
-                    $this->_settings = array_merge($this->_settings, $row->toArray());
+                $this->_row = $table->find($this->getPageId(), $this->getComponentKey())->current();
+                if (!$this->_row) {
+                    $this->_row = $table->createRow(get_class($this));
                 }
             }
         }
@@ -61,6 +62,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
      */
     protected function _init() {}
 
+    public static function createStaticInstance($class)
+    {
+        return new $class();
+    }
+
     /**
      * Erstellt aus der ID der Komponente die Komponente.
      *
@@ -68,9 +74,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string ID der Komponente
      * @return Vpc_Abstract
      */
-    public static function createInstance(Vps_Dao $dao, $class, $id, $pageCollection = null, $settings = array())
+    public static function createInstance(Vps_Dao $dao, $class, $id, $pageCollection = null)
     {
-        return self::_createInstance($dao, $class, $id, $pageCollection, $settings);
+        return self::_createInstance($dao, $class, $id, $pageCollection);
     }
 
     /**
@@ -110,7 +116,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         // Erstellte Komponente hinzufügen
         return $page;
     }
-
+    
     /**
      * Falls eine Komponente Unterkomponenten hat (zB. TextPic hat eine Textbox- und
      * ein Pic-Komponente), werden diese hier erstellt.
@@ -120,7 +126,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param int Für Unterscheidung des Komponenteninhalts
      * @return Vpc_Abstract Komponente
      */
-    protected function createComponent($class, $pageKeySuffix = '', $settings = array())
+    protected function createComponent($class, $pageKeySuffix = '')
     {
         $id = $this->getId();
         if ($pageKeySuffix != '') {
@@ -128,7 +134,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         }
 
         // Komponente erstellen
-        $component = self::_createInstance($this->getDao(), $class, $id, $this->getPageCollection(), $settings);
+        $component = self::_createInstance($this->getDao(), $class, $id, $this->getPageCollection());
 
         // Erstellte Komponente hinzufügen
         return $component;
@@ -138,11 +144,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Erstellt die Komponente tatsächlich.
      * @throws Vpc_ComponentNotFoundException Falls Klasse für Komponente nicht gefunden wird
      */
-    private static function _createInstance(Vps_Dao $dao, $class, $id, $pageCollection = null, $settings = array())
+    private static function _createInstance(Vps_Dao $dao, $class, $id, $pageCollection = null)
     {
         // Komponente erstellen
         if (class_exists($class)) {
-            $component = new $class($dao, $id, $pageCollection, $settings);
+            $component = new $class($dao, $id, $pageCollection);
         } else {
             throw new Vpc_ComponentNotFoundException("Component '$class' not found.");
         }
@@ -429,9 +435,33 @@ abstract class Vpc_Abstract implements Vpc_Interface
      */
     public function getTemplateVars()
     {
+        // Template rausfinden
+        $template = null;
+        $class = get_class($this);
+        while (!$template && $class != 'Vpc_Abstract') {
+            $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.tpl';
+            $dirs = explode(PATH_SEPARATOR, get_include_path());
+            $x = 0;
+            foreach ($dirs as $dir) {
+                $x++;
+                if ($dir == '.') { $dir = getcwd(); }
+                $path = $dir . '/' . $file;
+                if (is_file($path)) {
+                    $template = $path;
+                    break;
+                }
+            }
+            $class = get_parent_class($class);
+        }
+        if (!$template) {
+            throw new Vpc_Exception('Template not found for Component ' . get_class($this));
+        }
+        
+        $vars = array();
         $vars['class'] = get_class($this);
         $vars['id'] = $this->getId();
         $vars['store'] = $this->_store;
+        $vars['template'] = $template;
         return $vars;
     }
 
@@ -499,7 +529,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     public function getTable($tablename = '')
     {
         if ($tablename == '') {
-            $tablename = $this->_tablename;
+            $tablename = $this->_getSetting('tablename');
         }
         try {
             return $this->_dao->getTable($tablename);
@@ -507,43 +537,30 @@ abstract class Vpc_Abstract implements Vpc_Interface
             return null;
         }
     }
-
-    public function getSetting($setting)
+    
+    public static function getTablename($class)
     {
-        $settings = $this->getSettings();
+        return self::$tablename;
+    }
+    
+    public static function getSetting($class, $setting)
+    {
+        $settings = call_user_func(array($class, 'getSettings'));
         return isset($settings[$setting]) ? $settings[$setting] : null ;
     }
 
-    public function setSetting($field, $value)
+    public static function getSettings()
     {
-        $this->_settings[$field] = $value;
+        return array();
     }
 
-    public function saveSetting($field, $value)
+    protected function _getSetting($setting)
     {
-        $table = $this->getTable();
-        if (!$table) throw new Vps_Exception("Table not found");
-        $info = $table->info();
-        if ($info['primary'] != array(1 => 'page_id', 2 => 'component_key')) {
-            throw new Vps_Exception("Invalid primary keys for table");
-        }
-        $row = $table->find($this->getPageId(), $this->getComponentKey())->current();
-        if (!$row) {
-            throw new Vps_Exception("Row for page_id '".$this->getPageId()."' ".
-                    "and component_key '".$this->getComponentKey()."' not found");
-        }
-        $row->$field = $value;
-        $row->save();
-        $this->setSetting($field, $value);
-    }
-
-    public function getSettings()
-    {
-        return $this->_settings;
+        return self::getSetting(get_class($this), $setting);
     }
 
     protected function _getClassFromSetting($setting, $parentClass) {
-        $class = $this->getSetting($setting);
+        $class = $this->_getSetting($setting);
         if ($class != $parentClass && !is_subclass_of($class, $parentClass)) {
             throw new Vpc_Exception("$setting '$class' must be a subclass of $parentClass.");
         }
