@@ -34,24 +34,12 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                     }
                 }
             }
-        } else if ($module == 'component') {
+        } else if ($module == 'component' || $module == 'vps') {
             $className = ucfirst($request->getControllerName());
             $className = "Vps_Controller_Action_Component_$className";
-//             d($className);
         } else {
-return parent::getControllerClass($request);
-            $className = $request->getControllerName() . 'Controller';
-            $controllerDir = $this->getFrontController()->getControllerDirectory();
-            $controllerName = $request->getControllerName();
-            $controllerFile = $controllerDir['default'] . '/' . $this->classToFilename(parent::formatControllerName($controllerName));
-
-            if (!is_file($controllerFile)) {
-                $className = str_replace('Controller', '', ucfirst($className));
-                $className = "Vps_Controller_Action_Component_$className";
-            }
-            
+            $className = parent::getControllerClass($request);
         }
-
         return $className;
     }
 
@@ -64,7 +52,6 @@ return parent::getControllerClass($request);
             } catch (Zend_Exception $e) {
                 throw new Zend_Controller_Dispatcher_Exception('Invalid controller class ("' . $className . '")');
             }
-
             return $className;
         } else {
             return parent::loadClass($className);

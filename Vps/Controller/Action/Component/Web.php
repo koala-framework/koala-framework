@@ -71,7 +71,8 @@ class Vps_Controller_Action_Component_Web extends Vps_Controller_Action
         $config['menu'] = false;
         $config['fe'] = false;
 
-        if ($acl->isAllowed($role, 'admin')) {
+        /*
+        if ($acl->isAllowed($role, 'pages')) {
             //$config['menu'] = true;
         }
 
@@ -82,6 +83,7 @@ class Vps_Controller_Action_Component_Web extends Vps_Controller_Action
                 $config['fe'] = true;
             }
         }
+        */
 
         if ($config['menu'] || $config['fe']) {
             $this->view->ext('Vps.Component.Frontend.Index', $config);
