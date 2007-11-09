@@ -7,6 +7,6 @@ class Vpc_Formular_Textarea_Admin extends Vpc_Admin
 
         $fields['cols'] = 'smallint(6) NOT NULL';
         $fields['rows'] = 'smallint(6) NOT NULL';
-        $this->createTable('vpc_formular_textarea', $fields);
+        $this->createFormTable('vpc_formular_textarea', $fields);
     }
 }

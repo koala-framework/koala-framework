@@ -11,6 +11,6 @@ class Vpc_Basic_Text_Admin extends Vpc_Admin
     public function setup()
     {
         $fields['text'] = 'text NOT NULL';
-        $this->createTable('vpc_rte', $fields);
+        $this->createFormTable('vpc_rte', $fields);
     }
 }

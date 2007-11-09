@@ -31,10 +31,13 @@ class Vpc_Composite_Images_Admin extends Vpc_Admin
         }
     }
 
-    public function delete($component)
+    public function delete($class, $pageId, $componentKey)
     {
-        foreach ($component->getChildComponents() as $c) {
-            Vpc_Admin::getInstance($c)->delete($c);
+        foreach ($this->_getRows($class, $pageId, $componentKey) as $row) {
+            $imageClass = Vpc_Abstract::getSetting($class, 'imageClass');
+            $admin = Vpc_Admin::getInstance($imageClass);
+            $admin->delete($imageClass, $pageId, $componentKey . '-' . $row->id);
+            $row->delete();
         }
     }
 }

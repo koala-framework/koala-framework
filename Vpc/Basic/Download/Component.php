@@ -26,6 +26,11 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract
             Vps_Dao_File::DOWNLOAD
         );
         $filesize = $fileTable->getFilesize($row->vps_upload_id);
+        $filename = $row->filename;
+        $fileRow = $fileTable->find($row->vps_upload_id)->current();
+        if ($fileRow) {
+            $filename .= '.' . $fileRow->extension;
+        }
 
         $return = parent::getTemplateVars();
         $return['url'] = '';
@@ -33,7 +38,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract
         $return['text'] = '';
         $return['filesize'] = '';
         $return['url'] = $url;
-        $return['text'] = $row->filename;
+        $return['text'] = $filename;
         $return['info'] = $row->infotext;
         if ($this->_getSetting('showIcon')) {
             $return['icon'] = '';

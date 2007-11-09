@@ -23,10 +23,8 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
 
     public function setup()
     {
-        $this->copyTemplate('Template.html', 'Paragraphs.html');
-
         $tablename = 'vpc_paragraphs';
-        if (!in_array($tablename, $this->_db->listTables())) {
+        if (!$this->_tableExists($tablename)) {
           $this->_db->query("CREATE TABLE `$tablename` (
                   `id` int(10) unsigned NOT NULL auto_increment,
                   `page_id` int(10) unsigned NOT NULL,
@@ -39,17 +37,12 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
         }
     }
 
-    public function delete(Vpc_Abstract $component)
+    public function delete($class, $pageId, $componentKey)
     {
-        // Komponenten löschen
-        foreach ($component->getChildComponents() as $cc) {
-            Vpc_Admin::getInstance($component)->delete($component);
-        }
-        // Einträge in Tabelle löschen
-        $where = array();
-        $where['page_id = ?'] = $component->getDbId();
-        $where['component_key = ?'] = $component->getComponentKey();
-        foreach ($component->getTable()->fetchAll($where) as $row) {
+        foreach ($this->_getRows($class, $pageId, $componentKey) as $row) {
+            $admin = Vpc_Admin::getInstance($row->component_class);
+            $cKey = $componentKey . '-' . $row->id;
+            $admin->delete($row->component_class, $pageId, $cKey);
             $row->delete();
         }
     }
