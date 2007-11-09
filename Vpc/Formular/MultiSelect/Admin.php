@@ -6,7 +6,7 @@ class Vpc_Formular_MultiSelect_Admin extends Vpc_Admin
         $this->copyTemplate('Template.html', 'Formular/MultiSelect.html');
 
         $fields['type'] = 'varchar(20) NOT NULL';
-        $this->createTable('vpc_formular_multiselect', $fields);
+        $this->createFormTable('vpc_formular_multiselect', $fields);
 
         $tablename = 'vpc_formular_multiselect_options';
         if (!in_array($tablename, $this->_db->listTables())) {

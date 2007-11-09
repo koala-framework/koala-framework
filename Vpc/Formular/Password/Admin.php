@@ -7,6 +7,6 @@ class Vpc_Formular_Password_Admin extends Vpc_Admin
 
         $fields['maxlength'] = 'smallint (6) NOT NULL';
         $fields['width'] = 'smallint(6) NOT NULL';
-        $this->createTable("vpc_formular_password", $fields);
+        $this->createFormTable("vpc_formular_password", $fields);
     }
 }

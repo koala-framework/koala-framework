@@ -5,7 +5,8 @@ class Vpc_Basic_Download_Controller extends Vps_Controller_Action_Auto_Vpc_Form
     {
         $this->_form->setTable(new Vpc_Basic_Download_Model());
         $this->_form->add(new Vps_Auto_Field_TextField('filename', 'Filename'))
-            ->setAllowBlank(false);
+            ->setAllowBlank(false)
+            ->setVtype('alphanum');
         $this->_form->add(new Vps_Auto_Field_TextArea('infotext', 'Infotext'))
             ->setWidth(300)
             ->setGrow(true);

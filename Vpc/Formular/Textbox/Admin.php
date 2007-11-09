@@ -9,6 +9,6 @@ class Vpc_Formular_Textbox_Admin extends Vpc_Admin
         $fields['value'] = 'varchar(255) NOT NULL';
         $fields['maxlength'] = 'smallint(6) NOT NULL default 50';
         $fields['validator'] = 'varchar(255) NOT NULL';
-        $this->createTable('vpc_formular_textbox', $fields);
+        $this->createFormTable('vpc_formular_textbox', $fields);
     }
 }
