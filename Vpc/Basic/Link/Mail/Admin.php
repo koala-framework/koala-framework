@@ -3,11 +3,9 @@ class Vpc_Basic_Link_Mail_Admin extends Vpc_Basic_Link_Admin
 {
     public function setup()
     {
-        parent::setup();
-
-        $fields['target'] = "varchar(255) NOT NULL";
-        $fields['rel'] = "varchar(255) NOT NULL";
-        $fields['param'] = "varchar(255) NOT NULL";
-        $this->createFormTable('vpc_basic_link_intern', $fields);
+        $fields['mail']     = "varchar(255) NOT NULL";
+        $fields['subject']  = "varchar(255) NOT NULL";
+        $fields['text']     = "text NOT NULL";
+        $this->createFormTable('vpc_basic_link_mail', $fields);
     }
 }
