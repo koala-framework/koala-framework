@@ -9,22 +9,16 @@ class Vpc_Basic_Link_Mail_Component extends Vpc_Basic_Link_Component
     {
         return array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_Link_Mail_Model',
-            'componentName' => 'Standard.Link.Mail',
-            'hasLinktext'  => true,
-            'default'       => array(
-                'text'          => 'Linktext'
-            )
+            'componentName' => 'Standard.Link.Mail'
         )); 
     }
     
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['hasLinktext'] = $this->_getSetting('hasLinktext');
-        $ret['href'] = 'mailto: ' . $this->_row->target;
+        $ret['href'] = 'mailto: ' . $this->_row->mail;
         $ret['param'] = '';
         $ret['rel'] = '';
-        $ret['text'] = $this->_row->text;
         return $ret;
     }
 }

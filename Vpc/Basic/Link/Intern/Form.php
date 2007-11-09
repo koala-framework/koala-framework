@@ -5,12 +5,6 @@ class Vpc_Basic_Link_Intern_Form extends Vps_Auto_Vpc_Form
     {
         parent::__construct($class, $pageId, $componentKey);
 
-        if (Vpc_Abstract::getSetting($class, 'hasLinktext')) {
-            $this->add(new Vps_Auto_Field_TextField('text', 'Linktext'))
-                ->setWidth(500)
-                ->setAllowBlank(false);
-        }
-
         $this->add(new Vps_Auto_Field_TextField('rel', 'Rel'))
             ->setWidth(500);
 

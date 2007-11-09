@@ -9,11 +9,7 @@ class Vpc_Basic_Link_Intern_Component extends Vpc_Basic_Link_Component
     {
         return array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_Link_Intern_Model',
-            'componentName' => 'Standard.Link.Intern',
-            'hasLinktext'  => true,
-            'default'       => array(
-                'text'          => 'Linktext'
-            )
+            'componentName' => 'Standard.Link.Intern'
         )); 
     }
     
@@ -28,11 +24,9 @@ class Vpc_Basic_Link_Intern_Component extends Vpc_Basic_Link_Component
         }
         
         $ret = parent::getTemplateVars();
-        $ret['hasLinktext'] = $this->_getSetting('hasLinktext');
         $ret['href'] = $href;
         $ret['param'] = $this->_row->param;
         $ret['rel'] = $this->_row->rel;
-        $ret['text'] = $this->_row->text;
         return $ret;
     }
 }

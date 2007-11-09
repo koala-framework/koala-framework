@@ -5,16 +5,12 @@ class Vpc_Basic_Link_Extern_Form extends Vps_Auto_Vpc_Form
     {
         parent::__construct($class, $pageId, $componentKey);
 
-        if (Vpc_Abstract::getSetting($class, 'hasLinktext')) {
-            $this->add(new Vps_Auto_Field_TextField('text', 'Linktext'))
-                ->setWidth(500)
-                ->setAllowBlank(false);
-        }
         $this->add(new Vps_Auto_Field_TextField('target', 'Target'))
             ->setWidth(500)
             ->setAllowBlank(false);
         $this->add(new Vps_Auto_Field_TextField('rel', 'Rel'));
         $this->add(new Vps_Auto_Field_TextField('param', 'Parameters'));
+        
         $popup = new Vps_Auto_Container_FieldSet('Popup');
         $popup->add(new Vps_Auto_Field_TextField('width', 'Width'))
             ->setValue(400)

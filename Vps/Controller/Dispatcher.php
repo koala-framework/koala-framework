@@ -5,26 +5,42 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     {
         $module = $request->getModuleName();
         if ($module == 'component' && $request->getControllerName() == 'component') {
+            
             $className = '';
             $class = $request->getParam('class');
-            Zend_Loader::loadClass($class);
-            while ($className == '' && is_subclass_of($class, 'Vpc_Abstract')) {
-                $cc = $class;
-                if (substr($cc, -9) == 'Component') {
-                    $cc = substr($cc, 0, -9);
-                }
-                $cc .= 'Controller';
-                if (class_exists($cc)) {
-                    $className = $cc;
-                }
-                $class = get_parent_class($class);
+            
+            // Zuerst direkt Controller zu Klasse suchen
+            if (class_exists($class . 'Controller')) {
+                $className = $class . 'Controller';
             }
+            
+            // Wenn nicht gefunden, Vererbungshierarchie durchlaufen
+            if ($className == '') {
+                Zend_Loader::loadClass($class);
+                while ($className == '' && is_subclass_of($class, 'Vpc_Abstract')) {
+                    $cc = $class;
+                    if (substr($cc, -9) == 'Component') {
+                        $cc = substr($cc, 0, -9);
+                    }
+                    $cc .= 'Controller';
+                    if (class_exists($cc)) {
+                        $className = $cc;
+                    }
+                    $class = get_parent_class($class);
+                }
+            }
+            
         } else if ($module == 'component' || $module == 'vps') {
+            
             $className = ucfirst($request->getControllerName());
             $className = "Vps_Controller_Action_Component_$className";
+            
         } else {
+            
             $className = parent::getControllerClass($request);
+            
         }
+        
         return $className;
     }
 
