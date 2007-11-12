@@ -2,6 +2,9 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
 {
     initComponent : function()
     {
+        this.addEvents({
+            changevalue : true
+        });
         if(!this.store) {
             throw "no store set";
         }
@@ -121,6 +124,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                 scope: this
             });
         }
+        this.fireEvent('changevalue', this.value);
     },
     onRender : function(ct, position)
     {
