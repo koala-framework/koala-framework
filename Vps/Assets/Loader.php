@@ -34,7 +34,7 @@ class Vps_Assets_Loader
                 }
             }
             foreach($cssConfig as $k=>$i) {
-                $contents = str_replace('#'.$k, $i, $contents);
+                $contents = str_replace('$'.$k, $i, $contents);
             }
         }
         return $contents;
