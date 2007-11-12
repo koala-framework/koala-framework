@@ -27,7 +27,11 @@ class Vps_Assets_Loader
         if (substr($file, -4) == '.css') {
             static $cssConfig;
             if (!isset($cssConfig)) {
-                $cssConfig = new Zend_Config_Ini('application/config.ini', 'css');
+                try {
+                    $cssConfig = new Zend_Config_Ini('application/config.ini', 'css');
+                } catch (Zend_Config_Exception $e) {
+                    $cssConfig = array();
+                }
             }
             foreach($cssConfig as $k=>$i) {
                 $contents = str_replace('#'.$k, $i, $contents);
