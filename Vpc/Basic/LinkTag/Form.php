@@ -1,10 +1,8 @@
 <?php
 class Vpc_Basic_LinkTag_Form extends Vps_Auto_Vpc_Form
 {
-    private $_class;
     public function __construct($class, $pageId = null, $componentKey = null)
     {
-        $this->_class = $class;
         parent::__construct($class, $pageId, $componentKey);
         
         $classes = Vpc_Abstract::getSetting($class, 'linkClasses');
@@ -28,7 +26,7 @@ class Vpc_Basic_LinkTag_Form extends Vps_Auto_Vpc_Form
     
     public function prepareSave($parentRow, $postData)
     {
-        $linktype = $postData[$this->_class . '_link_class'];
+        $linktype = $postData[$this->fields['link_class']->getFieldName()];
         foreach ($this->fields['CardLayout']->getChildren() as $child) {
             if ($linktype != $child->getName()) {
                 unset($this->fields['CardLayout']->fields[$child->getName()]);

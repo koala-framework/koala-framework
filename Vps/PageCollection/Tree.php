@@ -178,25 +178,42 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
 
     public function getUrl($page)
     {
-        $id = $page->getPageId();
-
-        $path = '/';
-        if ($this->getHomePage()->getPageId() == $id) {
+        // Erste Nicht-Decorator-Komponente raussuchen
+        $p = $page;
+        while ($p instanceof Vpc_Decorator_Abstract) {
+            $p = $p->getChildComponent();
+        }
+        
+        if ($p instanceof Vpc_Basic_LinkTag_Component && 
+            $page->getId() != $p->getId()
+        ) {
+            $templateVars = $p->getTemplateVars();
+            $url = $templateVars['href'];
+            if ($templateVars['param'] != '') {
+                $url .= '?' . $templateVars['param'];
+            }
+            return $url;
+        } else {
+            $id = $page->getPageId();
+    
+            $path = '/';
+            if ($this->getHomePage()->getPageId() == $id) {
+                return $path;
+            }
+            if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL) {
+                while ($id) {
+                    $path = '/' . $this->_pageFilenames[$id] . $path;
+                    $page = $this->getParentPage($page);
+                    $id = $page ? $page->getPageId() : null;
+                }
+            } else {
+                if (isset($this->_pageFilenames[$id])) {
+                    $path .= 'de_' . $this->_pageFilenames[$id] . '_' . $id . '.html';
+                }
+            }
+    
             return $path;
         }
-        if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL) {
-            while ($id) {
-                $path = '/' . $this->_pageFilenames[$id] . $path;
-                $page = $this->getParentPage($page);
-                $id = $page ? $page->getPageId() : null;
-            }
-        } else {
-            if (isset($this->_pageFilenames[$id])) {
-                $path .= 'de_' . $this->_pageFilenames[$id] . '_' . $id . '.html';
-            }
-        }
-
-        return $path;
     }
 
 }

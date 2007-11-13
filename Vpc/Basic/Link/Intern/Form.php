@@ -15,4 +15,13 @@ class Vpc_Basic_Link_Intern_Form extends Vps_Auto_Vpc_Form
             ->setWidth(500)
             ->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl('Vpc_Basic_Link_Intern_Pages'));
     }
+    
+    public function prepareSave($row, $postData)
+    {
+        $pageId = $row->page_id;
+        if ($pageId == $postData[$this->fields['target']->getFieldName()]) {
+            throw new Vps_ClientException('Link cannot link to itself');
+        }
+        parent::prepareSave($row, $postData);
+    }
 }

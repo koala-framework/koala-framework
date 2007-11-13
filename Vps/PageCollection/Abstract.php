@@ -225,21 +225,20 @@ abstract class Vps_PageCollection_Abstract
     {
         $id = $page->getPageId();
         $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($id, false);
-
+        $data['url'] = $this->getUrl($page);
+        
+        // Erste Nicht-Decorator-Komponente raussuchen
         $p = $page;
         while ($p instanceof Vpc_Decorator_Abstract) {
             $p = $p->getChildComponent();
         }
         if ($p instanceof Vpc_Basic_LinkTag_Component) {
-            $templateVars = $p->getTemplateVars();
-            $data['url'] = $templateVars['href'];
-            if ($templateVars['param'] != '') {
-                $data['url'] .= '?' . $templateVars['param'];
+            if ($page != $p) {
+                $templateVars = $p->getTemplateVars();
+                $data['rel'] = $templateVars['rel'];
             }
-            $data['rel'] = $templateVars['rel'];
         } else {
             $data['rel'] = '';
-            $data['url'] = $this->getUrl($page);
         }
         
         return $data;
