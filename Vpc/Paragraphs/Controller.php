@@ -35,10 +35,9 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $insert['component_key'] = $this->componentKey;
             $insert['component_class'] = $class;
             $id = $this->_table->insert($insert);
-            $where = 'page_id = ' . $this->pageId;
-            $where .= ' AND component_key=\'' . $this->componentKey . '\'';
+            $where['page_id = ?'] = $this->pageId;
+            $where['component_key = ?'] = $this->componentKey;
             $this->_table->numberize($id, 'pos', 0, $where);
-
         } else {
             $this->view->error = 'Component not found: ' . $componentClass;
         }

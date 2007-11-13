@@ -14,7 +14,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
      * @param string Where-Klausel für Unique-Abfrage (zB. 'parent_id=1')
      * @return string Unique String
      */
-    public function getUniqueString($string, $fieldname = '', $where = array())
+    public function getUniqueString($string, $fieldname = '', array $where = array())
     {
         // Sonderzeichen rausnehmen
         if (function_exists('transliterate')) {
@@ -56,7 +56,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
      * @param string Where-Klausel für Einschränkung der betreffenden Datensätze (zB. 'parent_id=1')
      * @return boolean Ob Nummerierung erfolgreich war
      */
-    public function numberize($fieldname, $value = null, $where = array())
+    public function numberize($fieldname, $value = null, array $where = array())
     {
         $originalWhere = $where;
         $primaryKey = key($this->_getPrimaryKey());
