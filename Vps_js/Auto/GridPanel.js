@@ -64,7 +64,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             } else {
                 var storeType = Ext.data.Store;
             }
-            storeConfig.baseParams = this.baseParams;
+            if (this.baseParams) storeConfig.baseParams = this.baseParams;
             this.store = new storeType(storeConfig);
 
         }
@@ -194,8 +194,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             this.editDialog = new Vps.Auto.Form.Window(meta.editDialog);
         }
         if (this.editDialog) {
-            this.editDialog.on('datachange', function() {
+            this.editDialog.on('datachange', function(r) {
                 this.reload();
+                this.fireEvent('datachange', r);
             }, this);
 
             if (this.editDialog.allowEdit !== false) {
@@ -559,27 +560,40 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
     onDelete : function() {
         Ext.Msg.show({
             title:'Löschen',
-            msg: 'Möchten Sie diesen Eintrag wirklich löschen?',
+            msg: 'Do you really wish to remove this entry / these entries?',
             buttons: Ext.Msg.YESNO,
             scope: this,
             fn: function(button) {
                 if (button == 'yes') {
-                    var selectedRow = this.getGrid().getSelectionModel().getSelected();
-                    if (!selectedRow) return;
-                    if (selectedRow.data.id == 0) {
-                        this.store.remove(selectedRow);
-                    } else {
-                        this.el.mask('Deleting...');
+                    var selectedRows = this.getGrid().getSelectionModel().getSelections();
+                    if (selectedRows.length == 0) return;
 
-                        var params = {};
-                        params[this.store.reader.meta.id] = selectedRow.id;
+                    var ids = [];
+                    var params = {};
+                    selectedRows.each(function(selectedRow)
+                    {
+                        if (selectedRow.data.id == 0) {
+                            this.store.remove(selectedRow);
+                        } else {
+                            if (!params[this.store.reader.meta.id]) {
+                                params[this.store.reader.meta.id] = '';
+                            } else {
+                                params[this.store.reader.meta.id] += ';';
+                            }
+                            params[this.store.reader.meta.id] += selectedRow.id;
+                        }
+                    }, this);
+
+                    if (params[this.store.reader.meta.id]) {
+                        this.el.mask('Deleting...');
                         Ext.Ajax.request({
                             url: this.controllerUrl+'/jsonDelete',
                             params: params,
-                            success: function() {
+                            success: function(response, options, r) {
                                 this.reload();
                                 this.getAction('delete').disable();
                                 this.fireEvent('deleterow', this.grid);
+                                this.fireEvent('datachange', r);
                             },
                             failure: function() {
                                 this.getAction('delete').enable();
