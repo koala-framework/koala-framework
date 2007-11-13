@@ -58,7 +58,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
         $this->_postInsertValue($value);
         return $value;
     }
-
+    
     //ArrayAccess
     public function offsetUnset($offset)
     {
