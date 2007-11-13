@@ -12,25 +12,47 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
 
     initComponent : function() {
+        if (this.linkComponentConfig) {
+            this.enableLinks = true;
+            var cls = eval(this.linkComponentConfig['class']);
+            var panel = new cls(this.linkComponentConfig.config);
+            this.linkDialog = new Vps.Auto.Form.Window({
+                autoForm: panel,
+                width: 665,
+                height: 400
+            });
+        }
+        if (this.imageComponentConfig) {
+            var cls = eval(this.imageComponentConfig['class']);
+            var panel = new cls(this.imageComponentConfig.config);
+            this.imageDialog = new Vps.Auto.Form.Window({
+                autoForm: panel,
+                width: 450,
+                height: 400
+            });
+        }
+
         Vps.Form.HtmlEditor.superclass.initComponent.call(this);
     },
     createToolbar: function(editor){
         Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
         var tb = this.getToolbar();
-        tb.add('-');
-        tb.add({
-            icon: '/assets/silkicons/image.png',
-            handler: this.createImage,
-            scope: this,
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: 'Image',
-                text: 'Insert new image or edit selected image.'
-            },
-            cls: 'x-btn-icon',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
+        if (this.imageComponent) {
+            tb.add('-');
+            tb.add({
+                icon: '/assets/silkicons/image.png',
+                handler: this.createImage,
+                scope: this,
+                tooltip: {
+                    cls: 'x-html-editor-tip',
+                    title: 'Image',
+                    text: 'Insert new image or edit selected image.'
+                },
+                cls: 'x-btn-icon',
+                clickEvent: 'mousedown',
+                tabIndex: -1
+            });
+        }
         tb.add({
             icon: '/assets/silkicons/text_letter_omega.png',
             handler: this.insertChar,
@@ -124,55 +146,53 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 //     getDocMarkup : function(){
 //         return '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style></head><body></body></html>';
 //     },
+    setValue : function(v) {
+        if (v.page_id && v.component_key) {
+            this.page_id = v.page_id;
+            this.component_key = v.component_key;
+        }
+        if (v.content) v = v.content;
+        Vps.Form.HtmlEditor.superclass.setValue.call(this, v);
+    },
+
     createImage: function() {
         var img = this.getFocusElement();
         if (img && img.tagName && img.tagName.toLowerCase() == 'img') {
-            Ext.Ajax.request({
-                params: { src: img.src },
-                url: this.controllerUrl+'/jsonEditImage',
-                success: function(response, options, r) {
-                    var c = eval(r.config['class']);
-                    Ext.apply(r.config.config, {
-                        formConfig: { tbar: false },
-                        baseCls: 'x-plain'
-                    });
-                    var dialog = new Vps.Auto.Form.Window({
-                        autoForm: new c(r.config.config),
-                        width: 450,
-                        height: 400
-                    });
-                    dialog.on('datachange', function(r) {
-                        img.src = r.imageUrl;
-                        if (r.size.width) img.size.width = r.size.width;
-                        if (r.size.height) img.size.height = r.size.height;
-                    }, this);
-                    dialog.showEdit();
-                },
-                scope: this
-            });
-        } else {
-            Ext.Ajax.request({
-                params: { content: this.getValue() },
-                url: this.controllerUrl+'/jsonAddImage',
-                success: function(response, options, r) {
-                    var c = eval(r.config['class']);
-                    Ext.apply(r.config.config, {
-                        formConfig: { tbar: false },
-                        baseCls: 'x-plain'
-                    });
-                    var dialog = new Vps.Auto.Form.Window({
-                        autoForm: new c(r.config.config),
-                        width: 450,
-                        height: 400
-                    });
-                    dialog.on('datachange', function(r) {
-                        this.relayCmd('insertimage', r.imageUrl);
-                    }, this);
-                    dialog.showEdit();
-                },
-                scope: this
-            });
+            var expr = new RegExp('/media/[0-9]+/[^/]+/'+this.page_id+this.component_key+'-i([0-9]+)/');
+            var m = img.src.match(expr);
+            if (m) {
+                var nr = parseInt(m[1]);
+            }
+            if (nr) {
+                this.imageDialog.showEdit({
+                    page_id: this.page_id,
+                    component_key: this.component_key+'-i'+nr
+                });
+                this.imageDialog.on('datachange', function(r) {
+                    img.src = r.imageUrl;
+                    img.width = r.imageDimension.width;
+                    img.height = r.imageDimension.height;
+                }, this, {single: true});
+                return;
+            }
         }
+        Ext.Ajax.request({
+            params: {page_id: this.page_id, component_key: this.component_key},
+            url: this.controllerUrl+'/jsonAddImage',
+            success: function(response, options, r) {
+                this.imageDialog.showEdit({
+                    page_id: r.page_id,
+                    component_key: r.component_key
+                });
+                this.imageDialog.on('datachange', function(r) {
+                    var html = '<img src="'+r.imageUrl+'" ';
+                    html += 'width="'+r.imageDimension.width+'" ';
+                    html += 'height="'+r.imageDimension.height+'" />'
+                    this.insertAtCursor(html);
+                }, this, {single: true});
+            },
+            scope: this
+        });
     },
     createLink: function() {
         var a = this.getFocusElement();
@@ -180,50 +200,38 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             a = a.parentNode;
         }
         if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
-            Ext.Ajax.request({
-                params: { href: a.href },
-                url: this.controllerUrl+'/jsonEditLink',
-                success: function(response, options, r) {
-                    var c = eval(r.config['class']);
-                    Ext.apply(r.config.config, {
-                        formConfig: { tbar: false },
-                        baseCls: 'x-plain'
-                    });
-                    var dialog = new Vps.Auto.Form.Window({
-                        autoForm: new c(r.config.config),
-                        width: 660,
-                        height: 300
-                    });
-                    dialog.on('datachange', function(r) {
-                        img.href = r.href;
-                    }, this);
-                    dialog.showEdit();
-                },
-                scope: this
-            });
-        } else {
-            Ext.Ajax.request({
-                params: { content: this.getValue() },
-                url: this.controllerUrl+'/jsonAddLink',
-                success: function(response, options, r) {
-                    var c = eval(r.config['class']);
-                    Ext.apply(r.config.config, {
-                        formConfig: { tbar: false },
-                        baseCls: 'x-plain'
-                    });
-                    var dialog = new Vps.Auto.Form.Window({
-                        autoForm: new c(r.config.config),
-                        width: 660,
-                        height: 300
-                    });
-                    dialog.on('datachange', function(r) {
-                        this.relayCmd('createlink', r.href);
-                    }, this);
-                    dialog.showEdit();
-                },
-                scope: this
-            });
+            var expr = new RegExp(this.page_id+this.component_key+'-l([0-9]+)');
+            var m = a.href.match(expr);
+            if (m) {
+                var nr = parseInt(m[1]);
+            }
+            if (nr) {
+                this.linkDialog.un('datachange', this._insertLink, this);
+                this.linkDialog.showEdit({
+                    page_id: this.page_id,
+                    component_key: this.component_key+'-l'+nr
+                });
+                return;
+            }
         }
+        Ext.Ajax.request({
+            params: {page_id: this.page_id, component_key: this.component_key},
+            url: this.controllerUrl+'/jsonAddLink',
+            success: function(response, options, r) {
+                this.linkDialog.un('datachange', this._insertLink, this);
+                this.linkDialog.showEdit({
+                    page_id: r.page_id,
+                    component_key: r.component_key
+                });
+                this.linkDialog.on('datachange', this._insertLink, this, { single: true });
+            },
+            scope: this
+        });
+
+    },
+    _insertLink : function() {
+        var params = this.linkDialog.getAutoForm().getBaseParams();
+        this.relayCmd('createlink', params.page_id+params.component_key);
     },
 
     insertChar: function()

@@ -6,14 +6,18 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
         $pageCollection = new Vps_PageCollection_TreeBase(Zend_Registry::get('dao'));
         $components = $this->_getComponents(null, $pageCollection);
         asort($components);
+        $body = '';
         foreach ($components as $class => $ids) {
-            echo $class;
-            echo '<br />';
+            $body .= $class;
+            $body .= '<br />';
             foreach ($ids as $id) {
-                echo "<a href=\"/admin/component/edit/$class/$id\">$id</a>&nbsp;&nbsp;&nbsp;";
+                $body .= "<a href=\"/admin/component/edit/$class?page_id=$id[page_id]&component_key=$id[component_key]\">
+                                $id[page_id]$id[component_key]</a>&nbsp;&nbsp;&nbsp;";
             }
-            echo '<br /><br />';
+            $body .= '<br /><br />';
         }
+        $this->_helper->viewRenderer->setNoRender();
+        $this->getResponse()->appendBody($body);
     }
 
     private function _showComponents($component, $step = 0)
@@ -40,7 +44,8 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
     private function _getComponentsForPage($component, $return)
     {
         if ($component) {
-            $return[get_class($component)][] = $component->getId();
+            $return[get_class($component)][] = array('page_id'=>$component->getPageId(),
+                                                     'component_key'=>$component->getComponentKey());
             foreach ($component->getChildComponents() as $c) {
                 $return = $this->_getComponentsForPage($c, $return);
             }
@@ -61,12 +66,7 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
     {
         $component = $this->_getComponent();
 
-        if (is_file('application/views/Component.html')) {
-            $this->view->setRenderFile('Component.html');
-        } else {
-            $this->view->setRenderFile(VPS_PATH . '/views/Component.html');
-        }
-        $this->view->setScriptPath('application/views');
+        $this->view->setRenderFile(VPS_PATH . '/views/Component.html');
         $this->view->component = $component->getTemplateVars();
         $this->view->mode = '';
     }
@@ -76,12 +76,7 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
         $component = $this->_getComponent();
 
         $view = new Vps_View_Smarty();
-        if (is_file('application/views/Component.html')) {
-            $view->setRenderFile('Component.html');
-        } else {
-            $view->setRenderFile(VPS_PATH . '/views/Component.html');
-        }
-        $view->setScriptPath('application/views');
+        $view->setRenderFile(VPS_PATH . '/views/Component.html');
         $view->component = $component->getTemplateVars();
         $view->mode = '';
 
@@ -114,6 +109,9 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
     private function _getComponent()
     {
         $id = $this->_getParam('componentId');
+        if (!$id) {
+            $id = $this->_getParam('page_id').$this->_getParam('component_key');
+        }
         $pageCollection = new Vps_PageCollection_TreeBase(Zend_Registry::get('dao'));
         $component = $pageCollection->findComponent($id);
         return $component;

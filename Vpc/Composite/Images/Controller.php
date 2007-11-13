@@ -19,11 +19,4 @@ class Vpc_Composite_Images_Controller extends Vps_Controller_Action_Auto_Vpc_Gri
     {
         $row->visible = 0;
     }
-    
-    protected function _beforeDelete($row)
-    {
-        $class = Vpc_Abstract::getSetting($this->class, 'imageClass');
-        $componentKey = $row->component_key . '-' . $row->id;
-        Vpc_Admin::getInstance($class)->delete($class, $row->page_id, $componentKey);
-    }
 }

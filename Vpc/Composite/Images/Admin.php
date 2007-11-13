@@ -1,9 +1,9 @@
 <?php
 class Vpc_Composite_Images_Admin extends Vpc_Admin
 {
-    public function getControllerConfig($class)
+    public function getControllerConfig()
     {
-        $imageClass = Vpc_Abstract::getSetting($class, 'imageClass');
+        $imageClass = Vpc_Abstract::getSetting('imageClass');
         return array(
             'imageConfig' => Vpc_Admin::getConfig($imageClass)
         );
@@ -31,12 +31,9 @@ class Vpc_Composite_Images_Admin extends Vpc_Admin
         }
     }
 
-    public function delete($class, $pageId, $componentKey)
+    public function delete($pageId, $componentKey)
     {
-        foreach ($this->_getRows($class, $pageId, $componentKey) as $row) {
-            $imageClass = Vpc_Abstract::getSetting($class, 'imageClass');
-            $admin = Vpc_Admin::getInstance($imageClass);
-            $admin->delete($imageClass, $pageId, $componentKey . '-' . $row->id);
+        foreach ($this->_getRows($pageId, $componentKey) as $row) {
             $row->delete();
         }
     }

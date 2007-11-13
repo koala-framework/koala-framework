@@ -4,59 +4,30 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
     public function _initFields()
     {
         $field = new Vps_Auto_Field_HtmlEditor('content', 'Content');
+        $field->setData(new Vps_Auto_Data_Vpc_ComponentIds('content'));
+
+        $ignoreSettings = array('tablename', 'componentName', 'imageClass', 'linkClass', 'default');
         foreach (call_user_func(array($this->class, 'getSettings')) as $key => $val) {
-            if ($key != 'content') {
+            if (!in_array($key, $ignoreSettings)) {
                 $method = 'set' . ucfirst($key);
                 $field->$method($val);
             }
         }
-        $field->setEnableFont(false);
-        $field->setEnableFontSize(false);
-        $field->setEnableColors(false);
-        $controllerUrl = Vpc_Admin::getInstance($this->class)
-                            ->getControllerUrl($this->class);
-        $field->setControllerUrl($controllerUrl);
+        $class = Vpc_Abstract::getSetting($this->class, 'linkClass');
+        $field->setLinkComponentConfig(Vpc_Admin::getConfig($class));
+        $class = Vpc_Abstract::getSetting($this->class, 'imageClass');
+        $field->setImageComponentConfig(Vpc_Admin::getConfig($class));
+
+        $field->setControllerUrl(Vpc_Admin::getInstance($this->class)->getControllerUrl());
+
         $this->_form->add($field);
     }
 
     protected function _beforeSave(Zend_Db_Table_Row_Abstract $row)
     {
-        parent::_beforeSave($row);
-
         $row->content = $this->_tidy($row->content);
-
-        $this->component->beforeSave($row->content);
         $row->content_edit = '';
-    }
-
-    public function jsonAddImageAction()
-    {
-        $image = $this->component->addImage($this->_getParam('content'));
-        $this->view->config = Vpc_Admin::getInstance($image)->getConfig($image);
-    }
-
-    public function jsonEditImageAction()
-    {
-        $image = $this->component->getImageBySrc($this->_getParam('src'));
-        if (!$image) {
-            throw new Vps_Exception("Can't find image component");
-        }
-        $this->view->config = Vpc_Admin::getInstance($image)->getConfig($image);
-    }
-
-    public function jsonAddLinkAction()
-    {
-        $link = $this->component->addLink($this->_getParam('content'));
-        $this->view->config = Vpc_Admin::getInstance($link)->getConfig($link);
-    }
-
-    public function jsonEditLinkAction()
-    {
-        $link = $this->component->getLinkByHref($this->_getParam('href'));
-        if (!$link) {
-            throw new Vps_Exception("Can't find link component");
-        }
-        $this->view->config = Vpc_Admin::getInstance($link)->getConfig($link);
+        parent::_beforeSave($row);
     }
 
     public function jsonTidyHtmlAction()
@@ -84,10 +55,51 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
                     'drop-font-tags' => true,
                     'word-2000'      => true,
                     'show-body-only' => true,
-                    'bare'           => true);
+                    'bare'           => true,
+                    'enclose-block-text'=>true,
+                    'enclose-text'   => true,
+                    'join-styles'    => false,
+                    'logical-emphasis' => true,
+                    'lower-literals' => true,
+                    'output-bom'     => false,
+                    'char-encoding'  =>'utf8',
+                    'newline'        =>'LF'
+                    );
         $tidy = new tidy;
         $tidy->parseString($html, $config, 'utf8');
         $tidy->cleanRepair();
         return $tidy->value;
+    }
+
+    public function jsonAddImageAction()
+    {
+        $row = $this->_form->getRow();
+        $this->view->page_id = $row->page_id;
+        $nrs = array_merge($row->getTypeChildComponentNrs('image', $row->content),
+                    $row->getTypeChildComponentNrs('image', $row->content_edit));
+        if ($nrs) {
+            $nr = max($nrs);
+        } else {
+            $nr = 0;
+        }
+        $this->view->component_key = $row->component_key.'-i'.($nr+1);
+        $imageClass = Vpc_Abstract::getSetting($this->class, 'imageClass');
+        $row->content_edit .= "<img src=\"/media/0/$imageClass/{$this->view->page_id}{$this->view->component_key}/\" />";
+        $row->save();
+    }
+    public function jsonAddLinkAction()
+    {
+        $row = $this->_form->getRow();
+        $this->view->page_id = $row->page_id;
+        $nrs = array_merge($row->getTypeChildComponentNrs('link', $row->content),
+                    $row->getTypeChildComponentNrs('link', $row->content_edit));
+        if ($nrs) {
+            $nr = max($nrs);
+        } else {
+            $nr = 0;
+        }
+        $this->view->component_key = $row->component_key.'-l'.($nr+1);
+        $row->content_edit .= "<a href=\"{$this->view->page_id}{$this->view->component_key}\" />";
+        $row->save();
     }
 }

@@ -77,7 +77,8 @@ class Vps_Controller_Front extends Zend_Controller_Front
                               'action' => 'index')));
             $router->AddRoute('componentshow', new Zend_Controller_Router_Route(
                         'admin/component/show/:class/:componentId',
-                        array('module' => 'component',
+                        array('componentId'=>null,
+                              'module' => 'component',
                               'controller' => 'components',
                               'action' => 'show')));
             $router->AddRoute('componentedit', new Zend_Controller_Router_Route(
@@ -102,7 +103,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
                               'action' => 'index')));
 
             $router->AddRoute('media', new Zend_Controller_Router_Route(
-                        'media/:uploadId/:componentId/:checksum/:filename',
+                        'media/:uploadId/:class/:componentId/:checksum/:filename',
                         array('module' => 'vps',
                               'controller' => 'Media',
                               'action' => 'password')));
@@ -111,11 +112,12 @@ class Vps_Controller_Front extends Zend_Controller_Front
                         array('module' => 'vps',
                               'controller' => 'Media',
                               'action' => 'original')));
+/*
             $router->AddRoute('mediavpc', new Zend_Controller_Router_Route(
                         'media/:class/:componentId/:filename',
                         array('module' => 'component',
                               'controller' => 'Media',
-                              'action' => 'vpc')));
+                              'action' => 'vpc')));*/
 
             $plugin = new Zend_Controller_Plugin_ErrorHandler();
             $front->registerPlugin($plugin);

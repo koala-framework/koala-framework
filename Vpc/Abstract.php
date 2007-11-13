@@ -245,7 +245,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     public static function getIdPattern()
     {
         $pattern = '(\d+)'; // PageId
-        $pattern .= '(((-|_|,)\d+)*)?'; // PageKey
+        $pattern .= '(((-|_|,)[0-9a-zA-Z]+)*)?'; // PageKey
         return $pattern;
     }
 

@@ -3,10 +3,13 @@ Vpc.Basic.LinkTag.Panel = Ext.extend(Vps.Auto.FormPanel, {
     initComponent : function()
     {
         Vpc.Basic.LinkTag.Panel.superclass.initComponent.call(this);
-        this.on('loadform', function(o, e) {
+        this.on('renderform', function(o, e) {
             this.getForm().findField('LinkClass').on('changevalue', function(value) {
                 var cards = this.findById('CardsContainer');
-                cards.layout.setActiveItem(value);
+                var active = this.findById(value)
+                if (active) {
+                    cards.layout.setActiveItem(active);
+                }
                 cards.items.each(function(item){
                     if (item.id != value) {
                         item.cascade(function(i) {
