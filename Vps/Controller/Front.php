@@ -118,7 +118,6 @@ class Vps_Controller_Front extends Zend_Controller_Front
                               'action' => 'vpc')));
 
             $plugin = new Zend_Controller_Plugin_ErrorHandler();
-            $plugin->setErrorHandlerModule('component');
             $front->registerPlugin($plugin);
 
             self::setUpDb();
