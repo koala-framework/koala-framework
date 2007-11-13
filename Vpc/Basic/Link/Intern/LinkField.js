@@ -23,6 +23,15 @@ Vps.Form.VpcLinkField = Ext.extend(Ext.form.TextField, {
             }, this);
             this.pagesRendered = true;
         }
+    },
+    
+    validateValue : function(value)
+    {
+        if (!value) {
+            return false;
+        } else {
+            return true;
+        }
     }
 });
 
