@@ -104,11 +104,12 @@ class Vps_Assets_Loader
                     header("HTTP/1.0 404 Not Found");
                     die("file not found");
                 }
-                $lastModified = gmdate("D, d M Y H:i:s \G\M\T", filemtime($assetPath));
-                if ($http_if_modified_since == $lastModified) {
+                $lastModified = max(filemtime('application/config.ini'), filemtime($assetPath));
+                $lastModifiedString = gmdate("D, d M Y H:i:s \G\M\T", $lastModified);
+                if ($http_if_modified_since == $lastModifiedString) {
                     header("HTTP/1.1 304 Not Modified");
                 } else {
-                    header('Last-Modified: '.$lastModified);
+                    header('Last-Modified: '.$lastModifiedString);
                     header("Cache-Control: must-revalidate, max-age=".(24*60*60));
                     if (substr($url, -4)=='.gif') {
                         header('Content-Type: image/gif');
