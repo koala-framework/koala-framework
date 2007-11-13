@@ -49,8 +49,8 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         if (!isset($this->_hasPosition)) {
             $this->_hasPosition = in_array('pos', $info['cols']);
         }
-        if ($this->_hasPosition && !$this->_order != 'pos') {
-            throw new Vps_Exception("If _hasposition is enabled, order must be position");
+        if ($this->_hasPosition && $this->_order != 'pos') {
+            throw new Vps_Exception("If _hasposition is enabled, order must be 'pos'");
         }
         if ($this->_hasPosition) {
             $this->_order = 'pos';
