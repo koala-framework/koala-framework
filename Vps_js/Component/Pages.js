@@ -7,7 +7,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             title       : 'Seitenbaum',
             region      : 'west',
             split       : true,
-            width       : 400,
+            width       : 300,
             collapsible : true,
             minSize     : 200,
             maxSize     : 600,

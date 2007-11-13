@@ -232,15 +232,16 @@ abstract class Vps_PageCollection_Abstract
         while ($p instanceof Vpc_Decorator_Abstract) {
             $p = $p->getChildComponent();
         }
-        if ($p instanceof Vpc_Basic_LinkTag_Component) {
-            if ($page != $p) {
-                $templateVars = $p->getTemplateVars();
-                $data['rel'] = $templateVars['rel'];
-            }
+
+        if ($p instanceof Vpc_Basic_LinkTag_Component &&
+            $page->getId() != $p->getId()
+        ) {
+            $templateVars = $p->getTemplateVars();
+            $data['rel'] = $templateVars['rel'];
         } else {
             $data['rel'] = '';
         }
-        
+
         return $data;
     }
 
