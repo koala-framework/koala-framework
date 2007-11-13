@@ -33,7 +33,7 @@ class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Abstract
                                                  'text'    => $data['name'],
                                                  'current' => $isCurrent,
                                                  'class'   => trim($class),
-                                                 'rel'     => '');
+                                                 'rel'     => $data['rel']);
             }
         }
 
@@ -60,7 +60,6 @@ class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Abstract
             $page = $pc->getParentPage($page);
             $level--;
         }
-
         return $return;
     }
 }

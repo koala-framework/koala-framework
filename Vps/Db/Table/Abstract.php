@@ -27,7 +27,6 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
     
     public function numberizeAll($fieldname, $where = array())
     {
-        // Alle Elemente selecten
         $rows = $this->fetchAll($where, $fieldname);
         $i = 1;
         foreach ($rows as $row) {

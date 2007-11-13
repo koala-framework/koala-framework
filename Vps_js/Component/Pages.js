@@ -30,41 +30,22 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
     setupEditform : function ()
     {
-        this.editform = new Vps.Auto.FormPanel({baseCls: 'x-plain', controllerUrl: '/admin/component/pageedit'});
-        this.editDialog = new Ext.Window({
+        this.editDialog = new Vps.Auto.Form.Window({
             width: 400,
             height: 200,
-            layout: 'fit',
-            bodyStyle:'padding:5px;',
-            plain: true,
-            items: [this.editform],
-            buttons: [{
-                text: 'OK',
-                handler: function() {
-                    var params = this.editform.baseParams;
-                    this.editform.getForm().submit({
-                        success: function() {
-                            this.editDialog.hide();
-                            if (this.editform.getForm().baseParams.parent_id != undefined) {
-                                this.treePanel.tree.getSelectionModel().getSelectedNode().parentNode.reload();
-                            } else {
-                                values = this.editform.getForm().getValues();
-                                id = this.treePanel.tree.getSelectionModel().getSelectedNode().id;
-                                node = this.treePanel.tree.getNodeById(id).setText(values.name);
-                            }
-                        },
-                        scope: this
-                    });
-                },
-                scope: this
-            },{
-                text: 'Abbrechen',
-                handler: function() {
-                    this.editDialog.hide();
-                },
-                scope: this
-            }]
+            controllerUrl: '/admin/component/pageedit'
         });
+        this.editDialog.on('datachange', function() {
+            var tree = this.treePanel.tree;
+            debugger;
+            if (this.editDialog.getAutoForm().getBaseParams().parent_id != undefined) {
+                tree.selModel.selNode.parentNode.reload();
+            } else {
+                values = this.editDialog.getForm().getValues();
+                id = tree.selModel.selNode.id;
+                node = tree.getNodeById(id).setText(values.name);
+            }
+        }, this);
     },
 
     onTreePanelLoaded : function(tree)
@@ -259,8 +240,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Properties of selected Page',
                 handler : function () {
-                    this.editform.load(this.treePanel.tree.getSelectionModel().getSelectedNode().id);
-                    this.editDialog.show();
+                    this.editDialog.getAutoForm().setBaseParams({});
+                    this.editDialog.showEdit(this.treePanel.tree.selModel.selNode.id);
                 },
                 icon    : '/assets/silkicons/page_gear.png',
                 cls     : 'x-btn-text-icon',
@@ -270,9 +251,10 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Add new Subpage',
                 handler : function () {
-                    this.editform.load();
-                    this.editform.getForm().baseParams.parent_id = this.treePanel.tree.getSelectionModel().getSelectedNode().id;
-                    this.editDialog.show();
+                    this.editDialog.getAutoForm().setBaseParams({
+                        parent_id: this.treePanel.tree.selModel.selNode.id
+                    });
+                    this.editDialog.showAdd();
                 },
                 icon    : '/assets/silkicons/page_add.png',
                 cls     : 'x-btn-text-icon',

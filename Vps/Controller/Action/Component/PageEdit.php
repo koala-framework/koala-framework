@@ -7,13 +7,10 @@ class Vps_Controller_Action_Component_PageEdit extends Vps_Controller_Action_Aut
     protected function _initFields()
     {
         $components = Vpc_Admin::getAvailableComponents('Vpc/');
-        $types = array('Vpc_Paragraphs_Component' => 'Content');
-        foreach ($components as $name => $component) {
-            //$type = constant("$component::TYPE");
-            //if ($type != '') {
-                //$types[$component] = $type;
-            //}
-        }
+        $types = array(
+            'Vpc_Paragraphs_Component' => 'Content',
+            'Vpc_Basic_LinkTag_Component' => 'Link'
+        );
 
         $table = new Vps_Dao_Pages();
         $table->showInvisible(true);
@@ -22,15 +19,11 @@ class Vps_Controller_Action_Component_PageEdit extends Vps_Controller_Action_Aut
         $fields = $this->_form->fields;
         $fields->add(new Vps_Auto_Field_TextField('name'))
             ->setFieldLabel('Name of Page');
-        $fields->add(new Vps_Auto_Field_TextField('title'))
-            ->setFieldLabel('Title of Page');
-        $fields->add(new Vps_Auto_Field_TextField('pagetitle'))
-            ->setFieldLabel('Headline');
         $fields->add(new Vps_Auto_Field_ComboBox('component_class'))
             ->setFieldLabel('Pagetype')
             ->setValues($types)
             ->setTriggerAction('all')
-            ->setValue('Vpc_Paragraphs_Index')
+            ->setDefaultValue('Vpc_Paragraphs_Component')
             ->setEditable(false)
             ->setForceSelection(true);
     }
