@@ -27,7 +27,7 @@ class Vpc_Basic_Link_Intern_PagesController extends Vps_Controller_Action_Compon
                 }
                 $openedId = $page ? $page->getId() : null;
             }
-
+            
             if ((int)$id == 0) {
                 $type = $id;
                 $page = null;
