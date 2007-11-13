@@ -15,7 +15,12 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         if (this.linkComponentConfig) {
             this.enableLinks = true;
             var cls = eval(this.linkComponentConfig['class']);
-            var panel = new cls(this.linkComponentConfig.config);
+            var panel = new cls(Ext.applyIf(this.linkComponentConfig.config, {
+                baseCls: 'x-plain',
+                formConfig: {
+                    tbar: false
+                }
+            }));
             this.linkDialog = new Vps.Auto.Form.Window({
                 autoForm: panel,
                 width: 665,
@@ -24,7 +29,12 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         if (this.imageComponentConfig) {
             var cls = eval(this.imageComponentConfig['class']);
-            var panel = new cls(this.imageComponentConfig.config);
+            var panel = new cls(Ext.applyIf(this.imageComponentConfig.config, {
+                baseCls: 'x-plain',
+                formConfig: {
+                    tbar: false
+                }
+            }));
             this.imageDialog = new Vps.Auto.Form.Window({
                 autoForm: panel,
                 width: 450,
@@ -37,9 +47,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     createToolbar: function(editor){
         Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
         var tb = this.getToolbar();
-        if (this.imageComponent) {
+        if (this.imageDialog) {
             tb.add('-');
-            tb.add({
+            tb.insert(9, {
                 icon: '/assets/silkicons/image.png',
                 handler: this.createImage,
                 scope: this,
@@ -92,6 +102,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             clickEvent: 'mousedown',
             tabIndex: -1
         });
+
         this.blockSelect = tb.el.createChild({
             tag:'select',
             cls:'x-font-select',
@@ -105,6 +116,8 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             this.relayCmd('formatblock', v);
             this.deferFocus();
         }, this);
+        tb.insert(0, this.blockSelect.dom);
+        tb.insert(1, '-');
 
     },
 
