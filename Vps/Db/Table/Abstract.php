@@ -15,7 +15,7 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
         return $this->_dao;
     }
 
-    public function numberize($id, $fieldname, $value, $where = '')
+    public function numberize($id, $fieldname, $value, array $where = array())
     {
         $row = $this->find($id)->current();
         if ($row) {
