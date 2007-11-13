@@ -34,7 +34,7 @@ class Vps_Assets_Loader
                 }
             }
             foreach($cssConfig as $k=>$i) {
-                $contents = str_replace('$'.$k, $i, $contents);
+	        $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents);
             }
         }
         return $contents;
