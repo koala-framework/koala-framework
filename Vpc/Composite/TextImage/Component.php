@@ -9,7 +9,7 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract
         return array_merge(parent::getSettings(), array(
             'componentName'     => 'Standard.TextImage',
             'tablename'         => 'Vpc_Composite_TextImage_Model',
-            'textClass'         => 'Vpc_Basic_Html_Component',
+            'textClass'         => 'Vpc_Basic_Text_Component',
             'imageClass'        => 'Vpc_Basic_Image_Component',
             'default'           => array(
                 'image_position'    => 'alternate' // 'left', 'right', 'alternate'
@@ -28,7 +28,7 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract
 
     protected function _init()
     {
-        $textClass = $this->_getClassFromSetting('textClass', 'Vpc_Basic_Html_Component');
+        $textClass = $this->_getClassFromSetting('textClass', 'Vpc_Basic_Text_Component');
         $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Component');
         $this->text = $this->createComponent($textClass, 1);
         $this->image = $this->createComponent($imageClass, 2);

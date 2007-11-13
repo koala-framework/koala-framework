@@ -37,31 +37,12 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
     
     public function getTemplateVars()
     {
-        $size = $this->getImageDimension();
-        
+        $size = $this->_row->getImageDimension(get_class($this));
+
         $return = parent::getTemplateVars();
-        $return['url'] = $this->getImageUrl();
+        $return['url'] = $this->_row->getImageUrl(get_class($this));
         $return['width'] = $size['width'];
         $return['height'] = $size['height'];
         return $return;
-    }
-
-    public function getImageUrl()
-    {
-        return $this->getTable('Vps_Dao_File')->generateUrl(
-            $this->_row->vps_upload_id, 
-            $this->getId(), 
-            $this->_row->filename != '' ? $this->_row->filename : 'unnamed', 
-            Vps_Dao_File::SHOW
-        );
-    }
-    
-    public function getImageDimension()
-    {
-        return Vps_Media_Image::calculateScaleDimensions(
-            $this->getTable('Vps_Dao_File')->getFileSource($this->_row->vps_upload_id),
-            array($this->_row->width, $this->_row->height),
-            $this->_row->scale
-        );
     }
 }

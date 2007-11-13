@@ -1,6 +1,7 @@
 <?php
 class Vps_Controller_Action_Component_Media extends Vps_Controller_Action_Media
 {
+/*
     public function vpcAction()
     {
         $id = $this->_getParam('componentId');
@@ -10,7 +11,7 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action_Media
         $row = $table->findRow($id);
         $this->cacheAction($row->vps_upload_id);
     }
-
+*/
     protected function _createChecksum($password)
     {
         return md5($password . $this->_getParam('componentId'));
@@ -33,13 +34,15 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action_Media
     {
         $id = $this->_getParam('componentId');
         $class = $this->_getParam('class');
+        /*
         if (!$class) {
             $pageCollection = Vps_PageCollection_TreeBase::getInstance();
             $class = get_class($pageCollection->findComponent($id));
         }
+        */
         $tablename = Vpc_Abstract::getSetting($class, 'tablename');
         $table = new $tablename();
         $row = $table->findRow($id);
-        $row->createCacheFile($source, $target);
+        $row->createCacheFile($class, $source, $target);
     }
 }

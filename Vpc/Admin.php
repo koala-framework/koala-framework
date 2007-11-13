@@ -2,9 +2,11 @@
 class Vpc_Admin
 {
     protected $_db;
+    protected $_class;
 
-    protected function __construct(Zend_Db_Adapter_Pdo_Mysql $db)
+    protected function __construct($class, Zend_Db_Adapter_Pdo_Mysql $db)
     {
+        $this->_class = $class;
         $this->_db = $db;
     }
 
@@ -20,7 +22,7 @@ class Vpc_Admin
                 $setupClass = substr($class, 0, -$len) . '_Admin';
                 try {
                     if (class_exists($setupClass)) {
-                        return new $setupClass(Zend_Registry::get('dao')->getDb());
+                        return new $setupClass($componentClass, Zend_Registry::get('dao')->getDb());
                     }
                 } catch (Zend_Exception $e) {
                 }
@@ -66,10 +68,10 @@ class Vpc_Admin
     public static final function getConfig($class, $pageId = null, $componentKey = null, $config = array())
     {
         $admin = Vpc_Admin::getInstance($class);
-        $adminConfig = $admin->getControllerConfig($class, $pageId, $componentKey);
+        $adminConfig = $admin->getControllerConfig($pageId, $componentKey);
         $config = array_merge($config, $adminConfig);
-        $controllerClass = $admin->getControllerClass($class);
-        $controllerUrl = $admin->getControllerUrl($class);
+        $controllerClass = $admin->getControllerClass();
+        $controllerUrl = $admin->getControllerUrl();
         return Vpc_Admin::createConfig($controllerClass, $controllerUrl, $config, $pageId, $componentKey);
     }
 
@@ -98,13 +100,14 @@ class Vpc_Admin
         return 'Vps.Auto.FormPanel';
     }
 
-    public function getControllerConfig($class)
+    public function getControllerConfig()
     {
         return array();
     }
 
-    public function getControllerUrl($class)
+    public function getControllerUrl($class = null)
     {
+        if (is_null($class)) $class = $this->_class;
         if (substr($class, -10) == 'Controller') {
             $class = substr($class, 0, -10);
         }
@@ -113,9 +116,9 @@ class Vpc_Admin
 
     // ***************
     
-    protected function _getRow($class, $pageId, $componentKey)
+    protected function _getRow($pageId, $componentKey)
     {
-        $tablename = Vpc_Abstract::getSetting($class, 'tablename');
+        $tablename = Vpc_Abstract::getSetting($this->_class, 'tablename');
         if ($tablename) {
             $table = new $tablename();
             return $table->find($pageId, $componentKey)->current();
@@ -123,9 +126,9 @@ class Vpc_Admin
         return null;
     }
 
-    protected function _getRows($class, $pageId, $componentKey)
+    protected function _getRows($pageId, $componentKey)
     {
-        $tablename = Vpc_Abstract::getSetting($class, 'tablename');
+        $tablename = Vpc_Abstract::getSetting($this->_class, 'tablename');
         if ($tablename) {
             $table = new $tablename();
             $where = array(
@@ -139,9 +142,9 @@ class Vpc_Admin
 
     public function setup() {}
 
-    public function delete($class, $pageId, $componentKey)
+    public function delete($pageId, $componentKey)
     {
-        $row = $this->_getRow($class, $pageId, $componentKey);
+        $row = $this->_getRow($pageId, $componentKey);
         if ($row) {
             $row->delete();
         }

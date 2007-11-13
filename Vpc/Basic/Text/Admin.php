@@ -1,16 +1,16 @@
 <?php
 class Vpc_Basic_Text_Admin extends Vpc_Admin
 {
-    /*
-    public function getControllerClass()
-    {
-        return 'Vpc.Rte.Panel';
-    }
-*/
-
     public function setup()
     {
-        $fields['text'] = 'text NOT NULL';
-        $this->createFormTable('vpc_rte', $fields);
+        $class = Vpc_Abstract::getSetting($this->_class, 'linkClass');
+        Vpc_Admin::getInstance($class)->setup();
+        
+        $class = Vpc_Abstract::getSetting($this->_class, 'imageClass');
+        Vpc_Admin::getInstance($class)->setup();
+
+        $fields['content'] = 'text NOT NULL';
+        $fields['content_edit'] = 'text NOT NULL';
+        $this->createFormTable('vpc_basic_text', $fields);
     }
 }

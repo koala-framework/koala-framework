@@ -37,12 +37,9 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
         }
     }
 
-    public function delete($class, $pageId, $componentKey)
+    public function delete($pageId, $componentKey)
     {
-        foreach ($this->_getRows($class, $pageId, $componentKey) as $row) {
-            $admin = Vpc_Admin::getInstance($row->component_class);
-            $cKey = $componentKey . '-' . $row->id;
-            $admin->delete($row->component_class, $pageId, $cKey);
+        foreach ($this->_getRows($pageId, $componentKey) as $row) {
             $row->delete();
         }
     }

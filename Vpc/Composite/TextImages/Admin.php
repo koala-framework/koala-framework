@@ -6,19 +6,19 @@ class Vpc_Composite_TextImages_Admin extends Vpc_Admin
         return 'Vps.Component.TabPanel';
     }
 
-    public function getControllerConfig($class, $pageId, $componentKey)
+    public function getControllerConfig($pageId, $componentKey)
     {
-        $cls = Vpc_Abstract::getSetting($class, 'textClass');
+        $cls = Vpc_Abstract::getSetting($this->_class, 'textClass');
         $conf = Vpc_Admin::getConfig($cls, $pageId, $componentKey . '-1');
         $config['tabs']['Text'] = $conf; 
         
-        $cls = Vpc_Abstract::getSetting($class, 'imagesClass');
+        $cls = Vpc_Abstract::getSetting($this->_class, 'imagesClass');
         $conf = Vpc_Admin::getConfig($cls, $pageId, $componentKey . '-2');
         $config['tabs']['Images'] = $conf; 
         
         $conf = Vpc_Admin::createConfig(
             'Vps.Auto.FormPanel', 
-            $this->getControllerUrl($class), 
+            $this->getControllerUrl(),
             array(), 
             $pageId, 
             $componentKey
@@ -31,24 +31,23 @@ class Vpc_Composite_TextImages_Admin extends Vpc_Admin
 
     public function setup()
     {
-        $cls = Vpc_Abstract::getSetting($class, 'textClass');
+        $cls = Vpc_Abstract::getSetting($this->_class, 'textClass');
         Vpc_Admin::getInstance($cls)->setup();
-        $cls = Vpc_Abstract::getSetting($class, 'imagesClass');
+        $cls = Vpc_Abstract::getSetting($this->_class, 'imagesClass');
         Vpc_Admin::getInstance($cls)->setup();
 
         $fields['image_position'] = "enum('left', 'right', 'alternate') default NULL";
-        $fields['enlarge'] = 'tinyint(3) NOT NULL';
         $this->createFormTable('vpc_composite_textimage', $fields);
     }
 
-    public function delete($class, $pageId, $componentKey)
+    public function delete($pageId, $componentKey)
     {
-        $cls = Vpc_Abstract::getSetting($class, 'textClass');
-        Vpc_Admin::getInstance($cls)->delete($cls, $pageId, $componentKey . '-1');
+        $cls = Vpc_Abstract::getSetting($this->_class, 'textClass');
+        Vpc_Admin::getInstance($cls)->delete($pageId, $componentKey . '-1');
         
-        $cls = Vpc_Abstract::getSetting($class, 'imagesClass');
-        Vpc_Admin::getInstance($cls)->delete($cls, $pageId, $componentKey . '-2');
+        $cls = Vpc_Abstract::getSetting($this->_class, 'imagesClass');
+        Vpc_Admin::getInstance($cls)->delete($pageId, $componentKey . '-2');
         
-        parent::delete($class, $pageId, $componentKey);
+        parent::delete($pageId, $componentKey);
     }
 }
