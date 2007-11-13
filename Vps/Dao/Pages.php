@@ -149,9 +149,16 @@ class Vps_Dao_Pages extends Vps_Db_Table
         $id = parent::insert($data);
         if ($id) {
             $row = $this->find($id)->current();
-            $row->filename = $row->getUniqueString($data['name'], 'filename', 'parent_id = ' . $row->parent_id);
+            $where = array();
+            $where['type = ?'] = $data['type'];
+            if (!$row->parent_id) {
+                $where['parent_id IS NULL'] = '';
+            } else {
+                $where['parent_id = ?'] = $row->parent_id;
+            }
+            $row->filename = $row->getUniqueString($data['name'], 'filename', $where);
             $row->save();
-            $row->numberize('pos', 1, 'parent_id = ' . $row->parent_id);
+            $row->numberize('pos', null, $where);
         }
 
         $this->_pageData = null;

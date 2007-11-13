@@ -100,6 +100,11 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
         return array($this->_component);
     }
     
+    public function getChildComponent()
+    {
+        return $this->_component;
+    }
+    
     /**
      * Schleift die Methode auf auf dekorierte Komponente durch.
      */

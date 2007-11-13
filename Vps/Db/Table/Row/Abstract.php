@@ -14,7 +14,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
      * @param string Where-Klausel für Unique-Abfrage (zB. 'parent_id=1')
      * @return string Unique String
      */
-    public function getUniqueString($string, $fieldname = '', $where = '')
+    public function getUniqueString($string, $fieldname = '', $where = array())
     {
         // Sonderzeichen rausnehmen
         if (function_exists('transliterate')) {
@@ -30,17 +30,16 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
         // Unique machen
         if ($fieldname != '') {
-            $table = $this->getTable();
-            $info = $table->info();
-            $tablename = $info['name'];
-            $x = 0;
-            if ($where != '') { $where .= ' AND '; }
             $primaryKey = key($this->_getPrimaryKey());
             $primaryValue = current($this->_getPrimaryKey());
-            $where .= " $primaryKey!='$primaryValue'";
+            $where["$primaryKey != ?"] = $primaryValue;
+            
+            $x = 0;
             $unique = $string;
-            while ((int)$table->getAdapter()->fetchOne("SELECT COUNT(*) FROM $tablename WHERE $fieldname='$unique' AND $where") > 0) {
+            $where["$fieldname = ?"] = $unique;
+            while ($this->getTable()->fetchAll($where)->count() > 0) {
                 $unique = $string . '_' . ++$x;
+                $where["$fieldname = ?"] = $unique;
             }
             $string = $unique;
         }
@@ -57,72 +56,29 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
      * @param string Where-Klausel für Einschränkung der betreffenden Datensätze (zB. 'parent_id=1')
      * @return boolean Ob Nummerierung erfolgreich war
      */
-    public function numberize($fieldname, $value = null, $where = '')
+    public function numberize($fieldname, $value = null, $where = array())
     {
-        $origWhere = $where;
-        if (is_array($origWhere)) {
-            $w = array();
-            foreach ($origWhere as $key => $val) {
-                $w[] = $this->getTable()->getAdapter()->quoteInto($key, $val);
-            }
-            $where = implode(' AND ', $w);
-        }
-        $where_and = $where;
-        if ($where_and != '') {
-            $where_and .= ' AND ';
-        }
-
-        $table = $this->getTable();
-        $db = $table->getAdapter();
-        $info = $table->info();
-
-        $tablename = $info['name'];
+        $originalWhere = $where;
         $primaryKey = key($this->_getPrimaryKey());
         $primaryValue = current($this->_getPrimaryKey());
-
+        $where["$primaryKey != ?"] = $primaryValue;
+        
         // Wenn value null ist, Datensatz am Ende einfügen
         if (!$value) {
-            $value = $db->fetchOne("SELECT COUNT(*) FROM $tablename WHERE $where") + 1;
+            $value = $this->getTable()->fetchAll($where)->count() + 1;
         }
 
-        // Überprüfen ob Tabellenfeld korrekt definiert ist
-        $rowAnzahl = (int)$db->fetchOne("SELECT COUNT(*) FROM $tablename");
-
-        $colMeta = $db->fetchRow("DESCRIBE $tablename $fieldname");
-        if (strpos($colMeta['Type'], 'unsigned') !== false) {
-            throw new Zend_Db_Exception("Attribute 'unsigned' is not allowed in Sortfield '$fieldname'.");
-        }
-        if (strpos($colMeta['Type'], 'tinyint') !== false) {
-            if ($rowAnzahl >= 120) {
-                throw new Zend_Db_Exception("Type of Sortfield '$fieldname' ('tinyint') too small. Try 'smallint'.");
-            }
-            if ($value > 127) {
-                $value = 127;
-            } else if ($value < -128) {
-                $value = -128;
-            }
-        } else if (strpos($colMeta['Type'], 'smallint') !== false) {
-            if ($rowAnzahl >= 32750) {
-                throw new Zend_Db_Exception("Type of Sortfield '$fieldname' ('smallint') too small. Try 'mediumint'.");
-            }
-            if ($value > 32767) {
-                $value = 32767;
-            } else if ($value < -32768) {
-                $value = -32768;
-            }
+        $x = 0;
+        foreach ($this->getTable()->fetchAll($where, $fieldname) as $row) {
+            $x++;
+            if ($x == $value) { $x++; }
+            $row->$fieldname = $x;
+            $row->save();
         }
 
-        // Alle um 1 raufsetzen / runtersetzen, je nach Verschiebrichtung
-        if ($this->$fieldname > $value) {
-            $db->query("UPDATE $tablename SET $fieldname = $fieldname + 1 WHERE $where_and $fieldname >= $value");
-        } else if ($this->$fieldname < $value) {
-            $db->query("UPDATE $tablename SET $fieldname = $fieldname - 1 WHERE $where_and $fieldname <= $value");
-        }
-        // Zu bearbeitende Zeile ändern
-        $db->update($tablename, array($fieldname => $value), "$primaryKey = '$primaryValue'");
+        $this->$fieldname = $value;
+        $this->save();
 
-        $table->numberizeAll($fieldname, $origWhere);
-
-        return true;
+        $this->getTable()->numberizeAll($fieldname, $originalWhere);
     }
 }
