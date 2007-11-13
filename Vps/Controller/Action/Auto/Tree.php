@@ -212,7 +212,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         if ($point == 'append') {
             $row->parent_id = (int)$target == 0 ? null : $target;
             if ($this->_hasPosition) {
-                $row->position = '1';
+                $row->pos = '1';
             }
         } else {
             $targetRow = $this->_table->find($target)->current();
@@ -233,7 +233,12 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
 
         $row->save();
         if ($this->_hasPosition) {
-            $where = $row->parent_id ? 'parent_id=' . $row->parent_id : 'parent_id IS NULL';
+            if (!$row->parent_id) {
+                $where = array('parent_id IS NULL' => '');
+            } else {
+                $where = array('parent_id = ?' => $row->parent_id);
+            }
+
             $row->numberize('pos', $row->pos, $where);
         }
     }
