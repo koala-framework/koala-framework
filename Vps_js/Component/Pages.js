@@ -37,7 +37,6 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         });
         this.editDialog.on('datachange', function() {
             var tree = this.treePanel.tree;
-            debugger;
             if (this.editDialog.getAutoForm().getBaseParams().parent_id != undefined) {
                 tree.selModel.selNode.parentNode.reload();
             } else {
