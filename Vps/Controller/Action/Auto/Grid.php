@@ -480,25 +480,28 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             throw new Vps_Exception("Delete is not allowed.");
         }
         $success = false;
-        $id = $this->getRequest()->getParam($this->_primaryKey);
+        $ids = $this->getRequest()->getParam($this->_primaryKey);
+        $ids = explode(';', $ids);
 
-        $row = $this->_table->find($id)->current();
-        if(!$row) {
-            throw new Vps_Exception("Can't find row with id '$id'.");
-        }
-        if (!$this->_hasPermissions($row, 'delete')) {
-            throw new Vps_Exception("You don't have the permissions to delete this row.");
-        }
-        try {
-            $this->_beforeDelete($row);
-            $row->delete();
-            $this->_afterDelete();
-            if ($this->_position) {
-                $this->_table->numberizeAll($this->_position, $this->_getWhere());
+        foreach ($ids as $id) {
+            $row = $this->_table->find($id)->current();
+            if(!$row) {
+                throw new Vps_Exception("Can't find row with id '$id'.");
             }
-            $success = true;
-        } catch (Vps_ClientException $e) { //todo: nicht nur Vps_Exception fangen
-            $this->view->error = $e->getMessage();
+            if (!$this->_hasPermissions($row, 'delete')) {
+                throw new Vps_Exception("You don't have the permissions to delete this row.");
+            }
+            try {
+                $this->_beforeDelete($row);
+                $row->delete();
+                $this->_afterDelete();
+                if ($this->_position) {
+                    $this->_table->numberizeAll($this->_position, $this->_getWhere());
+                }
+                $success = true;
+            } catch (Vps_ClientException $e) { //todo: nicht nur Vps_Exception fangen
+                $this->view->error = $e->getMessage();
+            }
         }
 
         $this->view->success = $success;
