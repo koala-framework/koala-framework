@@ -477,6 +477,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         return array();
     }
+    
+    protected function _getParam($param)
+    {
+        return isset($_REQUEST[$param]) ? $_REQUEST[$param] : null;
+    }
 
     /**
      * Shortcut, fragt vom Seitenbaum die Url für eine Komponente ab

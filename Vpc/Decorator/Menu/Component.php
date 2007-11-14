@@ -24,6 +24,7 @@ class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Abstract
             $return['menu'][$type] = array();
             foreach ($pages as $i=>$page) {
                 $data = $pc->getPageData($page);
+                if ($data['hide']) { continue; }
                 $class = '';
                 if ($i==0) $class .= ' first';
                 if ($i==sizeof($pages)-1) $class .= ' last';
@@ -46,6 +47,7 @@ class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Abstract
             $return['submenus'][$level] = array();
             foreach ($pages as $i=>$p) {
                 $data = $pc->getPageData($p);
+                if ($data['hide']) { continue; }
                 $class = '';
                 if ($i==0) $class .= ' first';
                 if ($i==sizeof($pages)-1) $class .= ' last';

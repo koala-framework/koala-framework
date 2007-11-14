@@ -17,17 +17,8 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     public function getUniqueString($string, $fieldname = '', array $where = array())
     {
         // Sonderzeichen rausnehmen
-        if (function_exists('transliterate')) {
-            $filter[] = 'cyrillic_transliterate_bulgarian';
-            $string = transliterate($string, $filter, 'utf-8', 'utf-8');
-        }
-        $string = strtolower(htmlentities($string, ENT_COMPAT, 'utf-8'));
-        $string = preg_replace('/&szlig;/', 'ss', $string);
-        $string = preg_replace('/&(.)(uml);/', '$1e', $string);
-        $string = preg_replace('/&(.)(acute|breve|caron|cedil|circ|dblac|die|dot|grave|macr|ogon|ring|tilde|uml);/', '$1', $string);
-        $string = preg_replace('/([^a-z0-9]+)/', '_', html_entity_decode($string));
-        $string = trim($string, '_');
-
+        $string = Zend_Filter::get($string, 'Url', array(), 'Vps_Filter');
+        
         // Unique machen
         if ($fieldname != '') {
             $primaryKey = key($this->_getPrimaryKey());

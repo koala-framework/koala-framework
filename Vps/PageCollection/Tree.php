@@ -40,6 +40,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         }
 
         $this->_pageParentIds[$id] = $parentId;
+        // TODO: abchecken, ob es filename nicht doppelt gibt auf aktueller ebene
     }
 
     public function findPageByPath($path)
@@ -158,9 +159,9 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
                 $ids[] = $matches[1];
             }
         } else if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL) {
-            if (preg_match('/^(\/\w+)*\/$/', $path)) { // hierarchische URLs, Format /x/y/z/
+            if (preg_match('/^(\/\w+)*$/', $path)) { // hierarchische URLs, Format /x/y/z/
                 $page = null;
-                $pathParts = explode('/', substr($path, 1, -1));
+                $pathParts = explode('/', substr($path, 1));
                 foreach($pathParts as $pathPart) {
                     if ($pathPart != '') {
                         $page = $this->getChildPage($page, $pathPart);
@@ -203,6 +204,9 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
                     $path = '/' . $this->_pageFilenames[$id] . $path;
                     $page = $this->getParentPage($page);
                     $id = $page ? $page->getPageId() : null;
+                }
+                if (strlen($path) > 1 && substr($path, -1) == '/') {
+                    $path = substr($path, 0, -1);
                 }
             } else {
                 if (isset($this->_pageFilenames[$id])) {
