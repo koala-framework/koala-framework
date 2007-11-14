@@ -135,4 +135,11 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
         return $this->_dao->getTable($tablename);
     }
 
+    /**
+     * @return Vpc_PageCollection_Abstract/null Vorsicht! In einer Komponente nicht darauf verlassen, dass es die PageCollection gibt!
+     */
+    public function getPageCollection()
+    {
+        return $this->_pageCollection;
+    }
 }
