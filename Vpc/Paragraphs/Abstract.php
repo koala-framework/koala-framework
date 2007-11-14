@@ -11,6 +11,7 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'Paragraphs',
+            'hideInParagraphs' => true,
             'tablename' => 'Vpc_Paragraphs_Model'
         ));
         $ret['childComponentClasses'] = Vpc_Admin::getInstance('Vpc_Paragraphs_Abstract')

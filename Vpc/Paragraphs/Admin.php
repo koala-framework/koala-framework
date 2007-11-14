@@ -11,7 +11,8 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
         $componentList = array();
         foreach ($this->getComponents() as $component) {
             $name = Vpc_Abstract::getSetting($component, 'componentName');
-            if ($name) {
+            $hide = Vpc_Abstract::getSetting($component, 'hideInParagraphs');
+            if ($hide !== true && $name) {
                 $str = '$componentList["' . str_replace('.', '"]["', $name) . '"] = "' . $component . '";';
                 eval($str);
             }
