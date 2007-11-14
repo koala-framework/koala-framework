@@ -14,8 +14,8 @@ class Vpc_Decorator_Assets_Component extends Vpc_Decorator_Abstract
             $jsFiles = array('/assets/AllFrontend.js');
             $cssFiles = array('/assets/AllFrontend.css');
         }
-        $return['assets']['js'] = $jsFiles;
-        $return['assets']['css'] = $cssFiles;
+        $return['assets']['js'] = array_merge($return['assets']['js'], $jsFiles);
+        $return['assets']['css'] = array_merge($return['assets']['css'], $cssFiles);
 
         return $return;
     }
