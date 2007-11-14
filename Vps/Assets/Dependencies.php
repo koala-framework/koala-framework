@@ -5,6 +5,8 @@ class Vps_Assets_Dependencies
     private $_config;
     private $_assets;
     private $_dependenciesConfig;
+    private $_processedDependencies = array();
+    private $_processedComponents = array();
 
     public function __construct($assets, $config = null)
     {
@@ -127,8 +129,18 @@ class Vps_Assets_Dependencies
         return $this->_dependenciesConfig;
     }
 
-    protected function _processDependency($dependency)
+    private function _processDependency($dependency)
     {
+        if (in_array($dependency, $this->_processedDependencies)) return;
+        $this->_processedDependencies[] = $dependency;
+        if ($dependency == 'Components') {
+            foreach (Zend_Registry::get('config')->pageClasses as $c) {
+                if ($c->class && $c->text) {
+                    $this->_processComponentDependency($c->class);
+                }
+            }
+            return;
+        }
         if (!isset($this->_getDependenciesConfig()->$dependency)) {
             throw new Vps_Exception("Can't resolve dependency '$dependency'.");
         }
@@ -142,37 +154,77 @@ class Vps_Assets_Dependencies
 
         if (isset($deps->files)) {
             foreach ($deps->files as $file) {
-                if (substr($file, -2)=="/*") {
-                    $pathType = substr($file, 0, strpos($file, '/'));
-                    if (!isset($this->_config->path->$pathType)) {
-                        throw new Vps_Exception("Assets-Path-Type '$pathType' not found in config.");
-                    }
-                    $file = substr($file, strpos($file, '/')); //pathtype abschneiden
-                    $file = substr($file, 0, -1); //* abschneiden
-                    $path = $this->_config->path->$pathType.$file;
-                    if (!file_exists($path)) {
-                        throw new Vps_Exception("Path '$path' does not exist.");
-                    }
-                    $DirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
-                    foreach ($DirIterator as $file) {
-                        if (!preg_match('#/\\.svn/#', $file->getPathname())
-                            && (substr($file->getPathname(), -3) == '.js'
-                                || substr($file->getPathname(), -4) == '.css')) {
-                            $f = $file->getPathname();
-                            $f = substr($f, strlen($this->_config->path->$pathType));
-                            $f = $pathType . $f;
-                            if (!in_array($f, $this->_files)) {
-                                $this->_files[] = $f;
-                            }
-                        }
-                    }
-                } else {
-                    if (!in_array($file, $this->_files)) {
-                        $this->_files[] = $file;
-                    }
-                }
+                $this->_processDependencyFile($file);
             }
         }
         return;
+    }
+    private function _processComponentDependency($c)
+    {
+        if (in_array($c, $this->_processedComponents)) return;
+        $this->_processedComponents[] = $c;
+        $classes = Vpc_Abstract::getSetting($c, 'childComponentClasses');
+        if (is_array($classes)) {
+            foreach ($classes as $class) {
+                $assets = Vpc_Abstract::getSetting($class, 'assets');
+                if (isset($assets['dep'])) {
+                    foreach ($assets['dep'] as $dep) {
+                        $this->_processDependency($dep);
+                    }
+                }
+                if (isset($assets['files'])) {
+                    foreach ($assets['files'] as $file) {
+                        $this->_processDependencyFile($file);
+                    }
+                }
+                $file = Vpc_Admin::getComponentFile($class, 'css');
+                if ($file) {
+                    foreach ($this->_config->path as $type=>$path) {
+                        if ($path == '.') $path = getcwd();
+                        if (substr($file, 0, strlen($path)) == $path) {
+                            $file = $type.substr($file, strlen($path));
+                            if (!in_array($file, $this->_files)) {
+                                $this->_files[] = $file;
+                                break;
+                            }
+                        }
+                    }
+                }
+                $this->_processComponentDependency($class);
+            }
+        }
+    }
+
+    private function _processDependencyFile($file)
+    {
+        if (substr($file, -2)=="/*") {
+            $pathType = substr($file, 0, strpos($file, '/'));
+            if (!isset($this->_config->path->$pathType)) {
+                throw new Vps_Exception("Assets-Path-Type '$pathType' not found in config.");
+            }
+            $file = substr($file, strpos($file, '/')); //pathtype abschneiden
+            $file = substr($file, 0, -1); //* abschneiden
+            $path = $this->_config->path->$pathType.$file;
+            if (!file_exists($path)) {
+                throw new Vps_Exception("Path '$path' does not exist.");
+            }
+            $DirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
+            foreach ($DirIterator as $file) {
+                if (!preg_match('#/\\.svn/#', $file->getPathname())
+                    && (substr($file->getPathname(), -3) == '.js'
+                        || substr($file->getPathname(), -4) == '.css')) {
+                    $f = $file->getPathname();
+                    $f = substr($f, strlen($this->_config->path->$pathType));
+                    $f = $pathType . $f;
+                    if (!in_array($f, $this->_files)) {
+                        $this->_files[] = $f;
+                    }
+                }
+            }
+        } else {
+            if (!in_array($file, $this->_files)) {
+                $this->_files[] = $file;
+            }
+        }
     }
 }

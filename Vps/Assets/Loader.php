@@ -3,6 +3,7 @@ class Vps_Assets_Loader
 {
     static public function getAssetPath($url, $paths)
     {
+        if (file_exists($url)) return $url;
         $type = substr($url, 0, strpos($url, '/'));
         $url = substr($url, strpos($url, '/')+1);
         if (!isset($paths->$type)) {

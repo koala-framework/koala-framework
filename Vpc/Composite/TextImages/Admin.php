@@ -31,10 +31,9 @@ class Vpc_Composite_TextImages_Admin extends Vpc_Admin
 
     public function setup()
     {
-        $cls = Vpc_Abstract::getSetting($this->_class, 'textClass');
-        Vpc_Admin::getInstance($cls)->setup();
-        $cls = Vpc_Abstract::getSetting($this->_class, 'imagesClass');
-        Vpc_Admin::getInstance($cls)->setup();
+        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+        Vpc_Admin::getInstance($classes['text'])->setup();
+        Vpc_Admin::getInstance($classes['images'])->setup();
 
         $fields['image_position'] = "enum('left', 'right', 'alternate') default NULL";
         $this->createFormTable('vpc_composite_textimage', $fields);
@@ -42,12 +41,10 @@ class Vpc_Composite_TextImages_Admin extends Vpc_Admin
 
     public function delete($pageId, $componentKey)
     {
-        $cls = Vpc_Abstract::getSetting($this->_class, 'textClass');
-        Vpc_Admin::getInstance($cls)->delete($pageId, $componentKey . '-1');
-        
-        $cls = Vpc_Abstract::getSetting($this->_class, 'imagesClass');
-        Vpc_Admin::getInstance($cls)->delete($pageId, $componentKey . '-2');
-        
+        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+        Vpc_Admin::getInstance($classes['text'])->delete($pageId, $componentKey . '-1');
+        Vpc_Admin::getInstance($classes['images'])->delete($pageId, $componentKey . '-2');
+
         parent::delete($pageId, $componentKey);
     }
 }

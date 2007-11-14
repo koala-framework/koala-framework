@@ -8,8 +8,10 @@ class Vpc_Composite_ParagraphsImage_Component extends Vpc_Abstract
     {
         return array_merge(parent::getSettings(), array(
             'componentName'     => 'Standard.ParagraphsImage',
-            'paragraphsClass'   => 'Vpc_Paragraphs_Component',
-            'imageClass'        => 'Vpc_Basic_Image_Component',
+            'childComponentClasses' => array(
+                'paragraphs'   => 'Vpc_Paragraphs_Component',
+                'image'        => 'Vpc_Basic_Image_Component'
+            )
         ));
     }
 
@@ -23,8 +25,8 @@ class Vpc_Composite_ParagraphsImage_Component extends Vpc_Abstract
 
     protected function _init()
     {
-        $paragraphsClass = $this->_getClassFromSetting('paragraphsClass', 'Vpc_Paragraphs_Component');
-        $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Component');
+        $paragraphsClass = $this->_getClassFromSetting('paragraphs', 'Vpc_Paragraphs_Component');
+        $imageClass = $this->_getClassFromSetting('image', 'Vpc_Basic_Image_Component');
         $this->paragraphs = $this->createComponent($paragraphsClass, 1);
         $this->image = $this->createComponent($imageClass, 2);
     }

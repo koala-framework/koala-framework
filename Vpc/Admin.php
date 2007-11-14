@@ -54,8 +54,7 @@ class Vpc_Admin
                 $class = strrchr($class, 'Vpc_');
                 $class .= '_' . str_replace('.php', '', $item->getFilename());
                 if (class_exists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
-                    $name = Vpc_Abstract::getSetting($class, 'componentName');
-                    $return[$name] = $class;
+                    $return[] = $class;
                 }
                 
             }
@@ -184,6 +183,25 @@ class Vpc_Admin
     protected function _tableExists($tablename)
     {
         return in_array($tablename, $this->_db->listTables());
+    }
+
+    public static function getComponentFile($class, $ext)
+    {
+        $ret = null;
+        while (!$ret && $class != 'Vpc_Abstract') {
+            $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.'.$ext;
+            $dirs = explode(PATH_SEPARATOR, get_include_path());
+            foreach ($dirs as $dir) {
+                if ($dir == '.') { $dir = getcwd(); }
+                $path = $dir . '/' . $file;
+                if (is_file($path)) {
+                    $ret = $path;
+                    break;
+                }
+            }
+            $class = get_parent_class($class);
+        }
+        return $ret;
     }
 
 }
