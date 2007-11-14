@@ -238,7 +238,6 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
             } else {
                 $where = array('parent_id = ?' => $row->parent_id);
             }
-
             $row->numberize('pos', $row->pos, $where);
         }
     }
