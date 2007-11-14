@@ -4,6 +4,7 @@ abstract class Vps_PageCollection_Abstract
     protected $_pageFilenames = array();
     protected $_pageNames = array();
     protected $_pages = array();
+    protected $_hideInMenu = array();
     protected $_homeId;
     protected $_decoratorClasses = array();
     protected $_dao;
@@ -110,6 +111,11 @@ abstract class Vps_PageCollection_Abstract
         }
         return $page;
     }
+    
+    public function hideInMenu(Vpc_Interface $page)
+    {
+        $this->_hideInMenu[] = $page->getId();
+    }
 
     protected function _addDecorators(Vpc_Interface $page)
     {
@@ -133,9 +139,9 @@ abstract class Vps_PageCollection_Abstract
         if (isset($this->_pages[$id])) {
             throw new Vps_PageCollection_Exception('A page with the same componentId already exists.');
         }
-
+        
         $this->_pages[$id] = $page;
-        $this->_pageFilenames[$id] = $filename;
+        $this->_pageFilenames[$id] = Zend_Filter::get($filename, 'Url', array(), 'Vps_Filter');
         $this->_pageNames[$id] = $name;
     }
 
@@ -226,6 +232,8 @@ abstract class Vps_PageCollection_Abstract
         $id = $page->getPageId();
         $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($id, false);
         $data['url'] = $this->getUrl($page);
+        $data['name'] = $this->_pageNames[$page->getId()];
+        $data['hide'] = array_search($page->getId(), $this->_hideInMenu) !== false;
         
         // Erste Nicht-Decorator-Komponente raussuchen
         $p = $page;
