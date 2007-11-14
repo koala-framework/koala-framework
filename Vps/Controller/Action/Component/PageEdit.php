@@ -6,11 +6,12 @@ class Vps_Controller_Action_Component_PageEdit extends Vps_Controller_Action_Aut
 
     protected function _initFields()
     {
-        $components = Vpc_Admin::getAvailableComponents('Vpc/');
-        $types = array(
-            'Vpc_Paragraphs_Component' => 'Content',
-            'Vpc_Basic_LinkTag_Component' => 'Link'
-        );
+        $types = array();
+        foreach (Zend_Registry::get('config')->pageClasses as $c) {
+            if ($c->class && $c->text) {
+                $types[$c->class] = $c->text;
+            }
+        }
 
         $table = new Vps_Dao_Pages();
         $table->showInvisible(true);

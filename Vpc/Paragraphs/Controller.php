@@ -21,7 +21,10 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     public function preDispatch()
     {
-        $this->_components = Vpc_Admin::getInstance($this->class)->getComponents();
+        $this->_components = array();
+        foreach (Vpc_Abstract::getSetting($this->class, 'childComponentClasses') as $c) {
+            $this->_components[Vpc_Abstract::getSetting($c, 'componentName')] = $c;
+        }
         parent::preDispatch();
     }
     

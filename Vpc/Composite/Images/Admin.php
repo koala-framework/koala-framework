@@ -3,9 +3,9 @@ class Vpc_Composite_Images_Admin extends Vpc_Admin
 {
     public function getControllerConfig()
     {
-        $imageClass = Vpc_Abstract::getSetting('imageClass');
+        $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'childComponentClasses');
         return array(
-            'imageConfig' => Vpc_Admin::getConfig($imageClass)
+            'imageConfig' => Vpc_Admin::getConfig($classes['image'])
         );
     }
 

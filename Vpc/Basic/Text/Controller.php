@@ -6,17 +6,16 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         $field = new Vps_Auto_Field_HtmlEditor('content', 'Content');
         $field->setData(new Vps_Auto_Data_Vpc_ComponentIds('content'));
 
-        $ignoreSettings = array('tablename', 'componentName', 'imageClass', 'linkClass', 'default');
+        $ignoreSettings = array('tablename', 'componentName', 'childComponentClasses', 'default');
         foreach (call_user_func(array($this->class, 'getSettings')) as $key => $val) {
             if (!in_array($key, $ignoreSettings)) {
                 $method = 'set' . ucfirst($key);
                 $field->$method($val);
             }
         }
-        $class = Vpc_Abstract::getSetting($this->class, 'linkClass');
-        $field->setLinkComponentConfig(Vpc_Admin::getConfig($class));
-        $class = Vpc_Abstract::getSetting($this->class, 'imageClass');
-        $field->setImageComponentConfig(Vpc_Admin::getConfig($class));
+        $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
+        $field->setLinkComponentConfig(Vpc_Admin::getConfig($classes['link']));
+        $field->setImageComponentConfig(Vpc_Admin::getConfig($classes['image']));
 
         $field->setControllerUrl(Vpc_Admin::getInstance($this->class)->getControllerUrl());
 

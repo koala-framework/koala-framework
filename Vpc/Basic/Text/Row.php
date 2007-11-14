@@ -67,13 +67,10 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
 
     protected function _delete()
     {
-        $class = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
-                                            'imageClass');
-        $imageAdmin = Vpc_Admin::getInstance($class);
-
-        $class = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
-                                            'linkClass');
-        $linkAdmin = Vpc_Admin::getInstance($class);
+        $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
+                                            'childComponentClasses');
+        $imageAdmin = Vpc_Admin::getInstance($classes['image']);
+        $linkAdmin = Vpc_Admin::getInstance($classes['link']);
 
         $parts = array_unique(array_merge(
                     $this->getChildComponentNrs($this->content),
@@ -90,14 +87,10 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
     protected function _update()
     {
         if ($this->content_edit == '') {
-            $class = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
-                                                'imageClass');
-            $imageAdmin = Vpc_Admin::getInstance($class);
-
-            $class = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
-                                                'linkClass');
-            $linkAdmin = Vpc_Admin::getInstance($class);
-
+            $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
+                                                'childComponentClasses');
+            $imageAdmin = Vpc_Admin::getInstance($classes['link']);
+            $linkAdmin = Vpc_Admin::getInstance($classes['image']);
 
             $newParts = $this->getChildComponentNrs($this->content);
 

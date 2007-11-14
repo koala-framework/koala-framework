@@ -9,10 +9,13 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
 
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'Paragraphs',
             'tablename' => 'Vpc_Paragraphs_Model'
         ));
+        $ret['childComponentClasses'] = Vpc_Admin::getInstance('Vpc_Paragraphs_Abstract')
+                                ->getComponents();
+        return $ret;
     }
 
     protected function _init()

@@ -8,7 +8,9 @@ class Vpc_Composite_Images_Component extends Vpc_Abstract
         return array_merge(parent::getSettings(), array(
             'componentName' => 'Standard.Images',
             'tablename'     => 'Vpc_Composite_Images_Model',
-            'imageClass'    => 'Vpc_Basic_Image_Component'
+            'childComponentClasses' => array(
+                'image'         => 'Vpc_Basic_Image_Component'
+            )
         ));
     }
     
@@ -21,7 +23,7 @@ class Vpc_Composite_Images_Component extends Vpc_Abstract
         if (!$this->showInvisible()) {
             $where['visible = ?'] = 1;
         }
-        $imageClass = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Component');
+        $imageClass = $this->_getClassFromSetting('image', 'Vpc_Basic_Image_Component');
         foreach ($this->getTable()->fetchAll($where) as $row) {
             $this->images[$row->id] = $this->createComponent($imageClass, $row->id);
         }

@@ -435,33 +435,16 @@ abstract class Vpc_Abstract implements Vpc_Interface
      */
     public function getTemplateVars()
     {
-        // Template rausfinden
-        $template = null;
-        $class = get_class($this);
-        while (!$template && $class != 'Vpc_Abstract') {
-            $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.tpl';
-            $dirs = explode(PATH_SEPARATOR, get_include_path());
-            foreach ($dirs as $dir) {
-                if ($dir == '.') { $dir = getcwd(); }
-                $path = $dir . '/' . $file;
-                if (is_file($path)) {
-                    $template = $path;
-                    break;
-                }
-            }
-            $class = get_parent_class($class);
-        }
-        if (!$template) {
-            throw new Vpc_Exception('Template not found for Component ' . get_class($this));
-        }
-        
         $vars = array();
         $vars['assets']['js'] = array();
         $vars['assets']['css'] = array();
         $vars['class'] = get_class($this);
         $vars['id'] = $this->getId();
         $vars['store'] = $this->_store;
-        $vars['template'] = $template;
+        $vars['template'] = Vpc_Admin::getComponentFile(get_class($this), 'tpl');
+        if (!$vars['template']) {
+            throw new Vpc_Exception('Template not found for Component ' . get_class($this));
+        }
         return $vars;
     }
 
@@ -560,7 +543,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
     }
 
     protected function _getClassFromSetting($setting, $parentClass) {
-        $class = $this->_getSetting($setting);
+        $classes = $this->_getSetting('childComponentClasses');
+        if (!isset($classes[$setting])) {
+            throw new Vpc_Exception("ChildComponentClass '$setting' is not defined in settings.");
+        }
+        $class = $classes[$setting];
         if ($class != $parentClass && !is_subclass_of($class, $parentClass)) {
             throw new Vpc_Exception("$setting '$class' must be a subclass of $parentClass.");
         }

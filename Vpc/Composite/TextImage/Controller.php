@@ -3,9 +3,9 @@ class Vpc_Composite_TextImage_Controller extends Vps_Controller_Action_Auto_Vpc_
 {
     public function _initFields()
     {
+        $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
         // Text
-        $class = Vpc_Abstract::getSetting($this->class, 'textClass');
-        $form = new Vpc_Basic_Html_Form($class, $this->pageId, $this->componentKey . '-1');
+        $form = new Vpc_Basic_Html_Form($classes['text'], $this->pageId, $this->componentKey . '-1');
         
         $fieldset = new Vps_Auto_Container_FieldSet('Text');
         $fieldset->add($form);
@@ -16,8 +16,7 @@ class Vpc_Composite_TextImage_Controller extends Vps_Controller_Action_Auto_Vpc_
         $this->_form->add($fieldset);
 
         // Image
-        $class = Vpc_Abstract::getSetting($this->class, 'imageClass');
-        $form = new Vpc_Basic_Image_Form($class, $this->pageId, $this->componentKey . '-2');
+        $form = new Vpc_Basic_Image_Form($classes['image'], $this->pageId, $this->componentKey . '-2');
         $this->_form->add(new Vps_Auto_Container_FieldSet('Image'))
             ->add($form);
     }

@@ -18,8 +18,10 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
             'enableFormat'      => true,
             'enableLists'       => true,
             'enableSourceEdit'  => true,
-            'imageClass'        => 'Vpc_Basic_Text_Image_Component',
-            'linkClass'         => 'Vpc_Basic_LinkTag_Component',
+            'childComponentClasses' => array(
+                'image'         => 'Vpc_Basic_Text_Image_Component',
+                'link'          => 'Vpc_Basic_LinkTag_Component'
+            ),
             'default'           => array(
                 'content'       => '<p>'.Vpc_Abstract::LOREM_IPSUM.'</p>'
             )
@@ -33,10 +35,10 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
         foreach ($this->_row->getContentParts() as $part) {
             if (is_array($part)) {
                 if ($part['type'] == 'image') {
-                    $class = $this->_getClassFromSetting('imageClass', 'Vpc_Basic_Image_Component');
+                    $class = $this->_getClassFromSetting('image', 'Vpc_Basic_Image_Component');
                     $part['nr'] = 'i'.$part['nr'];
                 } else if ($part['type'] == 'link') {
-                    $class = $this->_getClassFromSetting('linkClass', 'Vpc_Basic_LinkTag_Component');
+                    $class = $this->_getClassFromSetting('link', 'Vpc_Basic_LinkTag_Component');
                     $part['nr'] = 'l'.$part['nr'];
                 }
                 $component = $this->createComponent($class, $part['nr']);

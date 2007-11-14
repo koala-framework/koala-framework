@@ -5,17 +5,17 @@ class Vpc_Basic_LinkTag_Form extends Vps_Auto_Vpc_Form
     {
         parent::__construct($class, $pageId, $componentKey);
 
-        $classes = Vpc_Abstract::getSetting($class, 'linkClasses');
+        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
 
         $this->add(new Vps_Auto_Field_Select('link_class', 'Linktype'))
-            ->setValues($classes)
+            ->setValues(array_flip($classes))
             ->setId('LinkClass');
 
         $layout = new Vps_Auto_Container('CardLayout');
         $layout->setLayout('card');
         $layout->setId('CardsContainer');
         $layout->setBaseCls('x-plain');
-        foreach ($classes as $class => $name) {
+        foreach ($classes as $name => $class) {
             $formname = str_replace('_Component', '_Form', $class);
             $form = new $formname($class, $pageId, $componentKey . '-1');
             $form->setAutoHeight(true);

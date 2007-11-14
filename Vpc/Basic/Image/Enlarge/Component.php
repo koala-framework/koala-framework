@@ -6,13 +6,15 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'enlargeClass'      => 'Vpc_Basic_Image_Component',
+            'childComponentClasses' => array(
+                'enlarge' => 'Vpc_Basic_Image_Component',
+            )
         ));
     }
     
     protected function _init()
     {
-        $enlargeClass = $this->_getClassFromSetting('enlargeClass', 'Vpc_Basic_Image_Component');
+        $enlargeClass = $this->_getClassFromSetting('enlarge', 'Vpc_Basic_Image_Component');
         $this->enlargeImage = $this->createComponent($enlargeClass, 1);
     }
 

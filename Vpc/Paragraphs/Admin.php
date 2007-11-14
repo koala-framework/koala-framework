@@ -9,9 +9,12 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
     public function getControllerConfig()
     {
         $componentList = array();
-        foreach ($this->getComponents() as $name => $component) {
-            $str = '$componentList["' . str_replace('.', '"]["', $name) . '"] = "' . $component . '";';
-            eval($str);
+        foreach ($this->getComponents() as $component) {
+            $name = Vpc_Abstract::getSetting($component, 'componentName');
+            if ($name) {
+                $str = '$componentList["' . str_replace('.', '"]["', $name) . '"] = "' . $component . '";';
+                eval($str);
+            }
         }
         return array('components' => $componentList);
     }

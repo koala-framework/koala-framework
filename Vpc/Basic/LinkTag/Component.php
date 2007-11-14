@@ -12,10 +12,10 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
         return array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_LinkTag_Model',
             'componentName' => 'Standard.LinkTag',
-            'linkClasses'   => array(
-                'Vpc_Basic_Link_Intern_Component'   => 'Internal Link',
-                'Vpc_Basic_Link_Extern_Component'   => 'External Link',
-                'Vpc_Basic_Link_Mail_Component'     => 'Mail Link'
+            'childComponentClasses'   => array(
+                'Internal Link' => 'Vpc_Basic_Link_Intern_Component',
+                'External Link' => 'Vpc_Basic_Link_Extern_Component',
+                'Mail Link' => 'Vpc_Basic_Link_Mail_Component'
             ),
             'default'       => array(
                 'link_class'    => 'Vpc_Basic_Link_Intern_Component'
