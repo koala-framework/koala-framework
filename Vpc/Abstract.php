@@ -425,7 +425,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         return array();
     }
-
+    
     /**
      * Gibt die Variablen für View zurück.
      *
@@ -441,9 +441,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         while (!$template && $class != 'Vpc_Abstract') {
             $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.tpl';
             $dirs = explode(PATH_SEPARATOR, get_include_path());
-            $x = 0;
             foreach ($dirs as $dir) {
-                $x++;
                 if ($dir == '.') { $dir = getcwd(); }
                 $path = $dir . '/' . $file;
                 if (is_file($path)) {
@@ -458,6 +456,8 @@ abstract class Vpc_Abstract implements Vpc_Interface
         }
         
         $vars = array();
+        $vars['assets']['js'] = array();
+        $vars['assets']['css'] = array();
         $vars['class'] = get_class($this);
         $vars['id'] = $this->getId();
         $vars['store'] = $this->_store;
