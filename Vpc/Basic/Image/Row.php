@@ -53,10 +53,14 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
     public function getImageDimension($class)
     {
         $s = $this->_getScaleSettings($class);
-        return Vps_Media_Image::calculateScaleDimensions(
-            $this->findParentRow('Vps_Dao_File')->getFileSource(),
-            array($s['width'], $s['height']), $s['scale']
-        );
+        if ($this->vps_upload_id) {
+            return Vps_Media_Image::calculateScaleDimensions(
+                $this->findParentRow('Vps_Dao_File')->getFileSource(),
+                array($s['width'], $s['height']), $s['scale']
+            );
+        } else {
+            return array('width' => 0, 'height' => 0);
+        }
     }
 
     protected function _delete()
