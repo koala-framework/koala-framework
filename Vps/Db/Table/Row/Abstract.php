@@ -55,7 +55,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         $where["$primaryKey != ?"] = $primaryValue;
         
         // Wenn value null ist, Datensatz am Ende einfügen
-        if (!$value) {
+        if (is_null($value)) {
             $value = $this->getTable()->fetchAll($where)->count() + 1;
         }
 

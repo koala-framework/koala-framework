@@ -111,7 +111,7 @@ abstract class Vps_PageCollection_Abstract
         }
         return $page;
     }
-    
+
     public function hideInMenu(Vpc_Interface $page)
     {
         $this->_hideInMenu[] = $page->getId();
@@ -139,7 +139,7 @@ abstract class Vps_PageCollection_Abstract
         if (isset($this->_pages[$id])) {
             throw new Vps_PageCollection_Exception('A page with the same componentId already exists.');
         }
-        
+
         $this->_pages[$id] = $page;
         $this->_pageFilenames[$id] = Zend_Filter::get($filename, 'Url', array(), 'Vps_Filter');
         $this->_pageNames[$id] = $name;
@@ -150,7 +150,7 @@ abstract class Vps_PageCollection_Abstract
         if (is_null($id)) {
             return $this->getHomePage();
         }
-        
+
         try {
             $parts = Vpc_Abstract::parseId($id);
         } catch (Vpc_Exception $e) {
@@ -233,8 +233,14 @@ abstract class Vps_PageCollection_Abstract
         $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($id, false);
         $data['url'] = $this->getUrl($page);
         $data['name'] = $this->_pageNames[$page->getId()];
-        $data['hide'] = array_search($page->getId(), $this->_hideInMenu) !== false;
-        
+        if (array_search($page->getId(), $this->_hideInMenu) ||
+            $data['hide'] == 1
+        ) {
+            $data['hide'] = true;
+        } else {
+            $data['hide'] = false;
+        }
+
         // Erste Nicht-Decorator-Komponente raussuchen
         $p = $page;
         while ($p instanceof Vpc_Decorator_Abstract) {

@@ -68,7 +68,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
         if ($this->_pageData == null) {
             $where = $this->_showInvisible ? '' : 'WHERE visible=1';
             $sql = '
-                SELECT id, parent_id, type, is_home, visible, name, filename, component_class
+                SELECT id, parent_id, type, is_home, visible, hide, name, filename, component_class
                 FROM vps_pages
                 ' . $where . '
                 ORDER BY pos
