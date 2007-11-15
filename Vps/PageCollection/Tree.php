@@ -218,4 +218,11 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         }
     }
 
+    public function createUrl($parentPage, $filename, $pageKeySuffix = '', $pageTagSuffix = '')
+    {
+        $page = $parentPage->createPage('Vpc_Empty', $pageKeySuffix, $pageTagSuffix);
+        $page = $this->addTreePage($page, $filename, $filename, $parentPage);
+        return $this->getUrl($page);
+    }
+    
 }
