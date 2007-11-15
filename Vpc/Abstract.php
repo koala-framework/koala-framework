@@ -62,11 +62,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
      */
     protected function _init() {}
 
-    public static function createStaticInstance($class)
-    {
-        return new $class();
-    }
-
     /**
      * Erstellt aus der ID der Komponente die Komponente.
      *
@@ -99,7 +94,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @return Vpc_Abstract Komponente, die als Seite im Seitenbaum hinzugefügt werden kann
      * @throws Vpc_Exception Falls pageKeySuffix und pageTagSuffix gleichzeit gesetzt werden
      */
-    protected function createPage($class, $pageKeySuffix = '', $pageTagSuffix = '')
+    public function createPage($class, $pageKeySuffix = '', $pageTagSuffix = '')
     {
         $id = $this->getId();
         if ($pageKeySuffix != '') {
@@ -126,7 +121,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param int Für Unterscheidung des Komponenteninhalts
      * @return Vpc_Abstract Komponente
      */
-    protected function createComponent($class, $pageKeySuffix = '')
+    public function createComponent($class, $pageKeySuffix = '')
     {
         $id = $this->getId();
         if ($pageKeySuffix != '') {

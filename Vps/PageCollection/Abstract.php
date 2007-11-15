@@ -216,6 +216,11 @@ abstract class Vps_PageCollection_Abstract
     {
         return '';
     }
+    
+    public function createUrl()
+    {
+        return '';
+    }
 
     public function getName($page)
     {
