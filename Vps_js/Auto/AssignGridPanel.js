@@ -105,6 +105,10 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         });
     },
 
+    reloadDataGrid: function() {
+        return this.gridData.reload.apply(this.gridData, arguments);
+    },
+
 
     load: function() {
         return this.gridAssigned.load.apply(this.gridAssigned, arguments);
