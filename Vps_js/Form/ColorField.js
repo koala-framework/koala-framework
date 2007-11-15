@@ -1,21 +1,25 @@
-Vps.Form.ColorField = Ext.extend(Ext.form.TextField,
+Vps.Form.ColorField = Ext.extend(Ext.form.Field,
 {
     defaultAutoCreate : {tag: "input", type: "hidden"},
-    colorRendered: false,
+    
+    afterRender: function(){
+        Vps.Form.ColorField.superclass.afterRender.call(this);
+        span = Ext.DomHelper.insertAfter(this.el, '<span></span>');
+        config = this.initialConfig;
+        config.renderTo = span;
+        this.cp = new Ext.ColorPalette(config);
+        this.cp.on('select', function(palette, color) {
+            if (this.getValue() != color) {
+                this.setValue(color);
+            }
+        }, this);
+    },
     
     setValue: function(value){
-        Vps.Form.ColorField.superclass.setValue.call(this, value);
-        if (!this.colorRendered) {
-            span = Ext.DomHelper.insertAfter(this.el, '<span></span>');
-            config = this.initialConfig;
-            config.value = value;
-            config.renderTo = span;
-            this.cp = new Ext.ColorPalette(config);
-            this.cp.on('select', function(palette, color) {
-                this.setValue(color);
-            }, this)
-            this.colorRendered = true;
+        if (value != '') {
+            this.cp.select(value);
         }
+        Vps.Form.ColorField.superclass.setValue.call(this, value);
     }
 });
 Ext.reg('colorfield', Vps.Form.ColorField);
