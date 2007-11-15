@@ -139,7 +139,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
             $acl->add(new Vps_Acl_Resource_MenuUrl('pages',
                 array('text'=>'Sitetree', 'icon'=>'application_side_tree.png'),
                 '/admin/component/pages/'));
-                $acl->add(new Zend_Acl_Resource('pageEdit'), 'pages');
+                $acl->add(new Zend_Acl_Resource('pageedit'), 'pages');
                 $acl->add(new Zend_Acl_Resource('components'), 'pages'); // für /component/show
                 $acl->add(new Zend_Acl_Resource('component'), 'pages'); // für /component/edit
 
