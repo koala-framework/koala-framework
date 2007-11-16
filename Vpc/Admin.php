@@ -20,12 +20,12 @@ class Vpc_Admin
             while ($class != 'Vpc_Abstract') {
                 $len = strlen(strrchr($class, '_'));
                 $setupClass = substr($class, 0, -$len) . '_Admin';
-                try {
+//                 try {
                     if (class_exists($setupClass)) {
-                        return new $setupClass($componentClass, Zend_Registry::get('dao')->getDb());
+                        return new $setupClass($componentClass, Zend_Registry::get('db'));
                     }
-                } catch (Zend_Exception $e) {
-                }
+//                 } catch (Zend_Exception $e) {
+//                 }
                 $class = get_parent_class($class);
             }
         }
@@ -119,7 +119,7 @@ class Vpc_Admin
     {
         $tablename = Vpc_Abstract::getSetting($this->_class, 'tablename');
         if ($tablename) {
-            $table = new $tablename();
+            $table = new $tablename(array('componentClass'=>$this->_class));
             return $table->find($pageId, $componentKey)->current();
         }
         return null;

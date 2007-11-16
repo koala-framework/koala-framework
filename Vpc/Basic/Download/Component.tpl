@@ -1,10 +1,8 @@
-{if $component.url != ''}
 {strip}
-<a href="{$component.url}">
-    {if $component.icon != ''}<img src="{$component.icon}">{/if}
-    {$component.text}
-    {if $component.filesize != ''} ({$component.filesize} Kb) {/if}
+{if $component.downloadTag.url}
+{component component=$component.downloadTag}
+    {$component.infotext}
+    {if $component.downloadTag.filesize > 0} ({$component.downloadTag.filesize|file_size}) {/if}
 </a>
-{if $component.info != ''}<br>{$component.info}{/if}
-{/strip}
 {/if}
+{/strip}

@@ -12,6 +12,9 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         if (!$uploadDir) {
             throw new Vps_Exception('Param "uploads" has to be set in the file application/config.ini.');
         }
+        if (!is_dir($uploadDir) || !is_writable($uploadDir)) {
+            throw new Vps_Exception('Dateiupload kann nicht in folgendes Verzeichnis schreiben: ' . $uploadDir);
+        }
 
         return $uploadDir;
     }
@@ -24,8 +27,8 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
     public function getFileSize()
     {
         $file = $this->getFileSource();
-        if (is_file($file)) {
-            return round((filesize($file) /1024), 2);
+        if ($file && is_file($file)) {
+            return filesize($file);
         }
         return null;
     }
@@ -52,7 +55,7 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
     public function deleteFile()
     {
         $filename = $this->getFileSource();
-        if (is_file($filename)) {
+        if ($filename && is_file($filename)) {
             unlink($filename);
         }
         $this->deleteCache();
@@ -99,25 +102,39 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
             throw new Vps_Exception('Die Datei wurde nicht vollständig hochgeladen.');
         }
 
-        $uploadDir = $this->_getUploadDir();
-        if (!is_dir($uploadDir) || !is_writable($uploadDir)) {
-            throw new Vps_Exception('Dateiupload kann nicht in folgendes Verzeichnis schreiben: ' . $uploadDir);
-        }
-
-        $filename = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
-        $extension = substr(strrchr($filedata['name'], '.'), 1);
-        
-        // Falls überschrieben wird, alte Datei löschen
         $this->deleteFile();
-        $this->filename = $filename;
-        $this->extension = $extension;
+        $this->filename = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
+        $this->extension = substr(strrchr($filedata['name'], '.'), 1);
         $this->save();
-        
-        $filename = $uploadDir . '/' . $this->id;
+
+        $filename = $this->getFileSource();
         if (move_uploaded_file($filedata['tmp_name'], $filename)) {
             chmod($filename, 0664);
         } else {
             $this->delete();
         }
+    }
+
+    public function copyFile($file, $filename, $extension)
+    {
+        if (!file_exists($file)) {
+            throw new Vps_Exception("File '$file' does not exist");
+        }
+        $this->deleteFile();
+        $this->filename = $filename;
+        $this->extension = $extension;
+        $this->save();
+        copy($file, $this->getFileSource());
+        chmod($this->getFileSource(), 0664);
+    }
+
+    public function writeFile($contents, $filename, $extension)
+    {
+        $this->deleteFile();
+        $this->filename = $filename;
+        $this->extension = $extension;
+        $this->save();
+        file_put_contents($this->getFileSource(), $contents);
+        chmod($this->getFileSource(), 0664);
     }
 }

@@ -99,23 +99,14 @@ class Vps_Assets_Dependencies
 
     public function getPackedAll($fileType)
     {
-        $contents = '';
-        foreach($this->getFiles($fileType) as $file) {
-            $contents .= $this->_pack($this->getFileContents($file), $fileType) . "\n";
-        }
-        return $contents;
-    }
-
-    public function getFileContents($file)
-    {
-        Vps_Assets_Loader::getFileContents($file, $this->_config->path);
+        return $this->_pack($this->getContentsAll($fileType), $fileType);
     }
 
     public function getContentsAll($fileType)
     {
         $contents = '';
         foreach($this->getFiles($fileType) as $file) {
-            $contents .= $this->getFileContents($file) . "\n";
+            $contents .= Vps_Assets_Loader::getFileContents($file, $this->_config->path) . "\n";
         }
         return $contents;
     }
@@ -134,7 +125,7 @@ class Vps_Assets_Dependencies
         if (in_array($dependency, $this->_processedDependencies)) return;
         $this->_processedDependencies[] = $dependency;
         if ($dependency == 'Components') {
-            foreach (Zend_Registry::get('config')->pageClasses as $c) {
+            foreach ($this->_config->pageClasses as $c) {
                 if ($c->class && $c->text) {
                     $this->_processComponentDependency($c->class);
                 }

@@ -23,8 +23,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
     {
         $uploadId = $this->_getParam('uploadId');
         $path = $this->_getSourcePath($uploadId);
-        $extension = $this->_getExtension($uploadId);
-        $this->_showFile($path, $extension);
+        $this->_showFile($path);
     }
 
     /**

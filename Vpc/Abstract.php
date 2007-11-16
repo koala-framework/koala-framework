@@ -45,7 +45,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
             if ($info['primary'] == array(1 => 'page_id', 2 => 'component_key')) {
                 $this->_row = $table->find($this->getPageId(), $this->getComponentKey())->current();
                 if (!$this->_row) {
-                    $this->_row = $table->createRow(get_class($this));
+                    $this->_row = $table->createRow();
                 }
             }
         }
@@ -515,7 +515,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
             $tablename = $this->_getSetting('tablename');
         }
         try {
-            return $this->_dao->getTable($tablename);
+            return $this->_dao->getTable($tablename, array('componentClass'=>get_class($this)));
         } catch (Vps_Dao_Exception $e) {
             return null;
         }

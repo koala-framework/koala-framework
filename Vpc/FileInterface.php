@@ -1,5 +1,5 @@
 <?php
 interface Vpc_FileInterface
 {
-    public function createCacheFile($class, $source, $target);
+    public function createCacheFile($source, $target);
 }

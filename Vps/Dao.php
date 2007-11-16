@@ -11,12 +11,13 @@ class Vps_Dao
         $this->_config = $config;
     }
 
-    public function getTable($tablename)
+    public function getTable($tablename, $config = array())
     {
         if (!$tablename) { return null; };
 
         if (!isset($this->_tables[$tablename])) {
-            $table = new $tablename(array('db'=>$this->getDb()));
+            if (!isset($config['db'])) $config['db'] = $this->getDb();
+            $table = new $tablename($config);
             if ($table instanceof Vps_Db_Table) {
                 $table->setDao($this);
             }
@@ -34,6 +35,8 @@ class Vps_Dao
             }
             $dbConfig = $this->_config->$db->toArray();
             $this->_db[$db] = Zend_Db::factory('PDO_MYSQL', $dbConfig);
+            $this->_db[$db]->query('SET names UTF8');
+
         }
         return $this->_db[$db];
     }

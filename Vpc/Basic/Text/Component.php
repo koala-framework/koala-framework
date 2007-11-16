@@ -20,7 +20,8 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
             'enableSourceEdit'  => true,
             'childComponentClasses' => array(
                 'image'         => 'Vpc_Basic_Text_Image_Component',
-                'link'          => 'Vpc_Basic_LinkTag_Component'
+                'link'          => 'Vpc_Basic_LinkTag_Component',
+                'download'      => 'Vpc_Basic_DownloadTag_Component'
             ),
             'default'           => array(
                 'content'       => '<p>'.Vpc_Abstract::LOREM_IPSUM.'</p>'
@@ -40,6 +41,9 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
                 } else if ($part['type'] == 'link') {
                     $class = $this->_getClassFromSetting('link', 'Vpc_Basic_LinkTag_Component');
                     $part['nr'] = 'l'.$part['nr'];
+                } else if ($part['type'] == 'download') {
+                    $class = $this->_getClassFromSetting('download', 'Vpc_Basic_DownloadTag_Component');
+                    $part['nr'] = 'd'.$part['nr'];
                 }
                 $component = $this->createComponent($class, $part['nr']);
                 $this->_componentParts[] = $component;

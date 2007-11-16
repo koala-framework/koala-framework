@@ -7,7 +7,7 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
 
     private $_deleteFileRow;
 
-    public function getImageUrl($class, $dimension = self::DIMENSION_NORMAL, $addRandom = false)
+    public function getImageUrl($dimension = self::DIMENSION_NORMAL, $addRandom = false)
     {
         $id = $this->page_id . $this->component_key;
         $filename = $this->filename != '' ? $this->filename : 'unnamed';
@@ -16,12 +16,13 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
         }
         $row = $this->findParentRow('Vps_Dao_File');
         if (!$row) return null;
-        return $row->generateUrl($class, $id, $filename, Vps_Dao_Row_File::SHOW, $addRandom);
+        return $row->generateUrl($this->getTable()->getComponentClass(), $id,
+                                 $filename, Vps_Dao_Row_File::SHOW, $addRandom);
     }
 
-    private function _getScaleSettings($class)
+    private function _getScaleSettings()
     {
-        $ret['scale'] = Vpc_Abstract::getSetting($class, 'scale');
+        $ret['scale'] = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'scale');
         if (is_array($ret['scale'])) {
             if (count($ret['scale']) == 1 && isset($ret['scale'][0])) {
                 $ret['scale'] = $ret['scale'][0];
@@ -29,7 +30,7 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
                 $ret['scale'] = $this->scale;
             }
         }
-        $dimension = Vpc_Abstract::getSetting($class, 'dimension');
+        $dimension = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'dimension');
         if (isset($dimension[0]) && !is_array($dimension[0])) {
             $ret['width'] = $dimension[0];
             $ret['height'] = $dimension[1];
@@ -39,9 +40,9 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
         }
         return $ret;
     }
-    public function createCacheFile($class, $source, $target)
+    public function createCacheFile($source, $target)
     {
-        $s = $this->_getScaleSettings($class);
+        $s = $this->_getScaleSettings($this->getTable()->getComponentClass());
         Vps_Media_Image::scale($source, $target, array($s['width'], $s['height']), $s['scale']);
         if (strpos($target, self::DIMENSION_THUMB)) {
             Vps_Media_Image::scale($target, $target, array(100, 100), Vps_Media_Image::SCALE_BESTFIT);
@@ -50,14 +51,14 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
         }
     }
 
-    public function getImageDimension($class)
+    public function getImageDimension()
     {
-        $s = $this->_getScaleSettings($class);
-        if ($this->vps_upload_id) {
+        $s = $this->_getScaleSettings($this->getTable()->getComponentClass());
+        $fileRow = $this->findParentRow('Vps_Dao_File');
+        if ($fileRow) {
             return Vps_Media_Image::calculateScaleDimensions(
-                $this->findParentRow('Vps_Dao_File')->getFileSource(),
-                array($s['width'], $s['height']), $s['scale']
-            );
+                $fileRow->getFileSource(),
+                array($s['width'], $s['height']), $s['scale']);
         } else {
             return array('width' => 0, 'height' => 0);
         }

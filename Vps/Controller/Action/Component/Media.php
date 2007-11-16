@@ -41,8 +41,8 @@ class Vps_Controller_Action_Component_Media extends Vps_Controller_Action_Media
         }
         */
         $tablename = Vpc_Abstract::getSetting($class, 'tablename');
-        $table = new $tablename();
+        $table = new $tablename(array('componentClass'=>$class));
         $row = $table->findRow($id);
-        $row->createCacheFile($class, $source, $target);
+        $row->createCacheFile($source, $target);
     }
 }
