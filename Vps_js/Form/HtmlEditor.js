@@ -12,8 +12,11 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
 
     initComponent : function() {
+        this.actions = {};
+
+        //todo: lazy-loading von windows
         if (this.linkComponentConfig) {
-            this.enableLinks = true;
+            this.enableLinks = false;
             var cls = eval(this.linkComponentConfig['class']);
             var panel = new cls(Ext.applyIf(this.linkComponentConfig.config, {
                 baseCls: 'x-plain',
@@ -41,15 +44,29 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 height: 400
             });
         }
+        if (this.downloadComponentConfig) {
+            var cls = eval(this.downloadComponentConfig['class']);
+            var panel = new cls(Ext.applyIf(this.downloadComponentConfig.config, {
+                baseCls: 'x-plain',
+                formConfig: {
+                    tbar: false
+                }
+            }));
+            this.downloadDialog = new Vps.Auto.Form.Window({
+                autoForm: panel,
+                width: 450,
+                height: 400
+            });
+        }
 
         Vps.Form.HtmlEditor.superclass.initComponent.call(this);
     },
-    createToolbar: function(editor){
-        Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
-        var tb = this.getToolbar();
-        if (this.imageDialog) {
-            tb.add('-');
-            tb.insert(9, {
+    getAction : function(type)
+    {
+        if (this.actions[type]) return this.actions[type];
+
+        if (type == 'insertImage') {
+            this.actions[type] = new Ext.Action({
                 icon: '/assets/silkicons/image.png',
                 handler: this.createImage,
                 scope: this,
@@ -62,7 +79,69 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 clickEvent: 'mousedown',
                 tabIndex: -1
             });
+        } else if (type == 'insertDownload') {
+            this.actions[type] = new Ext.Action({
+                icon: '/assets/silkicons/page_white.png',
+                handler: this.createDownload,
+                scope: this,
+                tooltip: {
+                    cls: 'x-html-editor-tip',
+                    title: 'Download',
+                    text: 'Create new Download for the selected text or edit selected Download.'
+                },
+                cls: 'x-btn-icon',
+                clickEvent: 'mousedown',
+                tabIndex: -1
+            });
+        } else if (type == 'insertLink') {
+            this.actions[type] = new Ext.Action({
+                handler: this.createLink,
+                scope: this,
+                tooltip: {
+                    cls: 'x-html-editor-tip',
+                    title: 'Hyperlink',
+                    text: 'Create new Link for the selected text or edit selected Link.'
+                },
+                cls: 'x-btn-icon x-edit-createlink',
+                clickEvent: 'mousedown',
+                tabIndex: -1
+            });
+        } else {
+            throw 'unknown action-type: ' + type;
         }
+        return this.actions[type];
+    },
+    initEditor : function() {
+        Vps.Form.HtmlEditor.superclass.initEditor.call(this);
+        Ext.EventManager.on(this.doc, 'keypress', function(e) {
+            if(e.ctrlKey){
+                var c = e.getCharCode(), cmd;
+                if(c > 0){
+                    c = String.fromCharCode(c);
+                    if (c == 'v') {
+                        //tidy on paste
+                        Ext.getBody().mask('Cleaning...');
+                        this.tidyHtml.defer(500, this);
+                    }
+                }
+            }
+        }, this);
+    },
+    createToolbar: function(editor){
+        Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
+        var tb = this.getToolbar();
+        tb.insert(7, '-');
+        if (this.linkDialog) {
+            tb.insert(8,  this.getAction('insertLink'));
+        }
+        if (this.imageDialog) {
+            tb.insert(9, this.getAction('insertImage'));
+        }
+        if (this.downloadDialog) {
+            tb.insert(10,  this.getAction('insertDownload'));
+        }
+        this.linkComponentConfig
+        tb.add('-');
         tb.add({
             icon: '/assets/silkicons/text_letter_omega.png',
             handler: this.insertChar,
@@ -155,10 +234,42 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 this.blockSelect.dom.value = name;
             }
         }
+        var a = this.getFocusElement('a');
+        if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
+            var expr = new RegExp(this.page_id+this.component_key+'-(l|d)([0-9]+)');
+            var m = a.href.match(expr);
+            if (m) {
+                if (m[1] == 'l') {
+                    this.getAction('insertLink').enable();
+                    this.getAction('insertDownload').disable();
+                } else if (m[1] == 'd') {
+                    this.getAction('insertLink').disable();
+                    this.getAction('insertDownload').enable();
+                }
+            } else {
+                this.getAction('insertLink').disable();
+                this.getAction('insertDownload').disable();
+            }
+        } else {
+            if (Ext.isIE) {
+                var selection = this.doc.selection;
+            } else {
+                var selection = this.doc.getSelection();
+            }
+            if (selection == '') {
+                this.getAction('insertLink').disable();
+                this.getAction('insertDownload').disable();
+            } else {
+                this.getAction('insertLink').enable();
+                this.getAction('insertDownload').enable();
+            }
+        }
     },
-//     getDocMarkup : function(){
-//         return '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style></head><body></body></html>';
-//     },
+    getDocMarkup : function(){
+        return '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style>'+
+               '<link rel="stylesheet" type="text/css" href="/assets/AllFrontend.css" />'+
+               '</head><body class="content"></body></html>';
+    },
     setValue : function(v) {
         if (v.page_id && v.component_key) {
             this.page_id = v.page_id;
@@ -169,7 +280,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
 
     createImage: function() {
-        var img = this.getFocusElement();
+        var img = this.getFocusElement('img');
         if (img && img.tagName && img.tagName.toLowerCase() == 'img') {
             var expr = new RegExp('/media/[0-9]+/[^/]+/'+this.page_id+this.component_key+'-i([0-9]+)/');
             var m = img.src.match(expr);
@@ -208,10 +319,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         });
     },
     createLink: function() {
-        var a = this.getFocusElement();
-        if (a && a.parentNode && (!a.tagName || a.tagName.toLowerCase() != 'a')) {
-            a = a.parentNode;
-        }
+        var a = this.getFocusElement('a');
         if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
             var expr = new RegExp(this.page_id+this.component_key+'-l([0-9]+)');
             var m = a.href.match(expr);
@@ -240,13 +348,50 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             },
             scope: this
         });
-
     },
+
     _insertLink : function() {
         var params = this.linkDialog.getAutoForm().getBaseParams();
         this.relayCmd('createlink', params.page_id+params.component_key);
     },
 
+    createDownload: function() {
+        var a = this.getFocusElement('a');
+        if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
+            var expr = new RegExp(this.page_id+this.component_key+'-d([0-9]+)');
+            var m = a.href.match(expr);
+            if (m) {
+                var nr = parseInt(m[1]);
+            }
+            if (nr) {
+                this.downloadDialog.un('datachange', this._insertDownloadLink, this);
+                this.downloadDialog.showEdit({
+                    page_id: this.page_id,
+                    component_key: this.component_key+'-d'+nr
+                });
+                return;
+            }
+        }
+        Ext.Ajax.request({
+            params: {page_id: this.page_id, component_key: this.component_key},
+            url: this.controllerUrl+'/jsonAddDownload',
+            success: function(response, options, r) {
+                this.downloadDialog.un('datachange', this._insertDownloadLink, this);
+                this.downloadDialog.showEdit({
+                    page_id: r.page_id,
+                    component_key: r.component_key
+                });
+                this.downloadDialog.on('datachange', this._insertDownloadLink, this, { single: true });
+            },
+            scope: this
+        });
+    },
+
+    _insertDownloadLink : function() {
+        var params = this.downloadDialog.getAutoForm().getBaseParams();
+        this.relayCmd('createlink', params.page_id+params.component_key);
+    },
+    
     insertChar: function()
     {
         var win = Vps.Form.HtmlEditor.insertCharWindow; //statische var, nur ein window erstellen
@@ -282,9 +427,15 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         Ext.getBody().mask('Cleaning...');
         Ext.Ajax.request({
             url: this.controllerUrl+'/jsonTidyHtml',
-            params: { html: this.getValue() },
+            params: {
+                page_id: this.page_id,
+                component_key: this.component_key,
+                html: this.getValue()
+            },
             success: function(response, options, r) {
-                this.setValue(r.html);
+                if (this.getValue() != r.html) {
+                    this.setValue(r.html);
+                }
             },
             callback: function() {
                 Ext.getBody().unmask();
@@ -294,11 +445,11 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
 
     //private
-	getFocusElement : function()
+	getFocusElement : function(tag)
 	{
         if (Ext.isIE) {
             var rng = this.doc.selection.createRange();
-            return rng.item ? rng.item(0) : rng.parentElement();
+            var elm = rng.item ? rng.item(0) : rng.parentElement();
         } else {
             this.win.focus(); //Von mir
             var sel = this.win.getSelection();
@@ -320,9 +471,20 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                     }
                 }
             }
-
-            return elm;
         }
+        if (tag && elm) {
+            while (elm && elm.parentNode &&
+                    (!elm.tagName || elm.tagName.toLowerCase() != tag)) {
+                elm = elm.parentNode;
+            }
+        }
+        return elm;
+    },
+
+    //protected
+    toggleSourceEdit : function(sourceEditMode) {
+        this.tidyHtml();
+        Vps.Form.HtmlEditor.superclass.toggleSourceEdit.call(this, sourceEditMode);
     }
 });
 Ext.reg('htmleditor', Vps.Form.HtmlEditor);

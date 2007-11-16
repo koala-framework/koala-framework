@@ -18,10 +18,10 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
                 'component_key' => $componentKey
             );
             if (!$this->_row) {
-                $this->_row = $table->createRow($class, $id);
+                $this->_row = $table->createRow($id);
             }
         } else {
-            $this->_row = $table->createRow($class);
+            $this->_row = $table->createRow();
             $id = 0;
         }
 

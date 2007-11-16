@@ -1,52 +1,43 @@
 <?php
 class Vpc_Basic_Download_Component extends Vpc_Abstract
 {
+    public $downloadTag;
+
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
             'tablename' => 'Vpc_Basic_Download_Model',
             'componentName' => 'Standard.Download',
-            'extensions' => array('pdf', 'doc', 'mp3', 'xls', 'ppt'),
-            'showIcon' => true,
             'showFilesize' => true,
+            'childComponentClasses'   => array(
+                'downloadTag' => 'Vpc_Basic_DownloadTag_Component',
+            ),
             'default'   => array(
                 'filename' => 'unnamed'
             )
         ));
     }
+    public function _init()
+    {
+        $class = $this->_getClassFromSetting('downloadTag', 'Vpc_Basic_DownloadTag_Component');
+        $this->downlaodTag = $this->createComponent($class, 1);
+    }
+
+    public function getChildComponents()
+    {
+        return array($this->downlaodTag);
+    }
     
     public function getTemplateVars()
     {
-        $row = $this->_row;
-        $fileTable = $this->getTable('Vps_Dao_File');
-        $url = $fileTable->generateUrl(
-            $row->vps_upload_id, 
-            $this->getId(), 
-            $row->filename != '' ? $row->filename : 'unnamed', 
-            Vps_Dao_File::DOWNLOAD
-        );
-        $filesize = $fileTable->getFilesize($row->vps_upload_id);
-        $filename = $row->filename;
-        $fileRow = $fileTable->find($row->vps_upload_id)->current();
-        if ($fileRow) {
-            $filename .= '.' . $fileRow->extension;
-        }
-
         $return = parent::getTemplateVars();
-        $return['url'] = '';
-        $return['icon'] = '';
-        $return['text'] = '';
-        $return['filesize'] = '';
-        $return['url'] = $url;
-        $return['text'] = $filename;
-        $return['info'] = $row->infotext;
-        if ($this->_getSetting('showIcon')) {
-            $return['icon'] = '';
+        $return['downloadTag'] = $this->downlaodTag->getTemplateVars();
+
+        $return['infotext'] = $this->_row->infotext;
+        if (!$this->_getSetting('showFilesize')) {
+            $return['filesize'] = '';
         }
-        if ($this->_getSetting('showFilesize')) {
-            $return['filesize'] = $filesize;
-        }
-        
         return $return;
     }
+
 }

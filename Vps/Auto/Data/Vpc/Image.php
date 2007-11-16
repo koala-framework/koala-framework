@@ -15,11 +15,11 @@ class Vps_Auto_Data_Vpc_Image extends Vps_Auto_Data_Abstract
     public function load($row)
     {
         $tablename = Vpc_Abstract::getSetting($this->_class, 'tablename');
-        $table = new $tablename();
+        $table = new $tablename(array('componentClass'=>$this->_class));
         $componentKey = $this->_componentKey . '-' . $row->id;
         $row = $table->find($this->_pageId, $componentKey)->current();
         if ($row) {
-            return '<img src="' . $row->getImageUrl($this->_class, Vpc_Basic_Image_Row::DIMENSION_MINI) . '" />';
+            return '<img src="' . $row->getImageUrl(Vpc_Basic_Image_Row::DIMENSION_MINI) . '" />';
         } else {
             return '';
         }

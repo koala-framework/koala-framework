@@ -11,11 +11,18 @@ class Vpc_Basic_Link_Extern_Component extends Vpc_Basic_Link_Component
             'tablename'     => 'Vpc_Basic_Link_Extern_Model',
             'componentName' => 'Standard.Link.Extern',
             'default'       => array(
-                'text'          => 'Linktext',
                 'target'        => 'http://',
+                'rel'           => '',
+                'param'         => '',
                 'is_popup'      => false,
                 'width'         => '400',
-                'height'        => '400'
+                'height'        => '400',
+                'menubar'       => '0',
+                'toolbar'       => '0',
+                'locationbar'   => '0',
+                'statusbar'     => '0',
+                'scrollbars'    => '0',
+                'resizeable'    => '0'
             )
         )); 
     }

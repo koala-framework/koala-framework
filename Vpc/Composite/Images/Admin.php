@@ -16,7 +16,8 @@ class Vpc_Composite_Images_Admin extends Vpc_Admin
     
     public function setup()
     {
-        Vpc_Admin::getInstance('Vpc_Basic_Image_Component')->setup();
+        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+        Vpc_Admin::getInstance($classes['image'])->setup();
 
         if (!$this->_tableExists('vpc_composite_images')) {
             $sql = 'CREATE TABLE IF NOT EXISTS `vpc_composite_images` (
