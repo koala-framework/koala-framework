@@ -1,6 +1,8 @@
 <?php
 abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
 {
+    const ADD_LAST = 0;
+    const ADD_FIRST = 1;
     protected $_tableName;
     protected $_table;
     protected $_icons = array (
@@ -23,11 +25,10 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
     );
     protected $_rootText = 'Root';
     protected $_rootVisible = true;
-    protected $_order = null;
-    protected $_enableDD;
-    protected $_hasPosition;
+    protected $_hasPosition; // Gibt es ein pos-Feld
     protected $_editDialog;
     private $_openedNodes = array();
+    protected $_addPosition = self::ADD_FIRST;
 
     public function init()
     {
@@ -44,28 +45,20 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         {
             $this->_buttons['invisible'] = true;
         }
-
-        // Sortierung aktivieren wenn in DB
+        
+        // Pos-Feld
         if (!isset($this->_hasPosition)) {
             $this->_hasPosition = in_array('pos', $info['cols']);
         }
-        if ($this->_hasPosition && isset($this->_order) && $this->_order != 'pos') {
-            throw new Vps_Exception("If _hasposition is enabled, order must be 'pos'");
-        }
-        if ($this->_hasPosition) {
-            $this->_order = 'pos';
-        }
-
-        // Drag&Drop standardmäßig aktivieren wenn _hasPosition aktiviert ist
-        if (!isset($this->_enableDD)) {
-            $this->_enableDD = $this->_hasPosition;
+        if ($this->_hasPosition && !in_array('pos', $info['cols'])) {
+            throw new Vps_Exception("_hasPosition is true, but 'pos' does not exist in database");
         }
     }
 
     protected function jsonMetaAction()
     {
         $this->view->icons = $this->_icons;
-        $this->view->enableDD = $this->_enableDD;
+        $this->view->enableDD = $this->_hasPosition;
         $this->view->rootText = $this->_rootText;
         $this->view->rootVisible = $this->_rootVisible;
         $this->view->buttons = $this->_buttons;
@@ -79,7 +72,8 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         $this->_saveSessionNodeOpened($parentId, true);
         $this->_saveNodeOpened();
 
-        $rowset = $this->_table->fetchAll($this->_getWhere(), $this->_order);
+        $order = $this->_hasPosition ? 'pos' : null ;
+        $rowset = $this->_table->fetchAll($this->_getWhere(), $order);
 
         $nodes = array();
         foreach ($rowset as $row) {
@@ -104,9 +98,9 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         $where = array();
         $parentId = $this->getRequest()->getParam('node');
         if (!$parentId) {
-            $where[] = 'parent_id IS NULL';
+            $where['parent_id IS NULL'] = '';
         } else {
-            $where[] = $this->_table->getAdapter()->quoteInto('parent_id = ?', $parentId);
+            $where['parent_id = ?'] = $parentId;
         }
         return $where;
     }
@@ -181,11 +175,18 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
     public function jsonAddAction()
     {
         $insert['parent_id'] = $this->getRequest()->getParam('parentId');
-        if (!$insert['parent_id']) $insert['parent_id'] = null;
         $insert[$this->_textField] = $this->getRequest()->getParam('name');
+        if ($this->_hasPosition) {
+            $insert['pos'] = 0;
+        }
         $id = $this->_table->insert($insert);
+        $row = $this->_table->find($id)->current();
+        if ($this->_hasPosition) {
+            $where = $this->_getWhere();
+            $row->numberize('pos', $this->_addPosition, $where);
+        }
         if ($id) {
-            $this->view->data = $this->_formatNode($this->_table->find($id)->current());
+            $this->view->data = $this->_formatNode($row);
         } else {
             $this->view->error = 'Couldn\'t insert row.';
         }
