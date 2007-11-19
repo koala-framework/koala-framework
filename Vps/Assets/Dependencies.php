@@ -168,7 +168,7 @@ class Vps_Assets_Dependencies
                         $this->_processDependencyFile($file);
                     }
                 }
-                $file = Vpc_Admin::getComponentFile($class, 'css');
+                $file = Vpc_Admin::getComponentFile($class, '', 'css');
                 if ($file) {
                     foreach ($this->_config->path as $type=>$path) {
                         if ($path == '.') $path = getcwd();

@@ -436,7 +436,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $vars['class'] = get_class($this);
         $vars['id'] = $this->getId();
         $vars['store'] = $this->_store;
-        $vars['template'] = Vpc_Admin::getComponentFile(get_class($this), 'tpl');
+        $vars['template'] = Vpc_Admin::getComponentFile(get_class($this), '', 'tpl');
         if (!$vars['template']) {
             throw new Vpc_Exception('Template not found for Component ' . get_class($this));
         }
@@ -527,6 +527,12 @@ abstract class Vpc_Abstract implements Vpc_Interface
     }
     
     public static function getSetting($class, $setting)
+    {
+        $settings = call_user_func(array($class, 'getSettings'));
+        return isset($settings[$setting]) ? $settings[$setting] : null ;
+    }
+
+    public static function getSetting2($class, $setting)
     {
         $settings = call_user_func(array($class, 'getSettings'));
         return isset($settings[$setting]) ? $settings[$setting] : null ;
