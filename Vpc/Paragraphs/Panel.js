@@ -54,7 +54,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
                 componentClass: row.data.component_class,
                 pageId: this.baseParams.page_id, 
                 componentKey: this.baseParams.component_key + '-' + row.data.id, 
-                text: row.data.component_class
+                text: row.data.component_name
             });
         }
     },
