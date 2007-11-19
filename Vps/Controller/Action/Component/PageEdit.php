@@ -25,6 +25,23 @@ class Vps_Controller_Action_Component_PageEdit extends Vps_Controller_Action_Aut
             ->setValue('Vpc_Paragraphs_Component')
             ->setAllowBlank(false);
         $fields->add(new Vps_Auto_Field_Checkbox('hide', 'Hide in Menu'));
+        
+        $cfg = new Zend_Config_Ini('application/config.ini', 'pagecollection');
+        foreach ($cfg->pagecollection->addDecorators as $decorator) {
+            $formClass = Vpc_Admin::getComponentFile($decorator, 'Form', 'php', true);
+            if ($formClass) {
+                $form = new $formClass($decorator, $this->_getParam('id'));
+                $form->setBaseCls('x-plain');
+                $title = Vpc_Abstract::getSetting($decorator, 'componentName');
+                if ($title) {
+                    $fieldset = new Vps_Auto_Container_FieldSet($title);
+                    $fieldset->add($form);
+                    $fields->add($fieldset);
+                } else {
+                    $fields->add($form);
+                }
+            }
+        }
     }
 
     protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row)

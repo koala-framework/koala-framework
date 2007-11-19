@@ -25,6 +25,11 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
         $this->_component = $component;
     }
     
+    public static function getSettings()
+    {
+        return array();
+    }
+    
     /**
      * Setzt für sich und für die dekorierte Komponente die pageCollection
      * 

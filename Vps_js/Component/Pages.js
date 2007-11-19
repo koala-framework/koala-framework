@@ -32,7 +32,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     {
         this.editDialog = new Vps.Auto.Form.Window({
             width: 400,
-            height: 200,
+            height: 400,
             controllerUrl: '/admin/component/pageEdit'
         });
         this.editDialog.on('datachange', function() {

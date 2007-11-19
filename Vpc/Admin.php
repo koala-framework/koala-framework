@@ -185,23 +185,30 @@ class Vpc_Admin
         return in_array($tablename, $this->_db->listTables());
     }
 
-    public static function getComponentFile($class, $ext)
+    public static function getComponentFile($class, $filename = '', $ext = 'php', $returnClass = false)
     {
         $ret = null;
-        while (!$ret && $class != 'Vpc_Abstract') {
-            $file = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.'.$ext;
+        $retClass = null;
+        while (!$ret && $class != '') {
+            $curClass = $class;
+            if ($filename == '') {
+                $filename = substr(strrchr($curClass, '_'), 1);
+            }
+            $curClass = substr($class, 0, strrpos($class, '_') + 1) . $filename;
+            $file = str_replace('_', DIRECTORY_SEPARATOR, $curClass) . '.' . $ext;
             $dirs = explode(PATH_SEPARATOR, get_include_path());
             foreach ($dirs as $dir) {
                 if ($dir == '.') { $dir = getcwd(); }
                 $path = $dir . '/' . $file;
                 if (is_file($path)) {
                     $ret = $path;
+                    $retClass = $curClass;
                     break;
                 }
             }
             $class = get_parent_class($class);
         }
-        return $ret;
+        return $returnClass ? $retClass : $ret;
     }
 
 }
