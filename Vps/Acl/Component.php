@@ -14,10 +14,14 @@ class Vps_Acl_Component extends Vps_Acl
         //$this->add(new Zend_Acl_Resource('fe'));
         $this->add(new Vps_Acl_Resource_MenuUrl('pages',
             array('text'=>'Sitetree', 'icon'=>'application_side_tree.png'),
-            '/admin/component/pages/'));
+            '/admin/component/pages'));
             $this->add(new Zend_Acl_Resource('pageedit'), 'pages');
             $this->add(new Zend_Acl_Resource('components'), 'pages'); // für /component/show
             $this->add(new Zend_Acl_Resource('component'), 'pages'); // für /component/edit
+
+        $this->add(new Vps_Acl_Resource_MenuUrl('overview',
+            array('text'=>'Components', 'icon'=>'application_view_list.png'),
+            '/admin/component/overview'));
 
 
         $this->allow(null, 'web');
@@ -26,5 +30,6 @@ class Vps_Acl_Component extends Vps_Acl
         $this->allow('admin', 'pages');
         $this->allow('admin', 'mediaoriginal');
         $this->allow('admin', 'mediavpc');
+        $this->allow('admin', 'overview');
     }
 }

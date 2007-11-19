@@ -83,28 +83,28 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
         $this->view->content = $view->render('');
     }
 
-    public function deleteAction()
-    {
-        $component = $this->_getComponent();
-        if ($component) {
-            Vpc_Admin::getInstance($component)->delete($component);
-            echo 'Deleted.';
-        } else {
-            echo 'Component not found.';
-        }
-    }
+//     public function deleteAction()
+//     {
+//         $component = $this->_getComponent();
+//         if ($component) {
+//             Vpc_Admin::getInstance($component)->delete($component);
+//             echo 'Deleted.';
+//         } else {
+//             echo 'Component not found.';
+//         }
+//     }
 
-    public function setupAction()
-    {
-        $class = $this->_getParam('class');
-        $admin = Vpc_Admin::getInstance($class);
-        if ($admin) {
-            $admin->setup();
-            echo 'Setup executed.';
-        } else {
-            echo 'Admin-Class not found';
-        }
-    }
+//     public function setupAction()
+//     {
+//         $class = $this->_getParam('class');
+//         $admin = Vpc_Admin::getInstance($class);
+//         if ($admin) {
+//             $admin->setup();
+//             echo 'Setup executed.';
+//         } else {
+//             echo 'Admin-Class not found';
+//         }
+//     }
 
     private function _getComponent()
     {

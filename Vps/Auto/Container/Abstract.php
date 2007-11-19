@@ -20,6 +20,9 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract
         foreach ($iterator as $field) {
             if ($field instanceof Vps_Auto_Field_File) {
                 $this->setFileUpload(true);
+            }
+            if ($field instanceof Vps_Auto_Field_File
+                || $field instanceof Vps_Auto_Field_HtmlEditor) {
                 $this->setLoadAfterSave(true);
             }
         }

@@ -45,7 +45,7 @@ class Vpc_Admin
                 $item->isDir()
             ){
                 
-                $pathNew = "$path$item/";
+                $pathNew = "$path/$item";
                 $return = array_merge(self::getAvailableComponents($pathNew), $return);
                 
             } else if (substr($item->getFilename(), -4) == '.php') {

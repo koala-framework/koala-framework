@@ -35,11 +35,11 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                     array('module' => 'component',
                         'controller' => 'component',
                         'action' => 'index')));
-        $router->AddRoute('componentsetup', new Zend_Controller_Router_Route(
+/*        $router->AddRoute('componentsetup', new Zend_Controller_Router_Route(
                     'admin/component/setup/:class',
                     array('module' => 'component',
                         'controller' => 'components',
-                        'action' => 'setup')));
+                        'action' => 'setup')));*/
         $router->AddRoute('login', new Zend_Controller_Router_Route(
                     'login/:action',
                     array('module' => 'vps',
