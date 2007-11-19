@@ -269,16 +269,23 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 
         if (meta.buttons.reload) {
             gridConfig.tbar.add(this.getAction('reload'));
+            delete meta.buttons.reload;
         }
         if (meta.buttons.save) {
             gridConfig.tbar.add(this.getAction('save'));
             gridConfig.tbar.add('-');
+            delete meta.buttons.save;
         }
         if (meta.buttons.add) {
             gridConfig.tbar.add(this.getAction('add'));
+            delete meta.buttons.add;
         }
         if (meta.buttons['delete']) {
             gridConfig.tbar.add(this.getAction('delete'));
+            delete meta.buttons.delete;
+        }
+        for (var i in meta.buttons) {
+            gridConfig.tbar.add(this.getAction(i));
         }
 
         var filtersEmpty = true;

@@ -3,7 +3,11 @@ class Vps_Filter_Url implements Zend_Filter_Interface
 {
     public function filter($value)
     {
-        if (function_exists('transliterate')) {
+        
+        if (function_exists('transliterate')
+            //online deaktiviert wg. server problem
+            && $_SERVER['SERVER_ADDR']=='192.168.0.10') {
+
             $filter[] = 'cyrillic_transliterate_bulgarian';
             $value = transliterate($value, $filter, 'utf-8', 'utf-8');
         }
