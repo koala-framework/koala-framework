@@ -85,12 +85,20 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
             } catch (Vps_Exception $e) {
                 throw new Vps_ClientException($e->getMessage());
             }
-        } else if ($uploadRow && $this->getAllowBlank()
+        }
+        if ($uploadRow && $this->getAllowBlank()
                     && isset($postData[$fieldName . '_delete'])
                     && $postData[$fieldName . '_delete'] == '1') {
             $row->$name = null;
+        }
+    }
+    public function save(Zend_Db_Table_Row_Abstract $row, $postData)
+    {
+        parent::save($row, $postData);
+        $uploadRow = $row->findParentRow('Vps_Dao_File');
+        $name = $this->getName();
+        if ($uploadRow && is_null($row->$name)) {
             $uploadRow->delete();
         }
     }
-
 }
