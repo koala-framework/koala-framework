@@ -1,27 +1,6 @@
 Vps.Auto.AssignedGridPanel = Ext.extend(Vps.Auto.GridPanel,
 {
 
-    textAssignActionUrl: null,
-
-    initComponent: function()
-    {
-        Vps.Auto.AssignedGridPanel.superclass.initComponent.call(this);
-
-        if (!this.textAssignActionUrl) {
-            this.textAssignActionUrl = this.controllerUrl + '/jsonTextAssign';
-        }
-
-    },
-
-    onMetaLoad : function(result)
-    {
-        Vps.Auto.AssignedGridPanel.superclass.onMetaLoad.call(this, result);
-
-        if (this.metaData.buttons.textAssign) {
-            this.getGrid().getTopToolbar().unshift(this.getAction('textAssign'), '-');
-        }
-    },
-
     getAction : function(type)
     {
         if (this.actions[type]) return this.actions[type];
@@ -54,7 +33,7 @@ Vps.Auto.AssignedGridPanel = Ext.extend(Vps.Auto.GridPanel,
                 if (btn == 'ok') {
                     params.assignText = text;
                     Ext.Ajax.request({
-                        url: this.textAssignActionUrl,
+                        url: this.controllerUrl + '/jsonTextAssign',
                         params: params,
                         success: function(response, options, r) {
                             this.reload();
