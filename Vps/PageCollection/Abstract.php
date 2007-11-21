@@ -237,9 +237,9 @@ abstract class Vps_PageCollection_Abstract
         $id = $page->getPageId();
         $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($id, false);
         $data['url'] = $this->getUrl($page);
-        $data['name'] = $this->_pageNames[$page->getId()];
+        $data['name'] = $this->_pageNames[$page->getPageId()];
         if (array_search($page->getId(), $this->_hideInMenu) ||
-            $data['hide'] == 1
+            isset($data['hide']) && $data['hide'] == 1
         ) {
             $data['hide'] = true;
         } else {

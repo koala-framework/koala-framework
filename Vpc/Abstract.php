@@ -185,7 +185,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         }
 
         $parts['id'] = $keys[0];
-        $parts['dbId'] = (int)$keys[1];
+        $parts['dbId'] = $keys[1];
         $parts['componentId'] = '';
         $parts['pageId'] = '';
         $parts['componentKey'] = '';
@@ -239,7 +239,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     public static function getIdPattern()
     {
-        $pattern = '(\d+)'; // PageId
+        $pattern = '([0-9a-zA-Z]+)'; // PageId
         $pattern .= '(((-|_|,)[0-9a-zA-Z]+)*)?'; // PageKey
         return $pattern;
     }
@@ -527,12 +527,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
     }
     
     public static function getSetting($class, $setting)
-    {
-        $settings = call_user_func(array($class, 'getSettings'));
-        return isset($settings[$setting]) ? $settings[$setting] : null ;
-    }
-
-    public static function getSetting2($class, $setting)
     {
         $settings = call_user_func(array($class, 'getSettings'));
         return isset($settings[$setting]) ? $settings[$setting] : null ;
