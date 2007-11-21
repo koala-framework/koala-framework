@@ -3,7 +3,7 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
 {
     public function getComponents()
     {
-        return $this->getAvailableComponents('Vpc/');
+        return $this->getAvailableComponents('Vpc');
     }
 
     public function getControllerConfig()
