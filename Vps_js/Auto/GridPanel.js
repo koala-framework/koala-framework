@@ -365,19 +365,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             }
         }
 
-        if (meta.buttons.pdf || meta.buttons.csv || meta.buttons.xls) {
-            gridConfig.tbar.add('->');
-        }
-        if (meta.buttons.pdf) {
-            gridConfig.tbar.add(this.getAction('pdf'));
-        }
-        if (meta.buttons.csv) {
-            gridConfig.tbar.add(this.getAction('csv'));
-        }
-        if (meta.buttons.xls) {
-            gridConfig.tbar.add(this.getAction('xls'));
-        }
-
         //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
         if (gridConfig.tbar.length == 0 && (!this.initialConfig.gridConfig ||
                                             !this.initialConfig.gridConfig.tbar)) {
