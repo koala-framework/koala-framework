@@ -27,6 +27,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
             $parentId = $parentPage->getPageId();
 
             if ($parentId == $id) {
+                d($page->getId());
                 throw new Vps_PageCollection_Exception('Cannot set Parent Page for the same object: ' . $id);
             }
 
@@ -120,12 +121,12 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         if ($rowset->count() > 0) {
             $startPage = $this->findPage($rowset->current()->page_id);
         }
-        if (!$startPage) {
-            $startPage = $this;
-        }
-        $component = $startPage->findComponentByClass($class);
-        if ($component) {
-            return $component;
+
+        if ($startPage) {
+            $component = $startPage->findComponentByClass($class);
+            if ($component) {
+                return $component;
+            }
         }
 
         foreach ($this->getChildPages($startPage) as $page) {
@@ -162,9 +163,19 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
             if (preg_match('/^(\/\w+)*$/', $path)) { // hierarchische URLs, Format /x/y/z/
                 $page = null;
                 $pathParts = explode('/', substr($path, 1));
-                foreach($pathParts as $pathPart) {
+                foreach($pathParts as $key => $pathPart) {
                     if ($pathPart != '') {
-                        $page = $this->getChildPage($page, $pathPart);
+                        try {
+                            $page = $this->getChildPage($page, $pathPart);
+                        } catch (Vpc_UrlNotFoundException $e) {
+                            $newPath = '';
+                            for ($x = 0; $x < $key; $x++) {
+                                $newPath .= '/' . $pathParts[$x];
+                            }
+                            $newPath .= '/' . $e->getMessage();
+                            header('Location: ' . $newPath, true, 301);
+                            die();
+                        }
                         if (!$page) {
                             return array();
                         } else {

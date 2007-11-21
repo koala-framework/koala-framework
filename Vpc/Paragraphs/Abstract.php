@@ -6,17 +6,21 @@
 abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
 {
     protected $_paragraphs = array();
+    protected static $_settings;
 
     public static function getSettings()
     {
-        $ret = array_merge(parent::getSettings(), array(
-            'componentName' => 'Paragraphs',
-            'hideInParagraphs' => true,
-            'tablename' => 'Vpc_Paragraphs_Model'
-        ));
-        $ret['childComponentClasses'] = Vpc_Admin::getInstance('Vpc_Paragraphs_Abstract')
-                                ->getComponents();
-        return $ret;
+        if (!self::$_settings) {
+            $ret = array_merge(parent::getSettings(), array(
+                'componentName' => 'Paragraphs',
+                'hideInParagraphs' => true,
+                'tablename' => 'Vpc_Paragraphs_Model'
+            ));
+            $ret['childComponentClasses'] = Vpc_Admin::getInstance('Vpc_Paragraphs_Abstract')
+                                    ->getComponents();
+            self::$_settings = $ret;
+        }
+        return self::$_settings;
     }
 
     protected function _init()
