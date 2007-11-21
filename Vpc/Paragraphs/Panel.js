@@ -28,6 +28,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
 
     addComponents : function(components, addToItem)
     {
+        if (components.length == 0) { return; }
         for (var i in components) {
             if (typeof components[i] == 'string') {
                 addToItem.addItem(
