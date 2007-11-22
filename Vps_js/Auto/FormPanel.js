@@ -3,7 +3,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     autoScroll: true, //um scrollbars zu bekommen
     border: false,
     formConfig: {},
-    maskDisabled: false,
+    maskDisabled: true,
 
     initComponent: function()
     {
