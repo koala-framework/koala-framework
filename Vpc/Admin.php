@@ -56,7 +56,7 @@ class Vpc_Admin
                 if (class_exists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
                     $return[] = $class;
                 }
-                
+
             }
         }
         return $return;

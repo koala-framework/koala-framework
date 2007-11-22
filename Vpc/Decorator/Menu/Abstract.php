@@ -1,27 +1,6 @@
 <?php
-/**
- * @package Vpc
- * @subpackage Decorator
- */
-class Vpc_Decorator_Menu_BreadCrumbs_Component extends Vpc_Decorator_Menu_Abstract
+class Vpc_Decorator_Menu_Abstract extends Vpc_Decorator_Abstract
 {
-    public function getTemplateVars()
-    {
-        $return = parent::getTemplateVars();
-        $pc = $this->_pageCollection;
-
-        $pages = array();
-        $page = $pc->getCurrentPage();
-        while ($page) {
-            $pages[] = $page;
-            $page = $pc->getParentPage($page);
-        }
-        $pages = array_reverse($pages);
-        $return['menu']['breadCrumbs'] = $this->_getMenuData($pages, array());
-
-        return $return;
-    }
-
     protected function _getMenuData($pages, $currentPageIds)
     {
         $return = array();

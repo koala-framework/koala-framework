@@ -3,7 +3,12 @@ class Vpc_Formular_Admin extends Vpc_Paragraphs_Admin
 {
     public function getComponents()
     {
-        $c = $this->getAvailableComponents(VPS_PATH . '/Vpc/Formular/');
+        return array_merge($this->getAvailableComponents(VPS_PATH . '/Vpc/Formular'),
+                            parent::getComponents());
+    }
+/*
+    public function getComponents()
+    {
         $components = array();
         foreach ($c as $key => $val) {
             if ($key != 'Formular') {
@@ -18,14 +23,12 @@ class Vpc_Formular_Admin extends Vpc_Paragraphs_Admin
             }
         }
         return $components;
-    }
+    }*/
 
     public function setup()
     {
-        $this->copyTemplate('Template.html', 'Formular.html');
-
         $tablename = 'vpc_formular';
-        if (!$this->_tableExits($tablename)) {
+        if (!$this->_tableExists($tablename)) {
           $this->_db->query("CREATE TABLE `$tablename` (
                   `id` int(10) unsigned NOT NULL auto_increment,
                   `page_id` int(10) unsigned NOT NULL,
@@ -37,7 +40,7 @@ class Vpc_Formular_Admin extends Vpc_Paragraphs_Admin
                   `mandatory` tinyint(4) NOT NULL,
                   `no_cols` tinyint(4) NOT NULL,
                    PRIMARY KEY  (`id`)
-                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;");
+                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
         }
     }
 }
