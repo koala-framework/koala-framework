@@ -130,7 +130,7 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
     
     mabySubmit : function(cb, options)
     {
-        if (this.checkDirty && this.isDirty()) {
+        if (!this.disabled && this.checkDirty && this.isDirty()) {
             Ext.Msg.show({
             title:'Save',
             msg: 'Do you want to save the changes?',
