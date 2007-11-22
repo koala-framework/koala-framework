@@ -20,7 +20,11 @@ Ext.extend(Vps.SubmitAction, Ext.form.Action.Submit, {
                 //überspringen, file-upload muss direkt submitted werden
                 return;
             } else {
-                this.options.params[field.getName()] = field.getValue();
+                var v = field.getValue();
+                if (typeof v == 'object') {
+                    v = Ext.encode(v);
+                }
+                this.options.params[field.getName()] = v;
             }
             if (field.rendered) {
                 field.realName = field.getName();

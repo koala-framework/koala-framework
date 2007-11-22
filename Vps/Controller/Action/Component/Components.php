@@ -64,7 +64,8 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
 
     public function showAction()
     {
-        $component = $this->_getComponent();
+        $component = new Vpc_Decorator_Assets_Component(
+                            Zend_Registry::get('dao'), $this->_getComponent());
 
         $this->view->setRenderFile(VPS_PATH . '/views/Component.html');
         $this->view->component = $component->getTemplateVars();

@@ -12,7 +12,6 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
         $this->setHideLabels(true);
         $this->setAutoHeight(true);
         $this->setLayout('form');
-        $this->setBaseCls('x-plain');
         $this->setXtype('fieldset');
     }
 
@@ -60,7 +59,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
         return $name;
     }
 
-    public function load($row)
+    public function load(Zend_Db_Table_Row_Abstract $row)
     {
         if ((array)$row == array()) return array();
 
@@ -125,11 +124,5 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
                 $i->save();
             }
         }
-    }
-
-    public function delete(Zend_Db_Table_Row_Abstract $row)
-    {
-        //todo
-        //ist das nicht aufgabe des models oder der datenbank?
     }
 }
