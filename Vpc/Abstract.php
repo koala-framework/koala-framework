@@ -13,6 +13,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     private $_store;
     protected $_row;
+    private $_tables = array();
 
     protected $_table;
     
@@ -518,13 +519,19 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Shortcut für $this->_dao->getTable($tablename)
      * @param string Name des Models
      */
-    public function getTable($tablename = '')
+    public function getTable($tablename = null)
     {
-        if ($tablename == '') {
+        if (!$tablename) {
             $tablename = $this->_getSetting('tablename');
+            if (!$tablename) {
+                return null;
+            }
         }
         try {
-            return $this->_dao->getTable($tablename, array('componentClass'=>get_class($this)));
+            if (!isset($this->_tables[$tablename])) {
+                $this->_tables[$tablename] = new $tablename(array('componentClass'=>get_class($this)));
+            }
+            return $this->_tables[$tablename];
         } catch (Vps_Dao_Exception $e) {
             return null;
         }
