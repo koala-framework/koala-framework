@@ -45,7 +45,7 @@ class Vps_Assets_Loader
     {
         require_once 'Vps/Loader.php';
         Vps_Loader::registerAutoload();
-        if (substr($_SERVER['SCRIPT_URL'], 0, 8)=='/assets/') {
+        if (substr($_SERVER['REQUEST_URI'], 0, 8)=='/assets/') {
 
             $headers = apache_request_headers();
             $http_if_modified_since = "";
@@ -60,7 +60,7 @@ class Vps_Assets_Loader
             }
 
             $config = Vps_Setup::createConfig();
-            $url = substr($_SERVER['SCRIPT_URL'], 8);
+            $url = substr($_SERVER['REQUEST_URI'], 8);
             if (preg_match('#^All([a-z]+)\\.(js|css)$#i', $url, $m)) {
                 if ($m[2] == 'js') {
                     header('Content-Type: text/javascript');
