@@ -33,11 +33,13 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
                         b.item.load();
                     }
                 }, this);
+                /*
             } else if (this.activeId !== 0) {
                 this.activeId = null;
                 this.bindings.each(function(b) {
                     b.item.disable();
                 }, this);
+                */
             }
         }, this, {buffer: 500});
         this.on('beforeselectionchange', function(id) {

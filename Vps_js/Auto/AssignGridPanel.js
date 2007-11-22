@@ -38,6 +38,9 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             this.gridData.reload();
         }, this);
 
+        this.relayEvents(this.gridAssigned, ['datachange']);
+
+
         this.gridData.on('selectionchange', function() {
             if (this.gridData.getSelectionModel().getSelections()[0]) {
                 this.getAction('assign').enable();
