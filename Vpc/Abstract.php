@@ -37,10 +37,18 @@ abstract class Vpc_Abstract implements Vpc_Interface
         
         $this->_dao = $dao;
         $this->_pageCollection = $pageCollection;
-        $this->_id = $this->parseId($id);
+
+        if (is_string($id)) {
+            $this->_id = $this->parseId($id);
+        } else if (is_object($id)) {
+            foreach (Vpc_Abstract::getSetting(get_class($this), 'default') as $k=>$i) {
+                if (!isset($id->$k)) $id->$k = $i;
+            }
+            $this->_row = $id;
+        }
 
         $table = $this->getTable();
-        if ($table) {
+        if ($table && !isset($this->_row)) {
             $info = $table->info();
             if ($info['primary'] == array(1 => 'page_id', 2 => 'component_key')) {
                 $this->_row = $table->find($this->getPageId(), $this->getComponentKey())->current();
@@ -53,6 +61,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_init();
 
         if (Zend_Registry::isRegistered('infolog')) {
+            if (!is_string($id)) $id = '(static)';
             Zend_Registry::get('infolog')->createComponent(get_class($this) . ' - ' . $id);
         }
     }

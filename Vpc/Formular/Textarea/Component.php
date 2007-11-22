@@ -1,24 +1,32 @@
 <?php
-class Vpc_Formular_Textarea_Component extends Vpc_Formular_Textbox_Component
+class Vpc_Formular_Textarea_Component extends Vpc_Formular_Field_Abstract
 {
-    protected $_settings = array(
-        'cols' => '20',
-        'rows' => '5',
-        'name' => '',
-        'value' => ''
-    );
-    protected $_tablename = 'Vpc_Formular_Textarea_Model';
-    const NAME = 'Formular.Textarea';
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName' => 'Formular Fields.Textarea',
+            'tablename' => 'Vpc_Formular_Textarea_Model',
+            'default' => array(
+                'width' => '150',
+                'height' => '50',
+                'name' => '',
+                'value' => ''
+            )
+        ));
+    }
 
     function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $return['cols'] = $this->getSetting('cols');
-        $return['rows'] = $this->getSetting('rows');
-        $return['name'] = $this->getSetting('name');
-        $return['value'] = $this->getSetting('value');
-        $return['template'] = 'Formular/Textarea.html';
+        $return['value'] = $this->_row->value;
+        $return['width'] = $this->_row->width;
+        $return['height'] = $this->_row->height;
+        if (isset($this->_row->name)) {
+            $return['name'] = $this->_row->name;
+        } else {
+            $return['name'] = $this->_store['name'];
+        }
+        
         return $return;
     }
-
 }

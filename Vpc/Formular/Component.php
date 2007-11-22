@@ -1,17 +1,45 @@
 <?php
 class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
 {
-    protected $_tablename = 'Vpc_Formular_Model';
-    const NAME = 'Formular';
-
     private $_errors = array();
-    private $_components = array();
+
+    public static function getSettings()
+    {
+        static $settings;
+        if (!isset($settings)) {
+            $settings = array_merge(parent::getSettings(), array(
+                'componentName' => 'Formular',
+                'hideInParagraphs' => false,
+                'tablename' => 'Vpc_Formular_Model'
+            ));
+            $settings['childComponentClasses'] = Vpc_Admin::getInstance('Vpc_Formular_Component')
+                                    ->getComponents();
+        }
+        return $settings;
+    }
+
+    protected function _init()
+    {
+        parent::_init();
+        foreach($this->_getRows() as $row) {
+            $component = $this->_paragraphs[$row->id];
+            $component->store('fieldLabel', $row->field_label);
+            $component->store('isMandatory', $component instanceof Vpc_Formular_Captcha_Component || $row->mandatory == 1);
+            $component->store('noCols', $row->no_cols == 1);
+            $component->store('isValid', true);
+            if ($component instanceof Vpc_Formular_Field_Interface ) {
+                $component->store('name', $component->getId());
+            }
+        }
+    }
+
 
     public function getTemplateVars()
     {
         $sent = 1;
         if ($_POST != array()) {
             if ($this->_validateFields()) {
+                $this->_processForm();
                 $sent = 3;
             } else {
                 $sent = 2;
@@ -22,35 +50,20 @@ class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
         $vars['action'] = $_SERVER['REQUEST_URI'];
         $vars['errors'] = $this->_errors;
         $vars['upload'] = $this->_hasUpload();
-        $vars['template'] = 'Formular.html';
         return $vars;
     }
 
-    /**
-     * Holt die Formularfelder und setzt den Namen für das jeweilige Feld auf
-     * Basis der Formulartabelle -> es wird ein eintrag in die Datenbank vorgenommen
-     */
-    public function getChildComponents()
+    protected function _processForm()
     {
-        if (!$this->_components) {
-            foreach ($this->getPreparedData() as $row){
-                $row = (object)$row;
-                $component = $this->createComponent($row->component_class, $row->id);
-                $component->store('description', $row->description);
-                $component->store('isMandatory', $component instanceof Vpc_Formular_Captcha_Component || $row->mandatory == 1);
-                $component->store('noCols', $row->no_cols == 1);
-                $component->store('isValid', true);
-                if ($component instanceof Vpc_Formular_Field_Interface ) {
-                    $component->setSetting('name', $component->getId());
-                }
-                $this->_components[] = $component;
-            }
-        }
-
-        return $this->_components;
     }
 
-    private function getPreparedData()
+    public function getChildComponents()
+    {
+        return $this->_paragraphs;
+    }
+    
+/*
+    private function _getPreparedData()
     {
         if (!$this->_data) {
             $data = $this->_getData()->toArray();
@@ -73,7 +86,7 @@ class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
         }
         return $this->_data;
     }
-
+*/
 
 
     private function _hasUpload()
@@ -89,7 +102,7 @@ class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
     private function _validateFields()
     {
         $return = true;
-        foreach($this->getChildComponents() as $value => $component) {
+        foreach($this->getChildComponents() as $component) {
             if ($component instanceof Vpc_Formular_Field_Interface) {
                 $component->processInput();
                 $message = $component->validateField($component->getStore('isMandatory'));
