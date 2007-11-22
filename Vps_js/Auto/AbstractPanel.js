@@ -33,13 +33,6 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
                         b.item.load();
                     }
                 }, this);
-                /*
-            } else if (this.activeId !== 0) {
-                this.activeId = null;
-                this.bindings.each(function(b) {
-                    b.item.disable();
-                }, this);
-                */
             }
         }, this, {buffer: 500});
         this.on('beforeselectionchange', function(id) {
@@ -132,7 +125,7 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
     
     mabySubmit : function(cb, options)
     {
-        if (!this.disabled && this.checkDirty && this.isDirty()) {
+        if (this.checkDirty && this.isDirty()) {
             Ext.Msg.show({
             title:'Save',
             msg: 'Do you want to save the changes?',
