@@ -196,7 +196,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         if (this.editDialog) {
             this.editDialog.on('datachange', function(r) {
                 this.reload();
-                this.fireEvent('datachange', r);
+                //r nicht durchschleifen - weil das probleme verursacht wenn
+                //das grid zB an einem Tree gebunden ist
+                this.fireEvent('datachange');
             }, this);
 
             if (this.editDialog.allowEdit !== false) {
@@ -282,7 +284,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         }
         if (meta.buttons['delete']) {
             gridConfig.tbar.add(this.getAction('delete'));
-            delete meta.buttons.delete;
+            delete meta.buttons['delete'];
         }
         for (var i in meta.buttons) {
             gridConfig.tbar.add(this.getAction(i));

@@ -71,7 +71,7 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
 
             b.item.on('datachange', function(result)
             {
-                if (result.data && result.data.addedId) {
+                if (result && result.data && result.data.addedId) {
 
                     //nachdem ein neuer eintrag hinzugefügt wurde die anderen reloaden
                     this.activeId = result.data.addedId;

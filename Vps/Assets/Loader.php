@@ -51,7 +51,7 @@ class Vps_Assets_Loader
             $http_if_modified_since = "";
             if (isset($headers['If-Modified-Since'])) $http_if_modified_since = preg_replace('/;.*$/', '', $headers['If-Modified-Since']);
 
-            if (!isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
+            if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
                 $encoding = strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')
                             ? 'gzip' : (strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate')
                             ? 'deflate' : 'none');
