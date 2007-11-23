@@ -35,7 +35,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         $class = $this->_getParam('component');
         if (array_search($class, $this->_components)) {
             $admin = Vpc_Admin::getInstance($class);
-            $admin->setup();
+            if ($admin) $admin->setup();
             $insert['page_id'] = $this->pageId;
             $insert['component_key'] = $this->componentKey;
             $insert['component_class'] = $class;
