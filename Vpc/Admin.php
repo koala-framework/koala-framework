@@ -193,8 +193,8 @@ class Vpc_Admin
             $curClass = $class;
             if ($filename == '') {
                 $filename = substr(strrchr($curClass, '_'), 1);
+                $curClass = substr($class, 0, strrpos($class, '_') + 1) . $filename;
             }
-            $curClass = substr($class, 0, strrpos($class, '_') + 1) . $filename;
             $file = str_replace('_', DIRECTORY_SEPARATOR, $curClass) . '.' . $ext;
             $dirs = explode(PATH_SEPARATOR, get_include_path());
             foreach ($dirs as $dir) {
