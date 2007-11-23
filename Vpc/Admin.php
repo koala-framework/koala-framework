@@ -191,8 +191,7 @@ class Vpc_Admin
         $retClass = null;
         while (!$ret && $class != '') {
             $curClass = $class;
-            if ($filename == '') {
-                $filename = substr(strrchr($curClass, '_'), 1);
+            if ($filename != '') {
                 $curClass = substr($class, 0, strrpos($class, '_') + 1) . $filename;
             }
             $file = str_replace('_', DIRECTORY_SEPARATOR, $curClass) . '.' . $ext;
