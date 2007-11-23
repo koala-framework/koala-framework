@@ -21,9 +21,8 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
      */
     public function originalAction()
     {
-        $uploadId = $this->_getParam('uploadId');
-        $path = $this->_getSourcePath($uploadId);
-        $this->_showFile($path);
+        $row = $this->_getRow($this->_getParam('uploadId'));
+        $this->_showFile($row->getFileSource(), $row);
     }
 
     /**
@@ -76,6 +75,8 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
      */
     public function cacheAction($uploadId)
     {
+        $row = $this->_getRow($uploadId);
+
         $target = $this->_getCachePath($uploadId, $this->_getCacheFilename());
         if (!is_file($target)) {
             // Verzeichnisse anlegen, falls nicht existent
@@ -89,7 +90,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
             }
 
             // Cache-Datei erstellen
-            $source = $this->_getSourcePath($uploadId);
+            $source = $row->getFileSource();
             try {
                 $this->_createCacheFile($source, $target);
             } catch (Exception $e) {
@@ -102,7 +103,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
             }
         }
 
-        $this->_showFile($target);
+        $this->_showFile($target, $row);
     }
 
     // Überschreiben
@@ -147,12 +148,12 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
         return $this->_getUploadDir() . '/cache/' . $uploadId . '/' . $filename;
     }
 
-    protected final function _getSourcePath($uploadId)
+    protected final function _getRow($uploadId)
     {
         $table = new Vps_Dao_File();
         $row = $table->find($uploadId)->current();
         if ($row) {
-            return $this->_getUploadDir() . '/' . $row->id;
+            return $row;
         }
         return '';
     }
@@ -163,7 +164,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
         return $config->uploads;
     }
 
-    protected final function _showFile($target)
+    protected final function _showFile($target, Vps_Dao_Row_File $row)
     {
         if (is_file($target)) {
             Zend_Controller_Action_HelperBroker::removeHelper('ViewRenderer');
@@ -172,17 +173,17 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
             if (function_exists('mime_content_type')) {
                 $contentType = mime_content_type($target);
             } else {
-                switch(substr($target, -4)) {
-                    case '.jpg':
+                switch($row->extension) {
+                    case 'jpg':
                         $contentType = 'image/jpeg';
                         break;
-                    case '.gif':
+                    case 'gif':
                         $contentType = 'image/gif';
                         break;
-                    case '.png':
+                    case 'png':
                         $contentType = 'image/png';
                         break;
-                    case '.pdf':
+                    case 'pdf':
                         $contentType = 'application/pdf';
                         break;
                     default:
