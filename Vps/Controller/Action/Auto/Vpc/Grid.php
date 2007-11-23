@@ -46,11 +46,4 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
             $row->numberize($this->_position, null, $this->_getWhere());
         }
     }
-
-    protected function _beforeDelete($row)
-    {
-        $class = $row->component_class;
-        $componentKey = $row->component_key . '-' . $row->id;
-        Vpc_Admin::getInstance($class)->delete($class, $row->page_id, $componentKey);
-    }
 }
