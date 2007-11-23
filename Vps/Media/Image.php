@@ -34,7 +34,8 @@ class Vps_Media_Image
                 $y = 0;
                 $height = $size[1];
             }
-            return array('width'=>$width, 'height'=>$height, 'x'=>$x, 'y'=>$y);
+            return array('width'=>round($width), 'height'=>round($height),
+                        'x'=>round($x), 'y'=>round($y));
 
         } elseif ($scale == self::SCALE_BESTFIT) { // Bild wird auf größte Maximale Ausdehnung skaliert
 
@@ -48,7 +49,7 @@ class Vps_Media_Image
                 $width = $size[0] / $heightRatio;
                 $height = $size[1] / $heightRatio;
             }
-            return array('width'=>$width, 'height'=>$height);
+            return array('width'=>round($width), 'height'=>round($height));
 
         } elseif ($scale == self::SCALE_DEFORM) {
 
@@ -71,27 +72,47 @@ class Vps_Media_Image
         $size = self::calculateScaleDimensions($source, $size, $scale);
         if ($size === false) return false;
 
-        $writeImage = true;
-
-        $im = new Imagick();
-        $im->readImage($source);
-
         if ($scale == self::SCALE_CROP){ // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
 
+            $im = new Imagick();
+            $im->readImage($source);
             $im->cropImage($size['width'], $size['height'], $size['x'], $size['y']);
+            $im->writeImage($target);
+            $im->destroy();
 
-        } elseif ($scale == self::SCALE_BESTFIT) { // Bild wird auf größte Maximale Ausdehnung skaliert
+        } elseif ($scale == self::SCALE_BESTFIT || $scale == self::SCALE_DEFORM) {
 
-            $im->thumbnailImage($size['width'], $size['height']);
-
-        } elseif ($scale == self::SCALE_DEFORM){
-
-            $im->thumbnailImage($size['width'], $size['height']);
+            if (class_exists('Imagick')) {
+                $im = new Imagick();
+                $im->readImage($source);
+                $im->thumbnailImage($size['width'], $size['height']);
+                $im->writeImage($target);
+                $im->destroy();
+            } else {
+                $srcSize = getimagesize($source);
+                if ($srcSize[2] == 1) {
+                    $source = imagecreatefromgif($source);
+                } elseif ($srcSize[2] == 2) {
+                    $source = imagecreatefromjpeg($source);
+                } elseif ($srcSize[2] == 3) {
+                    $source = imagecreatefrompng($source);
+                }
+                $destination = imagecreatetruecolor($size['width'], $size['height']);
+                imagecopyresampled($destination, $source, 0, 0, 0, 0,
+                                    $size['width'], $size['height'],
+                                    $srcSize[0], $srcSize[1]);
+                if ($srcSize[2] == 1) {
+                    $source = imagegif($destination, $target);
+                } elseif ($srcSize[2] == 2) {
+                    $source = imagejpeg($destination, $target);
+                } elseif ($srcSize[2] == 3) {
+                    $source = imagepng($destination, $target);
+                }
+            }
 
         } elseif ($scale == self::SCALE_ORIGINAL){
 
             copy($source, $target);
-            $writeImage = false;
 
         } else {
 
@@ -99,10 +120,6 @@ class Vps_Media_Image
 
         }
 
-        if ($writeImage) {
-            $im->writeImage($target);
-        }
-        $im->destroy();
         chmod($target, 0644);
         return true;
     }
