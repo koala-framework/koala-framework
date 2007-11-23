@@ -39,13 +39,13 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_dao = $dao;
         $this->_pageCollection = $pageCollection;
 
-        if (is_string($id)) {
-            $this->_id = $this->parseId($id);
-        } else if (is_object($id)) {
+        if (is_object($id)) {
             foreach (Vpc_Abstract::getSetting(get_class($this), 'default') as $k=>$i) {
                 if (!isset($id->$k)) $id->$k = $i;
             }
             $this->_row = $id;
+        } else {
+            $this->_id = $this->parseId($id);
         }
 
         $table = $this->getTable();
