@@ -18,7 +18,12 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
         }
 
         $table = $this->getTable();
-        
+
+        if (is_string($id)) {
+            $id = Vpc_Abstract::parseId($id);
+        }
+        if (isset($id['dbId'])) $id['page_id'] = $id['dbId'];
+        if (isset($id['componentKey'])) $id['component_key'] = $id['componentKey'];
         if (isset($id['page_id']) && $id['page_id']!==null) {
             $info = $table->info();
             if (sizeof($info['primary']) == 1) {
@@ -39,5 +44,43 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
             $this->_row = $table->createRow();
         }
         parent::setId($id);
+    }
+
+    protected function _getComponentIdFromParentRow($parentRow)
+    {
+        throw new Vps_Exception("_getComponentIdFromParentRow has to be reimplemented, or the id has to be set");
+    }
+
+    public function delete($parentRow)
+    {
+        if ($this->getId() == null) {
+            $this->setId($this->_getComponentIdFromParentRow($parentRow));
+        }
+        return parent::delete($parentRow);
+    }
+    public function load($parentRow)
+    {
+        if ($this->getId() == null) {
+            $this->setId($this->_getComponentIdFromParentRow($parentRow));
+        }
+        return parent::load($parentRow);
+    }
+    public function prepareSave($parentRow, $postData)
+    {
+        if ($this->getId() == null && $parentRow->id) {
+            $this->setId($this->_getComponentIdFromParentRow($parentRow));
+        }
+        return parent::prepareSave($parentRow, $postData);
+    }
+
+    public function save($parentRow, $postData)
+    {
+        $row = $this->getRow();
+        if (!$row->page_id) {
+            $id = $this->_getComponentIdFromParentRow($parentRow);
+            $row->page_id = $id['page_id'];
+            $row->component_key = $id['component_key'];
+        }
+        return parent::save($parentRow, $postData);
     }
 }

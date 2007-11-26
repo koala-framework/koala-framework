@@ -191,7 +191,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         preg_match("#^$pattern\$#", $id, $keys);
 
         if ($keys == null) {
-            throw new Vpc_Exception("ID $id doesn't match pattern for Id: $pattern");
+            throw new Vpc_Exception("ID '$id' doesn't match pattern for Id: $pattern");
         }
 
         $parts['id'] = $keys[0];
