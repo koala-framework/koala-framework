@@ -82,8 +82,8 @@ abstract class Vps_PageCollection_Abstract
             throw new Vps_PageCollection_Exception("Component must be instance of Vpc_Interface.");
         }
 
-        if ($filename == '' || $name == '') {
-            throw new Vps_PageCollection_Exception("Pagename and Name must not be empty. Probably Component is not a Page.");
+        if ($filename == '') {
+            throw new Vps_PageCollection_Exception("Pagename must not be empty. Probably Component is not a Page.");
         }
 
         $page->setPageCollection($this);
@@ -114,7 +114,7 @@ abstract class Vps_PageCollection_Abstract
 
     public function hideInMenu(Vpc_Interface $page)
     {
-        $this->_hideInMenu[] = $page->getId();
+        $this->_hideInMenu[] = $page->getPageId();
     }
 
     protected function _addDecorators(Vpc_Interface $page)
@@ -143,6 +143,9 @@ abstract class Vps_PageCollection_Abstract
         $this->_pages[$id] = $page;
         $this->_pageFilenames[$id] = Zend_Filter::get($filename, 'Url', array(), 'Vps_Filter');
         $this->_pageNames[$id] = $name;
+        if (!$name) {
+            $this->hideInMenu($page);
+        }
     }
 
     public function findPage($id)
@@ -238,14 +241,14 @@ abstract class Vps_PageCollection_Abstract
         $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($id, false);
         $data['url'] = $this->getUrl($page);
         $data['name'] = $this->_pageNames[$page->getPageId()];
-        if (array_search($page->getId(), $this->_hideInMenu) ||
+        if (array_search($page->getPageId(), $this->_hideInMenu) !== false ||
             isset($data['hide']) && $data['hide'] == 1
         ) {
             $data['hide'] = true;
         } else {
             $data['hide'] = false;
         }
-
+        
         // Erste Nicht-Decorator-Komponente raussuchen
         $p = $page;
         while ($p instanceof Vpc_Decorator_Abstract) {
@@ -269,6 +272,15 @@ abstract class Vps_PageCollection_Abstract
 
     abstract public function findPageByPath($path);
 
+    public function findPageByFilename($filename)
+    {
+        $id = array_search($filename, $this->_pageFilenames);
+        if ($id !== false) {
+            return $this->findPage($id);
+        }
+        return null;
+    }
+    
     public function findComponentByClass($class, $startPage = null)
     {
         $ids = $this->_dao->getTable('Vps_Dao_Pages')->findPagesByClass($class);
