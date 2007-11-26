@@ -6,7 +6,6 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Abstract
         return array_merge(parent::getSettings(), array(
             'tablename' => 'Vpc_Basic_DownloadTag_Model',
             'componentName' => 'Standard.Download Tag',
-            'extensions' => array('pdf', 'doc', 'mp3', 'xls', 'ppt'),
             'default'   => array(
             )
         ));

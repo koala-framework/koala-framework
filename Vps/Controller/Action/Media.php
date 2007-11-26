@@ -171,28 +171,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
             Zend_Controller_Action_HelperBroker::removeHelper('ViewRenderer');
             chmod($target, 0664);
             $response = $this->getResponse();
-            if (function_exists('mime_content_type')) {
-                $contentType = mime_content_type($target);
-            } else {
-                switch($row->extension) {
-                    case 'jpg':
-                        $contentType = 'image/jpeg';
-                        break;
-                    case 'gif':
-                        $contentType = 'image/gif';
-                        break;
-                    case 'png':
-                        $contentType = 'image/png';
-                        break;
-                    case 'pdf':
-                        $contentType = 'application/pdf';
-                        break;
-                    default:
-                        $contentType = 'application/octet-stream';
-                        break;
-                }
-            }
-            $response->setHeader("Content-type", $contentType);
+            $response->setHeader("Content-type", $row->mime_type);
             $response->setBody(file_get_contents($target));
         } else {
             throw new Vps_Controller_Action_Web_Exception("File '$target' not found.");
