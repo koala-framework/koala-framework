@@ -54,7 +54,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
         // Cache
         $password = Vps_Media_Password::CACHE;
         if ($checksum == $this->_createChecksum($password)) {
-            $this->cacheAction($this->_getParam('uploadId'));
+            $this->cacheAction();
             return;
         }
 
@@ -73,8 +73,9 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
      * Das Erstellen der Cache-Datei sollte durch Überschreiben von
      * $this->createCacheFile() geschehen.
      */
-    public function cacheAction($uploadId)
+    public function cacheAction()
     {
+        $uploadId = $this->_getParam('uploadId');
         $row = $this->_getRow($uploadId);
 
         $target = $this->_getCachePath($uploadId, $this->_getCacheFilename());
