@@ -11,6 +11,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         $this->setBorder(false);
         $this->setBaseCls('x-plain');
         $this->setAllowBlank(true); //standardwert für getAllowBlank
+        $this->getAllowOnlyImages(false);
     }
 
     protected function _getFields()
@@ -35,6 +36,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
     public function getMetaData()
     {
         $ret = parent::getMetaData();
+        unset($ret['allowOnlyImages']);
         $ret['items'] = $this->_getFields()->getMetaData();
         return $ret;
     }
@@ -64,16 +66,16 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
 
         if (!$uploadRow && (!isset($file['error']) || $file['error'] == UPLOAD_ERR_NO_FILE)) {
             if ($this->getAllowBlank() == false) {
-                throw new Vps_ClientException('Please select a file');
+                throw new Vps_ClientException('Please select a file.');
             } else {
                 return;
             }
         }
 
         if (isset($file['tmp_name']) && is_file($file['tmp_name'])) {
-            $extension = substr(strrchr($file['name'], '.'), 1);
-            if (!in_array($extension, $this->getExtensions())) {
-                throw new Vps_ClientException('File-extension not allowed. Allowed: ' . implode(', ', $this->getExtensions()));
+            
+            if ($this->getAllowOnlyImages() && substr($file['type'], 0, 6) != 'image/') {
+                throw new Vps_ClientException('File-Type not allowed. Only Images are allowed.');
             }
 
             try {

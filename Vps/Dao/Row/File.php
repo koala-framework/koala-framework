@@ -95,16 +95,17 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         }
 
         if ($filedata['error'] == UPLOAD_ERR_INI_SIZE || $filedata['error'] == UPLOAD_ERR_FORM_SIZE) {
-            throw new Vps_Exception('Die Datei übersteigt die maximale Dategröße für Dateiuploads.');
+            throw new Vps_ClientException('Die Datei übersteigt die maximale Dategröße für Dateiuploads.');
         }
 
         if ($filedata['error'] == UPLOAD_ERR_PARTIAL) {
-            throw new Vps_Exception('Die Datei wurde nicht vollständig hochgeladen.');
+            throw new Vps_ClientException('Die Datei wurde nicht vollständig hochgeladen.');
         }
 
         $this->deleteFile();
         $this->filename = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
         $this->extension = substr(strrchr($filedata['name'], '.'), 1);
+        $this->mime_type = $filedata['type'];
         $this->save();
 
         $filename = $this->getFileSource();

@@ -8,7 +8,6 @@ class Vpc_Basic_DownloadTag_Form extends Vps_Auto_Vpc_Form
             ->setAllowBlank(false)
             ->setVtype('alphanum');
         $this->fields->add(new Vps_Auto_Field_File('vps_upload_id', 'File'))
-            ->setDirectory('BasicDownloadTag')
-            ->setExtensions(Vpc_Abstract::getSetting($class, 'extensions'));
+            ->setDirectory('BasicDownloadTag');
     }
 }
