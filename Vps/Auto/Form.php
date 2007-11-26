@@ -55,7 +55,7 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
         return array();
     }
 
-    public function load()
+    public function load($parentRow)
     {
         $row = (object)$this->getRow();
         return parent::load($row);

@@ -105,6 +105,15 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
                         }
                     }, this);
                 }, this);
+
+                b.item.on('deleteaction', function(form) {
+                    this.activeId = null;
+                    this.selectId(null);
+                    //wenn gelöscht alle anderen disablen
+                    this.bindings.each(function(i) {
+                        i.item.disable();
+                    }, this);
+                }, this);
             }
         }
     },

@@ -23,4 +23,3 @@
 {else}
     <p>Ihr Formular wurde erfolgreich abgeschickt.</p>
 {/if}
-{debug}
