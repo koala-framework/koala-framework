@@ -212,10 +212,12 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                     'char-encoding'  =>'utf8',
                     'newline'        =>'LF'
                     );
-        $tidy = new tidy;
-        $tidy->parseString($html, $config, 'utf8');
-        $tidy->cleanRepair();
-        $html = $tidy->value;
+        if (class_exists('tidy')) {
+            $tidy = new tidy;
+            $tidy->parseString($html, $config, 'utf8');
+            $tidy->cleanRepair();
+            $html = $tidy->value;
+        }
 
         $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
                                             'childComponentClasses');
