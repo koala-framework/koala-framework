@@ -43,8 +43,9 @@ class Vps_View_Smarty extends Zend_View_Abstract
             $jsFiles = $dep->getAssetFiles('js');
             $cssFiles = $dep->getAssetFiles('css');
         } else {
-            $jsFiles = array('/assets/AllAdmin.js');
-            $cssFiles = array('/assets/AllAdmin.css');
+            $v = Zend_Registry::get('config')->application->version;
+            $jsFiles = array('/assets/AllAdmin.js?v='.$v);
+            $cssFiles = array('/assets/AllAdmin.css?v='.$v);
         }
 
         if (!$viewport) {

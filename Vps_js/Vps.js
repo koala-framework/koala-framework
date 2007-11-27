@@ -33,6 +33,8 @@ Ext.onReady(function()
     }
 });
 
+Vps.application = { version: '{$application.version}' };
+
 Vps.handleError = function(e)
 {
     if (e.toString) e = e.toString();
