@@ -21,6 +21,8 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         options.failure = this.vpsFailure;
         options.callback = this.vpsCallback;
         options.scope = this;
+        if (!options.params) options.params = {};
+        options.params.application_version = Vps.application.version;
         Vps.Connection.superclass.request.call(this, options);
     },
     repeatRequest: function(options) {
@@ -65,7 +67,17 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         }
 
         if (!r.success) {
-            if (r.login && r.login===true) {
+            debugger;
+            if (r.wrongversion) {
+                Ext.Msg.alert('Error - wrong version',
+                'Because of an application update the application has to be reloaded.',
+                function(){
+                    location.reload();
+                });
+                Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
+                return;
+            }
+            if (r.login) {
                 options.vpsLogin = true;
                 var dlg = new Vps.User.Login.Dialog({
                     success: function() {

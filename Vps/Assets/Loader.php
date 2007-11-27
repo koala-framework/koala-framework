@@ -38,6 +38,8 @@ class Vps_Assets_Loader
 	        $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents);
             }
         }
+        $version = Zend_Registry::get('config')->application->version;
+        $contents = str_replace('{$application.version}', $version, $contents);
         return $contents;
     }
 
