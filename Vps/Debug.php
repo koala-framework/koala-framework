@@ -1,5 +1,6 @@
 <?php
-class Vps_Debug {
+class Vps_Debug
+{
     public static function sendErrorMail($exception, $address)
     {
         if ($exception instanceof Vps_CustomException) {
@@ -17,9 +18,15 @@ class Vps_Debug {
         $body .= print_r($_SERVER, true);
         $mail = new Zend_Mail('utf-8');
         $mail->setBodyText($body)
-            ->addTo($address)
-            ->setSubject($type . ': ' . $_SERVER['HTTP_HOST'])
-            ->send();
+            ->setSubject($type . ': ' . $_SERVER['HTTP_HOST']);
+        if (is_string($address)) {
+            $mail->addTo($address);
+        } else {
+            foreach ($address as $i) {
+                $mail->addTo($i);
+            }
+        }
+        $mail->send();
     }
 
     function handleError($code, $string, $file, $line)
