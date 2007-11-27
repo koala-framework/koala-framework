@@ -34,6 +34,8 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             
             $className = ucfirst($request->getControllerName());
             $className = "Vps_Controller_Action_Component_$className";
+            $this->_curModule    = $module;
+            $this->_curDirectory = '';
             
         } else {
             
