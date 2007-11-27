@@ -63,6 +63,9 @@ class Vps_Assets_Loader
 
             $config = Vps_Setup::createConfig();
             $url = substr($_SERVER['REQUEST_URI'], 8);
+            if (strpos($url, '?') !== false) {
+                $url = substr($url, 0, strpos($url, '?'));
+            }
             if (preg_match('#^All([a-z]+)\\.(js|css)$#i', $url, $m)) {
                 if ($m[2] == 'js') {
                     header('Content-Type: text/javascript');
