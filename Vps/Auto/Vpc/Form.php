@@ -1,8 +1,12 @@
 <?php
 class Vps_Auto_Vpc_Form extends Vps_Auto_Form
 {
-    public function __construct($class, $id = null)
+    public function __construct($class, $id = null, $componentKey = null)
     {
+        if ($componentKey) {
+            $id = array('page_id' => $id,
+                        'component_key' => $componentKey);
+        }
         parent::__construct($class, $id);
     }
 
