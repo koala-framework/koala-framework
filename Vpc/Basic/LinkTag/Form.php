@@ -1,9 +1,9 @@
 <?php
 class Vpc_Basic_LinkTag_Form extends Vps_Auto_Vpc_Form
 {
-    public function __construct($class, $pageId = null, $componentKey = null)
+    public function __construct($class, $id = null)
     {
-        parent::__construct($class, $pageId, $componentKey);
+        parent::__construct($class, $id);
 
         $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
 
@@ -17,7 +17,9 @@ class Vpc_Basic_LinkTag_Form extends Vps_Auto_Vpc_Form
         $layout->setBaseCls('x-plain');
         foreach ($classes as $name => $class) {
             $formname = str_replace('_Component', '_Form', $class);
-            $form = new $formname($class, $pageId, $componentKey . '-1');
+            $id = $this->getId();
+            $id['component_key'] .= '-1';
+            $form = new $formname($class, $id);
             $form->setAutoHeight(true);
             $form->setBaseCls('x-plain');
             $form->setProperty('id', $class);
