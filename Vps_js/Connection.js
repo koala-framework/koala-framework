@@ -67,7 +67,6 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         }
 
         if (!r.success) {
-            debugger;
             if (r.wrongversion) {
                 Ext.Msg.alert('Error - wrong version',
                 'Because of an application update the application has to be reloaded.',
