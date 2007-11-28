@@ -62,7 +62,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         $x = 0;
         foreach ($this->getTable()->fetchAll($where, $fieldname) as $row) {
             $x++;
-            if ($x == $value) { $x++; }
+            if ($x == $value) $x++;
             $row->$fieldname = $x;
             $row->save();
         }

@@ -1,1 +1,1 @@
-<?php/** * @package Vpc */class Vpc_Exception extends Vps_Exception{}
+<?php/** * @package Vpc */class Vpc_Exception extends Vps_Exception{}

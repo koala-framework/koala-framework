@@ -22,7 +22,7 @@ class Vpc_Formular_Password_Component extends Vpc_Formular_Field_Abstract
     public function processInput()
     {
         $name = $this->getSetting('name');
-        if (isset($_POST[$name])){
+        if (isset($_POST[$name])) {
             $value = $_POST[$name];
         }
         $this->setSetting('value', $value);
@@ -30,7 +30,7 @@ class Vpc_Formular_Password_Component extends Vpc_Formular_Field_Abstract
 
     public function validateField($mandatory)
     {
-        if($mandatory && $this->getSetting('value') == ''){
+        if ($mandatory && $this->getSetting('value') == '') {
             return 'Feld ' . $this->getStore('description') . ' ist ein Pflichtfeld, bitte ausfüllen';
         }
         return '';

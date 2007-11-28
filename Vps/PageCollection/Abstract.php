@@ -28,6 +28,7 @@ abstract class Vps_PageCollection_Abstract
                 break;
             default:
                 throw new Vps_PageCollection_Exception('Invalid urlScheme specified');
+                break;
         }
         $this->_decoratorClasses = $decoratorClasses;
     }
@@ -200,7 +201,7 @@ abstract class Vps_PageCollection_Abstract
     {
         if (is_null($page)) {
             $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData(null);
-            foreach($rows as $pageRow) {
+            foreach ($rows as $pageRow) {
                 $page = Vpc_Abstract::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id'], $this);
                 $this->addTreePage($page, $pageRow['filename'], $pageRow['name'], null);
                 $this->_types[$page->getId()] = $pageRow['type'];

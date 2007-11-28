@@ -10,7 +10,7 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
         if (is_null($content)) $content = $this->content;
 
         $ret = array();
-        while(preg_match('#^(.*)(<img.+src=[\n ]*"([^"]*)"[^>]*>|<a.+href=[\n ]*"([^"]*)"[^>]*>)(.*)$#Us', $content, $m)) {
+        while (preg_match('#^(.*)(<img.+src=[\n ]*"([^"]*)"[^>]*>|<a.+href=[\n ]*"([^"]*)"[^>]*>)(.*)$#Us', $content, $m)) {
 
             if ($m[1] != '') {
                 $ret[] = $m[1];
@@ -143,9 +143,8 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
         $linkAdmin = Vpc_Admin::getInstance($classes['link']);
         $downloadAdmin = Vpc_Admin::getInstance($classes['download']);
 
-        $parts = array_unique(array_merge(
-                    $this->_getChildComponentNrs($this->content),
-                    $this->_getChildComponentNrs($this->content_edit)));
+        $parts = array_unique(array_merge($this->_getChildComponentNrs($this->content),
+                                          $this->_getChildComponentNrs($this->content_edit)));
         foreach ($parts as $part) {
             if (substr($part, 0, 1) == 'l') {
                 $linkAdmin->delete($this->page_id, $this->component_key . '-' . $part);
@@ -169,13 +168,14 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
 
         $this->content = $this->tidy($this->content);
 
-        $newParts = array_unique(array_merge(
-                    $this->_getChildComponentNrs($this->content),
-                    $this->_getChildComponentNrs($this->content_edit)));
+        $newParts = $this->_getChildComponentNrs($this->content);
+        $newParts = array_merge($newParts, $this->_getChildComponentNrs($this->content_edit));
+        $newParts = array_unique($newParts);
 
-        $oldParts = array_unique(array_merge(
-                    $this->_getChildComponentNrs($this->_cleanData['content']),
-                    $this->_getChildComponentNrs($this->_cleanData['content_edit'])));
+        $oldParts = $this->_getChildComponentNrs($this->_cleanData['content']);
+        $oldParts = array_merge($oldParts,
+                                $this->_getChildComponentNrs($this->_cleanData['content_edit']));
+        $oldParts = array_unique($oldParts);
 
         foreach ($oldParts as $oldPart) {
             if (!in_array($oldPart, $newParts)) {

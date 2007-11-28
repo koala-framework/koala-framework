@@ -41,8 +41,8 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         // Invisible-Button hinzufügen falls nicht überschrieben und in DB
         if (array_key_exists('invisible', $this->_buttons) &&
             is_null($this->_buttons['invisible']) &&
-            in_array('visible', $info['cols']))
-        {
+            in_array('visible', $info['cols'])) {
+
             $this->_buttons['invisible'] = true;
         }
         
