@@ -11,7 +11,7 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract
             'tablename'         => 'Vpc_Composite_TextImage_Model',
             'childComponentClasses' => array(
                 'text'         => 'Vpc_Basic_Text_Component',
-                'image'        => 'Vpc_Basic_Image_Component',
+                'image'        => 'Vpc_Basic_Image_Enlarge_Component',
             ),
             'default'           => array(
                 'image_position'    => 'alternate' // 'left', 'right', 'alternate'
