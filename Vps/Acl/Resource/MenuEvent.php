@@ -1,21 +1,21 @@
-<?p
-class Vps_Acl_Resource_MenuEvent extends Vps_Acl_Resource_MenuU
+<?php
+class Vps_Acl_Resource_MenuEvent extends Vps_Acl_Resource_MenuUrl
+{
+    protected $_menuEventConfig;
 
-    protected $_menuEventConfi
+    public function __construct($resourceId, $menuConfig = null, $menuEventConfig = null)
+    {
+        $this->_menuEventConfig = $menuEventConfig;
+        parent::__construct($resourceId, $menuConfig);
+    }
 
-    public function __construct($resourceId, $menuConfig = null, $menuEventConfig = nul
-   
-        $this->_menuEventConfig = $menuEventConfi
-        parent::__construct($resourceId, $menuConfig
-   
+    public function setMenuEventConfig($menuEventConfig)
+    {
+        $this->_menuEventConfig = $menuEventConfig;
+    }
 
-    public function setMenuEventConfig($menuEventConfi
-   
-        $this->_menuEventConfig = $menuEventConfi
-   
-
-    public function getMenuEventConfig
-   
-        return $this->_menuEventConfi
-   
-
+    public function getMenuEventConfig()
+    {
+        return $this->_menuEventConfig;
+    }
+}

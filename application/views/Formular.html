@@ -10,12 +10,12 @@
                 {if $component.store.noCols}
                     <td colspan = 2 > {component component=$paragraph}</td>
                 {else}
-                    <td {if !$component.store.isValid} bgcolor="#cc0000" {/if} ><b>{if $component.store.mandatory} * {/if} {$component.store.description}  </b></td
+                    <td {if !$component.store.isValid} bgcolor="#cc0000" {/if} ><b>{if $component.store.mandatory} * {/if} {$component.store.description}  </b></td>
                     <td> {component component=$paragraph}</td>
                 {/if}
                 </tr>
             {/foreach }
-        </table
+        </table>
     </form>
     {if $component.sent == 2}
         <br>Bitte überprüfen Sie Ihre Eingabe, es traten Fehler auf.

@@ -1,7 +1,7 @@
-.VpsParagraphsMoveButton, .VpsAbstractEditButton { position: absolute; 
+.VpsParagraphsMoveButton, .VpsAbstractEditButton { position: absolute; }
 div.VpsParagraphsMoveButton { padding: 2px; border: 1px solid black; left: 0;
     background-color: white; position: absolute; display: none; }
 div.VpsParagraphsMoveButton { cursor: move; margin-left: 40px; }
 
 
-div.VpsPicProgress { 
+div.VpsPicProgress { }

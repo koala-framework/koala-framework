@@ -1,44 +1,44 @@
-<?p
-/
- * Menüdecorator. Speichert in Template-Variable alle Werte, d
- * für das Menü benötigt werde
- * @package V
- * @subpackage Decorat
- 
-class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Menu_Abstra
+<?php
+/**
+ * Menüdecorator. Speichert in Template-Variable alle Werte, die
+ * für das Menü benötigt werden.
+ * @package Vpc
+ * @subpackage Decorator
+ */
+class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Menu_Abstract
+{
+    protected $_levels = 2;
+    
+    public function getTemplateVars()
+    {
+        $return = parent::getTemplateVars();
+        $pc = $this->getPageCollection();
 
-    protected $_levels = 
-  
-    public function getTemplateVars
-   
-        $return = parent::getTemplateVars(
-        $pc = $this->getPageCollection(
+        // Array mit IDs von aktueller Seiten und Parent Pages
+        $currentPageIds = array();
+        $p = $pc->getCurrentPage();
+        do {
+            $currentPageIds[] = $p->getPageId();
+        } while($p = $pc->getParentPage($p));
 
-        // Array mit IDs von aktueller Seiten und Parent Pag
-        $currentPageIds = array(
-        $p = $pc->getCurrentPage(
-        do
-            $currentPageIds[] = $p->getPageId(
-        } while($p = $pc->getParentPage($p)
+        // Hauptmenü
+        $config = new Zend_Config_Ini('application/config.ini', 'pagecollection');
+        foreach ($config->pagecollection->pagetypes as $type => $i) {
+            $pages = $pc->getChildPages(null, $type);
+            $return['menu'][$type] = array();
+            $return['menu'][$type] = $this->_getMenuData($pages, $currentPageIds);
+        }
 
-        // Hauptmen
-        $config = new Zend_Config_Ini('application/config.ini', 'pagecollection'
-        foreach ($config->pagecollection->pagetypes as $type => $i)
-            $pages = $pc->getChildPages(null, $type
-            $return['menu'][$type] = array(
-            $return['menu'][$type] = $this->_getMenuData($pages, $currentPageIds
-       
+        // Submenüs
+        $level = 0;
+        $page = $pc->findPage(array_pop($currentPageIds));
+        while ($page && $level < $this->_levels) {
+            $pages = $pc->getChildPages($page);
+            $return['submenus'][$level] = $this->_getMenuData($pages, $currentPageIds);
+            $page = $pc->findPage(array_pop($currentPageIds));
+            $level++;
+        }
+        return $return;
+    }
 
-        // Submen�
-        $level = 
-        $page = $pc->findPage(array_pop($currentPageIds)
-        while ($page && $level < $this->_levels)
-            $pages = $pc->getChildPages($page
-            $return['submenus'][$level] = $this->_getMenuData($pages, $currentPageIds
-            $page = $pc->findPage(array_pop($currentPageIds)
-            $level+
-       
-        return $retur
-   
-
-
+}

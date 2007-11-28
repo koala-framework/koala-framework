@@ -1,715 +1,715 @@
-<?p
-abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Auto_Abstra
-
-    protected $_columns = nul
-    protected $_buttons = array('save'=>tru
-                                'add'=>tru
-                                'delete'=>true
-    protected $_editDialog = nul
-    protected $_paging = 
-    protected $_defaultOrde
-    protected $_filters = array(
-    protected $_queryField
-    protected $_sortable = true; //ob felder vom user sortiert werden könn
-    protected $_positio
-
-    protected $_primaryKe
-    protected $_tabl
-    protected $_tableNam
-
-    protected $_grouping = nul
-
-    protected $_pdf = array(
-
-    const PDF_ORIENTATION_PORTRAIT  = 'P
-    const PDF_ORIENTATION_LANDSCAPE = 'L
-    const PDF_FORMAT_A3 = 'A3
-    const PDF_FORMAT_A4 = 'A4
-    const PDF_EXPORTTYPE_TABLE = 
-    const PDF_EXPORTTYPE_CONTAINER = 
-
-    public function indexAction
-   
-       $this->view->ext('Vps.Auto.GridPanel'
-   
-
-    public function jsonIndexAction
-   
-       $this->indexAction(
-   
-
-    protected function _initColumns
-   
-   
-    public function preDispatch
-   
-        parent::preDispatch(
-
-        if (!isset($this->_table) && isset($this->_tableName))
-            $this->_table = new $this->_tableName(
-       
-
-        if (isset($this->_table))
-            $info = $this->_table->info(
-            if(!isset($this->_primaryKey))
-                $info = $this->_table->info(
-                $this->_primaryKey = $info['primary'
-           
-       
-
-        $addColumns = array(
-        if (is_array($this->_columns)) $addColumns = $this->_column
-        $this->_columns = new Vps_Collection(
-        foreach ($addColumns as $k=>$column)
-            if (is_array($column))
-                $columnObject = new Vps_Auto_Grid_Column(
-                foreach ($column as $propName => $propValue)
-                    $columnObject->setProperty($propName, $propValue
-               
-                $this->_columns[] = $columnObjec
-            } else
-                $this->_columns[] = $colum
-           
-       
-        $this->_initColumns(
-
-        if (is_array($this->_primaryKey))
-            $this->_primaryKey = $this->_primaryKey[1
-       
-
-        if (isset($this->_table))
-            $info = $this->_getTableInfo(
-            if ($this->_position && array_search($this->_position, $info['cols']))
-                $columnObject = new Vps_Auto_Grid_Column($this->_position
-                $columnObject->setHeader(' 
-                             ->setWidth(3
-                             ->setType('int
-                             ->setEditor('PosField'
-                $this->_columns->prepend($columnObject
-                $this->_sortable = fals
-                $this->_defaultOrder = $this->_positio
-           
-            $primaryFound = fals
-            foreach ($this->_columns as $column)
-                if (!$column->getType() && isset($info['metadata'][$column->getDataIndex()]))
-                    $column->setType($this->_getTypeFromDbType($info['metadata'][$column->getDataIndex()]['DATA_TYPE'])
-               
-                if ($column->getDataIndex() == $this->_primaryKey)
-                    $primaryFound = tru
-               
-           
-            if (!$primaryFound)
-                //primary key hinzufügen falls er noch nicht in gridColumns existie
-                $columnObject = new Vps_Auto_Grid_Column($this->_primaryKey
-                $columnObject->setType($this->_getTypeFromDbType($info['metadata'][$this->_primaryKey]['DATA_TYPE'])
-                $this->_columns[] = $columnObjec
-           
-       
-
-        //default durchsucht alle angezeigten feld
-        if (!isset($this->_queryFields))
-            $this->_queryFields = array(
-            foreach ($this->_columns as $column)
-                $index = $column->getDataIndex(
-                if (isset($this->_table))
-                    $info = $this->_getTableInfo(
-                    if (!isset($info['metadata'][$index])) continu
-               
-                $this->_queryFields[] = $inde
-           
-       
-        if (!in_array($this->_primaryKey, $this->_queryFields))
-            $this->_queryFields[] = $this->_primaryKe
-       
-
-        if (!isset($this->_defaultOrder))
-            $this->_defaultOrder = $this->_columns->first()->getDataIndex(
-       
-
-        if (is_string($this->_defaultOrder))
-            $o = $this->_defaultOrde
-            $this->_defaultOrder = array(
-            $this->_defaultOrder['field'] = $
-            $this->_defaultOrder['direction'] = 'ASC
-       
-   
-
-$this->_table->select() aus incubator verwend
-http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-+Simon+Mun
-    protected function _select
-   
-        $select = $this->_table->select(
-        $select->where($this->_getWhere()); //todo: ged so ned, siehe fetchCou
-        $select->order($order
-        $select->limit($start, $limit
-        return $selec
-   
-
-    protected function _getWhere
-   
-        $db = $this->_table->getAdapter(
-        $where = array(
-        $query = $this->getRequest()->getParam('query'
-        if ($query)
-            if (!isset($this->_queryFields))
-                throw new Vps_Exception("queryFields which is required to use query-filters is not set."
-           
-
-            $whereQuery = array(
-            $query = explode(' ', $query
-            foreach($query as $q)
-                foreach ($this->_getWhereQuery($q) as $i)
-                    $whereQuery[] = $db->quoteInto($i, "%$q%"
-               
-                $where[] = implode(' OR ', $whereQuery
-           
-       
-        $queryId = $this->getRequest()->getParam('queryId'
-        if ($queryId)
-            $where[$this->_primaryKey.' = ?'] = $queryI
-       
-        foreach($this->_filters as $field=>$filter)
-            if ($field=='text') continue; //handled abo
-            if (isset($filter['skipWhere']) && $filter['skipWhere']) continu
-            if ($this->_getParam('query_'.$field))
-                $where[$field.' = ?'] = $this->_getParam('query_'.$field
-           
-            if ($filter['type'] == 'DateRange' && $this->_getParam($field.'_from
-                                               && $this->_getParam($field.'_to'))
-                $where[] = $field.' BETWEEN
-                        .$db->quote($this->_getParam($field.'_from'
-                        .' AND
-                        .$db->quote($this->_getParam($field.'_to')
-           
-       
-        return $wher
-   
-
-    protected function _getWhereQuery($
-   
-        if (!isset($this->_queryFields))
-            throw new Vps_Exception("queryFields which is required to use query-filters is not set."
-       
-        $whereQuery = array(
-        foreach($this->_queryFields as $f)
-            $whereQuery[] = "$f LIKE ?
-       
-        return $whereQuer
-   
-
-    protected function _fetchData($order, $limit, $star
-   
-        if (!isset($this->_table))
-            throw new Vps_Exception("Either _table has to be set or _fetchData has to be overwritten."
-       
-
-        $where = $this->_getWhere(
-
-        //wenn getWhere null zurückliefert nichts lad
-        if (is_null($where)) return nul
-
-        return $this->_table->fetchAll($where, $order, $limit, $start
-   
-
-    private function _getTableInfo
-   
-        if (!isset($this->_table)) return nul
-        return $this->_table->info(
-   
-
-    protected function _fetchCount
-   
-        if (!isset($this->_table))
-            throw new Vps_Exception("Either _gridTable has to be set or _fetchData has to be overwritten."
-       
-        $select = $this->_table->getAdapter()->select(
-        $info = $this->_getTableInfo(
-
-        $select->from($info['name'], 'COUNT(*)', $info['schema']
-
-        $where = (array) $this->_getWhere(
-        if (is_null($where)) return 
-
-        foreach ($where as $key => $val)
-            // is $key an in
-            if (is_int($key))
-                // $val is the full conditi
-                $select->where($val
-            } else
-                // $key is the condition with placeholde
-                // and $val is quoted into the conditi
-                $select->where($key, $val
-           
-       
-
-        // return the resul
-        $stmt = $this->_table->getAdapter()->query($select
-        return $stmt->fetchColumn(
-   
-
-
-    public function jsonDataAction
-   
-        $limit = null; $start = null; $order = 
-        if ($this->_paging)
-            $limit = $this->getRequest()->getParam('limit'
-            $start = $this->getRequest()->getParam('start'
-            if(!$limit)
-                if(!is_array($this->_paging) && $this->_paging > 0)
-                    $limit = $this->_pagin
-                } else if (is_array($this->_paging) && isset($this->_paging['pageSize']))
-                    $limit = $this->_paging['pageSize'
-                } else
-                    $limit = $this->_pagin
-               
-           
-
-            $order = $this->getRequest()->getParam('sort'
-            if (!$order) $order = $this->_defaultOrder['field'
-            if($this->_getParam("dir") && $this->_getParam('dir')!='UNDEFINED')
-                $order .= ' '.$this->_getParam('dir'
-            } else
-                $order .= ' '.$this->_defaultOrder['direction'
-           
-            $order = trim($order
-            $this->view->order = $orde
-       
-
-        $primaryKey = $this->_primaryKe
-
-        $rowSet = $this->_fetchData($order, $limit, $start
-        if (!is_null($rowSet))
-            $rows = array(
-            foreach ($rowSet as $row)
-                $r = array(
-                if (is_array($row))
-                    $row = (object)$ro
-               
-                if (!$this->_hasPermissions($row, 'load'))
-                    throw new Vps_Exception("You don't have the permissions to load this row"
-               
-                foreach ($this->_columns as $column)
-                    $data = $column->load($row, Vps_Auto_Grid_Column::ROLE_DISPLAY
-                    $r[$column->getDataIndex()] = $dat
-               
-                if (!isset($r[$primaryKey]) && isset($row->$primaryKey))
-                    $r[$primaryKey] = $row->$primaryKe
-               
-                $rows[] = $
-           
-
-            $this->view->rows = $row
-            if (isset($this->_paging['type']) && $this->_paging['type'] == 'Date')
-                //nix zu t
-            } else if ($this->_paging)
-                $this->view->total = $this->_fetchCount(
-            } else
-                $this->view->total = sizeof($rows
-           
-        } else
-            $this->view->total = 
-            $this->view->rows = array(
-       
-
-        if ($this->getRequest()->getParam('meta'))
-            $this->_appendMetaData(
-       
-   
-
-    protected function _getTypeFromDbType($typ
-   
-        if ($type == 'varchar') $type = 'string
-        else if (substr($type, 0, 7) == 'tinyint') $type = 'boolean
-        else if ($type == 'text') $type = 'string
-        else if ($type == 'tinytext') $type = 'string
-        else if (substr($type, -3) == 'int') $type = 'int
-        else if ($type == 'datetime') $type = 'date
-        else if ($type == 'decimal') $type = 'float
-        else if (substr($type, 0, 6) == 'double') $type = 'float
-        else if ($type == 'time') $type = ''; //au
-        else $type = ''; //au
-        return $typ
-   
-
-    protected function _appendMetaData
-   
-        $this->view->metaData = array(
-
-        $this->view->metaData['root'] = 'rows
-        $this->view->metaData['id'] = $this->_primaryKe
-        if (isset($this->_paging['type']) && $this->_paging['type'] == 'Date')
-            //nix zu t
-        } else
-            $this->view->metaData['totalProperty'] = 'total
-       
-        $this->view->metaData['successProperty'] = 'success
-        if (!$this->_sortable || !$this->_getParam('sort'))
-            //sandard-sortieru
-            $this->view->metaData['sortInfo'] = $this->_defaultOrde
-        } else
-            $this->view->metaData['sortInfo']['field'] = $this->_getParam('sort'
-            $this->view->metaData['sortInfo']['direction'] = $this->_getParam('dir'
-       
-        $this->view->metaData['columns'] = array(
-        $this->view->metaData['fields'] = array(
-        foreach ($this->_columns as $column)
-            $data = $column->getMetaData($this->_getTableInfo()
-            if ($data)
-                $this->view->metaData['columns'][] = $dat
-
-                $d = array(
-                if (isset($data['dataIndex']))
-                    $d['name'] = $data['dataIndex'
-               
-                if (isset($data['type']))
-                    $d['type'] = $data['type'
-               
-
-                if (isset($data['dateFormat']))
-                    $d['dateFormat'] = $data['dateFormat'
-               
-                if (isset($data['dateFormat']))
-                    $d['dateFormat'] = $data['dateFormat'
-               
-                if (isset($data['defaultValue']))
-                    $d['defaultValue'] = $data['defaultValue'
-               
-                $this->view->metaData['fields'][] = $
-           
-
-       
-        $this->view->metaData['buttons'] = (object)$this->_button
-        $this->view->metaData['permissions'] = (object)$this->_permission
-        $this->view->metaData['paging'] = $this->_pagin
-        $this->view->metaData['filters'] = (object)$this->_filter
-        $this->view->metaData['sortable'] = $this->_sortabl
-        $this->view->metaData['editDialog'] = $this->_editDialo
-        $this->view->metaData['grouping'] = $this->_groupin
-   
-
-    protected function _hasPermissions($row, $actio
-   
-        return tru
-   
-
-    protected function _beforeSave(Zend_Db_Table_Row_Abstract $row, $submitRo
-   
-   
-
-    protected function _afterSave(Zend_Db_Table_Row_Abstract $row, $submitRo
-   
-   
-
-    protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row, $submitRo
-   
-   
-
-    protected function _afterInsert(Zend_Db_Table_Row_Abstract $row, $submitRo
-   
-   
-
-    protected function _beforeDelete(Zend_Db_Table_Row_Abstract $ro
-   
-   
-
-    protected function _afterDelete
-   
-   
-
-    public function jsonSaveAction
-   
-        if(!isset($this->_permissions['save']) || !$this->_permissions['save'])
-            throw new Vps_Exception("Save is not allowed."
-       
-        $success = fals
-
-        $data = Zend_Json::decode($this->getRequest()->getParam("data")
-        $addedIds = array(
-        foreach ($data as $submitRow)
-            $id = $submitRow[$this->_primaryKey
-            if ($id)
-                $row = $this->_table->find($id)->current(
-            } else
-                if(!isset($this->_permissions['add']) || !$this->_permissions['add'])
-                    throw new Vps_Exception("Add is not allowed."
-               
-                $row = $this->_table->createRow(
-           
-            if(!$row)
-                throw new Vps_Exception("Can't find row with id '$id'."
-           
-            if (!$this->_hasPermissions($row, 'save'))
-                throw new Vps_Exception("You don't have the permissions to save this row."
-           
-            foreach ($this->_columns as $column)
-                if ($id && $column->getDataIndex() == $this->_position)
-                    $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere()
-                } else
-                    $column->prepareSave($row, $submitRow
-               
-           
-            if (!$id)
-                $this->_beforeInsert($row, $submitRow
-           
-            $this->_beforeSave($row, $submitRow
-
-
-            $row->save(
-            if (!$id)
-                $this->_afterInsert($row, $submitRow
-           
-            $this->_afterSave($row, $submitRow
-            if (!$id)
-                if ($this->_position)
-                    $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere()
-               
-                $addedIds[] = $row->i
-           
-       
-        $success = tru
-
-        if ($addedIds)
-            $this->view->addedIds = $addedId
-       
-        $this->view->success = $succes
-   
-
-    public function jsonDeleteAction
-   
-        if(!isset($this->_permissions['delete']) || !$this->_permissions['delete'])
-            throw new Vps_Exception("Delete is not allowed."
-       
-        $success = fals
-        $ids = $this->getRequest()->getParam($this->_primaryKey
-        $ids = explode(';', $ids
-
-        foreach ($ids as $id)
-            $row = $this->_table->find($id)->current(
-            if(!$row)
-                throw new Vps_Exception("Can't find row with id '$id'."
-           
-            if (!$this->_hasPermissions($row, 'delete'))
-                throw new Vps_Exception("You don't have the permissions to delete this row."
-           
-            try
-                $this->_beforeDelete($row
-                $row->delete(
-                $this->_afterDelete(
-                if ($this->_position)
-                    $this->_table->numberizeAll($this->_position, $this->_getWhere()
-               
-                $success = tru
-            } catch (Vps_ClientException $e) { //todo: nicht nur Vps_Exception fang
-                $this->view->error = $e->getMessage(
-           
-       
-
-        $this->view->success = $succes
-   
-
-
-    public function pdfAction
-   
-        if(!isset($this->_permissions['pdf']) || !$this->_permissions['pdf'])
-            throw new Vps_Exception("Pdf is not allowed."
-       
-
-        $pageMargin = 1
-
-        if (empty($this->_pdf['orientation']))
-            $this->_pdf['orientation'] = self::PDF_ORIENTATION_PORTRAI
-       
-        if (empty($this->_pdf['format']))
-            $this->_pdf['format'] = self::PDF_FORMAT_A
-       
-        if (!isset($this->_pdf['ignoreFields']))
-            $this->_pdf['ignoreFields'] = array(
-       
-        if (!isset($this->_pdf['fields']))
-            $this->_pdf['fields'] = array(
-            foreach ($this->_columns as $column)
-                if ($column->getHeader())
-                    $this->_pdf['fields'][] = $column->getName(
-               
-           
-       
-
-        if (!is_array($this->_pdf['fields']))
-            throw new Vps_Exception("PDF export fields must be of type `array`"
-       
-        if (!is_array($this->_pdf['ignoreFields']))
-            throw new Vps_Exception("PDF export `ignoreFields` must be of type `array`"
-       
-        if (isset($this->_pdf['columns']))
-            throw new Vps_Exception("PDF export fields key is labeld `fields`, not `columns`"
-       
-        $tmpFields = array(); // Needed for correct sorti
-        foreach ($this->_pdf['fields'] as $key => $mixed)
-            if (!is_array($mixed) && !is_string($mixed))
-                throw new Vps_Exception("PDF export field `$mixed` must not be of type
-                                        .'`'.gettype($mixed).'`, only `string` or `array` allowed.'
-           
-            if (is_string($mixed) && $this->_columns[$mixed] && !in_array($mixed, $this->_pdf['ignoreFields']))
-                $tmpFields[$mixed] = array('header' => $this->_columns[$mixed]->getHeader(
-                                            'width'  => 0
-            } else if (is_array($mixed) && $this->_columns[$key] && !in_array($key, $this->_pdf['ignoreFields']))
-                if (!isset($mixed['header']))
-                    $this->_pdf['fields'][$key]['header']
-                        $this->_columns[$key]->getHeader(
-               
-                if (!isset($mixed['width']))
-                    $this->_pdf['fields'][$key]['width'] = 
-               
-                $tmpFields[$key] = $this->_pdf['fields'][$key
-           
-       
-        $this->_pdf['fields'] = $tmpField
-
-        // Generate two times for correct page braki
-        $breakBeforeRow = array(
-        for ($i = 1; $i <= 2; $i++)
-            $pdf = new Vps_Auto_Grid_Pdf_Table($this->_pdf['orientation'], 'mm', $this->_pdf['format']
-            $pdf->SetFont('vera', '', 8
-            $pdf->SetMargins($pageMargin, 20, $pageMargin
-            $pdf->SetFooterMargin(5
-            $pdf->SetAutoPageBreak(true, 20
-            $pdf->AliasNbPages(
-            $pdf->AddPage(
-
-            $pdf->setFields($this->_pdf['fields']
-
-    //         $pdf->SetBarcode(date("Y-m-d H:i:s", time())
-
-            $pdf->writeHeader(
-
-            $order = trim($this->_defaultOrder['field'].' '.$this->_defaultOrder['direction']
-            $rowSet = $this->_fetchData($order, null, null
-
-            if (!is_null($rowSet))
-                $rowCount = 
-                foreach ($rowSet as $row)
-                    if (is_array($row))
-                        $row = (object)$ro
-                   
-
-                    if ($i === 1) $pageNoBefore = $pdf->PageNo(
-
-                    if ($i === 2 && in_array($rowCount, $breakBeforeRow))
-                        $pdf->drawLines(
-                        $pdf->AddPage(
-                        $pdf->writeHeader(
-                   
-                    $pdf->writeRow($row
-
-                    if ($i === 1 && $pageNoBefore != $pdf->PageNo())
-                        $breakBeforeRow[] = $rowCoun
-                        $pdf->AddPage(
-                        $pdf->writeRow($row
-                   
-                    $rowCount+
-               
-           
-       
-
-        $pdf->drawLines(
-
-        $pdf->output(
-        $this->_helper->viewRenderer->setNoRender(
-   
-
-    private function _getExportData
-   
-        $order = trim($this->_defaultOrder['field'].' '.$this->_defaultOrder['direction']
-        $rowSet = $this->_fetchData($order, null, null
-
-        if (!$rowSet)
-            return nul
-        } else
-            // $exportData = array( row => array( col => 'data' )
-            // Index 0 reserved for column heade
-            $exportData = array(0 => array()
-            $columns = $columnsHeader = array(
-            foreach ($rowSet as $row)
-                if (is_array($row))
-                    $row = (object)$ro
-               
-                if (!$this->_hasPermissions($row, 'load'))
-                    throw new Vps_Exception("You don't have the permissions to load this row"
-               
-                $columns = $columnsHeader = array(
-                foreach ($this->_columns as $column)
-                    $currentColumnHeader = $column->getHeader(
-                    if (!is_null($currentColumnHeader))
-                        $columnsHeader[] = $currentColumnHeade
-                        $columns[] = $column->load($row, Vps_Auto_Grid_Column::ROLE_EXPORT
-                   
-               
-
-                $exportData[] = $column
-           
-
-            $exportData[0] = $columnsHeade
-       
-
-        return $exportDat
-   
-
-    public function csvAction
-   
-        if (!isset($this->_permissions['csv']) || !$this->_permissions['csv'])
-            throw new Vps_Exception("CSV is not allowed."
-       
-
-        $data = $this->_getExportData(
-
-        if (!is_null($data))
-            $csvRows = array(
-            foreach ($data as $row => $cols)
-                $cols = str_replace('"', '""', $cols
-                $csvRows[] = '"'. implode('";"', $cols) .'"
-           
-
-            $csvReturn = implode("\r\n", $csvRows
-       
-
-        $this->_helper->viewRenderer->setNoRender(
-        $this->getResponse()->setHeader('Content-Description', 'File Transfer
-                            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0
-                            ->setHeader('Content-Type', 'text/csv
-                            ->setHeader('Content-Disposition', 'attachment; filename="csv_export_'.date('Y-m-d_Hi').'.csv"
-                            ->setBody($csvReturn
-   
-
-    public function xlsAction
-   
-        if (!isset($this->_permissions['xls']) || !$this->_permissions['xls'])
-            throw new Vps_Exception("XLS is not allowed."
-       
-        require_once 'Spreadsheet/Excel/Writer.php
-
-        $xls = new Spreadsheet_Excel_Writer(
-        $xls->setVersion(8
-        $xls->send('xls_export_'.date('Y-m-d_Hi').'.xls'
-
-        $sheet = $xls->addWorksheet('export_'. date('Y-m-d_H-i')
-        $sheet->setInputEncoding('UTF-8'
-
-        $data = $this->_getExportData(
-        if (!is_null($data))
-            foreach ($data as $row => $cols)
-                foreach ($cols as $col => $text)
-                    if ($row == 0)
-                        $format = $xls->addFormat(
-                        $format->setBold(
-                        $sheet->write($row, $col, $text, $format
-                    } else
-                        $sheet->write($row, $col, $text
-                   
-               
-           
-       
-
-        $xls->close(
-        $this->_helper->viewRenderer->setNoRender(
-   
-
+<?php
+abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Auto_Abstract
+{
+    protected $_columns = null;
+    protected $_buttons = array('save'=>true,
+                                'add'=>true,
+                                'delete'=>true);
+    protected $_editDialog = null;
+    protected $_paging = 0;
+    protected $_defaultOrder;
+    protected $_filters = array();
+    protected $_queryFields;
+    protected $_sortable = true; //ob felder vom user sortiert werden können
+    protected $_position;
+
+    protected $_primaryKey;
+    protected $_table;
+    protected $_tableName;
+
+    protected $_grouping = null;
+
+    protected $_pdf = array();
+
+    const PDF_ORIENTATION_PORTRAIT  = 'P';
+    const PDF_ORIENTATION_LANDSCAPE = 'L';
+    const PDF_FORMAT_A3 = 'A3';
+    const PDF_FORMAT_A4 = 'A4';
+    const PDF_EXPORTTYPE_TABLE = 1;
+    const PDF_EXPORTTYPE_CONTAINER = 2;
+
+    public function indexAction()
+    {
+       $this->view->ext('Vps.Auto.GridPanel');
+    }
+
+    public function jsonIndexAction()
+    {
+       $this->indexAction();
+    }
+
+    protected function _initColumns()
+    {
+    }
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        if (!isset($this->_table) && isset($this->_tableName)) {
+            $this->_table = new $this->_tableName();
+        }
+
+        if (isset($this->_table)) {
+            $info = $this->_table->info();
+            if(!isset($this->_primaryKey)) {
+                $info = $this->_table->info();
+                $this->_primaryKey = $info['primary'];
+            }
+        }
+
+        $addColumns = array();
+        if (is_array($this->_columns)) $addColumns = $this->_columns;
+        $this->_columns = new Vps_Collection();
+        foreach ($addColumns as $k=>$column) {
+            if (is_array($column)) {
+                $columnObject = new Vps_Auto_Grid_Column();
+                foreach ($column as $propName => $propValue) {
+                    $columnObject->setProperty($propName, $propValue);
+                }
+                $this->_columns[] = $columnObject;
+            } else {
+                $this->_columns[] = $column;
+            }
+        }
+        $this->_initColumns();
+
+        if (is_array($this->_primaryKey)) {
+            $this->_primaryKey = $this->_primaryKey[1];
+        }
+
+        if (isset($this->_table)) {
+            $info = $this->_getTableInfo();
+            if ($this->_position && array_search($this->_position, $info['cols'])) {
+                $columnObject = new Vps_Auto_Grid_Column($this->_position);
+                $columnObject->setHeader(' ')
+                             ->setWidth(30)
+                             ->setType('int')
+                             ->setEditor('PosField');
+                $this->_columns->prepend($columnObject);
+                $this->_sortable = false;
+                $this->_defaultOrder = $this->_position;
+            }
+            $primaryFound = false;
+            foreach ($this->_columns as $column) {
+                if (!$column->getType() && isset($info['metadata'][$column->getDataIndex()])) {
+                    $column->setType($this->_getTypeFromDbType($info['metadata'][$column->getDataIndex()]['DATA_TYPE']));
+                }
+                if ($column->getDataIndex() == $this->_primaryKey) {
+                    $primaryFound = true;
+                }
+            }
+            if (!$primaryFound) {
+                //primary key hinzufügen falls er noch nicht in gridColumns existiert
+                $columnObject = new Vps_Auto_Grid_Column($this->_primaryKey);
+                $columnObject->setType($this->_getTypeFromDbType($info['metadata'][$this->_primaryKey]['DATA_TYPE']));
+                $this->_columns[] = $columnObject;
+            }
+        }
+
+        //default durchsucht alle angezeigten felder
+        if (!isset($this->_queryFields)) {
+            $this->_queryFields = array();
+            foreach ($this->_columns as $column) {
+                $index = $column->getDataIndex();
+                if (isset($this->_table)) {
+                    $info = $this->_getTableInfo();
+                    if (!isset($info['metadata'][$index])) continue;
+                }
+                $this->_queryFields[] = $index;
+            }
+        }
+        if (!in_array($this->_primaryKey, $this->_queryFields)) {
+            $this->_queryFields[] = $this->_primaryKey;
+        }
+
+        if (!isset($this->_defaultOrder)) {
+            $this->_defaultOrder = $this->_columns->first()->getDataIndex();
+        }
+
+        if (is_string($this->_defaultOrder)) {
+            $o = $this->_defaultOrder;
+            $this->_defaultOrder = array();
+            $this->_defaultOrder['field'] = $o;
+            $this->_defaultOrder['direction'] = 'ASC';
+        }
+    }
+/*
+$this->_table->select() aus incubator verwenden
+http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-+Simon+Mundy
+    protected function _select()
+    {
+        $select = $this->_table->select();
+        $select->where($this->_getWhere()); //todo: ged so ned, siehe fetchCount
+        $select->order($order);
+        $select->limit($start, $limit);
+        return $select;
+    }
+*/
+    protected function _getWhere()
+    {
+        $db = $this->_table->getAdapter();
+        $where = array();
+        $query = $this->getRequest()->getParam('query');
+        if ($query) {
+            if (!isset($this->_queryFields)) {
+                throw new Vps_Exception("queryFields which is required to use query-filters is not set.");
+            }
+
+            $whereQuery = array();
+            $query = explode(' ', $query);
+            foreach($query as $q) {
+                foreach ($this->_getWhereQuery($q) as $i) {
+                    $whereQuery[] = $db->quoteInto($i, "%$q%");
+                }
+                $where[] = implode(' OR ', $whereQuery);
+            }
+        }
+        $queryId = $this->getRequest()->getParam('queryId');
+        if ($queryId) {
+            $where[$this->_primaryKey.' = ?'] = $queryId;
+        }
+        foreach($this->_filters as $field=>$filter) {
+            if ($field=='text') continue; //handled above
+            if (isset($filter['skipWhere']) && $filter['skipWhere']) continue;
+            if ($this->_getParam('query_'.$field)) {
+                $where[$field.' = ?'] = $this->_getParam('query_'.$field);
+            }
+            if ($filter['type'] == 'DateRange' && $this->_getParam($field.'_from')
+                                               && $this->_getParam($field.'_to')) {
+                $where[] = $field.' BETWEEN '
+                        .$db->quote($this->_getParam($field.'_from'))
+                        .' AND '
+                        .$db->quote($this->_getParam($field.'_to'));
+            }
+        }
+        return $where;
+    }
+
+    protected function _getWhereQuery($q)
+    {
+        if (!isset($this->_queryFields)) {
+            throw new Vps_Exception("queryFields which is required to use query-filters is not set.");
+        }
+        $whereQuery = array();
+        foreach($this->_queryFields as $f) {
+            $whereQuery[] = "$f LIKE ?";
+        }
+        return $whereQuery;
+    }
+
+    protected function _fetchData($order, $limit, $start)
+    {
+        if (!isset($this->_table)) {
+            throw new Vps_Exception("Either _table has to be set or _fetchData has to be overwritten.");
+        }
+
+        $where = $this->_getWhere();
+
+        //wenn getWhere null zurückliefert nichts laden
+        if (is_null($where)) return null;
+
+        return $this->_table->fetchAll($where, $order, $limit, $start);
+    }
+
+    private function _getTableInfo()
+    {
+        if (!isset($this->_table)) return null;
+        return $this->_table->info();
+    }
+
+    protected function _fetchCount()
+    {
+        if (!isset($this->_table)) {
+            throw new Vps_Exception("Either _gridTable has to be set or _fetchData has to be overwritten.");
+        }
+        $select = $this->_table->getAdapter()->select();
+        $info = $this->_getTableInfo();
+
+        $select->from($info['name'], 'COUNT(*)', $info['schema']);
+
+        $where = (array) $this->_getWhere();
+        if (is_null($where)) return 0;
+
+        foreach ($where as $key => $val) {
+            // is $key an int?
+            if (is_int($key)) {
+                // $val is the full condition
+                $select->where($val);
+            } else {
+                // $key is the condition with placeholder,
+                // and $val is quoted into the condition
+                $select->where($key, $val);
+            }
+        }
+
+        // return the results
+        $stmt = $this->_table->getAdapter()->query($select);
+        return $stmt->fetchColumn();
+    }
+
+
+    public function jsonDataAction()
+    {
+        $limit = null; $start = null; $order = 0;
+        if ($this->_paging) {
+            $limit = $this->getRequest()->getParam('limit');
+            $start = $this->getRequest()->getParam('start');
+            if(!$limit) {
+                if(!is_array($this->_paging) && $this->_paging > 0) {
+                    $limit = $this->_paging;
+                } else if (is_array($this->_paging) && isset($this->_paging['pageSize'])) {
+                    $limit = $this->_paging['pageSize'];
+                } else {
+                    $limit = $this->_paging;
+                }
+            }
+
+            $order = $this->getRequest()->getParam('sort');
+            if (!$order) $order = $this->_defaultOrder['field'];
+            if($this->_getParam("dir") && $this->_getParam('dir')!='UNDEFINED') {
+                $order .= ' '.$this->_getParam('dir');
+            } else {
+                $order .= ' '.$this->_defaultOrder['direction'];
+            }
+            $order = trim($order);
+            $this->view->order = $order;
+        }
+
+        $primaryKey = $this->_primaryKey;
+
+        $rowSet = $this->_fetchData($order, $limit, $start);
+        if (!is_null($rowSet)) {
+            $rows = array();
+            foreach ($rowSet as $row) {
+                $r = array();
+                if (is_array($row)) {
+                    $row = (object)$row;
+                }
+                if (!$this->_hasPermissions($row, 'load')) {
+                    throw new Vps_Exception("You don't have the permissions to load this row");
+                }
+                foreach ($this->_columns as $column) {
+                    $data = $column->load($row, Vps_Auto_Grid_Column::ROLE_DISPLAY);
+                    $r[$column->getDataIndex()] = $data;
+                }
+                if (!isset($r[$primaryKey]) && isset($row->$primaryKey)) {
+                    $r[$primaryKey] = $row->$primaryKey;
+                }
+                $rows[] = $r;
+            }
+
+            $this->view->rows = $rows;
+            if (isset($this->_paging['type']) && $this->_paging['type'] == 'Date') {
+                //nix zu tun
+            } else if ($this->_paging) {
+                $this->view->total = $this->_fetchCount();
+            } else {
+                $this->view->total = sizeof($rows);
+            }
+        } else {
+            $this->view->total = 0;
+            $this->view->rows = array();
+        }
+
+        if ($this->getRequest()->getParam('meta')) {
+            $this->_appendMetaData();
+        }
+    }
+
+    protected function _getTypeFromDbType($type)
+    {
+        if ($type == 'varchar') $type = 'string';
+        else if (substr($type, 0, 7) == 'tinyint') $type = 'boolean';
+        else if ($type == 'text') $type = 'string';
+        else if ($type == 'tinytext') $type = 'string';
+        else if (substr($type, -3) == 'int') $type = 'int';
+        else if ($type == 'datetime') $type = 'date';
+        else if ($type == 'decimal') $type = 'float';
+        else if (substr($type, 0, 6) == 'double') $type = 'float';
+        else if ($type == 'time') $type = ''; //auto
+        else $type = ''; //auto
+        return $type;
+    }
+
+    protected function _appendMetaData()
+    {
+        $this->view->metaData = array();
+
+        $this->view->metaData['root'] = 'rows';
+        $this->view->metaData['id'] = $this->_primaryKey;
+        if (isset($this->_paging['type']) && $this->_paging['type'] == 'Date') {
+            //nix zu tun
+        } else {
+            $this->view->metaData['totalProperty'] = 'total';
+        }
+        $this->view->metaData['successProperty'] = 'success';
+        if (!$this->_sortable || !$this->_getParam('sort')) {
+            //sandard-sortierung
+            $this->view->metaData['sortInfo'] = $this->_defaultOrder;
+        } else {
+            $this->view->metaData['sortInfo']['field'] = $this->_getParam('sort');
+            $this->view->metaData['sortInfo']['direction'] = $this->_getParam('dir');
+        }
+        $this->view->metaData['columns'] = array();
+        $this->view->metaData['fields'] = array();
+        foreach ($this->_columns as $column) {
+            $data = $column->getMetaData($this->_getTableInfo());
+            if ($data) {
+                $this->view->metaData['columns'][] = $data;
+
+                $d = array();
+                if (isset($data['dataIndex'])) {
+                    $d['name'] = $data['dataIndex'];
+                }
+                if (isset($data['type'])) {
+                    $d['type'] = $data['type'];
+                }
+
+                if (isset($data['dateFormat'])) {
+                    $d['dateFormat'] = $data['dateFormat'];
+                }
+                if (isset($data['dateFormat'])) {
+                    $d['dateFormat'] = $data['dateFormat'];
+                }
+                if (isset($data['defaultValue'])) {
+                    $d['defaultValue'] = $data['defaultValue'];
+                }
+                $this->view->metaData['fields'][] = $d;
+            }
+
+        }
+        $this->view->metaData['buttons'] = (object)$this->_buttons;
+        $this->view->metaData['permissions'] = (object)$this->_permissions;
+        $this->view->metaData['paging'] = $this->_paging;
+        $this->view->metaData['filters'] = (object)$this->_filters;
+        $this->view->metaData['sortable'] = $this->_sortable;
+        $this->view->metaData['editDialog'] = $this->_editDialog;
+        $this->view->metaData['grouping'] = $this->_grouping;
+    }
+
+    protected function _hasPermissions($row, $action)
+    {
+        return true;
+    }
+
+    protected function _beforeSave(Zend_Db_Table_Row_Abstract $row, $submitRow)
+    {
+    }
+
+    protected function _afterSave(Zend_Db_Table_Row_Abstract $row, $submitRow)
+    {
+    }
+
+    protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row, $submitRow)
+    {
+    }
+
+    protected function _afterInsert(Zend_Db_Table_Row_Abstract $row, $submitRow)
+    {
+    }
+
+    protected function _beforeDelete(Zend_Db_Table_Row_Abstract $row)
+    {
+    }
+
+    protected function _afterDelete()
+    {
+    }
+
+    public function jsonSaveAction()
+    {
+        if(!isset($this->_permissions['save']) || !$this->_permissions['save']) {
+            throw new Vps_Exception("Save is not allowed.");
+        }
+        $success = false;
+
+        $data = Zend_Json::decode($this->getRequest()->getParam("data"));
+        $addedIds = array();
+        foreach ($data as $submitRow) {
+            $id = $submitRow[$this->_primaryKey];
+            if ($id) {
+                $row = $this->_table->find($id)->current();
+            } else {
+                if(!isset($this->_permissions['add']) || !$this->_permissions['add']) {
+                    throw new Vps_Exception("Add is not allowed.");
+                }
+                $row = $this->_table->createRow();
+            }
+            if(!$row) {
+                throw new Vps_Exception("Can't find row with id '$id'.");
+            }
+            if (!$this->_hasPermissions($row, 'save')) {
+                throw new Vps_Exception("You don't have the permissions to save this row.");
+            }
+            foreach ($this->_columns as $column) {
+                if ($id && $column->getDataIndex() == $this->_position) {
+                    $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
+                } else {
+                    $column->prepareSave($row, $submitRow);
+                }
+            }
+            if (!$id) {
+                $this->_beforeInsert($row, $submitRow);
+            }
+            $this->_beforeSave($row, $submitRow);
+
+
+            $row->save();
+            if (!$id) {
+                $this->_afterInsert($row, $submitRow);
+            }
+            $this->_afterSave($row, $submitRow);
+            if (!$id) {
+                if ($this->_position) {
+                    $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
+                }
+                $addedIds[] = $row->id;
+            }
+        }
+        $success = true;
+
+        if ($addedIds) {
+            $this->view->addedIds = $addedIds;
+        }
+        $this->view->success = $success;
+    }
+
+    public function jsonDeleteAction()
+    {
+        if(!isset($this->_permissions['delete']) || !$this->_permissions['delete']) {
+            throw new Vps_Exception("Delete is not allowed.");
+        }
+        $success = false;
+        $ids = $this->getRequest()->getParam($this->_primaryKey);
+        $ids = explode(';', $ids);
+
+        foreach ($ids as $id) {
+            $row = $this->_table->find($id)->current();
+            if(!$row) {
+                throw new Vps_Exception("Can't find row with id '$id'.");
+            }
+            if (!$this->_hasPermissions($row, 'delete')) {
+                throw new Vps_Exception("You don't have the permissions to delete this row.");
+            }
+            try {
+                $this->_beforeDelete($row);
+                $row->delete();
+                $this->_afterDelete();
+                if ($this->_position) {
+                    $this->_table->numberizeAll($this->_position, $this->_getWhere());
+                }
+                $success = true;
+            } catch (Vps_ClientException $e) { //todo: nicht nur Vps_Exception fangen
+                $this->view->error = $e->getMessage();
+            }
+        }
+
+        $this->view->success = $success;
+    }
+
+
+    public function pdfAction()
+    {
+        if(!isset($this->_permissions['pdf']) || !$this->_permissions['pdf']) {
+            throw new Vps_Exception("Pdf is not allowed.");
+        }
+
+        $pageMargin = 10;
+
+        if (empty($this->_pdf['orientation'])) {
+            $this->_pdf['orientation'] = self::PDF_ORIENTATION_PORTRAIT;
+        }
+        if (empty($this->_pdf['format'])) {
+            $this->_pdf['format'] = self::PDF_FORMAT_A4;
+        }
+        if (!isset($this->_pdf['ignoreFields'])) {
+            $this->_pdf['ignoreFields'] = array();
+        }
+        if (!isset($this->_pdf['fields'])) {
+            $this->_pdf['fields'] = array();
+            foreach ($this->_columns as $column) {
+                if ($column->getHeader()) {
+                    $this->_pdf['fields'][] = $column->getName();
+                }
+            }
+        }
+
+        if (!is_array($this->_pdf['fields'])) {
+            throw new Vps_Exception("PDF export fields must be of type `array`");
+        }
+        if (!is_array($this->_pdf['ignoreFields'])) {
+            throw new Vps_Exception("PDF export `ignoreFields` must be of type `array`");
+        }
+        if (isset($this->_pdf['columns'])) {
+            throw new Vps_Exception("PDF export fields key is labeld `fields`, not `columns`");
+        }
+        $tmpFields = array(); // Needed for correct sorting
+        foreach ($this->_pdf['fields'] as $key => $mixed) {
+            if (!is_array($mixed) && !is_string($mixed)) {
+                throw new Vps_Exception("PDF export field `$mixed` must not be of type "
+                                        .'`'.gettype($mixed).'`, only `string` or `array` allowed.');
+            }
+            if (is_string($mixed) && $this->_columns[$mixed] && !in_array($mixed, $this->_pdf['ignoreFields'])) {
+                $tmpFields[$mixed] = array('header' => $this->_columns[$mixed]->getHeader(),
+                                            'width'  => 0);
+            } else if (is_array($mixed) && $this->_columns[$key] && !in_array($key, $this->_pdf['ignoreFields'])) {
+                if (!isset($mixed['header'])) {
+                    $this->_pdf['fields'][$key]['header'] =
+                        $this->_columns[$key]->getHeader();
+                }
+                if (!isset($mixed['width'])) {
+                    $this->_pdf['fields'][$key]['width'] = 0;
+                }
+                $tmpFields[$key] = $this->_pdf['fields'][$key];
+            }
+        }
+        $this->_pdf['fields'] = $tmpFields;
+
+        // Generate two times for correct page braking
+        $breakBeforeRow = array();
+        for ($i = 1; $i <= 2; $i++) {
+            $pdf = new Vps_Auto_Grid_Pdf_Table($this->_pdf['orientation'], 'mm', $this->_pdf['format']);
+            $pdf->SetFont('vera', '', 8);
+            $pdf->SetMargins($pageMargin, 20, $pageMargin);
+            $pdf->SetFooterMargin(5);
+            $pdf->SetAutoPageBreak(true, 20);
+            $pdf->AliasNbPages();
+            $pdf->AddPage();
+
+            $pdf->setFields($this->_pdf['fields']);
+
+    //         $pdf->SetBarcode(date("Y-m-d H:i:s", time()));
+
+            $pdf->writeHeader();
+
+            $order = trim($this->_defaultOrder['field'].' '.$this->_defaultOrder['direction']);
+            $rowSet = $this->_fetchData($order, null, null);
+
+            if (!is_null($rowSet)) {
+                $rowCount = 1;
+                foreach ($rowSet as $row) {
+                    if (is_array($row)) {
+                        $row = (object)$row;
+                    }
+
+                    if ($i === 1) $pageNoBefore = $pdf->PageNo();
+
+                    if ($i === 2 && in_array($rowCount, $breakBeforeRow)) {
+                        $pdf->drawLines();
+                        $pdf->AddPage();
+                        $pdf->writeHeader();
+                    }
+                    $pdf->writeRow($row);
+
+                    if ($i === 1 && $pageNoBefore != $pdf->PageNo()) {
+                        $breakBeforeRow[] = $rowCount;
+                        $pdf->AddPage();
+                        $pdf->writeRow($row);
+                    }
+                    $rowCount++;
+                }
+            }
+        }
+
+        $pdf->drawLines();
+
+        $pdf->output();
+        $this->_helper->viewRenderer->setNoRender();
+    }
+
+    private function _getExportData()
+    {
+        $order = trim($this->_defaultOrder['field'].' '.$this->_defaultOrder['direction']);
+        $rowSet = $this->_fetchData($order, null, null);
+
+        if (!$rowSet) {
+            return null;
+        } else {
+            // $exportData = array( row => array( col => 'data' ) )
+            // Index 0 reserved for column headers
+            $exportData = array(0 => array());
+            $columns = $columnsHeader = array();
+            foreach ($rowSet as $row) {
+                if (is_array($row)) {
+                    $row = (object)$row;
+                }
+                if (!$this->_hasPermissions($row, 'load')) {
+                    throw new Vps_Exception("You don't have the permissions to load this row");
+                }
+                $columns = $columnsHeader = array();
+                foreach ($this->_columns as $column) {
+                    $currentColumnHeader = $column->getHeader();
+                    if (!is_null($currentColumnHeader)) {
+                        $columnsHeader[] = $currentColumnHeader;
+                        $columns[] = $column->load($row, Vps_Auto_Grid_Column::ROLE_EXPORT);
+                    }
+                }
+
+                $exportData[] = $columns;
+            }
+
+            $exportData[0] = $columnsHeader;
+        }
+
+        return $exportData;
+    }
+
+    public function csvAction()
+    {
+        if (!isset($this->_permissions['csv']) || !$this->_permissions['csv']) {
+            throw new Vps_Exception("CSV is not allowed.");
+        }
+
+        $data = $this->_getExportData();
+
+        if (!is_null($data)) {
+            $csvRows = array();
+            foreach ($data as $row => $cols) {
+                $cols = str_replace('"', '""', $cols);
+                $csvRows[] = '"'. implode('";"', $cols) .'"';
+            }
+
+            $csvReturn = implode("\r\n", $csvRows);
+        }
+
+        $this->_helper->viewRenderer->setNoRender();
+        $this->getResponse()->setHeader('Content-Description', 'File Transfer')
+                            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')
+                            ->setHeader('Content-Type', 'text/csv')
+                            ->setHeader('Content-Disposition', 'attachment; filename="csv_export_'.date('Y-m-d_Hi').'.csv"')
+                            ->setBody($csvReturn);
+    }
+
+    public function xlsAction()
+    {
+        if (!isset($this->_permissions['xls']) || !$this->_permissions['xls']) {
+            throw new Vps_Exception("XLS is not allowed.");
+        }
+        require_once 'Spreadsheet/Excel/Writer.php';
+
+        $xls = new Spreadsheet_Excel_Writer();
+        $xls->setVersion(8);
+        $xls->send('xls_export_'.date('Y-m-d_Hi').'.xls');
+
+        $sheet = $xls->addWorksheet('export_'. date('Y-m-d_H-i'));
+        $sheet->setInputEncoding('UTF-8');
+
+        $data = $this->_getExportData();
+        if (!is_null($data)) {
+            foreach ($data as $row => $cols) {
+                foreach ($cols as $col => $text) {
+                    if ($row == 0) {
+                        $format = $xls->addFormat();
+                        $format->setBold();
+                        $sheet->write($row, $col, $text, $format);
+                    } else {
+                        $sheet->write($row, $col, $text);
+                    }
+                }
+            }
+        }
+
+        $xls->close();
+        $this->_helper->viewRenderer->setNoRender();
+    }
+}

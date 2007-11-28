@@ -1,28 +1,28 @@
-<?p
-class E3_DaoTest extends E3_Te
+<?php
+class E3_DaoTest extends E3_Test
+{
+    protected $_dao;
 
-    protected $_da
+    public function setUp()
+    {
+        $this->_dao = $this->createDao();
+    }
 
-    public function setUp
-   
-        $this->_dao = $this->createDao(
-   
+    public function testGetTable()
+    {
+   		$table = $this->_dao->getTable('E3_Dao_Components');
+    	$this->assertType('E3_Dao_Components', $table);
+    }
 
-    public function testGetTable
-   
-   		$table = $this->_dao->getTable('E3_Dao_Components'
-    	$this->assertType('E3_Dao_Components', $table
-   
+    public function testGetTableNonExistant()
+    {
+    	try {
+    		$this->_dao->getTable('Non_Existant_Table');
+    	} catch (E3_Dao_Exception $e) {
+    		return;
+    	}
+    	$this->fail('An expected Exception has not been raised.');
+    }
 
-    public function testGetTableNonExistant
-   
-    	try
-    		$this->_dao->getTable('Non_Existant_Table'
-    	} catch (E3_Dao_Exception $e)
-    		retur
-    
-    	$this->fail('An expected Exception has not been raised.'
-   
-
-
+}
 

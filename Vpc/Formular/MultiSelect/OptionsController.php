@@ -1,3 +1,4 @@
-<?ph
-class Vpc_Formular_MultiSelect_OptionsController extends Vpc_Formular_Select_OptionsControlle
-
+<?php
+class Vpc_Formular_MultiSelect_OptionsController extends Vpc_Formular_Select_OptionsController
+{
+}

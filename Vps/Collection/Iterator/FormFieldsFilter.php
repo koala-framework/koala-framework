@@ -1,8 +1,8 @@
-<?p
-class Vps_Collection_Iterator_FormFieldsFilter extends FilterIterat
-
-    public function accept
-   
-        return $this->current() instanceof Vps_Auto_Field_Abstrac
-   
-
+<?php
+class Vps_Collection_Iterator_FormFieldsFilter extends FilterIterator
+{
+    public function accept()
+    {
+        return $this->current() instanceof Vps_Auto_Field_Abstract;
+    }
+}

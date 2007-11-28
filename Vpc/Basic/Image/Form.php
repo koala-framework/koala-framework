@@ -1,41 +1,42 @@
-<?ph
-class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_For
-
-    public function __construct($class, $pageId = null, $componentKey = null
-    
-        parent::__construct($class, $pageId, $componentKey)
-       
-        // Dateinam
-        if (Vpc_Abstract::getSetting($class, 'editFilename')) 
-            $this->add(new Vps_Auto_Field_TextField('filename', 'Filename')
-                ->setAllowBlank(false
-                ->setVtype('alphanum')
+<?php
+class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
+{
+    public function __construct($class, $pageId = null, $componentKey = null)
+    {
+        parent::__construct($class, $pageId, $componentKey);
         
+        // Dateiname
+        if (Vpc_Abstract::getSetting($class, 'editFilename')) {
+            $this->add(new Vps_Auto_Field_TextField('filename', 'Filename'))
+                ->setAllowBlank(false)
+                ->setVtype('alphanum');
+        }
 
-        // Höhe, Breit
-        $dimensions = Vpc_Abstract::getSetting($class, 'dimension')
-        if (empty($dimensions)) 
-            $this->add(new Vps_Auto_Field_TextField('width', 'Width'))
-            $this->add(new Vps_Auto_Field_TextField('height','Height'))
-        } else if (is_array($dimensions[0])) 
-            $this->add(new Vps_Auto_Field_ComboBoxSize('dimension', 'Size')
-                ->setSizes($dimensions)
-        
+        // Höhe, Breite
+        $dimensions = Vpc_Abstract::getSetting($class, 'dimension');
+        if (empty($dimensions)) {
+            $this->add(new Vps_Auto_Field_TextField('width', 'Width'));
+            $this->add(new Vps_Auto_Field_TextField('height','Height'));
+        } else if (is_array($dimensions[0])) {
+            $this->add(new Vps_Auto_Field_ComboBoxSize('dimension', 'Size'))
+                ->setSizes($dimensions);
+        }
 
-        // Skalierungsty
-        $allow = Vpc_Abstract::getSetting($class, 'allow')
-        if (is_array($allow) && sizeof($allow) > 1) 
-            $this->add(new Vps_Auto_Field_Select('scale', 'Scaling')
-                ->setValues($allow)
-        
+        // Skalierungstyp
+        $allow = Vpc_Abstract::getSetting($class, 'allow');
+        if (is_array($allow) && sizeof($allow) > 1) {
+            $this->add(new Vps_Auto_Field_Select('scale', 'Scaling'))
+                ->setValues($allow);
+        }
 
-        // Fileuploa
-        $this->add(new Vps_Auto_Field_File('vps_upload_id', 'File')
-            ->setExtensions(Vpc_Abstract::getSetting($class, 'extensions')
-            ->setAllowBlank(Vpc_Abstract::getSetting($class, 'allowBlank')
-            ->setAllowOnlyImages(true)
+        // Fileupload
+        $this->add(new Vps_Auto_Field_File('vps_upload_id', 'File'))
+            ->setExtensions(Vpc_Abstract::getSetting($class, 'extensions'))
+            ->setAllowBlank(Vpc_Abstract::getSetting($class, 'allowBlank'))
+            ->setAllowOnlyImages(true);
 
-        // Bildvorscha
-        $this->add(new Vps_Auto_Field_ImageViewer('vps_upload_id_image', 'Preview')
-            ->setClass($class)
-    
+        // Bildvorschau
+        $this->add(new Vps_Auto_Field_ImageViewer('vps_upload_id_image', 'Preview'))
+            ->setClass($class);
+    }
+}

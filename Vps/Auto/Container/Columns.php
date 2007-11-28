@@ -1,41 +1,41 @@
-<?p
-class Vps_Auto_Container_Columns extends Vps_Auto_Container_Abstra
+<?php
+class Vps_Auto_Container_Columns extends Vps_Auto_Container_Abstract
+{
+    public $columns;
 
-    public $column
+    public function __construct($name = null)
+    {
+        $this->columns = new Vps_Collection('Vps_Auto_Container_Column');
+        parent::__construct($name);
+    }
 
-    public function __construct($name = nul
-   
-        $this->columns = new Vps_Collection('Vps_Auto_Container_Column'
-        parent::__construct($name
-   
+    public function getMetaData()
+    {
+        $ret = parent::getMetaData();
+        $ret['items'] = $this->columns->getMetaData();
+        if (!isset($ret['layout'])) $ret['layout'] = 'column';
+        if (!isset($ret['border'])) $ret['border'] = false;
+        if (!isset($ret['baseCls'])) $ret['baseCls'] = 'x-plain';
+        return $ret;
+    }
 
-    public function getMetaData
-   
-        $ret = parent::getMetaData(
-        $ret['items'] = $this->columns->getMetaData(
-        if (!isset($ret['layout'])) $ret['layout'] = 'column
-        if (!isset($ret['border'])) $ret['border'] = fals
-        if (!isset($ret['baseCls'])) $ret['baseCls'] = 'x-plain
-        return $re
-   
+    public function getByName($name)
+    {
+        $ret = parent::getByName($name);
+        if($ret) return $ret;
+        return $this->columns->getByName($name);
+    }
+    public function hasChildren()
+    {
+        return sizeof($this->columns) > 0;
+    }
+    public function getChildren()
+    {
+        return $this->columns;
+    }
 
-    public function getByName($nam
-   
-        $ret = parent::getByName($name
-        if($ret) return $re
-        return $this->columns->getByName($name
-   
-    public function hasChildren
-   
-        return sizeof($this->columns) > 
-   
-    public function getChildren
-   
-        return $this->column
-   
-
-    public function add($v = nul
-   
-        return $this->columns->add($v
-   
-
+    public function add($v = null)
+    {
+        return $this->columns->add($v);
+    }
+}

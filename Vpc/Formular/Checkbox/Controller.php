@@ -1,20 +1,20 @@
-<?ph
-class Vpc_Formular_Checkbox_Controller extends Vps_Controller_Action_Auto_Vpc_For
+<?php
+class Vpc_Formular_Checkbox_Controller extends Vps_Controller_Action_Auto_Vpc_Form
+{
+    protected $_fields = array(
+            array('type'       => 'TextField',
+                  'fieldLabel' => 'Text',
+                  'name'       => 'text',
+                  'width'      => 150),
+            array('type'       => 'Checkbox',
+                  'fieldLabel' => 'Checked',
+                  'name'       => 'checked',
+                  'width'      => 50)
+    );
 
-    protected $_fields = array
-            array('type'       => 'TextField'
-                  'fieldLabel' => 'Text'
-                  'name'       => 'text'
-                  'width'      => 150)
-            array('type'       => 'Checkbox'
-                  'fieldLabel' => 'Checked'
-                  'name'       => 'checked'
-                  'width'      => 50
-    )
-
-    protected $_buttons = array('save'   => true)
-    protected $_tableName = 'Vpc_Formular_Checkbox_Model'
-
+    protected $_buttons = array('save'   => true);
+    protected $_tableName = 'Vpc_Formular_Checkbox_Model';
+}
 
 
 
