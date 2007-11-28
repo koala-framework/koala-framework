@@ -18,7 +18,9 @@ class Vpc_Basic_LinkTag_Form extends Vps_Auto_Vpc_Form
         foreach ($classes as $name => $class) {
             $formname = str_replace('_Component', '_Form', $class);
             $id = $this->getId();
-            $id['component_key'] .= '-1';
+            if ($id != 0) {
+                $id['component_key'] .= '-1';
+            }
             $form = new $formname($class, $id);
             $form->setAutoHeight(true);
             $form->setBaseCls('x-plain');
