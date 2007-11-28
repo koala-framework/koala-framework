@@ -10,8 +10,8 @@ class Vps_Auto_Field_ImageViewer extends Vps_Auto_Field_Abstract
     public function load($row)
     {
         $data = array();
-        $data['imageUrl'] = $row->getImageUrl(Vpc_Basic_Image_Row::DIMENSION_NORMAL);
-        $data['previewUrl'] = $row->getImageUrl(Vpc_Basic_Image_Row::DIMENSION_THUMB);
+        $data['imageUrl'] = $row->getImageUrl('default');
+        $data['previewUrl'] = $row->getImageUrl('thumb');
         return array($this->getFieldName() => $data);
     }
 }

@@ -1,28 +1,22 @@
 <?php
 class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
 {
-    const DIMENSION_NORMAL = 'normal';
-    const DIMENSION_THUMB = 'thumb';
-    const DIMENSION_MINI = 'mini';
-
     private $_deleteFileRow;
 
-    public function getImageUrl($dimension = self::DIMENSION_NORMAL, $addRandom = false)
+    public function getImageUrl($type = 'default', $addRandom = false)
     {
         $id = $this->page_id . $this->component_key;
         $filename = $this->filename != '' ? $this->filename : 'unnamed';
-        if ($dimension != self::DIMENSION_NORMAL) {
-            $filename .= '.'.$dimension;
-        }
         $row = $this->findParentRow('Vps_Dao_File');
         if (!$row) return null;
         return $row->generateUrl($this->getTable()->getComponentClass(), $id,
-                                 $filename, Vps_Dao_Row_File::SHOW, $addRandom);
+                                 $filename, $type, $addRandom);
     }
 
     private function _getScaleSettings()
     {
-        $ret['scale'] = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'scale');
+        $ret['scale'] = Vpc_Abstract::getSetting(
+                                $this->getTable()->getComponentClass(), 'scale');
         if (is_array($ret['scale'])) {
             if (count($ret['scale']) == 1 && isset($ret['scale'][0])) {
                 $ret['scale'] = $ret['scale'][0];
@@ -30,7 +24,8 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
                 $ret['scale'] = $this->scale;
             }
         }
-        $dimension = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'dimension');
+        $dimension = Vpc_Abstract::getSetting(
+                            $this->getTable()->getComponentClass(), 'dimension');
         if (isset($dimension[0]) && !is_array($dimension[0])) {
             $ret['width'] = $dimension[0];
             $ret['height'] = $dimension[1];
@@ -40,20 +35,28 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
         }
         return $ret;
     }
-    public function createCacheFile($source, $target)
+    public function createCacheFile($source, $target, $type)
     {
-        $s = $this->_getScaleSettings($this->getTable()->getComponentClass());
-        Vps_Media_Image::scale($source, $target, array($s['width'], $s['height']), $s['scale']);
-        if (strpos($target, self::DIMENSION_THUMB)) {
-            Vps_Media_Image::scale($target, $target, array(100, 100), Vps_Media_Image::SCALE_BESTFIT);
-        } else if (strpos($target, self::DIMENSION_MINI)) {
-            Vps_Media_Image::scale($target, $target, array(20, 20), Vps_Media_Image::SCALE_BESTFIT);
+        if ($type == 'default') {
+            $s = $this->_getScaleSettings();
+            Vps_Media_Image::scale($source, $target,
+                                array($s['width'], $s['height']), $s['scale']);
+        }
+        $outputDimensions = Vpc_Abstract::getSetting(
+                                    $this->getTable()->getComponentClass(),
+                                    'ouputDimensions');
+        if (isset($outputDimensions[$type])) {
+            $s = $outputDimensions[$type];
+            if (!isset($s[2])) $s[2] = Vps_Media_Image::SCALE_BESTFIT;
+            Vps_Media_Image::scale($source, $target, array($s[0], $s[1]), $s[2]);
+        } else {
+            throw new Vps_Exception("Undefined outputDimension: '$type'");
         }
     }
 
     public function getImageDimension()
     {
-        $s = $this->_getScaleSettings($this->getTable()->getComponentClass());
+        $s = $this->_getScaleSettings();
         $fileRow = $this->findParentRow('Vps_Dao_File');
         if ($fileRow) {
             return Vps_Media_Image::calculateScaleDimensions(

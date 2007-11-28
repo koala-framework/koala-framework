@@ -43,22 +43,17 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
     public function passwordAction()
     {
         $checksum = $this->_getParam('checksum');
+        $type = $this->_getParam('type');
+        if ($checksum != $this->_createChecksum()) {
+            throw new Vps_Controller_Action_Web_Exception('Access to file not allowed.');
+        }
 
-        // Direkt auf Originaldatei springen
-        $password = Vps_Media_Password::ORIGINAL;
-        if ($checksum == $this->_createChecksum($password)) {
+        if ($type == 'original') {
+            // Direkt auf Originaldatei springen
             $this->originalAction();
-            return;
-        }
-
-        // Cache
-        $password = Vps_Media_Password::CACHE;
-        if ($checksum == $this->_createChecksum($password)) {
+        } else {
             $this->cacheAction();
-            return;
         }
-
-        throw new Vps_Controller_Action_Web_Exception('Access to file not allowed.');
     }
 
     /**
@@ -93,7 +88,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
             // Cache-Datei erstellen
             $source = $row->getFileSource();
             try {
-                $this->_createCacheFile($source, $target);
+                $this->_createCacheFile($source, $target, $this->_getParam('type'));
             } catch (Exception $e) {
                 throw new Vps_Controller_Action_Web_Exception($e->getMessage()); // immer 404 auswerfen
             }
@@ -115,9 +110,10 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
      * @param string Passwort für die Verwendung in der Prüfsumme
      * @return Prüfsumme als string
      */
-    protected function _createChecksum($password)
+    protected function _createChecksum()
     {
-        return md5($password . $this->_getParam('uploadId'));
+        return md5(Vps_Media_Password::PASSWORD .
+                    $this->_getParam('uploadId'));
     }
 
     /**
