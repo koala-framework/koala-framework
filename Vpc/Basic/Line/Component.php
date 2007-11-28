@@ -1,10 +1,10 @@
-<?php
-class Vpc_Basic_Line_Component extends Vpc_Abstract
-{
-    public static function getSettings()
-    {
-        return array_merge(parent::getSettings(), array(
-            'componentName' => 'Standard.Line'
-        ));
-    }
-}
+<?ph
+class Vpc_Basic_Line_Component extends Vpc_Abstrac
+
+    public static function getSettings(
+    
+        return array_merge(parent::getSettings(), array
+            'componentName' => 'Standard.Line
+        ))
+    
+

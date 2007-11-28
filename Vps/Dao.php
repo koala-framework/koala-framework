@@ -1,45 +1,45 @@
-<?php
-class Vps_Dao
-{
-    private $_config;
-    private $_tables = array();
-    private $_db = array();
-    private $_pageData = array();
+<?p
+class Vps_D
 
-    public function __construct(Zend_Config $config)
-    {
-        $this->_config = $config;
-    }
+    private $_confi
+    private $_tables = array(
+    private $_db = array(
+    private $_pageData = array(
 
-    public function getTable($tablename, $config = array())
-    {
-        if (!$tablename) { return null; };
+    public function __construct(Zend_Config $confi
+   
+        $this->_config = $confi
+   
 
-        if (!isset($this->_tables[$tablename])) {
-            if (!isset($config['db'])) $config['db'] = $this->getDb();
-            $table = new $tablename($config);
-            if ($table instanceof Vps_Db_Table) {
-                $table->setDao($this);
-            }
-            $this->_tables[$tablename] = $table;
-        }
-        return $this->_tables[$tablename];
-    }
+    public function getTable($tablename, $config = array(
+   
+        if (!$tablename) { return null; 
 
-    public function getDb($db = 'web')
-    {
-        if (!isset($this->_db[$db])) {
-            if(!isset($this->_config->$db)) {
-                throw new Vps_Dao_Exception("Connection \"$db\" in config.db.ini not found.
-                        Please add $db.host, $db.username, $db.password and $db.dbname under the sction [database].");
-            }
-            $dbConfig = $this->_config->$db->toArray();
-            $this->_db[$db] = Zend_Db::factory('PDO_MYSQL', $dbConfig);
-            $this->_db[$db]->query('SET names UTF8');
+        if (!isset($this->_tables[$tablename]))
+            if (!isset($config['db'])) $config['db'] = $this->getDb(
+            $table = new $tablename($config
+            if ($table instanceof Vps_Db_Table)
+                $table->setDao($this
+           
+            $this->_tables[$tablename] = $tabl
+       
+        return $this->_tables[$tablename
+   
 
-        }
-        return $this->_db[$db];
-    }
+    public function getDb($db = 'web
+   
+        if (!isset($this->_db[$db]))
+            if(!isset($this->_config->$db))
+                throw new Vps_Dao_Exception("Connection \"$db\" in config.db.ini not foun
+                        Please add $db.host, $db.username, $db.password and $db.dbname under the sction [database]."
+           
+            $dbConfig = $this->_config->$db->toArray(
+            $this->_db[$db] = Zend_Db::factory('PDO_MYSQL', $dbConfig
+            $this->_db[$db]->query('SET names UTF8'
+
+       
+        return $this->_db[$db
+   
 
 
-}
+

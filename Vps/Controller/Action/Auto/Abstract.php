@@ -1,51 +1,51 @@
-<?php
-class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
-{
-    protected $_buttons = array();
-    protected $_permissions;
+<?p
+class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Acti
 
-    public function init()
-    {
-        parent::init();
+    protected $_buttons = array(
+    protected $_permission
 
-        if (!isset($this->_permissions)) {
-            $this->_permissions = $this->_buttons;
-        }
+    public function init
+   
+        parent::init(
 
-        $btns = array();
-        foreach ($this->_buttons as $k=>$i) {
-            if (is_int($k)) {
-                $btns[$i] = true;
-            } else {
-                $btns[$k] = $i;
-            }
-        }
-        $this->_buttons = $btns;
+        if (!isset($this->_permissions))
+            $this->_permissions = $this->_button
+       
 
-        $perms = array();
-        foreach ($this->_permissions as $k=>$i) {
-            if (is_int($k)) {
-                $perms[$i] = true;
-            } else {
-                $perms[$k] = $i;
-            }
-        }
-        $this->_permissions = $perms;
+        $btns = array(
+        foreach ($this->_buttons as $k=>$i)
+            if (is_int($k))
+                $btns[$i] = tru
+            } else
+                $btns[$k] = $
+           
+       
+        $this->_buttons = $btn
 
-        //buttons/permissions abhängig von privileges in acl ausblenden/löschen
-        $acl = $this->_getAcl();
-        $role = $this->_getUserRole();
-        $resource = $this->_getResourceName();
+        $perms = array(
+        foreach ($this->_permissions as $k=>$i)
+            if (is_int($k))
+                $perms[$i] = tru
+            } else
+                $perms[$k] = $
+           
+       
+        $this->_permissions = $perm
 
-        foreach ($this->_buttons as $k=>$i) {
-            if (!$acl->isAllowed($role, $resource, $k)) {
-                unset($this->_buttons[$k]);
-            }
-        }
-        foreach ($this->_permissions as $k=>$i) {
-            if (!$acl->isAllowed($role, $resource, $k)) {
-                unset($this->_permissions[$k]);
-            }
-        }
-    }
-}
+        //buttons/permissions abhängig von privileges in acl ausblenden/lösch
+        $acl = $this->_getAcl(
+        $role = $this->_getUserRole(
+        $resource = $this->_getResourceName(
+
+        foreach ($this->_buttons as $k=>$i)
+            if (!$acl->isAllowed($role, $resource, $k))
+                unset($this->_buttons[$k]
+           
+       
+        foreach ($this->_permissions as $k=>$i)
+            if (!$acl->isAllowed($role, $resource, $k))
+                unset($this->_permissions[$k]
+           
+       
+   
+

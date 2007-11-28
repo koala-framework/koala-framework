@@ -1,5 +1,4 @@
-<?php
-class Vpc_Formular_Select_Model extends Vps_Db_Table
-{
-    protected $_name = 'vpc_formular_select';
-}
+<?ph
+class Vpc_Formular_Select_Model extends Vps_Db_Tabl
+
+    protected $_name = 'vpc_formular_select'

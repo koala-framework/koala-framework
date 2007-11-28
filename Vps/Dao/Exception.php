@@ -1,4 +1,4 @@
-<?php
-class Vps_Dao_Exception extends Vps_Exception
-{}
+<?p
+class Vps_Dao_Exception extends Vps_Excepti
+
 

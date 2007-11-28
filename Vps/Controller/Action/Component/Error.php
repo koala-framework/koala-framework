@@ -1,4 +1,3 @@
-<?php
-class Vps_Controller_Action_Component_Error extends Vps_Controller_Action_Error
-{
-}
+<?ph
+class Vps_Controller_Action_Component_Error extends Vps_Controller_Action_Erro
+

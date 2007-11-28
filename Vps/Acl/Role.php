@@ -1,21 +1,21 @@
-<?php
-class Vps_Acl_Role extends Zend_Acl_Role
-{
-    protected $_roleName;
+<?ph
+class Vps_Acl_Role extends Zend_Acl_Rol
 
-    public function __construct($roleId, $roleName = null)
-    {
-        $this->_roleName = $roleName;
-        parent::__construct($roleId);
-    }
+    protected $_roleName
 
-    public function setRoleName($roleName)
-    {
-        $this->_roleName = $roleName;
-    }
+    public function __construct($roleId, $roleName = null
+    
+        $this->_roleName = $roleName
+        parent::__construct($roleId)
+    
 
-    public function getRoleName()
-    {
-        return $this->_roleName;
-    }
-}
+    public function setRoleName($roleName
+    
+        $this->_roleName = $roleName
+    
+
+    public function getRoleName(
+    
+        return $this->_roleName
+    
+

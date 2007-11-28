@@ -1,126 +1,126 @@
-<?php
+<?p
 
-class Vps_Auto_Grid_Pdf_Table extends Vps_Auto_Grid_Pdf_Abstract
-{
+class Vps_Auto_Grid_Pdf_Table extends Vps_Auto_Grid_Pdf_Abstra
 
-    protected $_fields = array();
-    protected $_lines = array('x' => array(),
-                              'y' => array());
 
-    public function setFields($fields)
-    {
-        parent::setFields($fields);
+    protected $_fields = array(
+    protected $_lines = array('x' => array(
+                              'y' => array()
 
-        $numAutoWidth = 0;
+    public function setFields($field
+   
+        parent::setFields($fields
 
-        $remainingAutoWidth = $this->getPageWidth() - $this->GetX() * 2;
-        foreach ($this->_fields as $options) {
-            if ($options['width'] == 0) {
-                $numAutoWidth++;
-            } else {
-                $remainingAutoWidth -= $options['width'];
-            }
-        }
+        $numAutoWidth = 
 
-        if ($remainingAutoWidth < $numAutoWidth) {
-            $remainingAutoWidth = $numAutoWidth;
-        }
-        $autoWidth = $remainingAutoWidth / $numAutoWidth;
+        $remainingAutoWidth = $this->getPageWidth() - $this->GetX() * 
+        foreach ($this->_fields as $options)
+            if ($options['width'] == 0)
+                $numAutoWidth+
+            } else
+                $remainingAutoWidth -= $options['width'
+           
+       
 
-        foreach ($this->_fields as $field => $options) {
-            if ($options['width'] == 0) {
-                $this->_fields[$field]['width'] = $autoWidth;
-            }
-        }
-    }
+        if ($remainingAutoWidth < $numAutoWidth)
+            $remainingAutoWidth = $numAutoWidt
+       
+        $autoWidth = $remainingAutoWidth / $numAutoWidt
 
-    protected function _setLineValue($xy, $value)
-    {
-        $xy = strtolower($xy);
-        if ($xy != 'x' && $xy != 'y') {
-            throw new Vps_Exception("Only `x` or `y` allowed for first parameter "
-                                   ."of `setLineValue` (case-insensitive)");
-        }
+        foreach ($this->_fields as $field => $options)
+            if ($options['width'] == 0)
+                $this->_fields[$field]['width'] = $autoWidt
+           
+       
+   
 
-        if (!in_array($value, $this->_lines[$xy])) {
-            $this->_lines[$xy][] = $value;
-        }
-    }
+    protected function _setLineValue($xy, $valu
+   
+        $xy = strtolower($xy
+        if ($xy != 'x' && $xy != 'y')
+            throw new Vps_Exception("Only `x` or `y` allowed for first parameter
+                                   ."of `setLineValue` (case-insensitive)"
+       
 
-    protected function _setLineValueXY($valueX, $valueY)
-    {
-        $this->_setLineValue('x', $valueX);
-        $this->_setLineValue('y', $valueY);
-    }
+        if (!in_array($value, $this->_lines[$xy]))
+            $this->_lines[$xy][] = $valu
+       
+   
 
-    public function writeHeader()
-    {
-        $this->SetFont('vera', 'B', 8);
-        $currentRowY = $this->GetY();
-        $this->_setLineValue('y', $currentRowY);
-        $nextX = $this->GetX();
-        foreach ($this->_fields as $field => $options) {
-            $this->_setLineValue('x', $nextX);
-            $this->SetXY($nextX, $currentRowY);
-            $this->MultiCell($options['width'], 4, $options['header'], 0, 'L');
-            if (!isset($nextRowY) || $this->GetY() > $nextRowY) {
-                $nextRowY = $this->GetY();
-            }
-            $nextX += $options['width'];
-        }
-        $this->SetY($nextRowY);
+    protected function _setLineValueXY($valueX, $value
+   
+        $this->_setLineValue('x', $valueX
+        $this->_setLineValue('y', $valueY
+   
 
-        $this->_setLineValueXY($nextX, $nextRowY);
+    public function writeHeader
+   
+        $this->SetFont('vera', 'B', 8
+        $currentRowY = $this->GetY(
+        $this->_setLineValue('y', $currentRowY
+        $nextX = $this->GetX(
+        foreach ($this->_fields as $field => $options)
+            $this->_setLineValue('x', $nextX
+            $this->SetXY($nextX, $currentRowY
+            $this->MultiCell($options['width'], 4, $options['header'], 0, 'L'
+            if (!isset($nextRowY) || $this->GetY() > $nextRowY)
+                $nextRowY = $this->GetY(
+           
+            $nextX += $options['width'
+       
+        $this->SetY($nextRowY
 
-        $this->SetFont('vera', '', 8);
-    }
+        $this->_setLineValueXY($nextX, $nextRowY
 
-    public function writeRow($row)
-    {
-        $currentRowY = $this->GetY();
-        $this->_setLineValue('y', $currentRowY);
-        $nextX = $this->GetX();
-        foreach ($this->_fields as $field => $options) {
-            $this->_setLineValue('x', $nextX);
-            $this->SetXY($nextX, $currentRowY);
-            if (isset($row->$field)) {
-                $this->MultiCell($options['width'], 4, $row->$field, 0, 'L');
-            }
-            if (!isset($nextRowY) || $this->GetY() > $nextRowY) {
-                $nextRowY = $this->GetY();
-            }
-            $nextX += $options['width'];
-        }
-        $this->SetY($nextRowY);
+        $this->SetFont('vera', '', 8
+   
 
-        $this->_setLineValueXY($nextX, $nextRowY);
-    }
+    public function writeRow($ro
+   
+        $currentRowY = $this->GetY(
+        $this->_setLineValue('y', $currentRowY
+        $nextX = $this->GetX(
+        foreach ($this->_fields as $field => $options)
+            $this->_setLineValue('x', $nextX
+            $this->SetXY($nextX, $currentRowY
+            if (isset($row->$field))
+                $this->MultiCell($options['width'], 4, $row->$field, 0, 'L'
+           
+            if (!isset($nextRowY) || $this->GetY() > $nextRowY)
+                $nextRowY = $this->GetY(
+           
+            $nextX += $options['width'
+       
+        $this->SetY($nextRowY
 
-    public function drawLines()
-    {
-        if (count($this->_lines['x']) >= 2 && count($this->_lines['y']) >= 2) {
-            sort($this->_lines['x']);
-            sort($this->_lines['y']);
+        $this->_setLineValueXY($nextX, $nextRowY
+   
 
-            $minX = $this->_lines['x'][0];
-            $maxX = $this->_lines['x'][count($this->_lines['x'])-1];
+    public function drawLines
+   
+        if (count($this->_lines['x']) >= 2 && count($this->_lines['y']) >= 2)
+            sort($this->_lines['x']
+            sort($this->_lines['y']
 
-            $minY = $this->_lines['y'][0];
-            $maxY = $this->_lines['y'][count($this->_lines['y'])-1];
+            $minX = $this->_lines['x'][0
+            $maxX = $this->_lines['x'][count($this->_lines['x'])-1
 
-            // draw horizontal lines
-            foreach ($this->_lines['y'] as $lineY) {
-                $this->Line($minX, $lineY, $maxX, $lineY);
-            }
+            $minY = $this->_lines['y'][0
+            $maxY = $this->_lines['y'][count($this->_lines['y'])-1
 
-            // draw vertical lines
-            foreach ($this->_lines['x'] as $lineX) {
-                $this->Line($lineX, $minY, $lineX, $maxY);
-            }
+            // draw horizontal lin
+            foreach ($this->_lines['y'] as $lineY)
+                $this->Line($minX, $lineY, $maxX, $lineY
+           
 
-            $this->_lines = array('x' => array(),
-                                  'y' => array());
-        }
-    }
+            // draw vertical lin
+            foreach ($this->_lines['x'] as $lineX)
+                $this->Line($lineX, $minY, $lineX, $maxY
+           
 
-}
+            $this->_lines = array('x' => array(
+                                  'y' => array()
+       
+   
+
+

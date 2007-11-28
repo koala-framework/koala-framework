@@ -1,49 +1,49 @@
-<?php
-class Vps_View_Json extends Zend_View_Abstract
-{
-    private $_outputFormat = 'vpsConnection';
+<?ph
+class Vps_View_Json extends Zend_View_Abstrac
 
-    public function setPlainOutputFormat()
-    {
-        $this->_outputFormat = '';
-    }
+    private $_outputFormat = 'vpsConnection'
 
-    public function vpc($config)
-    {
-        foreach ($config as $key => $val) {
-            $this->$key = $val;
-        }
-    }
+    public function setPlainOutputFormat(
+    
+        $this->_outputFormat = ''
+    
 
-    public function ext($class, $config = array()) {
-        $this->class = $class;
-        $this->config = $config;
-    }
+    public function vpc($config
+    
+        foreach ($config as $key => $val) 
+            $this->$key = $val
+        
+    
 
-    public function render($name)
-    {
-        return $this->_run();
-    }
+    public function ext($class, $config = array()) 
+        $this->class = $class
+        $this->config = $config
+    
 
-    public function getOutput()
-    {
-        $this->strictVars(true);
-        $vars = get_object_vars($this);
-        foreach ($vars as $key => $value) {
-            if ('_' != substr($key, 0, 1)) {
-                $out[$key] = $value;
-            }
-        }
+    public function render($name
+    
+        return $this->_run()
+    
 
-        if ($this->_outputFormat == 'vpsConnection' && !isset($out['success'])) {
-            $out['success'] = !isset($out['exception']) && !isset($out['error']);
-        }
-        return $out;
-    }
+    public function getOutput(
+    
+        $this->strictVars(true)
+        $vars = get_object_vars($this)
+        foreach ($vars as $key => $value) 
+            if ('_' != substr($key, 0, 1)) 
+                $out[$key] = $value
+            
+        
 
-    protected function _run()
-    {
-        return Zend_Json::encode($this->getOutput());
-    }
+        if ($this->_outputFormat == 'vpsConnection' && !isset($out['success'])) 
+            $out['success'] = !isset($out['exception']) && !isset($out['error'])
+        
+        return $out
+    
 
-}
+    protected function _run(
+    
+        return Zend_Json::encode($this->getOutput())
+    
+
+

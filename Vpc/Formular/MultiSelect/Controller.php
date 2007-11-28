@@ -1,21 +1,20 @@
-<?php
-class Vpc_Formular_MultiSelect_Controller extends Vpc_Formular_Select_Controller
-{
-    protected $_fields = array(
-            array('type'       => 'ComboBox',
-                  'fieldLabel' => 'Typ',
-                  'hiddenName' => 'type',
-                  'mode'       => 'local',
-                  'store'      => array('data' => array(array('checkbox', 'Checkboxen'),
-                                                        array('checkbox_horizontal', 'Checkboxen horizontal'),
-                                                        array('select', 'Select-Feld')),
-                                       ),
-                  'editable'   => false,
-                  'triggerAction'=>'all'),
-            array('type'       => 'TextField',
-                  'fieldLabel' => 'Größe des Select-Felds',
-                  'name'       => 'size',
-                  'width'      => 60)
-    );
-    protected $_tableName = 'Vpc_Formular_MultiSelect_Model';
-}
+<?ph
+class Vpc_Formular_MultiSelect_Controller extends Vpc_Formular_Select_Controlle
+
+    protected $_fields = array
+            array('type'       => 'ComboBox'
+                  'fieldLabel' => 'Typ'
+                  'hiddenName' => 'type'
+                  'mode'       => 'local'
+                  'store'      => array('data' => array(array('checkbox', 'Checkboxen')
+                                                        array('checkbox_horizontal', 'Checkboxen horizontal')
+                                                        array('select', 'Select-Feld'))
+                                       )
+                  'editable'   => false
+                  'triggerAction'=>'all')
+            array('type'       => 'TextField'
+                  'fieldLabel' => 'Größe des Select-Felds'
+                  'name'       => 'size'
+                  'width'      => 60
+    )
+    protected $_tableName = 'Vpc_Formular_MultiSelect_Model'

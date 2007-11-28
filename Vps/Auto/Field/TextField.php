@@ -1,24 +1,24 @@
-<?php
-class Vps_Auto_Field_TextField extends Vps_Auto_Field_SimpleAbstract
-{
-    public function __construct($field_name = null, $field_label = null)
-    {
-        parent::__construct($field_name, $field_label);
-        $this->setXtype('textfield');
-    }
+<?p
+class Vps_Auto_Field_TextField extends Vps_Auto_Field_SimpleAbstra
 
-    protected function _addValidators()
-    {
-        parent::_addValidators();
+    public function __construct($field_name = null, $field_label = nul
+   
+        parent::__construct($field_name, $field_label
+        $this->setXtype('textfield'
+   
 
-        if ($this->getVType() === 'email') {
-            $this->addValidator(new Zend_Validate_EmailAddress());
-        } else if ($this->getVType() === 'url') {
-            //todo, reuse Zend_Uri::check
-        } else if ($this->getVType() === 'alpha') {
-            $this->addValidator(new Zend_Validate_Alpha());
-        } else if ($this->getVType() === 'alphanum') {
-            $this->addValidator(new Zend_Validate_Alnum());
-        }
-    }
-}
+    protected function _addValidators
+   
+        parent::_addValidators(
+
+        if ($this->getVType() === 'email')
+            $this->addValidator(new Zend_Validate_EmailAddress()
+        } else if ($this->getVType() === 'url')
+            //todo, reuse Zend_Uri::che
+        } else if ($this->getVType() === 'alpha')
+            $this->addValidator(new Zend_Validate_Alpha()
+        } else if ($this->getVType() === 'alphanum')
+            $this->addValidator(new Zend_Validate_Alnum()
+       
+   
+

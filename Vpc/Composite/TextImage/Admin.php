@@ -1,19 +1,19 @@
-<?php
-class Vpc_Composite_TextImage_Admin extends Vpc_Admin
-{
-    public function setup()
-    {
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+<?ph
+class Vpc_Composite_TextImage_Admin extends Vpc_Admi
 
-        Vpc_Admin::getInstance($classes['text'])->setup();
-        Vpc_Admin::getInstance($classes['image'])->setup();
+    public function setup(
+    
+        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses')
 
-        $fields['image_position'] = "enum('left', 'right', 'alternate') default NULL";
-        $this->createFormTable('vpc_composite_textimage', $fields);
-    }
+        Vpc_Admin::getInstance($classes['text'])->setup()
+        Vpc_Admin::getInstance($classes['image'])->setup()
 
-    public function delete($pageId, $componentKey)
-    {
-        parent::delete($pageId, $componentKey);
-    }
-}
+        $fields['image_position'] = "enum('left', 'right', 'alternate') default NULL"
+        $this->createFormTable('vpc_composite_textimage', $fields)
+    
+
+    public function delete($pageId, $componentKey
+    
+        parent::delete($pageId, $componentKey)
+    
+

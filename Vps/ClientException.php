@@ -1,5 +1,5 @@
-<?php
-class Vps_ClientException extends Vps_Exception
-{
-}
+<?p
+class Vps_ClientException extends Vps_Excepti
+
+
 

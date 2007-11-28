@@ -1,7 +1,7 @@
-<?php
-/**
- * @package Vpc
- */
-class Vpc_ComponentNotFoundException extends Vps_Exception
-{
-}
+<?ph
+/*
+ * @package Vp
+ *
+class Vpc_ComponentNotFoundException extends Vps_Exceptio
+
+

@@ -1,64 +1,64 @@
-<?php
-class Vps_Controller_Action extends Zend_Controller_Action
-{
-    protected $_auth = false;
+<?p
+class Vps_Controller_Action extends Zend_Controller_Acti
 
-    public function jsonIndexAction()
-    {
-        $this->indexAction();
-    }
+    protected $_auth = fals
 
-    public function preDispatch()
-    {
-        if (!$this instanceof Vps_Controller_Action_Error
-                && $this->_getParam('application_version')
-                && $this->getHelper('ViewRenderer')->isJson()) {
-            $version = Zend_Registry::get('config')->application->version;
-            if ($version != $this->_getParam('application_version')) {
-                $this->_forward('jsonWrongVersion', 'error', 'vps');
-            }
-        }
+    public function jsonIndexAction
+   
+        $this->indexAction(
+   
 
-        $acl = $this->_getAcl();
-        $role = $this->_getUserRole();
-        $resource = $this->_getResourceName();
+    public function preDispatch
+   
+        if (!$this instanceof Vps_Controller_Action_Err
+                && $this->_getParam('application_version
+                && $this->getHelper('ViewRenderer')->isJson())
+            $version = Zend_Registry::get('config')->application->versio
+            if ($version != $this->_getParam('application_version'))
+                $this->_forward('jsonWrongVersion', 'error', 'vps'
+           
+       
 
-        if (!$acl->isAllowed($role, $resource, 'view')) {
-            if ($this->getHelper('ViewRenderer')->isJson()) {
-                $this->_forward('jsonLogin', 'login', 'vps');
-            } else {
-                $params = array('location' => $this->getRequest()->getPathInfo());
-                $this->_forward('index', 'login', 'vps', $params);
-            }
-        }
-    }
+        $acl = $this->_getAcl(
+        $role = $this->_getUserRole(
+        $resource = $this->_getResourceName(
 
-    protected function _getResourceName()
-    {
-        $resource = strtolower(str_replace('Controller', '', str_replace('Vps_Controller_Action_Component_', '', get_class($this))));
-        if (substr($resource, 0, 4) == 'vpc_') {
-            $resource = 'component';
-        }
-        return $resource;
-    }
+        if (!$acl->isAllowed($role, $resource, 'view'))
+            if ($this->getHelper('ViewRenderer')->isJson())
+                $this->_forward('jsonLogin', 'login', 'vps'
+            } else
+                $params = array('location' => $this->getRequest()->getPathInfo()
+                $this->_forward('index', 'login', 'vps', $params
+           
+       
+   
 
-    protected function _getUserRole()
-    {
-        return $this->_getAuthData() ? $this->_getAuthData()->role : 'guest';
-    }
+    protected function _getResourceName
+   
+        $resource = strtolower(str_replace('Controller', '', str_replace('Vps_Controller_Action_Component_', '', get_class($this)))
+        if (substr($resource, 0, 4) == 'vpc_')
+            $resource = 'component
+       
+        return $resourc
+   
 
-    protected function _getAuthData()
-    {
-        return Zend_Auth::getInstance()->getStorage()->read();
-    }
+    protected function _getUserRole
+   
+        return $this->_getAuthData() ? $this->_getAuthData()->role : 'guest
+   
 
-    protected function _getAcl()
-    {
-        if (!Zend_Registry::isRegistered('acl')) {
-            $acl = new Vps_Acl();
-            Zend_Registry::set('acl', $acl);
-        }
-        return Zend_Registry::get('acl');
-    }
+    protected function _getAuthData
+   
+        return Zend_Auth::getInstance()->getStorage()->read(
+   
 
-}
+    protected function _getAcl
+   
+        if (!Zend_Registry::isRegistered('acl'))
+            $acl = new Vps_Acl(
+            Zend_Registry::set('acl', $acl
+       
+        return Zend_Registry::get('acl'
+   
+
+

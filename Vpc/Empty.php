@@ -1,5 +1,4 @@
-<?php
-class Vpc_Empty extends Vpc_Abstract
-{
-    
-}
+<?ph
+class Vpc_Empty extends Vpc_Abstrac
+
+   
