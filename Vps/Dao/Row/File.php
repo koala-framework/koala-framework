@@ -1,9 +1,6 @@
 <?php
 class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
 {
-    const SHOW = 1;
-    const DOWNLOAD = 2;
-
     private function _getUploadDir()
     {
         $config = Zend_Registry::get('config');
@@ -32,16 +29,12 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         }
         return null;
     }
-    public function generateUrl($class, $id, $filename, $type = self::SHOW, $addRandom = false)
+    public function generateUrl($class, $componentId, $filename, $type, $addRandom = false)
     {
-        if ($type == self::SHOW) {
-            $checksum = md5(Vps_Media_Password::CACHE . $id);
-        } else {
-            $checksum = md5(Vps_Media_Password::ORIGINAL . $id);
-        }
+        $checksum = md5(Vps_Media_Password::PASSWORD . $componentId . $type);
         $extension = $this->extension;
         $random = $addRandom ? '?' . uniqid() : '';
-        return "/media/{$this->id}/$class/$id/$checksum/$filename.$extension$random";
+        return "/media/{$this->id}/$class/$componentId/$type/$checksum/$filename.$extension$random";
     }
 
     public function getOriginalUrl()

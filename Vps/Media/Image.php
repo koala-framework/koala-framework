@@ -9,7 +9,7 @@ class Vps_Media_Image
     public static function calculateScaleDimensions($source, $size, $scale = self::SCALE_BESTFIT)
     {
         $width  = !isset($size['width'])  && isset($size[0]) ? $size[0] : 0 ;
-        $height = !isset($size['height']) && isset($size[0]) ? $size[0] : 0 ;
+        $height = !isset($size['height']) && isset($size[1]) ? $size[1] : 0 ;
 
         if ($width == 0 && $height == 0) {
             return false;
@@ -19,7 +19,15 @@ class Vps_Media_Image
             return false;
         }
 
-        if ($scale == self::SCALE_CROP){ // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
+        if ($width == 0) {
+            $size = getimagesize($source);
+            $width = round($height * ($size[0]/$size[1]));
+            return array('width'=>$width, 'height'=>$height);
+        } else if ($height == 0) {
+            $size = getimagesize($source);
+            $height = round($width * ($size[1]/$size[0]));
+            return array('width'=>$width, 'height'=>$height);
+        } else if ($scale == self::SCALE_CROP){ // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
 
             $size = getimagesize($source);
             if ($size[0] > $width) { // Wenn hochgeladenes Bild breiter als anzuzeigendes Bild ist
@@ -70,6 +78,7 @@ class Vps_Media_Image
     public static function scale($source, $target, $size, $scale = self::SCALE_BESTFIT)
     {
         $size = self::calculateScaleDimensions($source, $size, $scale);
+
         if ($size === false) return false;
 
         if ($scale == self::SCALE_CROP){ // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
@@ -81,7 +90,6 @@ class Vps_Media_Image
             $im->destroy();
 
         } elseif ($scale == self::SCALE_BESTFIT || $scale == self::SCALE_DEFORM) {
-
             if (class_exists('Imagick')) {
                 $im = new Imagick();
                 $im->readImage($source);
