@@ -3,7 +3,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
     controllerUrl: '',
     //autoload: true,
     layout: 'fit',
-    filters: [],
 
     initComponent : function()
     {
@@ -298,73 +297,31 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             }
             gridConfig.tbar.add('Filter:');
         }
-
-        if (meta.filters.text) {
-            var textfield = new Ext.form.TextField();
-            gridConfig.tbar.add(textfield);
-            textfield.on('render', function(textfield) {
-                textfield.getEl().on('keypress', function() {
-                    this.applyBaseParams({query: textfield.getValue()});
-                    this.load();
-                }, this, {buffer: 500});
-            }, this);
-            delete meta.filters.text;
-            this.filters.push(textfield);
+        if (meta.filters.text && typeof(meta.filters.text) != 'object') {
+            meta.filters.text = { type: 'TextField' };
         }
-
+        this.filters = new Ext.util.MixedCollection();
+        var first = true;
         for(var filter in meta.filters) {
-            if (meta.filters[filter].type == 'ComboBox') {
-                var data = meta.filters[filter].data;
-                data.unshift([0, 'all']);
-                var filterStore = new Ext.data.SimpleStore({
-                    id: 0,
-                    fields: ['id', 'name'],
-                    data: data
-                });
-                delete meta.filters[filter].data;
-                var combo = new Ext.form.ComboBox(Ext.applyIf(meta.filters[filter], {
-                        store: filterStore,
-                        displayField: 'name',
-                        valueField: 'id',
-                        mode: 'local',
-                        triggerAction: 'all',
-                        editable: false,
-                        width: 200
-                    }));
-                combo.setValue(0);
-                gridConfig.tbar.add(' ');
-                gridConfig.tbar.add(combo);
-                combo.on('select', function(combo, record, index) {
-                    var params = {};
-                    params['query_'+filter] = record.id;
-                    this.applyBaseParams(params);
-                    this.load();
-                }, this);
-                this.filters.push(combo);
-            } else if (meta.filters[filter].type == 'DateRange') {
-                var fieldFrom = new Vps.Form.DateField({
-                    width: 80,
-                    value: meta.filters[filter].from
-                });
-                var fieldTo = new Vps.Form.DateField({
-                    width: 80,
-                    value: meta.filters[filter].to
-                });
-                gridConfig.tbar.add(fieldFrom);
-                gridConfig.tbar.add(' - ');
-                gridConfig.tbar.add(fieldTo);
-                gridConfig.tbar.add(new Ext.Button({
-                    text: '»',
-                    handler: function() {
-                        var params = {};
-                        params[filter+'_from'] = fieldFrom.getValue().format('Y-m-d');
-                        params[filter+'_to'] = fieldTo.getValue().format('Y-m-d');
-                        this.load();
-                    },
-                    scope: this
-                }));
-                //todo: this.filters.push(textfield);
+            var f = meta.filters[filter]
+            if (!Vps.Auto.GridFilter[f.type]) {
+                throw "Unknown filter.type: "+f.type;
             }
+            var type = Vps.Auto.GridFilter[f.type];
+            delete f.type;
+            f.id = filter;
+            f = new type(f);
+            if (!first) gridConfig.tbar.add('  ');
+            console.log(f.getToolbarItem());
+            f.getToolbarItem().each(function(i) {
+                gridConfig.tbar.add(i);
+            });
+            this.filters.add(f);
+            f.on('filter', function(f, params) {
+                this.applyBaseParams(params);
+                this.load();
+            }, this);
+            first = false;
         }
 
         //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
@@ -694,10 +651,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         Ext.apply(this.getStore().baseParams, baseParams);
     },
     resetFilters: function() {
-        if (this.getStore().baseParams.query) delete this.getStore().baseParams.query;
         this.filters.each(function(f) {
-            f.setValue(f.defaultValue || '');
-            
+            f.reset();
+            this.applyBaseParams(f.getParams());
         }, this);
     },
     isDirty: function() {
