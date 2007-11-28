@@ -1,8 +1,8 @@
-<?ph
-/*
- * @package Vp
- *
-class Vpc_UrlNotFoundException extends Vps_Exceptio
-
-
+<?php
+/**
+ * @package Vpc
+ */
+class Vpc_UrlNotFoundException extends Vps_Exception
+{
+}
 

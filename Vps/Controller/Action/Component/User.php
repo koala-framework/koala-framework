@@ -1,4 +1,5 @@
-<?ph
-class Vps_Controller_Action_Component_User extends Vps_Controller_Action_User_User
+<?php
+class Vps_Controller_Action_Component_User extends Vps_Controller_Action_User_Users
+{
 
-
+}

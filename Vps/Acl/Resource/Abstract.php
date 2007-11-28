@@ -1,21 +1,21 @@
-<?p
-abstract class Vps_Acl_Resource_Abstract extends Zend_Acl_Resour
+<?php
+abstract class Vps_Acl_Resource_Abstract extends Zend_Acl_Resource
+{
+    protected $_menuConfig;
 
-    protected $_menuConfi
+    public function __construct($resourceId, $menuConfig = null)
+    {
+        $this->_menuConfig = $menuConfig;
+        parent::__construct($resourceId);
+    }
 
-    public function __construct($resourceId, $menuConfig = nul
-   
-        $this->_menuConfig = $menuConfi
-        parent::__construct($resourceId
-   
+    public function setMenuConfig($menuConfig)
+    {
+        $this->_menuConfig = $menuConfig;
+    }
 
-    public function setMenuConfig($menuConfi
-   
-        $this->_menuConfig = $menuConfi
-   
-
-    public function getMenuConfig
-   
-        return $this->_menuConfi
-   
-
+    public function getMenuConfig()
+    {
+        return $this->_menuConfig;
+    }
+}

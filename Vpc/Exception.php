@@ -1,8 +1,8 @@
-<?p
-/
- * @package V
- 
-class Vpc_Exception extends Vps_Excepti
-
-
+<?php
+/**
+ * @package Vpc
+ */
+class Vpc_Exception extends Vps_Exception
+{
+}
 

@@ -1,12 +1,12 @@
-<?ph
-class Vpc_Basic_Download_Admin extends Vpc_Basic_Image_Admi
+<?php
+class Vpc_Basic_Download_Admin extends Vpc_Basic_Image_Admin
+{
+    public function setup()
+    {
+        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+        Vpc_Admin::getInstance($classes['downloadTag'])->setup();
 
-    public function setup(
-    
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses')
-        Vpc_Admin::getInstance($classes['downloadTag'])->setup()
-
-        $fields['infotext'] = 'text'
-        $this->createFormTable('vpc_basic_download', $fields)
-    
-
+        $fields['infotext'] = 'text';
+        $this->createFormTable('vpc_basic_download', $fields);
+    }
+}

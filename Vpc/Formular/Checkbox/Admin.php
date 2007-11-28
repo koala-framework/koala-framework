@@ -1,12 +1,13 @@
-<?ph
-class Vpc_Formular_Checkbox_Admin extends Vpc_Admi
+<?php
+class Vpc_Formular_Checkbox_Admin extends Vpc_Admin
+{
+    public function setup()
+    {
+        $this->copyTemplate('Template.html', 'Formular/Checkbox.html');
 
-    public function setup(
-    
-        $this->copyTemplate('Template.html', 'Formular/Checkbox.html')
-
-        $fields['value'] = 'varchar(255) NOT NULL'
-        $fields['text'] = 'varchar(255) NOT NULL'
-        $fields['checked'] = 'tinyint(4) NOT NULL'
-        $this->createFormTable('vpc_formular_checkbox', $fields)
-    
+        $fields['value'] = 'varchar(255) NOT NULL';
+        $fields['text'] = 'varchar(255) NOT NULL';
+        $fields['checked'] = 'tinyint(4) NOT NULL';
+        $this->createFormTable('vpc_formular_checkbox', $fields);
+    }
+}

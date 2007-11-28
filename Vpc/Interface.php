@@ -1,22 +1,23 @@
-<?p
-/
- * Interface für Komponenten (Prefix Vp
- 
- * Decorators implementieren dieses Interface und erweitern in Fol
- * Vpc_Decorator_Abstract, Komponenten erweitern Vpc_Abstra
- 
- * @package V
- * @copyright Copyright (c) 2007, Vivid Planet Software Gm
- 
-interface Vpc_Interfa
-
-    public function getId(
-    public function getPageId(
-    public function generateHierarchy($filename = ''
-    public function setPageCollection(Vps_PageCollection_Abstract $pageCollection
-    public function getTemplateVars(
-    public function findComponent($id
-    public function findComponentByClass($class
-    // 
-    public function getComponentInfo(
-    public function saveFrontendEditing(Zend_Controller_Request_Http $request
+<?php
+/**
+ * Interface für Komponenten (Prefix Vpc)
+ * 
+ * Decorators implementieren dieses Interface und erweitern in Folge
+ * Vpc_Decorator_Abstract, Komponenten erweitern Vpc_Abstract
+ * 
+ * @package Vpc
+ * @copyright Copyright (c) 2007, Vivid Planet Software GmbH
+ */
+interface Vpc_Interface
+{
+    public function getId();
+    public function getPageId();
+    public function generateHierarchy($filename = '');
+    public function setPageCollection(Vps_PageCollection_Abstract $pageCollection);
+    public function getTemplateVars();
+    public function findComponent($id);
+    public function findComponentByClass($class);
+    // Fe
+    public function getComponentInfo();
+    public function saveFrontendEditing(Zend_Controller_Request_Http $request);
+}
