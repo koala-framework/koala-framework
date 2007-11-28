@@ -1,1 +1,1 @@
-{component component=$component.paragraphs}{component component=$component.image}
+{component component=$component.paragraphs}{component component=$component.image}

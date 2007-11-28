@@ -1,1 +1,1 @@
-{component component=$component.text}{component component=$component.image}
+{component component=$component.text}{component component=$component.image}

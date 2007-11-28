@@ -1,6 +1,1 @@
-<?php
-class Vpc_Composite_Images_Model extends Vps_Db_Table
-{
-    protected $_name = 'vpc_composite_images';
-    protected $_rowClass = 'Vpc_Composite_Images_Row';
-}
+<?phpclass Vpc_Composite_Images_Model extends Vps_Db_Table{    protected $_name = 'vpc_composite_images';    protected $_rowClass = 'Vpc_Composite_Images_Row';}

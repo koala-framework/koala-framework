@@ -1,5 +1,1 @@
-<?php
-class Vpc_Empty extends Vpc_Abstract
-{
-    
-}
+<?phpclass Vpc_Empty extends Vpc_Abstract{    }

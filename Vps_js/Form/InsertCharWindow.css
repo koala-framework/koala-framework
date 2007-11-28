@@ -1,14 +1,1 @@
-div.vps-insertchar-char {
-    float: left;
-    background-color: white;
-    width: 18px;
-    height: 18px;
-    border: 1px solid #99bbe8;
-    margin: 1px;
-    font-size: 15px;
-    text-align: center;
-    cursor: pointer;
-}
-div.vps-insertchar-char:hover {
-    background-color: gray;
-}
+div.vps-insertchar-char {    float: left;    background-color: white;    width: 18px;    height: 18px;    border: 1px solid #99bbe8;    margin: 1px;    font-size: 15px;    text-align: center;    cursor: pointer;}div.vps-insertchar-char:hover {    background-color: gray;}
