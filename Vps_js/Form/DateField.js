@@ -1,23 +1,23 @@
-Vps.Form.DateField = function(config)
-{
-    config = config || {};
-    config = Ext.applyIf(config, {
-        format: 'Y-m-d'
-    });
-    Vps.Form.DateField.superclass.constructor.call(this, config);
-};
-Ext.extend(Vps.Form.DateField, Ext.form.DateField,
-{
-    initComponent : function(){
-        Vps.Form.DateField.superclass.initComponent.call(this);
-        this.addEvents('menuhidden');
-        if (!this.menuListeners.oldHide) {
-            this.menuListeners.oldHide = this.menuListeners.hide;
-            this.menuListeners.hide = function() {
-                this.menuListeners.oldHide.call(this);
-                this.fireEvent('menuhidden', this);
-            };
-        }
+Vps.Form.DateField = function(confi
+
+    config = config || {
+    config = Ext.applyIf(config,
+        format: 'Y-m-
     }
-});
-Ext.reg('datefield', Vps.Form.DateField);
+    Vps.Form.DateField.superclass.constructor.call(this, config
+
+Ext.extend(Vps.Form.DateField, Ext.form.DateFiel
+
+    initComponent : function(
+        Vps.Form.DateField.superclass.initComponent.call(this
+        this.addEvents('menuhidden'
+        if (!this.menuListeners.oldHide)
+            this.menuListeners.oldHide = this.menuListeners.hid
+            this.menuListeners.hide = function()
+                this.menuListeners.oldHide.call(this
+                this.fireEvent('menuhidden', this
+            
+       
+   
+}
+Ext.reg('datefield', Vps.Form.DateField

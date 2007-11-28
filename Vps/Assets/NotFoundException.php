@@ -1,4 +1,4 @@
-<?php
-class Vps_Assets_NotFoundException extends Vps_Exception
-{
-}
+<?p
+class Vps_Assets_NotFoundException extends Vps_Excepti
+
+

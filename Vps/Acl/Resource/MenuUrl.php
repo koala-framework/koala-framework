@@ -1,21 +1,21 @@
-<?php
-class Vps_Acl_Resource_MenuUrl extends Vps_Acl_Resource_Abstract
-{
-    protected $_menuUrl;
+<?p
+class Vps_Acl_Resource_MenuUrl extends Vps_Acl_Resource_Abstra
 
-    public function __construct($resourceId, $menuConfig = null, $menuUrl = null)
-    {
-        $this->_menuUrl = $menuUrl;
-        parent::__construct($resourceId, $menuConfig);
-    }
+    protected $_menuUr
 
-    public function setMenuUrl($menuUrl)
-    {
-        $this->_menuUrl = $menuUrl;
-    }
+    public function __construct($resourceId, $menuConfig = null, $menuUrl = nul
+   
+        $this->_menuUrl = $menuUr
+        parent::__construct($resourceId, $menuConfig
+   
 
-    public function getMenuUrl()
-    {
-        return $this->_menuUrl;
-    }
-}
+    public function setMenuUrl($menuUr
+   
+        $this->_menuUrl = $menuUr
+   
+
+    public function getMenuUrl
+   
+        return $this->_menuUr
+   
+

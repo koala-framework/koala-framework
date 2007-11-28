@@ -1,71 +1,71 @@
-<?php
-class Vps_Debug
-{
-    public static function sendErrorMail($exception, $address)
-    {
-        if ($exception instanceof Vps_CustomException) {
-            $type = $exception->getType();
-        } else {
-            $type = get_class($exception);
-        }
+<?ph
+class Vps_Debu
 
-        $body = $exception->__toString();
-        $body .= "\n\n------------------\n\n_GET:\n";
-        $body .= print_r($_GET, true);
-        $body .= "\n\n------------------\n\n_POST:\n";
-        $body .= print_r($_POST, true);
-        $body .= "\n\n------------------\n\n_SERVER:\n";
-        $body .= print_r($_SERVER, true);
-        $mail = new Zend_Mail('utf-8');
-        $mail->setBodyText($body)
-            ->setSubject($type . ': ' . $_SERVER['HTTP_HOST']);
-        if (is_string($address)) {
-            $mail->addTo($address);
-        } else {
-            foreach ($address as $i) {
-                $mail->addTo($i);
-            }
-        }
-        $mail->send();
-    }
+    public static function sendErrorMail($exception, $address
+    
+        if ($exception instanceof Vps_CustomException) 
+            $type = $exception->getType()
+        } else 
+            $type = get_class($exception)
+        
 
-    function handleError($code, $string, $file, $line)
-    {
-        // Fehler durch @ unterdrückt
-        if (error_reporting() == 0) { return; }
+        $body = $exception->__toString()
+        $body .= "\n\n------------------\n\n_GET:\n"
+        $body .= print_r($_GET, true)
+        $body .= "\n\n------------------\n\n_POST:\n"
+        $body .= print_r($_POST, true)
+        $body .= "\n\n------------------\n\n_SERVER:\n"
+        $body .= print_r($_SERVER, true)
+        $mail = new Zend_Mail('utf-8')
+        $mail->setBodyText($body
+            ->setSubject($type . ': ' . $_SERVER['HTTP_HOST'])
+        if (is_string($address)) 
+            $mail->addTo($address)
+        } else 
+            foreach ($address as $i) 
+                $mail->addTo($i)
+            
+        
+        $mail->send()
+    
 
-        // Fehlertyp rausfinden
-        switch ($code) {
-            case E_ERROR:
-            case E_USER_ERROR:
-                $type = 'Error';
-                break;
-            case E_WARNING:
-            case E_USER_WARNING:
-                $type = 'Warning';
-                break;
-            case E_NOTICE:
-            case E_USER_NOTICE:
-                $type = 'Notice';
-                break;
-            default:
-                $type = 'Unknown Error';
-                break;
-        }
+    function handleError($code, $string, $file, $line
+    
+        // Fehler durch @ unterdrück
+        if (error_reporting() == 0) { return; 
 
-        // CustomException erstellen
-        $exception = new Vps_CustomException($string, $code);
-        $exception->setLine($line);
-        $exception->setFile($file);
-        $exception->setType($type);
+        // Fehlertyp rausfinde
+        switch ($code) 
+            case E_ERROR
+            case E_USER_ERROR
+                $type = 'Error'
+                break
+            case E_WARNING
+            case E_USER_WARNING
+                $type = 'Warning'
+                break
+            case E_NOTICE
+            case E_USER_NOTICE
+                $type = 'Notice'
+                break
+            default
+                $type = 'Unknown Error'
+                break
+        
 
-        // CustumException im Produktionsbetrieb nicht werfen, sondern Mail senden
-        $address = Zend_Registry::get('config')->debug->errormail;
-        if ($address != '' && ($code == E_NOTICE || $code == E_USER_NOTICE)) {
-            Vps_Debug::sendErrorMail($exception, $address);
-            return;
-        } else {
-            throw $exception;
-        }
-    }
-}
+        // CustomException erstelle
+        $exception = new Vps_CustomException($string, $code)
+        $exception->setLine($line)
+        $exception->setFile($file)
+        $exception->setType($type)
+
+        // CustumException im Produktionsbetrieb nicht werfen, sondern Mail sende
+        $address = Zend_Registry::get('config')->debug->errormail
+        if ($address != '' && ($code == E_NOTICE || $code == E_USER_NOTICE)) 
+            Vps_Debug::sendErrorMail($exception, $address)
+            return
+        } else 
+            throw $exception
+        
+    
+

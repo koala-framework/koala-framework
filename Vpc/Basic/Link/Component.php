@@ -1,4 +1,3 @@
-<?php
-abstract class Vpc_Basic_Link_Component extends Vpc_Abstract
-{
-}
+<?p
+abstract class Vpc_Basic_Link_Component extends Vpc_Abstra
+

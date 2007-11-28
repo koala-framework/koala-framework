@@ -1,33 +1,33 @@
-<?php
-class Vps_Acl_Resource_MenuCommand extends Vps_Acl_Resource_Abstract
-{
-    protected $_menuCommandClass;
-    protected $_menuCommandConfig;
+<?p
+class Vps_Acl_Resource_MenuCommand extends Vps_Acl_Resource_Abstra
 
-    public function __construct($resourceId, $menuConfig = null, $class = null, $menuCommandConfig = null)
-    {
-        $this->_menuCommandClass = $class;
-        $this->_menuCommandConfig = $menuCommandConfig;
-        parent::__construct($resourceId, $menuConfig);
-    }
+    protected $_menuCommandClas
+    protected $_menuCommandConfi
 
-    public function setMenuCommandClass($menuClass)
-    {
-        $this->_menuCommandClass = $menuClass;
-    }
+    public function __construct($resourceId, $menuConfig = null, $class = null, $menuCommandConfig = nul
+   
+        $this->_menuCommandClass = $clas
+        $this->_menuCommandConfig = $menuCommandConfi
+        parent::__construct($resourceId, $menuConfig
+   
 
-    public function getMenuCommandClass()
-    {
-        return $this->_menuCommandClass;
-    }
+    public function setMenuCommandClass($menuClas
+   
+        $this->_menuCommandClass = $menuClas
+   
 
-    public function setMenuCommandConfig($menuCommandConfig)
-    {
-        $this->_menuCommandConfig = $menuCommandConfig;
-    }
+    public function getMenuCommandClass
+   
+        return $this->_menuCommandClas
+   
 
-    public function getMenuCommandConfig()
-    {
-        return $this->_menuCommandConfig;
-    }
-}
+    public function setMenuCommandConfig($menuCommandConfi
+   
+        $this->_menuCommandConfig = $menuCommandConfi
+   
+
+    public function getMenuCommandConfig
+   
+        return $this->_menuCommandConfi
+   
+

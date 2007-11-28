@@ -1,90 +1,90 @@
-<?php
-class Vps_Auto_Vpc_Form extends Vps_Auto_Form
-{
-    public function __construct($class, $id = null, $componentKey = null)
-    {
-        if ($componentKey) {
-            $id = array('page_id' => $id,
-                        'component_key' => $componentKey);
-        }
-        parent::__construct($class, $id);
-    }
+<?p
+class Vps_Auto_Vpc_Form extends Vps_Auto_Fo
 
-    public function setId($id)
-    {
-        $class = $this->getName();
+    public function __construct($class, $id = null, $componentKey = nul
+   
+        if ($componentKey)
+            $id = array('page_id' => $i
+                        'component_key' => $componentKey
+       
+        parent::__construct($class, $id
+   
 
-        $tablename = Vpc_Abstract::getSetting($class, 'tablename');
-        if ($tablename) {
-            $this->setTable(new $tablename(array('componentClass'=>$class)));
-        } else {
-            throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
-        }
+    public function setId($i
+   
+        $class = $this->getName(
 
-        $table = $this->getTable();
+        $tablename = Vpc_Abstract::getSetting($class, 'tablename'
+        if ($tablename)
+            $this->setTable(new $tablename(array('componentClass'=>$class))
+        } else
+            throw new Vpc_Exception('No tablename in Setting defined: ' . $class
+       
 
-        if (is_string($id)) {
-            $id = Vpc_Abstract::parseId($id);
-        }
-        if (isset($id['dbId'])) $id['page_id'] = $id['dbId'];
-        if (isset($id['componentKey'])) $id['component_key'] = $id['componentKey'];
-        if (isset($id['page_id']) && $id['page_id']!==null) {
-            $info = $table->info();
-            if (sizeof($info['primary']) == 1) {
-                $this->_row = $table->find($id['page_id'])->current();
-                $id = array('page_id' => $id['page_id']);
-            } else {
-                $this->_row = $table->find($id['page_id'], $id['component_key'])->current();
-                $id = array(
-                    'page_id' => $id['page_id'],
-                    'component_key' => $id['component_key']
-                );
-            }
-            if (!$this->_row) {
-                $this->_row = $table->createRow($id);
-            }
-        } else {
-            $id = 0;
-            $this->_row = $table->createRow();
-        }
-        parent::setId($id);
-    }
+        $table = $this->getTable(
 
-    protected function _getComponentIdFromParentRow($parentRow)
-    {
-        throw new Vps_Exception("_getComponentIdFromParentRow has to be reimplemented, or the id has to be set");
-    }
+        if (is_string($id))
+            $id = Vpc_Abstract::parseId($id
+       
+        if (isset($id['dbId'])) $id['page_id'] = $id['dbId'
+        if (isset($id['componentKey'])) $id['component_key'] = $id['componentKey'
+        if (isset($id['page_id']) && $id['page_id']!==null)
+            $info = $table->info(
+            if (sizeof($info['primary']) == 1)
+                $this->_row = $table->find($id['page_id'])->current(
+                $id = array('page_id' => $id['page_id']
+            } else
+                $this->_row = $table->find($id['page_id'], $id['component_key'])->current(
+                $id = arra
+                    'page_id' => $id['page_id'
+                    'component_key' => $id['component_key
+                
+           
+            if (!$this->_row)
+                $this->_row = $table->createRow($id
+           
+        } else
+            $id = 
+            $this->_row = $table->createRow(
+       
+        parent::setId($id
+   
 
-    public function delete($parentRow)
-    {
-        if ($this->getId() == null) {
-            $this->setId($this->_getComponentIdFromParentRow($parentRow));
-        }
-        return parent::delete($parentRow);
-    }
-    public function load($parentRow)
-    {
-        if ($this->getId() == null) {
-            $this->setId($this->_getComponentIdFromParentRow($parentRow));
-        }
-        return parent::load($parentRow);
-    }
-    public function prepareSave($parentRow, $postData)
-    {
-        if ($this->getId() == null && $parentRow->id) {
-            $this->setId($this->_getComponentIdFromParentRow($parentRow));
-        }
-        return parent::prepareSave($parentRow, $postData);
-    }
+    protected function _getComponentIdFromParentRow($parentRo
+   
+        throw new Vps_Exception("_getComponentIdFromParentRow has to be reimplemented, or the id has to be set"
+   
 
-    public function save($parentRow, $postData)
-    {
-        $row = $this->getRow();
-        if (!$row->page_id) {
-            $id = $this->_getComponentIdFromParentRow($parentRow);
-            $row->page_id = $id['page_id'];
-            $row->component_key = $id['component_key'];
-        }
-        return parent::save($parentRow, $postData);
-    }
-}
+    public function delete($parentRo
+   
+        if ($this->getId() == null)
+            $this->setId($this->_getComponentIdFromParentRow($parentRow)
+       
+        return parent::delete($parentRow
+   
+    public function load($parentRo
+   
+        if ($this->getId() == null)
+            $this->setId($this->_getComponentIdFromParentRow($parentRow)
+       
+        return parent::load($parentRow
+   
+    public function prepareSave($parentRow, $postDat
+   
+        if ($this->getId() == null && $parentRow->id)
+            $this->setId($this->_getComponentIdFromParentRow($parentRow)
+       
+        return parent::prepareSave($parentRow, $postData
+   
+
+    public function save($parentRow, $postDat
+   
+        $row = $this->getRow(
+        if (!$row->page_id)
+            $id = $this->_getComponentIdFromParentRow($parentRow
+            $row->page_id = $id['page_id'
+            $row->component_key = $id['component_key'
+       
+        return parent::save($parentRow, $postData
+   
+

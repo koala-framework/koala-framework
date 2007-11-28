@@ -1,4 +1,4 @@
-<?php
-class ErrorController extends Vps_Controller_Action_Error
-{
-}
+<?p
+class ErrorController extends Vps_Controller_Action_Err
+
+

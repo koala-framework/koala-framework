@@ -1,14 +1,13 @@
-<?php
-class Vpc_Basic_Download_Controller extends Vps_Controller_Action_Auto_Vpc_Form
-{
-    public function _initFields()
-    {
-        $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
+<?ph
+class Vpc_Basic_Download_Controller extends Vps_Controller_Action_Auto_Vpc_For
 
-        $form = new Vpc_Basic_DownloadTag_Form($classes['downloadTag'], $this->pageId, $this->componentKey . '-1');
-        $this->_form->add($form);
-        $this->_form->add(new Vps_Auto_Field_TextArea('infotext', 'Infotext'))
-            ->setWidth(300)
-            ->setGrow(true);
-    }
-}
+    public function _initFields(
+    
+        $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses')
+
+        $form = new Vpc_Basic_DownloadTag_Form($classes['downloadTag'], $this->pageId, $this->componentKey . '-1')
+        $this->_form->add($form)
+        $this->_form->add(new Vps_Auto_Field_TextArea('infotext', 'Infotext')
+            ->setWidth(300
+            ->setGrow(true)
+    

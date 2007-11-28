@@ -1,49 +1,49 @@
-<?php
-abstract class Vps_Auto_Field_SimpleAbstract extends Vps_Auto_Field_Abstract
-{
-    public function load($row)
-    {
-        $ret = array();
-        $ret[$this->getFieldName()] = $this->getData()->load($row);
-        return array_merge($ret, parent::load($row));
-    }
+<?p
+abstract class Vps_Auto_Field_SimpleAbstract extends Vps_Auto_Field_Abstra
 
-    protected function _addValidators()
-    {
-        parent::_addValidators();
-    }
+    public function load($ro
+   
+        $ret = array(
+        $ret[$this->getFieldName()] = $this->getData()->load($row
+        return array_merge($ret, parent::load($row)
+   
 
-    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
-    {
-        parent::prepareSave($row, $postData);
+    protected function _addValidators
+   
+        parent::_addValidators(
+   
 
-        if ($this->getSave() !== false) {
-            $name = $this->getFieldLabel();
-            if (!$name) $name = $this->getName();
+    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postDat
+   
+        parent::prepareSave($row, $postData
 
-            $data = $this->_getValueFromPostData($postData);
+        if ($this->getSave() !== false)
+            $name = $this->getFieldLabel(
+            if (!$name) $name = $this->getName(
 
-            if ($this->getAllowBlank() === false) {
-                $v = new Zend_Validate_NotEmpty();
-                if (!$v->isValid($data)) {
-                    throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages()));
-                }
-            }
-            if (!is_null($data)) {
-                foreach($this->getValidators() as $v) {
-                    if (!$v->isValid($data)) {
-                        throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages()));
-                    }
-                }
-            }
-            $this->getData()->save($row, $data);
-        }
-    }
+            $data = $this->_getValueFromPostData($postData
 
-    protected function _getValueFromPostData($postData)
-    {
-        $fieldName = $this->getFieldName();
-        if (!isset($postData[$fieldName])) $postData[$fieldName] = null;
-        return $postData[$fieldName];
-    }
-}
+            if ($this->getAllowBlank() === false)
+                $v = new Zend_Validate_NotEmpty(
+                if (!$v->isValid($data))
+                    throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages())
+               
+           
+            if (!is_null($data))
+                foreach($this->getValidators() as $v)
+                    if (!$v->isValid($data))
+                        throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages())
+                   
+               
+           
+            $this->getData()->save($row, $data
+       
+   
+
+    protected function _getValueFromPostData($postDat
+   
+        $fieldName = $this->getFieldName(
+        if (!isset($postData[$fieldName])) $postData[$fieldName] = nul
+        return $postData[$fieldName
+   
+

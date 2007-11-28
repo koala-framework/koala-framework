@@ -1,21 +1,20 @@
-<?php
-class Vps_Dao_Vpc extends Vps_Db_Table
-{
-    protected $_name = 'vpc';
-    protected $_primary = 'id';
-    
-    private $_paramValues = null;
+<?ph
+class Vps_Dao_Vpc extends Vps_Db_Tabl
 
-    public function getParamValue($id, $param)
-    {
-        if (is_null($this->_paramValues)) {
-            $this->_paramValues = array();
-            $sql = "SELECT id, param, value FROM vpc_config";
-            $values = $this->getAdapter()->fetchAll($sql);
-            foreach ($values as $value) {
-                $this->_paramValues[$value['id']][$value['param']] = $value['value'];
-            }
-        }
-        return isset($this->_paramValues[$id][$param]) ? $this->_paramValues[$id][$param] : null;
-    }
-}
+    protected $_name = 'vpc'
+    protected $_primary = 'id'
+   
+    private $_paramValues = null
+
+    public function getParamValue($id, $param
+    
+        if (is_null($this->_paramValues)) 
+            $this->_paramValues = array()
+            $sql = "SELECT id, param, value FROM vpc_config"
+            $values = $this->getAdapter()->fetchAll($sql)
+            foreach ($values as $value) 
+                $this->_paramValues[$value['id']][$value['param']] = $value['value']
+            
+        
+        return isset($this->_paramValues[$id][$param]) ? $this->_paramValues[$id][$param] : null
+    

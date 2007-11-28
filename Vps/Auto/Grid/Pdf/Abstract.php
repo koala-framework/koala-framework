@@ -1,31 +1,31 @@
-<?php
+<?p
 
-require_once 'tcpdf.php';
+require_once 'tcpdf.php
 
-abstract class Vps_Auto_Grid_Pdf_Abstract extends TCPDF
-{
+abstract class Vps_Auto_Grid_Pdf_Abstract extends TCP
 
-    protected $_fields = array();
 
-    public function setFields($fields)
-    {
-        $this->_fields = $fields;
-    }
+    protected $_fields = array(
 
-    public function footer()
-    {
-        $this->SetY($this->GetPageHeight() - 15);
-        $this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'R');
-    }
+    public function setFields($field
+   
+        $this->_fields = $field
+   
 
-    public function Header()
-    {
-        $date = new Zend_Date();
-        $headStr = $date->get(Zend_Date::WEEKDAY).', '.date('d.m.Y, H:i');
+    public function footer
+   
+        $this->SetY($this->GetPageHeight() - 15
+        $this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'R'
+   
 
-        $yBefore = $this->GetY();
-        $this->SetY(10);
-        $this->Cell(0, 0, $headStr, 0, 1, 'R');
-        $this->SetY($yBefore);
-    }
-}
+    public function Header
+   
+        $date = new Zend_Date(
+        $headStr = $date->get(Zend_Date::WEEKDAY).', '.date('d.m.Y, H:i'
+
+        $yBefore = $this->GetY(
+        $this->SetY(10
+        $this->Cell(0, 0, $headStr, 0, 1, 'R'
+        $this->SetY($yBefore
+   
+

@@ -1,54 +1,54 @@
-Ext.BLANK_IMAGE_URL = '/assets/ext/resources/images/default/s.gif';
+Ext.BLANK_IMAGE_URL = '/assets/ext/resources/images/default/s.gif
 
-Ext.namespace(
-'Vps', 'Vpc',
-'Vps.Component',
-'Vps.User.Login',
-'Vps.Auto',
-'Vps.Form'
-);
+Ext.namespac
+'Vps', 'Vpc
+'Vps.Component
+'Vps.User.Login
+'Vps.Auto
+'Vps.For
 
-Ext.applyIf(Array.prototype, {
 
-    //to use array.each directly
-    each : function(fn, scope){
-        Ext.each(this, fn, scope);
-    },
+Ext.applyIf(Array.prototype,
 
-    //add is alias for push
-    add : function() {
-        this.push.apply(this, arguments);
-    }
-});
+    //to use array.each direct
+    each : function(fn, scope
+        Ext.each(this, fn, scope
+    
 
-Ext.onReady(function()
-{
-//     Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+    //add is alias for pu
+    add : function()
+        this.push.apply(this, arguments
+   
+}
 
-//     Ext.form.Field.prototype.msgTarget = 'side';// turn on validation errors beside the field globally
+Ext.onReady(function
 
-    if (Ext.QuickTips) {
-        //init quicktips when loaded
-        Ext.QuickTips.init();
-    }
-});
+//     Ext.state.Manager.setProvider(new Ext.state.CookieProvider()
 
-Vps.application = { version: '{$application.version}' };
+//     Ext.form.Field.prototype.msgTarget = 'side';// turn on validation errors beside the field global
 
-Vps.handleError = function(e)
-{
-    if (e.toString) e = e.toString();
-    if (e.message) e = e.message;
-    if(Ext.get('loading')) {
-        Ext.get('loading').fadeOut({remove: true});
-    }
-    if (Vps.debug) {
-        throw e; //re-throw
-    } else {
-        Ext.Msg.alert('Error', "Ein Fehler ist aufgetreten.");
-        Ext.Ajax.request({
-            url: '/error/jsonMail',
-            params: {msg: e}
-        });
-    }
-};
+    if (Ext.QuickTips)
+        //init quicktips when load
+        Ext.QuickTips.init(
+   
+}
+
+Vps.application = { version: '{$application.version}' 
+
+Vps.handleError = function(
+
+    if (e.toString) e = e.toString(
+    if (e.message) e = e.messag
+    if(Ext.get('loading'))
+        Ext.get('loading').fadeOut({remove: true}
+   
+    if (Vps.debug)
+        throw e; //re-thr
+    } else
+        Ext.Msg.alert('Error', "Ein Fehler ist aufgetreten."
+        Ext.Ajax.request
+            url: '/error/jsonMail
+            params: {msg: 
+        }
+   
+

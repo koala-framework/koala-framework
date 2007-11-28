@@ -1,11 +1,11 @@
-<?php
-class Vps_Collection_Iterator extends ArrayIterator
-{
-    private $_collection;
+<?p
+class Vps_Collection_Iterator extends ArrayIterat
 
-    public function __construct($collection, $flags = 0)
-    {
-        $this->_collection = $collection;
-        parent::__construct($collection->getArray(), $flags);
-    }
-}
+    private $_collectio
+
+    public function __construct($collection, $flags = 
+   
+        $this->_collection = $collectio
+        parent::__construct($collection->getArray(), $flags
+   
+

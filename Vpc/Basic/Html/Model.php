@@ -1,5 +1,4 @@
-<?php
-class Vpc_Basic_Html_Model extends Vpc_Table
-{
-    protected $_name = 'vpc_basic_html';
-}
+<?ph
+class Vpc_Basic_Html_Model extends Vpc_Tabl
+
+    protected $_name = 'vpc_basic_html'

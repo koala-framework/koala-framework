@@ -1,57 +1,56 @@
-<?php
-class Vps_Benchmark {
+<?ph
+class Vps_Benchmark 
+   
+    static $instance = null
+    private $_processes = array()
+   
+    public static function getInstance() 
+        if(self::$instance == null) 
+            self::$instance = new Vps_Benchmark()
+        
+        return self::$instance
     
-    static $instance = null;
-    private $_processes = array();
+
+    /*
+     * Startet eine Sequen
+     * Wenn die Sequenz bereits gestartet wurde, passiert nichts
+     * <code
+     * $benchmark = Bleistift_Benchmark::getInstance()
+     * $benchmark->startSequence("Test-Klasse wird geladen")
+     * $testClass = new stdClass()
+     * </code
+     
+     * @param string $identifie
+     *
+    public function startSequence($identifier
     
-    public static function getInstance() {
-        if(self::$instance == null) {
-            self::$instance = new Vps_Benchmark();
-        }
-        return self::$instance;
-    }
+        if(!isset($this->_processes[$identifier])) 
+            $this->_processes[$identifier] = array()
+            $this->_processes[$identifier]['start'] = microtime(true)
+        
+    
 
-    /**
-     * Startet eine Sequenz
-     * Wenn die Sequenz bereits gestartet wurde, passiert nichts.
-     * <code>
-     * $benchmark = Bleistift_Benchmark::getInstance();
-     * $benchmark->startSequence("Test-Klasse wird geladen");
-     * $testClass = new stdClass();
-     * </code>
+    /*
+     * Beendet eine Sequen
+     * <code
+     * $benchmark->stopSequence("Test-Klass wird geladen")
+     * </code
+     
+     * @param string $identifie
      *
-     * @param string $identifier
-     */
-    public function startSequence($identifier)
-    {
-        if(!isset($this->_processes[$identifier])) {
-            $this->_processes[$identifier] = array();
-            $this->_processes[$identifier]['start'] = microtime(true);
-        }
-    }
+    public function stopSequence($identifier
+    
+        if(isset($this->_processes[$identifier])) 
+            $this->_processes[$identifier]['stop'] = microtime(true)
+            $this->_processes[$identifier]['duration'] = $this->_processes[$identifier]['stop'] - $this->_processes[$identifier]['start']
+        
+    
 
-    /**
-     * Beendet eine Sequenz
-     * <code>
-     * $benchmark->stopSequence("Test-Klass wird geladen");
-     * </code>
+    /*
+     * Gibt ein Array mit den Resultaten zurüc
+     
+     * @return arra
      *
-     * @param string $identifier
-     */
-    public function stopSequence($identifier)
-    {
-        if(isset($this->_processes[$identifier])) {
-            $this->_processes[$identifier]['stop'] = microtime(true);
-            $this->_processes[$identifier]['duration'] = $this->_processes[$identifier]['stop'] - $this->_processes[$identifier]['start'];
-        }
-    }
-
-    /**
-     * Gibt ein Array mit den Resultaten zurück
-     *
-     * @return array
-     */
-    public function getResults() {
-        return $this->_processes;
-    }
-} 
+    public function getResults() 
+        return $this->_processes
+    
