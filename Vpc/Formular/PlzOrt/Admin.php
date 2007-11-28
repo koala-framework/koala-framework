@@ -1,8 +1,1 @@
-<?php
-class Vpc_Formular_PlzOrt_Admin extends Vpc_Admin
-{
-    public function setup()
-    {
-        $this->copyTemplate('Template.html', 'Formular/PlzOrt.html');
-    }
-}
+<?phpclass Vpc_Formular_PlzOrt_Admin extends Vpc_Admin{    public function setup()    {        $this->copyTemplate('Template.html', 'Formular/PlzOrt.html');    }}

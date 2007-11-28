@@ -1,10 +1,1 @@
-<?php
-class Vpc_Composite_Images_Row extends Vps_Db_Table_Row_Abstract
-{
-    protected function _delete()
-    {
-        $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'childComponentClasses');
-        $admin = Vpc_Admin::getInstance($classes['image']);
-        $admin->delete($this->page_id, $this->component_key . '-1');
-    }
-}
+<?phpclass Vpc_Composite_Images_Row extends Vps_Db_Table_Row_Abstract{    protected function _delete()    {        $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'childComponentClasses');        $admin = Vpc_Admin::getInstance($classes['image']);        $admin->delete($this->page_id, $this->component_key . '-1');    }}

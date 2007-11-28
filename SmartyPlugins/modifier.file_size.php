@@ -1,26 +1,1 @@
-<?php
-
-function smarty_modifier_file_size($FileSize)
-{
-	if(!is_int($FileSize) && file_exists($FileSize)) {
-		$FileSize = filesize($FileSize);
-	}
-
-	$ShortCuts = array("Bytes", "KB", "MB", "GB", "TB", "PB");
-
-	$i = 0;
-	while($FileSize > 1024 && isset($ShortCuts[$i+1])) {
-		$FileSize = $FileSize / 1024;
-		$i++;
-	}
-
-	if($FileSize < 10) 
-		$ret = number_format($FileSize, 1, ",", ".");
-	else
-		$ret = number_format($FileSize, 0, ",", ".");
-
-	$ret .= " ".$ShortCuts[$i];
-	return $ret;
-}
-
-?>
+<?phpfunction smarty_modifier_file_size($FileSize){    if (!is_int($FileSize) && file_exists($FileSize)) {        $FileSize = filesize($FileSize);    }    $ShortCuts = array("Bytes", "KB", "MB", "GB", "TB", "PB");    $i = 0;    while ($FileSize > 1024 && isset($ShortCuts[$i+1])) {        $FileSize = $FileSize / 1024;        $i++;    }    if ($FileSize < 10) {        $ret = number_format($FileSize, 1, ",", ".");    } else {        $ret = number_format($FileSize, 0, ",", ".");    }    $ret .= " ".$ShortCuts[$i];    return $ret;}?>

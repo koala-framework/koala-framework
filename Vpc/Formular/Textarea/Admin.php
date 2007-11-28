@@ -1,10 +1,1 @@
-<?php
-class Vpc_Formular_Textarea_Admin extends Vpc_Admin
-{
-    public function setup()
-    {
-        $fields['width'] = 'smallint(6) NOT NULL';
-        $fields['height'] = 'smallint(6) NOT NULL';
-        $this->createFormTable('vpc_formular_textarea', $fields);
-    }
-}
+<?phpclass Vpc_Formular_Textarea_Admin extends Vpc_Admin{    public function setup()    {        $fields['width'] = 'smallint(6) NOT NULL';        $fields['height'] = 'smallint(6) NOT NULL';        $this->createFormTable('vpc_formular_textarea', $fields);    }}
