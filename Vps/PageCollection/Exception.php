@@ -1,1 +1,1 @@
-<?phpclass Vps_PageCollection_Exception extends Vps_Exception{}
+<?phpclass Vps_PageCollection_Exception extends Vps_Exception{}

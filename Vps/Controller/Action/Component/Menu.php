@@ -1,1 +1,1 @@
-<?phpclass Vps_Controller_Action_Component_Menu extends Vps_Controller_Action_User_Menu{}
+<?phpclass Vps_Controller_Action_Component_Menu extends Vps_Controller_Action_User_Menu{}

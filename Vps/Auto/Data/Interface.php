@@ -1,1 +1,1 @@
-<?phpinterface Vps_Auto_Data_Interface{    public function load($row);    public function setFieldname($name);    public function save(Zend_Db_Table_Row_Abstract $row, $data);    public function delete();}
+<?phpinterface Vps_Auto_Data_Interface{    public function load($row);    public function setFieldname($name);    public function save(Zend_Db_Table_Row_Abstract $row, $data);    public function delete();}

@@ -1,1 +1,1 @@
-<?phpclass Vps_Exception extends Exception{}
+<?phpclass Vps_Exception extends Exception{}
