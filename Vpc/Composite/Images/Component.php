@@ -9,7 +9,7 @@ class Vpc_Composite_Images_Component extends Vpc_Abstract
             'componentName' => 'Standard.Images',
             'tablename'     => 'Vpc_Composite_Images_Model',
             'childComponentClasses' => array(
-                'image'         => 'Vpc_Basic_Image_Component'
+                'image'         => 'Vpc_Basic_Image_Enlarge_Component'
             )
         ));
     }

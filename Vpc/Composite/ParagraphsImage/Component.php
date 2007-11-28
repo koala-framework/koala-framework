@@ -10,7 +10,7 @@ class Vpc_Composite_ParagraphsImage_Component extends Vpc_Abstract
             'componentName'     => 'Standard.ParagraphsImage',
             'childComponentClasses' => array(
                 'paragraphs'   => 'Vpc_Paragraphs_Component',
-                'image'        => 'Vpc_Basic_Image_Component'
+                'image'        => 'Vpc_Basic_Image_Enlarge_Component'
             )
         ));
     }
