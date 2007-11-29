@@ -1,1 +1,43 @@
-<?phpclass Vps_Auto_Data_Table_Parent extends Vps_Auto_Data_Abstract{    protected $_dataIndex;    protected $_parentTable;    public function __construct($parentTable, $dataIndex = null)    {        $this->_parentTable = $parentTable;        $this->_dataIndex = $dataIndex;    }    public function load($row)    {        $name = $this->_dataIndex;        if (is_string($this->_parentTable)) {            $tables = array($this->_parentTable);        } else {            $tables = $this->_parentTable;        }        foreach ($tables as $t) {            $row = $row->findParentRow($t);            if (!$row) return '';        }        if (!$this->_dataIndex) {            return $row->__toString();        }        if (!isset($row->$name) && !is_null($row->$name)) { //scheiß php            throw new Vps_Exception("Index '$name' doesn't exist in row.");        }        return $row->$name;    }    public function save(Zend_Db_Table_Row_Abstract $row, $data)    {        throw new Vps_Exception('Save is not possible for Vps_Auto_Data_Table_Parent.');    }    public function delete()    {        throw new Vps_Exception('Delete is not possible for Vps_Auto_Data_Table_Parent.');    }}
+<?php
+class Vps_Auto_Data_Table_Parent extends Vps_Auto_Data_Abstract
+{
+    protected $_dataIndex;
+    protected $_parentTable;
+
+    public function __construct($parentTable, $dataIndex = null)
+    {
+        $this->_parentTable = $parentTable;
+        $this->_dataIndex = $dataIndex;
+    }
+
+    public function load($row)
+    {
+        $name = $this->_dataIndex;
+        if (is_string($this->_parentTable)) {
+            $tables = array($this->_parentTable);
+        } else {
+            $tables = $this->_parentTable;
+        }
+        foreach ($tables as $t) {
+            $row = $row->findParentRow($t);
+            if (!$row) return '';
+        }
+        if (!$this->_dataIndex) {
+            return $row->__toString();
+        }
+        if (!isset($row->$name) && !is_null($row->$name)) { //scheiß php
+            throw new Vps_Exception("Index '$name' doesn't exist in row.");
+        }
+        return $row->$name;
+    }
+
+    public function save(Zend_Db_Table_Row_Abstract $row, $data)
+    {
+        throw new Vps_Exception('Save is not possible for Vps_Auto_Data_Table_Parent.');
+    }
+
+    public function delete()
+    {
+        throw new Vps_Exception('Delete is not possible for Vps_Auto_Data_Table_Parent.');
+    }
+}

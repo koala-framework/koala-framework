@@ -1,1 +1,4 @@
-<?phpclass Vps_JavaScriptException extends Vps_Exception{}
+<?php
+class Vps_JavaScriptException extends Vps_Exception
+{
+}

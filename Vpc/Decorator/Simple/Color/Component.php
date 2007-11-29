@@ -1,1 +1,20 @@
-<?php/** * Beispieldecorator * * @package Vpc * @subpackage Decorator */class Vpc_Decorator_Simple_Color_Component extends Vpc_Decorator_Abstract{    protected $_decorated;    public function getTemplateVars()    {        $ret = parent::getTemplateVars();        $ret['decorated'] = $this->_component->getTemplateVars();        $ret['color'] = 'blue';        $ret['template'] = 'Decorator.html';        return $ret;    }}
+<?php
+/**
+ * Beispieldecorator
+ *
+ * @package Vpc
+ * @subpackage Decorator
+ */
+class Vpc_Decorator_Simple_Color_Component extends Vpc_Decorator_Abstract
+{
+    protected $_decorated;
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['decorated'] = $this->_component->getTemplateVars();
+        $ret['color'] = 'blue';
+        $ret['template'] = 'Decorator.html';
+        return $ret;
+    }
+}
