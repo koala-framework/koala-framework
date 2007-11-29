@@ -1,1 +1,50 @@
-<?php/** * @package Vpc * @subpackage Basic */class Vpc_Basic_LinkTag_Component extends Vpc_Abstract{    public $link;    public static function getSettings()    {        return array_merge(parent::getSettings(), array(            'tablename'     => 'Vpc_Basic_LinkTag_Model',            'componentName' => 'Standard.LinkTag',            'childComponentClasses'   => array(                'Internal Link' => 'Vpc_Basic_Link_Intern_Component',                'External Link' => 'Vpc_Basic_Link_Extern_Component',                'Mail Link' => 'Vpc_Basic_Link_Mail_Component'            ),            'default'       => array(                'link_class'    => 'Vpc_Basic_Link_Intern_Component'            )        ));     }    public function _init()    {        $class = $this->_row->link_class;        if (class_exists($class) &&             is_subclass_of($class, 'Vpc_Basic_Link_Component')        ) {            $this->link = $this->createComponent($class, 1);        } else {            throw new Vpc_Exception('Link class does not exist or does not have             Vpc_Basic_Link_Component as parent class: ' . $class);        }    }    public function getChildComponents()    {        return array($this->link);    }    public function getTemplateVars()    {        if ($this->link) {            return $this->link->getTemplateVars();        }    }}
+<?php
+/**
+ * @package Vpc
+ * @subpackage Basic
+ */
+class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
+{
+    public $link;
+
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'tablename'     => 'Vpc_Basic_LinkTag_Model',
+            'componentName' => 'Standard.LinkTag',
+            'childComponentClasses'   => array(
+                'Internal Link' => 'Vpc_Basic_Link_Intern_Component',
+                'External Link' => 'Vpc_Basic_Link_Extern_Component',
+                'Mail Link' => 'Vpc_Basic_Link_Mail_Component'
+            ),
+            'default'       => array(
+                'link_class'    => 'Vpc_Basic_Link_Intern_Component'
+            )
+        )); 
+    }
+
+    public function _init()
+    {
+        $class = $this->_row->link_class;
+        if (class_exists($class) && 
+            is_subclass_of($class, 'Vpc_Basic_Link_Component')
+        ) {
+            $this->link = $this->createComponent($class, 1);
+        } else {
+            throw new Vpc_Exception('Link class does not exist or does not have 
+            Vpc_Basic_Link_Component as parent class: ' . $class);
+        }
+    }
+
+    public function getChildComponents()
+    {
+        return array($this->link);
+    }
+
+    public function getTemplateVars()
+    {
+        if ($this->link) {
+            return $this->link->getTemplateVars();
+        }
+    }
+}

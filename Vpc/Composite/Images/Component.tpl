@@ -1,1 +1,3 @@
-{foreach from=$component.images item=image}{component component=$image}{/foreach}
+{foreach from=$component.images item=image}
+{component component=$image}
+{/foreach}

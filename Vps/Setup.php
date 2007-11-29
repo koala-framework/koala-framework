@@ -1,1 +1,72 @@
-<?phpfunction p($src, $max_depth = 5) {    ini_set('xdebug.var_display_max_depth', $max_depth);    if (function_exists('xdebug_var_dump')) {        xdebug_var_dump($src);    } else {        echo "<pre>";        var_dump($src);        echo "</pre>";    }}function d($src, $max_depth = 5){    p($src, $max_depth);    exit;}class Vps_Setup{    public static function setUp()    {        require_once 'Vps/Loader.php';        Vps_Loader::registerAutoload();        Zend_Registry::setClassName('Vps_Registry');        error_reporting(E_ALL);        date_default_timezone_set('Europe/Berlin');        set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);        $ip = get_include_path();        foreach (Zend_Registry::get('config')->includepath as $p) {            $ip .= PATH_SEPARATOR . $p;        }        set_include_path($ip);        Zend_Db_Table_Abstract::setDefaultAdapter(Zend_Registry::get('db'));    }    public static function createDb()    {        $dao = Zend_Registry::get('dao');        return $dao->getDb();    }    public static function createDao()    {        return new Vps_Dao(new Zend_Config_Ini('application/config.db.ini', 'database'));    }        public static function createConfig()    {        if (preg_match('#/www/usr/([0-9a-z]+)/#', $_SERVER['SCRIPT_FILENAME'], $m)) {            $section = $m[1];        } else if (substr(__FILE__, 0, strlen('/www/public/')) == '/www/public/') {            $section = 'vivid';        } else if (isset($_SERVER['HTTP_HOST']) && substr($_SERVER['HTTP_HOST'], 0, 4)=='dev.') {            $section = 'dev';        } else {            $section = 'production';        }        $webConfig = new Zend_Config_Ini('application/config.ini', $section);        $vpsConfig = new Zend_Config_Ini(VPS_PATH.'/config.ini', $section,                        array('allowModifications'=>true));        $vpsConfig->merge($webConfig);        return $vpsConfig;    }}
+<?php
+function p($src, $max_depth = 5) {
+    ini_set('xdebug.var_display_max_depth', $max_depth);
+    if (function_exists('xdebug_var_dump')) {
+        xdebug_var_dump($src);
+    } else {
+        echo "<pre>";
+        var_dump($src);
+        echo "</pre>";
+    }
+}
+
+function d($src, $max_depth = 5)
+{
+    p($src, $max_depth);
+    exit;
+}
+
+
+class Vps_Setup
+{
+    public static function setUp()
+    {
+        require_once 'Vps/Loader.php';
+        Vps_Loader::registerAutoload();
+
+        Zend_Registry::setClassName('Vps_Registry');
+
+        error_reporting(E_ALL);
+        date_default_timezone_set('Europe/Berlin');
+        set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
+
+        $ip = get_include_path();
+        foreach (Zend_Registry::get('config')->includepath as $p) {
+            $ip .= PATH_SEPARATOR . $p;
+        }
+        set_include_path($ip);
+
+        Zend_Db_Table_Abstract::setDefaultAdapter(Zend_Registry::get('db'));
+    }
+
+    public static function createDb()
+    {
+        $dao = Zend_Registry::get('dao');
+        return $dao->getDb();
+    }
+
+    public static function createDao()
+    {
+        return new Vps_Dao(new Zend_Config_Ini('application/config.db.ini', 'database'));
+    }
+    
+    public static function createConfig()
+    {
+        if (preg_match('#/www/usr/([0-9a-z]+)/#', $_SERVER['SCRIPT_FILENAME'], $m)) {
+            $section = $m[1];
+        } else if (substr(__FILE__, 0, strlen('/www/public/')) == '/www/public/') {
+            $section = 'vivid';
+        } else if (isset($_SERVER['HTTP_HOST']) && substr($_SERVER['HTTP_HOST'], 0, 4)=='dev.') {
+            $section = 'dev';
+        } else {
+            $section = 'production';
+        }
+        $webConfig = new Zend_Config_Ini('application/config.ini', $section);
+
+        $vpsConfig = new Zend_Config_Ini(VPS_PATH.'/config.ini', $section,
+                        array('allowModifications'=>true));
+        $vpsConfig->merge($webConfig);
+
+        return $vpsConfig;
+    }
+}

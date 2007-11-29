@@ -1,1 +1,35 @@
-Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {    initComponent: function() {        if (this.checkboxToggle && this.checkboxName) {            this.hiddenCheckboxValue = new Vps.Form.FieldSetHiddenCheckboxValue({                name: this.checkboxName            });            this.hiddenCheckboxValue.on('valuechange', function(field, value) {                if (value=='0' || !value) {                    this.collapse();                } else {                    this.expand();                }            }, this);            this.add(this.hiddenCheckboxValue);            delete this.checkboxName;        }        Vps.Form.FieldSet.superclass.initComponent.call(this);    },    onCheckClick : function() {        this.hiddenCheckboxValue.setValue(this.checkbox.dom.checked ? '1' : '0');    }});Vps.Form.FieldSetHiddenCheckboxValue = Ext.extend(Ext.form.Hidden, {    initComponent: function() {        this.addEvents('valuechange');        Vps.Form.FieldSetHiddenCheckboxValue.superclass.initComponent.call(this);    },    setValue : function(v) {        Vps.Form.FieldSetHiddenCheckboxValue.superclass.setValue.call(this, v);        this.fireEvent('valuechange', this, v);    }});Ext.reg('fieldset', Vps.Form.FieldSet);
+Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
+    initComponent: function() {
+        if (this.checkboxToggle && this.checkboxName) {
+            this.hiddenCheckboxValue = new Vps.Form.FieldSetHiddenCheckboxValue({
+                name: this.checkboxName
+            });
+            this.hiddenCheckboxValue.on('valuechange', function(field, value) {
+                if (value=='0' || !value) {
+                    this.collapse();
+                } else {
+                    this.expand();
+                }
+            }, this);
+            this.add(this.hiddenCheckboxValue);
+            delete this.checkboxName;
+        }
+        Vps.Form.FieldSet.superclass.initComponent.call(this);
+    },
+    onCheckClick : function() {
+        this.hiddenCheckboxValue.setValue(this.checkbox.dom.checked ? '1' : '0');
+    }
+});
+
+Vps.Form.FieldSetHiddenCheckboxValue = Ext.extend(Ext.form.Hidden, {
+    initComponent: function() {
+        this.addEvents('valuechange');
+        Vps.Form.FieldSetHiddenCheckboxValue.superclass.initComponent.call(this);
+    },
+    setValue : function(v) {
+        Vps.Form.FieldSetHiddenCheckboxValue.superclass.setValue.call(this, v);
+        this.fireEvent('valuechange', this, v);
+    }
+});
+
+Ext.reg('fieldset', Vps.Form.FieldSet);

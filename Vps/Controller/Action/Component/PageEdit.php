@@ -1,1 +1,51 @@
-<?phpclass Vps_Controller_Action_Component_PageEdit extends Vps_Controller_Action_Auto_Form{    protected $_permissions = array('save' => true, 'add' => true);    protected function _initFields()    {        $types = array();        foreach (Zend_Registry::get('config')->pageClasses as $c) {            if ($c->class && $c->text) {                $types[$c->class] = $c->text;            }        }        $table = new Vps_Dao_Pages();        $table->showInvisible(true);        $this->_form->setTable($table);        $fields = $this->_form->fields;        $fields->add(new Vps_Auto_Field_TextField('name', 'Name of Page'))            ->setAllowBlank(false);        $fields->add(new Vps_Auto_Field_Select('component_class', 'Pagetype'))            ->setValues($types)            ->setValue('Vpc_Paragraphs_Component')            ->setAllowBlank(false);        $fields->add(new Vps_Auto_Field_Checkbox('hide', 'Hide in Menu'));                $cfg = new Zend_Config_Ini('application/config.ini', 'pagecollection');        foreach ($cfg->pagecollection->addDecorators as $decorator) {            $formClass = Vpc_Admin::getComponentFile($decorator, 'Form', 'php', true);            if ($formClass) {                $form = new $formClass($decorator, $this->_getParam('id'));                $form->setBaseCls('x-plain');                $title = Vpc_Abstract::getSetting($decorator, 'componentName');                if ($title) {                    $fieldset = new Vps_Auto_Container_FieldSet($title);                    $fieldset->add($form);                    $fields->add($fieldset);                } else {                    $fields->add($form);                }            }        }    }    protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row)    {        $row->parent_id = $this->_getParam('parent_id');    }}
+<?php
+
+class Vps_Controller_Action_Component_PageEdit extends Vps_Controller_Action_Auto_Form
+{
+    protected $_permissions = array('save' => true, 'add' => true);
+
+    protected function _initFields()
+    {
+        $types = array();
+        foreach (Zend_Registry::get('config')->pageClasses as $c) {
+            if ($c->class && $c->text) {
+                $types[$c->class] = $c->text;
+            }
+        }
+
+        $table = new Vps_Dao_Pages();
+        $table->showInvisible(true);
+
+        $this->_form->setTable($table);
+        $fields = $this->_form->fields;
+        $fields->add(new Vps_Auto_Field_TextField('name', 'Name of Page'))
+            ->setAllowBlank(false);
+        $fields->add(new Vps_Auto_Field_Select('component_class', 'Pagetype'))
+            ->setValues($types)
+            ->setValue('Vpc_Paragraphs_Component')
+            ->setAllowBlank(false);
+        $fields->add(new Vps_Auto_Field_Checkbox('hide', 'Hide in Menu'));
+        
+        $cfg = new Zend_Config_Ini('application/config.ini', 'pagecollection');
+        foreach ($cfg->pagecollection->addDecorators as $decorator) {
+            $formClass = Vpc_Admin::getComponentFile($decorator, 'Form', 'php', true);
+            if ($formClass) {
+                $form = new $formClass($decorator, $this->_getParam('id'));
+                $form->setBaseCls('x-plain');
+                $title = Vpc_Abstract::getSetting($decorator, 'componentName');
+                if ($title) {
+                    $fieldset = new Vps_Auto_Container_FieldSet($title);
+                    $fieldset->add($form);
+                    $fields->add($fieldset);
+                } else {
+                    $fields->add($form);
+                }
+            }
+        }
+    }
+
+    protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row)
+    {
+        $row->parent_id = $this->_getParam('parent_id');
+    }
+}

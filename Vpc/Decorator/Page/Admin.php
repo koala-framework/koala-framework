@@ -1,1 +1,4 @@
-<?phpclass Vpc_Decorator_Page_Admin extends Vpc_Admin{}
+<?php
+class Vpc_Decorator_Page_Admin extends Vpc_Admin
+{
+}
