@@ -4,7 +4,7 @@ class Vps_Pdf_Index extends Zend_Pdf_Filter_Ascii85
     private $_cols = 0;
     private $_borders = array('left' => 20, 'right' => 20, 'top' => 20, 'bottom' => 20);
     private $_styles = array('headline' => array(), 'row1' => array(), 'row2' => array(), 'top' => array());
-    private $_page_nr = array ('active' => 0, 'x' => 580, 'y' => 10);
+    private $_pageNr = array ('active' => 0, 'x' => 580, 'y' => 10);
     private $_date = array ('active' => 0, 'x' => 420, 'y' => 820);
     private $_pdfFile = array();
     private $_columns = array();
@@ -46,7 +46,7 @@ class Vps_Pdf_Index extends Zend_Pdf_Filter_Ascii85
     
     public function setPageNrSettings($setting, $value) 
     {
-        $this->_page_nr[$setting] = $value;
+        $this->_pageNr[$setting] = $value;
     }
     
     public function setBorderSettings($setting, $value) 
@@ -143,7 +143,7 @@ class Vps_Pdf_Index extends Zend_Pdf_Filter_Ascii85
             
             if ($y < $this->_borders['bottom']) {
                 if ($this->_date['active']) $pdfPage->drawText($this->_getDate(), $this->_date['x'], $this->_date['y']);
-                if ($this->_page_nr['active']) $pdfPage->drawText($page_nr, $this->_page_nr['x'], $this->_page_nr['y']);
+                if ($this->_pageNr['active']) $pdfPage->drawText($page_nr, $this->_pageNr['x'], $this->_pageNr['y']);
                 $page_nr++;
                 $this->_pdfFile->pages[] = $pdfPage;
                 $pdfPage = $this ->_pdfFile->newPage(Zend_Pdf_Page::SIZE_A4);
@@ -161,7 +161,7 @@ class Vps_Pdf_Index extends Zend_Pdf_Filter_Ascii85
             }
         }
         if ($this->_date['active']) $pdfPage->drawText($this->_getDate(), $this->_date['x'], $this->_date['y']);
-        if ($this->_page_nr['active']) $pdfPage->drawText($page_nr, $this->_page_nr['x'], $this->_page_nr['y']);
+        if ($this->_pageNr['active']) $pdfPage->drawText($page_nr, $this->_pageNr['x'], $this->_pageNr['y']);
         $this->_pdfFile->pages[] = $pdfPage;
     }    
     

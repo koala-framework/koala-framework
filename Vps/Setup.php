@@ -1,6 +1,6 @@
 <?php
-function p($src, $max_depth = 5) {
-    ini_set('xdebug.var_display_max_depth', $max_depth);
+function p($src, $maxDepth = 5) {
+    ini_set('xdebug.var_display_max_depth', $maxDepth);
     if (function_exists('xdebug_var_dump')) {
         xdebug_var_dump($src);
     } else {
@@ -10,9 +10,9 @@ function p($src, $max_depth = 5) {
     }
 }
 
-function d($src, $max_depth = 5)
+function d($src, $maxDepth = 5)
 {
-    p($src, $max_depth);
+    p($src, $maxDepth);
     exit;
 }
 
