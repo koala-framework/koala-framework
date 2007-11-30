@@ -26,7 +26,26 @@ class Vpc_Formular_Textarea_Component extends Vpc_Formular_Field_Abstract
         } else {
             $return['name'] = $this->_store['name'];
         }
-        
+
         return $return;
+    }
+
+    protected function _getName()
+    {
+        if (isset($this->_row->name)) {
+            //subotimal
+            return $this->_row->name;
+        } else {
+            return $this->_store['name'];
+        }
+    }
+
+    public function processInput()
+    {
+        $name = $this->_getName();
+        if (isset($_POST[$name])) {
+            $value = $_POST[$name];
+        }
+        $this->_row->value = $value;
     }
 }
