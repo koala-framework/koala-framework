@@ -4,17 +4,29 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
     private $_name;
     private $_id;
     private $_table;
+    protected $_tableName;
     private $_primaryKey;
     protected $_row;
 
     public function __construct($name = null, $id = null)
     {
-        $this->fields = new Vps_Collection_FormFields();
-        $this->setName($name);
+        if (!isset($this->fields)) {
+            $this->fields = new Vps_Collection_FormFields();
+        }
         $this->setId($id);
         $this->setLayout('form');
         $this->setBorder(false);
+        parent::__construct($name);
     }
+
+    protected function _init()
+    {
+        parent::_init();
+        if (isset($this->_tableName) && !isset($this->_table)) {
+            $this->_table = new $this->_tableName();
+        }
+    }
+
 
     public function prepareSave($parentRow, $postData)
     {
