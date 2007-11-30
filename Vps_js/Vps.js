@@ -35,17 +35,22 @@ Ext.onReady(function()
 
 Vps.application = { version: '{$application.version}' };
 
-Vps.handleError = function(e)
-{
-    if (e.toString) e = e.toString();
-    if (e.message) e = e.message;
-    if(Ext.get('loading')) {
-        Ext.get('loading').fadeOut({remove: true});
-    }
+Vps.callWithErrorHandler = function(fn, scope) {
     if (Vps.debug) {
-        throw e; //re-throw
-    } else {
-        Ext.Msg.alert('Error', "Ein Fehler ist aufgetreten.");
+        //call without error handler
+        return fn.call(scope || window);
+    }
+    try {
+        return fn.call(scope || window);
+    } catch(e) {
+        if (e.toString) e = e.toString();
+        if (e.message) e = e.message;
+        if(Ext.get('loading')) {
+            Ext.get('loading').fadeOut({remove: true});
+        }
+        if (Ext.Msg) {
+            Ext.Msg.alert('Error', "Ein Fehler ist aufgetreten.");
+        }
         Ext.Ajax.request({
             url: '/error/jsonMail',
             params: {msg: e}
