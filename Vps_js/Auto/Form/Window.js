@@ -13,6 +13,13 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
                 controllerUrl: this.controllerUrl
             });
             this.autoForm = new Vps.Auto.FormPanel(this.formConfig);
+        } else if (typeof this.autoForm == 'string') {
+            try {
+                var d = eval(this.autoForm);
+            } catch (e) {
+                throw new Error("Invalid autoForm \'"+this.autoForm+"': "+e);
+            }
+            this.autoForm = new d({ baseCls: 'x-plain' });
         }
 
         var onRender = function() {

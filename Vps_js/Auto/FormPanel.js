@@ -26,14 +26,18 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         });
 
         if (this.autoload) {
-            this.loadForm(this.controllerUrl);
+            this.loadForm();
         }
     },
 
     loadForm : function(controllerUrl)
     {
-        this.controllerUrl = controllerUrl;
-        this.formConfig.url = controllerUrl + '/jsonSave';
+        if (controllerUrl) this.controllerUrl = controllerUrl;
+
+        if (!this.controllerUrl) {
+            throw new Error('No controllerUrl specified for AutoForm.');
+        }
+        this.formConfig.url = this.controllerUrl + '/jsonSave';
 
         Ext.Ajax.request({
             mask: true,
