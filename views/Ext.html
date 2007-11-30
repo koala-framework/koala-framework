@@ -49,7 +49,7 @@
     <script type="text/javascript">
     {literal}
         Ext.onReady(function() {
-            try {
+            Vps.callWithErrorHandler(function() {
                 {/literal}
                 Vps.debug = {$ext.debug};
                 Vps.userRole = '{$ext.userRole}';
@@ -63,9 +63,7 @@
                 if(Vps.Connection.masks == 0  && Ext.get('loading')) {
                     Ext.get('loading').fadeOut({remove: true});
                 }
-            } catch(e) {
-                Vps.handleError(e);
-            }
+            });
         });
     {/literal}
     </script>

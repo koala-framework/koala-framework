@@ -99,11 +99,9 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         }
         options.vpsIsSuccess = true;
 
-        try {
+        Vps.callWithErrorHandler(function() {
             Ext.callback(options.vpsCallback.success, options.vpsCallback.scope, [response, options, r]);
-        } catch(e) {
-            Vps.handleError(e);
-        }
+        });
     },
 
     vpsFailure: function(response, options)
