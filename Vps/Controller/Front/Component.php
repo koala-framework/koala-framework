@@ -69,6 +69,7 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                         'action' => 'vpc')));*/
 
         $plugin = new Zend_Controller_Plugin_ErrorHandler();
+        $plugin->setErrorHandlerModule('vps');
         $this->registerPlugin($plugin);
     }
 
