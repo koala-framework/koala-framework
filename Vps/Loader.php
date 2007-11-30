@@ -6,9 +6,9 @@ if (file_exists(VPS_PATH.'/include_path')) {
 } else {
     die ('zend not found');
 }
-$include_path  = get_include_path();
-$include_path .= PATH_SEPARATOR . $zendPath;
-set_include_path($include_path);
+$includePath  = get_include_path();
+$includePath .= PATH_SEPARATOR . $zendPath;
+set_include_path($includePath);
 
 require_once 'Zend/Loader.php';
 

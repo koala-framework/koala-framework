@@ -43,7 +43,9 @@ class Vps_Benchmark
     {
         if (isset($this->_processes[$identifier])) {
             $this->_processes[$identifier]['stop'] = microtime(true);
-            $this->_processes[$identifier]['duration'] = $this->_processes[$identifier]['stop'] - $this->_processes[$identifier]['start'];
+            $this->_processes[$identifier]['duration'] =
+                    $this->_processes[$identifier]['stop']
+                    - $this->_processes[$identifier]['start'];
         }
     }
 
