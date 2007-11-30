@@ -19,11 +19,11 @@ class Vps_Debug
         $mail = new Zend_Mail('utf-8');
         $mail->setBodyText($body)
             ->setSubject($type . ': ' . $_SERVER['HTTP_HOST']);
-        if (is_string($address)) {
-            $mail->addTo($address);
-        } else {
-            foreach ($address as $i) {
-                $mail->addTo($i);
+        $mail->addTo('vperror@vivid-planet.com');
+        if (is_string($address)) $address = array($address);
+        foreach ($address as $i) {
+            if (is_string($i) && $i != 'vperror@vivid-planet.com') {
+                $mail->addCc($i);
             }
         }
         $mail->send();
