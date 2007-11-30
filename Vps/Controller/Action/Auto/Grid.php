@@ -324,6 +324,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         else if ($type == 'tinytext') $type = 'string';
         else if (substr($type, -3) == 'int') $type = 'int';
         else if ($type == 'datetime') $type = 'date';
+        else if ($type == 'date') $type = 'date';
         else if ($type == 'decimal') $type = 'float';
         else if (substr($type, 0, 6) == 'double') $type = 'float';
         else if ($type == 'time') $type = ''; //auto
