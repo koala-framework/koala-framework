@@ -11,7 +11,9 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract
     public function __construct($name = null)
     {
         parent::__construct($name);
-        $this->fields = new Vps_Collection();
+        if (!isset($this->fields)) {
+            $this->fields = new Vps_Collection();
+        }
     }
 
     public function getMetaData()
