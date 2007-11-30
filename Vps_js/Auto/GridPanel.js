@@ -9,11 +9,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         this.actions = {};
 
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
+
 //         if(this.autoload) {
         //todo: wos bosiat bei !autoload
-
             if (!this.controllerUrl) {
-                throw 'No controllerUrl specified for AutoGrid.';
+                throw new Error('No controllerUrl specified for AutoGrid.');
             }
             Ext.Ajax.request({
                 mask: true,
@@ -193,8 +193,19 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         if (!this.editDialog && meta.editDialog) {
             this.editDialog = meta.editDialog;
         }
+        if (typeof this.editDialog == "string") {
+            try {
+                var d = eval(this.editDialog);
+            } catch (e) {
+                throw new Error("Invalid editDialog \'"+this.editDialog+"': "+e);
+            }
+            this.editDialog = new d({ baseCls: 'x-plain' });
+        }
+        if (this.editDialog instanceof Vps.Auto.FormPanel) {
+            this.editDialog = new Vps.Auto.Form.Window({ autoForm: this.editDialog });
+        }
         if (this.editDialog && !(this.editDialog instanceof Ext.Window)) {
-            this.editDialog = new Vps.Auto.Form.Window(meta.editDialog);
+            this.editDialog = new Vps.Auto.Form.Window(this.editDialog);
         }
         if (this.editDialog) {
             this.editDialog.on('datachange', function(r) {
@@ -290,7 +301,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             delete meta.buttons['delete'];
         }
         for (var i in meta.buttons) {
-            gridConfig.tbar.add(this.getAction(i));
+            if (i != 'pdf' && i != 'csv' && i != 'xls') {
+                gridConfig.tbar.add(this.getAction(i));
+            }
         }
 
         var filtersEmpty = true;
@@ -325,6 +338,19 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
                 this.load();
             }, this);
             first = false;
+        }
+
+        if (meta.buttons.pdf || meta.buttons.xls || meta.buttons.csv) {
+            gridConfig.tbar.add('->');
+        }
+        if (meta.buttons.pdf) {
+            gridConfig.tbar.add(this.getAction('pdf'));
+        }
+        if (meta.buttons.xls) {
+            gridConfig.tbar.add(this.getAction('xls'));
+        }
+        if (meta.buttons.csv) {
+            gridConfig.tbar.add(this.getAction('csv'));
         }
 
         //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
