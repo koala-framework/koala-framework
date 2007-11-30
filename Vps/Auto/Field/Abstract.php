@@ -9,6 +9,11 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
     {
         if ($field_name) $this->setProperty('name', $field_name);
         if ($field_label) $this->setProperty('fieldLabel', $field_label);
+        $this->_init();
+    }
+
+    protected function _init()
+    {
     }
 
     public function __call($method, $arguments)
