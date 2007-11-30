@@ -1,48 +1,67 @@
 <?php
 class Vpc_Formular_Checkbox_Component extends Vpc_Formular_Field_Abstract
 {
-    protected $_settings = array(
-        'text' => '',
-        'checked' => false,
-        'value' => '',
-        'name' => ''
-    );
-    protected $_tablename = 'Vpc_Formular_Checkbox_Model';
-    const NAME = 'Formular.Checkbox';
-
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName' => 'Formular Fields.Checkbox',
+            'tablename' => 'Vpc_Formular_Checkbox_Model',
+            'default' => array(
+                'text' => '',
+                'checked' => false,
+                'width' => 250,
+                'value' => '',
+                'name' => '',
+                'validator' => ''
+            )
+        ));
+    }
 
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $return['value'] = $this->getSetting('value');
-        $return['checked'] = $this->getSetting('checked');
-        $return['text'] = $this->getSetting('text');
-        $return['name'] = $this->getSetting('name');
-        $return['template'] = 'Formular/Checkbox.html';
+        $return['value'] = $this->_row->value;
+        $return['checked'] = $this->_row->checked;
+        $return['text'] = $this->_row->text;
+        $return['width'] = $this->_row->width;
+        $return['name'] = $this->_getName();
         return $return;
     }
 
-    public function processInput(){
-        if (isset($_POST[$this->getSetting('name')])) {
-            $this->setSetting('checked', 1);
-            $check = $this->getSetting('name');
-            if ($this instanceof  Vpc_Formular_Option_Component) {
-                if ($this->getSetting('value') == $_POST[$this->getSetting('name')]) {
-                    $this->setSetting('checked', 1);
-                } else {
-                    $this->setSetting('checked', 0);
-                }
-            }
+    protected function _getName()
+    {
+        if (isset($this->_row->name)) {
+            //subotimal
+            return $this->_row->name;
         } else {
-            $this->setSetting('checked', 0);
-            $check = $this->getSetting('name');
+            return $this->_store['name'];
         }
+    }
+
+    public function processInput()
+    {
+        $name = $this->_getName();
+        if (isset($_POST[$name])) {
+            $value = '1';
+        } else {
+            $value = '';
+        }
+        $this->_row->value = $value;
     }
 
     public function validateField($mandatory)
     {
-        if ($mandatory && !$this->getSetting('checked')) {
-            return 'Feld ' . $this->getStore('description') . ' ist ein Pflichtfeld, bitte ausfüllen';
+        $value = $this->_row->value;
+        $validatorString = $this->_row->validator;
+        if ($validatorString != '' && $value != '') {
+            $validator = new $validatorString();
+            if (!$validator->isValid($value)) {
+                $v = str_replace('Zend_Validate_', '', $validatorString);
+                return 'Das Feld ' . $this->getStore('fieldLabel') . ' entspricht nicht der geforderten Formatierung (' . $v . ')';
+            }
+        }
+        if ($mandatory && $value == '') {
+            return 'Feld ' . $this->getStore('fieldLabel') . ' ist ein Pflichtfeld.';
         }
         return '';
     }
