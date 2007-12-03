@@ -1,15 +1,10 @@
 <?php
 class Vpc_Paragraphs_Admin extends Vpc_Admin
 {
-    public function getComponents()
-    {
-        return $this->getAvailableComponents('Vpc');
-    }
-
     public function getControllerConfig()
     {
         $componentList = array();
-        foreach ($this->getComponents() as $component) {
+        foreach (Vpc_Abstract::getSetting($this->_class, 'childComponentClasses') as $component) {
             $name = Vpc_Abstract::getSetting($component, 'componentName');
             $hide = Vpc_Abstract::getSetting($component, 'hideInParagraphs');
             if ($hide !== true && $name) {

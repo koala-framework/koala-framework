@@ -546,8 +546,15 @@ abstract class Vpc_Abstract implements Vpc_Interface
     
     public static function getSetting($class, $setting)
     {
-        $settings = call_user_func(array($class, 'getSettings'));
-        return isset($settings[$setting]) ? $settings[$setting] : null ;
+        if (!class_exists($class)) {
+            $class = substr($class, 0, strrpos($class, '_')) . '_Component';
+        }
+        if (class_exists($class)) {
+            $settings = call_user_func(array($class, 'getSettings'));
+            return isset($settings[$setting]) ? $settings[$setting] : null ;
+        } else {
+            return null;
+        }
     }
 
     public static function getSettings()

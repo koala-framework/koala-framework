@@ -4,7 +4,7 @@ class Vpc_Formular_Admin extends Vpc_Paragraphs_Admin
     public function getComponents()
     {
         return array_merge($this->getAvailableComponents(VPS_PATH . '/Vpc/Formular'),
-                            parent::getComponents());
+                            $this->getAvailableComponents('Vpc'));
     }
 /*
     public function getComponents()

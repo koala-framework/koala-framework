@@ -176,7 +176,7 @@ class Vps_Assets_JavaScriptPacker
         // for high-ascii, don't encode single character low-ascii
         $regexp = ($this->_encoding > 62) ? '/\\w\\w+/' : '/\\w+/';
         // build the word list
-        $keywords = $this->_analyze($script, $regexp, $encode)q;
+        $keywords = $this->_analyze($script, $regexp, $encode);
         $encoded = $keywords['encoded'];
         
         // encode
