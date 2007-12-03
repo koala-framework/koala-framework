@@ -17,6 +17,9 @@ class Vps_Auto_Field_DateField extends Vps_Auto_Field_SimpleAbstract
     {
         $ret = parent::_getValueFromPostData($postData);
         if ($ret == '') $ret = null;
+        if ($ret) { 
+            $ret = substr(str_replace('"', '', $ret), 0, 10); 
+        }
         return $ret;
     }
 }

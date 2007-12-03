@@ -1,22 +1,38 @@
 <?php
-/**
- * Newskomponente
- *
- * @package Vpc
- * @subpackage Components
- */
 class Vpc_News_Component extends Vpc_Abstract
 {
-    const NAME = 'News';
+    public $content;
+
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName'     => 'News',
+            'tablename'         => 'Vpc_News_Model',
+            'hideInNews'        => true,
+            'childComponentClasses' => array(
+                'details'       => 'Vpc_News_Details_Component'
+            )
+        ));
+    }
+
     public function generateHierarchy($filename = '')
     {
+        parent::generateHierarchy($filename);
         $pages = array();
-        foreach ($this->getDao()->getTable('Vpc_News_Model')->fetchAll() as $row) {
-            if ($filename != '' && $filename != $row->filename) continue;
-            $page = $this->createPage('Vpc_News_Details', 0, $row->id);
-            $page->setNewsId($row->id);
-            $page->title = $row->title;
-            $this->getPagecollection()->addTreePage($page, $row->filename, $row->title, $this);
+        $where = array(
+            'page_id' => $this->getDbId(),
+            'component_key' => $this->getComponentKey()
+        );
+        if (!$this->showInvisible()) {
+            $where['visible = 1'] = '';
+        }
+        $class = $this->_getClassFromSetting('details', 'Vpc_News_Details_Component');
+        foreach ($this->getTable()->fetchAll($where) as $row) {
+            $fn = $row->getUniqueString($row->title, 'title', $where);
+            if ($filename != '' && $filename != $fn && $filename != $row->id) continue;
+            $page = $this->createPage($class, $row->id);
+            $page->setRow($row);
+            $this->getPagecollection()->addTreePage($page, $fn, $row->title, $this);
             $pages[] = $page;
         }
         return $pages;
@@ -27,12 +43,12 @@ class Vpc_News_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['news'] = array();
         foreach ($this->generateHierarchy() as $n) {
-            $data['title'] = $n->title;
-            $data['filename'] = $n->getUrl();
+            $data['title'] = $n->row->title;
+            $data['date'] = $n->row->publish_date;
+            $data['teaser'] = 'teaser';
+            $data['url'] = $n->getUrl();
             $ret['news'][] = $data;
         }
-        $ret['id'] = $this->getComponentId();
-        $ret['template'] = 'News/Aktuelle.html';
         return $ret;
     }
 

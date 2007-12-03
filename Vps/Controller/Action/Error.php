@@ -24,6 +24,8 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
                 $errors->exception instanceof Vps_Controller_Action_Web_Exception) {
                 $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
                 $file = 'Error404.html';
+            } else if ($errors->exception instanceof Vps_Controller_Exception) {
+                $file = 'ErrorVpc.html';
             } else {
                 $file = 'Error.html';
             }
@@ -33,6 +35,7 @@ class Vps_Controller_Action_Error extends Vps_Controller_Action
             $config = Zend_Registry::get('config');
             $this->view->type = $errors->type;
             $this->view->exception = $errors->exception;
+            $this->view->message = $errors->exception->getMessage();
             if ($config->debug->errormail != '') {
                 Vps_Debug::sendErrorMail($errors->exception, $config->debug->errormail);
                 $this->view->debug = false;

@@ -64,12 +64,16 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
 
     public function showAction()
     {
-        $component = new Vpc_Decorator_Assets_Component(
-                            Zend_Registry::get('dao'), $this->_getComponent());
-
-        $this->view->setRenderFile(VPS_PATH . '/views/Component.html');
-        $this->view->component = $component->getTemplateVars();
-        $this->view->mode = '';
+        try {
+            $component = new Vpc_Decorator_Assets_Component(
+                                Zend_Registry::get('dao'), $this->_getComponent());
+    
+            $this->view->setRenderFile(VPS_PATH . '/views/Component.html');
+            $this->view->component = $component->getTemplateVars();
+            $this->view->mode = '';
+        } catch (Vps_Exception $e) {
+            throw new Vps_Controller_Exception($e->getMessage());
+        }
     }
 
     public function jsonShowAction()
@@ -115,6 +119,9 @@ class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
         }
         $pageCollection = new Vps_PageCollection_TreeBase(Zend_Registry::get('dao'));
         $component = $pageCollection->findComponent($id);
+        if (!$component) {
+            throw new Vps_Controller_Exception('Component not found: ' . $id);
+        }
         return $component;
     }
 

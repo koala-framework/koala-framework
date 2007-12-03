@@ -17,8 +17,9 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
                 'hideInParagraphs' => true,
                 'tablename' => 'Vpc_Paragraphs_Model'
             ));
-            $settings['childComponentClasses'] = Vpc_Admin::getInstance('Vpc_Paragraphs_Abstract')
-                                    ->getComponents();
+            $settings['childComponentClasses'] = 
+                Vpc_Admin::getInstance('Vpc_Paragraphs_Abstract')
+                ->getAvailableComponents('Vpc');
         }
         return $settings;
     }

@@ -10,10 +10,6 @@ Ext.extend(Vps.SubmitAction, Ext.form.Action.Submit, {
         this.form.items.each(function(field) {
             if (field.disabled) {
                 this.options.params[field.getName()] = null;
-            } else if (Ext.form.DateField &&
-                field instanceof Ext.form.DateField &&
-                field.getValue() instanceof Date) {
-                this.options.params[field.getName()] = field.getValue().dateFormat("Y-m-d");
             } else if (Ext.form.Checkbox && field instanceof Ext.form.Checkbox) {
                 if (field.getValue()) {
                     this.options.params[field.getName()] = 1;
