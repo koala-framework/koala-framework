@@ -13,10 +13,10 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
         if (!isset($this->fields)) {
             $this->fields = new Vps_Collection_FormFields();
         }
-        $this->setId($id);
+        parent::__construct($name);
         $this->setLayout('form');
         $this->setBorder(false);
-        parent::__construct($name);
+        $this->setId($id);
     }
 
     protected function _init()
