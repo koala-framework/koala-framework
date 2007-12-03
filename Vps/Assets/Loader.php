@@ -133,6 +133,8 @@ class Vps_Assets_Loader
                         header('Content-Type: text/javascript');
                     } else if (substr($url, -4)=='.swf') {
                         header('Content-Type: application/flash');
+                    } else if (substr($url, -4)=='.ico') {
+                        header('Content-Type: image/x-icon');
                     } else {
                         header("HTTP/1.0 404 Not Found");
                         die("invalid file type");
