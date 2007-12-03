@@ -4,7 +4,7 @@
  *
  * zB FieldSet
  **/
-abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract
+abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract implements IteratorAggregate
 {
     public $fields;
 
@@ -53,5 +53,11 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract
     public function add($v = null)
     {
         return $this->fields->add($v);
+    }
+
+    //IteratorAggregate
+    public function getIterator()
+    {
+        return $this->fields->getIterator();
     }
 }
