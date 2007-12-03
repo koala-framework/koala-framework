@@ -2,13 +2,14 @@ Vps.Auto.GridFilter.ComboBox = function(config)
 {
     Vps.Auto.GridFilter.ComboBox.superclass.constructor.call(this, config);
 
-    var data = config.data;
-    data.unshift([0, 'all']);
-    var filterStore = new Ext.data.SimpleStore({
-        id: 0,
-        fields: ['id', 'name'],
-        data: data
+    var record = Ext.data.Record.create(['id', 'name'])
+    var filterStore = new Ext.data.Store({
+        reader: new Ext.data.ArrayReader({}, record),
+        data: config.data
     });
+    if (filterStore.find('id', 0) == -1) {
+        filterStore.insert(0, [new record({id: 0, name: 'all'})]);
+    }
     this.combo = new Ext.form.ComboBox({
             store: filterStore,
             displayField: 'name',
@@ -19,7 +20,7 @@ Vps.Auto.GridFilter.ComboBox = function(config)
             width: config.width || 200
         });
     this.combo.setValue(0);
-    this.combo.on('select', function(combo, record, index) {
+    this.combo.on('select', function() {
         this.fireEvent('filter', this, this.getParams());
     }, this);
     this.toolbarItems.add(this.combo);
