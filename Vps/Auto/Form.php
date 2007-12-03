@@ -3,7 +3,7 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
 {
     private $_name;
     private $_id;
-    private $_table;
+    protected $_table;
     protected $_tableName;
     private $_primaryKey;
     protected $_row;
