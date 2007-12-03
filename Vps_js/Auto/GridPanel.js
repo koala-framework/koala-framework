@@ -352,6 +352,12 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         if (meta.buttons.csv) {
             gridConfig.tbar.add(this.getAction('csv'));
         }
+        for (var i = 0; i < gridConfig.tbar.length; i++) {
+            if (typeof gridConfig.tbar[i] == 'string'
+                    && this.getAction(gridConfig.tbar[i])) {
+                gridConfig.tbar[i] = this.getAction(gridConfig.tbar[i]);
+            }
+        }
 
         //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
         if (gridConfig.tbar.length == 0 && (!this.initialConfig.gridConfig ||
@@ -438,7 +444,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
                 scope: this
             });
         } else {
-            throw 'unknown action-type: ' + type;
+            return null;
         }
         return this.actions[type];
     },
