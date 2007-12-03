@@ -33,6 +33,7 @@ class Vpc_News_Component extends Vpc_Abstract
             $page = $this->createPage($class, $row->id);
             $page->setRow($row);
             $this->getPagecollection()->addTreePage($page, $fn, $row->title, $this);
+            $this->getPagecollection()->hideInMenu($page);
             $pages[] = $page;
         }
         return $pages;
@@ -43,10 +44,8 @@ class Vpc_News_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['news'] = array();
         foreach ($this->generateHierarchy() as $n) {
-            $data['title'] = $n->row->title;
-            $data['date'] = $n->row->publish_date;
-            $data['teaser'] = 'teaser';
-            $data['url'] = $n->getUrl();
+            $data = $n->row->toArray();
+            $data['href'] = $n->getUrl();
             $ret['news'][] = $data;
         }
         return $ret;

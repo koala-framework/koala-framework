@@ -1,6 +1,6 @@
 {foreach from=$component.news item=news}
-<a href="{$news.url}">{$news.title}</a>
+<a href="{$news.href}">{$news.title}</a>
 <p>{$news.teaser}<p>
-{$news.date}
+{$news.publish_date}
 <br /><br />
 {/foreach}
