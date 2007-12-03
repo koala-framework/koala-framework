@@ -7,8 +7,8 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
 
     public function __construct($field_name = null, $field_label = null)
     {
-        if ($field_name) $this->setProperty('name', $field_name);
-        if ($field_label) $this->setProperty('fieldLabel', $field_label);
+        if ($field_name) $this->setName($field_name);
+        if ($field_label) $this->setFieldLabel($field_label);
         $this->_init();
     }
 
