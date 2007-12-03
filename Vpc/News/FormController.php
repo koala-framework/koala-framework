@@ -2,7 +2,8 @@
 class Vpc_News_FormController extends Vps_Controller_Action_Auto_Vpc_Form
 {
     protected $_buttons = array();
-
+    protected $_permissions = array('save' => true);
+    
     public function _initFields()
     {
         $this->_form->add(new Vps_Auto_Field_TextField('title', 'Title'));

@@ -14,6 +14,13 @@ class Vpc_News_Details_Component extends Vpc_Paragraphs_Component
         return $settings;
     }
     
+    public function getTemplateVars()
+    {
+        $vars = parent::getTemplateVars();
+        $vars['news'] = $this->row->toArray();
+        return $vars;
+    }
+    
     public function setRow($row)
     {
         $this->row = $row;
