@@ -7,7 +7,9 @@ class Vpc_News_Details_Component extends Vpc_Paragraphs_Component
     {
         $settings = parent::getSettings();
         foreach ($settings['childComponentClasses'] as $key => $class) {
-            if (Vpc_Abstract::getSetting($class, 'hideInNews')) {
+            if (get_class() != 'Vpc_News_Details_Component' &&
+                Vpc_Abstract::getSetting($class, 'hideInNews'))
+            {
                 unset($settings['childComponentClasses'][$key]);
             }
         }
