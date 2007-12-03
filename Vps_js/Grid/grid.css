@@ -1,0 +1,7 @@
+/* für Ext.util.Format.booleanTickCross */
+.x-grid3-check-col.vps-check-tick-cross {
+    background-image:url(/assets/silkicons/cross.png);
+}
+.x-grid3-check-col-on.vps-check-tick-cross {
+    background-image:url(/assets/silkicons/tick.png);
+}
