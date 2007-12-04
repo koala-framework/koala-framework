@@ -27,7 +27,7 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
                 this.bindings.each(function(b) {
                     b.item.enable();
                     if (b.item.getBaseParams()[b.queryParam] != this.activeId) {
-                        var params = Ext.applyIf({}, b.baseParams);
+                        var params = {};
                         params[b.queryParam] = this.activeId;
                         b.item.applyBaseParams(params);
                         b.item.load();
