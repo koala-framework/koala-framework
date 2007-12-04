@@ -35,7 +35,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
                     new Ext.menu.Item({
                         id: components[i],
                         text: i,
-                        handler: this.onAdd,
+                        handler: this.onParagraphAdd,
                         baseParams: {id: this.id},
                         scope: this
                     })
@@ -60,7 +60,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
         }
     },
 
-    onAdd : function(o, e) {
+    onParagraphAdd : function(o, e) {
         Ext.Ajax.request({
             url: this.controllerUrl + '/jsonAddParagraph',
             params: Ext.apply ({ component : o.id}, this.baseParams),
