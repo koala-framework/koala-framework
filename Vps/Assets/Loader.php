@@ -61,7 +61,7 @@ class Vps_Assets_Loader
                 $encoding = 'none';
             }
 
-            $config = Vps_Setup::createConfig();
+            
             $url = substr($_SERVER['REQUEST_URI'], 8);
             if (strpos($url, '?') !== false) {
                 $url = substr($url, 0, strpos($url, '?'));
@@ -87,6 +87,7 @@ class Vps_Assets_Loader
                 if ((!$lastModified = $cache->load($fileType.$encoding.$section.'LastModified'))
                     || !$cache->test($fileType.$encoding.$section.'Packed')) {
 
+                    $config = Zend_Registry::get('config');
                     $dep = new Vps_Assets_Dependencies($config->assets->$section, $config);
                     $contents = $dep->getPackedAll($fileType);
                     $contents = self::_encode($contents, $encoding);
@@ -109,6 +110,7 @@ class Vps_Assets_Loader
                 header("Content-Encoding: " . $encoding);
                 echo $contents;
             } else {
+                $config = Zend_Registry::get('config');
                 $assetPath = self::getAssetPath($url, $config->path);
                 if (!$assetPath) {
                     header("HTTP/1.0 404 Not Found");
