@@ -43,4 +43,4 @@ Ext.util.Format.component = function(v) {
     return '<iframe height="100" width="100%" frameborder="0" style="border: 1px solid darkgrey" src="' + v + '"></iframe>';
 };
 
-Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer('d.m.Y');
+Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer('Y-m-d');
