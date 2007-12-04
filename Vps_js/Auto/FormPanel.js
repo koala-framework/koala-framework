@@ -48,9 +48,11 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
                 this.onMetaChange(result.meta);
                 if (result.data) {
                     Ext.apply(this.getForm().baseParams, this.baseParams);
-                    this.fireEvent('loadform', this.getForm());
-                    this.getForm().clearInvalid();
-                    this.getForm().setValues(result.data);
+                    if (result.data) {
+                        this.fireEvent('loadform', this.getForm(), result.data);
+                        this.getForm().clearInvalid();
+                        this.getForm().setValues(result.data);
+                    }
                 }
             },
             scope: this
@@ -144,7 +146,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             waitMsg: 'Loading...',
             success: function(form, action) {
                 if (this.actions['delete']) this.actions['delete'].enable();
-                this.fireEvent('loadform', this.getForm());
+                this.fireEvent('loadform', this.getForm(), action.result.data);
             },
             scope: this
         }));
