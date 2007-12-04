@@ -4,7 +4,8 @@ class Vpc_News_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     protected $_buttons = array(
         'save' => true,
         'delete' => true,
-        'reload' => true
+        'reload' => true,
+        'add'   => true
     );
     protected $_paging = 0;
     protected $_position = 'pos';

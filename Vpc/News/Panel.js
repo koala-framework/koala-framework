@@ -20,5 +20,14 @@ Vpc.News.Panel = Ext.extend(Vpc.Paragraphs.Panel,
             },
             scope   : this
         });
+    },
+    
+    onAdd : function()
+    {
+        this.applyBaseParams({
+            pageId: this.baseParams.page_id, 
+            componentKey: this.baseParams.component_key 
+        });
+        Vpc.News.Panel.superclass.onAdd.call(this);
     }
 });
