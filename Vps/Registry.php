@@ -15,13 +15,17 @@ class Vps_Registry extends Zend_Registry
             $v = Vps_Setup::createConfig();
             $this->offsetSet('config', $v);
             return $v;
+        } else if ($index == 'acl' && !parent::offsetExists($index)) {
+            $v = new Vps_Acl();
+            $this->offsetSet('acl', $v);
+            return $v;
         }
         return parent::offsetGet($index);
     }
 
     public function offsetExists($index)
     {
-        if (in_array($index, array('db', 'dao', 'config'))) {
+        if (in_array($index, array('db', 'dao', 'config', 'acl'))) {
             return true;
         }
         return parent::offsetExists($index);
