@@ -200,7 +200,9 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
             $p = $p->getChildComponent();
         }
         
-        if ($p instanceof Vpc_Basic_LinkTag_Component) {
+        if ($p instanceof Vpc_Basic_LinkTag_Component ||
+            $p instanceof Vpc_Basic_Link_Component_Component)
+        {
             $templateVars = $p->getTemplateVars();
             $url = $templateVars['href'];
             if ($templateVars['param'] != '') {

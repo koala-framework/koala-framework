@@ -130,6 +130,15 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
             return $this->_component->findComponentByClass($class);
         }
     }
+    
+    public function getComponent()
+    {
+        if ($this->_component instanceof Vpc_Abstract) {
+            return $this->_component;
+        } else {
+            return $this->_component->getComponent();
+        }
+    }
 
     /**
      * Shortcut für $this->_dao->getTable($tablename)
