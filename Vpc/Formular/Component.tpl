@@ -7,7 +7,6 @@
     </ul>
     {/if}
     <form action="{$component.action}" method="POST" enctype="{if $component.upload}multipart/form-data{else}application/x-www-form-urlencoded{/if}">
-        <div class="fieldContainer {if !$component.store.isValid}invalid{/if}">
         {foreach from=$component.paragraphs item=paragraph}
             {if $paragraph.store.noCols}
                 {component component=$paragraph}
