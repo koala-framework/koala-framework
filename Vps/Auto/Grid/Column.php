@@ -7,11 +7,19 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
     const ROLE_PDF = 3;
     private $_data;
 
+    //bitmask
+    const SHOW_IN_GRID = 1;
+    const SHOW_IN_PDF = 2;
+    const SHOW_IN_XLS = 4;
+    const SHOW_IN_CSV = 8;
+    const SHOW_IN_ALL = 15;
+
     public function __construct($dataIndex = null, $header = null, $width = null)
     {
-        if ($dataIndex) $this->_properties['dataIndex'] = $dataIndex;
-        if ($header) $this->_properties['header'] = $header;
-        if ($width) $this->_properties['width'] = $width;
+        if ($dataIndex) $this->setDataIndex($dataIndex);
+        if ($header) $this->setHeader($header);
+        if ($width) $this->setWidth($width);
+        $this->setShowIn(self::SHOW_IN_ALL);
     }
 
     public function __call($method, $arguments)
@@ -78,6 +86,8 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
         if ($ret['type'] == 'date' && !isset($ret['renderer'])) {
             $ret['renderer'] = 'localizedDate';
         }
+
+        if (isset($ret['showIn'])) unset($ret['showIn']);
 //todo:
 //         if (isset($col['showDataIndex']) && $col['showDataIndex'] && !$this->_getColumnIndex($col['showDataIndex'])) {
 //             $this->_columns[] = array('dataIndex' => $col['showDataIndex']);
