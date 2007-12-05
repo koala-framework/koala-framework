@@ -20,9 +20,9 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
             $this->_fields = new Vps_Collection();
             $title = $this->getFileFieldLabel();
             if (!$title) $title = 'Upload new File';
-            $this->_fields->add(new Vps_Auto_Field_TextField($this->getFieldName(), 'Upload new File'))
+            $this->_fields->add(new Vps_Auto_Field_TextField($this->getFieldName()))
                 ->setFieldLabel($title)
-                ->setInputType('file');
+                ->setXtype('fileuploadfield');
             if ($this->getAllowBlank()) {
                 $this->_fields->add(new Vps_Auto_Field_Checkbox($this->getFieldName() . '_delete', ''))
                     ->setBoxLabel('Delete')
