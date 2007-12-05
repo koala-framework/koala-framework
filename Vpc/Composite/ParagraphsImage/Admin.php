@@ -10,10 +10,10 @@ class Vpc_Composite_ParagraphsImage_Admin extends Vpc_Admin
     {
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
 
-        $conf = Vpc_Admin::getConfig($classes['paragraphs'], $pageId, $componentKey . '-1');
+        $conf = Vpc_Admin::getConfig($classes['paragraphs'], $pageId, $componentKey . '-paragraphs');
         $config['tabs']['Paragraphs'] = $conf; 
 
-        $conf = Vpc_Admin::getConfig($classes['image'], $pageId, $componentKey . '-2');
+        $conf = Vpc_Admin::getConfig($classes['image'], $pageId, $componentKey . '-image');
         $config['tabs']['Image'] = $conf; 
 
         $config['activeItem'] = 'Paragraphs';
@@ -31,9 +31,9 @@ class Vpc_Composite_ParagraphsImage_Admin extends Vpc_Admin
     public function delete($class, $pageId, $componentKey)
     {
         $pClass = Vpc_Abstract::getSetting($this->_class, 'paragraphsClass');
-        Vpc_Admin::getInstance($pClass)->delete($pClass, $pageId, $componentKey . '-1');
+        Vpc_Admin::getInstance($pClass)->delete($pClass, $pageId, $componentKey . '-paragraphs');
         
         $iClass = Vpc_Abstract::getSetting($this->_class, 'imageClass');
-        Vpc_Admin::getInstance($iClass)->delete($iClass, $pageId, $componentKey . '-2');
+        Vpc_Admin::getInstance($iClass)->delete($iClass, $pageId, $componentKey . '-image');
     }
 }

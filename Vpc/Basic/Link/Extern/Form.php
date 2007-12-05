@@ -1,9 +1,9 @@
 <?php
 class Vpc_Basic_Link_Extern_Form extends Vps_Auto_Vpc_Form
 {
-    public function __construct($class, $pageId = null, $componentKey = null)
+    public function __construct($class, $id)
     {
-        parent::__construct($class, $pageId, $componentKey);
+        parent::__construct($class, $id);
 
         $this->add(new Vps_Auto_Field_TextField('target', 'Target'))
             ->setWidth(500)

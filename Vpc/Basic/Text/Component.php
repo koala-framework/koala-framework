@@ -45,8 +45,10 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
                     $class = $this->_getClassFromSetting('download', 'Vpc_Basic_DownloadTag_Component');
                     $part['nr'] = 'd'.$part['nr'];
                 }
-                $component = $this->createComponent($class, $part['nr']);
-                $this->_componentParts[] = $component;
+                if (isset($class)) {
+                    $component = $this->createComponent($class, $part['nr']);
+                    $this->_componentParts[] = $component;
+                }
             } else {
                 $this->_componentParts[] = $part;
             }
