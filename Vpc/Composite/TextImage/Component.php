@@ -24,7 +24,7 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract
         $return = parent::getTemplateVars();
         $return['text'] = $this->text->getTemplateVars('');
         $return['image'] = $this->image->getTemplateVars('');
-        $return['image_position'] = 'right'; // TODO
+        $return['image_position'] = $this->_row->image_position;
         return $return;
     }
 
