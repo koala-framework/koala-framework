@@ -24,14 +24,4 @@ class Vps_Auto_Data_Vpc_Image extends Vps_Auto_Data_Abstract
             return '';
         }
     }
-
-    public function save(Zend_Db_Table_Row_Abstract $row, $data)
-    {
-        throw new Vps_Exception('Save is not possible for Vps_Auto_Data_Table_Parent.');
-    }
-
-    public function delete()
-    {
-        throw new Vps_Exception('Delete is not possible for Vps_Auto_Data_Table_Parent.');
-    }
 }

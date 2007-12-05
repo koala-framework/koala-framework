@@ -25,10 +25,7 @@ Ext.onReady(function()
 {
 //     Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
-//     Ext.form.Field.prototype.msgTarget = 'side';// turn on validation errors beside the field globally
-
     if (Ext.QuickTips) {
-        //init quicktips when loaded
         Ext.QuickTips.init();
     }
 });

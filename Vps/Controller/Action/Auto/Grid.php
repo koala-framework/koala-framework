@@ -289,8 +289,10 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
                     throw new Vps_Exception("You don't have the permissions to load this row");
                 }
                 foreach ($this->_columns as $column) {
-                    $data = $column->load($row, Vps_Auto_Grid_Column::ROLE_DISPLAY);
-                    $r[$column->getDataIndex()] = $data;
+                    if ($column->getShowIn() & Vps_Auto_Grid_Column::SHOW_IN_GRID) {
+                        $data = $column->load($row, Vps_Auto_Grid_Column::ROLE_DISPLAY);
+                        $r[$column->getDataIndex()] = $data;
+                    }
                 }
                 if (!isset($r[$primaryKey]) && isset($row->$primaryKey)) {
                     $r[$primaryKey] = $row->$primaryKey;
@@ -354,6 +356,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         $this->view->metaData['columns'] = array();
         $this->view->metaData['fields'] = array();
         foreach ($this->_columns as $column) {
+            if (!($column->getShowIn() & Vps_Auto_Grid_Column::SHOW_IN_GRID)) continue;
             $data = $column->getMetaData($this->_getTableInfo());
             if ($data) {
                 $this->view->metaData['columns'][] = $data;
@@ -443,6 +446,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
                 throw new Vps_Exception("You don't have the permissions to save this row.");
             }
             foreach ($this->_columns as $column) {
+                if (!($column->getShowIn() & Vps_Auto_Grid_Column::SHOW_IN_GRID)) continue;
                 if ($id && $column->getDataIndex() == $this->_position) {
                     $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
                 } else {
@@ -523,12 +527,10 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         if (empty($this->_pdf['format'])) {
             $this->_pdf['format'] = self::PDF_FORMAT_A4;
         }
-        if (!isset($this->_pdf['ignoreFields'])) {
-            $this->_pdf['ignoreFields'] = array();
-        }
         if (!isset($this->_pdf['fields'])) {
             $this->_pdf['fields'] = array();
             foreach ($this->_columns as $column) {
+                if (!($column->getShowIn() & Vps_Auto_Grid_Column::SHOW_IN_PDF)) continue;
                 if ($column->getHeader()) {
                     $this->_pdf['fields'][] = $column->getName();
                 }
@@ -537,9 +539,6 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
 
         if (!is_array($this->_pdf['fields'])) {
             throw new Vps_Exception("PDF export fields must be of type `array`");
-        }
-        if (!is_array($this->_pdf['ignoreFields'])) {
-            throw new Vps_Exception("PDF export `ignoreFields` must be of type `array`");
         }
         if (isset($this->_pdf['columns'])) {
             throw new Vps_Exception("PDF export fields key is labeld `fields`, not `columns`");
@@ -550,10 +549,10 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
                 throw new Vps_Exception("PDF export field `$mixed` must not be of type "
                                         .'`'.gettype($mixed).'`, only `string` or `array` allowed.');
             }
-            if (is_string($mixed) && $this->_columns[$mixed] && !in_array($mixed, $this->_pdf['ignoreFields'])) {
+            if (is_string($mixed) && $this->_columns[$mixed]) {
                 $tmpFields[$mixed] = array('header' => $this->_columns[$mixed]->getHeader(),
                                             'width'  => 0);
-            } else if (is_array($mixed) && $this->_columns[$key] && !in_array($key, $this->_pdf['ignoreFields'])) {
+            } else if (is_array($mixed) && $this->_columns[$key]) {
                 if (!isset($mixed['header'])) {
                     $this->_pdf['fields'][$key]['header'] =
                         $this->_columns[$key]->getHeader();
@@ -618,7 +617,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         $this->_helper->viewRenderer->setNoRender();
     }
 
-    private function _getExportData()
+    private function _getExportData($onlyShowIn)
     {
         $order = trim($this->_defaultOrder['field'].' '.$this->_defaultOrder['direction']);
         $rowSet = $this->_fetchData($order, null, null);
@@ -639,6 +638,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
                 }
                 $columns = $columnsHeader = array();
                 foreach ($this->_columns as $column) {
+                    if (!($column->getShowIn() & $onlyShowIn)) continue;
                     $currentColumnHeader = $column->getHeader();
                     if (!is_null($currentColumnHeader)) {
                         $columnsHeader[] = $currentColumnHeader;
@@ -661,7 +661,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             throw new Vps_Exception("CSV is not allowed.");
         }
 
-        $data = $this->_getExportData();
+        $data = $this->_getExportData(Vps_Auto_Grid_Column::SHOW_IN_CSV);
 
         if (!is_null($data)) {
             $csvRows = array();
@@ -695,7 +695,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         $sheet = $xls->addWorksheet('export_'. date('Y-m-d_H-i'));
         $sheet->setInputEncoding('UTF-8');
 
-        $data = $this->_getExportData();
+        $data = $this->_getExportData(Vps_Auto_Grid_Column::SHOW_IN_XLS);
         if (!is_null($data)) {
             foreach ($data as $row => $cols) {
                 foreach ($cols as $col => $text) {
