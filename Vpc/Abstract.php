@@ -496,7 +496,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param Vpc_Abstract Komponente, für die man die URL wissen will
      * @return string URL der Seite
      */
-    protected function getUrl($component = null)
+    public function getUrl($component = null)
     {
         if ($component == null) $component = $this;
         return $this->getPageCollection()->getUrl($component);

@@ -1,7 +1,7 @@
 <?php
 class Vpc_Basic_Text_Form extends Vps_Auto_Vpc_Form
 {
-    public function __construct($class, $id)
+    public function __construct($class, $id = null)
     {
         parent::__construct($class, $id);
         $field = new Vps_Auto_Field_HtmlEditor('content', 'Content');
