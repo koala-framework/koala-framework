@@ -32,8 +32,8 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract
     {
         $textClass = $this->_getClassFromSetting('text', 'Vpc_Basic_Text_Component');
         $imageClass = $this->_getClassFromSetting('image', 'Vpc_Basic_Image_Component');
-        $this->text = $this->createComponent($textClass, 1);
-        $this->image = $this->createComponent($imageClass, 2);
+        $this->text = $this->createComponent($textClass, 'text');
+        $this->image = $this->createComponent($imageClass, 'image');
     }
 
     public function getChildComponents()

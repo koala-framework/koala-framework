@@ -20,7 +20,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract
     public function _init()
     {
         $class = $this->_getClassFromSetting('downloadTag', 'Vpc_Basic_DownloadTag_Component');
-        $this->downlaodTag = $this->createComponent($class, 1);
+        $this->downlaodTag = $this->createComponent($class, 'tag');
     }
 
     public function getChildComponents()

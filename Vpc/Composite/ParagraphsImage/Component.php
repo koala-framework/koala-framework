@@ -27,8 +27,8 @@ class Vpc_Composite_ParagraphsImage_Component extends Vpc_Abstract
     {
         $paragraphsClass = $this->_getClassFromSetting('paragraphs', 'Vpc_Paragraphs_Component');
         $imageClass = $this->_getClassFromSetting('image', 'Vpc_Basic_Image_Component');
-        $this->paragraphs = $this->createComponent($paragraphsClass, 1);
-        $this->image = $this->createComponent($imageClass, 2);
+        $this->paragraphs = $this->createComponent($paragraphsClass, 'paragraphs');
+        $this->image = $this->createComponent($imageClass, 'image');
     }
 
     public function getChildComponents()
