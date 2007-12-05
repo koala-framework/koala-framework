@@ -205,7 +205,15 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             this.editDialog = new Vps.Auto.Form.Window({ autoForm: this.editDialog });
         }
         if (this.editDialog && !(this.editDialog instanceof Ext.Window)) {
-            this.editDialog = new Vps.Auto.Form.Window(this.editDialog);
+            var d = Vps.Auto.Form.Window;
+            if (this.editDialog.type) {
+                try {
+                    d = eval(this.editDialog.type);
+                } catch (e) {
+                    throw new Error("Invalid editDialog \'"+this.editDialog.type+"': "+e);
+                }
+            }
+            this.editDialog = new d(this.editDialog);
         }
         if (this.editDialog) {
             this.editDialog.on('datachange', function(r) {

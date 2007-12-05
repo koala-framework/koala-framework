@@ -89,7 +89,15 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         });
 
         if (this.addDialog) {
-            this.addDialog = new Vps.Auto.Form.Window(this.addDialog);
+            var d = Vps.Auto.Form.Window;
+            if (this.addDialog.type) {
+                try {
+                    d = eval(this.addDialog.type);
+                } catch (e) {
+                    throw new Error("Invalid addDialog \'"+this.addDialog.type+"': "+e);
+                }
+            }
+            this.addDialog = new d(this.addDialog);
             this.addDialog.on('datachange', function(result) {
                 if (result.data.addedId) {
                     //neuen Eintrag auswählen
@@ -102,6 +110,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
     },
     setValue : function(v)
     {
+        //debugger;
         if (this.store.proxy && v!=='' && this.valueField) {
             //wenn proxy vorhanden können daten nachgeladen werden
             //also loading anzeigen (siehe setValue)

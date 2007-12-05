@@ -23,7 +23,11 @@ class Vps_Acl_Component extends Vps_Acl
             array('text'=>'Components', 'icon'=>'application_view_list.png'),
             '/admin/component/overview'));
 
-
+        $this->add(new Vps_Acl_Resource_MenuUrl('user',
+            array('text'=>'User', 'icon'=>'folder_user.png'),
+            '/admin/component/user'));
+            $this->add(new Zend_Acl_Resource('useredit'), 'user');
+            
         $this->allow(null, 'web');
         $this->allow(null, 'media');
 
@@ -31,5 +35,6 @@ class Vps_Acl_Component extends Vps_Acl
         $this->allow('admin', 'mediaoriginal');
         $this->allow('admin', 'mediavpc');
         $this->allow('admin', 'overview');
+        $this->allow('admin', 'user');
     }
 }
