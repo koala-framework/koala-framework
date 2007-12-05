@@ -72,6 +72,9 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
     {
         $uploadId = $this->_getParam('uploadId');
         $row = $this->_getRow($uploadId);
+        if (!$row) {
+            throw new Vps_Controller_Action_Web_Exception('File not found');
+        }
 
         $target = $this->_getCachePath($uploadId, $this->_getCacheFilename());
         if (!is_file($target)) {
