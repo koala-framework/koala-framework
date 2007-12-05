@@ -5,7 +5,7 @@ class Vpc_Composite_TextImage_Controller extends Vps_Controller_Action_Auto_Vpc_
     {
         $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
         // Text
-        $form = new Vpc_Basic_Html_Form($classes['text'], $this->pageId, $this->componentKey . '-1');
+        $form = new Vpc_Basic_Text_Form($classes['text'], $this->pageId, $this->componentKey . '-1');
         
         $fieldset = new Vps_Auto_Container_FieldSet('Text');
         $fieldset->add($form);
