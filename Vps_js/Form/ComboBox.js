@@ -106,20 +106,37 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             }, this);
         }
 
+        this.store.on('load', function() {
+            this.addNoSelection();
+        }, this);
+        if (this.store.recordType) {
+            this.addNoSelection();
+        }
+        if (this.showNoSelection) {
+            this.allowBlank = false;
+        }
+
         Vps.Form.ComboBox.superclass.initComponent.call(this);
+    },
+    addNoSelection : function() {
+        if (this.showNoSelection && this.store.find('id', '') == -1) {
+            var data = {};
+            data[this.displayField] = '(no selection)';
+            data[this.valueField] = '';
+            this.store.insert(0, new this.store.recordType(data));
+        }
     },
     setValue : function(v)
     {
-        //debugger;
-        if (this.store.proxy && v!=='' && this.valueField) {
+        if (this.store.proxy && this.valueField) {
             //wenn proxy vorhanden können daten nachgeladen werden
             //also loading anzeigen (siehe setValue)
-            this.valueNotFoundText = 'loading...';
+            this.valueNotFoundText = this.loadingText;
         } else {
             this.valueNotFoundText = '';
         }
         Vps.Form.ComboBox.superclass.setValue.apply(this, arguments);
-        if (v !== '' && this.valueField
+        if (this.valueField
                 && !this.findRecord(this.valueField, v) //record nicht gefunden
                 && this.store.proxy) { //proxy vorhanden (dh. daten können nachgeladen werden)
             this.store.baseParams[this.queryParam] = v;
