@@ -7,8 +7,7 @@ class Vpc_News_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         'reload' => true,
         'add'   => true
     );
-    protected $_paging = 0;
-    protected $_position = 'pos';
+    protected $_defaultOrder = array('field' => 'publish_date', 'direction' => 'DESC');
     protected $_editDialog = array('controllerUrl'=>'edit/Vpc_News_Form',
                                    'width'=>500,
                                    'height'=>400);

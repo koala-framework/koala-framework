@@ -3,8 +3,6 @@ Ext.namespace('Vps.Auto.Form');
 Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
     initComponent : function()
     {
-        this.actions = {};
-
         if (!this.autoForm) {
             if (!this.formConfig) this.formConfig = {};
 
@@ -52,6 +50,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
 
     getAction : function(type)
     {
+        if (!this.actions) { this.actions = {}; }
         if (this.actions[type]) return this.actions[type];
 
         if (type == 'save') {

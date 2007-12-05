@@ -27,7 +27,7 @@ class Vpc_News_Component extends Vpc_Abstract
             $where['visible = 1'] = '';
         }
         $class = $this->_getClassFromSetting('details', 'Vpc_News_Details_Component');
-        foreach ($this->getTable()->fetchAll($where) as $row) {
+        foreach ($this->getTable()->fetchAll($where, 'publish_date DESC') as $row) {
             $fn = $row->getUniqueString($row->title, 'title', $where);
             if ($filename != '' && $filename != $fn && $filename != $row->id) continue;
             $page = $this->createPage($class, $row->id);

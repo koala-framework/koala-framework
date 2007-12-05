@@ -28,7 +28,6 @@ class Vpc_News_FormController extends Vps_Controller_Action_Auto_Form
         if ($this->_getParam('id') == 0 && $this->_getParam('pageId')) {
             $row->page_id = $this->_getParam('pageId');
             $row->component_key = $this->_getParam('componentKey');
-            $row->pos = 0;
             $row->visible = 0;
         }
     }
