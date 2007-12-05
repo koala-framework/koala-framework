@@ -39,15 +39,16 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
             $s = $this->_getScaleSettings();
             Vps_Media_Image::scale($source, $target,
                                 array($s['width'], $s['height']), $s['scale']);
-        }
-        $outputDimensions = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
-                                    'ouputDimensions');
-        if (isset($outputDimensions[$type])) {
-            $s = $outputDimensions[$type];
-            if (!isset($s[2])) $s[2] = Vps_Media_Image::SCALE_BESTFIT;
-            Vps_Media_Image::scale($source, $target, array($s[0], $s[1]), $s[2]);
         } else {
-            throw new Vps_Exception("Undefined outputDimension: '$type'");
+            $outputDimensions = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
+                                        'ouputDimensions');
+            if (isset($outputDimensions[$type])) {
+                $s = $outputDimensions[$type];
+                if (!isset($s[2])) $s[2] = Vps_Media_Image::SCALE_BESTFIT;
+                Vps_Media_Image::scale($source, $target, array($s[0], $s[1]), $s[2]);
+            } else {
+                throw new Vps_Exception("Undefined outputDimension: '$type'");
+            }
         }
     }
 
