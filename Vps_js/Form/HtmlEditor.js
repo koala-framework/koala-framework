@@ -403,8 +403,8 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 closeAction: 'hide',
                 autoScroll: true
             });
-            win.on('insertchar', function(win, char) {
-                this.insertAtCursor(char);
+            win.on('insertchar', function(win, ch) {
+                this.insertAtCursor(ch);
                 win.hide();
             }, this);
             Vps.Form.HtmlEditor.insertCharWindow = win;
