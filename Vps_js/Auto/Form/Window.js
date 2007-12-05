@@ -82,9 +82,9 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
 
     showAdd : function()
     {
-        this.getAutoForm().onAdd();
         this.setTitle('add');
         this.show();
+        this.getAutoForm().onAdd();
     },
 
     showEdit : function(id, options)
