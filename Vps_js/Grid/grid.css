@@ -5,3 +5,9 @@
 .vps-check-tick-cross-col {
     background-image:url(/assets/silkicons/cross.png);
 }
+
+.vps-cell-button div.x-grid3-cell-inner {
+    background-image: url(/assets/silkicons/page_edit.png);
+    background-position: center; background-repeat: no-repeat;
+    cursor: pointer;
+}

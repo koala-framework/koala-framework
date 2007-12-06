@@ -44,3 +44,14 @@ Ext.util.Format.component = function(v) {
 };
 
 Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer('Y-m-d');
+
+Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, store, column) {
+    p.css += 'vps-cell-button';
+    if (column && column.buttonIcon) {
+        p.attr += 'style="background-image:url('+column.buttonIcon+');" ';
+    }
+    if (column && column.tooltip) {
+        p.attr += ' ext:qtip="'+column.tooltip+'"';
+    }
+    return '';
+};
