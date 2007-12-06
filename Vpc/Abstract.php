@@ -449,6 +449,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $vars['id'] = $this->getId();
         $vars['store'] = $this->_store;
         $vars['template'] = Vpc_Admin::getComponentFile(get_class($this), '', 'tpl');
+        $vars['isOffline'] = 
+            isset($_SERVER['SERVER_NAME']) &&
+            substr($_SERVER['SERVER_NAME'], -6) == '.vivid';
         if (!$vars['template']) {
             throw new Vpc_Exception('Template not found for Component ' . get_class($this));
         }
