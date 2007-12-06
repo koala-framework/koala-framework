@@ -122,7 +122,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         if (this.showNoSelection && this.store.find('id', '') == -1) {
             var data = {};
             data[this.displayField] = '(no selection)';
-            data[this.valueField] = '';
+            data[this.valueField] = null;
             this.store.insert(0, new this.store.recordType(data));
         }
     },

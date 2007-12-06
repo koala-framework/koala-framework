@@ -54,7 +54,7 @@ class Vps_Auto_Field_ComboBox extends Vps_Auto_Field_SimpleAbstract
     protected function _getValueFromPostData($postData)
     {
         $ret = parent::_getValueFromPostData($postData);
-        if ($ret == '') $ret = null;
+        if ($ret == '' || $ret == 'null') $ret = null;
         return $ret;
     }
 }
