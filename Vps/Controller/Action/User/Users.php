@@ -21,7 +21,7 @@ class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
     protected $_buttons = array('save'=>true,
                                 'add'=>true,
                                 'delete'=>true);
-    protected $_paging = 0;
+    protected $_paging = 20;
     protected $_defaultOrder = 'username';
     protected $_tableName = 'Vps_Model_User_Users';
 
