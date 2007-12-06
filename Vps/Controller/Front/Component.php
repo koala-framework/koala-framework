@@ -61,6 +61,10 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                     array('module' => 'vps',
                         'controller' => 'Media',
                         'action' => 'original')));
+        $router->AddRoute('error', new Zend_Controller_Router_Route(
+                    'error/:action',
+                    array('module' => 'vps',
+                          'controller' => 'error')));
 /*
         $router->AddRoute('mediavpc', new Zend_Controller_Router_Route(
                     'media/:class/:componentId/:filename',
