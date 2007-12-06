@@ -135,7 +135,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         }
         for (var i=0; i<meta.columns.length; i++) {
             var column = meta.columns[i];
-            if (!column.header) continue;
+            if (column.header == null) continue;
 
             if (column.editor && column.editor.xtype == 'checkbox') {
                 delete column.editor;
@@ -168,6 +168,23 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             } else if (column.showDataIndex) {
                 column.renderer = Ext.util.Format.showField(column.showDataIndex);
             }
+            if (column.renderer) {
+                column.renderer = this.createRenderer(column.renderer, column);
+            }
+            if (column.columnType == 'button') {
+                if (column.editDialog) {
+                    column.editDialog = this.initEditDialog(column.editDialog);
+                }
+                column.clickHandler = function(grid, rowIndex, col, e) {
+                    if (col.editDialog) {
+                        var r = grid.getStore().getAt(rowIndex);
+                        col.editDialog.showEdit(r.id);
+                    } else if (this.editDialog) {
+                        var r = grid.getStore().getAt(rowIndex);
+                        this.editDialog.showEdit(r.id);
+                    }
+                };
+            }
 
             if (column.defaultValue) delete column.defaultValue;
             if (column.dateFormat) delete column.dateFormat;
@@ -193,36 +210,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         if (!this.editDialog && meta.editDialog) {
             this.editDialog = meta.editDialog;
         }
-        if (typeof this.editDialog == "string") {
-            try {
-                var d = eval(this.editDialog);
-            } catch (e) {
-                throw new Error("Invalid editDialog \'"+this.editDialog+"': "+e);
-            }
-            this.editDialog = new d({ baseCls: 'x-plain' });
-        }
-        if (this.editDialog instanceof Vps.Auto.FormPanel) {
-            this.editDialog = new Vps.Auto.Form.Window({ autoForm: this.editDialog });
-        }
-        if (this.editDialog && !(this.editDialog instanceof Ext.Window)) {
-            var d = Vps.Auto.Form.Window;
-            if (this.editDialog.type) {
-                try {
-                    d = eval(this.editDialog.type);
-                } catch (e) {
-                    throw new Error("Invalid editDialog \'"+this.editDialog.type+"': "+e);
-                }
-            }
-            this.editDialog = new d(this.editDialog);
-        }
         if (this.editDialog) {
-            this.editDialog.on('datachange', function(r) {
-                this.reload();
-                //r nicht durchschleifen - weil das probleme verursacht wenn
-                //das grid zB an einem Tree gebunden ist
-                this.fireEvent('datachange');
-            }, this);
-
+            this.editDialog = this.initEditDialog(this.editDialog);
             if (this.editDialog.allowEdit !== false) {
                 this.on('rowdblclick', function(grid, rowIndex) {
                     this.editDialog.showEdit(this.store.getAt(rowIndex).id);
@@ -375,6 +364,13 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
 
+        this.grid.on('cellclick', function(grid, rowIndex, columnIndex, e) {
+            var col = grid.getColumnModel().config[columnIndex];
+            if (col.clickHandler) {
+                col.clickHandler.call(col.scope || this, grid, rowIndex, col, e);
+            }
+        }, this);
+
         this.fireEvent('beforerendergrid', this.grid);
 
         this.add(this.grid);
@@ -387,6 +383,47 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         if (result.rows) {
             this.store.loadData(result);
         }
+    },
+    initEditDialog : function(editDialog)
+    {
+        if (typeof editDialog == "string") {
+            try {
+                var d = eval(editDialog);
+            } catch (e) {
+                throw new Error("Invalid editDialog '"+editDialog+"': "+e);
+            }
+            editDialog = new d({});
+        }
+        if (editDialog instanceof Vps.Auto.FormPanel) {
+            editDialog = new Vps.Auto.Form.Window({ autoForm: editDialog });
+        }
+        if (editDialog && !(editDialog instanceof Ext.Window)) {
+            var d = Vps.Auto.Form.Window;
+            if (editDialog.type) {
+                try {
+                    d = eval(editDialog.type);
+                } catch (e) {
+                    throw new Error("Invalid editDialog \'"+editDialog.type+"': "+e);
+                }
+            }
+            editDialog = new d(editDialog);
+        }
+        editDialog.on('datachange', function(r) {
+            this.reload();
+            //r nicht durchschleifen - weil das probleme verursacht wenn
+            //das grid zB an einem Tree gebunden ist
+            this.fireEvent('datachange');
+        }, this);
+        return editDialog;
+    },
+
+    //add additional argument to renderer (column)
+    createRenderer : function(renderer, column) {
+        return function() {
+            var a = arguments;
+            Array.prototype.push.call(a, column);
+            return renderer.apply(this, a);
+        };
     },
 
     getAction : function(type)
