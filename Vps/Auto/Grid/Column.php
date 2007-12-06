@@ -16,9 +16,9 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
 
     public function __construct($dataIndex = null, $header = null, $width = null)
     {
-        if ($dataIndex) $this->setDataIndex($dataIndex);
-        if ($header) $this->setHeader($header);
-        if ($width) $this->setWidth($width);
+        if (!is_null($dataIndex)) $this->setDataIndex($dataIndex);
+        if (!is_null($header)) $this->setHeader($header);
+        if (!is_null($width)) $this->setWidth($width);
         $this->setShowIn(self::SHOW_IN_ALL);
     }
 
