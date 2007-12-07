@@ -20,6 +20,17 @@ Vpc.News.Panel = Ext.extend(Vpc.Paragraphs.Panel,
             },
             scope   : this
         });
+        this.getGrid().on('cellclick', function(grid, rowIndex, columnIndex) {
+            if (columnIndex == 1) {
+                var row = grid.getStore().getAt(rowIndex);
+                this.fireEvent('editcomponent', {
+                    componentClass: row.data.component_class,
+                    pageId: this.baseParams.page_id, 
+                    componentKey: this.baseParams.component_key + '-' + row.data.id, 
+                    text: row.data.component_name
+                });
+            }
+        }, this);
     },
     
     onAdd : function()
