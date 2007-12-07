@@ -1,0 +1,19 @@
+{if $image}
+    <img src="{$image}" width="{$imageSize.width}" height="{$imageSize.height}" />
+{/if}
+{if $content}
+    <div class="content">
+        {$content}
+    </div>
+    <div class="footer">
+        <p>{$application->name} Version {$application->version}</p>
+        <p>{$application->vps->name} Version {$application->vps->version}</p>
+    </div>
+{else}
+    <div class="content">
+        <h1>{$application->name} Version {$application->version}</h1>
+    </div>
+    <div class="footer">
+        <p>{$application->vps->name} Version {$application->vps->version}</p>
+    </div>
+{/if}

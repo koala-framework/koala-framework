@@ -1,0 +1,21 @@
+.vps-welcome {
+    font-family: tahoma,arial,helvetica,sans-serif;
+    font-size: 12px;
+}
+.vps-welcome .content {
+    padding: 10px;
+}
+.vps-welcome .content h1 {
+    color: #d4e1f2;
+    font-size: 18px; font-weight: bold;
+    margin-bottom: 10px;
+}
+.vps-welcome .content p {
+    margin-bottom: 10px;
+}
+.vps-welcome .footer {
+    border-color: #a9bfd4; border-style: solid;
+    border-width: 3px 0;
+    padding: 10px;
+    font-size: 11px;
+}

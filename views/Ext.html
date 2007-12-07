@@ -47,14 +47,12 @@
 
 
     <script type="text/javascript">
-    {literal}
-        Ext.onReady(function() {
-            Vps.callWithErrorHandler(function() {
-                {/literal}
-                Vps.debug = {$ext.debug};
+        Ext.onReady(function() {ldelim}
+            Vps.debug = {$ext.debug};
+            Vps.callWithErrorHandler(function() {ldelim}
                 Vps.userRole = '{$ext.userRole}';
                 var panel = new {$ext.class}({$ext.config});
-                {literal}
+    {literal}
                 if (!panel.region) panel.region = 'center';
                 panel.id = 'mainPanel';
                 Vps.currentViewport = new Vps.Viewport({

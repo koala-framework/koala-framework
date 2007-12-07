@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
+abstract class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
 {
     protected $_buttons = array();
     protected $_permissions;

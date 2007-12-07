@@ -81,7 +81,7 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
             // Verzeichnisse anlegen, falls nicht existent
             if (!is_dir($this->_getUploadDir() . '/cache')) {
                 mkdir($this->_getUploadDir() . '/cache', 0775);
-                chmod($this->_getUploadDir() . '/cache', 0775);
+               chmod($this->_getUploadDir() . '/cache', 0775);
             }
             if (!is_dir(dirname($target))) {
                 mkdir(dirname($target), 0775);
@@ -90,11 +90,11 @@ class Vps_Controller_Action_Media extends Vps_Controller_Action
 
             // Cache-Datei erstellen
             $source = $row->getFileSource();
-            try {
+//             try {
                 $this->_createCacheFile($source, $target, $this->_getParam('type'));
-            } catch (Exception $e) {
-                throw new Vps_Controller_Action_Web_Exception($e->getMessage()); // immer 404 auswerfen
-            }
+//             } catch (Exception $e) {
+//                 throw new Vps_Controller_Action_Web_Exception($e->getMessage()); // immer 404 auswerfen
+//             }
 
             // Aufräumen, falls Verzeichnis angelegt wurde und keine Datei erstellt wurde, wieder löschen
             if (sizeof(scandir(dirname($target))) <= 2) {
