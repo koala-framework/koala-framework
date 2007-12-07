@@ -10,27 +10,29 @@ Vpc.News.Panel = Ext.extend(Vpc.Paragraphs.Panel,
             handler : function(o, p) {
                 var row = this.grid.getSelectionModel().getSelected();
                 if (row != undefined) {
-                    this.fireEvent('editcomponent', {
-                        componentClass: this.contentClass,
-                        pageId: this.baseParams.page_id, 
-                        componentKey: this.baseParams.component_key + '_' + row.data.id, 
-                        text: 'Details'
-                    });
+                    this.fireEditComponent(row);
                 }
             },
             scope   : this
         });
+        // Event-Handler für Edit-Dialog rausschmeißen
+        this.getGrid().getColumnModel().getColumnByDataIndex('edit').clickHandler = function() {};
         this.getGrid().on('cellclick', function(grid, rowIndex, columnIndex) {
-            if (columnIndex == 1) {
+            if (columnIndex == 2) {
                 var row = grid.getStore().getAt(rowIndex);
-                this.fireEvent('editcomponent', {
-                    componentClass: row.data.component_class,
-                    pageId: this.baseParams.page_id, 
-                    componentKey: this.baseParams.component_key + '-' + row.data.id, 
-                    text: row.data.component_name
-                });
+                this.fireEditComponent(row);
             }
         }, this);
+    },
+    
+    fireEditComponent : function(row)
+    {
+        this.fireEvent('editcomponent', {
+            componentClass: this.contentClass,
+            pageId: this.baseParams.page_id, 
+            componentKey: this.baseParams.component_key + '_' + row.data.id, 
+            text: 'Details'
+        });
     },
     
     onAdd : function()
