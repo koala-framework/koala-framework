@@ -125,7 +125,7 @@ class Vpc_Admin
     {
         $tablename = Vpc_Abstract::getSetting($this->_class, 'tablename');
         if ($tablename) {
-            $table = new $tablename();
+            $table = new $tablename(array('componentClass' => $this->_class));
             $where = array(
                 'page_id = ?' => $pageId,
                 'component_key = ?' => $componentKey

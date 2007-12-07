@@ -14,6 +14,9 @@ class Vpc_News_Admin extends Vpc_Admin
 
     public function setup()
     {
+        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+        Vpc_Admin::getInstance($classes['details'])->setup();
+        
         if (!$this->_tableExists($tablename)) {
             $this->_db->query("CREATE TABLE IF NOT EXISTS `vpc_news` (
   `id` smallint(6) NOT NULL auto_increment,
@@ -27,5 +30,11 @@ class Vpc_News_Admin extends Vpc_Admin
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
         }
+    }
+    
+    public function delete($pageId, $componentKey)
+    {
+        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+        Vpc_Admin::getInstance($classes['details'])->delete($pageId, $componentKey);
     }
 }
