@@ -1,0 +1,21 @@
+<?php
+class Vps_Controller_Action_Welcomeform extends Vps_Controller_Action_Auto_Form
+{
+    protected $_tableName = 'Vps_Dao_Welcome';
+    protected $_buttons = array('save');
+    protected function _initFields()
+    {
+        parent::_initFields();
+        $this->_form->setId(1);
+
+        $this->_form->add(new Vps_Auto_Field_File('vps_upload_id', 'Image'));
+        $this->_form->add(new Vps_Auto_Field_HtmlEditor('content', 'Content'));
+
+    }
+
+    public function indexAction()
+    {
+        $this->view->ext('Vps.Auto.FormPanel',
+                array('controllerUrl'=>'/vps/welcomeform'));
+    }
+}

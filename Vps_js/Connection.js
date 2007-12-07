@@ -1,26 +1,29 @@
 Vps.Connection = Ext.extend(Ext.data.Connection, {
     request: function(options)
     {
-        if (options.mask) {
-            if (Vps.Connection.masks == 0) {
-                if (Ext.get('loading')) {
-                    Ext.getBody().mask();
-                } else {
-                    Ext.getBody().mask('Loading...');
+        if (options.url.match(/[\/a-zA-Z0-9]*\/json[a-zA-Z0-9]+(\/|\?|)/)) {
+
+            if (options.mask) {
+                if (Vps.Connection.masks == 0) {
+                    if (Ext.get('loading')) {
+                        Ext.getBody().mask();
+                    } else {
+                        Ext.getBody().mask('Loading...');
+                    }
                 }
+                Vps.Connection.masks++;
             }
-            Vps.Connection.masks++;
+            options.vpsCallback = {
+                success: options.success,
+                failure: options.failure,
+                callback: options.callback,
+                scope: options.scope
+            };
+            options.success = this.vpsSuccess;
+            options.failure = this.vpsFailure;
+            options.callback = this.vpsCallback;
+            options.scope = this;
         }
-        options.vpsCallback = {
-            success: options.success,
-            failure: options.failure,
-            callback: options.callback,
-            scope: options.scope
-        };
-        options.success = this.vpsSuccess;
-        options.failure = this.vpsFailure;
-        options.callback = this.vpsCallback;
-        options.scope = this;
         if (!options.params) options.params = {};
         options.params.application_version = Vps.application.version;
         Vps.Connection.superclass.request.call(this, options);

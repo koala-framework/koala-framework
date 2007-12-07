@@ -3,11 +3,7 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
 {
     protected function _init()
     {
-        parent::_init();
-
         $router = $this->getRouter();
-
-        $this->setDispatcher(new Vps_Controller_Dispatcher());
 
         $router->AddRoute('default', new Zend_Controller_Router_Route(
                     '*',
@@ -35,22 +31,6 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                     array('module' => 'component',
                         'controller' => 'component',
                         'action' => 'index')));
-/*        $router->AddRoute('componentsetup', new Zend_Controller_Router_Route(
-                    'admin/component/setup/:class',
-                    array('module' => 'component',
-                        'controller' => 'components',
-                        'action' => 'setup')));*/
-        $router->AddRoute('login', new Zend_Controller_Router_Route(
-                    'login/:action',
-                    array('module' => 'vps',
-                        'controller' => 'login',
-                        'action' => 'index')));
-        $router->AddRoute('menu', new Zend_Controller_Router_Route(
-                    'menu/:action',
-                    array('module' => 'vps',
-                        'controller' => 'menu',
-                        'action' => 'index')));
-
         $router->AddRoute('media', new Zend_Controller_Router_Route(
                     'media/:uploadId/:class/:componentId/:type/:checksum/:filename',
                     array('module' => 'vps',
@@ -61,20 +41,7 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                     array('module' => 'vps',
                         'controller' => 'Media',
                         'action' => 'original')));
-        $router->AddRoute('error', new Zend_Controller_Router_Route(
-                    'error/:action',
-                    array('module' => 'vps',
-                          'controller' => 'error')));
-/*
-        $router->AddRoute('mediavpc', new Zend_Controller_Router_Route(
-                    'media/:class/:componentId/:filename',
-                    array('module' => 'component',
-                        'controller' => 'Media',
-                        'action' => 'vpc')));*/
-
-        $plugin = new Zend_Controller_Plugin_ErrorHandler();
-        $plugin->setErrorHandlerModule('vps');
-        $this->registerPlugin($plugin);
+        parent::_init();
     }
 
     public static function getInstance()

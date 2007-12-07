@@ -8,7 +8,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
         );
 
         if (!this.controllerUrl) {
-            this.controllerUrl = '/menu/';
+            this.controllerUrl = '/vps/menu';
         }
         this.reload();
 
@@ -17,7 +17,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
     reload: function()
     {
         Ext.Ajax.request({
-            url: this.controllerUrl+'jsonData',
+            url: this.controllerUrl+'/jsonData',
             params: this.params,
             success: this.loadMenu,
             scope: this
@@ -121,7 +121,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                 icon: '/assets/silkicons/door_out.png',
                 handler: function() {
                     Ext.Ajax.request({
-                        url : '/login/jsonLogoutUser',
+                        url : '/vps/login/jsonLogoutUser',
                         success : function(form, action) {
                             //nicht reload, weil user nach erneutem login vielleicht
                             //die aktuelle seite gar nicht mehr sehen darf
@@ -133,6 +133,16 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                 scope: this
             });
         }
+        this.add({
+            text: 'Info',
+            cls: 'x-btn-text-icon',
+            icon: '/assets/silkicons/information.png',
+            handler: function() {
+                var about = new Vps.About();
+                about.show();
+            },
+            scope: this
+        });
         if (Vps.debug) {
             this.add('-');
             this.add({
@@ -146,7 +156,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                     scope: this,
                     handler: function() {
                         Ext.Ajax.request({
-                            url: this.controllerUrl+'jsonClearAssetsCache/',
+                            url: this.controllerUrl+'/jsonClearAssetsCache',
                             success: function() {
                                 Ext.Msg.alert('Clear Assets Cache', 'successfully cleared');
                             }

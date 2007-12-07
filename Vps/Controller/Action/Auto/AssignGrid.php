@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Action_Auto_Grid
+abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Action_Auto_Grid
 {
 
     protected $_assignTable = null;

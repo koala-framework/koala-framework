@@ -1,8 +1,6 @@
 <?php
-class Vps_Controller_Action extends Zend_Controller_Action
+abstract class Vps_Controller_Action extends Zend_Controller_Action
 {
-    protected $_auth = false;
-
     public function jsonIndexAction()
     {
         $this->indexAction();
@@ -35,9 +33,16 @@ class Vps_Controller_Action extends Zend_Controller_Action
 
     protected function _getResourceName()
     {
-        $resource = strtolower(str_replace('Controller', '', str_replace('Vps_Controller_Action_Component_', '', get_class($this))));
+//         d(get_class($this));
+        $resource = strtolower(str_replace(array('Vps_Controller_Action_Component_',
+                                                 'Vps_Controller_Action_',
+                                                 'Controller'),
+                                        '', get_class($this)));
+        if (substr(get_class($this), 0, 4) == 'Vps_') {
+            $resource = 'vps_'.$resource;
+        }
         if (substr($resource, 0, 4) == 'vpc_') {
-            $resource = 'component';
+            $resource = 'vps_component';
         }
         return $resource;
     }
@@ -56,5 +61,4 @@ class Vps_Controller_Action extends Zend_Controller_Action
     {
         return Zend_Registry::get('acl');
     }
-
 }

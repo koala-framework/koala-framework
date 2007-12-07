@@ -49,7 +49,7 @@ Vps.callWithErrorHandler = function(fn, scope) {
             Ext.Msg.alert('Error', "Ein Fehler ist aufgetreten.");
         }
         Ext.Ajax.request({
-            url: '/error/jsonMail',
+            url: '/vps/error/jsonMail',
             params: {msg: e}
         });
     }

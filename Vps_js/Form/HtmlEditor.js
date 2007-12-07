@@ -113,19 +113,21 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
     initEditor : function() {
         Vps.Form.HtmlEditor.superclass.initEditor.call(this);
-        Ext.EventManager.on(this.doc, 'keypress', function(e) {
-            if(e.ctrlKey){
-                var c = e.getCharCode(), cmd;
-                if(c > 0){
-                    c = String.fromCharCode(c);
-                    if (c == 'v') {
-                        //tidy on paste
-                        Ext.getBody().mask('Cleaning...');
-                        this.tidyHtml.defer(500, this);
+        if (this.controllerUrl) {
+            Ext.EventManager.on(this.doc, 'keypress', function(e) {
+                if(e.ctrlKey){
+                    var c = e.getCharCode(), cmd;
+                    if(c > 0){
+                        c = String.fromCharCode(c);
+                        if (c == 'v') {
+                            //tidy on paste
+                            Ext.getBody().mask('Cleaning...');
+                            this.tidyHtml.defer(500, this);
+                        }
                     }
                 }
-            }
-        }, this);
+            }, this);
+        }
     },
     createToolbar: function(editor){
         Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
@@ -168,19 +170,22 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             clickEvent: 'mousedown',
             tabIndex: -1
         });
-        tb.add({
-            icon: '/assets/silkicons/html_valid.png',
-            handler: this.tidyHtml,
-            scope: this,
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: 'Clean Html',
-                text: 'Clean up Html and remove formatings.'
-            },
-            cls: 'x-btn-icon',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
+
+        if (this.controllerUrl) {
+            tb.add({
+                icon: '/assets/silkicons/html_valid.png',
+                handler: this.tidyHtml,
+                scope: this,
+                tooltip: {
+                    cls: 'x-html-editor-tip',
+                    title: 'Clean Html',
+                    text: 'Clean up Html and remove formatings.'
+                },
+                cls: 'x-btn-icon',
+                clickEvent: 'mousedown',
+                tabIndex: -1
+            });
+        }
 
         this.blockSelect = tb.el.createChild({
             tag:'select',
