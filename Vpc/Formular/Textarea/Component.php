@@ -44,8 +44,7 @@ class Vpc_Formular_Textarea_Component extends Vpc_Formular_Field_Abstract
     {
         $name = $this->_getName();
         if (isset($_POST[$name])) {
-            $value = $_POST[$name];
+            $this->_row->value = $_POST[$name];
         }
-        $this->_row->value = $value;
     }
 }
