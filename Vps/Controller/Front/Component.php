@@ -33,12 +33,12 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                         'action' => 'index')));
         $router->AddRoute('media', new Zend_Controller_Router_Route(
                     'media/:uploadId/:class/:componentId/:type/:checksum/:filename',
-                    array('module' => 'vps',
+                    array('module' => 'component',
                         'controller' => 'Media',
                         'action' => 'password')));
         $router->AddRoute('mediaoriginal', new Zend_Controller_Router_Route(
                     'media/:uploadId',
-                    array('module' => 'vps',
+                    array('module' => 'component',
                         'controller' => 'Media',
                         'action' => 'original')));
         parent::_init();
