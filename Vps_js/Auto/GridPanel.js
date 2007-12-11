@@ -105,9 +105,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         }, this);
 
         if (meta.grouping) {
-            gridConfig.view = new Ext.grid.GroupingView(Ext.applyIf(meta.grouping, {
-                forceFit: true
-            }));
+            if (!gridConfig.view) {
+                gridConfig.view = new Ext.grid.GroupingView(Ext.applyIf(meta.grouping, {
+                    forceFit: true
+                }));
+            }
 
             if (!meta.grouping.noGroupSummary) {
                 var found = false;
@@ -121,7 +123,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
                     gridConfig.plugins.push(new Ext.grid.GroupSummary());
                 }
             }
-        } else {
+        } else if (!gridConfig.view) {
             gridConfig.view = new Ext.grid.GridView({
                 forceFit: true
             });
@@ -702,6 +704,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 
     getGrid : function() {
         return this.grid;
+    },
+    getView : function() {
+        return this.getGrid().getView();
     },
     getSelectionModel : function() {
         return this.getGrid().getSelectionModel();
