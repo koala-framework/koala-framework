@@ -1,19 +1,17 @@
 Ext.form.BasicForm.override({
     resetDirty: function() {
         this.items.each(function(field) {
-            field.originalValue = field.getValue();
+            field.resetDirty();
         });
     },
     setDefaultValues: function() {
         this.items.each(function(field) {
-            field.setValue(field.defaultValue || '');
-            field.originalValue = field.getValue();
+            field.setDefaultValue();
         }, this);
     },
     clearValues: function() {
         this.items.each(function(field) {
-            field.setValue('');
-            field.originalValue = field.getValue();
+            field.clearValue();
         }, this);
     }
 });

@@ -68,6 +68,9 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
             }
         }, this);
 
+        this.hiddenCountValue._findFormFields(item, function(i) {
+            i.setDefaultValue();
+        });
 
         if (this.multiItems[this.multiItems.length-1].xtype == 'fieldset') {
             if (upButton && upButton.el) {
@@ -149,6 +152,9 @@ Vps.Form.MultiFieldsDeleteButton = Ext.extend(Ext.BoxComponent,  {
                     break;
                 }
             }
+            //workaround für Firefox problem wenn eintrag gelöscht wird verschwindet add-Button
+            p.addGroupButton.hide();
+            p.addGroupButton.show.defer(1, p.addGroupButton);
             p.updateButtonsState();
         }, this);
     }
@@ -225,15 +231,13 @@ Vps.Form.MultiFieldsAddButton = Ext.extend(Ext.BoxComponent,  {
 });
 
 Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
-    setValue : function(value) {
+    _initFields: function(cnt) {
         var gp = this.multiFieldsPanel;
-        if (!value instanceof Array) throw new 'ohje, value ist kein array - wos mochma do?';
-        var cnt = value.length;
+        if (cnt < gp.minEntries) cnt = gp.minEntries;
+        if (cnt > gp.maxEntries) cnt = gp.maxEntries;
         for (var i = gp.groups.length; i < cnt; i++) {
             gp.addGroup();
         }
-        if (cnt < gp.minEntries) cnt = gp.minEntries;
-        if (cnt > gp.maxEntries) cnt = gp.maxEntries;
         for (var i = gp.groups.length; i > cnt; i--) {
             var g = gp.groups[i-1];
             gp.remove(g.item);
@@ -242,21 +246,27 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
             gp.remove(g.downButton);
             gp.groups.splice(i-1);
         }
+    },
+    setValue : function(value) {
+        var gp = this.multiFieldsPanel;
+        if (!value instanceof Array) throw new 'ohje, value ist kein array - wos mochma do?';
+        this._initFields(value.length);
         for (var i = 0; i < gp.groups.length; i++) {
             this._findFormFields(gp.groups[i].item, function(item) {
                 if (value[i]) {
                     for (var j in value[i]) {
                         if (item.name == j) {
                             item.setValue(value[i][j]);
+                            return;
                         }
                     }
-                } else {
-                    item.setValue(item.defaultValue || '');
-                    item.originalValue = item.getValue();
                 }
+                item.setDefaultValue();
             });
         }
         gp.updateButtonsState();
+
+        this.value = value;
     },
     getValue : function() {
         var ret = [];
@@ -293,17 +303,69 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
         }, this);
         return valid;
     },
-    isDirty : function() {
-        var dirty = false;
+    resetDirty: function() {
         var gp = this.multiFieldsPanel;
+        gp.groups.each(function(g) {
+            this._findFormFields(g.item, function(f) {
+                f.resetDirty();
+            }, this);
+        }, this);
+        this.originalCount = gp.groups.length;
+        this.originalValue = this.value;
+    },
+    clearValue: function() {
+        Vps.Form.MultiFieldsHidden.superclass.resetDirty.call(this);
+        this._initFields(this.minEntries);
+        var gp = this.multiFieldsPanel;
+        gp.groups.each(function(g) {
+            this._findFormFields(g.item, function(f) {
+                f.clearValue();
+            }, this);
+        }, this);
+        this.originalCount = gp.groups.length;
+        this.originalValue = '';
+    },
+    setDefaultValue: function() {
+        this._initFields(this.minEntries);
+        var gp = this.multiFieldsPanel;
+        gp.groups.each(function(g) {
+            this._findFormFields(g.item, function(f) {
+                f.setDefaultValue();
+            }, this);
+        }, this);
+        this.originalCount = gp.groups.length;
+        this.originalValue = '';
+    },
+    isDirty : function() {
+        var gp = this.multiFieldsPanel;
+
+        //anz. einträge geändert (felder selbst müssen nicht dirty sein)
+        if (this.originalCount != gp.groups.length) return true;
+
+        var dirty = false;
         gp.groups.each(function(g) {
             this._findFormFields(g.item, function(f) {
                 if (f.isDirty()) {
                     dirty = true;
-                    return false;
+                    return false; //each verlassen
                 }
             }, this);
         }, this);
         return dirty;
+    },
+
+    // private
+    initEvents : function(){
+        this.originalValue = '';
+    },
+
+    clearInvalid: function() {
+        var gp = this.multiFieldsPanel;
+        gp.groups.each(function(g) {
+            this._findFormFields(g.item, function(f) {
+                f.clearInvalid();
+            }, this);
+        }, this);
     }
+
 });
