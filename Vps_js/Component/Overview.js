@@ -53,7 +53,7 @@ Vps.Component.Overview = Ext.extend(Vps.Auto.GridPanel, {
         Ext.getBody().mask('Copying...');
         Ext.Ajax.request({
             url: this.controllerUrl+'/jsonCreate',
-            params: { type: createType, class: this.getSelected().data.class },
+            params: { type: createType, 'class': this.getSelected().data['class'] },
             success: function(a, b, r) {
                 this.reload();
                 Ext.Msg.alert('create '+createType,
@@ -90,7 +90,7 @@ Vps.Component.Overview = Ext.extend(Vps.Auto.GridPanel, {
         component.on('select', function(cmb, record, index) {
             var r = this.getStore().getAt(0);
             if (r) {
-                var m = r.data.class.match(/^(Vpc_[A-Za-z0-9]+_)/);
+                var m = r.data['class'].match(/^(Vpc_[A-Za-z0-9]+_)/);
                 name.setValue(record.data.id.replace('Vpc_', m[1]));
             }
         }, this);
@@ -113,7 +113,7 @@ Vps.Component.Overview = Ext.extend(Vps.Auto.GridPanel, {
                     Ext.Ajax.request({
                         url: this.controllerUrl+'/jsonAddComponent',
                         params: {
-                            class: component.getValue(),
+                            'class': component.getValue(),
                             name: name.getValue()
                         },
                         success: function(a,b,r) {
