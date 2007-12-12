@@ -14,8 +14,9 @@ Ext.util.Format.password = function(value)
     return value||true ? '******' : '';
 };
 
-Ext.util.Format.euroMoney = function(v)
+Ext.util.Format.euroMoney = function(v, p)
 {
+    if (p) p.css = 'vps-renderer-euro-money';
     if (v == 0) return "";
     v = v.toString().replace(",", ".");
     v = (Math.round((v-0)*100))/100;
