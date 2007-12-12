@@ -8,7 +8,8 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
 
             Ext.applyIf(this.formConfig, {
                 baseCls: 'x-plain',
-                controllerUrl: this.controllerUrl
+                controllerUrl: this.controllerUrl,
+                autoload: false
             });
             this.autoForm = new Vps.Auto.FormPanel(this.formConfig);
         } else if (typeof this.autoForm == 'string') {

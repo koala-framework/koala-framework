@@ -27,38 +27,14 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             autoScroll       : true
         });
 
-        if (this.autoload) {
-            this.loadForm();
-        }
-    },
-
-    loadForm : function(controllerUrl)
-    {
-        if (controllerUrl) this.controllerUrl = controllerUrl;
-
         if (!this.controllerUrl) {
             throw new Error('No controllerUrl specified for AutoForm.');
         }
         this.formConfig.url = this.controllerUrl + '/jsonSave';
 
-        Ext.Ajax.request({
-            mask: true,
-            url: this.controllerUrl+'/jsonLoad',
-            params: Ext.apply({ meta: true }, this.baseParams),
-            success: function(response, options, r) {
-                var result = Ext.decode(response.responseText);
-                this.onMetaChange(result.meta);
-                Ext.apply(this.getForm().baseParams, this.baseParams);
-                this.getForm().setDefaultValues();
-                if (result.data) {
-                    this.fireEvent('loadform', this.getForm(), result.data);
-                    this.getForm().setValues(result.data);
-                    this.getForm().resetDirty();
-                }
-                this.getForm().clearInvalid();
-            },
-            scope: this
-        });
+        if (this.autoload) {
+            this.load();
+        }
     },
 
     onMetaChange : function(meta)
@@ -89,12 +65,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         }, this);
         this.add(this.formPanel);
         this.doLayout();
-        this.getForm().baseParams = {};
-        this.getForm().on('actioncomplete', function(form, action) {
-            if (action.type == 'load') {
-                form.resetDirty();
-            }
-        }, this);
+        this.getForm().baseParams = this.baseParams;
     },
 
     isDirty : function() {
@@ -137,27 +108,55 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         return this.actions[type];
     },
 
-    load : function(params, options) {
+    load : function(params) {
+        if (this.el) this.el.mask('Loading...');
+
+        if (!params) params = {};
 
         //es kann auch direkt die id übergeben werden
-        if (params && typeof params != 'object') params = { id: params };
+        if (typeof params != 'object') params = { id: params };
 
-        Ext.apply(this.getForm().baseParams, params);
+        if (!this.getForm()) {
+            params.meta = true; //wenn noch keine form vorhanden metaDaten anfordern
+        }
 
-        if (!options) options = {};
-        this.getForm().clearValues();
-        this.getForm().clearInvalid();
-        this.getForm().waitMsgTarget = this.el;
-        this.enable();
-        this.getForm().load(Ext.applyIf(options, {
+        if (this.getForm()) {
+            this.getForm().clearValues();
+            this.getForm().clearInvalid();
+        }
+
+        Ext.Ajax.request({
+            mask: !this.el, //globale mask wenn kein el vorhanden
             url: this.controllerUrl+'/jsonLoad',
-            waitMsg: 'Loading...',
-            success: function(form, action) {
-                if (this.actions['delete']) this.actions['delete'].enable();
-                this.fireEvent('loadform', this.getForm(), action.result.data);
+            params: Ext.apply(this.baseParams || {}, params),
+            success: function(response, options, result) {
+                if (result.meta) {
+                    this.onMetaChange(result.meta);
+                }
+                if (result.data && this.getForm()) {
+                    if (this.actions['delete']) this.actions['delete'].enable();
+                    this.fireEvent('loadform', this.getForm(), result.data);
+//                     if (this.getForm()) {
+                        this.getForm().setValues(result.data);
+                        this.getForm().resetDirty();
+//todo: werte zwischenspeichern und setzen wenn form gerendered wurde?
+//erstmal auskommentiert, da das eher nach hack aussschaut und womöglich eh gar nicht gebraucht wird...
+//                     } else {
+//                         this.on('renderform', function(form) {
+//                             form.setValues(this.data);
+//                             form.resetDirty();
+//                         }, result);
+//                     }
+                }
+                if (this.getForm()) {
+                    this.getForm().clearInvalid();
+                }
+            },
+            callback: function() {
+                if (this.el) this.el.unmask();
             },
             scope: this
-        }));
+        });
     },
 
     //für AbstractPanel
@@ -283,6 +282,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         return this.getForm().findField(id);
     },
     getForm : function() {
+        if (!this.getFormPanel()) return null;
         return this.getFormPanel().getForm();
     },
     getFormPanel : function() {
