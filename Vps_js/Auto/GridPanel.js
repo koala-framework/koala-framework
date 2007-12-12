@@ -106,9 +106,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 
         if (meta.grouping) {
             if (!gridConfig.view) {
-                gridConfig.view = new Ext.grid.GroupingView(Ext.applyIf(meta.grouping, {
-                    forceFit: true
-                }));
+                gridConfig.view = new Ext.grid.GroupingView(Ext.applyIf(meta.grouping,
+                {}));
             }
 
             if (!meta.grouping.noGroupSummary) {
@@ -124,9 +123,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
                 }
             }
         } else if (!gridConfig.view) {
-            gridConfig.view = new Ext.grid.GridView({
-                forceFit: true
-            });
+            gridConfig.view = new Ext.grid.GridView();
         }
 
         this.comboBoxes = [];
