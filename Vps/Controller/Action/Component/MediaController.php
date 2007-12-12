@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Component_Media extends Vps_Controller_Action_Media
+class Vps_Controller_Action_Component_MediaController extends Vps_Controller_Action_Media
 {
     protected function _createChecksum()
     {

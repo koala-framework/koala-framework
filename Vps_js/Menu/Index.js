@@ -8,7 +8,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
         );
 
         if (!this.controllerUrl) {
-            this.controllerUrl = '/vps/menu';
+            this.controllerUrl = '/vps/user/menu';
         }
         this.reload();
 
@@ -39,17 +39,17 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                 subMenu.href = m.url;
             } else if (m.type == 'event') {
                 subMenu.handler = function(o) {
-                                if(o.eventConfig && !o.eventConfig.title) o.eventConfig.title = o.text;
-                                this.fireEvent('menuevent', o.eventConfig);
-                            };
+                    if(o.eventConfig && !o.eventConfig.title) o.eventConfig.title = o.text;
+                    this.fireEvent('menuevent', o.eventConfig);
+                };
                 subMenu.scope = this;
                 subMenu.eventConfig = m.eventConfig;
             } else if (m.type == 'commandDialog') {
                 subMenu.handler = function(o) {
-                                var c = eval(o.commandClass);
-                                var dlg = new c(o.commandConfig);
-                                dlg.show();
-                            };
+                    var c = eval(o.commandClass);
+                    var dlg = new c(o.commandConfig);
+                    dlg.show();
+                };
                 subMenu.scope = this;
                 subMenu.commandClass = m.commandClass;
                 subMenu.commandConfig = m.commandConfig;
@@ -58,14 +58,14 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                 }
             } else if (m.type == 'command') {
                 subMenu.handler = function(o) {
-                            Vps.currentViewport.remove(Vps.currentViewport.items.item('mainPanel'));
-                            var c = eval(o.commandClass);
-                            var panel = new c(o.commandConfig);
-                            panel.region = 'center';
-                            panel.id = 'mainPanel';
-                            Vps.currentViewport.add(panel);
-                            Vps.currentViewport.layout.rendered = false;
-                            Vps.currentViewport.doLayout();
+                    Vps.currentViewport.remove(Vps.currentViewport.items.item('mainPanel'));
+                    var c = eval(o.commandClass);
+                    var panel = new c(o.commandConfig);
+                    panel.region = 'center';
+                    panel.id = 'mainPanel';
+                    Vps.currentViewport.add(panel);
+                    Vps.currentViewport.layout.rendered = false;
+                    Vps.currentViewport.doLayout();
                 };
                 subMenu.scope = this;
                 subMenu.commandClass = m.commandClass;
@@ -103,13 +103,20 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
         }, this);
 
         this.add(new Ext.Toolbar.Fill());
-        if (response.authData && response.authData.realname) {
+        if (response.authData && response.authData.realname
+                && response.userSelfControllerUrl) {
             this.add({
                 text: response.authData.realname,
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/user.png',
                 handler: function() {
-                    //todo: display user settings dialog
+                    var dlg = new Vps.Auto.Form.Window({
+                        formConfig: {
+                            controllerUrl: response.userSelfControllerUrl,
+                            autoload: false
+                        }
+                    });
+                    dlg.showEdit(response.authData.id);
                 },
                 scope: this
             });
@@ -121,7 +128,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                 icon: '/assets/silkicons/door_out.png',
                 handler: function() {
                     Ext.Ajax.request({
-                        url : '/vps/login/jsonLogoutUser',
+                        url : '/vps/user/login/jsonLogoutUser',
                         success : function(form, action) {
                             //nicht reload, weil user nach erneutem login vielleicht
                             //die aktuelle seite gar nicht mehr sehen darf

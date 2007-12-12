@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Component_Pages extends Vps_Controller_Action_Auto_Tree
+class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Action_Auto_Tree
 {
     protected $_textField = 'name';
     protected $_rootVisible = false;

@@ -1,6 +1,6 @@
 <?php
 
-class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
+class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
 {
     protected function _processResources($resources)
     {
@@ -59,7 +59,8 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
     public function jsonDataAction()
     {
         $showLogout = true;
-        $resources = $this->_getAcl()->getResources();
+        $acl = $this->_getAcl();
+        $resources = $acl->getResources();
         $menus = $this->_processResources($resources);
 
         if (empty($menus) && $this->_getUserRole() == 'guest') {
@@ -69,6 +70,15 @@ class Vps_Controller_Action_User_Menu extends Vps_Controller_Action
             $menu['commandClass'] = 'Vps.User.Login.Dialog';
             $menus[] = $menu;
             $showLogout = false;
+        }
+
+        foreach ($acl->getAllResources() as $resource) {
+            if ($resource instanceof Vps_Acl_Resource_UserSelf
+                && $acl->isAllowed($this->_getUserRole(), $resource, 'view')) {
+
+                $this->view->userSelfControllerUrl = $resource->getControllerUrl();
+                break;
+            }
         }
 
         $this->view->menus = $menus;

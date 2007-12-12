@@ -8,7 +8,7 @@ Vps.About = Ext.extend(Ext.Window, {
         this.modal = true;
         this.items = [new Ext.Panel({
             cls: 'vps-about',
-            autoLoad: '/vps/about/content'
+            autoLoad: '/vps/user/about/content'
         })];
         Vps.About.superclass.initComponent.call(this);
     }

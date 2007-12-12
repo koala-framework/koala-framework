@@ -16,7 +16,7 @@ Vps.User.Useredit = Ext.extend(Vps.Auto.Form.Window, {
             this.getAction('cancel'), 
             this.getAction('save')
         ];
-        this.controllerUrl = '/admin/component/useredit';
+        if (!this.controllerUrl) this.controllerUrl = '/vps/user/useredit';
         this.width = 500;
         this.height = 400;
         Vps.User.Useredit.superclass.initComponent.call(this);

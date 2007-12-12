@@ -14,7 +14,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
             baseCls: 'x-plain',
             region: 'center',
             border: false,
-            html: '<iframe scrolling="no" src="/vps/login/showForm" width="100%" '+
+            html: '<iframe scrolling="no" src="/vps/user/login/showForm" width="100%" '+
                     'height="100%" style="border: 0px"></iframe>'
         });
         this.items = [{
@@ -22,7 +22,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
             cls: 'vps-login-header',
             region: 'north',
             height: 50,
-            autoLoad: '/vps/login/header',
+            autoLoad: '/vps/user/login/header',
             border: false
         },this.loginPanel];
 

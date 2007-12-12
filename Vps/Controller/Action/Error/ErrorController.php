@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Error extends Vps_Controller_Action
+class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
 {
     public function errorAction()
     {

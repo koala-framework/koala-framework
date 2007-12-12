@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Welcomemedia  extends Vps_Controller_Action_Media
+class Vps_Controller_Action_Welcome_MediaController extends Vps_Controller_Action_Media
 {
     public function indexAction()
     {

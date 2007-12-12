@@ -4,7 +4,8 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     public function getControllerClass(Zend_Controller_Request_Abstract $request)
     {
         $module = $request->getModuleName();
-        if ($module == 'component' && $request->getControllerName() == 'component') {
+        if ($module == 'component'
+                && $request->getControllerName() == 'component') {
 
             $className = '';
             $class = $request->getParam('class');
@@ -30,21 +31,9 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                 }
             }
 
-        } else if ($module == 'component' || $module == 'vps') {
-
-            $className = ucfirst($request->getControllerName());
-            if ($module == 'component') {
-                $className = "Vps_Controller_Action_Component_$className";
-            } else {
-                $className = "Vps_Controller_Action_$className";
-            }
-            $this->_curModule    = $module;
-            $this->_curDirectory = '';
-
         } else {
 
             $className = parent::getControllerClass($request);
-
         }
 
         return $className;
@@ -52,8 +41,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
     public function loadClass($className)
     {
-        if (substr($className, 0, 22) == 'Vps_Controller_Action_'
-            || substr($className, 0, 4) == 'Vpc_') {
+        if (substr($className, 0, 4) == 'Vpc_') {
             try {
                 Zend_Loader::loadClass($className);
             } catch (Zend_Exception $e) {

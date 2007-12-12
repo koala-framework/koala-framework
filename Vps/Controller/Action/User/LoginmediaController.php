@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Loginmedia  extends Vps_Controller_Action_Media
+class Vps_Controller_Action_User_LoginmediaController  extends Vps_Controller_Action_Media
 {
     public function indexAction()
     {

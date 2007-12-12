@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Component_Components extends Vps_Controller_Action
+class Vps_Controller_Action_Component_ComponentsController extends Vps_Controller_Action
 {
     public function indexAction()
     {

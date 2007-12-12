@@ -4,7 +4,7 @@ Vps.Welcome = Ext.extend(Ext.Panel,
         this.welcomePanel = new Ext.Panel({
             cls: 'vps-welcome',
             width: 300,
-            autoLoad: '/vps/welcome',
+            autoLoad: '/vps/welcome/index',
             border: false,
             renderTo: this.getEl()
         });
