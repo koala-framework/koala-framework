@@ -3,7 +3,7 @@ Ext.namespace('Vps.User');
 Vps.User.Users = Ext.extend(Vps.Auto.GridPanel, {
     initComponent: function()
     {
-        if (!this.controllerUrl) this.controllerUrl = '/users/';
+        if (!this.controllerUrl) this.controllerUrl = '/vps/user/users';
 
         Vps.User.Users.superclass.initComponent.call(this);
         

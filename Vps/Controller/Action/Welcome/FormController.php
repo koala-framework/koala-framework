@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Welcomeform extends Vps_Controller_Action_Auto_Form
+class Vps_Controller_Action_Welcome_FormController extends Vps_Controller_Action_Auto_Form
 {
     protected $_tableName = 'Vps_Dao_Welcome';
     protected $_buttons = array('save');
@@ -16,6 +16,6 @@ class Vps_Controller_Action_Welcomeform extends Vps_Controller_Action_Auto_Form
     public function indexAction()
     {
         $this->view->ext('Vps.Auto.FormPanel',
-                array('controllerUrl'=>'/vps/welcomeform'));
+                array('controllerUrl'=>'/vps/welcome/form'));
     }
 }

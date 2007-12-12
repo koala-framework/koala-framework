@@ -3,27 +3,29 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
 {
     protected function _init()
     {
+        $this->setDispatcher(new Vps_Controller_Dispatcher());
+
         $router = $this->getRouter();
 
         $router->AddRoute('default', new Zend_Controller_Router_Route(
                     '*',
-                    array('module' => 'component',
-                        'controller' => 'web',
-                        'action' => 'index')));
+                    array('module' => 'vps_controller_action_component',
+                          'controller' => 'web',
+                          'action' => 'index')));
         $router->AddRoute('admin', new Zend_Controller_Router_Route(
-                    'admin/:module/:controller/:action',
-                    array('module'=>'component',
+                    'admin/component/:controller/:action',
+                    array('module'=>'vps_controller_action_component',
                         'controller' => 'index',
                         'action' => 'index')));
         $router->AddRoute('components', new Zend_Controller_Router_Route(
                     'admin/components/:action',
-                    array('module' => 'component',
+                    array('module' => 'vps_controller_action_component',
                         'controller' => 'components',
                         'action' => 'index')));
         $router->AddRoute('componentshow', new Zend_Controller_Router_Route(
                     'admin/component/show/:class/:componentId',
                     array('componentId'=>null,
-                        'module' => 'component',
+                        'module' => 'vps_controller_action_component',
                         'controller' => 'components',
                         'action' => 'show')));
         $router->AddRoute('componentedit', new Zend_Controller_Router_Route(
@@ -33,15 +35,18 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                         'action' => 'index')));
         $router->AddRoute('media', new Zend_Controller_Router_Route(
                     'media/:uploadId/:class/:componentId/:type/:checksum/:filename',
-                    array('module' => 'component',
-                        'controller' => 'Media',
-                        'action' => 'password')));
+                    array('module' => 'vps_controller_action_component',
+                          'controller' => 'Media',
+                          'action' => 'password')));
         $router->AddRoute('mediaoriginal', new Zend_Controller_Router_Route(
                     'media/:uploadId',
-                    array('module' => 'component',
-                        'controller' => 'Media',
-                        'action' => 'original')));
+                    array('module' => 'vps_controller_action_component',
+                          'controller' => 'Media',
+                          'action' => 'original')));
         parent::_init();
+        $this->addControllerDirectory('Vps/Controller/Action/Component',
+                                        'vps_controller_action_component');
+
     }
 
     public static function getInstance()

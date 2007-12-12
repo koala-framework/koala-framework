@@ -9,15 +9,27 @@ class Vps_Controller_Front extends Zend_Controller_Front
         $this->setControllerDirectory('application/controllers');
         $this->returnResponse(true);
 
-        $this->setDispatcher(new Vps_Controller_Dispatcher());
+        $this->addControllerDirectory('Vps/Controller/Action/Welcome', 'vps_controller_action_welcome');
+        $this->addControllerDirectory('Vps/Controller/Action/User', 'vps_controller_action_user');
+        $this->addControllerDirectory('Vps/Controller/Action/Error', 'vps_controller_action_error');
+
         $router = $this->getRouter();
-        $router->AddRoute('vps', new Zend_Controller_Router_Route(
-                    '/vps/:controller/:action',
-                    array('module' => 'vps',
-                          'action'=>'index')));
+
+        $router->AddRoute('vps_welcome', new Zend_Controller_Router_Route(
+                    '/vps/welcome/:controller/:action',
+                    array('module' => 'vps_controller_action_welcome',
+                          'controller'=>'index',
+                          'action' =>'index')));
+        $router->AddRoute('vps_user', new Zend_Controller_Router_Route(
+                    '/vps/user/:controller/:action',
+                    array('module' => 'vps_controller_action_user',
+                          'action' =>'index')));
+        $router->AddRoute('vps_error', new Zend_Controller_Router_Route(
+                    '/vps/error/:controller/:action',
+                    array('module' => 'vps_controller_action_error')));
 
         $plugin = new Zend_Controller_Plugin_ErrorHandler();
-        $plugin->setErrorHandlerModule('vps');
+        $plugin->setErrorHandlerModule('vps_controller_action_error');
         $this->registerPlugin($plugin);
     }
     public static function getInstance()

@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Component_Overview extends Vps_Controller_Action_Auto_Grid
+class Vps_Controller_Action_Component_OverviewController extends Vps_Controller_Action_Auto_Grid
 {
     protected $_buttons = array('addComponent', 'createTpl', 'createCss');
 

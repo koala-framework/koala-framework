@@ -16,7 +16,7 @@ class Vps_Controller_Action_User_Users_RoleColumn extends Vps_Auto_Grid_Column
     }
 }
 
-class Vps_Controller_Action_User_Users extends Vps_Controller_Action_Auto_Grid
+class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_Auto_Grid
 {
     protected $_buttons = array('save'=>true,
                                 'add'=>true,

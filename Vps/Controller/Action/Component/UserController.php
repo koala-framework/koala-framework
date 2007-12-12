@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Component_User extends Vps_Controller_Action_User_Users
+class Vps_Controller_Action_Component_UserController extends Vps_Controller_Action_User_Users
 {
     protected $_buttons = array('save'=>true,
                                 'add'=>true,

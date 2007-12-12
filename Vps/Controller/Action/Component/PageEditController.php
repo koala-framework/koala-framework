@@ -1,6 +1,6 @@
 <?php
 
-class Vps_Controller_Action_Component_PageEdit extends Vps_Controller_Action_Auto_Form
+class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save' => true, 'add' => true);
 

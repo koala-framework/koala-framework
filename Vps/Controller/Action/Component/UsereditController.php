@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Component_Useredit extends Vps_Controller_Action_Auto_Form
+class Vps_Controller_Action_Component_UsereditController extends Vps_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save' => true, 'add' => true);
     protected $_tableName = 'Vps_Model_User_Users';

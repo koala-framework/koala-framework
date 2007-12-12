@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Welcome  extends Vps_Controller_Action
+class Vps_Controller_Action_Welcome_IndexController  extends Vps_Controller_Action
 {
     public function indexAction()
     {
@@ -14,7 +14,7 @@ class Vps_Controller_Action_Welcome  extends Vps_Controller_Action
             $this->view->content = '';
         }
         if ($file) {
-            $this->view->image = '/vps/welcomemedia';
+            $this->view->image = '/vps/welcome/media';
             $s = Vps_Media_Image::calculateScaleDimensions($file->getFileSource(),
                                                             array(300, 100));
             $this->view->imageSize = $s;

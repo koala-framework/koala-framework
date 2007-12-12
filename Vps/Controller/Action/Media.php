@@ -14,7 +14,7 @@
  * Alle Actions sind auf den Parameter 'uploadId' angewiesen. Im Zuge dessen
  * sollte auch die Zugangsberechtigungen gesetzt werden.
  */
-class Vps_Controller_Action_Media extends Vps_Controller_Action
+abstract class Vps_Controller_Action_Media extends Vps_Controller_Action
 {
     /**
      * Die angeforderte Datei wird ohne Änderung ausgeliefert.

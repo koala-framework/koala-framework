@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Component_Web extends Vps_Controller_Action
+class Vps_Controller_Action_Component_WebController extends Vps_Controller_Action
 {
     public function preDispatch()
     {
