@@ -4,6 +4,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     border: false,
     formConfig: {},
     maskDisabled: true,
+    layout: 'fit',
 
     initComponent: function()
     {
@@ -22,7 +23,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         Ext.applyIf(this.formConfig, {
             baseParams       : {},
             trackResetOnLoad : true,
-            maskDisabled     : false
+            maskDisabled     : false,
+            autoScroll       : true
         });
 
         if (this.autoload) {
@@ -80,6 +82,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         if (this.formPanel != undefined) {
             this.remove(this.formPanel, true);
         }
+
         this.formPanel = new Ext.FormPanel(meta.form);
         this.formPanel.on('render', function() {
             this.fireEvent('renderform', this.getForm());
