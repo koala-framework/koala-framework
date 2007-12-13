@@ -120,6 +120,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         if (!this.getForm()) {
             params.meta = true; //wenn noch keine form vorhanden metaDaten anfordern
         }
+        Ext.applyIf(params, this.baseParams);
 
         if (this.getForm()) {
             this.getForm().clearValues();
@@ -129,7 +130,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         Ext.Ajax.request({
             mask: !this.el, //globale mask wenn kein el vorhanden
             url: this.controllerUrl+'/jsonLoad',
-            params: Ext.apply(this.baseParams || {}, params),
+            params: params,
             success: function(response, options, result) {
                 if (result.meta) {
                     this.onMetaChange(result.meta);
