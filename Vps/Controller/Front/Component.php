@@ -12,7 +12,7 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                     array('module' => 'vps_controller_action_component',
                           'controller' => 'web',
                           'action' => 'index')));
-        $router->AddRoute('admin', new Zend_Controller_Router_Route(
+        $router->AddRoute('component', new Zend_Controller_Router_Route(
                     'admin/component/:controller/:action',
                     array('module'=>'vps_controller_action_component',
                         'controller' => 'index',
@@ -43,6 +43,11 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                     array('module' => 'vps_controller_action_component',
                           'controller' => 'Media',
                           'action' => 'original')));
+        $router->AddRoute('admin', new Zend_Controller_Router_Route(
+                    'admin/:module/:controller/:action',
+                    array('module'=>'',
+                        'controller' => 'index',
+                        'action' => 'index')));
         parent::_init();
         $this->addControllerDirectory('Vps/Controller/Action/Component',
                                         'vps_controller_action_component');
