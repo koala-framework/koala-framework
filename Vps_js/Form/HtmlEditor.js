@@ -276,11 +276,11 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                '</head><body class="content"></body></html>';
     },
     setValue : function(v) {
-        if (v.page_id && v.component_key) {
+        if (v && v.page_id && v.component_key) {
             this.page_id = v.page_id;
             this.component_key = v.component_key;
         }
-        if (v.content) v = v.content;
+        if (v && v.content) v = v.content;
         Vps.Form.HtmlEditor.superclass.setValue.call(this, v);
     },
 

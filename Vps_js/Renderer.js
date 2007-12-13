@@ -46,6 +46,10 @@ Ext.util.Format.component = function(v) {
 
 Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer('Y-m-d');
 Ext.util.Format.germanDate = Ext.util.Format.dateRenderer('d.m.Y');
+Ext.util.Format.germanDay = function(value, p) {
+    p.css += 'vps-renderer-bright';
+    return Ext.util.Format.date(value, 'd.m.');    
+}
 
 Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, store, column) {
     p.css += 'vps-cell-button';
