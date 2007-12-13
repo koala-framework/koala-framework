@@ -37,8 +37,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
     protected function _getResourceName()
     {
 //         d(get_class($this));
-        $resource = strtolower(str_replace(array('Vps_Controller_Action_Component_',
-                                                 'Vps_Controller_Action_',
+        $resource = strtolower(str_replace(array('Vps_Controller_Action_',
                                                  'Controller'),
                                         '', get_class($this)));
         if (substr(get_class($this), 0, 4) == 'Vps_') {
