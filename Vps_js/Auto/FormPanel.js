@@ -265,14 +265,18 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         });
     },
     onAdd : function() {
+        if (!this.getForm()) this.load(); //meta-daten wurden noch nicht geladen
+
         this.mabySave({
             callback: function() {
                 this.enable();
                 if (this.deleteButton) this.deleteButton.disable();
                 this.getAction('delete').disable();
                 this.applyBaseParams({id: 0});
-                this.getForm().setDefaultValues();
-                this.getForm().clearInvalid();
+                if (this.getForm()) {
+                    this.getForm().setDefaultValues();
+                    this.getForm().clearInvalid();
+                }
                 this.fireEvent('addaction', this);
             },
             scope: this
