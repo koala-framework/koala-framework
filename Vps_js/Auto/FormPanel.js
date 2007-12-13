@@ -8,7 +8,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
     initComponent: function()
     {
-        this.actions = {};
+        if (!this.actions) this.actions = {};
+        if (!this.baseParams) this.baseParams = {};
 
         this.addEvents(
             'loadform',
@@ -138,7 +139,6 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
                     this.fireEvent('loadform', this.getForm(), result.data);
 //                     if (this.getForm()) {
                         this.getForm().setValues(result.data);
-                        this.getForm().resetDirty();
 //todo: werte zwischenspeichern und setzen wenn form gerendered wurde?
 //erstmal auskommentiert, da das eher nach hack aussschaut und womöglich eh gar nicht gebraucht wird...
 //                     } else {
@@ -150,6 +150,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
                 }
                 if (this.getForm()) {
                     this.getForm().clearInvalid();
+                    this.getForm().resetDirty();
                 }
             },
             callback: function() {
@@ -293,17 +294,19 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         return this.formPanel;
     },
     setBaseParams : function(baseParams) {
+        this.baseParams = baseParams;
         if (this.getForm()) {
             this.getForm().baseParams = baseParams;
         }
     },
     applyBaseParams : function(baseParams) {
+        Ext.apply(this.baseParams, baseParams);
         if (this.getForm()) {
             Ext.apply(this.getForm().baseParams, baseParams);
         }
     },
     getBaseParams : function() {
-        return this.getForm().baseParams;
+        return this.baseParams;
     }
 });
 
