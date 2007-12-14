@@ -117,6 +117,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         //es kann auch direkt die id übergeben werden
         if (typeof params != 'object') params = { id: params };
 
+        this.applyBaseParams(params);
+
         if (!this.getForm()) {
             params.meta = true; //wenn noch keine form vorhanden metaDaten anfordern
         }
