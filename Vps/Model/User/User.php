@@ -30,11 +30,6 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
     public function __toString()
     {
         $ret = '';
-        if ($this->gender == 'male') {
-            $ret .= 'Mr. ';
-        } else if ($this->gender == 'female') {
-            $ret .= 'Mrs. ';
-        }
         if ($this->title) $ret .= $this->title.' ';
         if ($this->firstname) $ret .= $this->firstname.' ';
         if ($this->lastname) $ret .= $this->lastname;
@@ -219,11 +214,17 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
                 $mailView->{$key} = $param;
             }
         }
+        $fullname = $this->__toString();
+        if ($this->gender == 'male') {
+            $fullname = "Mr. $fullname";
+        } else if ($this->gender == 'female') {
+            $fullname = "Mrs. $fullname";
+        }
         $mailView->webUrl = $webUrl;
         $mailView->host = $host;
         $mailView->activationCode = $activationCode;
         $mailView->applicationName = Zend_Registry::get('config')->application->name;
-        $mailView->fullname = $this->__toString();
+        $mailView->fullname = $fullname;
         $mailView->userData = $this->toArray();
 
         $bodyText = $mailView->render($tpl);
