@@ -20,7 +20,10 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         this.gridAssigned = new Vps.Auto.AssignedGridPanel({
             controllerUrl: this.gridAssignedControllerUrl,
             textAssignActionUrl: this.textAssignActionUrl,
-            region: 'center'
+            region: 'center',
+            gridConfig: {
+                selModel: new Ext.grid.CheckboxSelectionModel()
+            }
         });
 
         this.gridData = new Vps.Auto.GridPanel({
