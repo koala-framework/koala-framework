@@ -2,10 +2,11 @@
 class Vps_Controller_Action_Component_UsereditController extends Vps_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save' => true, 'add' => true);
-    protected $_tableName = 'Vps_Model_User_Users';
-    
+
     protected function _initFields()
     {
+        $this->_table = Zend_Registry::get('userModel');
+
         $acl = Zend_Registry::get('acl');
         $roles = array();
         foreach ($acl->getRoles() as $role) {

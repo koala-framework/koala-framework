@@ -3,7 +3,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
 {
     initComponent: function()
     {
-        this.height = 200;
+        this.height = 220;
         this.width = 310;
         this.modal = true;
         this.title = 'Login';
@@ -55,9 +55,36 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
             } else {
                 doc.getElementsByName('username')[0].focus();
             }
+
+            Ext.EventManager.on(doc.getElementById('lostPassword'), 'click', function() {
+                Ext.Msg.prompt('Password lost', 'Please enter your email address', function(btn, email) {
+                    if (btn == 'ok') {
+                        var lostPasswordResultDialog = function(response, options, result) {
+                            Ext.Msg.show({
+                                title: 'Lost password',
+                                msg: result.message,
+                                width: 270,
+                                buttons: Ext.MessageBox.OK
+                            }, this);
+                        };
+                        Ext.Ajax.request({
+                            mask: true,
+                            url: '/vps/user/login/jsonLostPassword',
+                            params: { email: email },
+                            success: lostPasswordResultDialog
+                        });
+                    }
+                }, this);
+            }, this);
         }
     },
+
     showLogin: function() {
         this.show();
     }
 });
+
+
+
+
+
