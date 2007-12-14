@@ -111,5 +111,10 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
     findField: function(f)
     {
         return this.getAutoForm().findField(f);
+    },
+
+    getBaseParams: function()
+    {
+        return this.getAutoForm().getBaseParams();
     }
 });

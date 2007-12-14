@@ -589,16 +589,20 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
                 data[this.store.recordType.prototype.fields.items[i].name] = this.store.recordType.prototype.fields.items[i].defaultValue;
             }
             var record = new this.store.recordType(data);
+            for(var i=0; i<this.getGrid().getColumnModel().getColumnCount(); i++) {
+                if(!this.getGrid().getColumnModel().isHidden(i) && this.getGrid().getColumnModel().isCellEditable(i, 0)) {
+                    record.dirty = true;
+                    record.modified = {};
+                    record.modified[record.fields.items[i].name] = '';
+                    break;
+                }
+            }
 
             this.getGrid().stopEditing();
             this.store.insert(0, record);
             this.store.newRecords.push(record);
-
-            for(var i=0; i<this.getGrid().getColumnModel().getColumnCount(); i++) {
-                if(!this.getGrid().getColumnModel().isHidden(i) && this.getGrid().getColumnModel().isCellEditable(i, 0)) {
-                    this.getGrid().startEditing(0, i);
-                    break;
-                }
+            if (record.dirty) {
+                this.getGrid().startEditing(0, i);
             }
         }
     },
