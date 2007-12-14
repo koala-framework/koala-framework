@@ -104,7 +104,6 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             url: this.assignActionUrl,
             params: params,
             success: function() {
-                this.gridData.getSelectionModel().clearSelections();
                 this.gridAssigned.reload();
                 this.gridData.reload();
             },
