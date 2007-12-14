@@ -268,6 +268,8 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
             }
         } else if ($columnName == 'password1' || $columnName == 'password2') {
             return '';
+        } else if ($columnName == 'name') {
+            return $this->firstname . ' ' . $this->lastname;
         } else {
             return parent::__get($columnName);
         }
@@ -277,7 +279,11 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
     {
         if (in_array($columnName, $this->getServiceColumns())) {
             return true;
-        } else if ($columnName == 'password1' || $columnName == 'password2') {
+        } else if (
+            $columnName == 'password1' ||
+            $columnName == 'password2' ||
+            $columnName == 'name')
+        {
             return true;
         } else {
             return parent::__isset($columnName);

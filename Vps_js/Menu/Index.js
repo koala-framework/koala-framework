@@ -136,7 +136,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                         success : function(form, action) {
                             //nicht reload, weil user nach erneutem login vielleicht
                             //die aktuelle seite gar nicht mehr sehen darf
-                            location.href = '/'; 
+                            location.href = '/vps/welcome'; 
                         },
                         scope: this
                     });
