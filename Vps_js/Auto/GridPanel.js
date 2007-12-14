@@ -98,6 +98,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 
         gridConfig.selModel.on('rowselect', function(selData, gridRow, currentRow) {
             this.getAction('delete').enable();
+            this.getAction('duplicate').enable();
         }, this);
 
         gridConfig.selModel.on('beforerowselect', function(selModel, rowIndex, keepExisting, record) {
@@ -296,6 +297,10 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             gridConfig.tbar.add(this.getAction('delete'));
             delete meta.buttons['delete'];
         }
+        if (meta.buttons.duplicate) {
+            gridConfig.tbar.add(this.getAction('duplicate'));
+            delete meta.buttons.duplicate;
+        }
         for (var i in meta.buttons) {
             if (i != 'pdf' && i != 'csv' && i != 'xls') {
                 gridConfig.tbar.add(this.getAction(i));
@@ -463,6 +468,15 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
                 handler : this.onDelete,
                 scope: this
             });
+        } else if (type == 'duplicate') {
+            this.actions[type] = new Ext.Action({
+                text    : 'Duplicate',
+                icon    : '/assets/silkicons/table_go.png',
+                cls     : 'x-btn-text-icon',
+                disabled: true,
+                handler : this.onDuplicate,
+                scope: this
+            });
         } else if (type == 'pdf') {
             this.actions[type] = new Ext.Action({
                 text    : 'Drucken',
@@ -591,14 +605,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 
     onDelete : function() {
         Ext.Msg.show({
-            title:'Löschen',
+            title:'Delete',
             msg: 'Do you really wish to remove this entry / these entries?',
             buttons: Ext.Msg.YESNO,
             scope: this,
             fn: function(button) {
                 if (button == 'yes') {
                     var selectedRows = this.getGrid().getSelectionModel().getSelections();
-                    if (selectedRows.length == 0) return;
+                    if (!selectedRows.length) return;
 
                     var ids = [];
                     var params = {};
@@ -607,37 +621,79 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
                         if (selectedRow.data.id == 0) {
                             this.store.remove(selectedRow);
                         } else {
-                            if (!params[this.store.reader.meta.id]) {
-                                params[this.store.reader.meta.id] = '';
-                            } else {
-                                params[this.store.reader.meta.id] += ';';
-                            }
-                            params[this.store.reader.meta.id] += selectedRow.id;
+                            ids.push(selectedRow.id);
                         }
                     }, this);
+                    if (!ids.length) return;
 
-                    if (params[this.store.reader.meta.id]) {
-                        this.el.mask('Deleting...');
-                        Ext.Ajax.request({
-                            url: this.controllerUrl+'/jsonDelete',
-                            params: params,
-                            success: function(response, options, r) {
-                                this.reload();
-                                this.getAction('delete').disable();
-                                this.fireEvent('deleterow', this.grid);
-                                this.fireEvent('datachange', r);
-                            },
-                            failure: function() {
-                                this.getAction('delete').enable();
-                            },
-                            callback: function() {
-                                this.el.unmask();
-                            },
-                            scope : this
-                        });
-                    }
+                    params[this.store.reader.meta.id] = ids.join(';');
+
+                    this.el.mask('Deleting...');
+                    Ext.Ajax.request({
+                        url: this.controllerUrl+'/jsonDelete',
+                        params: params,
+                        success: function(response, options, r) {
+                            this.reload();
+                            this.getAction('delete').disable();
+                            this.fireEvent('deleterow', this.grid);
+                            this.fireEvent('datachange', r);
+                        },
+                        failure: function() {
+                            this.getAction('delete').enable();
+                        },
+                        callback: function() {
+                            this.el.unmask();
+                        },
+                        scope : this
+                    });
                 }
             }
+        });
+    },
+    onDuplicate : function() {
+        var selectedRows = this.getGrid().getSelectionModel().getSelections();
+
+        var ids = [];
+        var params = {};
+        selectedRows.each(function(selectedRow) {
+            if (selectedRow.data.id != 0) {
+                ids.push(selectedRow.id);
+            }
+        }, this);
+        if (!ids.length) {
+            Ext.Msg.show({
+                title:'Duplicate',
+                msg: 'No entries are selected'
+            });
+            return;
+        }
+        params[this.store.reader.meta.id] = ids.join(';');
+
+        this.el.mask('Duplicating...');
+        Ext.Ajax.request({
+            url: this.controllerUrl+'/jsonDuplicate',
+            params: params,
+            success: function(response, options, r) {
+                this.reload({
+                    duplicatedIds: r.data.duplicatedIds,
+                    callback: function(records, options, success) {
+                        //neue einträge auswählen
+                        if (options.duplicatedIds) {
+                            var records = [];
+                            options.duplicatedIds.each(function(id) {
+                                records.push(this.getStore().getById(id));
+                            }, this);
+                            this.getSelectionModel().selectRecords(records);
+                        }
+                    },
+                    scope: this
+                });
+                this.fireEvent('datachange', r);
+            },
+            callback: function() {
+                this.el.unmask();
+            },
+            scope : this
         });
     },
     onPdf : function()

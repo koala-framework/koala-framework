@@ -153,7 +153,9 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         $db = $this->_table->getAdapter();
         $where = array();
         $query = $this->getRequest()->getParam('query');
-        if ($query) {
+        $sk = isset($this->_filters['text']['skipWhere']) &&
+                                        $this->_filters['text']['skipWhere'];
+        if ($query && !$sk) {
             if (!isset($this->_queryFields)) {
                 throw new Vps_Exception("queryFields which is required to use query-filters is not set.");
             }
@@ -487,7 +489,6 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         if (!isset($this->_permissions['delete']) || !$this->_permissions['delete']) {
             throw new Vps_Exception("Delete is not allowed.");
         }
-        $success = false;
         $ids = $this->getRequest()->getParam($this->_primaryKey);
         $ids = explode(';', $ids);
 
@@ -499,22 +500,38 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             if (!$this->_hasPermissions($row, 'delete')) {
                 throw new Vps_Exception("You don't have the permissions to delete this row.");
             }
-            try {
-                $this->_beforeDelete($row);
-                $row->delete();
-                $this->_afterDelete();
-                if ($this->_position) {
-                    $this->_table->numberizeAll($this->_position, $this->_getWhere());
-                }
-                $success = true;
-            } catch (Vps_ClientException $e) { //todo: nicht nur Vps_Exception fangen
-                $this->view->error = $e->getMessage();
+            $this->_beforeDelete($row);
+            $row->delete();
+            $this->_afterDelete();
+            if ($this->_position) {
+                $this->_table->numberizeAll($this->_position, $this->_getWhere());
             }
         }
-
-        $this->view->success = $success;
     }
+    public function jsonDuplicateAction()
+    {
+        if (!isset($this->_permissions['duplicate']) || !$this->_permissions['duplicate']) {
+            throw new Vps_Exception("Duplicate is not allowed.");
+        }
+        $ids = $this->getRequest()->getParam($this->_primaryKey);
+        $ids = explode(';', $ids);
 
+        $this->view->data = array('duplicatedIds' => array());
+        foreach ($ids as $id) {
+            $row = $this->_table->find($id)->current();
+            if (!$row) {
+                throw new Vps_Exception("Can't find row with id '$id'.");
+            }
+            if (!$this->_hasPermissions($row, 'duplicate')) {
+                throw new Vps_Exception("You don't have the permissions to duplicate this row.");
+            }
+            $new = $row->duplicate();
+            $this->view->data['duplicatedIds'][] = $new->{$this->_primaryKey};
+            if ($this->_position) {
+                $this->_table->numberizeAll($this->_position, $this->_getWhere());
+            }
+        }
+    }
 
     public function pdfAction()
     {

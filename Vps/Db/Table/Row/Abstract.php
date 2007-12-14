@@ -72,4 +72,38 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
         $this->getTable()->numberizeAll($fieldname, $originalWhere);
     }
+
+    public function duplicate($data = array())
+    {
+        $data = array_merge($this->toArray(), $data);
+        unset($data['id']);
+        $new = $this->getTable()->createRow($data);
+        $new->save();
+        return $new;
+    }
+
+    protected function _duplicateParentRow($tableClassname, $ruleKey = null)
+    {
+        $row = $this->findParentRow($tableClassname, $ruleKey);
+        $new = $row->duplicate();
+        $ref = $this->getTable()->getReference($tableClassname, $ruleKey);
+        $data = array();
+        foreach ($ref['columns'] as $k=>$c) {
+            $this->$c = $new->{$ref['refColumns'][$k]};
+        }
+        $this->save();
+    }
+
+    protected function _duplicateDependentTable($tableClassname, $ruleKey = null)
+    {
+        $rowset = $this->findDependentRowset($tableClassname, $ruleKey);
+        foreach ($rowset as $row) {
+            $ref = $row->getTable()->getReference($tableClassname, $ruleKey);
+            $data = array();
+            foreach ($ref['columns'] as $k=>$c) {
+                $data[$ref['refColumns'][$k]] = $this->$c;
+            }
+            $row->duplicate($data);
+        }
+    }
 }
