@@ -52,7 +52,7 @@ class Vps_Setup
 
     public static function createConfig()
     {
-        if (preg_match('#/www/(usr|public)/([0-9a-z]+)/#', $_SERVER['SCRIPT_FILENAME'], $m)) {
+        if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $_SERVER['SCRIPT_FILENAME'], $m)) {
             $vpsSection = $webSection = 'vivid';
 
             $webConfigFull = new Zend_Config_Ini('application/config.ini', null);
