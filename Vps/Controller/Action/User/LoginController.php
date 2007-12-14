@@ -4,7 +4,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
     public function indexAction()
     {
         $location = $this->_getParam('location');
-        if ($location == '') $location = '/';
+        if ($location == '') { $location = '/'; }
         $config = array('location' => $location);
         $this->view->ext('Vps.User.Login.Index', $config);
     }
@@ -40,13 +40,69 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
             $result = $this->_login();
             $this->view->username = $this->_getParam('username');
             if ($result->isValid()) {
-                $this->view->text = 'Login successful.<!--successful->';
+                $this->view->text = 'Login successful.<!--successful-->';
             } else {
                 $this->view->text = 'Login failed';
             }
         } else {
             $this->view->text = '';
         }
+    }
+
+    public function activateAction()
+    {
+        $activationCode = $this->_getParam('code');
+        list($userId, $code) = explode('-', $activationCode, 2);
+
+        $users = Zend_Registry::get('userModel');
+        $row = $users->find($userId)->current();
+
+        $config = array(
+            'errorMsg' => '',
+            'userId'   => $userId,
+            'code'     => $code
+        );
+
+        if (!$row) {
+            $config['errorMsg'] = 'User not found in Web.';
+        } else if ($row->getActivationCode() != $code) {
+            $config['errorMsg'] = 'Activation code is invalid. Maybe the URL wasn\'t copied completely?';
+        }
+
+        if (empty($config['errorMsg'])) {
+            $config['email'] = $row->email;
+        }
+
+        $this->view->ext('Vps.User.Activate.Index', $config);
+    }
+
+    public function jsonActivateAction()
+    {
+        $userId = $this->getRequest()->getParam('userId');
+        $password = $this->getRequest()->getParam('password');
+        $code = $this->getRequest()->getParam('code');
+
+        if (empty($userId) || empty($password) || empty($code)) {
+            throw new Vps_ClientException('Data not submited completely.');
+        }
+
+        $users = Zend_Registry::get('userModel');
+        $row = $users->find($userId)->current();
+
+        if (!$row) {
+            throw new Vps_ClientException('User not found in Web.');
+        } else if ($row->getActivationCode() != $code) {
+            throw new Vps_ClientException('Activation code is invalid. Maybe your '
+                                         .'account has already been activated?');
+        }
+
+        $status = $row->setPassword($password);
+
+        if (!$status) {
+            throw new Vps_ClientException('New password couldn\'t be set');
+        }
+
+        $this->_login($row->email, $password);
     }
 
     public function logoutAction()
@@ -76,31 +132,43 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
 
     protected function _createAuthAdapter()
     {
-        $dao = Zend_Registry::get('dao');
-        $adapter = new Zend_Auth_Adapter_DbTable($dao->getDb(), 'vps_users', 'username', 'password', 'MD5(CONCAT(?, password_salt))');
+        $adapter = new Vps_Auth_Adapter_Service();
         return $adapter;
     }
 
-    private function _login()
+    private function _login($username = null, $password = null)
     {
-        $username = $this->getRequest()->getParam('username');
-        $password = $this->getRequest()->getParam('password');
+        if (is_null($username)) $username = $this->getRequest()->getParam('username');
+        if (is_null($password)) $password = $this->getRequest()->getParam('password');
+
+
         $adapter = $this->_createAuthAdapter();
 
-        if (!$adapter instanceof Zend_Auth_Adapter_DbTable) {
-            throw new Vps_Controller_Exception('_createAuthAdapter didn\'t return instance of Zend_Auth_Adapter_DbTable');
+        if (!$adapter instanceof Vps_Auth_Adapter_Service) {
+            throw new Vps_Controller_Exception('_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service');
         }
+
 
         $auth = Zend_Auth::getInstance();
         $adapter->setIdentity($username);
         $adapter->setCredential($password);
         $result = $auth->authenticate($adapter);
+
         if ($result->isValid()) {
-            $resultRow = $adapter->getResultRowObject(null, array('password', 'password_salt'));
-            $auth->getStorage()->write($resultRow);
-            $this->_onLogin();
+            $auth->getStorage()->write($adapter->getUserId());
         }
+
         return $result;
+    }
+
+    public function jsonLostPasswordAction()
+    {
+        $email = $this->getRequest()->getParam('email');
+
+        $users = Zend_Registry::get('userModel');
+        $result = $users->lostPassword($email);
+
+        $this->view->message = $result;
     }
 
     protected function _onLogin()

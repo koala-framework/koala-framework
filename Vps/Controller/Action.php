@@ -36,7 +36,6 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     protected function _getResourceName()
     {
-//         d(get_class($this));
         $resource = strtolower(str_replace(array('Vps_Controller_Action_',
                                                  'Controller'),
                                         '', get_class($this)));
@@ -51,12 +50,12 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     protected function _getUserRole()
     {
-        return $this->_getAuthData() ? $this->_getAuthData()->role : 'guest';
+        return Zend_Registry::get('userModel')->getAuthedUserRole();
     }
 
     protected function _getAuthData()
     {
-        return Zend_Auth::getInstance()->getStorage()->read();
+        return Zend_Registry::get('userModel')->getAuthedUser();
     }
 
     protected function _getAcl()

@@ -6,13 +6,14 @@ class Vps_Controller_Action_Component_UserController extends Vps_Controller_Acti
                                 'delete'=>true);
     protected $_paging = 20;
     protected $_defaultOrder = 'username';
-    protected $_tableName = 'Vps_Model_User_Users';
     protected $_editDialog = array(
         'type'          => 'Vps.User.Useredit'
     );
     
     protected function _initColumns()
     {
+        $this->_table = Zend_Registry::get('userModel');
+
         $acl = Zend_Registry::get('acl');
         $roles = array();
         foreach ($acl->getRoles() as $role) {

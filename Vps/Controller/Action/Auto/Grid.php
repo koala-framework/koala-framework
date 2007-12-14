@@ -48,18 +48,6 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     {
         parent::preDispatch();
 
-        if (!isset($this->_table) && isset($this->_tableName)) {
-            $this->_table = new $this->_tableName();
-        }
-
-        if (isset($this->_table)) {
-            $info = $this->_table->info();
-            if (!isset($this->_primaryKey)) {
-                $info = $this->_table->info();
-                $this->_primaryKey = $info['primary'];
-            }
-        }
-
         $addColumns = array();
         if (is_array($this->_columns)) $addColumns = $this->_columns;
         $this->_columns = new Vps_Collection();
@@ -74,7 +62,20 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $this->_columns[] = $column;
             }
         }
+
+        if (!isset($this->_table) && isset($this->_tableName)) {
+            $this->_table = new $this->_tableName();
+        }
+
         $this->_initColumns();
+
+        if (isset($this->_table)) {
+            $info = $this->_table->info();
+            if (!isset($this->_primaryKey)) {
+                $info = $this->_table->info();
+                $this->_primaryKey = $info['primary'];
+            }
+        }
 
         if (is_array($this->_primaryKey)) {
             $this->_primaryKey = $this->_primaryKey[1];

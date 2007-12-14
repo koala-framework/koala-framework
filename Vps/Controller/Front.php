@@ -30,6 +30,11 @@ class Vps_Controller_Front extends Zend_Controller_Front
         $router->AddRoute('vps_error', new Zend_Controller_Router_Route(
                     '/vps/error/:controller/:action',
                     array('module' => 'vps_controller_action_error')));
+        $router->AddRoute('vps_start', new Zend_Controller_Router_Route(
+                    '/vps/start',
+                    array('module' => 'vps_controller_action_welcome',
+                          'controller'  => 'start',
+                          'action'      => 'index')));
 
         $plugin = new Zend_Controller_Plugin_ErrorHandler();
         $plugin->setErrorHandlerModule('vps_controller_action_error');

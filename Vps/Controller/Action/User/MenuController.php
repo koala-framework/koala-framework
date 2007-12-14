@@ -81,9 +81,12 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
             }
         }
 
+        $authData = $this->_getAuthData();
+
         $this->view->menus = $menus;
         $this->view->showLogout = $showLogout;
-        $this->view->authData = $this->_getAuthData();
+        $this->view->userId = $authData ? $authData->id : 0;
+        $this->view->fullname = $authData ? $authData->__toString() : '';
     }
 
     public function jsonClearAssetsCacheAction()

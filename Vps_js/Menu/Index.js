@@ -103,20 +103,24 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
         }, this);
 
         this.add(new Ext.Toolbar.Fill());
-        if (response.authData && response.authData.realname
-                && response.userSelfControllerUrl) {
+
+        if (response.fullname && response.userSelfControllerUrl) {
             this.add({
-                text: response.authData.realname,
+                text: response.fullname,
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/user.png',
                 handler: function() {
                     var dlg = new Vps.Auto.Form.Window({
+                        width: 450,
+                        height: 370,
                         formConfig: {
-                            controllerUrl: response.userSelfControllerUrl,
-                            autoload: false
+                            controllerUrl: response.userSelfControllerUrl
                         }
                     });
-                    dlg.showEdit(response.authData.id);
+                    dlg.on('datachange', function() {
+                        this.reload();
+                    }, this);
+                    dlg.showEdit(response.userId);
                 },
                 scope: this
             });
