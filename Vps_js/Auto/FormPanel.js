@@ -109,7 +109,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         return this.actions[type];
     },
 
-    load : function(params) {
+    load : function(params, options) {
         if (this.el) this.el.mask('Loading...');
 
         if (!params) params = {};
@@ -131,6 +131,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
         Ext.Ajax.request({
             mask: !this.el, //globale mask wenn kein el vorhanden
+            loadOptions: options,
             url: this.controllerUrl+'/jsonLoad',
             params: params,
             success: function(response, options, result) {
@@ -154,6 +155,16 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
                 if (this.getForm()) {
                     this.getForm().clearInvalid();
                     this.getForm().resetDirty();
+                }
+                var lo = options.loadOptions;
+                if (lo && lo.success) {
+                    lo.success.call(lo.scope || this, this, result);
+                }
+            },
+            failure: function(response, options, result){
+                var lo = options.loadOptions;
+                if (lo && lo.failure) {
+                    lo.failure.call(lo.scope || this, this, result);
                 }
             },
             callback: function() {
@@ -269,22 +280,24 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         });
     },
     onAdd : function() {
-        if (!this.getForm()) this.load(); //meta-daten wurden noch nicht geladen
-
-        this.mabySave({
-            callback: function() {
-                this.enable();
-                if (this.deleteButton) this.deleteButton.disable();
-                this.getAction('delete').disable();
-                this.applyBaseParams({id: 0});
-                if (this.getForm()) {
-                    this.getForm().setDefaultValues();
-                    this.getForm().clearInvalid();
-                }
-                this.fireEvent('addaction', this);
-            },
-            scope: this
-        });
+        var cb = function() {
+            this.enable();
+            if (this.deleteButton) this.deleteButton.disable();
+            this.getAction('delete').disable();
+            this.applyBaseParams({id: 0});
+            this.getForm().setDefaultValues();
+            this.getForm().clearInvalid();
+            this.fireEvent('addaction', this);
+        };
+        if (!this.getForm()) {
+            //meta-daten wurden noch nicht geladen
+            this.load({}, {success: cb, scope: this});
+        } else {
+            this.mabySave({
+                callback: cb,
+                scope: this
+            });
+        }
     },
     findField: function(id) {
         return this.getForm().findField(id);
