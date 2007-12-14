@@ -31,6 +31,7 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract imple
         $ret = parent::getMetaData();
         $ret['name'] = $this->getName();
         $ret['items'] = $this->fields->getMetaData();
+        if (!count($ret['items'])) unset($ret['items']);
         return $ret;
     }
 
