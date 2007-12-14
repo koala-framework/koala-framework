@@ -214,17 +214,12 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
                 $mailView->{$key} = $param;
             }
         }
-        $fullname = $this->__toString();
-        if ($this->gender == 'male') {
-            $fullname = "Mr. $fullname";
-        } else if ($this->gender == 'female') {
-            $fullname = "Mrs. $fullname";
-        }
+
         $mailView->webUrl = $webUrl;
         $mailView->host = $host;
         $mailView->activationCode = $activationCode;
         $mailView->applicationName = Zend_Registry::get('config')->application->name;
-        $mailView->fullname = $fullname;
+        $mailView->fullname = $this->__toString();
         $mailView->userData = $this->toArray();
 
         $bodyText = $mailView->render($tpl);
