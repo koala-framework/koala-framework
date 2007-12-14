@@ -131,4 +131,14 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         file_put_contents($this->getFileSource(), $contents);
         chmod($this->getFileSource(), 0664);
     }
+
+    public function duplicate($data = array())
+    {
+        $new = parent::duplicate($data);
+        if (file_exists($this->getFileSource())) {
+            copy($this->getFileSource(), $new->getFileSource());
+            chmod($new->getFileSource(), 0664);
+        }
+        return $new;
+    }
 }
