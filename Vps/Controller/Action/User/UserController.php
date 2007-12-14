@@ -5,14 +5,6 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 
     protected function _initFields()
     {
-        $acl = Zend_Registry::get('acl');
-        $roles = array();
-        foreach($acl->getRoles() as $role) {
-            if($role instanceof Vps_Acl_Role) {
-                $roles[$role->getRoleId()] = $role->getRoleName();
-            }
-        }
-
         $genders = array('male' => 'male', 'female' => 'female');
 
         $this->_form->setTable(Zend_Registry::get('userModel'));
@@ -45,6 +37,14 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
     
     protected function _addRoleField($fs1)
     {
+        $acl = Zend_Registry::get('acl');
+        $roles = array();
+        foreach($acl->getRoles() as $role) {
+            if($role instanceof Vps_Acl_Role) {
+                $roles[$role->getRoleId()] = $role->getRoleName();
+            }
+        }
+
         $editor = new Vps_Auto_Field_ComboBox('role', 'Rights');
         $editor->setValues($roles)
                ->setEditable(false)
