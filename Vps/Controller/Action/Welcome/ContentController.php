@@ -16,7 +16,7 @@ class Vps_Controller_Action_Welcome_ContentController extends Vps_Controller_Act
         if ($file) {
             $this->view->image = '/vps/welcome/media';
             $s = Vps_Media_Image::calculateScaleDimensions($file->getFileSource(),
-                                                            array(300, 100));
+                                                            array(296, 100));
             $this->view->imageSize = $s;
         } else {
             $this->view->image = false;
