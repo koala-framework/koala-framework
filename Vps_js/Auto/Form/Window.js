@@ -3,6 +3,14 @@ Ext.namespace('Vps.Auto.Form');
 Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
     initComponent : function()
     {
+        if (!this.editTitle) {
+            this.editTitle = 'Edit';
+            if (this.title) this.editTitle = this.editTitle + ' ' + this.title;
+        }
+        if (!this.addTitle) {
+            this.addTitle = 'Add';
+            if (this.title) this.addTitle = this.addTitle + ' ' + this.title;
+        }
         if (!this.autoForm) {
             if (!this.formConfig) this.formConfig = {};
 
@@ -84,14 +92,14 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
 
     showAdd : function()
     {
-        this.setTitle('add');
+        this.setTitle(this.addTitle);
         this.show();
         this.getAutoForm().onAdd();
     },
 
     showEdit : function(id, options)
     {
-        this.setTitle('edit');
+        this.setTitle(this.editTitle);
         this.show();
         if (id) {
             this.getAutoForm().load(id, options);
