@@ -1,6 +1,6 @@
 Vps.Form.ShowField = Ext.extend(Ext.form.Field,
 {
-    defaultAutoCreate : {tag: 'div', class: 'vps-form-show-field'},
+    defaultAutoCreate : {tag: 'div', cls: 'vps-form-show-field'},
     tpl: '{value}',
 
     initValue : function(){
