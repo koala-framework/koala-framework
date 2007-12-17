@@ -230,7 +230,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     },
     onSubmitFailure: function(form, action) {
         if(action.failureType == Ext.form.Action.CLIENT_INVALID) {
-            Ext.Msg.alert('Speichern', 'Es konnte nicht gespeichert werden, bitte alle Felder korrekt ausfüllen.');
+            Ext.Msg.alert('Save',
+                "Can't save, please fill all marked fields correctly.");
         }
         this.getAction('save').enable();
     },
