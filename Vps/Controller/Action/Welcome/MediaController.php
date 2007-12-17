@@ -11,7 +11,7 @@ class Vps_Controller_Action_Welcome_MediaController extends Vps_Controller_Actio
     }
     protected function _createCacheFile($source, $target, $type)
     {
-        Vps_Media_Image::scale($source, $target, array(300, 100));
+        Vps_Media_Image::scale($source, $target, array(296, 100));
     }
 
     protected function _getCacheFilename()
