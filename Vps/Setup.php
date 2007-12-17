@@ -76,6 +76,18 @@ class Vps_Setup
                         array('allowModifications'=>true));
         $vpsConfig->merge($webConfig);
 
+        $v = $vpsConfig->application->vps->version;
+        if (preg_match('#tags/([^/]+)/config\\.ini#', $v, $m)) {
+            $v = $m[1];
+        } else if (preg_match('#branches/([^/]+)/config\\.ini#', $v, $m)) {
+            $v = $m[1];
+        } else if (preg_match('#trunk/vps/config\\.ini#', $v, $m)) {
+            $v = 'trunk';
+        }
+        $vpsConfig->application->vps->version = $v;
+        if (preg_match('/Revision: ([0-9]+)/', $vpsConfig->application->vps->revision, $m)) {
+            $vpsConfig->application->vps->revision = (int)$m[1];
+        }
         return $vpsConfig;
     }
 }
