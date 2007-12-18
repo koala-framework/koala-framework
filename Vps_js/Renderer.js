@@ -44,6 +44,17 @@ Ext.util.Format.component = function(v) {
     return '<iframe height="100" width="100%" frameborder="0" style="border: 1px solid darkgrey" src="' + v + '"></iframe>';
 };
 
+//date-funktion überschreiben, damit Y-m-d als eingabeformat verwendet werden kann
+Ext.util.Format.date = function(v, format) {
+    if(!v){
+        return '';
+    }
+    if(!(v instanceof Date)){
+        v = new Date(Date.parseDate(v, 'Y-m-d'));
+    }
+    return v.dateFormat(format || 'Y-m-d');
+};
+
 Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer('Y-m-d');
 Ext.util.Format.germanDate = Ext.util.Format.dateRenderer('d.m.Y');
 Ext.util.Format.germanDay = function(value, p) {
