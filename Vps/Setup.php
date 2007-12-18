@@ -77,9 +77,9 @@ class Vps_Setup
         $vpsConfig->merge($webConfig);
 
         $v = $vpsConfig->application->vps->version;
-        if (preg_match('#tags/([^/]+)/config\\.ini#', $v, $m)) {
+        if (preg_match('#tags/vps/([^/]+)/config\\.ini#', $v, $m)) {
             $v = $m[1];
-        } else if (preg_match('#branches/([^/]+)/config\\.ini#', $v, $m)) {
+        } else if (preg_match('#branches/vps/([^/]+)/config\\.ini#', $v, $m)) {
             $v = $m[1];
         } else if (preg_match('#trunk/vps/config\\.ini#', $v, $m)) {
             $v = 'trunk';
