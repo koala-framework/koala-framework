@@ -117,6 +117,18 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
         return $value;
     }
 
+    public function insertAfter($where, Vps_Collection_Item_Interface $value)
+    {
+        $value = $this->_preInsertValue($value);
+        foreach ($this->_array as $i=>$v) {
+            if ($v->getName() == $where) {
+                array_splice($this->_array, $i+1, 0, array($value));
+            }
+        }
+        $this->_postInsertValue($value);
+        return $value;
+    }
+
     public function getArray()
     {
         return $this->_array;

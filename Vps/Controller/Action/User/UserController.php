@@ -1,7 +1,7 @@
 <?php
 class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Auto_Form
 {
-    protected $_permissions = array('save'=>true, 'edit' => true, 'add'=>true, 'delete'=>true);
+    protected $_permissions = array('save'=>true, 'add'=>true);
 
     protected function _initFields()
     {
@@ -20,13 +20,9 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
         
         $this->_addRoleField($fs1);
 
-        $editor = new Vps_Auto_Field_ComboBox('gender', 'Gender');
+        $editor = new Vps_Auto_Field_Select('gender', 'Gender');
         $editor->setValues($genders)
-               ->setEditable(false)
-               ->setTriggerAction('all')
-               ->setAllowBlank(false)
-               ->setLazyRender(true)
-               ->setForceSelection(true);
+               ->setAllowBlank(false);
         $fs1->add($editor);
 
         $fs1->add(new Vps_Auto_Field_TextField('title', 'Title'));
@@ -45,13 +41,9 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
             }
         }
 
-        $editor = new Vps_Auto_Field_ComboBox('role', 'Rights');
+        $editor = new Vps_Auto_Field_Select('role', 'Rights');
         $editor->setValues($roles)
-               ->setEditable(false)
-               ->setTriggerAction('all')
-               ->setAllowBlank(false)
-               ->setLazyRender(true)
-               ->setForceSelection(true);
+               ->setAllowBlank(false);
         $fs1->add($editor);
     }
 
