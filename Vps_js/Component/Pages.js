@@ -145,7 +145,9 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     {
         var panel = new Vps.Component.ComponentPanel({
             id          : data.text,
-            title       : data.text
+            title       : data.text,
+            region      : 'center',
+            closable    : true
         });
         return panel;
     },
