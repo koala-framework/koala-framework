@@ -27,10 +27,11 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
         this.getGrid().on('cellclick', function(grid, rowIndex, columnIndex) {
             if (columnIndex == 3) {
                 var row = grid.getStore().getAt(rowIndex);
+                var bp = this.getBaseParams();
                 this.fireEvent('editcomponent', {
                     componentClass: row.data.component_class,
-                    pageId: this.baseParams.page_id, 
-                    componentKey: this.baseParams.component_key + '-' + row.data.id, 
+                    pageId: bp.page_id,
+                    componentKey: bp.component_key + '-' + row.data.id,
                     text: row.data.component_name
                 });
             }
@@ -47,7 +48,6 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
                         id: components[i],
                         text: i,
                         handler: this.onParagraphAdd,
-                        baseParams: {id: this.id},
                         scope: this
                     })
                 );
@@ -62,10 +62,11 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
     onEdit : function(o, p) {
         var row = this.grid.getSelectionModel().getSelected();
         if (row != undefined) {
+            var bp = this.getBaseParams();
             this.fireEvent('editcomponent', {
                 componentClass: row.data.component_class,
-                pageId: this.baseParams.page_id, 
-                componentKey: this.baseParams.component_key + '-' + row.data.id, 
+                pageId: bp.page_id,
+                componentKey: bp.component_key + '-' + row.data.id,
                 text: row.data.component_name
             });
         }
@@ -74,7 +75,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
     onParagraphAdd : function(o, e) {
         Ext.Ajax.request({
             url: this.controllerUrl + '/jsonAddParagraph',
-            params: Ext.apply ({ component : o.id}, this.baseParams),
+            params: Ext.apply ({ component : o.id}, this.getBaseParams()),
             success: function(r) {
                 this.reload();
             },
