@@ -1,6 +1,6 @@
 Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
 {
-    checkDirty: false,
+    checkDirty: true,
 
     initComponent: function() {
         this.activeId = null;
