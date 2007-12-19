@@ -1,27 +1,23 @@
 {if $image}
-    <div id="welcome_img">
+    <div id="welcomeImg">
         <img src="{$image}" width="{$imageSize.width}" height="{$imageSize.height}" />
     </div>
 {/if}
-{if $content|strip_tags|trim}
-    <div class="welcome_box">
+<div class="welcomeBox">
+    {if $content|strip_tags|trim}
         <div class="content">
             {$content}
         </div>
-        <div class="footer">
-            <p>{$application->name} Version {$application->version}</p>
-            <h2>{$application->vps->name} Version {$application->vps->version}</h2>
-            <img id="ente_welcome" src="/assets/vps/images/ente_cms_welcome.jpg" alt="" height="30" width="54" />
-        </div>
-    </div>
-{else}
-    <div class="welcome_box">
+    {else}
         <div class="content">
             <h1>{$application->name} Version {$application->version}</h1>
         </div>
-        <div class="footer">
-            <h2>{$application->vps->name} Version {$application->vps->version}</h2>
-            <img id="ente_welcome" src="/assets/vps/images/ente_cms_welcome.jpg" alt="" height="30" width="54" />
-        </div>
+    {/if}
+    <div class="footer">
+        {if $content|strip_tags|trim}
+            <p>{$application->name} Version {$application->version}</p>
+        {/if}
+        <h2>{$application->vps->name} Version {$application->vps->version}</h2>
+        <img id="enteWelcome" src="/assets/vps/images/welcome/ente.jpg" alt="" height="30" width="54" />
     </div>
-{/if}
+</div>
