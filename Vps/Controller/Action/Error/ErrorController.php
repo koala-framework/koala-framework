@@ -24,8 +24,9 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
                 $errors->exception instanceof Vps_Controller_Action_Web_Exception) {
                 $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
                 $file = 'Error404.html';
-            } else if ($errors->exception instanceof Vps_Controller_Exception) {
-                $file = 'ErrorVpc.html';
+            //auskommentiert - wenn ich einen exception bekomm dann will ich eine gscheite :D
+            //} else if ($errors->exception instanceof Vps_Controller_Exception) {
+            //    $file = 'ErrorVpc.html';
             } else {
                 $file = 'Error.html';
             }
