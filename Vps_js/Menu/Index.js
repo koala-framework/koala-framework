@@ -147,7 +147,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
         this.add({
             text: 'Info',
             cls: 'x-btn-text-icon',
-            icon: '/assets/silkicons/information.png',
+            icon: '/assets/vps/images/information.png',
             handler: function() {
                 var about = new Vps.About();
                 about.show();
