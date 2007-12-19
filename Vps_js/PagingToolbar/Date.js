@@ -22,7 +22,7 @@ Vps.PagingToolbar.Date = Ext.extend(Ext.PagingToolbar, {
         this.add(this.field);
         this.field.el.on("keydown", this.onPagingKeydown, this);
         this.field.on('menuhidden', function() {
-            this.ds.load({params:{start: this.field.getValue().format('Y-m-d'), limit: this.pageSize}});
+            this.store.load({params:{start: this.field.getValue().format('Y-m-d'), limit: this.pageSize}});
         }, this);
         this.addSeparator();
         this.next = this.addButton({
