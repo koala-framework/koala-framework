@@ -3,11 +3,8 @@ Vps.Component.ComponentPanel = Ext.extend(Ext.Panel, {
     initComponent: function() {
         Ext.apply(this, {
             layout      : 'fit',
-            region      : 'center',
-            closable    : true,
             tbar        : [],
             items       : [new Ext.Panel({
-                region  : 'center',
                 id      : 'componentPanel'
             })]
         });
@@ -18,9 +15,8 @@ Vps.Component.ComponentPanel = Ext.extend(Ext.Panel, {
         Ext.Ajax.request({
             url: '/admin/component/edit/' + data.componentClass + '/jsonIndex',
             params: { page_id: data.pageId, component_key: data.componentKey },
-            success: function(r) {
-                response = Ext.decode(r.responseText);
-                cls = eval(response['class']);
+            success: function(r, options, response) {
+                var cls = eval(response['class']);
                 if (cls) {
                     var panel2 = new cls(Ext.applyIf(response.config, {
                         region          : 'center',
@@ -70,6 +66,14 @@ Vps.Component.ComponentPanel = Ext.extend(Ext.Panel, {
             },
             params: data,
             scope   : this
+        });
+    },
+
+    clearToolbar: function() {
+        var toolbar = this.getTopToolbar();
+        toolbar.items.each(function(i) {
+            toolbar.items.remove(i);
+            i.destroy();
         });
     }
 });
