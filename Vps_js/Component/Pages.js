@@ -1,4 +1,3 @@
-Ext.namespace('Vps.Component');
 Vps.Component.Pages = Ext.extend(Ext.Panel, {
     initComponent : function()
     {
@@ -13,15 +12,15 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             maxSize     : 600,
             tbar        : []
         });
-        this.contentPanel = new Ext.TabPanel({
+        this.contentTabPanel = new Ext.TabPanel({
             region      : 'center',
-            id          : 'contentPanel'
+            id          : 'contentTabPanel'
         });
 
         this.layout = 'border';
         this.actions = {};
-        this.items = [this.treePanel, this.contentPanel];
-        Vps.Component.Index.superclass.initComponent.call(this);
+        this.items = [this.treePanel, this.contentTabPanel];
+       Vps.Component.Pages.superclass.initComponent.call(this);
 
         this.treePanel.on('loaded', this.onTreePanelLoaded, this);
         this.on('editcomponent', this.loadComponent, this);
@@ -129,12 +128,12 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
     loadComponent: function(data)
     {
-        if (this.contentPanel.getItem(data.text)) {
-            var panel = this.contentPanel.getItem(data.text);
+        if (this.contentTabPanel.getItem(data.text)) {
+            var panel = this.contentTabPanel.getItem(data.text);
         } else {
             var panel = this.createComponentPanel(data);
-            this.contentPanel.add(panel);
-            this.contentPanel.setActiveTab(panel);
+            this.contentTabPanel.add(panel);
+            this.contentTabPanel.setActiveTab(panel);
         }
         data.componentClass = data.cls;
         data.pageId = data.id;
@@ -144,78 +143,10 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
     createComponentPanel: function(data)
     {
-        var panel = new Ext.Panel({
-            layout      : 'fit',
-            region      : 'center',
-            closable    : true,
+        var panel = new Vps.Component.ComponentPanel({
             id          : data.text,
-            title       : data.text,
-            tbar        : [],
-            items       : [new Ext.Panel({
-                region  : 'center',
-                id      : 'componentPanel'
-            })]
+            title       : data.text
         });
-
-        panel.loadComponent = function(data){
-            Ext.Ajax.request({
-                url: '/admin/component/edit/' + data.componentClass + '/jsonIndex/',
-                params: { page_id: data.pageId, component_key: data.componentKey },
-                success: function(r) {
-                    response = Ext.decode(r.responseText);
-                    cls = eval(response['class']);
-                    if (cls) {
-                        var panel2 = new cls(Ext.applyIf(response.config, {
-                            region          : 'center',
-                            autoScroll      : true,
-                            closable        : true,
-                            id              : 'componentPanel'
-                        }));
-                        panel2.on('editcomponent', this.loadComponent, this);
-                        this.addToolbarButton(data);
-
-                        this.remove(this.items.item('componentPanel'));
-                        this.add(panel2);
-                        this.layout.rendered = false;
-                        this.doLayout();
-                    }
-                },
-                scope: this
-            });
-        }
-
-        panel.addToolbarButton = function(data){
-            var toolbar = this.getTopToolbar();
-            var count = toolbar.items.getCount();
-            del = count;
-            for (var x=0; x<count; x++){
-                var item = toolbar.items.itemAt(x);
-                if (item.params != undefined && 
-                    item.params.pageId == data.pageId && 
-                    item.params.componentKey == data.componentKey
-                ) {
-                    del = x > 0 ? x - 1 : x;
-                    x = count;
-                }
-            }
-            for (var x=count-1; x>=del; x--){
-                var item = toolbar.items.itemAt(x);
-                toolbar.items.removeAt(x);
-                item.destroy();
-            }
-            if (toolbar.items.getCount() >= 1) {
-                 toolbar.addSeparator();
-            }
-            toolbar.addButton({
-                text    : data.text,
-                handler : function (o, e) {
-                    this.loadComponent(data);
-                },
-                params: data,
-                scope   : this
-            });
-        }
-
         return panel;
     },
 
