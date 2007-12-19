@@ -37,6 +37,20 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                 subMenu.menu = menu;
             } else if (m.type == 'url') {
                 subMenu.href = m.url;
+                subMenu.handler = function(o, e) {
+                    e.stopEvent();
+                    var cb = function() {
+                        location.href = o.href;
+                    };
+                    if (!Vps.currentViewport.mabySubmit) cb();
+                    if (Vps.currentViewport.mabySubmit({
+                        callback: cb,
+                        scope: this
+                    })) {
+                        cb();
+                    }
+                };
+                subMenu.scope = this;
             } else if (m.type == 'event') {
                 subMenu.handler = function(o) {
                     if(o.eventConfig && !o.eventConfig.title) o.eventConfig.title = o.text;
@@ -75,6 +89,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
             } else {
                 throw "unknown menu-type: "+m.type;
             }
+
             menuItems.push(subMenu);
         }
         return menuItems;
@@ -91,13 +106,6 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                 menuItem.cls = 'x-btn-text-icon';
             } else if (menuItem.icon) {
                 menuItem.cls = 'x-btn-icon';
-            }
-
-            //button (in oberster ebene) kann kein href, darum mit handler faken
-            if (menuItem.href) {
-                menuItem.handler = function(menu) {
-                    location.href = menu.href;
-                }
             }
             this.add(menuItem);
         }, this);
