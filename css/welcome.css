@@ -2,11 +2,11 @@
     font-family: tahoma,arial,helvetica,sans-serif;
     font-size: 12px;
 }
-.vps-welcome div#welcome_img {
+.vps-welcome div#welcomeImg {
     border: 2px solid #a9bfd4;
     border-bottom: none;
 }
-.vps-welcome .welcome_box {
+.vps-welcome .welcomeBox {
     border: 2px solid #a9bfd4;
     background-color: #e2ebf5;
 }
@@ -26,7 +26,7 @@
     border-top: 2px solid #a9bfd4;
     padding: 10px;
     font-size: 11px;
-    background: url(/assets/vps/images/footer_bg.jpg) bottom left repeat-x;
+    background: url(/assets/vps/images/welcome/footerBg.jpg) bottom left repeat-x;
 }
 .vps-welcome .footer p {
     margin-bottom: 5px;
@@ -36,7 +36,7 @@
     letter-spacing: 0.01em;
     color: #7e7e7e;
 }
-.vps-welcome .footer img#ente_welcome {
+.vps-welcome .footer img#enteWelcome {
     position: absolute;
     bottom: 0px; right: 0px;
 }
