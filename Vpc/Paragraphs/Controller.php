@@ -47,7 +47,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $where['component_key = ?'] = $this->componentKey;
             $this->_table->numberize($id, 'pos', 0, $where);
         } else {
-            $this->view->error = 'Component not found: ' . $componentClass;
+            throw new Vps_Exception("Component '$class' not found");
         }
     }
 }
