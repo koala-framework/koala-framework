@@ -64,16 +64,12 @@ class Vps_Controller_Action_Component_ComponentsController extends Vps_Controlle
 
     public function showAction()
     {
-        try {
-            $component = new Vpc_Decorator_Assets_Component(
-                                Zend_Registry::get('dao'), $this->_getComponent());
-    
-            $this->view->setRenderFile(VPS_PATH . '/views/Component.html');
-            $this->view->component = $component->getTemplateVars();
-            $this->view->mode = '';
-        } catch (Vps_Exception $e) {
-            throw new Vps_Controller_Exception($e->getMessage());
-        }
+        $component = new Vpc_Decorator_Assets_Component(
+                            Zend_Registry::get('dao'), $this->_getComponent());
+
+        $this->view->setRenderFile(VPS_PATH . '/views/Component.html');
+        $this->view->component = $component->getTemplateVars();
+        $this->view->mode = '';
     }
 
     public function jsonShowAction()
