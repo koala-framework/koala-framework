@@ -1,4 +1,3 @@
-Ext.namespace('Vps.Component');
 Vps.Component.TabPanel = Ext.extend(Ext.TabPanel,
 {
     initComponent : function()
