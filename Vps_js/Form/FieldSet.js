@@ -7,8 +7,21 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
             this.hiddenCheckboxValue.on('valuechange', function(field, value) {
                 if (value=='0' || !value) {
                     this.collapse();
+                    this.cascade(function(i) {
+                        if (i != this && i != this.hiddenCheckboxValue) {
+                            i.disable();
+                            i.clearInvalid();
+                            i.disabledByFieldset = true; //hack, Kitepower ServiceDialog aktiviert das feld sonst wida
+                        }
+                    }, this);
                 } else {
                     this.expand();
+                    this.cascade(function(i) {
+                        if (i != this && i != this.hiddenCheckboxValue) {
+                            i.enable();
+                            delete i.disabledByFieldset;
+                        }
+                    }, this);
                 }
             }, this);
             this.add(this.hiddenCheckboxValue);
