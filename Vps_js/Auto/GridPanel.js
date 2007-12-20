@@ -168,9 +168,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             } else if (column.showDataIndex) {
                 column.renderer = Ext.util.Format.showField(column.showDataIndex);
             }
-            if (column.renderer) {
-                column.renderer = this.createRenderer(column.renderer, column);
-            }
             if (column.columnType == 'button') {
                 if (column.editDialog) {
                     column.editDialog = this.initEditDialog(column.editDialog);
@@ -376,6 +373,15 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         }, this);
 
         this.fireEvent('beforerendergrid', this.grid);
+
+        //bei renderern zusäztliches argument anhängen (die column)
+        //wird nach beforerendergrid gemacht, weil da drinnen können noch eigene
+        //renderer angehängt werden.
+        this.grid.getColumnModel().config.each(function(column) {
+            if (column.renderer) {
+                column.renderer = this.createRenderer(column.renderer, column);
+            }
+        }, this);
 
         this.add(this.grid);
         this.doLayout();
