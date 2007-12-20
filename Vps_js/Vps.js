@@ -28,6 +28,17 @@ Ext.onReady(function()
     if (Ext.QuickTips) {
         Ext.QuickTips.init();
     }
+
+    if (Ext.isIE6) {
+        Ext.each(Ext.DomQuery.select('.addHover'), function(el) {
+            var extEl = Ext.fly(el);
+            extEl.hover(
+                function() { this.addClass('hover'); },
+                function() { this.removeClass('hover'); },
+                extEl
+            );
+        });
+    }
 });
 
 Vps.application = { version: '{$application.version}' };

@@ -498,6 +498,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      *
      * @param Vpc_Abstract Komponente, für die man die URL wissen will
      * @return string URL der Seite
+     * @todo protected machen
      */
     public function getUrl($component = null)
     {
