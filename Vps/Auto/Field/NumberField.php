@@ -11,10 +11,10 @@ class Vps_Auto_Field_NumberField extends Vps_Auto_Field_SimpleAbstract
         parent::_addValidators();
 
         if ($this->getMaxValue()) {
-            $this->addValidator(new Zend_Validate_LessThan($this->getMaxValue()));
+            $this->addValidator(new Zend_Validate_LessThan($this->getMaxValue()+0.000001));
         }
         if ($this->getMinValue()) {
-            $this->addValidator(new Zend_Validate_GreaterThan($this->getMinValue()));
+            $this->addValidator(new Zend_Validate_GreaterThan($this->getMinValue()-0.000001));
         }
         if ($this->getAllowNegative() === false) {
             $this->addValidator(new Zend_Validate_GreaterThan(-1));
