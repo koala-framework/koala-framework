@@ -247,19 +247,23 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
 
     public function __get($columnName)
     {
+        static $cache = array();
         if (in_array($columnName, $this->getServiceColumns())) {
             if (isset($this->_changedServiceData[$columnName])) {
                 return $this->_changedServiceData[$columnName];
             } else {
-                $restClient = new Vps_Rest_Client();
-                $restClient->getData($this->id, $columnName);
+                if (!isset($cache[$this->id])) {
+                    $restClient = new Vps_Rest_Client();
+                    $restClient->getData($this->id, '');
 
-                $restResult = $restClient->get();
-                if (!$restResult->status()) {
-                    throw new Vps_Exception($restResult->msg());
+                    $restResult = $restClient->get();
+                    if (!$restResult->status()) {
+                        throw new Vps_Exception($restResult->msg());
+                    }
+                    $cache[$this->id] = $restResult->data;
+//                     return (string)$restResult->data->{$columnName};
                 }
-
-                return (string)$restResult->data->{$columnName};
+                return (string)$cache[$this->id]->{$columnName};
             }
         } else if ($columnName == 'password1' || $columnName == 'password2') {
             return '';
