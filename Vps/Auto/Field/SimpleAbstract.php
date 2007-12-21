@@ -24,7 +24,7 @@ abstract class Vps_Auto_Field_SimpleAbstract extends Vps_Auto_Field_Abstract
             $data = $this->_getValueFromPostData($postData);
 
             if ($this->getAllowBlank() === false) {
-                $v = new Zend_Validate_NotEmpty();
+                $v = new Vps_Validate_NotEmpty();
                 if (!$v->isValid($data)) {
                     throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages()));
                 }
