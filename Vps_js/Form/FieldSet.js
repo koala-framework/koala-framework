@@ -1,4 +1,6 @@
 Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
+    checkboxToggle: false,
+    checkboxCollapse: true,
     initComponent: function() {
         if (this.checkboxToggle && this.checkboxName) {
             this.hiddenCheckboxValue = new Vps.Form.FieldSetHiddenCheckboxValue({
@@ -6,7 +8,7 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
             });
             this.hiddenCheckboxValue.on('valuechange', function(field, value) {
                 if (value=='0' || !value) {
-                    this.collapse();
+                    if (this.checkboxCollapse) this.collapse();
                     this.cascade(function(i) {
                         if (i != this && i != this.hiddenCheckboxValue) {
                             i.disable();
@@ -14,15 +16,18 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
                             i.disabledByFieldset = true; //hack, Kitepower ServiceDialog aktiviert das feld sonst wida
                         }
                     }, this);
+                    this.checkbox.dom.checked = false;
                 } else {
-                    this.expand();
+                    if (this.checkboxCollapse) this.expand();
                     this.cascade(function(i) {
                         if (i != this && i != this.hiddenCheckboxValue) {
                             i.enable();
                             delete i.disabledByFieldset;
                         }
                     }, this);
+                    this.checkbox.dom.checked = true;
                 }
+                
             }, this);
             this.add(this.hiddenCheckboxValue);
             delete this.checkboxName;
