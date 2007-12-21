@@ -261,7 +261,6 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
                         throw new Vps_Exception($restResult->msg());
                     }
                     $cache[$this->id] = $restResult->data;
-//                     return (string)$restResult->data->{$columnName};
                 }
                 return (string)$cache[$this->id]->{$columnName};
             }
