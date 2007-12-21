@@ -8,7 +8,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     public function preDispatch()
     {
-        if (!$this instanceof Vps_Controller_Action_Error
+        if (!$this instanceof Vps_Controller_Action_Error_ErrorController
                 && $this->_getParam('application_version')
                 && $this->getHelper('ViewRenderer')->isJson()) {
             $version = Zend_Registry::get('config')->application->version;
