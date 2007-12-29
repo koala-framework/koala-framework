@@ -20,18 +20,18 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract
     public function _init()
     {
         $class = $this->_getClassFromSetting('downloadTag', 'Vpc_Basic_DownloadTag_Component');
-        $this->downlaodTag = $this->createComponent($class, 'tag');
+        $this->downloadTag = $this->createComponent($class, 'tag');
     }
 
     public function getChildComponents()
     {
-        return array($this->downlaodTag);
+        return array($this->downloadTag);
     }
 
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $return['downloadTag'] = $this->downlaodTag->getTemplateVars();
+        $return['downloadTag'] = $this->downloadTag->getTemplateVars();
 
         $return['infotext'] = $this->_row->infotext;
         if (!$this->_getSetting('showFilesize')) {
