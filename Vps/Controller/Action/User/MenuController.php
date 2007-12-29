@@ -1,5 +1,4 @@
 <?php
-
 class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
 {
     protected function _processResources($resources)
@@ -49,7 +48,7 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
                 } else if ($resource instanceof Vps_Acl_Resource_MenuSeparator) {
                     $menu['type'] = 'separator';
                 } else {
-                    throw new Vps_Exception("Unknown resource-type '".get_class($resource)."'");
+                    $menu = $menu['menuConfig'];
                 }
                 $menus[] = $menu;
             }
