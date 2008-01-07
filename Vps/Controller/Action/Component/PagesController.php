@@ -108,7 +108,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $id = $this->_getParam('id');
         $row = $this->_table->find($id)->current();
         if ($row) {
-            $oldRows = $this->_table->fetchAll('is_home=1');
+            $oldRows = $this->_table->fetchAll("is_home=1 AND id!='$id'");
+            $oldId = $id;
+            $oldVisible = false;
             foreach ($oldRows as $oldRow) {
                 $oldId = $oldRow->id;
                 $oldVisible = $oldRow->visible;
