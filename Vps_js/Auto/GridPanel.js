@@ -186,6 +186,10 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             if (column.defaultValue) delete column.defaultValue;
             if (column.dateFormat) delete column.dateFormat;
             if (typeof column.sortable == 'undefined') column.sortable = meta.sortable;
+
+            if (this.columnsConfig && this.columnsConfig[column.dataIndex]) {
+                Ext.apply(column, this.columnsConfig[column.dataIndex]);
+            }
             config.push(column);
         }
         if (config instanceof Array) {

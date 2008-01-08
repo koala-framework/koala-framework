@@ -95,7 +95,6 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         if (this.addDialog) {
             var d = Vps.Auto.Form.Window;
             if (this.addDialog.type) {
-                debugger;
                 try {
                     d = eval(this.addDialog.type);
                 } catch (e) {
