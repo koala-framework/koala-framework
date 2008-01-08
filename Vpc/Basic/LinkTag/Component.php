@@ -11,7 +11,7 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
     {
         return array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_LinkTag_Model',
-            'componentName' => 'Standard.LinkTag',
+            'componentName' => 'LinkTag',
             'childComponentClasses'   => array(
                 'Internal Link' => 'Vpc_Basic_Link_Intern_Component',
                 'External Link' => 'Vpc_Basic_Link_Extern_Component',

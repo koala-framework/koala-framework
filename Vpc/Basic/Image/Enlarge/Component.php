@@ -6,7 +6,7 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName'     => 'Standard.Image Enlarge',
+            'componentName'     => 'Image Enlarge',
             'tablename' => 'Vpc_Basic_Image_Enlarge_Model',
             'childComponentClasses' => array(
                 'enlarge' => 'Vpc_Basic_Image_Component',

@@ -7,7 +7,7 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName'     => 'Standard.TextImage',
+            'componentName'     => 'TextImage',
             'tablename'         => 'Vpc_Composite_TextImage_Model',
             'childComponentClasses' => array(
                 'text'         => 'Vpc_Basic_Text_Component',

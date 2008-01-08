@@ -7,7 +7,7 @@ class Vpc_Composite_ParagraphsImage_Component extends Vpc_Abstract
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName'     => 'Standard.ParagraphsImage',
+            'componentName'     => 'ParagraphsImage',
             'childComponentClasses' => array(
                 'paragraphs'   => 'Vpc_Paragraphs_Component',
                 'image'        => 'Vpc_Basic_Image_Enlarge_Component'

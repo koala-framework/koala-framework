@@ -9,7 +9,7 @@ class Vpc_Basic_Link_Mail_Component extends Vpc_Basic_Link_Component
     {
         return array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_Link_Mail_Model',
-            'componentName' => 'Standard.Link.Mail'
+            'componentName' => 'Link.Mail'
         )); 
     }
 

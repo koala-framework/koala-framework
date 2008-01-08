@@ -4,7 +4,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $settings = array_merge(parent::getSettings(), array(
-            'componentName'     => 'Standard.Image',
+            'componentName'     => 'Image',
             'tablename'         => 'Vpc_Basic_Image_Model',
             'dimension'         => array(300, 200), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
             'scale'             => array(Vps_Media_Image::SCALE_BESTFIT),

@@ -8,7 +8,7 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName' => 'Standard.Html',
+            'componentName' => 'Html',
             'tablename' => 'Vpc_Basic_Html_Model',
             'width' => 400,
             'height' => 400,

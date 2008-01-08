@@ -7,7 +7,7 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
     {
         return array_merge(parent::getSettings(), array(
             'tablename'         => 'Vpc_Basic_Text_Model',
-            'componentName'     => 'Standard.Text',
+            'componentName'     => 'Text',
             'fieldLabel'        => 'Rich Text Editor',
             'width'             => 550,
             'height'            => 400,

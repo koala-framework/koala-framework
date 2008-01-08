@@ -9,7 +9,7 @@ class Vpc_Basic_Link_Extern_Component extends Vpc_Basic_Link_Component
     {
         return array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_Link_Extern_Model',
-            'componentName' => 'Standard.Link.Extern',
+            'componentName' => 'Link.Extern',
             'default'       => array(
                 'target'        => 'http://',
                 'rel'           => '',
