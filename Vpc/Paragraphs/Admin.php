@@ -12,6 +12,7 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
                 eval($str);
             }
         }
+        asort($componentList);
         return array('components' => $componentList);
     }
 

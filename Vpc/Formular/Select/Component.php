@@ -1,23 +1,39 @@
 <?php
 class Vpc_Formular_Select_Component extends Vpc_Formular_Field_Abstract
 {
-    protected $_settings = array(
-        'name' => '',
-        'type' => 'radio'
-    );
-    protected $_tablename = 'Vpc_Formular_Select_Model';
-    const NAME = 'Formular.Select';
     protected $_options;
+
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName' => 'Formular Fields.Select',
+            'tablename' => 'Vpc_Formular_Select_Model',
+            'default' => array(
+                'width' => '',
+                'name' => '',
+                'value' => '',
+                'type' => 'radio',
+                'validator' => ''
+            )
+        ));
+    }
 
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
         $return['options'] = $this->getOptions();
-        $return['type'] = $this->getSetting('type');
-        $return['name'] = $this->getSetting('name');
-        $return['size'] = $this->getSetting('size');
-        $return['template'] = 'Formular/Select.html';
+        $return['type'] = $this->_row->type;
+        $return['name'] = $this->_row->name;
+        $return['width'] = $this->_row->width;
         return $return;
+    }
+
+    public function setOptions(array $options)
+    {
+        $this->_options = $options;
+        foreach ($this->_options as $key => $option) {
+            if (!isset($option['checked'])) $this->_options[$key]['checked'] = 0;
+        }
     }
 
     public function getOptions()
@@ -29,7 +45,7 @@ class Vpc_Formular_Select_Component extends Vpc_Formular_Field_Abstract
                 'component_key = ?' => $this->getComponentKey()
             );
             $rows = $table->fetchAll($where);
-            $options = array();
+            $this->_options = array();
             foreach ($rows as $row) {
                 $this->_options[] = array(
                     'value' => $row->id,
@@ -43,18 +59,27 @@ class Vpc_Formular_Select_Component extends Vpc_Formular_Field_Abstract
         return $this->_options;
     }
 
+    protected function _getName()
+    {
+        if (isset($this->_row->name)) {
+            //subotimal
+            return $this->_row->name;
+        } else {
+            return $this->_store['name'];
+        }
+    }
+
     public function processInput()
     {
-        if (isset($_POST[$this->getSetting('name')])) {
-            foreach ($this->getOptions() AS $key => $option) {
-                $this->_options[$key]['checked'] = $option['value'] == $_POST[$this->getSetting('name')];
-            }
+        $name = $this->_getName();
+        if (isset($_POST[$name])) {
+            $this->_row->value = $_POST[$name];
         }
     }
 
     public function validateField($mandatory)
     {
-        if ($mandatory && !isset($_POST[$this->getSetting('name')])) {
+        if ($mandatory && !isset($_POST[$this->_getName()])) {
             return 'Feld ' . $this->getStore('description') . ' ist ein Pflichtfeld, bitte ausfüllen';
         }
         return '';

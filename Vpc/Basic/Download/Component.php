@@ -7,7 +7,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract
     {
         return array_merge(parent::getSettings(), array(
             'tablename' => 'Vpc_Basic_Download_Model',
-            'componentName' => 'Standard.Download',
+            'componentName' => 'Download',
             'showFilesize' => true,
             'childComponentClasses'   => array(
                 'downloadTag' => 'Vpc_Basic_DownloadTag_Component',

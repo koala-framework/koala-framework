@@ -9,7 +9,7 @@ class Vpc_Basic_Link_Intern_Component extends Vpc_Basic_Link_Component
     {
         return array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_Link_Intern_Model',
-            'componentName' => 'Standard.Link.Intern'
+            'componentName' => 'Link.Intern'
         )); 
     }
 
