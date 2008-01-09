@@ -47,23 +47,24 @@
 
 
     <script type="text/javascript">
-        Ext.onReady(function() {ldelim}
-            Vps.debug = {$ext.debug};
-            Vps.callWithErrorHandler(function() {ldelim}
-                Vps.userRole = '{$ext.userRole}';
-                var panel = new {$ext.class}({$ext.config});
-    {literal}
-                if (!panel.region) panel.region = 'center';
-                panel.id = 'mainPanel';
-                Vps.currentViewport = new Vps.Viewport({
-                    items: [panel]
-                });
-                if(Vps.Connection.masks == 0  && Ext.get('loading')) {
-                    Ext.get('loading').fadeOut({remove: true});
-                }
+        Vps.debug = {$ext.debug};
+        Vps.userRole = '{$ext.userRole}';
+        Vps.main = function() {ldelim}
+            var panel = new {$ext.class}({$ext.config});
+{literal}
+            if (!panel.region) panel.region = 'center';
+            panel.id = 'mainPanel';
+            Vps.currentViewport = new Vps.Viewport({
+                items: [panel]
             });
+            if(Vps.Connection.masks == 0  && Ext.get('loading')) {
+                Ext.get('loading').fadeOut({remove: true});
+            }
+        };
+        Ext.onReady(function() {
+            Vps.callWithErrorHandler(Vps.main);
         });
-    {/literal}
+{/literal}
     </script>
 
 {/if}
