@@ -1,6 +1,7 @@
 Vps.Connection = Ext.extend(Ext.data.Connection, {
     request: function(options)
     {
+    
         if (options.url.match(/[\/a-zA-Z0-9]*\/json[a-zA-Z0-9]+(\/|\?|)/)) {
 
             if (options.mask) {
@@ -26,6 +27,16 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         }
         if (!options.params) options.params = {};
         options.params.application_version = Vps.application.version;
+        if (!options.url.match(/:\/\//)) {
+            //absolute url incl. http:// erstellen
+            //wird benötigt wenn fkt über mozrepl aufgerufen wird
+            var u = location.protocol + '//' + location.host;
+            if (options.url.substr(0, 1) == '/') {
+                options.url = u + options.url;
+            } else {
+                options.url = u + '/' + options.url;
+            }
+        }
         Vps.Connection.superclass.request.call(this, options);
     },
     repeatRequest: function(options) {
