@@ -156,4 +156,23 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
     {
         return $this->_pageCollection;
     }
+
+    public static function getSetting($class, $setting)
+    {
+        if (!class_exists($class)) {
+            $class = substr($class, 0, strrpos($class, '_')) . '_Component';
+        }
+        if (class_exists($class)) {
+            $settings = call_user_func(array($class, 'getSettings'));
+            return isset($settings[$setting]) ? $settings[$setting] : null ;
+        } else {
+            return null;
+        }
+    }
+
+    protected function _getSetting($setting)
+    {
+        return self::getSetting(get_class($this), $setting);
+    }
+
 }

@@ -1,8 +1,12 @@
 <?php
 class Vpc_Decorator_Menu_Abstract extends Vpc_Decorator_Abstract
 {
-    protected function _getMenuData($pages, $currentPageIds)
+    private $_currentPageIds;
+
+    protected function _getMenuData($pages)
     {
+        $currentPageIds = $this->_getCurrentPageIds();
+
         $return = array();
         foreach ($pages as $i => $page) {
             $data = $this->getPageCollection()->getPageData($page);
@@ -13,6 +17,7 @@ class Vpc_Decorator_Menu_Abstract extends Vpc_Decorator_Abstract
             $isCurrent = in_array($page->getPageId(), $currentPageIds);
             if ($isCurrent) $class .= ' current';
             $return[] = array(
+                'page'    => $page,
                 'href'    => $data['url'],
                 'text'    => $data['name'],
                 'current' => $isCurrent,
@@ -21,5 +26,19 @@ class Vpc_Decorator_Menu_Abstract extends Vpc_Decorator_Abstract
             );
         }
         return $return;
+    }
+
+    // Array mit IDs von aktueller Seiten und Parent Pages
+    protected function _getCurrentPageIds()
+    {
+        if (!isset($this->_currentPageIds)) {
+            $pc = $this->getPageCollection();
+            $this->_currentPageIds = array();
+            $p = $pc->getCurrentPage();
+            do {
+                $this->_currentPageIds[] = $p->getPageId();
+            } while ($p = $pc->getParentPage($p));
+        }
+        return $this->_currentPageIds;
     }
 }
