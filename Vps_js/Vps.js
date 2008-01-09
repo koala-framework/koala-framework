@@ -65,3 +65,25 @@ Vps.callWithErrorHandler = function(fn, scope) {
         });
     }
 };
+
+
+Vps.include =  function(url, restart) {
+    Ext.Ajax.request({
+        url: url,
+        success: function(response, options)  {
+            s = document.createElement('script');
+            s.setAttribute('type', 'text/javascript');
+            s.appendChild(document.createTextNode(response.responseText));
+            document.getElementsByTagName("head")[0].appendChild(s);
+            if (restart) Vps.restart();
+        }
+    });
+};
+Vps.restart = function() {
+    Vps.currentViewport.onDestroy();
+    delete Vps.currentViewport;
+    Vps.main();
+};
+
+var restart = Vps.restart;
+var include = Vps.include;
