@@ -80,8 +80,10 @@ Vps.include =  function(url, restart) {
     });
 };
 Vps.restart = function() {
-    Vps.currentViewport.onDestroy();
-    delete Vps.currentViewport;
+    if (Vps.currentViewport) {
+        Vps.currentViewport.onDestroy();
+        delete Vps.currentViewport;
+    }
     Vps.main();
 };
 
