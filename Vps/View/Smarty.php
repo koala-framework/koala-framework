@@ -56,6 +56,13 @@ class Vps_View_Smarty extends Zend_View_Abstract
         //raus aber {} wird benötigt (array als config ist ungültig)
         $config = (object)$config;
 
+        $vars = get_object_vars($this);
+        foreach ($vars as $key => $value) {
+            if ('_' != substr($key, 0, 1)) {
+                $config->$key = $value;
+            }
+        }
+
         // View einrichten
         $ext['files']['js'] = $jsFiles;
         $ext['files']['css'] = $cssFiles;
