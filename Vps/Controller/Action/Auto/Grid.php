@@ -716,6 +716,31 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         $sheet = $xls->addWorksheet('export_'. date('Y-m-d_H-i'));
         $sheet->setInputEncoding('UTF-8');
 
+        $colOptions = array();
+        $i = 0;
+        foreach ($this->_columns as $column) {
+            $options = $column->getXlsOptions();
+            if ($options) {
+                if (is_array($options)) {
+                    $options = new Vps_Auto_Grid_Xls_Options($options);
+                }
+            } else {
+                $options = new Vps_Auto_Grid_Xls_Options();
+            }
+
+            if ($options->getWidth() === null) {
+                if ($column->getWidth()) {
+                    $options->setWidth(round($column->getWidth() / 6, 1));
+                } else {
+                    $options->setWidth($options->getDefaultOption('width'));
+                }
+            }
+
+            $sheet->setColumn($i, $i, $options->getWidth());
+
+            $i++;
+        }
+
         $headFormat = $xls->addFormat();
         $headFormat->setBold();
         $data = $this->_getExportData(Vps_Auto_Grid_Column::SHOW_IN_XLS);
