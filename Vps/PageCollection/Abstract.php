@@ -122,10 +122,8 @@ abstract class Vps_PageCollection_Abstract
     {
         foreach ($this->_decoratorClasses as $class) {
             try {
-                if (class_exists($class)) {
-                    $page = new $class($this->_dao, $page);
-                    $page->setPageCollection($this);
-                }
+                $page = new $class($this->_dao, $page);
+                $page->setPageCollection($this);
             } catch (Zend_Exception $e) {
                 throw new Vpc_ComponentNotFoundException("Decorator '$class' not found.");
             }
