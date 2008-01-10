@@ -88,6 +88,7 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
         }
 
         if (isset($ret['showIn'])) unset($ret['showIn']);
+        if (isset($ret['xlsOptions'])) unset($ret['xlsOptions']);
 //todo:
 //         if (isset($col['showDataIndex']) && $col['showDataIndex'] && !$this->_getColumnIndex($col['showDataIndex'])) {
 //             $this->_columns[] = array('dataIndex' => $col['showDataIndex']);
