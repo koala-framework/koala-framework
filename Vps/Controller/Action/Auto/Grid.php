@@ -719,6 +719,9 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         $colOptions = array();
         $i = 0;
         foreach ($this->_columns as $column) {
+            if (!($column->getShowIn() & Vps_Auto_Grid_Column::SHOW_IN_XLS)) continue;
+            if (is_null($column->getHeader())) continue;
+
             $options = $column->getXlsOptions();
             if ($options) {
                 if (is_array($options)) {
