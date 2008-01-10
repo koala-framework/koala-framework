@@ -716,14 +716,14 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         $sheet = $xls->addWorksheet('export_'. date('Y-m-d_H-i'));
         $sheet->setInputEncoding('UTF-8');
 
+        $headFormat = $xls->addFormat();
+        $headFormat->setBold();
         $data = $this->_getExportData(Vps_Auto_Grid_Column::SHOW_IN_XLS);
         if (!is_null($data)) {
             foreach ($data as $row => $cols) {
                 foreach ($cols as $col => $text) {
                     if ($row == 0) {
-                        $format = $xls->addFormat();
-                        $format->setBold();
-                        $sheet->write($row, $col, $text, $format);
+                        $sheet->write($row, $col, $text, $headFormat);
                     } else {
                         $sheet->write($row, $col, $text);
                     }
