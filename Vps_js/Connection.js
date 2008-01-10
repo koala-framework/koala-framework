@@ -27,10 +27,10 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         }
         if (!options.params) options.params = {};
         options.params.application_version = Vps.application.version;
-        if (!options.url.match(/:\/\//)) {
+        if (!options.url.match(':\/\/')) {
             //absolute url incl. http:// erstellen
             //wird benötigt wenn fkt über mozrepl aufgerufen wird
-            var u = location.protocol + '//' + location.host;
+            var u = location.protocol + '/'+'/' + location.host;
             if (options.url.substr(0, 1) == '/') {
                 options.url = u + options.url;
             } else {
