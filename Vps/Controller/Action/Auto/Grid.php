@@ -496,7 +496,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         foreach ($ids as $id) {
             $row = $this->_table->find($id)->current();
             if (!$row) {
-                throw new Vps_Exception("Can't find row with id '$id'.");
+                throw new Vps_ClientException("Can't find row with id '$id'.");
             }
             if (!$this->_hasPermissions($row, 'delete')) {
                 throw new Vps_Exception("You don't have the permissions to delete this row.");

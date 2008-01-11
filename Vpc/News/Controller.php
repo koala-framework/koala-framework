@@ -8,9 +8,7 @@ class Vpc_News_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         'add'   => true
     );
     protected $_defaultOrder = array('field' => 'publish_date', 'direction' => 'DESC');
-    protected $_editDialog = array('controllerUrl'=>'edit/Vpc_News_Form',
-                                   'width'=>500,
-                                   'height'=>400);
+    //protected $_editDialog = array();
     
     public function _initColumns()
     {
