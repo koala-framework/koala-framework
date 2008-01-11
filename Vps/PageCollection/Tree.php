@@ -47,6 +47,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
     public function findPageByPath($path)
     {
         $ids = $this->getIdsForPath($path);
+        if ($ids == array()) return null;
         $page = $this->findPage(array_pop($ids));
         $this->_currentPage = $page;
         return $page;
@@ -102,11 +103,6 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
             if ($parentId == $searchId && $filename == $this->_pageFilenames[$id]) {
                 return $this->_pages[$id];
             }
-        }
-        // Wenn nicht mit gleichem Filename gefunden, erste Unterseite liefern
-        $id = array_search($searchId, $this->_pageParentIds);
-        if ($id) {
-            return $this->findPage($id);
         }
         return null;
     }
