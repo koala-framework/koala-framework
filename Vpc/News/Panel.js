@@ -1,6 +1,17 @@
 Ext.namespace('Vpc.News');
 Vpc.News.Panel = Ext.extend(Vpc.Paragraphs.Panel,
 {
+    initComponent: function() {
+        this.editDialog = new Vps.Auto.Form.Window({
+            controllerUrl: '/admin/component/edit/Vpc_News_Form',
+            width: 500,
+            height: 400,
+            formConfig: {
+                baseParams: this.baseParams
+            }
+        });
+        Vpc.News.Panel.superclass.initComponent.call(this);
+    },
     addButtons : function()
     {
         var toolbar = this.grid.getTopToolbar();
@@ -23,6 +34,26 @@ Vpc.News.Panel = Ext.extend(Vpc.Paragraphs.Panel,
                 this.fireEditComponent(row);
             }
         }, this);
+
+        this.editCategories = toolbar.addButton({
+            text    : 'Categories',
+            handler : function(o, p) {
+                var dlg = new Ext.Window({
+                    width:  450,
+                    height: 370,
+                    layout: 'fit',
+                    title:  'News Categories',
+                    modal:  true,
+                    items:  new Vps.Auto.GridPanel({
+                        controllerUrl: '/admin/component/edit/Vpc_News_Categories',
+                        baseParams: this.getBaseParams()
+                    })
+                }, this);
+                dlg.show();
+            },
+            scope   : this
+        });
+
     },
     
     fireEditComponent : function(row)

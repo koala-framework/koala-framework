@@ -72,6 +72,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
             $selectedIds[] = $i->$key;
         }
 
+        $ret = array();
         foreach ($this->_getFields() as $field) {
             $ret[$field->getFieldName()] = in_array($field->getKey(), $selectedIds);
         }
