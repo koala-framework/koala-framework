@@ -153,6 +153,10 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
     public function getIdsForPath($path)
     {
         $ids = array();
+        if ($path == '/') {
+            $ids[] = $this->getHomePage()->getPageId();
+            return $ids;
+        }
         $matches = array();
         if ($this->_urlScheme == Vps_PageCollection_Abstract::URL_SCHEME_FLAT) {
             $pattern = '/^\/.*?_(' . Vpc_Abstract::getIdPattern() . ')\.html$/';
