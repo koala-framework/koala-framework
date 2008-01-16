@@ -308,34 +308,38 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             }
         }
 
-        var filtersEmpty = true;
-        for (var i in meta.filters) filtersEmpty = false; //durch was einfacheres ersetzen :D
-        if (!filtersEmpty) {
-            if(gridConfig.tbar.length > 0) {
-                gridConfig.tbar.add('-');
-            }
-            gridConfig.tbar.add('Filter:');
-        }
-        if (meta.filters.text && typeof(meta.filters.text) != 'object') {
-            meta.filters.text = { type: 'TextField' };
-        }
         this.filters = new Ext.util.MixedCollection();
         var first = true;
         for(var filter in meta.filters) {
-            var f = meta.filters[filter]
+            var f = meta.filters[filter];
+            if (!f.type) f.type = 'TextField';
             if (!Vps.Auto.GridFilter[f.type]) {
                 throw "Unknown filter.type: "+f.type;
             }
             var type = Vps.Auto.GridFilter[f.type];
             delete f.type;
             f.id = filter;
-            f = new type(f);
-            if (!first) gridConfig.tbar.add('  ');
-            f.getToolbarItem().each(function(i) {
+            var filterField = new type(f);
+
+            if(first && gridConfig.tbar.length > 0) {
+                gridConfig.tbar.add('-');
+            }
+            if (first && !f.label) f.label = 'Filter:';
+            if (f.label) {
+                if (!first) {
+                    f.label = '  '+f.label;
+                }
+                gridConfig.tbar.add(f.label);
+            } else {
+                if (!first) {
+                    gridConfig.tbar.add('  ');
+                }
+            }
+            filterField.getToolbarItem().each(function(i) {
                 gridConfig.tbar.add(i);
             });
-            this.filters.add(f);
-            f.on('filter', function(f, params) {
+            this.filters.add(filterField);
+            filterField.on('filter', function(f, params) {
                 this.applyBaseParams(params);
                 this.load();
             }, this);
