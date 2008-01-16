@@ -23,7 +23,8 @@ Vps.Auto.GridFilter.DateRange = function(config)
 
 Ext.extend(Vps.Auto.GridFilter.DateRange, Vps.Auto.GridFilter.Abstract, {
     reset: function() {
-        this.textField.reset();
+        this.fieldFrom.reset();
+        this.fieldTo.reset();
     },
     getParams: function() {
         var params = {};
