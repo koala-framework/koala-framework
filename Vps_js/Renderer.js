@@ -66,6 +66,7 @@ Ext.util.Format.germanDay = function(value, p) {
     p.css += 'vps-renderer-bright';
     return Ext.util.Format.date(value, 'd.m.');    
 }
+Ext.util.Format.time = Ext.util.Format.dateRenderer('H:i');
 
 Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, store, column) {
     p.css += 'vps-cell-button';
