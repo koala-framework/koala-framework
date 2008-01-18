@@ -3,7 +3,6 @@ class Vps_Dao_Pages extends Vps_Db_Table
 {
     protected $_name = 'vps_pages';
     private $_pageData = null;
-    private $_decoratorData = null;
     private $_showInvisible = false;
 
     public function showInvisible($show)
@@ -78,24 +77,6 @@ class Vps_Dao_Pages extends Vps_Db_Table
         return $this->_pageData;
     }
 
-    public function retrieveDecoratorData($id)
-    {
-        if ($this->_decoratorData == null) {
-            $this->_decoratorData = array();
-            $sql = '
-                SELECT id, decorator, page_id
-                FROM vps_decorators
-            ';
-            $data = $this->getAdapter()->fetchAll($sql);
-            foreach ($data as $d) {
-                $pageId = $d['page_id'];
-                unset($d['page_id']);
-                $this->_decoratorData[$pageId][] = $d['decorator'];
-            }
-        }
-        return isset($this->_decoratorData[$id]) ? $this->_decoratorData[$id] : array() ;
-    }
-
     public function findPagesByClass($class)
     {
         $return = array();
@@ -105,31 +86,6 @@ class Vps_Dao_Pages extends Vps_Db_Table
             }
         }
         return $return;
-    }
-
-    public function saveDecorators($id, $decorators)
-    {
-        $delete = array();
-        $add = array();
-        $existingDecorators = $this->retrieveDecoratorData($id);
-        foreach ($existingDecorators as $d) {
-            if (!in_array($d, $decorators)) {
-                $delete[] = $d;
-            }
-        }
-        foreach ($decorators as $d) {
-            if (!in_array($d, $existingDecorators)) {
-                $add[] = $d;
-            }
-        }
-        $sql = "DELETE FROM vps_decorators WHERE page_id='$id' AND decorator IN ('" . implode("', '", $delete) . "')";
-        $this->getAdapter()->query($sql);
-        foreach ($add as $d) {
-            $sql = "INSERT INTO vps_decorators SET page_id='$id', decorator='$d'";
-            $this->getAdapter()->query($sql);
-        }
-        $this->_decoratorData = null;
-        return $this->retrieveDecoratorData($id);
     }
 
     public function insert(array $data)

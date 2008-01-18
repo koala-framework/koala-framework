@@ -15,7 +15,7 @@ class Vpc_Basic_Link_Intern_Component extends Vpc_Basic_Link_Component
 
     public function getTemplateVars()
     {
-        $target = $this->_row->target;
+        $target = $this->_getRow()->target;
         $page = $this->getPageCollection()->findPage($target);
         if ($page) {
             $href = $this->getPageCollection()->getUrl($page);
@@ -25,8 +25,8 @@ class Vpc_Basic_Link_Intern_Component extends Vpc_Basic_Link_Component
 
         $ret = parent::getTemplateVars();
         $ret['href'] = $href;
-        $ret['param'] = $this->_row->param;
-        $ret['rel'] = $this->_row->rel;
+        $ret['param'] = $this->_getRow()->param;
+        $ret['rel'] = $this->_getRow()->rel;
         return $ret;
     }
 }

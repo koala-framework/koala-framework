@@ -11,16 +11,16 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Auto_Grid_Column('preview', 'Preview', 300))
-            ->setRenderer('component')
-            ->setData(new Vps_Auto_Data_Vpc_Frontend($this->class, $this->pageId . $this->componentKey));
         $this->_columns->add(new Vps_Auto_Grid_Column('component_class'));
-        $this->_columns->add(new Vps_Auto_Grid_Column('component_name', 'Type', 200))
+        $this->_columns->add(new Vps_Auto_Grid_Column('component_name'))
             ->setData(new Vps_Auto_Data_Vpc_ComponentName());
+
+        $this->_columns->add(new Vps_Auto_Grid_Column('preview', 'Preview', 500))
+            ->setData(new Vps_Auto_Data_Vpc_Frontend($this->class, $this->pageId . $this->componentKey));
         $this->_columns->add(new Vps_Auto_Grid_Column_Button('edit', ' ', 20))
             ->setButtonIcon('/assets/silkicons/table_edit.png')
             ->setToolTip('Edit Paragraph');
-        $this->_columns->add(new Vps_Auto_Grid_Column('visible', 'Visible', 100))
+        $this->_columns->add(new Vps_Auto_Grid_Column('visible', '', 20))
             ->setEditor(new Vps_Auto_Field_Checkbox('visible', 'Visible'));
     }
 
@@ -32,7 +32,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         }
         parent::preDispatch();
     }
-    
+
     public function jsonAddParagraphAction()
     {
         $class = $this->_getParam('component');

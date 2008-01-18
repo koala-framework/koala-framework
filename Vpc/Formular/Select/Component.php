@@ -22,9 +22,9 @@ class Vpc_Formular_Select_Component extends Vpc_Formular_Field_Abstract
     {
         $return = parent::getTemplateVars();
         $return['options'] = $this->getOptions();
-        $return['type'] = $this->_row->type;
-        $return['name'] = $this->_row->name;
-        $return['width'] = $this->_row->width;
+        $return['type'] = $this->_getRow()->type;
+        $return['name'] = $this->_getRow()->name;
+        $return['width'] = $this->_getRow()->width;
         return $return;
     }
 
@@ -61,9 +61,9 @@ class Vpc_Formular_Select_Component extends Vpc_Formular_Field_Abstract
 
     protected function _getName()
     {
-        if (isset($this->_row->name)) {
+        if (isset($this->_getRow()->name)) {
             //subotimal
-            return $this->_row->name;
+            return $this->_getRow()->name;
         } else {
             return $this->_store['name'];
         }
@@ -73,7 +73,7 @@ class Vpc_Formular_Select_Component extends Vpc_Formular_Field_Abstract
     {
         $name = $this->_getName();
         if (isset($_POST[$name])) {
-            $this->_row->value = $_POST[$name];
+            $this->_getRow()->value = $_POST[$name];
         }
     }
 

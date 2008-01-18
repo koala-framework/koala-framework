@@ -14,6 +14,7 @@ class Vps_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('vps_welcome_index'));
         $this->add(new Zend_Acl_Resource('vps_welcome_content'));
         $this->add(new Zend_Acl_Resource('vps_welcome_media'));
+        $this->add(new Zend_Acl_Resource('media'));
 
         $this->add(new Vps_Acl_Resource_UserSelf('vps_user_self', '/vps/user/self'));
 

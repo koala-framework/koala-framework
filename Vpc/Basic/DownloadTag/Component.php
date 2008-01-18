@@ -13,8 +13,8 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Abstract
 
     public function getTemplateVars()
     {
-        $row = $this->_row;
-        $fileRow = $this->_row->findParentRow('Vps_Dao_File');
+        $row = $this->_getRow();
+        $fileRow = $row->findParentRow('Vps_Dao_File');
         if ($fileRow) {
             $url = $fileRow->generateUrl(get_class($this),
                                          $this->getId(), 

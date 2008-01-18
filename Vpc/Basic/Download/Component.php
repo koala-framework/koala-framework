@@ -33,7 +33,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract
         $return = parent::getTemplateVars();
         $return['downloadTag'] = $this->downloadTag->getTemplateVars();
 
-        $return['infotext'] = $this->_row->infotext;
+        $return['infotext'] = $this->_getRow()->infotext;
         if (!$this->_getSetting('showFilesize')) {
             $return['filesize'] = '';
         }

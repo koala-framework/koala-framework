@@ -25,7 +25,7 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
 
     public function _init()
     {
-        $class = $this->_row->link_class;
+        $class = $this->_getRow()->link_class;
         if (class_exists($class) && 
             is_subclass_of($class, 'Vpc_Basic_Link_Component')
         ) {

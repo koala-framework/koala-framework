@@ -21,6 +21,16 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         if (!$this->id) return null;
         return $this->_getUploadDir() . '/' . $this->id;
     }
+
+    public function getCacheFileSource($type)
+    {
+        $source = $this->_getUploadDir() . '/cache/' . $this->id . '/' . $type;
+        if (!is_file($source)) {
+            return null;
+        }
+        return $source;
+    }
+
     public function getFileSize()
     {
         $file = $this->getFileSource();
@@ -29,6 +39,7 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         }
         return null;
     }
+
     public function generateUrl($class, $componentId, $filename, $type, $addRandom = false)
     {
         $checksum = md5(Vps_Media_Password::PASSWORD . $componentId . $type);

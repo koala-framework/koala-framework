@@ -30,9 +30,9 @@ class Vpc_Basic_Link_Extern_Component extends Vpc_Basic_Link_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['href'] = $this->_row->target;
-        $ret['param'] = $this->_row->param;
-        $ret['rel'] = $this->_row->rel;
+        $ret['href'] = $this->_getRow()->target;
+        $ret['param'] = $this->_getRow()->param;
+        $ret['rel'] = $this->_getRow()->rel;
         return $ret;
     }
 }

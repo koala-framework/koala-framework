@@ -25,7 +25,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
             scope   : this
         });
         this.getGrid().on('cellclick', function(grid, rowIndex, columnIndex) {
-            if (columnIndex == 3) {
+            if (columnIndex == 2) {
                 var row = grid.getStore().getAt(rowIndex);
                 var bp = this.getBaseParams();
                 this.fireEvent('editcomponent', {

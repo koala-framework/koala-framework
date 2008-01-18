@@ -21,10 +21,10 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
 
     public function getTemplateVars()
     {
-        $size = $this->_row->getImageDimension();
+        $size = $this->_getRow()->getImageDimension();
 
         $return = parent::getTemplateVars();
-        $return['url'] = $this->_row->getImageUrl();
+        $return['url'] = $this->_getRow()->getImageUrl();
         $return['width'] = $size['width'];
         $return['height'] = $size['height'];
         return $return;
@@ -32,11 +32,16 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
 
     public function getImageUrl($type = 'default')
     {
-        return $this->_row->getImageUrl($type);
+        return $this->_getRow()->getImageUrl($type);
     }
 
     public function getImageDimension()
     {
-        return $this->_row->getImageDimension();
+        return $this->_getRow()->getImageDimension();
+    }
+
+    public function getImageRow()
+    {
+        return $this->_getRow();
     }
 }

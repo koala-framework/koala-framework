@@ -32,12 +32,18 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                           'module' => 'vps_controller_action_component',
                           'controller' => 'components',
                           'action' => 'show')));
+        $router->AddRoute('componentjsonshow', new Zend_Controller_Router_Route(
+                    'admin/component/jsonshow/:class/:componentId',
+                    array('componentId'=>null,
+                          'module' => 'vps_controller_action_component',
+                          'controller' => 'components',
+                          'action' => 'jsonshow')));
         $router->AddRoute('componentedit', new Zend_Controller_Router_Route(
                     'admin/component/edit/:class/:action',
                     array('module' => 'component',
                           'controller' => 'component',
                           'action' => 'index')));
-        $router->AddRoute('media', new Zend_Controller_Router_Route(
+        $router->AddRoute('mediacomponent', new Zend_Controller_Router_Route(
                     'media/:uploadId/:class/:componentId/:type/:checksum/:filename',
                     array('module' => 'vps_controller_action_component',
                           'controller' => 'media',

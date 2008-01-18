@@ -113,7 +113,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
     initEditor : function() {
         Vps.Form.HtmlEditor.superclass.initEditor.call(this);
-        if (this.controllerUrl) {
+        if (this.controllerUrl && this.enableTidy) {
             Ext.EventManager.on(this.doc, 'keypress', function(e) {
                 if(e.ctrlKey){
                     var c = e.getCharCode(), cmd;
@@ -132,7 +132,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     createToolbar: function(editor){
         Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
         var tb = this.getToolbar();
-        tb.insert(7, '-');
+        if (this.linkDialog || this.imageDialog || this.downloadDialog) {
+            tb.insert(7, '-');
+        }
         if (this.linkDialog) {
             tb.insert(8,  this.getAction('insertLink'));
         }
@@ -142,36 +144,39 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         if (this.downloadDialog) {
             tb.insert(10,  this.getAction('insertDownload'));
         }
-        this.linkComponentConfig
         tb.add('-');
-        tb.add({
-            icon: '/assets/silkicons/text_letter_omega.png',
-            handler: this.insertChar,
-            scope: this,
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: 'Character',
-                text: 'Insert a custom character.'
-            },
-            cls: 'x-btn-icon',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
-        tb.add({
-            icon: '/assets/silkicons/paste_plain.png',
-            handler: this.insertPlainText,
-            scope: this,
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: 'Insert Plain Text',
-                text: 'Insert text without formating.'
-            },
-            cls: 'x-btn-icon',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
+        if (this.enableInsertChar) {
+            tb.add({
+                icon: '/assets/silkicons/text_letter_omega.png',
+                handler: this.insertChar,
+                scope: this,
+                tooltip: {
+                    cls: 'x-html-editor-tip',
+                    title: 'Character',
+                    text: 'Insert a custom character.'
+                },
+                cls: 'x-btn-icon',
+                clickEvent: 'mousedown',
+                tabIndex: -1
+            });
+        }
+        if (this.enablePastePlain) {
+            tb.add({
+                icon: '/assets/silkicons/paste_plain.png',
+                handler: this.insertPlainText,
+                scope: this,
+                tooltip: {
+                    cls: 'x-html-editor-tip',
+                    title: 'Insert Plain Text',
+                    text: 'Insert text without formating.'
+                },
+                cls: 'x-btn-icon',
+                clickEvent: 'mousedown',
+                tabIndex: -1
+            });
+        }
 
-        if (this.controllerUrl) {
+        if (this.controllerUrl && this.enableTidy) {
             tb.add({
                 icon: '/assets/silkicons/html_valid.png',
                 handler: this.tidyHtml,
@@ -187,22 +192,23 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             });
         }
 
-        this.blockSelect = tb.el.createChild({
-            tag:'select',
-            cls:'x-font-select',
-            html: this.createBlockOptions()
-        });
-        this.blockSelect.on('change', function(){
-            var v = this.blockSelect.dom.value;
-            if (Ext.isIE) {
-                v = '<'+v+'>';
-            }
-            this.relayCmd('formatblock', v);
-            this.deferFocus();
-        }, this);
-        tb.insert(0, this.blockSelect.dom);
-        tb.insert(1, '-');
-
+        if (this.enableBlock) {
+            this.blockSelect = tb.el.createChild({
+                tag:'select',
+                cls:'x-font-select',
+                html: this.createBlockOptions()
+            });
+            this.blockSelect.on('change', function(){
+                var v = this.blockSelect.dom.value;
+                if (Ext.isIE) {
+                    v = '<'+v+'>';
+                }
+                this.relayCmd('formatblock', v);
+                this.deferFocus();
+            }, this);
+            tb.insert(0, this.blockSelect.dom);
+            tb.insert(1, '-');
+        }
     },
 
     createBlockOptions : function(){
@@ -220,23 +226,25 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
     updateToolbar: function(){
         Vps.Form.HtmlEditor.superclass.updateToolbar.call(this);
-        if (Ext.isIE) {
-            var el = this.getFocusElement();
-            while (el) {
-                for(var i in this.formatBlocks) {
-                    if (el.tagName && i == el.tagName.toLowerCase()) {
-                        if(i != this.blockSelect.dom.value){
-                            this.blockSelect.dom.value = i;
+        if (this.blockSelect) {
+            if (Ext.isIE) {
+                var el = this.getFocusElement();
+                while (el) {
+                    for(var i in this.formatBlocks) {
+                        if (el.tagName && i == el.tagName.toLowerCase()) {
+                            if(i != this.blockSelect.dom.value){
+                                this.blockSelect.dom.value = i;
+                            }
+                            return;
                         }
-                        return;
                     }
+                    el = el.parentNode;
                 }
-                el = el.parentNode;
-            }
-        } else {
-            var name = (this.doc.queryCommandValue('FormatBlock')||'p').toLowerCase();
-            if(name != this.blockSelect.dom.value){
-                this.blockSelect.dom.value = name;
+            } else {
+                var name = (this.doc.queryCommandValue('FormatBlock')||'p').toLowerCase();
+                if(name != this.blockSelect.dom.value){
+                    this.blockSelect.dom.value = name;
+                }
             }
         }
         var a = this.getFocusElement('a');
@@ -429,6 +437,8 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
     tidyHtml: function()
     {
+        if (!this.enableTidy) return;
+
         Ext.getBody().mask('Cleaning...');
         Ext.Ajax.request({
             url: this.controllerUrl+'/jsonTidyHtml',
