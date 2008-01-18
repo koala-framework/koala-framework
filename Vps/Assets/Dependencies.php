@@ -124,10 +124,10 @@ class Vps_Assets_Dependencies
     {
         if (in_array($dependency, $this->_processedDependencies)) return;
         $this->_processedDependencies[] = $dependency;
-        if ($dependency == 'Components') {
+        if ($dependency == 'Components' || $dependency == 'ComponentsAdmin') {
             foreach ($this->_config->pageClasses as $c) {
                 if ($c->class && $c->text) {
-                    $this->_processComponentDependency($c->class);
+                    $this->_processComponentDependency($c->class, $dependency == 'ComponentsAdmin');
                 }
             }
             return;
@@ -150,7 +150,7 @@ class Vps_Assets_Dependencies
         }
         return;
     }
-    private function _processComponentDependency($c)
+    private function _processComponentDependency($c, $includeAdminAssets)
     {
         if (in_array($c, $this->_processedComponents)) return;
         $this->_processedComponents[] = $c;
@@ -158,13 +158,27 @@ class Vps_Assets_Dependencies
         if (is_array($classes)) {
             foreach ($classes as $class) {
                 $assets = Vpc_Abstract::getSetting($class, 'assets');
+                $assetsAdmin = array();
+                if ($includeAdminAssets) {
+                    $assetsAdmin = Vpc_Abstract::getSetting($class, 'assetsAdmin');
+                }
                 if (isset($assets['dep'])) {
                     foreach ($assets['dep'] as $dep) {
                         $this->_processDependency($dep);
                     }
                 }
+                if (isset($assetsAdmin['dep'])) {
+                    foreach ($assetsAdmin['dep'] as $dep) {
+                        $this->_processDependency($dep);
+                    }
+                }
                 if (isset($assets['files'])) {
                     foreach ($assets['files'] as $file) {
+                        $this->_processDependencyFile($file);
+                    }
+                }
+                if (isset($assetsAdmin['files'])) {
+                    foreach ($assetsAdmin['files'] as $file) {
                         $this->_processDependencyFile($file);
                     }
                 }
@@ -181,7 +195,7 @@ class Vps_Assets_Dependencies
                         }
                     }
                 }
-                $this->_processComponentDependency($class);
+                $this->_processComponentDependency($class, $includeAdminAssets);
             }
         }
     }

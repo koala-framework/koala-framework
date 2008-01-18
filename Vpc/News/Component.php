@@ -5,7 +5,7 @@ class Vpc_News_Component extends Vpc_Abstract
 
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'componentName'     => 'News',
             'tablename'         => 'Vpc_News_Model',
             'hideInNews'        => true,
@@ -13,6 +13,8 @@ class Vpc_News_Component extends Vpc_Abstract
                 'details'       => 'Vpc_News_Details_Component'
             )
         ));
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/News/Panel.js';
+        return $ret;
     }
 
     public function generateHierarchy($filename = '')
