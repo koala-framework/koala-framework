@@ -84,19 +84,11 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
     /**
      * Schleift die Methode auf auf dekorierte Komponente durch.
      */
-    public function generateHierarchy($filename = '')
+    public function getPageFactory()
     {
-        return $this->_component->generateHierarchy($filename);
+        return $this->_component->getPageFactory();
     }
 
-    /**
-     * Schleift die Methode auf auf dekorierte Komponente durch.
-     */
-    public function saveFrontendEditing(Zend_Controller_Request_Http $request)
-    {
-        return $this->_component->saveFrontendEditing($request);
-    }
-    
     /**
      * Schleift die Methode auf auf dekorierte Komponente durch.
      */
@@ -109,7 +101,7 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
     {
         return $this->_component;
     }
-    
+
     /**
      * Schleift die Methode auf auf dekorierte Komponente durch.
      */

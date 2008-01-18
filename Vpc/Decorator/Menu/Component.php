@@ -23,7 +23,7 @@ class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Menu_Abstract
         // Hauptmenü
         $config = new Zend_Config_Ini('application/config.ini', 'pagecollection');
         foreach ($config->pagecollection->pagetypes as $type => $i) {
-            $pages = $pc->getChildPages(null, $type);
+            $pages = $pc->getMenuChildPages(null, $type);
             $return['menu'][$type] = $this->_getMenuData($pages);
         }
 
@@ -32,7 +32,7 @@ class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Menu_Abstract
         $currentPageIds = $this->_getCurrentPageIds();
         $page = $pc->findPage(array_pop($currentPageIds));
         while ($page && $level < $this->_getSetting('levels')) {
-            $pages = $pc->getChildPages($page);
+            $pages = $pc->getMenuChildPages($page);
             $return['submenus'][$level] = $this->_getMenuData($pages);
             $page = $pc->findPage(array_pop($currentPageIds));
             $level++;

@@ -4,7 +4,6 @@ abstract class Vps_PageCollection_Abstract
     protected $_pageFilenames = array();
     protected $_pageNames = array();
     protected $_pages = array();
-    protected $_hideInMenu = array();
     protected $_homeId;
     protected $_decoratorClasses = array();
     protected $_dao;
@@ -113,11 +112,6 @@ abstract class Vps_PageCollection_Abstract
         return $page;
     }
 
-    public function hideInMenu(Vpc_Interface $page)
-    {
-        $this->_hideInMenu[] = $page->getPageId();
-    }
-
     protected function _addDecorators(Vpc_Interface $page)
     {
         foreach ($this->_decoratorClasses as $class) {
@@ -142,9 +136,6 @@ abstract class Vps_PageCollection_Abstract
         $this->_pages[$id] = $page;
         $this->_pageFilenames[$id] = Zend_Filter::get($filename, 'Url', array(), 'Vps_Filter');
         $this->_pageNames[$id] = $name;
-        if (!$name) {
-            $this->hideInMenu($page);
-        }
     }
 
     public function findPage($id)
@@ -164,7 +155,8 @@ abstract class Vps_PageCollection_Abstract
             $page = $this->addPage($currentId);
             if ($page != null) {
                 foreach ($parts['pageKeys'] as $currentPageKey => $pageKey) {
-                    $this->_pages[$currentId]->generateHierarchy($pageKey);
+                    $this->_pages[$currentId]->getPageFactory()
+                                             ->getChildPageById($pageKey);
                     $currentId = $parts['dbId'] . $currentPageKey;
                 }
             }
@@ -195,20 +187,6 @@ abstract class Vps_PageCollection_Abstract
         return $this->_pages[$this->_homeId];
     }
 
-    protected function _generateHierarchy(Vpc_Interface $page = null, $filename = '')
-    {
-        if (is_null($page)) {
-            $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData(null);
-            foreach ($rows as $pageRow) {
-                $page = Vpc_Abstract::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id'], $this);
-                $this->addTreePage($page, $pageRow['filename'], $pageRow['name'], null);
-                $this->_types[$page->getId()] = $pageRow['type'];
-            }
-        } else {
-            $page->generateHierarchy($filename);
-        }
-    }
-
     public function getCurrentPage()
     {
         return $this->_currentPage;
@@ -218,7 +196,7 @@ abstract class Vps_PageCollection_Abstract
     {
         return '';
     }
-    
+
     public function createUrl()
     {
         return '';
@@ -240,14 +218,7 @@ abstract class Vps_PageCollection_Abstract
         $data = $this->_dao->getTable('Vps_Dao_Pages')->retrievePageData($id, false);
         $data['url'] = $this->getUrl($page);
         $data['name'] = $this->_pageNames[$page->getPageId()];
-        if (array_search($page->getPageId(), $this->_hideInMenu) !== false ||
-            isset($data['hide']) && $data['hide'] == 1
-        ) {
-            $data['hide'] = true;
-        } else {
-            $data['hide'] = false;
-        }
-        
+
         // Erste Nicht-Decorator-Komponente raussuchen
         $p = $page;
         while ($p instanceof Vpc_Decorator_Abstract) {
@@ -271,15 +242,6 @@ abstract class Vps_PageCollection_Abstract
 
     abstract public function findPageByPath($path);
 
-    public function findPageByFilename($filename)
-    {
-        $id = array_search($filename, $this->_pageFilenames);
-        if ($id !== false) {
-            return $this->findPage($id);
-        }
-        return null;
-    }
-    
     public function findComponentByClass($class, $startPage = null)
     {
         $ids = $this->_dao->getTable('Vps_Dao_Pages')->findPagesByClass($class);

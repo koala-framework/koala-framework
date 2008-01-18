@@ -6,7 +6,7 @@ class Vpc_Table extends Vps_Db_Table
     {
         parent::__construct($config);
         if (!isset($config['componentClass'])) {
-            throw new Vps_Exception("componentClass is requred for Vpc_Table in config");
+            throw new Vps_Exception("componentClass is required for Vpc_Table in config");
         }
         $this->setComponentClass($config['componentClass']);
     }

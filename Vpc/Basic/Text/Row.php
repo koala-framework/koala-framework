@@ -4,19 +4,24 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
     //für Component und Row
     public function getContentParts($content = null)
     {
+        $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
+                                            'childComponentClasses');
+
         $usedChildComponentNrs = array();
 
         $componentId = $this->page_id.$this->component_key;
         if (is_null($content)) $content = $this->content;
 
         $ret = array();
+                            //1   2                 3                              4              5
         while (preg_match('#^(.*)(<img.+src=[\n ]*"([^"]*)"[^>]*>|<a.+href=[\n ]*"([^"]*)"[^>]*>)(.*)$#Us', $content, $m)) {
 
             if ($m[1] != '') {
                 $ret[] = $m[1];
             }
 
-            if ($m[3] != '' && preg_match('#/media/([0-9]+)/([^/]+)/([^/]+)/#', $m[3], $m2)) {
+            if ($classes['image'] && $m[3] != ''
+                && preg_match('#/media/([0-9]+)/([^/]+)/([^/]+)/#', $m[3], $m2)) {
                 $isInvalid = false;
                 $childComponentId = $m2[3];
                 if (substr($childComponentId, 0, strlen($componentId)+2)
@@ -39,14 +44,18 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                                     'componentId'=>$m2[3],
                                     'html'=>$m[2]);
                 }
-            } else if ($m[3] != '') {
+            } else if ($classes['image'] && $m[3] != '') {
                 $ret[] = array('type'=>'invalidImage', 'src'=>$m[3], 'html'=>$m[2]);
+            } else if ($m[3] != '') {
+                $ret[] = $m[2];
             }
 
-            if ($m[4] != '' && preg_match('#/?([^/]+)$#', $m[4], $m2)) {
+            if (($classes['link'] || $classes['download']) && $m[4] != ''
+                && preg_match('#/?([^/]+)$#', $m[4], $m2)) {
                 $isInvalid = false;
                 $childComponentId = $m2[1];
-                if (substr($childComponentId, 0, strlen($componentId)+2)
+                if ($classes['link']
+                    && substr($childComponentId, 0, strlen($componentId)+2)
                             == $componentId.'-l') {
                     $nr = substr($childComponentId, strlen($componentId)+2);
                     if (!in_array('l'.$nr, $usedChildComponentNrs)) {
@@ -58,7 +67,8 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                                     'componentId'=>$m2[1],
                                     'html'=>$m[2]);
                     }
-                } else if (substr($childComponentId, 0, strlen($componentId)+2)
+                } else if ($classes['download']
+                        && substr($childComponentId, 0, strlen($componentId)+2)
                             == $componentId.'-d') {
                     $nr = substr($childComponentId, strlen($componentId)+2);
                     if (!in_array('d'.$nr, $usedChildComponentNrs)) {
@@ -70,19 +80,23 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                                     'componentId'=>$m2[1],
                                     'html'=>$m[2]);
                     }
-                } else if (preg_match('#-l[0-9]+$#', $m2[1])) {
+                } else if ($classes['link'] && preg_match('#-l[0-9]+$#', $m2[1])) {
                     $ret[] = array('type'=>'invalidLink',
                                    'href'=>$m[4],
                                    'componentId'=>$m2[1],
                                    'html'=>$m[2]);
-                } else if (preg_match('#-d[0-9]+$#', $m2[1])) {
+                } else if ($classes['download'] && preg_match('#-d[0-9]+$#', $m2[1])) {
                     $ret[] = array('type'=>'invalidDownload',
                                    'href'=>$m[4],
                                    'componentId'=>$m2[1],
                                    'html'=>$m[2]);
+                } else {
+                    $ret[] = $m[2];
                 }
-            } else if ($m[4] != '') {
+            } else if ($classes['link'] && $m[4] != '') {
                 $ret[] = array('type'=>'invalidLink', 'href'=>$m[4], 'html'=>$m[2]);
+            } else if ($m[4] != '') {
+                $ret[] = $m[2];
             }
 
             $content = $m[5];
@@ -139,9 +153,9 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
     {
         $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
                                             'childComponentClasses');
-        $imageAdmin = Vpc_Admin::getInstance($classes['image']);
-        $linkAdmin = Vpc_Admin::getInstance($classes['link']);
-        $downloadAdmin = Vpc_Admin::getInstance($classes['download']);
+        if ($classes['image']) $imageAdmin = Vpc_Admin::getInstance($classes['image']);
+        if ($classes['link']) $linkAdmin = Vpc_Admin::getInstance($classes['link']);
+        if ($classes['download']) $downloadAdmin = Vpc_Admin::getInstance($classes['download']);
 
         $parts = array_unique(array_merge($this->_getChildComponentNrs($this->content),
                                           $this->_getChildComponentNrs($this->content_edit)));
@@ -162,9 +176,9 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
         $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
                                             'childComponentClasses');
 
-        $imageAdmin = Vpc_Admin::getInstance($classes['image']);
-        $linkAdmin = Vpc_Admin::getInstance($classes['link']);
-        $downloadAdmin = Vpc_Admin::getInstance($classes['download']);
+        if ($classes['image']) $imageAdmin = Vpc_Admin::getInstance($classes['image']);
+        if ($classes['link']) $linkAdmin = Vpc_Admin::getInstance($classes['link']);
+        if ($classes['download']) $downloadAdmin = Vpc_Admin::getInstance($classes['download']);
 
         $this->content = $this->tidy($this->content);
 
@@ -212,7 +226,10 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                     'char-encoding'  =>'utf8',
                     'newline'        =>'LF'
                     );
-        if (class_exists('tidy')) {
+        $enableTidy = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableTidy');
+        if (class_exists('tidy') && $enableTidy) {
+            //<span style="font-weight: bold;">pos<!--<em>-->t<a href="">asdf</a>u</em>lant </span>
+            //<strong>postulant </strong>
             $tidy = new tidy;
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();

@@ -20,19 +20,19 @@ class Vpc_Formular_Checkbox_Component extends Vpc_Formular_Field_Abstract
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $return['value'] = $this->_row->value;
-        $return['checked'] = $this->_row->checked;
-        $return['text'] = $this->_row->text;
-        $return['width'] = $this->_row->width;
+        $return['value'] = $this->_getRow()->value;
+        $return['checked'] = $this->_getRow()->checked;
+        $return['text'] = $this->_getRow()->text;
+        $return['width'] = $this->_getRow()->width;
         $return['name'] = $this->_getName();
         return $return;
     }
 
     protected function _getName()
     {
-        if (isset($this->_row->name)) {
+        if (isset($this->_getRow()->name)) {
             //subotimal
-            return $this->_row->name;
+            return $this->_getRow()->name;
         } else {
             return $this->_store['name'];
         }
@@ -46,13 +46,13 @@ class Vpc_Formular_Checkbox_Component extends Vpc_Formular_Field_Abstract
         } else {
             $value = '';
         }
-        $this->_row->value = $value;
+        $this->_getRow()->value = $value;
     }
 
     public function validateField($mandatory)
     {
-        $value = $this->_row->value;
-        $validatorString = $this->_row->validator;
+        $value = $this->_getRow()->value;
+        $validatorString = $this->_getRow()->validator;
         if ($validatorString != '' && $value != '') {
             $validator = new $validatorString();
             if (!$validator->isValid($value)) {

@@ -18,11 +18,11 @@ class Vpc_Formular_Textarea_Component extends Vpc_Formular_Field_Abstract
     function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $return['value'] = $this->_row->value;
-        $return['width'] = $this->_row->width;
-        $return['height'] = $this->_row->height;
-        if (isset($this->_row->name)) {
-            $return['name'] = $this->_row->name;
+        $return['value'] = $this->_getRow()->value;
+        $return['width'] = $this->_getRow()->width;
+        $return['height'] = $this->_getRow()->height;
+        if (isset($this->_getRow()->name)) {
+            $return['name'] = $this->_getRow()->name;
         } else {
             $return['name'] = $this->_store['name'];
         }
@@ -32,9 +32,9 @@ class Vpc_Formular_Textarea_Component extends Vpc_Formular_Field_Abstract
 
     protected function _getName()
     {
-        if (isset($this->_row->name)) {
+        if (isset($this->_getRow()->name)) {
             //subotimal
-            return $this->_row->name;
+            return $this->_getRow()->name;
         } else {
             return $this->_store['name'];
         }
@@ -44,7 +44,7 @@ class Vpc_Formular_Textarea_Component extends Vpc_Formular_Field_Abstract
     {
         $name = $this->_getName();
         if (isset($_POST[$name])) {
-            $this->_row->value = $_POST[$name];
+            $this->_getRow()->value = $_POST[$name];
         }
     }
 }

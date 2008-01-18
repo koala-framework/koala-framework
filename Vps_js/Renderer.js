@@ -1,9 +1,9 @@
 Ext.util.Format.boolean = function(v, p, record) {
-    p.css += ' x-grid3-check-col-td'; 
+    p.css += ' x-grid3-check-col-td';
     return '<div class="x-grid3-check-col'+(v?'-on':'')+'">&#160;</div>';
 };
 Ext.util.Format.booleanTickCross = function(v, p, record) {
-    p.css += ' x-grid3-check-col-td'; 
+    p.css += ' x-grid3-check-col-td';
     return '<div class="x-grid3-check-col vps-check-tick-cross-col'+(v?'-on':'')+'">&#160;</div>';
 };
 
@@ -64,7 +64,7 @@ Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer('Y-m-d');
 Ext.util.Format.germanDate = Ext.util.Format.dateRenderer('d.m.Y');
 Ext.util.Format.germanDay = function(value, p) {
     p.css += 'vps-renderer-bright';
-    return Ext.util.Format.date(value, 'd.m.');    
+    return Ext.util.Format.date(value, 'd.m.');
 }
 Ext.util.Format.time = Ext.util.Format.dateRenderer('H:i');
 

@@ -5,7 +5,7 @@
  */
 abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
 {
-    protected $_paragraphs = array();
+    protected $_paragraphs;
     private $_rows;
 
     public static function getSettings()
@@ -38,14 +38,6 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         return $this->_rows;
     }
 
-    protected function _init()
-    {
-        foreach ($this->_getRows() as $row) {
-            $c = $this->createComponent($row->component_class, $row->id);
-            $this->_paragraphs[$row->id] = $c;
-        }
-    }
-
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -56,16 +48,15 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         return $ret;
     }
 
-    public function generateHierarchy($filename = '')
-    {
-        parent::generateHierarchy($filename);
-        foreach ($this->getChildComponents() as $p) {
-            $p->generateHierarchy($filename);
-        }
-    }
-
     public function getChildComponents()
     {
+        if (!isset($this->_paragraphs)) {
+            $this->_paragraphs = array();
+            foreach ($this->_getRows() as $row) {
+                $c = $this->createComponent($row->component_class, $row->id);
+                $this->_paragraphs[$row->id] = $c;
+            }
+        }
         return $this->_paragraphs;
     }
 

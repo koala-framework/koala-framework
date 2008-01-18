@@ -89,7 +89,7 @@ class Vpc_Admin
     }
 
     // ****************
-    
+
     public function getControllerClass()
     {
         return 'Vps.Auto.FormPanel';
@@ -99,6 +99,11 @@ class Vpc_Admin
     {
         return array();
     }
+
+//     public function getExtConfig()
+//     {
+//         return array('xtype'=>'autoform');
+//     }
 
     public function getControllerUrl($class = null)
     {
@@ -187,8 +192,8 @@ class Vpc_Admin
 
     public static function getComponentFile($class, $filename = '', $ext = 'php', $returnClass = false)
     {
+        if (is_object($class)) $class = get_class($class);
         $ret = null;
-        $retClass = null;
         while (!$ret && $class != '') {
             $curClass = $class;
             if ($filename != '') {
@@ -200,14 +205,12 @@ class Vpc_Admin
                 if ($dir == '.') $dir = getcwd();
                 $path = $dir . '/' . $file;
                 if (is_file($path)) {
-                    $ret = $path;
-                    $retClass = $curClass;
+                    $ret = $returnClass ? $curClass : $path;
                     break;
                 }
             }
             $class = get_parent_class($class);
         }
-        return $returnClass ? $retClass : $ret;
+        return $ret;
     }
-
 }

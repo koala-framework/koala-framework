@@ -310,9 +310,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 
         this.filters = new Ext.util.MixedCollection();
         var first = true;
+        if (meta.filters.text && typeof(meta.filters.text) != 'object') {
+            meta.filters.text = { type: 'TextField' };
+        }
         for(var filter in meta.filters) {
             var f = meta.filters[filter];
-            if (!f.type) f.type = 'TextField';
             if (!Vps.Auto.GridFilter[f.type]) {
                 throw "Unknown filter.type: "+f.type;
             }

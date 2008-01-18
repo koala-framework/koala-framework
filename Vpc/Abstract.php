@@ -8,16 +8,20 @@ abstract class Vpc_Abstract implements Vpc_Interface
 {
     protected $_dao;
     private $_id;
-    private $_hasGeneratedForFilename = array();
-    private $_pageCollection = null;
+    private $_pageCollection;
+    private $_parentComponent;
 
     private $_store;
     protected $_row;
     private $_tables = array();
 
+    private $_pdfWriter;
+
     protected $_table;
-    
+
     const LOREM_IPSUM = 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.';
+
+    private $_childPagesDataCache;
 
     /**
      * Sollte nicht direkt aufgerufen werden, sondern über statische Methoden der Klasse. Kann nicht
@@ -35,7 +39,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     public final function __construct(Vps_Dao $dao = null, $id = null, $pageCollection = null)
     {
         if (is_null($dao)) return;
-        
+
         $this->_dao = $dao;
         $this->_pageCollection = $pageCollection;
 
@@ -48,23 +52,39 @@ abstract class Vpc_Abstract implements Vpc_Interface
             $this->_id = $this->parseId($id);
         }
 
-        $table = $this->getTable();
-        if ($table && !isset($this->_row)) {
-            $info = $table->info();
-            if ($info['primary'] == array(1 => 'page_id', 2 => 'component_key')) {
-                $this->_row = $table->find($this->getPageId(), $this->getComponentKey())->current();
-                if (!$this->_row) {
-                    $this->_row = $table->createRow();
-                }
-            }
-        }
-
         $this->_init();
 
         if (Zend_Registry::isRegistered('infolog')) {
             if (!is_string($id)) $id = '(static)';
             Zend_Registry::get('infolog')->createComponent(get_class($this) . ' - ' . $id);
         }
+    }
+
+    public function setParentComponent($component)
+    {
+        $this->_parentComponent = $component;
+    }
+
+    public function getParentComponent()
+    {
+        return $this->_parentComponent();
+    }
+
+    protected function _getRow()
+    {
+        if (!isset($this->_row)) {
+            $table = $this->getTable();
+            if ($table && !isset($this->_row)) {
+                $info = $table->info();
+                if ($info['primary'] == array(1 => 'page_id', 2 => 'component_key')) {
+                    $this->_row = $table->find($this->getPageId(), $this->getComponentKey())->current();
+                    if (!$this->_row) {
+                        $this->_row = $table->createRow();
+                    }
+                }
+            }
+        }
+        return $this->_row;
     }
 
     /**
@@ -86,44 +106,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return self::_createInstance($dao, $class, $id, $pageCollection);
     }
 
-    /**
-     * Erstellt eine Komponente, die als neue Seite in den Seitenbaum eingefügt werden
-     * kann.
-     *
-     * Wird von generateHierarchy() verwendet. Wenn eine Unterseite erstellt wird, muss dieser eine
-     * neue pageId zugewiesen werden. Diese pageId besteht aus topComponentId und pageKeys/pageTags.
-     * Die pageKeys/pageTags dienen zur Unterscheidung bei gleicher topComponentId. pageKeys werden
-     * verwendet, wenn bei gleichen Seitenaufbau der Unterseite unterschiedliche Inhalte angezeigt
-     * werden sollen, pageTags, wenn die gleichen Inhalte angezeigt werden sollen bzw. nur darauf
-     * spezialisierte Komponenten auf den pageTag reagieren und unterschiedliche Inhalte liefern.
-     *
-     * @see generateHierarchy
-     * @param string Klassenname der Komponente, die erstellt werden soll
-     * @param int Falls bestehende Komponente aus DB erstellt werden soll (className wird bei Werten != 0 wirkungslos!)
-     * @param int Für Unterscheidung in Seitenbaum und des Komponenteninhalts
-     * @param int Für Unterscheidung in Seitenbaum ohne Unterscheidung des Komponenteninhalts
-     * @param int Wie pageTag, wird jedoch nicht hierarchisch an die URL angehängt, sondern überschrieben
-     * @return Vpc_Abstract Komponente, die als Seite im Seitenbaum hinzugefügt werden kann
-     * @throws Vpc_Exception Falls pageKeySuffix und pageTagSuffix gleichzeit gesetzt werden
-     */
-    public function createPage($class, $pageKeySuffix = '', $pageTagSuffix = '')
-    {
-        $id = $this->getId();
-        if ($pageKeySuffix != '') {
-            $id .= '_' . $pageKeySuffix;
-        }
-
-        if ($pageTagSuffix != '') {
-            $id .= ',' . $pageTagSuffix;
-        }
-
-        // Page erstellen
-        $page = self::_createInstance($this->getDao(), $class, $id, $this->getPageCollection());
-
-        // Erstellte Komponente hinzufügen
-        return $page;
-    }
-    
     /**
      * Falls eine Komponente Unterkomponenten hat (zB. TextPic hat eine Textbox- und
      * ein Pic-Komponente), werden diese hier erstellt.
@@ -159,17 +141,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
         } else {
             throw new Vpc_ComponentNotFoundException("Component '$class' not found.");
         }
-
-        // Decorators hinzufügen
-        if (!is_null($component)) {
-            $decoratorData = $dao->getTable('Vps_Dao_Pages')->retrieveDecoratorData($component->getId());
-            foreach ($decoratorData as $decoratorClass) {
-                if (class_exists($decoratorClass)) {
-                    $component = new $decoratorClass($dao, $component);
-                }
-            }
-        }
-
         return $component;
     }
 
@@ -388,42 +359,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
     }
 
     /**
-     * Falls eine Komponente Unterseiten im Seitenbaum erstellt, wird das hier gemacht.
-     *
-     * Standardmäßig werden die Seiten aus dem als Unterseite im Seitenbaum hinzugefügt. Falls
-     * eine Komponente dynamisch Unterseiten erstellen will, sollte das in dieser Methode erfolgen.
-     * parent::generateHierarchy sollte dennoch aufgerufen werden.
-     *
-     * Der zweite Parameter bestimmt, ob die Seite als Home ausgeführt wird. Falls die Seite
-     * also Home ausgeführt wird, werden die Unterseiten der obersten Ebene hinzugefügt, die
-     * Seite fungiert also als Rootpage.
-     *
-     * @param string Nächster Bestandteil der URL für lazy loading, damit nicht immer alle Unterseiten erstellt werden müssen
-     * @param boolean Hierarchie wird im Kontext der Homepage erstellt
-     * @return Array mit erstellten Unterseiten
-     */
-    public function generateHierarchy($filename = '')
-    {
-        $return = array();
-        if (!in_array('', $this->_hasGeneratedForFilename) && !in_array($filename, $this->_hasGeneratedForFilename)) {
-
-            $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData($this->getId());
-            foreach ($rows as $pageRow) {
-                if ($filename != '' && $filename != $pageRow['filename']) continue;
-                $page = self::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id'], $this->getPageCollection());
-                $this->getPageCollection()->addTreePage($page, $pageRow['filename'], $pageRow['name'], $this);
-                $r['page'] = $page;
-                $r['filename'] = $pageRow['filename'];
-                $return[] = $r;
-            }
-
-            $this->_hasGeneratedForFilename[] = $filename;
-        }
-
-        return $return;
-    }
-
-    /**
      * Falls eine Komponente Unterkomponente erstellt, wird das hier gemacht.
      *
      * @return Array mit erstellten Unterkomponente
@@ -432,7 +367,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         return array();
     }
-    
+
     /**
      * Gibt die Variablen für View zurück.
      *
@@ -449,7 +384,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $vars['id'] = $this->getId();
         $vars['store'] = $this->_store;
         $vars['template'] = Vpc_Admin::getComponentFile(get_class($this), '', 'tpl');
-        $vars['isOffline'] = 
+        $vars['isOffline'] =
             isset($_SERVER['SERVER_NAME']) &&
             substr($_SERVER['SERVER_NAME'], -6) == '.vivid';
         if (!$vars['template']) {
@@ -487,7 +422,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         return array();
     }
-    
+
     protected function _getParam($param)
     {
         return isset($_REQUEST[$param]) ? $_REQUEST[$param] : null;
@@ -496,14 +431,12 @@ abstract class Vpc_Abstract implements Vpc_Interface
     /**
      * Shortcut, fragt vom Seitenbaum die Url für eine Komponente ab
      *
-     * @param Vpc_Abstract Komponente, für die man die URL wissen will
      * @return string URL der Seite
      * @todo protected machen
      */
-    public function getUrl($component = null)
+    public function getUrl()
     {
-        if ($component == null) $component = $this;
-        return $this->getPageCollection()->getUrl($component);
+        return $this->getPageCollection()->getUrl($this);
     }
 
     /**
@@ -542,12 +475,12 @@ abstract class Vpc_Abstract implements Vpc_Interface
             return null;
         }
     }
-    
+
     public static function getTablename($class)
     {
         return self::$tablename;
     }
-    
+
     public static function getSetting($class, $setting)
     {
         if (!class_exists($class)) {
@@ -599,5 +532,23 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     public function onDelete()
     {
+    }
+
+    public function getPdfWriter($pdf)
+    {
+        if (!isset($this->_pdfWriter)) {
+            $class = Vpc_Admin::getComponentFile(get_class($this), 'Pdf', 'php', true);
+            $this->_pdfWriter = new $class($this, $pdf);
+        }
+        return $this->_pdfWriter;
+    }
+
+    public function getPageFactory()
+    {
+        if (!isset($this->_pageFactory)) {
+            $c = Vpc_Admin::getComponentFile($this, 'PageFactory', 'php', true);
+            $this->_pageFactory = new $c($this);
+        }
+        return $this->_pageFactory;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
 {
-    protected $_componentParts = array();
+    private $_componentParts = array();
 
     public static function getSettings()
     {
@@ -18,7 +18,13 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
             'enableFormat'      => true,
             'enableLists'       => true,
             'enableSourceEdit'  => true,
+            'enableBlock'       => true,
+            'enableLinks'       => false, //nur wenn link komponente nicht vorhanden
+            'enableInsertChar'  => true,
+            'enablePastePlain'  => true,
+            'enableTidy'        => true,
             'childComponentClasses' => array(
+                //auf false setzen um buttons zu deaktivieren
                 'image'         => 'Vpc_Basic_Text_Image_Component',
                 'link'          => 'Vpc_Basic_LinkTag_Component',
                 'download'      => 'Vpc_Basic_DownloadTag_Component'
@@ -29,36 +35,37 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
         ));
     }
 
-    protected function _init()
+    protected function _getComponentParts()
     {
-        parent::_init();
-
-        foreach ($this->_row->getContentParts() as $part) {
-            if (is_array($part)) {
-                if ($part['type'] == 'image') {
-                    $class = $this->_getClassFromSetting('image', 'Vpc_Basic_Image_Component');
-                    $part['nr'] = 'i'.$part['nr'];
-                } else if ($part['type'] == 'link') {
-                    $class = $this->_getClassFromSetting('link', 'Vpc_Basic_LinkTag_Component');
-                    $part['nr'] = 'l'.$part['nr'];
-                } else if ($part['type'] == 'download') {
-                    $class = $this->_getClassFromSetting('download', 'Vpc_Basic_DownloadTag_Component');
-                    $part['nr'] = 'd'.$part['nr'];
+        if (!isset($this->_componentParts)) {
+            foreach ($this->_getRow()->getContentParts() as $part) {
+                if (is_array($part)) {
+                    if ($part['type'] == 'image') {
+                        $class = $this->_getClassFromSetting('image', 'Vpc_Basic_Image_Component');
+                        $part['nr'] = 'i'.$part['nr'];
+                    } else if ($part['type'] == 'link') {
+                        $class = $this->_getClassFromSetting('link', 'Vpc_Basic_LinkTag_Component');
+                        $part['nr'] = 'l'.$part['nr'];
+                    } else if ($part['type'] == 'download') {
+                        $class = $this->_getClassFromSetting('download', 'Vpc_Basic_DownloadTag_Component');
+                        $part['nr'] = 'd'.$part['nr'];
+                    }
+                    if (isset($class)) {
+                        $component = $this->createComponent($class, $part['nr']);
+                        $this->_componentParts[] = $component;
+                    }
+                } else {
+                    $this->_componentParts[] = $part;
                 }
-                if (isset($class)) {
-                    $component = $this->createComponent($class, $part['nr']);
-                    $this->_componentParts[] = $component;
-                }
-            } else {
-                $this->_componentParts[] = $part;
             }
         }
+        return $this->_componentParts;
     }
 
     public function getChildComponents()
     {
         $ret = array();
-        foreach ($this->_componentParts as $part) {
+        foreach ($this->_getComponentParts() as $part) {
             if ($part instanceof Vpc_Abstract) {
                 $ret[] = $part;
             }
@@ -69,7 +76,8 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        foreach ($this->_componentParts as $part) {
+        $ret['contentParts'] = array();
+        foreach ($this->_getComponentParts() as $part) {
             if ($part instanceof Vpc_Abstract) {
                 $ret['contentParts'][] = $part->getTemplateVars();
             } else {

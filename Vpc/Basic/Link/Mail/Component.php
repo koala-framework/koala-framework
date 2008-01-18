@@ -16,7 +16,7 @@ class Vpc_Basic_Link_Mail_Component extends Vpc_Basic_Link_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['href'] = 'mailto:' . $this->_row->mail;
+        $ret['href'] = 'mailto:' . $this->_getRow()->mail;
         $ret['param'] = '';
         $ret['rel'] = '';
         return $ret;

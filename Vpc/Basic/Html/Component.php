@@ -21,7 +21,7 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['content'] = $this->_row->content;
+        $ret['content'] = $this->_getRow()->content;
         return $ret;
     }
 }

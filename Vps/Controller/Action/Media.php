@@ -72,9 +72,6 @@ abstract class Vps_Controller_Action_Media extends Vps_Controller_Action
     {
         $uploadId = $this->_getParam('uploadId');
         $row = $this->_getRow($uploadId);
-        if (!$row) {
-            throw new Vps_Controller_Action_Web_Exception('File not found');
-        }
 
         $target = $this->_getCachePath($uploadId, $this->_getCacheFilename());
         if (!is_file($target)) {
@@ -90,11 +87,7 @@ abstract class Vps_Controller_Action_Media extends Vps_Controller_Action
 
             // Cache-Datei erstellen
             $source = $row->getFileSource();
-//             try {
-                $this->_createCacheFile($source, $target, $this->_getParam('type'));
-//             } catch (Exception $e) {
-//                 throw new Vps_Controller_Action_Web_Exception($e->getMessage()); // immer 404 auswerfen
-//             }
+            $this->_createCacheFile($source, $target, $this->_getParam('type'));
 
             // Aufräumen, falls Verzeichnis angelegt wurde und keine Datei erstellt wurde, wieder löschen
             if (sizeof(scandir(dirname($target))) <= 2) {
@@ -126,7 +119,7 @@ abstract class Vps_Controller_Action_Media extends Vps_Controller_Action
      */
     protected function _getCacheFilename()
     {
-        return $this->_getParam('uploadId');
+        return $this->_getParam('type');
     }
 
     /**
@@ -152,10 +145,10 @@ abstract class Vps_Controller_Action_Media extends Vps_Controller_Action
     {
         $table = new Vps_Dao_File();
         $row = $table->find($uploadId)->current();
-        if ($row) {
-            return $row;
+        if (!$row) {
+            throw new Vps_Controller_Action_Web_Exception('File not found');
         }
-        return '';
+        return $row;
     }
 
     protected final function _getUploadDir()

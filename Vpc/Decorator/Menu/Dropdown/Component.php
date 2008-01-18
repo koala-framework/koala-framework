@@ -19,7 +19,7 @@ class Vpc_Decorator_Menu_Dropdown_Component extends Vpc_Decorator_Menu_Abstract
 
         foreach ($this->_getSetting('pagetypes') as $type) {
             foreach ($return['menu'][$type] as $k=>$c) {
-                $pages = $pc->getChildPages($c['page']);
+                $pages = $pc->getMenuChildPages($c['page']);
                 $return['menu'][$type][$k]['dropDown'] = $this->_getMenuData($pages);
             }
         }

@@ -14,7 +14,7 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract
                 'image'        => 'Vpc_Basic_Image_Enlarge_Component',
             ),
             'default'           => array(
-                'image_position'    => 'alternate' // 'left', 'right', 'alternate'
+                'image_position'    => 'left' // 'left', 'right', 'alternate'
             )
         ));
     }
@@ -24,7 +24,7 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract
         $return = parent::getTemplateVars();
         $return['text'] = $this->text->getTemplateVars('');
         $return['image'] = $this->image->getTemplateVars('');
-        $return['image_position'] = $this->_row->image_position;
+        $return['image_position'] = $this->_getRow()->image_position;
         return $return;
     }
 
@@ -39,6 +39,11 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract
     public function getChildComponents()
     {
         return array($this->text, $this->image);
+    }
+
+    public function getTextImageRow()
+    {
+        return $this->_getRow();
     }
 
 }

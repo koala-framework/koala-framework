@@ -19,18 +19,18 @@ class Vpc_Formular_Textbox_Component extends Vpc_Formular_Field_Abstract
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $return['value'] = $this->_row->value;
-        $return['maxlength'] = $this->_row->maxlength;
-        $return['width'] = $this->_row->width;
+        $return['value'] = $this->_getRow()->value;
+        $return['maxlength'] = $this->_getRow()->maxlength;
+        $return['width'] = $this->_getRow()->width;
         $return['name'] = $this->_getName();
         return $return;
     }
 
     protected function _getName()
     {
-        if (isset($this->_row->name)) {
+        if (isset($this->_getRow()->name)) {
             //subotimal
-            return $this->_row->name;
+            return $this->_getRow()->name;
         } else {
             return $this->_store['name'];
         }
@@ -40,14 +40,14 @@ class Vpc_Formular_Textbox_Component extends Vpc_Formular_Field_Abstract
     {
         $name = $this->_getName();
         if (isset($_POST[$name])) {
-            $this->_row->value = $_POST[$name];
+            $this->_getRow()->value = $_POST[$name];
         }
     }
 
     public function validateField($mandatory)
     {
-        $value = $this->_row->value;
-        $validatorString = $this->_row->validator;
+        $value = $this->_getRow()->value;
+        $validatorString = $this->_getRow()->validator;
         if ($validatorString != '' && $value != '') {
             $validator = new $validatorString();
             if (!$validator->isValid($value)) {

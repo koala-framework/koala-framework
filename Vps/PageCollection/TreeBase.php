@@ -20,7 +20,8 @@ class Vps_PageCollection_TreeBase extends Vps_PageCollection_Tree
     public function getUrl($page)
     {
         if ($this->overwriteGetUrl) {
-            return '/admin/component/show/' . get_class($page) . '/' . $page->getId() . '/';
+            //return '/admin/component/show/' . get_class($page) . '/' . $page->getId() . '/';
+            return '#';
         } else {
             return parent::getUrl($page);
         }

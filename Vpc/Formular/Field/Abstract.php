@@ -10,11 +10,11 @@ abstract class Vpc_Formular_Field_Abstract extends Vpc_Abstract implements Vpc_F
     public function getValue()
     {
         //scheißlösung
-        return $this->_row->value;
+        return $this->_getRow()->value;
     }
     public function getName()
     {
         //scheißlösung
-        return $this->_row->name;
+        return $this->_getRow()->name;
     }
 }
