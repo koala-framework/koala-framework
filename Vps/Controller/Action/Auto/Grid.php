@@ -10,6 +10,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected $_defaultOrder;
     protected $_filters = array();
     protected $_queryFields;
+    protected $_querySeparator = '';
     protected $_sortable = true; //ob felder vom user sortiert werden können
     protected $_position;
 
@@ -162,7 +163,11 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             }
 
             $whereQuery = array();
-            $query = explode(' ', $query);
+            if ($this->_querySeparator) {
+                $query = explode($this->_querySeparator, $query);
+            } else {
+                $query = array($query);
+            }
             foreach ($query as $q) {
                 foreach ($this->_getWhereQuery($q) as $i) {
                     $whereQuery[] = $db->quoteInto($i, "%$q%");
