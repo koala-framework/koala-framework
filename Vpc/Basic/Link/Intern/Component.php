@@ -7,10 +7,12 @@ class Vpc_Basic_Link_Intern_Component extends Vpc_Basic_Link_Component
 {
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_Link_Intern_Model',
             'componentName' => 'Link.Intern'
-        )); 
+        ));
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Link/Intern/LinkField.js';
+        return $ret;
     }
 
     public function getTemplateVars()

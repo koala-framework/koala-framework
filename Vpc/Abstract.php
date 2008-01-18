@@ -496,7 +496,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     public static function getSettings()
     {
-        return array();
+        return array('assets'=>array('files'=>array(), 'dep'=>array()),
+                     'assetsAdmin'=>array('files'=>array(), 'dep'=>array()),
+        );
     }
 
     protected function _getSetting($setting)

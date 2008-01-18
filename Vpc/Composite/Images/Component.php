@@ -5,13 +5,15 @@ class Vpc_Composite_Images_Component extends Vpc_Abstract
 
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'Images',
             'tablename'     => 'Vpc_Composite_Images_Model',
             'childComponentClasses' => array(
                 'image'         => 'Vpc_Basic_Image_Enlarge_Component'
             )
         ));
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Composite/Images/Panel.js';
+        return $ret;
     }
 
     protected function _init()

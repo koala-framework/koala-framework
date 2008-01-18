@@ -5,7 +5,7 @@ class Vpc_Formular_Select_Component extends Vpc_Formular_Field_Abstract
 
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'Formular Fields.Select',
             'tablename' => 'Vpc_Formular_Select_Model',
             'default' => array(
@@ -16,6 +16,8 @@ class Vpc_Formular_Select_Component extends Vpc_Formular_Field_Abstract
                 'validator' => ''
             )
         ));
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Formular/Select/Panel.js';
+        return $ret;
     }
 
     public function getTemplateVars()

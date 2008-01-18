@@ -9,7 +9,7 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
 
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_LinkTag_Model',
             'componentName' => 'LinkTag',
             'childComponentClasses'   => array(
@@ -20,7 +20,10 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
             'default'       => array(
                 'link_class'    => 'Vpc_Basic_Link_Intern_Component'
             )
-        )); 
+        ));
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/LinkTag/Panel.js';
+        return $ret;
+
     }
 
     public function _init()
