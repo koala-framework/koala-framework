@@ -206,10 +206,11 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
 
     public function tidy($html)
     {
+
         $config = array(
                     'indent'         => true,
                     'output-xhtml'   => true,
-                    'clean'          => true,
+                    'clean'          => false,
                     'wrap'           => 200,
                     'doctype'        => 'omit',
                     'drop-proprietary-attributes' => true,
@@ -220,20 +221,30 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                     'enclose-block-text'=>true,
                     'enclose-text'   => true,
                     'join-styles'    => false,
+                    'join-classes'   => false,
                     'logical-emphasis' => true,
                     'lower-literals' => true,
                     'output-bom'     => false,
                     'char-encoding'  =>'utf8',
-                    'newline'        =>'LF'
+                    'newline'        =>'LF',
+                    'uppercase-tags' =>'false'
                     );
         $enableTidy = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableTidy');
         if (class_exists('tidy') && $enableTidy) {
-            //<span style="font-weight: bold;">pos<!--<em>-->t<a href="">asdf</a>u</em>lant </span>
-            //<strong>postulant </strong>
+
             $tidy = new tidy;
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
+            $parser = new Vpc_Basic_Text_Parser();
+            $parser->readCatalog("<BODY>".$html."</BODY>");
+            $html = $parser->getFinalHtml();
+
+
+            $tidy->parseString($html, $config, 'utf8');
+            $tidy->cleanRepair();
+            $html = $tidy->value;
+
         }
 
         $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
