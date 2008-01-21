@@ -2,19 +2,11 @@
 class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
 {
     protected $_formName = 'Vpc_Basic_Text_Form';
-    
+
     public function jsonTidyHtmlAction()
     {
         $html = $this->_getParam('html');
-
-        $html = preg_replace('#(<o:p.*>)#', '', $html);
-
-        $stripProps = array('style', 'class', 'width', 'valign');
-        foreach ($stripProps as $i) {
-            $html = preg_replace('#(<.+)'.preg_quote($i).'="[^"]*"(.*>)#', '\\1\\2', $html);
-        }
         $row = $this->_form->getRow();
-
         $row->content_edit = $row->tidy($html);
         $row->save();
         $this->view->html = $row->content_edit;
