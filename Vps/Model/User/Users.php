@@ -87,14 +87,30 @@ class Vps_Model_User_Users extends Vps_Db_Table
 
     public function getAuthedUser()
     {
-        $userId = Zend_Auth::getInstance()->getStorage()->read();
-        if (!$userId) return null;
-        return Zend_Registry::get('userModel')->find($userId)->current();
+        $loginData = Zend_Auth::getInstance()->getStorage()->read();
+        if (!$loginData) return null;
+        return $this->find($loginData['userId'])->current();
     }
 
     public function getAuthedUserRole()
     {
         $u = $this->getAuthedUser();
         return $u ? $u->role : 'guest';
+    }
+    public function getAuthedChangedUserRole()
+    {
+        $storage = Zend_Auth::getInstance()->getStorage();
+        $loginData = $storage->read();
+        if (isset($loginData['changeUserId'])) {
+            $userId = $loginData['changeUserId'];
+        } else {
+            $userId = $loginData['userId'];
+        }
+        if ($user = $this->find($userId)->current()) {
+            $role = $user->role;
+        } else {
+            $role = 'guest';
+        }
+        return $role;
     }
 }
