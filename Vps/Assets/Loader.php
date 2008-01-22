@@ -50,8 +50,6 @@ class Vps_Assets_Loader
         if (substr($_SERVER['REQUEST_URI'], 0, 8)=='/assets/') {
 
             $headers = apache_request_headers();
-            $http_if_modified_since = "";
-            if (isset($headers['If-Modified-Since'])) $http_if_modified_since = preg_replace('/;.*$/', '', $headers['If-Modified-Since']);
 
             if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
                 $encoding = strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')
@@ -61,12 +59,25 @@ class Vps_Assets_Loader
                 $encoding = 'none';
             }
 
-            
             $url = substr($_SERVER['REQUEST_URI'], 8);
             if (strpos($url, '?') !== false) {
                 $url = substr($url, 0, strpos($url, '?'));
             }
             if (preg_match('#^All([a-z]+)\\.(js|css)$#i', $url, $m)) {
+
+                //falls der browser irgendwas im cache hat, hat sich das nie geändert
+                //weil wenn wir eine neue version haben ändert sich die url
+                if (isset($headers['If-None-Match'])) {
+                    header('HTTP/1.1 304 Not Modified');
+                    header('ETag: '.$headers['If-None-Match']);
+                    exit;
+                }
+                if (isset($headers['If-Modified-Since'])) {
+                    header('HTTP/1.1 304 Not Modified');
+                    header('Last-Modified: '.$headers['If-Modified-Since']);
+                    exit;
+                }
+
                 if ($m[2] == 'js') {
                     header('Content-Type: text/javascript');
                     $fileType = 'js';
@@ -76,45 +87,41 @@ class Vps_Assets_Loader
                 }
                 $section = $m[1];
 
+                header('Last-Modified: '.gmdate("D, d M Y H:i:s \G\M\T", time()));
+                header('ETag: abc-defg');
+
                 $frontendOptions = array(
-                    'lifetime' => null
+                    'lifetime' => null,
+                    'automatic_serialization' => true
                 );
                 $backendOptions = array(
                     'cache_dir' => 'application/cache/assets/'
                 );
                 $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+                $config = Zend_Registry::get('config');
+                if ((!$cacheData = $cache->load($fileType.$encoding.$section))
+                    || $cacheData['version'] != $config->application->version) {
 
-                if ((!$lastModified = $cache->load($fileType.$encoding.$section.'LastModified'))
-                    || !$cache->test($fileType.$encoding.$section.'Packed')) {
-
-                    $config = Zend_Registry::get('config');
                     $dep = new Vps_Assets_Dependencies($config->assets->$section, $config);
                     $contents = $dep->getPackedAll($fileType);
                     $contents = self::_encode($contents, $encoding);
-                    $cache->save($contents, $fileType.$encoding.$section.'Packed');
-
-                    $lm = gmdate("D, d M Y H:i:s \G\M\T", time());
-                    header('Last-Modified: '.$lm);
-                    $cache->save($lm, $fileType.$encoding.$section.'LastModified');
-                } else {
-                    header('Last-Modified: '.$lastModified);
+                    $cacheData = array('contents'=>$contents,
+                                       'version'=>$config->application->version);
+                    $cache->save($cacheData, $fileType.$encoding.$section);
                 }
-                if ($http_if_modified_since == $lastModified) {
-                    header('HTTP/1.1 304 Not Modified');
-                    exit;
-                }
-                header('Cache-Control: must-revalidate, max-age='.(24*60*60));
-                if (!isset($contents)) {
-                    $contents = $cache->load($fileType.$encoding.$section.'Packed');
-                }
+                header('Cache-Control: public');
                 header("Content-Encoding: " . $encoding);
-                echo $contents;
+                echo $cacheData['contents'];
             } else {
                 $config = Zend_Registry::get('config');
                 $assetPath = self::getAssetPath($url, $config->path);
                 if (!$assetPath) {
                     header("HTTP/1.0 404 Not Found");
                     die("file not found");
+                }
+                $http_if_modified_since = "";
+                if (isset($headers['If-Modified-Since'])) {
+                    $http_if_modified_since = preg_replace('/;.*$/', '', $headers['If-Modified-Since']);
                 }
                 $lastModified = max(filemtime('application/config.ini'), filemtime($assetPath));
                 $lastModifiedString = gmdate("D, d M Y H:i:s \G\M\T", $lastModified);
