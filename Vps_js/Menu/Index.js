@@ -112,6 +112,40 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
 
         this.add(new Ext.Toolbar.Fill());
 
+        if (response.changeUser) {
+            var changeUser = new Vps.Form.ComboBox({
+                store: {
+                    url: '/vps/user/changeUser/jsonData'
+                },
+                mode: 'remote',
+                editable: false,
+                triggerAction: 'all',
+                width: 100,
+                listWidth: 200,
+                tpl: new Ext.XTemplate(
+                      '<tpl for=".">',
+                        '<div class="x-combo-list-item">',
+                            '<h3>{name}</h3>',
+                            '{email} {role}',
+                        '</div>',
+                      '</tpl>')
+            });
+            changeUser.on('render', function(combo) {
+                combo.setRawValue(response.fullname);
+            }, this);
+            changeUser.on('select', function(combo, record, index) {
+                Ext.Ajax.request({
+                    url: '/vps/user/changeUser/jsonChangeUser',
+                    params: { userId: record.id },
+                    success: function() {
+                        this.reload();
+                    },
+                    scope: this
+                });
+            }, this);
+            this.add(changeUser);
+        }
+
         if (response.fullname && response.userSelfControllerUrl) {
             this.add({
                 text: response.fullname,

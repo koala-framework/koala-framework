@@ -155,7 +155,9 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         $result = $auth->authenticate($adapter);
 
         if ($result->isValid()) {
-            $auth->getStorage()->write($adapter->getUserId());
+            $loginData = array();
+            $loginData['userId'] = $adapter->getUserId();
+            $auth->getStorage()->write($loginData);
         }
 
         return $result;

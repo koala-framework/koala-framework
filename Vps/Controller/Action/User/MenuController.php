@@ -86,6 +86,9 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
         $this->view->showLogout = $showLogout;
         $this->view->userId = $authData ? $authData->id : 0;
         $this->view->fullname = $authData ? $authData->__toString() : '';
+
+        $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
+        $this->view->changeUser = $acl->isAllowed($role, 'vps_user_changeuser', 'view');
     }
 
     public function jsonClearAssetsCacheAction()
