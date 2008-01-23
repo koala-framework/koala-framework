@@ -168,6 +168,17 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             } else if (column.showDataIndex) {
                 column.renderer = Ext.util.Format.showField(column.showDataIndex);
             }
+            if (column.summaryRenderer) {
+	            if (Ext.util.Format[column.summaryRenderer]) {
+	                column.summaryRenderer = Ext.util.Format[column.summaryRenderer];
+	            } else {
+	                try {
+	                    column.summaryRenderer = eval(column.summaryRenderer);
+	                } catch(e) {
+	                    throw "invalid summaryRenderer: "+column.summaryRenderer;
+	                }
+	            }
+			}
             if (column.columnType == 'button') {
                 if (column.editDialog) {
                     column.editDialog = this.initEditDialog(column.editDialog);
