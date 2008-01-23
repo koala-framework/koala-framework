@@ -3,6 +3,23 @@ class Vps_Controller_Action_User_ChangeuserController extends Vps_Controller_Act
 {
     protected $_defaultOrder = 'id';
 
+    protected function _getWhere()
+    {
+        $where = parent::_getWhere();
+        $authedChangedRole = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
+        $acl = Zend_Registry::get('acl');
+        if (!($acl->getRole($authedChangedRole) instanceof Vps_Acl_Role_Admin)) {
+            //wenn nicht superuser
+            foreach($acl->getRoles() as $role) {
+                if($role instanceof Vps_Acl_Role && !($role instanceof Vps_Acl_Role_Admin)) {
+                    $roles[] = $role->getRoleId();
+                }
+            }
+            $where[] = "role IN ('".implode("', '", $roles)."')";
+        }
+        return $where;
+    }
+
     protected function _initColumns()
     {
         parent::_initColumns();

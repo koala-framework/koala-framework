@@ -138,7 +138,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                     url: '/vps/user/changeUser/jsonChangeUser',
                     params: { userId: record.id },
                     success: function() {
-                        this.reload();
+                        location.href = '/';
                     },
                     scope: this
                 });

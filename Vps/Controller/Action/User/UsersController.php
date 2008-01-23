@@ -9,6 +9,21 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
                                    'width'=>400,
                                    'height'=>300);
 
+    protected function _getWhere()
+    {
+        $where = parent::_getWhere();
+        $acl = Zend_Registry::get('acl');
+        if (!($acl->getRole($this->_getUserRole()) instanceof Vps_Acl_Role_Admin)) {
+            foreach($acl->getRoles() as $role) {
+                if($role instanceof Vps_Acl_Role && !($role instanceof Vps_Acl_Role_Admin)) {
+                    $roles[] = $role->getRoleId();
+                }
+            }
+            $where[] = "role IN ('".implode("', '", $roles)."')";
+        }
+        return $where;
+    }
+
     protected function _initColumns()
     {
         parent::_initColumns();
