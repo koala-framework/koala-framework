@@ -7,7 +7,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
     protected $_paging = 20;
     protected $_editDialog = array('controllerUrl'=>'/vps/user/user',
                                    'width'=>400,
-                                   'height'=>300);
+                                   'height'=>400);
 
     protected function _getWhere()
     {
