@@ -35,7 +35,7 @@ class Vps_Controller_Action_User_ChangeuserController extends Vps_Controller_Act
         if (!$this->_getParam('userId')) {
             throw new Vps_Exception("userId is required");
         }
-        $storage = Zend_Auth::getInstance()->getStorage();
+        $storage = Vps_Auth::getInstance()->getStorage();
         $loginData = $storage->read();
         if (!isset($loginData['changeUserId'])) {
             $loginData['changeUserId'] = $loginData['userId'];

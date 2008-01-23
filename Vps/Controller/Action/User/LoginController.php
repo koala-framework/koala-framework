@@ -107,7 +107,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
 
     public function logoutAction()
     {
-        Zend_Auth::getInstance()->clearIdentity();
+        Vps_Auth::getInstance()->clearIdentity();
         $this->_onLogout();
     }
 
@@ -149,7 +149,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         }
 
 
-        $auth = Zend_Auth::getInstance();
+        $auth = Vps_Auth::getInstance();
         $adapter->setIdentity($username);
         $adapter->setCredential($password);
         $result = $auth->authenticate($adapter);

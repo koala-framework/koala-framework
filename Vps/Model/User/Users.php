@@ -87,7 +87,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
 
     public function getAuthedUser()
     {
-        $loginData = Zend_Auth::getInstance()->getStorage()->read();
+        $loginData = Vps_Auth::getInstance()->getStorage()->read();
         if (!$loginData) return null;
         return $this->find($loginData['userId'])->current();
     }
@@ -99,7 +99,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
     }
     public function getAuthedChangedUserRole()
     {
-        $storage = Zend_Auth::getInstance()->getStorage();
+        $storage = Vps_Auth::getInstance()->getStorage();
         $loginData = $storage->read();
         if (isset($loginData['changeUserId'])) {
             $userId = $loginData['changeUserId'];

@@ -445,13 +445,21 @@ abstract class Vpc_Abstract implements Vpc_Interface
      *
      * @return boolean
      */
-    protected function showInvisible()
+    protected function _showInvisible()
     {
         if ($this->getPageCollection()) {
             return $this->getPageCollection()->showInvisible();
         } else {
             return true;
         }
+    }
+
+    /**
+     * @deprecated
+     */
+    protected function showInvisible()
+    {
+        return $this->_showInvisible();
     }
 
     /**

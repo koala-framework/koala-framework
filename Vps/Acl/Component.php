@@ -5,7 +5,7 @@ class Vps_Acl_Component extends Vps_Acl
     {
         parent::__construct();
 
-        $this->addRole(new Vps_Acl_Role('admin', 'Admin'));
+        $this->addRole(new Vps_Acl_Role_Admin('admin', 'Administrator'));
 
         $this->add(new Zend_Acl_Resource('vps_component_web'));
         $this->add(new Zend_Acl_Resource('vps_component_media'));

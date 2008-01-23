@@ -36,6 +36,7 @@ abstract class Vpc_Abstract_CompositePageFactory extends Vpc_Abstract_PageFactor
         }
         return parent::getChildPageById($id);
     }
+
     public function getChildPageByFilename($filename)
     {
         foreach ($this->_pageFactories as $f) {

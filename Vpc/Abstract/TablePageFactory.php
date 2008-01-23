@@ -4,11 +4,21 @@ abstract class Vpc_Abstract_TablePageFactory extends Vpc_Abstract_PageFactory
     protected $_tableName;
     protected $_componentClass;
     protected $_filenamePattern = '/^(\d+)_(.*)$/';
+    protected $_showInMenu = false;
     protected $_additionalPageFactories = array('Vpc_Abstract_PagesFactory');
 
     public function getChildPages()
     {
         return array_merge(parent::getChildPages(), $this->getDynamicChildPages());
+    }
+
+    public function getMenuChildPages()
+    {
+        $ret = parent::getMenuChildPages();
+        if ($this->_showInMenu) {
+            return array_merge($ret, $this->getDynamicChildPages());
+        }
+        return $ret;
     }
 
     protected function _getWhere()
