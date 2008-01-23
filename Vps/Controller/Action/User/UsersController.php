@@ -7,7 +7,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
     protected $_paging = 20;
     protected $_editDialog = array('controllerUrl'=>'/vps/user/user',
                                    'width'=>400,
-                                   'height'=>400);
+                                   'height'=>410);
 
     protected function _getWhere()
     {
@@ -39,5 +39,13 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         $this->_columns->add(new Vps_Auto_Grid_Column('name'));
         $this->_columns->add(new Vps_Auto_Grid_Column('firstname', 'First name', 150));
         $this->_columns->add(new Vps_Auto_Grid_Column('lastname', 'Last name', 150));
+
+        $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
+        $acl = Zend_Registry::get('acl');
+        if ($acl->getRole($authedRole) instanceof Vps_Acl_Role_Admin) {
+            $this->_columns->add(new Vps_Auto_Grid_Column('webcode', 'Webcode', 60))
+                 ->setData(new Vps_Controller_Action_User_Users_WebcodeData())
+                 ->setRenderer('boolean');
+        }
     }
 }

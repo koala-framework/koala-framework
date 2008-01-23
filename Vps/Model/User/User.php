@@ -93,7 +93,7 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
         if ($this->id) $id = $this->id;
 
         if (!$id) {
-            // create: prüfen ob ohne webcode in diesem web schon existent
+            // create: prüfen ob ohne webcode in DIESEM web schon existent
             $restClient = new Vps_Rest_Client();
             $restClient->exists('', $this->_changedServiceData['email']);
             $restResult = $restClient->get();
@@ -253,7 +253,7 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
         if (in_array($columnName, $this->getServiceColumns())) {
             if (isset($this->_changedServiceData[$columnName])) {
                 return $this->_changedServiceData[$columnName];
-            } else {
+            } else if ($this->id) {
                 if (!isset($cache[$this->id])) {
                     $restClient = new Vps_Rest_Client();
                     $restClient->getData($this->id, '');
@@ -266,6 +266,7 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
                 }
                 return (string)$cache[$this->id]->{$columnName};
             }
+            return null;
         } else if ($columnName == 'password1' || $columnName == 'password2') {
             return '';
         } else if ($columnName == 'name') {
