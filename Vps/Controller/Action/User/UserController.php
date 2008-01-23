@@ -38,8 +38,15 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
         $fs1->add(new Vps_Auto_Field_TextField('firstname', 'First name'));
         $fs1->add(new Vps_Auto_Field_TextField('lastname', 'Last name'));
 
+        $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
+        $acl = Zend_Registry::get('acl');
+        if ($acl->getRole($authedRole) instanceof Vps_Acl_Role_Admin) {
+            $fs1->add(new Vps_Auto_Field_Checkbox('webcode', 'Webcode'))
+                ->setData(new Vps_Controller_Action_User_Users_WebcodeData());
+        }
+
     }
-    
+
     protected function _addRoleField($fs1)
     {
         $acl = Zend_Registry::get('acl');
