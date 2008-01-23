@@ -58,6 +58,21 @@ class Vpc_Abstract_PageFactory
     }
 
     /**
+     * Shortcut, fragt vom Seitenbaum, ob die unsichtbaren Einträge
+     * auch angezeige werden
+     *
+     * @return boolean
+     */
+    protected function _showInvisible()
+    {
+        if ($this->getPageCollection()) {
+            return $this->getPageCollection()->showInvisible();
+        } else {
+            return true;
+        }
+    }
+
+    /**
      * Erstellt eine Komponente, die als neue Seite in den Seitenbaum eingefügt werden
      * kann.
      *

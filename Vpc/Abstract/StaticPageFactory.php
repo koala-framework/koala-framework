@@ -11,6 +11,18 @@ abstract class Vpc_Abstract_StaticPageFactory extends Vpc_Abstract_PageFactory
         return $ret;
     }
 
+    public function getMenuChildPages()
+    {
+        $ret = parent::getMenuChildPages();
+
+        foreach ($this->_pages as $p) {
+            if (!isset($p['showInMenu']) || $p['showInMenu']) {
+                $ret[] = $this->_createStaticPage($p);
+            }
+        }
+        return $ret;
+    }
+
     public function getChildPageByFilename($filename)
     {
         foreach ($this->_pages as $p) {

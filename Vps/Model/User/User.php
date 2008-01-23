@@ -122,14 +122,16 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
         $restResult = $restClient->get();
 
         if (!$restResult->status()) {
-            throw new Vps_ClientException($restResult->msg());
+            // wenn er bereits existiert soll er einfach hergenommen werden.
+//             throw new Vps_ClientException($restResult->msg());
         }
 
         if ($restResult->id()) {
             $this->id = $restResult->id();
         }
 
-        if (!$id) {
+        // rest->status() nur true wenn wirklich angelegt, sonst nur id verwendet, da schon existent
+        if (!$id && $restResult->status()) {
             $this->sendActivationMail();
         }
 
