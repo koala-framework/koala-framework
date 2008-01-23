@@ -9,6 +9,15 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 
         $this->_form->setTable(Zend_Registry::get('userModel'));
 
+        $fs0 = $this->_form->add(new Vps_Auto_Container_FieldSet('Hinweis'));
+        $fs0->setLabelWidth(80);
+        $fs0->setStyle('margin:10px;');
+
+        $fs0->add(new Vps_Auto_Field_Panel())
+            ->setHtml('Bei folgenden Aktionen werden automatisch E-Mails an den '
+                     .'betreffenden Benutzer gesendet.<br />'
+                     .'Erstellen, Löschen und E-Mail ändern');
+
         // Hauptdaten
         $fs1 = $this->_form->add(new Vps_Auto_Container_FieldSet('Zugangsdaten &amp; Person'));
         $fs1->setLabelWidth(80);
@@ -17,7 +26,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
         $editor = new Vps_Auto_Field_TextField('email', 'Email');
         $editor->setVtype('email');
         $fs1->add($editor);
-        
+
         $this->_addRoleField($fs1);
 
         $editor = new Vps_Auto_Field_Select('gender', 'Gender');
