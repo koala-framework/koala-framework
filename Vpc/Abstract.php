@@ -67,7 +67,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     public function getParentComponent()
     {
-        return $this->_parentComponent();
+        return $this->_parentComponent;
     }
 
     protected function _getRow()
