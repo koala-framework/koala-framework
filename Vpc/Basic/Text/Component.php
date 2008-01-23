@@ -1,7 +1,7 @@
 <?php
 class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
 {
-    private $_componentParts = array();
+    private $_componentParts;
 
     public static function getSettings()
     {
