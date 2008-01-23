@@ -15,30 +15,33 @@ class Vps_Controller_Front extends Zend_Controller_Front
                                         'vps_controller_action_user');
         $this->addControllerDirectory('Vps/Controller/Action/Error',
                                         'vps_controller_action_error');
+        $this->addControllerDirectory('Vps/Controller/Action/Media',
+                                        'vps_controller_action_media');
 
         $router = $this->getRouter();
 
         $router->AddRoute('vps_welcome', new Zend_Controller_Router_Route(
                     '/vps/welcome/:controller/:action',
-                    array('module' => 'vps_controller_action_welcome',
-                          'controller'=>'index',
-                          'action' =>'index')));
+                    array('module'     => 'vps_controller_action_welcome',
+                          'controller' =>'index',
+                          'action'     =>'index')));
         $router->AddRoute('vps_user', new Zend_Controller_Router_Route(
                     '/vps/user/:controller/:action',
-                    array('module' => 'vps_controller_action_user',
-                          'action' =>'index')));
+                    array('module'     => 'vps_controller_action_user',
+                          'action'     =>'index')));
         $router->AddRoute('vps_error', new Zend_Controller_Router_Route(
                     '/vps/error/:controller/:action',
-                    array('module' => 'vps_controller_action_error')));
+                    array('module'     => 'vps_controller_action_error')));
         $router->AddRoute('vps_start', new Zend_Controller_Router_Route(
                     '/vps/start',
-                    array('module' => 'vps_controller_action_welcome',
+                    array('module'      => 'vps_controller_action_welcome',
                           'controller'  => 'start',
                           'action'      => 'index')));
         $router->AddRoute('media', new Zend_Controller_Router_Route(
                     'media/:table/:id/:rule/:type/:checksum/:filename',
-                    array('controller' => 'Media',
-                          'action' => 'password')));
+                    array('module'     => 'vps_controller_action_media',
+                          'controller' => 'media',
+                          'action'     => 'password')));
 
         $plugin = new Zend_Controller_Plugin_ErrorHandler();
         $plugin->setErrorHandlerModule('vps_controller_action_error');

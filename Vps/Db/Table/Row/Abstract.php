@@ -157,6 +157,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         if (!$filename || $filename == '') {
             $filename = $fileRow->filename;
         }
+        $filename = Zend_Filter::get($filename, 'Url', array(), 'Vps_Filter');
         return "/media/$class/$id/$rule/$type/$checksum/$filename.$extension$random";
     }
 

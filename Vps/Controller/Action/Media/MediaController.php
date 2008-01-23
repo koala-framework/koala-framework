@@ -14,7 +14,7 @@
  * Alle Actions sind auf den Parameter 'uploadId' angewiesen. Im Zuge dessen
  * sollte auch die Zugangsberechtigungen gesetzt werden.
  */
-abstract class Vps_Controller_Action_Media extends Vps_Controller_Action
+class Vps_Controller_Action_Media_MediaController extends Vps_Controller_Action
 {
     public function passwordAction()
     {
@@ -52,11 +52,10 @@ abstract class Vps_Controller_Action_Media extends Vps_Controller_Action
     protected final function _showFile($target, Vps_Dao_Row_File $row)
     {
         if (is_file($target)) {
-            Zend_Controller_Action_HelperBroker::removeHelper('ViewRenderer');
-            chmod($target, 0664);
             $response = $this->getResponse();
             $response->setHeader("Content-type", $row->mime_type);
             $response->setBody(file_get_contents($target));
+            $this->_helper->viewRenderer->setNoRender();
         } else {
             throw new Vps_Controller_Action_Web_Exception("File '$target' not found.");
         }
