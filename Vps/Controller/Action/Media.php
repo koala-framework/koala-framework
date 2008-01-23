@@ -16,145 +16,37 @@
  */
 abstract class Vps_Controller_Action_Media extends Vps_Controller_Action
 {
-    /**
-     * Die angeforderte Datei wird ohne Änderung ausgeliefert.
-     */
-    public function originalAction()
-    {
-        $row = $this->_getRow($this->_getParam('uploadId'));
-        $this->_showFile($row->getFileSource(), $row);
-    }
-
-    /**
-     * Die angeforderte Datei wird ausgeliefert, wenn die Prüfsumme passt.
-     *
-     * Die Passwörter sind in der Klasse Vps_Media_Password gespeichert und
-     * über die statische Methode get() zu holen. Die Methode
-     * _createChecksum() kann für die Überprüfung überschrieben werden.
-     *
-     * Es wird entweder die originale oder eine gecachte Datei ausgeliefert.
-     * Dies wird durch das Passwort unterschieden.
-     *
-     * Diese Action benötigt zusätzlich den Parameter 'checksum'.
-     *
-     * @see Vps_Media_Password
-     * @see _createChecksum()
-     */
     public function passwordAction()
     {
-        $checksum = $this->_getParam('checksum');
-        $type = $this->_getParam('type');
-        if ($checksum != $this->_createChecksum()) {
+        $checksum = md5(
+            Vps_Db_Table_Row::FILE_PASSWORD .
+            $this->_getParam('table') .
+            $this->_getParam('id') .
+            $this->_getParam('rule') .
+            $this->_getParam('type')
+        );
+        if ($checksum != $this->_getParam('checksum')) {
             throw new Vps_Controller_Action_Web_Exception('Access to file not allowed.');
         }
 
-        if ($type == 'original') {
-            // Direkt auf Originaldatei springen
-            $this->originalAction();
-        } else {
-            $this->cacheAction();
-        }
-    }
+        $class = $this->_getParam('table');
+        $type = $this->_getParam('type');
+        $id = explode(',', $this->_getParam('id'));
+        $rule = $this->_getParam('rule');
+        if ($rule == 'default') { $rule = null; }
 
-    /**
-     * Eine gecachte Datei wird ausgeliefert.
-     *
-     * Der Dateiname der gecachten Datei kann durch Überschreiben von
-     * $this->_getCacheFilename() geändert werden (falls es zB. zwei
-     * gecachte Dateien für eine Originaldatei gibt).
-     * Die Verzeichnisse für den Cache werden automatisch angelegt
-     * und ggf. gelöscht.
-     *
-     * Das Erstellen der Cache-Datei sollte durch Überschreiben von
-     * $this->createCacheFile() geschehen.
-     */
-    public function cacheAction()
-    {
-        $uploadId = $this->_getParam('uploadId');
-        $row = $this->_getRow($uploadId);
-
-        $target = $this->_getCachePath($uploadId, $this->_getCacheFilename());
-        if (!is_file($target)) {
-            // Verzeichnisse anlegen, falls nicht existent
-            if (!is_dir($this->_getUploadDir() . '/cache')) {
-                mkdir($this->_getUploadDir() . '/cache', 0775);
-               chmod($this->_getUploadDir() . '/cache', 0775);
-            }
-            if (!is_dir(dirname($target))) {
-                mkdir(dirname($target), 0775);
-                chmod(dirname($target), 0775);
-            }
-
-            // Cache-Datei erstellen
-            $source = $row->getFileSource();
-            $this->_createCacheFile($source, $target, $this->_getParam('type'));
-
-            // Aufräumen, falls Verzeichnis angelegt wurde und keine Datei erstellt wurde, wieder löschen
-            if (sizeof(scandir(dirname($target))) <= 2) {
-                @rmdir(dirname($target));
-            }
-        }
-
-        $this->_showFile($target, $row);
-    }
-
-    // Überschreiben
-
-    /**
-     * Erstellt die Prüfsumme für die passwordAction.
-     *
-     * @param string Passwort für die Verwendung in der Prüfsumme
-     * @return Prüfsumme als string
-     */
-    protected function _createChecksum()
-    {
-        return md5(Vps_Media_Password::PASSWORD .
-                    $this->_getParam('uploadId'));
-    }
-
-    /**
-     * Bestimmt den Dateinamen der gecachten Datei.
-     *
-     * @return Dateiname (ohne Endung!)
-     */
-    protected function _getCacheFilename()
-    {
-        return $this->_getParam('type');
-    }
-
-    /**
-     * Erstellt die gecachte Datei.
-     *
-     * Hier können beispielsweise skalierte Bilder erzeugt werden.
-     *
-     * @param string Der Pfad zur Originaldatei
-     * @param string Der Pfad zur gecachten Datei
-     */
-    protected function _createCacheFile($source, $target)
-    {
-        copy($source, $target);
-    }
-
-    // Ab hier Final
-    protected final function _getCachePath($uploadId, $filename)
-    {
-        return $this->_getUploadDir() . '/cache/' . $uploadId . '/' . $filename;
-    }
-
-    protected final function _getRow($uploadId)
-    {
-        $table = new Vps_Dao_File();
-        $row = $table->find($uploadId)->current();
+        $table = new $class();
+        $row = call_user_func_array(array($table, 'find'), $id)->current();
         if (!$row) {
-            throw new Vps_Controller_Action_Web_Exception('File not found');
+            throw new Vps_Exception('File not found.');
         }
-        return $row;
-    }
+        $fileRow = $row->findParentRow('Vps_Dao_File', $rule);
+        if (!$fileRow) {
+            throw new Vps_Exception('No File uploaded.');
+        }
+        $target = $row->getFileSource($rule, $type);
 
-    protected final function _getUploadDir()
-    {
-        $config = Zend_Registry::get('config');
-        return $config->uploads;
+        $this->_showFile($target, $fileRow);
     }
 
     protected final function _showFile($target, Vps_Dao_Row_File $row)

@@ -79,13 +79,13 @@ class Vps_Media_Image
 
     public static function scale($source, $target, $size, $scale = self::SCALE_BESTFIT)
     {
+        if (!$scale) { $scale = self::SCALE_BESTFIT; }
         $size = self::calculateScaleDimensions($source, $size, $scale);
 
         if ($size === false) return false;
 
         if ($scale == self::SCALE_CROP) {
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
-
             $im = new Imagick();
             $im->readImage($source);
             $im->cropImage($size['width'], $size['height'], $size['x'], $size['y']);

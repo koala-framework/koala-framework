@@ -1,16 +1,12 @@
 <?php
-class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
+class Vpc_Basic_Image_Row extends Vps_Db_Table_Row
 {
     private $_deleteFileRow;
 
     public function getImageUrl($type = 'default', $addRandom = false)
     {
-        $id = $this->page_id . $this->component_key;
         $filename = $this->filename != '' ? $this->filename : 'unnamed';
-        $row = $this->findParentRow('Vps_Dao_File');
-        if (!$row) return null;
-        return $row->generateUrl($this->getTable()->getComponentClass(), $id,
-                                 $filename, $type, $addRandom);
+        return $this->getFileUrl(null, $type, $filename, $addRandom);
     }
 
     private function _getScaleSettings()
@@ -33,12 +29,15 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
         }
         return $ret;
     }
-    public function createCacheFile($source, $target, $type)
+
+    protected function _createCacheFile($source, $target, $type)
     {
         if ($type == 'default') {
             $s = $this->_getScaleSettings();
-            Vps_Media_Image::scale($source, $target,
-                                array($s['width'], $s['height']), $s['scale']);
+            Vps_Media_Image::scale(
+                $source, $target,
+                array($s['width'], $s['height']), $s['scale']
+            );
         } else {
             $outputDimensions = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
                                         'ouputDimensions');
@@ -47,7 +46,7 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
                 if (!isset($s[2])) $s[2] = Vps_Media_Image::SCALE_BESTFIT;
                 Vps_Media_Image::scale($source, $target, array($s[0], $s[1]), $s[2]);
             } else {
-                throw new Vps_Exception("Undefined outputDimension: '$type'");
+                parent::_createCacheFile($source, $target, $type);
             }
         }
     }
@@ -61,18 +60,6 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row implements Vpc_FileInterface
                 array($s['width'], $s['height']), $s['scale']);
         } else {
             return array('width' => 0, 'height' => 0);
-        }
-    }
-
-    protected function _delete()
-    {
-        $this->_deleteFileRow = $this->findParentRow('Vps_Dao_File');
-    }
-
-    protected function _postDelete()
-    {
-        if ($this->_deleteFileRow) {
-            $this->_deleteFileRow->delete();
         }
     }
 }
