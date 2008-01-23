@@ -83,7 +83,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         $code = $this->getRequest()->getParam('code');
 
         if (empty($userId) || empty($password) || empty($code)) {
-            throw new Vps_ClientException('Data not submited completely.');
+            throw new Vps_ClientException('Data not submitted completely.');
         }
 
         $users = Zend_Registry::get('userModel');

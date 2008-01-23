@@ -23,7 +23,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
         return parent::fetchAll($where, $order, $limit, $start);
     }
 
-    private function _getRowWebcode()
+    public function getRowWebcode()
     {
         return call_user_func(array($this->_rowClass, 'getWebcode'));
     }
@@ -31,7 +31,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
     public function login($identity, $credential)
     {
         $restClient = new Vps_Rest_Client();
-        $restClient->login($this->_getRowWebcode(), $identity, $credential);
+        $restClient->login($this->getRowWebcode(), $identity, $credential);
 
         $restResult = $restClient->get();
 
@@ -65,7 +65,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
     {
         // ID des benutzers vom Service ermitteln
         $restClient = new Vps_Rest_Client();
-        $restClient->exists($this->_getRowWebcode(), $email);
+        $restClient->exists($this->getRowWebcode(), $email);
         $restResult = $restClient->get();
 
         if (!$restResult->status()) {

@@ -11,13 +11,15 @@ class Vps_Auth extends Zend_Auth
 
             // automatisches einloggen
             $autologin = Zend_Registry::get('config')->autologin;
-            if (!$autologin) {
+            if ($autologin) {
                 $storage = self::$_instance->getStorage();
                 $loginData = $storage->read();
 
-                if (!isset($loginData['userId'])) {
+                if (!$loginData['userId']) {
+                    $userModel = Zend_Registry::get('userModel');
+
                     $restClient = new Vps_Rest_Client();
-                    $restClient->exists(Vps_Model_User_User::getWebcode(), $autologin);
+                    $restClient->exists($userModel->getRowWebcode(), $autologin);
                     $restResult = $restClient->get();
 
                     if (!$restResult->status()) {
