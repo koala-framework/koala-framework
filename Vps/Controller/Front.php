@@ -36,9 +36,9 @@ class Vps_Controller_Front extends Zend_Controller_Front
                           'controller'  => 'start',
                           'action'      => 'index')));
         $router->AddRoute('media', new Zend_Controller_Router_Route(
-                    'media/:type/:uploadId',
+                    'media/:table/:id/:rule/:type/:checksum/:filename',
                     array('controller' => 'Media',
-                          'action' => 'cache')));
+                          'action' => 'password')));
 
         $plugin = new Zend_Controller_Plugin_ErrorHandler();
         $plugin->setErrorHandlerModule('vps_controller_action_error');

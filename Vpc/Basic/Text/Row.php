@@ -264,9 +264,9 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                     $srcTableName = Vpc_Abstract::getSetting($part['componentClass'], 'tablename');
                     $srcTable = new $srcTableName(array('componentClass' => $part['componentClass']));
                     $srcRow = $srcTable->findRow($part['componentId']);
-                    $srcFileRow = $srcRow->findParentRow('Vps_Dao_File');
+                    $srcFileRow = $srcRow->findParentRow('Vps_Dao_FileComponent');
                     if ($srcFileRow && $srcFileRow->getFileSource()) {
-                        $fileTable = new Vps_Dao_File();
+                        $fileTable = new Vps_Dao_FileComponent();
                         $destFileRow = $fileTable->createRow();
                         $destFileRow->copyFile($srcFileRow->getFileSource(),
                                                 $srcFileRow->filename,
@@ -313,7 +313,7 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                 } else {
                     continue;
                 }
-                $fileTable = new Vps_Dao_File();
+                $fileTable = new Vps_Dao_FileComponent();
                 $destFileRow = $fileTable->createRow();
 
                 $path = explode('?', $part['src']);
@@ -401,9 +401,9 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                 $srcTableName = Vpc_Abstract::getSetting($classes['download'], 'tablename');
                 $srcTable = new $srcTableName(array('componentClass' => $classes['download']));
                 $srcRow = $srcTable->findRow($part['componentId']);
-                $srcFileRow = $srcRow->findParentRow('Vps_Dao_File');
+                $srcFileRow = $srcRow->findParentRow('Vps_Dao_FileComponent');
                 if ($srcFileRow && $srcFileRow->getFileSource()) {
-                    $fileTable = new Vps_Dao_File();
+                    $fileTable = new Vps_Dao_FileComponent();
                     $destFileRow = $fileTable->createRow();
                     $destFileRow->copyFile($srcFileRow->getFileSource(),
                                             $srcFileRow->filename,

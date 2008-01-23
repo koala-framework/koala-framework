@@ -8,30 +8,25 @@ class Vps_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('index'));
         $this->add(new Zend_Acl_Resource('vps_user_menu'));
         $this->add(new Zend_Acl_Resource('vps_user_login'));
-        $this->add(new Zend_Acl_Resource('vps_user_loginmedia'));
         $this->add(new Zend_Acl_Resource('vps_user_changeuser'));
         $this->add(new Zend_Acl_Resource('vps_error_error'));
         $this->add(new Zend_Acl_Resource('vps_user_about'));
         $this->add(new Zend_Acl_Resource('vps_welcome_index'));
         $this->add(new Zend_Acl_Resource('vps_welcome_content'));
-        $this->add(new Zend_Acl_Resource('vps_welcome_media'));
         $this->add(new Zend_Acl_Resource('media'));
 
         $this->add(new Vps_Acl_Resource_UserSelf('vps_user_self', '/vps/user/self'));
 
-
         $this->allow(null, 'index');
+        $this->allow(null, 'media');
         $this->deny('guest', 'index');
         $this->allow(null, 'vps_user_menu');
         $this->allow(null, 'vps_user_login');
-        $this->allow(null, 'vps_user_loginmedia');
         $this->allow(null, 'vps_error_error');
         $this->allow(null, 'vps_user_about');
         $this->allow(null, 'vps_welcome_index');
         $this->allow(null, 'vps_welcome_content');
         $this->deny('guest', 'vps_welcome_index');
-        $this->allow(null, 'vps_welcome_media');
-        $this->deny('guest', 'vps_welcome_media');
         $this->allow(null, 'vps_user_self');
         $this->deny('guest', 'vps_user_self');
     }

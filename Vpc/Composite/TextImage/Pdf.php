@@ -66,7 +66,7 @@ class Vpc_Composite_TextImage_Pdf extends Vpc_Abstract_Pdf
         // $this->_pdf->setLeftMargin($tempMargin);
 
 
-        //$file = $image->findParentRow('Vps_Dao_File');
+        //$file = $image->findParentRow('Vps_Dao_FileComponent');
         //$this->_pdf->Image($file->getFileSource(), $this->_pdf->getX(), $this->_pdf->getY(), 0, 0, $file->extension);
     }
 

@@ -43,16 +43,6 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                     array('module' => 'component',
                           'controller' => 'component',
                           'action' => 'index')));
-        $router->AddRoute('mediacomponent', new Zend_Controller_Router_Route(
-                    'media/:uploadId/:class/:componentId/:type/:checksum/:filename',
-                    array('module' => 'vps_controller_action_component',
-                          'controller' => 'media',
-                          'action' => 'password')));
-        $router->AddRoute('mediaoriginal', new Zend_Controller_Router_Route(
-                    'media/:uploadId',
-                    array('module' => 'vps_controller_action_component',
-                          'controller' => 'media',
-                          'action' => 'original')));
         parent::_init();
         $this->addControllerDirectory('Vps/Controller/Action/Component',
                                         'vps_controller_action_component');

@@ -1,7 +1,7 @@
 <?php
 class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
 {
-    private function _getUploadDir()
+    public static function getUploadDir()
     {
         $config = Zend_Registry::get('config');
         $uploadDir = $config->uploads;
@@ -10,7 +10,7 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
             throw new Vps_Exception('Param "uploads" has to be set in the file application/config.ini.');
         }
         if (!is_dir($uploadDir) || !is_writable($uploadDir)) {
-            throw new Vps_Exception('Dateiupload kann nicht in folgendes Verzeichnis schreiben: ' . $uploadDir);
+            throw new Vps_Exception('Path for uploads is not writeable: ' . $uploadDir);
         }
 
         return $uploadDir;
@@ -19,16 +19,7 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
     public function getFileSource()
     {
         if (!$this->id) return null;
-        return $this->_getUploadDir() . '/' . $this->id;
-    }
-
-    public function getCacheFileSource($type)
-    {
-        $source = $this->_getUploadDir() . '/cache/' . $this->id . '/' . $type;
-        if (!is_file($source)) {
-            return null;
-        }
-        return $source;
+        return self::getUploadDir() . '/' . $this->id;
     }
 
     public function getFileSize()
@@ -36,22 +27,6 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         $file = $this->getFileSource();
         if ($file && is_file($file)) {
             return filesize($file);
-        }
-        return null;
-    }
-
-    public function generateUrl($class, $componentId, $filename, $type, $addRandom = false)
-    {
-        $checksum = md5(Vps_Media_Password::PASSWORD . $componentId . $type);
-        $extension = $this->extension;
-        $random = $addRandom ? '?' . uniqid() : '';
-        return "/media/{$this->id}/$class/$componentId/$type/$checksum/$filename.$extension$random";
-    }
-
-    public function getOriginalUrl()
-    {
-        if (is_file($this->getFileSource())) {
-            return "/media/{$this->id}.{$this->extension}";
         }
         return null;
     }
@@ -68,7 +43,7 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
     public function deleteCache()
     {
         if ($this->id) {
-            $this->_recursiveRemoveDirectory($this->_getUploadDir() . '/cache/' . $this->id);
+            $this->_recursiveRemoveDirectory(self::getUploadDir() . '/cache/' . $this->id);
         }
     }
 

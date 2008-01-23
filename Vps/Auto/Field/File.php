@@ -2,8 +2,9 @@
 class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
 {
     private $_fields;
+    private $_ruleKey;
 
-    public function __construct($fieldname = null, $title = null)
+    public function __construct($fieldname = null, $title = null, $ruleKey = null)
     {
         parent::__construct($fieldname);
         $this->setFileFieldLabel($title);
@@ -12,6 +13,13 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         $this->setBaseCls('x-plain');
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->getAllowOnlyImages(false);
+        $this->setRuleKey($ruleKey);
+    }
+
+    public function setRuleKey($ruleKey)
+    {
+        $this->_ruleKey = $ruleKey;
+        return $this;
     }
 
     protected function _getFields()
@@ -43,14 +51,11 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
 
     public function load($row)
     {
-        $return = array();
-        $uploadRow = $row->findParentRow('Vps_Dao_File');
-        if ($uploadRow) {
-            $return['url'] = $uploadRow->getOriginalUrl();
-        } else {
-            $return['url'] = null;
-        }
-        $return['uploaded'] = !is_null($return['url']);
+        $url = $row->getFileUrl(null, 'original');
+        $return = array(
+            'url' => $url,
+            'uploaded' => !is_null($url)
+        );
         return array($this->getFieldName() . '_delete' => $return);
     }
 
@@ -73,7 +78,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         }
 
         if (isset($file['tmp_name']) && is_file($file['tmp_name'])) {
-            
+
             if ($this->getAllowOnlyImages() && substr($file['type'], 0, 6) != 'image/') {
                 throw new Vps_ClientException('File-Type not allowed. Only Images are allowed.');
             }
