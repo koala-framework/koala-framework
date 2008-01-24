@@ -25,9 +25,13 @@ class Vps_Acl_Component extends Vps_Acl
 
         $this->allow(null, 'vps_component_web');
         $this->allow(null, 'vps_component_media');
+        $this->allow(null, 'vps_component_index');
+        $this->allow(null, 'vps_component');
 
-        $this->allow('admin', 'vps_component_index');
-        $this->allow('admin', 'vps_component_pages');
         $this->allow('admin', 'vps_component_overview');
+        $this->allow('admin', 'vps_component_pages');
+
+        $this->deny('guest', 'vps_component_index');
+        $this->deny('guest', 'vps_component_pages');
     }
 }
