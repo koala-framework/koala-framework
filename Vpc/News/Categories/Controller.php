@@ -1,12 +1,12 @@
 <?php
-class Vpc_News_CategoriesController extends Vps_Controller_Action_Auto_Vpc_Grid
+class Vpc_News_Categories_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 {
     protected $_buttons = array(
         'save' => true,
         'delete' => true,
         'add'   => true
     );
-    protected $_tableName = 'Vpc_News_CategoriesModel';
+    protected $_tableName = 'Vpc_News_Categories_Model';
     protected $_position = 'pos';
 
     public function _initColumns()

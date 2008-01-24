@@ -14,7 +14,8 @@ class Vpc_News_FormController extends Vps_Controller_Action_Auto_Form
     public function _initFields()
     {
         $this->_form->add(new Vps_Auto_Field_TextField('title', 'Title'))
-            ->setAllowBlank(false);
+            ->setAllowBlank(false)
+            ->setWidth(300);
         $this->_form->add(new Vps_Auto_Field_TextArea('teaser', 'Teaser'))
             ->setWidth(300)
             ->setHeight(100);
@@ -22,10 +23,11 @@ class Vpc_News_FormController extends Vps_Controller_Action_Auto_Form
             ->setAllowBlank(false);
         $this->_form->add(new Vps_Auto_Field_DateField('expiry_date', 'Expiry Date'));
 
-        $table = new Vpc_News_CategoriesModel();
+
+        $table = new Vpc_News_Categories_Model();
         $where = array('page_id = ?'   => $this->_getParam('page_id'),
                        'component_key = ?' => $this->_getParam('component_key'));
-        $this->_form->add(new Vps_Auto_Field_MultiCheckbox('Vpc_News_NewsToCategoriesModel', 'Categroies'))
+        $this->_form->add(new Vps_Auto_Field_MultiCheckbox('Vpc_News_Categories_NewsToCategoriesModel', 'Categroies'))
             ->setValues($table->fetchAll($where));
     }
 

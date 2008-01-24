@@ -10,22 +10,22 @@ Vpc.News.Panel = Ext.extend(Vpc.Paragraphs.Panel,
                 baseParams: this.baseParams
             }
         });
+
+        if (this.componentPlugins) {
+            this.plugins = [ ];
+            this.componentPlugins.each(function(v) {
+                var pluginClass = eval(v);
+                this.plugins.push(new pluginClass());
+            }, this);
+        }
+
         Vpc.News.Panel.superclass.initComponent.call(this);
     },
+
     addButtons : function()
     {
         var toolbar = this.grid.getTopToolbar();
-        toolbar.addSeparator();
-        this.editButton = toolbar.addButton({
-            text    : 'Edit',
-            handler : function(o, p) {
-                var row = this.grid.getSelectionModel().getSelected();
-                if (row != undefined) {
-                    this.fireEditComponent(row);
-                }
-            },
-            scope   : this
-        });
+
         // Event-Handler für Edit-Dialog rausschmeißen
         this.getGrid().getColumnModel().getColumnByDataIndex('edit').clickHandler = function() {};
         this.getGrid().on('cellclick', function(grid, rowIndex, columnIndex) {
@@ -34,26 +34,6 @@ Vpc.News.Panel = Ext.extend(Vpc.Paragraphs.Panel,
                 this.fireEditComponent(row);
             }
         }, this);
-
-        this.editCategories = toolbar.addButton({
-            text    : 'Categories',
-            handler : function(o, p) {
-                var dlg = new Ext.Window({
-                    width:  450,
-                    height: 370,
-                    layout: 'fit',
-                    title:  'News Categories',
-                    modal:  true,
-                    items:  new Vps.Auto.GridPanel({
-                        controllerUrl: '/admin/component/edit/Vpc_News_Categories',
-                        baseParams: this.getBaseParams()
-                    })
-                }, this);
-                dlg.show();
-            },
-            scope   : this
-        });
-
     },
     
     fireEditComponent : function(row)
