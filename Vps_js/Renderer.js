@@ -38,8 +38,9 @@ Ext.util.Format.nl2Br = function(v) {
     return v.replace(/\n/g, "<br />");
 };
 
-Ext.util.Format.component = function(v) {
-    return '<iframe height="100" width="100%" frameborder="0" style="border: 1px solid darkgrey" src="' + v + '"></iframe>';
+Ext.util.Format.component = function(v, f) {
+    f.css += 'content';
+    return v;
 };
 
 //date-funktion überschreiben, damit Y-m-d als eingabeformat verwendet werden kann
