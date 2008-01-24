@@ -16,7 +16,8 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             ->setData(new Vps_Auto_Data_Vpc_ComponentName());
 
         $this->_columns->add(new Vps_Auto_Grid_Column('preview', 'Preview', 500))
-            ->setData(new Vps_Auto_Data_Vpc_Frontend($this->class, $this->pageId . $this->componentKey));
+            ->setData(new Vps_Auto_Data_Vpc_Frontend($this->class, $this->pageId . $this->componentKey))
+            ->setRenderer('component');
         $this->_columns->add(new Vps_Auto_Grid_Column_Button('edit', ' ', 20))
             ->setButtonIcon('/assets/silkicons/table_edit.png')
             ->setToolTip('Edit Paragraph');
