@@ -46,7 +46,13 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $id = $this->_table->insert($insert);
             $where['page_id = ?'] = $this->pageId;
             $where['component_key = ?'] = $this->componentKey;
-            $this->_table->numberize($id, 'pos', 0, $where);
+            $this->_table->numberize($id, 'pos', null, $where);
+
+            // Hack für weiterleiten auf Edit-Seite
+            $name = Vpc_Abstract::getSetting($this->_table->getComponentClass(), 'componentName');
+            $name = str_replace('.', ' -> ', $name);
+            $this->view->data = $this->_table->find($id)->current()->toArray();
+            $this->view->data['component_name'] = $name;
         } else {
             throw new Vps_Exception("Component '$class' not found");
         }
