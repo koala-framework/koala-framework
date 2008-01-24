@@ -77,7 +77,13 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
             url: this.controllerUrl + '/jsonAddParagraph',
             params: Ext.apply ({ component : o.id}, this.getBaseParams()),
             success: function(r) {
-                this.reload();
+                data = Ext.decode(r.responseText).data;
+                this.fireEvent('editcomponent', {
+                    componentClass: data.component_class,
+                    pageId: this.getBaseParams().page_id,
+                    componentKey: this.getBaseParams().component_key + '-' + data.id,
+                    text: data.component_name
+                });
             },
             scope: this
         });
