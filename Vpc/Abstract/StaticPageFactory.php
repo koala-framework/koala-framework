@@ -7,7 +7,9 @@ abstract class Vpc_Abstract_StaticPageFactory extends Vpc_Abstract_PageFactory
     public function getChildPages()
     {
         $ret = parent::getChildPages();
-        $ret = array_merge($ret, $this->_createStaticPages());
+        foreach ($this->_pages as $p) {
+            $ret[] = $this->_createStaticPage($p);
+        }
         return $ret;
     }
 

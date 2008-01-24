@@ -1,6 +1,7 @@
 <?php
-abstract class Vpc_Abstract_PagesFactory extends Vpc_Abstract_PageFactory
+class Vpc_Abstract_PagesFactory extends Vpc_Abstract_PageFactory
 {
+    protected $_additionalFactories = array();
     /**
      * Falls eine Komponente Unterseiten im Seitenbaum erstellt, wird das hier gemacht.
      *

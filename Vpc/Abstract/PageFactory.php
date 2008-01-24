@@ -2,7 +2,7 @@
 class Vpc_Abstract_PageFactory
 {
     protected $_component;
-    protected $_additionalFactories = array();
+    protected $_additionalFactories = array('Vpc_Abstract_PagesFactory');
 
     public function __construct($component)
     {
@@ -12,6 +12,11 @@ class Vpc_Abstract_PageFactory
 
     protected function _init()
     {
+        foreach ($this->_additionalFactories as $k=>$f) {
+            if (is_string($f)) {
+                $this->_additionalFactories[$k] = new $f($this->_component);
+            }
+        }
     }
 
     public function getPageCollection()

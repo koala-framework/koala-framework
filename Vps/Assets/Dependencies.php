@@ -150,51 +150,52 @@ class Vps_Assets_Dependencies
         }
         return;
     }
-    private function _processComponentDependency($c, $includeAdminAssets)
+    private function _processComponentDependency($class, $includeAdminAssets)
     {
-        if (in_array($c, $this->_processedComponents)) return;
-        $this->_processedComponents[] = $c;
-        $classes = Vpc_Abstract::getSetting($c, 'childComponentClasses');
+        if (in_array($class.$includeAdminAssets, $this->_processedComponents)) return;
+        $this->_processedComponents[] = $class.$includeAdminAssets;
+
+        $assets = Vpc_Abstract::getSetting($class, 'assets');
+        $assetsAdmin = array();
+        if ($includeAdminAssets) {
+            $assetsAdmin = Vpc_Abstract::getSetting($class, 'assetsAdmin');
+        }
+        if (isset($assets['dep'])) {
+            foreach ($assets['dep'] as $dep) {
+                $this->_processDependency($dep);
+            }
+        }
+        if (isset($assetsAdmin['dep'])) {
+            foreach ($assetsAdmin['dep'] as $dep) {
+                $this->_processDependency($dep);
+            }
+        }
+        if (isset($assets['files'])) {
+            foreach ($assets['files'] as $file) {
+                $this->_processDependencyFile($file);
+            }
+        }
+        if (isset($assetsAdmin['files'])) {
+            foreach ($assetsAdmin['files'] as $file) {
+                $this->_processDependencyFile($file);
+            }
+        }
+        $file = Vpc_Admin::getComponentFile($class, '', 'css');
+        if ($file) {
+            foreach ($this->_config->path as $type=>$path) {
+                if ($path == '.') $path = getcwd();
+                if (substr($file, 0, strlen($path)) == $path) {
+                    $file = $type.substr($file, strlen($path));
+                    if (!in_array($file, $this->_files)) {
+                        $this->_files[] = $file;
+                        break;
+                    }
+                }
+            }
+        }
+        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
         if (is_array($classes)) {
             foreach ($classes as $class) {
-                $assets = Vpc_Abstract::getSetting($class, 'assets');
-                $assetsAdmin = array();
-                if ($includeAdminAssets) {
-                    $assetsAdmin = Vpc_Abstract::getSetting($class, 'assetsAdmin');
-                }
-                if (isset($assets['dep'])) {
-                    foreach ($assets['dep'] as $dep) {
-                        $this->_processDependency($dep);
-                    }
-                }
-                if (isset($assetsAdmin['dep'])) {
-                    foreach ($assetsAdmin['dep'] as $dep) {
-                        $this->_processDependency($dep);
-                    }
-                }
-                if (isset($assets['files'])) {
-                    foreach ($assets['files'] as $file) {
-                        $this->_processDependencyFile($file);
-                    }
-                }
-                if (isset($assetsAdmin['files'])) {
-                    foreach ($assetsAdmin['files'] as $file) {
-                        $this->_processDependencyFile($file);
-                    }
-                }
-                $file = Vpc_Admin::getComponentFile($class, '', 'css');
-                if ($file) {
-                    foreach ($this->_config->path as $type=>$path) {
-                        if ($path == '.') $path = getcwd();
-                        if (substr($file, 0, strlen($path)) == $path) {
-                            $file = $type.substr($file, strlen($path));
-                            if (!in_array($file, $this->_files)) {
-                                $this->_files[] = $file;
-                                break;
-                            }
-                        }
-                    }
-                }
                 $this->_processComponentDependency($class, $includeAdminAssets);
             }
         }

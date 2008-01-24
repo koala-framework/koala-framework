@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Component extends Vpc_Abstract
+class Vpc_News_Component extends Vpc_News_List_Abstract_Component implements Vpc_News_Interface
 {
     public $content;
 
@@ -10,47 +10,38 @@ class Vpc_News_Component extends Vpc_Abstract
             'tablename'         => 'Vpc_News_Model',
             'hideInNews'        => true,
             'childComponentClasses' => array(
-                'details'       => 'Vpc_News_Details_Component'
+                'details'       => 'Vpc_News_Details_Component',
+                'cat'           => 'Vpc_News_Categories_Component'
+            ),
+            'categories'        => array(
+                'cat' => array('pageFactory' => 'Vpc_News_PageFactoryCategories')
             )
         ));
+
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/News/Panel.js';
         return $ret;
     }
 
-    public function generateHierarchy($filename = '')
+    public function getNews()
     {
-        parent::generateHierarchy($filename);
-        $pages = array();
+        $ret = array();
+        $ret['news'] = array();
         $where = array(
-            'page_id' => $this->getDbId(),
-            'component_key' => $this->getComponentKey()
+            'page_id = ?' => $this->getDbId(),
+            'component_key = ?' => $this->getComponentKey()
         );
+
         if (!$this->showInvisible()) {
             $where['visible = 1'] = '';
         }
-        $class = $this->_getClassFromSetting('details', 'Vpc_News_Details_Component');
-        foreach ($this->getTable()->fetchAll($where, 'publish_date DESC') as $row) {
-            $fn = $row->getUniqueString($row->title, 'title', $where);
-            if ($filename != '' && $filename != $fn && $filename != $row->id) continue;
-            $page = $this->createPage($class, $row->id);
-            $page->setRow($row);
-            $this->getPagecollection()->addTreePage($page, $fn, $row->title, $this);
-            $this->getPagecollection()->hideInMenu($page);
-            $pages[] = $page;
-        }
-        return $pages;
+        $rows = $this->getTable()->fetchAll($where, 'publish_date DESC', 15);
+
+        return $rows;
     }
 
     public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars();
-        $ret['news'] = array();
-        foreach ($this->generateHierarchy() as $n) {
-            $data = $n->row->toArray();
-            $data['href'] = $n->getUrl();
-            $ret['news'][] = $data;
-        }
-        return $ret;
+        return parent::getTemplateVars();
     }
 
 }

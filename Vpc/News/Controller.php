@@ -9,7 +9,7 @@ class Vpc_News_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     );
     protected $_defaultOrder = array('field' => 'publish_date', 'direction' => 'DESC');
     //protected $_editDialog = array();
-    
+
     public function _initColumns()
     {
         $this->_columns->add(new Vps_Auto_Grid_Column('title', 'Title', 300));
@@ -25,5 +25,31 @@ class Vpc_News_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             ->setEditor(new Vps_Auto_Field_DateField('expiry_date', 'Expiry Date'));
         $this->_columns->add(new Vps_Auto_Grid_Column('visible', 'Visible', 20))
             ->setEditor(new Vps_Auto_Field_Checkbox('visible', 'Visible'));
+    }
+
+    public function indexAction()
+    {
+        $config = Vpc_Admin::getConfig($this->class, $this->pageId, $this->componentKey);
+
+        $settings = call_user_func(array($this->class, 'getSettings'));
+        if (count($settings['categories'])) {
+            $plugins = array();
+            foreach ($settings['categories'] as $katname => $katsettings) {
+                if (!isset($settings['childComponentClasses'][$katname])) {
+                    throw new Vps_Exception('childComponentClass must be set for key \''.$katname.'\'');
+                }
+                $pluginName = Vpc_Admin::getComponentFile(
+                    $settings['childComponentClasses'][$katname], 'Plugins', 'js', true
+                );
+                if ($pluginName) {
+                    $pluginName = str_replace('_', '.', $pluginName);
+                    $plugins[] = $pluginName;
+                }
+            }
+        }
+        if (count($plugins)) {
+            $config['config']['componentPlugins'] = $plugins;
+        }
+        $this->view->vpc($config);
     }
 }
