@@ -66,25 +66,25 @@ Vps.callWithErrorHandler = function(fn, scope) {
     }
 };
 
-
-Vps.include =  function(url, restart) {
-    Ext.Ajax.request({
-        url: url,
-        success: function(response, options)  {
-            if (url.substr(-4) == '.css') {
-                var s = document.createElement('style');
-                s.setAttribute('type', 'text/css');
-            } else {
-                var s = document.createElement('script');
-                s.setAttribute('type', 'text/javascript');
-            }
-            s.appendChild(document.createTextNode(response.responseText));
-            document.getElementsByTagName("head")[0].appendChild(s);
-            if (restart) Vps.restart();
-        }
-    });
+Vps.include =  function(url, restart)
+{
+    if (url.substr(-4) == '.css') {
+        var s = document.createElement('link');
+        s.setAttribute('type', 'text/css');
+        s.setAttribute('href', url+'?'+Math.random());
+    } else {
+        var s = document.createElement('script');
+        s.setAttribute('type', 'text/javascript');
+        s.setAttribute('src', url+'?'+Math.random());
+    }
+    s.onload = function () {
+        if (restart) Vps.restart();
+    };
+    document.getElementsByTagName("head")[0].appendChild(s);
 };
-Vps.restart = function() {
+
+Vps.restart = function()
+{
     if (Vps.currentViewport) {
         Vps.currentViewport.onDestroy();
         delete Vps.currentViewport;
