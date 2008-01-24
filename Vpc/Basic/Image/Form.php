@@ -4,11 +4,10 @@ class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
     public function __construct($class, $id = null)
     {
         parent::__construct($class, $id);
-        
+
         // Dateiname
         if (Vpc_Abstract::getSetting($class, 'editFilename')) {
             $this->add(new Vps_Auto_Field_TextField('filename', 'Filename'))
-                ->setAllowBlank(false)
                 ->setVtype('alphanum');
         }
 

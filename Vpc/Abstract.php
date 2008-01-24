@@ -484,11 +484,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
         }
     }
 
-    public static function getTablename($class)
-    {
-        return self::$tablename;
-    }
-
     public static function getSetting($class, $setting)
     {
         if (!class_exists($class)) {

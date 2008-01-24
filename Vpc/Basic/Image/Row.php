@@ -51,6 +51,14 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row
         }
     }
 
+    public function getFileUrl($rule = null, $type = 'default', $filename = null, $addRandom = false)
+    {
+        if ($this->filename != '') {
+            //$filename = $this->filename;
+        }
+        return parent::getFileUrl($rule, $type, $filename, $addRandom);
+    }
+
     public function getImageDimension()
     {
         $s = $this->_getScaleSettings();

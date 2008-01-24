@@ -149,7 +149,11 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         if (!$fileRow) {
             return null;
         }
-        $class = get_class($this->getTable());
+        if ($this->getTable() instanceof Vpc_Table) {
+            $class = $this->getTable()->getComponentClass();
+        } else {
+            $class = get_class($this->getTable());
+        }
         $id = $this->_getIdString();
         $extension = $fileRow->extension;
         $checksum = md5(self::FILE_PASSWORD . $class . $id . $rule . $type);
@@ -157,7 +161,6 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         if (!$filename || $filename == '') {
             $filename = $fileRow->filename;
         }
-        $filename = Zend_Filter::get($filename, 'Url', array(), 'Vps_Filter');
         return "/media/$class/$id/$rule/$type/$checksum/$filename.$extension$random";
     }
 

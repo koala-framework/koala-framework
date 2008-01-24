@@ -35,7 +35,12 @@ class Vps_Controller_Action_Media_MediaController extends Vps_Controller_Action
         $rule = $this->_getParam('rule');
         if ($rule == 'default') { $rule = null; }
 
-        $table = new $class();
+        if (substr($class, 0, 4) == 'Vpc_') {
+            $tableClass = Vpc_Abstract::getSetting($class, 'tablename');
+            $table = new $tableClass(array('componentClass' => $class));
+        } else {
+            $table = new $class();
+        }
         $row = call_user_func_array(array($table, 'find'), $id)->current();
         if (!$row) {
             throw new Vps_Exception('File not found.');
