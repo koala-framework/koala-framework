@@ -21,6 +21,9 @@ class Vpc_Basic_Text_Form extends Vps_Auto_Vpc_Form
 
         $field->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl());
 
+        $v = Zend_Registry::get('config')->application->version;
+        $field->setCssFile('/assets/AllFrontend.css?v='.$v);
+
         $this->fields->add($field);
     }
     

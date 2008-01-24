@@ -67,7 +67,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
         if (type == 'insertImage') {
             this.actions[type] = new Ext.Action({
-                icon: '/assets/silkicons/image.png',
+                icon: '/assets/silkicons/picture.png',
                 handler: this.createImage,
                 scope: this,
                 tooltip: {
@@ -279,9 +279,12 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
     },
     getDocMarkup : function(){
-        return '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style>'+
-               '<link rel="stylesheet" type="text/css" href="/assets/AllFrontend.css" />'+
-               '</head><body class="content"></body></html>';
+        var ret = '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style>';
+        if (this.cssFile) {
+            ret += '<link rel="stylesheet" type="text/css" href="'+this.cssFile+'" />';
+        }
+        ret += '</head><body class="content"></body></html>';
+        return ret;
     },
     setValue : function(v) {
         if (v && v.page_id && v.component_key) {
@@ -427,12 +430,20 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
     insertPlainText: function()
     {
-        Ext.Msg.prompt('Insert Plain Text', '',
-            function(btn, text) {
+        Ext.Msg.show({
+            title : 'Insert Plain Text',
+            msg : '',
+            buttons: Ext.Msg.OKCANCEL,
+            fn: function(btn, text) {
                 if (btn == 'ok') {
                     this.insertAtCursor(text);
                 }
-            }, this, true);
+            },
+            scope : this,
+            minWidth: 500,
+            prompt: true,
+            multiline: 300
+        });
     },
 
     tidyHtml: function()
