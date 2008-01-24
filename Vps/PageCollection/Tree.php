@@ -77,13 +77,14 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
             $ret = array();
             $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData(null);
             foreach ($rows as $pageRow) {
-                if ($page = $this->getExistingPageById($pageRow['id'])) {
-                } else {
-                    $page = Vpc_Abstract::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id'], $this);
-                    $this->addTreePage($page, $pageRow['filename'], $pageRow['name'], null);
-                    $this->_types[$page->getId()] = $pageRow['type'];
+                if (!$type || $pageRow['type'] == $type) {
+                    if (!$page = $this->getExistingPageById($pageRow['id'])) {
+                        $page = Vpc_Abstract::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id'], $this);
+                        $this->addTreePage($page, $pageRow['filename'], $pageRow['name'], null);
+                        $this->_types[$page->getId()] = $pageRow['type'];
+                    }
+                    $ret[] = $page;
                 }
-                $ret[] = $page;
             }
             return $ret;
         } else {
