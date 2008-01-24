@@ -57,6 +57,7 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
             $ret['hiddenName'] = $this->getNamePrefix() . '_' . $ret['hiddenName'];
         }
         if (isset($ret['namePrefix'])) unset($ret['namePrefix']);
+        if (isset($ret['save'])) unset($ret['save']);
         return $ret;
     }
 

@@ -61,4 +61,11 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract imple
     {
         return $this->fields->getIterator();
     }
+
+    public function setSave($v)
+    {
+        foreach ($this as $f) {
+            $f->setSave($v);
+        }
+    }
 }
