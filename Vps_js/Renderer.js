@@ -40,6 +40,7 @@ Ext.util.Format.nl2Br = function(v) {
 
 Ext.util.Format.component = function(v, f) {
     f.css += 'content';
+    f.attr += 'style="overflow: visible; white-space: normal;"';
     return v;
 };
 
