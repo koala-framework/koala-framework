@@ -11,8 +11,8 @@ class Vps_Controller_Action_Component_ComponentsController extends Vps_Controlle
             $body .= $class;
             $body .= '<br />';
             foreach ($ids as $id) {
-                $body .= "<a href=\"/admin/component/edit/$class?page_id=$id[page_id]&component_key=$id[component_key]\">
-                                $id[page_id]$id[component_key]</a>&nbsp;&nbsp;&nbsp;";
+                $body .= "<a href=\"/admin/component/edit/$class?component_id=$id[component_id]\">
+                                $id[component_id]</a>&nbsp;&nbsp;&nbsp;";
             }
             $body .= '<br /><br />';
         }
@@ -41,27 +41,6 @@ class Vps_Controller_Action_Component_ComponentsController extends Vps_Controlle
         }
     }
 
-    private function _getComponentsForPage($component, $return)
-    {
-        if ($component) {
-            $return[get_class($component)][] = array('page_id'=>$component->getPageId(),
-                                                     'component_key'=>$component->getComponentKey());
-            foreach ($component->getChildComponents() as $c) {
-                $return = $this->_getComponentsForPage($c, $return);
-            }
-        }
-        return $return;
-    }
-
-    private function _getComponents($page, $pageCollection, $return = array())
-    {
-        $return = $this->_getComponentsForPage($page, $return);
-        foreach ($pageCollection->getChildPages($page) as $cp) {
-            $return = $this->_getComponentsForPage($cp, $return);
-        }
-        return $return;
-    }
-
     public function showAction()
     {
         $component = new Vpc_Decorator_Assets_Component(
@@ -84,34 +63,11 @@ class Vps_Controller_Action_Component_ComponentsController extends Vps_Controlle
         $this->view->content = $view->render('');
     }
 
-//     public function deleteAction()
-//     {
-//         $component = $this->_getComponent();
-//         if ($component) {
-//             Vpc_Admin::getInstance($component)->delete($component);
-//             echo 'Deleted.';
-//         } else {
-//             echo 'Component not found.';
-//         }
-//     }
-
-//     public function setupAction()
-//     {
-//         $class = $this->_getParam('class');
-//         $admin = Vpc_Admin::getInstance($class);
-//         if ($admin) {
-//             $admin->setup();
-//             echo 'Setup executed.';
-//         } else {
-//             echo 'Admin-Class not found';
-//         }
-//     }
-
     private function _getComponent()
     {
         $id = $this->_getParam('componentId');
         if (!$id) {
-            $id = $this->_getParam('page_id').$this->_getParam('component_key');
+            $id = $this->_getParam('component_id');
         }
         $pageCollection = new Vps_PageCollection_TreeBase(Zend_Registry::get('dao'));
         $component = $pageCollection->findComponent($id);

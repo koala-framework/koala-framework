@@ -17,29 +17,26 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
 
         $row = $this->_form->getRow();
-        $this->view->page_id = $row->page_id;
-        $this->view->component_key = $row->component_key.'-i'.
+        $this->view->component_id = $row->component_id.'-i'.
                                         ($row->getMaxChildComponentNr('image')+1);
         $imageClass = Vpc_Abstract::getSetting($this->class, 'imageClass');
-        $row->content_edit .= "<img src=\"/media/0/$classes[image]/{$this->view->page_id}{$this->view->component_key}/\" />";
+        $row->content_edit .= "<img src=\"/media/0/$classes[image]/{$this->view->component_id}/\" />";
         $row->save();
     }
     public function jsonAddLinkAction()
     {
         $row = $this->_form->getRow();
-        $this->view->page_id = $row->page_id;
-        $this->view->component_key = $row->component_key.'-l'.
+        $this->view->component_id = $row->component_id.'-l'.
                                         ($row->getMaxChildComponentNr('link')+1);
-        $row->content_edit .= "<a href=\"{$this->view->page_id}{$this->view->component_key}\" />";
+        $row->content_edit .= "<a href=\"{$this->view->component_id}\" />";
         $row->save();
     }
     public function jsonAddDownloadAction()
     {
         $row = $this->_form->getRow();
-        $this->view->page_id = $row->page_id;
-        $this->view->component_key = $row->component_key.'-d'.
+        $this->view->component_id = $row->component_id.'-d'.
                                         ($row->getMaxChildComponentNr('download')+1);
-        $row->content_edit .= "<a href=\"{$this->view->page_id}{$this->view->component_key}\" />";
+        $row->content_edit .= "<a href=\"{$this->view->component_id}\" />";
         $row->save();
     }
 }

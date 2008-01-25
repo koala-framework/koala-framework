@@ -60,28 +60,27 @@ class Vpc_Admin
 
     // ****************
     
-    public static final function getConfig($class, $pageId = null, $componentKey = null, $config = array())
+    public static final function getConfig($class, $componentId = null, $config = array())
     {
         $admin = Vpc_Admin::getInstance($class);
-        $adminConfig = $admin->getControllerConfig($pageId, $componentKey);
+        $adminConfig = $admin->getControllerConfig($componentId);
         $config = array_merge($config, $adminConfig);
         $controllerClass = $admin->getControllerClass();
         $controllerUrl = $admin->getControllerUrl();
-        return Vpc_Admin::createConfig($controllerClass, $controllerUrl, $config, $pageId, $componentKey);
+        return Vpc_Admin::createConfig($controllerClass, $controllerUrl, $config, $componentId);
     }
 
-    public static final function createConfig($controllerClass, $controllerUrl, $config = array(), $pageId = null, $componentKey = null)
+    public static final function createConfig($controllerClass, $controllerUrl, $config = array(), $componentId = null)
     {
         if (!is_array($config)) $config = array();
         if (!isset($config['controllerUrl'])) {
             $config['controllerUrl'] = $controllerUrl;
         }
-        if ($pageId) {
+        if ($componentId) {
             if (!isset($config['baseParams'])) {
                 $config['baseParams'] = array();
             }
-            $config['baseParams']['page_id'] = $pageId;
-            $config['baseParams']['component_key'] = $componentKey;
+            $config['baseParams']['component_id'] = $componentId;
         }
         $return['config'] = $config;
         $return['class'] = $controllerClass;
@@ -116,24 +115,23 @@ class Vpc_Admin
 
     // ***************
     
-    protected function _getRow($pageId, $componentKey)
+    protected function _getRow($componentId)
     {
         $tablename = Vpc_Abstract::getSetting($this->_class, 'tablename');
         if ($tablename) {
             $table = new $tablename(array('componentClass'=>$this->_class));
-            return $table->find($pageId, $componentKey)->current();
+            return $table->find($componentId)->current();
         }
         return null;
     }
 
-    protected function _getRows($pageId, $componentKey)
+    protected function _getRows($componentId)
     {
         $tablename = Vpc_Abstract::getSetting($this->_class, 'tablename');
         if ($tablename) {
             $table = new $tablename(array('componentClass' => $this->_class));
             $where = array(
-                'page_id = ?' => $pageId,
-                'component_key = ?' => $componentKey
+                'component_id = ?' => $componentId
             );
             return $table->fetchAll($where);
         }
@@ -144,9 +142,9 @@ class Vpc_Admin
     {
     }
 
-    public function delete($pageId, $componentKey)
+    public function delete($componentId)
     {
-        $row = $this->_getRow($pageId, $componentKey);
+        $row = $this->_getRow($componentId);
         if ($row) {
             $row->delete();
         }
@@ -160,15 +158,14 @@ class Vpc_Admin
     {
         if (!$this->_tableExists($tablename)) {
             $f = array();
-            $f['page_id'] = 'int(10) unsigned NOT NULL';
-            $f['component_key'] = 'varchar(255) NOT NULL';
+            $f['component_id'] = 'varchar(255) NOT NULL';
             $f = array_merge($f, $fields);
 
             $sql = "CREATE TABLE `$tablename` (";
             foreach ($f as $field => $data) {
                 $sql .= " `$field` $data," ;
             }
-            $sql .= 'PRIMARY KEY (page_id, component_key))';
+            $sql .= 'PRIMARY KEY (component_id))';
             $sql .= 'ENGINE=InnoDB DEFAULT CHARSET=utf8';
             $this->_db->query($sql);
 

@@ -136,8 +136,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.contentTabPanel.setActiveTab(panel);
         }
         data.componentClass = data.cls;
-        data.pageId = data.id;
-        data.componentKey = '';
+        data.componentId = data.id;
         panel.loadComponent(data);
     },
 

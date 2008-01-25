@@ -44,6 +44,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $this->_pageCollection = $pageCollection;
 
         if (is_object($id)) {
+            //vorübergehend für formular-felder
             foreach (Vpc_Abstract::getSetting(get_class($this), 'default') as $k=>$i) {
                 if (!isset($id->$k)) $id->$k = $i;
             }
@@ -51,6 +52,8 @@ abstract class Vpc_Abstract implements Vpc_Interface
         } else {
             $this->_id = $this->parseId($id);
         }
+
+
 
         $this->_init();
 
@@ -76,8 +79,8 @@ abstract class Vpc_Abstract implements Vpc_Interface
             $table = $this->getTable();
             if ($table && !isset($this->_row)) {
                 $info = $table->info();
-                if ($info['primary'] == array(1 => 'page_id', 2 => 'component_key')) {
-                    $this->_row = $table->find($this->getPageId(), $this->getComponentKey())->current();
+                if ($info['primary'] == array(1 => 'component_id')) {
+                    $this->_row = $table->find($this->getDbId())->current();
                     if (!$this->_row) {
                         $this->_row = $table->createRow();
                     }
@@ -115,11 +118,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param int Für Unterscheidung des Komponenteninhalts
      * @return Vpc_Abstract Komponente
      */
-    public function createComponent($class, $pageKeySuffix = '')
+    public function createComponent($class, $suffix = '')
     {
         $id = $this->getId();
-        if ($pageKeySuffix != '') {
-            $id .= '-' . $pageKeySuffix;
+        if ($suffix != '') {
+            $id .= '-' . $suffix;
         }
 
         // Komponente erstellen
@@ -159,15 +162,15 @@ abstract class Vpc_Abstract implements Vpc_Interface
      */
     public static function parseId($id)
     {
-        $id = '3_k3-45_f3_2-aa';
-
         $parts = preg_split("/(_|-)/", $id, -1, PREG_SPLIT_DELIM_CAPTURE);
         if (!$parts) {
             throw new Vpc_Exception("ID '$id' doesn't match pattern for Id: $pattern");
         }
         $idParts = array();
-        $idParts['id'] = $parts[0];
+        $idParts['id'] = $id;
         $idParts['pageId'] = $parts[0];
+        $idParts['pageKeys'] = array($parts[0]);
+        $idParts['componentKeys'] = array();
         $idParts['currentComponentKey'] = '';
         $idParts['currentPageKey'] = '';
 
@@ -177,7 +180,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
             if ($lastPart == '_') {
                 $idParts['currentPageKey'] = $part;
                 $idParts['pageId'] .= $lastPart . $part;
+                $idParts['pageKeys'][] = $part;
             } else if ($lastPart == '-') {
+                $idParts['componentKeys'][] = $part;
                 $idParts['currentComponentKey'] = $part;
             }
             $lastPart = $part;
@@ -192,6 +197,13 @@ abstract class Vpc_Abstract implements Vpc_Interface
     public function getId()
     {
         return (string)$this->_id['id'];
+    }
+
+    public function getDbId()
+    {
+        $c = Vpc_Admin::getComponentFile($this, 'IdTranslator', 'php', true);
+        $translator = new $c();
+        return $translator->collapse($this->getId());
     }
 
     /**
@@ -220,13 +232,13 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string id der Komponente
      * @return Vpc_Abstract/null
      */
-    public function findComponent($id)
+    public function getComponentById($id)
     {
         if ($this->getId() == $id) {
             return $this;
         } else {
             foreach ($this->getChildComponents() as $childComponent) {
-                $component = $childComponent->findComponent($id);
+                $component = $childComponent->getComponentById($id);
                 if ($component != null) {
                     return $component;
                 }
@@ -242,13 +254,13 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string Klassenname der gesuchten Komponente
      * @return Vpc_Abstract/null
      */
-    public function findComponentByClass($class)
+    public function getComponentByClass($class)
     {
         if (get_class($this) == $class) {
             return $this;
         } else {
             foreach ($this->getChildComponents() as $childComponent) {
-                $component = $childComponent->findComponentByClass($class);
+                $component = $childComponent->getComponentByClass($class);
                 if ($component != null) {
                     return $component;
                 }

@@ -14,7 +14,7 @@ class Vpc_Composite_Images_Controller extends Vpc_Abstract_List_Controller
 
         $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
         $this->_columns->add(new Vps_Auto_Grid_Column($classes['child'], 'Image', 100))
-            ->setData(new Vps_Auto_Data_Vpc_Image($classes['child'], $this->pageId, $this->componentKey));
+            ->setData(new Vps_Auto_Data_Vpc_Image($classes['child'], $this->componentId));
         parent::_initColumns();
     }
 }

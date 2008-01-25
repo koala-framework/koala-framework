@@ -29,7 +29,7 @@ class Vpc_News_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     public function indexAction()
     {
-        $config = Vpc_Admin::getConfig($this->class, $this->pageId, $this->componentKey);
+        $config = Vpc_Admin::getConfig($this->class, $this->componentId);
 
         $settings = call_user_func(array($this->class, 'getSettings'));
         if (count($settings['categories'])) {

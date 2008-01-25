@@ -11,9 +11,4 @@ class Vpc_Composite_TextImage_Admin extends Vpc_Admin
         $fields['image_position'] = "enum('left', 'right', 'alternate') default NULL";
         $this->createFormTable('vpc_composite_textimage', $fields);
     }
-
-    public function delete($pageId, $componentKey)
-    {
-        parent::delete($pageId, $componentKey);
-    }
 }

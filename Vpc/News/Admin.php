@@ -6,7 +6,7 @@ class Vpc_News_Admin extends Vpc_Admin
         return 'Vpc.News.Panel';
     }
     
-    public function getControllerConfig($pageId, $componentKey)
+    public function getControllerConfig($componentId)
     {
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
         return array('contentClass' => $classes['details']);
@@ -20,8 +20,7 @@ class Vpc_News_Admin extends Vpc_Admin
         if (!$this->_tableExists($tablename)) {
             $this->_db->query("CREATE TABLE IF NOT EXISTS `vpc_news` (
   `id` smallint(6) NOT NULL auto_increment,
-  `page_id` int(11) NOT NULL,
-  `component_key` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `component_id` varchar(255) collate utf8_unicode_ci NOT NULL,
   `visible` tinyint(4) NOT NULL,
   `title` varchar(255) collate utf8_unicode_ci NOT NULL,
   `teaser` text collate utf8_unicode_ci NOT NULL,
@@ -32,9 +31,9 @@ class Vpc_News_Admin extends Vpc_Admin
         }
     }
     
-    public function delete($pageId, $componentKey)
+    public function delete($componentId)
     {
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        Vpc_Admin::getInstance($classes['details'])->delete($pageId, $componentKey);
+        Vpc_Admin::getInstance($classes['details'])->delete($componentId);
     }
 }

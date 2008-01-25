@@ -45,7 +45,7 @@ class Vps_Controller_Action_Component_WebController extends Vps_Controller_Actio
         $benchmark->startSequence('Seitenbaum');
 
         $pageCollection = Vps_PageCollection_Abstract::getInstance();
-        $page = $pageCollection->findPageByPath($this->getRequest()->getPathInfo());
+        $page = $pageCollection->getPageByPath($this->getRequest()->getPathInfo());
         if (!$page) {
             throw new Vps_Controller_Action_Web_Exception('Page not found for path ' . $this->getRequest()->getPathInfo());
         }

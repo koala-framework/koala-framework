@@ -8,7 +8,7 @@ class Vpc_Basic_Image_Enlarge_Row extends Vpc_Basic_Image_Row
         $classes = Vpc_Abstract::getSetting($componentClass, 'childComponentClasses');
         $admin = Vpc_Admin::getInstance($classes['smallImage']);
         if ($admin) {
-            $admin->delete($this->page_id, $this->component_key);
+            $admin->delete($this->component_id);
         }
     }
 

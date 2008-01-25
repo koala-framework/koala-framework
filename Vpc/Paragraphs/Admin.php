@@ -27,8 +27,7 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
         if (!$this->_tableExists($tablename)) {
           $this->_db->query("CREATE TABLE `$tablename` (
                   `id` int(10) unsigned NOT NULL auto_increment,
-                  `page_id` int(10) unsigned NOT NULL,
-                  `component_key` varchar(255) NOT NULL,
+                  `component_id` varchar(255) NOT NULL,
                   `component_class` varchar(255) NOT NULL,
                   `pos` smallint NOT NULL,
                   `visible` tinyint(4) NOT NULL
@@ -37,9 +36,9 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
         }
     }
 
-    public function delete($pageId, $componentKey)
+    public function delete($componentId)
     {
-        foreach ($this->_getRows($pageId, $componentKey) as $row) {
+        foreach ($this->_getRows($componentId) as $row) {
             $row->delete();
         }
     }

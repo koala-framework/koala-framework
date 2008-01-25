@@ -25,17 +25,15 @@ class Vpc_News_FormController extends Vps_Controller_Action_Auto_Form
 
 
         $table = new Vpc_News_Categories_Model();
-        $where = array('page_id = ?'   => $this->_getParam('page_id'),
-                       'component_key = ?' => $this->_getParam('component_key'));
+        $where = array('component_id = ?' => $this->_getParam('component_id'));
         $this->_form->add(new Vps_Auto_Field_MultiCheckbox('Vpc_News_Categories_NewsToCategoriesModel', 'Categroies'))
             ->setValues($table->fetchAll($where));
     }
 
     public function _beforeSave($row)
     {
-        if ($this->_getParam('id') == 0 && $this->_getParam('pageId')) {
-            $row->page_id = $this->_getParam('pageId');
-            $row->component_key = $this->_getParam('componentKey');
+        if ($this->_getParam('id') == 0 && $this->_getParam('componentId')) {
+            $row->component_id = $this->_getParam('componentId');
             $row->visible = 0;
         }
     }

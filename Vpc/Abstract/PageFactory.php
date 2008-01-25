@@ -97,16 +97,13 @@ class Vpc_Abstract_PageFactory
      * @return Vpc_Abstract Komponente, die als Seite im Seitenbaum hinzugefügt werden kann
      * @throws Vpc_Exception Falls pageKeySuffix und pageTagSuffix gleichzeit gesetzt werden
      */
-    protected final function _createPage($class, $pageKeySuffix = '', $pageTagSuffix = '')
+    protected final function _createPage($class, $pageKeySuffix = '')
     {
         $id = $this->_component->getId();
         if ($pageKeySuffix != '') {
             $id .= '_' . $pageKeySuffix;
         }
 
-        if ($pageTagSuffix != '') {
-            $id .= ',' . $pageTagSuffix;
-        }
         $page = new $class($this->_component->getDao(), $id, $this->getPageCollection());
         $page->setParentComponent($this->_component);
         return $page;

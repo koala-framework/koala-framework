@@ -27,8 +27,7 @@ class Vpc_News_Component extends Vpc_News_List_Abstract_Component implements Vpc
         $ret = array();
         $ret['news'] = array();
         $where = array(
-            'page_id = ?' => $this->getDbId(),
-            'component_key = ?' => $this->getComponentKey()
+            'component_id = ?' => $this->getId()
         );
 
         if (!$this->showInvisible()) {

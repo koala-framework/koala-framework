@@ -40,8 +40,7 @@ Vpc.News.Panel = Ext.extend(Vpc.Paragraphs.Panel,
     {
         this.fireEvent('editcomponent', {
             componentClass: this.contentClass,
-            pageId: this.baseParams.page_id, 
-            componentKey: this.baseParams.component_key + '_' + row.data.id, 
+            componentId: this.baseParams.component_id + '_' + row.data.id,
             text: 'Details'
         });
     },
@@ -49,8 +48,7 @@ Vpc.News.Panel = Ext.extend(Vpc.Paragraphs.Panel,
     onAdd : function()
     {
         this.applyBaseParams({
-            pageId: this.baseParams.page_id, 
-            componentKey: this.baseParams.component_key 
+            componentId: this.baseParams.component_id
         });
         Vpc.News.Panel.superclass.onAdd.call(this);
     }

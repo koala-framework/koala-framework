@@ -35,36 +35,10 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
 
             if ($module == 'component') {
                 $request = $this->getRequest();
-                $pageId = $request->getParam('page_id');
-                $componentKey = $request->getParam('component_key');
+                $componentId = $request->getParam('component_id');
                 $class = $request->getParam('class');
-                if ($pageId && $componentKey) {
-                    $this->_actionController->id = array(
-                        'page_id' => $pageId,
-                        'component_key' => $componentKey
-                    );
-                } else {
-                    $this->_actionController->id = null;
-                }
                 $this->_actionController->class = $class;
-                $this->_actionController->pageId = $pageId;
-                $this->_actionController->componentKey = $componentKey;
-                
-/*
-                $id = $this->getRequest()->getParam('componentId');
-                $pageCollection = Vps_PageCollection_TreeBase::getInstance();
-                $component = $pageCollection->findComponent($id);
-                if (!$component) {
-                    $class = $this->getRequest()->getParam('class');
-                    Zend_Loader::loadClass($class);
-                    $component = Vpc_Abstract::createInstance(Zend_Registry::get('dao'), $class, $id);
-                }
-                if (!$component) {
-                    throw new Vpc_Exception('Component not found: ' . $id);
-                } else {
-                    $this->_actionController->component = $component;
-                }
-                */
+                $this->_actionController->componentId = $componentId;
             }
 
         }

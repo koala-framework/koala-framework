@@ -29,8 +29,7 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
     {
         if (!isset($this->_rows)) {
             $where = array();
-            $where['page_id = ?'] = $this->getDbId();
-            $where['component_key = ?'] = $this->getComponentKey();
+            $where['component_id = ?'] = $this->getDbId();
             if (!$this->showInvisible()) {
                 $where['visible = ?'] = 1;
             }

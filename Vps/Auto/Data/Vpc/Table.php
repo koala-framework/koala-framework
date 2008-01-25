@@ -15,8 +15,7 @@ class Vps_Auto_Data_Vpc_Table extends Vps_Auto_Data_Table_Parent
     {
         $table = new $this->_parentTable(array('componentClass' => $this->_componentClass));
         $key = array(
-            'page_id = ?' => $row->page_id,
-            'component_key = ?' => $row->component_key . '-' . $row->id . $this->_tagSuffix
+            'component_id = ?' => $row->component_id . '-' . $row->id . $this->_tagSuffix
         );
 
         $row = $table->fetchAll($key)->current();
