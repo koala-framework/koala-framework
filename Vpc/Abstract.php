@@ -159,72 +159,30 @@ abstract class Vpc_Abstract implements Vpc_Interface
      */
     public static function parseId($id)
     {
-        $keys = array();
-        $pattern = self::getIdPattern();
-        preg_match("#^$pattern\$#", $id, $keys);
+        $id = '3_k3-45_f3_2-aa';
 
-        if ($keys == null) {
+        $parts = preg_split("/(_|-)/", $id, -1, PREG_SPLIT_DELIM_CAPTURE);
+        if (!$parts) {
             throw new Vpc_Exception("ID '$id' doesn't match pattern for Id: $pattern");
         }
+        $idParts = array();
+        $idParts['id'] = $parts[0];
+        $idParts['pageId'] = $parts[0];
+        $idParts['currentComponentKey'] = '';
+        $idParts['currentPageKey'] = '';
 
-        $parts['id'] = $keys[0];
-        $parts['dbId'] = $keys[1];
-        $parts['componentId'] = '';
-        $parts['pageId'] = '';
-        $parts['componentKey'] = '';
-        $parts['pageKey'] = '';
-        $parts['pageKeys'] = array();
-        $parts['currentComponentKey'] = '';
-        $parts['currentPageKey'] = '';
-        $parts['currentPageTag'] = '';
-
-        $pageKey = isset($keys[2]) ? $keys[2] : '';
-        $pageKeys = array();
-        $currentPageKey = '';
-        foreach (str_split($pageKey) as $pos => $key) {
-            if ($key == ',' || $key == '-' || $key == '_') {
-                if ($currentPageKey != '') {
-                    $pageKeys[substr($pageKey, 0, $pos)] = $currentPageKey;
-                }
-                $currentPageKey = $key;
-            } else {
-                $currentPageKey .= $key;
+        unset($parts[0]);
+        $lastPart = null;
+        foreach ($parts as $part) {
+            if ($lastPart == '_') {
+                $idParts['currentPageKey'] = $part;
+                $idParts['pageId'] .= $lastPart . $part;
+            } else if ($lastPart == '-') {
+                $idParts['currentComponentKey'] = $part;
             }
+            $lastPart = $part;
         }
-        if ($currentPageKey != '') {
-            $pageKeys[$pageKey] = $currentPageKey;
-        }
-        foreach ($pageKeys as $currentPageKey => $value) {
-            $key = substr($value, 0, 1);
-            $val = substr($value, 1);
-            if ($key != '-') {
-                $parts['pageKeys'][$currentPageKey] = $val;
-                $parts['pageKey'] = $currentPageKey;
-                if ($key == ',') {
-                    $parts['currentPageTag'] = $val;
-                    $parts['currentPageKey'] = '';
-                } else if ($key == '_') {
-                    $parts['currentPageKey'] = $val;
-                    $parts['currentPageTag'] = '';
-                }
-            }
-            if ($key != ',') {
-                $parts['componentKey'] .= $value;
-            }
-            if ($key == '-') {
-                $parts['currentComponentKey'] = $value;
-            }
-        }
-        $parts['componentId'] = $parts['dbId'] . $parts['componentKey'];
-        $parts['pageId'] = $parts['dbId'] . $parts['pageKey'];
-        return $parts;
-    }
-
-    public static function getIdPattern()
-    {
-        $pattern = '([0-9a-zA-Z]+)'; // PageId
-        $pattern .= '(((-|_|,)[0-9a-zA-Z]+)*)?'; // PageKey
-        return $pattern;
+        return $idParts;
     }
 
     /**
@@ -245,56 +203,14 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return (string)$this->_id['pageId'];
     }
 
-    /**
-     * @return string pageId der Komponente.
-     * @see parsePageId
-     */
-    public function getDbId()
-    {
-        return (int)$this->_id['dbId'];
-    }
-
-    /**
-     * Da der pageKey in der URL auch die pageTags beinhalten kann,
-     * wird er hier zerlegt und nur die pageKeys zurückgegeben.
-     *
-     * @return string pageKey, falls es mehrere gibt, durch . aneinandergekettet
-     */
-    public function getPageKey()
-    {
-        return (string)$this->_id['pageKey'];
-    }
-
-    public function getComponentKey()
-    {
-        return (string)$this->_id['componentKey'];
-    }
-
     public function getCurrentComponentKey()
     {
         return (string)$this->_id['currentComponentKey'];
     }
 
-    /**
-     * Der pageKey wird in Normalfall hierarchisch gespeichert. Hier
-     * wird nur der letzte pageKey zurückgegeben.
-     *
-     * @return string pageTag
-     */
     public function getCurrentPageKey()
     {
         return (string)$this->_id['currentPageKey'];
-    }
-
-    /**
-     * Der pageKey wird in Normalfall hierarchisch gespeichert. Hier
-     * wird nur der letzte pageTag zurückgegeben.
-     *
-     * @return string pageTag
-     */
-    public function getCurrentPageTag()
-    {
-        return (string)$this->_id['currentPageTag'];
     }
 
     /**
