@@ -1,6 +1,6 @@
 <?php
 
-class Vpc_News_Categories_Category_Component extends Vpc_News_List_Abstract_Component implements Vpc_News_Interface
+class Vpc_News_Categories_Category_Component extends Vpc_News_List_Abstract_Component implements Vpc_News_Interface_Component
 {
 
     public static function getSettings()
