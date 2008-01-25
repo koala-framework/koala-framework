@@ -6,21 +6,20 @@ class Vpc_Composite_TextImages_Admin extends Vpc_Admin
         return 'Vps.Component.TabPanel';
     }
 
-    public function getControllerConfig($pageId, $componentKey)
+    public function getControllerConfig($componentId)
     {
         $cls = Vpc_Abstract::getSetting($this->_class, 'textClass');
-        $conf = Vpc_Admin::getConfig($cls, $pageId, $componentKey . '-text');
+        $conf = Vpc_Admin::getConfig($cls, $componentId . '-text');
         $config['tabs']['Text'] = $conf; 
         
         $cls = Vpc_Abstract::getSetting($this->_class, 'imagesClass');
-        $conf = Vpc_Admin::getConfig($cls, $pageId, $componentKey . '-images');
+        $conf = Vpc_Admin::getConfig($cls, $componentId . '-images');
         $config['tabs']['Images'] = $conf; 
         
         $conf = Vpc_Admin::createConfig('Vps.Auto.FormPanel',
                                         $this->getControllerUrl(),
                                         array(), 
-                                        $pageId, 
-                                        $componentKey);
+                                        $componentId);
         $config['tabs']['Properties'] = $conf; 
 
         $config['activeItem'] = 'Text';
@@ -37,12 +36,12 @@ class Vpc_Composite_TextImages_Admin extends Vpc_Admin
         $this->createFormTable('vpc_composite_textimage', $fields);
     }
 
-    public function delete($pageId, $componentKey)
+    public function delete($componentId)
     {
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        Vpc_Admin::getInstance($classes['text'])->delete($pageId, $componentKey . '-text');
-        Vpc_Admin::getInstance($classes['images'])->delete($pageId, $componentKey . '-images');
+        Vpc_Admin::getInstance($classes['text'])->delete($componentId . '-text');
+        Vpc_Admin::getInstance($classes['images'])->delete($componentId . '-images');
 
-        parent::delete($pageId, $componentKey);
+        parent::delete($componentId);
     }
 }

@@ -43,8 +43,7 @@ class Vpc_Formular_Select_Component extends Vpc_Formular_Field_Abstract
         if (!$this->_options) {
             $table = $this->getTable('Vpc_Formular_Select_OptionsModel');
             $where = array(
-                'page_id = ?' => $this->getDbId(),
-                'component_key = ?' => $this->getComponentKey()
+                'component_id = ?' => $this->getId()
             );
             $rows = $table->fetchAll($where);
             $this->_options = array();

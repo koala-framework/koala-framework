@@ -20,8 +20,7 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
     {
         $class = $this->_getClassFromSetting('child', 'Vpc_Abstract');
         $where = array(
-            'page_id = ?' => $this->getDbId(),
-            'component_key = ?' => $this->getComponentKey(),
+            'component_id = ?' => $this->getDbId(),
             'component_class = ?' => $class
         );
         if (!$this->showInvisible()) {

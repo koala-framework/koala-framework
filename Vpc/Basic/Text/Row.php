@@ -9,7 +9,7 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
 
         $usedChildComponentNrs = array();
 
-        $componentId = $this->page_id.$this->component_key;
+        $componentId = $this->component_id;
         if (is_null($content)) $content = $this->content;
 
         $ret = array();
@@ -161,11 +161,11 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                                           $this->_getChildComponentNrs($this->content_edit)));
         foreach ($parts as $part) {
             if (substr($part, 0, 1) == 'l') {
-                $linkAdmin->delete($this->page_id, $this->component_key . '-' . $part);
+                $linkAdmin->delete($this->component_id . '-' . $part);
             } else if (substr($part, 0, 1) == 'i') {
-                $imageAdmin->delete($this->page_id, $this->component_key . '-' . $part);
+                $imageAdmin->delete($this->component_id . '-' . $part);
             } else if (substr($part, 0, 1) == 'd') {
-                $downloadAdmin->delete($this->page_id, $this->component_key . '-' . $part);
+                $downloadAdmin->delete($this->component_id . '-' . $part);
             }
         }
     }
@@ -194,11 +194,11 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
         foreach ($oldParts as $oldPart) {
             if (!in_array($oldPart, $newParts)) {
                 if (substr($oldPart, 0, 1) == 'l') {
-                    $linkAdmin->delete($this->page_id, $this->component_key . '-' . $oldPart);
+                    $linkAdmin->delete($this->component_id . '-' . $oldPart);
                 } else if (substr($oldPart, 0, 1) == 'i') {
-                    $imageAdmin->delete($this->page_id, $this->component_key . '-' . $oldPart);
+                    $imageAdmin->delete($this->component_id . '-' . $oldPart);
                 } else if (substr($oldPart, 0, 1) == 'd') {
-                    $downloadAdmin->delete($this->page_id, $this->component_key . '-' . $oldPart);
+                    $downloadAdmin->delete($this->component_id . '-' . $oldPart);
                 }
             }
         }
@@ -275,9 +275,8 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                         $destTableName = Vpc_Abstract::getSetting($classes['image'], 'tablename');
                         $destTable = new $destTableName(array('componentClass' => $classes['image']));
                         $destRow = $destTable->createRow($srcRow->toArray());
-                        $destRow->page_id = $this->page_id;
                         $imageMaxChildComponentNr++;
-                        $destRow->component_key = $this->component_key.'-i'.$imageMaxChildComponentNr;
+                        $destRow->component_id = $this->component_id.'-i'.$imageMaxChildComponentNr;
                         $destRow->vps_upload_id = $destFileRow->id;
                         $destRow->save();
                         $dimension = $destRow->getImageDimension();
@@ -328,9 +327,8 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                 $destTableName = Vpc_Abstract::getSetting($classes['image'], 'tablename');
                 $destTable = new $destTableName(array('componentClass' => $classes['image']));
                 $destRow = $destTable->createRow();
-                $destRow->page_id = $this->page_id;
                 $imageMaxChildComponentNr++;
-                $destRow->component_key = $this->component_key.'-i'.$imageMaxChildComponentNr;
+                $destRow->component_id = $this->component_id.'-i'.$imageMaxChildComponentNr;
                 $destRow->vps_upload_id = $destFileRow->id;
                 $size = getimagesize($destFileRow->getFileSource());
                 $destRow->width = $size[0];
@@ -360,23 +358,20 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                         if ($srcLinkRow) {
                             $destRow = $table->createRow();
                             $destRow->link_class = $srcRow->link_class;
-                            $destRow->page_id = $this->page_id;
                             $linkMaxChildComponentNr++;
-                            $destRow->component_key = $this->component_key.'-l'.$linkMaxChildComponentNr;
+                            $destRow->component_id = $this->component_id.'-l'.$linkMaxChildComponentNr;
                             $destRow->save();
                             $destLinkRow = $linkTable->createRow($srcLinkRow->toArray());
-                            $destLinkRow->page_id = $this->page_id;
-                            $destLinkRow->component_key = $destRow->component_key.'-1';
+                            $destLinkRow->component_id = $destRow->component_id.'-1';
                             $destLinkRow->save();
-                            $newContent .= "<a href=\"{$destRow->page_id}{$destRow->component_key}\">";
+                            $newContent .= "<a href=\"{$destRow->component_id}\">";
                             continue;
                         }
                     }
                 }
                 $destRow = $table->createRow();
-                $destRow->page_id = $this->page_id;
                 $linkMaxChildComponentNr++;
-                $destRow->component_key = $this->component_key.'-l'.$linkMaxChildComponentNr;
+                $destRow->component_id = $this->component_id.'-l'.$linkMaxChildComponentNr;
                 $linkClasses = Vpc_Abstract::getSetting($classes['link'], 'childComponentClasses');
                 foreach ($linkClasses as $class) {
                     if ($class == 'Vpc_Basic_Link_Extern_Component' ||
@@ -391,10 +386,9 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                 $linkExternTable = new $linkExternTableName(array('componentClass'=>$destRow->link_class));
                 $row = $linkExternTable->createRow();
                 $row->target = $part['href'];
-                $row->page_id = $this->page_id;
-                $row->component_key = $destRow->component_key.'-1';
+                $row->component_id = $destRow->component_id.'-1';
                 $row->save();
-                $newContent .= "<a href=\"{$destRow->page_id}{$destRow->component_key}\">";
+                $newContent .= "<a href=\"{$destRow->component_id}\">";
 
             } else if ($part['type'] == 'invalidDownload') {
 
@@ -412,12 +406,11 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                     $destTableName = Vpc_Abstract::getSetting($classes['download'], 'tablename');
                     $destTable = new $destTableName(array('componentClass' => $classes['download']));
                     $destRow = $destTable->createRow($srcRow->toArray());
-                    $destRow->page_id = $this->page_id;
                     $downloadMaxChildComponentNr++;
-                    $destRow->component_key = $this->component_key.'-d'.$downloadMaxChildComponentNr;
+                    $destRow->component_id = $this->component_id.'-d'.$downloadMaxChildComponentNr;
                     $destRow->vps_upload_id = $destFileRow->id;
                     $destRow->save();
-                    $newContent .= "<a href=\"{$destRow->page_id}{$destRow->component_key}\">";
+                    $newContent .= "<a href=\"{$destRow->component_id}\">";
                     continue;
                 }
 

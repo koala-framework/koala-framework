@@ -17,20 +17,18 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
     protected function _getWhere()
     {
         $where = parent::_getWhere();
-        $where['page_id = ?'] = $this->pageId;
-        $where['component_key = ?'] = $this->componentKey;
+        $where['component_id = ?'] = $this->componentId;
         return $where;
     }
 
     protected function _beforeSave($row)
     {
-        $row->page_id = $this->pageId;
-        $row->component_key = $this->componentKey;
+        $row->component_id = $this->componentId;
     }
 
     public function indexAction()
     {
-        $config = Vpc_Admin::getConfig($this->class, $this->pageId, $this->componentKey);
+        $config = Vpc_Admin::getConfig($this->class, $this->componentId);
         $this->view->vpc($config);
     }
 

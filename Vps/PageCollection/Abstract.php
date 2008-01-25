@@ -137,51 +137,52 @@ abstract class Vps_PageCollection_Abstract
         $this->_pageFilenames[$id] = Zend_Filter::get($filename, 'Url', array(), 'Vps_Filter');
         $this->_pageNames[$id] = $name;
     }
-
-    public function findPage($id)
+    private function _translateId($id)
     {
-        if (is_null($id)) {
-            return $this->getHomePage();
+        foreach (Zend_Registry::get('config')->pagecollection->idTranslators as $c) {
+            $translator = new $c();
+            $id = $translator->expand($id, $this);
         }
+        return $id;
+    }
+    public function getPageById($id)
+    {
+        $id = $this->_translateId($id);
+        return $this->_getPageByIdWithoutTranslation($id);
+    }
 
-        try {
-            $parts = Vpc_Abstract::parseId($id);
-        } catch (Vpc_Exception $e) {
-            return null;
+
+    public function getComponentById($id)
+    {
+        $id = $this->_translateId($id);
+        $page = $this->_getPageByIdWithoutTranslation($id);
+        $ret = null;
+        if ($page) {
+            $ret = $page->getComponentById($id);
         }
+        return $ret;
+    }
+
+    private function _getPageByIdWithoutTranslation($id)
+    {
+        $parts = Vpc_Abstract::parseId($id);
         $id = $parts['pageId'];
         if (!isset($this->_pages[$id])) {
-            $currentId = $parts['dbId'];
-            $page = $this->addPage($currentId);
+            $page = $this->addPage(array_shift($parts['pageKeys']));
             if ($page != null) {
-                foreach ($parts['pageKeys'] as $currentPageKey => $pageKey) {
-                    $this->_pages[$currentId]->getPageFactory()
-                                             ->getChildPageById($pageKey);
-                    $currentId = $parts['dbId'] . $currentPageKey;
+                foreach ($parts['pageKeys'] as $pageKey) {
+                    $page = $page->getPageFactory()->getChildPageById($pageKey);
                 }
             }
         }
-        if (isset($this->_pages[$id])) {
-            return $this->_pages[$id];
-        } else {
-            return null;
-        }
-    }
-
-    public function findComponent($id)
-    {
-        $page = $this->findPage($id);
-        if ($page) {
-            return $page->findComponent($id);
-        }
-        return null;
+        return $page;
     }
 
     public function getHomePage()
     {
         if (!isset($this->_homeId)) {
             $data = $this->_dao->getTable('Vps_Dao_Pages')->retrieveHomePageData();
-            $page = $this->findPage($data['id']);
+            $page = $this->getPageById($data['id']);
             $this->_homeId = $page->getPageId();
         }
         return $this->_pages[$this->_homeId];
@@ -240,16 +241,16 @@ abstract class Vps_PageCollection_Abstract
         return isset($this->_pageFilenames[$page->getPageId()]) ? $this->_pageFilenames[$page->getPageId()] : '';
     }
 
-    abstract public function findPageByPath($path);
+    abstract public function getPageByPath($path);
 
-    public function findComponentByClass($class, $startPage = null)
+    public function getComponentByClass($class, $startPage = null)
     {
-        $ids = $this->_dao->getTable('Vps_Dao_Pages')->findPagesByClass($class);
+        $ids = $this->_dao->getTable('Vps_Dao_Pages')->getPagesByClass($class);
         $id = (int)array_shift($ids);
         if ($id > 0) {
             $page = $this->findPage($id);
             if ($page) {
-                $component = $page->findComponentByClass($class);
+                $component = $page->getComponentByClass($class);
                 if ($component) {
                     return $component;
                 }

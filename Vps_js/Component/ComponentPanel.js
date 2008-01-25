@@ -14,7 +14,7 @@ Vps.Component.ComponentPanel = Ext.extend(Ext.Panel, {
     loadComponent: function(data) {
         Ext.Ajax.request({
             url: '/admin/component/edit/' + data.componentClass + '/jsonIndex',
-            params: { page_id: data.pageId, component_key: data.componentKey },
+            params: { component_id: data.componentId },
             success: function(r, options, response) {
                 var cls = eval(response['class']);
                 if (cls) {
@@ -44,8 +44,7 @@ Vps.Component.ComponentPanel = Ext.extend(Ext.Panel, {
         for (var x=0; x<count; x++){
             var item = toolbar.items.itemAt(x);
             if (item.params != undefined &&
-                item.params.pageId == data.pageId &&
-                item.params.componentKey == data.componentKey
+                item.params.componentId == data.componentId
             ) {
                 del = x > 0 ? x - 1 : x;
                 x = count;

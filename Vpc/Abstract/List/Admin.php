@@ -22,8 +22,7 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
         if (!$this->_tableExists('vpc_composite_list')) {
             $sql = 'CREATE TABLE IF NOT EXISTS `vpc_composite_list` (
               `id` int(10) unsigned NOT NULL auto_increment,
-              `page_id` int(10) unsigned NOT NULL,
-              `component_key` varchar(255) NOT NULL,
+              `component_id` varchar(255) NOT NULL,
               `component_class` varchar(255) NOT NULL,
               `pos` tinyint(4) NOT NULL,
               `visible` tinyint(4) NOT NULL,
@@ -33,9 +32,9 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
         }
     }
 
-    public function delete($pageId, $componentKey)
+    public function delete($componentId)
     {
-        foreach ($this->_getRows($pageId, $componentKey) as $row) {
+        foreach ($this->_getRows($componentId) as $row) {
             $row->delete();
         }
     }

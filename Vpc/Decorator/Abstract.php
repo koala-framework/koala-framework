@@ -105,21 +105,21 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
     /**
      * Schleift die Methode auf auf dekorierte Komponente durch.
      */
-    public function findComponent($id)
+    public function getComponentById($id)
     {
-        return $this->_component->findComponent($id);
+        return $this->_component->getComponent($id);
     }
     
     /**
      * Schleift die Methode auf auf dekorierte Komponente durch, findet
      * aber auch den Decorator selbst.
      */
-    public function findComponentByClass($class)
+    public function getComponentByClass($class)
     {
         if (get_class($this) == $class) {
             return $this;
         } else {
-            return $this->_component->findComponentByClass($class);
+            return $this->_component->getComponentByClass($class);
         }
     }
     

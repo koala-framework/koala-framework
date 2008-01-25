@@ -20,29 +20,9 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
 
         $table = $this->getTable();
 
-        if (is_string($id)) {
-            $id = Vpc_Abstract::parseId($id);
-        }
-        if (isset($id['dbId'])) $id['page_id'] = $id['dbId'];
-        if (isset($id['componentKey'])) $id['component_key'] = $id['componentKey'];
-        if (isset($id['page_id']) && $id['page_id']!==null) {
-            $info = $table->info();
-            if (sizeof($info['primary']) == 1) {
-                $this->_row = $table->find($id['page_id'])->current();
-                $id = array('page_id' => $id['page_id']);
-            } else {
-                $this->_row = $table->find($id['page_id'], $id['component_key'])->current();
-                $id = array(
-                    'page_id' => $id['page_id'],
-                    'component_key' => $id['component_key']
-                );
-            }
-            if (!$this->_row) {
-                $this->_row = $table->createRow($id);
-            }
-        } else {
-            $id = 0;
-            $this->_row = $table->createRow();
+        $this->_row = $table->find($id)->current();
+        if (!$this->_row) {
+            $this->_row = $table->createRow(array('component_id' => $id));
         }
         parent::setId($id);
     }
@@ -77,10 +57,9 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
     public function save($parentRow, $postData)
     {
         $row = $this->getRow();
-        if (!$row->page_id) {
+        if (!$row->component_id) {
             $id = $this->_getComponentIdFromParentRow($parentRow);
-            $row->page_id = $id['page_id'];
-            $row->component_key = $id['component_key'];
+            $row->component_id = $id['component_id'];
         }
         return parent::save($parentRow, $postData);
     }

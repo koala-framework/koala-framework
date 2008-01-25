@@ -16,7 +16,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             ->setData(new Vps_Auto_Data_Vpc_ComponentName());
 
         $this->_columns->add(new Vps_Auto_Grid_Column('preview', 'Preview', 500))
-            ->setData(new Vps_Auto_Data_Vpc_Frontend($this->class, $this->pageId . $this->componentKey))
+            ->setData(new Vps_Auto_Data_Vpc_Frontend($this->class, $this->componentId))
             ->setRenderer('component');
         $this->_columns->add(new Vps_Auto_Grid_Column_Button('edit', ' ', 20))
             ->setButtonIcon('/assets/silkicons/table_edit.png')
@@ -40,12 +40,10 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         if (array_search($class, $this->_components)) {
             $admin = Vpc_Admin::getInstance($class);
             if ($admin) $admin->setup();
-            $insert['page_id'] = $this->pageId;
-            $insert['component_key'] = $this->componentKey;
+            $insert['component_id'] = $this->componentId;
             $insert['component_class'] = $class;
             $id = $this->_table->insert($insert);
-            $where['page_id = ?'] = $this->pageId;
-            $where['component_key = ?'] = $this->componentKey;
+            $where['component_id = ?'] = $this->componentId;
             $this->_table->numberize($id, 'pos', null, $where);
 
             // Hack für weiterleiten auf Edit-Seite

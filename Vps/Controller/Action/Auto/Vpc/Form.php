@@ -7,9 +7,7 @@ abstract class Vps_Controller_Action_Auto_Vpc_Form extends Vps_Controller_Action
     public function preDispatch()
     {
         if (!isset($this->_form)) {
-            $this->_form = new $this->_formName($this->class,
-                        array('page_id'=> $this->pageId,
-                              'component_key'=> $this->componentKey));
+            $this->_form = new $this->_formName($this->class, $this->componentId);
         }
         $this->_form->setBodyStyle('padding: 10px');
         parent::preDispatch();
@@ -17,7 +15,7 @@ abstract class Vps_Controller_Action_Auto_Vpc_Form extends Vps_Controller_Action
 
     public function indexAction()
     {
-        $config = Vpc_Admin::getConfig($this->class, $this->pageId, $this->componentKey);
+        $config = Vpc_Admin::getConfig($this->class, $this->componentId);
         $this->view->vpc($config);
     }
 

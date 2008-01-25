@@ -43,11 +43,11 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         // TODO: abchecken, ob es filename nicht doppelt gibt auf aktueller ebene
     }
 
-    public function findPageByPath($path)
+    public function getPageByPath($path)
     {
         $ids = $this->getIdsForPath($path);
         if ($ids == array()) return null;
-        $page = $this->findPage(array_pop($ids));
+        $page = $this->getPageById(array_pop($ids));
         $this->_currentPage = $page;
         return $page;
     }
@@ -63,7 +63,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         } else { // Page gibt es nicht, wird erstellt
             $data = $this->_dao->getTable('Vps_Dao_Pages')->retrieveParentPageData($id);
             if ($data) {
-                $parentPage = $this->findPage($data['id']);
+                $parentPage = $this->getPage($data['id']);
                 $this->setParentPage($page, $parentPage);
                 return $parentPage;
             }
@@ -133,11 +133,11 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         }
     }
 
-    public function findComponentByClass($class, Vpc_Interface $startPage = null)
+    public function getComponentByClass($class, Vpc_Interface $startPage = null)
     {
         $rowset = $this->_dao->getTable('Vps_Dao_Pages')->fetchAll("component_class = '$class'");
         if ($rowset->count() > 0) {
-            $startPage = $this->findPage($rowset->current()->id);
+            $startPage = $this->getPageById($rowset->current()->id);
         }
 
         $table = $this->_dao->getTable('Vpc_Paragraphs_Model',
@@ -145,18 +145,18 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
                     array('componentClass'=>'Vpc_Paragraphs_Component'));
         $rowset = $table->fetchAll("component_class = '$class'");
         if ($rowset->count() > 0) {
-            $startPage = $this->findPage($rowset->current()->page_id);
+            $startPage = $this->getPageById($rowset->current()->component_id);
         }
 
         if ($startPage) {
-            $component = $startPage->findComponentByClass($class);
+            $component = $startPage->getComponentByClass($class);
             if ($component) {
                 return $component;
             }
         }
 
         foreach ($this->getChildPages($startPage) as $page) {
-            $component = $this->findComponentByClass($class, $page);
+            $component = $this->getComponentByClass($class, $page);
             if ($component != null) {
                 return $component;
             }

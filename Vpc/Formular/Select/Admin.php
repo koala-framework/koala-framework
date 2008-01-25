@@ -12,13 +12,12 @@ class Vpc_Formular_Select_Admin extends Vpc_Admin
         if (!in_array($tablename, $this->_db->listTables())) {
             $this->_db->query("CREATE TABLE `$tablename` (
                 `id` int(11) NOT NULL auto_increment,
-                `page_id` int(11) NOT NULL,
-                `component_key` varchar(255) NOT NULL,
+                `component_id` varchar(255) NOT NULL,
                 `pos` smallint(6) NOT NULL,
                 `text` varchar(255) NOT NULL,
                 `checked` tinyint(4) NOT NULL,
                 PRIMARY KEY  (`id`),
-                KEY `KEY` (`page_id`,`component_key`)
+                KEY `KEY` (`component_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;");
         }
     }
@@ -26,8 +25,7 @@ class Vpc_Formular_Select_Admin extends Vpc_Admin
     public function deleteEntry($component)
     {
         $where = array();
-        $where['page_id = ?'] = $component->getDbId();
-        $where['component_key = ?'] = $component->getComponentKey();
+        $where['component_id = ?'] = $component->getId();
         $table = new Vpc_Formular_Select_Model(array('db'=>$this->_db));
         $table->delete($where);
         $table = new Vpc_Formular_Select_OptionsModel(array('db'=>$this->_db));

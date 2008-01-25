@@ -23,8 +23,7 @@ class Vpc_Table extends Vps_Db_Table
 
     public function findRow($id)
     {
-        $parts = Vpc_Abstract::parseId($id);
-        return $this->find($parts['dbId'], $parts['componentKey'])->current();
+        return $this->find($id)->current();
     }
     public function createRow(array $data = array())
     {
