@@ -281,7 +281,7 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                         $destRow->vps_upload_id = $destFileRow->id;
                         $destRow->save();
                         $dimension = $destRow->getImageDimension();
-                        $newContent .= "<img src=\"".$destRow->getImageUrl()."\" ".
+                        $newContent .= "<img src=\"".$destRow->getFileUrl()."\" ".
                                     "width=\"$dimension[width]\" ".
                                     "height=\"$dimension[height]\" />";
                         continue;

@@ -24,7 +24,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
         $size = $this->_getRow()->getImageDimension();
 
         $return = parent::getTemplateVars();
-        $return['url'] = $this->_getRow()->getImageUrl();
+        $return['url'] = $this->_getRow()->getFileUrl();
         $return['width'] = $size['width'];
         $return['height'] = $size['height'];
         return $return;
