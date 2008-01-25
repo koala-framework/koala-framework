@@ -3,6 +3,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 {
     protected $_cacheImages = array();
     const FILE_PASSWORD = 'l4Gx8SFe';
+    const FILE_PASSWORD_DOWNLOAD = 'j3yjEdv1';
 
     /**
      * Gibt einen von Sonderzeichen befreiten und eindeutigen String zurück.
@@ -116,6 +117,10 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         $rule = $this->_getRule($rule);
         $fileRow = $this->findParentRow('Vps_Dao_File', $rule);
 
+        if (!$fileRow) {
+            return null;
+        }
+
         $uploadDir = Vps_Dao_Row_File::getUploadDir();
         $uploadId = $fileRow->id;
         $class = get_class($this->getTable());
@@ -142,7 +147,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         return $target;
     }
 
-    public function getFileUrl($rule = null, $type = 'default', $filename = null, $addRandom = false)
+    public function getFileUrl($rule = null, $type = 'default', $filename = null, $addRandom = false, $encryption = self::FILE_PASSWORD)
     {
         $rule = $this->_getRule($rule);
         $fileRow = $this->findParentRow('Vps_Dao_File', $rule);
@@ -156,7 +161,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         }
         $id = $this->_getIdString();
         $extension = $fileRow->extension;
-        $checksum = md5(self::FILE_PASSWORD . $class . $id . $rule . $type);
+        $checksum = md5($encryption . $class . $id . $rule . $type);
         $random = $addRandom ? '?' . uniqid() : '';
         if (!$filename || $filename == '') {
             $filename = $fileRow->filename;
@@ -167,7 +172,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     public function getFileSize($rule = null, $type = 'default')
     {
         $target = $this->getFileSource($rule, $type);
-        if (is_file($file)) {
+        if (is_file($target)) {
             return filesize($target);
         }
         return null;

@@ -18,6 +18,7 @@ class Vps_Controller_Action_Media_MediaController extends Vps_Controller_Action
 {
     public function passwordAction()
     {
+        $download = false;
         $checksum = md5(
             Vps_Db_Table_Row::FILE_PASSWORD .
             $this->_getParam('table') .
@@ -25,6 +26,16 @@ class Vps_Controller_Action_Media_MediaController extends Vps_Controller_Action
             $this->_getParam('rule') .
             $this->_getParam('type')
         );
+        if ($checksum != $this->_getParam('checksum')) {
+            $checksum = md5(
+                Vps_Db_Table_Row::FILE_PASSWORD_DOWNLOAD .
+                $this->_getParam('table') .
+                $this->_getParam('id') .
+                $this->_getParam('rule') .
+                $this->_getParam('type')
+            );
+            $download = true;
+        }
         if ($checksum != $this->_getParam('checksum')) {
             throw new Vps_Controller_Action_Web_Exception('Access to file not allowed.');
         }
@@ -51,14 +62,18 @@ class Vps_Controller_Action_Media_MediaController extends Vps_Controller_Action
         }
         $target = $row->getFileSource($rule, $type);
 
-        $this->_showFile($target, $fileRow);
+        $this->_showFile($target, $fileRow, $download);
     }
 
-    protected final function _showFile($target, Vps_Dao_Row_File $row)
+    protected final function _showFile($target, Vps_Dao_Row_File $row, $download = false)
     {
         if (is_file($target)) {
             $response = $this->getResponse();
             $response->setHeader("Content-type", $row->mime_type);
+            if ($download) {
+                $filename = $this->_getParam('filename');
+                $response->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
+            }
             $response->setBody(file_get_contents($target));
             $this->_helper->viewRenderer->setNoRender();
         } else {
