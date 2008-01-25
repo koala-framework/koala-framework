@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Details_Component extends Vpc_Paragraphs_Component implements Vpc_News_Interface
+class Vpc_News_Details_Component extends Vpc_Paragraphs_Component implements Vpc_News_Interface_Component
 {
     public $row;
     public $news = 'true'; // Wird benötigt um Endlosschleife bei getSettings zu vermeiden

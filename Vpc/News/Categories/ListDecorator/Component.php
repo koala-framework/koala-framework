@@ -6,7 +6,7 @@ class Vpc_News_Categories_ListDecorator_Component extends Vpc_Decorator_Abstract
     {
         $ret = null;
 
-        if ($component instanceof Vpc_News_Interface) {
+        if ($component instanceof Vpc_News_Interface_Component) {
             $ret = $component;
         }
 
@@ -14,7 +14,7 @@ class Vpc_News_Categories_ListDecorator_Component extends Vpc_Decorator_Abstract
             $childComps = $component->getChildComponents();
             if ($childComps) {
                 foreach ($childComps as $childComp) {
-                    if ($childComp instanceof Vpc_News_Interface) {
+                    if ($childComp instanceof Vpc_News_Interface_Component) {
                         $ret = $childComp;
                         break;
                     }

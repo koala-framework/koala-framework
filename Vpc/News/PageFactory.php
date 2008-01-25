@@ -11,6 +11,10 @@ class Vpc_News_PageFactory extends Vpc_Abstract_PageFactory
                     throw new Vps_Exception('News category pageFactory not set (key: '.$key.')');
                 }
                 $this->_additionalFactories[$key] = new $category['pageFactory']($this->_component);
+                if ($this->_additionalFactories[$key] instanceof Vpc_News_Interface_PageFactoryCategory) {
+                    $childComponentClasses = Vpc_Abstract::getSetting(get_class($this->_component), 'childComponentClasses');
+                    $this->_additionalFactories[$key]->setComponentClass($childComponentClasses[$key]);
+                }
             }
         }
         $this->_additionalFactories['details'] = new Vpc_News_PageFactoryDetails($this->_component);
