@@ -3,12 +3,6 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row
 {
     private $_deleteFileRow;
 
-    public function getImageUrl($type = 'default', $addRandom = false)
-    {
-        $filename = $this->filename != '' ? $this->filename : 'unnamed';
-        return $this->getFileUrl(null, $type, $filename, $addRandom);
-    }
-
     private function _getScaleSettings()
     {
         $ret['scale'] = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'scale');
@@ -54,7 +48,7 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row
     public function getFileUrl($rule = null, $type = 'default', $filename = null, $addRandom = false)
     {
         if ($this->filename != '') {
-            //$filename = $this->filename;
+            $filename = $this->filename;
         }
         return parent::getFileUrl($rule, $type, $filename, $addRandom);
     }
