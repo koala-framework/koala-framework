@@ -85,7 +85,6 @@ abstract class Vps_PageCollection_Abstract
         if ($filename == '') {
             throw new Vps_PageCollection_Exception("Pagename must not be empty. Probably Component is not a Page.");
         }
-
         $page->setPageCollection($this);
         $id = $page->getPageId();
         if (isset($this->_pages[$id])) {
@@ -137,6 +136,7 @@ abstract class Vps_PageCollection_Abstract
         $this->_pageFilenames[$id] = Zend_Filter::get($filename, 'Url', array(), 'Vps_Filter');
         $this->_pageNames[$id] = $name;
     }
+
     private function _translateId($id)
     {
         foreach (Zend_Registry::get('config')->pagecollection->idTranslators as $c) {
@@ -145,6 +145,7 @@ abstract class Vps_PageCollection_Abstract
         }
         return $id;
     }
+
     public function getPageById($id)
     {
         $id = $this->_translateId($id);
@@ -167,6 +168,7 @@ abstract class Vps_PageCollection_Abstract
     {
         $parts = Vpc_Abstract::parseId($id);
         $id = $parts['pageId'];
+        $page = null;
         if (!isset($this->_pages[$id])) {
             $page = $this->addPage(array_shift($parts['pageKeys']));
             if ($page != null) {
@@ -175,7 +177,8 @@ abstract class Vps_PageCollection_Abstract
                 }
             }
         }
-        return $page;
+
+        return $this->_pages[$id];
     }
 
     public function getHomePage()
