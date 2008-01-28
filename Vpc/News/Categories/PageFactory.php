@@ -8,8 +8,7 @@ class Vpc_News_Categories_PageFactory extends Vpc_Abstract_TablePageFactory
     protected function _getWhere()
     {
         $where = array(
-            'page_id = ?' => $this->_component->getDbId(),
-            'component_key = ?' => $this->_component->getCurrentComponentKey()
+            'component_id = ?' => $this->_component->getDbId(),
         );
         if (!$this->_showInvisible()) {
             $where['visible = 1'] = '';

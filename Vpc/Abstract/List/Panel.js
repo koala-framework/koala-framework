@@ -27,9 +27,9 @@ Vpc.Abstract.List.Panel = Ext.extend(Ext.Panel,
         }, this);
 
         this.grid.on('rowselect', function(model, rowIndex, selected) {
-            var params = {};
-            params.page_id = this.baseParams.page_id;
-            params.component_key = this.baseParams.component_key + '-' + selected.data.id;
+            var params = {
+                component_id : this.baseParams.component_id + '-' + selected.data.id
+            };
             this.childPanel.load(params);
             this.childPanel.enable();
         }, this);

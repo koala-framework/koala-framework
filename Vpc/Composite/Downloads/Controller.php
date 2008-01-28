@@ -9,7 +9,7 @@ class Vpc_Composite_Downloads_Controller extends Vpc_Abstract_List_Controller
             'Vpc_Basic_DownloadTag_Model',
             'filename',
             'Vpc_Basic_DownloadTag_Component',
-            '-tag'
+            'tag'
         );
 
         $this->_columns->add(new Vps_Auto_Grid_Column($classes['child'], 'Filename', 100))

@@ -33,8 +33,7 @@ class Vpc_News_Categories_Component extends Vpc_Abstract implements Vpc_News_Int
         $componentKeyFirst = $this->getCurrentComponentKey();
 
         $where = array(
-            'page_id = ?' => $this->getDbId(),
-            'component_key = ?' => $componentKeyFirst
+            'component_id = ?' => $this->getDbId(),
         );
         $where['visible = 1'] = '';
 
