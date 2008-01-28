@@ -233,6 +233,12 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return (string)$this->_id['currentPageKey'];
     }
 
+    public function getPageKeys()
+    {
+        return $this->_id['pageKeys'];
+    }
+
+
     /**
      * Durchsucht die aktuelle Komponente und deren Unterkomponenten nach der
      * Komponente mit der entsprechenden id.
