@@ -211,7 +211,7 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                     'indent'         => true,
                     'output-xhtml'   => true,
                     'clean'          => false,
-                    'wrap'           => 200,
+                    'wrap'           => 86,
                     'doctype'        => 'omit',
                     'drop-proprietary-attributes' => true,
                     'drop-font-tags' => true,
@@ -224,6 +224,8 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                     'join-classes'   => false,
                     'logical-emphasis' => true,
                     'lower-literals' => true,
+        			'literal-attributes' => false,
+                    'quote-nbsp'     => true,
                     'output-bom'     => false,
                     'char-encoding'  =>'utf8',
                     'newline'        =>'LF',
@@ -232,18 +234,19 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
         $enableTidy = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableTidy');
         if (class_exists('tidy') && $enableTidy) {
 
+
             $tidy = new tidy;
+            $html = str_replace('&nbsp;', '#nbsp#', $html); //einstellungen oben funktionieren nicht richtig
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
             $parser = new Vpc_Basic_Text_Parser();
             $parser->readCatalog("<BODY>".$html."</BODY>");
             $html = $parser->getFinalHtml();
-
-
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
+            $html = str_replace('#nbsp#', '&nbsp;', $html);
 
         }
 
