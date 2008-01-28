@@ -171,16 +171,23 @@ abstract class Vps_PageCollection_Abstract
         $parts = Vpc_Abstract::parseId($id);
         $id = $parts['pageId'];
         $page = null;
-        if (!isset($this->_pages[$id])) {
+        if ($id && !isset($this->_pages[$id])) {
             $page = $this->addPage(array_shift($parts['pageKeys']));
-            if ($page != null) {
+            if ($page) {
                 foreach ($parts['pageKeys'] as $pageKey) {
                     $page = $page->getPageFactory()->getChildPageById($pageKey);
                 }
             }
+            if ($page) {
+                $this->_pages[$id] = $page;
+            }
         }
 
-        return $this->_pages[$id];
+        if (isset($this->_pages[$id])) {
+            return $this->_pages[$id];
+        }
+
+        return null;
     }
 
     public function getHomePage()
@@ -253,7 +260,7 @@ abstract class Vps_PageCollection_Abstract
         $ids = $this->_dao->getTable('Vps_Dao_Pages')->getPagesByClass($class);
         $id = (int)array_shift($ids);
         if ($id > 0) {
-            $page = $this->findPage($id);
+            $page = $this->getPageById($id);
             if ($page) {
                 $component = $page->getComponentByClass($class);
                 if ($component) {

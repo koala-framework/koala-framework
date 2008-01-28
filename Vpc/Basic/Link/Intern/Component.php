@@ -18,7 +18,7 @@ class Vpc_Basic_Link_Intern_Component extends Vpc_Basic_Link_Component
     public function getTemplateVars()
     {
         $target = $this->_getRow()->target;
-        $page = $this->getPageCollection()->findPage($target);
+        $page = $this->getPageCollection()->getPageById($target);
         if ($page) {
             $href = $this->getPageCollection()->getUrl($page);
         } else {

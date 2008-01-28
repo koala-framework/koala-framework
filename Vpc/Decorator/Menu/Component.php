@@ -31,7 +31,7 @@ class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Menu_Abstract
         $level = 0;
         $currentPageIds = $this->_getCurrentPageIds();
         $page = $pc->getPageById(array_pop($currentPageIds));
-        while (count($currentPageIds) && $level < $this->_getSetting('levels')) {
+        while ($page && $level < $this->_getSetting('levels')) {
             $pages = $pc->getMenuChildPages($page);
             $return['submenus'][$level] = $this->_getMenuData($pages);
             $page = $pc->getPageById(array_pop($currentPageIds));

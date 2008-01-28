@@ -63,7 +63,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         } else { // Page gibt es nicht, wird erstellt
             $data = $this->_dao->getTable('Vps_Dao_Pages')->retrieveParentPageData($id);
             if ($data) {
-                $parentPage = $this->getPage($data['id']);
+                $parentPage = $this->getPageById($data['id']);
                 $this->setParentPage($page, $parentPage);
                 return $parentPage;
             }
