@@ -8,6 +8,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
 {
     protected $_dao;
     private $_id;
+    private $_dbId;
     private $_pageCollection;
     private $_parentComponent;
 
@@ -116,15 +117,16 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param int Für Unterscheidung des Komponenteninhalts
      * @return Vpc_Abstract Komponente
      */
-    public function createComponent($class, $suffix = '')
+    public function createComponent($class, $suffix)
     {
         $id = $this->getId();
-        if ($suffix != '') {
-            $id .= '-' . $suffix;
-        }
+        $id .= '-' . $suffix;
 
         // Komponente erstellen
         $component = self::_createInstance($this->getDao(), $class, $id, $this->getPageCollection());
+
+        $component->setParentComponent($this);
+        $component->setDbId($this->getDbId().'-'.$suffix);
 
         // Erstellte Komponente hinzufügen
         return $component;
@@ -201,9 +203,17 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         $c = Vpc_Admin::getComponentFile($this, 'IdTranslator', 'php', true);
         $translator = new $c();
-        return $translator->collapse($this->getId());
+        if (isset($this->_dbId)) {
+            $id = $this->_dbId;
+        } else {
+            $id = $this->getId();
+        }
+        return $translator->collapse($id);
     }
-
+    public function setDbId($id)
+    {
+        $this->_dbId = $id;
+    }
     /**
      * @return string pageId der Komponente.
      * @see parsePageId

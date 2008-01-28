@@ -139,7 +139,9 @@ abstract class Vps_PageCollection_Abstract
 
     private function _translateId($id)
     {
-        foreach (Zend_Registry::get('config')->pagecollection->idTranslators as $c) {
+        $translators = Zend_Registry::get('config')->pagecollection->idTranslators;
+        if (!$translators) return $id;
+        foreach ($translators as $c) {
             $translator = new $c();
             $id = $translator->expand($id, $this);
         }
