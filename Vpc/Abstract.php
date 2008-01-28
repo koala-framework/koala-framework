@@ -53,8 +53,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
             $this->_id = $this->parseId($id);
         }
 
-
-
         $this->_init();
 
         if (Zend_Registry::isRegistered('infolog')) {
