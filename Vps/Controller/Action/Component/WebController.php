@@ -12,7 +12,7 @@ class Vps_Controller_Action_Component_WebController extends Vps_Controller_Actio
             $url = $this->getRequest()->getParam('url');
             if ($pageId != '') {
                 $pageCollection = Vps_PageCollection_Abstract::getInstance();
-                $page = $pageCollection->findPage($pageId);
+                $page = $pageCollection->getPageById($pageId);
                 $path = $pageCollection->getUrl($page);
                 $acl->add(new Vps_Acl_Resource('page', 'Aktuelle Seite betrachten', $path));
                 $acl->allow('admin', 'page');

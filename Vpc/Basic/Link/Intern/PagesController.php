@@ -21,7 +21,7 @@ class Vpc_Basic_Link_Intern_PagesController extends Vps_Controller_Action_Compon
             $openedId = $this->_getParam('openedId');
             while ($openedId) {
                 $this->_openedNodes[$openedId] = true;
-                $page = $this->_pc->findPage($openedId);
+                $page = $this->_pc->getPageById($openedId);
                 if ($page) {
                     $page = $this->_pc->getParentPage($page);
                 }
@@ -33,7 +33,7 @@ class Vpc_Basic_Link_Intern_PagesController extends Vps_Controller_Action_Compon
                 $page = null;
             } else {
                 $type = null;
-                $page = $this->_pc->findPage($id);
+                $page = $this->_pc->getPageById($id);
             }
 
             $this->_pc->overwriteGetUrl = false;
