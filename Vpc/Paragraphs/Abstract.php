@@ -18,7 +18,7 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
                 'tablename' => 'Vpc_Paragraphs_Model'
             ));
             $settings['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
-            $settings['childComponentClasses'] = 
+            $settings['childComponentClasses'] =
                 Vpc_Admin::getInstance('Vpc_Paragraphs_Abstract')
                 ->getAvailableComponents('Vpc');
         }
