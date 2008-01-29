@@ -71,8 +71,22 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         this.store.newRecords = []; //hier werden neue records gespeichert die nicht dirty sind
         this.store.on('update', function(store, record, operation) {
             if (operation == Ext.data.Record.EDIT) {
-                this.getAction('save').enable();
+                if (this.isDirty()) {
+                    this.getAction('save').enable();
+                } else {
+                    this.getAction('save').disable();
+                }
             }
+        }, this);
+        this.on('aftereditcomplete', function() {
+            if (this.isDirty()) {
+                this.getAction('save').enable();
+            } else {
+                this.getAction('save').disable();
+            }
+        }, this);
+        this.on('beforeedit', function() {
+            this.getAction('save').enable();
         }, this);
         this.store.on('add', function(store, records, index) {
             this.getAction('save').enable();
@@ -96,9 +110,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         this.relayEvents(this.store, ['load']);
         this.relayEvents(gridConfig.selModel, ['selectionchange', 'rowselect', 'beforerowselect']);
 
-        gridConfig.selModel.on('rowselect', function(selData, gridRow, currentRow) {
-            this.getAction('delete').enable();
-            this.getAction('duplicate').enable();
+        gridConfig.selModel.on('selectionchange', function() {
+            if (this.getSelected()) {
+                this.getAction('delete').enable();
+                this.getAction('duplicate').enable();
+            } else {
+                this.getAction('delete').disable();
+                this.getAction('duplicate').disable();
+            }
         }, this);
 
         gridConfig.selModel.on('beforerowselect', function(selModel, rowIndex, keepExisting, record) {
@@ -385,6 +404,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         }
 
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
+        this.relayEvents(this.grid, ['rowdblclick', 'beforeedit', 'aftereditcomplete']);
 
         this.grid.on('cellclick', function(grid, rowIndex, columnIndex, e) {
             var col = grid.getColumnModel().config[columnIndex];
@@ -408,8 +428,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         this.doLayout();
 
         this.fireEvent('rendergrid', this.grid);
-
-        this.relayEvents(this.grid, ['rowdblclick']);
 
         if (result.rows) {
             this.store.loadData(result);
@@ -584,6 +602,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             url: this.controllerUrl+'/jsonSave',
             params: params,
             success: function(response, options, r) {
+                //geänderte und neue zurücksetzen, damit isDirty false ist
+                this.store.modified = [];
+                this.store.newRecords = [];
                 this.reload();
                 this.fireEvent('datachange', r);
                 if (cb.success) {
@@ -609,27 +630,45 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
     onAdd : function()
     {
         if (this.editDialog) {
+            //wenn EditDialog hat diesen öffnen
             this.editDialog.showAdd();
         } else {
-            var data = {};
-            for(var i=0; i<this.store.recordType.prototype.fields.items.length; i++) {
-                data[this.store.recordType.prototype.fields.items[i].name] = this.store.recordType.prototype.fields.items[i].defaultValue;
-            }
-            var record = new this.store.recordType(data);
-            for(var i=0; i<this.getGrid().getColumnModel().getColumnCount(); i++) {
-                if(!this.getGrid().getColumnModel().isHidden(i) && this.getGrid().getColumnModel().isCellEditable(i, 0)) {
-                    record.dirty = true;
-                    record.modified = {};
-                    record.modified[record.fields.items[i].name] = '';
-                    break;
+            //im ersten form-binding hinzufügen
+            var foundForm = false;
+            this.bindings.each(function(b) {
+                if (b.item instanceof Vps.Auto.FormPanel) {
+                    b.item.onAdd();
+                    //wenn  form in einem tab, die form anzeigen
+                    if (b.item.ownerCt instanceof Ext.TabPanel) {
+                        b.item.ownerCt.setActiveTab(b.item);
+                    }
+                    foundForm = true;
+                    return false;
                 }
-            }
+            }, this);
 
-            this.getGrid().stopEditing();
-            this.store.insert(0, record);
-            this.store.newRecords.push(record);
-            if (record.dirty) {
-                this.getGrid().startEditing(0, i);
+            if (!foundForm) {
+                //sonst mittels inline-editing einen neuen datensatz anlegen
+                var data = {};
+                for(var i=0; i<this.store.recordType.prototype.fields.items.length; i++) {
+                    data[this.store.recordType.prototype.fields.items[i].name] = this.store.recordType.prototype.fields.items[i].defaultValue;
+                }
+                var record = new this.store.recordType(data);
+                for(var i=0; i<this.getGrid().getColumnModel().getColumnCount(); i++) {
+                    if(!this.getGrid().getColumnModel().isHidden(i) && this.getGrid().getColumnModel().isCellEditable(i, 0)) {
+                        record.dirty = true;
+                        record.modified = {};
+                        record.modified[record.fields.items[i].name] = '';
+                        break;
+                    }
+                }
+
+                this.getGrid().stopEditing();
+                this.store.insert(0, record);
+                this.store.newRecords.push(record);
+                if (record.dirty) {
+                    this.getGrid().startEditing(0, i);
+                }
             }
         }
 		this.fireEvent('addaction', this);
