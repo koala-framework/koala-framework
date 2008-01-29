@@ -67,7 +67,11 @@ class Vps_Auto_Grid_Column implements Vps_Collection_Item_Interface
         foreach ($ret as $k=>$i) {
             if (is_object($i)) {
                 unset($ret[$k]);
-                $ret[$k] = $i->getMetaData();
+                if ($i instanceof Vps_Asset) {
+                    $ret[$k] = $i->__toString();
+                } else {
+                    $ret[$k] = $i->getMetaData();
+                }
             }
         }
 

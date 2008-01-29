@@ -21,11 +21,10 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
                 }
 
                 if (isset($menu['menuConfig']['icon'])) {
-                    try {
-                        $menu['menuConfig']['icon'] = Vps_Assets_Loader::getAssetPath(substr($menu['menuConfig']['icon'], 8), $assetPaths);
-                    } catch (Vps_Assets_NotFoundException $e) {
-                        $menu['menuConfig']['icon'] = '/assets/silkicons/'.$menu['menuConfig']['icon'];
+                    if (is_string($menu['menuConfig']['icon'])) {
+                        $menu['menuConfig']['icon'] = new Vps_Asset($menu['menuConfig']['icon']);
                     }
+                    $menu['menuConfig']['icon'] = $menu['menuConfig']['icon']->__toString();
                 }
 
                 if ($resource instanceof Vps_Acl_Resource_MenuDropdown) {

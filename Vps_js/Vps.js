@@ -10,8 +10,13 @@ Ext.namespace(
 
 Ext.applyIf(Array.prototype, {
 
-    //to use array.each directly
+    //deprecated! -> forEach (ist auch ein JS-Standard!)
     each : function(fn, scope){
+        Ext.each(this, fn, scope);
+    },
+
+    //to use array.forEach directly
+    forEach : function(fn, scope){
         Ext.each(this, fn, scope);
     },
 

@@ -1,34 +1,44 @@
-Vps.Component.ComponentPanel = Ext.extend(Ext.Panel, {
-
+Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
+    layout: 'fit',
+    mainComponentClass: 'Vpc_Paragraphs_Component',
+    mainComponentId: '{0}',
+    mainComponentText: 'Content',
+    
     initComponent: function() {
+        this.contentPanel = new Ext.Panel();
         Ext.apply(this, {
-            layout      : 'fit',
             tbar        : [],
-            items       : [new Ext.Panel({
-                id      : 'componentPanel'
-            })]
+            items       : this.contentPanel
         });
+        this.baseParams = {};
         Vps.Component.ComponentPanel.superclass.initComponent.call(this);
     },
 
     loadComponent: function(data) {
+        var params;
+        if (data.componentId) {
+            params = { component_id: data.componentId };
+        } else {
+            params = this.getBaseParams();
+        }
         Ext.Ajax.request({
             url: '/admin/component/edit/' + data.componentClass + '/jsonIndex',
-            params: { component_id: data.componentId },
+            params: params,
             success: function(r, options, response) {
                 var cls = eval(response['class']);
                 if (cls) {
                     var panel2 = new cls(Ext.applyIf(response.config, {
                         region          : 'center',
                         autoScroll      : true,
-                        closable        : true,
-                        id              : 'componentPanel'
+                        closable        : true
                     }));
                     panel2.on('editcomponent', this.loadComponent, this);
                     this.addToolbarButton(data);
 
-                    this.remove(this.items.item('componentPanel'));
+                    this.remove(this.contentPanel);
+                    //this.contentPanel.destory();
                     this.add(panel2);
+                    this.contentPanel = panel2;
                     this.layout.rendered = false;
                     this.doLayout();
                 }
@@ -74,5 +84,36 @@ Vps.Component.ComponentPanel = Ext.extend(Ext.Panel, {
             toolbar.items.remove(i);
             i.destroy();
         });
+    },
+
+    load: function() {
+        this.clearToolbar();
+        this.loadComponent({
+            componentClass: this.mainComponentClass,
+            text: this.mainComponentText
+        });
+    },
+
+    isDirty: function() {
+        return this.contentPanel.isDirty();
+    },
+    mabySubmit : function(cb, options)
+    {
+        return this.contentPanel.mabySubmit.apply(this, arguments);
+    },
+    setBaseParams : function(baseParams) {
+        this.baseParams = {};
+        this.applyBaseParams(baseParams);
+    },
+    applyBaseParams : function(baseParams) {
+        if (baseParams.id) {
+            baseParams.component_id = String.format(this.mainComponentId, baseParams.id);
+            delete baseParams.id;
+        }
+        Ext.apply(this.baseParams, baseParams);
+    },
+    getBaseParams : function() {
+        return this.baseParams || {};
     }
+
 });

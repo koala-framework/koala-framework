@@ -20,7 +20,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         this.layout = 'border';
         this.actions = {};
         this.items = [this.treePanel, this.contentTabPanel];
-       Vps.Component.Pages.superclass.initComponent.call(this);
+        Vps.Component.Pages.superclass.initComponent.call(this);
 
         this.treePanel.on('loaded', this.onTreePanelLoaded, this);
         this.on('editcomponent', this.loadComponent, this);

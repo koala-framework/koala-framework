@@ -137,24 +137,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             var column = meta.columns[i];
             if (column.header == null) continue;
 
-            if (column.editor && column.editor.xtype == 'checkbox') {
-                delete column.editor;
-                if (column.renderer) delete column.renderer;
-                column = new Ext.grid.CheckColumn(column);
-                gridConfig.plugins.push(column);
-            } else if (column.editor) {
-                Ext.applyIf(column.editor, { msgTarget: 'qtip' });
-
-                column.editor = new Ext.grid.GridEditor(Ext.ComponentMgr.create(column.editor, 'textfield'));
-                var field = column.editor.field;
-                if(field instanceof Ext.form.ComboBox) {
-                    this.comboBoxes.push({
-                        field: field,
-                        column: column
-                    });
-                }
-            }
-
             if (typeof column.renderer == 'function') {
                 //do nothing
             } else if (Ext.util.Format[column.renderer]) {
@@ -179,6 +161,24 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 	                }
 	            }
 			}
+
+            if (column.editor && column.editor.xtype == 'checkbox') {
+                delete column.editor;
+                column = new Ext.grid.CheckColumn(column);
+                gridConfig.plugins.push(column);
+            } else if (column.editor) {
+                Ext.applyIf(column.editor, { msgTarget: 'qtip' });
+
+                column.editor = new Ext.grid.GridEditor(Ext.ComponentMgr.create(column.editor, 'textfield'));
+                var field = column.editor.field;
+                if(field instanceof Ext.form.ComboBox) {
+                    this.comboBoxes.push({
+                        field: field,
+                        column: column
+                    });
+                }
+            }
+
             if (column.columnType == 'button') {
                 if (column.editDialog) {
                     column.editDialog = this.initEditDialog(column.editDialog);

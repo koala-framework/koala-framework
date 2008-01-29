@@ -5,6 +5,8 @@ class Vps_Auto_Field_TimeField extends Vps_Auto_Field_SimpleAbstract
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('timefield');
+        $this->setFormat('H:i');
+        $this->setWidth(70);
     }
 
     protected function _addValidators()
