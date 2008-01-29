@@ -231,7 +231,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
     protected function _fetchCount()
     {
         if (!isset($this->_table)) {
-            throw new Vps_Exception("Either _gridTable has to be set or _fetchData has to be overwritten.");
+            throw new Vps_Exception("Either _Table has to be set or _fetchData has to be overwritten.");
         }
         $select = $this->_table->getAdapter()->select();
         $info = $this->_getTableInfo();

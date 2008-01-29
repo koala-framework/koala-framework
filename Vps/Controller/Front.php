@@ -17,6 +17,8 @@ class Vps_Controller_Front extends Zend_Controller_Front
                                         'vps_controller_action_error');
         $this->addControllerDirectory('Vps/Controller/Action/Media',
                                         'vps_controller_action_media');
+        $this->addControllerDirectory('Vps/Controller/Action/Pool',
+                                'vps_controller_action_pool');
 
         $router = $this->getRouter();
 
@@ -37,6 +39,11 @@ class Vps_Controller_Front extends Zend_Controller_Front
                     array('module'      => 'vps_controller_action_welcome',
                           'controller'  => 'start',
                           'action'      => 'index')));
+        $router->AddRoute('vps_pool', new Zend_Controller_Router_Route(
+                    'vps/pool/:controller/:action',
+                    array('module'     => 'vps_controller_action_pool',
+                          'controller' => 'pools',
+                          'action'     => 'index')));
         $router->AddRoute('media', new Zend_Controller_Router_Route(
                     'media/:table/:id/:rule/:type/:checksum/:filename',
                     array('module'     => 'vps_controller_action_media',
