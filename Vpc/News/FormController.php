@@ -3,14 +3,14 @@ class Vpc_News_FormController extends Vps_Controller_Action_Auto_Form
 {
     protected $_buttons = array();
     protected $_permissions = array('save' => true, 'add' => true);
-    
+
     public function preDispatch()
     {
         $tablename = Vpc_Abstract::getSetting($this->class, 'tablename');
         $this->_table = new $tablename(array('componentClass'=>$this->class));
         parent::preDispatch();
     }
-    
+
     public function _initFields()
     {
         $this->_form->add(new Vps_Auto_Field_TextField('title', 'Title'))
@@ -24,16 +24,23 @@ class Vpc_News_FormController extends Vps_Controller_Action_Auto_Form
         $this->_form->add(new Vps_Auto_Field_DateField('expiry_date', 'Expiry Date'));
 
 
-        $table = new Vpc_News_Categories_Model();
-        $where = array('component_id = ?' => $this->_getParam('component_id'));
-        $this->_form->add(new Vps_Auto_Field_MultiCheckbox('Vpc_News_Categories_NewsToCategoriesModel', 'Categroies'))
-            ->setValues($table->fetchAll($where));
+        $childComponentClasses = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
+        $categories = Vpc_Abstract::getSetting($this->class, 'categories');
+        if ($categories) {
+            foreach ($categories as $cKey => $category) {
+                $formName = Vpc_Admin::getComponentFile(
+                    $childComponentClasses[$cKey], 'Form', 'php', true
+                );
+                $this->_form->add(new $formName($childComponentClasses[$cKey]))
+                    ->setBaseCls('x-plain');
+            }
+        }
     }
 
     public function _beforeSave($row)
     {
-        if ($this->_getParam('id') == 0 && $this->_getParam('componentId')) {
-            $row->component_id = $this->_getParam('componentId');
+        if ($this->_getParam('id') == 0 && $this->_getParam('component_id')) {
+            $row->component_id = $this->_getParam('component_id');
             $row->visible = 0;
         }
     }

@@ -1,8 +1,12 @@
 <?php
-class Vps_Auto_Field_PoolMulticheckbox extends Vps_Auto_Field_Multicheckbox
+class Vps_Auto_Field_PoolMulticheckbox extends Vps_Auto_Field_MultiCheckbox
 {
+
     public function setPool($pool)
     {
-        // TODO
+        $table = new Vps_Dao_Pool();
+        $where = array('pool = ?' => $pool);
+        $this->setValues($table->fetchAll($where));
+        return $this;
     }
 }

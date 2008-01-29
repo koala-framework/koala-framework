@@ -10,15 +10,15 @@
     border: 2px solid #a9bfd4;
     background-color: #e2ebf5;
 }
-.vps-welcome .content {
+.vps-welcome .welcomeContent {
     padding: 10px;
 }
-.vps-welcome .content h1 {
+.vps-welcome .welcomeContent h1 {
     color: #5378aa;
     font-size: 14px; font-weight: bold;
     margin-bottom: 10px;
 }
-.vps-welcome .content p {
+.vps-welcome .welcomeContent p {
     margin-bottom: 10px;
 }
 .vps-welcome .footer {

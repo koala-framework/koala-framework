@@ -404,10 +404,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return $this->_showInvisible();
     }
 
-    /**
-     * Shortcut für $this->_dao->getTable($tablename)
-     * @param string Name des Models
-     */
     public function getTable($tablename = null)
     {
         if (!$tablename) {
@@ -416,14 +412,10 @@ abstract class Vpc_Abstract implements Vpc_Interface
                 return null;
             }
         }
-        try {
-            if (!isset($this->_tables[$tablename])) {
-                $this->_tables[$tablename] = new $tablename(array('componentClass'=>get_class($this)));
-            }
-            return $this->_tables[$tablename];
-        } catch (Vps_Dao_Exception $e) {
-            return null;
+        if (!isset($this->_tables[$tablename])) {
+            $this->_tables[$tablename] = new $tablename(array('componentClass'=>get_class($this)));
         }
+        return $this->_tables[$tablename];
     }
 
     public static function getSetting($class, $setting)

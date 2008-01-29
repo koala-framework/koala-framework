@@ -1,22 +1,10 @@
 <?php
-class Vpc_News_Categories_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
+class Vpc_News_Categories_Controller extends Vps_Controller_Action_Pool_PoolController
 {
-    protected $_buttons = array(
-        'save' => true,
-        'delete' => true,
-        'add'   => true
-    );
-    protected $_tableName = 'Vpc_News_Categories_Model';
-    protected $_position = 'pos';
 
-    public function _initColumns()
+    protected function _getPool()
     {
-        parent::_initColumns();
-        $this->_columns->add(new Vps_Auto_Grid_Column('category', 'Category', 200))
-            ->setEditor(new Vps_Auto_Field_TextField('category', 'Category'));
-        $this->_columns->add(new Vps_Auto_Grid_Column('visible', 'Visible', 55))
-            ->setEditor(new Vps_Auto_Field_Checkbox('visible', 'Visible'));
-
+        return Vpc_Abstract::getSetting($this->class, 'pool');
     }
 
 }

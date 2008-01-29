@@ -28,10 +28,16 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
         }
     }
 
+    //kann überschrieben werden wenn wir eine anderen row haben wollen
+    protected function _getRowByParentRow($parentRow)
+    {
+        return $this->getRow();
+    }
+
 
     public function prepareSave($parentRow, $postData)
     {
-        $row = $this->getRow();
+        $row = $this->_getRowByParentRow($parentRow);
         if (!$row) {
             throw new Vps_Exception('Can\'t find row.');
         } else if (!$row instanceof Zend_Db_Table_Row_Abstract) {
@@ -42,7 +48,7 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
 
     public function save($parentRow, $postData)
     {
-        $row = $this->getRow();
+        $row = $this->_getRowByParentRow($parentRow);
         if (!$row) {
             throw new Vps_Exception('Can\'t find row.');
         } else if (!$row instanceof Zend_Db_Table_Row_Abstract) {
@@ -70,13 +76,13 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
 
     public function load($parentRow)
     {
-        $row = (object)$this->getRow();
+        $row = (object)$this->_getRowByParentRow($parentRow);
         return parent::load($row);
     }
 
     public function delete($parentRow)
     {
-        $row = $this->getRow();
+        $row = $this->_getRowByParentRow($parentRow);
         if (!$row) {
             throw new Vps_Exception('Can\'t find row.');
         } else if (!$row instanceof Zend_Db_Table_Row_Abstract) {
@@ -139,7 +145,7 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
         if (isset($this->_row)) return $this->_row;
 
         if (!isset($this->_table)) {
-            throw new Vps_Exception('Either _table has to be set or _fetchData has to be overwritten.');
+            throw new Vps_Exception('_table has to be set');
         }
         $rowset = null;
 
@@ -164,9 +170,9 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
             return null;
         } else {
             if ($rowset->count() == 0) {
-                throw new Vps_ClientException('No database-entry found.');
+                throw new Vps_Exception('No database-entry found.');
             } else if ($rowset->count() > 1) {
-                throw new Vps_ClientException('More than one database-entry found.');
+                throw new Vps_Exception('More than one database-entry found.');
             } else {
                 $this->_row = $rowset->current();
             }
