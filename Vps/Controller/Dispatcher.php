@@ -10,25 +10,17 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             $className = '';
             $class = $request->getParam('class');
 
-            // Zuerst direkt Controller zu Klasse suchen
-            if (class_exists($class . 'Controller')) {
-                $className = $class . 'Controller';
-            }
-
-            // Wenn nicht gefunden, Vererbungshierarchie durchlaufen
-            if ($className == '') {
-                Zend_Loader::loadClass($class);
-                while ($className == '' && is_subclass_of($class, 'Vpc_Abstract')) {
-                    $cc = $class;
-                    if (substr($cc, -9) == 'Component') {
-                        $cc = substr($cc, 0, -9);
-                    }
-                    $cc .= 'Controller';
-                    if (class_exists($cc)) {
-                        $className = $cc;
-                    }
-                    $class = get_parent_class($class);
+            Zend_Loader::loadClass($class);
+            while (is_subclass_of($class, 'Vpc_Abstract')) {
+                $cc = $class;
+                if (substr($cc, -9) == 'Component') {
+                    $cc = substr($cc, 0, -9);
                 }
+                $cc .= 'Controller';
+                if (class_exists($cc)) {
+                    return $cc;
+                }
+                $class = get_parent_class($class);
             }
 
         } else {
