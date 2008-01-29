@@ -127,6 +127,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         if (this.getForm()) {
             this.getForm().clearValues();
             this.getForm().clearInvalid();
+            this.getForm().resetDirty();
         }
 
         Ext.Ajax.request({
