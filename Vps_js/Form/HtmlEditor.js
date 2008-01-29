@@ -162,7 +162,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         if (this.enablePastePlain) {
             tb.add({
-                icon: '/assets/silkicons/paste_plain.png',
+                icon: '/assets/vps/images/pastePlain.gif',
                 handler: this.insertPlainText,
                 scope: this,
                 tooltip: {

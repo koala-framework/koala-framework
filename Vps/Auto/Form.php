@@ -16,6 +16,7 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
         parent::__construct($name);
         $this->setLayout('form');
         $this->setBorder(false);
+        $this->setLabelAlign('right');
         $this->setId($id);
     }
 
