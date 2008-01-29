@@ -5,10 +5,15 @@ class Vps_Controller_Action_Pool_PoolController extends Vps_Controller_Action_Au
     protected $_position = 'pos';
     protected $_tableName = 'Vps_Dao_Pool';
 
+    protected function _getPool()
+    {
+        return $this->_getParam('pool');
+    }
+
     protected function _getWhere()
     {
         $where = parent::_getWhere();
-        $where['pool = ?'] = $this->_getParam('pool');
+        $where['pool = ?'] = $this->_getPool();
         return $where;
     }
 
@@ -22,6 +27,6 @@ class Vps_Controller_Action_Pool_PoolController extends Vps_Controller_Action_Au
     protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row, $submitRow)
     {
         parent::_beforeInsert($row, $submitRow);
-        $row->pool = $this->_getParam('pool');
+        $row->pool = $this->_getPool();
     }
 }

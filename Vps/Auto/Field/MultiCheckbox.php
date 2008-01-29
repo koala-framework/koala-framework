@@ -33,7 +33,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
             foreach ($this->getValues() as $i) {
                 $k = $i->$pk;
                 if (!is_string($i)) $i = $i->__toString();
-                $this->_fields->add(new Vps_Auto_Field_Checkbox($this->getName()."[$k]"))
+                $this->_fields->add(new Vps_Auto_Field_Checkbox($this->getFieldName()."[$k]"))
                     ->setKey($k)
                     ->setBoxLabel($i);
             }
