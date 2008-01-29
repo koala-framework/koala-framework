@@ -15,7 +15,7 @@ class Vpc_News_PageFactoryDetails extends Vpc_Abstract_TablePageFactory
     protected function _getWhere()
     {
         $where = array(
-            'component_od = ?' => $this->_component->getId()
+            'component_id = ?' => $this->_component->getId()
         );
         if (!$this->_showInvisible()) {
             $where['visible = 1'] = '';

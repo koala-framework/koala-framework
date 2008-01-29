@@ -30,12 +30,12 @@ class Vpc_News_Categories_Component extends Vpc_Abstract implements Vpc_News_Int
         $ret = parent::getTemplateVars();
         $ret['categories'] = array();
 
-        $componentKeyFirst = $this->getCurrentComponentKey();
-
         $where = array(
             'component_id = ?' => $this->getDbId(),
         );
-        $where['visible = 1'] = '';
+        if (!$this->showInvisible()) {
+            $where[] = 'visible = 1';
+        }
 
         $rowset = $this->getTable()->fetchAll($where, 'pos ASC');
         foreach ($rowset as $row) {
