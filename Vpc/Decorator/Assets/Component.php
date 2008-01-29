@@ -12,8 +12,8 @@ class Vpc_Decorator_Assets_Component extends Vpc_Decorator_Abstract
             $cssFiles = $dep->getAssetFiles('css');
         } else {
             $v = $cfg->application->version;
-            $jsFiles = array('/assets/AllAdmin.js?v='.$v);
-            $cssFiles = array('/assets/AllAdmin.css?v='.$v);
+            $jsFiles = array('/assets/AllFrontend.js?v='.$v);
+            $cssFiles = array('/assets/AllFrontend.css?v='.$v);
         }
         $return['assets']['js'] = array_merge($return['assets']['js'], $jsFiles);
         $return['assets']['css'] = array_merge($return['assets']['css'], $cssFiles);
