@@ -3,14 +3,6 @@ Vpc.Abstract.List.Panel = Ext.extend(Ext.Panel,
 {
     initComponent: function()
     {
-        this.grid = new Vps.Auto.GridPanel({
-            controllerUrl: this.controllerUrl,
-            baseParams: this.baseParams,
-            width: 300,
-            split: true,
-            region: 'west'
-        });
-
         var cls = eval(this.childConfig['class']);
         this.childPanel = new cls({
             controllerUrl: this.childConfig.config.controllerUrl,
@@ -18,21 +10,14 @@ Vpc.Abstract.List.Panel = Ext.extend(Ext.Panel,
             disabled: true
         });
 
-        this.childPanel.on('datachange', function(i) {
-            this.grid.reload();
-        }, this);
-
-        this.grid.on('deleterow', function() {
-            this.grid.getGrid().getSelectionModel().selectPrevious();
-        }, this);
-
-        this.grid.on('rowselect', function(model, rowIndex, selected) {
-            var params = {
-                component_id : this.baseParams.component_id + '-' + selected.data.id
-            };
-            this.childPanel.load(params);
-            this.childPanel.enable();
-        }, this);
+        this.grid = new Vps.Auto.GridPanel({
+            controllerUrl: this.controllerUrl,
+            baseParams: this.baseParams,
+            width: 300,
+            split: true,
+            region: 'west',
+            bindings: [ this.childPanel ]
+        });
 
         this.grid.onAdd = this.onAdd;
         this.layout = 'border';
@@ -45,7 +30,7 @@ Vpc.Abstract.List.Panel = Ext.extend(Ext.Panel,
         Ext.Ajax.request({
             mask: true,
             url: this.controllerUrl + '/jsonInsert',
-            params: this.baseParams,
+            params: this.getBaseParams(),
             success: function(response, options, r) {
                 this.getSelectionModel().clearSelections();
                 this.reload({
