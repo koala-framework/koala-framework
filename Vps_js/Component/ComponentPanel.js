@@ -3,7 +3,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     mainComponentClass: 'Vpc_Paragraphs_Component',
     mainComponentId: '{0}',
     mainComponentText: 'Content',
-    
+
     initComponent: function() {
         this.contentPanel = new Ext.Panel();
         Ext.apply(this, {
@@ -101,19 +101,11 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     {
         return this.contentPanel.mabySubmit.apply(this, arguments);
     },
-    setBaseParams : function(baseParams) {
-        this.baseParams = {};
-        this.applyBaseParams(baseParams);
-    },
     applyBaseParams : function(baseParams) {
         if (baseParams.id) {
             baseParams.component_id = String.format(this.mainComponentId, baseParams.id);
             delete baseParams.id;
         }
         Ext.apply(this.baseParams, baseParams);
-    },
-    getBaseParams : function() {
-        return this.baseParams || {};
     }
-
 });

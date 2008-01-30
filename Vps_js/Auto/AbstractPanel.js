@@ -28,7 +28,16 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
                     b.item.enable();
                     if (b.item.getBaseParams()[b.queryParam] != this.activeId) {
                         var params = {};
-                        params[b.queryParam] = this.activeId;
+                        if (b.componentIdSuffix) {
+                            params.component_id =
+                                this.getBaseParams()['component_id'] +
+                                String.format(b.componentIdSuffix, this.activeId);
+                        } else if (b.componentId) {
+                            params.component_id =
+                                String.format(b.componentId, this.activeId);
+                        } else {
+                            params[b.queryParam] = this.activeId;
+                        }
                         b.item.applyBaseParams(params);
                         b.item.load();
                     }
@@ -131,7 +140,7 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
         }
         return ret;
     },
-    
+
     mabySubmit : function(cb, options)
     {
         if (this.checkDirty && this.isDirty()) {
@@ -174,9 +183,14 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
         return false;
     },
     setBaseParams : function(baseParams) {
+        this.baseParams = {};
+        this.applyBaseParams(baseParams);
     },
     applyBaseParams : function(baseParams) {
+        if (!this.baseParams) { this.baseParams = {}; }
+        Ext.apply(this.baseParams, baseParams);
     },
     getBaseParams : function() {
+        return this.baseParams || {};
     }
 });
