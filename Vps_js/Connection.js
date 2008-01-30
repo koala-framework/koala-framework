@@ -72,7 +72,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             } else {
                 Ext.Msg.alert('Error', "A Server failure occured.");
                 Ext.Ajax.request({
-                    url: '/error/jsonMail',
+                    url: '/vps/error/error/jsonMail',
                     params: {msg: errorMsg}
                 });
             }
