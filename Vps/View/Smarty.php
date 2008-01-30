@@ -38,15 +38,9 @@ class Vps_View_Smarty extends Zend_View_Abstract
             throw new Vps_View_Exception('Class must be a string.');
         }
 
-        if (Zend_Registry::get('config')->debug->assets) {
-            $dep = new Vps_Assets_Dependencies(Zend_Registry::get('config')->assets->Admin);
-            $jsFiles = $dep->getAssetFiles('js');
-            $cssFiles = $dep->getAssetFiles('css');
-        } else {
-            $v = Zend_Registry::get('config')->application->version;
-            $jsFiles = array('/assets/AllAdmin.js?v='.$v);
-            $cssFiles = array('/assets/AllAdmin.css?v='.$v);
-        }
+        $dep = new Vps_Assets_Dependencies('Admin');
+        $jsFiles = $dep->getAssetFiles('js');
+        $cssFiles = $dep->getAssetFiles('css');
 
         if (!$viewport) {
             $viewport = Zend_Registry::get('config')->ext->defaultViewport;

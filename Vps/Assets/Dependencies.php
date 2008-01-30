@@ -7,15 +7,21 @@ class Vps_Assets_Dependencies
     private $_dependenciesConfig;
     private $_processedDependencies = array();
     private $_processedComponents = array();
-
-    public function __construct($assets, $config = null)
+    private $_assetsType;
+    /**
+     * @param string Assets-Typ, Frontend od. Admin
+     **/
+    public function __construct($assetsType, $config = null)
     {
-        if (!isset($config)) {
+        if (!$config) {
             $config = Zend_Registry::get('config');
         }
         $this->_config = $config;
-
-        $this->_assets = $assets;
+        $this->_assetsType = $assetsType;
+        if (!isset($this->_config->assets->$assetsType)) {
+            throw new Vps_Exception("Unknown AssetsType: $assetsType");
+        }
+        $this->_assets = $this->_config->assets->$assetsType;
     }
 
     private function _getFilePath($file)
@@ -25,13 +31,21 @@ class Vps_Assets_Dependencies
 
     public function getAssetFiles($fileType = null)
     {
-        $files = $this->getFiles($fileType);
         $ret = array();
-        foreach ($files as $file) {
-            $ret[] = '/assets/'.$file;
+        if (!$this->_config->debug->assets) {
+            $v = $this->_config->application->version;
+            $ret[] = "/assets/All{$this->_assetsType}.$fileType?v=$v";
+        }
+        foreach ($this->getFiles($fileType) as $file) {
+            if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://') {
+                $ret[] = $file;
+            } else if ($this->_config->debug->assets) {
+                $ret[] = '/assets/'.$file;
+            }
         }
         return $ret;
     }
+
     public function getFiles($fileType = null)
     {
         if (!isset($this->_files)) {
@@ -48,6 +62,13 @@ class Vps_Assets_Dependencies
         $files = array();
         foreach ($this->_files as $file) {
             if (substr($file, -strlen($fileType)) == $fileType) {
+                if (substr($file, -strlen($fileType)-1) == " $fileType") {
+                    //wenn asset hinten mit " js" aufhört das js abschneiden
+                    //wird benötigt für googlemaps wo die js-dateien kein js am ende haben
+                    $file = substr($file, 0, -strlen($fileType)-1);
+                }
+                //TODO: wenn sowas öfters gebraucht wird dynamischer machen
+                $file = str_replace('{$config.googleApiKey}', $this->_config->googleApiKey, $file);
                 $files[] = $file;
             }
         }
@@ -106,7 +127,9 @@ class Vps_Assets_Dependencies
     {
         $contents = '';
         foreach ($this->getFiles($fileType) as $file) {
-            $contents .= Vps_Assets_Loader::getFileContents($file, $this->_config->path) . "\n";
+            if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://')) {
+                $contents .= Vps_Assets_Loader::getFileContents($file, $this->_config->path) . "\n";
+            }
         }
         return $contents;
     }
