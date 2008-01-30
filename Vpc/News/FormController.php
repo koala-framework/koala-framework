@@ -31,8 +31,10 @@ class Vpc_News_FormController extends Vps_Controller_Action_Auto_Form
                 $formName = Vpc_Admin::getComponentFile(
                     $childComponentClasses[$cKey], 'Form', 'php', true
                 );
-                $this->_form->add(new $formName($childComponentClasses[$cKey]))
-                    ->setBaseCls('x-plain');
+                if (!$formName) {
+                    $this->_form->add(new $formName($childComponentClasses[$cKey]))
+                        ->setBaseCls('x-plain');
+                }
             }
         }
     }
