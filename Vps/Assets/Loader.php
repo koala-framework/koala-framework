@@ -79,10 +79,10 @@ class Vps_Assets_Loader
                 }
 
                 if ($m[2] == 'js') {
-//                     header('Content-Type: text/javascript');
+                    header('Content-Type: text/javascript');
                     $fileType = 'js';
                 } else {
-//                     header('Content-Type: text/css');
+                    header('Content-Type: text/css');
                     $fileType = 'css';
                 }
                 $section = $m[1];
