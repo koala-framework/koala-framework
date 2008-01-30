@@ -4,10 +4,12 @@ class Vpc_Decorator_Assets_Component extends Vpc_Decorator_Abstract
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-
+        
+        $dep = new Vps_Assets_Dependencies('Frontend');
+        
         $cfg = Zend_Registry::get('config');
         if ($cfg->debug->assets) {
-            $dep = new Vps_Assets_Dependencies($cfg->assets->Frontend);
+            
             $jsFiles = $dep->getAssetFiles('js');
             $cssFiles = $dep->getAssetFiles('css');
         } else {

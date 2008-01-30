@@ -79,13 +79,14 @@ class Vps_Assets_Loader
                 }
 
                 if ($m[2] == 'js') {
-                    header('Content-Type: text/javascript');
+//                     header('Content-Type: text/javascript');
                     $fileType = 'js';
                 } else {
-                    header('Content-Type: text/css');
+//                     header('Content-Type: text/css');
                     $fileType = 'css';
                 }
                 $section = $m[1];
+
 
                 header('Last-Modified: '.gmdate("D, d M Y H:i:s \G\M\T", time()));
                 header('ETag: abc-defg');
@@ -102,7 +103,7 @@ class Vps_Assets_Loader
                 if ((!$cacheData = $cache->load($fileType.$encoding.$section))
                     || $cacheData['version'] != $config->application->version) {
 
-                    $dep = new Vps_Assets_Dependencies($config->assets->$section, $config);
+                    $dep = new Vps_Assets_Dependencies($section, $config);
                     $contents = $dep->getPackedAll($fileType);
                     $contents = self::_encode($contents, $encoding);
                     $cacheData = array('contents'=>$contents,
