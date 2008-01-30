@@ -29,7 +29,7 @@ class Vpc_News_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         $config = Vpc_Admin::getConfig($this->class, $this->componentId);
 
         $settings = call_user_func(array($this->class, 'getSettings'));
-        if (count($settings['categories'])) {
+        if (isset($settings['categories']) && count($settings['categories'])) {
             $plugins = array();
             foreach ($settings['categories'] as $katname => $katsettings) {
                 if (!isset($settings['childComponentClasses'][$katname])) {
@@ -44,7 +44,7 @@ class Vpc_News_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
                 }
             }
         }
-        if (count($plugins)) {
+        if (isset($plugins) && count($plugins)) {
             $config['config']['componentPlugins'] = $plugins;
         }
         $this->view->vpc($config);
