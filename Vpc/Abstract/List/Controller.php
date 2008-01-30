@@ -2,6 +2,7 @@
 class Vpc_Abstract_List_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 {
     protected $_position = 'pos';
+    protected $_buttons = array('add', 'delete');
 
     protected function _initColumns()
     {
