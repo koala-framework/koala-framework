@@ -26,11 +26,17 @@ class Vpc_Basic_Text_Form extends Vps_Auto_Vpc_Form
 
         $this->fields->add($field);
     }
-    
+
     public function prepareSave($parentRow, $postData)
     {
         $this->getRow()->content_edit = null;
         parent::prepareSave($parentRow, $postData);
+    }
+
+    public function setHtmlEditorLabel($title)
+    {
+        $this->fields[0]->setFieldLabel($title);
+        return $this;
     }
 
 }
