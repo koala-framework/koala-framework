@@ -77,6 +77,11 @@ class Vpc_Abstract_PageFactory
         }
     }
 
+    protected function _getComponentSetting($setting)
+    {
+        return Vpc_Abstract::getSetting(get_class($this->_component), $setting);
+    }
+
     /**
      * Erstellt eine Komponente, die als neue Seite in den Seitenbaum eingefügt werden
      * kann.

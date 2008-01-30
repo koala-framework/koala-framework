@@ -1,9 +1,9 @@
 <?php
-class Vpc_News_PageFactoryCategories extends Vpc_Abstract_StaticPageFactory implements Vpc_News_Interface_PageFactoryCategory
+class Vpc_News_PageFactoryMonths extends Vpc_Abstract_StaticPageFactory implements Vpc_News_Interface_PageFactoryCategory
 {
     protected $_pages = array(array(
-        'id'=>'categories',
-        'name'=>'Kategorien',
+        'id'=>'months',
+        'name'=>'Monate',
         'showInMenu' => false
     ));
     protected $_additionalFactories = array();
