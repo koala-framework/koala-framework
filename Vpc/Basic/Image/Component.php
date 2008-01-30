@@ -32,7 +32,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
 
     public function getImageUrl($type = 'default')
     {
-        return $this->_getRow()->getImageUrl($type);
+        return $this->_getRow()->getFileUrl(null, $type);
     }
 
     public function getImageDimension()
@@ -40,6 +40,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
         return $this->_getRow()->getImageDimension();
     }
 
+    //für Pdf
     public function getImageRow()
     {
         return $this->_getRow();
