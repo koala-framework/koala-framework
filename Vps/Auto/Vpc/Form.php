@@ -73,7 +73,7 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
         $row = $this->getRow();
         if (!$row->component_id) {
             $id = $this->_getComponentIdFromParentRow($parentRow);
-            $row->component_id = $id['component_id'];
+            $row->component_id = $id;
         }
         return parent::save($parentRow, $postData);
     }
