@@ -29,8 +29,11 @@ class Vpc_Abstract_PagesFactory extends Vpc_Abstract_PageFactory
     {
         $ret = array();
         foreach ($this->_childPagesData() as $pageRow) {
-            $ret[] = $this->_createChildPageByPageRow($pageRow);
+            if (!$pageRow['hide']) {
+                $ret[] = $this->_createChildPageByPageRow($pageRow);
+            }
         }
+
         foreach ($this->_component->getChildComponents() as $p) {
             $ret = array_merge($ret, $p->getPageFactory()->getMenuChildPages());
         }
