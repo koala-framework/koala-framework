@@ -9,10 +9,10 @@ Vps.Viewport = Ext.extend(Ext.Viewport, {
         this.layout = 'border';
         Vps.Viewport.superclass.initComponent.call(this);
     },
-    mabySubmit: function() {
+    mabySubmit: function(cb, options) {
         var ret = true;
         this.items.each(function(i) {
-            if (i.mabySubmit && !i.mabySubmit.apply(i, arguments)) {
+            if (i.mabySubmit && !i.mabySubmit(cb, options)) {
                 ret = false;
                 return false; //break each
             }
