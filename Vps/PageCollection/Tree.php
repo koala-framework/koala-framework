@@ -71,22 +71,27 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         return null;
     }
 
+    private function _getChildPagesRootChecked(Vpc_Interface $page = null, $type = null, $isRoot = false)
+    {
+        $ret = array();
+        $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData(null);
+        foreach ($rows as $pageRow) {
+            if ((!$type || $pageRow['type'] == $type) && (!$isRoot || !$pageRow['hide'])) {
+                if (!$page = $this->getExistingPageById($pageRow['id'])) {
+                    $page = Vpc_Abstract::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id'], $this);
+                    $this->addTreePage($page, $pageRow['filename'], $pageRow['name'], null);
+                    $this->_types[$page->getId()] = $pageRow['type'];
+                }
+                $ret[] = $page;
+            }
+        }
+        return $ret;
+    }
+
     public function getChildPages(Vpc_Interface $page = null, $type = null)
     {
         if (is_null($page)) {
-            $ret = array();
-            $rows = $this->_dao->getTable('Vps_Dao_Pages')->retrieveChildPagesData(null);
-            foreach ($rows as $pageRow) {
-                if (!$type || $pageRow['type'] == $type) {
-                    if (!$page = $this->getExistingPageById($pageRow['id'])) {
-                        $page = Vpc_Abstract::createInstance($this->getDao(), $pageRow['component_class'], $pageRow['id'], $this);
-                        $this->addTreePage($page, $pageRow['filename'], $pageRow['name'], null);
-                        $this->_types[$page->getId()] = $pageRow['type'];
-                    }
-                    $ret[] = $page;
-                }
-            }
-            return $ret;
+            return $this->_getChildPagesRootChecked($page, $type);
         } else {
             return $page->getPageFactory()->getChildPages();
         }
@@ -95,7 +100,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
     public function getMenuChildPages(Vpc_Interface $page = null, $type = null)
     {
         if (is_null($page)) {
-            return $this->getChildPages($page, $type);
+            return $this->_getChildPagesRootChecked($page, $type, true);
         } else {
             return $page->getPageFactory()->getMenuChildPages();
         }
