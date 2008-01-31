@@ -26,18 +26,18 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
                 this.activeId = id;
                 this.bindings.each(function(b) {
                     b.item.enable();
-                    if (b.item.getBaseParams()[b.queryParam] != this.activeId) {
-                        var params = {};
-                        if (b.componentIdSuffix) {
-                            params.component_id =
-                                this.getBaseParams()['component_id'] +
-                                String.format(b.componentIdSuffix, this.activeId);
-                        } else if (b.componentId) {
-                            params.component_id =
-                                String.format(b.componentId, this.activeId);
-                        } else {
-                            params[b.queryParam] = this.activeId;
-                        }
+                    var params = {};
+                    if (b.componentIdSuffix) {
+                        params.component_id =
+                            this.getBaseParams()['component_id'] +
+                            String.format(b.componentIdSuffix, this.activeId);
+                    } else if (b.componentId) {
+                        params.component_id =
+                            String.format(b.componentId, this.activeId);
+                    } else {
+                        params[b.queryParam] = this.activeId;
+                    }
+                    if (!b.item.hasBaseParams(params)) {
                         b.item.applyBaseParams(params);
                         b.item.load();
                     }
@@ -192,5 +192,17 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
     },
     getBaseParams : function() {
         return this.baseParams || {};
+    },
+
+    //um herauszufinden ob params neue baseParams sind
+    //wird zB in ComponentPanel überschrieben
+    //getBaseParams von aussen holen und mit den neuen vergleichen geht im ComponentPanel
+    //nicht, da diese anders gespeichert werden
+    hasBaseParams : function(params) {
+        var baseParams = this.getBaseParams();
+        for (var i in params) {
+            if (params[i] != baseParams[i]) return false;
+        }
+        return true;
     }
 });
