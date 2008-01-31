@@ -107,5 +107,18 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             delete baseParams.id;
         }
         Ext.apply(this.baseParams, baseParams);
+    },
+    hasBaseParams : function(params) {
+        var baseParams = this.getBaseParams();
+        for (var i in params) {
+            if (i == 'id') {
+                if (baseParams.component_id != String.format(this.mainComponentId, params[i])) {
+                    return false;
+                }
+            } else {
+                if (params[i] != baseParams[i]) return false;
+            }
+        }
+        return true;
     }
 });
