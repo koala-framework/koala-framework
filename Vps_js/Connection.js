@@ -50,13 +50,25 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         try {
             var r = Ext.decode(response.responseText);
         } catch(e) {
-            var errorMsg = '<a href="'+options.url+'?'+Ext.urlEncode(options.params)+'">request-url</a><br />';
+            var p;
+            if (typeof options.params == "string") {
+                p = options.params;
+            } else {
+                p = Ext.urlEncode(options.params);
+            }
+            var errorMsg = '<a href="'+options.url+'?'+p+'">request-url</a><br />';
             errorMsg += e.toString()+': <br />'+response.responseText;
             var errorMsgTitle = 'Javascript Parse Exception';
         }
 
         if (!errorMsg && r.exception) {
-            var errorMsg = '<a href="'+options.url+'?'+Ext.urlEncode(options.params)+'">request-url</a><br />';
+            var p;
+            if (typeof options.params == "string") {
+                p = options.params;
+            } else {
+                p = Ext.urlEncode(options.params);
+            }
+            var errorMsg = '<a href="'+options.url+'?'+p+'">request-url</a><br />';
             errorMsg += r.exception;
             var errorMsgTitle = 'PHP Exception';
         }
