@@ -21,8 +21,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         $this->_columns->add(new Vps_Auto_Grid_Column_Button('edit', ' ', 20))
             ->setButtonIcon('/assets/silkicons/table_edit.png')
             ->setToolTip('Edit Paragraph');
-        $this->_columns->add(new Vps_Auto_Grid_Column('visible', '', 20))
-            ->setEditor(new Vps_Auto_Field_Checkbox('visible', 'Visible'));
+        $this->_columns->add(new Vps_Auto_Grid_Column_Visible());
     }
 
     public function preDispatch()
