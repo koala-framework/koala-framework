@@ -10,9 +10,76 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         'address': 'Address',
         'pre': 'Formatted'
     },
+    enableUndoRedo: true,
 
-    initComponent : function() {
-        this.actions = {};
+    initComponent : function()
+    {
+        if (!this.actions) this.actions = {};
+
+        this.actions.insertImage = new Ext.Action({
+            icon: '/assets/silkicons/picture.png',
+            handler: this.createImage,
+            scope: this,
+            tooltip: {
+                cls: 'x-html-editor-tip',
+                title: 'Image',
+                text: 'Insert new image or edit selected image.'
+            },
+            cls: 'x-btn-icon',
+            clickEvent: 'mousedown',
+            tabIndex: -1
+        });
+        this.actions.insertDownload = new Ext.Action({
+            icon: '/assets/silkicons/folder_link.png',
+            handler: this.createDownload,
+            scope: this,
+            tooltip: {
+                cls: 'x-html-editor-tip',
+                title: 'Download',
+                text: 'Create new Download for the selected text or edit selected Download.'
+            },
+            cls: 'x-btn-icon',
+            clickEvent: 'mousedown',
+            tabIndex: -1
+        });
+        this.actions.insertLink = new Ext.Action({
+            handler: this.createLink,
+            scope: this,
+            tooltip: {
+                cls: 'x-html-editor-tip',
+                title: 'Hyperlink',
+                text: 'Create new Link for the selected text or edit selected Link.'
+            },
+            cls: 'x-btn-icon x-edit-createlink',
+            clickEvent: 'mousedown',
+            tabIndex: -1
+        });
+        this.actions.undo = new Ext.Action({
+            handler: this.undo,
+            scope: this,
+            icon: '/assets/silkicons/arrow_undo.png',
+            tooltip: {
+                cls: 'x-html-editor-tip',
+                title: 'Undo',
+                text: 'Undo the last action.'
+            },
+            cls: 'x-btn-icon',
+            clickEvent: 'mousedown',
+            tabIndex: -1
+        });
+        this.actions.redo = new Ext.Action({
+            handler: this.redo,
+            scope: this,
+            icon: '/assets/silkicons/arrow_redo.png',
+            tooltip: {
+                cls: 'x-html-editor-tip',
+                title: 'Redo',
+                text: 'Redo the last action.'
+            },
+            cls: 'x-btn-icon',
+            clickEvent: 'mousedown',
+            tabIndex: -1
+        });
 
         //todo: lazy-loading von windows
         if (this.linkComponentConfig) {
@@ -63,52 +130,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
     getAction : function(type)
     {
-        if (this.actions[type]) return this.actions[type];
-
-        if (type == 'insertImage') {
-            this.actions[type] = new Ext.Action({
-                icon: '/assets/silkicons/picture.png',
-                handler: this.createImage,
-                scope: this,
-                tooltip: {
-                    cls: 'x-html-editor-tip',
-                    title: 'Image',
-                    text: 'Insert new image or edit selected image.'
-                },
-                cls: 'x-btn-icon',
-                clickEvent: 'mousedown',
-                tabIndex: -1
-            });
-        } else if (type == 'insertDownload') {
-            this.actions[type] = new Ext.Action({
-                icon: '/assets/silkicons/folder_link.png',
-                handler: this.createDownload,
-                scope: this,
-                tooltip: {
-                    cls: 'x-html-editor-tip',
-                    title: 'Download',
-                    text: 'Create new Download for the selected text or edit selected Download.'
-                },
-                cls: 'x-btn-icon',
-                clickEvent: 'mousedown',
-                tabIndex: -1
-            });
-        } else if (type == 'insertLink') {
-            this.actions[type] = new Ext.Action({
-                handler: this.createLink,
-                scope: this,
-                tooltip: {
-                    cls: 'x-html-editor-tip',
-                    title: 'Hyperlink',
-                    text: 'Create new Link for the selected text or edit selected Link.'
-                },
-                cls: 'x-btn-icon x-edit-createlink',
-                clickEvent: 'mousedown',
-                tabIndex: -1
-            });
-        } else {
-            throw 'unknown action-type: ' + type;
-        }
         return this.actions[type];
     },
     initEditor : function() {
@@ -132,17 +153,24 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     createToolbar: function(editor){
         Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
         var tb = this.getToolbar();
+        
+        if (this.enableUndoRedo) {
+            tb.insert(0, this.getAction('undo'));
+            tb.insert(1, this.getAction('redo'));
+            tb.insert(2, '-');
+        }
+
         if (this.linkDialog || this.imageDialog || this.downloadDialog) {
-            tb.insert(7, '-');
+            tb.insert(10, '-');
         }
         if (this.linkDialog) {
-            tb.insert(8,  this.getAction('insertLink'));
+            tb.insert(11,  this.getAction('insertLink'));
         }
         if (this.imageDialog) {
-            tb.insert(9, this.getAction('insertImage'));
+            tb.insert(12, this.getAction('insertImage'));
         }
         if (this.downloadDialog) {
-            tb.insert(10,  this.getAction('insertDownload'));
+            tb.insert(13,  this.getAction('insertDownload'));
         }
         tb.add('-');
         if (this.enableInsertChar) {
@@ -429,6 +457,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             buttons: Ext.Msg.OKCANCEL,
             fn: function(btn, text) {
                 if (btn == 'ok') {
+                    text = text.replace(/\r/g, '');
+                    text = text.replace(/\n/g, '</p>\n<p>');
+                    text = String.format('<p>{0}</p>', text);
                     this.insertAtCursor(text);
                 }
             },
@@ -503,6 +534,13 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     toggleSourceEdit : function(sourceEditMode) {
         this.tidyHtml();
         Vps.Form.HtmlEditor.superclass.toggleSourceEdit.call(this, sourceEditMode);
+    },
+
+    undo: function() {
+        this.relayCmd('undo');
+    },
+    redo: function() {
+        this.relayCmd('redo');
     }
 });
 Ext.reg('htmleditor', Vps.Form.HtmlEditor);
