@@ -1,0 +1,23 @@
+<?php
+class Vpc_Basic_Link_FirstChildPage_Component extends Vpc_Basic_Link_Component
+{
+    public static function getSettings()
+    {
+        $ret = array_merge(parent::getSettings(), array(
+            'componentName' => 'Link.FirstChildPage'
+        ));
+        return $ret;
+    }
+
+    public function getTemplateVars()
+    {
+        $pc = $this->getPageCollection();
+        $childPages = $pc->getMenuChildPages($this);
+
+        $ret = parent::getTemplateVars();
+        $ret['href'] = $pc->getUrl($childPages[0]);
+        $ret['param'] = '';
+        $ret['rel'] = '';
+        return $ret;
+    }
+}
