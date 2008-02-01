@@ -13,12 +13,11 @@ class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Menu_Abstract
             'levels' => 2
         ));
     }
-
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $pc = $this->getPageCollection();
 
+        $pc = $this->getPageCollection();
 
         // Hauptmenü
         $config = new Zend_Config_Ini('application/config.ini', 'pagecollection');
@@ -37,7 +36,11 @@ class Vpc_Decorator_Menu_Component extends Vpc_Decorator_Menu_Abstract
             $page = $pc->getPageById(array_pop($currentPageIds));
             $level++;
         }
+        for ($i = 0; $i < $this->_getSetting('levels'); $i++) {
+            if (!isset($return['submenus'][$i])) {
+                $return['submenus'][$i] = array();
+            }
+        }
         return $return;
     }
-
 }
