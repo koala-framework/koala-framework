@@ -2,10 +2,11 @@
 class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 {
     protected $_buttons = array(
-        'save' => true,
-        'delete' => true,
-        'reload' => true
-    );
+        'save',
+        'delete',
+        'reload',
+        'addparagraph'
+        );
     protected $_paging = 0;
     protected $_position = 'pos';
 
@@ -18,10 +19,10 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         $this->_columns->add(new Vps_Auto_Grid_Column('preview', 'Preview', 500))
             ->setData(new Vps_Auto_Data_Vpc_Frontend($this->class, $this->componentId))
             ->setRenderer('component');
-        $this->_columns->add(new Vps_Auto_Grid_Column_Button('edit', ' ', 20))
-            ->setButtonIcon('/assets/silkicons/table_edit.png')
-            ->setToolTip('Edit Paragraph');
         $this->_columns->add(new Vps_Auto_Grid_Column_Visible());
+        $this->_columns->add(new Vps_Auto_Grid_Column_Button())
+            ->setButtonIcon(new Vps_Asset('paragraph_edit'))
+            ->setTooltip('Edit Paragraph');
     }
 
     public function preDispatch()

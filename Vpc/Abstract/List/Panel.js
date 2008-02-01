@@ -1,5 +1,5 @@
 Ext.namespace('Vpc.Abstract.List');
-Vpc.Abstract.List.Panel = Ext.extend(Vps.Auto.AbstractPanel,
+Vpc.Abstract.List.Panel = Ext.extend(Vps.Auto.ProxyPanel,
 {
     initComponent: function()
     {
@@ -21,6 +21,7 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Auto.AbstractPanel,
                 componentIdSuffix: '-{0}'
             }]
         });
+        this.proxyItem = this.grid;
 
         this.grid.onAdd = this.onAdd;
         this.layout = 'border';
@@ -30,9 +31,6 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Auto.AbstractPanel,
 
     load: function()
     {
-        this.grid.applyBaseParams({
-            component_id: this.getBaseParams()['component_id']
-        });
         this.grid.load();
         this.childPanel.getForm().clearValues();
         this.childPanel.disable();
@@ -55,14 +53,5 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Auto.AbstractPanel,
             },
             scope: this
         });
-    },
-    setBaseParams : function(baseParams) {
-        this.grid.setBaseParams(baseParams);
-    },
-    applyBaseParams : function(baseParams) {
-        this.grid.applyBaseParams(baseParams);
-    },
-    getBaseParams : function() {
-        return this.grid.getBaseParams();
     }
 });

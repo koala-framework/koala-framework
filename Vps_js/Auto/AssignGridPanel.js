@@ -1,4 +1,4 @@
-Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.AbstractPanel, {
+Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.ProxyPanel, {
 
     gridAssignedControllerUrl: '',
     gridDataControllerUrl: '',
@@ -12,7 +12,6 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
     initComponent: function()
     {
-        this.actions = {};
         if (this.assignActionUrl == '') {
             this.assignActionUrl = this.gridAssignedControllerUrl + '/jsonAssign';
         }
@@ -25,6 +24,7 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.AbstractPanel, {
                 selModel: new Ext.grid.CheckboxSelectionModel()
             }
         });
+        this.proxyItem = this.gridAssigned;
 
         this.gridData = new Vps.Auto.GridPanel({
             region: 'south',
@@ -64,26 +64,16 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
         this.items = [this.gridAssigned, this.gridData];
 
+        this.actions.assign = new Ext.Action({
+            text    : 'Assign',
+            icon    : '/assets/silkicons/table_relationship.png',
+            cls     : 'x-btn-text-icon',
+            disabled: true,
+            handler : this.onAssign,
+            scope   : this
+        });
+
         Vps.Auto.AssignGridPanel.superclass.initComponent.call(this);
-    },
-
-    getAction : function(type)
-    {
-        if (this.actions[type]) return this.actions[type];
-
-        if (type == 'assign') {
-            this.actions[type] = new Ext.Action({
-                text    : 'Assign',
-                icon    : '/assets/silkicons/table_relationship.png',
-                cls     : 'x-btn-text-icon',
-                disabled: true,
-                handler : this.onAssign,
-                scope   : this
-            });
-        } else {
-            throw 'unknown action-type: ' + type;
-        }
-        return this.actions[type];
     },
 
     onAssign : function()
@@ -113,25 +103,5 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
     reloadDataGrid: function() {
         return this.gridData.reload.apply(this.gridData, arguments);
-    },
-
-
-    load: function() {
-        return this.gridAssigned.load.apply(this.gridAssigned, arguments);
-    },
-    applyBaseParams: function() {
-        return this.gridAssigned.applyBaseParams.apply(this.gridAssigned, arguments);
-    },
-    getSelectedId: function() {
-        return this.gridAssigned.getSelectedId.apply(this.gridAssigned, arguments);
-    },
-    selectId: function(id) {
-        return this.gridAssigned.selectId.apply(this.gridAssigned, arguments);
-    },
-    setBaseParams : function(baseParams) {
-        return this.gridAssigned.setBaseParams.apply(this.gridAssigned, arguments);
-    },
-    getBaseParams : function() {
-        return this.gridAssigned.getBaseParams.apply(this.gridAssigned, arguments);
     }
 });

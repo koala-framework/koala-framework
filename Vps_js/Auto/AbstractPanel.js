@@ -1,4 +1,8 @@
-Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
+Vps.Auto.AbstractPanel = function(config) {
+    if (!config.actions) this.actions = {}; //muss hier sein
+    Vps.Auto.AbstractPanel.superclass.constructor.apply(this, arguments);
+};
+Ext.extend(Vps.Auto.AbstractPanel, Ext.Panel,
 {
     checkDirty: true,
 
@@ -128,6 +132,11 @@ Vps.Auto.AbstractPanel = Ext.extend(Ext.Panel,
     },
     removeBinding: function(autoPanel) {
         //todo
+    },
+
+    getAction : function(type)
+    {
+        if (this.actions[type]) return this.actions[type];
     },
 
     //deprecated
