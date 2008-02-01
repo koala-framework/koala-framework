@@ -6,6 +6,7 @@ abstract class Vpc_Abstract_TablePageFactory extends Vpc_Abstract_PageFactory
     protected $_filenamePattern = '/^(\d+)_(.*)$/';
     protected $_showInMenu = false;
     protected $_additionalPageFactories = array('Vpc_Abstract_PagesFactory');
+    protected $_orderBy;
 
     public function getChildPages()
     {
@@ -30,7 +31,7 @@ abstract class Vpc_Abstract_TablePageFactory extends Vpc_Abstract_PageFactory
     {
         $ret = array();
 
-        $rowset = $this->_getTable()->fetchAll($this->_getWhere());
+        $rowset = $this->_getTable()->fetchAll($this->_getWhere(), $this->_orderBy);
         foreach ($rowset as $row) {
             $ret[] = $this->getChildPageByRow($row);
         }
