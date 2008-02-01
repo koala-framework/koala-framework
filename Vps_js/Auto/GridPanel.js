@@ -27,7 +27,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         this.addEvents(
             'rendergrid',
             'beforerendergrid',
-            'deleterow'
+            'deleterow',
+            'celldblclick',
+            'rowdblclick'
         );
 
         this.actions.reload = new Ext.Action({
@@ -301,7 +303,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             }, this);
         };
 
-
         //editDialog kann entweder von config übergeben werden oder von meta-daten kommen
         if (!this.editDialog && meta.editDialog) {
             this.editDialog = meta.editDialog;
@@ -309,8 +310,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         if (this.editDialog) {
             this.editDialog = this.initEditDialog(this.editDialog);
         }
-        this.on('rowdblclick', function(grid, rowIndex) {
-            this.edit(this.store.getAt(rowIndex));
+        this.on('celldblclick', function(grid, rowIndex, columnIndex, e) {
+            //wenn spalte einen eigenen clickhandler hat den dblclick ignorieren
+            var col = grid.getColumnModel().config[columnIndex];
+            if (!col.clickHandler) {
+                this.fireEvent('celldblclick', grid, rowIndex, columnIndex, e);
+                this.fireEvent('rowdblclick', grid, rowIndex, e);
+                this.edit(this.store.getAt(rowIndex));
+            }
         }, this);
 
         for (var i in this.actions) {
@@ -473,9 +480,16 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         }
 
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
-        this.relayEvents(this.grid, ['rowdblclick', 'beforeedit', 'aftereditcomplete']);
+        this.relayEvents(this.grid, ['beforeedit', 'aftereditcomplete']);
 
         this.grid.on('cellclick', function(grid, rowIndex, columnIndex, e) {
+            //damit bei doppelclick nur ein event ausgeführt wird
+            if (this.ignoreCellClicks) return;
+            this.ignoreCellClicks = true;
+            (function(){
+                this.ignoreCellClicks = false;
+            }).defer(500, this);
+
             var col = grid.getColumnModel().config[columnIndex];
             if (col.clickHandler) {
                 col.clickHandler.call(col.scope || this, grid, rowIndex, col, e);
