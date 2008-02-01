@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Link_FirstChildPage_Component extends Vpc_Basic_Link_Component
+class Vpc_Basic_Link_FirstChildPage_Component extends Vpc_Basic_LinkTag_Abstract_Component
 {
     public static function getSettings()
     {

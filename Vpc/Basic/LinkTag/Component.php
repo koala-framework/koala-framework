@@ -13,12 +13,12 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
             'tablename'     => 'Vpc_Basic_LinkTag_Model',
             'componentName' => 'LinkTag',
             'childComponentClasses'   => array(
-                'Internal Link' => 'Vpc_Basic_Link_Intern_Component',
-                'External Link' => 'Vpc_Basic_Link_Extern_Component',
-                'Mail Link' => 'Vpc_Basic_Link_Mail_Component'
+                'Internal Link' => 'Vpc_Basic_LinkTag_Intern_Component',
+                'External Link' => 'Vpc_Basic_LinkTag_Extern_Component',
+                'Mail Link'     => 'Vpc_Basic_LinkTag_Mail_Component'
             ),
             'default'       => array(
-                'link_class'    => 'Vpc_Basic_Link_Intern_Component'
+                'link_class'    => 'Vpc_Basic_LinkTag_Intern_Component'
             )
         ));
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/LinkTag/Panel.js';
@@ -30,12 +30,13 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
     {
         $class = $this->_getRow()->link_class;
         if (class_exists($class) && 
-            is_subclass_of($class, 'Vpc_Basic_Link_Component')
+            is_subclass_of($class, 'Vpc_Basic_LinkTag_Abstract_Component')
         ) {
+            //TODO: lazy load
             $this->link = $this->createComponent($class, 1);
         } else {
             throw new Vpc_Exception('Link class does not exist or does not have 
-            Vpc_Basic_Link_Component as parent class: ' . $class);
+            Vpc_Basic_LinkTag_Abstract_Component as parent class: ' . $class);
         }
     }
 
