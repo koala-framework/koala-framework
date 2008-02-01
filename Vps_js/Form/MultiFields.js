@@ -25,9 +25,6 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
             multiFieldsPanel: this,
             renderTo: this.body
         }, position);
-        if (this.multiItems[this.multiItems.length-1].xtype == 'fieldset') {
-            this.addGroupButton.el.setStyle('top', '-19px');
-        }
     },
 
     // private
@@ -85,6 +82,10 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
             }
         }
 
+        //firefox schiebt den button ned nach unten
+        this.addGroupButton.hide();
+        this.addGroupButton.show.defer(100, this.addGroupButton);
+
         this.groups.push({
             item: item,
             deleteButton: deleteButton,
@@ -101,6 +102,13 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
                 this.addGroupButton.disable();
             } else {
                 this.addGroupButton.enable();
+            }
+            if (this.multiItems[this.multiItems.length-1].xtype == 'fieldset') {
+                if (this.groups.length) {
+                    this.addGroupButton.el.setStyle('top', '-19px');
+                } else {
+                    this.addGroupButton.el.setStyle('top', '0');
+                }
             }
         }
         for (var i = 0; i < this.groups.length; i++) {
@@ -315,8 +323,8 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
     },
     clearValue: function() {
         Vps.Form.MultiFieldsHidden.superclass.resetDirty.call(this);
-        this._initFields(this.minEntries);
         var gp = this.multiFieldsPanel;
+        this._initFields(gp.minEntries);
         gp.groups.each(function(g) {
             this._findFormFields(g.item, function(f) {
                 f.clearValue();
@@ -326,8 +334,8 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
         this.originalValue = '';
     },
     setDefaultValue: function() {
-        this._initFields(this.minEntries);
         var gp = this.multiFieldsPanel;
+        this._initFields(gp.minEntries);
         gp.groups.each(function(g) {
             this._findFormFields(g.item, function(f) {
                 f.setDefaultValue();
@@ -367,5 +375,4 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
             }, this);
         }, this);
     }
-
 });
