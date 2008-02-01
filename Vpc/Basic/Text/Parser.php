@@ -77,7 +77,7 @@ class Vpc_Basic_Text_Parser
         else {
             $this->_finalHTML .= "<".$element;
             foreach ($attributes as $key => $value) {
-                 $this->_finalHTML .= ' ' . $key . ':'. $value;
+                 $this->_finalHTML .= ' ' . $key . '="'. $value . '"';
             }
 
             $this->_finalHTML .= ">";
