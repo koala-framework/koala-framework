@@ -12,6 +12,15 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.ProxyPanel, {
 
     initComponent: function()
     {
+        this.actions.assign = new Ext.Action({
+            text    : 'Assign',
+            icon    : '/assets/silkicons/table_relationship.png',
+            cls     : 'x-btn-text-icon',
+            disabled: true,
+            handler : this.onAssign,
+            scope   : this
+        });
+
         if (this.assignActionUrl == '') {
             this.assignActionUrl = this.gridAssignedControllerUrl + '/jsonAssign';
         }
@@ -63,15 +72,6 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.ProxyPanel, {
         this.layout = 'border';
 
         this.items = [this.gridAssigned, this.gridData];
-
-        this.actions.assign = new Ext.Action({
-            text    : 'Assign',
-            icon    : '/assets/silkicons/table_relationship.png',
-            cls     : 'x-btn-text-icon',
-            disabled: true,
-            handler : this.onAssign,
-            scope   : this
-        });
 
         Vps.Auto.AssignGridPanel.superclass.initComponent.call(this);
     },
