@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Link_Intern_PagesController extends Vps_Controller_Action_Component_PagesController
+class Vpc_Basic_LinkTag_Intern_PagesController extends Vps_Controller_Action_Component_PagesController
 {
     private $_pc;
 

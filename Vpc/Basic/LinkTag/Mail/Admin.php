@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Link_Mail_Admin extends Vpc_Admin
+class Vpc_Basic_LinkTag_Mail_Admin extends Vpc_Admin
 {
     public function setup()
     {
