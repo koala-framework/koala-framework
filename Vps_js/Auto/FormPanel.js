@@ -8,7 +8,6 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
     initComponent: function()
     {
-        if (!this.actions) this.actions = {};
         if (!this.baseParams) this.baseParams = {};
 
         this.addEvents(
@@ -17,6 +16,29 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             'addaction',
             'renderform'
         );
+        this.actions.save = new Ext.Action({
+            text    : 'Save',
+            icon    : '/assets/silkicons/table_save.png',
+            cls     : 'x-btn-text-icon',
+            handler : function() {
+                this.onSave();
+            },
+            scope   : this
+        });
+        this.actions['delete'] = new Ext.Action({
+            text    : 'Delete',
+            icon    : '/assets/silkicons/table_delete.png',
+            cls     : 'x-btn-text-icon',
+            handler : this.onDelete,
+            scope   : this
+        });
+        this.actions.add = new Ext.Action({
+            text    : 'New Entry',
+            icon    : '/assets/silkicons/table_add.png',
+            cls     : 'x-btn-text-icon',
+            handler : this.onAdd,
+            scope   : this
+        });
 
         Vps.Auto.FormPanel.superclass.initComponent.call(this);
 
@@ -71,42 +93,6 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
     isDirty : function() {
         return this.getForm().isDirty();
-    },
-
-    getAction : function(type)
-    {
-        if (this.actions[type]) return this.actions[type];
-
-        if (type == 'save') {
-            this.actions[type] = new Ext.Action({
-                text    : 'Save',
-                icon    : '/assets/silkicons/table_save.png',
-                cls     : 'x-btn-text-icon',
-                handler : function() {
-                    this.onSave();
-                },
-                scope   : this
-            });
-        } else if (type == 'delete') {
-            this.actions[type] = new Ext.Action({
-                text    : 'Delete',
-                icon    : '/assets/silkicons/table_delete.png',
-                cls     : 'x-btn-text-icon',
-                handler : this.onDelete,
-                scope   : this
-            });
-        } else if (type == 'add') {
-            this.actions[type] = new Ext.Action({
-                text    : 'New Entry',
-                icon    : '/assets/silkicons/table_add.png',
-                cls     : 'x-btn-text-icon',
-                handler : this.onAdd,
-                scope   : this
-            });
-        } else {
-            throw 'unknown action-type: ' + type;
-        }
-        return this.actions[type];
     },
 
     load : function(params, options) {

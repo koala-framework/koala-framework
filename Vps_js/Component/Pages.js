@@ -133,10 +133,12 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         } else {
             var panel = this.createComponentPanel(data);
             this.contentTabPanel.add(panel);
-            this.contentTabPanel.setActiveTab(panel);
         }
+        this.contentTabPanel.setActiveTab(panel);
         data.componentClass = data.cls;
         data.componentId = data.id;
+        data.text = 'Document';
+        data.icon = '/assets/vps/images/paragraph_page.gif';
         panel.loadComponent(data);
     },
 

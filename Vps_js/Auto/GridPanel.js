@@ -6,8 +6,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 
     initComponent : function()
     {
-        this.actions = {};
-
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
 
 //         if(this.autoload) {
@@ -33,6 +31,73 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             'deleterow'
         );
 
+        this.actions.reload = new Ext.Action({
+            icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
+            cls     : 'x-btn-icon',
+            tooltip : 'Reload',
+            handler : this.reload,
+            scope   : this
+        });
+        this.actions.save = new Ext.Action({
+            text    : 'Save',
+            icon    : '/assets/silkicons/table_save.png',
+            cls     : 'x-btn-text-icon',
+            disabled: true, //?? passt des?
+            handler : this.onSave,
+            scope   : this
+        });
+        this.actions.add = new Ext.Action({
+            text    : 'Add',
+            icon    : '/assets/silkicons/table_add.png',
+            cls     : 'x-btn-text-icon',
+            handler : this.onAdd,
+            scope: this
+        });
+        this.actions['delete'] = new Ext.Action({
+            text    : 'Delete',
+            icon    : '/assets/silkicons/table_delete.png',
+            cls     : 'x-btn-text-icon',
+            disabled: true,
+            handler : this.onDelete,
+            scope: this
+        });
+        this.actions.edit = new Ext.Action({
+            text    : 'Edit',
+            icon    : '/assets/silkicons/table_edit.png',
+            cls     : 'x-btn-text-icon',
+            disabled: true,
+            handler : this.onEdit,
+            scope: this
+        });
+        this.actions.duplicate = new Ext.Action({
+            text    : 'Duplicate',
+            icon    : '/assets/silkicons/table_go.png',
+            cls     : 'x-btn-text-icon',
+            disabled: true,
+            handler : this.onDuplicate,
+            scope: this
+        });
+        this.actions.pdf = new Ext.Action({
+            text    : 'Drucken',
+            icon    : '/assets/silkicons/printer.png',
+            cls     : 'x-btn-text-icon',
+            handler : this.onPdf,
+            scope: this
+        });
+        this.actions.csv = new Ext.Action({
+            text    : 'CSV Export',
+            icon    : '/assets/silkicons/page_code.png',
+            cls     : 'x-btn-text-icon',
+            handler : this.onCsv,
+            scope: this
+        });
+        this.actions.xls = new Ext.Action({
+            text    : 'Excel Export',
+            icon    : '/assets/silkicons/page_excel.png',
+            cls     : 'x-btn-text-icon',
+            handler : this.onXls,
+            scope: this
+        });
         Vps.Auto.GridPanel.superclass.initComponent.call(this);
     },
 
@@ -112,9 +177,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
 
         gridConfig.selModel.on('selectionchange', function() {
             if (this.getSelected()) {
+                this.getAction('edit').enable();
                 this.getAction('delete').enable();
                 this.getAction('duplicate').enable();
             } else {
+                this.getAction('edit').disable();
                 this.getAction('delete').disable();
                 this.getAction('duplicate').disable();
             }
@@ -203,12 +270,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
                     column.editDialog = this.initEditDialog(column.editDialog);
                 }
                 column.clickHandler = function(grid, rowIndex, col, e) {
+                    var r = grid.getStore().getAt(rowIndex);
                     if (col.editDialog) {
-                        var r = grid.getStore().getAt(rowIndex);
                         col.editDialog.showEdit(r.id);
-                    } else if (this.editDialog) {
-                        var r = grid.getStore().getAt(rowIndex);
-                        this.editDialog.showEdit(r.id);
+                    } else {
+                        this.edit(r);
                     }
                 };
             }
@@ -243,12 +309,10 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         }
         if (this.editDialog) {
             this.editDialog = this.initEditDialog(this.editDialog);
-            if (this.editDialog.allowEdit !== false) {
-                this.on('rowdblclick', function(grid, rowIndex) {
-                    this.editDialog.showEdit(this.store.getAt(rowIndex).id);
-                }, this);
-            }
         }
+        this.on('rowdblclick', function(grid, rowIndex) {
+            this.edit(this.store.getAt(rowIndex));
+        }, this);
 
         for (var i in this.actions) {
             if (i == 'add' && this.editDialog) continue; //add-button anzeigen auch wenn keine permissions da die add-permissions im dialog sein müssen
@@ -256,6 +320,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
                 this.getAction(i).hide();
             }
         }
+
         /* * Für DD
         var ddrow = new Ext.dd.DropTarget(this.grid.container, {
             ddGroup : 'GridDD',
@@ -311,14 +376,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             this.pagingType = false;
         }
 
-        if (meta.buttons.reload) {
-            gridConfig.tbar.add(this.getAction('reload'));
-            delete meta.buttons.reload;
-        }
         if (meta.buttons.save) {
             gridConfig.tbar.add(this.getAction('save'));
             gridConfig.tbar.add('-');
             delete meta.buttons.save;
+        }
+        if (meta.buttons.edit) {
+            gridConfig.tbar.add(this.getAction('edit'));
+            delete meta.buttons.edit;
         }
         if (meta.buttons.add) {
             gridConfig.tbar.add(this.getAction('add'));
@@ -332,8 +397,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             gridConfig.tbar.add(this.getAction('duplicate'));
             delete meta.buttons.duplicate;
         }
+
         for (var i in meta.buttons) {
-            if (i != 'pdf' && i != 'csv' && i != 'xls') {
+            if (i != 'pdf' && i != 'csv' && i != 'xls' && i != 'reload') {
                 gridConfig.tbar.add(this.getAction(i));
             }
         }
@@ -378,7 +444,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             first = false;
         }
 
-        if (meta.buttons.pdf || meta.buttons.xls || meta.buttons.csv) {
+        if (meta.buttons.pdf || meta.buttons.xls || meta.buttons.csv || meta.buttons.reload) {
             gridConfig.tbar.add('->');
         }
         if (meta.buttons.pdf) {
@@ -390,6 +456,10 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         if (meta.buttons.csv) {
             gridConfig.tbar.add(this.getAction('csv'));
         }
+        if (meta.buttons.reload) {
+            gridConfig.tbar.add(this.getAction('reload'));
+        }
+
         for (var i = 0; i < gridConfig.tbar.length; i++) {
             if (typeof gridConfig.tbar[i] == 'string'
                     && this.getAction(gridConfig.tbar[i])) {
@@ -475,83 +545,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         };
     },
 
-    getAction : function(type)
-    {
-        if (this.actions[type]) return this.actions[type];
-
-        if (type == 'reload') {
-            this.actions[type] = new Ext.Action({
-                text    : '',
-                handler : this.reload,
-                icon    : '/assets/silkicons/bullet_star.png',
-                cls     : 'x-btn-icon',
-                scope   : this
-            });
-        } else if (type == 'save') {
-            this.actions[type] = new Ext.Action({
-                text    : 'Save',
-                icon    : '/assets/silkicons/table_save.png',
-                cls     : 'x-btn-text-icon',
-                disabled: true, //?? passt des?
-                handler : this.onSave,
-                scope   : this
-            });
-        } else if (type == 'add') {
-            this.actions[type] = new Ext.Action({
-                text    : 'Add',
-                icon    : '/assets/silkicons/table_add.png',
-                cls     : 'x-btn-text-icon',
-                handler : this.onAdd,
-                scope: this
-            });
-        } else if (type == 'delete') {
-            this.actions[type] = new Ext.Action({
-                text    : 'Delete',
-                icon    : '/assets/silkicons/table_delete.png',
-                cls     : 'x-btn-text-icon',
-                disabled: true,
-                handler : this.onDelete,
-                scope: this
-            });
-        } else if (type == 'duplicate') {
-            this.actions[type] = new Ext.Action({
-                text    : 'Duplicate',
-                icon    : '/assets/silkicons/table_go.png',
-                cls     : 'x-btn-text-icon',
-                disabled: true,
-                handler : this.onDuplicate,
-                scope: this
-            });
-        } else if (type == 'pdf') {
-            this.actions[type] = new Ext.Action({
-                text    : 'Drucken',
-                icon    : '/assets/silkicons/printer.png',
-                cls     : 'x-btn-text-icon',
-                handler : this.onPdf,
-                scope: this
-            });
-        } else if (type == 'csv') {
-            this.actions[type] = new Ext.Action({
-                text    : 'CSV Export',
-                icon    : '/assets/silkicons/page_code.png',
-                cls     : 'x-btn-text-icon',
-                handler : this.onCsv,
-                scope: this
-            });
-        } else if (type == 'xls') {
-            this.actions[type] = new Ext.Action({
-                text    : 'Excel Export',
-                icon    : '/assets/silkicons/page_excel.png',
-                cls     : 'x-btn-text-icon',
-                handler : this.onXls,
-                scope: this
-            });
-        } else {
-            return null;
-        }
-        return this.actions[type];
-    },
-
     //protected, zum überschreiben in unterklassen um zusäztliche daten zu speichern
     getSaveParams : function()
     {
@@ -625,6 +618,20 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             },
             scope  : this
         });
+    },
+    onEdit : function()
+    {
+        if (this.getSelected()) {
+            this.edit(this.getSelected());
+        }
+    },
+
+    //protected, wird zB in Paragraphs.Panel überschrieben
+    edit : function(row)
+    {
+        if (this.editDialog && this.editDialog.allowEdit !== false) {
+            this.editDialog.showEdit(row.id);
+        }
     },
 
     onAdd : function()

@@ -66,10 +66,12 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             item.destroy();
         }
         if (toolbar.items.getCount() >= 1) {
-                toolbar.addSeparator();
+                toolbar.add('»');
         }
         toolbar.addButton({
             text    : data.text,
+            icon    : data.icon,
+            cls     : data.icon ? 'x-btn-text-icon' : 'x-btn-text',
             handler : function (o, e) {
                 this.loadComponent(data);
             },
@@ -90,7 +92,8 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         this.clearToolbar();
         this.loadComponent({
             componentClass: this.mainComponentClass,
-            text: this.mainComponentText
+            text: this.mainComponentText,
+            icon: '/assets/vps/images/paragraph_page.gif'
         });
     },
 
