@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Link_Mail_Form extends Vps_Auto_Vpc_Form
+class Vpc_Basic_LinkTag_Mail_Form extends Vps_Auto_Vpc_Form
 {
     public function __construct($class, $id = null)
     {
