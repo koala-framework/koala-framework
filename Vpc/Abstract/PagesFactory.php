@@ -20,7 +20,7 @@ class Vpc_Abstract_PagesFactory extends Vpc_Abstract_PageFactory
             }
         }
         foreach ($this->_component->getChildComponents() as $p) {
-            $ret = array_merge($ret, $p->getChildPages());
+            $ret = array_merge($ret, $p->getPageFactory()->getChildPages());
         }
         return $ret;
     }

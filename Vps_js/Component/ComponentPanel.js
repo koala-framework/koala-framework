@@ -104,6 +104,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     load: function(data) {
         this.componentsStack = [];
         this.clearToolbar();
+        if (!data) { data = {}; }
         Ext.applyIf(data, {
             componentClass: this.mainComponentClass,
             text: this.mainComponentText,
