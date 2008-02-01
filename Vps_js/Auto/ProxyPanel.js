@@ -1,9 +1,5 @@
 Vps.Auto.ProxyPanel = Ext.extend(Vps.Auto.AbstractPanel,
 {
-    initComponent: function()
-    {
-        Vps.Auto.ProxyPanel.superclass.initComponent.call(this);
-    },
     mabySubmit: function() {
         return this.proxyItem.mabySubmit.apply(this.proxyItem, arguments);
     },

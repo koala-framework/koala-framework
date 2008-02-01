@@ -117,7 +117,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     },
     mabySubmit : function(cb, options)
     {
-        return this.contentPanel.mabySubmit.apply(this, arguments);
+        return this.contentPanel.mabySubmit.apply(this.contentPanel, arguments);
     },
     applyBaseParams : function(baseParams) {
         if (baseParams.id) {
