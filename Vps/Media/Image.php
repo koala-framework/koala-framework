@@ -50,6 +50,7 @@ class Vps_Media_Image
             // Bild wird auf größte Maximale Ausdehnung skaliert
 
             $size = getimagesize($source);
+            if (!$size) return array();
             $widthRatio = $size[0] / $width;
             $heightRatio = $size[1] / $height;
             if ($widthRatio > $heightRatio) {
