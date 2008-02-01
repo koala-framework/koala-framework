@@ -19,6 +19,7 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
             'enableLists'       => true,
             'enableSourceEdit'  => true,
             'enableBlock'       => true,
+            'enableUndoRedo'    => true,
             'enableLinks'       => false, //nur wenn link komponente nicht vorhanden
             'enableInsertChar'  => true,
             'enablePastePlain'  => true,
