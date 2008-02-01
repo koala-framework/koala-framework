@@ -18,8 +18,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
                 url: this.controllerUrl+'/jsonData',
                 params: Ext.apply({ meta: true }, this.baseParams),
                 success: function(response, options, r) {
-                    var result = Ext.decode(response.responseText);
-                    this.onMetaLoad(result);
+                    this.onMetaLoad(r);
                 },
                 scope: this
             });

@@ -3,6 +3,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     mainComponentClass: 'Vpc_Paragraphs_Component',
     mainComponentId: '{0}',
     mainComponentText: 'Content',
+    mainComponentIcon: '/assets/vps/images/paragraph_page.gif',
 
     initComponent: function() {
         this.contentPanel = new Ext.Panel();
@@ -10,7 +11,8 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             tbar        : [],
             items       : this.contentPanel
         });
-        this.baseParams = {};
+        this.componentsStack = [];
+
         Vps.Component.ComponentPanel.superclass.initComponent.call(this);
     },
 
@@ -27,11 +29,24 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             success: function(r, options, response) {
                 var cls = eval(response['class']);
                 if (cls) {
+
+                    this.componentsStack.push(data);
+
                     var panel2 = new cls(Ext.applyIf(response.config, {
-                        region          : 'center',
-                        autoScroll      : true,
-                        closable        : true
+                        autoScroll : true
                     }));
+                    if (panel2.getAction('saveBack')) {
+                        if (this.getTopToolbar().items.getCount() == 0) {
+                            panel2.getAction('saveBack').hide();
+                        } else {
+                            panel2.getAction('saveBack').show();
+                        }
+                    }
+                    panel2.on('savebackaction', function() {
+                        this.componentsStack.pop();
+                        var data = this.componentsStack[this.componentsStack.length-1];
+                        this.loadComponent(data);
+                    }, this);
                     panel2.on('editcomponent', this.loadComponent, this);
                     this.addToolbarButton(data);
 
@@ -88,13 +103,15 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         });
     },
 
-    load: function() {
+    load: function(data) {
+        this.componentsStack = [];
         this.clearToolbar();
-        this.loadComponent({
+        Ext.applyIf(data, {
             componentClass: this.mainComponentClass,
             text: this.mainComponentText,
-            icon: '/assets/vps/images/paragraph_page.gif'
+            icon: this.mainComponentIcon
         });
+        this.loadComponent(data);
     },
 
     isDirty: function() {

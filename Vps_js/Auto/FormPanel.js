@@ -20,9 +20,14 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             text    : 'Save',
             icon    : '/assets/silkicons/table_save.png',
             cls     : 'x-btn-text-icon',
-            handler : function() {
-                this.onSave();
-            },
+            handler : this.onSave,
+            scope   : this
+        });
+        this.actions.saveBack = new Ext.Action({
+            text    : 'Save and Back',
+            icon    : '/assets/silkicons/table_save.png',
+            cls     : 'x-btn-text-icon',
+            handler :this.onSaveBack,
             scope   : this
         });
         this.actions['delete'] = new Ext.Action({
@@ -176,6 +181,15 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     //private
     onSave : function() {
         this.submit();
+    },
+
+    onSaveBack : function() {
+        this.submit({
+            success: function() {
+                this.fireEvent('savebackaction', this);
+            },
+            scope: this
+        });
     },
 
     //für AbstractPanel
