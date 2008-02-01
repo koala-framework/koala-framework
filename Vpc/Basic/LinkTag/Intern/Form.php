@@ -11,9 +11,9 @@ class Vpc_Basic_LinkTag_Intern_Form extends Vps_Auto_Vpc_Form
         $this->add(new Vps_Auto_Field_TextField('param', 'Parameters'))
             ->setWidth(500);
 
-        $this->add(new Vpc_Basic_Link_Intern_Field('target', 'Target'))
+        $this->add(new Vpc_Basic_LinkTag_Intern_Field('target', 'Target'))
             ->setWidth(500)
-            ->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl('Vpc_Basic_Link_Intern_Pages'));
+            ->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl('Vpc_Basic_LinkTag_Intern_Pages'));
     }
 
     public function prepareSave($row, $postData)

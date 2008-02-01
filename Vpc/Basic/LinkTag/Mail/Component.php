@@ -8,7 +8,7 @@ class Vpc_Basic_LinkTag_Mail_Component extends Vpc_Basic_LinkTag_Abstract_Compon
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'tablename'     => 'Vpc_Basic_Link_Mail_Model',
+            'tablename'     => 'Vpc_Basic_LinkTag_Mail_Model',
             'componentName' => 'Link.Mail'
         )); 
     }

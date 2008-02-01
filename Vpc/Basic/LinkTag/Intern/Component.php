@@ -11,7 +11,7 @@ class Vpc_Basic_LinkTag_Intern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
             'tablename'     => 'Vpc_Basic_LinkTag_Intern_Model',
             'componentName' => 'Link.Intern'
         ));
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Link/Intern/LinkField.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/LinkTag/Intern/LinkField.js';
         return $ret;
     }
 
