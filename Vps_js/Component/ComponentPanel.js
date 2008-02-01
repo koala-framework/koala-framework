@@ -36,9 +36,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
                         autoScroll : true
                     }));
                     if (panel2.getAction('saveBack')) {
-                        if (this.getTopToolbar().items.getCount() == 0) {
-                            panel2.getAction('saveBack').hide();
-                        } else {
+                        if (this.getTopToolbar().items.getCount() > 0) {
                             panel2.getAction('saveBack').show();
                         }
                     }

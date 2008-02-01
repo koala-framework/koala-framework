@@ -27,8 +27,9 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
             text    : 'Save and Back',
             icon    : '/assets/silkicons/table_save.png',
             cls     : 'x-btn-text-icon',
-            handler :this.onSaveBack,
-            scope   : this
+            handler : this.onSaveBack,
+            scope   : this,
+            hidden  : true //standardmäßig versteckt, ComponentPanel ruft show() auf
         });
         this.actions['delete'] = new Ext.Action({
             text    : 'Delete',

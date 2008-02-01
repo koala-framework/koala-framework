@@ -6,8 +6,7 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Auto.ProxyPanel,
         var cls = eval(this.childConfig['class']);
         this.childPanel = new cls({
             controllerUrl: this.childConfig.config.controllerUrl,
-            region: 'center',
-            disabled: true
+            region: 'center'
         });
 
         this.grid = new Vps.Auto.GridPanel({
@@ -19,11 +18,11 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Auto.ProxyPanel,
             bindings: [{
                 item        : this.childPanel,
                 componentIdSuffix: '-{0}'
-            }]
+            }],
+            onAdd: this.onAdd
         });
         this.proxyItem = this.grid;
 
-        this.grid.onAdd = this.onAdd;
         this.layout = 'border';
         this.items = [this.grid, this.childPanel];
         Vpc.Abstract.List.Panel.superclass.initComponent.call(this);
