@@ -259,7 +259,9 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
         $downloadMaxChildComponentNr = $this->getMaxChildComponentNr('download');
         $newContent = '';
         foreach ($this->getContentParts($html) as $part) {
-            if ($part['type'] == 'invalidImage') {
+            if (is_string($part)) {
+                $newContent .= $part;
+            } else if ($part['type'] == 'invalidImage') {
                 if (isset($part['componentId'])
                     && class_exists($part['componentClass'])
                     && (strtolower($part['componentClass']) == 'vpc_basic_image_component'
