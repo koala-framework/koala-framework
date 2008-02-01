@@ -9,7 +9,8 @@ Vps.Auto.AssignedGridPanel = Ext.extend(Vps.Auto.GridPanel,
             scope   : this
         });
         Vps.Auto.AssignedGridPanel.superclass.initComponent.call(this);
-    }
+    },
+
     onTextAssign : function()
     {
         var params = this.getBaseParams();
