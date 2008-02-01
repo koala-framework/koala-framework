@@ -14,7 +14,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         });
         this.contentTabPanel = new Ext.TabPanel({
             region      : 'center',
-            id          : 'contentTabPanel'
+            id          : 'contentTabPanel',
+            mainComponentText: 'Document'
         });
 
         this.layout = 'border';
@@ -135,11 +136,13 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.contentTabPanel.add(panel);
         }
         this.contentTabPanel.setActiveTab(panel);
-        data.componentClass = data.cls;
-        data.componentId = data.id;
-        data.text = 'Document';
-        data.icon = '/assets/vps/images/paragraph_page.gif';
-        panel.loadComponent(data);
+
+        panel.applyBaseParams({
+            id: data.id
+        });
+        panel.load({
+            componentClass: data.cls
+        });
     },
 
     createComponentPanel: function(data)

@@ -65,6 +65,10 @@ Ext.extend(Vps.Auto.AbstractPanel, Ext.Panel,
             return ret;
         }, this);
 
+        if (!this.baseParams) {
+            this.baseParams = {};
+        }
+
         Vps.Auto.AbstractPanel.superclass.initComponent.call(this);
     },
     addBinding: function() {
