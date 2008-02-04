@@ -13,9 +13,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             tbar        : []
         });
         this.contentTabPanel = new Ext.TabPanel({
-            region      : 'center',
-            id          : 'contentTabPanel',
-            mainComponentText: 'Document'
+            region      : 'center'
         });
 
         this.layout = 'border';
@@ -129,10 +127,9 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
     loadComponent: function(data)
     {
-        if (this.contentTabPanel.getItem(data.text)) {
-            var panel = this.contentTabPanel.getItem(data.text);
-        } else {
-            var panel = this.createComponentPanel(data);
+        var panel = this.contentTabPanel.getItem('page'+data.id);
+        if (!panel)
+            panel = this.createComponentPanel(data);
             this.contentTabPanel.add(panel);
         }
         this.contentTabPanel.setActiveTab(panel);
@@ -148,7 +145,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     createComponentPanel: function(data)
     {
         var panel = new Vps.Component.ComponentPanel({
-            id          : data.text,
+            id          : 'page'+data.id,
             title       : data.text,
             region      : 'center',
             closable    : true
