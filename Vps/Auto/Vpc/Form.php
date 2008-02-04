@@ -67,8 +67,7 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
     }
     public function prepareSave($parentRow, $postData)
     {
-        $primaryKey = $this->getPrimaryKey();
-        if ($this->getId() == null && $parentRow->$primaryKey) {
+        if ($this->getId() == null && $parentRow->id) {
             $this->setId($this->_getComponentIdFromParentRow($parentRow));
         }
         return parent::prepareSave($parentRow, $postData);
