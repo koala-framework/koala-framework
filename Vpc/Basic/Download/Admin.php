@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Download_Admin extends Vpc_Basic_Image_Admin
+class Vpc_Basic_Download_Admin extends Vpc_Admin
 {
     public function setup()
     {
