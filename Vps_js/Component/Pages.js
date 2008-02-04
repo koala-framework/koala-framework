@@ -128,7 +128,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     loadComponent: function(data)
     {
         var panel = this.contentTabPanel.getItem('page'+data.id);
-        if (!panel)
+        if (!panel) {
             panel = this.createComponentPanel(data);
             this.contentTabPanel.add(panel);
         }
