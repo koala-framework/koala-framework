@@ -1,7 +1,7 @@
 <?php
 class Vpc_Basic_Link_Component extends Vpc_Abstract
 {
-    public $linkTag;
+    protected $_linkTag;
 
     public static function getSettings()
     {
@@ -13,21 +13,25 @@ class Vpc_Basic_Link_Component extends Vpc_Abstract
             )
         ));
     }
-    public function _init()
+
+    public function getChildComponent()
     {
-        $class = $this->_getClassFromSetting('linkTag', 'Vpc_Basic_LinkTag_Component');
-        $this->linkTag = $this->createComponent($class, 'tag');
+        if (!$this->_linkTag) {
+            $class = $this->_getClassFromSetting('linkTag', 'Vpc_Basic_LinkTag_Component');
+            $this->_linkTag = $this->createComponent($class, 'tag');
+        }
+        return $this->_linkTag;
     }
 
     public function getChildComponents()
     {
-        return array($this->linkTag);
+        return array($this->getChildComponent());
     }
 
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $return['linkTag'] = $this->linkTag->getTemplateVars();
+        $return['linkTag'] = $this->getChildComponent()->getTemplateVars();
         $return['text'] = $this->_getRow()->text;
         return $return;
     }

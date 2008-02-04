@@ -10,6 +10,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
             'scale'             => array(Vps_Media_Image::SCALE_BESTFIT),
             'ouputDimensions'   => array('mini'  => array(20, 20, Vps_Media_Image::SCALE_BESTFIT),
                                          'thumb' => array(100, 100, Vps_Media_Image::SCALE_BESTFIT)),
+            'editComment'       => true,
             'editFilename'      => true,
             'allowBlank'        => true,
             'default'           => array(

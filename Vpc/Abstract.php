@@ -37,7 +37,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string Falls dynamische Unterseite
      * @param string Falls dynamische Unterkomponente
      */
-    public final function __construct(Vps_Dao $dao = null, $id = null, $pageCollection = null)
+    public final function __construct(Vps_Dao $dao = null, $id = null, $dbId = null, $pageCollection = null)
     {
         if (is_null($dao)) return;
 
@@ -52,6 +52,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
             $this->_row = $id;
         } else {
             $this->_id = $this->parseId($id);
+        }
+        if ($dbId) {
+            $this->setDbId($dbId);
         }
 
         $this->_init();
@@ -105,7 +108,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      */
     public static function createInstance(Vps_Dao $dao, $class, $id, $pageCollection = null)
     {
-        return self::_createInstance($dao, $class, $id, $pageCollection);
+        return self::_createInstance($dao, $class, $id, null, $pageCollection);
     }
 
     /**
@@ -123,10 +126,9 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $id .= '-' . $suffix;
 
         // Komponente erstellen
-        $component = self::_createInstance($this->getDao(), $class, $id, $this->getPageCollection());
-
+        $dbId = $this->getDbId() . '-' . $suffix;
+        $component = self::_createInstance($this->getDao(), $class, $id, $dbId, $this->getPageCollection());
         $component->setParentComponent($this);
-        $component->setDbId($this->getDbId().'-'.$suffix);
 
         // Erstellte Komponente hinzufügen
         return $component;
@@ -136,11 +138,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Erstellt die Komponente tatsächlich.
      * @throws Vpc_ComponentNotFoundException Falls Klasse für Komponente nicht gefunden wird
      */
-    private static function _createInstance(Vps_Dao $dao, $class, $id, $pageCollection = null)
+    private static function _createInstance(Vps_Dao $dao, $class, $id, $dbId, $pageCollection = null)
     {
         // Komponente erstellen
         if (class_exists($class)) {
-            $component = new $class($dao, $id, $pageCollection);
+            $component = new $class($dao, $id, $dbId, $pageCollection);
         } else {
             throw new Vpc_ComponentNotFoundException("Component '$class' not found.");
         }

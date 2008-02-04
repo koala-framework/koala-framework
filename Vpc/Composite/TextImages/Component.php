@@ -1,8 +1,8 @@
 <?php
 class Vpc_Composite_TextImages_Component extends Vpc_Abstract
 {
-    public $text;
-    public $images;
+    protected $_text;
+    protected $_images;
 
     public static function getSettings()
     {
@@ -18,22 +18,40 @@ class Vpc_Composite_TextImages_Component extends Vpc_Abstract
             )
         ));
     }
-    
+
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $return['text'] = $this->text->getTemplateVars('');
-        $return['images'] = $this->images->getTemplateVars('');
+        $return['text'] = $this->getChildComponent('text')->getTemplateVars('');
+        $return['images'] = $this->getChildComponent('images')->getTemplateVars('');
         $return['imagePosition'] = $this->_getRow()->image_position;
         return $return;
     }
 
-    protected function _init()
+    protected function getChildComponent($type)
     {
-        $textClass = $this->_getClassFromSetting('text', 'Vpc_Basic_Html_Component');
-        $imagesClass = $this->_getClassFromSetting('images', 'Vpc_Composite_Images_Component');
-        $this->text = $this->createComponent($textClass, 'text');
-        $this->images = $this->createComponent($imagesClass, 'images');
+        if ($type == 'text') {
+            if (!$this->_paragraphs) {
+                $textClass = $this->_getClassFromSetting('text', 'Vpc_Basic_Text_Component');
+                $this->_text = $this->createComponent($textClass, 'text');
+            }
+            return $this->_text;
+        } else if ($type == 'images') {
+            if (!$this->_images) {
+                $imagesClass = $this->_getClassFromSetting('images', 'Vpc_Composite_Images_Component');
+                $this->_images = $this->createComponent($imagesClass, 'images');
+            }
+            return $this->_images;
+        }
+        return null;
+    }
+
+    public function getChildComponents()
+    {
+        return array(
+            $this->getChildComponent('text'),
+            $this->getChildComponent('images')
+        );
     }
 
     public function getChildComponents()
