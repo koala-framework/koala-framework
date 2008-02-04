@@ -1,7 +1,7 @@
 <?php
 abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
 {
-    public $children = array();
+    protected $_children;
 
     public static function getSettings()
     {
@@ -17,26 +17,11 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         return $ret;
     }
 
-    protected function _init()
-    {
-        $class = $this->_getClassFromSetting('child', 'Vpc_Abstract');
-        $where = array(
-            'component_id = ?' => $this->getDbId(),
-            'component_class = ?' => $class
-        );
-        if (!$this->showInvisible()) {
-            $where['visible = ?'] = 1;
-        }
-        foreach ($this->getTable()->fetchAll($where) as $row) {
-            $this->children[$row->id] = $this->createComponent($class, $row->id);
-        }
-    }
-
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
         $return['children'] = array();
-        foreach ($this->children as $c) {
+        foreach ($this->getChildComponents() as $c) {
             $return['children'][] = $c->getTemplateVars();
         }
         return $return;
@@ -44,7 +29,22 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
 
     public function getChildComponents()
     {
-        return $this->children;
+        if (!$this->_children) {
+            $this->_children = array();
+            $class = $this->_getClassFromSetting('child', 'Vpc_Abstract');
+            $where = array(
+                'component_id = ?' => $this->getDbId(),
+                'component_class = ?' => $class
+            );
+            if (!$this->showInvisible()) {
+                $where['visible = ?'] = 1;
+            }
+            foreach ($this->getTable()->fetchAll($where) as $row) {
+                $this->_children[$row->id] = $this->createComponent($class, $row->id);
+            }
+        }
+
+        return $this->_children;
     }
 
 }

@@ -5,6 +5,12 @@ class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
     {
         parent::__construct($class, $id);
 
+        // Kommentar
+        if (Vpc_Abstract::getSetting($class, 'editComment')) {
+            $this->add(new Vps_Auto_Field_TextField('comment', 'Comment'))
+                ->setWidth(250);
+        }
+
         // Dateiname
         if (Vpc_Abstract::getSetting($class, 'editFilename')) {
             $this->add(new Vps_Auto_Field_TextField('filename', 'Filename'))

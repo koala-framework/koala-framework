@@ -5,7 +5,7 @@
  */
 class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
 {
-    public $link;
+    protected $_link;
 
     public static function getSettings()
     {
@@ -23,32 +23,31 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
         ));
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/LinkTag/Panel.js';
         return $ret;
-
     }
 
-    public function _init()
+    public function getChildComponent()
     {
-        $class = $this->_getRow()->link_class;
-        if (class_exists($class) && 
-            is_subclass_of($class, 'Vpc_Basic_LinkTag_Abstract_Component')
-        ) {
-            //TODO: lazy load
-            $this->link = $this->createComponent($class, 1);
-        } else {
-            throw new Vpc_Exception('Link class does not exist or does not have 
-            Vpc_Basic_LinkTag_Abstract_Component as parent class: ' . $class);
+        if (!$this->_link) {
+            $class = $this->_getRow()->link_class;
+            if (class_exists($class) &&
+                is_subclass_of($class, 'Vpc_Basic_LinkTag_Abstract_Component')
+            ) {
+                $this->_link = $this->createComponent($class, 1);
+            } else {
+                throw new Vpc_Exception('Link class does not exist or does not have
+                Vpc_Basic_LinkTag_Abstract_Component as parent class: ' . $class);
+            }
         }
+        return $this->_link;
     }
 
     public function getChildComponents()
     {
-        return array($this->link);
+        return array($this->getChildComponent());
     }
 
     public function getTemplateVars()
     {
-        if ($this->link) {
-            return $this->link->getTemplateVars();
-        }
+        return $this->getChildComponent()->getTemplateVars();
     }
 }

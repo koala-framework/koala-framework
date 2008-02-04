@@ -35,5 +35,5 @@ Vps.Auto.ProxyPanel = Ext.extend(Vps.Auto.AbstractPanel,
     },
     hasBaseParams: function() {
         return this.proxyItem.hasBaseParams.apply(this.proxyItem, arguments);
-    },
+    }
 });

@@ -1,7 +1,7 @@
 <?php
 class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
 {
-    public $smallImage = null;
+    protected $_smallImage;
 
     public static function getSettings()
     {
@@ -21,16 +21,10 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
         ));
     }
 
-    protected function _init()
-    {
-        $enlargeClass = $this->_getClassFromSetting('smallImage', 'Vpc_Basic_Image_Component');
-        $this->smallImage = $this->createComponent($enlargeClass, 1);
-    }
-
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $vars = $this->smallImage->getTemplateVars();
+        $vars = $this->getChildComponent()->getTemplateVars();
         if (!$vars['url']) {
             $url = $this->_row->getFileUrl(null, 'small');
             $size = $this->_row->getImageDimensions(null, 'small');
@@ -50,8 +44,17 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
         return $return;
     }
 
+    protected function getChildComponent()
+    {
+        if (!$this->_smallImage) {
+            $enlargeClass = $this->_getClassFromSetting('smallImage', 'Vpc_Basic_Image_Component');
+            $this->_smallImage = $this->createComponent($enlargeClass, 1);
+        }
+        return $this->_smallImage;
+    }
+
     public function getChildComponents()
     {
-        return array($this->smallImage);
+        return array($this->_smallImage);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 class Vpc_Basic_Download_Component extends Vpc_Abstract
 {
-    public $downloadTag;
+    protected $_downloadTag;
 
     public static function getSettings()
     {
@@ -17,21 +17,26 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract
             )
         ));
     }
-    public function _init()
+
+    public function getChildComponent()
     {
-        $class = $this->_getClassFromSetting('downloadTag', 'Vpc_Basic_DownloadTag_Component');
-        $this->downloadTag = $this->createComponent($class, 'tag');
+        if (!$this->_downloadTag) {
+            $class = $this->_getClassFromSetting('downloadTag', 'Vpc_Basic_DownloadTag_Component');
+            $this->_downloadTag = $this->createComponent($class, 'tag');
+        }
+        return $this->_downloadTag;
     }
 
     public function getChildComponents()
     {
-        return array($this->downloadTag);
+        return array($this->getChildComponent());
     }
+
 
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $return['downloadTag'] = $this->downloadTag->getTemplateVars();
+        $return['downloadTag'] = $this->getChildComponent()->getTemplateVars();
 
         $return['infotext'] = $this->_getRow()->infotext;
         if (!$this->_getSetting('showFilesize')) {
