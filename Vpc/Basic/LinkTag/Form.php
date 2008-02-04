@@ -17,11 +17,8 @@ class Vpc_Basic_LinkTag_Form extends Vps_Auto_Vpc_Form
         $layout->setBaseCls('x-plain');
         foreach ($classes as $name => $class) {
             $formname = str_replace('_Component', '_Form', $class);
-            $id = $this->getId();
-            if ($id != 0) {
-                $id .= '-1';
-            }
-            $form = new $formname($class, $id);
+            $form = new $formname($class);
+            $form->setComponentIdTemplate('{0}-1');
             $form->setAutoHeight(true);
             $form->setBaseCls('x-plain');
             $form->setProperty('id', $class);

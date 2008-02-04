@@ -380,8 +380,8 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                 $destRow->component_id = $this->component_id.'-l'.$linkMaxChildComponentNr;
                 $linkClasses = Vpc_Abstract::getSetting($classes['link'], 'childComponentClasses');
                 foreach ($linkClasses as $class) {
-                    if ($class == 'Vpc_Basic_Link_Extern_Component' ||
-                            is_subclass_of($class, 'Vpc_Basic_Link_Extern_Component')) {
+                    if ($class == 'Vpc_Basic_LinkTag_Extern_Component' ||
+                            is_subclass_of($class, 'Vpc_Basic_LinkTag_Extern_Component')) {
                         $destRow->link_class = $class;
                     }
                 }

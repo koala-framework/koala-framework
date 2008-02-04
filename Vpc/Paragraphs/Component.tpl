@@ -1,3 +1,5 @@
 {foreach from=$component.paragraphs item=paragraph}
-    {component component=$paragraph}
+    <div>
+        {component component=$paragraph}
+    </div>
 {/foreach}
