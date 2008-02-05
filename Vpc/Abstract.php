@@ -435,8 +435,10 @@ abstract class Vpc_Abstract implements Vpc_Interface
 
     public static function getSettings()
     {
-        return array('assets'=>array('files'=>array(), 'dep'=>array()),
-                     'assetsAdmin'=>array('files'=>array(), 'dep'=>array()),
+        return array(
+            'assets'        => array('files'=>array(), 'dep'=>array()),
+            'assetsAdmin'   => array('files'=>array(), 'dep'=>array()),
+            'componentIcon' => new Vps_Asset('paragraph_page')
         );
     }
 

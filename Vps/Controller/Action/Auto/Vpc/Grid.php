@@ -26,10 +26,9 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
         $row->component_id = $this->componentId;
     }
 
-    public function indexAction()
+    public function jsonIndexAction()
     {
-        $config = Vpc_Admin::getConfig($this->class, $this->componentId);
-        $this->view->vpc($config);
+        $this->view->vpc(Vpc_Admin::getInstance($this->class)->getExtConfig());
     }
 
     public function jsonInsertAction()

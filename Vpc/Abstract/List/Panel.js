@@ -1,13 +1,11 @@
 Ext.namespace('Vpc.Abstract.List');
-Vpc.Abstract.List.Panel = Ext.extend(Vps.Auto.ProxyPanel,
+Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
 {
     initComponent: function()
     {
-        var cls = eval(this.childConfig['class']);
-        this.childPanel = new cls({
-            controllerUrl: this.childConfig.config.controllerUrl,
+        this.childPanel = Ext.ComponentMgr.create(Ext.applyIf(this.childConfig, {
             region: 'center'
-        });
+        }));
 
         this.grid = new Vps.Auto.GridPanel({
             controllerUrl: this.controllerUrl,
@@ -54,3 +52,4 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Auto.ProxyPanel,
         });
     }
 });
+Ext.reg('vpc.list', Vpc.Abstract.List.Panel);

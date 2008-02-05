@@ -12,6 +12,7 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
         $ret = array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_LinkTag_Model',
             'componentName' => 'LinkTag',
+            'componentIcon' => new Vps_Asset('page_white_link'),
             'childComponentClasses'   => array(
                 'Internal Link' => 'Vpc_Basic_LinkTag_Intern_Component',
                 'External Link' => 'Vpc_Basic_LinkTag_Extern_Component',

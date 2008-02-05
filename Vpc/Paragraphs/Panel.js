@@ -30,6 +30,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
                         id: components[i],
                         text: i,
                         handler: this.onParagraphAdd,
+                        icon: this.componentIcons[components[i]],
                         scope: this
                     })
                 );
@@ -50,7 +51,8 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
         });
     },
 
-    onParagraphAdd : function(o, e) {
+    onParagraphAdd : function(o, e)
+    {
         Ext.Ajax.request({
             url: this.controllerUrl + '/jsonAddParagraph',
             params: Ext.apply ({ component : o.id}, this.getBaseParams()),
@@ -66,3 +68,5 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
         });
     }
 });
+
+Ext.reg('vpc.paragraphs', Vpc.Paragraphs.Panel);

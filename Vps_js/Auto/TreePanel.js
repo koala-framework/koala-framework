@@ -1,4 +1,4 @@
-Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
+Vps.Auto.TreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     layout: 'fit',
 
@@ -74,7 +74,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
         this.icons = meta.icons;
         for (var i in this.icons) {
             if (i in this.actions) {
-                this.actions[i].icon = '/assets/silkicons/' + this.icons[i] + '.png';
+                this.actions[i].icon = this.icons[i];
             }
         }
 
@@ -129,7 +129,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
         this.doLayout();
 
         if (meta.rootVisible) {
-            this.tree.getRootNode().ui.iconNode.style.backgroundImage = 'url(/assets/silkicons/' + meta.icons.root + '.png)';
+            this.tree.getRootNode().ui.iconNode.style.backgroundImage = 'url(' + meta.icons.root + ')';
             this.tree.getRootNode().select();
         }
         this.tree.getRootNode().expand();
@@ -304,9 +304,9 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
 
     setVisible : function (node) {
         if (node.attributes.visible) {
-            node.ui.iconNode.style.backgroundImage = 'url(/assets/silkicons/' + this.icons['default'] + '.png)';
+            node.ui.iconNode.style.backgroundImage = 'url(' + this.icons['default'] + ')';
         } else {
-            node.ui.iconNode.style.backgroundImage = 'url(/assets/silkicons/' + this.icons['invisible'] + '.png)';
+            node.ui.iconNode.style.backgroundImage = 'url(' + this.icons['invisible'] + ')';
         }
     },
 
@@ -345,7 +345,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.AbstractPanel, {
 Vps.Auto.TreeNode = Ext.extend(Ext.tree.TreeNodeUI, {
     initEvents : function(){
         Vps.Auto.TreeNode.superclass.initEvents.call(this);
-        this.node.ui.iconNode.style.backgroundImage = 'url(/assets/silkicons/' + this.node.attributes.bIcon + '.png)';
+        this.node.ui.iconNode.style.backgroundImage = 'url(' + this.node.attributes.bIcon + ')';
     },
     onDblClick : function(e){
         e.preventDefault();
@@ -353,3 +353,4 @@ Vps.Auto.TreeNode = Ext.extend(Ext.tree.TreeNodeUI, {
     }
 });
 
+Ext.reg('vps.autotree', Vps.Auto.TreePanel);

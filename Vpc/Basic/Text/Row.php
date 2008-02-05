@@ -21,9 +21,9 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
             }
 
             if ($classes['image'] && $m[3] != ''
-                && preg_match('#/media/([0-9]+)/([^/]+)/([^/]+)/#', $m[3], $m2)) {
+                && preg_match('#/media/([^/]+)/([^/]+)/([^/]+)/([^/]+)#', $m[3], $m2)) {
                 $isInvalid = false;
-                $childComponentId = $m2[3];
+                $childComponentId = $m2[2];
                 if (substr($childComponentId, 0, strlen($componentId)+2)
                             == $componentId.'-i') {
                     $nr = substr($childComponentId, strlen($componentId)+2);
@@ -52,6 +52,7 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
 
             if (($classes['link'] || $classes['download']) && $m[4] != ''
                 && preg_match('#/?([^/]+)$#', $m[4], $m2)) {
+
                 $isInvalid = false;
                 $childComponentId = $m2[1];
                 if ($classes['link']
@@ -91,7 +92,7 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                                    'componentId'=>$m2[1],
                                    'html'=>$m[2]);
                 } else {
-                    $ret[] = $m[2];
+                    $ret[] = array('type'=>'invalidLink', 'href'=>$m[4], 'html'=>$m[2]);
                 }
             } else if ($classes['link'] && $m[4] != '') {
                 $ret[] = array('type'=>'invalidLink', 'href'=>$m[4], 'html'=>$m[2]);
@@ -206,7 +207,6 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
 
     public function tidy($html)
     {
-
         $config = array(
                     'indent'         => true,
                     'output-xhtml'   => true,
@@ -258,6 +258,7 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
         $linkMaxChildComponentNr = $this->getMaxChildComponentNr('link');
         $downloadMaxChildComponentNr = $this->getMaxChildComponentNr('download');
         $newContent = '';
+
         foreach ($this->getContentParts($html) as $part) {
             if (is_string($part)) {
                 $newContent .= $part;
@@ -329,7 +330,7 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                     $srcFileName = 'download';
                 }
 
-                $destFileRow->writeFile($response->getBody(), $srcFileName, $extension);
+                $destFileRow->writeFile($response->getBody(), $srcFileName, $extension, $contentType);
                 $destTableName = Vpc_Abstract::getSetting($classes['image'], 'tablename');
                 $destTable = new $destTableName(array('componentClass' => $classes['image']));
                 $destRow = $destTable->createRow();
@@ -343,7 +344,7 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                 $destRow->scale = '';
                 $destRow->save();
                 $dimension = $destRow->getImageDimension();
-                $newContent .= "<img src=\"".$destRow->getImageUrl()."\" ".
+                $newContent .= "<img src=\"".$destRow->getFileUrl()."\" ".
                             "width=\"$dimension[width]\" ".
                             "height=\"$dimension[height]\" />";
 
@@ -376,22 +377,40 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                     }
                 }
                 $destRow = $table->createRow();
-                $linkMaxChildComponentNr++;
-                $destRow->component_id = $this->component_id.'-l'.$linkMaxChildComponentNr;
                 $linkClasses = Vpc_Abstract::getSetting($classes['link'], 'childComponentClasses');
-                foreach ($linkClasses as $class) {
-                    if ($class == 'Vpc_Basic_LinkTag_Extern_Component' ||
-                            is_subclass_of($class, 'Vpc_Basic_LinkTag_Extern_Component')) {
-                        $destRow->link_class = $class;
+                if (preg_match('#^mailto:#', $part['href'], $m)) {
+                    foreach ($linkClasses as $class) {
+                        if ($class == 'Vpc_Basic_LinkTag_Mail_Component' ||
+                                is_subclass_of($class, 'Vpc_Basic_LinkTag_Mail_Component')) {
+                            $destRow->link_class = $class;
+                        }
+                    }
+                } else {
+                    foreach ($linkClasses as $class) {
+                        if ($class == 'Vpc_Basic_LinkTag_Extern_Component' ||
+                                is_subclass_of($class, 'Vpc_Basic_LinkTag_Extern_Component')) {
+                            $destRow->link_class = $class;
+                        }
                     }
                 }
                 if (!$destRow->link_class) continue; //kein externer-link möglich
+                $linkMaxChildComponentNr++;
+                $destRow->component_id = $this->component_id.'-l'.$linkMaxChildComponentNr;
                 $destRow->save();
 
                 $linkExternTableName = Vpc_Abstract::getSetting($destRow->link_class, 'tablename');
                 $linkExternTable = new $linkExternTableName(array('componentClass'=>$destRow->link_class));
                 $row = $linkExternTable->createRow();
-                $row->target = $part['href'];
+                if ($destRow->link_class == 'Vpc_Basic_LinkTag_Extern_Component' ||
+                        is_subclass_of($destRow->link_class, 'Vpc_Basic_LinkTag_Extern_Component')) {
+                    $row->target = $part['href'];
+                } else {
+                    preg_match('#^mailto:(.*)\\??(.*)#', $part['href'], $m);
+                    $row->mail = $m[1];
+                    $m = parse_str($m[2]);
+                    $row->subject = isset($m['subject']) ? $m['subject'] : '';
+                    $row->text = isset($m['body']) ? $m['body'] : '';
+                }
                 $row->component_id = $destRow->component_id.'-1';
                 $row->save();
                 $newContent .= "<a href=\"{$destRow->component_id}\">";

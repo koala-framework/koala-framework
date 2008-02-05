@@ -16,8 +16,18 @@ class Vpc_Basic_LinkTag_Mail_Component extends Vpc_Basic_LinkTag_Abstract_Compon
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['href'] = 'mailto:' . $this->_getRow()->mail;
-        $ret['param'] = '';
+        $r = $this->_getRow();
+        $p = array();
+        if ($r->subject) {
+            $p[] = 'subject='.urlencode($r->subject);
+        }
+        if ($r->text) {
+            $p[] = 'body='.urlencode($r->text);
+        }
+        $ret['href'] = 'mailto:' . $r->mail;
+        if ($p) {
+            $ret['href'] .= '?' . implode('&', $p);
+        }
         $ret['rel'] = '';
         return $ret;
     }

@@ -63,11 +63,11 @@ class Vps_Assets_Dependencies
         foreach ($this->_files as $file) {
             if (substr($file, -strlen($fileType)) == $fileType) {
                 if (substr($file, -strlen($fileType)-1) == " $fileType") {
-                    //wenn asset hinten mit " js" aufhört das js abschneiden
-                    //wird benötigt für googlemaps wo die js-dateien kein js am ende haben
+                    //wenn asset hinten mit " js" aufhï¿½rt das js abschneiden
+                    //wird benï¿½tigt fï¿½r googlemaps wo die js-dateien kein js am ende haben
                     $file = substr($file, 0, -strlen($fileType)-1);
                 }
-                //TODO: wenn sowas öfters gebraucht wird dynamischer machen
+                //TODO: wenn sowas ï¿½fters gebraucht wird dynamischer machen
                 $file = str_replace('{$config.googleApiKey}', $this->_config->googleApiKey, $file);
                 $files[] = $file;
             }
@@ -176,13 +176,13 @@ class Vps_Assets_Dependencies
     private function _processComponentDependency($class, $includeAdminAssets)
     {
         if (in_array($class.$includeAdminAssets, $this->_processedComponents)) return;
-        $this->_processedComponents[] = $class.$includeAdminAssets;
 
         $assets = Vpc_Abstract::getSetting($class, 'assets');
         $assetsAdmin = array();
         if ($includeAdminAssets) {
             $assetsAdmin = Vpc_Abstract::getSetting($class, 'assetsAdmin');
         }
+        $this->_processedComponents[] = $class.$includeAdminAssets;
         if (isset($assets['dep'])) {
             foreach ($assets['dep'] as $dep) {
                 $this->_processDependency($dep);

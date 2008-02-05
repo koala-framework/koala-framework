@@ -84,8 +84,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         //todo: lazy-loading von windows
         if (this.linkComponentConfig) {
             this.enableLinks = false;
-            var cls = eval(this.linkComponentConfig['class']);
-            var panel = new cls(Ext.applyIf(this.linkComponentConfig.config, {
+            var panel = Ext.ComponentMgr.create(Ext.applyIf(this.linkComponentConfig, {
                 baseCls: 'x-plain',
                 formConfig: {
                     tbar: false
@@ -98,8 +97,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             });
         }
         if (this.imageComponentConfig) {
-            var cls = eval(this.imageComponentConfig['class']);
-            var panel = new cls(Ext.applyIf(this.imageComponentConfig.config, {
+            var panel = Ext.ComponentMgr.create(Ext.applyIf(this.imageComponentConfig, {
                 baseCls: 'x-plain',
                 formConfig: {
                     tbar: false
@@ -112,8 +110,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             });
         }
         if (this.downloadComponentConfig) {
-            var cls = eval(this.downloadComponentConfig['class']);
-            var panel = new cls(Ext.applyIf(this.downloadComponentConfig.config, {
+            var panel = Ext.ComponentMgr.create(Ext.applyIf(this.downloadComponentConfig, {
                 baseCls: 'x-plain',
                 formConfig: {
                     tbar: false
@@ -323,9 +320,10 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
 
     createImage: function() {
+    debugger;
         var img = this.getFocusElement('img');
         if (img && img.tagName && img.tagName.toLowerCase() == 'img') {
-            var expr = new RegExp('/media/[0-9]+/[^/]+/'+this.component_id+'-i([0-9]+)/');
+            var expr = new RegExp('/media/[^/]+/'+this.component_id+'-i([0-9]+)/');
             var m = img.src.match(expr);
             if (m) {
                 var nr = parseInt(m[1]);

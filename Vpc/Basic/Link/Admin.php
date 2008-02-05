@@ -1,15 +1,18 @@
 <?php
-class Vpc_Basic_Link_Admin extends Vpc_Admin
+class Vpc_Basic_Link_Admin extends Vpc_Abstract_Composite_Admin
 {
-    public function getControllerClass()
+    public function getExtConfig()
     {
         //HACK
         //TODO: Ein Form-Feld mit ComboBox + CardLayout
-        return 'Vpc.Basic.LinkTag.Panel';
+        return array_merge(parent::getExtConfig(), array(
+            'xtype'=>'vpc.linktag'
+        ));
     }
 
     public function setup()
     {
+        parent::setup();
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
         Vpc_Admin::getInstance($classes['linkTag'])->setup();
 

@@ -1,4 +1,4 @@
-Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.ProxyPanel, {
+Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
 
     gridAssignedControllerUrl: '',
     gridDataControllerUrl: '',
@@ -105,3 +105,5 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Auto.ProxyPanel, {
         return this.gridData.reload.apply(this.gridData, arguments);
     }
 });
+
+Ext.reg('vps.assigngrid', Vps.Auto.AssignGridPanel);

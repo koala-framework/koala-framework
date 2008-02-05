@@ -5,7 +5,8 @@ Ext.namespace(
 'Vps.Component',
 'Vps.User.Login',
 'Vps.Auto',
-'Vps.Form'
+'Vps.Form',
+'Vps.Binding'
 );
 
 Ext.applyIf(Array.prototype, {
@@ -90,6 +91,7 @@ Vps.include =  function(url, restart)
 
 Vps.restart = function()
 {
+    Ext.getBody().unmask();
     if (Vps.currentViewport) {
         Vps.currentViewport.onDestroy();
         delete Vps.currentViewport;

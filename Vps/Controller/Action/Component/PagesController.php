@@ -28,8 +28,11 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     protected function _formatNode($row)
     {
         $data = parent::_formatNode($row);
-        if ($data['data']['is_home']) {
-            $data['bIcon'] = 'application_home';
+        if ($row->visible) {
+            $data['bIcon'] = Vpc_Abstract::getSetting($row->component_class, 'componentIcon');
+        }
+        if ($row->is_home) {
+            $data['bIcon'] = new Vps_Asset('application_home');
         }
         $data['uiProvider'] = 'Vps.Component.PagesNode';
         return $data;
@@ -64,7 +67,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 $data['expanded'] = true;
                 $data['allowDrag'] = false;
                 $data['type'] = 'category';
-                $data['bIcon'] = 'folder_page';
+                $data['bIcon'] = new Vps_Asset('folder_page');
                 $data['uiProvider'] = 'Vps.Component.PagesNode';
                 $return[] = $data;
             }

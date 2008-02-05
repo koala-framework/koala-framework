@@ -58,51 +58,17 @@ class Vpc_Admin
         return $return;
     }
 
-    // ****************
-    
-    public static final function getConfig($class, $componentId = null, $config = array())
+    public function getExtConfig()
     {
-        $admin = Vpc_Admin::getInstance($class);
-        $adminConfig = $admin->getControllerConfig($componentId);
-        $config = array_merge($config, $adminConfig);
-        $controllerClass = $admin->getControllerClass();
-        $controllerUrl = $admin->getControllerUrl();
-        return Vpc_Admin::createConfig($controllerClass, $controllerUrl, $config, $componentId);
+        $name = Vpc_Abstract::getSetting($this->_class, 'componentName');
+        $icon = Vpc_Abstract::getSetting($this->_class, 'componentIcon');
+        return array(
+            'xtype'         => 'vps.autoform',
+            'controllerUrl' => $this->getControllerUrl(),
+            'componentName' => $name,
+            'componentIcon' => $icon->__toString()
+        );
     }
-
-    public static final function createConfig($controllerClass, $controllerUrl, $config = array(), $componentId = null)
-    {
-        if (!is_array($config)) $config = array();
-        if (!isset($config['controllerUrl'])) {
-            $config['controllerUrl'] = $controllerUrl;
-        }
-        if ($componentId) {
-            if (!isset($config['baseParams'])) {
-                $config['baseParams'] = array();
-            }
-            $config['baseParams']['component_id'] = $componentId;
-        }
-        $return['config'] = $config;
-        $return['class'] = $controllerClass;
-        return $return;
-    }
-
-    // ****************
-
-    public function getControllerClass()
-    {
-        return 'Vps.Auto.FormPanel';
-    }
-
-    public function getControllerConfig()
-    {
-        return array();
-    }
-
-//     public function getExtConfig()
-//     {
-//         return array('xtype'=>'autoform');
-//     }
 
     public function getControllerUrl($class = null)
     {
@@ -113,8 +79,6 @@ class Vpc_Admin
         return '/admin/component/edit/' . $class;
     }
 
-    // ***************
-    
     protected function _getRow($componentId)
     {
         $tablename = Vpc_Abstract::getSetting($this->_class, 'tablename');

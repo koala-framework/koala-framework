@@ -6,6 +6,7 @@ class Vpc_Basic_LinkTag_Intern_PagesController extends Vps_Controller_Action_Com
     public function init()
     {
         $this->_pc = Vps_PageCollection_TreeBase::getInstance(false);
+        parent::init();
     }
 
     public function jsonDataAction()

@@ -1,11 +1,9 @@
 <?php
-class Vpc_Basic_Download_Admin extends Vpc_Admin
+class Vpc_Basic_Download_Admin extends Vpc_Abstract_Composite_Admin
 {
     public function setup()
     {
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        Vpc_Admin::getInstance($classes['downloadTag'])->setup();
-
+        parent::setup();
         $fields['infotext'] = 'text';
         $this->createFormTable('vpc_basic_download', $fields);
     }

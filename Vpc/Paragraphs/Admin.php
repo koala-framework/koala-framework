@@ -1,24 +1,26 @@
 <?php
 class Vpc_Paragraphs_Admin extends Vpc_Admin
 {
-    public function getControllerConfig()
+    public function getExtConfig()
     {
         $componentList = array();
         foreach (Vpc_Abstract::getSetting($this->_class, 'childComponentClasses') as $component) {
             $name = Vpc_Abstract::getSetting($component, 'componentName');
+            $icon = Vpc_Abstract::getSetting($component, 'componentIcon')->__toString();
             $hide = Vpc_Abstract::getSetting($component, 'hideInParagraphs');
             if ($hide !== true && $name) {
                 $str = '$componentList["' . str_replace('.', '"]["', $name) . '"] = "' . $component . '";';
                 eval($str);
+                $componentIcons[$component] = $icon;
             }
         }
         asort($componentList);
-        return array('components' => $componentList);
-    }
 
-    public function getControllerClass()
-    {
-        return 'Vpc.Paragraphs.Panel';
+        return array_merge(parent::getExtConfig(), array(
+            'xtype'=>'vpc.paragraphs',
+            'components' => $componentList,
+            'componentIcons' => $componentIcons
+        ));
     }
 
     public function setup()

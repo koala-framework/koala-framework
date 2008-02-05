@@ -29,6 +29,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
 
     public function vpc($config)
     {
+        throw new Vps_Exception("Noch nicht konvertiert, wenns benötigt wird niko sagen :D");
         $this->ext($config['class'], $config['config']);
     }
 

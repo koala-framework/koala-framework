@@ -14,6 +14,7 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         if (!isset($settings)) {
             $settings = array_merge(parent::getSettings(), array(
                 'componentName' => 'Paragraphs',
+                'componentIcon' => new Vps_Asset('page'),
                 'hideInParagraphs' => true,
                 'tablename' => 'Vpc_Paragraphs_Model'
             ));

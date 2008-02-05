@@ -1,15 +1,28 @@
 <?php
 class Vpc_News_Admin extends Vpc_Admin
 {
-    public function getControllerClass()
-    {
-        return 'Vpc.News.Panel';
-    }
-    
-    public function getControllerConfig($componentId)
+    public function getExtConfig()
     {
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        return array('contentClass' => $classes['details']);
+        $categories = Vpc_Abstract::getSetting($this->_class, 'categories');
+        $plugins = array();
+        foreach ($categories as $katname => $katsettings) {
+            if (!isset($classes[$katname])) {
+                throw new Vps_Exception('childComponentClass must be set for key \''.$katname.'\'');
+            }
+            $pluginName = Vpc_Admin::getComponentFile(
+                $classes[$katname], 'Plugins', 'js', true
+            );
+            if ($pluginName) {
+                $pluginName = str_replace('_', '.', $pluginName);
+                $plugins[] = $pluginName;
+            }
+        }
+        return array_merge(parent::getExtConfig(), array(
+            'xtype'=>'vpc.news',
+            'contentClass' => $classes['details'],
+            'componentPlugins' => $plugins
+        ));
     }
 
     public function setup()

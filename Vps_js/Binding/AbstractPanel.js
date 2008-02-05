@@ -1,8 +1,8 @@
-Vps.Auto.AbstractPanel = function(config) {
+Vps.Binding.AbstractPanel = function(config) {
     if (!config.actions) this.actions = {}; //muss hier sein
-    Vps.Auto.AbstractPanel.superclass.constructor.apply(this, arguments);
+    Vps.Binding.AbstractPanel.superclass.constructor.apply(this, arguments);
 };
-Ext.extend(Vps.Auto.AbstractPanel, Ext.Panel,
+Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
 {
     checkDirty: true,
 
@@ -69,12 +69,12 @@ Ext.extend(Vps.Auto.AbstractPanel, Ext.Panel,
             this.baseParams = {};
         }
 
-        Vps.Auto.AbstractPanel.superclass.initComponent.call(this);
+        Vps.Binding.AbstractPanel.superclass.initComponent.call(this);
     },
     addBinding: function() {
         for(var i = 0; i < arguments.length; i++){
             var b = arguments[i];
-            if (b instanceof Vps.Auto.AbstractPanel) {
+            if (b instanceof Vps.Binding.AbstractPanel) {
                 b = {item: b};
             }
             if (!b.queryParam) b.queryParam = 'id';

@@ -1,9 +1,11 @@
 <?php
 class Vpc_Basic_LinkTag_Admin extends Vpc_Admin
 {
-    public function getControllerClass()
+    public function getExtConfig()
     {
-        return 'Vpc.Basic.LinkTag.Panel';
+        return array_merge(parent::getExtConfig(), array(
+            'xtype'=>'vpc.linktag'
+        ));
     }
 
     public function setup()

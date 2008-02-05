@@ -1,4 +1,4 @@
-Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
+Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 {
     controllerUrl: '',
     //autoload: true,
@@ -129,9 +129,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             } else {
                 var storeType = Ext.data.Store;
             }
-            if (this.baseParams) storeConfig.baseParams = this.baseParams;
             this.store = new storeType(storeConfig);
-
+            if (this.baseParams) {
+                this.setBaseParams(this.baseParams);
+                delete this.baseParams;
+            }
         }
 
         this.store.newRecords = []; //hier werden neue records gespeichert die nicht dirty sind
@@ -540,6 +542,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
             }
             editDialog = new d(editDialog);
         }
+        if (this.baseParams) {
+            editDialog.applyBaseParams(this.baseParams);
+        }
         editDialog.on('datachange', function(r) {
             this.reload();
             //r nicht durchschleifen - weil das probleme verursacht wenn
@@ -865,19 +870,34 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
         return this.editDialog;
     },
     getBaseParams : function() {
-        return this.getStore().baseParams;
+        if (this.getStore()) {
+            return this.getStore().baseParams;
+        } else {
+            return this.baseParams || {};
+        }
     },
     setBaseParams : function(baseParams) {
         if (this.editDialog) {
             this.editDialog.getAutoForm().setBaseParams(baseParams);
         }
-        this.getStore().baseParams = baseParams;
+        if (this.getStore()) {
+            this.getStore().baseParams = baseParams;
+        } else {
+            //no store yet, apply them later
+            this.baseParams = baseParams;
+        }
     },
     applyBaseParams : function(baseParams) {
         if (this.editDialog) {
             this.editDialog.getAutoForm().applyBaseParams(baseParams);
         }
-        Ext.apply(this.getStore().baseParams, baseParams);
+        if (this.getStore()) {
+            Ext.apply(this.getStore().baseParams, baseParams);
+        } else {
+            //no store yet, apply them later
+            if (!this.baseParams) this.baseParams = {};
+            Ext.apply(this.baseParams, baseParams);
+        }
     },
     resetFilters: function() {
         this.filters.each(function(f) {
@@ -894,4 +914,4 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Auto.AbstractPanel,
     }
 });
 
-Ext.reg('autogrid', Vps.Auto.GridPanel);
+Ext.reg('vps.autogrid', Vps.Auto.GridPanel);
