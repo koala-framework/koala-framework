@@ -3,7 +3,7 @@ abstract class Vps_Controller_Action_Auto_Vpc_Form extends Vps_Controller_Action
 {
     protected $_buttons = array('save', 'saveBack');
     protected $_formName = 'Vps_Auto_Vpc_Form';
-    
+
     public function preDispatch()
     {
         if (!isset($this->_form)) {
@@ -13,14 +13,8 @@ abstract class Vps_Controller_Action_Auto_Vpc_Form extends Vps_Controller_Action
         parent::preDispatch();
     }
 
-    public function indexAction()
-    {
-        $config = Vpc_Admin::getConfig($this->class, $this->componentId);
-        $this->view->vpc($config);
-    }
-
     public function jsonIndexAction()
     {
-       $this->indexAction();
+        $this->view->vpc(Vpc_Admin::getInstance($this->class)->getExtConfig());
     }
 }

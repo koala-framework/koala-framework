@@ -15,9 +15,18 @@ class Vpc_Basic_Text_Form extends Vps_Auto_Vpc_Form
             }
         }
         $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
-        if ($classes['link']) $field->setLinkComponentConfig(Vpc_Admin::getConfig($classes['link']));
-        if ($classes['image']) $field->setImageComponentConfig(Vpc_Admin::getConfig($classes['image']));
-        if ($classes['download']) $field->setDownloadComponentConfig(Vpc_Admin::getConfig($classes['download']));
+        if ($classes['link']) {
+            $c = Vpc_Admin::getInstance($classes['link'])->getExtConfig();
+            $field->setLinkComponentConfig($c);
+        }
+        if ($classes['image']) {
+            $c = Vpc_Admin::getInstance($classes['image'])->getExtConfig();
+            $field->setImageComponentConfig($c);
+        }
+        if ($classes['download']) {
+            $c = Vpc_Admin::getInstance($classes['download'])->getExtConfig();
+            $field->setDownloadComponentConfig($c);
+        }
 
         $field->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl());
 

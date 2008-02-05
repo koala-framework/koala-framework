@@ -8,7 +8,7 @@ Vpc.Basic.LinkTag.Panel = Ext.extend(Vps.Auto.FormPanel, {
                 var cards = this.findById('CardsContainer');
                 var active = this.findById(value)
                 if (active) {
-                    cards.layout.setActiveItem(active);
+                    cards.getLayout().setActiveItem(active);
                 }
                 cards.items.each(function(item){
                     if (item.id != value) {
@@ -25,3 +25,5 @@ Vpc.Basic.LinkTag.Panel = Ext.extend(Vps.Auto.FormPanel, {
         }, this);
     }
 });
+
+Ext.reg('vpc.linktag', Vpc.Basic.LinkTag.Panel);

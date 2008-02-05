@@ -15,6 +15,7 @@ Vpc.News.Categories.Plugins = Ext.extend(Ext.util.Observable,
                         title:  'News Categories',
                         modal:  true,
                         items:  new Vps.Auto.GridPanel({
+                            //TODO: url hier nicht hardkodieren, soll geändert werden können
                             controllerUrl: '/admin/component/edit/Vpc_News_Categories_Component',
                             baseParams: newsPanel.getBaseParams()
                         })

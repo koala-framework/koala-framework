@@ -1,5 +1,5 @@
-Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
-    layout: 'fit',
+Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
+    layout: 'card',
     mainComponentClass: 'Vpc_Paragraphs_Component',
     mainComponentId: '{0}',
     mainComponentText: 'Content',
@@ -9,7 +9,8 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         this.contentPanel = new Ext.Panel();
         Ext.apply(this, {
             tbar        : [],
-            items       : this.contentPanel
+            items       : this.contentPanel,
+            currentItem : this.contentPanel
         });
         this.componentsStack = [];
 
@@ -23,41 +24,62 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         } else {
             params = this.getBaseParams();
         }
-        Ext.Ajax.request({
-            url: '/admin/component/edit/' + data.componentClass + '/jsonIndex',
-            params: params,
-            success: function(r, options, response) {
-                var cls = eval(response['class']);
-                if (cls) {
+        var item;
+        this.items.each(function(i) {
+            if (i.componentClass == data.componentClass) {
+                item = i;
+                return false; //break each
+            }
+        }, this);
 
-                    this.componentsStack.push(data);
-
-                    var panel2 = new cls(Ext.applyIf(response.config, {
-                        autoScroll : true
-                    }));
-                    if (panel2.getAction('saveBack')) {
-                        if (this.getTopToolbar().items.getCount() > 0) {
-                            panel2.getAction('saveBack').show();
-                        }
-                    }
-                    panel2.on('savebackaction', function() {
-                        this.componentsStack.pop();
-                        var data = this.componentsStack[this.componentsStack.length-1];
-                        this.loadComponent(data);
-                    }, this);
-                    panel2.on('editcomponent', this.loadComponent, this);
-                    this.addToolbarButton(data);
-
-                    this.remove(this.contentPanel);
-                    //this.contentPanel.destory();
-                    this.add(panel2);
-                    this.contentPanel = panel2;
-                    this.layout.rendered = false;
+        if (item) {
+            this._loadComponentPanel(item, data);
+            item.load(params);
+        } else {
+            Ext.Ajax.request({
+                url: '/admin/component/edit/' + data.componentClass + '/jsonIndex',
+                success: function(r, options, response) {
+                    Ext.applyIf(response.config, {
+                        autoScroll : true,
+                        componentClass: data.componentClass,
+                        baseParams: params
+                    });
+                    var panel = Ext.ComponentMgr.create(response.config);
+                    panel.on('editcomponent', this.loadComponent, this);
+                    this.add(panel);
                     this.doLayout();
-                }
-            },
-            scope: this
-        });
+
+                    //TODO: nach welcher logik componentName zusammensetzen?
+                    //wo soll diese Logik liegen?
+                    //hier, in Komponente, in Paragraphs?
+                    data.text = panel.componentName;
+                    data.icon = panel.componentIcon;
+
+                    this._loadComponentPanel(panel, data);
+                },
+                scope: this
+            });
+        }
+    },
+
+    _loadComponentPanel: function(panel, data)
+    {
+        this.componentsStack.push(data);
+        this.addToolbarButton(data);
+
+        this.getLayout().setActiveItem(panel);
+
+        if (panel.getAction('saveBack')) {
+            if (this.getTopToolbar().items.getCount() > 0) {
+                panel.getAction('saveBack').show();
+            }
+        }
+        panel.on('savebackaction', function() {
+            this.componentsStack.pop();
+            var data = this.componentsStack[this.componentsStack.length-1];
+            this.loadComponent(data);
+        }, this);
+
     },
 
     addToolbarButton: function(data) {
@@ -141,3 +163,5 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Auto.AbstractPanel, {
         return true;
     }
 });
+
+Ext.reg('vps.component', Vps.Component.ComponentPanel);

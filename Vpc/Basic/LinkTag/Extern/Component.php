@@ -31,7 +31,9 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
     {
         $ret = parent::getTemplateVars();
         $ret['href'] = $this->_getRow()->target;
-        $ret['param'] = $this->_getRow()->param;
+        if ($this->_getRow()->param) {
+            $ret['href'] .= '?' . $this->_getRow()->param;
+        }
         $ret['rel'] = $this->_getRow()->rel;
         return $ret;
     }

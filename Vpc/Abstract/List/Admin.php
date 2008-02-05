@@ -1,19 +1,16 @@
 <?php
 class Vpc_Abstract_List_Admin extends Vpc_Admin
 {
-    public function getControllerConfig()
+    public function getExtConfig()
     {
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        return array(
-            'childConfig' => Vpc_Admin::getConfig($classes['child'])
-        );
+        $childConfig = Vpc_Admin::getInstance($classes['child'])->getExtConfig();
+        
+        return array_merge(parent::getExtConfig(), array(
+            'xtype'=>'vpc.list',
+            'childConfig'=>$childConfig
+        ));
     }
-
-    public function getControllerClass()
-    {
-        return 'Vpc.Abstract.List.Panel';
-    }
-
     public function setup()
     {
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');

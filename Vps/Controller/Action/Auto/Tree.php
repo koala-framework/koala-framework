@@ -53,11 +53,20 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
         if ($this->_hasPosition && !in_array('pos', $info['cols'])) {
             throw new Vps_Exception("_hasPosition is true, but 'pos' does not exist in database");
         }
+
+        foreach ($this->_icons as $k=>$i) {
+            if (is_string($i)) {
+                $this->_icons[$k] = new Vps_Asset($i);
+            }
+        }
     }
 
     protected function jsonMetaAction()
     {
-        $this->view->icons = $this->_icons;
+        $this->view->icons = array();
+        foreach ($this->_icons as $k=>$i) {
+            $this->view->icons[$k] = $i->__toString();
+        }
         $this->view->enableDD = $this->_hasPosition;
         $this->view->rootText = $this->_rootText;
         $this->view->rootVisible = $this->_rootVisible;
@@ -77,7 +86,13 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
 
         $nodes = array();
         foreach ($rowset as $row) {
-            $nodes[] = $this->_formatNode($row);
+            $data = $this->_formatNode($row);
+            foreach ($data as $k=>$i) {
+                if ($i instanceof Vps_Asset) {
+                    $data[$k] = $i->__toString();
+                }
+            }
+            $nodes[]= $data;
         }
         $this->view->nodes = $nodes;
     }
@@ -186,7 +201,13 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action
             $row->numberize('pos', $this->_addPosition, $where);
         }
         if ($id) {
-            $this->view->data = $this->_formatNode($row);
+            $data = $this->_formatNode($row);
+            foreach ($data as $k=>$i) {
+                if ($i instanceof Vps_Asset) {
+                    $data[$k] = $i->__toString();
+                }
+            }
+            $this->view->data = $data;
         } else {
             $this->view->error = 'Couldn\'t insert row.';
         }

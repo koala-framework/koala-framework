@@ -55,6 +55,6 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
 
     public function getChildComponents()
     {
-        return array($this->_smallImage);
+        return array($this->getChildComponent());
     }
 }

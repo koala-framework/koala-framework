@@ -1,4 +1,4 @@
-Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
+Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     autoload: true,
     autoScroll: true, //um scrollbars zu bekommen
     border: false,
@@ -330,4 +330,4 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Auto.AbstractPanel, {
     }
 });
 
-Ext.reg('autoform', Vps.Auto.FormPanel);
+Ext.reg('vps.autoform', Vps.Auto.FormPanel);

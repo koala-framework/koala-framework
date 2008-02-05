@@ -1,13 +1,10 @@
 <?php
-class Vpc_Basic_Download_Controller extends Vps_Controller_Action_Auto_Vpc_Form
+class Vpc_Basic_Download_Controller extends Vpc_Abstract_Composite_Controller
 {
     public function _initFields()
     {
-        $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
+        parent::_initFields();
 
-        $form = new Vpc_Basic_DownloadTag_Form($classes['downloadTag']);
-        $form->setComponentIdTemplate('{0}-tag');
-        $this->_form->add($form);
         $this->_form->add(new Vps_Auto_Field_TextArea('infotext', 'Infotext'))
             ->setWidth(300)
             ->setGrow(true);

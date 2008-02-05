@@ -1,3 +1,5 @@
-{foreach from=$component.children item=child}
-{component component=$child}<br />
-{/foreach}
+<ul>
+    {foreach from=$component.children item=child}
+        <li>{component component=$child}</li>
+    {/foreach}
+</ul>

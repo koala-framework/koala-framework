@@ -95,7 +95,7 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         }
     }
 
-    public function copyFile($file, $filename, $extension)
+    public function copyFile($file, $filename, $extension, $mime_type)
     {
         if (!file_exists($file)) {
             throw new Vps_Exception("File '$file' does not exist");
@@ -103,16 +103,18 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         $this->deleteFile();
         $this->filename = $filename;
         $this->extension = $extension;
+        $this->mime_type = $mime_type;
         $this->save();
         copy($file, $this->getFileSource());
         chmod($this->getFileSource(), 0664);
     }
 
-    public function writeFile($contents, $filename, $extension)
+    public function writeFile($contents, $filename, $extension, $mime_type)
     {
         $this->deleteFile();
         $this->filename = $filename;
         $this->extension = $extension;
+        $this->mime_type = $mime_type;
         $this->save();
         file_put_contents($this->getFileSource(), $contents);
         chmod($this->getFileSource(), 0664);

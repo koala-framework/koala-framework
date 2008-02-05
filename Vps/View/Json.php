@@ -10,9 +10,7 @@ class Vps_View_Json extends Zend_View_Abstract
 
     public function vpc($config)
     {
-        foreach ($config as $key => $val) {
-            $this->$key = $val;
-        }
+        $this->config = $config;
     }
 
     public function ext($class, $config = array()) {

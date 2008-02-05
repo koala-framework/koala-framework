@@ -1,4 +1,4 @@
-Vps.Auto.ProxyPanel = Ext.extend(Vps.Auto.AbstractPanel,
+Vps.Binding.ProxyPanel = Ext.extend(Vps.Binding.AbstractPanel,
 {
     mabySubmit: function() {
         return this.proxyItem.mabySubmit.apply(this.proxyItem, arguments);
