@@ -238,7 +238,7 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
         {
             $templateVars = $p->getTemplateVars();
             $url = $templateVars['href'];
-            if ($templateVars['param'] != '') {
+            if (isset($templateVars['param']) && $templateVars['param'] != '') {
                 $url .= '?' . $templateVars['param'];
             }
             return $url;
