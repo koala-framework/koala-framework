@@ -428,7 +428,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         var params = this.downloadDialog.getAutoForm().getBaseParams();
         this.relayCmd('createlink', params.component_id);
     },
-    
+
     insertChar: function()
     {
         var win = Vps.Form.HtmlEditor.insertCharWindow; //statische var, nur ein window erstellen
@@ -440,12 +440,13 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 closeAction: 'hide',
                 autoScroll: true
             });
-            win.on('insertchar', function(win, ch) {
-                this.insertAtCursor(ch);
-                win.hide();
-            }, this);
             Vps.Form.HtmlEditor.insertCharWindow = win;
         }
+		win.purgeListeners();
+        win.on('insertchar', function(win, ch) {
+            this.insertAtCursor(ch);
+            win.hide();
+        }, this);
         win.show();
     },
 
