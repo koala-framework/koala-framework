@@ -312,15 +312,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (this.editDialog) {
             this.editDialog = this.initEditDialog(this.editDialog);
         }
-        this.on('celldblclick', function(grid, rowIndex, columnIndex, e) {
-            //wenn spalte einen eigenen clickhandler hat den dblclick ignorieren
-            var col = grid.getColumnModel().config[columnIndex];
-            if (!col.clickHandler) {
-                this.fireEvent('celldblclick', grid, rowIndex, columnIndex, e);
-                this.fireEvent('rowdblclick', grid, rowIndex, e);
-                this.edit(this.store.getAt(rowIndex));
-            }
-        }, this);
 
         for (var i in this.actions) {
             if (i == 'add' && this.editDialog) continue; //add-button anzeigen auch wenn keine permissions da die add-permissions im dialog sein müssen
@@ -384,31 +375,57 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             this.pagingType = false;
         }
 
+        //aktionen die als string in der tbar sind
+        var existingActions = {};
+        for (var i = 0; i < gridConfig.tbar.length; i++) {
+            if (typeof gridConfig.tbar[i] == 'string'
+                    && this.getAction(gridConfig.tbar[i])) {
+                existingActions[gridConfig.tbar[i]] = true;
+            }
+        }
+
         if (meta.buttons.save) {
-            gridConfig.tbar.add(this.getAction('save'));
-            gridConfig.tbar.add('-');
+            if (!existingActions.save) {
+                gridConfig.tbar.add(this.getAction('save'));
+                gridConfig.tbar.add('-');
+            }
             delete meta.buttons.save;
         }
         if (meta.buttons.edit) {
-            gridConfig.tbar.add(this.getAction('edit'));
+            if (!existingActions.edit) {
+                gridConfig.tbar.add(this.getAction('edit'));
+            }
             delete meta.buttons.edit;
         }
         if (meta.buttons.add) {
-            gridConfig.tbar.add(this.getAction('add'));
+            if (!existingActions.add) {
+                gridConfig.tbar.add(this.getAction('add'));
+            }
             delete meta.buttons.add;
         }
         if (meta.buttons['delete']) {
-            gridConfig.tbar.add(this.getAction('delete'));
+            if (!existingActions['delete']) {
+                gridConfig.tbar.add(this.getAction('delete'));
+            }
             delete meta.buttons['delete'];
         }
         if (meta.buttons.duplicate) {
-            gridConfig.tbar.add(this.getAction('duplicate'));
+            if (!existingActions.duplicate) {
+                gridConfig.tbar.add(this.getAction('duplicate'));
+            }
             delete meta.buttons.duplicate;
         }
 
         for (var i in meta.buttons) {
-            if (i != 'pdf' && i != 'csv' && i != 'xls' && i != 'reload') {
+            if (i != 'pdf' && i != 'csv' && i != 'xls' && i != 'reload' && ! !existingActions[i]) {
                 gridConfig.tbar.add(this.getAction(i));
+            }
+        }
+
+        for (var i = 0; i < gridConfig.tbar.length; i++) {
+            if (typeof gridConfig.tbar[i] == 'string'
+                    && this.getAction(gridConfig.tbar[i])) {
+                gridConfig.tbar[i] = this.getAction(gridConfig.tbar[i]);
             }
         }
 
@@ -455,24 +472,17 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (meta.buttons.pdf || meta.buttons.xls || meta.buttons.csv || meta.buttons.reload) {
             gridConfig.tbar.add('->');
         }
-        if (meta.buttons.pdf) {
+        if (meta.buttons.pdf && !existingActions.pdf) {
             gridConfig.tbar.add(this.getAction('pdf'));
         }
-        if (meta.buttons.xls) {
+        if (meta.buttons.xls && !existingActions.xls) {
             gridConfig.tbar.add(this.getAction('xls'));
         }
-        if (meta.buttons.csv) {
+        if (meta.buttons.csv && !existingActions.csv) {
             gridConfig.tbar.add(this.getAction('csv'));
         }
-        if (meta.buttons.reload) {
+        if (meta.buttons.reload && !existingActions.reload) {
             gridConfig.tbar.add(this.getAction('reload'));
-        }
-
-        for (var i = 0; i < gridConfig.tbar.length; i++) {
-            if (typeof gridConfig.tbar[i] == 'string'
-                    && this.getAction(gridConfig.tbar[i])) {
-                gridConfig.tbar[i] = this.getAction(gridConfig.tbar[i]);
-            }
         }
 
         //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
@@ -495,6 +505,15 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             var col = grid.getColumnModel().config[columnIndex];
             if (col.clickHandler) {
                 col.clickHandler.call(col.scope || this, grid, rowIndex, col, e);
+            }
+        }, this);
+        this.grid.on('celldblclick', function(grid, rowIndex, columnIndex, e) {
+            //wenn spalte einen eigenen clickhandler hat den dblclick ignorieren
+            var col = grid.getColumnModel().config[columnIndex];
+            if (!col.clickHandler) {
+                this.fireEvent('celldblclick', grid, rowIndex, columnIndex, e);
+                this.fireEvent('rowdblclick', grid, rowIndex, e);
+                this.edit(this.store.getAt(rowIndex));
             }
         }, this);
 
