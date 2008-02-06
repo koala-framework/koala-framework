@@ -1,7 +1,7 @@
 <?php
 class Vps_Controller_Action_Component_OverviewController extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_buttons = array('addComponent', 'createTpl', 'createCss');
+    protected $_buttons = array('addComponent', 'createTpl', 'createCss', 'reload');
 
     protected function _initColumns()
     {
