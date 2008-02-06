@@ -8,8 +8,11 @@ class Vps_Controller_Action_Welcome_FormController extends Vps_Controller_Action
         parent::_initFields();
         $this->_form->setId(1);
 
-        $this->_form->add(new Vps_Auto_Field_File('vps_upload_id', 'Image'));
-        $this->_form->add(new Vps_Auto_Field_HtmlEditor('content', 'Content'));
+        $this->_form->add(new Vps_Auto_Field_File('vps_upload_id', 'Welcome-Image', 'WelcomeImage'));
+        $this->_form->add(new Vps_Auto_Field_File('login_vps_upload_id', 'Login-Image', 'LoginImage'));
+        $this->_form->add(new Vps_Auto_Field_HtmlEditor('content', 'Content'))
+            ->setEnableLinks(false)
+            ->setEnableFont(false);
 
     }
 

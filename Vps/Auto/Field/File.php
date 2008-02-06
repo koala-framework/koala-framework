@@ -2,7 +2,6 @@
 class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
 {
     private $_fields;
-    private $_ruleKey;
 
     public function __construct($fieldname = null, $title = null, $ruleKey = null)
     {
@@ -14,12 +13,6 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->getAllowOnlyImages(false);
         $this->setRuleKey($ruleKey);
-    }
-
-    public function setRuleKey($ruleKey)
-    {
-        $this->_ruleKey = $ruleKey;
-        return $this;
     }
 
     protected function _getFields()
@@ -45,13 +38,14 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
     {
         $ret = parent::getMetaData();
         unset($ret['allowOnlyImages']);
+        unset($ret['ruleKey']);
         $ret['items'] = $this->_getFields()->getMetaData();
         return $ret;
     }
 
     public function load($row)
     {
-        $url = $row->getFileUrl(null, 'original');
+        $url = $row->getFileUrl($this->getRuleKey(), 'original');
         $return = array(
             'url' => $url,
             'uploaded' => !is_null($url)

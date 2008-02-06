@@ -32,8 +32,8 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
             $row = null;
         }
         if ($row) {
-            $this->view->image = $row->getFileUrl(null, 'login');
-            $this->view->imageSize = $row->getImageDimensions(null, 'login');
+            $this->view->image = $row->getFileUrl('LoginImage', 'login');
+            $this->view->imageSize = $row->getImageDimensions('LoginImage', 'login');
         } else {
             $this->view->image = false;
         }
