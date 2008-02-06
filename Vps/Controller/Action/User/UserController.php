@@ -51,8 +51,11 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
     {
         $acl = Zend_Registry::get('acl');
         $roles = array();
-        foreach($acl->getRoles() as $role) {
-            if($role instanceof Vps_Acl_Role) {
+        foreach ($acl->getRoles() as $role) {
+            if ($role instanceof Vps_Acl_Role
+                && ( !($role instanceof Vps_Acl_Role_Admin)
+                || ($acl->getRole($this->_getUserRole()) instanceof Vps_Acl_Role_Admin) )
+            ) {
                 $roles[$role->getRoleId()] = $role->getRoleName();
             }
         }
