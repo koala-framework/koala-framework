@@ -4,6 +4,7 @@ class Vps_Acl extends Zend_Acl
     public function __construct()
     {
         $this->addRole(new Zend_Acl_Role('guest'));
+        $this->addRole(new Vps_Acl_Role_Admin('admin', 'Administrator'));
 
         $this->add(new Zend_Acl_Resource('index'));
         $this->add(new Zend_Acl_Resource('vps_user_menu'));
