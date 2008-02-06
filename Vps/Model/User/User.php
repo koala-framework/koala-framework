@@ -121,9 +121,10 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
         $restClient->save($this->getWebcode(), $id, $this->_changedServiceData);
         $restResult = $restClient->get();
 
-        if (!$restResult->status()) {
-            // wenn er bereits existiert soll er einfach hergenommen werden.
-//             throw new Vps_ClientException($restResult->msg());
+        if (!$restResult->status() && $restResult->operation() == 'update') {
+            // wenn er bereits existiert und inserted wurde, soll er einfach
+            // hergenommen werden, darum nur bei update fehlerausgabe
+            throw new Vps_ClientException($restResult->msg());
         }
 
         if ($restResult->id()) {
