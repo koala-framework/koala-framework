@@ -60,7 +60,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             icon: '/assets/silkicons/arrow_undo.png',
             tooltip: {
                 cls: 'x-html-editor-tip',
-                title: 'Undo',
+                title: 'Undo (Ctrl+Z)',
                 text: 'Undo the last action.'
             },
             cls: 'x-btn-icon',
@@ -151,23 +151,17 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
         var tb = this.getToolbar();
         
-        if (this.enableUndoRedo) {
-            tb.insert(0, this.getAction('undo'));
-            tb.insert(1, this.getAction('redo'));
-            tb.insert(2, '-');
-        }
-
         if (this.linkDialog || this.imageDialog || this.downloadDialog) {
-            tb.insert(10, '-');
+            tb.insert(8, '-');
         }
         if (this.linkDialog) {
-            tb.insert(11,  this.getAction('insertLink'));
+            tb.insert(9,  this.getAction('insertLink'));
         }
         if (this.imageDialog) {
-            tb.insert(12, this.getAction('insertImage'));
+            tb.insert(10, this.getAction('insertImage'));
         }
         if (this.downloadDialog) {
-            tb.insert(13,  this.getAction('insertDownload'));
+            tb.insert(11,  this.getAction('insertDownload'));
         }
         tb.add('-');
         if (this.enableInsertChar) {
@@ -233,6 +227,14 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             }, this);
             tb.insert(0, this.blockSelect.dom);
             tb.insert(1, '-');
+        }
+        if (this.enableUndoRedo) {
+            var offs = 0;
+            if (this.enableBlock) offs += 2;
+            if (this.enableFont) offs += 2;
+            tb.insert(offs, this.getAction('undo'));
+            tb.insert(offs+1, this.getAction('redo'));
+            tb.insert(offs+2, '-');
         }
     },
 
