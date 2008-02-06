@@ -105,6 +105,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             if (r.login) {
                 options.vpsLogin = true;
                 var dlg = new Vps.User.Login.Dialog({
+                    message: r.message,
                     success: function() {
                         //redo action...
                         this.repeatRequest(options);

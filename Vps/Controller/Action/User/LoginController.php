@@ -6,8 +6,21 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         $location = $this->_getParam('location');
         if ($location == '') { $location = '/'; }
         $config = array('location' => $location);
+        if ($this->_getUserRole() != 'guest') {
+            $config['message'] = "You don't have enough permissions for this Action";
+        }
         $this->view->ext('Vps.User.Login.Index', $config);
     }
+
+    public function jsonLoginAction()
+    {
+        if ($this->_getUserRole() != 'guest') {
+            $this->view->message = "You don't have enough permissions for this Action";
+        }
+        $this->view->login = true;
+        $this->view->success = false;
+    }
+
 
     public function headerAction()
     {
@@ -106,12 +119,6 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
     {
         Vps_Auth::getInstance()->clearIdentity();
         $this->_onLogout();
-    }
-
-    public function jsonLoginAction()
-    {
-        $this->view->login = true;
-        $this->view->success = false;
     }
 
     public function jsonLoginUserAction()

@@ -3,7 +3,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
 {
     initComponent: function()
     {
-        this.height = 220;
+        this.height = 240;
         this.width = 310;
         this.modal = true;
         this.title = 'Login';
@@ -12,8 +12,9 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
         this.layout = 'border';
         this.loginPanel = new Ext.Panel({
             baseCls: 'x-plain',
-            region: 'center',
+            region: 'south',
             border: false,
+            height: 125,
             html: '<iframe scrolling="no" src="/vps/user/login/showForm" width="100%" '+
                     'height="100%" style="border: 0px"></iframe>'
         });
@@ -24,7 +25,13 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
             height: 50,
             autoLoad: '/vps/user/login/header',
             border: false
-        },this.loginPanel];
+        },{
+            baseCls: 'x-plain',
+            region: 'center',
+            bodyStyle: 'padding: 10px;',
+            html: this.message,
+            border: false
+        }, this.loginPanel];
 
         this.loginPanel.on('render', function(panel) {
             var frame = this.loginPanel.body.first('iframe');
