@@ -13,8 +13,8 @@ class Vps_Controller_Action_Welcome_ContentController extends Vps_Controller_Act
             $this->view->content = '';
         }
         if ($row) {
-            $this->view->image = $row->getFileUrl(null, 'welcome');
-            $this->view->imageSize = $row->getImageDimensions(null, 'welcome');
+            $this->view->image = $row->getFileUrl('WelcomeImage', 'welcome');
+            $this->view->imageSize = $row->getImageDimensions('WelcomeImage', 'welcome');
         } else {
             $this->view->image = false;
         }
