@@ -13,3 +13,4 @@ Vps.About = Ext.extend(Ext.Window, {
         Vps.About.superclass.initComponent.call(this);
     }
 });
+
