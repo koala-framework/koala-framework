@@ -18,6 +18,10 @@ class Vpc_News_PageFactory extends Vpc_Abstract_PageFactory
             }
         }
         $this->_additionalFactories['details'] = new Vpc_News_PageFactoryDetails($this->_component);
+        $childComponentClasses = Vpc_Abstract::getSetting(get_class($this->_component), 'childComponentClasses');
+        if (!empty($childComponentClasses['titles'])) {
+            $this->_additionalFactories['titles'] = new Vpc_News_PageFactoryTitles($this->_component);
+        }
     }
 
     public function getChildPageByNewsRow($row)

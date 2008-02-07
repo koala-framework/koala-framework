@@ -40,9 +40,11 @@ class Vpc_News_Categories_ListDecorator_Component extends Vpc_Decorator_Abstract
         if (!is_null($newsSubComponent)) {
             $newsComponent = $newsSubComponent->getNewsComponent();
 
-            $categoryPages = $newsComponent->getPageFactory()->getCategoryPages();
-            foreach ($categoryPages as $categoryPage) {
-                $vars['categoryComponents'][] = $categoryPage->getTemplateVars();
+            if ($newsComponent) {
+                $categoryPages = $newsComponent->getPageFactory()->getCategoryPages();
+                foreach ($categoryPages as $categoryPage) {
+                    $vars['categoryComponents'][] = $categoryPage->getTemplateVars();
+                }
             }
         }
 
