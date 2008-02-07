@@ -58,25 +58,25 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             text    : 'Delete',
             icon    : '/assets/silkicons/table_delete.png',
             cls     : 'x-btn-text-icon',
-            disabled: true,
             handler : this.onDelete,
-            scope: this
+            scope: this,
+            needsSelection: true
         });
         this.actions.edit = new Ext.Action({
             text    : 'Edit',
             icon    : '/assets/silkicons/table_edit.png',
             cls     : 'x-btn-text-icon',
-            disabled: true,
             handler : this.onEdit,
-            scope: this
+            scope: this,
+            needsSelection: true
         });
         this.actions.duplicate = new Ext.Action({
             text    : 'Duplicate',
             icon    : '/assets/silkicons/table_go.png',
             cls     : 'x-btn-text-icon',
-            disabled: true,
             handler : this.onDuplicate,
-            scope: this
+            scope: this,
+            needsSelection: true
         });
         this.actions.pdf = new Ext.Action({
             text    : 'Drucken',
@@ -180,13 +180,15 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
         gridConfig.selModel.on('selectionchange', function() {
             if (this.getSelected()) {
-                this.getAction('edit').enable();
-                this.getAction('delete').enable();
-                this.getAction('duplicate').enable();
+                for (var i in this.actions) {
+                    var a = this.actions[i];
+                    if (a.initialConfig.needsSelection) a.enable();
+                }
             } else {
-                this.getAction('edit').disable();
-                this.getAction('delete').disable();
-                this.getAction('duplicate').disable();
+                for (var i in this.actions) {
+                    var a = this.actions[i];
+                    if (a.initialConfig.needsSelection) a.disable();
+                }
             }
         }, this);
 
@@ -313,12 +315,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             this.editDialog = this.initEditDialog(this.editDialog);
         }
 
-        for (var i in this.actions) {
-            if (i == 'add' && this.editDialog) continue; //add-button anzeigen auch wenn keine permissions da die add-permissions im dialog sein müssen
-            if (!meta.permissions[i]) {
-                this.getAction(i).hide();
-            }
-        }
 
         /* * Für DD
         var ddrow = new Ext.dd.DropTarget(this.grid.container, {
@@ -375,6 +371,16 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             this.pagingType = false;
         }
 
+        for (var i in this.actions) {
+            if (this.actions[i].initialConfig.needsSelection) {
+                this.actions[i].disable();
+            }
+            if (i == 'add' && this.editDialog) continue; //add-button anzeigen auch wenn keine permissions da die add-permissions im dialog sein müssen
+            if (!meta.permissions[i]) {
+                this.getAction(i).hide();
+            }
+        }
+
         //aktionen die als string in der tbar sind
         var existingActions = {};
         for (var i = 0; i < gridConfig.tbar.length; i++) {
@@ -383,6 +389,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 existingActions[gridConfig.tbar[i]] = true;
             }
         }
+
 
         if (meta.buttons.save) {
             if (!existingActions.save) {
@@ -417,8 +424,12 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         }
 
         for (var i in meta.buttons) {
-            if (i != 'pdf' && i != 'csv' && i != 'xls' && i != 'reload' && ! !existingActions[i]) {
-                gridConfig.tbar.add(this.getAction(i));
+            if (i != 'pdf' && i != 'csv' && i != 'xls' && i != 'reload' && !existingActions[i]) {
+                if (this.getAction(i)) {
+                    gridConfig.tbar.add(this.getAction(i));
+                } else {
+                    gridConfig.tbar.add(i);
+                }
             }
         }
 
@@ -925,6 +936,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         }, this);
     },
     isDirty: function() {
+        if (!this.store) return false;
         if (this.store.getModifiedRecords().length || this.store.newRecords.legth) {
             return true;
         } else {
