@@ -68,6 +68,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 $data['allowDrag'] = false;
                 $data['type'] = 'category';
                 $data['bIcon'] = new Vps_Asset('folder_page');
+                $data['bIcon'] = $data['bIcon']->__toString();
                 $data['uiProvider'] = 'Vps.Component.PagesNode';
                 $return[] = $data;
             }
