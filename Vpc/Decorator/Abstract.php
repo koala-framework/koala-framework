@@ -107,7 +107,7 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
      */
     public function getComponentById($id)
     {
-        return $this->_component->getComponent($id);
+        return $this->_component->getComponentById($id);
     }
     
     /**

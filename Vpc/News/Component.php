@@ -6,12 +6,13 @@ class Vpc_News_Component extends Vpc_News_List_Abstract_Component implements Vpc
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName'     => 'News',
+            'componentName'     => 'News.List',
             'componentIcon'     => new Vps_Asset('newspaper'),
             'tablename'         => 'Vpc_News_Model',
             'hideInNews'        => true,
             'childComponentClasses' => array(
-                'details'       => 'Vpc_News_Details_Component'
+                'details'       => 'Vpc_News_Details_Component',
+                'titles'        => 'Vpc_News_Titles_Component'
             )
         ));
 
@@ -21,8 +22,6 @@ class Vpc_News_Component extends Vpc_News_List_Abstract_Component implements Vpc
 
     public function getNews()
     {
-        $ret = array();
-        $ret['news'] = array();
         $where = array(
             'component_id = ?' => $this->getId()
         );

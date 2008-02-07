@@ -22,16 +22,14 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['news'] = array();
 
-        if (null === $this->getNewsComponent()) {
-            throw new Vps_Exception('News Component has not been set by method \'setNewsComponent\'');
-        }
+        if ($this->getNewsComponent()) {
+            foreach ($this->getNews() as $row) {
+                $n = $this->getNewsComponent()->getPageFactory()->getChildPageByNewsRow($row);
 
-        foreach ($this->getNews() as $row) {
-            $n = $this->getNewsComponent()->getPageFactory()->getChildPageByNewsRow($row);
-
-            $data = $row->toArray();
-            $data['href'] = $n->getUrl();
-            $ret['news'][] = $data;
+                $data = $row->toArray();
+                $data['href'] = $n->getUrl();
+                $ret['news'][] = $data;
+            }
         }
         return $ret;
     }
