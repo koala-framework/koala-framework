@@ -29,9 +29,9 @@ Vpc.Advanced.GoogleMap = function(mapContainer, options, text){
 		container.setHeight(parseInt(options.height));
 
 		var input = mapContainer.down("form.fromAddress input");
-		input.set({value:'Ihr Abfahrtsort: PLZ, Ort, Straﬂe'});
+		input.set({value:'Ihr Abfahrtsort: PLZ, Ort, Stra√üe'});
 		input.on('focus', function() {
-			if (this.getValue() == 'Ihr Abfahrtsort: PLZ, Ort, Straﬂe'){
+			if (this.getValue() == 'Ihr Abfahrtsort: PLZ, Ort, Stra√üe'){
 				this.set({
 					value: ''
 				});
@@ -42,7 +42,7 @@ Vpc.Advanced.GoogleMap = function(mapContainer, options, text){
 		input.on('blur', function() {
 			if (this.getValue()=='') {
 				this.set({
-					value:'Ihr Abfahrtsort: PLZ, Ort, Straﬂe'});
+					value:'Ihr Abfahrtsort: PLZ, Ort, Stra√üe'});
 			}
 			this.addClass('textBefore');
 		}, input);
