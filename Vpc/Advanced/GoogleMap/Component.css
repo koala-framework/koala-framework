@@ -6,3 +6,5 @@ div.vpcGoogleMap .fromAddress input.textOn {color:#000000}
 div.vpcGoogleMap .fromAddress input.submitOn {color:#D2281B}
 
 div.vpcGoogleMap .mapDirSuggestParent {display: none}
+
+div.vpcGoogleMap .container { overflow: hidden; border: 1px solid #000; }

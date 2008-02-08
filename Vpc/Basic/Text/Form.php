@@ -44,8 +44,13 @@ class Vpc_Basic_Text_Form extends Vps_Auto_Vpc_Form
 
     public function setHtmlEditorLabel($title)
     {
-        $this->fields[0]->setFieldLabel($title);
+        $this->getHtmlEditor()->setFieldLabel($title);
         return $this;
+    }
+
+    public function getHtmlEditor()
+    {
+        return $this->fields['content'];
     }
 
 }
