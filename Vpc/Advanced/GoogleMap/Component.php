@@ -15,8 +15,10 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract
                 'content' => Vpc_Abstract::LOREM_IPSUM
             ),
             'assets' => array(
-                'files' => array('vps/Vpc/Advanced/GoogleMap/Component.js'),
-                'dep'   => array('VpsGoogleMap', 'ExtUtilJson')
+                'files' => array(
+                    'vps/Vpc/Advanced/GoogleMap/Component.js',
+                ),
+                'dep'   => array('ExtCore', 'VpsGoogleMap', 'ExtUtilJson')
             ),
             'assetsAdmin' => array(
                 'dep'   => array('VpsGoolgeMapField')
