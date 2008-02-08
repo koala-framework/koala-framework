@@ -1,15 +1,14 @@
 Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 {
     controllerUrl: '',
-    //autoload: true,
+    autoLoad: true,
     layout: 'fit',
 
     initComponent : function()
     {
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
 
-//         if(this.autoload) {
-        //todo: wos bosiat bei !autoload
+        if(this.autoLoad) {
             if (!this.controllerUrl) {
                 throw new Error('No controllerUrl specified for AutoGrid.');
             }
@@ -22,7 +21,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 },
                 scope: this
             });
-//         }
+        }
 
         this.addEvents(
             'rendergrid',
