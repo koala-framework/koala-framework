@@ -7,15 +7,20 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract
     {
         return array_merge(parent::getSettings(), array(
             'componentName' => 'Google Maps',
-            'tablename' => 'Vpc_Advanced_Googlemap_Model',
+            'tablename' => 'Vpc_Advanced_GoogleMap_Model',
         	'childComponentClasses' => array(
                 'text'         => 'Vpc_Basic_Text_Component'
             ),
             'default' => array(
                 'content' => Vpc_Abstract::LOREM_IPSUM
             ),
-            'assets' => array('files'=>array('vps/Vpc/Advanced/GoogleMap/Component.js'),
-            'dep' => array('VpsGoogleMap', 'ExtUtilJson'))
+            'assets' => array(
+                'files' => array('vps/Vpc/Advanced/GoogleMap/Component.js'),
+                'dep'   => array('VpsGoogleMap', 'ExtUtilJson')
+            ),
+            'assetsAdmin' => array(
+                'dep'   => array('VpsGoolgeMapField')
+            )
         ));
 
     }
