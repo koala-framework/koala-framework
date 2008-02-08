@@ -1,5 +1,5 @@
 Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
-    autoload: true,
+    autoLoad: true,
     autoScroll: true, //um scrollbars zu bekommen
     border: false,
     formConfig: {},
@@ -61,7 +61,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
         this.formConfig.url = this.controllerUrl + '/jsonSave';
 
-        if (this.autoload) {
+        if (this.autoLoad) {
             this.load();
         }
     },
