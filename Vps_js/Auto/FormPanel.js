@@ -274,6 +274,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                             this.fireEvent('datachange', r);
                             this.getForm().clearValues();
                             this.getForm().clearInvalid();
+                            this.getForm().resetDirty();
                             this.disable();
                             this.fireEvent('deleteaction', this);
                         },
