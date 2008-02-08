@@ -760,12 +760,15 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                         params: params,
                         success: function(response, options, r) {
                             this.reload();
-                            this.getAction('delete').disable();
                             this.fireEvent('deleterow', this.grid);
                             this.fireEvent('datachange', r);
-                        },
-                        failure: function() {
-                            this.getAction('delete').enable();
+
+                            this.activeId = null;
+                            //wenn gelöscht alle anderen disablen
+                            this.bindings.each(function(i) {
+                                i.item.disable();
+                                i.item.reset();
+                            }, this);
                         },
                         callback: function() {
                             this.el.unmask();
