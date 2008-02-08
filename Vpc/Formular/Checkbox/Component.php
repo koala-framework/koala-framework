@@ -11,7 +11,6 @@ class Vpc_Formular_Checkbox_Component extends Vpc_Formular_Field_Abstract
                 'checked' => false,
                 'width' => 250,
                 'value' => '',
-                'name' => '',
                 'validator' => ''
             )
         ));
@@ -24,28 +23,12 @@ class Vpc_Formular_Checkbox_Component extends Vpc_Formular_Field_Abstract
         $return['checked'] = $this->_getRow()->checked;
         $return['text'] = $this->_getRow()->text;
         $return['width'] = $this->_getRow()->width;
-        $return['name'] = $this->_getName();
         return $return;
-    }
-
-    protected function _getName()
-    {
-        if (isset($this->_getRow()->name)) {
-            //subotimal
-            return $this->_getRow()->name;
-        } else {
-            return $this->_store['name'];
-        }
     }
 
     public function processInput()
     {
-        $name = $this->_getName();
-        if (isset($_POST[$name])) {
-            $value = '1';
-        } else {
-            $value = '';
-        }
+        $value = isset($_POST[$this->_getName()]) ? '1' : '' ;
         $this->_getRow()->value = $value;
     }
 

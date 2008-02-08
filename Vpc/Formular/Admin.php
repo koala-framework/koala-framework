@@ -35,7 +35,7 @@ class Vpc_Formular_Admin extends Vpc_Paragraphs_Admin
                   `component_class` varchar(255) NOT NULL,
                   `pos` smallint NOT NULL,
                   `visible` tinyint(4) NOT NULL,
-                  `name` varchar(255) NOT NULL,
+                  `field_label` varchar(255) NOT NULL,
                   `mandatory` tinyint(4) NOT NULL,
                   `no_cols` tinyint(4) NOT NULL,
                    PRIMARY KEY  (`id`)

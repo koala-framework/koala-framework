@@ -3,8 +3,13 @@ class Vpc_Formular_PlzOrt_Component extends Vpc_Formular_Field_Abstract
 {
     protected $_plz;
     protected $_ort;
-    protected $_settings = array('name' => '');
-    const NAME = 'Formular.PlzOrt';
+
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName' => 'Formular Fields.PlzOrt'
+        ));
+    }
 
     function getTemplateVars()
     {

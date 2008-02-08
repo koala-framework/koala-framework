@@ -20,5 +20,13 @@
         <p>Bitte überprüfen Sie Ihre Eingabe, es traten Fehler auf.</p>
     {/if}
 {else}
-    <p>Ihr Formular wurde erfolgreich abgeschickt.</p>
+    <p>
+        Das Formular wurde erfolgreich übermittelt.
+        {*
+        The following data has been sent:<br />
+        {foreach from=$component.values key=k item=v}
+            {$k}: {$v}<br />
+        {/foreach}
+        *}
+    </p>
 {/if}

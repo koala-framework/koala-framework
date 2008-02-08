@@ -1,19 +1,22 @@
 <?php
 class Vpc_Formular_Password_Component extends Vpc_Formular_Field_Abstract
 {
-    protected $_settings = array(
-        'maxlength' => '255',
-        'name' => '',
-        'width' => '50'
-    );
-    protected $_tablename = 'Vpc_Formular_Password_Model';
-    const NAME = 'Formular.Password';
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName' => 'Formular Fields.Password',
+            'tablename' => 'Vpc_Formular_Password_Model',
+            'default' => array(
+                'maxlength' => '255',
+                'width' => '50'
+            )
+        ));
+    }
 
     function getTemplateVars()
     {
         $return = parent::getTemplateVars();
         $return['maxlength'] = $this->getSetting('maxlength');
-        $return['name'] = $this->getSetting('name');
         $return['width'] = $this->getSetting('width');
         $return['template'] = 'Formular/Password.html';
         return $return;
@@ -21,9 +24,8 @@ class Vpc_Formular_Password_Component extends Vpc_Formular_Field_Abstract
 
     public function processInput()
     {
-        $name = $this->getSetting('name');
-        if (isset($_POST[$name])) {
-            $value = $_POST[$name];
+        if (isset($_POST[$this->_getName()])) {
+            $value = $_POST[$this->_getName()];
         }
         $this->setSetting('value', $value);
     }

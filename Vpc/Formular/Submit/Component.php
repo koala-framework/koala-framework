@@ -7,7 +7,6 @@ class Vpc_Formular_Submit_Component extends Vpc_Abstract
             'componentName' => 'Formular Fields.Submit',
             'tablename' => 'Vpc_Formular_Submit_Model',
             'default' => array(
-                'name' => 'submit',
                 'text' => 'Submit'
             )
         ));
@@ -17,11 +16,6 @@ class Vpc_Formular_Submit_Component extends Vpc_Abstract
     {
         $return = parent::getTemplateVars();
         $return['text'] = $this->_getRow()->text;
-        if (isset($this->_getRow()->name)) {
-            $return['name'] = $this->_getRow()->name;
-        } else {
-            $return['name'] = $this->_store['name'];
-        }
         return $return;
     }
 }

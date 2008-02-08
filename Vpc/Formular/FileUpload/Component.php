@@ -1,20 +1,23 @@
 <?php
 class Vpc_Formular_FileUpload_Component extends Vpc_Formular_Field_Abstract
 {
-    protected $_settings = array(
-        'types_allowed' => '',
-         'name' => '',
-         'width' => '50',
-         'maxSize' => 2000
-    );
-    protected $_tablename = 'Vpc_Formular_FileUpload_Model';
-    const NAME = 'Formular.FileUpload';
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName' => 'Formular Fields.FileUpload',
+            'tablename' => 'Vpc_Formular_FileUpload_Model',
+            'default' => array(
+                 'types_allowed' => '',
+                 'width' => '50',
+                 'maxSize' => 2000
+            )
+        ));
+    }
 
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
         $return['width'] = $this->getSetting('width');
-        $return['name'] = $this->getSetting('name');
         $return['template'] = 'Formular/FileUpload.html';
         return $return;
     }
