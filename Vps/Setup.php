@@ -66,6 +66,8 @@ class Vps_Setup
             }
         } else if (isset($_SERVER['HTTP_HOST']) && substr($_SERVER['HTTP_HOST'], 0, 4)=='dev.') {
             $vpsSection = $webSection = 'dev';
+        } else if (isset($_SERVER['HTTP_HOST']) && substr($_SERVER['HTTP_HOST'], 0, 5)=='test.') {
+            $vpsSection = $webSection = 'test';
         } else {
             $vpsSection = $webSection = 'production';
         }
