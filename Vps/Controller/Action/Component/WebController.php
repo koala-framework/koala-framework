@@ -52,7 +52,7 @@ class Vps_Controller_Action_Component_WebController extends Vps_Controller_Actio
             die();
         }
         if (!$page) {
-            throw new Vps_Controller_Action_Web_Exception('Page not found for path ' . $this->getRequest()->getPathInfo());
+            throw new Vps_Controller_Action_Web_FileNotFoundException('Page not found for path ' . $this->getRequest()->getPathInfo());
         }
 
         $templateVars = $page->getTemplateVars();

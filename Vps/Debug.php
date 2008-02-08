@@ -3,6 +3,10 @@ class Vps_Debug
 {
     public static function sendErrorMail($exception, $address)
     {
+        if ($exception instanceof Vps_Controller_Action_Web_FileNotFoundException) {
+            //404-Fehler nicht als mail verschicken
+            return;
+        }
         if ($exception instanceof Vps_CustomException) {
             $type = $exception->getType();
         } else {
@@ -10,15 +14,23 @@ class Vps_Debug
         }
 
         $body = $exception->__toString();
+        $body .= "\n\nREQUEST_URI: ".$_SERVER['REQUEST_URI'];
+        $body .= "\nHTTP_REFERRER: ".(isset($_SERVER['HTTP_REFERRER'])
+                                        ? $_SERVER['HTTP_REFERRER'] : '(none)');
         $body .= "\n\n------------------\n\n_GET:\n";
         $body .= print_r($_GET, true);
         $body .= "\n\n------------------\n\n_POST:\n";
         $body .= print_r($_POST, true);
         $body .= "\n\n------------------\n\n_SERVER:\n";
         $body .= print_r($_SERVER, true);
+        $body .= "\n\n------------------\n\n_SESSION:\n";
+        $body .= print_r($_SESSION, true);
+        $body .= "\n\n------------------\n\n_FILES:\n";
+        $body .= print_r($_FILES, true);
+        $body = substr($body, 0, 5000);
         $mail = new Zend_Mail('utf-8');
         $mail->setBodyText($body)
-            ->setSubject($type . ': ' . $_SERVER['HTTP_HOST']);
+            ->setSubject($_SERVER['HTTP_HOST'] . ': ' . $type);
         $mail->addTo('vperror@vivid-planet.com');
         if (is_string($address)) $address = array($address);
         foreach ($address as $i) {
