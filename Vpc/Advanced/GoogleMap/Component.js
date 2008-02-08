@@ -138,7 +138,7 @@ Vpc.Advanced.GoogleMap.prototype = {
 							e.stopEvent();
 						}, this);
 					}
-                } else {
+                } else if (elParent) {
                     elParent.style.display = 'none';
                 }
 	}
