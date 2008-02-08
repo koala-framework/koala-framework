@@ -1,20 +1,32 @@
 <?php
 abstract class Vpc_Formular_Field_Abstract extends Vpc_Abstract implements Vpc_Formular_Field_Interface
 {
-    public function processInput()
-    {
-    }
     public function validateField($mandatory)
     {
     }
+
+    public function processInput()
+    {
+    }
+
     public function getValue()
     {
-        //scheißlösung
-        return $this->_getRow()->value;
+        $row = $this->_getRow();
+        if ($row && isset($row->value)) {
+            return $row->value;
+        }
+        return '';
     }
-    public function getName()
+
+    protected function _getName()
     {
-        //scheißlösung
-        return $this->_getRow()->name;
+        return $this->getStore('name');
+    }
+
+    public function getTemplateVars()
+    {
+        $return = parent::getTemplateVars();
+        $return['name'] = $this->_getName();
+        return $return;
     }
 }

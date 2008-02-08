@@ -1,13 +1,17 @@
 <?php
 class Vpc_Formular_MultiSelect_Component extends Vpc_Formular_Select_Component
 {
-    protected $_settings = array(
-        'name' => '',
-        'type' => 'checkbox',
-        'size' => '5'
-    );
-    protected $_tablename = 'Vpc_Formular_MultiSelect_Model';
-    const NAME = 'Formular.MultiSelect';
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName' => 'Formular Fields.MultiSelect',
+            'tablename' => 'Vpc_Formular_MultiSelect_Model',
+            'default' => array(
+                'type' => 'checkbox',
+                'size' => '5'
+            )
+        ));
+    }
 
     public function getTemplateVars()
     {
@@ -18,7 +22,7 @@ class Vpc_Formular_MultiSelect_Component extends Vpc_Formular_Select_Component
 
     public function processInput()
     {
-        $name = $this->getSetting('name');
+        $name = $this->_getName();
         foreach ($this->getOptions() AS $key => $option) {
             $this->_options[$key]['checked'] = isset($_POST[$name]) && in_array($option['value'], $_POST[$name]);
         }

@@ -9,7 +9,6 @@ class Vpc_Formular_Textbox_Component extends Vpc_Formular_Field_Abstract
             'default' => array(
                 'maxlength' => '255',
                 'width' => '150',
-                'name' => '',
                 'value' => '',
                 'validator' => ''
             )
@@ -22,31 +21,19 @@ class Vpc_Formular_Textbox_Component extends Vpc_Formular_Field_Abstract
         $return['value'] = $this->_getRow()->value;
         $return['maxlength'] = $this->_getRow()->maxlength;
         $return['width'] = $this->_getRow()->width;
-        $return['name'] = $this->_getName();
         return $return;
-    }
-
-    protected function _getName()
-    {
-        if (isset($this->_getRow()->name)) {
-            //subotimal
-            return $this->_getRow()->name;
-        } else {
-            return $this->_store['name'];
-        }
     }
 
     public function processInput()
     {
-        $name = $this->_getName();
-        if (isset($_POST[$name])) {
-            $this->_getRow()->value = $_POST[$name];
+        if (isset($_POST[$this->_getName()])) {
+            $this->_getRow()->value = $_POST[$this->_getName()];
         }
     }
 
     public function validateField($mandatory)
     {
-        $value = $this->_getRow()->value;
+        $value = $this->getValue();
         $validatorString = $this->_getRow()->validator;
         if ($validatorString != '' && $value != '') {
             $validator = new $validatorString();
