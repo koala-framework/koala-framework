@@ -14,7 +14,6 @@ abstract class Vps_PageCollection_Abstract
     protected $_urlScheme = 0;
     const URL_SCHEME_HIERARCHICAL = 0;
     const URL_SCHEME_FLAT = 1;
-    private $_showInvisible = false;
     protected $_types = array();
 
     public function __construct(Vps_Dao $dao, $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL, $decoratorClasses = array())
@@ -30,6 +29,8 @@ abstract class Vps_PageCollection_Abstract
                 break;
         }
         $this->_decoratorClasses = $decoratorClasses;
+
+        $this->_dao->getTable('Vps_Dao_Pages')->showInvisible($this->showInvisible());
     }
 
     public function getDao()
@@ -37,13 +38,9 @@ abstract class Vps_PageCollection_Abstract
         return $this->_dao;
     }
 
-    public function showInvisible($show = null)
+    public function showInvisible()
     {
-        if ($show === true || $show === false) {
-            $this->_showInvisible = $show;
-            $this->_dao->getTable('Vps_Dao_Pages')->showInvisible($show);
-        }
-        return $this->_showInvisible;
+        return Zend_Registry::get('config')->showInvisible;
     }
 
     public static function getInstance()

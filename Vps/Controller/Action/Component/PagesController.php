@@ -139,4 +139,15 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $this->view->id = $id;
         }
     }
+    public function openPreviewAction()
+    {
+        $host = $_SERVER['HTTP_HOST'];
+        $host = str_replace('www.', '', $host);
+        $host = 'preview.' . $host;
+        $pc = Vps_PageCollection_Abstract::getInstance();
+        $p = $pc->getPageById($this->_getParam('page_id'));
+        $href = 'http://' . $host . $pc->getUrl($p);
+        header('Location: '.$href);
+        exit;
+    }
 }

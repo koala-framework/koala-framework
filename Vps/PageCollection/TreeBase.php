@@ -6,7 +6,6 @@ class Vps_PageCollection_TreeBase extends Vps_PageCollection_Tree
     public function __construct(Vps_Dao $dao, $urlScheme = Vps_PageCollection_Abstract::URL_SCHEME_HIERARCHICAL, $decoratorClasses = array())
     {
         parent::__construct($dao, $urlScheme, $decoratorClasses);
-        $this->showInvisible(true);
     }
 
     public static function getInstance()
@@ -31,4 +30,10 @@ class Vps_PageCollection_TreeBase extends Vps_PageCollection_Tree
     {
         return $page;
     }
+
+    public function showInvisible()
+    {
+        return true;
+    }
+
 }

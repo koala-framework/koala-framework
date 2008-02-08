@@ -52,6 +52,11 @@ class Vps_Setup
 
     public static function createConfig()
     {
+        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+
+        //www abschneiden damit www.test und www.preview usw auch funktionieren
+        if (substr($host, 0, 4)== 'www.') $host = substr($host, 4); 
+
         if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $_SERVER['SCRIPT_FILENAME'], $m)) {
             $vpsSection = $webSection = 'vivid';
 
@@ -64,10 +69,12 @@ class Vps_Setup
             if (isset($vpsConfigFull->{$m[2]})) {
                 $vpsSection = $m[2];
             }
-        } else if (isset($_SERVER['HTTP_HOST']) && substr($_SERVER['HTTP_HOST'], 0, 4)=='dev.') {
+        } else if (substr($host, 0, 4)=='dev.') {
             $vpsSection = $webSection = 'dev';
-        } else if (isset($_SERVER['HTTP_HOST']) && substr($_SERVER['HTTP_HOST'], 0, 5)=='test.') {
+        } else if (substr($host, 0, 5)=='test.') {
             $vpsSection = $webSection = 'test';
+        } else if (substr($host, 0, 8)=='preview.') {
+            $vpsSection = $webSection = 'preview';
         } else {
             $vpsSection = $webSection = 'production';
         }

@@ -55,7 +55,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 this.getAction('add'),
                 this.getAction('delete'),
                 this.getAction('visible'),
-                this.getAction('makeHome')
+                this.getAction('makeHome'),
+                this.getAction('preview')
             ],
             icon    : '/assets/silkicons/page.png',
             disabled: true
@@ -87,6 +88,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 this.getAction('delete'),
                 this.getAction('visible'),
                 this.getAction('makeHome'),
+                this.getAction('preview'),
                 '-',
                 this.getAction('reloadAll'),
                 this.getAction('expand'),
@@ -268,6 +270,17 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 text    : 'Collapse all',
                 handler : function () { this.treePanel.tree.collapseAll(); },
                 icon    : '/assets/silkicons/bullet_delete.png',
+                cls     : 'x-btn-text-icon',
+                scope   : this
+            });
+        } else if (type == 'preview') {
+            this.actions[type] = new Ext.Action({
+                text    : 'Open Preview',
+                handler : function () {
+                    window.open('/admin/component/pages/openPreview?page_id='+
+                                this.treePanel.getSelectedId());
+                },
+                icon    : '/assets/silkicons/page_white_magnify.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this
             });
