@@ -21,7 +21,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
 
             if ($errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER ||
                 $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION ||
-                $errors->exception instanceof Vps_Controller_Action_Web_Exception) {
+                $errors->exception instanceof Vps_Controller_Action_Web_FileNotFoundException) {
                 $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
                 $file = 'Error404.html';
             //auskommentiert - wenn ich einen exception bekomm dann will ich eine gscheite :D
