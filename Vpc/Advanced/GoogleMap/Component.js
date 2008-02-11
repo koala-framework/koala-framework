@@ -29,27 +29,30 @@ Vpc.Advanced.GoogleMap = function(mapContainer, options, text){
 		container.setHeight(parseInt(options.height));
 
 		var input = mapContainer.down("form.fromAddress input");
-		input.set({value:'Ihr Abfahrtsort: PLZ, Ort, Straße'});
+		input.dom.value = 'Ihr Abfahrtsort: PLZ, Ort, Straße';
+		//input.set({value:'Ihr Abfahrtsort: PLZ, Ort, Straße'}); // auskommentiert wegen problemen mit safari
 		input.on('focus', function() {
 			if (this.getValue() == 'Ihr Abfahrtsort: PLZ, Ort, Straße'){
-				this.set({
+				/*this.set({
 					value: ''
-				});
+				});*/
+				input.dom.value = '';
 				this.removeClass('textBefore');
 				this.addClass('textOn');
 			}
 		}, input);
 		input.on('blur', function() {
 			if (this.getValue()=='') {
-				this.set({
-					value:'Ihr Abfahrtsort: PLZ, Ort, Straße'});
+				/*this.set({
+					value:'Ihr Abfahrtsort: PLZ, Ort, Straße'});*/
+					input.dom.value = 'Ihr Abfahrtsort: PLZ, Ort, Straße';
+					this.removeClass('textOn');
+					this.addClass('textBefore');
+
 			}
 			this.addClass('textBefore');
 		}, input);
 };
-
-
-
 
 Vpc.Advanced.GoogleMap.prototype = {
 
@@ -139,7 +142,7 @@ Vpc.Advanced.GoogleMap.prototype = {
 						}, this);
 					}
                 } else if (elParent) {
-                    elParent.style.display = 'none';
+                    elParent.setStyle({display:"none"});
                 }
 	}
 }
