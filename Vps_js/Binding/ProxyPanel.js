@@ -1,5 +1,15 @@
 Vps.Binding.ProxyPanel = Ext.extend(Vps.Binding.AbstractPanel,
 {
+    initComponent: function()
+    {
+        if (!this.proxyItem) {
+            throw "proxyItem not set for ProxyPanel";
+        }
+        this.proxyItem.autoLoad = this.autoLoad;
+        this.proxyItem.baseParams = this.baseParams;
+
+        Vps.Binding.ProxyPanel.superclass.initComponent.call(this);
+    },
     mabySubmit: function() {
         return this.proxyItem.mabySubmit.apply(this.proxyItem, arguments);
     },
@@ -35,5 +45,11 @@ Vps.Binding.ProxyPanel = Ext.extend(Vps.Binding.AbstractPanel,
     },
     hasBaseParams: function() {
         return this.proxyItem.hasBaseParams.apply(this.proxyItem, arguments);
+    },
+    setAutoLoad: function() {
+        return this.proxyItem.setAutoLoad.apply(this.proxyItem, arguments);
+    },
+    getAutoLoad: function() {
+        return this.proxyItem.getAutoLoad.apply(this.proxyItem, arguments);
     }
 });

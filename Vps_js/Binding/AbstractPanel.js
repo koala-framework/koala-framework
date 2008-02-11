@@ -30,21 +30,14 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
                 this.activeId = id;
                 this.bindings.each(function(b) {
                     b.item.enable();
-                    var params = {};
-                    if (b.componentIdSuffix) {
-                        params.component_id =
-                            this.getBaseParams()['component_id'] +
-                            String.format(b.componentIdSuffix, this.activeId);
-                    } else if (b.componentId) {
-                        params.component_id =
-                            String.format(b.componentId, this.activeId);
-                    } else {
-                        params[b.queryParam] = this.activeId;
+                    if (b.item.ownerCt instanceof Ext.TabPanel) {
+                        if (b.item.ownerCt.getActiveTab() != b.item) {
+                            //dieses binding überspringen, liegt in einem
+                            //tab der nicht aktiv ist
+                            return;
+                        }
                     }
-                    if (!b.item.hasBaseParams(params)) {
-                        b.item.applyBaseParams(params);
-                        b.item.load();
-                    }
+                    this._loadBinding(b);
                 }, this);
             }
         }, this, {buffer: 500});
@@ -71,6 +64,26 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
 
         Vps.Binding.AbstractPanel.superclass.initComponent.call(this);
     },
+
+    //private
+    _loadBinding: function(b)
+    {
+        var params = {};
+        if (b.componentIdSuffix) {
+            params.component_id =
+                this.getBaseParams()['component_id'] +
+                String.format(b.componentIdSuffix, this.activeId);
+        } else if (b.componentId) {
+            params.component_id =
+                String.format(b.componentId, this.activeId);
+        } else {
+            params[b.queryParam] = this.activeId;
+        }
+        if (!b.item.hasBaseParams(params)) {
+            b.item.applyBaseParams(params);
+            b.item.load();
+        }
+    },
     addBinding: function() {
         for(var i = 0; i < arguments.length; i++){
             var b = arguments[i];
@@ -79,6 +92,7 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
             }
             if (!b.queryParam) b.queryParam = 'id';
             b.item.disable();
+            b.item.setAutoLoad(false);
             this.bindings.add(b);
 
             b.item.on('datachange', function(result)
@@ -132,6 +146,16 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
                     }, this);
                 }, this);
             }
+            b.item.on('activate', function(item) {
+                this.bindings.each(function(i) {
+                    if (i.item == item) {
+                        if (!item.disabled) {
+                            this._loadBinding(i);
+                        }
+                        return false;
+                    }
+                }, this);
+            }, this);
         }
     },
     removeBinding: function(autoPanel) {
@@ -217,5 +241,12 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
             if (params[i] != baseParams[i]) return false;
         }
         return true;
+    },
+
+    setAutoLoad: function(v) {
+        this.autoLoad = v;
+    },
+    getAutoLoad: function() {
+        return this.autoLoad;
     }
 });
