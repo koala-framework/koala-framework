@@ -8,21 +8,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     {
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
 
-        if(this.autoLoad) {
-            if (!this.controllerUrl) {
-                throw new Error('No controllerUrl specified for AutoGrid.');
-            }
-            Ext.Ajax.request({
-                mask: true,
-                url: this.controllerUrl+'/jsonData',
-                params: Ext.apply({ meta: true }, this.baseParams),
-                success: function(response, options, r) {
-                    this.onMetaLoad(r);
-                },
-                scope: this
-            });
-        }
-
         this.addEvents(
             'rendergrid',
             'beforerendergrid',
@@ -99,6 +84,21 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             scope: this
         });
         Vps.Auto.GridPanel.superclass.initComponent.call(this);
+    },
+
+    doAutoLoad : function(){
+        if (!this.controllerUrl) {
+            throw new Error('No controllerUrl specified for AutoGrid.');
+        }
+        Ext.Ajax.request({
+            mask: true,
+            url: this.controllerUrl+'/jsonData',
+            params: Ext.apply({ meta: true }, this.baseParams),
+            success: function(response, options, r) {
+                this.onMetaLoad(r);
+            },
+            scope: this
+        });
     },
 
     onMetaLoad : function(result)
