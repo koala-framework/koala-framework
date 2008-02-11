@@ -1,14 +1,18 @@
 Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
-    autoLoad: true,
     autoScroll: true, //um scrollbars zu bekommen
     border: false,
-    formConfig: {},
     maskDisabled: true,
     layout: 'fit',
 
     initComponent: function()
     {
+        if (!this.formConfig) this.formConfig = {};
         if (!this.baseParams) this.baseParams = {};
+        if (this.autoLoad !== false) {
+            this.autoLoad = true;
+        } else {
+            delete this.autoLoad;
+        }
 
         this.addEvents(
             'loadform',
@@ -62,7 +66,12 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         this.formConfig.url = this.controllerUrl + '/jsonSave';
     },
 
-    doAutoLoad : function(){
+    doAutoLoad : function()
+    {
+        //autoLoad kann in der zwischenzeit abgeschaltet werden, zB wenn
+        //wir in einem Binding sind
+        if (!this.autoLoad) return;
+
         this.load();
     },
 
@@ -98,10 +107,13 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
 
     isDirty : function() {
-        return this.getForm().isDirty();
+        var f = this.getForm();
+        if (!f) return false;
+        return f.isDirty();
     },
 
     load : function(params, options) {
+
         if (this.el) this.el.mask('Loading...');
 
         if (!params) params = {};

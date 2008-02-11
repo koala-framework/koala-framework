@@ -1,12 +1,15 @@
 Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 {
-    controllerUrl: '',
-    autoLoad: true,
     layout: 'fit',
 
     initComponent : function()
     {
         if (!this.gridConfig) this.gridConfig = { plugins: [] };
+        if (this.autoLoad !== false) {
+            this.autoLoad = true;
+        } else {
+            delete this.autoLoad;
+        }
 
         this.addEvents(
             'rendergrid',
@@ -86,19 +89,12 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         Vps.Auto.GridPanel.superclass.initComponent.call(this);
     },
 
-    doAutoLoad : function(){
-        if (!this.controllerUrl) {
-            throw new Error('No controllerUrl specified for AutoGrid.');
-        }
-        Ext.Ajax.request({
-            mask: true,
-            url: this.controllerUrl+'/jsonData',
-            params: Ext.apply({ meta: true }, this.baseParams),
-            success: function(response, options, r) {
-                this.onMetaLoad(r);
-            },
-            scope: this
-        });
+    doAutoLoad : function()
+    {
+        //autoLoad kann in der zwischenzeit abgeschaltet werden, zB wenn
+        //wir in einem Binding sind
+        if (!this.autoLoad) return;
+        this.load();
     },
 
     onMetaLoad : function(result)
@@ -876,11 +872,27 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         this.store.commitChanges();
     },
     load : function(params) {
-        if (!params) params = {};
-        if (this.pagingType && this.pagingType != 'Date' && !params.start) {
-            params.start = 0;
+        if (!this.controllerUrl) {
+            throw new Error('No controllerUrl specified for AutoGrid.');
         }
-        this.getStore().load({ params: params });
+        if (!params) params = {};
+        if (!this.getStore()) {
+            Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
+            Ext.Ajax.request({
+                mask: true,
+                url: this.controllerUrl+'/jsonData',
+                params: params,
+                success: function(response, options, r) {
+                    this.onMetaLoad(r);
+                },
+                scope: this
+            });
+        } else {
+            if (this.pagingType && this.pagingType != 'Date' && !params.start) {
+                params.start = 0;
+            }
+            this.getStore().load({ params: params });
+        }
     },
 
     getGrid : function() {

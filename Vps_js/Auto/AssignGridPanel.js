@@ -43,7 +43,8 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
             gridConfig: {
                 tbar: [ this.getAction('assign'), '-' ],
                 selModel: new Ext.grid.CheckboxSelectionModel()
-            }
+            },
+            autoLoad: this.autoLoad
         });
 
         this.gridAssigned.on('datachange', function() {
@@ -103,6 +104,19 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
 
     reloadDataGrid: function() {
         return this.gridData.reload.apply(this.gridData, arguments);
+    },
+
+    setAutoLoad: function(v) {
+        Vps.Auto.AssignGridPanel.superclass.setAutoLoad.apply(this, arguments);
+        this.gridData.setAutoLoad(v);
+    },
+    load: function() {
+        Vps.Auto.AssignGridPanel.superclass.load.apply(this, arguments);
+
+        //wenn autoLoad=false
+        if (!this.gridData.getStore()) {
+            this.gridData.load();
+        }
     }
 });
 
