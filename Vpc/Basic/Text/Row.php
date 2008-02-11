@@ -14,7 +14,7 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
 
         $ret = array();
                             //1   2                 3                              4              5
-        while (preg_match('#^(.*)(<img.+src=[\n ]*"([^"]*)"[^>]*>|<a.+href=[\n ]*"([^"]*)"[^>]*>)(.*)$#Us', $content, $m)) {
+        while (preg_match('#^(.*)(<img[^>]+src=[\n ]*"([^"]*)"[^>]*>|<a[^>]+href=[\n ]*"([^"]*)"[^>]*>)(.*)$#Us', $content, $m)) {
 
             if ($m[1] != '') {
                 $ret[] = $m[1];
