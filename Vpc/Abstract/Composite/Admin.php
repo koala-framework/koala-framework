@@ -12,13 +12,13 @@ class Vpc_Abstract_Composite_Admin extends Vpc_Admin
         $fields['image_position'] = "enum('left', 'right', 'alternate') default NULL";
         $this->createFormTable('vpc_composite_textimage', $fields);
     }
-    public function delete($class, $componentId)
+    public function delete($componentId)
     {
-        parent::delete($class, $componentId);
-        if (!Vpc_Abstract::getSetting($class, 'tablename')) {
+        parent::delete($componentId);
+        if (!Vpc_Abstract::getSetting($this->_class, 'tablename')) {
             //wenn komponente kein model hat unterkomponenten hier löschen
             //ansonsten erledigt das die row
-            $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
+            $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
             foreach ($classes as $k=>$i) {
                 Vpc_Admin::getInstance($i)->delete($componentId.'-'.$k);
             }
