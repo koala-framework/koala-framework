@@ -63,12 +63,19 @@ class Vps_Assets_Dependencies
         foreach ($this->_files as $file) {
             if (substr($file, -strlen($fileType)) == $fileType) {
                 if (substr($file, -strlen($fileType)-1) == " $fileType") {
-                    //wenn asset hinten mit " js" aufh�rt das js abschneiden
-                    //wird ben�tigt f�r googlemaps wo die js-dateien kein js am ende haben
+                    //wenn asset hinten mit " js" aufhört das js abschneiden
+                    //wird benötigt für googlemaps wo die js-dateien kein js am ende haben
                     $file = substr($file, 0, -strlen($fileType)-1);
                 }
-                //TODO: wenn sowas �fters gebraucht wird dynamischer machen
-                $file = str_replace('{$config.googleApiKey}', $this->_config->googleApiKey, $file);
+                //TODO: wenn sowas öfters gebraucht wird dynamischer machen
+                $hostParts = explode('.', $_SERVER['HTTP_HOST']);
+                $configDomain = $hostParts[count($hostParts)-2]  // zB 'vivid-planet'
+                               .$hostParts[count($hostParts)-1]; // zB 'com'
+                $file = str_replace(
+                    '{$config.googleMapsApiKey}',
+                    $this->_config->googleMapsApiKeys->$configDomain,
+                    $file
+                );
                 $files[] = $file;
             }
         }
