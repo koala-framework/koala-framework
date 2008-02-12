@@ -30,7 +30,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             text    : 'Save',
             icon    : '/assets/silkicons/table_save.png',
             cls     : 'x-btn-text-icon',
-            disabled: true, //?? passt des?
+            disabled: true,
             handler : this.onSave,
             scope   : this
         });

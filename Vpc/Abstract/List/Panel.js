@@ -13,6 +13,7 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
             split: true,
             region: 'west',
             baseParams: this.baseParams, //Kompatibilität zu ComponentPanel
+            autoLoad: this.autoLoad,
             bindings: [{
                 item        : this.childPanel,
                 componentIdSuffix: '-{0}'
@@ -29,7 +30,10 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
     load: function()
     {
         this.grid.load();
-        this.childPanel.getForm().clearValues();
+        var f = this.childPanel.getForm();
+        if (f) {
+            f.clearValues();
+        }
         this.childPanel.disable();
     },
 
