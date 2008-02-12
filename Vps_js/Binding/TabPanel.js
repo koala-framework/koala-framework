@@ -3,11 +3,12 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
     layout: 'fit',
     initComponent : function()
     {
-        var tabPanel = new Ext.TabPanel({
+        this.tabPanel = new Ext.TabPanel({
             deferredRender: false,
             activeTab: this.activeTab
         });
         this.tabItems = [];
+        
         for (var i in this.tabs) {
             var b = {};
             if (this.baseParams) {
@@ -24,16 +25,27 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 closable    : false,
                 title       : i,
                 id          : i,
-                baseParams  : b
+                baseParams  : b,
+                autoLoad    : this.autoLoad
             }));
             this.relayEvents(item, ['editcomponent']);
-            tabPanel.add(item);
+            this.tabPanel.add(item);
             this.tabItems.push(item);
         }
         if (this.baseParams) delete this.baseParams;
 
-        this.items = tabPanel;
+        this.tabItems.each(function(i) {
+            if (this.tabPanel.getActiveTab() != i) {
+                i.setAutoLoad(false);
+            }
+            i.on('activate', function(i) {
+                i.load();
+            }, this);
+        }, this);
+
+        this.items = this.tabPanel;
         Vps.Binding.TabPanel.superclass.initComponent.call(this);
+
     },
 
     mabySubmit: function() {
@@ -62,7 +74,9 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
     load: function() {
         var arg = arguments;
         this.tabItems.each(function(i) {
-            i.load.apply(i, arg);
+            if (this.tabPanel.getActiveTab() == i) {
+                i.load.apply(i, arg);
+            }
         }, this);
     },
     reload: function() {
@@ -114,6 +128,15 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
     hasBaseParams: function() {
         //Annahme: alle haben die gleichen baseParams
         this.tabItems.first().hasBaseParams();
+    },
+    setAutoLoad: function(v) {
+        this.tabItems.each(function(i) {
+            i.setAutoLoad(v);
+        }, this);
+    },
+    getAutoLoad: function() {
+        //Annahme: alle haben die gleiches autoLoad
+        return this.tabItems.first().getAutoLoad.apply(this.proxyItem, arguments);
     }
 });
 Ext.reg('vps.tabpanel', Vps.Binding.TabPanel);

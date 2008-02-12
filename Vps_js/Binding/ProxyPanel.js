@@ -5,9 +5,6 @@ Vps.Binding.ProxyPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (!this.proxyItem) {
             throw "proxyItem not set for ProxyPanel";
         }
-        this.proxyItem.autoLoad = this.autoLoad;
-        this.proxyItem.baseParams = this.baseParams;
-
         Vps.Binding.ProxyPanel.superclass.initComponent.call(this);
     },
     mabySubmit: function() {
