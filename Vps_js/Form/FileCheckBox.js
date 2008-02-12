@@ -12,7 +12,7 @@ Vps.Form.FileCheckBox = Ext.extend(Ext.form.Checkbox,
                 text += '<img src="/assets/silkicons/eye.png" />';
                 text += '</a>&nbsp;Show';
                 text += '</span>';
-                if (el) {
+                if (this.node) {
                     Ext.DomHelper.overwrite(this.node, text);
                 } else {
                     this.node = Ext.DomHelper.insertAfter(this.container.dom.lastChild.lastChild, text);

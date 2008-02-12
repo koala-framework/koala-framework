@@ -322,7 +322,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
 
     createImage: function() {
-    debugger;
         var img = this.getFocusElement('img');
         if (img && img.tagName && img.tagName.toLowerCase() == 'img') {
             var expr = new RegExp('/media/[^/]+/'+this.component_id+'-i([0-9]+)/');
