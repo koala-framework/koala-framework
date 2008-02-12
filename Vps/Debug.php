@@ -17,6 +17,13 @@ class Vps_Debug
         $body .= "\n\nREQUEST_URI: ".$_SERVER['REQUEST_URI'];
         $body .= "\nHTTP_REFERRER: ".(isset($_SERVER['HTTP_REFERRER'])
                                         ? $_SERVER['HTTP_REFERRER'] : '(none)');
+        $u = Zend_Registry::get('userModel')->getAuthedUser();
+        $body .= "\nUser: ";
+        if ($u) {
+            $body .= "$u, id $u->id, $u->role";
+        } else {
+            $body .= "guest";
+        }
         $body .= "\n\n------------------\n\n_GET:\n";
         $body .= print_r($_GET, true);
         $body .= "\n\n------------------\n\n_POST:\n";
