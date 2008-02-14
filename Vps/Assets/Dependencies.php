@@ -71,11 +71,13 @@ class Vps_Assets_Dependencies
                 $hostParts = explode('.', $_SERVER['HTTP_HOST']);
                 $configDomain = $hostParts[count($hostParts)-2]  // zB 'vivid-planet'
                                .$hostParts[count($hostParts)-1]; // zB 'com'
-                $file = str_replace(
-                    '{$config.googleMapsApiKey}',
-                    $this->_config->googleMapsApiKeys->$configDomain,
-                    $file
-                );
+                if (isset($this->_config->googleMapsApiKeys->$configDomain)) {
+                    $file = str_replace(
+                        '{$config.googleMapsApiKey}',
+                        $this->_config->googleMapsApiKeys->$configDomain,
+                        $file
+                    );
+                }
                 $files[] = $file;
             }
         }
