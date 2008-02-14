@@ -29,6 +29,10 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
         $return['url'] = $this->_getRow()->getFileUrl();
         $return['width'] = $size['width'];
         $return['height'] = $size['height'];
+        if (Vpc_Abstract::getSetting(get_class($this), 'editComment')) {
+            $return['comment'] = $this->_getRow()->comment;
+        }
+        $return['height'] = $size['height'];
         return $return;
     }
 
