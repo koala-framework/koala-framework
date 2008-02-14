@@ -120,8 +120,8 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                 mode: 'remote',
                 editable: false,
                 triggerAction: 'all',
-                width: 100,
-                listWidth: 200,
+                width: 120,
+                listWidth: 250,
                 tpl: new Ext.XTemplate(
                       '<tpl for=".">',
                         '<div class="x-combo-list-item">',
@@ -178,7 +178,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                         success : function(form, action) {
                             //nicht reload, weil user nach erneutem login vielleicht
                             //die aktuelle seite gar nicht mehr sehen darf
-                            location.href = '/vps/welcome'; 
+                            location.href = '/vps/welcome';
                         },
                         scope: this
                     });

@@ -141,6 +141,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 }
             }
         }, this);
+		this.relayEvents(this.store, ['load']);
         this.on('aftereditcomplete', function() {
             if (this.isDirty()) {
                 this.getAction('save').enable();
