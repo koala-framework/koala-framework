@@ -568,7 +568,9 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             }
             editDialog = new d(editDialog);
         }
-        editDialog.applyBaseParams(this.getBaseParams());
+        if (editDialog.applyBaseParams) {
+            editDialog.applyBaseParams(this.getBaseParams());
+        }
         editDialog.on('datachange', function(r) {
             this.reload();
             //r nicht durchschleifen - weil das probleme verursacht wenn
