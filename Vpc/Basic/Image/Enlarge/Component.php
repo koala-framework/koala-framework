@@ -16,8 +16,12 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
                 'dimension'         => array(100, 100),
                 'scale'             => Vps_Media_Image::SCALE_BESTFIT
             ),
-            'assets' => array('files'=>array('vps/Vpc/Basic/Image/Enlarge/Component.js'),
-            'dep' => array('ExtCore', 'ExtWindow'))
+            'dimension' => array(640, 480),
+            'assets' => array(
+                'files'=>array('vps/Vpc/Basic/Image/Enlarge/Component.js'),
+                'dep' => array('ExtCore')
+            ),
+            'editComment' => true
         ));
     }
 
@@ -40,6 +44,7 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
                 'height' => $vars['height']
             );
         }
+
         $return['smallImage'] = $vars;
         return $return;
     }
