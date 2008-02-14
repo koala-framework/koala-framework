@@ -21,6 +21,8 @@
 .vps-welcome .welcomeContent p {
     margin-bottom: 10px;
 }
+.vps-welcome .welcomeContent strong { font-weight: bold; }
+
 .vps-welcome .footer {
     position: relative;
     border-top: 2px solid #a9bfd4;
