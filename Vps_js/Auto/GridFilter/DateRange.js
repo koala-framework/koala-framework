@@ -12,14 +12,34 @@ Vps.Auto.GridFilter.DateRange = function(config)
         value: config.to
     });
     this.toolbarItems.add(this.fieldTo);
-    this.toolbarItems.add(new Ext.Button({
+    /*this.toolbarItems.add(new Ext.Button({
         text: '»',
         handler: function() {
             this.fireEvent('filter', this, this.getParams());
         },
         scope: this
-    }));
+    }));*/
+
+	this.fieldTo.on('menuhidden', reload, this);
+    this.fieldTo.on('render', function() {
+        this.fieldTo.getEl().on('keypress',reload, this, {buffer: 500});
+    }, this);
+
+	this.fieldFrom.on('menuhidden', reload , this);
+    this.fieldFrom.on('render', function() {
+        this.fieldFrom.getEl().on('keypress', reload, this, {buffer: 500});
+    }, this);
+
+	function reload(){
+		if (this.fieldFrom.isValid() && this.fieldTo.isValid()) {
+			this.fireEvent('filter', this, this.getParams());
+		}
+	}
+
+
 };
+
+
 
 Ext.extend(Vps.Auto.GridFilter.DateRange, Vps.Auto.GridFilter.Abstract, {
     reset: function() {

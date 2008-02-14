@@ -25,4 +25,18 @@ class Vps_Pdf_TcPdf extends TCPDF
 
 
     }
+
+    public function setPageWidth($value)
+	{
+        $this->w = $value;
+    }
+
+    public function setPageHeight($value)
+	{
+        $this->h = $value;
+    }
+
+    public function setLasth ($value){
+        $this->lasth = $value;
+    }
 }
