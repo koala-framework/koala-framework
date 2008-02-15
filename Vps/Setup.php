@@ -1,6 +1,9 @@
 <?php
 function p($src, $maxDepth = 5) {
     ini_set('xdebug.var_display_max_depth', $maxDepth);
+    if (method_exists($src, '__toString')) {
+        $src = $src->__toString();
+    }
     if (function_exists('xdebug_var_dump')) {
         xdebug_var_dump($src);
     } else {
