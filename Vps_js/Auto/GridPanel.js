@@ -115,7 +115,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                     fields: meta.fields
                 }),
                 remoteSort: remoteSort,
-                sortInfo: meta.sortInfo
+                sortInfo: meta.sortInfo,
+                pruneModifiedRecords: true
             };
             if (meta.grouping) {
                 var storeType = Ext.data.GroupingStore;
@@ -623,10 +624,17 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (arguments[1]) options.params = arguments[1]; //backwards compatibility
 
         this.getAction('save').disable();
+
         var params = this.getSaveParams();
         if (options.params) Ext.apply(params, options.params);
 
-        if (params == {}) return;
+        //gibts da keine bessere lösung?
+        var empty = true;
+        for (var i in params) {
+            empty = false;
+            break;
+        }
+        if (empty) return;
 
         var cb = {
             success: options.success,
@@ -738,14 +746,21 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
                     var ids = [];
                     var params = {};
+                    var newNewRecords = [];
                     selectedRows.each(function(selectedRow)
                     {
                         if (selectedRow.data.id == 0) {
                             this.store.remove(selectedRow);
+                            this.store.newRecords.each(function(r) {
+                                if (selectedRow != r) {
+                                    newNewRecords.push(r);
+                                }
+                            });
                         } else {
                             ids.push(selectedRow.id);
                         }
                     }, this);
+                    this.store.newRecords = newNewRecords;
                     if (!ids.length) return;
 
                     params[this.store.reader.meta.id] = ids.join(';');

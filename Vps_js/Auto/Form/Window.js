@@ -131,3 +131,4 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
         this.getAutoForm().applyBaseParams(p);
     }
 });
+Ext.reg('vps.autoformwindow', Vps.Auto.Form.Window);
