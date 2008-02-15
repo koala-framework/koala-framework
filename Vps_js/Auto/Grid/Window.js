@@ -4,6 +4,7 @@ Vps.Auto.Grid.Window = Ext.extend(Ext.Window, {
     layout: 'fit',
     modal: true,
     closeAction: 'hide',
+    queryParam: 'id',
     initComponent : function()
     {
         this.autoGrid = new Vps.Auto.GridPanel({
@@ -15,7 +16,10 @@ Vps.Auto.Grid.Window = Ext.extend(Ext.Window, {
         Vps.Auto.Grid.Window.superclass.initComponent.call(this);
     },
 
-    showEdit: function(record) {
+    showEdit: function(id) {
+        var p = {};
+        p[this.queryParam] = id;
+        this.applyBaseParams(p);
         this.show();
         this.autoGrid.load();
     },
@@ -39,3 +43,5 @@ Vps.Auto.Grid.Window = Ext.extend(Ext.Window, {
         this.getAutoGrid().applyBaseParams(p);
     }
 });
+
+Ext.reg('vps.autogridwindow', Vps.Auto.Grid.Window);
