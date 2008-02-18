@@ -5,7 +5,7 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
     {
         this.tabPanel = new Ext.TabPanel({
             deferredRender: false,
-            activeTab: this.activeTab
+            activeTab: this.activeTab || 0
         });
         this.tabItems = [];
         
@@ -33,7 +33,6 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
             this.tabItems.push(item);
         }
         if (this.baseParams) delete this.baseParams;
-
         this.tabItems.each(function(i) {
             if (this.tabPanel.getActiveTab() != i) {
                 i.setAutoLoad(false);

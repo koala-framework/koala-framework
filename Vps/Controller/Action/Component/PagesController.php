@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Action_Auto_Tree
+class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Action_Auto_Synctree
 {
     protected $_textField = 'name';
     protected $_rootVisible = false;
@@ -70,6 +70,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 $data['bIcon'] = new Vps_Asset('folder_page');
                 $data['bIcon'] = $data['bIcon']->__toString();
                 $data['uiProvider'] = 'Vps.Component.PagesNode';
+                $data['children'] = $this->_formatNodes($type);
                 $return[] = $data;
             }
             $this->view->nodes = $return;
@@ -82,15 +83,15 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
     }
 
-    protected function _getWhere()
+    protected function _getWhere($parentId = null)
     {
         $where = array();
         $node = $this->getRequest()->getParam('node');
-        if ((int)$node === 0 && $node !== '0') {
+        if (is_string($parentId)) {
             $where['parent_id IS NULL'] = '';
-            $where['type = ?'] = $node;
+            $where['type = ?'] = $parentId;
         } else {
-            $where['parent_id = ?'] = $node;
+            $where['parent_id = ?'] = $parentId;
         }
         return $where;
     }

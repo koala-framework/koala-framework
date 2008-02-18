@@ -47,7 +47,7 @@ class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
         if ($_POST != array()) {
             if ($this->_validateFields()) {
                 $values = $this->_getValues();
-                $this->_processForm();
+                $this->_processForm($values);
                 $sent = 3;
             } else {
                 $sent = 2;
@@ -73,7 +73,7 @@ class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
         return $values;
     }
 
-    protected function _processForm()
+    protected function _processForm($values)
     {
     }
 

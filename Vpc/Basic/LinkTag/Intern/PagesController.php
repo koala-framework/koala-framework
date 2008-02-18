@@ -36,10 +36,12 @@ class Vpc_Basic_LinkTag_Intern_PagesController extends Vps_Controller_Action_Com
                 $type = null;
                 $page = $this->_pc->getPageById($id);
             }
+            p($page->getId());
 
             $this->_pc->overwriteGetUrl = false;
 
             $childPages = $this->_pc->getChildPages($page, $type);
+            d(sizeof($childPages));
             $nodes = array();
             foreach ($childPages as $page) {
                 $nodes[] = $this->_formatNode($page);
