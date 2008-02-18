@@ -233,21 +233,24 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                     'uppercase-tags' =>'false'
                     );
         $enableTidy = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableTidy');
+        $enableFontSize = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableFontSize');
+        if ($enableFontSize){
+            $config['drop-font-tags'] = false;
+        }
         if (class_exists('tidy') && $enableTidy) {
-
-
             $tidy = new tidy;
             $html = str_replace('&nbsp;', '#nbsp#', $html); //einstellungen oben funktionieren nicht richtig
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
             $parser = new Vpc_Basic_Text_Parser();
+            $parser->setEnableColor(Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableColors'));
             $parser->readCatalog("<BODY>".$html."</BODY>");
             $html = $parser->getFinalHtml();
-            $tidy->parseString($html, $config, 'utf8');
+           /* $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
-            $html = str_replace('#nbsp#', '&nbsp;', $html);
+            $html = str_replace('#nbsp#', '&nbsp;', $html);*/
 
         }
 
