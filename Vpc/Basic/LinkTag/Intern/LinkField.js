@@ -21,10 +21,11 @@ Vps.Form.VpcLinkField = Ext.extend(Ext.form.TextField, {
                     this.setValue(node.id);
                 }, this);
             }, this);
+
             this.pagesRendered = true;
         }
     },
-    
+
     validateValue : function(value)
     {
         if (!value) {

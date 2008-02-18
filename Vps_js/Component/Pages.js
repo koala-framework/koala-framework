@@ -1,7 +1,7 @@
 Vps.Component.Pages = Ext.extend(Ext.Panel, {
     initComponent : function()
     {
-        this.treePanel = new Vps.Auto.TreePanel({
+        this.treePanel = new Vps.Auto.SyncTreePanel({
             controllerUrl: '/admin/component/pages',
             title       : 'Seitenbaum',
             region      : 'west',
@@ -72,9 +72,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 text:'Navigation',
                 icon : '/assets/silkicons/weather_sun.png',
                 menu: [
-                    this.getAction('reloadAll'),
-                    this.getAction('expandAll'),
-                    this.getAction('collapseAll')
+                    this.getAction('reloadAll')
                 ]
             })
         );
@@ -253,22 +251,6 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : 'Collapse here',
                 handler : function () { this.treePanel.tree.getSelectionModel().getSelectedNode().collapse(true); },
-                icon    : '/assets/silkicons/bullet_delete.png',
-                cls     : 'x-btn-text-icon',
-                scope   : this
-            });
-        } else if (type == 'expandAll') {
-            this.actions[type] = new Ext.Action({
-                text    : 'Expand All',
-                handler : function () { this.treePanel.tree.expandAll(); },
-                icon    : '/assets/silkicons/bullet_add.png',
-                cls     : 'x-btn-text-icon',
-                scope   : this
-            });
-        } else if (type == 'collapseAll') {
-            this.actions[type] = new Ext.Action({
-                text    : 'Collapse all',
-                handler : function () { this.treePanel.tree.collapseAll(); },
                 icon    : '/assets/silkicons/bullet_delete.png',
                 cls     : 'x-btn-text-icon',
                 scope   : this

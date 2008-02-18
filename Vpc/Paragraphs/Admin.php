@@ -4,7 +4,7 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
     public function getExtConfig()
     {
         $componentList = array();
-        foreach (Vpc_Abstract::getSetting($this->_class, 'childComponentClasses') as $component) {
+        foreach ($this->_getComponents() as $component) {
             $name = Vpc_Abstract::getSetting($component, 'componentName');
             $icon = Vpc_Abstract::getSetting($component, 'componentIcon')->__toString();
             $hide = Vpc_Abstract::getSetting($component, 'hideInParagraphs');
@@ -21,6 +21,11 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
             'components' => $componentList,
             'componentIcons' => $componentIcons
         ));
+    }
+
+    protected function _getComponents()
+    {
+        return Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
     }
 
     public function setup()
