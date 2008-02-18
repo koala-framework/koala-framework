@@ -7,6 +7,8 @@ class Vpc_Basic_Text_Parser
     protected $_P = array();
     protected $_SPAN = array();
     protected $_finalHTML;
+    protected $_deleteContent = false;
+    protected $_enableColor = false;
 
     public function __construct()
     {
@@ -45,7 +47,7 @@ class Vpc_Basic_Text_Parser
         if ($element == "SPAN"){
             $tag = array_pop($this->_stack);
             if ($tag != "") $this->_finalHTML .= "</".$tag.">";
-        } elseif ($element == "BODY" || $element == "O:P" || $element == "BR" || $element == "IMG") {
+        } elseif ($element == "BODY" || $element == "O:P" || $element == "BR" || $element == "IMG" || $element == 'SCRIPT') {
             //do nothing
         }
         else {
@@ -69,10 +71,18 @@ class Vpc_Basic_Text_Parser
             } elseif (preg_match("# *text-decoration *: +underline *; *#", $attributes["STYLE"], $matches)){
                  array_push($this->_stack, "u");
                  $this->_finalHTML .= "<u>";
+            } elseif (preg_match("# *color *: +[0-9,]* *#", $attributes["STYLE"], $matches) && $this->_enableColor){
+                 array_push($this->_stack, "SPAN");
+                 $this->_finalHTML .= "<SPAN style='".$attributes['STYLE']."'>";
+            } elseif (preg_match("# *background-color *: +[0-9,A-Za-z]* *#", $attributes["STYLE"], $matches) && $this->_enableColor){
+                 array_push($this->_stack, "SPAN");
+                 $this->_finalHTML .= "<SPAN style='".$attributes['STYLE']."'>";
             }
         }
         elseif ($element == "BODY" || $element == "O:P" ) {
             //do nothing
+        } elseif ($element == "SCRIPT"){
+            $this->_deleteContent = true;
         }
         else {
             $this->_finalHTML .= "<".$element;
@@ -82,13 +92,21 @@ class Vpc_Basic_Text_Parser
 
             $this->_finalHTML .= ">";
         }
+
     }
 
     protected function characterData($parser, $cdata)
     {
-        $level   = sizeof($this->_elementStack) - 1;
-        $element = $this->_elementStack[$level];
-        $this->_finalHTML .= $cdata;
+       if (!$this->_deleteContent){
+            $level   = sizeof($this->_elementStack) - 1;
+            $element = $this->_elementStack[$level];
+            $this->_finalHTML .= $cdata;
+            $this->_deleteContent = false;
+        }
+    }
+
+    public function setEnableColor($value){
+        $this->_enableColor = $value;
     }
 
     public function getFinalHtml()
