@@ -5,7 +5,8 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
     {
         this.tabPanel = new Ext.TabPanel({
             deferredRender: false,
-            activeTab: this.activeTab || 0
+            activeTab: this.activeTab || 0,
+            enableTabScroll: this.enableTabScroll || false
         });
         this.tabItems = [];
         
