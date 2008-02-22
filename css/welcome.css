@@ -10,6 +10,11 @@
     border: 2px solid #a9bfd4;
     background-color: #e2ebf5;
 }
+
+.vps-welcome .welcomeBox p {
+    padding: 10px; padding-top: 0px;
+}
+
 .vps-welcome .welcomeContent {
     padding: 10px;
 }
@@ -27,11 +32,13 @@
     position: relative;
     border-top: 2px solid #a9bfd4;
     padding: 10px;
+    margin-top: 10px;
     font-size: 11px;
     background: url(/assets/vps/images/welcome/footerBg.jpg) bottom left repeat-x;
 }
 .vps-welcome .footer p {
     margin-bottom: 5px;
+    padding: 0px;
 }
 .vps-welcome .footer h2 {
     font-family: Lucida Sans,tahoma,arial,helvetica,sans-serif;
