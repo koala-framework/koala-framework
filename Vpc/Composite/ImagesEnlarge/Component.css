@@ -1,3 +1,6 @@
+.vpcImagesEnlarge .thumbOuter { float: left; padding:5px; border: 1px solid #ccc; height: auto; }/*height:112px; würde passen*/
+.vpcImagesEnlarge .thumb { text-align: center; overflow: hidden; }
+
 .lightboxNext { float: right; }
 .lightboxNext img,
 .lightboxNextBigButton {
