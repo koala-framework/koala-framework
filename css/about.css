@@ -1,4 +1,24 @@
 .vps-about h1, .vps-about p {
-    margin: 0 10px;
+    padding: 10px;
 }
 .vps-about h1 { margin-bottom: 5px; }
+
+.vps-about .footer {
+    position: absolute;
+    z-index: 0px;
+    width: 264px; _width: 284px;
+    bottom: 1px; left: 1px;
+    _bottom: 0px; _left: 0px;
+    border-top: 2px solid #a9bfd4;
+    padding: 10px;
+    font-size: 11px;
+    background: url(/assets/vps/images/welcome/footerBg.jpg) bottom left repeat-x;
+}
+.vps-about .footer img#enteWelcome {
+    position: absolute;
+    z-index: 10;
+    bottom: 0px; right: 0px;
+}
+
+.vps-about {position:relative; width: 300px; }
+.vps-about .x-panel-body {background-color: #e2ebf5;}
