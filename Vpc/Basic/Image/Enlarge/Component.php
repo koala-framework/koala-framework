@@ -45,6 +45,9 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
             );
         }
 
+        $return['thumbMaxHeight'] = $this->_getSetting('smallImageSettings');
+        $return['thumbMaxHeight'] = $return['thumbMaxHeight']['dimension'][1];
+
         $return['smallImage'] = $vars;
         return $return;
     }

@@ -21,7 +21,6 @@ class Vpc_Composite_ImagesEnlarge_Component extends Vpc_Composite_Images_Compone
         $ret = parent::getTemplateVars();
         $ret['thumbMaxWidth']  = $thumbSettings['dimension'][0];
         $ret['thumbMaxHeight'] = $thumbSettings['dimension'][1];
-        p($ret);
         return $ret;
     }
 }
