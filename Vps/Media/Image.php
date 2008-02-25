@@ -30,21 +30,45 @@ class Vps_Media_Image
         } else if ($scale == self::SCALE_CROP) {
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
 
+            if (!$width || !$height) {
+                throw new Vps_Exception("width and height must be set higher than 0 "
+                    ."if Vps_Media_Image::SCALE_CROP is used. Maybe "
+                    ."Vps_Media_Image::SCALE_BESTFIT would be better?");
+            }
+
             $size = getimagesize($source);
-            if ($size[0] > $width) { // Wenn hochgeladenes Bild breiter als anzuzeigendes Bild ist
-                $x = ($size[0] - $width) / 2; // Ursprungs-X berechnen
+
+            if (($width / $height) >= ($size[0] / $size[1])) {
+                $resizeWidth  = $width;
+                $resizeHeight = 0;
+                $cropFromWidth  = $resizeWidth;
+                $cropFromHeight = $size[1] * ($width / $size[0]);
+            } else {
+                $resizeWidth  = 0;
+                $resizeHeight = $height;
+                $cropFromWidth  = $size[0] * ($height / $size[1]);
+                $cropFromHeight = $resizeHeight;
+            }
+
+            if ($cropFromWidth > $width) { // Wenn hochgeladenes Bild breiter als anzuzeigendes Bild ist
+                $x = ($cropFromWidth - $width) / 2; // Ursprungs-X berechnen
             } else {
                 $x = 0; // Bei 0 mit Beschneiden beginnen
-                $width = $size[0]; // Breite auf Originalgröße begrenzen
+                $width = $cropFromWidth; // Breite auf Originalgröße begrenzen
             }
-            if ($size[1] > $height) {
-                $y = ($size[1] - $height) / 2;
+            if ($cropFromHeight > $height) {
+                $y = ($cropFromHeight - $height) / 2;
             } else {
                 $y = 0;
-                $height = $size[1];
+                $height = $cropFromHeight;
             }
-            return array('width'=>round($width), 'height'=>round($height),
-                        'x'=>round($x), 'y'=>round($y));
+            return array('width'        => round($width),
+                         'height'       => round($height),
+                         'x'            => round($x),
+                         'y'            => round($y),
+                         'resizeWidth'  => $resizeWidth,
+                         'resizeHeight' => $resizeHeight
+            );
 
         } elseif ($scale == self::SCALE_BESTFIT) {
             // Bild wird auf größte Maximale Ausdehnung skaliert
@@ -89,7 +113,9 @@ class Vps_Media_Image
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
             $im = new Imagick();
             $im->readImage($source);
+            $im->scaleImage($size['resizeWidth'], $size['resizeHeight']);
             $im->cropImage($size['width'], $size['height'], $size['x'], $size['y']);
+//             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
             $im->writeImage($target);
             $im->destroy();
 
