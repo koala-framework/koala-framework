@@ -34,7 +34,8 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
         if (item) {
             this._loadComponentPanel(item, data);
-            item.load(params);
+            item.applyBaseParams(params);
+            item.load();
         } else {
             Ext.Ajax.request({
                 url: '/admin/component/edit/' + data.componentClass + '/jsonIndex',
