@@ -310,7 +310,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             //meta-daten wurden noch nicht geladen
             this.load({}, {success: cb, scope: this});
         } else {
-            this.mabySave({
+            this.mabySubmit({
                 callback: cb,
                 scope: this
             });
