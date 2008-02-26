@@ -305,15 +305,21 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.getForm().setDefaultValues();
             this.getForm().clearInvalid();
             this.fireEvent('addaction', this);
+
+            //wenn  form in einem tab, die form anzeigen
+            //nach addaction, damit in grid an dem die form gebunden ist die activeId
+            //auf 0 gesetzt werden kann
+            if (this.ownerCt instanceof Ext.TabPanel) {
+                this.ownerCt.setActiveTab(this);
+            }
         };
         if (!this.getForm()) {
             //meta-daten wurden noch nicht geladen
             this.load({}, {success: cb, scope: this});
         } else {
-            this.mabySubmit({
-                callback: cb,
-                scope: this
-            });
+            if (this.mabySubmit({ callback: cb, scope: this})) {
+                cb.call(this);
+            }
         }
     },
     findField: function(id) {

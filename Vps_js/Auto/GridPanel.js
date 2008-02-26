@@ -628,7 +628,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         var params = this.getSaveParams();
         if (options.params) Ext.apply(params, options.params);
 
-        //gibts da keine bessere lösung?
+        //gibts da keine bessere lï¿½sung?
         var empty = true;
         for (var i in params) {
             empty = false;
@@ -697,10 +697,6 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             this.bindings.each(function(b) {
                 if (b.item instanceof Vps.Auto.FormPanel) {
                     b.item.onAdd();
-                    //wenn  form in einem tab, die form anzeigen
-                    if (b.item.ownerCt instanceof Ext.TabPanel) {
-                        b.item.ownerCt.setActiveTab(b.item);
-                    }
                     foundForm = true;
                     return false;
                 }
