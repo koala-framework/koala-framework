@@ -274,7 +274,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 column.clickHandler = function(grid, rowIndex, col, e) {
                     var r = grid.getStore().getAt(rowIndex);
                     if (col.editDialog) {
-                        col.editDialog.showEdit(r.id);
+                        col.editDialog.showEdit(r.id, r);
                     } else {
                         this.edit(r);
                     }
@@ -682,7 +682,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     edit : function(row)
     {
         if (this.editDialog && this.editDialog.allowEdit !== false) {
-            this.editDialog.showEdit(row.id);
+            this.editDialog.showEdit(row.id, row);
         }
     },
 

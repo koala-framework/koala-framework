@@ -16,7 +16,7 @@ Vps.Auto.Grid.Window = Ext.extend(Ext.Window, {
         Vps.Auto.Grid.Window.superclass.initComponent.call(this);
     },
 
-    showEdit: function(id) {
+    showEdit: function(id, record) {
         var p = {};
         p[this.queryParam] = id;
         this.applyBaseParams(p);
