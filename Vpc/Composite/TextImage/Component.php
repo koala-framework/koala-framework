@@ -5,6 +5,7 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract_Composite_Component
     {
         return array_merge(parent::getSettings(), array(
             'componentName'     => 'TextImage',
+            'componentIcon'     => new Vps_Asset('textImage'),
             'tablename'         => 'Vpc_Composite_TextImage_Model',
             'childComponentClasses' => array(
                 'text'         => 'Vpc_Basic_Text_Component',

@@ -7,6 +7,7 @@ class Vpc_Composite_Images_Component extends Vpc_Abstract_List_Component
 
         $settings['componentName'] = 'Images';
         $settings['componentIcon'] = new Vps_Asset('pictures');
+        $settings['tablename'] = 'Vpc_Composite_Images_Model';
 
         return $settings;
     }
