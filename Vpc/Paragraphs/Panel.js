@@ -9,15 +9,15 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
         this.addComponents(this.components, componentMenu);
         this.actions.addparagraph = new Ext.Action({
             text : 'Add Paragraph',
-            icon : '/assets/vps/images/paragraph_add.gif',
+            icon : '/assets/vps/images/paragraphAdd.png',
             cls  : 'x-btn-text-icon',
             menu : componentMenu
         });
 
         Vpc.Paragraphs.Panel.superclass.initComponent.call(this);
 
-        this.actions.edit.icon = '/assets/vps/images/paragraph_edit.gif';
-        this.actions['delete'].icon = '/assets/vps/images/paragraph_delete.gif';
+        this.actions.edit.icon = '/assets/vps/images/paragraphEdit.png';
+        this.actions['delete'].icon = '/assets/vps/images/paragraphDelete.png';
     },
 
     addComponents : function(components, addToItem)
