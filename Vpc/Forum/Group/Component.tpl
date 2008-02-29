@@ -28,7 +28,7 @@
                     <a href="{$t.postUserUrl}">{$t.postUser}</a>
                 {else}
                     {$t.postUser}
-                {/if}            
+                {/if}
                 <div class="time">am <strong><i>{$t.postTime|date_format:"%d.%m.%y, %H:%M"}</i></strong></div>
             </div>
                     

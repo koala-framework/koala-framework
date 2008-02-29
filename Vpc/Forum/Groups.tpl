@@ -13,15 +13,20 @@
             <div class="posts"><strong>Posts:</strong> {$g.numPosts}</div>
         </div>
         <div class="lastPost">Letzter Eintrag:
-            <a href="{$g.lastPostUrl}">{$g.lastPostSubject}</a>
-            <div class="time">
-                <i>am <strong>{$g.lastPostTime|date_format:"%d.%m.%y, %H:%M"}</strong></i> von
-                {if $g.lastPostUserUrl}
-                    <a href="{$g.lastPostUserUrl}">{$g.lastPostUser}</a>
-                {else}
-                    {$g.lastPostUser}
-                {/if}
-            </div>
+            {if $g.lastPostSubject}
+                <a href="{$g.lastPostUrl}">{$g.lastPostSubject}</a>
+                <div class="time">
+                    <i>am <strong>{$g.lastPostTime|date_format:"%d.%m.%y, %H:%M"}</strong></i> von
+                    {if $g.lastPostUserUrl}
+                        <a href="{$g.lastPostUserUrl}">{$g.lastPostUser}</a>
+                    {else}
+                        {$g.lastPostUser}
+                    {/if}
+                </div>
+            {else}
+                -
+                <div class="time">&nbsp;</div>
+            {/if}
         </div>
                 
         <div class="clear"></div>
