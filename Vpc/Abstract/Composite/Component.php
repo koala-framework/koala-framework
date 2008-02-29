@@ -5,10 +5,7 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'childComponentClasses' => array(
-                'text'         => 'Vpc_Basic_Text_Component',
-                'images'       => 'Vpc_Composite_Images_Component',
-            )
+            'childComponentClasses' => array()
         ));
         $ret['assetsAdmin']['dep'][] = 'VpsTabPanel';
         return $ret;

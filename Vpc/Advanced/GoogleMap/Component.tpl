@@ -1,6 +1,6 @@
 <div class="vpcGoogleMap">
 
-    <div class="text">{component component=$component.content}<br /></div>
+    <div class="text">{component component=$component.text}<br /></div>
     <div class="options">{$component.options}</div>
 
     <div class="container"></div>
