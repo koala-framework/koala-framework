@@ -9,10 +9,10 @@
         </div>
         
         <div class="statistik">
-            <div class="threads"><strong>Threads:</strong> {$g.numThreads}</div>
-            <div class="posts"><strong>Posts:</strong> {$g.numPosts}</div>
+            <div class="threads"><strong>Themen:</strong> {$g.numThreads}</div>
+            <div class="posts"><strong>Beiträge:</strong> {$g.numPosts}</div>
         </div>
-        <div class="lastPost">Letzter Eintrag:
+        <div class="lastPost">Letzter Beitrag:
             {if $g.lastPostSubject}
                 <a href="{$g.lastPostUrl}">{$g.lastPostSubject}</a>
                 <div class="time">

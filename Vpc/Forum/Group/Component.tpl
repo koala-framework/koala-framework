@@ -3,7 +3,7 @@
         <a href="{$component.forumUrl}">{$component.forum}</a> »
         <a href="{$component.groupUrl}">{$component.group}</a>
     </h2>
-    <h3>Threads:</h3>
+    <h3>Themen:</h3>
     <ul>
     {foreach from=$component.threads item=t}
         <li class="threads">
@@ -37,5 +37,5 @@
         {/foreach}
     </ul>
     
-    <p><a class="newThread" href="{$component.newThreadUrl}">neuer Thread</a></p>
+    <p><a class="newThread" href="{$component.newThreadUrl}">Neues Thema erstellen</a></p>
 </div>
