@@ -79,17 +79,19 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
     }
     protected function _processForm()
     {
-        $t = new Vpc_Posts_Model();
-        $row = $t->createRow();
-        $values = $this->_getValues();
-        $row->content = $values['content'];
-        $row->component_id = $this->getParentComponent()->getDbId();
-        $row->visible = 1;
-        if (Zend_Registry::get('userModel')->getAuthedUser()) {
-            $row->user_id = Zend_Registry::get('userModel')->getAuthedUser()->id;
+        if (!isset($_POST['preview'])) {
+            $t = new Vpc_Posts_Model();
+            $row = $t->createRow();
+            $values = $this->_getValues();
+            $row->content = $values['content'];
+            $row->component_id = $this->getParentComponent()->getDbId();
+            $row->visible = 1;
+            if (Zend_Registry::get('userModel')->getAuthedUser()) {
+                $row->user_id = Zend_Registry::get('userModel')->getAuthedUser()->id;
+            }
+            $this->_beforeSave($row);
+            $row->save();
         }
-        $this->_beforeSave($row);
-        $row->save();
     }
 
     protected function _createFieldComponent($class, $row)
@@ -97,7 +99,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         if (!class_exists($class)) {
             $class = "Vpc_Formular_{$class}_Component";
         }
-        $c = new $class($this->getDao(), (object)$row, $this->getPageCollection());
+        $c = new $class($this->getDao(), (object)$row, $this->getDbId(), $this->getPageCollection());
         $c->store('noCols', false);
         $c->store('isValid', true);
         $c->store('isMandatory', false);
