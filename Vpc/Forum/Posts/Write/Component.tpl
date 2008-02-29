@@ -2,8 +2,10 @@
 <div class="vpcPostsWrite">
 <h1>
     <a href="{$component.forumUrl}">{$component.forum}</a> »
-    <a href="{$component.groupUrl}">{$component.group}</a> »
-    <a href="{$component.threadUrl}">{$component.thread}</a>
+    <a href="{$component.groupUrl}">{$component.group}</a>
+    {if $component.thread}
+        » <a href="{$component.threadUrl}">{$component.thread}</a>
+    {/if}
 </h1>
 <h2>Antworten</h2>
 
