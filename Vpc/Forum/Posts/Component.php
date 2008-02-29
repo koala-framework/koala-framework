@@ -23,7 +23,7 @@ class Vpc_Forum_Posts_Component extends Vpc_Posts_Component
 
     public function getGroupComponent()
     {
-        return $this->getParentComponent();
+        return $this->getParentComponent()->getParentComponent();
     }
 
     public function getForumComponent()
