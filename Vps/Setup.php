@@ -19,6 +19,47 @@ function d($src, $maxDepth = 5)
     exit;
 }
 
+function trl($string, $text = array()){
+
+    return Zend_Registry::get('trl')->trl($string, $text, 'project');
+}
+
+function trlc($context, $string, $text = array()){
+
+    return Zend_Registry::get('trl')->trlc($context, $string, $text, 'project');
+}
+
+function trlp($single, $plural, $text =  array()){
+
+    return Zend_Registry::get('trl')->trlp($single, $plural, $text, 'project');
+}
+
+function trlcp($context, $single, $plural, $text = array()){
+
+    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, 'project');
+}
+
+function trlVps($string, $text = array()){
+
+    return Zend_Registry::get('trl')->trl($string, $text, 'vps');
+}
+
+function trlcVps($context, $string, $text = array()){
+
+    return Zend_Registry::get('trl')->trlc($context, $string, $text, 'vps');
+}
+
+function trlpVps($single, $plural, $text =  array()){
+
+    return Zend_Registry::get('trl')->trlp($single, $plural, $text, 'vps');
+}
+
+function trlcpVps($context, $single, $plural, $text = array()){
+
+    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, 'vps');
+}
+
+
 
 class Vps_Setup
 {
@@ -58,7 +99,7 @@ class Vps_Setup
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
 
         //www abschneiden damit www.test und www.preview usw auch funktionieren
-        if (substr($host, 0, 4)== 'www.') $host = substr($host, 4); 
+        if (substr($host, 0, 4)== 'www.') $host = substr($host, 4);
 
         if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $_SERVER['SCRIPT_FILENAME'], $m)) {
             $vpsSection = $webSection = 'vivid';
