@@ -30,7 +30,7 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
                                'value' => ($row ? $row->signature : ''));
         $c = $this->_createFieldComponent('Textarea', $fieldSettings);
         $c->store('name', 'signature');
-        $c->store('fieldLabel', 'Signature');
+        $c->store('fieldLabel', 'Signatur');
         $c->store('isMandatory', false);
 
         $fieldSettings = array('name'  => 'description_short',
@@ -39,11 +39,11 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
                                'value' => ($row ? $row->description_short : ''));
         $c = $this->_createFieldComponent('Textarea', $fieldSettings);
         $c->store('name', 'description_short');
-        $c->store('fieldLabel', 'Short Description');
+        $c->store('fieldLabel', 'Kurze Beschreibung');
         $c->store('isMandatory', false);
 
         $c = $this->_createFieldComponent('Submit', array(
-            'name'=>'sbmt', 'width'=>200, 'text' => 'Edit Forum Account'
+            'name'=>'sbmt', 'width'=>200, 'text' => 'Einstellungen bearbeiten'
         ));
         $c->store('name', 'sbmt');
         $c->store('fieldLabel', '&nbsp;');

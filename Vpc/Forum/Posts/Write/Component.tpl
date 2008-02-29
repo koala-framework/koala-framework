@@ -7,7 +7,7 @@
         » <a href="{$component.threadUrl}">{$component.thread}</a>
     {/if}
 </h1>
-<h2>Antworten</h2>
+<h2>Nachricht erstellen:</h2>
 
 {if $component.sent != 3}
     {if $component.sent == 4}

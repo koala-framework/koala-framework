@@ -44,17 +44,17 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
 
         $c = $this->_createFieldComponent('Textarea', array('name'=>'content', 'width'=>470, 'height'=>150));
         $c->store('name', 'content');
-        $c->store('fieldLabel', 'Text');
+        $c->store('fieldLabel', 'Geben Sie hier den gewünschten Nachrichtentext ein:');
         $c->store('isMandatory', false);
         $this->_paragraphs[] = $c;
 
-        $c = $this->_createFieldComponent('Submit', array('name'=>'preview', 'width'=>200, 'text' => 'Vorschau'));
+        $c = $this->_createFieldComponent('Submit', array('name'=>'preview', 'width'=>200, 'text' => 'Vorschau anzeigen'));
         $c->store('name', 'preview');
         $c->store('fieldLabel', '&nbsp;');
         $this->_paragraphs[] = $c;
 
         if (isset($_POST['preview'])) {
-            $c = $this->_createFieldComponent('Submit', array('name'=>'sbmt', 'width'=>200, 'text' => 'Post absenden'));
+            $c = $this->_createFieldComponent('Submit', array('name'=>'sbmt', 'width'=>200, 'text' => 'Nachricht absenden'));
             $c->store('name', 'sbmt');
             $c->store('fieldLabel', '&nbsp;');
             $this->_paragraphs[] = $c;
