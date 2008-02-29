@@ -21,7 +21,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     public function getUniqueString($string, $fieldname = '', array $where = array())
     {
         // Sonderzeichen rausnehmen
-        $string = Zend_Filter::get($string, 'Url', array(), 'Vps_Filter');
+        $string = Vps_Filter::get($string, 'Url');
 
         // Unique machen
         if ($fieldname != '') {
