@@ -19,6 +19,8 @@ class Vps_Controller_Front extends Zend_Controller_Front
                                         'vps_controller_action_media');
         $this->addControllerDirectory('Vps/Controller/Action/Pool',
                                 'vps_controller_action_pool');
+        $this->addControllerDirectory('Vps/Controller/Action/Trl',
+                                'vps_controller_action_trl');
 
         $router = $this->getRouter();
 
@@ -49,6 +51,11 @@ class Vps_Controller_Front extends Zend_Controller_Front
                     array('module'     => 'vps_controller_action_media',
                           'controller' => 'media',
                           'action'     => 'password')));
+        $router->AddRoute('trl', new Zend_Controller_Router_Route(
+                    '/vps/trl/:controller/:action',
+                    array('module'     => 'vps_controller_action_trl',
+                          'controller' => 'index',
+                          'action'     => 'index')));
 
         $plugin = new Zend_Controller_Plugin_ErrorHandler();
         $plugin->setErrorHandlerModule('vps_controller_action_error');

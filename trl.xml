@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<trl>
+   <text/>
+   <text>
+      <en>erst {hallo} dann {tschuess}</en>
+      <de>_</de>
+   </text>
+   <text>
+      <en>zwischen {0} und {1}</en>
+      <de>_</de>
+   </text>
+   <text>
+      <en>whatever {0} und {1}</en>
+      <de>_</de>
+   </text>
+   <text>
+      <en>whatever {0}</en>
+      <de>_</de>
+   </text>
+</trl>
+

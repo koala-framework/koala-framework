@@ -40,6 +40,7 @@ class Vps_Assets_Loader
         }
         $version = Zend_Registry::get('config')->application->version;
         $contents = str_replace('{$application.version}', $version, $contents);
+        $contents = self::trl($contents);
         return $contents;
     }
 
@@ -166,4 +167,103 @@ class Vps_Assets_Loader
             return $contents;
         }
     }
+
+    static private function trl ($contents){
+        $type= '';
+        preg_match_all('#trl'.$type.'\("(.+?)"\)|trl'.$type.'\(\'(.+?)\'\)#', $contents, $m);
+        $values = self::_pregMatchTrl($m);
+        $contents = str_replace($values['before'], $values['now'], $contents);
+
+        preg_match_all('#trl'.$type.'\(\'(.+?)\', (.*)\)|trl'.$type.'\(\"(.+?)\", (.*)\)#', $contents, $m);
+        $values = self::_pregMatchTrl($m);
+        $contents = str_replace($values['before'], $values['now'], $contents);
+
+        preg_match_all('#trlc'.$type.'\(\'(.+?)\', +(.*), +(.*)\)|trlc'.$type.'\(\"(.+?)\", +(.*), +(.*)\)#', $contents, $m);
+        $values = self::_pregMatchTrlc($m);
+        $contents = str_replace($values['before'], $values['now'], $contents);
+
+        return $contents;
+    }
+
+   static private function _pregMatchTrl ($m){
+       foreach($m[0] as $key => $trl){
+
+            if ($m[1][$key] == ""){
+                if (!($m[2][$key] == "")){
+                    $values = array();
+                    $values['before'] = $m[0][$key];
+                    $values['tochange'] = $m[2][$key];
+                    $values['now'] = trl(self::_getText($values['tochange']));
+                    $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
+                    return $values;
+                }
+            } else {
+                    $values = array();
+                    $values['before'] = $m[0][$key];
+                    $values['tochange'] = $m[1][$key];
+                    $values['now'] = trl(self::_getText($values['tochange']));
+                    $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
+                    return $values;
+            }
+        }
+    }
+
+    static private function _pregMatchTrlc ($m){
+       foreach($m[0] as $key => $trl){
+            if ($m[1][$key] == ""){
+                if (!($m[2][$key] == "")){
+                    $values = array();
+                    $values['context'] = self::_getText($m[1][$key]);
+                    $values['before'] = $m[0][$key];
+                    $string = explode(',', $m[2][$key]);
+                    $values['tochange'] = self::_getText($string[0]);
+                    d ($values['tochange']);
+                    $values['now'] = trlc($values['context'] ,$values['tochange']);
+                    $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
+                    $values['now'] = str_replace('trlc', 'trl', $values['now']);
+                    $values['now'] = str_replace('\''.$values['context'].'\', ', '', $values['now']);
+                    return $values;
+                }
+            } else {
+                    $values = array();
+                    $values['context'] = self::_getText($m[1][$key]);
+                    $values['before'] = $m[0][$key];
+                    $string = explode(',', $m[2][$key]);
+
+                    $values['tochange'] = self::_getText($string[0]);
+                    $values['now'] = trlc($values['context'] ,$values['tochange']);
+                    $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
+                    $values['now'] = str_replace('trlc', 'trl', $values['now']);
+                    $values['now'] = str_replace('\''.$values['context'].'\', ', '', $values['now']);
+                    return $values;
+            }
+        }
+    }
+
+   /* protected function _pregMatchTrlc ($m, $xml){
+        foreach($m[0] as $key => $trl){
+            if ($m[1][$key] == ""){
+                if (!($m[2][$key] == "")){
+                    $values = array();
+                    $values['before'] = $m[2][$key];
+                    $values['now'] = trl(self::_getText($values['before']));
+                    return $values;
+                }
+            } else {
+                    $values = array();
+                    $values['before'] = $m[1][$key];
+                    $values['now'] = trl(self::_getText($values['before']));
+                    return $values;
+            }
+        }
+    }*/
+
+    static protected function _getText($name){
+            if(strpos($name, '{')){
+                $values = explode(',', $name);
+                return str_replace("'", '', $values[0]);
+            } else {
+                return $name;
+            }
+   }
 }
