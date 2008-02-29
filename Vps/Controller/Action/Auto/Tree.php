@@ -9,7 +9,8 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
         $this->_saveNodeOpened();
 
         $order = $this->_hasPosition ? 'pos' : null ;
-        $rowset = $this->_table->fetchAll($this->_getWhere($parentId), $order);
+        $where = $this->_getTreeWhere($parentId);
+        $rowset = $this->_table->fetchAll($where, $order);
 
         $nodes = array();
         foreach ($rowset as $row) {

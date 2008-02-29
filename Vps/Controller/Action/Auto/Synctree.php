@@ -19,9 +19,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         'edit'      => false,
         'delete'    => true,
         'invisible' => null,
-        'reload'    => true,
-        'expandAll' => true,
-        'collapseAll'=> true
+        'reload'    => true
     );
     protected $_rootText = 'Root';
     protected $_rootVisible = true;
@@ -30,8 +28,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     private $_openedNodes = array();
     protected $_addPosition = self::ADD_FIRST;
 
-    public function init()
+    public function preDispatch()
     {
+        parent::preDispatch();
+
         if (!isset($this->_table)) {
             $this->_table = new $this->_tableName();
         }
@@ -95,9 +95,9 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         }
     }
 
-    protected function _getWhere($parentId = null)
+    protected function _getTreeWhere($parentId = null)
     {
-        $where = array();
+        $where = $this->_getWhere();
         if (!$parentId) {
             $where['parent_id IS NULL'] = '';
         } else {
@@ -106,11 +106,16 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         return $where;
     }
 
+    protected function _getWhere()
+    {
+        return array();
+    }
+
     protected function _formatNodes($parentId = null)
     {
         $nodes = array();
         $order = $this->_hasPosition ? 'pos' : null ;
-        $rows = $this->_table->fetchAll($this->_getWhere($parentId), $order);
+        $rows = $this->_table->fetchAll($this->_getTreeWhere($parentId), $order);
         foreach ($rows as $row) {
             $data = array();
             $data['id'] = $row->id;
@@ -192,7 +197,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $id = $this->_table->insert($insert);
         $row = $this->_table->find($id)->current();
         if ($this->_hasPosition) {
-            $where = $this->_getWhere();
+            $where = $this->_getTreeWhere($insert['parent_id']);
             $row->numberize('pos', $this->_addPosition, $where);
         }
         if ($id) {

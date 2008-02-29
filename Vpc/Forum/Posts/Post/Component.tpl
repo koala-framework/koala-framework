@@ -1,0 +1,14 @@
+<div class="vpcPostsPost">
+    
+    <div class="lastPoster">
+        {component component=$component.user}
+        <strong>#{$component.postNum}:</strong> 
+        <i>{$component.create_time|date_format:"%d.%m.%y, %H:%M"}</i>
+    </div>
+    <div class="clear"></div>
+    <div class="comment">
+        {$component.content|nl2br}
+    </div>
+    {if $component.signature}<p class="signature"><tt>--<br />{$component.signature}</tt></p>{/if}
+</div>
+

@@ -2,6 +2,7 @@
 class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
 {
     private $_errors = array();
+    private $_successComponent;
 
     public static function getSettings()
     {
@@ -14,13 +15,13 @@ class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
             ));
             $settings['childComponentClasses'] =
                 Vpc_Admin::getInstance('Vpc_Formular_Component')->getComponents();
+            $settings['childComponentClasses']['success'] = 'Vpc_Formular_Success_Component';
         }
         return $settings;
     }
-
-    public function getChildComponents()
+    protected function _getParagraphs()
     {
-        $childComponents = parent::getChildComponents();
+        $childComponents = parent::_getParagraphs();
         foreach ($childComponents as $id => $component) {
             foreach ($this->_getRows() as $row) {
                 if ($row->id == $id) {
@@ -40,6 +41,13 @@ class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
         return $childComponents;
     }
 
+    public function getChildComponents()
+    {
+        $childComponents = parent::getChildComponents();
+        $childComponents[] = $this->_getSuccessComponent();
+        return $childComponents;
+    }
+
     public function getTemplateVars()
     {
         $sent = 1;
@@ -47,8 +55,14 @@ class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
         if ($_POST != array()) {
             if ($this->_validateFields()) {
                 $values = $this->_getValues();
-                $this->_processForm($values);
-                $sent = 3;
+
+                try {
+                    $this->_processForm($values);
+                    $sent = 3;
+                } catch (Vps_ClientException $e) {
+                    $addError = $e->getMessage();
+                    $sent = 2;
+                }
             } else {
                 $sent = 2;
             }
@@ -57,8 +71,10 @@ class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
         $vars['sent'] = $sent;
         $vars['action'] = $_SERVER['REQUEST_URI'];
         $vars['errors'] = $this->_errors;
+        if (isset($addError) && !empty($addError)) $vars['errors'][] = $addError;
         $vars['upload'] = $this->_hasUpload();
         $vars['values'] = $values;
+        $vars['success'] = $this->_getSuccessComponent()->getTemplateVars();
         return $vars;
     }
 
@@ -104,4 +120,28 @@ class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
         return $return;
     }
 
+    protected function _createFieldComponent($class, $row)
+    {
+        if (!class_exists($class)) {
+            $class = "Vpc_Formular_{$class}_Component";
+        }
+        $c = Vpc_Abstract::_createInstance($this->getDao(), $class, (object)$row,
+                                    $this->getDbId(), $this->getPageCollection());
+        $c->store('noCols', false);
+        $c->store('isValid', true);
+        $c->store('isMandatory', false);
+        $c->store('fieldLabel', '');
+
+        $this->_paragraphs[] = $c;
+        return $c;
+    }
+
+    protected function _getSuccessComponent()
+    {
+        if (!isset($this->_successComponent)) {
+            $classes = $this->_getSetting('childComponentClasses');
+            $this->_successComponent = $this->createComponent($classes['success'], 'success');
+        }
+        return $this->_successComponent;
+    }
 }

@@ -1,5 +1,4 @@
 <?php
-
 class Vps_Model_User_Users extends Vps_Db_Table
 {
     protected $_name = 'vps_users';
@@ -21,6 +20,17 @@ class Vps_Model_User_Users extends Vps_Db_Table
         }
 
         return parent::fetchAll($where, $order, $limit, $start);
+    }
+
+    public function fetchRowByEmail($email)
+    {
+        $restClient = new Vps_Rest_Client();
+        $restClient->exists($this->getRowWebcode(), $email);
+        $restResult = $restClient->get();
+        if ($restResult->status()) {
+            return $this->find($restResult->id)->current();
+        }
+        return null;
     }
 
     public function getRowWebcode()

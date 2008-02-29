@@ -268,6 +268,23 @@ abstract class Vps_PageCollection_Abstract
         return null;
     }
 
+    public function getComponentByParentClass($parentClass)
+    {
+        $matchingClasses = array();
+        $classes = Vpc_Abstract::getComponentClasses();
+        foreach ($classes as $class) {
+            if (is_subclass_of($class, $parentClass) || $class == $parentClass) {
+                $matchingClasses[] = $class;
+            }
+        }
+
+        foreach ($matchingClasses as $class) {
+            $ret = $this->getComponentByClass($class);
+            if ($ret) return $ret;
+        }
+        return null;
+    }
+
     public function getTitle($page)
     {
         $data = $this->getPageData($page);

@@ -1,5 +1,6 @@
 <?php
 class Vpc_Formular_Password_Component extends Vpc_Formular_Field_Abstract
+                                      implements Vpc_Formular_Field_Interface
 {
     public static function getSettings()
     {
@@ -8,32 +9,33 @@ class Vpc_Formular_Password_Component extends Vpc_Formular_Field_Abstract
             'tablename' => 'Vpc_Formular_Password_Model',
             'default' => array(
                 'maxlength' => '255',
-                'width' => '50'
+                'width' => '150',
+                'value' => '',
+                'validator' => ''
             )
         ));
     }
 
-    function getTemplateVars()
+    public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
-        $return['maxlength'] = $this->getSetting('maxlength');
-        $return['width'] = $this->getSetting('width');
-        $return['template'] = 'Formular/Password.html';
+        $return['maxlength'] = $this->_getRow()->maxlength;
+        $return['width'] = $this->_getRow()->width;
         return $return;
     }
 
     public function processInput()
     {
         if (isset($_POST[$this->_getName()])) {
-            $value = $_POST[$this->_getName()];
+            $this->_getRow()->value = $_POST[$this->_getName()];
         }
-        $this->setSetting('value', $value);
     }
 
     public function validateField($mandatory)
     {
-        if ($mandatory && $this->getSetting('value') == '') {
-            return 'Feld ' . $this->getStore('description') . ' ist ein Pflichtfeld, bitte ausfüllen';
+        $value = $this->getValue();
+        if ($mandatory && $value == '') {
+            return 'Feld ' . $this->getStore('fieldLabel') . ' ist ein Pflichtfeld, bitte ausfüllen';
         }
         return '';
     }
