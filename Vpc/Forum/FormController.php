@@ -18,7 +18,9 @@ class Vpc_Forum_FormController extends Vps_Controller_Action_Auto_Form
 
     protected function _beforeInsert($row)
     {
-        $row->parent_id = $this->_getParam('parent_id');
+        if ($this->_getParam('parent_id')) {
+            $row->parent_id = $this->_getParam('parent_id');
+        }
         $row->component_id = $this->_getParam('component_id');
         $row->pos = 0;
         $row->visible = 0;
