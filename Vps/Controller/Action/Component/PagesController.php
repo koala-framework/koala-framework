@@ -83,7 +83,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
     }
 
-    protected function _getWhere($parentId = null)
+    protected function _getTreeWhere($parentId = null)
     {
         $where = array();
         $node = $this->getRequest()->getParam('node');

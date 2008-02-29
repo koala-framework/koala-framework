@@ -933,8 +933,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         }
     },
     setBaseParams : function(baseParams) {
-        if (this.editDialog) {
-            this.editDialog.getAutoForm().setBaseParams(baseParams);
+        if (this.editDialog && this.editDialog.setBaseParams) {
+            this.editDialog.setBaseParams(baseParams);
         }
         if (this.getStore()) {
             this.getStore().baseParams = baseParams;
@@ -944,8 +944,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         }
     },
     applyBaseParams : function(baseParams) {
-        if (this.editDialog) {
-            this.editDialog.getAutoForm().applyBaseParams(baseParams);
+        if (this.editDialog && this.editDialog.applyBaseParams) {
+            this.editDialog.applyBaseParams(baseParams);
         }
         if (this.getStore()) {
             Ext.apply(this.getStore().baseParams, baseParams);

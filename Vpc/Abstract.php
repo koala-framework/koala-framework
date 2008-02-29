@@ -138,7 +138,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Erstellt die Komponente tatsächlich.
      * @throws Vpc_ComponentNotFoundException Falls Klasse für Komponente nicht gefunden wird
      */
-    private static function _createInstance(Vps_Dao $dao, $class, $id, $dbId, $pageCollection = null)
+    protected static function _createInstance(Vps_Dao $dao, $class, $id, $dbId, $pageCollection = null)
     {
         // Komponente erstellen
         if (class_exists($class)) {
@@ -376,13 +376,17 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * Shortcut, fragt vom Seitenbaum die Url für eine Komponente ab
      *
      * @return string URL der Seite
-     * @todo protected machen
      */
     public function getUrl()
     {
         return $this->getPageCollection()->getUrl($this);
     }
 
+    public function getName()
+    {
+        return $this->getPageCollection()->getName($this);
+    }
+    
     /**
      * Shortcut, fragt vom Seitenbaum, ob die unsichtbaren Einträge
      * auch angezeige werden
@@ -494,4 +498,29 @@ abstract class Vpc_Abstract implements Vpc_Interface
         }
         return $this->_pageFactory;
     }
+
+    public static function getComponentClasses($class = null)
+    {
+        static $componentClasses;
+        if (!$class) {
+            $componentClasses = array();
+            foreach (Zend_Registry::get('config')->pageClasses as $c) {
+                if ($c->class && $c->text) {
+                    $classes[] = $c->class;
+                }
+            }
+        } else {
+            $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
+            if (!is_array($classes)) return;
+        }
+        foreach ($classes as $class) {
+            if ($class && !in_array($class, $componentClasses)) {
+                $componentClasses[] = $class;
+                self::getComponentClasses($class);
+            }
+        }
+        return $componentClasses;
+    }
+
 }
+

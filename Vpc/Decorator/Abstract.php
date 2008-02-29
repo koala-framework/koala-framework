@@ -167,4 +167,9 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
         return self::getSetting(get_class($this), $setting);
     }
 
+    public function getUrl()
+    {
+        return $this->_component->getUrl();
+    }
+
 }

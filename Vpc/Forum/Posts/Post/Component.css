@@ -1,0 +1,7 @@
+div.vpcPostsPost {margin-top: 20px;}
+div.vpcPostsPost p.signature {
+    padding: 5px; padding-left: 20px;
+    margin-top: -10px;
+    font-size: 11px;
+    border-bottom: 1px dashed #ccc;
+}

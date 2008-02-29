@@ -14,7 +14,7 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
 
     public static function getServiceColumns() {
         return array(
-            'email', 'password_salt', 'gender', 'title', 'firstname', 'lastname', 'webcode'
+            'email', 'password_salt', 'gender', 'title', 'firstname', 'lastname', 'webcode', 'created', 'logins', 'last_login'
         );
     }
 
@@ -218,8 +218,30 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
             }
         }
 
+        $activateComponent = null;
+        $pc = Vps_PageCollection_Abstract::getInstance();
+        $userComponent = $pc->getComponentByParentClass('Vpc_User_Component');
+        if ($userComponent) {
+            $tmpComponents = $pc->getChildPages($userComponent);
+            if ($tmpComponents) {
+                foreach ($tmpComponents as $tmpComponent) {
+                    if ($tmpComponent instanceof Vpc_User_Activate_Component) {
+                        $activateComponent = $tmpComponent;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if ($activateComponent) {
+            $activationUrl = $activateComponent->getUrl();
+        } else {
+            $activationUrl = '/vps/user/login/activate';
+        }
+
         $mailView->webUrl = $webUrl;
         $mailView->host = $host;
+        $mailView->activationUrl = $activationUrl;
         $mailView->activationCode = $activationCode;
         $mailView->applicationName = Zend_Registry::get('config')->application->name;
         $mailView->fullname = $this->__toString();

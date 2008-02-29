@@ -1,0 +1,8 @@
+div.vpcPostsWrite h1 {
+    background: url(/assets/vps/Vpc/Forum/forumHeaderBg.jpg) repeat-x top left;
+    line-height: 25px;
+    padding-left: 10px;
+    margin: 0px; margin-bottom: 20px;
+    font-weight: bold;
+    color: #786047;
+}

@@ -56,11 +56,11 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
 
     onMetaChange: function(response) {
-        meta = Ext.decode(response.responseText);
+        var meta = Ext.decode(response.responseText);
         this.icons = meta.icons;
         for (var i in this.icons) {
             if (i in this.actions) {
-                this.actions[i].icon = this.icons[i];
+                this.actions[i].initialConfig.icon = this.icons[i];
             }
         }
 
@@ -71,7 +71,6 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 tbar.add(this.getAction(button));
             }
         }
-
         // Tree
         baseParams = this.baseParams != undefined ? this.baseParams : {};
         if (this.openedId != undefined) { baseParams.openedId = this.openedId; }
@@ -140,6 +139,9 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.tree.on('dblclick', function(grid, rowIndex) {
                 this.onEdit();
             }, this);
+            if (this.editDialog.applyBaseParams) {
+                this.editDialog.applyBaseParams(this.getBaseParams());
+            }
         }
 
         this.fireEvent('loaded', this.tree);
@@ -158,7 +160,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         if (this.editDialog != undefined) {
             this.editDialog.showAdd();
             this.editDialog.getAutoForm().applyBaseParams({
-                parent_id: this.tree.getSelectionModel().getSelectedNode().id
+                parent_id: this.getSelectedId()
             });
         } else {
             this.fireEvent('addaction', this.tree.getSelectionModel().getSelectedNode());
@@ -302,6 +304,19 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     onDeleted: function (response) {
         this.tree.getRootNode().reload();
+    },
+
+    setBaseParams : function(baseParams) {
+        Vps.Auto.SyncTreePanel.superclass.setBaseParams.apply(this, arguments);
+        if (this.editDialog && this.editDialog.setBaseParams) {
+            this.editDialog.setBaseParams(baseParams);
+        }
+    },
+    applyBaseParams : function(baseParams) {
+        Vps.Auto.SyncTreePanel.superclass.applyBaseParams.apply(this, arguments);
+        if (this.editDialog && this.editDialog.applyBaseParams) {
+            this.editDialog.applyBaseParams(baseParams);
+        }
     }
 
 });

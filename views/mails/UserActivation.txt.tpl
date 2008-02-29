@@ -3,7 +3,7 @@ Hello {$fullname}!
 Your account at {$webUrl}
 has just been created.
 Please use the following link to choose yourself a password.
-{$webUrl}/vps/user/login/activate?code={$activationCode}
+{$webUrl}{$activationUrl}?code={$activationCode}
 and to log in.
 
 {$applicationName}

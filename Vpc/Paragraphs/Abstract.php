@@ -43,13 +43,13 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['paragraphs'] = array();
-        foreach ($this->getChildComponents() as $paragraph) {
+        foreach ($this->_getParagraphs() as $paragraph) {
             $ret['paragraphs'][] = $paragraph->getTemplateVars();
         }
         return $ret;
     }
 
-    public function getChildComponents()
+    protected function _getParagraphs()
     {
         if (!isset($this->_paragraphs)) {
             $this->_paragraphs = array();
@@ -59,6 +59,11 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
             }
         }
         return $this->_paragraphs;
+    }
+
+    public function getChildComponents()
+    {
+        return $this->_getParagraphs();
     }
 
     public function getChildComponent($id)

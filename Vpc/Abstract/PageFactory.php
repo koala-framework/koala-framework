@@ -52,6 +52,16 @@ class Vpc_Abstract_PageFactory
         return null;
     }
 
+    public function getChildPageByRow($row)
+    {
+        foreach ($this->_additionalFactories as $f) {
+            if ($page = $f->getChildPageByRow($row)) {
+                return $page;
+            }
+        }
+        return null;
+    }
+
     public function getChildPageByFilename($filename)
     {
         foreach ($this->_additionalFactories as $f) {
@@ -106,10 +116,24 @@ class Vpc_Abstract_PageFactory
     {
         $id = $this->_component->getId();
         $id .= '_' . $suffix;
+        $dbId = $this->_component->getDbId();
+        $dbId .= '_' . $suffix;
 
-        $page = new $class($this->_component->getDao(), $id, $this->getPageCollection());
+        $page = new $class($this->_component->getDao(), $id, $dbId, $this->getPageCollection());
         $page->setParentComponent($this->_component);
         $page->setDbId($this->_component->getDbId().'_'.$suffix);
+        $page = $this->_decoratePage($page);
         return $page;
+    }
+
+    protected function _decoratePage($page)
+    {
+        return $page;
+    }
+
+    protected function _getChildComponentClass($type)
+    {
+        $childComponentClasses = Vpc_Abstract::getSetting(get_class($this->_component), 'childComponentClasses');
+        return $childComponentClasses[$type];
     }
 }

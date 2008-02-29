@@ -16,6 +16,7 @@ class Vpc_Formular_Submit_Component extends Vpc_Abstract
     {
         $return = parent::getTemplateVars();
         $return['text'] = $this->_getRow()->text;
+        $return['name'] = $this->getStore('name');
         return $return;
     }
 }

@@ -23,7 +23,7 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
         if (!isset($this->_childComponents[$type])) {
             $classes = $this->_getSetting('childComponentClasses');
             if (!isset($classes[$type])) {
-                throw new Vps_Execption("Invalid type: '$type', no such childCoponent exists");
+                throw new Vps_Execption("Invalid type: '$type', no such childComponent exists");
             }
             $this->_childComponents[$type] = $this->createComponent($classes[$type], $type);
         }
