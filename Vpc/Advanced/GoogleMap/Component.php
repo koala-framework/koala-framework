@@ -1,8 +1,6 @@
 <?php
-class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract
+class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract_Composite_Component
 {
-    protected $_text;
-
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
@@ -32,7 +30,6 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $pos = strpos($this->_getRow()->coordinates, ";");
 
-        $ret['content'] =  $this->getChildComponent('text')->getTemplateVars();
         $options = array();
         $options['zoom_properties'] = $this->_getRow()->zoom_properties;
         $options['zoom'] = $this->_getRow()->zoom;
@@ -46,26 +43,6 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract
         $options['overview'] = $this->_getRow()->overview;
         $ret['options'] = Zend_Json::encode($options);
         return $ret;
-    }
-
-    protected function getChildComponent($type)
-    {
-
-        if ($type == 'text') {
-            if (!$this->_text) {
-                $textClass = $this->_getClassFromSetting('text', 'Vpc_Basic_Text_Component');
-                $this->_text = $this->createComponent($textClass, 'text');
-            }
-            return $this->_text;
-        }
-        return null;
-    }
-
-    public function getChildComponents()
-    {
-        return array(
-            $this->getChildComponent('text')
-        );
     }
 
     public function getTextImageRow()
