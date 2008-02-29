@@ -11,8 +11,14 @@ class Vpc_Forum_Posts_Write_Component extends Vpc_Posts_Write_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['thread'] = $this->getThreadComponent()->getName();
-        $ret['threadUrl'] = $this->getThreadComponent()->getUrl();
+        $t = $this->getThreadComponent();
+        if ($t) {
+            $ret['thread'] = $t->getName();
+            $ret['threadUrl'] = $t->getUrl();
+        } else {
+            $ret['thread'] = null;
+            $ret['threadUrl'] = null;
+        }
         $ret['group'] = $this->getGroupComponent()->getName();
         $ret['groupUrl'] = $this->getGroupComponent()->getUrl();
         $ret['forum'] = $this->getForumComponent()->getName();
