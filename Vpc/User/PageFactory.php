@@ -31,4 +31,14 @@ class Vpc_User_PageFactory extends Vpc_Abstract_StaticPageFactory
             'id' => 'userreg'
         );
     }
+
+    protected function _decoratePage($page)
+    {
+        if (get_class($page) == $this->_getChildComponentClass('edit')) {
+            $dao = $this->_component->getDao();
+            return new Vpc_Decorator_CheckLogin_Component($dao, $page);
+        } else {
+            return parent::_decoratePage($page);
+        }
+    }
 }

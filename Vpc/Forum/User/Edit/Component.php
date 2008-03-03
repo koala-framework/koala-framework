@@ -8,6 +8,7 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
         $ret['tablename']     = 'Vpc_Formular_Model';
         $ret['forumUserModel'] = 'Vpc_Forum_User_Model';
         $ret['hideInNews']    = true;
+        $ret['childComponentClasses']['success'] = 'Vpc_Forum_User_Edit_Success_Component';
         return $ret;
     }
 
@@ -47,6 +48,13 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
         ));
         $c->store('name', 'sbmt');
         $c->store('fieldLabel', '&nbsp;');
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['formTemplate'] = Vpc_Admin::getComponentFile('Vpc_Formular_Component', '', 'tpl');
+        return $ret;
     }
 
     protected function _getEditRow()

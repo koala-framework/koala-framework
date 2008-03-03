@@ -3,10 +3,12 @@ class Vpc_User_Activate_Component extends Vpc_Formular_Component
 {
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'tablename'  => 'Vpc_Formular_Model',
             'hideInNews' => true
         ));
+        $ret['childComponentClasses']['success'] = 'Vpc_User_Activate_Success_Component';
+        return $ret;
     }
 
     protected function _init()
@@ -21,7 +23,7 @@ class Vpc_User_Activate_Component extends Vpc_Formular_Component
             $c->store('name', 'password');
 
             $c = $this->_createFieldComponent('Submit', array(
-                'name'=>'sbmt', 'width'=>200, 'text' => 'Account aktivieren'
+                'name'=>'sbmt', 'width'=>200, 'text' => 'Konto aktivieren'
             ));
             $c->store('name', 'sbmt');
             $c->store('fieldLabel', '&nbsp;');
@@ -59,6 +61,8 @@ class Vpc_User_Activate_Component extends Vpc_Formular_Component
         $error = $this->_checkUserData();
         if ($error) $ret['errors'][] = $error;
 
+        $ret['formTemplate'] = Vpc_Admin::getComponentFile('Vpc_Formular_Component', '', 'tpl');
+
         return $ret;
     }
 
@@ -83,5 +87,7 @@ class Vpc_User_Activate_Component extends Vpc_Formular_Component
         $users = Zend_Registry::get('userModel');
         $row = $users->find($userId)->current();
         $status = $row->setPassword($password);
+
+        Vpc_User_Login_Component::doLogin($row->email, $password);
     }
 }

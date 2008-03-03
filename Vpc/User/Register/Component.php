@@ -5,6 +5,7 @@ class Vpc_User_Register_Component extends Vpc_User_Abstract_Form
     {
         $ret = parent::getSettings();
         $ret['standardRole']  = 'guest';
+        $ret['childComponentClasses']['success'] = 'Vpc_User_Register_Success_Component';
         return $ret;
     }
 
@@ -17,6 +18,13 @@ class Vpc_User_Register_Component extends Vpc_User_Abstract_Form
         ));
         $c->store('name', 'sbmt');
         $c->store('fieldLabel', '&nbsp;');
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['formTemplate'] = Vpc_Admin::getComponentFile('Vpc_Formular_Component', '', 'tpl');
+        return $ret;
     }
 
     protected function _beforeSave($row)

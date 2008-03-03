@@ -273,9 +273,9 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 if ($this->_hasPosition) {
                     $targetPosition = $targetRow->pos;
                     if ($point == 'above') {
-                        $row->pos = $targetPosition - 1;
-                    } else {
                         $row->pos = $targetPosition;
+                    } else {
+                        $row->pos = $targetPosition + 1;
                     }
                 }
             } else {
