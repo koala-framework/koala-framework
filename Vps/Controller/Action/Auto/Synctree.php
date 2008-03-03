@@ -125,10 +125,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $data['uiProvider'] = 'Vps.Auto.TreeNode';
             if ($row->visible == '0') {
                 $data['visible'] = false;
-                $data['bIcon'] = $this->_icons['invisible']->__toString();;
+                $data['bIcon'] = $this->_icons['invisible']->__toString();
             } else {
                 $data['visible'] = true;
-                $data['bIcon'] = $this->_icons['default']->__toString();;
+                $data['bIcon'] = $this->_icons['default']->__toString();
             }
 
             $openedNodes = $this->_saveSessionNodeOpened(null, null);
@@ -148,6 +148,36 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $nodes[] = $data;
         }
         return $nodes;
+    }
+
+    protected function _formatNode($row)
+    {
+        $data = array();
+        $data['id'] = $row->id;
+        $data['text'] = $row->name;
+        $data['data'] = $row->toArray();
+        $data['leaf'] = false;
+        $data['visible'] = true;
+        $data['bIcon'] = $this->_icons['default']->__toString();
+        if ($row->visible == '0') {
+            $data['visible'] = false;
+            $data['bIcon'] = $this->_icons['invisible']->__toString();
+        }
+        $openedNodes = $this->_saveSessionNodeOpened(null, null);
+        if ($this->_table->fetchAll('parent_id = ' . $row->id)->count() > 0) {
+            if (isset($openedNodes[$row->id]) ||
+                isset($this->_openedNodes[$row->id])
+            ) {
+                $data['expanded'] = true;
+            } else {
+                $data['expanded'] = false;
+            }
+        } else {
+            $data['children'] = array();
+            $data['expanded'] = true;
+        }
+        $data['uiProvider'] = 'Vps.Auto.TreeNode';
+        return $data;
     }
 
     protected function _saveSessionNodeOpened($id, $activate)
