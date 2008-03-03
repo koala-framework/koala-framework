@@ -14,7 +14,7 @@ class Vpc_News_Months_Month_Component extends Vpc_News_List_Abstract_Component i
 
     public function getNews()
     {
-        $monthDate = $this->getCurrentPageKey();
+        $monthDate = $this->getCurrentPageKey().'-'.$this->getCurrentComponentKey();
 
         $where = array(
             "publish_date >= '$monthDate-01'",
