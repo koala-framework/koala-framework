@@ -15,14 +15,6 @@ class Vpc_User_Abstract_Form extends Vpc_Formular_Component
         parent::_init();
         $user = $this->_getEditRow();
 
-        $fieldSettings = array('name'  => 'email',
-                               'width' => 200,
-                               'value' => (!$user || !$user->email?'':$user->email));
-        $c = $this->_createFieldComponent('Textbox', $fieldSettings);
-        $c->store('name', 'email');
-        $c->store('fieldLabel', 'Email');
-        $c->store('isMandatory', true);
-
         $fieldSettings = array('name'  => 'firstname',
                                'width' => 200,
                                'value' => (!$user || !$user->firstname?'':$user->firstname));

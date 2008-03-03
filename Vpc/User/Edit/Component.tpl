@@ -1,3 +1,8 @@
-<h1>Konto - Einstellungen</h1>
+<div class="vpcUserEdit">
+    <h1>Konto - Einstellungen</h1>
 
-{include file=$component.formTemplate}
+    <label>E-Mail Adresse</label>
+    <div class="showField">{$component.email}</div>
+
+    {include file=$component.formTemplate}
+</div>
