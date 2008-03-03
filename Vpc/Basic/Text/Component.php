@@ -42,6 +42,7 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
         if (!isset($this->_componentParts)) {
             foreach ($this->_getRow()->getContentParts() as $part) {
                 if (is_array($part)) {
+                    $class = false;
                     if ($part['type'] == 'image') {
                         $class = $this->_getClassFromSetting('image', 'Vpc_Basic_Image_Component');
                         $part['nr'] = 'i'.$part['nr'];
@@ -52,7 +53,7 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
                         $class = $this->_getClassFromSetting('download', 'Vpc_Basic_DownloadTag_Component');
                         $part['nr'] = 'd'.$part['nr'];
                     }
-                    if (isset($class)) {
+                    if ($class) {
                         $component = $this->createComponent($class, $part['nr']);
                         $this->_componentParts[] = $component;
                     }
