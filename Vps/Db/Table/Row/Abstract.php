@@ -49,7 +49,6 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
      * @param string Spaltenname, in der die Nummerierung steht
      * @param int Nummer des zu nummerierenden Datensatzes
      * @param string Where-Klausel für Einschränkung der betreffenden Datensätze (zB. 'parent_id=1')
-     * @return boolean Ob Nummerierung erfolgreich war
      */
     public function numberize($fieldname, $value = null, array $where = array())
     {

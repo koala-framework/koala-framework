@@ -50,6 +50,21 @@ class Vpc_User_Login_Component extends Vpc_Formular_Component
         return $ret;
     }
 
+    static public function doLogin($email, $password)
+    {
+        $adapter = new Vps_Auth_Adapter_Service();
+        $adapter->setIdentity($email);
+        $adapter->setCredential($password);
+
+        $auth = Vps_Auth::getInstance();
+        $result = $auth->authenticate($adapter);
+
+        if ($result->isValid()) {
+            $loginData = array('userId' => $adapter->getUserId());
+            $auth->getStorage()->write($loginData);
+        }
+    }
+
     protected function _processForm()
     {
         $values = array();
@@ -62,16 +77,6 @@ class Vpc_User_Login_Component extends Vpc_Formular_Component
             }
         }
 
-        $adapter = new Vps_Auth_Adapter_Service();
-        $adapter->setIdentity($values['email']);
-        $adapter->setCredential($values['password']);
-
-        $auth = Vps_Auth::getInstance();
-        $result = $auth->authenticate($adapter);
-
-        if ($result->isValid()) {
-            $loginData = array('userId' => $adapter->getUserId());
-            $auth->getStorage()->write($loginData);
-        }
+        self::doLogin($values['email'], $values['password']);
     }
 }
