@@ -158,10 +158,10 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     onAdd: function (o, e) {
         if (this.editDialog != undefined) {
-            this.editDialog.showAdd();
             this.editDialog.getAutoForm().applyBaseParams({
                 parent_id: this.getSelectedId()
             });
+            this.editDialog.showAdd();
         } else {
             this.fireEvent('addaction', this.tree.getSelectionModel().getSelectedNode());
         }
@@ -173,7 +173,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             url: this.controllerUrl + '/jsonNodeData',
             params: { node: id },
             success: function(r) {
-                this.onSave(Ext.decode(r.responseText).data);
+                this.onSaved(Ext.decode(r.responseText).data);
             },
             scope: this
         })
