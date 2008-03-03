@@ -11,6 +11,14 @@ class Vpc_User_Register_Component extends Vpc_User_Abstract_Form
 
     protected function _init()
     {
+        $fieldSettings = array('name'  => 'email',
+                               'width' => 200,
+                               'value' => '');
+        $c = $this->_createFieldComponent('Textbox', $fieldSettings);
+        $c->store('name', 'email');
+        $c->store('fieldLabel', 'Email');
+        $c->store('isMandatory', true);
+
         parent::_init();
 
         $c = $this->_createFieldComponent('Submit', array(

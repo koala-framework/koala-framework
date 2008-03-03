@@ -23,6 +23,7 @@ class Vpc_User_Edit_Component extends Vpc_User_Abstract_Form
     {
         $ret = parent::getTemplateVars();
         $ret['formTemplate'] = Vpc_Admin::getComponentFile('Vpc_Formular_Component', '', 'tpl');
+        $ret['email'] = $this->_getEditRow()->email;
         return $ret;
     }
 
