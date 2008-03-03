@@ -6,7 +6,7 @@
     </div>
     <div class="clear"></div>
     <div class="comment">
-        {$component.content|htmlentities|nl2br}
+        {$component.content|htmlspecialchars|nl2br}
     </div>
 </div>
 
