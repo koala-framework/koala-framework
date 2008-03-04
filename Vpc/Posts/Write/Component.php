@@ -7,6 +7,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
     {
         $ret = parent::getSettings();
         $ret['childComponentClasses']['preview'] = 'Vpc_Posts_Write_Preview_Component';
+        $ret['childComponentClasses']['success'] = 'Vpc_Posts_Write_Success_Component';
         return $ret;
     }
 
