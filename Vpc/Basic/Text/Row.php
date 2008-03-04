@@ -14,7 +14,7 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
 
         $ret = array();
                             //1   2                 3                              4              5
-        while (preg_match('#^(.*)(<img[^>]+src=[\n ]*"([^"]*)"[^>]*>|<a[^>]+href=[\n ]*"([^"]*)"[^>]*>)(.*)$#Us', $content, $m)) {
+        while (preg_match('#^(.*)(<img[^>]+src=[\n ]*"([^"]*)"[^>]*>|<a[^>]+href=[\n ]*"([^"]*)"[^>]*>)(.*)$#Usi', $content, $m)) {
 
             if ($m[1] != '') {
                 $ret[] = $m[1];
@@ -247,10 +247,10 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
             $parser->setEnableColor(Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableColors'));
             $parser->readCatalog("<BODY>".$html."</BODY>");
             $html = $parser->getFinalHtml();
-           /* $tidy->parseString($html, $config, 'utf8');
+            $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
-            $html = str_replace('#nbsp#', '&nbsp;', $html);*/
+            $html = str_replace('#nbsp#', '&nbsp;', $html);
 
         }
 
