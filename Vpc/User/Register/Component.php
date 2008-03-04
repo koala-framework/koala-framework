@@ -22,7 +22,7 @@ class Vpc_User_Register_Component extends Vpc_User_Abstract_Form
         parent::_init();
 
         $c = $this->_createFieldComponent('Submit', array(
-            'name'=>'sbmt', 'width'=>200, 'text' => 'Create Account'
+            'name'=>'sbmt', 'width'=>200, 'text' => 'Account erstellen'
         ));
         $c->store('name', 'sbmt');
         $c->store('fieldLabel', '&nbsp;');
