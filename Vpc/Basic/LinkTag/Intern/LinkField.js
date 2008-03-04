@@ -1,38 +1,26 @@
-Vps.Form.VpcLinkField = Ext.extend(Ext.form.TextField, {
-
+Vps.Form.VpcLinkField = Ext.extend(Ext.form.Field,
+{
     defaultAutoCreate : {tag: "input", type: "hidden"},
 
-    pagesRendered: false,
+    afterRender: function(){
+        Vps.Form.ColorField.superclass.afterRender.call(this);
+        var span = Ext.DomHelper.insertAfter(this.el, '<span></span>');
+        this.pages = new Vps.Auto.TreePanel({
+            controllerUrl: this.controllerUrl,
+            renderTo: span,
+            width: this.width
+        });
+        this.pages.on('click', function(node) {
+            if (this.getValue() != node.id) {
+                this.setValue(node.id);
+            }
+        }, this);
 
-    setValue : function(){
-        Vps.Form.VpcLinkField.superclass.setValue.apply(this, arguments);
-
-        if (!this.pagesRendered) {
-            span = Ext.DomHelper.insertAfter(this.el, '<span></span>');
-            this.pages = new Vps.Auto.TreePanel({
-                controllerUrl: this.controllerUrl,
-                openedId: this.getValue(),
-                renderTo: span,
-                width: this.width
-            });
-
-            this.pages.on('loaded', function() {
-                this.pages.tree.on('click', function(node) {
-                    this.setValue(node.id);
-                }, this);
-            }, this);
-
-            this.pagesRendered = true;
-        }
     },
 
-    validateValue : function(value)
-    {
-        if (!value) {
-            return false;
-        } else {
-            return true;
-        }
+    setValue: function(value){
+        this.pages.selectId(value);
+        Vps.Form.VpcLinkField.superclass.setValue.call(this, value);
     }
 });
 

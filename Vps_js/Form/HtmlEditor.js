@@ -88,7 +88,8 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 baseCls: 'x-plain',
                 formConfig: {
                     tbar: false
-                }
+                },
+                autoLoad: false
             }));
             this.linkDialog = new Vps.Auto.Form.Window({
                 autoForm: panel,
@@ -106,7 +107,8 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             this.imageDialog = new Vps.Auto.Form.Window({
                 autoForm: panel,
                 width: 450,
-                height: 400
+                height: 400,
+                autoLoad: false
             });
         }
         if (this.downloadComponentConfig) {
@@ -119,7 +121,8 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             this.downloadDialog = new Vps.Auto.Form.Window({
                 autoForm: panel,
                 width: 450,
-                height: 400
+                height: 400,
+                autoLoad: false
             });
         }
 
