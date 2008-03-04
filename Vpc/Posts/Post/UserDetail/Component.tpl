@@ -1,4 +1,11 @@
-<div class="userdates">
-    <div class="threads"><strong>User:</strong> {$component.name}</div>
-    <div class="posts"><strong>Joined:</strong> {$component.created}</div>
+<div class="vpcPostsPostUser">
+    Von:
+    {if $component.url}
+        <a href="{$component.url}">{$component.name}</a>
+    {else}
+        {$component.name}
+    {/if}
+    {if $component.created}
+    <span> ( Mitglied seit: {$component.created|date_format:"%d.%m.%y, %H:%M"} )</span>
+    {/if}
 </div>
