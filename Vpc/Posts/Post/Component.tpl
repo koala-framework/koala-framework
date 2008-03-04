@@ -1,5 +1,4 @@
 <div class="vpcPostsPost">
-    
     <div class="lastPoster">
         {component component=$component.user}
         <strong>#{$component.postNum}:</strong> 
