@@ -15,8 +15,8 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
                 'rel'           => '',
                 'param'         => '',
                 'is_popup'      => false,
-                'width'         => '400',
-                'height'        => '400',
+                'width'         => '0',
+                'height'        => '0',
                 'menubar'       => '1',
                 'toolbar'       => '1',
                 'locationbar'   => '1',
@@ -26,6 +26,7 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
             )
         ));
         $ret['assets']['files'][] = 'vps/Vpc/Basic/LinkTag/Extern/Component.js';
+        $ret['assets']['dep'][] = 'ExtCore';
         return $ret;
     }
 
