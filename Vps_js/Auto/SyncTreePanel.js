@@ -297,6 +297,8 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 if (n) {
                     n.select();
                 }
+            } else {
+                this.openedId = id;
             }
         } else {
             var m = this.getSelectionModel();
