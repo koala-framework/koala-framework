@@ -24,7 +24,6 @@ div.vpcForum ul li.post {
 div.vpcForum ul li.post a { font-weight: bold; }
 div.vpcForum ul li.post a.name { display: block; }
 div.vpcForum ul li.post div.description {
-    padding-bottom: 10px;
     border-bottom: 1px solid #ccc;
 }
 div.vpcForum ul li.post div.lastPost {
@@ -45,9 +44,3 @@ div.vpcForum ul li.post div.threads { border-bottom: 1px solid #ccc; text-align:
 div.vpcForum ul li.post div.posts { text-align: center; }
 
 div.clear { clear: both;}
-
-
-
-
-
-
