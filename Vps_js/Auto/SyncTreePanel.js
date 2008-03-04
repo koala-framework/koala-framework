@@ -112,6 +112,8 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             return true;
         }, this);
 
+        this.relayEvents(this.tree, ['click', 'dblclick']);
+
         this.add(this.tree);
         this.doLayout();
 
@@ -272,9 +274,11 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         return this.tree;
     },
     getSelectionModel : function() {
+        if (!this.getTree()) return null;
         return this.getTree().getSelectionModel();
     },
     getSelectedNode : function() {
+        if (!this.getSelectionModel()) return null;
         return this.getSelectionModel().getSelectedNode();
     },
 
@@ -288,12 +292,15 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     //für AbstractPanel
     selectId: function(id) {
         if (id) {
-            var n = this.getTree().getNodeById(id);
-            if (n) {
-                n.select();
+            if (this.getTree()) {
+                var n = this.getTree().getNodeById(id);
+                if (n) {
+                    n.select();
+                }
             }
         } else {
-            this.getSelectionModel().clearSelections();
+            var m = this.getSelectionModel();
+            if (m) m.clearSelections();
         }
     },
 
