@@ -7,7 +7,7 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
 {
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_LinkTag_Extern_Model',
             'componentName' => 'Link.Extern',
             'default'       => array(
@@ -17,24 +17,39 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
                 'is_popup'      => false,
                 'width'         => '400',
                 'height'        => '400',
-                'menubar'       => '0',
-                'toolbar'       => '0',
-                'locationbar'   => '0',
-                'statusbar'     => '0',
-                'scrollbars'    => '0',
-                'resizeable'    => '0'
+                'menubar'       => '1',
+                'toolbar'       => '1',
+                'locationbar'   => '1',
+                'statusbar'     => '1',
+                'scrollbars'    => '1',
+                'resizeable'    => '1'
             )
-        )); 
+        ));
+        $ret['assets']['files'][] = 'vps/Vpc/Basic/LinkTag/Extern/Component.js';
+        return $ret;
     }
+
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['href'] = $this->_getRow()->target;
-        if ($this->_getRow()->param) {
-            $ret['href'] .= '?' . $this->_getRow()->param;
+        $row = $this->_getRow();
+        $ret['href'] = $row->target;
+        if ($row->param) {
+            $ret['href'] .= '?' . $row->param;
         }
-        $ret['rel'] = $this->_getRow()->rel;
+        $ret['rel'] = '';
+        if ($row->is_popup) {
+            $ret['rel'] .= 'popup_'
+                .($row->width ? 'width='.$row->width.',' : '')
+                .($row->height ? 'height='.$row->height.',' : '')
+                .'menubar='.($row->menubar ? 'yes' : 'no')
+                .',toolbar='.($row->toolbar ? 'yes' : 'no')
+                .',location='.($row->locationbar ? 'yes' : 'no')
+                .',status='.($row->statusbar ? 'yes' : 'no')
+                .',scrollbars='.($row->scrollbars ? 'yes' : 'no')
+                .',resizable='.($row->resizeable ? 'yes' : 'no');
+        }
         return $ret;
     }
 }
