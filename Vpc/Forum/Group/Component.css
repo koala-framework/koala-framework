@@ -33,7 +33,6 @@ div.vpcForumGroup a.newThread {
 div.vpcForumGroup a { font-weight: bold; }
 div.vpcForumGroup a.name { display: block; }
 div.vpcForumGroup div.description {
-    padding-bottom: 10px;
     border-bottom: 1px solid #ccc;
 }
 div.vpcForumGroup div.lastPost {
