@@ -29,8 +29,8 @@ class Vpc_Forum_Group_Component extends Vpc_Abstract
             $ret['threads'][] = $page->getThreadVars();
         }
 
-        $ret['newThreadUrl'] = $this->getPageFactory()->
-                                    getChildPageById('newthread')->getUrl();
+        $ret['newThreadUrl'] = $this->getPageFactory()
+                                    ->getChildPageById('newthread')->getUrl();
 
         $ret['group'] = $this->getGroupComponent()->getName();
         $ret['groupUrl'] = $this->getGroupComponent()->getUrl();

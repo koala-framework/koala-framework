@@ -1,9 +1,13 @@
 <?php
-class Vpc_User_Edit_Component extends Vpc_User_Abstract_Form
+class Vpc_User_Edit_Component extends Vpc_Formular_Component
 {
     public static function getSettings()
     {
-        $ret = parent::getSettings();
+        $ret = array_merge(parent::getSettings(), array(
+            'tablename'  => 'Vpc_Formular_Model',
+            'hideInNews' => true,
+            'fieldsNotSaved' => array('sbmt')
+        ));
         $ret['childComponentClasses']['success'] = 'Vpc_User_Edit_Success_Component';
         return $ret;
     }
@@ -12,11 +16,70 @@ class Vpc_User_Edit_Component extends Vpc_User_Abstract_Form
     {
         parent::_init();
 
+        $user = $this->_getEditRow();
+
+        $fieldSettings = array('name'  => 'firstname',
+                               'width' => 200,
+                               'value' => (!$user || !$user->firstname?'':$user->firstname));
+        $c = $this->_createFieldComponent('Textbox', $fieldSettings);
+        $c->store('name', 'firstname');
+        $c->store('fieldLabel', 'Vorname');
+        $c->store('isMandatory', true);
+
+        $fieldSettings = array('name'  => 'lastname',
+                               'width' => 200,
+                               'value' => (!$user || !$user->lastname?'':$user->lastname));
+        $c = $this->_createFieldComponent('Textbox', $fieldSettings);
+        $c->store('name', 'lastname');
+        $c->store('fieldLabel', 'Zuname');
+        $c->store('isMandatory', true);
+
+        $fieldSettings = array('name'  => 'title',
+                               'width' => 200,
+                               'value' => (!$user || !$user->title?'':$user->title));
+        $c = $this->_createFieldComponent('Textbox', $fieldSettings);
+        $c->store('name', 'title');
+        $c->store('fieldLabel', 'Titel');
+        $c->store('isMandatory', false);
+
+        $genderOptions = array(
+            array('value' => 'female', 'text'  => 'Weiblich', 'checked' => 1),
+            array('value' => 'male', 'text'  => 'Männlich', 'checked' => 0)
+        );
+        if (isset($_POST['gender']) && $_POST['gender'] == 'female' ||
+            ($user && $user->gender == 'female')
+        ) {
+            $genderOptions[0]['checked'] = 1;
+            $genderOptions[1]['checked'] = 0;
+        } else if (isset($_POST['gender']) && $_POST['gender'] == 'male' ||
+            ($user && $user->gender == 'male')
+        ) {
+            $genderOptions[0]['checked'] = 0;
+            $genderOptions[1]['checked'] = 1;
+        }
+
+        $c = $this->_createFieldComponent('Select', array('name'=>'gender', 'type' => 'select', 'width'=>200));
+        $c->store('name', 'gender');
+        $c->setOptions($genderOptions);
+        $c->store('fieldLabel', 'Geschlecht');
+        $c->store('isMandatory', true);
+
+        $this->_webFields();
+
         $c = $this->_createFieldComponent('Submit', array(
             'name'=>'sbmt', 'width'=>200, 'text' => 'Account bearbeiten'
         ));
         $c->store('name', 'sbmt');
         $c->store('fieldLabel', '&nbsp;');
+    }
+
+    protected function _getEditRow()
+    {
+        return Zend_Registry::get('userModel')->getAuthedUser();
+    }
+
+    protected function _webFields()
+    {
     }
 
     public function getTemplateVars()
@@ -27,9 +90,21 @@ class Vpc_User_Edit_Component extends Vpc_User_Abstract_Form
         return $ret;
     }
 
-    protected function _getEditRow()
+    protected function _processForm()
     {
-        $table = Zend_Registry::get('userModel');
-        return $table->getAuthedUser();
+        $fieldsNotSaved = $this->_getSetting('fieldsNotSaved');
+        $user = $this->_getEditRow();
+        if ($user) {
+            foreach ($this->getChildComponents() as $c) {
+                if ($c instanceof Vpc_Formular_Field_Interface) {
+                    $name = $c->getStore('name');
+                    if (!in_array($name, $fieldsNotSaved)) {
+                        $user->$name = $c->getValue();
+                    }
+                }
+            }
+            $user->save();
+        }
     }
+
 }

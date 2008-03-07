@@ -20,11 +20,29 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         $ret['content'] = $row->content;
         $ret['create_time'] = $row->create_time;
         $ret['postNum'] = $this->_postNum;
+        $ret['editUrl'] = '';
+        if ($this->mayEditPost()) {
+            $ret['editUrl'] = $this->getParentComponent()->getPageFactory()
+                ->getChildPageById('write')->getComponent()->getEditUrl($row->id);
+        }
         return $ret;
     }
 
     public function setPostNum($postNum)
     {
         $this->_postNum = $postNum;
+    }
+
+    public function mayEditPost()
+    {
+        $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
+        if (!$authedUser) return false;
+
+        $post = $this->getTable()->find($this->getCurrentComponentKey())->current();
+        if ($authedUser->id == $post->user_id) {
+            return true;
+        }
+
+        return false;
     }
 }

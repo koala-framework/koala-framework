@@ -31,7 +31,6 @@
                 {/if}
                 <div class="time">am <strong><i>{$t.postTime|date_format:"%d.%m.%y, %H:%M"}</i></strong></div>
             </div>
-                    
             <div class="clear"></div>
         </li>
         {/foreach}

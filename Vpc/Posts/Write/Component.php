@@ -8,13 +8,13 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         $ret = parent::getSettings();
         $ret['childComponentClasses']['preview'] = 'Vpc_Posts_Write_Preview_Component';
         $ret['childComponentClasses']['success'] = 'Vpc_Posts_Write_Success_Component';
+        $ret['postsTableName'] = 'Vpc_Posts_Model';
         return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-//         d($_POST);
         if (isset($_POST['preview'])) {
             $ret['sent'] = 4;
             //TODO das nicht mit zahlen machen
@@ -43,7 +43,18 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         $c->store('isMandatory', true);
         */
 
-        $c = $this->_createFieldComponent('Textarea', array('name'=>'content', 'width'=>470, 'height'=>150));
+        $initContent = '';
+        if ($this->_getParam('edit')) {
+            $tableName = $this->_getSetting('postsTableName');
+            $postsTable = new $tableName();
+            $postRow = $postsTable->find($this->_getParam('edit'))->current();
+            $initContent = $postRow->content;
+        }
+
+
+        $c = $this->_createFieldComponent('Textarea',
+            array('name'=>'content', 'width'=>470, 'height'=>150, 'value' => $initContent)
+        );
         $c->store('name', 'content');
         $c->store('fieldLabel', 'Geben Sie hier den gewünschten Nachrichtentext ein:');
         $c->store('isMandatory', false);
@@ -81,8 +92,19 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
     protected function _processForm()
     {
         if (!isset($_POST['preview'])) {
-            $t = new Vpc_Posts_Model();
-            $row = $t->createRow();
+            $tableName = $this->_getSetting('postsTableName');
+            $t = new $tableName();
+
+            if (!$this->_getParam('edit')) {
+                $row = $t->createRow();
+            } else {
+                $postRow = $t->find($this->_getParam('edit'))->current();
+                if ($this->getParentComponent()->getChildComponentByRow($postRow)->mayEditPost()) {
+                    $row = $postRow;
+                } else {
+                    $row = $t->createRow();
+                }
+            }
             $values = $this->_getValues();
             $row->content = $values['content'];
             $row->component_id = $this->getParentComponent()->getDbId();
@@ -122,5 +144,10 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
             $this->_previewComponent = $this->createComponent($classes['preview'], 'preview');
         }
         return $this->_previewComponent;
+    }
+
+    public function getEditUrl($postId)
+    {
+        return $this->getUrl().'?edit='.$postId;
     }
 }
