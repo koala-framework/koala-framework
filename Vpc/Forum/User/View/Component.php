@@ -21,6 +21,41 @@ class Vpc_Forum_User_View_Component extends Vpc_Abstract
         $ret['userThreads'] = $forumUserData->getNumThreads();
         $ret['forumUserData'] = $forumUserData->toArray();
 
+        $pc = $this->getPageCollection();
+
+        if ($ret['userThreads']) {
+            $threadTable = new Vpc_Forum_Thread_Model();
+            $where = array('user_id = ?' => $userId);
+            $ret['lastThreads'] = array();
+            foreach ($threadTable->fetchAll($where, null, 3) as $row) {
+                $groupPageFactory = $pc->getComponentById($row->component_id)->getPageFactory();
+                $ret['lastThreads'][] = array(
+                    'subject'     => $row->subject,
+                    'create_time' => $row->create_time,
+                    'url'         => $groupPageFactory->getChildPageByRow($row)->getUrl()
+                );
+            }
+        }
+
+        if ($ret['userPosts']) {
+            $postsTable = new Vpc_Posts_Model();
+            $where = array('user_id = ?' => $userId);
+            $i = 0;
+            $ret['lastPosts'] = array();
+            foreach ($postsTable->fetchAll($where, null, 10) as $row) {
+                $threadComponent = $pc->getComponentById($row->component_id);
+                if ($threadComponent instanceof Vpc_Forum_Posts_Component) {
+                    $ret['lastPosts'][] = array(
+                        'subject'     => $threadComponent->getName(),
+                        'create_time' => $row->create_time,
+                        'url'         => $threadComponent->getUrl()
+                    );
+                    $i++;
+                    if ($i >= 3) break;
+                }
+            }
+        }
+
         return $ret;
     }
 }

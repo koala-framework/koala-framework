@@ -1,11 +1,72 @@
 <div class="vpcForumUser">
-    <h1>User:</h1>
+    <h1>Benutzerprofil:</h1>
     <div class="text">
-        <p><strong>Name:</strong> {$component.userData.title} {$component.userData.firstname} {$component.userData.lastname}</p>
-        <p><strong>Mitglied seit:</strong> {$component.userData.created|date_format:"%d.%m.%y, %H:%M"}</p>
-        <p><strong>Zuletzt online:</strong> {$component.userData.last_login|date_format:"%d.%m.%y, %H:%M"}</p>
-        <p><strong>Kurzbeschreibung:</strong> {$component.forumUserData.description_short|nl2br}</p>
-        <p><strong>Threads:</strong> {$component.userThreads}</p>
-        <p><strong>Posts:</strong> {$component.userPosts}</p>
+
+        {if $component.forumUserData.nickname}
+            <p><strong>Name für Forum:</strong> {$component.forumUserData.nickname}</p>
+        {/if}
+
+        {if $component.userData.firstname || $component.userData.lastname}
+            <p><strong>Name:</strong>
+            {$component.userData.title}
+            {$component.userData.firstname}
+            {$component.userData.lastname}</p>
+        {/if}
+
+        <p>
+            <strong>Mitglied seit:</strong>
+            {$component.userData.created|date_format:"%d.%m.%y"}
+        </p>
+
+        <p>
+            <strong>Zuletzt online:</strong>
+            {$component.userData.last_login|date_format:"%d.%m.%y, %H:%M"}
+        </p>
+
+        {if $component.forumUserData.location}
+            <p><strong>Ort:</strong> {$component.forumUserData.location}</p>
+        {/if}
+
+        {if $component.forumUserData.description_short}
+            <p>
+                <strong>Kurzbeschreibung:</strong>
+                {$component.forumUserData.description_short|htmlspecialchars|nl2br}
+            </p>
+        {/if}
+
+        {if $component.forumUserData.signature}
+            <p>
+                <strong>Signatur:</strong>
+                {$component.forumUserData.signature|htmlspecialchars|nl2br}
+            </p>
+        {/if}
+
+        {if $component.lastThreads}
+            <p>
+                <strong>Die neuesten Themen ({$component.userThreads} gesamt):</strong>
+                <ul>
+                    {foreach from=$component.lastThreads item=thread}
+                        <li>
+                            {$thread.create_time|date_format:"%d.%m.%y"}:
+                            <a href="{$thread.url}">{$thread.subject}</a>
+                        </li>
+                    {/foreach}
+                </ul>
+            </p>
+        {/if}
+
+        {if $component.lastPosts}
+            <p>
+                <strong>Die neuesten Beiträge ({$component.userPosts} gesamt):</strong>
+                <ul>
+                    {foreach from=$component.lastPosts item=post}
+                        <li>
+                            {$post.create_time|date_format:"%d.%m.%y"}:
+                            <a href="{$post.url}">{$post.subject}</a>
+                        </li>
+                    {/foreach}
+                </ul>
+            </p>
+        {/if}
     </div>
 </div>

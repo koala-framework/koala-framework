@@ -36,6 +36,12 @@ class Vpc_Posts_Component extends Vpc_Abstract
         return $this->_posts;
     }
 
+    public function getChildComponentByRow($row)
+    {
+        $classes = $this->_getSetting('childComponentClasses');
+        return $this->createComponent($classes['post'], $row->id);
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

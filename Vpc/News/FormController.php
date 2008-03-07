@@ -24,17 +24,24 @@ class Vpc_News_FormController extends Vps_Controller_Action_Auto_Form
         $this->_form->add(new Vps_Auto_Field_DateField('expiry_date', 'Expiry Date'));
 
 
-        $childComponentClasses = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
-        $categories = Vpc_Abstract::getSetting($this->class, 'categories');
+        $component = get_class($this);
+        $component = substr($component, 0, strrpos($component, '_')) . '_Component';
+        $component = Vps_PageCollection_Abstract::getInstance()->getComponentByParentClass($component);
+        $componentName = get_class($component);
+
+        $childComponentClasses = Vpc_Abstract::getSetting($componentName, 'childComponentClasses');
+        $categories = Vpc_Abstract::getSetting($componentName, 'categories');
+
         if ($categories) {
             foreach ($categories as $cKey => $category) {
                 $formName = Vpc_Admin::getComponentFile(
                     $childComponentClasses[$cKey], 'Form', 'php', true
                 );
-                if (!$formName) {
+                if ($formName) {
                     $this->_form->add(new $formName($childComponentClasses[$cKey]))
                         ->setBaseCls('x-plain');
                 }
+
             }
         }
     }

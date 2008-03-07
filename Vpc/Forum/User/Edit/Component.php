@@ -25,6 +25,22 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
         $c->store('fieldLabel', 'Avatar');
         $c->store('isMandatory', false);
 */
+        $fieldSettings = array('name'  => 'nickname',
+                               'width' => 250,
+                               'value' => ($row ? $row->nickname : ''));
+        $c = $this->_createFieldComponent('Textbox', $fieldSettings);
+        $c->store('name', 'nickname');
+        $c->store('fieldLabel', 'Name für Forum');
+        $c->store('isMandatory', true);
+
+        $fieldSettings = array('name'  => 'location',
+                               'width' => 250,
+                               'value' => ($row ? $row->location : ''));
+        $c = $this->_createFieldComponent('Textbox', $fieldSettings);
+        $c->store('name', 'location');
+        $c->store('fieldLabel', 'Ort');
+        $c->store('isMandatory', false);
+
         $fieldSettings = array('name'  => 'signature',
                                'width' => 250,
                                'height' => 100,
@@ -65,11 +81,6 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
         $tableName = $this->_getSetting('forumUserModel');
         $table = new $tableName();
         $row = $table->find($authedUser->id)->current();
-        if (!$row) {
-            $row = $table->createRow();
-            $row->id = $authedUser->id;
-            $row->save();
-        }
         return $row;
     }
 
@@ -77,6 +88,16 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
     {
         $row = $this->_getEditRow();
         if (!$row) return ;
+
+        $forumUserTable = new Vpc_Forum_User_Model();
+        $nickExists = $forumUserTable->fetchRow(array(
+            'id != ?' => $row->id,
+            'nickname = ?' => $_POST['nickname']
+        ));
+        if ($nickExists) {
+            throw new Vps_ClientException('Dieser &quot;Name für Forum&quot; existiert '
+                .'bereits. Bitte wählen Sie einen anderen.');
+        }
 
         foreach ($this->getChildComponents() as $c) {
             if ($c instanceof Vpc_Formular_Field_Interface) {

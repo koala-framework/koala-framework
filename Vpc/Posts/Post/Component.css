@@ -1,1 +1,5 @@
 div.vpcPostsPost { margin-top: 15px;}
+div.vpcPostsPost div.edit {
+    border: 1px solid #fc9;
+    margin: 5px 0px; padding: 0px 20px;
+}

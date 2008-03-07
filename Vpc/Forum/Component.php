@@ -55,10 +55,16 @@ class Vpc_Forum_Component extends Vpc_Abstract
                 if ($lastThread) {
                     $post = $postsT->getLastPost($lastThread->component_id.'_'.$lastThread->id.'-posts');
                     $g['lastPostTime'] = $post->create_time;
+                    $forumUserTable = new Vpc_Forum_User_Model();
+                    $forumUser = $forumUserTable->fetchRow(array('id = ?' => $post->user_id));
                     $user = Zend_Registry::get('userModel')->find($post->user_id)->current();
                     if ($user) {
-                        $g['lastPostUser'] = $user->__toString();
-                        $g['lastPostUserUrl'] = $this->getUserViewComponent($user)->getUrl();
+                        if ($forumUser->nickname) {
+                            $g['lastPostUser'] = $forumUser->nickname;
+                        } else {
+                            $g['lastPostUser'] = $user->firstname;
+                        }
+                        $g['lastPostUserUrl'] = $this->getUserViewComponent($forumUser)->getUrl();
                     } else {
                         $g['lastPostUser'] = 'Anonym';
                         $g['lastPostUserUrl'] = null;
@@ -82,8 +88,7 @@ class Vpc_Forum_Component extends Vpc_Abstract
 
     public function getUserViewComponent($user)
     {
-        return $this->getPageFactory()
-                    ->getChildPageById('users')->getPageFactory()
-                    ->getChildPageByRow($user);
+        return $this->getPageFactory()->getChildPageById('users')
+                    ->getPageFactory()->getChildPageByRow($user);
     }
 }

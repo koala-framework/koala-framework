@@ -12,7 +12,7 @@ class Vpc_Forum_User_Model extends Vps_Db_Table_Abstract
             if (!is_array($newWhere)) $newWhere = array($newWhere);
             $whereIdOnly = null;
             foreach ($newWhere as $key => $val) {
-                if (substr(trim($key), 0, 2) == 'id' || substr(trim($val), 0, 2) == 'id') {
+                if (preg_match('/^id\s*=/', trim($key)) || preg_match('/^id\s*=/', trim($val))) {
                     $whereIdOnly = array($key => $val);
                     break;
                 }

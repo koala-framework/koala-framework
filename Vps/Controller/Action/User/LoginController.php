@@ -3,7 +3,8 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
 {
     public function indexAction()
     {
-        $location = $this->_getParam('location');
+        // ursprünglich $this->_getParam('location'), dann gehen aber GET params verloren
+        $location = $_SERVER['REQUEST_URI'];
         if ($location == '') { $location = '/'; }
         $config = array('location' => $location);
         if ($this->_getUserRole() != 'guest') {
