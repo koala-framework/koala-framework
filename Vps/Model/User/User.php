@@ -219,15 +219,18 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
         }
 
         $activateComponent = null;
-        $pc = Vps_PageCollection_Abstract::getInstance();
-        $userComponent = $pc->getComponentByParentClass('Vpc_User_Component');
-        if ($userComponent) {
-            $tmpComponents = $pc->getChildPages($userComponent);
-            if ($tmpComponents) {
-                foreach ($tmpComponents as $tmpComponent) {
-                    if ($tmpComponent instanceof Vpc_User_Activate_Component) {
-                        $activateComponent = $tmpComponent;
-                        break;
+        $config = new Zend_Config_Ini('application/config.ini');
+        if ($config->pagecollection) {
+            $pc = Vps_PageCollection_Abstract::getInstance();
+            $userComponent = $pc->getComponentByParentClass('Vpc_User_Component');
+            if ($userComponent) {
+                $tmpComponents = $pc->getChildPages($userComponent);
+                if ($tmpComponents) {
+                    foreach ($tmpComponents as $tmpComponent) {
+                        if ($tmpComponent instanceof Vpc_User_Activate_Component) {
+                            $activateComponent = $tmpComponent;
+                            break;
+                        }
                     }
                 }
             }

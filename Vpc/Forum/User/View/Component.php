@@ -28,11 +28,19 @@ class Vpc_Forum_User_View_Component extends Vpc_Abstract
             $threadTable = new Vpc_Forum_Thread_Model();
             $where = array('user_id = ?' => $userId);
             foreach ($threadTable->fetchAll($where, null, 3) as $row) {
-                $groupPageFactory = $pc->getComponentById($row->component_id)->getPageFactory();
+                $groupPage = $pc->getComponentById($row->component_id);
+                if (!$groupPage) continue;
+
+                $groupPageFactory = $groupPage->getPageFactory();
+                if (!$groupPageFactory) continue;
+
+                $child = $groupPageFactory->getChildPageByRow($row);
+                if (!$child) continue;
+
                 $ret['lastThreads'][] = array(
                     'subject'     => $row->subject,
                     'create_time' => $row->create_time,
-                    'url'         => $groupPageFactory->getChildPageByRow($row)->getUrl()
+                    'url'         => $child->getUrl()
                 );
             }
         }
