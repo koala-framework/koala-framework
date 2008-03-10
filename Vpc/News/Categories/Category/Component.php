@@ -22,11 +22,19 @@ class Vpc_News_Categories_Category_Component extends Vpc_News_List_Abstract_Comp
             'Vpc_News_Categories_NewsToPoolModel'
         );
 
-        $ret = array();
+        $tmp = array();
+        $tmpSort = array();
         foreach ($newsRowset as $newsRow) {
             if ($newsRow->visible) {
-                $ret[] = $newsRow;
+                $tmp[] = $newsRow;
+                $tmpSort[] = $newsRow->publish_date;
             }
+        }
+        arsort($tmpSort);
+
+        $ret = array();
+        foreach ($tmpSort as $key => $tmpSor) {
+            $ret[] = $tmp[$key];
         }
 
         return $ret;

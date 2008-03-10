@@ -23,10 +23,10 @@ class Vpc_Forum_User_View_Component extends Vpc_Abstract
 
         $pc = $this->getPageCollection();
 
+        $ret['lastThreads'] = array();
         if ($ret['userThreads']) {
             $threadTable = new Vpc_Forum_Thread_Model();
             $where = array('user_id = ?' => $userId);
-            $ret['lastThreads'] = array();
             foreach ($threadTable->fetchAll($where, null, 3) as $row) {
                 $groupPageFactory = $pc->getComponentById($row->component_id)->getPageFactory();
                 $ret['lastThreads'][] = array(
@@ -37,11 +37,11 @@ class Vpc_Forum_User_View_Component extends Vpc_Abstract
             }
         }
 
+        $ret['lastPosts'] = array();
         if ($ret['userPosts']) {
             $postsTable = new Vpc_Posts_Model();
             $where = array('user_id = ?' => $userId);
             $i = 0;
-            $ret['lastPosts'] = array();
             foreach ($postsTable->fetchAll($where, null, 10) as $row) {
                 $threadComponent = $pc->getComponentById($row->component_id);
                 if ($threadComponent instanceof Vpc_Forum_Posts_Component) {
