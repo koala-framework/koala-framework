@@ -172,6 +172,7 @@ abstract class Vps_PageCollection_Abstract
             $page = $this->addPage(array_shift($parts['pageKeys']));
             if ($page) {
                 foreach ($parts['pageKeys'] as $pageKey) {
+                    if (!$page) return null;
                     $page = $page->getPageFactory()->getChildPageById($pageKey);
                 }
             }
