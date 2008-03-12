@@ -158,21 +158,21 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
     public function sendActivationMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - Account created';
+        $subject .= ' - Benutzerkonto erstellt';
         return $this->_sendMail('mails/UserActivation.txt.tpl', $subject);
     }
 
     public function sendLostPasswordMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - Lost password';
+        $subject .= ' - Passwort vergessen';
         return $this->_sendMail('mails/UserLostPassword.txt.tpl', $subject);
     }
 
     public function sendChangedMailMail($oldMail)
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - Changed email';
+        $subject .= ' - Email geaendert';
         return $this->_sendMail(
             'mails/UserChangedMail.txt.tpl',
             $subject,
