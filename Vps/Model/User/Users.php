@@ -5,8 +5,14 @@ class Vps_Model_User_Users extends Vps_Db_Table
     protected $_primary = 'id';
     protected $_rowClass = 'Vps_Model_User_User';
 
+    static public $allCache = null;
+
     public function fetchAll($where, $order = null, $limit = null, $start = null)
     {
+        // wenn serviceColumn in where vorkommt, komplettes where an Service schicken und id's zurückbekommen
+        $where = $this->prepareWhere($where);
+
+        // ob nach serviceColumn sortiert werden soll
         if ($order) {
             list($orderColumn, $direction) = explode(' ', $order);
             $orderColumn = trim($orderColumn);
@@ -20,6 +26,62 @@ class Vps_Model_User_Users extends Vps_Db_Table
         }
 
         return parent::fetchAll($where, $order, $limit, $start);
+    }
+
+    public function prepareWhere($where)
+    {
+        if ($where) {
+            if (!is_array($where)) $where = array($where);
+            $sc = call_user_func(array($this->_rowClass, 'getServiceColumns'));
+
+            $serviceColumnMatched = false;
+            foreach ($where as $key => $val) {
+                foreach ($sc as $scol) {
+                    if ((is_string($key) && strpos($key, $scol) !== false)
+                        || strpos($val, $scol) !== false
+                    ) {
+                        $serviceColumnMatched = true;
+                        break 2;
+                    }
+                }
+            }
+
+            if ($serviceColumnMatched) {
+                $restClient = new Vps_Rest_Client();
+                $restClient->getIdsWhere($where, 'fakeArgWegenZend');
+                $restResult = $restClient->get();
+                $ids = (array)$restResult->ids;
+                if (count($ids)) {
+                    $where = 'id IN('.implode(',', $ids).')';
+                } else {
+                    $where = 'id = 0';
+                }
+            }
+        }
+        return $where;
+    }
+
+    static public function getAllCache()
+    {
+        return self::$allCache;
+    }
+
+    public function createAllCache()
+    {
+        self::$allCache = array();
+
+        $allIds = array();
+        foreach (parent::fetchAll(null) as $row) {
+            $allIds[] = $row->id;
+        }
+
+        $restClient = new Vps_Rest_Client();
+        $restClient->getData($allIds, '');
+        $restResult = $restClient->get();
+
+        foreach ($restResult->data as $row) {
+            self::$allCache[(int)$row->id] = $row;
+        }
     }
 
     public function fetchRowByEmail($email)

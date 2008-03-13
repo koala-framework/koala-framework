@@ -4,7 +4,7 @@ class Vpc_Forum_Component extends Vpc_Abstract
     private $_groups;
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'componentName'         => 'Forum',
             'tablename'             => 'Vpc_Forum_Group_Model',
             'childComponentClasses' => array(
@@ -12,6 +12,8 @@ class Vpc_Forum_Component extends Vpc_Abstract
                 'user'  => 'Vpc_Forum_User_Component'
             )
         ));
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Forum/Panel.js';
+        return $ret;
     }
 
     public function getTemplateVars()

@@ -5,7 +5,7 @@
         <strong>#{$component.postNum}:</strong> 
         <i>{$component.create_time|date_format:"%d.%m.%y, %H:%M"}</i>
         {if $component.editUrl}
-            <br /><a href="{$component.editUrl}">Beitrag ändern</a>
+            <br />Moderation: <a href="{$component.editUrl}">Beitrag bearbeiten</a>
         {/if}
     </div>
     <div class="clear"></div>

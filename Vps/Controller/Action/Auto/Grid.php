@@ -241,6 +241,11 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         $where = (array) $this->_getWhere();
         if (is_null($where)) return 0;
 
+        if ($this->_table instanceof Vps_Model_User_Users) {
+            $where = $this->_table->prepareWhere($where);
+            if (!is_array($where)) $where = array($where);
+        }
+
         foreach ($where as $key => $val) {
             // is $key an int?
             if (is_int($key)) {
