@@ -144,6 +144,11 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
             }
         }
 
+        $allCache = call_user_func(array($this->getTableClass(), 'getAllCache'));
+        if (!is_null($allCache)) {
+            $this->getTable()->createAllCache();
+        }
+
         if (!empty($this->_changedPasswordData['password1']) && !empty($this->_changedPasswordData['password2'])) {
             if ($this->_changedPasswordData['password1'] == $this->_changedPasswordData['password2']) {
                 $this->setPassword($this->_changedPasswordData['password1']);
@@ -281,14 +286,19 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
                 return $this->_changedServiceData[$columnName];
             } else if ($this->id) {
                 if (!isset($cache[$this->id])) {
-                    $restClient = new Vps_Rest_Client();
-                    $restClient->getData($this->id, '');
+                    $allCache = call_user_func(array($this->getTableClass(), 'getAllCache'));
+                    if (!is_null($allCache)) {
+                        $cache[$this->id] = $allCache[$this->id];
+                    } else {
+                        $restClient = new Vps_Rest_Client();
+                        $restClient->getData($this->id, '');
 
-                    $restResult = $restClient->get();
-                    if (!$restResult->status()) {
-                        throw new Vps_Exception($restResult->msg());
+                        $restResult = $restClient->get();
+                        if (!$restResult->status()) {
+                            throw new Vps_Exception($restResult->msg());
+                        }
+                        $cache[$this->id] = $restResult->data;
                     }
-                    $cache[$this->id] = $restResult->data;
                 }
                 return (string)$cache[$this->id]->{$columnName};
             }
