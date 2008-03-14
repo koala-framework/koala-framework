@@ -29,7 +29,8 @@ class Vps_Trl {
        }
     }
 
-    function trlp($single, $plural, $text, $type){
+    function trlp($single, $plural, $text, $type, $prog_lang){
+
         $params = $this->_checkArray($text);
         $xml = $this->_setupTrl($type);
         $single = $this->_findElement($single, $xml);
@@ -39,10 +40,14 @@ class Vps_Trl {
        } else {
            if ($params[0] != 1){
                foreach ($params as $key => $value){
+                   if ($prog_lang == 'js') return $plural;
+
                    $text = str_replace('{'.$key.'}', $value, $plural);
                }
            } else {
                foreach ($params as $key => $value){
+                   if ($prog_lang == 'js') return $single;
+
                    $text = str_replace('{'.$key.'}', $value, $single);
                }
            }
@@ -50,7 +55,8 @@ class Vps_Trl {
        }
     }
 
-    function trlcp($context, $single, $plural, $text, $type){
+    function trlcp($context, $single, $plural, $text, $type, $prog_lang){
+
         $params = $this->_checkArray($text);
         $xml = $this->_setupTrl($type);
         $single = $this->_findElement($single, $xml, $context);
@@ -60,10 +66,12 @@ class Vps_Trl {
        } else {
            if ($params[0] != 1){
                foreach ($params as $key => $value){
+                   if ($prog_lang == 'js') return $plural;
                    $text = str_replace('{'.$key.'}', $value, $plural);
                }
            } else {
                foreach ($params as $key => $value){
+                   if ($prog_lang == 'js') return $single;
                    $text = str_replace('{'.$key.'}', $value, $single);
                }
            }

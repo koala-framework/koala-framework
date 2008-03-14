@@ -171,44 +171,92 @@ class Vps_Assets_Loader
     static private function trl ($contents){
         $type= '';
         preg_match_all('#trl'.$type.'\("(.+?)"\)|trl'.$type.'\(\'(.+?)\'\)#', $contents, $m);
-        $values = self::_pregMatchTrl($m);
-        $contents = str_replace($values['before'], $values['now'], $contents);
+        $values = self::_pregMatchTrl($m, '');
+        if ($values)
+            $contents = str_replace($values['before'], $values['now'], $contents);
+
+        //das gleiche mit Vps
+        preg_match_all('#trlVps'.$type.'\("(.+?)"\)|trlVps'.$type.'\(\'(.+?)\'\)#', $contents, $m);
+        $values = self::_pregMatchTrl($m, 'Vps');
+        if ($values)
+            $contents = str_replace($values['before'], $values['now'], $contents);
 
         preg_match_all('#trl'.$type.'\(\'(.+?)\', (.*)\)|trl'.$type.'\(\"(.+?)\", (.*)\)#', $contents, $m);
-        $values = self::_pregMatchTrl($m);
-        $contents = str_replace($values['before'], $values['now'], $contents);
+        $values = self::_pregMatchTrl($m, '');
+        if ($values)
+            $contents = str_replace($values['before'], $values['now'], $contents);
+
+        //das gleiche mit Vps
+        preg_match_all('#trlVps'.$type.'\(\'(.+?)\', (.*)\)|trlVps'.$type.'\(\"(.+?)\", (.*)\)#', $contents, $m);
+        $values = self::_pregMatchTrl($m, 'Vps');
+        if ($values)
+            $contents = str_replace($values['before'], $values['now'], $contents);
 
         preg_match_all('#trlc'.$type.'\(\'(.+?)\', +(.*), +(.*)\)|trlc'.$type.'\(\"(.+?)\", +(.*), +(.*)\)#', $contents, $m);
-        $values = self::_pregMatchTrlc($m);
-        $contents = str_replace($values['before'], $values['now'], $contents);
+        $values = self::_pregMatchTrlc($m, '');
+        if ($values)
+            $contents = str_replace($values['before'], $values['now'], $contents);
+
+        //das gleiche mit Vps
+        preg_match_all('#trlcVps'.$type.'\(\'(.+?)\', +(.*), +(.*)\)|trlcVps'.$type.'\(\"(.+?)\", +(.*), +(.*)\)#', $contents, $m);
+        $values = self::_pregMatchTrlc($m, 'Vps');
+        if ($values)
+            $contents = str_replace($values['before'], $values['now'], $contents);
+
+        preg_match_all('#trlp'.$type.'\(\'(.+?)\', +(.*), +(.*)\)|trlp'.$type.'\(\"(.+?)\", +(.*), +(.*)\)#', $contents, $m);
+        $values = self::_pregMatchTrlp($m, '');
+        if ($values)
+            $contents = str_replace($values['before'], $values['now'], $contents);
+
+        //das gleiche mit Vps
+        preg_match_all('#trlpVps'.$type.'\(\'(.+?)\', +(.*), +(.*)\)|trlpVps'.$type.'\(\"(.+?)\", +(.*), +(.*)\)#', $contents, $m);
+        $values = self::_pregMatchTrlp($m, 'Vps');
+        if ($values)
+            $contents = str_replace($values['before'], $values['now'], $contents);
+
+        preg_match_all('#trlcp'.$type.'\(\'(.+?)\', +(.*), +(.*), +(.*)\)|trlcp'.$type.'\(\"(.+?)\", +(.*), +(.*), +(.*)\)#', $contents, $m);
+        $values = self::_pregMatchTrlcp($m, '');
+        if ($values)
+            $contents = str_replace($values['before'], $values['now'], $contents);
+
+        //das gleiche mit Vps
+        preg_match_all('#trlcpVps'.$type.'\(\'(.+?)\', +(.*), +(.*), +(.*)\)|trlcpVps'.$type.'\(\"(.+?)\", +(.*), +(.*), +(.*)\)#', $contents, $m);
+        $values = self::_pregMatchTrlcp($m, 'Vps');
+
+        if ($values)
+            $contents = str_replace($values['before'], $values['now'], $contents);
 
         return $contents;
     }
 
-   static private function _pregMatchTrl ($m){
+    static private function _pregMatchTrl ($m, $mode){
        foreach($m[0] as $key => $trl){
-
             if ($m[1][$key] == ""){
                 if (!($m[2][$key] == "")){
                     $values = array();
                     $values['before'] = $m[0][$key];
                     $values['tochange'] = $m[2][$key];
-                    $values['now'] = trl(self::_getText($values['tochange']));
+                    $method = "trl".$mode;
+                    $values['now'] = $method(self::_getText($values['tochange']));
                     $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
+                    $values['now'] = str_replace($method, "trl", $values['now']);
                     return $values;
                 }
             } else {
                     $values = array();
                     $values['before'] = $m[0][$key];
                     $values['tochange'] = $m[1][$key];
-                    $values['now'] = trl(self::_getText($values['tochange']));
+                    $method = "trl".$mode;
+                    $values['now'] = $method(self::_getText($values['tochange']));
                     $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
+
+                    $values['now'] = str_replace($method, "trl", $values['now']);
                     return $values;
             }
         }
     }
 
-    static private function _pregMatchTrlc ($m){
+    static private function _pregMatchTrlc ($m, $mode){
        foreach($m[0] as $key => $trl){
             if ($m[1][$key] == ""){
                 if (!($m[2][$key] == "")){
@@ -217,10 +265,10 @@ class Vps_Assets_Loader
                     $values['before'] = $m[0][$key];
                     $string = explode(',', $m[2][$key]);
                     $values['tochange'] = self::_getText($string[0]);
-                    d ($values['tochange']);
-                    $values['now'] = trlc($values['context'] ,$values['tochange']);
+                    $method = "trlc".$mode;
+                    $values['now'] = $method($values['context'] ,$values['tochange']);
                     $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                    $values['now'] = str_replace('trlc', 'trl', $values['now']);
+                    $values['now'] = str_replace($method, 'trl', $values['now']);
                     $values['now'] = str_replace('\''.$values['context'].'\', ', '', $values['now']);
                     return $values;
                 }
@@ -231,39 +279,138 @@ class Vps_Assets_Loader
                     $string = explode(',', $m[2][$key]);
 
                     $values['tochange'] = self::_getText($string[0]);
-                    $values['now'] = trlc($values['context'] ,$values['tochange']);
+                    $method = "trlc".$mode;
+                    $values['now'] = $method($values['context'] ,$values['tochange']);
                     $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                    $values['now'] = str_replace('trlc', 'trl', $values['now']);
+                    $values['now'] = str_replace($method, 'trl', $values['now']);
                     $values['now'] = str_replace('\''.$values['context'].'\', ', '', $values['now']);
                     return $values;
             }
         }
     }
 
-   /* protected function _pregMatchTrlc ($m, $xml){
+    static private function _pregMatchTrlp ($m, $mode){
         foreach($m[0] as $key => $trl){
             if ($m[1][$key] == ""){
-                if (!($m[2][$key] == "")){
-                    $values = array();
-                    $values['before'] = $m[2][$key];
-                    $values['now'] = trl(self::_getText($values['before']));
-                    return $values;
+                if (!($m[4][$key] == "")){
+
+                $values = array();
+                $values['before'] = $m[0][$key];
+                $strings = self::_splitStringTrlp($values['before'], "\"", $mode);
+                $values['single'] = $strings[0];
+                $values['plural'] = $strings[1];
+                $values['value'] = substr($strings[2], 0, 1);
+                $values['tochange'] = $strings[1];
+
+                $method = 'trlp'.$mode;
+                $values['new'] = $method($values['single'], $values['plural'], $values['value'], 'js');
+
+                $values['now'] = str_replace("\"".$values['single']."\",", "", $values['before']);
+
+                $values['now'] = str_replace($values['tochange'], $values['new'], $values['now']);
+                $values['now'] = str_replace($method, 'trl', $values['now']);
+
+                return $values;
                 }
             } else {
-                    $values = array();
-                    $values['before'] = $m[1][$key];
-                    $values['now'] = trl(self::_getText($values['before']));
-                    return $values;
+
+                $values = array();
+                $values['before'] = $m[0][$key];
+                $strings = self::_splitStringTrlp($values['before'], '\'', $mode);
+                $values['single'] = $strings[0];
+                $values['plural'] = $strings[1];
+                $values['value'] = substr($strings[2], 0, 1);
+
+                $values['tochange'] = $strings[1];
+
+                $method = 'trlp'.$mode;
+                $values['new'] = $method($values['single'], $values['plural'], $values['value'], 'js');
+
+                $values['now'] = str_replace('\''.$values['single'].'\',', '', $values['before']);
+
+                $values['now'] = str_replace($values['tochange'], $values['new'], $values['now']);
+                $values['now'] = str_replace($method, 'trl', $values['now']);
+
+                return $values;
             }
         }
-    }*/
+    }
+
+    static private function _pregMatchTrlcp ($m, $mode){
+        foreach($m[0] as $key => $trl){
+            if ($m[1][$key] == ""){
+                $values = array();
+                $values['before'] = $m[0][$key];
+                $strings = self::_splitStringTrlcp($values['before'], "\"", $mode);
+                $values['context'] = $strings[0];
+                $values['single'] = $strings[1];
+                $values['plural'] = $strings[2];
+                $values['value'] = substr($strings[3], 0, 1);
+                $values['tochange'] = $strings[2];
+
+                $method = 'trlcp'.$mode;
+                $values['new'] = $method($values['context'], $values['single'], $values['plural'], $values['value'], 'js');
+
+                $values['now'] = str_replace("\"".$values['single']."\",", "", $values['before']);
+                $values['now'] = str_replace("\"".$values['context']."\",", "", $values['now']);
+
+                $values['now'] = str_replace($values['tochange'], $values['new'], $values['now']);
+                $values['now'] = str_replace($method, 'trl', $values['now']);
+
+                return $values;
+            } else {
+                $values = array();
+                $values['before'] = $m[0][$key];
+                $strings = self::_splitStringTrlcp($values['before'], '\'', $mode);
+                $values['context'] = $strings[0];
+                $values['single'] = $strings[1];
+                $values['plural'] = $strings[2];
+                $values['value'] = substr($strings[3], 0, 1); //derweil nur einstellig
+                $values['tochange'] = $strings[2];
+
+                $method = 'trlcp'.$mode;
+                $values['new'] = $method($values['context'], $values['single'], $values['plural'], $values['value'], 'js');
+
+                $values['now'] = str_replace('\''.$values['single'].'\',', '', $values['before']);
+                $values['now'] = str_replace('\''.$values['single'].'\',', '', $values['now']);
+                $values['now'] = str_replace('\''.$values['context'].'\',', '', $values['now']);
+                $values['now'] = str_replace('\''.$values['context'].'\',', '', $values['now']);
+
+                $values['now'] = str_replace($values['tochange'], $values['new'], $values['now']);
+                $values['now'] = str_replace($method, 'trl', $values['now']);
+
+                return $values;
+            }
+        }
+    }
+
+
 
     static protected function _getText($name){
             if(strpos($name, '{')){
                 $values = explode(',', $name);
-                return str_replace("'", '', $values[0]);
+                return str_replace("'", '', str_replace("\"", "" , $values[0]),str_replace("[", "" , str_replace("[", "" , $values[0])));
             } else {
-                return $name;
+                return str_replace("\"", "", str_replace("'", '', str_replace("[", "" , str_replace("]", "" , $name))));
             }
+   }
+
+   static protected function _splitStringTrlcp($string, $explode, $mode){
+       $start = 0;
+       $strings = explode($explode.',', $string);
+       $strings[0] = str_replace('trlcp'.$mode.'(', '', self::_getText($strings[0]));
+       $strings[++$start] = substr(self::_getText($strings[$start]), 1, strlen($strings[$start]));
+       $strings[++$start] = substr(self::_getText($strings[$start]), 1, strlen($strings[$start]));
+       $strings[++$start] = substr(str_replace('))', '', self::_getText($strings[$start])), 1, strlen($strings[$start]));
+       return $strings;
+   }
+
+   static protected function _splitStringTrlp($string, $explode, $mode){
+       $start = 0;
+       $strings = explode($explode.',', $string);
+       $strings[0] = str_replace('trlp'.$mode.'(', '', self::_getText($strings[0]));
+       $strings[++$start] = substr(self::_getText($strings[$start]), 1, strlen($strings[$start]));
+       $strings[++$start] = substr(str_replace('))', '', self::_getText($strings[$start])), 1, strlen($strings[$start]));
+       return $strings;
    }
 }
