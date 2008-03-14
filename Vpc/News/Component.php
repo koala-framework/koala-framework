@@ -20,7 +20,7 @@ class Vpc_News_Component extends Vpc_News_List_Abstract_Component implements Vpc
         return $ret;
     }
 
-    public function getNews()
+    public function getNews($limit = 15)
     {
         $where = array(
             'component_id = ?' => $this->getId()
@@ -29,7 +29,7 @@ class Vpc_News_Component extends Vpc_News_List_Abstract_Component implements Vpc
         if (!$this->showInvisible()) {
             $where['visible = 1'] = '';
         }
-        $rows = $this->getTable()->fetchAll($where, 'publish_date DESC', 15);
+        $rows = $this->getTable()->fetchAll($where, 'publish_date DESC', $limit);
 
         return $rows;
     }

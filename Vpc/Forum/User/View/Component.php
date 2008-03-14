@@ -16,6 +16,13 @@ class Vpc_Forum_User_View_Component extends Vpc_Abstract
         $userData = Zend_Registry::get('userModel')->find($userId)->current();
         $forumUserData = $this->getTable()->find($userId)->current();
 
+        if (!$userData) {
+            throw new Vps_ClientException('Benutzer existiert nicht (mehr).');
+        }
+        if (!$forumUserData) {
+            throw new Vps_ClientException('Forum-Benutzer existiert nicht (mehr).');
+        }
+
         $ret['userData'] = $userData->toArray();
         $ret['userPosts'] = $forumUserData->getNumPosts();
         $ret['userThreads'] = $forumUserData->getNumThreads();
