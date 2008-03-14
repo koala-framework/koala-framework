@@ -8,6 +8,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
 
     public function __construct($config = array())
     {
+
         parent::__construct($config);
 
         $this->_smarty = new Smarty();
@@ -23,6 +24,14 @@ class Vps_View_Smarty extends Zend_View_Abstract
             $this->_smarty->$key = $value;
         }
         $this->extTemplate = VPS_PATH . '/views/Ext.html';
+        $this->_smarty->register_function("trl", "trl");
+        $this->_smarty->register_function("trlc", "trlc");
+        $this->_smarty->register_function("trlcp", "trlcp");
+        $this->_smarty->register_function("trlp", "trlp");
+        $this->_smarty->register_function("trlVps", "trlVps");
+        $this->_smarty->register_function("trlcVps", "trlcVps");
+        $this->_smarty->register_function("trlcpVps", "trlcpVps");
+        $this->_smarty->register_function("trlpVps", "trlpVps");
 
         $this->config = Zend_Registry::get('config');
     }

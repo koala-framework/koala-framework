@@ -21,42 +21,173 @@ function d($src, $maxDepth = 5)
 
 function trl($string, $text = array()){
 
+    //if abfrage wird bei smarty templates erfüllt
+    if (is_array($string)){
+        $tempstring = "";
+        $text = array();
+        foreach ($string as $key => $value){
+            if ($key === "text"){
+                $tempstring = $value;
+            } else {
+                $text[$key] = $value;
+            }
+        }
+        $string = $tempstring;
+    }
+    $string = str_replace("[", "{", str_replace("]", "}", $string));
     return Zend_Registry::get('trl')->trl($string, $text, 'project');
 }
 
 function trlc($context, $string, $text = array()){
 
+    //Sonderfall Smarty
+    if (is_array($context)){
+        $tempcontext = "";
+        $text = array();
+        foreach ($context as $key => $value){
+            if ($key === "text"){
+                $string = $value;
+            } else if ($key === "context") {
+                $tempcontext = $value;
+            } else {
+                $text[$key] = $value;
+            }
+        }
+        $context = $tempcontext;
+    }
+    $string = str_replace("[", "{", str_replace("]", "}", $string));
     return Zend_Registry::get('trl')->trlc($context, $string, $text, 'project');
 }
 
-function trlp($single, $plural, $text =  array()){
-
-    return Zend_Registry::get('trl')->trlp($single, $plural, $text, 'project');
+function trlp($single, $plural, $text =  array(), $prog_lang = 'php'){
+    //Sonderfall Smarty
+    if (is_array($single)){
+        $tempsingle = "";
+        $text = array();
+        foreach ($single as $key => $value){
+            if ($key === "single"){
+                $tempsingle = $value;
+            } else if ($key === "plural") {
+                $plural = $value;
+            } else {
+                $text[$key] = $value;
+            }
+        }
+        $prog_lang = "smarty";
+        $single = $tempsingle;
+    }
+    $single = str_replace("[", "{", str_replace("]", "}", $single));
+    $plural = str_replace("[", "{", str_replace("]", "}", $plural));
+    return Zend_Registry::get('trl')->trlp($single, $plural, $text, 'project', $prog_lang);
 }
 
-function trlcp($context, $single, $plural, $text = array()){
+function trlcp($context, $single, $plural = null, $text = array(), $prog_lang = 'php'){
 
-    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, 'project');
+    if (is_array($context)){
+        $tempcontext = "";
+        $text = array();
+        foreach ($context as $key => $value){
+            if ($key === "context"){
+                $tempcontext = $value;
+            } else if ($key === "single") {
+                $single = $value;
+            } else if ($key === "plural") {
+                $plural = $value;
+            }else {
+                $text[$key] = $value;
+            }
+        }
+        $context = $tempcontext;
+        $prog_lang = "smarty";
+    }
+    $single = str_replace("[", "{", str_replace("]", "}", $single));
+    $plural = str_replace("[", "{", str_replace("]", "}", $plural));
+
+    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, 'project', $prog_lang);
 }
 
 function trlVps($string, $text = array()){
-
+    //if abfrage wird bei smarty templates erfüllt
+    if (is_array($string)){
+        $tempstring = "";
+        $text = array();
+        foreach ($string as $key => $value){
+            if ($key === "text"){
+                $tempstring = $value;
+            } else {
+                $text[$key] = $value;
+            }
+        }
+        $string = $tempstring;
+    }
+    $string = str_replace("[", "{", str_replace("]", "}", $string));
     return Zend_Registry::get('trl')->trl($string, $text, 'vps');
 }
 
 function trlcVps($context, $string, $text = array()){
-
+        //Sonderfall Smarty
+    if (is_array($context)){
+        $tempcontext = "";
+        $text = array();
+        foreach ($context as $key => $value){
+            if ($key === "text"){
+                $string = $value;
+            } else if ($key === "context") {
+                $tempcontext = $value;
+            } else {
+                $text[$key] = $value;
+            }
+        }
+        $context = $tempcontext;
+    }
+    $string = str_replace("[", "{", str_replace("]", "}", $string));
     return Zend_Registry::get('trl')->trlc($context, $string, $text, 'vps');
 }
 
-function trlpVps($single, $plural, $text =  array()){
-
-    return Zend_Registry::get('trl')->trlp($single, $plural, $text, 'vps');
+function trlpVps($single, $plural, $text =  array(), $prog_lang){
+        //Sonderfall Smarty
+    if (is_array($single)){
+        $tempsingle = "";
+        $text = array();
+        foreach ($single as $key => $value){
+            if ($key === "single"){
+                $tempsingle = $value;
+            } else if ($key === "plural") {
+                $plural = $value;
+            } else {
+                $text[$key] = $value;
+            }
+        }
+        $prog_lang = "smarty";
+        $single = $tempsingle;
+    }
+    $single = str_replace("[", "{", str_replace("]", "}", $single));
+    $plural = str_replace("[", "{", str_replace("]", "}", $plural));
+    return Zend_Registry::get('trl')->trlp($single, $plural, $text, 'vps', $prog_lang);
 }
 
-function trlcpVps($context, $single, $plural, $text = array()){
+function trlcpVps($context, $single, $plural, $text = array(), $prog_lang){
+        if (is_array($context)){
+        $tempcontext = "";
+        $text = array();
+        foreach ($context as $key => $value){
+            if ($key === "context"){
+                $tempcontext = $value;
+            } else if ($key === "single") {
+                $single = $value;
+            } else if ($key === "plural") {
+                $plural = $value;
+            }else {
+                $text[$key] = $value;
+            }
+        }
+        $context = $tempcontext;
+        $prog_lang = "smarty";
+    }
+    $single = str_replace("[", "{", str_replace("]", "}", $single));
+    $plural = str_replace("[", "{", str_replace("]", "}", $plural));
 
-    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, 'vps');
+    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, 'vps', $prog_lang);
 }
 
 
