@@ -26,18 +26,7 @@ class Vpc_News_Titles_Component extends Vpc_News_List_Abstract_Component impleme
 
     public function getNews()
     {
-         return $this->getNewsComponent()->getNews();
-/*        $where = array(
-            'component_id = ?' => $this->getId()
-        );
-
-        if (!$this->showInvisible()) {
-            $where['visible = 1'] = '';
-        }
-        $rows = $this->getTable()->fetchAll($where, 'publish_date DESC', 15);
-*/
-        $rows = array();
-        return $rows;
+        return $this->getNewsComponent()->getNews(5);
     }
 
     public function getTemplateVars()
