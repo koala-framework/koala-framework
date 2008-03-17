@@ -23,22 +23,18 @@ div.vpcForum ul li.post {
 
 div.vpcForum ul li.post a { font-weight: bold; }
 div.vpcForum ul li.post a.name { display: block; }
-div.vpcForum ul li.post div.description {
-    border-bottom: 1px solid #ccc;
-}
 div.vpcForum ul li.post div.lastPost {
     font-size: 11px;
     line-height: 16px;
     padding-left: 20px;
-    border-left: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border: 1px solid #ccc;
+    height: 35px;
 }
 div.vpcForum ul li.post div.statistik {
     float: right; font-size: 11px;
-    width: 100px;
+    width: 100px; height: 100%;
     line-height: 16px;
     border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
 }
 div.vpcForum ul li.post div.threads { border-bottom: 1px solid #ccc; text-align: center; }
 div.vpcForum ul li.post div.posts { text-align: center; }

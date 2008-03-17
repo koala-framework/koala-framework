@@ -99,8 +99,10 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
                 $row = $t->createRow();
             } else {
                 $postRow = $t->find($this->_getParam('edit'))->current();
+                $edit = false;
                 if ($this->getParentComponent()->getChildComponentByRow($postRow)->mayEditPost()) {
                     $row = $postRow;
+                    $edit = true;
                 } else {
                     $row = $t->createRow();
                 }
@@ -109,7 +111,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
             $row->content = $values['content'];
             $row->component_id = $this->getParentComponent()->getDbId();
             $row->visible = 1;
-            if (Zend_Registry::get('userModel')->getAuthedUser()) {
+            if (!$edit && Zend_Registry::get('userModel')->getAuthedUser()) {
                 $row->user_id = Zend_Registry::get('userModel')->getAuthedUser()->id;
             }
             $this->_beforeSave($row);
