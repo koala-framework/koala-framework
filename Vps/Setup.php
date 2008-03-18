@@ -144,7 +144,7 @@ function trlcVps($context, $string, $text = array()){
     return Zend_Registry::get('trl')->trlc($context, $string, $text, 'vps');
 }
 
-function trlpVps($single, $plural, $text =  array(), $prog_lang){
+function trlpVps($single, $plural, $text =  array(), $prog_lang = 'php'){
         //Sonderfall Smarty
     if (is_array($single)){
         $tempsingle = "";
@@ -166,7 +166,7 @@ function trlpVps($single, $plural, $text =  array(), $prog_lang){
     return Zend_Registry::get('trl')->trlp($single, $plural, $text, 'vps', $prog_lang);
 }
 
-function trlcpVps($context, $single, $plural, $text = array(), $prog_lang){
+function trlcpVps($context, $single, $plural, $text = array(), $prog_lang= 'php'){
         if (is_array($context)){
         $tempcontext = "";
         $text = array();
@@ -190,7 +190,11 @@ function trlcpVps($context, $single, $plural, $text = array(), $prog_lang){
     return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, 'vps', $prog_lang);
 }
 
+//notwendig für die Erstellung der javascript methoden
+function getTrlpValues ($context, $single, $plural, $mode){
+    return Zend_Registry::get('trl')->getTrlpValues($context, $single, $plural, $mode);
 
+}
 
 class Vps_Setup
 {
