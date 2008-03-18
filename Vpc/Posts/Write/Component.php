@@ -95,11 +95,11 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
             $tableName = $this->_getSetting('postsTableName');
             $t = new $tableName();
 
+            $edit = false;
             if (!$this->_getParam('edit')) {
                 $row = $t->createRow();
             } else {
                 $postRow = $t->find($this->_getParam('edit'))->current();
-                $edit = false;
                 if ($this->getParentComponent()->getChildComponentByRow($postRow)->mayEditPost()) {
                     $row = $postRow;
                     $edit = true;
