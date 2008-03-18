@@ -29,8 +29,10 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         parent::_initColumns();
 
         $this->_table = Zend_Registry::get('userModel');
+        $this->_table->createAllCache();
 
         $this->_columns->add(new Vps_Auto_Grid_Column_Button('edit', 'Edit'));
+        $this->_columns->add(new Vps_Auto_Grid_Column('id', 'ID', 50));
         $this->_columns->add(new Vps_Auto_Grid_Column('email', 'Email', 140));
         $this->_columns->add(new Vps_Auto_Grid_Column('role', 'Rights'))
              ->setData(new Vps_Controller_Action_User_Users_RoleData());

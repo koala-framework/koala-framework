@@ -188,7 +188,7 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
     public function sendDeletedMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - Accound deleted';
+        $subject .= ' - Account entfernt';
         return $this->_sendMail('mails/UserDeleted.txt.tpl', $subject);
     }
 
@@ -197,6 +197,8 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
         if (!$this->email) {
             return false;
         }
+
+        $tplHtml = str_replace('.txt.tpl', '.html.tpl', $tpl);
 
         $webUrl = 'http://'.$_SERVER['HTTP_HOST'];
         $host = parse_url($webUrl, PHP_URL_HOST);
@@ -216,10 +218,13 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
 
         $mailView = new Vps_View_Smarty();
         $mailView->setRenderFile($tpl);
+        $mailViewHtml = new Vps_View_Smarty();
+        $mailViewHtml->setRenderFile($tplHtml);
 
         if (!is_null($tplParams)) {
             foreach ($tplParams as $key => $param) {
                 $mailView->{$key} = $param;
+                $mailViewHtml->{$key} = $param;
             }
         }
 
@@ -257,7 +262,18 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
 
         $bodyText = $mailView->render($tpl);
 
+        $mailViewHtml->webUrl = $webUrl;
+        $mailViewHtml->host = $host;
+        $mailViewHtml->activationUrl = $activationUrl;
+        $mailViewHtml->activationCode = $activationCode;
+        $mailViewHtml->applicationName = Zend_Registry::get('config')->application->name;
+        $mailViewHtml->fullname = $this->__toString();
+        $mailViewHtml->userData = $this->toArray();
+
+        $bodyTextHtml = $mailViewHtml->render($tpl);
+
         $mail = new Zend_Mail('utf-8');
+        $mail->setBodyHtml($bodyTextHtml);
         $mail->setBodyText($bodyText);
         $mail->setFrom($fromAddress, $fromName);
         $mail->addTo($this->email, $this->__toString());
