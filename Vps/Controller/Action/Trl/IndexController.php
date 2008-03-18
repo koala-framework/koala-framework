@@ -100,17 +100,23 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
                         preg_match_all('#trlcp'.$type.'\(\'(.+?)\', +(.*), +(.*), +(.*)\)|trlcp'.$type.'\(\"(.+?)\", +(.*), +(.*), +(.*)\)#', $file, $m);
                         $this->_pregMatchTrlcp($m, $xml, $type);
                     } elseif ($extension=='tpl' || $extension=='html') {
+                        if ($file == '/www/usr/lorenz/vps/views/mails/UserChangedMail.txt.tpl') {
+                            preg_match_all('#{trl'.$type.' (\n?|.)+}#', file_get_contents($file), $m);
+                            p($m[0]);
+
+                        }
+                        //p($m);
                         $file = implode("", file($file));
-                        preg_match_all('#{trl'.$type.' .*?}#', $file, $m);
+                        preg_match_all('#{trl'.$type.' (\n?|.)+}#', $file, $m);
                         $this->_pregMatchTrlSmarty($m, $xml);
 
-                        preg_match_all('#{trlc'.$type.' .*?}#', $file, $m);
+                        preg_match_all('#{trlc'.$type.' (\n?|.)+}#', $file, $m);
                         $this->_pregMatchTrlcSmarty($m, $xml);
 
-                        preg_match_all('#{trlp'.$type.' .*?}#', $file, $m);
+                        preg_match_all('#{trlp'.$type.' (\n?|.)+}#', $file, $m);
                         $this->_pregMatchTrlpSmarty($m, $xml);
 
-                        preg_match_all('#{trlcp'.$type.' .*?}#', $file, $m);
+                        preg_match_all('#{trlcp'.$type.' (\n?|.)+}#', $file, $m);
                         $this->_pregMatchTrlcpSmarty($m, $xml);
 
 
@@ -126,19 +132,21 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
         foreach($m as $lines){
             if ($lines){
                 foreach ($lines as $line){
-                    preg_match_all('#text=".*"|text=\'.*\'#', $line, $m);
-                    $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
-                    $name = $this->_formatSmartyString(str_replace("text=\"", '', $temp));
-                    $name = $this->_formatSmartyString(str_replace('text=\'', '', $name));
-                    if ($this->_checkNotExists($name, $xml)){
-                         $element = $xml->addChild('text');
-                         $lang = $element->addChild($this->_defaultLanguage, $name);
-                         $lang->addAttribute('default', true);
-                         foreach ($this->_languages as $lang){
-                             $element->addChild($lang, '_');
-                         }
-                    } else {
-                        $this->_checkLanguages($name, $xml, false);
+                    preg_match_all('#text="(\n?|.)*"|text=\'(\n?|.)*\'#', $line, $m);
+                    if ($m[0]){
+                        $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
+                        $name = $this->_formatSmartyString(str_replace("text=\"", '', $temp));
+                        $name = $this->_formatSmartyString(str_replace('text=\'', '', $name));
+                        if ($this->_checkNotExists($name, $xml)){
+                             $element = $xml->addChild('text');
+                             $lang = $element->addChild($this->_defaultLanguage, $name);
+                             $lang->addAttribute('default', true);
+                             foreach ($this->_languages as $lang){
+                                 $element->addChild($lang, '_');
+                             }
+                        } else {
+                            $this->_checkLanguages($name, $xml, false);
+                        }
                     }
                 }
             }
@@ -150,25 +158,27 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
         foreach($m as $lines){
             if ($lines){
                 foreach ($lines as $line){
-                    preg_match_all('# text=\"[^".]*\"| text=\'[^\'.]*\'#', $line, $m);
-                    $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
-                    $text = $this->_formatSmartyString(str_replace(" text=\"", '', $temp));
-                    $text = $this->_formatSmartyString(str_replace(' text=\'', '', $text));
+                    preg_match_all('# text=\"[^"(\n?|.)]*\"| text=\'[^\'(\n?|.)]*\'#', $line, $m);
+                    if ($m[0]){
+                        $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
+                        $text = $this->_formatSmartyString(str_replace(" text=\"", '', $temp));
+                        $text = $this->_formatSmartyString(str_replace(' text=\'', '', $text));
 
-                    preg_match_all('# context=\"[^".]*\"| context=\'[^\'.]*\'#', $line, $m);
-                    $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
-                    $context = $this->_formatSmartyString(str_replace(" context=\"", '', $temp));
-                    $context = $this->_formatSmartyString(str_replace(' context=\'', '', $context));
-                    if ($this->_checkNotExistsContext($text, $xml, $context)){
-                        $element = $xml->addChild('text');
-                        $lang = $element->addChild($this->_defaultLanguage, $text);
-                        $lang->addAttribute('default', true);
-                        foreach ($this->_languages as $lang){
-                             $element->addChild($lang, '_');
+                        preg_match_all('# context=\"[^"(\n?|.)]*\"| context=\'[^\'(\n?|.)]*\'#', $line, $m);
+                        $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
+                        $context = $this->_formatSmartyString(str_replace(" context=\"", '', $temp));
+                        $context = $this->_formatSmartyString(str_replace(' context=\'', '', $context));
+                        if ($this->_checkNotExistsContext($text, $xml, $context)){
+                            $element = $xml->addChild('text');
+                            $lang = $element->addChild($this->_defaultLanguage, $text);
+                            $lang->addAttribute('default', true);
+                            foreach ($this->_languages as $lang){
+                                 $element->addChild($lang, '_');
+                            }
+                            $element->addAttribute('context', $context);
+                        } else {
+                            $this->_checkLanguages($text, $xml, false);
                         }
-                        $element->addAttribute('context', $context);
-                    } else {
-                        $this->_checkLanguages($text, $xml, false);
                     }
                 }
             }
@@ -179,29 +189,31 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
         foreach($m as $lines){
             if ($lines){
                 foreach ($lines as $line){
-                    preg_match_all('# single=\"[^".]*\"| single=\'[^\'.]*\'#', $line, $m);
-                    $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
-                    $single = $this->_formatSmartyString(str_replace(" single=\"", '', $temp));
-                    $single = $this->_formatSmartyString(str_replace(' single=\'', '', $single));
+                    preg_match_all('# single=\"[^"(\n?|.)]*\"| single=\'[^\'(\n?|.)]*\'#', $line, $m);
+                    if ($m[0]){
+                        $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
+                        $single = $this->_formatSmartyString(str_replace(" single=\"", '', $temp));
+                        $single = $this->_formatSmartyString(str_replace(' single=\'', '', $single));
 
-                    preg_match_all('# plural=\"[^".]*\"| plural=\'[^\'.]*\'#', $line, $m);
-                    $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
-                    $plural = $this->_formatSmartyString(str_replace(" plural=\"", '', $temp));
-                    $plural = $this->_formatSmartyString(str_replace(' plural=\'', '', $plural));
+                        preg_match_all('# plural=\"[^"(\n?|.)]*\"| plural=\'[^\'(\n?|.)]*\'#', $line, $m);
+                        $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
+                        $plural = $this->_formatSmartyString(str_replace(" plural=\"", '', $temp));
+                        $plural = $this->_formatSmartyString(str_replace(' plural=\'', '', $plural));
 
-                    if ($this->_checkNotExists($single, $xml)){
-                        $element = $xml->addChild('text');
-                        $lang = $element->addChild($this->_defaultLanguage, $single);
-                        $lang->addAttribute('default', true);
-                        $lang = $element->addChild($this->_defaultLanguage.'_plural', $single);
-                        $lang->addAttribute('default', true);
+                        if ($this->_checkNotExists($single, $xml)){
+                            $element = $xml->addChild('text');
+                            $lang = $element->addChild($this->_defaultLanguage, $single);
+                            $lang->addAttribute('default', true);
+                            $lang = $element->addChild($this->_defaultLanguage.'_plural', $single);
+                            $lang->addAttribute('default', true);
 
-                        foreach ($this->_languages as $lang){
-                             $element->addChild($lang, '_');
-                             $element->addChild($lang.'_plural', '_');
+                            foreach ($this->_languages as $lang){
+                                 $element->addChild($lang, '_');
+                                 $element->addChild($lang.'_plural', '_');
+                            }
+                        } else {
+                            $this->_checkLanguages($single, $xml, true);
                         }
-                    } else {
-                        $this->_checkLanguages($single, $xml, true);
                     }
                 }
             }
@@ -212,35 +224,37 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
         foreach($m as $lines){
             if ($lines){
                 foreach ($lines as $line){
-                    preg_match_all('# single=\"[^".]*\"| single=\"[^".]*\"#', $line, $m);
-                    $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
-                    $single = $this->_formatSmartyString(str_replace(" single=\"", '', $temp));
-                    $single = $this->_formatSmartyString(str_replace(" single=\"", '', $single));
+                    preg_match_all('# single=\"[^"(\n?|.)]*\"| single=\"[^"(\n?|.)]*\"#', $line, $m);
+                    if ($m[0]){
+                        $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
+                        $single = $this->_formatSmartyString(str_replace(" single=\"", '', $temp));
+                        $single = $this->_formatSmartyString(str_replace(" single=\"", '', $single));
 
-                    preg_match_all('# plural=\"[^".]*\"|  plural=\'[^\'.]*\'#', $line, $m);
-                    $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
-                    $plural = $this->_formatSmartyString(str_replace(" plural=\"", '', $temp));
-                    $plural = $this->_formatSmartyString(str_replace(' plural=\'', '', $plural));
+                        preg_match_all('# plural=\"[^"(\n?|.)]*\"|  plural=\'[^\'(\n?|.)]*\'#', $line, $m);
+                        $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
+                        $plural = $this->_formatSmartyString(str_replace(" plural=\"", '', $temp));
+                        $plural = $this->_formatSmartyString(str_replace(' plural=\'', '', $plural));
 
-                    preg_match_all('# context=\"[^".]*\"|  context=\'[^\'.]*\'#', $line, $m);
-                    $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
-                    $context = $this->_formatSmartyString(str_replace(" context=\"", '', $temp));
-                    $context = $this->_formatSmartyString(str_replace(' context=\'', '', $context));
+                        preg_match_all('# context=\"[^".]*\"|  context=\'[^\'.]*\'#', $line, $m);
+                        $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
+                        $context = $this->_formatSmartyString(str_replace(" context=\"", '', $temp));
+                        $context = $this->_formatSmartyString(str_replace(' context=\'', '', $context));
 
-                    if ($this->_checkNotExistsContext($single, $xml, $context)){
-                            $element = $xml->addChild('text');
-                            $lang = $element->addChild($this->_defaultLanguage, $single);
-                            $lang->addAttribute('default', true);
-                            $lang = $element->addChild($this->_defaultLanguage.'_plural', $plural);
-                            $lang->addAttribute('default', true);
+                        if ($this->_checkNotExistsContext($single, $xml, $context)){
+                                $element = $xml->addChild('text');
+                                $lang = $element->addChild($this->_defaultLanguage, $single);
+                                $lang->addAttribute('default', true);
+                                $lang = $element->addChild($this->_defaultLanguage.'_plural', $plural);
+                                $lang->addAttribute('default', true);
 
-                            foreach ($this->_languages as $lang){
-                                 $element->addChild($lang, '_');
-                                 $element->addChild($lang.'_plural', '_');
-                            }
-                            $element->addAttribute('context', $context);
-                    } else {
-                            $this->_checkLanguages($single, $xml, true);
+                                foreach ($this->_languages as $lang){
+                                     $element->addChild($lang, '_');
+                                     $element->addChild($lang.'_plural', '_');
+                                }
+                                $element->addAttribute('context', $context);
+                        } else {
+                                $this->_checkLanguages($single, $xml, true);
+                        }
                     }
 
                 }
@@ -474,7 +488,7 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
              */
 
             if (preg_match('/^<([\w])+[^>\/]*>$/U',$element)) {
-                $string .=  str_repeat(' ', $currIndent) . $element . "\n";
+                $string .=  str_repeat(' ', 0) . $element . "\n";
                 $currIndent += $indent;
             }
 
@@ -483,13 +497,13 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
              */
             elseif ( preg_match('/^<\/.+>$/',$element)) {
                 $currIndent -= $indent;
-                $string .=  str_repeat(' ', $currIndent) . $element . "\n";
+                $string .=  str_repeat(' ', 0) . $element . "\n";
             }
             /**
              * find open/closed tags on the same line print to string
              */
             else {
-                $string .=  str_repeat(' ', $currIndent) . $element . "\n";
+                $string .=  str_repeat(' ', 0) . $element . "\n";
             }
         }
 
