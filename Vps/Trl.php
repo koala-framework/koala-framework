@@ -1,6 +1,9 @@
 <?php
 class Vps_Trl {
 
+    private $_defaultLanguage;
+    private $_targetLanguage;
+
     function trl($string, $text, $type){
        $params = $this->_checkArray($text);
        $xml = $this->_setupTrl($type);
@@ -88,32 +91,60 @@ class Vps_Trl {
 
     private function _setupTrl ($type){
            if ($type == 'project'){
-               $directory = '.';
-               $inipath = 'application/trl.xml';
+                $directory = '.';
+                $inipath = 'application/trl.xml';
+
+                   //festsetzen der sprachen
+                $config = new Zend_Config_Ini('application/config.ini');
+                $cnt = 0;
+                foreach($config->production->languages as $key => $value){
+                    if ($cnt == 0){
+                        $this->_defaultLanguage = $key;
+
+                    } elseif ($cnt == 1){
+                        $this->_targetLanguage = $key;
+                    }
+                    $cnt++;
+                }
+
            } else {
                $directory = VPS_PATH;
                $inipath = $directory.'/trl.xml';
+               $this->_defaultLanguage = 'en';
+               $this->_targetLanguage = 'de';
            }
            $contents = file_get_contents($inipath);
            return new SimpleXMLElement($contents);
     }
 
     protected function _findElement($needle, $xml, $context = null){
+        $temp_default_lang = $this->_defaultLanguage;
+        $temp_target_lang = $this->_targetLanguage;
         foreach ($xml->text as $element) {
-                if ($element->en == $needle && $element->de != '_' && ($element['context'] == $context)){
-                    return (string) $element->de;
+                if ($element->$temp_default_lang == $needle && $element->$temp_target_lang != '_' && ($element['context'] == $context)){
+                    return (string) $element->$temp_target_lang;
                 }
         }
         return $needle;
     }
 
     protected function _findElementPlural($needle, $xml, $context = null){
+        $temp_default_lang = $this->_defaultLanguage;
+        $temp_target_lang = $this->_targetLanguage;
         foreach ($xml->text as $element) {
-                if ($element->en_plural == $needle && $element->de_plural != '_' && ($element['context'] == $context)){
-                    return (string) $element->de_plural;
+                if ($element->$temp_default_lang.'_plural' == $needle && $element->$temp_target_lang.'_plural' != '_' && ($element['context'] == $context)){
+                    return (string) $element->$temp_target_lang.'_plural';
                 }
         }
         return $needle;
+    }
+
+    function getTrlpValues($context, $single, $plural, $type){
+       $xml =  $this->_setupTrl($type);
+       $values = array();
+       $values['plural'] = $this->_findElementPlural($plural, $xml, $context);
+       $values['single'] = $this->_findElement($single, $xml, $context);
+       return $values;
     }
 
 

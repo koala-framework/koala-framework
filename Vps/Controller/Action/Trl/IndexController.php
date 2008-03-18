@@ -2,8 +2,23 @@
 
 class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
 {
+    private $_defaultLanguage;
+    private $_languages = array();
     public function indexAction()
     {
+
+        //festsetzen der sprachen
+        $config = new Zend_Config_Ini('application/config.ini');
+        $cnt = 0;
+        foreach($config->production->languages as $key => $value){
+            if ($cnt == 0){
+                $this->_defaultLanguage = $key;
+                $cnt++;
+            } else {
+                $this->_languages[] = $key;
+            }
+        }
+
         //das Project
        $directory = ".";
        $inipath = 'application/trl.xml';
@@ -22,6 +37,13 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
        file_put_contents($inipath, $this->_asPrettyXML($this->parseDocuments($directory, array('php', 'js', 'tpl'), $xml, '')->asXML()));
 
       //das Vps
+       $this->_defaultLanguage = 'en';
+       $this->_languages = array();
+       foreach($config->production->languages as $key => $value){
+           if ($key != 'en'){
+               $this->_languages[] = $key;
+           }
+       }
        $directory = VPS_PATH;
        $inipath = $directory.'/trl.xml';
 
@@ -104,35 +126,49 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
         foreach($m as $lines){
             if ($lines){
                 foreach ($lines as $line){
-                    preg_match_all('#text=".*"#', $line, $m);
+                    preg_match_all('#text=".*"|text=\'.*\'#', $line, $m);
                     $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
                     $name = $this->_formatSmartyString(str_replace("text=\"", '', $temp));
+                    $name = $this->_formatSmartyString(str_replace('text=\'', '', $name));
                     if ($this->_checkNotExists($name, $xml)){
-                        $element = $xml->addChild('text');
-                         $element->addChild('en', $name);
-                         $element->addChild('de', '_');
+                         $element = $xml->addChild('text');
+                         $lang = $element->addChild($this->_defaultLanguage, $name);
+                         $lang->addAttribute('default', true);
+                         foreach ($this->_languages as $lang){
+                             $element->addChild($lang, '_');
+                         }
+                    } else {
+                        $this->_checkLanguages($name, $xml, false);
                     }
                 }
             }
         }
+
     }
 
     protected function _pregMatchTrlcSmarty ($m, $xml){
         foreach($m as $lines){
             if ($lines){
                 foreach ($lines as $line){
-                    preg_match_all('# text=\"[^".]*\"#', $line, $m);
+                    preg_match_all('# text=\"[^".]*\"| text=\'[^\'.]*\'#', $line, $m);
                     $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
                     $text = $this->_formatSmartyString(str_replace(" text=\"", '', $temp));
+                    $text = $this->_formatSmartyString(str_replace(' text=\'', '', $text));
 
-                    preg_match_all('# context=\"[^".]*\"#', $line, $m);
+                    preg_match_all('# context=\"[^".]*\"| context=\'[^\'.]*\'#', $line, $m);
                     $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
                     $context = $this->_formatSmartyString(str_replace(" context=\"", '', $temp));
+                    $context = $this->_formatSmartyString(str_replace(' context=\'', '', $context));
                     if ($this->_checkNotExistsContext($text, $xml, $context)){
                         $element = $xml->addChild('text');
-                        $element->addChild('en', $text);
-                        $element->addChild('de', '_');
+                        $lang = $element->addChild($this->_defaultLanguage, $text);
+                        $lang->addAttribute('default', true);
+                        foreach ($this->_languages as $lang){
+                             $element->addChild($lang, '_');
+                        }
                         $element->addAttribute('context', $context);
+                    } else {
+                        $this->_checkLanguages($text, $xml, false);
                     }
                 }
             }
@@ -143,22 +179,30 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
         foreach($m as $lines){
             if ($lines){
                 foreach ($lines as $line){
-                    preg_match_all('# single=\"[^".]*\"#', $line, $m);
+                    preg_match_all('# single=\"[^".]*\"| single=\'[^\'.]*\'#', $line, $m);
                     $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
                     $single = $this->_formatSmartyString(str_replace(" single=\"", '', $temp));
+                    $single = $this->_formatSmartyString(str_replace(' single=\'', '', $single));
 
-                    preg_match_all('# plural=\"[^".]*\"#', $line, $m);
+                    preg_match_all('# plural=\"[^".]*\"| plural=\'[^\'.]*\'#', $line, $m);
                     $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
                     $plural = $this->_formatSmartyString(str_replace(" plural=\"", '', $temp));
+                    $plural = $this->_formatSmartyString(str_replace(' plural=\'', '', $plural));
 
                     if ($this->_checkNotExists($single, $xml)){
                         $element = $xml->addChild('text');
-                        $element->addChild('en', $single);
-                        $element->addChild('de', '_');
-                        $element->addChild('en_plural', $plural);
-                        $element->addChild('de_plural', '_');
-                    }
+                        $lang = $element->addChild($this->_defaultLanguage, $single);
+                        $lang->addAttribute('default', true);
+                        $lang = $element->addChild($this->_defaultLanguage.'_plural', $single);
+                        $lang->addAttribute('default', true);
 
+                        foreach ($this->_languages as $lang){
+                             $element->addChild($lang, '_');
+                             $element->addChild($lang.'_plural', '_');
+                        }
+                    } else {
+                        $this->_checkLanguages($single, $xml, true);
+                    }
                 }
             }
         }
@@ -168,25 +212,35 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
         foreach($m as $lines){
             if ($lines){
                 foreach ($lines as $line){
-                    preg_match_all('# single=\"[^".]*\"#', $line, $m);
+                    preg_match_all('# single=\"[^".]*\"| single=\"[^".]*\"#', $line, $m);
                     $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
                     $single = $this->_formatSmartyString(str_replace(" single=\"", '', $temp));
+                    $single = $this->_formatSmartyString(str_replace(" single=\"", '', $single));
 
-                    preg_match_all('# plural=\"[^".]*\"#', $line, $m);
+                    preg_match_all('# plural=\"[^".]*\"|  plural=\'[^\'.]*\'#', $line, $m);
                     $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
                     $plural = $this->_formatSmartyString(str_replace(" plural=\"", '', $temp));
+                    $plural = $this->_formatSmartyString(str_replace(' plural=\'', '', $plural));
 
-                    preg_match_all('# context=\"[^".]*\"#', $line, $m);
+                    preg_match_all('# context=\"[^".]*\"|  context=\'[^\'.]*\'#', $line, $m);
                     $temp = substr($m[0][0], 0, strlen($m[0][0])-1);
                     $context = $this->_formatSmartyString(str_replace(" context=\"", '', $temp));
+                    $context = $this->_formatSmartyString(str_replace(' context=\'', '', $context));
 
-                if ($this->_checkNotExistsContext($single, $xml, $context)){
-                        $element = $xml->addChild('text');
-                        $element->addChild('en', $single);
-                        $element->addChild('de', '_');
-                        $element->addChild('en_plural', $plural);
-                        $element->addChild('de_plural', '_');
-                        $element->addAttribute('context', $context);
+                    if ($this->_checkNotExistsContext($single, $xml, $context)){
+                            $element = $xml->addChild('text');
+                            $lang = $element->addChild($this->_defaultLanguage, $single);
+                            $lang->addAttribute('default', true);
+                            $lang = $element->addChild($this->_defaultLanguage.'_plural', $plural);
+                            $lang->addAttribute('default', true);
+
+                            foreach ($this->_languages as $lang){
+                                 $element->addChild($lang, '_');
+                                 $element->addChild($lang.'_plural', '_');
+                            }
+                            $element->addAttribute('context', $context);
+                    } else {
+                            $this->_checkLanguages($single, $xml, true);
                     }
 
                 }
@@ -202,109 +256,134 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
         foreach($m[0] as $key => $trl){
             if ($m[1][$key] == ""){
                 if (!($m[2][$key] == "")){
-                    $name= $this->_getText( $m[2][$key]);
-                    if ($this->_checkNotExists($name, $xml)){
-                        $element = $xml->addChild('text');
-                         $element->addChild('en', $name);
-                         $element->addChild('de', '_');
-                    }
+                    $this->_insertToXmlTrl($m, $key, $xml, 2);
+                } else {
+                    $this->_insertToXmlTrl($m, $key, $xml, 3);
                 }
             } else {
-                $name= $this->_getText( $m[1][$key]);
-                if ($this->_checkNotExists($name, $xml)){
-                    $element = $xml->addChild('text');
-                    $element->addChild('en', $name);
-                    $element->addChild('de', '_');
-                }
+                $this->_insertToXmlTrl($m, $key, $xml, 1);
             }
         }
+    }
+
+    private function _insertToXmlTrl ($m, $key, $xml, $val){
+            $name= $this->_getText( $m[$val][$key]);
+            if ($this->_checkNotExists($name, $xml)){
+                $element = $xml->addChild('text');
+                $lang = $element->addChild($this->_defaultLanguage, $name);
+                $lang->addAttribute('default', true);
+                foreach ($this->_languages as $lang){
+                    $element->addChild($lang, '_');
+                }
+            } else {
+                $this->_checkLanguages($name, $xml, false);
+            }
     }
 
     protected function _pregMatchTrlc ($m, $xml){
         foreach($m[0] as $key => $trl){
             if ($m[1][$key] == ""){
                 if (!($m[2][$key] == "")){
-                    $context = $this->_getText( $m[1][$key]);
-                    $name = $this->_getText( $m[2][$key]);
-                    if ($this->_checkNotExistsContext($name, $xml, $context)){
-                        $element = $xml->addChild('text');
-                        $element->addChild('en', $name);
-                        $element->addChild('de', '_');
-                        $element->addAttribute('context', $context);
-                    }
+                    $this->_insertToXmlTrlc ($m, $key, $xml, 1);
+                } else {
+                    $this->_insertToXmlTrlc ($m, $key, $xml, 4);
                 }
             } else {
-                    $context = $this->_getText($m[1][$key]);
-                    $name = $this->_getText($m[2][$key]);
-                    if ($this->_checkNotExistsContext($name, $xml, $context)){
-                        $element = $xml->addChild('text');
-                        $element->addChild('en', $name);
-                        $element->addChild('de', '_');
-                        $element->addAttribute('context', $context);
-                    }
+                $this->_insertToXmlTrlc ($m, $key, $xml, 1);
             }
         }
+    }
+
+    private function _insertToXmlTrlc ($m, $key, $xml, $val){
+            $context = $this->_getText( $m[$val][$key]);
+            $text = $this->_getText( $m[++$val][$key]);
+            if ($this->_checkNotExistsContext($text, $xml, $context)){
+                $element = $xml->addChild('text');
+                $lang = $element->addChild($this->_defaultLanguage, $text);
+                $lang->addAttribute('default', true);
+                foreach ($this->_languages as $lang){
+                     $element->addChild($lang, '_');
+                }
+                $element->addAttribute('context', $context);
+            } else {
+                $this->_checkLanguages($text, $xml, false);
+            }
     }
 
     protected function _pregMatchTrlp ($m, $xml){
         foreach($m[0] as $key => $trl){
             if ($m[1][$key] == ""){
                 if (!($m[2][$key] == "")){
-                    $name = $this->_getText($m[1][$key]);
-                    $plural = $this->_getText($m[2][$key]);
-                    if ($this->_checkNotExists($name, $xml)){
-                        $element = $xml->addChild('text');
-                        $element->addChild('en', $name);
-                        $element->addChild('de', '_');
-                        $element->addChild('en_plural', $plural);
-                        $element->addChild('de_plural', '_');
-                    }
+                    $this->_insertToXmlTrlp ($m, $key, $xml, 1);
+                } else {
+                    $this->_insertToXmlTrlp ($m, $key, $xml, 4);
                 }
             } else {
-                    $name = $this->_getText($m[1][$key]);
-                    $plural = $this->_getText($m[2][$key]);
-                    if ($this->_checkNotExists($name, $xml)){
-                        $element = $xml->addChild('text');
-                        $element->addChild('en', $name);
-                        $element->addChild('de', '_');
-                        $element->addChild('en_plural', $plural);
-                        $element->addChild('de_plural', '_');
-                    }
+                    $this->_insertToXmlTrlp ($m, $key, $xml, 1);
             }
+        }
+    }
+
+    private function _insertToXmlTrlp ($m, $key, $xml, $val){
+        $single = $this->_getText($m[$val][$key]);
+        $plural = $this->_getText($m[++$val][$key]);
+        if ($this->_checkNotExists($single, $xml)){
+            $element = $xml->addChild('text');
+            $lang = $element->addChild($this->_defaultLanguage, $single);
+            $lang->addAttribute('default', true);
+            $lang = $element->addChild($this->_defaultLanguage.'_plural', $single);
+            $lang->addAttribute('default', true);
+
+            foreach ($this->_languages as $lang){
+                 $element->addChild($lang, '_');
+                 $element->addChild($lang.'_plural', '_');
+            }
+        } else {
+            $this->_checkLanguages($single, $xml, true);
         }
     }
 
     protected function _pregMatchTrlcp ($m, $xml, $type){
         foreach($m[0] as $key => $trl){
             if ($m[1][$key] == ""){
-                if (!($m[2][$key] == "")){
-
                     $strings = $this->_splitStringTrlcp($m[0][$key], "\"", $type);
                     $context = $strings[0];
-                    $name = $strings[1];
+                    $single = $strings[1];
                     $plural = $strings[2];
-                    if ($this->_checkNotExistsContext($name, $xml, $context)){
+                    if ($this->_checkNotExistsContext($single, $xml, $context)){
+                            $element = $xml->addChild('text');
+                            $lang = $element->addChild($this->_defaultLanguage, $single);
+                            $lang->addAttribute('default', true);
+                            $lang = $element->addChild($this->_defaultLanguage.'_plural', $plural);
+                            $lang->addAttribute('default', true);
 
-                        $element = $xml->addChild('text');
-                        $element->addChild('en', $name);
-                        $element->addChild('de', '_');
-                        $element->addChild('en_plural', $plural);
-                        $element->addChild('de_plural', '_');
-                        $element->addAttribute('context', $context);
+                            foreach ($this->_languages as $lang){
+                                 $element->addChild($lang, '_');
+                                 $element->addChild($lang.'_plural', '_');
+                            }
+                            $element->addAttribute('context', $context);
+                    } else {
+                            $this->_checkLanguages($single, $xml, true);
                     }
-                }
             } else {
                     $strings = $this->_splitStringTrlcp($m[0][$key], '\'', $type);
                     $context = $strings[0];
-                    $name = $strings[1];
+                    $single = $strings[1];
                     $plural = $strings[2];
-                    if ($this->_checkNotExistsContext($name, $xml, $context)){
-                        $element = $xml->addChild('text');
-                        $element->addChild('en', $name);
-                        $element->addChild('de', '_');
-                        $element->addChild('en_plural', $plural);
-                        $element->addChild('de_plural', '_');
-                        $element->addAttribute('context', $context);
+                    if ($this->_checkNotExistsContext($single, $xml, $context)){
+                            $element = $xml->addChild('text');
+                            $lang = $element->addChild($this->_defaultLanguage, $single);
+                            $lang->addAttribute('default', true);
+                            $lang = $element->addChild($this->_defaultLanguage.'_plural', $plural);
+                            $lang->addAttribute('default', true);
+
+                            foreach ($this->_languages as $lang){
+                                 $element->addChild($lang, '_');
+                                 $element->addChild($lang.'_plural', '_');
+                            }
+                            $element->addAttribute('context', $context);
+                    } else {
+                            $this->_checkLanguages($single, $xml, true);
                     }
             }
         }
@@ -313,10 +392,10 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
     protected function _splitStringTrlcp($string, $explode, $mode){
        $start = 0;
        $strings = explode($explode.',', $string);
-       $strings[0] = str_replace('trlcp'.$mode.'(\'', '', $this->_getText($strings[0]));
-       $strings[++$start] = substr($this->_getText($strings[$start]), 1, strlen($strings[$start]));
-       $strings[++$start] = substr($this->_getText($strings[$start]), 1, strlen($strings[$start]));
-       $strings[++$start] = substr(str_replace('))', '', self::_getText($strings[$start])), 1, strlen($strings[$start]));
+       $strings[0] = str_replace('trlcp'.$mode.'('.$explode, '', $this->_getText($strings[0]));
+       $strings[++$start] = str_replace($explode, '', substr($this->_getText($strings[$start]), 1, strlen($strings[$start])));
+       $strings[++$start] = str_replace($explode, '', substr($this->_getText($strings[$start]), 1, strlen($strings[$start])));
+       $strings[++$start] = str_replace($explode, '', substr(str_replace('))', '', self::_getText($strings[$start])), 1, strlen($strings[$start])));
        return $strings;
    }
 
@@ -329,20 +408,37 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
             }
    }
 
-
     protected function _checkNotExists($needle, $xml){
         foreach ($xml->text as $element) {
-
-                if ($element->en == $needle){
+                $default = $this->_defaultLanguage;
+                if ($element->$default == $needle){
                     return false;
                 }
         }
         return true;
     }
 
-    protected function _checkNotExistsContext($needle, $xml, $context){
+    protected function _checkLanguages($needle, $xml, $plural){
         foreach ($xml->text as $element) {
-                if ($element->en == $needle && $element['context'] == $context){
+                $default = $this->_defaultLanguage;
+                if ($element->$default == $needle){
+                    foreach ($this->_languages as $lang){
+                        if (!$element->$lang){
+                            $element->addChild($lang, '_');
+                            if ($plural){
+                                $element->addChild($lang.'_plural', '_');
+                            }
+                        }
+                    }
+                }
+        }
+        return true;
+    }
+
+    protected function _checkNotExistsContext($needle, $xml, $context){
+        $temp_lang = $this->_defaultLanguage;
+        foreach ($xml->text as $element) {
+                if ($element->$temp_lang == $needle && $element['context'] == $context){
                     return false;
                 }
         }
