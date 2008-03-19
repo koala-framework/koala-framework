@@ -1,5 +1,4 @@
 <div class="forumLatestThreads">
-    <h2>Aktuelle Themen im Forum:</h2>
     <ul>
         {foreach from=$component.forumLatestThreads item=t name=tf}
             <li{if $smarty.foreach.tf.index == 0} class="first"{/if}>
