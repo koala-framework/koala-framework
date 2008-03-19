@@ -720,11 +720,12 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         require_once 'Spreadsheet/Excel/Writer.php';
 
         $xls = new Spreadsheet_Excel_Writer();
-        $xls->setVersion(8);
+//         $xls->setVersion(8);
         $xls->send('xls_export_'.date('Y-m-d_Hi').'.xls');
 
         $sheet = $xls->addWorksheet('export_'. date('Y-m-d_H-i'));
-        $sheet->setInputEncoding('UTF-8');
+        // UTF-8 würde mit setVersion(8) funzen, allerdings dann max. 255 zeichen / zeile
+//         $sheet->setInputEncoding('UTF-8');
 
         $colOptions = array();
         $i = 0;
@@ -761,9 +762,9 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             foreach ($data as $row => $cols) {
                 foreach ($cols as $col => $text) {
                     if ($row == 0) {
-                        $sheet->write($row, $col, $text, $headFormat);
+                        $sheet->write($row, $col, utf8_decode($text), $headFormat);
                     } else {
-                        $sheet->write($row, $col, $text);
+                        $sheet->write($row, $col, utf8_decode($text));
                     }
                 }
             }
