@@ -3,6 +3,15 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 {
     protected $_permissions = array('save'=>true, 'add'=>true);
 
+    public function jsonSaveAction()
+    {
+        try {
+            parent::jsonSaveAction();
+        } catch(Vps_ClientException $e) {
+            $this->view->error = $e->getMessage();
+        }
+    }
+
     protected function _initFields()
     {
         $genders = array('male' => 'male', 'female' => 'female');
