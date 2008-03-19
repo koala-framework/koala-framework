@@ -226,18 +226,18 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             success: function() {
                 this.onSubmitSuccess.apply(this, arguments);
                 if (cb.success) {
-                    cb.success.apply(cb.scope, arguments)
+                    cb.success.apply(cb.scope, arguments);
                 }
             },
             failure: function() {
                 this.onSubmitFailure.apply(this, arguments);
                 if (cb.failure) {
-                    cb.failure.apply(cb.scope, arguments)
+                    cb.failure.apply(cb.scope, arguments);
                 }
             },
             callback: function() {
                 if (cb.callback) {
-                    cb.callback.apply(cb.scope, arguments)
+                    cb.callback.apply(cb.scope, arguments);
                 }
             },
             scope: this
