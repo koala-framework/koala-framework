@@ -23,6 +23,7 @@ class Vps_Controller_Action_User_ChangeuserController extends Vps_Controller_Act
     protected function _initColumns()
     {
         parent::_initColumns();
+        Zend_Registry::get('userModel')->createAllCache();
         $this->_table = Zend_Registry::get('userModel');
         $this->_columns->add(new Vps_Auto_Grid_Column('name'));
         $this->_columns->add(new Vps_Auto_Grid_Column('role'))
