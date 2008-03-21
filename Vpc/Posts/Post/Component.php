@@ -17,7 +17,7 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
         $row = $this->getTable()->find($this->getCurrentComponentKey())->current();
-        $ret['content'] = $row->content;
+        $ret['content'] = $this->_replaceCodes($row->content);
         $ret['create_time'] = $row->create_time;
         $ret['postNum'] = $this->_postNum;
         $ret['editUrl'] = '';
@@ -44,5 +44,27 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         }
 
         return false;
+    }
+
+    private function _replaceCodes($content)
+    {
+        $content = str_replace('[quote]', '<fieldset class="quote"><legend>Zitat</legend>', $content, $countOpened);
+
+        $content = str_replace('[/quote]', '</fieldset>', $content, $closed);
+
+        $content = preg_replace('/\[quote=(.+)\]/i',
+            '<fieldset class="quote"><legend>Zitat von $1</legend>',
+            $content,
+            -1, $countOpenedPreg
+        );
+
+        $open = $countOpened + $countOpenedPreg;
+
+        while ($open > $closed) {
+            $content .= '</fieldset>';
+            $closed++;
+        }
+
+        return $content;
     }
 }

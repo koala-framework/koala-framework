@@ -10,7 +10,7 @@
     </div>
     <div class="clear"></div>
     <div class="comment">
-        {$component.content|htmlspecialchars|nl2br}
+        {$component.content|nl2br}
     </div>
     {if $component.signature}
         <p class="signature"><tt>--<br />{$component.signature|htmlspecialchars|nl2br}</tt></p>
