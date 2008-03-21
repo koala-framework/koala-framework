@@ -5,11 +5,15 @@ class Vpc_Basic_LinkTag_Intern_Form extends Vps_Auto_Vpc_Form
     {
         parent::__construct($class, $id);
 
-        $this->add(new Vps_Auto_Field_TextField('rel', 'Rel'))
-            ->setWidth(500);
+        if (Vpc_Abstract::getSetting($class, 'showRel')) {
+            $this->add(new Vps_Auto_Field_TextField('rel', 'Rel'))
+                ->setWidth(500);
+        }
 
-        $this->add(new Vps_Auto_Field_TextField('param', 'Parameters'))
-            ->setWidth(500);
+        if (Vpc_Abstract::getSetting($class, 'showParameters')) {
+            $this->add(new Vps_Auto_Field_TextField('param', 'Parameters'))
+                ->setWidth(500);
+        }
 
         $this->add(new Vpc_Basic_LinkTag_Intern_Field('target', 'Target'))
             ->setWidth(500)

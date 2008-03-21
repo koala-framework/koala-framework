@@ -141,6 +141,9 @@ class Vps_Dao_Pages extends Vps_Db_Table
             $this->deletePage($cd['id']);
         }
 
+        // Dranhängende Komponente löschen
+        Vpc_Admin::getInstance($data['component_class'])->delete($data['id']);
+
         // Eintrag in Pages-Tabelle löschen
         $where = $this->getAdapter()->quoteInto('id = ?', $id);
         $rows = parent::delete($where);

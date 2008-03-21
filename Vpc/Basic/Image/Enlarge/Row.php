@@ -16,8 +16,12 @@ class Vpc_Basic_Image_Enlarge_Row extends Vpc_Basic_Image_Row
     {
         if ($type == 'small') {
             $componentClass = $this->getTable()->getComponentClass();
-            $settings = Vpc_Abstract::getSetting($componentClass, 'smallImageSettings');
-            Vps_Media_Image::scale($source, $target, $settings['dimension'], $settings['scale']);
+            $childComponentClasses = Vpc_Abstract::getSetting($componentClass, 'childComponentClasses');
+            $childComponentClass = $childComponentClasses['smallImage'];
+            $dimension = Vpc_Abstract::getSetting($childComponentClass, 'dimension');
+            $scale = Vpc_Abstract::getSetting($childComponentClass, 'scale');
+            if (is_array($scale)) { $scale = $scale[0]; }
+            Vps_Media_Image::scale($source, $target, $dimension, $scale);
         } else {
             parent::_createCacheFile($source, $target, $type);
         }

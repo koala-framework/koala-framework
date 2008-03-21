@@ -49,8 +49,13 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             // Hack für weiterleiten auf Edit-Seite
             $name = Vpc_Abstract::getSetting($this->_table->getComponentClass(), 'componentName');
             $name = str_replace('.', ' -> ', $name);
-            $this->view->data = $this->_table->find($id)->current()->toArray();
+            $data = $this->_table->find($id)->current()->toArray();
+            $this->view->data = $data;
             $this->view->data['component_name'] = $name;
+
+            $this->view->hasController = !is_null(
+                Vpc_Admin::getComponentFile($data['component_class'], 'Controller')
+            );
         } else {
             throw new Vps_Exception("Component '$class' not found");
         }

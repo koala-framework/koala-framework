@@ -17,10 +17,22 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row
         if (isset($dimension[0]) && !is_array($dimension[0])) {
             $ret['width'] = $dimension[0];
             $ret['height'] = $dimension[1];
-        } else {
+        } else { // aus DB
             $ret['width'] = $this->width;
             $ret['height'] = $this->height;
         }
+        if (is_null($ret['width']) && is_null($ret['height'])) {
+            $parentRow = $this->findParentRow('Vps_Dao_File');
+            if ($parentRow) {
+                $originalFile = $parentRow->getFileSource();
+                if (is_file($originalFile)) {
+                    $data = getimagesize($originalFile);
+                    $ret['width'] = $data[0];
+                    $ret['height'] = $data[1];
+                }
+            }
+        }
+
         return $ret;
     }
 

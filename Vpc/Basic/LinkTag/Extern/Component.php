@@ -9,6 +9,8 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
     {
         $ret = array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_LinkTag_Extern_Model',
+            'showRel'       => false,
+            'showParameters' => false,
             'componentName' => 'Link.Extern',
             'default'       => array(
                 'target'        => 'http://',

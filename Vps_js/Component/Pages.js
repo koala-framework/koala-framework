@@ -33,15 +33,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             height: 400,
             controllerUrl: '/admin/component/pageEdit'
         });
-        this.editDialog.on('datachange', function() {
-            var tree = this.treePanel.tree;
-            if (this.editDialog.getAutoForm().getBaseParams().parent_id != undefined) {
-                tree.selModel.selNode.parentNode.reload();
-            } else {
-                values = this.editDialog.getForm().getValues();
-                id = tree.selModel.selNode.id;
-                node = tree.getNodeById(id).setText(values.name);
-            }
+        this.editDialog.on('datachange', function(test) {
+            this.treePanel.tree.root.reload();
         }, this);
     },
 
@@ -63,18 +56,11 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         });
 
         this.treePanel.getTopToolbar().add(
-            this.getAction('edit'),
-            '-',
             this.pageButton,
             '-',
-            new Ext.Toolbar.Button({
-                cls: 'x-btn-text-icon bmenu',
-                text:'Navigation',
-                icon : '/assets/silkicons/weather_sun.png',
-                menu: [
-                    this.getAction('reloadAll')
-                ]
-            })
+            this.getAction('edit'),
+            '->',
+            this.getAction('reloadAll')
         );
 
         this.contextMenu = new Ext.menu.Menu({
@@ -88,7 +74,6 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 this.getAction('makeHome'),
                 this.getAction('preview'),
                 '-',
-                this.getAction('reloadAll'),
                 this.getAction('expand'),
                 this.getAction('collapse')
             ]
@@ -233,10 +218,10 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'reloadAll') {
             this.actions[type] = new Ext.Action({
-                text    : 'Reload all',
                 handler : function () { this.treePanel.tree.getRootNode().reload(); },
-                icon    : '/assets/silkicons/bullet_star.png',
-                cls     : 'x-btn-text-icon',
+                icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
+                cls     : 'x-btn-icon',
+                tooltip : 'Reload',
                 scope   : this
             });
         } else if (type == 'expand') {

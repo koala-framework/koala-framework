@@ -7,7 +7,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
             'componentName'     => 'Image',
             'componentIcon'     => new Vps_Asset('picture'),
             'tablename'         => 'Vpc_Basic_Image_Model',
-            'dimension'         => array(300, 200), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), ...)
+            'dimension'         => array(300, 200), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), null: Bild in Originalgröße)
             'scale'             => array(Vps_Media_Image::SCALE_BESTFIT),
             'ouputDimensions'   => array('mini'  => array(20, 20, Vps_Media_Image::SCALE_BESTFIT),
                                          'thumb' => array(100, 100, Vps_Media_Image::SCALE_BESTFIT)),
