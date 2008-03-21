@@ -386,7 +386,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         return $this->getPageCollection()->getName($this);
     }
-    
+
     /**
      * Shortcut, fragt vom Seitenbaum, ob die unsichtbaren Einträge
      * auch angezeige werden

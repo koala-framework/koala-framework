@@ -3,11 +3,13 @@ class Vps_Auto_Data_Vpc_Image extends Vps_Auto_Data_Abstract
 {
     protected $_class;
     protected $_componentId;
+    protected $_size;
 
-    public function __construct($class, $componentId)
+    public function __construct($class, $componentId, $size)
     {
         $this->_class = $class;
         $this->_componentId = $componentId;
+        $this->_size = $size;
     }
 
     public function load($row)
@@ -17,7 +19,7 @@ class Vps_Auto_Data_Vpc_Image extends Vps_Auto_Data_Abstract
         $componentId = $this->_componentId . '-' . $row->id;
         $row = $table->find($componentId)->current();
         if ($row) {
-            return '<img src="' . $row->getFileUrl(null, 'mini') . '" />';
+            return $row->getFileUrl(null, $this->_size);
         } else {
             return '';
         }

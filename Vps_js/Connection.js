@@ -1,7 +1,7 @@
 Vps.Connection = Ext.extend(Ext.data.Connection, {
     request: function(options)
     {
-    
+
         if (options.url.match(/[\/a-zA-Z0-9]*\/json[a-zA-Z0-9]+(\/|\?|)/)) {
 
             if (options.mask) {
@@ -143,7 +143,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
         return;
     },
-    
+
     vpsCallback: function(options, success, response)
     {
         //wenn login-fenster angezeigt wird keinen callback aufrufen - weil der request

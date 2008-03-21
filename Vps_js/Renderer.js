@@ -1,4 +1,4 @@
-Ext.util.Format.boolean = function(v, p, record) {
+Ext.util.Format['boolean'] = function(v, p, record) {
     p.css += ' x-grid3-check-col-td';
     return '<div class="x-grid3-check-col'+(v?'-on':'')+'">&#160;</div>';
 };
@@ -70,11 +70,19 @@ Ext.util.Format.germanDay = function(value, p) {
 }
 Ext.util.Format.time = Ext.util.Format.dateRenderer('H:i');
 
-Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, store, column) {
+Ext.util.Format.mouseoverPic = function(v, p, record){
+    if (!v) return '';
     p.css += 'vps-cell-button';
-    if (column && column.buttonIcon) {
-        p.attr += 'style="background-image:url('+column.buttonIcon+');" ';
-    }
+    p.attr += 'style="background-image:url('+escape(v)+');"';
+    p.attr += ' ext:qtip="&lt;img src=\''+record.data.pic_large+'\' /&gt;"';
+    return '';
+};
+
+Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, store, column) {
+    //p.css += 'vps-cell-button';
+    //if (column && column.buttonIcon) {
+    //    p.attr += 'style="background-image:url('+column.buttonIcon+');" ';
+    //}
     if (column && column.tooltip) {
         p.attr += ' ext:qtip="'+column.tooltip+'"';
     }

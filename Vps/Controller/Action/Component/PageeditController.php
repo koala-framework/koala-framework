@@ -22,10 +22,10 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
             ->setAllowBlank(false);
         $fields->add(new Vps_Auto_Field_Select('component_class', 'Pagetype'))
             ->setValues($types)
-            ->setValue('Vpc_Paragraphs_Component')
+            ->setValue(0)
             ->setAllowBlank(false);
         $fields->add(new Vps_Auto_Field_Checkbox('hide', 'Hide in Menu'));
-        
+
         $cfg = new Zend_Config_Ini('application/config.ini', 'pagecollection');
         foreach ($cfg->pagecollection->addDecorators as $decorator) {
             $formClass = Vpc_Admin::getComponentFile($decorator, 'Form', 'php', true);
