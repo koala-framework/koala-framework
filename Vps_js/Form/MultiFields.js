@@ -282,7 +282,7 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
         for (var i = 0; i < gp.groups.length; i++) {
             var g = gp.groups[i];
             var row = {};
-            this._findFormFields(g.item, function(item) { 
+            this._findFormFields(g.item, function(item) {
                 row[item.name] = item.getValue();
             });
             ret.push(row);

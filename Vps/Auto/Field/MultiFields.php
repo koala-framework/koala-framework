@@ -85,7 +85,7 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
                 }
                 unset($postData[$k]);
             } else {
-                $this->_deleteRows[] = $r;
+                $this->_deletedRows[] = $r;
             }
         }
         foreach ($postData as $k=>$rowPostData) {
@@ -106,6 +106,10 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
 
     public function save(Zend_Db_Table_Row_Abstract $row, $postData)
     {
+        foreach ($this->_deletedRows as $r) {
+            $r->delete();
+        }
+
         foreach ($this->_insertedRows as $i) {
             $r = $i[0];
             $rowPostData = $i[1];
@@ -127,8 +131,5 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
             }
         }
 
-        foreach ($this->_deletedRows as $i) {
-            $r->delete();
-        }
     }
 }

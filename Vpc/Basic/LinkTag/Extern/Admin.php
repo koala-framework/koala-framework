@@ -4,8 +4,8 @@ class Vpc_Basic_LinkTag_Extern_Admin extends Vpc_Admin
     public function setup()
     {
         $fields['target']       = "varchar(255) NOT NULL";
-        $fields['rel']          = "varchar(255) NOT NULL";
-        $fields['param']        = "varchar(255) NOT NULL";
+        $fields['rel']          = "varchar(255) DEFAULT NULL";
+        $fields['param']        = "varchar(255) DEFAULT NULL";
         $fields['is_popup']     = "tinyint(4) NOT NULL";
         $fields['width']        = "mediumint DEFAULT NULL";
         $fields['height']       = "mediumint DEFAULT NULL";
