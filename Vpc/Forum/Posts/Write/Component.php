@@ -8,6 +8,36 @@ class Vpc_Forum_Posts_Write_Component extends Vpc_Posts_Write_Component
         return $ret;
     }
 
+    protected function _getInitContent()
+    {
+        if ($this->_getParam('quote')) {
+            $postComponent = $this->getPageCollection()->getComponentById($this->_getParam('quote'));
+            $initContent = $postComponent->getContent();
+
+            $userComponent = null;
+            foreach ($postComponent->getChildComponents() as $component) {
+                if ($component instanceof Vpc_Forum_Posts_Post_UserDetail_Component) {
+                    $userComponent = $component;
+                    break;
+                }
+            }
+
+            $uservars = null;
+            if ($userComponent) {
+                $uservars = $userComponent->getTemplateVars();
+            }
+
+            $userstr = '';
+            if ($uservars) {
+                $userstr = '='.$uservars['name'];
+            }
+
+            $initContent = '[quote'.$userstr.']'.$initContent.'[/quote]';
+            return $initContent;
+        }
+        return '';
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

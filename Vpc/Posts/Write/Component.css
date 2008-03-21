@@ -1,8 +1,7 @@
-div.vpcPostsWrite h1 {
-    background: url(/assets/vps/Vpc/Forum/forumHeaderBg.jpg) repeat-x top left;
+
+div.vpcPostsWrite h2 {
+    padding-left: 20px;
+    margin: 0px; margin-bottom: 20px; 
     line-height: 25px;
-    padding-left: 10px;
-    margin: 0px; margin-bottom: 20px;
-    font-weight: bold;
-    color: #786047;
+    background: url(/assets/vps/Vpc/Forum/forumHeaderBg.jpg) repeat-x top left;
 }

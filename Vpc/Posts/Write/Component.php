@@ -23,6 +23,18 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         return $ret;
     }
 
+    protected function _getInitContent()
+    {
+        $initContent = '';
+        if ($this->_getParam('edit')) {
+            $tableName = $this->_getSetting('postsTableName');
+            $postsTable = new $tableName();
+            $postRow = $postsTable->find($this->_getParam('edit'))->current();
+            $initContent = $postRow->content;
+        }
+        return $initContent;
+    }
+
     protected function _init()
     {
         parent::_init();
@@ -43,14 +55,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         $c->store('isMandatory', true);
         */
 
-        $initContent = '';
-        if ($this->_getParam('edit')) {
-            $tableName = $this->_getSetting('postsTableName');
-            $postsTable = new $tableName();
-            $postRow = $postsTable->find($this->_getParam('edit'))->current();
-            $initContent = $postRow->content;
-        }
-
+        $initContent = $this->_getInitContent();
 
         $c = $this->_createFieldComponent('Textarea',
             array('name'=>'content', 'width'=>470, 'height'=>150, 'value' => $initContent)

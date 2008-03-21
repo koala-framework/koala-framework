@@ -29,6 +29,10 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
         } else {
             $ret['signature'] = '';
         }
+
+        $ret['writeUrl'] = $this->getParentComponent()->getPageFactory()->getChildPageById('write')->getUrl()
+            .'?quote='.$this->getId();
+
         return $ret;
     }
 

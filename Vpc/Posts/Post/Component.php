@@ -17,7 +17,7 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
         $row = $this->getTable()->find($this->getCurrentComponentKey())->current();
-        $ret['content'] = $this->_replaceCodes($row->content);
+        $ret['content'] = self::replaceCodes($this->getContent($row));
         $ret['create_time'] = $row->create_time;
         $ret['postNum'] = $this->_postNum;
         $ret['editUrl'] = '';
@@ -26,6 +26,14 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
                 ->getChildPageById('write')->getComponent()->getEditUrl($row->id);
         }
         return $ret;
+    }
+
+    public function getContent($row = null)
+    {
+        if (is_null($row)) {
+            $row = $this->getTable()->find($this->getCurrentComponentKey())->current();
+        }
+        return $row->content;
     }
 
     public function setPostNum($postNum)
@@ -46,7 +54,7 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         return false;
     }
 
-    private function _replaceCodes($content)
+    static public function replaceCodes($content)
     {
         $content = str_replace('[quote]', '<fieldset class="quote"><legend>Zitat</legend>', $content, $countOpened);
 
