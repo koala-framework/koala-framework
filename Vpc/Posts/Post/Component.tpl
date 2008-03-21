@@ -9,6 +9,6 @@
     </div>
     <div class="clear"></div>
     <div class="comment">
-        {$component.content|htmlspecialchars|nl2br}
+        {$component.content|nl2br}
     </div>
 </div>
