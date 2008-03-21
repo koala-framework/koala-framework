@@ -4,3 +4,13 @@ div.vpcPostsPreview div.preview {
     padding: 10px;
     margin-bottom: 15px;
 }
+
+div.vpcPostsPreview fieldset.quote {
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #f3f2f1;
+}
+div.vpcPostsPreview fieldset.quote legend {
+    color: #ff9600;
+    font-family: "Lucida Console",Helvetica,sans-serif;
+}

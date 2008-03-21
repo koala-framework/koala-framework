@@ -5,3 +5,5 @@ div.vpcPostsPost p.signature {
     margin-top: -10px;
     font-size: 11px;
 }
+
+a.quoteLink { float: right; padding-right: 20px; }

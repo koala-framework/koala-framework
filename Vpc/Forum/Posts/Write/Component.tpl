@@ -1,13 +1,13 @@
 {*TODO besser machen, mit echten brotkrümel*}
 <div class="vpcPostsWrite">
-<h1>
+<h2>
     <a href="{$component.forumUrl}">{$component.forum}</a> »
-    <a href="{$component.groupUrl}">{$component.group}</a>
+    <a href="{$component.groupUrl}">{$component.group|truncate:30:'...':true}</a>
     {if $component.thread}
-        » <a href="{$component.threadUrl}">{$component.thread}</a>
+        » <a href="{$component.threadUrl}" title="{$component.thread}">{$component.thread|truncate:30:'...':true}</a>
     {/if}
-</h1>
-<h2>Nachricht erstellen:</h2>
+</h2>
+<h3>Nachricht erstellen:</h3>
 
 {if $component.sent != 3}
     {if $component.sent == 4}
