@@ -1,5 +1,15 @@
-div.vpcPostsPost { margin-top: 15px;}
+div.vpcPostsPost { margin-top: 15px; margin-bottom: 15px; }
 div.vpcPostsPost div.edit {
     border: 1px solid #fc9;
     margin: 5px 0px; padding: 0px 20px;
+}
+
+div.vpcPostsPost fieldset.quote {
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #f3f2f1;
+}
+div.vpcPostsPost fieldset.quote legend {
+    color: #ff9600;
+    font-family: "Lucida Console",Helvetica,sans-serif;
 }
