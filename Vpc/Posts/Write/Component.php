@@ -61,7 +61,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
             array('name'=>'content', 'width'=>470, 'height'=>150, 'value' => $initContent)
         );
         $c->store('name', 'content');
-        $c->store('fieldLabel', 'Geben Sie hier den gewünschten Nachrichtentext ein:');
+        $c->store('fieldLabel', trlVps('Please enter the desired newstext:'));
         $c->store('isMandatory', false);
         $this->_paragraphs[] = $c;
 

@@ -49,7 +49,7 @@ abstract class Vpc_Abstract_StaticPageFactory extends Vpc_Abstract_PageFactory
     {
         if (isset($p['filename'])) return $p['filename'];
         if (!isset($p['name'])) {
-            throw new Vps_Exception("'name' is required in _pages array");
+            throw new Vps_Exception(trlVps("'name' is required in _pages array"));
         }
         $filter = new Vps_Filter_Url();
         return $filter->filter($p['name']);
@@ -73,7 +73,7 @@ abstract class Vpc_Abstract_StaticPageFactory extends Vpc_Abstract_PageFactory
 
         // Page erstellen
         if (!isset($p['componentClass'])) {
-            throw new Vps_Exception("'componentClass' is required in _pages array");
+            throw new Vps_Exception(trlVps("'componentClass' is required in _pages array"));
         }
         $page = $this->_createPage($p['componentClass'], $this->_getIdByP($p));
 

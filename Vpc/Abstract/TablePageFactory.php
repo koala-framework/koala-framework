@@ -71,9 +71,9 @@ abstract class Vpc_Abstract_TablePageFactory extends Vpc_Abstract_PageFactory
     {
         if (!isset($row->name)) {
             if (!method_exists($row, '__toString')) {
-                throw new Vps_Exception("Can't generate filename for row.
+                throw new Vps_Exception(trlVps("Can't generate filename for row.
                     Add a name field, implement __toString for the row or
-                    implement _getFilenameByRow for the PageFactory");
+                    implement _getFilenameByRow for the PageFactory"));
             }
             return $row->__toString();
         }
@@ -100,7 +100,7 @@ abstract class Vpc_Abstract_TablePageFactory extends Vpc_Abstract_PageFactory
         // Page erstellen
         $filename = $this->_getFilenameByRow($row);
         if (!isset($this->_componentClass)) {
-            throw new Vps_Exception("No _componentClass specified for " . get_class($this));
+            throw new Vps_Exception(trlVps("No _componentClass specified for {0}", get_class($this)));
         }
         $page = $this->_createPage($this->_componentClass, $row->id);
 

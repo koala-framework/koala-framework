@@ -7,13 +7,13 @@ class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
 
         // Kommentar
         if (Vpc_Abstract::getSetting($class, 'editComment')) {
-            $this->add(new Vps_Auto_Field_TextField('comment', 'Comment'))
+            $this->add(new Vps_Auto_Field_TextField('comment', trlVps('Comment')))
                 ->setWidth(250);
         }
 
         // Dateiname
         if (Vpc_Abstract::getSetting($class, 'editFilename')) {
-            $this->add(new Vps_Auto_Field_TextField('filename', 'Filename'))
+            $this->add(new Vps_Auto_Field_TextField('filename', trlVps('Filename')))
                 ->setVtype('alphanum');
         }
 
@@ -28,15 +28,16 @@ class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
         if (is_array($dimensions) && empty($dimensions)) {
             $this->add($widthField);
             $this->add($heightField);
+
         } else if (is_array($dimensions[0])) {
-            $this->add(new Vps_Auto_Field_ComboBoxSize('dimension', 'Size'))
+            $this->add(new Vps_Auto_Field_ComboBoxSize('dimension', trlVps('Size')))
                 ->setSizes($dimensions);
         }
 
         // Skalierungstyp
         $allow = Vpc_Abstract::getSetting($class, 'allow');
         if (is_array($allow) && sizeof($allow) > 1) {
-            $this->add(new Vps_Auto_Field_Select('scale', 'Scaling'))
+            $this->add(new Vps_Auto_Field_Select('scale', trlVps('Scaling')))
                 ->setValues($allow);
         }
 
@@ -47,7 +48,7 @@ class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
             ->setAllowOnlyImages(true);
 
         // Bildvorschau
-        $this->add(new Vps_Auto_Field_ImageViewer('vps_upload_id_image', 'Preview'))
+        $this->add(new Vps_Auto_Field_ImageViewer('vps_upload_id_image', trlVps('Preview')))
             ->setClass($class);
     }
 }

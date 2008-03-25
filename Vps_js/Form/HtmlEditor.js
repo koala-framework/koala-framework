@@ -23,7 +23,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tooltip: {
                 cls: 'x-html-editor-tip',
                 title: 'Image',
-                text: 'Insert new image or edit selected image.'
+                text: trlVps('Insert new image or edit selected image.')
             },
             cls: 'x-btn-icon',
             clickEvent: 'mousedown',
@@ -36,7 +36,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tooltip: {
                 cls: 'x-html-editor-tip',
                 title: 'Download',
-                text: 'Create new Download for the selected text or edit selected Download.'
+                text: trlVps('Create new Download for the selected text or edit selected Download.')
             },
             cls: 'x-btn-icon',
             clickEvent: 'mousedown',
@@ -48,7 +48,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tooltip: {
                 cls: 'x-html-editor-tip',
                 title: 'Hyperlink',
-                text: 'Create new Link for the selected text or edit selected Link.'
+                text: trlVps('Create new Link for the selected text or edit selected Link.')
             },
             cls: 'x-btn-icon x-edit-createlink',
             clickEvent: 'mousedown',
@@ -61,7 +61,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tooltip: {
                 cls: 'x-html-editor-tip',
                 title: 'Undo (Ctrl+Z)',
-                text: 'Undo the last action.'
+                text: trlVps('Undo the last action.')
             },
             cls: 'x-btn-icon',
             clickEvent: 'mousedown',
@@ -74,7 +74,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tooltip: {
                 cls: 'x-html-editor-tip',
                 title: 'Redo',
-                text: 'Redo the last action.'
+                text: trlVps('Redo the last action.')
             },
             cls: 'x-btn-icon',
             clickEvent: 'mousedown',
@@ -153,7 +153,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     createToolbar: function(editor){
         Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
         var tb = this.getToolbar();
-        
+
         if (this.linkDialog || this.imageDialog || this.downloadDialog) {
             tb.insert(8, '-');
         }
@@ -175,7 +175,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 tooltip: {
                     cls: 'x-html-editor-tip',
                     title: 'Character',
-                    text: 'Insert a custom character.'
+                    text: trlVps('Insert a custom character.')
                 },
                 cls: 'x-btn-icon',
                 clickEvent: 'mousedown',
@@ -190,7 +190,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 tooltip: {
                     cls: 'x-html-editor-tip',
                     title: 'Insert Plain Text',
-                    text: 'Insert text without formating.'
+                    text: trlVps('Insert text without formating.')
                 },
                 cls: 'x-btn-icon',
                 clickEvent: 'mousedown',
@@ -206,7 +206,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 tooltip: {
                     cls: 'x-html-editor-tip',
                     title: 'Clean Html',
-                    text: 'Clean up Html and remove formatings.'
+                    text: trlVps('Clean up Html and remove formatings.')
                 },
                 cls: 'x-btn-icon',
                 clickEvent: 'mousedown',
@@ -437,7 +437,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         if (!win) {
             win = new Vps.Form.InsertCharWindow({
                 modal: true,
-                title: 'Insert Custom Character',
+                title: trlVps('Insert Custom Character'),
                 width: 500,
                 closeAction: 'hide',
                 autoScroll: true
@@ -455,7 +455,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     insertPlainText: function()
     {
         Ext.Msg.show({
-            title : 'Insert Plain Text',
+            title : trlVps('Insert Plain Text'),
             msg : '',
             buttons: Ext.Msg.OKCANCEL,
             fn: function(btn, text) {
@@ -477,7 +477,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     {
         if (!this.enableTidy) return;
 
-        Ext.getBody().mask('Cleaning...');
+        Ext.getBody().mask(trlVps('Cleaning...'));
         Ext.Ajax.request({
             url: this.controllerUrl+'/jsonTidyHtml',
             params: {

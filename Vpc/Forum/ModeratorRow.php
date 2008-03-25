@@ -12,7 +12,7 @@ class Vpc_Forum_ModeratorRow extends Vps_Db_Table_Row
                 return $row->__toString();
             }
 
-            return '<i>Empty</i>';
+            return '<i>'.trlVps('Empty').'</i>';
         } else {
             return parent::__get($columnName);
         }

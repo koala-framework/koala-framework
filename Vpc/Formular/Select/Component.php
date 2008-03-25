@@ -69,7 +69,7 @@ class Vpc_Formular_Select_Component extends Vpc_Formular_Field_Abstract
     public function validateField($mandatory)
     {
         if ($mandatory && !isset($_POST[$this->_getName()])) {
-            return 'Feld ' . $this->getStore('description') . ' ist ein Pflichtfeld, bitte ausfüllen';
+            return trlVps('Field {0} is mandatory, please fill out', $this->getStore('description'));
         }
         return '';
     }

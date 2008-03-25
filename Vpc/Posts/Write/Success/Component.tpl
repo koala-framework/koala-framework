@@ -1,4 +1,4 @@
-<p>Der Kommentar wurde erfolgreich gespeichert.</p>
+<p>{trlVps text="Comment was successfully saved."</p>
 <ul>
-    <li><a href="{$component.backUrl}">Klicken Sie hier</a>, um fortzufahren.</li>
+    <li><a href="{$component.backUrl}">{trlVps text="Click here"}</a>, {trlVps text="to continue"}.</li>
 </ul>

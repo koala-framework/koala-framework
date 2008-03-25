@@ -2,7 +2,7 @@
 /**
  * Leere Komponente. Wird verwendet im Admin zur Auswahl
  * richtiger Komponenten.
- * 
+ *
  * @package Vpc
  * @subpackage Empty
  */

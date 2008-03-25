@@ -8,7 +8,7 @@ Vps.Form.GoogleMapsField = Ext.extend(Ext.form.TriggerField,
         if (!win) {
             win = new Vps.Form.GoogleMapWindow({
 				modal: true,
-				title: 'Select your Position',
+				title: trlVps('Select your Position'),
 				width:535,
 				height:500,
 				shadow:true,

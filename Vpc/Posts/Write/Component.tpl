@@ -1,5 +1,5 @@
 <div class="vpcPostsWrite">
-    <h2>Kommentar erstellen:</h2>
+    <h2>{trlVps text="Create comment"}:</h2>
 
     {if $component.sent != 3}
         {if $component.sent == 4}
@@ -24,7 +24,7 @@
             {/foreach}
         </form>
         {if $component.sent == 2}
-            <p>Bitte überprüfen Sie Ihre Eingabe, es traten Fehler auf.</p>
+            <p>{trlVps text="Please check you values, errors occured"}</p>
         {/if}
     {else}
         {component component=$component.success}

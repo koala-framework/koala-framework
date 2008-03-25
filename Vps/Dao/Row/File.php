@@ -7,10 +7,10 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         $uploadDir = $config->uploads;
 
         if (!$uploadDir) {
-            throw new Vps_Exception('Param "uploads" has to be set in the file application/config.ini.');
+            throw new Vps_Exception(trlVps('Param "uploads" has to be set in the file application/config.ini.'));
         }
         if (!is_dir($uploadDir) || !is_writable($uploadDir)) {
-            throw new Vps_Exception('Path for uploads is not writeable: ' . $uploadDir);
+            throw new Vps_Exception(trlVps('Path for uploads is not writeable: {0}', $uploadDir));
         }
 
         return $uploadDir;
@@ -70,15 +70,15 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
     public function uploadFile($filedata)
     {
         if ($filedata['error'] == UPLOAD_ERR_NO_FILE) {
-            throw new Vps_Exception('Es wurde keine Datei hochgeladen.');
+            throw new Vps_Exception(trlVps('Es wurde keine Datei hochgeladen.'));
         }
 
         if ($filedata['error'] == UPLOAD_ERR_INI_SIZE || $filedata['error'] == UPLOAD_ERR_FORM_SIZE) {
-            throw new Vps_ClientException('Die Datei übersteigt die maximale Dategröße für Dateiuploads.');
+            throw new Vps_ClientException(trlVps('Die Datei übersteigt die maximale Dategröße für Dateiuploads.'));
         }
 
         if ($filedata['error'] == UPLOAD_ERR_PARTIAL) {
-            throw new Vps_ClientException('Die Datei wurde nicht vollständig hochgeladen.');
+            throw new Vps_ClientException(trlVps('Die Datei wurde nicht vollständig hochgeladen.'));
         }
 
         $this->deleteFile();
@@ -98,7 +98,7 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
     public function copyFile($file, $filename, $extension, $mime_type)
     {
         if (!file_exists($file)) {
-            throw new Vps_Exception("File '$file' does not exist");
+            throw new Vps_Exception(trlVps("File {0} does not exist", '\''.$file.'\''));
         }
         $this->deleteFile();
         $this->filename = $filename;

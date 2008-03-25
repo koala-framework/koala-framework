@@ -13,13 +13,13 @@ class Vpc_Forum_ModeratorsToGroupController extends Vps_Controller_Action_Auto_A
         $serviceUserClass = get_class(Zend_Registry::get('userModel'));
 
         $this->_columns->add(new Vps_Auto_Grid_Column('user_id', 'ID', 55));
-        $this->_columns->add(new Vps_Auto_Grid_Column('title', 'Titel', 60))
+        $this->_columns->add(new Vps_Auto_Grid_Column('title', trlVps('Titlel'), 60))
                        ->setData(new Vps_Auto_Data_Table_Parent($serviceUserClass, 'title'));
-        $this->_columns->add(new Vps_Auto_Grid_Column('firstname', 'Vorname', 120))
+        $this->_columns->add(new Vps_Auto_Grid_Column('firstname', trlVps('Firstname'), 120))
                        ->setData(new Vps_Auto_Data_Table_Parent($serviceUserClass, 'firstname'));
-        $this->_columns->add(new Vps_Auto_Grid_Column('lastname', 'Zuname', 120))
+        $this->_columns->add(new Vps_Auto_Grid_Column('lastname', trlVps('Lastname'), 120))
                        ->setData(new Vps_Auto_Data_Table_Parent($serviceUserClass, 'lastname'));
-        $this->_columns->add(new Vps_Auto_Grid_Column('email', 'Email', 180))
+        $this->_columns->add(new Vps_Auto_Grid_Column('email', trlVps('Email'), 180))
                        ->setData(new Vps_Auto_Data_Table_Parent($serviceUserClass, 'email'));
     }
 

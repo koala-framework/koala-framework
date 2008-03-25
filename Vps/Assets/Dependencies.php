@@ -19,7 +19,7 @@ class Vps_Assets_Dependencies
         $this->_config = $config;
         $this->_assetsType = $assetsType;
         if (!isset($this->_config->assets->$assetsType)) {
-            throw new Vps_Exception("Unknown AssetsType: $assetsType");
+            throw new Vps_Exception(trlVps("Unknown AssetsType: {0}", $assetsType));
         }
         $this->_assets = $this->_config->assets->$assetsType;
     }
@@ -83,7 +83,7 @@ class Vps_Assets_Dependencies
         }
         return $files;
     }
-    
+
     public function getFilePaths($fileType = null)
     {
         $paths = array();
@@ -238,13 +238,13 @@ class Vps_Assets_Dependencies
         if (substr($file, -2)=="/*") {
             $pathType = substr($file, 0, strpos($file, '/'));
             if (!isset($this->_config->path->$pathType)) {
-                throw new Vps_Exception("Assets-Path-Type '$pathType' not found in config.");
+                throw new Vps_Exception(trlVps("Assets-Path-Type '{0}' not found in config.", $pathType));
             }
             $file = substr($file, strpos($file, '/')); //pathtype abschneiden
             $file = substr($file, 0, -1); //* abschneiden
             $path = $this->_config->path->$pathType.$file;
             if (!file_exists($path)) {
-                throw new Vps_Exception("Path '$path' does not exist.");
+                throw new Vps_Exception(trlVps("Path '{0}' does not exist.", $path));
             }
             $DirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
             foreach ($DirIterator as $file) {

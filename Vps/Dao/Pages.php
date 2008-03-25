@@ -14,7 +14,7 @@ class Vps_Dao_Pages extends Vps_Db_Table
     {
         $data = $this->_retrievePageData();
         if ($throwError && !isset($data[$id])) {
-            throw new Vps_Exception('Page width id "' . $id . '" not found');
+            throw new Vps_Exception(trlVps('Page width id {0} not found', '\''.$id.'\''));
         }
         return isset($data[$id]) ? $data[$id] : array();
     }

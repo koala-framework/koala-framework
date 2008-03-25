@@ -45,7 +45,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             try {
                 Zend_Loader::loadClass($className);
             } catch (Zend_Exception $e) {
-                throw new Zend_Controller_Dispatcher_Exception('Invalid controller class ("' . $className . '")');
+                throw new Zend_Controller_Dispatcher_Exception(trlVps('Invalid controller class ("{0}")', $className));
             }
             return $className;
         } else {

@@ -10,12 +10,12 @@
         </div>
     {else}
         <div class="welcomeContent">
-            <h1>{$application->name} Version {$application->version}</h1>
+            <h1>{$application->name}  {trlVps text="version"} {$application->version}</h1>
         </div>
     {/if}
     <div class="footer">
         {if $content|strip_tags|trim}
-            <p>{$application->name} Version {$application->version}</p>
+            <p>{$application->name} {trlVps text="version"} {$application->version}</p>
         {/if}
         <h2>{$application->vps->name} Version {$application->vps->version}</h2>
         <img id="enteWelcome" src="/assets/vps/images/welcome/ente.jpg" alt="" height="30" width="54" />

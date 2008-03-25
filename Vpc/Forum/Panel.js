@@ -14,7 +14,7 @@ Vpc.Forum.Panel = Ext.extend(Vps.Auto.TreePanel,
 
         this.modDialog = new Ext.Window({
             layout: 'fit',
-            title: 'Moderators of selected group',
+            title: trlVps('Moderators of selected group'),
             closeAction: 'hide',
             width: 600,
             height: 480,

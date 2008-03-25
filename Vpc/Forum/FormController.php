@@ -7,13 +7,13 @@ class Vpc_Forum_FormController extends Vps_Controller_Action_Auto_Form
 
     public function _initFields()
     {
-        $this->_form->add(new Vps_Auto_Field_TextField('name', 'Group'))
+        $this->_form->add(new Vps_Auto_Field_TextField('name', trlVps('Group')))
             ->setAllowBlank(false)
             ->setWidth(300);
-        $this->_form->add(new Vps_Auto_Field_TextArea('description', 'Description'))
+        $this->_form->add(new Vps_Auto_Field_TextArea('description', trlVps('Description')))
             ->setWidth(300);
 
-        $this->_form->add(new Vps_Auto_Field_Checkbox('post', 'enable posts'));
+        $this->_form->add(new Vps_Auto_Field_Checkbox('post', trlVps('enable posts')));
     }
 
     protected function _beforeInsert($row)

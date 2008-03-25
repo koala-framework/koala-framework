@@ -1,6 +1,6 @@
 <p>
-    <strong>Die geänderten Daten wurde erfolgreich gespeichert.</strong>
+    <strong>{trlVps text="Changed data was successfully saved"}</strong>
 </p>
 <p>
-    <a href="{$component.requestUri}">Klicken Sie hier</a>, um zum Formular zurück zu gelangen.
+    <a href="{$component.requestUri}">{trlVps text="Click here"}</a>, {trlVps text="to get back to the forum"}.
 </p>

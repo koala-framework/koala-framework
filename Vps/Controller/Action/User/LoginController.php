@@ -8,7 +8,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         if ($location == '') { $location = '/'; }
         $config = array('location' => $location);
         if ($this->_getUserRole() != 'guest') {
-            $config['message'] = "You don't have enough permissions for this Action";
+            $config['message'] = trlVps("You don't have enough permissions for this Action");
         }
         $this->view->ext('Vps.User.Login.Index', $config);
     }
@@ -16,7 +16,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
     public function jsonLoginAction()
     {
         if ($this->_getUserRole() != 'guest') {
-            $this->view->message = "You don't have enough permissions for this Action";
+            $this->view->message = trlVps("You don't have enough permissions for this Action");
         }
         $this->view->login = true;
         $this->view->success = false;
@@ -51,9 +51,9 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
             $result = $this->_login();
             $this->view->username = $this->_getParam('username');
             if ($result->isValid()) {
-                $this->view->text = 'Login successful.<!--successful-->';
+                $this->view->text = trlVps('Login successful.<!--successful-->');
             } else {
-                $this->view->text = 'Login failed';
+                $this->view->text = trlVps('Login failed');
             }
         } else {
             $this->view->text = '';
@@ -77,7 +77,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         if (!$row) {
             $config['errorMsg'] = 'User not found in Web.';
         } else if ($row->getActivationCode() != $code) {
-            $config['errorMsg'] = 'Activation code is invalid. Maybe the URL wasn\'t copied completely?';
+            $config['errorMsg'] = trlVps('Activation code is invalid. Maybe the URL wasn\'t copied completely?');
         }
 
         if (empty($config['errorMsg'])) {
@@ -94,7 +94,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         $code = $this->getRequest()->getParam('code');
 
         if (empty($userId) || empty($password) || empty($code)) {
-            throw new Vps_ClientException('Data not submitted completely.');
+            throw new Vps_ClientException(trlVps('Data not submitted completely.'));
         }
 
         $users = Zend_Registry::get('userModel');
@@ -103,14 +103,14 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         if (!$row) {
             throw new Vps_ClientException('User not found in Web.');
         } else if ($row->getActivationCode() != $code) {
-            throw new Vps_ClientException('Activation code is invalid. Maybe your '
-                                         .'account has already been activated?');
+            throw new Vps_ClientException(trlVps('Activation code is invalid. Maybe your '
+                                         .'account has already been activated?'));
         }
 
         $status = $row->setPassword($password);
 
         if (!$status) {
-            throw new Vps_ClientException('New password couldn\'t be set');
+            throw new Vps_ClientException(trlVps('New password couldn\'t be set'));
         }
 
         $this->_login($row->email, $password);
@@ -150,7 +150,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         $adapter = $this->_createAuthAdapter();
 
         if (!$adapter instanceof Vps_Auth_Adapter_Service) {
-            throw new Vps_Controller_Exception('_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service');
+            throw new Vps_Controller_Exception(trlVps('_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service'));
         }
 
 

@@ -183,7 +183,7 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
         if (this.checkDirty && this.isDirty()) {
             Ext.Msg.show({
             title:'Save',
-            msg: 'Do you want to save the changes?',
+            msg: trlVps('Do you want to save the changes?'),
             buttons: Ext.Msg.YESNOCANCEL,
             scope: this,
             fn: function(button) {

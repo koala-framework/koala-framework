@@ -5,15 +5,15 @@ class Vpc_Advanced_GoogleMap_Form extends Vps_Auto_Vpc_Form
     {
         parent::__construct($class, $id);
 
-        $this->fields->add(new Vps_Auto_Field_GoogleMapsField('coordinates', 'Koordinaten'));
-        $this->fields->add(new Vps_Auto_Field_Select('zoom', 'Zoomstufe'))
+        $this->fields->add(new Vps_Auto_Field_GoogleMapsField('coordinates', trlVps('Coordinates')));
+        $this->fields->add(new Vps_Auto_Field_Select('zoom', trlVps('Zoomlevel')))
             ->setValues($this->_getZoomLevels());
 
-        $this->fields->add(new Vps_Auto_Field_NumberField('width', 'Breite'))
+        $this->fields->add(new Vps_Auto_Field_NumberField('width', trlVps('Width')))
             ->setAllowNegative(false)
             ->setAllowDecimals(false);
 
-        $this->fields->add(new Vps_Auto_Field_NumberField('height', 'Höhe'))
+        $this->fields->add(new Vps_Auto_Field_NumberField('height', trlVps('Height')))
             ->setAllowNegative(false)
             ->setAllowDecimals(false);
 
@@ -24,14 +24,14 @@ class Vpc_Advanced_GoogleMap_Form extends Vps_Auto_Vpc_Form
 
 
         $this->fields->add(new Vps_Auto_Field_Select('zoom_properties', 'Zoomeinstellungen'))
-            ->setValues(array(array('0', 'Verschieben + Zoom'),
-                              array('1', 'Verschieben + Zoom (ohne Zoombalken)'),
-                              array('2', 'Nur Zoom')))
+            ->setValues(array(array('0', trlVps('Move + Zoom')),
+                              array('1', trlVps('Move + Zoom (without zoombar)')),
+                              array('2', trlVps('Just Zoom'))))
             ->setWidth(300);
 
-        $this->fields->add(new Vps_Auto_Field_Checkbox('scale', 'Skalierung'));
-        $this->fields->add(new Vps_Auto_Field_Checkbox('satelite', 'Satellitenkarte'));
-        $this->fields->add(new Vps_Auto_Field_Checkbox('overview', 'Übersichtskarte'));
+        $this->fields->add(new Vps_Auto_Field_Checkbox('scale', trlVps('Scale')));
+        $this->fields->add(new Vps_Auto_Field_Checkbox('satelite', trlVps('Satelitemap')));
+        $this->fields->add(new Vps_Auto_Field_Checkbox('overview', trlVps('Overviewmap')));
 
     }
 
@@ -40,9 +40,9 @@ class Vpc_Advanced_GoogleMap_Form extends Vps_Auto_Vpc_Form
         $zoomLevels = array();
         for ($i = 0; $i <= 20; $i++) {
             if ($i == 0) {
-                $zommText = ' (Weltansicht)';
+                $zommText = trlVps(' (Worldview)');
             } else if ($i == 20) {
-                $zommText = ' (Detailansicht)';
+                $zommText = trlVps(' (Detailview)');
             } else {
                 $zommText = '';
             }

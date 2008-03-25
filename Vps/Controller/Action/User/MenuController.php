@@ -94,7 +94,7 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
     {
         $config = Zend_Registry::get('config');
         if ($config->debug->errormail) { //todo, besserer debug-modus
-            throw new Vps_Exception("Debug is not enabled");
+            throw new Vps_Exception(trlVps("Debug is not enabled"));
         }
         foreach (new DirectoryIterator('application/cache/assets') as $file) {
             if ($file->isFile()) {

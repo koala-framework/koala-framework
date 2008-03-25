@@ -7,11 +7,11 @@
 
     <form action="#" class="fromAddress">
         <input type="text" class="textBefore"/>
-        <input type="submit" value="Route zeigen" class="submitOn"/>
+        <input type="submit" value="{trlVps text="Show Route"}" class="submitOn"/>
     </form>
 
     <div class="mapDirSuggestParent">
-        <b>Vorschläge</b>
+        <b>{trlVps text="Suggestions"}</b>
         <ul class="mapDirSuggest"></ul>
     </div>
 

@@ -23,7 +23,7 @@ class Vps_Auth extends Zend_Auth
                     $restResult = $restClient->get();
 
                     if (!$restResult->status()) {
-                        throw new Vps_Exception("autologin failed: ".$restResult->msg());
+                        throw new Vps_Exception(trlVps("autologin failed: {0}", $restResult->msg()));
                     }
 
                     $loginData['userId'] = $restResult->id();

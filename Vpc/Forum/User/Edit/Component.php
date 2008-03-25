@@ -60,7 +60,7 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
         $c->store('isMandatory', false);
 
         $c = $this->_createFieldComponent('Submit', array(
-            'name'=>'sbmt', 'width'=>200, 'text' => 'Einstellungen bearbeiten'
+            'name'=>'sbmt', 'width'=>200, 'text' => trlVps('Change properties')
         ));
         $c->store('name', 'sbmt');
         $c->store('fieldLabel', '&nbsp;');
@@ -95,8 +95,8 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
             'nickname = ?' => $_POST['nickname']
         ));
         if ($nickExists) {
-            throw new Vps_ClientException('Dieser &quot;Name für Forum&quot; existiert '
-                .'bereits. Bitte wählen Sie einen anderen.');
+            throw new Vps_ClientException(trlVps('This "name for the forum" already exists. ')
+                .trlVps('Please choose a different.'));
         }
 
         foreach ($this->getChildComponents() as $c) {

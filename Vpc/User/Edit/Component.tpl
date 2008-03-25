@@ -1,8 +1,8 @@
 <div class="vpcUserEdit">
-    <h1>Konto - Einstellungen</h1>
+    <h1>{trlVps text="Account - Properties"}</h1>
 
     {if $component.sent != 3}
-        <label>E-Mail Adresse</label>
+        <label>{trlVps text="E-Mail Adress"}</label>
         <div class="showField">{$component.email}</div>
     {/if}
 

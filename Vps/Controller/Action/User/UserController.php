@@ -18,39 +18,38 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 
         $this->_form->setTable(Zend_Registry::get('userModel'));
 
-        $fs0 = $this->_form->add(new Vps_Auto_Container_FieldSet('Hinweis'));
+        $fs0 = $this->_form->add(new Vps_Auto_Container_FieldSet(trlVps('Advice')));
         $fs0->setLabelWidth(80);
         $fs0->setStyle('margin:10px;');
 
         $fs0->add(new Vps_Auto_Field_Panel())
-            ->setHtml('Bei folgenden Aktionen werden automatisch E-Mails an den '
-                     .'betreffenden Benutzer gesendet.<br />'
-                     .'Erstellen, Löschen und E-Mail ändern');
+            ->setHtml(trlVps('At the following action emails are automatically sent to the adequade user.').'<br />'
+                     .trlVps('Create, Delete and E-Mail change'));
 
         // Hauptdaten
-        $fs1 = $this->_form->add(new Vps_Auto_Container_FieldSet('Zugangsdaten &amp; Person'));
+        $fs1 = $this->_form->add(new Vps_Auto_Container_FieldSet(trlVps('Accessdata and person')));
         $fs1->setLabelWidth(80);
         $fs1->setStyle('margin:10px;');
 
-        $editor = new Vps_Auto_Field_TextField('email', 'Email');
+        $editor = new Vps_Auto_Field_TextField('email', trlVps('Email'));
         $editor->setVtype('email');
         $fs1->add($editor);
 
         $this->_addRoleField($fs1);
 
-        $editor = new Vps_Auto_Field_Select('gender', 'Gender');
+        $editor = new Vps_Auto_Field_Select('gender', trlVps('Gender'));
         $editor->setValues($genders)
                ->setAllowBlank(false);
         $fs1->add($editor);
 
-        $fs1->add(new Vps_Auto_Field_TextField('title', 'Title'));
-        $fs1->add(new Vps_Auto_Field_TextField('firstname', 'First name'));
-        $fs1->add(new Vps_Auto_Field_TextField('lastname', 'Last name'));
+        $fs1->add(new Vps_Auto_Field_TextField('title', trlVps('Title')));
+        $fs1->add(new Vps_Auto_Field_TextField('firstname', trlVps('First name')));
+        $fs1->add(new Vps_Auto_Field_TextField('lastname', trlVps('Last name')));
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         $acl = Zend_Registry::get('acl');
         if ($acl->getRole($authedRole) instanceof Vps_Acl_Role_Admin) {
-            $fs1->add(new Vps_Auto_Field_Checkbox('webcode', 'Webcode'))
+            $fs1->add(new Vps_Auto_Field_Checkbox('webcode', trlVps('Webcode')))
                 ->setData(new Vps_Controller_Action_User_Users_WebcodeData());
         }
 
@@ -69,7 +68,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
             }
         }
 
-        $editor = new Vps_Auto_Field_Select('role', 'Rights');
+        $editor = new Vps_Auto_Field_Select('role', trlVps('Rights'));
         $editor->setValues($roles)
                ->setAllowBlank(false);
         $fs1->add($editor);

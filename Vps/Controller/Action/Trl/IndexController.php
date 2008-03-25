@@ -100,12 +100,6 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
                         preg_match_all('#trlcp'.$type.'\(\'(.+?)\', +(.*), +(.*), +(.*)\)|trlcp'.$type.'\(\"(.+?)\", +(.*), +(.*), +(.*)\)#', $file, $m);
                         $this->_pregMatchTrlcp($m, $xml, $type);
                     } elseif ($extension=='tpl' || $extension=='html') {
-                        if ($file == '/www/usr/lorenz/vps/views/mails/UserChangedMail.txt.tpl') {
-                            preg_match_all('#{trl'.$type.' (\n?|.)+}#', file_get_contents($file), $m);
-                            p($m[0]);
-
-                        }
-                        //p($m);
                         $file = implode("", file($file));
                         preg_match_all('#{trl'.$type.' (\n?|.)+}#', $file, $m);
                         $this->_pregMatchTrlSmarty($m, $xml);
@@ -204,7 +198,7 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
                             $element = $xml->addChild('text');
                             $lang = $element->addChild($this->_defaultLanguage, $single);
                             $lang->addAttribute('default', true);
-                            $lang = $element->addChild($this->_defaultLanguage.'_plural', $single);
+                            $lang = $element->addChild($this->_defaultLanguage.'_plural', $plural);
                             $lang->addAttribute('default', true);
 
                             foreach ($this->_languages as $lang){
@@ -415,7 +409,11 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
 
     protected function _getText($name){
             if(strpos($name, '{')){
-                $values = explode(',', $name);
+                if (strpos($name, '\''))
+                    $values = explode('\',', $name);
+                else
+                    $values = explode("\",", $name);
+
                 return str_replace("'", '', $values[0]);
             } else {
                 return $name;

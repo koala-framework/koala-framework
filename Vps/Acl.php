@@ -47,7 +47,7 @@ class Vps_Acl extends Zend_Acl
                 }
                 $resourceParent = $this->get($resourceParentId);
             } catch (Zend_Acl_Exception $e) {
-                throw new Zend_Acl_Exception("Parent Resource id '$resourceParentId' does not exist");
+                throw new Zend_Acl_Exception(trlVps("Parent Resource id {0} does not exist", '\''.$resourceParentId.'\''));
             }
         } else {
             $resourceParentId = null;

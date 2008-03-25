@@ -12,7 +12,7 @@ Vpc.News.Categories.Plugins = Ext.extend(Ext.util.Observable,
                         width:  450,
                         height: 370,
                         layout: 'fit',
-                        title:  'News Categories',
+                        title:  trlVps('News Categories'),
                         modal:  true,
                         items:  new Vps.Auto.GridPanel({
                             //TODO: url hier nicht hardkodieren, soll geändert werden können

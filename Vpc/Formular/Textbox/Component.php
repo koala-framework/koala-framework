@@ -43,7 +43,7 @@ class Vpc_Formular_Textbox_Component extends Vpc_Formular_Field_Abstract
             }
         }
         if ($mandatory && $value == '') {
-            return 'Feld ' . $this->getStore('fieldLabel') . ' ist ein Pflichtfeld, bitte ausfüllen';
+            return trlVps('Field {0} is mandatory, please fill out', $this->getStore('fieldlabel'));
         }
         return '';
     }

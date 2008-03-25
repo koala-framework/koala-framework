@@ -101,7 +101,7 @@ class Vps_Trl {
                     if ($cnt == 0){
                         $this->_defaultLanguage = $key;
 
-                    } elseif ($cnt == 1){
+                    } elseif ($cnt == 0){
                         $this->_targetLanguage = $key;
                     }
                     $cnt++;

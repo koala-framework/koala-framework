@@ -13,15 +13,15 @@ class Vpc_News_FormController extends Vps_Controller_Action_Auto_Form
 
     public function _initFields()
     {
-        $this->_form->add(new Vps_Auto_Field_TextField('title', 'Title'))
+        $this->_form->add(new Vps_Auto_Field_TextField('title', trlVps('Title')))
             ->setAllowBlank(false)
             ->setWidth(300);
-        $this->_form->add(new Vps_Auto_Field_TextArea('teaser', 'Teaser'))
+        $this->_form->add(new Vps_Auto_Field_TextArea('teaser', trlVps('Teaser')))
             ->setWidth(300)
             ->setHeight(100);
-        $this->_form->add(new Vps_Auto_Field_DateField('publish_date', 'Publish Date'))
+        $this->_form->add(new Vps_Auto_Field_DateField('publish_date', trlVps('Publish Date')))
             ->setAllowBlank(false);
-        $this->_form->add(new Vps_Auto_Field_DateField('expiry_date', 'Expiry Date'));
+        $this->_form->add(new Vps_Auto_Field_DateField('expiry_date', trlVps('Expiry Date')));
 
 
         $component = get_class($this);
