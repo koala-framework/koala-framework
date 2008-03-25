@@ -34,8 +34,9 @@ class Vpc_Forum_Posts_Write_Component extends Vpc_Posts_Write_Component
 
             $initContent = '[quote'.$userstr.']'.$initContent.'[/quote]';
             return $initContent;
+        } else {
+            return parent::_getInitContent();
         }
-        return '';
     }
 
     public function getTemplateVars()
