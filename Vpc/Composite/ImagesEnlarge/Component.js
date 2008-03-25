@@ -7,7 +7,7 @@ Ext.onReady(function()
 
         var els = Ext.query('a', gallery);
         Ext.each(els, function(el) {
-            if (el.rel.match(/enlarge_[0-9]+_[0-9]+/)) {
+            if (el && el.rel.match(/enlarge_[0-9]+_[0-9]+/)) {
                 galleryEls.push(Ext.get(el));
             }
         });

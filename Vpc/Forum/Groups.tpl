@@ -15,7 +15,7 @@
                 </div>
                 {trlVps text="Last Entry"}:
                 {if $g.lastPostSubject}
-                    <a href="{$g.lastPostUrl}" title="{$g.lastPostSubject}">{$g.lastPostSubject|truncate:40:'...':true}</a>
+                    <a href="{$g.lastPostUrl}" title="{$g.lastPostSubject}">{$g.lastPostSubject|truncate:37:'...':true}</a>
                     <div class="time">
                         <i>am <strong>{$g.lastPostTime|date_format:"%d.%m.%y, %H:%M"}</strong></i> von
                         {if $g.lastPostUserUrl}
