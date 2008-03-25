@@ -40,12 +40,12 @@ class Vpc_Admin
                 $item->getFilename() != '..' &&
                 $item->getFilename() != '.svn' &&
                 $item->isDir()) {
-                
+
                 $pathNew = "$path/$item";
                 $return = array_merge(self::getAvailableComponents($pathNew), $return);
-                
+
             } else if (substr($item->getFilename(), -4) == '.php') {
-                
+
                 $class = str_replace('/', '_', $item->getPath());
                 $class = strrchr($class, 'Vpc_');
                 $class .= '_' . str_replace('.php', '', $item->getFilename());
