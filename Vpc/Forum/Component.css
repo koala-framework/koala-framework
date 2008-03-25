@@ -14,11 +14,11 @@ div.vpcForum ul li ul li.title {
 }
 
 div.vpcForum ul li.post {
-    background: url(/assets/vps/Vpc/Forum/iconPost.jpg) no-repeat top left;
-    padding-left: 30px; padding-bottom: 10px;
+    padding-left: 10px;
     margin-top: 10px;
     font-weight: normal;
-    border-bottom: 1px dashed #ccc;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
 }
 
 div.vpcForum ul li.post a { font-weight: bold; }
@@ -27,8 +27,9 @@ div.vpcForum ul li.post div.lastPost {
     font-size: 11px;
     line-height: 16px;
     padding-left: 20px;
-    border: 1px solid #ccc;
+    border-top: 1px solid #ccc;
     height: 35px;
+    margin-left: -10px;
 }
 div.vpcForum ul li.post div.statistik {
     float: right; font-size: 11px;
@@ -36,6 +37,9 @@ div.vpcForum ul li.post div.statistik {
     line-height: 16px;
     border-left: 1px solid #ccc;
 }
+
+div.vpcForum ul li.post div.description a { background-color: #F3F2F1; margin-left: -10px; padding-left: 10px; }
+
 div.vpcForum ul li.post div.threads { border-bottom: 1px solid #ccc; text-align: center; }
 div.vpcForum ul li.post div.posts { text-align: center; }
 

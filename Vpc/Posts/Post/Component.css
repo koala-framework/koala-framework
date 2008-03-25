@@ -8,6 +8,7 @@ div.vpcPostsPost fieldset.quote {
     padding: 10px;
     margin-top: 10px;
     background-color: #f3f2f1;
+    border: 1px solid #ccc;
 }
 div.vpcPostsPost fieldset.quote legend {
     color: #ff9600;
