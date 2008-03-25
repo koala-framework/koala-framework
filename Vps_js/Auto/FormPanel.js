@@ -114,7 +114,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     load : function(params, options) {
 
-        if (this.el) this.el.mask('Loading...');
+        if (this.el) this.el.mask(trlVps('Loading...'));
 
         if (!params) params = {};
 

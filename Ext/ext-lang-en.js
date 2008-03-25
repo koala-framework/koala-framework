@@ -5,8 +5,9 @@
  * English Translations
  */
 
-Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">'+trlVps('Loading...')+'</div>';
-
+if(Ext.UpdateManager){
+	Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">'+trlVps('Loading...')+'</div>';
+}
 if(Ext.View){
   Ext.View.prototype.emptyText = "";
 }
