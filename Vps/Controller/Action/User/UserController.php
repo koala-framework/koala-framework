@@ -42,9 +42,21 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
                ->setAllowBlank(false);
         $fs1->add($editor);
 
+
+
         $fs1->add(new Vps_Auto_Field_TextField('title', trlVps('Title')));
         $fs1->add(new Vps_Auto_Field_TextField('firstname', trlVps('First name')));
         $fs1->add(new Vps_Auto_Field_TextField('lastname', trlVps('Last name')));
+
+        if (isset($this->_getAuthData()->language)){
+            $config = Zend_Registry::get('config');
+            $data = array();
+            foreach ($config->languages as $key => $value){
+                $data[$key] = $value;
+            }
+            $fs1->add(new Vps_Auto_Field_Select('language', trlVps('Language')))
+            ->setValues($data);
+        }
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         $acl = Zend_Registry::get('acl');

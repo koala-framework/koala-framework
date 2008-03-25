@@ -11,27 +11,27 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             'loaded'
         );
         this.actions['delete'] = new Ext.Action({
-            text    : 'Delete',
+            text    : trlVps('Delete'),
             handler : this.onDelete,
             cls     : 'x-btn-text-icon',
             disabled: true,
             scope   : this
         });
         this.actions.add = new Ext.Action({
-            text    : 'Add',
+            text    : trlVps('Add'),
             handler : this.onAdd,
             cls     : 'x-btn-text-icon',
             scope   : this
         });
         this.actions.edit = new Ext.Action({
-            text    : 'Edit',
+            text    : trlVps('Edit'),
             handler : this.onEdit,
             cls     : 'x-btn-text-icon',
             disabled: true,
             scope   : this
         });
         this.actions.invisible = new Ext.Action({
-            text    : 'Toggle Visibility',
+            text    : trlVps('Toggle Visibility'),
             handler : this.onVisible,
             cls     : 'x-btn-text-icon',
             disabled: true,
@@ -65,7 +65,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
 
         // Toolbar
-        if (meta.buttons.each == undefined) { // Abfrage nötig, falls keine Buttons geliefert
+        if (meta.buttons.each == undefined) { // Abfrage n�tig, falls keine Buttons geliefert
             var tbar = [];
             for (var button in meta.buttons) {
                 tbar.add(this.getAction(button));
@@ -195,7 +195,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
 
     onDelete: function (o, e) {
-        Ext.MessageBox.confirm('Löschen', 'Wollen Sie diesen Eintrag wirklich löschen:\n\n"' + this.tree.getSelectionModel().getSelectedNode().text + '"',
+        Ext.MessageBox.confirm(trlVps('Delete'), trlVps('Do you really want to delete this entry:\n\n"') + this.tree.getSelectionModel().getSelectedNode().text + '"',
             function  (button) {
                 if (button == 'yes') {
                     Ext.Ajax.request({

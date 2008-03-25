@@ -28,6 +28,29 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
             scope : this
         });
 
+		this.buttons = [
+		{
+			text: trlVps('Cancel'),
+			handler: function() {
+				this.hide();
+			},
+			scope: this
+		},{
+			text: 'Ok',
+			handler: function() {
+				this.clear = false;
+				this.fireEvent('confirm', this);
+				this.hide();
+			},
+			scope: this
+		}];
+		Vps.Form.GoogleMapWindow.superclass.initComponent.call(this);
+	},
+	afterRender:function(){
+		Vps.Form.GoogleMapWindow.superclass.afterRender.call(this);
+	    this.map = new GMap2(this.body.dom);
+		this.geocoder = new GClientGeocoder();
+		this.map.addControl(new GLargeMapControl());
         this.buttons = [
         {
             text: 'Cancel',
@@ -117,29 +140,29 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
                         this.setMarkerPoint(this.placemarks[index].Point.coordinates[1]+';'+this.placemarks[index].Point.coordinates[0]);
                     }, this);
 
-                    var win = new Ext.Window({
-                        modal: true,
-                        title: 'Mögliche Standorte',
-                        width:400,
-                        height:250,
-                        shadow:true,
-                        closeAction: 'close',
-                        layout: 'fit',
-                        buttons: [{
-                            text: 'Ok',
-                            handler: function() {
-                                win.close();
-                            },
-                            scope: this
-                        }],
-                        items: [grid]
-                    });
-                    win.show();
-                } else {
-                    this.setMarkerPoint(place.Point.coordinates[1]+';'+place.Point.coordinates[0]);
-                }
-            }
-        }
+					var win = new Ext.Window({
+						modal: true,
+						title: trlVps('Possible Destinations'),
+						width:400,
+						height:250,
+						shadow:true,
+						closeAction: 'close',
+						layout: 'fit',
+						buttons: [{
+							text: 'Ok',
+							handler: function() {
+								win.close();
+							},
+							scope: this
+						}],
+						items: [grid]
+            		});
+					win.show();
+				} else {
+					this.setMarkerPoint(place.Point.coordinates[1]+';'+place.Point.coordinates[0]);
+				}
+			}
+	  	}
     },
     showLatLng:function(){
         var pnt = this.marker.getPoint();

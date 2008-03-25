@@ -9,7 +9,7 @@ class Vps_Acl_Component extends Vps_Acl
         $this->add(new Zend_Acl_Resource('vps_component_media'));
         $this->add(new Zend_Acl_Resource('vps_component_index'));
         $this->add(new Vps_Acl_Resource_MenuUrl('vps_component_pages',
-            array('text'=>'Sitetree', 'icon'=>'application_side_tree.png'),
+            array('text'=>trlVps('Sitetree'), 'icon'=>'application_side_tree.png'),
             '/admin/component/pages'));
             $this->add(new Zend_Acl_Resource('vps_component_pageedit'), 'vps_component_pages');
             $this->add(new Zend_Acl_Resource('vps_component_components'),
@@ -18,7 +18,7 @@ class Vps_Acl_Component extends Vps_Acl
                                 'vps_component_pages'); // für /component/edit
 
         $this->add(new Vps_Acl_Resource_MenuUrl('vps_component_overview',
-            array('text'=>'Components', 'icon'=>'application_view_list.png'),
+            array('text'=>trlVps('Components'), 'icon'=>'application_view_list.png'),
             '/admin/component/overview'));
 
         $this->allow(null, 'vps_component_web');

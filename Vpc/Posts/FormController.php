@@ -17,7 +17,7 @@ class Vpc_Posts_FormController extends Vps_Controller_Action_Auto_Form
             ->setWidth(300);
         $this->_form->add(new Vps_Auto_Field_TextField('email', trlVps('Email')))
             ->setWidth(300);
-        $this->_form->add(new Vps_Auto_Field_TextArea('content', trlVps('Inhalt')))
+        $this->_form->add(new Vps_Auto_Field_TextArea('content', trlVps('Content')))
             ->setWidth(300)
             ->setHeight(150);
     }

@@ -45,6 +45,16 @@ class Vps_Controller_Action_User_SelfController extends Vps_Controller_Action_Au
         $fs2->add(new Vps_Auto_Field_TextField('firstname', trlVps('First name')));
         $fs2->add(new Vps_Auto_Field_TextField('lastname', trlVps('Last name')));
 
+        if (isset($this->_getAuthData()->language)){
+            $config = Zend_Registry::get('config');
+            $data = array();
+            foreach ($config->languages as $key => $value){
+                $data[$key] = $value;
+            }
+            $fs2->add(new Vps_Auto_Field_Select('language', trlVps('Language')))
+            ->setValues($data);
+        }
+
     }
 
 

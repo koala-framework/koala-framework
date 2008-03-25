@@ -91,27 +91,36 @@ class Vps_Trl {
 
     private function _setupTrl ($type){
            if ($type == 'project'){
+
+                //Zend_Registry::get('userModel')
                 $directory = '.';
                 $inipath = 'application/trl.xml';
 
                    //festsetzen der sprachen
-                $config = new Zend_Config_Ini('application/config.ini');
+                $config = Zend_Registry::get('config');
                 $cnt = 0;
-                foreach($config->production->languages as $key => $value){
-                    if ($cnt == 0){
-                        $this->_defaultLanguage = $key;
+                $this->_defaultLanguage = $config->webCodeLanguage;
 
-                    } elseif ($cnt == 0){
-                        $this->_targetLanguage = $key;
-                    }
-                    $cnt++;
-                }
+                if (isset(Zend_Registry::get('userModel')->getAuthedUser()->language)
+                   && Zend_Registry::get('userModel')->getAuthedUser()->language){
+                   $this->_targetLanguage = Zend_Registry::get('userModel')->getAuthedUser()->language;
+               } else {
+                   $config = Zend_Registry::get('config');
+                   $this->_targetLanguage = $config->webCodeLanguage;
+               }
 
            } else {
+
+               $this->_defaultLanguage = 'en';
+               if (isset(Zend_Registry::get('userModel')->getAuthedUser()->language)
+                   && Zend_Registry::get('userModel')->getAuthedUser()->language){
+                   $this->_targetLanguage = Zend_Registry::get('userModel')->getAuthedUser()->language;
+               } else {
+                   $config = Zend_Registry::get('config');
+                   $this->_targetLanguage = $config->webCodeLanguage;
+               }
                $directory = VPS_PATH;
                $inipath = $directory.'/trl.xml';
-               $this->_defaultLanguage = 'en';
-               $this->_targetLanguage = 'de';
            }
            $contents = file_get_contents($inipath);
            return new SimpleXMLElement($contents);

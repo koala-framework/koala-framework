@@ -24,7 +24,7 @@ class Vpc_Basic_LinkTag_Intern_Form extends Vps_Auto_Vpc_Form
     {
         $pageId = $row->component_id;
         if ($pageId == $postData[$this->fields['target']->getFieldName()]) {
-            throw new Vps_ClientException('Link cannot link to itself');
+            throw new Vps_ClientException(trlVps('Link cannot link to itself'));
         }
         parent::prepareSave($row, $postData);
     }

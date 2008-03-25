@@ -37,7 +37,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         $this->_columns->add(new Vps_Auto_Grid_Column('email', trlVps('Email'), 140));
         $this->_columns->add(new Vps_Auto_Grid_Column('role', trlVps('Rights')));
 
-        $this->_columns->add(new Vps_Auto_Grid_Column_Button('edit', 'Edit'));
+        $this->_columns->add(new Vps_Auto_Grid_Column_Button('edit', trlVps('Edit')));
 
         $this->_columns->add(new Vps_Auto_Grid_Column('email', 'Email', 140));
         $this->_columns->add(new Vps_Auto_Grid_Column('role', 'Rights'))
@@ -45,8 +45,14 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         $this->_columns->add(new Vps_Auto_Grid_Column('gender', trlVps('Gender'), 50));
         $this->_columns->add(new Vps_Auto_Grid_Column('title', trlVps('Title'), 100));
         $this->_columns->add(new Vps_Auto_Grid_Column('name'));
+
+
         $this->_columns->add(new Vps_Auto_Grid_Column('firstname', trlVps('First name'), 150));
         $this->_columns->add(new Vps_Auto_Grid_Column('lastname', trlVps('Last name'), 150));
+
+        if (isset($this->_getAuthData()->language)){
+             $this->_columns->add(new Vps_Auto_Grid_Column('language', trlVps('lang'), 30));
+        }
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         $acl = Zend_Registry::get('acl');
