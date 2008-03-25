@@ -120,10 +120,6 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             this.allowBlank = false;
         }
 
-		this.on('change', function(){
-			alert(this.getValue());
-		});
-
         Vps.Form.ComboBox.superclass.initComponent.call(this);
     } ,
     addNoSelection : function() {
