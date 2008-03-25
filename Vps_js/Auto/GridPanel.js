@@ -27,7 +27,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             scope   : this
         });
         this.actions.save = new Ext.Action({
-            text    : 'Save',
+            text    : trlVps('Save'),
             icon    : '/assets/silkicons/table_save.png',
             cls     : 'x-btn-text-icon',
             disabled: true,
@@ -35,14 +35,14 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             scope   : this
         });
         this.actions.add = new Ext.Action({
-            text    : 'Add',
+            text    : trlVps('Add'),
             icon    : '/assets/silkicons/table_add.png',
             cls     : 'x-btn-text-icon',
             handler : this.onAdd,
             scope: this
         });
         this.actions['delete'] = new Ext.Action({
-            text    : 'Delete',
+            text    : trlVps('Delete'),
             icon    : '/assets/silkicons/table_delete.png',
             cls     : 'x-btn-text-icon',
             handler : this.onDelete,
@@ -50,7 +50,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             needsSelection: true
         });
         this.actions.edit = new Ext.Action({
-            text    : 'Edit',
+            text    : trlVps('Edit'),
             icon    : '/assets/silkicons/table_edit.png',
             cls     : 'x-btn-text-icon',
             handler : this.onEdit,
@@ -58,7 +58,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             needsSelection: true
         });
         this.actions.duplicate = new Ext.Action({
-            text    : 'Duplicate',
+            text    : trlVps('Duplicate'),
             icon    : '/assets/silkicons/table_go.png',
             cls     : 'x-btn-text-icon',
             handler : this.onDuplicate,
@@ -66,21 +66,21 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             needsSelection: true
         });
         this.actions.pdf = new Ext.Action({
-            text    : 'Drucken',
+            text    : trlVps('Print'),
             icon    : '/assets/silkicons/printer.png',
             cls     : 'x-btn-text-icon',
             handler : this.onPdf,
             scope: this
         });
         this.actions.csv = new Ext.Action({
-            text    : 'CSV Export',
+            text    : trlVps('CSV Export'),
             icon    : '/assets/silkicons/page_code.png',
             cls     : 'x-btn-text-icon',
             handler : this.onCsv,
             scope: this
         });
         this.actions.xls = new Ext.Action({
-            text    : 'Excel Export',
+            text    : trlVps('Excel Export'),
             icon    : '/assets/silkicons/page_excel.png',
             cls     : 'x-btn-text-icon',
             handler : this.onXls,
@@ -731,8 +731,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
     onDelete : function() {
         Ext.Msg.show({
-            title:'Delete',
-            msg: 'Do you really wish to remove this entry / these entries?',
+            title:trlVps('Delete'),
+            msg: trlVps('Do you really wish to remove this entry / these entries?'),
             buttons: Ext.Msg.YESNO,
             scope: this,
             fn: function(button) {

@@ -8,7 +8,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
         var componentMenu = new Ext.menu.Menu({id: 'componentMenu'});
         this.addComponents(this.components, componentMenu);
         this.actions.addparagraph = new Ext.Action({
-            text : 'Add Paragraph',
+            text : trlVps('Add Paragraph'),
             icon : '/assets/vps/images/paragraphAdd.png',
             cls  : 'x-btn-text-icon',
             menu : componentMenu

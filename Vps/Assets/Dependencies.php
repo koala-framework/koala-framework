@@ -81,6 +81,9 @@ class Vps_Assets_Dependencies
                 $files[] = $file;
             }
         }
+        if ($fileType == 'js') {
+            $files[] = 'vps/Ext/ext-lang-en.js';
+        }
         return $files;
     }
 

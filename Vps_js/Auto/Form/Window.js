@@ -66,7 +66,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
 
         if (type == 'save') {
             this.actions[type] = new Ext.Action({
-                text    : 'Save',
+                text    : trlVps('Save'),
                 handler : function() {
                     this.getAutoForm().submit({
                         success: function() {
@@ -79,7 +79,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
             });
         } else if (type == 'cancel') {
             this.actions[type] = new Ext.Action({
-                text    : 'Cancel',
+                text    : trlVps('Cancel'),
                 handler : function() {
                     this.hide();
                 },

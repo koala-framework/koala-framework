@@ -13,7 +13,7 @@ class Vpc_Forum_ModeratorsToGroupController extends Vps_Controller_Action_Auto_A
         $serviceUserClass = get_class(Zend_Registry::get('userModel'));
 
         $this->_columns->add(new Vps_Auto_Grid_Column('user_id', 'ID', 55));
-        $this->_columns->add(new Vps_Auto_Grid_Column('title', trlVps('Titlel'), 60))
+        $this->_columns->add(new Vps_Auto_Grid_Column('title', trlVps('Title'), 60))
                        ->setData(new Vps_Auto_Data_Table_Parent($serviceUserClass, 'title'));
         $this->_columns->add(new Vps_Auto_Grid_Column('firstname', trlVps('Firstname'), 120))
                        ->setData(new Vps_Auto_Data_Table_Parent($serviceUserClass, 'firstname'));

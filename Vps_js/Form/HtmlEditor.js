@@ -47,7 +47,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             scope: this,
             tooltip: {
                 cls: 'x-html-editor-tip',
-                title: 'Hyperlink',
+                title: trlVps('Hyperlink'),
                 text: trlVps('Create new Link for the selected text or edit selected Link.')
             },
             cls: 'x-btn-icon x-edit-createlink',
@@ -60,7 +60,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             icon: '/assets/silkicons/arrow_undo.png',
             tooltip: {
                 cls: 'x-html-editor-tip',
-                title: 'Undo (Ctrl+Z)',
+                title: trlVps('Undo (Ctrl+Z)'),
                 text: trlVps('Undo the last action.')
             },
             cls: 'x-btn-icon',
@@ -73,7 +73,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             icon: '/assets/silkicons/arrow_redo.png',
             tooltip: {
                 cls: 'x-html-editor-tip',
-                title: 'Redo',
+                title: trlVps('Redo'),
                 text: trlVps('Redo the last action.')
             },
             cls: 'x-btn-icon',
@@ -174,7 +174,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 scope: this,
                 tooltip: {
                     cls: 'x-html-editor-tip',
-                    title: 'Character',
+                    title: trlVps('Character'),
                     text: trlVps('Insert a custom character.')
                 },
                 cls: 'x-btn-icon',
@@ -189,7 +189,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 scope: this,
                 tooltip: {
                     cls: 'x-html-editor-tip',
-                    title: 'Insert Plain Text',
+                    title: trlVps('Insert Plain Text'),
                     text: trlVps('Insert text without formating.')
                 },
                 cls: 'x-btn-icon',
@@ -205,7 +205,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 scope: this,
                 tooltip: {
                     cls: 'x-html-editor-tip',
-                    title: 'Clean Html',
+                    title: trlVps('Clean Html'),
                     text: trlVps('Clean up Html and remove formatings.')
                 },
                 cls: 'x-btn-icon',

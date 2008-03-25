@@ -6,6 +6,6 @@
         -
     {/if}
     {if $component.created}
-        <span> ( {trlVps text="Mitglied seit"}: {$component.created|date_format:"%d.%m.%y"} )</span>
+        <span> ( {trlVps text="Member since"}: {$component.created|date_format:"%d.%m.%y"} )</span>
     {/if}
 </div>

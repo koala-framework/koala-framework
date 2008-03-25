@@ -21,14 +21,14 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             'renderform'
         );
         this.actions.save = new Ext.Action({
-            text    : 'Save',
+            text    : trlVps('Save'),
             icon    : '/assets/silkicons/table_save.png',
             cls     : 'x-btn-text-icon',
             handler : this.onSave,
             scope   : this
         });
         this.actions.saveBack = new Ext.Action({
-            text    : 'Save and Back',
+            text    : trlVps('Save and Back'),
             icon    : '/assets/silkicons/table_save.png',
             cls     : 'x-btn-text-icon',
             handler : this.onSaveBack,
@@ -36,14 +36,14 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             hidden  : true //standardmäßig versteckt, ComponentPanel ruft show() auf
         });
         this.actions['delete'] = new Ext.Action({
-            text    : 'Delete',
+            text    : trlVps('Delete'),
             icon    : '/assets/silkicons/table_delete.png',
             cls     : 'x-btn-text-icon',
             handler : this.onDelete,
             scope   : this
         });
         this.actions.add = new Ext.Action({
-            text    : 'New Entry',
+            text    : trlVps('New Entry'),
             icon    : '/assets/silkicons/table_add.png',
             cls     : 'x-btn-text-icon',
             handler : this.onAdd,
@@ -61,7 +61,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         });
 
         if (!this.controllerUrl) {
-            throw new Error('No controllerUrl specified for AutoForm.');
+            throw new Error(trlVps('No controllerUrl specified for AutoForm.'));
         }
         this.formConfig.url = this.controllerUrl + '/jsonSave';
     },
@@ -245,7 +245,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
     onSubmitFailure: function(form, action) {
         if(action.failureType == Ext.form.Action.CLIENT_INVALID) {
-            Ext.Msg.alert('Save',
+            Ext.Msg.alert(trlVps('Save'),
                 trlVps("Can't save, please fill all marked fields correctly."));
         }
         this.getAction('save').enable();
@@ -272,7 +272,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
     onDelete : function() {
         Ext.Msg.show({
-        title:'löschen?',
+        title:trlVps('delete?'),
         msg: trlVps('Do you really want to delete this entry?'),
         buttons: Ext.Msg.YESNO,
         scope: this,
