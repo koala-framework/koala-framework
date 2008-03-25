@@ -47,7 +47,7 @@ class Vpc_Formular_DoublePassword_Component extends Vpc_Abstract_Composite_Compo
         if ($this->getChildComponent('password1')->getValue() !=
             $this->getChildComponent('password2')->getValue()
         ) {
-            $return = "Passwörter sind unterschiedlich. Bitte versuchen Sie es erneut.";
+            $return = trlVps("Passwords are different. Please try again.");
         }
         return $return;
     }

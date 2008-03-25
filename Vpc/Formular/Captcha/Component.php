@@ -260,7 +260,7 @@ class Vpc_Formular_Captcha_Component extends Vpc_Formular_Field_Abstract
             $code = $_POST['hidden'];
             $captcha = $_POST['captcha'];
             if ($code != $this->encrypt($captcha)) {
-                return 'Das Captcha Feld muss korrekt ausgefüllt werden';
+                return trlVps('The captcha field has to be filled out correctly!');
             }
         }
         return '';

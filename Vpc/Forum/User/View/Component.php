@@ -17,10 +17,10 @@ class Vpc_Forum_User_View_Component extends Vpc_Abstract
         $forumUserData = $this->getTable()->find($userId)->current();
 
         if (!$userData) {
-            throw new Vps_ClientException('Benutzer existiert nicht (mehr).');
+            throw new Vps_ClientException(trlVps('User does not exist (anymore).'));
         }
         if (!$forumUserData) {
-            throw new Vps_ClientException('Forum-Benutzer existiert nicht (mehr).');
+            throw new Vps_ClientException(trlVps('Forum-User does not exist (anymore).'));
         }
 
         $ret['userData'] = $userData->toArray();

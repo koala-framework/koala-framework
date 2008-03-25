@@ -40,11 +40,11 @@ class Vpc_Formular_Checkbox_Component extends Vpc_Formular_Field_Abstract
             $validator = new $validatorString();
             if (!$validator->isValid($value)) {
                 $v = str_replace('Zend_Validate_', '', $validatorString);
-                return 'Das Feld ' . $this->getStore('fieldLabel') . ' entspricht nicht der geforderten Formatierung (' . $v . ')';
+                return trlVps('Field {0} does not fit to the required formatting ({1})', array($this->getStore('fieldLabel'), $v));
             }
         }
         if ($mandatory && $value == '') {
-            return 'Feld ' . $this->getStore('fieldLabel') . ' ist ein Pflichtfeld.';
+            return trlVps('Field {0} is mandatory.', $this->getStore('fieldLabel'));
         }
         return '';
     }

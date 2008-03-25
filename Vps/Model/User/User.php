@@ -22,7 +22,7 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
     {
         $webCode = Zend_Registry::get('config')->service->users->webcode;
         if (is_null($webCode)) {
-            throw new Vps_Exception("'service.users.webcode' not defined in config");
+            throw new Vps_Exception(trlVps("'service.users.webcode' not defined in config"));
         }
         return $webCode;
     }
@@ -101,7 +101,7 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
             if ($restResult->status()) {
                 if ($this->getTable()->find((int)$restResult->data->id)->current()) {
                     throw new Vps_ClientException(
-                        'An account with this email address already exists'
+                        trlVps('An account with this email address already exists')
                     );
                 }
             }
@@ -153,7 +153,7 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
             if ($this->_changedPasswordData['password1'] == $this->_changedPasswordData['password2']) {
                 $this->setPassword($this->_changedPasswordData['password1']);
             } else {
-                throw new Vps_ClientException('Passwords are different - please try again');
+                throw new Vps_ClientException(trlVps('Passwords are different - please try again'));
             }
         }
 
@@ -163,21 +163,21 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
     public function sendActivationMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - Benutzerkonto erstellt';
+        $subject .= trlVps(' - Useraccount created');
         return $this->_sendMail('mails/UserActivation.txt.tpl', $subject);
     }
 
     public function sendLostPasswordMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - Passwort vergessen';
+        $subject .= trlVps(' - lost password');
         return $this->_sendMail('mails/UserLostPassword.txt.tpl', $subject);
     }
 
     public function sendChangedMailMail($oldMail)
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - Email geaendert';
+        $subject .= trlVps(' - Email changed');
         return $this->_sendMail(
             'mails/UserChangedMail.txt.tpl',
             $subject,
@@ -188,7 +188,7 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
     public function sendDeletedMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - Account entfernt';
+        $subject .= trlVps(' - Accound deleted');
         return $this->_sendMail('mails/UserDeleted.txt.tpl', $subject);
     }
 

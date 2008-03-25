@@ -7,13 +7,13 @@
                 <a class="name" href="{$g.url}">{$g.name}</a>
                 <p>{$g.description}</p>
             </div>
-            
+
             <div class="lastPost">
                 <div class="statistik">
-                    <div class="threads"><strong>Themen:</strong> {$g.numThreads}</div>
-                    <div class="posts"><strong>Beiträge:</strong> {$g.numPosts}</div>
+                    <div class="threads"><strong>{trlVps text="Topics"}:</strong> {$g.numThreads}</div>
+                    <div class="posts"><strong>{trlVps text="Entries"}:</strong> {$g.numPosts}</div>
                 </div>
-                Letzter Beitrag:
+                {trlVps text="Last Entry"}:
                 {if $g.lastPostSubject}
                     <a href="{$g.lastPostUrl}" title="{$g.lastPostSubject}">{$g.lastPostSubject|truncate:40:'...':true}</a>
                     <div class="time">

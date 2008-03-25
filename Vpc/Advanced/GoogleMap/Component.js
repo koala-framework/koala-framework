@@ -29,10 +29,10 @@ Vpc.Advanced.GoogleMap = function(mapContainer, options, text){
 		container.setHeight(parseInt(options.height));
 
 		var input = mapContainer.down("form.fromAddress input");
-		input.dom.value = 'Ihr Abfahrtsort: PLZ, Ort, Straße';
-		//input.set({value:'Ihr Abfahrtsort: PLZ, Ort, Straße'}); // auskommentiert wegen problemen mit safari
+		input.dom.value = trlVps('Place of departure: zip code, Town, Street');
+		//input.set({value:'Place of departure: zip code, Town, Street'}); // auskommentiert wegen problemen mit safari
 		input.on('focus', function() {
-			if (this.getValue() == 'Ihr Abfahrtsort: PLZ, Ort, Straße'){
+			if (this.getValue() == trlVps('Place of departure: zip code, Town, Street')){
 				/*this.set({
 					value: ''
 				});*/
@@ -45,7 +45,7 @@ Vpc.Advanced.GoogleMap = function(mapContainer, options, text){
 			if (this.getValue()=='') {
 				/*this.set({
 					value:'Ihr Abfahrtsort: PLZ, Ort, Straße'});*/
-					input.dom.value = 'Ihr Abfahrtsort: PLZ, Ort, Straße';
+					input.dom.value = trlVps('Place of departure: zip code, Town, Street');
 					this.removeClass('textOn');
 					this.addClass('textBefore');
 
@@ -105,7 +105,7 @@ Vpc.Advanced.GoogleMap.prototype = {
  	},
 	testCallback : function(o) {
 		if (!o.Placemark) {
-            alert('Eingegebener Ort konnte nicht gefunden werden.');
+            alert(trlVps('Entered place could not been found!'));
         } else {
             this.useFrom(o.Placemark[0], false);
             this.suggestLocations(o.Placemark);

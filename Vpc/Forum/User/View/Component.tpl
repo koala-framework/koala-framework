@@ -1,5 +1,5 @@
 <div class="vpcForumUser">
-    <h1>Benutzerprofil:</h1>
+    <h1>{trlVps text="Userprofile:"}</h1>
     <div class="text">
 
         {if $component.forumUserData.nickname}
@@ -7,43 +7,43 @@
         {/if}
 
         {if $component.userData.firstname || $component.userData.lastname}
-            <p><strong>Name:</strong>
+            <p><strong>{trlVps text="Name"}:</strong>
             {$component.userData.title}
             {$component.userData.firstname}
             {$component.userData.lastname}</p>
         {/if}
 
         <p>
-            <strong>Mitglied seit:</strong>
+            <strong>{trlVps text="Member since"}:</strong>
             {$component.userData.created|date_format:"%d.%m.%y"}
         </p>
 
         <p>
-            <strong>Zuletzt online:</strong>
+            <strong>{trlVps text="Latest online"}:</strong>
             {$component.userData.last_login|date_format:"%d.%m.%y, %H:%M"}
         </p>
 
         {if $component.forumUserData.location}
-            <p><strong>Ort:</strong> {$component.forumUserData.location}</p>
+            <p><strong>{trlVps text="Town"}:</strong> {$component.forumUserData.location}</p>
         {/if}
 
         {if $component.forumUserData.description_short}
             <p>
-                <strong>Kurzbeschreibung:</strong>
+                <strong>{trlVps text="Short description"}:</strong>
                 {$component.forumUserData.description_short|htmlspecialchars|nl2br}
             </p>
         {/if}
 
         {if $component.forumUserData.signature}
             <p>
-                <strong>Signatur:</strong>
+                <strong>{trlVps text="Signature":</strong>
                 {$component.forumUserData.signature|htmlspecialchars|nl2br}
             </p>
         {/if}
 
         {if $component.lastThreads}
             <p>
-                <strong>Die neuesten Themen ({$component.userThreads} gesamt):</strong>
+                <strong>{trlVps text="Latest topics"} ({$component.userThreads} gesamt):</strong>
                 <ul>
                     {foreach from=$component.lastThreads item=thread}
                         <li>
@@ -57,7 +57,7 @@
 
         {if $component.lastPosts}
             <p>
-                <strong>Die neuesten Beiträge ({$component.userPosts} gesamt):</strong>
+                <strong>{trlVps text="Latest entries"} ({$component.userPosts} gesamt):</strong>
                 <ul>
                     {foreach from=$component.lastPosts item=post}
                         <li>

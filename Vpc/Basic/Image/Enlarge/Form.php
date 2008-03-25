@@ -9,10 +9,10 @@ class Vpc_Basic_Image_Enlarge_Form extends Vpc_Basic_Image_Form
         if (Vpc_Abstract::getSetting($class, 'hasSmallImageComponent')) {
             $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
             $image = new Vpc_Basic_Image_Form($classes['smallImage'], $childId);
-            $image->fields->getByName('vps_upload_id')->setFileFieldLabel('File (optional)');
+            $image->fields->getByName('vps_upload_id')->setFileFieldLabel(trlVps('File (optional)'));
             $this->add(new Vps_Auto_Container_FieldSet('Small Image (optional)'))
                 ->setCheckboxToggle(true)
-                ->setCheckboxName('enlarge')
+                ->setCheckboxName(trlVps('enlarge'))
                 ->add($image);
         }
     }

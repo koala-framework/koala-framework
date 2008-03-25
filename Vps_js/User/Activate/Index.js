@@ -20,9 +20,9 @@ Vps.User.Activate.Index = Ext.extend(Ext.Panel,
                 width: 330,
 
                 items: [{
-                    html: 'Please type in your password. After clicking the button below '
-                         +'you are logged in automatically and may use the typed in password '
-                         +'for future logins.<br />Your email address: <b>' + this.email + '</b>',
+                    html: trlVps('Please type in your password. After clicking the button below ')
+                         +trlVps('you are logged in automatically and may use the typed in password ')
+                         +trlVps('for future logins.')+'<br />'+trlVps('Your email address: ')+'<b>' + this.email + '</b>',
                     xtype: 'panel',
                     bodyStyle: 'background-color:transparent; padding:5px; margin-bottom:10px;'
                 }, {
@@ -39,7 +39,7 @@ Vps.User.Activate.Index = Ext.extend(Ext.Panel,
                     xtype: 'textfield'
                 }],
 
-                buttons: [{ text: 'Activate &amp; login account', handler: this.activateAction, scope: this }]
+                buttons: [{ text: trlVps('Activate and login account'), handler: this.activateAction, scope: this }]
             });
             dlg.show();
         }
@@ -51,7 +51,7 @@ Vps.User.Activate.Index = Ext.extend(Ext.Panel,
         if (password != document.getElementsByName('password2')[0].value) {
             Ext.Msg.show({
                 title: 'Passwords not equal',
-                msg: 'The repeated password is different - please try again.',
+                msg: trlVps('The repeated password is different - please try again.'),
                 buttons: Ext.Msg.OK
             });
         } else {

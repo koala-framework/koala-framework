@@ -246,7 +246,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     onSubmitFailure: function(form, action) {
         if(action.failureType == Ext.form.Action.CLIENT_INVALID) {
             Ext.Msg.alert('Save',
-                "Can't save, please fill all marked fields correctly.");
+                trlVps("Can't save, please fill all marked fields correctly."));
         }
         this.getAction('save').enable();
     },
@@ -273,7 +273,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     onDelete : function() {
         Ext.Msg.show({
         title:'löschen?',
-        msg: 'Möchten Sie diesen Eintrag wirklich löschen?',
+        msg: trlVps('Do you really want to delete this entry?'),
         buttons: Ext.Msg.YESNO,
         scope: this,
         fn: function(button) {

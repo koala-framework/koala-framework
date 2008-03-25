@@ -7,7 +7,7 @@ class Vpc_Formular_Submit_Component extends Vpc_Abstract
             'componentName' => 'Formular Fields.Submit',
             'tablename' => 'Vpc_Formular_Submit_Model',
             'default' => array(
-                'text' => 'Submit'
+                'text' => trlVps('Submit')
             )
         ));
     }

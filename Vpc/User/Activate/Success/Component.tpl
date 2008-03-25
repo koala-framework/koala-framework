@@ -1,9 +1,9 @@
 <p>
-    <strong>Ihr Benutzerkonto wurde erfolgreich aktiviert.</strong>
+    <strong>{trlVps text="Your useraccount was successfully activated."}</strong>
 </p>
 <p>
-    Sie wurden automatisch eingeloggt.<br />
-    <a href="/">Klicken Sie hier</a>, um zurück zur Startseite zu gelangen.
+    {trlVps text="You were logged in, automatically."}.<br />
+    <a href="/">{trlVps text="Click here"}</a>, {trlVps text="to get back to the Startpage"}.
 
     <script type="text/javascript">
         window.setTimeout("window.location.href = '/'", 3000);

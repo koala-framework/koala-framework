@@ -1,13 +1,11 @@
-Hello {$fullname}!
+{trlVps text="Hello [0]!" 0=$fullname}
 
-Your account at {$webUrl}
-has just been created.
-Please use the following link to choose yourself a password.
+{trlVps text="Your account at [0]
+has just been created." 0=$webUrl}
+{trlVps text="Please use the following link to choose yourself a password and to login"}
 {$webUrl}{$activationUrl}?code={$activationCode}
-and to log in.
 
 {$applicationName}
 
 --
-This email has been generated automatically. There may be no
-recipient if you answer to this email.
+{trlVps text="This email has been generated automatically. There may be no recipient if you answer to this email."}

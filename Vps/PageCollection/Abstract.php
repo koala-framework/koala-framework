@@ -25,7 +25,7 @@ abstract class Vps_PageCollection_Abstract
                 $this->_urlScheme = $urlScheme;
                 break;
             default:
-                throw new Vps_PageCollection_Exception('Invalid urlScheme specified');
+                throw new Vps_PageCollection_Exception(trlVps('Invalid urlScheme specified'));
                 break;
         }
         $this->_decoratorClasses = $decoratorClasses;
@@ -72,15 +72,15 @@ abstract class Vps_PageCollection_Abstract
                 $filename = $pageData['filename'];
                 $name = $pageData['name'];
             } else {
-                throw new Vps_Page_Collection_Exception("Couldn\'t create Page with id $id");
+                throw new Vps_Page_Collection_Exception(trlVps("Couldn\'t create Page with id {0}", $id));
             }
         }
         if (!$page instanceof Vpc_Interface) {
-            throw new Vps_PageCollection_Exception("Component must be instance of Vpc_Interface.");
+            throw new Vps_PageCollection_Exception(trlVps("Component must be instance of Vpc_Interface."));
         }
 
         if ($filename == '') {
-            throw new Vps_PageCollection_Exception("Pagename must not be empty. Probably Component is not a Page.");
+            throw new Vps_PageCollection_Exception(trlVps("Pagename must not be empty. Probably Component is not a Page."));
         }
         $page->setPageCollection($this);
         $id = $page->getPageId();
@@ -115,7 +115,7 @@ abstract class Vps_PageCollection_Abstract
                 $page = new $class($this->_dao, $page);
                 $page->setPageCollection($this);
             } catch (Zend_Exception $e) {
-                throw new Vpc_ComponentNotFoundException("Decorator '$class' not found.");
+                throw new Vpc_ComponentNotFoundException(trlVps("Decorator  not found.", '\''.$class.'\''));
             }
         }
         return $page;
@@ -126,7 +126,7 @@ abstract class Vps_PageCollection_Abstract
         $id = $page->getPageId();
 
         if (isset($this->_pages[$id])) {
-            throw new Vps_PageCollection_Exception('A page with the same componentId already exists.');
+            throw new Vps_PageCollection_Exception(trlVps('A page with the same componentId already exists.'));
         }
 
         $this->_pages[$id] = $page;

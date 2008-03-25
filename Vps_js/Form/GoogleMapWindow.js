@@ -65,7 +65,7 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
         GEvent.addListener(this.marker, 'dragend',   this.showLatLng.createDelegate(this));
     },
 	addressPrompt:function(){
-		Ext.Msg.prompt('Adresse eingeben', 'Beispiel: Pfongauerstraße 67, 5202 Neumarkt am Wallersee', function(btn, text){
+		Ext.Msg.prompt(trlVps('enter address'), trlVps('Example: Pfongauerstraße 67, 5202 Neumarkt am Wallersee'), function(btn, text){
 		    if (btn == 'ok' && text != ''){
 		        this.geoCodeLookup(text);
 		    }
@@ -77,13 +77,13 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
 	addAddressToMap : function(response) {
 		this.placemarks = response.Placemark;
 		if (!response || response.Status.code != 200) {
-			Ext.MessageBox.alert('Error', 'Code '+response.Status.code+' Error Returned');
+			Ext.MessageBox.alert(trlVps('Error'), trlVps('Code {0} Error Returned', [response.Status.code]));
 			} else {
 			place = response.Placemark[0];
 			addressinfo = place.AddressDetails;
 			accuracy = addressinfo.Accuracy;
 			if (accuracy == 0) {
-				Ext.MessageBox.alert('Ungültie Adresse', 'Ihre Adresse kann nicht gefunden werden');
+				Ext.MessageBox.alert(trlVps('Unknown address'), trlVps('Address could not be found'));
 			}else{
 				if (accuracy < 7) {
 					var myData = [];
@@ -144,7 +144,8 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
         pnt.x = Math.round(pnt.x * 100000000) / 100000000;
 		this.markerpoint_x = pnt.x;
 		this.markerpoint_y = pnt.y;
-        this.marker.openInfoWindowHtml('<b>Marker bei gedrückter Maustaste verschieben.</b><br /><br />Breitengrad: '+ pnt.y +'<br />Längengrad: '+ pnt.x);
+        this.marker.openInfoWindowHtml(trlVps('<b>Move marker while pressing mousekey.')+'</b><br /><br />' +
+				trlVps('Latitude: ')+ pnt.y +'<br />'+trlVps('Longitude: ')+ pnt.x);
 	},
 	hideLatLng:function(){
 		this.marker.closeInfoWindow();

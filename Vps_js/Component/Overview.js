@@ -50,14 +50,14 @@ Vps.Component.Overview = Ext.extend(Vps.Auto.GridPanel, {
     onCreate : function(createType)
     {
         if (!this.getSelected()) return;
-        Ext.getBody().mask('Copying...');
+        Ext.getBody().mask(trlVps('Copying...'));
         Ext.Ajax.request({
             url: this.controllerUrl+'/jsonCreate',
             params: { type: createType, 'class': this.getSelected().data['class'] },
             success: function(a, b, r) {
                 this.reload();
-                Ext.Msg.alert('create '+createType,
-                              "File successfully created: "+r.path);
+                Ext.Msg.alert(trlVps('create ')+createType,
+                              trlVps("File successfully created: ")+r.path);
             },
             scope: this,
             callback: function() {
@@ -72,7 +72,7 @@ Vps.Component.Overview = Ext.extend(Vps.Auto.GridPanel, {
             data.push([c, c]);
         }, this);
         var component = new Vps.Form.ComboBox({
-            fieldLabel: 'Component',
+            fieldLabel: trlVps('Component'),
             editable: false,
             triggerAction: 'all',
             forceSelection: true,
@@ -95,7 +95,7 @@ Vps.Component.Overview = Ext.extend(Vps.Auto.GridPanel, {
             }
         }, this);
         var dlg = new Ext.Window({
-            title: 'Add Component',
+            title: trlVps('Add Component'),
             width: 450,
             modal: true,
             items: [{
@@ -109,7 +109,7 @@ Vps.Component.Overview = Ext.extend(Vps.Auto.GridPanel, {
                 text: 'OK',
                 handler: function() {
                     dlg.close();
-                    Ext.getBody().mask('Creating...');
+                    Ext.getBody().mask(trlVps('Creating...'));
                     Ext.Ajax.request({
                         url: this.controllerUrl+'/jsonAddComponent',
                         params: {
@@ -117,8 +117,8 @@ Vps.Component.Overview = Ext.extend(Vps.Auto.GridPanel, {
                             name: name.getValue()
                         },
                         success: function(a,b,r) {
-                                Ext.Msg.alert('Add Component',
-                                        "File successfully created: "+r.path);
+                                Ext.Msg.alert(trlVps('Add Component'),
+                                        trlVps("File successfully created: ")+r.path);
                         },
                         callback: function() {
                             Ext.getBody().unmask();

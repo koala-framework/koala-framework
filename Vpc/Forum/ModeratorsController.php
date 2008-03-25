@@ -19,9 +19,9 @@ class Vpc_Forum_ModeratorsController extends Vps_Controller_Action_Auto_Grid
     protected function _initColumns()
     {
         $this->_columns->add(new Vps_Auto_Grid_Column('id', 'ID', 55));
-        $this->_columns->add(new Vps_Auto_Grid_Column('title', 'Titel', 60));
-        $this->_columns->add(new Vps_Auto_Grid_Column('firstname', 'Vorname', 120));
-        $this->_columns->add(new Vps_Auto_Grid_Column('lastname', 'Zuname', 120));
-        $this->_columns->add(new Vps_Auto_Grid_Column('email', 'Email', 180));
+        $this->_columns->add(new Vps_Auto_Grid_Column('title', trlVps('Title'), 60));
+        $this->_columns->add(new Vps_Auto_Grid_Column('firstname', trlVps('Firstname'), 120));
+        $this->_columns->add(new Vps_Auto_Grid_Column('lastname', trlVps('Lastname'), 120));
+        $this->_columns->add(new Vps_Auto_Grid_Column('email', trlVps('Email'), 180));
     }
 }

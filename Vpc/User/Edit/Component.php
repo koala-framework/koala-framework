@@ -43,8 +43,8 @@ class Vpc_User_Edit_Component extends Vpc_Formular_Component
         $c->store('isMandatory', false);
 
         $genderOptions = array(
-            array('value' => 'female', 'text'  => 'Weiblich', 'checked' => 1),
-            array('value' => 'male', 'text'  => 'Männlich', 'checked' => 0)
+            array('value' => 'female', 'text'  => trlVps('Female'), 'checked' => 1),
+            array('value' => 'male', 'text'  => trlVps('Male'), 'checked' => 0)
         );
         if (isset($_POST['gender']) && $_POST['gender'] == 'female' ||
             ($user && $user->gender == 'female')
@@ -61,13 +61,13 @@ class Vpc_User_Edit_Component extends Vpc_Formular_Component
         $c = $this->_createFieldComponent('Select', array('name'=>'gender', 'type' => 'select', 'width'=>200));
         $c->store('name', 'gender');
         $c->setOptions($genderOptions);
-        $c->store('fieldLabel', 'Geschlecht');
+        $c->store('fieldLabel', trlVps('Gender'));
         $c->store('isMandatory', true);
 
         $this->_webFields();
 
         $c = $this->_createFieldComponent('Submit', array(
-            'name'=>'sbmt', 'width'=>200, 'text' => 'Account bearbeiten'
+            'name'=>'sbmt', 'width'=>200, 'text' => trlVps('Edit account')
         ));
         $c->store('name', 'sbmt');
         $c->store('fieldLabel', '&nbsp;');

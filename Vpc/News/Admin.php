@@ -8,7 +8,7 @@ class Vpc_News_Admin extends Vpc_Admin
         $plugins = array();
         foreach ($categories as $katname => $katsettings) {
             if (!isset($classes[$katname])) {
-                throw new Vps_Exception('childComponentClass must be set for key \''.$katname.'\'');
+                throw new Vps_Exception(trlVps('childComponentClass must be set for key \'{0}\'', $katname));
             }
             $pluginName = Vpc_Admin::getComponentFile(
                 $classes[$katname], 'Plugins', 'js', true
@@ -29,7 +29,7 @@ class Vpc_News_Admin extends Vpc_Admin
     {
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
         Vpc_Admin::getInstance($classes['details'])->setup();
-        
+
         if (!$this->_tableExists($tablename)) {
             $this->_db->query("CREATE TABLE IF NOT EXISTS `vpc_news` (
   `id` smallint(6) NOT NULL auto_increment,
@@ -43,7 +43,7 @@ class Vpc_News_Admin extends Vpc_Admin
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
         }
     }
-    
+
     public function delete($componentId)
     {
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');

@@ -41,7 +41,7 @@ Vps.User.Activate.Dialog = Ext.extend(Ext.Window,
                 }
 
                 Ext.EventManager.on(doc.getElementById('lostPassword'), 'click', function() {
-                    Ext.Msg.prompt('Password lost', 'Please enter your email address', function(btn, email) {
+                    Ext.Msg.prompt(trlVps('Password lost'), trlVps('Please enter your email address'), function(btn, email) {
                         if (btn == 'ok') {
                             var lostPasswordResultDialog = function(response, options, result) {
                                 Ext.Msg.show({

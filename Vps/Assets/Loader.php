@@ -7,12 +7,12 @@ class Vps_Assets_Loader
         $type = substr($url, 0, strpos($url, '/'));
         $url = substr($url, strpos($url, '/')+1);
         if (!isset($paths->$type)) {
-            throw new Vps_Assets_NotFoundException("Assets-Path-Type '$type' not found in config.");
+            throw new Vps_Assets_NotFoundException(trlVps("Assets-Path-Type {0} not found in config.", '\''.$type.'\''));
         }
         $p = $paths->$type;
         if ($p == 'VPS_PATH') $p = VPS_PATH;
         if (!file_exists($p.'/'.$url)) {
-            throw new Vps_Assets_NotFoundException("Asset-File '$p/$url' does not exist.");
+            throw new Vps_Assets_NotFoundException(trlVps("Asset-File {0} does not exist."),'\''.$p/$url.'\'' );
         }
         return $p.'/'.$url;
     }
@@ -175,7 +175,7 @@ class Vps_Assets_Loader
         $contents = self::_writeContent($m, $contents, $expressions);
 
         //das gleiche mit Vps
-        preg_match_all('#trlVps'.$type.'\("(.+?)"\)|trlVps'.$type.'\(\'(.+?)\'\)#', $contents, $m);
+        preg_match_all('#trlVps\("(.+?)"\)|trlVps'.$type.'\(\'(.+?)\'\)#', $contents, $m);
         $expressions = self::_pregMatchTrl($m, 'Vps');
         $contents = self::_writeContent($m, $contents, $expressions);
 
@@ -184,7 +184,7 @@ class Vps_Assets_Loader
         $contents = self::_writeContent($m, $contents, $expressions);
 
         //das gleiche mit Vps
-        preg_match_all('#trlVps'.$type.'\(\'(.+?)\', (.*)\)|trlVps'.$type.'\(\"(.+?)\", (.*)\)#', $contents, $m);
+        preg_match_all('#trlVps\(\'(.+?)\', (.*)\)|trlVps'.$type.'\(\"(.+?)\", (.*)\)#', $contents, $m);
         $expressions = self::_pregMatchTrl($m, 'Vps');
         $contents = self::_writeContent($m, $contents, $expressions);
 
@@ -215,21 +215,21 @@ class Vps_Assets_Loader
         $expressions = self::_pregMatchTrlcp($m, 'Vps');
         $contents = self::_writeContent($m, $contents, $expressions);
 
-
         return $contents;
     }
 
     static private function _writeContent($m, $contents, $expressions) {
-
         if ($expressions) {
-            foreach ($expressions as $values)
+            foreach ($expressions as $values){
                 $contents = str_replace($values['before'], $values['now'], $contents);
+            }
         }
         return $contents;
 
     }
 
     static private function _pregMatchTrl ($m, $mode){
+
         $expressions = array();
         foreach($m[0] as $key => $trl){
             if ($m[1][$key] == ""){
@@ -241,7 +241,7 @@ class Vps_Assets_Loader
                     $values['now'] = $method(self::_getText($values['tochange']));
                     $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
                     $values['now'] = str_replace($method, "trl", $values['now']);
-                    return $values;
+                    $expressions[] =  $values;
                 } else {
                     $values = array();
                     $values['before'] = $m[0][$key];

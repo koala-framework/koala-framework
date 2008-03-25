@@ -32,7 +32,7 @@
         {/foreach}
     </form>
     {if $component.sent == 2}
-        <p>Bitte überprüfen Sie Ihre Eingabe, es traten Fehler auf.</p>
+        <p>{trlVps text="Please check you entry, errors occured"}</p>
     {/if}
 {else}
     {component component=$component.success}

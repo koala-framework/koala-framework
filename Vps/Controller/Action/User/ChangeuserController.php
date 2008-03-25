@@ -34,7 +34,7 @@ class Vps_Controller_Action_User_ChangeuserController extends Vps_Controller_Act
     public function jsonChangeUserAction()
     {
         if (!$this->_getParam('userId')) {
-            throw new Vps_Exception("userId is required");
+            throw new Vps_Exception(trlVps("userId is required"));
         }
         $storage = Vps_Auth::getInstance()->getStorage();
         $loginData = $storage->read();

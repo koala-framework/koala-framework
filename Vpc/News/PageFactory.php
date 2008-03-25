@@ -8,7 +8,7 @@ class Vpc_News_PageFactory extends Vpc_Abstract_PageFactory
         if ($categories) {
             foreach ($categories as $key => $category) {
                 if (!isset($category['pageFactory'])) {
-                    throw new Vps_Exception('News category pageFactory not set (key: '.$key.')');
+                    throw new Vps_Exception(trlVps('News category pageFactory not set (key: {0})', $key));
                 }
                 $this->_additionalFactories[$key] = new $category['pageFactory']($this->_component);
                 if ($this->_additionalFactories[$key] instanceof Vpc_News_Interface_PageFactoryCategory) {

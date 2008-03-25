@@ -42,7 +42,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     {
         this.pageButton = new Ext.Toolbar.Button({
             cls     : 'x-btn-text-icon bmenu',
-            text    :'Page',
+            text    : trlVps('Page'),
             menu    : [
                 this.getAction('properties'),
                 this.getAction('add'),
@@ -144,7 +144,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
         if (type == 'edit') {
             this.actions[type] = new Ext.Action({
-                text    : 'Edit Content',
+                text    : trlVps('Edit Content'),
                 disabled: true,
                 handler : function (o, e) {
                     node = this.treePanel.tree.getSelectionModel().getSelectedNode();
@@ -156,7 +156,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'properties') {
             this.actions[type] = new Ext.Action({
-                text    : 'Properties of selected Page',
+                text    : trlVps('Properties of selected Page'),
                 handler : function () {
                     this.editDialog.getAutoForm().setBaseParams({});
                     this.editDialog.showEdit(this.treePanel.tree.selModel.selNode.id);
@@ -167,7 +167,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'add') {
             this.actions[type] = new Ext.Action({
-                text    : 'Add new Subpage',
+                text    : trlVps('Add new Subpage'),
                 handler : function () {
                     this.editDialog.getAutoForm().setBaseParams({
                         parent_id: this.treePanel.tree.selModel.selNode.id
@@ -180,7 +180,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'delete') {
             this.actions[type] = new Ext.Action({
-                text    : 'Delete selected Page',
+                text    : trlVps('Delete selected Page'),
                 handler : this.treePanel.onDelete,
                 icon    : '/assets/silkicons/page_delete.png',
                 cls     : 'x-btn-text-icon',
@@ -188,7 +188,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'visible') {
             this.actions[type] = new Ext.Action({
-                text    : 'Toggle Visibility of selected Page',
+                text    : trlVps('Toggle Visibility of selected Page'),
                 handler : this.treePanel.onVisible,
                 icon    : '/assets/silkicons/page_red.png',
                 cls     : 'x-btn-text-icon',
@@ -196,7 +196,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'makeHome') {
             this.actions[type] = new Ext.Action({
-                text    : 'Make selected Page Homepage',
+                text    : trlVps('Make selected Page Homepage'),
                 handler : function (o, e) {
                     Ext.Ajax.request({
                         url: '/admin/component/pages/jsonMakeHome',
@@ -226,7 +226,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'expand') {
             this.actions[type] = new Ext.Action({
-                text    : 'Expand here',
+                text    : trlVps('Expand here'),
                 handler : function () { this.treePanel.tree.getSelectionModel().getSelectedNode().expand(true); },
                 icon    : '/assets/silkicons/bullet_add.png',
                 cls     : 'x-btn-text-icon',
@@ -234,7 +234,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'collapse') {
             this.actions[type] = new Ext.Action({
-                text    : 'Collapse here',
+                text    : trlVps('Collapse here'),
                 handler : function () { this.treePanel.tree.getSelectionModel().getSelectedNode().collapse(true); },
                 icon    : '/assets/silkicons/bullet_delete.png',
                 cls     : 'x-btn-text-icon',
@@ -242,7 +242,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             });
         } else if (type == 'preview') {
             this.actions[type] = new Ext.Action({
-                text    : 'Open Preview',
+                text    : trlVps('Open Preview'),
                 handler : function () {
                     window.open('/admin/component/pages/openPreview?page_id='+
                                 this.treePanel.getSelectedId());

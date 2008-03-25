@@ -27,15 +27,15 @@ class Vps_PageCollection_Tree extends Vps_PageCollection_Abstract
             $parentId = $parentPage->getPageId();
 
             if ($parentId == $id) {
-                throw new Vps_PageCollection_Exception('Cannot set Parent Page for the same object: ' . $id);
+                throw new Vps_PageCollection_Exception(trlVps('Cannot set Parent Page for the same object: {0}', $id));
             }
 
             if (!isset($this->_pages[$parentId])) {
-                throw new Vps_PageCollection_Exception('Parent Page does not exist: ' . $parentId);
+                throw new Vps_PageCollection_Exception(trlVps('Parent Page does not exist: {0}' , $parentId));
             }
 
             if (!isset($this->_pages[$id])) {
-                throw new Vps_PageCollection_Exception('Page does not exist: ' . $id);
+                throw new Vps_PageCollection_Exception(trlVps('Page does not exist: {0}', $id));
             }
         }
 

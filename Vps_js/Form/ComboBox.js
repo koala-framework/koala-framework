@@ -120,8 +120,12 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             this.allowBlank = false;
         }
 
+		this.on('change', function(){
+			alert(this.getValue());
+		});
+
         Vps.Form.ComboBox.superclass.initComponent.call(this);
-    },
+    } ,
     addNoSelection : function() {
         if (this.showNoSelection && this.store.find('id', '') == -1) {
             var data = {};
@@ -129,8 +133,8 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             data[this.valueField] = null;
             this.store.insert(0, new this.store.recordType(data));
         }
-    },
-    setValue : function(v)
+    } ,
+   setValue : function(v)
     {
         if (v == '') v = null;
         if (v && this.store.proxy && this.valueField && this.mode == 'remote') {

@@ -63,7 +63,7 @@ Vps.callWithErrorHandler = function(fn, scope) {
             Ext.get('loading').fadeOut({remove: true});
         }
         if (Ext.Msg) {
-            Ext.Msg.alert('Error', "Ein Fehler ist aufgetreten.");
+            Ext.Msg.alert(trlVps('Error'), trlVps("An error occured"));
         }
         Ext.Ajax.request({
             url: '/vps/error/error/jsonMail',

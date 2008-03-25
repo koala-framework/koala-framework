@@ -5,9 +5,9 @@ class Vpc_Formular_Password_Controller extends Vps_Controller_Action_Auto_Vpc_Fo
 
     protected function _initFields()
     {
-        $this->_form->add(new Vps_Auto_Field_TextField('width', 'Width'))
+        $this->_form->add(new Vps_Auto_Field_TextField('width', trlVps('Width')))
             ->setWidth(50);
-        $this->_form->add(new Vps_Auto_Field_TextField('maxlength', 'Maximum Length'))
+        $this->_form->add(new Vps_Auto_Field_TextField('maxlength', trlVps('Maximum Length')))
             ->setWidth(50);
     }
 }

@@ -1,12 +1,12 @@
 <div class="vpcPostsPost">
-    
+
     <div class="lastPoster">
         {component component=$component.user}
-        <strong>#{$component.postNum}:</strong> 
+        <strong>#{$component.postNum}:</strong>
         <i>{$component.create_time|date_format:"%d.%m.%y, %H:%M"}</i>
         <a href="{$component.writeUrl}" class="quoteLink">Beitrag zitieren</a>
         {if $component.editUrl}
-            <br />Moderation: <a href="{$component.editUrl}">Beitrag bearbeiten</a>
+            <br />{trlVps text="Moderation"}: <a href="{$component.editUrl}">{trlVps text="Edit entry"}</a>
         {/if}
         <div class="clear"></div>
     </div>

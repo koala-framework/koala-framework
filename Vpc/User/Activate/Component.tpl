@@ -1,11 +1,10 @@
-<h1>Benutzerkonto aktivieren</h1>
+<h1>{trlVps text="Activate Useraccount"}</h1>
 
 {if $component.sent != 3}
     <p>
-        Bitte geben Sie in beide Felder das Passwort ein, das Sie künftig für Ihr
-        Benutzerkonto verwenden möchten.<br />
-        Nach der Aktivierung werden Sie automatisch eingeloggt und können Ihren
-        Account benützen.
+    	{trlVps text="Plese enter in both fields the password which you want to use
+    	for your useraccount"}<br />
+        {trlVps text="After the activation you are automatically loggid and you could use your account."}
     </p>
 {/if}
 

@@ -166,7 +166,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
     {
         $parts = preg_split("/(_|-)/", $id, -1, PREG_SPLIT_DELIM_CAPTURE);
         if (!$parts) {
-            throw new Vpc_Exception("ID '$id' doesn't match pattern for Id: $pattern");
+            throw new Vpc_Exception(trlVps("ID {0} doesn't match pattern for Id: {1}", array($id, $pattern)));
         }
         $idParts = array();
         $idParts['id'] = $id;
@@ -332,7 +332,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
             isset($_SERVER['SERVER_NAME']) &&
             substr($_SERVER['SERVER_NAME'], -6) == '.vivid';
         if (!$vars['template']) {
-            throw new Vpc_Exception('Template not found for Component ' . get_class($this));
+            throw new Vpc_Exception(trlVps('Template not found for Component {0}',  get_class($this)));
         }
         return $vars;
     }
@@ -455,11 +455,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
     protected function _getClassFromSetting($setting, $parentClass) {
         $classes = $this->_getSetting('childComponentClasses');
         if (!isset($classes[$setting])) {
-            throw new Vpc_Exception("ChildComponentClass '$setting' is not defined in settings.");
+            throw new Vpc_Exception(trlVps("ChildComponentClass {0} is not defined in settings.", $setting));
         }
         $class = $classes[$setting];
         if ($class != $parentClass && !is_subclass_of($class, $parentClass)) {
-            throw new Vpc_Exception("$setting '$class' must be a subclass of $parentClass.");
+            throw new Vpc_Exception(trlVps("{0} '{1}' must be a subclass of {2}.",array($setting, $class, $parentClass)));
         }
         return $class;
     }

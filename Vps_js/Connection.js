@@ -58,8 +58,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             }
             var errorMsg = '<a href="'+options.url+'?'+p+'">request-url</a><br />';
             errorMsg += e.toString()+': <br />'+response.responseText;
-            var errorMsgTitle = 'Javascript Parse Exception';
-        }
+            var errorMsgTitle = trlVps('Javascript Parse Exception');        }
 
         if (!errorMsg && r.exception) {
             var p;
@@ -70,7 +69,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             }
             var errorMsg = '<a href="'+options.url+'?'+p+'">request-url</a><br />';
             errorMsg += r.exception;
-            var errorMsgTitle = 'PHP Exception';
+            var errorMsgTitle = trlVps('PHP Exception');
         }
         if (errorMsg) {
             if (Vps.debug) {
@@ -82,7 +81,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                     width: 800
                 });
             } else {
-                Ext.Msg.alert('Error', "A Server failure occured.");
+                Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
                 Ext.Ajax.request({
                     url: '/vps/error/error/jsonMail',
                     params: {msg: errorMsg}
@@ -94,8 +93,8 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
 
         if (!r.success) {
             if (r.wrongversion) {
-                Ext.Msg.alert('Error - wrong version',
-                'Because of an application update the application has to be reloaded.',
+                Ext.Msg.alert(trlVps('Error - wrong version'),
+                trlVps('Because of an application update the application has to be reloaded.'),
                 function(){
                     location.reload();
                 });
@@ -117,9 +116,9 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                 return;
             }
             if (r.error) {
-                Ext.Msg.alert('Error', r.error);
+                Ext.Msg.alert(trlVps('Error'), r.error);
             } else if (!r.login) {
-                Ext.Msg.alert('Error', "A Server failure occured.");
+                Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
             }
             Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
             return;
@@ -138,7 +137,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         for (var dbg in options.params) {
             debugString += '<br />params.' + dbg + ' = ' + options.params[dbg];
         }
-        Ext.Msg.alert('Error', "A connection problem occured.<br /><br /><b>Debug info:</b><br />"
+        Ext.Msg.alert(trlVps('Error'), trlVps("A connection problem occured.")+"<br /><br /><b>"+trlVps("Debug info")+":</b><br />"
             + "url: " + options.url + debugString);
         Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
         return;

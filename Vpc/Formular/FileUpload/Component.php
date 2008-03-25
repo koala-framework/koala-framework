@@ -43,15 +43,15 @@ class Vpc_Formular_FileUpload_Component extends Vpc_Formular_Field_Abstract
         $file = $_FILES[$this->_getRow()->name];
 
         if ($file['error'] == 4 && $mandatory) {
-            return 'Feld ' . $this->getStore('fieldLabel') . ' ist ein Pflichtfeld, bitte ausfüllen';
+            return trlVps('Field {0} is mandatory, please fill out', $this->getStore('fieldLabel'));
         }
 
         if ($file['error'] != 0 && $file['error'] != 4) {
-            return 'Beim Dateiupload ist ein Fehler aufgetreten';
+            return trlVps('An error occured during the file upload');
         }
 
         if ($this->_getRow()->max_size < ($file['size']/1024)) {
-            return 'Es dürfen Dateien bis max. '.$this->_getRow()->max_size.' kB hochgeladen werden';
+            return trlVps('Maximum Upload {0} kB', $this->_getRow()->max_size);
         }
 
         if ($file['error'] != 4) {
@@ -63,7 +63,7 @@ class Vpc_Formular_FileUpload_Component extends Vpc_Formular_Field_Abstract
                 }
 
                 if (!in_array($extension, $extensions)) {
-                    return 'Ungültiges Format in Feld ' . $this->getStore('fieldLabel') . ', zulässige Formate: ' . $this->_getRow()->types_allowed;
+                    return trlVps('Invalid format in field {0}, valid formats: {1}', array($this->getStore('fieldLabel'), $this->_getRow()->types_allowed));
                 }
             }
         }

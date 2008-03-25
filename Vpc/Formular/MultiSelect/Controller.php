@@ -6,7 +6,7 @@ class Vpc_Formular_MultiSelect_Controller extends Vpc_Formular_Select_Controller
                   'fieldLabel' => 'Typ',
                   'hiddenName' => 'type',
                   'mode'       => 'local',
-                  'store'      => array('data' => array(array('checkbox', 'Checkboxen'),
+                  'store'      => array('data' => array(array('checkbox', 'Checkboxes'),
                                                         array('checkbox_horizontal', 'Checkboxen horizontal'),
                                                         array('select', 'Select-Feld')),
                                        ),
