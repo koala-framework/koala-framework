@@ -10,6 +10,7 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
         $ret['assetsAdmin']['dep'][] = 'VpsTabPanel';
         return $ret;
     }
+
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
@@ -18,7 +19,8 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
         }
         return $return;
     }
-    protected function getChildComponent($type)
+
+    public function getChildComponent($type)
     {
         if (!isset($this->_childComponents[$type])) {
             $classes = $this->_getSetting('childComponentClasses');
