@@ -9,7 +9,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
                     if (Ext.get('loading')) {
                         Ext.getBody().mask();
                     } else {
-                        Ext.getBody().mask('Loading...');
+                        Ext.getBody().mask(trlVps('Loading...'));
                     }
                 }
                 Vps.Connection.masks++;
