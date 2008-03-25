@@ -32,14 +32,14 @@ class Vps_Assets_Dependencies
     public function getAssetFiles($fileType = null)
     {
         $ret = array();
-        if (!$this->_config->debug->assets) {
+        if (!$this->_config->debug->assets->$fileType) {
             $v = $this->_config->application->version;
             $ret[] = "/assets/All{$this->_assetsType}.$fileType?v=$v";
         }
         foreach ($this->getFiles($fileType) as $file) {
             if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://') {
                 $ret[] = $file;
-            } else if ($this->_config->debug->assets) {
+            } else if ($this->_config->debug->assets->$fileType) {
                 $ret[] = '/assets/'.$file;
             }
         }
