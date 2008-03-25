@@ -3,9 +3,8 @@
 div.vpcForumGroup ul { margin-left: 0px; }
 div.vpcForumGroup ul li { list-style: none; clear: both; }
 div.vpcForumGroup ul li.threads {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px dashed #ccc;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
 }
 div.vpcForumGroup h2 {
     background: url(/assets/vps/Vpc/Forum/forumHeaderBg.jpg) repeat-x top left;
@@ -41,18 +40,17 @@ div.vpcForumGroup div.lastPost {
     font-size: 11px;
     line-height: 16px;
     padding-left: 20px;
-    border-left: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
 }
 div.vpcForumGroup div.statistik {
     float: right; font-size: 11px;
     width: 200px;
     line-height: 16px;
     border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
 }
 div.vpcForumGroup div.statistik strong { color:#786047; }
 div.vpcForumGroup div.threads { text-align: center; }
 div.vpcForumGroup div.posts { text-align: center; }
 
+div.vpcForumGroup ul li.threads div.description a { background-color: #F3F2F1; padding: 3px; padding-left: 10px; }
+div.vpcForumGroup ul li.threads div.description p { padding: 10px; }
 div.clear { clear: both;}
