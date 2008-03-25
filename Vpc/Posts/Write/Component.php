@@ -65,13 +65,13 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         $c->store('isMandatory', false);
         $this->_paragraphs[] = $c;
 
-        $c = $this->_createFieldComponent('Submit', array('name'=>'preview', 'width'=>300, 'text' => 'Vorschau anzeigen'));
+        $c = $this->_createFieldComponent('Submit', array('name'=>'preview', 'width'=>150, 'text' => 'Vorschau anzeigen'));
         $c->store('name', 'preview');
         $c->store('fieldLabel', '&nbsp;');
         $this->_paragraphs[] = $c;
 
         if (isset($_POST['preview'])) {
-            $c = $this->_createFieldComponent('Submit', array('name'=>'sbmt', 'width'=>300, 'text' => 'Nachricht absenden'));
+            $c = $this->_createFieldComponent('Submit', array('name'=>'sbmt', 'width'=>150, 'text' => 'Nachricht absenden'));
             $c->store('name', 'sbmt');
             $c->store('fieldLabel', '&nbsp;');
             $this->_paragraphs[] = $c;

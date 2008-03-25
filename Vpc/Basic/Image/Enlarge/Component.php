@@ -11,7 +11,7 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
             'tablename' => 'Vpc_Basic_Image_Enlarge_Model',
             'hasSmallImageComponent' => true,
             'childComponentClasses' => array(
-                'smallImage' => 'Vpc_Basic_Image_Component',
+                'smallImage' => 'Vpc_Basic_Image_Thumb_Component',
             ),
             'dimension' => array(640, 480),
             'assets' => array(

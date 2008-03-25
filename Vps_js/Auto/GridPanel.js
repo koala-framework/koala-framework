@@ -880,8 +880,10 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
     },
 
     reload: function(options) {
-        this.store.reload(options);
-        this.store.commitChanges();
+        if (this.store) {
+            this.store.reload(options);
+            this.store.commitChanges();
+        }
     },
     load : function(params) {
         if (!this.controllerUrl) {
