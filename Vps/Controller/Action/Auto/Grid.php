@@ -10,7 +10,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected $_defaultOrder;
     protected $_filters = array();
     protected $_queryFields;
-    protected $_querySeparator = '';
+    protected $_querySeparator = ' ';
     protected $_sortable = true; //ob felder vom user sortiert werden können
     protected $_position;
 
