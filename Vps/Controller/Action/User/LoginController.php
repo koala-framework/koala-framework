@@ -51,7 +51,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
             $result = $this->_login();
             $this->view->username = $this->_getParam('username');
             if ($result->isValid()) {
-                $this->view->text = trlVps('Login successful.<!--successful-->');
+                $this->view->text = trlVps('Login successful').'<!--successful-->';
             } else {
                 $this->view->text = trlVps('Login failed');
             }
