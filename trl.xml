@@ -633,7 +633,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">After the activation you are automatically loggid and you could use your account.</en>
-<de>Nach der Aktivierung sind Sie automatisch angemeldet und Sie können Ihr Konto verwenden.</de>
+<de>Nach der Aktivierung sind Sie automatisch angemeldet und Sie k&#xF6;nnen Ihr Konto verwenden.</de>
 </text>
 <text>
 <en default="1">Your useraccount was successfully activated.</en>
@@ -721,7 +721,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Login successful.&lt;!--successful--&gt;</en>
-<de>Login erfolgreich</de>
+<de>Login successful.&lt;!--successful--&gt;</de>
 </text>
 <text>
 <en default="1">Login failed</en>
@@ -1629,11 +1629,43 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Paragraphs</en>
-<de>Absätze</de>
+<de>Abs&#xE4;tze</de>
 </text>
 <text>
 <en default="1">Code {0} Error Returned</en>
 <de>Code {0} Fehler</de>
+</text>
+<text>
+<en default="1">Download</en>
+<de>Datei Herunterladen</de>
+</text>
+<text>
+<en default="1">Logout</en>
+<de>Abmelden</de>
+</text>
+<text>
+<en default="1">Line</en>
+<de>Linie</de>
+</text>
+<text>
+<en default="1">Headline</en>
+<de>Überschrift</de>
+</text>
+<text>
+<en default="1">Images</en>
+<de>Bilder</de>
+</text>
+<text>
+<en default="1">Links</en>
+<de>Links</de>
+</text>
+<text>
+<en default="1">TextImage</en>
+<de>Text-Bild</de>
+</text>
+<text>
+<en default="1">Reload</en>
+<de>Neu laden</de>
 </text>
 </trl>
 
