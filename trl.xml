@@ -416,7 +416,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">create answer</en>
-<de>Antwort erzeugen.</de>
+<de>Antwort erstellen</de>
 </text>
 <text>
 <en default="1">Moderation</en>
@@ -424,7 +424,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Edit entry</en>
-<de>Eintrag bearbeiten.</de>
+<de>Eintrag bearbeiten</de>
 </text>
 <text>
 <en default="1">of</en>
@@ -440,7 +440,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Post was successfully saved.</en>
-<de>EIntrag wurde erfolgreich gespeichert.</de>
+<de>Eintrag wurde erfolgreich gespeichert.</de>
 </text>
 <text>
 <en default="1">to topic</en>
@@ -464,7 +464,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Please choose a different.</en>
-<de>Bitte w&#xE4;hlen Sie einen andersen.</de>
+<de>Bitte w&#xE4;hlen Sie einen anderen.</de>
 </text>
 <text>
 <en default="1">Forum - Properties</en>
@@ -633,7 +633,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">After the activation you are automatically loggid and you could use your account.</en>
-<de>Nach der Aktivierung sind Sie automatisch angemeldet und Sie &#xF6;nnen Ihr Konto verwenden.</de>
+<de>Nach der Aktivierung sind Sie automatisch angemeldet und Sie können Ihr Konto verwenden.</de>
 </text>
 <text>
 <en default="1">Your useraccount was successfully activated.</en>
@@ -805,7 +805,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Page width id {0} not found</en>
-<de>Seite mit der ID {0} nicht gefunden.</de>
+<de>Seite mit der ID {0} wurde nicht gefunden.</de>
 </text>
 <text>
 <en default="1">Param "uploads" has to be set in the file application/config.ini.</en>
@@ -957,39 +957,39 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Properties of selected Page</en>
-<de>Eigenschaften der gew&#xE4;hlten Seite.</de>
+<de>Eigenschaften der gew&#xE4;hlten Seite</de>
 </text>
 <text>
 <en default="1">Add new Subpage</en>
-<de>Neue Unterseite hinzuf&#xFC;gen.</de>
+<de>Neue Unterseite hinzuf&#xFC;gen</de>
 </text>
 <text>
 <en default="1">Delete selected Page</en>
-<de>Ausgew&#xE4;hlte Seite l&#xF6;schen.</de>
+<de>Ausgew&#xE4;hlte Seite l&#xF6;schen</de>
 </text>
 <text>
 <en default="1">Toggle Visibility of selected Page</en>
-<de>Sichtbarkeit der gew&#xE4;hlten Seite &#xE4;ndern.</de>
+<de>Sichtbarkeit der gew&#xE4;hlten Seite &#xE4;ndern</de>
 </text>
 <text>
 <en default="1">Make selected Page Homepage</en>
-<de>Gew&#xE4;hlte Seite zur Homepage machen.</de>
+<de>Gew&#xE4;hlte Seite zur Homepage machen</de>
 </text>
 <text>
 <en default="1">Reload all</en>
-<de>Alles neuladen.</de>
+<de>Alles neuladen</de>
 </text>
 <text>
 <en default="1">Expand here</en>
-<de>Hier erweitern.</de>
+<de>Hier erweitern</de>
 </text>
 <text>
 <en default="1">Collapse here</en>
-<de>Hier schrumpfen.</de>
+<de>Hier schrumpfen</de>
 </text>
 <text>
 <en default="1">Open Preview</en>
-<de>Vorschau &#xF6;ffnen.</de>
+<de>Vorschau &#xF6;ffnen</de>
 </text>
 <text>
 <en default="1">Javascript Parse Exception</en>
@@ -1141,7 +1141,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Add Paragraph</en>
-<de>Paragraphfen hinzuf&#xFC;gen</de>
+<de>Absatz hinzuf&#xFC;gen</de>jhghkf
 </text>
 <text>
 <en default="1">Save</en>
@@ -1622,6 +1622,18 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <text>
 <en default="1">lang</en>
 <de>Spr.</de>
+</text>
+<text>
+<en default="1">Small Image (optional)</en>
+<de>Kleines Bild (optional)</de>
+</text>
+<text>
+<en default="1">Paragraphs</en>
+<de>Absätze</de>
+</text>
+<text>
+<en default="1">Code {0} Error Returned</en>
+<de>Code {0} Fehler</de>
 </text>
 </trl>
 
