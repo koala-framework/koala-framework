@@ -5,8 +5,8 @@
  * English Translations
  */
 
-if(Ext.UpdateManager){
-	Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">'+trlVps('Loading...')+'</div>';
+if(Ext.UpdateManager && Ext.UpdateManager.defaults){
+    Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">'+trlVps('Loading...')+'</div>';
 }
 if(Ext.View){
   Ext.View.prototype.emptyText = "";
@@ -282,7 +282,7 @@ if(Ext.grid.PropertyColumnModel){
   });
 }
 
-if(Ext.layout.BorderLayout.SplitRegion){
+if(Ext.layout && Ext.layout.BorderLayout && Ext.layout.BorderLayout.SplitRegion){
   Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
     splitTip            : trlVps("Drag to resize."),
     collapsibleSplitTip : trlVps("Drag to resize. Double click to hide.")
