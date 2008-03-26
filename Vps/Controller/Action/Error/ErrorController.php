@@ -37,6 +37,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
             $this->view->type = $errors->type;
             $this->view->exception = $errors->exception;
             $this->view->message = $errors->exception->getMessage();
+            $this->view->requestUri = $_SERVER['REQUEST_URI'];
             if ($config->debug->errormail != '') {
                 Vps_Debug::sendErrorMail($errors->exception, $config->debug->errormail);
                 $this->view->debug = false;

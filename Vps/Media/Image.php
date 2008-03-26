@@ -115,6 +115,7 @@ class Vps_Media_Image
             $im->readImage($source);
             $im->scaleImage($size['resizeWidth'], $size['resizeHeight']);
             $im->cropImage($size['width'], $size['height'], $size['x'], $size['y']);
+            $im->setImagePage(0, 0, 0, 0);
 //             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
             $im->writeImage($target);
             $im->destroy();
