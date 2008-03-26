@@ -3,7 +3,7 @@
 <text/>
 <text>
 <en default="1">version</en>
-<de>Version</de>
+<de>Versionn</de>
 </text>
 <text>
 <en default="1">Copyright 2007 Vivid Planet Software GmbH</en>
@@ -1065,7 +1065,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Undo the last action.</en>
-<de>Letzten Arbeitsschritt rckg&#xE4;ngig machen.</de>
+<de>Letzten Arbeitsschritt rückg&#xE4;ngig machen.</de>
 </text>
 <text>
 <en default="1">Redo the last action.</en>
@@ -1073,7 +1073,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Insert a custom character.</en>
-<de>Ein benutzerdefiniertes Zeichen einf&#xFC;gen.</de>
+<de>Sonderzeichen einf&#xFC;gen.</de>
 </text>
 <text>
 <en default="1">Insert text without formating.</en>
@@ -1085,11 +1085,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Insert Custom Character</en>
-<de>Benutzerdefiniertes Zeichen einf&#xFC;gen.</de>
+<de>Benutzerdefiniertes Zeichen einf&#xFC;gen</de>
 </text>
 <text>
 <en default="1">Insert Plain Text</en>
-<de>Reinen Text einf&#xFC;gen.</de>
+<de>"Sauberen" Text einf&#xFC;gen</de>
 </text>
 <text>
 <en default="1">Cleaning...</en>
@@ -1097,19 +1097,19 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Password lost</en>
-<de>Passwort vergessen.</de>
+<de>Passwort vergessen</de>
 </text>
 <text>
 <en default="1">Please enter your email address</en>
-<de>Bitte geben Sie Ihre E-Mail Adresse ein.</de>
+<de>Bitte geben Sie Ihre E-Mail Adresse ein</de>
 </text>
 <text>
 <en default="1">Please type in your password. After clicking the button below </en>
-<de>Bitte geben Sie Ihr Passwort ein. Nach dem Klick auf den unteren Schalter.</de>
+<de>Bitte geben Sie Ihr Passwort ein. Nach dem Klick auf den unteren Schalter </de>
 </text>
 <text>
 <en default="1">you are logged in automatically and may use the typed in password </en>
-<de>Sie werden automatisch angemeldet und nnen das eingegebenen Passwort verwenden.</de>
+<de>Sie werden automatisch angemeldet und können das eingegebenen Passwort verwenden.</de>
 </text>
 <text>
 <en default="1">for future logins.</en>
@@ -1117,11 +1117,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Your email address: </en>
-<de>Ihre E-Mail Adresse:</de>
+<de>Ihre E-Mail Adresse: </de>
 </text>
 <text>
 <en default="1">Activate and login account</en>
-<de>Konto aktivieren und anmelden.</de>
+<de>Konto aktivieren und anmelden</de>
 </text>
 <text>
 <en default="1">The repeated password is different - please try again.</en>
@@ -1129,15 +1129,15 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">An error occured</en>
-<de>Ein Fehler ist aufgetreten.</de>
+<de>Ein Fehler ist aufgetreten</de>
 </text>
 <text>
 <en default="1">Link cannot link to itself</en>
-<de>Link kann nicht auf sich sich selbst verlinken.</de>
+<de>Link kann nicht auf sich sich selbst verlinken</de>
 </text>
 <text>
 <en default="1">Add Paragraph</en>
-<de>Absatz hinzuf&#xFC;gen</de>jhghkf
+<de>Absatz hinzuf&#xFC;gen</de>
 </text>
 <text>
 <en default="1">Save</en>
@@ -1209,7 +1209,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Undo (Ctrl+Z)</en>
-<de>Z&#xFC;ckg&#xE4;ngig (Ctrl+Z)</de>
+<de>R&#xFC;ckg&#xE4;ngig (Ctrl+Z)</de>
 </text>
 <text>
 <en default="1">Redo</en>
@@ -1221,7 +1221,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Clean Html</en>
-<de>S&#xE4;ubert das HTML</de>
+<de>HTML bereinigen</de>
 </text>
 <text>
 <en default="1">Loading...</en>
@@ -1233,11 +1233,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Close this tab</en>
-<de>Schlie&#xDF;t diesen tab.</de>
+<de>Schlie&#xDF;t diesen tab</de>
 </text>
 <text>
 <en default="1">The value in this field is invalid</en>
-<de>Die Variable in diesem Feld ist falsch.</de>
+<de>Die Variable in diesem Feld ist falsch</de>
 </text>
 <text>
 <en default="1">January</en>
@@ -1329,11 +1329,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">This date is before the minimum date</en>
-<de>Dieses Datum ist vor dem Mindestdatum.</de>
+<de>Dieses Datum ist vor dem Mindestdatum</de>
 </text>
 <text>
 <en default="1">This date is after the maximum date</en>
-<de>Dieses Datum ist nach dem Maximaldatum.</de>
+<de>Dieses Datum ist nach dem Maximaldatum</de>
 </text>
 <text>
 <en default="1">Next Month (Control+Right)</en>
@@ -1385,27 +1385,27 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">No data to display</en>
-<de>Keine Daten zur Anzeige vorhanden.</de>
+<de>Keine Daten zur Anzeige vorhanden</de>
 </text>
 <text>
 <en default="1">The minimum length for this field is {0}</en>
-<de>Die Mindestl&#xE4;nge f&#xFC;r dieses Feld ist {0}.</de>
+<de>Die Mindestl&#xE4;nge f&#xFC;r dieses Feld ist {0}</de>
 </text>
 <text>
 <en default="1">The maximum length for this field is {0}</en>
-<de>Die Maximall&#xE4;nge f&#xFC;r dieses Feld ist {0}.</de>
+<de>Die Maximall&#xE4;nge f&#xFC;r dieses Feld ist {0}</de>
 </text>
 <text>
 <en default="1">This field is required</en>
-<de>Dieses Feld ist erforderlich.</de>
+<de>Dieses Feld ist erforderlich</de>
 </text>
 <text>
 <en default="1">The minimum value for this field is {0}</en>
-<de>Der Mindestwert f&#xFC;r dieses Feld ist {0.}</de>
+<de>Der Mindestwert f&#xFC;r dieses Feld ist {0}</de>
 </text>
 <text>
 <en default="1">The maximum value for this field is {0}</en>
-<de>Der Maximalwert f&#xFC;r dieses Feld ist {0}.</de>
+<de>Der Maximalwert f&#xFC;r dieses Feld ist {0}</de>
 </text>
 <text>
 <en default="1">{0} is not a valid number</en>
@@ -1417,15 +1417,15 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">The date in this field must be after {0}</en>
-<de>Das Datum in diesem Feld muss nach dem {0} sein.</de>
+<de>Das Datum in diesem Feld muss nach dem {0} sein</de>
 </text>
 <text>
 <en default="1">The date in this field must be before {0}</en>
-<de>Das Datum in diesem Feld muss vor dem {0} sein.</de>
+<de>Das Datum in diesem Feld muss vor dem {0} sein</de>
 </text>
 <text>
 <en default="1">{0} is not a valid date - it must be in the format {1}</en>
-<de>{0} ist kein g&#xFC;ltiges Datum - es muss im Format {1} sein.</de>
+<de>{0} ist kein g&#xFC;ltiges Datum - es muss im Format {1} sein</de>
 </text>
 <text>
 <en default="1">This field should be an e-mail address in the format "user@domain.com"</en>
@@ -1509,7 +1509,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Align text to the left.</en>
-<de>Richtet den Text rechtsb&#xFC;ndig aus.</de>
+<de>Richtet den Text linksb&#xFC;ndig aus.</de>
 </text>
 <text>
 <en default="1">Center Text</en>
@@ -1525,7 +1525,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Align text to the right.</en>
-<de>Richtet den Text linksb&#xFC;ndig aus.</de>
+<de>Richtet den Text rechtsb&#xFC;ndig aus.</de>
 </text>
 <text>
 <en default="1">Bullet List</en>
@@ -1549,11 +1549,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Source Edit</en>
-<de>Quellecode editieren</de>
+<de>Quellcode editieren</de>
 </text>
 <text>
 <en default="1">Switch to source editing mode.</en>
-<de>Schalte in den Quellecode-Editierungs Modus.</de>
+<de>Schaltet in den Quellcode-Editier Modus.</de>
 </text>
 <text>
 <en default="1">Sort Ascending</en>
@@ -1585,7 +1585,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Show in Groups</en>
-<de>Gruppiert anzeigen.</de>
+<de>Gruppiert anzeigen</de>
 </text>
 <text>
 <en default="1">Value</en>
