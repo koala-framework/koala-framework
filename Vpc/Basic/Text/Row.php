@@ -21,7 +21,8 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
             }
 
             if ($classes['image'] && $m[3] != ''
-                && preg_match('#/media/([^/]+)/([^/]+)/([^/]+)/([^/]+)#', $m[3], $m2)) {
+                && preg_match('#/media/([^/]+)/([^/]+)#', $m[3], $m2)) {
+                //"/media/$class/$id/$rule/$type/$checksum/$filename.$extension$random"
                 $isInvalid = false;
                 $childComponentId = $m2[2];
                 if (substr($childComponentId, 0, strlen($componentId)+2)
@@ -39,9 +40,8 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
                 if ($isInvalid) {
                     $ret[] = array('type'=>'invalidImage',
                                     'src'=>$m[3],
-                                    'uploadId'=>$m2[1],
-                                    'componentClass'=>$m2[2],
-                                    'componentId'=>$m2[3],
+                                    'componentClass'=>$m2[1],
+                                    'componentId'=>$childComponentId,
                                     'html'=>$m[2]);
                 }
             } else if ($classes['image'] && $m[3] != '') {
