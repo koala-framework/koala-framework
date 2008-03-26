@@ -20,7 +20,7 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         $this->view->component_id = $row->component_id.'-i'.
                                         ($row->getMaxChildComponentNr('image')+1);
         $imageClass = Vpc_Abstract::getSetting($this->class, 'imageClass');
-        $row->content_edit .= "<img src=\"/media/0/$classes[image]/{$this->view->component_id}/\" />";
+        $row->content_edit .= "<img src=\"/media/$classes[image]/{$this->view->component_id}/\" />";
         $row->save();
     }
     public function jsonAddLinkAction()

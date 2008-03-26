@@ -154,18 +154,19 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
         var tb = this.getToolbar();
 
-        if (this.linkDialog || this.imageDialog || this.downloadDialog) {
-            tb.insert(8, '-');
-        }
         if (this.linkDialog) {
-            tb.insert(9,  this.getAction('insertLink'));
+            tb.insert(8,  this.getAction('insertLink'));
         }
         if (this.imageDialog) {
-            tb.insert(10, this.getAction('insertImage'));
+            tb.insert(9, this.getAction('insertImage'));
         }
         if (this.downloadDialog) {
-            tb.insert(11,  this.getAction('insertDownload'));
+            tb.insert(10,  this.getAction('insertDownload'));
         }
+        if (this.linkDialog || this.imageDialog || this.downloadDialog) {
+            tb.insert(11, '-');
+        }
+
         tb.add('-');
         if (this.enableInsertChar) {
             tb.add({
