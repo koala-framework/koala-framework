@@ -10,13 +10,17 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
         //festsetzen der sprachen
         $config = new Zend_Config_Ini('application/config.ini');
         $cnt = 0;
-        foreach($config->production->languages as $key => $value){
-            if ($cnt == 0){
-                $this->_defaultLanguage = $key;
-                $cnt++;
-            } else {
-                $this->_languages[] = $key;
+        if ($config->production->languages){
+            foreach($config->production->languages as $key => $value){
+                if ($cnt == 0){
+                    $this->_defaultLanguage = $key;
+                    $cnt++;
+                } else {
+                    $this->_languages[] = $key;
+                }
             }
+        } else {
+            $this->_defaultLanguage = $config->production->webCodeLanguage;
         }
 
         //das Project
@@ -39,9 +43,11 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
       //das Vps
        $this->_defaultLanguage = 'en';
        $this->_languages = array();
-       foreach($config->production->languages as $key => $value){
-           if ($key != 'en'){
-               $this->_languages[] = $key;
+       if ($config->production->languages){
+           foreach($config->production->languages as $key => $value){
+               if ($key != 'en'){
+                   $this->_languages[] = $key;
+               }
            }
        }
        $directory = VPS_PATH;
