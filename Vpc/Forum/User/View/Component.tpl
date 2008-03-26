@@ -36,7 +36,7 @@
 
         {if $component.forumUserData.signature}
             <p>
-                <strong>{trlVps text="Signature":</strong>
+                <strong>{trlVps text="Signature"}:</strong>
                 {$component.forumUserData.signature|htmlspecialchars|nl2br}
             </p>
         {/if}
