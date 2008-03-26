@@ -19,14 +19,13 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
 
         this.tbar = [{}];
         this.tbar.add(
-            this.actions.clear,
             '->', {
             text:'Search',
             handler: this.addressPrompt,
             icon    : '/assets/silkicons/find.png',
             cls     : 'x-btn-text-icon',
             scope : this
-        });
+        }, this.actions.clear);
 
 		this.buttons = [
 		{

@@ -5,17 +5,24 @@ class Vpc_Advanced_GoogleMap_Form extends Vps_Auto_Vpc_Form
     {
         parent::__construct($class, $id);
 
+        $this->setLabelWidth(120);
         $this->fields->add(new Vps_Auto_Field_GoogleMapsField('coordinates', trlVps('Coordinates')));
         $this->fields->add(new Vps_Auto_Field_Select('zoom', trlVps('Zoomlevel')))
-            ->setValues($this->_getZoomLevels());
+            ->setAllowBlank(false)
+            ->setValues($this->_getZoomLevels())
+            ->setWidth(120);
 
         $this->fields->add(new Vps_Auto_Field_NumberField('width', trlVps('Width')))
             ->setAllowNegative(false)
-            ->setAllowDecimals(false);
+            ->setAllowDecimals(false)
+            ->setAllowBlank(false)
+            ->setWidth(120);
 
         $this->fields->add(new Vps_Auto_Field_NumberField('height', trlVps('Height')))
             ->setAllowNegative(false)
-            ->setAllowDecimals(false);
+            ->setAllowDecimals(false)
+            ->setAllowBlank(false)
+            ->setWidth(120);
 
         $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
         $textId = $id . '-text';
@@ -27,7 +34,8 @@ class Vpc_Advanced_GoogleMap_Form extends Vps_Auto_Vpc_Form
             ->setValues(array(array('0', trlVps('Move + Zoom')),
                               array('1', trlVps('Move + Zoom (without zoombar)')),
                               array('2', trlVps('Just Zoom'))))
-            ->setWidth(300);
+            ->setWidth(300)
+            ->setAllowBlank(false);
 
         $this->fields->add(new Vps_Auto_Field_Checkbox('scale', trlVps('Scale')));
         $this->fields->add(new Vps_Auto_Field_Checkbox('satelite', trlVps('Satelitemap')));
