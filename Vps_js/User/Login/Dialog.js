@@ -22,7 +22,7 @@ Vps.User.Login.Dialog = Ext.extend(Ext.Window,
             baseCls: 'x-plain',
             cls: 'vps-login-header',
             region: 'north',
-            height: 50,
+            height: 80,
             autoLoad: '/vps/user/login/header',
             border: false
         },{
