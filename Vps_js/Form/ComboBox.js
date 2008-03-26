@@ -1,5 +1,8 @@
 Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
 {
+	displayField: 'name',
+    valueField: 'id',
+
     initComponent : function()
     {
         this.addEvents({
@@ -87,11 +90,6 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             }
         }
 
-        Ext.applyIf(this, {
-            displayField: 'name',
-            valueField: 'id'
-        });
-
         if (this.addDialog) {
             var d = Vps.Auto.Form.Window;
             if (this.addDialog.type) {
@@ -174,5 +172,6 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             });
         }
     }
+
 });
 Ext.reg('combobox', Vps.Form.ComboBox);

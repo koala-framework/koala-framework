@@ -5,7 +5,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
     {
         return array_merge(parent::getSettings(), array(
             'tablename' => 'Vpc_Basic_Download_Model',
-            'componentName' => 'Download',
+            'componentName' => trlVps('Download'),
             'componentIcon' => new Vps_Asset('folder_link'),
             'showFilesize' => true,
             'childComponentClasses'   => array(

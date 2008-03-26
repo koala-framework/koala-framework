@@ -35,7 +35,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             scope: this,
             tooltip: {
                 cls: 'x-html-editor-tip',
-                title: 'Download',
+                title: trlVps('Download'),
                 text: trlVps('Create new Download for the selected text or edit selected Download.')
             },
             cls: 'x-btn-icon',

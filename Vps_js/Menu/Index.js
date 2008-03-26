@@ -169,7 +169,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
         }
         if (response.showLogout) {
             this.add({
-                text: 'Logout',
+                text: trlVps('Logout'),
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/door_out.png',
                 handler: function() {
