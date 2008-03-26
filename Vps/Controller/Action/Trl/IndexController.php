@@ -100,10 +100,10 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
                         preg_match_all('#trl'.$type.'\(\'(.+?)\', (.*)\)|trl'.$type.'\(\"(.+?)\", (.*)\)#', $file, $m);
                         $this->_pregMatchTrl($m, $xml);
 
-                        preg_match_all('#trlc'.$type.'\(\'(.+?)\', +(.*), +(.*)\)|trlc'.$type.'\(\"(.+?)\", +(.*), +(.*)\)#', $file, $m);
+                        preg_match_all('#trlc'.$type.'\(\'(.+?)\', +\'(.*?)\', +(.*)\)|trlc'.$type.'\(\"(.+?)\", +"(.*)", +(.*)\)#', $file, $m);
                         $this->_pregMatchTrlc($m, $xml);
 
-                        preg_match_all('#trlp'.$type.'\(\'(.+?)\', +(.*), +(.*)\)|trlp'.$type.'\(\"(.+?)\", +(.*), +(.*)\)#', $file, $m);
+                        preg_match_all('#trlp'.$type.'\(\'(.+?)\', +\'(.*?)\', +(.*)\)|trlp'.$type.'\(\"(.+?)\", +"(.*)", +(.*)\)#', $file, $m);
                         $this->_pregMatchTrlp($m, $xml);
 
                         preg_match_all('#trlcp'.$type.'\(\'(.+?)\', +(.*), +(.*), +(.*)\)|trlcp'.$type.'\(\"(.+?)\", +(.*), +(.*), +(.*)\)#', $file, $m);

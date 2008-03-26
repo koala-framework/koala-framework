@@ -25,16 +25,19 @@ class Vpc_Formular_FileUpload_Component extends Vpc_Formular_Field_Abstract
     {
         $file = $_FILES[$this->_getRow()->name];
 
-        if ($file) {
+        if ($file && $file['name']) {
             $t = new Vps_Dao_File();
             $uploadRow = $t->createRow();
+            $uploadRow->uploadFile($file);
+            $this->_getRow()->upload_id = $uploadRow->id;
         }
-        $uploadRow->uploadFile($file);
-        $this->_getRow()->upload_id = $uploadRow->id;
     }
 
     public function getValue()
     {
+        if (!$this->_getRow() || empty($this->_getRow()->upload_id)) {
+            return null;
+        }
         return $this->_getRow()->upload_id;
     }
 

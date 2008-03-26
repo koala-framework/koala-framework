@@ -46,7 +46,7 @@ class Vps_Controller_Action_Media_MediaController extends Vps_Controller_Action
         $rule = $this->_getParam('rule');
         if ($rule == 'default') { $rule = null; }
 
-        if (substr($class, 0, 4) == 'Vpc_') {
+        if (is_subclass_of($class, 'Vpc_Abstract')) {
             $tableClass = Vpc_Abstract::getSetting($class, 'tablename');
             $table = new $tableClass(array('componentClass' => $class));
         } else {

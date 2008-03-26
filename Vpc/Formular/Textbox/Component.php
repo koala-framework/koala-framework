@@ -24,6 +24,11 @@ class Vpc_Formular_Textbox_Component extends Vpc_Formular_Field_Abstract
         return $return;
     }
 
+    public function getValue()
+    {
+        return $this->_getRow()->value;
+    }
+
     public function processInput()
     {
         if (isset($_POST[$this->_getName()])) {
