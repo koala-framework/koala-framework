@@ -72,6 +72,21 @@ Vps.callWithErrorHandler = function(fn, scope) {
     }
 };
 
+Vps.contentReadyHandlers = [];
+Vps.onContentReady = function(fn, scope) {
+    if (Vps.currentViewport) {
+        //in einer Ext-Anwendung mit viewport den contentReadHandler
+        //nicht gleich ausführen, das paragraphs-panel führt es dafür aus
+        Vps.contentReadyHandlers.push({
+            fn: fn,
+            scope: scope
+        });
+    } else {
+        //normales Frontend
+        Ext.onReady(fn, scope);
+    }
+};
+
 Vps.include =  function(url, restart)
 {
     if (url.substr(-4) == '.css') {

@@ -1,19 +1,5 @@
-Ext.onReady(function() {
-  var maps = Ext.DomQuery.select('div.vpcGoogleMap');
-    Ext.each(maps, function(map) {
-    mapContainer= new Ext.Element(map)
-    var options = Ext.decode(mapContainer.down("div.options").dom.innerHTML);
-    var text = mapContainer.down("div.text").dom.innerHTML;
-    myMap = new Vpc.Advanced.GoogleMap(mapContainer, options, text);
-    myMap.show();
-      myMap.activateMarker();
-  });
-
-});
-
-
-
 Ext.namespace("Vpc.Advanced");
+
 Vpc.Advanced.GoogleMap = function(mapContainer, options, text){
     var input = mapContainer.down("form.fromAddress input");
     mapContainer.down("form.fromAddress").on('submit', function(e) {
@@ -150,4 +136,22 @@ Vpc.Advanced.GoogleMap.prototype = {
                     elParent.setStyle({display:"none"});
                 }
   }
-}
+};
+
+Vpc.Advanced.GoogleMap.renderedMaps = [];
+
+Vps.onContentReady(function() {
+    var maps = Ext.DomQuery.select('div.vpcGoogleMap');
+    Ext.each(maps, function(map) {
+        if (Vpc.Advanced.GoogleMap.renderedMaps.indexOf(map) != -1) return;
+        Vpc.Advanced.GoogleMap.renderedMaps.push(map);
+
+        var mapContainer = new Ext.Element(map);
+        var options = Ext.decode(mapContainer.down("div.options").dom.innerHTML);
+        var text = mapContainer.down("div.text").dom.innerHTML;
+        var myMap = new Vpc.Advanced.GoogleMap(mapContainer, options, text);
+        myMap.show();
+        myMap.activateMarker();
+    });
+});
+

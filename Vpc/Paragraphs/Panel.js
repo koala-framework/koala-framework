@@ -18,6 +18,14 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
 
         this.actions.edit.icon = '/assets/vps/images/paragraphEdit.png';
         this.actions['delete'].icon = '/assets/vps/images/paragraphDelete.png';
+
+        this.on('beforerendergrid', function() {
+            this.getStore().on('load', function() {
+                Ext.each(Vps.contentReadyHandlers, function(i) {
+                    i.fn.call(i.scope | window);
+                }, this);
+            }, this);
+        }, this);
     },
 
     addComponents : function(components, addToItem)
