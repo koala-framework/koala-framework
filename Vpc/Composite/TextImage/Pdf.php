@@ -3,17 +3,18 @@ class Vpc_Composite_TextImage_Pdf extends Vpc_Abstract_Pdf
 {
     public function writeContent()
     {
-        $image = $this->_component->image;
-        $text = $this->_component->text;
+        $image = $this->_component->getChildComponent('image');
+        $text = $this->_component->getChildComponent('text');
         $position = $this->_component->getTextImageRow()->image_position;
         $area = $this->_pdf->getPageWidth() - ($this->_pdf->getRightMargin() + $this->_pdf->getLeftMargin());
 
         $startY = $this->_pdf->getY();
         $startPage = $this->_pdf->getPage();
-        $marginPicLeft = 0;
-        $marginPicRight = 0;
-        $marginTextLeft = 0;
+        $marginPicLeft = 3;
+        $marginPicRight = 10;
+        $marginTextLeft = 3;
         $marginTextRight = $this->_pdf->getRightMargin();
+        $padding = 2;
 
         if ($position == "right")
         {
@@ -26,7 +27,7 @@ class Vpc_Composite_TextImage_Pdf extends Vpc_Abstract_Pdf
         {
             $marginTextLeft = $this->_pdf->getLeftMargin() + $area / 3;
             $marginTextRight = $this->_pdf->getRightMargin();
-            $marginPicRight = $this->_pdf->getPageWidth() - ($marginTextLeft);
+            $marginPicRight = $this->_pdf->getPageWidth() - ($marginTextLeft) + $padding;
             $marginPicLeft = $this->_pdf->getLeftMargin();
         }
 

@@ -6,7 +6,7 @@ class Vps_Auto_Field_ComboBoxSize extends Vps_Auto_Field_ComboBox
         $data = array();
         foreach ($sizes as $key => $val) {
             if (is_null($val)) {
-                $str = 'Original Size';
+                $str = trlVps('Original Size');
                 $data[] = array(null, $str);
             } else {
                 $str = $val[0] . ' x ' . $val[1];

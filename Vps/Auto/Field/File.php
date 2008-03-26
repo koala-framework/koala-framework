@@ -26,7 +26,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
                 ->setXtype('fileuploadfield');
             if ($this->getAllowBlank()) {
                 $this->_fields->add(new Vps_Auto_Field_Checkbox($this->getFieldName() . '_delete', ''))
-                    ->setBoxLabel('Delete')
+                    ->setBoxLabel(trlVps('Delete'))
                     ->setHideLabel(true)
                     ->setXtype('filecheckbox');
             }
@@ -74,7 +74,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         if (isset($file['tmp_name']) && is_file($file['tmp_name'])) {
 
             if ($this->getAllowOnlyImages() && substr($file['type'], 0, 6) != 'image/') {
-                throw new Vps_ClientException('File-Type not allowed. Only Images are allowed.');
+                throw new Vps_ClientException(trlVps('File-Type not allowed. Only Images are allowed.'));
             }
 
             try {
@@ -84,7 +84,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
                 }
                 $uploadRow->uploadFile($file);
                 $row->$name = $uploadRow->id;
-                
+
             } catch (Vps_Exception $e) {
                 throw new Vps_ClientException($e->getMessage());
             }
