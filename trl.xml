@@ -460,7 +460,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">This "name for the forum" already exists. </en>
-<de>Dieser "Forumsname" existiert bereits.</de>
+<de>Dieser "Forumsname" existiert bereits. </de>
 </text>
 <text>
 <en default="1">Please choose a different.</en>
@@ -472,15 +472,15 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Changed data was successfully saved</en>
-<de>Die ge&#xE4;nderten Daten wurden erfolgreich gespeichert.</de>
+<de>Die ge&#xE4;nderten Daten wurden erfolgreich gespeichert</de>
 </text>
 <text>
 <en default="1">Click here</en>
-<de>Hier klicken.</de>
+<de>Hier klicken</de>
 </text>
 <text>
 <en default="1">to get back to the forum</en>
-<de>Um wieder zum Forum zur&#xFC;ckzukehren.</de>
+<de>um zum Forum zur&#xFC;ckzukehren</de>
 </text>
 <text>
 <en default="1">User does not exist (anymore).</en>
@@ -548,7 +548,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Component {0} not found</en>
-<de>Komponente {0} nicht gefunden.</de>
+<de>Komponente {0} nicht gefunden</de>
 </text>
 <text>
 <en default="1">Comments</en>
@@ -612,7 +612,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Data was not sent completely. </en>
-<de>Daten wurden nicht vollst&#xE4;ndig gesendet.</de>
+<de>Daten wurden nicht vollst&#xE4;ndig gesendet. </de>
 </text>
 <text>
 <en default="1">Please copy the complete address out of the email.</en>
@@ -624,12 +624,12 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Activate Useraccount</en>
-<de>Aktiviere Benutzerkonto.</de>
+<de>Benutzerkonto aktivieren</de>
 </text>
 <text>
 <en default="1">Plese enter in both fields the password which you want to use
     	for your useraccount</en>
-<de>Bitte geben Sie in beide Felder das gew&#xFC;nschte Passwort f&#xFC;r Ihr Benutzerkonto ein.</de>
+<de>Bitte geben Sie in beide Felder das gew&#xFC;nschte Passwort f&#xFC;r Ihr Benutzerkonto ein</de>
 </text>
 <text>
 <en default="1">After the activation you are automatically loggid and you could use your account.</en>
@@ -645,7 +645,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">to get back to the Startpage</en>
-<de>Zur Startseite zur&#xFC;ckkehren.</de>
+<de>um zur Startseite zur&#xFC;ckkehren</de>
 </text>
 <text>
 <en default="1">Female</en>
@@ -673,11 +673,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">The changed data was saved successfully</en>
-<de>Die ge&#xE4;nderten Daten wurden erfolgreich gespeichert.</de>
+<de>Die ge&#xE4;nderten Daten wurden erfolgreich gespeichert</de>
 </text>
 <text>
 <en default="1">Parent Resource id {0} does not exist</en>
-<de>Parent Resource id {0} existiert nicht.</de>
+<de>Parent Resource id {0} existiert nicht</de>
 </text>
 <text>
 <en default="1">Unknown AssetsType: {0}</en>
@@ -709,23 +709,19 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Offset {0} not found</en>
-<de>Offset {0} nicht gefunden.</de>
+<de>Offset {0} nicht gefunden</de>
 </text>
 <text>
 <en default="1">userId is required</en>
-<de>userId ist erforderklich.</de>
+<de>userId ist erforderklich</de>
 </text>
 <text>
 <en default="1">You don't have enough permissions for this Action</en>
 <de>Sie haben nicht die erforderlichen Befugnisse f&#xFC;r diese Aktion.</de>
 </text>
 <text>
-<en default="1">Login successful.&lt;!--successful--&gt;</en>
-<de>Login successful.&lt;!--successful--&gt;</de>
-</text>
-<text>
 <en default="1">Login failed</en>
-<de>Login fehlgeschlagen.</de>
+<de>Login fehlgeschlagen</de>
 </text>
 <text>
 <en default="1">Activation code is invalid. Maybe the URL wasn\'t copied completely?</en>
@@ -737,7 +733,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">New password couldn\'t be set</en>
-<de>Das neue Passwort kann nicht gesetzt werden.</de>
+<de>Das neue Passwort kann nicht gesetzt werden</de>
 </text>
 <text>
 <en default="1">_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service</en>
@@ -745,7 +741,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Debug is not enabled</en>
-<de>Debuggen ist nicht aktiviert.</de>
+<de>Debuggen ist nicht aktiviert</de>
 </text>
 <text>
 <en default="1">Login data</en>
@@ -781,11 +777,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Create, Delete and E-Mail change</en>
-<de>Erzeugen, L&#xF6;schen und E-Mail &#xC4;nderungen.</de>
+<de>Erzeugen, L&#xF6;schen und E-Mail &#xC4;nderungen</de>
 </text>
 <text>
 <en default="1">Accessdata and person</en>
-<de>Zutrittsdaten und Person.</de>
+<de>Zutrittsdaten und Person</de>
 </text>
 <text>
 <en default="1">Webcode</en>
@@ -805,7 +801,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Page width id {0} not found</en>
-<de>Seite mit der ID {0} wurde nicht gefunden.</de>
+<de>Seite mit der ID {0} wurde nicht gefunden</de>
 </text>
 <text>
 <en default="1">Param "uploads" has to be set in the file application/config.ini.</en>
@@ -829,47 +825,47 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">File {0} does not exist</en>
-<de>Datei {0} existiert nicht.</de>
+<de>Datei {0} existiert nicht</de>
 </text>
 <text>
 <en default="1">Cant sort by {0}, field doesnt exist in row</en>
-<de>Sortierung nach {0} nicht m&#xF6;glich, das Feld existiert nicht.</de>
+<de>Sortierung nach {0} nicht m&#xF6;glich, das Feld existiert nicht</de>
 </text>
 <text>
 <en default="1">Can't sort by , array_multisort returned an error</en>
-<de>Sortierung nicht m&#xF6;glich, array_multisort liefert einen Fehler zur&#xFC;ck.</de>
+<de>Sortierung nicht m&#xF6;glich, array_multisort liefert einen Fehler zur&#xFC;ck</de>
 </text>
 <text>
 <en default="1">'service.users.webcode' not defined in config</en>
-<de>'service.users.webcode' ist in config nicht definiert.</de>
+<de>'service.users.webcode' ist in config nicht definiert</de>
 </text>
 <text>
 <en default="1">An account with this email address already exists</en>
-<de>Es besteht bereits ein Konto mit dieser E-Mail Adresse.</de>
+<de>Es besteht bereits ein Konto mit dieser E-Mail Adresse</de>
 </text>
 <text>
 <en default="1">Passwords are different - please try again</en>
-<de>Passw&#xF6;rter sind unterschiedlich - bitte versuchen Sie es erneut.</de>
+<de>Passw&#xF6;rter sind unterschiedlich - bitte versuchen Sie es erneut</de>
 </text>
 <text>
 <en default="1"> - Useraccount created</en>
-<de> - Benutzerkonto wurde eingerichtet.</de>
+<de> - Benutzerkonto wurde eingerichtet</de>
 </text>
 <text>
 <en default="1"> - lost password</en>
-<de> - Passwort vergessen.</de>
+<de> - Passwort vergessen</de>
 </text>
 <text>
 <en default="1"> - Email changed</en>
-<de> - E-Mail wurde ge&#xE4;ndert.</de>
+<de> - E-Mail wurde ge&#xE4;ndert</de>
 </text>
 <text>
 <en default="1"> - Accound deleted</en>
-<de> - Konto wurde gel&#xF6;scht.</de>
+<de> - Konto wurde gel&#xF6;scht</de>
 </text>
 <text>
 <en default="1">Invalid urlScheme specified</en>
-<de>Ung&#xFC;ltiges url-Schema wurde rezeugt.</de>
+<de>Ung&#xFC;ltiges url-Schema wurde rezeugt</de>
 </text>
 <text>
 <en default="1">Component must be instance of Vpc_Interface.</en>
@@ -885,7 +881,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Couldn\t create Page with id {0}</en>
-<de>Die Seite mit der id {0} konnte nicht erstellt werden.</de>
+<de>Die Seite mit der id {0} konnte nicht erstellt werden</de>
 </text>
 <text>
 <en default="1">Decorator  not found.</en>
@@ -901,7 +897,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">'service.users.url' not defined in config (usually defined in VPS config)</en>
-<de>'service.users.url' ist in config nicht definiert (gew&#xF6;hnlich wird diesen in VPS config definiert).</de>
+<de>'service.users.url' ist in config nicht definiert (gew&#xF6;hnlich wird diesen in VPS config definiert)</de>
 </text>
 <text>
 <en default="1">Please enter the text you wish to assign.</en>
@@ -925,11 +921,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Copying...</en>
-<de>Kopieren ...</de>
+<de>Kopiere...</de>
 </text>
 <text>
 <en default="1">create </en>
-<de>erzeugen</de>
+<de>erstellen </de>
 </text>
 <text>
 <en default="1">File successfully created: </en>
@@ -945,7 +941,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Creating...</en>
-<de>Erzeugen ...</de>
+<de>Erzeugen...</de>
 </text>
 <text>
 <en default="1">Page</en>
@@ -1585,7 +1581,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Group By This Field</en>
-<de>Mit diesem Feld gruppieren.</de>
+<de>Mit diesem Feld gruppieren</de>
 </text>
 <text>
 <en default="1">Show in Groups</en>
@@ -1649,7 +1645,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Headline</en>
-<de>Überschrift</de>
+<de>&#xDC;berschrift</de>
 </text>
 <text>
 <en default="1">Images</en>
@@ -1666,6 +1662,30 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <text>
 <en default="1">Reload</en>
 <de>Neu laden</de>
+</text>
+<text>
+<en default="1">Save properties</en>
+<de>Eigenschaften speichern</de>
+</text>
+<text>
+<en default="1">Login successful</en>
+<de>Erfolgreich eingeloggt</de>
+</text>
+<text>
+<en default="1">Back to topic</en>
+<de>Zur&#xFC;ck zum Thema</de>
+</text>
+<text>
+<en default="1">Back to group</en>
+<de>Zur&#xFC;ck zur Gruppe</de>
+</text>
+<text>
+<en default="1">Back to forum</en>
+<de>Zur&#xFC;ck zum Forum</de>
+</text>
+<text>
+<en default="1">to get back to the formular</en>
+<de>um zum Formular zur&#xFC;ck zu gelangen</de>
 </text>
 </trl>
 
