@@ -3,6 +3,6 @@ class Vps_Controller_Action_Component_IndexController extends Vps_Controller_Act
 {
     public function indexAction()
     {
-        $this->view->ext('Vps.Welcome');
+        $this->view->ext('Welcome');
     }
 }
