@@ -67,6 +67,7 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
 
         this.hiddenCountValue._findFormFields(item, function(i) {
             i.setDefaultValue();
+            i.clearInvalid();
         });
 
         if (this.multiItems[this.multiItems.length-1].xtype == 'fieldset') {
@@ -94,6 +95,8 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
         });
 
         this.updateButtonsState();
+
+        return item;
     },
 
     updateButtonsState: function() {
@@ -185,6 +188,9 @@ Vps.Form.MultiFieldsUpButton = Ext.extend(Ext.BoxComponent,  {
                 if (g.item == this.groupItem) {
                     g.item.getEl().insertBefore(p.groups[i-1].item.getEl());
                     p.groups.splice(i-1, 2, p.groups[i], p.groups[i-1]);
+                    //wenn reihenfolge geaendert wurde muss feld dirty sein
+                    //einfach die anzahl faken
+                    p.hiddenCountValue.originalCount = -1;
                     break;
                 }
             }
@@ -214,6 +220,9 @@ Vps.Form.MultiFieldsDownButton = Ext.extend(Ext.BoxComponent,  {
                         g.item.getEl().insertBefore(p.groups[i+2].item.getEl());
                     }
                     p.groups.splice(i, 2, p.groups[i+1], p.groups[i]);
+                    //wenn reihenfolge geaendert wurde muss feld dirty sein
+                    //einfach die anzahl faken
+                    p.hiddenCountValue.originalCount = -1;
                     break;
                 }
             }
@@ -233,7 +242,15 @@ Vps.Form.MultiFieldsAddButton = Ext.extend(Ext.BoxComponent,  {
         this.el.on('click', function(e) {
             e.stopEvent();
             if (this.disabled) return false;
-            this.multiFieldsPanel.addGroup();
+            var item = this.multiFieldsPanel.addGroup();
+            var breakIt = false;
+            item.cascade(function(i) {
+                if (!breakIt && i.isFormField && i.isVisible()) {
+                    i.focus();
+                    //return false funktioniert nicht, workaround:
+                    breakIt = true;
+                }
+            }, this);
         }, this);
     }
 });
