@@ -140,9 +140,11 @@ class Vps_Trl {
     protected function _findElementPlural($needle, $xml, $context = null){
         $temp_default_lang = $this->_defaultLanguage;
         $temp_target_lang = $this->_targetLanguage;
+        $temp_plural = $temp_default_lang.'_plural';
+        $temp_target_plural = $temp_target_lang.'_plural';
         foreach ($xml->text as $element) {
-                if ($element->$temp_default_lang.'_plural' == $needle && $element->$temp_target_lang.'_plural' != '_' && ($element['context'] == $context)){
-                    return (string) $element->$temp_target_lang.'_plural';
+                if ($element->$temp_plural == $needle && $element->$temp_target_plural != '_' && ($element['context'] == $context)){
+                    return (string) $element->$temp_target_plural;
                 }
         }
         return $needle;
