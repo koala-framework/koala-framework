@@ -22,7 +22,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             scope: this,
             tooltip: {
                 cls: 'x-html-editor-tip',
-                title: 'Image',
+                title: trlVps('Image'),
                 text: trlVps('Insert new image or edit selected image.')
             },
             cls: 'x-btn-icon',
