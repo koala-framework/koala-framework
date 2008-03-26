@@ -1,9 +1,9 @@
 <?php
 class Vpc_Basic_Text_Form extends Vps_Auto_Vpc_Form
 {
-    public function __construct($class, $id = null)
+    public function __construct($name, $class, $id = null)
     {
-        parent::__construct($class, $id);
+        parent::__construct($name, $class, $id);
         $field = new Vps_Auto_Field_HtmlEditor('content', 'Content');
         $field->setData(new Vps_Auto_Data_Vpc_ComponentIds('content'));
         $field->setFieldLabel(trlVps('Text'));
@@ -46,6 +46,11 @@ class Vpc_Basic_Text_Form extends Vps_Auto_Vpc_Form
     public function setHtmlEditorLabel($title)
     {
         $this->getHtmlEditor()->setFieldLabel($title);
+        return $this;
+    }
+    public function setHtmlEditorHeight($height)
+    {
+        $this->getHtmlEditor()->setHeight($height);
         return $this;
     }
 

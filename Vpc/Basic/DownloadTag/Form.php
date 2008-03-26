@@ -1,9 +1,9 @@
 <?php
 class Vpc_Basic_DownloadTag_Form extends Vps_Auto_Vpc_Form
 {
-    public function __construct($class, $id = null)
+    public function __construct($name, $class, $id = null)
     {
-        parent::__construct($class, $id);
+        parent::__construct($name, $class, $id);
         $this->fields->add(new Vps_Auto_Field_TextField('filename', trlVps('Filename')))
             ->setAllowBlank(false)
             ->setVtype('alphanum');
