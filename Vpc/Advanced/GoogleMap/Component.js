@@ -1,5 +1,3 @@
-Ext.namespace("Vpc.Advanced");
-
 Vpc.Advanced.GoogleMap = function(mapContainer, options, text){
     var input = mapContainer.down("form.fromAddress input");
     mapContainer.down("form.fromAddress").on('submit', function(e) {
