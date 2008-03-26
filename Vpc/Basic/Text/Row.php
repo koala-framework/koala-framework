@@ -243,15 +243,13 @@ class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
-            $parser = new Vpc_Basic_Text_Parser();
+            $parser = new Vpc_Basic_Text_Parser($this);
             $parser->setEnableColor(Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableColors'));
-            $parser->readCatalog("<BODY>".$html."</BODY>");
-            $html = $parser->getFinalHtml();
+            $html = $parser->parse($html);
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
             $html = $tidy->value;
             $html = str_replace('#nbsp#', '&nbsp;', $html);
-
         }
 
         $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
