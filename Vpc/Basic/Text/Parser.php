@@ -1,6 +1,7 @@
 <?php
 class Vpc_Basic_Text_Parser
 {
+    protected $_row;
     protected $_parser;
     protected $_elementStack = array();
     protected $_stack = array();
@@ -10,8 +11,10 @@ class Vpc_Basic_Text_Parser
     protected $_deleteContent = false;
     protected $_enableColor = false;
 
-    public function __construct()
+    public function __construct(Vpc_Basic_Text_Row $row)
     {
+        $this->_row = $row;
+
         $this->_parser = xml_parser_create();
 
         xml_set_object($this->_parser, $this);
@@ -31,13 +34,6 @@ class Vpc_Basic_Text_Parser
           $this->_parser,
           'characterData'
         );
-    }
-
-    public function readCatalog($catalog)
-    {
-        xml_parse(
-          $this->_parser,
-          $catalog, true);
     }
 
     protected function endElement($parser, $element)
@@ -81,9 +77,43 @@ class Vpc_Basic_Text_Parser
             }
         } elseif ($element == 'BODY' || $element == 'O:P') {
             //do nothing
-        } elseif ($element == 'SCRIPT'){
+        } elseif ($element == 'SCRIPT') {
             $this->_deleteContent = true;
         } else {
+            if ($element == 'IMG') {
+                $src = $attributes['SRC'];
+                $id = preg_quote($this->_row->component_id);
+                if (preg_match('#/media/([^/]+)/('.$id.'-i[0-9]+)#', $src, $m)) {
+                    //"/media/$class/$id/$rule/$type/$checksum/$filename.$extension$random"
+                    $classes = Vpc_Abstract::getSetting($this->_row->getTable()
+                                ->getComponentClass(), 'childComponentClasses');
+                    $t = Vpc_Abstract::getSetting($classes['image'], 'tablename');
+                    $t = new $t(array('componentClass' => $classes['image']));
+                    $imageRow = $t->find($m[2])->current();
+
+                    if (isset($attributes['WIDTH']) && $imageRow) {
+                        $imageRow->width = $attributes['WIDTH'];
+                    }
+                    if (isset($attributes['HEIGHT']) && $imageRow) {
+                        $imageRow->height = $attributes['HEIGHT'];
+                    }
+                    if (isset($attributes['STYLE']) && $imageRow) {
+                        if (preg_match('#[^a-zA-Z\\-]*width: *([0-9]+)px#', $attributes['STYLE'], $m)) {
+                            $imageRow->width = $m[1];
+                        }
+                        if (preg_match('#[^a-zA-Z\\-]*height: *([0-9]+)px#', $attributes['STYLE'], $m)) {
+                            $imageRow->height = $m[1];
+                        }
+                    }
+                    
+                    if ($imageRow) {
+                        $imageRow->save();
+                        $attributes['WIDTH'] = $imageRow->width;
+                        $attributes['HEIGHT'] = $imageRow->height;
+                        if (isset($attributes['STYLE'])) unset($attributes['STYLE']);
+                    }
+                }
+            }
             $this->_finalHTML .= '<'.$element;
             foreach ($attributes as $key => $value) {
                  $this->_finalHTML .= ' ' . $key . '="'. $value . '"';
@@ -109,8 +139,11 @@ class Vpc_Basic_Text_Parser
         $this->_enableColor = $value;
     }
 
-    public function getFinalHtml()
+    public function parse($html)
     {
+        xml_parse($this->_parser,
+          "<BODY>".$html."</BODY>",
+          true);
         return $this->_finalHTML;
     }
 }

@@ -334,14 +334,12 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 var nr = parseInt(m[1]);
             }
             if (nr) {
+                this.linkDialog.un('datachange', this._insertImage, this);
+                this.linkDialog.un('datachange', this._modifyImage, this);
                 this.imageDialog.showEdit({
                     component_id: this.component_id+'-i'+nr
                 });
-                this.imageDialog.on('datachange', function(r) {
-                    img.src = r.imageUrl;
-                    img.width = r.imageDimension.width;
-                    img.height = r.imageDimension.height;
-                }, this, {single: true});
+                this.imageDialog.on('datachange', this._modifyImage, this);
                 return;
             }
         }
@@ -349,18 +347,26 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             params: {component_id: this.component_id},
             url: this.controllerUrl+'/jsonAddImage',
             success: function(response, options, r) {
+                this.linkDialog.un('datachange', this._insertImage, this);
+                this.linkDialog.un('datachange', this._modifyImage, this);
                 this.imageDialog.showEdit({
                     component_id: r.component_id
                 });
-                this.imageDialog.on('datachange', function(r) {
-                    var html = '<img src="'+r.imageUrl+'" ';
-                    html += 'width="'+r.imageDimension.width+'" ';
-                    html += 'height="'+r.imageDimension.height+'" />'
-                    this.insertAtCursor(html);
-                }, this, {single: true});
+                this.imageDialog.on('datachange', this._insertImage, this);
             },
             scope: this
         });
+    },
+    _insertImage: function(r) {
+        var html = '<img src="'+r.imageUrl+'?'+Math.random()+'" ';
+        html += 'width="'+r.imageDimension.width+'" ';
+        html += 'height="'+r.imageDimension.height+'" />'
+        this.insertAtCursor(html);
+    },
+    _modifyImage: function(r) {
+        img.src = r.imageUrl+'?'+Math.random();
+        img.width = r.imageDimension.width;
+        img.height = r.imageDimension.height;
     },
     createLink: function() {
         var a = this.getFocusElement('a');
@@ -445,7 +451,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             });
             Vps.Form.HtmlEditor.insertCharWindow = win;
         }
-		win.purgeListeners();
+        win.purgeListeners();
         win.on('insertchar', function(win, ch) {
             this.insertAtCursor(ch);
             win.hide();
