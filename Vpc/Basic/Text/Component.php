@@ -9,7 +9,6 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
             'tablename'         => 'Vpc_Basic_Text_Model',
             'componentName'     => 'Text',
             'componentIcon'     => new Vps_Asset('paragraph_page'),
-            'fieldLabel'        => 'Rich Text Editor',
             'width'             => 550,
             'height'            => 400,
             'enableAlignments'  => true,
