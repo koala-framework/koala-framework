@@ -1689,7 +1689,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Forum name</en>
-<de>Name für Forum</de>
+<de>Name f&#xFC;r Forum</de>
 </text>
 <text>
 <en default="1">Location</en>
@@ -1701,7 +1701,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Delete current Avatar</en>
-<de>Aktuellen Avatar löschen</de>
+<de>Aktuellen Avatar l&#xF6;schen</de>
 </text>
 <text>
 <en default="1">Delete avatar</en>
@@ -1710,6 +1710,16 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <text context="forum">
 <en default="1">Signature</en>
 <de>Signatur</de>
+</text>
+<text>
+<en default="1">File-Type not allowed. Only Images are allowed.</en>
+<de>_</de>
+<de>_</de>
+</text>
+<text>
+<en default="1">Show Original</en>
+<de>_</de>
+<de>_</de>
 </text>
 </trl>
 
