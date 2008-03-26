@@ -3,7 +3,7 @@
 <text/>
 <text>
 <en default="1">version</en>
-<de>Versionn</de>
+<de>Version</de>
 </text>
 <text>
 <en default="1">Copyright 2007 Vivid Planet Software GmbH</en>
@@ -628,7 +628,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Plese enter in both fields the password which you want to use
-    	for your useraccount</en>
+        for your useraccount</en>
 <de>Bitte geben Sie in beide Felder das gew&#xFC;nschte Passwort f&#xFC;r Ihr Benutzerkonto ein</de>
 </text>
 <text>
