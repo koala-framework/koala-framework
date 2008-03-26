@@ -50,6 +50,9 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
                }
            }
        }
+       if ($config->production->webCodeLanguage != 'en'){
+           $this->_languages[] = $config->production->webCodeLanguage;
+       }
        $directory = VPS_PATH;
        $inipath = $directory.'/trl.xml';
 
