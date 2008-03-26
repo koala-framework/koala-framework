@@ -15,8 +15,8 @@ class Vps_Debug
 
         $body = $exception->__toString();
         $body .= "\n\nREQUEST_URI: ".$_SERVER['REQUEST_URI'];
-        $body .= "\nHTTP_REFERRER: ".(isset($_SERVER['HTTP_REFERRER'])
-                                        ? $_SERVER['HTTP_REFERRER'] : '(none)');
+        $body .= "\nHTTP_REFERER: ".(isset($_SERVER['HTTP_REFERER'])
+                                        ? $_SERVER['HTTP_REFERER'] : '(none)');
         $u = Zend_Registry::get('userModel')->getAuthedUser();
         $body .= "\nUser: ";
         if ($u) {
