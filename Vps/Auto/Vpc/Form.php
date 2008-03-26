@@ -3,10 +3,10 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
 {
     private $_componentIdTemplate;
 
-    public function __construct($class, $id = null)
+    public function __construct($name, $class, $id = null)
     {
         $this->setProperty('class', $class);
-        parent::__construct($class, $id);
+        parent::__construct($name, $id);
     }
 
     public function setId($id)

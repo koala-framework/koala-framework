@@ -1,9 +1,9 @@
 <?php
 class Vpc_News_Titles_Form extends Vps_Auto_Vpc_Form
 {
-    public function __construct($class, $id = null)
+    public function __construct($name, $class, $id = null)
     {
-        parent::__construct($class, $id);
+        parent::__construct($name, $class, $id);
 
         // model besser wenn nicht hardcoded
         $newsModel = new Vpc_News_Model(array('componentClass' => 'Vpc_News_Component'));
