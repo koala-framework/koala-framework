@@ -22,7 +22,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         this.actions.reload = new Ext.Action({
             icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
             cls     : 'x-btn-icon',
-            tooltip : 'Reload',
+            tooltip : trlVps('Reload'),
             handler : this.reload,
             scope   : this
         });
