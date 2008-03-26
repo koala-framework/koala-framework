@@ -1,8 +1,6 @@
 <?php
 class Vpc_Basic_Image_Row extends Vps_Db_Table_Row
 {
-    private $_deleteFileRow;
-
     private function _getScaleSettings()
     {
         $ret['scale'] = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'scale');
@@ -75,5 +73,11 @@ class Vpc_Basic_Image_Row extends Vps_Db_Table_Row
         } else {
             return array('width' => 0, 'height' => 0);
         }
+    }
+
+    protected function _postUpdate()
+    {
+        parent::_postUpdate();
+        $this->deleteFileCache();
     }
 }

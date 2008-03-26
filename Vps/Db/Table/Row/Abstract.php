@@ -186,6 +186,14 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         return null;
     }
 
+    public function deleteFileCache($rule = null)
+    {
+        $fileRow = $this->findParentRow('Vps_Dao_File', $rule);
+        if ($fileRow) {
+            $fileRow->deleteCache();
+        }
+    }
+
     public function getImageDimensions($rule = null, $type = 'default')
     {
         $target = $this->getFileSource($rule, $type);
