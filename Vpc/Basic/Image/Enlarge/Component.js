@@ -5,10 +5,12 @@ Ext.onReady(function() {
     var els = document.getElementsByTagName('a');
     Ext.each(els, function(el) {
         el = Ext.get(el);
-        if (el.dom.rel.match(/enlarge_[0-9]+_[0-9]+/)) {
-            Ext.EventManager.addListener(el, 'click', function(e) {
-                lightbox.show(el, e);
-            }, lightbox, { stopEvent: true });
+        if (el) {
+            if (el.dom.rel.match(/enlarge_[0-9]+_[0-9]+/)) {
+                Ext.EventManager.addListener(el, 'click', function(e) {
+                    lightbox.show(el, e);
+                }, lightbox, { stopEvent: true });
+            }
         }
     });
 });
