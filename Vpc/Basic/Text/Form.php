@@ -6,6 +6,7 @@ class Vpc_Basic_Text_Form extends Vps_Auto_Vpc_Form
         parent::__construct($class, $id);
         $field = new Vps_Auto_Field_HtmlEditor('content', 'Content');
         $field->setData(new Vps_Auto_Data_Vpc_ComponentIds('content'));
+        $field->setFieldLabel(vpsTrl('Text'));
 
         $ignoreSettings = array('tablename', 'componentName', 'childComponentClasses', 'default');
         foreach (call_user_func(array($class, 'getSettings')) as $key => $val) {
