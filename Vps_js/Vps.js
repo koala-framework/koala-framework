@@ -6,7 +6,8 @@ Ext.namespace(
 'Vps.User.Login',
 'Vps.Auto',
 'Vps.Form',
-'Vps.Binding'
+'Vps.Binding',
+'Vpc.Advanced'
 );
 
 Ext.applyIf(Array.prototype, {
