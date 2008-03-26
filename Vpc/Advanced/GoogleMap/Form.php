@@ -25,8 +25,8 @@ class Vpc_Advanced_GoogleMap_Form extends Vps_Auto_Vpc_Form
             ->setWidth(120);
 
         $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
-        $textId = $id . '-text';
-        $form = new Vpc_Basic_Text_Form($classes['text'], $textId);
+        $form = new Vpc_Basic_Text_Form('text', $classes['text']);
+        $form->setComponentIdTemplate('{0}-text');
         $this->fields->add($form);
 
 
