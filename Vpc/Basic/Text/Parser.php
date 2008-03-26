@@ -44,14 +44,14 @@ class Vpc_Basic_Text_Parser
     {
         $element = array_pop($this->_elementStack);
 
-        if ($element == "SPAN"){
+        if ($element == 'SPAN'){
             $tag = array_pop($this->_stack);
-            if ($tag != "") $this->_finalHTML .= "</".$tag.">";
-        } elseif ($element == "BODY" || $element == "O:P" || $element == "BR" || $element == "IMG" || $element == 'SCRIPT') {
+            if ($tag != '') $this->_finalHTML .= '</'.$tag.'>';
+        } elseif ($element == 'BODY' || $element == 'O:P' || $element == 'BR' || $element == 'IMG' || $element == 'SCRIPT') {
             //do nothing
         }
         else {
-            $this->_finalHTML .= "</".$element.">";
+            $this->_finalHTML .= '</'.$element.'>';
 
         }
     }
@@ -60,37 +60,36 @@ class Vpc_Basic_Text_Parser
     {
         array_push($this->_elementStack, $element);
 
-        if ($element == "SPAN" && array_key_exists("STYLE", $attributes)){
+        if ($element == 'SPAN' && array_key_exists('STYLE', $attributes)){
 
-            if (preg_match("# *font-weight *: +bold *; *#", $attributes["STYLE"], $matches)){
-                 array_push($this->_stack, "strong");
-                 $this->_finalHTML .= "<strong>";
-            } elseif (preg_match("# *font-style *: +italic *; *#", $attributes["STYLE"], $matches)){
-                 array_push($this->_stack, "em");
-                 $this->_finalHTML .= "<em>";
-            } elseif (preg_match("# *text-decoration *: +underline *; *#", $attributes["STYLE"], $matches)){
-                 array_push($this->_stack, "u");
-                 $this->_finalHTML .= "<u>";
-            } elseif (preg_match("# *color *: +[0-9,]* *#", $attributes["STYLE"], $matches) && $this->_enableColor){
-                 array_push($this->_stack, "SPAN");
-                 $this->_finalHTML .= "<SPAN style='".$attributes['STYLE']."'>";
-            } elseif (preg_match("# *background-color *: +[0-9,A-Za-z]* *#", $attributes["STYLE"], $matches) && $this->_enableColor){
-                 array_push($this->_stack, "SPAN");
-                 $this->_finalHTML .= "<SPAN style='".$attributes['STYLE']."'>";
+            $style = $attributes['STYLE'];
+            if (preg_match('# *font-weight *: +bold *; *#', $style, $matches)){
+                 array_push($this->_stack, 'strong');
+                 $this->_finalHTML .= '<strong>';
+            } elseif (preg_match('# *font-style *: +italic *; *#', $style, $matches)){
+                 array_push($this->_stack, 'em');
+                 $this->_finalHTML .= '<em>';
+            } elseif (preg_match('# *text-decoration *: +underline *; *#', $style, $matches)){
+                 array_push($this->_stack, 'u');
+                 $this->_finalHTML .= '<u>';
+            } elseif (preg_match('# *color *: +[0-9,]* *#', $style, $matches) && $this->_enableColor){
+                 array_push($this->_stack, 'span');
+                 $this->_finalHTML .= '<span style="'.$style.'">';
+            } elseif (preg_match('# *background-color *: +[0-9,A-Za-z]* *#', $style, $matches) && $this->_enableColor){
+                 array_push($this->_stack, 'span');
+                 $this->_finalHTML .= '<span style="'.$style.'">';
             }
-        }
-        elseif ($element == "BODY" || $element == "O:P" ) {
+        } elseif ($element == 'BODY' || $element == 'O:P') {
             //do nothing
-        } elseif ($element == "SCRIPT"){
+        } elseif ($element == 'SCRIPT'){
             $this->_deleteContent = true;
-        }
-        else {
-            $this->_finalHTML .= "<".$element;
+        } else {
+            $this->_finalHTML .= '<'.$element;
             foreach ($attributes as $key => $value) {
                  $this->_finalHTML .= ' ' . $key . '="'. $value . '"';
             }
 
-            $this->_finalHTML .= ">";
+            $this->_finalHTML .= '>';
         }
 
     }
@@ -105,15 +104,13 @@ class Vpc_Basic_Text_Parser
         }
     }
 
-    public function setEnableColor($value){
+    public function setEnableColor($value)
+    {
         $this->_enableColor = $value;
     }
 
     public function getFinalHtml()
     {
         return $this->_finalHTML;
-
     }
-
-
 }
