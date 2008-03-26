@@ -13,6 +13,16 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
         $this->setBorder(false);
         $this->setXtype('multifields');
     }
+    protected function _addValidators()
+    {
+        parent::_addValidators();
+        if ($this->getMaxEntries()) {
+            $this->addValidator(new Zend_Validate_LessThan($this->getMaxEntries()+0.000001));
+        }
+        if ($this->getMinEntries()) {
+            $this->addValidator(new Zend_Validate_GreaterThan($this->getMinEntries()-0.000001));
+        }
+    }
 
     public function getMetaData()
     {
@@ -100,6 +110,15 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
             $pos++;
             if (isset($r->pos)) {
                 $r->pos = $pos;
+            }
+        }
+
+        $cnt = count($rows) - count($this->_deletedRows) + count($this->_insertedRows);
+        $name = $this->getFieldLabel();
+        if (!$name) $name = $this->getName();
+        foreach ($this->getValidators() as $v) {
+            if (!$v->isValid($cnt)) {
+                throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages()));
             }
         }
     }

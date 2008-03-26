@@ -17,14 +17,14 @@ Vps.Form.MultiFields = Ext.extend(Ext.Panel, {
     onRender : function(ct, position){
         Vps.Form.MultiFields.superclass.onRender.call(this, ct, position);
 
-        for (var i = 0; i < this.minEntries; i++) {
-            this.addGroup();
-        }
-
         this.addGroupButton = new Vps.Form.MultiFieldsAddButton({
             multiFieldsPanel: this,
             renderTo: this.body
         }, position);
+
+        for (var i = 0; i < this.minEntries; i++) {
+            this.addGroup();
+        }
     },
 
     // private
