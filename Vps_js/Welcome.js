@@ -18,3 +18,4 @@ Vps.Welcome = Ext.extend(Ext.Panel,
         this.welcomePanel.getEl().center();
     }
 });
+var Welcome = Vps.Welcome;

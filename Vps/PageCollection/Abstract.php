@@ -130,7 +130,7 @@ abstract class Vps_PageCollection_Abstract
         }
 
         $this->_pages[$id] = $page;
-        $this->_pageFilenames[$id] = Zend_Filter::get($filename, 'Url', array(), 'Vps_Filter');
+        $this->_pageFilenames[$id] = Vps_Filter::get($filename, 'Url');
         $this->_pageNames[$id] = $name;
     }
 
