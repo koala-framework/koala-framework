@@ -468,7 +468,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Forum - Properties</en>
-<de>Forum - M&#xF6;glichkeiten</de>
+<de>Forum - Einstellungen</de>
 </text>
 <text>
 <en default="1">Changed data was successfully saved</en>
@@ -1065,7 +1065,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Undo the last action.</en>
-<de>Letzten Arbeitsschritt rückg&#xE4;ngig machen.</de>
+<de>Letzten Arbeitsschritt r&#xFC;ckg&#xE4;ngig machen.</de>
 </text>
 <text>
 <en default="1">Redo the last action.</en>
@@ -1109,7 +1109,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">you are logged in automatically and may use the typed in password </en>
-<de>Sie werden automatisch angemeldet und können das eingegebenen Passwort verwenden.</de>
+<de>Sie werden automatisch angemeldet und k&#xF6;nnen das eingegebenen Passwort verwenden.</de>
 </text>
 <text>
 <en default="1">for future logins.</en>
@@ -1686,6 +1686,30 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <text>
 <en default="1">to get back to the formular</en>
 <de>um zum Formular zur&#xFC;ck zu gelangen</de>
+</text>
+<text>
+<en default="1">Forum name</en>
+<de>Name für Forum</de>
+</text>
+<text>
+<en default="1">Location</en>
+<de>Ort</de>
+</text>
+<text>
+<en default="1">Avatar (Image)</en>
+<de>Avatar (Bild)</de>
+</text>
+<text>
+<en default="1">Delete current Avatar</en>
+<de>Aktuellen Avatar löschen</de>
+</text>
+<text>
+<en default="1">Delete avatar</en>
+<de>Avatar l&#xF6;schen</de>
+</text>
+<text context="forum">
+<en default="1">Signature</en>
+<de>Signatur</de>
 </text>
 </trl>
 

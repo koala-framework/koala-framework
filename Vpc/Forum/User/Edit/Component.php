@@ -30,7 +30,7 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
                                'value' => ($row ? $row->nickname : ''));
         $c = $this->_createFieldComponent('Textbox', $fieldSettings);
         $c->store('name', 'nickname');
-        $c->store('fieldLabel', 'Name für Forum');
+        $c->store('fieldLabel', trlVps('Forum name'));
         $c->store('isMandatory', true);
 
         $fieldSettings = array('name'  => 'location',
@@ -38,7 +38,7 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
                                'value' => ($row ? $row->location : ''));
         $c = $this->_createFieldComponent('Textbox', $fieldSettings);
         $c->store('name', 'location');
-        $c->store('fieldLabel', 'Ort');
+        $c->store('fieldLabel', trlVps('Location'));
         $c->store('isMandatory', false);
 
         $fieldSettings = array('name'  => 'signature',
@@ -47,7 +47,7 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
                                'value' => ($row ? $row->signature : ''));
         $c = $this->_createFieldComponent('Textarea', $fieldSettings);
         $c->store('name', 'signature');
-        $c->store('fieldLabel', 'Signatur');
+        $c->store('fieldLabel', trlcVps('forum', 'Signature', 0));
         $c->store('isMandatory', false);
 
         $fieldSettings = array('name'  => 'description_short',
@@ -56,11 +56,31 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
                                'value' => ($row ? $row->description_short : ''));
         $c = $this->_createFieldComponent('Textarea', $fieldSettings);
         $c->store('name', 'description_short');
-        $c->store('fieldLabel', 'Kurze Beschreibung');
+        $c->store('fieldLabel', trlVps('Short description'));
         $c->store('isMandatory', false);
 
+        $fieldSettings = array('name'  => 'avatar',
+                               'width' => 250);
+        $c = $this->_createFieldComponent('FileUpload', $fieldSettings);
+        $c->store('name', 'avatar');
+        $c->store('fieldLabel', trlVps('Avatar (Image)'));
+        $c->store('isMandatory', false);
+
+        if ($row->avatar) {
+            $fieldSettings = array('name'  => 'avatar_delete',
+                                   'width' => 250,
+                                   'value' => 1,
+                                   'checked' => false,
+                                   'text' => trlVps('Delete current Avatar')
+                                        .'<br /><img src="'.$row->getFileUrl('Avatar', 'avatar').'" alt="Avatar" />');
+            $c = $this->_createFieldComponent('Checkbox', $fieldSettings);
+            $c->store('name', 'avatar_delete');
+            $c->store('fieldLabel', trlVps('Delete avatar'));
+            $c->store('isMandatory', false);
+        }
+
         $c = $this->_createFieldComponent('Submit', array(
-            'name'=>'sbmt', 'width'=>200, 'text' => trlVps('Change properties')
+            'name'=>'sbmt', 'width'=>200, 'text' => trlVps('Save properties')
         ));
         $c->store('name', 'sbmt');
         $c->store('fieldLabel', '&nbsp;');
@@ -102,8 +122,14 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
         foreach ($this->getChildComponents() as $c) {
             if ($c instanceof Vpc_Formular_Field_Interface) {
                 $name = $c->getStore('name');
-                if (!in_array($name, array('sbmt'))) {
-                    $row->$name = $c->getValue();
+                if (!in_array($name, array('sbmt', 'avatar_delete'))) {
+                    if ($name != 'avatar' || $c->getValue() != null) {
+                        $row->$name = $c->getValue();
+                    }
+                } else if ($name == 'avatar_delete') {
+                    if ($c->getSent()) {
+                        $row->avatar = null;
+                    }
                 }
             }
         }

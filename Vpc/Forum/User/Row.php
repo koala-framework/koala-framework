@@ -1,6 +1,11 @@
 <?php
 class Vpc_Forum_User_Row extends Vps_Db_Table_Row_Abstract
 {
+    protected $_cacheImages = array(
+        'avatarmini' => array(0, 50),
+        'avatar' => array(150, 150)
+    );
+
     public function __toString()
     {
         return trim($this->nickname.' '.Zend_Registry::get('userModel')->find($this->id)->current()->firstname);

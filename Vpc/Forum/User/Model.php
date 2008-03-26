@@ -3,6 +3,13 @@ class Vpc_Forum_User_Model extends Vps_Db_Table_Abstract
 {
     protected $_name = 'vpc_forum_users';
     protected $_rowClass = 'Vpc_Forum_User_Row';
+    protected $_referenceMap    = array(
+        'Avatar' => array(
+            'columns'           => array('avatar'),
+            'refTableClass'     => 'Vps_Dao_File',
+            'refColumns'        => array('id')
+        )
+    );
 
     protected function _fetch($where = null, $order = null, $count = null, $offset = null)
     {

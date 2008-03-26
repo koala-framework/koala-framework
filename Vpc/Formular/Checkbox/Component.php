@@ -26,9 +26,14 @@ class Vpc_Formular_Checkbox_Component extends Vpc_Formular_Field_Abstract
         return $return;
     }
 
+    public function getSent()
+    {
+        return isset($_POST[$this->_getName()]) ? '1' : '' ;
+    }
+
     public function processInput()
     {
-        $value = isset($_POST[$this->_getName()]) ? '1' : '' ;
+        $value = $this->getSent();
         $this->_getRow()->value = $value;
     }
 
