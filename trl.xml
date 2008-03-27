@@ -1742,5 +1742,10 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
     <en default="1">Y-m-d</en>
     <de>d.m.Y</de>
 </text>
+<text>
+    <en default="1">no selection</en>
+    <de>_</de>
+</text>
+
 </trl>
 
