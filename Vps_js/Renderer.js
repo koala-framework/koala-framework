@@ -59,10 +59,10 @@ Ext.util.Format.date = function(v, format) {
     if(isNaN(v.getYear())){
         return '';
     }
-    return v.dateFormat(format || 'Y-m-d');
+    return v.dateFormat(format || trlVps('Y-m-d'));
 };
 
-Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer('Y-m-d');
+Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer(trlVps('Y-m-d'));
 Ext.util.Format.germanDate = Ext.util.Format.dateRenderer('d.m.Y');
 Ext.util.Format.germanDay = function(value, p) {
     p.css += 'vps-renderer-bright';

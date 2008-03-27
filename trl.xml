@@ -1738,5 +1738,9 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en default="1">Original Size</en>
 <de>_</de>
 </text>
+<text>
+    <en default="1">Y-m-d</en>
+    <de>d.m.Y</de>
+</text>
 </trl>
 
