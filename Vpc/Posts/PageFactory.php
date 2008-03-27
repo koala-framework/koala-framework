@@ -17,7 +17,13 @@ class Vpc_Posts_PageFactory extends Vpc_Abstract_StaticPageFactory
 
     protected function _decoratePage($page)
     {
+        if ($this->_component instanceof Vpc_Forum_Posts_Component) {
+            $forumComponent = $this->_component->getForumComponent();
+            $decoratorName = $forumComponent->getSetting(get_class($forumComponent), 'loginDecorator');
+        } else {
+            $decoratorName = $this->_component->getSetting(get_class($this->_component), 'loginDecorator');
+        }
         $dao = $this->_component->getDao();
-        return new Vpc_Decorator_CheckLogin_Component($dao, $page);
+        return new $decoratorName($dao, $page);
     }
 }

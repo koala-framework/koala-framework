@@ -22,12 +22,18 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
     {
         $ret = parent::getTemplateVars();
         $post = $this->getTable()->find($this->getCurrentComponentKey())->current();
+
+        $ret['signature'] = '';
+        $ret['avatarUrl'] = '';
+
         $forumUserModel = new Vpc_Forum_User_Model();
         $user = $forumUserModel->find($post->user_id)->current();
         if ($user) {
             $ret['signature'] = $user->signature;
-        } else {
-            $ret['signature'] = '';
+
+            if ($user->avatar) {
+                $ret['avatarUrl'] = $user->getFileUrl('Avatar', 'avatarsmall');
+            }
         }
 
         $ret['writeUrl'] = $this->getParentComponent()->getPageFactory()->getChildPageById('write')->getUrl()

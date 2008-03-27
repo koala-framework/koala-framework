@@ -10,7 +10,8 @@ class Vpc_Forum_Component extends Vpc_Abstract
             'childComponentClasses' => array(
                 'group' => 'Vpc_Forum_Group_Component',
                 'user'  => 'Vpc_Forum_User_Component'
-            )
+            ),
+            'loginDecorator' => 'Vpc_Decorator_CheckLogin_Component'
         ));
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Forum/Panel.js';
         return $ret;

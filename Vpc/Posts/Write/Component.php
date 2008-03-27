@@ -20,6 +20,11 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
             //TODO das nicht mit zahlen machen
         }
         $ret['preview'] = $this->_getPreviewComponent()->getTemplateVars();
+        $ret['lastPosts'] = array();
+        foreach ($this->getParentComponent()->getChildComponents('desc') as $comp) {
+            $ret['lastPosts'][] = $comp->getTemplateVars();
+        }
+
         return $ret;
     }
 
@@ -61,7 +66,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
             array('name'=>'content', 'width'=>470, 'height'=>150, 'value' => $initContent)
         );
         $c->store('name', 'content');
-        $c->store('fieldLabel', trlVps('Please enter the desired newstext:'));
+        $c->store('fieldLabel', trlVps('Please enter the desired text:'));
         $c->store('isMandatory', false);
         $this->_paragraphs[] = $c;
 

@@ -13,7 +13,7 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
     initComponent: function()
     {
         this.actions.assign = new Ext.Action({
-            text    : 'Assign',
+            text    : trlVps('Assign'),
             icon    : '/assets/silkicons/table_relationship.png',
             cls     : 'x-btn-text-icon',
             disabled: true,

@@ -16,7 +16,10 @@ class Vpc_Forum_Group_NewThreadPageFactory extends Vpc_Abstract_StaticPageFactor
 
     protected function _decoratePage($page)
     {
+        $forumComponent = $this->_component->getForumComponent();
+        $decoratorName = $forumComponent->getSetting(get_class($forumComponent), 'loginDecorator');
+
         $dao = $this->_component->getDao();
-        return new Vpc_Decorator_CheckLogin_Component($dao, $page);
+        return new $decoratorName($dao, $page);
     }
 }

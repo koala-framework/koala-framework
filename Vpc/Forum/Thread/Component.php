@@ -51,6 +51,10 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
             } else {
                 $ret['postUser'] = $user->firstname;
             }
+            $ret['postUserAvatarUrl'] = '';
+            if ($forumUser->avatar) {
+                $ret['postUserAvatarUrl'] = $forumUser->getFileUrl('Avatar', 'avatarsmall');
+            }
             $page = $this->getForumComponent()->getUserViewComponent($forumUser);
             $ret['postUserUrl'] = $page->getUrl();
         } else {

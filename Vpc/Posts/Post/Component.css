@@ -14,3 +14,18 @@ div.vpcPostsPost fieldset.quote legend {
     color: #ff9600;
     font-family: "Lucida Console",Helvetica,sans-serif;
 }
+
+div.vpcPostsPost div.lastPoster {
+    font-size: 11px;
+    line-height: 16px;
+    padding: 0px;
+    background-color: #f3f2f1;
+}
+div.vpcPostsPost div.lastPoster div.time { margin-bottom: 0px; }
+
+
+div.vpcPostsPost div.time { margin-bottom: 5px; }
+div.vpcPostsPost div.comment {
+    margin-bottom: 10px; margin-top: 10px;
+    padding-bottom: 10px; padding-left: 20px;
+}

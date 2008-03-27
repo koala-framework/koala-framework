@@ -11,8 +11,10 @@ class Vpc_Forum_Posts_Post_UserDetail_Component extends Vpc_Posts_Post_UserDetai
             $forumUser = $forumUserTable->fetchRow(array('id = ?' => $user->id));
         }
 
-        if ($forumUser && $forumUser->nickname) {
-            $ret['name'] = $forumUser->nickname;
+        if ($forumUser) {
+            if ($forumUser->nickname) {
+                $ret['name'] = $forumUser->nickname;
+            }
         }
 
         if ($user) {

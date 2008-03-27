@@ -13,11 +13,7 @@ div.vpcPosts h2 {
     line-height: 25px;
     background: url(/assets/vps/Vpc/Forum/forumHeaderBg.jpg) repeat-x top left;
 }
-div.vpcPosts div.time { margin-bottom: 5px; }
-div.vpcPosts div.comment {
-    margin-bottom: 10px; margin-top: 10px;
-    padding-bottom: 10px; padding-left: 20px;
-}
+
 div.vpcPosts div.userdates {
     float: right; font-size: 11px;
     width: 200px;
@@ -27,10 +23,4 @@ div.vpcPosts div.userdates {
 }
 div.vpcPosts div.userdates div.threads { border-bottom: none; }
 div.vpcPosts div.userdates div.posts { border-top: 1px solid #ccc; }
-div.vpcPosts div.lastPoster {
-    font-size: 11px;
-    line-height: 16px;
-    padding-left: 20px;
-    border: 1px solid #ccc;
-}
-div.vpcPosts div.lastPoster div.time { margin-bottom: 0px; }
+

@@ -28,6 +28,11 @@ class Vpc_Forum_User_View_Component extends Vpc_Abstract
         $ret['userThreads'] = $forumUserData->getNumThreads();
         $ret['forumUserData'] = $forumUserData->toArray();
 
+        $ret['forumUserData']['avatarUrl'] = '';
+        if ($forumUserData && $forumUserData->avatar) {
+            $ret['forumUserData']['avatarUrl'] = $forumUserData->getFileUrl('Avatar', 'avatar');
+        }
+
         $pc = $this->getPageCollection();
 
         $ret['lastThreads'] = array();

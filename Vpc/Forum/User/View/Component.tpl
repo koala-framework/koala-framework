@@ -2,6 +2,10 @@
     <h1>{trlVps text="Userprofile:"}</h1>
     <div class="text">
 
+        {if $component.forumUserData.avatarUrl}
+            <div class="avatar"><img src="{$component.forumUserData.avatarUrl}" alt="Avatar" /></div>
+        {/if}
+
         {if $component.forumUserData.nickname}
             <p><strong>Name für Forum:</strong> {$component.forumUserData.nickname}</p>
         {/if}

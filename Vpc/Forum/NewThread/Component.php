@@ -8,7 +8,7 @@ class Vpc_Forum_NewThread_Component extends Vpc_Forum_Posts_Write_Component
         $c = $this->_createFieldComponent('Textbox', array('name'=>'subject', 'width'=>200));
         $c->store('name', 'subject');
         $c->store('fieldLabel', trlVps('Subject'));
-        $c->store('isMandatory', false);
+        $c->store('isMandatory', true);
         array_unshift($this->_paragraphs, $c);
     }
 

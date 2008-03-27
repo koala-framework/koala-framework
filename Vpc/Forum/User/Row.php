@@ -2,8 +2,8 @@
 class Vpc_Forum_User_Row extends Vps_Db_Table_Row_Abstract
 {
     protected $_cacheImages = array(
-        'avatarmini' => array(0, 50),
-        'avatar' => array(150, 150)
+        'avatarsmall' => array(40, 40, Vps_Media_Image::SCALE_CROP),
+        'avatar' => array(150, 0)
     );
 
     public function __toString()
