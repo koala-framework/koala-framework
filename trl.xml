@@ -110,7 +110,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">ID {0} doesnt match pattern for Id: {1}</en>
-<de>ID {0} passt nicht zum Muster f&#xFC;r ID {1}.</de>
+<de>ID {0} passt nicht zum Muster f&#xFC;r ID: {1}</de>
 </text>
 <text>
 <en default="1">Template not found for Component {0}</en>
@@ -130,7 +130,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Show Route</en>
-<de>Route zeigen.</de>
+<de>Route zeigen</de>
 </text>
 <text>
 <en default="1">Suggestions</en>
