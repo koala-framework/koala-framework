@@ -112,6 +112,7 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
                 $r->pos = $pos;
             }
         }
+        $this->_addValidators();
 
         $cnt = count($rows) - count($this->_deletedRows) + count($this->_insertedRows);
         $name = $this->getFieldLabel();
