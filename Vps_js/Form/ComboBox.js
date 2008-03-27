@@ -115,7 +115,9 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             this.addNoSelection();
         }
         if (this.showNoSelection) {
-            this.allowBlank = false;
+            if (!this.emptyText) {
+                this.emptyText = '('+trlVps('no selection')+')';
+            }
         }
 
         Vps.Form.ComboBox.superclass.initComponent.call(this);
@@ -123,7 +125,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
     addNoSelection : function() {
         if (this.showNoSelection && this.store.find('id', '') == -1) {
             var data = {};
-            data[this.displayField] = '(no selection)';
+            data[this.displayField] = this.emptyText;
             data[this.valueField] = null;
             this.store.insert(0, new this.store.recordType(data));
         }
@@ -164,7 +166,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             var c = this.el.up('div.x-form-field-wrap').insertSibling({style: 'float: right'}, 'before');
             var button = new Ext.Button({
                 renderTo: c,
-                text: this.addDialog.text || 'add new entry',
+                text: this.addDialog.text || trlVps('add new entry'),
                 handler: function() {
                     this.addDialog.showAdd();
                 },
