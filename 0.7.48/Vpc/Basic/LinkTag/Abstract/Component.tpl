@@ -1,0 +1,1 @@
+<a href="{$component.href}" rel="{$component.rel}">
