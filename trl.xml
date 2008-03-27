@@ -412,7 +412,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Moderators of selected group</en>
-<de>Moderatoren der ausgew&#xE4;hlten Gruppe.</de>
+<de>Moderatoren der ausgew&#xE4;hlten Gruppe</de>
 </text>
 <text>
 <en default="1">create answer</en>
@@ -1719,6 +1719,23 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <text>
 <en default="1">Show Original</en>
 <de>_</de>
+<de>_</de>
+</text>
+<text>
+<en default="1">Assign</en>
+<de>Zuweisen</de>
+</text>
+<text>
+<en default="1">Assign by text input</en>
+<de>Durch Texteingabe zuweisen</de>
+</text>
+<text>
+<en default="1">Plese enter in both fields the password which you want to use
+    	for your useraccount</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Original Size</en>
 <de>_</de>
 </text>
 </trl>
