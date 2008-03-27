@@ -1,1 +1,0 @@
-<div class="basicSpace" style="height: {$component.height}px;"></div>
