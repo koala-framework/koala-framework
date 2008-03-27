@@ -1,1 +1,0 @@
-{component component=$component.paragraphs}{component component=$component.image}

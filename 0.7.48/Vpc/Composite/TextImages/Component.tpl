@@ -1,7 +1,0 @@
-{if $component.imagePosition == 'left'}
-    {component component=$component.images}
-    {component component=$component.text}
-{else}
-    {component component=$component.text}
-    {component component=$component.images}
-{/if}
