@@ -10,4 +10,9 @@ class Vpc_Forum_User_Component extends Vpc_Abstract
             )
         ));
     }
+
+    public function getForumComponent()
+    {
+        return $this->getParentComponent();
+    }
 }

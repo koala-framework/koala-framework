@@ -66,13 +66,13 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
         $c->store('fieldLabel', trlVps('Avatar (Image)'));
         $c->store('isMandatory', false);
 
-        if ($row->avatar) {
+        if ($row && $row->avatar) {
             $fieldSettings = array('name'  => 'avatar_delete',
                                    'width' => 250,
                                    'value' => 1,
                                    'checked' => false,
                                    'text' => trlVps('Delete current Avatar')
-                                        .'<br /><img src="'.$row->getFileUrl('Avatar', 'avatar').'" alt="Avatar" />');
+                                        .'<br /><img src="'.$row->getFileUrl('Avatar', 'avatar').'" class="avatar" alt="Avatar" />');
             $c = $this->_createFieldComponent('Checkbox', $fieldSettings);
             $c->store('name', 'avatar_delete');
             $c->store('fieldLabel', trlVps('Delete avatar'));
@@ -124,10 +124,16 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
                 $name = $c->getStore('name');
                 if (!in_array($name, array('sbmt', 'avatar_delete'))) {
                     if ($name != 'avatar' || $c->getValue() != null) {
+                        if ($name == 'avatar' && $c->getValue() != null && $row->avatar) {
+                            $ft = new Vps_Dao_File();
+                            $ft->fetchRow(array('id = ?' => $row->avatar))->delete();
+                        }
                         $row->$name = $c->getValue();
                     }
                 } else if ($name == 'avatar_delete') {
                     if ($c->getSent()) {
+                        $ft = new Vps_Dao_File();
+                        $ft->fetchRow(array('id = ?' => $row->avatar))->delete();
                         $row->avatar = null;
                     }
                 }

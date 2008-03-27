@@ -20,7 +20,7 @@ class Vpc_User_Login_Component extends Vpc_Formular_Component
         $c->store('isMandatory', true);
 
         $c = $this->_createFieldComponent('Submit', array(
-            'name'=>'sbmt', 'width'=>200, 'text' => 'Login'
+            'name'=>'sbmt', 'width'=>100, 'text' => 'Login'
         ));
         $c->store('name', 'sbmt');
         $c->store('fieldLabel', '&nbsp;');
@@ -29,7 +29,6 @@ class Vpc_User_Login_Component extends Vpc_Formular_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['formTemplate'] = Vpc_Admin::getComponentFile(get_parent_class($this), 'Component', 'tpl');
         $ret['redirectTo'] = $_SERVER['REQUEST_URI'];
         $ret['redirectTo'] = preg_replace('/(\?)logout=?[^&]*&?/', '$1', $ret['redirectTo']);
         $ret['loggedIn'] = false;

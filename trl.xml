@@ -575,6 +575,10 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Bitte geben Sie den gew&#xFC;nschten Newstext ein:</de>
 </text>
 <text>
+<en default="1">Please enter the desired text:</en>
+<de>Bitte geben Sie den gew&#xFC;nschten Text ein:</de>
+</text>
+<text>
 <en default="1">Create comment</en>
 <de>Kommentar erstellen</de>
 </text>
@@ -1730,8 +1734,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Durch Texteingabe zuweisen</de>
 </text>
 <text>
-<en default="1">Plese enter in both fields the password which you want to use
-    	for your useraccount</en>
+<en default="1">Plese enter in both fields the password which you want to use for your useraccount</en>
 <de>_</de>
 </text>
 <text>
@@ -1739,13 +1742,23 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>_</de>
 </text>
 <text>
-    <en default="1">Y-m-d</en>
-    <de>d.m.Y</de>
+<en default="1">By</en>
+<de>Von</de>
 </text>
 <text>
-    <en default="1">no selection</en>
-    <de>_</de>
+<en default="1">Latest posts from this topic</en>
+<de>Die letzten Beitr&#xE4;ge in diesem Thema</de>
 </text>
-
+<text>
+<en default="1">Last entry by</en>
+<de>Letzter Eintrag von</de>
+</text>
+<text>
+<en default="1">Y-m-d</en>
+<de>d.m.Y</de>
+</text>
+<text>
+<en default="1">no selection</en>
+<de>_</de>
+</text>
 </trl>
-

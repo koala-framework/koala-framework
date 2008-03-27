@@ -16,7 +16,7 @@ Vps.Auto.AssignedGridPanel = Ext.extend(Vps.Auto.GridPanel,
         var params = this.getBaseParams();
 
         Ext.MessageBox.show({
-            title    : 'Assign by text input',
+            title    : trlVps('Assign by text input'),
             msg      : trlVps('Please enter the text you wish to assign.')+'<br />'
                       +trlVps('Seperate items by a new line.'),
             width    : 400,

@@ -60,7 +60,7 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
 
         $content = str_replace('[/quote]', '</fieldset>', $content, $closed);
 
-        $content = preg_replace('/\[quote=(.+)\]/i',
+        $content = preg_replace('/\[quote=(.*?)\]/i',
             '<fieldset class="quote"><legend>Zitat von $1</legend>',
             $content,
             -1, $countOpenedPreg

@@ -4,6 +4,9 @@
         <a href="{$component.groupUrl}">{$component.group}</a>
     </h2>
     <h3>Themen:</h3>
+
+    <p><a class="newThread" href="{$component.newThreadUrl}">Neues Thema erstellen</a></p>
+
     <ul>
     {foreach from=$component.threads item=t}
         <li class="threads">

@@ -12,6 +12,7 @@ class Vpc_User_Component extends Vpc_Abstract
             'login'    => 'Vpc_User_Login_Component',
             'register' => 'Vpc_User_Register_Component'
         ));
+        $ret['loginDecorator'] = 'Vpc_Decorator_CheckLogin_Component';
         return $ret;
     }
 

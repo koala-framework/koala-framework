@@ -12,12 +12,13 @@ class Vpc_Posts_Component extends Vpc_Abstract
             'childComponentClasses' => array(
                 'write' => 'Vpc_Posts_Write_Component',
                 'post' =>  'Vpc_Posts_Post_Component'
-            )
+            ),
+            'loginDecorator' => 'Vpc_Decorator_CheckLogin_Component'
         ));
         return $ret;
     }
 
-    public function getChildComponents()
+    public function getChildComponents($orderOut = 'asc')
     {
         if (!isset($this->_posts)) {
             $this->_posts = array();
@@ -33,6 +34,14 @@ class Vpc_Posts_Component extends Vpc_Abstract
                 $c->setPostNum(count($this->_posts));
             }
         }
+        if ($orderOut == 'desc') {
+            $posts = $this->_posts;
+            if ($posts) {
+                krsort($posts);
+                return array_values($posts);
+            }
+        }
+
         return $this->_posts;
     }
 

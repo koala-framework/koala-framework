@@ -12,7 +12,10 @@ class Vpc_Forum_User_EditPageFactory extends Vpc_Abstract_StaticPageFactory
 
     protected function _decoratePage($page)
     {
+        $forumComponent = $this->_component->getForumComponent();
+        $decoratorName = $forumComponent->getSetting(get_class($forumComponent), 'loginDecorator');
+
         $dao = $this->_component->getDao();
-        return new Vpc_Decorator_CheckLogin_Component($dao, $page);
+        return new $decoratorName($dao, $page);
     }
 }

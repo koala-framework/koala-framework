@@ -29,4 +29,14 @@
     {else}
         {component component=$component.success}
     {/if}
+
+    {if $component.lastPosts}
+        <h2 class="lastPosts">{trlVps text="Latest posts from this topic"}</h2>
+        {foreach from=$component.lastPosts item=post name=lp}
+            {if $smarty.foreach.lp.index < 5}
+                {component component=$post}
+            {/if}
+        {/foreach}
+    {/if}
+
 </div>

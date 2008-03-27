@@ -1,6 +1,6 @@
 /* gehören in unterkomponente thread */
 
-div.vpcForumGroup ul { margin-left: 0px; }
+div.vpcForumGroup ul { margin-top: 20px; margin-left: 0px; }
 div.vpcForumGroup ul li { list-style: none; clear: both; }
 div.vpcForumGroup ul li.threads {
     margin-bottom: 15px;
