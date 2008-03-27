@@ -161,6 +161,8 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             throw e; //re-throw
         }, this);
 
+        var alwaysKeepTbar = (typeof this.gridConfig.tbar != 'undefined');
+
         var gridConfig = Ext.applyIf(this.gridConfig, {
             store: this.store,
             selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
@@ -494,8 +496,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         }
 
         //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
-        if (gridConfig.tbar.length == 0 && (!this.initialConfig.gridConfig ||
-                                            !this.initialConfig.gridConfig.tbar)) {
+        if (gridConfig.tbar.length == 0 && !alwaysKeepTbar) {
             delete gridConfig.tbar;
         }
 
