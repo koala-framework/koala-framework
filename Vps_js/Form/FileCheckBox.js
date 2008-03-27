@@ -10,7 +10,7 @@ Vps.Form.FileCheckBox = Ext.extend(Ext.form.Checkbox,
                 var text = '<span id="' + this.name + '_show' + '">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
                 text += '<a href="' + value.url + '" target="#blank">';
                 text += '<img src="/assets/silkicons/eye.png" />';
-                text += '</a>&nbsp;'.trlVps('Show Original');
+                text += '</a>&nbsp;'+trlVps('Show Original');
                 text += '</span>';
                 if (this.node) {
                     Ext.DomHelper.overwrite(this.node, text);
