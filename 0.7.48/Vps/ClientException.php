@@ -1,0 +1,4 @@
+<?php
+class Vps_ClientException extends Vps_Exception
+{
+}

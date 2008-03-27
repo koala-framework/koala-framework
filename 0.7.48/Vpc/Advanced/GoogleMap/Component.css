@@ -1,0 +1,10 @@
+div.vpcGoogleMap div.text { display: none; }
+div.vpcGoogleMap div.options { display: none; }
+div.vpcGoogleMap .fromAddress input { }
+div.vpcGoogleMap .fromAddress input.textBefore { color: #D0D0D0; }
+div.vpcGoogleMap .fromAddress input.textOn { color: #000000; }
+div.vpcGoogleMap .fromAddress input.submitOn { color: #D2281B; }
+
+div.vpcGoogleMap .mapDirSuggestParent { display: none; }
+
+div.vpcGoogleMap .container { overflow: hidden; border: 1px solid #000; }

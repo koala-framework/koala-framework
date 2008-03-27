@@ -1,0 +1,35 @@
+.vpcImagesEnlarge { }
+.vpcImagesEnlarge .thumbOuter { float: left; border: 1px solid #ccc; padding: 3px; margin: 3px; }
+.vpcImagesEnlarge .thumb { text-align: center; overflow: hidden; }
+
+
+.lightboxNext { float: right; }
+.lightboxNext img,
+.lightboxNextBigButton {
+    width: 57px; height: 14px; margin: 2px 0px;
+    background-image:url(/assets/vps/images/lightbox/next.png);
+}
+.lightboxPrevious img,
+.lightboxPreviousBigButton {
+    width: 57px; height: 14px; margin: 2px 0px;
+    background-image:url(/assets/vps/images/lightbox/previous.png);
+}
+
+.lightboxPreviousBig,
+.lightboxNextBig {
+    width: 22%; position: absolute; top: 0px; z-index: 105;
+    text-align: center;
+    opacity: 0.0; -moz-opacity: 0.0; filter: alpha(opacity=0);
+    cursor: pointer;
+}
+.lightboxPreviousBig { left: 0px; }
+.lightboxNextBig { right: 0px; }
+
+.lightboxPreviousBig.bigOver,
+.lightboxNextBig.bigOver { opacity: 0.82; -moz-opacity: 0.82; filter: alpha(opacity=82); }
+
+.lightboxPreviousBig .lightboxPreviousBigContent,
+.lightboxNextBig .lightboxNextBigContent {
+    background-color: #fff; margin-top: 45px; padding: 8px 0px;
+}
+

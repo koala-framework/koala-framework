@@ -1,0 +1,9 @@
+div.vpcPostsPost { border: 1px solid #ccc;}
+div.vpcPostsPost { margin-top: 15px;}
+div.vpcPostsPost p.signature {
+    padding: 5px; padding-left: 20px;
+    margin-top: -10px;
+    font-size: 11px;
+}
+
+a.quoteLink { float: right; padding-right: 20px; }

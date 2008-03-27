@@ -1,0 +1,20 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>{trlVps text="Error"}</h1>
+
+        {if $debug}
+            {trlVps text="Errortype:"}<br />
+            <pre>{$type}</pre>
+
+            <br />
+
+            {trlVps text="Message:"}<br />
+            <pre>{$exception}</pre>
+        {else}
+            {trlVps text="An Error ocurred. Please try again later."}
+        {/if}
+
+    </body>
+</html>

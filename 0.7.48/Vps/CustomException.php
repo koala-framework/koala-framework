@@ -1,0 +1,28 @@
+<?php
+class Vps_CustomException extends Vps_Exception
+{
+    private $_line;
+    private $_file;
+    private $_type;
+
+    public function setLine($line)
+    {
+        $this->_line = $line;
+    }
+
+    public function setFile($file)
+    {
+        $this->_file = $file;
+    }
+
+    public function setType($type)
+    {
+        $this->_type = $type;
+    }
+
+    public function getType()
+    {
+        return $this->_type;
+    }
+
+}

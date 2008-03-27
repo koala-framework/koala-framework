@@ -1,0 +1,1 @@
+<input type="file" name="{$component.name}" style="width: {$component.width}px;" />
