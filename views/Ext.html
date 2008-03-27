@@ -35,6 +35,7 @@
             document.write('<img src="/assets/ext/resources/images/default/shared/large-loading.gif" width="32" height="32"/>');
             document.write('{$config->application->name}<br /><span id="loading-msg">{trlVps text="Loading..."}</span></div>');
         document.write('</div>');
+        var Vps = {ldelim}isApp: true{rdelim};
     </script>
 
     {foreach item=file from=$ext.files.css}
@@ -47,7 +48,6 @@
 
 
     <script type="text/javascript">
-        if (!Vps) Vps = {ldelim}{rdelim};
         Vps.debug = {$ext.debug};
         Vps.userRole = '{$ext.userRole}';
         Vps.main = function() {ldelim}
