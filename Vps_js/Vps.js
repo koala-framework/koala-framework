@@ -119,8 +119,8 @@ Vps.callWithErrorHandler = function(fn, scope) {
 
 Vps.contentReadyHandlers = [];
 Vps.onContentReady = function(fn, scope) {
-    if (Vps.currentViewport) {
-        //in einer Ext-Anwendung mit viewport den contentReadHandler
+    if (Vps.main) {
+        //in einer Ext-Anwendung mit Vps.main den contentReadHandler
         //nicht gleich ausführen, das paragraphs-panel führt es dafür aus
         Vps.contentReadyHandlers.push({
             fn: fn,
