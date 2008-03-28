@@ -31,15 +31,17 @@ class Vps_Assets_Dependencies
 
     public function getAssetFiles($fileType = null)
     {
+        $sessionAssets = new Zend_Session_Namespace('debugAssets');
         $ret = array();
-        if (!$this->_config->debug->assets->$fileType) {
+        if (!$this->_config->debug->assets->$fileType || (isset($sessionAssets->$fileType) && !$sessionAssets->$fileType)) {
             $v = $this->_config->application->version;
             $ret[] = "/assets/All{$this->_assetsType}.$fileType?v=$v";
+            $allUsed = true;
         }
         foreach ($this->getFiles($fileType) as $file) {
             if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://') {
                 $ret[] = $file;
-            } else if ($this->_config->debug->assets->$fileType) {
+            } else if (empty($allUsed)) {
                 $ret[] = '/assets/'.$file;
             }
         }
