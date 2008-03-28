@@ -1,5 +1,5 @@
 <div class="vpcPostsPostUser">
-    {trlvps text="Of"}:
+    {trlVps text="By"}:
     {if $component.name}
         {$component.name}
     {else}

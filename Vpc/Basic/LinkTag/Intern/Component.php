@@ -29,10 +29,6 @@ class Vpc_Basic_LinkTag_Intern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
 
         $ret = parent::getTemplateVars();
         $ret['href'] = $href;
-        if ($this->_getRow()->param) {
-            $ret['href'] .= '?' . $this->_getRow()->param;
-        }
-        $ret['rel'] = $this->_getRow()->rel;
         return $ret;
     }
 }
