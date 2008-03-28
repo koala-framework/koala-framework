@@ -239,4 +239,16 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         return implode(',', $this->_getPrimaryKey());
     }
 
+
+    public function toDebug()
+    {
+        $i = get_class($this);
+        if (method_exists($this, '__toString')) {
+            $i .= " (".$this->__toString().")\n";
+        }
+        $ret = print_r($this->_data, true);
+        $ret = preg_replace('#^Array#', $i, $ret);
+        $ret = "<pre>$ret</pre>";
+        return $ret;
+    }
 }
