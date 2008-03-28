@@ -46,6 +46,7 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
             } else {
                 $id = $parentRow->id;
             }
+            if (!$id) return null;
             return str_replace('{0}', $id, $this->_componentIdTemplate);
         }
         throw new Vps_Exception("_getComponentIdFromParentRow has to be reimplemented or setComponentIdTemplate has to be set or the id has to be set");
