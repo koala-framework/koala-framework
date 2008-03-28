@@ -588,7 +588,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">to continue</en>
-<de>weiter</de>
+<de>um fortzufahren</de>
 </text>
 <text>
 <en default="1">Product</en>
@@ -1761,4 +1761,26 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en default="1">no selection</en>
 <de>_</de>
 </text>
+<text>
+<en default="1">add new entry</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Edit Paragraph</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Plese enter in both fields the password which you want to use
+    	for your useraccount</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">There is no editig for this component.</en>
+<de>Diese Komponente hat keinen Bearbeitungsbereich.</de>
+</text>
+<text>
+<en default="1">An error occured. Please try again later.</en>
+<de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es später wieder.</de>
+</text>
 </trl>
+

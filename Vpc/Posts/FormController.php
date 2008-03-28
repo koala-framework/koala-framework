@@ -2,7 +2,7 @@
 class Vpc_Posts_FormController extends Vps_Controller_Action_Auto_Form
 {
     protected $_buttons = array();
-    protected $_permissions = array('save' => true, 'add' => true);
+    protected $_permissions = array('save' => true, 'delete' => true);
 
     public function preDispatch()
     {
@@ -13,10 +13,6 @@ class Vpc_Posts_FormController extends Vps_Controller_Action_Auto_Form
 
     public function _initFields()
     {
-        $this->_form->add(new Vps_Auto_Field_TextField('name', trlVps('Name')))
-            ->setWidth(300);
-        $this->_form->add(new Vps_Auto_Field_TextField('email', trlVps('Email')))
-            ->setWidth(300);
         $this->_form->add(new Vps_Auto_Field_TextArea('content', trlVps('Content')))
             ->setWidth(300)
             ->setHeight(150);
