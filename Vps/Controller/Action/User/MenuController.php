@@ -81,10 +81,25 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
 
         $authData = $this->_getAuthData();
 
+
+        $config = Zend_Registry::get('config');
+        $debugAssets = array(
+            'js'  => $config->debug->assets->js,
+            'css' => $config->debug->assets->css
+        );
+        $sessionAssets = new Zend_Session_Namespace('debugAssets');
+        if (isset($sessionAssets->js)) {
+            $debugAssets['js'] = $sessionAssets->js;
+        }
+        if (isset($sessionAssets->css)) {
+            $debugAssets['css'] = $sessionAssets->css;
+        }
+
         $this->view->menus = $menus;
         $this->view->showLogout = $showLogout;
         $this->view->userId = $authData ? $authData->id : 0;
         $this->view->fullname = $authData ? $authData->__toString() : '';
+        $this->view->debugAssets = $debugAssets;
 
         $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
         $this->view->changeUser = $acl->isAllowed($role, 'vps_user_changeuser', 'view');
@@ -100,6 +115,18 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
             if ($file->isFile()) {
                 unlink($file->getPathname());
             }
+        }
+    }
+
+    public function jsonSetDebugAssetsAction()
+    {
+        $params = $this->getRequest()->getParams();
+        $sessionAssets = new Zend_Session_Namespace('debugAssets');
+        if (isset($params['js'])) {
+            $sessionAssets->js = $params['js'];
+        }
+        if (isset($params['css'])) {
+            $sessionAssets->css = $params['css'];
         }
     }
 }

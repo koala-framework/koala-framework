@@ -203,7 +203,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/bug.png',
                 menu: [{
-                    text: 'clear assets-cache',
+                    text: 'Clear Assets-cache',
                     icon: '/assets/silkicons/database_delete.png',
                     cls: 'x-btn-text-icon',
                     scope: this,
@@ -211,8 +211,42 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                         Ext.Ajax.request({
                             url: this.controllerUrl+'/jsonClearAssetsCache',
                             success: function() {
-                                Ext.Msg.alert('Clear Assets Cache', 'successfully cleared');
+                                Ext.Msg.alert('Assets Cache', 'Successfully cleared');
                             }
+                        });
+                    }
+                },{
+                    text: (response.debugAssets.js=='1' ?
+                        'true &raquo; <b>false</b> (.js DebugAssets)' :
+                        'false &raquo; <b>true</b> (.js DebugAssets)'),
+                    icon: '/assets/silkicons/'+(response.debugAssets.js=='1' ? 'bullet_green' : 'bullet_red')+'.png',
+                    cls: 'x-btn-text-icon',
+                    scope: this,
+                    handler: function() {
+                        Ext.Ajax.request({
+                            url: this.controllerUrl+'/jsonSetDebugAssets',
+                            params: { 'js' : (response.debugAssets.js=='1' ? 0 : 1) },
+                            success: function() {
+                                this.reload();
+                            },
+                            scope: this
+                        });
+                    }
+                },{
+                    text: (response.debugAssets.css=='1' ?
+                        'true &raquo; <b>false</b> (.css DebugAssets)' :
+                        'false &raquo; <b>true</b> (.css DebugAssets)'),
+                    icon: '/assets/silkicons/'+(response.debugAssets.css=='1' ? 'bullet_green' : 'bullet_red')+'.png',
+                    cls: 'x-btn-text-icon',
+                    scope: this,
+                    handler: function() {
+                        Ext.Ajax.request({
+                            url: this.controllerUrl+'/jsonSetDebugAssets',
+                            params: { 'css' : (response.debugAssets.css=='1' ? 0 : 1) },
+                            success: function() {
+                                this.reload();
+                            },
+                            scope: this
                         });
                     }
                 },{
