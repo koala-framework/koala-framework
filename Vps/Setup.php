@@ -3,6 +3,9 @@ function p($src, $maxDepth = 5) {
     ini_set('xdebug.var_display_max_depth', $maxDepth);
     if (is_object($src) && method_exists($src, '__toString')) {
         $src = $src->__toString();
+    } else if (is_object($src) && method_exists($src, 'toDebug')) {
+        echo $src->toDebug();
+        return;
     }
     if (function_exists('xdebug_var_dump')) {
         xdebug_var_dump($src);
