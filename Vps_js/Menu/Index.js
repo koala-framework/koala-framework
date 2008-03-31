@@ -216,10 +216,23 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                         });
                     }
                 },{
-                    text: (response.debugAssets.js=='1' ?
-                        'true &raquo; <b>false</b> (.js DebugAssets)' :
-                        'false &raquo; <b>true</b> (.js DebugAssets)'),
-                    icon: '/assets/silkicons/'+(response.debugAssets.js=='1' ? 'bullet_green' : 'bullet_red')+'.png',
+                    text: 'Auto-Clear Assets Cache',
+                    icon: (response.debugAssets.autoClearCache=='1' ? '/assets/silkicons/tick.png' : null),
+                    cls: 'x-btn-text-icon',
+                    scope: this,
+                    handler: function() {
+                        Ext.Ajax.request({
+                            url: this.controllerUrl+'/jsonSetDebugAssets',
+                            params: { 'autoClearCache' : (response.debugAssets.autoClearCache=='1' ? 0 : 1) },
+                            success: function() {
+                                this.reload();
+                            },
+                            scope: this
+                        });
+                    }
+                },{
+                    text: '.js - Debug Assets',
+                    icon: (response.debugAssets.js=='1' ? '/assets/silkicons/tick.png' : null),
                     cls: 'x-btn-text-icon',
                     scope: this,
                     handler: function() {
@@ -233,10 +246,8 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                         });
                     }
                 },{
-                    text: (response.debugAssets.css=='1' ?
-                        'true &raquo; <b>false</b> (.css DebugAssets)' :
-                        'false &raquo; <b>true</b> (.css DebugAssets)'),
-                    icon: '/assets/silkicons/'+(response.debugAssets.css=='1' ? 'bullet_green' : 'bullet_red')+'.png',
+                    text: '.css - Debug Assets',
+                    icon: (response.debugAssets.css=='1' ? '/assets/silkicons/tick.png' : null),
                     cls: 'x-btn-text-icon',
                     scope: this,
                     handler: function() {

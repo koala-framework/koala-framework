@@ -94,6 +94,9 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
         if (isset($sessionAssets->css)) {
             $debugAssets['css'] = $sessionAssets->css;
         }
+        if (isset($sessionAssets->autoClearCache)) {
+            $debugAssets['autoClearCache'] = $sessionAssets->autoClearCache;
+        }
 
         $this->view->menus = $menus;
         $this->view->showLogout = $showLogout;
@@ -127,6 +130,9 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
         }
         if (isset($params['css'])) {
             $sessionAssets->css = $params['css'];
+        }
+        if (isset($params['autoClearCache'])) {
+            $sessionAssets->autoClearCache = $params['autoClearCache'];
         }
     }
 }

@@ -99,11 +99,14 @@ class Vps_Assets_Loader
                 $backendOptions = array(
                     'cache_dir' => 'application/cache/assets/'
                 );
+
+                $sessionAssets = new Zend_Session_Namespace('debugAssets');
                 $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
                 $config = Zend_Registry::get('config');
                 if ((!$cacheData = $cache->load($fileType.$encoding.$section))
-                    || $cacheData['version'] != $config->application->version) {
-
+                    || $cacheData['version'] != $config->application->version
+                    || $sessionAssets->autoClearCache
+                ) {
                     $dep = new Vps_Assets_Dependencies($section, $config);
                     $contents = $dep->getPackedAll($fileType);
                     $contents = self::_encode($contents, $encoding);
