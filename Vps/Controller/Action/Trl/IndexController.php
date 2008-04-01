@@ -6,23 +6,10 @@ class Vps_Controller_Action_Trl_IndexController extends Vps_Controller_Action
     private $_languages = array();
     public function indexAction()
     {
-
         //festsetzen der sprachen
-        $config = new Zend_Config_Ini('application/config.ini');
-        $cnt = 0;
-        if ($config->production->languages){
-            foreach($config->production->languages as $key => $value){
-                if ($cnt == 0){
-                    $this->_defaultLanguage = $key;
-                    $cnt++;
-                } else {
-                    $this->_languages[] = $key;
-                }
-            }
-        } else {
-            $this->_defaultLanguage = $config->production->webCodeLanguage;
-        }
-
+        $this->_languages = Vps_Trl::getLanguages();
+        $this->_defaultLanguage = Vps_Trl::getCurrentLanguage();
+        
         //das Project
        $directory = ".";
        $inipath = 'application/trl.xml';

@@ -494,7 +494,27 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (meta.buttons.reload && !existingActions.reload) {
             gridConfig.tbar.add(this.getAction('reload'));
         }
-
+		
+		if (meta.helpText) {
+            gridConfig.tbar.add('->');
+            gridConfig.tbar.add(new Ext.Action({
+                icon : '/assets/silkicons/information.png',
+                cls : 'x-btn-icon',
+                handler : function (a) {
+                    var helpWindow = new Ext.Window({
+                        html: meta.helpText,
+                        width: 400,
+                        bodyStyle: 'padding: 10px',
+                        autoHeight: true,
+                        bodyBorder : false,
+                        title: trlVps('Info'),
+                        resize: false
+                    });
+                    helpWindow.show();
+                },
+                scope: this
+            }));
+		}
         //wenn toolbar leer und keine tbar über config gesetzt dann nicht erstellen
         if (gridConfig.tbar.length == 0 && !alwaysKeepTbar) {
             delete gridConfig.tbar;

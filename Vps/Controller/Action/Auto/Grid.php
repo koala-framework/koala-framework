@@ -354,6 +354,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
     {
         $this->view->metaData = array();
 
+        $this->view->metaData['helpText'] = $this->getHelpText();
         $this->view->metaData['root'] = 'rows';
         $this->view->metaData['id'] = $this->_primaryKey;
         if (isset($this->_paging['type']) && $this->_paging['type'] == 'Date') {

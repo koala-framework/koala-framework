@@ -27,13 +27,17 @@ class Vps_Registry extends Zend_Registry
             $v = new Vps_Trl();
             $this->offsetSet('trl', $v);
             return $v;
+        } else if ($index == 'hlp' && !parent::offsetExists($index)) {
+            $v = new Vps_Hlp();
+            $this->offsetSet('hlp', $v);
+            return $v;
         }
         return parent::offsetGet($index);
     }
 
     public function offsetExists($index)
     {
-        if (in_array($index, array('db', 'dao', 'config', 'acl', 'userModel', 'trl'))) {
+        if (in_array($index, array('db', 'dao', 'config', 'acl', 'userModel', 'trl', 'hlp'))) {
             return true;
         }
         return parent::offsetExists($index);

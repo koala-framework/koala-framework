@@ -63,6 +63,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
     protected function jsonMetaAction()
     {
+        $this->view->helpText = $this->_helpText;
         $this->view->icons = array();
         foreach ($this->_icons as $k=>$i) {
             $this->view->icons[$k] = $i->__toString();

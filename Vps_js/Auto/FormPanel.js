@@ -1,3 +1,36 @@
+// Für Hilfetexte afterRender in Formularfields überschreiben
+Ext.override(Ext.form.Field, {
+  afterRender : function() {
+        Ext.form.Field.superclass.afterRender.call(this);
+		if (this.helpText){
+		    var wrapDiv = this.getEl().up('div.x-form-item');
+		    if (wrapDiv) {
+				var label = wrapDiv.child('label');        
+	            if (label) {            
+				    if (this.width) {
+						var style = 'position:absolute; margin-left:' + (this.width + 10) + 'px'
+					} else {
+						var style = 'margin-bottom: 0px; margin-left: 5px; padding: 0px;';
+					}
+                    var helpImage = label.createChild({
+                        tag: 'img', 
+                        src: '/assets/silkicons/information.png',
+                        style: style,
+                        width: 16,
+                        height: 16
+                    });           
+	                Ext.QuickTips.register({
+	                    target:  helpImage,
+	                    title: '',
+	                    text: this.helpText,
+	                    enabled: true
+	                });
+	            }
+		    }
+        }
+    }
+});
+
 Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     autoScroll: true, //um scrollbars zu bekommen
     border: false,
@@ -92,6 +125,26 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 if (!meta.form.tbar) meta.form.tbar = [];
                 meta.form.tbar.push(this.getAction(b));
             }
+	        if (meta.helpText) {
+				meta.form.tbar.push('->');
+	            meta.form.tbar.push(new Ext.Action({
+	                icon : '/assets/silkicons/information.png',
+	                cls : 'x-btn-icon',
+	                handler : function (a) {
+	                    var helpWindow = new Ext.Window({
+	                        html: meta.helpText,
+	                        width: 400,
+	                        bodyStyle: 'padding: 10px',
+	                        autoHeight: true,
+	                        bodyBorder : false,
+	                        title: trlVps('Info'),
+	                        resize: false
+	                    });
+	                    helpWindow.show();
+	                },
+	                scope: this
+	            }));
+	        }
         }
         if (this.formPanel != undefined) {
             this.remove(this.formPanel, true);
