@@ -39,7 +39,13 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
             if (!$this->showInvisible()) {
                 $where['visible = ?'] = 1;
             }
-            foreach ($this->getTable()->fetchAll($where) as $row) {
+
+            $order = null;
+            $tableInfo = $this->getTable()->info();
+            if (in_array('pos', $tableInfo['cols'])) {
+                $order = 'pos ASC';
+            }
+            foreach ($this->getTable()->fetchAll($where, $order) as $row) {
                 $this->_children[$row->id] = $this->createComponent($class, $row->id);
             }
         }

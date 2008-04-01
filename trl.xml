@@ -306,11 +306,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Maximum Upload {0} kB</en>
-<de>Maximale Dateig&#xF6;&#xDF;er {0} kB</de>
+<de>Maximale Dateig&#xF6;&#xDF;e: {0} kB</de>
 </text>
 <text>
 <en default="1">Max. filesize (in kb)</en>
-<de>Maximale Dateig&#xF6;&#xDF;er (in kB)</de>
+<de>Maximale Dateig&#xF6;&#xDF;e (in kB)</de>
 </text>
 <text>
 <en default="1">Valid types (e.g. jpg, gif)</en>
@@ -773,7 +773,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Advice</en>
-<de>Ratschlag</de>
+<de>Information</de>
 </text>
 <text>
 <en default="1">At the following action emails are automatically sent to the adequade user.</en>
@@ -785,7 +785,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Accessdata and person</en>
-<de>Zutrittsdaten und Person</de>
+<de>Zugangsdaten und Person</de>
 </text>
 <text>
 <en default="1">Webcode</en>
