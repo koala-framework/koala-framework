@@ -22,6 +22,14 @@ function d($src, $maxDepth = 5)
     exit;
 }
 
+function hlp($string){
+    return Zend_Registry::get('hlp')->hlp($string);
+}
+
+function hlpVps($string){
+    return Zend_Registry::get('hlp')->hlpVps($string);
+}
+
 function trl($string, $text = array()){
 
     //if abfrage wird bei smarty templates erfüllt

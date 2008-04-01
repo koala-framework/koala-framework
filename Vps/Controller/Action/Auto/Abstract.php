@@ -3,7 +3,8 @@ abstract class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
 {
     protected $_buttons = array();
     protected $_permissions;
-
+    private $_helpText;
+    
     public function init()
     {
         parent::init();
@@ -47,5 +48,15 @@ abstract class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
                 unset($this->_permissions[$k]);
             }
         }
+    }
+    
+    public final function setHelpText($helpText)
+    {
+        $this->_helpText = $helpText;
+    }
+    
+    public final function getHelpText()
+    {
+        return $this->_helpText;
     }
 }

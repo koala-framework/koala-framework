@@ -16,7 +16,8 @@ class Vps_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('vps_welcome_content'));
         $this->add(new Zend_Acl_Resource('vps_media_media'));
         $this->add(new Zend_Acl_Resource('vps_trl_index'));
-
+        $this->add(new Zend_Acl_Resource('vps_trl_helptext'));
+        
         $this->add(new Vps_Acl_Resource_UserSelf('vps_user_self', '/vps/user/self'));
 
         $this->allow(null, 'index');
@@ -31,6 +32,8 @@ class Vps_Acl extends Zend_Acl
         $this->deny('guest', 'vps_welcome_index');
         $this->allow(null, 'vps_user_self');
         $this->deny('guest', 'vps_user_self');
+        $this->allow('admin', 'vps_trl_index');
+        $this->allow('admin', 'vps_trl_helptext');
     }
 
     public function getResources($parent = null)
