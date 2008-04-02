@@ -162,13 +162,13 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
                 throw new Vps_Exception("queryFields which is required to use query-filters is not set.");
             }
 
-            $whereQuery = array();
             if ($this->_querySeparator) {
                 $query = explode($this->_querySeparator, $query);
             } else {
                 $query = array($query);
             }
             foreach ($query as $q) {
+                $whereQuery = array();
                 foreach ($this->_getWhereQuery($q) as $i) {
                     $whereQuery[] = $db->quoteInto($i, "%$q%");
                 }
