@@ -18,7 +18,7 @@ div.vpcForum ul li.post {
     margin-top: 10px;
     font-weight: normal;
     border: 1px solid #ccc;
-    margin-bottom: 15px;
+    margin-bottom: 15px; margin-left: -10px;
 }
 
 div.vpcForum ul li.post a { font-weight: bold; }
