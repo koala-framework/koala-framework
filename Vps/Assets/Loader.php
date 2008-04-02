@@ -7,12 +7,12 @@ class Vps_Assets_Loader
         $type = substr($url, 0, strpos($url, '/'));
         $url = substr($url, strpos($url, '/')+1);
         if (!isset($paths->$type)) {
-            throw new Vps_Assets_NotFoundException(trlVps("Assets-Path-Type {0} not found in config.", '\''.$type.'\''));
+            throw new Vps_Assets_NotFoundException("Assets-Path-Type '$type' not found in config.");
         }
         $p = $paths->$type;
         if ($p == 'VPS_PATH') $p = VPS_PATH;
         if (!file_exists($p.'/'.$url)) {
-            throw new Vps_Assets_NotFoundException(trlVps("Asset-File {0} does not exist."),'\''.$p/$url.'\'' );
+            throw new Vps_Assets_NotFoundException("Asset-File '$p/$url' does not exist.");
         }
         return $p.'/'.$url;
     }
