@@ -5,6 +5,7 @@
                 {component component=$child}
             </div>
         </div>
+         <div class="{cycle values="one,two,three,four"}"></div>
     {/foreach}
-    <div class="clear"></div>
+      <div class="clear"></div>
 </div>
