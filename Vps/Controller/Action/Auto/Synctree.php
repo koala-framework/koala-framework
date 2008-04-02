@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
+abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action_Auto_Abstract
 {
     const ADD_LAST = 0;
     const ADD_FIRST = 1;
@@ -28,6 +28,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     private $_openedNodes = array();
     protected $_addPosition = self::ADD_FIRST;
 
+    public function init()
+    {
+    }
+    
     public function preDispatch()
     {
         parent::preDispatch();
@@ -63,7 +67,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
     protected function jsonMetaAction()
     {
-        $this->view->helpText = $this->_helpText;
+        $this->view->helpText = $this->getHelpText();
         $this->view->icons = array();
         foreach ($this->_icons as $k=>$i) {
             $this->view->icons[$k] = $i->__toString();
