@@ -58,7 +58,8 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             }
             var errorMsg = '<a href="'+options.url+'?'+p+'">request-url</a><br />';
             errorMsg += e.toString()+': <br />'+response.responseText;
-            var errorMsgTitle = trlVps('Javascript Parse Exception');        }
+            var errorMsgTitle = 'Javascript Parse Exception';
+        }
 
         if (!errorMsg && r.exception) {
             var p;
@@ -69,7 +70,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             }
             var errorMsg = '<a href="'+options.url+'?'+p+'">request-url</a><br />';
             errorMsg += r.exception;
-            var errorMsgTitle = trlVps('PHP Exception');
+            var errorMsgTitle = 'PHP Exception';
         }
         if (errorMsg) {
             if (Vps.debug) {

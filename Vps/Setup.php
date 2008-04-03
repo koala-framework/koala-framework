@@ -226,6 +226,17 @@ class Vps_Setup
         }
         set_include_path($ip);
 
+        if (Zend_Registry::get('config')->debug->querylog) {
+            $profiler = new Vps_Db_Profiler(true);
+            Zend_Registry::get('db')->setProfiler($profiler);
+
+            if (file_exists('querylog')) unlink('querylog');
+            $writer = new Zend_Log_Writer_Stream('querylog');
+            $writer->setFormatter(new Zend_Log_Formatter_Simple("%message%\n"));
+            $logger = new Zend_Log($writer);
+            $profiler->setLogger($logger);
+        }
+
         Zend_Db_Table_Abstract::setDefaultAdapter(Zend_Registry::get('db'));
     }
 
