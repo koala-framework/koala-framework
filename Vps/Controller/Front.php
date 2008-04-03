@@ -9,17 +9,17 @@ class Vps_Controller_Front extends Zend_Controller_Front
         $this->setControllerDirectory('application/controllers');
         $this->returnResponse(true);
 
-        $this->addControllerDirectory('Vps/Controller/Action/Welcome',
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Welcome',
                                         'vps_controller_action_welcome');
-        $this->addControllerDirectory('Vps/Controller/Action/User',
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/User',
                                         'vps_controller_action_user');
-        $this->addControllerDirectory('Vps/Controller/Action/Error',
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Error',
                                         'vps_controller_action_error');
-        $this->addControllerDirectory('Vps/Controller/Action/Media',
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Media',
                                         'vps_controller_action_media');
-        $this->addControllerDirectory('Vps/Controller/Action/Pool',
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Pool',
                                 'vps_controller_action_pool');
-        $this->addControllerDirectory('Vps/Controller/Action/Trl',
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Trl',
                                 'vps_controller_action_trl');
 
         $router = $this->getRouter();
