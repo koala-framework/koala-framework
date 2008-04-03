@@ -44,7 +44,7 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                           'controller' => 'component',
                           'action' => 'index')));
         parent::_init();
-        $this->addControllerDirectory('Vps/Controller/Action/Component',
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Component',
                                         'vps_controller_action_component');
 
     }
