@@ -70,4 +70,16 @@ class Vps_Controller_Front extends Zend_Controller_Front
 
         return self::$_instance;
     }
+
+    //funktioniert über __destrukt nicht, workaround:
+    public function dispatch()
+    {
+        $ret = parent::dispatch();
+
+        $profiler = Zend_Registry::get('db')->getProfiler();
+        if ($profiler instanceof Vps_Db_Profiler) {
+            $profiler->logSummary();
+        }
+        return $ret;
+    }
 }

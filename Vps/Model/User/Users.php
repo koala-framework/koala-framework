@@ -4,6 +4,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
     protected $_name = 'vps_users';
     protected $_primary = 'id';
     protected $_rowClass = 'Vps_Model_User_User';
+    private $_rowCache = array(); //damit jede row nur einmal erstellt wird
 
     static public $allCache = null;
 
@@ -184,5 +185,13 @@ class Vps_Model_User_Users extends Vps_Db_Table
             $role = 'guest';
         }
         return $role;
+    }
+
+    public function find($id)
+    {
+        if (!isset($this->_rowCache[$id])) {
+            $this->_rowCache[$id] = parent::find($id);
+        }
+        return $this->_rowCache[$id];
     }
 }
