@@ -1,51 +1,53 @@
 <?php
-class Vps_Trl {
-
+class Vps_Trl
+{
     private $_xml;
     private $_xmlVps;
-    
+    private $_languages; //cache
+
     public function __construct()
     {
-       $filename = 'application/trl.xml';
-       if (is_file($filename)) {
+        $filename = 'application/trl.xml';
+        if (is_file($filename)) {
            $this->_xml = new SimpleXMLElement(file_get_contents($filename));
-       }
-       $filename = VPS_PATH . '/trl.xml';
-       if (is_file($filename)) {
+        }
+        $filename = VPS_PATH . '/trl.xml';
+        if (is_file($filename)) {
            $this->_xmlVps = new SimpleXMLElement(file_get_contents($filename));
-       }
+        }
     }
 
-    public static function getLanguages()
+    public function getLanguages()
     {
-        $languages = array();
-        $config = new Zend_Config_Ini('application/config.ini');
-        if ($config->production->languages){
-            $languages = array_keys($config->production->languages->toArray());
-        } else if ($config->production->webCodeLanguage) {
-            $languages[] = $config->production->webCodeLanguage;
+        if (!isset($this->_languages)) {
+            $config = Zend_Registry::get('config');
+            if ($config->languages) {
+                $this->_languages = array_keys($config->languages->toArray());
+            } else if ($config->webCodeLanguage) {
+                $this->_languages = array($config->webCodeLanguage);
+            }
+            if (empty($this->_languages)) {
+                throw new Vps_Exception('Neither config languages nor config webCodeLanguage set.');
+            }
         }
-        if (empty($languages)) {
-            throw new Vps_Exception(trlVps('Neither $config->production->languages nor $config->production->webCodeLanguage set.'));
-        }
-        return $languages;
+        return $this->_languages;
     }
     
-    public static function getCurrentLanguage()
+    public function getCurrentLanguage()
     {
-        $languages = self::getLanguages();
+        $languages = $this->getLanguages();
         if (isset(Zend_Registry::get('userModel')->getAuthedUser()->language)){
             $userLanguage = Zend_Registry::get('userModel')->getAuthedUser()->language;
             if (array_search($userLanguage, $languages)) {
                 return $userLanguage;
             }
         }
-        return self::getDefaultLanguage();
+        return $this->getDefaultLanguage();
     }
 
-    public static function getDefaultLanguage()
+    public function getDefaultLanguage()
     {
-        $languages = self::getLanguages();
+        $languages = $this->getLanguages();
         return $languages[0];
     }
     
