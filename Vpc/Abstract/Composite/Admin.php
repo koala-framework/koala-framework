@@ -7,10 +7,6 @@ class Vpc_Abstract_Composite_Admin extends Vpc_Admin
         foreach ($classes as $class) {
             Vpc_Admin::getInstance($class)->setup();
         }
-
-
-        $fields['image_position'] = "enum('left', 'right', 'alternate') default NULL";
-        $this->createFormTable('vpc_composite_textimage', $fields);
     }
     public function delete($componentId)
     {

@@ -12,7 +12,7 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract imple
     {
         parent::__construct($name);
         if (!isset($this->fields)) {
-            $this->fields = new Vps_Collection();
+            $this->fields = new Vps_Collection_FormFields();
         }
     }
 
@@ -64,8 +64,14 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract imple
 
     public function setSave($v)
     {
+        $this->setProperty('save', $v);
         foreach ($this as $f) {
             $f->setSave($v);
         }
+    }
+
+    public function setNamePrefix($v)
+    {
+        $this->fields->setFormName($v);
     }
 }

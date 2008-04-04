@@ -1,13 +1,6 @@
 <?php
 class Vpc_Basic_LinkTag_Admin extends Vpc_Admin
 {
-    public function getExtConfig()
-    {
-        return array_merge(parent::getExtConfig(), array(
-            'xtype'=>'vpc.linktag'
-        ));
-    }
-
     public function setup()
     {
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');

@@ -14,7 +14,7 @@
             <p><strong>{trlVps text="Name"}:</strong>
             {$component.userData.title}
             {$component.userData.firstname}
-            {$component.userData.lastname}</p>
+            {$component.userData.lastname|truncate:2:'.':true}</p>
         {/if}
 
         <p>

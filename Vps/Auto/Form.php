@@ -48,6 +48,9 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
 
     public function save($parentRow, $postData)
     {
+        //wenn form zB in einem CardLayout liegt und deaktivert wurde nicht speichern
+        if ($this->getSave() === false) return array();
+
         $row = $this->_getRowByParentRow($parentRow);
         if (!$row) {
             throw new Vps_Exception('Can\'t find row.');
