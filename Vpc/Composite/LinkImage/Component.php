@@ -9,7 +9,7 @@ class Vpc_Composite_LinkImage_Component extends Vpc_Abstract_Composite_Component
             'tablename'         => 'Vpc_Composite_LinkImage_Model',
             'childComponentClasses' => array(
                 'link'         => 'Vpc_Basic_LinkTag_Component',
-                'image'        => 'Vpc_Basic_Image_Component',
+                'image'        => 'Vpc_Composite_LinkImage_Image_Component',
             )
         ));
     }
