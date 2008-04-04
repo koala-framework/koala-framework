@@ -6,7 +6,7 @@ class Vpc_Basic_LinkTag_Extern_Form extends Vps_Auto_Vpc_Form
         parent::__construct($name, $class, $id);
 
         $this->add(new Vps_Auto_Field_TextField('target', 'Target'))
-            ->setWidth(500)
+            ->setWidth(450)
             ->setAllowBlank(false);
         if (Vpc_Abstract::getSetting($class, 'showRel')) {
             $this->add(new Vps_Auto_Field_TextField('rel', 'Rel'));

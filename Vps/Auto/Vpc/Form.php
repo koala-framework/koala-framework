@@ -40,6 +40,7 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
 
     protected function _getComponentIdFromParentRow($parentRow)
     {
+    
         if (isset($this->_componentIdTemplate)) {
             if (isset($parentRow->component_id)) {
                 $id = $parentRow->component_id;

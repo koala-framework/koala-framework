@@ -22,7 +22,7 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
                 'link_class'    => 'Vpc_Basic_LinkTag_Intern_Component'
             )
         ));
-        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/LinkTag/Panel.js';
+        $ret['assetsAdmin']['dep'][] = 'VpsFormCards';
         return $ret;
     }
 
