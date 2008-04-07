@@ -34,7 +34,11 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
 
     public function setProperty($name, $value)
     {
-        $this->_properties[$name] = $value;
+        if (is_null($value)) {
+            unset($this->_properties[$name]);
+        } else {
+            $this->_properties[$name] = $value;
+        }
         return $this;
     }
 

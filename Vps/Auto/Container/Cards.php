@@ -1,18 +1,17 @@
 <?php
 class Vps_Auto_Container_Cards extends Vps_Auto_Container_Abstract
 {
-    public $cards;
     private $_combobox;
 
     public function __construct($name = null, $fieldLabel = null)
     {
-        parent::__construct($name);
-        $this->cards = new Vps_Collection('Vps_Auto_Container_Card');
+        $this->fields = new Vps_Collection_FormFields(null, 'Vps_Auto_Container_Card');
+        parent::__construct();
         $this->setBaseCls('x-plain');
         $this->setXtype('vps.cards');
         $this->setLayout('form');
 
-        $this->_combobox = $this->cards->add(new Vps_Auto_Field_Select($name, $fieldLabel));
+        $this->_combobox = $this->fields->add(new Vps_Auto_Field_Select($name, $fieldLabel));
     }
 
     public function setFieldLabel($value)
@@ -32,14 +31,14 @@ class Vps_Auto_Container_Cards extends Vps_Auto_Container_Abstract
         $ret = parent::getMetaData();
 
         $comboboxData = array();
-        foreach ($this->cards as $card) {
+        foreach ($this->fields as $card) {
             if ($card != $this->_combobox) {
                 $comboboxData[$card->getName()] = $card->getTitle();
             }
         }
         $this->_combobox->setValues($comboboxData);
 
-        $cardItems = $this->cards->getMetaData();
+        $cardItems = $this->fields->getMetaData();
         unset($cardItems[0]); //die combobox
         $cardItems = array_values($cardItems);
         foreach ($cardItems as $k => $v) {
@@ -59,32 +58,11 @@ class Vps_Auto_Container_Cards extends Vps_Auto_Container_Abstract
         return $ret;
     }
 
-    public function getByName($name)
-    {
-        $ret = parent::getByName($name);
-        if($ret) return $ret;
-        return $this->cards->getByName($name);
-    }
-    public function hasChildren()
-    {
-        return true;
-    }
-    public function getChildren()
-    {
-        return $this->cards;
-    }
-
-    public function add($v = null)
-    {
-        $return = $this->cards->add($v);
-        return $return;
-    }
-
     public function prepareSave($row, $postData)
     {
-        foreach ($this->cards as $card) {
+        foreach ($this->fields as $card) {
             if ($card != $this->_combobox
-                && $card->getName() != $postData[$this->getName()]) {
+                && $card->getName() != $postData[$this->_combobox->getFieldName()]) {
                 $card->setSave(false);
             }
         }

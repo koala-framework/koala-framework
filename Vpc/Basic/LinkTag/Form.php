@@ -18,7 +18,7 @@ class Vpc_Basic_LinkTag_Form extends Vps_Auto_Vpc_Form
             $form->setAutoHeight(true);
             $form->setBaseCls('x-plain');
 
-            $card = $cards->cards->add();
+            $card = $cards->add();
             $card->setTitle($name);
             $card->setName($class);
             $card->add($form);

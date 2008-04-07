@@ -7,6 +7,7 @@ class Vps_Auto_Container_FieldSet extends Vps_Auto_Container_Abstract
         parent::__construct();
         $this->setTitle($title);
         $this->setAutoHeight(true);
+        $this->setBorder(true);
         $this->setXtype('fieldset');
     }
 

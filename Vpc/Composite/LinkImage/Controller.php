@@ -2,6 +2,7 @@
 class Vpc_Composite_LinkImage_Controller extends Vps_Controller_Action_Auto_Vpc_Form
 {
     protected $_permissions = array('add', 'save', 'delete', 'edit');
+    protected $_formName = 'Vps_Auto_Vpc_NonTableForm';
 
     public function _initFields()
     {

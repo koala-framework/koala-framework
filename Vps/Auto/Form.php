@@ -1,8 +1,6 @@
 <?php
-class Vps_Auto_Form extends Vps_Auto_Container_Abstract
+class Vps_Auto_Form extends Vps_Auto_NonTableForm
 {
-    private $_name;
-    private $_id;
     protected $_table;
     protected $_tableName;
     private $_primaryKey;
@@ -14,9 +12,6 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
             $this->fields = new Vps_Collection_FormFields();
         }
         parent::__construct($name);
-        $this->setLayout('form');
-        $this->setBorder(false);
-        $this->setLabelAlign('right');
         $this->setId($id);
     }
 
@@ -34,30 +29,12 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
         return $this->getRow();
     }
 
-
-    public function prepareSave($parentRow, $postData)
-    {
-        $row = $this->_getRowByParentRow($parentRow);
-        if (!$row) {
-            throw new Vps_Exception('Can\'t find row.');
-        } else if (!$row instanceof Zend_Db_Table_Row_Abstract) {
-            throw new Vps_Exception('Row must be a Zend_Db_Table_Row_Abstract.');
-        }
-        parent::prepareSave($row, $postData);
-    }
-
     public function save($parentRow, $postData)
     {
         //wenn form zB in einem CardLayout liegt und deaktivert wurde nicht speichern
         if ($this->getSave() === false) return array();
 
         $row = $this->_getRowByParentRow($parentRow);
-        if (!$row) {
-            throw new Vps_Exception('Can\'t find row.');
-        } else if (!$row instanceof Zend_Db_Table_Row_Abstract) {
-            throw new Vps_Exception('Row must be a Zend_Db_Table_Row_Abstract.');
-        }
-
         $row->save();
         parent::save($row, $postData);
 
@@ -77,43 +54,13 @@ class Vps_Auto_Form extends Vps_Auto_Container_Abstract
         return array();
     }
 
-    public function load($parentRow)
-    {
-        $row = (object)$this->_getRowByParentRow($parentRow);
-        return parent::load($row);
-    }
 
     public function delete($parentRow)
     {
+        parent::delete($parentRow);
+
         $row = $this->_getRowByParentRow($parentRow);
-        if (!$row) {
-            throw new Vps_Exception('Can\'t find row.');
-        } else if (!$row instanceof Zend_Db_Table_Row_Abstract) {
-            throw new Vps_Exception('Row must be a Zend_Db_Table_Row_Abstract.');
-        }
-        parent::delete($row);
         $row->delete();
-    }
-
-    public function getName()
-    {
-        return $this->_name;
-    }
-
-    public function setName($name)
-    {
-        $this->_name = $name;
-        $this->fields->setFormName($name); //damit prefixName der Felder nachträglich angepasst wird
-    }
-
-    public function getId()
-    {
-        return $this->_id;
-    }
-
-    public function setId($id)
-    {
-        $this->_id = $id;
     }
 
     public function getPrimaryKey()

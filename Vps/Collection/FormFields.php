@@ -3,9 +3,10 @@ class Vps_Collection_FormFields extends Vps_Collection
 {
     private $_formName = null;
 
-    public function __construct($name = null)
+    public function __construct($name = null, $defaultClass = null)
     {
         $this->_formName = $name;
+        parent::__construct($defaultClass);
     }
 
     protected function _postInsertValue($field)
