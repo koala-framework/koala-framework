@@ -137,7 +137,8 @@ class Vps_Trl
         $temp_default_lang = $this->getDefaultLanguage();
         $temp_target_lang = $this->getCurrentLanguage();
         foreach ($xml->text as $element) {
-                if ($element->$temp_default_lang == $needle && $element->$temp_target_lang != '_' && ($element['context'] == $context)){
+                // en direkt hinschreiben ist nur ein quick-fix
+                if ($element->en == $needle && $element->$temp_target_lang != '_' && ($element['context'] == $context)){
                     return (string) $element->$temp_target_lang;
                 }
         }
@@ -150,7 +151,8 @@ class Vps_Trl
         $temp_plural = $temp_default_lang.'_plural';
         $temp_target_plural = $temp_target_lang.'_plural';
         foreach ($xml->text as $element) {
-                if ($element->$temp_plural == $needle && $element->$temp_target_plural != '_' && ($element['context'] == $context)){
+                // en_plural direkt hinschreiben ist nur ein quick-fix
+                if ($element->en_plural == $needle && $element->$temp_target_plural != '_' && ($element['context'] == $context)){
                     return (string) $element->$temp_target_plural;
                 }
         }
