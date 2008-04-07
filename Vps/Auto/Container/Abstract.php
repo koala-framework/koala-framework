@@ -2,7 +2,6 @@
 /**
  * Basisklasse für Fields die andere Fields beinhalten
  *
- * zB FieldSet
  **/
 abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract implements IteratorAggregate
 {
@@ -14,6 +13,9 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract imple
         if (!isset($this->fields)) {
             $this->fields = new Vps_Collection_FormFields();
         }
+        $this->setLayout('form');
+        $this->setBorder(false);
+        $this->setLabelAlign('right');
     }
 
     public function getMetaData()
@@ -72,6 +74,44 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract imple
 
     public function setNamePrefix($v)
     {
+        if ($this->getName()) {
+            $v = $v . '_' . $this->getName();
+        }
         $this->fields->setFormName($v);
+        return $this;
     }
+
+    //kann überschrieben werden wenn wir eine anderen row haben wollen
+    protected function _getRowByParentRow($parentRow)
+    {
+        return $parentRow;
+    }
+
+    public function prepareSave($parentRow, $postData)
+    {
+        $row = $this->_getRowByParentRow($parentRow);
+        parent::prepareSave($row, $postData);
+    }
+
+    public function save($parentRow, $postData)
+    {
+        //wenn form zB in einem CardLayout liegt und deaktivert wurde nicht speichern
+        if ($this->getSave() === false) return array();
+
+        $row = $this->_getRowByParentRow($parentRow);
+        parent::save($row, $postData);
+    }
+
+    public function delete($parentRow)
+    {
+        $row = (object)$this->_getRowByParentRow($parentRow);
+        parent::delete($row);
+    }
+
+    public function load($parentRow)
+    {
+        $row = (object)$this->_getRowByParentRow($parentRow);
+        return parent::load($row);
+    }
+
 }

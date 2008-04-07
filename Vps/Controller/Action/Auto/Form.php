@@ -96,8 +96,8 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
         $insert = false;
 
-        if ($row) {
-            $primaryKey = $this->_form->getPrimaryKey();
+        $primaryKey = $this->_form->getPrimaryKey();
+        if ($row && $primaryKey) {
             if (is_array($primaryKey)) $primaryKey = $primaryKey[1];
             if (!$row->$primaryKey) {
                 $insert = true;
@@ -145,19 +145,19 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         $this->_form->delete(null);
     }
 
-    protected function _beforeSave(Zend_Db_Table_Row_Abstract $row)
+    protected function _beforeSave($row)
     {
     }
 
-    protected function _afterSave(Zend_Db_Table_Row_Abstract $row)
+    protected function _afterSave($row)
     {
     }
 
-    protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row)
+    protected function _beforeInsert($row)
     {
     }
 
-    protected function _afterInsert(Zend_Db_Table_Row_Abstract $row)
+    protected function _afterInsert($row)
     {
     }
 
