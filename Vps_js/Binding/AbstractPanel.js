@@ -180,7 +180,7 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
 
     mabySubmit : function(cb, options)
     {
-        if (this.checkDirty && this.isDirty()) {
+        if (this.checkDirty && !this.disabled && this.isDirty()) {
             Ext.Msg.show({
             title:trlVps('Save'),
             msg: trlVps('Do you want to save the changes?'),
