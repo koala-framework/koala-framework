@@ -52,13 +52,13 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
 		this.map.addControl(new GLargeMapControl());
         this.buttons = [
         {
-            text: 'Cancel',
+            text: trlVps('Cancel'),
             handler: function() {
                 this.hide();
             },
             scope: this
         },{
-            text: 'Ok',
+            text: trlVps('OK'),
             handler: function() {
                 this.clear = false;
                 this.fireEvent('confirm', this);
@@ -70,21 +70,23 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
     },
     afterRender:function(){
         Vps.Form.GoogleMapWindow.superclass.afterRender.call(this);
-        this.map = new GMap2(this.body.dom);
-        this.geocoder = new GClientGeocoder();
-        this.map.addControl(new GLargeMapControl());
-        this.map.addControl(new GScaleControl(), new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(64,15)));
-        this.map.addControl(new GMapTypeControl());
-        this.map.addControl(new GOverviewMapControl());
+        Vps.GoogleMap.load(function() {
+            this.map = new GMap2(this.body.dom);
+            this.geocoder = new GClientGeocoder();
+            this.map.addControl(new GLargeMapControl());
+            this.map.addControl(new GScaleControl(), new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(64,15)));
+            this.map.addControl(new GMapTypeControl());
+            this.map.addControl(new GOverviewMapControl());
 
-        var point = new GLatLng(47.9534, 13.2448);
-        this.marker = new GMarker(point, {draggable: true});
+            var point = new GLatLng(47.9534, 13.2448);
+            this.marker = new GMarker(point, {draggable: true});
 
-        this.setMarkerPoint ('47.9534;13.2448');
+            this.setMarkerPoint ('47.9534;13.2448');
 
-        GEvent.addListener(this.marker, 'click',     this.showLatLng.createDelegate(this));
-        GEvent.addListener(this.marker, 'dragstart', this.hideLatLng.createDelegate(this));
-        GEvent.addListener(this.marker, 'dragend',   this.showLatLng.createDelegate(this));
+            GEvent.addListener(this.marker, 'click',     this.showLatLng.createDelegate(this));
+            GEvent.addListener(this.marker, 'dragstart', this.hideLatLng.createDelegate(this));
+            GEvent.addListener(this.marker, 'dragend',   this.showLatLng.createDelegate(this));
+        }, this);
     },
     addressPrompt:function(){
         Ext.Msg.prompt(trlVps('enter address'), trlVps('Example: Pfongauerstraße 67, 5202 Neumarkt am Wallersee'), function(btn, text){
