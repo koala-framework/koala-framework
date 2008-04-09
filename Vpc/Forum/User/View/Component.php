@@ -62,7 +62,7 @@ class Vpc_Forum_User_View_Component extends Vpc_Abstract
             $postsTable = new Vpc_Posts_Model();
             $where = array('user_id = ?' => $userId);
             $i = 0;
-            foreach ($postsTable->fetchAll($where, null, 10) as $row) {
+            foreach ($postsTable->fetchAll($where, 'id DESC', 10) as $row) {
                 $threadComponent = $pc->getComponentById($row->component_id);
                 if ($threadComponent instanceof Vpc_Forum_Posts_Component) {
                     $ret['lastPosts'][] = array(
