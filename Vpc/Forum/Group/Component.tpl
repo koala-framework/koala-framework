@@ -26,7 +26,7 @@
                 </div>
             </div>
 
-            <div class="lastPost">Letzter Eintrag:
+            <div class="lastPost">{trlVps text="Last entry"}:
                 {if $t.postUserUrl}
                     <a href="{$t.postUserUrl}">{$t.postUser}</a>
                 {else}

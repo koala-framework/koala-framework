@@ -354,7 +354,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">enable posts</en>
-<de>Eintrag erlauben</de>
+<de>Beiträge erlauben</de>
 </text>
 <text>
 <en default="1">Topics</en>
@@ -362,15 +362,15 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Entries</en>
-<de>Eintr&#xE4;ge</de>
+<de>Beiträge</de>
 </text>
 <text>
 <en default="1">Last Entry</en>
-<de>Letzter Eintrag</de>
+<de>Letzter Beitrag</de>
 </text>
 <text>
 <en default="1">Last entry</en>
-<de>Letzter Eintrag</de>
+<de>Letzter Beitrag</de>
 </text>
 <text>
 <en default="1">at</en>
@@ -424,7 +424,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Edit entry</en>
-<de>Eintrag bearbeiten</de>
+<de>Beitrag bearbeiten</de>
 </text>
 <text>
 <en default="1">of</en>
@@ -436,11 +436,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Please check your entry, errors occured</en>
-<de>Bitte &#xFC;berpr&#xFC;fen Sie Ihren Eintrag, Fehler sind aufgetreten.</de>
+<de>Bitte &#xFC;berpr&#xFC;fen Sie Ihren Beitrag, Fehler sind aufgetreten.</de>
 </text>
 <text>
 <en default="1">Post was successfully saved.</en>
-<de>Eintrag wurde erfolgreich gespeichert.</de>
+<de>Beitrag wurde erfolgreich gespeichert.</de>
 </text>
 <text>
 <en default="1">to topic</en>
@@ -516,11 +516,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Latest topics</en>
-<de>Letztes Thema</de>
+<de>Letzte Themen</de>
 </text>
 <text>
 <en default="1">Latest entries</en>
-<de>Letzter Eintrag</de>
+<de>Letzte Beiträge</de>
 </text>
 <text>
 <en default="1">childComponentClass must be set for key \{0}\</en>
@@ -564,7 +564,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Change Post</en>
-<de>Eintrag &#xE4;ndern</de>
+<de>Beitrag &#xE4;ndern</de>
 </text>
 <text>
 <en default="1">Member since</en>
@@ -917,7 +917,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Do you really want to delete this entry?</en>
-<de>Wollen Sie diesen Eintrag wirklich l&#xF6;schen?</de>
+<de>Wollen Sie diesen Beitrag wirklich l&#xF6;schen?</de>
 </text>
 <text>
 <en default="1">Do you want to save the changes?</en>
@@ -1161,7 +1161,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">New Entry</en>
-<de>Neuer Eintrag</de>
+<de>Neuer Beitrag</de>
 </text>
 <text>
 <en default="1">No controllerUrl specified for AutoForm.</en>
@@ -1189,7 +1189,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Do you really wish to remove this entry / these entries?</en>
-<de>Wollen Sie diesen Eintrag (diese Eintr&#xE4;ge) wirklich l&#xF6;schen?</de>
+<de>Wollen Sie diesen Beitrag (diese Beiträge) wirklich l&#xF6;schen?</de>
 </text>
 <text>
 <en default="1">Add</en>
@@ -1605,7 +1605,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Do you really want to delete this entry:\n\n"</en>
-<de>Wollen Sie diesen Eintrag wirklich l&#xF6;schen:\n\n"</de>
+<de>Wollen Sie diesen Beitrag wirklich l&#xF6;schen:\n\n"</de>
 </text>
 <text>
 <en default="1">Sitetree</en>
@@ -1751,7 +1751,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Last entry by</en>
-<de>Letzter Eintrag von</de>
+<de>Letzter Beitrag von</de>
 </text>
 <text>
 <en default="1">Y-m-d</en>
