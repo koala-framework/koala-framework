@@ -69,20 +69,11 @@ class Vps_Assets_Dependencies
                     //wird benÃ¶tigt fÃ¼r googlemaps wo die js-dateien kein js am ende haben
                     $file = substr($file, 0, -strlen($fileType)-1);
                 }
-                //TODO: wenn sowas Ã¶fters gebraucht wird dynamischer machen
-                $hostParts = explode('.', $_SERVER['HTTP_HOST']);
-                $configDomain = $hostParts[count($hostParts)-2]  // zB 'vivid-planet'
-                               .$hostParts[count($hostParts)-1]; // zB 'com'
-                if (isset($this->_config->googleMapsApiKeys->$configDomain)) {
-                    $file = str_replace(
-                        '{$config.googleMapsApiKey}',
-                        $this->_config->googleMapsApiKeys->$configDomain,
-                        $file
-                    );
-                }
                 $files[] = $file;
             }
         }
+
+        //hack: übersetzung immer zuletzt anhängen
         if ($fileType == 'js') {
             $files[] = 'vps/Ext/ext-lang-en.js';
         }

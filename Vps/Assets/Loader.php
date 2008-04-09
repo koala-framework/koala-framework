@@ -38,6 +38,20 @@ class Vps_Assets_Loader
                 $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents);
             }
         }
+        if (substr($file, -3) == '.js') {
+            //TODO: wenn sowas öfters gebraucht wird dynamischer machen
+            $hostParts = explode('.', $_SERVER['HTTP_HOST']);
+            $configDomain = $hostParts[count($hostParts)-2]  // zB 'vivid-planet'
+                            .$hostParts[count($hostParts)-1]; // zB 'com'
+            if (isset(Zend_Registry::get('config')->googleMapsApiKeys->$configDomain)) {
+                $contents = str_replace(
+                    '{$googleMapsApiKey}',
+                    Zend_Registry::get('config')->googleMapsApiKeys->$configDomain,
+                    $contents
+                );
+            }
+        }
+
         $version = Zend_Registry::get('config')->application->version;
         $contents = str_replace('{$application.version}', $version, $contents);
         $contents = self::trl($contents);

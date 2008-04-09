@@ -148,8 +148,11 @@ Vps.onContentReady(function() {
         var options = Ext.decode(mapContainer.down("div.options").dom.innerHTML);
         var text = mapContainer.down("div.text").dom.innerHTML;
         var myMap = new Vpc.Advanced.GoogleMap(mapContainer, options, text);
-        myMap.show();
-        myMap.activateMarker();
+
+        Vps.GoogleMap.load(function() {
+            this.show();
+            this.activateMarker();
+        }, myMap);
     });
 });
 
