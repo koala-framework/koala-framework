@@ -1,18 +1,16 @@
 
-Ext.onReady(function() {
+Vps.onContentReady(function() {
 
     var lightbox = new Vpc.Basic.ImageEnlarge();
     var els = document.getElementsByTagName('a');
-    Ext.each(els, function(el) {
-        el = Ext.get(el);
-        if (el) {
-            if (el.dom.rel.match(/enlarge_[0-9]+_[0-9]+/)) {
-                Ext.EventManager.addListener(el, 'click', function(e) {
-                    lightbox.show(el, e);
-                }, lightbox, { stopEvent: true });
-            }
+    for (var i=0; i<els.length; i++) {
+        if (els[i].rel.match(/enlarge_[0-9]+_[0-9]+/)) {
+            Ext.EventManager.addListener(els[i], 'click', function(e) {
+                lightbox.show(Ext.get(this), e);
+                e.stopEvent();
+            }, els[i], { stopEvent: true });
         }
-    });
+    }
 });
 
 
