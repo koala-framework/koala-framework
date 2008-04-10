@@ -218,7 +218,7 @@ class Vps_Setup
 
         error_reporting(E_ALL);
         date_default_timezone_set('Europe/Berlin');
-        //set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
+        set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
 
         $ip = get_include_path();
         foreach (Zend_Registry::get('config')->includepath as $p) {
