@@ -38,7 +38,7 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
                                'value' => ($row ? $row->location : ''));
         $c = $this->_createFieldComponent('Textbox', $fieldSettings);
         $c->store('name', 'location');
-        $c->store('fieldLabel', trlVps('Location'));
+        $c->store('fieldLabel', trlcVps('forum', 'Location', 0));
         $c->store('isMandatory', false);
 
         $fieldSettings = array('name'  => 'signature',
@@ -47,7 +47,10 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
                                'value' => ($row ? $row->signature : ''));
         $c = $this->_createFieldComponent('Textarea', $fieldSettings);
         $c->store('name', 'signature');
-        $c->store('fieldLabel', trlcVps('forum', 'Signature', 0));
+        $c->store('fieldLabel',
+            trlcVps('forum', 'Signature', 0).'<br />('.
+            trlVps('will be displayed at the end of each post').')'
+        );
         $c->store('isMandatory', false);
 
         $fieldSettings = array('name'  => 'description_short',
@@ -56,14 +59,31 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
                                'value' => ($row ? $row->description_short : ''));
         $c = $this->_createFieldComponent('Textarea', $fieldSettings);
         $c->store('name', 'description_short');
-        $c->store('fieldLabel', trlVps('Short description'));
+        $c->store('fieldLabel',
+            trlVps('Short description').'<br />('.
+            trlVps('interests, hobbies, pets, ...').')'
+        );
+        $c->store('isMandatory', false);
+
+        $fieldSettings = array(
+            'value' => '<br />'
+                .trlVps('You may upload a picture that is displayed in your profile '
+                    .'and in each of your posts in a small version (40x40 Pixels).')
+                .'<br />'
+                .trlVps('For optimized displayment the picture should have a width of at least 150 Pixels, '
+                    .'the file size may not be bigger than 2 MB.'),
+            'name'  => 'avatarinfo'
+        );
+        $c = $this->_createFieldComponent('ShowText', $fieldSettings);
+        $c->store('name', 'avatarinfo');
+//         $c->store('fieldLabel', trlVps('Information'));
         $c->store('isMandatory', false);
 
         $fieldSettings = array('name'  => 'avatar',
                                'width' => 250);
         $c = $this->_createFieldComponent('FileUpload', $fieldSettings);
         $c->store('name', 'avatar');
-        $c->store('fieldLabel', trlVps('Avatar (Image)'));
+        $c->store('fieldLabel', trlVps('Profile picture'));
         $c->store('isMandatory', false);
 
         if ($row && $row->avatar) {
@@ -71,11 +91,11 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
                                    'width' => 250,
                                    'value' => 1,
                                    'checked' => false,
-                                   'text' => trlVps('Delete current Avatar')
+                                   'text' => trlVps('Delete current picture')
                                         .'<br /><img src="'.$row->getFileUrl('Avatar', 'avatar').'" class="avatar" alt="Avatar" />');
             $c = $this->_createFieldComponent('Checkbox', $fieldSettings);
             $c->store('name', 'avatar_delete');
-            $c->store('fieldLabel', trlVps('Delete avatar'));
+            $c->store('fieldLabel', trlVps('Delete picture'));
             $c->store('isMandatory', false);
         }
 
@@ -122,7 +142,7 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
         foreach ($this->getChildComponents() as $c) {
             if ($c instanceof Vpc_Formular_Field_Interface) {
                 $name = $c->getStore('name');
-                if (!in_array($name, array('sbmt', 'avatar_delete'))) {
+                if (!in_array($name, array('sbmt', 'avatar_delete', 'avatarinfo'))) {
                     if ($name != 'avatar' || $c->getValue() != null) {
                         if ($name == 'avatar' && $c->getValue() != null && $row->avatar) {
                             $ft = new Vps_Dao_File();

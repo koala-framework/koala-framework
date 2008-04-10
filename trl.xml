@@ -511,6 +511,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Kurze Beschreibung</de>
 </text>
 <text>
+<en default="1">interests, hobbies, pets, ...</en>
+<de>Interessen, Hobbies, Haustiere, ...</de>
+</text>
+
+<text>
 <en default="1">Signature</en>
 <de>Unterschrift</de>
 </text>
@@ -1699,6 +1704,10 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en default="1">Location</en>
 <de>Ort</de>
 </text>
+<text context="forum">
+<en default="1">Location</en>
+<de>Wohnort</de>
+</text>
 <text>
 <en default="1">Avatar (Image)</en>
 <de>Avatar (Bild)</de>
@@ -1708,12 +1717,24 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Aktuellen Avatar l&#xF6;schen</de>
 </text>
 <text>
+<en default="1">You may upload a picture that is displayed in your profile and in each of your posts in a small version (40x40 Pixels).</en>
+<de>Hier können Sie ein Bild hochladen, welches in Ihrem Profil und in verkleinerter Version (40x40 Pixel) bei Ihren Beiträgen angezeigt wird.</de>
+</text>
+<text>
+<en default="1">For optimized displayment the picture should have a width of at least 150 Pixels, the file size may not be bigger than 2 MB.</en>
+<de>Für eine optimale Darstellung sollte das Bild mindestens 150 Pixel breit sein, die maximale Dateigröße darf 2 MB nicht überschreiten.</de>
+</text>
+<text>
 <en default="1">Delete avatar</en>
 <de>Avatar l&#xF6;schen</de>
 </text>
 <text context="forum">
 <en default="1">Signature</en>
 <de>Signatur</de>
+</text>
+<text>
+<en default="1">will be displayed at the end of each post</en>
+<de>wird am Ende eines jeden Forumbeitrags angehängt</de>
 </text>
 <text>
 <en default="1">File-Type not allowed. Only Images are allowed.</en>
@@ -1785,6 +1806,18 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <text>
 <en default="1">on</en>
 <de>am</de>
+</text>
+<text>
+<en default="1">Profile picture</en>
+<de>Profilbild</de>
+</text>
+<text>
+<en default="1">Delete picture</en>
+<de>Bild löschen</de>
+</text>
+<text>
+<en default="1">Delete current picture</en>
+<de>Aktuelles Bild löschen</de>
 </text>
 </trl>
 
