@@ -44,9 +44,4 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract_Composite_Component
         $ret['options'] = Zend_Json::encode($options);
         return $ret;
     }
-
-    public function getTextImageRow()
-    {
-        return $this->_getRow();
-    }
 }

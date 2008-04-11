@@ -1,5 +1,5 @@
 <?php
-class Vpc_Paragraphs_Row extends Vps_Db_Table_Row_Abstract
+class Vpc_Paragraphs_Row extends Vpc_Row
 {
     protected function _delete()
     {

@@ -27,4 +27,10 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
         return $return;
     }
 
+    public function getSearchVars()
+    {
+        $ret = parent::getSearchVars();
+        $ret['text'] .= ' '.$this->_getRow()->infotext;
+        return $ret;
+    }
 }
