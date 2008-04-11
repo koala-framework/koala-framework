@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Image_Row extends Vps_Db_Table_Row
+class Vpc_Basic_Image_Row extends Vpc_Row
 {
     private function _getScaleSettings()
     {

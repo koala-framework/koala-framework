@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
+class Vpc_Basic_Text_Component extends Vpc_Abstract
 {
     private $_componentParts;
 
@@ -84,6 +84,23 @@ class Vpc_Basic_Text_Component extends Vpc_Basic_Html_Component
                 $ret['contentParts'][] = $part->getTemplateVars();
             } else {
                 $ret['contentParts'][] = $part;
+            }
+        }
+        return $ret;
+    }
+
+    public function getSearchVars()
+    {
+        $ret = parent::getSearchVars();
+        foreach ($this->_getComponentParts() as $part) {
+            if ($part instanceof Vpc_Abstract) {
+                foreach ($part->getSearchVars() as $k=>$i) {
+                    if (!isset($ret[$k])) $ret[$k] = '';
+                    $ret[$k] .= ' '.$i;
+                }
+            } else {
+                $part = strip_tags($part);
+                $ret['text'] .= ' '.$part;
             }
         }
         return $ret;

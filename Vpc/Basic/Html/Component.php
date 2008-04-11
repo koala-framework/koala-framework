@@ -25,4 +25,11 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract
         $ret['content'] = $this->_getRow()->content;
         return $ret;
     }
+
+    public function getSearchVars()
+    {
+        $ret = parent::getSearchVars();
+        $ret['text'] .= ' '.strip_tags($this->_getRow()->content);
+        return $ret;
+    }
 }

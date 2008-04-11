@@ -49,6 +49,18 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         return $ret;
     }
 
+    public function getSearchVars()
+    {
+        $ret = parent::getSearchVars();
+        foreach ($this->_getParagraphs() as $c) {
+            foreach ($c->getSearchVars() as $k=>$i) {
+                if (!isset($ret[$k])) $ret[$k] = '';
+                $ret[$k] .= ' '.$i;
+            }
+        }
+        return $ret;
+    }
+
     protected function _getParagraphs()
     {
         if (!isset($this->_paragraphs)) {

@@ -337,6 +337,11 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return $vars;
     }
 
+    public function getSearchVars()
+    {
+        return array('text' => '');
+    }
+
     /**
      * Informationen über den Aufbau der aktuellen Komponente.
      *

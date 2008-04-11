@@ -20,4 +20,10 @@ class Vpc_Basic_Link_Component extends Vpc_Abstract_Composite_Component
         return $return;
     }
 
+    public function getSearchVars()
+    {
+        $ret = parent::getSearchVars();
+        $ret['text'] .= ' '.$this->_getRow()->text;
+        return $ret;
+    }
 }

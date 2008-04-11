@@ -20,6 +20,18 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
         return $return;
     }
 
+    public function getSearchVars()
+    {
+        $ret = parent::getSearchVars();
+        foreach ($this->_getSetting('childComponentClasses') as $id=>$c) {
+            foreach ($this->getChildComponent($id)->getSearchVars() as $k=>$i) {
+                if (!isset($ret[$k])) $ret[$k] = '';
+                $ret[$k] .= ' '.$i;
+            }
+        }
+        return $ret;
+    }
+
     public function getChildComponent($type)
     {
         if (!isset($this->_childComponents[$type])) {

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_Row extends Vps_Db_Table_Row
+class Vpc_Basic_Text_Row extends Vpc_Row
 {
     //für Component und Row
     public function getContentParts($content = null)
