@@ -18,7 +18,6 @@ class Vpc_Basic_LinkTag_FirstChildPage_Component extends Vpc_Basic_LinkTag_Abstr
         $ret = parent::getTemplateVars();
         $ret['href'] = $pc->getUrl($childPages[0]);
         $ret['param'] = '';
-        $ret['rel'] = '';
         return $ret;
     }
 }
