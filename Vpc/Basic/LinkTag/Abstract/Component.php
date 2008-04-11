@@ -7,4 +7,10 @@ abstract class Vpc_Basic_LinkTag_Abstract_Component extends Vpc_Abstract
             'componentIcon' => new Vps_Asset('page_link')
         ));
     }
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['rel'] = '';
+        return $ret;
+    }
 }

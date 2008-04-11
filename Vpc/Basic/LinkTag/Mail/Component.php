@@ -28,7 +28,6 @@ class Vpc_Basic_LinkTag_Mail_Component extends Vpc_Basic_LinkTag_Abstract_Compon
         if ($p) {
             $ret['href'] .= '?' . implode('&', $p);
         }
-        $ret['rel'] = '';
         return $ret;
     }
 }
