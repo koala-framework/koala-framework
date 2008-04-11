@@ -151,6 +151,11 @@ class Vpc_Admin
         return in_array($tablename, $this->_db->listTables());
     }
 
+    public static function getComponentClass($class, $filename)
+    {
+        return self::getComponentFile($class, $filename, 'php', true);
+    }
+
     public static function getComponentFile($class, $filename = '', $ext = 'php', $returnClass = false)
     {
         if (is_object($class)) $class = get_class($class);

@@ -84,4 +84,10 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
         }
         return parent::save($parentRow, $postData);
     }
+
+    public static function createComponentForm($name, $class)
+    {
+        $f = Vpc_Admin::getComponentClass($class, 'Form');
+        return new $f($name, $class);
+    }
 }

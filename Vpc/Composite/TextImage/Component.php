@@ -9,7 +9,7 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract_Composite_Component
             'tablename'         => 'Vpc_Composite_TextImage_Model',
             'childComponentClasses' => array(
                 'text'         => 'Vpc_Basic_Text_Component',
-                'image'        => 'Vpc_Basic_Image_Enlarge_Component',
+                'image'        => 'Vpc_Basic_Image_Component',
             ),
             'default'           => array(
                 'image_position'    => 'left' // 'left', 'right', 'alternate'
