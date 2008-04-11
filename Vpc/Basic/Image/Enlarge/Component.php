@@ -28,6 +28,7 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
 
         // Small Image
         $vars = $this->getChildComponent()->getTemplateVars();
+
         if (!$vars['url'] || !$this->_getRow()->enlarge) {
             $size = $this->_getRow()->getImageDimensions(null, 'small');
             $vars['url'] = $this->_getRow()->getFileUrl(null, 'small');
@@ -37,6 +38,7 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
         $return['smallImage'] = $vars;
 
         $return['thumbMaxHeight'] = $vars['height'];
+
         return $return;
     }
 
