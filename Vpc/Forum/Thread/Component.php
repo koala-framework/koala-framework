@@ -23,6 +23,7 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         $ret = array();
         $ret['url'] = $this->getUrl();
         $ret['subject'] = $thread->subject;
+        $ret['thread_id'] = $thread->id;
 
         $forumUser = $forumUserTable->fetchRow(array('id = ?' => $thread->user_id));
         $user = Zend_Registry::get('userModel')->find($thread->user_id)->current();

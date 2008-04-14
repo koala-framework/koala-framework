@@ -86,6 +86,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
     protected function _beforeSave($row)
     {
     }
+
     protected function _getValues()
     {
         //TODO, ist a schas hier, überschreibt _getValues von überklasse
@@ -99,6 +100,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         }
         return $ret;
     }
+
     protected function _processForm()
     {
         if (!isset($_POST['preview'])) {

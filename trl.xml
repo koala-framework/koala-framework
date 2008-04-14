@@ -636,8 +636,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Benutzerkonto aktivieren</de>
 </text>
 <text>
-<en default="1">Plese enter in both fields the password which you want to use
-        for your useraccount</en>
+<en default="1">Plese enter in both fields the password which you want to use for your useraccount</en>
 <de>Bitte geben Sie in beide Felder das gew&#xFC;nschte Passwort f&#xFC;r Ihr Benutzerkonto ein</de>
 </text>
 <text>
@@ -1818,6 +1817,22 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <text>
 <en default="1">Delete current picture</en>
 <de>Aktuelles Bild löschen</de>
+</text>
+<text>
+<en default="1">New post in observed thread</en>
+<de>Neuer Beitrag in beobachtetem Thema</de>
+</text>
+<text>
+<en default="1">A new Post has been written in thread:</en>
+<de>In folgendem Thema wurde ein neuer Beitrag verfasst:</de>
+</text>
+<text>
+<en default="1">in the forum of:</en>
+<de>im Forum von:</de>
+</text>
+<text>
+<en default="1">Click the following link to go directly to the mentioned thread:</en>
+<de>Klicken Sie auf folgenden Link um direkt zum betreffenden Thema zu gelangen:</de>
 </text>
 </trl>
 

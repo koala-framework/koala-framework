@@ -2,7 +2,7 @@ Vps.Form.ShowField = Ext.extend(Ext.form.Field,
 {
     defaultAutoCreate : {tag: 'div', cls: 'vps-form-show-field'},
     /**
-     * {value} wenn kein objekt übergeben, sonst index aus objekt
+     * {value} wenn kein objekt ï¿½bergeben, sonst index aus objekt
      */
     tpl: '{value}',
 
@@ -25,6 +25,11 @@ Vps.Form.ShowField = Ext.extend(Ext.form.Field,
     getRawValue : function(){
         return this.el.dom.innerHTML;
     },
+    getValue : function()
+    {
+        return null;
+    },
+
     setValue : function(value)
     {
         this.value = value;

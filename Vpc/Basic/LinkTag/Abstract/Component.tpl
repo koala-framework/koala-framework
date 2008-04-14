@@ -1,1 +1,1 @@
-<a href="{$component.href}" rel="{$component.rel}">
+<a href="{$component.href}"{if $component.rel} rel="{$component.rel}"{/if}>

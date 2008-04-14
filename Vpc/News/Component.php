@@ -23,12 +23,15 @@ class Vpc_News_Component extends Vpc_News_List_Abstract_Component implements Vpc
     public function getNews($limit = 15)
     {
         $where = array(
-            'component_id = ?' => $this->getId()
+            'component_id = ?' => $this->getId(),
+            'publish_date <= ?' => date('Y-m-d'),
+            'expiry_date >= ?' => date('Y-m-d')
         );
 
         if (!$this->showInvisible()) {
             $where['visible = 1'] = '';
         }
+
         $rows = $this->getTable()->fetchAll($where, 'publish_date DESC', $limit);
 
         return $rows;
