@@ -11,8 +11,7 @@
     {foreach from=$component.threads item=t}
         <li class="threads">
             <div class="description">
-                <a class="name" href="{$t.url}">{$t.subject}</a>
-                <p>Antworten: {$t.replies}</p>
+                <a class="name" href="{$t.url}">{$t.subject} <span>Antworten: {$t.replies}</span></a>
             </div>
            
             <div class="statistik">
