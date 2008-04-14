@@ -1,0 +1,11 @@
+a.notObserved {
+    background: url(/assets/vps/Vpc/Forum/notObserved.jpg) no-repeat 70px -2px;
+    line-height: 24px;
+    padding-right: 30px;
+    margin-left: 250px;
+}
+a.observed {
+    background: url(/assets/vps/Vpc/Forum/observed.jpg) no-repeat 70px -2px;
+    padding-right: 30px;
+    margin-left: 250px;
+}

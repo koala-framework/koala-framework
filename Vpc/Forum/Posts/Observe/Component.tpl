@@ -1,5 +1,5 @@
 {if $component.isObserved}
-    <a href="{$component.observeUrl}">wird momentan beobachtet</a>
+    <a class="observed" href="{$component.observeUrl}">beobachten</a>
 {else}
-    <a href="{$component.observeUrl}">wird nicht beobachtet</a>
+    <a class="notObserved" href="{$component.observeUrl}">beobachten</a>
 {/if}
