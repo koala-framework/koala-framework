@@ -4,7 +4,7 @@
             <li{if $smarty.foreach.tf.index == 0} class="first"{/if}>
                 <div class="avatar">
                     {if $t.postUserAvatarUrl}
-                        <img src="{$t.postUserAvatarUrl}" alt="Avatar" />
+                        <a href="{$t.threadUserUrl}"><img src="{$t.postUserAvatarUrl}" alt="Avatar" /></a>
                     {else}
                         &nbsp;
                     {/if}

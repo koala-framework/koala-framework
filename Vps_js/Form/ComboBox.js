@@ -1,6 +1,6 @@
 Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
 {
-	displayField: 'name',
+    displayField: 'name',
     valueField: 'id',
 
     initComponent : function()
@@ -121,16 +121,25 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         }
 
         Vps.Form.ComboBox.superclass.initComponent.call(this);
-    } ,
+    },
+
     addNoSelection : function() {
         if (this.showNoSelection && this.store.find('id', '') == -1) {
             var data = {};
             data[this.displayField] = this.emptyText;
             data[this.valueField] = null;
+            for (var i = 0; i < this.store.fields.keys.length; i++) {
+                if (this.store.fields.keys[i] != this.displayField
+                    && this.store.fields.keys[i] != this.valueField
+                ) {
+                    data[this.store.fields.keys[i]] = null;
+                }
+            }
             this.store.insert(0, new this.store.recordType(data));
         }
-    } ,
-   setValue : function(v)
+    },
+
+    setValue : function(v)
     {
         if (v == '') v = null;
         if (v && this.store.proxy && this.valueField && this.mode == 'remote') {
@@ -159,6 +168,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
         }
         this.fireEvent('changevalue', this.value);
     },
+
     onRender : function(ct, position)
     {
         Vps.Form.ComboBox.superclass.onRender.call(this, ct, position);

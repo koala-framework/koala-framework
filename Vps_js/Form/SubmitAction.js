@@ -19,6 +19,9 @@ Ext.extend(Vps.SubmitAction, Ext.form.Action.Submit, {
             } else if (field.rendered && field.el.dom.type == 'file') {
                 //überspringen, file-upload muss direkt submitted werden
                 return;
+            } else if (Vps.Form.ShowField && field instanceof Vps.Form.ShowField ) {
+                //überspringen, kann nichts speichern
+                return;
             } else {
                 var v = field.getValue();
                 if (typeof v == 'object') {

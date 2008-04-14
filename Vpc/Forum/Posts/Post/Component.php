@@ -25,10 +25,14 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
 
         $ret['signature'] = '';
         $ret['avatarUrl'] = '';
+        $ret['userUrl']   = '';
 
         $forumUserModel = new Vpc_Forum_User_Model();
         $user = $forumUserModel->find($post->user_id)->current();
         if ($user) {
+            $userViewComponent = $this->getForumComponent()->getUserViewComponent($user);
+            if ($userViewComponent) $ret['userUrl'] = $userViewComponent->getUrl();
+
             $ret['signature'] = $user->signature;
 
             if ($user->avatar) {

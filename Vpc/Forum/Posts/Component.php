@@ -6,12 +6,14 @@ class Vpc_Forum_Posts_Component extends Vpc_Posts_Component
         $ret = parent::getSettings();
         $ret['childComponentClasses']['write'] = 'Vpc_Forum_Posts_Write_Component';
         $ret['childComponentClasses']['post'] = 'Vpc_Forum_Posts_Post_Component';
+        $ret['childComponentClasses']['observe'] = 'Vpc_Forum_Posts_Observe_Component';
         return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+        $ret['observe'] = $this->getPageFactory()->getChildPageById('observe')->getComponent()->getTemplateVars();
         $ret['thread'] = $this->getName();
         $ret['threadUrl'] = $this->getUrl();
         $ret['group'] = $this->getGroupComponent()->getName();

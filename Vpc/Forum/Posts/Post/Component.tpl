@@ -3,7 +3,7 @@
     <div class="lastPoster">
         <div class="avatar">
             {if $component.avatarUrl}
-                <img src="{$component.avatarUrl}" alt="Avatar" />
+                <a href="{$component.userUrl}"><img src="{$component.avatarUrl}" alt="Avatar" /></a>
             {/if}
         </div>
         <div class="postData">

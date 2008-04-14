@@ -51,6 +51,18 @@ class Vps_Auto_Field_ComboBox extends Vps_Auto_Field_SimpleAbstract
             return $this->setStore(array('data' => $d));
         }
     }
+
+    public function setFields(array $fields)
+    {
+        if (!in_array('id', $fields) || !in_array('name', $fields)) {
+            throw new Vps_Exception('fields \'id\' and \'name\' must be set when using setFields method');
+        }
+
+        $store = $this->getStore();
+        $store['fields'] = $fields;
+        return $this->setStore($store);
+    }
+
     protected function _getValueFromPostData($postData)
     {
         $ret = parent::_getValueFromPostData($postData);
