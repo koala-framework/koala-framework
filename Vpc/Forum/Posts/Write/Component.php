@@ -64,10 +64,15 @@ class Vpc_Forum_Posts_Write_Component extends Vpc_Posts_Write_Component
         if (!isset($_POST['preview'])) {
             $threadComponent = $this->getThreadComponent();
             $threadVars = $threadComponent->getThreadVars();
+            $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
             $observeTable = new Vpc_Forum_Posts_Observe_Model();
-            $observers = $observeTable->fetchAll(array('thread_id' => $threadVars['thread_id']));
+            $observers = $observeTable->fetchAll(array('thread_id = ?' => $threadVars['thread_id']));
 
             foreach ($observers as $observer) {
+                if ($authedUser && $authedUser->id == $observer->user_id) {
+                    continue;
+                }
+
                 $userRow = Zend_Registry::get('userModel')->fetchAll(array(
                     'id = ?' => $observer->user_id
                 ))->current();

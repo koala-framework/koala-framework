@@ -18,6 +18,7 @@ class Vpc_Forum_Posts_Observe_Component extends Vpc_Abstract
         $userVars = Zend_Registry::get('userModel')->getAuthedUser();
 
         $ret['isObserved'] = false;
+        $ret['userIsAuthed'] = $userVars ? true : false;
 
         if ($threadVars && $userVars) {
             // prüfen, dass nur einmal drin ist
