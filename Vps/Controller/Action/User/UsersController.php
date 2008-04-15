@@ -1,7 +1,7 @@
 <?php
 class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_buttons = array('add'=>true, 'delete'=>true);
+    protected $_buttons = array('add', 'delete');
     protected $_sortable = true;
     protected $_defaultOrder = 'id';
     protected $_paging = 20;

@@ -3,7 +3,7 @@
 {trlVps text="Your account at [0]
 has just been created." 0=$webUrl}
 {trlVps text="Please use the following link to choose yourself a password and to login"}
-{$webUrl}{$activationUrl}?code={$activationCode}
+{$activationUrl}
 
 {$applicationName}
 

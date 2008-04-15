@@ -164,14 +164,14 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
     {
         $subject = Zend_Registry::get('config')->application->name;
         $subject .= trlVps(' - Useraccount created');
-        return $this->_sendMail('mails/UserActivation.txt.tpl', $subject);
+        return $this->_sendMail('UserActivation', $subject);
     }
 
     public function sendLostPasswordMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
         $subject .= trlVps(' - lost password');
-        return $this->_sendMail('mails/UserLostPassword.txt.tpl', $subject);
+        return $this->_sendMail('UserLostPassword', $subject);
     }
 
     public function sendChangedMailMail($oldMail)
@@ -179,7 +179,7 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
         $subject = Zend_Registry::get('config')->application->name;
         $subject .= trlVps(' - Email changed');
         return $this->_sendMail(
-            'mails/UserChangedMail.txt.tpl',
+            'UserChangedMail',
             $subject,
             array('oldMail' => $oldMail)
         );
@@ -189,44 +189,21 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
     {
         $subject = Zend_Registry::get('config')->application->name;
         $subject .= trlVps(' - Accound deleted');
-        return $this->_sendMail('mails/UserDeleted.txt.tpl', $subject);
+        return $this->_sendMail('UserDeleted', $subject);
     }
 
-    protected function _sendMail($tpl, $subject, $tplParams = null)
+    private function _sendMail($tpl, $subject, $tplParams = null)
     {
         if (!$this->email) {
             return false;
         }
+        $mail = new Vps_Mail($tpl);
+        $mail->subject = $subject;
+        $mail->addTo($this->email, $this->__toString());
+        if ($tplParams) $mail->assign($tplParams);
 
-        $tplHtml = str_replace('.txt.tpl', '.html.tpl', $tpl);
-
-        $webUrl = 'http://'.$_SERVER['HTTP_HOST'];
-        $host = parse_url($webUrl, PHP_URL_HOST);
-        $hostNonWww = $host;
-        if (substr($hostNonWww, 0, 4) == 'www.') {
-            $hostNonWww = substr($hostNonWww, 4);
-        }
-        $activationCode = $this->id.'-'.$this->getActivationCode();
-
-        if (Zend_Registry::get('config')->email) {
-            $fromName = Zend_Registry::get('config')->email->from->name;
-            $fromAddress = Zend_Registry::get('config')->email->from->address;
-        } else {
-            $fromName = Zend_Registry::get('config')->application->name;
-            $fromAddress = 'noreply@'.$hostNonWww;
-        }
-
-        $mailView = new Vps_View_Smarty();
-        $mailView->setRenderFile($tpl);
-        $mailViewHtml = new Vps_View_Smarty();
-        $mailViewHtml->setRenderFile($tplHtml);
-
-        if (!is_null($tplParams)) {
-            foreach ($tplParams as $key => $param) {
-                $mailView->{$key} = $param;
-                $mailViewHtml->{$key} = $param;
-            }
-        }
+        $mail->fullname = $this->__toString();
+        $mail->userData = $this->toArray();
 
         $activateComponent = null;
         $config = new Zend_Config_Ini('application/config.ini');
@@ -247,40 +224,14 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
         }
 
         if ($activateComponent) {
-            $activationUrl = $activateComponent->getUrl();
+            $url = $activateComponent->getUrl();
         } else {
-            $activationUrl = '/vps/user/login/activate';
+            $url = '/vps/user/login/activate';
         }
+        $mail->activationUrl = $mail->webUrl.$url.'?code='.$this->id.'-'.
+                        $this->getActivationCode();
 
-        $mailView->webUrl = $webUrl;
-        $mailView->host = $host;
-        $mailView->activationUrl = $activationUrl;
-        $mailView->activationCode = $activationCode;
-        $mailView->applicationName = Zend_Registry::get('config')->application->name;
-        $mailView->fullname = $this->__toString();
-        $mailView->userData = $this->toArray();
-
-        $bodyText = $mailView->render($tpl);
-
-        $mailViewHtml->webUrl = $webUrl;
-        $mailViewHtml->host = $host;
-        $mailViewHtml->activationUrl = $activationUrl;
-        $mailViewHtml->activationCode = $activationCode;
-        $mailViewHtml->applicationName = Zend_Registry::get('config')->application->name;
-        $mailViewHtml->fullname = $this->__toString();
-        $mailViewHtml->userData = $this->toArray();
-
-        $bodyTextHtml = $mailViewHtml->render($tpl);
-
-        $mail = new Zend_Mail('utf-8');
-        $mail->setBodyHtml($bodyTextHtml);
-        $mail->setBodyText($bodyText);
-        $mail->setFrom($fromAddress, $fromName);
-        $mail->addTo($this->email, $this->__toString());
-        $mail->setSubject($subject);
-        $mail->send();
-
-        return true;
+        return $mail->send();
     }
 
     public function __set($columnName, $value)
