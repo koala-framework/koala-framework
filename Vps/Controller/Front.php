@@ -83,3 +83,4 @@ class Vps_Controller_Front extends Zend_Controller_Front
         return $ret;
     }
 }
+
