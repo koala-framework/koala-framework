@@ -10,8 +10,9 @@ div.vpcPostsPreview fieldset.quote {
     margin-top: 10px;
     background-color: #f3f2f1;
     border: 1px solid #ccc;
+    font-style: italic;
 }
 div.vpcPostsPreview fieldset.quote legend {
-    color: #ff9600;
+    font-style: italic;
     font-family: "Lucida Console",Helvetica,sans-serif;
 }
