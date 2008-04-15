@@ -7,11 +7,6 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
 
         $router = $this->getRouter();
 
-        $router->AddRoute('default', new Zend_Controller_Router_Route(
-                    '*',
-                    array('module' => 'vps_controller_action_component',
-                          'controller' => 'web',
-                          'action' => 'index')));
         $router->AddRoute('admin', new Zend_Controller_Router_Route(
                     'admin/:module/:controller/:action',
                     array('module'=>'vps_controller_action_component',
@@ -57,5 +52,29 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
         }
 
         return self::$_instance;
+    }
+    public function dispatchVpc()
+    {
+        $uri = substr($_SERVER['REQUEST_URI'], 1);
+        $i = strpos($uri, '/');
+        if ($i) $uri = substr($uri, 0, $i);
+        if (!in_array($uri, array('media', 'vps', 'admin'))) {
+
+            $uri = $_SERVER['REQUEST_URI'];
+            $pageCollection = Vps_PageCollection_Abstract::getInstance();
+            try {
+                $page = $pageCollection->getPageByPath($uri);
+            } catch (Vpc_UrlNotFoundException $e) {
+                header('Location: ' . $e->getMessage(), true, 301);
+                die();
+            }
+            if (!$page) {
+                throw new Vps_Controller_Action_Web_FileNotFoundException('Page not found for path ' . $uri);
+            }
+
+            $page->sendContent($page);
+
+            exit;
+        }
     }
 }

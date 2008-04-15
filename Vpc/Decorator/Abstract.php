@@ -176,5 +176,8 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
     {
         return $this->_component->getUrl();
     }
-
+    public function sendContent($decoratedPage)
+    {
+        $this->_component->sendContent($decoratedPage);
+    }
 }

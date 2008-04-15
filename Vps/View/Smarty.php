@@ -133,5 +133,6 @@ class Vps_View_Smarty extends Zend_View_Abstract
 
         //process the template (and filter the output)
         $this->_smarty->display($file);
+        d('asdf');
     }
 }

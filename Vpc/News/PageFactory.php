@@ -22,6 +22,7 @@ class Vpc_News_PageFactory extends Vpc_Abstract_PageFactory
         if (!empty($childComponentClasses['titles'])) {
             $this->_additionalFactories['titles'] = new Vpc_News_PageFactoryTitles($this->_component);
         }
+        $this->_additionalFactories['feed'] = new Vpc_News_PageFactoryFeed($this->_component);
     }
 
     public function getChildPageByNewsRow($row)

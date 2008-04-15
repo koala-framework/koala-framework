@@ -528,5 +528,21 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return $componentClasses;
     }
 
+    public function sendContent($decoratedPage)
+    {
+        header('Content-Type: text/html; charset=utf-8');
+
+        $benchmark = Vps_Benchmark::getInstance();
+        $benchmark->startSequence('Seitenbaum');
+
+        $view = new Vps_View_Smarty();
+        $view->url = $_SERVER['REQUEST_URI'];
+        $view->component = $decoratedPage->getTemplateVars();
+
+        $benchmark->stopSequence('Seitenbaum');
+        $result = $benchmark->getResults();
+        $view->time = sprintf("%01.2f", $result['Seitenbaum']['duration']/1.5);
+        $view->render('');
+    }
 }
 
