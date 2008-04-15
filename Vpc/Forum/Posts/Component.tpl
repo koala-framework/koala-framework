@@ -4,15 +4,15 @@
         <a href="{$component.groupUrl}">{$component.group|truncate:30:'...':true}</a> »
         <a href="{$component.threadUrl}" title="{$component.thread}">{$component.thread|truncate:30:'...':true}</a>
     </h2>
-
-    <a class="post" href="{$component.writeUrl}">{trlVps text="create answer"}</a>
+    
     {component component=$component.observe}
-
+    <a class="post" href="{$component.writeUrl}">{trlVps text="create answer"}</a>
+    
     {foreach from=$component.posts item=post}
         {component component=$post}
     {/foreach}
-
-    <a class="post" href="{$component.writeUrl}">{trlVps text="create answer"}</a>
     {component component=$component.observe}
+    <a class="post" href="{$component.writeUrl}">{trlVps text="create answer"}</a>
+    
 
 </div>
