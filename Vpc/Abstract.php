@@ -343,6 +343,27 @@ abstract class Vpc_Abstract implements Vpc_Interface
     }
 
     /**
+     * Gibt Werte für den Statistik-Decorator zurück
+     * 
+     * Standardmäßig wird in die Tabelle "temp" geschrieben,
+     * falls man in eine andere Tabelle schreiben möchte, ist der Tabellenname
+     * als Schlüssel für das eigentlich Wertearray anzugebn.
+     * 
+     * Falls kein leeres Array zurückgegeben wird, wird für die aktuelle Seite die
+     * Statistik gezählt, falls nicht ohnehin die Statistik generell aktiviert
+     * ist.
+     * 
+     * Falls die Statistik generell aktiviert ist, werden die hier angegebenen
+     * Variable am Ende gemergt.
+     *
+     * @return Array mit Statistik-Variablen
+     */
+     public function getStatisticVars()
+     {
+         return array();
+     }
+
+    /**
      * Informationen über den Aufbau der aktuellen Komponente.
      *
      * Falls eine Komponente Unterkomponenten hat, deren Informationen
