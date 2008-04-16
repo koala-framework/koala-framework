@@ -91,7 +91,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
         $restClient->exists($this->getRowWebcode(), $email);
         $restResult = $restClient->get();
         if ($restResult->status()) {
-            return $this->find($restResult->id)->current();
+            return $this->find($restResult->id())->current();
         }
         return null;
     }

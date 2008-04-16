@@ -147,7 +147,7 @@ class Vpc_Admin
     {
         if (is_object($class)) $class = get_class($class);
 
-        if (!class_exists($class) || !is_subclass_of($class, 'Vpc_Abstract')) {
+        if (!class_exists($class) || !is_subclass_of($class, 'Vpc_Interface')) {
             throw new Vps_Exception("Übergegeben Klasse '$class' existiert nicht "
                 ."oder ist keine Komponente.");
         }

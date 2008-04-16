@@ -1,6 +1,13 @@
 <?php
 class Vpc_User_Login_Component extends Vpc_Formular_Component
 {
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['componentName'] = '';
+        return $ret;
+    }
+
     protected function _init()
     {
         parent::_init();

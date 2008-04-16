@@ -581,7 +581,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
-<de>Bitte geben Sie den gewünschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... werden automatisch erkannt und verlinkt.</de>
+<de>Bitte geben Sie den gewünschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
 </text>
 <text>
 <en default="1">Create comment</en>
