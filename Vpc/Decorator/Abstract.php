@@ -54,6 +54,11 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
         return $this->_component->getSearchVars();
     }
     
+    public function getStatisticVars()
+    {
+        return $this->_component->getStatisticVars();
+    }
+
     /**
      * Schleift die Methode auf auf dekorierte Komponente durch.
      */

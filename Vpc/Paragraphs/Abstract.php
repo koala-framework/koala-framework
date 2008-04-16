@@ -61,6 +61,15 @@ abstract class Vpc_Paragraphs_Abstract extends Vpc_Abstract
         return $ret;
     }
 
+    public function getStatisticVars()
+    {
+        $ret = parent::getStatisticVars();
+        foreach ($this->_getParagraphs() as $c) {
+            $ret = array_merge($ret, $c->getStatisticVars());
+        }
+        return $ret;
+    }
+    
     protected function _getParagraphs()
     {
         if (!isset($this->_paragraphs)) {

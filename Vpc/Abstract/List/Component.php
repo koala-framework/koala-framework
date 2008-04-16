@@ -39,6 +39,15 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public function getStatisticVars()
+    {
+        $ret = parent::getStatisticVars();
+        foreach ($this->getChildComponents() as $c) {
+            $ret = array_merge($ret, $c->getStatisticVars());
+        }
+        return $ret;
+    }
+
     public function getChildComponents()
     {
         if (!$this->_children) {
