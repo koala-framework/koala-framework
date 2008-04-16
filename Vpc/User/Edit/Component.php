@@ -9,6 +9,7 @@ class Vpc_User_Edit_Component extends Vpc_Formular_Component
             'fieldsNotSaved' => array('sbmt')
         ));
         $ret['childComponentClasses']['success'] = 'Vpc_User_Edit_Success_Component';
+        $ret['componentName'] = '';
         return $ret;
     }
 
