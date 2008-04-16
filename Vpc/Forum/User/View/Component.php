@@ -59,6 +59,7 @@ class Vpc_Forum_User_View_Component extends Vpc_Abstract
 
         $ret['lastPosts'] = array();
         if ($ret['userPosts']) {
+            // todo: komponente holen un getTable() machen => auf treeComponentCache warten
             $postsTable = new Vpc_Posts_Model(array('componentClass' => ''));
             $where = array('user_id = ?' => $userId);
             $i = 0;

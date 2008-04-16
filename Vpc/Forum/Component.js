@@ -7,11 +7,11 @@ Ext.onReady(function()
         lnk = Ext.get(lnk);
         var rels = lnk.dom.rel.split(' ');
         Ext.each(rels, function(rel) {
-            if (rel.match(/forumDeleteConfirmation/)) {
+            if (rel.match(/^popup/)) {
+                var relProperties = rel.split('_');
                 lnk.on('click', function(e) {
-                    if (!confirm(trlVps("Do you really wish to delete this post?"))) {
-                        e.stopEvent();
-                    }
+                    e.stopEvent();
+                    window.open(lnk.dom.href, '_blank', relProperties[1]);
                 });
             }
         });

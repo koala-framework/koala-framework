@@ -112,7 +112,8 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
     {
         if (!isset($_POST['preview'])) {
             $tableName = $this->_getSetting('postsTableName');
-            $t = new $tableName();
+            // todo: komponente holen un getTable() machen => auf treeComponentCache warten
+            $t = new $tableName(array('componentClass' => ''));
 
             $edit = false;
             if (!$this->_getParam('edit')) {

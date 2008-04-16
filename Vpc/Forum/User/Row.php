@@ -13,6 +13,7 @@ class Vpc_Forum_User_Row extends Vps_Db_Table_Row_Abstract
 
     public function getNumPosts()
     {
+        // todo: komponente holen un getTable() machen => auf treeComponentCache warten
         $posts = new Vpc_Posts_Model(array('componentClass' => ''));
 
         $info = $posts->info();

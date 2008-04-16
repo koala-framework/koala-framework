@@ -14,6 +14,8 @@ class Vpc_Forum_Component extends Vpc_Abstract
             'loginDecorator' => 'Vpc_Decorator_CheckLogin_Component'
         ));
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Forum/Panel.js';
+        $ret['assets']['files'][] = 'vps/Vpc/Forum/Component.js';
+        $ret['assets']['dep'][] = 'ExtCore';
         return $ret;
     }
 
@@ -38,6 +40,7 @@ class Vpc_Forum_Component extends Vpc_Abstract
     private function _processGroups($parentId)
     {
         $threadT = new Vpc_Forum_Thread_Model();
+        // todo: komponente holen un getTable() machen => auf treeComponentCache warten
         $postsT = new Vpc_Posts_Model(array('componentClass' => ''));
         $groups = array();
         foreach ($this->_groups->toArray() as $row) {
