@@ -21,7 +21,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         }
         $ret['preview'] = $this->_getPreviewComponent()->getTemplateVars();
         $ret['lastPosts'] = array();
-        foreach ($this->getParentComponent()->getChildComponents('desc') as $comp) {
+        foreach ($this->getParentComponent()->getLastPosts() as $comp) {
             $ret['lastPosts'][] = $comp->getTemplateVars();
         }
 

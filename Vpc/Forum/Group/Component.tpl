@@ -7,6 +7,7 @@
 
     <p><a class="newThread" href="{$component.newThreadUrl}">Neues Thema erstellen</a></p>
 
+    {component component=$component.paging}
     <ul>
     {foreach from=$component.threads item=t}
         <li class="threads">

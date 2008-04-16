@@ -8,8 +8,7 @@ class Vpc_News_Titles_Component extends Vpc_News_List_Abstract_Component impleme
             'componentName' => 'News.Titles',
             'componentIcon' => new Vps_Asset('newspaper'),
             'tablename'     => 'Vpc_News_Titles_Model',
-            'hideInNews'        => true,
-            'childComponentClasses' => array()
+            'hideInNews'        => true
         ));
     }
 
@@ -24,9 +23,15 @@ class Vpc_News_Titles_Component extends Vpc_News_List_Abstract_Component impleme
         }
     }
 
-    public function getNews()
+    public function getNews($limit = 15, $start = null)
     {
         return $this->getNewsComponent()->getNews(5);
+    }
+
+    public function getNewsCount()
+    {
+        //todo: langsam und unschön
+        return count($this->getNews(null, null));
     }
 
     public function getTemplateVars()

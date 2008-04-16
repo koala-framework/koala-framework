@@ -2,11 +2,17 @@
 
 abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract
 {
+    private $_paging;
 
-    public function getNews()
+    public static function getSettings()
     {
-        return array();
+        $ret = parent::getSettings();
+        $ret['childComponentClasses']['paging'] = 'Vpc_News_List_Paging_Component';
+        return $ret;
     }
+
+    abstract public function getNews($limit = 15, $start = null);
+    abstract public function getNewsCount();
 
     public function getNewsComponent()
     {
@@ -23,7 +29,8 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract
         $ret['news'] = array();
 
         if ($this->getNewsComponent()) {
-            foreach ($this->getNews() as $row) {
+            $limit = $this->_getPagingComponent()->getLimit();
+            foreach ($this->getNews($limit['limit'], $limit['start']) as $row) {
                 $n = $this->getNewsComponent()->getPageFactory()->getChildPageByNewsRow($row);
 
                 $data = $row->toArray();
@@ -31,7 +38,24 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract
                 $ret['news'][] = $data;
             }
         }
+
+        $ret['paging'] = $this->_getPagingComponent()->getTemplateVars();
         return $ret;
+    }
+
+    protected function _getPagingComponent()
+    {
+        if (!isset($this->_paging)) {
+            $classes = $this->_getSetting('childComponentClasses');
+            $this->_paging = $this->createComponent($classes['paging'], 'paging');
+            $this->_paging->setEntries($this->getNewsCount());
+        }
+        return $this->_paging;
+    }
+
+    public function getChildComponents()
+    {
+        return array($this->_getPagingComponent());
     }
 
 }
