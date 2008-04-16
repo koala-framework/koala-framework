@@ -17,7 +17,8 @@
                     <a href="{$component.editUrl}">{trlcVps context="forum" text="edit"}</a>
                 {/if}
                 {if $component.deleteUrl}
-                    | <a href="{$component.deleteUrl}">{trlVps text="delete"}</a>
+                    {** todo: löschen schöner machen, mit js oder evtl. sogar eigene seite **}
+                    | <a href="{$component.deleteUrl}" rel="forumDeleteConfirmation">{trlVps text="delete"}</a>
                 {/if}
             {/if}
         </div>
