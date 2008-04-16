@@ -6,7 +6,6 @@ class Vps_View_Mail_Smarty extends Vps_View_Smarty
     public function __construct($config = array())
     {
         parent::__construct($config);
-        $this->setScriptPath('application/views');
     }
     protected function _run()
     {

@@ -17,7 +17,7 @@
         {/foreach}
     </form>
     {if $component.sent == 2}
-        <p>{trlVps text="Please check you values, errors occured"}</p>
+        <p class="error">{trlVps text="Please check you values, errors occured"}</p>
     {/if}
 {else}
     {component component=$component.success}

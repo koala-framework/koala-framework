@@ -1,14 +1,6 @@
 <?php
 class Vpc_Posts_Post_UserDetail_Component extends Vpc_Abstract
 {
-    public static function getSettings()
-    {
-        $ret = array_merge(parent::getSettings(), array(
-            'tablename'         => 'Vpc_Posts_Model',
-        ));
-        return $ret;
-    }
-
     protected function _getUser()
     {
         $post = $this->getParentComponent()->getTable()

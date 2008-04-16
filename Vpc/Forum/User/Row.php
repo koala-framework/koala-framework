@@ -13,7 +13,7 @@ class Vpc_Forum_User_Row extends Vps_Db_Table_Row_Abstract
 
     public function getNumPosts()
     {
-        $posts = new Vpc_Posts_Model();
+        $posts = new Vpc_Posts_Model(array('componentClass' => ''));
 
         $info = $posts->info();
         $select = new Zend_Db_Select($posts->getAdapter());

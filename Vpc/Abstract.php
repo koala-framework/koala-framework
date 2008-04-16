@@ -563,7 +563,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $benchmark->stopSequence('Seitenbaum');
         $result = $benchmark->getResults();
         $view->time = sprintf("%01.2f", $result['Seitenbaum']['duration']/1.5);
-        $view->render('');
+        echo $view->render('');
     }
 }
 

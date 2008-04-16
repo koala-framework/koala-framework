@@ -14,8 +14,6 @@ class Vps_Mail
 
         $this->_mail = new Zend_Mail('utf-8');
 
-        $this->_mail->addBcc('niko@vivid.vps');
-
         $webUrl = 'http://'.$_SERVER['HTTP_HOST'];
         $host = $_SERVER['HTTP_HOST'];
         $this->_view->webUrl = $webUrl;
@@ -114,11 +112,12 @@ class Vps_Mail
         }
         $this->_view->setRenderFile($file);
 
-        if (file_exists("views/mails/{$this->_template}.txt.tpl")) {
+        if (file_exists("application/views/mails/{$this->_template}.txt.tpl")) {
             $file = "mails/{$this->_template}.txt.tpl";
         } else {
             $file = VPS_PATH."/views/mails/{$this->_template}.txt.tpl";
         }
+
         $c = $this->_view->render($file);
         $this->_mail->setBodyText($c);
 
@@ -134,12 +133,13 @@ class Vps_Mail
         }
         $this->_view->setRenderFile($file);
 
-        if (file_exists("views/mails/{$this->_template}.html.tpl")) {
+        if (file_exists("application/views/mails/{$this->_template}.html.tpl")) {
             $file = "mails/{$this->_template}.html.tpl";
         } else {
             $file = VPS_PATH."/views/mails/{$this->_template}.html.tpl";
+            if (!file_exists($file)) $file = '';
         }
-        if (file_exists($file)) {
+        if ($file) {
             $c = $this->_view->render($file);
             $this->_mail->setBodyHtml($c);
         }

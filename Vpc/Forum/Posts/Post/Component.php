@@ -26,6 +26,23 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
         $ret['signature'] = '';
         $ret['avatarUrl'] = '';
         $ret['userUrl']   = '';
+        $ret['deleteUrl'] = '';
+
+        if ($this->mayModeratePost()) {
+            // post löschen
+            if (!empty($_GET['deletePost']) && $_GET['deletePost'] == $this->getCurrentComponentKey()) {
+                $deleteRow = $this->getTable()->find($_GET['deletePost'])->current();
+                if ($deleteRow) {
+                    if ($deleteRow->delete()) {
+                        header('Location: '.$_SERVER['REQUEST_URI']);
+                        exit;
+                    }
+                }
+            }
+
+            // lösch-url generieren
+            $ret['deleteUrl'] = $this->getUrl().'?deletePost='.$this->getCurrentComponentKey();
+        }
 
         $forumUserModel = new Vpc_Forum_User_Model();
         $user = $forumUserModel->find($post->user_id)->current();
@@ -46,20 +63,25 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
         return $ret;
     }
 
+    public function mayModeratePost()
+    {
+        $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
+        if ($authedUser) {
+            $t = new Vpc_Forum_ModeratorModel();
+            $row = $t->fetchRow(array(
+                'user_id = ?' => $authedUser->id,
+                'group_id = ?' => $this->getGroupComponent()->getCurrentPageKey()
+            ));
+            if ($row) return true;
+        }
+
+        return false;
+    }
+
     public function mayEditPost()
     {
         $ret = parent::mayEditPost();
-        if (!$ret) {
-            $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
-            if ($authedUser) {
-                $t = new Vpc_Forum_ModeratorModel();
-                $row = $t->fetchRow(array(
-                    'user_id = ?' => $authedUser->id,
-                    'group_id = ?' => $this->getGroupComponent()->getCurrentPageKey()
-                ));
-                if ($row) return true;
-            }
-        }
+        if (!$ret) return $this->mayModeratePost();
         return $ret;
     }
 }

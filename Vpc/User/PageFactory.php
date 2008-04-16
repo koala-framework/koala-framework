@@ -30,6 +30,12 @@ class Vpc_User_PageFactory extends Vpc_Abstract_StaticPageFactory
             'name' => 'User Registration',
             'id' => 'userreg'
         );
+        $this->_pages[] = array(
+            'componentClass' => $this->_getChildComponentClass('lostpw'),
+            'showInMenu' => false,
+            'name' => 'Lost Password',
+            'id' => 'userlostpw'
+        );
     }
 
     protected function _decoratePage($page)

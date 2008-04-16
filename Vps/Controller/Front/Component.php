@@ -8,33 +8,33 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
         $router = $this->getRouter();
 
         $router->AddRoute('admin', new Zend_Controller_Router_Route(
-                    'admin/:module/:controller/:action',
+                    '/admin/:module/:controller/:action',
                     array('module'=>'vps_controller_action_component',
                           'controller' => 'index',
                           'action' => 'index')));
         $router->AddRoute('component', new Zend_Controller_Router_Route(
-                    'admin/component/:controller/:action',
+                    '/admin/component/:controller/:action',
                     array('module'=>'vps_controller_action_component',
                           'action' => 'index')));
         $router->AddRoute('components', new Zend_Controller_Router_Route(
-                    'admin/components/:action',
+                    '/admin/components/:action',
                     array('module' => 'vps_controller_action_component',
                           'controller' => 'components',
                           'action' => 'index')));
         $router->AddRoute('componentshow', new Zend_Controller_Router_Route(
-                    'admin/component/show/:class/:componentId',
+                    '/admin/component/show/:class/:componentId',
                     array('componentId'=>null,
                           'module' => 'vps_controller_action_component',
                           'controller' => 'components',
                           'action' => 'show')));
         $router->AddRoute('componentjsonshow', new Zend_Controller_Router_Route(
-                    'admin/component/jsonshow/:class/:componentId',
+                    '/admin/component/jsonshow/:class/:componentId',
                     array('componentId'=>null,
                           'module' => 'vps_controller_action_component',
                           'controller' => 'components',
                           'action' => 'jsonshow')));
         $router->AddRoute('componentedit', new Zend_Controller_Router_Route(
-                    'admin/component/edit/:class/:action',
+                    '/admin/component/edit/:class/:action',
                     array('module' => 'component',
                           'controller' => 'component',
                           'action' => 'index')));
@@ -55,12 +55,12 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
     }
     public function dispatchVpc()
     {
-        $uri = substr($_SERVER['REQUEST_URI'], 1);
+        $uri = substr($_SERVER['REDIRECT_URL'], 1);
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
         if (!in_array($uri, array('media', 'vps', 'admin'))) {
 
-            $uri = $_SERVER['REQUEST_URI'];
+            $uri = $_SERVER['REDIRECT_URL'];
             $pageCollection = Vps_PageCollection_Abstract::getInstance();
             try {
                 $page = $pageCollection->getPageByPath($uri);

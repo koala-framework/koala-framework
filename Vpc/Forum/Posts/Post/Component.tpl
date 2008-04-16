@@ -11,8 +11,14 @@
             <strong>#{$component.postNum}:</strong>
             <i>{$component.create_time|date_format:"%d.%m.%y, %H:%M"}</i>
             <a href="{$component.writeUrl}" class="quoteLink">Beitrag zitieren</a>
-            {if $component.editUrl}
-                <br />{trlVps text="Moderation"}: <a href="{$component.editUrl}">{trlVps text="Edit entry"}</a>
+            {if $component.editUrl || $component.deleteUrl}
+                <br />{trlVps text="Post"}:
+                {if $component.editUrl}
+                    <a href="{$component.editUrl}">{trlcVps context="forum" text="edit"}</a>
+                {/if}
+                {if $component.deleteUrl}
+                    | <a href="{$component.deleteUrl}">{trlVps text="delete"}</a>
+                {/if}
             {/if}
         </div>
     </div>
