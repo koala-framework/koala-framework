@@ -1,5 +1,5 @@
 <?php
-class Vpc_Posts_Admin extends Vpc_Admin
+class Vpc_Posts_Admin extends Vpc_Abstract_Composite_Admin
 {
     public function getExtConfig()
     {
@@ -26,11 +26,5 @@ class Vpc_Posts_Admin extends Vpc_Admin
                 KEY `component_id` (`component_id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
         }
-    }
-
-    public function delete($componentId)
-    {
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-//         Vpc_Admin::getInstance($classes['child'])->delete($componentId);
     }
 }

@@ -66,7 +66,14 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
             array('name'=>'content', 'width'=>470, 'height'=>150, 'value' => $initContent)
         );
         $c->store('name', 'content');
-        $c->store('fieldLabel', trlVps('Please enter the desired text:'));
+        $c->store('fieldLabel', trlVps('Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.'));
+        $c->store('isMandatory', false);
+        $this->_paragraphs[] = $c;
+
+        $c = $this->_createFieldComponent('ShowText',
+            array('name'=>'infotext', 'value' => trlVps('Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.'))
+        );
+        $c->store('name', 'infotext');
         $c->store('isMandatory', false);
         $this->_paragraphs[] = $c;
 

@@ -73,7 +73,7 @@ class Vps_Assets_Dependencies
             }
         }
 
-        //hack: übersetzung immer zuletzt anhängen
+        //hack: ï¿½bersetzung immer zuletzt anhï¿½ngen
         if ($fileType == 'js') {
             $files[] = 'vps/Ext/ext-lang-en.js';
         }
@@ -208,6 +208,7 @@ class Vps_Assets_Dependencies
                 $this->_processDependencyFile($file);
             }
         }
+
         $file = Vpc_Admin::getComponentFile($class, '', 'css');
         if ($file) {
             foreach ($this->_config->path as $type=>$path) {
@@ -224,7 +225,9 @@ class Vps_Assets_Dependencies
         $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
         if (is_array($classes)) {
             foreach ($classes as $class) {
-                $this->_processComponentDependency($class, $includeAdminAssets);
+                if ($class) {
+                    $this->_processComponentDependency($class, $includeAdminAssets);
+                }
             }
         }
     }

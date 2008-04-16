@@ -274,7 +274,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Please check you values, errors occured</en>
-<de>Bitte &#xFC;berpr&#xFC;fen Sie Ihre Variablen, ein Fehler ist aufgetreten.</de>
+<de>Bitte &#xFC;berpr&#xFC;fen Sie Ihre Eingaben - es sind Fehler aufgetreten.</de>
 </text>
 <text>
 <en default="1">Field Label</en>
@@ -294,7 +294,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Field {0} is mandatory, please fill out</en>
-<de>Das Feld {0} ist pflicht, bitte f&#xFC;llen Sie es aus.</de>
+<de>Bitte füllen Sie das Feld {0} aus</de>
 </text>
 <text>
 <en default="1">An error occured during the file upload</en>
@@ -580,8 +580,8 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Bitte geben Sie den gew&#xFC;nschten Newstext ein:</de>
 </text>
 <text>
-<en default="1">Please enter the desired text:</en>
-<de>Bitte geben Sie den gew&#xFC;nschten Text ein:</de>
+<en default="1">Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
+<de>Bitte geben Sie den gewünschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... werden automatisch erkannt und verlinkt.</de>
 </text>
 <text>
 <en default="1">Create comment</en>
@@ -802,6 +802,10 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <text>
 <en default="1">Edit</en>
 <de>&#xC4;ndern</de>
+</text>
+<text context="forum">
+<en default="1">edit</en>
+<de>bearbeiten</de>
 </text>
 <text>
 <en default="1">Invalid controller class ("{0}")</en>
@@ -1162,6 +1166,10 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <text>
 <en default="1">Delete</en>
 <de>L&#xF6;schen</de>
+</text>
+<text>
+<en default="1">delete</en>
+<de>l&#xF6;schen</de>
 </text>
 <text>
 <en default="1">New Entry</en>
@@ -1834,5 +1842,28 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en default="1">Click the following link to go directly to the mentioned thread:</en>
 <de>Klicken Sie auf folgenden Link um direkt zum betreffenden Thema zu gelangen:</de>
 </text>
+<text>
+<en default="1">Please type in your email address in the field below.</en>
+<de>Bitte geben Sie im Feld Ihre Email-Adresse ein.</de>
+</text>
+<text>
+<en default="1">You will receive an email with a passwort reset link and further instructions.</en>
+<de>Sie erhalten eine Email mit einem Passwort zurücksetzen Link und weiteren Anweisungen.</de>
+</text>
+<text>
+<en default="1">Post</en>
+<de>Beitrag</de>
+</text>
+<text>
+<en default="1">Lost your password?</en>
+<de>Passwort vergessen?</de>
+</text>
+<text>
+<en default="1">User not existent in this web.</en>
+<de>Dieser Benutzer existiert leider nicht.</de>
+</text>
+<text>
+<en>Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.</en>
+<de>Bitte bleibt in den Beiträgen bei einem freundlichen Umgangston. Jeder Verfasser haftet für sämtliche von ihm veröffentlichte Beiträge selbst. Beleidigende oder verletzende Beiträge werden von uns ohne Kommentar gelöscht.</de>
+</text>
 </trl>
-

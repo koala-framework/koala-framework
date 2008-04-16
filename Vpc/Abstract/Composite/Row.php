@@ -8,5 +8,6 @@ class Vpc_Abstract_Composite_Row extends Vpc_Row
         foreach ($classes as $k=>$i) {
             Vpc_Admin::getInstance($i)->delete($this->component_id.'-'.$k);
         }
+
     }
 }

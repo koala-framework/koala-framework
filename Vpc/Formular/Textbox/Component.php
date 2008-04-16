@@ -47,8 +47,9 @@ class Vpc_Formular_Textbox_Component extends Vpc_Formular_Field_Abstract
                 return 'Das Feld ' . $this->getStore('fieldLabel') . ' entspricht nicht der geforderten Formatierung (' . $v . ')';
             }
         }
+
         if ($mandatory && $value == '') {
-            return trlVps('Field {0} is mandatory, please fill out', $this->getStore('fieldlabel'));
+            return trlVps('Field {0} is mandatory, please fill out', $this->getStore('fieldLabel'));
         }
         return '';
     }

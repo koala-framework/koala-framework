@@ -148,7 +148,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
         // Prüfen ob die ID im Web erlaubnis hat
         $userRow = $this->find($restResult->id())->current();
         if (!$userRow) {
-            throw new Vps_ClientException('User not existent in this web');
+            throw new Vps_ClientException(trlVps('User not existent in this web.'));
         }
 
         if ($userRow->sendLostPasswordMail()) {

@@ -59,7 +59,7 @@ class Vpc_Forum_User_View_Component extends Vpc_Abstract
 
         $ret['lastPosts'] = array();
         if ($ret['userPosts']) {
-            $postsTable = new Vpc_Posts_Model();
+            $postsTable = new Vpc_Posts_Model(array('componentClass' => ''));
             $where = array('user_id = ?' => $userId);
             $i = 0;
             foreach ($postsTable->fetchAll($where, 'id DESC', 10) as $row) {

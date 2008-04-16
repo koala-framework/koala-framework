@@ -15,7 +15,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $this->_smarty->plugins_dir[] = 'SmartyPlugins';
 
         $this->addScriptPath(VPS_PATH.'/views');
-        $this->addScriptPath('application/views');
+        $this->addScriptPath(getcwd().'/application/views');
 
         if (!isset($config['compile_dir'])) {
             $config['compile_dir'] = 'application/cache/views_c';
@@ -133,6 +133,5 @@ class Vps_View_Smarty extends Zend_View_Abstract
 
         //process the template (and filter the output)
         $this->_smarty->display($file);
-        d('asdf');
     }
 }

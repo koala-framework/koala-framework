@@ -10,7 +10,8 @@ class Vpc_User_Component extends Vpc_Abstract
             'activate' => 'Vpc_User_Activate_Component',
             'edit'     => 'Vpc_User_Edit_Component',
             'login'    => 'Vpc_User_Login_Component',
-            'register' => 'Vpc_User_Register_Component'
+            'register' => 'Vpc_User_Register_Component',
+            'lostpw'   => 'Vpc_User_LostPassword_Component'
         ));
         $ret['loginDecorator'] = 'Vpc_Decorator_CheckLogin_Component';
         return $ret;

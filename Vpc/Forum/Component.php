@@ -38,7 +38,7 @@ class Vpc_Forum_Component extends Vpc_Abstract
     private function _processGroups($parentId)
     {
         $threadT = new Vpc_Forum_Thread_Model();
-        $postsT = new Vpc_Posts_Model();
+        $postsT = new Vpc_Posts_Model(array('componentClass' => ''));
         $groups = array();
         foreach ($this->_groups->toArray() as $row) {
             //toArray weil sonst funktioniert rekursiver aufruf nicht

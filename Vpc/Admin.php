@@ -12,21 +12,8 @@ class Vpc_Admin
 
     public static function getInstance($componentClass)
     {
-        if (class_exists($componentClass) &&
-            class_exists('Vpc_Abstract') &&
-            is_subclass_of($componentClass, 'Vpc_Abstract')) {
-
-            $class = $componentClass;
-            while ($class != 'Vpc_Abstract') {
-                $len = strlen(strrchr($class, '_'));
-                $setupClass = substr($class, 0, -$len) . '_Admin';
-                    if (class_exists($setupClass)) {
-                        return new $setupClass($componentClass, Zend_Registry::get('db'));
-                    }
-                $class = get_parent_class($class);
-            }
-        }
-        return null;
+        $class = self::getComponentFile($componentClass, 'Admin', 'php', true);
+        return new $class($componentClass, Zend_Registry::get('db'));
     }
 
     public static function getAvailableComponents($path = '')
@@ -159,6 +146,12 @@ class Vpc_Admin
     public static function getComponentFile($class, $filename = '', $ext = 'php', $returnClass = false)
     {
         if (is_object($class)) $class = get_class($class);
+
+        if (!class_exists($class) || !is_subclass_of($class, 'Vpc_Abstract')) {
+            throw new Vps_Exception("Übergegeben Klasse '$class' existiert nicht "
+                ."oder ist keine Komponente.");
+        }
+
         $ret = null;
         while (!$ret && $class != '') {
             $curClass = $class;
