@@ -7,12 +7,11 @@ class Vpc_News_Categories_Category_Component extends Vpc_News_List_Abstract_Comp
     {
         return array_merge(parent::getSettings(), array(
             'tablename'         => 'Vps_Dao_Pool',
-            'hideInNews'        => true,
-            'childComponentClasses' => array()
+            'hideInNews'        => true
         ));
     }
 
-    public function getNews()
+    public function getNews($limit = 15, $start = null)
     {
         $categoryId = $this->getCurrentPageKey();
         $row = $this->getTable()->find($categoryId)->current();
@@ -22,13 +21,20 @@ class Vpc_News_Categories_Category_Component extends Vpc_News_List_Abstract_Comp
             'Vpc_News_Categories_NewsToPoolModel'
         );
 
+
+        //todo: mit Zend_Db_Table::select einen join machen (ab zend 1.5))
         $tmp = array();
         $tmpSort = array();
+        $i = 0;
+        if (is_null($start)) $start = 0;
         foreach ($newsRowset as $newsRow) {
+            //grauslig
+            if ($i++ < $start) continue;
             if ($newsRow->visible) {
                 $tmp[] = $newsRow;
                 $tmpSort[] = $newsRow->publish_date;
             }
+            if ($limit && count($tmp) >= $limit) break;
         }
         arsort($tmpSort);
 
@@ -38,6 +44,12 @@ class Vpc_News_Categories_Category_Component extends Vpc_News_List_Abstract_Comp
         }
 
         return $ret;
+    }
+
+    public function getNewsCount()
+    {
+        //todo: langsam und unschön
+        return count($this->getNews(null, null));
     }
 
     public function getTemplateVars()

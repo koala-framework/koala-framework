@@ -5,36 +5,47 @@ class Vpc_News_Component extends Vpc_News_List_Abstract_Component implements Vpc
 
     public static function getSettings()
     {
-        $ret = array_merge(parent::getSettings(), array(
-            'componentName'     => 'News.List',
-            'componentIcon'     => new Vps_Asset('newspaper'),
-            'tablename'         => 'Vpc_News_Model',
-            'hideInNews'        => true,
-            'childComponentClasses' => array(
-                'details'       => 'Vpc_News_Details_Component',
-                'titles'        => 'Vpc_News_Titles_Component'
-            )
-        ));
-
+        $ret = parent::getSettings();
+        $ret['componentName'] = 'News.List';
+        $ret['componentIcon'] = new Vps_Asset('newspaper');
+        $ret['tablename'] = 'Vpc_News_Model';
+        $ret['hideInNews'] = true;
+        $ret['childComponentClasses']['details'] ='Vpc_News_Details_Component';
+        $ret['childComponentClasses']['titles'] ='Vpc_News_Titles_Component';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/News/Panel.js';
         return $ret;
     }
 
-    public function getNews($limit = 15)
+    public function getNews($limit = 15, $start = null)
     {
         $where = array(
             'component_id = ?' => $this->getId(),
-            'publish_date <= ?' => date('Y-m-d'),
-            'expiry_date >= ?' => date('Y-m-d')
+            'publish_date <= NOW()',
+            'expiry_date >= NOW()'
         );
 
         if (!$this->showInvisible()) {
             $where['visible = 1'] = '';
         }
 
-        $rows = $this->getTable()->fetchAll($where, 'publish_date DESC', $limit);
+        $rows = $this->getTable()->fetchAll($where, 'publish_date DESC', $limit, $start);
 
         return $rows;
+    }
+
+    public function getNewsCount()
+    {
+        //todo, ist von oben kopiert - wird aber sowiso mit treecache neu gemacht
+        $select = $this->getTable()->getAdapter()->select();
+        $select->from('vpc_news', array('count' => 'COUNT(*)'))
+            ->where('component_id = ?', $this->getId())
+            ->where('publish_date <= NOW()')
+            ->where('expiry_date >= NOW()');
+        if (!$this->showInvisible()) {
+            $select->where('visible = 1');
+        }
+        $r = $select->query()->fetchAll();
+        return $r[0]['count'];
     }
 
     public function getTemplateVars()

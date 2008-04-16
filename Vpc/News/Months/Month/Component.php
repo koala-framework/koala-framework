@@ -7,12 +7,11 @@ class Vpc_News_Months_Month_Component extends Vpc_News_List_Abstract_Component i
     {
         return array_merge(parent::getSettings(), array(
             'tablename'         => 'Vpc_News_Model',
-            'hideInNews'        => true,
-            'childComponentClasses' => array()
+            'hideInNews'        => true
         ));
     }
 
-    public function getNews()
+    public function getNews($limit=15, $start=null)
     {
         $monthDate = $this->getCurrentPageKey().'-'.$this->getCurrentComponentKey();
 
@@ -20,7 +19,7 @@ class Vpc_News_Months_Month_Component extends Vpc_News_List_Abstract_Component i
             "publish_date >= '$monthDate-01'",
             "publish_date <= '$monthDate-31'"
         );
-        $newsRowset = $this->getTable()->fetchAll($where, 'publish_date DESC');
+        $newsRowset = $this->getTable()->fetchAll($where, 'publish_date DESC', $limit, $start);
 
         $ret = array();
         foreach ($newsRowset as $newsRow) {
@@ -30,6 +29,12 @@ class Vpc_News_Months_Month_Component extends Vpc_News_List_Abstract_Component i
         }
 
         return $ret;
+    }
+
+    public function getNewsCount()
+    {
+        //todo: langsam und unschön
+        return count($this->getNews(null, null));
     }
 
     public function getTemplateVars()
