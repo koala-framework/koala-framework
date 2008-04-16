@@ -1,0 +1,21 @@
+div.vpcPaging {
+    float: right;
+    margin-bottom: 10px;
+}
+div.vpcPaging a {
+    padding: 5px;
+    padding-top: 3px; padding-bottom: 3px;
+    border: 1px solid #FF9600;
+    color: #786047;
+}
+div.vpcPaging a:hover,
+div.vpcPaging a.active {
+    color: #FF9600;
+    font-weight: bold;
+    background-color: #f8f2e6;
+}
+div.vpcPaging span {
+    font-weight: bold;
+    color: #786047;
+    padding-right: 5px;
+}

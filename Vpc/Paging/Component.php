@@ -5,7 +5,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['pagesize'] = 25;
+        $ret['pagesize'] = 15;
         return $ret;
     }
 
