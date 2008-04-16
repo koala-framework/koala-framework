@@ -59,7 +59,8 @@ class Vpc_Paging_Component extends Vpc_Abstract
             $ret['pageLinks'][] = array(
                 'text' => $i,
                 'href' => $this->getUrl().'?'.$this->_getParamName().'='.$i,
-                'rel'  => ''
+                'rel'  => '',
+                'active' => $ret['currentPage']==$i
             );
         }
         return $ret;
