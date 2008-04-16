@@ -6,26 +6,28 @@ class Vps_Controller_Action_User_MailController extends Vps_Controller_Action_Au
 
     protected function _initFields()
     {
-        if (!file_exists('application/views/mails')) {
-            
-        }
-        $values = array();
-        foreach (new DirectoryIterator('application/views/mails') as $file) {
-            if ($file->isFile()) {
-                $name = $file->getFilename();
-                $name = preg_replace('#\\.(txt|html)\\.tpl$#', '', $name);
-                if (!isset($values[$name])) {
-                    $values[$name] = $name;
+        if (Zend_Registry::get('userModel')->getAuthedUserRole() == 'admin') {
+            $values = array();
+            foreach (new DirectoryIterator('application/views/mails') as $file) {
+                if ($file->isFile()) {
+                    $name = $file->getFilename();
+                    $name = preg_replace('#\\.(txt|html)\\.tpl$#', '', $name);
+                    if (!isset($values[$name])) {
+                        $values[$name] = $name;
+                    }
                 }
             }
+            $this->_form->add(new Vps_Auto_Field_Select('template', trlVps('Template')))
+                ->setWidth(300)
+                ->setValues($values)
+                ->setShowNoSelection(true)
+                ->setEmptyText(trlVps('(all templates)'));
+            $this->_form->add(new Vps_Auto_Field_TextField('variable', trlVps('Variable')))
+                ->setWidth(300);
+        } else {
+            $this->_form->add(new Vps_Auto_Field_ShowField('template', trlVps('Template')));
+            $this->_form->add(new Vps_Auto_Field_ShowField('variable', trlVps('Variable')));
         }
-        $this->_form->add(new Vps_Auto_Field_Select('template', trlVps('Template')))
-            ->setWidth(300)
-            ->setValues($values)
-            ->setShowNoSelection(true)
-            ->setEmptyText(trlVps('(all templates)'));
-        $this->_form->add(new Vps_Auto_Field_TextField('variable', trlVps('Variable')))
-            ->setWidth(300);
         $this->_form->add(new Vps_Auto_Field_TextField('name', trlVps('Name')))
             ->setWidth(300);
         $this->_form->add(new Vps_Auto_Field_TextArea('text', trlVps('Text')))

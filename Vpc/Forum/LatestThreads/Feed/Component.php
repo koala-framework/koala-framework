@@ -16,6 +16,7 @@ class Vpc_Forum_LatestThreads_Feed_Component extends Vpc_Abstract_Feed_Component
         $pc = $this->getPageCollection();
         foreach ($this->getTable()->fetchAll(null, 'create_time DESC', 15) as $row) {
             $thread = $pc->getComponentById($row->component_id);
+            if (!$thread) continue;
             $group = $thread->getGroupComponent();
             $ret[] = array(
                 'title' => $group->getName(). ' - '.$thread->getName(),
