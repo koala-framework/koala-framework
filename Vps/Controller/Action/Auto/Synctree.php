@@ -14,6 +14,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         'delete'    => 'table_delete'
     );
     protected $_textField = 'text';
+    protected $_parentField = 'parent_id';
     protected $_buttons = array(
         'add'       => true,
         'edit'      => false,
@@ -104,9 +105,9 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     {
         $where = $this->_getWhere();
         if (!$parentId) {
-            $where['parent_id IS NULL'] = '';
+            $where[] = "$this->_parentField IS NULL";
         } else {
-            $where['parent_id = ?'] = $parentId;
+            $where["$this->_parentField = ?"] = $parentId;
         }
         return $where;
     }
@@ -169,7 +170,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $data['bIcon'] = $this->_icons['invisible']->__toString();
         }
         $openedNodes = $this->_saveSessionNodeOpened(null, null);
-        if ($this->_table->fetchAll('parent_id = ' . $row->id)->count() > 0) {
+        if ($this->_table->fetchAll(array("$this->_parentField = ?", $row->id))->count() > 0) {
             if (isset($openedNodes[$row->id]) ||
                 isset($this->_openedNodes[$row->id])
             ) {
@@ -208,7 +209,8 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         while ($openedId) {
             $row = $this->_table->find($openedId)->current();
             $this->_openedNodes[$openedId] = true;
-            $openedId = $row ? $row->parent_id : null;
+            $field = $this->_parentField;
+            $openedId = $row ? $row->$field : null;
         }
     }
 
@@ -224,7 +226,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
     public function jsonAddAction()
     {
-        $insert['parent_id'] = $this->getRequest()->getParam('parentId');
+        $insert[$this->_parentField] = $this->getRequest()->getParam('parentId');
         $insert[$this->_textField] = $this->getRequest()->getParam('name');
         if ($this->_hasPosition) {
             $insert['pos'] = 0;
@@ -232,7 +234,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $id = $this->_table->insert($insert);
         $row = $this->_table->find($id)->current();
         if ($this->_hasPosition) {
-            $where = $this->_getTreeWhere($insert['parent_id']);
+            $where = $this->_getTreeWhere($insert[$this->_parentField]);
             $row->numberize('pos', $this->_addPosition, $where);
         }
         if ($id) {
@@ -267,14 +269,16 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
         $row = $this->_table->find($source)->current();
         if ($point == 'append') {
-            $row->parent_id = (int)$target == 0 ? null : $target;
+            $parentField = $this->_parentField;
+            $row->$parentField = (int)$target == 0 ? null : $target;
             if ($this->_hasPosition) {
                 $row->pos = '1';
             }
         } else {
             $targetRow = $this->_table->find($target)->current();
             if ($targetRow) {
-                $row->parent_id = $targetRow->parent_id;
+                $parentField = $this->_parentField;
+                $row->$parentField = $targetRow->$parentField;
                 if ($this->_hasPosition) {
                     $targetPosition = $targetRow->pos;
                     if ($point == 'above') {
@@ -290,10 +294,11 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
         $row->save();
         if ($this->_hasPosition) {
-            if (!$row->parent_id) {
-                $where = array('parent_id IS NULL' => '');
+            $parentField = $this->_parentField;
+            if (!$row->$parentField) {
+                $where = array("$parentField IS NULL");
             } else {
-                $where = array('parent_id = ?' => $row->parent_id);
+                $where = array("$parentField = ?" => $row->$parentField);
             }
             $row->numberize('pos', $row->pos, $where);
         }
