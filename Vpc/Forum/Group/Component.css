@@ -40,17 +40,16 @@ div.vpcForumGroup div.description {
 div.vpcForumGroup div.lastPost {
     font-size: 11px;
     line-height: 16px;
-    padding-left: 20px;
+    padding-left: 10px;
 }
 div.vpcForumGroup div.statistik {
     float: right; font-size: 11px;
     width: 200px;
     line-height: 16px;
-    border-left: 1px solid #ccc;
 }
-div.vpcForumGroup div.statistik strong { color:#786047; }
-div.vpcForumGroup div.threads { text-align: center; }
-div.vpcForumGroup div.posts { text-align: center; }
+div.vpcForumGroup strong { color:#786047; }
+div.vpcForumGroup div.threads { text-align: right; margin-right: 10px; }
+div.vpcForumGroup div.posts { text-align: right; }
 
 div.vpcForumGroup ul li.threads div.description a { position: relative; background-color: #F3F2F1; padding: 3px; padding-left: 10px; }
 div.vpcForumGroup ul li.threads div.description a span {position: absolute; right: 10px;}
