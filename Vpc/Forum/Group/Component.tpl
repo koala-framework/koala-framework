@@ -25,13 +25,14 @@
                 </div>
             </div>
 
-            <div class="lastPost">{trlVps text="Last entry"}:
+            <div class="lastPost">
+            <strong>{trlVps text="Last entry"}:</strong>
                 {if $t.postUserUrl}
                     <a href="{$t.postUserUrl}">{$t.postUser}</a>
                 {else}
                     {$t.postUser}
                 {/if}
-                <div class="time">am <strong><i>{$t.postTime|date_format:"%d.%m.%y, %H:%M"}</i></strong></div>
+                <div class="time"><strong>am:</strong> {$t.postTime|date_format:"%d.%m.%y, %H:%M"}</div>
             </div>
             <div class="clear"></div>
         </li>
