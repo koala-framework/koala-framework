@@ -18,10 +18,12 @@ class Vpc_Basic_Image_Form extends Vps_Auto_Vpc_Form
         }
 
         // Höhe, Breite
-        $widthField = new Vps_Auto_Field_NumberField('width', 'Width');
+        $widthField = new Vps_Auto_Field_NumberField('width', trlVps('Width'));
+        $widthField->setAllowBlank(false);
         $widthField->setMinValue(1);
         $widthField->setMaxValue(9999);
-        $heightField = new Vps_Auto_Field_TextField('height', 'Height');
+        $heightField = new Vps_Auto_Field_NumberField('height', trlVps('Height'));
+        $heightField->setAllowBlank(false);
         $heightField->setMinValue(1);
         $heightField->setMaxValue(9999);
         $dimensions = Vpc_Abstract::getSetting($class, 'dimension');
