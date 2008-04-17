@@ -21,10 +21,13 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         }
         $ret['preview'] = $this->_getPreviewComponent()->getTemplateVars();
         $ret['lastPosts'] = array();
-        foreach ($this->getParentComponent()->getLastPosts() as $comp) {
-            $ret['lastPosts'][] = $comp->getTemplateVars();
-        }
 
+        //todo gehört hier eigentlich nicht her:
+        if ($this->getParentComponent() instanceof Vpc_Posts_Component) {
+            foreach ($this->getParentComponent()->getLastPosts() as $comp) {
+                $ret['lastPosts'][] = $comp->getTemplateVars();
+            }
+        }
         return $ret;
     }
 
@@ -33,7 +36,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         $initContent = '';
         if ($this->_getParam('edit')) {
             $tableName = $this->_getSetting('postsTableName');
-            $postsTable = new $tableName();
+            $postsTable = new $tableName(array('componentClass'=>''));
             $postRow = $postsTable->find($this->_getParam('edit'))->current();
             $initContent = $postRow->content;
         }
