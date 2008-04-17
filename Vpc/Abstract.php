@@ -334,6 +334,7 @@ abstract class Vpc_Abstract implements Vpc_Interface
         if (!$vars['template']) {
             throw new Vpc_Exception(trlVps('Template not found for Component {0}',  get_class($this)));
         }
+        $vars['placeholder'] = $this->_getSetting('placeholder');
         return $vars;
     }
 
@@ -469,7 +470,8 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return array(
             'assets'        => array('files'=>array(), 'dep'=>array()),
             'assetsAdmin'   => array('files'=>array(), 'dep'=>array()),
-            'componentIcon' => new Vps_Asset('paragraph_page')
+            'componentIcon' => new Vps_Asset('paragraph_page'),
+            'placeholder'   => array()
         );
     }
 
@@ -564,6 +566,15 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $result = $benchmark->getResults();
         $view->time = sprintf("%01.2f", $result['Seitenbaum']['duration']/1.5);
         echo $view->render('');
+    }
+
+    protected function _getPlaceholder($name)
+    {
+        $s = $this->_getSetting('placeholder');
+        if (!isset($s[$name])) {
+            throw new Vps_Exception("Unknown placeholder '$name'");
+        }
+        return $s[$name];
     }
 }
 

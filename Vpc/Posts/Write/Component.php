@@ -9,6 +9,8 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         $ret['childComponentClasses']['preview'] = 'Vpc_Posts_Write_Preview_Component';
         $ret['childComponentClasses']['success'] = 'Vpc_Posts_Write_Success_Component';
         $ret['postsTableName'] = 'Vpc_Posts_Model';
+
+        $ret['placeholder']['infotext'] = trlVps('Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.');
         return $ret;
     }
 
@@ -74,7 +76,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         $this->_paragraphs[] = $c;
 
         $c = $this->_createFieldComponent('ShowText',
-            array('name'=>'infotext', 'value' => trlVps('Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.'))
+            array('name'=>'infotext', 'value' => $this->_getPlaceholder('infotext'))
         );
         $c->store('name', 'infotext');
         $c->store('isMandatory', false);
