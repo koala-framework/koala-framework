@@ -4,8 +4,9 @@
         <a href="{$component.groupUrl}">{$component.group}</a>
     </h2>
     <h3>Themen:</h3>
-    {component component=$component.paging}
-    <p><a class="newThread" href="{$component.newThreadUrl}">Neues Thema erstellen</a></p>
+    
+    <p><a class="newThread" href="{$component.newThreadUrl}">Neues Thema erstellen</a>
+    {component component=$component.paging}</p>
     <ul>
     {foreach from=$component.threads item=t}
         <li class="threads">
@@ -36,6 +37,6 @@
         </li>
         {/foreach}
     </ul>
-    {component component=$component.paging}
-    <p><a class="newThread" href="{$component.newThreadUrl}">Neues Thema erstellen</a></p>
+    
+    <p><a class="newThread" href="{$component.newThreadUrl}">Neues Thema erstellen</a>{component component=$component.paging}</p>
 </div>
