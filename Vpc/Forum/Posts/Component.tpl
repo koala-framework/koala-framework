@@ -5,15 +5,17 @@
         <a href="{$component.threadUrl}" title="{$component.thread}">{$component.thread|truncate:30:'...':true}</a>
     </h2>
 
-    {component component=$component.paging}
+    
 
     {component component=$component.observe}
     <a class="post" href="{$component.writeUrl}">{trlVps text="create answer"}</a>
+    {component component=$component.paging}
 
     {foreach from=$component.posts item=post}
         {component component=$post}
     {/foreach}
     {component component=$component.observe}
     <a class="post" href="{$component.writeUrl}">{trlVps text="create answer"}</a>
+    {component component=$component.paging}
 
 </div>

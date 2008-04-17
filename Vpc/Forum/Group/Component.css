@@ -27,7 +27,8 @@ div.vpcForumGroup a.newThread {
     color:#786047;
     padding-left: 15px; padding-right: 15px;
     padding-top: 5px; padding-bottom: 5px;
-    margin-top: 10px; margin-bottom: 15px;
+    margin-top: -5px; margin-bottom: 15px; margin-right: 10px;
+    float: left;
 }
 div.vpcForumGroup a.newThread:hover { color: #ff9600; }
 
