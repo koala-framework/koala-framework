@@ -170,7 +170,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $data['bIcon'] = $this->_icons['invisible']->__toString();
         }
         $openedNodes = $this->_saveSessionNodeOpened(null, null);
-        if ($this->_table->fetchAll(array("$this->_parentField = ?", $row->id))->count() > 0) {
+        if ($this->_table->fetchAll(array("$this->_parentField = ?"=>$row->id))->count() > 0) {
             if (isset($openedNodes[$row->id]) ||
                 isset($this->_openedNodes[$row->id])
             ) {
