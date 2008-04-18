@@ -18,6 +18,11 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
         return $this->getParentComponent()->getGroupComponent();
     }
 
+    public function getThreadComponent()
+    {
+        return $this->getParentComponent()->getParentComponent();
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -33,8 +38,22 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
             if (!empty($_GET['deletePost']) && $_GET['deletePost'] == $this->getCurrentComponentKey()) {
                 $deleteRow = $this->getTable()->find($_GET['deletePost'])->current();
                 if ($deleteRow) {
+                    $locationHeader = $_SERVER['REQUEST_URI'];
+                    // Prüfen ob noch beiträge in diesem thread, sonst thread auch löschen
+                    if ($this->getTable()->fetchAll(
+                        array('component_id = ?' => $deleteRow->component_id)
+                    )->count() <= 1) {
+                        $threadVars = $this->getThreadComponent()->getThreadVars();
+                        $threadModel = new Vpc_Forum_Thread_Model();
+                        $threadRow = $threadModel->find($threadVars['thread_id'])->current();
+                        if ($threadRow) {
+                            $locationHeader = $this->getGroupComponent()->getUrl();
+                            $threadDeleted = $threadRow->delete();
+                        }
+                    }
+                    // post wirklich löschen
                     if ($deleteRow->delete()) {
-                        header('Location: '.$_SERVER['REQUEST_URI']);
+                        header('Location: '.$locationHeader);
                         exit;
                     }
                 }
