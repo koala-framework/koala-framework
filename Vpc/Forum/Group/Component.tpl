@@ -3,25 +3,25 @@
         <a href="{$component.forumUrl}">{$component.forum}</a> »
         <a href="{$component.groupUrl}">{$component.group}</a>
     </h2>
-    <h3>Themen:</h3>
+    <h3>{trlVps text="Topics"}:</h3>
     
-    <p><a class="newThread" href="{$component.newThreadUrl}">Neues Thema erstellen</a>
+    <p><a class="newThread" href="{$component.newThreadUrl}">{trlVps text="Create a new topic"}</a>
     {component component=$component.paging}</p>
     <ul>
     {foreach from=$component.threads item=t}
         <li class="threads">
             <div class="description">
-                <a class="name" href="{$t.url}">{$t.subject} <span>Antworten: {$t.replies}</span></a>
+                <a class="name" href="{$t.url}">{$t.subject} <span>{$t.replies} {trlpVps single="answer" plural="answers" 0=$t.replies}</span></a>
             </div>
            
             <div class="statistik">
-                <div class="threads"><strong>Erstellt von:</strong>
+                <div class="threads"><strong>{trlVps text="Created by"}:</strong>
                     {if $t.threadUserUrl}
                         <a href="{$t.threadUserUrl}">{$t.threadUser}</a>
                     {else}
                         {$t.threadUser}
                     {/if}
-                    <div class="posts"><strong>Datum:</strong> {$t.threadTime|date_format:"%d.%m.%y, %H:%M"}</div>
+                    <div class="posts"><strong>{trlVps text="on"}:</strong> {$t.threadTime|date_format:"%d.%m.%y, %H:%M"}</div>
                 </div>
             </div>
 
@@ -32,12 +32,12 @@
                 {else}
                     {$t.postUser}
                 {/if}
-                <div class="time"><strong>am:</strong> {$t.postTime|date_format:"%d.%m.%y, %H:%M"}</div>
+                <div class="time"><strong>{trlVps text="on"}:</strong> {$t.postTime|date_format:"%d.%m.%y, %H:%M"}</div>
             </div>
             <div class="clear"></div>
         </li>
         {/foreach}
     </ul>
     
-    <p><a class="newThread" href="{$component.newThreadUrl}">Neues Thema erstellen</a>{component component=$component.paging}</p>
+    <p><a class="newThread" href="{$component.newThreadUrl}">{trlVps text="Create a new topic"}</a>{component component=$component.paging}</p>
 </div>
