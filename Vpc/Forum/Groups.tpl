@@ -13,11 +13,11 @@
                     <div class="threads"><strong>{trlVps text="Topics"}:</strong> {$g.numThreads}</div>
                     <div class="posts"><strong>{trlVps text="Entries"}:</strong> {$g.numPosts}</div>
                 </div>
-                {trlVps text="Last Entry"}:
+                <strong>{trlVps text="Last Entry"}:</strong>
                 {if $g.lastPostSubject}
                     <a href="{$g.lastPostUrl}" title="{$g.lastPostSubject}">{$g.lastPostSubject|truncate:37:'...':true|htmlspecialchars}</a>
                     <div class="time">
-                        <i>am <strong>{$g.lastPostTime|date_format:"%d.%m.%y, %H:%M"}</strong></i> von
+                        <strong>am: </strong>{$g.lastPostTime|date_format:"%d.%m.%y, %H:%M"} <strong>von: </strong>
                         {if $g.lastPostUserUrl}
                             <a href="{$g.lastPostUserUrl}">{$g.lastPostUser}</a>
                         {else}

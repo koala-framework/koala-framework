@@ -26,7 +26,7 @@ div.vpcForum ul li.post a.name { display: block; }
 div.vpcForum ul li.post div.lastPost {
     font-size: 11px;
     line-height: 16px;
-    padding-left: 20px;
+    padding-left: 10px;
     border-top: 1px solid #ccc;
     height: 35px;
     margin-left: -10px;
@@ -39,8 +39,21 @@ div.vpcForum ul li.post div.statistik {
 }
 
 div.vpcForum ul li.post div.description a { background-color: #F3F2F1; margin-left: -10px; padding-left: 10px; }
+div.vpcForum ul li.post div.description p { margin-bottom: 0px; }
 
 div.vpcForum ul li.post div.threads { border-bottom: 1px solid #ccc; text-align: center; }
 div.vpcForum ul li.post div.posts { text-align: center; }
+
+div.vpcForum form.forumSearch button {
+    padding-right: 7px;
+    width: 150px;
+    color: #ff9600;
+    cursor: pointer;
+}
+div.vpcForum form.forumSearch input {
+    margin-bottom: 10px;
+    margin-left: 193px;
+}
+div.vpcForum ul.forumResults { margin-top: 20px; }
 
 div.clear { clear: both;}
