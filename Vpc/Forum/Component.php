@@ -34,6 +34,9 @@ class Vpc_Forum_Component extends Vpc_Abstract
         $this->_groups = $this->getTable()->fetchAll($where, 'pos');
         $ret['groups'] = $this->_processGroups(null);
         $ret['groupsTemplate'] = Vpc_Admin::getComponentFile(get_class($this), 'Groups', 'tpl');
+
+        $ret['searchUrl'] = $this->getPageFactory()
+                ->getChildPageById('search')->getUrl();
         return $ret;
     }
 

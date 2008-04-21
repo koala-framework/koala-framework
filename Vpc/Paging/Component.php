@@ -6,6 +6,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['pagesize'] = 10;
+        $ret['includedParams'] = array();
         return $ret;
     }
 
@@ -55,10 +56,17 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['pages'] = $this->_getPages();
         $ret['currentPage'] = $this->_getCurrentpage();
         $ret['pageLinks'] = array();
+        $params = '';
+        foreach ($this->_getSetting('includedParams') as $p) {
+            $v = $this->_getParam($p);
+            if ($v) {
+                $params .= "&$p=".urlencode($v);
+            }
+        }
         for ($i = 1; $i <= $ret['pages']; $i++) {
             $ret['pageLinks'][] = array(
                 'text' => $i,
-                'href' => $this->getUrl().'?'.$this->_getParamName().'='.$i,
+                'href' => $this->getUrl().'?'.$this->_getParamName().'='.$i.$params,
                 'rel'  => '',
                 'active' => $ret['currentPage']==$i
             );
