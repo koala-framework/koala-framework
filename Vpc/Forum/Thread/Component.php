@@ -22,7 +22,7 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         $thread = $t->find($this->getCurrentPageKey())->current();
         $ret = array();
         $ret['url'] = $this->getUrl();
-        $ret['subject'] = $thread->subject;
+        $ret['subject'] = htmlspecialchars($thread->subject);
         $ret['thread_id'] = $thread->id;
 
         $forumUser = $forumUserTable->fetchRow(array('id = ?' => $thread->user_id));
@@ -46,13 +46,14 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         $post = $posts->getTable()->getLastPost($posts->getDbId());
         $forumUser = $forumUserTable->fetchRow(array('id = ?' => $post->user_id));
         $user = Zend_Registry::get('userModel')->find($post->user_id)->current();
+        $ret['postUserAvatarUrl'] = '';
         if ($user) {
             if ($forumUser->nickname) {
                 $ret['postUser'] = $forumUser->nickname;
             } else {
                 $ret['postUser'] = $user->firstname;
             }
-            $ret['postUserAvatarUrl'] = '';
+
             if ($forumUser->avatar) {
                 $ret['postUserAvatarUrl'] = $forumUser->getFileUrl('Avatar', 'avatarsmall');
             }
