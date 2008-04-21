@@ -1,0 +1,1 @@
+<textarea name="{$component.name}" style="width: {$component.width}px; height: {$component.height}px">{$component.value}</textarea>

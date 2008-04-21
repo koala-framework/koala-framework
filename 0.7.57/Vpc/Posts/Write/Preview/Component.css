@@ -1,0 +1,18 @@
+div.vpcPostsPreview p { margin-top: 10px; }
+div.vpcPostsPreview div.preview {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+div.vpcPostsPreview fieldset.quote {
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #f3f2f1;
+    border: 1px solid #ccc;
+    font-style: italic;
+}
+div.vpcPostsPreview fieldset.quote legend {
+    font-style: italic;
+    font-family: "Lucida Console",Helvetica,sans-serif;
+}

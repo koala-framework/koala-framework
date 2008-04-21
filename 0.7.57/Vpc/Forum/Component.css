@@ -1,0 +1,46 @@
+div.vpcForum ul { margin-left: 0px; }
+div.vpcForum ul li { list-style: none; clear: both; }
+div.vpcForum ul li.title {
+    background: url(/assets/vps/Vpc/Forum/forumHeaderBg.jpg) repeat-x top left;
+    line-height: 25px;
+    padding-left: 10px;
+    font-weight: bold;
+    color: #786047;
+}
+div.vpcForum ul li ul li.title {
+    padding-left: 20px;
+    margin-left: -10px;
+    background: url(/assets/vps/Vpc/Forum/forumSubHeaderBg.jpg) repeat-x top left;
+}
+
+div.vpcForum ul li.post {
+    padding-left: 10px;
+    margin-top: 10px;
+    font-weight: normal;
+    border: 1px solid #ccc;
+    margin-bottom: 15px; margin-left: -10px;
+}
+
+div.vpcForum ul li.post a { font-weight: bold; }
+div.vpcForum ul li.post a.name { display: block; }
+div.vpcForum ul li.post div.lastPost {
+    font-size: 11px;
+    line-height: 16px;
+    padding-left: 20px;
+    border-top: 1px solid #ccc;
+    height: 35px;
+    margin-left: -10px;
+}
+div.vpcForum ul li.post div.statistik {
+    float: right; font-size: 11px;
+    width: 100px; height: 100%;
+    line-height: 16px;
+    border-left: 1px solid #ccc;
+}
+
+div.vpcForum ul li.post div.description a { background-color: #F3F2F1; margin-left: -10px; padding-left: 10px; }
+
+div.vpcForum ul li.post div.threads { border-bottom: 1px solid #ccc; text-align: center; }
+div.vpcForum ul li.post div.posts { text-align: center; }
+
+div.clear { clear: both;}

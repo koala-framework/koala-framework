@@ -1,0 +1,1 @@
+<input type="submit" name="{$component.name}" value="{$component.text}" style="width:{$component.width}px;" />

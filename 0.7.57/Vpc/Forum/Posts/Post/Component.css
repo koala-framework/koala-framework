@@ -1,0 +1,32 @@
+
+div.vpcPostsPost { margin-top: 15px; border: 1px solid #ccc; clear: both;}
+div.vpcPostsPost p.signature {
+    padding: 5px; padding-left: 20px;
+    margin-top: -10px;
+    font-size: 11px;
+}
+
+div.vpcPostsPost div.avatar {
+    float: left; height: 40px;
+}
+div.vpcPostsPost div.avatar img { margin-right: 10px; }
+div.vpcPostsPost div.postData { margin-left: 10px; padding-top: 3px; }
+
+div.vpcPostsPost div.lastPoster {
+    font-size: 11px;
+    line-height: 16px;
+    padding: 0px;
+    background-color: #f3f2f1;
+    height: 40px;
+    overflow: hidden;
+}
+div.vpcPostsPost div.lastPoster div.time { margin-bottom: 0px; }
+
+div.vpcPostsPost div.time { margin-bottom: 5px; }
+div.vpcPostsPost div.comment {
+    margin-bottom: 10px; margin-top: 10px;
+    padding-bottom: 10px; padding-left: 10px; padding-right: 10px;
+}
+
+
+a.quoteLink { float: right; padding-right: 10px; }

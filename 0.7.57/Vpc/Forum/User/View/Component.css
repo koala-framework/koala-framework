@@ -1,0 +1,13 @@
+div.vpcForumUser h1 {
+    padding-left: 20px;
+    margin: 0px; margin-bottom: 20px; 
+    line-height: 25px;
+    background: url(/assets/vps/Vpc/Forum/forumHeaderBg.jpg) repeat-x top left;
+}
+div.vpcForumUser div.text { padding-left: 20px; }
+div.vpcForumUser div.avatar {
+    float: right; border: 1px solid #ccc;
+    padding: 2px;
+}
+
+div.vpcForumUser p strong { width: 300px; display: block; }
