@@ -81,6 +81,10 @@ class Vpc_Forum_Posts_Write_Component extends Vpc_Posts_Write_Component
                     $this->_sendObserveMail($userRow, $threadComponent, $threadVars);
                 }
             }
+        } else {
+            // wird in parentComponent in getTemplateVars gefangen.
+            // ist leer damit kein fehler ausgegeben wird
+            throw new Vps_ClientException('logged in');
         }
     }
 
