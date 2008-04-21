@@ -77,6 +77,7 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
             params.component_id =
                 String.format(b.componentId, this.activeId);
         } else {
+			//this.getGrid().getSelectionModel().getSelections()[0].data[b.valueParam];
             params[b.queryParam] = this.activeId;
         }
         if (!b.item.hasBaseParams(params)) {

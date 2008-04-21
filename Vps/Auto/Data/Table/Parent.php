@@ -3,23 +3,25 @@ class Vps_Auto_Data_Table_Parent extends Vps_Auto_Data_Abstract
 {
     protected $_dataIndex;
     protected $_parentTable;
-
-    public function __construct($parentTable, $dataIndex = null)
+    protected $_ruleKey;
+    
+    public function __construct($parentTable, $dataIndex = null, $ruleKey = null)
     {
         $this->_parentTable = $parentTable;
         $this->_dataIndex = $dataIndex;
+        $this->_ruleKey = $ruleKey;
     }
 
     public function load($row)
     {
         $name = $this->_dataIndex;
-        if (is_string($this->_parentTable)) {
+        if (is_string($this->_parentTable) || !is_array($this->_parentTable)) {
             $tables = array($this->_parentTable);
         } else {
             $tables = $this->_parentTable;
         }
         foreach ($tables as $t) {
-            $row = $row->findParentRow($t);
+            $row = $row->findParentRow($t, $this->_ruleKey);
             if (!$row) return '';
         }
         if (!$this->_dataIndex) {
