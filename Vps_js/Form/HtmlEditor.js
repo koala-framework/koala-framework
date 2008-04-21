@@ -369,6 +369,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         img.height = r.imageDimension.height;
     },
     createLink: function() {
+        if (!this.linkDialog) {
+            return Vps.Form.HtmlEditor.superclass.createLink.call(this);
+        }
         var a = this.getFocusElement('a');
         if (a && a.tagName && a.tagName.toLowerCase() == 'a') {
             var expr = new RegExp(this.component_id+'-l([0-9]+)');
