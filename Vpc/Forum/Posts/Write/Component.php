@@ -61,7 +61,7 @@ class Vpc_Forum_Posts_Write_Component extends Vpc_Posts_Write_Component
     {
         parent::_processForm();
 
-        if (!isset($_POST['preview'])) {
+        if (!isset($_POST['preview']) && isset($_POST['sbmt'])) {
             $threadComponent = $this->getThreadComponent();
             $threadVars = $threadComponent->getThreadVars();
             $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
