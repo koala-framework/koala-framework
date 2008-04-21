@@ -25,7 +25,7 @@ class Vpc_User_Edit_Component extends Vpc_Formular_Component
         $c = $this->_createFieldComponent('Textbox', $fieldSettings);
         $c->store('name', 'firstname');
         $c->store('fieldLabel', 'Vorname');
-        $c->store('isMandatory', true);
+        $c->store('isMandatory', false);
 
         $fieldSettings = array('name'  => 'lastname',
                                'width' => 200,
@@ -33,7 +33,7 @@ class Vpc_User_Edit_Component extends Vpc_Formular_Component
         $c = $this->_createFieldComponent('Textbox', $fieldSettings);
         $c->store('name', 'lastname');
         $c->store('fieldLabel', 'Zuname');
-        $c->store('isMandatory', true);
+        $c->store('isMandatory', false);
 
         $fieldSettings = array('name'  => 'title',
                                'width' => 200,
