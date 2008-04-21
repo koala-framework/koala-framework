@@ -8,7 +8,7 @@
     <a class="newThread" href="{$component.newThreadUrl}">{trlVps text="Create a new topic"}</a>
     {component component=$component.paging}
     <ul>
-    {foreach from=$component.threads item=t}
+        {foreach from=$component.threads item=t}
         <li class="threads">
             <div class="description">
                 <a class="name" href="{$t.url}">{$t.subject} <span>{$t.replies} {trlpVps single="answer" plural="answers" 0=$t.replies}</span></a>

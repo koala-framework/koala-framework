@@ -42,10 +42,9 @@ class Vpc_Forum_Search_Component extends Vpc_Abstract_Composite_Component
                 $groupPage = $this->getParentComponent()->getPageFactory()
                                 ->getChildPageById($groupId);
                 $threadPage = $groupPage->getPageFactory()->getChildPageById($t['id']);
-                $ret['results'][] = array(
-                    'href'=>$threadPage->getUrl(),
-                    'rel'=>'',
-                    'subject'=>$t['subject']
+                $ret['results'][] = array_merge(
+                    array('rel' => ''),
+                    $threadPage->getThreadVars()
                 );
             }
         }

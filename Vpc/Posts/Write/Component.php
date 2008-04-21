@@ -115,7 +115,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
 
     protected function _processForm()
     {
-        if (!isset($_POST['preview'])) {
+        if (!isset($_POST['preview']) && isset($_POST['sbmt'])) {
             $tableName = $this->_getSetting('postsTableName');
             // todo: komponente holen un getTable() machen => auf treeComponentCache warten
             $t = new $tableName(array('componentClass' => ''));
