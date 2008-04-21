@@ -1,1 +1,0 @@
-{component component=$component.linkTag}{$component.text}</a>

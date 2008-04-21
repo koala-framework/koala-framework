@@ -1,1 +1,0 @@
-<input type="checkbox" name="{$component.name}" value="{$component.value}" style="float:left; margin-right:6px;"{if $component.checked eq "1"} checked{/if} /><div style="margin-left:130px; width:{$component.width}px;">{$component.text}</div>

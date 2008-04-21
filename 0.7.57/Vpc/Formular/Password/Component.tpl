@@ -1,1 +1,0 @@
-<input type="password" name="{$component.name}" maxlength="{$component.maxlength}" style="width:{$component.width}px" value=""/>

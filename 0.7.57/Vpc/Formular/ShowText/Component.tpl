@@ -1,1 +1,0 @@
-<div>{$component.value}</div>
