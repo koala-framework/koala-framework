@@ -5,8 +5,8 @@
     </h2>
     <h3>{trlVps text="Topics"}:</h3>
     
-    <p><a class="newThread" href="{$component.newThreadUrl}">{trlVps text="Create a new topic"}</a>
-    {component component=$component.paging}</p>
+    <a class="newThread" href="{$component.newThreadUrl}">{trlVps text="Create a new topic"}</a>
+    {component component=$component.paging}
     <ul>
     {foreach from=$component.threads item=t}
         <li class="threads">
@@ -39,5 +39,5 @@
         {/foreach}
     </ul>
     
-    <p><a class="newThread" href="{$component.newThreadUrl}">{trlVps text="Create a new topic"}</a>{component component=$component.paging}</p>
+    <a class="newThread" href="{$component.newThreadUrl}">{trlVps text="Create a new topic"}</a>{component component=$component.paging}
 </div>

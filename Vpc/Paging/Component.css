@@ -1,6 +1,7 @@
 div.vpcPaging {
-    width: 330px;
+    width: 300px;
     margin-bottom: 10px;
+    line-height: 20px;
 }
 div.vpcPaging a {
     padding: 5px;
