@@ -38,4 +38,5 @@
         {/foreach}
     </ul>
     </div>
+    {component component=$component.paging}
 </div>
