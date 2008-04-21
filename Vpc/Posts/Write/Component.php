@@ -141,6 +141,10 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
             }
             $this->_beforeSave($row);
             $row->save();
+        } else {
+            // wird in parentComponent in getTemplateVars gefangen.
+            // ist leer damit kein fehler ausgegeben wird
+            throw new Vps_ClientException();
         }
     }
 
