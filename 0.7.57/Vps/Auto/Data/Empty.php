@@ -1,8 +1,0 @@
-<?php
-class Vps_Auto_Data_Empty extends Vps_Auto_Data_Abstract
-{
-    public function load($row)
-    {
-        return null;
-    }
-}
