@@ -56,6 +56,9 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
 
     static public function replaceCodes($content)
     {
+        // html entfernen
+        $content = htmlspecialchars($content);
+
         // zitate
         $content = str_replace('[quote]', '<fieldset class="quote"><legend>Zitat</legend>', $content, $countOpened);
 
@@ -76,8 +79,7 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
 
         // automatische verlinkung
         $rel = 'popup_menubar=yes,toolbar=yes,location=yes,status=yes,scrollbars=yes,resizable=yes';
-        $content = preg_replace('/(\s|^)(www\.\S+)/i', '$1<a href="http://$2" rel="'.$rel.'">$2</a>', $content);
-        $content = preg_replace('/(\s|^)(http:\/\/)(\S+)/i', '$1<a href="http://$3" rel="'.$rel.'">$3</a>', $content);
+        $content = preg_replace('/(http:\/\/)?(www\.[a-z0-9äöü;\/?:@=&!*~#%\'+$.,_-]+)/i', '<a href="http://$2" rel="'.$rel.'">$2</a>', $content);
 
 
         return $content;

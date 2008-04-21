@@ -52,7 +52,7 @@
                     {foreach from=$component.lastThreads item=thread}
                         <li>
                             {$thread.create_time|date_format:"%d.%m.%y"}:
-                            <a href="{$thread.url}">{$thread.subject}</a>
+                            <a href="{$thread.url}">{$thread.subject|htmlspecialchars}</a>
                         </li>
                     {/foreach}
                 </ul>
@@ -66,7 +66,7 @@
                     {foreach from=$component.lastPosts item=post}
                         <li>
                             {$post.create_time|date_format:"%d.%m.%y"}:
-                            <a href="{$post.url}">{$post.subject}</a>
+                            <a href="{$post.url}">{$post.subject|htmlspecialchars}</a>
                         </li>
                     {/foreach}
                 </ul>

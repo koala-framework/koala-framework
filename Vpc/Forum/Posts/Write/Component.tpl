@@ -4,7 +4,7 @@
         <a href="{$component.forumUrl}">{$component.forum}</a> »
         <a href="{$component.groupUrl}">{$component.group|truncate:30:'...':true}</a>
         {if $component.thread}
-            » <a href="{$component.threadUrl}" title="{$component.thread}">{$component.thread|truncate:30:'...':true}</a>
+            » <a href="{$component.threadUrl}" title="{$component.thread|htmlspecialchars}">{$component.thread|truncate:30:'...':true|htmlspecialchars}</a>
         {/if}
     </h2>
     <h3>Nachricht erstellen:</h3>
