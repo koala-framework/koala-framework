@@ -1,0 +1,49 @@
+<?php
+abstract class Vps_Auto_Field_SimpleAbstract extends Vps_Auto_Field_Abstract
+{
+    public function load($row)
+    {
+        $ret = array();
+        $ret[$this->getFieldName()] = $this->getData()->load($row);
+        return array_merge($ret, parent::load($row));
+    }
+
+    protected function _addValidators()
+    {
+        parent::_addValidators();
+    }
+
+    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
+    {
+        parent::prepareSave($row, $postData);
+
+        if ($this->getSave() !== false) {
+            $name = $this->getFieldLabel();
+            if (!$name) $name = $this->getName();
+
+            $data = $this->_getValueFromPostData($postData);
+
+            if ($this->getAllowBlank() === false) {
+                $v = new Vps_Validate_NotEmpty();
+                if (!$v->isValid($data)) {
+                    throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages()));
+                }
+            }
+            if (!is_null($data)) {
+                foreach ($this->getValidators() as $v) {
+                    if (!$v->isValid($data)) {
+                        throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages()));
+                    }
+                }
+            }
+            $this->getData()->save($row, $data);
+        }
+    }
+
+    protected function _getValueFromPostData($postData)
+    {
+        $fieldName = $this->getFieldName();
+        if (!isset($postData[$fieldName])) $postData[$fieldName] = null;
+        return $postData[$fieldName];
+    }
+}

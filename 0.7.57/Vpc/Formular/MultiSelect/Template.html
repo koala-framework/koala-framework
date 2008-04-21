@@ -1,0 +1,11 @@
+{if $component.type == 'select'}
+    <select name="{$component.name}[]" size="{$component.size}" multiple>
+    {foreach from=$component.options item=option}
+    <option value="{$option.value}" {if $option.checked}selected{/if}>{$option.text}</option>
+    {/foreach}
+    </select>
+{else}
+    {foreach from=$component.options item=option}
+    <input type="checkbox" name="{$component.name}[]" value="{$option.value}" {if $option.checked}checked{/if}/>{$option.text} {if $component.type != 'checkbox_horizontal'} <br> {/if}
+    {/foreach}
+{/if}

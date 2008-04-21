@@ -1,0 +1,1881 @@
+<?xml version="1.0"?>
+<trl>
+<text/>
+<text>
+<en default="1">version</en>
+<de>Version</de>
+</text>
+<text>
+<en default="1">Copyright 2007 Vivid Planet Software GmbH</en>
+<de>Copyright 2007 Vivid Planet Software GmbH</de>
+</text>
+<text>
+<en default="1">Error</en>
+<de>Fehler</de>
+</text>
+<text>
+<en default="1">Errortype:</en>
+<de>Fehlertyp:</de>
+</text>
+<text>
+<en default="1">Message:</en>
+<de>Nachricht:</de>
+</text>
+<text>
+<en default="1">An Error ocurred. Please try again later.</en>
+<de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es zu einem sp&#xE4;teren Zeitpunkt noch einmal.</de>
+</text>
+<text>
+<en default="1">Page not found</en>
+<de>Seite wurde nicht gefunden.</de>
+</text>
+<text>
+<en default="1">Email:</en>
+<de>E-Mail:</de>
+</text>
+<text>
+<en default="1">Password:</en>
+<de>Passwort:</de>
+</text>
+<text>
+<en default="1">Lost password?</en>
+<de>Passwort vergessen?</de>
+</text>
+<text>
+<en default="1">Login</en>
+<de>Einloggen</de>
+</text>
+<text>
+<en default="1">Hello {0}!</en>
+<de>Hallo {0}!</de>
+</text>
+<text>
+<en default="1">Your account at {0}
+has just been created.</en>
+<de>Ihr Konto bei {0}
+wurde soeben erstellt.</de>
+</text>
+<text>
+<en default="1">Please use the following link to choose yourself a password and to login</en>
+<de>Bitte verwenden Sie diesen Link um sich ein Passwort zu erstellen und einzuloggen.</de>
+</text>
+<text>
+<en default="1">This email has been generated automatically. There may be no recipient if you answer to this email.</en>
+<de>Diese E-Mail wurde automatisch erzeugt. Es gibt keinen Empf&#xE4;nger an den eine Antwort gesendet werden kann.</de>
+</text>
+<text>
+<en default="1">Your email address at {0} has been changed
+from {1} to {2}</en>
+<de>Ihre E-Mail Adresse bei {0} wurde von {1} auf {2} ge&#xE4;ndert.</de>
+</text>
+<text>
+<en default="1">Your account at {0} has been deleted.</en>
+<de>Ihr Konto bei {0} wurde gel&#xF6;scht.</de>
+</text>
+<text>
+<en default="1">This email has been generated automatically. There may be no
+recipient if you answer to this email.</en>
+<de>Diese E-Mail wurde automatisch erzeugt. Es gibt keinen Empf&#xE4;nger an den eine Antwort gesendet werden kann.</de>
+</text>
+<text>
+<en default="1">This email has been generated using the lost password function
+at {0}</en>
+<de>Diese E-Mail wurde erzeugt durch die "Passwort vergessen"-Funktion bei {0}.</de>
+</text>
+<text>
+<en default="1">Please use the following link to choose yourself a new password.</en>
+<de>Bitte verwenden Sie den folgenden Link um sich selbst ein neues Passwort zu erstellen.</de>
+</text>
+<text>
+<en default="1">If you did not request this email you may just ignore it and
+use the login as before.</en>
+<de>Wenn Sie diese E-Mail nicht angefordert haben, k&#xF6;nnen Sie diese ignorieren und
+sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
+</text>
+<text>
+<en default="1">Invalid type: {0}, no such childComponent exists</en>
+<de>Falscher Typ: {0}, es existiert keine derartige Kinderkomponente ;-)</de>
+</text>
+<text>
+<en default="1">'name' is required in _pages array</en>
+<de>'name' ist erforderlich im _pages Array.</de>
+</text>
+<text>
+<en default="1">'componentClass' is required in _pages array</en>
+<de>'componentClass' ist erforderlich im _pages Array.</de>
+</text>
+<text>
+<en default="1">No _componentClass specified for {0}</en>
+<de>Keine _componentClass ist f&#xFC;r {0} spezifiziert.</de>
+</text>
+<text>
+<en default="1">ID {0} doesnt match pattern for Id: {1}</en>
+<de>ID {0} passt nicht zum Muster f&#xFC;r ID: {1}</de>
+</text>
+<text>
+<en default="1">Template not found for Component {0}</en>
+<de>Template f&#xFC;r Component {0} nicht gefunden.</de>
+</text>
+<text>
+<en default="1">ChildComponentClass {0} is not defined in settings.</en>
+<de>ChildComponentClass {0} wurde in den Einstellungen nicht definiert.</de>
+</text>
+<text>
+<en default="1">Place of departure: zip code, Town, Street</en>
+<de>Ort der Abreise: Postleitzahl, Ort, Stra&#xDF;e</de>
+</text>
+<text>
+<en default="1">Entered place could not been found!</en>
+<de>Eingetragener Ort konnte nicht gefunden werden!</de>
+</text>
+<text>
+<en default="1">Show Route</en>
+<de>Route zeigen</de>
+</text>
+<text>
+<en default="1">Suggestions</en>
+<de>Vorschl&#xE4;ge</de>
+</text>
+<text>
+<en default="1">Coordinates</en>
+<de>Koordinaten</de>
+</text>
+<text>
+<en default="1">Zoomlevel</en>
+<de>Vergr&#xF6;&#xDF;erungsfaktor</de>
+</text>
+<text>
+<en default="1">Width</en>
+<de>Breite</de>
+</text>
+<text>
+<en default="1">Height</en>
+<de>H&#xF6;he</de>
+</text>
+<text>
+<en default="1">Move + Zoom</en>
+<de>Bewegen + Zoomen</de>
+</text>
+<text>
+<en default="1">Move + Zoom (without zoombar)</en>
+<de>Bewegen + Zoomen (ohne Vergr&#xF6;&#xDF;erungsleiste)</de>
+</text>
+<text>
+<en default="1">Just Zoom</en>
+<de>Nur Vergr&#xF6;&#xDF;ern.</de>
+</text>
+<text>
+<en default="1">Scale</en>
+<de>Skalieren</de>
+</text>
+<text>
+<en default="1">Satelitemap</en>
+<de>Satellitenkarte</de>
+</text>
+<text>
+<en default="1">Overviewmap</en>
+<de>&#xDC;bersichtskarte</de>
+</text>
+<text>
+<en default="1"> (Worldview)</en>
+<de>(Weltansicht)</de>
+</text>
+<text>
+<en default="1"> (Detailview)</en>
+<de>(Detailansicht)</de>
+</text>
+<text>
+<en default="1">Infotext</en>
+<de>Infotext</de>
+</text>
+<text>
+<en default="1">Filename</en>
+<de>Dateiname</de>
+</text>
+<text>
+<en default="1">File</en>
+<de>Datei</de>
+</text>
+<text>
+<en default="1">Content</en>
+<de>Inhalt</de>
+</text>
+<text>
+<en default="1">Image</en>
+<de>Bild</de>
+</text>
+<text>
+<en default="1">Image Enlarge</en>
+<de>Bild vergr&#xF6;&#xDF;ern</de>
+</text>
+<text>
+<en default="1">File (optional)</en>
+<de>Datei (optional)</de>
+</text>
+<text>
+<en default="1">enlarge</en>
+<de>vergr&#xF6;&#xDF;ern</de>
+</text>
+<text>
+<en default="1">Comment</en>
+<de>Kommentar</de>
+</text>
+<text>
+<en default="1">Size</en>
+<de>Gr&#xF6;&#xDF;e</de>
+</text>
+<text>
+<en default="1">Scaling</en>
+<de>Skalierung</de>
+</text>
+<text>
+<en default="1">Preview</en>
+<de>Vorschau</de>
+</text>
+<text>
+<en default="1">Text</en>
+<de>Text</de>
+</text>
+<text>
+<en default="1">Position of Image</en>
+<de>Bildposition</de>
+</text>
+<text>
+<en default="1">Left</en>
+<de>Links</de>
+</text>
+<text>
+<en default="1">Right</en>
+<de>Rechts</de>
+</text>
+<text>
+<en default="1">Alternate</en>
+<de>Alternierend</de>
+</text>
+<text>
+<en default="1">The captcha field has to be filled out correctly!</en>
+<de>Das Captcha-Feld muss korrekt ausgef&#xFC;llt werden!</de>
+</text>
+<text>
+<en default="1">Field {0} does not fit to the required formatting ({1})</en>
+<de>Das Feld {0} passt nicht zur erforderlichen Formatierung ({1})</de>
+</text>
+<text>
+<en default="1">Field {0} is mandatory.</en>
+<de>Das Feld {0} ist verpflichtend.</de>
+</text>
+<text>
+<en default="1">Maximum Length</en>
+<de>Maximale L&#xE4;nge</de>
+</text>
+<text>
+<en default="1">Default Value</en>
+<de>Standardwert</de>
+</text>
+<text>
+<en default="1">Please check you values, errors occured</en>
+<de>Bitte &#xFC;berpr&#xFC;fen Sie Ihre Eingaben - es sind Fehler aufgetreten.</de>
+</text>
+<text>
+<en default="1">Field Label</en>
+<de>Feldbezeichnung</de>
+</text>
+<text>
+<en default="1">Mandatory</en>
+<de>Pflicht</de>
+</text>
+<text>
+<en default="1">Row</en>
+<de>Zeile</de>
+</text>
+<text>
+<en default="1">Passwords are different. Please try again.</en>
+<de>Passw&#xF6;rter sind unterschiedlich. Bitte versuchen Sie es erneut.</de>
+</text>
+<text>
+<en default="1">Field {0} is mandatory, please fill out</en>
+<de>Bitte füllen Sie das Feld {0} aus</de>
+</text>
+<text>
+<en default="1">An error occured during the file upload</en>
+<de>W&#xE4;hrend der Datei&#xFC;bertragung ist ein Fehler aufgetreten.</de>
+</text>
+<text>
+<en default="1">Invalid format in field {0}, valid formats: {1}</en>
+<de>Ung&#xFC;ltiges Dateiformat in Feld {0}, g&#xFC;ltiges Format: {1}</de>
+</text>
+<text>
+<en default="1">Maximum Upload {0} kB</en>
+<de>Maximale Dateig&#xF6;&#xDF;e: {0} kB</de>
+</text>
+<text>
+<en default="1">Max. filesize (in kb)</en>
+<de>Maximale Dateig&#xF6;&#xDF;e (in kB)</de>
+</text>
+<text>
+<en default="1">Valid types (e.g. jpg, gif)</en>
+<de>erlaubte Formate (z.B. jpg, gif)</de>
+</text>
+<text>
+<en default="1">Description</en>
+<de>Beschreibung</de>
+</text>
+<text>
+<en default="1">Checked</en>
+<de>Kontrolliert</de>
+</text>
+<text>
+<en default="1">Submit</en>
+<de>Senden</de>
+</text>
+<text>
+<en default="1">The following data has been sent:</en>
+<de>Folgende Daten wurden gesendet:</de>
+</text>
+<text>
+<en default="1">Validator</en>
+<de>Validator</de>
+</text>
+<text>
+<en default="1">No Validator</en>
+<de>Kein Validator</de>
+</text>
+<text>
+<en default="1">E-Mail</en>
+<de>E-Mail</de>
+</text>
+<text>
+<en default="1">Date</en>
+<de>Datum</de>
+</text>
+<text>
+<en default="1">Group</en>
+<de>Gruppe</de>
+</text>
+<text>
+<en default="1">enable posts</en>
+<de>Beiträge erlauben</de>
+</text>
+<text>
+<en default="1">Topics</en>
+<de>Themen</de>
+</text>
+<text>
+<en default="1">Entries</en>
+<de>Beiträge</de>
+</text>
+<text>
+<en default="1">Last Entry</en>
+<de>Letzter Beitrag</de>
+</text>
+<text>
+<en default="1">Last entry</en>
+<de>Letzter Beitrag</de>
+</text>
+<text>
+<en default="1">at</en>
+<de>um</de>
+</text>
+<text>
+<en default="1">answer</en>
+<en_plural default="1">answers</en_plural>
+<de>Antwort</de>
+<de_plural>Antworten</de_plural>
+</text>
+<text>
+<en default="1">Empty</en>
+<de>Leer</de>
+</text>
+<text>
+<en default="1">Title</en>
+<de>Titel</de>
+</text>
+<text>
+<en default="1">Firstname</en>
+<de>Vorname</de>
+</text>
+<text>
+<en default="1">Lastname</en>
+<de>Familienname</de>
+</text>
+<text>
+<en default="1">Email</en>
+<de>E-Mail</de>
+</text>
+<text>
+<en default="1">Title</en>
+<de>Titel</de>
+</text>
+<text>
+<en default="1">Subject</en>
+<de>Betreff</de>
+</text>
+<text>
+<en default="1">Moderators of selected group</en>
+<de>Moderatoren der ausgew&#xE4;hlten Gruppe</de>
+</text>
+<text>
+<en default="1">create answer</en>
+<de>Antwort erstellen</de>
+</text>
+<text>
+<en default="1">Moderation</en>
+<de>Moderation</de>
+</text>
+<text>
+<en default="1">Edit entry</en>
+<de>Beitrag bearbeiten</de>
+</text>
+<text>
+<en default="1">of</en>
+<de>von</de>
+</text>
+<text>
+<en default="1">Member since</en>
+<de>Mitglied seit</de>
+</text>
+<text>
+<en default="1">Please check your entry, errors occured</en>
+<de>Bitte &#xFC;berpr&#xFC;fen Sie Ihren Beitrag, Fehler sind aufgetreten.</de>
+</text>
+<text>
+<en default="1">Post was successfully saved.</en>
+<de>Beitrag wurde erfolgreich gespeichert.</de>
+</text>
+<text>
+<en default="1">to topic</en>
+<de>Zum Thema</de>
+</text>
+<text>
+<en default="1">back to group</en>
+<de>Zur&#xFC;ck zur Gruppe.</de>
+</text>
+<text>
+<en default="1">back to forum</en>
+<de>Zur&#xFC;ck zum Forum.</de>
+</text>
+<text>
+<en default="1">Change properties</en>
+<de>Eigenschaften &#xE4;ndern.</de>
+</text>
+<text>
+<en default="1">This "name for the forum" already exists. </en>
+<de>Dieser "Forumsname" existiert bereits. </de>
+</text>
+<text>
+<en default="1">Please choose a different.</en>
+<de>Bitte w&#xE4;hlen Sie einen anderen.</de>
+</text>
+<text>
+<en default="1">Forum - Properties</en>
+<de>Forum - Einstellungen</de>
+</text>
+<text>
+<en default="1">Changed data was successfully saved</en>
+<de>Die ge&#xE4;nderten Daten wurden erfolgreich gespeichert</de>
+</text>
+<text>
+<en default="1">Click here</en>
+<de>Hier klicken</de>
+</text>
+<text>
+<en default="1">to get back to the forum</en>
+<de>um zum Forum zur&#xFC;ckzukehren</de>
+</text>
+<text>
+<en default="1">User does not exist (anymore).</en>
+<de>Benutzer existiert nicht (mehr).</de>
+</text>
+<text>
+<en default="1">Forum-User does not exist (anymore).</en>
+<de>Forum-Benutzer existiert nicht (mehr).</de>
+</text>
+<text>
+<en default="1">Userprofile:</en>
+<de>Benutzerprofil:</de>
+</text>
+<text>
+<en default="1">Name</en>
+<de>Name</de>
+</text>
+<text>
+<en default="1">Latest online</en>
+<de>Zuletzt online</de>
+</text>
+<text>
+<en default="1">Town</en>
+<de>Stadt</de>
+</text>
+<text>
+<en default="1">Short description</en>
+<de>Kurze Beschreibung</de>
+</text>
+<text>
+<en default="1">interests, hobbies, pets, ...</en>
+<de>Interessen, Hobbies, Haustiere, ...</de>
+</text>
+
+<text>
+<en default="1">Signature</en>
+<de>Unterschrift</de>
+</text>
+<text>
+<en default="1">Latest topics</en>
+<de>Letzte Themen</de>
+</text>
+<text>
+<en default="1">Latest entries</en>
+<de>Letzte Beiträge</de>
+</text>
+<text>
+<en default="1">childComponentClass must be set for key \{0}\</en>
+<de>childComponentClass muss auf den Schl&#xFC;ssel \{0}\ gesetzt werden</de>
+</text>
+<text>
+<en default="1">News Categories</en>
+<de>Neue Kategorien</de>
+</text>
+<text>
+<en default="1">Publish Date</en>
+<de>Datum der Ver&#xF6;ffentlichung</de>
+</text>
+<text>
+<en default="1">Expiry Date</en>
+<de>Ablauf Datum</de>
+</text>
+<text>
+<en default="1">Teaser</en>
+<de>Kurztext (Teaser)</de>
+</text>
+<text>
+<en default="1">News category pageFactory not set (key: {0})</en>
+<de>News Kategorie pageFactory nicht gesetzt (key: {0})</de>
+</text>
+<text>
+<en default="1">Component {0} not found</en>
+<de>Komponente {0} nicht gefunden</de>
+</text>
+<text>
+<en default="1">Comments</en>
+<de>Kommentare</de>
+</text>
+<text>
+<en default="1">Created</en>
+<de>Erstellt</de>
+</text>
+<text>
+<en default="1">Content</en>
+<de>Inhalt</de>
+</text>
+<text>
+<en default="1">Change Post</en>
+<de>Beitrag &#xE4;ndern</de>
+</text>
+<text>
+<en default="1">Member since</en>
+<de>Mitglied seit</de>
+</text>
+<text>
+<en default="1">Please enter the desired newstext:</en>
+<de>Bitte geben Sie den gew&#xFC;nschten Newstext ein:</de>
+</text>
+<text>
+<en default="1">Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
+<de>Bitte geben Sie den gewünschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
+</text>
+<text>
+<en default="1">Create comment</en>
+<de>Kommentar erstellen</de>
+</text>
+<text>
+<en default="1">Comment was successfully saved.</en>
+<de>Kommentar wurde erfolgreich gespeichert.</de>
+</text>
+<text>
+<en default="1">to continue</en>
+<de>um fortzufahren</de>
+</text>
+<text>
+<en default="1">Product</en>
+<de>Produkt</de>
+</text>
+<text>
+<en default="1">filename</en>
+<de>Dateiname</de>
+</text>
+<text>
+<en default="1">price</en>
+<de>Preis</de>
+</text>
+<text>
+<en default="1">vat</en>
+<de>MwSt.</de>
+</text>
+<text>
+<en default="1">componentClass is required for Vpc_Table in config</en>
+<de>componentClass is erforderlich f&#xFC;r Vpc_Table in config</de>
+</text>
+<text>
+<en default="1">activate Account</en>
+<de>Konto aktivieren</de>
+</text>
+<text>
+<en default="1">Data was not sent completely. </en>
+<de>Daten wurden nicht vollst&#xE4;ndig gesendet. </de>
+</text>
+<text>
+<en default="1">Please copy the complete address out of the email.</en>
+<de>Bitte kopieren Sie die vollst&#xE4;ndige Adresse aus der E-Mail.</de>
+</text>
+<text>
+<en default="1">Activation code is wrong. Eventually your account has already been activated</en>
+<de>Aktivierungscode ist falsch. Eventuell wurde Ihr Konto bereits aktiviert.</de>
+</text>
+<text>
+<en default="1">Activate Useraccount</en>
+<de>Benutzerkonto aktivieren</de>
+</text>
+<text>
+<en default="1">Plese enter in both fields the password which you want to use for your useraccount</en>
+<de>Bitte geben Sie in beide Felder das gew&#xFC;nschte Passwort f&#xFC;r Ihr Benutzerkonto ein</de>
+</text>
+<text>
+<en default="1">After the activation you are automatically loggid and you could use your account.</en>
+<de>Nach der Aktivierung sind Sie automatisch angemeldet und Sie k&#xF6;nnen Ihr Konto verwenden.</de>
+</text>
+<text>
+<en default="1">Your useraccount was successfully activated.</en>
+<de>Ihr Benutzerkonto wurde erfolgreich aktiviert.</de>
+</text>
+<text>
+<en default="1">You were logged in, automatically.</en>
+<de>Sie sind automatisch angemeldet.</de>
+</text>
+<text>
+<en default="1">to get back to the Startpage</en>
+<de>um zur Startseite zur&#xFC;ckkehren</de>
+</text>
+<text>
+<en default="1">Female</en>
+<de>Weiblich</de>
+</text>
+<text>
+<en default="1">Male</en>
+<de>M&#xE4;nnlich</de>
+</text>
+<text>
+<en default="1">Gender</en>
+<de>Geschlecht</de>
+</text>
+<text>
+<en default="1">Edit account</en>
+<de>Konto &#xE4;ndern</de>
+</text>
+<text>
+<en default="1">Account - Properties</en>
+<de>Konto - Eigenschaften</de>
+</text>
+<text>
+<en default="1">E-Mail Adress</en>
+<de>E-Mail Adresse</de>
+</text>
+<text>
+<en default="1">The changed data was saved successfully</en>
+<de>Die ge&#xE4;nderten Daten wurden erfolgreich gespeichert</de>
+</text>
+<text>
+<en default="1">Parent Resource id {0} does not exist</en>
+<de>Parent Resource id {0} existiert nicht</de>
+</text>
+<text>
+<en default="1">Unknown AssetsType: {0}</en>
+<de>Unbekannter AssetsType: {0}</de>
+</text>
+<text>
+<en default="1">Assets-Path-Type {0} not found in config.</en>
+<de>Assets-Path-Type {0} in config nicht gefunden.</de>
+</text>
+<text>
+<en default="1">Path {0} does not exist.</en>
+<de>Pfad {0} existiert nicht.</de>
+</text>
+<text>
+<en default="1">Asset-File {0} does not exist.</en>
+<de>Asset-File {0} existiert nicht.</de>
+</text>
+<text>
+<en default="1">autologin failed: {0}</en>
+<de>Automatischer Login ist fehlgeschlagen: {0}</de>
+</text>
+<text>
+<en default="1">Not yet Implemented.</en>
+<de>Noch nicht implementiert.</de>
+</text>
+<text>
+<en default="1">Vps_Collection can hold only items with Vps_Collection_Item_Interface</en>
+<de>Vps_Collection can hold only items with Vps_Collection_Item_Interface</de>
+</text>
+<text>
+<en default="1">Offset {0} not found</en>
+<de>Offset {0} nicht gefunden</de>
+</text>
+<text>
+<en default="1">userId is required</en>
+<de>userId ist erforderklich</de>
+</text>
+<text>
+<en default="1">You don't have enough permissions for this Action</en>
+<de>Sie haben nicht die erforderlichen Befugnisse f&#xFC;r diese Aktion.</de>
+</text>
+<text>
+<en default="1">Login failed</en>
+<de>Login fehlgeschlagen</de>
+</text>
+<text>
+<en default="1">Activation code is invalid. Maybe the URL wasn\'t copied completely?</en>
+<de>Aktivierungscode ist fehlerhaft. Vielleicht wurde die URL nicht vollst&#xE4;ndig kopiert?</de>
+</text>
+<text>
+<en default="1">Data not submitted completely.</en>
+<de>Daten wurden nicht vollst&#xE4;ndig vorgelegt.</de>
+</text>
+<text>
+<en default="1">New password couldn\'t be set</en>
+<de>Das neue Passwort kann nicht gesetzt werden</de>
+</text>
+<text>
+<en default="1">_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service</en>
+<de>_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service</de>
+</text>
+<text>
+<en default="1">Debug is not enabled</en>
+<de>Debuggen ist nicht aktiviert</de>
+</text>
+<text>
+<en default="1">Login data</en>
+<de>Login-Daten</de>
+</text>
+<text>
+<en default="1">Change password</en>
+<de>Passwort &#xE4;ndern</de>
+</text>
+<text>
+<en default="1">Repeat password</en>
+<de>Passwort wiederholen</de>
+</text>
+<text>
+<en default="1">Personal data</en>
+<de>Pers&#xF6;nliche Daten</de>
+</text>
+<text>
+<en default="1">First name</en>
+<de>Vorname</de>
+</text>
+<text>
+<en default="1">Last name</en>
+<de>Familienname</de>
+</text>
+<text>
+<en default="1">Advice</en>
+<de>Information</de>
+</text>
+<text>
+<en default="1">At the following action emails are automatically sent to the adequade user.</en>
+<de>Im Anschluss an diese Aktion werden E-Mails automatisch an die entsprechenden Benutzer gesendet.</de>
+</text>
+<text>
+<en default="1">Create, Delete and E-Mail change</en>
+<de>Erzeugen, L&#xF6;schen und E-Mail &#xC4;nderungen</de>
+</text>
+<text>
+<en default="1">Accessdata and person</en>
+<de>Zugangsdaten und Person</de>
+</text>
+<text>
+<en default="1">Webcode</en>
+<de>Webcode</de>
+</text>
+<text>
+<en default="1">Rights</en>
+<de>Rechte</de>
+</text>
+<text>
+<en default="1">Edit</en>
+<de>&#xC4;ndern</de>
+</text>
+<text context="forum">
+<en default="1">edit</en>
+<de>bearbeiten</de>
+</text>
+<text>
+<en default="1">Invalid controller class ("{0}")</en>
+<de>Ung&#xFC;ltige Controller Klasse ("{0}")</de>
+</text>
+<text>
+<en default="1">Page width id {0} not found</en>
+<de>Seite mit der ID {0} wurde nicht gefunden</de>
+</text>
+<text>
+<en default="1">Param "uploads" has to be set in the file application/config.ini.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">No File was uploaded.</en>
+<de>Es wurde keine Datei hochgeladen.</de>
+</text>
+<text>
+<en default="1">The file is larger than the maximum upload amount.</en>
+<de>Die Datei &#xFC;bersteigt die maximale Dategr&#xF6;&#xDF;e f&#xFC;r Dateiuploads.</de>
+</text>
+<text>
+<en default="1">The file was not uploaded completely.</en>
+<de>Die Datei wurde nicht vollst&#xE4;ndig hochgeladen.</de>
+</text>
+<text>
+<en default="1">Path for uploads is not writeable: {0}</en>
+<de>Der Pfad f&#xFC;r Dateiuploads ist schreibgesch&#xFC;tzt: {0}</de>
+</text>
+<text>
+<en default="1">File {0} does not exist</en>
+<de>Datei {0} existiert nicht</de>
+</text>
+<text>
+<en default="1">Cant sort by {0}, field doesnt exist in row</en>
+<de>Sortierung nach {0} nicht m&#xF6;glich, das Feld existiert nicht</de>
+</text>
+<text>
+<en default="1">Can't sort by , array_multisort returned an error</en>
+<de>Sortierung nicht m&#xF6;glich, array_multisort liefert einen Fehler zur&#xFC;ck</de>
+</text>
+<text>
+<en default="1">'service.users.webcode' not defined in config</en>
+<de>'service.users.webcode' ist in config nicht definiert</de>
+</text>
+<text>
+<en default="1">An account with this email address already exists</en>
+<de>Es besteht bereits ein Konto mit dieser E-Mail Adresse</de>
+</text>
+<text>
+<en default="1">Passwords are different - please try again</en>
+<de>Passw&#xF6;rter sind unterschiedlich - bitte versuchen Sie es erneut</de>
+</text>
+<text>
+<en default="1"> - Useraccount created</en>
+<de> - Benutzerkonto wurde eingerichtet</de>
+</text>
+<text>
+<en default="1"> - lost password</en>
+<de> - Passwort vergessen</de>
+</text>
+<text>
+<en default="1"> - Email changed</en>
+<de> - E-Mail wurde ge&#xE4;ndert</de>
+</text>
+<text>
+<en default="1"> - Accound deleted</en>
+<de> - Konto wurde gel&#xF6;scht</de>
+</text>
+<text>
+<en default="1">Invalid urlScheme specified</en>
+<de>Ung&#xFC;ltiges url-Schema wurde rezeugt</de>
+</text>
+<text>
+<en default="1">Component must be instance of Vpc_Interface.</en>
+<de>Die Komponente muss eine Instanz des Vpc_Interface sein.</de>
+</text>
+<text>
+<en default="1">Pagename must not be empty. Probably Component is not a Page.</en>
+<de>Seitenname darf nicht leer sein. Wahrscheinlich ist die Komponente keine Seite.</de>
+</text>
+<text>
+<en default="1">A page with the same componentId already exists.</en>
+<de>Es existiert bereits eine Seite mit der gleichen componenId.</de>
+</text>
+<text>
+<en default="1">Couldn\t create Page with id {0}</en>
+<de>Die Seite mit der id {0} konnte nicht erstellt werden</de>
+</text>
+<text>
+<en default="1">Decorator  not found.</en>
+<de>Decorator konnte nicht gefunden werden.</de>
+</text>
+<text>
+<en default="1">Cannot set Parent Page for the same object: {0}</en>
+<de>&#xDC;bergeordnete Seite kann nicht f&#xFC;r das selbe Objekt gesetzt werden: {0}</de>
+</text>
+<text>
+<en default="1">Page does not exist: {0}</en>
+<de>Seite existiert nicht: {0}</de>
+</text>
+<text>
+<en default="1">'service.users.url' not defined in config (usually defined in VPS config)</en>
+<de>'service.users.url' ist in config nicht definiert (gew&#xF6;hnlich wird diesen in VPS config definiert)</de>
+</text>
+<text>
+<en default="1">Please enter the text you wish to assign.</en>
+<de>Bitte geben Sie den Text ein, welchen Sie zuweisen m&#xF6;chten.</de>
+</text>
+<text>
+<en default="1">Seperate items by a new line.</en>
+<de>Unterteilen Sie Elemente durch eine neue Zeile.</de>
+</text>
+<text>
+<en default="1">Can't save, please fill all marked fields correctly.</en>
+<de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle markierten Felder aus.</de>
+</text>
+<text>
+<en default="1">Do you really want to delete this entry?</en>
+<de>Wollen Sie diesen Beitrag wirklich l&#xF6;schen?</de>
+</text>
+<text>
+<en default="1">Do you want to save the changes?</en>
+<de>Wollen Sie die &#xC4;nderungen speichern?</de>
+</text>
+<text>
+<en default="1">Copying...</en>
+<de>Kopiere...</de>
+</text>
+<text>
+<en default="1">create </en>
+<de>erstellen </de>
+</text>
+<text>
+<en default="1">File successfully created: </en>
+<de>Datei wurde erfolgreich erstellt: </de>
+</text>
+<text>
+<en default="1">Component</en>
+<de>Komponente</de>
+</text>
+<text>
+<en default="1">Add Component</en>
+<de>Komponente hinzuf&#xFC;gen</de>
+</text>
+<text>
+<en default="1">Creating...</en>
+<de>Erzeugen...</de>
+</text>
+<text>
+<en default="1">Page</en>
+<de>Seite</de>
+</text>
+<text>
+<en default="1">Edit Content</en>
+<de>Inhalt bearbeiten</de>
+</text>
+<text>
+<en default="1">Properties of selected Page</en>
+<de>Eigenschaften der gew&#xE4;hlten Seite</de>
+</text>
+<text>
+<en default="1">Add new Subpage</en>
+<de>Neue Unterseite hinzuf&#xFC;gen</de>
+</text>
+<text>
+<en default="1">Delete selected Page</en>
+<de>Ausgew&#xE4;hlte Seite l&#xF6;schen</de>
+</text>
+<text>
+<en default="1">Toggle Visibility of selected Page</en>
+<de>Sichtbarkeit der gew&#xE4;hlten Seite &#xE4;ndern</de>
+</text>
+<text>
+<en default="1">Make selected Page Homepage</en>
+<de>Gew&#xE4;hlte Seite zur Homepage machen</de>
+</text>
+<text>
+<en default="1">Reload all</en>
+<de>Alles neuladen</de>
+</text>
+<text>
+<en default="1">Expand here</en>
+<de>Hier erweitern</de>
+</text>
+<text>
+<en default="1">Collapse here</en>
+<de>Hier schrumpfen</de>
+</text>
+<text>
+<en default="1">Open Preview</en>
+<de>Vorschau &#xF6;ffnen</de>
+</text>
+<text>
+<en default="1">Javascript Parse Exception</en>
+<de>Javascript Parse Ausnahme</de>
+</text>
+<text>
+<en default="1">PHP Exception</en>
+<de>PHP Ausnahme</de>
+</text>
+<text>
+<en default="1">A Server failure occured.</en>
+<de>Ein Server Fehler ist aufgetreten.</de>
+</text>
+<text>
+<en default="1">Error - wrong version</en>
+<de>Fehler - falsche Version.</de>
+</text>
+<text>
+<en default="1">Because of an application update the application has to be reloaded.</en>
+<de>Aufgrund eines Updates muss die Anwendung neu geladen werden.</de>
+</text>
+<text>
+<en default="1">A connection problem occured.</en>
+<de>Ein Verbindungsfehler ist aufgetreten.</de>
+</text>
+<text>
+<en default="1">Debug info</en>
+<de>Debug Info</de>
+</text>
+<text>
+<en default="1">Select your Position</en>
+<de>W&#xE4;hlen Sie Ihre Position.</de>
+</text>
+<text>
+<en default="1">enter address</en>
+<de>Adresse eingeben.</de>
+</text>
+<text>
+<en default="1">Example: Pfongauerstra&#xDF;e 67, 5202 Neumarkt am Wallersee</en>
+<de>Beispiel: Pfongauerstra&#xDF;e 67, 5202 Neumarkt am Wallersee</de>
+</text>
+<text>
+<en default="1">Unknown address</en>
+<de>Unbekannte Adresse.</de>
+</text>
+<text>
+<en default="1">Address could not be found</en>
+<de>Adresse kann nicht gefunden werden.</de>
+</text>
+<text>
+<en default="1">&lt;b&gt;Move marker while pressing mousekey.</en>
+<de>&lt;b&gt;Bewegen Sie den Marker mit der Maus.</de>
+</text>
+<text>
+<en default="1">Latitude: </en>
+<de>Breitengrad</de>
+</text>
+<text>
+<en default="1">Longitude: </en>
+<de>L&#xE4;ngengrad</de>
+</text>
+<text>
+<en default="1">Error), trlVps(Code {0} Error Returned</en>
+<de>Error), trlVps(Code {0} Error Returned</de>
+</text>
+<text>
+<en default="1">Insert new image or edit selected image.</en>
+<de>F&#xFC;gt neues Bild ein oder bearbeitet das ausgew&#xE4;hlte Bild.</de>
+</text>
+<text>
+<en default="1">Create new Download for the selected text or edit selected Download.</en>
+<de>Erstellt neuen Download f&#xFC;r den ausgew&#xE4;hlten Text oder bearbeitet den ausgew&#xE4;hlten Download.</de>
+</text>
+<text>
+<en default="1">Create new Link for the selected text or edit selected Link.</en>
+<de>Erzeugt neuen Link f&#xFC;r den ausgew&#xE4;hlten Text oder bearbeitet den ausgew&#xE4;hlten Link.</de>
+</text>
+<text>
+<en default="1">Undo the last action.</en>
+<de>Letzten Arbeitsschritt r&#xFC;ckg&#xE4;ngig machen.</de>
+</text>
+<text>
+<en default="1">Redo the last action.</en>
+<de>Letzten Arbeitsschritt wiederholen.</de>
+</text>
+<text>
+<en default="1">Insert a custom character.</en>
+<de>Sonderzeichen einf&#xFC;gen.</de>
+</text>
+<text>
+<en default="1">Insert text without formating.</en>
+<de>Text ohne Formatierung einf&#xFC;gen.</de>
+</text>
+<text>
+<en default="1">Clean up Html and remove formatings.</en>
+<de>HTML-Bereinigung und entfernen von Formatierungen.</de>
+</text>
+<text>
+<en default="1">Insert Custom Character</en>
+<de>Benutzerdefiniertes Zeichen einf&#xFC;gen</de>
+</text>
+<text>
+<en default="1">Insert Plain Text</en>
+<de>"Sauberen" Text einf&#xFC;gen</de>
+</text>
+<text>
+<en default="1">Cleaning...</en>
+<de>Reinigen...</de>
+</text>
+<text>
+<en default="1">Password lost</en>
+<de>Passwort vergessen</de>
+</text>
+<text>
+<en default="1">Please enter your email address</en>
+<de>Bitte geben Sie Ihre E-Mail Adresse ein</de>
+</text>
+<text>
+<en default="1">Please type in your password. After clicking the button below </en>
+<de>Bitte geben Sie Ihr Passwort ein. Nach dem Klick auf den unteren Schalter </de>
+</text>
+<text>
+<en default="1">you are logged in automatically and may use the typed in password </en>
+<de>Sie werden automatisch angemeldet und k&#xF6;nnen das eingegebenen Passwort verwenden.</de>
+</text>
+<text>
+<en default="1">for future logins.</en>
+<de>F&#xFC;r k&#xFC;nftige Anmeldungen.</de>
+</text>
+<text>
+<en default="1">Your email address: </en>
+<de>Ihre E-Mail Adresse: </de>
+</text>
+<text>
+<en default="1">Activate and login account</en>
+<de>Konto aktivieren und anmelden</de>
+</text>
+<text>
+<en default="1">The repeated password is different - please try again.</en>
+<de>Das wiederholte Passwort ist unterschiedlich - bitte versuchen Sie es erneut.</de>
+</text>
+<text>
+<en default="1">An error occured</en>
+<de>Ein Fehler ist aufgetreten</de>
+</text>
+<text>
+<en default="1">Link cannot link to itself</en>
+<de>Link kann nicht auf sich sich selbst verlinken</de>
+</text>
+<text>
+<en default="1">Add Paragraph</en>
+<de>Absatz hinzuf&#xFC;gen</de>
+</text>
+<text>
+<en default="1">Save</en>
+<de>Speichern</de>
+</text>
+<text>
+<en default="1">Cancel</en>
+<de>Abbrechen</de>
+</text>
+<text>
+<en default="1">Save and Back</en>
+<de>Speichern und zur&#xFC;ck</de>
+</text>
+<text>
+<en default="1">Delete</en>
+<de>L&#xF6;schen</de>
+</text>
+<text>
+<en default="1">delete</en>
+<de>l&#xF6;schen</de>
+</text>
+<text>
+<en default="1">New Entry</en>
+<de>Neuer Beitrag</de>
+</text>
+<text>
+<en default="1">No controllerUrl specified for AutoForm.</en>
+<de>No controllerUrl specified for AutoForm.</de>
+</text>
+<text>
+<en default="1">delete?</en>
+<de>L&#xF6;schen?</de>
+</text>
+<text>
+<en default="1">Duplicate</en>
+<de>Duplizieren</de>
+</text>
+<text>
+<en default="1">Print</en>
+<de>Drucken</de>
+</text>
+<text>
+<en default="1">CSV Export</en>
+<de>CSV Export</de>
+</text>
+<text>
+<en default="1">Excel Export</en>
+<de>Excel Export</de>
+</text>
+<text>
+<en default="1">Do you really wish to remove this entry / these entries?</en>
+<de>Wollen Sie diesen Beitrag (diese Beiträge) wirklich l&#xF6;schen?</de>
+</text>
+<text>
+<en default="1">Add</en>
+<de>Hinzuf&#xFC;gen</de>
+</text>
+<text>
+<en default="1">Toggle Visibility</en>
+<de>Sichtbarkeit umschalten</de>
+</text>
+<text>
+<en default="1">Search</en>
+<de>Suchen</de>
+</text>
+<text>
+<en default="1">Possible Destinations</en>
+<de>M&#xF6;glicher Bestimmungsort</de>
+</text>
+<text>
+<en default="1">Hyperlink</en>
+<de>Hyperlink</de>
+</text>
+<text>
+<en default="1">Undo (Ctrl+Z)</en>
+<de>R&#xFC;ckg&#xE4;ngig (Ctrl+Z)</de>
+</text>
+<text>
+<en default="1">Redo</en>
+<de>Wiederholen</de>
+</text>
+<text>
+<en default="1">Character</en>
+<de>Zeichen</de>
+</text>
+<text>
+<en default="1">Clean Html</en>
+<de>HTML bereinigen</de>
+</text>
+<text>
+<en default="1">Loading...</en>
+<de>Laden...</de>
+</text>
+<text>
+<en default="1">{0} selected row(s)</en>
+<de>{0} markierte Zeile(n)</de>
+</text>
+<text>
+<en default="1">Close this tab</en>
+<de>Schlie&#xDF;t diesen tab</de>
+</text>
+<text>
+<en default="1">The value in this field is invalid</en>
+<de>Die Variable in diesem Feld ist falsch</de>
+</text>
+<text>
+<en default="1">January</en>
+<de>J&#xE4;nner</de>
+</text>
+<text>
+<en default="1">February</en>
+<de>Februar</de>
+</text>
+<text>
+<en default="1">March</en>
+<de>M&#xE4;rz</de>
+</text>
+<text>
+<en default="1">April</en>
+<de>April</de>
+</text>
+<text>
+<en default="1">May</en>
+<de>Mai</de>
+</text>
+<text>
+<en default="1">June</en>
+<de>Juni</de>
+</text>
+<text>
+<en default="1">July</en>
+<de>Juli</de>
+</text>
+<text>
+<en default="1">August</en>
+<de>August</de>
+</text>
+<text>
+<en default="1">September</en>
+<de>September</de>
+</text>
+<text>
+<en default="1">October</en>
+<de>Oktober</de>
+</text>
+<text>
+<en default="1">November</en>
+<de>November</de>
+</text>
+<text>
+<en default="1">December</en>
+<de>Dezember</de>
+</text>
+<text>
+<en default="1">Sunday</en>
+<de>Sonntag</de>
+</text>
+<text>
+<en default="1">Monday</en>
+<de>Montag</de>
+</text>
+<text>
+<en default="1">Tuesday</en>
+<de>Dienstag</de>
+</text>
+<text>
+<en default="1">Wednesday</en>
+<de>Mittwoch</de>
+</text>
+<text>
+<en default="1">Thursday</en>
+<de>Donnerstag</de>
+</text>
+<text>
+<en default="1">Friday</en>
+<de>Freitag</de>
+</text>
+<text>
+<en default="1">OK</en>
+<de>OK</de>
+</text>
+<text>
+<en default="1">Yes</en>
+<de>Ja</de>
+</text>
+<text>
+<en default="1">No</en>
+<de>Nein</de>
+</text>
+<text>
+<en default="1">Today</en>
+<de>Heute</de>
+</text>
+<text>
+<en default="1">This date is before the minimum date</en>
+<de>Dieses Datum ist vor dem Mindestdatum</de>
+</text>
+<text>
+<en default="1">This date is after the maximum date</en>
+<de>Dieses Datum ist nach dem Maximaldatum</de>
+</text>
+<text>
+<en default="1">Next Month (Control+Right)</en>
+<de>n&#xE4;chstes Monat (Control + &#x279D;)</de>
+</text>
+<text>
+<en default="1">Previous Month (Control+Left)</en>
+<de>letztes Monat (Control + &#x2190;)</de>
+</text>
+<text>
+<en default="1">Choose a month (Control+Up/Down to move years)</en>
+<de>W&#xE4;hlen Sie ein Monat (Control + &#x2191;/&#x2193; um Jahre zu bewegen)</de>
+</text>
+<text>
+<en default="1">{0} (Spacebar)</en>
+<de>{0} (Leertaste)</de>
+</text>
+<text>
+<en default="1">m/d/y</en>
+<de>m/t/j</de>
+</text>
+<text>
+<en default="1">of {0}</en>
+<de>von {0}</de>
+</text>
+<text>
+<en default="1">First Page</en>
+<de>Erste Seite</de>
+</text>
+<text>
+<en default="1">Previous Page</en>
+<de>Vorige Seite</de>
+</text>
+<text>
+<en default="1">Next Page</en>
+<de>N&#xE4;chste Seite</de>
+</text>
+<text>
+<en default="1">Last Page</en>
+<de>Letzte Seite</de>
+</text>
+<text>
+<en default="1">Refresh</en>
+<de>Neu laden</de>
+</text>
+<text>
+<en default="1">Displaying {0} - {1} of {2}</en>
+<de>Zeige {0} - {1} von {2}</de>
+</text>
+<text>
+<en default="1">No data to display</en>
+<de>Keine Daten zur Anzeige vorhanden</de>
+</text>
+<text>
+<en default="1">The minimum length for this field is {0}</en>
+<de>Die Mindestl&#xE4;nge f&#xFC;r dieses Feld ist {0}</de>
+</text>
+<text>
+<en default="1">The maximum length for this field is {0}</en>
+<de>Die Maximall&#xE4;nge f&#xFC;r dieses Feld ist {0}</de>
+</text>
+<text>
+<en default="1">This field is required</en>
+<de>Dieses Feld ist erforderlich</de>
+</text>
+<text>
+<en default="1">The minimum value for this field is {0}</en>
+<de>Der Mindestwert f&#xFC;r dieses Feld ist {0}</de>
+</text>
+<text>
+<en default="1">The maximum value for this field is {0}</en>
+<de>Der Maximalwert f&#xFC;r dieses Feld ist {0}</de>
+</text>
+<text>
+<en default="1">{0} is not a valid number</en>
+<de>{0} ist keine g&#xFC;ltige Nummer.</de>
+</text>
+<text>
+<en default="1">Disabled</en>
+<de>Ausgeblendet</de>
+</text>
+<text>
+<en default="1">The date in this field must be after {0}</en>
+<de>Das Datum in diesem Feld muss nach dem {0} sein</de>
+</text>
+<text>
+<en default="1">The date in this field must be before {0}</en>
+<de>Das Datum in diesem Feld muss vor dem {0} sein</de>
+</text>
+<text>
+<en default="1">{0} is not a valid date - it must be in the format {1}</en>
+<de>{0} ist kein g&#xFC;ltiges Datum - es muss im Format {1} sein</de>
+</text>
+<text>
+<en default="1">This field should be an e-mail address in the format "user@domain.com"</en>
+<de>Dieses Feld sollte eine E-Mail Adresse im Format "user@domain.com" enthalten.</de>
+</text>
+<text>
+<en default="1">This field should be a URL in the format "http:/'+'/www.domain.com"</en>
+<de>Dieses Feld sollte eine Webadresse im Format "http:/'+'/www.domain.com" enthalten.</de>
+</text>
+<text>
+<en default="1">This field should only contain letters and _</en>
+<de>Dieses Feld sollte nur Zeichen und _ enthalten</de>
+</text>
+<text>
+<en default="1">This field should only contain letters, numbers and _</en>
+<de>Dieses Feld sollte nur Zeichen, Zahlen und _ enthalten</de>
+</text>
+<text>
+<en default="1">Please enter the URL for the link:</en>
+<de>Bitte geben Sie die Webadresse f&#xFC;r den Link ein:</de>
+</text>
+<text>
+<en default="1">Bold (Ctrl+B)</en>
+<de>Fett (Ctrl+B)</de>
+</text>
+<text>
+<en default="1">Make the selected text bold.</en>
+<de>Schreibt den markierten Text fett.</de>
+</text>
+<text>
+<en default="1">Italic (Ctrl+I)</en>
+<de>Kursiv (Ctrl+I)</de>
+</text>
+<text>
+<en default="1">Make the selected text italic.</en>
+<de>Schreibt den markierten Text kursiv.</de>
+</text>
+<text>
+<en default="1">Underline (Ctrl+U)</en>
+<de>Unterstreichen (Ctrl+U)</de>
+</text>
+<text>
+<en default="1">Underline the selected text.</en>
+<de>Unterstreicht den markierten Text.</de>
+</text>
+<text>
+<en default="1">Grow Text</en>
+<de>Text vergr&#xF6;&#xDF;ern.</de>
+</text>
+<text>
+<en default="1">Increase the font size.</en>
+<de>Die Schriftgr&#xF6;&#xDF;e wird vergr&#xF6;&#xDF;ert.</de>
+</text>
+<text>
+<en default="1">Shrink Text</en>
+<de>Text verkleinern.</de>
+</text>
+<text>
+<en default="1">Decrease the font size.</en>
+<de>Die Schriftgr&#xF6;&#xDF;e wird verkleinern.</de>
+</text>
+<text>
+<en default="1">Text Highlight Color</en>
+<de>Text-Hervorheben Farbe.</de>
+</text>
+<text>
+<en default="1">Change the background color of the selected text.</en>
+<de>Wechselt die Hintergund-Farbe des markierten Textes.</de>
+</text>
+<text>
+<en default="1">Font Color</en>
+<de>Schrift Farbe</de>
+</text>
+<text>
+<en default="1">Change the color of the selected text.</en>
+<de>Wechselt die Farbe des markierten Textes.</de>
+</text>
+<text>
+<en default="1">Align Text Left</en>
+<de>Text links ausrichten.</de>
+</text>
+<text>
+<en default="1">Align text to the left.</en>
+<de>Richtet den Text linksb&#xFC;ndig aus.</de>
+</text>
+<text>
+<en default="1">Center Text</en>
+<de>Text zentrieren.</de>
+</text>
+<text>
+<en default="1">Center text in the editor.</en>
+<de>Richtet den Text zentriert aus.</de>
+</text>
+<text>
+<en default="1">Align Text Right</en>
+<de>Text rechts ausrichten.</de>
+</text>
+<text>
+<en default="1">Align text to the right.</en>
+<de>Richtet den Text rechtsb&#xFC;ndig aus.</de>
+</text>
+<text>
+<en default="1">Bullet List</en>
+<de>Aufz&#xE4;hlungsliste</de>
+</text>
+<text>
+<en default="1">Start a bulleted list.</en>
+<de>Eine Nummerierte Liste</de>
+</text>
+<text>
+<en default="1">Numbered List</en>
+<de>Nummerierte Liste</de>
+</text>
+<text>
+<en default="1">Start a numbered list.</en>
+<de>Eine Aufz&#xE4;hlungsliste beginnen.</de>
+</text>
+<text>
+<en default="1">Make the selected text a hyperlink.</en>
+<de>Erzeugt aus dem markierten Text einen Hyperlink.</de>
+</text>
+<text>
+<en default="1">Source Edit</en>
+<de>Quellcode editieren</de>
+</text>
+<text>
+<en default="1">Switch to source editing mode.</en>
+<de>Schaltet in den Quellcode-Editier Modus.</de>
+</text>
+<text>
+<en default="1">Sort Ascending</en>
+<de>Aufsteigend sortieren</de>
+</text>
+<text>
+<en default="1">Sort Descending</en>
+<de>Absteigend sortieren</de>
+</text>
+<text>
+<en default="1">Lock Column</en>
+<de>Spalten sperren</de>
+</text>
+<text>
+<en default="1">Unlock Column</en>
+<de>Spalten freigeben</de>
+</text>
+<text>
+<en default="1">Columns</en>
+<de>Spalten</de>
+</text>
+<text>
+<en default="1">(None)</en>
+<de>(Keine)</de>
+</text>
+<text>
+<en default="1">Group By This Field</en>
+<de>Mit diesem Feld gruppieren</de>
+</text>
+<text>
+<en default="1">Show in Groups</en>
+<de>Gruppiert anzeigen</de>
+</text>
+<text>
+<en default="1">Value</en>
+<de>Variable</de>
+</text>
+<text>
+<en default="1">Drag to resize.</en>
+<de>Ziehen um die Gr&#xF6;&#xDF;e zu ver&#xE4;ndern.</de>
+</text>
+<text>
+<en default="1">Drag to resize. Double click to hide.</en>
+<de>Ziehen um die Gr&#xF6;&#xDF;e zu ver&#xE4;ndern. Doppelt klicken um unsichtabr zu machen.</de>
+</text>
+<text>
+<en default="1">Do you really want to delete this entry:\n\n"</en>
+<de>Wollen Sie diesen Beitrag wirklich l&#xF6;schen:\n\n"</de>
+</text>
+<text>
+<en default="1">Sitetree</en>
+<de>Seitenbaum</de>
+</text>
+<text>
+<en default="1">Components</en>
+<de>Komponenten</de>
+</text>
+<text>
+<en default="1">Language</en>
+<de>Sprache</de>
+</text>
+<text>
+<en default="1">lang</en>
+<de>Spr.</de>
+</text>
+<text>
+<en default="1">Small Image (optional)</en>
+<de>Kleines Bild (optional)</de>
+</text>
+<text>
+<en default="1">Paragraphs</en>
+<de>Abs&#xE4;tze</de>
+</text>
+<text>
+<en default="1">Code {0} Error Returned</en>
+<de>Code {0} Fehler</de>
+</text>
+<text>
+<en default="1">Download</en>
+<de>Datei Herunterladen</de>
+</text>
+<text>
+<en default="1">Logout</en>
+<de>Abmelden</de>
+</text>
+<text>
+<en default="1">Line</en>
+<de>Linie</de>
+</text>
+<text>
+<en default="1">Headline</en>
+<de>&#xDC;berschrift</de>
+</text>
+<text>
+<en default="1">Images</en>
+<de>Bilder</de>
+</text>
+<text>
+<en default="1">Links</en>
+<de>Links</de>
+</text>
+<text>
+<en default="1">TextImage</en>
+<de>Text-Bild</de>
+</text>
+<text>
+<en default="1">Reload</en>
+<de>Neu laden</de>
+</text>
+<text>
+<en default="1">Save properties</en>
+<de>Eigenschaften speichern</de>
+</text>
+<text>
+<en default="1">Login successful</en>
+<de>Erfolgreich eingeloggt</de>
+</text>
+<text>
+<en default="1">Back to topic</en>
+<de>Zur&#xFC;ck zum Thema</de>
+</text>
+<text>
+<en default="1">Back to group</en>
+<de>Zur&#xFC;ck zur Gruppe</de>
+</text>
+<text>
+<en default="1">Back to forum</en>
+<de>Zur&#xFC;ck zum Forum</de>
+</text>
+<text>
+<en default="1">to get back to the formular</en>
+<de>um zum Formular zur&#xFC;ck zu gelangen</de>
+</text>
+<text>
+<en default="1">Forum name</en>
+<de>Name f&#xFC;r Forum</de>
+</text>
+<text>
+<en default="1">Location</en>
+<de>Ort</de>
+</text>
+<text context="forum">
+<en default="1">Location</en>
+<de>Wohnort</de>
+</text>
+<text>
+<en default="1">Avatar (Image)</en>
+<de>Avatar (Bild)</de>
+</text>
+<text>
+<en default="1">Delete current Avatar</en>
+<de>Aktuellen Avatar l&#xF6;schen</de>
+</text>
+<text>
+<en default="1">You may upload a picture that is displayed in your profile and in each of your posts in a small version (40x40 Pixels).</en>
+<de>Hier können Sie ein Bild hochladen, welches in Ihrem Profil und in verkleinerter Version (40x40 Pixel) bei Ihren Beiträgen angezeigt wird.</de>
+</text>
+<text>
+<en default="1">For optimized displayment the picture should have a width of at least 150 Pixels, the file size may not be bigger than 2 MB.</en>
+<de>Für eine optimale Darstellung sollte das Bild mindestens 150 Pixel breit sein, die maximale Dateigröße darf 2 MB nicht überschreiten.</de>
+</text>
+<text>
+<en default="1">Delete avatar</en>
+<de>Avatar l&#xF6;schen</de>
+</text>
+<text context="forum">
+<en default="1">Signature</en>
+<de>Signatur</de>
+</text>
+<text>
+<en default="1">will be displayed at the end of each post</en>
+<de>wird am Ende eines jeden Forumbeitrags angehängt</de>
+</text>
+<text>
+<en default="1">File-Type not allowed. Only Images are allowed.</en>
+<de>_</de>
+<de>_</de>
+</text>
+<text>
+<en default="1">Show Original</en>
+<de>_</de>
+<de>_</de>
+</text>
+<text>
+<en default="1">Assign</en>
+<de>Zuweisen</de>
+</text>
+<text>
+<en default="1">Assign by text input</en>
+<de>Durch Texteingabe zuweisen</de>
+</text>
+<text>
+<en default="1">Plese enter in both fields the password which you want to use for your useraccount</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Original Size</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">By</en>
+<de>Von</de>
+</text>
+<text>
+<en default="1">Latest posts from this topic</en>
+<de>Die letzten Beitr&#xE4;ge in diesem Thema</de>
+</text>
+<text>
+<en default="1">Last entry by</en>
+<de>Letzter Beitrag von</de>
+</text>
+<text>
+<en default="1">Y-m-d</en>
+<de>d.m.Y</de>
+</text>
+<text>
+<en default="1">no selection</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">add new entry</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Edit Paragraph</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Plese enter in both fields the password which you want to use
+    	for your useraccount</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">There is no editig for this component.</en>
+<de>Diese Komponente hat keinen Bearbeitungsbereich.</de>
+</text>
+<text>
+<en default="1">An error occured. Please try again later.</en>
+<de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es später wieder.</de>
+</text>
+<text>
+<en default="1">on</en>
+<de>am</de>
+</text>
+<text>
+<en default="1">Profile picture</en>
+<de>Profilbild</de>
+</text>
+<text>
+<en default="1">Delete picture</en>
+<de>Bild löschen</de>
+</text>
+<text>
+<en default="1">Delete current picture</en>
+<de>Aktuelles Bild löschen</de>
+</text>
+<text>
+<en default="1">New post in observed thread</en>
+<de>Neuer Beitrag in beobachtetem Thema</de>
+</text>
+<text>
+<en default="1">A new Post has been written in thread:</en>
+<de>In folgendem Thema wurde ein neuer Beitrag verfasst:</de>
+</text>
+<text>
+<en default="1">in the forum of:</en>
+<de>im Forum von:</de>
+</text>
+<text>
+<en default="1">Click the following link to go directly to the mentioned thread:</en>
+<de>Klicken Sie auf folgenden Link um direkt zum betreffenden Thema zu gelangen:</de>
+</text>
+<text>
+<en default="1">Please type in your email address in the field below.</en>
+<de>Bitte geben Sie im Feld Ihre Email-Adresse ein.</de>
+</text>
+<text>
+<en default="1">You will receive an email with a passwort reset link and further instructions.</en>
+<de>Sie erhalten eine Email mit einem Passwort zurücksetzen Link und weiteren Anweisungen.</de>
+</text>
+<text>
+<en default="1">Post</en>
+<de>Beitrag</de>
+</text>
+<text>
+<en default="1">Lost your password?</en>
+<de>Passwort vergessen?</de>
+</text>
+<text>
+<en default="1">User not existent in this web.</en>
+<de>Dieser Benutzer existiert leider nicht.</de>
+</text>
+<text>
+<en>Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.</en>
+<de>Bitte bleibt in den Beiträgen bei einem freundlichen Umgangston. Jeder Verfasser haftet für sämtliche von ihm veröffentlichte Beiträge selbst. Beleidigende oder verletzende Beiträge werden von uns ohne Kommentar gelöscht.</de>
+</text>
+<text>
+<en>Do you really wish to delete this post?</en>
+<de>Möchten Sie diesen Beitrag wirklich löschen?</de>
+</text>
+<text>
+<en>Created by</en>
+<de>Erstellt von</de>
+</text>
+<text>
+<en>Create a new topic</en>
+<de>Neues Thema erstellen</de>
+</text>
+</trl>
