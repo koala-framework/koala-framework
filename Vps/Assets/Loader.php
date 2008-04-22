@@ -55,6 +55,7 @@ class Vps_Assets_Loader
         $version = Zend_Registry::get('config')->application->version;
         $contents = str_replace('{$application.version}', $version, $contents);
         $contents = self::trl($contents);
+        $contents = self::hlp($contents);
         return $contents;
     }
 
@@ -183,6 +184,15 @@ class Vps_Assets_Loader
         } else {
             return $contents;
         }
+    }
+
+    static private function hlp($contents){
+        $matches = array();
+        preg_match_all("#hlp\('(.*)'\)#", $contents, $matches);
+        foreach ($matches[0] as $key => $search) {
+            $contents = str_replace($search, "'" . hlp($matches[1][$key]) . "'", $contents);
+        }
+        return $contents;
     }
 
     static private function trl ($contents){
