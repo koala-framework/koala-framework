@@ -56,4 +56,14 @@ div.vpcForum form.forumSearch input {
 }
 div.vpcForum ul.forumResults { margin-top: 20px; }
 
+/* Wenn bei Suche kein Ergebniss */
+div.vpcForum p.noResult {
+    color: #FF9600;
+    font-weight: bold;
+    padding: 10px;
+    border: 1px solid #FF9600;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 div.clear { clear: both;}
