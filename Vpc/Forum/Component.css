@@ -63,4 +63,15 @@ div.vpcForum p.noResult {
     margin-bottom: 10px;
 }
 
+div.vpcForum h2 {
+    background: url(/assets/vps/Vpc/Forum/forumHeaderBg.jpg) repeat-x top left;
+    line-height: 25px;
+    padding-left: 10px;
+    margin: 0px;
+    margin-bottom: 14px;
+    font-weight: bold;
+    color: #786047;
+}
+
+
 div.clear { clear: both;}

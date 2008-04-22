@@ -83,15 +83,20 @@ class Vps_Assets_Loader
 
                 //falls der browser irgendwas im cache hat, hat sich das nie geändert
                 //weil wenn wir eine neue version haben ändert sich die url
-                if (isset($headers['If-None-Match'])) {
-                    header('HTTP/1.1 304 Not Modified');
-                    header('ETag: '.$headers['If-None-Match']);
-                    exit;
-                }
-                if (isset($headers['If-Modified-Since'])) {
-                    header('HTTP/1.1 304 Not Modified');
-                    header('Last-Modified: '.$headers['If-Modified-Since']);
-                    exit;
+
+                //für offline die if außen rum, da ändert sich die version kaum
+                //auch für auto-clear assets
+                if (!(isset($_SERVER['SERVER_NAME']) && substr($_SERVER['SERVER_NAME'], -6) == '.vivid')) {
+                    if (isset($headers['If-None-Match'])) {
+                        header('HTTP/1.1 304 Not Modified');
+                        header('ETag: '.$headers['If-None-Match']);
+                        exit;
+                    }
+                    if (isset($headers['If-Modified-Since'])) {
+                        header('HTTP/1.1 304 Not Modified');
+                        header('Last-Modified: '.$headers['If-Modified-Since']);
+                        exit;
+                    }
                 }
 
                 if ($m[2] == 'js') {
