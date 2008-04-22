@@ -28,6 +28,7 @@ class Vpc_Forum_Search_Component extends Vpc_Abstract_Composite_Component
                 ->order('p.create_time DESC');
             $count = $select->query()->fetchAll();
             $this->getChildComponent('paging')->setEntries($count[0]['count']);
+            $ret['resultCount'] = $count[0]['count'];
 
             $select->reset(Zend_Db_Select::COLUMNS);
             $select->from(null, array('t.id', 't.component_id', 't.subject'));
@@ -48,10 +49,18 @@ class Vpc_Forum_Search_Component extends Vpc_Abstract_Composite_Component
                 );
             }
         }
+
         //TODO: suboptimal, muss nochmal ausgeführt werden obwohls in
         //Composite_Abstract schon gemacht wird (da ist aber Entries noch nicht gestetzt)
         //mögliche lösung: ein "processInput"-Schritt
         $ret['paging'] = $this->getChildComponent('paging')->getTemplateVars();
+
+        $forumComponent = $this->getParentComponent();
+        $ret['forum'] = $forumComponent->getName();
+        $ret['forumUrl'] = $forumComponent->getUrl();
+        $ret['search'] = $this->getName();
+        $ret['searchUrl'] = $_SERVER['REQUEST_URI'];
+
         return $ret;
     }
 }

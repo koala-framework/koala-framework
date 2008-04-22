@@ -1,14 +1,22 @@
 <div class="vpcForum">
+    <h2>
+        <a href="{$component.forumUrl}">{$component.forum}</a> »
+        <a href="{$component.searchUrl}">{$component.search}</a>
+    </h2>
+
     <form class="forumSearch" method="GET" action="{$component.action}">
         <span>Forumsuche: </span>
         <input type="text" name="search" value="{$component.searchText}" />
         <button type="submit"></button>
     </form>
-    {component component=$component.paging}
 
     {if !$component.results}
-        <p class="noResult">Die Suche ergab keine Treffer.</p>
+        <p class="noResult">Die Suche nach &quot;{$component.searchText}&quot; ergab keine Treffer.</p>
+    {else}
+        <p class="noResult">Bei der Suche nach &quot;{$component.searchText}&quot; wurden {$component.resultCount} Themen gefunden.</p>
     {/if}
+
+    {component component=$component.paging}
 
     <div class="vpcForumGroup">
     <ul>
@@ -43,5 +51,6 @@
         {/foreach}
     </ul>
     </div>
+
     {component component=$component.paging}
 </div>
