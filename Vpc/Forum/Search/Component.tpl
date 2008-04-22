@@ -6,7 +6,7 @@
     {component component=$component.paging}
 
     {if !$component.results}
-        Die Suche ergab keine Treffer.
+        <p class="noResult">Die Suche ergab keine Treffer.</p>
     {/if}
 
     <div class="vpcForumGroup">
