@@ -1,7 +1,8 @@
 <div class="vpcForum">
     <form class="forumSearch" method="GET" action="{$component.action}">
+        <span>Forumsuche: </span>
         <input type="text" name="search" value="{$component.searchText}" />
-        <button type="submit">Im Forum suchen</button>
+        <button type="submit"></button>
     </form>
     {component component=$component.paging}
 
