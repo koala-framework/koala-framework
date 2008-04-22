@@ -50,6 +50,7 @@ div.vpcForum form.forumSearch span {
     width: 150px;
     color: #ff9600;
 }
+div.vpcForum form.forumSearch button { cursor: pointer; }
 div.vpcForum ul.forumResults { margin-top: 20px; }
 
 /* Wenn bei Suche kein Ergebniss */
