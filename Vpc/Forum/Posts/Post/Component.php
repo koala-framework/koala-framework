@@ -78,6 +78,10 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
 
         $ret['writeUrl'] = $this->getParentComponent()->getPageFactory()->getChildPageById('write')->getUrl()
             .'?quote='.$this->getId();
+        $pagingKey = $this->getParentComponent()->getId().'-paging';
+        if (isset($_GET[$pagingKey])) {
+            $ret['writeUrl'] .= '&'.$pagingKey.'='.$_GET[$pagingKey];
+        }
 
         return $ret;
     }

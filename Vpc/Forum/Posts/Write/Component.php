@@ -11,6 +11,7 @@ class Vpc_Forum_Posts_Write_Component extends Vpc_Posts_Write_Component
     protected function _getInitContent()
     {
         if ($this->_getParam('quote')) {
+            //TODO: mit treecache wird alles besser :D
             $postComponent = $this->getPageCollection()->getComponentById($this->_getParam('quote'));
             $initContent = $postComponent->getContent();
 
