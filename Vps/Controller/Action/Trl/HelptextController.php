@@ -4,15 +4,15 @@ class Vps_Controller_Action_Trl_HelptextController extends Vps_Controller_Action
 {
     public function indexAction()
     {
-        $maskedTexts = $this->_findMaskedTexts('./application/controllers');
+        $maskedTexts = $this->_findMaskedTexts('./application');
         $this->_createXmlFromTexts($maskedTexts, 'application/hlp.xml', Vps_Trl::getLanguages());
         
         $vpsLanguages = array_unique(array_merge(array('en'), Vps_Trl::getLanguages()));
         $maskedTexts = $this->_findMaskedTexts(VPS_PATH, true);
-        $maskedTexts += $this->_findMaskedTexts('./application/controllers', true);
+        $maskedTexts += $this->_findMaskedTexts('./application', true);
         $this->_createXmlFromTexts($maskedTexts, VPS_PATH . '/hlp.xml', $vpsLanguages);
 
-        die("Erfolgreich ausgeführt");
+        die();
     }
     
     protected function _findMaskedTexts($directory, $isVps = false)
@@ -20,17 +20,14 @@ class Vps_Controller_Action_Trl_HelptextController extends Vps_Controller_Action
         $results = array();
         $iterator = new RecursiveDirectoryIterator($directory);
         foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as $file) {
-            if (end(explode('.', $file->getFileName()))=='php') {
+            $extension = end(explode('.', $file->getFileName()));
+            if ($extension == 'php' || $extension == 'js') {
                 $m = array();
                 $vps = $isVps ? 'Vps' : '';
                 preg_match_all("#hlp$vps\('(.*)'\)#", implode("", file($file)), $m);
-                if (!empty($m[0])) {
+                foreach ($m[1] as $key) {
                     // Dateiname mit Pfad vernünftig formatieren
-                    $controller = str_replace($directory . '/', '', $file->getPathName());
-                    $controller = str_replace('Controller.php', '', $controller);
-                    $controller = strtolower($controller);
-                    $key = $m[1][0];
-                    $results[$key][] = $controller;
+                    $results[$key][] = str_replace($directory . '/', '', $file->getPathName());
                 }
             }
         }
@@ -92,5 +89,7 @@ class Vps_Controller_Action_Trl_HelptextController extends Vps_Controller_Action
         }
         // XML in Datei schreiben
         file_put_contents($targetFile, $result);
+
+        echo("Datei $targetFile erstellt.");
     }
 }
