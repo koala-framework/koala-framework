@@ -44,15 +44,12 @@ div.vpcForum ul li.post div.description p { margin-bottom: 0px; }
 div.vpcForum ul li.post div.threads { border-bottom: 1px solid #ccc; text-align: center; }
 div.vpcForum ul li.post div.posts { text-align: center; }
 
-div.vpcForum form.forumSearch button {
+div.vpcForum form.forumSearch { margin-left: 224px; margin-bottom: 20px; }
+div.vpcForum form.forumSearch span {
     padding-right: 7px;
     width: 150px;
     color: #ff9600;
     cursor: pointer;
-}
-div.vpcForum form.forumSearch input {
-    margin-bottom: 10px;
-    margin-left: 193px;
 }
 div.vpcForum ul.forumResults { margin-top: 20px; }
 
