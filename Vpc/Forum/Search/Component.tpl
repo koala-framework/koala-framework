@@ -5,6 +5,10 @@
     </form>
     {component component=$component.paging}
 
+    {if !$component.results}
+        Die Suche ergab keine Treffer.
+    {/if}
+
     <div class="vpcForumGroup">
     <ul>
         {foreach from=$component.results item=t}

@@ -14,8 +14,10 @@
     {foreach from=$component.posts item=post}
         {component component=$post}
     {/foreach}
+
+
+    {component component=$component.paging}
     {component component=$component.observe}
     <a class="post" href="{$component.writeUrl}">{trlVps text="create answer"}</a>
-    {component component=$component.paging}
 
 </div>
