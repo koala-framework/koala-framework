@@ -25,6 +25,7 @@ div.vpcForumGroup a.newThread {
     font-weight: bold; 
     background: url(/assets/vps/Vpc/Forum/themaBtn.jpg) no-repeat top left;
     color:#786047;
+    line-height: 25px;
     padding-left: 15px; padding-right: 15px;
     padding-top: 5px; padding-bottom: 5px;
     margin-top: -5px; margin-bottom: 15px; margin-right: 10px;
