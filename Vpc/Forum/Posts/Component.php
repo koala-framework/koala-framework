@@ -20,6 +20,7 @@ class Vpc_Forum_Posts_Component extends Vpc_Posts_Component
         $ret['groupUrl'] = $this->getGroupComponent()->getUrl();
         $ret['forum'] = $this->getForumComponent()->getName();
         $ret['forumUrl'] = $this->getForumComponent()->getUrl();
+        $ret['threadVars'] = $this->getParentComponent()->getThreadVars();
         return $ret;
     }
 
