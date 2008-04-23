@@ -153,7 +153,7 @@ class Vps_Assets_Dependencies
         if (in_array($dependency, $this->_processedDependencies)) return;
         $this->_processedDependencies[] = $dependency;
         if ($dependency == 'Components' || $dependency == 'ComponentsAdmin') {
-            foreach ($this->_config->pageClasses as $c) {
+            foreach ($this->_config->vpc->pageClasses as $c) {
                 if ($c->class && $c->text) {
                     $this->_processComponentDependency($c->class, $dependency == 'ComponentsAdmin');
                 }

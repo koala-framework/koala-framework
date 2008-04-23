@@ -12,8 +12,12 @@ class Vpc_Admin
 
     public static function getInstance($componentClass)
     {
-        $class = self::getComponentFile($componentClass, 'Admin', 'php', true);
-        return new $class($componentClass, Zend_Registry::get('db'));
+        static $instances = array();
+        if (!isset($instances[$componentClass])) {
+            $c = Vpc_Admin::getComponentFile($componentClass, 'Admin', 'php', true);
+            $instances[$componentClass] = new $c($componentClass, Zend_Registry::get('db'));
+        }
+        return $instances[$componentClass];
     }
 
     public static function getAvailableComponents($path = '')
@@ -36,7 +40,7 @@ class Vpc_Admin
                 $class = str_replace('/', '_', $item->getPath());
                 $class = strrchr($class, 'Vpc_');
                 $class .= '_' . str_replace('.php', '', $item->getFilename());
-                if (class_exists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
+                if (Vps_Loader::classExists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
                     $return[] = $class;
                 }
 

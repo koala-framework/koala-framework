@@ -1,0 +1,11 @@
+{if $debug.menu || $debug.displayErrors}
+<script type="text/javascript">
+    Vps.Debug.displayErrors = {if $debug.displayErrors}true{else}false{/if};
+    Vps.Debug.showMenu = {if $debug.menu}true{else}false{/if};
+    Vps.Debug.js = {if $debug.js}true{else}false{/if};
+    Vps.Debug.css = {if $debug.css}true{else}false{/if};
+    Vps.Debug.querylog = {if $debug.querylog}true{else}false{/if};
+    Vps.Debug.autoClearCache = {if $debug.autoClearCache}true{else}false{/if};
+    Vps.Debug.requestNum = '{$debug.requestNum}';
+</script>
+{/if}

@@ -114,4 +114,10 @@ abstract class Vps_Auto_Container_Abstract extends Vps_Auto_Field_Abstract imple
         return parent::load($row);
     }
 
+    public function getTemplateVars($values)
+    {
+        $ret = parent::getTemplateVars($values);
+        $ret['items'] = $this->fields->getTemplateVars($values);
+        return $ret;
+    }
 }

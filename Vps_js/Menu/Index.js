@@ -1,6 +1,7 @@
 Ext.namespace('Vps.Menu');
 
-Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
+Vps.Menu.Index = Ext.extend(Ext.Toolbar,
+{
     initComponent : function()
     {
         this.addEvents(
@@ -17,7 +18,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
     reload: function()
     {
         Ext.Ajax.request({
-            url: this.controllerUrl+'/jsonData',
+            url: this.controllerUrl+'/json-data',
             params: this.params,
             success: this.loadMenu,
             scope: this
@@ -115,7 +116,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
         if (response.changeUser) {
             var changeUser = new Vps.Form.ComboBox({
                 store: {
-                    url: '/vps/user/changeUser/jsonData'
+                    url: '/vps/user/changeUser/json-data'
                 },
                 mode: 'remote',
                 editable: false,
@@ -135,7 +136,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
             }, this);
             changeUser.on('select', function(combo, record, index) {
                 Ext.Ajax.request({
-                    url: '/vps/user/changeUser/jsonChangeUser',
+                    url: '/vps/user/changeUser/json-change-user',
                     params: { userId: record.id },
                     success: function() {
                         location.href = '/vps/welcome';
@@ -174,7 +175,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
                 icon: '/assets/silkicons/door_out.png',
                 handler: function() {
                     Ext.Ajax.request({
-                        url : '/vps/user/login/jsonLogoutUser',
+                        url : '/vps/user/login/json-logout-user',
                         success : function(form, action) {
                             //nicht reload, weil user nach erneutem login vielleicht
                             //die aktuelle seite gar nicht mehr sehen darf
@@ -196,80 +197,14 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar, {
             },
             scope: this
         });
-        if (Vps.debug) {
+
+        if (Vps.Debug.showMenu) {
             this.add('-');
             this.add({
                 text: 'Debug',
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/bug.png',
-                menu: [{
-                    text: 'Clear Assets-cache',
-                    icon: '/assets/silkicons/database_delete.png',
-                    cls: 'x-btn-text-icon',
-                    scope: this,
-                    handler: function() {
-                        Ext.Ajax.request({
-                            url: this.controllerUrl+'/jsonClearAssetsCache',
-                            success: function() {
-                                Ext.Msg.alert('Assets Cache', 'Successfully cleared');
-                            }
-                        });
-                    }
-                },{
-                    text: 'Auto-Clear Assets Cache',
-                    icon: (response.debugAssets.autoClearCache=='1' ? '/assets/silkicons/tick.png' : null),
-                    cls: 'x-btn-text-icon',
-                    scope: this,
-                    handler: function() {
-                        Ext.Ajax.request({
-                            url: this.controllerUrl+'/jsonSetDebugAssets',
-                            params: { 'autoClearCache' : (response.debugAssets.autoClearCache=='1' ? 0 : 1) },
-                            success: function() {
-                                this.reload();
-                            },
-                            scope: this
-                        });
-                    }
-                },{
-                    text: '.js - Debug Assets',
-                    icon: (response.debugAssets.js=='1' ? '/assets/silkicons/tick.png' : null),
-                    cls: 'x-btn-text-icon',
-                    scope: this,
-                    handler: function() {
-                        Ext.Ajax.request({
-                            url: this.controllerUrl+'/jsonSetDebugAssets',
-                            params: { 'js' : (response.debugAssets.js=='1' ? 0 : 1) },
-                            success: function() {
-                                this.reload();
-                            },
-                            scope: this
-                        });
-                    }
-                },{
-                    text: '.css - Debug Assets',
-                    icon: (response.debugAssets.css=='1' ? '/assets/silkicons/tick.png' : null),
-                    cls: 'x-btn-text-icon',
-                    scope: this,
-                    handler: function() {
-                        Ext.Ajax.request({
-                            url: this.controllerUrl+'/jsonSetDebugAssets',
-                            params: { 'css' : (response.debugAssets.css=='1' ? 0 : 1) },
-                            success: function() {
-                                this.reload();
-                            },
-                            scope: this
-                        });
-                    }
-                },{
-                    text: 'show debug console',
-                    icon: '/assets/silkicons/bug.png',
-                    cls: 'x-btn-text-icon',
-                    scope: this,
-                    handler: function() {
-                        Ext.log();
-                    }
-                }],
-                scope: this
+                menu: new Vps.Debug.Menu()
             });
         }
     }

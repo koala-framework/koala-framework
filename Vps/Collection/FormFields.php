@@ -28,4 +28,24 @@ class Vps_Collection_FormFields extends Vps_Collection
     {
         return $this->_formName;
     }
+
+    public function getMetaData()
+    {
+        $ret = array();
+        foreach ($this as $field) {
+            $data = $field->getMetaData();
+            if (!is_null($data)) $ret[] = $data;
+        }
+        return $ret;
+    }
+
+    public function getTemplateVars($values)
+    {
+        $ret = array();
+        foreach ($this as $field) {
+            $data = $field->getTemplateVars($values);
+            if (!is_null($data)) $ret[] = $data;
+        }
+        return $ret;
+    }
 }

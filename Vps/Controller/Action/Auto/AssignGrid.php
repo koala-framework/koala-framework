@@ -22,6 +22,7 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
             $where["$toColumn = ?"] = $this->_getParam($toColumn);
         }
 
+        $this->_table->getAdapter()->beginTransaction();
         foreach ($ids as $id) {
             foreach ($assignFromColumns as $fromColumn) {
                 $where["$fromColumn = ?"] = $id;
@@ -39,6 +40,7 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
                 $this->_assignTable->insert($data);
             }
         }
+        $this->_table->getAdapter()->commit();
     }
 
     public function jsonTextAssignAction()
@@ -58,6 +60,7 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
 
         $dataTable = new $refMap[$this->_assignFromReference]['refTableClass']();
 
+        $this->_table->getAdapter()->beginTransaction();
         $items = preg_split("(\n|\r)", $text);
         foreach ($items as $item) {
             $item = trim($item);
@@ -93,6 +96,7 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
                 }
             }
         }
+        $this->_table->getAdapter()->commit();
     }
 
     protected function _checkNecessaryProperties()

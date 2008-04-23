@@ -1,15 +1,30 @@
 <?php
 class Vps_Db_Profiler extends Zend_Db_Profiler
 {
+    private $_count;
+    private $_lastQuery;
+    private $_longestQuery = null;
     protected $_logger = null;
 
-    public function setLogger($logger)
+    public function __construct($enable)
     {
-        $this->_logger = $logger;
+        parent::__construct($enable);
+
+        file_put_contents('querylog', ''); //leeren
+        $writer = new Zend_Log_Writer_Stream('querylog');
+        $writer->setFormatter(new Zend_Log_Formatter_Simple("%message%\n"));
+        $this->_logger = new Zend_Log($writer);
+
+        foreach (new DirectoryIterator('/tmp') as $item) {
+            if (substr($item->getFilename(), 0, 9+4) == 'querylog.test') {
+                $time = (int)(substr($item->getFilename(), 9+4, -2));
+                if (time()-$time > 15*60) {
+                    unlink($item->getPathname());
+                }
+            }
+        }
     }
 
-    //fkt musste kopiert werden :(
-    //damit eigene Vps_Db_Profiler_Query klasse verwendet werden kann
     public function queryStart($queryText, $queryType = null)
     {
         if (!$this->_enabled) {
@@ -37,62 +52,72 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
             }
         }
 
-        $this->_queryProfiles[] = new Vps_Db_Profiler_Query($queryText, $queryType);
+        $this->_lastQuery = new Vps_Db_Profiler_Query($queryText, $queryType);
+    
 
-        end($this->_queryProfiles);
-        $ret = key($this->_queryProfiles);
-
+        $this->_count++;
         if ($this->_logger) {
-            $query = $this->_queryProfiles[$ret];
-            $this->_logger->info(count($this->_queryProfiles).' ----------------------');
-            $this->_logger->debug($query->getQuery());
-            $out = '';
-            foreach ($query->getBacktrace() as $bt) {
-                if (!isset($bt['file'])) continue;
-                if (preg_match('#bootstrap\\.php$#', $bt['file'])) continue;
-                if (preg_match('#Db/Profiler\\.php$#', $bt['file'])) continue;
-                if (preg_match('#^/www/public/niko/zend103/#', $bt['file'])) continue;
-                if (preg_match('#^/www/public/library/#', $bt['file'])) continue;
-                $bt['file'] = str_replace('/www/public/niko/vps/', '', $bt['file']);
-                $out .= "$bt[file]:$bt[line]\n";
-            }
-            $this->_logger->debug($out);
+            $this->_logger->info($this->_count.' ----------------------');
+            $this->_logger->debug($queryText);
+            //$this->_logger->debug(implode("", $this->_lastQuery->getBacktrace()));
         }
 
-        return $ret;
+        return $this->_count;
+    }
+    public function getQueryProfile($queryId)
+    {
+        if ($queryId == $this->_count) {
+            return $this->_lastQuery;
+        } else {
+            return null;
+        }
     }
     public function queryEnd($queryId)
     {
-        parent::queryEnd($queryId);
-        $qp = $this->_queryProfiles[$queryId];
-        if ($this->_logger) {
-            if ($qp->getElapsedSecs() > 0.1) {
-                $this->_logger->info("!!!!!!!!".$qp->getElapsedSecs().'sec');
-            } else {
-                $this->_logger->info($qp->getElapsedSecs().'sec');
+        if ($queryId == $this->_count) {
+        
+            // Ensure that the query profile has not already ended
+            if ($this->_lastQuery->hasEnded()) {
+                require_once 'Zend/Db/Profiler/Exception.php';
+                throw new Zend_Db_Profiler_Exception("Query with profiler handle '$queryId' has already ended.");
             }
+
+            // End the query profile so that the elapsed time can be calculated.
+            $this->_lastQuery->end();
+
+            if (!$this->_longestQuery ||
+                $this->_lastQuery->getElapsedSecs()
+                    > $this->_longestQuery->getElapsedSecs()) {
+                $this->_longestQuery = $this->_lastQuery;
+            }
+
+            if ($this->_logger) {
+                $this->_logger->debug($this->_lastQuery->getElapsedSecs());
+            }
+
+            $d = array();
+            $d['query'] = $this->_lastQuery->getQuery();
+            $d['backtrace'] = $this->_lastQuery->getBacktrace();
+            $d['time'] = $this->_lastQuery->getElapsedSecs();
+            $d['type'] = $this->_lastQuery->getQueryType();
+            $d['params'] = $this->_lastQuery->getQueryParams();
+            $filename = '/tmp/querylog.'.Zend_Registry::get('requestNum');
+            $f = fopen($filename, 'a');
+            fwrite($f, "\nquerylog\n".serialize($d));
+            fclose($f);
+            chmod($filename, 0660);
+
+        } else {
+            throw new Vps_Exception('Query not found');
         }
     }
+
     public function logSummary()
     {
-        if (!$this->_logger) return;
-        $profiler = $this;
-        $totalTime    = $profiler->getTotalElapsedSecs();
-        $queryCount   = $profiler->getTotalNumQueries();
-        $longestTime  = 0;
-        $longestQuery = null;
-        foreach ($profiler->getQueryProfiles() as $query) {
-            if ($query->getElapsedSecs() > $longestTime) {
-                $longestTime  = $query->getElapsedSecs();
-                $longestQuery = $query->getQuery();
-            }
+        if ($this->_logger) {
+            $this->_logger->info('Longest Query:');
+            $this->_logger->debug($this->_longestQuery->getQuery());
+            $this->_logger->debug($this->_longestQuery->getElapsedSecs().' sec');
         }
-
-        $out = "\n\n\n".'Executed ' . $queryCount . ' queries in ' . $totalTime . ' seconds' . "\n";
-        $out .= 'Average query length: ' . $totalTime / $queryCount . ' seconds' . "\n";
-        $out .= 'Queries per second: ' . $queryCount / $totalTime . "\n";
-        $out .= 'Longest query length: ' . $longestTime . "\n";
-        $out .= "Longest query: \n" . $longestQuery . "\n";
-        $this->_logger->info($out);
     }
 }

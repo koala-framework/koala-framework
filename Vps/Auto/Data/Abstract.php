@@ -14,7 +14,7 @@ abstract class Vps_Auto_Data_Abstract implements Vps_Auto_Data_Interface
         return $this->_fieldname;
     }
 
-    public function save(Zend_Db_Table_Row_Abstract $row, $data)
+    public function save(Vps_Model_Row_Interface $row, $data)
     {
         throw new Vps_Exception("Save is not possible for '".get_class($this)."'");
     }

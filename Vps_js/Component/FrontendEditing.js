@@ -48,7 +48,7 @@ Ext.extend(Vps.Component.FrontendEditing.Index, Ext.util.Observable,
         parts = el.className.split(' ');
         cls = parts[1];
         Ext.Ajax.request({
-            url: '/admin/component/jsonShow/' + cls + '/' + el.id.substr(10),
+            url: '/admin/component/json-show/' + cls + '/' + el.id.substr(10),
             success: function (o, e) {
                 r = Ext.decode(o.responseText);
                 Ext.DomHelper.overwrite(e.params.container, r.content);

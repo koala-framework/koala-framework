@@ -1,7 +1,6 @@
 <?php
 class Vpc_Abstract_Composite_Component extends Vpc_Abstract
 {
-    private $_childComponents = array();
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
@@ -15,7 +14,9 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
     {
         $return = parent::getTemplateVars();
         foreach ($this->_getSetting('childComponentClasses') as $id=>$c) {
-            $return[$id] = $this->getChildComponent($id)->getTemplateVars();
+            $componentId = $this->getTreeCacheRow()->component_id.'-'.$id;
+            $row = $this->getTreeCacheRow()->getTable()->find($componentId)->current();
+            $return[$id] = $row->getComponent()->getTemplateVars();
         }
         return $return;
     }

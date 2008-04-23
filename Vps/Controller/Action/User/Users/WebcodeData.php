@@ -11,7 +11,7 @@ class Vps_Controller_Action_User_Users_WebcodeData extends Vps_Auto_Data_Abstrac
         }
     }
 
-    public function save(Zend_Db_Table_Row_Abstract $row, $data)
+    public function save(Vps_Model_Row_Interface $row, $data)
     {
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         $acl = Zend_Registry::get('acl');

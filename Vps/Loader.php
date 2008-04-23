@@ -14,4 +14,16 @@ require_once 'Zend/Loader.php';
 
 class Vps_Loader extends Zend_Loader
 {
+    public function classExists($class)
+    {
+        $filename = str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
+
+        foreach (explode(PATH_SEPARATOR, get_include_path()) as $dir) {
+            $filespec = rtrim($dir, '\\/') . DIRECTORY_SEPARATOR . $filename;
+            if (is_file($filespec)) {
+                return class_exists($class);
+            }
+        }
+        return false;
+    }
 }

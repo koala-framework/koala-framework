@@ -5,8 +5,6 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
     {
         $acl = $this->_getAcl();
 
-        $assetPaths = Zend_Registry::get('config')->path;
-
         $menus = array();
         foreach ($resources as $resource) {
             if ($acl->isAllowed($this->_getUserRole(), $resource, 'view')) {
@@ -81,58 +79,12 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
 
         $authData = $this->_getAuthData();
 
-
-        $config = Zend_Registry::get('config');
-        $debugAssets = array(
-            'js'  => $config->debug->assets->js,
-            'css' => $config->debug->assets->css
-        );
-        $sessionAssets = new Zend_Session_Namespace('debugAssets');
-        if (isset($sessionAssets->js)) {
-            $debugAssets['js'] = $sessionAssets->js;
-        }
-        if (isset($sessionAssets->css)) {
-            $debugAssets['css'] = $sessionAssets->css;
-        }
-        if (isset($sessionAssets->autoClearCache)) {
-            $debugAssets['autoClearCache'] = $sessionAssets->autoClearCache;
-        }
-
         $this->view->menus = $menus;
         $this->view->showLogout = $showLogout;
         $this->view->userId = $authData ? $authData->id : 0;
         $this->view->fullname = $authData ? $authData->__toString() : '';
-        $this->view->debugAssets = $debugAssets;
 
         $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
         $this->view->changeUser = $acl->isAllowed($role, 'vps_user_changeuser', 'view');
-    }
-
-    public function jsonClearAssetsCacheAction()
-    {
-        $config = Zend_Registry::get('config');
-        if ($config->debug->errormail) { //todo, besserer debug-modus
-            throw new Vps_Exception(trlVps("Debug is not enabled"));
-        }
-        foreach (new DirectoryIterator('application/cache/assets') as $file) {
-            if ($file->isFile()) {
-                unlink($file->getPathname());
-            }
-        }
-    }
-
-    public function jsonSetDebugAssetsAction()
-    {
-        $params = $this->getRequest()->getParams();
-        $sessionAssets = new Zend_Session_Namespace('debugAssets');
-        if (isset($params['js'])) {
-            $sessionAssets->js = $params['js'];
-        }
-        if (isset($params['css'])) {
-            $sessionAssets->css = $params['css'];
-        }
-        if (isset($params['autoClearCache'])) {
-            $sessionAssets->autoClearCache = $params['autoClearCache'];
-        }
     }
 }

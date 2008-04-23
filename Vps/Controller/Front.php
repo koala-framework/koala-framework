@@ -19,6 +19,8 @@ class Vps_Controller_Front extends Zend_Controller_Front
                                 'vps_controller_action_pool');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Trl',
                                 'vps_controller_action_trl');
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Debug',
+                                'vps_controller_action_debug');
 
         $router = $this->getRouter();
 
@@ -47,6 +49,11 @@ class Vps_Controller_Front extends Zend_Controller_Front
         $router->AddRoute('trl', new Zend_Controller_Router_Route(
                     '/vps/trl/:controller/:action',
                     array('module'     => 'vps_controller_action_trl',
+                          'controller' => 'index',
+                          'action'     => 'index')));
+        $router->AddRoute('trl', new Zend_Controller_Router_Route(
+                    '/vps/debug/:controller/:action',
+                    array('module'     => 'vps_controller_action_debug',
                           'controller' => 'index',
                           'action'     => 'index')));
 

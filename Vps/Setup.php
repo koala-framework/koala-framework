@@ -1,18 +1,30 @@
 <?php
 function p($src, $maxDepth = 5) {
-    ini_set('xdebug.var_display_max_depth', $maxDepth);
-    if (is_object($src) && method_exists($src, '__toString')) {
-        $src = $src->__toString();
-    } else if (is_object($src) && method_exists($src, 'toDebug')) {
+    if (is_object($src) && method_exists($src, 'toDebug')) {
         echo $src->toDebug();
-        return;
-    }
-    if (function_exists('xdebug_var_dump')) {
-        xdebug_var_dump($src);
-    } else {
+    } else if ($src instanceof Zend_Db_Select || $src instanceof Exception) {
         echo "<pre>";
-        var_dump($src);
+        //damit string nicht abgeschnitten wird von xdebug_var_dump
+        echo $src->__toString();
         echo "</pre>";
+    } else {
+        if (is_object($src) && method_exists($src, '__toString')) {
+            $src = $src->__toString();
+        }
+        if (function_exists('xdebug_var_dump')) {
+            ini_set('xdebug.var_display_max_depth', $maxDepth);
+            xdebug_var_dump($src);
+        } else {
+            echo "<pre>";
+            var_dump($src);
+            echo "</pre>";
+        }
+    }
+    if (function_exists('debug_backtrace')) {
+        $bt = debug_backtrace();
+        $i = 0;
+        if ($bt[1]['function'] == 'd') $i = 1;
+        echo $bt[$i]['file'].':'.$bt[$i]['line']."<br />\n";
     }
 }
 
@@ -226,18 +238,7 @@ class Vps_Setup
         }
         set_include_path($ip);
 
-        if (Zend_Registry::get('config')->debug->querylog) {
-            $profiler = new Vps_Db_Profiler(true);
-            Zend_Registry::get('db')->setProfiler($profiler);
-
-            if (file_exists('querylog')) unlink('querylog');
-            $writer = new Zend_Log_Writer_Stream('querylog');
-            $writer->setFormatter(new Zend_Log_Formatter_Simple("%message%\n"));
-            $logger = new Zend_Log($writer);
-            $profiler->setLogger($logger);
-        }
-
-        Zend_Db_Table_Abstract::setDefaultAdapter(Zend_Registry::get('db'));
+        Zend_Registry::set('requestNum', ''.floor(microtime(true)*100));
     }
 
     public static function createDb()
@@ -258,7 +259,13 @@ class Vps_Setup
         //www abschneiden damit www.test und www.preview usw auch funktionieren
         if (substr($host, 0, 4)== 'www.') $host = substr($host, 4);
 
-        if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $_SERVER['SCRIPT_FILENAME'], $m)) {
+        if (isset($_SERVER['PWD'])) {
+            //wenn über kommandozeile aufgerufen
+            $path = $_SERVER['PWD'];
+        } else {
+            $path = $_SERVER['SCRIPT_FILENAME'];
+        }
+        if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
             $vpsSection = $webSection = 'vivid';
 
             $webConfigFull = new Zend_Config_Ini('application/config.ini', null);

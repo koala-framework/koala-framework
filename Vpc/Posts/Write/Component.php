@@ -150,7 +150,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
 
     protected function _createFieldComponent($class, $row)
     {
-        if (!class_exists($class)) {
+        if (!Vps_Loader::classExists($class)) {
             $class = "Vpc_Formular_{$class}_Component";
         }
         $c = new $class($this->getDao(), (object)$row, $this->getDbId(), $this->getPageCollection());

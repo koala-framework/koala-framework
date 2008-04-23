@@ -8,8 +8,6 @@
 abstract class Vpc_Decorator_Abstract implements Vpc_Interface
 {
     protected $_component;
-    protected $_dao;
-    protected $_pageCollection;
 
     /**
      * Ein Decorator kann im Gegensatz zu einer Komponenten direkt im
@@ -19,26 +17,14 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
      * @param Vps_Dao DAO
      * @param Vpc_Interface Komponente, die dekoriert werden soll
      */
-    public function __construct(Vps_Dao $dao, Vpc_Interface $component)
+    public function __construct(Vpc_Interface $component)
     {
-        $this->_dao = $dao;
         $this->_component = $component;
     }
     
     public static function getSettings()
     {
         return array();
-    }
-    
-    /**
-     * Setzt für sich und für die dekorierte Komponente die pageCollection
-     * 
-     * @param Vps_PageCollection_Abstract
-     */
-    public function setPageCollection(Vps_PageCollection_Abstract $pageCollection)
-    {
-        $this->_pageCollection = $pageCollection;
-        $this->_component->setPageCollection($pageCollection);
     }
 
     /**
@@ -62,25 +48,9 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
     /**
      * Schleift die Methode auf auf dekorierte Komponente durch.
      */
-    public function getId()
+    public function getTreeCacheRow()
     {
-        return $this->_component->getId();
-    }
-    
-    /**
-     * Schleift die Methode auf auf dekorierte Komponente durch.
-     */
-    public function getPageId()
-    {
-        return $this->_component->getPageId();
-    }
-    
-    /**
-     * Schleift die Methode auf auf dekorierte Komponente durch.
-     */
-    public function getComponentInfo()
-    {
-        return $this->_component->getComponentInfo();
+        return $this->_component->getTreeCacheRow();
     }
 
     /**
@@ -88,58 +58,7 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
      */
     protected function getDao()
     {
-        return $this->_dao;
-    }
-
-    /**
-     * Schleift die Methode auf auf dekorierte Komponente durch.
-     */
-    public function getPageFactory()
-    {
-        return $this->_component->getPageFactory();
-    }
-
-    /**
-     * Schleift die Methode auf auf dekorierte Komponente durch.
-     */
-    public function getChildComponents()
-    {
-        return array($this->_component);
-    }
-    
-    public function getChildComponent()
-    {
-        return $this->_component;
-    }
-
-    /**
-     * Schleift die Methode auf auf dekorierte Komponente durch.
-     */
-    public function getComponentById($id)
-    {
-        return $this->_component->getComponentById($id);
-    }
-    
-    /**
-     * Schleift die Methode auf auf dekorierte Komponente durch, findet
-     * aber auch den Decorator selbst.
-     */
-    public function getComponentByClass($class)
-    {
-        if (get_class($this) == $class) {
-            return $this;
-        } else {
-            return $this->_component->getComponentByClass($class);
-        }
-    }
-    
-    public function getComponent()
-    {
-        if ($this->_component instanceof Vpc_Abstract) {
-            return $this->_component;
-        } else {
-            return $this->_component->getComponent();
-        }
+        return $this->_component->getDao();
     }
 
     /**
@@ -151,17 +70,9 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
         return $this->_dao->getTable($tablename);
     }
 
-    /**
-     * @return Vpc_PageCollection_Abstract/null Vorsicht! In einer Komponente nicht darauf verlassen, dass es die PageCollection gibt!
-     */
-    public function getPageCollection()
-    {
-        return $this->_pageCollection;
-    }
-
     public static function getSetting($class, $setting)
     {
-        if (!class_exists($class)) {
+        if (!Vps_Loader::classExists($class)) {
             $class = substr($class, 0, strrpos($class, '_')) . '_Component';
         }
         if (class_exists($class)) {
@@ -177,6 +88,9 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
         return self::getSetting(get_class($this), $setting);
     }
 
+    /**
+     * Schleift die Methode auf auf dekorierte Komponente durch.
+     */
     public function getUrl()
     {
         return $this->_component->getUrl();
@@ -185,4 +99,15 @@ abstract class Vpc_Decorator_Abstract implements Vpc_Interface
     {
         $this->_component->sendContent($decoratedPage);
     }
+    /**
+     * Shortcut, fragt vom Seitenbaum, ob die unsichtbaren Einträge
+     * auch angezeige werden
+     *
+     * @return boolean
+     */
+    protected function _showInvisible()
+    {
+        return $this->getTreeCacheRow()->getTable()->showInvisible();
+    }
+
 }

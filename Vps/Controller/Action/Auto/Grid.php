@@ -15,6 +15,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected $_position;
 
     protected $_primaryKey;
+    protected $_model;
     protected $_table;
     protected $_tableName;
 
@@ -64,26 +65,20 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
         }
 
-        if (!isset($this->_table) && isset($this->_tableName)) {
-            $this->_table = new $this->_tableName();
+        if (!isset($this->_model) && isset($this->_tableName)) {
+            $this->setTable(new $this->_tableName());
+        }
+        if (!isset($this->_model) && isset($this->_table)) {
+            $this->setTable($this->_table);
         }
 
         $this->_initColumns();
 
-        if (isset($this->_table)) {
-            $info = $this->_table->info();
-            if (!isset($this->_primaryKey)) {
-                $info = $this->_table->info();
-                $this->_primaryKey = $info['primary'];
-            }
+        if (isset($this->_model)) {
+            $this->_primaryKey = $this->_model->getPrimaryKey();
         }
 
-        if (is_array($this->_primaryKey)) {
-            $this->_primaryKey = $this->_primaryKey[1];
-        }
-
-        if (isset($this->_table)) {
-            $info = $this->_getTableInfo();
+        if (isset($this->_model) && ($info = $this->_getTableInfo())) {
             if ($this->_position && array_search($this->_position, $info['cols'])) {
                 $columnObject = new Vps_Auto_Grid_Column($this->_position);
                 $columnObject->setHeader(' ')
@@ -116,8 +111,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->_queryFields = array();
             foreach ($this->_columns as $column) {
                 $index = $column->getDataIndex();
-                if (isset($this->_table)) {
-                    $info = $this->_getTableInfo();
+                if ($info = $this->_getTableInfo()) {
                     if (!isset($info['metadata'][$index])) continue;
                 }
                 $this->_queryFields[] = $index;
@@ -138,6 +132,13 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->_defaultOrder['direction'] = 'ASC';
         }
     }
+
+    public function setTable($table)
+    {
+        $this->_model = new Vps_Model_Db(array(
+            'table' => $table
+        ));
+    }
 /*
 $this->_table->select() aus incubator verwenden
 http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-+Simon+Mundy
@@ -152,7 +153,11 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
 */
     protected function _getWhere()
     {
-        $db = $this->_table->getAdapter();
+        if (!($this->_model instanceof Vps_Model_Db)) {
+            //TODO: support others too...
+            return array();
+        }
+        $db = $this->_model->getTable()->getAdapter();
         $where = array();
         $query = $this->getRequest()->getParam('query');
         $sk = isset($this->_filters['text']['skipWhere']) &&
@@ -210,8 +215,8 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
 
     protected function _fetchData($order, $limit, $start)
     {
-        if (!isset($this->_table)) {
-            throw new Vps_Exception("Either _table has to be set or _fetchData has to be overwritten.");
+        if (!isset($this->_model)) {
+            throw new Vps_Exception("Either _model has to be set or _fetchData has to be overwritten.");
         }
 
         $where = $this->_getWhere();
@@ -219,48 +224,27 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         //wenn getWhere null zurückliefert nichts laden
         if (is_null($where)) return null;
 
-        return $this->_table->fetchAll($where, $order, $limit, $start);
+        return $this->_model->fetchAll($where, $order, $limit, $start);
     }
 
     private function _getTableInfo()
     {
-        if (!isset($this->_table)) return null;
-        return $this->_table->info();
+        if (!isset($this->_model) || !($this->_model instanceof Vps_Model_Db)) {
+            return null;
+        }
+        return $this->_model->getTable()->info();
     }
 
     protected function _fetchCount()
     {
-        if (!isset($this->_table)) {
-            throw new Vps_Exception("Either _Table has to be set or _fetchData has to be overwritten.");
+        if (!isset($this->_model)) {
+            throw new Vps_Exception("Either _model has to be set or _fetchData has to be overwritten.");
         }
-        $select = $this->_table->getAdapter()->select();
-        $info = $this->_getTableInfo();
-
-        $select->from($info['name'], 'COUNT(*)', $info['schema']);
 
         $where = (array) $this->_getWhere();
         if (is_null($where)) return 0;
 
-        if ($this->_table instanceof Vps_Model_User_Users) {
-            $where = $this->_table->prepareWhere($where);
-            if (!is_array($where)) $where = array($where);
-        }
-
-        foreach ($where as $key => $val) {
-            // is $key an int?
-            if (is_int($key)) {
-                // $val is the full condition
-                $select->where($val);
-            } else {
-                // $key is the condition with placeholder,
-                // and $val is quoted into the condition
-                $select->where($key, $val);
-            }
-        }
-
-        // return the results
-        $stmt = $this->_table->getAdapter()->query($select);
-        return $stmt->fetchColumn();
+        return $this->_model->fetchCount($where);
     }
 
 
@@ -413,23 +397,23 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         return true;
     }
 
-    protected function _beforeSave(Zend_Db_Table_Row_Abstract $row, $submitRow)
+    protected function _beforeSave(Vps_Model_Row_Interface $row, $submitRow)
     {
     }
 
-    protected function _afterSave(Zend_Db_Table_Row_Abstract $row, $submitRow)
+    protected function _afterSave(Vps_Model_Row_Interface $row, $submitRow)
     {
     }
 
-    protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row, $submitRow)
+    protected function _beforeInsert(Vps_Model_Row_Interface $row, $submitRow)
     {
     }
 
-    protected function _afterInsert(Zend_Db_Table_Row_Abstract $row, $submitRow)
+    protected function _afterInsert(Vps_Model_Row_Interface $row, $submitRow)
     {
     }
 
-    protected function _beforeDelete(Zend_Db_Table_Row_Abstract $row)
+    protected function _beforeDelete(Vps_Model_Row_Interface $row)
     {
     }
 
@@ -446,15 +430,16 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
 
         $data = Zend_Json::decode($this->getRequest()->getParam("data"));
         $addedIds = array();
+        Zend_Registry::get('db')->beginTransaction();
         foreach ($data as $submitRow) {
             $id = $submitRow[$this->_primaryKey];
             if ($id) {
-                $row = $this->_table->find($id)->current();
+                $row = $this->_model->find($id)->current();
             } else {
                 if (!isset($this->_permissions['add']) || !$this->_permissions['add']) {
                     throw new Vps_Exception("Add is not allowed.");
                 }
-                $row = $this->_table->createRow();
+                $row = $this->_model->createRow();
             }
             if (!$row) {
                 throw new Vps_Exception("Can't find row with id '$id'.");
@@ -464,6 +449,10 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             }
             foreach ($this->_columns as $column) {
                 if (!($column->getShowIn() & Vps_Auto_Grid_Column::SHOW_IN_GRID)) continue;
+                $invalid = $column->validate($submitRow);
+                if ($invalid) {
+                    throw new Vps_ClientException(implode("<br />", $invalid));
+                }
                 if ($id && $column->getDataIndex() == $this->_position) {
                     $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
                 } else {
@@ -488,6 +477,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
                 $addedIds[] = $row->id;
             }
         }
+        Zend_Registry::get('db')->commit();
         $success = true;
 
         if ($addedIds) {
@@ -504,8 +494,9 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         $ids = $this->getRequest()->getParam($this->_primaryKey);
         $ids = explode(';', $ids);
 
+        Zend_Registry::get('db')->beginTransaction();
         foreach ($ids as $id) {
-            $row = $this->_table->find($id)->current();
+            $row = $this->_model->find($id)->current();
             if (!$row) {
                 throw new Vps_ClientException("Can't find row with id '$id'.");
             }
@@ -516,9 +507,10 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             $row->delete();
             $this->_afterDelete();
             if ($this->_position) {
-                $this->_table->numberizeAll($this->_position, $this->_getWhere());
+                $this->_model->numberizeAll($this->_position, $this->_getWhere());
             }
         }
+        Zend_Registry::get('db')->commit();
     }
     public function jsonDuplicateAction()
     {
@@ -529,8 +521,9 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         $ids = explode(';', $ids);
 
         $this->view->data = array('duplicatedIds' => array());
+        Zend_Registry::get('db')->beginTransaction();
         foreach ($ids as $id) {
-            $row = $this->_table->find($id)->current();
+            $row = $this->_model->find($id)->current();
             if (!$row) {
                 throw new Vps_Exception("Can't find row with id '$id'.");
             }
@@ -540,9 +533,10 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             $new = $row->duplicate();
             $this->view->data['duplicatedIds'][] = $new->{$this->_primaryKey};
             if ($this->_position) {
-                $this->_table->numberizeAll($this->_position, $this->_getWhere());
+                $this->_model->numberizeAll($this->_position, $this->_getWhere());
             }
         }
+        Zend_Registry::get('db')->commit();
     }
 
     public function pdfAction()

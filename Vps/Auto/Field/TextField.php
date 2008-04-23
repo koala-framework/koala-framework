@@ -21,4 +21,18 @@ class Vps_Auto_Field_TextField extends Vps_Auto_Field_SimpleAbstract
             $this->addValidator(new Zend_Validate_Alnum());
         }
     }
+
+    public function getTemplateVars($values)
+    {
+        $name = $this->getFieldName();
+        if (isset($values[$name])) {
+            $value = $values[$name];
+        } else {
+            $value = '';
+        }
+        $ret = parent::getTemplateVars($values);
+        //todo: escapen
+        $ret['html'] = "<input type=\"text\" id=\"$name\" name=\"$name\" value=\"$value\" />";
+        return $ret;
+    }
 }

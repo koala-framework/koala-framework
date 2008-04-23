@@ -345,7 +345,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         Ext.Ajax.request({
             params: {component_id: this.component_id},
-            url: this.controllerUrl+'/jsonAddImage',
+            url: this.controllerUrl+'/json-add-image',
             success: function(response, options, r) {
                 this.linkDialog.un('datachange', this._insertImage, this);
                 this.linkDialog.un('datachange', this._modifyImage, this);
@@ -389,7 +389,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         Ext.Ajax.request({
             params: {component_id: this.component_id},
-            url: this.controllerUrl+'/jsonAddLink',
+            url: this.controllerUrl+'/json-add-link',
             success: function(response, options, r) {
                 this.linkDialog.un('datachange', this._insertLink, this);
                 this.linkDialog.showEdit({
@@ -424,7 +424,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
         Ext.Ajax.request({
             params: {component_id: this.component_id},
-            url: this.controllerUrl+'/jsonAddDownload',
+            url: this.controllerUrl+'/json-add-download',
             success: function(response, options, r) {
                 this.downloadDialog.un('datachange', this._insertDownloadLink, this);
                 this.downloadDialog.showEdit({
@@ -489,7 +489,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
 
         Ext.getBody().mask(trlVps('Cleaning...'));
         Ext.Ajax.request({
-            url: this.controllerUrl+'/jsonTidyHtml',
+            url: this.controllerUrl+'/json-tidy-html',
             params: {
                 component_id: this.component_id,
                 html: this.getValue()

@@ -18,7 +18,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
     protected function _getFields()
     {
         if (!isset($this->_fields)) {
-            $this->_fields = new Vps_Collection();
+            $this->_fields = new Vps_Collection_FormFields();
             $title = $this->getFileFieldLabel();
             if (!$title) $title = 'Upload new File';
             $this->_fields->add(new Vps_Auto_Field_TextField($this->getFieldName()))
@@ -45,7 +45,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
 
     public function load($row)
     {
-        $url = $row->getFileUrl($this->getRuleKey(), 'original');
+        $url = $row->getRow()->getFileUrl($this->getRuleKey(), 'original');
         $return = array(
             'url' => $url,
             'uploaded' => !is_null($url)
@@ -53,7 +53,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
         return array($this->getFieldName() . '_delete' => $return);
     }
 
-    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
+    public function prepareSave(Vps_Model_Db_Row $row, $postData)
     {
         parent::prepareSave($row, $postData);
         $fieldName = $this->getFieldName();
@@ -95,7 +95,7 @@ class Vps_Auto_Field_File extends Vps_Auto_Field_Abstract
             $row->$name = null;
         }
     }
-    public function save(Zend_Db_Table_Row_Abstract $row, $postData)
+    public function save(Vps_Model_Db_Row $row, $postData)
     {
         parent::save($row, $postData);
         $uploadRow = $row->findParentRow('Vps_Dao_File', $this->getRuleKey());

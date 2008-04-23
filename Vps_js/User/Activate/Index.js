@@ -56,7 +56,7 @@ Vps.User.Activate.Index = Ext.extend(Ext.Panel,
             });
         } else {
             Ext.Ajax.request({
-                url: '/vps/user/login/jsonActivate',
+                url: '/vps/user/login/json-activate',
                 params: { userId: this.userId, code: this.code, password: password },
                 success: function(response, options, result) {
                     location.href = '/vps/welcome';

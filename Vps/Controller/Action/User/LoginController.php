@@ -153,7 +153,6 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
             throw new Vps_Controller_Exception(trlVps('_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service'));
         }
 
-
         $auth = Vps_Auth::getInstance();
         $adapter->setIdentity($username);
         $adapter->setCredential($password);

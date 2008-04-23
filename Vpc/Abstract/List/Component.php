@@ -1,8 +1,6 @@
 <?php
 abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
 {
-    protected $_children;
-
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
@@ -20,9 +18,22 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
+        $tc = $this->getTreeCacheRow()->getTable();
+
+        $class = $this->_getClassFromSetting('child', 'Vpc_Abstract');
+        $where = array('parent_component_id = ?'=>$this->getDbID());
+        $where['component_class = ?'] = $class;
+        if (!$this->_showInvisible()) {
+            $where['visible = ?'] = 1;
+        }
+        //todo: mit join optimieren - wenn wir Zend 1.5 haben
+        $where[] = '(SELECT COUNT(*) FROM vpc_composite_list
+            WHERE CONCAT(vpc_composite_list.component_id, \'-\', vpc_composite_list.id)
+                    LIKE vps_tree_cache.component_id)';
+
         $return['children'] = array();
-        foreach ($this->getChildComponents() as $c) {
-            $return['children'][] = $c->getTemplateVars();
+        foreach ($tc->fetchAll($where, 'pos') as $row) {
+            $ret['children'][] = $row->getComponent()->getTemplateVars();
         }
         return $return;
     }
@@ -73,5 +84,4 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
 
         return $this->_children;
     }
-
 }

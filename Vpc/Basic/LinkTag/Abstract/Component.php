@@ -7,10 +7,12 @@ abstract class Vpc_Basic_LinkTag_Abstract_Component extends Vpc_Abstract
             'componentIcon' => new Vps_Asset('page_link')
         ));
     }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['rel'] = '';
+        $ret['href'] = $this->getTreeCacheRow()->url;
+        $ret['rel'] = $this->getTreeCacheRow()->rel;
         return $ret;
     }
 }

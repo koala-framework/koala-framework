@@ -41,7 +41,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             }
             $this->_form->fields[] = $fieldObject;
         }
-        if (!$this->_form->getTable()) {
+        if (!$this->_form->getModel()) {
             if (isset($this->_table)) {
                 $this->_form->setTable($this->_table);
             } else if (isset($this->_tableName)) {
@@ -90,7 +90,14 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
     public function jsonSaveAction()
     {
+        Zend_Registry::get('db')->beginTransaction();
+
         $row = $this->_form->getRow();
+
+        $invalid = $this->_form->validate($this->getRequest()->getParams());
+        if ($invalid) {
+            throw new Vps_ClientException(implode("<br />", $invalid));
+        }
 
         $data = $this->_form->prepareSave(null, $this->getRequest()->getParams());
 
@@ -129,6 +136,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             }
             $this->_afterSave($row);
         }
+        Zend_Registry::get('db')->commit();
 
         $this->view->data = $data;
     }
@@ -142,22 +150,24 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         if (!$this->_hasPermissions($row, 'delete')) {
             throw new Vps_Exception("Delete is not allowed for this row.");
         }
+        Zend_Registry::get('db')->beginTransaction();
         $this->_form->delete(null);
+        Zend_Registry::get('db')->commit();
     }
 
-    protected function _beforeSave($row)
+    protected function _beforeSave(Vps_Model_Row_Interface $row)
     {
     }
 
-    protected function _afterSave($row)
+    protected function _afterSave(Vps_Model_Row_Interface $row)
     {
     }
 
-    protected function _beforeInsert($row)
+    protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
     }
 
-    protected function _afterInsert($row)
+    protected function _afterInsert(Vps_Model_Row_Interface $row)
     {
     }
 

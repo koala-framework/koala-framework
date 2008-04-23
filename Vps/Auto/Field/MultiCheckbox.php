@@ -59,7 +59,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
         return $name;
     }
 
-    public function load(Zend_Db_Table_Row_Abstract $row)
+    public function load(Vps_Model_Row_Interface $row)
     {
         if ((array)$row == array()) return array();
 
@@ -79,7 +79,7 @@ class Vps_Auto_Field_MultiCheckbox extends Vps_Auto_Field_Abstract
 
         return $ret;
     }
-    public function save(Zend_Db_Table_Row_Abstract $row, $postData)
+    public function save(Vps_Model_Row_Interface $row, $postData)
     {
         $new = array();
         if ($postData[$this->getFieldName()]) {

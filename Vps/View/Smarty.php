@@ -34,6 +34,27 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $this->_smarty->register_function("trlpVps", "trlpVps");
 
         $this->config = Zend_Registry::get('config');
+
+        $this->debug = array(
+            'js'  => !!$this->config->debug->assets->js,
+            'css' => !!$this->config->debug->assets->css,
+            'autoClearCache' => false,
+            'menu' => !!$this->config->debug->menu,
+            'querylog' => !!$this->config->debug->querylog,
+            'displayErrors' => !$this->config->debug->errormail,
+            'requestNum' => Zend_Registry::get('requestNum'),
+            'template' => VPS_PATH.'/views/DebugVars.html'
+        );
+        $sessionAssets = new Zend_Session_Namespace('debugAssets');
+        if (isset($sessionAssets->js)) {
+            $this->debug['js'] = $sessionAssets->js;
+        }
+        if (isset($sessionAssets->css)) {
+            $this->debug['css'] = $sessionAssets->css;
+        }
+        if (isset($sessionAssets->autoClearCache)) {
+            $this->debug['autoClearCache'] = $sessionAssets->autoClearCache;
+        }
     }
 
     public function vpc($config)
@@ -73,7 +94,6 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $ext['class'] = $class;
         $ext['config'] = Zend_Json::encode($config);
         $ext['viewport'] = $viewport;
-        $ext['debug'] = Zend_Json::encode(!Zend_Registry::get('config')->debug->errormail);
         $ext['userRole'] = Zend_Registry::get('userModel')->getAuthedUserRole();
         $this->ext = $ext;
         $this->_renderFile = VPS_PATH.'/views/Master.html';

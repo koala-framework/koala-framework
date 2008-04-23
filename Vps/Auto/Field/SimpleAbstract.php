@@ -13,29 +13,39 @@ abstract class Vps_Auto_Field_SimpleAbstract extends Vps_Auto_Field_Abstract
         parent::_addValidators();
     }
 
-    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
+    public function validate($postData)
     {
-        parent::prepareSave($row, $postData);
+        $ret = parent::validate($postData);
 
         if ($this->getSave() !== false) {
-            $name = $this->getFieldLabel();
-            if (!$name) $name = $this->getName();
 
             $data = $this->_getValueFromPostData($postData);
 
+            $name = $this->getFieldLabel();
+            if (!$name) $name = $this->getName();
             if ($this->getAllowBlank() === false) {
                 $v = new Vps_Validate_NotEmpty();
                 if (!$v->isValid($data)) {
-                    throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages()));
+                    $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
                 }
             }
             if (!is_null($data)) {
                 foreach ($this->getValidators() as $v) {
                     if (!$v->isValid($data)) {
-                        throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages()));
+                        $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
                     }
                 }
             }
+        }
+        return $ret;
+    }
+
+    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    {
+        parent::prepareSave($row, $postData);
+
+        if ($this->getSave() !== false) {
+            $data = $this->_getValueFromPostData($postData);
             $this->getData()->save($row, $data);
         }
     }

@@ -106,7 +106,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             var remoteSort = false;
             if (meta.paging) remoteSort = true;
             var storeConfig = {
-                proxy: new Ext.data.HttpProxy({ url: this.controllerUrl + '/jsonData' }),
+                proxy: new Ext.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
                 reader: new Ext.data.JsonReader({
                     totalProperty: meta.totalProperty,
                     root: meta.root,
@@ -665,7 +665,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         };
 
         Ext.Ajax.request({
-            url: this.controllerUrl+'/jsonSave',
+            url: this.controllerUrl+'/json-save',
             params: params,
             success: function(response, options, r) {
                 //geänderte und neue zurücksetzen, damit isDirty false ist
@@ -784,7 +784,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
                     this.el.mask('Deleting...');
                     Ext.Ajax.request({
-                        url: this.controllerUrl+'/jsonDelete',
+                        url: this.controllerUrl+'/json-delete',
                         params: params,
                         success: function(response, options, r) {
                             this.reload();
@@ -828,7 +828,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
         this.el.mask('Duplicating...');
         Ext.Ajax.request({
-            url: this.controllerUrl+'/jsonDuplicate',
+            url: this.controllerUrl+'/json-duplicate',
             params: params,
             success: function(response, options, r) {
                 this.reload({
@@ -917,7 +917,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             Ext.applyIf(params, Ext.apply({ meta: true }, this.baseParams));
             Ext.Ajax.request({
                 mask: true,
-                url: this.controllerUrl+'/jsonData',
+                url: this.controllerUrl+'/json-data',
                 params: params,
                 success: function(response, options, r) {
                     this.onMetaLoad(r);

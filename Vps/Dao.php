@@ -37,6 +37,10 @@ class Vps_Dao
             $this->_db[$db] = Zend_Db::factory('PDO_MYSQL', $dbConfig);
             $this->_db[$db]->query('SET names UTF8');
 
+            if (Zend_Registry::get('config')->debug->querylog) {
+                $profiler = new Vps_Db_Profiler(true);
+                $this->_db[$db]->setProfiler($profiler);
+            }
         }
         return $this->_db[$db];
     }

@@ -6,43 +6,6 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     const FILE_PASSWORD_DOWNLOAD = 'j3yjEdv1';
 
     /**
-     * Gibt einen von Sonderzeichen befreiten und eindeutigen String zurück.
-     *
-     * Ersetzt alle Zeichen außer a-z0-9_ möglichst sinngemäß, auch im kyrillischen
-     * Zeichensatz (falls die transliterate-Erweiterung installiert ist). Optional
-     * kann der String auf Eindeutigkeit in einer Tabelle geändert werden. Falls der
-     * gleiche String schon existiert, wird _1, _2 ... angehängt.
-     *
-     * @param string String, der Unique sein sollte
-     * @param string Spaltenname, dessen Werte unique sein sollten
-     * @param string Where-Klausel für Unique-Abfrage (zB. 'parent_id=1')
-     * @return string Unique String
-     */
-    public function getUniqueString($string, $fieldname = '', array $where = array())
-    {
-        // Sonderzeichen rausnehmen
-        $string = Vps_Filter::get($string, 'Url');
-
-        // Unique machen
-        if ($fieldname != '') {
-            $primaryKey = key($this->_getPrimaryKey());
-            $primaryValue = current($this->_getPrimaryKey());
-            $where["$primaryKey != ?"] = $primaryValue;
-
-            $x = 0;
-            $unique = $string;
-            $where["$fieldname = ?"] = $unique;
-            while ($this->getTable()->fetchAll($where)->count() > 0) {
-                $unique = $string . '_' . ++$x;
-                $where["$fieldname = ?"] = $unique;
-            }
-            $string = $unique;
-        }
-
-        return $string;
-    }
-
-    /**
      * Speichert die Nummerierung für einen Datensatz und passt die restlichen
      * Datensätze an.
      *
@@ -66,12 +29,15 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         foreach ($this->getTable()->fetchAll($where, $fieldname) as $row) {
             $x++;
             if ($x == $value) $x++;
-            $row->$fieldname = $x;
-            $row->save();
+            if ($row->$fieldname != $x) {
+                $row->$fieldname = $x;
+                $row->save();
+            }
         }
-
-        $this->$fieldname = $value;
-        $this->save();
+        if ($this->$fieldname != $value) {
+            $this->$fieldname = $value;
+            $this->save();
+        }
 
         $this->getTable()->numberizeAll($fieldname, $originalWhere);
     }
@@ -126,7 +92,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         $id = $this->_getIdString();
         $target = "$uploadDir/cache/$uploadId/$class.$id.$rule.$type";
 
-        if (!is_file($target)) {
+        if (!is_file($target) && !is_link($target)) {
             // Verzeichnisse anlegen, falls nicht existent
             $uploadDir = Vps_Dao_Row_File::getUploadDir();
             if (!is_dir($uploadDir . '/cache')) {
@@ -140,6 +106,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
             // Cache-Datei erstellen
             $source = $fileRow->getFileSource();
+            if (file_exists($target)) unlink($target);
             $this->_createCacheFile($source, $target, $type);
         }
 
@@ -217,6 +184,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         } else if ($type == 'thumb') {
             Vps_Media_Image::scale($source, $target, array(100, 100));
         } else {
+            if (is_file($target)) @unlink($target);
             symlink($source, $target);
         }
     }
@@ -249,6 +217,91 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         $ret = print_r($this->_data, true);
         $ret = preg_replace('#^Array#', $i, $ret);
         $ret = "<pre>$ret</pre>";
+        return $ret;
+    }
+
+    //f�r Filter_Row_UniqueAscii
+    public function getPrimaryKey()
+    {
+        return $this->_getPrimaryKey();
+    }
+
+    protected function _insert()
+    {
+        parent::_insert();
+        $this->_updateFilters();
+    }
+
+    protected function _update()
+    {
+        parent::_update();
+        $this->_updateFilters();
+    }
+
+    protected function _updateFilters()
+    {
+        $filters = $this->getTable()->getFilters();
+        if (is_string($filters)) $filters = array($filters);
+        foreach($filters as $k=>$f) {
+            if (is_int($k)) {
+                $k = $f;
+                $f = 'Vps_Filter_Ascii';
+            }
+            if (is_string($f)) {
+                $f = new $f();
+            }
+            if ($f instanceof Vps_Filter_Row_Abstract) {
+                $f->setField($k);
+                $this->$k = $f->filter($this);
+            } else {
+                $this->$k = $f->filter($this->__toString());
+            }
+        }
+    }
+
+
+    protected function _postInsert()
+    {
+        parent::_postInsert();
+        if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
+            foreach ($this->_getComponentClasses() as $c) {
+                $tc = Vpc_TreeCache_Abstract::getInstance($c);
+                if ($tc) $tc->onInsertRow($this);
+            }
+            Vpc_TreeCache_Abstract::getTreeCacheTable()->createMissingChilds();
+        }
+    }
+
+    protected function _postDelete()
+    {
+        parent::_postDelete();
+        if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
+            foreach ($this->_getComponentClasses() as $c) {
+                $tc = Vpc_TreeCache_Abstract::getInstance($c);
+                if ($tc) $tc->onDeleteRow($this);
+            }
+        }
+    }
+
+    protected function _postUpdate()
+    {
+        parent::_postUpdate();
+        if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
+            foreach ($this->_getComponentClasses() as $c) {
+                $tc = Vpc_TreeCache_Abstract::getInstance($c);
+                if ($tc) $tc->onUpdateRow($this);
+            }
+        }
+    }
+    private function _getComponentClasses()
+    {
+        $select = Zend_Registry::get('db')->select()
+                ->from('vps_tree_cache', 'component_class')
+                ->group('component_class');
+        $ret = array('Vpc_Root_TreeCache');
+        foreach ($select->query()->fetchAll() as $row) {
+            $ret[] = $row['component_class'];
+        }
         return $ret;
     }
 }

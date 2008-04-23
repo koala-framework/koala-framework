@@ -24,7 +24,7 @@ class Vps_Controller_Action_Pool_PoolController extends Vps_Controller_Action_Au
         $this->_columns->add(new Vps_Auto_Grid_Column_Visible());
     }
 
-    protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row, $submitRow)
+    protected function _beforeInsert(Vps_Model_Row_Interface $row, $submitRow)
     {
         parent::_beforeInsert($row, $submitRow);
         $row->pool = $this->_getPool();

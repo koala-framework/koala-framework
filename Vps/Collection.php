@@ -147,14 +147,4 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
         }
         return $value;
     }
-
-    public function getMetaData()
-    {
-        $ret = array();
-        foreach ($this as $field) {
-            $data = $field->getMetaData();
-            if (!is_null($data)) $ret[] = $data;
-        }
-        return $ret;
-    }
 }

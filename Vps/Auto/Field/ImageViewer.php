@@ -19,8 +19,8 @@ class Vps_Auto_Field_ImageViewer extends Vps_Auto_Field_Abstract
     public function load($row)
     {
         $data = array();
-        $data['imageUrl'] = $row->getFileUrl($this->_ruleKey);
-        $data['previewUrl'] = $row->getFileUrl($this->_ruleKey, 'thumb');
+        $data['imageUrl'] = $row->getRow()->getFileUrl($this->_ruleKey);
+        $data['previewUrl'] = $row->getRow()->getFileUrl($this->_ruleKey, 'thumb');
         return array($this->getFieldName() => $data);
     }
 }

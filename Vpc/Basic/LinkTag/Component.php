@@ -25,30 +25,9 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
         $ret['assetsAdmin']['dep'][] = 'VpsFormCards';
         return $ret;
     }
-
-    public function getChildComponent()
-    {
-        if (!$this->_link) {
-            $class = $this->_getRow()->link_class;
-            if (class_exists($class) &&
-                is_subclass_of($class, 'Vpc_Basic_LinkTag_Abstract_Component')
-            ) {
-                $this->_link = $this->createComponent($class, 1);
-            } else {
-                throw new Vpc_Exception('Link class does not exist or does not have
-                Vpc_Basic_LinkTag_Abstract_Component as parent class: ' . $class);
-            }
-        }
-        return $this->_link;
-    }
-
-    public function getChildComponents()
-    {
-        return array($this->getChildComponent());
-    }
-
     public function getTemplateVars()
     {
-        return $this->getChildComponent()->getTemplateVars();
+        return $this->getTreeCacheRow()->findChildComponents()->current()
+                ->getComponent()->getTemplateVars();
     }
 }

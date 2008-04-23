@@ -63,7 +63,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         if (!this.controllerUrl) {
             throw new Error(trlVps('No controllerUrl specified for AutoForm.'));
         }
-        this.formConfig.url = this.controllerUrl + '/jsonSave';
+        this.formConfig.url = this.controllerUrl + '/json-save';
     },
 
     doAutoLoad : function()
@@ -157,7 +157,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         Ext.Ajax.request({
             mask: !this.el, //globale mask wenn kein el vorhanden
             loadOptions: options,
-            url: this.controllerUrl+'/jsonLoad',
+            url: this.controllerUrl+'/json-load',
             params: params,
             success: function(response, options, result) {
                 if (result.meta) {
@@ -241,7 +241,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
         this.getForm().waitMsgTarget = this.el;
         this.getForm().submit(Ext.apply(options, {
-            url: this.controllerUrl+'/jsonSave',
+            url: this.controllerUrl+'/json-save',
             waitMsg: 'saving...',
             success: function() {
                 this.onSubmitSuccess.apply(this, arguments);
@@ -300,7 +300,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             if (button == 'yes') {
 
                 Ext.Ajax.request({
-                        url: this.controllerUrl+'/jsonDelete',
+                        url: this.controllerUrl+'/json-delete',
                         params: {id: this.getForm().baseParams.id},
                         success: function(response, options, r) {
                             this.fireEvent('datachange', r);

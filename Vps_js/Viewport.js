@@ -4,7 +4,7 @@ Vps.Viewport = Ext.extend(Ext.Viewport, {
         Vps.menu = new Vps.Menu.Index({
                     region: 'north',
                     height: 30
-                })
+                });
         this.items.push(Vps.menu);
         this.layout = 'border';
         Vps.Viewport.superclass.initComponent.call(this);

@@ -27,7 +27,9 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
         $return = parent::getTemplateVars();
 
         // Small Image
-        $vars = $this->getChildComponent()->getTemplateVars();
+        $id = $this->getTreeCacheRow()->component_id.'-1';
+        $row = $this->getTreeCacheRow()->getTable()->find($id)->current();
+        $vars = $row->getComponent()->getTemplateVars();
 
         if (!$vars['url'] || !$this->_getRow()->enlarge) {
             $size = $this->_getRow()->getImageDimensions(null, 'small');
@@ -40,19 +42,5 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
         $return['thumbMaxHeight'] = $vars['height'];
 
         return $return;
-    }
-
-    protected function getChildComponent()
-    {
-        if (!$this->_smallImage) {
-            $class = $this->_getClassFromSetting('smallImage', 'Vpc_Basic_Image_Component');
-            $this->_smallImage = $this->createComponent($class, 1);
-        }
-        return $this->_smallImage;
-    }
-
-    public function getChildComponents()
-    {
-        return array($this->getChildComponent());
     }
 }

@@ -41,7 +41,7 @@ Vpc.Abstract.List.Panel = Ext.extend(Vps.Binding.ProxyPanel,
     {
         Ext.Ajax.request({
             mask: true,
-            url: this.controllerUrl + '/jsonInsert',
+            url: this.controllerUrl + '/json-insert',
             params: this.getBaseParams(),
             success: function(response, options, r) {
                 this.getSelectionModel().clearSelections();

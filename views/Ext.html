@@ -46,9 +46,9 @@
     <script type="text/javascript" src="{$file}"></script>
     {/foreach}
 
+    {include file=$debug.template}
 
     <script type="text/javascript">
-        Vps.debug = {$ext.debug};
         Vps.userRole = '{$ext.userRole}';
         Vps.main = function() {ldelim}
             var panel = new {$ext.class}({$ext.config});
