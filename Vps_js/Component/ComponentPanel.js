@@ -6,6 +6,11 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     mainComponentIcon: '/assets/vps/images/paragraph_page.gif',
 
     initComponent: function() {
+        if (this.autoLoad !== false) {
+            this.autoLoad = true;
+        } else {
+            delete this.autoLoad;
+        }
         this.contentPanel = new Ext.Panel();
         Ext.apply(this, {
             tbar        : [],
@@ -15,6 +20,14 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         this.componentsStack = [];
 
         Vps.Component.ComponentPanel.superclass.initComponent.call(this);
+    },
+    doAutoLoad : function()
+    {
+        //autoLoad kann in der zwischenzeit abgeschaltet werden, zB wenn
+        //wir in einem Binding sind
+        if (!this.autoLoad) return;
+
+        this.load();
     },
 
     loadComponent: function(data) {

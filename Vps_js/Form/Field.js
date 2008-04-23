@@ -13,5 +13,36 @@ Ext.form.Field.override({
     clearValue: function() {
         this.setValue('');
         this.resetDirty();
+    },
+
+    // Für Hilfetexte afterRender in Formularfields überschreiben
+    afterRender: function() {
+        Ext.form.Field.superclass.afterRender.call(this);
+        if (this.helpText){
+            var wrapDiv = this.getEl().up('div.x-form-item');
+            if (wrapDiv) {
+                var label = wrapDiv.child('label');
+                if (label) {
+                    if (this.width) {
+                        var style = 'position:absolute; margin-left:' + (this.width + 10) + 'px'
+                    } else {
+                        var style = 'margin-bottom: 0px; margin-left: 5px; padding: 0px;';
+                    }
+                    var helpImage = label.createChild({
+                        tag: 'img', 
+                        src: '/assets/silkicons/information.png',
+                        style: style,
+                        width: 16,
+                        height: 16
+                    });
+                    Ext.QuickTips.register({
+                        target:  helpImage,
+                        title: '',
+                        text: this.helpText,
+                        enabled: true
+                    });
+                }
+            }
+        }
     }
 });

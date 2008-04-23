@@ -195,7 +195,9 @@ class Vps_Assets_Loader
         $matches = array();
         preg_match_all("#hlp\('(.*)'\)#", $contents, $matches);
         foreach ($matches[0] as $key => $search) {
-            $contents = str_replace($search, "'" . hlp($matches[1][$key]) . "'", $contents);
+            $r = hlp($matches[1][$key]);
+            $r = str_replace(array("\n", "\r", "'"), array('\n', '', "\\'"), $r);
+            $contents = str_replace($search, "'" . $r . "'", $contents);
         }
         return $contents;
     }
