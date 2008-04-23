@@ -340,6 +340,7 @@ class Vps_Setup
             $rule = $params['rule'];
             if ($rule == 'default') { $rule = null; }
 
+            // TODO: Cachen ohne Datenbankabfragen
             if (substr($class, 0, 4) == 'Vpc_') {
                 $tableClass = Vpc_Abstract::getSetting($class, 'tablename');
                 $table = new $tableClass(array('componentClass' => $class));
