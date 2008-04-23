@@ -22,7 +22,7 @@ class Vps_Controller_Action_Pool_PoolviewController extends Vps_Controller_Actio
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Auto_Grid_Column('pos'));
-        $this->_columns->add(new Vps_Auto_Grid_Column('value', 'Wert', 300));
+        $this->_columns->add(new Vps_Grid_Column('pos'));
+        $this->_columns->add(new Vps_Grid_Column('value', 'Wert', 300));
     }
 }

@@ -25,10 +25,10 @@ class Vps_Controller_Action_User_ChangeuserController extends Vps_Controller_Act
         parent::_initColumns();
         Zend_Registry::get('userModel')->createAllCache();
         $this->_table = Zend_Registry::get('userModel');
-        $this->_columns->add(new Vps_Auto_Grid_Column('name'));
-        $this->_columns->add(new Vps_Auto_Grid_Column('role'))
+        $this->_columns->add(new Vps_Grid_Column('name'));
+        $this->_columns->add(new Vps_Grid_Column('role'))
              ->setData(new Vps_Controller_Action_User_Users_RoleData());
-        $this->_columns->add(new Vps_Auto_Grid_Column('email'));
+        $this->_columns->add(new Vps_Grid_Column('email'));
     }
 
     public function jsonChangeUserAction()

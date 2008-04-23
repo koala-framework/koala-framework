@@ -14,8 +14,8 @@ class Vpc_Posts_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     public function _initColumns()
     {
-        $this->_columns->add(new Vps_Auto_Grid_Column('create_time', trlVps('Created'), 150));
-        $this->_columns->add(new Vps_Auto_Grid_Column('content', trlVps('Content'), 350));
-        $this->_columns->add(new Vps_Auto_Grid_Column_Visible());
+        $this->_columns->add(new Vps_Grid_Column('create_time', trlVps('Created'), 150));
+        $this->_columns->add(new Vps_Grid_Column('content', trlVps('Content'), 350));
+        $this->_columns->add(new Vps_Grid_Column_Visible());
     }
 }

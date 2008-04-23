@@ -13,7 +13,7 @@ class Vpc_Posts_FormController extends Vps_Controller_Action_Auto_Form
 
     public function _initFields()
     {
-        $this->_form->add(new Vps_Auto_Field_TextArea('content', trlVps('Content')))
+        $this->_form->add(new Vps_Form_Field_TextArea('content', trlVps('Content')))
             ->setWidth(300)
             ->setHeight(150);
     }

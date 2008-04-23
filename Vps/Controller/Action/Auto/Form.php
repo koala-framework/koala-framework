@@ -27,12 +27,12 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         parent::preDispatch();
 
         if (!isset($this->_form)) {
-            $this->_form = new Vps_Auto_Form();
+            $this->_form = new Vps_Form();
         }
 
         foreach ($this->_fields as $k=>$field) {
             if (!isset($field['type'])) throw new Vps_Exception("no type for field no $k specified");
-            $cls = 'Vps_Auto_Field_'.$field['type'];
+            $cls = 'Vps_Form_Field_'.$field['type'];
             if (!class_exists($cls)) throw new Vps_Exception("Invalid type: Form-Field-Class $cls does not exist.");
             $fieldObject = new $cls();
             unset($field['type']);

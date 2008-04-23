@@ -1,5 +1,5 @@
 <?php
-class Vpc_Forum_Column_Moderator extends Vps_Auto_Grid_Column
+class Vpc_Forum_Column_Moderator extends Vps_Grid_Column
 {
     public function load($row, $role)
     {

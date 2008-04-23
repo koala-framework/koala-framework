@@ -1,5 +1,5 @@
 <?php
-class Vps_Form extends Vps_Auto_NonTableForm
+class Vps_Form extends Vps_Form_NonTableForm
 {
     protected $_tableName;
     protected $_modelName;

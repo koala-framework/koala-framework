@@ -6,12 +6,12 @@ class Vps_Controller_Action_Component_OverviewController extends Vps_Controller_
     protected function _initColumns()
     {
         parent::_initColumns();
-        $this->_columns->add(new Vps_Auto_Grid_Column('class', 'Class', 100));
-        $this->_columns->add(new Vps_Auto_Grid_Column('name', 'Name', 100));
-        $this->_columns->add(new Vps_Auto_Grid_Column('parentClass', 'Parent Class', 100));
-        $this->_columns->add(new Vps_Auto_Grid_Column('hasTemplate', 'web tpl', 50))
+        $this->_columns->add(new Vps_Grid_Column('class', 'Class', 100));
+        $this->_columns->add(new Vps_Grid_Column('name', 'Name', 100));
+        $this->_columns->add(new Vps_Grid_Column('parentClass', 'Parent Class', 100));
+        $this->_columns->add(new Vps_Grid_Column('hasTemplate', 'web tpl', 50))
                                 ->setRenderer('boolean');
-        $this->_columns->add(new Vps_Auto_Grid_Column('hasCss', 'web css', 50))
+        $this->_columns->add(new Vps_Grid_Column('hasCss', 'web css', 50))
                                 ->setRenderer('boolean');
     }
 

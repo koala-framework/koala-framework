@@ -55,7 +55,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $this->_columns = new Vps_Collection();
         foreach ($addColumns as $k=>$column) {
             if (is_array($column)) {
-                $columnObject = new Vps_Auto_Grid_Column();
+                $columnObject = new Vps_Grid_Column();
                 foreach ($column as $propName => $propValue) {
                     $columnObject->setProperty($propName, $propValue);
                 }
@@ -80,7 +80,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         if (isset($this->_model) && ($info = $this->_getTableInfo())) {
             if ($this->_position && array_search($this->_position, $info['cols'])) {
-                $columnObject = new Vps_Auto_Grid_Column($this->_position);
+                $columnObject = new Vps_Grid_Column($this->_position);
                 $columnObject->setHeader(' ')
                              ->setWidth(30)
                              ->setType('int')
@@ -100,7 +100,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
             if (!$primaryFound) {
                 //primary key hinzufügen falls er noch nicht in gridColumns existiert
-                $columnObject = new Vps_Auto_Grid_Column($this->_primaryKey);
+                $columnObject = new Vps_Grid_Column($this->_primaryKey);
                 $columnObject->setType($this->_getTypeFromDbType($info['metadata'][$this->_primaryKey]['DATA_TYPE']));
                 $this->_columns[] = $columnObject;
             }
@@ -289,8 +289,8 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
                     throw new Vps_Exception("You don't have the permissions to load this row");
                 }
                 foreach ($this->_columns as $column) {
-                    if ($column->getShowIn() & Vps_Auto_Grid_Column::SHOW_IN_GRID) {
-                        $data = $column->load($row, Vps_Auto_Grid_Column::ROLE_DISPLAY);
+                    if ($column->getShowIn() & Vps_Grid_Column::SHOW_IN_GRID) {
+                        $data = $column->load($row, Vps_Grid_Column::ROLE_DISPLAY);
                         $r[$column->getDataIndex()] = $data;
                     }
                 }
@@ -357,7 +357,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         $this->view->metaData['columns'] = array();
         $this->view->metaData['fields'] = array();
         foreach ($this->_columns as $column) {
-            if (!($column->getShowIn() & Vps_Auto_Grid_Column::SHOW_IN_GRID)) continue;
+            if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_GRID)) continue;
             $data = $column->getMetaData($this->_getTableInfo());
             if ($data) {
                 $this->view->metaData['columns'][] = $data;
@@ -448,7 +448,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
                 throw new Vps_Exception("You don't have the permissions to save this row.");
             }
             foreach ($this->_columns as $column) {
-                if (!($column->getShowIn() & Vps_Auto_Grid_Column::SHOW_IN_GRID)) continue;
+                if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_GRID)) continue;
                 $invalid = $column->validate($submitRow);
                 if ($invalid) {
                     throw new Vps_ClientException(implode("<br />", $invalid));
@@ -556,7 +556,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         if (!isset($this->_pdf['fields'])) {
             $this->_pdf['fields'] = array();
             foreach ($this->_columns as $column) {
-                if (!($column->getShowIn() & Vps_Auto_Grid_Column::SHOW_IN_PDF)) continue;
+                if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_PDF)) continue;
                 if ($column->getHeader()) {
                     $this->_pdf['fields'][] = $column->getName();
                 }
@@ -594,7 +594,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         // Generate two times for correct page braking
         $breakBeforeRow = array();
         for ($i = 1; $i <= 2; $i++) {
-            $pdf = new Vps_Auto_Grid_Pdf_Table($this->_pdf['orientation'], 'mm', $this->_pdf['format']);
+            $pdf = new Vps_Grid_Pdf_Table($this->_pdf['orientation'], 'mm', $this->_pdf['format']);
             $pdf->SetFont('vera', '', 8);
             $pdf->SetMargins($pageMargin, 20, $pageMargin);
             $pdf->SetFooterMargin(5);
@@ -668,7 +668,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
                     $currentColumnHeader = $column->getHeader();
                     if (!is_null($currentColumnHeader)) {
                         $columnsHeader[] = $currentColumnHeader;
-                        $columns[] = $column->load($row, Vps_Auto_Grid_Column::ROLE_EXPORT);
+                        $columns[] = $column->load($row, Vps_Grid_Column::ROLE_EXPORT);
                     }
                 }
 
@@ -687,7 +687,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             throw new Vps_Exception("CSV is not allowed.");
         }
 
-        $data = $this->_getExportData(Vps_Auto_Grid_Column::SHOW_IN_CSV);
+        $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_CSV);
 
         if (!is_null($data)) {
             $csvRows = array();
@@ -725,16 +725,16 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         $colOptions = array();
         $i = 0;
         foreach ($this->_columns as $column) {
-            if (!($column->getShowIn() & Vps_Auto_Grid_Column::SHOW_IN_XLS)) continue;
+            if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_XLS)) continue;
             if (is_null($column->getHeader())) continue;
 
             $options = $column->getXlsOptions();
             if ($options) {
                 if (is_array($options)) {
-                    $options = new Vps_Auto_Grid_Xls_Options($options);
+                    $options = new Vps_Grid_Xls_Options($options);
                 }
             } else {
-                $options = new Vps_Auto_Grid_Xls_Options();
+                $options = new Vps_Grid_Xls_Options();
             }
 
             if ($options->getWidth() === null) {
@@ -752,7 +752,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
 
         $headFormat = $xls->addFormat();
         $headFormat->setBold();
-        $data = $this->_getExportData(Vps_Auto_Grid_Column::SHOW_IN_XLS);
+        $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_XLS);
         if (!is_null($data)) {
             foreach ($data as $row => $cols) {
                 foreach ($cols as $col => $text) {

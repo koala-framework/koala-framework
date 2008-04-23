@@ -16,9 +16,9 @@ class Vps_Controller_Action_User_MailsController extends Vps_Controller_Action_A
             $this->_buttons = array('add', 'delete');
         }
 
-        $this->_columns->add(new Vps_Auto_Grid_Column('name', 'Name', 400));
-        $this->_columns->add(new Vps_Auto_Grid_Column('template', 'Template', 200));
-        $this->_columns->add(new Vps_Auto_Grid_Column('variable', 'Variable', 200));
-        $this->_columns->add(new Vps_Auto_Grid_Column_Button('edit'));
+        $this->_columns->add(new Vps_Grid_Column('name', 'Name', 400));
+        $this->_columns->add(new Vps_Grid_Column('template', 'Template', 200));
+        $this->_columns->add(new Vps_Grid_Column('variable', 'Variable', 200));
+        $this->_columns->add(new Vps_Grid_Column_Button('edit'));
     }
 }
