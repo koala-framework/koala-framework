@@ -1,5 +1,5 @@
 <?php
-class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
+class Vpc_Formular_Component extends Vpc_Abstract
 {
     protected $_form;
     protected $_formName;
@@ -55,6 +55,10 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
         $ret['formName'] = $this->getTreeCacheRow()->component_id;
 
         $ret['action'] = $this->getTreeCacheRow()->tree_url;
+
+        $componentId = $this->getTreeCacheRow()->component_id.'-success';
+        $row = $this->getTreeCacheRow()->getTable()->find($componentId)->current();
+        $return['success'] = $row->getComponent()->getTemplateVars();
 
         return $ret;
     }

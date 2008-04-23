@@ -35,4 +35,11 @@ class Vps_Auto_Field_TextField extends Vps_Auto_Field_SimpleAbstract
         $ret['html'] = "<input type=\"text\" id=\"$name\" name=\"$name\" value=\"$value\" />";
         return $ret;
     }
+
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'name' => trlVps('Text Field')
+        ));
+    }
 }

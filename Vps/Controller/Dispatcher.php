@@ -18,12 +18,13 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             // Wenn nicht gefunden, Vererbungshierarchie durchlaufen
             if ($className == '') {
                 Zend_Loader::loadClass($class);
-                while (is_subclass_of($class, 'Vpc_Abstract')) {
+                while (is_subclass_of($class, 'Vps_Component_Abstract')) {
                     $cc = $class;
-                    if (substr($cc, -9) == 'Component') {
-                        $cc = substr($cc, 0, -9);
+                    if (substr($cc, -10) == '_Component') {
+                        $cc = substr($cc, 0, -10);
                     }
-                    $cc .= 'Controller';
+                    $cc .= '_Controller';
+
                     if (Vps_Loader::classExists($cc)) {
                         return $cc;
                     }
@@ -41,11 +42,11 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
     public function loadClass($className)
     {
-        if (substr($className, 0, 4) == 'Vpc_') {
+        if (substr($className, 0, 4) == 'Vpc_' || substr($className, 0, 4) == 'Vps_') {
             try {
                 Zend_Loader::loadClass($className);
             } catch (Zend_Exception $e) {
-                throw new Zend_Controller_Dispatcher_Exception(trlVps('Invalid controller class ("{0}")', $className));
+                throw new Zend_Controller_Dispatcher_Exception("Invalid controller class '$className'");
             }
             return $className;
         } else {
