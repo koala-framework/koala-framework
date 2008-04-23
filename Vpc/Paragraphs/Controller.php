@@ -12,15 +12,15 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Auto_Grid_Column('component_class'));
-        $this->_columns->add(new Vps_Auto_Grid_Column('component_name'))
-            ->setData(new Vps_Auto_Data_Vpc_ComponentName());
+        $this->_columns->add(new Vps_Grid_Column('component_class'));
+        $this->_columns->add(new Vps_Grid_Column('component_name'))
+            ->setData(new Vps_Data_Vpc_ComponentName());
 
-        $this->_columns->add(new Vps_Auto_Grid_Column('preview', trlVps('Preview'), 500))
-            ->setData(new Vps_Auto_Data_Vpc_Frontend($this->class, $this->componentId))
+        $this->_columns->add(new Vps_Grid_Column('preview', trlVps('Preview'), 500))
+            ->setData(new Vps_Data_Vpc_Frontend($this->class, $this->componentId))
             ->setRenderer('component');
-        $this->_columns->add(new Vps_Auto_Grid_Column_Visible());
-        $this->_columns->add(new Vps_Auto_Grid_Column_Button())
+        $this->_columns->add(new Vps_Grid_Column_Visible());
+        $this->_columns->add(new Vps_Grid_Column_Button())
             ->setButtonIcon(new Vps_Asset('paragraph_edit'))
             ->setTooltip(trlVps('Edit Paragraph'));
     }

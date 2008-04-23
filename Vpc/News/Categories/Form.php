@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Categories_Form extends Vps_Auto_Form
+class Vpc_News_Categories_Form extends Vps_Form
 {
     public function __construct($class, $id = null)
     {
@@ -8,7 +8,7 @@ class Vpc_News_Categories_Form extends Vps_Auto_Form
         $tablename = Vpc_Abstract::getSetting($class, 'tablename');
         $this->_table = new $tablename(array('componentClass'=>$class));
 
-        $this->add(new Vps_Auto_Field_PoolMulticheckbox('Vpc_News_Categories_NewsToPoolModel', 'Categories'))
+        $this->add(new Vps_Form_Field_PoolMulticheckbox('Vpc_News_Categories_NewsToPoolModel', 'Categories'))
              ->setPool(Vpc_Abstract::getSetting($class, 'pool'));
     }
 

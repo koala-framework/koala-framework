@@ -1,5 +1,5 @@
 <?php
-class Vpc_Composite_LinksImages_ImageData extends Vps_Auto_Data_Vpc_Image
+class Vpc_Composite_LinksImages_ImageData extends Vps_Data_Vpc_Image
 {
     public function load($row)
     {

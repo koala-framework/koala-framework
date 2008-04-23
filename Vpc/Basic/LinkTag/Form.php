@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_LinkTag_Form extends Vps_Auto_Vpc_Form
+class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
 {
     public function __construct($name, $class, $id = null)
     {
@@ -8,7 +8,7 @@ class Vpc_Basic_LinkTag_Form extends Vps_Auto_Vpc_Form
         $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
 
         reset($classes);
-        $cards = $this->add(new Vps_Auto_Container_Cards('link_class', trlVps('Linktype')))
+        $cards = $this->add(new Vps_Form_Container_Cards('link_class', trlVps('Linktype')))
             ->setDefaultValue(key($classes));
 
         foreach ($classes as $name => $class) {

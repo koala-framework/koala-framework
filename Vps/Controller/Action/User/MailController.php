@@ -17,23 +17,23 @@ class Vps_Controller_Action_User_MailController extends Vps_Controller_Action_Au
                     }
                 }
             }
-            $this->_form->add(new Vps_Auto_Field_Select('template', trlVps('Template')))
+            $this->_form->add(new Vps_Form_Field_Select('template', trlVps('Template')))
                 ->setWidth(300)
                 ->setValues($values)
                 ->setShowNoSelection(true)
                 ->setEmptyText(trlVps('(all templates)'));
-            $this->_form->add(new Vps_Auto_Field_TextField('variable', trlVps('Variable')))
+            $this->_form->add(new Vps_Form_Field_TextField('variable', trlVps('Variable')))
                 ->setWidth(300);
         } else {
-            $this->_form->add(new Vps_Auto_Field_ShowField('template', trlVps('Template')));
-            $this->_form->add(new Vps_Auto_Field_ShowField('variable', trlVps('Variable')));
+            $this->_form->add(new Vps_Form_Field_ShowField('template', trlVps('Template')));
+            $this->_form->add(new Vps_Form_Field_ShowField('variable', trlVps('Variable')));
         }
-        $this->_form->add(new Vps_Auto_Field_TextField('name', trlVps('Name')))
+        $this->_form->add(new Vps_Form_Field_TextField('name', trlVps('Name')))
             ->setWidth(300);
-        $this->_form->add(new Vps_Auto_Field_TextArea('text', trlVps('Text')))
+        $this->_form->add(new Vps_Form_Field_TextArea('text', trlVps('Text')))
             ->setWidth(400)
             ->setHeight(150);
-        $this->_form->add(new Vps_Auto_Field_HtmlEditor('html', trlVps('Html')))
+        $this->_form->add(new Vps_Form_Field_HtmlEditor('html', trlVps('Html')))
             ->setEnableAlignments(false)
             ->setEnableColors(false)
             ->setEnableFont(false)

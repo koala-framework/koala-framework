@@ -12,7 +12,7 @@ class Vps_Controller_Action_Pool_PoolsController extends Vps_Controller_Action_A
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Auto_Grid_Column('pool', 'Pool', 200));
+        $this->_columns->add(new Vps_Grid_Column('pool', 'Pool', 200));
     }
 
     protected function _fetchData($order, $limit, $start)

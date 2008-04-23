@@ -18,13 +18,13 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
 
         $this->_form->setTable($table);
         $fields = $this->_form->fields;
-        $fields->add(new Vps_Auto_Field_TextField('name', 'Name of Page'))
+        $fields->add(new Vps_Form_Field_TextField('name', 'Name of Page'))
             ->setAllowBlank(false);
-        $fields->add(new Vps_Auto_Field_Select('component_class', 'Pagetype'))
+        $fields->add(new Vps_Form_Field_Select('component_class', 'Pagetype'))
             ->setValues($types)
             ->setValue(0)
             ->setAllowBlank(false);
-        $fields->add(new Vps_Auto_Field_Checkbox('hide', 'Hide in Menu'));
+        $fields->add(new Vps_Form_Field_Checkbox('hide', 'Hide in Menu'));
 
         $cfg = Zend_Registry::get('config');
         foreach ($cfg->vpc->pageDecorators as $decorator) {
@@ -34,7 +34,7 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
                 $form->setBaseCls('x-plain');
                 $title = Vpc_Abstract::getSetting($decorator, 'componentName');
                 if ($title) {
-                    $fieldset = new Vps_Auto_Container_FieldSet($title);
+                    $fieldset = new Vps_Form_Container_FieldSet($title);
                     $fieldset->add($form);
                     $fields->add($fieldset);
                 } else {

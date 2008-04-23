@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_LinkTag_Intern_Field extends Vps_Auto_Field_TextField
+class Vpc_Basic_LinkTag_Intern_Field extends Vps_Form_Field_TextField
 {
     public function __construct($field_name = null, $field_label = null)
     {

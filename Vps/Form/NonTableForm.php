@@ -1,5 +1,5 @@
 <?php
-class Vps_Auto_NonTableForm extends Vps_Form_Container_Abstract
+class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
 {
     private $_name;
     private $_id;

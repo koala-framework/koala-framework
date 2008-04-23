@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Titles_Form extends Vps_Auto_Vpc_Form
+class Vpc_News_Titles_Form extends Vpc_Abstract_Form
 {
     public function __construct($name, $class, $id = null)
     {
@@ -29,7 +29,7 @@ class Vpc_News_Titles_Form extends Vps_Auto_Vpc_Form
                 .' (z.B.: '.$row->title.')';
         }
 
-        $this->fields->add(new Vps_Auto_Field_Select('news_component_id', 'Component Id'))
+        $this->fields->add(new Vps_Form_Field_Select('news_component_id', 'Component Id'))
             ->setValues($selectValues)
             ->setWidth(400);
     }

@@ -3,7 +3,7 @@ class Vps_Collection_Iterator_RecursiveFormFields extends Vps_Collection_Iterato
 {
     public function hasChildren()
     {
-        if ($this->current() instanceof Vps_Auto_Field_Abstract) {
+        if ($this->current() instanceof Vps_Form_Field_Abstract) {
             return $this->current()->hasChildren();
         } else {
             return false;
