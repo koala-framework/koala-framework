@@ -53,6 +53,7 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
 
         return self::$_instance;
     }
+    
     public function dispatchVpc()
     {
         $uri = substr($_SERVER['REDIRECT_URL'], 1);
