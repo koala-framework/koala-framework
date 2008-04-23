@@ -8,7 +8,7 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
             if ($tablename) {
                 $this->setTable(new $tablename(array('componentClass'=>$this->class)));
             } else {
-                throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
+                throw new Vpc_Exception('No tablename in Setting defined for ' . $this->class);
             }
         }
         parent::preDispatch();

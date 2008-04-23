@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
+abstract class Vps_Auto_Field_Abstract extends Vps_Component_Abstract implements Vps_Collection_Item_Interface
 {
     private $_properties;
     protected $_validators = array();
@@ -194,5 +194,12 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
         $ret = array();
         $ret['item'] = $this;
         return $ret;
+    }
+
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentIcon' => new Vps_Asset('textfield')
+        ));
     }
 }

@@ -4,7 +4,7 @@
  * @package Vpc
  * @copyright Copyright (c) 2007, Vivid Planet Software GmbH
  */
-abstract class Vpc_Abstract implements Vpc_Interface
+abstract class Vpc_Abstract extends Vps_Component_Abstract implements Vpc_Interface
 {
     private $_treeCacheRow;
 
@@ -31,24 +31,10 @@ abstract class Vpc_Abstract implements Vpc_Interface
      * @param string Falls dynamische Unterseite
      * @param string Falls dynamische Unterkomponente
      */
-    public final function __construct(Vps_Dao_Row_TreeCache $treeCacheRow, $row = null)
+    public function __construct(Vps_Dao_Row_TreeCache $treeCacheRow)
     {
         $this->_treeCacheRow = $treeCacheRow;
-
-        if ($row) {
-            //vorübergehend für formular-felder
-            foreach (Vpc_Abstract::getSetting(get_class($this), 'default') as $k=>$i) {
-                if (!isset($row->$k)) $row->$k = $i;
-            }
-            $this->_row = $row;
-        }
-
-        $this->_init();
-
-        if (Zend_Registry::isRegistered('infolog')) {
-            if (!is_string($id)) $id = '(static)';
-            Zend_Registry::get('infolog')->createComponent(get_class($this) . ' - ' . $id);
-        }
+        parent::__construct();
     }
     
     /**
@@ -73,12 +59,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return $this->_row;
     }
 
-    /**
-     * Wird nach dem Konstruktor aufgerufen. Initialisierungscode in Unterklassen ist hier richtig.
-     */
-    protected function _init()
-    {
-    }
 
     public function getDbId()
     {
@@ -207,65 +187,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
         return $this->_tables[$tablename];
     }
 
-    public static function getSetting($class, $setting)
-    {
-        if (!Vps_Loader::classExists($class)) {
-            $class = substr($class, 0, strrpos($class, '_')) . '_Component';
-        }
-
-        if (class_exists($class)) {
-            $settings = call_user_func(array($class, 'getSettings'));
-            return isset($settings[$setting]) ? $settings[$setting] : null ;
-        } else {
-            return null;
-        }
-    }
-
-    public static function getSettings()
-    {
-        return array(
-            'assets'        => array('files'=>array(), 'dep'=>array()),
-            'assetsAdmin'   => array('files'=>array(), 'dep'=>array()),
-            'componentIcon' => new Vps_Asset('paragraph_page'),
-            'placeholder'   => array()
-        );
-    }
-
-    protected function _getSetting($setting)
-    {
-        return self::getSetting(get_class($this), $setting);
-    }
-
-    protected function _getClassFromSetting($setting, $parentClass) {
-        $classes = $this->_getSetting('childComponentClasses');
-        if (!isset($classes[$setting])) {
-            throw new Vpc_Exception(trlVps("ChildComponentClass {0} is not defined in settings.", $setting));
-        }
-        $class = $classes[$setting];
-        if ($class != $parentClass && !is_subclass_of($class, $parentClass)) {
-            throw new Vpc_Exception(trlVps("{0} '{1}' must be a subclass of {2}.",array($setting, $class, $parentClass)));
-        }
-        return $class;
-    }
-
-    public function store($key, $val)
-    {
-        $this->_store[$key] = $val;
-    }
-
-    public function getStore($key)
-    {
-        if (isset($this->_store[$key])) {
-            return $this->_store[$key];
-        } else {
-            return null;
-        }
-    }
-
-    public function onDelete()
-    {
-    }
-
     public function getPdfWriter($pdf)
     {
         if (!isset($this->_pdfWriter)) {
@@ -273,32 +194,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
             $this->_pdfWriter = new $class($this, $pdf);
         }
         return $this->_pdfWriter;
-    }
-
-    public static function getComponentClasses($class = null)
-    {
-        static $componentClasses;
-        if (!$class) {
-            if ($componentClasses) return $componentClasses;
-            $classes = array();
-            $classes[] = 'Vpc_Root_Component';
-            foreach (Zend_Registry::get('config')->vpc->pageClasses as $c) {
-                if ($c->class && $c->text) {
-                    $classes[] = $c->class;
-                }
-            }
-            $componentClasses = array();
-        } else {
-            $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
-            if (!is_array($classes)) return;
-        }
-        foreach ($classes as $class) {
-            if ($class && !in_array($class, $componentClasses)) {
-                $componentClasses[] = $class;
-                self::getComponentClasses($class);
-            }
-        }
-        return $componentClasses;
     }
 
     public function sendContent($decoratedPage)
@@ -316,15 +211,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
         $result = $benchmark->getResults();
         $view->time = sprintf("%01.2f", $result['Seitenbaum']['duration']/1.5);
         echo $view->render('');
-    }
-
-    protected function _getPlaceholder($name)
-    {
-        $s = $this->_getSetting('placeholder');
-        if (!isset($s[$name])) {
-            throw new Vps_Exception("Unknown placeholder '$name'");
-        }
-        return $s[$name];
     }
 }
 

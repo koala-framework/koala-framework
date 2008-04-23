@@ -29,7 +29,9 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     {
         $this->_components = array();
         foreach (Vpc_Abstract::getSetting($this->class, 'childComponentClasses') as $c) {
-            $this->_components[Vpc_Abstract::getSetting($c, 'componentName')] = $c;
+            $name = Vpc_Abstract::getSetting($c, 'componentName');
+            if (!$name) $name = Vpc_Abstract::getSetting($c, 'name');
+            if ($name) $this->_components[$name] = $c;
         }
         parent::preDispatch();
     }
@@ -40,20 +42,20 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         if (array_search($class, $this->_components)) {
             $admin = Vpc_Admin::getInstance($class);
             if ($admin) $admin->setup();
-            $row = $this->_table->createRow();
+            $row = $this->_model->createRow();
             $row->component_id = $this->componentId;
             $row->component_class = $class;
-            $row->pos = 1000; //TODO: bessere Lösung mit Vps_Filter_Row_Numberize
+            $row->pos = 1000; //TODO: bessere Lï¿½sung mit Vps_Filter_Row_Numberize
             $row->visible = 0;
             $row->save();
             $id = $row->id;
             $where['component_id = ?'] = $this->componentId;
-            $this->_table->numberize($id, 'pos', null, $where);
+            $this->_model->getTable()->numberize($id, 'pos', null, $where);
 
             // Hack fÃ¼r weiterleiten auf Edit-Seite
-            $name = Vpc_Abstract::getSetting($this->_table->getComponentClass(), 'componentName');
+            $name = Vpc_Abstract::getSetting($this->_model->getTable()->getComponentClass(), 'componentName');
             $name = str_replace('.', ' -> ', $name);
-            $data = $this->_table->find($id)->current()->toArray();
+            $data = $this->_model->find($id)->current()->getRow()->toArray();
             $this->view->data = $data;
             $this->view->data['component_name'] = $name;
 
@@ -61,7 +63,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
                 Vpc_Admin::getComponentFile($data['component_class'], 'Controller')
             );
         } else {
-            throw new Vps_Exception(trlVps("Component {0} not found", $class));
+            throw new Vps_Exception("Component $class not found");
         }
     }
 }

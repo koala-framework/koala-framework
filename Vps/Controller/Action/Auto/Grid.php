@@ -507,7 +507,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             $row->delete();
             $this->_afterDelete();
             if ($this->_position) {
-                $this->_model->numberizeAll($this->_position, $this->_getWhere());
+                $this->_model->getTable()->numberizeAll($this->_position, $this->_getWhere());
             }
         }
         Zend_Registry::get('db')->commit();
@@ -533,7 +533,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             $new = $row->duplicate();
             $this->view->data['duplicatedIds'][] = $new->{$this->_primaryKey};
             if ($this->_position) {
-                $this->_model->numberizeAll($this->_position, $this->_getWhere());
+                $this->_model->getTable()->numberizeAll($this->_position, $this->_getWhere());
             }
         }
         Zend_Registry::get('db')->commit();

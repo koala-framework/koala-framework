@@ -33,4 +33,10 @@ class Vps_Auto_Field_Select extends Vps_Auto_Field_ComboBox
         $ret['html'] .= "</select>\n";
         return $ret;
     }
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'name' => trlVps('Select Field')
+        ));
+    }
 }
