@@ -50,7 +50,7 @@ class Vps_Controller_Action_Trl_HelptextController extends Vps_Controller_Action
             if (!$search) { // Wenn nein, hinzufügen
                 $element = $xml->addChild('text');
                 $element->addAttribute('key', $key);
-                $element->addAttribute('controller', implode(', ', $controllers));
+                $element->addAttribute('file', implode(', ', $controllers));
             } else {
                 $element = $search[0];
             }
@@ -77,13 +77,13 @@ class Vps_Controller_Action_Trl_HelptextController extends Vps_Controller_Action
         $result = '';
         foreach (explode("\n", $string) as $line) {
             if (substr($line, 0, 6) == '<text ' || substr($line, 0, 6) == '</text') {
-                $result .= "\t";
+                $result .= "    ";
             } else if (
                 substr($line, 0, 4) != '<hlp' && 
                 substr($line, 0, 5) != '<?xml' &&
                 substr($line, 0, 2) != '</'
             ){
-                $result .= "\t\t";
+                $result .= "        ";
             }
             $result .= $line . "\n";
         }
