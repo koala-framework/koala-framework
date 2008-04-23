@@ -49,6 +49,20 @@ class Vpc_Forum_Group_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public function mayModerate()
+    {
+        $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
+        if ($authedUser) {
+            $t = new Vpc_Forum_ModeratorModel();
+            $row = $t->fetchRow(array(
+                'user_id = ?' => $authedUser->id,
+                'group_id = ?' => $this->getCurrentPageKey()
+            ));
+            if ($row) return true;
+        }
+        return false;
+    }
+
     protected function _getPagingComponent()
     {
         if (!isset($this->_paging)) {

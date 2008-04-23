@@ -86,19 +86,10 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
         return $ret;
     }
 
+    // deprecated for compatibility
     public function mayModeratePost()
     {
-        $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
-        if ($authedUser) {
-            $t = new Vpc_Forum_ModeratorModel();
-            $row = $t->fetchRow(array(
-                'user_id = ?' => $authedUser->id,
-                'group_id = ?' => $this->getGroupComponent()->getCurrentPageKey()
-            ));
-            if ($row) return true;
-        }
-
-        return false;
+        return $this->getGroupComponent()->mayModerate();
     }
 
     public function mayEditPost()
