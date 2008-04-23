@@ -300,4 +300,94 @@ class Vps_Setup
         }
         return $vpsConfig;
     }
+    
+    public static function dispatchMedia()
+    {
+        $urlParts = explode('/', substr($_SERVER['REDIRECT_URL'], 1));
+        if (is_array($urlParts) && $urlParts[0] == 'media') {
+            $params['table'] = $urlParts[1];
+            $params['id'] = $urlParts[2];
+            $params['rule'] = $urlParts[3];
+            $params['type'] = $urlParts[4];
+            $params['checksum'] = $urlParts[5];
+            $params['filename'] = $urlParts[6];
+            
+            $download = false;
+            $checksum = md5(
+                Vps_Db_Table_Row::FILE_PASSWORD .
+                $params['table'] .
+                $params['id'] .
+                $params['rule'] .
+                $params['type']
+            );
+            if ($checksum != $params['checksum']) {
+                $checksum = md5(
+                    Vps_Db_Table_Row::FILE_PASSWORD_DOWNLOAD .
+                        $params['table'] .
+                        $params['id'] .
+                        $params['rule'] .
+                        $params['type']
+                );
+                $download = true;
+            }
+            if ($checksum != $params['checksum']) {
+                throw new Vps_Controller_Action_Web_Exception('Access to file not allowed.');
+            }
+            
+            $class = $params['table'];
+            $type = $params['type'];
+            $id = explode(',', $params['id']);
+            $rule = $params['rule'];
+            if ($rule == 'default') { $rule = null; }
+
+            if (substr($class, 0, 4) == 'Vpc_') {
+                $tableClass = Vpc_Abstract::getSetting($class, 'tablename');
+                $table = new $tableClass(array('componentClass' => $class));
+            } else {
+                $table = new $class();
+            }
+            $row = $table->find($id)->current();
+            if (!$row) {
+                throw new Vps_Exception('File not found.');
+            }
+            $fileRow = $row->findParentRow('Vps_Dao_File', $rule);
+            if (!$fileRow) {
+                throw new Vps_Exception('No File uploaded.');
+            }
+            $target = $row->getFileSource($rule, $type);
+            
+            if (is_file($target)) {
+                header('Cache-Control:');
+                header('Pragma:');
+                header('Expires:');
+                header('Transfer-Encoding:');
+                                
+                $headers = apache_request_headers();
+                $lastModifiedString = gmdate("D, d M Y H:i:s \G\M\T", filemtime($target));
+                $etag = md5($target . $lastModifiedString);
+                if ((isset($headers['If-Modified-Since']) &&
+                        $headers['If-Modified-Since'] == $lastModifiedString) ||
+                    (isset($headers['If-None-Match']) &&
+                        $headers['If-Modified-Since'] == $etag)
+                ) {
+                    header('HTTP/1.1 304 Not Modified');
+                    header('ETag: ' . $etag);
+                    header('Last-Modified: ' . $lastModifiedString);
+                } else {
+                    header('Content-type: ' . $fileRow->mime_type);
+                    header('Last-Modified: ' . $lastModifiedString);
+                    header('Content-Length: ' . filesize($target));
+                    header('ETag: ' . $etag);
+                    if ($download) {
+                        $filename = $this->_getParam('filename');
+                        header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+                    }
+                    readfile($target);
+                }
+                die();
+            } else {
+                throw new Vps_Controller_Action_Web_Exception("File '$target' not found.");
+            }
+        }
+    }
 }
