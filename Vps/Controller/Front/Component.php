@@ -60,8 +60,7 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
         if (!in_array($uri, array('media', 'vps', 'admin'))) {
-
-            $uri = $_SERVER['REDIRECT_URL'];
+/*
             $pageCollection = Vps_PageCollection_Abstract::getInstance();
             try {
                 $page = $pageCollection->getPageByPath($uri);
@@ -72,7 +71,35 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
             if (!$page) {
                 throw new Vps_Controller_Action_Web_FileNotFoundException('Page not found for path ' . $uri);
             }
+*/
 
+            $requestUrl = $_SERVER['REDIRECT_URL'];
+            $tc = new Vps_Dao_TreeCache();
+            $where = array();
+            if ($tc->showInvisible()) {
+                $where["url_match_preview = ?"] = $requestUrl;
+            } else {
+                $where["url_match = ?"] = $requestUrl;
+            }
+            $row = $tc->fetchAll($where)->current();
+            if (!$row ) {
+                if (!$tc->showInvisible()) {
+                    $where = array();
+                    $where["? LIKE url_pattern"] = $requestUrl;
+                    $where["? NOT LIKE CONCAT(url_pattern, '/%')"] = $requestUrl;
+                    $row = $tc->fetchAll($where)->current();
+                }
+                if (!$row) {
+                    throw new Vps_Controller_Action_Web_FileNotFoundException('Page not found for path ' . $this->getRequest()->getPathInfo());
+                }
+                if ($row->url_match != $requestUrl) {
+                    header('Location: '.$row->url_match);
+                    exit;
+                }
+            }
+            $page = $row->getComponent();
+            
+            
             $page->sendContent($page);
 
             exit;

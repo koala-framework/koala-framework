@@ -144,20 +144,6 @@ abstract class Vpc_Abstract implements Vpc_Interface
          return array();
      }
 
-    /**
-     * Informationen über den Aufbau der aktuellen Komponente.
-     *
-     * Falls eine Komponente Unterkomponenten hat, deren Informationen
-     * einschließen. Für jede Komponente wird im Array ein Eintrag mit
-     * dem Schlüssel id und dem Wert Klassenname angehängt.
-     *
-     * @return array ComponentInfo
-     */
-    public function getComponentInfo()
-    {
-        return array($this->getId() => get_class($this));
-    }
-    
     public function getBoxVars($boxname)
     {
         $componentId = $this->getTreeCacheRow()->component_id . '-' . $boxname;
