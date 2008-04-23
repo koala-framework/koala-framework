@@ -12,8 +12,4 @@ interface Vpc_Interface
 {
     public function getTemplateVars();
     public function getSearchVars();
-    public function getComponentById($id);
-    public function getComponentByClass($class);
-    // Fe
-    public function getComponentInfo();
 }
