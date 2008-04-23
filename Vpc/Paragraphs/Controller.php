@@ -40,9 +40,13 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         if (array_search($class, $this->_components)) {
             $admin = Vpc_Admin::getInstance($class);
             if ($admin) $admin->setup();
-            $insert['component_id'] = $this->componentId;
-            $insert['component_class'] = $class;
-            $id = $this->_table->insert($insert);
+            $row = $this->_table->createRow();
+            $row->component_id = $this->componentId;
+            $row->component_class = $class;
+            $row->pos = 1000; //TODO: bessere Lösung mit Vps_Filter_Row_Numberize
+            $row->visible = 0;
+            $row->save();
+            $id = $row->id;
             $where['component_id = ?'] = $this->componentId;
             $this->_table->numberize($id, 'pos', null, $where);
 

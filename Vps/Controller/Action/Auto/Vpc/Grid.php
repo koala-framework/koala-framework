@@ -3,10 +3,10 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
 {
     public function preDispatch()
     {
-        if (!isset($this->_table) && !isset($this->_tableName)) {
+        if (!isset($this->_model) && !isset($this->_tableName)) {
             $tablename = Vpc_Abstract::getSetting($this->class, 'tablename');
             if ($tablename) {
-                $this->_table = new $tablename(array('componentClass'=>$this->class));
+                $this->setTable(new $tablename(array('componentClass'=>$this->class)));
             } else {
                 throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
             }
@@ -33,7 +33,9 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
 
     public function jsonInsertAction()
     {
-        $row = $this->_table->createRow();
+        //TODO: permissions überprüfen!
+        Zend_Registry::get('db')->beginTransaction();
+        $row = $this->_model->createRow();
         $this->_beforeInsert($row);
         $this->_beforeSave($row);
         if ($this->_position) {
@@ -44,5 +46,6 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
         if ($this->_position) {
             $row->numberize($this->_position, null, $this->_getWhere());
         }
+        Zend_Registry::get('db')->commit();
     }
 }

@@ -1,147 +1,61 @@
 <?php
-class Vpc_Formular_Component extends Vpc_Paragraphs_Abstract
+class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
 {
-    private $_errors = array();
-    private $_successComponent;
+    protected $_form;
+    protected $_formName;
 
     public static function getSettings()
     {
-        static $settings;
-        if (!isset($settings)) {
-            $settings = array_merge(parent::getSettings(), array(
-                'componentName' => 'Formular',
-                'hideInParagraphs' => false,
-                'tablename' => 'Vpc_Formular_Model'
-            ));
-            $settings['childComponentClasses'] =
-                Vpc_Admin::getInstance('Vpc_Formular_Component')->getComponents();
-            $settings['childComponentClasses']['success'] = 'Vpc_Formular_Success_Component';
-        }
-        return $settings;
-    }
-    protected function _getParagraphs()
-    {
-        $childComponents = parent::_getParagraphs();
-        foreach ($childComponents as $id => $component) {
-            foreach ($this->_getRows() as $row) {
-                if ($row->id == $id) {
-                    $isMandatory =
-                        $row->mandatory == 1 ||
-                        $component instanceof Vpc_Formular_Captcha_Component;
-                    $component->store('fieldLabel', $row->field_label);
-                    $component->store('isMandatory', $isMandatory);
-                    $component->store('noCols', $row->no_cols == 1);
-                    $component->store('isValid', true);
-                    if ($component instanceof Vpc_Formular_Field_Interface ) {
-                        $component->store('name', $component->getId());
-                    }
-                }
-            }
-        }
-        return $childComponents;
+        $ret = parent::getSettings();
+        $ret['childComponentClasses']['success'] = 'Vpc_Formular_Success_Component';
+        $ret['componentName'] = 'Formular';
+        $ret['placeholder']['submitButton'] = trlVps('Submit');
+        $ret['decorator'] = 'Vpc_Formular_Decorator_Label';
+        return $ret;
     }
 
-    public function getChildComponents()
+    protected function _initForm()
     {
-        $childComponents = parent::getChildComponents();
-        $childComponents[] = $this->_getSuccessComponent();
-        return $childComponents;
+        $this->_form = new Vps_Rotary_Test_Form();
+        $this->_form->setId(1);
     }
 
     public function getTemplateVars()
     {
-        $sent = 1;
-        $values = array();
-        if ($_POST != array()) {
-            if ($this->_validateFields()) {
-                $values = $this->_getValues();
+        $ret = parent::getTemplateVars();
 
-                try {
-                    $this->_processForm($values);
-                    $sent = 3;
-                } catch (Vps_ClientException $e) {
-                    $addError = $e->getMessage();
-                    $sent = 2;
-                }
-            } else {
-                $sent = 2;
+        $this->_initForm();
+
+        if (!isset($this->_form) && isset($this->_formName)) {
+            $this->_form = new $this->_formName();
+        }
+
+        $ret['isSuccess'] = false;
+        $ret['errors'] = array();
+        if (isset($_POST[$this->getTreeCacheRow()->component_id])) {
+            $ret['errors'] = $this->_form->validate($_REQUEST);
+            if (!$ret['errors']) {
+                $this->_form->prepareSave(null, $_REQUEST);
+                $this->_form->save(null, $_REQUEST);
+                $ret['isSuccess'] = true;
             }
         }
-        $vars = parent::getTemplateVars();
-        $vars['sent'] = $sent;
-        $vars['action'] = $_SERVER['REQUEST_URI'];
-        $vars['errors'] = $this->_errors;
-        if (isset($addError) && !empty($addError)) $vars['errors'][] = $addError;
-        $vars['upload'] = $this->_hasUpload();
-        $vars['values'] = $values;
-        $vars['success'] = $this->_getSuccessComponent()->getTemplateVars();
-        return $vars;
-    }
 
-    protected function _getValues()
-    {
-        $values = array();
-        foreach ($this->getChildComponents() as $component) {
-            if ($component instanceof Vpc_Formular_Field_Interface) {
-                $values[$component->getStore('fieldLabel')] = $component->getValue();
-            }
+        $values = array_merge($this->_form->load(null), $_REQUEST);
+        $ret['form'] = $this->_form->getTemplateVars($values);
+
+        $dec = $this->_getSetting('decorator');
+        if ($dec && is_string($dec)) {
+            $dec = new $dec();
         }
-        return $values;
-    }
-
-    protected function _processForm($values)
-    {
-    }
-
-    private function _hasUpload()
-    {
-        foreach ($this->getChildComponents() as $value => $component) {
-            if ($component instanceof Vpc_Formular_FileUpload_Component) {
-                return true;
-            }
+        if ($dec) {
+            $ret['form'] = $dec->processItem($ret['form']);
         }
-        return false;
-    }
 
-    private function _validateFields()
-    {
-        $return = true;
-        foreach ($this->getChildComponents() as $component) {
-            if ($component instanceof Vpc_Formular_Field_Interface) {
-                $component->processInput();
-                $message = $component->validateField($component->getStore('isMandatory'));
-                if ($message != '') {
-                    $return = false;
-                    $this->_errors[] = $message;
-                    $component->store('isValid', false);
-                }
-            }
-        }
-        return $return;
-    }
+        $ret['formName'] = $this->getTreeCacheRow()->component_id;
 
-    protected function _createFieldComponent($class, $row)
-    {
-        if (!class_exists($class)) {
-            $class = "Vpc_Formular_{$class}_Component";
-        }
-        $c = Vpc_Abstract::_createInstance($this->getDao(), $class, (object)$row,
-                                    $this->getDbId(), $this->getPageCollection());
-        $c->store('noCols', false);
-        $c->store('isValid', true);
-        $c->store('isMandatory', false);
-        $c->store('fieldLabel', '');
+        $ret['action'] = $this->getTreeCacheRow()->tree_url;
 
-        $this->_paragraphs[] = $c;
-        return $c;
-    }
-
-    protected function _getSuccessComponent()
-    {
-        if (!isset($this->_successComponent)) {
-            $classes = $this->_getSetting('childComponentClasses');
-            $this->_successComponent = $this->createComponent($classes['success'], 'success');
-        }
-        return $this->_successComponent;
+        return $ret;
     }
 }

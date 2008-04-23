@@ -1,9 +1,17 @@
 <?php
-class Vps_Dao_Pages extends Vps_Db_Table
+class Vps_Dao_Pages extends Vps_Db_Table_Abstract
 {
     protected $_name = 'vps_pages';
+    protected $_rowClass = 'Vps_Dao_Row_Page';
     private $_pageData = null;
     private $_showInvisible = false;
+
+    protected function _setupFilters()
+    {
+        parent::_setupFilters();
+        $this->_filters['filename'] = new Vps_Filter_Row_UniqueAscii();
+        $this->_filters['filename']->setGroupBy('parent_id');
+    }
 
     public function showInvisible($show)
     {
@@ -76,56 +84,11 @@ class Vps_Dao_Pages extends Vps_Db_Table
         }
         return $this->_pageData;
     }
-/*
-    public function findPagesByClass($class)
-    {
-        $return = array();
-        foreach ($this->_retrievePageData() as $id => $data) {
-            if ($data['component_class'] == $class) {
-                $return[] = $data['page_id'];
-            }
-        }
-        return $return;
-    }*/
-
-    public function insert(array $data)
-    {
-        if ((int)$data['parent_id'] == 0) {
-            $data['type'] = $data['parent_id'];
-            $data['parent_id'] = null;
-        } else {
-            $parentRow = $this->retrievePageData($data['parent_id']);
-            $data['type'] = $parentRow['type'];
-        }
-
-        $data['is_home'] = 0;
-        $data['filename'] = '';
-        $data['visible'] = 0;
-        $data['pos'] = 1;
-        $id = parent::insert($data);
-        if ($id) {
-            $row = $this->find($id)->current();
-            $where = array();
-            $where['type = ?'] = $data['type'];
-            if (!$row->parent_id) {
-                $where['parent_id IS NULL'] = '';
-            } else {
-                $where['parent_id = ?'] = $row->parent_id;
-            }
-            $row->filename = $row->getUniqueString($data['name'], 'filename', $where);
-            $row->save();
-            $row->numberize('pos', null, $where);
-        }
-
-        $this->_pageData = null;
-        return $id;
-    }
 
     public function savePageName($id, $name)
     {
         $row = $this->find($id)->current();
         $row->name = $name;
-        $row->filename = $row->getUniqueString($name, 'filename', 'parent_id = ' . $row->parent_id);
         $row->save();
         $this->_pageData = null;
     }
@@ -159,5 +122,19 @@ class Vps_Dao_Pages extends Vps_Db_Table
         if ($row) {
             return $this->deletePage($row->id);
         }
+    }
+
+    public function insert($data)
+    {
+        $id = parent::insert($data);
+        $where = array();
+        $where['type = ?'] = $data['type'];
+        if (!$data['parent_id']) {
+            $where[] = 'parent_id IS NULL';
+        } else {
+            $where['parent_id = ?'] = $data['parent_id'];
+        }
+        $this->numberize('pos', null, $where);
+        return $id;
     }
 }

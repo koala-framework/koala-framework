@@ -20,11 +20,11 @@ class Vps_Auto_Vpc_Form extends Vps_Auto_Form
             throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
         }
 
-        $table = $this->getTable();
+        $model = $this->getModel();
 
-        $this->_row = $table->find($id)->current();
+        $this->_row = $model->find($id)->current();
         if (!$this->_row) {
-            $this->_row = $table->createRow(array('component_id' => $id));
+            $this->_row = $model->createRow(array('component_id' => $id));
         }
         parent::setId($id);
     }

@@ -16,7 +16,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
                     isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
         if (($prefix == 'ajax' || $prefix == 'json') &&
             ($isHttpRequest || $errors->exception instanceof Vps_ClientException)) {
-            $this->_forward('jsonError');
+            $this->_forward('json-error');
         } else {
 
             if ($errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER ||

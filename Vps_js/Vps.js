@@ -7,7 +7,8 @@ Ext.namespace(
 'Vps.Auto',
 'Vps.Form',
 'Vps.Binding',
-'Vpc.Advanced'
+'Vpc.Advanced',
+'Vps.Debug'
 );
 
 Ext.applyIf(Array.prototype, {
@@ -95,7 +96,7 @@ Ext.onReady(function()
 Vps.application = { version: '{$application.version}' };
 
 Vps.callWithErrorHandler = function(fn, scope) {
-    if (Vps.debug) {
+    if (Vps.Debug.displayErrors) {
         //call without error handler
         return fn.call(scope || window);
     }
@@ -111,7 +112,7 @@ Vps.callWithErrorHandler = function(fn, scope) {
             Ext.Msg.alert(trlVps('Error'), trlVps("An error occured"));
         }
         Ext.Ajax.request({
-            url: '/vps/error/error/jsonMail',
+            url: '/vps/error/error/json-mail',
             params: {msg: e}
         });
     }
@@ -121,7 +122,7 @@ Vps.contentReadyHandlers = [];
 Vps.onContentReady = function(fn, scope) {
     if (Vps.isApp) {
         //in einer Ext-Anwendung mit Vps.main den contentReadHandler
-        //nicht gleich ausführen, das paragraphs-panel führt es dafür aus
+        //nicht gleich ausfï¿½hren, das paragraphs-panel fï¿½hrt es dafï¿½r aus
         Vps.contentReadyHandlers.push({
             fn: fn,
             scope: scope

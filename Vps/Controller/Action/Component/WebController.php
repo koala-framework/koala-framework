@@ -35,29 +35,37 @@ class Vps_Controller_Action_Component_WebController extends Vps_Controller_Actio
 
     public function indexAction()
     {
-        $logger = new Zend_Log_Writer_Mock();
-        $log = new Zend_Log($logger);
-        $log->addPriority('createPage', 10);
-        $log->addPriority('createComponent', 11);
-        Zend_Registry::set('infolog', $log);
-
         $benchmark = Vps_Benchmark::getInstance();
         $benchmark->startSequence('Seitenbaum');
 
-        $pageCollection = Vps_PageCollection_Abstract::getInstance();
-        try {
-            $page = $pageCollection->getPageByPath($this->getRequest()->getPathInfo());
-        } catch (Vpc_UrlNotFoundException $e) {
-            header('Location: ' . $e->getMessage(), true, 301);
-            die();
-        }
-        if (!$page) {
-            throw new Vps_Controller_Action_Web_FileNotFoundException('Page not found for path ' . $this->getRequest()->getPathInfo());
-        }
+        $requestUrl = $this->getRequest()->getPathInfo();
 
-        $templateVars = $page->getTemplateVars();
-
-        $this->view->url = $this->getRequest()->getPathInfo();
+        $tc = new Vps_Dao_TreeCache();
+        $where = array();
+        if ($tc->showInvisible()) {
+            $where["url_match_preview = ?"] = $requestUrl;
+        } else {
+            $where["url_match = ?"] = $requestUrl;
+        }
+        $row = $tc->fetchAll($where)->current();
+        if (!$row ) {
+            if (!$tc->showInvisible()) {
+                $where = array();
+                $where["? LIKE url_pattern"] = $requestUrl;
+                $where["? NOT LIKE CONCAT(url_pattern, '/%')"] = $requestUrl;
+                $row = $tc->fetchAll($where)->current();
+            }
+            if (!$row) {
+                throw new Vps_Controller_Action_Web_FileNotFoundException('Page not found for path ' . $this->getRequest()->getPathInfo());
+            }
+            if ($row->url_match != $requestUrl) {
+                header('Location: '.$row->url_match);
+                exit;
+            }
+        }
+        $templateVars = $row->getComponent()->getTemplateVars();
+        
+        $this->view->url = $requestUrl;
         $this->view->component = $templateVars;
         $this->view->mode = ''; // Für Smarty-Plugin
 

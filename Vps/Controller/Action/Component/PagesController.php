@@ -56,8 +56,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $id = $this->getRequest()->getParam('node');
         if ($id === '0') {
 
-            $config = new Zend_Config_Ini('application/config.ini', 'pagecollection');
-            $types = $config->pagecollection->pagetypes->toArray();
+            $types = Zend_Registry::get('config')->vpc->pageTypes->toArray();
             if (sizeof($types) == 0) $types[''] = 'Seiten';
             foreach ($types as $type => $text) {
                 $data = array();
@@ -149,6 +148,92 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $p = $pc->getPageById($this->_getParam('page_id'));
         $href = 'http://' . $host . $pc->getUrl($p);
         header('Location: '.$href);
+        exit;
+    }
+
+    public function regenerateTreeCacheAction()
+    {
+
+        $writer = new Zend_Log_Writer_Stream('php://output');
+        $writer->setFormatter(new Vps_Log_Formatter_Html());
+        $logger = new Zend_Log($writer);
+        Zend_Registry::set('debugLogger', $logger);
+
+
+        $db = Zend_Registry::get('db');
+        $db->getProfiler()->setEnabled(true);
+
+        $start = microtime(true);
+        set_time_limit(15);
+        $t = new Vps_Dao_TreeCache();
+        $t->regenerate();
+        echo 'done in '.(microtime(true)-$start).'sec';
+/*
+$profiler = $db->getProfiler();
+$totalTime    = $profiler->getTotalElapsedSecs();
+$queryCount   = $profiler->getTotalNumQueries();
+$longestTime  = 0;
+$longestQuery = null;
+foreach ($profiler->getQueryProfiles() as $query) {
+     p($query->getQuery());
+    if ($query->getElapsedSecs() > $longestTime) {
+        $longestTime  = $query->getElapsedSecs();
+        $longestQuery = $query->getQuery();
+    }
+}
+
+echo '<pre>Executed ' . $queryCount . ' queries in ' . $totalTime . ' seconds' . "\n";
+echo 'Average query length: ' . $totalTime / $queryCount . ' seconds' . "\n";
+echo 'Queries per second: ' . $queryCount / $totalTime . "\n";
+echo 'Longest query length: ' . $longestTime . "\n";
+echo "Longest query: \n" . $longestQuery . "\n";*/
+        exit;
+    }
+
+    public function updateTextComponentsAction()
+    {
+        $start = microtime(true);
+        $existingCount = $addedCount = $deletedCount = 0;
+        $t = new Vpc_Basic_Text_Model(array(
+            'componentClass'=>'Vpc_Basic_Text_Component'
+        ));
+        $validTypes = array('image', 'link', 'download');
+        $ccm = new Vpc_Basic_Text_ChildComponentsModel();
+        $existingEntries = array();
+        foreach ($ccm->fetchAll() as $row) {
+            $existingEntries[] = $row->component_id.'-'.$row->type.$row->nr;
+        }
+        $validEntries = array();
+        foreach ($t->fetchAll() as $row) {
+            foreach ($row->getContentParts() as $part) {
+                if (is_array($part) && in_array($part['type'], $validTypes)) {
+                    $id = $row->component_id.'-'.$part['type'].$part['nr'];
+                    $validEntries[] = $id;
+                    if (in_array($id, $existingEntries)) {
+                        $existingCount++;
+                    } else {
+                        $addedCount++;
+                        $r = $ccm->createRow();
+                        $r->component_id = $row->component_id;
+                        $r->type = $part['type'];
+                        $r->nr = $part['nr'];
+                        $r->saved = 1;
+                        $r->save();
+                    }
+                }
+            }
+        }
+        foreach ($ccm->fetchAll() as $row) {
+            $id = $row->component_id.'-'.$row->type.$row->nr;
+            if (!in_array($id, $validEntries)) {
+                $deletedCount++;
+                $row->delete();
+            }
+        }
+        echo "existing: $existingCount<br />";
+        echo "added: $addedCount<br />";
+        echo "deleted: $deletedCount<br />";
+        echo 'done in '.(microtime(true)-$start).'sec';
         exit;
     }
 }

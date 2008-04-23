@@ -10,9 +10,6 @@
  */
 interface Vpc_Interface
 {
-    public function getId();
-    public function getPageId();
-    public function setPageCollection(Vps_PageCollection_Abstract $pageCollection);
     public function getTemplateVars();
     public function getSearchVars();
     public function getComponentById($id);

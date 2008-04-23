@@ -63,7 +63,6 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                     echo '<pre>';
                     print_r($this->view->getOutput());
                     echo '</pre>';
-                    die();
                 }
             } else {
                 $this->getResponse()->setHeader('Content-Type', 'text/html; charset=utf-8');

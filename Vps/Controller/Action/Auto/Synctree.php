@@ -3,8 +3,11 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 {
     const ADD_LAST = 0;
     const ADD_FIRST = 1;
-    protected $_tableName;
+
+    protected $_primaryKey;
     protected $_table;
+    protected $_tableName;
+
     protected $_icons = array (
         'root'      => 'folder',
         'default'   => 'table',
@@ -43,6 +46,18 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
         $info = $this->_table->info();
 
+        if (isset($this->_table)) {
+            $info = $this->_table->info();
+            if (!isset($this->_primaryKey)) {
+                $info = $this->_table->info();
+                $this->_primaryKey = $info['primary'];
+            }
+        }
+
+        if (is_array($this->_primaryKey)) {
+            $this->_primaryKey = $this->_primaryKey[1];
+        }
+
         // Invisible-Button hinzufügen falls nicht überschrieben und in DB
         if (array_key_exists('invisible', $this->_buttons) &&
             is_null($this->_buttons['invisible']) &&
@@ -66,7 +81,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         }
     }
 
-    protected function jsonMetaAction()
+    public function jsonMetaAction()
     {
         $this->view->helpText = $this->getHelpText();
         $this->view->icons = array();
@@ -122,9 +137,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $nodes = array();
         $order = $this->_hasPosition ? 'pos' : null ;
         $rows = $this->_table->fetchAll($this->_getTreeWhere($parentId), $order);
+        $primaryKey = $this->_primaryKey;
         foreach ($rows as $row) {
             $data = array();
-            $data['id'] = $row->id;
+            $data['id'] = $row->$primaryKey;
             $data['text'] = $row->name;
             $data['data'] = $row->toArray();
             $data['leaf'] = false;
@@ -139,7 +155,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
             $openedNodes = $this->_saveSessionNodeOpened(null, null);
             if ($openedNodes == 'all' ||
-                isset($openedNodes[$row->id]) ||
+                isset($openedNodes[$row->$primaryKey]) ||
                 isset($this->_openedNodes[$row->id])
             ) {
                 $data['expanded'] = true;
@@ -147,7 +163,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 $data['expanded'] = false;
             }
 
-            $data['children'] = $this->_formatNodes((int)$row->id);
+            $data['children'] = $this->_formatNodes((int)$row->$primaryKey);
             if (sizeof($data['children']) == 0) {
                 $data['expanded'] = true;
             }
@@ -159,7 +175,8 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected function _formatNode($row)
     {
         $data = array();
-        $data['id'] = $row->id;
+        $primaryKey = $this->_primaryKey;
+        $data['id'] = $row->$primaryKey;
         $data['text'] = $row->name;
         $data['data'] = $row->toArray();
         $data['leaf'] = false;
@@ -170,9 +187,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             $data['bIcon'] = $this->_icons['invisible']->__toString();
         }
         $openedNodes = $this->_saveSessionNodeOpened(null, null);
-        if ($this->_table->fetchAll(array("$this->_parentField = ?"=>$row->id))->count() > 0) {
-            if (isset($openedNodes[$row->id]) ||
-                isset($this->_openedNodes[$row->id])
+        $where = array("$this->_parentField = ?" => $row->$primaryKey);
+        if ($this->_table->fetchAll($where)->count() > 0) {
+            if (isset($openedNodes[$row->$primaryKey]) ||
+                isset($this->_openedNodes[$row->$primaryKey])
             ) {
                 $data['expanded'] = true;
             } else {
@@ -218,14 +236,17 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     {
         $visible = $this->getRequest()->getParam('visible') == 'true';
         $id = $this->getRequest()->getParam('id');
+        $this->_table->getAdapter()->beginTransaction();
         $row = $this->_table->find($id)->current();
         $row->visible = $row->visible == '0' ? '1' : '0';
         $this->view->id = $row->save();
+        $this->_table->getAdapter()->commit();
         $this->view->visible = $row->visible == '1';
     }
 
     public function jsonAddAction()
     {
+        $this->_table->getAdapter()->beginTransaction();
         $insert[$this->_parentField] = $this->getRequest()->getParam('parentId');
         $insert[$this->_textField] = $this->getRequest()->getParam('name');
         if ($this->_hasPosition) {
@@ -248,17 +269,18 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         } else {
             $this->view->error = 'Couldn\'t insert row.';
         }
+        $this->_table->getAdapter()->commit();
     }
 
     public function jsonDeleteAction()
     {
         $id = $this->getRequest()->getParam('id');
+        $this->_table->getAdapter()->beginTransaction();
         $row = $this->_table->find($id)->current();
         if (!$row) throw new Vps_Exception("No entry with id '$id' found");
-        if ($row) {
-            $row->delete();
-            $this->view->id = $id;
-        }
+        $row->delete();
+        $this->view->id = $id;
+        $this->_table->getAdapter()->commit();
     }
 
     public function jsonMoveAction()
@@ -267,6 +289,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $target = $this->getRequest()->getParam('target');
         $point  = $this->getRequest()->getParam('point');
 
+        $this->_table->getAdapter()->beginTransaction();
         $row = $this->_table->find($source)->current();
         if ($point == 'append') {
             $parentField = $this->_parentField;
@@ -302,6 +325,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             }
             $row->numberize('pos', $row->pos, $where);
         }
+        $this->_table->getAdapter()->commit();
     }
 
     public function jsonCollapseAction()

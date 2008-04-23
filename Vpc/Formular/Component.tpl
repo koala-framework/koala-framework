@@ -1,24 +1,17 @@
-{if $component.sent != 3}
-    {if count($component.errors)}
-    <ul class="error">
-    {foreach from=$component.errors item=error}
-        <li>{$error}</li>
-    {/foreach}
-    </ul>
-    {/if}
-    <form action="{$component.action}" method="POST" enctype="{if $component.upload}multipart/form-data{else}application/x-www-form-urlencoded{/if}">
-        {foreach from=$component.paragraphs item=paragraph}
-            {if $paragraph.store.noCols}
-                {component component=$paragraph}
-            {else}
-                <label>{if $paragraph.store.isMandatory} * {/if} {$paragraph.store.fieldLabel}</label>
-                <div class="field">{component component=$paragraph}</div>
-            {/if}
-        {/foreach}
-    </form>
-    {if $component.sent == 2}
-        <p class="error">{trlVps text="Please check you values, errors occured"}</p>
-    {/if}
-{else}
+{if $component.isSuccess}
     {component component=$component.success}
+{else}
+    {if $component.errors}
+        Fehler:
+        <ul>
+        {foreach from=$component.errors item=e}
+            <li>{$e}</li>
+        {/foreach}
+        </ul>
+    {/if}
+
+    <form action="{$component.action}" method="POST">
+        {include file="`$smarty.const.VPS_PATH`/Vpc/Formular/field.tpl" item=$component.form}
+        <button type="submit" name="{$component.formName}" value="submit">{$component.placeholder.submitButton}</button>
+    </form>
 {/if}

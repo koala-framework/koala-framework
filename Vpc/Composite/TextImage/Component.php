@@ -28,5 +28,4 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract_Composite_Component
     {
         return $this->_getRow();
     }
-
 }

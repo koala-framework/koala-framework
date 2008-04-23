@@ -7,7 +7,7 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
     protected function _initFields()
     {
         $types = array();
-        foreach (Zend_Registry::get('config')->pageClasses as $c) {
+        foreach (Zend_Registry::get('config')->vpc->pageClasses as $c) {
             if ($c->class && $c->text) {
                 $types[$c->class] = $c->text;
             }
@@ -26,8 +26,8 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
             ->setAllowBlank(false);
         $fields->add(new Vps_Auto_Field_Checkbox('hide', 'Hide in Menu'));
 
-        $cfg = new Zend_Config_Ini('application/config.ini', 'pagecollection');
-        foreach ($cfg->pagecollection->addDecorators as $decorator) {
+        $cfg = Zend_Registry::get('config');
+        foreach ($cfg->vpc->pageDecorators as $decorator) {
             $formClass = Vpc_Admin::getComponentFile($decorator, 'Form', 'php', true);
             if ($formClass) {
                 $form = new $formClass($decorator, $this->_getParam('id'));
@@ -44,7 +44,7 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
         }
     }
 
-    protected function _beforeInsert(Zend_Db_Table_Row_Abstract $row)
+    protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
         $row->parent_id = $this->_getParam('parent_id');
     }

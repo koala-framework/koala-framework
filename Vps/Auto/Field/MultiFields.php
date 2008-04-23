@@ -3,13 +3,23 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
 {
     public $fields;
     private $_updatedRows;
-    private $_deleteRows;
+    private $_deletedRows;
     private $_insertedRows;
+    private $_model;
 
     public function __construct($tableName = null)
     {
         parent::__construct($tableName);
-        $this->fields = new Vps_Collection();
+        if (class_exists($tableName)) {
+            $model = new $tableName();
+            if ($model instanceof Zend_Db_Table_Abstract) {
+                $model = new Vps_Model_Db(array(
+                    'table' => $model
+                ));
+            }
+            $this->setModel($model);
+        }
+        $this->fields = new Vps_Collection_FormFields();
         $this->setBorder(false);
         $this->setXtype('multifields');
     }
@@ -24,15 +34,27 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
         }
     }
 
+    public function setModel($model)
+    {
+        $this->_model = $model;
+    }
+
+    public function getModel()
+    {
+        return $this->_model;
+    }
+
     public function getMetaData()
     {
         $ret = parent::getMetaData();
         $ret['multiItems'] = $this->fields->getMetaData();
         if (!isset($ret['position'])) {
-            $n = $this->getName();
-            $t = new $n;
-            $fields = $t->info();
-            $ret['position'] = in_array('pos', $fields['cols']);
+            if ($this->_model instanceof Vps_Model_Db) {
+                $info = $this->_model->getTable()->info();
+                $ret['position'] = in_array('pos', $info['cols']);
+            } else {
+                $ret['position'] = false;
+            }
         }
         return $ret;
     }
@@ -46,13 +68,31 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
         return $this->fields;
     }
 
-
-    public function load(Zend_Db_Table_Row_Abstract $row)
+    private function _getRowsByRow(Vps_Model_Row_Interface $row)
+    {
+        if ($this->_model instanceof Vps_Model_FieldRows) {
+            $rows = $this->_model->fetchByParentRow($row);
+        } else if ($this->_model instanceof Vps_Model_Db) {
+            $ref = $this->_model->getTable()
+                    ->getReference(get_class($row->getRow()->getTable()));
+            $where = array();
+            foreach (array_keys($ref['columns']) as $k) {
+                $where["{$ref['columns'][$k]} = ?"] = $row->{$ref['refColumns'][$k]};
+            }
+            $rows = $this->_model->fetchAll($where);
+        } else {
+            //TODO: implement - die relationen muessen iregndwie hergestellt werden
+            throw new Vps_Exception('MultiFields is only implemented for Vps_Model_FieldRows and Vps_Model_Db');
+        }
+        return $rows;
+    }
+    public function load(Vps_Model_Row_Interface $row)
     {
         if ((array)$row == array()) return array();
-
         $ret = array($this->getFieldName()=>array());
-        $rows = $row->findDependentRowset($this->getName());
+
+        $rows = $this->_getRowsByRow($row);
+
         $pos = array();
         foreach ($rows as $r) {
             $retRow = array();
@@ -66,7 +106,7 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
         }
         if (count($pos)) {
             //h�ndisch per php sortieren
-            //kann verbessert werden wenn findDependentRowset ein 3. parameter ein db_select aktzeptiert
+            //todo: kann verbessert werden wenn findDependentRowset ein 3. parameter ein db_select aktzeptiert
             //(ist im moment noch im zend incubator)
             array_multisort($pos, SORT_ASC, SORT_NUMERIC,
                             $ret[$this->getFieldName()]);
@@ -74,18 +114,19 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
         return $ret;
     }
 
-    public function prepareSave(Zend_Db_Table_Row_Abstract $row, $postData)
+    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
     {
         $postData = Zend_Json::decode($postData[$this->getFieldName()]);
-        $rows = $row->findDependentRowset($this->getName());
+        $rows = $this->_getRowsByRow($row);
         $this->_updatedRows = array();
         $this->_deletedRows = array();
         $this->_insertedRows = array();
         $pos = 0;
+
         foreach ($rows as $k=>$r) {
             if (isset($postData[$k])) {
                 $rowPostData = $postData[$k];
-                $this->_updatedRows[] = array($r, $rowPostData);
+                $this->_updatedRows[] = array('row'=>$r, 'data'=>$rowPostData);
                 foreach ($this->fields as $field) {
                     $field->prepareSave($r, $rowPostData);
                 }
@@ -98,12 +139,11 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
                 $this->_deletedRows[] = $r;
             }
         }
+
         foreach ($postData as $k=>$rowPostData) {
             $k = (int)$k;
-            $n = $this->getName();
-            $table = new $n();
-            $r = $table->createRow();
-            $this->_insertedRows[] = array($r, $rowPostData);
+            $r = $this->_model->createRow();
+            $this->_insertedRows[] = array('row'=>$r, 'data'=>$rowPostData);
             foreach ($this->fields as $field) {
                 $field->prepareSave($r, $rowPostData);
             }
@@ -112,30 +152,48 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
                 $r->pos = $pos;
             }
         }
-        $this->_addValidators();
+    }
+    public function validate($postData)
+    {
+        $ret = array();
 
-        $cnt = count($rows) - count($this->_deletedRows) + count($this->_insertedRows);
+        $this->_addValidators();
+        $postData = Zend_Json::decode($postData[$this->getFieldName()]);
+
+        $cnt = count($postData);
         $name = $this->getFieldLabel();
         if (!$name) $name = $this->getName();
         foreach ($this->getValidators() as $v) {
             if (!$v->isValid($cnt)) {
-                throw new Vps_ClientException($name.": ".implode("<br />\n", $v->getMessages()));
+                $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
             }
         }
+        return $ret;
     }
 
-    public function save(Zend_Db_Table_Row_Abstract $row, $postData)
+    public function save(Vps_Model_Row_Interface $row, $postData)
     {
         foreach ($this->_deletedRows as $r) {
             $r->delete();
         }
 
         foreach ($this->_insertedRows as $i) {
-            $r = $i[0];
-            $rowPostData = $i[1];
-            $ref = $r->getTable()->getReference(get_class($row->getTable()));
-            $key1 = $ref['columns'][0];
-            $r->$key1 = $row->id;
+            $r = $i['row'];
+            $rowPostData = $i['data'];
+
+            if ($this->_model instanceof Vps_Model_FieldRows) {
+                //nichts zu tun, keine parent_id muss gesetzt werden
+            } else if ($this->_model instanceof Vps_Model_Db) {
+                $ref = $this->_model->getTable()
+                        ->getReference(get_class($row->getRow()->getTable()));
+                $where = array();
+                foreach (array_keys($ref['columns']) as $k) {
+                    $r->{$ref['columns'][$k]} = $row->{$ref['refColumns'][$k]};
+                }
+            } else {
+                //TODO: implement - die relationen muessen iregndwie hergestellt werden
+                throw new Vps_Exception('MultiFields is only implemented for Vps_Model_FieldRows and Vps_Model_Db');
+            }
             $r->save();
             foreach ($this->fields as $field) {
                 $field->save($r, $rowPostData);
@@ -143,8 +201,8 @@ class Vps_Auto_Field_MultiFields extends Vps_Auto_Field_Abstract
         }
 
         foreach ($this->_updatedRows as $i) {
-            $r = $i[0];
-            $rowPostData = $i[1];
+            $r = $i['row'];
+            $rowPostData = $i['data'];
             $r->save();
             foreach ($this->fields as $field) {
                 $field->save($r, $rowPostData);

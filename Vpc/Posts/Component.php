@@ -34,6 +34,7 @@ class Vpc_Posts_Component extends Vpc_Abstract
         }
         return $this->_paging;
     }
+    
     public function getPosts()
     {
         if (!isset($this->_posts)) {

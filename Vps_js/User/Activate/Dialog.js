@@ -15,7 +15,7 @@ Vps.User.Activate.Dialog = Ext.extend(Ext.Window,
     {
         // Form & Login
         Vps.User.Login.Dialog.superclass.afterRender.call(this);
-        var frameHtml = '<iframe scrolling="no" src="/login/showForm" width="100%" '+
+        var frameHtml = '<iframe scrolling="no" src="/login/show-form" width="100%" '+
                         'height="100%" style="border: 0px"></iframe>';
         var frame = Ext.DomHelper.append(this.body, frameHtml, true);
 
@@ -52,7 +52,7 @@ Vps.User.Activate.Dialog = Ext.extend(Ext.Window,
                                 }, this);
                             };
                             Ext.Ajax.request({
-                                url: '/login/jsonLostPassword',
+                                url: '/login/json-lost-password',
                                 params: { email: email },
                                 success: lostPasswordResultDialog
                             });

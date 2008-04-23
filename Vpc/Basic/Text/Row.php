@@ -107,67 +107,27 @@ class Vpc_Basic_Text_Row extends Vpc_Row
         return $ret;
     }
 
-    private function _getChildComponentNrs($content = null, $type = null)
-    {
-        $ret = array();
-        foreach ($this->getContentParts($content) as $p) {
-            if (is_string($p)) {
-            } else if ($p['type'] == 'image') {
-                $ret[] = 'i'.$p['nr'];
-            } else if ($p['type'] == 'link') {
-                $ret[] = 'l'.$p['nr'];
-            } else if ($p['type'] == 'download') {
-                $ret[] = 'd'.$p['nr'];
-            }
-        }
-        return $ret;
-    }
-
-    private function _getTypeChildComponentNrs($type, $content = null)
-    {
-        $ret = array();
-        foreach ($this->getContentParts($content) as $p) {
-            if (is_string($p)) {
-            } else if ($p['type'] == $type) {
-                $ret[] = $p['nr'];
-            }
-        }
-        return $ret;
-    }
-
     public function getMaxChildComponentNr($type)
     {
-        $nrs = array_merge($this->_getTypeChildComponentNrs($type, $this->content),
-                    $this->_getTypeChildComponentNrs($type, $this->content_edit));
-        if (isset($this->_cleanData['content']) && $this->content != $this->_cleanData['content']) {
-            $nrs = array_merge($nrs, $this->_getTypeChildComponentNrs($type, $this->_cleanData['content']));
-        }
-        if ($nrs) {
-            $nr = max($nrs);
-        } else {
-            $nr = 0;
-        }
-        return $nr;
+        $select = $this->getTable()->getAdapter()->select();
+        $select->from('vpc_basic_text_components', new Zend_Db_Expr('MAX(nr)'))
+                ->where('component_id = ?', $this->component_id)
+                ->where('type = ?', $type);
+        return $select->query()->fetchColumn();
     }
 
     protected function _delete()
     {
         $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
                                             'childComponentClasses');
-        if ($classes['image']) $imageAdmin = Vpc_Admin::getInstance($classes['image']);
-        if ($classes['link']) $linkAdmin = Vpc_Admin::getInstance($classes['link']);
-        if ($classes['download']) $downloadAdmin = Vpc_Admin::getInstance($classes['download']);
 
-        $parts = array_unique(array_merge($this->_getChildComponentNrs($this->content),
-                                          $this->_getChildComponentNrs($this->content_edit)));
-        foreach ($parts as $part) {
-            if (substr($part, 0, 1) == 'l') {
-                $linkAdmin->delete($this->component_id . '-' . $part);
-            } else if (substr($part, 0, 1) == 'i') {
-                $imageAdmin->delete($this->component_id . '-' . $part);
-            } else if (substr($part, 0, 1) == 'd') {
-                $downloadAdmin->delete($this->component_id . '-' . $part);
-            }
+        $table = new Vpc_Basic_Text_ChildComponentsModel();
+        $rows = $table->fetchAll(array('component_id = ?' => $this->component_id));
+        foreach ($rows as $row) {
+            $t = substr($row->type, 0, 1);
+            $admin = Vpc_Admin::getInstance($classes[$row->type]);
+            $admin->delete($this->component_id . '-' . $t.$row->nr);
+            $row->delete();
         }
     }
 
@@ -177,32 +137,48 @@ class Vpc_Basic_Text_Row extends Vpc_Row
         $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
                                             'childComponentClasses');
 
-        if ($classes['image']) $imageAdmin = Vpc_Admin::getInstance($classes['image']);
-        if ($classes['link']) $linkAdmin = Vpc_Admin::getInstance($classes['link']);
-        if ($classes['download']) $downloadAdmin = Vpc_Admin::getInstance($classes['download']);
-
         $this->content = $this->tidy($this->content);
-
-        $newParts = $this->_getChildComponentNrs($this->content);
-        $newParts = array_merge($newParts, $this->_getChildComponentNrs($this->content_edit));
-        $newParts = array_unique($newParts);
-
-        $oldParts = $this->_getChildComponentNrs($this->_cleanData['content']);
-        $oldParts = array_merge($oldParts,
-                                $this->_getChildComponentNrs($this->_cleanData['content_edit']));
-        $oldParts = array_unique($oldParts);
-
-        foreach ($oldParts as $oldPart) {
-            if (!in_array($oldPart, $newParts)) {
-                if (substr($oldPart, 0, 1) == 'l') {
-                    $linkAdmin->delete($this->component_id . '-' . $oldPart);
-                } else if (substr($oldPart, 0, 1) == 'i') {
-                    $imageAdmin->delete($this->component_id . '-' . $oldPart);
-                } else if (substr($oldPart, 0, 1) == 'd') {
-                    $downloadAdmin->delete($this->component_id . '-' . $oldPart);
-                }
+        $newParts = $this->getContentParts($this->content);
+        $newPartStrings = array();
+        foreach ($newParts as $part) {
+            if (!is_string($part) ) {
+                $newPartStrings[] = $part['type'].$part['nr'];
             }
         }
+
+        $table = new Vpc_Basic_Text_ChildComponentsModel();
+        $rows = $table->fetchAll(array('component_id = ?' => $this->component_id));
+        $existingParts = array();
+        foreach ($rows as $row) {
+            $t = substr($row->type, 0, 1);
+            if (!in_array($row->type.$row->nr, $newPartStrings)) {
+                $admin = Vpc_Admin::getInstance($classes[$row->type]);
+                $admin->delete($this->component_id . '-' . $t.$row->nr);
+                $row->delete();
+            } else {
+                if (!$row->saved) {
+                    $row->saved = 1;
+                    $row->save();
+                }
+                $existingParts[] = $row->type.$row->nr;
+            }
+        }
+
+        foreach ($newParts as $part) {
+            if (!is_string($part)
+                && !in_array($part['type'].$part['nr'], $existingParts)) {
+                $row = $table->createRow();
+                $row->component_id = $this->component_id;
+                $row->type = $part['type'];
+                $row->nr = $part['nr'];
+                $row->saved = 1;
+                $row->save();
+            }
+        }
+    }
+    protected function _insert()
+    {
+        $this->_update();
     }
 
     public function tidy($html)

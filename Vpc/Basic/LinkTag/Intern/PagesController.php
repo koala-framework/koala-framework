@@ -1,6 +1,7 @@
 <?php
 class Vpc_Basic_LinkTag_Intern_PagesController extends Vps_Controller_Action_Component_PagesController
 {
+/*
     private $_pc;
 
     public function init()
@@ -75,4 +76,5 @@ class Vpc_Basic_LinkTag_Intern_PagesController extends Vps_Controller_Action_Com
         $data['uiProvider'] = 'Vps.Component.PagesNode';
         return $data;
     }
+    */
 }

@@ -24,7 +24,11 @@ class Vpc_Table extends Vps_Db_Table
 
     public function findRow($id)
     {
-        return $this->find($id)->current();
+        $row = $this->find($id)->current();
+        if (!$row) {
+            $row = $this->createRow();
+        }
+        return $row;
     }
     public function createRow(array $data = array())
     {

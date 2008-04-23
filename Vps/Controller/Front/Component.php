@@ -28,7 +28,7 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                           'controller' => 'components',
                           'action' => 'show')));
         $router->AddRoute('componentjsonshow', new Zend_Controller_Router_Route(
-                    '/admin/component/jsonshow/:class/:componentId',
+                    'admin/component/json-show/:class/:componentId',
                     array('componentId'=>null,
                           'module' => 'vps_controller_action_component',
                           'controller' => 'components',

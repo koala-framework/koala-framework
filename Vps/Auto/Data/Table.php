@@ -21,7 +21,7 @@ class Vps_Auto_Data_Table extends Vps_Auto_Data_Abstract
         return $row->$name;
     }
 
-    public function save(Zend_Db_Table_Row_Abstract $row, $data)
+    public function save(Vps_Model_Row_Interface $row, $data)
     {
         $name = $this->getFieldname();
         $row->$name = $data;

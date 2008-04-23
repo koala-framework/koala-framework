@@ -20,6 +20,10 @@ class Vps_Auto_Data_Table_Parent extends Vps_Auto_Data_Abstract
         } else {
             $tables = $this->_parentTable;
         }
+        if (!($row instanceof Vps_Model_Db_Row)) {
+            throw new Vps_Exception("Data_Table_Parent only works with Vps_Model_Db");
+        }
+        $row = $row->getRow();
         foreach ($tables as $t) {
             $row = $row->findParentRow($t, $this->_ruleKey);
             if (!$row) return '';

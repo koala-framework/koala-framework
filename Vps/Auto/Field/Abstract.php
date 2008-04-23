@@ -9,6 +9,7 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
     {
         if ($field_name) $this->setName($field_name);
         if ($field_label) $this->setFieldLabel($field_label);
+        $this->setLabelSeparator(':');
         $this->_init();
     }
 
@@ -76,6 +77,19 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
         return $ret;
     }
 
+    public function validate($postData)
+    {
+        $this->_addValidators();
+
+        $ret = array();
+        if ($this->hasChildren()) {
+            foreach ($this->getChildren() as $field) {
+                $ret = array_merge($ret, $field->validate($postData));
+            }
+        }
+        return $ret;
+    }
+
     public function prepareSave($row, $postData)
     {
         $this->_addValidators();
@@ -96,7 +110,7 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
         }
     }
 
-    public function delete(Zend_Db_Table_Row_Abstract $row)
+    public function delete(Vps_Model_Row_Interface $row)
     {
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
@@ -174,5 +188,11 @@ abstract class Vps_Auto_Field_Abstract implements Vps_Collection_Item_Interface
         $this->_data = $data;
         $data->setFieldname($this->getName());
         return $this;
+    }
+    public function getTemplateVars($values)
+    {
+        $ret = array();
+        $ret['item'] = $this;
+        return $ret;
     }
 }

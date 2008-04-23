@@ -11,7 +11,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             $class = $request->getParam('class');
 
             // Zuerst direkt Controller zu Klasse suchen
-            if (class_exists($class . 'Controller')) {
+            if (Vps_Loader::classExists($class . 'Controller')) {
                 $className = $class . 'Controller';
             }
 
@@ -24,7 +24,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
                         $cc = substr($cc, 0, -9);
                     }
                     $cc .= 'Controller';
-                    if (class_exists($cc)) {
+                    if (Vps_Loader::classExists($cc)) {
                         return $cc;
                     }
                     $class = get_parent_class($class);

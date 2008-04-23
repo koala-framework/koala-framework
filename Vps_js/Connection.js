@@ -2,7 +2,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
     request: function(options)
     {
 
-        if (options.url.match(/[\/a-zA-Z0-9]*\/json[a-zA-Z0-9]+(\/|\?|)/)) {
+        if (options.url.match(/[\/a-zA-Z0-9]*\/json[a-zA-Z0-9\-]+(\/|\?|)/)) {
 
             if (options.mask) {
                 if (Vps.Connection.masks == 0) {
@@ -47,18 +47,29 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
     {
         options.vpsIsSuccess = false;
         options.vpsLogin = false;
+
+        var encParams;
+        if (typeof options.params == "string") {
+            encParams = options.params;
+        } else {
+            encParams = Ext.urlEncode(options.params);
+        }
         try {
             var r = Ext.decode(response.responseText);
         } catch(e) {
-            var p;
-            if (typeof options.params == "string") {
-                p = options.params;
-            } else {
-                p = Ext.urlEncode(options.params);
-            }
-            var errorMsg = '<a href="'+options.url+'?'+p+'">request-url</a><br />';
+            var errorMsg = '<a href="'+options.url+'?'+encParams+'">request-url</a><br />';
             errorMsg += e.toString()+': <br />'+response.responseText;
-            var errorMsgTitle = 'Javascript Parse Exception';
+            var errorMsgTitle = trlVps('Javascript Parse Exception');
+            return;
+        }
+        if (Vps.Debug.querylog && r.requestNum) {
+            var rm = location.protocol + '/'+'/' + location.host;
+            var url = options.url;
+            if (url.substr(0, rm.length) == rm) {
+                url = url.substr(rm.length);
+            }
+            var data = [[new Date(), url, encParams, r.requestNum]];
+            Vps.Debug.requestsStore.loadData(data, true);
         }
 
         if (!errorMsg && r.exception) {
@@ -73,7 +84,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             var errorMsgTitle = 'PHP Exception';
         }
         if (errorMsg) {
-            if (Vps.debug) {
+            if (Vps.Debug.displayErrors) {
                 Ext.Msg.show({
                     title: errorMsgTitle,
                     msg: errorMsg,
@@ -84,7 +95,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             } else {
                 Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
                 Ext.Ajax.request({
-                    url: '/vps/error/error/jsonMail',
+                    url: '/vps/error/error/json-mail',
                     params: {msg: errorMsg}
                 });
             }

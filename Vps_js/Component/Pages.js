@@ -199,7 +199,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 text    : trlVps('Make selected Page Homepage'),
                 handler : function (o, e) {
                     Ext.Ajax.request({
-                        url: '/admin/component/pages/jsonMakeHome',
+                        url: '/admin/component/pages/json-make-home',
                         success: function(r) {
                             response = Ext.decode(r.responseText);
                             var oldhome = this.treePanel.tree.getNodeById(response.oldhome);

@@ -22,7 +22,7 @@ Vps.Auto.AssignGridPanel = Ext.extend(Vps.Binding.ProxyPanel, {
         });
 
         if (this.assignActionUrl == '') {
-            this.assignActionUrl = this.gridAssignedControllerUrl + '/jsonAssign';
+            this.assignActionUrl = this.gridAssignedControllerUrl + '/json-assign';
         }
 
         this.gridAssigned = new Vps.Auto.AssignedGridPanel({

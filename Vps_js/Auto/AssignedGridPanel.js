@@ -26,7 +26,7 @@ Vps.Auto.AssignedGridPanel = Ext.extend(Vps.Auto.GridPanel,
                 if (btn == 'ok') {
                     params.assignText = text;
                     Ext.Ajax.request({
-                        url: this.controllerUrl + '/jsonTextAssign',
+                        url: this.controllerUrl + '/json-text-assign',
                         params: params,
                         success: function(response, options, r) {
                             this.reload();

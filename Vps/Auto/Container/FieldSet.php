@@ -18,15 +18,7 @@ class Vps_Auto_Container_FieldSet extends Vps_Auto_Container_Abstract
         return $this;
     }
 
-    public function setNamePrefix($v)
-    {
-        parent::setNamePrefix($v);
-        if ($this->_checkboxHiddenField) {
-            $this->_checkboxHiddenField->setNamePrefix($v);
-        }
-    }
-
-    public function prepareSave($row, $postData)
+    public function validate($postData)
     {
         if ($this->_checkboxHiddenField) {
             $n = $this->_checkboxHiddenField->getFieldName();
@@ -38,7 +30,7 @@ class Vps_Auto_Container_FieldSet extends Vps_Auto_Container_Abstract
                 }
             }
         }
-        parent::prepareSave($row, $postData);
+        return parent::validate($postData);
     }
 
     public function getMetaData()

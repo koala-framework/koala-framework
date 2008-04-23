@@ -47,7 +47,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
         Ext.Ajax.request({
             mask: true,
-            url: this.controllerUrl + '/jsonMeta',
+            url: this.controllerUrl + '/json-meta',
             params: this.baseParams,
             success: this.onMetaChange,
             scope: this
@@ -79,7 +79,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
 //            animate     : true,
             loader      : new Ext.tree.TreeLoader({
                 baseParams  : baseParams,
-                dataUrl     : this.controllerUrl + '/jsonData'
+                dataUrl     : this.controllerUrl + '/json-data'
             }),
             enableDD    : meta.enableDD,
             autoScroll: true,
@@ -172,7 +172,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     onSave : function (id)
     {
         Ext.Ajax.request({
-            url: this.controllerUrl + '/jsonNodeData',
+            url: this.controllerUrl + '/json-node-data',
             params: { node: id },
             success: function(r) {
                 this.onSaved(Ext.decode(r.responseText).data);
@@ -199,7 +199,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             function  (button) {
                 if (button == 'yes') {
                     Ext.Ajax.request({
-                        url: this.controllerUrl + '/jsonDelete',
+                        url: this.controllerUrl + '/json-delete',
                         params: {
                             id: this.tree.getSelectionModel().getSelectedNode().id
                         },
@@ -216,7 +216,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     onMove : function(e){
         Ext.Ajax.request({
-            url: this.controllerUrl + '/jsonMove',
+            url: this.controllerUrl + '/json-move',
             params: {
                 source: e.dropNode.id,
                 target: e.target.id,
@@ -232,7 +232,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     onCollapseNode : function(node) {
         Ext.Ajax.request({
-            url: this.controllerUrl + '/jsonCollapse',
+            url: this.controllerUrl + '/json-collapse',
             params: {id: node.id}
         });
     },
@@ -240,7 +240,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     onExpandNode : function(node) {
         if (node.attributes.children && node.attributes.children.length > 0) {
             Ext.Ajax.request({
-                url: this.controllerUrl + '/jsonExpand',
+                url: this.controllerUrl + '/json-expand',
                 params: {id: node.id}
             });
         }
@@ -248,7 +248,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     onVisible : function (o, e) {
         Ext.Ajax.request({
-            url: this.controllerUrl + '/jsonVisible',
+            url: this.controllerUrl + '/json-visible',
             params: {
                 id: this.tree.getSelectionModel().getSelectedNode().id
             },

@@ -24,14 +24,16 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         return $where;
     }
 
+    public function preDispatch()
+    {
+        $this->_table = Zend_Registry::get('userModel');
+        $this->_table->createAllCache();
+        parent::preDispatch();
+    }
+
     protected function _initColumns()
     {
         parent::_initColumns();
-
-        $this->_table = Zend_Registry::get('userModel');
-        $this->_table->createAllCache();
-
-
         $this->_columns->add(new Vps_Auto_Grid_Column_Button('edit', trlVps('Edit')));
         $this->_columns->add(new Vps_Auto_Grid_Column('id', 'ID', 50));
         $this->_columns->add(new Vps_Auto_Grid_Column('email', trlVps('Email'), 140));
