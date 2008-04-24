@@ -52,6 +52,16 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract implements
         }
     }
 
+    public function setProperties(array $properties)
+    {
+        foreach ($properties as $k=>$value) {
+            if (is_string($k) && $k != 'id') {
+                $fn = 'set'.str_replace(' ','',ucwords(str_replace('_', ' ', $k)));
+                call_user_func(array($this, $fn), $value);
+            }
+        }
+    }
+
     public function getMetaData()
     {
         $ret = $this->_properties;

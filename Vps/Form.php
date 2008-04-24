@@ -12,8 +12,7 @@ class Vps_Form extends Vps_Form_NonTableForm
         if (!isset($this->fields)) {
             $this->fields = new Vps_Collection_FormFields();
         }
-        parent::__construct($name);
-        $this->setId($id);
+        parent::__construct($name, $id);
     }
 
     protected function _init()
@@ -30,6 +29,7 @@ class Vps_Form extends Vps_Form_NonTableForm
     //kann überschrieben werden wenn wir eine anderen row haben wollen
     protected function _getRowByParentRow($parentRow)
     {
+        if ($this->_row) return $this->_row;
         if ($parentRow && $this->_model instanceof Vps_Model_Field) {
             return $this->_model->getRowByParentRow($parentRow);
         } else {

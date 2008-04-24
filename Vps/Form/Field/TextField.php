@@ -28,18 +28,18 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         if (isset($values[$name])) {
             $value = $values[$name];
         } else {
-            $value = '';
+            $value = $this->getDefaultValue();
         }
         $ret = parent::getTemplateVars($values);
         //todo: escapen
-        $ret['html'] = "<input type=\"text\" id=\"$name\" name=\"$name\" value=\"$value\" />";
+        $ret['html'] = "<input type=\"text\" id=\"$name\" name=\"$name\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
         return $ret;
     }
 
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'name' => trlVps('Text Field')
+            'componentName' => trlVps('Text Field')
         ));
     }
 }

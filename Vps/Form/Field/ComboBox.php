@@ -40,12 +40,19 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
             $data = $data->toStringDataArray();
             return $this->setStore(array('data' => $data));
         } else if (is_array($data)) {
+            if (isset($data['data'])) $data = $data['data'];
             $d = array();
             foreach ($data as $k=>$i) {
                 if (!is_array($i)) {
                     $d[] = array($k, $i);
                 } else {
-                    $d[] = $i;
+                    if (isset($i['id'])) $id = $i['id'];
+                    elseif (isset($i[0])) $id = $i[0];
+                    else throw new Vps_Exception("id not found");
+                    if (isset($i['value'])) $value = $i['value'];
+                    else if (isset($i[1])) $value = $i[1];
+                    else throw new Vps_Exception("value not found");
+                    $d[] = array($id, $value);
                 }
             }
             return $this->setStore(array('data' => $d));

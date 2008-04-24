@@ -6,4 +6,27 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
         parent::__construct($field_name, $field_label);
         $this->setXtype('checkbox');
     }
+
+    public function getTemplateVars($values)
+    {
+        $name = $this->getFieldName();
+        if (isset($values[$name])) {
+            $value = $values[$name];
+        } else {
+            $value = $this->getDefaultValue();
+        }
+        $ret = parent::getTemplateVars($values);
+        //todo: escapen
+        $ret['html'] = "<input type=\"checkbox\" id=\"$name\" name=\"$name\" ";
+        if ($value) 'checked="checked" ';
+        $ret['html'] .= "/>";
+        return $ret;
+    }
+
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName' => trlVps('Checkbox')
+        ));
+    }
 }
