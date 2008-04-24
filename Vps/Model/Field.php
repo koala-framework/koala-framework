@@ -69,6 +69,11 @@ class Vps_Model_Field extends Vps_Model_Abstract
         return $this->_parentModel->getPrimaryKey();
     }
 
+    public function getParentModel()
+    {
+        return $this->_parentModel;
+    }
+
     public function getRowByParentRow($parentRow)
     {
         return new $this->_rowClass(array(

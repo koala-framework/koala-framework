@@ -3,6 +3,8 @@ class Vps_Index_Vpc
 {
     public static function update($componentId)
     {
+        //TODO auf TreeCache aktuallisieren
+        /*
         $pc = Vps_PageCollection_Abstract::getInstance();
         $page = $pc->getPageById($componentId);
         $searchVars = $page->getSearchVars();
@@ -14,5 +16,6 @@ class Vps_Index_Vpc
         }
         $row->text = trim($searchVars['text']);
         $row->save();
+        */
     }
 }

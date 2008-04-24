@@ -10,7 +10,7 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
             $this->fields = new Vps_Collection_FormFields();
         }
         parent::__construct($name);
-        $this->setId($id);
+        if (!is_null($id)) $this->setId($id);
     }
 
     protected function _getRowByParentRow($parentRow)

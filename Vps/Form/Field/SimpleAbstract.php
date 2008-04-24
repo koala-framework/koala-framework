@@ -23,7 +23,9 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
 
             $name = $this->getFieldLabel();
             if (!$name) $name = $this->getName();
-            if ($this->getAllowBlank() === false) {
+            if ($this->getAllowBlank() === false
+                || $this->getAllowBlank() === 0
+                || $this->getAllowBlank() === '0') {
                 $v = new Vps_Validate_NotEmpty();
                 if (!$v->isValid($data)) {
                     $ret[] = $name.": ".implode("<br />\n", $v->getMessages());

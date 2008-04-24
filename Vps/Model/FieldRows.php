@@ -22,7 +22,7 @@ class Vps_Model_FieldRows extends Vps_Model_Abstract
     public function setParentRow(Vps_Model_Row_Interface $row)
     {
         $this->_parentRow = $row;
-        $v = unserialize($this->_parentRow->{$this->_fieldName});
+        $v = (array)$this->_parentRow->{$this->_fieldName};
         if (isset($v['data'])) {
             $this->_data = $v['data'];
         } else {
@@ -96,10 +96,10 @@ class Vps_Model_FieldRows extends Vps_Model_Abstract
 
     private function _updateRow()
     {
-        $v = serialize(array(
+        $v = array(
             'data' => $this->_data,
             'autoId' => $this->_autoId
-        ));
+        );
         $this->_parentRow->{$this->_fieldName} = $v;
         $this->_parentRow->save();
     }

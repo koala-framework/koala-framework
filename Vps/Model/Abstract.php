@@ -17,7 +17,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     {
         if (!isset($data['id'])) $data['id'] = null;
         return new $this->_rowClass(array(
-            'data' => $id,
+            'data' => $data,
             'model' => $this
         ));
     }

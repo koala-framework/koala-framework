@@ -17,7 +17,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             ->setData(new Vps_Data_Vpc_ComponentName());
 
         $this->_columns->add(new Vps_Grid_Column('preview', trlVps('Preview'), 500))
-            ->setData(new Vps_Data_Vpc_Frontend($this->class, $this->componentId))
+            ->setData(new Vps_Data_Vpc_Frontend($this->class))
             ->setRenderer('component');
         $this->_columns->add(new Vps_Grid_Column_Visible());
         $this->_columns->add(new Vps_Grid_Column_Button())
@@ -53,7 +53,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $this->_model->getTable()->numberize($id, 'pos', null, $where);
 
             // Hack für weiterleiten auf Edit-Seite
-            $name = Vpc_Abstract::getSetting($this->_model->getTable()->getComponentClass(), 'componentName');
+            $name = Vpc_Abstract::getSetting($this->class, 'componentName');
             $name = str_replace('.', ' -> ', $name);
             $data = $this->_model->find($id)->current()->getRow()->toArray();
             $this->view->data = $data;

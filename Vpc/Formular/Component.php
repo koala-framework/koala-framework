@@ -47,8 +47,6 @@ class Vpc_Formular_Component extends Vpc_Abstract
         $dec = $this->_getSetting('decorator');
         if ($dec && is_string($dec)) {
             $dec = new $dec();
-        }
-        if ($dec) {
             $ret['form'] = $dec->processItem($ret['form']);
         }
 
@@ -58,7 +56,7 @@ class Vpc_Formular_Component extends Vpc_Abstract
 
         $componentId = $this->getTreeCacheRow()->component_id.'-success';
         $row = $this->getTreeCacheRow()->getTable()->find($componentId)->current();
-        $return['success'] = $row->getComponent()->getTemplateVars();
+        $ret['success'] = $row->getComponent()->getTemplateVars();
 
         return $ret;
     }

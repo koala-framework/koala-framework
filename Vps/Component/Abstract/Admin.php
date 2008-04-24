@@ -100,5 +100,12 @@ class Vps_Component_Abstract_Admin
         }
         return $ret;
     }
+    public static function getComponentClass($class, $filename)
+    {
+        return self::getComponentFile($class, $filename, 'php', true);
+    }
 
+    public function delete()
+    {
+    }
 }

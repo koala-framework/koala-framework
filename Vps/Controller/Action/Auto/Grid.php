@@ -454,7 +454,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
                     throw new Vps_ClientException(implode("<br />", $invalid));
                 }
                 if ($id && $column->getDataIndex() == $this->_position) {
-                    $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
+                    $row->getRow()->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
                 } else {
                     $column->prepareSave($row, $submitRow);
                 }
@@ -472,7 +472,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             $this->_afterSave($row, $submitRow);
             if (!$id) {
                 if ($this->_position) {
-                    $row->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
+                    $row->getRow()->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
                 }
                 $addedIds[] = $row->id;
             }

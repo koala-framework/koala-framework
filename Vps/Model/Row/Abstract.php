@@ -54,5 +54,10 @@ class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     {
         return $this->_model->getPrimaryKey();
     }
+    public function toArray()
+    {
+        return $this->_data;
+    }
+
 }
 

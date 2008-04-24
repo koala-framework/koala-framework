@@ -90,7 +90,7 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
                     $row = $tc->fetchAll($where)->current();
                 }
                 if (!$row) {
-                    throw new Vps_Controller_Action_Web_FileNotFoundException('Page not found for path ' . $this->getRequest()->getPathInfo());
+                    throw new Vps_Controller_Action_Web_FileNotFoundException('Page not found for path ' . $requestUrl);
                 }
                 if ($row->url_match != $requestUrl) {
                     header('Location: '.$row->url_match);
