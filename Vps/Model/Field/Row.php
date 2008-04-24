@@ -10,7 +10,11 @@ class Vps_Model_Field_Row extends Vps_Model_Row_Abstract
 
         $this->_fieldName = $config['fieldName'];
         $this->_parentRow = $config['parentRow'];
-        $data = (array)$this->_parentRow->{$this->_fieldName};
+        $data = $this->_parentRow->{$this->_fieldName};
+        if (!$data) {
+            $data = $config['model']->getDefault();
+        }
+        $data = (array)$data;
         
         $data[$pk] = $this->_parentRow->$pk;
         $config['data'] = $data;
@@ -25,7 +29,6 @@ class Vps_Model_Field_Row extends Vps_Model_Row_Abstract
     public function __set($name, $value)
     {
         parent::__set($name, $value);
-        
         $pk = $this->_getPrimaryKey();
         $data = $this->_data;
         unset($data[$pk]);
