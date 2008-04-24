@@ -7,6 +7,8 @@ class Vpc_Formular_Dynamic_Component extends Vpc_Formular_Component
         $ret['childComponentClasses']['textfield'] = 'Vps_Form_Field_TextField';
         $ret['childComponentClasses']['checkbox'] = 'Vps_Form_Field_Checkbox';
         $ret['childComponentClasses']['select'] = 'Vps_Form_Field_Select';
+        $ret['childComponentClasses']['numberfield'] = 'Vps_Form_Field_NumberField';
+        $ret['childComponentClasses']['textarea'] = 'Vps_Form_Field_TextArea';
         $ret['childComponentClasses']['text'] = 'Vpc_Basic_Text_Component';
         $ret['tablename'] = 'Vpc_Formular_Dynamic_Model';
         return $ret;
@@ -34,12 +36,23 @@ class Vpc_Formular_Dynamic_Component extends Vpc_Formular_Component
             'fieldName' => 'settings'
         ));
 
+        $childComponents = $this->getTreeCacheRow()->findChildComponents();
+
         foreach ($t->fetchAll($where, 'pos') as $field) {
             $c = $field->component_class;
-            $f = new $c();
-            $f->setProperties($settingsModel->getRowByParentRow($field)->toArray());
-            if (!$f->getName()) $f->setName('field'.$field->id);
-            $this->_form->add($f);
+            if (is_subclass_of($c, 'Vpc_Abstract')) {
+                $f = false;
+                foreach ($childComponents as $component) {
+                    if ($component->tag == $field->id) {
+                        $f = new Vps_Form_Field_ComponentContainer($component->getComponent());
+                    }
+                }
+            } else {
+                $f = new $c();
+                $f->setProperties($settingsModel->getRowByParentRow($field)->toArray());
+                if (!$f->getName()) $f->setName('field'.$field->id);
+            }
+            if ($f) $this->_form->add($f);
         }
     }
 }

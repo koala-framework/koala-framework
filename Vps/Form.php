@@ -29,7 +29,6 @@ class Vps_Form extends Vps_Form_NonTableForm
     //kann überschrieben werden wenn wir eine anderen row haben wollen
     protected function _getRowByParentRow($parentRow)
     {
-        if ($this->_row) return $this->_row;
         if ($parentRow && $this->_model instanceof Vps_Model_Field) {
             return $this->_model->getRowByParentRow($parentRow);
         } else {
@@ -46,7 +45,7 @@ class Vps_Form extends Vps_Form_NonTableForm
         } else if (!$row instanceof Vps_Model_Row_Interface) {
             throw new Vps_Exception('Row must be a Vps_Model_Row_Interface.');
         }
-        parent::prepareSave($row, $postData);
+        parent::prepareSave($parentRow, $postData);
     }
 
     public function save($parentRow, $postData)
@@ -61,7 +60,7 @@ class Vps_Form extends Vps_Form_NonTableForm
             throw new Vps_Exception('Row must be a Vps_Model_Row_Interface.');
         }
         $row->save();
-        parent::save($row, $postData);
+        parent::save($parentRow, $postData);
 
         $primaryKey = $this->getPrimaryKey();
         if (is_array($primaryKey)) $primaryKey = $primaryKey[1];
@@ -88,7 +87,7 @@ class Vps_Form extends Vps_Form_NonTableForm
         } else if (!$row instanceof Vps_Model_Row_Interface) {
             throw new Vps_Exception('Row must be a Vps_Model_Row_Interface.');
         }
-        parent::delete($row);
+        parent::delete($parentRow);
         $row->delete();
     }
 

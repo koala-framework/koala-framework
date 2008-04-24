@@ -6,10 +6,10 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
         $componentList = array();
         foreach ($this->_getComponents() as $component) {
             $name = Vpc_Abstract::getSetting($component, 'componentName');
-            if (!$name) $name = Vpc_Abstract::getSetting($component, 'name');
             $icon = Vpc_Abstract::getSetting($component, 'componentIcon');
-            if (!$icon) $icon = Vpc_Abstract::getSetting($component, 'icon');
-            $icon = $icon->__toString();
+            if ($icon) {
+                $icon = $icon->__toString();
+            }
             $hide = Vpc_Abstract::getSetting($component, 'hideInParagraphs');
             if ($hide !== true && $name) {
                 $str = '$componentList["' . str_replace('.', '"]["', $name) . '"] = "' . $component . '";';

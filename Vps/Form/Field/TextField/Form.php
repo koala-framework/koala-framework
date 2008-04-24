@@ -10,9 +10,11 @@ class Vps_Form_Field_TextField_Form extends Vps_Form_Field_Abstract_Form
             ->setWidth(50);
         $this->add(new Vps_Form_Field_TextField('default_value', trlVps('Default Value')))
             ->setWidth(150);
-        $this->add(new Vps_Form_Field_Select('validator', trlVps('Validator')))
+        $this->add(new Vps_Form_Field_Select('v_type', trlVps('Validator')))
             ->setValues(array(''=> trlVps('No Validator'),
-                              'Zend_Validate_EmailAddress' => trlVps('E-Mail'),
-                              'Zend_Validate_Date' => trlVps('Date')));
+                              'email' => trlVps('E-Mail'),
+                              'url' => trlVps('Url'),
+                              'alpha' => trlVps('Alpha'),
+                              'alphanum' => trlVps('Alpha Numeric')));
     }
 }

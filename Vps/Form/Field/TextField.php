@@ -39,7 +39,11 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName' => trlVps('Text Field')
+            'componentName' => trlVps('Text Field'),
+            'default' => array(
+                'width' => 150,
+                'max_length' => 100
+            )
         ));
     }
 }

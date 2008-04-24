@@ -1,5 +1,5 @@
 <?php
-class Vps_Form_Field_NumberField extends Vps_Form_Field_SimpleAbstract
+class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -24,5 +24,13 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_SimpleAbstract
         } else {
             $this->addValidator(new Zend_Validate_Float());
         }
+    }
+
+
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName' => trlVps('Number Field')
+        ));
     }
 }

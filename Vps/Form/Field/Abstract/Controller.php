@@ -11,7 +11,8 @@ class Vps_Form_Field_Abstract_Controller extends Vps_Controller_Action_Auto_Form
             'parentModel' => new Vps_Model_Db(array(
                                 'table' => new Vpc_Formular_Dynamic_Model()
                             )),
-            'fieldName' => 'settings'
+            'fieldName' => 'settings',
+            'default' => Vpc_Abstract::getSetting($this->class, 'default')
         )));
         //TODO: recht unschön :D
         if (preg_match('#[0-9]*$#', $this->componentId, $m)) {

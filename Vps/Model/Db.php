@@ -5,10 +5,13 @@ class Vps_Model_Db implements Vps_Model_Interface
     protected $_rowsetClass = 'Vps_Model_Db_Rowset';
     protected $_table;
     protected $_tableName;
+    protected $_default = array();
 
     public function __construct($config)
     {
         if (isset($config['table'])) $this->_table = $config['table'];
+        if (isset($config['default'])) $this->_default = $config['default'];
+        $this->_init();
     }
     protected function _init()
     {
@@ -19,6 +22,7 @@ class Vps_Model_Db implements Vps_Model_Interface
 
     public function createRow(array $data=array())
     {
+        $data = array_merge($this->_default, $data);
         return new $this->_rowClass(array(
             'row' => $this->_table->createRow($data),
             'model' => $this
