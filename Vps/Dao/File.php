@@ -11,6 +11,5 @@ class Vps_Dao_File extends Vps_Db_Table
                 $file->delete();
             }
         }
-        die();
     }
 }
