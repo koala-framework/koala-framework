@@ -1,6 +1,8 @@
 <?php
 class Vpc_Formular_Dynamic_Component extends Vpc_Formular_Component
 {
+    private $_settingsModel;
+    private $_childComponents;
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -9,6 +11,7 @@ class Vpc_Formular_Dynamic_Component extends Vpc_Formular_Component
         $ret['childComponentClasses']['select'] = 'Vps_Form_Field_Select';
         $ret['childComponentClasses']['numberfield'] = 'Vps_Form_Field_NumberField';
         $ret['childComponentClasses']['textarea'] = 'Vps_Form_Field_TextArea';
+        $ret['childComponentClasses']['fieldset'] = 'Vps_Form_Container_FieldSet';
         $ret['childComponentClasses']['text'] = 'Vpc_Basic_Text_Component';
         $ret['tablename'] = 'Vpc_Formular_Dynamic_Model';
         return $ret;
@@ -25,34 +28,63 @@ class Vpc_Formular_Dynamic_Component extends Vpc_Formular_Component
                 'table' => new Vpc_Formular_Dynamic_Model()
             ));
         $where = array(
-            'component_id = ?' => $this->getTreeCacheRow()->db_id
+            //todo: ned schön, wegen fieldset (das soll anders, besser speichern)
+            "component_id = ? OR component_id LIKE CONCAT(?, '-%')"
+                                        => $this->getTreeCacheRow()->db_id
         );
         if (!$this->_showInvisible()) {
             $where[] = 'visible = 1';
         }
 
-        $settingsModel = new Vps_Model_Field(array(
+        $this->_settingsModel = new Vps_Model_Field(array(
             'parentModel' => $t,
             'fieldName' => 'settings'
         ));
 
-        $childComponents = $this->getTreeCacheRow()->findChildComponents();
+        $this->_childComponents = $this->getTreeCacheRow()->findChildComponents();
 
-        foreach ($t->fetchAll($where, 'pos') as $field) {
+        $fields = array();
+        foreach ($t->fetchAll($where, 'pos') as $f) {
+            if (!$f->parent_id) {
+                $fields[0][] = $f;
+            } else {
+                $fields[$f->parent_id][] = $f;
+            }
+        }
+
+        $this->_addFields($fields, 0);
+    }
+    private function _addFields($fields, $parentId)
+    {
+        //Fieldsets können Unterfelder haben
+        //nicht umbedingt optimal gelöst - das hinzufügen gehört mehr
+        //zum fieldset finde ich
+        foreach ($fields[$parentId] as $field) {
+            if ($field->parent_id != $parentId) continue;
             $c = $field->component_class;
             if (is_subclass_of($c, 'Vpc_Abstract')) {
                 $f = false;
-                foreach ($childComponents as $component) {
+                foreach ($this->_childComponents as $component) {
                     if ($component->tag == $field->id) {
-                        $f = new Vps_Form_Field_ComponentContainer($component->getComponent());
+                        $cmp = $component->getComponent();
+                        $f = new Vps_Form_Field_ComponentContainer($cmp);
                     }
                 }
             } else {
                 $f = new $c();
-                $f->setProperties($settingsModel->getRowByParentRow($field)->toArray());
-                if (!$f->getName()) $f->setName('field'.$field->id);
+                $props = $this->_settingsModel->getRowByParentRow($field)->toArray();
+                $f->setProperties($props);
+                $f->setName('field'.$field->id);
             }
-            if ($f) $this->_form->add($f);
+            if ($f && $field->parent_id) {
+                $this->_form->fields['field'.$field->parent_id]->add($f);
+            } else if ($f) {
+                $this->_form->add($f);
+            }
+
+            if (isset($fields[$field->id])) {
+                $this->_addFields($fields, $field->id);
+            }
         }
     }
 }

@@ -41,4 +41,38 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         }
         return $ret;
     }
+    
+
+    public function getTemplateVars($values)
+    {
+        $name = $this->getFieldName();
+        if (isset($values[$name])) {
+            $value = $values[$name];
+        } else {
+            $value = $this->getDefaultValue();
+        }
+        $ret = parent::getTemplateVars($values);
+        $ret['preHtml'] = '<fieldset>';
+        if ($this->getTitle()) {
+            $ret['preHtml'] .= "<legend>{$this->getTitle()}</legend>";
+        }
+        $ret['postHtml'] = '</fieldset>';
+        return $ret;
+    }
+
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['childComponentClasses']['textfield'] = 'Vps_Form_Field_TextField';
+        $ret['childComponentClasses']['checkbox'] = 'Vps_Form_Field_Checkbox';
+        $ret['childComponentClasses']['select'] = 'Vps_Form_Field_Select';
+        $ret['childComponentClasses']['numberfield'] = 'Vps_Form_Field_NumberField';
+        $ret['childComponentClasses']['textarea'] = 'Vps_Form_Field_TextArea';
+        $ret['childComponentClasses']['fieldset'] = 'Vps_Form_Container_FieldSet';
+        $ret['childComponentClasses']['text'] = 'Vpc_Basic_Text_Component';
+        $ret['tablename'] = 'Vpc_Formular_Dynamic_Model';
+        $ret['decorator'] = 'Vpc_Formular_Decorator_Label';
+        $ret['componentName'] = trlVps('Fieldset');
+        return $ret;
+    }
 }

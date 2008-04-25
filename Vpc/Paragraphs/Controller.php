@@ -43,7 +43,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $admin = Vpc_Admin::getInstance($class);
             if ($admin) $admin->setup();
             $row = $this->_model->createRow();
-            $row->component_id = $this->componentId;
+            $this->_preforeAddParagraph($row);
             $row->component_class = $class;
             $row->pos = 1000; //TODO: bessere L�sung mit Vps_Filter_Row_Numberize
             $row->visible = 0;
@@ -65,5 +65,9 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         } else {
             throw new Vps_Exception("Component $class not found");
         }
+    }
+    protected function _preforeAddParagraph($row)
+    {
+        $row->component_id = $this->componentId;
     }
 }
