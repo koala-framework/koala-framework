@@ -60,5 +60,9 @@ class Vps_Model_Db_Rowset implements Vps_Model_Rowset_Interface
     {
         return $this->_model;
     }
+    public function toArray()
+    {
+        return $this->_rowset->toArray();
+    }
 
 }

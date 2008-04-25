@@ -8,6 +8,7 @@ class Vpc_Formular_Dynamic_Admin extends Vpc_Paragraphs_Admin
           $this->_db->query("CREATE TABLE `$tablename` (
                   `id` int(10) unsigned NOT NULL auto_increment,
                   `component_id` varchar(255) NOT NULL,
+                  `parent_id` int(10) unsigned NULL,
                   `class` varchar(255) NOT NULL,
                   `pos` smallint NOT NULL,
                   `visible` tinyint(4) NOT NULL,
