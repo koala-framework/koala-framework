@@ -59,8 +59,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         } catch(e) {
             var errorMsg = '<a href="'+options.url+'?'+encParams+'">request-url</a><br />';
             errorMsg += e.toString()+': <br />'+response.responseText;
-            var errorMsgTitle = trlVps('Javascript Parse Exception');
-            return;
+            var errorMsgTitle = 'Javascript Parse Exception';
         }
         if (Vps.Debug.querylog && r.requestNum) {
             var rm = location.protocol + '/'+'/' + location.host;
