@@ -61,7 +61,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_Abstract
 
         $file = isset($_FILES[$fieldName]) ? $_FILES[$fieldName] : array();
 
-        $uploadRow = $row->findParentRow('Vps_Dao_File', $this->getRuleKey());
+        $uploadRow = $row->getRow()->findParentRow('Vps_Dao_File', $this->getRuleKey());
 
         if (!$uploadRow && (!isset($file['error']) || $file['error'] == UPLOAD_ERR_NO_FILE)) {
             if ($this->getAllowBlank() == false) {
@@ -98,7 +98,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_Abstract
     public function save(Vps_Model_Db_Row $row, $postData)
     {
         parent::save($row, $postData);
-        $uploadRow = $row->findParentRow('Vps_Dao_File', $this->getRuleKey());
+        $uploadRow = $row->getRow()->findParentRow('Vps_Dao_File', $this->getRuleKey());
         $name = $this->getName();
         if ($uploadRow && is_null($row->$name)) {
             $uploadRow->delete();
