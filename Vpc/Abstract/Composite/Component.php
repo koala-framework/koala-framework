@@ -13,10 +13,9 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();
+        $componentId = $this->getTreeCacheRow()->component_id;
         foreach ($this->_getSetting('childComponentClasses') as $id=>$c) {
-            $componentId = $this->getTreeCacheRow()->component_id.'-'.$id;
-            $row = $this->getTreeCacheRow()->getTable()->find($componentId)->current();
-            $return[$id] = $row->getComponent()->getTemplateVars();
+            $return[$id] = $componentId . '-' . $id;
         }
         return $return;
     }

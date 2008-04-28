@@ -17,9 +17,8 @@ class Vpc_Decorator_Box_Component extends Vpc_Decorator_Abstract
             $row = $this->getTreeCacheRow()->getTable()->find($componentId)->current();
             if (!$row) {
                 $componentId = $this->getTreeCacheRow()->component_id . '-' . $id;
-                $row = $this->getTreeCacheRow()->getTable()->find($componentId)->current();
             }
-            $vars['boxes'][$id] = $row->getComponent()->getTemplateVars(); 
+            $vars['boxes'][$id] = $componentId; 
         }
         return $vars;
     }

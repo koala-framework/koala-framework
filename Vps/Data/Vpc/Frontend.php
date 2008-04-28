@@ -21,7 +21,9 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
             } else {
                 $view = new Vps_View_Smarty();
                 $view->setRenderFile(VPS_PATH . '/views/Component.html');
-                $view->component = $row->getComponent()->getTemplateVars();
+                $templateVars = $row->getComponent()->getTemplateVars();
+                $view->assets = $templateVars['assets'];
+                $view->component = $id;
                 return $view->render('');
             }
         } else if (isset($row->settings)) {

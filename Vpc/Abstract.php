@@ -202,15 +202,21 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract implements Vpc_Interf
 
         $benchmark = Vps_Benchmark::getInstance();
         $benchmark->startSequence('Seitenbaum');
+        
+        $componentId = $this->getTreeCacheRow()->component_id;
 
-        $view = new Vps_View_Smarty();
+        $view = new Vps_View_Smarty_Cached();
         $view->url = $_SERVER['REQUEST_URI'];
-        $view->component = $decoratedPage->getTemplateVars();
+        foreach ($decoratedPage->getTemplateVars() as $key => $val) {
+            $view->$key = $val;
+        }
+        $view->component = $componentId;
 
         $benchmark->stopSequence('Seitenbaum');
         $result = $benchmark->getResults();
-        $view->time = sprintf("%01.2f", $result['Seitenbaum']['duration']/1.5);
-        echo $view->render('');
+        $view->time = sprintf("%01.2f", $result['Seitenbaum']['duration']);
+        echo $view->fetch('Master.html', $componentId);
+        p($result['Seitenbaum']['duration']);
     }
 }
 

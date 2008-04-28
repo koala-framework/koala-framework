@@ -57,6 +57,7 @@ class Vps_Component_Abstract
     public static function getComponentClasses($class = null)
     {
         static $componentClasses;
+        if (!$componentClasses) { $componentClasses = array(); }
         if (!$class) {
             if ($componentClasses) return $componentClasses;
             $classes = array();
@@ -66,7 +67,6 @@ class Vps_Component_Abstract
                     $classes[] = $c->class;
                 }
             }
-            $componentClasses = array();
         } else {
             $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
             if (!is_array($classes)) return;
