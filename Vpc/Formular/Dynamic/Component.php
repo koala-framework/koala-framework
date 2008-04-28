@@ -44,6 +44,7 @@ class Vpc_Formular_Dynamic_Component extends Vpc_Formular_Component
         $this->_childComponents = $this->getTreeCacheRow()->findChildComponents();
 
         $fields = array();
+        $fields[0] = array();
         foreach ($t->fetchAll($where, 'pos') as $f) {
             if (!$f->parent_id) {
                 $fields[0][] = $f;
