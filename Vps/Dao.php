@@ -11,19 +11,13 @@ class Vps_Dao
         $this->_config = $config;
     }
 
-    public function getTable($tablename, $config = array())
+    public static function getTable($tablename, $config = array())
     {
-        if (!$tablename) return null;
-
-        if (!isset($this->_tables[$tablename])) {
-            if (!isset($config['db'])) $config['db'] = $this->getDb();
-            $table = new $tablename($config);
-            if ($table instanceof Vps_Db_Table) {
-                $table->setDao($this);
-            }
-            $this->_tables[$tablename] = $table;
+        static $tables;
+        if (!isset($tables[$tablename])) {
+            $tables[$tablename] = new $tablename($config);
         }
-        return $this->_tables[$tablename];
+        return $tables[$tablename];
     }
 
     public function getDb($db = 'web')

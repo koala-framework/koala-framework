@@ -1,6 +1,8 @@
 <?php
 class Vps_Dao_Row_TreeCache extends Vps_Db_Table_Row_Abstract
 {
+    private $_component;
+    
     public function findParentComponent()
     {
         return $this->findParentRow('Vps_Dao_TreeCache', 'Parent');
@@ -20,13 +22,17 @@ class Vps_Dao_Row_TreeCache extends Vps_Db_Table_Row_Abstract
         return $page;
     }
 
-    public function getComponent()
+    public function getComponent($addDecorators = true)
     {
-        $c = new $this->component_class($this);
-        if (!is_null($this->url_match)) {
-            $c = $this->_addDecorators($c);
+        if (!isset($this->_component) || !$addDecorators) {
+            $component = new $this->component_class($this);
+            if (!$addDecorators) { return $component; }
+            $this->_component = $component;
+            if (!is_null($this->url_match)) {
+                $this->_component = $this->_addDecorators($this->_component);
+            }
         }
-        return $c;
+        return $this->_component;
     }
 
     public function getTitle()

@@ -18,9 +18,10 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
                 'tablename' => 'Vpc_Paragraphs_Model'
             ));
             $settings['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
-            $settings['childComponentClasses'] =
+            $settings['childComponentClasses'] = 
                 Vpc_Admin::getInstance('Vpc_Paragraphs_Component')
                 ->getAvailableComponents('Vpc');
+
         }
         return $settings;
     }
@@ -29,7 +30,6 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $tc = $this->getTreeCacheRow()->getTable();
-        
         $select = $tc->select();
         $select->from('vps_tree_cache');
         $select->where('vps_tree_cache.parent_component_id = ?', $this->getDbID());
@@ -37,13 +37,13 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
             $select->where('vps_tree_cache.visible = 1');
         }
         $select->join('vpc_paragraphs', "CONCAT(vpc_paragraphs.component_id, '-', vpc_paragraphs.id) = vps_tree_cache.component_id", array());
-        $select->where('vps_tree_cache.parent_component_class = ?', get_class($this));
-
+        $select->where('parent_component_class = ?', get_class($this));
+        $select->where('vpc_paragraphs.component_id = ?', $this->getDbID());
+        
         $select->order('vps_tree_cache.pos');
-
         $ret['paragraphs'] = array();
         foreach ($tc->fetchAll($select) as $row) {
-            $ret['paragraphs'][] = $row->getComponent()->getTemplateVars();
+            $ret['paragraphs'][] = $row->component_id;
         }
 
         return $ret;

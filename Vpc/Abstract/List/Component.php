@@ -33,7 +33,7 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
 
         $return['children'] = array();
         foreach ($tc->fetchAll($where, 'pos') as $row) {
-            $ret['children'][] = $row->getComponent()->getTemplateVars();
+            $ret['children'][] = $row->component_id;
         }
         return $return;
     }

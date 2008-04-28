@@ -8,12 +8,11 @@ class Vps_View_Smarty extends Zend_View_Abstract
 
     public function __construct($config = array())
     {
-
         parent::__construct($config);
 
         $this->_smarty = new Smarty();
         $this->_smarty->plugins_dir[] = 'SmartyPlugins';
-
+        
         $this->addScriptPath(VPS_PATH.'/views');
         $this->addScriptPath(getcwd().'/application/views');
 
@@ -32,7 +31,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
         $this->_smarty->register_function("trlcVps", "trlcVps");
         $this->_smarty->register_function("trlcpVps", "trlcpVps");
         $this->_smarty->register_function("trlpVps", "trlpVps");
-
+        
         $this->config = Zend_Registry::get('config');
 
         $this->debug = array(
@@ -55,8 +54,26 @@ class Vps_View_Smarty extends Zend_View_Abstract
         if (isset($sessionAssets->autoClearCache)) {
             $this->debug['autoClearCache'] = $sessionAssets->autoClearCache;
         }
+        $this->_smarty->register_function('component', array($this, 'component'), false, array('component'));
     }
 
+    public function component($params)
+    {
+        $componentId = $params['component'];
+        $template = VPS_PATH . '/views/site.html';
+        $view = new Vps_View_Smarty();
+        $tc = Vps_Dao::getTable('Vps_Dao_TreeCache');
+        $where = array('component_id = ?' => $componentId);
+        $row = $tc->fetchRow($where);
+        if ($row) {
+            $templateVars = $row->getComponent(false)->getTemplateVars();
+            $view->component = $templateVars;
+            $view->template = $templateVars['template'];
+        } else {
+            return 'bar';
+        }
+    }
+    
     public function vpc($config)
     {
         throw new Vps_Exception("Noch nicht konvertiert, wenns benötigt wird niko sagen :D");
@@ -118,6 +135,10 @@ class Vps_View_Smarty extends Zend_View_Abstract
     {
         $this->_smarty->compile_dir = $path;
     }
+    
+    public function isCached($template, $cacheId, $compileId = null) {
+        return $this->_smarty->is_cached($template, $cacheId, $compileId);
+    }
 
     protected function _run()
     {
@@ -153,5 +174,26 @@ class Vps_View_Smarty extends Zend_View_Abstract
 
         //process the template (and filter the output)
         $this->_smarty->display($file);
+    }
+    
+    public function fetch($file, $cacheId = null, $compileId = null)
+    {
+        $vars = get_object_vars($this);
+        foreach ($vars as $key => $value) {
+            if ('_' != substr($key, 0, 1)) {
+                $this->_smarty->assign($key, $value);
+            }
+        }
+
+        $this->_smarty->assign_by_ref('this', $this);
+
+        foreach ($this->getScriptPaths() as $path) {
+            if (file_exists($path.$file)) {
+                $this->_smarty->template_dir = $path;
+                break;
+            }
+        }
+
+        return $this->_smarty->fetch($file, $cacheId, $compileId);
     }
 }
