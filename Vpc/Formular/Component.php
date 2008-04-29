@@ -36,7 +36,9 @@ class Vpc_Formular_Component extends Vpc_Abstract
             $ret['errors'] = $this->_form->validate($_REQUEST);
             if (!$ret['errors']) {
                 $this->_form->prepareSave(null, $_REQUEST);
+                $this->_beforeSave($this->_form->getRow());
                 $this->_form->save(null, $_REQUEST);
+                $this->_afterSave($this->_form->getRow());
                 $ret['isSuccess'] = true;
             }
         }
@@ -59,5 +61,13 @@ class Vpc_Formular_Component extends Vpc_Abstract
         $ret['success'] = $row->getComponent()->getTemplateVars();
 
         return $ret;
+    }
+
+    protected function _afterSave(Vps_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    {
     }
 }

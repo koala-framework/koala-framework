@@ -314,7 +314,6 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 $this->view->error = 'Cannot move here.';
             }
         }
-
         $row->save();
         if ($this->_hasPosition) {
             $parentField = $this->_parentField;

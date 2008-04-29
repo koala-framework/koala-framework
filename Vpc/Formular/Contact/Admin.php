@@ -1,10 +1,10 @@
 <?php
-class Vps_Form_Container_FieldSet_Admin extends Vpc_Formular_Dynamic_Admin
+class Vpc_Formular_Contact_Admin extends Vpc_Formular_Dynamic_Admin
 {
     public function getExtConfig()
     {
         return array_merge(parent::getExtConfig(), array(
-            'xtype'=>'vps.form.container.fieldset'
+            'xtype'=>'vpc.formular.contact'
         ));
     }
 }

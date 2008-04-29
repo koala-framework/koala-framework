@@ -13,7 +13,6 @@ class Vpc_Formular_Dynamic_Component extends Vpc_Formular_Component
         $ret['childComponentClasses']['textarea'] = 'Vps_Form_Field_TextArea';
         $ret['childComponentClasses']['fieldset'] = 'Vps_Form_Container_FieldSet';
         $ret['childComponentClasses']['text'] = 'Vpc_Basic_Text_Component';
-        $ret['tablename'] = 'Vpc_Formular_Dynamic_Model';
         return $ret;
     }
 

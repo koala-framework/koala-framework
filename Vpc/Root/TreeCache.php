@@ -10,10 +10,10 @@ class Vpc_Root_TreeCache extends Vpc_TreeCache_TablePage
         $this->_showInMenu = new Zend_Db_Expr('!t.hide');
         parent::_init();
     }
-//     protected function _getWhere()
-//     {
-//         return array('id=8');
-//     }
+    protected function _getWhere()
+    {
+        return array('id!=8');
+    }
 
     public function createRoot()
     {
@@ -78,6 +78,7 @@ class Vpc_Root_TreeCache extends Vpc_TreeCache_TablePage
             $tcRow->parent_url = null;
         } else {
             $parent = $tcRow->findParentComponent();
+            if (!$parent) d($tcRow);
             $tcRow->url = $parent->tree_url.'/'.$row->filename;
             $tcRow->url_match = $parent->tree_url.'/'.$row->filename;
             $tcRow->tree_url = $parent->tree_url.'/'.$row->filename;
@@ -92,10 +93,12 @@ class Vpc_Root_TreeCache extends Vpc_TreeCache_TablePage
         if ($row->getTable() instanceof $this->_table) {
             $tcRow = $this->_cache->find($row->id)->current();
             if ($tcRow->parent_component_id != $row->parent_id) {
-                throw new Vps_Exception('todo?!');
-                $this->onDeleteRow($row);
+                $where = array();
+                $id = $this->_cache->getAdapter()->quote($tcRow->component_id);
+                $where[] = "component_id=$id OR component_id LIKE CONCAT($id, '\\_%')
+                        OR component_id LIKE CONCAT($id, '-%')";
+                $this->_cache->delete($where);
                 $this->onInsertRow($row);
-                //return ohne parent::onUpdateRow, es wurde sowiso alles neu gemacht
                 return;
             }
         }
