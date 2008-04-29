@@ -28,4 +28,9 @@ class Vps_Form_Field_Abstract_Controller extends Vpc_Formular_Dynamic_Controller
         $row->parent_id = $this->_formularId;
         $row->component_id = $this->_parentComponentId;
     }
+    public function init()
+    {
+        $this->_buttons[] = 'settings';
+        parent::init();
+    }
 }

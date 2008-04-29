@@ -14,8 +14,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
             $settings = array_merge(parent::getSettings(), array(
                 'componentName' => trlVps('Paragraphs'),
                 'componentIcon' => new Vps_Asset('page'),
-                'hideInParagraphs' => true,
-                'tablename' => 'Vpc_Paragraphs_Model'
+                'hideInParagraphs' => true
             ));
             $settings['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
             $settings['childComponentClasses'] = 

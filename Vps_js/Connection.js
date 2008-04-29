@@ -1,7 +1,7 @@
 Vps.Connection = Ext.extend(Ext.data.Connection, {
     request: function(options)
     {
-
+        Vps.Connection.runningRequests++;
         if (options.url.match(/[\/a-zA-Z0-9]*\/json[a-zA-Z0-9\-]+(\/|\?|)/)) {
 
             if (options.mask) {
@@ -174,9 +174,11 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             success = false;
         }
         Ext.callback(options.vpsCallback.callback, options.vpsCallback.scope, [options, success, response]);
+        Vps.Connection.runningRequests--;
     }
 });
 Vps.Connection.masks = 0; //static var that hols number of masked requests
+Vps.Connection.runningRequests = 0;
 
 Ext.Ajax = new Vps.Connection({
     /**

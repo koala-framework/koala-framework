@@ -5,7 +5,9 @@ class Vps_Form_Field_Abstract_Controller extends Vps_Controller_Action_Auto_Form
 
     protected function _initFields()
     {
-        $this->_form = Vpc_Abstract_Form::createComponentForm('form', $this->class);
+        if (!$this->_form) {
+            $this->_form = Vpc_Abstract_Form::createComponentForm('form', $this->class);
+        }
 
         $this->_form->setModel(new Vps_Model_Field(array(
             'parentModel' => new Vps_Model_Db(array(

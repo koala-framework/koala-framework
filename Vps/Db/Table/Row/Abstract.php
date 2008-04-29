@@ -280,6 +280,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
                 $tc = Vpc_TreeCache_Abstract::getInstance($c);
                 if ($tc) $tc->onDeleteRow($this);
             }
+            Vpc_TreeCache_Abstract::getTreeCacheTable()->createMissingChilds();
         }
     }
 
@@ -291,6 +292,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
                 $tc = Vpc_TreeCache_Abstract::getInstance($c);
                 if ($tc) $tc->onUpdateRow($this);
             }
+            Vpc_TreeCache_Abstract::getTreeCacheTable()->createMissingChilds();
         }
     }
     private function _getComponentClasses()
@@ -298,7 +300,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         $select = Zend_Registry::get('db')->select()
                 ->from('vps_tree_cache', 'component_class')
                 ->group('component_class');
-        $ret = array('Vpc_Root_TreeCache');
+        $ret = array('Vpc_Root_Component');
         foreach ($select->query()->fetchAll() as $row) {
             $ret[] = $row['component_class'];
         }

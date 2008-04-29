@@ -9,6 +9,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         );
     protected $_paging = 0;
     protected $_position = 'pos';
+    protected $_tableName = 'Vpc_Paragraphs_Model';
 
     protected function _initColumns()
     {
