@@ -3,7 +3,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
 {
     public function errorAction()
     {
-        $errors = $this->getRequest()->error_handler;
+        $errors = $this->getRequest()->getParam('error_handler');
 
         if ($this->_getParam('module') == 'component' &&
             $this->_getParam('action') == 'jsonIndex' &&
@@ -12,7 +12,8 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
         }
 
         $prefix = substr($this->_getParam('action'), 0, 4);
-        $isHttpRequest = $_SERVER['REQUEST_METHOD'] == 'POST' ||
+        $isHttpRequest = (isset($_SERVER['REQUEST_METHOD'])
+                            && $_SERVER['REQUEST_METHOD']== 'POST') ||
                     isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
         if (($prefix == 'ajax' || $prefix == 'json') &&
             ($isHttpRequest || $errors->exception instanceof Vps_ClientException)) {
@@ -37,7 +38,11 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
             $this->view->type = $errors->type;
             $this->view->exception = $errors->exception;
             $this->view->message = $errors->exception->getMessage();
-            $this->view->requestUri = $_SERVER['REQUEST_URI'];
+            if (isset($_SERVER['REQUEST_URI'])) {
+                $this->view->requestUri = $_SERVER['REQUEST_URI'];
+            } else {
+                $this->view->requestUri = '';
+            }
             if ($config->debug->errormail != '') {
                 Vps_Debug::sendErrorMail($errors->exception, $config->debug->errormail);
                 $this->view->debug = false;
@@ -49,7 +54,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
 
     public function jsonErrorAction()
     {
-        $errors = $this->getRequest()->error_handler;
+        $errors = $this->getRequest()->getParam('error_handler');
         $exception = $errors->exception;
         if ($exception instanceof Vps_ClientException) {
             $this->view->error = $exception->getMessage();

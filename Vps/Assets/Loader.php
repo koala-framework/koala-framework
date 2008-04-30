@@ -61,6 +61,8 @@ class Vps_Assets_Loader
 
     static public function load()
     {
+        if (!isset($_SERVER['REQUEST_URI'])) return;
+
         require_once 'Vps/Loader.php';
         Vps_Loader::registerAutoload();
         if (substr($_SERVER['REQUEST_URI'], 0, 8)=='/assets/') {
@@ -169,6 +171,8 @@ class Vps_Assets_Loader
                         header('Content-Type: application/flash');
                     } else if (substr($url, -4)=='.ico') {
                         header('Content-Type: image/x-icon');
+                    } else if (substr($url, -5)=='.html') {
+                        header('Content-Type: text/html');
                     } else {
                         header("HTTP/1.0 404 Not Found");
                         die("invalid file type");

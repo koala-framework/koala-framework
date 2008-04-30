@@ -310,6 +310,8 @@ class Vps_Setup
     
     public function dispatchVpc()
     {
+        if (!isset($_SERVER['REDIRECT_URL'])) return;
+
         $uri = substr($_SERVER['REDIRECT_URL'], 1);
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
@@ -347,6 +349,8 @@ class Vps_Setup
     
     public static function dispatchMedia()
     {
+        if (!isset($_SERVER['REDIRECT_URL'])) return;
+
         $urlParts = explode('/', substr($_SERVER['REDIRECT_URL'], 1));
         if (is_array($urlParts) && $urlParts[0] == 'media') {
             $params['table'] = $urlParts[1];

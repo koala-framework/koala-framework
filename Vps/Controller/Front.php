@@ -8,6 +8,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
     {
         $this->setControllerDirectory('application/controllers');
         $this->returnResponse(true);
+        $this->setParam('disableOutputBuffering', true);
 
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Welcome',
                                         'vps_controller_action_welcome');
@@ -21,46 +22,14 @@ class Vps_Controller_Front extends Zend_Controller_Front
                                 'vps_controller_action_trl');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Debug',
                                 'vps_controller_action_debug');
-
-        $router = $this->getRouter();
-
-        $router->AddRoute('vps_welcome', new Zend_Controller_Router_Route(
-                    '/vps/welcome/:controller/:action',
-                    array('module'     => 'vps_controller_action_welcome',
-                          'controller' =>'index',
-                          'action'     =>'index')));
-        $router->AddRoute('vps_user', new Zend_Controller_Router_Route(
-                    '/vps/user/:controller/:action',
-                    array('module'     => 'vps_controller_action_user',
-                          'action'     =>'index')));
-        $router->AddRoute('vps_error', new Zend_Controller_Router_Route(
-                    '/vps/error/:controller/:action',
-                    array('module'     => 'vps_controller_action_error')));
-        $router->AddRoute('vps_start', new Zend_Controller_Router_Route(
-                    '/vps/start',
-                    array('module'      => 'vps_controller_action_welcome',
-                          'controller'  => 'start',
-                          'action'      => 'index')));
-        $router->AddRoute('vps_pool', new Zend_Controller_Router_Route(
-                    '/vps/pool/:controller/:action',
-                    array('module'     => 'vps_controller_action_pool',
-                          'controller' => 'pools',
-                          'action'     => 'index')));
-        $router->AddRoute('trl', new Zend_Controller_Router_Route(
-                    '/vps/trl/:controller/:action',
-                    array('module'     => 'vps_controller_action_trl',
-                          'controller' => 'index',
-                          'action'     => 'index')));
-        $router->AddRoute('trl', new Zend_Controller_Router_Route(
-                    '/vps/debug/:controller/:action',
-                    array('module'     => 'vps_controller_action_debug',
-                          'controller' => 'index',
-                          'action'     => 'index')));
+        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Cli',
+                                'vps_controller_action_cli');
 
         $plugin = new Zend_Controller_Plugin_ErrorHandler();
         $plugin->setErrorHandlerModule('vps_controller_action_error');
         $this->registerPlugin($plugin);
     }
+
     public static function getInstance()
     {
         if (null === self::$_instance) {
@@ -71,10 +40,28 @@ class Vps_Controller_Front extends Zend_Controller_Front
         return self::$_instance;
     }
 
-    //funktioniert über __destrukt nicht, workaround:
-    public function dispatch()
+    public function getRouter()
     {
-        $ret = parent::dispatch();
+        if (null == $this->_router) {
+            if (isset($_SERVER['SHELL'])) {
+                $this->setRouter(new Vps_Controller_Router());
+            } else {
+                $this->setRouter(new Vps_Controller_Router_Http());
+            }
+        }
+
+        return $this->_router;
+    }
+
+    //funktioniert über __destrukt nicht, workaround:
+    public function dispatch(Zend_Controller_Request_Abstract $request = null, Zend_Controller_Response_Abstract $response = null)
+    {
+        if ($request === null) {
+            if (isset($_SERVER['SHELL'])) {
+                $request = new Vps_Controller_Request_Cli();
+            }
+        }
+        $ret = parent::dispatch($request, $response);
 
         $profiler = Zend_Registry::get('db')->getProfiler();
         if ($profiler instanceof Vps_Db_Profiler) {
