@@ -70,6 +70,10 @@ class Vps_Mail
     {
         $this->_mail->addCC($email, $name);
     }
+    public function addHeader($name, $value, $append = false)
+    {
+        $this->_mail->addHeader($name, $value, $append);
+    }
     public function addBcc($email)
     {
         $this->_mail->addBcc($email);
@@ -80,7 +84,15 @@ class Vps_Mail
     }
     public function addTo($email, $name='')
     {
-        $this->_mail->addTo($email, $name);
+        $mailSendAll = Zend_Registry::get('config')->mail->sendAllTo;
+        if ($mailSendAll) {
+            list($mailName, $mailHost) = explode('@', $mailSendAll);
+            $this->addHeader('X-Real-Recipient-Email', $email);
+            $this->addHeader('X-Real-Recipient-Name', $name);
+            $this->_mail->addTo($mailSendAll, $mailName);
+        } else {
+            $this->_mail->addTo($email, $name);
+        }
     }
     public function setFrom($email, $name='')
     {
