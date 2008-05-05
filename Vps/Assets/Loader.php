@@ -86,7 +86,7 @@ class Vps_Assets_Loader
                 //falls der browser irgendwas im cache hat, hat sich das nie geändert
                 //weil wenn wir eine neue version haben ändert sich die url
 
-                //für offline die if außen rum, da ändert sich die version kaum
+                //für offline die if außen rum, da ändert sich die version kaum, die files schon
                 //auch für auto-clear assets
                 if (!(isset($_SERVER['SERVER_NAME']) && substr($_SERVER['SERVER_NAME'], -6) == '.vivid')) {
                     if (isset($headers['If-None-Match'])) {
@@ -128,6 +128,7 @@ class Vps_Assets_Loader
                 if ((!$cacheData = $cache->load($fileType.$encoding.$section))
                     || $cacheData['version'] != $config->application->version
                     || $sessionAssets->autoClearCache
+                    || $config->debug->autoClearAssetsCache
                 ) {
                     $dep = new Vps_Assets_Dependencies($section, $config);
                     $contents = $dep->getPackedAll($fileType);

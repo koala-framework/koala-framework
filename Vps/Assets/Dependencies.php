@@ -73,7 +73,7 @@ class Vps_Assets_Dependencies
             }
         }
 
-        //hack: �bersetzung immer zuletzt anh�ngen
+        //hack: übersetzung immer zuletzt anhängen
         if ($fileType == 'js') {
             $files[] = 'vps/Ext/ext-lang-en.js';
         }
