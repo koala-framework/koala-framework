@@ -55,7 +55,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     protected function _getUserRole()
     {
-        if (isset($_SERVER['argv'])) return 'cli';
+        if (isset($_SERVER['SHELL'])) return 'cli';
         return Zend_Registry::get('userModel')->getAuthedUserRole();
     }
 
