@@ -69,6 +69,7 @@ class Vps_View_Smarty extends Zend_View_Abstract
             $templateVars = $row->getComponent(false)->getTemplateVars();
             $view->component = $templateVars;
             $view->template = $templateVars['template'];
+            return $view->fetch($template, $componentId);
         } else {
             return 'bar';
         }

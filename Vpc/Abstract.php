@@ -205,7 +205,10 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract implements Vpc_Interf
         
         $componentId = $this->getTreeCacheRow()->component_id;
 
-        $view = new Vps_View_Smarty_Cached();
+
+        /******************
+            **** Hier kommt mal Vps_View_Smarty_Cached hin!!! **********/
+        $view = new Vps_View_Smarty();
         $view->url = $_SERVER['REQUEST_URI'];
         foreach ($decoratedPage->getTemplateVars() as $key => $val) {
             $view->$key = $val;
