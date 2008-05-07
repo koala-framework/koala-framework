@@ -108,16 +108,16 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
             }, this);
         }
 
+        if (this.showNoSelection) {
+            if (!this.emptyText) {
+                this.emptyText = '('+trlVps('no selection')+')';
+            }
+        }
         this.store.on('load', function() {
             this.addNoSelection();
         }, this);
         if (this.store.recordType) {
             this.addNoSelection();
-        }
-        if (this.showNoSelection) {
-            if (!this.emptyText) {
-                this.emptyText = '('+trlVps('no selection')+')';
-            }
         }
 
         Vps.Form.ComboBox.superclass.initComponent.call(this);
