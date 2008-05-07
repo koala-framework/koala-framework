@@ -17,26 +17,26 @@ Ext.override(T, {
             var idx = index+i-1;
             var el = a[i];
             if(el.isFormField){ // some kind of form field
-                this.insertField(idx, el);
+                return this.insertField(idx, el);
             }else if(el.render){ // some kind of Toolbar.Item
-                this.insertItem(idx, el);
+                return this.insertItem(idx, el);
             }else if(typeof el == "string"){ // string
                 if(el == "separator" || el == "-"){
-                    this.insertSeparator(idx);
+                    return this.insertSeparator(idx);
                 }else if(el == " "){
-                    this.insertSpacer(idx);
+                    return this.insertSpacer(idx);
                 }else if(el == "->"){
-                    this.insertFill(idx);
+                    return this.insertFill(idx);
                 }else{
-                    this.insertText(idx, el);
+                    return this.insertText(idx, el);
                 }
             }else if(el.tagName){ // element
-                this.insertElement(idx, el);
+                return this.insertElement(idx, el);
             }else if(typeof el == "object"){ // must be button config?
                 if(el.xtype){
-                    this.insertField(idx, Ext.ComponentMgr.create(el, 'button'));
+                    return this.insertField(idx, Ext.ComponentMgr.create(el, 'button'));
                 }else{
-                    this.insertButton(idx, el);
+                    return this.insertButton(idx, el);
                 }
             }
         }
