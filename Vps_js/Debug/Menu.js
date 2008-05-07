@@ -72,6 +72,7 @@ Vps.Debug.Menu = function(config) {
             });
         }
     });
+    var chk = Vps.Debug.autoClearCache;
     this.add(new Ext.menu.CheckItem({
         text: 'Auto-Clear Assets Cache',
         scope: this,
@@ -81,8 +82,9 @@ Vps.Debug.Menu = function(config) {
                 params: { 'autoClearCache' : !menu.checked+0 },
             });
         },
-        checked: Vps.Debug.js
+        checked: chk
     }));
+    chk = Vps.Debug.js;
     this.add(new Ext.menu.CheckItem({
         text: '.js - Debug Assets',
         scope: this,
@@ -92,8 +94,9 @@ Vps.Debug.Menu = function(config) {
                 params: { 'js' : !menu.checked+0 },
             });
         },
-        checked: Vps.Debug.js
+        checked: chk
     }));
+    chk = Vps.Debug.css;
     this.add(new Ext.menu.CheckItem({
         text: '.css - Debug Assets',
         scope: this,
@@ -103,7 +106,7 @@ Vps.Debug.Menu = function(config) {
                 params: { 'css' : !menu.checked+0 },
             });
         },
-        checked: Vps.Debug.css
+        checked: chk
     }));
     this.add({
         text: 'Components Tree',
