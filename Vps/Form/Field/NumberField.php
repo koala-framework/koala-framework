@@ -20,7 +20,7 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
             $this->addValidator(new Zend_Validate_GreaterThan(-1));
         }
         if ($this->getAllowDecimals() === false) {
-            $this->addValidator(new Zend_Validate_Digits());
+            $this->addValidator(new Vps_Validate_Digits(true));
         } else {
             $this->addValidator(new Zend_Validate_Float());
         }
