@@ -139,6 +139,7 @@ Vps.include =  function(url, restart)
         var s = document.createElement('link');
         s.setAttribute('type', 'text/css');
         s.setAttribute('href', url+'?'+Math.random());
+        s.setAttribute('rel', 'stylesheet');
     } else {
         var s = document.createElement('script');
         s.setAttribute('type', 'text/javascript');
