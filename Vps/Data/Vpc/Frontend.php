@@ -20,11 +20,8 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
                 return 'Could not create component: ' . $id;
             } else {
                 $view = new Vps_View_Smarty();
-                $view->setRenderFile(VPS_PATH . '/views/Component.html');
-                $templateVars = $row->getComponent()->getTemplateVars();
-                $view->assets = $templateVars['assets'];
-                $view->component = $id;
-                return $view->render('');
+                //todo, diese fkt ist vermutl. nur für smarty gedacht
+                return $view->component(array('component' => $id));
             }
         } else if (isset($row->settings)) {
             $settingsModel = new Vps_Model_Field(array(
