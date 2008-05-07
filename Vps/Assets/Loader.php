@@ -102,10 +102,10 @@ class Vps_Assets_Loader
                 }
 
                 if ($m[2] == 'js') {
-                    header('Content-Type: text/javascript');
+                    header('Content-Type: text/javascript; charset=utf-8');
                     $fileType = 'js';
                 } else {
-                    header('Content-Type: text/css');
+                    header('Content-Type: text/css; charset=utf-8');
                     $fileType = 'css';
                 }
                 $section = $m[1];
@@ -113,33 +113,38 @@ class Vps_Assets_Loader
 
                 header('Last-Modified: '.gmdate("D, d M Y H:i:s \G\M\T", time()));
                 header('ETag: abc-defg');
-
-                $frontendOptions = array(
-                    'lifetime' => null,
-                    'automatic_serialization' => true
-                );
-                $backendOptions = array(
-                    'cache_dir' => 'application/cache/assets/'
-                );
-
-                $sessionAssets = new Zend_Session_Namespace('debugAssets');
-                $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-                $config = Zend_Registry::get('config');
-                if ((!$cacheData = $cache->load($fileType.$encoding.$section))
-                    || $cacheData['version'] != $config->application->version
-                    || $sessionAssets->autoClearCache
-                    || $config->debug->autoClearAssetsCache
-                ) {
-                    $dep = new Vps_Assets_Dependencies($section, $config);
-                    $contents = $dep->getPackedAll($fileType);
-                    $contents = self::_encode($contents, $encoding);
-                    $cacheData = array('contents'=>$contents,
-                                       'version'=>$config->application->version);
-                    $cache->save($cacheData, $fileType.$encoding.$section);
-                }
                 header('Cache-Control: public');
                 header("Content-Encoding: " . $encoding);
-                echo $cacheData['contents'];
+
+                if ($section == 'RteStyles') {
+                    $contents = Vpc_Basic_Text_StylesModel::getStylesContents();
+                    echo self::_encode($contents, $encoding);
+                } else {
+                    $frontendOptions = array(
+                        'lifetime' => null,
+                        'automatic_serialization' => true
+                    );
+                    $backendOptions = array(
+                        'cache_dir' => 'application/cache/assets/'
+                    );
+                    $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+
+                    $sessionAssets = new Zend_Session_Namespace('debugAssets');
+                    $config = Zend_Registry::get('config');
+                    if ((!$cacheData = $cache->load($fileType.$encoding.$section))
+                        || $cacheData['version'] != $config->application->version
+                        || $sessionAssets->autoClearCache
+                        || $config->debug->autoClearAssetsCache
+                    ) {
+                        $dep = new Vps_Assets_Dependencies($section, $config);
+                        $contents = $dep->getPackedAll($fileType);
+                        $contents = self::_encode($contents, $encoding);
+                        $cacheData = array('contents'=>$contents,
+                                        'version'=>$config->application->version);
+                        $cache->save($cacheData, $fileType.$encoding.$section);
+                    }
+                    echo $cacheData['contents'];
+                }
             } else {
                 $config = Zend_Registry::get('config');
                 $assetPath = self::getAssetPath($url, $config->path);
@@ -165,15 +170,15 @@ class Vps_Assets_Loader
                     } else if (substr($url, -4)=='.jpg') {
                         header('Content-Type: image/jpeg');
                     } else if (substr($url, -4)=='.css') {
-                        header('Content-Type: text/css');
+                        header('Content-Type: text/css; charset=utf-8');
                     } else if (substr($url, -3)=='.js') {
-                        header('Content-Type: text/javascript');
+                        header('Content-Type: text/javascript; charset=utf-8');
                     } else if (substr($url, -4)=='.swf') {
                         header('Content-Type: application/flash');
                     } else if (substr($url, -4)=='.ico') {
                         header('Content-Type: image/x-icon');
                     } else if (substr($url, -5)=='.html') {
-                        header('Content-Type: text/html');
+                        header('Content-Type: text/html; charset=utf-8');
                     } else {
                         header("HTTP/1.0 404 Not Found");
                         die("invalid file type");

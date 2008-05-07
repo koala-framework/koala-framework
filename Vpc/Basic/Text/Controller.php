@@ -7,7 +7,7 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
     {
         $html = $this->_getParam('html');
         $row = $this->_form->getRow();
-        $this->view->html = $row->tidy($html);
+        $this->view->html = $row->getRow()->tidy($html);
     }
 
     public function jsonAddImageAction()
@@ -37,5 +37,13 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         $r->saved = 0;
         $r->save();
         Zend_Registry::get('db')->commit();
+    }
+
+    public function jsonStylesAction()
+    {
+        $t = new Vpc_Basic_Text_StylesModel();
+        $styles = $t->getStyles();
+        $this->view->inlineStyles = $styles['inline'];
+        $this->view->blockStyles = $styles['block'];
     }
 }

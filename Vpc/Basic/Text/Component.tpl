@@ -3,7 +3,7 @@
   {if is_string($part)}
     {$part}
   {else}
-    {component component=$part}
+    {component component=$part.component}
   {/if}
 {/foreach}
 {/strip}
