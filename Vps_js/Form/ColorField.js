@@ -9,15 +9,19 @@ Vps.Form.ColorField = Ext.extend(Ext.form.Field,
         config.renderTo = span;
         this.cp = new Ext.ColorPalette(config);
         this.cp.on('select', function(palette, color) {
-            if (this.getValue() != color) {
+            oldValue= this.getValue();
+            if (oldValue != color) {
                 this.setValue(color);
+                this.fireEvent('change', this, color, oldValue);
             }
         }, this);
     },
     
     setValue: function(value){
-        if (value != '') {
+        if (value) {
             this.cp.select(value);
+        } else {
+            //todo: deselect?!
         }
         Vps.Form.ColorField.superclass.setValue.call(this, value);
     }
