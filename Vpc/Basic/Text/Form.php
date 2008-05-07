@@ -8,7 +8,9 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
         $field->setData(new Vps_Data_Vpc_ComponentIds('content'));
         $field->setFieldLabel(trlVps('Text'));
 
-        $ignoreSettings = array('tablename', 'componentName', 'childComponentClasses', 'default');
+        $ignoreSettings = array('tablename', 'componentName',
+                'childComponentClasses', 'default', 'assets', 'assetsAdmin',
+                'placeholder');
         foreach (call_user_func(array($class, 'getSettings')) as $key => $val) {
             if (!in_array($key, $ignoreSettings)) {
                 $method = 'set' . ucfirst($key);
@@ -28,11 +30,21 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
             $c = Vpc_Admin::getInstance($classes['download'])->getExtConfig();
             $field->setDownloadComponentConfig($c);
         }
+        $field->setStylesEditorConfig(array(
+            'xtype' => 'vpc.basic.text.styleseditor'
+        ));
+
+        $t = new Vpc_Basic_Text_StylesModel();
+        $styles = $t->getStyles();
+        $field->setInlineStyles($styles['inline']);
+        $field->setBlockStyles($styles['block']);
+
+        $field->setStylesCssFile(Vpc_Basic_Text_StylesModel::getStylesUrl());
 
         $field->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl());
 
-        $v = Zend_Registry::get('config')->application->version;
-        $field->setCssFile('/assets/AllFrontend.css?v='.$v);
+        $dep = new Vps_Assets_Dependencies('Frontend');
+        $field->setCssFiles($dep->getAssetFiles('css'));
 
         $this->fields->add($field);
     }

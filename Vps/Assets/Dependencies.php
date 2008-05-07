@@ -39,7 +39,7 @@ class Vps_Assets_Dependencies
             $allUsed = true;
         }
         foreach ($this->getFiles($fileType) as $file) {
-            if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://') {
+            if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
                 $ret[] = $file;
             } else if (empty($allUsed)) {
                 $ret[] = '/assets/'.$file;
@@ -132,14 +132,15 @@ class Vps_Assets_Dependencies
     {
         $contents = '';
         foreach ($this->getFiles($fileType) as $file) {
-            if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://')) {
+            if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
                 $contents .= Vps_Assets_Loader::getFileContents($file, $this->_config->path) . "\n";
             }
         }
         return $contents;
     }
 
-    private function _getDependenciesConfig() {
+    private function _getDependenciesConfig()
+    {
         if (!isset($this->_dependenciesConfig)) {
             $this->_dependenciesConfig = new Zend_Config_Ini(VPS_PATH.'/config.ini', 'dependencies',
                                                 array('allowModifications'=>true));
@@ -209,19 +210,32 @@ class Vps_Assets_Dependencies
             }
         }
 
-        $file = Vpc_Admin::getComponentFile($class, '', 'css');
-        if ($file) {
-            foreach ($this->_config->path as $type=>$path) {
-                if ($path == '.') $path = getcwd();
-                if (substr($file, 0, strlen($path)) == $path) {
-                    $file = $type.substr($file, strlen($path));
-                    if (!in_array($file, $this->_files)) {
-                        $this->_files[] = $file;
-                        break;
+        //alle css-dateien der vererbungshierache includieren
+        $componentCssFiles = array();
+        $c = $class;
+        while ($c) {
+            $curClass = $c;
+            if (substr($curClass, -10) == '_Component') {
+                $curClass = substr($curClass, 0, -10);
+            }
+            $curClass =  $curClass . '_Component';
+            $file = str_replace('_', DIRECTORY_SEPARATOR, $curClass) . '.css';
+            foreach ($this->_config->path as $type=>$dir) {
+                if ($dir == '.') $dir = getcwd();
+                $path = $dir . '/' . $file;
+                if (is_file($path)) {
+                    $f = $type . '/' . $file;
+                    if (!in_array($f, $this->_files)) {
+                        $componentCssFiles[] = $f;
                     }
+                    break;
                 }
             }
+            $c = get_parent_class($c);
         }
+        //reverse damit css von weiter unten in der vererbungshierachie überschreibt
+        $this->_files = array_merge($this->_files, array_reverse($componentCssFiles));
+
         $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
         if (is_array($classes)) {
             foreach ($classes as $class) {

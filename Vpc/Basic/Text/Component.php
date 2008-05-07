@@ -3,20 +3,20 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
 {
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'tablename'         => 'Vpc_Basic_Text_Model',
             'componentName'     => 'Text',
             'componentIcon'     => new Vps_Asset('paragraph_page'),
             'width'             => 550,
             'height'            => 400,
-            'enableAlignments'  => true,
+            'enableAlignments'  => false,
             'enableColors'      => false,
             'enableFont'        => false,
             'enableFontSize'    => false,
             'enableFormat'      => true,
             'enableLists'       => true,
             'enableSourceEdit'  => true,
-            'enableBlock'       => true,
+            'enableBlock'       => false,
             'enableUndoRedo'    => true,
             'enableLinks'       => false, //nur wenn link komponente nicht vorhanden
             'enableInsertChar'  => true,
@@ -32,6 +32,14 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
                 'content'       => '<p>'.Vpc_Abstract::LOREM_IPSUM.'</p>'
             )
         ));
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditor.js';
+
+        //hinten ' css' anhängen damit die datei als css-datei erkannt wird
+        //nötig weil ein get-parameter mit der mtime dranhängt
+        $ret['assets']['files'][] =
+                    Vpc_Basic_Text_StylesModel::getStylesUrl().' css';
+
+        return $ret;
     }
 
     public function getTemplateVars()
@@ -50,7 +58,10 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
                 }
                 foreach ($childs as $row) {
                     if ($row->db_id == $this->getTreeCacheRow()->db_id.'-'.$part['nr']) {
-                        $ret['contentParts'][] = $row->getComponent()->getTemplateVars();
+                        $ret['contentParts'][] = array(
+                            'type' => $part['type'],
+                            'component'=>$row->component_id
+                        );
                         break;
                     }
                 }

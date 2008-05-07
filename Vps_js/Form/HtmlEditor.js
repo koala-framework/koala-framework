@@ -55,7 +55,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tabIndex: -1
         });
         this.actions.undo = new Ext.Action({
-            handler: this.undo,
+            handler: function() {
+                this.relayCmd('undo');
+            },
             scope: this,
             icon: '/assets/silkicons/arrow_undo.png',
             tooltip: {
@@ -68,7 +70,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tabIndex: -1
         });
         this.actions.redo = new Ext.Action({
-            handler: this.redo,
+            handler: function() {
+                this.relayCmd('redo');
+            },
             scope: this,
             icon: '/assets/silkicons/arrow_redo.png',
             tooltip: {
@@ -80,8 +84,64 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             clickEvent: 'mousedown',
             tabIndex: -1
         });
+        this.actions.editStyles = new Ext.Action({
+            icon: '/assets/silkicons/style_edit.png',
+            handler: function() {
+                this.stylesEditorDialog.show();
+            },
+            scope: this,
+            tooltip: {
+                cls: 'x-html-editor-tip',
+                title: trlVps('Edit Styles'),
+                text: trlVps('Modify and Create Styles.')
+            },
+            cls: 'x-btn-icon',
+            clickEvent: 'mousedown',
+            tabIndex: -1
+        });
+        this.actions.insertChar = new Ext.Action({
+            icon: '/assets/silkicons/text_letter_omega.png',
+            handler: this.insertChar,
+            scope: this,
+            tooltip: {
+                cls: 'x-html-editor-tip',
+                title: trlVps('Character'),
+                text: trlVps('Insert a custom character.')
+            },
+            cls: 'x-btn-icon',
+            clickEvent: 'mousedown',
+            tabIndex: -1
+        });
+        this.actions.insertPlainText = new Ext.Action({
+            icon: '/assets/vps/images/pastePlain.gif',
+            handler: this.insertPlainText,
+            scope: this,
+            tooltip: {
+                cls: 'x-html-editor-tip',
+                title: trlVps('Insert Plain Text'),
+                text: trlVps('Insert text without formating.')
+            },
+            cls: 'x-btn-icon',
+            clickEvent: 'mousedown',
+            tabIndex: -1
+        });
+        this.actions.tidyHtml = new Ext.Action({
+            icon: '/assets/silkicons/html_valid.png',
+            handler: function() {
+                this.syncValue();
+                this.tidyHtml();
+            },
+            scope: this,
+            tooltip: {
+                cls: 'x-html-editor-tip',
+                title: trlVps('Clean Html'),
+                text: trlVps('Clean up Html and remove formatings.')
+            },
+            cls: 'x-btn-icon',
+            clickEvent: 'mousedown',
+            tabIndex: -1
+        });
 
-        //todo: lazy-loading von windows
         if (this.linkComponentConfig) {
             this.enableLinks = false;
             var panel = Ext.ComponentMgr.create(Ext.applyIf(this.linkComponentConfig, {
@@ -125,6 +185,10 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 autoLoad: false
             });
         }
+        if (this.stylesEditorConfig) {
+            this.stylesEditorDialog = Ext.ComponentMgr.create(this.stylesEditorConfig);
+            this.stylesEditorDialog.on('hide', this._reloadStyles, this);
+        }
 
         Vps.Form.HtmlEditor.superclass.initComponent.call(this);
     },
@@ -143,14 +207,26 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                         if (c == 'v') {
                             //tidy on paste
                             Ext.getBody().mask('Cleaning...');
-                            this.tidyHtml.defer(500, this);
+                            (function() {
+                                this.syncValue();
+                                this.tidyHtml();
+                            }).defer(500, this);
                         }
                     }
                 }
             }, this);
         }
     },
-    createToolbar: function(editor){
+    onRender: function(ct, position)
+    {
+        Vps.Form.HtmlEditor.superclass.onRender.call(this, ct, position);
+
+        //re-enable items that are possible for not-yet-active editor
+        if (this.stylesEditorToolbarItem) this.stylesEditorToolbarItem.enable();
+        if (this.tidyToolbarItem) this.tidyToolbarItem.enable();
+    },
+    createToolbar: function(editor)
+    {
         Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
         var tb = this.getToolbar();
 
@@ -164,55 +240,26 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tb.insert(10,  this.getAction('insertDownload'));
         }
         if (this.linkDialog || this.imageDialog || this.downloadDialog) {
-            tb.insert(11, '-');
+            tb.insert(8, '-');
         }
 
         tb.add('-');
         if (this.enableInsertChar) {
-            tb.add({
-                icon: '/assets/silkicons/text_letter_omega.png',
-                handler: this.insertChar,
-                scope: this,
-                tooltip: {
-                    cls: 'x-html-editor-tip',
-                    title: trlVps('Character'),
-                    text: trlVps('Insert a custom character.')
-                },
-                cls: 'x-btn-icon',
-                clickEvent: 'mousedown',
-                tabIndex: -1
-            });
+            tb.add(this.getAction('insertChar'));
         }
         if (this.enablePastePlain) {
-            tb.add({
-                icon: '/assets/vps/images/pastePlain.gif',
-                handler: this.insertPlainText,
-                scope: this,
-                tooltip: {
-                    cls: 'x-html-editor-tip',
-                    title: trlVps('Insert Plain Text'),
-                    text: trlVps('Insert text without formating.')
-                },
-                cls: 'x-btn-icon',
-                clickEvent: 'mousedown',
-                tabIndex: -1
-            });
+            tb.add(this.getAction('insertPlainText'));
         }
 
         if (this.controllerUrl && this.enableTidy) {
-            tb.add({
-                icon: '/assets/silkicons/html_valid.png',
-                handler: this.tidyHtml,
-                scope: this,
-                tooltip: {
-                    cls: 'x-html-editor-tip',
-                    title: trlVps('Clean Html'),
-                    text: trlVps('Clean up Html and remove formatings.')
-                },
-                cls: 'x-btn-icon',
-                clickEvent: 'mousedown',
-                tabIndex: -1
-            });
+            this.tidyToolbarItem = tb.addButton(this.getAction('tidyHtml'));
+        }
+        if (this.enableUndoRedo) {
+            var offs = 0;
+            if (this.enableFont) offs += 2;
+            tb.insert(offs, this.getAction('undo'));
+            tb.insert(offs+1, this.getAction('redo'));
+            tb.insert(offs+2, '-');
         }
 
         if (this.enableBlock) {
@@ -232,24 +279,50 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tb.insert(0, this.blockSelect.dom);
             tb.insert(1, '-');
         }
-        if (this.enableUndoRedo) {
-            var offs = 0;
-            if (this.enableBlock) offs += 2;
-            if (this.enableFont) offs += 2;
-            tb.insert(offs, this.getAction('undo'));
-            tb.insert(offs+1, this.getAction('redo'));
-            tb.insert(offs+2, '-');
+        tb.stylesTr = tb.el.insertHtml('beforeEnd', tb.autoCreate.html);
+        tb.tr = tb.stylesTr;
+        tb.originalTr = tb.tr;
+        if (this.stylesEditorDialog) {
+            this.stylesEditorToolbarItem = tb.insert(0, this.getAction('editStyles'));
         }
+        this._renderInlineStylesSelect();
+        this._renderBlockStylesSelect();
+        tb.tr = tb.originalTr;
+    },
+
+    createInlineStylesOptions : function(){
+        var buf = [];
+        for (var i in this.inlineStyles) {
+            buf.push(
+                '<option value="',i,'"',
+                    (i == 'span' ? ' selected="true">' : '>'),
+                    this.inlineStyles[i],
+                '</option>'
+            );
+        }
+        return buf.join('');
+    },
+
+    createBlockStylesOptions : function(){
+        var buf = [];
+        for (var i in this.blockStyles) {
+            buf.push(
+                '<option value="',i,'"',
+                    (i == 'p' ? ' selected="true">' : '>'),
+                    this.blockStyles[i],
+                '</option>'
+            );
+        }
+        return buf.join('');
     },
 
     createBlockOptions : function(){
         var buf = [];
         for (var i in this.formatBlocks) {
-            fb = this.formatBlocks[i];
             buf.push(
-                '<option value="',i,'"', /*style="font-family:',ff,';"',*/
+                '<option value="',i,'"',
                     (i == 'p' ? ' selected="true">' : '>'),
-                    fb,
+                    this.formatBlocks[i],
                 '</option>'
             );
         }
@@ -259,6 +332,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         Vps.Form.HtmlEditor.superclass.updateToolbar.call(this);
         if (this.blockSelect) {
             if (Ext.isIE) {
+                var selectedBlock = false;
                 var el = this.getFocusElement();
                 while (el) {
                     for(var i in this.formatBlocks) {
@@ -266,15 +340,70 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                             if(i != this.blockSelect.dom.value){
                                 this.blockSelect.dom.value = i;
                             }
-                            return;
+                            selectedBlock = true;
+                            break;
                         }
                     }
+                    if (selectedBlock) break;
                     el = el.parentNode;
+                }
+                if (!selectedBlock) {
+                    if('p' != this.blockSelect.dom.value){
+                        this.blockSelect.dom.value = 'p';
+                    }
                 }
             } else {
                 var name = (this.doc.queryCommandValue('FormatBlock')||'p').toLowerCase();
                 if(name != this.blockSelect.dom.value){
                     this.blockSelect.dom.value = name;
+                }
+            }
+        }
+        if (this.blockStylesSelect) {
+            var el = this.getFocusElement('block');
+            var selectedStyle = false;
+            if (el) {
+                for(var i in this.blockStyles) {
+                    var selector = i.split('.');
+                    var tag = selector[0];
+                    var className = selector[1];
+                    if ((!tag || el.tagName.toLowerCase() == tag)
+                        && (!className || el.className.toLowerCase() == className)) {
+                        if(i != this.blockStylesSelect.dom.value){
+                            this.blockStylesSelect.dom.value = i;
+                        }
+                        selectedStyle = true;
+                        break;
+                    }
+                }
+            }
+            if (!selectedStyle) {
+                if ('p' != this.blockStylesSelect.dom.value) {
+                    this.blockStylesSelect.dom.value = 'p';
+                }
+            }
+        }
+        if (this.inlineStylesSelect) {
+            var el = this.getFocusElement('span');
+            var selectedStyle = false;
+            if (el) {
+                for(var i in this.inlineStyles) {
+                    var selector = i.split('.');
+                    var tag = selector[0];
+                    var className = selector[1];
+                    if (i != 'span' && (!tag || el.tagName.toLowerCase() == tag)
+                        && (!className || el.className.toLowerCase() == className)) {
+                        if(i != this.inlineStylesSelect.dom.value){
+                            this.inlineStylesSelect.dom.value = i;
+                        }
+                        selectedStyle = true;
+                        break;
+                    }
+                }
+            }
+            if (!selectedStyle) {
+                if ('span' != this.inlineStylesSelect.dom.value) {
+                    this.inlineStylesSelect.dom.value = 'span';
                 }
             }
         }
@@ -298,7 +427,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             if (Ext.isIE) {
                 var selection = this.doc.selection;
             } else {
-                var selection = this.doc.getSelection();
+                var selection = this.win.getSelection();
             }
             if (selection == '') {
                 this.getAction('insertLink').disable();
@@ -310,9 +439,11 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         }
     },
     getDocMarkup : function(){
-        var ret = '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style>';
-        if (this.cssFile) {
-            ret += '<link rel="stylesheet" type="text/css" href="'+this.cssFile+'" />';
+        var ret = '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style>\n';
+        if (this.cssFiles) {
+            this.cssFiles.forEach(function(f) {
+                ret += '<link rel="stylesheet" type="text/css" href="'+f+'" />\n';
+            }, this);
         }
         ret += '</head><body class="content"></body></html>';
         return ret;
@@ -535,25 +666,212 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             }
         }
         if (tag && elm) {
+            if (tag == 'block') tag = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                                       'pre', 'code', 'address'];
+            var isNeededTag = function(t) {
+                if (tag.indexOf) {
+                    return tag.indexOf(t) != -1;
+                } else {
+                    return tag == t;
+                }
+            }
             while (elm && elm.parentNode &&
-                    (!elm.tagName || elm.tagName.toLowerCase() != tag)) {
+                    (!elm.tagName || !isNeededTag(elm.tagName.toLowerCase()))) {
                 elm = elm.parentNode;
             }
+            if (!elm || !elm.tagName || !isNeededTag(elm.tagName.toLowerCase())) return null;
         }
         return elm;
     },
 
     //protected
     toggleSourceEdit : function(sourceEditMode) {
-        this.tidyHtml();
         Vps.Form.HtmlEditor.superclass.toggleSourceEdit.call(this, sourceEditMode);
+
+        //re-enable items that are possible in sourceedit
+        if (this.stylesEditorToolbarItem) this.stylesEditorToolbarItem.enable();
+        if (this.tidyToolbarItem) this.tidyToolbarItem.enable();
+
+        this.tidyHtml();
     },
 
-    undo: function() {
-        this.relayCmd('undo');
+    //returns null if there is no selection
+    getSelectionRange: function()
+    {
+        var sel;
+        if (Ext.isIE) {
+            sel = this.doc.selection;
+        } else {
+            sel = this.win.getSelection();
+        }
+        if (!sel) return null;
+        if (sel.isCollapsed) return null;
+        if (Ext.isIE && sel.createRange().htmlText === '') return null;
+        var range;
+        if (Ext.isIE) {
+            range = sel.createRange();
+        } else {
+            range = sel.getRangeAt(0);
+        }
+        if (!range) return null;
+
+        return range;
     },
-    redo: function() {
-        this.relayCmd('redo');
+
+    _onSelectBlockStyle: function() {
+        var v = this.blockStylesSelect.dom.value;
+        var tag = '';
+        var className = '';
+        if (v.indexOf('.') == -1) {
+            tag = v;
+        } else {
+            var i = v.split('.');
+            tag = i[0];
+            className = i[1];
+        }
+        if (tag) {
+            v = tag;
+            if (Ext.isIE) {
+                v = '<'+v+'>';
+            }
+            this.relayCmd('formatblock', v);
+        }
+        var elm = this.getFocusElement(tag || 'block');
+        if (elm) {
+            elm.className = className;
+        }
+        this.deferFocus();
+        this.updateToolbar();
+    },
+    _onSelectInlineStyle: function() {
+        var v = this.inlineStylesSelect.dom.value;
+        var tag = '';
+        var className = '';
+        if (v.indexOf('.') == -1) {
+            tag = v;
+        } else {
+            var i = v.split('.');
+            tag = i[0];
+            className = i[1];
+        }
+        var range = this.getSelectionRange();
+        if (range) {
+            var span = this.doc.createElement(tag);
+            span.className = className;
+            //TODO: IE kompatibel?
+            range.surroundContents(span);
+        } else {
+            var elm = this.getFocusElement(tag);
+            if (elm) {
+                elm.className = className;
+            } else {
+                //TODO: IE kompatibel?
+                this.insertAtCursor('<'+tag+' class="'+className+'">&nbsp;</'+tag+'>');
+                this.win.getSelection().getRangeAt(0).selectNode(this.win.getSelection().focusNode)
+            }
+        }
+        this.deferFocus();
+        this.updateToolbar();
+    },
+    _reloadStyles: function() {
+        var reloadCss = function(doc) {
+            var href = doc.location.protocol+'//'+
+                        doc.location.hostname + this.stylesCssFile;
+            href = href.split('?')[0];
+            var links = doc.getElementsByTagName("link");
+            for (var i = 0; i < links.length; i++) {
+                var l = links[i];
+                if (l.type == 'text/css' && l.href
+                    && l.href.split('?')[0] == href) {
+                    l.parentNode.removeChild(l);
+                }
+            }
+            var s = doc.createElement('link');
+            s.setAttribute('type', 'text/css');
+            s.setAttribute('href', href+'?'+Math.random());
+            s.setAttribute('rel', 'stylesheet');
+            doc.getElementsByTagName("head")[0].appendChild(s);
+        };
+        reloadCss.call(this, document);
+        reloadCss.call(this, this.doc);
+        Ext.Ajax.request({
+            url: this.controllerUrl+'/json-styles',
+            success: function(response, options, result) {
+                this.inlineStyles = result.inlineStyles;
+                this.blockStyles = result.blockStyles;
+                this._renderInlineStylesSelect();
+                this._renderBlockStylesSelect();
+                this.updateToolbar();
+            },
+            scope: this
+        });
+    },
+
+    _renderInlineStylesSelect: function() {
+        var stylesLength = 0;
+        for (var i in this.inlineStyles) stylesLength++;
+        if (this.inlineStyles && stylesLength > 1) {
+            if (!this.inlineStylesSelect) {
+                this.inlineStylesSelect = this.getToolbar().el.createChild({
+                    tag:'select',
+                    cls:'x-font-select',
+                    html: this.createInlineStylesOptions()
+                });
+                this.inlineStylesSelect.on('change', this._onSelectInlineStyle, this);
+                var offs = 0;
+                if (this.blockStylesToolbarItem && !this.blockStylesToolbarItem.hidden) {
+                    offs = 3;
+                }
+                var tb = this.getToolbar();
+                tb.tr = tb.stylesTr;
+                this.inlineStylesToolbarText = tb.insert(offs, 'Inline:');
+                this.inlineStylesToolbarItem = tb.insert(offs+1, this.inlineStylesSelect.dom);
+                this.inlineStylesSeparator = tb.insert(offs+2, '-');
+                tb.tr = tb.originalTr;
+            } else {
+                this.inlineStylesToolbarText.show();
+                this.inlineStylesToolbarItem.show();
+                this.inlineStylesSeparator.show();
+                this.inlineStylesSelect.update(this.createInlineStylesOptions());
+            }
+        } else {
+            if (this.inlineStylesSelect) {
+                this.inlineStylesToolbarText.hide();
+                this.inlineStylesToolbarItem.hide();
+                this.inlineStylesSeparator.hide();
+            }
+        }
+    },
+    _renderBlockStylesSelect: function() {
+        var stylesLength = 0;
+        for (var i in this.blockStyles) stylesLength++;
+        if (this.blockStyles && stylesLength > 1) {
+            if (!this.blockStylesSelect) {
+                this.blockStylesSelect = this.getToolbar().el.createChild({
+                    tag:'select',
+                    cls:'x-font-select',
+                    html: this.createBlockStylesOptions()
+                });
+                this.blockStylesSelect.on('change', this._onSelectBlockStyle, this);
+                var tb = this.getToolbar();
+                tb.tr = tb.stylesTr;
+                this.blockStylesToolbarText = tb.insert(0, 'Block:');
+                this.blockStylesToolbarItem = tb.insert(1, this.blockStylesSelect.dom);
+                this.blockStylesSeparator = tb.insert(2, '-');
+                tb.tr = tb.originalTr;
+            } else {
+                this.blockStylesToolbarText.show();
+                this.blockStylesToolbarItem.show();
+                this.blockStylesSeparator.show();
+                this.blockStylesSelect.update(this.createBlockStylesOptions());
+            }
+        } else {
+            if (this.blockStylesSelect) {
+                this.blockStylesToolbarText.hide();
+                this.blockStylesToolbarItem.hide();
+                this.blockStylesSeparator.hide();
+            }
+        }
     }
 });
 Ext.reg('htmleditor', Vps.Form.HtmlEditor);
