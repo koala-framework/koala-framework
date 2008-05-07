@@ -56,9 +56,12 @@ class Vpc_Basic_Text_Parser
     {
         array_push($this->_elementStack, $element);
 
-        if ($element == 'SPAN' && array_key_exists('STYLE', $attributes)){
-
-            $style = $attributes['STYLE'];
+        if ($element == 'SPAN') {
+            if (isset($attributes['STYLE'])) {
+                $style = $attributes['STYLE'];
+            } else {
+                $style = '';
+            }
             if (preg_match('# *font-weight *: +bold *; *#', $style, $matches)){
                  array_push($this->_stack, 'strong');
                  $this->_finalHTML .= '<strong>';
@@ -74,6 +77,14 @@ class Vpc_Basic_Text_Parser
             } elseif (preg_match('# *background-color *: +[0-9,A-Za-z]* *#', $style, $matches) && $this->_enableColor){
                  array_push($this->_stack, 'span');
                  $this->_finalHTML .= '<span style="'.$style.'">';
+            } else {
+                array_push($this->_stack, 'span');
+                $this->_finalHTML .= '<'.$element;
+                foreach ($attributes as $key => $value) {
+                    $this->_finalHTML .= ' ' . $key . '="'. $value . '"';
+                }
+
+                $this->_finalHTML .= '>';
             }
         } elseif ($element == 'BODY' || $element == 'O:P') {
             //do nothing
