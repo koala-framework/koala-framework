@@ -11,7 +11,8 @@ class Vps_Component_Cache  {
         $backendOptions = array(
             'cache_dir' => 'application/cache/component',
             'hashed_directory_level' => 2,
-            'file_name_prefix' => 'vpc'
+            'file_name_prefix' => 'vpc',
+            'hashed_directory_umask' => 0770
         );
         $this->_cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
     }
