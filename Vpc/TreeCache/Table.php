@@ -181,6 +181,7 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
                     $this->_cache->afterGenerate();
                 }
             }
+            $this->_cache->clearCache();
         }
         parent::onInsertRow($row);
     }
@@ -203,6 +204,7 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
             foreach ($this->_cache->fetchAll($where) as $tcRow) {
                 $tcRow->delete();
             }
+            $this->_cache->clearCache();
         }
         parent::onDeleteRow($row);
     }
@@ -248,6 +250,7 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
             if ($saved) {
                 $this->_cache->afterGenerate();
             }
+            $this->_cache->clearCache();
         }
         parent::onUpdateRow($row);
     }

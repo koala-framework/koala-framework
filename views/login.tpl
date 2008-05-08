@@ -1,8 +1,9 @@
+<?= $this->doctype() ?>
 <html>
     <head>
-        {foreach item=file from=$ext.files.css}
-        <link rel="stylesheet" type="text/css" href="{$file}" />
-        {/foreach}
+        <?php foreach ($this->ext['files']['css'] as $file) { ?>
+        <link rel="stylesheet" type="text/css" href="<?= $file ?>" />
+        <?php } ?>
     </head>
     <body>
 
@@ -10,13 +11,13 @@
             <form id="ext-gen34" method="post" class="x-form" action="/vps/user/login/show-form">
                 <div class="x-panel-mc" style="padding: 10px; height:100%">
                     <div tabindex="-1" class="x-form-item">
-                        <label class="x-form-item-label" style="width: 75px;" for="ext-comp-1004">{trlVps text="Email:"}</label>
+                        <label class="x-form-item-label" style="width: 75px;" for="ext-comp-1004"><?= trlVps('E-Mail') ?>:</label>
                         <div style="padding-left: 80px;" id="x-form-el-ext-comp-1004" class="x-form-element">
                             <input type="text" name="username" autocomplete="on" size="20" class="x-form-text x-form-field" style="width: 180px;"/>
                         </div>
                     </div>
                     <div tabindex="-1" class="x-form-item">
-                        <label class="x-form-item-label" style="width: 75px;" for="ext-comp-1004">{trlVps text="Password:"}</label>
+                        <label class="x-form-item-label" style="width: 75px;" for="ext-comp-1004"><?= trlVps('Password') ?>:</label>
                         <div style="padding-left: 80px;" id="x-form-el-ext-comp-1004" class="x-form-element">
                             <input type="password" name="password" autocomplete="on" size="20" class="x-form-text x-form-field" style="width: 180px;"/>
                         </div>
@@ -28,7 +29,7 @@
                             <tr>
                                 <td class="x-btn-left"></td>
                                 <td class="x-btn-center">
-                                    <button type="button" class="x-btn-text" id="lostPassword">{trlVps text="Lost password?"}</button>
+                                    <button type="button" class="x-btn-text" id="lostPassword"><?= trlVps('Lost password?') ?></button>
                                 </td>
                                 <td class="x-btn-right"></td>
 
@@ -36,14 +37,14 @@
 
                                 <td class="x-btn-left"></td>
                                 <td class="x-btn-center">
-                                    <button type="submit" class="x-btn-text" id="ext-gen18">{trlVps text="Login"}</button>
+                                    <button type="submit" class="x-btn-text" id="ext-gen18"><?= trlVps('Login') ?></button>
                                 </td>
                                 <td class="x-btn-right"></td>
                             </tr>
                         </tbody>
                     </table>
                     <div class="x-clear"></div>
-                    <div class="x-form-item" style="width: 270px; margin-top:10px">{$text}</div>
+                    <div class="x-form-item" style="width: 270px; margin-top:10px"><?= $this->text ?></div>
                 </div>
             </form>
         </div>

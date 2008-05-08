@@ -1,1 +1,1 @@
-<div>{$component.value}</div>
+<div><?= $this->value ?></div>

@@ -1,8 +1,8 @@
-{if count($component.pageLinks) > 1}
+<?php if (count($this->pageLinks) > 1) { ?>
 <div class="vpcPaging">
-    <span>{trlVps text="Page"}:</span> 
-    {foreach from=$component.pageLinks item=l}
-        <a href="{$l.href}" rel="{$l.rel}"{if $l.active} class="active"{/if}>{$l.text}</a>
-    {/foreach}
+    <span><?php trlVps('Page') ?>:</span> 
+    <?php foreach ($this->pageLinks as $l) { ?>
+        <a href="<?= $l['href'] ?>" rel="<?= $l['rel'] ?>"<?php if ($l['active']) { ?> class="active"<?php } ?>><?= $l['text'] ?></a>
+    <?php } ?>
 </div>
-{/if}
+<?php } ?>

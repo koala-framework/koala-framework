@@ -1,17 +1,17 @@
 <div class="vpcGoogleMap">
 
-    <div class="text">{component component=$component.text}<br /></div>
-    <div class="options">{$component.options}</div>
+    <div class="text"><?php $this->component($this->text) ?><br /></div>
+    <div class="options"><?php $this->options ?></div>
 
     <div class="container"></div>
 
     <form action="#" class="fromAddress">
         <input type="text" class="textBefore"/>
-        <input type="submit" value="{trlVps text="Show Route"}" class="submitOn"/>
+        <input type="submit" value="<?= trlVps('Show Route') ?>" class="submitOn"/>
     </form>
 
     <div class="mapDirSuggestParent">
-        <b>{trlVps text="Suggestions"}</b>
+        <b><?= trlVps('Suggestions') ?></b>
         <ul class="mapDirSuggest"></ul>
     </div>
 

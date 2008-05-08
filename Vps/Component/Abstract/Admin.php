@@ -15,6 +15,7 @@ class Vps_Component_Abstract_Admin
         static $instances = array();
         if (!isset($instances[$componentClass])) {
             $c = self::getComponentFile($componentClass, 'Admin', 'php', true);
+            if (!$c) { return null; }
             $instances[$componentClass] = new $c($componentClass, Zend_Registry::get('db'));
         }
         return $instances[$componentClass];

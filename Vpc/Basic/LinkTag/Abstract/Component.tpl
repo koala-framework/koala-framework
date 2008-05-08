@@ -1,1 +1,4 @@
-<a href="{$component.href}"{if $component.rel} rel="{$component.rel}"{/if}>
+<?php
+echo '<a href="' . $this->href . '"';
+if($this->rel) { echo ' rel="' . $this->rel . '"'; }
+echo '>';

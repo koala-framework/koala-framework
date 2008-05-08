@@ -15,7 +15,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
         $isHttpRequest = (isset($_SERVER['REQUEST_METHOD'])
                             && $_SERVER['REQUEST_METHOD']== 'POST') ||
                     isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
-        if (($prefix == 'ajax' || $prefix == 'json') &&
+        if ($prefix == 'json' &&
             ($isHttpRequest || $errors->exception instanceof Vps_ClientException)) {
             $this->_forward('json-error');
         } else {
@@ -24,16 +24,13 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
                 $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION ||
                 $errors->exception instanceof Vps_Controller_Action_Web_FileNotFoundException) {
                 $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
-                $file = 'Error404.html';
-            //auskommentiert - wenn ich einen exception bekomm dann will ich eine gscheite :D
-            //} else if ($errors->exception instanceof Vps_Controller_Exception) {
-            //    $file = 'ErrorVpc.html';
+                $file = 'Error404';
             } else {
-                $file = 'Error.html';
+                $file = 'Error';
             }
 
-            $this->view->setRenderFile($file);
-
+            $this->_helper->viewRenderer->setRender($file);
+                        
             $config = Zend_Registry::get('config');
             $this->view->type = $errors->type;
             $this->view->exception = $errors->exception;

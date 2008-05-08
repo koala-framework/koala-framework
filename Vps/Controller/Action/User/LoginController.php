@@ -38,14 +38,14 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         } else {
             $this->view->image = false;
         }
-        $this->view->application = Zend_Registry::get('config')->application;
-        $this->view->setRenderFile('LoginHeader.html');
+        $this->view->application = Zend_Registry::get('config')->application->toArray();
+        $this->_helper->viewRenderer->setRender('loginheader');
     }
 
     public function showFormAction()
     {
+        $this->_helper->viewRenderer->setRender('Login');
         $this->view->ext('');
-        $this->view->setRenderFile(VPS_PATH . '/views/Login.html');
         $this->view->username = '';
         if ($this->_getParam('username')) {
             $result = $this->_login();

@@ -1,6 +1,3 @@
-{if isset($ext) && !empty($ext)}
-
-    {literal}
     <style type="text/css">
     #loading {
         position:absolute;
@@ -28,31 +25,30 @@
         font: normal 10px arial,tahoma,sans-serif;
     }
     </style>
-    {/literal}
+
     <script type="text/javascript">
         document.write('<div id="loading">');
           document.write('<div class="loading-indicator">');
             document.write('<img src="/assets/ext/resources/images/default/shared/large-loading.gif" width="32" height="32"/>');
-            document.write('{$config->application->name}<br /><span id="loading-msg">{trlVps text="Loading..."}</span></div>');
+            document.write('<?= $this->config['application']['name'] ?><br /><span id="loading-msg"><?= trlVps('Loading...') ?></span></div>');
         document.write('</div>');
-        var Vps = {ldelim}isApp: true{rdelim};
+        var Vps = {isApp: true};
     </script>
 
-    {foreach item=file from=$ext.files.css}
-    <link rel="stylesheet" type="text/css" href="{$file}" />
-    {/foreach}
+    <?php foreach ($this->ext['files']['css'] as $file) { ?>
+    <link rel="stylesheet" type="text/css" href="<?= $file ?>" />
+    <?php } ?>
 
-    {foreach item=file from=$ext.files.js}
-    <script type="text/javascript" src="{$file}"></script>
-    {/foreach}
+    <?php foreach ($this->ext['files']['js'] as $file) { ?>
+    <script type="text/javascript" src="<?= $file ?>"></script>
+    <?php } ?>
 
-    {include file=$debug.template}
+    <?php if($this->debug['template']) { echo $this->partial($this->debug['template'], $this->debug); } ?>
 
     <script type="text/javascript">
-        Vps.userRole = '{$ext.userRole}';
-        Vps.main = function() {ldelim}
-            var panel = new {$ext.class}({$ext.config});
-{literal}
+        Vps.userRole = '<?= $this->ext['userRole'] ?>';
+        Vps.main = function() {
+            var panel = new <?= $this->ext['class'] ?>(<?= $this->ext['config'] ?>);
             if (!panel.region) panel.region = 'center';
             panel.id = 'mainPanel';
             Vps.currentViewport = new Vps.Viewport({
@@ -65,7 +61,4 @@
         Ext.onReady(function() {
             Vps.callWithErrorHandler(Vps.main);
         });
-{/literal}
     </script>
-
-{/if}

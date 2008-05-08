@@ -1,1 +1,1 @@
-<input type="file" name="{$component.name}" style="width: {$component.width}px;" />
+<input type="file" name="<?= $this->name ?>" style="width: <?= $this->width ?>px;" />

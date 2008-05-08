@@ -19,9 +19,12 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
             if (!$row) {
                 return 'Could not create component: ' . $id;
             } else {
-                $view = new Vps_View_Smarty();
-                //todo, diese fkt ist vermutl. nur für smarty gedacht
-                return $view->component(array('component' => $id));
+                $view = new Vps_View_Component();
+                $templateVars = $row->getComponent()->getTemplateVars();
+                foreach ($templateVars as $key => $val) {
+                    $view->$key = $val;
+                }
+                return $view->render($templateVars['template']);
             }
         } else if (isset($row->settings)) {
             $settingsModel = new Vps_Model_Field(array(
@@ -40,10 +43,9 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
                 $vars = $dec->processItem($vars);
             }
 
-            $view = new Vps_View_Smarty();
+            $view = new Vps_View_Ext();
             $view->item = $vars;
-            $view->setRenderFile(VPS_PATH . '/Vpc/Formular/field.tpl');
-            return $view->render('');
+            return $view->render(VPS_PATH . '/Vpc/Formular/field.tpl');
         }
     }
 }

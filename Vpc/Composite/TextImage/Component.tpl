@@ -1,5 +1,5 @@
 <div class="vpcCompositeTextImage">
-    <div class="{$component.image_position}">{component component=$component.image}</div>
-    {component component=$component.text}
+    <div class="<?=$this->image_position?>"><?= $this->component($this->image) ?></div>
+    <?= $this->component($this->text) ?>
     <div class="clear"></div>
 </div>

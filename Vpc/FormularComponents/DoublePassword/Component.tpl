@@ -1,5 +1,5 @@
-{component component=$component.password1}
+<?php $this->component($this->password1) ?>
 <div class="vpcDoublePasswordField">
-    <label>{if $component.password2.store.isMandatory} * {/if} {$component.password2.store.fieldLabel}</label>
-    <div class="field">{component component=$component.password2}</div>
+    <label><?php if ($this->password2['store']['isMandatory']) echo ' * ' ?><?= $this->password2['store']['fieldLabel'] ?></label>
+    <div class="field"><?php $this->component($this->password2) ?></div>
 </div>

@@ -1,7 +1,8 @@
-{if $component.imagePosition == 'left'}
-    {component component=$component.images}
-    {component component=$component.text}
-{else}
-    {component component=$component.text}
-    {component component=$component.images}
-{/if}
+<?php
+if ($this->imagePosition == 'left') {
+    $this->component($this->images);
+    $this->component($this->text);
+} else {
+    $this->component($this->text);
+    $this->component($this->images);
+}

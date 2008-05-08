@@ -1,21 +1,19 @@
 <ul id="{$component.level}Menu">
-    {foreach from=$component.menu item=m}
-    <li class="{$m.class}">
-        <a href="{$m.href}" rel="{$m.rel}"><span>{$m.text}</span></a>
+    <?php foreach ($this->menu as $m) { ?>
+    <li class="<?= $m['class'] ?>">
+        <a href="<?= $m['href'] ?>" rel="<?= $m['rel'] ?>"><span><?= $m['text'] ?></span></a>
         <div class="clear"></div>
-        {if $m.submenu}
-            <div class="{$component.level}Submenu">
-            {strip}
+        <?php if (isset($m['submenu'])) { ?>
+            <div class="<?= $this->level ?>Submenu">
             <ul>
-            {foreach from=$m.submenu item=sm}
-                <li class="{$sm.class}">
-                <a href="{$sm.href}" rel="{$m.rel}"><span>{$sm.text}</span></a>
+            <?php foreach ($m['submenu'] as $sm) { ?>
+                <li class="<?= $sm['class'] ?>">
+                <a href="<?= $sm['href'] ?>" rel="<?= $sm['rel'] ?>"><span><?= $sm['text'] ?></span></a>
                 </li>
-            {/foreach}
+            <?php } ?>
             </ul>
-            {/strip}
             </div>
-        {/if}
+        <?php } ?>
     </li>
-    {/foreach}
+    <?php } ?>
 </ul>

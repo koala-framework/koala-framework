@@ -1,7 +1,7 @@
 <ul class="newsCatagory">
-    {foreach from=$component.categories item=cat}
+    <?php foreach ($this->categories as $cat) { ?>
         <li>
-            <a href="{$cat.href}">{$cat.value}</a>
+            <a href="<?= $cat['href'] ?>"><?= $cat['value'] ?></a>
         </li>
-    {/foreach}
+    <?php } ?>
 </ul>

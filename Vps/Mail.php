@@ -8,7 +8,7 @@ class Vps_Mail
 
     public function __construct($template, $renderFile = 'Master')
     {
-        $this->_view = new Vps_View_Mail_Smarty();
+        $this->_view = new Vps_View_Mail();
         $this->_template = $template;
         $this->_renderFile = $renderFile;
 

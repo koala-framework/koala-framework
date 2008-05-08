@@ -1,8 +1,8 @@
-<ul id="{$component.level}Menu">
-    {foreach from=$component.menu item=m}
-    <li class="{$m.class}">
-        <a href="{$m.href}" rel="{$m.rel}"><span>{$m.text}</span></a>
+<ul id="<?= $this->level ?>Menu">
+    <?php foreach ($this->menu as $m) { ?>
+    <li class="<?= $m['class'] ?>">
+        <a href="<?= $m['href'] ?>" rel="<?= $m['rel'] ?>"><span><?= $m['text'] ?></span></a>
         <div class="clear"></div>
     </li>
-    {/foreach}
+    <?php } ?>
 </ul>

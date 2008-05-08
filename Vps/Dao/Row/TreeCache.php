@@ -8,7 +8,7 @@ class Vps_Dao_Row_TreeCache extends Vps_Db_Table_Row_Abstract
         return $this->findParentRow('Vps_Dao_TreeCache', 'Parent');
     }
 
-    protected function _addDecorators(Vpc_Interface $page)
+    protected function _addDecorators(Vpc_Abstract $page)
     {
         if (!Zend_Registry::get('config')->vpc->pageDecorators) return $page;
         $classes = Zend_Registry::get('config')->vpc->pageDecorators;
@@ -22,11 +22,10 @@ class Vps_Dao_Row_TreeCache extends Vps_Db_Table_Row_Abstract
         return $page;
     }
 
-    public function getComponent($addDecorators = true)
+    public function getComponent()
     {
-        if (!isset($this->_component) || !$addDecorators) {
+        if (!isset($this->_component)) {
             $component = new $this->component_class($this);
-            if (!$addDecorators) { return $component; }
             $this->_component = $component;
             if (!is_null($this->url_match)) {
                 $this->_component = $this->_addDecorators($this->_component);

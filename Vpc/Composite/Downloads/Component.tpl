@@ -1,3 +1,6 @@
-{foreach from=$component.children item=child}
-{component component=$child}<br />
-{/foreach}
+<?php
+foreach ($this->children as $child) {
+    echo $this->component($child);
+    ?><br /><?php
+}
+?>

@@ -1,1 +1,1 @@
-<input type="submit" name="{$component.name}" value="{$component.text}" style="width:{$component.width}px;" />
+<input type="submit" name="<?= $this->name ?>" value="<?= $this->text ?>" style="width:<?= $this->width ?>px;" />

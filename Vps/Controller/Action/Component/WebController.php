@@ -67,7 +67,6 @@ class Vps_Controller_Action_Component_WebController extends Vps_Controller_Actio
         
         $this->view->url = $requestUrl;
         $this->view->component = $templateVars;
-        $this->view->mode = ''; // Für Smarty-Plugin
 
         $benchmark->stopSequence('Seitenbaum');
         $result = $benchmark->getResults();

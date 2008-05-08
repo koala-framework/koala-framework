@@ -7,18 +7,6 @@ class Vpc_Menu_BreadCrumbs_Component extends Vpc_Menu_Abstract
 {
     public function getTemplateVars()
     {
-        $return = parent::getTemplateVars();
-        $pc = $this->_pageCollection;
-
-        $pages = array();
-        $page = $pc->getCurrentPage();
-        while ($page) {
-            $pages[] = $page;
-            $page = $pc->getParentPage($page);
-        }
-        $pages = array_reverse($pages);
-        $return['menu']['breadCrumbs'] = $this->_getMenuData($pages, array());
-
-        return $return;
+        throw new Vps_Exception('Vpc_Menu_BreadCrumbs_Component not implemented yet!');
     }
 }

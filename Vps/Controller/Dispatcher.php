@@ -39,6 +39,15 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
 
         return $className;
     }
+    
+    public function getControllerDirectory($module = null)
+    {
+        if ($module == 'component') {
+            return '';
+        } else {
+            return parent::getControllerDirectory($module);
+        }
+    }
 
     public function loadClass($className)
     {

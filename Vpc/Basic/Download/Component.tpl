@@ -1,8 +1,8 @@
-{strip}
-{if $component.downloadTag.url}
-{component component=$component.downloadTag}
-    {$component.infotext}
-    {if $component.downloadTag.filesize > 0} ({$component.downloadTag.filesize|file_size}) {/if}
-</a>
-{/if}
-{/strip}
+<?php
+if ($this->downloadTag['url']) {
+    $this->component($this->downloadTag);
+    echo $this->infotext;
+    if ($this->downloadTag['filesize'] > 0) {
+        echo '(' . $this->fileSize($this->downloadTag['filesize']) . ')';
+    }
+}

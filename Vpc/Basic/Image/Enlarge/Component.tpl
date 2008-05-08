@@ -1,13 +1,13 @@
-{if $component.smallImage && $component.smallImage.height && $component.url}
-    {math equation="(compheight - thumbheight) / 2"
-            compheight  = $component.thumbMaxHeight
-            thumbheight = $component.smallImage.height
-            assign = topMargin
-    }
-    {assign var=topMargin value=$topMargin|floor}
-
-    <a href="{$component.url}"
-        rel="enlarge_{$component.width}_{$component.height}"
-        title="{if $component.comment}{$component.comment}{/if}"
-    ><img src="{$component.smallImage.url}" style="margin-top:{$topMargin}px;" width="{$component.smallImage.width}" height="{$component.smallImage.height}" /></a>
-{/if}
+<?php
+if ($this->smallImage && $this->smallImage['height'] && $this->url) {
+    $topMargin = floor(($this->thumbMaxHeight - $this->smallImage['height']) / 2);
+?>
+<a href="<?php echo $this->url ?>"
+    rel="enlarge_<?php echo $this->width ?>_<?php echo $this->height ?>"
+    title="<?php echo $this->comment ?>"
+><img src="<?php echo $this->smallImage['url'] ?>" 
+    style="margin-top:<?php echo $topMargin ?>px;" 
+    width="<?php echo $this->smallImage['width'] ?>" 
+    height="<?php echo $this->smallImage['height'] ?>" />
+</a>
+<?php } ?>

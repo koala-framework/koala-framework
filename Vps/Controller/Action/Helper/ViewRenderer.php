@@ -1,33 +1,19 @@
 <?php
-class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_Helper_Abstract
+class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_Helper_ViewRenderer
 {
-    var $view = null;
-    var $_noRender = false;
-
-    public function __construct(Zend_View_Interface $view = null)
+    public function init()
     {
-        if (null !== $view) {
-            $this->setView($view);
-        }
+        $this->setNoController();
+        $this->setViewSuffix('tpl');
+        $this->setRender('master');
     }
-
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->view = $view;
-        return $this;
-    }
-
-    public function setNoRender($noRender = true)
-    {
-        $this->_noRender = $noRender;
-    }
-
+    
     public function preDispatch() {
         $module = $this->getRequest()->getParam('module');
         if ($this->isJson()) {
-            $this->view = new Vps_View_Json();
+            $this->setView(new Vps_View_Json());
         } else {
-            $this->view = new Vps_View_Smarty();
+            $this->setView(new Vps_View_Ext());
         }
 
         if ((null !== $this->_actionController) && (null === $this->_actionController->view)) {
@@ -40,9 +26,8 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
                 $this->_actionController->class = $class;
                 $this->_actionController->componentId = $componentId;
             }
-
         }
-
+        parent::preDispatch();
     }
 
     public function postDispatch()
@@ -55,25 +40,23 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
             if ($this->isJson()) {
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $this->getResponse()->setHeader('Content-Type', 'text/html');
-                    $this->getResponse()->setBody($this->view->render(''));
                 } else if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
                     $this->getResponse()->setHeader('Content-Type', 'text/javascript');
-                    $this->getResponse()->setBody($this->view->render(''));
                 } else {
                     echo '<pre>';
                     print_r($this->view->getOutput());
                     echo '</pre>';
+                    $this->setNoRender();
                 }
             } else {
                 $this->getResponse()->setHeader('Content-Type', 'text/html; charset=utf-8');
-                $this->getResponse()->appendBody($this->view->render(''));
             }
         }
+        parent::postDispatch();
     }
 
     public function isJson()
     {
-        $prefix = substr($this->getRequest()->getActionName(), 0, 4);
-        return ($prefix == 'ajax' || $prefix == 'json');
+        return substr($this->getRequest()->getActionName(), 0, 4) == 'json';
     }
 }

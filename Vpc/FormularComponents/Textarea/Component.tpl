@@ -1,1 +1,1 @@
-<textarea name="{$component.name}" style="width: {$component.width}px; height: {$component.height}px">{$component.value}</textarea>
+<textarea name="<?= $this->name ?>" style="width: <?= $this->width ?>px; height: <?= $this->height ?>px"><?= $this->value ?></textarea>

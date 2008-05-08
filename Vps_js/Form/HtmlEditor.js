@@ -775,7 +775,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
     _reloadStyles: function() {
         var reloadCss = function(doc) {
-            var href = doc.location.protocol+'//'+
+            var href = doc.location.protocol+'/' + '/'+
                         doc.location.hostname + this.stylesCssFile;
             href = href.split('?')[0];
             var links = doc.getElementsByTagName("link");

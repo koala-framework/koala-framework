@@ -1,5 +1,5 @@
 <ul>
-    {foreach from=$component.children item=child}
-        <li>{component component=$child}</li>
-    {/foreach}
+    <?php foreach ($this->children as $child) { ?>
+        <li><?php echo $this->component($child) ?></li>
+    <?php } ?>
 </ul>
