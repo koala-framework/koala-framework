@@ -1,8 +1,10 @@
 <?php
-class Vpc_Formular_Component extends Vpc_Abstract
+class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
 {
     protected $_form;
     protected $_formName;
+    private $_processed = false;
+    private $_errors;
 
     public static function getSettings()
     {
@@ -16,13 +18,12 @@ class Vpc_Formular_Component extends Vpc_Abstract
 
     protected function _initForm()
     {
-        $this->_form = new Vps_Rotary_Test_Form();
-        $this->_form->setId(1);
     }
 
-    public function getTemplateVars()
+    protected function _processForm()
     {
-        $ret = parent::getTemplateVars();
+        if ($this->_processed) return;
+        $this->_processed = true;
 
         $this->_initForm();
 
@@ -30,16 +31,43 @@ class Vpc_Formular_Component extends Vpc_Abstract
             $this->_form = new $this->_formName();
         }
 
-        $ret['isSuccess'] = false;
-        $ret['errors'] = array();
+        $this->_errors = array();
         if (isset($_POST[$this->getTreeCacheRow()->component_id])) {
-            $ret['errors'] = $this->_form->validate($_REQUEST);
-            if (!$ret['errors']) {
+            $this->_errors = $this->_form->validate($_REQUEST);
+            if (!$this->_errors) {
                 $this->_form->prepareSave(null, $_REQUEST);
                 $this->_beforeSave($this->_form->getRow());
                 $this->_form->save(null, $_REQUEST);
                 $this->_afterSave($this->_form->getRow());
-                $ret['isSuccess'] = true;
+            }
+        }
+    }
+
+    public function getErrors()
+    {
+        $this->_processForm();
+        return $this->_errors;
+    }
+
+    public function getFormRow()
+    {
+        $this->_processForm();
+        return $this->_form->getRow();
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+
+        $this->_processForm();
+
+        $classes = $this->_getSetting('childComponentClasses');
+
+        $ret['showSuccess'] = false;
+        $ret['errors'] = $this->getErrors();
+        if (isset($_POST[$this->getTreeCacheRow()->component_id])) {
+            if (!$ret['errors'] && $classes['success']) {
+                $ret['showSuccess'] = true;
             }
         }
 
@@ -55,10 +83,6 @@ class Vpc_Formular_Component extends Vpc_Abstract
         $ret['formName'] = $this->getTreeCacheRow()->component_id;
 
         $ret['action'] = $this->getTreeCacheRow()->tree_url;
-
-        $componentId = $this->getTreeCacheRow()->component_id.'-success';
-        $row = $this->getTreeCacheRow()->getTable()->find($componentId)->current();
-        $ret['success'] = $row->getComponent()->getTemplateVars();
 
         return $ret;
     }

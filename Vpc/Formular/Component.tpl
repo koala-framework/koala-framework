@@ -1,5 +1,5 @@
 <?php
-if ($this->isSuccess) {
+if ($this->showSuccess) {
     $this->component($this->success);
 } else {
     if ($this->errors) {
