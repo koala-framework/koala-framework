@@ -1,3 +1,3 @@
 <div class="vpcCompositeLinkImage">
-    {component component=$component.link}{component component=$component.image}</a>
+    <?= $this->component($this->link) ?><?= $this->component($this->image) ?>
 </div>

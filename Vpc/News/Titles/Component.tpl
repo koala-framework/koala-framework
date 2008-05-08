@@ -1,5 +1,5 @@
-{foreach from=$component.news item=news}
+<?php foreach ($this->news as $n) { ?>
     <div>
-        <a href="{$news.href}">{$news.title}</a>
+        <a href="<?= $$n['href'] ?>"><?= $n['title'] ?></a>
     </div>
-{/foreach}
+<?php } ?>

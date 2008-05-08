@@ -1,5 +1,6 @@
-<h2>{$component.news.title}</h2>
-{$component.news.publish_date}
-{foreach from=$component.paragraphs item=paragraph}
-    {component component=$paragraph}
-{/foreach}
+<h2><?= $this->news['title'] ?></h2>
+<?php
+echo $this->news['publish_date'];
+foreach ($this->paragraphs as $paragraph) {
+    $this->component($paragraph);
+}

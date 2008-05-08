@@ -12,7 +12,7 @@ class Vps_Dao_TreeCache extends Vps_Db_Table
         )
     );
     
-    private $_decoratorTreeCaches;
+    private $_masterTreeCaches;
     private $_dao;
 
     const NOT_GENERATED = 0;
@@ -31,19 +31,20 @@ class Vps_Dao_TreeCache extends Vps_Db_Table
             if ($tc) $tc->createRoot();
         }
         $this->createMissingChilds();
+        $this->clearCache();
 //         $this->getAdapter()->commit();
     }
     
-    private function _getDecoratorTreeCaches()
+    private function _getMasterTreeCaches()
     {
-        if (!$this->_decoratorTreeCaches) {
-            $this->_decoratorTreeCaches = array();
-            foreach (Zend_Registry::get('config')->vpc->pageDecorators->toArray() as $decorator) {
-                $tc = Vpc_TreeCache_Abstract::getInstance($decorator);
-                if ($tc) { $this->_decoratorTreeCaches[] = $tc; }
+        if (!$this->_masterTreeCaches) {
+            $this->_masterTreeCaches = array();
+            foreach (Zend_Registry::get('config')->vpc->masterComponents->toArray() as $mc) {
+                $tc = Vpc_TreeCache_Abstract::getInstance($mc);
+                if ($tc) { $this->_masterTreeCaches[] = $tc; }
             }
         }
-        return $this->_decoratorTreeCaches;
+        return $this->_masterTreeCaches;
     }
 
     public function createMissingChilds()
@@ -81,7 +82,7 @@ class Vps_Dao_TreeCache extends Vps_Db_Table
                     $where['generated = ?'] = self::NOT_GENERATED;
                 }
                 if ($row['hasurl']) {
-                    foreach ($this->_getDecoratorTreeCaches() as $tc) {
+                    foreach ($this->_getMasterTreeCaches() as $tc) {
                         $tc->createMissingChilds($row['component_class']);
                     }
                 }
@@ -195,5 +196,30 @@ class Vps_Dao_TreeCache extends Vps_Db_Table
             if ($ret) return $ret;
         }
         return null;
+    }
+    
+    public function getComponentClasses()
+    {
+        $select = Zend_Registry::get('db')->select()
+                ->from('vps_tree_cache', 'component_class')
+                ->group('component_class');
+        $ret = array('Vpc_Root_Component');
+        foreach ($select->query()->fetchAll() as $row) {
+            $ret[] = $row['component_class'];
+        }
+        return $ret;
+    }
+    
+    public function clearCache()
+    {
+        // Alle Komponentenklassen durchlaufen und informieren, dass sich der Treecache geändert hat
+        foreach ($this->getComponentClasses() as $componentClass) {
+            $admin = Vpc_Admin::getInstance($componentClass);
+            if ($admin) {
+                $admin->clearCache($this);
+            }
+        }
+        // Masterpage immer löschen
+        Vps_Component_Cache::getInstance()->cleanByTag('master');
     }
 }

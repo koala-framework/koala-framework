@@ -1,3 +1,3 @@
-{if $component.url}
-<a href="{$component.url}">{if $component.icon}<img src="{$component.icon}" />{/if}
-{/if}
+<?php if ($this->url) { ?>
+<a href="<?= $this->url ?>"><?php if ($this->icon) { ?><img src="<?= $this->icon ?>" /><?php } ?>
+<?php } ?>

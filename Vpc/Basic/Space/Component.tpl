@@ -1,1 +1,1 @@
-<div class="basicSpace" style="height: {$component.height}px;"></div>
+<div class="basicSpace" style="height: <?= $this->height ?>px;"></div>

@@ -1,1 +1,4 @@
-{component component=$component.linkTag}{$component.text}</a>
+<?php
+$this->component($this->linkTag);
+echo $this->text;
+echo '</a>';

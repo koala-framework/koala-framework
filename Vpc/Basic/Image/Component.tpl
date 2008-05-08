@@ -1,3 +1,3 @@
-{if $component.url}
-<img src="{$component.url}" width="{$component.width}" height="{$component.height}" alt="" />
-{/if}
+<?php if ($this->url) { ?>
+<img src="<?php echo $this->url ?>" width="<?php echo $this->width ?>" height="<?php echo $this->height ?>" alt="" />
+<?php } ?>

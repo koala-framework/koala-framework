@@ -18,7 +18,8 @@ class Vps_Controller_Action_Welcome_ContentController extends Vps_Controller_Act
         } else {
             $this->view->image = false;
         }
-        $this->view->application = Zend_Registry::get('config')->application;
-        $this->view->setRenderFile('Welcome.html');
+        $this->view->application = Zend_Registry::get('config')->application->toArray();
+        
+        $this->_helper->viewRenderer->setRender('Welcome');
     }
 }

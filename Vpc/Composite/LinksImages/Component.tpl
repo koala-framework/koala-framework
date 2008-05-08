@@ -1,6 +1,6 @@
 <div class="vpcCompositeLinksImages">
-    {foreach from=$component.children item=child}
-        {component component=$child}
-    {/foreach}
+    <?php foreach ($this->children as $child) { ?>
+        <?php echo $this->component($child) ?>
+    <?php } ?>
     <div class="clear"></div>
 </div>

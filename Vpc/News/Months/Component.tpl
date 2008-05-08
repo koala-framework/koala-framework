@@ -1,7 +1,7 @@
 <ul class="newsCatagory">
-    {foreach from=$component.months item=month}
-        <li>
-            <a href="{$month.href}">{$month.monthName} {$month.year}</a>
-        </li>
-    {/foreach}
+    <?php foreach ($this->months as $month) { ?>
+    <li>
+        <a href="<?= $month['href'] ?>"><?= $month['monthName'] ?> <?= $month['<year'] ?></a>
+    </li>
+    <?php } ?>
 </ul>

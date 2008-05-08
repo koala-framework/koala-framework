@@ -1,1 +1,1 @@
-<input type="checkbox" name="{$component.name}" value="{$component.value}" style="float:left; margin-right:6px;"{if $component.checked eq "1"} checked{/if} /><div style="margin-left:130px; width:{$component.width}px;">{$component.text}</div>
+<input type="checkbox" name="<?= $this->name ?>" value="<?= $this->value ?> style="float:left; margin-right:6px;"<?php if ($this->checked == '1') { echo ' checked'; } ?> /><div style="margin-left:130px; width:<?= $this->width ?>px;"><?= $this->text ?></div>

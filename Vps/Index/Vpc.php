@@ -18,11 +18,4 @@ class Vps_Index_Vpc
         $row->save();
         */
     }
-    
-    public static function clearCache($componentId)
-    {
-        $smarty = new Vps_View_Smarty_Cached();
-        $template = VPS_PATH . '/views/site.html';
-        $smarty->getSmarty()->clear_cache($template, $componentId);
-    }
 }

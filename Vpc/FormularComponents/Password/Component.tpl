@@ -1,1 +1,1 @@
-<input type="password" name="{$component.name}" maxlength="{$component.maxlength}" style="width:{$component.width}px" value=""/>
+<input type="password" name="<?= $this->name ?>" maxlength="<?= $this->maxlength ?>" style="width:<?= $this->width ?>px" value=""/>

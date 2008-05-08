@@ -1,1 +1,1 @@
-{$component.content}
+<?= $this->content ?>

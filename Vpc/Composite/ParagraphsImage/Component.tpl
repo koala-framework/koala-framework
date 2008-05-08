@@ -1,1 +1,3 @@
-{component component=$component.paragraphs}{component component=$component.image}
+<?php
+$this->component($this->paragraphs);
+$this->component($this->image);

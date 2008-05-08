@@ -1,17 +1,20 @@
-{if $component.isSuccess}
-    {component component=$component.success}
-{else}
-    {if $component.errors}
-        Fehler:
-        <ul>
-        {foreach from=$component.errors item=e}
-            <li>{$e}</li>
-        {/foreach}
-        </ul>
-    {/if}
-
-    <form action="{$component.action}" method="POST">
-        {include file="`$smarty.const.VPS_PATH`/Vpc/Formular/field.tpl" item=$component.form}
-        <button type="submit" name="{$component.formName}" value="submit">{$component.placeholder.submitButton}</button>
+<?php
+if ($this->isSuccess) {
+    $this->component($this->success);
+} else {
+    if ($this->errors) {
+        echo 'Fehler:';
+        echo '<ul>';
+        foreach ($this->errors as $error) {
+            echo "<li>$error</li>";
+        }
+        echo '</ul>';
+    }
+    ?> 
+    <form action="<?= $this->action ?>" method="POST">
+        <?php $this->formField($this->form) ?>
+        <button type="submit" name="<?= $this->formName ?>" value="submit"><?= $this->placeholder['submitButton'] ?>}</button>
     </form>
-{/if}
+    <?php
+}
+?>

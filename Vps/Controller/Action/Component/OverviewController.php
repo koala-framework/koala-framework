@@ -54,7 +54,7 @@ class Vps_Controller_Action_Component_OverviewController extends Vps_Controller_
         $path = str_replace('_', '/', $class);
         $path = str_replace('.', '', $path); //security
         if (file_exists($path.'.'.$type)) {
-            throw new Vps_ClientException("File does allready exist.");
+            throw new Vps_ClientException("File does already exist.");
         }
         $srcFile = Vpc_Admin::getComponentFile($class, $type);
         if (!$srcFile) {

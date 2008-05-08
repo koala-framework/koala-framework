@@ -1,7 +1,6 @@
 <?php
 class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
 {
-
     protected function _getRow($componentId)
     {
         $tablename = Vpc_Abstract::getSetting($this->_class, 'tablename');
@@ -68,5 +67,15 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
     protected function _tableExists($tablename)
     {
         return in_array($tablename, $this->_db->listTables());
+    }
+    
+    public function clearCache($caller)
+    {
+        // Cache der aktuellen Komponente löschen
+        if ($caller instanceof Vpc_Row &&
+            Vpc_Abstract::getSetting($this->_class, 'tablename') == $caller->getTableClass()
+        ) {
+            Vps_Component_Cache::getInstance()->remove($caller->component_id);
+        }
     }
 }

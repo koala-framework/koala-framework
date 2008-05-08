@@ -1,9 +1,5 @@
-{strip}
-{foreach from=$component.contentParts item=part}
-  {if is_string($part)}
-    {$part}
-  {else}
-    {component component=$part.component}
-  {/if}
-{/foreach}
-{/strip}
+<?php
+foreach ($this->contentParts as $part) {
+    echo is_string($part) ? $part : $this->component($part['component']);
+}
+?>

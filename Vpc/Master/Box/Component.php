@@ -1,5 +1,5 @@
 <?php
-class Vpc_Decorator_Box_Component extends Vpc_Decorator_Abstract
+class Vpc_Master_Box_Component extends Vpc_Master_Abstract
 {
     public static function getSettings()
     {

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Decorator_Title_Component extends Vpc_Decorator_Abstract
+class Vpc_Master_Title_Component extends Vpc_Master_Abstract
 {
     public function getTemplateVars()
     {

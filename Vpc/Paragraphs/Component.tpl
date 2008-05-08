@@ -1,5 +1,5 @@
-{foreach from=$component.paragraphs item=paragraph}
+<?php foreach ($this->paragraphs as $paragraph) { ?>
     <div>
-        {component component=$paragraph}
+        <?php echo $this->component($paragraph) ?>
     </div>
-{/foreach}
+<?php } ?>
