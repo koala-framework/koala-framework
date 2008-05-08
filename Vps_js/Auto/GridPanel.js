@@ -876,7 +876,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         return null;
     },
     clearSelections: function() {
-        if (this.getGrid()) {
+        if (this.getGrid() && this.getGrid().getSelectionModel().grid) {
             this.getGrid().getSelectionModel().clearSelections();
         }
     },

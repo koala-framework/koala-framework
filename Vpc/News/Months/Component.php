@@ -7,7 +7,6 @@ class Vpc_News_Months_Component extends Vpc_Abstract implements Vpc_News_Interfa
     {
         $ret = array_merge(parent::getSettings(), array(
             'tablename'         => 'Vpc_News_Model',
-            'hideInNews'        => true,
             'childComponentClasses' => array(
                 'details'       => 'Vpc_News_Months_Month_Component'
             ),

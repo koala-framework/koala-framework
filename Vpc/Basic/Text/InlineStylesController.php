@@ -1,6 +1,7 @@
 <?php
 class Vpc_Basic_Text_InlineStylesController extends Vps_Controller_Action_Auto_Grid
 {
+    protected $_buttons = array('add', 'delete');
     protected $_position = 'pos';
     protected $_tableName = 'Vpc_Basic_Text_StylesModel';
 
@@ -8,12 +9,30 @@ class Vpc_Basic_Text_InlineStylesController extends Vps_Controller_Action_Auto_G
     {
         parent::_initColumns();
         $this->_columns->add(new Vps_Grid_Column('name', 'Name', 100));
+        $this->_columns->add(new Vps_Grid_Column_Checkbox('master', 'Master'));
     }
 
     protected function _getWhere()
     {
         $where = parent::_getWhere();
         $where[] = "tag = 'span'";
+
+        $pattern = Vpc_Abstract::getSetting($this->_getParam('componentClass'),
+                                                            'stylesIdPattern');
+        if ($pattern) {
+            if (preg_match('#'.$pattern.'#', $this->_getParam('componentId'), $m)) {
+                $where['ownStyles = ?'] = $m[0];
+            }
+        } else {
+            $where[] = "ownStyles = ''";
+        }
         return $where;
     }
+    protected function _beforeDelete(Vps_Model_Row_Interface $row)
+    {
+        if ($this->_getUserRole() != 'admin' && $row->master) {
+            throw new Vps_ClientException(trlVps("You can't delete master styles"));
+        }
+    }
+
 }

@@ -10,6 +10,12 @@ class Vpc_Basic_Text_Parser
     protected $_finalHTML;
     protected $_deleteContent = false;
     protected $_enableColor = false;
+    protected $_enableTagsWhitelist = true;
+    protected $_tagsWhitelist = array(
+        'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+        'span', 'a', 'img', 'br', 'strong', 'em', 'u',
+        'ul', 'ol', 'li'
+    );
 
     public function __construct(Vpc_Basic_Text_Row $row)
     {
@@ -43,18 +49,21 @@ class Vpc_Basic_Text_Parser
         if ($element == 'SPAN'){
             $tag = array_pop($this->_stack);
             if ($tag != '') $this->_finalHTML .= '</'.$tag.'>';
-        } elseif ($element == 'BODY' || $element == 'O:P' || $element == 'BR' || $element == 'IMG' || $element == 'SCRIPT') {
+        } elseif ($element == 'BODY' || $element == 'O:P' || $element == 'BR'
+                    || $element == 'IMG' || $element == 'SCRIPT') {
             //do nothing
-        }
-        else {
+        } elseif ($this->_enableTagsWhitelist
+                    && !in_array(strtolower($element), $this->_tagsWhitelist)) {
+            //do nothing
+        } else {
             $this->_finalHTML .= '</'.$element.'>';
-
         }
     }
 
     protected function startElement($parser, $element, $attributes)
     {
         array_push($this->_elementStack, $element);
+        //$this->_enableTagsWhitelist
 
         if ($element == 'SPAN') {
             if (isset($attributes['STYLE'])) {
@@ -62,19 +71,19 @@ class Vpc_Basic_Text_Parser
             } else {
                 $style = '';
             }
-            if (preg_match('# *font-weight *: +bold *; *#', $style, $matches)){
+            if (preg_match('# *font-weight *: *bold *; *#', $style, $matches)){
                  array_push($this->_stack, 'strong');
                  $this->_finalHTML .= '<strong>';
-            } elseif (preg_match('# *font-style *: +italic *; *#', $style, $matches)){
+            } elseif (preg_match('# *font-style *: *italic *; *#', $style, $matches)){
                  array_push($this->_stack, 'em');
                  $this->_finalHTML .= '<em>';
-            } elseif (preg_match('# *text-decoration *: +underline *; *#', $style, $matches)){
+            } elseif (preg_match('# *text-decoration *: *underline *; *#', $style, $matches)){
                  array_push($this->_stack, 'u');
                  $this->_finalHTML .= '<u>';
-            } elseif (preg_match('# *color *: +[0-9,]* *#', $style, $matches) && $this->_enableColor){
+            } elseif (preg_match('# *color *: *[0-9A-Za-z]* *#', $style, $matches) && $this->_enableColor){
                  array_push($this->_stack, 'span');
                  $this->_finalHTML .= '<span style="'.$style.'">';
-            } elseif (preg_match('# *background-color *: +[0-9,A-Za-z]* *#', $style, $matches) && $this->_enableColor){
+            } elseif (preg_match('# *background-color *: *[0-9A-Za-z]* *#', $style, $matches) && $this->_enableColor){
                  array_push($this->_stack, 'span');
                  $this->_finalHTML .= '<span style="'.$style.'">';
             } else {
@@ -116,7 +125,7 @@ class Vpc_Basic_Text_Parser
                             $imageRow->height = $m[1];
                         }
                     }
-                    
+
                     if ($imageRow) {
                         $imageRow->save();
                         $attributes['WIDTH'] = $imageRow->width;
@@ -125,12 +134,16 @@ class Vpc_Basic_Text_Parser
                     }
                 }
             }
-            $this->_finalHTML .= '<'.$element;
-            foreach ($attributes as $key => $value) {
-                 $this->_finalHTML .= ' ' . $key . '="'. $value . '"';
+            if ($this->_enableTagsWhitelist
+                && !in_array(strtolower($element), $this->_tagsWhitelist)) {
+                //ignore this tag
+            } else {
+                $this->_finalHTML .= '<'.$element;
+                foreach ($attributes as $key => $value) {
+                    $this->_finalHTML .= ' ' . $key . '="'. $value . '"';
+                }
+                $this->_finalHTML .= '>';
             }
-
-            $this->_finalHTML .= '>';
         }
 
     }
@@ -148,6 +161,11 @@ class Vpc_Basic_Text_Parser
     public function setEnableColor($value)
     {
         $this->_enableColor = $value;
+    }
+
+    public function setEnableTagsWhitelist($value)
+    {
+        $this->_enableTagsWhitelist = $value;
     }
 
     public function parse($html)

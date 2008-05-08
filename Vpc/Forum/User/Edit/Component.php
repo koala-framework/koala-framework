@@ -7,7 +7,6 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
         $ret['componentName'] = 'Forum.Edit Forum Account';
         $ret['tablename']     = 'Vpc_Formular_Model';
         $ret['forumUserModel'] = 'Vpc_Forum_User_Model';
-        $ret['hideInNews']    = true;
         $ret['childComponentClasses']['success'] = 'Vpc_Forum_User_Edit_Success_Component';
         return $ret;
     }

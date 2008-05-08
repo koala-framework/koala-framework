@@ -6,8 +6,7 @@ class Vpc_News_Categories_Category_Component extends Vpc_News_List_Abstract_Comp
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'tablename'         => 'Vps_Dao_Pool',
-            'hideInNews'        => true
+            'tablename'         => 'Vps_Dao_Pool'
         ));
     }
 

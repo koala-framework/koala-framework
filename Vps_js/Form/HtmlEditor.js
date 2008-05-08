@@ -11,6 +11,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         'pre': 'Formatted'
     },
     enableUndoRedo: true,
+    stylesIdPattern: null,
 
     initComponent : function()
     {
@@ -445,12 +446,26 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 ret += '<link rel="stylesheet" type="text/css" href="'+f+'" />\n';
             }, this);
         }
-        ret += '</head><body class="content"></body></html>';
+        ret += '</head><body class="content vpcText"></body></html>';
         return ret;
     },
     setValue : function(v) {
         if (v && v.component_id) {
             this.component_id = v.component_id;
+            if (this.stylesIdPattern) {
+                var m = this.component_id.match(this.stylesIdPattern);
+                m = m ? m[0] : null;
+                if (this.ownStylesParam != m) {
+                    this.ownStylesParam = m;
+                    this._reloadStyles();
+                }
+            }
+        }
+        if (this.stylesEditorDialog) {
+            this.stylesEditorDialog.applyBaseParams({
+                componentId: this.component_id,
+                componentClass: this.componentClass
+            });
         }
         if (typeof v.content != 'undefined') v = v.content;
         Vps.Form.HtmlEditor.superclass.setValue.call(this, v);
@@ -795,13 +810,16 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         reloadCss.call(this, document);
         reloadCss.call(this, this.doc);
         Ext.Ajax.request({
+            params: {
+                componentId: this.component_id
+            },
             url: this.controllerUrl+'/json-styles',
             success: function(response, options, result) {
                 this.inlineStyles = result.inlineStyles;
                 this.blockStyles = result.blockStyles;
                 this._renderInlineStylesSelect();
                 this._renderBlockStylesSelect();
-                this.updateToolbar();
+                if (this.activated) this.updateToolbar();
             },
             scope: this
         });

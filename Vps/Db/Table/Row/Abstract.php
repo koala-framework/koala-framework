@@ -1,46 +1,10 @@
 <?php
 abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 {
+    private $_skipFilters = false; //für saveSkipFilters
     protected $_cacheImages = array();
     const FILE_PASSWORD = 'l4Gx8SFe';
     const FILE_PASSWORD_DOWNLOAD = 'j3yjEdv1';
-
-    /**
-     * Speichert die Nummerierung für einen Datensatz und passt die restlichen
-     * Datensätze an.
-     *
-     * @param string Spaltenname, in der die Nummerierung steht
-     * @param int Nummer des zu nummerierenden Datensatzes
-     * @param string Where-Klausel für Einschränkung der betreffenden Datensätze (zB. 'parent_id=1')
-     */
-    public function numberize($fieldname, $value = null, array $where = array())
-    {
-        $originalWhere = $where;
-        $primaryKey = key($this->_getPrimaryKey());
-        $primaryValue = current($this->_getPrimaryKey());
-        $where["$primaryKey != ?"] = $primaryValue;
-
-        // Wenn value null ist, Datensatz am Ende einfügen
-        if (is_null($value)) {
-            $value = $this->getTable()->fetchAll($where)->count() + 1;
-        }
-
-        $x = 0;
-        foreach ($this->getTable()->fetchAll($where, $fieldname) as $row) {
-            $x++;
-            if ($x == $value) $x++;
-            if ($row->$fieldname != $x) {
-                $row->$fieldname = $x;
-                $row->save();
-            }
-        }
-        if ($this->$fieldname != $value) {
-            $this->$fieldname = $value;
-            $this->save();
-        }
-
-        $this->getTable()->numberizeAll($fieldname, $originalWhere);
-    }
 
     public function duplicate($data = array())
     {
@@ -238,20 +202,13 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         $this->_updateFilters();
     }
 
-    protected function _updateFilters()
+    private function _updateFilters()
     {
+        if ($this->_skipFilters) return; //für saveSkipFilters
+
         $filters = $this->getTable()->getFilters();
-        if (is_string($filters)) $filters = array($filters);
         foreach($filters as $k=>$f) {
-            if (is_int($k)) {
-                $k = $f;
-                $f = 'Vps_Filter_Ascii';
-            }
-            if (is_string($f)) {
-                $f = new $f();
-            }
             if ($f instanceof Vps_Filter_Row_Abstract) {
-                $f->setField($k);
                 $this->$k = $f->filter($this);
             } else {
                 $this->$k = $f->filter($this->__toString());
@@ -259,6 +216,17 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         }
     }
 
+
+    protected function _delete()
+    {
+        parent::_delete();
+        $filters = $this->getTable()->getFilters();
+        foreach($filters as $k=>$f) {
+            if ($f instanceof Vps_Filter_Row_Abstract) {
+                $f->onDeleteRow($this);
+            }
+        }
+    }
 
     protected function _postInsert()
     {
@@ -296,4 +264,13 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         }
     }
     
+
+    //Speichern und abei die Filter nicht verwenden
+    //wird benötigt bei der Nummerierung um eine Endlusschleife zu verhindern
+    public function saveSkipFilters()
+    {
+        $this->_skipFilters = true;
+        $this->save();
+        $this->_skipFilters = false;
+    }
 }

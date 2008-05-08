@@ -64,7 +64,7 @@ class Vps_Form extends Vps_Form_NonTableForm
 
         $primaryKey = $this->getPrimaryKey();
         if (is_array($primaryKey)) $primaryKey = $primaryKey[1];
-        if ($this->getId() == 0) {
+        if (!$this->getId()) {
             if (is_array($primaryKey)) {
                 $addedId = array();
                 foreach ($primaryKey as $key) {

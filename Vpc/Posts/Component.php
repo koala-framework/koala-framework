@@ -9,7 +9,6 @@ class Vpc_Posts_Component extends Vpc_Abstract
             'componentName'     => 'Posts',
             'componentIcon'     => new Vps_Asset('comments'),
             'tablename'         => 'Vpc_Posts_Model',
-            'hideInNews'        => true,
             'childComponentClasses' => array(
                 'write' => 'Vpc_Posts_Write_Component',
                 'post' =>  'Vpc_Posts_Post_Component',

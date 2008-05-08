@@ -9,7 +9,8 @@ class Vpc_Basic_Text_BlockStylesController extends Vpc_Basic_Text_InlineStylesCo
 
     protected function _getWhere()
     {
-        $where = Vps_Controller_Action_Auto_Grid::_getWhere();
+        $where = parent::_getWhere();
+        unset($where[array_search("tag = 'span'", $where)]);
         $where[] = "tag != 'span'";
         return $where;
     }

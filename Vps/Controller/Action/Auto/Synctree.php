@@ -34,6 +34,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
     public function init()
     {
+        parent::init();
     }
     
     public function preDispatch()
@@ -252,23 +253,15 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         if ($this->_hasPosition) {
             $insert['pos'] = 0;
         }
-        $id = $this->_table->insert($insert);
-        $row = $this->_table->find($id)->current();
-        if ($this->_hasPosition) {
-            $where = $this->_getTreeWhere($insert[$this->_parentField]);
-            $row->numberize('pos', $this->_addPosition, $where);
-        }
-        if ($id) {
-            $data = $this->_formatNode($row);
-            foreach ($data as $k=>$i) {
-                if ($i instanceof Vps_Asset) {
-                    $data[$k] = $i->__toString();
-                }
+        $row = $this->_table->createRow($insert);
+        $row->save();
+        $data = $this->_formatNode($row);
+        foreach ($data as $k=>$i) {
+            if ($i instanceof Vps_Asset) {
+                $data[$k] = $i->__toString();
             }
-            $this->view->data = $data;
-        } else {
-            $this->view->error = 'Couldn\'t insert row.';
         }
+        $this->view->data = $data;
         $this->_table->getAdapter()->commit();
     }
 
@@ -315,15 +308,6 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             }
         }
         $row->save();
-        if ($this->_hasPosition) {
-            $parentField = $this->_parentField;
-            if (!$row->$parentField) {
-                $where = array("$parentField IS NULL");
-            } else {
-                $where = array("$parentField = ?" => $row->$parentField);
-            }
-            $row->numberize('pos', $row->pos, $where);
-        }
         $this->_table->getAdapter()->commit();
     }
 

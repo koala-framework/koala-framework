@@ -37,6 +37,7 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
             region: 'west',
             width: 250,
             split: true,
+            autoLoad: false,
             bindings: [this.inlineForm]
         });
         this.blockGrid = new Vps.Auto.GridPanel({
@@ -44,6 +45,7 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
             region: 'west',
             width: 250,
             split: true,
+            autoLoad: false,
             bindings: [this.blockForm]
         });
 
@@ -69,6 +71,21 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
         });
 
         Vpc.Basic.Text.StylesEditor.superclass.initComponent.call(this);
+    },
+    applyBaseParams: function(params) {
+        this.blockGrid.applyBaseParams(params);
+        this.blockForm.applyBaseParams(params);
+        this.inlineGrid.applyBaseParams(params);
+        this.inlineForm.applyBaseParams(params);
+    },
+    show: function() {
+        this.blockGrid.load();
+        this.blockGrid.clearSelections()
+        this.blockForm.disable();
+        this.inlineGrid.load();
+        this.inlineGrid.clearSelections()
+        this.inlineForm.disable();
+        Vpc.Basic.Text.StylesEditor.superclass.show.call(this);
     }
 /*
     _reloadPreview: function()

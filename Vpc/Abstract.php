@@ -10,6 +10,13 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
     private $_pdfWriter;
     const LOREM_IPSUM = 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.';
 
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['childComponentClasses'] = array();
+        return $ret;
+    }
+
     protected function _getRow()
     {
         if (!isset($this->_row)) {

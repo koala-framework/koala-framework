@@ -107,11 +107,16 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
 
     public function insertBefore($where, Vps_Collection_Item_Interface $value)
     {
+        $added = false;
         $value = $this->_preInsertValue($value);
         foreach ($this->_array as $i=>$v) {
             if ($v->getName() == $where) {
                 array_splice($this->_array, $i, 0, array($value));
+                $added = true;
             }
+        }
+        if (!$added) {
+            throw new Vps_Exception("Can't insert item to collection, '$where' not found");
         }
         $this->_postInsertValue($value);
         return $value;
@@ -119,11 +124,16 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
 
     public function insertAfter($where, Vps_Collection_Item_Interface $value)
     {
+        $added = false;
         $value = $this->_preInsertValue($value);
         foreach ($this->_array as $i=>$v) {
             if ($v->getName() == $where) {
                 array_splice($this->_array, $i+1, 0, array($value));
+                $added = true;
             }
+        }
+        if (!$added) {
+            throw new Vps_Exception("Can't insert item to collection, '$where' not found");
         }
         $this->_postInsertValue($value);
         return $value;

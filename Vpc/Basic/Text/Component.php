@@ -22,6 +22,8 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             'enableInsertChar'  => true,
             'enablePastePlain'  => true,
             'enableTidy'        => true,
+            'stylesIdPattern'   => false, //zB: '^company_[0-9]+',
+            'enableTagsWhitelist'=> true,
             'childComponentClasses' => array(
                 //auf false setzen um buttons zu deaktivieren
                 'image'         => 'Vpc_Basic_Text_Image_Component',

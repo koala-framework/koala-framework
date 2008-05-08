@@ -48,6 +48,8 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         options.vpsIsSuccess = false;
         options.vpsLogin = false;
 
+        var errorMsg = false;
+
         var encParams;
         if (typeof options.params == "string") {
             encParams = options.params;
@@ -55,10 +57,13 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             encParams = Ext.urlEncode(options.params);
         }
         try {
-            var r = Ext.decode(response.responseText);
+            if (!response.responseText) {
+                errorMsg = 'response is empty';
+            } else {
+                var r = Ext.decode(response.responseText);
+            }
         } catch(e) {
-            var errorMsg = '<a href="'+options.url+'?'+encParams+'">request-url</a><br />';
-            errorMsg += e.toString()+': <br />'+response.responseText;
+            errorMsg = e.toString()+': <br />'+response.responseText;
             var errorMsgTitle = 'Javascript Parse Exception';
         }
         if (Vps.Debug.querylog && r.requestNum) {
@@ -78,12 +83,12 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             } else {
                 p = Ext.urlEncode(options.params);
             }
-            var errorMsg = '<a href="'+options.url+'?'+p+'">request-url</a><br />';
-            errorMsg += r.exception;
+            errorMsg = r.exception;
             var errorMsgTitle = 'PHP Exception';
         }
         if (errorMsg) {
             if (Vps.Debug.displayErrors) {
+                errorMsg = '<a href="'+options.url+'?'+encParams+'">request-url</a><br />'+errorMsg;
                 Ext.Msg.show({
                     title: errorMsgTitle,
                     msg: errorMsg,

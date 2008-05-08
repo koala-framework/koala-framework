@@ -7,8 +7,7 @@ class Vpc_News_Titles_Component extends Vpc_News_List_Abstract_Component impleme
         return array_merge(parent::getSettings(), array(
             'componentName' => 'News.Titles',
             'componentIcon' => new Vps_Asset('newspaper'),
-            'tablename'     => 'Vpc_News_Titles_Model',
-            'hideInNews'        => true
+            'tablename'     => 'Vpc_News_Titles_Model'
         ));
     }
 

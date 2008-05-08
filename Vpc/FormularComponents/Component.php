@@ -10,7 +10,6 @@ class Vpc_Formular_Component extends Vpc_Paragraphs_Component
         if (!isset($settings)) {
             $settings = array_merge(parent::getSettings(), array(
                 'componentName' => 'Formular',
-                'hideInParagraphs' => false,
                 'tablename' => 'Vpc_Formular_Model'
             ));
             $settings['childComponentClasses'] =

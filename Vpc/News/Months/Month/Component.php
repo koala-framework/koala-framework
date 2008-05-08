@@ -6,8 +6,7 @@ class Vpc_News_Months_Month_Component extends Vpc_News_List_Abstract_Component i
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'tablename'         => 'Vpc_News_Model',
-            'hideInNews'        => true
+            'tablename'         => 'Vpc_News_Model'
         ));
     }
 

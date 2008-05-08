@@ -9,7 +9,6 @@ class Vpc_News_Component extends Vpc_News_List_Abstract_Component implements Vpc
         $ret['componentName'] = 'News.List';
         $ret['componentIcon'] = new Vps_Asset('newspaper');
         $ret['tablename'] = 'Vpc_News_Model';
-        $ret['hideInNews'] = true;
         $ret['childComponentClasses']['details'] ='Vpc_News_Details_Component';
         $ret['childComponentClasses']['titles'] ='Vpc_News_Titles_Component';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/News/Panel.js';
