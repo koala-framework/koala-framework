@@ -78,11 +78,17 @@ class Vpc_Root_TreeCache extends Vpc_TreeCache_TablePage
             $tcRow->parent_url = null;
         } else {
             $parent = $tcRow->findParentComponent();
-            if (!$parent) d($tcRow);
-            $tcRow->url = $parent->tree_url.'/'.$row->filename;
-            $tcRow->url_match = $parent->tree_url.'/'.$row->filename;
-            $tcRow->tree_url = $parent->tree_url.'/'.$row->filename;
-            $tcRow->parent_url = $parent->tree_url;
+            if ($parent) {
+                $tcRow->url = $parent->tree_url.'/'.$row->filename;
+                $tcRow->url_match = $parent->tree_url.'/'.$row->filename;
+                $tcRow->tree_url = $parent->tree_url.'/'.$row->filename;
+                $tcRow->parent_url = $parent->tree_url;
+            } else {
+                $tcRow->url = '/'.$row->filename;
+                $tcRow->url_match = '/'.$row->filename;
+                $tcRow->tree_url = '/'.$row->filename;
+                $tcRow->parent_url = '/';
+            }
         }
         $tcRow->url_pattern = $tcRow->url;
         $tcRow->tree_url_pattern = $tcRow->url;
