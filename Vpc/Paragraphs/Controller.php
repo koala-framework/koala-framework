@@ -46,12 +46,10 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $row = $this->_model->createRow();
             $this->_preforeAddParagraph($row);
             $row->component_class = $class;
-            $row->pos = 1000; //TODO: bessere L�sung mit Vps_Filter_Row_Numberize
             $row->visible = 0;
             $row->save();
             $id = $row->id;
             $where['component_id = ?'] = $this->componentId;
-            $this->_model->getTable()->numberize($id, 'pos', null, $where);
 
             // Hack für weiterleiten auf Edit-Seite
             $name = Vpc_Abstract::getSetting($this->class, 'componentName');

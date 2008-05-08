@@ -15,7 +15,7 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
             $id = $row->component_id . '-' . $row->id;
 
             $tc = new Vps_Dao_TreeCache();
-            $row = $tc->find($id)->current();
+            $row = $tc->fetchAll(array('db_id = ?'=>$id))->current();
             if (!$row) {
                 return 'Could not create component: ' . $id;
             } else {

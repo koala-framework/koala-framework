@@ -1,2 +1,5 @@
-.content strong { font-weight: bold; }
-.content em { font-style: italic; }
+.vpcText strong { font-weight: bold; }
+.vpcText em { font-style: italic; }
+.vpcText ol { list-style-type: decimal; margin-left: 21px; }
+.vpcText ul { margin-bottom: 15px; list-style-type: square; margin-left: 15px;}
+.vpcText li { margin-bottom: 2px; }

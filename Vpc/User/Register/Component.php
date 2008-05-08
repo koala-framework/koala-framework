@@ -6,7 +6,6 @@ class Vpc_User_Register_Component extends Vpc_Formular_Component
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => '',
             'tablename'  => 'Vpc_Formular_Model',
-            'hideInNews' => true,
             'fieldsNotSaved' => array('sbmt'),
             'standardRole' => 'guest',
         ));

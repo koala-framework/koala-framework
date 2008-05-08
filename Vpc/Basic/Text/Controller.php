@@ -41,8 +41,17 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
 
     public function jsonStylesAction()
     {
+        $ownStyles = false;
+        $pattern = Vpc_Abstract::getSetting($this->class, 'stylesIdPattern');
+
+        if ($pattern) {
+            if (preg_match('#'.$pattern.'#', $this->_getParam('componentId'), $m)) {
+                $ownStyles = $m[0];
+            }
+        }
+
         $t = new Vpc_Basic_Text_StylesModel();
-        $styles = $t->getStyles();
+        $styles = $t->getStyles($ownStyles);
         $this->view->inlineStyles = $styles['inline'];
         $this->view->blockStyles = $styles['block'];
     }

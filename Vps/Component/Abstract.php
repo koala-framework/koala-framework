@@ -21,9 +21,12 @@ class Vps_Component_Abstract
 
         if (class_exists($class)) {
             $settings = call_user_func(array($class, 'getSettings'));
+            if (!isset($settings[$setting])) {
+                throw new Vps_Exception("Setting '$setting' does not exist for Component $class");
+            }
             return isset($settings[$setting]) ? $settings[$setting] : null ;
         } else {
-            return null;
+            throw new Vps_Exception("Component '$class' does not exist");
         }
     }
 

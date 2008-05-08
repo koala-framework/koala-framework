@@ -43,9 +43,6 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
         }
         $this->view->id = $row->save();
 
-        if ($this->_position) {
-            $row->numberize($this->_position, null, $this->_getWhere());
-        }
         Zend_Registry::get('db')->commit();
     }
 }

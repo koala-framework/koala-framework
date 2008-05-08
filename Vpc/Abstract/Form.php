@@ -71,7 +71,8 @@ class Vpc_Abstract_Form extends Vps_Form
         if ($this->getId() == null) {
             $this->setId($this->_getComponentIdFromParentRow($parentRow));
         }
-        return parent::prepareSave($parentRow, $postData);
+        $ret = parent::prepareSave($parentRow, $postData);
+        return $ret;
     }
 
     public function save($parentRow, $postData)

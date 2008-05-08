@@ -6,7 +6,7 @@ class Vpc_Basic_Text_BlockStyleController extends Vpc_Basic_Text_InlineStyleCont
     protected function _initFields()
     {
         parent::_initFields();
-        $this->_form->fields->insertBefore('className', new Vps_Form_Field_Select('tag', trlVps('Tag')))
+        $this->_form->fields->insertAfter('name', new Vps_Form_Field_Select('tag', trlVps('Tag')))
             ->setValues(array(
                 'p'    => trlVps('Normal (p)'),
                 'h1'   => trlVps('Überschrift 1 (h1)'),
@@ -16,11 +16,5 @@ class Vpc_Basic_Text_BlockStyleController extends Vpc_Basic_Text_InlineStyleCont
                 'h5'   => trlVps('Überschrift 5 (h5)'),
                 'h6'   => trlVps('Überschrift 6 (h6)')
              ));
-    }
-
-
-    protected function _beforeInsert(Vps_Model_Row_Interface $row)
-    {
-        Vps_Controller_Action_Auto_Form::_beforeInsert($row);
     }
 }

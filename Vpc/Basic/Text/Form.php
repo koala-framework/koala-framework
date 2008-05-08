@@ -38,6 +38,7 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
         $styles = $t->getStyles();
         $field->setInlineStyles($styles['inline']);
         $field->setBlockStyles($styles['block']);
+        $field->setComponentClass($class);
 
         $field->setStylesCssFile(Vpc_Basic_Text_StylesModel::getStylesUrl());
 

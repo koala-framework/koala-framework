@@ -1,6 +1,6 @@
 <?php
-abstract class Vpc_Master_Abstract extends Vps_Component_Abstract {
-    
+abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
+{
     private $_treeCacheRow;
 
     public function __construct(Vps_Dao_Row_TreeCache $treeCacheRow)
@@ -17,6 +17,11 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract {
     public function getDbId()
     {
         return $this->getTreeCacheRow()->db_id;
+    }
+
+    public function getComponentId()
+    {
+        return $this->getTreeCacheRow()->component_id;
     }
 
     public function getDao()

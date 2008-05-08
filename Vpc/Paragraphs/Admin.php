@@ -10,8 +10,7 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
             if ($icon) {
                 $icon = $icon->__toString();
             }
-            $hide = Vpc_Abstract::getSetting($component, 'hideInParagraphs');
-            if ($hide !== true && $name) {
+            if ($name) {
                 $str = '$componentList["' . str_replace('.', '"]["', $name) . '"] = "' . $component . '";';
                 eval($str);
                 $componentIcons[$component] = $icon;

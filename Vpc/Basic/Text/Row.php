@@ -221,6 +221,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
             $html = $tidy->value;
             $parser = new Vpc_Basic_Text_Parser($this);
             $parser->setEnableColor(Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableColors'));
+            $parser->setEnableTagsWhitelist(Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableTagsWhitelist'));
             $html = $parser->parse($html);
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();

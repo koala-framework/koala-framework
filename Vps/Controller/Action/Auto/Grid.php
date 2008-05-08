@@ -2,9 +2,7 @@
 abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Auto_Abstract
 {
     protected $_columns = null;
-    protected $_buttons = array('save'=>true,
-                                'add'=>true,
-                                'delete'=>true);
+    protected $_buttons = array('save', 'add', 'delete');
     protected $_editDialog = null;
     protected $_paging = 0;
     protected $_defaultOrder;
@@ -83,8 +81,10 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $columnObject = new Vps_Grid_Column($this->_position);
                 $columnObject->setHeader(' ')
                              ->setWidth(30)
-                             ->setType('int')
-                             ->setEditor('PosField');
+                             ->setType('int');
+                if (isset($this->_permissions['save']) && $this->_permissions['save']) {
+                    $columnObject->setEditor('PosField');
+                }
                 $this->_columns->prepend($columnObject);
                 $this->_sortable = false;
                 $this->_defaultOrder = $this->_position;
@@ -453,11 +453,7 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
                 if ($invalid) {
                     throw new Vps_ClientException(implode("<br />", $invalid));
                 }
-                if ($id && $column->getDataIndex() == $this->_position) {
-                    $row->getRow()->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
-                } else {
-                    $column->prepareSave($row, $submitRow);
-                }
+                $column->prepareSave($row, $submitRow);
             }
             if (!$id) {
                 $this->_beforeInsert($row, $submitRow);
@@ -471,9 +467,6 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             }
             $this->_afterSave($row, $submitRow);
             if (!$id) {
-                if ($this->_position) {
-                    $row->getRow()->numberize($this->_position, $submitRow[$this->_position], $this->_getWhere());
-                }
                 $addedIds[] = $row->id;
             }
         }
@@ -506,9 +499,6 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             $this->_beforeDelete($row);
             $row->delete();
             $this->_afterDelete();
-            if ($this->_position) {
-                $this->_model->getTable()->numberizeAll($this->_position, $this->_getWhere());
-            }
         }
         Zend_Registry::get('db')->commit();
     }
@@ -532,9 +522,6 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
             }
             $new = $row->duplicate();
             $this->view->data['duplicatedIds'][] = $new->{$this->_primaryKey};
-            if ($this->_position) {
-                $this->_model->getTable()->numberizeAll($this->_position, $this->_getWhere());
-            }
         }
         Zend_Registry::get('db')->commit();
     }

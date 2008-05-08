@@ -4,19 +4,36 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
     protected $_name = 'vpc_basic_text_styles';
     protected $_rowClass = 'Vpc_Basic_Text_StylesRow';
 
-    public function getStyles()
+    protected function _setupFilters()
+    {
+        $filter = new Vps_Filter_Row_Numberize();
+        $filter->setGroupBy(array('ownStyles', 'tag'=>array('span')));
+        $this->_filters = array('pos' => $filter);
+    }
+
+    public function getStyles($ownStyles = false)
     {
         $styles = array();
         $styles['block'] = array('p' => trlVps('Default'));
         $styles['inline'] = array('span' => trlVps('Normal'));
-        foreach ($this->fetchAll(null, 'pos') as $row) {
+
+        $where = array();
+        if ($ownStyles) {
+            $where["ownStyles = ? OR ownStyles=''"] = $ownStyles;
+        } else {
+            $where[] = "ownStyles = ''";
+        }
+        $order = new Zend_Db_Expr("ownStyles!='', master DESC, pos");
+        foreach ($this->fetchAll($where, $order) as $row) {
             $selector = $row->tag;
             $selector .= '.style'.$row->id;
             if ($selector) {
+                $name = $row->name;
+                if ($row->ownStyles) $name = '* '.$name;
                 if ($row->tag == 'span') {
-                    $styles['inline'][$selector] = $row->name;
+                    $styles['inline'][$selector] = $name;
                 } else {
-                    $styles['block'][$selector] = $row->name;
+                    $styles['block'][$selector] = $name;
                 }
             }
         }
@@ -50,8 +67,9 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
                 'parentModel' => $model,
                 'fieldName' => 'styles'
             ));
+
             foreach ($model->fetchAll() as $row) {
-                $css .= '.content ' . $row->tag;
+                $css .= '.vpcText ' . $row->tag;
                 $css .= '.style'.$row->id;
                 $css .= ' { ';
                 $stylesRow = $stylesModel->getRowByParentRow($row);
@@ -72,6 +90,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
                 }
                 $css .= "} /* $row->name */\n";
             }
+
             $cacheData = array(
                 'contents' => $css,
                 'mtime' => time()

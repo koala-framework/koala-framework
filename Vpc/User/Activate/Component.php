@@ -5,8 +5,7 @@ class Vpc_User_Activate_Component extends Vpc_Formular_Component
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => '',
-            'tablename'  => 'Vpc_Formular_Model',
-            'hideInNews' => true
+            'tablename'  => 'Vpc_Formular_Model'
         ));
         $ret['childComponentClasses']['success'] = 'Vpc_User_Activate_Success_Component';
         return $ret;
