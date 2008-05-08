@@ -6,47 +6,40 @@ class Vps_View_Component extends Vps_View
         parent::init();
         $this->addScriptPath('application/views');
     }
-    
-    public static function renderCachedComponent($id, $isMaster = false, $renderDirectly = false)
+
+    public static function renderCachedComponent($id, $isMaster = false)
     {
         $cache = Vps_Component_Cache::getInstance();
+
         // Parameter ordnen, je nachdem von woher aufgerufen
         if (is_array($id)) { // Komponente wird ausgegeben
             $cacheId = $id[1];
             $componentId = $cache->getComponentIdFromCacheId($cacheId);
-            $renderDirectly = true;
         } else { // Komponente wird gecacht
             $componentId = $id;
             $cacheId = $cache->getCacheIdFromComponentId($componentId);
-            $renderDirectly = $renderDirectly || false;
         }
         if ($isMaster) {
             $cacheId = $cacheId . '__master';
         }
-        $hasCache = $cache->getCache()->test($cacheId);
-        if (!$hasCache) {
+        if (!$return = $cache->getCache()->load($cacheId)) {
             $tc = Vps_Dao::getTable('Vps_Dao_TreeCache');
             $where = array('component_id = ?' => $componentId);
             $row = $tc->fetchRow($where);
-            $html = Vps_View_Component::renderComponent($row, $isMaster);
+            $return = Vps_View_Component::renderComponent($row, $isMaster);
             $tag = $isMaster ? 'master' : $row->component_class;
-            $cache->getCache()->save($html, $cacheId, array($tag));
-            $return = '{nocache: ' . $cacheId . '}';
-        } else {
-            $return = $cache->getCache()->load($cacheId);
+            $cache->getCache()->save($return, $cacheId, array($tag));
         }
-        
-        if ($renderDirectly || $isMaster) {
-            $return = preg_replace_callback(
-                '/{nocache: (.+)}/', 
-                array('Vps_View_Component', 'renderCachedComponent'), 
-                $return
-            );
-        }
-    
+
+        $return = preg_replace_callback(
+            '/{nocache: (.+)}/',
+            array('Vps_View_Component', 'renderCachedComponent'),
+            $return
+        );
+
         return $return;
     }
-    
+
     public static function renderComponent($row, $isMaster = false)
     {
         $componentId = $row->component_id;
