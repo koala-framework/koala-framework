@@ -19,12 +19,16 @@ class Vps_Controller_Action_User_ChangeuserController extends Vps_Controller_Act
         }
         return $where;
     }
+    
+    public function init()
+    {
+        $this->_table = Zend_Registry::get('userModel');
+    }
 
     protected function _initColumns()
     {
         parent::_initColumns();
         Zend_Registry::get('userModel')->createAllCache();
-        $this->_table = Zend_Registry::get('userModel');
         $this->_columns->add(new Vps_Grid_Column('name'));
         $this->_columns->add(new Vps_Grid_Column('role'))
              ->setData(new Vps_Controller_Action_User_Users_RoleData());
