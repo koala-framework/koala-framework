@@ -1,20 +1,22 @@
 <?php
-class Vps_Component_Cache  {
+class Vps_Component_Cache extends Zend_Cache_Core {
     
     static private $_instance;
     
     public function __construct()
     {
-        $frontendOptions = array(
+        parent::__construct(array(
             'lifetime' => 30*60
-        );
-        $backendOptions = array(
+        ));
+        
+        $backend = new Zend_Cache_Backend_File(array(
             'cache_dir' => 'application/cache/component',
             'hashed_directory_level' => 2,
             'file_name_prefix' => 'vpc',
             'hashed_directory_umask' => 0770
-        );
-        $this->_cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        ));
+        
+        $this->setBackend($backend);
     }
     
     public static function getInstance()
@@ -25,28 +27,66 @@ class Vps_Component_Cache  {
         return self::$_instance;
     }
     
-    public function getCache()
-    {
-        return $this->_cache;
-    }
-    
     public function cleanByTag($tag)
     {
-        $this->getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array($tag));
+        $this->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array($tag));
     }
     
     public function remove($componentId)
     {
-        $this->getCache()->remove($this->getCacheIdFromComponentId($componentId));
+        parent::remove($this->getCacheIdFromComponentId($componentId));
     }
     
-    public function getCacheIdFromComponentId($componentId)
+    public function load($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
     {
+        if (!$this->test($id)) {
+            return false;
+        }
+        return parent::load($id, $doNotTestCacheValidity, $doNotUnserialize);
+    }
+    
+    public function test($id)
+    {
+        $lastModified = parent::test($id);
+        if (!Zend_Registry::get('config')->debug->autoClearComponentCache) {
+            return $lastModified;
+        }
+        
+        $componentId = $this->getComponentIdFromCacheId($id);
+        if ($componentId) {
+            $row = Vps_Dao::getTable('Vps_Dao_TreeCache')->fetchRow(array('component_id = ?' => $componentId));
+            $file = Vpc_Admin::getComponentFile($row->component_class, 'Component', 'tpl');
+            if ($lastModified < filemtime($file)) { // Component.tpl wurde geändert
+                return false;
+            } else { // Wenn Component.tpl nicht geändert wurde, Component.php prüfen
+                $class = $row->component_class;
+                while ($class) { // Alle Component.php der Klassenhierarchie prüfen
+                    $file = Vpc_Admin::getComponentFile($class, 'Component', 'php');
+                    if ($lastModified < filemtime($file)) {
+                        Zend_Session::start();p($id);
+                        return false;
+                    }
+                    $class = get_parent_class($class);
+                }
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+    
+    public function getCacheIdFromComponentId($componentId, $isMaster = false)
+    {
+        if ($isMaster) { $componentId .= '-master'; }
         return str_replace('-', '__', $componentId);
     }
     
     public function getComponentIdFromCacheId($cacheId)
     {
-        return str_replace('__', '-', $cacheId);
+        if (substr($cacheId, -8) == '__master') {
+            return null;
+        } else {
+            return str_replace('__', '-', $cacheId);
+        }
     }
 }

@@ -13,19 +13,7 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
         $class = $row->component_class;
         if (is_subclass_of($class, 'Vpc_Abstract')) {
             $id = $row->component_id . '-' . $row->id;
-
-            $tc = new Vps_Dao_TreeCache();
-            $row = $tc->fetchAll(array('db_id = ?'=>$id))->current();
-            if (!$row) {
-                return 'Could not create component: ' . $id;
-            } else {
-                $view = new Vps_View_Component();
-                $templateVars = $row->getComponent()->getTemplateVars();
-                foreach ($templateVars as $key => $val) {
-                    $view->$key = $val;
-                }
-                return $view->render($templateVars['template']);
-            }
+            return Vps_View_Component::renderCachedComponent($id);
         } else if (isset($row->settings)) {
             $settingsModel = new Vps_Model_Field(array(
                 'parentModel' => $row->getModel(),

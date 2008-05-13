@@ -7,40 +7,32 @@ class Vps_View_Component extends Vps_View
         $this->addScriptPath('application/views');
     }
 
-    public static function renderCachedComponent($id, $isMaster = false)
+    public static function renderCachedComponent($componentId, $isMaster = false)
     {
+        // Falls es Cache gibt, Cache holen
         $cache = Vps_Component_Cache::getInstance();
-
-        // Parameter ordnen, je nachdem von woher aufgerufen
-        if (is_array($id)) { // Komponente wird ausgegeben
-            $cacheId = $id[1];
-            $componentId = $cache->getComponentIdFromCacheId($cacheId);
-        } else { // Komponente wird gecacht
-            $componentId = $id;
-            $cacheId = $cache->getCacheIdFromComponentId($componentId);
-        }
-        if ($isMaster) {
-            $cacheId = $cacheId . '__master';
-        }
-        if (!$return = $cache->getCache()->load($cacheId)) {
+        $cacheId = $cache->getCacheIdFromComponentId($componentId, $isMaster);
+        $return = $cache->load($cacheId);
+        if ($return === false) {
             $tc = Vps_Dao::getTable('Vps_Dao_TreeCache');
             $where = array('component_id = ?' => $componentId);
             $row = $tc->fetchRow($where);
-            $return = Vps_View_Component::renderComponent($row, $isMaster);
+            $return = Vps_View_Component::_renderComponent($row, $isMaster);
             $tag = $isMaster ? 'master' : $row->component_class;
-            $cache->getCache()->save($return, $cacheId, array($tag));
+            $cache->save($return, $cacheId, array($tag));
         }
-
-        $return = preg_replace_callback(
-            '/{nocache: (.+)}/',
-            array('Vps_View_Component', 'renderCachedComponent'),
-            $return
-        );
+        
+        // nocache-Tags ersetzen
+        preg_match_all('/{nocache: (.+)}/', $return, $matches);
+        foreach ($matches[0] as $key => $search) {
+            $replace = self::renderCachedComponent($matches[1][$key]);
+            $return = str_replace($search, $replace, $return);
+        }
 
         return $return;
     }
 
-    public static function renderComponent($row, $isMaster = false)
+    private static function _renderComponent(Vps_Dao_Row_TreeCache $row, $isMaster = false)
     {
         $componentId = $row->component_id;
         if ($isMaster) {
@@ -57,8 +49,8 @@ class Vps_View_Component extends Vps_View
             $templateVars['component'] = $componentId;
             $template = 'application/views/Master.tpl';
         } else {
-            $templateVars = $row->getComponent(false)->getTemplateVars();
-            $template = $templateVars['template'];
+            $templateVars = $row->getComponent()->getTemplateVars();
+            $template = Vpc_Admin::getComponentFile($row->component_class, 'Component', 'tpl');
         }
 
         $view = new Vps_View_Component();

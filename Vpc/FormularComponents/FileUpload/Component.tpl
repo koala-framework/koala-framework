@@ -1,1 +1,0 @@
-<input type="file" name="<?= $this->name ?>" style="width: <?= $this->width ?>px;" />
