@@ -31,15 +31,6 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         return $this->_row;
     }
 
-    public function getTemplateVars()
-    {
-        $vars = parent::getTemplateVars();
-        if (!$vars['template']) {
-            throw new Vpc_Exception(trlVps('Template not found for Component {0}',  get_class($this)));
-        }
-        return $vars;
-    }
-    
     public function getSearchVars()
     {
         return array('text' => '');

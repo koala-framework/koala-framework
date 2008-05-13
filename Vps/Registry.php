@@ -12,7 +12,11 @@ class Vps_Registry extends Zend_Registry
             $this->offsetSet('dao', $v);
             return $v;
         } else if ($index == 'config' && !parent::offsetExists($index)) {
-            $v = Vps_Setup::createConfig();
+            $cache = new Vps_Config_Cache;
+            if(!$v = $cache->load('config')) {
+                $v = Vps_Setup::createConfig();
+                $cache->save($v, 'config');
+            }
             $this->offsetSet('config', $v);
             return $v;
         } else if ($index == 'acl' && !parent::offsetExists($index)) {

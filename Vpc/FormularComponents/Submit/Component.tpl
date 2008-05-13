@@ -1,1 +1,0 @@
-<input type="submit" name="<?= $this->name ?>" value="<?= $this->text ?>" style="width:<?= $this->width ?>px;" />

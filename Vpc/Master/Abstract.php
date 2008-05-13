@@ -39,7 +39,6 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
     public function getTemplateVars()
     {
         $vars = array();
-        $vars['template'] = Vpc_Admin::getComponentFile(get_class($this), '', 'tpl');
         $vars['placeholder'] = $this->_getSetting('placeholder');
         return $vars;
     }

@@ -1,1 +1,0 @@
-<textarea name="<?= $this->name ?>" style="width: <?= $this->width ?>px; height: <?= $this->height ?>px"><?= $this->value ?></textarea>

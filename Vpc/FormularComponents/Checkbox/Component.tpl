@@ -1,1 +1,0 @@
-<input type="checkbox" name="<?= $this->name ?>" value="<?= $this->value ?> style="float:left; margin-right:6px;"<?php if ($this->checked == '1') { echo ' checked'; } ?> /><div style="margin-left:130px; width:<?= $this->width ?>px;"><?= $this->text ?></div>

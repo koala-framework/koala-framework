@@ -1,1 +1,0 @@
-<input type="text" name="<?= $this->name ?>" maxlength="<?= $this->maxlength ?>" style="width:<?= $this->width ?>px;" value="<?= $this->value ?>" />
