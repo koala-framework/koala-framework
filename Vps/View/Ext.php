@@ -40,7 +40,7 @@ class Vps_View_Ext extends Vps_View
         $ext['viewport'] = $viewport;
         $ext['userRole'] = Zend_Registry::get('userModel')->getAuthedUserRole();
         $this->ext = $ext;
-        $this->extTemplate = VPS_PATH . '/views/ext.tpl';
+        $this->extTemplate = 'ext.tpl';
 
         $this->debug = array(
             'js'  => !!Zend_Registry::get('config')->debug->assets->js,
