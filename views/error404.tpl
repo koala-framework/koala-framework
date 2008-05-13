@@ -2,15 +2,15 @@
     <head>
     </head>
     <body>
-        <h1>{trlVps text="Page not found"}</h1>
+        <h1><?= trlVps('Page not found'); ?></h1>
 
-        {trlVps text="Errortype:"}<br />
-        <pre>{$type}</pre>
+        <?= trlVps('Errortype'); ?>:<br />
+        <pre><?= $this->type ?></pre>
 
         <br />
 
-        {trlVps text="Message:"}<br />
-        <pre>{$exception}</pre>
+        <?= trlVps('Message'); ?>:<br />
+        <pre><?= $this->exception ?></pre>
 
     </body>
 </html>

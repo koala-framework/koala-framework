@@ -3,7 +3,7 @@
   <head>
     <title><?= $this->config['application']['name'] ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <?= include($this->extTemplate) ?>
+    <?= $this->partial($this->extTemplate, $this) ?>
   </head>
   <body>
   </body>
