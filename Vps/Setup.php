@@ -1,17 +1,28 @@
 <?php
-function p($src, $maxDepth = 5) {
+function p($src, $maxDepth = 5, $noFirePhp = false)
+{
+    $isToDebug = false;
     if (is_object($src) && method_exists($src, 'toDebug')) {
-        echo $src->toDebug();
-    } else if ($src instanceof Zend_Db_Select || $src instanceof Exception) {
-        echo "<pre>";
-        //damit string nicht abgeschnitten wird von xdebug_var_dump
-        echo $src->__toString();
-        echo "</pre>";
+        $isToDebug = true;
+        $src = $src->toDebug();
     } else {
         if (is_object($src) && method_exists($src, '__toString')) {
             $src = $src->__toString();
         }
-        if (function_exists('xdebug_var_dump')) {
+        if (!$noFirePhp && class_exists('FirePHP') && FirePHP::getInstance()) {
+            if (is_object($src) && method_exists($src, 'toArray')) {
+                $src = $src->toArray();
+            } else if (is_object($src)) {
+                $src = (array)$src;
+            }
+            //wenn FirePHP nicht aktiv im browser gibts false zur�ck
+            if (FirePhp_Debug::fb($src)) return;
+        }
+        if ($isToDebug) {
+            echo $src;
+        } else if (function_exists('xdebug_var_dump')
+            && !($src instanceof Zend_Db_Select ||
+                 $src instanceof Exception)) {
             ini_set('xdebug.var_display_max_depth', $maxDepth);
             xdebug_var_dump($src);
         } else {
@@ -30,7 +41,7 @@ function p($src, $maxDepth = 5) {
 
 function d($src, $maxDepth = 5)
 {
-    p($src, $maxDepth);
+    p($src, $maxDepth, true);
     exit;
 }
 
@@ -239,6 +250,21 @@ class Vps_Setup
         set_include_path($ip);
 
         Zend_Registry::set('requestNum', ''.floor(microtime(true)*100));
+        if (Zend_Registry::get('config')->debug->firephp && !isset($_SERVER['SHELL'])) {
+            ob_start();
+            require_once 'FirePHPCore/FirePHP.class.php';
+            FirePHP::init();
+        }
+        if (Zend_Registry::get('config')->debug->querylog && !isset($_SERVER['SHELL'])) {
+            header('X-Vps-RequestNum: '.Zend_Registry::get('requestNum'));
+        }
+        register_shutdown_function(array('Vps_Setup', 'shutDown'));
+    }
+    public static function shutDown()
+    {
+        if (Zend_Registry::get('config')->debug->querylog && !isset($_SERVER['SHELL'])) {
+            header('X-Vps-DbQueries: '.Vps_Db_Profiler::getCount());
+        }
     }
 
     public static function createDb()
@@ -251,8 +277,8 @@ class Vps_Setup
     {
         return new Vps_Dao(new Zend_Config_Ini('application/config.db.ini', 'database'));
     }
-
-    public static function createConfig()
+    
+    public static function getConfigSection()
     {
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
 
@@ -266,25 +292,34 @@ class Vps_Setup
             $path = $_SERVER['SCRIPT_FILENAME'];
         }
         if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
-            $vpsSection = $webSection = 'vivid';
-
-            $webConfigFull = new Zend_Config_Ini('application/config.ini', null);
-            if (isset($webConfigFull->{$m[2]})) {
-                $webSection = $m[2];
-            }
-
-            $vpsConfigFull = new Zend_Config_Ini(VPS_PATH.'/config.ini', null);
-            if (isset($vpsConfigFull->{$m[2]})) {
-                $vpsSection = $m[2];
-            }
+            return $m[2];
         } else if (substr($host, 0, 4)=='dev.') {
-            $vpsSection = $webSection = 'dev';
-        } else if (substr($host, 0, 5)=='test.') {
-            $vpsSection = $webSection = 'test';
+            return 'dev';
+        } else if (substr($host, 0, 5)=='test.' ||
+                   substr($path, 0, 17) == '/docs/vpcms/test.' ||
+                   substr($path, 0, 21) == '/docs/vpcms/www.test.') {
+            return 'test';
         } else if (substr($host, 0, 8)=='preview.') {
-            $vpsSection = $webSection = 'preview';
+            return 'preview';
         } else {
-            $vpsSection = $webSection = 'production';
+            return 'production';
+        }
+    }
+
+    public static function createConfig()
+    {
+        $section = self::getConfigSection();
+
+        $vpsSection = $webSection = 'vivid';
+
+        $webConfigFull = new Zend_Config_Ini('application/config.ini', null);
+        if (isset($webConfigFull->$section)) {
+            $webSection = $section;
+        }
+
+        $vpsConfigFull = new Zend_Config_Ini(VPS_PATH.'/config.ini', null);
+        if (isset($vpsConfigFull->$section)) {
+            $vpsSection = $section;
         }
 
         $webConfig = new Zend_Config_Ini('application/config.ini', $webSection);

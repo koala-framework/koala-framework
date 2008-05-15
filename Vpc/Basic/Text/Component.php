@@ -35,6 +35,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             )
         ));
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditor.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditorTab.js';
 
         //hinten ' css' anhängen damit die datei als css-datei erkannt wird
         //nötig weil ein get-parameter mit der mtime dranhängt

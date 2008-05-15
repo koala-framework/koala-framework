@@ -462,6 +462,11 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             }
         }
         if (this.stylesEditorDialog) {
+            if (this.ownStylesParam) {
+                this.stylesEditorDialog.master.hide();
+            } else {
+                this.stylesEditorDialog.master.show();
+            }
             this.stylesEditorDialog.applyBaseParams({
                 componentId: this.component_id,
                 componentClass: this.componentClass

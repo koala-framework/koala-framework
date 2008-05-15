@@ -1,28 +1,18 @@
 <?php
-class Vpc_News_Details_Component extends Vpc_Paragraphs_Component implements Vpc_News_Interface_Component
+class Vpc_News_Details_Component extends Vpc_Abstract
 {
-    public $row;
-
     public static function getSettings()
     {
-        $settings = parent::getSettings();
-        return $settings;
-    }
-
-    public function getNewsComponent()
-    {
-        return $this->getParentComponent();
+        $ret = parent::getSettings();
+        $ret['childComponentClasses']['content'] = 'Vpc_Paragraphs_Component';
+        return $ret;
     }
 
     public function getTemplateVars()
     {
-        $vars = parent::getTemplateVars();
-        $vars['news'] = $this->row->toArray();
-        return $vars;
-    }
-
-    public function setRow($row)
-    {
-        $this->row = $row;
+        $return = parent::getTemplateVars();
+        $id = $this->getTreeCacheRow()->component_id;
+        $return['content'] = $id.'-content';
+        return $return;
     }
 }

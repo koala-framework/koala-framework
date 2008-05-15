@@ -17,10 +17,6 @@ class Vpc_Basic_Text_InlineStyleController extends Vps_Controller_Action_Auto_Fo
         $this->_form->add(new Vps_Form_Field_TextField('name', trlVps('Name')))
             ->setAllowBlank(false);
 
-        if ($this->_getUserRole() == 'admin') {
-            $this->_form->add(new Vps_Form_Field_Checkbox('master', trlVps('Master')));
-        }
-
         $m = new Vps_Model_Field(array(
             'parentModel' => $this->_form->getModel(),
             'fieldName' => 'styles'

@@ -27,7 +27,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['news'] = array();
-
+/*
         if ($this->getNewsComponent()) {
             $limit = $this->_getPagingComponent()->getLimit();
             foreach ($this->getNews($limit['limit'], $limit['start']) as $row) {
@@ -38,8 +38,8 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract
                 $ret['news'][] = $data;
             }
         }
-
-        $ret['paging'] = $this->_getPagingComponent()->getTemplateVars();
+*/
+        //$ret['paging'] = $this->_getPagingComponent()->getTemplateVars();
         return $ret;
     }
 
