@@ -26,15 +26,17 @@ function p($src, $maxDepth = 5, $noFirePhp = false)
         ini_set('xdebug.var_display_max_depth', $maxDepth);
         xdebug_var_dump($src);
     } else {
-        echo "<pre>";
+        if (!isset($_SERVER['SHELL'])) echo "<pre>";
         var_dump($src);
-        echo "</pre>";
+        if (!isset($_SERVER['SHELL'])) echo "</pre>";
     }
     if (function_exists('debug_backtrace')) {
         $bt = debug_backtrace();
         $i = 0;
         if ($bt[1]['function'] == 'd') $i = 1;
-        echo $bt[$i]['file'].':'.$bt[$i]['line']."<br />\n";
+        echo $bt[$i]['file'].':'.$bt[$i]['line'];
+        if (!isset($_SERVER['SHELL'])) echo "<br />";
+        echo "\n";
     }
 }
 
