@@ -9,12 +9,12 @@ class Vpc_Basic_Text_InlineStylesController extends Vps_Controller_Action_Auto_G
     {
         parent::_initColumns();
         $this->_columns->add(new Vps_Grid_Column('name', 'Name', 100));
-        $this->_columns->add(new Vps_Grid_Column_Checkbox('master', 'Master'));
     }
 
     protected function _getWhere()
     {
         $where = parent::_getWhere();
+        $where[] = 'master=0';
         $where[] = "tag = 'span'";
 
         $pattern = Vpc_Abstract::getSetting($this->_getParam('componentClass'),

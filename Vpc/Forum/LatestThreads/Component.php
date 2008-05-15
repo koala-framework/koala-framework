@@ -21,7 +21,7 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
 
         $threadTable = $this->getTable();
         $rowset = $threadTable->fetchAll(null, null, 5);
-
+/*
         $pc = $this->getPageCollection();
         foreach ($rowset as $row) {
             $parentComponent = $pc->getComponentById($row->component_id);
@@ -38,7 +38,7 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
                 }
             }
         }
-
+*/
         return $vars;
     }
 }

@@ -1,8 +1,8 @@
 <?php
 abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
 {
-    protected $_componentClass;
-    protected $_childClassKey;
+    protected $_componentClass; //unterkomponenten-klasse
+    protected $_childClassKey;  //oder: childComponentClasses-key
 
     protected $_loadTableFromComponent = true;
 

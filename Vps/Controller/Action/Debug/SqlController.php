@@ -48,7 +48,25 @@ class Vps_Controller_Action_Debug_SqlController extends Vps_Controller_Action
         $db = Zend_Registry::get('db');
         $this->view->data = array();
         foreach ($db->query("EXPLAIN $query")->fetchAll() as $row) {
-            $this->view->data[] = array_values($row);
+            $this->view->data[] = $row;
+        }
+    }
+
+    public function jsonQueryAction()
+    {
+        $this->view->requestNum = false;
+
+        $query = $this->_getParam('query');
+        $db = Zend_Registry::get('db');
+        $this->view->data = array();
+        try {
+            $rows = $db->query($query.' LIMIT 30')->fetchAll();
+        } catch (Exception $e) {
+            $rows = $db->query($query)->fetchAll();
+        }
+        foreach ($rows as $row) {
+            $this->view->data[] = $row;
+            if (count($this->view->data) > 30) break;
         }
     }
 

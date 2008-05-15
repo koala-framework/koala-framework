@@ -8,6 +8,23 @@ abstract class Vpc_TreeCache_StaticPage extends Vpc_TreeCache_Static
         if (!isset($class['name'])) {
             throw new Vps_Exception("'name' is required in _classes array");
         }
+
+        $sql = "CONCAT(tc.component_id, '_', ";
+        $sql .= $this->_cache->getAdapter()->quote($this->_getChildIdByKey($key));
+        $sql .= ")";
+        $fields['component_id'] = new Zend_Db_Expr($sql);
+
+        $sql = 'CONCAT(';
+        if (isset($class['dbIdShortcut'])) {
+            $sql .= $this->_cache->getAdapter()->quote($class['dbIdShortcut']);
+        } else {
+            $sql .= "'_', tc.db_id";
+        }
+        $sql .= ", ";
+        $sql .= $this->_cache->getAdapter()->quote($this->_getChildIdByKey($key));
+        $sql .= ")";
+        $fields['db_id'] = new Zend_Db_Expr($sql);
+
         $fields['name'] = new Zend_Db_Expr($this->_cache->getAdapter()->quote($class['name']));
         if (isset($class['showInMenu']) && $class['showInMenu']) {
             $fields['menu'] = new Zend_Db_Expr('1');
@@ -28,7 +45,7 @@ abstract class Vpc_TreeCache_StaticPage extends Vpc_TreeCache_Static
         $fields['tree_url_pattern'] = $fields['url_pattern'];
         return $fields;
     }
-    
+
     protected function _getFilenameByKey($key)
     {
         if (is_string($this->_classes[$key])) {

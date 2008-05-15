@@ -13,9 +13,10 @@ class Vps_Registry extends Zend_Registry
             return $v;
         } else if ($index == 'config' && !parent::offsetExists($index)) {
             $cache = new Vps_Config_Cache;
-            if(!$v = $cache->load('config')) {
+            $cacheId = Vps_Setup::getConfigSection();
+            if(!$v = $cache->load($cacheId)) {
                 $v = Vps_Setup::createConfig();
-                $cache->save($v, 'config');
+                $cache->save($v, $cacheId);
             }
             $this->offsetSet('config', $v);
             return $v;

@@ -9,17 +9,37 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
     closeAction: 'hide',
     initComponent: function()
     {
-        this.inlineForm = new Vps.Auto.FormPanel({
-            controllerUrl: '/admin/component/edit/Vpc_Basic_Text_InlineStyle',
-            region: 'center',
-            autoLoad: true
+        this.block = new Vpc.Basic.Text.StylesEditorTab({
+                title: trlVps('Block-Styles'),
+                controllerUrl: '/admin/component/edit/Vpc_Basic_Text_BlockStyle'
+            });
+        this.inline = new Vpc.Basic.Text.StylesEditorTab({
+                title: trlVps('Inline-Styles'),
+                controllerUrl: '/admin/component/edit/Vpc_Basic_Text_InlineStyle'
+            });
+        this.master = new Vpc.Basic.Text.StylesEditorTab({
+                title: trlVps('Master-Styles'),
+                controllerUrl: '/admin/component/edit/Vpc_Basic_Text_MasterStyle'
+            });
+        this.items = new Ext.TabPanel({
+            items: [this.block, this.inline, this.master],
+            activeTab: 0
         });
-        this.blockForm = new Vps.Auto.FormPanel({
-            controllerUrl: '/admin/component/edit/Vpc_Basic_Text_BlockStyle',
-            region: 'center',
-            autoLoad: true
+
+        Vpc.Basic.Text.StylesEditor.superclass.initComponent.call(this);
+    },
+    applyBaseParams: function(params) {
+        this.items.each(function(i) {
+            i.applyBaseParams(params);
         });
-        /*
+    },
+    show: function() {
+        this.items.each(function(i) {
+            i.load();
+        });
+        Vpc.Basic.Text.StylesEditor.superclass.show.call(this);
+    }
+/*
         this.form.on('renderform', function() {
             this.form.getForm().items.each(function(i) {
                 if (i.isFormField) {
@@ -30,64 +50,13 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
             }, this);
         }, this);
         this.form.on('loadform', this._reloadPreview, this);
-        */
 
-        this.inlineGrid = new Vps.Auto.GridPanel({
-            controllerUrl: '/admin/component/edit/Vpc_Basic_Text_InlineStyles',
-            region: 'west',
-            width: 250,
-            split: true,
-            autoLoad: false,
-            bindings: [this.inlineForm]
-        });
-        this.blockGrid = new Vps.Auto.GridPanel({
-            controllerUrl: '/admin/component/edit/Vpc_Basic_Text_BlockStyles',
-            region: 'west',
-            width: 250,
-            split: true,
-            autoLoad: false,
-            bindings: [this.blockForm]
-        });
-
-        /*
         this.preview = new Ext.Panel({
             region: 'south',
             width: 150,
             split: true,
             html: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.'
         });
-        */
-        this.items = new Ext.TabPanel({
-            items: [{
-                title: trlVps('Block-Styles'),
-                layout: 'border',
-                items: [this.blockGrid, this.blockForm]
-            },{
-                title: trlVps('Inline-Styles'),
-                layout: 'border',
-                items: [this.inlineGrid, this.inlineForm]
-            }],
-            activeTab: 0
-        });
-
-        Vpc.Basic.Text.StylesEditor.superclass.initComponent.call(this);
-    },
-    applyBaseParams: function(params) {
-        this.blockGrid.applyBaseParams(params);
-        this.blockForm.applyBaseParams(params);
-        this.inlineGrid.applyBaseParams(params);
-        this.inlineForm.applyBaseParams(params);
-    },
-    show: function() {
-        this.blockGrid.load();
-        this.blockGrid.clearSelections()
-        this.blockForm.disable();
-        this.inlineGrid.load();
-        this.inlineGrid.clearSelections()
-        this.inlineForm.disable();
-        Vpc.Basic.Text.StylesEditor.superclass.show.call(this);
-    }
-/*
     _reloadPreview: function()
     {
         var styles = '';

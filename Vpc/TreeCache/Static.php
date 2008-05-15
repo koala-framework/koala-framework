@@ -62,29 +62,19 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
             $class = array('componentClass'=>$class);
         }
 
-        $sql = 'CONCAT(';
-        $parts = array('tc.component_id', $this->_getChildIdByKey($key));
-        foreach ($parts as $p) {
-            if (substr($p, 0, 3) == 'tc.') {
-                $sql .= "$p, ";
-            } else {
-                $sql .= $this->_cache->getAdapter()->quote($p).", ";
-            }
-        }
-        $sql = substr($sql, 0, -2);
+        $sql = "CONCAT(tc.component_id, '-', ";
+        $sql .= $this->_cache->getAdapter()->quote($this->_getChildIdByKey($key));
         $sql .= ")";
         $fields['component_id'] = new Zend_Db_Expr($sql);
 
         $sql = 'CONCAT(';
-        $parts = array('tc.db_id', $this->_getChildIdByKey($key));
-        foreach ($parts as $p) {
-            if (substr($p, 0, 3) == 'tc.') {
-                $sql .= "$p, ";
-            } else {
-                $sql .= $this->_cache->getAdapter()->quote($p).", ";
-            }
+        if (isset($class['dbIdShortcut'])) {
+            $sql .= $this->_cache->getAdapter()->quote($class['dbIdShortcut']);
+        } else {
+            $sql .= "'-', tc.db_id";
         }
-        $sql = substr($sql, 0, -2);
+        $sql .= ", ";
+        $sql .= $this->_cache->getAdapter()->quote($this->_getChildIdByKey($key));
         $sql .= ")";
         $fields['db_id'] = new Zend_Db_Expr($sql);
 
@@ -105,7 +95,7 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
     protected function _getChildIdByKey($key)
     {
         $c = $this->_classes[$key];
-        if (is_array($c) && isset($c['id'])) return '-'.$c['id'];
-        return '-'.$key;
+        if (is_array($c) && isset($c['id'])) return $c['id'];
+        return $key;
     }
 }

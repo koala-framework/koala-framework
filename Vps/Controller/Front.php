@@ -62,11 +62,6 @@ class Vps_Controller_Front extends Zend_Controller_Front
             }
         }
         $ret = parent::dispatch($request, $response);
-
-        $profiler = Zend_Registry::get('db')->getProfiler();
-        if ($profiler instanceof Vps_Db_Profiler) {
-            $profiler->logSummary();
-        }
         return $ret;
     }
 }
