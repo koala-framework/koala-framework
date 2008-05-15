@@ -37,9 +37,8 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
 
     public function getFilters()
     {
-        $filters = $this->_filters;
-        if (is_string($filters)) $filters = array($filters);
-        foreach($filters as $k=>$f) {
+        if (is_string($this->_filters)) $this->_filters = array($this->_filters);
+        foreach($this->_filters as $k=>$f) {
             if (is_int($k)) {
                 $k = $f;
                 if ($k == 'pos') {
@@ -54,8 +53,9 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
             if ($f instanceof Vps_Filter_Row_Abstract) {
                 $f->setField($k);
             }
+            $this->_filters[$k] = $f;
         }
-        return $filters;
+        return $this->_filters;
     }
 
     public function setDao($dao)
