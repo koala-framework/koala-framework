@@ -13,6 +13,7 @@ class Vps_View_Component extends Vps_View
         $cache = Vps_Component_Cache::getInstance();
         $cacheId = $cache->getCacheIdFromComponentId($componentId, $isMaster);
         $cacheDisabled = Zend_Registry::get('config')->debug->componentCache->disable;
+        
         if ($cacheDisabled || ($return = $cache->load($cacheId))===false) {
             $tc = Vps_Dao::getTable('Vps_Dao_TreeCache');
             $where = array('component_id = ?' => $componentId);
@@ -25,6 +26,7 @@ class Vps_View_Component extends Vps_View
                 }
             } else {
                 $return = "Component '$componentId' does not exist in TreeCache";
+                //todo: throw error
             }
         }
         

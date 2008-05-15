@@ -18,7 +18,7 @@ abstract class Vpc_TreeCache_StaticPage extends Vpc_TreeCache_Static
         if (isset($class['dbIdShortcut'])) {
             $sql .= $this->_cache->getAdapter()->quote($class['dbIdShortcut']);
         } else {
-            $sql .= "'_', tc.db_id";
+            $sql .= "tc.db_id, '_'";
         }
         $sql .= ", ";
         $sql .= $this->_cache->getAdapter()->quote($this->_getChildIdByKey($key));
@@ -63,9 +63,9 @@ abstract class Vpc_TreeCache_StaticPage extends Vpc_TreeCache_Static
     protected function _getChildIdByKey($key)
     {
         $c = $this->_classes[$key];
-        if (is_string($c)) return '_'.$key;
-        if (isset($c['id'])) return '_'.$c['id'];
-        return '_'.$this->_getFilenameByKey($key);
+        if (is_string($c)) return $key;
+        if (isset($c['id'])) return $c['id'];
+        return $this->_getFilenameByKey($key);
     }
 
 }

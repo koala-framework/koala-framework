@@ -10,7 +10,7 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
             if (is_string($class)) continue;
             if (!isset($class['childComponentClass']) && isset($class['childClassKey'])) {
                 $cls = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-                $class['childComponentClass'] = $cls[$class['childClassKey']];
+                $class['componentClass'] = $cls[$class['childClassKey']];
             }
         }
     }
@@ -83,7 +83,7 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
         if (isset($class['dbIdShortcut'])) {
             $sql .= $this->_cache->getAdapter()->quote($class['dbIdShortcut']);
         } else {
-            $sql .= "'-', tc.db_id";
+            $sql .= "tc.db_id, '-'";
         }
         $sql .= ", ";
         $sql .= $this->_cache->getAdapter()->quote($this->_getChildIdByKey($key));
