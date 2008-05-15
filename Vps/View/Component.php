@@ -12,14 +12,20 @@ class Vps_View_Component extends Vps_View
         // Falls es Cache gibt, Cache holen
         $cache = Vps_Component_Cache::getInstance();
         $cacheId = $cache->getCacheIdFromComponentId($componentId, $isMaster);
-        $return = $cache->load($cacheId);
-        if ($return === false) {
+        $cacheDisabled = Zend_Registry::get('config')->debug->componentCache->disable;
+        if ($cacheDisabled || ($return = $cache->load($cacheId))===false) {
             $tc = Vps_Dao::getTable('Vps_Dao_TreeCache');
             $where = array('component_id = ?' => $componentId);
             $row = $tc->fetchRow($where);
-            $return = Vps_View_Component::_renderComponent($row, $isMaster);
-            $tag = $isMaster ? 'master' : $row->component_class;
-            $cache->save($return, $cacheId, array($tag));
+            if ($row) {
+                $return = Vps_View_Component::_renderComponent($row, $isMaster);
+                $tag = $isMaster ? 'master' : $row->component_class;
+                if (!$cacheDisabled) {
+                    $cache->save($return, $cacheId, array($tag));
+                }
+            } else {
+                $return = "Component '$componentId' does not exist in TreeCache";
+            }
         }
         
         // nocache-Tags ersetzen

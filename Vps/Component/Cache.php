@@ -48,7 +48,7 @@ class Vps_Component_Cache extends Zend_Cache_Core {
     public function test($id)
     {
         $lastModified = parent::test($id);
-        if (!Zend_Registry::get('config')->debug->autoClearComponentCache) {
+        if (!Zend_Registry::get('config')->debug->componentCache->checkComponentModification) {
             return $lastModified;
         }
         
@@ -63,7 +63,6 @@ class Vps_Component_Cache extends Zend_Cache_Core {
                 while ($class) { // Alle Component.php der Klassenhierarchie prüfen
                     $file = Vpc_Admin::getComponentFile($class, 'Component', 'php');
                     if ($lastModified < filemtime($file)) {
-                        Zend_Session::start();p($id);
                         return false;
                     }
                     $class = get_parent_class($class);
