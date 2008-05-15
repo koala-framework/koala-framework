@@ -3,6 +3,18 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
 {
     protected $_classes;
 
+    protected function _init()
+    {
+        parent::_init();
+        foreach ($this->_classes as &$class) {
+            if (is_string($class)) continue;
+            if (!isset($class['childComponentClass']) && isset($class['childClassKey'])) {
+                $cls = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+                $class['childComponentClass'] = $cls[$class['childClassKey']];
+            }
+        }
+    }
+    
     public function createMissingChilds($componentClass = null)
     {
         $logger = false;

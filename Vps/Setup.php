@@ -2,34 +2,33 @@
 function p($src, $maxDepth = 5, $noFirePhp = false)
 {
     $isToDebug = false;
+    if (!$noFirePhp && class_exists('FirePHP') && FirePHP::getInstance()) {
+        if (is_object($src) && method_exists($src, 'toArray')) {
+            $src = $src->toArray();
+        } else if (is_object($src)) {
+            $src = (array)$src;
+        }
+        //wenn FirePHP nicht aktiv im browser gibts false zur�ck
+        if (FirePhp_Debug::fb($src)) return;
+    }
     if (is_object($src) && method_exists($src, 'toDebug')) {
         $isToDebug = true;
         $src = $src->toDebug();
+    }
+    if (is_object($src) && method_exists($src, '__toString')) {
+        $src = $src->__toString();
+    }
+    if ($isToDebug) {
+        echo $src;
+    } else if (function_exists('xdebug_var_dump')
+        && !($src instanceof Zend_Db_Select ||
+                $src instanceof Exception)) {
+        ini_set('xdebug.var_display_max_depth', $maxDepth);
+        xdebug_var_dump($src);
     } else {
-        if (is_object($src) && method_exists($src, '__toString')) {
-            $src = $src->__toString();
-        }
-        if (!$noFirePhp && class_exists('FirePHP') && FirePHP::getInstance()) {
-            if (is_object($src) && method_exists($src, 'toArray')) {
-                $src = $src->toArray();
-            } else if (is_object($src)) {
-                $src = (array)$src;
-            }
-            //wenn FirePHP nicht aktiv im browser gibts false zur�ck
-            if (FirePhp_Debug::fb($src)) return;
-        }
-        if ($isToDebug) {
-            echo $src;
-        } else if (function_exists('xdebug_var_dump')
-            && !($src instanceof Zend_Db_Select ||
-                 $src instanceof Exception)) {
-            ini_set('xdebug.var_display_max_depth', $maxDepth);
-            xdebug_var_dump($src);
-        } else {
-            echo "<pre>";
-            var_dump($src);
-            echo "</pre>";
-        }
+        echo "<pre>";
+        var_dump($src);
+        echo "</pre>";
     }
     if (function_exists('debug_backtrace')) {
         $bt = debug_backtrace();
