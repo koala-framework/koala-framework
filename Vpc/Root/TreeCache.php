@@ -10,10 +10,6 @@ class Vpc_Root_TreeCache extends Vpc_TreeCache_TablePage
         $this->_showInMenu = new Zend_Db_Expr('!t.hide');
         parent::_init();
     }
-    protected function _getWhere()
-    {
-        return array('id!=8');
-    }
 
     public function createRoot()
     {
