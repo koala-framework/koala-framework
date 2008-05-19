@@ -55,23 +55,22 @@ class Vps_Component_Cache extends Zend_Cache_Core {
         $componentId = $this->getComponentIdFromCacheId($id);
         if ($componentId) {
             $row = Vps_Dao::getTable('Vps_Dao_TreeCache')->fetchRow(array('component_id = ?' => $componentId));
-            $file = Vpc_Admin::getComponentFile($row->component_class, 'Component', 'tpl');
-            if ($lastModified < filemtime($file)) { // Component.tpl wurde geändert
-                return false;
-            } else { // Wenn Component.tpl nicht geändert wurde, Component.php prüfen
-                $class = $row->component_class;
-                while ($class) { // Alle Component.php der Klassenhierarchie prüfen
-                    $file = Vpc_Admin::getComponentFile($class, 'Component', 'php');
-                    if ($lastModified < filemtime($file)) {
-                        return false;
+            if ($row) {
+                $file = Vpc_Admin::getComponentFile($row->component_class, 'Component', 'tpl');
+                if ($lastModified > filemtime($file)) { // Wenn Component.tpl nicht geändert wurde, Component.php prüfen
+                    $class = $row->component_class;
+                    while ($class) { // Alle Component.php der Klassenhierarchie prüfen
+                        $file = Vpc_Admin::getComponentFile($class, 'Component', 'php');
+                        if ($lastModified < filemtime($file)) {
+                            return false;
+                        }
+                        $class = get_parent_class($class);
                     }
-                    $class = get_parent_class($class);
+                    return true;
                 }
-                return true;
             }
-        } else {
-            return true;
         }
+        return true;
     }
     
     public function getCacheIdFromComponentId($componentId, $isMaster = false)
