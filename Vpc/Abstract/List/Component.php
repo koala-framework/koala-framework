@@ -8,7 +8,8 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
             'tablename'     => 'Vpc_Abstract_List_Model',
             'childComponentClasses' => array(
                 'child'         => 'Vpc_Empty'
-            )
+            ),
+            'default' => array()
         ));
         $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/Panel.js';
