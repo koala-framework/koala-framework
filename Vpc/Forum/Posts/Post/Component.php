@@ -5,6 +5,7 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
     {
         $ret = parent::getSettings();
         $ret['childComponentClasses']['user'] = 'Vpc_Forum_Posts_Post_UserDetail_Component';
+        $ret['moderatorRoles'] = array('admin');
         return $ret;
     }
 
@@ -20,7 +21,7 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
 
     public function getThreadComponent()
     {
-        return $this->getParentComponent()->getParentComponent();
+        return $this->getParentComponent()->getThreadComponent();
     }
 
     public function getTemplateVars()
@@ -43,12 +44,15 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
                     if ($this->getTable()->fetchAll(
                         array('component_id = ?' => $deleteRow->component_id)
                     )->count() <= 1) {
-                        $threadVars = $this->getThreadComponent()->getThreadVars();
-                        $threadModel = new Vpc_Forum_Thread_Model();
-                        $threadRow = $threadModel->find($threadVars['thread_id'])->current();
-                        if ($threadRow) {
-                            $locationHeader = $this->getGroupComponent()->getUrl();
-                            $threadDeleted = $threadRow->delete();
+                        $threadComponent = $this->getThreadComponent();
+                        if ($threadComponent) {
+                            $threadVars = $threadComponent->getThreadVars();
+                            $threadModel = new Vpc_Forum_Thread_Model();
+                            $threadRow = $threadModel->find($threadVars['thread_id'])->current();
+                            if ($threadRow) {
+                                $locationHeader = $this->getGroupComponent()->getUrl();
+                                $threadDeleted = $threadRow->delete();
+                            }
                         }
                     }
                     // post wirklich löschen
@@ -76,19 +80,38 @@ class Vpc_Forum_Posts_Post_Component extends Vpc_Posts_Post_Component
             }
         }
 
+        $threadComp = $this->getThreadComponent();
+        if ($threadComp) {
+            $ret['threadClosed'] = $threadComp->isClosed();
+        } else {
+            $ret['threadClosed'] = 0;
+        }
+
         $ret['writeUrl'] = $this->getParentComponent()->getPageFactory()->getChildPageById('write')->getUrl()
             .'?quote='.$this->getId();
         $pagingKey = $this->getParentComponent()->getId().'-paging';
         if (isset($_GET[$pagingKey])) {
             $ret['writeUrl'] .= '&'.$pagingKey.'='.$_GET[$pagingKey];
+            if ($ret['deleteUrl']) {
+                $ret['deleteUrl'] .= '&'.$pagingKey.'='.$_GET[$pagingKey];
+            }
         }
 
         return $ret;
     }
 
-    // deprecated for compatibility
     public function mayModeratePost()
     {
+        $moderatorRoles = $this->_getSetting('moderatorRoles');
+        $authedUserRole = Zend_Registry::get('userModel')->getAuthedUserRole();
+
+        if (!is_array($moderatorRoles)) {
+            throw new Vps_Exception("The setting 'moderatorRoles' must be an array.");
+        }
+        if ($authedUserRole && in_array($authedUserRole, $moderatorRoles)) {
+            return true;
+        }
+
         return $this->getGroupComponent()->mayModerate();
     }
 

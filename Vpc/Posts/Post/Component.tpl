@@ -7,6 +7,9 @@
             {if $component.editUrl}
                 <br /><a href="{$component.editUrl}">{trlVps text="Change Post"}</a>
             {/if}
+            {if $component.reportUrl}
+                <br /><a href="{$component.reportUrl}">Beitrag melden</a>
+            {/if}
         </div>
     </div>
     <div class="clear"></div>

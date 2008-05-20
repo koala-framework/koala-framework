@@ -6,6 +6,7 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         $ret = array_merge(parent::getSettings(), array(
             'childComponentClasses' => array(
                 'posts'       => 'Vpc_Forum_Posts_Component',
+                // todo: mit treecache wird alles besser :D
                 'movethread'  => 'Vpc_Forum_Thread_Move_Component'
             )
         ));
@@ -44,6 +45,15 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         }
 
         return $vars;
+    }
+
+    public function isClosed()
+    {
+        $t = new Vpc_Forum_Thread_Model();
+        $thread = $t->find($this->getCurrentPageKey())->current();
+
+        if ($thread->closed) return true;
+        return false;
     }
 
     public function getThreadVars()

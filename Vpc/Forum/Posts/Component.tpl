@@ -9,7 +9,7 @@
     {if !$component.threadVars.threadClosed}
         <a class="post" href="{$component.writeUrl}">{trlVps text="create answer"}</a>
     {else}
-        Thema geschlossen
+        <span class="themaClosed">Thema geschlossen</span>
     {/if}
     {component component=$component.paging}
 
@@ -23,7 +23,7 @@
     {if !$component.threadVars.threadClosed}
         <a class="post" href="{$component.writeUrl}">{trlVps text="create answer"}</a>
     {else}
-        Thema geschlossen
+        <span class="themaClosed">Thema geschlossen</span>
     {/if}
 
 </div>

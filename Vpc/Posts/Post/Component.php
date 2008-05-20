@@ -25,6 +25,15 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
             $ret['editUrl'] = $this->getParentComponent()->getPageFactory()
                 ->getChildPageById('write')->getComponent()->getEditUrl($row->id);
         }
+
+        $postsComponent = $this->getParentComponent();
+        $ret['reportUrl'] = '';
+        $reportMail = $this->getSetting(get_class($postsComponent), 'reportMail');
+        if ($reportMail) {
+            $ret['reportUrl'] = $postsComponent->getPageFactory()
+                ->getChildPageById('report')->getUrl().'?reportPost='.$row->id;
+        }
+
         return $ret;
     }
 
@@ -59,6 +68,13 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         // html entfernen
         $content = htmlspecialchars($content);
 
+        // smileys
+        $content = preg_replace('/:-?\)/', '<img class="emoticon_smile" src="/assets/web/images/spacer.gif" alt=":-)" border="0" />', $content);
+        $content = preg_replace('/:-?D/', '<img class="emoticon_grin" src="/assets/web/images/spacer.gif" alt=":-D" border="0" />', $content);
+        $content = preg_replace('/:-?P/', '<img class="emoticon_tongue" src="/assets/web/images/spacer.gif" alt=":-P" border="0" />', $content);
+        $content = preg_replace('/:-?\(/', '<img class="emoticon_unhappy" src="/assets/web/images/spacer.gif" alt=":-(" border="0" />', $content);
+        $content = preg_replace('/;-?\)/', '<img class="emoticon_wink" src="/assets/web/images/spacer.gif" alt=";-)" border="0" />', $content);
+
         // zitate
         $content = str_replace('[quote]', '<fieldset class="quote"><legend>Zitat</legend>', $content, $countOpened);
 
@@ -78,9 +94,22 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         }
 
         // automatische verlinkung
-        $rel = 'popup_menubar=yes,toolbar=yes,location=yes,status=yes,scrollbars=yes,resizable=yes';
-        $content = preg_replace('/(http:\/\/)?(www\.[a-z0-9äöü;\/?:@=&!*~#%\'+$.,_-]+)/i', '<a href="http://$2" rel="'.$rel.'">$2</a>', $content);
+        if (!function_exists('replaceLinks')) {
+            function replaceLinks($matches) {
+                $rel = 'popup_menubar=yes,toolbar=yes,location=yes,status=yes,scrollbars=yes,resizable=yes';
+                $showUrl = $matches[5];
+                if (strlen($showUrl) > 72) {
+                    $showUrl = substr($showUrl, 0, 70).'...';
+                }
+                return "<a href=\"http://{$matches[3]}{$matches[5]}\" rel=\"$rel\">{$matches[3]}$showUrl</a>";
+            }
+        }
 
+        $content = preg_replace_callback(
+            '/((http:\/\/)|(www\.)|(http:\/\/www\.)){1,1}([a-z0-9äöü;\/?:@=&!*~#%\'+$.,_-]+)/i',
+            'replaceLinks',
+            $content
+        );
 
         return $content;
     }

@@ -68,7 +68,7 @@ class Vpc_Posts_Write_Component extends Vpc_Formular_Component
         $initContent = $this->_getInitContent();
 
         $c = $this->_createFieldComponent('Textarea',
-            array('name'=>'content', 'width'=>470, 'height'=>150, 'value' => $initContent)
+            array('name'=>'content', 'width'=>475, 'height'=>150, 'value' => $initContent)
         );
         $c->store('name', 'content');
         $c->store('fieldLabel', trlVps('Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.'));

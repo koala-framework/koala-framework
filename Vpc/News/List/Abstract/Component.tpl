@@ -8,3 +8,4 @@
     </li>
 <?php } ?>
 </ul>
+<?=$this->component($this->paging)?>

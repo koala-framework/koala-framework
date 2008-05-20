@@ -4,10 +4,11 @@ div.vpcForumUser h1 {
     line-height: 25px;
     background: url(/assets/vps/Vpc/Forum/forumHeaderBg.jpg) repeat-x top left;
 }
-div.vpcForumUser div.text { padding-left: 20px; }
-div.vpcForumUser div.avatar {
-    float: right; border: 1px solid #ccc;
-    padding: 2px;
-}
-
+div.vpcForumUser h1.galery { margin-top: 20px; }
+div.vpcForumUser h3 { font-size: 14px; }
 div.vpcForumUser p strong { width: 300px; display: block; }
+
+div.vpcForumUser div.text { padding-left: 20px; }
+div.vpcForumUser div.avatar { float: right; }
+div.vpcForumUser div.pfoten { margin-bottom: 10px; }
+div.vpcForumUser div.pfoten img { margin-bottom: -4px; }

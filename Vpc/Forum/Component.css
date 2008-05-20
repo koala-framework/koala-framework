@@ -44,7 +44,7 @@ div.vpcForum ul li.post div.description p { margin-bottom: 0px; }
 div.vpcForum ul li.post div.threads { border-bottom: 1px solid #ccc; text-align: center; }
 div.vpcForum ul li.post div.posts { text-align: center; }
 
-div.vpcForum form.forumSearch { margin-left: 224px; margin-bottom: 20px; }
+div.vpcForum form.forumSearch { text-align: right; margin-bottom: 20px; margin-right: 30px; }
 div.vpcForum form.forumSearch span {
     padding-right: 7px;
     width: 150px;

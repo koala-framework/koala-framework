@@ -4,7 +4,7 @@ class Vps_Controller_Action_User_Users_WebcodeData extends Vps_Data_Abstract
 
     public function load($row)
     {
-        if (!$row->webcode) {
+        if (empty($row->webcode)) {
             return 0;
         } else {
             return 1;

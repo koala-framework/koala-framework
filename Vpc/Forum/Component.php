@@ -9,7 +9,8 @@ class Vpc_Forum_Component extends Vpc_Abstract
             'tablename'             => 'Vpc_Forum_Group_Model',
             'childComponentClasses' => array(
                 'group' => 'Vpc_Forum_Group_Component',
-                'user'  => 'Vpc_Forum_User_Component'
+                'user'  => 'Vpc_Forum_User_Component',
+                'search' => 'Vpc_Forum_Search_Component'
             ),
             'loginDecorator' => 'Vpc_Decorator_CheckLogin_Component'
         ));

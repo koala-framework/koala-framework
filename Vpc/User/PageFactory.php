@@ -1,8 +1,6 @@
 <?php
 class Vpc_User_PageFactory extends Vpc_Abstract_StaticPageFactory
 {
-    protected $_pages = array();
-
     protected function _init()
     {
         parent::_init();

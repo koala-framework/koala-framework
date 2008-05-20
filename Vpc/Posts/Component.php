@@ -13,8 +13,11 @@ class Vpc_Posts_Component extends Vpc_Abstract
                 'write' => 'Vpc_Posts_Write_Component',
                 'post' =>  'Vpc_Posts_Post_Component',
                 'paging' =>  'Vpc_Posts_Paging_Component',
+                'report' =>  'Vpc_Posts_Report_Component'
             ),
-            'loginDecorator' => 'Vpc_Decorator_CheckLogin_Component'
+            'loginDecorator' => 'Vpc_Decorator_CheckLogin_Component',
+            'reportMail' => 'content@vivid-planet.com',
+            'reportMailName' => ''
         ));
         return $ret;
     }
@@ -49,7 +52,7 @@ class Vpc_Posts_Component extends Vpc_Abstract
             foreach ($rows as $row) {
                 $c = $this->createComponent($classes['post'], $row->id);
                 $this->_posts[] = $c;
-                $c->setPostNum(count($this->_posts));
+                $c->setPostNum(count($this->_posts) + $limit['start']);
             }
         }
         return $this->_posts;

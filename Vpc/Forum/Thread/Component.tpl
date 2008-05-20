@@ -1,13 +1,21 @@
+{component component=$component.posts}
 
+<div class="forumMoveThread">
 {if $component.moveUrl || $component.closeToggleUrl}
     <fieldset>
         <legend>Thema moderieren</legend>
 
-        <a href="{$component.moveUrl}">Thema verschieben</a>
-        <a href="{$component.closeToggleUrl}">{if $component.closeToggleCurrent}Thema reaktivieren{else}Thema schließen{/if}</a>
+        <a class="themaVerschieben" href="{$component.moveUrl}">Thema verschieben</a>
+
+        {if $component.closeToggleCurrent}
+            <a class="threadOpen" href="{$component.closeToggleUrl}">Thema öffnen</a>
+        {else}
+            <a class="threadClose" href="{$component.closeToggleUrl}">Thema schließen</a>
+        {/if}
 
     </fieldset>
 {/if}
+</div>
 
-{component component=$component.posts}
+
 

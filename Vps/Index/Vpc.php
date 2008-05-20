@@ -5,7 +5,7 @@ class Vps_Index_Vpc
     {
         //TODO auf TreeCache aktuallisieren
         /*
-        $pc = Vps_PageCollection_Abstract::getInstance();
+        $pc = Vps_PageCollection_TreeBase::getInstance();
         $page = $pc->getPageById($componentId);
         $searchVars = $page->getSearchVars();
         $t = new Vps_Dao_Index();

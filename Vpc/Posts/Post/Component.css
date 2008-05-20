@@ -5,7 +5,7 @@ div.vpcPostsPost div.edit {
 }
 
 div.vpcPostsPost fieldset.quote {
-    padding: 10px;
+    padding: 10px; *padding-top: 0px;
     margin-top: 10px;
     background-color: #f3f2f1;
     border: 1px solid #ccc;
@@ -14,6 +14,8 @@ div.vpcPostsPost fieldset.quote {
 div.vpcPostsPost fieldset.quote legend {
     font-style: italic;
     font-family: "Lucida Console",Helvetica,sans-serif;
+    color: #8F8373;
+    *margin-bottom: 10px;
 }
 
 div.vpcPostsPost div.lastPoster {
@@ -29,4 +31,25 @@ div.vpcPostsPost div.time { margin-bottom: 5px; }
 div.vpcPostsPost div.comment {
     margin-bottom: 10px; margin-top: 10px;
     padding-bottom: 10px; padding-left: 20px;
+}
+
+.emoticon_smile,
+.emoticon_grin,
+.emoticon_tongue,
+.emoticon_unhappy,
+.emoticon_wink { width: 16px; height: 16px; }
+.emoticon_smile { 
+    background-image: url(/assets/silkicons/emoticon_smile.png); 
+}
+.emoticon_grin { 
+    background-image: url(/assets/silkicons/emoticon_grin.png); 
+}
+.emoticon_tongue { 
+    background-image: url(/assets/silkicons/emoticon_tongue.png); 
+}
+.emoticon_unhappy { 
+    background-image: url(/assets/silkicons/emoticon_unhappy.png); 
+}
+.emoticon_wink { 
+    background-image: url(/assets/silkicons/emoticon_wink.png); 
 }
