@@ -30,9 +30,10 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     {
         $this->_components = array();
         foreach (Vpc_Abstract::getSetting($this->class, 'childComponentClasses') as $c) {
-            $name = Vpc_Abstract::getSetting($c, 'componentName');
-            if (!$name) $name = Vpc_Abstract::getSetting($c, 'name');
-            if ($name) $this->_components[$name] = $c;
+            if (Vpc_Abstract::hasSetting($c, 'componentName')) {
+                $name = Vpc_Abstract::getSetting($c, 'componentName');
+                if ($name) $this->_components[$name] = $c;
+            }
         }
         parent::preDispatch();
     }

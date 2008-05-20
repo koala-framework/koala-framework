@@ -58,6 +58,8 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
                     $part['nr'] = 'l'.$part['nr'];
                 } else if ($part['type'] == 'download') {
                     $part['nr'] = 'd'.$part['nr'];
+                } else {
+                    continue;
                 }
                 foreach ($childs as $row) {
                     if ($row->db_id == $this->getTreeCacheRow()->db_id.'-'.$part['nr']) {

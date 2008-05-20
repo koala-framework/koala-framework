@@ -360,7 +360,7 @@ class Vps_Setup
             } else {
                 $where["url_match = ?"] = $requestUrl;
             }
-            $row = $tc->fetchAll($where)->current();
+            $row = $tc->fetchAll($where, null, 1)->current();
             if (!$row ) {
                 if (!$tc->showInvisible()) {
                     $where = array();

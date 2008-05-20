@@ -1,8 +1,10 @@
-<?php
-$this->component($this->paging);
-foreach ($this->news as $n) {
-    echo '<a href="' . $n['href'] . '">' . $n['title'] . '</a>';
-    echo '<p>' . $n['teaser'] . '</p>';
-    echo $n['publish_date'];
-    echo '<br /><br />';
-}
+<?=$this->component($this->paging)?>
+<ul>
+<?php foreach ($this->news as $n) { ?>
+    <li>
+    <?=$this->componentLink($n);?>
+    <span class="publishDate"><?=$n['publish_date']?></span>
+    <p><?=$n['teaser']?></p>
+    </li>
+<?php } ?>
+</ul>

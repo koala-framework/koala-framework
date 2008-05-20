@@ -7,16 +7,18 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
     protected $_loadTableFromComponent = true;
 
     protected $_dbIdShortcut = false;
+    protected $_idSeparator = '-'; //um in StaticTable _ verwenden zu können
+    protected $_idColumn= 'id';
 
     protected $_joinTreeCache = true; //wird in Vpc_Root_TreeCache deaktiviert
+    protected $_joinTreeCacheOnComponentId = true; //zB Vpc_News_Month_Directory_TreeCache
 
     protected function _init()
     {
         parent::_init();
         if (!isset($this->_componentClass)) {
             if (isset($this->_childClassKey)) {
-                $cls = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-                $this->_componentClass = $cls[$this->_childClassKey];
+                $this->_componentClass = $this->_getChildComponentClass($this->_childClassKey);
             } else {
                 throw new Vps_Exception("Entweder _componentClass oder _childClassKey muss gesetzt sein");
             }
@@ -30,12 +32,16 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
         $select = $this->_cache->getAdapter()->select();
         $select->from(array('t'=>$info['name']), array());
         foreach ($this->_getWhere() as $k=>$i) {
-            $select->where($i);
+            if (is_int($k)) {
+                $select->where($i);
+            } else {
+                $select->where($k, $i);
+            }
         }
         $fields = $this->_getSelectFields();
         $select->from(null, $fields);
         if ($this->_joinTreeCache) {
-            if (in_array('component_id', $info['cols'])) {
+            if (in_array('component_id', $info['cols']) && $this->_joinTreeCacheOnComponentId) {
                 $select->joinLeft(array('tc' => 'vps_tree_cache'), 't.component_id=tc.db_id', array());
             } else {
                 $select->joinLeft(array('tc' => 'vps_tree_cache'), '1=1', array());
@@ -95,14 +101,14 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
 
         $fields = array();
 
-        $sql = "CONCAT(tc.component_id, '-', id)";
+        $sql = "CONCAT(tc.component_id, '$this->_idSeparator', $this->_idColumn)";
         $fields['component_id'] = new Zend_Db_Expr($sql);
 
         if ($this->_dbIdShortcut) {
             $sc = $this->_cache->getAdapter()->quote($this->_dbIdShortcut);
-            $sql = "CONCAT($sc, id)";
+            $sql = "CONCAT($sc, $this->_idColumn)";
         } else {
-            $sql = "CONCAT(tc.db_id, '-', id)";
+            $sql = "CONCAT(tc.db_id, '$this->_idSeparator', $this->_idColumn)";
         }
         $fields['db_id'] = new Zend_Db_Expr($sql);
 
@@ -127,8 +133,8 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
             $fields['visible'] = new Zend_Db_Expr("1");
         }
 
-        if (in_array('id', $info['cols'])) {
-            $fields['tag'] = 't.id';
+        if ($this->_idColumn instanceof Zend_Db_Expr || in_array('id', $info['cols'])) {
+            $fields['tag'] = $this->_idColumn;
         }
         if (!in_array('id', $info['cols']) && !in_array('component_id', $info['cols'])) {
             throw new Vps_Exception("TreeCache_Table currently supports only id or component_id as primary key");

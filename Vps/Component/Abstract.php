@@ -13,22 +13,35 @@ class Vps_Component_Abstract
     {
     }
 
+    public static function hasSetting($class, $setting)
+    {
+        $class = self::_normalizeClass($class);
+        $settings = call_user_func(array($class, 'getSettings'));
+        return isset($settings[$setting]);
+    }
+
     public static function getSetting($class, $setting)
     {
+        $class = self::_normalizeClass($class);
+        $settings = call_user_func(array($class, 'getSettings'));
+        if (!isset($settings[$setting])) {
+            throw new Vps_Exception("Setting '$setting' does not exist for Component $class");
+        }
+        return $settings[$setting];
+    }
+
+    private static function _normalizeClass($class)
+    {
+        if (is_object($class)) $class = get_class($class);
         if (!Vps_Loader::classExists($class)) {
             $class = substr($class, 0, strrpos($class, '_')) . '_Component';
         }
-
-        if (class_exists($class)) {
-            $settings = call_user_func(array($class, 'getSettings'));
-            if (!isset($settings[$setting])) {
-                throw new Vps_Exception("Setting '$setting' does not exist for Component $class");
-            }
-            return isset($settings[$setting]) ? $settings[$setting] : null ;
-        } else {
+        if (!class_exists($class)) {
             throw new Vps_Exception("Component '$class' does not exist");
         }
+        return $class;
     }
+
 
     public static function getSettings()
     {

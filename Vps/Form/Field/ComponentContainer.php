@@ -1,15 +1,15 @@
 <?php
 class Vps_Form_Field_ComponentContainer extends Vps_Form_Field_Abstract
 {
-    private $_component;
+    private $_componentId;
 
-    public function __construct($component)
+    public function __construct($componentId)
     {
-        $this->_component = $component;
+        $this->_componentId = $componentId;
         $this->_init();
     }
     public function getTemplateVars($values)
     {
-        return array('component' => $this->_component->getTemplateVars());
+        return array('component' => $this->_componentId);
     }
 }

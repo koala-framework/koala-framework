@@ -1,7 +1,6 @@
 <?php
 class Vpc_Paging_Component extends Vpc_Abstract
 {
-    protected $_entries;
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -15,19 +14,15 @@ class Vpc_Paging_Component extends Vpc_Abstract
         return $this->getDbId();
     }
 
-    public function setEntries($entries)
+    private function _getEntries()
     {
-        $this->_entries = (int)$entries;
-    }
-
-    public function getEntries()
-    {
-        return $this->_entries;
+        return $this->getTreeCacheRow()->findParentComponent()
+                    ->getComponent()->getPagingCount();
     }
 
     protected function _getPages()
     {
-        return ceil($this->_entries / $this->_getSetting('pagesize'));
+        return ceil($this->_getEntries() / $this->_getSetting('pagesize'));
     }
 
     protected function _getCurrentPage()
@@ -41,7 +36,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
         if ($page < 1 || $page > $pages) $page = 1;
         return $page;
     }
-    
+
     public function getLimit()
     {
         $ret = array();

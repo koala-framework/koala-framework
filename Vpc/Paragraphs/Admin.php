@@ -5,6 +5,7 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
     {
         $componentList = array();
         foreach ($this->_getComponents() as $component) {
+            if (!Vpc_Abstract::hasSetting($component, 'componentName')) continue;
             $name = Vpc_Abstract::getSetting($component, 'componentName');
             $icon = Vpc_Abstract::getSetting($component, 'componentIcon');
             if ($icon) {

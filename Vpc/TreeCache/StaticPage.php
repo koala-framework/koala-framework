@@ -1,6 +1,8 @@
 <?php
 abstract class Vpc_TreeCache_StaticPage extends Vpc_TreeCache_Static
 {
+    protected $_idSeparator = '_';
+
     protected function _getSelectFields($key)
     {
         $fields = parent::_getSelectFields($key);
@@ -8,22 +10,6 @@ abstract class Vpc_TreeCache_StaticPage extends Vpc_TreeCache_Static
         if (!isset($class['name'])) {
             throw new Vps_Exception("'name' is required in _classes array");
         }
-
-        $sql = "CONCAT(tc.component_id, '_', ";
-        $sql .= $this->_cache->getAdapter()->quote($this->_getChildIdByKey($key));
-        $sql .= ")";
-        $fields['component_id'] = new Zend_Db_Expr($sql);
-
-        $sql = 'CONCAT(';
-        if (isset($class['dbIdShortcut'])) {
-            $sql .= $this->_cache->getAdapter()->quote($class['dbIdShortcut']);
-        } else {
-            $sql .= "tc.db_id, '_'";
-        }
-        $sql .= ", ";
-        $sql .= $this->_cache->getAdapter()->quote($this->_getChildIdByKey($key));
-        $sql .= ")";
-        $fields['db_id'] = new Zend_Db_Expr($sql);
 
         $fields['name'] = new Zend_Db_Expr($this->_cache->getAdapter()->quote($class['name']));
         if (isset($class['showInMenu']) && $class['showInMenu']) {

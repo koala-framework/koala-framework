@@ -59,6 +59,9 @@ class Vps_View_Component extends Vps_View
         } else {
             $templateVars = $row->getComponent()->getTemplateVars();
             $template = Vpc_Admin::getComponentFile($row->component_class, 'Component', 'tpl');
+            if (!$template) {
+                throw new Vps_Exception("No Template found for '$row->component_class'");
+            }
         }
 
         $view = new Vps_View_Component();

@@ -3,6 +3,7 @@ class Vps_Dao_TreeCache extends Vps_Db_Table
 {
     protected $_name = 'vps_tree_cache';
     protected $_rowClass = 'Vps_Dao_Row_TreeCache';
+    protected $_rowsetClass = 'Vps_Dao_Rowset_TreeCache';
     protected $_primary = 'component_id';
     protected $_referenceMap    = array(
         'Parent' => array(
