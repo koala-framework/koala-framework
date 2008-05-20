@@ -9,17 +9,13 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
 
     public static function getSettings()
     {
-        static $settings;
-        if (!isset($settings)) {
-            $settings = array_merge(parent::getSettings(), array(
-                'componentName' => trlVps('Paragraphs'),
-                'componentIcon' => new Vps_Asset('page')
-            ));
-            $settings['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
-            $settings['childComponentClasses']['text'] = 'Vpc_Basic_Text_Component';
-            $settings['childComponentClasses']['image'] = 'Vpc_Basic_Image_Component';
-
-        }
+        $settings = array_merge(parent::getSettings(), array(
+            'componentName' => trlVps('Paragraphs'),
+            'componentIcon' => new Vps_Asset('page')
+        ));
+        $settings['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
+        $settings['childComponentClasses']['text'] = 'Vpc_Basic_Text_Component';
+        $settings['childComponentClasses']['image'] = 'Vpc_Basic_Image_Component';
         return $settings;
     }
 

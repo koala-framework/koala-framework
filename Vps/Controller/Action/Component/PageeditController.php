@@ -3,6 +3,7 @@
 class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save' => true, 'add' => true);
+    protected $_tableName = 'Vps_Dao_Pages';
 
     protected function _initFields()
     {
@@ -13,10 +14,6 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
             }
         }
 
-        $table = new Vps_Dao_Pages();
-        $table->showInvisible(true);
-
-        $this->_form->setTable($table);
         $fields = $this->_form->fields;
         $fields->add(new Vps_Form_Field_TextField('name', 'Name of Page'))
             ->setAllowBlank(false);

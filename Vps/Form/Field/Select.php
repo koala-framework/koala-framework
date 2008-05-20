@@ -36,7 +36,10 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'name' => trlVps('Select Field')
+            'componentName' => trlVps('Select Field'),
+            'default' => array(
+                'width' => 100
+            )
         ));
     }
 }
