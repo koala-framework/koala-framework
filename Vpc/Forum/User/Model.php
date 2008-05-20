@@ -14,17 +14,19 @@ class Vpc_Forum_User_Model extends Vps_Db_Table_Abstract
     protected function _fetch($where = null, $order = null, $count = null, $offset = null)
     {
         $ret = parent::_fetch($where, $order, $count, $offset);
+
+        //todo: ned wirlich optimal :D
         if (!$ret) {
             $newWhere = $where;
             if (!is_array($newWhere)) $newWhere = array($newWhere);
             $whereIdOnly = null;
             foreach ($newWhere as $key => $val) {
-                if (preg_match('/^id\s*=/', trim($key)) || preg_match('/^id\s*=/', trim($val))) {
+                $pattern = '/\W?id\W=/';
+                if (preg_match($pattern, trim($key)) || preg_match($pattern, trim($val))) {
                     $whereIdOnly = array($key => $val);
                     break;
                 }
             }
-
             if ($whereIdOnly) {
                 $userRow = Zend_Registry::get('userModel')->fetchRow($whereIdOnly);
                 if ($userRow) {

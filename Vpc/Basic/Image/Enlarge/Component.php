@@ -43,4 +43,8 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
 
         return $return;
     }
+    public function getImageRow()
+    {
+        return $this->_getRow();
+    }
 }

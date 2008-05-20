@@ -73,4 +73,9 @@
             </p>
         {/if}
     </div>
+
+    {component component=$component.images}
+
+    <h1>Gästebuch:</h1>
+    {component component=$component.guestbook}
 </div>

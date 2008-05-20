@@ -20,7 +20,7 @@ class Vpc_User_LostPassword_Component extends Vpc_Formular_Component
         $c->store('isMandatory', true);
 
         $c = $this->_createFieldComponent('Submit', array(
-            'name'=>'sbmt', 'width'=>100, 'text' => 'Senden'
+            'name'=>'sbmt', 'width'=>205, 'text' => 'Password anfordern'
         ));
         $c->store('name', 'sbmt');
         $c->store('fieldLabel', '&nbsp;');

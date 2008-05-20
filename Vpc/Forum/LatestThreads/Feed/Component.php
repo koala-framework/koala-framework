@@ -18,6 +18,7 @@ class Vpc_Forum_LatestThreads_Feed_Component extends Vpc_Abstract_Feed_Component
             $thread = $pc->getComponentById($row->component_id);
             if (!$thread) continue;
             $group = $thread->getGroupComponent();
+            if (!$group) continue;
             $ret[] = array(
                 'title' => $group->getName(). ' - '.$thread->getName(),
                 'link' => 'http://'.$_SERVER['HTTP_HOST'].$thread ->getUrl(),

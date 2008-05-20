@@ -443,6 +443,10 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Beitrag wurde erfolgreich gespeichert.</de>
 </text>
 <text>
+<en default="1">Entry was successfully saved.</en>
+<de>Eintrag wurde erfolgreich gespeichert.</de>
+</text>
+<text>
 <en default="1">to topic</en>
 <de>Zum Thema</de>
 </text>
@@ -581,7 +585,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
-<de>Bitte geben Sie den gewünschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
+<de>Bitte gib den gewünschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
 </text>
 <text>
 <en default="1">Create comment</en>
@@ -653,7 +657,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">to get back to the Startpage</en>
-<de>um zur Startseite zur&#xFC;ckkehren</de>
+<de>um zur Startseite zur&#xFC;ckzukehren</de>
 </text>
 <text>
 <en default="1">Female</en>
@@ -921,6 +925,10 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Can't save, please fill all marked fields correctly.</en>
+<de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle markierten Felder aus.</de>
+</text>
+<text>
+<en default="1">Cant save, please fill all marked fields correctly.</en>
 <de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle markierten Felder aus.</de>
 </text>
 <text>
@@ -1877,5 +1885,25 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <text>
 <en>Create a new topic</en>
 <de>Neues Thema erstellen</de>
+</text>
+<text>
+<en>New entry in guestbook</en>
+<de>Neuer Eintrag im Gaestebuch</de>
+</text>
+<text>
+<en>Users</en>
+<de>Benutzer</de>
+</text>
+<text>
+<en>Account - Images</en>
+<de>Benutzerprofil - Bilder</de>
+</text>
+<text>
+<en>Upload new image</en>
+<de>Neues Bild hochladen</de>
+</text>
+<text>
+<en>Upload</en>
+<de>Hochladen</de>
 </text>
 </trl>

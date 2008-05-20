@@ -1,5 +1,5 @@
 
-div.vpcPostsPost { margin-top: 15px; border: 1px solid #ccc; clear: both;}
+div.vpcPostsPost { margin-top: 15px; border: 1px solid #ccc; clear: both; position: relative;}
 div.vpcPostsPost p.signature {
     padding: 5px; padding-left: 20px;
     margin-top: -10px;
@@ -7,7 +7,9 @@ div.vpcPostsPost p.signature {
 }
 
 div.vpcPostsPost div.avatar {
-    float: left; height: 40px;
+    position: absolute;
+    top: 0px; right: -10px;
+     height: 40px;
 }
 div.vpcPostsPost div.avatar img { margin-right: 10px; }
 div.vpcPostsPost div.postData { margin-left: 10px; padding-top: 3px; }
@@ -19,6 +21,7 @@ div.vpcPostsPost div.lastPoster {
     background-color: #f3f2f1;
     height: 40px;
     overflow: hidden;
+    position: relative;
 }
 div.vpcPostsPost div.lastPoster div.time { margin-bottom: 0px; }
 
@@ -27,6 +30,3 @@ div.vpcPostsPost div.comment {
     margin-bottom: 10px; margin-top: 10px;
     padding-bottom: 10px; padding-left: 10px; padding-right: 10px;
 }
-
-
-a.quoteLink { float: right; padding-right: 10px; }

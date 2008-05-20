@@ -11,7 +11,7 @@
         {foreach from=$component.threads item=t}
         <li class="threads">
             <div class="description">
-                <a class="name" href="{$t.url}">{$t.subject} <span>{$t.replies} {trlpVps single="answer" plural="answers" 0=$t.replies}</span></a>
+                <a class="name" href="{$t.url}" title="{$t.subject}">{$t.subject|truncate:50:'...':true} <span>{$t.replies} {trlpVps single="answer" plural="answers" 0=$t.replies}</span></a>
             </div>
            
             <div class="statistik">

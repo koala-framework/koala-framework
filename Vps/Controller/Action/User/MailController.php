@@ -7,16 +7,8 @@ class Vps_Controller_Action_User_MailController extends Vps_Controller_Action_Au
     protected function _initFields()
     {
         if (Zend_Registry::get('userModel')->getAuthedUserRole() == 'admin') {
-            $values = array();
-            foreach (new DirectoryIterator('application/views/mails') as $file) {
-                if ($file->isFile()) {
-                    $name = $file->getFilename();
-                    $name = preg_replace('#\\.(txt|html)\\.tpl$#', '', $name);
-                    if (!isset($values[$name])) {
-                        $values[$name] = $name;
-                    }
-                }
-            }
+            $values = $this->_getMailTemplatesRecursive();
+
             $this->_form->add(new Vps_Form_Field_Select('template', trlVps('Template')))
                 ->setWidth(300)
                 ->setValues($values)
@@ -40,5 +32,29 @@ class Vps_Controller_Action_User_MailController extends Vps_Controller_Action_Au
             ->setEnableFontSize(false)
             ->setWidth(400)
             ->setHeight(200);
+    }
+
+    private function _getMailTemplatesRecursive($scanPath = 'application/views/mails')
+    {
+        $values = array();
+        foreach (new DirectoryIterator($scanPath) as $file) {
+            if ($file->isFile()) {
+                $name = '';
+                if (preg_match('#^application/views/mails/(.+)$#', $scanPath, $matches)) {
+                    $name = $matches[1].'/';
+                }
+                $name .= $file->getFilename();
+                $name = preg_replace('#\\.(txt|html)\\.tpl$#', '', $name);
+                if (!isset($values[$name])) {
+                    $values[$name] = $name;
+                }
+            } else if ($file->isDir() && !$file->isDot() && $file->getFilename() != '.svn') {
+                $values = array_merge(
+                    $values,
+                    $this->_getMailTemplatesRecursive($scanPath.'/'.$file->getFilename())
+                );
+            }
+        }
+        return $values;
     }
 }

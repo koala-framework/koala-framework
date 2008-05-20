@@ -6,6 +6,11 @@ class Vpc_Posts_PageFactory extends Vpc_Abstract_StaticPageFactory
             'showInMenu' => false,
             'name' => 'New Post',
             'id' => 'write'
+        ),
+        'report'=> array(
+            'showInMenu' => false,
+            'name' => 'Report',
+            'id' => 'report'
         )
     );
     protected function _init()
@@ -13,6 +18,7 @@ class Vpc_Posts_PageFactory extends Vpc_Abstract_StaticPageFactory
         parent::_init();
         $childComponentClasses = Vpc_Abstract::getSetting(get_class($this->_component), 'childComponentClasses');
         $this->_pages['write']['componentClass'] = $childComponentClasses['write'];
+        $this->_pages['report']['componentClass'] = $childComponentClasses['report'];
     }
 
     protected function _decoratePage($page)

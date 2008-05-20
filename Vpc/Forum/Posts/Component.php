@@ -24,6 +24,11 @@ class Vpc_Forum_Posts_Component extends Vpc_Posts_Component
         return $ret;
     }
 
+    public function getThreadComponent()
+    {
+        return $this->getParentComponent();
+    }
+
     public function getGroupComponent()
     {
         return $this->getParentComponent()->getParentComponent();

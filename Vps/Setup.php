@@ -423,9 +423,9 @@ class Vps_Setup
             $id = explode(',', $params['id']);
             $rule = $params['rule'];
             if ($rule == 'default') { $rule = null; }
-
+            
             // TODO: Cachen ohne Datenbankabfragen
-            if (substr($class, 0, 4) == 'Vpc_') {
+            if (class_exists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
                 $tableClass = Vpc_Abstract::getSetting($class, 'tablename');
                 $table = new $tableClass(array('componentClass' => $class));
             } else {
@@ -446,7 +446,7 @@ class Vps_Setup
                 header('Pragma:');
                 header('Expires:');
                 header('Transfer-Encoding:');
-                                
+
                 $headers = apache_request_headers();
                 $lastModifiedString = gmdate("D, d M Y H:i:s \G\M\T", filemtime($target));
                 $etag = md5($target . $lastModifiedString);

@@ -10,10 +10,12 @@
         <button type="submit"></button>
     </form>
 
-    {if !$component.results}
-        <p class="noResult">Die Suche nach &quot;{$component.searchText}&quot; ergab keine Treffer.</p>
-    {else}
-        <p class="noResult">Bei der Suche nach &quot;{$component.searchText}&quot; wurden {$component.resultCount} Themen gefunden.</p>
+    {if $component.searchText}
+        {if !$component.results}
+            <p class="noResult">Die Suche nach &quot;{$component.searchText}&quot; ergab leider keine Treffer.</p>
+        {else}
+            <p class="noResult">Bei der Suche nach &quot;{$component.searchText}&quot; wurden {$component.resultCount} Themen gefunden.</p>
+        {/if}
     {/if}
 
     {component component=$component.paging}

@@ -1,0 +1,36 @@
+div.vpcUserEdit div.imageContainer a.close {
+    background: url(/assets/vps/Vpc/Forum/closeBtn.jpg) no-repeat top left;
+    padding-left: 20px;
+}
+div.vpcUserEdit div.imageContainer {
+    float: left;
+    width: 100px;
+    margin-right: 13px;
+    margin-bottom: 15px;
+    padding: 4px; 
+    border: 1px solid #ccc;
+    text-align: center;
+}
+div.vpcUserEdit div.imageContainer.last { margin-right: 0px; }
+div.vpcUserEdit h1 {
+    background: url(/assets/vps/Vpc/Forum/forumHeaderBg.jpg) repeat-x top left;
+    line-height: 25px;
+    padding-left: 10px;
+    margin: 0px; margin-bottom: 15px;
+    font-weight: bold;
+    color: #786047;
+}
+
+div.vpcUserEdit form { margin-top: 20px; }
+div.vpcUserEdit form div.field { margin-bottom: 10px; }
+div.vpcUserEdit form label { width: 150px; clear: both; margin-bottom: 10px;}
+
+div.vpcUserEdit form div.field input.submit {
+    font-weight: bold; 
+    background: url(/assets/vps/Vpc/Forum/themaBtn.jpg) no-repeat top left;
+    color:#786047;
+    padding-right: 40px;
+    padding-top: 4px; padding-bottom: 5px;
+    margin-bottom: 15px;
+    border: none;
+}

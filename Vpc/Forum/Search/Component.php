@@ -16,7 +16,7 @@ class Vpc_Forum_Search_Component extends Vpc_Abstract_Composite_Component
 
         $ret['results'] = array();
         if (strlen($this->_getParam('search')) > 3) {
-            $searchText = '%'.$this->_getParam('search').'%';
+            $searchTexts = preg_split('/[ -+,;]/', $this->_getParam('search'));
 
             $select = Zend_Registry::get('db')->select()
                 ->from(array('t'=>'vpc_forum_threads'),
@@ -24,8 +24,11 @@ class Vpc_Forum_Search_Component extends Vpc_Abstract_Composite_Component
                 ->join(array('p'=>'vpc_posts'),
                         "p.component_id = CONCAT(t.component_id, '_', t.id, '-posts')",
                         array())
-                ->where('t.subject LIKE ? OR p.content LIKE ?', $searchText)
                 ->order('p.create_time DESC');
+            foreach ($searchTexts as $searchText) {
+                $searchText = '%'.$searchText.'%';
+                $select->where('t.subject LIKE ? OR p.content LIKE ?', $searchText);
+            }
             $count = $select->query()->fetchAll();
             $this->getChildComponent('paging')->setEntries($count[0]['count']);
             $ret['resultCount'] = $count[0]['count'];
