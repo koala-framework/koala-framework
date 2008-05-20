@@ -236,12 +236,14 @@ class Vps_Assets_Dependencies
         }
         //reverse damit css von weiter unten in der vererbungshierachie überschreibt
         $this->_files = array_merge($this->_files, array_reverse($componentCssFiles));
-        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
+        if (Vpc_Abstract::hasSetting($class, 'childComponentClasses')) {
+            $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
 
-        if (is_array($classes)) {
-            foreach ($classes as $class) {
-                if ($class) {
-                    $this->_processComponentDependency($class, $includeAdminAssets);
+            if (is_array($classes)) {
+                foreach ($classes as $class) {
+                    if ($class) {
+                        $this->_processComponentDependency($class, $includeAdminAssets);
+                    }
                 }
             }
         }

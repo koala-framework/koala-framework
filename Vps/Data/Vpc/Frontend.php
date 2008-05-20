@@ -36,7 +36,7 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
 
             $view = new Vps_View_Ext();
             $view->item = $vars;
-            return $view->render(VPS_PATH . '/Vpc/Formular/field.tpl');
+            return $view->render('field.tpl');
         }
     }
 }

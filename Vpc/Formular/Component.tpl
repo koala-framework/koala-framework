@@ -13,7 +13,7 @@ if ($this->showSuccess) {
     ?> 
     <form action="<?= $this->action ?>" method="POST">
         <?php $this->formField($this->form) ?>
-        <button type="submit" name="<?= $this->formName ?>" value="submit"><?= $this->placeholder['submitButton'] ?>}</button>
+        <button type="submit" name="<?= $this->formName ?>" value="submit"><?= $this->placeholder['submitButton'] ?></button>
     </form>
     <?php
 }

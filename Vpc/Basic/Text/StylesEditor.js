@@ -29,14 +29,14 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
         Vpc.Basic.Text.StylesEditor.superclass.initComponent.call(this);
     },
     applyBaseParams: function(params) {
-        this.items.each(function(i) {
-            i.applyBaseParams(params);
-        });
+        this.block.applyBaseParams(params);
+        this.inline.applyBaseParams(params);
+        this.master.applyBaseParams(params);
     },
     show: function() {
-        this.items.each(function(i) {
-            i.load();
-        });
+        this.block.load();
+        this.inline.load();
+        this.master.load();
         Vpc.Basic.Text.StylesEditor.superclass.show.call(this);
     }
 /*
