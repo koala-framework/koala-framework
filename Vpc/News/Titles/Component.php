@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Titles_Component extends Vpc_News_List_Abstract_Component implements Vpc_News_Titles_Interface_Component
+class Vpc_News_Titles_Component extends Vpc_News_List_Abstract_Component
 {
 
     public static function getSettings()
@@ -24,10 +24,10 @@ class Vpc_News_Titles_Component extends Vpc_News_List_Abstract_Component impleme
 
     public function getNews($limit = 15, $start = null)
     {
-        return $this->getNewsComponent()->getNews(5);
+        return $this->_getNewsComponent()->getNews(5);
     }
 
-    public function getNewsCount()
+    public function getPagingCount()
     {
         //todo: langsam und unschön
         return count($this->getNews(null, null));

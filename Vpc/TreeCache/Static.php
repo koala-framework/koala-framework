@@ -2,6 +2,7 @@
 class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
 {
     protected $_classes;
+    protected $_idSeparator = '-'; //um in StaticPage _ verwenden zu können
 
     protected function _init()
     {
@@ -74,19 +75,22 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
             $class = array('componentClass'=>$class);
         }
 
-        $sql = "CONCAT(tc.component_id, '-', ";
+        $sql = "CONCAT(tc.component_id, '{$this->_idSeparator}', ";
         $sql .= $this->_cache->getAdapter()->quote($this->_getChildIdByKey($key));
         $sql .= ")";
         $fields['component_id'] = new Zend_Db_Expr($sql);
 
         $sql = 'CONCAT(';
         if (isset($class['dbIdShortcut'])) {
-            $sql .= $this->_cache->getAdapter()->quote($class['dbIdShortcut']);
+            if ($class['dbIdShortcut'] instanceof Zend_Db_Expr) {
+                $sql .= $class['dbIdShortcut']->__toString();
+            } else {
+                $sql .= $this->_cache->getAdapter()->quote($class['dbIdShortcut']);
+            }
         } else {
-            $sql .= "tc.db_id, '-'";
+            $sql .= "tc.db_id, '{$this->_idSeparator}', ";
+            $sql .= $this->_cache->getAdapter()->quote($this->_getChildIdByKey($key));
         }
-        $sql .= ", ";
-        $sql .= $this->_cache->getAdapter()->quote($this->_getChildIdByKey($key));
         $sql .= ")";
         $fields['db_id'] = new Zend_Db_Expr($sql);
 

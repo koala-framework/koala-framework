@@ -1048,15 +1048,15 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Adresse kann nicht gefunden werden.</de>
 </text>
 <text>
-<en default="1">&lt;b&gt;Move marker while pressing mousekey.</en>
-<de>&lt;b&gt;Bewegen Sie den Marker mit der Maus.</de>
+<en default="1">Move marker while pressing mousekey.</en>
+<de>Bewegen Sie den Marker mit der Maus.</de>
 </text>
 <text>
-<en default="1">Latitude: </en>
+<en default="1">Latitude</en>
 <de>Breitengrad</de>
 </text>
 <text>
-<en default="1">Longitude: </en>
+<en default="1">Longitude</en>
 <de>L&#xE4;ngengrad</de>
 </text>
 <text>

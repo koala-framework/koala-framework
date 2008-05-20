@@ -128,4 +128,15 @@ abstract class Vpc_TreeCache_Abstract
         }
         return $ret;
     }
+
+    protected function _getSetting($name)
+    {
+        return Vpc_Abstract::getSetting($this->_class, $name);
+    }
+
+    protected function _getChildComponentClass($key)
+    {
+        $c = $this->_getSetting('childComponentClasses');
+        return $c[$key];
+    }
 }

@@ -1,61 +1,64 @@
 <?php
-
-abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract
+abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract implements Vpc_Paging_ParentInterface
 {
-    private $_paging;
-
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['childComponentClasses']['paging'] = 'Vpc_News_List_Paging_Component';
+        $ret['childComponentClasses']['paging'] = 'Vpc_News_List_Abstract_Paging_Component';
         return $ret;
     }
 
-    abstract public function getNews($limit = 15, $start = null);
-    abstract public function getNewsCount();
+    abstract public function getNewsComponent();
 
-    public function getNewsComponent()
+
+    protected function _selectNews()
     {
-        $returnComponent = $this;
-        while (!$returnComponent instanceof Vpc_News_Component) {
-            $returnComponent = $returnComponent->getParentComponent();
+        $select = $this->getTreeCacheRow()->getTable()->select();
+        $select->setIntegrityCheck(false);
+        $select->from($this->getTreeCacheRow()->getTable());
+
+        $newsComponent = $this->getNewsComponent();
+        $cClasses = Vpc_Abstract::getSetting($newsComponent, 'childComponentClasses');
+
+        $select->where('vps_tree_cache.parent_component_id = ?', $newsComponent->getComponentId())
+            ->where('vps_tree_cache.component_class = ?', $cClasses['detail'])
+            ->join('vpc_news', 'vps_tree_cache.tag=vpc_news.id')
+            ->where('publish_date <= NOW()')
+            ->where('expiry_date >= NOW()');
+        if (!$this->showInvisible()) {
+            $select->where('vps_tree_cache.visible = 1');
         }
-        return $returnComponent;
+        return $select;
+    }
+
+    public function getNews($limit = 15, $start = null)
+    {
+        $select = $this->_selectNews();
+        $select->limit($limit, $start);
+        $select->order('publish_date DESC');
+        return $this->getTreeCacheRow()->getTable()->fetchAll($select);
+    }
+
+    public function getPagingCount()
+    {
+        $select = $this->_selectNews();
+        $select->reset(Zend_Db_Select::COLUMNS);
+        $select->from(null, array('count' => 'COUNT(*)'));
+        $r = $select->query()->fetchAll();
+        return $r[0]['count'];
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['news'] = array();
-/*
-        if ($this->getNewsComponent()) {
-            $limit = $this->_getPagingComponent()->getLimit();
-            foreach ($this->getNews($limit['limit'], $limit['start']) as $row) {
-                $n = $this->getNewsComponent()->getPageFactory()->getChildPageByNewsRow($row);
+        $ret['paging'] = $this->getComponentId().'-paging';
 
-                $data = $row->toArray();
-                $data['href'] = $n->getUrl();
-                $ret['news'][] = $data;
-            }
-        }
-*/
-        //$ret['paging'] = $this->_getPagingComponent()->getTemplateVars();
+        $limit = $this->getTreeCacheRow()->getTable()
+            ->find($ret['paging'])
+            ->current()->getComponent()->getLimit();
+
+        $ret['news'] = $this->getNews($limit['limit'], $limit['start'])->toMenuData();
+
         return $ret;
     }
-
-    protected function _getPagingComponent()
-    {
-        if (!isset($this->_paging)) {
-            $classes = $this->_getSetting('childComponentClasses');
-            $this->_paging = $this->createComponent($classes['paging'], 'paging');
-            $this->_paging->setEntries($this->getNewsCount());
-        }
-        return $this->_paging;
-    }
-
-    public function getChildComponents()
-    {
-        return array($this->_getPagingComponent());
-    }
-
 }

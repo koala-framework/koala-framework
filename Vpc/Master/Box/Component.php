@@ -13,12 +13,12 @@ class Vpc_Master_Box_Component extends Vpc_Master_Abstract
     {
         $vars = parent::getTemplateVars();
         foreach ($this->_getSetting('boxComponentClasses') as $id => $boxComponentClass) {
-            $componentId = $this->getTreeCacheRow()->component_id . '-box' . $id;
-            $row = $this->getTreeCacheRow()->getTable()->find($componentId)->current();
-            if (!$row) {
-                $componentId = $this->getTreeCacheRow()->component_id . '-' . $id;
-            }
-            $vars['boxes'][$id] = $componentId; 
+            $where = array(
+                'box = ?' => $id,
+                'tree_url = ?' => $this->getTreeCacheRow()->tree_url
+            );
+            $row = $this->getTreeCacheRow()->getTable()->fetchAll($where)->current();
+            $vars['boxes'][$id] = $row->component_id;
         }
         return $vars;
     }

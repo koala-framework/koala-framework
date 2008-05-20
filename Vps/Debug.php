@@ -48,35 +48,10 @@ class Vps_Debug
         $mail->send();
     }
 
-    function handleError($code, $string, $file, $line)
+    function handleError($errno, $errstr, $errfile, $errline)
     {
-        // Fehler durch @ unterdrückt
-        if (error_reporting() == 0) return;
-
-        // Fehlertyp rausfinden
-        switch ($code) {
-            case E_ERROR:
-            case E_USER_ERROR:
-                $type = 'Error';
-                break;
-            case E_WARNING:
-            case E_USER_WARNING:
-                $type = 'Warning';
-                break;
-            case E_NOTICE:
-            case E_USER_NOTICE:
-                $type = 'Notice';
-                break;
-            default:
-                $type = 'Unknown Error';
-                break;
-        }
-
-        // CustomException erstellen
-        $exception = new Vps_CustomException($string, $code);
-        $exception->setLine($line);
-        $exception->setFile($file);
-        $exception->setType($type);
+        if (error_reporting() == 0) return; // error unterdrückt mit @foo()
+        $exception = new ErrorException($errstr, 0, $errno, $errfile, $errline);
 
         // CustumException im Produktionsbetrieb nicht werfen, sondern Mail senden
         $address = Zend_Registry::get('config')->debug->errormail;

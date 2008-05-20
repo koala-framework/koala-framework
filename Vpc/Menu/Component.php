@@ -7,6 +7,7 @@
  */
 class Vpc_Menu_Component extends Vpc_Menu_Abstract
 {
+
     public function getTemplateVars()
     {
         $return = parent::getTemplateVars();

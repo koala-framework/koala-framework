@@ -17,6 +17,12 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         return $ret;
     }
 
+    protected function _getChildComponentClass($key)
+    {
+        $c = $this->_getSetting('childComponentClasses');
+        return $c[$key];
+    }
+
     protected function _getRow()
     {
         if (!isset($this->_row)) {

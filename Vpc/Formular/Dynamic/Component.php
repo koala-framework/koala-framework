@@ -66,8 +66,7 @@ class Vpc_Formular_Dynamic_Component extends Vpc_Formular_Component
                 $f = false;
                 foreach ($this->_childComponents as $component) {
                     if ($component->tag == $field->id) {
-                        $cmp = $component->getComponent();
-                        $f = new Vps_Form_Field_ComponentContainer($cmp);
+                        $f = new Vps_Form_Field_ComponentContainer($component->component_id);
                     }
                 }
             } else {

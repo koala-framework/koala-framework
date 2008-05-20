@@ -171,8 +171,8 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
         pnt.x = Math.round(pnt.x * 100000000) / 100000000;
         this.markerpoint_x = pnt.x;
         this.markerpoint_y = pnt.y;
-        this.marker.openInfoWindowHtml(trlVps('<b>Move marker while pressing mousekey.')+'</b><br /><br />' +
-                trlVps('Latitude: ')+ pnt.y +'<br />'+trlVps('Longitude: ')+ pnt.x);
+        this.marker.openInfoWindowHtml('<strong>'+trlVps('Move marker while pressing mousekey.')+'</strong><br /><br />' +
+                trlVps('Latitude')+ ': ' +pnt.y +'<br />'+trlVps('Longitude')+ ': ' +pnt.x);
     },
     hideLatLng:function(){
         this.marker.closeInfoWindow();

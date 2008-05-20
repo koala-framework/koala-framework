@@ -9,14 +9,16 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
             'level' => 'main' // (string)pagetype oder (int)ebene
         ));
     }
-    
+
+    protected function _select()
+    {
+        return $this->getTreeCacheRow()->getTable()->select();
+    }
+
     protected function _getMenuData($parentComponentId = null)
     {
-        $tc = $this->getTreeCacheRow()->getTable();
-
+        $select = $this->_select();
         // Hauptmenü
-        $select = $tc->select()
-            ->where('menu = 1');
         if ($parentComponentId) {
             $select->where('parent_component_id = ?', $parentComponentId);
         } else {
@@ -40,30 +42,9 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
             $select->where('vps_tree_cache.visible = ?', 1);
         }
         $select->order('pos');
-        $rows = $tc->fetchAll($select);
-        $return = array();
-        foreach ($rows as $i => $row) {
-            $class = '';
-            if ($i == 0) $class .= ' first';
-            if ($i == sizeof($rows)-1) $class .= ' last';
-            $isCurrent = in_array($row->component_id, $this->_getCurrentPageIds());
-            if ($isCurrent) $class .= ' current';
-            $data = array(
-                'componentId'  => $row->component_id,
-                'text'         => $row->name,
-                'current'      => $isCurrent,
-                'class'        => trim($class),
-            );
-            if (!$this->_showInvisible()) {
-                $data['href'] = $row->url;
-                $data['rel'] = $row->rel;
-            } else {
-                $data['href'] = $row->url_preview;
-                $data['rel'] = $row->rel_preview;
-            }
-            $return[] = $data;
-        }
-        return $return;
+
+        return $this->getTreeCacheRow()->getTable()
+                    ->fetchAll($select)->toMenuData($this->_getCurrentPageIds());
     }
     
     // Array mit IDs von aktueller Seiten und Parent Pages
