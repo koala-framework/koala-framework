@@ -12,13 +12,8 @@ class Vpc_Abstract_Form extends Vps_Form
     public function setId($id)
     {
         $class = $this->getClass();
-
-        $tablename = Vpc_Abstract::getSetting($class, 'tablename');
-        if ($tablename) {
-            $this->setTable(new $tablename(array('componentClass'=>$class)));
-        } else {
-            throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
-        }
+        
+        $this->setTable(Vpc_Abstract::createTable($class));
 
         $model = $this->getModel();
 
