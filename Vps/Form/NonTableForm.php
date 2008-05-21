@@ -3,6 +3,7 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
 {
     private $_name;
     private $_id;
+    private $_idTemplate;
 
     public function __construct($name = null, $id = null)
     {
@@ -15,7 +16,17 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
 
     protected function _getRowByParentRow($parentRow)
     {
-        return $this->getRow();
+        $id = $this->getId();
+        if ($this->_idTemplate && $parentRow instanceof Vps_Model_Db_Row) {
+            $info = $parentRow->getRow()->getTable()->info();
+            if (isset($info['primary'][1])) {
+                $id = $parentRow->{$info['primary'][1]};
+                $id = str_replace('{0}', $id, $this->_idTemplate);
+            }
+        }
+        
+        $model = new Vps_Model_FnF();
+        return $model->createRow(array('id' => $id));
     }
 
     public function getName()
@@ -39,8 +50,14 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
         $this->_id = $id;
     }
 
-    public function getRow()
+    public function setIdTemplate($idTemplate)
     {
-        return (object)array('id' => $this->getId());
+        $this->_idTemplate = $idTemplate;
+        return $this;
+    }
+    
+    public function getIdTemplate()
+    {
+        return $this->_idTemplate;
     }
 }

@@ -53,6 +53,17 @@ class Vps_Component_Abstract
         );
     }
 
+    public static function createTable($class, $tablename = null)
+    {
+        if (!$tablename) {
+            $tablename = Vpc_Abstract::getSetting($class, 'tablename');
+            if (!$tablename) {
+                throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
+            }
+        }
+        return new $tablename(array('componentClass'=>$class));
+    }
+    
     protected function _getSetting($setting)
     {
         return self::getSetting(get_class($this), $setting);

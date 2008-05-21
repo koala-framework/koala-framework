@@ -1,13 +1,12 @@
 <?php
-class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
+class Vps_Form_Field_MultiFields extends Vps_Form_Field_MultiFields
 {
     public $fields;
     private $_updatedRows;
     private $_deletedRows;
     private $_insertedRows;
     private $_model;
-    private $_references;
-    
+
     public function __construct($tableName = null)
     {
         if (is_object($tableName)) {
@@ -26,7 +25,6 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         $this->setBorder(false);
         $this->setXtype('multifields');
     }
-    
     protected function _addValidators()
     {
         parent::_addValidators();
@@ -46,11 +44,6 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     public function getModel()
     {
         return $this->_model;
-    }
-    
-    public function setReferences($references)
-    {
-        $this->_references = $references;
     }
 
     public function getMetaData()
@@ -77,17 +70,21 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         return $this->fields;
     }
 
-    protected function _getRowsByRow(Vps_Model_Row_Interface $row)
+    private function _getRowsByRow(Vps_Model_Row_Interface $row)
     {
         if ($this->_model instanceof Vps_Model_FieldRows) {
             $rows = $this->_model->fetchByParentRow($row);
-        } else {
-            $ref = $this->_getReferences($row);
+        } else if ($this->_model instanceof Vps_Model_Db) {
+            $ref = $this->_model->getTable()
+                    ->getReference(get_class($row->getRow()->getTable()));
             $where = array();
             foreach (array_keys($ref['columns']) as $k) {
                 $where["{$ref['columns'][$k]} = ?"] = $row->{$ref['refColumns'][$k]};
             }
             $rows = $this->_model->fetchAll($where);
+        } else {
+            //TODO: implement - die relationen muessen iregndwie hergestellt werden
+            throw new Vps_Exception('MultiFields is only implemented for Vps_Model_FieldRows and Vps_Model_Db');
         }
         return $rows;
     }
@@ -175,18 +172,6 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         }
         return $ret;
     }
-    
-    protected function _getReferences($row)
-    {
-        if ($this->_references) {
-            return $this->_references;
-        } else if ($this->_model instanceof Vps_Model_Db && $row instanceof Vps_Model_Db) {
-            return $this->_model->getTable()
-                        ->getReference(get_class($row->getRow()->getTable()));
-        } else {
-            throw new Vps_Exception('Couldn\'t read references for Multifields. Either use Vps_Model_FieldRows/Vps_Model_Db or set the References by setReferences().');
-        }
-    }
 
     public function save(Vps_Model_Row_Interface $row, $postData)
     {
@@ -200,12 +185,16 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 
             if ($this->_model instanceof Vps_Model_FieldRows) {
                 //nichts zu tun, keine parent_id muss gesetzt werden
-            } else {
-                $ref = $this->_getReferences($row);
+            } else if ($this->_model instanceof Vps_Model_Db) {
+                $ref = $this->_model->getTable()
+                        ->getReference(get_class($row->getRow()->getTable()));
                 $where = array();
                 foreach (array_keys($ref['columns']) as $k) {
                     $r->{$ref['columns'][$k]} = $row->{$ref['refColumns'][$k]};
                 }
+            } else {
+                //TODO: implement - die relationen muessen iregndwie hergestellt werden
+                throw new Vps_Exception('MultiFields is only implemented for Vps_Model_FieldRows and Vps_Model_Db');
             }
             $r->save();
             foreach ($this->fields as $field) {
