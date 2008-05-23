@@ -20,7 +20,6 @@ Ext.form.BasicForm.override({
     //needed for: Checkbox, ComboBox, SwfUpload, Date...
     getValues: function() {
         var ret = {};
-        debugger;
         this.items.each(function(field) {
             var v = field.getValue();
             if (v instanceof Date) {
