@@ -13,7 +13,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
                 && $this->getHelper('ViewRenderer')->isJson()) {
             $version = Zend_Registry::get('config')->application->version;
             if ($version != $this->_getParam('application_version')) {
-                $this->_forward('jsonWrongVersion', 'error',
+                $this->_forward('json-wrong-version', 'error',
                                     'vps_controller_action_error');
             }
         }
@@ -28,7 +28,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
         if (!$acl->isAllowed($role, $resource, 'view')) {
             if ($this->getHelper('ViewRenderer')->isJson()) {
-                $this->_forward('jsonLogin', 'login',
+                $this->_forward('json-login', 'login',
                                     'vps_controller_action_user');
             } else {
                 $params = array('location' => $this->getRequest()->getPathInfo());

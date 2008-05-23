@@ -3,13 +3,16 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Abstract
 {
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'tablename'     => 'Vpc_Basic_DownloadTag_Model',
             'componentName' => 'Download Tag',
             'componentIcon' => new Vps_Asset('folder_link'),
             'default'   => array(
             )
         ));
+        $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/DownloadTag/Panel.js';
+        return $ret;
     }
 
     public function getTemplateVars()

@@ -57,7 +57,6 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             baseParams       : {},
             trackResetOnLoad : true,
             maskDisabled     : false,
-            autoScroll       : true
         });
 
         if (!this.controllerUrl) {
@@ -117,7 +116,10 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.remove(this.formPanel, true);
         }
 
-        this.formPanel = new Ext.FormPanel(meta.form);
+        this.formPanel = new Ext.FormPanel({
+            autoScroll: true,
+            items: meta.form
+        });
         this.formPanel.on('render', function() {
             this.fireEvent('renderform', this.getForm());
         }, this);
@@ -239,10 +241,13 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             scope: options.scope || this
         };
 
-        this.getForm().waitMsgTarget = this.el;
-        this.getForm().submit(Ext.apply(options, {
+        if (this.el) this.el.mask(trlVps('Saving...'));
+
+        var params = this.getForm().getValues();
+        Ext.apply(params, this.getBaseParams());
+        Ext.Ajax.request(Ext.apply(options, {
+            params: params,
             url: this.controllerUrl+'/json-save',
-            waitMsg: 'saving...',
             success: function() {
                 this.onSubmitSuccess.apply(this, arguments);
                 if (cb.success) {
@@ -256,6 +261,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                 }
             },
             callback: function() {
+                if (this.el) this.el.unmask();
                 if (cb.callback) {
                     cb.callback.apply(cb.scope, arguments);
                 }

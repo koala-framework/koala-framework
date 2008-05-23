@@ -5,10 +5,10 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract implements
     protected $_validators = array();
     private $_data;
 
-    public function __construct($field_name = null, $field_label = null)
+    public function __construct($fieldName = null, $fieldLabel = null)
     {
-        if ($field_name) $this->setName($field_name);
-        if ($field_label) $this->setFieldLabel($field_label);
+        if ($fieldName) $this->setName($fieldName);
+        if ($fieldLabel) $this->setFieldLabel($fieldLabel);
         $this->setLabelSeparator(':');
         $this->_init();
     }

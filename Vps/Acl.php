@@ -15,12 +15,12 @@ class Vps_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('vps_user_about'));
         $this->add(new Zend_Acl_Resource('vps_welcome_index'));
         $this->add(new Zend_Acl_Resource('vps_welcome_content'));
-        $this->add(new Zend_Acl_Resource('vps_media_media'));
         $this->add(new Zend_Acl_Resource('vps_trl_index'));
         $this->add(new Zend_Acl_Resource('vps_trl_helptext'));
         $this->add(new Zend_Acl_Resource('vps_debug'));
         $this->add(new Zend_Acl_Resource('vps_debug_sql'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_debug_assets'), 'vps_debug');
+        $this->add(new Zend_Acl_Resource('vps_media_upload'));
 
         $this->add(new Vps_Acl_Resource_UserSelf('vps_user_self', '/vps/user/self'));
 
@@ -30,7 +30,6 @@ class Vps_Acl extends Zend_Acl
         $this->allow('cli', 'vps_cli_index');
 
         $this->allow(null, 'index');
-        $this->allow(null, 'vps_media_media');
         $this->deny('guest', 'index');
         $this->allow(null, 'vps_user_menu');
         $this->allow(null, 'vps_user_login');
@@ -44,6 +43,7 @@ class Vps_Acl extends Zend_Acl
         $this->allow('admin', 'vps_trl_index');
         $this->allow('admin', 'vps_trl_helptext');
         $this->allow('admin', 'vps_debug');
+        $this->allow('admin', 'vps_media_upload');
     }
 
     public function getResources($parent = null)

@@ -22,11 +22,7 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract imple
     {
         $iterator = new RecursiveIteratorIterator(new Vps_Collection_Iterator_Recursive($this->fields));
         foreach ($iterator as $field) {
-            if ($field instanceof Vps_Form_Field_File) {
-                $this->setFileUpload(true);
-            }
-            if ($field instanceof Vps_Form_Field_File
-                || $field instanceof Vps_Form_Field_HtmlEditor) {
+            if ($field instanceof Vps_Form_Field_HtmlEditor) {
                 $this->setLoadAfterSave(true);
             }
         }

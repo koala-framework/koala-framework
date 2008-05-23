@@ -87,22 +87,9 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             var errorMsgTitle = 'PHP Exception';
         }
         if (errorMsg) {
-            if (Vps.Debug.displayErrors) {
-                errorMsg = '<a href="'+options.url+'?'+encParams+'">request-url</a><br />'+errorMsg;
-                Ext.Msg.show({
-                    title: errorMsgTitle,
-                    msg: errorMsg,
-                    buttons: Ext.Msg.OK,
-                    modal: true,
-                    width: 800
-                });
-            } else {
-                Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
-                Ext.Ajax.request({
-                    url: '/vps/error/error/json-mail',
-                    params: {msg: errorMsg}
-                });
-            }
+            errorMsg = '<a href="'+options.url+'?'+encParams+'">request-url</a><br />' + errorMsg;
+            var sendMail = !r || !r.exception;
+            Vps.handleError(errorMsg, errorMsgTitle, sendMail);
             Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
             return;
         }
@@ -133,7 +120,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             }
             if (r.error) {
                 Ext.Msg.alert(trlVps('Error'), r.error);
-            } else if (!r.login) {
+            } else {
                 Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
             }
             Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);

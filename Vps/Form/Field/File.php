@@ -1,107 +1,67 @@
 <?php
-class Vps_Form_Field_File extends Vps_Form_Field_Abstract
+class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 {
     private $_fields;
 
-    public function __construct($fieldname = null, $title = null, $ruleKey = null)
+    public function __construct($fieldname = null, $fieldLabel = null, $ruleKey = null)
     {
-        parent::__construct($fieldname);
-        $this->setFileFieldLabel($title);
-        $this->setLayout('form');
-        $this->setBorder(false);
-        $this->setBaseCls('x-plain');
+        parent::__construct($fieldname, $fieldLabel);
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->getAllowOnlyImages(false);
         $this->setRuleKey($ruleKey);
-    }
-
-    protected function _getFields()
-    {
-        if (!isset($this->_fields)) {
-            $this->_fields = new Vps_Collection_FormFields();
-            $title = $this->getFileFieldLabel();
-            if (!$title) $title = 'Upload new File';
-            $this->_fields->add(new Vps_Form_Field_TextField($this->getFieldName()))
-                ->setFieldLabel($title)
-                ->setXtype('fileuploadfield');
-            if ($this->getAllowBlank()) {
-                $this->_fields->add(new Vps_Form_Field_Checkbox($this->getFieldName() . '_delete', ''))
-                    ->setBoxLabel(trlVps('Delete'))
-                    ->setHideLabel(true)
-                    ->setXtype('filecheckbox');
-            }
-        }
-        return $this->_fields;
+        $this->setXtype('swfuploadfield');
     }
 
     public function getMetaData()
     {
         $ret = parent::getMetaData();
-        unset($ret['allowOnlyImages']);
         unset($ret['ruleKey']);
-        $ret['items'] = $this->_getFields()->getMetaData();
+        $maxSize = ini_get('upload_max_filesize');
+        if (strtolower(substr($maxSize, -1))=='k') {
+            $maxSize = substr($maxSize, 0, -1)*1024;
+        } else if (strtolower(substr($maxSize, -1))=='m') {
+            $maxSize = substr($maxSize, 0, -1)*1024*1024;
+        } else if (strtolower(substr($maxSize, -1))=='g') {
+            $maxSize = substr($maxSize, 0, -1)*1024*1024*1024;
+        }
+        $ret['fileSizeLimit'] = $maxSize;
         return $ret;
     }
 
     public function load($row)
     {
-        $url = $row->getRow()->getFileUrl($this->getRuleKey(), 'original');
-        $return = array(
-            'url' => $url,
-            'uploaded' => !is_null($url)
-        );
-        return array($this->getFieldName() . '_delete' => $return);
+        $fileRow = $row->getRow()->getFileRow($this->getRuleKey());
+        if ($fileRow) {
+            $return = $fileRow->getFileInfo();
+        } else {
+            $return = '';
+        }
+        return array_merge(parent::load($row),
+            array($this->getFieldName() => $return));
     }
 
-    public function prepareSave(Vps_Model_Db_Row $row, $postData)
+    protected function _getValueFromPostData($postData)
     {
-        parent::prepareSave($row, $postData);
-        $fieldName = $this->getFieldName();
-        $name = $this->getName();
+        $ret = parent::_getValueFromPostData($postData);
+        if ($ret == '' || $ret == 'null') $ret = null;
+        return $ret;
+    }
+    public function validate($postData)
+    {
+        $ret = parent::validate($postData);
 
-        $file = isset($_FILES[$fieldName]) ? $_FILES[$fieldName] : array();
-
-        $uploadRow = $row->getRow()->findParentRow('Vps_Dao_File', $this->getRuleKey());
-
-        if (!$uploadRow && (!isset($file['error']) || $file['error'] == UPLOAD_ERR_NO_FILE)) {
-            if ($this->getAllowBlank() == false) {
-                throw new Vps_ClientException('Please select a file.');
-            } else {
-                return;
-            }
-        }
-
-        if (isset($file['tmp_name']) && is_file($file['tmp_name'])) {
-
-            if ($this->getAllowOnlyImages() && substr($file['type'], 0, 6) != 'image/') {
-                throw new Vps_ClientException(trlVps('File-Type not allowed. Only Images are allowed.'));
-            }
-
-            try {
-                if (!$uploadRow) {
-                    $t = new Vps_Dao_File();
-                    $uploadRow = $t->createRow();
+        if ($this->getSave() !== false) {
+            $data = $this->_getValueFromPostData($postData);
+            if ($data) {
+                $t = new Vps_Dao_File();
+                $row = $t->find($data)->current();
+                if ($this->getAllowOnlyImages() && substr($row->mime_type, 0, 6) !=  'image/') {
+                    $name = $this->getFieldLabel();
+                    if (!$name) $name = $this->getName();
+                    $ret[] = $name.': '.trlVps('This is not an image.');
                 }
-                $uploadRow->uploadFile($file);
-                $row->$name = $uploadRow->id;
-
-            } catch (Vps_Exception $e) {
-                throw new Vps_ClientException($e->getMessage());
             }
         }
-        if ($uploadRow && $this->getAllowBlank()
-                    && isset($postData[$fieldName . '_delete'])
-                    && $postData[$fieldName . '_delete'] == '1') {
-            $row->$name = null;
-        }
-    }
-    public function save(Vps_Model_Db_Row $row, $postData)
-    {
-        parent::save($row, $postData);
-        $uploadRow = $row->getRow()->findParentRow('Vps_Dao_File', $this->getRuleKey());
-        $name = $this->getName();
-        if ($uploadRow && is_null($row->$name)) {
-            $uploadRow->delete();
-        }
+        return $ret;
     }
 }
