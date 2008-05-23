@@ -133,6 +133,26 @@ Vps.onContentReady = function(fn, scope) {
     }
 };
 
+Vps.handleError = function(errorMsg, errorMsgTitle, sendMail) {
+    if (Vps.Debug.displayErrors) {
+        Ext.Msg.show({
+            title: errorMsgTitle,
+            msg: errorMsg,
+            buttons: Ext.Msg.OK,
+            modal: true,
+            width: 800
+        });
+    } else {
+        Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
+        if (sendMail || (typeof sendMail == 'undefined')) {
+            Ext.Ajax.request({
+                url: '/vps/error/error/json-mail',
+                params: {msg: errorMsg}
+            });
+        }
+    }
+};
+
 Vps.include =  function(url, restart)
 {
     if (url.substr(-4) == '.css') {

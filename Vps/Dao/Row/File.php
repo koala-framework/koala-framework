@@ -16,6 +16,41 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         return $uploadDir;
     }
 
+    //hilfsfkt wird vor erstellen des caches aufgerufen damit die ordner korrekt
+    //erstellt werden. passt nicht wirklich hier her.
+    public static function prepareCacheTarget($target)
+    {
+        $uploadDir = Vps_Dao_Row_File::getUploadDir();
+        if (!is_dir($uploadDir . '/cache')) {
+            mkdir($uploadDir . '/cache', 0775);
+            chmod($uploadDir . '/cache', 0775);
+        }
+        if (!is_dir(dirname($target))) {
+            mkdir(dirname($target), 0775);
+            chmod(dirname($target), 0775);
+        }
+    }
+
+    public function getFileInfo()
+    {
+        $ret = array(
+            'uploadId' => $this->id,
+            'mimeType' => $this->mime_type,
+            'filename' => $this->filename,
+            'extension'=> $this->extension,
+            'fileSize' => $this->getFileSize()
+        );
+        $size = @getimagesize($this->getFileSource());
+        if ($size) {
+            $ret['image'] = true;
+            $ret['imageWidth'] = $size[0];
+            $ret['imageHeight'] = $size[1];
+        } else {
+            $ret['image'] = false;
+        }
+        return $ret;
+    }
+
     public function getFileSource()
     {
         if (!$this->id) return null;
@@ -84,7 +119,24 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         $this->deleteFile();
         $this->filename = substr($filedata['name'], 0, strrpos($filedata['name'], '.'));
         $this->extension = substr(strrchr($filedata['name'], '.'), 1);
-        $this->mime_type = $filedata['type'];
+
+        if ($filedata['type'] == 'application/octet-stream') {
+            //for flash uploads
+            if (function_exists('finfo_open')) {
+                $finfo = finfo_open(FILEINFO_MIME);
+                $this->mime_type = finfo_file($finfo, $filedata['tmp_name']);
+                finfo_close($finfo);
+            } else if (function_exists('mime_content_type')) {
+                $this->mime_type = mime_content_type($filedata['tmp_name']);
+            } else {
+                throw new VpsException("Can't autodetect mimetype");
+            }
+        } else {
+            $this->mime_type = $filedata['type'];
+        }
+        if (!$this->mime_type) {
+            $this->mime_type = 'application/octet-stream';
+        }
         $this->save();
 
         $filename = $this->getFileSource();

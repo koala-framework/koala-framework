@@ -88,3 +88,18 @@ Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, stor
     }
     return '';
 };
+
+Ext.util.Format.fileSize = function(size) {
+    var unit;
+    if(size < 1024) {
+        unit = 'bytes';
+    } else if(size < 1048576) {
+        unit = 'KB';
+        size = (Math.round(((size*10) / 1024))/10);
+    } else {
+        unit = 'MB';
+        size = (Math.round(((size*10) / 1048576))/10);
+    }
+    return size.toString().replace(".", ",") + ' ' + unit;
+};
+

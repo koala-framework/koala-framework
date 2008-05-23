@@ -31,9 +31,14 @@ class Vps_Controller_Router extends Zend_Controller_Router_Rewrite
                     array('module'     => 'vps_controller_action_trl',
                           'controller' => 'index',
                           'action'     => 'index')));
-        $this->AddRoute('trl', new Zend_Controller_Router_Route(
+        $this->AddRoute('debug', new Zend_Controller_Router_Route(
                     '/vps/debug/:controller/:action',
                     array('module'     => 'vps_controller_action_debug',
+                          'controller' => 'index',
+                          'action'     => 'index')));
+        $this->AddRoute('media', new Zend_Controller_Router_Route(
+                    '/vps/media/:controller/:action',
+                    array('module'     => 'vps_controller_action_media',
                           'controller' => 'index',
                           'action'     => 'index')));
     }

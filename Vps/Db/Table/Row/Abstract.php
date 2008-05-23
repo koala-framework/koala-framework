@@ -58,15 +58,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
         if (!is_file($target) && !is_link($target)) {
             // Verzeichnisse anlegen, falls nicht existent
-            $uploadDir = Vps_Dao_Row_File::getUploadDir();
-            if (!is_dir($uploadDir . '/cache')) {
-                mkdir($uploadDir . '/cache', 0775);
-                chmod($uploadDir . '/cache', 0775);
-            }
-            if (!is_dir(dirname($target))) {
-                mkdir(dirname($target), 0775);
-                chmod(dirname($target), 0775);
-            }
+            Vps_Dao_Row_File::prepareCacheTarget($target);
 
             // Cache-Datei erstellen
             $source = $fileRow->getFileSource();
@@ -164,6 +156,11 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
             }
         }
         return $rule;
+    }
+    public function getFileRow($rule = null)
+    {
+        $rule = $this->_getRule($rule);
+        return $this->findParentRow('Vps_Dao_File', $rule);
     }
 
     private function _getIdString()
