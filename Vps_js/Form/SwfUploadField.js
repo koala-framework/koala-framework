@@ -179,10 +179,10 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         Vps.Form.SwfUploadField.superclass.setValue.call(this, value.uploadId);
         var icon = false;
         if (value) {
-            if (value.mimeType.match(/^image\//)) {
+            if (value.mimeType.match(/(^image\/)/)) {
                 icon = '/vps/media/upload/preview?uploadId='+value.uploadId;
             } else {
-                icon = this.fileIcons[value.mimeType] || this.fileIcons.default;
+                icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
                 icon = '/assets/silkicons/' + icon + '.png';
             }
             this.previewTpl.overwrite(this.previewImage, {
