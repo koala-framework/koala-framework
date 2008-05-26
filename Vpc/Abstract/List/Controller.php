@@ -11,8 +11,6 @@ class Vpc_Abstract_List_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     protected function _beforeInsert($row)
     {
-        $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
-        $row->visible = 0;
-        $row->component_class = $classes['child'];
+        if (is_null($row->visible)) $row->visible = 0;
     }
 }

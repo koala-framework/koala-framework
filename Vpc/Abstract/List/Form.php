@@ -10,7 +10,12 @@ class Vpc_Abstract_List_Form extends Vps_Form_NonTableForm
     
     protected function _getMultiFields()
     {
-        $multifields = new Vpc_Abstract_Field_MultiFields($this->getClass());
+        $multifields = new Vps_Form_Field_MultiFields('childs');
+@work: passt das da? mehr testen usw... (idTemplate stuff)
+        $multifields->setReferences(array(
+            'columns' => array('component_id'),
+            'refColumns' => array('id')
+        ));
         $multifields->setMinEntries(0);
         $multifields->fields->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
 
@@ -18,7 +23,6 @@ class Vpc_Abstract_List_Form extends Vps_Form_NonTableForm
         $childComponentClass = $childComponentClasses['child'];
         $multifields->fields->add(Vpc_Abstract_Form::createComponentForm('child', $childComponentClass))
             ->setIdTemplate('{component_id}-{id}');
-            //;
         return $multifields;
     }
 }
