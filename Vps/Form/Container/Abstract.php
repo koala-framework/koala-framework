@@ -27,7 +27,6 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract imple
             }
         }
         $ret = parent::getMetaData();
-        $ret['name'] = $this->getName();
         $ret['items'] = $this->fields->getMetaData();
         if (!count($ret['items'])) unset($ret['items']);
         return $ret;

@@ -32,7 +32,7 @@ class Vps_Form extends Vps_Form_NonTableForm
         if ($parentRow && $this->_model instanceof Vps_Model_Field) {
             return $this->_model->getRowByParentRow($parentRow);
         } else {
-            return $this->getRow();
+            return $this->getRow($parentRow);
         }
     }
 
@@ -59,11 +59,15 @@ class Vps_Form extends Vps_Form_NonTableForm
         } else if (!$row instanceof Vps_Model_Row_Interface) {
             throw new Vps_Exception('Row must be a Vps_Model_Row_Interface.');
         }
+
+        $primaryKey = $this->getPrimaryKey();
+        if (!$row->$primaryKey && $this->getIdTemplate()) {
+            $row->$primaryKey = $this->_getIdByParentRow($parentRow);
+        }
+
         $row->save();
         parent::save($parentRow, $postData);
 
-        $primaryKey = $this->getPrimaryKey();
-        if (is_array($primaryKey)) $primaryKey = $primaryKey[1];
         if (!$this->getId()) {
             if (is_array($primaryKey)) {
                 $addedId = array();
@@ -119,7 +123,7 @@ class Vps_Form extends Vps_Form_NonTableForm
         return $this;
     }
 
-    public function getRow()
+    public function getRow($parentRow = null)
     {
         if (isset($this->_row)) return $this->_row;
 
@@ -128,7 +132,8 @@ class Vps_Form extends Vps_Form_NonTableForm
         }
         $rowset = null;
 
-        $id = $this->getId();
+        $id = $this->_getIdByParentRow($parentRow);
+
         if (is_array($this->getPrimaryKey())) {
             $where = array();
             foreach ($this->getPrimaryKey() as $key) {
@@ -139,7 +144,7 @@ class Vps_Form extends Vps_Form_NonTableForm
             if (!empty($where)) {
                 $rowset = $this->_model->fetchAll($where);
             }
-        } else if ($id == 0) {
+        } else if ($id === 0 || $id === '0' || is_null($id)) {
             $this->_row = $this->_model->createRow();
             return $this->_row;
         } else if ($id) {
@@ -148,9 +153,9 @@ class Vps_Form extends Vps_Form_NonTableForm
         if (!$rowset) {
             return null;
         } else {
-            if ($rowset->count() == 0) {
+            if (count($rowset)== 0) {
                 throw new Vps_Exception('No database-entry found.');
-            } else if ($rowset->count() > 1) {
+            } else if (count($rowset) > 1) {
                 throw new Vps_Exception('More than one database-entry found.');
             } else {
                 $this->_row = $rowset->current();

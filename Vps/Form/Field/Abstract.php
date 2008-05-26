@@ -212,4 +212,32 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract implements
             'componentIcon' => new Vps_Asset('textfield')
         ));
     }
+
+    public function toDebug($indent=0)
+    {
+        $ind = str_repeat(' ', $indent*4);
+        $ret = '';
+        $ret .= '<pre style="margin:0">';
+        $ret .= "$ind<strong>".get_class($this)."</strong>";
+        $c = get_class($this);
+        while ($c = get_parent_class($c)) {
+            $ret .= " -&gt; $c";
+        }
+        $ret .= "\n";
+        foreach ($this->_properties as $n=>$v) {
+            $ret .= "$ind  $n: $v\n";
+        }
+        $children = '';
+        if ($this->hasChildren()) {
+            foreach ($this->getChildren() as $field) {
+                $children .= $field->toDebug($indent+1);
+            }
+        }
+        if ($this->hasChildren()) {
+            $ret .= "{$ind}childs(".count($this->getChildren())."):\n";
+        }
+        $ret .= '</pre>';
+        $ret .= $children;
+        return $ret;
+    }
 }

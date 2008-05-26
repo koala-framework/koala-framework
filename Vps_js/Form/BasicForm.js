@@ -21,11 +21,7 @@ Ext.form.BasicForm.override({
     getValues: function() {
         var ret = {};
         this.items.each(function(field) {
-            var v = field.getValue();
-            if (v instanceof Date) {
-                v = v.format("Y-m-d");
-            }
-            ret[field.getName()] = v;
+            ret[field.getName()] = field.getValue();
         }, this);
         return ret;
     }

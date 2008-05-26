@@ -110,7 +110,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             }
         }
         if (count($pos)) {
-            //h�ndisch per php sortieren
+            //händisch per php sortieren
             //todo: kann verbessert werden wenn findDependentRowset ein 3. parameter ein db_select aktzeptiert
             //(ist im moment noch im zend incubator)
             array_multisort($pos, SORT_ASC, SORT_NUMERIC,
@@ -122,6 +122,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     public function prepareSave(Vps_Model_Row_Interface $row, $postData)
     {
         $postData = Zend_Json::decode($postData[$this->getFieldName()]);
+
         $rows = $this->_getRowsByRow($row);
         $this->_updatedRows = array();
         $this->_deletedRows = array();

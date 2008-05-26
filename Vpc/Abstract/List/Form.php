@@ -13,6 +13,12 @@ class Vpc_Abstract_List_Form extends Vps_Form_NonTableForm
         $multifields = new Vpc_Abstract_Field_MultiFields($this->getClass());
         $multifields->setMinEntries(0);
         $multifields->fields->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
+
+        $childComponentClasses = Vpc_Abstract::getSetting($this->getClass(), 'childComponentClasses');
+        $childComponentClass = $childComponentClasses['child'];
+        $multifields->fields->add(Vpc_Abstract_Form::createComponentForm('child', $childComponentClass))
+            ->setIdTemplate('{component_id}-{id}');
+            //;
         return $multifields;
     }
 }
