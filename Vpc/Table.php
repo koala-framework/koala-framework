@@ -30,6 +30,19 @@ class Vpc_Table extends Vps_Db_Table
         }
         return $row;
     }
+    public function find($id) {
+        $ret = parent::find($id);
+        if (!$ret->count()) {
+            $ret = new $this->_rowsetClass(array(
+                'table'     => $this,
+                'data'      => array($this->createRow()->toArray()),
+                'readyOnly' => false,
+                'rowClass'  => $this->_rowClass,
+                'stored'    => false
+            ));
+        }
+        return $ret;
+    }
     public function createRow(array $data = array())
     {
         $defaultValues = Vpc_Abstract::getSetting($this->_componentClass, 'default');

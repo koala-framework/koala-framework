@@ -244,6 +244,12 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         if (this.el) this.el.mask(trlVps('Saving...'));
 
         var params = this.getForm().getValues();
+        for (var i in params) {
+            if (typeof params[i] == 'object') {
+                params[i] = Ext.encode(params[i]);
+            }
+        }
+
         Ext.apply(params, this.getBaseParams());
         Ext.Ajax.request(Ext.apply(options, {
             params: params,

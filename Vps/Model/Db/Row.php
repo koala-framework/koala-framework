@@ -68,6 +68,6 @@ class Vps_Model_Db_Row implements Vps_Model_Row_Interface
     }
     public function toArray()
     {
-        return $this->_row->__toArray();
+        return $this->_row->toArray();
     }
 }
