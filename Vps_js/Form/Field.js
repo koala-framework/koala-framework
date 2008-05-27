@@ -1,3 +1,4 @@
+Ext.form.Field.prototype.afterRenderExt = Ext.form.Field.prototype.afterRender;
 Ext.form.Field.override({
     getName: function() {
         //http://extjs.com/forum/showthread.php?t=15236
@@ -17,7 +18,7 @@ Ext.form.Field.override({
 
     // Für Hilfetexte afterRender in Formularfields überschreiben
     afterRender: function() {
-        Ext.form.Field.superclass.afterRender.call(this);
+        this.afterRenderExt();
         if (this.helpText){
             var wrapDiv = this.getEl().up('div.x-form-item');
             if (wrapDiv) {
