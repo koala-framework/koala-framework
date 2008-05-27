@@ -20,31 +20,52 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
         } else if (isset($store['url'])) {
             //todo, keine ahnung wie :D
         }
-
     }
+
+    //setValues
+        //url (string), rowset, array
+    
+    //setFields
+        //array mit feldern
+
+    //setTpl
+        //string mit template, standardwert in ext definiert:
+        //'<tpl for="."><div class="x-combo-list-item">{' + this.displayField + '}</div></tpl>';
+        
 
     public function getMetaData()
     {
         $ret = parent::getMetaData();
-        if (isset($ret[0]['storeUrl'])) {
-            $ret[0]['store'] = array('url' => $ret[0]['storeUrl']);
-        }
-        return $ret;
-    }
 
-    public function setValues($data)
-    {
+        $store = $this->getStore();
+        if (!$store) $store = array();
+
+        $fields = $this->getFields();
+        if ($fields) {
+            unset($ret['fields']);
+            $store['fields'] = $fields;
+        }
+
+        if ($this->getStoreUrl()) {
+            $store['url'] = $this->getStoreUrl();
+        }
+
+        $data = $this->getValues();
+        unset($ret['values']);
         if (is_string($data)) {
-            return $this->setStore(array('url' => $data));
-        } else if ($data instanceof Vps_Db_Table_Rowset) {
-            $data = $data->toStringDataArray();
-            return $this->setStore(array('data' => $data));
+            $store['url'] = $data;
+        } else if ($data instanceof Vps_Db_Table_Rowset_Abstract) {
+            if ($this->getFields()) {
+                $store['data'] = $data->toStringDataArray($fields);
+            } else {
+                $store['data'] = $data->toStringDataArray();
+            }
         } else if (is_array($data)) {
             if (isset($data['data'])) $data = $data['data'];
-            $d = array();
+            $store['data'] = array();
             foreach ($data as $k=>$i) {
                 if (!is_array($i)) {
-                    $d[] = array($k, $i);
+                    $store['data'][] = array($k, $i);
                 } else {
                     if (isset($i['id'])) $id = $i['id'];
                     elseif (isset($i[0])) $id = $i[0];
@@ -52,22 +73,12 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
                     if (isset($i['value'])) $value = $i['value'];
                     else if (isset($i[1])) $value = $i[1];
                     else throw new Vps_Exception("value not found");
-                    $d[] = array($id, $value);
+                    $store['data'][] = array($id, $value);
                 }
             }
-            return $this->setStore(array('data' => $d));
         }
-    }
-
-    public function setFields(array $fields)
-    {
-        if (!in_array('id', $fields) || !in_array('name', $fields)) {
-            throw new Vps_Exception('fields \'id\' and \'name\' must be set when using setFields method');
-        }
-
-        $store = $this->getStore();
-        $store['fields'] = $fields;
-        return $this->setStore($store);
+        $ret['store'] = $store;
+        return $ret;
     }
 
     protected function _getValueFromPostData($postData)

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Auswahl wo man nicht reinschreiben kann, so wie eine HTML-Select-Box
+ **/
 class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
 {
     public function __construct($field_name = null, $field_label = null)
