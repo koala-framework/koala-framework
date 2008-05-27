@@ -225,6 +225,13 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract implements
         }
         $ret .= "\n";
         foreach ($this->_properties as $n=>$v) {
+            if (is_object($v)) {
+                if (method_exists($v, '__toString')) {
+                    $v = $v->__toString();
+                } else {
+                    $v = "(object) ".get_class($v);
+                }
+            }
             $ret .= "$ind  $n: $v\n";
         }
         $children = '';
