@@ -4,11 +4,23 @@ abstract class Vps_Db_Table_Rowset_Abstract extends Zend_Db_Table_Rowset_Abstrac
     /**
      * Rowset in Array wie es für Ext.store.ArrayReader benötigt wird umwandeln.
      **/
-    public function toStringDataArray($key = 'id')
+    public function toStringDataArray($fields = array('id', '__toString'))
     {
+        if (is_string($fields)) {
+            //falls nur die id als string angegeben wurde
+            $fields = array($field, '__toString');
+        }
         $data = array();
         foreach ($this as $row) {
-            $data[] = array($row->$key, $row->__toString());
+            $d = array();
+            foreach ($fields as $f) {
+                if ($f == '__toString') {
+                    $d[] = $row->__toString();
+                } else {
+                    $d[] = $row->$f;
+                }
+            }
+            $data[] = $d;
         }
         return $data;
     }
