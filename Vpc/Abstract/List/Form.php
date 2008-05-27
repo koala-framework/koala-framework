@@ -10,8 +10,7 @@ class Vpc_Abstract_List_Form extends Vps_Form_NonTableForm
     
     protected function _getMultiFields()
     {
-        $multifields = new Vps_Form_Field_MultiFields('childs');
-@work: passt das da? mehr testen usw... (idTemplate stuff)
+        $multifields = new Vpc_Abstract_Field_MultiFields($this->getClass());
         $multifields->setReferences(array(
             'columns' => array('component_id'),
             'refColumns' => array('id')
