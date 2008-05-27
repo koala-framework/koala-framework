@@ -14,7 +14,7 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
         foreach ($classes as $name => $class) {
             $formname = str_replace('_Component', '_Form', $class);
             $form = new $formname($class, $class);
-            $form->setComponentIdTemplate('{0}-1');
+            $form->setIdTemplate('{0}-1');
             $form->setAutoHeight(true);
             $form->setBaseCls('x-plain');
 

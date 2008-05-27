@@ -2,6 +2,10 @@
 <trl>
 <text/>
 <text>
+<en default="1">Visible</en>
+<de>Sichtbar</de>
+</text>
+<text>
 <en default="1">version</en>
 <de>Version</de>
 </text>

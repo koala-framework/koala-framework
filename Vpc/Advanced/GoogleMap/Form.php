@@ -26,7 +26,7 @@ class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
 
         $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
         $form = new Vpc_Basic_Text_Form('text', $classes['text']);
-        $form->setComponentIdTemplate('{0}-text');
+        $form->setIdTemplate('{0}-text');
         $this->fields->add($form);
 
 
