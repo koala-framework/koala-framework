@@ -12,6 +12,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
     enableUndoRedo: true,
     stylesIdPattern: null,
+    enableStyles: false,
 
     initComponent : function()
     {
@@ -186,7 +187,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 autoLoad: false
             });
         }
-        if (this.stylesEditorConfig) {
+        if (this.stylesEditorConfig && this.enableStyles) {
             this.stylesEditorDialog = Ext.ComponentMgr.create(this.stylesEditorConfig);
             this.stylesEditorDialog.on('hide', this._reloadStyles, this);
         }
@@ -280,15 +281,17 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             tb.insert(0, this.blockSelect.dom);
             tb.insert(1, '-');
         }
-        tb.stylesTr = tb.el.insertHtml('beforeEnd', tb.autoCreate.html);
-        tb.tr = tb.stylesTr;
-        tb.originalTr = tb.tr;
-        if (this.stylesEditorDialog) {
-            this.stylesEditorToolbarItem = tb.insert(0, this.getAction('editStyles'));
+        if (this.enableStyles) {
+            tb.stylesTr = tb.el.insertHtml('beforeEnd', tb.autoCreate.html);
+            tb.tr = tb.stylesTr;
+            tb.originalTr = tb.tr;
+            if (this.stylesEditorDialog) {
+                this.stylesEditorToolbarItem = tb.insert(0, this.getAction('editStyles'));
+            }
+            this._renderInlineStylesSelect();
+            this._renderBlockStylesSelect();
+            tb.tr = tb.originalTr;
         }
-        this._renderInlineStylesSelect();
-        this._renderBlockStylesSelect();
-        tb.tr = tb.originalTr;
     },
 
     createInlineStylesOptions : function(){
