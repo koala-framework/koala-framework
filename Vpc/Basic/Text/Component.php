@@ -23,6 +23,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             'enablePastePlain'  => true,
             'enableTidy'        => true,
             'stylesIdPattern'   => false, //zB: '^company_[0-9]+',
+            'enableStyles'      => true,
             'enableTagsWhitelist'=> true,
             'childComponentClasses' => array(
                 //auf false setzen um buttons zu deaktivieren

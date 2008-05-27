@@ -11,11 +11,7 @@ class Vpc_Basic_Text_Parser
     protected $_deleteContent = false;
     protected $_enableColor = false;
     protected $_enableTagsWhitelist = true;
-    protected $_tagsWhitelist = array(
-        'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-        'span', 'a', 'img', 'br', 'strong', 'em', 'u',
-        'ul', 'ol', 'li'
-    );
+    protected $_enableStyles = true;
 
     public function __construct(Vpc_Basic_Text_Row $row)
     {
@@ -168,8 +164,20 @@ class Vpc_Basic_Text_Parser
         $this->_enableTagsWhitelist = $value;
     }
 
+    public function setEnableStyles($value)
+    {
+        $this->_enableStyles = $value;
+    }
+
     public function parse($html)
     {
+    
+        $this->_tagsWhitelist = array(
+            'p', 'a', 'img', 'br', 'strong', 'em', 'u', 'ul', 'ol', 'li'
+        );
+        if ($this->_enableStyles) {
+            $this->_tagsWhitelist = array_merge('span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6');
+        }
         xml_parse($this->_parser,
           "<BODY>".$html."</BODY>",
           true);
