@@ -30,7 +30,7 @@
         document.write('<div id="loading">');
           document.write('<div class="loading-indicator">');
             document.write('<img src="/assets/ext/resources/images/default/shared/large-loading.gif" width="32" height="32"/>');
-            document.write('<?= $this->config['application']['name'] ?><br /><span id="loading-msg"><?= trlVps('Loading...') ?></span></div>');
+            document.write('<?= $this->applicationName ?><br /><span id="loading-msg"><?= trlVps('Loading...') ?></span></div>');
         document.write('</div>');
         var Vps = {isApp: true};
     </script>

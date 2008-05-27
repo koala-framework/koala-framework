@@ -62,5 +62,7 @@ class Vps_View_Ext extends Vps_View
         if (isset($sessionAssets->autoClearCache)) {
             $this->debug['autoClearCache'] = $sessionAssets->autoClearCache;
         }
+
+        $this->applicationName = Zend_Registry::get('config')->application->name;
     }
 }
