@@ -1,4 +1,8 @@
 <?php
+/**
+ * Für zwei (oder mehr) zusammengeschaltete ComboBoxen (Auswahl in der ersten
+ * lädt Daten in der zweiten nach, gespeichert wird nur die zweite)
+ **/
 class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_ComboBox
 {
     private $_filterObject;

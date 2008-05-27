@@ -1,4 +1,7 @@
 <?php
+/**
+ * Spezial-Feld: Größenauswahl die in zwei eigenen DB-Feldern gesp. wird
+ **/
 class Vps_Form_Field_ComboBoxSize extends Vps_Form_Field_ComboBox
 {
     public function setSizes($sizes)
