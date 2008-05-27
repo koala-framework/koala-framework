@@ -181,7 +181,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     {
         if ($this->_references) {
             return $this->_references;
-        } else if ($this->_model instanceof Vps_Model_Db && $row instanceof Vps_Model_Db) {
+        } else if ($this->_model instanceof Vps_Model_Db && $row instanceof Vps_Model_Db_Row) {
             return $this->_model->getTable()
                         ->getReference(get_class($row->getRow()->getTable()));
         } else {
