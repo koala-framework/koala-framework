@@ -167,6 +167,13 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         if (this.swfu) this.swfu.destroy();
     },
 
+    // überschrieben weil ext implementation auf this.el.dom.value zugreift was wir nicht haben
+    initValue : function() {
+        if(this.value !== undefined){
+            this.setValue(this.value);
+        }
+    },
+
     setValue: function(value)
     {
         var v = '';
