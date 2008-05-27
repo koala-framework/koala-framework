@@ -33,9 +33,11 @@ class Vpc_Table extends Vps_Db_Table
     public function find($id) {
         $ret = parent::find($id);
         if (!$ret->count()) {
+            $data = $this->createRow()->toArray();
+            $data['component_id'] = $id;
             $ret = new $this->_rowsetClass(array(
                 'table'     => $this,
-                'data'      => array($this->createRow()->toArray()),
+                'data'      => array($data),
                 'readyOnly' => false,
                 'rowClass'  => $this->_rowClass,
                 'stored'    => false
