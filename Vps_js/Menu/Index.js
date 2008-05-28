@@ -2,18 +2,18 @@ Ext.namespace('Vps.Menu');
 
 Vps.Menu.Index = Ext.extend(Ext.Toolbar,
 {
+    controllerUrl: '/vps/user/menu',
     initComponent : function()
     {
         this.addEvents(
             'menuevent'
         );
-
-        if (!this.controllerUrl) {
-            this.controllerUrl = '/vps/user/menu';
-        }
-        this.reload();
-
         Vps.Menu.Index.superclass.initComponent.call(this);
+
+    },
+    afterRender: function() {
+        Vps.Menu.Index.superclass.afterRender.call(this);
+        this.reload();
     },
     reload: function()
     {
@@ -95,13 +95,12 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         }
         return menuItems;
     },
-    loadMenu: function(r)
+    loadMenu: function(response, options, result)
     {
         this.items.each(function(i) {
             i.destroy();
         });
-        var response = Ext.decode(r.responseText);
-        var menuItems = this._processMenus(response.menus);
+        var menuItems = this._processMenus(result.menus);
         menuItems.each(function(menuItem) {
             if (menuItem.icon && menuItem.text) {
                 menuItem.cls = 'x-btn-text-icon';
@@ -113,7 +112,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
 
         this.add(new Ext.Toolbar.Fill());
 
-        if (response.changeUser) {
+        if (result.changeUser) {
             var changeUser = new Vps.Form.ComboBox({
                 store: {
                     url: '/vps/user/changeUser/json-data'
@@ -132,7 +131,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                       '</tpl>')
             });
             changeUser.on('render', function(combo) {
-                combo.setRawValue(response.fullname);
+                combo.setRawValue(result.fullname);
             }, this, {delay: 10});
             changeUser.on('select', function(combo, record, index) {
                 Ext.Ajax.request({
@@ -147,9 +146,10 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
             this.add(changeUser);
         }
 
-        if (response.fullname && response.userSelfControllerUrl) {
+        if (result.fullname && result.userSelfControllerUrl) {
             this.add({
-                text: response.fullname,
+                id: 'currentUser',
+                text: result.fullname,
                 cls: 'x-btn-text-icon',
                 icon: '/assets/silkicons/user.png',
                 handler: function() {
@@ -157,18 +157,18 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                         width: 450,
                         height: 370,
                         formConfig: {
-                            controllerUrl: response.userSelfControllerUrl
+                            controllerUrl: result.userSelfControllerUrl
                         }
                     });
                     dlg.on('datachange', function() {
                         this.reload();
                     }, this);
-                    dlg.showEdit(response.userId);
+                    dlg.showEdit(result.userId);
                 },
                 scope: this
             });
         }
-        if (response.showLogout) {
+        if (result.showLogout) {
             this.add({
                 text: trlVps('Logout'),
                 cls: 'x-btn-text-icon',
@@ -209,3 +209,4 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         }
     }
 });
+Ext.reg('vps.menu', Vps.Menu.Index);

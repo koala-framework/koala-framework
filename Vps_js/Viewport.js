@@ -1,11 +1,16 @@
 Vps.Viewport = Ext.extend(Ext.Viewport, {
     initComponent: function()
     {
-        Vps.menu = new Vps.Menu.Index({
+        Vps.menu = Ext.ComponentMgr.create({
+                    xtype: 'vps.menu',
                     region: 'north',
                     height: 30
                 });
-        this.items.push(Vps.menu);
+        this.items.push({
+            xtype: 'vps.menu',
+            region: 'north',
+            height: 30
+        });
         this.layout = 'border';
         Vps.Viewport.superclass.initComponent.call(this);
     },
