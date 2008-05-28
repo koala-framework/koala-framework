@@ -49,7 +49,8 @@ class Vps_Component_Abstract
             'assets'        => array('files'=>array(), 'dep'=>array()),
             'assetsAdmin'   => array('files'=>array(), 'dep'=>array()),
             'componentIcon' => new Vps_Asset('paragraph_page'),
-            'placeholder'   => array()
+            'placeholder'   => array(),
+            'childComponentClasses' => array()
         );
     }
 
