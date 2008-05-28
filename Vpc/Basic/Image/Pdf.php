@@ -30,10 +30,10 @@ class Vpc_Basic_Image_Pdf extends Vpc_Abstract_Pdf
             }
 
             $this->_pdf->Image($file->getFileSource(), $this->_pdf->getLeftMargin() + $x, $this->_pdf->getY(), $width, $height, $file->extension);
-
             $this->_pdf->setY($this->_pdf->getY()+$height + 2);
-        }
 
+        }
     }
+
 
 }
