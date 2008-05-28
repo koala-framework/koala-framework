@@ -260,7 +260,13 @@ class Vps_Setup
             header('X-Vps-RequestNum: '.Zend_Registry::get('requestNum'));
         }
         register_shutdown_function(array('Vps_Setup', 'shutDown'));
+
+        if (isset($_POST['PHPSESSID'])) {
+            //für swfupload
+            Zend_Session::setId($_POST['PHPSESSID']);
+        }
     }
+
     public static function shutDown()
     {
         if (Zend_Registry::get('config')->debug->querylog && !isset($_SERVER['SHELL'])) {
