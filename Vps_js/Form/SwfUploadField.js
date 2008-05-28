@@ -121,7 +121,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
                 }
                 if (r.success) {
                     this.customSettings.field.setValue(r.value);
-                    this.fireEvent('uploaded', this, result.value);
+                    this.customSettings.field.fireEvent('uploaded', this, r.value);
                 } else {
                     if (r.wrongversion) {
                         Ext.Msg.alert(trlVps('Error - wrong version'),
