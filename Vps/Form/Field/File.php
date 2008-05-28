@@ -7,7 +7,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     {
         parent::__construct($fieldname, $fieldLabel);
         $this->setAllowBlank(true); //standardwert für getAllowBlank
-        $this->getAllowOnlyImages(false);
+        $this->setAllowOnlyImages(false);
         $this->setRuleKey($ruleKey);
         $this->setXtype('swfuploadfield');
     }

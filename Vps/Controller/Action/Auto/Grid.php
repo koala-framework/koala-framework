@@ -223,7 +223,6 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
 
         //wenn getWhere null zurückliefert nichts laden
         if (is_null($where)) return null;
-
         return $this->_model->fetchAll($where, $order, $limit, $start);
     }
 
