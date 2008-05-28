@@ -133,7 +133,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
             });
             changeUser.on('render', function(combo) {
                 combo.setRawValue(response.fullname);
-            }, this);
+            }, this, {delay: 10});
             changeUser.on('select', function(combo, record, index) {
                 Ext.Ajax.request({
                     url: '/vps/user/changeUser/json-change-user',
