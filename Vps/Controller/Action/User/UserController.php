@@ -16,10 +16,12 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
         $fs0->add(new Vps_Form_Field_Panel())
             ->setHtml(trlVps('At the following action emails are automatically sent to the adequade user.').'<br />'
                      .trlVps('Create, Delete and E-Mail change'));
+        $fs0->add(new Vps_Form_Field_ShowField('password', trlVps('Activation link')))
+            ->setData(new Vps_Controller_Action_User_Users_ActivationlinkData());
 
         // Hauptdaten
         $fs1 = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Accessdata and person')));
-        $fs1->setLabelWidth(80);
+        $fs1->setLabelWidth(100);
         $fs1->setStyle('margin:10px;');
 
         $editor = new Vps_Form_Field_TextField('email', trlVps('Email'));
@@ -47,6 +49,14 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
             }
             $fs1->add(new Vps_Form_Field_Select('language', trlVps('Language')))
             ->setValues($data);
+        }
+
+        try {
+            new Vpc_Forum_User_Model();
+            $fs1->add(new Vps_Auto_Field_TextField('nickname', trlVps('Forum name')))
+                ->setData(new Vps_Controller_Action_User_Users_ForumNameData());
+        } catch(Zend_Db_Statement_Exception $e) {
+            // Forum user table existiert nicht -> daten nicht anzeigen
         }
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();

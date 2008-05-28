@@ -64,6 +64,10 @@ class Vps_View_Component extends Vps_View
             }
         }
 
+        if (is_null($templateVars)) {
+            throw new Vps_Exception('getTemplateVars einer Komponenten gibt null zurück. return $vars; vergessen?');
+        }
+
         $view = new Vps_View_Component();
         foreach ($templateVars as $key => $val) {
             $view->$key = $val;

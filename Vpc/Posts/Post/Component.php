@@ -98,10 +98,10 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
             function replaceLinks($matches) {
                 $rel = 'popup_menubar=yes,toolbar=yes,location=yes,status=yes,scrollbars=yes,resizable=yes';
                 $showUrl = $matches[5];
-                if (strlen($showUrl) > 72) {
-                    $showUrl = substr($showUrl, 0, 70).'...';
+                if (strlen($showUrl) > 62) {
+                    $showUrl = substr($showUrl, 0, 60).'...';
                 }
-                return "<a href=\"http://{$matches[3]}{$matches[5]}\" rel=\"$rel\">{$matches[3]}$showUrl</a>";
+                return "<a href=\"http://{$matches[3]}{$matches[5]}\" title=\"{$matches[3]}{$matches[5]}\" rel=\"$rel\">{$matches[3]}$showUrl</a>";
             }
         }
 
