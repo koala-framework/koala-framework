@@ -42,6 +42,7 @@ class Vpc_Table extends Vps_Db_Table
                 'rowClass'  => $this->_rowClass,
                 'stored'    => false
             ));
+            $ret->current()->setFromArray($data); //as in Zend_Db_Table_Abstract::createRow
         }
         return $ret;
     }
