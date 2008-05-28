@@ -285,17 +285,17 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         this.getAction('save').enable();
     },
 
-    onSubmitSuccess: function(form, action) {
+    onSubmitSuccess: function(response, options, result) {
         this.getForm().resetDirty();
-        this.fireEvent('datachange', action.result);
+        this.fireEvent('datachange', result);
 
         var reEnableSubmitButton = function() {
             this.getAction('save').enable();
         };
         reEnableSubmitButton.defer(1000, this);
 
-        if(action.result && action.result.data && action.result.data.addedId) {
-            this.getForm().baseParams.id = action.result.data.addedId;
+        if(result.data && result.data.addedId) {
+            this.getForm().baseParams.id = result.data.addedId;
             this.getAction('delete').enable();
             this.getAction('save').enable();
         }
