@@ -247,6 +247,8 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         for (var i in params) {
             if (typeof params[i] == 'object') {
                 params[i] = Ext.encode(params[i]);
+            } else if (typeof params[i] == 'boolean') {
+                params[i] = params[i] ? '1' : '0';
             }
         }
 
