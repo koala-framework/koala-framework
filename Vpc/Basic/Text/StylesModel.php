@@ -7,7 +7,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
     protected function _setupFilters()
     {
         $filter = new Vps_Filter_Row_Numberize();
-        $filter->setGroupBy(array('ownStyles', 'tag'=>array('span')));
+        $filter->setGroupBy(array('ownStyles', 'tag'=>array('span'), 'master'));
         $this->_filters = array('pos' => $filter);
     }
 

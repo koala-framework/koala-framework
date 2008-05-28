@@ -5,6 +5,15 @@ class Vpc_Basic_Text_InlineStylesController extends Vps_Controller_Action_Auto_G
     protected $_position = 'pos';
     protected $_tableName = 'Vpc_Basic_Text_StylesModel';
 
+    public function init()
+    {
+        if (!Vpc_Abstract::getSetting($this->_getParam('componentClass'),
+                                                            'enableStyles')) {
+            throw new Vps_Exception("Styles are disabled");
+        }
+        parent::init();
+    }
+
     protected function _initColumns()
     {
         parent::_initColumns();

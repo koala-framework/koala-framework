@@ -6,6 +6,15 @@ class Vpc_Basic_Text_InlineStyleController extends Vps_Controller_Action_Auto_Fo
     protected $_permissions = array('save', 'add');
     protected $_stylesFormName = 'Vpc_Basic_Text_InlineStyleForm';
 
+    public function init()
+    {
+        if (!Vpc_Abstract::getSetting($this->_getParam('componentClass'),
+                                                            'enableStyles')) {
+            throw new Vps_Exception("Styles are disabled");
+        }
+        parent::init();
+    }
+
     protected function _initFields()
     {
         parent::_initFields();
