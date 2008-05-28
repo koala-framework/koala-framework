@@ -48,7 +48,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
 
         try {
             new Vpc_Forum_User_Model();
-            $this->_columns->add(new Vps_Auto_Grid_Column('nickname', trlVps('Forum name'), 150))
+            $this->_columns->add(new Vps_Grid_Column('nickname', trlVps('Forum name'), 150))
                 ->setData(new Vps_Controller_Action_User_Users_ForumNameData());
         } catch(Zend_Db_Statement_Exception $e) {
             // Forum user table existiert nicht -> daten nicht anzeigen
@@ -58,7 +58,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
              $this->_columns->add(new Vps_Grid_Column('language', trlVps('lang'), 30));
         }
 
-        $this->_columns->add(new Vps_Auto_Grid_Column('password', trlVps('Activated'), 60))
+        $this->_columns->add(new Vps_Grid_Column('password', trlVps('Activated'), 60))
             ->setRenderer('boolean');
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();

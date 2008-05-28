@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_User_Users_ForumNameData extends Vps_Auto_Data_Abstract
+class Vps_Controller_Action_User_Users_ForumNameData extends Vps_Data_Abstract
 {
 
     public function load($row)
