@@ -48,9 +48,5 @@ class Vpc_Basic_Image_Form extends Vpc_Abstract_Form
             ->setExtensions(Vpc_Abstract::getSetting($class, 'extensions'))
             ->setAllowBlank(Vpc_Abstract::getSetting($class, 'allowBlank'))
             ->setAllowOnlyImages(true);
-
-        // Bildvorschau
-        $this->add(new Vps_Form_Field_ImageViewer('vps_upload_id_image', trlVps('Preview')))
-            ->setClass($class);
     }
 }
