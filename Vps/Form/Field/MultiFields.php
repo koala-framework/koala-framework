@@ -12,11 +12,10 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     {
         if (is_object($tableName)) {
             $model = $tableName;
-            $tableName = get_class($tableName);
         } else if (class_exists($tableName)) {
             $model = new $tableName();
         }
-        parent::__construct($tableName);
+        parent::__construct(get_class($model));
         if ($model instanceof Zend_Db_Table_Abstract) {
             $model = new Vps_Model_Db(array(
                 'table' => $model

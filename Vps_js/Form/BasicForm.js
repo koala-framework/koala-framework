@@ -21,7 +21,9 @@ Ext.form.BasicForm.override({
     getValues: function() {
         var ret = {};
         this.items.each(function(field) {
-            ret[field.getName()] = field.getValue();
+            if (field.getName && field.getName()) {
+                ret[field.getName()] = field.getValue();
+            }
         }, this);
         return ret;
     }
