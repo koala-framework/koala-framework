@@ -18,7 +18,8 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
                 'filename'   => 'filename'
             ),
             'extensions'        => array('jpg'),
-            'scale'             => array()
+            'scale'             => array(),
+            'pdfMaxWidth'	    => 0
         ));
         return $settings;
     }
