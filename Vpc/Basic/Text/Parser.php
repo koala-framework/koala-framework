@@ -176,7 +176,8 @@ class Vpc_Basic_Text_Parser
             'p', 'a', 'img', 'br', 'strong', 'em', 'u', 'ul', 'ol', 'li'
         );
         if ($this->_enableStyles) {
-            $this->_tagsWhitelist = array_merge('span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6');
+            $this->_tagsWhitelist = array_merge($this->_tagsWhitelist, 
+                array('span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'));
         }
         xml_parse($this->_parser,
           "<BODY>".$html."</BODY>",

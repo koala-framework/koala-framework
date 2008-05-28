@@ -17,7 +17,8 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
             'default'           => array(
                 'filename'   => 'filename'
             ),
-            'extensions'        => array('jpg')
+            'extensions'        => array('jpg'),
+            'scale'             => array()
         ));
         return $settings;
     }
