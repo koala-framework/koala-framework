@@ -16,8 +16,5 @@ class Vpc_Basic_Text_BlockStyleController extends Vpc_Basic_Text_InlineStyleCont
                 'h5'   => trlVps('Überschrift 5 (h5)'),
                 'h6'   => trlVps('Überschrift 6 (h6)')
              ));
-        if ($this->_getUserRole() == 'admin') {
-            $tag->setEditable(true);
-        }
     }
 }
