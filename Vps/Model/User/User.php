@@ -14,7 +14,7 @@ class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
 
     public static function getServiceColumns() {
         return array(
-            'email', 'password_salt', 'gender', 'title', 'firstname', 'lastname', 'webcode', 'created', 'logins', 'last_login'
+            'email', 'password', 'password_salt', 'gender', 'title', 'firstname', 'lastname', 'webcode', 'created', 'logins', 'last_login'
         );
     }
 

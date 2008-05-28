@@ -74,14 +74,6 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
         return $this->getTreeCacheRow()->getTable()->showInvisible();
     }
 
-    /**
-     * @deprecated
-     */
-    protected function showInvisible()
-    {
-        return $this->_showInvisible();
-    }
-
     public function getTable($tablename = null)
     {
         if (!$tablename) {
