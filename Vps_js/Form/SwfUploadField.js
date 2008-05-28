@@ -82,13 +82,25 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             fileTypes = '*.*';
             fileTypesDescription = 'All Files';
         }
+
+        //cookie als post mitschicken
+        var params = {};
+        var cookies = document.cookie.split(';');
+        Ext.each(cookies, function(c) {
+            c = c.split('=');
+            if (c[0] == 'PHPSESSID' && c[1]) {
+                params.PHPSESSID = c[1];
+            }
+        });
+        if (!params.PHPSESSID) return;
         this.swfu = new SWFUpload({
             custom_settings: {field: this},
-            upload_url: '/vps/media/upload/json-upload',
+            upload_url: location.protocol+'//'+location.host+'/vps/media/upload/json-upload',
             flash_url: '/assets/swfupload/Flash9/swfupload_f9.swf',
             file_size_limit: this.fileSizeLimit,
             file_types: fileTypes,
             file_types_description: fileTypesDescription,
+            post_params: params,
             swfupload_loaded_handler: function() {
                 this.customSettings.field.swfReady = true;
             },
@@ -159,8 +171,8 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
             }
         });
     },
-    
-        
+
+
     onDestroy: function()
     {
         Vps.Form.SwfUploadField.superclass.onDestroy.call(this);
