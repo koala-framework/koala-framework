@@ -127,23 +127,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             clickEvent: 'mousedown',
             tabIndex: -1
         });
-        this.actions.tidyHtml = new Ext.Action({
-            icon: '/assets/silkicons/html_valid.png',
-            handler: function() {
-                this.syncValue();
-                this.tidyHtml();
-            },
-            scope: this,
-            tooltip: {
-                cls: 'x-html-editor-tip',
-                title: trlVps('Clean Html'),
-                text: trlVps('Clean up Html and remove formatings.')
-            },
-            cls: 'x-btn-icon',
-            clickEvent: 'mousedown',
-            tabIndex: -1
-        });
-
         if (this.linkComponentConfig) {
             this.enableLinks = false;
             var panel = Ext.ComponentMgr.create(Ext.applyIf(this.linkComponentConfig, {
@@ -232,30 +215,29 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         Vps.Form.HtmlEditor.superclass.createToolbar.call(this, editor);
         var tb = this.getToolbar();
 
+        if (this.downloadDialog) {
+            tb.insert(6,  this.getAction('insertDownload'));
+        }
         if (this.linkDialog) {
-            tb.insert(8,  this.getAction('insertLink'));
+            tb.insert(6,  this.getAction('insertLink'));
         }
         if (this.imageDialog) {
-            tb.insert(9, this.getAction('insertImage'));
-        }
-        if (this.downloadDialog) {
-            tb.insert(10,  this.getAction('insertDownload'));
+            tb.insert(6, this.getAction('insertImage'));
         }
         if (this.linkDialog || this.imageDialog || this.downloadDialog) {
-            tb.insert(8, '-');
+            tb.insert(6, '-');
         }
 
-        tb.add('-');
         if (this.enableInsertChar) {
-            tb.add(this.getAction('insertChar'));
+            tb.insert(tb.items.getCount()-1, this.getAction('insertChar'));
         }
         if (this.enablePastePlain) {
-            tb.add(this.getAction('insertPlainText'));
+            tb.insert(tb.items.getCount()-1, this.getAction('insertPlainText'));
+        }
+        if (this.enableInsertChar || this.enablePastePlain) {
+            tb.insert(tb.items.getCount()-1, '-');
         }
 
-        if (this.controllerUrl && this.enableTidy) {
-            this.tidyToolbarItem = tb.addButton(this.getAction('tidyHtml'));
-        }
         if (this.enableUndoRedo) {
             var offs = 0;
             if (this.enableFont) offs += 2;
