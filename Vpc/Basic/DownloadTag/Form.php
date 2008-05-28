@@ -12,6 +12,6 @@ class Vpc_Basic_DownloadTag_Form extends Vpc_Abstract_Form
         $this->fields->add(new Vps_Form_Field_File('vps_upload_id', trlVps('File')))
             ->setDirectory('BasicDownloadTag')
             ->setAllowBlank(false)
-            ->setAllowOnlyImages(true);
+            ->setAllowOnlyImages(false);
     }
 }
