@@ -32,8 +32,8 @@ class Vps_Trl
         }
         return $this->_languages;
     }
-    
-    public function getCurrentLanguage()
+
+    public function getTargetLanguage()
     {
         $languages = $this->getLanguages();
         if (isset(Zend_Registry::get('userModel')->getAuthedUser()->language)){
@@ -42,82 +42,64 @@ class Vps_Trl
                 return $userLanguage;
             }
         }
-        return $this->getDefaultLanguage();
+        return $this->getWebCodeLanguage();
     }
 
-    public function getDefaultLanguage()
+    public function getWebCodeLanguage()
     {
-        $languages = $this->getLanguages();
-        return $languages[0];
+         $config = Zend_Registry::get('config');
+         if ($config->webCodeLanguage) {
+                return $config->webCodeLanguage;
+            }
     }
-    
+
     private function _getXml($type)
     {
         return $type == 'project' ? $this->_xml : $this->_xmlVps;
     }
-    
-    function trl($string, $text, $type){
-       $params = $this->_makeArray($text);
-       $text = $this->_findElement($string, $this->_getXml($type));
-       if ($params == null){
-           return $text;
-       } else {
-           foreach ($params as $key => $value){
-               $text = str_replace('{'.$key.'}', $value, $text);
-           }
-           return $text;
-       }
+
+    public function trl($string, $placeholders, $type)
+    {
+        $params = $this->_makeArray($placeholders);
+        $text = $this->_findElement($string, $this->_getXml($type), $type);
+        if ($params == null) {
+            return $text;
+        } else {
+            foreach ($params as $key => $value) {
+                $text = str_replace('{'.$key.'}', $value, $text);
+            }
+            return $text;
+        }
     }
 
-    function trlc($context, $string, $text, $type){
-        $params = $this->_makeArray($text);
-        $text = $this->_findElement($string, $this->_getXml($type), $context);
-        if ($text == null){
-           return $string;
-       } else {
-           foreach ($params as $key => $value){
-               $text = str_replace('{'.$key.'}', $value, $text);
-           }
-           return $text;
-       }
+
+    function trlc($context, $string, $placeolders, $type)
+    {
+        $params = $this->_makeArray($placeolders);
+        $text = $this->_findElement($string, $this->_getXml($type), $type, $context);
+
+        if ($text == null) {
+            return $string;
+        } else {
+            foreach ($params as $key => $value) {
+                $text = str_replace('{'.$key.'}', $value, $text);
+            }
+            return $text;
+        }
     }
 
-    function trlp($single, $plural, $text, $type, $prog_lang){
-
-        $params = $this->_makeArray($text);
-        $single = $this->_findElement($single, $this->_getXml($type));
-        $plural = $this->_findElementPlural($plural, $this->_getXml($type));
+    function trlp($single, $plural, $placeolders, $type, $prog_lang)
+    {
+        $params = $this->_makeArray($placeolders);
+        $single = $this->_findElement($single, $this->_getXml($type), $type);
+        $plural = $this->_findElementPlural($plural, $this->_getXml($type), $type);
         if ($params == null){
-           return $text;
+           return $placeolders;
        } else {
-           if ($params[0] != 1){
-               foreach ($params as $key => $value){
+           if ($params[0] != 1) {
+               foreach ($params as $key => $value) {
                    if ($prog_lang == 'js') return $plural;
 
-                   $text = str_replace('{'.$key.'}', $value, $plural);
-               }
-           } else {
-               foreach ($params as $key => $value){
-                   if ($prog_lang == 'js') return $single;
-
-                   $text = str_replace('{'.$key.'}', $value, $single);
-               }
-           }
-           return $text;
-       }
-    }
-
-    function trlcp($context, $single, $plural, $text, $type, $prog_lang){
-
-        $params = $this->_makeArray($text);
-        $single = $this->_findElement($single, $this->_getXml($type), $context);
-        $plural = $this->_findElementPlural($plural, $this->_getXml($type), $context);
-        if ($params == null){
-           return $text;
-       } else {
-           if ($params[0] != 1){
-               foreach ($params as $key => $value){
-                   if ($prog_lang == 'js') return $plural;
                    $text = str_replace('{'.$key.'}', $value, $plural);
                }
            } else {
@@ -129,32 +111,59 @@ class Vps_Trl
            return $text;
        }
     }
-    private function _makeArray($text) {
-        return is_array($text) ? $text : array($text);
-    }
-    
-    protected function _findElement($needle, $xml, $context = null){
-        $temp_default_lang = $this->getDefaultLanguage();
-        $temp_target_lang = $this->getCurrentLanguage();
-        foreach ($xml->text as $element) {
-                // en direkt hinschreiben ist nur ein quick-fix
-                if ($element->en == $needle && $element->$temp_target_lang != '_' && ($element['context'] == $context)){
-                    return (string) $element->$temp_target_lang;
+
+    function trlcp($context, $single, $plural, $placeolders, $type, $prog_lang)
+    {
+        $params = $this->_makeArray($placeolders);
+        $single = $this->_findElement($single, $this->_getXml($type), $type, $context);
+        $plural = $this->_findElementPlural($plural, $this->_getXml($type), $type, $context);
+        if ($params == null) {
+            return $placeolders;
+        } else {
+            if ($params[0] != 1){
+                foreach ($params as $key => $value){
+                    if ($prog_lang == 'js') return $plural;
+                    $text = str_replace('{'.$key.'}', $value, $plural);
                 }
+            } else {
+                foreach ($params as $key => $value) {
+                    if ($prog_lang == 'js') return $single;
+                    $text = str_replace('{'.$key.'}', $value, $single);
+                }
+            }
+            return $text;
+        }
+    }
+
+    private function _makeArray($placeolders)
+    {
+        return is_array($placeolders) ? $placeolders : array($placeolders);
+    }
+
+    protected function _findElement($needle, $xml, $type, $context = null)
+    {
+        if ($type == 'project') $temp_default_lang = $this->getWebCodeLanguage();
+        else $temp_default_lang = "en";
+        $temp_target_lang = $this->getTargetLanguage();
+        foreach ($xml->text as $element) {
+            if ($element->$temp_default_lang == $needle && $element->$temp_target_lang != '_' && ($element['context'] == $context)){
+                return (string) $element->$temp_target_lang;
+            }
         }
         return $needle;
     }
 
-    protected function _findElementPlural($needle, $xml, $context = null){
-        $temp_default_lang = $this->getDefaultLanguage();
-        $temp_target_lang = $this->getCurrentLanguage();
+    protected function _findElementPlural($needle, $xml, $type, $context = null)
+    {
+        if ($type == 'project') $temp_default_lang = $this->getWebCodeLanguage();
+        else $temp_default_lang = "en";
+        $temp_target_lang = $this->getTargetLanguage();
         $temp_plural = $temp_default_lang.'_plural';
         $temp_target_plural = $temp_target_lang.'_plural';
         foreach ($xml->text as $element) {
-                // en_plural direkt hinschreiben ist nur ein quick-fix
-                if ($element->en_plural == $needle && $element->$temp_target_plural != '_' && ($element['context'] == $context)){
-                    return (string) $element->$temp_target_plural;
-                }
+            if ($element->$temp_plural == $needle && $element->$temp_target_plural != '_' && ($element['context'] == $context)){
+                return (string) $element->$temp_target_plural;
+            }
         }
         return $needle;
     }
@@ -165,6 +174,73 @@ class Vps_Trl
        $values['plural'] = $this->_findElementPlural($plural, $xml, $context);
        $values['single'] = $this->_findElement($single, $xml, $context);
        return $values;
+    }
+
+    public function parse($content)
+    {
+        return array_merge($this->_parseType('trl', $content),
+                           $this->_parseType('trlc', $content));
+    }
+
+    private function _parseType($type, $content)
+    {   $pattern = null;
+        switch($type) {
+            case "trl":
+                $pattern = '#(trl|trlVps)((\("(.+?)"\))|(\(\'(.+?)\'\))|'.
+                             '(\(\'(.+?)\', (.*)\))|(\(\"(.+?)\", (.*)\)))#';
+                break;
+            case "trlc":
+                $pattern = '#(trlc|trlcVps)((\(\'(.+?)\', \'(.*)\'\))|(\("(.+?)", "(.*)"\))|'.
+                			'(\(\'(.+?)\', +\'(.*)\', +(.*)\))|(\(\"(.+?)\", +"(.*)", +(.*)\)))#';
+
+                break;
+        }
+        if ($pattern) {
+            preg_match_all($pattern, $content, $m);
+            if ($m[0]){
+                return $this->_rearrange($m);
+            }
+        }
+        return array();
+    }
+
+    private function _rearrange ($m)
+    {
+        $retAll = array();
+        foreach($m[0] as $key => $value) {
+            $ret = array();
+            if ($m[1][$key] == "trl" || $m[1][$key] == "trlVps"){
+                $ret['isVps'] = strpos($m[1][$key], 'Vps');
+                $ret['type'] = str_replace('Vps', '', $m[1][$key]);
+                if (($m[4][$key] != "")) {
+                    $ret['text'] = $m[4][$key];
+                } elseif (($m[6][$key] != "")) {
+                    $ret['text'] = $m[6][$key];
+                }  elseif (($m[8][$key] != "")) {
+                    $ret['text'] = $m[8][$key];
+                }  elseif (($m[11][$key] != "")) {
+                    $ret['text'] = $m[11][$key];
+                }
+            } elseif ($m[1][$key] == "trlc" || $m[1][$key] == "trlcVps"){
+                $ret['isVps'] = strpos($m[1][$key], 'Vps');
+                $ret['type'] = str_replace('Vps', '', $m[1][$key]);
+                if (($m[4][$key] != "")) {
+                    $ret['context'] = $m[4][$key];
+                    $ret['text'] = $m[5][$key];
+                } elseif (($m[7][$key] != "")) {
+                    $ret['context'] = $m[7][$key];
+                    $ret['text'] = $m[8][$key];
+                }  elseif (($m[10][$key] != "")) {
+                    $ret['context'] = $m[10][$key];
+                    $ret['text'] = $m[11][$key];
+                }  elseif (($m[14][$key] != "")) {
+                    $ret['context'] = $m[14][$key];
+                    $ret['text'] = $m[15][$key];
+                }
+            }
+            $retAll[] = $ret;
+        }
+        return $retAll;
     }
 
 }
