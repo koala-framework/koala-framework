@@ -20,6 +20,9 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
             }
             $pk = $parentRow->getModel()->getPrimaryKey();
             $id = $parentRow->$pk;
+            if (!$id) {
+                return null;
+            }
             $id = str_replace('{0}', $id, $this->getIdTemplate());
             if (preg_match_all('#{([a-z0-9_]+)}#', $id, $m)) {
                 foreach ($m[1] as $i) {
