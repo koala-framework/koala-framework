@@ -76,7 +76,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
 
         if (Ext.isLinux) return;
         if (this.allowOnlyImages) {
-            fileTypes = '*.jpg;*.gif;*.png';
+            fileTypes = '*.jpg;*.jpeg;*.gif;*.png';
             fileTypesDescription = 'Web Image Files';
         } else {
             fileTypes = '*.*';
