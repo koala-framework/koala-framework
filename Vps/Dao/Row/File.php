@@ -129,7 +129,7 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
             } else if (function_exists('mime_content_type')) {
                 $this->mime_type = mime_content_type($filedata['tmp_name']);
             } else {
-                throw new VpsException("Can't autodetect mimetype");
+                throw new Vps_Exception("Can't autodetect mimetype");
             }
         } else {
             $this->mime_type = $filedata['type'];
