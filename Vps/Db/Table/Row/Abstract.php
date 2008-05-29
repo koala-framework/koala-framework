@@ -260,7 +260,6 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
             Vpc_TreeCache_Abstract::getTreeCacheTable()->createMissingChilds();
         }
     }
-    
 
     //Speichern und abei die Filter nicht verwenden
     //wird benötigt bei der Nummerierung um eine Endlusschleife zu verhindern
@@ -269,5 +268,44 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         $this->_skipFilters = true;
         $this->save();
         $this->_skipFilters = false;
+    }
+
+
+    //Überschrieben als workaround für einen bug
+    public function findParentRow($parentTable, $ruleKey = null, Zend_Db_Table_Select $select = null)
+    {
+        $db = $this->_getTable()->getAdapter();
+
+        //***kopiert von Zend_Db_Table_Row
+        if (is_string($parentTable)) {
+            try {
+                Zend_Loader::loadClass($parentTable);
+            } catch (Zend_Exception $e) {
+                require_once 'Zend/Db/Table/Row/Exception.php';
+                throw new Zend_Db_Table_Row_Exception($e->getMessage());
+            }
+            $parentTable = new $parentTable(array('db' => $db));
+        }
+        if (! $parentTable instanceof Zend_Db_Table_Abstract) {
+            $type = gettype($parentTable);
+            if ($type == 'object') {
+                $type = get_class($parentTable);
+            }
+            require_once 'Zend/Db/Table/Row/Exception.php';
+            throw new Zend_Db_Table_Row_Exception("Parent table must be a Zend_Db_Table_Abstract, but it is $type");
+        }
+
+        $map = $this->_prepareReference($this->_getTable(), $parentTable, $ruleKey);
+        //********
+
+        for ($i = 0; $i < count($map[Zend_Db_Table_Abstract::COLUMNS]); ++$i) {
+            $dependentColumnName = $db->foldCase($map[Zend_Db_Table_Abstract::COLUMNS][$i]);
+            $value = $this->_data[$dependentColumnName];
+            if (!$value) {
+                return null;
+            }
+        }
+
+        return parent::findParentRow($parentTable, $ruleKey, $select);
     }
 }

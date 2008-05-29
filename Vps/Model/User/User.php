@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_User_User extends Zend_Db_Table_Row_Abstract
+class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
 {
     protected $_changedServiceData = array();
     protected $_changedPasswordData = array();
