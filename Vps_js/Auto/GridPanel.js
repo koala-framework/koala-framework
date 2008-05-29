@@ -628,7 +628,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             data.push(r.data);
         }, this);
 
-        this.el.mask('Saving...');
+        this.el.mask(trlVps('Saving...'));
 
         var params = this.getBaseParams() || {};
         params.data = Ext.util.JSON.encode(data);
@@ -782,7 +782,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
                     params[this.store.reader.meta.id] = ids.join(';');
 
-                    this.el.mask('Deleting...');
+                    this.el.mask(trlVps('Deleting...'));
                     Ext.Ajax.request({
                         url: this.controllerUrl+'/json-delete',
                         params: params,
@@ -826,7 +826,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         }
         params[this.store.reader.meta.id] = ids.join(';');
 
-        this.el.mask('Duplicating...');
+        this.el.mask(trlVps('Duplicating...'));
         Ext.Ajax.request({
             url: this.controllerUrl+'/json-duplicate',
             params: params,
