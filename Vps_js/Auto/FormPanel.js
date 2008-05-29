@@ -60,7 +60,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         });
 
         if (!this.controllerUrl) {
-            throw new Error(trlVps('No controllerUrl specified for AutoForm.'));
+            throw new Error('No controllerUrl specified for AutoForm.');
         }
         this.formConfig.url = this.controllerUrl + '/json-save';
     },
