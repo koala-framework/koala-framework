@@ -46,9 +46,9 @@ class Vps_Controller_Front extends Zend_Controller_Front
     {
         if (null == $this->_router) {
             if (isset($_SERVER['SHELL'])) {
-                $this->setRouter(new Vps_Controller_Router());
+                $this->setRouter(new Vps_Controller_Router_Cli());
             } else {
-                $this->setRouter(new Vps_Controller_Router_Http());
+                $this->setRouter(new Vps_Controller_Router());
             }
         }
 
