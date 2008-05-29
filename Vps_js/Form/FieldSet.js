@@ -2,6 +2,7 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
     checkboxToggle: false,
     checkboxCollapse: true,
     initComponent: function() {
+        this.monitorResize = true;
         if (this.checkboxToggle && this.checkboxName) {
             this.hiddenCheckboxValue = new Vps.Form.FieldSetHiddenCheckboxValue({
                 name: this.checkboxName
@@ -38,6 +39,35 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
     },
     onCheckClick : function() {
         this.hiddenCheckboxValue.setValue(this.checkbox.dom.checked ? '1' : '0');
+    },
+    afterRender: function() {
+        Vps.Form.FieldSet.superclass.afterRender.call(this);
+        if (this.helpText) {
+            this.helpEl = this.el.createChild({
+                tag: 'a',
+                href: '#',
+                style: 'display: block; width: 16px; height: 16px; '+
+                       'position: absolute; '+
+                       'background-image: url(/assets/silkicons/information.png)'
+            }, this.body);
+            this.helpEl.on('click', function(e) {
+                e.stopEvent();
+                var helpWindow = new Ext.Window({
+                    html: this.helpText,
+                    width: 400,
+                    bodyStyle: 'padding: 10px; background-color: white;',
+                    autoHeight: true,
+                    bodyBorder : false,
+                    title: trlVps('Info'),
+                    resize: false,
+                });
+                helpWindow.show();
+            }, this);
+            this.helpEl.alignTo(this.el, 'tr', [-10, -3]);
+            this.on('afterlayout', function() {
+                this.helpEl.alignTo(this.el, 'tr', [-30, -3]);
+            }, this);
+        }
     }
 });
 

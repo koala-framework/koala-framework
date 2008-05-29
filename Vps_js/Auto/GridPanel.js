@@ -504,7 +504,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                     var helpWindow = new Ext.Window({
                         html: meta.helpText,
                         width: 400,
-                        bodyStyle: 'padding: 10px',
+                        bodyStyle: 'padding: 10px; background-color: white;',
                         autoHeight: true,
                         bodyBorder : false,
                         title: trlVps('Info'),
