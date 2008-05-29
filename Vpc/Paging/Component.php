@@ -51,17 +51,23 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['pages'] = $this->_getPages();
         $ret['currentPage'] = $this->_getCurrentpage();
         $ret['pageLinks'] = array();
-        $params = '';
+        $params = array();
         foreach ($this->_getSetting('includedParams') as $p) {
             $v = $this->_getParam($p);
             if ($v) {
-                $params .= "&$p=".urlencode($v);
+                $params[] = "$p=".urlencode($v);
             }
         }
+        $params = implode('&', $params);
         for ($i = 1; $i <= $ret['pages']; $i++) {
+            if ($i == 1) {
+                $p = '?'.$params;
+            } else {
+                $p = '?'.$this->_getParamName().'='.$i.'&'.$params;
+            }
             $ret['pageLinks'][] = array(
                 'text' => $i,
-                'href' => $this->getUrl().'?'.$this->_getParamName().'='.$i.$params,
+                'href' => $this->getUrl().$p,
                 'rel'  => '',
                 'active' => $ret['currentPage']==$i
             );
