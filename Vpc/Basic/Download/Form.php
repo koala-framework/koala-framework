@@ -10,6 +10,7 @@ class Vpc_Basic_Download_Form extends Vpc_Abstract_Form
         $this->add($form);
 
         $this->add(new Vps_Form_Field_TextField('infotext', trlVps('Link-Text')))
-            ->setWidth(300);
+            ->setWidth(300)
+            ->setHelpText(hlpVps('vpc_download_linktext'));
     }
 }
