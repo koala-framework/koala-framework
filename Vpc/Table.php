@@ -24,25 +24,21 @@ class Vpc_Table extends Vps_Db_Table
 
     public function findRow($id)
     {
-        $row = $this->find($id)->current();
-        if (!$row) {
-            $row = $this->createRow();
-        }
-        return $row;
+        return $this->find($id)->current();
     }
     public function find($id) {
         $ret = parent::find($id);
         if (!$ret->count()) {
-            $data = $this->createRow()->toArray();
-            $data['component_id'] = $id;
+            $defaults = array_combine($this->_cols, array_fill(0, count($this->_cols), null));
             $ret = new $this->_rowsetClass(array(
                 'table'     => $this,
-                'data'      => array($data),
+                'data'      => array($defaults),
                 'readyOnly' => false,
                 'rowClass'  => $this->_rowClass,
                 'stored'    => false
             ));
-            $ret->current()->setFromArray($data); //as in Zend_Db_Table_Abstract::createRow
+            $ret->current()->component_id = $id;
+            $ret->current()->setFromArray(Vpc_Abstract::getSetting($this->_componentClass, 'default'));
         }
         return $ret;
     }
