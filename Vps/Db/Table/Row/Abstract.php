@@ -272,6 +272,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
 
     //Überschrieben als workaround für einen bug
+    //http://framework.zend.com/issues/browse/ZF-3347
     public function findParentRow($parentTable, $ruleKey = null, Zend_Db_Table_Select $select = null)
     {
         $db = $this->_getTable()->getAdapter();
