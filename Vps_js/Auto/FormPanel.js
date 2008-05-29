@@ -100,7 +100,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 	                    var helpWindow = new Ext.Window({
 	                        html: meta.helpText,
 	                        width: 400,
-	                        bodyStyle: 'padding: 10px',
+	                        bodyStyle: 'padding: 10px; background-color: white;',
 	                        autoHeight: true,
 	                        bodyBorder : false,
 	                        title: trlVps('Info'),
@@ -231,7 +231,15 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     //für AbstractPanel
     submit: function(options)
     {
+        if (!this.getForm().isValid()) {
+            Ext.Msg.alert(trlVps('Save'),
+                trlVps("Can't save, please fill all marked fields correctly."));
+            return;
+        }
+
         this.getAction('save').disable();
+
+        
         if (!options) options = {};
 
         var cb = {
