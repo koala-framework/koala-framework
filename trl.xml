@@ -1918,4 +1918,17 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
     <en default="1">Edit {0}</en>
     <de>{0} bearbeiten</de>
 </text>
+<text>
+    <en default="1">Saving...</en>
+    <de>Speichern...</de>
+</text>
+<text>
+    <en default="1">Deleting...</en>
+    <de>Löschen...</de>
+</text>
+<text>
+    <en default="1">Duplicating...</en>
+    <de>Duplizieren</de>
+</text>
+
 </trl>
