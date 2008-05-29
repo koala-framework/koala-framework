@@ -95,7 +95,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         if (!params.PHPSESSID) return;
         this.swfu = new SWFUpload({
             custom_settings: {field: this},
-            upload_url: location.protocol+'//'+location.host+'/vps/media/upload/json-upload',
+            upload_url: location.protocol+'/'+'/'+location.host+'/vps/media/upload/json-upload',
             flash_url: '/assets/swfupload/Flash9/swfupload_f9.swf',
             file_size_limit: this.fileSizeLimit,
             file_types: fileTypes,
