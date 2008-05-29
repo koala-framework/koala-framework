@@ -4,12 +4,16 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
     initComponent : function()
     {
         if (!this.editTitle) {
-            this.editTitle = 'Edit';
-            if (this.title) this.editTitle = this.editTitle + ' ' + this.title;
+            this.editTitle = trlVps('Edit');
+            if (this.title) {
+                this.editTitle = trlVps('Edit {0}', this.title);
+            }
         }
         if (!this.addTitle) {
-            this.addTitle = 'Add';
-            if (this.title) this.addTitle = this.addTitle + ' ' + this.title;
+            this.addTitle = trlVps('Add');
+            if (this.title) {
+                this.addTitle = trlVps('Add {0}', this.title);
+            }
         }
         if (!this.autoForm) {
             if (!this.formConfig) this.formConfig = {};

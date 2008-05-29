@@ -809,7 +809,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Edit</en>
-<de>&#xC4;ndern</de>
+<de>Bearbeiten</de>
 </text>
 <text context="forum">
 <en default="1">edit</en>
@@ -1910,4 +1910,13 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en>Upload</en>
 <de>Hochladen</de>
 </text>
+<text>
+    <en default="1">Add {0}</en>
+    <de>{0} hinzufügen</de>
+</text>
+<text>
+    <en default="1">Edit {0}</en>
+    <de>{0} bearbeiten</de>
+</text>
+<text>
 </trl>
