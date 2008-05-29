@@ -82,6 +82,11 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         if ($this->_model instanceof Vps_Model_FieldRows) {
             $rows = $this->_model->fetchByParentRow($row);
         } else {
+            $pk = $row->getModel()->getPrimaryKey();
+            if (!$row->$pk) {
+                //neuer eintrag (noch keine id)
+                return array();
+            }
             $ref = $this->_getReferences($row);
             $where = array();
             foreach (array_keys($ref['columns']) as $k) {
