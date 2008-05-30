@@ -55,7 +55,7 @@ class Vps_Debug
 
         // CustumException im Produktionsbetrieb nicht werfen, sondern Mail senden
         $address = Zend_Registry::get('config')->debug->errormail;
-        if ($address != '' && ($code == E_NOTICE || $code == E_USER_NOTICE)) {
+        if (!isset($_SERVER['SHELL']) && $address != '' && ($errno == E_NOTICE || $errno == E_USER_NOTICE)) {
             Vps_Debug::sendErrorMail($exception, $address);
             return;
         } else {
