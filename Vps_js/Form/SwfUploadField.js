@@ -194,25 +194,25 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
         }
         if (v != this.value) {
             this.fireEvent('change', this, value, this.value);
+            var icon = false;
+            if (value.mimeType) {
+                if (value.mimeType.match(/(^image\/)/)) {
+                    icon = '/vps/media/upload/preview?uploadId='+value.uploadId;
+                } else {
+                    icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
+                    icon = '/assets/silkicons/' + icon + '.png';
+                }
+                this.previewTpl.overwrite(this.previewImage, {
+                    preview: icon,
+                    href: '/vps/media/upload/download?uploadId='+value.uploadId
+                });
+                this.infoTpl.overwrite(this.infoContainer, value);
+            } else {
+                this.previewImage.update(this.emptyTpl);
+                this.infoContainer.update('');
+            }
         }
         Vps.Form.SwfUploadField.superclass.setValue.call(this, value.uploadId);
-        var icon = false;
-        if (value) {
-            if (value.mimeType.match(/(^image\/)/)) {
-                icon = '/vps/media/upload/preview?uploadId='+value.uploadId;
-            } else {
-                icon = this.fileIcons[value.mimeType] || this.fileIcons['default'];
-                icon = '/assets/silkicons/' + icon + '.png';
-            }
-            this.previewTpl.overwrite(this.previewImage, {
-                preview: icon,
-                href: '/vps/media/upload/download?uploadId='+value.uploadId
-            });
-            this.infoTpl.overwrite(this.infoContainer, value);
-        } else {
-            this.previewImage.update(this.emptyTpl);
-            this.infoContainer.update('');
-        }
     },
 
     validateValue : function(value){
