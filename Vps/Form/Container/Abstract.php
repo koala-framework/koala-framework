@@ -16,6 +16,7 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract imple
         $this->setLayout('form');
         $this->setBorder(false);
         $this->setLabelAlign('right');
+        $this->setBaseCls('x-plain');
     }
 
     public function getMetaData()
