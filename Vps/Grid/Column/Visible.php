@@ -5,7 +5,7 @@ class Vps_Grid_Column_Visible extends Vps_Grid_Column_Checkbox
     {
         parent::__construct($dataIndex, $header, $width);
         $this->setRenderer('booleanTickCross');
-        $this->setHeaderIcon(new Vps_Asset('table_edit'));
+        $this->setHeaderIcon(new Vps_Asset('visible'));
         $this->setTooltip('Visibility');
         $this->setEditor(new Vps_Form_Field_Checkbox());
     }
