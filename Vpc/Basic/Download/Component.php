@@ -12,7 +12,6 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
                 'downloadTag' => 'Vpc_Basic_DownloadTag_Component',
             ),
             'default'   => array(
-                'filename' => 'unnamed'
             )
         ));
     }
