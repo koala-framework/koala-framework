@@ -25,4 +25,11 @@ class Vps_Form_Field_TimeField extends Vps_Form_Field_SimpleAbstract
         $ret[$this->getFieldName()] = $v;
         return array_merge($ret, Vps_Form_Field_Abstract::load($row));
     }
+
+    protected function _getValueFromPostData($postData)
+    {
+        $ret = parent::_getValueFromPostData($postData);
+        if ($ret == '') $ret = null;
+        return $ret;
+    }
 }
