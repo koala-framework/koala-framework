@@ -102,3 +102,7 @@ td.x-date-mp-sep{border-right:1px solid #d0d0d0;}
 .x-tbar-page-last{background-image:url(/assets/vps/images/gray/grid/page-last.gif)!important;}
 .x-tbar-page-next{background-image:url(/assets/vps/images/gray/grid/page-next.gif)!important;}
 .x-tbar-page-prev{background-image:url(/assets/vps/images/gray/grid/page-prev.gif)!important;}
+
+
+/* änderung vom style: todo - in eigene datei mit eigenen styles auslagern */
+.x-form-item { color: black; }
