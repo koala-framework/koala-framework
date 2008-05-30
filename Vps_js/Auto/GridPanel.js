@@ -105,6 +105,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (!this.store) {
             var remoteSort = false;
             if (meta.paging) remoteSort = true;
+            if (!meta.sortable) remoteSort = true;
             var storeConfig = {
                 proxy: new Ext.data.HttpProxy({ url: this.controllerUrl + '/json-data' }),
                 reader: new Ext.data.JsonReader({
