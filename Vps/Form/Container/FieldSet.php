@@ -9,6 +9,7 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         $this->setAutoHeight(true);
         $this->setBorder(true);
         $this->setXtype('fieldset');
+        $this->setBaseCls(null);
     }
 
     public function setCheckboxName($name)
