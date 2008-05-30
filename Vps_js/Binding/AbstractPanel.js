@@ -112,14 +112,16 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
                     });
 
                     //die anderen auch neu laden
-                    this.bindings.each(function(i) {
-                        i.item.enable();
-                        if (i.item.getBaseParams()[i.queryParam] != this.activeId) {
-                            var params = {};
-                            params[i.queryParam] = this.activeId;
-                            i.item.applyBaseParams(params);
-                            i.item.load();
+                    this.bindings.each(function(b) {
+                        b.item.enable();
+                        if (b.item.ownerCt instanceof Ext.TabPanel) {
+                            if (b.item.ownerCt.getActiveTab() != b.item) {
+                                //dieses binding überspringen, liegt in einem
+                                //tab der nicht aktiv ist
+                                return;
+                            }
                         }
+                        this._loadBinding(b);
                     }, this);
                 } else {
                     this.reload();
