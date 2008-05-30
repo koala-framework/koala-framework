@@ -123,9 +123,9 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
         if ($filedata['type'] == 'application/octet-stream') {
             //for flash uploads
             if (function_exists('finfo_open')) {
-                $finfo = finfo_open(FILEINFO_MIME);
-                $this->mime_type = finfo_file($finfo, $filedata['tmp_name']);
-                finfo_close($finfo);
+                //für andere server muss dieser pfad vielleicht einstellbar gemacht werden
+                $finfo = new finfo(FILEINFO_MIME, '/usr/share/file/magic');
+                $this->mime_type = $finfo->file($filedata['tmp_name']);
             } else if (function_exists('mime_content_type')) {
                 $this->mime_type = mime_content_type($filedata['tmp_name']);
             } else {
