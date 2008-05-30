@@ -117,6 +117,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
 
         this.formPanel = new Ext.FormPanel({
+            baseCls: 'x-plain',
             autoScroll: true,
             items: meta.form
         });
