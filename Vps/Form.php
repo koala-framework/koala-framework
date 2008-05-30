@@ -5,7 +5,7 @@ class Vps_Form extends Vps_Form_NonTableForm
     protected $_modelName;
     protected $_model;
     private $_primaryKey;
-    protected $_row;
+    private $_rows = array();
 
     public function __construct($name = null, $id = null)
     {
@@ -125,7 +125,12 @@ class Vps_Form extends Vps_Form_NonTableForm
 
     public function getRow($parentRow = null)
     {
-        if (isset($this->_row)) return $this->_row;
+        $key = 'none';
+        if ($parentRow) {
+            $pk = $parentRow->getModel()->getPrimaryKey();
+            $key = $parentRow->$pk;
+        }
+        if (isset($this->_rows[$key])) return $this->_rows[$key];
 
         if (!isset($this->_model)) {
             throw new Vps_Exception('_model has to be set');
@@ -145,11 +150,12 @@ class Vps_Form extends Vps_Form_NonTableForm
                 $rowset = $this->_model->fetchAll($where);
             }
         } else if ($id === 0 || $id === '0' || is_null($id)) {
-            $this->_row = $this->_model->createRow();
-            return $this->_row;
+            $this->_rows[$key] = $this->_model->createRow();
+            return $this->_rows[$key];
         } else if ($id) {
             $rowset = $this->_model->find($id);
         }
+
         if (!$rowset) {
             return null;
         } else {
@@ -158,9 +164,9 @@ class Vps_Form extends Vps_Form_NonTableForm
             } else if (count($rowset) > 1) {
                 throw new Vps_Exception('More than one database-entry found.');
             } else {
-                $this->_row = $rowset->current();
+                $this->_rows[$key] = $rowset->current();
             }
         }
-        return $this->_row;
+        return $this->_rows[$key];
     }
 }

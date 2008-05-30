@@ -24,16 +24,4 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
             $card->add($form);
         }
     }
-
-
-    public function validate($postData)
-    {
-        $linktype = $postData[$this->fields['link_class']->getFieldName()];
-        foreach ($this->fields['CardLayout']->getChildren() as $child) {
-            if ($linktype != $child->getName()) {
-                unset($this->fields['CardLayout']->fields[$child->getName()]);
-            }
-        }
-        return parent::validate($postData);
-    }
 }

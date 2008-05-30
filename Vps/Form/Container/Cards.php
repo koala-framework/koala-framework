@@ -58,7 +58,7 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         return $ret;
     }
 
-    public function prepareSave($row, $postData)
+    public function validate($postData)
     {
         foreach ($this->fields as $card) {
             if ($card != $this->_combobox
@@ -66,6 +66,6 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
                 $card->setSave(false);
             }
         }
-        parent::prepareSave($row, $postData);
+        return parent::validate($postData);
     }
 }
