@@ -226,7 +226,7 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
              }
         }
         return true;
-    },
+    }
 
 });
 Ext.reg('swfuploadfield', Vps.Form.SwfUploadField);

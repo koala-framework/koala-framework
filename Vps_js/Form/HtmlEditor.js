@@ -457,7 +457,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 componentClass: this.componentClass
             });
         }
-        if (typeof v.content != 'undefined') v = v.content;
+        if (v && (typeof v.content) != 'undefined') v = v.content;
         Vps.Form.HtmlEditor.superclass.setValue.call(this, v);
     },
 

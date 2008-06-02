@@ -59,7 +59,7 @@ Vps.Form.FieldSet = Ext.extend(Ext.form.FieldSet, {
                     autoHeight: true,
                     bodyBorder : false,
                     title: trlVps('Info'),
-                    resize: false,
+                    resize: false
                 });
                 helpWindow.show();
             }, this);

@@ -56,7 +56,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         Ext.applyIf(this.formConfig, {
             baseParams       : {},
             trackResetOnLoad : true,
-            maskDisabled     : false,
+            maskDisabled     : false
         });
 
         if (!this.controllerUrl) {
