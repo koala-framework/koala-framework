@@ -19,10 +19,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
         $isHttpRequest = (isset($_SERVER['REQUEST_METHOD'])
                             && $_SERVER['REQUEST_METHOD']== 'POST') ||
                     isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
-        if (isset($_SERVER['SHELL'])) {
-            echo $errors->exception->__toString();
-            exit;
-        } else if ($prefix == 'json' &&
+        if ($prefix == 'json' &&
             ($isHttpRequest || $errors->exception instanceof Vps_ClientException)) {
             $this->_forward('json-error');
         } else {

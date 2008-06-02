@@ -40,6 +40,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     protected function _getResourceName()
     {
+        if (isset($_SERVER['SHELL'])) return 'vps_cli';
         if ($this->getRequest()->getControllerName() == 'component') {
             $resource = 'vps_component';
         } else {
