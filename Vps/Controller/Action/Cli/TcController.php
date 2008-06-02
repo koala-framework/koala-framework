@@ -1,6 +1,20 @@
 <?php
 class Vps_Controller_Action_Cli_TcController extends Vps_Controller_Action
 {
+    public static function getHelp()
+    {
+        return "Regenerate TreeCache";
+    }
+    public static function getHelpOptions()
+    {
+        return array(
+            array(
+                'param'=> 'debug',
+                'help' => 'enable debug output'
+            )
+        );
+    }
+
     public function indexAction()
     {
         $debug = $this->_getParam('debug');
@@ -11,7 +25,7 @@ class Vps_Controller_Action_Cli_TcController extends Vps_Controller_Action
             Zend_Registry::set('debugLogger', $logger);
 
             Zend_Registry::get('db')->getProfiler()->setEnabled(false);
-        
+
             $db = Zend_Registry::get('db');
             $db->query("DROP TABLE IF EXISTS vps_tree_cache_copy");
             $db->getConnection()->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);

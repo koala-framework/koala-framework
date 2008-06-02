@@ -1,6 +1,11 @@
 <?php
 class Vps_Controller_Action_Cli_HlpParseController extends Vps_Controller_Action
 {
+    public static function getHelp()
+    {
+        return "parse for hlp() calls and add them to hlp.xml";
+    }
+
     public function indexAction()
     {
         $maskedTexts = $this->_findMaskedTexts('./application');

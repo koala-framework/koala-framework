@@ -1,6 +1,11 @@
 <?php
 class Vps_Controller_Action_Cli_TextComponentsController extends Vps_Controller_Action
 {
+    public static function getHelp()
+    {
+        return "Regenerate vpc_basic_text_components table";
+    }
+
     public function indexAction()
     {
         $start = microtime(true);

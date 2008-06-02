@@ -33,12 +33,8 @@ class Vps_Acl_Component extends Vps_Acl
         $this->deny('guest', 'vps_component_index');
         $this->deny('guest', 'vps_component_pages');
 
-        $this->add(new Zend_Acl_Resource('vps_cli_tc'));
-        $this->add(new Zend_Acl_Resource('vps_cli_textcomponents'));
-        $this->add(new Zend_Acl_Resource('vps_cli_hlpparse'));
-        $this->allow('cli', 'vps_cli_tc');
-        $this->allow('cli', 'vps_cli_textcomponents');
-        $this->allow('cli', 'vps_cli_hlpparse');
+        $this->add(new Zend_Acl_Resource('vps_cli'));
+        $this->allow('cli', 'vps_cli');
 
     }
 }

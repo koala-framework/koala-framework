@@ -3,9 +3,6 @@ class Vps_Controller_Request_Cli extends Zend_Controller_Request_Abstract
 {
     public function __construct()
     {
-        //todo: ned hier fix einstellen sondern über router einstellbar machen
-        $this->setModuleName('vps_controller_action_cli');
-
         $argv = $_SERVER['argv'];
         unset($argv[0]);
         if (isset($argv[1])) {

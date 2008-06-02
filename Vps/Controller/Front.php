@@ -26,9 +26,15 @@ class Vps_Controller_Front extends Zend_Controller_Front
                                 'vps_controller_action_cli');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Media',
                                 'vps_controller_action_media');
+        if (file_exists('application/controllers/Cli')) {
+            $this->addControllerDirectory('application/controllers/Cli', 'cli');
+        }
 
         $plugin = new Zend_Controller_Plugin_ErrorHandler();
         $plugin->setErrorHandlerModule('vps_controller_action_error');
+        if (isset($_SERVER['SHELL'])) {
+            $plugin->setErrorHandlerController('cli');
+        }
         $this->registerPlugin($plugin);
     }
 
