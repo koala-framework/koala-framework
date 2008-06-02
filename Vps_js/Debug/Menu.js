@@ -79,7 +79,7 @@ Vps.Debug.Menu = function(config) {
         handler: function(menu) {
             Ext.Ajax.request({
                 url: '/vps/debug/assets/json-set-debug-assets',
-                params: { 'autoClearCache' : !menu.checked+0 },
+                params: { 'autoClearCache' : !menu.checked+0 }
             });
         },
         checked: chk
@@ -91,7 +91,7 @@ Vps.Debug.Menu = function(config) {
         handler: function(menu) {
             Ext.Ajax.request({
                 url: '/vps/debug/assets/json-set-debug-assets',
-                params: { 'js' : !menu.checked+0 },
+                params: { 'js' : !menu.checked+0 }
             });
         },
         checked: chk
@@ -103,7 +103,7 @@ Vps.Debug.Menu = function(config) {
         handler: function(menu) {
             Ext.Ajax.request({
                 url: '/vps/debug/assets/json-set-debug-assets',
-                params: { 'css' : !menu.checked+0 },
+                params: { 'css' : !menu.checked+0 }
             });
         },
         checked: chk
@@ -124,7 +124,7 @@ Vps.Debug.Menu = function(config) {
                 height: 600
             });
             win.show();
-        },
+        }
     });
     this.add({
         text: 'show debug console',
