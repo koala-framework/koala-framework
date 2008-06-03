@@ -54,6 +54,15 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract imple
         return $this->fields->add($v);
     }
 
+    public function insertBefore($where, $v = null)
+    {
+        return $this->fields->insertBefore($where, $v);
+    }
+    public function insertAfter($where, $v = null)
+    {
+        return $this->fields->insertAfter($where, $v);
+    }
+
     //IteratorAggregate
     public function getIterator()
     {

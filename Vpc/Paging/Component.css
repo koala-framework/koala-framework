@@ -5,8 +5,7 @@ div.vpcPaging {
     text-align: center;
 }
 div.vpcPaging a {
-    padding: 5px;
-    padding-top: 3px; padding-bottom: 3px;
+    padding: 2px 3px;
     border: 1px solid #FF9600;
     color: #786047;
 }

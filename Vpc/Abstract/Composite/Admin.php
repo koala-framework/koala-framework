@@ -5,7 +5,10 @@ class Vpc_Abstract_Composite_Admin extends Vpc_Admin
     {
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
         foreach ($classes as $class) {
-            Vpc_Admin::getInstance($class)->setup();
+            $admin = Vpc_Admin::getInstance($class);
+            if (method_exists($admin, 'setup')) {
+                $admin->setup();
+            }
         }
     }
     public function delete($componentId)

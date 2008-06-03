@@ -5,19 +5,51 @@ class Vpc_Paging_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['pagesize'] = 10;
+        $ret['maxPagingLinks'] = 13;
+        $ret['bigPagingSteps'] = array(10, 50);
         $ret['includedParams'] = array();
         return $ret;
-    }
-
-    protected function _getParamName()
-    {
-        return $this->getDbId();
     }
 
     private function _getEntries()
     {
         return $this->getTreeCacheRow()->findParentComponent()
                     ->getComponent()->getPagingCount();
+    }
+
+    private function _getLinkData($pageNumber, $linktext = null)
+    {
+        if (is_null($linktext)) $linktext = $pageNumber;
+
+        $params = array();
+        foreach ($this->_getSetting('includedParams') as $p) {
+            $v = $this->_getParam($p);
+            if ($v) {
+                $params[] = "$p=".urlencode($v);
+            }
+        }
+        $params = implode('&', $params);
+
+        $currentPage = $this->_getCurrentpage();
+        $p = '';
+        if ($pageNumber == 1) {
+            if ($params) $p = '?'.$params;
+        } else {
+            $p = '?'.$this->_getParamName().'='.$pageNumber;
+            if ($params) $p .= '&'.$params;
+        }
+
+        return array(
+            'text' => $linktext,
+            'href' => $this->getUrl().$p,
+            'rel'  => '',
+            'active' => $currentPage == $pageNumber
+        );
+    }
+
+    protected function _getParamName()
+    {
+        return $this->getDbId();
     }
 
     protected function _getPages()
@@ -51,27 +83,60 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['pages'] = $this->_getPages();
         $ret['currentPage'] = $this->_getCurrentpage();
         $ret['pageLinks'] = array();
-        $params = array();
-        foreach ($this->_getSetting('includedParams') as $p) {
-            $v = $this->_getParam($p);
-            if ($v) {
-                $params[] = "$p=".urlencode($v);
+
+        if ($ret['currentPage'] >= 3) {
+            $ret['pageLinks'][] = $this->_getLinkData(1, '&lt;&lt;');
+        }
+        if ($ret['currentPage'] >= 2) {
+            $ret['pageLinks'][] = $this->_getLinkData($ret['currentPage']-1, '&lt;');
+        }
+
+        $appendPagelinks = array();
+        $bigSteps = $this->_getSetting('bigPagingSteps');
+        rsort($bigSteps);
+        foreach ($bigSteps as $stepOffset) {
+            if ($this->_getSetting('maxPagingLinks') < $stepOffset * 2) {
+                if ($ret['currentPage'] >= $stepOffset + 1) {
+                    $ret['pageLinks'][] = $this->_getLinkData($ret['currentPage'] - $stepOffset);
+                }
+
+                if ($ret['currentPage'] <= $ret['pages'] - $stepOffset) {
+                    array_unshift($appendPagelinks, $this->_getLinkData($ret['currentPage'] + $stepOffset));
+                }
             }
         }
-        $params = implode('&', $params);
-        for ($i = 1; $i <= $ret['pages']; $i++) {
-            if ($i == 1) {
-                $p = '?'.$params;
-            } else {
-                $p = '?'.$this->_getParamName().'='.$i.'&'.$params;
-            }
-            $ret['pageLinks'][] = array(
-                'text' => $i,
-                'href' => $this->getUrl().$p,
-                'rel'  => '',
-                'active' => $ret['currentPage']==$i
-            );
+
+        if ($ret['currentPage'] < $ret['pages']) {
+            $appendPagelinks[] = $this->_getLinkData($ret['currentPage']+1, '&gt;');
         }
+        if ($ret['currentPage'] < $ret['pages'] - 1) {
+            $appendPagelinks[] = $this->_getLinkData($ret['pages'], '&gt;&gt;');
+        }
+
+        $linksPerDirection = floor(
+            ($this->_getSetting('maxPagingLinks') - (count($ret['pageLinks']) + count($appendPagelinks) + 1)) / 2
+        );
+        if ($linksPerDirection < 0) $linksPerDirection = 0;
+
+        $fromPage = $ret['currentPage'] - $linksPerDirection;
+        $toPage = $ret['currentPage'] + $linksPerDirection;
+        if ($fromPage < 1) {
+            $toPage += abs($fromPage - 1);
+        }
+        if ($toPage > $ret['pages']) {
+            $fromPage -= ($toPage - $ret['pages']);
+        }
+        if ($fromPage < 1) $fromPage = 1;
+        if ($toPage > $ret['pages']) $toPage = $ret['pages'];
+
+        for ($i = $fromPage; $i <= $toPage; $i++) {
+            $ret['pageLinks'][] = $this->_getLinkData($i);
+        }
+
+        foreach ($appendPagelinks as $linkData) {
+            $ret['pageLinks'][] = $linkData;
+        }
+
         return $ret;
     }
 }
