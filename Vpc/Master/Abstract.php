@@ -55,7 +55,7 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
      */
     public function getUrl()
     {
-        return $this->getTreeCacheRow()->url;
+        return $this->getTreeCacheRow()->tree_url;
     }
 
     public function getName()

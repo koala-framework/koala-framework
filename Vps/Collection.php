@@ -100,12 +100,12 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
         return $value;
     }
 
-    public function append($value)
+    public function append($value = null)
     {
         return $this->add($value);
     }
 
-    public function insertBefore($where, Vps_Collection_Item_Interface $value)
+    public function insertBefore($where, Vps_Collection_Item_Interface $value = null)
     {
         $added = false;
         $value = $this->_preInsertValue($value);
@@ -122,7 +122,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
         return $value;
     }
 
-    public function insertAfter($where, Vps_Collection_Item_Interface $value)
+    public function insertAfter($where, Vps_Collection_Item_Interface $value = null)
     {
         $added = false;
         $value = $this->_preInsertValue($value);
