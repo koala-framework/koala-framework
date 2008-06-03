@@ -1,16 +1,9 @@
 <html>
     <head>
+        <title>404 <?= trlVps('Not Found'); ?></title>
     </head>
     <body>
-        <h1><?= trlVps('Page not found'); ?></h1>
-
-        <?= trlVps('Errortype'); ?>:<br />
-        <pre><?= $this->type ?></pre>
-
-        <br />
-
-        <?= trlVps('Message'); ?>:<br />
-        <pre><?= $this->exception ?></pre>
-
+        <h1><?= trlVps('Not Found'); ?></h1>
+        <p><?= trlVps('The requested URL "{0}" was not found on this server.', $this->requestUri); ?></p>
     </body>
 </html>
