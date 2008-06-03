@@ -375,7 +375,11 @@ class Vps_Setup
                     $row = $tc->fetchAll($where)->current();
                 }
                 if (!$row) {
-                    throw new Vps_Controller_Action_Web_FileNotFoundException('Page not found for path ' . $uri);
+                    header('HTTP/1.1 404 Not Found');
+                    $view = new Vps_View();
+                    $view->requestUri = $uri;
+                    echo $view->render('error404.tpl');
+                    exit;
                 }
                 if ($row->url_match != $requestUrl) {
                     header('Location: '.$row->url_match);
