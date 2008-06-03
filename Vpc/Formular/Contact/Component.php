@@ -5,8 +5,8 @@ class Vpc_Formular_Contact_Component extends Vpc_Formular_Dynamic_Component
     {
         $ret = parent::getSettings();
         $ret['tablename'] = 'Vpc_Formular_Contact_Model';
-        $ret['assets']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
-        $ret['assets']['files'][] = 'vps/Vpc/Formular/Contact/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Formular/Contact/Panel.js';
         return $ret;
     }
 

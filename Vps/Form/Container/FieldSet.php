@@ -74,8 +74,8 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         $ret['tablename'] = 'Vpc_Formular_Dynamic_Model';
         $ret['decorator'] = 'Vpc_Formular_Decorator_Label';
         $ret['componentName'] = trlVps('Fieldset');
-        $ret['assets']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
-        $ret['assets']['files'][] = 'vps/Vps/Form/Container/FieldSet/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
+        $ret['assetsAdmin']['files'][] = 'vps/Vps/Form/Container/FieldSet/Panel.js';
         return $ret;
     }
 }
