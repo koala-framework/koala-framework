@@ -1,6 +1,17 @@
 <?php
 class Vpc_Paragraphs_Admin extends Vpc_Admin
 {
+    private function _componentNameToArray($name, $component)
+    {
+        $names = explode('.', $name, 2);
+        if (count($names) > 1) {
+            $ret = $this->_componentNameToArray($names[1], $component);
+        } else {
+            $ret = $component;
+        }
+        return array($names[0] => $ret);
+    }
+
     public function getExtConfig()
     {
         $componentList = array();
@@ -12,12 +23,12 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
                 $icon = $icon->__toString();
             }
             if ($name) {
-                $str = '$componentList["' . str_replace('.', '"]["', $name) . '"] = "' . $component . '";';
-                eval($str);
+                $componentList = array_merge(
+                    $componentList, $this->_componentNameToArray($name, $component)
+                );
                 $componentIcons[$component] = $icon;
             }
         }
-        asort($componentList);
 
         return array_merge(parent::getExtConfig(), array(
             'xtype'=>'vpc.paragraphs',
