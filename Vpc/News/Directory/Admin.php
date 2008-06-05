@@ -4,23 +4,18 @@ class Vpc_News_Directory_Admin extends Vpc_Admin
     public function getExtConfig()
     {
         $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        $categories = Vpc_Abstract::getSetting($this->_class, 'categories');
         $plugins = array();
-        foreach ($categories as $katname => $katsettings) {
-            if (!isset($classes[$katname])) {
-                throw new Vps_Exception(trlVps('childComponentClass must be set for key \'{0}\'', $katname));
-            }
-            $pluginName = Vpc_Admin::getComponentFile(
-                $classes[$katname], 'Plugins', 'js', true
+        foreach ($classes as $class) {
+            $plugin = Vpc_Admin::getComponentFile(
+                $class, 'Plugin', 'js', true
             );
-            if ($pluginName) {
-                $pluginName = str_replace('_', '.', $pluginName);
-                $plugins[] = $pluginName;
+            if ($plugin) {
+                $plugins[] = str_replace('_', '.', $plugin);
             }
         }
         return array_merge(parent::getExtConfig(), array(
             'xtype'=>'vpc.news',
-            'contentClass' => $classes['details'],
+            'contentClass' => $classes['detail'],
             'componentPlugins' => $plugins
         ));
     }

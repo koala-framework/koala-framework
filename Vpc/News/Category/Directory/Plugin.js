@@ -1,0 +1,29 @@
+Ext.namespace('Vpc.News.Category.Directory');
+Vpc.News.Category.Directory.Plugin = Ext.extend(Ext.util.Observable,
+{
+    init: function(newsPanel)
+    {
+        newsPanel.on('beforerendergrid', function(grid)
+        {
+            grid.getTopToolbar().add({
+                text    : 'Categories',
+                handler : function(o, p) {
+                    var dlg = new Ext.Window({
+                        width:  450,
+                        height: 370,
+                        layout: 'fit',
+                        title:  trlVps('News Categories'),
+                        modal:  true,
+                        items:  new Vps.Auto.GridPanel({
+                            //TODO: url hier nicht hardkodieren, soll geändert werden können
+                            controllerUrl: '/admin/component/edit/Vpc_News_Category_Directory_Component',
+                            baseParams: newsPanel.getBaseParams()
+                        })
+                    }, this);
+                    dlg.show();
+                },
+                scope   : this
+            });
+        }, this);
+    }
+});

@@ -1,10 +1,10 @@
-Ext.namespace('Vpc.News');
-Vpc.News.Panel = Ext.extend(Vps.Auto.GridPanel,
+Ext.namespace('Vpc.News.Directory');
+Vpc.News.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
 {
     initComponent: function() {
         this.editDialog = new Vps.Auto.Form.Window({
             //TODO: url hier nicht hardkodieren, soll geändert werden können
-            controllerUrl: '/admin/component/edit/Vpc_News_Form',
+            controllerUrl: '/admin/component/edit/Vpc_News_Directory_Form',
             width: 500,
             height: 400
         });
@@ -27,7 +27,7 @@ Vpc.News.Panel = Ext.extend(Vps.Auto.GridPanel,
             }
         };
 
-        Vpc.News.Panel.superclass.initComponent.call(this);
+        Vpc.News.Directory.Panel.superclass.initComponent.call(this);
     },
 
     fireEditComponent : function(row)
@@ -41,4 +41,4 @@ Vpc.News.Panel = Ext.extend(Vps.Auto.GridPanel,
     }
 });
 
-Ext.reg('vpc.news', Vpc.News.Panel);
+Ext.reg('vpc.news', Vpc.News.Directory.Panel);
