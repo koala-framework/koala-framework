@@ -48,32 +48,19 @@ class Vps_Model_Db implements Vps_Model_Interface
 
     public function fetchCount(array $where = array())
     {
-        $select = $this->_table->getAdapter()->select();
-        $info = $this->_table->info();
+        $select = $this->_table->select();
 
-        $select->from($info['name'], 'COUNT(*)', $info['schema']);
+        $select->from($this->_table, 'COUNT(*)');
 
-
+        //TODO: das gehört hier nicht her
         if ($this->_table instanceof Vps_Model_User_Users) {
             $where = $this->_table->prepareWhere($where);
             if (!is_array($where)) $where = array($where);
         }
 
-        foreach ($where as $key => $val) {
-            // is $key an int?
-            if (is_int($key)) {
-                // $val is the full condition
-                $select->where($val);
-            } else {
-                // $key is the condition with placeholder,
-                // and $val is quoted into the condition
-                $select->where($key, $val);
-            }
-        }
+        $select->where($where);
 
-        // return the results
-        $stmt = $this->_table->getAdapter()->query($select);
-        return $stmt->fetchColumn();
+        return $this->_table->getAdapter()->query($select)->fetchColumn();
     }
 
     public function getPrimaryKey()

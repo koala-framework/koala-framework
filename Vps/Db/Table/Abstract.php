@@ -67,4 +67,9 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
     {
         return $this->_dao;
     }
+
+    public function select()
+    {
+        return new Vps_Db_Table_Select($this);
+    }
 }
