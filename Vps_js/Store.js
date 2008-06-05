@@ -5,7 +5,8 @@ Ext.override(Ext.data.Store, {
         if(!this.recordType) {
             this.baseParams.meta = true;
         }
-        this.originalLoad(options);
+        var ret = this.originalLoad(options);
         this.baseParams.meta = undefined;
+        return ret;
     }
 });
