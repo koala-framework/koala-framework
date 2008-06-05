@@ -12,6 +12,8 @@ class Vpc_News_Category_Directory_Component extends Vpc_Abstract
         $ret['categoryChildId'] = 'categories';
         $ret['categoryName'] = trlVps('Categories');
 
+        $ret['assetsAdmin']['files'][] = 'vps/Vpc/News/Category/Directory/Plugin.js';
+
         return $ret;
     }
 

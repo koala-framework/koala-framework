@@ -25,7 +25,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract implements 
             ->join('vpc_news', 'vps_tree_cache.tag=vpc_news.id')
             ->where('publish_date <= NOW()')
             ->where('expiry_date >= NOW()');
-        if (!$this->showInvisible()) {
+        if (!$this->_showInvisible()) {
             $select->where('vps_tree_cache.visible = 1');
         }
         return $select;

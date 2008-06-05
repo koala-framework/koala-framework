@@ -2,10 +2,11 @@
 class Vpc_News_Directory_FormController extends Vps_Controller_Action_Auto_Form
 {
     protected $_buttons = array();
-    protected $_permissions = array('save' => true, 'add' => true);
+    protected $_permissions = array('save', 'add');
 
     public function preDispatch()
     {
+        p($this->class);
         $tablename = Vpc_Abstract::getSetting($this->class, 'tablename');
         $this->_table = new $tablename(array('componentClass'=>$this->class));
         parent::preDispatch();
@@ -24,24 +25,15 @@ class Vpc_News_Directory_FormController extends Vps_Controller_Action_Auto_Form
         $this->_form->add(new Vps_Form_Field_DateField('expiry_date', trlVps('Expiry Date')));
 
 
-        $component = get_class($this);
-        $component = substr($component, 0, strrpos($component, '_')) . '_Component';
-        $component = Vps_PageCollection_Abstract::getInstance()->getComponentByParentClass($component);
-        $componentName = get_class($component);
-
-        $childComponentClasses = Vpc_Abstract::getSetting($componentName, 'childComponentClasses');
-        $categories = Vpc_Abstract::getSetting($componentName, 'categories');
-
-        if ($categories) {
-            foreach ($categories as $cKey => $category) {
-                $formName = Vpc_Admin::getComponentFile(
-                    $childComponentClasses[$cKey], 'Form', 'php', true
-                );
-                if ($formName) {
-                    $this->_form->add(new $formName($childComponentClasses[$cKey]))
-                        ->setBaseCls('x-plain');
-                }
-
+@work: $this->class ist FALSCH
+        $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
+        p($this->class);
+        foreach ($classes as $class) {
+            $formName = Vpc_Admin::getComponentClass($class, 'NewsEditForm');
+            p($class);
+            p($formName);
+            if ($formName) {
+                $this->_form->add(new $formName($class, $class));
             }
         }
     }
