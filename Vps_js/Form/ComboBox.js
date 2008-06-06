@@ -24,6 +24,7 @@ Vps.Form.ComboBox = Ext.extend(Ext.form.ComboBox,
                 id: 'id'
             });
             this.store = new Ext.data.SimpleStore(store);
+			this.displayField = store.fields[1];
             this.mode = 'local';
         } else {
             if (store.reader) {
