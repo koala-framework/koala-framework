@@ -218,6 +218,13 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         if (!isset($this->_model)) {
             throw new Vps_Exception("Either _model has to be set or _fetchData has to be overwritten.");
         }
+        
+        if (!$order) {
+            $info = $this->_getTableInfo();
+            if (array_search($this->_defaultOrder['field'], $info['cols']) !== false) {
+                $order = $this->_defaultOrder['field'] . ' ' . $this->_defaultOrder['direction'];
+            }
+        }
 
         $where = $this->_getWhere();
 

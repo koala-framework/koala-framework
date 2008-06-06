@@ -6,6 +6,8 @@ Vps.Auto.GridFilter.Button = function(config)
         icon: config.icon,
         text: config.text,
         cls: config.cls,
+		pressed: config.pressed,
+		tooltip: config.tooltip,
         enableToggle: true
     });
     this.button.on('toggle', function() {
