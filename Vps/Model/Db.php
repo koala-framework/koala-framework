@@ -52,7 +52,7 @@ class Vps_Model_Db implements Vps_Model_Interface
 
         $select->from($this->_table, 'COUNT(*)');
 
-        //TODO: das gehört hier nicht her
+        //TODO: das gehï¿½rt hier nicht her
         if ($this->_table instanceof Vps_Model_User_Users) {
             $where = $this->_table->prepareWhere($where);
             if (!is_array($where)) $where = array($where);
@@ -77,6 +77,11 @@ class Vps_Model_Db implements Vps_Model_Interface
     public function getTable()
     {
         return $this->_table;
+    }
+
+    public function getAdapter()
+    {
+        return $this->getTable()->getAdapter();
     }
 
 }
