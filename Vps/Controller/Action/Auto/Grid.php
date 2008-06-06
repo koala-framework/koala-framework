@@ -117,7 +117,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $this->_queryFields[] = $index;
             }
         }
-        if (!in_array($this->_primaryKey, $this->_queryFields)) {
+        $info = $this->_getTableInfo();
+        if (!in_array($this->_primaryKey, $this->_queryFields) && $info && !in_array($info['name'].'.'.$this->_primaryKey, $this->_queryFields)) {
             $this->_queryFields[] = $this->_primaryKey;
         }
 
