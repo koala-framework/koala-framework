@@ -20,10 +20,7 @@ class Vps_Pdf_TcPdf extends TCPDF
 
     public function Output ($name='',$dest='')
     {
-    	header('Accept-Ranges: bytes');
 		parent::Output($name, $dest);
-
-
     }
 
     public function setPageWidth($value)
