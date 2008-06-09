@@ -64,7 +64,7 @@ class Vps_Model_FieldRows extends Vps_Model_Abstract
             'rowClass' => $this->_rowClass
         ));
     }
-    public function fetchCount(array $where = array())
+    public function fetchCount($where = array())
     {
         if ($where) throw new Vps_Exception('where is not yet implmented');
         return count($this->_data);

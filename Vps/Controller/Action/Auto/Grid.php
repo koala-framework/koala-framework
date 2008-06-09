@@ -140,18 +140,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             'table' => $table
         ));
     }
-/*
-$this->_table->select() aus incubator verwenden
-http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-+Simon+Mundy
-    protected function _select()
-    {
-        $select = $this->_table->select();
-        $select->where($this->_getWhere()); //todo: ged so ned, siehe fetchCount
-        $select->order($order);
-        $select->limit($start, $limit);
-        return $select;
-    }
-*/
+
     protected function _getWhere()
     {
         if (!($this->_model instanceof Vps_Model_Db)) {
@@ -219,7 +208,8 @@ http://framework.zend.com/wiki/display/ZFPROP/Zend_Db_Table+Query+Enhancements+-
         if (!isset($this->_model)) {
             throw new Vps_Exception("Either _model has to be set or _fetchData has to be overwritten.");
         }
-        
+
+        //todo: hier entfernen
         if (!$order) {
             $info = $this->_getTableInfo();
             if (array_search($this->_defaultOrder['field'], $info['cols']) !== false) {
