@@ -46,19 +46,25 @@ class Vps_Model_Db implements Vps_Model_Interface
         ));
     }
 
-    public function fetchCount(array $where = array())
+    public function fetchCount($where = array())
     {
-        $select = $this->_table->select();
-
-        $select->from($this->_table, 'COUNT(*)');
+        if ($where instanceof Zend_Db_Select) {
+            $select = $where;
+            $select->reset(Zend_Db_Select::COLUMNS);
+            $select->from(null, 'COUNT(*)');
+        } else if (is_array($where)) {
+            $select = $this->_table->select();
+            $select->from($this->_table, 'COUNT(*)');
+            $select->where($where);
+        } else {
+            throw new Vps_Exception("array or Zend_Db_Select required as first argument for fetchCount");
+        }
 
         //TODO: das geh�rt hier nicht her
         if ($this->_table instanceof Vps_Model_User_Users) {
             $where = $this->_table->prepareWhere($where);
             if (!is_array($where)) $where = array($where);
         }
-
-        $select->where($where);
 
         return $this->_table->getAdapter()->query($select)->fetchColumn();
     }

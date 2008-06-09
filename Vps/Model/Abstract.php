@@ -33,7 +33,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     {
     }
 
-    public function fetchCount(array $where = array())
+    public function fetchCount($where = array())
     {
     }
 

@@ -59,7 +59,7 @@ class Vps_Model_Field extends Vps_Model_Abstract
     {
         throw new Vps_Exception('fetchAll is not possible for Vps_Model_Field');
     }
-    public function fetchCount(array $where = array())
+    public function fetchCount($where = array())
     {
         throw new Vps_Exception('fetchCount is not possible for Vps_Model_Field');
     }
