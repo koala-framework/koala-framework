@@ -1,0 +1,2731 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<countries>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Afghanistan</name>
+        <capital language="de">Kabul</capital>
+        <iso2>AF</iso2>
+        <iso3>AFG</iso3>
+        <ico>AFG</ico>
+        <tld>.af</tld>
+        <currency>AFN</currency>
+        <areacode>+93</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Ägypten</name>
+        <capital language="de">Kairo</capital>
+        <iso2>EG</iso2>
+        <iso3>EGY</iso3>
+        <ico>EGY</ico>
+        <tld>.eg</tld>
+        <currency>EGP</currency>
+        <areacode>+20</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Aland</name>
+        <capital language="de">Mariehamn</capital>
+        <iso2>AX</iso2>
+        <iso3>ALA</iso3>
+        <ico></ico>
+        <tld>.ax</tld>
+        <currency>EUR</currency>
+        <areacode>+35818</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Albanien</name>
+        <capital language="de">Tirana</capital>
+        <iso2>AL</iso2>
+        <iso3>ALB</iso3>
+        <ico>ALB</ico>
+        <tld>.al</tld>
+        <currency>ALL</currency>
+        <areacode>+355</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Algerien</name>
+        <capital language="de">Algier</capital>
+        <iso2>DZ</iso2>
+        <iso3>DZA</iso3>
+        <ico>ALG</ico>
+        <tld>.dz</tld>
+        <currency>DZD</currency>
+        <areacode>+213</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Amerikanisch-Samoa</name>
+        <capital language="de">Pago-Pago</capital>
+        <iso2>AS</iso2>
+        <iso3>ASM</iso3>
+        <ico></ico>
+        <tld>.as</tld>
+        <currency>USD</currency>
+        <areacode>+1684</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Amerikanische Jungferninseln</name>
+        <capital language="de">Charlotte Amalie</capital>
+        <iso2>VI</iso2>
+        <iso3>VIR</iso3>
+        <ico></ico>
+        <tld>.vi</tld>
+        <currency>USD</currency>
+        <areacode>+1340</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Andorra</name>
+        <capital language="de">Andorra la Vella</capital>
+        <iso2>AD</iso2>
+        <iso3>AND</iso3>
+        <ico>AND</ico>
+        <tld>.ad</tld>
+        <currency>EUR</currency>
+        <areacode>+376</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Angola</name>
+        <capital language="de">Luanda</capital>
+        <iso2>AO</iso2>
+        <iso3>AGO</iso3>
+        <ico>ANG</ico>
+        <tld>.ao</tld>
+        <currency>AOA</currency>
+        <areacode>+244</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Anguilla</name>
+        <capital language="de">The Valley</capital>
+        <iso2>AI</iso2>
+        <iso3>AIA</iso3>
+        <ico></ico>
+        <tld>.ai</tld>
+        <currency>XCD</currency>
+        <areacode>+1264</areacode>
+    </country>
+    <country>
+        <continent language="de">Antarktika</continent>
+        <name language="de">Antarktis</name>
+        <capital language="de">Juneau</capital>
+        <iso2>AQ</iso2>
+        <iso3>ATA</iso3>
+        <ico></ico>
+        <tld>.aq</tld>
+        <currency></currency>
+        <areacode>+672</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Antigua und Barbuda</name>
+        <capital language="de">Saint John's</capital>
+        <iso2>AG</iso2>
+        <iso3>ATG</iso3>
+        <ico>ANT</ico>
+        <tld>.ag</tld>
+        <currency>XCD</currency>
+        <areacode>+1268</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Äquatorialguinea, Republik</name>
+        <capital language="de">Malabo</capital>
+        <iso2>GQ</iso2>
+        <iso3>GNQ</iso3>
+        <ico>GEQ</ico>
+        <tld>.gq</tld>
+        <currency>XAF</currency>
+        <areacode>+240</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Argentinien</name>
+        <capital language="de">Buenos Aires</capital>
+        <iso2>AR</iso2>
+        <iso3>ARG</iso3>
+        <ico>ARG</ico>
+        <tld>.ar</tld>
+        <currency>ARS</currency>
+        <areacode>+54</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Armenien</name>
+        <capital language="de">Eriwan</capital>
+        <iso2>AM</iso2>
+        <iso3>ARM</iso3>
+        <ico>ARM</ico>
+        <tld>.am</tld>
+        <currency>AMD</currency>
+        <areacode>+374</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Aruba</name>
+        <capital language="de">Oranjestad</capital>
+        <iso2>AW</iso2>
+        <iso3>ABW</iso3>
+        <ico>ARU</ico>
+        <tld>.aw</tld>
+        <currency>ANG</currency>
+        <areacode>+297</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Ascension</name>
+        <capital language="de">-/-</capital>
+        <iso2>AC</iso2>
+        <iso3>ASC</iso3>
+        <ico></ico>
+        <tld>.ac</tld>
+        <currency></currency>
+        <areacode>+247</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Aserbaidschan</name>
+        <capital language="de">Baku</capital>
+        <iso2>AZ</iso2>
+        <iso3>AZE</iso3>
+        <ico>AZE</ico>
+        <tld>.az</tld>
+        <currency>AZN</currency>
+        <areacode>+994</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Äthiopien</name>
+        <capital language="de">Addis Abeba</capital>
+        <iso2>ET</iso2>
+        <iso3>ETH</iso3>
+        <ico>ETH</ico>
+        <tld>.et</tld>
+        <currency>ETB</currency>
+        <areacode>+251</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Australien</name>
+        <capital language="de">Canberra</capital>
+        <iso2>AU</iso2>
+        <iso3>AUS</iso3>
+        <ico>AUS</ico>
+        <tld>.au</tld>
+        <currency>AUD</currency>
+        <areacode>+61</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Bahamas</name>
+        <capital language="de">Nassau</capital>
+        <iso2>BS</iso2>
+        <iso3>BHS</iso3>
+        <ico>BAH</ico>
+        <tld>.bs</tld>
+        <currency>BSD</currency>
+        <areacode>+1242</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Bahrain</name>
+        <capital language="de">Manama</capital>
+        <iso2>BH</iso2>
+        <iso3>BHR</iso3>
+        <ico>BRN</ico>
+        <tld>.bh</tld>
+        <currency>BHD</currency>
+        <areacode>+973</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Bangladesch</name>
+        <capital language="de">Dhaka</capital>
+        <iso2>BD</iso2>
+        <iso3>BGD</iso3>
+        <ico>BAN</ico>
+        <tld>.bd</tld>
+        <currency>BDT</currency>
+        <areacode>+880</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Barbados</name>
+        <capital language="de">Bridgetown</capital>
+        <iso2>BB</iso2>
+        <iso3>BRB</iso3>
+        <ico>BAR</ico>
+        <tld>.bb</tld>
+        <currency>BBD</currency>
+        <areacode>+1246</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Belgien</name>
+        <capital language="de">Brüssel</capital>
+        <iso2>BE</iso2>
+        <iso3>BEL</iso3>
+        <ico>BEL</ico>
+        <tld>.be</tld>
+        <currency>EUR</currency>
+        <areacode>+32</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Belize</name>
+        <capital language="de">Belmopan</capital>
+        <iso2>BZ</iso2>
+        <iso3>BLZ</iso3>
+        <ico>BLZ</ico>
+        <tld>.bz</tld>
+        <currency>BZD</currency>
+        <areacode>+51</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Benin</name>
+        <capital language="de">Porto Novo</capital>
+        <iso2>BJ</iso2>
+        <iso3>BEN</iso3>
+        <ico>BEN</ico>
+        <tld>.bj</tld>
+        <currency>XOF</currency>
+        <areacode>+229</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Bermuda</name>
+        <capital language="de">Hamilton</capital>
+        <iso2>BM</iso2>
+        <iso3>BMU</iso3>
+        <ico>BER</ico>
+        <tld>.bm</tld>
+        <currency>BMD</currency>
+        <areacode>+1441</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Bhutan</name>
+        <capital language="de">Thimphu</capital>
+        <iso2>BT</iso2>
+        <iso3>BTN</iso3>
+        <ico>BHU</ico>
+        <tld>.bt</tld>
+        <currency>BTN</currency>
+        <areacode>+975</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Bolivien</name>
+        <capital language="de">Sucre</capital>
+        <iso2>BO</iso2>
+        <iso3>BOL</iso3>
+        <ico>BOL</ico>
+        <tld>.bo</tld>
+        <currency>BOB</currency>
+        <areacode>+591</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Bosnien und Herzegowina</name>
+        <capital language="de">Sarajevo</capital>
+        <iso2>BA</iso2>
+        <iso3>BIH</iso3>
+        <ico>BIH</ico>
+        <tld>.ba</tld>
+        <currency>BAM</currency>
+        <areacode>+387</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Botswana</name>
+        <capital language="de">Gaborone</capital>
+        <iso2>BW</iso2>
+        <iso3>BWA</iso3>
+        <ico>BOT</ico>
+        <tld>.bw</tld>
+        <currency>BWP</currency>
+        <areacode>+267</areacode>
+    </country>
+    <country>
+        <continent language="de">Antarktika</continent>
+        <name language="de">Bouvetinsel</name>
+        <capital language="de">(Forschungsinsel)</capital>
+        <iso2>BV</iso2>
+        <iso3>BVT</iso3>
+        <ico></ico>
+        <tld>.bv</tld>
+        <currency>NOK</currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Brasilien</name>
+        <capital language="de">Brasília</capital>
+        <iso2>BR</iso2>
+        <iso3>BRA</iso3>
+        <ico>BRA</ico>
+        <tld>.br</tld>
+        <currency>BRL</currency>
+        <areacode>+55</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Britische Jungferninseln</name>
+        <capital language="de">Road Town</capital>
+        <iso2>VG</iso2>
+        <iso3>VGB</iso3>
+        <ico>ISB</ico>
+        <tld>.vg</tld>
+        <currency>USD</currency>
+        <areacode>+1284</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Britisches Territorium im Indischen Ozean</name>
+        <capital language="de">-/-</capital>
+        <iso2>IO</iso2>
+        <iso3>IOT</iso3>
+        <ico></ico>
+        <tld>.io</tld>
+        <currency>USD</currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Brunei</name>
+        <capital language="de">Bandar Seri Begawan</capital>
+        <iso2>BN</iso2>
+        <iso3>BRN</iso3>
+        <ico>BRU</ico>
+        <tld>.bn</tld>
+        <currency>BND</currency>
+        <areacode>+673</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Bulgarien</name>
+        <capital language="de">Sofia</capital>
+        <iso2>BG</iso2>
+        <iso3>BGR</iso3>
+        <ico>BUL</ico>
+        <tld>.bg</tld>
+        <currency>BGN</currency>
+        <areacode>+359</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Burkina Faso</name>
+        <capital language="de">Ouagadougou</capital>
+        <iso2>BF</iso2>
+        <iso3>BFA</iso3>
+        <ico>BUR</ico>
+        <tld>.bf</tld>
+        <currency>XOF</currency>
+        <areacode>+226</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Burundi</name>
+        <capital language="de">Bujumbura</capital>
+        <iso2>BI</iso2>
+        <iso3>BDI</iso3>
+        <ico>BDI</ico>
+        <tld>.bi</tld>
+        <currency>BIF</currency>
+        <areacode>+257</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Chile</name>
+        <capital language="de">Santiago</capital>
+        <iso2>CL</iso2>
+        <iso3>CHL</iso3>
+        <ico>CHI</ico>
+        <tld>.cl</tld>
+        <currency>CLP</currency>
+        <areacode>+56</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">China, Volksrepublik</name>
+        <capital language="de">Peking (Beijing)</capital>
+        <iso2>CN</iso2>
+        <iso3>CHN</iso3>
+        <ico>CHN</ico>
+        <tld>.cn</tld>
+        <currency>CNY</currency>
+        <areacode>+86</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Cookinseln</name>
+        <capital language="de">Avarua</capital>
+        <iso2>CK</iso2>
+        <iso3>COK</iso3>
+        <ico>COK</ico>
+        <tld>.ck</tld>
+        <currency>NZD</currency>
+        <areacode>+682</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Costa Rica</name>
+        <capital language="de">San José</capital>
+        <iso2>CR</iso2>
+        <iso3>CRI</iso3>
+        <ico>CRC</ico>
+        <tld>.cr</tld>
+        <currency>CRC</currency>
+        <areacode>+56</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Cote d'Ivoire</name>
+        <capital language="de">Yamoussoukro</capital>
+        <iso2>CI</iso2>
+        <iso3>CIV</iso3>
+        <ico>CIV</ico>
+        <tld>.ci</tld>
+        <currency>XOF</currency>
+        <areacode>+225</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Dänemark</name>
+        <capital language="de">Kopenhagen</capital>
+        <iso2>DK</iso2>
+        <iso3>DNK</iso3>
+        <ico>DEN</ico>
+        <tld>.dk</tld>
+        <currency>DKK</currency>
+        <areacode>+45</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Deutschland</name>
+        <capital language="de">Berlin</capital>
+        <iso2>DE</iso2>
+        <iso3>DEU</iso3>
+        <ico>GER</ico>
+        <tld>.de</tld>
+        <currency>EUR</currency>
+        <areacode>+49</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Die Kronkolonie St. Helena und Nebengebiete</name>
+        <capital language="de">Jamestown</capital>
+        <iso2>SH</iso2>
+        <iso3>SHN</iso3>
+        <ico></ico>
+        <tld>.sh</tld>
+        <currency>SHP</currency>
+        <areacode>+290</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Diego Garcia</name>
+        <capital language="de"></capital>
+        <iso2>DG</iso2>
+        <iso3>DGA</iso3>
+        <ico></ico>
+        <tld></tld>
+        <currency></currency>
+        <areacode>+246</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Dominica</name>
+        <capital language="de">Roseau</capital>
+        <iso2>DM</iso2>
+        <iso3>DMA</iso3>
+        <ico></ico>
+        <tld>.dm</tld>
+        <currency>XCD</currency>
+        <areacode>+1767</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Dominikanische Republik</name>
+        <capital language="de">Santo Domingo</capital>
+        <iso2>DO</iso2>
+        <iso3>DOM</iso3>
+        <ico>DOM</ico>
+        <tld>.do</tld>
+        <currency>DOP</currency>
+        <areacode>+1809</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Dschibuti</name>
+        <capital language="de">Dschibuti</capital>
+        <iso2>DJ</iso2>
+        <iso3>DJI</iso3>
+        <ico>DJI</ico>
+        <tld>dj</tld>
+        <currency>DJF</currency>
+        <areacode>+253</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Ecuador</name>
+        <capital language="de">Quito</capital>
+        <iso2>EC</iso2>
+        <iso3>ECU</iso3>
+        <ico>ECU</ico>
+        <tld>.ec</tld>
+        <currency>USD</currency>
+        <areacode>+593</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">El Salvador</name>
+        <capital language="de">San Salvador</capital>
+        <iso2>SV</iso2>
+        <iso3>SLV</iso3>
+        <ico>ESA</ico>
+        <tld>.sv</tld>
+        <currency>SVC</currency>
+        <areacode>+53</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Eritrea</name>
+        <capital language="de">Asmara (Asmera)</capital>
+        <iso2>ER</iso2>
+        <iso3>ERI</iso3>
+        <ico>ERI</ico>
+        <tld>.er</tld>
+        <currency>ERN</currency>
+        <areacode>+291</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Estland</name>
+        <capital language="de">Tallinn (Reval)</capital>
+        <iso2>EE</iso2>
+        <iso3>EST</iso3>
+        <ico>EST</ico>
+        <tld>.ee</tld>
+        <currency>EEK</currency>
+        <areacode>+372</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Europäische Union</name>
+        <capital language="de">Brüssel</capital>
+        <iso2>EU</iso2>
+        <iso3>-/-</iso3>
+        <ico>-/-</ico>
+        <tld>.eu</tld>
+        <currency></currency>
+        <areacode>+3883</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Falklandinseln</name>
+        <capital language="de">Port Stanley</capital>
+        <iso2>FK</iso2>
+        <iso3>FLK</iso3>
+        <ico></ico>
+        <tld>.fk</tld>
+        <currency>FLP</currency>
+        <areacode>+500</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Färöer</name>
+        <capital language="de">Tórshavn</capital>
+        <iso2>FO</iso2>
+        <iso3>FRO</iso3>
+        <ico>FRO</ico>
+        <tld>.fo</tld>
+        <currency>DKK</currency>
+        <areacode>+298</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Fidschi</name>
+        <capital language="de">Suva</capital>
+        <iso2>FJ</iso2>
+        <iso3>FJI</iso3>
+        <ico>FJI</ico>
+        <tld>.fj</tld>
+        <currency>FJD</currency>
+        <areacode>+679</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Finnland</name>
+        <capital language="de">Helsinki</capital>
+        <iso2>FI</iso2>
+        <iso3>FIN</iso3>
+        <ico>FIN</ico>
+        <tld>.fi</tld>
+        <currency>EUR</currency>
+        <areacode>+358</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Frankreich</name>
+        <capital language="de">Paris</capital>
+        <iso2>FR</iso2>
+        <iso3>FRA</iso3>
+        <ico>FRA</ico>
+        <tld>.fr</tld>
+        <currency>EUR</currency>
+        <areacode>+33</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Französisch-Guayana</name>
+        <capital language="de">Cayenne</capital>
+        <iso2>GF</iso2>
+        <iso3>GUF</iso3>
+        <ico></ico>
+        <tld>.gf</tld>
+        <currency>EUR</currency>
+        <areacode>+594</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Französisch-Polynesien</name>
+        <capital language="de">Papeete</capital>
+        <iso2>PF</iso2>
+        <iso3>PYF</iso3>
+        <ico></ico>
+        <tld>.pf</tld>
+        <currency>XPF</currency>
+        <areacode>+689</areacode>
+    </country>
+    <country>
+        <continent language="de"></continent>
+        <name language="de">Französische Süd- und Antarktisgebiete</name>
+        <capital language="de">Port-aux-Français</capital>
+        <iso2>TF</iso2>
+        <iso3>ATF</iso3>
+        <ico></ico>
+        <tld>.tf</tld>
+        <currency>EUR</currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Gabun</name>
+        <capital language="de">Libreville</capital>
+        <iso2>GA</iso2>
+        <iso3>GAB</iso3>
+        <ico>GAB</ico>
+        <tld>.ga</tld>
+        <currency>XAF</currency>
+        <areacode>+241</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Gambia</name>
+        <capital language="de">Banjul</capital>
+        <iso2>GM</iso2>
+        <iso3>GMB</iso3>
+        <ico>GAM</ico>
+        <tld>.gm</tld>
+        <currency>GMD</currency>
+        <areacode>+220</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Georgien</name>
+        <capital language="de">Tiflis</capital>
+        <iso2>GE</iso2>
+        <iso3>GEO</iso3>
+        <ico>GEO</ico>
+        <tld>.ge</tld>
+        <currency>GEL</currency>
+        <areacode>+995</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Ghana, Republik</name>
+        <capital language="de">Accra</capital>
+        <iso2>GH</iso2>
+        <iso3>GHA</iso3>
+        <ico>GHA</ico>
+        <tld>.gh</tld>
+        <currency>GHC</currency>
+        <areacode>+233</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Gibraltar</name>
+        <capital language="de">Gibraltar (Stadt)</capital>
+        <iso2>GI</iso2>
+        <iso3>GIB</iso3>
+        <ico></ico>
+        <tld>.gi</tld>
+        <currency>GIP</currency>
+        <areacode>+350</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Grenada</name>
+        <capital language="de">St. George's</capital>
+        <iso2>GD</iso2>
+        <iso3>GRD</iso3>
+        <ico>GRN</ico>
+        <tld>.gd</tld>
+        <currency>XCD</currency>
+        <areacode>+1473</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Griechenland</name>
+        <capital language="de">Athen</capital>
+        <iso2>GR</iso2>
+        <iso3>GRC</iso3>
+        <ico>GRE</ico>
+        <tld>.gr</tld>
+        <currency>EUR</currency>
+        <areacode>+30</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Grönland</name>
+        <capital language="de">Nuuk</capital>
+        <iso2>GL</iso2>
+        <iso3>GRL</iso3>
+        <ico></ico>
+        <tld>.gl</tld>
+        <currency>DKK</currency>
+        <areacode>+299</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Guadeloupe</name>
+        <capital language="de">Basse-Terre</capital>
+        <iso2>CP</iso2>
+        <iso3>GLP</iso3>
+        <ico></ico>
+        <tld>.gp</tld>
+        <currency>EUR</currency>
+        <areacode>+590</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Guam</name>
+        <capital language="de">Hagåtña</capital>
+        <iso2>GU</iso2>
+        <iso3>GUM</iso3>
+        <ico>GUM</ico>
+        <tld>.gu</tld>
+        <currency>USD</currency>
+        <areacode>+1671</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Guatemala</name>
+        <capital language="de">Guatemala-Stadt</capital>
+        <iso2>GT</iso2>
+        <iso3>GTM</iso3>
+        <ico>GUA</ico>
+        <tld>.gt</tld>
+        <currency>GTQ</currency>
+        <areacode>+52</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Guernsey, Vogtei</name>
+        <capital language="de">St. Peter Port</capital>
+        <iso2>GG</iso2>
+        <iso3>GGY</iso3>
+        <ico></ico>
+        <tld>.gg</tld>
+        <currency>GGP</currency>
+        <areacode>+44</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Guinea, Republik</name>
+        <capital language="de">Conakry</capital>
+        <iso2>GN</iso2>
+        <iso3>GIN</iso3>
+        <ico>GUI</ico>
+        <tld>.gn</tld>
+        <currency>GNF</currency>
+        <areacode>+224</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Guinea-Bissau, Republik</name>
+        <capital language="de">Bissau</capital>
+        <iso2>GW</iso2>
+        <iso3>GNB</iso3>
+        <ico>GBS</ico>
+        <tld>.gw</tld>
+        <currency>XOF</currency>
+        <areacode>+245</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Guyana</name>
+        <capital language="de">Georgetown</capital>
+        <iso2>GY</iso2>
+        <iso3>GUY</iso3>
+        <ico>GUY</ico>
+        <tld>.gy</tld>
+        <currency>GYD</currency>
+        <areacode>+592</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Haiti</name>
+        <capital language="de">Port-au-Prince</capital>
+        <iso2>HT</iso2>
+        <iso3>HTI</iso3>
+        <ico>HAI</ico>
+        <tld>.ht</tld>
+        <currency>USD</currency>
+        <areacode>+59</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Heard und McDonaldinseln</name>
+        <capital language="de"></capital>
+        <iso2>HM</iso2>
+        <iso3>HMD</iso3>
+        <ico></ico>
+        <tld>.hm</tld>
+        <currency>AUD</currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Honduras</name>
+        <capital language="de">Tegucigalpa</capital>
+        <iso2>HN</iso2>
+        <iso3>HND</iso3>
+        <ico>HON</ico>
+        <tld>.hn</tld>
+        <currency>HNL</currency>
+        <areacode>+54</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Hongkong</name>
+        <capital language="de"></capital>
+        <iso2>HK</iso2>
+        <iso3>HKG</iso3>
+        <ico>HKG</ico>
+        <tld>.hk</tld>
+        <currency>HNL</currency>
+        <areacode>+852</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Indien</name>
+        <capital language="de">Neu-Delhi</capital>
+        <iso2>IN</iso2>
+        <iso3>IND</iso3>
+        <ico>IND</ico>
+        <tld>.in</tld>
+        <currency>ISK</currency>
+        <areacode>+91</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Indonesien</name>
+        <capital language="de">Jakarta</capital>
+        <iso2>ID</iso2>
+        <iso3>IDN</iso3>
+        <ico>INA</ico>
+        <tld>.id</tld>
+        <currency>INR</currency>
+        <areacode>+62</areacode>
+    </country>
+    <country>
+        <continent language="de"></continent>
+        <name language="de">Insel Mann</name>
+        <capital language="de"></capital>
+        <iso2>IM</iso2>
+        <iso3>IMN</iso3>
+        <ico></ico>
+        <tld>.im</tld>
+        <currency>IMP</currency>
+        <areacode>+44</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Irak</name>
+        <capital language="de">Bagdad</capital>
+        <iso2>IQ</iso2>
+        <iso3>IRQ</iso3>
+        <ico>IRQ</ico>
+        <tld>.iq</tld>
+        <currency>IDR</currency>
+        <areacode>+964</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Iran</name>
+        <capital language="de">Teheran</capital>
+        <iso2>IR</iso2>
+        <iso3>IRN</iso3>
+        <ico>IRI</ico>
+        <tld>.ir</tld>
+        <currency>IRR</currency>
+        <areacode>+98</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Irland, Republik</name>
+        <capital language="de">Dublin</capital>
+        <iso2>IE</iso2>
+        <iso3>IRL</iso3>
+        <ico>IRL</ico>
+        <tld>.ie</tld>
+        <currency>EUR</currency>
+        <areacode>+353</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Island</name>
+        <capital language="de">Reykjavík</capital>
+        <iso2>IS</iso2>
+        <iso3>ISL</iso3>
+        <ico>ISL</ico>
+        <tld>.is</tld>
+        <currency>HUF</currency>
+        <areacode>+354</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Israel</name>
+        <capital language="de">Jerusalem</capital>
+        <iso2>IL</iso2>
+        <iso3>ISR</iso3>
+        <ico>ISR</ico>
+        <tld>.il</tld>
+        <currency>ILS</currency>
+        <areacode>+972</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Italien</name>
+        <capital language="de">Rom</capital>
+        <iso2>IT</iso2>
+        <iso3>ITA</iso3>
+        <ico>ITA</ico>
+        <tld>.it</tld>
+        <currency>EUR</currency>
+        <areacode>+39</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Jamaika</name>
+        <capital language="de">Kingston</capital>
+        <iso2>JM</iso2>
+        <iso3>JAM</iso3>
+        <ico>JAM</ico>
+        <tld>.jm</tld>
+        <currency>JMD</currency>
+        <areacode>+1876</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Japan</name>
+        <capital language="de">Tokio</capital>
+        <iso2>JP</iso2>
+        <iso3>JPN</iso3>
+        <ico>JPN</ico>
+        <tld>.jp</tld>
+        <currency>JPY</currency>
+        <areacode>+81</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Jemen</name>
+        <capital language="de">Sanaa</capital>
+        <iso2>YE</iso2>
+        <iso3>YEM</iso3>
+        <ico>YEM</ico>
+        <tld>.ye</tld>
+        <currency>YER</currency>
+        <areacode>+967</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Jersey</name>
+        <capital language="de">Saint Helier</capital>
+        <iso2>JE</iso2>
+        <iso3>JEY</iso3>
+        <ico></ico>
+        <tld>.je</tld>
+        <currency>JEP</currency>
+        <areacode>+44</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Jordanien</name>
+        <capital language="de">Amman</capital>
+        <iso2>JO</iso2>
+        <iso3>JOR</iso3>
+        <ico>JOR</ico>
+        <tld>.jo</tld>
+        <currency>JOD</currency>
+        <areacode>+962</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Kaimaninseln</name>
+        <capital language="de">George Town</capital>
+        <iso2>KY</iso2>
+        <iso3>CYM</iso3>
+        <ico>CAY</ico>
+        <tld>.ky</tld>
+        <currency>KYD</currency>
+        <areacode>+1345</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Kambodscha</name>
+        <capital language="de">Phnom Penh</capital>
+        <iso2>KH</iso2>
+        <iso3>KHM</iso3>
+        <ico>CAM</ico>
+        <tld>.kh</tld>
+        <currency>KHR</currency>
+        <areacode>+855</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Kamerun</name>
+        <capital language="de">Yaoundé</capital>
+        <iso2>CM</iso2>
+        <iso3>CMR</iso3>
+        <ico>CMR</ico>
+        <tld>.cm</tld>
+        <currency>XAF</currency>
+        <areacode>+237</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Kanada</name>
+        <capital language="de">Ottawa</capital>
+        <iso2>CA</iso2>
+        <iso3>CAN</iso3>
+        <ico>CAN</ico>
+        <tld>.ca</tld>
+        <currency>CAD</currency>
+        <areacode>+1NXX</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Kanarische Inseln</name>
+        <capital language="de"></capital>
+        <iso2>IC</iso2>
+        <iso3></iso3>
+        <ico></ico>
+        <tld></tld>
+        <currency></currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Kap Verde, Republik</name>
+        <capital language="de">Praia</capital>
+        <iso2>CV</iso2>
+        <iso3>CPV</iso3>
+        <ico>CPV</ico>
+        <tld>.cv</tld>
+        <currency>CVE</currency>
+        <areacode>+238</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Kasachstan</name>
+        <capital language="de">Astana</capital>
+        <iso2>KZ</iso2>
+        <iso3>KAZ</iso3>
+        <ico>KAZ</ico>
+        <tld>.kz</tld>
+        <currency>KZT</currency>
+        <areacode>+7</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Katar</name>
+        <capital language="de">Doha</capital>
+        <iso2>QA</iso2>
+        <iso3>QAT</iso3>
+        <ico>QAT</ico>
+        <tld>.qa</tld>
+        <currency>QAR</currency>
+        <areacode>+974</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Kenia</name>
+        <capital language="de">Nairobi</capital>
+        <iso2>KE</iso2>
+        <iso3>KEN</iso3>
+        <ico>KEN</ico>
+        <tld>.ke</tld>
+        <currency>KES</currency>
+        <areacode>+254</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Kirgisistan</name>
+        <capital language="de">Bischkek</capital>
+        <iso2>KG</iso2>
+        <iso3>KGZ</iso3>
+        <ico>KGZ</ico>
+        <tld>.kg</tld>
+        <currency>KGS</currency>
+        <areacode>+996</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Kiribati</name>
+        <capital language="de">Bairiki</capital>
+        <iso2>KI</iso2>
+        <iso3>KIR</iso3>
+        <ico></ico>
+        <tld>.ki</tld>
+        <currency>AUD</currency>
+        <areacode>+686</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Kokosinseln</name>
+        <capital language="de"></capital>
+        <iso2>CC</iso2>
+        <iso3>CCK</iso3>
+        <ico></ico>
+        <tld>.cc</tld>
+        <currency>AUD</currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Kolumbien</name>
+        <capital language="de">Santa Fé de Bogotá</capital>
+        <iso2>CO</iso2>
+        <iso3>COL</iso3>
+        <ico>COL</ico>
+        <tld>.co</tld>
+        <currency>COP</currency>
+        <areacode>+57</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Komoren</name>
+        <capital language="de">Moroni</capital>
+        <iso2>KM</iso2>
+        <iso3></iso3>
+        <ico></ico>
+        <tld>.km</tld>
+        <currency>KMF</currency>
+        <areacode>+269</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Kongo, Demokratische Republik</name>
+        <capital language="de">Kinshasa</capital>
+        <iso2>CD</iso2>
+        <iso3>COD</iso3>
+        <ico>COD</ico>
+        <tld>.cd</tld>
+        <currency>CDF</currency>
+        <areacode>+243</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Kongo, Republik</name>
+        <capital language="de">Brazzaville</capital>
+        <iso2>CG</iso2>
+        <iso3>COG</iso3>
+        <ico>CGO</ico>
+        <tld>.cg</tld>
+        <currency>XAF</currency>
+        <areacode>+242</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Korea, Demokratische Volkrepublik</name>
+        <capital language="de"></capital>
+        <iso2>KP</iso2>
+        <iso3>PRK</iso3>
+        <ico>PRK</ico>
+        <tld>.kp</tld>
+        <currency>KPW</currency>
+        <areacode>+850</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Korea, Republik</name>
+        <capital language="de"></capital>
+        <iso2>KR</iso2>
+        <iso3>KOR</iso3>
+        <ico>KOR</ico>
+        <tld>.kr</tld>
+        <currency>KRW</currency>
+        <areacode>+82</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Kroatien</name>
+        <capital language="de">Zagreb</capital>
+        <iso2>HR</iso2>
+        <iso3>HRV</iso3>
+        <ico>CRO</ico>
+        <tld>.hr</tld>
+        <currency>HRK</currency>
+        <areacode>+385</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Kuba</name>
+        <capital language="de">Havanna</capital>
+        <iso2>CU</iso2>
+        <iso3>CUB</iso3>
+        <ico>CUB</ico>
+        <tld>.cu</tld>
+        <currency>CUP</currency>
+        <areacode>+53</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Kuwait</name>
+        <capital language="de">Kuwait</capital>
+        <iso2>KW</iso2>
+        <iso3>KWT</iso3>
+        <ico>KUW</ico>
+        <tld>.kw</tld>
+        <currency>KWD</currency>
+        <areacode>+965</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Laos</name>
+        <capital language="de">Vientiane</capital>
+        <iso2>LA</iso2>
+        <iso3>LAO</iso3>
+        <ico>LAO</ico>
+        <tld>.la</tld>
+        <currency>LAK</currency>
+        <areacode>+856</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Lesotho</name>
+        <capital language="de">Maseru</capital>
+        <iso2>LS</iso2>
+        <iso3>LSO</iso3>
+        <ico>LES</ico>
+        <tld>.ls</tld>
+        <currency>LSL</currency>
+        <areacode>+266</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Lettland</name>
+        <capital language="de">Rīga</capital>
+        <iso2>LV</iso2>
+        <iso3>LVA</iso3>
+        <ico>LAT</ico>
+        <tld>.lv</tld>
+        <currency>LVL</currency>
+        <areacode>+371</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Libanon</name>
+        <capital language="de">Beirut</capital>
+        <iso2>LB</iso2>
+        <iso3>LBN</iso3>
+        <ico>LIB</ico>
+        <tld>.lb</tld>
+        <currency>LBP</currency>
+        <areacode>+961</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Liberia, Republik</name>
+        <capital language="de">Monrovia</capital>
+        <iso2>LR</iso2>
+        <iso3>LBR</iso3>
+        <ico>LBR</ico>
+        <tld>.lr</tld>
+        <currency>LRD</currency>
+        <areacode>+231</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Libyen</name>
+        <capital language="de">Tripolis</capital>
+        <iso2>LY</iso2>
+        <iso3>LBY</iso3>
+        <ico>LBA</ico>
+        <tld>.ly</tld>
+        <currency>LYD</currency>
+        <areacode>+218</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Liechtenstein, Fürstentum</name>
+        <capital language="de">Vaduz</capital>
+        <iso2>LI</iso2>
+        <iso3>LIE</iso3>
+        <ico>LIE</ico>
+        <tld>.li</tld>
+        <currency>CHF</currency>
+        <areacode>+423</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Litauen</name>
+        <capital language="de">Wilna</capital>
+        <iso2>LT</iso2>
+        <iso3>LTU</iso3>
+        <ico>LTU</ico>
+        <tld>.lt</tld>
+        <currency>LTL</currency>
+        <areacode>+370</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Luxemburg</name>
+        <capital language="de">Luxemburg</capital>
+        <iso2>LU</iso2>
+        <iso3>LUX</iso3>
+        <ico>LUX</ico>
+        <tld>.lu</tld>
+        <currency>EUR</currency>
+        <areacode>+352</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Macao</name>
+        <capital language="de"></capital>
+        <iso2>MO</iso2>
+        <iso3>MAC</iso3>
+        <ico></ico>
+        <tld>.mo</tld>
+        <currency>MOP</currency>
+        <areacode>+853</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Madagaskar, Republik</name>
+        <capital language="de">Antananarivo</capital>
+        <iso2>MG</iso2>
+        <iso3>MDG</iso3>
+        <ico>MAD</ico>
+        <tld>.mg</tld>
+        <currency>MGA</currency>
+        <areacode>+261</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Malawi, Republik</name>
+        <capital language="de">Lilongwe</capital>
+        <iso2>MW</iso2>
+        <iso3>MWI</iso3>
+        <ico>MAW</ico>
+        <tld>.mw</tld>
+        <currency>MWK</currency>
+        <areacode>+265</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Malaysia</name>
+        <capital language="de">Kuala Lumpur</capital>
+        <iso2>MY</iso2>
+        <iso3>MYS</iso3>
+        <ico>MAS</ico>
+        <tld>.my</tld>
+        <currency>MYR</currency>
+        <areacode>+60</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Malediven</name>
+        <capital language="de">Malé</capital>
+        <iso2>MV</iso2>
+        <iso3>MDV</iso3>
+        <ico>MDV</ico>
+        <tld>.mv</tld>
+        <currency>MVR</currency>
+        <areacode>+960</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Mali, Republik</name>
+        <capital language="de">Bamako</capital>
+        <iso2>ML</iso2>
+        <iso3>MLI</iso3>
+        <ico>MLI</ico>
+        <tld>.ml</tld>
+        <currency>XOF</currency>
+        <areacode>+223</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Malta</name>
+        <capital language="de">Valletta</capital>
+        <iso2>MT</iso2>
+        <iso3>MDV</iso3>
+        <ico>MDV</ico>
+        <tld>.mv</tld>
+        <currency>MVR</currency>
+        <areacode>+960</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Marokko</name>
+        <capital language="de">Rabat</capital>
+        <iso2>MA</iso2>
+        <iso3>MAR</iso3>
+        <ico>MAR</ico>
+        <tld>.ma</tld>
+        <currency>MAD</currency>
+        <areacode>+211</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Marshallinseln</name>
+        <capital language="de">Delap-Uliga-Darrit</capital>
+        <iso2>MH</iso2>
+        <iso3>MHL</iso3>
+        <ico></ico>
+        <tld>.mh</tld>
+        <currency>USD</currency>
+        <areacode>+692</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Martinique</name>
+        <capital language="de">Fort-de-France</capital>
+        <iso2>MQ</iso2>
+        <iso3>MTQ</iso3>
+        <ico></ico>
+        <tld>.mq</tld>
+        <currency>EUR</currency>
+        <areacode>+596</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Mauretanien</name>
+        <capital language="de">Nouakchott</capital>
+        <iso2>MR</iso2>
+        <iso3>MRT</iso3>
+        <ico>MTN</ico>
+        <tld>.mr</tld>
+        <currency>MRO</currency>
+        <areacode>+222</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Mauritius, Republik</name>
+        <capital language="de">Port Louis</capital>
+        <iso2>MU</iso2>
+        <iso3>MUS</iso3>
+        <ico>MRI</ico>
+        <tld>.mu</tld>
+        <currency>MUR</currency>
+        <areacode>+230</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Mayotte</name>
+        <capital language="de">Mamoudzou</capital>
+        <iso2>YT</iso2>
+        <iso3>MYT</iso3>
+        <ico></ico>
+        <tld>.yt</tld>
+        <currency>EUR</currency>
+        <areacode>+269</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Mazedonien</name>
+        <capital language="de">Skopje</capital>
+        <iso2>MK</iso2>
+        <iso3>MKD</iso3>
+        <ico>MKD</ico>
+        <tld>.mk</tld>
+        <currency>MKD</currency>
+        <areacode>+389</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Mexiko</name>
+        <capital language="de">Mexiko-Stadt</capital>
+        <iso2>MX</iso2>
+        <iso3>MEX</iso3>
+        <ico>MEX</ico>
+        <tld>.mx</tld>
+        <currency>MXN</currency>
+        <areacode>+52</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Mikronesien, Föderierte Staaten von</name>
+        <capital language="de"></capital>
+        <iso2>FM</iso2>
+        <iso3>FSM</iso3>
+        <ico>FSM</ico>
+        <tld>.fm</tld>
+        <currency>USD</currency>
+        <areacode>+691</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Moldawien</name>
+        <capital language="de">Chişinău</capital>
+        <iso2>MD</iso2>
+        <iso3>MDA</iso3>
+        <ico>MDA</ico>
+        <tld>.md</tld>
+        <currency>MDL</currency>
+        <areacode>+373</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Monaco</name>
+        <capital language="de">Monaco</capital>
+        <iso2>MC</iso2>
+        <iso3>MCO</iso3>
+        <ico>MON</ico>
+        <tld>.mc</tld>
+        <currency>EUR</currency>
+        <areacode>+377</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Mongolei</name>
+        <capital language="de">Ulaanbaatar</capital>
+        <iso2>MN</iso2>
+        <iso3>MNG</iso3>
+        <ico>MGL</ico>
+        <tld>.mn</tld>
+        <currency>MNT</currency>
+        <areacode>+976</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Montserrat</name>
+        <capital language="de">Plymouth</capital>
+        <iso2>MS</iso2>
+        <iso3>MSR</iso3>
+        <ico></ico>
+        <tld>.ms</tld>
+        <currency>XCD</currency>
+        <areacode>+1664</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Mosambik</name>
+        <capital language="de">Maputo</capital>
+        <iso2>MZ</iso2>
+        <iso3>MOZ</iso3>
+        <ico>MOZ</ico>
+        <tld>.mz</tld>
+        <currency>MZM</currency>
+        <areacode>+258</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Myanmar</name>
+        <capital language="de">Rangun</capital>
+        <iso2>MM</iso2>
+        <iso3>MMR</iso3>
+        <ico>MYA</ico>
+        <tld>.mm</tld>
+        <currency>MMK</currency>
+        <areacode>+95</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Namibia, Republik</name>
+        <capital language="de">Windhoek</capital>
+        <iso2>NA</iso2>
+        <iso3>NAM</iso3>
+        <ico>NAM</ico>
+        <tld>.na</tld>
+        <currency>ZAR</currency>
+        <areacode>+264</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Nauru</name>
+        <capital language="de">Yaren</capital>
+        <iso2>NR</iso2>
+        <iso3>NRU</iso3>
+        <ico>NRU</ico>
+        <tld>.nr</tld>
+        <currency>AUD</currency>
+        <areacode>+674</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Nepal</name>
+        <capital language="de">Kathmandu</capital>
+        <iso2>NP</iso2>
+        <iso3>NPL</iso3>
+        <ico>NEP</ico>
+        <tld>.np</tld>
+        <currency>NPR</currency>
+        <areacode>+977</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Neukaledonien</name>
+        <capital language="de">Nouméa</capital>
+        <iso2>NC</iso2>
+        <iso3>NCL</iso3>
+        <ico></ico>
+        <tld>.nc</tld>
+        <currency>XPF</currency>
+        <areacode>+687</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Neuseeland</name>
+        <capital language="de">Wellington</capital>
+        <iso2>NZ</iso2>
+        <iso3>NZL</iso3>
+        <ico>NZL</ico>
+        <tld>.nz</tld>
+        <currency>NZD</currency>
+        <areacode>+64</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Neutrale Zone</name>
+        <capital language="de"></capital>
+        <iso2>NT</iso2>
+        <iso3>NTZ</iso3>
+        <ico></ico>
+        <tld>.nt</tld>
+        <currency></currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Nicaragua</name>
+        <capital language="de">Managua</capital>
+        <iso2>NI</iso2>
+        <iso3>NIC</iso3>
+        <ico>NCA</ico>
+        <tld>.ni</tld>
+        <currency>NIO</currency>
+        <areacode>+55</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Niederlande</name>
+        <capital language="de">Amsterdam</capital>
+        <iso2>NL</iso2>
+        <iso3>NLD</iso3>
+        <ico>NED</ico>
+        <tld>.nl</tld>
+        <currency>EUR</currency>
+        <areacode>+31</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Niederländische Antillen</name>
+        <capital language="de">Willemstad</capital>
+        <iso2>AN</iso2>
+        <iso3>ANT</iso3>
+        <ico>AHO</ico>
+        <tld>.an</tld>
+        <currency>ANG</currency>
+        <areacode>+599</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Niger</name>
+        <capital language="de">Niamey</capital>
+        <iso2>NE</iso2>
+        <iso3>NER</iso3>
+        <ico>NIG</ico>
+        <tld>.ne</tld>
+        <currency>XOF</currency>
+        <areacode>+227</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Nigeria</name>
+        <capital language="de">Abuja</capital>
+        <iso2>NG</iso2>
+        <iso3>NGA</iso3>
+        <ico>NGR</ico>
+        <tld>.ng</tld>
+        <currency>NGN</currency>
+        <areacode>+234</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Niue</name>
+        <capital language="de">Alofi</capital>
+        <iso2>NU</iso2>
+        <iso3>NIU</iso3>
+        <ico></ico>
+        <tld>.nu</tld>
+        <currency>NZD</currency>
+        <areacode>+683</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Nördliche Marianen</name>
+        <capital language="de">Saipan</capital>
+        <iso2>MP</iso2>
+        <iso3>MNP</iso3>
+        <ico></ico>
+        <tld>.mp</tld>
+        <currency>USD</currency>
+        <areacode>+1670</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Norfolkinsel</name>
+        <capital language="de">Kingston</capital>
+        <iso2>NF</iso2>
+        <iso3>NFK</iso3>
+        <ico></ico>
+        <tld>.nf</tld>
+        <currency>AUD</currency>
+        <areacode>+6723</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Norwegen</name>
+        <capital language="de">Oslo</capital>
+        <iso2>NO</iso2>
+        <iso3>NOR</iso3>
+        <ico>NOR</ico>
+        <tld>.no</tld>
+        <currency>NOK</currency>
+        <areacode>+47</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Oman</name>
+        <capital language="de">Maskat</capital>
+        <iso2>OM</iso2>
+        <iso3>OMN</iso3>
+        <ico>OMA</ico>
+        <tld>.om</tld>
+        <currency>OMR</currency>
+        <areacode>+968</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Österreich</name>
+        <capital language="de">Wien</capital>
+        <iso2>AT</iso2>
+        <iso3>AUT</iso3>
+        <ico>AUT</ico>
+        <tld>.at</tld>
+        <currency>EUR</currency>
+        <areacode>+43</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Pakistan</name>
+        <capital language="de">Islamabad</capital>
+        <iso2>PK</iso2>
+        <iso3>PAK</iso3>
+        <ico>PAK</ico>
+        <tld>.pk</tld>
+        <currency>PKR</currency>
+        <areacode>+92</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Palästinensische Autonomiegebiete</name>
+        <capital language="de">Ramallah</capital>
+        <iso2>PS</iso2>
+        <iso3>PSE</iso3>
+        <ico>PLE</ico>
+        <tld>.ps</tld>
+        <currency></currency>
+        <areacode>+970</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Palau</name>
+        <capital language="de">Melekeok</capital>
+        <iso2>PW</iso2>
+        <iso3>PLW</iso3>
+        <ico>PLW</ico>
+        <tld>.pw</tld>
+        <currency>USD</currency>
+        <areacode>+680</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Panama</name>
+        <capital language="de">Panama-Stadt</capital>
+        <iso2>PA</iso2>
+        <iso3>PAN</iso3>
+        <ico>PAN</ico>
+        <tld>.pa</tld>
+        <currency>USD</currency>
+        <areacode>+57</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Papua-Neuguinea</name>
+        <capital language="de">Port Moresby</capital>
+        <iso2>PG</iso2>
+        <iso3>PNG</iso3>
+        <ico></ico>
+        <tld>.pg</tld>
+        <currency>PGK</currency>
+        <areacode>+675</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Paraguay</name>
+        <capital language="de">Asunción</capital>
+        <iso2>PY</iso2>
+        <iso3>PRY</iso3>
+        <ico>PAR</ico>
+        <tld>.py</tld>
+        <currency>PYG</currency>
+        <areacode>+595</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Peru</name>
+        <capital language="de">Lima</capital>
+        <iso2>PE</iso2>
+        <iso3>PER</iso3>
+        <ico>PER</ico>
+        <tld>.pe</tld>
+        <currency>PEN</currency>
+        <areacode>+51</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Philippinen</name>
+        <capital language="de">Manila</capital>
+        <iso2>PH</iso2>
+        <iso3>PHL</iso3>
+        <ico>PHI</ico>
+        <tld>.ph</tld>
+        <currency>PHP</currency>
+        <areacode>+63</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Pitcairninseln</name>
+        <capital language="de">Adamstown</capital>
+        <iso2>PN</iso2>
+        <iso3>PCN</iso3>
+        <ico></ico>
+        <tld>.pn</tld>
+        <currency>NZD</currency>
+        <areacode>+649</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Polen</name>
+        <capital language="de">Warschau</capital>
+        <iso2>PL</iso2>
+        <iso3>POL</iso3>
+        <ico>POL</ico>
+        <tld>.pl</tld>
+        <currency>PLN</currency>
+        <areacode>+48</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Portugal</name>
+        <capital language="de">Lissabon</capital>
+        <iso2>PT</iso2>
+        <iso3>PRT</iso3>
+        <ico>POR</ico>
+        <tld>.pt</tld>
+        <currency>EUR</currency>
+        <areacode>+351</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Puerto Rico</name>
+        <capital language="de">San Juan</capital>
+        <iso2>PR</iso2>
+        <iso3>PRI</iso3>
+        <ico>PUR</ico>
+        <tld>.pr</tld>
+        <currency>USD</currency>
+        <areacode>+1939</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Réunion</name>
+        <capital language="de">Saint-Denis</capital>
+        <iso2>RE</iso2>
+        <iso3>REU</iso3>
+        <ico></ico>
+        <tld>.re</tld>
+        <currency>EUR</currency>
+        <areacode>+262</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Ruanda, Republik</name>
+        <capital language="de">Kigali</capital>
+        <iso2>RW</iso2>
+        <iso3>RWA</iso3>
+        <ico>RWA</ico>
+        <tld>.rw</tld>
+        <currency>RWF</currency>
+        <areacode>+250</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Rumänien</name>
+        <capital language="de">Bukarest</capital>
+        <iso2>RO</iso2>
+        <iso3>ROU</iso3>
+        <ico>ROM</ico>
+        <tld>.ro</tld>
+        <currency>RON</currency>
+        <areacode>+40</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Russische Föderation</name>
+        <capital language="de"></capital>
+        <iso2>RU</iso2>
+        <iso3>RUS</iso3>
+        <ico>RUS</ico>
+        <tld>.ru</tld>
+        <currency>RUB</currency>
+        <areacode>+7</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Salomonen</name>
+        <capital language="de">Honiara</capital>
+        <iso2>SB</iso2>
+        <iso3>SLB</iso3>
+        <ico>SOL</ico>
+        <tld>.sb</tld>
+        <currency>SBD</currency>
+        <areacode>+677</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Sambia, Republik</name>
+        <capital language="de">Lusaka</capital>
+        <iso2>ZM</iso2>
+        <iso3>ZMB</iso3>
+        <ico>ZAM</ico>
+        <tld>.zm</tld>
+        <currency>ZMK</currency>
+        <areacode>+260</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Samoa</name>
+        <capital language="de">Apia</capital>
+        <iso2>WS</iso2>
+        <iso3>WSM</iso3>
+        <ico>SAM</ico>
+        <tld>.ws</tld>
+        <currency>WST</currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">San Marino</name>
+        <capital language="de">San Marino</capital>
+        <iso2>SM</iso2>
+        <iso3>SMR</iso3>
+        <ico>SMR</ico>
+        <tld>.sm</tld>
+        <currency>EUR</currency>
+        <areacode>+378</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">São Tomé und Príncipe</name>
+        <capital language="de">São Tomé</capital>
+        <iso2>ST</iso2>
+        <iso3>STP</iso3>
+        <ico>STP</ico>
+        <tld>.st</tld>
+        <currency>STD</currency>
+        <areacode>+239</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Saudi-Arabien, Königreich</name>
+        <capital language="de">Riad</capital>
+        <iso2>SA</iso2>
+        <iso3>SAU</iso3>
+        <ico>KSA</ico>
+        <tld>.sa</tld>
+        <currency>SAR</currency>
+        <areacode>+966</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Schweden</name>
+        <capital language="de">Stockholm</capital>
+        <iso2>SE</iso2>
+        <iso3>SWE</iso3>
+        <ico>SWE</ico>
+        <tld>.se</tld>
+        <currency>SEK</currency>
+        <areacode>+46</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Schweiz</name>
+        <capital language="de">Bern</capital>
+        <iso2>CH</iso2>
+        <iso3>CHE</iso3>
+        <ico>SUI</ico>
+        <tld>.ch</tld>
+        <currency>CHF</currency>
+        <areacode>+41</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Senegal</name>
+        <capital language="de">Dakar</capital>
+        <iso2>SN</iso2>
+        <iso3>SEN</iso3>
+        <ico>SEN</ico>
+        <tld>.sn</tld>
+        <currency>XOF</currency>
+        <areacode>+221</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Serbien und Montenegro</name>
+        <capital language="de">Belgrad</capital>
+        <iso2>CS</iso2>
+        <iso3>SCG</iso3>
+        <ico>YUG</ico>
+        <tld>.cs</tld>
+        <currency></currency>
+        <areacode>+381</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Seychellen, Republik der</name>
+        <capital language="de">Victoria</capital>
+        <iso2>SC</iso2>
+        <iso3>SYC</iso3>
+        <ico>SEY</ico>
+        <tld>.sc</tld>
+        <currency>SCR</currency>
+        <areacode>+248</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Sierra Leone, Republik</name>
+        <capital language="de">Freetown</capital>
+        <iso2>SL</iso2>
+        <iso3>SLE</iso3>
+        <ico>SLE</ico>
+        <tld>.sl</tld>
+        <currency>SLL</currency>
+        <areacode>+232</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Simbabwe, Republik</name>
+        <capital language="de">Harare</capital>
+        <iso2>ZW</iso2>
+        <iso3>ZWE</iso3>
+        <ico>ZIM</ico>
+        <tld>.zw</tld>
+        <currency>ZWD</currency>
+        <areacode>+263</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Singapur</name>
+        <capital language="de">Singapur</capital>
+        <iso2>SG</iso2>
+        <iso3>SGP</iso3>
+        <ico>SIN</ico>
+        <tld>.sg</tld>
+        <currency>SGD</currency>
+        <areacode>+65</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Slowakei</name>
+        <capital language="de">Bratislava</capital>
+        <iso2>SK</iso2>
+        <iso3>SVK</iso3>
+        <ico>SVK</ico>
+        <tld>.sk</tld>
+        <currency>SKK</currency>
+        <areacode>+421</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Slowenien</name>
+        <capital language="de">Ljubljana</capital>
+        <iso2>SI</iso2>
+        <iso3>SVN</iso3>
+        <ico>SLO</ico>
+        <tld>.si</tld>
+        <currency>SIT</currency>
+        <areacode>+386</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Somalia, Demokratische Republik</name>
+        <capital language="de">Mogadischu</capital>
+        <iso2>SO</iso2>
+        <iso3>SOM</iso3>
+        <ico>SOM</ico>
+        <tld>.so</tld>
+        <currency>SOS</currency>
+        <areacode>+252</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Spanien</name>
+        <capital language="de">Madrid</capital>
+        <iso2>ES</iso2>
+        <iso3>ESP</iso3>
+        <ico>ESP</ico>
+        <tld>.es</tld>
+        <currency>EUR</currency>
+        <areacode>+34</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Sri Lanka</name>
+        <capital language="de">Colombo</capital>
+        <iso2>LK</iso2>
+        <iso3>LKA</iso3>
+        <ico>SRI</ico>
+        <tld>.lk</tld>
+        <currency>LKR</currency>
+        <areacode>+94</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">St. Kitts und Nevis</name>
+        <capital language="de">Basseterre</capital>
+        <iso2>KN</iso2>
+        <iso3>KNA</iso3>
+        <ico>SKN</ico>
+        <tld>.kn</tld>
+        <currency>XCD</currency>
+        <areacode>+1869</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">St. Lucia</name>
+        <capital language="de">Castries</capital>
+        <iso2>LC</iso2>
+        <iso3>LCA</iso3>
+        <ico>LCA</ico>
+        <tld>.lc</tld>
+        <currency>XCD</currency>
+        <areacode>+1758</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">St. Pierre und Miquelon</name>
+        <capital language="de">Saint-Pierre</capital>
+        <iso2>PM</iso2>
+        <iso3>SPM</iso3>
+        <ico></ico>
+        <tld>.pm</tld>
+        <currency>EUR</currency>
+        <areacode>+508</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">St. Vincent und die Grenadinen (GB)</name>
+        <capital language="de">Kingstown</capital>
+        <iso2>VC</iso2>
+        <iso3>VCT</iso3>
+        <ico>VIN</ico>
+        <tld>.vc</tld>
+        <currency>XCD</currency>
+        <areacode>+1784</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Südafrika, Republik</name>
+        <capital language="de">Tshwane / Pretoria</capital>
+        <iso2>ZA</iso2>
+        <iso3>ZAF</iso3>
+        <ico>RSA</ico>
+        <tld>.za</tld>
+        <currency>ZAR</currency>
+        <areacode>+27</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Sudan</name>
+        <capital language="de">Khartum</capital>
+        <iso2>SD</iso2>
+        <iso3>SDN</iso3>
+        <ico>SUD</ico>
+        <tld>.sd</tld>
+        <currency>SDD</currency>
+        <areacode>+249</areacode>
+    </country>
+    <country>
+        <continent language="de"></continent>
+        <name language="de">Südgeorgien und die Südlichen Sandwichinseln</name>
+        <capital language="de">Grytviken</capital>
+        <iso2>GS</iso2>
+        <iso3>SGS</iso3>
+        <ico></ico>
+        <tld></tld>
+        <currency>GBP</currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Suriname</name>
+        <capital language="de">Paramaribo</capital>
+        <iso2>SR</iso2>
+        <iso3>SUR</iso3>
+        <ico>SUR</ico>
+        <tld>.sr</tld>
+        <currency>SRD</currency>
+        <areacode>+597</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Svalbard und Jan Mayen</name>
+        <capital language="de"></capital>
+        <iso2>SJ</iso2>
+        <iso3>SJM</iso3>
+        <ico></ico>
+        <tld>.sj</tld>
+        <currency>NOK</currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Swasiland</name>
+        <capital language="de">Mbabane</capital>
+        <iso2>SZ</iso2>
+        <iso3>SWZ</iso3>
+        <ico>SWZ</ico>
+        <tld>.sz</tld>
+        <currency>SZL</currency>
+        <areacode>+268</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Syrien</name>
+        <capital language="de">Damaskus</capital>
+        <iso2>SY</iso2>
+        <iso3>SYR</iso3>
+        <ico>SYR</ico>
+        <tld>.sy</tld>
+        <currency>SYP</currency>
+        <areacode>+963</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Tadschikistan</name>
+        <capital language="de">Duschanbe</capital>
+        <iso2>TJ</iso2>
+        <iso3>TJK</iso3>
+        <ico>TJK</ico>
+        <tld>.tj</tld>
+        <currency>RUB</currency>
+        <areacode>+992</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Taiwan</name>
+        <capital language="de">Taipeh</capital>
+        <iso2>TW</iso2>
+        <iso3>TWN</iso3>
+        <ico>TPE</ico>
+        <tld>.tw</tld>
+        <currency>TWD</currency>
+        <areacode>+886</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Tansania, Vereinigte Republik</name>
+        <capital language="de"></capital>
+        <iso2>TZ</iso2>
+        <iso3>TZA</iso3>
+        <ico>TAN</ico>
+        <tld>.tz</tld>
+        <currency>TZS</currency>
+        <areacode>+255</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Thailand</name>
+        <capital language="de"></capital>
+        <iso2>TH</iso2>
+        <iso3>THA</iso3>
+        <ico>THA</ico>
+        <tld>.th</tld>
+        <currency>THB</currency>
+        <areacode>+66</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Timor-Leste, Demokratische Republik</name>
+        <capital language="de">Dili</capital>
+        <iso2>TL</iso2>
+        <iso3>TLS</iso3>
+        <ico></ico>
+        <tld>.tl</tld>
+        <currency>IDR</currency>
+        <areacode>+670</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Togo, Republik</name>
+        <capital language="de">Lomé</capital>
+        <iso2>TG</iso2>
+        <iso3>TGO</iso3>
+        <ico>TOG</ico>
+        <tld>.tg</tld>
+        <currency>XOF</currency>
+        <areacode>+228</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Tokelau</name>
+        <capital language="de">-/-</capital>
+        <iso2>TK</iso2>
+        <iso3>TKL</iso3>
+        <ico></ico>
+        <tld>.tk</tld>
+        <currency>NZD</currency>
+        <areacode>+690</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Tonga</name>
+        <capital language="de">Nuku’alofa</capital>
+        <iso2>TO</iso2>
+        <iso3>TON</iso3>
+        <ico>TGA</ico>
+        <tld>.to</tld>
+        <currency>TOP</currency>
+        <areacode>+676</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Trinidad und Tobago</name>
+        <capital language="de">Port-of-Spain</capital>
+        <iso2>TT</iso2>
+        <iso3>TTO</iso3>
+        <ico>TRI</ico>
+        <tld>.tt</tld>
+        <currency>TTD</currency>
+        <areacode>+1868</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Tristan da Cunha</name>
+        <capital language="de">Jamestown</capital>
+        <iso2>TA</iso2>
+        <iso3>TAA</iso3>
+        <ico></ico>
+        <tld></tld>
+        <currency></currency>
+        <areacode>+290</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Tschad, Republik</name>
+        <capital language="de">N'Djamena</capital>
+        <iso2>TD</iso2>
+        <iso3>TCD</iso3>
+        <ico>CHA</ico>
+        <tld>.td</tld>
+        <currency>XAF</currency>
+        <areacode>+235</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Tschechische Republik</name>
+        <capital language="de">Prag</capital>
+        <iso2>CZ</iso2>
+        <iso3>CZE</iso3>
+        <ico>CZE</ico>
+        <tld>.cz</tld>
+        <currency>CZK</currency>
+        <areacode>+420</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Tunesien</name>
+        <capital language="de">Tunis</capital>
+        <iso2>TN</iso2>
+        <iso3>TUN</iso3>
+        <ico>TUN</ico>
+        <tld>.tn</tld>
+        <currency>TND</currency>
+        <areacode>+216</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Türkei</name>
+        <capital language="de">Ankara</capital>
+        <iso2>TR</iso2>
+        <iso3>TUR</iso3>
+        <ico>TUR</ico>
+        <tld>.tr</tld>
+        <currency>TRY</currency>
+        <areacode>+90</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Turkmenistan</name>
+        <capital language="de">Aşgabat</capital>
+        <iso2>TM</iso2>
+        <iso3>TKM</iso3>
+        <ico>TKM</ico>
+        <tld>.tm</tld>
+        <currency>TMM</currency>
+        <areacode>+993</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Turks- und Caicosinseln</name>
+        <capital language="de">Cockburn Town auf Grand Turk</capital>
+        <iso2>TC</iso2>
+        <iso3>TCA</iso3>
+        <ico></ico>
+        <tld>.tc</tld>
+        <currency>USD</currency>
+        <areacode>+1649</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Tuvalu</name>
+        <capital language="de">Funafuti</capital>
+        <iso2>TV</iso2>
+        <iso3>TUV</iso3>
+        <ico></ico>
+        <tld>.tv</tld>
+        <currency>TVD</currency>
+        <areacode>+688</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Uganda, Republik</name>
+        <capital language="de">Kampala</capital>
+        <iso2>UG</iso2>
+        <iso3>UGA</iso3>
+        <ico>UGA</ico>
+        <tld>.ug</tld>
+        <currency>UGX</currency>
+        <areacode>+256</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Ukraine</name>
+        <capital language="de">Kiew</capital>
+        <iso2>UA</iso2>
+        <iso3>UKR</iso3>
+        <ico>UKR</ico>
+        <tld>.ua</tld>
+        <currency>UAH</currency>
+        <areacode>+380</areacode>
+    </country>
+    <country>
+        <continent language="de"></continent>
+        <name language="de">Union der Sozialistischen Sowjetrepubliken</name>
+        <capital language="de">Moskau</capital>
+        <iso2>SU</iso2>
+        <iso3>SUN</iso3>
+        <ico>URS</ico>
+        <tld>.su</tld>
+        <currency></currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Uruguay</name>
+        <capital language="de">Montevideo</capital>
+        <iso2>UY</iso2>
+        <iso3>URY</iso3>
+        <ico>URU</ico>
+        <tld>.uy</tld>
+        <currency>UYU</currency>
+        <areacode>+598</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Usbekistan</name>
+        <capital language="de">Taschkent</capital>
+        <iso2>UZ</iso2>
+        <iso3>UZB</iso3>
+        <ico>UZB</ico>
+        <tld>.uz</tld>
+        <currency>UZS</currency>
+        <areacode>+998</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Vanuatu</name>
+        <capital language="de">Port Vila</capital>
+        <iso2>VU</iso2>
+        <iso3>VUT</iso3>
+        <ico>VAN</ico>
+        <tld>.vu</tld>
+        <currency>VUV</currency>
+        <areacode>+678</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Vatikanstadt</name>
+        <capital language="de">Vatikanstadt</capital>
+        <iso2>VA</iso2>
+        <iso3>VAT</iso3>
+        <ico></ico>
+        <tld>.va</tld>
+        <currency>EUR</currency>
+        <areacode>+3906</areacode>
+    </country>
+    <country>
+        <continent language="de">Südamerika</continent>
+        <name language="de">Venezuela</name>
+        <capital language="de">Caracas</capital>
+        <iso2>VE</iso2>
+        <iso3>VEN</iso3>
+        <ico>VEN</ico>
+        <tld>.ve</tld>
+        <currency>VEB</currency>
+        <areacode>+58</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Vereinigte Arabische Emirate</name>
+        <capital language="de">Abu Dhabi</capital>
+        <iso2>AE</iso2>
+        <iso3>ARE</iso3>
+        <ico>UAE</ico>
+        <tld>.ae</tld>
+        <currency>AED</currency>
+        <areacode>+971</areacode>
+    </country>
+    <country>
+        <continent language="de">Nordamerika</continent>
+        <name language="de">Vereinigte Staaten von Amerika</name>
+        <capital language="de">Washington, D.C.</capital>
+        <iso2>US</iso2>
+        <iso3>USA</iso3>
+        <ico>USA</ico>
+        <tld>.us</tld>
+        <currency>USD</currency>
+        <areacode>+1</areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Vereinigtes Königreich von Großbritannien und Nordirland</name>
+        <capital language="de">London</capital>
+        <iso2>GB</iso2>
+        <iso3>GBR</iso3>
+        <ico>GBR</ico>
+        <tld>.gb</tld>
+        <currency>GBP</currency>
+        <areacode>+44</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Vietnam</name>
+        <capital language="de">Hà Nội</capital>
+        <iso2>VN</iso2>
+        <iso3>VNM</iso3>
+        <ico>VIE</ico>
+        <tld>.vn</tld>
+        <currency>VND</currency>
+        <areacode>+84</areacode>
+    </country>
+    <country>
+        <continent language="de">Australien</continent>
+        <name language="de">Wallis und Futuna</name>
+        <capital language="de">Mata-Utu</capital>
+        <iso2>WF</iso2>
+        <iso3>WLF</iso3>
+        <ico></ico>
+        <tld>.wf</tld>
+        <currency>XPF</currency>
+        <areacode>+681</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Weihnachtsinsel</name>
+        <capital language="de">Flying Fish Cove</capital>
+        <iso2>CX</iso2>
+        <iso3>CXR</iso3>
+        <ico></ico>
+        <tld>.cx</tld>
+        <currency>AUD</currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Europa</continent>
+        <name language="de">Weißrussland</name>
+        <capital language="de">Minsk</capital>
+        <iso2>BY</iso2>
+        <iso3>BLR</iso3>
+        <ico>BLR</ico>
+        <tld>.by</tld>
+        <currency>BYR</currency>
+        <areacode>+375</areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Westsahara</name>
+        <capital language="de"></capital>
+        <iso2>EH</iso2>
+        <iso3>ESH</iso3>
+        <ico></ico>
+        <tld>.eh</tld>
+        <currency>MAD</currency>
+        <areacode></areacode>
+    </country>
+    <country>
+        <continent language="de">Afrika</continent>
+        <name language="de">Zentralafrikanische Republik</name>
+        <capital language="de">Bangui</capital>
+        <iso2>CF</iso2>
+        <iso3>CAF</iso3>
+        <ico>CAF</ico>
+        <tld>.cf</tld>
+        <currency>XAF</currency>
+        <areacode>+236</areacode>
+    </country>
+    <country>
+        <continent language="de">Asien</continent>
+        <name language="de">Zypern, Republik</name>
+        <capital language="de">Nikosia</capital>
+        <iso2>CY</iso2>
+        <iso3>CYP</iso3>
+        <ico>CYP</ico>
+        <tld>.cy</tld>
+        <currency>CYP</currency>
+        <areacode>+357</areacode>
+    </country>
+</countries>
