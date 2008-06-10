@@ -31,7 +31,7 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         foreach ($store['data'] as $i) {
             $ret['html'] .= '<option value="'.$i[0].'"';
             if ($i[0] == $value) $ret['html'] .= ' selected="selected"';
-            $ret['html'] .= '>'.$i[1].'</option>';
+            $ret['html'] .= '>'.htmlspecialchars($i[1]).'</option>';
         }
         $ret['html'] .= "</select>\n";
         return $ret;
