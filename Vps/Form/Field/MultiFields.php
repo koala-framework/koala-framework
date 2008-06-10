@@ -47,7 +47,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     {
         return $this->_model;
     }
-    
+
     public function setReferences($references)
     {
         $this->_references = $references;
@@ -98,7 +98,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     }
     public function load(Vps_Model_Row_Interface $row)
     {
-        if ((array)$row == array()) return array();
+        if (!$row) return array();
         $ret = array($this->getFieldName()=>array());
 
         $rows = $this->_getRowsByRow($row);
