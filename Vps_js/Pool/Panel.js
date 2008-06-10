@@ -23,6 +23,6 @@ Vps.Pool.Panel = Ext.extend(Ext.Panel,
 
         this.layout = 'border';
         this.items = [grid, form];
-        Clubs.superclass.initComponent.call(this);
+        Vps.Pool.Panel.superclass.initComponent.call(this);
     }
 });
