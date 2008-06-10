@@ -6,7 +6,6 @@ class Vpc_News_Directory_FormController extends Vps_Controller_Action_Auto_Form
 
     public function preDispatch()
     {
-        p($this->class);
         $tablename = Vpc_Abstract::getSetting($this->class, 'tablename');
         $this->_table = new $tablename(array('componentClass'=>$this->class));
         parent::preDispatch();
@@ -24,14 +23,12 @@ class Vpc_News_Directory_FormController extends Vps_Controller_Action_Auto_Form
             ->setAllowBlank(false);
         $this->_form->add(new Vps_Form_Field_DateField('expiry_date', trlVps('Expiry Date')));
 
-
-@work: $this->class ist FALSCH
-        $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
-        p($this->class);
+        
+        $tc = new Vps_Dao_TreeCache();
+        $component = $tc->findByDbId($this->_getParam('component_id'))->current();
+        $classes = Vpc_Abstract::getSetting($component->component_class, 'childComponentClasses');
         foreach ($classes as $class) {
             $formName = Vpc_Admin::getComponentClass($class, 'NewsEditForm');
-            p($class);
-            p($formName);
             if ($formName) {
                 $this->_form->add(new $formName($class, $class));
             }

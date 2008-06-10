@@ -9,4 +9,9 @@ class Vpc_News_Directory_Row extends Vps_Db_Table_Row_Abstract
             $admin->delete($this->component_id . '-' . $this->id);
         }
     }
+
+    public function __toString()
+    {
+        return $this->title;
+    }
 }
