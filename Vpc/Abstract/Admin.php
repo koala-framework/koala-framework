@@ -3,6 +3,7 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
 {
     protected function _getRow($componentId)
     {
+        if (!Vpc_Abstract::hasSetting($this->_class, 'tablename')) return null;
         $tablename = Vpc_Abstract::getSetting($this->_class, 'tablename');
         if ($tablename) {
             $table = new $tablename(array('componentClass'=>$this->_class));
