@@ -40,6 +40,7 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
         if (is_string($this->_filters)) $this->_filters = array($this->_filters);
         foreach($this->_filters as $k=>$f) {
             if (is_int($k)) {
+                unset($this->_filters[$k]);
                 $k = $f;
                 if ($k == 'pos') {
                     $f = 'Vps_Filter_Row_Numberize';
