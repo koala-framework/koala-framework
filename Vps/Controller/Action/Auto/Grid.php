@@ -209,19 +209,18 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             throw new Vps_Exception("Either _model has to be set or _fetchData has to be overwritten.");
         }
 
-        //todo: hier entfernen
-        if (!$order) {
-            $info = $this->_getTableInfo();
-            if (array_search($this->_defaultOrder['field'], $info['cols']) !== false) {
-                $order = $this->_defaultOrder['field'] . ' ' . $this->_defaultOrder['direction'];
-            }
-        }
+        $order = $this->_getOrder($order);
 
         $where = $this->_getWhere();
 
         //wenn getWhere null zurückliefert nichts laden
         if (is_null($where)) return null;
         return $this->_model->fetchAll($where, $order, $limit, $start);
+    }
+
+    protected function _getOrder($order)
+    {
+        return $order;
     }
 
     private function _getTableInfo()
