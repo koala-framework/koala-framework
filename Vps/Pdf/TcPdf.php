@@ -20,7 +20,14 @@ class Vps_Pdf_TcPdf extends TCPDF
 
     public function Output ($name='',$dest='')
     {
-		parent::Output($name, $dest);
+        if ($dest == 'I' || $dest == 'D') {
+            //Workaround für IE problem: unterschied von Apache-Auslieferung
+            //(wo es funktionierte)
+            //von lenz mittels sniffer herausgefunden
+            //todo: checken ob das hilft und noch benötigt wird
+            header('Accept-Ranges: bytes');
+        }
+        parent::Output($name, $dest);
     }
 
     public function setPageWidth($value)
