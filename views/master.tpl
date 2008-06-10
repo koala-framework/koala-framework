@@ -1,7 +1,7 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title><?= $this->config['application']['name'] ?></title>
+    <title><?= $this->applicationName; ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <?= $this->partial($this->extTemplate, $this) ?>
   </head>
