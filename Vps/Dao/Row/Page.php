@@ -10,8 +10,13 @@ class Vps_Dao_Row_Page extends Vps_Db_Table_Row_Abstract
     {
         parent::_insert();
         if ($this->parent_id && !$this->type) {
-            $parentRow = $this->getTable()->find($this->parent_id)->current();
-            $this->type = $parentRow->type;
+            if (is_numeric($this->parent_id)) {
+                $parentRow = $this->getTable()->find($this->parent_id)->current();
+                $this->type = $parentRow->type;
+            } else {
+                $this->type = $this->parent_id;
+                $this->parent_id = null;
+            }
         }
 
         if (!$this->is_home) $this->is_home = 0;
