@@ -15,6 +15,13 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         return $new;
     }
 
+    // Übersetzt Mysql-Datum in Timestamp
+    public function getTimestamp($columnName)
+    {
+        $parts = explode('-', $this->$columnName);
+        return mktime(0, 0, 0, $parts[1], $parts[2], $parts[0]);
+    }
+    
     protected function _duplicateParentRow($tableClassname, $ruleKey = null)
     {
         $row = $this->findParentRow($tableClassname, $ruleKey);
