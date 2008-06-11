@@ -899,16 +899,19 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
     //für AbstractPanel
     reset: function() {
-        this.getStore().modified = [];
-        this.store.newRecords = [];
+        if (this.getStore()) {
+            this.getStore().modified = [];
+            this.getStore().newRecords = [];
+        }
     },
 
     reload: function(options) {
-        if (this.store) {
-            this.store.reload(options);
-            this.store.commitChanges();
+        if (this.getStore()) {
+            this.getStore().reload(options);
+            this.getStore().commitChanges();
         }
     },
+
     load : function(params) {
         if (!this.controllerUrl) {
             throw new Error('No controllerUrl specified for AutoGrid.');
