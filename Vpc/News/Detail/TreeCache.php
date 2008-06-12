@@ -1,12 +1,9 @@
 <?php
-class Vpc_News_Detail_TreeCache extends Vpc_TreeCache_Static
+class Vpc_News_Detail_TreeCache extends Vpc_News_Detail_Abstract_TreeCache
 {
     protected function _init()
     {
-        $this->_classes = array('content'=>array(
-            'childClassKey' => 'content',
-            'dbIdShortcut' => new Zend_Db_Expr("CONCAT('news_', tc.tag)")
-        ));
         parent::_init();
+        $this->_classes['image']['dbIdShortcut'] = new Zend_Db_Expr("CONCAT('news_', tc.tag, '-image')");
     }
 }

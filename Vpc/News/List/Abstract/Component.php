@@ -5,6 +5,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract implements 
     {
         $ret = parent::getSettings();
         $ret['childComponentClasses']['paging'] = 'Vpc_News_List_Abstract_Paging_Component';
+        $ret['childComponentClasses']['preview'] = 'Vpc_News_Detail_Preview_Component';
         return $ret;
     }
 
@@ -18,11 +19,11 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract implements 
         $select->from($this->getTreeCacheRow()->getTable());
 
         $newsComponent = $this->getNewsComponent();
-        $cClasses = Vpc_Abstract::getSetting($newsComponent, 'childComponentClasses');
+        $cClasses = Vpc_Abstract::getSetting($newsComponent->component_class, 'childComponentClasses');
 
-        $select->where('vps_tree_cache.parent_component_id = ?', $newsComponent->getComponentId())
-            ->where('vps_tree_cache.component_class = ?', $cClasses['detail'])
-            ->join('vpc_news', 'vps_tree_cache.tag=vpc_news.id')
+        $select->where('vps_tree_cache.parent_component_id = ?', $newsComponent->component_id)
+            ->where('vps_tree_cache.component_class = ?', $cClasses['preview'])
+            ->join('vpc_news', 'vps_tree_cache.tag=vpc_news.id', array())
             ->where('publish_date <= NOW()')
             ->where('expiry_date >= NOW()');
         if (!$this->_showInvisible()) {
@@ -37,6 +38,12 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract implements 
         $select->limit($limit, $start);
         $select->order('publish_date DESC');
         return $this->getTreeCacheRow()->getTable()->fetchAll($select);
+    }
+
+    public function getNewsRow($news_id)
+    {
+        $model = new Vpc_News_Directory_Model();
+        return $model->find($news_id)->current();
     }
 
     public function getPagingCount()
@@ -57,7 +64,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract implements 
             ->find($ret['paging'])
             ->current()->getComponent()->getLimit();
 
-        $ret['news'] = $this->getNews($limit['limit'], $limit['start'])->toMenuData();
+        $ret['news'] = $this->getNews($limit['limit'], $limit['start']);
 
         return $ret;
     }

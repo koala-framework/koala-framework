@@ -35,7 +35,7 @@ Vpc.News.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
         var bp = this.getBaseParams();
         this.fireEvent('editcomponent', {
             componentClass: this.contentClass,
-            componentId: 'news_' + row.data.id,
+            componentId: 'news_' + row.data.id + '-content',
             text: 'Details'
         });
     }
