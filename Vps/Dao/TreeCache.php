@@ -185,7 +185,7 @@ class Vps_Dao_TreeCache extends Vps_Db_Table
 
     public function findPageByPath($path)
     {
-        $where = array('tree_url = ?'=>$path);
+        $where = array('url = ?'=>$path);
         return $this->fetchAll($where)->current();
     }
 
