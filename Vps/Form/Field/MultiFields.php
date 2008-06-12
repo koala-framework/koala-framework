@@ -131,6 +131,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 
         $rows = $this->_getRowsByRow($row);
         $id = $row->{$row->getModel()->getPrimaryKey()};
+        $id='A';
         $this->_updatedRows[$id] = array();
         $this->_deletedRows[$id] = array();
         $this->_insertedRows[$id] = array();
@@ -200,6 +201,9 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     public function save(Vps_Model_Row_Interface $row, $postData)
     {
         $id = $row->{$row->getModel()->getPrimaryKey()};
+        if (!isset($this->_deletedRows[$id])) { $id = null; }
+        $id='A';
+        
         foreach ($this->_deletedRows[$id] as $r) {
             $r->delete();
         }
