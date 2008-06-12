@@ -39,7 +39,8 @@ Vps.Form.SwfUploadField = Ext.extend(Ext.form.Field, {
     afterRender: function() {
         Vps.Form.SwfUploadField.superclass.afterRender.call(this);
         this.previewImage = this.el.createChild({
-            style: 'margin-right: 10px; padding: 5px; float: left; border: 1px solid #b5b8c8;'
+            style: 'margin-right: 10px; padding: 5px; float: left; border: 1px solid #b5b8c8;'+
+                   'background-color: white;'
         });
         this.uploadButton = new Ext.Button({
             text: trlVps('Upload File'),
