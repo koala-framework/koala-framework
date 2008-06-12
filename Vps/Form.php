@@ -7,12 +7,12 @@ class Vps_Form extends Vps_Form_NonTableForm
     private $_primaryKey;
     private $_rows = array();
 
-    public function __construct($name = null, $id = null)
+    public function __construct($name = null)
     {
         if (!isset($this->fields)) {
             $this->fields = new Vps_Collection_FormFields();
         }
-        parent::__construct($name, $id);
+        parent::__construct($name);
     }
 
     protected function _init()

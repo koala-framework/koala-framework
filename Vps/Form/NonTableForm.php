@@ -3,13 +3,12 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
 {
     private $_id;
 
-    public function __construct($name = null, $id = null)
+    public function __construct($name = null)
     {
         if (!isset($this->fields)) {
             $this->fields = new Vps_Collection_FormFields();
         }
         parent::__construct($name);
-        if (!is_null($id)) $this->setId($id);
     }
     protected function _getIdByParentRow($parentRow)
     {
