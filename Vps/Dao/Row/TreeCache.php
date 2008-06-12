@@ -33,10 +33,24 @@ class Vps_Dao_Row_TreeCache extends Vps_Db_Table_Row_Abstract
         return $this->getTable()->findPageByPath($this->parent_url);
     }
 
+    //sucht die Page in der die Komponente liegt, kann sich selbst sein
+    public function findPage()
+    {
+        if ($this->url) return $this;
+        return $this->getTable()->findPageByPath($this->tree_url);
+    }
+
     public function findChildComponents()
     {
         $where = array('parent_component_id = ?' => $this->component_id);
         return $this->getTable()->fetchAll($where, 'pos');
+    }
+
+    //sucht eine unter-komponente der aktuellen komponente, nur suffix wird benötigt
+    public function findChildComponent($suffix)
+    {
+        $where = array('component_id = ?' => $this->component_id.$suffix);
+        return $this->getTable()->fetchAll($where);
     }
 
     public function findChildPages()
