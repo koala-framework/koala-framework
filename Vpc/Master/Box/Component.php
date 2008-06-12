@@ -18,7 +18,9 @@ class Vpc_Master_Box_Component extends Vpc_Master_Abstract
                 'tree_url = ?' => $this->getTreeCacheRow()->tree_url
             );
             $row = $this->getTreeCacheRow()->getTable()->fetchAll($where)->current();
-            $vars['boxes'][$id] = $row->component_id;
+            if ($row) {
+                $vars['boxes'][$id] = $row->component_id;
+            }
         }
         return $vars;
     }

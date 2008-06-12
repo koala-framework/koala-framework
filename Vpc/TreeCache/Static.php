@@ -16,7 +16,7 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
         }
     }
     
-    public function createMissingChilds($componentClass = null)
+    public function createMissingChilds($boxComponentClass = null)
     {
         $logger = false;
         if (Zend_Registry::isRegistered('debugLogger')) {
@@ -29,16 +29,12 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
             $select = new Zend_Db_Select($this->_cache->getAdapter());
             $select->from(array('tc' => 'vps_tree_cache'), array());
             $select->from(null, $fields);
-            $select->where('tc.generated = ?', Vps_Dao_TreeCache::GENERATE_START);
-            if ($componentClass) {
-                //wenn von Vpc_Dao_TreeCache aufgerufen ist componentClass gesetzt
-                //es ist dann eine DecoratorBox die unter allen Pages angelegt werden soll
-                //wenn die fkt von einer anderen Komponente aufgerufen wird ist componentClass
-                //nicht gesetzt, da soll dann auch unter nicht-pages was erstellt werden
-                $select->where('NOT ISNULL(tc.url_match)');
-                $select->where('tc.component_class = ?', $componentClass);
+            if ($boxComponentClass) { // Wenn MasterBox
+                $select->where('NOT ISNULL(tc.url_match)'); // Unter jeder Page
+                $select->where('tc.component_class = ?', $boxComponentClass); // der übergebenen Komponent anlegen
             } else {
                 $select->where('tc.component_class = ?', $this->_class);
+                $select->where('tc.generated = ?', Vps_Dao_TreeCache::GENERATE_START);
             }
 
             if ($logger) {
@@ -46,9 +42,10 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
                 $logger->debug($select->__toString());;
                 $start = microtime(true);
             }
+
             $this->_db->query("INSERT INTO vps_tree_cache
                    (".implode(', ', array_keys($fields)).") ($select)");
-
+            
             if ($logger) {
                 $time = round(microtime(true)-$start, 2);
 
