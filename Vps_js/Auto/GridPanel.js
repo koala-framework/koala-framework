@@ -570,6 +570,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             this.store.loadData(result);
         }
     },
+
+    getFilter : function(filterName) {
+        if (this.filters) return this.filters.get(filterName);
+    },
+
     initEditDialog : function(editDialog)
     {
         if (typeof editDialog == "string") {

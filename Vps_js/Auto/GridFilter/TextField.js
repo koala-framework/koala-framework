@@ -19,5 +19,9 @@ Ext.extend(Vps.Auto.GridFilter.TextField, Vps.Auto.GridFilter.Abstract, {
     },
     getParams: function() {
         return { query: this.textField.getValue() };
+    },
+    setValue: function(v) {
+        this.textField.setValue(v);
+        this.fireEvent('filter', this, this.getParams());
     }
 });

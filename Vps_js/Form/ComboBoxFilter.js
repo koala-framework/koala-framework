@@ -2,6 +2,7 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
 
     layout: 'form',
     border: false,
+    baseCls: 'x-form-item',
 
     initComponent : function()
     {
@@ -50,4 +51,4 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
 
 
 });
-Ext.reg('vps.comboboxFilter', Vps.Form.ComboBoxFilter);
+Ext.reg('comboboxfilter', Vps.Form.ComboBoxFilter);
