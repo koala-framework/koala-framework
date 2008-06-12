@@ -2,9 +2,9 @@
 class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 {
     public $fields;
-    private $_updatedRows;
-    private $_deletedRows;
-    private $_insertedRows;
+    private $_updatedRows = array();
+    private $_deletedRows = array();
+    private $_insertedRows = array();
     private $_model;
     private $_references;
     
@@ -130,15 +130,16 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         if (is_string($postData)) { $postData = Zend_Json::decode($postData); }
 
         $rows = $this->_getRowsByRow($row);
-        $this->_updatedRows = array();
-        $this->_deletedRows = array();
-        $this->_insertedRows = array();
+        $id = $row->{$row->getModel()->getPrimaryKey()};
+        $this->_updatedRows[$id] = array();
+        $this->_deletedRows[$id] = array();
+        $this->_insertedRows[$id] = array();
         $pos = 0;
 
         foreach ($rows as $k=>$r) {
             if (isset($postData[$k])) {
                 $rowPostData = $postData[$k];
-                $this->_updatedRows[] = array('row'=>$r, 'data'=>$rowPostData);
+                $this->_updatedRows[$id][] = array('row'=>$r, 'data'=>$rowPostData);
                 foreach ($this->fields as $field) {
                     $field->prepareSave($r, $rowPostData);
                 }
@@ -148,14 +149,14 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
                 }
                 unset($postData[$k]);
             } else {
-                $this->_deletedRows[] = $r;
+                $this->_deletedRows[$id][] = $r;
             }
         }
 
         foreach ($postData as $k=>$rowPostData) {
             $k = (int)$k;
             $r = $this->_model->createRow();
-            $this->_insertedRows[] = array('row'=>$r, 'data'=>$rowPostData);
+            $this->_insertedRows[$id][] = array('row'=>$r, 'data'=>$rowPostData);
             foreach ($this->fields as $field) {
                 $field->prepareSave($r, $rowPostData);
             }
@@ -198,11 +199,12 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 
     public function save(Vps_Model_Row_Interface $row, $postData)
     {
-        foreach ($this->_deletedRows as $r) {
+        $id = $row->{$row->getModel()->getPrimaryKey()};
+        foreach ($this->_deletedRows[$id] as $r) {
             $r->delete();
         }
 
-        foreach ($this->_insertedRows as $i) {
+        foreach ($this->_insertedRows[$id] as $i) {
             $r = $i['row'];
             $rowPostData = $i['data'];
 
@@ -221,7 +223,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             }
         }
 
-        foreach ($this->_updatedRows as $i) {
+        foreach ($this->_updatedRows[$id] as $i) {
             $r = $i['row'];
             $rowPostData = $i['data'];
             $r->save();
