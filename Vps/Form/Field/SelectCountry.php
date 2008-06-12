@@ -12,7 +12,7 @@ class Vps_Form_Field_SelectCountry extends Vps_Form_Field_Select
         $xml = simplexml_load_file($file);
         $data = array();
         foreach ($xml->country as $country) {
-            $data[] = array((string)$country->iso2, (string)$country->nameinent);
+            $data[] = array((string)$country->iso2, (string)$country->name);
         }
         $this->setValues($data);
     }
