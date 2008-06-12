@@ -200,7 +200,7 @@ class Vps_Dao_TreeCache extends Vps_Db_Table
         return $this->fetchAll($where);
     }
 
-    public function findComponentByParentClass($parentClass)
+    private function _getMatchingClassesForParentClass($parentClass)
     {
         $matchingClasses = array();
         $classes = Vpc_Abstract::getComponentClasses();
@@ -209,14 +209,33 @@ class Vps_Dao_TreeCache extends Vps_Db_Table
                 $matchingClasses[] = $class;
             }
         }
-
-        foreach ($matchingClasses as $class) {
-            $ret = $this->getComponentByClass($class);
-            if ($ret) return $ret;
-        }
-        return null;
+        return $matchingClasses;
     }
-    
+
+    public function findComponentByParentClass($parentClass)
+    {
+        $matchingClasses = $this->_getMatchingClassesForParentClass($parentClass);
+        if (!$matchingClasses) return array();
+
+        foreach ($matchingClasses as &$class) {
+            $class = $this->getAdapter()->quote($class);
+        }
+        $where = 'component_class IN ('.implode(', ', $matchingClasses).')';
+        return $this->fetchAll($where, null, 1)->current();
+    }
+
+    public function findComponentsByParentClass($parentClass)
+    {
+        $matchingClasses = $this->_getMatchingClassesForParentClass($parentClass);
+        if (!$matchingClasses) return array();
+
+        foreach ($matchingClasses as &$class) {
+            $class = $this->getAdapter()->quote($class);
+        }
+        $where = 'component_class IN ('.implode(', ', $matchingClasses).')';
+        return $this->fetchAll($where);
+    }
+
     public function getComponentClasses()
     {
         $select = Zend_Registry::get('db')->select()
