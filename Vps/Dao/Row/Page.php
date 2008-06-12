@@ -33,8 +33,6 @@ class Vps_Dao_Row_Page extends Vps_Db_Table_Row_Abstract
 
     protected function _delete()
     {
-        $data = $this->retrievePageData($id);
-
         if (count($this->findDependentRowset('Vps_Dao_Pages'))) {
             throw new Vps_ClientException(trlVps("Can't delete page as there are child pages."));
         }
