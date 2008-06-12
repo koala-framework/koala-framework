@@ -16,7 +16,9 @@ class Vpc_Abstract_List_Form extends Vps_Form_NonTableForm
             'refColumns' => array('id')
         ));
         $multifields->setMinEntries(0);
-        $multifields->fields->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
+        if (Vpc_Abstract::getSetting($this->getClass(), 'showVisible')) {
+            $multifields->fields->add(new Vps_Form_Field_Checkbox('visible', trlVps('Visible')));
+        }
 
         $childComponentClasses = Vpc_Abstract::getSetting($this->getClass(), 'childComponentClasses');
         $childComponentClass = $childComponentClasses['child'];
