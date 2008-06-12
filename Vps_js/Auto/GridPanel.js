@@ -454,8 +454,11 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             delete f.type;
             f.id = filter;
             var filterField = new type(f);
-
-            if(first && gridConfig.tbar.length > 0) {
+			
+            if (f.right) {
+				gridConfig.tbar.add('->');
+				f.label += ' ';
+			} else if(first && gridConfig.tbar.length > 0) {
                 gridConfig.tbar.add('-');
             }
             if (first && !f.label) f.label = 'Filter:';

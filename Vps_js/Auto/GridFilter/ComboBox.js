@@ -7,8 +7,9 @@ Vps.Auto.GridFilter.ComboBox = function(config)
         reader: new Ext.data.ArrayReader({}, record),
         data: config.data
     });
-    if (filterStore.find('id', 0) == -1) {
+    if (!config['default'] && filterStore.find('id', 0) == -1) {
         filterStore.insert(0, [new record({id: 0, name: 'all'})]);
+		config['default'] = 0;
     }
     this.combo = new Ext.form.ComboBox({
             store: filterStore,
@@ -19,7 +20,7 @@ Vps.Auto.GridFilter.ComboBox = function(config)
             editable: false,
             width: config.width || 200
         });
-    this.combo.setValue(0);
+    this.combo.setValue(config['default']);
     this.combo.on('select', function() {
         this.fireEvent('filter', this, this.getParams());
     }, this);
