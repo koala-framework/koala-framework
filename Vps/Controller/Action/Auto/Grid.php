@@ -48,6 +48,16 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     {
         parent::preDispatch();
 
+        // Falls Filter einen Default-Wert hat:
+        // - GET query-Parameter setzen,
+        // - Im JavaScript nach rechts verschieben und Defaultwert setzen
+        foreach ($this->_filters as $key => $filter) {
+            $param = 'query_' . $key;
+            if (isset($filter['default']) && !$this->_getParam($param)) {
+                $this->_setParam($param, $filter['default']);
+            }
+        }
+        
         $addColumns = array();
         if (is_array($this->_columns)) $addColumns = $this->_columns;
         $this->_columns = new Vps_Collection();
