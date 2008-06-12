@@ -126,7 +126,8 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 
     public function prepareSave(Vps_Model_Row_Interface $row, $postData)
     {
-        $postData = Zend_Json::decode($postData[$this->getFieldName()]);
+        $postData = $postData[$this->getFieldName()];
+        if (is_string($postData)) { $postData = Zend_Json::decode($postData); }
 
         $rows = $this->_getRowsByRow($row);
         $this->_updatedRows = array();
@@ -169,7 +170,8 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         $ret = array();
 
         $this->_addValidators();
-        $postData = Zend_Json::decode($postData[$this->getFieldName()]);
+        $postData = $postData[$this->getFieldName()];
+        if (is_string($postData)) { $postData = Zend_Json::decode($postData); }
 
         $cnt = count($postData);
         $name = $this->getFieldLabel();
