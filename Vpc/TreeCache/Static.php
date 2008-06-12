@@ -32,11 +32,15 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
             if ($boxComponentClass) { // Wenn MasterBox
                 $select->where('NOT ISNULL(tc.url_match)'); // Unter jeder Page
                 $select->where('tc.component_class = ?', $boxComponentClass); // der übergebenen Komponent anlegen
+                
+                // Das kommt wieder weg ;-)
+                $componentIds = $this->_db->fetchCol($select);
+                $this->_db->query("DELETE FROM vps_tree_cache WHERE component_id IN ('" . implode("', '", $componentIds) . "')");
             } else {
                 $select->where('tc.component_class = ?', $this->_class);
                 $select->where('tc.generated = ?', Vps_Dao_TreeCache::GENERATE_START);
             }
-
+            
             if ($logger) {
                 $logger->info("table: ".get_class($this));
                 $logger->debug($select->__toString());;
