@@ -31,7 +31,7 @@ class Vps_View_Component extends Vps_View
         }
         
         // nocache-Tags ersetzen
-        preg_match_all('/{nocache: (.+)}/', $return, $matches);
+        preg_match_all('/{nocache: (.+?)}/', $return, $matches);
         foreach ($matches[0] as $key => $search) {
             $replace = self::renderCachedComponent($matches[1][$key]);
             $return = str_replace($search, $replace, $return);
@@ -55,7 +55,7 @@ class Vps_View_Component extends Vps_View
                 $templateVars += $component->getTemplateVars();
             }
             $templateVars['component'] = $componentId;
-            $template = 'application/views/Master.tpl';
+            $template = 'application/views/master/default.tpl';
         } else {
             $templateVars = $row->getComponent()->getTemplateVars();
             $template = Vpc_Admin::getComponentFile($row->component_class, 'Component', 'tpl');
