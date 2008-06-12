@@ -63,16 +63,6 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
          return array();
      }
 
-    public function getBoxVars($boxname)
-    {
-        $componentId = $this->getTreeCacheRow()->component_id . '-' . $boxname;
-        $row = $this->getTreeCacheRow()->getTable()->find($componentId)->current();
-        if ($row) {
-            return $row->getComponent()->getTemplateVars();
-        }
-        return null;
-    }
-
     public function getPdfWriter($pdf)
     {
         if (!isset($this->_pdfWriter)) {

@@ -12,7 +12,8 @@ class Vpc_Master_Box_TreeCache extends Vpc_TreeCache_StaticBox
                 'id' => 'box' . $id,
                 'box' => $id,
                 'componentClass' => $class,
-                'priority' => 0
+                'priority' => 0,
+                'inherit' => false
             );
         }
     }
