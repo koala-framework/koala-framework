@@ -4,6 +4,7 @@ class Vps_View_Helper_ComponentLink
     public function componentLink($m, $text = null)
     {
         if ($m instanceof Vps_Dao_Row_TreeCache) {
+            if (!$m->url) $m = $m->findPage();
             $si = $m->getTable()->showInvisible();
             $m = array(
                 'href' => $si ? $m->url_preview : $m->url,
