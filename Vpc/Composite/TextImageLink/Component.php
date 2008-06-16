@@ -1,0 +1,23 @@
+<?php
+class Vpc_Composite_TextImageLink_Component extends Vpc_Abstract_Composite_Component
+{
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['componentName'] = trlVps('Text Image Link');
+        $ret['tablename'] = 'Vpc_Composite_TextImageLink_Model';
+        $ret['childComponentClasses']['image'] = 'Vpc_Basic_Image_Component';
+        $ret['childComponentClasses']['link'] = 'Vpc_Basic_LinkTag_Component';
+        $ret['default'] = array();
+        return $ret;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $row = $this->_getRow();
+        $ret['title'] = $row->title;
+        $ret['teaser'] = $row->teaser;
+        return $ret;
+    }
+}
