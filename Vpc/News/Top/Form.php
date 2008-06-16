@@ -6,7 +6,7 @@ class Vpc_News_Top_Form extends Vpc_Abstract_Form
         parent::__construct($name, $class, $id);
 
         $tc = new Vps_Dao_TreeCache();
-        $news = $tc->findComponentsByParentClass('Vpc_Rotary_District_News_Component');
+        $news = $tc->findComponentsByParentClass('Vpc_News_Directory_Component');
 
         $values = array();
         foreach ($news as $n) {

@@ -1,7 +1,7 @@
 <?php
 class Vpc_News_Detail_Abstract_Form extends Vps_Form
 {
-    public function __construct($detailClass = null)
+    public function __construct($newsClass = null)
     {
         parent::__construct('details');
 
@@ -13,6 +13,8 @@ class Vpc_News_Detail_Abstract_Form extends Vps_Form
             ->setHeight(100);
         $this->add(new Vps_Form_Field_DateField('publish_date', trlVps('Publish Date')))
             ->setAllowBlank(false);
-        $this->add(new Vps_Form_Field_DateField('expiry_date', trlVps('Expiry Date')));
+        if (Vpc_Abstract::getSetting($newsClass, 'enableExpireDate')) {
+            $this->add(new Vps_Form_Field_DateField('expiry_date', trlVps('Expiry Date')));
+        }
     }
 }
