@@ -21,13 +21,13 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
 
     public function getTemplateVars()
     {
-        $return = parent::getTemplateVars();
+        $ret = parent::getTemplateVars();
 
-        $return['children'] = array();
+        $ret['children'] = array();
         foreach ($this->getChildComponentTreeCacheRows() as $row) {
             $ret['children'][] = $row->component_id;
         }
-        return $return;
+        return $ret;
     }
 
     //wird verwendet in Pdf Writer
@@ -44,10 +44,9 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         }
 
         //todo: mit join optimieren - wenn wir Zend 1.5 haben
-        $where[] = '(SELECT COUNT(*) FROM vpc_composite_list
-            WHERE CONCAT(vpc_composite_list.component_id, \'-\', vpc_composite_list.id)
-                    LIKE vps_tree_cache.db_id)';
-
+         $where[] = '(SELECT COUNT(*) FROM vpc_composite_list
+             WHERE CONCAT(vpc_composite_list.component_id, \'-\', vpc_composite_list.id)
+                     LIKE vps_tree_cache.db_id)';
         return $tc->fetchAll($where, 'pos');
     }
 

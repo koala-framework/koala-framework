@@ -1,4 +1,4 @@
-<?php 
-foreach ($this->children as $child) { 
-    $this->component($child);
+<?php
+foreach ($this->children as $child) {
+    echo $this->component($child);
 }
