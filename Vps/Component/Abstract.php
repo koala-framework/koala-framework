@@ -87,15 +87,14 @@ class Vps_Component_Abstract
         static $componentClasses;
         if (isset($componentClasses)) return $componentClasses;
         $componentClasses = array();
-        $classes = array();
-        $classes[] = 'Vpc_Root_Component';
+        $componentClasses[] = 'Vpc_Root_Component';
         foreach (Zend_Registry::get('config')->vpc->pageClasses as $c) {
             if ($c->class && $c->text) {
-                $classes[] = $c->class;
-                self::_getChildComponentClasses($classes, $c->class);
+                $componentClasses[] = $c->class;
+                self::_getChildComponentClasses($componentClasses, $c->class);
             }
         }
-        return $classes;
+        return $componentClasses;
     }
 
     private static function _getChildComponentClasses(&$componentClasses, $class)
