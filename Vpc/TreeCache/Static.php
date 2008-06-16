@@ -32,10 +32,6 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
             if ($boxComponentClass) { // Wenn MasterBox
                 $select->where('NOT ISNULL(tc.url_match)'); // Unter jeder Page
                 $select->where('tc.component_class = ?', $boxComponentClass); // der übergebenen Komponent anlegen
-                
-                // Das kommt wieder weg ;-)
-                $componentIds = $this->_db->fetchCol($select);
-                $this->_db->query("DELETE FROM vps_tree_cache WHERE component_id IN ('" . implode("', '", $componentIds) . "')");
             } else {
                 $select->where('tc.component_class = ?', $this->_class);
                 $select->where('tc.generated = ?', Vps_Dao_TreeCache::GENERATE_START);
@@ -46,9 +42,8 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
                 $logger->debug($select->__toString());;
                 $start = microtime(true);
             }
-
-            $this->_db->query("INSERT INTO vps_tree_cache
-                   (".implode(', ', array_keys($fields)).") ($select)");
+            
+            $this->insertValues($fields, $select, $key);
             
             if ($logger) {
                 $time = round(microtime(true)-$start, 2);
@@ -64,6 +59,12 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
         }
 
         parent::createMissingChilds();
+    }
+    
+    protected function insertValues($fields, $select, $key)
+    {
+        $this->_db->query("INSERT INTO vps_tree_cache
+               (".implode(', ', array_keys($fields)).") ($select)");
     }
     
     protected function _getSelectFields($key)
