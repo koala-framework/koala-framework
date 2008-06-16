@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Detail_Abstract_Component extends Vpc_Abstract_Composite_Component
+abstract class Vpc_News_Detail_Abstract_Component extends Vpc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
