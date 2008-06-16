@@ -4,29 +4,37 @@ class Vpc_TreeCache_StaticBox extends Vpc_TreeCache_Static
     protected function _getSelectFields($key)
     {
         $fields = parent::_getSelectFields($key);
-        $class = $this->_classes[$key];
-        $priority = isset($class['priority']) ? $class['priority'] : 0 ;
-        $box = isset($class['box']) ? $class['box'] : $class['id'];
         $fields['box'] = new Zend_Db_Expr(
-            $this->_cache->getAdapter()->quote($box)
+            $this->_cache->getAdapter()->quote($this->_getBoxValue($key, 'box'))
         );
         $fields['box_priority'] = new Zend_Db_Expr(
-            $this->_cache->getAdapter()->quote($priority)
+            $this->_cache->getAdapter()->quote($this->_getBoxValue($key, 'priority'))
         );
-        if (!isset($class['inherit']) || $class['inherit']) {
-            $fields['generated'] = new Zend_Db_Expr(
-                $this->_cache->getAdapter()->quote(Vps_Dao_TreeCache::GENERATE_INHERIT_BOX)
-            );
+        if ($this->_getBoxValue($key, 'inherit')) {
+            $fields['tag'] = new Zend_Db_Expr($this->_cache->getAdapter()->quote('inherit'));
         }
-        $fields['box_priority'] = new Zend_Db_Expr(
-            $this->_cache->getAdapter()->quote($priority)
-        );
         return $fields;
     }
     
-    public function createMissingChilds($boxComponentClass = null)
+    protected function _getBoxValue($key, $param)
     {
-        //$sql = "DELETE FROM vps_tree_cache WHERE "
-        return parent::createMissingChilds($boxComponentClass);
+        $class = $this->_classes[$key];
+        if ($param == 'priority') {
+            return isset($class['priority']) ? $class['priority'] : 0 ;
+        } else if ($param == 'box') {
+            return isset($class['box']) ? $class['box'] : $class['id'];
+        } else if ($param == 'inherit') {
+           return (!isset($class['inherit']) || $class['inherit']); 
+        }
+        return null;
+    }
+    
+    protected function insertValues($fields, $select, $key)
+    {
+        $box = $this->_getBoxValue($key, 'box');
+        $priority = $this->_getBoxValue($key, 'priority');
+        $select->where("component_id NOT IN (SELECT parent_component_id FROM vps_tree_cache WHERE box='$box' AND box_priority>$priority AND parent_component_class='{$this->_class}')");
+        $this->_db->query("REPLACE INTO vps_tree_cache
+               (".implode(', ', array_keys($fields)).") ($select)");
     }
 }

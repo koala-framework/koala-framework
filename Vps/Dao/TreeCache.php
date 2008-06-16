@@ -20,8 +20,7 @@ class Vps_Dao_TreeCache extends Vps_Db_Table
     const GENERATE_START = 1;
     const GENERATE_AFTER = 2;
     const GENERATE_AFTER_START = 3;
-    const GENERATE_INHERIT_BOX = 4;
-    const GENERATE_FINISHED = 5;
+    const GENERATE_FINISHED = 4;
     
     public function regenerate()
     {
@@ -83,11 +82,13 @@ class Vps_Dao_TreeCache extends Vps_Db_Table
                 } else {
                     $where['generated = ?'] = self::NOT_GENERATED;
                 }
+
                 if ($row['hasurl']) {
                     foreach ($this->_getMasterTreeCaches() as $tc) {
                         $tc->createMissingChilds($row['component_class']);
                     }
                 }
+
                 $this->updateGenerated($generated, $where);
             }
         } while(count($rows));
@@ -114,35 +115,27 @@ class Vps_Dao_TreeCache extends Vps_Db_Table
 
     public function afterGenerate()
     {
-        // TODO: funktioniert nicht 100%ig
-        // Mehrfachboxen löschen
-        $sql = "SELECT parent_url, box, (COUNT(*) - 1) c FROM vps_tree_cache
-            WHERE NOT ISNULL(box)
-            GROUP BY parent_url, box
-            HAVING c > 0";
-        foreach ($this->getAdapter()->fetchAll($sql) as $row) {
-            $sql = "DELETE FROM vps_tree_cache 
-                WHERE parent_url=:parent_url AND box=:box 
-                ORDER BY box_priority ASC LIMIT :c";
-            $this->getAdapter()->query($sql, $row);
-        }
-        
         // Boxen mit generated==GENERATE_INHERIT_BOX vererben
         $sql = "SELECT component_id, box, box_priority FROM vps_tree_cache
-            WHERE NOT ISNULL(box) AND generated=" . self::GENERATE_INHERIT_BOX;
+            WHERE NOT ISNULL(box) AND tag='inherit'";
         foreach ($this->getAdapter()->fetchAll($sql) as $row) {
             $componentId = substr($row['component_id'], 0, strrpos($row['component_id'], '-'));
             $sql = "UPDATE vps_tree_cache
-                SET generated=" . self::GENERATE_FINISHED . ", component_class='Vpc_ShowContent_Component', tag=:component_id
+                SET component_class='Vpc_ShowContent_Component', tag=:component_id
                 WHERE component_id LIKE '$componentId%' AND box_priority<:box_priority AND box=:box";
             $this->getAdapter()->query($sql, $row);
-            /*
-            $box = $row['box'];
-            $sql = "DELETE FROM vps_tree_cache WHERE component_id LIKE '$componentId%-$box-%' OR component_id LIKE '$componentId%-box$box-%'";
-            p($this->getAdapter()->query($sql));
-            */
         }
-                
+
+        // Überflüssige Boxen löschen
+        $db = $this->getAdapter();
+        $sql = "SELECT parent_url, box FROM vps_tree_cache WHERE NOT ISNULL(box) GROUP BY parent_url, box HAVING count(*)>1";
+        foreach ($this->getAdapter()->fetchAll($sql) as $row) {
+            $keepComponentId = $db->fetchOne("SELECT component_id FROM vps_tree_cache WHERE box='{$row['box']}' AND parent_url='{$row['parent_url']}' ORDER BY box_priority DESC LIMIT 1");
+            $componentId = '%-' . $row['box'] . '%';
+            $sql = "DELETE FROM vps_tree_cache WHERE component_id LIKE '$componentId' AND component_id NOT LIKE '$keepComponentId%' AND parent_url='{$row['parent_url']}'";
+            $this->getAdapter()->query($sql);
+        }
+        
         do {
             $select = $this->getAdapter()->select();
             $select->from($this->_name, array('component_class'))
