@@ -43,7 +43,7 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
                 $start = microtime(true);
             }
             
-            $this->insertValues($fields, $select, $key);
+            $this->_insertValues($fields, $select, $key, $boxComponentClass);
             
             if ($logger) {
                 $time = round(microtime(true)-$start, 2);
@@ -61,7 +61,7 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
         parent::createMissingChilds();
     }
     
-    protected function insertValues($fields, $select, $key)
+    protected function _insertValues($fields, $select, $key)
     {
         $this->_db->query("INSERT INTO vps_tree_cache
                (".implode(', ', array_keys($fields)).") ($select)");

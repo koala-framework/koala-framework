@@ -29,11 +29,16 @@ class Vpc_TreeCache_StaticBox extends Vpc_TreeCache_Static
         return null;
     }
     
-    protected function insertValues($fields, $select, $key)
+    protected function _insertValues($fields, $select, $key, $boxComponentClass)
     {
         $box = $this->_getBoxValue($key, 'box');
         $priority = $this->_getBoxValue($key, 'priority');
-        $select->where("component_id NOT IN (SELECT parent_component_id FROM vps_tree_cache WHERE box='$box' AND box_priority>$priority AND parent_component_class='{$this->_class}')");
+        $parentClass = $boxComponentClass ? $boxComponentClass : $this->_class;
+        $select->where("component_id NOT IN (SELECT parent_component_id
+                                FROM vps_tree_cache
+                                WHERE box='$box'
+                                AND box_priority>$priority
+                                AND parent_component_class='$parentClass')");
         $this->_db->query("REPLACE INTO vps_tree_cache
                (".implode(', ', array_keys($fields)).") ($select)");
     }
