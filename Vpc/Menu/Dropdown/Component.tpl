@@ -1,4 +1,4 @@
-<ul id="{$component.level}Menu">
+<ul id="<?=$this->level?>Menu">
     <?php foreach ($this->menu as $m) { ?>
     <li class="<?= $m['class'] ?>">
         <?=$this->componentLink($m)?>
