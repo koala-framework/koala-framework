@@ -43,17 +43,25 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
         $dirs = explode(PATH_SEPARATOR, get_include_path());
         $c = get_class($this);
         do {
-            $file = str_replace('_', '', $c);
+            $file = str_replace('_', '/', $c);
+            if (substr($file, -10) != '/Component') {
+                $file .= '/Component';
+            }
             $file .= '.css';
             foreach ($dirs as $dir) {
                 if (is_file($dir . '/' . $file)) {
-                    $cssClass[] = strtolower(substr($file, 0, 1)) .
-                                  substr(str_replace('_', '', $file), 1);
+                    $cls = $c;
+                    if (substr($cls, -10) == '_Component') {
+                        $cls = substr($cls, 0, -10);
+                    }
+                    $cls = str_replace('_', '', $cls);
+                    $cls = strtolower(substr($cls, 0, 1)) . substr($cls, 1);
+                    $cssClass[] = $cls;
                     break;
                 }
             }
         } while($c = get_parent_class($c));
-        $vars['cssClass'] = implode(' ', $cssClass);
+        $vars['cssClass'] = implode(' ', array_reverse($cssClass));
         return $vars;
     }
 

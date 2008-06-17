@@ -4,7 +4,7 @@
     <li class="<?= $m['class'] ?>">
         <?=$this->componentLink($m)?>
         <?php if (isset($m['submenu']) && sizeof($m['submenu'])) { ?>
-            <div class="<?= $this->level ?>Submenu">
+            <div class="dropdown">
             <ul>
             <?php foreach ($m['submenu'] as $sm) { ?>
                 <li class="<?= $sm['class'] ?>">
