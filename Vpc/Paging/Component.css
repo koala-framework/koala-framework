@@ -1,21 +1,21 @@
-div.vpcPaging {
+.vpcPaging {
     margin-bottom: 10px;
     margin-top: 15px;
     line-height: 20px;
     text-align: center;
 }
-div.vpcPaging a {
+.vpcPaging a {
     padding: 2px 3px;
     border: 1px solid #FF9600;
     color: #786047;
 }
-div.vpcPaging a:hover,
-div.vpcPaging a.active {
+.vpcPaging a:hover,
+.vpcPaging a.active {
     color: #FF9600;
     font-weight: bold;
     background-color: #f8f2e6;
 }
-div.vpcPaging span {
+.vpcPaging span {
     font-weight: bold;
     color: #786047;
     padding-right: 5px;

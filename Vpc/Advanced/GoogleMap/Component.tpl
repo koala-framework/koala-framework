@@ -1,4 +1,4 @@
-<div class="vpcGoogleMap">
+<div class="<?=$this->cssClass?>">
 
     <div class="text"><?php $this->component($this->text) ?><br /></div>
     <div class="options"><?= $this->options ?></div>
