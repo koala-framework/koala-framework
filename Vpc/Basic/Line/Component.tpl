@@ -1,1 +1,1 @@
-<div class="basicLine"></div>
+<div class="<?=$this->cssClass?>"></div>

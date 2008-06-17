@@ -9,7 +9,8 @@ class Vpc_News_Top_Component extends Vpc_News_List_Abstract_Component
             'componentName' => 'News.Top',
             'componentIcon' => new Vps_Asset('newspaper'),
             'tablename'     => 'Vpc_News_Top_Model',
-            'default'       => array()
+            'default'       => array(),
+            'limit'         => 5
         ));
     }
 
@@ -29,7 +30,7 @@ class Vpc_News_Top_Component extends Vpc_News_List_Abstract_Component
 
     public function getNews($limit = 15, $start = null)
     {
-        return $this->getNewsComponent()->getComponent()->getNews(5);
+        return $this->getNewsComponent()->getComponent()->getNews($this->_getSetting('limit'));
     }
 
     public function getPagingCount()

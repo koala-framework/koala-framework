@@ -1,11 +1,11 @@
-.vpcImagesEnlarge { text-align: center; }
-.vpcImagesEnlarge .thumbOuter {
+.vpcCompositeImagesEnlarge { text-align: center; }
+.vpcCompositeImagesEnlarge .thumbOuter {
     float: left;
     border: 1px solid #ccc;
     padding: 3px;
     margin: 3px;
 }
-.vpcImagesEnlarge .thumb { text-align: center; overflow: hidden; }
+.vpcCompositeImagesEnlarge .thumb { text-align: center; overflow: hidden; }
 
 
 .lightboxNext { float: right; }
