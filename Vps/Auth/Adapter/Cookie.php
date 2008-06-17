@@ -46,6 +46,9 @@ class Vps_Auth_Adapter_Cookie implements Zend_Auth_Adapter_Interface
         if ($userRow) {
             if ($this->_credential == md5($userRow->password_salt)) {
                 $this->_userId = $userRow->id;
+                $userRow->last_login = date('Y-m-d H:i:s');
+                $userRow->logins = $userRow->logins + 1;
+                $userRow->save();
                 return new Zend_Auth_Result(
                     Zend_Auth_Result::SUCCESS,
                     $userRow->email,
