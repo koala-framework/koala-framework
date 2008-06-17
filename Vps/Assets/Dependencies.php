@@ -159,6 +159,11 @@ class Vps_Assets_Dependencies
                     $this->_processComponentDependency($c->class, $dependency == 'ComponentsAdmin');
                 }
             }
+            foreach ($this->_config->vpc->masterComponents as $c) {
+                if ($c) {
+                    $this->_processComponentDependency($c, $dependency == 'ComponentsAdmin');
+                }
+            }
             return;
         }
         if (!isset($this->_getDependenciesConfig()->$dependency)) {
