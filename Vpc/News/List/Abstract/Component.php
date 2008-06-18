@@ -1,5 +1,6 @@
 <?php
-abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_Component implements Vpc_Paging_ParentInterface
+abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_Component
+            implements Vpc_Paging_ParentInterface
 {
     public static function getSettings()
     {
@@ -19,9 +20,11 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
 
     protected function _selectNews()
     {
+        $newsComponent = $this->getNewsComponent();
+        if (!$newsComponent) return null;
         $select = $this->_getNewsTable()->select()
             ->from($this->_getNewsTable())
-            ->where('component_id = ?', $this->getNewsComponent()->db_id)
+            ->where('component_id = ?', $newsComponent->db_id)
             ->where('publish_date <= NOW()');
         if (Vpc_Abstract::getSetting($this->getNewsComponent()->component_class, 'enableExpireDate')) {
             $select->where('expiry_date >= NOW()');
@@ -35,6 +38,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
     public function getNews($limit = null, $start = null)
     {
         $select = $this->_selectNews();
+        if (!$select) return array();
         if (!$limit && !$start) {
             $l = $this->getTreeCacheRow()->findChildComponent('-paging')
                 ->current()->getComponent()->getLimit();
@@ -54,6 +58,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
     public function getPagingCount()
     {
         $select = $this->_selectNews();
+        if (!$select) return 0;
         $select->setIntegrityCheck(false);
         $select->reset(Zend_Db_Select::COLUMNS);
         $select->from(null, array('count' => 'COUNT(*)'));
