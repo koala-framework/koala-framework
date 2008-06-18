@@ -37,21 +37,28 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
     {
         $ret = parent::getMetaData();
 
+
+        $ret['store'] = $this->_getStoreData();
+        if (isset($ret['fields'])) unset($ret['fields']);
+        if (isset($ret['values'])) unset($ret['values']);
+
+        return $ret;
+    }
+    
+    protected function _getStoreData()
+    {
         $store = $this->getStore();
         if (!$store) $store = array();
 
         $fields = $this->getFields();
         if ($fields) {
-            unset($ret['fields']);
             $store['fields'] = $fields;
         }
 
         if ($this->getStoreUrl()) {
             $store['url'] = $this->getStoreUrl();
         }
-
         $data = $this->getValues();
-        unset($ret['values']);
         if (is_string($data)) {
             $store['url'] = $data;
         } else if ($data instanceof Vps_Db_Table_Rowset_Abstract) {
@@ -77,10 +84,8 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
                 }
             }
         }
-        $ret['store'] = $store;
-        return $ret;
+        return $store;
     }
-
     protected function _getValueFromPostData($postData)
     {
         $ret = parent::_getValueFromPostData($postData);
