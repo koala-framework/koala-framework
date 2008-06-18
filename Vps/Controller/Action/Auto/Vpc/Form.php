@@ -3,13 +3,18 @@ abstract class Vps_Controller_Action_Auto_Vpc_Form extends Vps_Controller_Action
 {
     protected $_buttons = array('save', 'saveBack');
     protected $_permissions = array('save', 'add');
-    protected $_formName = 'Vpc_Abstract_Form';
+    protected $_formName;
 
     public function preDispatch()
     {
         if (!isset($this->_form)) {
-            $this->_form = new $this->_formName(null, $this->class);
+            if (isset($this->_formName)) {
+                $this->_form = new $this->_formName(null, $this->class);
+            } else {
+                $this->_form = Vpc_Abstract_Form::createComponentForm(null, $this->class);
+            }
         }
+        
         $this->_form->setBodyStyle('padding: 10px');
         $this->_form->setId($this->componentId);
         parent::preDispatch();
