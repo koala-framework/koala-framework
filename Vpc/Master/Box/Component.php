@@ -4,6 +4,7 @@ class Vpc_Master_Box_Component extends Vpc_Master_Abstract
     public function getTemplateVars()
     {
         $vars = parent::getTemplateVars();
+        $vars['boxes'] = array();
         foreach ($this->_getSetting('childComponentClasses') as $id => $boxComponentClass) {
             $where = array(
                 'box = ?' => $id,
