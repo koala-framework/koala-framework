@@ -6,6 +6,12 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     private $_references;
     private $_model;
 
+    //Einstellungen:
+    //setColumnName
+       //- wenn bei setValues() kein rowset übergeben wird
+    //setReferences
+       //- wenn ned über innoDb ermittelt werden können
+
     public function __construct($tableName = null, $title = null)
     {
         parent::__construct();
@@ -53,13 +59,17 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     {
         if (!isset($this->_fields)) {
             $this->_fields = new Vps_Collection_FormFields();
-            $info = $this->getValues()->getTable()->info();
-            $pk = $info['primary'][1];
-            foreach ($this->getValues() as $i) {
-                $k = $i->$pk;
+            if ($this->getValues() instanceof Zend_Db_Table_Rowset_Abstract) {
+                $info = $this->getValues()->getTable()->info();
+                $pk = $info['primary'][1];
+            }
+            foreach ($this->getValues() as $key => $i) {
+                if (isset($pk)) {
+                    $key = $i->$pk;
+                }
                 if (!is_string($i)) $i = $i->__toString();
-                $this->_fields->add(new Vps_Form_Field_Checkbox($this->getFieldName()."[$k]"))
-                    ->setKey($k)
+                $this->_fields->add(new Vps_Form_Field_Checkbox($this->getFieldName()."[$key]"))
+                    ->setKey($key)
                     ->setBoxLabel($i);
             }
         }
@@ -116,6 +126,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
     public function setReferences($references)
     {
         $this->_references = $references;
+        return $this;
     }
     
     public function load(Vps_Model_Row_Interface $row)
@@ -123,8 +134,10 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         if (!$row) return array();
 
         $selected = $this->_getRowsByRow($row);
-        $ref = $this->_model->getTable()->getReference(get_class($this->getValues()->getTable()));
-        $key = $ref['columns'][0];
+        if (!$key = $this->getColumnName()) {
+            $ref = $this->_model->getTable()->getReference(get_class($this->getValues()->getTable()));
+            $key = $ref['columns'][0];
+        }
 
         $selectedIds = array();
         foreach ($selected as $i) {
@@ -154,8 +167,10 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         $ref = $this->_getReferences($row);
         $key1 = $ref['columns'][0];
         
-        $ref = $this->_model->getTable()->getReference(get_class($this->getValues()->getTable()));
-        $key2 = $ref['columns'][0];
+        if (!$key2 = $this->getColumnName()) {
+            $ref = $this->_model->getTable()->getReference(get_class($this->getValues()->getTable()));
+            $key2 = $ref['columns'][0];
+        }
 
         $avaliableKeys = array();
         foreach ($this->_getFields() as $field) {
@@ -174,10 +189,11 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
             }
         }
 
+        $ref = $this->_getReferences($row);
         foreach ($new as $id) {
             if (in_array($id, $avaliableKeys)) {
                 $i = $this->_model->createRow();
-                $i->$key1 = $row->id;
+                $i->$key1 = $row->{$ref['refColumns'][0]};
                 $i->$key2 = $id;
                 $i->save();
             }
