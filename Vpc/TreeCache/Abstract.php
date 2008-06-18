@@ -11,11 +11,12 @@ abstract class Vpc_TreeCache_Abstract
     
     protected $_additionalTreeCaches = array();
     
-    protected function __construct($class, Zend_Db_Adapter_Pdo_Mysql $db)
+    protected function __construct($class, Zend_Db_Adapter_Pdo_Mysql $db, $additionalTreeCaches = array())
     {
         $this->_class = $class;
         $this->_db = $db;
         $this->_cache = self::getTreeCacheTable();
+        $this->_additionalTreeCaches += $additionalTreeCaches;
         $this->_init();
     }
 
@@ -50,7 +51,7 @@ abstract class Vpc_TreeCache_Abstract
         if (!isset($instances[$componentClass])) {
             $c = Vpc_Admin::getComponentFile($componentClass, 'TreeCache', 'php', true);
             if ($c) {
-                $instances[$componentClass] = new $c($componentClass, Zend_Registry::get('db'));
+                $instances[$componentClass] = new $c($componentClass, Zend_Registry::get('db'), array('Vpc_TreeCache_Page'));
             } else {
                 $instances[$componentClass] = null;
             }
@@ -58,73 +59,11 @@ abstract class Vpc_TreeCache_Abstract
         return $instances[$componentClass];
     }
 
-    public function createRoot()
+    public function getChildData($parentData, $constraints)
     {
+        $ret = array();
         foreach ($this->_additionalTreeCaches as $treeCache) {
-            $treeCache->createRoot();
-        }
-    }
-
-    public function createChilds($componentId)
-    {
-        foreach ($this->_additionalTreeCaches as $treeCache) {
-            $treeCache->createChilds($componentId);
-        }
-    }
-
-    public function deleteChilds($componentId)
-    {
-        foreach ($this->_additionalTreeCaches as $treeCache) {
-            $treeCache->deleteChilds($componentId);
-        }
-    }
-
-    public function onInsertRow($row)
-    {
-        foreach ($this->_additionalTreeCaches as $treeCache) {
-            $treeCache->onInsertRow($row);
-        }
-    }
-
-    public function onUpdateRow($row)
-    {
-        foreach ($this->_additionalTreeCaches as $treeCache) {
-            $treeCache->onUpdateRow($row);
-        }
-    }
-
-    public function onDeleteRow($row)
-    {
-        foreach ($this->_additionalTreeCaches as $treeCache) {
-            $treeCache->onDeleteRow($row);
-        }
-    }
-
-    public function createMissingChilds()
-    {
-        foreach ($this->_additionalTreeCaches as $treeCache) {
-            $treeCache->createMissingChilds();
-        }
-    }
-
-    protected function _loggedQuery($sql, $bind = array())
-    {
-        $logger = false;
-        if (Zend_Registry::isRegistered('debugLogger')) {
-            $logger = Zend_Registry::get('debugLogger');
-        }
-        if ($logger) {
-            $start = microtime(true);
-            $logger->info(get_class($this));
-            $logger->debug("$sql");
-            if ($bind) $logger->debug(print_r($bind, true));
-        }
-
-        $ret = $this->_cache->getAdapter()->query($sql, $bind);
-
-        if ($logger) {
-            $time = round(microtime(true)-$start, 2);
-            $logger->debug("Dauer: $time sec");
+            return array_merge($ret, $treeCache->getChildData($parentData, $constraints));
         }
         return $ret;
     }
@@ -137,6 +76,9 @@ abstract class Vpc_TreeCache_Abstract
     protected function _getChildComponentClass($key)
     {
         $c = $this->_getSetting('childComponentClasses');
+        if (!isset($c[$key])) {
+            throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found.");
+        }
         return $c[$key];
     }
 }

@@ -8,7 +8,7 @@ class Vpc_Basic_LinkTag_Admin extends Vpc_Admin
             Vpc_Admin::getInstance($class)->setup();
         }
 
-        $fields['link_class'] = "VARCHAR(255) NOT NULL";
+        $fields['component'] = "VARCHAR(255) NOT NULL";
         $this->createFormTable('vpc_basic_linktag', $fields);
     }
 }

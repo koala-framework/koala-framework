@@ -75,9 +75,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
     public function sendContent($decoratedPage)
     {
         header('Content-Type: text/html; charset=utf-8');
-        $row = $this->getTreeCacheRow();
-        $componentId = $row->component_id;
-        echo Vps_View_Component::renderCachedComponent($row->component_id, true);
+        echo Vps_View_Component::renderCachedComponent($this->getData()->componentId, true);
     }
 }
 

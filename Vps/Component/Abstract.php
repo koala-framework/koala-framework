@@ -15,14 +15,14 @@ class Vps_Component_Abstract
 
     public static function hasSetting($class, $setting)
     {
-        $class = self::_normalizeClass($class);
+        //$class = self::_normalizeClass($class);
         $settings = call_user_func(array($class, 'getSettings'));
         return isset($settings[$setting]);
     }
 
     public static function getSetting($class, $setting)
     {
-        $class = self::_normalizeClass($class);
+        //$class = self::_normalizeClass($class);
         $settings = call_user_func(array($class, 'getSettings'));
         if (!isset($settings[$setting])) {
             throw new Vps_Exception("Setting '$setting' does not exist for Component $class");

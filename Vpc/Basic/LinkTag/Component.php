@@ -14,12 +14,12 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
             'componentName' => 'LinkTag',
             'componentIcon' => new Vps_Asset('page_link'),
             'childComponentClasses'   => array(
-                'Internal Link' => 'Vpc_Basic_LinkTag_Intern_Component',
-                'External Link' => 'Vpc_Basic_LinkTag_Extern_Component',
-                'Mail Link'     => 'Vpc_Basic_LinkTag_Mail_Component'
+                'intern' => 'Vpc_Basic_LinkTag_Intern_Component',
+                'extern' => 'Vpc_Basic_LinkTag_Extern_Component',
+                'mail'     => 'Vpc_Basic_LinkTag_Mail_Component'
             ),
             'default'       => array(
-                'link_class'    => 'Vpc_Basic_LinkTag_Intern_Component'
+                'component'    => 'intern'
             )
         ));
         $ret['assetsAdmin']['dep'][] = 'VpsFormCards';

@@ -15,12 +15,10 @@ class Vps_View_Component extends Vps_View
         $cacheDisabled = Zend_Registry::get('config')->debug->componentCache->disable;
         
         if ($cacheDisabled || ($return = $cache->load($cacheId))===false) {
-            $tc = Vps_Dao::getTable('Vps_Dao_TreeCache');
-            $where = array('component_id = ?' => $componentId);
-            $row = $tc->fetchRow($where);
-            if ($row) {
-                $return = Vps_View_Component::_renderComponent($row, $isMaster);
-                $tag = $isMaster ? 'master' : $row->component_class;
+            $component = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
+            if ($component) {
+                $return = Vps_View_Component::_renderComponent($component, $isMaster);
+                $tag = $isMaster ? 'master' : $component->componentClass;
                 if (!$cacheDisabled) {
                     $cache->save($return, $cacheId, array($tag));
                 }

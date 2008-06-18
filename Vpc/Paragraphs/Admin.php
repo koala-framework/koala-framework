@@ -49,7 +49,7 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
           $this->_db->query("CREATE TABLE `$tablename` (
                   `id` int(10) unsigned NOT NULL auto_increment,
                   `component_id` varchar(255) NOT NULL,
-                  `component_class` varchar(255) NOT NULL,
+                  `component` varchar(255) NOT NULL,
                   `pos` smallint NOT NULL,
                   `visible` tinyint(4) NOT NULL
                    PRIMARY KEY  (`id`)
