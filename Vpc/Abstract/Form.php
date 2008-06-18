@@ -1,11 +1,11 @@
 <?php
 class Vpc_Abstract_Form extends Vps_Form
 {
-    public function __construct($name, $class, $id = null)
+    public function __construct($name, $class)
     {
         $this->setProperty('class', $class);
         $this->setTable(Vpc_Abstract::createTable($class));
-        parent::__construct($name, $id);
+        parent::__construct($name);
     }
 
     public function setComponentIdTemplate($idTemplate)
