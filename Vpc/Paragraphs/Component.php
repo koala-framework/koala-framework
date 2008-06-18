@@ -22,23 +22,18 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $tc = $this->getTreeCacheRow()->getTable();
-        $select = $tc->select();
-        $select->from('vps_tree_cache');
-        $select->where('vps_tree_cache.parent_component_id = ?', $this->getComponentId());
+        $table = Vps_Dao::getTable('Vpc_Paragraphs_Model');
+        $select = $table->select();
         if (!$this->_showInvisible()) {
-            $select->where('vps_tree_cache.visible = 1');
+            $select->where('visible = 1');
         }
-        $select->join('vpc_paragraphs', "CONCAT(vpc_paragraphs.component_id, '-', vpc_paragraphs.id) = vps_tree_cache.db_id", array());
-        $select->where('parent_component_class = ?', get_class($this));
-        $select->where('vpc_paragraphs.component_id = ?', $this->getDbID());
-        
-        $select->order('vps_tree_cache.pos');
-        $ret['paragraphs'] = array();
-        foreach ($tc->fetchAll($select) as $row) {
-            $ret['paragraphs'][] = $row->component_id;
-        }
+        $select->where('component_id = ?', $this->getDbID());
+        $select->order('pos');
 
+        $ret['paragraphs'] = array();
+        foreach ($table->fetchAll($select) as $row) {
+            $ret['paragraphs'][] = $this->getComponentId() . '-' . $row->id;
+        }
         return $ret;
     }
 }

@@ -6,9 +6,7 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'List',
             'tablename'     => 'Vpc_Abstract_List_Model',
-            'childComponentClasses' => array(
-                'child'         => 'Vpc_Empty'
-            ),
+            'childComponentClasses' => array(),
             'showVisible' => true,
             'default' => array(
                 'visible' => 1

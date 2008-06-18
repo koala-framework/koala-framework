@@ -1,32 +1,27 @@
 <?php
 abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
 {
-    private $_treeCacheRow;
+    private $_data;
 
-    public function __construct(Vps_Dao_Row_TreeCache $treeCacheRow)
+    public function __construct(Vps_Component_Data $data)
     {
-        $this->_treeCacheRow = $treeCacheRow;
+        $this->_data = $data;
         parent::__construct();
     }
     
-    public function getTreeCacheRow()
+    public function getData()
     {
-        return $this->_treeCacheRow;
+        return $this->_data;
     }
 
     public function getDbId()
     {
-        return $this->getTreeCacheRow()->db_id;
+        return $this->getData()->getDbId();
     }
 
     public function getComponentId()
     {
-        return $this->getTreeCacheRow()->component_id;
-    }
-
-    public function getDao()
-    {
-        return $this->getTreeCacheRow()->getTable()->getDao();
+        return $this->getData()->getComponentId();
     }
 
     /**

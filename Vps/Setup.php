@@ -359,6 +359,7 @@ class Vps_Setup
         if ($i) $uri = substr($uri, 0, $i);
         if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))) {
             $requestUrl = $_SERVER['REDIRECT_URL'];
+            /*
             $tc = new Vps_Dao_TreeCache();
             $where = array();
             if ($tc->showInvisible()) {
@@ -388,7 +389,12 @@ class Vps_Setup
             }
             $page = $row->getComponent();
             $page->sendContent($page);
-
+            */
+            $root = Vps_Component_Data_Root::getInstance();
+            $data = $root->getPageByPath($requestUrl);
+            $page = $data->getComponent();
+            $page->sendContent($page);
+            
             exit;
         }
     }

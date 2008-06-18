@@ -1,7 +1,7 @@
 <?php
 class Vpc_Basic_LinkTag_TreeCache extends Vpc_TreeCache_Table implements Vpc_TreeCache_AfterGenerate_Interface
 {
-    protected $_componentClass = 'link_class';
+    protected $_idColumn = 'component_id';
 
     protected function _getSelectFields()
     {
