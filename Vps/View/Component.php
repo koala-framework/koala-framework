@@ -23,7 +23,7 @@ class Vps_View_Component extends Vps_View
                     $cache->save($return, $cacheId, array($tag));
                 }
             } else {
-                $return = "Component '$componentId' does not exist in TreeCache";
+                $return = "Component '$componentId' not found";
                 //todo: throw error
             }
         }
@@ -38,15 +38,15 @@ class Vps_View_Component extends Vps_View
         return $return;
     }
 
-    private static function _renderComponent(Vps_Dao_Row_TreeCache $row, $isMaster = false)
+    private static function _renderComponent(Vps_Component_Data $componentData, $isMaster = false)
     {
-        $componentId = $row->component_id;
+        $componentId = $componentData->componentId;
         if ($isMaster) {
             $templateVars = array();
             foreach (Zend_Registry::get('config')->vpc->masterComponents->toArray()
              as $componentClass)
             {
-                $component = new $componentClass($row);
+                $component = new $componentClass($componentData);
                 if (!$component instanceof Vpc_Master_Abstract) {
                     throw new Vps_Exception('vpc.masterComponent has to be instance of Vpc_Master_Abstract');
                 }
@@ -55,10 +55,10 @@ class Vps_View_Component extends Vps_View
             $templateVars['component'] = $componentId;
             $template = 'application/views/master/default.tpl';
         } else {
-            $templateVars = $row->getComponent()->getTemplateVars();
-            $template = Vpc_Admin::getComponentFile($row->component_class, 'Component', 'tpl');
+            $templateVars = $componentData->getComponent()->getTemplateVars();
+            $template = Vpc_Admin::getComponentFile($componentData->componentClass, 'Component', 'tpl');
             if (!$template) {
-                throw new Vps_Exception("No Template found for '$row->component_class'");
+                throw new Vps_Exception("No Template found for '$componentData->componentClass'");
             }
         }
 

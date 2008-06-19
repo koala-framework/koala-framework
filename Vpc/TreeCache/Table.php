@@ -10,21 +10,55 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
     protected $_idSeparator = '-'; //um in StaticTable _ verwenden zu können
     protected $_idColumn= 'id';
 
-    protected $_joinTreeCache = true; //wird in Vpc_Root_TreeCache deaktiviert
-    protected $_joinTreeCacheOnComponentId = true; //zB Vpc_News_Month_Directory_TreeCache
-
+    public function getDbIdShortcut($dbId)
+    {
+        if ($this->_dbIdShortcut && 
+            substr($dbId, 0, strlen($this->_dbIdShortcut)) == $this->_dbIdShortcut
+        ) {
+            return $this->_dbIdShortcut;
+        }
+        return null;
+    }
+    
+    public function select($parentData)
+    {
+        $select = $this->_table->select();
+        if (in_array('component_id', $this->_table->info('cols'))) {
+            $select->where('component_id = ?', $parentData->dbId);
+        }
+        return $select;        
+    }
+    
     public function getChildData($parentData, $constraints = array())
     {
-        $ret = array();
-        $pages = $this->_table->fetchAll($this->_formatConstraints($parentData, $constraints)); // TODO: Nummerierung
-        foreach ($pages as $row) {
-            $ret[] = new Vps_Component_Data_Page($this->_formatConfig($parentData, $row));
+        $ret = parent::getChildData($parentData, $constraints);
+        $select = $this->_formatConstraints($parentData, $constraints);
+        if ($select) {
+            $pages = $this->_table->fetchAll($select); // TODO: Nummerierung
+            foreach ($pages as $row) {
+                $ret[] = new $this->_pageDataClass($this->_formatConfig($parentData, $row));
+            }
         }
         return $ret;
     }
     
-    protected function _formatConstraints($parentData, $constraints) {
-        return array();
+    protected function _formatConstraints($parentData, $constraints)
+    {
+        $where = parent::_formatConstraints($parentData, $constraints);
+        if (is_null($where)) return null;
+        if (isset($constraints['select'])) {
+            $select = $constraints['select'];
+            unset($constraints['select']);
+        } else {
+            $select = $this->select($parentData);
+        }
+        
+        if (isset($constraints['id'])) {
+            $select->where($this->_idColumn . ' = ?', $constraints['id']);
+            unset($constraints['id']);
+        }
+
+        return $select;
     }
     
     protected function _formatConfig($parentData, $row)
@@ -55,7 +89,9 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
             'componentId' => $componentId,
             'dbId' => $dbId,
             'componentClass' => $componentClass,
-            'parent' => $parentData
+            'parent' => $parentData,
+            'row' => $row,
+            'id' => $row->{$this->_idColumn}
         );
         return $data;
     }

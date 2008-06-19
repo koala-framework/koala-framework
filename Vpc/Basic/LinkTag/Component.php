@@ -28,7 +28,7 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['linkTag'] = $this->getTreeCacheRow()->findChildComponents()->current();
+        $ret['linkTag'] = $this->getData()->getChildComponent();
         return $ret;
     }
 }

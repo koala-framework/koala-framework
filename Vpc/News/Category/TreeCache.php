@@ -1,10 +1,9 @@
 <?php
 class Vpc_News_Category_TreeCache extends Vpc_TreeCache_StaticPage
 {
-    protected $_classes = array(array(
+    protected $_classes = array('categories' => array(
         'componentClass' => 'Vpc_News_Category_Directory_Component',
-        'name' => 'Categories',
-        'id' => 'categories'
+        'name' => 'Categories'
     ));
 
     protected function _select()

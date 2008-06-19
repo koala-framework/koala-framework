@@ -29,7 +29,7 @@ class Vpc_Formular_Dynamic_Component extends Vpc_Formular_Component
         $where = array(
             //todo: ned schön, wegen fieldset (das soll anders, besser speichern)
             "component_id = ? OR component_id LIKE CONCAT(?, '-%')"
-                                        => $this->getTreeCacheRow()->db_id
+                                        => $this->getData()->dbId
         );
         if (!$this->_showInvisible()) {
             $where[] = 'visible = 1';
@@ -40,7 +40,7 @@ class Vpc_Formular_Dynamic_Component extends Vpc_Formular_Component
             'fieldName' => 'settings'
         ));
 
-        $this->_childComponents = $this->getTreeCacheRow()->findChildComponents();
+        $this->_childComponents = $this->getData()->getChildComponents();
 
         $fields = array();
         $fields[0] = array();

@@ -11,8 +11,8 @@ abstract class Vpc_Basic_LinkTag_Abstract_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['href'] = $this->getTreeCacheRow()->url;
-        $ret['rel'] = $this->getTreeCacheRow()->rel;
+        $ret['href'] = $this->getData()->url;
+        $ret['rel'] = $this->getData()->rel;
         return $ret;
     }
 }

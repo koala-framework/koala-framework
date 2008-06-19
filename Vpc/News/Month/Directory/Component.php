@@ -17,8 +17,8 @@ class Vpc_News_Month_Directory_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-
-        $select = $this->getTreeCacheRow()->getTable()->select()
+/*
+        $select = $this->getData()->getTable()->select()
             ->order('pos')
             ->where('component_class = ?', $this->_getChildComponentClass('detail'))
             ->where('parent_component_id = ?', $this->getComponentId());
@@ -27,11 +27,12 @@ class Vpc_News_Month_Directory_Component extends Vpc_Abstract
         }
 
         $ret['months'] = $this->getTreeCacheRow()->getTable()->fetchAll($select)->toMenuData();
+*/
+        $ret['months'] = array(); // TODO
         return $ret;
     }
     public function getNewsComponent()
     {
-        return $this->getTreeCacheRow()
-            ->findParentComponent();
+        return $this->getData()->getParentComponent();
     }
 }

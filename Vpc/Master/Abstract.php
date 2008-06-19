@@ -16,12 +16,12 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
 
     public function getDbId()
     {
-        return $this->getData()->getDbId();
+        return $this->getData()->dbId;
     }
 
     public function getComponentId()
     {
-        return $this->getData()->getComponentId();
+        return $this->getData()->componentId;
     }
 
     /**
@@ -72,12 +72,12 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
      */
     public function getUrl()
     {
-        return $this->getTreeCacheRow()->tree_url;
+        return $this->getData()->getPage()->url;
     }
 
     public function getName()
     {
-        return $this->getTreeCacheRow()->name;
+        return $this->getData()->getPage()->name;
     }
 
     /**
@@ -88,7 +88,7 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
      */
     protected function _showInvisible()
     {
-        return $this->getTreeCacheRow()->getTable()->showInvisible();
+        return Vps_Registry::get('config')->showInvisible;
     }
 
     public function getTable($tablename = null)

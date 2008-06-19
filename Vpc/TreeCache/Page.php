@@ -6,32 +6,30 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
     protected $_idSeparator = false;
     
     protected function _formatConstraints($parentData, $constraints) {
-        $where = parent::_formatConstraints($parentData, $constraints);
-        $where['visible = ?'] = Zend_Registry::get('config')->showInvisible;
-        if (isset($constraints['id'])) {
-            $where['id = ?'] = $constraints['id'];
-        } else {
-            foreach ($constraints as $key => $val) {
-                if ($key == 'filename') {
-                    if ($val == '') {
-                        $where['is_home = ?'] = 1;
-                    } else {
-                        $where['filename = ?'] = $val;
-                    }
-                } else if (is_null($val)) {
-                    $where[$key . ' IS NULL'] = '';
+        $select = parent::_formatConstraints($parentData, $constraints);
+        if (!$select) return null;
+        if (!Zend_Registry::get('config')->showInvisible) {
+            $select->where('visible = ?', 1);
+        }
+        if (!isset($constraints['id'])) {
+            if (isset($constraints['filename'])) {
+                if ($constraints['filename'] == '') {
+                    $select->where('is_home = ?', 1);
                 } else {
-                    $where[$key . ' = ?'] = $val;
+                    $select->where('filename = ?', $constraints['filename']);
                 }
             }
             if ($parentData instanceof Vps_Component_Data_Root) {
-                $where['parent_id IS NULL'] = '';
+                $select->where('parent_id IS NULL');
             } else {
-                $componentId = $parentData->getComponentId();
+                $componentId = $parentData->componentId;
                 if (!is_numeric($componentId)) { return array(); }
-                $where['parent_id = ?'] = $parentData->getComponentId();
+                $select->where('parent_id = ?', $parentData->componentId);
+            }
+            if (isset($constraints['type'])) {
+                $select->where('type = ?', $constraints['type']);
             }
         }
-        return $where;
+        return $select;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 class Vpc_News_Top_Component extends Vpc_News_List_Abstract_Component
 {
-    private $_newsTreeCacheRow;
+    private $_newsData;
 
     public static function getSettings()
     {
@@ -16,21 +16,22 @@ class Vpc_News_Top_Component extends Vpc_News_List_Abstract_Component
 
     public function getNewsComponent()
     {
-        if (!isset($this->_newsTreeCacheRow)) {
+        if (!isset($this->_newsData)) {
             $row = $this->_getRow();
             if ($row && $row->news_component_id) {
-                $this->_newsTreeCacheRow = $this->getTreeCacheRow()->getTable()
-                    ->findByDbId($row->news_component_id)->current();
+                $this->_newsData = Vps_Component_Data_Root::getInstance()->getByDbId($row->news_component_id);
             } else {
-                $this->_newsTreeCacheRow = null;
+                $this->_newsData = null;
             }
         }
-        return $this->_newsTreeCacheRow;
+        return $this->_newsData;
     }
 
     public function getNews($limit = 15, $start = null)
     {
-        return $this->getNewsComponent()->getComponent()->getNews($this->_getSetting('limit'));
+        $c = $this->getNewsComponent();
+        if (!$c) return array();
+        return $c->getComponent()->getNews($this->_getSetting('limit'));
     }
 
     public function getPagingCount()

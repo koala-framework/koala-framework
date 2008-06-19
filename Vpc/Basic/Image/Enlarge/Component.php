@@ -27,8 +27,7 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
         $return = parent::getTemplateVars();
 
         // Small Image
-        $id = $this->getTreeCacheRow()->component_id.'-1';
-        $row = $this->getTreeCacheRow()->getTable()->find($id)->current();
+        $row = $this->getData()->getChildComponent(1);
         $vars = $row->getComponent()->getTemplateVars();
 
         if (!$vars['url'] || !$this->_getRow()->enlarge) {

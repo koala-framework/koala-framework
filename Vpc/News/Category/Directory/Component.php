@@ -21,20 +21,13 @@ class Vpc_News_Category_Directory_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
 
-        $select = $this->getTreeCacheRow()->getTable()->select()
-            ->order('pos')
-            ->where('component_class = ?', $this->_getChildComponentClass('detail'))
-            ->where('parent_component_id = ?', $this->getComponentId());
-        if (!$this->showInvisible()) {
-            $select->where('visible = 1');
-        }
+        $childComponents = $this->getData()->getChildComponents(array('treecache' => 'Vpc_News_Category_Directory_TreeCache'));
 
-        $ret['categories'] = $this->getTreeCacheRow()->getTable()->fetchAll($select)->toMenuData();
+        $ret['categories'] = $childComponents;
         return $ret;
     }
     public function getNewsComponent()
     {
-        return $this->getTreeCacheRow()
-            ->findParentComponent();
+        return $this->getData()->findParentComponent();
     }
 }

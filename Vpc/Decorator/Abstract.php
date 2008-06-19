@@ -23,9 +23,9 @@ abstract class Vpc_Decorator_Abstract extends Vps_Component_Abstract
         return $this->_component->getStatisticVars();
     }
 
-    public function getTreeCacheRow()
+    public function getData()
     {
-        return $this->_component->getTreeCacheRow();
+        return $this->_component->getData();
     }
 
 }
