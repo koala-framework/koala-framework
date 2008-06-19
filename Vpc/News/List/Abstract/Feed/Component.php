@@ -4,7 +4,7 @@ class Vpc_News_List_Abstract_Feed_Component extends Vpc_Abstract_Feed_Component
 
     public function getNewsComponent()
     {
-        return $this->getTreeCacheRow()->findParentComponent()->getComponent();
+        return $this->getData()->getParentComponent()->getComponent();
     }
     protected function _getRssEntries()
     {

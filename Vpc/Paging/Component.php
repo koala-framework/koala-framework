@@ -13,8 +13,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
 
     private function _getEntries()
     {
-        return $this->getTreeCacheRow()->findParentComponent()
-                    ->getComponent()->getPagingCount();
+        return $this->getData()->parent->getComponent()->getPagingCount();
     }
 
     private function _getLinkData($pageNumber, $linktext = null)

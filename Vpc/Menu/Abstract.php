@@ -1,7 +1,7 @@
 <?php
 class Vpc_Menu_Abstract extends Vpc_Abstract
 {
-    private $_currentPageIds;
+    private $_currentPages;
 
     public static function getSettings()
     {
@@ -10,55 +10,51 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
         ));
     }
 
-    protected function _select()
+    protected function _getMenuData($parentData = null)
     {
-        return $this->getTreeCacheRow()->getTable()->select();
-    }
-
-    protected function _getMenuData($parentComponentId = null)
-    {
-        $select = $this->_select();
-        // Hauptmenü
-        if ($parentComponentId) {
-            $select->where('parent_component_id = ?', $parentComponentId);
+        $constraints = array('showInMenu' => true);
+        $ret = array();
+        $currentPages = array_reverse($this->_getCurrentPages());
+        if ($parentData) {
+            $ret = $parentData->getChildPages($constraints);
         } else {
             $level = $this->_getSetting('level');
             if (is_string($level)) {
-                $select->from('vps_tree_cache');
-                $select->from('vps_pages', array());
-                $select->where('vps_pages.id = vps_tree_cache.component_id');
-                $select->where('vps_pages.type = ?', $level);
-                $select->where('ISNULL(parent_component_id)');
+                $constraints['type'] = $level;
+                $ret = Vps_Component_Data_Root::getInstance()->getChildPages($constraints);
             } else {
-                $currentPageIds = array_reverse($this->_getCurrentPageIds());
-                if (isset($currentPageIds[$level - 1])) {
-                    $select->where('parent_component_id = ?', $currentPageIds[$level - 1]);
-                } else {
-                    $select->where('1 = 2');
+                if (isset($currentPages[$level])) {
+                    $ret = $currentPages[$level]->getChildPages($constraints);
                 }
             }
         }
-        if (!$this->_showInvisible()) {
-            $select->where('vps_tree_cache.visible = ?', 1);
+        $first = reset($ret);
+        $last = end($ret);
+        $currentPageIds = array();
+        foreach ($currentPages as $page) {
+            if (!$page instanceof Vps_Component_Data_Root) {
+                $currentPageIds[] = $page->getComponentId();
+            }
         }
-        $select->order('pos');
-
-        return $this->getTreeCacheRow()->getTable()
-                    ->fetchAll($select)->toMenuData($this->_getCurrentPageIds());
+        foreach ($ret as $r) {
+            $r->setClass('');
+            if ($r == $first) { $r->setClass('first'); }
+            if ($r == $last) { $r->setClass('last'); }
+            if (in_array($r->getComponentId(), $currentPageIds)) { $r->setClass('current'); }
+        }
+        return $ret;
     }
     
     // Array mit IDs von aktueller Seiten und Parent Pages
-    protected function _getCurrentPageIds()
+    protected function _getCurrentPages()
     {
-        if (!isset($this->_currentPageIds)) {
-            $this->_currentPageIds = array();
-            $p = $this->getTreeCacheRow();
+        if (!isset($this->_currentPages)) {
+            $this->_currentPages = array();
+            $p = $this->getData()->getPage();
             do {
-                if ($p->url) {
-                    $this->_currentPageIds[] = $p->component_id;
-                }
-            } while ($p = $p->findParentPage());
+                $this->_currentPages[] = $p;
+            } while ($p = $p->getParentPage());
         }
-        return $this->_currentPageIds;
+        return $this->_currentPages;
     }
 }

@@ -7,7 +7,7 @@ class Vpc_News_Category_Detail_Component extends Vpc_News_List_Abstract_Componen
         $select->join('vpc_news_to_categories',
                       'vpc_news_to_categories.news_id=vpc_news.id',
                       array());
-        $categoryId = $this->getTreeCacheRow()->tag;
+        $categoryId = $this->getData()->id;
         $select->where('vpc_news_to_categories.category_id = ?', $categoryId);
         $select->group('vps_news.id');
         return $select;
@@ -15,8 +15,7 @@ class Vpc_News_Category_Detail_Component extends Vpc_News_List_Abstract_Componen
 
     public function getNewsComponent()
     {
-        return $this->getTreeCacheRow()
-            ->findParentComponent()->getComponent() //categories directory
+        return $this->getData()->parent->getComponent() //categories directory
             ->getNewsComponent();
     }
 }

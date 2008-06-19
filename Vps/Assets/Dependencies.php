@@ -154,9 +154,11 @@ class Vps_Assets_Dependencies
         if (in_array($dependency, $this->_processedDependencies)) return;
         $this->_processedDependencies[] = $dependency;
         if ($dependency == 'Components' || $dependency == 'ComponentsAdmin') {
-            foreach ($this->_config->vpc->pageClasses as $c) {
-                if ($c->class && $c->text) {
-                    $this->_processComponentDependency($c->class, $dependency == 'ComponentsAdmin');
+            $rootComonent = $this->_config->vpc->rootComponent;
+            $classes = Vpc_Abstract::getSetting($rootComonent, 'childComponentClasses');
+            foreach ($classes as $c) {
+                if ($c) {
+                    $this->_processComponentDependency($c, $dependency == 'ComponentsAdmin');
                 }
             }
             foreach ($this->_config->vpc->masterComponents as $c) {

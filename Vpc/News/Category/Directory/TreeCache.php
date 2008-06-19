@@ -6,11 +6,11 @@ class Vpc_News_Category_Directory_TreeCache extends Vpc_TreeCache_TablePage
     protected $_nameColumn = 'value';
     protected $_filenameColumn = 'id';
 
-    protected function _getWhere()
+    protected function _formatConstraints($parentData, $constraints)
     {
-        $where = array(
-            'pool = ?' => $this->_getSetting('pool')
-        );
-        return $where;
+        $select = parent::_formatConstraints($parentData, $constraints);
+        if (!$select) return null;
+        $select->where('pool = ?', $this->_getSetting('pool'));
+        return $select;
     }
 }

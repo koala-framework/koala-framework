@@ -82,31 +82,25 @@ class Vps_Component_Abstract
         return $class;
     }
 
-    public static function getComponentClasses($class = null)
+    public static function getComponentClasses($parentClass = null)
     {
         static $componentClasses;
-        if (isset($componentClasses)) return $componentClasses;
-        $componentClasses = array();
-        $componentClasses[] = 'Vpc_Root_Component';
-        foreach (Zend_Registry::get('config')->vpc->pageClasses as $c) {
-            if ($c->class && $c->text) {
-                $componentClasses[] = $c->class;
-                self::_getChildComponentClasses($componentClasses, $c->class);
+        if (!isset($componentClasses)) {
+            $componentClasses = array();
+            if (!$parentClass) {
+                $parentClass = Vps_Registry::get('config')->vpc->rootComponent;
+            }
+            $classes = Vpc_Abstract::getSetting($parentClass, 'childComponentClasses');
+            foreach ($classes as $class) {
+                $componentClasses[] = $class;
+                $componentClasses = array_merge($componentClasses, 
+                    self::getComponentClasses($class)
+                );
             }
         }
-        return $componentClasses;
+        return array_unique($componentClasses);
     }
 
-    private static function _getChildComponentClasses(&$componentClasses, $class)
-    {
-        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
-        foreach ($classes as $class) {
-            if ($class && !in_array($class, $componentClasses)) {
-                $componentClasses[] = $class;
-                self::_getChildComponentClasses($componentClasses, $class);
-            }
-        }
-    }
     protected function _getPlaceholder($name)
     {
         $s = $this->_getSetting('placeholder');

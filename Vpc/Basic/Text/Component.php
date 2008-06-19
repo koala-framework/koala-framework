@@ -50,7 +50,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['contentParts'] = array();
-        $childs = $this->getTreeCacheRow()->findChildComponents();
+        $childs = $this->getData()->getChildComponents();
         foreach ($this->_getRow()->getContentParts() as $part) {
             if (is_array($part)) {
                 if ($part['type'] == 'image') {
@@ -63,7 +63,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
                     continue;
                 }
                 foreach ($childs as $row) {
-                    if ($row->db_id == $this->getTreeCacheRow()->db_id.'-'.$part['nr']) {
+                    if ($row->db_id == $this->getData()->dbId.'-'.$part['nr']) {
                         $ret['contentParts'][] = array(
                             'type' => $part['type'],
                             'component'=>$row->component_id

@@ -17,7 +17,6 @@ abstract class Vpc_News_Detail_Abstract_Component extends Vpc_Abstract_Composite
 
     public function getNewsComponent()
     {
-        return $this->getTreeCacheRow()
-            ->findParentComponent();
+        return $this->getData()->findParentComponent();
     }
 }

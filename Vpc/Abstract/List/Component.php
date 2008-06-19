@@ -20,32 +20,29 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-
-        $ret['children'] = array();
-        foreach ($this->getChildComponentTreeCacheRows() as $row) {
-            $ret['children'][] = $row->component_id;
+        $ret['children'] = array(); 
+        foreach ($this->getChildComponentIds() as $id) {
+            $ret['children'][] = $this->getComponentId() . '-' . $id;
         }
         return $ret;
     }
 
     //wird verwendet in Pdf Writer
-    public function getChildComponentTreeCacheRows()
+    public function getChildComponentIds()
     {
-        $tc = $this->getTreeCacheRow()->getTable();
-
-        $class = $this->_getClassFromSetting('child', 'Vpc_Abstract');
-
-        $where = array('parent_component_id = ?'=>$this->getComponentId());
-        $where['component_class = ?'] = $class;
+        $table = $this->getTable();
+        $select = $table->select();
         if (!$this->_showInvisible()) {
-            $where['visible = ?'] = 1;
+            $select->where('visible = 1');
         }
+        $select->where('component_id = ?', $this->getDbID());
+        $select->order('pos');
 
-        //todo: mit join optimieren - wenn wir Zend 1.5 haben
-         $where[] = '(SELECT COUNT(*) FROM vpc_composite_list
-             WHERE CONCAT(vpc_composite_list.component_id, \'-\', vpc_composite_list.id)
-                     LIKE vps_tree_cache.db_id)';
-        return $tc->fetchAll($where, 'pos');
+        $ret = array();
+        foreach ($table->fetchAll($select) as $row) {
+            $ret[] = $row->id;
+        }
+        return $ret;
     }
 
     public function getSearchVars()

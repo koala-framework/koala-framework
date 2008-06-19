@@ -20,17 +20,11 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
 
     protected function _selectNews()
     {
-        $newsComponent = $this->getNewsComponent();
-        if (!$newsComponent) return null;
-        $select = $this->_getNewsTable()->select()
-            ->from($this->_getNewsTable())
-            ->where('component_id = ?', $newsComponent->db_id)
-            ->where('publish_date <= NOW()');
-        if (Vpc_Abstract::getSetting($this->getNewsComponent()->component_class, 'enableExpireDate')) {
+        $select = $this->getNewsComponent()->getTreeCache('Vpc_News_Directory_TreeCacheDetail')
+            ->select($this->getData());
+        $select->where('publish_date <= NOW()');
+        if (Vpc_Abstract::getSetting($this->getNewsComponent()->componentClass, 'enableExpireDate')) {
             $select->where('expiry_date >= NOW()');
-        }
-        if (!$this->_showInvisible()) {
-            $select->where('visible = 1');
         }
         return $select;
     }
@@ -40,19 +34,18 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
         $select = $this->_selectNews();
         if (!$select) return array();
         if (!$limit && !$start) {
-            $l = $this->getTreeCacheRow()->findChildComponent('-paging')
-                ->current()->getComponent()->getLimit();
+            $l = $this->getData()->getChildComponent('paging')
+                ->getComponent()->getLimit();
             $limit = $l['limit'];
             $start = $l['start'];
         }
         $select->limit($limit, $start);
         $select->order('publish_date DESC');
-        return $this->_getNewsTable()->fetchAll($select);
-    }
-
-    public function getNewsRow($news_id)
-    {
-        return $this->_getNewsTable()->find($news_id)->current();
+        $constraints = array(
+            'treecache' => 'Vpc_News_Directory_TreeCacheDetail',
+            'select' => $select
+        );
+        return $this->getNewsComponent()->getChildComponents($constraints);
     }
 
     public function getPagingCount()

@@ -9,22 +9,17 @@ abstract class Vpc_TreeCache_Abstract
     protected $_table;
     protected $_tableName;
     
-    protected $_additionalTreeCaches = array();
+    protected $_pageDataClass = 'Vps_Component_Data';
     
-    protected function __construct($class, Zend_Db_Adapter_Pdo_Mysql $db, $additionalTreeCaches = array())
+    protected $_additionalTreeCaches = array();
+    private $_pagesTreeCache;
+    private $_isTop = true;
+    
+    protected function __construct($class)
     {
         $this->_class = $class;
-        $this->_db = $db;
-        $this->_cache = self::getTreeCacheTable();
-        $this->_additionalTreeCaches += $additionalTreeCaches;
+        $this->_db = Zend_Registry::get('db');
         $this->_init();
-    }
-
-    public static function getTreeCacheTable()
-    {
-        static $c = null;
-        if (!$c) $c = new Vps_Dao_TreeCache(); //wg. performance
-        return $c;
     }
 
     protected function _init()
@@ -41,29 +36,72 @@ abstract class Vpc_TreeCache_Abstract
             }
         }
         foreach ($this->_additionalTreeCaches as $key => $treeCache) {
-            $this->_additionalTreeCaches[$key] = new $treeCache($this->_class, $this->_db);
+            $this->_additionalTreeCaches[$key] = new $treeCache($this->_class);
         }
     }
+    
+    public function addTreeCache($treeCache)
+    {
+        $this->_additionalTreeCaches[] = $treeCache;
+    }
 
-    public static function getInstance($componentClass)
+    public static function getInstance($componentClass, $isTop = true)
     {
         static $instances = array();
         if (!isset($instances[$componentClass])) {
             $c = Vpc_Admin::getComponentFile($componentClass, 'TreeCache', 'php', true);
             if ($c) {
-                $instances[$componentClass] = new $c($componentClass, Zend_Registry::get('db'), array('Vpc_TreeCache_Page'));
+                $instances[$componentClass] = new $c($componentClass);
             } else {
                 $instances[$componentClass] = null;
             }
         }
         return $instances[$componentClass];
     }
+    
+    public function getTreeCache($class)
+    {
+        if ($this instanceof $class) {
+            return $this;
+        } else {
+            foreach ($this->_additionalTreeCaches as $treeCache) {
+                $tc = $treeCache->getTreeCache($class);
+                if ($tc) return $tc;
+            }
+        }
+        return null;
+    }
 
     public function getChildData($parentData, $constraints)
     {
         $ret = array();
-        foreach ($this->_additionalTreeCaches as $treeCache) {
-            return array_merge($ret, $treeCache->getChildData($parentData, $constraints));
+        
+        foreach ($this->_getAdditionalTreeCaches($parentData) as $treeCache) {
+            $ret = array_merge($ret, $treeCache->getChildData($parentData, $constraints));
+        }
+        return $ret;
+    }
+
+    protected function _getAdditionalTreeCaches($parentData)
+    {
+        $ret = $this->_additionalTreeCaches;
+        if ($this->_isTop && $parentData instanceof Vps_Component_Data_Page) {
+            if (!$parentData instanceof Vps_Component_Data_Root) {
+                foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $mc) {
+                    $tc = Vpc_TreeCache_Abstract::getInstance($mc);
+                    if ($tc) {
+                        $tc->_isTop = false;
+                        $ret[] = $tc;
+                    }
+                }
+            }
+            if ($parentData instanceof Vps_Component_Data_Root || is_numeric($parentData->componentId)) {
+                if (!isset($this->_pagesTreeCache)) {
+                    $this->_pagesTreeCache = Vpc_TreeCache_Abstract::getInstance(Vps_Registry::get('config')->vpc->rootComponent);
+                    $this->_pagesTreeCache->_isTop = false;
+                }
+                $ret[] = $this->_pagesTreeCache;
+            }
         }
         return $ret;
     }
@@ -80,5 +118,20 @@ abstract class Vpc_TreeCache_Abstract
             throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found.");
         }
         return $c[$key];
+    }
+    
+    protected function _formatConstraints($parentData, $constraints)
+    {
+        if (isset($constraints['treecache']) && 
+            !$this instanceof $constraints['treecache']
+        ){
+            return null;
+        }
+        return $constraints;
+    }
+    
+    public function hasDbIdShortcut($dbId)
+    {
+        return false;
     }
 }

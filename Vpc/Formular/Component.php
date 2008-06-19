@@ -32,7 +32,7 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
         }
 
         $this->_errors = array();
-        if (isset($_POST[$this->getTreeCacheRow()->component_id])) {
+        if (isset($_POST[$this->getData()->componentId])) {
             $this->_errors = $this->_form->validate($_REQUEST);
             if (!$this->_errors) {
                 $this->_form->prepareSave(null, $_REQUEST);
@@ -65,7 +65,7 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
 
         $ret['showSuccess'] = false;
         $ret['errors'] = $this->getErrors();
-        if (isset($_POST[$this->getTreeCacheRow()->component_id])) {
+        if (isset($_POST[$this->getData()->componentId])) {
             if (!$ret['errors'] && $classes['success']) {
                 $ret['showSuccess'] = true;
             }
@@ -80,9 +80,9 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
             $ret['form'] = $dec->processItem($ret['form']);
         }
 
-        $ret['formName'] = $this->getTreeCacheRow()->component_id;
+        $ret['formName'] = $this->getData()->componentId;
 
-        $ret['action'] = $this->getTreeCacheRow()->tree_url;
+        $ret['action'] = $this->getData()->url;
 
         return $ret;
     }
