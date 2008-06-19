@@ -394,7 +394,7 @@ class Vps_Setup
             $data = $root->getPageByPath($requestUrl);
             $page = $data->getComponent();
             $page->sendContent($page);
-            
+            echo (microtime(true)-$GLOBALS['start']).' sec';
             exit;
         }
     }

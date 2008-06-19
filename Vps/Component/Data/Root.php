@@ -2,6 +2,8 @@
 class Vps_Component_Data_Root extends Vps_Component_Data_Page {
     
     private static $_instance;
+    private $_hasChildComponentCache;
+private static $debugClassesCheckedCounter;
     
     public static function getInstance()
     {
@@ -30,6 +32,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data_Page {
         $page = $this;
         foreach (split('[_\-]', $componentId) as $idPart) {
             $page = $page->getChildComponent($idPart);
+            if (!$page) return null;
         }
         return $page;
     }
@@ -54,38 +57,69 @@ class Vps_Component_Data_Root extends Vps_Component_Data_Page {
         return null;
     }
     
-    public function getComponentsByClass($classes, $data = null)
+    public function getComponentsByClass($class, $data = null)
     {
-        if (!is_array($classes)) {
-            $parentClass = $classes;
-            $classes = array();
-            foreach (Vpc_Abstract::getComponentClasses() as $class) {
-                if (is_subclass_of($class, $parentClass) || $class == $parentClass) {
-                    $classes[] = $class;
-                }
+self::$debugClassesCheckedCounter = 0;
+$startQueryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount();
+$start = microtime(true);
+        $this->_hasChildComponentCache = array();
+        $lookingForChildClasses = array();
+        foreach (Vpc_Abstract::getComponentClasses() as $c) {
+            if (is_subclass_of($c, $class) || $c == $class) {
+                $lookingForChildClasses[] = $c;
             }
         }
+        $ret = $this->_getComponentsByClassRek($lookingForChildClasses, $this);
+$queryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount() - $startQueryCount;
+p('Looking for '.$class. ' in '.(microtime(true)-$start) . ' sec; '.self::$debugClassesCheckedCounter.' components checked; '.$queryCount.' db-queryies');
+        return $ret;
+    }
+
+    private function _getComponentsByClassRek($lookingForChildClasses, $data)
+    {
         $ret = array();
-        if (!$data) $data = $this;
-        foreach ($data->getChildComponents() as $childData) {
-            if (in_array($childData->componentClass, $classes)) {
+        $constraintClasses = array();
+        foreach (Vpc_Abstract::getSetting($data->componentClass, 'childComponentClasses') as $c) {
+            if ($this->_hasChildComponentClass($c, $lookingForChildClasses)) {
+                $constraintClasses[] = $c;
+            }
+        }
+        
+        $constraint = array('componentClass' => $constraintClasses);
+        foreach ($data->getChildComponents($constraint) as $childData) {
+self::$debugClassesCheckedCounter++;
+            if (in_array($childData->componentClass, $lookingForChildClasses)) {
                 $ret[] = $childData;
             }
-            if ($this->_hasChildComponentClass(array($childData->componentClass), $classes)) {
-                $ret = array_merge($ret, $this->getComponentsByClass($classes, $childData));
+            if ($this->_hasChildComponentClass($childData->componentClass, $lookingForChildClasses)) {
+//echo "<h3>SCHON: ".$childData->componentClass."</h3>";
+                $ret = array_merge($ret, $this->_getComponentsByClassRek($lookingForChildClasses, $childData));
+//} else {
+//echo "<h3>NED: ".$childData->componentClass."</h3>";
             }
         }
         return $ret;
     }
     
-    private function _hasChildComponentClass($classes, $childClass)
+    //$this->_hasChildComponentCache muss vor erstem aufruf mit anderen
+    //klassen in $lookingForChildClasses geleert werden
+    //fkt ist aber eh private
+    private function _hasChildComponentClass($class, $lookingForChildClasses)
     {
-        foreach ($classes as $class) {
-            if ($class) {
-                $childClasses = Vpc_Abstract::getSetting($class, 'childComponentClasses');
-                if (in_array($childClass, $childClasses)) return true;
-                foreach ($childClasses as $c) {
-                    if ($this->_hasChildComponentClass($classes, $c)) return true;
+        if (isset($this->_hasChildComponentCache[$class])) {
+            return $this->_hasChildComponentCache[$class];
+        }
+        if (in_array($class, $lookingForChildClasses)) {
+            $this->_hasChildComponentCache[$class] = true;
+            return true;
+        }
+        $childClasses = Vpc_Abstract::getSetting($class, 'childComponentClasses');
+        $this->_hasChildComponentCache[$class] = false;
+        foreach ($childClasses as $c) {
+            if ($c) {
+                if ($this->_hasChildComponentClass($c, $lookingForChildClasses)) {
+                    $this->_hasChildComponentCache[$class] = true;
+                    return true;
                 }
             }
         }

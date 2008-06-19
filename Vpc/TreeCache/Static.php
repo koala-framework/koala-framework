@@ -14,27 +14,43 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
                     $ret[] = new $this->_pageDataClass($this->_formatConfig($parentData, $constraints['id']));
                 }
             } else {
-                foreach ($this->_classes as $key => $val) {
+                if (isset($constraints['componentClass'])) {
+                    if (!is_array($constraints['componentClass'])) {
+                        $contraintClasses = array($constraints['componentClass']);
+                    } else {
+                        $contraintClasses = $constraints['componentClass'];
+                    }
+                }
+                foreach (array_keys($this->_classes) as $key) {
+                    if (isset($contraintClasses) &&
+                            !in_array($this->_getComponentClass($key), $contraintClasses))
+                    {
+                        continue;
+                    }
                     $ret[] = new $this->_pageDataClass($this->_formatConfig($parentData, $key));
                 }
             }
         }
         return $ret;
     }
-    
-    protected function _formatConfig($parentData, $componentKey)
+
+    private function _getComponentClass($componentKey)
     {
         $c = $this->_classes[$componentKey];
         if (is_string($c)) {
-            $componentClass = $c;
+            return $c;
         } else if (!isset($c['childComponentClass']) && isset($c['childClassKey'])) {
-            $componentClass = $this->_getChildComponentClass($c['childClassKey']);
+            return $this->_getChildComponentClass($c['childClassKey']);
         } else if (isset($c['componentClass'])) {
-            $componentClass = $c['componentClass'];
+            return $c['componentClass'];
         } else {
             throw new Vps_Exception('ComponentClass is not set in ' . get_class($this));
         }
-        
+    }
+
+    protected function _formatConfig($parentData, $componentKey)
+    {
+        $c = $this->_classes[$componentKey];
         $componentId = '';
         if ($parentData->componentId) {
             $componentId = $parentData->componentId . $this->_idSeparator;
@@ -49,7 +65,7 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
         return array(
             'componentId' => $componentId,
             'dbId' => $dbId,
-            'componentClass' => $componentClass,
+            'componentClass' => $this->_getComponentClass($componentKey),
             'parent' => $parentData,
             'id' => $componentKey
         );
