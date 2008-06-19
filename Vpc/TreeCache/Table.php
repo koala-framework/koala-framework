@@ -58,6 +58,27 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
             unset($constraints['id']);
         }
 
+        if (isset($constraints['componentClass'])) {
+            $constraintClasses = $constraints['componentClass'];
+            if (!is_array($constraintClasses)) {
+                $constraintClasses = array($constraintClasses);
+            }
+            if (!$constraintClasses) return null;
+            $childClasses = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+            $keys = array();
+            foreach ($constraintClasses as $constraintClass) {
+                $key = array_search($constraintClass, $childClasses);
+                if ($key) $keys[] = $key;
+            }
+            if (!$keys) return null;
+            if (isset($this->_childClassKey)) {
+                if (!in_array($this->_childClassKey, $keys)) {
+                    return null;
+                }
+            } else {
+                $select->where("component IN ('".implode("', '", $keys) ."')");
+            }
+        }
         return $select;
     }
     

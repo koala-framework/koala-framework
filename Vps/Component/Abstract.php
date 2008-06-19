@@ -1,6 +1,7 @@
 <?php
 class Vps_Component_Abstract
 {
+    private static $_settingsCache = array();
     public function __construct()
     {
         $this->_init();
@@ -16,18 +17,22 @@ class Vps_Component_Abstract
     public static function hasSetting($class, $setting)
     {
         //$class = self::_normalizeClass($class);
-        $settings = call_user_func(array($class, 'getSettings'));
-        return isset($settings[$setting]);
+        if (!isset(self::$_settingsCache[$class])) {
+            self::$_settingsCache[$class] = call_user_func(array($class, 'getSettings'));
+        }
+        return isset(self::$_settingsCache[$class][$setting]);
     }
 
     public static function getSetting($class, $setting)
     {
         //$class = self::_normalizeClass($class);
-        $settings = call_user_func(array($class, 'getSettings'));
-        if (!isset($settings[$setting])) {
+        if (!isset(self::$_settingsCache[$class])) {
+            self::$_settingsCache[$class] = call_user_func(array($class, 'getSettings'));
+        }
+        if (!isset(self::$_settingsCache[$class][$setting])) {
             throw new Vps_Exception("Setting '$setting' does not exist for Component $class");
         }
-        return $settings[$setting];
+        return self::$_settingsCache[$class][$setting];
     }
 
     private static function _normalizeClass($class)
@@ -82,23 +87,27 @@ class Vps_Component_Abstract
         return $class;
     }
 
-    public static function getComponentClasses($parentClass = null)
+    public static function getComponentClasses()
     {
         static $componentClasses;
-        if (!isset($componentClasses)) {
-            $componentClasses = array();
-            if (!$parentClass) {
-                $parentClass = Vps_Registry::get('config')->vpc->rootComponent;
-            }
-            $classes = Vpc_Abstract::getSetting($parentClass, 'childComponentClasses');
-            foreach ($classes as $class) {
+        if (isset($componentClasses)) return $componentClasses;
+        $componentClasses = array();
+        $c = Vps_Registry::get('config')->vpc->rootComponent;
+        self::_getChildComponentClasses($componentClasses, $c);
+        return $componentClasses;
+    }
+
+    //bitte nicht mehr in eine funktion zusammenführen :D
+    //rekursive aufrufe sind viel einfacher mit einsprungs-fkt und rekursiv-fkt
+    private static function _getChildComponentClasses(&$componentClasses, $class)
+    {
+        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
+        foreach ($classes as $class) {
+            if ($class && !in_array($class, $componentClasses)) {
                 $componentClasses[] = $class;
-                $componentClasses = array_merge($componentClasses, 
-                    self::getComponentClasses($class)
-                );
+                self::_getChildComponentClasses($componentClasses, $class);
             }
         }
-        return array_unique($componentClasses);
     }
 
     protected function _getPlaceholder($name)
