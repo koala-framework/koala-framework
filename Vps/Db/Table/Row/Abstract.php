@@ -19,6 +19,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     public function getTimestamp($columnName)
     {
         $parts = explode('-', $this->$columnName);
+        if ($parts == array("")) return null; //Bugfix, falls kein Datum vorhanden
         return mktime(0, 0, 0, $parts[1], $parts[2], $parts[0]);
     }
 

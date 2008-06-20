@@ -80,8 +80,12 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
 
             var point = new GLatLng(47.9534, 13.2448);
             this.marker = new GMarker(point, {draggable: true});
-
-            this.setMarkerPoint ('47.9534;13.2448');
+			//TODO falscher startort
+			if (this.markerpoint_x) {
+				this.setMarkerPoint(this.markerpoint_y+';'+this.markerpoint_x);
+			} else {
+				this.setMarkerPoint ('47.9534;13.2448');
+			}
 
             GEvent.addListener(this.marker, 'click',     this.showLatLng.createDelegate(this));
             GEvent.addListener(this.marker, 'dragstart', this.hideLatLng.createDelegate(this));
@@ -181,7 +185,7 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
         var points = value.split(";")
         this.markerpoint_y = points[0];
         this.markerpoint_x = points[1];
-        if (this.markerpoint_y && this.markerpoint_x){
+        if (this.markerpoint_y && this.markerpoint_x && this.map){
             this.map.setCenter(new GLatLng(this.markerpoint_y,this.markerpoint_x), 13);
             this.marker.setLatLng(new GLatLng(this.markerpoint_y,this.markerpoint_x));
             this.marker.closeInfoWindow();
