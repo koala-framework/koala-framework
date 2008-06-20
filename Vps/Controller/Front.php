@@ -18,8 +18,6 @@ class Vps_Controller_Front extends Zend_Controller_Front
                                         'vps_controller_action_error');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Pool',
                                 'vps_controller_action_pool');
-        $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Trl',
-                                'vps_controller_action_trl');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Debug',
                                 'vps_controller_action_debug');
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Cli',

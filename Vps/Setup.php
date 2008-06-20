@@ -54,181 +54,37 @@ function hlpVps($string){
     return Zend_Registry::get('hlp')->hlpVps($string);
 }
 
-function trl($string, $text = array()){
-
-    //if abfrage wird bei smarty templates erfüllt
-    if (is_array($string)){
-        $tempstring = "";
-        $text = array();
-        foreach ($string as $key => $value){
-            if ($key === "text"){
-                $tempstring = $value;
-            } else {
-                $text[$key] = $value;
-            }
-        }
-        $string = $tempstring;
-    }
-    $string = str_replace("[", "{", str_replace("]", "}", $string));
-    return Zend_Registry::get('trl')->trl($string, $text, 'project');
+function trl($string, $text = array())
+{
+    return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_WEB);
 }
 
-function trlc($context, $string, $text = array()){
-
-    //Sonderfall Smarty
-    if (is_array($context)){
-        $tempcontext = "";
-        $text = array();
-        foreach ($context as $key => $value){
-            if ($key === "text"){
-                $string = $value;
-            } else if ($key === "context") {
-                $tempcontext = $value;
-            } else {
-                $text[$key] = $value;
-            }
-        }
-        $context = $tempcontext;
-    }
-    $string = str_replace("[", "{", str_replace("]", "}", $string));
-    return Zend_Registry::get('trl')->trlc($context, $string, $text, 'project');
+function trlc($context, $string, $text = array()) {
+    return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_WEB);
 }
 
-function trlp($single, $plural, $text =  array(), $prog_lang = 'php'){
-    //Sonderfall Smarty
-    if (is_array($single)){
-        $tempsingle = "";
-        $text = array();
-        foreach ($single as $key => $value){
-            if ($key === "single"){
-                $tempsingle = $value;
-            } else if ($key === "plural") {
-                $plural = $value;
-            } else {
-                $text[$key] = $value;
-            }
-        }
-        $prog_lang = "smarty";
-        $single = $tempsingle;
-    }
-    $single = str_replace("[", "{", str_replace("]", "}", $single));
-    $plural = str_replace("[", "{", str_replace("]", "}", $plural));
-    return Zend_Registry::get('trl')->trlp($single, $plural, $text, 'project', $prog_lang);
+function trlp($single, $plural, $text =  array()) {
+    return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_WEB);
 }
 
-function trlcp($context, $single, $plural = null, $text = array(), $prog_lang = 'php'){
-
-    if (is_array($context)){
-        $tempcontext = "";
-        $text = array();
-        foreach ($context as $key => $value){
-            if ($key === "context"){
-                $tempcontext = $value;
-            } else if ($key === "single") {
-                $single = $value;
-            } else if ($key === "plural") {
-                $plural = $value;
-            }else {
-                $text[$key] = $value;
-            }
-        }
-        $context = $tempcontext;
-        $prog_lang = "smarty";
-    }
-    $single = str_replace("[", "{", str_replace("]", "}", $single));
-    $plural = str_replace("[", "{", str_replace("]", "}", $plural));
-
-    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, 'project', $prog_lang);
+function trlcp($context, $single, $plural = null, $text = array()){
+    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_WEB);
 }
 
 function trlVps($string, $text = array()){
-    //if abfrage wird bei smarty templates erfüllt
-    if (is_array($string)){
-        $tempstring = "";
-        $text = array();
-        foreach ($string as $key => $value){
-            if ($key === "text"){
-                $tempstring = $value;
-            } else {
-                $text[$key] = $value;
-            }
-        }
-        $string = $tempstring;
-    }
-    $string = str_replace("[", "{", str_replace("]", "}", $string));
-    return Zend_Registry::get('trl')->trl($string, $text, 'vps');
+    return Zend_Registry::get('trl')->trl($string, $text, Vps_Trl::SOURCE_VPS);
 }
 
 function trlcVps($context, $string, $text = array()){
-        //Sonderfall Smarty
-    if (is_array($context)){
-        $tempcontext = "";
-        $text = array();
-        foreach ($context as $key => $value){
-            if ($key === "text"){
-                $string = $value;
-            } else if ($key === "context") {
-                $tempcontext = $value;
-            } else {
-                $text[$key] = $value;
-            }
-        }
-        $context = $tempcontext;
-    }
-    $string = str_replace("[", "{", str_replace("]", "}", $string));
-    return Zend_Registry::get('trl')->trlc($context, $string, $text, 'vps');
+    return Zend_Registry::get('trl')->trlc($context, $string, $text, Vps_Trl::SOURCE_VPS);
 }
 
-function trlpVps($single, $plural, $text =  array(), $prog_lang = 'php'){
-        //Sonderfall Smarty
-    if (is_array($single)){
-        $tempsingle = "";
-        $text = array();
-        foreach ($single as $key => $value){
-            if ($key === "single"){
-                $tempsingle = $value;
-            } else if ($key === "plural") {
-                $plural = $value;
-            } else {
-                $text[$key] = $value;
-            }
-        }
-        $prog_lang = "smarty";
-        $single = $tempsingle;
-    }
-    $single = str_replace("[", "{", str_replace("]", "}", $single));
-    $plural = str_replace("[", "{", str_replace("]", "}", $plural));
-    return Zend_Registry::get('trl')->trlp($single, $plural, $text, 'vps', $prog_lang);
+function trlpVps($single, $plural, $text =  array()){
+    return Zend_Registry::get('trl')->trlp($single, $plural, $text, Vps_Trl::SOURCE_VPS);
 }
 
-function trlcpVps($context, $single, $plural, $text = array(), $prog_lang= 'php'){
-        if (is_array($context)){
-        $tempcontext = "";
-        $text = array();
-        foreach ($context as $key => $value){
-            if ($key === "context"){
-                $tempcontext = $value;
-            } else if ($key === "single") {
-                $single = $value;
-            } else if ($key === "plural") {
-                $plural = $value;
-            }else {
-                $text[$key] = $value;
-            }
-        }
-        $context = $tempcontext;
-        $prog_lang = "smarty";
-    }
-    $single = str_replace("[", "{", str_replace("]", "}", $single));
-    $plural = str_replace("[", "{", str_replace("]", "}", $plural));
-
-    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, 'vps', $prog_lang);
-}
-
-//notwendig für die Erstellung der javascript methoden
-function getTrlpValues ($context, $single, $plural, $mode){
-    return Zend_Registry::get('trl')->getTrlpValues($context, $single, $plural, $mode);
-
+function trlcpVps($context, $single, $plural, $text = array()){
+    return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS);
 }
 
 class Vps_Setup
@@ -284,7 +140,7 @@ class Vps_Setup
     {
         return new Vps_Dao(new Zend_Config_Ini('application/config.db.ini', 'database'));
     }
-    
+
     public static function getConfigSection()
     {
         $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
@@ -349,7 +205,7 @@ class Vps_Setup
         }
         return $vpsConfig;
     }
-    
+
     public function dispatchVpc()
     {
         if (!isset($_SERVER['REDIRECT_URL'])) return;
@@ -398,7 +254,7 @@ class Vps_Setup
             exit;
         }
     }
-    
+
     public static function dispatchMedia()
     {
         if (!isset($_SERVER['REDIRECT_URL'])) return;
@@ -411,7 +267,7 @@ class Vps_Setup
             $params['type'] = $urlParts[4];
             $params['checksum'] = $urlParts[5];
             $params['filename'] = $urlParts[6];
-            
+
             $download = false;
             $checksum = md5(
                 Vps_Db_Table_Row::FILE_PASSWORD .
@@ -433,13 +289,13 @@ class Vps_Setup
             if ($checksum != $params['checksum']) {
                 throw new Vps_Controller_Action_Web_Exception('Access to file not allowed.');
             }
-            
+
             $class = $params['table'];
             $type = $params['type'];
             $id = explode(',', $params['id']);
             $rule = $params['rule'];
             if ($rule == 'default') { $rule = null; }
-            
+
             // TODO: Cachen ohne Datenbankabfragen
             if (class_exists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
                 $tableClass = Vpc_Abstract::getSetting($class, 'tablename');

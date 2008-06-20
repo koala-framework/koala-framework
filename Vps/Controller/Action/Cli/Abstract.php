@@ -15,7 +15,16 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
                 throw new Vps_ClientException("Parameter '$opt[param]' is missing");
             }
             if (is_null($p) && isset($opt['value'])) {
-                $this->getRequest()->setParam($opt['param'], $opt['value']);
+                if (is_array($opt['value'])) {
+                    $v = $opt['value'][0];
+                } else {
+                    $v = $opt['value'];
+                }
+                $this->getRequest()->setParam($opt['param'], $v);
+                $p = $v;
+            }
+            if (is_array($opt['value']) && !in_array($p, $opt['value'])) {
+                throw new Vps_ClientException("Invalid value for parameter '$opt[param]'");
             }
         }
     }

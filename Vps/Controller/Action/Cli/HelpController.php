@@ -9,7 +9,7 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
 
     public function indexAction()
     {
-    
+
         echo "VPS CLI\n\n";
         echo "avaliable commands:\n";
 
@@ -38,6 +38,9 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
                     if (isset($o['value'])) {
                         $opt = isset($o['valueOptional']) && $o['valueOptional'];
                         if ($opt) echo "[";
+                        if (is_array($o['value'])) {
+                            $o['value'] = implode('|', $o['value']);
+                        }
                         echo "=$o[value]";
                         if ($opt) echo "]";
                     }
@@ -47,7 +50,6 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
                     echo "\n";
                 }
             }
-            
         }
         exit;
     }
@@ -73,3 +75,6 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
         return $ret;
     }
 }
+//php bootstrap.php trl-parse --type=all
+//php bootstrap.php trl-parse --type=web
+//php bootstrap.php trl-parse --type=vps

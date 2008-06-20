@@ -12,7 +12,6 @@ class Vps_Assets_Loader
         $p = $paths->$type;
         if ($p == 'VPS_PATH') $p = VPS_PATH;
         if (!file_exists($p.'/'.$url)) {
-            throw new Vps_Assets_NotFoundException("Asset-File '$p/$url' does not exist.");
         }
         return $p.'/'.$url;
     }
@@ -158,7 +157,8 @@ class Vps_Assets_Loader
                 }
                 $lastModified = max(filemtime('application/config.ini'), filemtime($assetPath));
                 $lastModifiedString = gmdate("D, d M Y H:i:s \G\M\T", $lastModified);
-                if ($http_if_modified_since == $lastModifiedString) {
+                //NED EINCHCKEN!°!!!!!!!!
+                if (false && $http_if_modified_since == $lastModifiedString) {
                     header("HTTP/1.1 304 Not Modified");
                 } else {
                     header('Last-Modified: '.$lastModifiedString);
@@ -172,7 +172,7 @@ class Vps_Assets_Loader
                     } else if (substr($url, -4)=='.css') {
                         header('Content-Type: text/css; charset=utf-8');
                     } else if (substr($url, -3)=='.js') {
-                        header('Content-Type: text/javascript; charset=utf-8');
+                        //NED EINCHCKEN!°!!!!!!!!header('Content-Type: text/javascript; charset=utf-8');
                     } else if (substr($url, -4)=='.swf') {
                         header('Content-Type: application/flash');
                     } else if (substr($url, -4)=='.ico') {
@@ -201,7 +201,8 @@ class Vps_Assets_Loader
         }
     }
 
-    static private function hlp($contents){
+    static private function hlp($contents)
+    {
         $matches = array();
         preg_match_all("#hlp\('(.*)'\)#", $contents, $matches);
         foreach ($matches[0] as $key => $search) {
@@ -212,278 +213,69 @@ class Vps_Assets_Loader
         return $contents;
     }
 
-    static private function trl ($contents){
-        $type= '';
-        preg_match_all('#trl'.$type.'\("(.+?)"\)|trl'.$type.'\(\'(.+?)\'\)#', $contents, $m);
-        $expressions = self::_pregMatchTrl($m, '');
-        $contents = self::_writeContent($m, $contents, $expressions);
+    static private function trl($contents)
+    {
+        foreach (Zend_Registry::get('trl')->parse($contents) as $trlelement) {
+            $values = array();
 
-        //das gleiche mit Vps
-        preg_match_all('#trlVps\("(.+?)"\)|trlVps'.$type.'\(\'(.+?)\'\)#', $contents, $m);
-        $expressions = self::_pregMatchTrl($m, 'Vps');
-        $contents = self::_writeContent($m, $contents, $expressions);
-
-        preg_match_all('#trl'.$type.'\(\'(.+?)\', (.*)\)|trl'.$type.'\(\"(.+?)\", (.*)\)#', $contents, $m);
-        $expressions = self::_pregMatchTrl($m, '');
-        $contents = self::_writeContent($m, $contents, $expressions);
-
-        //das gleiche mit Vps
-        preg_match_all('#trlVps\(\'(.+?)\', (.*)\)|trlVps'.$type.'\(\"(.+?)\", (.*)\)#', $contents, $m);
-        $expressions = self::_pregMatchTrl($m, 'Vps');
-        $contents = self::_writeContent($m, $contents, $expressions);
-
-        preg_match_all('#trlc'.$type.'\(\'(.+?)\', +(.*), +(.*)\)|trlc'.$type.'\(\"(.+?)\", +(.*), +(.*)\)#', $contents, $m);
-        $expressions = self::_pregMatchTrlc($m, '');
-        $contents = self::_writeContent($m, $contents, $expressions);
-
-        //das gleiche mit Vps
-        preg_match_all('#trlcVps'.$type.'\(\'(.+?)\', +(.*), +(.*)\)|trlcVps'.$type.'\(\"(.+?)\", +(.*), +(.*)\)#', $contents, $m);
-        $expressions = self::_pregMatchTrlc($m, 'Vps');
-        $contents = self::_writeContent($m, $contents, $expressions);
-
-        preg_match_all('#trlp'.$type.'\(\'(.+?)\', +(.*), +(.*)\)|trlp'.$type.'\(\"(.+?)\", +(.*), +(.*)\)#', $contents, $m);
-        $expressions = self::_pregMatchTrlp($m, '');
-        $contents = self::_writeContent($m, $contents, $expressions);
-
-        //das gleiche mit Vps
-        preg_match_all('#trlpVps'.$type.'\(\'(.+?)\', +(.*), +(.*)\)|trlpVps'.$type.'\(\"(.+?)\", +(.*), +(.*)\)#', $contents, $m);
-        $expressions = self::_pregMatchTrlp($m, 'Vps');
-        $contents = self::_writeContent($m, $contents, $expressions);
-
-        preg_match_all('#trlcp'.$type.'\(\'(.+?)\', +(.*), +(.*), +(.*)\)|trlcp'.$type.'\(\"(.+?)\", +(.*), +(.*), +(.*)\)#', $contents, $m);
-        $expressions = self::_pregMatchTrlcp($m, '');
-        $contents = self::_writeContent($m, $contents, $expressions);
-
-        //das gleiche mit Vps
-        preg_match_all('#trlcpVps'.$type.'\(\'(.+?)\', +(.*), +(.*), +(.*)\)|trlcpVps'.$type.'\(\"(.+?)\", +(.*), +(.*), +(.*)\)#', $contents, $m);
-        $expressions = self::_pregMatchTrlcp($m, 'Vps');
-        $contents = self::_writeContent($m, $contents, $expressions);
-
-        return $contents;
-    }
-
-    static private function _writeContent($m, $contents, $expressions) {
-        if ($expressions) {
-            foreach ($expressions as $values){
-                $contents = str_replace($values['before'], $values['now'], $contents);
+            if ($trlelement['source'] == Vps_Trl::SOURCE_VPS) {
+                $mode = "Vps";
+            } else  {
+                $mode = '';
             }
-        }
-        return $contents;
 
-    }
+            if ($trlelement['type'] == 'trl') {
+                $values['before'] = $trlelement['before'];
+                $values['tochange'] = $trlelement['text'];
+                $method = $trlelement['type'].$mode;
+                $values['now'] = $method($values['tochange']);
+                $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
+                $values['now'] = str_replace($method, "trl", $values['now']);
 
-    static private function _pregMatchTrl ($m, $mode){
-
-        $expressions = array();
-        foreach($m[0] as $key => $trl){
-            if ($m[1][$key] == ""){
-                if (!($m[2][$key] == "")){
-                    $values = array();
-                    $values['before'] = $m[0][$key];
-                    $values['tochange'] = $m[2][$key];
-                    $method = "trl".$mode;
-                    $values['now'] = $method(self::_getText($values['tochange']));
-                    $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                    $values['now'] = str_replace($method, "trl", $values['now']);
-                    $expressions[] =  $values;
-                } else {
-                    $values = array();
-                    $values['before'] = $m[0][$key];
-                    $values['tochange'] = $m[3][$key];
-                    $method = "trl".$mode;
-                    $values['now'] = $method(self::_getText($values['tochange']));
-                    $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                    $values['now'] = str_replace($method, "trl", $values['now']);
-                    $expressions[] =  $values;
-                }
-            } else {
-                    $values = array();
-                    $values['before'] = $m[0][$key];
-                    $values['tochange'] = $m[1][$key];
-                    $method = "trl".$mode;
-                    $values['now'] = $method(self::_getText($values['tochange']));
-                    $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-
-                    $values['now'] = str_replace($method, "trl", $values['now']);
-                    $expressions[] = $values;
-            }
-       }
-       return $expressions;
-
-    }
-
-    static private function _pregMatchTrlc ($m, $mode){
-        $expressions = array();
-        foreach($m[0] as $key => $trl){
-            if ($m[1][$key] == ""){
-                if (!($m[2][$key] == "")){
-                    $values = array();
-                    $values['context'] = self::_getText($m[1][$key]);
-                    $values['before'] = $m[0][$key];
-                    $string = explode(',', $m[2][$key]);
-                    $values['tochange'] = self::_getText($string[0]);
-                    $method = "trlc".$mode;
-                    $values['now'] = $method($values['context'] ,$values['tochange']);
-                    $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                    $values['now'] = str_replace($method, 'trl', $values['now']);
-                    $values['now'] = str_replace('\''.$values['context'].'\', ', '', $values['now']);
-                    $expressions[] = $values;
-                } else {
-                    $values['context'] = self::_getText($m[4][$key]);
-                    $values['before'] = $m[0][$key];
-                    $string = explode(',', $m[5][$key]);
-                    $values['tochange'] = self::_getText($string[0]);
-                    $method = "trlc".$mode;
-                    $values['now'] = $method($values['context'] ,$values['tochange']);
-                    $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                    $values['now'] = str_replace($method, 'trl', $values['now']);
-                    $values['now'] = str_replace("\"".$values['context']."\", ", '', $values['now']);
-                    $expressions[] = $values;
-
-                }
-            } else {
-                    $values = array();
-                    $values['context'] = self::_getText($m[1][$key]);
-                    $values['before'] = $m[0][$key];
-                    $string = explode(',', $m[2][$key]);
-
-                    $values['tochange'] = self::_getText($string[0]);
-                    $method = "trlc".$mode;
-                    $values['now'] = $method($values['context'] ,$values['tochange']);
-                    $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                    $values['now'] = str_replace($method, 'trl', $values['now']);
-                    $values['now'] = str_replace('\''.$values['context'].'\', ', '', $values['now']);
-                    $expressions[] =  $values;
-            }
-        }
-        return $expressions;
-    }
-
-    static private function _pregMatchTrlp ($m, $mode){
-        $expressions = array();
-        foreach($m[0] as $key => $trl){
-            if ($m[1][$key] == ""){
-                if (!($m[4][$key] == "")){
-
+            } else if ($trlelement['type'] == 'trlc') {
                 $values = array();
-                $values['before'] = $m[0][$key];
-                $strings = self::_splitStringTrlp($values['before'], "\"", $mode);
-                $values['single'] = $strings[0];
-                $values['plural'] = $strings[1];
-                $values['value'] = substr($strings[2], 0, 1);
-                $values['tochange'] = $strings[1];
+                $values['context'] = $trlelement['context'];
+                $values['before'] = $trlelement['before'];
+                $values['tochange'] = $trlelement['text'];
+                $method = $trlelement['type'].$mode;
+                $values['now'] = $method($values['context'] ,$values['tochange']);
+                $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
+                $values['now'] = str_replace($method, 'trl', $values['now']);
+                $values['now'] = str_replace('\''.$values['context'].'\', ', '', $values['now']);
+                $values['now'] = str_replace('"'.$values['context'].'", ', '', $values['now']);
 
-                //$method = 'trlp'.$mode;
-                $method = 'getTrlpValues';
-                $newValues = $method(null, $values['single'], $values['plural'], $mode);
+            } else if ($trlelement['type'] == 'trlp') {
+                $values['before'] = $trlelement['before'];
+                $values['single'] = $trlelement['text'];
+                $values['plural'] = $trlelement['plural'];
 
-                $method = 'trlp'.$mode;
+                $newValues = Zend_Registry::get('trl')->getTrlpValues(null, $values['single'],
+                                            $values['plural'], $trlelement['source'] );
+
+                $method = $trlelement['type'].$mode;
                 $values['now'] = str_replace($values['single'], $newValues['single'], $values['before']);
                 $values['now'] = str_replace($values['plural'], $newValues['plural'], $values['now']);
                 $values['now'] = str_replace($method, 'trlp', $values['now']);
 
-                $expressions[] =  $values;
-                }
-            } else {
-
+            } else if ($trlelement['type'] == 'trlcp') {
                 $values = array();
-                $values['before'] = $m[0][$key];
-                $strings = self::_splitStringTrlp($values['before'], '\'', $mode);
-                $values['single'] = $strings[0];
-                $values['plural'] = $strings[1];
-                $values['value'] = substr($strings[2], 0, 1);
+                $values['before'] = $trlelement['before'];
+                $values['context'] = $trlelement['context'];
+                $values['single'] = $trlelement['text'];
+                $values['plural'] = $trlelement['plural'];
 
-                $values['tochange'] = $strings[1];
-                $values['before'];
-                $method = 'getTrlpValues';
-                $newValues = $method(null, $values['single'], $values['plural'], $mode);
-
-                $method = 'trlp'.$mode;
-                $values['now'] = str_replace($values['single'], $newValues['single'], $values['before']);
-                $values['now'] = str_replace($values['plural'], $newValues['plural'], $values['now']);
-                $values['now'] = str_replace($method, 'trlp', $values['now']);
-
-                $expressions[] = $values;
-            }
-        }
-        return $expressions;
-    }
-
-    static private function _pregMatchTrlcp ($m, $mode){
-        $expressions = array();
-        foreach($m[0] as $key => $trl){
-            if ($m[1][$key] == ""){
-                $values = array();
-                $values['before'] = $m[0][$key];
-                $strings = self::_splitStringTrlcp($values['before'], "\"", $mode);
-                $values['context'] = $strings[0];
-                $values['single'] = $strings[1];
-                $values['plural'] = $strings[2];
-                $values['value'] = substr($strings[3], 0, 1);
-                $values['tochange'] = $strings[2];
-
-                $method = 'getTrlpValues';
-                $newValues = $method($values['context'], $values['single'], $values['plural'], $mode);
+                $newValues = Zend_Registry::get('trl')->getTrlpValues($values['context'],
+                            $values['single'], $values['plural'], $trlelement['source'] );
 
                 $method = 'trlcp'.$mode;
                 $values['now'] = str_replace($values['single'], $newValues['single'], $values['before']);
                 $values['now'] = str_replace($values['plural'], $newValues['plural'], $values['now']);
                 $values['now'] = str_replace("\"".$values['context']."\",", "", $values['now']);
+                $values['now'] = str_replace('\''.$values['context'].'\',', "", $values['now']);
                 $values['now'] = str_replace($method, 'trlp', $values['now']);
-                $expressions[] =  $values;
-            } else {
-                $values = array();
-                $values['before'] = $m[0][$key];
-                $strings = self::_splitStringTrlcp($values['before'], '\'', $mode);
-                $values['context'] = $strings[0];
-                $values['single'] = $strings[1];
-                $values['plural'] = $strings[2];
-                $values['value'] = substr($strings[3], 0, 1); //derweil nur einstellig
-                $values['tochange'] = $strings[2];
-
-                $method = 'getTrlpValues';
-                $newValues = $method($values['context'], $values['single'], $values['plural'], $mode);
-
-                $method = 'trlcp'.$mode;
-                $values['now'] = str_replace($values['single'], $newValues['single'], $values['before']);
-                $values['now'] = str_replace($values['plural'], $newValues['plural'], $values['now']);
-                $values['now'] = str_replace("\"".$values['context']."\",", "", $values['now']);
-                $values['now'] = str_replace($method, 'trlp', $values['now']);
-
-
-                $expressions[] =  $values;
             }
+            $contents = str_replace($values['before'], $values['now'], $contents);
         }
-        return $expressions;
+        return $contents;
     }
-
-
-
-    static protected function _getText($name){
-            if(strpos($name, '{')){
-                $values = explode(',', $name);
-                return str_replace("'", '', str_replace("\"", "" , $values[0]),str_replace("[", "" , str_replace("[", "" , $values[0])));
-            } else {
-                return str_replace("\"", "", str_replace("'", '', str_replace("[", "" , str_replace("]", "" , $name))));
-            }
-   }
-
-   static protected function _splitStringTrlcp($string, $explode, $mode){
-       $start = 0;
-       $strings = explode($explode.',', $string);
-       $strings[0] = str_replace('trlcp'.$mode.'(', '', self::_getText($strings[0]));
-       $strings[++$start] = substr(self::_getText($strings[$start]), 1, strlen($strings[$start]));
-       $strings[++$start] = substr(self::_getText($strings[$start]), 1, strlen($strings[$start]));
-       $strings[++$start] = substr(str_replace('))', '', self::_getText($strings[$start])), 1, strlen($strings[$start]));
-       return $strings;
-   }
-
-   static protected function _splitStringTrlp($string, $explode, $mode){
-       $start = 0;
-       $strings = explode($explode.',', $string);
-       $strings[0] = str_replace('trlp'.$mode.'(', '', self::_getText($strings[0]));
-       $strings[++$start] = substr(self::_getText($strings[$start]), 1, strlen($strings[$start]));
-       $strings[++$start] = substr(str_replace('))', '', self::_getText($strings[$start])), 1, strlen($strings[$start]));
-       return $strings;
-   }
 }
