@@ -1,18 +1,75 @@
 <?php
-class Vps_Component_Data {
-    
+class Vps_Component_Data
+{
     private $_component;
-    
+
+    private $_url;
+    private $_rel;
+    private $_filename;
+
     public function __construct($config)
     {
+        $GLOBALS['dataCounter']++;
         foreach ($config as $k=>$i) {
-            $this->$k = $i;
+            if ($k == 'url') {
+                $this->_url = $i;
+            } else if ($k == 'rel') {
+                $this->_rel = $i;
+            } else if ($k == 'filename') {
+                $this->_filename = $i;
+            } else {
+                $this->$k = $i;
+            }
         }
         if (!isset($this->dbId) && isset($this->componentId)) {
             $this->dbId = $this->componentId;
         }
     }
-    
+
+    public function __get($var)
+    {
+        if ($var == 'url') {
+            $filenames = array();
+            $page = $this->getPage();
+            do {
+                $filenames[] = $page->filename;
+            } while ($page = $page->getParentPage());
+            return implode('/', array_reverse($filenames));
+        } else if ($var == 'rel') {
+            return $this->getPage()->_rel;
+        } else if ($var == 'filename') {
+            return $this->getPage()->_filename;
+        } else {
+            throw new Vps_Exception("Variable '$var' is not set for ".get_class($this));
+        }
+    }
+
+    public function __isset($var)
+    {
+        if ($var == 'url' || $var == 'rel' || $var == 'filename') {
+            return true;
+        }
+        return false;
+    }
+
+    public function __unset($var)
+    {
+        if ($var == 'url' || $var == 'rel' || $var == 'filename') {
+            throw new Vps_Exception("Variable '$var' can't be modified for ".get_class($this));
+        } else {
+            throw new Vps_Exception("Variable '$var' is not set for ".get_class($this));
+        }
+    }
+
+    public function __set($var, $value)
+    {
+        if ($var == 'url' || $var == 'rel' || $var == 'filename') {
+            throw new Vps_Exception("Variable '$var' can't be modified for ".get_class($this));
+        } else {
+            $this->$var = $value;
+        }
+    }
+
     public function __call($method, $arguments)
     {
         if (substr($method, 0, 3) == 'set') {
@@ -29,23 +86,13 @@ class Vps_Component_Data {
             throw new Vps_Exception("Invalid method called: '$method'");
         }
     }
-    
-    public function getUrl()
-    {
-        return $this->getPage()->url;
-    }
-
-    public function getFilename()
-    {
-        return $this->getPage()->filename;
-    }
 
     public function getChildPages($constraints = array())
     {
         $ret = array();
         $components = $this->getChildComponents($constraints);
         foreach ($components as $component) {
-            if ($component instanceof Vps_Component_Data_Page) {
+            if ($component->isPage) {
                 $ret[] = $component;
             } else {
                 $ret = array_merge($ret, $component->getChildPages($constraints));
@@ -102,7 +149,7 @@ class Vps_Component_Data {
     public function getPage()
     {
         $page = $this;
-        while ($page && !$page instanceof Vps_Component_Data_Page) {
+        while ($page && !$page->isPage) {
             $page = $page->parent;
         }
         return $page;

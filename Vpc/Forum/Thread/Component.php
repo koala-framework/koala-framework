@@ -88,7 +88,7 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         }
         $ret['threadTime'] = $thread->create_time;
 
-        $posts = $this->getChildComponent('posts');
+        $posts = $this->getChildComponent('-posts');
 
         $post = $posts->getTable()->getLastPost($posts->getDbId());
         $forumUser = $forumUserTable->fetchRow(array('id = ?' => $post->user_id));

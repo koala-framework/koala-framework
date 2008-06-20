@@ -35,15 +35,8 @@
         var Vps = {isApp: true};
     </script>
 
-    <?php foreach ($this->ext['files']['css'] as $file) { ?>
-    <link rel="stylesheet" type="text/css" href="<?= $file ?>" />
-    <?php } ?>
-
-    <?php foreach ($this->ext['files']['js'] as $file) { ?>
-    <script type="text/javascript" src="<?= $file ?>"></script>
-    <?php } ?>
-
-    <?php if($this->debug['template']) { echo $this->partial($this->debug['template'], $this->debug); } ?>
+    <?= $this->assets($this->ext['assets']) ?>
+    <?= $this->debugData() ?>
 
     <script type="text/javascript">
         Vps.userRole = '<?= $this->ext['userRole'] ?>';

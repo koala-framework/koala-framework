@@ -8,18 +8,17 @@ abstract class Vpc_TreeCache_Abstract
     protected $_loadTableFromComponent = false;
     protected $_table;
     protected $_tableName;
-    
-    protected $_pageDataClass = 'Vps_Component_Data';
-    
+
     protected $_additionalTreeCaches = array();
-    private $_pagesTreeCache;
     private $_isTop = true;
-    
+    private $_dataCache = array();
+
     protected function __construct($class)
     {
         $this->_class = $class;
         $this->_db = Zend_Registry::get('db');
         $this->_init();
+        $GLOBALS['treeCacheCounter']++;
     }
 
     protected function _init()
@@ -85,7 +84,7 @@ abstract class Vpc_TreeCache_Abstract
     protected function _getAdditionalTreeCaches($parentData)
     {
         $ret = $this->_additionalTreeCaches;
-        if ($this->_isTop && $parentData instanceof Vps_Component_Data_Page) {
+        if ($this->_isTop && $parentData->isPage) {
             if (!$parentData instanceof Vps_Component_Data_Root) {
                 foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $mc) {
                     $tc = Vpc_TreeCache_Abstract::getInstance($mc);
@@ -96,11 +95,10 @@ abstract class Vpc_TreeCache_Abstract
                 }
             }
             if ($parentData instanceof Vps_Component_Data_Root || is_numeric($parentData->componentId)) {
-                if (!isset($this->_pagesTreeCache)) {
-                    $this->_pagesTreeCache = Vpc_TreeCache_Abstract::getInstance(Vps_Registry::get('config')->vpc->rootComponent);
-                    $this->_pagesTreeCache->_isTop = false;
-                }
-                $ret[] = $this->_pagesTreeCache;
+                $tc = Vpc_TreeCache_Abstract::getInstance(Vps_Registry::get('config')->vpc->rootComponent);
+                //TODO wird da eh nicht ein bestehender tc geändert der woanders ohne isTop gebraucht wird?
+                $tc->_isTop = false;
+                $ret[] = $tc;
             }
         }
         return $ret;
@@ -122,7 +120,7 @@ abstract class Vpc_TreeCache_Abstract
     
     protected function _formatConstraints($parentData, $constraints)
     {
-        if (isset($constraints['treecache']) && 
+        if (isset($constraints['treecache']) &&
             !$this instanceof $constraints['treecache']
         ){
             return null;
@@ -133,5 +131,18 @@ abstract class Vpc_TreeCache_Abstract
     public function hasDbIdShortcut($dbId)
     {
         return false;
+    }
+
+    protected function _createData($config)
+    {
+        if (!isset($this->_dataCache[$config['componentId']])) {
+            if (Vpc_Abstract::hasSetting($config['componentClass'], 'dataClass')) {
+                $pageDataClass = Vpc_Abstract::getSetting($config['componentClass'], 'dataClass');
+            } else {
+                $pageDataClass = 'Vps_Component_Data';
+            }
+            $this->_dataCache[$config['componentId']] = new $pageDataClass($config);
+        }
+        return $this->_dataCache[$config['componentId']];
     }
 }

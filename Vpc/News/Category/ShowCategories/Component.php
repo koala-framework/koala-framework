@@ -20,7 +20,7 @@ class Vpc_News_Category_ShowCategories_Component extends Vpc_News_List_Abstract_
         return $this->_categories;
     }
 
-    public function getNewsComponent()
+    protected function _getNewsComponent()
     {
         if (!isset($this->_newsTreeCacheRow)) {
             $categories = $this->_getCategories();

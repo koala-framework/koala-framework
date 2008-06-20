@@ -215,42 +215,34 @@ class Vps_Setup
         if ($i) $uri = substr($uri, 0, $i);
         if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))) {
             $requestUrl = $_SERVER['REDIRECT_URL'];
-            /*
-            $tc = new Vps_Dao_TreeCache();
-            $where = array();
-            if ($tc->showInvisible()) {
-                $where["url_match_preview = ?"] = $requestUrl;
-            } else {
-                $where["url_match = ?"] = $requestUrl;
-            }
-            $row = $tc->fetchAll($where, null, 1)->current();
-            if (!$row ) {
-                if (!$tc->showInvisible()) {
-                    $where = array();
-                    $where["? LIKE url_pattern"] = $requestUrl;
-                    $where["? NOT LIKE CONCAT(url_pattern, '/%')"] = $requestUrl;
-                    $row = $tc->fetchAll($where)->current();
-                }
-                if (!$row) {
-                    header('HTTP/1.1 404 Not Found');
-                    $view = new Vps_View();
-                    $view->requestUri = $uri;
-                    echo $view->render('error404.tpl');
-                    exit;
-                }
+            //TODO: redirect wenn url geändert
+/*
                 if ($row->url_match != $requestUrl) {
                     header('Location: '.$row->url_match);
                     exit;
-                }
-            }
-            $page = $row->getComponent();
-            $page->sendContent($page);
-            */
+                }*/
             $root = Vps_Component_Data_Root::getInstance();
             $data = $root->getPageByPath($requestUrl);
+            if (!$data) {
+                header('HTTP/1.1 404 Not Found');
+                $view = new Vps_View();
+                $view->requestUri = $requestUrl;
+                echo $view->render('error404.tpl');
+                exit;
+            }
             $page = $data->getComponent();
             $page->sendContent($page);
-            echo (microtime(true)-$GLOBALS['start']).' sec';
+echo '<div style="background-color:white;width:200px;position:absolute;top:0;right:0;padding:5px;">';
+echo (microtime(true)-$GLOBALS['start'])." sec<br>\n";
+if (Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
+    echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br>\n";
+}
+echo "TreeCaches: $GLOBALS[treeCacheCounter]<br>\n";
+echo "Components: $GLOBALS[componentCounter]<br>\n";
+echo "Component Datas: $GLOBALS[dataCounter]<br>\n";
+echo "getComponentById called: ".count($GLOBALS['getComponentByIdCalled'])."<br>\n";
+echo "unique getComponentById called: ".count(array_unique($GLOBALS['getComponentByIdCalled']))."<br>\n";
+echo "</div>";
             exit;
         }
     }

@@ -4,6 +4,7 @@ class Vps_Component_Abstract
     private static $_settingsCache = array();
     public function __construct()
     {
+        $GLOBALS['componentCounter']++;
         $this->_init();
     }
 

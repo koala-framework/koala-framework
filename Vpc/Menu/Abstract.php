@@ -36,11 +36,14 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
                 $currentPageIds[] = $page->getComponentId();
             }
         }
-        foreach ($ret as $r) {
-            $r->setClass('');
-            if ($r == $first) { $r->setClass('first'); }
-            if ($r == $last) { $r->setClass('last'); }
-            if (in_array($r->getComponentId(), $currentPageIds)) { $r->setClass('current'); }
+        foreach ($ret as $i=>$r) {
+            $class = array();
+            if ($i == 0) { $class[] = 'first'; }
+            if ($i == count($ret)-1) { $class[] = 'last'; }
+            if (in_array($r->getComponentId(), $currentPageIds)) {
+                $class[] ='current';
+            }
+            $r->class = implode(' ', $class);
         }
         return $ret;
     }

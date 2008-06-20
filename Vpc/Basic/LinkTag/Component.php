@@ -5,8 +5,6 @@
  */
 class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
 {
-    protected $_link;
-
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(

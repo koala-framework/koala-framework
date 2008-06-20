@@ -1,8 +1,10 @@
 <?php
-class Vps_Component_Data_Root extends Vps_Component_Data_Page {
+class Vps_Component_Data_Root extends Vps_Component_Data
+{
     
     private static $_instance;
     private $_hasChildComponentCache;
+    private $_componentIdCache = array();
 private static $debugClassesCheckedCounter;
     
     public static function getInstance()
@@ -12,7 +14,8 @@ private static $debugClassesCheckedCounter;
             self::$_instance = new self(array(
                 'componentClass' => $componentClass,
                 'name' => '',
-                'parent' => null
+                'parent' => null,
+                'isPage' => false
             ));
         }
         return self::$_instance;
@@ -20,47 +23,101 @@ private static $debugClassesCheckedCounter;
     
     public function getPageByPath($path)
     {
-        $page = $this;
-        foreach (explode('/', substr($path, 1)) as $pathPart) {
-            $page = $page->getChildPage(array('filename' => $pathPart));
+        if ($path == '/') {
+            return $this->getChildPage(array('home' => true));
+        } else {
+            $page = $this;
+            foreach (explode('/', substr($path, 1)) as $pathPart) {
+                $page = $page->getChildPage(array('filename' => $pathPart));
+            }
+            return $page;
         }
-        return $page;
     }
 
-    public function getComponentById($componentId)
+    public function getComponentById($componentId, $page = null)
     {
-        $page = $this;
-        foreach (split('[_\-]', $componentId) as $idPart) {
-            $page = $page->getChildComponent($idPart);
-            if (!$page) return null;
+$GLOBALS['getComponentByIdCalled'][] = $componentId;
+        $cacheKey = $componentId;
+        if ($page) {
+            $cacheKey .= '#'.$page->componentId;
         }
-        return $page;
+        if (!array_key_exists($cacheKey, $this->_componentIdCache)) {
+            if (!$page) $page = $this;
+            $pos = array(strlen($componentId));
+            if (strpos($componentId, '-', 1)) $pos[] = strpos($componentId, '-', 1);
+            if (strpos($componentId, '_', 1)) $pos[] = strpos($componentId, '_', 1);
+            $pos = min($pos);
+            if ($pos) {
+                $childId = substr($componentId, 0, $pos);
+            }
+            $page = $page->getChildComponent($childId);
+            if ($pos < strlen($componentId)) {
+                $restId = substr($componentId, $pos);
+                $page = $this->getComponentById($restId, $page);
+            }
+            return $page;
+            
+        /*
+            $ids = preg_split('/([_\-])/', $componentId, -1, PREG_SPLIT_DELIM_CAPTURE);
+            if (!$page) $page = $this;
+            for ($i = 0; $i < count($ids); $i++) {
+                $idPart = $ids[$i];
+                if ($i > 0) {
+                    $i++;
+                    $idPart .= $ids[$i];
+                }
+                $page = $page->getChildComponent($idPart);
+                if (!$page) break;
+            }
+            $this->_componentIdCache[$cacheKey] = $page;
+        */
+        }
+        return $this->_componentIdCache[$cacheKey];
     }
     
     public function getByDbId($dbId)
     {
+static $cnt = 0;
+$cnt++;
+// if ($cnt > 3) {
+    //$bt = debug_backtrace();
+    //p($bt[2]['class'].' '.$bt[2]['object']->getData()->componentId);
+// }
+$startQueryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount();
+$start = microtime(true);
         if (is_numeric(substr($dbId, 0, 1))) {
-            return $this->getComponentById($dbId);
+            $data = $this->getComponentById($dbId);
+$queryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount() - $startQueryCount;
+p('Looking for dbId '.$dbId. ' in '.(microtime(true)-$start) . ' sec; '.$queryCount.' db-queryies');
+            return $data;
         }
         foreach (Vpc_Abstract::getComponentClasses() as $class) {
             $tc = $this->_getTreeCache($class);
             if ($tc && ($dbIdShortcut = $tc->getDbIdShortcut($dbId))) {
                 foreach ($this->getComponentsByClass($class) as $data) {
-                    $id = substr($dbId, strlen($dbIdShortcut));
-                    foreach (split('[_\-]', $id) as $idPart) {
-                        $data = $data->getChildComponent($idPart);
+                    $id = '-'.substr($dbId, strlen($dbIdShortcut));
+                    $data = $this->getComponentById($id, $data);
+                    if ($data) {
+$queryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount() - $startQueryCount;
+p('Looking for dbId '.$dbId. ' in '.(microtime(true)-$start) . ' sec; '.$queryCount.' db-queryies');
+                        return $data;
                     }
-                    if ($data) return $data;
                 }
             }
         }
+p('NIX GEFUNDEN BEIM SUCHEN NACH DB_ID');
         return null;
     }
     
-    public function getComponentsByClass($class, $data = null)
+    public function getComponentsByClass($class)
     {
+//static $cnt = 0;
+//$cnt++;
+//if ($cnt > 1) echo $x;
 self::$debugClassesCheckedCounter = 0;
-$startQueryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount();
+if (Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
+    $startQueryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount();
+}
 $start = microtime(true);
         $this->_hasChildComponentCache = array();
         $lookingForChildClasses = array();
@@ -70,7 +127,11 @@ $start = microtime(true);
             }
         }
         $ret = $this->_getComponentsByClassRek($lookingForChildClasses, $this);
-$queryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount() - $startQueryCount;
+if (Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
+    $queryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount() - $startQueryCount;
+} else {
+    $queryCount = '?';
+}
 p('Looking for '.$class. ' in '.(microtime(true)-$start) . ' sec; '.self::$debugClassesCheckedCounter.' components checked; '.$queryCount.' db-queryies');
         return $ret;
     }
@@ -84,7 +145,7 @@ p('Looking for '.$class. ' in '.(microtime(true)-$start) . ' sec; '.self::$debug
                 $constraintClasses[] = $c;
             }
         }
-        
+
         $constraint = array('componentClass' => $constraintClasses);
         foreach ($data->getChildComponents($constraint) as $childData) {
 self::$debugClassesCheckedCounter++;

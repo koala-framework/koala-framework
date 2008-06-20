@@ -31,7 +31,7 @@ class Vpc_News_Month_Directory_Component extends Vpc_Abstract
         $ret['months'] = array(); // TODO
         return $ret;
     }
-    public function getNewsComponent()
+    protected function _getNewsComponent()
     {
         return $this->getData()->getParentComponent();
     }

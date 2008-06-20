@@ -13,7 +13,7 @@ class Vpc_News_Category_Detail_Component extends Vpc_News_List_Abstract_Componen
         return $select;
     }
 
-    public function getNewsComponent()
+    protected function _getNewsComponent()
     {
         return $this->getData()->parent->getComponent() //categories directory
             ->getNewsComponent();

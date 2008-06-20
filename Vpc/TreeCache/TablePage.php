@@ -8,15 +8,30 @@ abstract class Vpc_TreeCache_TablePage extends Vpc_TreeCache_Table
     protected $_uniqueFilename = false;
 
     protected $_idSeparator = '_';
-    protected $_pageDataClass = 'Vps_Component_Data_Page';
     
     protected function _formatConfig($parentData, $row)
     {
         $data = parent::_formatConfig($parentData, $row);
-        $data['url'] = $row->{$this->_filenameColumn}; // TODO: uniqueFilename, hierarchische URL;
-        $data['rel'] = ''; // TODO
+
+         // TODO: uniqueFilename, hierarchische URL;
+        $data['filename'] = $row->{$this->_filenameColumn};
+
+        $data['rel'] = '';
         $data['name'] = $row->{$this->_nameColumn};
-        $data['showInMenu'] = $this->_showInMenu;
+        $data['isPage'] = true;
         return $data;
+    }
+    protected function _formatConstraints($parentData, $constraints)
+    {
+        if (isset($constraints['page'])) {
+            if (!$constraints['page']) return null;
+            unset($constraints['page']);
+        }
+        if (isset($constraints['showInMenu'])) {
+            if ($constraints['showInMenu'] && !$this->_showInMenu) return null;
+            if (!$constraints['showInMenu'] && $this->_showInMenu) return null;
+            unset($constraints['showInMenu']);
+        }
+        return parent::_formatConstraints($parentData, $constraints);
     }
 }

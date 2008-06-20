@@ -2,6 +2,8 @@
 abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_Component
             implements Vpc_Paging_ParentInterface
 {
+    private $_newsComponent = false;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -10,13 +12,14 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
         return $ret;
     }
 
-    abstract public function getNewsComponent();
-
-    protected function _getNewsTable()
+    public function getNewsComponent()
     {
-        return $this->getNewsComponent()->getComponent()->getTable();
+        if ($this->_newsComponent === false) {
+            $this->_newsComponent = $this->_getNewsComponent();
+        }
+        return $this->_newsComponent;
     }
-
+    abstract protected function _getNewsComponent();
 
     protected function _selectNews()
     {
@@ -34,7 +37,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
         $select = $this->_selectNews();
         if (!$select) return array();
         if (!$limit && !$start) {
-            $l = $this->getData()->getChildComponent('paging')
+            $l = $this->getData()->getChildComponent('-paging')
                 ->getComponent()->getLimit();
             $limit = $l['limit'];
             $start = $l['start'];
