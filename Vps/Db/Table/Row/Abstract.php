@@ -21,7 +21,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         $parts = explode('-', $this->$columnName);
         return mktime(0, 0, 0, $parts[1], $parts[2], $parts[0]);
     }
-    
+
     protected function _duplicateParentRow($tableClassname, $ruleKey = null)
     {
         $row = $this->findParentRow($tableClassname, $ruleKey);
@@ -229,42 +229,6 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
             if ($f instanceof Vps_Filter_Row_Abstract) {
                 $f->onDeleteRow($this);
             }
-        }
-    }
-
-    protected function _postInsert()
-    {
-        parent::_postInsert();
-        if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
-            foreach (Vps_Dao::getTable('Vps_Dao_TreeCache')->getComponentClasses() as $c) {
-                $tc = Vpc_TreeCache_Abstract::getInstance($c);
-                if ($tc) $tc->onInsertRow($this);
-            }
-            Vpc_TreeCache_Abstract::getTreeCacheTable()->createMissingChilds();
-        }
-    }
-
-    protected function _postDelete()
-    {
-        parent::_postDelete();
-        if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
-            foreach (Vps_Dao::getTable('Vps_Dao_TreeCache')->getComponentClasses() as $c) {
-                $tc = Vpc_TreeCache_Abstract::getInstance($c);
-                if ($tc) $tc->onDeleteRow($this);
-            }
-            Vpc_TreeCache_Abstract::getTreeCacheTable()->createMissingChilds();
-        }
-    }
-
-    protected function _postUpdate()
-    {
-        parent::_postUpdate();
-        if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
-            foreach (Vps_Dao::getTable('Vps_Dao_TreeCache')->getComponentClasses() as $c) {
-                $tc = Vpc_TreeCache_Abstract::getInstance($c);
-                if ($tc) $tc->onUpdateRow($this);
-            }
-            Vpc_TreeCache_Abstract::getTreeCacheTable()->createMissingChilds();
         }
     }
 
