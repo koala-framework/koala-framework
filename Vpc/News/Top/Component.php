@@ -1,8 +1,6 @@
 <?php
 class Vpc_News_Top_Component extends Vpc_News_List_Abstract_Component
 {
-    private $_newsData;
-
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
@@ -14,17 +12,13 @@ class Vpc_News_Top_Component extends Vpc_News_List_Abstract_Component
         ));
     }
 
-    public function getNewsComponent()
+    protected function _getNewsComponent()
     {
-        if (!isset($this->_newsData)) {
-            $row = $this->_getRow();
-            if ($row && $row->news_component_id) {
-                $this->_newsData = Vps_Component_Data_Root::getInstance()->getByDbId($row->news_component_id);
-            } else {
-                $this->_newsData = null;
-            }
+        $row = $this->_getRow();
+        if ($row && $row->news_component_id) {
+            return Vps_Component_Data_Root::getInstance()->getByDbId($row->news_component_id);
         }
-        return $this->_newsData;
+        return null;
     }
 
     public function getNews($limit = 15, $start = null)

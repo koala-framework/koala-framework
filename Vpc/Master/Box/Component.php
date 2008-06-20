@@ -1,6 +1,6 @@
 <?php
 class Vpc_Master_Box_Component extends Vpc_Master_Abstract
-{   
+{
     public function getTemplateVars()
     {
         $vars = parent::getTemplateVars();

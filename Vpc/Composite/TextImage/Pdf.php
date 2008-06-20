@@ -3,8 +3,8 @@ class Vpc_Composite_TextImage_Pdf extends Vpc_Abstract_Pdf
 {
     public function writeContent()
     {
-        $image = $this->_component->getChildComponent('image');
-        $text = $this->_component->getChildComponent('text');
+        $image = $this->_component->getChildComponent('-image');
+        $text = $this->_component->getChildComponent('-text');
         $position = $this->_component->getTextImageRow()->image_position;
         $area = $this->_pdf->getPageWidth() - ($this->_pdf->getRightMargin() + $this->_pdf->getLeftMargin());
 

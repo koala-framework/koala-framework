@@ -8,6 +8,7 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
+            'dataClass' => 'Vpc_Basic_LinkTag_Extern_Data',
             'tablename'     => 'Vpc_Basic_LinkTag_Extern_Model',
             'componentName' => 'Link.Extern',
             'default'       => array(

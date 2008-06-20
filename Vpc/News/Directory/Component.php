@@ -4,7 +4,7 @@ class Vpc_News_Directory_Component extends Vpc_News_List_Abstract_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = 'News.List';
+        $ret['componentName'] = trlVps('News.List');
         $ret['componentIcon'] = new Vps_Asset('newspaper');
         $ret['tablename'] = 'Vpc_News_Directory_Model';
         $ret['childComponentClasses']['detail'] = 'Vpc_News_Detail_Component';
@@ -12,7 +12,7 @@ class Vpc_News_Directory_Component extends Vpc_News_List_Abstract_Component
         $ret['enableExpireDate'] = true;
         return $ret;
     }
-    public function getNewsComponent()
+    protected function _getNewsComponent()
     {
         return $this->getData();
     }

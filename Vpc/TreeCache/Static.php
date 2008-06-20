@@ -8,27 +8,26 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
     {
         $ret = parent::getChildData($parentData, $constraints);
         $constraints = $this->_formatConstraints($parentData, $constraints);
-        if (!is_null($constraints)) {
-            if (isset($constraints['id'])) {
-                if (isset($this->_classes[$constraints['id']])) {
-                    $ret[] = new $this->_pageDataClass($this->_formatConfig($parentData, $constraints['id']));
-                }
-            } else {
-                if (isset($constraints['componentClass'])) {
-                    if (!is_array($constraints['componentClass'])) {
-                        $contraintClasses = array($constraints['componentClass']);
-                    } else {
-                        $contraintClasses = $constraints['componentClass'];
-                    }
-                }
-                foreach (array_keys($this->_classes) as $key) {
-                    if (isset($contraintClasses) &&
-                            !in_array($this->_getComponentClass($key), $contraintClasses))
-                    {
-                        continue;
-                    }
-                    $ret[] = new $this->_pageDataClass($this->_formatConfig($parentData, $key));
-                }
+        if (is_null($constraints)) return $ret;
+        foreach (array_keys($this->_classes) as $key) {
+            if ($this->_acceptKey($key, $constraints)) {
+                $ret[] = $this->_createData($this->_formatConfig($parentData, $key));
+            }
+        }
+        return $ret;
+    }
+
+    protected function _acceptKey($key, $constraints)
+    {
+        $ret = true;
+        if (isset($constraints['id'])) {
+            if ($constraints['id'] != $key) {
+                $ret = false;
+            }
+        }
+        if ($ret && isset($constraints['componentClass'])) {
+            if (!in_array($this->_getComponentClass($key), $constraints['componentClass'])) {
+                $ret = false;
             }
         }
         return $ret;
@@ -67,7 +66,32 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
             'dbId' => $dbId,
             'componentClass' => $this->_getComponentClass($componentKey),
             'parent' => $parentData,
-            'id' => $componentKey
+            'id' => $componentKey,
+            'isPage' => false
         );
     }
+    protected function _formatConstraints($parentData, $constraints)
+    {
+        $constraints = parent::_formatConstraints($parentData, $constraints);
+        if (is_null($constraints)) return null;
+        if (isset($constraints['id'])) {
+            $sep = substr($constraints['id'], 0, 1);
+            if ($sep == '-' || $sep == '_') {
+                $constraints['id'] = substr($constraints['id'], 1);
+            } else {
+                return null;
+            }
+        }
+        if (isset($constraints['page']) && $constraints['page']) {
+            return null;
+        }
+        if (isset($constraints['componentClass'])) {
+            if (!is_array($constraints['componentClass'])) {
+                $constraints['componentClass'] = array($constraints['componentClass']);
+            }
+        }
+
+        return $constraints;
+    }
+
 }
