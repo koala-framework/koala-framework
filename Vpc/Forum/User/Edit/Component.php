@@ -66,11 +66,11 @@ class Vpc_Forum_User_Edit_Component extends Vpc_Formular_Component
 
         $fieldSettings = array(
             'value' => '<br />'
-                .trlVps('You may upload a picture that is displayed in your profile '
-                    .'and in each of your posts in a small version (40x40 Pixels).')
+                .trlVps('You may upload a picture that is displayed in your profile
+                and in each of your posts in a small version (40x40 Pixels).')
                 .'<br />'
-                .trlVps('For optimized displayment the picture should have a width of at least 150 Pixels, '
-                    .'the file size may not be bigger than 2 MB.'),
+                .trlVps('For optimized displayment the picture should have a width of at least 150 Pixels,
+                the file size may not be bigger than 2 MB.'),
             'name'  => 'avatarinfo'
         );
         $c = $this->_createFieldComponent('ShowText', $fieldSettings);
