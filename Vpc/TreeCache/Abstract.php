@@ -3,7 +3,6 @@ abstract class Vpc_TreeCache_Abstract
 {
     protected $_db;
     protected $_class;
-    protected $_cache;
 
     protected $_loadTableFromComponent = false;
     protected $_table;
@@ -11,7 +10,6 @@ abstract class Vpc_TreeCache_Abstract
 
     protected $_additionalTreeCaches = array();
     private $_isTop = true;
-    private $_dataCache = array();
 
     protected function __construct($class)
     {
@@ -71,12 +69,20 @@ abstract class Vpc_TreeCache_Abstract
         return null;
     }
 
-    public function getChildData($parentData, $constraints)
+    public function getChildData($parentData, $id)
+    {
+        foreach ($this->_getAdditionalTreeCaches($parentData) as $treeCache) {
+            $ret = $treeCache->getChildData($parentData, $id);
+            if ($ret) { return $ret; }
+        }
+    }
+
+    public function getChildIds($parentData, $constraints)
     {
         $ret = array();
         
         foreach ($this->_getAdditionalTreeCaches($parentData) as $treeCache) {
-            $ret = array_merge($ret, $treeCache->getChildData($parentData, $constraints));
+            $ret = array_merge($ret, $treeCache->getChildIds($parentData, $constraints));
         }
         return $ret;
     }
@@ -135,14 +141,11 @@ abstract class Vpc_TreeCache_Abstract
 
     protected function _createData($config)
     {
-        if (!isset($this->_dataCache[$config['componentId']])) {
-            if (Vpc_Abstract::hasSetting($config['componentClass'], 'dataClass')) {
-                $pageDataClass = Vpc_Abstract::getSetting($config['componentClass'], 'dataClass');
-            } else {
-                $pageDataClass = 'Vps_Component_Data';
-            }
-            $this->_dataCache[$config['componentId']] = new $pageDataClass($config);
+        if (Vpc_Abstract::hasSetting($config['componentClass'], 'dataClass')) {
+            $pageDataClass = Vpc_Abstract::getSetting($config['componentClass'], 'dataClass');
+        } else {
+            $pageDataClass = 'Vps_Component_Data';
         }
-        return $this->_dataCache[$config['componentId']];
+        return new $pageDataClass($config);
     }
 }

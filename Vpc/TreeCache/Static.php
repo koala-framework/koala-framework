@@ -4,31 +4,33 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
     protected $_classes;
     protected $_idSeparator = '-';
 
-    public function getChildData($parentData, $constraints = array())
+    public function getChildIds($parentData, $constraints = array())
     {
-        $ret = parent::getChildData($parentData, $constraints);
+        $ret = parent::getChildIds($parentData, $constraints);
         $constraints = $this->_formatConstraints($parentData, $constraints);
         if (is_null($constraints)) return $ret;
         foreach (array_keys($this->_classes) as $key) {
             if ($this->_acceptKey($key, $constraints)) {
-                $ret[] = $this->_createData($this->_formatConfig($parentData, $key));
+                $ret[] = $this->_idSeparator . $key;
             }
         }
         return $ret;
+    }
+
+    public function getChildData($parentData, $id)
+    {
+        $prefix = substr($id, 0, 1);
+        $key = substr($id, 1);
+        if ($prefix == $this->_idSeparator && isset($this->_classes[$key])) {
+            return $this->_createData($this->_formatConfig($parentData, $key));
+        }
+        return parent::getChildData($parentData, $id);
     }
 
     protected function _formatConstraints($parentData, $constraints)
     {
         $constraints = parent::_formatConstraints($parentData, $constraints);
         if (is_null($constraints)) return null;
-        if (isset($constraints['id'])) {
-            $sep = substr($constraints['id'], 0, 1);
-            if ($sep == '-' || $sep == '_') {
-                $constraints['id'] = substr($constraints['id'], 1);
-            } else {
-                return null;
-            }
-        }
         if (isset($constraints['page']) && $constraints['page']) {
             return null;
         }
@@ -50,11 +52,6 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
     protected function _acceptKey($key, $constraints)
     {
         $ret = true;
-        if (isset($constraints['id'])) {
-            if ($constraints['id'] != $key) {
-                $ret = false;
-            }
-        }
         if ($ret && isset($constraints['componentClass'])) {
             if (!in_array($this->_getComponentClass($key), $constraints['componentClass'])) {
                 $ret = false;

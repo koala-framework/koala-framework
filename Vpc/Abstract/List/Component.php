@@ -20,35 +20,14 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['children'] = array(); 
-        foreach ($this->getChildComponentIds() as $id) {
-            $ret['children'][] = $this->getComponentId() . '-' . $id;
-        }
-        return $ret;
-    }
-
-    //wird verwendet in Pdf Writer
-    public function getChildComponentIds()
-    {
-        $table = $this->getTable();
-        $select = $table->select();
-        if (!$this->_showInvisible()) {
-            $select->where('visible = 1');
-        }
-        $select->where('component_id = ?', $this->getDbID());
-        $select->order('pos');
-
-        $ret = array();
-        foreach ($table->fetchAll($select) as $row) {
-            $ret[] = $row->id;
-        }
+        $ret['children'] = $this->getData()->getChildComponentIds(array('treecache' => 'Vpc_Abstract_List_TreeCache'));
         return $ret;
     }
 
     public function getSearchVars()
     {
         $ret = parent::getSearchVars();
-        foreach ($this->getChildComponents() as $c) {
+        foreach ($this->getData()->getChildComponents() as $c) {
             foreach ($c->getSearchVars() as $k=>$i) {
                 if (!isset($ret[$k])) $ret[$k] = '';
                 $ret[$k] .= ' '.$i;
@@ -64,31 +43,5 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
             $ret = array_merge($ret, $c->getStatisticVars());
         }
         return $ret;
-    }
-
-    public function getChildComponents()
-    {
-        if (!$this->_children) {
-            $this->_children = array();
-            $class = $this->_getClassFromSetting('child', 'Vpc_Abstract');
-            $where = array(
-                'component_id = ?' => $this->getDbId(),
-                'component_class = ?' => $class
-            );
-            if (!$this->showInvisible()) {
-                $where['visible = ?'] = 1;
-            }
-
-            $order = null;
-            $tableInfo = $this->getTable()->info();
-            if (in_array('pos', $tableInfo['cols'])) {
-                $order = 'pos ASC';
-            }
-            foreach ($this->getTable()->fetchAll($where, $order) as $row) {
-                $this->_children[$row->id] = $this->createComponent($class, $row->id);
-            }
-        }
-
-        return $this->_children;
     }
 }

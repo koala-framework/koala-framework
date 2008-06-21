@@ -4,7 +4,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     
     private static $_instance;
     private $_hasChildComponentCache;
-    private $_componentIdCache = array();
 private static $debugClassesCheckedCounter;
     
     public static function getInstance()
@@ -44,57 +43,11 @@ $GLOBALS['getComponentByIdCalled'][] = $componentId;
             if ($i > 0) {
                 $i++;
                 $idPart .= $ids[$i];
-                $cacheKey .= $idPart;
-            } else {
-                $cacheKey = $idPart;
             }
-            if (!array_key_exists($cacheKey, $this->_componentIdCache)) {
-                $this->_componentIdCache[$cacheKey] = $page->getChildComponent($idPart);
-            }
-            $page = $this->_componentIdCache[$cacheKey];
+            $page = $page->getChildComponent($idPart);
             if (!$page) break;
         }
         return $page;
-    }
-    public function getComponentById2($componentId, $page = null)
-    {
-        $cacheKey = '';
-        if ($page) { $cacheKey = $page->componentId; }
-        $cacheKey .= $componentId;
-        $GLOBALS['getComponentByIdCalled'][] = $cacheKey;
-        p('search: '. $cacheKey);
-        if (!array_key_exists($cacheKey, $this->_componentIdCache)) {
-            $pos = array(strlen($componentId));
-            if (strpos($componentId, '-', 1)) $pos[] = strpos($componentId, '-', 1);
-            if (strpos($componentId, '_', 1)) $pos[] = strpos($componentId, '_', 1);
-            $pos = min($pos);
-            if ($pos) {
-                $childId = substr($componentId, 0, $pos);
-            }
-            $cacheKeyChild = '';
-            if ($page) { $cacheKeyChild = $page->componentId; }
-            $cacheKeyChild .= $childId;
-            p('search: '. $cacheKeyChild);
-            if (!array_key_exists($cacheKeyChild, $this->_componentIdCache)) {
-                if (!$page) $page = $this;
-                $page = $page->getChildComponent($childId);
-                $this->_componentIdCache[$cacheKeyChild] = $page;
-                p('cached: ' . $cacheKeyChild);
-            } else {
-                p('found: ' . $cacheKeyChild);
-                $page = $this->_componentIdCache[$cacheKeyChild];
-            }
-            if ($pos < strlen($componentId)) {
-                $restId = substr($componentId, $pos);
-                $page = $this->getComponentById($restId, $page);
-                $this->_componentIdCache[$cacheKey] = $page;
-                p('cached: ' . $cacheKey);
-            }
-        } else {
-            p('found: ' . $cacheKey);
-        }
-        p('___________');
-        return $this->_componentIdCache[$cacheKey];
     }
     
     public function getByDbId($dbId)
