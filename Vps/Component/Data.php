@@ -6,7 +6,9 @@ class Vps_Component_Data
     private $_url;
     private $_rel;
     private $_filename;
-
+    private $_componentIdCache = array();
+    private $_constraintsCache = array();
+    
     public function __construct($config)
     {
         $GLOBALS['dataCounter']++;
@@ -120,7 +122,42 @@ class Vps_Component_Data
         $ret = array();
         $tc = $this->_getTreeCache();
         if ($tc) {
-            $ret = array_merge($ret, $tc->getChildData($this, $constraints));
+            $cacheId = $this instanceof Vps_Component_Data_Root ? '' : $this->componentId;
+            if (is_array($constraints)) {
+                $sc = '';
+                foreach ($constraints as $key => $val) {
+                    if ($val instanceof Zend_Db_Select) {
+                        $val = $val->__toString();
+                    }
+                    if (is_array($val)) {
+                        $val = implode('', $val);
+                    }
+                    $sc .= $key . $val;
+                }
+                $sc = md5($sc);
+                if (!isset($this->_constraintsCache[$cacheId][$sc])) {
+                    $this->_constraintsCache[$cacheId][$sc] = $tc->getChildIds($this, $constraints);
+                }
+                $ids = $this->_constraintsCache[$cacheId][$sc];
+            } else {
+                $ids = array($constraints);
+            }
+            foreach ($ids as $id) {
+                $componentId = $cacheId . $id;
+                if (!array_key_exists($componentId, $this->_componentIdCache)) {
+                    $this->_componentIdCache[$componentId] = $tc->getChildData($this, $id);
+                }
+                $ret[] = $this->_componentIdCache[$componentId];
+            }
+        }
+        return $ret;
+    }
+    
+    public function getChildComponentIds($constraints = array())
+    {
+        $ret = array();
+        foreach ($this->getChildComponents($constraints) as $data) {
+            $ret[] = $data->componentId;
         }
         return $ret;
     }
@@ -132,9 +169,6 @@ class Vps_Component_Data
     
     public function getChildComponent($constraints = array())
     {
-        if (is_string($constraints)) {
-            $constraints = array('id' => $constraints);
-        }
         $childComponents = $this->getChildComponents($constraints);
         return isset($childComponents[0]) ? $childComponents[0] : null;
     }

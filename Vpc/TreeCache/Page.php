@@ -35,9 +35,10 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
             if ($row['is_home']) $this->_pageHome = $row['id'];
         }
     }
-    public function getChildData($parentData, $constraints = array())
+    
+    public function getChildIds($parentData, $constraints)
     {
-        $ret = Vpc_TreeCache_Abstract::getChildData($parentData, $constraints);
+        $ret = Vpc_TreeCache_Abstract::getChildIds($parentData, $constraints);
         $constraints = Vpc_TreeCache_Abstract::_formatConstraints($parentData, $constraints);
         if (is_null($constraints)) return $ret;
 
@@ -46,17 +47,8 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
         } else {
             $parentId = $parentData->componentId;
         }
-
         $pageIds = array();
-        if (isset($constraints['id']) && isset($this->_pageData[$constraints['id']])) {
-            if (isset($constraints['filename']) || isset($constraints['componentClass']) || isset($constraints['home'])) {
-                throw new Vps_Exception("Can't use contraint filename, componentClass or home together with id");
-            }
-            $page = $this->_pageData[$constraints['id']];
-            if ($parentData instanceof Vps_Component_Data_Root || $page['parent_id']) {
-                $pageIds[] = $constraints['id'];
-            }
-        } else if (isset($constraints['home']) && $constraints['home']) {
+        if (isset($constraints['home']) && $constraints['home']) {
             if (isset($constraints['filename']) || isset($constraints['componentClass'])) {
                 throw new Vps_Exception("Can't use contraint filename or componentClass together with home");
             }
@@ -104,9 +96,17 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
             if (isset($constraints['showInMenu']) && $constraints['showInMenu'] == $page['hide']) {
                 continue;
             }
-            $ret[] = $this->_createData($this->_formatConfig($parentData, $page));
+            $ret[] = $page['id'];
         }
         return $ret;
+    }
+
+    public function getChildData($parentData, $id)
+    {
+        if (isset($this->_pageData[$id])) {
+            return $this->_createData($this->_formatConfig($parentData, $this->_pageData[$id]));
+        }
+        return Vpc_TreeCache_Abstract::getChildData($parentData, $id);
     }
 
     protected function _formatConfig($parentData, $page)

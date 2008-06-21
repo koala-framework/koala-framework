@@ -22,18 +22,8 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $table = Vps_Dao::getTable('Vpc_Paragraphs_Model');
-        $select = $table->select();
-        if (!$this->_showInvisible()) {
-            $select->where('visible = 1');
-        }
-        $select->where('component_id = ?', $this->getDbID());
-        $select->order('pos');
-
-        $ret['paragraphs'] = array();
-        foreach ($table->fetchAll($select) as $row) {
-            $ret['paragraphs'][] = $this->getComponentId() . '-' . $row->id;
-        }
+        $ret['paragraphs'] = $this->getData()->getChildComponentIds(array('treecache'=>'Vpc_Paragraphs_TreeCache'));
+        p($ret);
         return $ret;
     }
 }

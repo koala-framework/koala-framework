@@ -9,6 +9,7 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
     protected $_dbIdShortcut = false;
     protected $_idSeparator = '-'; //um in StaticTable _ verwenden zu können
     protected $_idColumn = 'id';
+    private $_cache = array();
 
     public function getDbIdShortcut($dbId)
     {
@@ -29,9 +30,9 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
         return $select;
     }
     
-    public function getChildData($parentData, $constraints = array())
+    public function getChildIds($parentData, $constraints = array())
     {
-        $ret = parent::getChildData($parentData, $constraints);
+        $ret = parent::getChildIds($parentData, $constraints);
         $c = $constraints;
         $constraints = $this->_formatConstraints($parentData, $constraints);
         if ($constraints) {
@@ -39,11 +40,21 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
             if ($select) {
                 $pages = $this->_table->fetchAll($select); // TODO: Nummerierung
                 foreach ($pages as $row) {
-                    $ret[] = $this->_createData($this->_formatConfig($parentData, $row));
+                    $id = $this->_idSeparator . $this->_getIdFromRow($row);
+                    $this->_cache[$id] = $row;
+                    $ret[] = $id;
                 }
             }
         }
         return $ret;
+    }
+    
+    public function getChildData($parentData, $id)
+    {
+        if (isset($this->_cache[$id])) {
+            return $this->_createData($this->_formatConfig($parentData, $this->_cache[$id]));
+        }
+        return parent::getChildData($parentData, $id);
     }
     
     protected function _formatConstraints($parentData, $constraints)
@@ -71,18 +82,6 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
         if (!isset($constraints['select'])) { return null; }
         $select = $constraints['select'];
 
-        if (isset($constraints['id'])) {
-            $sep = substr($constraints['id'], 0, 1);
-            if ($sep == '-' || $sep == '_') {
-                $id = substr($constraints['id'], 1);
-                if (!is_numeric($id)) return null;
-                $select->where($this->_idColumn . ' = ?', $id);
-                unset($constraints['id']);
-            } else {
-                return null;
-            }
-        }
-        
         if (isset($constraints['componentClass'])) {
             $constraintClasses = $constraints['componentClass'];
             if (!is_array($constraintClasses)) {
