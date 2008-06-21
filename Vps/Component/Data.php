@@ -119,7 +119,9 @@ class Vps_Component_Data
     {
         $ret = array();
         $tc = $this->_getTreeCache();
-        if ($tc) $ret = array_merge($ret, $tc->getChildData($this, $constraints));
+        if ($tc) {
+            $ret = array_merge($ret, $tc->getChildData($this, $constraints));
+        }
         return $ret;
     }
     

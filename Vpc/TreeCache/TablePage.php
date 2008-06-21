@@ -9,11 +9,39 @@ abstract class Vpc_TreeCache_TablePage extends Vpc_TreeCache_Table
 
     protected $_idSeparator = '_';
     
+    protected function _formatConstraints($parentData, $constraints)
+    {
+        if (isset($constraints['page']) && !$constraints['page']) {
+            return null;
+        } else {
+            unset($constraints['page']);
+        }
+        $filename = isset($constraints['filename']) ? $constraints['filename'] : null;
+        if (isset($constraints['showInMenu'])) {
+            if ($constraints['showInMenu'] && !$this->_showInMenu) return null;
+            if (!$constraints['showInMenu'] && $this->_showInMenu) return null;
+            unset($constraints['showInMenu']);
+        }
+        $constraints = parent::_formatConstraints($parentData, $constraints);
+        if ($filename) { $constraints['filename'] = $filename; }
+        
+        return $constraints;
+    }
+    
+    protected function _getSelect($constraints)
+    {
+        $select = parent::_getSelect($constraints);
+        if (isset($constraints['filename'])) {
+            $select->where($this->_filenameColumn . ' = ?', $constraints['filename']);
+        }
+        return $select;
+    }
+
     protected function _formatConfig($parentData, $row)
     {
         $data = parent::_formatConfig($parentData, $row);
 
-         // TODO: uniqueFilename, hierarchische URL;
+         // TODO: uniqueFilename
         $data['filename'] = $row->{$this->_filenameColumn};
 
         $data['rel'] = '';
@@ -21,17 +49,5 @@ abstract class Vpc_TreeCache_TablePage extends Vpc_TreeCache_Table
         $data['isPage'] = true;
         return $data;
     }
-    protected function _formatConstraints($parentData, $constraints)
-    {
-        if (isset($constraints['page'])) {
-            if (!$constraints['page']) return null;
-            unset($constraints['page']);
-        }
-        if (isset($constraints['showInMenu'])) {
-            if ($constraints['showInMenu'] && !$this->_showInMenu) return null;
-            if (!$constraints['showInMenu'] && $this->_showInMenu) return null;
-            unset($constraints['showInMenu']);
-        }
-        return parent::_formatConstraints($parentData, $constraints);
-    }
+    
 }
