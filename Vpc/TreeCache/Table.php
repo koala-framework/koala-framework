@@ -32,16 +32,20 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
     public function getChildData($parentData, $constraints = array())
     {
         $ret = parent::getChildData($parentData, $constraints);
-        $select = $this->_formatConstraints($parentData, $constraints);
-        if ($select) {
-            $pages = $this->_table->fetchAll($select); // TODO: Nummerierung
-            foreach ($pages as $row) {
-                $ret[] = $this->_createData($this->_formatConfig($parentData, $row));
+        $c = $constraints;
+        $constraints = $this->_formatConstraints($parentData, $constraints);
+        if ($constraints) {
+            $select = $this->_getSelect($constraints);
+            if ($select) {
+                $pages = $this->_table->fetchAll($select); // TODO: Nummerierung
+                foreach ($pages as $row) {
+                    $ret[] = $this->_createData($this->_formatConfig($parentData, $row));
+                }
             }
         }
         return $ret;
     }
-
+    
     protected function _formatConstraints($parentData, $constraints)
     {
         $where = parent::_formatConstraints($parentData, $constraints);
@@ -49,12 +53,23 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
         if (isset($constraints['page']) && $constraints['page']) {
             return null;
         }
-        if (isset($constraints['select'])) {
-            $select = $constraints['select'];
-            unset($constraints['select']);
-        } else {
-            $select = $this->select($parentData);
+        if (isset($constraints['filename'])) {
+            return null;
         }
+        if (isset($constraints['showInMenu'])) {
+            return null;
+        }
+        if (!isset($constraints['select'])) {
+            $constraints['select'] = $this->select($parentData);
+        }
+
+        return $constraints;
+    }
+
+    protected function _getSelect($constraints)
+    {
+        if (!isset($constraints['select'])) { return null; }
+        $select = $constraints['select'];
 
         if (isset($constraints['id'])) {
             $sep = substr($constraints['id'], 0, 1);
@@ -67,7 +82,7 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
                 return null;
             }
         }
-
+        
         if (isset($constraints['componentClass'])) {
             $constraintClasses = $constraints['componentClass'];
             if (!is_array($constraintClasses)) {
@@ -90,14 +105,6 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
             }
         }
         return $select;
-    }
-
-    /**
-     * wird in Link-TreeCache überschrieben
-     **/
-    protected function _getIdFromRow($row)
-    {
-        return $row->{$this->_idColumn};
     }
 
     protected function _formatConfig($parentData, $row)
@@ -135,4 +142,13 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
         );
         return $data;
     }
+    
+    /**
+     * wird in Link-TreeCache überschrieben
+     **/
+    protected function _getIdFromRow($row)
+    {
+        return $row->{$this->_idColumn};
+    }
+
 }

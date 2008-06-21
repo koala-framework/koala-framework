@@ -37,12 +37,33 @@ private static $debugClassesCheckedCounter;
     public function getComponentById($componentId, $page = null)
     {
 $GLOBALS['getComponentByIdCalled'][] = $componentId;
-        $cacheKey = $componentId;
-        if ($page) {
-            $cacheKey .= '#'.$page->componentId;
+        $ids = preg_split('/([_\-])/', $componentId, -1, PREG_SPLIT_DELIM_CAPTURE);
+        if (!$page) $page = $this;
+        for ($i = 0; $i < count($ids); $i++) {
+            $idPart = $ids[$i];
+            if ($i > 0) {
+                $i++;
+                $idPart .= $ids[$i];
+                $cacheKey .= $idPart;
+            } else {
+                $cacheKey = $idPart;
+            }
+            if (!array_key_exists($cacheKey, $this->_componentIdCache)) {
+                $this->_componentIdCache[$cacheKey] = $page->getChildComponent($idPart);
+            }
+            $page = $this->_componentIdCache[$cacheKey];
+            if (!$page) break;
         }
+        return $page;
+    }
+    public function getComponentById2($componentId, $page = null)
+    {
+        $cacheKey = '';
+        if ($page) { $cacheKey = $page->componentId; }
+        $cacheKey .= $componentId;
+        $GLOBALS['getComponentByIdCalled'][] = $cacheKey;
+        p('search: '. $cacheKey);
         if (!array_key_exists($cacheKey, $this->_componentIdCache)) {
-            if (!$page) $page = $this;
             $pos = array(strlen($componentId));
             if (strpos($componentId, '-', 1)) $pos[] = strpos($componentId, '-', 1);
             if (strpos($componentId, '_', 1)) $pos[] = strpos($componentId, '_', 1);
@@ -50,28 +71,29 @@ $GLOBALS['getComponentByIdCalled'][] = $componentId;
             if ($pos) {
                 $childId = substr($componentId, 0, $pos);
             }
-            $page = $page->getChildComponent($childId);
+            $cacheKeyChild = '';
+            if ($page) { $cacheKeyChild = $page->componentId; }
+            $cacheKeyChild .= $childId;
+            p('search: '. $cacheKeyChild);
+            if (!array_key_exists($cacheKeyChild, $this->_componentIdCache)) {
+                if (!$page) $page = $this;
+                $page = $page->getChildComponent($childId);
+                $this->_componentIdCache[$cacheKeyChild] = $page;
+                p('cached: ' . $cacheKeyChild);
+            } else {
+                p('found: ' . $cacheKeyChild);
+                $page = $this->_componentIdCache[$cacheKeyChild];
+            }
             if ($pos < strlen($componentId)) {
                 $restId = substr($componentId, $pos);
                 $page = $this->getComponentById($restId, $page);
+                $this->_componentIdCache[$cacheKey] = $page;
+                p('cached: ' . $cacheKey);
             }
-            return $page;
-            
-        /*
-            $ids = preg_split('/([_\-])/', $componentId, -1, PREG_SPLIT_DELIM_CAPTURE);
-            if (!$page) $page = $this;
-            for ($i = 0; $i < count($ids); $i++) {
-                $idPart = $ids[$i];
-                if ($i > 0) {
-                    $i++;
-                    $idPart .= $ids[$i];
-                }
-                $page = $page->getChildComponent($idPart);
-                if (!$page) break;
-            }
-            $this->_componentIdCache[$cacheKey] = $page;
-        */
+        } else {
+            p('found: ' . $cacheKey);
         }
+        p('___________');
         return $this->_componentIdCache[$cacheKey];
     }
     
@@ -88,7 +110,7 @@ $start = microtime(true);
         if (is_numeric(substr($dbId, 0, 1))) {
             $data = $this->getComponentById($dbId);
 $queryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount() - $startQueryCount;
-p('Looking for dbId '.$dbId. ' in '.(microtime(true)-$start) . ' sec; '.$queryCount.' db-queryies');
+//p('Looking for dbId '.$dbId. ' in '.(microtime(true)-$start) . ' sec; '.$queryCount.' db-queryies');
             return $data;
         }
         foreach (Vpc_Abstract::getComponentClasses() as $class) {
@@ -99,13 +121,13 @@ p('Looking for dbId '.$dbId. ' in '.(microtime(true)-$start) . ' sec; '.$queryCo
                     $data = $this->getComponentById($id, $data);
                     if ($data) {
 $queryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount() - $startQueryCount;
-p('Looking for dbId '.$dbId. ' in '.(microtime(true)-$start) . ' sec; '.$queryCount.' db-queryies');
+//p('Looking for dbId '.$dbId. ' in '.(microtime(true)-$start) . ' sec; '.$queryCount.' db-queryies');
                         return $data;
                     }
                 }
             }
         }
-p('NIX GEFUNDEN BEIM SUCHEN NACH DB_ID');
+//p('NIX GEFUNDEN BEIM SUCHEN NACH DB_ID');
         return null;
     }
     
@@ -132,7 +154,7 @@ if (Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
 } else {
     $queryCount = '?';
 }
-p('Looking for '.$class. ' in '.(microtime(true)-$start) . ' sec; '.self::$debugClassesCheckedCounter.' components checked; '.$queryCount.' db-queryies');
+//p('Looking for '.$class. ' in '.(microtime(true)-$start) . ' sec; '.self::$debugClassesCheckedCounter.' components checked; '.$queryCount.' db-queryies');
         return $ret;
     }
 
