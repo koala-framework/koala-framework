@@ -8,27 +8,10 @@ class Vpc_Basic_LinkTag_Mail_Component extends Vpc_Basic_LinkTag_Abstract_Compon
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
+            'dataClass' => 'Vpc_Basic_LinkTag_Mail_Data',
             'tablename'     => 'Vpc_Basic_LinkTag_Mail_Model',
             'componentName' => 'Link.Mail',
             'default' => array()
         ));
-    }
-
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        $r = $this->_getRow();
-        $p = array();
-        if ($r->subject) {
-            $p[] = 'subject=' . $r->subject;
-        }
-        if ($r->text) {
-            $p[] = 'body=' . $r->text;
-        }
-        $ret['href'] = 'mailto:' . $r->mail;
-        if ($p) {
-            $ret['href'] .= '?' . implode('&', $p);
-        }
-        return $ret;
     }
 }

@@ -1,4 +1,4 @@
 <?php
-echo '<a href="' . $this->href . '"';
-if($this->rel) { echo ' rel="' . $this->rel . '"'; }
+echo '<a href="' . $this->data->url . '"';
+if($this->data->rel) { echo ' rel="' . $this->data->rel . '"'; }
 echo '>';

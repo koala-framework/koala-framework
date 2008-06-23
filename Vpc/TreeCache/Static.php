@@ -45,7 +45,6 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
                 $constraints['componentClass'] = array($constraints['componentClass']);
             }
         }
-
         return $constraints;
     }
 
@@ -73,7 +72,7 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
             $dbId = $parentData->dbId . $this->_idSeparator;
         }
         $dbId .= $componentKey;
-        
+
         return array(
             'componentId' => $componentId,
             'dbId' => $dbId,

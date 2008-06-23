@@ -23,6 +23,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
 
     protected function _selectNews()
     {
+        if (!$this->getNewsComponent()) return null;
         $select = $this->getNewsComponent()->getTreeCache('Vpc_News_Directory_TreeCacheDetail')
             ->select($this->getData());
         $select->where('publish_date <= NOW()');
