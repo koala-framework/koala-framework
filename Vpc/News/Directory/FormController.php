@@ -6,13 +6,13 @@ class Vpc_News_Directory_FormController extends Vps_Controller_Action_Auto_Form
 
     public function _initFields()
     {
-        $tc = new Vps_Dao_TreeCache();
-        $component = $tc->findByDbId($this->_getParam('component_id'))->current();
-        $classes = Vpc_Abstract::getSetting($component->component_class, 'childComponentClasses');
+        $data = Vps_Component_Data_Root::getInstance()
+                        ->getByDbId($this->_getParam('component_id'));
+        $classes = Vpc_Abstract::getSetting($data->componentClass, 'childComponentClasses');
 
-        $this->_form = Vpc_Abstract_Form::createComponentForm($component->component_class, $classes['detail']);
-        $tablename = Vpc_Abstract::getSetting($this->class, 'tablename');
-        $this->_form->setTable(new $tablename(array('componentClass'=>$this->class)));
+        $this->_form = Vpc_Abstract_Form::createComponentForm($data->componentClass, $classes['detail']);
+        $tablename = Vpc_Abstract::getSetting($data->componentClass, 'tablename');
+        $this->_form->setTable(new $tablename(array('componentClass'=>$data->componentClass)));
 
         foreach ($classes as $class) {
             $formName = Vpc_Admin::getComponentClass($class, 'NewsEditForm');

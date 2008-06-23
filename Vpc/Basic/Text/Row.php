@@ -112,7 +112,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
         $select = $this->getTable()->getAdapter()->select();
         $select->from('vpc_basic_text_components', new Zend_Db_Expr('MAX(nr)'))
                 ->where('component_id = ?', $this->component_id)
-                ->where('type = ?', $type);
+                ->where('component = ?', $type);
         return $select->query()->fetchColumn();
     }
 
@@ -150,9 +150,9 @@ class Vpc_Basic_Text_Row extends Vpc_Row
         $rows = $table->fetchAll(array('component_id = ?' => $this->component_id));
         $existingParts = array();
         foreach ($rows as $row) {
-            $t = substr($row->type, 0, 1);
-            if (!in_array($row->type.$row->nr, $newPartStrings)) {
-                $admin = Vpc_Admin::getInstance($classes[$row->type]);
+            $t = substr($row->component, 0, 1);
+            if (!in_array($row->component.$row->nr, $newPartStrings)) {
+                $admin = Vpc_Admin::getInstance($classes[$row->component]);
                 $admin->delete($this->component_id . '-' . $t.$row->nr);
                 $row->delete();
             } else {
@@ -160,7 +160,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                     $row->saved = 1;
                     $row->save();
                 }
-                $existingParts[] = $row->type.$row->nr;
+                $existingParts[] = $row->component.$row->nr;
             }
         }
 
@@ -169,7 +169,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                 && !in_array($part['type'].$part['nr'], $existingParts)) {
                 $row = $table->createRow();
                 $row->component_id = $this->component_id;
-                $row->type = $part['type'];
+                $row->component = $part['type'];
                 $row->nr = $part['nr'];
                 $row->saved = 1;
                 $row->save();

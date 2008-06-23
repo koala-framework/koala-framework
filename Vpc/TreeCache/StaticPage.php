@@ -52,4 +52,9 @@ abstract class Vpc_TreeCache_StaticPage extends Vpc_TreeCache_Static
         return $data;
     }
 
+    public function createsPages()
+    {
+        return true;
+    }
+
 }

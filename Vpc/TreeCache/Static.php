@@ -1,4 +1,5 @@
 <?php
+
 class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
 {
     protected $_classes;
@@ -53,6 +54,11 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
         $ret = true;
         if ($ret && isset($constraints['componentClass'])) {
             if (!in_array($this->_getComponentClass($key), $constraints['componentClass'])) {
+                $ret = false;
+            }
+        }
+        if ($ret && isset($constraints['id'])) {
+            if ($this->_idSeparator.$key != $constraints['id']) {
                 $ret = false;
             }
         }

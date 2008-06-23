@@ -91,24 +91,54 @@ class Vps_Component_Data
 
     public function getChildPages($constraints = array())
     {
-        $ret = array();
-        $components = $this->getChildComponents($constraints);
-        foreach ($components as $component) {
-            if ($component->isPage) {
-                $ret[] = $component;
-            } else {
-                $ret = array_merge($ret, $component->getChildPages($constraints));
+        $classes = Vpc_Abstract::getSetting($this->componentClass, 'childComponentClasses');
+        $childConstraints = array('page'=>false);
+        $childConstraints['componentClass'] = array();
+
+        foreach ($classes as $class) {
+            if ($this->_canCreatePages($class)) {
+                $childConstraints['componentClass'][] = $class;
             }
+        }
+
+        $constraints['page'] = true;
+        $ret = $this->getChildComponents($constraints);
+        foreach ($this->getChildComponents($childConstraints) as $component) {
+            $ret = array_merge($ret, $component->getChildPages($constraints));
         }
         return $ret;
     }
-    
+
+    private function _canCreatePages($componentClass)
+    {
+        static $canCreatePagesCache = array();
+
+        if (isset($canCreatePagesCache[$componentClass])) {
+            return $canCreatePagesCache[$componentClass];
+        }
+        $tc = Vpc_TreeCache_Abstract::getInstance($componentClass);
+        if ($tc && $tc->createsPages()) {
+            $canCreatePagesCache[$componentClass] = true;
+            return true;
+        }
+        $canCreatePagesCache[$componentClass] = false;
+        $classes = Vpc_Abstract::getSetting($componentClass, 'childComponentClasses');
+        foreach ($classes as $class) {
+            if ($class && $this->_canCreatePages($class)) {
+                $canCreatePagesCache[$componentClass] = true;
+                return true;
+            }
+        }
+        $canCreatePagesCache[$componentClass] = false;
+        return false;
+    }
+
     public function getChildPage($constraints = array())
     {
         $childPages = $this->getChildPages($constraints);
         return isset($childPages[0]) ? $childPages[0] : null;
     }
-    
+
     public function getTreeCache($class)
     {
         $tc = $this->_getTreeCache();
@@ -122,32 +152,29 @@ class Vps_Component_Data
         $ret = array();
         $tc = $this->_getTreeCache();
         if ($tc) {
-            $cacheId = $this instanceof Vps_Component_Data_Root ? '' : $this->componentId;
-            if (is_array($constraints)) {
-                $sc = '';
-                foreach ($constraints as $key => $val) {
-                    if ($val instanceof Zend_Db_Select) {
-                        $val = $val->__toString();
-                    }
-                    if (is_array($val)) {
-                        $val = implode('', $val);
-                    }
-                    $sc .= $key . $val;
-                }
-                $sc = md5($sc);
-                if (!isset($this->_constraintsCache[$cacheId][$sc])) {
-                    $this->_constraintsCache[$cacheId][$sc] = $tc->getChildIds($this, $constraints);
-                }
-                $ids = $this->_constraintsCache[$cacheId][$sc];
-            } else {
-                $ids = array($constraints);
+            if (!is_array($constraints)) {
+                $constraints = array('id' => $constraints);
             }
-            foreach ($ids as $id) {
-                $componentId = $cacheId . $id;
-                if (!array_key_exists($componentId, $this->_componentIdCache)) {
-                    $this->_componentIdCache[$componentId] = $tc->getChildData($this, $id);
+            $sc = '';
+            foreach ($constraints as $key => $val) {
+                if ($val instanceof Zend_Db_Select) {
+                    $val = $val->__toString();
                 }
-                $ret[] = $this->_componentIdCache[$componentId];
+                if (is_array($val)) {
+                    $val = implode('', $val);
+                }
+                $sc .= $key . $val;
+            }
+            $sc = md5($sc);
+            if (!isset($this->_constraintsCache[$sc])) {
+                $this->_constraintsCache[$sc] = $tc->getChildIds($this, $constraints);
+            }
+            $ids = $this->_constraintsCache[$sc];
+            foreach ($ids as $id) {
+                if (!array_key_exists($id, $this->_componentIdCache)) {
+                    $this->_componentIdCache[$id] = $tc->getChildData($this, $id);
+                }
+                $ret[] = $this->_componentIdCache[$id];
             }
         }
         return $ret;

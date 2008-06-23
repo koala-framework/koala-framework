@@ -13,9 +13,10 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     protected function _initColumns()
     {
-        $this->_columns->add(new Vps_Grid_Column('component_class'));
+        $this->_columns->add(new Vps_Grid_Column('component_class'))
+            ->setData(new Vps_Data_Vpc_ComponentClass($this->class));
         $this->_columns->add(new Vps_Grid_Column('component_name'))
-            ->setData(new Vps_Data_Vpc_ComponentName());
+            ->setData(new Vps_Data_Vpc_ComponentName($this->class));
 
         $this->_columns->add(new Vps_Grid_Column('preview', trlVps('Preview'), 500))
             ->setData(new Vps_Data_Vpc_Frontend($this->class))
@@ -46,7 +47,8 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             if ($admin) $admin->setup();
             $row = $this->_model->createRow();
             $this->_preforeAddParagraph($row);
-            $row->component_class = $class;
+            $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
+            $row->component = array_search($class, $classes);
             $row->visible = 0;
             $row->save();
             $id = $row->id;

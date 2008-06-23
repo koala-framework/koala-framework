@@ -80,7 +80,6 @@ abstract class Vpc_TreeCache_Abstract
     public function getChildIds($parentData, $constraints)
     {
         $ret = array();
-        
         foreach ($this->_getAdditionalTreeCaches($parentData) as $treeCache) {
             $ret = array_merge($ret, $treeCache->getChildIds($parentData, $constraints));
         }
@@ -90,7 +89,7 @@ abstract class Vpc_TreeCache_Abstract
     protected function _getAdditionalTreeCaches($parentData)
     {
         $ret = $this->_additionalTreeCaches;
-        if ($this->_isTop && $parentData->isPage) {
+        if ($this->_isTop && $parentData && $parentData->isPage) {
             if (!$parentData instanceof Vps_Component_Data_Root) {
                 foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $mc) {
                     $tc = Vpc_TreeCache_Abstract::getInstance($mc);
@@ -134,9 +133,13 @@ abstract class Vpc_TreeCache_Abstract
         return $constraints;
     }
     
-    public function hasDbIdShortcut($dbId)
+    public function getDbIdShortcut($dbId)
     {
-        return false;
+        foreach ($this->_getAdditionalTreeCaches(null) as $treeCache) {
+            $ret = $treeCache->getDbIdShortcut($dbId);
+            if ($ret) return $ret;
+        }
+        return null;
     }
 
     protected function _createData($config)
@@ -147,5 +150,13 @@ abstract class Vpc_TreeCache_Abstract
             $pageDataClass = 'Vps_Component_Data';
         }
         return new $pageDataClass($config);
+    }
+
+    public function createsPages()
+    {
+        foreach ($this->_getAdditionalTreeCaches(null) as $treeCache) {
+            if ($treeCache->createsPages()) return true;
+        }
+        return false;
     }
 }
