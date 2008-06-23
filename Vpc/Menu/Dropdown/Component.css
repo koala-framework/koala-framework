@@ -1,29 +1,7 @@
-ul.vpcMenuDropdown { position: absolute; top: 75px; padding-left: 40px; }
-ul.vpcMenuDropdown li {
-    float: left;
-    background: url(/assets/web/images/menuleft.gif) no-repeat left top;
-    padding:0px 0px 0px 7px;
-    margin-right: 5px;
-}
-ul.vpcMenuDropdown li:hover {
-    background-position:0px -100px;
-    color:#FFFFFF;
-    text-decoration:none;
-}
-ul.vpcMenuDropdown li a {
-    color: $white;
-    display:block;
-    float: left;
-    padding-right: 7px;
-    line-height: 25px;
-    text-decoration: none;
-    background: url(/assets/web/images/menuright.gif) no-repeat right top;
-}
-ul.vpcMenuDropdown li a:hover { background-position:100% -100px; }
+ul.vpcMenuDropdown li { float: left; }
+ul.vpcMenuDropdown li a { display:block; width: auto; }
 
 ul.vpcMenuDropdown div.dropdown {
-    padding-top: 25px; 
-    width: 123px;
     position: absolute;
     z-index: 100;
     margin-left: 0px;
@@ -32,14 +10,5 @@ ul.vpcMenuDropdown div.dropdown {
 ul.vpcMenuDropdown li:hover div.dropdown,
 ul.vpcMenuDropdown li.hover div.dropdown { display: block; }
 ul.vpcMenuDropdown div.dropdown ul { margin-bottom: -1px; }
-ul.vpcMenuDropdown div.dropdown ul li {
-    float: none;
-    background-image: none;
-    background-color: $subMenu;
-    border-left: 2px solid $white;
-    border-right: 2px solid $white;
-    margin: 0px;
-}
-ul.vpcMenuDropdown div.dropdown ul li a:hover { background-color: $subMenuOver; }
-ul.vpcMenuDropdown div.dropdown ul li a { padding: 0px; float: none; background-image: none; }
-ul.vpcMenuDropdown div.dropdown ul li a { color: $black; padding-left: 10px; padding-right: 10px; }
+ul.vpcMenuDropdown div.dropdown ul li { float: none; margin: 0px; }
+ul.vpcMenuDropdown div.dropdown ul li a { padding: 0px; float: none; }

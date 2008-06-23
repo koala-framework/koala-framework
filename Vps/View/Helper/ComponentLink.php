@@ -1,7 +1,7 @@
 <?php
 class Vps_View_Helper_ComponentLink
 {
-    public function componentLink($m, $text = null)
+    public function componentLink($m, $text = null, $cssClass = null)
     {
         if ($m instanceof Vps_Component_Data) {
             $m = $m->getPage();
@@ -12,6 +12,11 @@ class Vps_View_Helper_ComponentLink
             );
         }
         if (!$text) $text = $m['text'];
-        return '<a href="'.$m['href'].'" rel="'.$m['rel'].'">'.$text.'</a>';
+        if ($cssClass) {
+            $cssClass = " class=\"$cssClass\"";
+        } else {
+            $cssClass = '';
+        }
+        return "<a href=\"{$m['href']}\" rel=\"{$m['rel']}\"$cssClass>$text</a>";
     }
 }
