@@ -28,6 +28,7 @@ private static $debugClassesCheckedCounter;
             $page = $this;
             foreach (explode('/', substr($path, 1)) as $pathPart) {
                 $page = $page->getChildPage(array('filename' => $pathPart));
+                p('================='.$pathPart);
             }
             return $page;
         }

@@ -36,7 +36,7 @@ class Vps_Component_Data
             do {
                 $filenames[] = $page->filename;
             } while ($page = $page->getParentPage());
-            return implode('/', array_reverse($filenames));
+            return '/'.implode('/', array_reverse($filenames));
         } else if ($var == 'rel') {
             return $this->getPage()->_rel;
         } else if ($var == 'filename') {
