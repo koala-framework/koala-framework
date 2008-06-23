@@ -16,14 +16,17 @@ abstract class Vpc_TreeCache_TablePage extends Vpc_TreeCache_Table
         } else {
             unset($constraints['page']);
         }
-        $filename = isset($constraints['filename']) ? $constraints['filename'] : null;
+        if (isset($constraints['filename'])) {
+            $filename = $constraints['filename'];
+            unset($constraints['filename']);
+        }
         if (isset($constraints['showInMenu'])) {
             if ($constraints['showInMenu'] && !$this->_showInMenu) return null;
             if (!$constraints['showInMenu'] && $this->_showInMenu) return null;
             unset($constraints['showInMenu']);
         }
         $constraints = parent::_formatConstraints($parentData, $constraints);
-        if ($filename) { $constraints['filename'] = $filename; }
+        if (isset($filename)) { $constraints['filename'] = $filename; }
         
         return $constraints;
     }
@@ -49,5 +52,8 @@ abstract class Vpc_TreeCache_TablePage extends Vpc_TreeCache_Table
         $data['isPage'] = true;
         return $data;
     }
-    
+    public function createsPages()
+    {
+        return true;
+    }
 }

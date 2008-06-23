@@ -5,12 +5,4 @@ class Vpc_News_Category_TreeCache extends Vpc_TreeCache_StaticPage
         'componentClass' => 'Vpc_News_Category_Directory_Component',
         'name' => 'Categories'
     ));
-
-    protected function _select()
-    {
-        $select = parent::_select();
-        $select->where('menu = 1');
-        return $select;
-    }
-
 }

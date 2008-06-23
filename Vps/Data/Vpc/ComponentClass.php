@@ -1,5 +1,5 @@
 <?php
-class Vps_Data_Vpc_ComponentName extends Vps_Data_Abstract
+class Vps_Data_Vpc_ComponentClass extends Vps_Data_Abstract
 {
     private $_componentClass;
 
@@ -11,8 +11,6 @@ class Vps_Data_Vpc_ComponentName extends Vps_Data_Abstract
     public function load($row)
     {
         $classes = Vpc_Abstract::getSetting($this->_componentClass, 'childComponentClasses');
-        $class = $classes[$row->component];
-        $name = Vpc_Abstract::getSetting($class, 'componentName');
-        return str_replace('.', ' -> ', $name);
+        return $class = $classes[$row->component];
     }
 }

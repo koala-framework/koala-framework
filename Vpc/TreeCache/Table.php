@@ -9,16 +9,16 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
     protected $_dbIdShortcut = false;
     protected $_idSeparator = '-'; //um in StaticTable _ verwenden zu können
     protected $_idColumn = 'id';
-    private $_cache = array();
+    private $_rows = array();
 
     public function getDbIdShortcut($dbId)
     {
-        if ($this->_dbIdShortcut && 
+        if ($this->_dbIdShortcut &&
             substr($dbId, 0, strlen($this->_dbIdShortcut)) == $this->_dbIdShortcut
         ) {
             return $this->_dbIdShortcut;
         }
-        return null;
+        return parent::getDbIdShortcut($dbId);
     }
     
     public function select($parentData)
@@ -33,16 +33,19 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
     public function getChildIds($parentData, $constraints = array())
     {
         $ret = parent::getChildIds($parentData, $constraints);
-        $c = $constraints;
         $constraints = $this->_formatConstraints($parentData, $constraints);
         if ($constraints) {
-            $select = $this->_getSelect($constraints);
-            if ($select) {
-                $pages = $this->_table->fetchAll($select); // TODO: Nummerierung
-                foreach ($pages as $row) {
-                    $id = $this->_idSeparator . $this->_getIdFromRow($row);
-                    $this->_cache[$id] = $row;
-                    $ret[] = $id;
+            if (isset($constraints['id']) && isset($this->_rows[$constraints['id']])) {
+                $ret[] = $constraints['id'];
+            } else {
+                $select = $this->_getSelect($constraints);
+                if ($select) {
+                    $rows = $this->_table->fetchAll($select); // TODO: Nummerierung
+                    foreach ($rows as $row) {
+                        $id = $this->_idSeparator . $this->_getIdFromRow($row);
+                        $this->_rows[$id] = $row;
+                        $ret[] = $id;
+                    }
                 }
             }
         }
@@ -51,8 +54,8 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
     
     public function getChildData($parentData, $id)
     {
-        if (isset($this->_cache[$id])) {
-            return $this->_createData($this->_formatConfig($parentData, $this->_cache[$id]));
+        if (isset($this->_rows[$id])) {
+            return $this->_createData($this->_formatConfig($parentData, $this->_rows[$id]));
         }
         return parent::getChildData($parentData, $id);
     }
@@ -102,6 +105,11 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
             } else {
                 $select->where("component IN ('".implode("', '", $keys) ."')");
             }
+        }
+
+        if (isset($constraints['id'])) {
+                                                    //- bzw. _ abschneiden
+            $select->where($this->_idColumn.' = ?', substr($constraints['id'], 1));
         }
         return $select;
     }

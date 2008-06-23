@@ -14,7 +14,8 @@ private static $debugClassesCheckedCounter;
                 'componentClass' => $componentClass,
                 'name' => '',
                 'parent' => null,
-                'isPage' => false
+                'isPage' => false,
+                'componentId' => null
             ));
         }
         return self::$_instance;
@@ -28,7 +29,6 @@ private static $debugClassesCheckedCounter;
             $page = $this;
             foreach (explode('/', substr($path, 1)) as $pathPart) {
                 $page = $page->getChildPage(array('filename' => $pathPart));
-                p('================='.$pathPart);
             }
             return $page;
         }
@@ -40,6 +40,9 @@ $GLOBALS['getComponentByIdCalled'][] = $componentId;
         $ids = preg_split('/([_\-])/', $componentId, -1, PREG_SPLIT_DELIM_CAPTURE);
         if (!$page) $page = $this;
         for ($i = 0; $i < count($ids); $i++) {
+            if ($ids[$i] == '') {
+                $i++;
+            }
             $idPart = $ids[$i];
             if ($i > 0) {
                 $i++;
@@ -59,22 +62,23 @@ $cnt++;
     //$bt = debug_backtrace();
     //p($bt[2]['class'].' '.$bt[2]['object']->getData()->componentId);
 // }
-$startQueryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount();
-$start = microtime(true);
+// $startQueryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount();
+// $start = microtime(true);
         if (is_numeric(substr($dbId, 0, 1))) {
             $data = $this->getComponentById($dbId);
-$queryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount() - $startQueryCount;
+// $queryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount() - $startQueryCount;
 //p('Looking for dbId '.$dbId. ' in '.(microtime(true)-$start) . ' sec; '.$queryCount.' db-queryies');
             return $data;
         }
         foreach (Vpc_Abstract::getComponentClasses() as $class) {
-            $tc = $this->_getTreeCache($class);
-            if ($tc && ($dbIdShortcut = $tc->getDbIdShortcut($dbId))) {
+            $tc = Vpc_TreeCache_Abstract::getInstance($class);
+            if (!$tc) continue;
+            if ($dbIdShortcut = $tc->getDbIdShortcut($dbId)) {
                 foreach ($this->getComponentsByClass($class) as $data) {
                     $id = '-'.substr($dbId, strlen($dbIdShortcut));
                     $data = $this->getComponentById($id, $data);
                     if ($data) {
-$queryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount() - $startQueryCount;
+// $queryCount = Zend_Registry::get('db')->getProfiler()->getQueryCount() - $startQueryCount;
 //p('Looking for dbId '.$dbId. ' in '.(microtime(true)-$start) . ' sec; '.$queryCount.' db-queryies');
                         return $data;
                     }

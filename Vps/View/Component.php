@@ -9,14 +9,21 @@ class Vps_View_Component extends Vps_View
 
     public static function renderCachedComponent($componentId, $isMaster = false)
     {
+        if ($componentId instanceof Vps_Component_Data) {
+            $component = $componentId;
+            $componentId = $component->componentId;
+        }
+    
         // Falls es Cache gibt, Cache holen
         $cache = Vps_Component_Cache::getInstance();
         $cacheId = $cache->getCacheIdFromComponentId($componentId, $isMaster);
         $cacheDisabled = Zend_Registry::get('config')->debug->componentCache->disable;
 
         if ($cacheDisabled || ($return = $cache->load($cacheId))===false) {
-            $component = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
-            
+            if (!isset($component)) {
+                $component = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
+            }
+
             if ($component) {
                 $return = Vps_View_Component::_renderComponent($component, $isMaster);
                 $tag = $isMaster ? 'master' : $component->componentClass;

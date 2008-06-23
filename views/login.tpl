@@ -1,9 +1,7 @@
 <?= $this->doctype() ?>
 <html>
     <head>
-        <?php foreach ($this->ext['files']['css'] as $file) { ?>
-        <link rel="stylesheet" type="text/css" href="<?= $file ?>" />
-        <?php } ?>
+        <?= $this->assets($this->ext['assets']) ?>
     </head>
     <body>
 

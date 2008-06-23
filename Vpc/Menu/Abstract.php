@@ -23,8 +23,8 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
                 $constraints['type'] = $level;
                 $ret = Vps_Component_Data_Root::getInstance()->getChildPages($constraints);
             } else {
-                if (isset($currentPages[$level])) {
-                    $ret = $currentPages[$level]->getChildPages($constraints);
+                if (isset($currentPages[$level-2])) {
+                    $ret = $currentPages[$level-2]->getChildPages($constraints);
                 }
             }
         }

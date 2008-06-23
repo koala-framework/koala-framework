@@ -41,6 +41,7 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
         $ret = Vpc_TreeCache_Abstract::getChildIds($parentData, $constraints);
         $constraints = Vpc_TreeCache_Abstract::_formatConstraints($parentData, $constraints);
         if (is_null($constraints)) return $ret;
+        if (isset($constraints['page']) && !$constraints['page']) return $ret;
 
         if ($parentData instanceof Vps_Component_Data_Root) {
             $parentId = 0;
@@ -49,7 +50,14 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
         }
         $pageIds = array();
 
-        if (isset($constraints['home']) && $constraints['home']) {
+        if (isset($constraints['id'])) {
+            if (isset($constraints['home']) || isset($constraints['filename']) || isset($constraints['componentClass'])) {
+                throw new Vps_Exception("Can't use contraint home, filename or componentClass together with id");
+            }
+            if (isset($this->_pageData[$constraints['id']])) {
+                $pageIds[] = $constraints['id'];
+            }
+        } else if (isset($constraints['home']) && $constraints['home']) {
             if (isset($constraints['filename']) || isset($constraints['componentClass'])) {
                 throw new Vps_Exception("Can't use contraint filename or componentClass together with home");
             }
