@@ -153,6 +153,17 @@ class Vps_Component_Data
         return $ret;
     }
     
+    public function getChildBoxes($constraints = array())
+    {
+        $ret = array_merge(array(), $this->getChildComponents($constraints));
+        foreach ($this->getChildComponents() as $component) {
+            if (!$component->isPage) {
+                $ret = array_merge($ret, $component->getChildBoxes($constraints));
+            }
+        }
+        return $ret;
+    }
+    
     public function getChildComponentIds($constraints = array())
     {
         $ret = array();
