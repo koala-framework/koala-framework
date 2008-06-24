@@ -24,11 +24,16 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         parent::init();
     }
 
+
+    //TODO: _formatNode vs. _formatNodes, dass darf es nur einmal geben!
+    //gehört in Vps_Controller_Action_Auto_Synctree verbessert!!!
     protected function _formatNode($row)
     {
         $data = parent::_formatNode($row);
+        $classes = Vpc_Abstract::getSetting(Vps_Registry::get('config')->vpc->rootComponent, 'childComponentClasses');
+        $data['data']['component_class'] = $classes[$row->component];
         if ($row->visible) {
-            $data['bIcon'] = Vpc_Abstract::getSetting($row->component_class, 'componentIcon');
+            $data['bIcon'] = Vpc_Abstract::getSetting($data['componentClass'], 'componentIcon');
         }
         if ($row->is_home) {
             $data['bIcon'] = new Vps_Asset('application_home');
@@ -36,10 +41,20 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $data['uiProvider'] = 'Vps.Component.PagesNode';
         return $data;
     }
+    protected function _formatNodes($parentId = null)
+    {
+        $ret = parent::_formatNodes($parentId);
+        $classes = Vpc_Abstract::getSetting(Vps_Registry::get('config')->vpc->rootComponent, 'childComponentClasses');
+        foreach ($ret as &$node) {
+            $node['data']['component_class'] = $classes[$node['data']['component']];
+        }
+        return $ret;
+    }
 
     public function jsonDataAction()
     {
         $id = $this->getRequest()->getParam('node');
+
         if ($id === '0') {
 
             $types = Zend_Registry::get('config')->vpc->pageTypes->toArray();

@@ -183,6 +183,12 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
                 $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
             }
         }
+
+        foreach ($this->fields as $field) {
+            foreach ($postData as $d) {
+                $ret = array_merge($ret, $field->validate($d));
+            }
+        }
         return $ret;
     }
     

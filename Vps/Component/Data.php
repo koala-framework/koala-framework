@@ -249,5 +249,15 @@ class Vps_Component_Data
         } while ($row = $row->getParentPage());
         return implode(' - ', $title);
     }
+
+    public function toDebug()
+    {
+        $ret = '';
+        foreach ($this as $k=>$i) {
+            if ($k == 'parent') continue;
+            $ret .= "$k: $i<br >\n";
+        }
+        return $ret;
+    }
 }
 ?>

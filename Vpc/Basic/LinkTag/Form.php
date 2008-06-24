@@ -8,19 +8,20 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
         $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
 
         reset($classes);
-        $cards = $this->add(new Vps_Form_Container_Cards('link_class', trlVps('Linktype')))
+        $cards = $this->add(new Vps_Form_Container_Cards('component', trlVps('Linktype')))
             ->setDefaultValue(key($classes));
 
         foreach ($classes as $name => $class) {
-            $formname = str_replace('_Component', '_Form', $class);
-            $form = new $formname($class, $class);
-            $form->setIdTemplate('{0}-1');
+            $form = Vpc_Abstract_Form::createComponentForm($name, $class);
+            $form->setIdTemplate('{0}-link');
             $form->setAutoHeight(true);
             $form->setBaseCls('x-plain');
 
             $card = $cards->add();
-            $card->setTitle($name);
-            $card->setName($class);
+            $title = Vpc_Abstract::getSetting($class, 'componentName');
+            $title = str_replace('.', ' ', $title);
+            $card->setTitle($title);
+            $card->setName($name);
             $card->add($form);
         }
     }

@@ -7,6 +7,7 @@ class Vpc_Basic_Link_Component extends Vpc_Abstract_Composite_Component
             'tablename' => 'Vpc_Basic_Link_Model',
             'componentName' => 'Link',
             'componentIcon' => new Vps_Asset('page_white_link'),
+            'default' => array(),
             'childComponentClasses'   => array(
                 'linkTag' => 'Vpc_Basic_LinkTag_Component',
             )
@@ -15,9 +16,9 @@ class Vpc_Basic_Link_Component extends Vpc_Abstract_Composite_Component
 
     public function getTemplateVars()
     {
-        $return = parent::getTemplateVars();
-        $return['text'] = $this->_getRow()->text;
-        return $return;
+        $ret = parent::getTemplateVars();
+        $ret['text'] = $this->_getRow()->text;
+        return $ret;
     }
 
     public function getSearchVars()

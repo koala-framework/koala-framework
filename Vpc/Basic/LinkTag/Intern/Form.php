@@ -10,13 +10,14 @@ class Vpc_Basic_LinkTag_Intern_Form extends Vpc_Abstract_Form
             ->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl('Vpc_Basic_LinkTag_Intern_Pages'));
     }
 
-    public function prepareSave($row, $postData)
+    public function prepareSave($parentRow, $postData)
     {
-        $pageId = $row->component_id;
+        $pageId = Vps_Component_Data_Root::getInstance()->getByDbId($parentRow->component_id)
+            ->getPage()->dbId;
         if ($this->fields['target']->getSave() &&
                 $pageId == $postData[$this->fields['target']->getFieldName()]) {
             throw new Vps_ClientException(trlVps('Link cannot link to itself'));
         }
-        parent::prepareSave($row, $postData);
+        parent::prepareSave($parentRow, $postData);
     }
 }
