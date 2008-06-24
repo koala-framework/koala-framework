@@ -9,6 +9,7 @@ class Vpc_News_Category_Directory_TreeCache extends Vpc_TreeCache_TablePage
     protected function _getSelect($constraints)
     {
         $select = parent::_getSelect($constraints);
+        if (!$select) return null;
         $select->where('pool = ?', $this->_getSetting('pool'));
         return $select;
     }

@@ -15,8 +15,7 @@ class Vpc_News_Category_ShowCategories_Component extends Vpc_News_List_Abstract_
     {
         if (!isset($this->_categories)) {
             $t = new Vpc_News_Category_ShowCategories_Model();
-//             $this->_categories = $t->fetchAll(array('component_id = ?' => $this->getDbId()));
-            $this->_categories = array();
+            $this->_categories = $t->fetchAll(array('component_id = ?' => $this->getDbId()));
         }
         return $this->_categories;
     }

@@ -8,17 +8,17 @@ class Vpc_News_Category_ShowCategories_Form extends Vps_Form_NonTableForm
 
         $showNewsClass = Vpc_Abstract::getSetting($class, 'showNewsClass');
         
-        $tc = new Vps_Dao_TreeCache();
         $p = new Vps_Dao_Pool();
-        $news = $tc->findComponentsByParentClass('Vpc_News_Category_Directory_Component');
+        $news = Vps_Component_Data_Root::getInstance()
+                ->getComponentsByClass('Vpc_News_Category_Directory_Component');
 
         $values = array();
         foreach ($news as $new) {
-            $pool = Vpc_Abstract::getSetting($new->component_class, 'pool');
+            $pool = Vpc_Abstract::getSetting($new->componentClass, 'pool');
             $new = $new->getComponent()->getNewsComponent();
-            if ($new->component_class == $showNewsClass || is_subclass_of($new->component_class, $showNewsClass)) {
+            if ($new->componentClass == $showNewsClass || is_subclass_of($new->componentClass, $showNewsClass)) {
                 foreach ($p->fetchAll(array('pool = ?' => $pool)) as $cat) {
-                    $values[$new->component_id.'#'.$cat->id] = $new->getTitle().' - '.$cat->__toString();
+                    $values[$new->dbId.'#'.$cat->id] = $new->getTitle().' - '.$cat->__toString();
                 }
             }
         }
