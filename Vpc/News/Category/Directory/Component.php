@@ -26,8 +26,8 @@ class Vpc_News_Category_Directory_Component extends Vpc_Abstract
         $ret['categories'] = $childComponents;
         return $ret;
     }
-    protected function _getNewsComponent()
+    public function getNewsComponent()
     {
-        return $this->getData()->findParentComponent();
+        return $this->getData()->parent;
     }
 }

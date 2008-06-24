@@ -25,7 +25,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
     {
         if (!$this->getNewsComponent()) return null;
         $select = $this->getNewsComponent()->getTreeCache('Vpc_News_Directory_TreeCacheDetail')
-            ->select($this->getData());
+            ->select($this->getNewsComponent());
         $select->where('publish_date <= NOW()');
         if (Vpc_Abstract::getSetting($this->getNewsComponent()->componentClass, 'enableExpireDate')) {
             $select->where('expiry_date >= NOW()');
@@ -45,6 +45,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
         }
         $select->limit($limit, $start);
         $select->order('publish_date DESC');
+        $select->group('vpc_news.id');
         $constraints = array(
             'treecache' => 'Vpc_News_Directory_TreeCacheDetail',
             'select' => $select
@@ -58,7 +59,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
         if (!$select) return 0;
         $select->setIntegrityCheck(false);
         $select->reset(Zend_Db_Select::COLUMNS);
-        $select->from(null, array('count' => 'COUNT(*)'));
+        $select->from(null, array('count' => 'COUNT(DISTINCT vpc_news.id)'));
         $r = $select->query()->fetchAll();
         return $r[0]['count'];
     }

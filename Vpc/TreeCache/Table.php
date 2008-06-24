@@ -24,6 +24,7 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
     public function select($parentData)
     {
         $select = $this->_table->select();
+        $select->from($this->_table);
         if (in_array('component_id', $this->_table->info('cols'))) {
             $select->where('component_id = ?', $parentData->dbId);
         }
@@ -82,8 +83,11 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
 
     protected function _getSelect($constraints)
     {
-        if (!isset($constraints['select'])) { return null; }
-        $select = $constraints['select'];
+        if (isset($constraints['select'])) {
+            $select = $constraints['select'];
+        } else {
+            $select = $this->select();
+        }
 
         if (isset($constraints['componentClass'])) {
             $constraintClasses = $constraints['componentClass'];
