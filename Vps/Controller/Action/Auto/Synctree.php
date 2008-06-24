@@ -173,6 +173,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         return $nodes;
     }
 
+    //TODO: diese fkt ist eine kopie von _formatNodes
     protected function _formatNode($row)
     {
         $data = array();
@@ -186,20 +187,6 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         if ($row->visible == '0') {
             $data['visible'] = false;
             $data['bIcon'] = $this->_icons['invisible']->__toString();
-        }
-        $openedNodes = $this->_saveSessionNodeOpened(null, null);
-        $where = array("$this->_parentField = ?" => $row->$primaryKey);
-        if ($this->_table->fetchAll($where)->count() > 0) {
-            if (isset($openedNodes[$row->$primaryKey]) ||
-                isset($this->_openedNodes[$row->$primaryKey])
-            ) {
-                $data['expanded'] = true;
-            } else {
-                $data['expanded'] = false;
-            }
-        } else {
-            $data['children'] = array();
-            $data['expanded'] = true;
         }
         $data['uiProvider'] = 'Vps.Auto.TreeNode';
         return $data;

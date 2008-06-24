@@ -8,7 +8,11 @@ class Vpc_Abstract_Composite_Form extends Vps_Form_NonTableForm
         foreach ($classes as $k=>$i) {
             $form = Vpc_Abstract_Form::createComponentForm($k, $i);
             $form->setIdTemplate('{0}-'.$k);
-            $this->add($form);
+
+            $name = Vpc_Abstract::getSetting($i, 'componentName');
+            $name = str_replace('.', ' ', $name);
+            $this->add(new Vps_Form_Container_FieldSet($name))
+                ->add($form);
         }
     }
 }

@@ -81,7 +81,7 @@ class Vps_View_Component extends Vps_View
         }
         return $view->render($template);
     }
-    
+
     protected function _script($name)
     {
         return $name;
