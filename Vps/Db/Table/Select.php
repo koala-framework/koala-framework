@@ -20,4 +20,12 @@ class Vps_Db_Table_Select extends Zend_Db_Table_Select
             return parent::where($cond, $value, $type);
         }
     }
+    public function limit($count = null, $offset = null)
+    {
+        if (is_array($count)) {
+            $offset = $count['start'];
+            $count = $count['limit'];
+        }
+        return parent::limit($count, $offset);
+    }
 }

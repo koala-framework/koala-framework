@@ -23,7 +23,8 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
 
     public function select($parentData)
     {
-        $select = $this->_table->select();
+        $select = new Vps_Db_Table_Select_TreeCache($this->_table);
+        $select->setTreeCacheClass(get_class($this));
         $select->from($this->_table);
         if ($parentData && in_array('component_id', $this->_table->info('cols'))) {
             $select->where('component_id = ?', $parentData->dbId);
@@ -84,8 +85,8 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
 
     protected function _formatConstraints($parentData, $constraints)
     {
-        $where = parent::_formatConstraints($parentData, $constraints);
-        if (is_null($where)) return null;
+        $constraints = parent::_formatConstraints($parentData, $constraints);
+        if (is_null($constraints)) return null;
         if (isset($constraints['page']) && $constraints['page']) {
             return null;
         }

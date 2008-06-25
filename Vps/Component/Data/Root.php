@@ -28,6 +28,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $page = $this;
             foreach (explode('/', substr($path, 1)) as $pathPart) {
                 $page = $page->getChildPage(array('filename' => $pathPart));
+                if (!$page) break;
             }
             return $page;
         }
