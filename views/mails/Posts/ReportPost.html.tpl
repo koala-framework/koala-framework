@@ -1,16 +1,16 @@
-Hello!<br /><br />
+<?= trlVps('Hello'); ?>!<br /><br />
 
-A Post at <a href="{$webUrl}">{$webUrl}</a> has been reported with the following comment:<br /><br />
+<?= trlVps('A Post at {0} has been reported with the following comment', '<a href="'.$this->webUrl.'">'.$this->webUrl.'</a>'); ?>:<br /><br />
 
-{$content}<br /><br />
+<?= $this->content; ?><br /><br />
 
-<a href="{$webUrl}{$postUrl}">Click here</a>,
-to go directly to the post or read it below:<br /><br />
+<a href="<?= $this->webUrl.$this->postUrl; ?>"><?= trlVps('Click here'); ?></a>,
+<?= trlVps('to go directly to the post or read it below'); ?>:<br /><br />
 
-{$postContent|nl2br}<br /><br /><br />
+<?= nl2br($this->postContent); ?><br /><br /><br />
 
 
-{$applicationName}<br /><br />
+<?= $this->applicationName; ?><br /><br />
 
 --<br />
-{trlVps text="This email has been generated automatically. There may be no recipient if you answer to this email."}
+<?= trlVps('This email has been generated automatically. There may be no recipient if you answer to this email.'); ?>

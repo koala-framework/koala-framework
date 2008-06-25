@@ -19,14 +19,18 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
         }
 
         $acl = $this->_getAcl();
-        $role = $this->_getUserRole();
         $resource = $this->_getResourceName();
         if ($resource == 'vps_user_changeuser') {
             //spezielle berechtigungsabfrage für Benutzerwechsel
             $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
+            $allowed = $acl->isAllowed($role, $resource, 'view');
+        } else if ($this->_getUserRole() == 'cli') {
+            $allowed = $acl->isAllowed('cli', $resource, 'view');
+        } else {
+            $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
         }
 
-        if (!$acl->isAllowed($role, $resource, 'view')) {
+        if (!$allowed) {
             if ($this->getHelper('ViewRenderer')->isJson()) {
                 $this->_forward('json-login', 'login',
                                     'vps_controller_action_user');

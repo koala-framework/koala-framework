@@ -62,7 +62,7 @@ class Vps_Controller_Action_Cli_TrlParseController extends Vps_Controller_Action
         }
 
 
-        echo "successfull\n";
+        echo "successful\n";
         exit();
     }
 
@@ -74,7 +74,7 @@ class Vps_Controller_Action_Cli_TrlParseController extends Vps_Controller_Action
             {
                 if(!$file->isDir()) {
                     $extension = end(explode('.', $file->getFileName()));
-                    if($extension=='php' || $extension =='js') {
+                    if($extension=='php' || $extension =='js' || $extension =='tpl') {
                         //nach trl aufrufen suchen
                         $ret = array();
                         $ret = Zend_Registry::get('trl')->parse(file_get_contents($file));

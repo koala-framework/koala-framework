@@ -3,14 +3,14 @@ class Vps_Mail
 {
     protected $_mail;
     protected $_view;
-    protected $_renderFile;
+    protected $_masterTemplate = null;
     protected $_template;
 
-    public function __construct($template, $renderFile = 'Master')
+    public function __construct($template, $masterTemplate = 'Master')
     {
-        $this->_view = new Vps_View_Mail();
+        $this->_view = new Vps_View();
         $this->_template = $template;
-        $this->_renderFile = $renderFile;
+        $this->_masterTemplate = $masterTemplate;
 
         $this->_mail = new Zend_Mail('utf-8');
 
@@ -38,7 +38,7 @@ class Vps_Mail
 
     public function __isset($key)
     {
-        isset($this->_view->$key);
+        return isset($this->_view->$key);
     }
 
     public function assign($spec, $value = null)
@@ -121,7 +121,6 @@ class Vps_Mail
             $this->_mail->setFrom($fromAddress, $fromName);
         }
 
-
         try {
             $mails = new Vps_Dao_UserMails();
         } catch (Zend_Db_Statement_Exception $e) {
@@ -134,27 +133,19 @@ class Vps_Mail
             $vars = $mails->fetchAll($where, 'template');
         }
 
+        // txt mail
         foreach ($vars as $row) {
             $var = $row->variable;
             $this->_view->$var = trim($row->text);
         }
 
-        if (file_exists("application/views/mails/{$this->_renderFile}.txt.tpl")) {
-            $file = "mails/{$this->_renderFile}.txt.tpl";
-        } else {
-            $file = VPS_PATH."/views/mails/{$this->_renderFile}.txt.tpl";
-        }
-        $this->_view->setRenderFile($file);
+        $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.txt.tpl");
 
-        if (file_exists("application/views/mails/{$this->_template}.txt.tpl")) {
-            $file = "mails/{$this->_template}.txt.tpl";
-        } else {
-            $file = VPS_PATH."/views/mails/{$this->_template}.txt.tpl";
-        }
+        $this->_mail->setBodyText(
+            $this->_view->render("mails/{$this->_template}.txt.tpl")
+        );
 
-        $c = $this->_view->render($file);
-        $this->_mail->setBodyText($c);
-
+        // html mail
         foreach ($vars as $row) {
             $var = $row->variable;
             $html = $row->html;
@@ -162,22 +153,11 @@ class Vps_Mail
             $this->_view->$var = $html;
         }
 
-        if (file_exists("application/views/mails/{$this->_renderFile}.html.tpl")) {
-            $file = "mails/{$this->_renderFile}.html.tpl";
-        } else {
-            $file = VPS_PATH."/views/mails/{$this->_renderFile}.html.tpl";
-        }
-        $this->_view->setRenderFile($file);
+        $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.html.tpl");
 
-        if (file_exists("application/views/mails/{$this->_template}.html.tpl")) {
-            $file = "mails/{$this->_template}.html.tpl";
-        } else {
-            $file = VPS_PATH."/views/mails/{$this->_template}.html.tpl";
-            if (!file_exists($file)) $file = '';
-        }
-        if ($file) {
-            $c = $this->_view->render($file);
-            $this->_mail->setBodyHtml($c);
+        $file = "mails/{$this->_template}.html.tpl";
+        if (file_exists("application/views/$file") || file_exists(VPS_PATH."/views/$file")) {
+            $this->_mail->setBodyHtml( $this->_view->render($file) );
         }
 
         $this->_mail->setSubject($this->_view->subject);

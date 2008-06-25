@@ -1,1 +1,1 @@
-{include file=$template}
+<?= $this->renderedTemplate; ?>

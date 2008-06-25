@@ -5,7 +5,7 @@ class Vps_Acl_Role extends Zend_Acl_Role
 
     public function __construct($roleId, $roleName = null)
     {
-        $this->_roleName = $roleName;
+        $this->setRoleName($roleName);
         parent::__construct($roleId);
     }
 

@@ -21,6 +21,7 @@ class Vps_Form_Field_MultiCheckbox extends Vps_Form_Field_Abstract
         } else if (class_exists($tableName)) {
             $model = new $tableName();
         }
+
         parent::__construct(get_class($model));
         if ($model instanceof Zend_Db_Table_Abstract) {
             $model = new Vps_Model_Db(array(

@@ -68,24 +68,86 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 
     }
 
-    protected function _addRoleField($fs1)
+    protected function _addRoleField($addTo)
     {
         $acl = Zend_Registry::get('acl');
-        $roles = array();
+
+        // alle EditRoles Resourcen holen und ermitteln, ob man diese bearbeiten darf
+        $myEditRoleResource = null;
+        $allowedEditRoles = $editRoleResources = array();
+        foreach ($acl->getAllResources() as $r) {
+            if ($r instanceof Vps_Acl_Resource_EditRole
+                && $acl->isAllowed($this->_getUserRole(), $r->getResourceId(), 'view')
+            ) {
+                $allowedEditRoles[] = $r->getRoleId();
+                $editRoleResources[] = $r;
+                if ($r->getRoleId() == $this->_getUserRole()) $myEditRoleResource = $r;
+            }
+        }
+        if (!$allowedEditRoles) return;
+
+        // alle rollen und additioinalRoles in variablen speichern
+        $roles = $addRoles = array();
         foreach ($acl->getRoles() as $role) {
-            if ($role instanceof Vps_Acl_Role
-                && ( !($role instanceof Vps_Acl_Role_Admin)
-                || ($acl->getRole($this->_getUserRole()) instanceof Vps_Acl_Role_Admin) )
+            if ($role instanceof Vps_Acl_Role && !($role instanceof Vps_Acl_Role_Additional)
+                && in_array($role->getRoleId(), $allowedEditRoles)
             ) {
                 $roles[$role->getRoleId()] = $role->getRoleName();
+            } else if ($role instanceof Vps_Acl_Role_Additional) {
+                $addRoles[$role->getParentRoleId()][$role->getRoleId()] = $role->getRoleName();
             }
         }
 
-        $editor = new Vps_Form_Field_Select('role', trlVps('Rights'));
-        $editor->setValues($roles)
-               ->setAllowBlank(false);
-        $fs1->add($editor);
+        // Wenns keine additionalRoles gibt, normales select verwenden
+        if (!$addRoles) {
+            $editor = new Vps_Form_Field_Select('role', trlVps('Rights'));
+            $editor->setValues($roles)
+                ->setAllowBlank(false);
+            $addTo->add($editor);
+        } else {
+            // eigene additionalRoles holen, nur die dürfen zugewiesen werden
+            $allowedAddRoles = array();
+            if ($addRoles) {
+                $table = new Vps_Model_User_AdditionalRoles();
+                $rowset = $table->fetchAll(array('user_id = ?' => $this->_getAuthData()->id));
+                foreach ($rowset as $row) {
+                    $allowedAddRoles[] = $row->additional_role;
+                }
+            }
+
+            // wenn die roleResource erbt, darf man beim child alle addRoles bearbeiten
+            foreach ($editRoleResources as $r) {
+                if ($acl->inherits($r, $myEditRoleResource)) {
+                    if (isset($addRoles[$r->getRoleId()])) {
+                        foreach ($addRoles[$r->getRoleId()] as $k => $v) {
+                            $allowedAddRoles[] = $k;
+                        }
+                    }
+                }
+            }
+
+            // cards container erstellen und zu form hinzufügen
+            $cards = $addTo->add(new Vps_Form_Container_Cards('role', trlVps('Rights')))
+                ->setAllowBlank(false);
+            foreach ($roles as $roleId => $roleName) {
+                $card = $cards->add();
+                $card->setTitle($roleName);
+                $card->setName($roleId);
+
+                if (isset($addRoles[$roleId])) {
+                    foreach ($addRoles[$roleId] as $addRoleId => $addRoleName) {
+                        if (!in_array($addRoleId, $allowedAddRoles)) {
+                            unset($addRoles[$roleId][$addRoleId]);
+                        }
+                    }
+
+                    $editor = new Vps_Form_Field_MultiCheckbox('Vps_Model_User_AdditionalRoles', trlVps('Additional rights'));
+                    $editor->setColumnName('additional_role');
+                    $editor->setValues($addRoles[$roleId]);
+
+                    $card->add($editor);
+                }
+            }
+        }
     }
-
-
 }

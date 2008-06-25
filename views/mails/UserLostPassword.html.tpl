@@ -1,19 +1,16 @@
-Hello {$fullname}!<br /><br />
+<?= trlVps('Hello {0}!', $this->fullname); ?><br /><br />
 
-This email has been generated using the lost password function at <a href="{$webUrl}">{$webUrl}</a>.<br />
-Please use the following link to choose yourself a new password.<br />
-<a href="{$activationUrl}">Click here to choose a new password</a>.<br /><br />
+<?= trlVps('This email has been generated using the lost password function at {0}', '<a href="'.$this->webUrl.'">'.$this->webUrl.'</a>'); ?><br />
+<?= trlVps('Please use the following link to choose yourself a new password.'); ?><br />
+<a href="<?= $this->activationUrl; ?>"><?= trlVps('Click here to choose a new password'); ?></a>.<br /><br />
 
-If the link does not work, copy the following<br />
-address and paste it in your browser (it is possible that<br />
-the address has a line-break, so please be sure to copy<br />
-everything correctly):<br /><br />
+<?= trlVps('If the activationlink does not work, copy the following address and paste it in your browser (it is possible that the address has a line-break, so please be sure to copy everything correctly):'); ?><br /><br />
 
-{$activationUrl}<br /><br />
+<?= $this->activationUrl; ?><br /><br />
 
-If you did not request this email you may just ignore it and use the login as before.<br /><br />
+<?= trlVps('If you did not request this email you may just ignore it and use the login as before.'); ?><br /><br />
 
-{$applicationName}<br /><br />
+<?= $this->applicationName; ?><br /><br />
 
 --<br />
-This email has been generated automatically. There may be no recipient if you answer to this email.
+<?= trlVps('This email has been generated automatically. There may be no recipient if you answer to this email.'); ?>

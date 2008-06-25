@@ -13,14 +13,21 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
     {
         $where = parent::_getWhere();
         $acl = Zend_Registry::get('acl');
-        if (!($acl->getRole($this->_getUserRole()) instanceof Vps_Acl_Role_Admin)) {
-            foreach ($acl->getRoles() as $role) {
-                if ($role instanceof Vps_Acl_Role && !($role instanceof Vps_Acl_Role_Admin)) {
-                    $roles[] = $role->getRoleId();
-                }
+        $roles = array();
+        foreach ($acl->getAllResources() as $res) {
+            if ($res instanceof Vps_Acl_Resource_EditRole
+                && $acl->isAllowed($this->_getUserRole(), $res, 'view')
+            ) {
+                $roles[] = $res->getRoleId();
             }
-            $where[] = "role IN ('".implode("', '", $roles)."')";
         }
+
+        if ($roles) {
+            $where[] = "role IN ('".implode("','", $roles)."')";
+        } else {
+            $where[] = "0 = 1";
+        }
+
         return $where;
     }
 
