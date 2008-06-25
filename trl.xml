@@ -1930,5 +1930,8 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
     <en default="1">Duplicating...</en>
     <de>Duplizieren</de>
 </text>
-
+<text>
+    <en default="1">yyyy-mm-dd</en>
+    <de>dd.mm.yyyy</de>
+</text>
 </trl>

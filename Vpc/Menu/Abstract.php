@@ -28,8 +28,6 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
                 }
             }
         }
-        $first = reset($ret);
-        $last = end($ret);
         $currentPageIds = array();
         foreach ($currentPages as $page) {
             if (!$page instanceof Vps_Component_Data_Root) {

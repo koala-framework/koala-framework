@@ -31,7 +31,9 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
             $value = $this->getDefaultValue();
         }
         $ret = parent::getTemplateVars($values);
-        //todo: escapen
+
+        $value = htmlspecialchars($value);
+        $name = htmlspecialchars($name);
         $ret['html'] = "<input type=\"text\" id=\"$name\" name=\"$name\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
         return $ret;
     }

@@ -1,13 +1,15 @@
 <?php
-class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
+class Vpc_TreeCache_Page extends Vpc_TreeCache_Abstract
 {
     protected $_tableName = 'Vps_Dao_Pages';
     protected $_componentClass = 'row';
     protected $_idSeparator = false;
     protected $_loadTableFromComponent = false;
     private $_pageData;
-    private $_pageChilds;
+    private $_pageParent;
     private $_pageFilename;
+    private $_pageComponentParent;
+    private $_pageComponent;
     private $_pageHome;
 
     protected function _init()
@@ -24,6 +26,8 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
         $this->_pageData = array();
         $this->_pageParent = array();
         $this->_pageFilename = array();
+        $this->_pageComponentParent = array();
+        $this->_pageComponent = array();
         $this->_pageHome = 0;
         foreach ($select->query()->fetchAll() as $row) {
             $this->_pageData[$row['id']] = $row;
@@ -31,7 +35,8 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
             if (is_null($parentId)) $parentId = 0;
             $this->_pageChilds[$parentId][] = $row['id'];
             $this->_pageFilename[$parentId][$row['filename']] = $row['id'];
-            $this->_pageComponent[$parentId][$row['component']][] = $row['id'];
+            $this->_pageComponentParent[$parentId][$row['component']][] = $row['id'];
+            $this->_pageComponent[$row['component']][] = $row['id'];
             if ($row['is_home']) $this->_pageHome = $row['id'];
         }
     }
@@ -45,7 +50,7 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
 
         if ($parentData instanceof Vps_Component_Data_Root) {
             $parentId = 0;
-        } else {
+        } else if ($parentData) {
             $parentId = $parentData->componentId;
         }
         $pageIds = array();
@@ -66,6 +71,9 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
             if (isset($constraints['componentClass'])) {
                 throw new Vps_Exception("Can't use contraint filename and componentClass together");
             }
+            if (!isset($parentId)) {
+                throw new Vps_Exception("filename contraint only works with parentData");
+            }
             if (!isset($this->_pageFilename[$parentId][$constraints['filename']])) {
                 return $ret;
             }
@@ -85,15 +93,20 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
             if (!$keys) return $ret;
 
             foreach ($keys as $key) {
-                if (isset($this->_pageComponent[$parentId][$key])) {
-                    foreach ($this->_pageComponent[$parentId][$key] as $page) {
-                        $pageIds[] = $page;
-                    }
+                if (isset($parentId) && isset($this->_pageComponentParent[$parentId][$key])) {
+                    $pageIds = array_merge($pageIds, $this->_pageComponentParent[$parentId][$key]);
+                }
+                if (!isset($parentId) && isset($this->_pageComponent[$key])) {
+                    $pageIds = array_merge($pageIds, $this->_pageComponent[$key]);
                 }
             }
         } else {
-            if (isset($this->_pageChilds[$parentId])) {
+            if (isset($parentId) && isset($this->_pageChilds[$parentId])) {
                 $pageIds = $this->_pageChilds[$parentId];
+            }
+            if (!isset($parentId)) {
+                throw new Vps_Exception("This would return all pages. You don't want this.");
+                $pageIds = array_keys($this->_pageData);
             }
         }
 
@@ -110,17 +123,32 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
         return $ret;
     }
 
-    public function getChildData($parentData, $id)
+    public function getChildData($parentData, $constraints)
     {
-        if (isset($this->_pageData[$id])) {
-            return $this->_createData($this->_formatConfig($parentData, $this->_pageData[$id]));
+        $ret = parent::getChildData($parentData, $constraints);
+        foreach ($this->getChildIds($parentData, $constraints) as $id) {
+            $ret[] = $this->_createData($parentData, $id);
         }
-        return Vpc_TreeCache_Abstract::getChildData($parentData, $id);
+        return $ret;
+    }
+    protected function _createData($parentData, $id)
+    {
+        $page = $this->_pageData[$id];
+        if (!$parentData || ($parentData instanceof Vps_Component_Data_Root && $page['parent_id'])) {
+            if (!$page['parent_id']) {
+                $parentData = Vps_Component_Data_Root::getInstance();
+            } else {
+                $parentData = Vps_Component_Data_Root::getInstance()
+                                    ->getComponentById($page['parent_id']);
+            }
+        }
+        return parent::_createData($parentData, $id);
     }
 
-    protected function _formatConfig($parentData, $page)
+    protected function _formatConfig($parentData, $id)
     {
         $data = array();
+        $page = $this->_pageData[$id];
         $data['filename'] = $page['filename'];
         $data['rel'] = '';
         $data['name'] = $page['name'];
@@ -128,13 +156,15 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_TablePage
         $data['componentId'] = $page['id'];
         $data['componentClass'] = $this->_getChildComponentClass($page['component']);
         $data['row'] = (object)$page;
-        $data['id'] = $page['id'];
-        if ($parentData instanceof Vps_Component_Data_Root && $page['parent_id']) {
-            $data['parent'] = Vps_Component_Data_Root::getInstance()
-                                    ->getComponentById($page['parent_id']);
-        } else {
-            $data['parent'] = $parentData;
-        }
+        $data['parent'] = $parentData;
         return $data;
+    }
+    protected function _getIdFromRow($id)
+    {
+        return $id;
+    }
+    public function createsPages()
+    {
+        return true;
     }
 }

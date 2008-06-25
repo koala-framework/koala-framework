@@ -92,8 +92,8 @@ class Vps_Component_Abstract
     {
         static $componentClasses;
         if (isset($componentClasses)) return $componentClasses;
-        $componentClasses = array();
         $c = Vps_Registry::get('config')->vpc->rootComponent;
+        $componentClasses = array($c);
         self::_getChildComponentClasses($componentClasses, $c);
         return $componentClasses;
     }

@@ -27,13 +27,14 @@ abstract class Vpc_TreeCache_TablePage extends Vpc_TreeCache_Table
         }
         $constraints = parent::_formatConstraints($parentData, $constraints);
         if (isset($filename)) { $constraints['filename'] = $filename; }
-        
+
         return $constraints;
     }
-    
-    protected function _getSelect($constraints)
+
+    protected function _getSelect($parentData, $constraints)
     {
-        $select = parent::_getSelect($constraints);
+        $select = parent::_getSelect($parentData, $constraints);
+        if (!$select) return null;
         if (isset($constraints['filename'])) {
             $select->where($this->_filenameColumn . ' = ?', $constraints['filename']);
         }

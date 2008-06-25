@@ -8,24 +8,42 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
     public function getChildIds($parentData, $constraints = array())
     {
         $ret = parent::getChildIds($parentData, $constraints);
-        $constraints = $this->_formatConstraints($parentData, $constraints);
-        if (is_null($constraints)) return $ret;
-        foreach (array_keys($this->_classes) as $key) {
-            if ($this->_acceptKey($key, $constraints)) {
-                $ret[] = $this->_idSeparator . $key;
+        if (!$parentData) {
+            throw new Vps_Exception("no parentData for getChildIds is not (yet) implemented");
+        }
+        foreach ($this->_fetchKeys($parentData, $constraints) as $key) {
+            $ret[] = $this->_idSeparator . $key;
+        }
+        return $ret;
+    }
+    public function getChildData($parentData, $constraints = array())
+    {
+        $ret = parent::getChildData($parentData, $constraints);
+        if (!$parentData) {
+            $parentDatas = Vps_Component_Data_Root::getInstance()
+                                        ->getComponentsByClass($this->_class);
+        } else {
+            $parentDatas = array($parentData);
+        }
+        foreach ($parentDatas as $parentData) {
+            foreach ($this->_fetchKeys($parentData, $constraints) as $key) {
+                $ret[] = $this->_createData($parentData, $key);
             }
         }
         return $ret;
     }
 
-    public function getChildData($parentData, $id)
+    protected function _fetchKeys($parentData, $constraints)
     {
-        $prefix = substr($id, 0, 1);
-        $key = substr($id, 1);
-        if ($prefix == $this->_idSeparator && isset($this->_classes[$key])) {
-            return $this->_createData($this->_formatConfig($parentData, $key));
+        $ret = array();
+        $constraints = $this->_formatConstraints($parentData, $constraints);
+        if (is_null($constraints)) return array();
+        foreach (array_keys($this->_classes) as $key) {
+            if ($this->_acceptKey($key, $constraints)) {
+                $ret[] = $key;
+            }
         }
-        return parent::getChildData($parentData, $id);
+        return $ret;
     }
 
     protected function _formatConstraints($parentData, $constraints)
@@ -84,9 +102,12 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
             'dbId' => $dbId,
             'componentClass' => $this->_getComponentClass($componentKey),
             'parent' => $parentData,
-            'id' => $componentKey,
             'isPage' => false
         );
+    }
+    protected function _getIdFromRow($componentKey)
+    {
+        return $componentKey;
     }
     
     private function _getComponentClass($componentKey)
