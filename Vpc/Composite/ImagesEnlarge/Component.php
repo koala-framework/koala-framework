@@ -13,14 +13,18 @@ class Vpc_Composite_ImagesEnlarge_Component extends Vpc_Composite_Images_Compone
 
     public function getTemplateVars()
     {
-        $childComponentClasses = $this->_getSetting('childComponentClasses');
-        $thumbSettings = Vpc_Abstract::getSetting(
-            $childComponentClasses['child'], 'smallImageSettings'
-        );
-
         $ret = parent::getTemplateVars();
-        $ret['thumbMaxWidth']  = $thumbSettings['dimension'][0];
-        $ret['thumbMaxHeight'] = $thumbSettings['dimension'][1];
+        $images = $this->getData()->getChildComponents(array(
+            'treecache' => 'Vpc_Abstract_List_TreeCache'
+        ));
+        $ret['smallMaxWidth'] = 0;
+        $ret['smallMaxHeight'] = 0;
+        foreach ($images as $image) {
+            $img = $image->getComponent()->getSmallImage();
+            $ret['smallMaxWidth'] = max($ret['smallMaxWidth'], $img['width']);
+            $ret['smallMaxHeight'] = max($ret['smallMaxHeight'], $img['width']);
+        }
+
         return $ret;
     }
 }

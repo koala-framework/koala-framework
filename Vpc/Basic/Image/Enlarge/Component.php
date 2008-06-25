@@ -1,49 +1,47 @@
 <?php
 class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
 {
-    protected $_smallImage;
-
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
-            'componentName'     => trlVps('Image Enlarge'),
-            'componentIcon'     => new Vps_Asset('imageEnlarge'),
-            'tablename' => 'Vpc_Basic_Image_Enlarge_Model',
-            'hasSmallImageComponent' => true,
-            'childComponentClasses' => array(
-                'smallImage' => 'Vpc_Basic_Image_Thumb_Component',
-            ),
-            'dimension' => array(640, 480),
-            'assets' => array(
-                'files'=>array('vps/Vpc/Basic/Image/Enlarge/Component.js'),
-                'dep' => array('ExtCore')
-            ),
-            'editComment' => true
-        ));
+        $ret = parent::getSettings();
+        $ret['componentName'] = trlVps('Image Enlarge');
+        $ret['componentIcon'] = new Vps_Asset('imageEnlarge');
+        $ret['tablename'] = 'Vpc_Basic_Image_Enlarge_Model';
+        $ret['hasSmallImageComponent'] = true;
+        $ret['childComponentClasses']['smallImage'] = 'Vpc_Basic_Image_Thumb_Component';
+        $ret['dimension'] = array(640, 480);
+        $ret['assets']['files'][] = 'vps/Vpc/Basic/Image/Enlarge/Component.js';
+        $ret['assets']['dep'][] = 'ExtCore';
+        $ret['editComment'] = true;
+        return $ret;
     }
 
     public function getTemplateVars()
     {
-        $return = parent::getTemplateVars();
-
-        // Small Image
-        $row = $this->getData()->getChildComponent('-1');
-        $vars = $row->getComponent()->getTemplateVars();
-
-        if (!$vars['url'] || !$this->_getRow()->enlarge) {
-            $size = $this->_getRow()->getImageDimensions(null, 'small');
-            $vars['url'] = $this->_getRow()->getFileUrl(null, 'small');
-            $vars['width'] = $size['width'];
-            $vars['height'] = $size['height'];
-        }
-        $return['smallImage'] = $vars;
-
-        $return['thumbMaxHeight'] = $vars['height'];
-
-        return $return;
+        $ret = parent::getTemplateVars();
+        $ret['smallImage'] = $this->getSmallImage();
+        return $ret;
     }
-    public function getImageRow()
+
+    //wird uA. verwendet in Vpc_Composite_ImagesEnlarge_Component
+    public function getSmallImage()
     {
-        return $this->_getRow();
+        $row = $this->getData()->getChildComponent('-smallImage')
+                            ->getComponent()->getImageRow();
+        $ret = array();
+        $ret['row'] = $row;
+        if (!$this->_getSetting('hasSmallImageComponent') ||
+            !$row->getFileUrl() ||
+            !$this->_getRow()->enlarge)
+        {
+            $ret['url'] = $this->_getRow()->getFileUrl(null, 'small');
+            $size = $this->_getRow()->getImageDimensions(null, 'small');
+        } else {
+            $ret['url'] = $this->_getRow()->getFileUrl();
+            $size = $this->_getRow()->getImageDimensions();
+        }
+        $ret['width'] = $size['width'];
+        $ret['height'] = $size['height'];
+        return $ret;
     }
 }

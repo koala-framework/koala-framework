@@ -128,6 +128,9 @@ abstract class Vpc_TreeCache_Abstract
     
     protected function _formatConstraints($parentData, $constraints)
     {
+        if (isset($constraints['select']) && ($constraints['select'] instanceof Vps_Db_Table_Select_TreeCache)) {
+            $constraints['treecache'] = $constraints['select']->getTreeCacheClass();
+        }
         if (isset($constraints['treecache']) &&
             !$this instanceof $constraints['treecache']
         ){

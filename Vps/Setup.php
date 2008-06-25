@@ -215,12 +215,6 @@ class Vps_Setup
         if ($i) $uri = substr($uri, 0, $i);
         if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))) {
             $requestUrl = $_SERVER['REDIRECT_URL'];
-            //TODO: redirect wenn url geändert
-/*
-                if ($row->url_match != $requestUrl) {
-                    header('Location: '.$row->url_match);
-                    exit;
-                }*/
             $root = Vps_Component_Data_Root::getInstance();
             $data = $root->getPageByPath($requestUrl);
             if (!$data) {
@@ -228,6 +222,10 @@ class Vps_Setup
                 $view = new Vps_View();
                 $view->requestUri = $requestUrl;
                 echo $view->render('error404.tpl');
+                exit;
+            }
+            if ($data->url != $requestUrl) {
+                header('Location: '.$data->url);
                 exit;
             }
             $page = $data->getComponent();

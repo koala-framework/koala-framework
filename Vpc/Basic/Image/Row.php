@@ -63,18 +63,6 @@ class Vpc_Basic_Image_Row extends Vpc_Row
         return parent::getFileUrl($rule, $type, $filename, $addRandom);
     }
 
-    public function getImageDimension()
-    {
-        $s = $this->_getScaleSettings();
-        $fileRow = $this->findParentRow('Vps_Dao_File');
-        if ($fileRow) {
-            return Vps_Media_Image::calculateScaleDimensions($fileRow->getFileSource(),
-                array($s['width'], $s['height']), $s['scale']);
-        } else {
-            return array('width' => 0, 'height' => 0);
-        }
-    }
-
     protected function _postUpdate()
     {
         parent::_postUpdate();

@@ -4,11 +4,11 @@ abstract class Vpc_TreeCache_TablePage extends Vpc_TreeCache_Table
     protected $_showInMenu = false;
 
     protected $_nameColumn= 'name';
-    protected $_filenameColumn= 'filename';
+    protected $_filenameColumn = 'filename';
     protected $_uniqueFilename = false;
 
     protected $_idSeparator = '_';
-    
+
     protected function _formatConstraints($parentData, $constraints)
     {
         if (isset($constraints['page']) && !$constraints['page']) {
@@ -36,7 +36,12 @@ abstract class Vpc_TreeCache_TablePage extends Vpc_TreeCache_Table
         $select = parent::_getSelect($parentData, $constraints);
         if (!$select) return null;
         if (isset($constraints['filename'])) {
-            $select->where($this->_filenameColumn . ' = ?', $constraints['filename']);
+            if ($this->_uniqueFilename) {
+                $select->where($this->_filenameColumn . ' = ?', $constraints['filename']);
+            } else {
+                if (!preg_match('#^([0-9]+)_#', $constraints['filename'], $m)) return null;
+                $select->where($this->_idColumn . ' = ?', $m[1]);
+            }
         }
         return $select;
     }
@@ -45,8 +50,16 @@ abstract class Vpc_TreeCache_TablePage extends Vpc_TreeCache_Table
     {
         $data = parent::_formatConfig($parentData, $row);
 
-         // TODO: uniqueFilename
-        $data['filename'] = $row->{$this->_filenameColumn};
+        if ($this->_uniqueFilename) {
+            $data['filename'] = $row->{$this->_filenameColumn};
+        } else {
+            $data['filename'] = $this->_getIdFromRow($row).'_';
+            if ($this->_filenameColumn) {
+                $data['filename'] .= $row->{$this->_filenameColumn};
+            } else {
+                $data['filename'] .= Vps_Filter::get($row->__toString(), 'Ascii');
+            }
+        }
 
         $data['rel'] = '';
         $data['name'] = $row->{$this->_nameColumn};

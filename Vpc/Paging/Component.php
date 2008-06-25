@@ -13,7 +13,16 @@ class Vpc_Paging_Component extends Vpc_Abstract
 
     private function _getEntries()
     {
-        return $this->getData()->parent->getComponent()->getPagingCount();
+        $count = $this->getData()->parent->getComponent()->getPagingCount();
+        if (!$count) return 0;
+        if ($count instanceof Zend_Db_Select) {
+            $select = $count;
+            $select->setIntegrityCheck(false);
+            $select->reset(Zend_Db_Select::COLUMNS);
+            $select->from(null, array('count' => 'COUNT(DISTINCT id)'));
+            $r = $select->query()->fetchAll();
+            return $r[0]['count'];
+        }
     }
 
     private function _getLinkData($pageNumber, $linktext = null)

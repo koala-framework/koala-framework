@@ -26,10 +26,10 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
 
     public function getTemplateVars()
     {
-        $size = $this->_getRow()->getImageDimension();
 
         $return = parent::getTemplateVars();
         $return['url'] = $this->_getRow()->getFileUrl();
+        $size = $this->_getRow()->getImageDimensions();
         $return['width'] = $size['width'];
         $return['height'] = $size['height'];
         if (Vpc_Abstract::getSetting(get_class($this), 'editComment')) {
@@ -44,9 +44,9 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
         return $this->_getRow()->getFileUrl(null, $type);
     }
 
-    public function getImageDimension()
+    public function getImageDimensions()
     {
-        return $this->_getRow()->getImageDimension();
+        return $this->_getRow()->getImageDimensions();
     }
 
     //für Pdf

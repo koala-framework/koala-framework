@@ -150,7 +150,13 @@ class Vps_Component_Data
     public function getChildComponents($constraints = array())
     {
         if (!is_array($constraints)) {
-            $constraints = array('id' => $constraints);
+            if (is_string($constraints)) {
+                $constraints = array('id' => $constraints);
+            } else if ($constraints instanceof Zend_Db_Select) {
+                $constraints = array('select' => $constraints);
+            } else {
+                throw new Vps_Exception("Invalid contraint");
+            }
         }
         $sc = '';
         foreach ($constraints as $key => $val) {
