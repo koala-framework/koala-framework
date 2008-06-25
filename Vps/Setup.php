@@ -234,6 +234,7 @@ class Vps_Setup
             $page->sendContent($page);
 echo '<div style="background-color:white;width:200px;position:absolute;top:0;right:0;padding:5px;">';
 echo (microtime(true)-$GLOBALS['start'])." sec<br>\n";
+echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br>\n";
 if (Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
     echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br>\n";
 }

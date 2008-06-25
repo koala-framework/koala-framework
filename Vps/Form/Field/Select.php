@@ -28,6 +28,9 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         //todo: html wählt ersten wert vor-aus - ext galub ich nicht
         //      => sollte sich gleich verhalten.
         $store = $this->_getStoreData();
+        if ($this->getShowNoSelection()) {
+            array_unshift($store['data'], array('', '('.trlVps('no selection').')'));
+        }
         foreach ($store['data'] as $i) {
             $ret['html'] .= '<option value="'.$i[0].'"';
             if ($i[0] == $value) $ret['html'] .= ' selected="selected"';

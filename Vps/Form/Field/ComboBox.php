@@ -31,6 +31,9 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
     //setTpl
         //string mit template, standardwert in ext definiert:
         //'<tpl for="."><div class="x-combo-list-item">{' + this.displayField + '}</div></tpl>';
+
+    //setShowNoSelection
+        //keine auswahl anbieten
         
 
     public function getMetaData()

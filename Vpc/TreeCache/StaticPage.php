@@ -28,10 +28,7 @@ abstract class Vpc_TreeCache_StaticPage extends Vpc_TreeCache_Static
         $ret = parent::_acceptKey($key, $constraints);
         if ($ret) {
             $c = $this->_classes[$key];
-            if (isset($constraints['showInMenu']) && isset($c['showInMenu']) && $c['showInMenu'] != $constraints['showInMenu']) {
-                $ret = false;
-            }
-            if (isset($constraints['filename']) && 
+            if (isset($constraints['filename']) &&
                 ($constraints['filename'] != (isset($c['filename']) ? $c['filename'] : $key))
             ) {
                 $ret = false;

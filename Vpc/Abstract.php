@@ -16,6 +16,18 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         $ret['childComponentClasses'] = array();
         return $ret;
     }
+    public static function getChildComponentClasses($class)
+    {
+        return self::getSetting($class, 'childComponentClasses');
+    }
+    public static function getChildComponentClass($class, $key)
+    {
+        $classes = self::getSetting($class, 'childComponentClasses');
+        if (!isset($classes[$key])) {
+            throw new Vps_Exception("childComponentClass '$key' not set for '$class'");
+        }
+        return $classes[$key];
+    }
 
     protected function _getChildComponentClass($key)
     {

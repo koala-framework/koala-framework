@@ -62,7 +62,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
             $this->view->data['component_name'] = $name;
 
             $this->view->hasController = !is_null(
-                Vpc_Admin::getComponentFile($data['component_class'], 'Controller')
+                Vpc_Admin::getComponentFile($row->component, 'Controller')
             );
         } else {
             throw new Vps_Exception("Component $class not found");

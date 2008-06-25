@@ -11,6 +11,8 @@ abstract class Vpc_TreeCache_Abstract
     protected $_additionalTreeCaches = array();
     private $_isTop = true;
 
+    private $_dataCache = array();
+
     protected function __construct($class)
     {
         $this->_class = $class;
@@ -69,12 +71,13 @@ abstract class Vpc_TreeCache_Abstract
         return null;
     }
 
-    public function getChildData($parentData, $id)
+    public function getChildData($parentData, $constraints)
     {
+        $ret = array();
         foreach ($this->_getAdditionalTreeCaches($parentData) as $treeCache) {
-            $ret = $treeCache->getChildData($parentData, $id);
-            if ($ret) { return $ret; }
+            $ret = array_merge($ret, $treeCache->getChildData($parentData, $constraints));
         }
+        return $ret;
     }
 
     public function getChildIds($parentData, $constraints)
@@ -142,14 +145,27 @@ abstract class Vpc_TreeCache_Abstract
         return null;
     }
 
-    protected function _createData($config)
+    protected function _createData($parentData, $row)
     {
-        if (Vpc_Abstract::hasSetting($config['componentClass'], 'dataClass')) {
-            $pageDataClass = Vpc_Abstract::getSetting($config['componentClass'], 'dataClass');
-        } else {
-            $pageDataClass = 'Vps_Component_Data';
+        $id = $this->_getIdFromRow($row);
+        if (!isset($this->_dataCache[$parentData->componentId][$id])) {
+            $config = $this->_formatConfig($parentData, $row);
+            $config['id'] = $id;
+            if (Vpc_Abstract::hasSetting($config['componentClass'], 'dataClass')) {
+                $pageDataClass = Vpc_Abstract::getSetting($config['componentClass'], 'dataClass');
+            } else {
+                $pageDataClass = 'Vps_Component_Data';
+            }
+            $this->_dataCache[$parentData->componentId][$id] = new $pageDataClass($config);
         }
-        return new $pageDataClass($config);
+        return $this->_dataCache[$parentData->componentId][$id];
+    }
+
+    protected function _formatConfig($parentData, $row) {
+        throw new Vps_Exception('_formatConfig has to be implemented for '.get_class($this));
+    }
+    protected function _getIdFromRow($row) {
+        throw new Vps_Exception('_getIdFromRow has to be implemented for '.get_class($this));
     }
 
     public function createsPages()

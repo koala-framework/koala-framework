@@ -149,37 +149,33 @@ class Vps_Component_Data
 
     public function getChildComponents($constraints = array())
     {
-        $ret = array();
-        $tc = $this->_getTreeCache();
-        if ($tc) {
-            if (!is_array($constraints)) {
-                $constraints = array('id' => $constraints);
+        if (!is_array($constraints)) {
+            $constraints = array('id' => $constraints);
+        }
+        $sc = '';
+        foreach ($constraints as $key => $val) {
+            if ($val instanceof Zend_Db_Select) {
+                $val = $val->__toString();
             }
-            $sc = '';
-            foreach ($constraints as $key => $val) {
-                if ($val instanceof Zend_Db_Select) {
-                    $val = $val->__toString();
-                }
-                if (is_array($val)) {
-                    $val = implode('', $val);
-                }
-                $sc .= $key . $val;
+            if (is_array($val)) {
+                $val = implode('', $val);
             }
-            $sc = md5($sc);
-            if (!isset($this->_constraintsCache[$sc])) {
-                $this->_constraintsCache[$sc] = $tc->getChildIds($this, $constraints);
-            }
-            $ids = $this->_constraintsCache[$sc];
-            foreach ($ids as $id) {
-                if (!array_key_exists($id, $this->_componentIdCache)) {
-                    $this->_componentIdCache[$id] = $tc->getChildData($this, $id);
-                }
-                $ret[] = $this->_componentIdCache[$id];
+            $sc .= $key . $val;
+        }
+        $sc = md5($sc);
+        if (!isset($this->_constraintsCache[$sc])) {
+            $ret = array();
+            $tc = $this->_getTreeCache();
+            if ($tc) {
+                $this->_constraintsCache[$sc] = $tc->getChildData($this, $constraints);
+            } else {
+                $this->_constraintsCache[$sc] = array();
             }
         }
-        return $ret;
+        return $this->_constraintsCache[$sc];
+
     }
-    
+
     public function getChildBoxes($constraints = array())
     {
         $ret = array_merge(array(), $this->getChildComponents($constraints));
@@ -249,7 +245,7 @@ class Vps_Component_Data
         } while ($row = $row->getParentPage());
         return implode(' - ', $title);
     }
-
+/*
     public function toDebug()
     {
         $ret = '';
@@ -259,5 +255,6 @@ class Vps_Component_Data
         }
         return $ret;
     }
+*/
 }
 ?>

@@ -20,47 +20,68 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
         }
         return parent::getDbIdShortcut($dbId);
     }
-    
+
     public function select($parentData)
     {
         $select = $this->_table->select();
         $select->from($this->_table);
-        if (in_array('component_id', $this->_table->info('cols'))) {
+        if ($parentData && in_array('component_id', $this->_table->info('cols'))) {
             $select->where('component_id = ?', $parentData->dbId);
         }
+        // TODO: Sortierung / Nummerierung
         return $select;
     }
-    
+
     public function getChildIds($parentData, $constraints = array())
     {
         $ret = parent::getChildIds($parentData, $constraints);
-        $constraints = $this->_formatConstraints($parentData, $constraints);
-        if ($constraints) {
-            if (isset($constraints['id']) && isset($this->_rows[$constraints['id']])) {
-                $ret[] = $constraints['id'];
-            } else {
-                $select = $this->_getSelect($constraints);
-                if ($select) {
-                    $rows = $this->_table->fetchAll($select); // TODO: Nummerierung
-                    foreach ($rows as $row) {
-                        $id = $this->_idSeparator . $this->_getIdFromRow($row);
-                        $this->_rows[$id] = $row;
-                        $ret[] = $id;
-                    }
-                }
-            }
+        if (!$parentData) {
+            throw new Vps_Exception("no parentData for getChildIds is not (yet) implemented");
+        }
+        foreach ($this->_fetchRows($parentData, $constraints) as $row) {
+            $ret[] = $this->_idSeparator . $this->_getIdFromRow($row);
         }
         return $ret;
     }
-    
-    public function getChildData($parentData, $id)
+    public function getChildData($parentData, $constraints = array())
     {
-        if (isset($this->_rows[$id])) {
-            return $this->_createData($this->_formatConfig($parentData, $this->_rows[$id]));
+        $ret = parent::getChildData($parentData, $constraints);
+        foreach ($this->_fetchRows($parentData, $constraints) as $row) {
+            $ret[] = $this->_createData($parentData, $row);
         }
-        return parent::getChildData($parentData, $id);
+        return $ret;
     }
-    
+
+    protected function _createData($parentData, $row)
+    {
+        if (!$parentData) {
+            $parentData = $this->_getParentDataByRow($row);
+        }
+        return parent::_createData($parentData, $row);
+    }
+
+    protected function _getParentDataByRow($row)
+    {
+        if (isset($row->component_id)) {
+            $ret = Vps_Component_Data_Root::getInstance()
+                                        ->getByDbId($row->component_id);
+        } else {
+            //TODO: funktioniert das so korrekt?
+            $ret = Vps_Component_Data_Root::getInstance()
+                                ->getComponentByClass($this->_class);
+        }
+        return $ret;
+    }
+
+    protected function _fetchRows($parentData, $constraints)
+    {
+        $select = $this->_getSelect($parentData, $constraints);
+        if ($select) {
+            return $this->_table->fetchAll($select);
+        }
+        return array();
+    }
+
     protected function _formatConstraints($parentData, $constraints)
     {
         $where = parent::_formatConstraints($parentData, $constraints);
@@ -81,8 +102,11 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
         return $constraints;
     }
 
-    protected function _getSelect($constraints)
+    protected function _getSelect($parentData, $constraints)
     {
+        $constraints = $this->_formatConstraints($parentData, $constraints);
+        if (!$constraints) return null;
+
         if (isset($constraints['select'])) {
             $select = $constraints['select'];
         } else {
@@ -148,7 +172,6 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
             'componentClass' => $componentClass,
             'parent' => $parentData,
             'row' => $row,
-            'id' => $this->_getIdFromRow($row),
             'isPage' => false
         );
         return $data;
