@@ -19,6 +19,8 @@ class Vps_Acl extends Zend_Acl
         $this->add(new Zend_Acl_Resource('vps_debug_sql'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_debug_assets'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_media_upload'));
+        $this->add(new Zend_Acl_Resource('edit_role'));
+        $this->add(new Vps_Acl_Resource_EditRole('edit_role_admin', 'admin'), 'edit_role');
 
         $this->add(new Vps_Acl_Resource_UserSelf('vps_user_self', '/vps/user/self'));
 
@@ -44,6 +46,50 @@ class Vps_Acl extends Zend_Acl
         $this->deny('guest', 'vps_user_self');
         $this->allow('admin', 'vps_debug');
         $this->allow('admin', 'vps_media_upload');
+        $this->allow('admin', 'edit_role');
+    }
+
+    public function isAllowedUser($user, $resource = null, $privilege = null)
+    {
+//     d('a');
+        if (is_numeric($user)) {
+            $table = Vps_Registry::get('userModel');
+            $user = $table->find($user)->current();
+        }
+//         d('b');
+
+        if (!$user) {
+            return $this->isAllowed('guest', $resource, $privilege);
+        }
+
+        $userRoles      = array($user->role);
+        $availableRoles = array($user->role);
+
+        $additionalRolesExist = false;
+        foreach ($this->getRoles() as $roleObj) {
+            if ($roleObj instanceof Vps_Acl_Role_Additional
+                && $roleObj->getParentRoleId() == $user->role
+            ) {
+                $availableRoles[] = $roleObj->getRoleId();
+                $additionalRolesExist = true;
+            }
+        }
+
+        if ($additionalRolesExist) {
+            $table = new Vps_Model_User_AdditionalRoles();
+            $rows = $table->fetchAll(array('user_id = ?' => $user->id));
+            foreach ($rows as $r) {
+                $userRoles[] = $r->additional_role;
+            }
+        }
+
+        foreach ($userRoles as $r) {
+            if (in_array($r, $availableRoles) && $this->isAllowed($r, $resource, $privilege)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getResources($parent = null)

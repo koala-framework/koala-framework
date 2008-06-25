@@ -10,7 +10,7 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
     protected function _addValidators()
     {
         parent::_addValidators();
-        $store = $this->getStore();
+        $store = $this->_getStoreData();
         if (isset($store['data'])) {
             $a = array('');
             foreach ($store['data'] as $r) {

@@ -298,7 +298,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Field {0} is mandatory, please fill out</en>
-<de>Bitte füllen Sie das Feld {0} aus</de>
+<de>Bitte f&#xFC;llen Sie das Feld {0} aus</de>
 </text>
 <text>
 <en default="1">An error occured during the file upload</en>
@@ -358,7 +358,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">enable posts</en>
-<de>Beiträge erlauben</de>
+<de>Beitr&#xE4;ge erlauben</de>
 </text>
 <text>
 <en default="1">Topics</en>
@@ -366,7 +366,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Entries</en>
-<de>Beiträge</de>
+<de>Beitr&#xE4;ge</de>
 </text>
 <text>
 <en default="1">Last Entry</en>
@@ -522,7 +522,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en default="1">interests, hobbies, pets, ...</en>
 <de>Interessen, Hobbies, Haustiere, ...</de>
 </text>
-
 <text>
 <en default="1">Signature</en>
 <de>Unterschrift</de>
@@ -533,7 +532,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Latest entries</en>
-<de>Letzte Beiträge</de>
+<de>Letzte Beitr&#xE4;ge</de>
 </text>
 <text>
 <en default="1">childComponentClass must be set for key \{0}\</en>
@@ -589,7 +588,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
-<de>Bitte gib den gewünschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
+<de>Bitte gib den gew&#xFC;nschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
 </text>
 <text>
 <en default="1">Create comment</en>
@@ -1213,7 +1212,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Do you really wish to remove this entry / these entries?</en>
-<de>Wollen Sie diesen Beitrag (diese Beiträge) wirklich l&#xF6;schen?</de>
+<de>Wollen Sie diesen Beitrag (diese Beitr&#xE4;ge) wirklich l&#xF6;schen?</de>
 </text>
 <text>
 <en default="1">Add</en>
@@ -1737,11 +1736,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">You may upload a picture that is displayed in your profile and in each of your posts in a small version (40x40 Pixels).</en>
-<de>Hier können Sie ein Bild hochladen, welches in Ihrem Profil und in verkleinerter Version (40x40 Pixel) bei Ihren Beiträgen angezeigt wird.</de>
+<de>Hier k&#xF6;nnen Sie ein Bild hochladen, welches in Ihrem Profil und in verkleinerter Version (40x40 Pixel) bei Ihren Beitr&#xE4;gen angezeigt wird.</de>
 </text>
 <text>
 <en default="1">For optimized displayment the picture should have a width of at least 150 Pixels, the file size may not be bigger than 2 MB.</en>
-<de>Für eine optimale Darstellung sollte das Bild mindestens 150 Pixel breit sein, die maximale Dateigröße darf 2 MB nicht überschreiten.</de>
+<de>F&#xFC;r eine optimale Darstellung sollte das Bild mindestens 150 Pixel breit sein, die maximale Dateigr&#xF6;&#xDF;e darf 2 MB nicht &#xFC;berschreiten.</de>
 </text>
 <text>
 <en default="1">Delete avatar</en>
@@ -1753,7 +1752,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">will be displayed at the end of each post</en>
-<de>wird am Ende eines jeden Forumbeitrags angehängt</de>
+<de>wird am Ende eines jeden Forumbeitrags angeh&#xE4;ngt</de>
 </text>
 <text>
 <en default="1">File-Type not allowed. Only Images are allowed.</en>
@@ -1820,7 +1819,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">An error occured. Please try again later.</en>
-<de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es später wieder.</de>
+<de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es sp&#xE4;ter wieder.</de>
 </text>
 <text>
 <en default="1">on</en>
@@ -1832,11 +1831,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Delete picture</en>
-<de>Bild löschen</de>
+<de>Bild l&#xF6;schen</de>
 </text>
 <text>
 <en default="1">Delete current picture</en>
-<de>Aktuelles Bild löschen</de>
+<de>Aktuelles Bild l&#xF6;schen</de>
 </text>
 <text>
 <en default="1">New post in observed thread</en>
@@ -1860,7 +1859,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">You will receive an email with a passwort reset link and further instructions.</en>
-<de>Sie erhalten eine Email mit einem Passwort zurücksetzen Link und weiteren Anweisungen.</de>
+<de>Sie erhalten eine Email mit einem Passwort zur&#xFC;cksetzen Link und weiteren Anweisungen.</de>
 </text>
 <text>
 <en default="1">Post</en>
@@ -1876,11 +1875,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en>Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.</en>
-<de>Bitte bleibt in den Beiträgen bei einem freundlichen Umgangston. Jeder Verfasser haftet für sämtliche von ihm veröffentlichte Beiträge selbst. Beleidigende oder verletzende Beiträge werden von uns ohne Kommentar gelöscht.</de>
+<de>Bitte bleibt in den Beitr&#xE4;gen bei einem freundlichen Umgangston. Jeder Verfasser haftet f&#xFC;r s&#xE4;mtliche von ihm ver&#xF6;ffentlichte Beitr&#xE4;ge selbst. Beleidigende oder verletzende Beitr&#xE4;ge werden von uns ohne Kommentar gel&#xF6;scht.</de>
 </text>
 <text>
 <en>Do you really wish to delete this post?</en>
-<de>Möchten Sie diesen Beitrag wirklich löschen?</de>
+<de>M&#xF6;chten Sie diesen Beitrag wirklich l&#xF6;schen?</de>
 </text>
 <text>
 <en>Created by</en>
@@ -1911,27 +1910,507 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Hochladen</de>
 </text>
 <text>
-    <en default="1">Add {0}</en>
-    <de>{0} hinzufügen</de>
+<en default="1">Add {0}</en>
+<de>{0} hinzuf&#xFC;gen</de>
 </text>
 <text>
-    <en default="1">Edit {0}</en>
-    <de>{0} bearbeiten</de>
+<en default="1">Edit {0}</en>
+<de>{0} bearbeiten</de>
 </text>
 <text>
-    <en default="1">Saving...</en>
-    <de>Speichern...</de>
+<en default="1">Saving...</en>
+<de>Speichern...</de>
 </text>
 <text>
-    <en default="1">Deleting...</en>
-    <de>Löschen...</de>
+<en default="1">Deleting...</en>
+<de>L&#xF6;schen...</de>
 </text>
 <text>
-    <en default="1">Duplicating...</en>
-    <de>Duplizieren</de>
+<en default="1">Duplicating...</en>
+<de>Duplizieren</de>
 </text>
 <text>
-    <en default="1">yyyy-mm-dd</en>
-    <de>dd.mm.yyyy</de>
+<en default="1">clubId is required</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Events.show Categories</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">empty</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Upload File</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Delete File</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Uploading file</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Edit Styles</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Modify and Create Styles.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">File upload</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Info</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Do you really want to delete this entry:</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">yyyy-mm-dd</en>
+<de>dd.mm.yyyy</de>
+</text>
+<text>
+<en default="1">Small Image</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Margin top</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Margin bottom</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Text Align</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Center</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Justify</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Tag</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Position</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Selector</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Default</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Normal</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Normal (p)</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">&#xDC;berschrift 1 (h1)</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">&#xDC;berschrift 2 (h2)</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">&#xDC;berschrift 3 (h3)</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">&#xDC;berschrift 4 (h4)</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">&#xDC;berschrift 5 (h5)</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">&#xDC;berschrift 6 (h6)</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Block-Styles</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Inline-Styles</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Master-Styles</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Color</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Font Weight</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Bold</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Bolder</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Lighter</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Font Family</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Font size</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Additional Styles</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">You can't delete master styles</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Beschreibungstext</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Linktype</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Settings</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Forum Feed</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">You may upload a picture that is displayed in your profile
+                and in each of your posts in a small version (40x40 Pixels).</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">For optimized displayment the picture should have a width of at least 150 Pixels,
+                the file size may not be bigger than 2 MB.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Information</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Link Image</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Text Image enlarge</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Text Image Link</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Links Images</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Show News</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">News.List</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Months</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">News Feed</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Categories</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">News.show Categories</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Request password</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">{0} '{1}' must be a subclass of {2}.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Label</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Fieldset</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Url</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Alpha</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Alpha Numeric</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Maximum Value</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Minimum Value</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Allow Negative</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Allow Decimals</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Allow Blank</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Values</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Number Field</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Text Area</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Select Field</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Checkbox</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">This is not an image.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Text Field</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Activation code is invalid. Maybe the URL wasn't copied completely?</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Activation code is invalid. Maybe your '
+                                         .'account has already been activated?</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">New password couldn't be set</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">_createAuthAdapter didn't return instance of Vps_Auth_Adapter_Service</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Activation link</en>
+<de>Aktivierungslink</de>
+</text>
+<text>
+<en default="1">Additional rights</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Activated</en>
+<de>Aktiviert</de>
+</text>
+<text>
+<en default="1">Template</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">(all templates)</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Variable</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Html</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Can't sort by {0}, field doesn't exist in row</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Assets-Path-Type '{0}' not found in config.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Path '{0}' does not exist.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Cannot set Home Page invisible</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Can't delete page as there are child pages.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Hello</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">A Post at {0} has been reported with the following comment</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">to go directly to the post or read it below</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Click the link</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">A new entry has been written in your guestbook.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Here is the Link to your profile:</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">This is the text that was saved in your guestbook:</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Click here to go directly to you profile</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">This email has been generated using the lost password function at</en>
+<de>Diese Email wurde durch die Passwort vergessen funktion auf</de>
+</text>
+<text>
+<en default="1">If you did not request this email you may just ignore it and use the login as before.</en>
+<de>Sollten Sie diese Email nicht angefordert haben, ignorieren Sie sie bitte und benutzen Ihr Login wie zuvor.</de>
+</text>
+<text>
+<en default="1">Click here to activate and log in to your Account</en>
+<de>Klicken Sie hier, um Ihren Account zu aktivieren und sich einzuloggen</de>
+</text>
+<text>
+<en default="1">If the activationlink does not work, copy the following address and paste it in your browser (it is possible that the address has a line-break, so please be sure to copy everything correctly):</en>
+<de>Wenn der Aktivierungslink nicht funktioniert, kopieren Sie bitte die folgende Adresse und f&#xFC;gen Sie in Ihrem Browser in der Adresszeile ein (es ist m&#xF6;glich, dass die Adresse umbricht, also stellen Sie bitte sicher, dass Sie alles korrekt kopiert haben):</de>
+</text>
+<text>
+<en default="1">Your email address at {0} has been changed.</en>
+<de>Ihre Email Adresse auf {0} wurde ge&#xE4;ndert.</de>
+</text>
+<text>
+<en default="1">From your old email address {0} to {1}</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Not Found</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">The requested URL "{0}" was not found on this server.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Version</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Password</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Errortype</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Message</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Last DB-Query</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Revision</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Your old email address was {0}, the new one is {1}</en>
+<de>Ihre alte Email Adresse war {0}, die neue ist {1}</de>
+</text>
+<text>
+<en default="1">This email has been generated using the lost password function at {0}</en>
+<de>Diese Email wurde von der Passwort vergessen Funktion auf {0} generiert.</de>
+</text>
+<text>
+<en default="1">Click here to choose a new password</en>
+<de>Klicken Sie hier, um ein neues Passwort zu w&#xE4;hlen</de>
+</text>
+<text>
+<en default="1">Already activated</en>
+<de>Bereits aktiviert</de>
 </text>
 </trl>
+

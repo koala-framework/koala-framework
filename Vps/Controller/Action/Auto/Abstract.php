@@ -35,16 +35,16 @@ abstract class Vps_Controller_Action_Auto_Abstract extends Vps_Controller_Action
 
         //buttons/permissions abhängig von privileges in acl ausblenden/löschen
         $acl = $this->_getAcl();
-        $role = $this->_getUserRole();
+        $authData = $this->_getAuthData();
         $resource = $this->_getResourceName();
 
         foreach ($this->_buttons as $k=>$i) {
-            if (!$acl->isAllowed($role, $resource, $k)) {
+            if (!$acl->isAllowedUser($authData, $resource, $k)) {
                 unset($this->_buttons[$k]);
             }
         }
         foreach ($this->_permissions as $k=>$i) {
-            if (!$acl->isAllowed($role, $resource, $k)) {
+            if (!$acl->isAllowedUser($authData, $resource, $k)) {
                 unset($this->_permissions[$k]);
             }
         }

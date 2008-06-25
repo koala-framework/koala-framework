@@ -1,9 +1,9 @@
-Hello {$fullname}!<br /><br />
+<?= trlVps('Hello {0}!', $this->fullname); ?><br /><br />
 
-Your email address at <a href="{$webUrl}">{$webUrl}</a> has been changed<br />
-from {$oldMail} to {$userData.email}<br /><br />
+<?= trlVps('Your email address at {0} has been changed.', '<a href="'.$this->webUrl.'">'.$this->webUrl.'</a>'); ?><br />
+<?= trlVps('Your old email address was {0}, the new one is {1}', array($this->oldMail, $this->userData['email'])); ?><br /><br />
 
-{$applicationName}<br /><br />
+<?= $this->applicationName; ?><br /><br />
 
 --<br />
-This email has been generated automatically. There may be no recipient if you answer to this email.
+<?= trlVps('This email has been generated automatically. There may be no recipient if you answer to this email.'); ?>

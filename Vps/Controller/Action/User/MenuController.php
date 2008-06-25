@@ -7,7 +7,7 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
 
         $menus = array();
         foreach ($resources as $resource) {
-            if ($acl->isAllowed($this->_getUserRole(), $resource, 'view')) {
+            if ($acl->isAllowedUser($this->_getAuthData(), $resource, 'view')) {
                 if (!$resource instanceof Vps_Acl_Resource_Abstract) {
                     //nur Vps-Resourcen im Menü anzeigen
                     continue;
@@ -70,7 +70,8 @@ class Vps_Controller_Action_User_MenuController extends Vps_Controller_Action
 
         foreach ($acl->getAllResources() as $resource) {
             if ($resource instanceof Vps_Acl_Resource_UserSelf
-                && $acl->isAllowed($this->_getUserRole(), $resource, 'view')) {
+                && $acl->isAllowedUser($this->_getAuthData(), $resource, 'view')
+            ) {
 
                 $this->view->userSelfControllerUrl = $resource->getControllerUrl();
                 break;
