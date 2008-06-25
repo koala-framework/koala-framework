@@ -67,7 +67,7 @@ $GLOBALS['getComponentByIdCalled'][] = $componentId;
             $tc = Vpc_TreeCache_Abstract::getInstance($class);
             if (!$tc) continue;
             if ($dbIdShortcut = $tc->getDbIdShortcut($dbId)) {
-                $id = '-'.substr($dbId, strlen($dbIdShortcut));
+                $id = substr($dbId, strlen($dbIdShortcut) - 1);
                 $data = $tc->getChildData(null, array('id' => $id));
                 return $data[0];
             }
