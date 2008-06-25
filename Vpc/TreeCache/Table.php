@@ -26,8 +26,12 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
         $select = new Vps_Db_Table_Select_TreeCache($this->_table);
         $select->setTreeCacheClass(get_class($this));
         $select->from($this->_table);
-        if ($parentData && in_array('component_id', $this->_table->info('cols'))) {
+        $cols = $this->_table->info('cols');
+        if ($parentData && in_array('component_id', $cols)) {
             $select->where('component_id = ?', $parentData->dbId);
+        }
+        if (in_array('visible', $cols) && !Vps_Registry::get('config')->showInvisible) {
+            $select->where('visible = ?', 1);
         }
         // TODO: Sortierung / Nummerierung
         return $select;
