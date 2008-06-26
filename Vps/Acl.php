@@ -50,47 +50,115 @@ class Vps_Acl extends Zend_Acl
         $this->allow('admin', 'edit_role');
     }
 
+    public function isAllowed($role = null, $resource = null, $privilege = null)
+    {
+        $ret = parent::isAllowed($role, $resource, $privilege);
+
+        if (!$ret) {
+            if (null !== $resource) {
+                $resource = $this->get($resource);
+            }
+
+            if ($resource instanceof Vps_Acl_Resource_MenuDropdown) {
+                foreach ($this->getResources($resource) as $r) {
+                    if ($r instanceof Vps_Acl_Resource_MenuUrl
+                        && parent::isAllowed($role, $r, $privilege)
+                    ) {
+                        $ret = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $ret;
+    }
+
     public function isAllowedUser($user, $resource = null, $privilege = null)
     {
-//     d('a');
         if (is_numeric($user)) {
             $table = Vps_Registry::get('userModel');
             $user = $table->find($user)->current();
         }
-//         d('b');
 
         if (!$user) {
             return $this->isAllowed('guest', $resource, $privilege);
         }
 
-        $userRoles      = array($user->role);
-        $availableRoles = array($user->role);
-
-        $additionalRolesExist = false;
-        foreach ($this->getRoles() as $roleObj) {
-            if ($roleObj instanceof Vps_Acl_Role_Additional
-                && $roleObj->getParentRoleId() == $user->role
-            ) {
-                $availableRoles[] = $roleObj->getRoleId();
-                $additionalRolesExist = true;
-            }
+        if ($this->isAllowed($user->role, $resource, $privilege)) {
+            return true;
         }
 
-        if ($additionalRolesExist) {
-            $table = new Vps_Model_User_AdditionalRoles();
-            $rows = $table->fetchAll(array('user_id = ?' => $user->id));
-            foreach ($rows as $r) {
-                $userRoles[] = $r->additional_role;
-            }
-        }
-
-        foreach ($userRoles as $r) {
-            if (in_array($r, $availableRoles) && $this->isAllowed($r, $resource, $privilege)) {
-                return true;
+        $additionalRoles = $this->_getAdditionalRolesByRole($user->role);
+        if ($additionalRoles) {
+            foreach ($user->getAdditionalRoles() as $r) {
+                if (in_array($r, $additionalRoles) && $this->isAllowed($r, $resource, $privilege)) {
+                    return true;
+                }
             }
         }
 
         return false;
+    }
+
+    private function _getAdditionalRolesByRole($role)
+    {
+        $ret = array();
+        foreach ($this->getRoles() as $r) {
+            if ($r instanceof Vps_Acl_Role_Additional
+                && $r->getParentRoleId() == $role
+            ) {
+                $ret[] = $r->getRoleId();
+            }
+        }
+        return $ret;
+    }
+
+    public function getAllowedEditResourceRoleIdsByRole($role)
+    {
+        $ret = array();
+        foreach ($this->_getAllowedEditResourcesByRole($role) as $res) {
+            $ret[] = $res->getRoleId();
+        }
+        return $ret;
+    }
+
+    private function _getAllowedEditResourcesByRole($role)
+    {
+        $ret = array();
+        foreach ($this->getAllResources() as $r) {
+            if ($r instanceof Vps_Acl_Resource_EditRole
+                && $this->isAllowed($role, $r, 'view')
+            ) {
+                $ret[] = $r;
+            }
+        }
+        return $ret;
+    }
+
+    public function getAllowedEditRolesByRole($role)
+    {
+        $ret = array();
+        $editResourceRoleIds = $this->getAllowedEditResourceRoleIdsByRole($role);
+        foreach ($this->getRoles() as $role) {
+            if ($role instanceof Vps_Acl_Role && !($role instanceof Vps_Acl_Role_Additional)
+                && in_array($role->getRoleId(), $editResourceRoleIds)
+            ) {
+                $ret[] = $role;
+            }
+        }
+        return $ret;
+    }
+
+    public function getAdditionalRoles()
+    {
+        $ret = array();
+        foreach ($this->getRoles() as $role) {
+            if ($role instanceof Vps_Acl_Role_Additional) {
+                $ret[] = $role;
+            }
+        }
+        return $ret;
     }
 
     public function getResources($parent = null)
