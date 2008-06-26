@@ -31,8 +31,8 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
      */
     public function getTemplateVars()
     {
-        $vars = array();
-        $vars['placeholder'] = $this->_getSetting('placeholder');
+        $ret = array();
+        $ret['placeholder'] = $this->_getSetting('placeholder');
 
         $cssClass = array();
         $dirs = explode(PATH_SEPARATOR, get_include_path());
@@ -56,8 +56,11 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
                 }
             }
         } while($c = get_parent_class($c));
-        $vars['cssClass'] = implode(' ', array_reverse($cssClass));
-        return $vars;
+        $ret['cssClass'] = implode(' ', array_reverse($cssClass));
+        if (Vpc_Abstract::hasSetting(get_class($this), 'cssClass')) {
+            $ret['cssClass'] .= ' '.Vpc_Abstract::getSetting(get_class($this), 'cssClass');
+        }
+        return $ret;
     }
 
     protected function _getParam($param)
