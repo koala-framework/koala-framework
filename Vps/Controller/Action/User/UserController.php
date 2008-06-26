@@ -72,30 +72,17 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
     {
         $acl = Zend_Registry::get('acl');
 
-        // alle EditRoles Resourcen holen und ermitteln, ob man diese bearbeiten darf
-        $myEditRoleResource = null;
-        $allowedEditRoles = $editRoleResources = array();
-        foreach ($acl->getAllResources() as $r) {
-            if ($r instanceof Vps_Acl_Resource_EditRole
-                && $acl->isAllowed($this->_getUserRole(), $r->getResourceId(), 'view')
-            ) {
-                $allowedEditRoles[] = $r->getRoleId();
-                $editRoleResources[] = $r;
-                if ($r->getRoleId() == $this->_getUserRole()) $myEditRoleResource = $r;
-            }
+        // alle erlaubten haupt-rollen in variable
+        $roles = array();
+        foreach ($acl->getAllowedEditRolesByRole($this->_getUserRole()) as $role) {
+            $roles[$role->getRoleId()] = $role->getRoleName();
         }
-        if (!$allowedEditRoles) return;
+        if (!$roles) return;
 
-        // alle rollen und additioinalRoles in variablen speichern
-        $roles = $addRoles = array();
-        foreach ($acl->getRoles() as $role) {
-            if ($role instanceof Vps_Acl_Role && !($role instanceof Vps_Acl_Role_Additional)
-                && in_array($role->getRoleId(), $allowedEditRoles)
-            ) {
-                $roles[$role->getRoleId()] = $role->getRoleName();
-            } else if ($role instanceof Vps_Acl_Role_Additional) {
-                $addRoles[$role->getParentRoleId()][$role->getRoleId()] = $role->getRoleName();
-            }
+        // ALLE additional roles in variable
+        $addRoles = array();
+        foreach ($acl->getAdditionalRoles() as $role) {
+            $addRoles[$role->getParentRoleId()][$role->getRoleId()] = $role->getRoleName();
         }
 
         // Wenns keine additionalRoles gibt, normales select verwenden
@@ -106,25 +93,10 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
             $addTo->add($editor);
         } else {
             // eigene additionalRoles holen, nur die dürfen zugewiesen werden
-            $allowedAddRoles = array();
-            if ($addRoles) {
-                $table = new Vps_Model_User_AdditionalRoles();
-                $rowset = $table->fetchAll(array('user_id = ?' => $this->_getAuthData()->id));
-                foreach ($rowset as $row) {
-                    $allowedAddRoles[] = $row->additional_role;
-                }
-            }
-
-            // wenn die roleResource erbt, darf man beim child alle addRoles bearbeiten
-            foreach ($editRoleResources as $r) {
-                if ($acl->inherits($r, $myEditRoleResource)) {
-                    if (isset($addRoles[$r->getRoleId()])) {
-                        foreach ($addRoles[$r->getRoleId()] as $k => $v) {
-                            $allowedAddRoles[] = $k;
-                        }
-                    }
-                }
-            }
+            $allowedRoles = array_merge(
+                $this->_getAuthData()->getAdditionalRoles(),
+                $acl->getAllowedEditResourceRoleIdsByRole($this->_getUserRole())
+            );
 
             // cards container erstellen und zu form hinzufügen
             $cards = $addTo->add(new Vps_Form_Container_Cards('role', trlVps('Rights')))
@@ -136,7 +108,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 
                 if (isset($addRoles[$roleId])) {
                     foreach ($addRoles[$roleId] as $addRoleId => $addRoleName) {
-                        if (!in_array($addRoleId, $allowedAddRoles)) {
+                        if (!in_array($addRoleId, $allowedRoles)) {
                             unset($addRoles[$roleId][$addRoleId]);
                         }
                     }

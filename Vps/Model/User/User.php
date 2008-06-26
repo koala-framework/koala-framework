@@ -3,6 +3,7 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
 {
     protected $_changedServiceData = array();
     protected $_changedPasswordData = array();
+    protected $_additionalRolesCache = null;
 
     public function __sleep()
     {
@@ -292,6 +293,19 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
         } else {
             return parent::__isset($columnName);
         }
+    }
+
+    public function getAdditionalRoles()
+    {
+        if (is_null($this->_additionalRolesCache)) {
+            $this->_additionalRolesCache = array();
+            $rows = $this->findDependentRowset('Vps_Model_User_AdditionalRoles');
+            foreach ($rows as $r) {
+                $this->_additionalRolesCache[] = $r->additional_role;
+            }
+        }
+
+        return $this->_additionalRolesCache;
     }
 
 }
