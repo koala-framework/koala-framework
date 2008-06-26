@@ -3,9 +3,9 @@ ul.vpcMenuDropdown li a { display:block; width: auto; }
 
 ul.vpcMenuDropdown div.dropdown {
     position: absolute;
-    z-index: 100;
     margin-left: 0px;
     display: none;
+    z-index: 100;
 }
 ul.vpcMenuDropdown li:hover div.dropdown,
 ul.vpcMenuDropdown li.hover div.dropdown { display: block; }

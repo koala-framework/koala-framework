@@ -59,6 +59,7 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
         $ret['cssClass'] = implode(' ', array_reverse($cssClass));
         if (Vpc_Abstract::hasSetting(get_class($this), 'cssClass')) {
             $ret['cssClass'] .= ' '.Vpc_Abstract::getSetting(get_class($this), 'cssClass');
+            $ret['cssClass'] = trim($ret['cssClass']);
         }
         return $ret;
     }
