@@ -178,4 +178,11 @@ abstract class Vpc_TreeCache_Abstract
         }
         return false;
     }
+    public function createsBoxes()
+    {
+        foreach ($this->_getAdditionalTreeCaches(null) as $treeCache) {
+            if ($treeCache->createsBoxes()) return true;
+        }
+        return false;
+    }
 }

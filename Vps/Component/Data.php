@@ -132,6 +132,64 @@ class Vps_Component_Data
         $canCreatePagesCache[$componentClass] = false;
         return false;
     }
+    /*
+    public function getChildBoxes($constraints = array())
+    {
+        $ret = array_merge(array(), $this->getChildComponents($constraints));
+        foreach ($this->getChildComponents() as $component) {
+            if (!$component->isPage) {
+                $ret = array_merge($ret, $component->getChildBoxes($constraints));
+            }
+        }
+        return $ret;
+    }*/
+    
+    public function getChildBoxes($constraints = array())
+    {
+        $classes = Vpc_Abstract::getSetting($this->componentClass, 'childComponentClasses');
+        $childConstraints = array('page'=>false);
+        $childConstraints['componentClass'] = array();
+
+        foreach ($classes as $class) {
+            if ($this->_canCreateBoxes($class)) {
+                $childConstraints['componentClass'][] = $class;
+            }
+        }
+
+        $constraints['treecache'] = 'Vpc_TreeCache_StaticBox';
+        $ret = $this->getChildComponents($constraints);
+        foreach ($this->getChildComponents($childConstraints) as $component) {
+            $ret = array_merge($ret, $component->getChildBoxes($constraints));
+        }
+        return $ret;
+    }
+
+    //TODO: ist eine 99%ige kopie von _canCreatePages
+    //wird verbessert wenn wir in den komponenten-einstellungen die additionalBoxes haben
+    //und auch ob es page oder box TreeCaches sind
+    private function _canCreateBoxes($componentClass)
+    {
+        static $canCreateBoxesCache = array();
+
+        if (isset($canCreateBoxesCache[$componentClass])) {
+            return $canCreateBoxesCache[$componentClass];
+        }
+        $tc = Vpc_TreeCache_Abstract::getInstance($componentClass);
+        if ($tc && $tc->createsBoxes()) {
+            $canCreateBoxesCache[$componentClass] = true;
+            return true;
+        }
+        $canCreateBoxesCache[$componentClass] = false;
+        $classes = Vpc_Abstract::getSetting($componentClass, 'childComponentClasses');
+        foreach ($classes as $class) {
+            if ($class && $this->_canCreateBoxes($class)) {
+                $canCreateBoxesCache[$componentClass] = true;
+                return true;
+            }
+        }
+        $canCreateBoxesCache[$componentClass] = false;
+        return false;
+    }
 
     public function getChildPage($constraints = array())
     {
@@ -182,17 +240,6 @@ class Vps_Component_Data
 
     }
 
-    public function getChildBoxes($constraints = array())
-    {
-        $ret = array_merge(array(), $this->getChildComponents($constraints));
-        foreach ($this->getChildComponents() as $component) {
-            if (!$component->isPage) {
-                $ret = array_merge($ret, $component->getChildBoxes($constraints));
-            }
-        }
-        return $ret;
-    }
-    
     public function getChildComponentIds($constraints = array())
     {
         $ret = array();

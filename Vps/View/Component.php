@@ -26,8 +26,8 @@ class Vps_View_Component extends Vps_View
 
             if ($component) {
                 $return = Vps_View_Component::_renderComponent($component, $isMaster);
-                $tag = $isMaster ? 'master' : $component->componentClass;
                 if (!$cacheDisabled) {
+                    $tag = $isMaster ? 'master' : $component->componentClass;
                     $cache->save($return, $cacheId, array($tag));
                 }
             } else {
@@ -49,7 +49,7 @@ class Vps_View_Component extends Vps_View
     private static function _renderComponent(Vps_Component_Data $componentData, $isMaster = false)
     {
         $componentId = $componentData->componentId;
-        
+
         if ($isMaster) {
             $templateVars = array();
             foreach (Zend_Registry::get('config')->vpc->masterComponents->toArray()
@@ -59,7 +59,8 @@ class Vps_View_Component extends Vps_View
                 if (!$component instanceof Vpc_Master_Abstract) {
                     throw new Vps_Exception('vpc.masterComponent has to be instance of Vpc_Master_Abstract');
                 }
-                $templateVars += $component->getTemplateVars();
+                $vars = $component->getTemplateVars();
+                $templateVars = array_merge($templateVars, $vars);
             }
             $templateVars['component'] = $componentId;
             $template = 'application/views/master/default.tpl';
