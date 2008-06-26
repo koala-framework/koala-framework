@@ -5,15 +5,15 @@
         <h1><?= trlVps('Error') ?></h1>
 
         <?php if ($this->debug) { ?>
-            <?= trlVps('Errortype') ?>:<br />
+            Errortype:<br />
             <pre><?= $this->type ?></pre>
 
             <br />
 
-            <?= trlVps('Message') ?>:<br />
+            Message:<br />
             <pre><?= $this->exception ?></pre>
             <?php if(isset($this->query)) { ?>
-            <p><?= trlVps('Last DB-Query') ?>:</p>
+            <p>Last DB-Query:</p>
             <pre><?= $this->query ?></pre>
             <?php } ?>
         <?php } else { ?>
