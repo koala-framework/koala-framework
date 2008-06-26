@@ -135,6 +135,20 @@ Vps.Debug.Menu = function(config) {
             Ext.log();
         }
     });
+    this.add({
+        text: 'stop debugging',
+        icon: '/assets/silkicons/stop.png',
+        cls: 'x-btn-text-icon',
+        scope: this,
+        handler: function() {
+            Ext.Ajax.request({
+                url: '/vps/debug/activate/json-deactivate',
+                success: function() {
+                    location.href = location.href;
+                }
+            })
+        }
+    });
 };
 
 

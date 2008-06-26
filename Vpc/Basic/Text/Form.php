@@ -44,8 +44,8 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
 
         $field->setControllerUrl(Vpc_Admin::getInstance($class)->getControllerUrl());
 
-        $dep = new Vps_Assets_Dependencies('Frontend');
-        $field->setCssFiles($dep->getAssetFiles('css'));
+        $dep = new Vps_Assets_Dependencies();
+        $field->setCssFiles($dep->getAssetFiles('Frontend', 'css'));
 
         $this->fields->add($field);
     }

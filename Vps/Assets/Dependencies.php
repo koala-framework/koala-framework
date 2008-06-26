@@ -1,27 +1,17 @@
 <?php
 class Vps_Assets_Dependencies
 {
-    private $_files;
+    private $_files = array();
     private $_config;
-    private $_assets;
     private $_dependenciesConfig;
     private $_processedDependencies = array();
     private $_processedComponents = array();
-    private $_assetsType;
     /**
      * @param string Assets-Typ, Frontend od. Admin
      **/
-    public function __construct($assetsType, $config = null)
+    public function __construct()
     {
-        if (!$config) {
-            $config = Zend_Registry::get('config');
-        }
-        $this->_config = $config;
-        $this->_assetsType = $assetsType;
-        if (!isset($this->_config->assets->$assetsType)) {
-            throw new Vps_Exception(trlVps("Unknown AssetsType: {0}", $assetsType));
-        }
-        $this->_assets = $this->_config->assets->$assetsType;
+        $this->_config = Vps_Registry::get('config');
     }
 
     private function _getFilePath($file)
@@ -29,16 +19,21 @@ class Vps_Assets_Dependencies
         return Vps_Assets_Loader::getAssetPath($file, $this->_config->path);
     }
 
-    public function getAssetFiles($fileType = null)
+    public function getAssetFiles($assetsType, $fileType = null)
     {
-        $sessionAssets = new Zend_Session_Namespace('debugAssets');
+        if ($this->_config->debug->menu) {
+            $session = new Zend_Session_Namespace('debug');
+            if (isset($session->enable) && $session->enable) {
+                $assetsType .= 'Debug';
+            }
+        }
         $ret = array();
-        if (!$this->_config->debug->assets->$fileType || (isset($sessionAssets->$fileType) && !$sessionAssets->$fileType)) {
+        if (!$this->_config->debug->assets->$fileType || (isset($session->$fileType) && !$session->$fileType)) {
             $v = $this->_config->application->version;
-            $ret[] = "/assets/All{$this->_assetsType}.$fileType?v=$v";
+            $ret[] = "/assets/All$assetsType.$fileType?v=$v";
             $allUsed = true;
         }
-        foreach ($this->getFiles($fileType) as $file) {
+        foreach ($this->_getFiles($assetsType, $fileType) as $file) {
             if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
                 $ret[] = $file;
             } else if (empty($allUsed)) {
@@ -48,21 +43,25 @@ class Vps_Assets_Dependencies
         return $ret;
     }
 
-    public function getFiles($fileType = null)
+    private function _getFiles($assetsType, $fileType = null)
     {
-        if (!isset($this->_files)) {
-            $this->_files = array();
-            foreach ($this->_assets as $d=>$v) {
+        if (!isset($this->_files[$assetsType])) {
+            $this->_files[$assetsType] = array();
+            $assetsSection = $assetsType;
+            if (!isset($this->_config->assets->$assetsType)) {
+                throw new Vps_Exception("Unknown AssetsType '$assetsType'");
+            }
+            foreach ($this->_config->assets->$assetsType as $d=>$v) {
                 if ($v) {
-                    $this->_processDependency($d);
+                    $this->_processDependency($assetsType, $d);
                 }
             }
         }
 
-        if (is_null($fileType)) return $this->_files;
+        if (is_null($fileType)) return $this->_files[$assetsType];
 
         $files = array();
-        foreach ($this->_files as $file) {
+        foreach ($this->_files[$assetsType] as $file) {
             if (substr($file, -strlen($fileType)) == $fileType) {
                 if (substr($file, -strlen($fileType)-1) == " $fileType") {
                     //wenn asset hinten mit " js" aufhört das js abschneiden
@@ -78,15 +77,6 @@ class Vps_Assets_Dependencies
             $files[] = 'vps/Ext/ext-lang-en.js';
         }
         return $files;
-    }
-
-    public function getFilePaths($fileType = null)
-    {
-        $paths = array();
-        foreach ($this->getFiles($fileType) as $file) {
-            $paths[] = $this->_getFilePath($file);
-        }
-        return $paths;
     }
 
     private function _pack($contents, $fileType)
@@ -123,15 +113,18 @@ class Vps_Assets_Dependencies
         return $contents;
     }
 
-    public function getPackedAll($fileType)
+    public function getPackedAll($assetsType, $fileType)
     {
-        return $this->_pack($this->getContentsAll($fileType), $fileType);
+        return $this->_pack($this->getContentsAll($assetsType, $fileType), $fileType);
     }
 
-    public function getContentsAll($fileType)
+    public function getContentsAll($assetsType, $fileType)
     {
+        if (substr($assetsType, -5) == 'Debug' && !$this->_config->debug->menu) {
+            throw new Vps_Exception("Debug Assets are not avaliable as the debug menu is disabled");
+        }
         $contents = '';
-        foreach ($this->getFiles($fileType) as $file) {
+        foreach ($this->_getFiles($assetsType, $fileType) as $file) {
             if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
                 $contents .= Vps_Assets_Loader::getFileContents($file, $this->_config->path) . "\n";
             }
@@ -149,21 +142,21 @@ class Vps_Assets_Dependencies
         return $this->_dependenciesConfig;
     }
 
-    private function _processDependency($dependency)
+    private function _processDependency($assetsType, $dependency)
     {
-        if (in_array($dependency, $this->_processedDependencies)) return;
-        $this->_processedDependencies[] = $dependency;
+        if (in_array($assetsType.$dependency, $this->_processedDependencies)) return;
+        $this->_processedDependencies[] = $assetsType.$dependency;
         if ($dependency == 'Components' || $dependency == 'ComponentsAdmin') {
             $rootComonent = $this->_config->vpc->rootComponent;
             $classes = Vpc_Abstract::getSetting($rootComonent, 'childComponentClasses');
             foreach ($classes as $c) {
                 if ($c) {
-                    $this->_processComponentDependency($c, $dependency == 'ComponentsAdmin');
+                    $this->_processComponentDependency($assetsType, $c, $dependency == 'ComponentsAdmin');
                 }
             }
             foreach ($this->_config->vpc->masterComponents as $c) {
                 if ($c) {
-                    $this->_processComponentDependency($c, $dependency == 'ComponentsAdmin');
+                    $this->_processComponentDependency($assetsType, $c, $dependency == 'ComponentsAdmin');
                 }
             }
             return;
@@ -175,45 +168,45 @@ class Vps_Assets_Dependencies
 
         if (isset($deps->dep)) {
             foreach ($deps->dep as $d) {
-                $this->_processDependency($d);
+                $this->_processDependency($assetsType, $d);
             }
         }
 
         if (isset($deps->files)) {
             foreach ($deps->files as $file) {
-                $this->_processDependencyFile($file);
+                $this->_processDependencyFile($assetsType, $file);
             }
         }
         return;
     }
-    private function _processComponentDependency($class, $includeAdminAssets)
+    private function _processComponentDependency($assetsType, $class, $includeAdminAssets)
     {
-        if (in_array($class.$includeAdminAssets, $this->_processedComponents)) return;
+        if (in_array($assetsType.$class.$includeAdminAssets, $this->_processedComponents)) return;
 
         $assets = Vpc_Abstract::getSetting($class, 'assets');
         $assetsAdmin = array();
         if ($includeAdminAssets) {
             $assetsAdmin = Vpc_Abstract::getSetting($class, 'assetsAdmin');
         }
-        $this->_processedComponents[] = $class.$includeAdminAssets;
+        $this->_processedComponents[] = $assetsType.$class.$includeAdminAssets;
         if (isset($assets['dep'])) {
             foreach ($assets['dep'] as $dep) {
-                $this->_processDependency($dep);
+                $this->_processDependency($assetsType, $dep);
             }
         }
         if (isset($assetsAdmin['dep'])) {
             foreach ($assetsAdmin['dep'] as $dep) {
-                $this->_processDependency($dep);
+                $this->_processDependency($assetsType, $dep);
             }
         }
         if (isset($assets['files'])) {
             foreach ($assets['files'] as $file) {
-                $this->_processDependencyFile($file);
+                $this->_processDependencyFile($assetsType, $file);
             }
         }
         if (isset($assetsAdmin['files'])) {
             foreach ($assetsAdmin['files'] as $file) {
-                $this->_processDependencyFile($file);
+                $this->_processDependencyFile($assetsType, $file);
             }
         }
 
@@ -233,7 +226,7 @@ class Vps_Assets_Dependencies
                 $path = $dir . '/' . $file;
                 if (is_file($path)) {
                     $f = $type . '/' . $file;
-                    if (!in_array($f, $this->_files)) {
+                    if (!in_array($f, $this->_files[$assetsType])) {
                         $componentCssFiles[] = $f;
                     }
                     break;
@@ -242,21 +235,21 @@ class Vps_Assets_Dependencies
             $c = get_parent_class($c);
         }
         //reverse damit css von weiter unten in der vererbungshierachie überschreibt
-        $this->_files = array_merge($this->_files, array_reverse($componentCssFiles));
+        $this->_files[$assetsType] = array_merge($this->_files[$assetsType], array_reverse($componentCssFiles));
         if (Vpc_Abstract::hasSetting($class, 'childComponentClasses')) {
             $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
 
             if (is_array($classes)) {
                 foreach ($classes as $class) {
                     if ($class) {
-                        $this->_processComponentDependency($class, $includeAdminAssets);
+                        $this->_processComponentDependency($assetsType, $class, $includeAdminAssets);
                     }
                 }
             }
         }
     }
 
-    private function _processDependencyFile($file)
+    private function _processDependencyFile($assetsType, $file)
     {
         if (substr($file, -2)=="/*") {
             $pathType = substr($file, 0, strpos($file, '/'));
@@ -277,14 +270,14 @@ class Vps_Assets_Dependencies
                     $f = $file->getPathname();
                     $f = substr($f, strlen($this->_config->path->$pathType));
                     $f = $pathType . $f;
-                    if (!in_array($f, $this->_files)) {
-                        $this->_files[] = $f;
+                    if (!in_array($f, $this->_files[$assetsType])) {
+                        $this->_files[$assetsType][] = $f;
                     }
                 }
             }
         } else {
-            if (!in_array($file, $this->_files)) {
-                $this->_files[] = $file;
+            if (!in_array($file, $this->_files[$assetsType])) {
+                $this->_files[$assetsType][] = $file;
             }
         }
     }
