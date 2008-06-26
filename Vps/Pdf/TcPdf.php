@@ -27,7 +27,7 @@ class Vps_Pdf_TcPdf extends TCPDF
             //todo: checken ob das hilft und noch benötigt wird
             header('Accept-Ranges: bytes');
         }
-        parent::Output($name, $dest);
+        return parent::Output($name, $dest);
     }
 
     public function setPageWidth($value)
