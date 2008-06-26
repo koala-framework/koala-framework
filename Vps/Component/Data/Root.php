@@ -69,6 +69,7 @@ $GLOBALS['getComponentByIdCalled'][] = $componentId;
             if ($dbIdShortcut = $tc->getDbIdShortcut($dbId)) {
                 $id = substr($dbId, strlen($dbIdShortcut) - 1);
                 $data = $tc->getChildData(null, array('id' => $id));
+                if (!isset($data[0])) return null;
                 return $data[0];
             }
         }

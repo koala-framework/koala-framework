@@ -62,6 +62,9 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
         if (!$parentData) {
             $parentData = $this->_getParentDataByRow($row);
         }
+        if (!$parentData) {
+            throw new Vps_Exception("Can't find parentData in ".get_class($this));
+        }
         return parent::_createData($parentData, $row);
     }
 
