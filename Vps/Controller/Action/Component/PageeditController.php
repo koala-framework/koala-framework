@@ -8,18 +8,20 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
     protected function _initFields()
     {
         $types = array();
-        foreach (Zend_Registry::get('config')->vpc->pageClasses as $c) {
-            if ($c->class && $c->text) {
-                $types[$c->class] = $c->text;
+        $classes = Vpc_Abstract::getChildComponentClasses(Vps_Registry::get('config')->vpc->rootComponent);
+        foreach ($classes as $component=>$class) {
+            $name = Vpc_Abstract::getSetting($class, 'componentName');
+            if ($name) {
+                $name = str_replace('.', ' ', $name);
+                $types[$component] = $name;
             }
         }
 
         $fields = $this->_form->fields;
         $fields->add(new Vps_Form_Field_TextField('name', 'Name of Page'))
             ->setAllowBlank(false);
-        $fields->add(new Vps_Form_Field_Select('component_class', 'Pagetype'))
+        $fields->add(new Vps_Form_Field_Select('component', 'Pagetype'))
             ->setValues($types)
-            ->setValue(0)
             ->setAllowBlank(false);
         $fields->add(new Vps_Form_Field_Checkbox('hide', 'Hide in Menu'));
 

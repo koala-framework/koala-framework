@@ -1,15 +1,14 @@
 <?php
 class Vpc_Paragraphs_Admin extends Vpc_Admin
 {
-    private function _componentNameToArray($name, $component)
+    private function _componentNameToArray($name, $component, &$componentList)
     {
         $names = explode('.', $name, 2);
         if (count($names) > 1) {
-            $ret = $this->_componentNameToArray($names[1], $component);
+            $this->_componentNameToArray($names[1], $component, $componentList[$names[0]]);
         } else {
-            $ret = $component;
+            $componentList[$name] = $component;
         }
-        return array($names[0] => $ret);
     }
 
     public function getExtConfig()
@@ -23,9 +22,7 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
                 $icon = $icon->__toString();
             }
             if ($name) {
-                $componentList = array_merge(
-                    $componentList, $this->_componentNameToArray($name, $component)
-                );
+                $this->_componentNameToArray($name, $component, $componentList);
                 $componentIcons[$component] = $icon;
             }
         }
