@@ -11,12 +11,17 @@ class Vpc_TreeCache_StaticBox extends Vpc_TreeCache_Static
         return $ret;
     }
     
-    protected function _formatConfig($parentData, $componentKey)
+    protected function _formatConfig($parentData, $key)
     {
-        $ret = parent::_formatConfig($parentData, $componentKey);
-        $c = $this->_classes[$componentKey];
+        $ret = parent::_formatConfig($parentData, $key);
+        $c = $this->_classes[$key];
         $ret['priority'] = isset($c['priority']) ? $c['priority'] : 0;
         $ret['inherit'] = !isset($c['inherit']) || $c['inherit'];
+        $ret['box'] = isset($c['box']) ? $c['box'] : $key;
         return $ret;
+    }
+    public function createsBoxes()
+    {
+        return true;
     }
 }
