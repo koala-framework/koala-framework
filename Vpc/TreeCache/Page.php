@@ -167,4 +167,13 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_Abstract
     {
         return true;
     }
+
+    protected function _getDataClass($config, $id)
+    {
+        if ($id == $this->_pageHome) {
+            return 'Vps_Component_Data_Home';
+        } else {
+            return parent::_getDataClass($config, $id);
+        }
+    }
 }
