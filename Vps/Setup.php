@@ -1,15 +1,15 @@
 <?php
-function p($src, $maxDepth = 5, $noFirePhp = false)
+function p($src, $Type = 'LOG')
 {
     $isToDebug = false;
-    if (!$noFirePhp && class_exists('FirePHP') && FirePHP::getInstance()) {
+    if ($Type != 'ECHO' && class_exists('FirePHP') && FirePHP::getInstance()) {
         if (is_object($src) && method_exists($src, 'toArray')) {
             $src = $src->toArray();
         } else if (is_object($src)) {
             $src = (array)$src;
         }
         //wenn FirePHP nicht aktiv im browser gibts false zur�ck
-        if (FirePhp_Debug::fb($src)) return;
+        if (FirePHP::getInstance()->fb($src, $Type)) return;
     }
     if (is_object($src) && method_exists($src, 'toDebug')) {
         $isToDebug = true;
@@ -23,7 +23,6 @@ function p($src, $maxDepth = 5, $noFirePhp = false)
     } else if (function_exists('xdebug_var_dump')
         && !($src instanceof Zend_Db_Select ||
                 $src instanceof Exception)) {
-        ini_set('xdebug.var_display_max_depth', $maxDepth);
         xdebug_var_dump($src);
     } else {
         if (!isset($_SERVER['SHELL'])) echo "<pre>";
@@ -40,10 +39,65 @@ function p($src, $maxDepth = 5, $noFirePhp = false)
     }
 }
 
-function d($src, $maxDepth = 5)
+function d($src)
 {
-    p($src, $maxDepth, true);
+    p($src, 'ECHO');
     exit;
+}
+
+function _btString($bt)
+{
+    $ret = '';
+    if (isset($bt['class'])) {
+        $ret .= $bt['class'].'::';
+    }
+    if (isset($bt['function'])) {
+        $ret .= $bt['function'].'('._btArgsString($bt).')';
+    }
+    return $ret;
+}
+function _btArgsString($bt)
+{
+    if (!isset($bt['args'])) return '';
+    $ret = array();
+    foreach ($bt['args'] as $arg) {
+        if (is_object($arg)) {
+            $ret[] = get_class($arg);
+        } else if (is_array($arg)) {
+            $arrayString = array();
+            foreach ($arg as $k=>$i) {
+                $s = '';
+                if (!is_int($k)) {
+                    $s = $k.'=>';
+                }
+                if (is_array($i)) {
+                    $arrayString[] = $s.'Array';
+                } else if (is_object($i)) {
+                    $arrayString[] = $s.get_class($i);
+                } else {
+                    $arrayString[] = $s.$i;
+                }
+            }
+            $ret[] = 'array('.implode(', ', $arrayString).')';
+        } else {
+            $ret[] = $arg;
+        }
+    }
+    return implode(', ', $ret);
+}
+function bt()
+{
+    $bt = debug_backtrace();
+    unset($bt[0]);
+    $out = array(array('File', 'Line', 'Function', 'Args'));
+    foreach ($bt as $i) {
+        $out[] = array(
+            $i['file'], $i['line'],
+            isset($i['function']) ? $i['function'] : null,
+            _btArgsString($i),
+        );
+    }
+    p(array('Backtrace for '._btString($bt[1]), $out), 'TABLE');
 }
 
 function hlp($string){
@@ -215,6 +269,7 @@ class Vps_Setup
         if ($i) $uri = substr($uri, 0, $i);
         if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))) {
             $requestUrl = $_SERVER['REDIRECT_URL'];
+
             $root = Vps_Component_Data_Root::getInstance();
             $data = $root->getPageByPath($requestUrl);
             if (!$data) {
