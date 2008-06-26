@@ -2091,27 +2091,27 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Additional Styles</en>
-<de>_</de>
+<de>Zusätzliche Stile</de>
 </text>
 <text>
 <en default="1">You can't delete master styles</en>
-<de>_</de>
+<de>Master Stile können nicht gelöscht werden</de>
 </text>
 <text>
 <en default="1">Beschreibungstext</en>
-<de>_</de>
+<de>Beschreibungstext</de>
 </text>
 <text>
 <en default="1">Linktype</en>
-<de>_</de>
+<de>Linktyp</de>
 </text>
 <text>
 <en default="1">Settings</en>
-<de>_</de>
+<de>Einstellungen</de>
 </text>
 <text>
 <en default="1">Forum Feed</en>
-<de>_</de>
+<de>Forum Feed</de>
 </text>
 <text>
 <en default="1">You may upload a picture that is displayed in your profile
@@ -2125,136 +2125,137 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Information</en>
-<de>_</de>
+<de>Information</de>
 </text>
 <text>
 <en default="1">Link Image</en>
-<de>_</de>
+<de>Bild Link</de>
 </text>
 <text>
 <en default="1">Text Image enlarge</en>
-<de>_</de>
+<de>Text Bild</de>
 </text>
 <text>
 <en default="1">Text Image Link</en>
-<de>_</de>
+<de>Text Bild Link</de>
 </text>
 <text>
 <en default="1">Links Images</en>
-<de>_</de>
+<de>Bilder Links</de>
 </text>
 <text>
 <en default="1">Show News</en>
-<de>_</de>
+<de>Nachrichten zeigen</de>
 </text>
 <text>
 <en default="1">News.List</en>
-<de>_</de>
+<de>News.List</de>
 </text>
 <text>
 <en default="1">Months</en>
-<de>_</de>
+<de>Monate</de>
 </text>
 <text>
 <en default="1">News Feed</en>
-<de>_</de>
+<de>News Feed</de>
 </text>
 <text>
 <en default="1">Categories</en>
-<de>_</de>
+<de>Kategorien</de>
 </text>
 <text>
 <en default="1">News.show Categories</en>
-<de>_</de>
+<de>News.show Kategorien</de>
 </text>
 <text>
 <en default="1">Request password</en>
-<de>_</de>
+<de>Passwort erforderlich</de>
 </text>
 <text>
 <en default="1">{0} '{1}' must be a subclass of {2}.</en>
-<de>_</de>
+<de>{0} '{1}' muss eine Unterklasse von {2} sein.</de>
 </text>
 <text>
 <en default="1">Label</en>
-<de>_</de>
+<de>Bezeichnung</de>
 </text>
 <text>
 <en default="1">Fieldset</en>
-<de>_</de>
+<de>Fieldset</de>
 </text>
 <text>
 <en default="1">Url</en>
-<de>_</de>
+<de>Internetadresse</de>
 </text>
 <text>
 <en default="1">Alpha</en>
-<de>_</de>
+<de>Zeichen</de>
 </text>
 <text>
 <en default="1">Alpha Numeric</en>
-<de>_</de>
+<de>Zeichen und Zahlen</de>
 </text>
 <text>
 <en default="1">Maximum Value</en>
-<de>_</de>
+<de>Maximum</de>
 </text>
 <text>
 <en default="1">Minimum Value</en>
-<de>_</de>
+<de>Minimum</de>
 </text>
 <text>
 <en default="1">Allow Negative</en>
-<de>_</de>
+<de>Negative Zahlen erlaubt</de>
 </text>
 <text>
 <en default="1">Allow Decimals</en>
-<de>_</de>
+<de>Dezimalzahlen erlaubt</de>
 </text>
 <text>
 <en default="1">Allow Blank</en>
-<de>_</de>
+<de>Leerzeichen erlaubt</de>
 </text>
 <text>
 <en default="1">Values</en>
-<de>_</de>
+<de>Variablen</de>
 </text>
 <text>
 <en default="1">Number Field</en>
-<de>_</de>
+<de>Zahlenfeld</de>
 </text>
 <text>
 <en default="1">Text Area</en>
-<de>_</de>
+<de>Textfeld (mehrzeilig)</de>
 </text>
 <text>
 <en default="1">Select Field</en>
-<de>_</de>
+<de>Auswahlfeld</de>
 </text>
 <text>
 <en default="1">Checkbox</en>
-<de>_</de>
+<de>Kontrollkästchen</de>
 </text>
 <text>
 <en default="1">This is not an image.</en>
-<de>_</de>
+<de>Das ist kein Bild.</de>
 </text>
 <text>
 <en default="1">Text Field</en>
-<de>_</de>
+<de>Textfeld</de>
 </text>
 <text>
 <en default="1">Activation code is invalid. Maybe the URL wasn't copied completely?</en>
-<de>_</de>
+<de>Der Aktivierungscode ist falsch. Vielleicht wurde die URL unvollständig kopiert</de>
 </text>
 <text>
 <en default="1">Activation code is invalid. Maybe your '
                                          .'account has already been activated?</en>
-<de>_</de>
+<de>Der Aktivierungscode ist falsch. Vielleicht wurde Ihr '
+                                         .'Zugang bereits aktiviert?</de>
 </text>
 <text>
 <en default="1">New password couldn't be set</en>
-<de>_</de>
+<de>Das neue Passwort konnte nicht erstellt werden</de>
 </text>
 <text>
 <en default="1">_createAuthAdapter didn't return instance of Vps_Auth_Adapter_Service</en>
@@ -2266,7 +2267,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Additional rights</en>
-<de>_</de>
+<de>Zusätzliche Rechte</de>
 </text>
 <text>
 <en default="1">Activated</en>
@@ -2274,71 +2275,71 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Template</en>
-<de>_</de>
+<de>Vorlage</de>
 </text>
 <text>
 <en default="1">(all templates)</en>
-<de>_</de>
+<de>(alle Vorlagen)</de>
 </text>
 <text>
 <en default="1">Variable</en>
-<de>_</de>
+<de>Variable</de>
 </text>
 <text>
 <en default="1">Html</en>
-<de>_</de>
+<de>HTML</de>
 </text>
 <text>
 <en default="1">Can't sort by {0}, field doesn't exist in row</en>
-<de>_</de>
+<de>Nach {0} kann nicht sorteirt werden, das Feld existiert nicht als Spalte</de>
 </text>
 <text>
 <en default="1">Assets-Path-Type '{0}' not found in config.</en>
-<de>_</de>
+<de>Der Assets-Path-Type '{0}' konnte in der config nicht gefunden werden.</de>
 </text>
 <text>
 <en default="1">Path '{0}' does not exist.</en>
-<de>_</de>
+<de>Der Pfad '{0}' existiert nicht.</de>
 </text>
 <text>
 <en default="1">Cannot set Home Page invisible</en>
-<de>_</de>
+<de>Die Home-Seite kann nicht auf unsichtbar gesetzt werden</de>
 </text>
 <text>
 <en default="1">Can't delete page as there are child pages.</en>
-<de>_</de>
+<de>Die Seite kann nicht gelöscht werden, da es Unterseiten dazu gibt.</de>
 </text>
 <text>
 <en default="1">Hello</en>
-<de>_</de>
+<de>Hallo</de>
 </text>
 <text>
 <en default="1">A Post at {0} has been reported with the following comment</en>
-<de>_</de>
+<de>Der Eintrag auf {0} wurde mit folgendem Kommentar versehen</de>
 </text>
 <text>
 <en default="1">to go directly to the post or read it below</en>
-<de>_</de>
+<de>um direkt zum Eintrag zu gelangen oder lesen Sie in unten</de>
 </text>
 <text>
 <en default="1">Click the link</en>
-<de>_</de>
+<de>Klicken Sie auf den Link</de>
 </text>
 <text>
 <en default="1">A new entry has been written in your guestbook.</en>
-<de>_</de>
+<de>Ein neuer Eintrag wurde in Ihr Gästebuch geschrieben.</de>
 </text>
 <text>
 <en default="1">Here is the Link to your profile:</en>
-<de>_</de>
+<de>Das ist der Link um in Ihr Profil zu gelangen:</de>
 </text>
 <text>
 <en default="1">This is the text that was saved in your guestbook:</en>
-<de>_</de>
+<de>Das ist der Text der in Ihrem Gästebuch gespeichert wurde:</de>
 </text>
 <text>
 <en default="1">Click here to go directly to you profile</en>
-<de>_</de>
+<de>Klicken Sie bitte hier um direkt zu Ihrem Profil zu gelangen</de>
 </text>
 <text>
 <en default="1">This email has been generated using the lost password function at</en>
@@ -2362,23 +2363,23 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">From your old email address {0} to {1}</en>
-<de>_</de>
+<de>Ändern Sie bitte Ihre alte E-Mail Adresse von {0} zu {1}</de>
 </text>
 <text>
 <en default="1">Not Found</en>
-<de>_</de>
+<de>Nicht gefunden</de>
 </text>
 <text>
 <en default="1">The requested URL "{0}" was not found on this server.</en>
-<de>_</de>
+<de>Die Adresse "{0}" konnte nicht gefunden werden.</de>
 </text>
 <text>
 <en default="1">Version</en>
-<de>_</de>
+<de>Version</de>
 </text>
 <text>
 <en default="1">Password</en>
-<de>_</de>
+<de>Passwort</de>
 </text>
 <text>
 <en default="1">Errortype</en>
@@ -2386,7 +2387,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Message</en>
-<de>_</de>
+<de>Nachricht</de>
 </text>
 <text>
 <en default="1">Last DB-Query</en>
