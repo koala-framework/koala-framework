@@ -209,6 +209,7 @@ class Vps_Setup
             $path = $_SERVER['SCRIPT_FILENAME'];
         }
         if (preg_match('#/www/(usr|public)/([0-9a-z-]+)/#', $path, $m)) {
+	    if ($m[2]=='vps-projekte') return 'vivid';
             return $m[2];
         } else if (substr($host, 0, 4)=='dev.') {
             return 'dev';
