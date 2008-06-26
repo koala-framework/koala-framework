@@ -1931,7 +1931,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">clubId is required</en>
-<de>_</de>
+<de>clubId ist erforderlich</de>
 </text>
 <text>
 <en default="1">Events.show Categories</en>
@@ -1939,39 +1939,39 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">empty</en>
-<de>_</de>
+<de>leer</de>
 </text>
 <text>
 <en default="1">Upload File</en>
-<de>_</de>
+<de>Datei hochladen</de>
 </text>
 <text>
 <en default="1">Delete File</en>
-<de>_</de>
+<de>Datei löschen</de>
 </text>
 <text>
 <en default="1">Uploading file</en>
-<de>_</de>
+<de>Datei wird hochgeladen</de>
 </text>
 <text>
 <en default="1">Edit Styles</en>
-<de>_</de>
+<de>Stile bearbeiten</de>
 </text>
 <text>
 <en default="1">Modify and Create Styles.</en>
-<de>_</de>
+<de>Bearbeiten und erzeugen von Stilen.</de>
 </text>
 <text>
 <en default="1">File upload</en>
-<de>_</de>
+<de>Datei hochladen</de>
 </text>
 <text>
 <en default="1">Info</en>
-<de>_</de>
+<de>Info</de>
 </text>
 <text>
 <en default="1">Do you really want to delete this entry:</en>
-<de>_</de>
+<de>Wollen Sie diesen Eintrag wirklich löschen:</de>
 </text>
 <text>
 <en default="1">yyyy-mm-dd</en>
@@ -1979,27 +1979,27 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Small Image</en>
-<de>_</de>
+<de>Kleines Bild</de>
 </text>
 <text>
 <en default="1">Margin top</en>
-<de>_</de>
+<de>Abstand oben</de>
 </text>
 <text>
 <en default="1">Margin bottom</en>
-<de>_</de>
+<de>Abstand unten</de>
 </text>
 <text>
 <en default="1">Text Align</en>
-<de>_</de>
+<de>Textausrichtung</de>
 </text>
 <text>
 <en default="1">Center</en>
-<de>_</de>
+<de>Zentriert</de>
 </text>
 <text>
 <en default="1">Justify</en>
-<de>_</de>
+<de>Blocksatz</de>
 </text>
 <text>
 <en default="1">Tag</en>
@@ -2007,7 +2007,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Position</en>
-<de>_</de>
+<de>Position</de>
 </text>
 <text>
 <en default="1">Selector</en>
@@ -2015,7 +2015,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Default</en>
-<de>_</de>
+<de>Grundeinstellung</de>
 </text>
 <text>
 <en default="1">Normal</en>
@@ -2051,43 +2051,43 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Block-Styles</en>
-<de>_</de>
+<de>Block-Styles</de>
 </text>
 <text>
 <en default="1">Inline-Styles</en>
-<de>_</de>
+<de>Inline-Styles</de>
 </text>
 <text>
 <en default="1">Master-Styles</en>
-<de>_</de>
+<de>Master-Stil</de>
 </text>
 <text>
 <en default="1">Color</en>
-<de>_</de>
+<de>Farbe</de>
 </text>
 <text>
 <en default="1">Font Weight</en>
-<de>_</de>
+<de>Schriftgrad</de>
 </text>
 <text>
 <en default="1">Bold</en>
-<de>_</de>
+<de>Fett</de>
 </text>
 <text>
 <en default="1">Bolder</en>
-<de>_</de>
+<de>Fetter</de>
 </text>
 <text>
 <en default="1">Lighter</en>
-<de>_</de>
+<de>Heller</de>
 </text>
 <text>
 <en default="1">Font Family</en>
-<de>_</de>
+<de>Schriftart</de>
 </text>
 <text>
 <en default="1">Font size</en>
-<de>_</de>
+<de>Schriftgröße</de>
 </text>
 <text>
 <en default="1">Additional Styles</en>
@@ -2111,17 +2111,19 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Forum Feed</en>
-<de>Forum Feed</de>
+<de>Forum-Feed</de>
 </text>
 <text>
 <en default="1">You may upload a picture that is displayed in your profile
                 and in each of your posts in a small version (40x40 Pixels).</en>
-<de>_</de>
+<de>Sie können ein Bild hochladen, das in in Ihrem Profil angezeigt wird
+                und in jedem Ihrer Schreiben als kleine Version (40x40 Pixels).</de>
 </text>
 <text>
 <en default="1">For optimized displayment the picture should have a width of at least 150 Pixels,
                 the file size may not be bigger than 2 MB.</en>
-<de>_</de>
+<de>Für eine optimale Bildschirmdarstellung sollten das Bild eine Mindestbreite von 150 Pixel haben,
+                die Dateigröße sollte nicht mehr als 2 MB betragen.</de>
 </text>
 <text>
 <en default="1">Information</en>
@@ -2133,7 +2135,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Text Image enlarge</en>
-<de>Text Bild</de>
+<de>Text Bildvergrößerung</de>
 </text>
 <text>
 <en default="1">Text Image Link</en>
