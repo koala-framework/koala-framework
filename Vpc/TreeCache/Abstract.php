@@ -154,14 +154,18 @@ abstract class Vpc_TreeCache_Abstract
         if (!isset($this->_dataCache[$parentData->componentId][$id])) {
             $config = $this->_formatConfig($parentData, $row);
             $config['id'] = $id;
-            if (Vpc_Abstract::hasSetting($config['componentClass'], 'dataClass')) {
-                $pageDataClass = Vpc_Abstract::getSetting($config['componentClass'], 'dataClass');
-            } else {
-                $pageDataClass = 'Vps_Component_Data';
-            }
+            $pageDataClass = $this->_getDataClass($config, $row);
             $this->_dataCache[$parentData->componentId][$id] = new $pageDataClass($config);
         }
         return $this->_dataCache[$parentData->componentId][$id];
+    }
+    protected function _getDataClass($config, $row)
+    {
+        if (Vpc_Abstract::hasSetting($config['componentClass'], 'dataClass')) {
+            return Vpc_Abstract::getSetting($config['componentClass'], 'dataClass');
+        } else {
+            return 'Vps_Component_Data';
+        }
     }
 
     protected function _formatConfig($parentData, $row) {
