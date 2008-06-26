@@ -37,8 +37,18 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getComponentById($componentId, $page = null)
     {
 $GLOBALS['getComponentByIdCalled'][] = $componentId;
-        $ids = preg_split('/([_\-])/', $componentId, -1, PREG_SPLIT_DELIM_CAPTURE);
         if (!$page) $page = $this;
+        foreach ($this->_getIdParts($componentId) as $idPart) {
+            $page = $page->getChildComponent($idPart);
+            if (!$page) break;
+        }
+        return $page;
+    }
+
+    private function _getIdParts($componentId)
+    {
+        $ret = array();
+        $ids = preg_split('/([_\-])/', $componentId, -1, PREG_SPLIT_DELIM_CAPTURE);
         for ($i = 0; $i < count($ids); $i++) {
             if ($ids[$i] == '') {
                 $i++;
@@ -48,10 +58,9 @@ $GLOBALS['getComponentByIdCalled'][] = $componentId;
                 $i++;
                 $idPart .= $ids[$i];
             }
-            $page = $page->getChildComponent($idPart);
-            if (!$page) break;
+            $ret[] = $idPart;
         }
-        return $page;
+        return $ret;
     }
     
     public function getByDbId($dbId)
@@ -67,10 +76,15 @@ $GLOBALS['getComponentByIdCalled'][] = $componentId;
             $tc = Vpc_TreeCache_Abstract::getInstance($class);
             if (!$tc) continue;
             if ($dbIdShortcut = $tc->getDbIdShortcut($dbId)) {
-                $id = substr($dbId, strlen($dbIdShortcut) - 1);
-                $data = $tc->getChildData(null, array('id' => $id));
-                if (!isset($data[0])) return null;
-                return $data[0];
+                $idParts = $this->_getIdParts(substr($dbId, strlen($dbIdShortcut) - 1));
+                $data = $tc->getChildData(null, array('id' => $idParts[0]));
+                unset($idParts[0]);
+                $data = isset($data[0]) ? $data[0] : null;
+                foreach ($idParts as $idPart) {
+                    if (!$data) break;
+                    $data = $data->getChildComponent($idPart);
+                }
+                return $data;
             }
         }
         return null;
