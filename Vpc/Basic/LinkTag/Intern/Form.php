@@ -12,10 +12,9 @@ class Vpc_Basic_LinkTag_Intern_Form extends Vpc_Abstract_Form
 
     public function prepareSave($parentRow, $postData)
     {
-        $pageId = Vps_Component_Data_Root::getInstance()->getByDbId($parentRow->component_id)
-            ->getPage()->dbId;
+        $data = Vps_Component_Data_Root::getInstance()->getByDbId($parentRow->component_id);
         if ($this->fields['target']->getSave() &&
-                $pageId == $postData[$this->fields['target']->getFieldName()]) {
+                $data && $data->getPage()->dbId == $postData[$this->fields['target']->getFieldName()]) {
             throw new Vps_ClientException(trlVps('Link cannot link to itself'));
         }
         parent::prepareSave($parentRow, $postData);
