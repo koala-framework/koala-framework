@@ -206,6 +206,17 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 icon: '/assets/silkicons/bug.png',
                 menu: new Vps.Debug.Menu()
             });
+        } else if (Vps.Debug.showActivator) {
+            this.add('-');
+            this.add({
+                text: 'Debug',
+                tooltip: 'Activate Debugging',
+                cls: 'x-btn-text-icon',
+                icon: '/assets/silkicons/bug.png',
+                handler: function() {
+                    location.href = '/vps/debug/activate?url=' + location.href;
+                }
+            });
         }
     }
 });

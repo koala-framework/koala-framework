@@ -101,24 +101,18 @@ class Vps_Assets_Loader
                 }
 
                 if ($m[2] == 'js') {
-                    header('Content-Type: text/javascript; charset=utf-8');
                     $fileType = 'js';
                 } else {
-                    header('Content-Type: text/css; charset=utf-8');
                     $fileType = 'css';
                 }
                 $section = $m[1];
 
-
-                header('Last-Modified: '.gmdate("D, d M Y H:i:s \G\M\T", time()));
-                header('ETag: abc-defg');
-                header('Cache-Control: public');
-                header("Content-Encoding: " . $encoding);
-
                 if ($section == 'RteStyles') {
                     $contents = Vpc_Basic_Text_StylesModel::getStylesContents();
+                    self::_outputHeaders($fileType, $encoding);
                     echo self::_encode($contents, $encoding);
                 } else {
+
                     $frontendOptions = array(
                         'lifetime' => null,
                         'automatic_serialization' => true
@@ -128,20 +122,21 @@ class Vps_Assets_Loader
                     );
                     $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
 
-                    $sessionAssets = new Zend_Session_Namespace('debugAssets');
-                    $config = Zend_Registry::get('config');
+                    $sessionDebug = new Zend_Session_Namespace('debug');
+                    $config = Vps_Registry::get('config');
                     if ((!$cacheData = $cache->load($fileType.$encoding.$section))
                         || $cacheData['version'] != $config->application->version
-                        || $sessionAssets->autoClearCache
+                        || $sessionDebug->autoClearAssetsCache
                         || $config->debug->autoClearAssetsCache
                     ) {
-                        $dep = new Vps_Assets_Dependencies($section, $config);
-                        $contents = $dep->getPackedAll($fileType);
+                        $dep = new Vps_Assets_Dependencies();
+                        $contents = $dep->getPackedAll($section, $fileType);
                         $contents = self::_encode($contents, $encoding);
                         $cacheData = array('contents'=>$contents,
                                         'version'=>$config->application->version);
                         $cache->save($cacheData, $fileType.$encoding.$section);
                     }
+                    self::_outputHeaders($fileType, $encoding);
                     echo $cacheData['contents'];
                 }
             } else {
@@ -157,8 +152,7 @@ class Vps_Assets_Loader
                 }
                 $lastModified = max(filemtime('application/config.ini'), filemtime($assetPath));
                 $lastModifiedString = gmdate("D, d M Y H:i:s \G\M\T", $lastModified);
-                //NED EINCHCKEN!°!!!!!!!!
-                if (false && $http_if_modified_since == $lastModifiedString) {
+                if ($http_if_modified_since == $lastModifiedString) {
                     header("HTTP/1.1 304 Not Modified");
                 } else {
                     header('Last-Modified: '.$lastModifiedString);
@@ -172,7 +166,7 @@ class Vps_Assets_Loader
                     } else if (substr($url, -4)=='.css') {
                         header('Content-Type: text/css; charset=utf-8');
                     } else if (substr($url, -3)=='.js') {
-                        //NED EINCHCKEN!°!!!!!!!!header('Content-Type: text/javascript; charset=utf-8');
+                        header('Content-Type: text/javascript; charset=utf-8');
                     } else if (substr($url, -4)=='.swf') {
                         header('Content-Type: application/flash');
                     } else if (substr($url, -4)=='.ico') {
@@ -189,6 +183,19 @@ class Vps_Assets_Loader
                 }
             }
             exit;
+        }
+    }
+
+    private static function _outputHeaders($fileType, $encoding)
+    {
+        header('Last-Modified: '.gmdate("D, d M Y H:i:s \G\M\T", time()));
+        header('ETag: abc-defg');
+        header('Cache-Control: public');
+        header("Content-Encoding: " . $encoding);
+        if ($fileType == 'js') {
+            header('Content-Type: text/javascript; charset=utf-8');
+        } else if ($fileType = 'css') {
+            header('Content-Type: text/css; charset=utf-8');
         }
     }
 
