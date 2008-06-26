@@ -189,7 +189,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         return $ret;
     }
 
-    //f�r Filter_Row_UniqueAscii
+    //für Filter_Row_UniqueAscii
     public function getPrimaryKey()
     {
         return $this->_getPrimaryKey();

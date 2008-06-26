@@ -8,7 +8,7 @@ function p($src, $Type = 'LOG')
         } else if (is_object($src)) {
             $src = (array)$src;
         }
-        //wenn FirePHP nicht aktiv im browser gibts false zur�ck
+        //wenn FirePHP nicht aktiv im browser gibts false zurück
         if (FirePHP::getInstance()->fb($src, $Type)) return;
     }
     if (is_object($src) && method_exists($src, 'toDebug')) {

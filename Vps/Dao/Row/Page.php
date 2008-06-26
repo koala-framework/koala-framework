@@ -26,6 +26,7 @@ class Vps_Dao_Row_Page extends Vps_Db_Table_Row_Abstract
 
     protected function _update()
     {
+        parent::_update();
         if ($this->is_home && !$this->visible) {
             throw new Vps_ClientException(trlVps('Cannot set Home Page invisible'));
         }
@@ -33,6 +34,7 @@ class Vps_Dao_Row_Page extends Vps_Db_Table_Row_Abstract
 
     protected function _delete()
     {
+        parent::_delete();
         if (count($this->findDependentRowset('Vps_Dao_Pages'))) {
             throw new Vps_ClientException(trlVps("Can't delete page as there are child pages."));
         }
