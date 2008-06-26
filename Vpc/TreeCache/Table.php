@@ -118,8 +118,9 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
         if (isset($constraints['select'])) {
             $select = $constraints['select'];
         } else {
-            $select = $this->select();
+            $select = $this->select($parentData);
         }
+        if (!$select) return null;
 
         if (isset($constraints['componentClass'])) {
             $constraintClasses = $constraints['componentClass'];
