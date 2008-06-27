@@ -11,6 +11,7 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
             'dataClass' => 'Vpc_Basic_LinkTag_Extern_Data',
             'tablename'     => 'Vpc_Basic_LinkTag_Extern_Model',
             'componentName' => 'Link.Extern',
+            'hasPopup'      => true,
             'default'       => array(
                 'target'        => 'http://',
                 'is_popup'      => false,
