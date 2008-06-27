@@ -28,4 +28,9 @@ class Vps_Db_Table_Select extends Zend_Db_Table_Select
         }
         return parent::limit($count, $offset);
     }
+
+    public function getTableName()
+    {
+        return $this->_info['name'];
+    }
 }

@@ -19,7 +19,12 @@ class Vpc_Paging_Component extends Vpc_Abstract
             $select = $count;
             $select->setIntegrityCheck(false);
             $select->reset(Zend_Db_Select::COLUMNS);
-            $select->from(null, array('count' => 'COUNT(DISTINCT id)'));
+            if ($select instanceof Vps_Db_Table_Select) {
+                $table = $select->getTableName().'.';
+            } else {
+                $table = '';
+            }
+            $select->from(null, array('count' => "COUNT(DISTINCT {$table}id)"));
             $r = $select->query()->fetchAll();
             return $r[0]['count'];
         }
