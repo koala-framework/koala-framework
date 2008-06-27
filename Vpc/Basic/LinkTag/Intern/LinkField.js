@@ -1,26 +1,69 @@
-Vps.Form.VpcLinkField = Ext.extend(Ext.form.Field,
+Vps.Form.VpcLinkField = Ext.extend(Ext.form.TriggerField,
 {
-    defaultAutoCreate : {tag: "input", type: "hidden"},
-
-    afterRender: function(){
-        Vps.Form.ColorField.superclass.afterRender.call(this);
-        var span = Ext.DomHelper.insertAfter(this.el, '<span></span>');
-        this.pages = new Vps.Auto.TreePanel({
-            controllerUrl: this.controllerUrl,
-            renderTo: span,
-            width: this.width
-        });
-        this.pages.on('click', function(node) {
-            if (this.getValue() != node.id) {
-                this.setValue(node.id);
-            }
-        }, this);
-
+    triggerClass : 'x-form-search-trigger',
+    readOnly: true,
+    width: 200,
+    onTriggerClick : function(){
+        var win = Vps.Form.VpcLinkField.PagesWindow; //statische var, nur ein window erstellen??
+        if (!win) {
+            win = new Ext.Window({
+                width: 535,
+                height: 500,
+                modal: true,
+                closeAction: 'hide',
+                title: trlVps('Select Page'),
+                layout: 'fit',
+                buttons: [{
+                    text: trlVps('OK'),
+                    handler: function() {
+                        this.setValue(win.value);
+                        win.hide();
+                    },
+                    scope: this
+                },{
+                    text: trlVps('Cancel'),
+                    handler: function() {
+                        win.hide();
+                    },
+                    scope: this
+                }],
+                items: new Vps.Auto.TreePanel({
+                    controllerUrl: this.controllerUrl,
+                    listeners: {
+                        click: function(node) {
+                            var n = node;
+                            var name = '';
+                            while (n.parentNode.parentNode) {
+                                if (name) name += ' - ';
+                                name += n.attributes.text;
+                                n = n.parentNode;
+                            }
+                            win.value = {
+                                id: node.id,
+                                name: name
+                            };
+                        }
+                    }
+                })
+            });
+            Vps.Form.VpcLinkField.PagesWindow = win;
+        }
+        win.show();
+        win.items.get(0).selectId(this.value);
     },
 
-    setValue: function(value){
-        this.pages.selectId(value);
-        Vps.Form.VpcLinkField.superclass.setValue.call(this, value);
+    getValue: function(value) {
+        return this.value;
+    },
+
+    setValue: function(value) {
+        if (typeof value.name != 'undefined') {
+            Vps.Form.VpcLinkField.superclass.setValue.call(this, value.name);
+            this.value = value.id;
+        } else {
+            Vps.Form.VpcLinkField.superclass.setValue.call(this, value);
+            this.value = value;
+        }
     }
 });
 
