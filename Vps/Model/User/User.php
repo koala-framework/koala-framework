@@ -84,6 +84,13 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
             throw new Vps_Exception($restResult->msg());
         }
 
+        try {
+            foreach ($this->findDependentRowset('Vps_Model_User_AdditionalRoles') as $row) {
+                $row->delete();
+            }
+        } catch (Zend_Db_Statement_Exception $e) {
+        }
+
         parent::_delete();
     }
 
