@@ -130,8 +130,11 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         if (is_string($postData)) { $postData = Zend_Json::decode($postData); }
 
         $rows = $this->_getRowsByRow($row);
-        $id = $row->{$row->getModel()->getPrimaryKey()};
-        $id='A';
+
+        //id kann nicht als key verwendet werden da sich die beim
+        //hinzufügen ändert nach dem speichern (bzw. vorher keine da ist)
+        //spl_object_hash ist so eine art hash von pointer-adresse
+        $id = spl_object_hash($row);
         $this->_updatedRows[$id] = array();
         $this->_deletedRows[$id] = array();
         $this->_insertedRows[$id] = array();
@@ -206,10 +209,11 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 
     public function save(Vps_Model_Row_Interface $row, $postData)
     {
-        $id = $row->{$row->getModel()->getPrimaryKey()};
-        if (!isset($this->_deletedRows[$id])) { $id = null; }
-        $id='A';
-        
+        //id kann nicht als key verwendet werden da sich die beim
+        //hinzufügen ändert nach dem speichern (bzw. vorher keine da ist)
+        //spl_object_hash ist so eine art hash von pointer-adresse
+        $id = spl_object_hash($row);
+
         foreach ($this->_deletedRows[$id] as $r) {
             $r->delete();
         }
