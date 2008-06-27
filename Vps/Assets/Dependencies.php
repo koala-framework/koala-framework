@@ -21,7 +21,7 @@ class Vps_Assets_Dependencies
 
     public function getAssetFiles($assetsType, $fileType = null)
     {
-        $b = Vps_Benchmark::start();
+        //$b = Vps_Benchmark::start();
         if ($this->_config->debug->menu) {
             $session = new Zend_Session_Namespace('debug');
             if (isset($session->enable) && $session->enable) {
