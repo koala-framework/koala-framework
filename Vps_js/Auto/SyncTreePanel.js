@@ -4,6 +4,12 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
     initComponent : function()
     {
+        if (this.autoLoad !== false) {
+            this.autoLoad = true;
+        } else {
+            delete this.autoLoad;
+        }
+
         this.addEvents(
             'selectionchange',
             'editaction',
@@ -45,6 +51,18 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             scope   : this
         });
 
+        Vps.Auto.SyncTreePanel.superclass.initComponent.call(this);
+    },
+    doAutoLoad : function()
+    {
+        //autoLoad kann in der zwischenzeit abgeschaltet werden, zB wenn
+        //wir in einem Binding sind
+        if (!this.autoLoad) return;
+        this.loadMeta();
+    },
+
+    loadMeta: function()
+    {
         Ext.Ajax.request({
             mask: true,
             url: this.controllerUrl + '/json-meta',
@@ -52,7 +70,6 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             success: this.onMetaChange,
             scope: this
         });
-        Vps.Auto.SyncTreePanel.superclass.initComponent.call(this);
     },
 
     onMetaChange: function(response) {
@@ -95,8 +112,6 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
             })
         );
 
-        this.tree.getRootNode().expand();
-
         this.tree.getSelectionModel().on('selectionchange', this.onSelectionchange, this);
         this.tree.getSelectionModel().on('beforeselect', function(selModel, newNode, oldNode) {
             return this.fireEvent('beforeselectionchange', newNode.attributes.id);
@@ -117,11 +132,11 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         this.add(this.tree);
         this.doLayout();
 
+        this.tree.getRootNode().expand();
         if (meta.rootVisible) {
             this.tree.getRootNode().ui.iconNode.style.backgroundImage = 'url(' + meta.icons.root + ')';
             this.tree.getRootNode().select();
         }
-        //this.tree.getRootNode().expand();
 
         if (!this.editDialog && meta.editDialog) {
             this.editDialog = meta.editDialog;
