@@ -65,7 +65,7 @@ $GLOBALS['getComponentByIdCalled'][] = $componentId;
     
     public function getByDbId($dbId)
     {
-        $benchmark = Vps_Benchmark::start();
+        //$benchmark = Vps_Benchmark::start();
 
         if (is_numeric(substr($dbId, 0, 1))) {
             $data = $this->getComponentById($dbId);
@@ -93,7 +93,7 @@ $GLOBALS['getComponentByIdCalled'][] = $componentId;
     public function getComponentsByClass($class)
     {
         if (!isset($this->_componentsByClassCache[$class])) {
-            $benchmark = Vps_Benchmark::start();
+            //$benchmark = Vps_Benchmark::start();
 
             $lookingForChildClasses = array();
             foreach (Vpc_Abstract::getComponentClasses() as $c) {
