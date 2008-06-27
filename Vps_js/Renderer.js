@@ -91,6 +91,7 @@ Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, stor
 
 Ext.util.Format.fileSize = function(size) {
     var unit;
+    if (!parseInt(size) && size !== 0) return '';
     if(size < 1024) {
         unit = 'bytes';
     } else if(size < 1048576) {
