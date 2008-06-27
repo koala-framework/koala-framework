@@ -16,4 +16,10 @@ Ext.onReady(function() {
         document.body.appendChild(a);
     }
 });
+
+//for Vps.Menu.Index
 Vps.Debug.showActivator = true;
+
+//if we have the activator loaded we always want to show debug messages
+//DebugData-Helper doesn't output anything so we set it here
+Vps.Debug.displayErrors = true;
