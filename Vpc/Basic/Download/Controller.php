@@ -1,12 +1,5 @@
 <?php
-class Vpc_Basic_Download_Controller extends Vpc_Abstract_Composite_Controller
+class Vpc_Basic_Download_Controller extends Vps_Controller_Action_Auto_Vpc_Form
 {
-    public function _initFields()
-    {
-        parent::_initFields();
-
-        $this->_form->add(new Vps_Form_Field_TextArea('infotext', trlVps('Infotext')))
-            ->setWidth(300)
-            ->setGrow(true);
-    }
+    protected $_formName = 'Vpc_Basic_Download_Form';
 }
