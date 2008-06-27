@@ -5,4 +5,5 @@
         <a href="<?= $l['href'] ?>" rel="<?= $l['rel'] ?>"<?php if ($l['active']) { ?> class="active"<?php } ?>><?= $l['text'] ?></a>
     <?php } ?>
 </div>
+<div class="webNewContentBox"></div>
 <?php } ?>
