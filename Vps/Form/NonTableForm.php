@@ -2,6 +2,7 @@
 class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
 {
     private $_id;
+    private $_rows;
 
     public function __construct($name = null)
     {
@@ -37,9 +38,13 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
 
     protected function _getRowByParentRow($parentRow)
     {
-        $id = $this->_getIdByParentRow($parentRow);
-        $model = new Vps_Model_FnF();
-        return $model->createRow(array('id' => $id));
+        $key = spl_object_hash($parentRow);
+        if (!isset($this->_rows[$key])) {
+            $id = $this->_getIdByParentRow($parentRow);
+            $model = new Vps_Model_FnF();
+            $this->_rows[$key] = $model->createRow(array('id' => $id));
+        }
+        return $this->_rows[$key];
     }
 
     public function setName($name)
