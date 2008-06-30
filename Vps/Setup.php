@@ -52,15 +52,14 @@ function _btString($bt)
         $ret .= $bt['class'].'::';
     }
     if (isset($bt['function'])) {
-        $ret .= $bt['function'].'('._btArgsString($bt).')';
+        $ret .= $bt['function'].'('._btArgsString($bt['args']).')';
     }
     return $ret;
 }
-function _btArgsString($bt)
+function _btArgsString($args)
 {
-    if (!isset($bt['args'])) return '';
     $ret = array();
-    foreach ($bt['args'] as $arg) {
+    foreach ($args as $arg) {
         if (is_object($arg)) {
             $ret[] = get_class($arg);
         } else if (is_array($arg)) {
@@ -71,14 +70,20 @@ function _btArgsString($bt)
                     $s = $k.'=>';
                 }
                 if (is_array($i)) {
-                    $arrayString[] = $s.'Array';
+                    $arrayString[] = $s.'array('._btArgsString($i).')';
                 } else if (is_object($i)) {
                     $arrayString[] = $s.get_class($i);
+                } else if (is_null($i)) {
+                    $arrayString[] = $s.'null';
                 } else {
                     $arrayString[] = $s.$i;
                 }
             }
             $ret[] = 'array('.implode(', ', $arrayString).')';
+        } else if (is_null($arg)) {
+            $ret[] = 'null';
+        } else if (is_string($arg)) {
+            $ret[] = '"'.$arg.'"';
         } else {
             $ret[] = $arg;
         }
@@ -94,7 +99,7 @@ function bt()
         $out[] = array(
             $i['file'], $i['line'],
             isset($i['function']) ? $i['function'] : null,
-            _btArgsString($i),
+            _btArgsString($i['args']),
         );
     }
     p(array('Backtrace for '._btString($bt[1]), $out), 'TABLE');
