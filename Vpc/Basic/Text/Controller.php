@@ -32,7 +32,7 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
         $t = new Vpc_Basic_Text_ChildComponentsModel();
         $r = $t->createRow();
         $r->component_id = $row->component_id;
-        $r->type = $type;
+        $r->component = $type;
         $r->nr = $nr;
         $r->saved = 0;
         $r->save();
