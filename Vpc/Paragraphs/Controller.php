@@ -9,7 +9,6 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
         );
     protected $_paging = 0;
     protected $_position = 'pos';
-    protected $_tableName = 'Vpc_Paragraphs_Model';
 
     protected function _initColumns()
     {
@@ -29,6 +28,7 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
 
     public function preDispatch()
     {
+        parent::preDispatch();
         $this->_components = array();
         foreach (Vpc_Abstract::getSetting($this->class, 'childComponentClasses') as $c) {
             if (Vpc_Abstract::hasSetting($c, 'componentName')) {
@@ -36,7 +36,6 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
                 if ($name) $this->_components[$name] = $c;
             }
         }
-        parent::preDispatch();
     }
 
     public function jsonAddParagraphAction()
