@@ -239,6 +239,11 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
     protected function _getOrder($order)
     {
+        // Falls Pos-Feld eingeschalten und das Order nicht andersweitig geändert wurde,
+        // serverseitig sortiern, weil im Client ausgeschalten
+        if ($this->_position && !$order) {
+            return $this->_position;
+        }
         return $order;
     }
 
