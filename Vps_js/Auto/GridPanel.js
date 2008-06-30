@@ -761,7 +761,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
 
     onDelete : function() {
         Ext.Msg.show({
-            title:trlVps('Delete'),
+            title: trlVps('Delete'),
             msg: trlVps('Do you really wish to remove this entry / these entries?'),
             buttons: Ext.Msg.YESNO,
             scope: this,
@@ -771,7 +771,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
                     if (!selectedRows.length) return;
 
                     var ids = [];
-                    var params = {};
+                    var params = this.getBaseParams() || {};
                     var newNewRecords = [];
                     selectedRows.each(function(selectedRow)
                     {
