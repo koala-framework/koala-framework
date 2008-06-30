@@ -33,7 +33,9 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
         if (in_array('visible', $cols) && !Vps_Registry::get('config')->showInvisible) {
             $select->where('visible = ?', 1);
         }
-        // TODO: Sortierung / Nummerierung
+        if (in_array('pos', $cols)) {
+            $select->order('pos');
+        }
         return $select;
     }
 
