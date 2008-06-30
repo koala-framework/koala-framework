@@ -5,9 +5,12 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
 
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'level' => 'main' // (string)pagetype oder (int)ebene
         ));
+        $ret['cssClass'] = 'webStandard';
+        return $ret;
+        
     }
 
     protected function _getMenuData($parentData = null)

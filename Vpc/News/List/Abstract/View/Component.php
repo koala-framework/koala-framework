@@ -9,4 +9,11 @@ class Vpc_News_List_Abstract_View_Component extends Vpc_Abstract
         $ret['news'] = $parent->getNews();
         return $ret;
     }
+
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['cssClass'] = 'webStandard';
+        return $ret;
+    }
 }
