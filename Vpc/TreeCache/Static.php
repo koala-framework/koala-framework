@@ -20,6 +20,14 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
     {
         $ret = parent::getChildData($parentData, $constraints);
         if (!$parentData) {
+            if (isset($constraints['id'])) {
+                //Performance: wenn id contraint schauen ob es überhaupt was gibt
+                //wenn nicht parentDatas nicht ermitteln (kann aufwändig sein)
+                $id = substr($constraints['id'], 1);
+                if (substr($constraints['id'], 0, 1) == $this->_idSeparator || !isset($this->_classes[$id])) {
+                    return $ret;
+                }
+            }
             $parentDatas = Vps_Component_Data_Root::getInstance()
                                         ->getComponentsByClass($this->_class);
         } else {
