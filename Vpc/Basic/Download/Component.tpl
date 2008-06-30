@@ -1,8 +1,8 @@
 <?php
-if ($this->downloadTag['url']) {
-    $this->component($this->downloadTag);
-    echo $this->infotext;
-    if ($this->downloadTag['filesize'] > 0) {
-        echo '(' . $this->fileSize($this->downloadTag['filesize']) . ')';
-    }
+echo $this->component($this->downloadTag);
+echo ' ';
+echo $this->infotext;
+if ($this->filesize) {
+    echo ' (' . $this->fileSize($this->filesize) . ')';
 }
+?></a>

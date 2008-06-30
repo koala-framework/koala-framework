@@ -21,7 +21,6 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Abstract
         $filename = $row->filename != '' ? $row->filename : 'unnamed';
 
         $url = $row->getFileUrl(null, 'default', $filename, false, Vps_Db_Table_Row_Abstract::FILE_PASSWORD_DOWNLOAD);
-        $filesize = $row->getFileSize();
         $filename = $row->filename . '.' . $this->_row->getFileExtension();
         switch ($row->getFileExtension()) {
             case 'pdf':
@@ -59,12 +58,16 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Abstract
         if ($icon) {
             $icon = '/assets/silkicons/' . $icon . '.png';
         }
-
         $return = parent::getTemplateVars();
-        $return['filesize'] = $filesize;
+        $return['filesize'] = $this->getFilesize();
         $return['url'] = $url;
         $return['filename'] = $filename;
         $return['icon'] = $icon;
         return $return;
+    }
+    
+    public function getFilesize()
+    {
+        return $this->_getRow()->getFileSize();
     }
 }
