@@ -9,6 +9,7 @@ Ext.onReady(function()
         Ext.each(rels, function(rel) {
             if (rel.match(/forumDeleteConfirmation/)) {
                 lnk.on('click', function(e) {
+                    //TODO: gehört hier nicht rein
                     if (!confirm(trlVps("Do you really wish to delete this post?"))) {
                         e.stopEvent();
                     }

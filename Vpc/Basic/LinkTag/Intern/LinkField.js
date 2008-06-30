@@ -4,9 +4,8 @@ Vps.Form.VpcLinkField = Ext.extend(Ext.form.TriggerField,
     readOnly: true,
     width: 200,
     onTriggerClick : function(){
-        var win = Vps.Form.VpcLinkField.PagesWindow; //statische var, nur ein window erstellen??
-        if (!win) {
-            win = new Ext.Window({
+        if (!this.selectWin) {
+            this.selectWin = new Ext.Window({
                 width: 535,
                 height: 500,
                 modal: true,
@@ -16,14 +15,14 @@ Vps.Form.VpcLinkField = Ext.extend(Ext.form.TriggerField,
                 buttons: [{
                     text: trlVps('OK'),
                     handler: function() {
-                        this.setValue(win.value);
-                        win.hide();
+                        this.setValue(this.selectWin.value);
+                        this.selectWin.hide();
                     },
                     scope: this
                 },{
                     text: trlVps('Cancel'),
                     handler: function() {
-                        win.hide();
+                        this.selectWin.hide();
                     },
                     scope: this
                 }],
@@ -38,18 +37,18 @@ Vps.Form.VpcLinkField = Ext.extend(Ext.form.TriggerField,
                                 name += n.attributes.text;
                                 n = n.parentNode;
                             }
-                            win.value = {
+                            this.selectWin.value = {
                                 id: node.id,
                                 name: name
                             };
-                        }
+                        },
+                        scope: this
                     }
                 })
             });
-            Vps.Form.VpcLinkField.PagesWindow = win;
         }
-        win.show();
-        win.items.get(0).selectId(this.value);
+        this.selectWin.show();
+        this.selectWin.items.get(0).selectId(this.value);
     },
 
     getValue: function(value) {
