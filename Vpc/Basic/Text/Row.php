@@ -124,8 +124,8 @@ class Vpc_Basic_Text_Row extends Vpc_Row
         $table = new Vpc_Basic_Text_ChildComponentsModel();
         $rows = $table->fetchAll(array('component_id = ?' => $this->component_id));
         foreach ($rows as $row) {
-            $t = substr($row->type, 0, 1);
-            $admin = Vpc_Admin::getInstance($classes[$row->type]);
+            $t = substr($row->component, 0, 1);
+            $admin = Vpc_Admin::getInstance($classes[$row->component]);
             $admin->delete($this->component_id . '-' . $t.$row->nr);
             $row->delete();
         }
