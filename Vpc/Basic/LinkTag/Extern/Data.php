@@ -23,8 +23,8 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
                 if ($row->height) $ret[] = 'height='.$row->height;
                 $ret[] = 'menubar='.($row->menubar ? 'yes' : 'no');
                 $ret[] = 'toolbar='.($row->toolbar ? 'yes' : 'no');
-                $ret[] = 'location='.($row->location ? 'yes' : 'no');
-                $ret[] = 'status='.($row->status ? 'yes' : 'no');
+                $ret[] = 'location='.($row->locationbar ? 'yes' : 'no');
+                $ret[] = 'status='.($row->statusbar ? 'yes' : 'no');
                 $ret[] = 'scrollbars='.($row->scrollbars ? 'yes' : 'no');
                 $ret[] = 'resizable='.($row->resizable ? 'yes' : 'no');
             }

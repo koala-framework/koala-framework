@@ -14,7 +14,7 @@ class Vpc_Composite_Links_Component extends Vpc_Abstract_List_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['children'] = $this->getData()->getChildComponentIds(array('treecache' => 'Vpc_Abstract_List_TreeCache'));
+        $ret['children'] = $this->getData()->getChildComponents(array('treecache' => 'Vpc_Abstract_List_TreeCache'));
         return $ret;
     }
 }
