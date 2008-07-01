@@ -24,7 +24,7 @@ class Vps_Pdf_TcPdf extends TCPDF
             //Workaround für IE problem: unterschied von Apache-Auslieferung
             //(wo es funktionierte)
             //von lenz mittels sniffer herausgefunden
-            //todo: checken ob das hilft und noch benötigt wird
+            //ist definitiv notwendig - ie ist böööse
             header('Accept-Ranges: bytes');
         }
         return parent::Output($name, $dest);
