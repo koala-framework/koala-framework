@@ -1947,7 +1947,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Delete File</en>
-<de>Datei löschen</de>
+<de>Datei l&#xF6;schen</de>
 </text>
 <text>
 <en default="1">Uploading file</en>
@@ -1971,7 +1971,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Do you really want to delete this entry:</en>
-<de>Wollen Sie diesen Eintrag wirklich löschen:</de>
+<de>Wollen Sie diesen Eintrag wirklich l&#xF6;schen:</de>
 </text>
 <text>
 <en default="1">yyyy-mm-dd</en>
@@ -2087,15 +2087,15 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Font size</en>
-<de>Schriftgröße</de>
+<de>Schriftgr&#xF6;&#xDF;e</de>
 </text>
 <text>
 <en default="1">Additional Styles</en>
-<de>Zusätzliche Stile</de>
+<de>Zus&#xE4;tzliche Stile</de>
 </text>
 <text>
 <en default="1">You can't delete master styles</en>
-<de>Master Stile können nicht gelöscht werden</de>
+<de>Master Stile k&#xF6;nnen nicht gel&#xF6;scht werden</de>
 </text>
 <text>
 <en default="1">Beschreibungstext</en>
@@ -2116,14 +2116,14 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <text>
 <en default="1">You may upload a picture that is displayed in your profile
                 and in each of your posts in a small version (40x40 Pixels).</en>
-<de>Sie können ein Bild hochladen, das in in Ihrem Profil angezeigt wird
+<de>Sie k&#xF6;nnen ein Bild hochladen, das in in Ihrem Profil angezeigt wird
                 und in jedem Ihrer Schreiben als kleine Version (40x40 Pixels).</de>
 </text>
 <text>
 <en default="1">For optimized displayment the picture should have a width of at least 150 Pixels,
                 the file size may not be bigger than 2 MB.</en>
-<de>Für eine optimale Bildschirmdarstellung sollten das Bild eine Mindestbreite von 150 Pixel haben,
-                die Dateigröße sollte nicht mehr als 2 MB betragen.</de>
+<de>F&#xFC;r eine optimale Bildschirmdarstellung sollten das Bild eine Mindestbreite von 150 Pixel haben,
+                die Dateigr&#xF6;&#xDF;e sollte nicht mehr als 2 MB betragen.</de>
 </text>
 <text>
 <en default="1">Information</en>
@@ -2135,7 +2135,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Text Image enlarge</en>
-<de>Text Bildvergrößerung</de>
+<de>Text Bildvergr&#xF6;&#xDF;erung</de>
 </text>
 <text>
 <en default="1">Text Image Link</en>
@@ -2235,7 +2235,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Checkbox</en>
-<de>Kontrollkästchen</de>
+<de>Kontrollk&#xE4;stchen</de>
 </text>
 <text>
 <en default="1">This is not an image.</en>
@@ -2247,7 +2247,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Activation code is invalid. Maybe the URL wasn't copied completely?</en>
-<de>Der Aktivierungscode ist falsch. Vielleicht wurde die URL unvollständig kopiert</de>
+<de>Der Aktivierungscode ist falsch. Vielleicht wurde die URL unvollst&#xE4;ndig kopiert</de>
 </text>
 <text>
 <en default="1">Activation code is invalid. Maybe your '
@@ -2269,7 +2269,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Additional rights</en>
-<de>Zusätzliche Rechte</de>
+<de>Zus&#xE4;tzliche Rechte</de>
 </text>
 <text>
 <en default="1">Activated</en>
@@ -2309,7 +2309,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Can't delete page as there are child pages.</en>
-<de>Die Seite kann nicht gelöscht werden, da es Unterseiten dazu gibt.</de>
+<de>Die Seite kann nicht gel&#xF6;scht werden, da es Unterseiten dazu gibt.</de>
 </text>
 <text>
 <en default="1">Hello</en>
@@ -2329,7 +2329,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">A new entry has been written in your guestbook.</en>
-<de>Ein neuer Eintrag wurde in Ihr Gästebuch geschrieben.</de>
+<de>Ein neuer Eintrag wurde in Ihr G&#xE4;stebuch geschrieben.</de>
 </text>
 <text>
 <en default="1">Here is the Link to your profile:</en>
@@ -2337,7 +2337,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">This is the text that was saved in your guestbook:</en>
-<de>Das ist der Text der in Ihrem Gästebuch gespeichert wurde:</de>
+<de>Das ist der Text der in Ihrem G&#xE4;stebuch gespeichert wurde:</de>
 </text>
 <text>
 <en default="1">Click here to go directly to you profile</en>
@@ -2365,7 +2365,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">From your old email address {0} to {1}</en>
-<de>Ändern Sie bitte Ihre alte E-Mail Adresse von {0} zu {1}</de>
+<de>&#xC4;ndern Sie bitte Ihre alte E-Mail Adresse von {0} zu {1}</de>
 </text>
 <text>
 <en default="1">Not Found</en>
@@ -2414,6 +2414,40 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <text>
 <en default="1">Already activated</en>
 <de>Bereits aktiviert</de>
+</text>
+<text>
+<en default="1">Do you really want to delete this entry:
+
+"</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Activate / Login</en>
+<de>Aktivieren / Einloggen</de>
+</text>
+<text>
+<en default="1">Passwords not equal</en>
+<de>Passw&#xF6;rter unterschiedlich</de>
+</text>
+<text>
+<en default="1">Select Page</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Activation link sent to email address.</en>
+<de>Aktivierungslink wurde zur Email-Adresse gesendet.</de>
+</text>
+<text>
+<en default="1">Error sending the mail.</en>
+<de>Fehler beim senden der Email.</de>
+</text>
+<text>
+<en default="1">male</en>
+<de>männlich</de>
+</text>
+<text>
+<en default="1">female</en>
+<de>weiblich</de>
 </text>
 </trl>
 

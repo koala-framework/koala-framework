@@ -152,9 +152,9 @@ class Vps_Model_User_Users extends Vps_Db_Table
         }
 
         if ($userRow->sendLostPasswordMail()) {
-            return 'Activation link sent to email address';
+            return trlVps('Activation link sent to email address.');
         } else {
-            return 'Error sending the mail';
+            return trlVps('Error sending the mail.');
         }
     }
 

@@ -16,7 +16,7 @@ Vps.User.Activate.Index = Ext.extend(Ext.Panel,
                 modal: true,
                 labelWidth: 130,
                 bodyStyle:'padding: 8px;',
-                title: 'Activate &amp; Login',
+                title: trlVps('Activate / Login'),
                 width: 330,
 
                 items: [{
@@ -26,13 +26,13 @@ Vps.User.Activate.Index = Ext.extend(Ext.Panel,
                     xtype: 'panel',
                     bodyStyle: 'background-color:transparent; padding:5px; margin-bottom:10px;'
                 }, {
-                    fieldLabel: 'Password',
+                    fieldLabel: trlVps('Password'),
                     name: 'password1',
                     allowBlank: false,
                     inputType: 'password',
                     xtype: 'textfield'
                 }, {
-                    fieldLabel: 'Repeat password',
+                    fieldLabel: trlVps('Repeat password'),
                     name: 'password2',
                     allowBlank: false,
                     inputType: 'password',
@@ -50,7 +50,7 @@ Vps.User.Activate.Index = Ext.extend(Ext.Panel,
 
         if (password != document.getElementsByName('password2')[0].value) {
             Ext.Msg.show({
-                title: 'Passwords not equal',
+                title: trlVps('Passwords not equal'),
                 msg: trlVps('The repeated password is different - please try again.'),
                 buttons: Ext.Msg.OK
             });
