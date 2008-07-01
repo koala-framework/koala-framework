@@ -5,7 +5,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 
     protected function _initFields()
     {
-        $genders = array('male' => 'male', 'female' => 'female');
+        $genders = array('male' => trlVps('male'), 'female' => trlVps('female'));
 
         $this->_form->setTable(Zend_Registry::get('userModel'));
 

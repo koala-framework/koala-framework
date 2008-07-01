@@ -89,6 +89,21 @@ Ext.util.Format.cellButton = function(value, p, record, rowIndex, colIndex, stor
     return '';
 };
 
+Ext.util.Format.genderIcon = function(value, p, record, rowIndex, colIndex, store, column) {
+    p.css += 'vps-cell-button';
+    if (value == 'male') {
+        p.attr += 'style="background-image:url(/assets/silkicons/male.png); cursor: auto;"" ';
+    } else if (value == 'female') {
+        p.attr += 'style="background-image:url(/assets/silkicons/female.png); cursor: auto;"" ';
+    } else {
+        p.attr += 'style="background-image:none; cursor: auto;"" ';
+    }
+    if (column && column.tooltip) {
+        p.attr += ' ext:qtip="'+column.tooltip+'"';
+    }
+    return '';
+};
+
 Ext.util.Format.fileSize = function(size) {
     var unit;
     if (!parseInt(size) && size !== 0) return '';

@@ -47,7 +47,8 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         $this->_columns->add(new Vps_Grid_Column('role', trlVps('Rights')))
             ->setData(new Vps_Controller_Action_User_Users_RoleData());
 
-        $this->_columns->add(new Vps_Grid_Column('gender', trlVps('Gender'), 50));
+        $this->_columns->add(new Vps_Grid_Column('gender', trlVps('Gender'), 70))
+            ->setRenderer('genderIcon');
         $this->_columns->add(new Vps_Grid_Column('title', trlVps('Title'), 100));
 
         $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('First name'), 150));
