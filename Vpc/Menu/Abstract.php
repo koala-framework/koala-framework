@@ -21,7 +21,11 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
         if ($parentData) {
             $ret = $parentData->getChildPages($constraints);
         } else {
-            $level = $this->_getSetting('level');
+            if (isset($this->getData()->level)) {
+                $level = $this->getData()->level;
+            } else {
+                $level = $this->_getSetting('level');
+            }
             if (is_string($level)) {
                 $constraints['type'] = $level;
                 $ret = Vps_Component_Data_Root::getInstance()->getChildPages($constraints);
@@ -41,8 +45,9 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
             $class = array();
             if ($i == 0) { $class[] = 'first'; }
             if ($i == count($ret)-1) { $class[] = 'last'; }
-            if (in_array($r->getComponentId(), $currentPageIds)) {
+            if (in_array($r->componentId, $currentPageIds)) {
                 $class[] ='current';
+                $r->current = true;
             }
             $r->class = implode(' ', $class);
         }
@@ -54,7 +59,10 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
     {
         if (!isset($this->_currentPages)) {
             $this->_currentPages = array();
-            $p = $this->getData()->getPage();
+            $p = Vps_Component_Data_Root::getInstance()->getCurrentPage();
+            if (!$p) {
+                throw new Vps_Exception('To show the menu currentPage has to be set for Vps_Component_Data_Root');
+            }
             do {
                 $this->_currentPages[] = $p;
             } while ($p = $p->getParentPage());
