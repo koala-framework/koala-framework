@@ -1,6 +1,7 @@
 <?php
 class Vpc_Paging_Component extends Vpc_Abstract
 {
+    private $_entries;
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -11,24 +12,27 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['cssClass'] = 'webStandard';
         return $ret;
     }
-
-    private function _getEntries()
+    public function getCount()
     {
-        $count = $this->getData()->parent->getComponent()->getPagingCount();
-        if (!$count) return 0;
-        if ($count instanceof Zend_Db_Select) {
-            $select = $count;
-            $select->setIntegrityCheck(false);
-            $select->reset(Zend_Db_Select::COLUMNS);
-            if ($select instanceof Vps_Db_Table_Select) {
-                $table = $select->getTableName().'.';
-            } else {
-                $table = '';
+        if (!isset($this->_entries)) {
+            $this->_entries = $this->getData()->parent->getComponent()->getPagingCount();
+            if (!$this->_entries) {
+                $this->_entries = 0;
+            } else if ($this->_entries instanceof Zend_Db_Select) {
+                $select = $this->_entries;
+                $select->setIntegrityCheck(false);
+                $select->reset(Zend_Db_Select::COLUMNS);
+                if ($select instanceof Vps_Db_Table_Select) {
+                    $table = $select->getTableName().'.';
+                } else {
+                    $table = '';
+                }
+                $select->from(null, array('count' => "COUNT(DISTINCT {$table}id)"));
+                $r = $select->query()->fetchAll();
+                $this->_entries = $r[0]['count'];
             }
-            $select->from(null, array('count' => "COUNT(DISTINCT {$table}id)"));
-            $r = $select->query()->fetchAll();
-            return $r[0]['count'];
         }
+        return $this->_entries;
     }
 
     private function _getLinkData($pageNumber, $linktext = null)
@@ -68,7 +72,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
 
     protected function _getPages()
     {
-        return ceil($this->_getEntries() / $this->_getSetting('pagesize'));
+        return ceil($this->getCount() / $this->_getSetting('pagesize'));
     }
 
     protected function _getCurrentPage()
