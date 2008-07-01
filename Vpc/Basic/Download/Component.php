@@ -8,6 +8,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
             'componentName' => trlVps('Download'),
             'componentIcon' => new Vps_Asset('folder_link'),
             'showFilesize' => true,
+            'cssClass' => 'webStandard',
             'childComponentClasses'   => array(
                 'downloadTag' => 'Vpc_Basic_DownloadTag_Component',
             ),
@@ -20,12 +21,55 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
     {
         $return = parent::getTemplateVars();
         $return['infotext'] = $this->_getRow()->infotext;
+        
+        $fileRow = $this->getData()->getChildComponent('-downloadTag')->
+            getComponent()->getFileRow();
         if (!$this->_getSetting('showFilesize')) {
             $return['filesize'] = null;
         } else {
-            $tag = $this->getData()->getChildComponent('-downloadTag')->getComponent();
-            $return['filesize'] = $tag->getFilesize();
+            $return['filesize'] = $fileRow->getFilesize();
         }
+
+        $extension = $fileRow->getFileExtension();
+           
+        $icon = false;
+        switch ($extension) {
+            case 'pdf':
+                $icon = 'page_white_acrobat';
+                break;
+            case 'doc':
+            case 'docx':
+                $icon = 'page_white_word';
+                break;
+            case 'xls':
+            case 'xlsx':
+                $icon = 'page_white_excel';
+                break;
+            case 'ppt':
+            case 'pptx':
+                $icon = 'page_white_powerpoint';
+                break;
+            case 'zip':
+            case 'rar':
+                $icon = 'page_white_compressed';
+                break;
+            case 'exe':
+                $icon = 'page_white_gear';
+                break;
+            case 'jpg':
+            case 'gif':
+            case 'png':
+            case 'psd':
+                $icon = 'page_white_picture';
+                break;
+            default:
+                $icon = 'page_white_get';
+                break;
+        }
+        if ($icon) {
+            $icon = '/assets/silkicons/' . $icon . '.png';
+        }        
+        $return['icon'] = $icon;
         return $return;
     }
 
