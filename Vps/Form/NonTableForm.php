@@ -44,6 +44,9 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
             $model = new Vps_Model_FnF();
             $this->_rows[$key] = $model->createRow(array('id' => $id));
         }
+        if ($this->_rows[$key] instanceof Vps_Model_FnF_Row) {
+            $this->_rows[$key]->id = $this->_getIdByParentRow($parentRow);
+        }
         return $this->_rows[$key];
     }
 
