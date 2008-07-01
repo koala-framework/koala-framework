@@ -368,7 +368,7 @@ echo "</div>";
 
             $downloadFilename = false;
             if ($download) {
-                $downloadFilename = $this->_getParam('filename');
+                $downloadFilename = $params['filename'];
             }
             Vps_Media_Output::output($target, $fileRow->mime_type, $downloadFilename);
         }
