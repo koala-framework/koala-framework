@@ -7,7 +7,7 @@ class Vps_View_Component extends Vps_View
         $this->addScriptPath('application/views');
     }
 
-    public static function renderCachedComponent($componentId, $isMaster = false)
+    public static function renderCachedComponent($componentId, $isMaster = false, $plugins = array())
     {
         if ($componentId instanceof Vps_Component_Data) {
             $component = $componentId;
@@ -25,7 +25,7 @@ class Vps_View_Component extends Vps_View
             }
 
             if ($component) {
-                $return = Vps_View_Component::_renderComponent($component, $isMaster);
+                $return = Vps_View_Component::_renderComponent($component, $isMaster, $plugins);
                 if (!$cacheDisabled) {
                     $tag = $isMaster ? 'master' : $component->componentClass;
                     $cache->save($return, $cacheId, array($tag));
@@ -37,16 +37,21 @@ class Vps_View_Component extends Vps_View
         }
         
         // nocache-Tags ersetzen
-        preg_match_all('/{nocache: (.+?)}/', $return, $matches);
+        preg_match_all('/{nocache: ([^ }]+) ?([^}]*)}/', $return, $matches);
         foreach ($matches[0] as $key => $search) {
-            $replace = self::renderCachedComponent($matches[1][$key]);
+            if ($matches[2][$key]) {
+                $plugins = explode(' ', $matches[2][$key]);
+            } else {
+                $plugins = array();
+            }
+            $replace = self::renderCachedComponent($matches[1][$key], false, $plugins);
             $return = str_replace($search, $replace, $return);
         }
 
         return $return;
     }
 
-    private static function _renderComponent(Vps_Component_Data $componentData, $isMaster = false)
+    private static function _renderComponent(Vps_Component_Data $componentData, $isMaster, $plugins)
     {
         $componentId = $componentData->componentId;
 
@@ -62,7 +67,7 @@ class Vps_View_Component extends Vps_View
                 $vars = $component->getTemplateVars();
                 $templateVars = array_merge($templateVars, $vars);
             }
-            $templateVars['component'] = $componentId;
+            $templateVars['component'] = $componentData;
             $template = 'application/views/master/default.tpl';
         } else {
             $templateVars = $componentData->getComponent()->getTemplateVars();
@@ -80,7 +85,12 @@ class Vps_View_Component extends Vps_View
         foreach ($templateVars as $key => $val) {
             $view->$key = $val;
         }
-        return $view->render($template);
+        $ret = $view->render($template);
+        foreach ($plugins as $p) {
+            $p = new $p($componentId);
+            $ret = $p->processOutput($ret);
+        }
+        return $ret;
     }
 
     protected function _script($name)

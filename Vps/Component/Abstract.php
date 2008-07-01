@@ -56,7 +56,8 @@ class Vps_Component_Abstract
             'assetsAdmin'   => array('files'=>array(), 'dep'=>array()),
             'componentIcon' => new Vps_Asset('paragraph_page'),
             'placeholder'   => array(),
-            'childComponentClasses' => array()
+            'childComponentClasses' => array(),
+            'plugins'       => array()
         );
     }
 

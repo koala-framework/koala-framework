@@ -17,7 +17,7 @@ class Vpc_Master_Box_Component extends Vpc_Master_Abstract
             // Boxen ausgeben, Priorität speichern, wenn gleiche Box mit höher Priorität gefunden
             foreach ($boxes as $box) {
                 if (!isset($priorities[$box->box]) || $box->priority > $priorities[$box->box]) {
-                    $ret['boxes'][$box->box] = $box->componentId;
+                    $ret['boxes'][$box->box] = $box;
                     $priorities[$box->box] = $box->priority;
                 }
             }
