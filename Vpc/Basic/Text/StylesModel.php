@@ -24,15 +24,18 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
             $where[] = "ownStyles = ''";
         }
         $order = new Zend_Db_Expr("ownStyles!='', master DESC, pos");
+        $blockTags = array('p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6');
         foreach ($this->fetchAll($where, $order) as $row) {
             $selector = $row->tag;
-            $selector .= '.style'.$row->id;
+            if (!$row->master) {
+                $selector .= '.style'.$row->id;
+            }
             if ($selector) {
                 $name = $row->name;
                 if ($row->ownStyles) $name = '* '.$name;
                 if ($row->tag == 'span') {
                     $styles['inline'][$selector] = $name;
-                } else {
+                } else if (in_array($this->tag, $blockTags)) {
                     $styles['block'][$selector] = $name;
                 }
             }
