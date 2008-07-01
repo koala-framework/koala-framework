@@ -4,6 +4,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private static $_instance;
     private $_hasChildComponentCache;
     private $_componentsByClassCache;
+    private $_currentPage;
 
     public static function getInstance()
     {
@@ -65,7 +66,7 @@ $GLOBALS['getComponentByIdCalled'][] = $componentId;
     
     public function getByDbId($dbId)
     {
-        //$benchmark = Vps_Benchmark::start();
+        $benchmark = Vps_Benchmark::start();
 
         if (is_numeric(substr($dbId, 0, 1))) {
             $data = $this->getComponentById($dbId);
@@ -93,7 +94,7 @@ $GLOBALS['getComponentByIdCalled'][] = $componentId;
     public function getComponentsByClass($class)
     {
         if (!isset($this->_componentsByClassCache[$class])) {
-            //$benchmark = Vps_Benchmark::start();
+            $benchmark = Vps_Benchmark::start();
 
             $lookingForChildClasses = array();
             foreach (Vpc_Abstract::getComponentClasses() as $c) {
@@ -139,6 +140,16 @@ $GLOBALS['getComponentByIdCalled'][] = $componentId;
             return $components[0];
         }
         return null;
+    }
+
+    public function setCurrentPage(Vps_Component_Data $page)
+    {
+        $this->_currentPage = $page;
+    }
+
+    public function getCurrentPage()
+    {
+        return $this->_currentPage;
     }
 }
 ?>
