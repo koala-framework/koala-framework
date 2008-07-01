@@ -6,7 +6,7 @@ class Vps_Filter_Ascii implements Zend_Filter_Interface
         
         if (function_exists('transliterate')
             //online deaktiviert wg. server problem
-            && $_SERVER['SERVER_ADDR']=='192.168.0.10') {
+            && isset($_SERVER['SERVER_ADDR']) && $_SERVER['SERVER_ADDR']=='192.168.0.10') {
 
             $filter[] = 'cyrillic_transliterate_bulgarian';
             $value = transliterate($value, $filter, 'utf-8', 'utf-8');
