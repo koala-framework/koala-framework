@@ -1,12 +1,4 @@
 <?php
-class Vpc_News_List_Abstract_TreeCache extends Vpc_TreeCache_Static
+class Vpc_News_List_Abstract_TreeCache extends Vpc_Abstract_Composite_TreeCache
 {
-    protected $_classes = array(
-        'paging'=>array(
-            'childClassKey' => 'paging',
-        ),
-        'view'=>array(
-            'childClassKey' => 'view',
-        )
-    );
 }

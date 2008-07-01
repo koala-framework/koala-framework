@@ -298,6 +298,35 @@ class Vps_Component_Data
         } while ($row = $row->getParentPage());
         return implode(' - ', $title);
     }
+
+    public function getPlugins($interface = null)
+    {
+        $ret = array();
+        $plugins = Vpc_Abstract::getSetting($this->componentClass, 'plugins');
+        foreach ($plugins as $p) {
+            if (!$interface || $this->_isInstanceOf($p, $interface)) {
+                $ret[] = $p;
+            }
+        }
+        return $ret;
+    }
+
+    //instanceof operator geht für strings ned korrekt, von php.net gfladad
+    private function _isInstanceOf($sub, $super)
+    {
+        $sub = (string)$sub;
+        $super = is_object($super) ? get_class($super) : (string)$super;
+    
+        switch(true)
+        {
+            case $sub === $super; // well ... conformity
+            case is_subclass_of($sub, $super):
+            case in_array($super, class_implements($sub)):
+                return true;
+            default:
+                return false;
+        }
+    }
 /*
     public function toDebug()
     {
