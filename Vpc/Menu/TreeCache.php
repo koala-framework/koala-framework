@@ -10,9 +10,7 @@ class Vpc_Menu_TreeCache extends Vpc_TreeCache_Static
     protected function _formatConstraints($parentData, $constraints)
     {
         $maxLevel = $this->_getSetting('maxLevel');
-        p($this->_class.': '.$maxLevel. ' / ' . $this->_getParentLevel($parentData));
         if ($this->_getParentLevel($parentData) >= $maxLevel) {
-            p('NULL');
             return null;
         }
         return parent::_formatConstraints($parentData, $constraints);
