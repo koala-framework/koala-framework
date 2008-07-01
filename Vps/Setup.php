@@ -285,6 +285,7 @@ class Vps_Setup
                 echo $view->render('error404.tpl');
                 exit;
             }
+            $root->setCurrentPage($data);
             if ($data->url != $requestUrl) {
                 header('Location: '.$data->url);
                 exit;
