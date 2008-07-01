@@ -5,7 +5,7 @@ class Vpc_Basic_Link_Form extends Vpc_Abstract_Form
     {
         parent::__construct($name, $class);
 
-        $this->add(new Vps_Form_Field_TextField('text', trlVps('Text')))
+        $this->add(new Vps_Form_Field_TextField('text', trlVps('Linktext')))
             ->setWidth(300)
             ->setAllowBlank(false);
 
