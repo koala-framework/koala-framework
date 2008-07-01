@@ -35,7 +35,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
                 if ($row->ownStyles) $name = '* '.$name;
                 if ($row->tag == 'span') {
                     $styles['inline'][$selector] = $name;
-                } else if (in_array($this->tag, $blockTags)) {
+                } else if (in_array($row->tag, $blockTags)) {
                     $styles['block'][$selector] = $name;
                 }
             }
