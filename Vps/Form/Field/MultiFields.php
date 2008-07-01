@@ -131,10 +131,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 
         $rows = $this->_getRowsByRow($row);
 
-        //id kann nicht als key verwendet werden da sich die beim
-        //hinzufügen ändert nach dem speichern (bzw. vorher keine da ist)
-        //spl_object_hash ist so eine art hash von pointer-adresse
-        $id = spl_object_hash($row);
+        $id = $row->getInternalId();
         $this->_updatedRows[$id] = array();
         $this->_deletedRows[$id] = array();
         $this->_insertedRows[$id] = array();
@@ -209,10 +206,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 
     public function save(Vps_Model_Row_Interface $row, $postData)
     {
-        //id kann nicht als key verwendet werden da sich die beim
-        //hinzufügen ändert nach dem speichern (bzw. vorher keine da ist)
-        //spl_object_hash ist so eine art hash von pointer-adresse
-        $id = spl_object_hash($row);
+        $id = $row->getInternalId();
 
         foreach ($this->_deletedRows[$id] as $r) {
             $r->delete();

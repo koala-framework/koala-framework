@@ -5,11 +5,19 @@ class Vps_Model_Db_Row implements Vps_Model_Row_Interface
     protected $_rowsetClass = 'Vps_Model_Rowset_Abstract';
     protected $_row;
     protected $_model;
+    private $_internalId;
 
     public function __construct(array $config)
     {
         $this->_row = $config['row'];
         $this->_model = $config['model'];
+        static $internalId = 0;
+        $this->_internalId = $internalId++;
+    }
+    
+    public function getInternalId()
+    {
+        return $this->_internalId;
     }
 
     public function __isset($name)
