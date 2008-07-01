@@ -5,7 +5,7 @@ class Vpc_Basic_LinkTag_Extern_Form extends Vpc_Abstract_Form
     {
         parent::__construct($name, $class, $id);
 
-        $this->add(new Vps_Form_Field_TextField('target', 'Target'))
+        $this->add(new Vps_Form_Field_TextField('target', trlVps('URL')))
             ->setWidth(450)
             ->setAllowBlank(false);
 
