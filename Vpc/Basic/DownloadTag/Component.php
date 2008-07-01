@@ -12,6 +12,7 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Abstract
         ));
         $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/DownloadTag/Panel.js';
+        $ret['cssClass'] = 'webStandard';
         return $ret;
     }
 
