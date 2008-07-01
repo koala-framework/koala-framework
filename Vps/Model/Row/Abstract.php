@@ -3,7 +3,8 @@ class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
 {
     protected $_data;
     protected $_model;
-
+    private $_internalId;
+    
     public function __construct(array $config)
     {
         if (isset($config['data'])) {
@@ -12,6 +13,13 @@ class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
             $this->_data = array();
         }
         $this->_model = $config['model'];
+        static $internalId = 0;
+        $this->_internalId = $internalId++;
+    }
+
+    public function getInternalId()
+    {
+        return $this->_internalId;
     }
 
     public function __isset($name)

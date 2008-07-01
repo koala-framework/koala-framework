@@ -127,10 +127,7 @@ class Vps_Form extends Vps_Form_NonTableForm
     {
         $key = 'none';
         if ($parentRow) {
-            //id kann nicht als key verwendet werden da sich die beim
-            //hinzufügen ändert nach dem speichern (bzw. vorher keine da ist)
-            //spl_object_hash ist so eine art hash von pointer-adresse
-            $key = spl_object_hash($parentRow);
+            $key = $parentRow->getInternalId();
         }
         if (isset($this->_rows[$key])) return $this->_rows[$key];
 

@@ -38,7 +38,7 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
 
     protected function _getRowByParentRow($parentRow)
     {
-        $key = $parentRow ? spl_object_hash($parentRow) : 0;
+        $key = $parentRow ? $parentRow->getInternalId() : 0;
         if (!isset($this->_rows[$key])) {
             $id = $this->_getIdByParentRow($parentRow);
             $model = new Vps_Model_FnF();
