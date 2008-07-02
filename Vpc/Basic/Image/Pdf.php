@@ -7,7 +7,7 @@ class Vpc_Basic_Image_Pdf extends Vpc_Abstract_Pdf
         $image = $this->_component->getImageRow();
         $file = $image->findParentRow('Vps_Dao_File');
         $area = $this->_pdf->getPageWidth() - ($this->_pdf->getRightMargin() + $this->_pdf->getLeftMargin());
-        $dimension = $image->getImageDimension();
+        $dimension = $image->getImageDimensions();
         if ($file) {
             if (!$dimension){
                 $dimensions = getimagesize($file->getFileSource());
