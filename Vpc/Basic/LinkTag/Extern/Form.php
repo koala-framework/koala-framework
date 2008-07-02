@@ -24,7 +24,7 @@ class Vpc_Basic_LinkTag_Extern_Form extends Vpc_Abstract_Form
             $popup->add(new Vps_Form_Field_Checkbox('locationbar', 'Locationbar'));
             $popup->add(new Vps_Form_Field_Checkbox('statusbar', 'Statusbar'));
             $popup->add(new Vps_Form_Field_Checkbox('scrollbars', 'Scrollbars'));
-            $popup->add(new Vps_Form_Field_Checkbox('resizeable', 'Resizeable'));
+            $popup->add(new Vps_Form_Field_Checkbox('resizable', 'Resizable'));
     
             $this->add($popup)
                 ->setCheckboxToggle(true)

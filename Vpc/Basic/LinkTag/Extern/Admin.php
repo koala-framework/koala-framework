@@ -14,7 +14,7 @@ class Vpc_Basic_LinkTag_Extern_Admin extends Vpc_Admin
         $fields['locationbar']  = "tinyint(4) NOT NULL";
         $fields['statusbar']    = "tinyint(4) NOT NULL";
         $fields['scrollbars']   = "tinyint(4) NOT NULL";
-        $fields['resizeable']   = "tinyint(4) NOT NULL";
+        $fields['resizable']    = "tinyint(4) NOT NULL";
         $this->createFormTable('vpc_basic_link_extern', $fields);
     }
 }
