@@ -41,13 +41,21 @@ Vpc.Basic.ImageEnlarge.prototype =
         this.lightbox.applyStyles('display: block;');
         this.lightbox.center();
 
-        var m = linkEl.dom.rel.match(/enlarge_([0-9]+)_([0-9]+)/);
+        var m = linkEl.dom.rel.match(/enlarge_([0-9]+)_([0-9]+)_?(.*)/);
+
         var imgWidth = parseInt(m[1]);
         var imgHeight = parseInt(m[2]);
+        var fullSizePath = false;
+        if (m[3]) {
+            fullSizePath = m[3];
+        }
 
         // head
+        var hdHtml = '';
+        if (fullSizePath) hdHtml += '<a href="'+fullSizePath+'" class="fullSizeLink" target="_blank"></a> ';
+        hdHtml += linkEl.dom.title ? linkEl.dom.title : '&nbsp;';
         var hd = Ext.DomHelper.overwrite(this.lightbox,
-            { tag: 'div', cls:'lightboxHd', html: (linkEl.dom.title ? linkEl.dom.title : '&nbsp;') }
+            { tag: 'div', cls:'lightboxHd', html: hdHtml }
         );
 
         // head - close

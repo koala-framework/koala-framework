@@ -8,6 +8,7 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
         $ret['componentIcon'] = new Vps_Asset('imageEnlarge');
         $ret['tablename'] = 'Vpc_Basic_Image_Enlarge_Model';
         $ret['hasSmallImageComponent'] = true;
+        $ret['fullSizeDownloadable'] = true;
         $ret['childComponentClasses']['smallImage'] = 'Vpc_Basic_Image_Thumb_Component';
         $ret['dimension'] = array(640, 480);
         $ret['assets']['files'][] = 'vps/Vpc/Basic/Image/Enlarge/Component.js';
@@ -20,6 +21,11 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
     {
         $ret = parent::getTemplateVars();
         $ret['smallImage'] = $this->getSmallImage();
+
+        $ret['fullSizeUrl'] = false;
+        if ($this->_getSetting('fullSizeDownloadable')) {
+            $ret['fullSizeUrl'] = $this->_getRow()->getFileUrl(null, 'original');
+        }
         return $ret;
     }
 

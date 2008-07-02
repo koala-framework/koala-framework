@@ -6,6 +6,10 @@
     padding: 5px 10px 3px 10px;
     font-weight:bold; color: #555; border-bottom:1px solid #aaa;
 }
+.lightboxHd .fullSizeLink {
+    display: block; float: left; width: 16px; height: 16px; padding-right: 10px;
+    background: url(/assets/silkicons/picture_save.png) left top no-repeat;
+}
 .lightboxBd, .lightboxPreviousBig, .lightboxNextBig {
     height: 480px;
 }
