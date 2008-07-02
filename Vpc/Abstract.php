@@ -13,7 +13,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['childComponentClasses'] = array();
+        $ret['viewCache'] = true;
         return $ret;
     }
     public static function getChildComponentClasses($class)

@@ -26,7 +26,8 @@ class Vps_View_Component extends Vps_View
 
             if ($component) {
                 $return = Vps_View_Component::_renderComponent($component, $isMaster, $plugins);
-                if (!$cacheDisabled) {
+                $useCache = Vpc_Abstract::getSetting($component->componentClass, 'viewCache');
+                if (!$cacheDisabled && ($useCache || $isMaster)) {
                     $tag = $isMaster ? 'master' : $component->componentClass;
                     $cache->save($return, $cacheId, array($tag));
                 }
@@ -34,6 +35,9 @@ class Vps_View_Component extends Vps_View
                 $return = "Component '$componentId' not found";
                 //todo: throw error
             }
+            $GLOBALS['renderedCounter']['notcached'][] = $componentId;
+        } else {
+            $GLOBALS['renderedCounter']['cached'][] = $componentId;
         }
         
         // nocache-Tags ersetzen

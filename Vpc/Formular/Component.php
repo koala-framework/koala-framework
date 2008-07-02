@@ -13,6 +13,7 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
         $ret['componentName'] = 'Formular';
         $ret['placeholder']['submitButton'] = trlVps('Submit');
         $ret['decorator'] = 'Vpc_Formular_Decorator_Label';
+        $ret['viewCache'] = false;
         return $ret;
     }
 
