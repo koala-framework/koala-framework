@@ -31,12 +31,6 @@ class Vps_View_Component extends Vps_View
                     $tag = $isMaster ? 'master' : $component->componentClass;
                     $cache->save($ret, $cacheId, array($tag));
                 }
-
-                //plugins _nach_ im cache speichern ausführen
-                foreach ($plugins as $p) {
-                    $p = new $p($componentId);
-                    $ret = $p->processOutput($ret);
-                }
             } else {
                 $ret = "Component '$componentId' not found";
                 //todo: throw error
@@ -45,7 +39,13 @@ class Vps_View_Component extends Vps_View
         } else {
             $GLOBALS['renderedCounter']['cached'][] = $componentId;
         }
-        
+
+        //plugins _nach_ im cache speichern ausführen
+        foreach ($plugins as $p) {
+            $p = new $p($componentId);
+            $ret = $p->processOutput($ret);
+        }
+
         // nocache-Tags ersetzen
         preg_match_all('/{nocache: ([^ }]+) ?([^}]*)}/', $ret, $matches);
         foreach ($matches[0] as $key => $search) {
