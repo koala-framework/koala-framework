@@ -19,12 +19,10 @@ class Vps_Controller_Action_User_SelfController extends Vps_Controller_Action_Au
         $editor->setWidth(220);
         $fs1->add($editor);
 
-        $editor = new Vps_Form_Field_TextField('password1', trlVps('Change password'));
-        $editor->setInputType('password');
+        $editor = new Vps_Form_Field_Password('password1', trlVps('Change password'));
         $fs1->add($editor);
 
-        $editor = new Vps_Form_Field_TextField('password2', trlVps('Repeat password'));
-        $editor->setInputType('password');
+        $editor = new Vps_Form_Field_Password('password2', trlVps('Repeat password'));
         $fs1->add($editor);
 
         // Person
