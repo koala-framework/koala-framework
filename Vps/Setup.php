@@ -303,6 +303,8 @@ echo "Components: $GLOBALS[componentCounter]<br>\n";
 echo "Component Datas: $GLOBALS[dataCounter]<br>\n";
 echo "getComponentById called: ".count($GLOBALS['getComponentByIdCalled'])."<br>\n";
 echo "unique getComponentById called: ".count(array_unique($GLOBALS['getComponentByIdCalled']))."<br>\n";
+echo "cached cmp: ".count($GLOBALS['renderedCounter']['cached'])."<br>\n";
+echo "notcached cmp: ".count($GLOBALS['renderedCounter']['notcached'])." ".implode(', ', $GLOBALS['renderedCounter']['notcached'])."<br>\n";
 echo "</div>";
             exit;
         }

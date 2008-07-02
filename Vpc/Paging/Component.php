@@ -10,6 +10,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['bigPagingSteps'] = array(10, 50);
         $ret['includedParams'] = array();
         $ret['cssClass'] = 'webStandard';
+        $ret['viewCache'] = false;
         return $ret;
     }
     public function getCount()
