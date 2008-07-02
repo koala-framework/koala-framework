@@ -49,4 +49,10 @@ class Vpc_Basic_Image_Form extends Vpc_Abstract_Form
             ->setAllowBlank(Vpc_Abstract::getSetting($class, 'allowBlank'))
             ->setAllowOnlyImages(true);
     }
+
+    public function setFieldLabel($label)
+    {
+        $this->fields['vps_upload_id']->setFieldLabel($label);
+        return $this;
+    }
 }

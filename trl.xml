@@ -788,11 +788,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">At the following action emails are automatically sent to the adequade user.</en>
-<de>Im Anschluss an diese Aktion werden E-Mails automatisch an die entsprechenden Benutzer gesendet.</de>
+<de>Nach Änderungen der folgenden Felder wird automatisch eine E-Mail an die eingetragene E-Mail Adresse versendet:</de>
 </text>
 <text>
 <en default="1">Create, Delete and E-Mail change</en>
-<de>Erzeugen, L&#xF6;schen und E-Mail &#xC4;nderungen</de>
+<de>Hinzufügen, Löschen und E-Mail-Änderungen</de>
 </text>
 <text>
 <en default="1">Accessdata and person</en>
