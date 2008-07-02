@@ -52,7 +52,7 @@ Vpc.Basic.ImageEnlarge.prototype =
 
         // head
         var hdHtml = '';
-        if (fullSizePath) hdHtml += '<a href="'+fullSizePath+'" class="fullSizeLink" target="_blank"></a> ';
+        if (fullSizePath) hdHtml += '<a href="'+fullSizePath+'" class="fullSizeLink" title="Bild in Originalgröße" target="_blank"></a> ';
         hdHtml += linkEl.dom.title ? linkEl.dom.title : '&nbsp;';
         var hd = Ext.DomHelper.overwrite(this.lightbox,
             { tag: 'div', cls:'lightboxHd', html: hdHtml }
