@@ -4,7 +4,7 @@ abstract class Vpc_TreeCache_TablePage extends Vpc_TreeCache_Table
     protected $_showInMenu = false;
 
     protected $_nameColumn= 'name';
-    protected $_filenameColumn = 'filename';
+    protected $_filenameColumn = false;
     protected $_uniqueFilename = false;
 
     protected $_idSeparator = '_';
