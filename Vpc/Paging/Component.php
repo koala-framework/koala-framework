@@ -88,6 +88,11 @@ class Vpc_Paging_Component extends Vpc_Abstract
         return $page;
     }
 
+    public function getPagingVisible()
+    {
+        return ($this->_getPages() > 1 ? true : false);
+    }
+
     public function getLimit()
     {
         $ret = array();
