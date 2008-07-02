@@ -22,7 +22,7 @@ class Vpc_Composite_ImagesEnlarge_Component extends Vpc_Composite_Images_Compone
         foreach ($images as $image) {
             $img = $image->getComponent()->getSmallImage();
             $ret['smallMaxWidth'] = max($ret['smallMaxWidth'], $img['width']);
-            $ret['smallMaxHeight'] = max($ret['smallMaxHeight'], $img['width']);
+            $ret['smallMaxHeight'] = max($ret['smallMaxHeight'], $img['height']);
         }
 
         return $ret;
