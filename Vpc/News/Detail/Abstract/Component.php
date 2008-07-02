@@ -14,6 +14,11 @@ abstract class Vpc_News_Detail_Abstract_Component extends Vpc_Abstract_Composite
         //todo: 404 wenn news abgelaufen
         return $return;
     }
+    
+    public function getRow()
+    {
+        return $this->_row;
+    }
 
     public function getNewsComponent()
     {
