@@ -13,6 +13,7 @@ class Vps_View extends Zend_View
     public function render($name)
     {
         if (!is_null($this->_masterTemplate)) {
+            //TODO: partial von Zend_View verwenden
             $this->renderedTemplate = parent::render($name);
             $name = $this->getMasterTemplate();
         }

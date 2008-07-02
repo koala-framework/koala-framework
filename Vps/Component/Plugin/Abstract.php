@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Component_Plugin_Abstract
+abstract class Vps_Component_Plugin_Abstract extends Vps_Component_Abstract
 {
     protected $_componentId;
 

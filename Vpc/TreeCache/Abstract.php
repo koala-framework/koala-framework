@@ -39,11 +39,6 @@ abstract class Vpc_TreeCache_Abstract
         }
     }
     
-    public function addTreeCache($treeCache)
-    {
-        $this->_additionalTreeCaches[] = $treeCache;
-    }
-
     public static function getInstance($componentClass, $isTop = true)
     {
         static $instances = array();
@@ -92,6 +87,14 @@ abstract class Vpc_TreeCache_Abstract
     protected function _getAdditionalTreeCaches($parentData)
     {
         $ret = $this->_additionalTreeCaches;
+        if ($this->_isTop) {
+            foreach ($this->_getSetting('plugins') as $plugin) {
+                $tc = Vpc_TreeCache_Abstract::getInstance($plugin);
+                if ($tc) {
+                    $ret[] = $tc;
+                }
+            }
+        }
         if ($this->_isTop && $parentData && $parentData->isPage) {
             if (!$parentData instanceof Vps_Component_Data_Root) {
                 foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $mc) {

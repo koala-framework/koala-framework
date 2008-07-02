@@ -5,6 +5,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('textfield');
+        $this->setInputType('text');
     }
 
     protected function _addValidators()
@@ -34,7 +35,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
 
         $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);
-        $ret['html'] = "<input type=\"text\" id=\"$name\" name=\"$name\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
+        $ret['html'] = "<input type=\"".$this->getInputType()."\" id=\"$name\" name=\"$name\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
         return $ret;
     }
 
