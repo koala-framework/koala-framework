@@ -149,12 +149,7 @@ class Vps_Assets_Dependencies
         $this->_processedDependencies[] = $assetsType.$dependency;
         if ($dependency == 'Components' || $dependency == 'ComponentsAdmin') {
             $rootComonent = $this->_config->vpc->rootComponent;
-            $classes = Vpc_Abstract::getSetting($rootComonent, 'childComponentClasses');
-            foreach ($classes as $c) {
-                if ($c) {
-                    $this->_processComponentDependency($assetsType, $c, $dependency == 'ComponentsAdmin');
-                }
-            }
+            $this->_processComponentDependency($assetsType, $rootComonent, $dependency == 'ComponentsAdmin');
             foreach ($this->_config->vpc->masterComponents as $c) {
                 if ($c) {
                     $this->_processComponentDependency($assetsType, $c, $dependency == 'ComponentsAdmin');
@@ -237,15 +232,12 @@ class Vps_Assets_Dependencies
         }
         //reverse damit css von weiter unten in der vererbungshierachie überschreibt
         $this->_files[$assetsType] = array_merge($this->_files[$assetsType], array_reverse($componentCssFiles));
-        if (Vpc_Abstract::hasSetting($class, 'childComponentClasses')) {
-            $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
 
-            if (is_array($classes)) {
-                foreach ($classes as $class) {
-                    if ($class) {
-                        $this->_processComponentDependency($assetsType, $class, $includeAdminAssets);
-                    }
-                }
+        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
+        $classes = array_merge($classes, Vpc_Abstract::getSetting($class, 'plugins'));
+        foreach ($classes as $class) {
+            if ($class) {
+                $this->_processComponentDependency($assetsType, $class, $includeAdminAssets);
             }
         }
     }

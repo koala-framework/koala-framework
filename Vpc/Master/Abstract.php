@@ -109,4 +109,3 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
         return $this->_tables[$tablename];
     }
 }
-?>

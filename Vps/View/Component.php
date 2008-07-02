@@ -13,7 +13,7 @@ class Vps_View_Component extends Vps_View
             $component = $componentId;
             $componentId = $component->componentId;
         }
-    
+
         // Falls es Cache gibt, Cache holen
         $cache = Vps_Component_Cache::getInstance();
         $cacheId = $cache->getCacheIdFromComponentId($componentId, $isMaster);
@@ -92,9 +92,7 @@ class Vps_View_Component extends Vps_View
         }
 
         $view = new Vps_View_Component();
-        foreach ($templateVars as $key => $val) {
-            $view->$key = $val;
-        }
+        $view->assign($templateVars);
         return $view->render($template);
     }
 
