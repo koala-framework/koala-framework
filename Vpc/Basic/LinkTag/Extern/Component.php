@@ -22,7 +22,7 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
                 'locationbar'   => '1',
                 'statusbar'     => '1',
                 'scrollbars'    => '1',
-                'resizeable'    => '1'
+                'resizable'     => '1'
             )
         ));
         $ret['assets']['files'][] = 'vps/Vpc/Basic/LinkTag/Extern/Component.js';

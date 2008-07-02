@@ -1,7 +1,7 @@
 
 Ext.onReady(function()
 {
-    var galleries = Ext.query('div.vpcImagesEnlarge');
+    var galleries = Ext.query('div.vpcCompositeImagesEnlarge');
     Ext.each(galleries, function(gallery) {
         var galleryEls = [ ];
 
