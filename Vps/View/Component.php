@@ -19,20 +19,26 @@ class Vps_View_Component extends Vps_View
         $cacheId = $cache->getCacheIdFromComponentId($componentId, $isMaster);
         $cacheDisabled = Zend_Registry::get('config')->debug->componentCache->disable;
 
-        if ($cacheDisabled || ($return = $cache->load($cacheId))===false) {
+        if ($cacheDisabled || ($ret = $cache->load($cacheId))===false) {
             if (!isset($component)) {
                 $component = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
             }
 
             if ($component) {
-                $return = Vps_View_Component::_renderComponent($component, $isMaster, $plugins);
+                $ret = Vps_View_Component::_renderComponent($component, $isMaster);
                 $useCache = Vpc_Abstract::getSetting($component->componentClass, 'viewCache');
                 if (!$cacheDisabled && ($useCache || $isMaster)) {
                     $tag = $isMaster ? 'master' : $component->componentClass;
-                    $cache->save($return, $cacheId, array($tag));
+                    $cache->save($ret, $cacheId, array($tag));
+                }
+
+                //plugins _nach_ im cache speichern ausführen
+                foreach ($plugins as $p) {
+                    $p = new $p($componentId);
+                    $ret = $p->processOutput($ret);
                 }
             } else {
-                $return = "Component '$componentId' not found";
+                $ret = "Component '$componentId' not found";
                 //todo: throw error
             }
             $GLOBALS['renderedCounter']['notcached'][] = $componentId;
@@ -41,7 +47,7 @@ class Vps_View_Component extends Vps_View
         }
         
         // nocache-Tags ersetzen
-        preg_match_all('/{nocache: ([^ }]+) ?([^}]*)}/', $return, $matches);
+        preg_match_all('/{nocache: ([^ }]+) ?([^}]*)}/', $ret, $matches);
         foreach ($matches[0] as $key => $search) {
             if ($matches[2][$key]) {
                 $plugins = explode(' ', $matches[2][$key]);
@@ -49,13 +55,13 @@ class Vps_View_Component extends Vps_View
                 $plugins = array();
             }
             $replace = self::renderCachedComponent($matches[1][$key], false, $plugins);
-            $return = str_replace($search, $replace, $return);
+            $ret = str_replace($search, $replace, $ret);
         }
 
-        return $return;
+        return $ret;
     }
 
-    private static function _renderComponent(Vps_Component_Data $componentData, $isMaster, $plugins)
+    private static function _renderComponent(Vps_Component_Data $componentData, $isMaster)
     {
         $componentId = $componentData->componentId;
 
@@ -89,12 +95,7 @@ class Vps_View_Component extends Vps_View
         foreach ($templateVars as $key => $val) {
             $view->$key = $val;
         }
-        $ret = $view->render($template);
-        foreach ($plugins as $p) {
-            $p = new $p($componentId);
-            $ret = $p->processOutput($ret);
-        }
-        return $ret;
+        return $view->render($template);
     }
 
     protected function _script($name)
