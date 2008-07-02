@@ -16,19 +16,21 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
         if ($var == 'url') {
             return $this->_getLinkRow()->target;
         } else if ($var == 'rel') {
-            $ret = array();
+            $ret = '';
             $row = $this->_getLinkRow();
             if ($row->is_popup) {
-                if ($row->width) $ret[] = 'width='.$row->width;
-                if ($row->height) $ret[] = 'height='.$row->height;
-                $ret[] = 'menubar='.($row->menubar ? 'yes' : 'no');
-                $ret[] = 'toolbar='.($row->toolbar ? 'yes' : 'no');
-                $ret[] = 'location='.($row->locationbar ? 'yes' : 'no');
-                $ret[] = 'status='.($row->statusbar ? 'yes' : 'no');
-                $ret[] = 'scrollbars='.($row->scrollbars ? 'yes' : 'no');
-                $ret[] = 'resizable='.($row->resizable ? 'yes' : 'no');
+                $pop = array();
+                if ($row->width) $pop[] = 'width='.$row->width;
+                if ($row->height) $pop[] = 'height='.$row->height;
+                $pop[] = 'menubar='.($row->menubar ? 'yes' : 'no');
+                $pop[] = 'toolbar='.($row->toolbar ? 'yes' : 'no');
+                $pop[] = 'location='.($row->locationbar ? 'yes' : 'no');
+                $pop[] = 'status='.($row->statusbar ? 'yes' : 'no');
+                $pop[] = 'scrollbars='.($row->scrollbars ? 'yes' : 'no');
+                $pop[] = 'resizable='.($row->resizable ? 'yes' : 'no');
+                $ret = 'popup_'.implode(',', $pop);
             }
-            return implode(',', $ret);
+            return $ret;
         } else {
             return parent::__get($var);
         }
