@@ -1955,11 +1955,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Edit Styles</en>
-<de>Stile bearbeiten</de>
+<de>Formatvorlagen bearbeiten</de>
 </text>
 <text>
 <en default="1">Modify and Create Styles.</en>
-<de>Bearbeiten und erzeugen von Stilen.</de>
+<de>Bearbeiten und erzeugen von Formatvorlagen.</de>
 </text>
 <text>
 <en default="1">File upload</en>
@@ -2051,15 +2051,15 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Block-Styles</en>
-<de>Block-Styles</de>
+<de>Absatz-Formatvorlagen</de>
 </text>
 <text>
 <en default="1">Inline-Styles</en>
-<de>Inline-Styles</de>
+<de>Text-Formatvorlagen</de>
 </text>
 <text>
 <en default="1">Master-Styles</en>
-<de>Master-Stil</de>
+<de>Master-Formatvorlagen</de>
 </text>
 <text>
 <en default="1">Color</en>
@@ -2067,7 +2067,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Font Weight</en>
-<de>Schriftgrad</de>
+<de>Schriftschnitt</de>
 </text>
 <text>
 <en default="1">Bold</en>
@@ -2087,15 +2087,15 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Font size</en>
-<de>Schriftgr&#xF6;&#xDF;e</de>
+<de>Schriftgrad</de>
 </text>
 <text>
 <en default="1">Additional Styles</en>
-<de>Zus&#xE4;tzliche Stile</de>
+<de>Zusätzliche CSS Einstellungen</de>
 </text>
 <text>
 <en default="1">You can't delete master styles</en>
-<de>Master Stile k&#xF6;nnen nicht gel&#xF6;scht werden</de>
+<de>Master Formatvorlagen können nicht gelöscht werden</de>
 </text>
 <text>
 <en default="1">Beschreibungstext</en>
