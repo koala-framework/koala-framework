@@ -72,11 +72,24 @@ class Vps_Media_Image
 
         } elseif ($scale == self::SCALE_BESTFIT) {
             // Bild wird auf größte Maximale Ausdehnung skaliert
+            // Bild wird NICHT vergrößert! (kann also auch kleiner ausgegeben werden als angefordert)
 
             $size = getimagesize($source);
             if (!$size) return array();
+
+            // 2 if abfragen um zu verhindern, dass das bild vergrößert wird
+            if ($size[0] < $width) {
+                $height = $height / ($width / $size[0]);
+                $width = $size[0];
+            }
+            if ($size[1] < $height) {
+                $width = $width / ($height / $size[1]);
+                $height = $size[1];
+            }
+
             $widthRatio = $size[0] / $width;
             $heightRatio = $size[1] / $height;
+
             if ($widthRatio > $heightRatio) {
                 $width = $size[0] / $widthRatio;
                 $height = $size[1] / $widthRatio;
@@ -111,14 +124,16 @@ class Vps_Media_Image
 
         if ($scale == self::SCALE_CROP) {
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
-            $im = new Imagick();
-            $im->readImage($source);
-            $im->scaleImage($size['resizeWidth'], $size['resizeHeight']);
-            $im->cropImage($size['width'], $size['height'], $size['x'], $size['y']);
-            $im->setImagePage(0, 0, 0, 0);
-//             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
-            $im->writeImage($target);
-            $im->destroy();
+            if (class_exists('Imagick')) {
+                $im = new Imagick();
+                $im->readImage($source);
+                $im->scaleImage($size['resizeWidth'], $size['resizeHeight']);
+                $im->cropImage($size['width'], $size['height'], $size['x'], $size['y']);
+                $im->setImagePage(0, 0, 0, 0);
+    //             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
+                $im->writeImage($target);
+                $im->destroy();
+            }
 
         } elseif ($scale == self::SCALE_BESTFIT || $scale == self::SCALE_DEFORM) {
             if (class_exists('Imagick')) {
