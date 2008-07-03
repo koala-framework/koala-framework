@@ -1,4 +1,10 @@
-.vpcPaging { margin-bottom: -5px; line-height: 20px; }
+.vpcPaging {
+    margin-bottom: -5px;
+    line-height: 20px;
+    position: relative;
+    z-index: 1000;
+    width: 400px;
+}
 .vpcPaging a {
     padding: 2px 3px;
     border: 1px solid $blue;
