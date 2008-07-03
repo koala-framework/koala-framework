@@ -28,7 +28,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
             ->select($this->getNewsComponent());
         $select->where('publish_date <= NOW()');
         if (Vpc_Abstract::getSetting($this->getNewsComponent()->componentClass, 'enableExpireDate')) {
-            $select->where('expiry_date >= NOW()');
+            $select->where('expiry_date >= NOW() OR ISNULL(expiry_date)');
         }
         return $select;
     }
