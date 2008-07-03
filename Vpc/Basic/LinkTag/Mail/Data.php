@@ -18,10 +18,10 @@ class Vpc_Basic_LinkTag_Mail_Data extends Vps_Component_Data
             if (!$row) return '';
             $ret = 'mailto:';
             $ret .= $row->mail;
-            if ($row->body || $row->subject) $ret .= '?';
+            if ($row->text || $row->subject) $ret .= '?';
             if ($row->subject) $ret .= 'subject='.$row->subject;
-            if ($row->body && $row->subject) $ret .= '&';
-            if ($row->body) $ret .= 'body='.$row->body;
+            if ($row->text && $row->subject) $ret .= '&';
+            if ($row->text) $ret .= 'body='.$row->text;
             return $ret;
         } else if ($var == 'rel') {
             return '';
