@@ -11,7 +11,11 @@ Ext.onReady(function()
                 var relProperties = rel.split('_');
                 lnk.on('click', function(e) {
                     e.stopEvent();
-                    window.open(lnk.dom.href, '_blank', relProperties[1]);
+                    if (relProperties[1] == 'blank') {
+                        window.open(lnk.dom.href, '_blank');
+                    } else {
+                        window.open(lnk.dom.href, '_blank', relProperties[1]);
+                    }
                 });
             }
         });

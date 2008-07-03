@@ -18,7 +18,7 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
         } else if ($var == 'rel') {
             $ret = '';
             $row = $this->_getLinkRow();
-            if ($row->is_popup) {
+            if ($row->open_type == 'popup') {
                 $pop = array();
                 if ($row->width) $pop[] = 'width='.$row->width;
                 if ($row->height) $pop[] = 'height='.$row->height;
@@ -29,6 +29,8 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
                 $pop[] = 'scrollbars='.($row->scrollbars ? 'yes' : 'no');
                 $pop[] = 'resizable='.($row->resizable ? 'yes' : 'no');
                 $ret = 'popup_'.implode(',', $pop);
+            } else if ($row->open_type == 'blank') {
+                $ret = 'popup_blank';
             }
             return $ret;
         } else {

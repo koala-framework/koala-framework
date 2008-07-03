@@ -10,25 +10,34 @@ class Vpc_Basic_LinkTag_Extern_Form extends Vpc_Abstract_Form
             ->setAllowBlank(false);
 
         if (Vpc_Abstract::getSetting($class, 'hasPopup')) {
-            $popup = new Vps_Form_Container_FieldSet('Popup');
-            $popup->add(new Vps_Form_Field_TextField('width', 'Width'))
-                ->setValue(400)
-                ->setAllowBlank(false)
-                ->setVtype('alphanum');
-            $popup->add(new Vps_Form_Field_TextField('height', 'Height'))
-                ->setValue(400)
-                ->setAllowBlank(false)
-                ->setVtype('alphanum');
-            $popup->add(new Vps_Form_Field_Checkbox('menubar', 'Menubar'));
-            $popup->add(new Vps_Form_Field_Checkbox('toolbar', 'Toolbar'));
-            $popup->add(new Vps_Form_Field_Checkbox('locationbar', 'Locationbar'));
-            $popup->add(new Vps_Form_Field_Checkbox('statusbar', 'Statusbar'));
-            $popup->add(new Vps_Form_Field_Checkbox('scrollbars', 'Scrollbars'));
-            $popup->add(new Vps_Form_Field_Checkbox('resizable', 'Resizable'));
-    
-            $this->add($popup)
-                ->setCheckboxToggle(true)
-                ->setCheckboxName('is_popup');
+
+            // cards container erstellen und zu form hinzufügen
+            $cards = $this->add(new Vps_Form_Container_Cards('open_type', trlVps('Open in')))
+                ->setAllowBlank(false);
+            $card = $cards->add();
+                $card->setTitle(trlVps('Own window'));
+                $card->setName('self');
+            $card = $cards->add();
+                $card->setTitle(trlVps('New window'));
+                $card->setName('blank');
+            $card = $cards->add();
+                $card->setTitle(trlVps('Popup'));
+                $card->setName('popup');
+
+                $card->add(new Vps_Form_Field_TextField('width', 'Width'))
+                    ->setValue(400)
+                    ->setAllowBlank(false)
+                    ->setVtype('alphanum');
+                $card->add(new Vps_Form_Field_TextField('height', 'Height'))
+                    ->setValue(400)
+                    ->setAllowBlank(false)
+                    ->setVtype('alphanum');
+                $card->add(new Vps_Form_Field_Checkbox('menubar', 'Menubar'));
+                $card->add(new Vps_Form_Field_Checkbox('toolbar', 'Toolbar'));
+                $card->add(new Vps_Form_Field_Checkbox('locationbar', 'Locationbar'));
+                $card->add(new Vps_Form_Field_Checkbox('statusbar', 'Statusbar'));
+                $card->add(new Vps_Form_Field_Checkbox('scrollbars', 'Scrollbars'));
+                $card->add(new Vps_Form_Field_Checkbox('resizable', 'Resizable'));
         }
     }
 }

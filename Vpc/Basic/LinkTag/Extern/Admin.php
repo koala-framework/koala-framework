@@ -6,7 +6,7 @@ class Vpc_Basic_LinkTag_Extern_Admin extends Vpc_Admin
         $fields['target']       = "varchar(255) NOT NULL";
         $fields['rel']          = "varchar(255) DEFAULT NULL";
         $fields['param']        = "varchar(255) DEFAULT NULL";
-        $fields['is_popup']     = "tinyint(4) NOT NULL";
+        $fields['open_type']    = "enum('self','popup','blank') NOT NULL DEFAULT 'self'";
         $fields['width']        = "mediumint DEFAULT NULL";
         $fields['height']       = "mediumint DEFAULT NULL";
         $fields['menubar']      = "tinyint(4) NOT NULL";

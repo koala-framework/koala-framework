@@ -788,11 +788,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">At the following action emails are automatically sent to the adequade user.</en>
-<de>Nach Änderungen der folgenden Felder wird automatisch eine E-Mail an die eingetragene E-Mail Adresse versendet:</de>
+<de>Nach &#xC4;nderungen der folgenden Felder wird automatisch eine E-Mail an die eingetragene E-Mail Adresse versendet:</de>
 </text>
 <text>
 <en default="1">Create, Delete and E-Mail change</en>
-<de>Hinzufügen, Löschen und E-Mail-Änderungen</de>
+<de>Hinzuf&#xFC;gen, L&#xF6;schen und E-Mail-&#xC4;nderungen</de>
 </text>
 <text>
 <en default="1">Accessdata and person</en>
@@ -2091,11 +2091,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Additional Styles</en>
-<de>Zusätzliche CSS Einstellungen</de>
+<de>Zus&#xE4;tzliche CSS Einstellungen</de>
 </text>
 <text>
 <en default="1">You can't delete master styles</en>
-<de>Master Formatvorlagen können nicht gelöscht werden</de>
+<de>Master Formatvorlagen k&#xF6;nnen nicht gel&#xF6;scht werden</de>
 </text>
 <text>
 <en default="1">Beschreibungstext</en>
@@ -2443,11 +2443,43 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">male</en>
-<de>männlich</de>
+<de>m&#xE4;nnlich</de>
 </text>
 <text>
 <en default="1">female</en>
 <de>weiblich</de>
+</text>
+<text>
+<en default="1">URL</en>
+<de>URL</de>
+</text>
+<text>
+<en default="1">Open in</en>
+<de>Öffnen in</de>
+</text>
+<text>
+<en default="1">Own window</en>
+<de>Eigenes Fenster</de>
+</text>
+<text>
+<en default="1">New window</en>
+<de>Neues Fenster</de>
+</text>
+<text>
+<en default="1">Popup</en>
+<de>Popup</de>
+</text>
+<text>
+<en default="1">Linktext</en>
+<de>Linktext</de>
+</text>
+<text>
+<en default="1">Invalid Password</en>
+<de>Ungültiges Passwort</de>
+</text>
+<text>
+<en default="1">Login required</en>
+<de>_</de>
 </text>
 </trl>
 
