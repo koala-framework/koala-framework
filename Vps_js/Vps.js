@@ -122,7 +122,7 @@ Vps.contentReadyHandlers = [];
 Vps.onContentReady = function(fn, scope) {
     if (Vps.isApp) {
         //in einer Ext-Anwendung mit Vps.main den contentReadHandler
-        //nicht gleich ausf�hren, das paragraphs-panel f�hrt es daf�r aus
+        //nicht gleich ausführen, das paragraphs-panel führt es dafür aus
         Vps.contentReadyHandlers.push({
             fn: fn,
             scope: scope

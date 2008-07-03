@@ -1,0 +1,9 @@
+div.vpsSwitchDisplay a.switchLink {
+    background: url(/assets/silkicons/bullet_arrow_down.png) 0px -2px no-repeat;
+    padding-left: 18px;
+}
+div.vpsSwitchDisplay a.switchLink.switchLinkOpened {
+    background: url(/assets/silkicons/bullet_arrow_up.png) 0px -2px no-repeat;
+
+}
+div.vpsSwitchDisplay div.switchContent { overflow: hidden; }
