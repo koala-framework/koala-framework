@@ -19,11 +19,15 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
 
         if (file_exists('css/master.css')) {
             $masterContent = file_get_contents('css/master.css');
-            preg_match_all('#.webStandard.*(p|h[1-6]).*{.*}.*/\\* +(.*) +\\*/#U', $masterContent, $m);
+            preg_match_all('#^ *.webStandard *((span|p|h[1-6])\\.?[^ ]*) *{[^}]*} */\\* +(.*?) +\\*/#m', $masterContent, $m);
             foreach (array_keys($m[1]) as $i) {
-                $tag = $m[1][$i];
-                $name = $m[2][$i];
-                $styles['block'][$tag] = $name;
+                $selector = $m[1][$i];
+                $name = $m[3][$i];
+                if (substr($selector, 0, 4)=='span') {
+                    $styles['inline'][$selector] = $name;
+                } else {
+                    $styles['block'][$selector] = $name;
+                }
             }
         }
 
