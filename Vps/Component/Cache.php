@@ -29,11 +29,13 @@ class Vps_Component_Cache extends Zend_Cache_Core {
     
     public function cleanByTag($tag)
     {
+        $b = Vps_Benchmark::start();
         $this->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array($tag));
     }
     
     public function remove($componentId)
     {
+        $b = Vps_Benchmark::start();
         parent::remove($this->getCacheIdFromComponentId($componentId));
     }
     

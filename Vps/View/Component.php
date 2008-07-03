@@ -28,8 +28,11 @@ class Vps_View_Component extends Vps_View
                 $ret = Vps_View_Component::_renderComponent($component, $isMaster);
                 $useCache = Vpc_Abstract::getSetting($component->componentClass, 'viewCache');
                 if (!$cacheDisabled && ($useCache || $isMaster)) {
-                    $tag = $isMaster ? 'master' : $component->componentClass;
-                    $cache->save($ret, $cacheId, array($tag));
+                    $tags = array($isMaster ? 'master' : $component->componentClass);
+                    if (Vpc_Abstract::hasSetting($component->componentClass, 'viewCacheTag')) {
+                        $tags[] = Vpc_Abstract::getSetting($component->componentClass, 'viewCacheTag');
+                    }
+                    $cache->save($ret, $cacheId, $tags);
                 }
             } else {
                 $ret = "Component '$componentId' not found";
