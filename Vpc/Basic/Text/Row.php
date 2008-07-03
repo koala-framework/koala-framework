@@ -265,7 +265,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                         $destRow->component_id = $this->component_id.'-i'.$imageMaxChildComponentNr;
                         $destRow->vps_upload_id = $destFileRow->id;
                         $destRow->save();
-                        $dimension = $destRow->getImageDimension();
+                        $dimension = $destRow->getImageDimensions();
                         $newContent .= "<img src=\"".$destRow->getFileUrl()."\" ".
                                     "width=\"$dimension[width]\" ".
                                     "height=\"$dimension[height]\" />";
@@ -322,7 +322,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                 $destRow->filename = $srcFileName;
                 $destRow->scale = '';
                 $destRow->save();
-                $dimension = $destRow->getImageDimension();
+                $dimension = $destRow->getImageDimensions();
                 $newContent .= "<img src=\"".$destRow->getFileUrl()."\" ".
                             "width=\"$dimension[width]\" ".
                             "height=\"$dimension[height]\" />";

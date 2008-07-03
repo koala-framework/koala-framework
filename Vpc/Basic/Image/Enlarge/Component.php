@@ -10,7 +10,7 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
         $ret['hasSmallImageComponent'] = true;
         $ret['fullSizeDownloadable'] = true;
         $ret['childComponentClasses']['smallImage'] = 'Vpc_Basic_Image_Thumb_Component';
-        $ret['dimension'] = array(640, 480);
+        $ret['dimensions'] = array(640, 480);
         $ret['assets']['files'][] = 'vps/Vpc/Basic/Image/Enlarge/Component.js';
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['editComment'] = true;

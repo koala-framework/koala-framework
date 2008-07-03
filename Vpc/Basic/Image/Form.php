@@ -18,30 +18,27 @@ class Vpc_Basic_Image_Form extends Vpc_Abstract_Form
         }
 
         // Höhe, Breite
-        $widthField = new Vps_Form_Field_NumberField('width', trlVps('Width'));
-        $widthField->setAllowBlank(false);
-        $widthField->setMinValue(1);
-        $widthField->setMaxValue(9999);
-        $heightField = new Vps_Form_Field_NumberField('height', trlVps('Height'));
-        $heightField->setAllowBlank(false);
-        $heightField->setMinValue(1);
-        $heightField->setMaxValue(9999);
-        $dimensions = Vpc_Abstract::getSetting($class, 'dimension');
+        $dimensions = Vpc_Abstract::getSetting($class, 'dimensions');
         if (is_array($dimensions) && empty($dimensions)) {
-            $this->add($widthField);
-            $this->add($heightField);
-
+            $this->add(new Vps_Form_Field_NumberField('width', trlVps('Width')))
+                ->setAllowBlank(false)
+                ->setMinValue(1)
+                ->setMaxValue(9999);
+            $this->add(new Vps_Form_Field_NumberField('height', trlVps('Height')))
+                ->setAllowBlank(false)
+                ->setMinValue(1)
+                ->setMaxValue(9999);
+            $this->add(new Vps_Form_Field_Select('scale', trlVps('Scaling')))
+                ->setValues(array(
+                        Vps_Media_Image::SCALE_BESTFIT => trlVps('Bestfit'),
+                        Vps_Media_Image::SCALE_CROP => trlVps('Crop'),
+                        Vps_Media_Image::SCALE_DEFORM => trlVps('Deform')
+                    ));
         } else if (is_array($dimensions[0])) {
             $this->add(new Vps_Form_Field_ComboBoxSize('dimension', trlVps('Size')))
                 ->setSizes($dimensions);
         }
 
-        // Skalierungstyp
-        $allow = Vpc_Abstract::getSetting($class, 'allow');
-        if (is_array($allow) && sizeof($allow) > 1) {
-            $this->add(new Vps_Form_Field_Select('scale', trlVps('Scaling')))
-                ->setValues($allow);
-        }
 
         // Fileupload
         $this->add(new Vps_Form_Field_File('vps_upload_id', trlVps('Image')))

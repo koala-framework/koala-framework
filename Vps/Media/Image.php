@@ -6,10 +6,20 @@ class Vps_Media_Image
     const SCALE_DEFORM = 'deform';
     const SCALE_ORIGINAL = 'original';
 
-    public static function calculateScaleDimensions($source, $size, $scale = self::SCALE_BESTFIT)
+    public static function calculateScaleDimensions($source, $size)
     {
-        $width  = !isset($size['width'])  && isset($size[0]) ? $size[0] : 0 ;
-        $height = !isset($size['height']) && isset($size[1]) ? $size[1] : 0 ;
+        if (isset($size['width'])) $width = $size['width'];
+        else if (isset($size[0])) $width = $size[0];
+        else $width = 0;
+
+        if (isset($size['height'])) $height = $size['height'];
+        else if (isset($size[1])) $height = $size[1];
+        else $height = 0;
+
+        if (isset($size['scale'])) $scale = $size['scale'];
+        else if (isset($size[2])) $scale = $size[2];
+        else $scale = self::SCALE_BESTFIT;
+        if (!$scale) $scale = self::SCALE_BESTFIT;
 
         if ($width == 0 && $height == 0) {
             return false;
@@ -22,11 +32,11 @@ class Vps_Media_Image
         if ($width == 0) {
             $size = getimagesize($source);
             $width = round($height * ($size[0]/$size[1]));
-            return array('width'=>$width, 'height'=>$height);
+            return array('width'=>$width, 'height'=>$height, 'scale'=>$scale);
         } else if ($height == 0) {
             $size = getimagesize($source);
             $height = round($width * ($size[1]/$size[0]));
-            return array('width'=>$width, 'height'=>$height);
+            return array('width'=>$width, 'height'=>$height, 'scale'=>$scale);
         } else if ($scale == self::SCALE_CROP) {
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
 
@@ -67,7 +77,8 @@ class Vps_Media_Image
                          'x'            => round($x),
                          'y'            => round($y),
                          'resizeWidth'  => $resizeWidth,
-                         'resizeHeight' => $resizeHeight
+                         'resizeHeight' => $resizeHeight,
+                         'scale'=>$scale
             );
 
         } elseif ($scale == self::SCALE_BESTFIT) {
@@ -97,16 +108,16 @@ class Vps_Media_Image
                 $width = $size[0] / $heightRatio;
                 $height = $size[1] / $heightRatio;
             }
-            return array('width'=>round($width), 'height'=>round($height));
+            return array('width'=>round($width), 'height'=>round($height), 'scale'=>$scale);
 
         } elseif ($scale == self::SCALE_DEFORM) {
 
-            return array('width'=>$width, 'height'=>$height);
+            return array('width'=>$width, 'height'=>$height, 'scale'=>$scale);
 
         } elseif ($scale == self::SCALE_ORIGINAL) {
 
             $size = getimagesize($source);
-            return array('width'=>$size[0], 'height'=>$size[1]);
+            return array('width'=>$size[0], 'height'=>$size[1], 'scale'=>$scale);
 
         } else {
 
@@ -115,14 +126,13 @@ class Vps_Media_Image
         }
     }
 
-    public static function scale($source, $target, $size, $scale = self::SCALE_BESTFIT)
+    public static function scale($source, $target, $size)
     {
-        if (!$scale) { $scale = self::SCALE_BESTFIT; }
-        $size = self::calculateScaleDimensions($source, $size, $scale);
+        $size = self::calculateScaleDimensions($source, $size);
 
         if ($size === false) return false;
 
-        if ($scale == self::SCALE_CROP) {
+        if ($size['scale'] == self::SCALE_CROP) {
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
             if (class_exists('Imagick')) {
                 $im = new Imagick();
@@ -135,7 +145,7 @@ class Vps_Media_Image
                 $im->destroy();
             }
 
-        } elseif ($scale == self::SCALE_BESTFIT || $scale == self::SCALE_DEFORM) {
+        } elseif ($size['scale'] == self::SCALE_BESTFIT || $size['scale'] == self::SCALE_DEFORM) {
             if (class_exists('Imagick')) {
                 $im = new Imagick();
                 $im->readImage($source);
@@ -164,7 +174,7 @@ class Vps_Media_Image
                 }
             }
 
-        } elseif ($scale == self::SCALE_ORIGINAL) {
+        } elseif ($size['scale'] == self::SCALE_ORIGINAL) {
 
             copy($source, $target);
 

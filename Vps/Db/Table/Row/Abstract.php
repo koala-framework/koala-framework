@@ -138,13 +138,8 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     protected function _createCacheFile($source, $target, $type = 'default')
     {
         if (isset($this->_cacheImages[$type])) {
-            $data = $this->_cacheImages[$type];
-            $size = array($data[0], $data[1]);
-            if (isset($data[2])) {
-                Vps_Media_Image::scale($source, $target, $size, $data[2]);
-            } else {
-                Vps_Media_Image::scale($source, $target, $size);
-            }
+            $size = $this->_cacheImages[$type];
+            Vps_Media_Image::scale($source, $target, $size);
         } else if ($type == 'thumb') {
             Vps_Media_Image::scale($source, $target, array(100, 100));
         } else {
