@@ -7,6 +7,6 @@ class Vpc_Basic_Text_Image_Controller extends Vpc_Basic_Image_Controller
     {
         //für rte
         $this->view->imageUrl = $row->getRow()->getFileUrl();
-        $this->view->imageDimension = $row->getRow()->getImageDimension();
+        $this->view->imageDimension = $row->getRow()->getImageDimensions();
     }
 }

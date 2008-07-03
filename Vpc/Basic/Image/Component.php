@@ -7,10 +7,11 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
             'componentName'     => trlVps('Image'),
             'componentIcon'     => new Vps_Asset('picture'),
             'tablename'         => 'Vpc_Basic_Image_Model',
-            'dimension'         => array(300, 200), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), null: Bild in Originalgröße)
-            'allow'             => array(Vps_Media_Image::SCALE_BESTFIT),
+
+            'dimensions'        => array(300, 200, Vps_Media_Image::SCALE_BESTFIT), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), null: Bild in Originalgröße)
             'ouputDimensions'   => array('mini'  => array(20, 20, Vps_Media_Image::SCALE_BESTFIT),
                                          'thumb' => array(100, 100, Vps_Media_Image::SCALE_BESTFIT)),
+
             'editComment'       => false,
             'editFilename'      => false,
             'allowBlank'        => true,
@@ -18,7 +19,6 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
                 'filename'   => 'filename'
             ),
             'extensions'        => array('jpg'),
-            'scale'             => array(),
             'pdfMaxWidth'	    => 0
         ));
         return $settings;
@@ -27,16 +27,12 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
 
-        $return = parent::getTemplateVars();
-        $return['url'] = $this->_getRow()->getFileUrl();
-        $size = $this->_getRow()->getImageDimensions();
-        $return['width'] = $size['width'];
-        $return['height'] = $size['height'];
+        $ret = parent::getTemplateVars();
+        $ret['row'] = $this->_getRow();
         if (Vpc_Abstract::getSetting(get_class($this), 'editComment')) {
-            $return['comment'] = $this->_getRow()->comment;
+            $ret['comment'] = $this->_getRow()->comment;
         }
-        $return['height'] = $size['height'];
-        return $return;
+        return $ret;
     }
 
     public function getImageUrl($type = 'default')
@@ -44,9 +40,9 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
         return $this->_getRow()->getFileUrl(null, $type);
     }
 
-    public function getImageDimensions()
+    public function getImageDimensions($type = 'default')
     {
-        return $this->_getRow()->getImageDimensions();
+        return $this->_getRow()->getImageDimensions(null, $type);
     }
 
     //für Pdf
