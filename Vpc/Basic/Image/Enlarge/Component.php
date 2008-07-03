@@ -1,6 +1,8 @@
 <?php
 class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
 {
+    private $_smallImageRow;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -20,6 +22,10 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+        $ret['url'] = $ret['row']->getFileUrl();
+        $size = $ret['row']->getImageDimensions();
+        $ret['width'] = $size['width'];
+        $ret['height'] = $size['height'];
         $ret['smallImage'] = $this->getSmallImage();
 
         $ret['fullSizeUrl'] = false;
@@ -29,22 +35,30 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
         return $ret;
     }
 
+    private function _getSmallImageRow()
+    {
+        if (!isset($this->_smallImageRow)) {
+            $this->_smallImageRow = $this->getData()->getChildComponent('-smallImage')
+                                        ->getComponent()->getImageRow();
+        }
+        return $this->_smallImageRow;
+    }
+
     //wird uA. verwendet in Vpc_Composite_ImagesEnlarge_Component
     public function getSmallImage()
     {
-        $row = $this->getData()->getChildComponent('-smallImage')
-                            ->getComponent()->getImageRow();
         $ret = array();
-        $ret['row'] = $row;
-        if (!$this->_getSetting('hasSmallImageComponent') ||
-            !$row->getFileUrl() ||
-            !$this->_getRow()->enlarge)
+
+        if (!$this->_getSetting('hasSmallImageComponent')
+            || !$this->_getRow()->enlarge
+            || !$this->_getSmallImageRow()->getFileUrl())
         {
             $ret['url'] = $this->_getRow()->getFileUrl(null, 'small');
             $size = $this->_getRow()->getImageDimensions(null, 'small');
         } else {
-            $ret['url'] = $this->_getRow()->getFileUrl();
-            $size = $this->_getRow()->getImageDimensions();
+            $ret['row'] = $this->_getSmallImageRow();
+            $ret['url'] = $ret['row']->getFileUrl();
+            $size = $ret['row']->getImageDimensions();
         }
         $ret['width'] = $size['width'];
         $ret['height'] = $size['height'];

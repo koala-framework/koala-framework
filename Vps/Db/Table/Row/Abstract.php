@@ -5,6 +5,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     protected $_cacheImages = array();
     const FILE_PASSWORD = 'l4Gx8SFe';
     const FILE_PASSWORD_DOWNLOAD = 'j3yjEdv1';
+    private $_fileRowCache = array();
 
     public function duplicate($data = array())
     {
@@ -51,8 +52,8 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     // Dateihandling
     public function getFileSource($rule = null, $type = 'default')
     {
+        $fileRow = $this->getFileRow($rule);
         $rule = $this->_getRule($rule);
-        $fileRow = $this->findParentRow('Vps_Dao_File', $rule);
 
         if (!$fileRow) {
             return null;
@@ -79,8 +80,8 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
     public function getFileUrl($rule = null, $type = 'default', $filename = null, $addRandom = false, $encryption = self::FILE_PASSWORD)
     {
+        $fileRow = $this->getFileRow($rule);
         $rule = $this->_getRule($rule);
-        $fileRow = $this->findParentRow('Vps_Dao_File', $rule);
         if (!$fileRow) {
             return null;
         }
@@ -110,7 +111,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
     public function getFileExtension($rule = null)
     {
-        $fileRow = $this->findParentRow('Vps_Dao_File', $rule);
+        $fileRow = $this->getFileRow($rule);
         if ($fileRow) {
             return $fileRow->extension;
         }
@@ -119,7 +120,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
     public function deleteFileCache($rule = null)
     {
-        $fileRow = $this->findParentRow('Vps_Dao_File', $rule);
+        $fileRow = $this->getFileRow($rule);
         if ($fileRow) {
             $fileRow->deleteCache();
         }
@@ -162,8 +163,11 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     }
     public function getFileRow($rule = null)
     {
-        $rule = $this->_getRule($rule);
-        return $this->findParentRow('Vps_Dao_File', $rule);
+        $key = is_null($rule) ? 'asdf' : $rule;
+        if (!array_key_exists($rule, $this->_fileRowCache)) {
+            $this->_fileRowCache[$key] = $this->findParentRow('Vps_Dao_File', $this->_getRule($rule));
+        }
+        return $this->_fileRowCache[$key];
     }
 
     private function _getIdString()
