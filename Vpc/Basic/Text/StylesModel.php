@@ -7,7 +7,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
     protected function _setupFilters()
     {
         $filter = new Vps_Filter_Row_Numberize();
-        $filter->setGroupBy(array('ownStyles', 'tag'=>array('span'), 'master'));
+        $filter->setGroupBy(array('ownStyles', 'tag'=>array('span')));
         $this->_filters = array('pos' => $filter);
     }
 
@@ -17,19 +17,26 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
         $styles['block'] = array('p' => trlVps('Default'));
         $styles['inline'] = array('span' => trlVps('Normal'));
 
+        if (file_exists('css/master.css')) {
+            $masterContent = file_get_contents('css/master.css');
+            preg_match_all('#.webStandard.*(p|h[1-6]).*{.*}.*/\\* +(.*) +\\*/#U', $masterContent, $m);
+            foreach (array_keys($m[1]) as $i) {
+                $tag = $m[1][$i];
+                $name = $m[2][$i];
+                $styles['block'][$tag] = $name;
+            }
+        }
+
         $where = array();
         if ($ownStyles) {
             $where["ownStyles = ? OR ownStyles=''"] = $ownStyles;
         } else {
             $where[] = "ownStyles = ''";
         }
-        $order = new Zend_Db_Expr("ownStyles!='', master DESC, pos");
+        $order = new Zend_Db_Expr("ownStyles!='', pos");
         $blockTags = array('p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6');
         foreach ($this->fetchAll($where, $order) as $row) {
             $selector = $row->tag;
-            if (!$row->master) {
-                $selector .= '.style'.$row->id;
-            }
             if ($selector) {
                 $name = $row->name;
                 if ($row->ownStyles) $name = '* '.$name;

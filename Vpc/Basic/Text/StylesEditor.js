@@ -22,7 +22,7 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
                 controllerUrl: '/admin/component/edit/Vpc_Basic_Text_MasterStyle'
             });
         this.items = new Ext.TabPanel({
-            items: [this.block, this.inline, this.master],
+            items: [this.block, this.inline/*, this.master*/],
             activeTab: 0
         });
 
