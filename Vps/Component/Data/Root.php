@@ -89,7 +89,10 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 $data = isset($data[0]) ? $data[0] : null;
                 foreach ($idParts as $idPart) {
                     if (!$data) break;
-                    $ret = array_merge($ret, $data->getChildComponents($idPart));
+                    $data = $data->getChildComponent($idPart);
+                }
+                if ($data) {
+                    $ret[] = $data;
                 }
                 if ($ret && $returnFirst) {
                     return $ret;
