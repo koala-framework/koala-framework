@@ -17,6 +17,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
         $ret['childComponentClasses']['text'] = 'Vpc_Basic_Text_Component';
         $ret['childComponentClasses']['image'] = 'Vpc_Basic_Image_Component';
+        $ret['default'] = array();
         return $ret;
     }
 

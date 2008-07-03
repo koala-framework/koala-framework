@@ -6,7 +6,7 @@ class Vpc_Basic_Link_Admin extends Vpc_Abstract_Composite_Admin
         //HACK
         //TODO: Ein Form-Feld mit ComboBox + CardLayout
         return array_merge(parent::getExtConfig(), array(
-            'xtype'=>'vpc.linktag'
+            'xtype'=>'vps.autoform'
         ));
     }
 
