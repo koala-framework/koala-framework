@@ -18,7 +18,7 @@ abstract class Vpc_TreeCache_Abstract
         $this->_class = $class;
         $this->_db = Zend_Registry::get('db');
         $this->_init();
-        $GLOBALS['treeCacheCounter']++;
+        Vps_Benchmark::count('treeCaches');
     }
 
     protected function _init()

@@ -165,6 +165,12 @@ class Vps_Setup
         }
         set_include_path($ip);
 
+        if (Zend_Registry::get('config')->debug->benchmark) {
+            Vps_Benchmark::enable();
+            $GLOBALS['renderedCounter'] = array('cached' => array(), 'notcached' => array());
+            $GLOBALS['getComponentByIdCalled'] = array();
+        }
+
         Zend_Registry::set('requestNum', ''.floor(microtime(true)*100));
         if (Zend_Registry::get('config')->debug->firephp && !isset($_SERVER['SHELL'])) {
             ob_start();
@@ -292,23 +298,8 @@ class Vps_Setup
             }
             $page = $data->getComponent();
             $page->sendContent($page);
-/*
-echo '<div style="background-color:white;width:200px;position:absolute;top:0;right:0;padding:5px;">';
-echo (microtime(true)-$GLOBALS['start'])." sec<br>\n";
-echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br>\n";
-if (Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
-    echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br>\n";
-}
-echo "TreeCaches: $GLOBALS[treeCacheCounter]<br>\n";
-echo "Components: $GLOBALS[componentCounter]<br>\n";
-echo "Component Datas: $GLOBALS[dataCounter]<br>\n";
-echo "getComponentById called: ".count($GLOBALS['getComponentByIdCalled'])."<br>\n";
-echo "unique getComponentById called: ".count(array_unique($GLOBALS['getComponentByIdCalled']))."<br>\n";
-echo "cached cmp: ".count($GLOBALS['renderedCounter']['cached'])."<br>\n";
-echo "notcached cmp: ".count($GLOBALS['renderedCounter']['notcached'])." ".implode(', ', $GLOBALS['renderedCounter']['notcached'])."<br>\n";
-echo "</div>";
-*/
-            exit;
+
+            Vps_Benchmark::output();
         }
     }
 
