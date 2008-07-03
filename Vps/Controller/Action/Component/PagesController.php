@@ -34,8 +34,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         if ($row->is_home) {
             $data['bIcon'] = $this->_icons['home']->__toString();
         }
-        $data['task'] = 'task!';
-        $data['duration'] = 'fadf';
+        $classes = Vpc_Abstract::getSetting(Vps_Registry::get('config')->vpc->rootComponent, 'childComponentClasses');
+        $data['data']['component_class'] = $classes[$row->component];
         $data['uiProvider'] = 'Vps.Component.PagesNode';
         return $data;
     }
@@ -58,8 +58,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 $data['bIcon'] = new Vps_Asset('folder_page');
                 $data['bIcon'] = $data['bIcon']->__toString();
                 $data['uiProvider'] = 'Vps.Component.PagesNode';
-                $data['task'] = 'task!';
-                $data['duration'] = 'fadf';
                 $data['children'] = $this->_formatNodes($type);
                 $return[] = $data;
             }
