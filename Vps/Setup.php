@@ -186,6 +186,11 @@ class Vps_Setup
             //für swfupload
             Zend_Session::setId($_POST['PHPSESSID']);
         }
+
+        $frontendOptions = array('automatic_serialization' => true);
+        $backendOptions  = array('cache_dir' => 'application/cache/table');
+        $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
     }
 
     public static function shutDown()

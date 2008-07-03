@@ -7,7 +7,7 @@ class Vpc_Basic_Image_Row extends Vpc_Row
         if (isset($dimension[0]) && !is_array($dimension[0])) {
             $ret['width'] = $dimension[0];
             $ret['height'] = $dimension[1];
-            $ret['scale'] = $dimension[2];
+            $ret['scale'] = isset($dimension[2]) ? $dimension[2] : false;
         } else { // aus DB
             $ret['width'] = $this->width;
             $ret['height'] = $this->height;
