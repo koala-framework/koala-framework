@@ -431,7 +431,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 ret += '<link rel="stylesheet" type="text/css" href="'+f+'" />\n';
             }, this);
         }
-        ret += '</head><body class="content vpcText"></body></html>';
+        ret += '</head><body class="webStandard vpcText"></body></html>';
         return ret;
     },
     setValue : function(v) {
