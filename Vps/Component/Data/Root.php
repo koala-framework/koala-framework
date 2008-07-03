@@ -37,7 +37,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
     public function getComponentById($componentId, $page = null)
     {
-$GLOBALS['getComponentByIdCalled'][] = $componentId;
         if (!$page) $page = $this;
         foreach ($this->_getIdParts($componentId) as $idPart) {
             $page = $page->getChildComponent($idPart);

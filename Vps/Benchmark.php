@@ -1,6 +1,10 @@
 <?php
 class Vps_Benchmark
 {
+    private static $_startTime;
+    private static $_enabled = false;
+    private static $_counter;
+
     private $_start;
     private $_stop;
     private $_queriesStart;
@@ -58,7 +62,7 @@ class Vps_Benchmark
      */
     public static function start($identifier = null)
     {
-        if (!Vps_Registry::get('config')->debug->benchmark) return null;
+        if (!self::$_enabled) return null;
         return new Vps_Benchmark($identifier);
     }
 
@@ -83,7 +87,7 @@ class Vps_Benchmark
             $this->queries = $this->_queriesStop - $this->_queriesStart;
             $out[] = $this->queries.' DB-Queries';
         }
-        
+
         foreach ($this as $k=>$i) {
             if ($k == 'identifier' || $k == 'duration' || $k == 'queries' || $k == 'memory') continue;
             if (substr($k, 0, 1) == '_') continue;
@@ -97,4 +101,60 @@ class Vps_Benchmark
     {
         if (!$this->_stopped) $this->stop();
     }
+
+
+    public static function enable()
+    {
+        self::$_startTime = microtime();
+        self::$_enabled = true;
+    }
+
+    public static function count($name, $value = null)
+    {
+        if (!self::$_enabled) return false;
+        if (!isset(self::$_counter[$name])) {
+            if ($value) {
+                self::$_counter[$name] = array();
+            } else {
+                self::$_counter[$name] = 0;
+            }
+        }
+        if ($value) {
+            if (!is_array(self::$_counter[$name])) {
+                throw new Vps_Exception("Missing value for counter '$name'");
+            }
+            self::$_counter[$name][] = $value;;
+        } else {
+            if (is_array(self::$_counter[$name])) {
+                throw new Vps_Exception("no value possible for counter '$name'");
+            }
+            self::$_counter[$name]++;
+        }
+    }
+
+    public static function output()
+    {
+        if (!self::$_enabled) return;
+        echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:200px;position:absolute;top:0;right:0;padding:5px;">';
+        echo (microtime(true) - self::$_startTime)." sec<br>\n";
+        echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br>\n";
+        if (Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
+            echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br>\n";
+        }
+        foreach (self::$_counter as $k=>$i) {
+            if (is_array($i)) {
+                echo "<a style=\"display:block;\"href=\"#\" onclick=\"this.nextSibling.style.display='block';return(false);\">";
+                echo "$k: ".count($i)."</a>";
+                echo "<ul style=\"display:none\">";
+                foreach ($i as $j) {
+                    echo "<li>$j</li>";
+                }
+                echo "</ul>";
+            } else {
+                echo "$k: $i<br />\n";
+            }
+        }
+        echo "</div>";
+    }
+
 }

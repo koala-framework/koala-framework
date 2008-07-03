@@ -11,7 +11,6 @@ class Vps_Component_Data
     
     public function __construct($config)
     {
-        $GLOBALS['dataCounter']++;
         foreach ($config as $k=>$i) {
             if ($k == 'url') {
                 $this->_url = $i;
@@ -26,6 +25,8 @@ class Vps_Component_Data
         if (!isset($this->dbId) && isset($this->componentId)) {
             $this->dbId = $this->componentId;
         }
+
+        Vps_Benchmark::count('componentDatas');
     }
 
     public function __get($var)
