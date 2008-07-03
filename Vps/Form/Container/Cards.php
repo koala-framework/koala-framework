@@ -11,7 +11,14 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         $this->setXtype('vps.cards');
         $this->setLayout('form');
 
-        $this->_combobox = $this->fields->add(new Vps_Form_Field_Select($name, $fieldLabel));
+        $this->_combobox = $this->fields->add(new Vps_Form_Field_Select($name, $fieldLabel))
+            ->setWidth(150)
+            ->setListWidth(150);
+    }
+
+    public function getCombobox()
+    {
+        return $this->_combobox;
     }
 
     public function setFieldLabel($value)

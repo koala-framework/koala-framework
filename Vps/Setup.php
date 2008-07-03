@@ -292,6 +292,7 @@ class Vps_Setup
             }
             $page = $data->getComponent();
             $page->sendContent($page);
+/*
 echo '<div style="background-color:white;width:200px;position:absolute;top:0;right:0;padding:5px;">';
 echo (microtime(true)-$GLOBALS['start'])." sec<br>\n";
 echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br>\n";
@@ -306,6 +307,7 @@ echo "unique getComponentById called: ".count(array_unique($GLOBALS['getComponen
 echo "cached cmp: ".count($GLOBALS['renderedCounter']['cached'])."<br>\n";
 echo "notcached cmp: ".count($GLOBALS['renderedCounter']['notcached'])." ".implode(', ', $GLOBALS['renderedCounter']['notcached'])."<br>\n";
 echo "</div>";
+*/
             exit;
         }
     }

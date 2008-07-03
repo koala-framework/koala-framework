@@ -14,7 +14,7 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
             'hasPopup'      => true,
             'default'       => array(
                 'target'        => 'http://',
-                'is_popup'      => false,
+                'open_type'     => 'self',
                 'width'         => '0',
                 'height'        => '0',
                 'menubar'       => '1',
