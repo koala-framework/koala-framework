@@ -17,7 +17,11 @@ class Vpc_Basic_LinkTag_Mail_Data extends Vps_Component_Data
             $row = $this->_getLinkRow();
             if (!$row) return '';
             $ret = 'mailto:';
-            $ret .= $row->mail;
+
+            // helper wegen spamschutz
+            $helper = new Vps_View_Helper_MailLink();
+            $ret .= $helper->encodeMail($row->mail);
+
             if ($row->text || $row->subject) $ret .= '?';
             if ($row->subject) $ret .= 'subject='.$row->subject;
             if ($row->text && $row->subject) $ret .= '&';
