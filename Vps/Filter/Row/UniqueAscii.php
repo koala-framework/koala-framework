@@ -39,10 +39,18 @@ class Vps_Filter_Row_UniqueAscii extends Vps_Filter_Row_Abstract
 
         $where = array();
         foreach ($this->_groupBy as $f) {
-            $where["$f = ?"] = $row->$f;
+            if (is_null($row->$f)) {
+                $where["ISNULL($f)"] = '';
+            } else {
+                $where["$f = ?"] = $row->$f;
+            }
         }
         foreach ($row->getPrimaryKey() as $k=>$i) {
-            $where["$k != ?"] = $i;
+            if (is_null($i)) {
+                $where["ISNULL($k)"] = '';
+            } else {
+                $where["$k = ?"] = $i;
+            }
         }
 
         $x = 0;
