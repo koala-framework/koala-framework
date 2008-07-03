@@ -3,7 +3,7 @@
     <div class="text">
         <?=$this->componentLink($new);?>
         <span class="publishDate"><?=$new->row->publish_date?></span>
-        <p><?=$new->row->teaser?></p>
+        <p><?=$this->mailEncodeText($new->row->teaser)?></p>
     </div>
 <?php } ?>
 </div>
