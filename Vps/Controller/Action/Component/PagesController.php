@@ -9,8 +9,9 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         'reload' => 'control_repeat_blue',
         'add' => 'page_add',
         'delete' => 'page_delete',
-        'folder' => 'folder'
-    );
+        'folder' => 'folder',
+        'home' => 'application_home'
+        );
     protected $_buttons = array();
 
     public function indexAction()
@@ -24,37 +25,24 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         parent::init();
     }
 
-
-    //TODO: _formatNode vs. _formatNodes, dass darf es nur einmal geben!
-    //gehört in Vps_Controller_Action_Auto_Synctree verbessert!!!
     protected function _formatNode($row)
     {
         $data = parent::_formatNode($row);
-        $classes = Vpc_Abstract::getSetting(Vps_Registry::get('config')->vpc->rootComponent, 'childComponentClasses');
-        $data['data']['component_class'] = $classes[$row->component];
-        if ($row->visible) {
-            $data['bIcon'] = Vpc_Abstract::getSetting($data['componentClass'], 'componentIcon');
+        if (!$row->visible) {
+            $data['bIcon'] = $this->_icons['invisible']->__toString();
         }
         if ($row->is_home) {
-            $data['bIcon'] = new Vps_Asset('application_home');
+            $data['bIcon'] = $this->_icons['home']->__toString();
         }
+        $data['task'] = 'task!';
+        $data['duration'] = 'fadf';
         $data['uiProvider'] = 'Vps.Component.PagesNode';
         return $data;
-    }
-    protected function _formatNodes($parentId = null)
-    {
-        $ret = parent::_formatNodes($parentId);
-        $classes = Vpc_Abstract::getSetting(Vps_Registry::get('config')->vpc->rootComponent, 'childComponentClasses');
-        foreach ($ret as &$node) {
-            $node['data']['component_class'] = $classes[$node['data']['component']];
-        }
-        return $ret;
     }
 
     public function jsonDataAction()
     {
         $id = $this->getRequest()->getParam('node');
-
         if ($id === '0') {
 
             $types = Zend_Registry::get('config')->vpc->pageTypes->toArray();
@@ -70,6 +58,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 $data['bIcon'] = new Vps_Asset('folder_page');
                 $data['bIcon'] = $data['bIcon']->__toString();
                 $data['uiProvider'] = 'Vps.Component.PagesNode';
+                $data['task'] = 'task!';
+                $data['duration'] = 'fadf';
                 $data['children'] = $this->_formatNodes($type);
                 $return[] = $data;
             }

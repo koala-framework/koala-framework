@@ -140,40 +140,11 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $rows = $this->_table->fetchAll($this->_getTreeWhere($parentId), $order);
         $primaryKey = $this->_primaryKey;
         foreach ($rows as $row) {
-            $data = array();
-            $data['id'] = $row->$primaryKey;
-            $data['text'] = $row->name;
-            $data['data'] = $row->toArray();
-            $data['leaf'] = false;
-            $data['uiProvider'] = 'Vps.Auto.TreeNode';
-            if ($row->visible == '0') {
-                $data['visible'] = false;
-                $data['bIcon'] = $this->_icons['invisible']->__toString();
-            } else {
-                $data['visible'] = true;
-                $data['bIcon'] = $this->_icons['default']->__toString();
-            }
-
-            $openedNodes = $this->_saveSessionNodeOpened(null, null);
-            if ($openedNodes == 'all' ||
-                isset($openedNodes[$row->$primaryKey]) ||
-                isset($this->_openedNodes[$row->id])
-            ) {
-                $data['expanded'] = true;
-            } else {
-                $data['expanded'] = false;
-            }
-
-            $data['children'] = $this->_formatNodes((int)$row->$primaryKey);
-            if (sizeof($data['children']) == 0) {
-                $data['expanded'] = true;
-            }
-            $nodes[] = $data;
+            $nodes[] = $this->_formatNode($row);
         }
         return $nodes;
     }
 
-    //TODO: diese fkt ist eine kopie von _formatNodes
     protected function _formatNode($row)
     {
         $data = array();
@@ -183,12 +154,30 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $data['data'] = $row->toArray();
         $data['leaf'] = false;
         $data['visible'] = true;
-        $data['bIcon'] = $this->_icons['default']->__toString();
+        $data['uiProvider'] = 'Vps.Tree.Node';
         if ($row->visible == '0') {
             $data['visible'] = false;
             $data['bIcon'] = $this->_icons['invisible']->__toString();
+        } else {
+            $data['visible'] = true;
+            $data['bIcon'] = $this->_icons['default']->__toString();
         }
-        $data['uiProvider'] = 'Vps.Auto.TreeNode';
+        $openedNodes = $this->_saveSessionNodeOpened(null, null);
+        $data['uiProvider'] = 'Vps.Tree.Node';
+        if ($openedNodes == 'all' ||
+            isset($openedNodes[$row->$primaryKey]) ||
+            isset($this->_openedNodes[$row->id])
+        ) {
+            $data['expanded'] = true;
+        } else {
+            $data['expanded'] = false;
+        }
+
+        $data['children'] = $this->_formatNodes((int)$row->$primaryKey);
+        if (sizeof($data['children']) == 0) {
+            $data['expanded'] = true;
+        }
+        $nodes[] = $data;
         return $data;
     }
 

@@ -1,3 +1,4 @@
+Ext.namespace('Vps.Component');
 Vps.Component.Pages = Ext.extend(Ext.Panel, {
     initComponent : function()
     {
@@ -258,11 +259,4 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         return this.actions[type];
     }
 
-});
-
-Vps.Component.PagesNode = Ext.extend(Vps.Auto.TreeNode, {
-    onDblClick : function(e){
-        e.preventDefault();
-        this.fireEvent("dblclick", this.node, e);
-    }
 });
