@@ -300,6 +300,8 @@ class Vps_Setup
             $page->sendContent($page);
 
             Vps_Benchmark::output();
+
+            exit;
         }
     }
 
