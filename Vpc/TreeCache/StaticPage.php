@@ -29,20 +29,34 @@ abstract class Vpc_TreeCache_StaticPage extends Vpc_TreeCache_Static
         if ($ret) {
             $c = $this->_classes[$key];
             if (isset($constraints['filename']) &&
-                ($constraints['filename'] != (isset($c['filename']) ? $c['filename'] : $key))
+                $constraints['filename'] != $this->_getFilenameFromRow($key)
             ) {
                 $ret = false;
             }
         }
         return $ret;
     }
-    
+
+    protected function _getFilenameFromRow($componentKey)
+    {
+        $c = $this->_classes[$componentKey];
+        if (isset($c['filename'])) {
+            return $c['filename'];
+        }
+        if (isset($c['name'])) {
+            $ret = $c['name'];
+        } else {
+            $ret = $componentKey;
+        }
+        return Vps_Filter::get($ret, 'Ascii');
+    }
+
     protected function _formatConfig($parentData, $componentKey)
     {
         $c = $this->_classes[$componentKey];
 
         $data = parent::_formatConfig($parentData, $componentKey);
-        $data['filename'] = isset($c['filename']) ? $c['filename'] : $componentKey; // TODO: reicht noch nicht
+        $data['filename'] = $this->_getFilenameFromRow($componentKey);
         $data['rel'] = isset($c['rel']) ? $c['rel'] : '';
         $data['name'] = isset($c['name']) ? $c['name'] : $componentKey;
         $data['isPage'] = true;
