@@ -9,6 +9,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
         $ret = parent::getSettings();
         $ret['childComponentClasses']['paging'] = 'Vpc_News_List_Abstract_Paging_Component';
         $ret['childComponentClasses']['view'] = 'Vpc_News_List_Abstract_View_Component';
+        $ret['viewCacheTag'] = 'news';
         return $ret;
     }
 
