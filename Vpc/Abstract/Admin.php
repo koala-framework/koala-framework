@@ -76,7 +76,10 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
         if ($caller instanceof Vpc_Row &&
             Vpc_Abstract::getSetting($this->_class, 'tablename') == $caller->getTableClass()
         ) {
-            Vps_Component_Cache::getInstance()->remove($caller->component_id);
+            $components = Vps_Component_Data_Root::getInstance()->getComponentsByDbId($caller->component_id);
+            foreach ($components as $c) {
+                Vps_Component_Cache::getInstance()->remove($c->componentId);
+            }
         }
     }
 }

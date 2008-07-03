@@ -65,13 +65,20 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     
     public function getByDbId($dbId)
     {
+        $cmp = $this->getComponentsByDbId($dbId, true);
+        return isset($cmp[0]) ? $cmp[0] : null;
+    }
+
+    public function getComponentsByDbId($dbId, $returnFirst=false)
+    {
         $benchmark = Vps_Benchmark::start();
 
         if (is_numeric(substr($dbId, 0, 1))) {
             $data = $this->getComponentById($dbId);
-            return $data;
+            return array($data);
         }
 
+        $ret = array();
         foreach (Vpc_Abstract::getComponentClasses() as $class) {
             $tc = Vpc_TreeCache_Abstract::getInstance($class);
             if (!$tc) continue;
@@ -82,14 +89,15 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 $data = isset($data[0]) ? $data[0] : null;
                 foreach ($idParts as $idPart) {
                     if (!$data) break;
-                    $data = $data->getChildComponent($idPart);
+                    $ret = array_merge($ret, $data->getChildComponents($idPart));
                 }
-                return $data;
+                if ($ret && $returnFirst) {
+                    return $ret;
+                }
             }
         }
-        return null;
+        return $ret;
     }
-
     public function getComponentsByClass($class)
     {
         if (!isset($this->_componentsByClassCache[$class])) {
