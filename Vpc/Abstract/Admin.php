@@ -78,9 +78,7 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
         ) {
             $components = Vps_Component_Data_Root::getInstance()->getComponentsByDbId($caller->component_id);
             foreach ($components as $c) {
-                if ($c) {
-                    Vps_Component_Cache::getInstance()->remove($c->componentId);
-                }
+                Vps_Component_Cache::getInstance()->remove($c->componentId);
             }
         }
     }
