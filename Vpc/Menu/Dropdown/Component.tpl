@@ -8,7 +8,7 @@
             <ul>
             <?php foreach ($m->submenu as $sm) { ?>
                 <li class="<?= $sm->class ?>">
-                <?=$this->componentLink($sm)?>
+                <?=$this->componentLink($sm, str_replace(' ', '&nbsp;', $sm->name))?>
                 </li>
             <?php } ?>
             </ul>

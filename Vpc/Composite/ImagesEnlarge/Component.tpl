@@ -7,4 +7,5 @@
         </div>
     <?php } ?>
     <div class="clear"></div>
+    <!-- <a class="back" href="javascript:history.back()"><span>«</span>zurück</a> -->
 </div>
