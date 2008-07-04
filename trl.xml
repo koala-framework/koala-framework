@@ -2247,7 +2247,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Activation code is invalid. Maybe the URL wasn't copied completely?</en>
-<de>Der Aktivierungscode ist falsch. Vielleicht wurde die URL unvollst&#xE4;ndig kopiert</de>
+<de>Der Aktivierungscode ist falsch. Vielleicht wurde die URL unvollst&#xE4;ndig kopiert.</de>
 </text>
 <text>
 <en default="1">Activation code is invalid. Maybe your '
@@ -2455,7 +2455,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Open in</en>
-<de>Öffnen in</de>
+<de>&#xD6;ffnen in</de>
 </text>
 <text>
 <en default="1">Own window</en>
@@ -2475,11 +2475,31 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Invalid Password</en>
-<de>Ungültiges Passwort</de>
+<de>Ung&#xFC;ltiges Passwort</de>
 </text>
 <text>
 <en default="1">Login required</en>
 <de>_</de>
+</text>
+<text>
+<en default="1">Bestfit</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Crop</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Deform</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?</en>
+<de>Aktivierungscode ist ung&#xFC;ltig. Vielleicht wurde Ihr Account bereits aktiviert, oder die URL wurde nicht vollst&#xE4;ndig kopiert, oder Ihr Passwort wurde bereits gesetzt?</de>
+</text>
+<text>
+<en default="1">Your account is active and a password has been set.{2}Use the application by {0}clicking here{1}.</en>
+<de>Ihr Account ist aktiv und das Passwort wurde bereits gesetzt. {2} {0}Klicken Sie hier{1}, um in den Admin-Bereich zu gelangen.</de>
 </text>
 </trl>
 

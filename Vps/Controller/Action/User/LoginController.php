@@ -77,7 +77,11 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         if (!$row) {
             $config['errorMsg'] = 'User not found in Web.';
         } else if ($row->getActivationCode() != $code) {
-            $config['errorMsg'] = trlVps('Activation code is invalid. Maybe the URL wasn\'t copied completely?');
+            if ($row->password) {
+                $config['errorMsg'] = trlVps('Your account is active and a password has been set.{2}Use the application by {0}clicking here{1}.', array('<a href="/vps/welcome">', '</a>', '<br />'));
+            } else {
+                $config['errorMsg'] = trlVps('Activation code is invalid. Maybe the URL wasn\'t copied completely?');
+            }
         }
 
         if (empty($config['errorMsg'])) {
@@ -103,8 +107,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
         if (!$row) {
             throw new Vps_ClientException('User not found in Web.');
         } else if ($row->getActivationCode() != $code) {
-            throw new Vps_ClientException(trlVps('Activation code is invalid. Maybe your '
-                                         .'account has already been activated?'));
+            throw new Vps_ClientException(trlVps('Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?'));
         }
 
         $status = $row->setPassword($password);
