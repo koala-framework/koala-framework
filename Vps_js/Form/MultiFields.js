@@ -269,7 +269,7 @@ Vps.Form.MultiFieldsHidden = Ext.extend(Ext.form.Hidden, {
             gp.remove(g.deleteButton);
             gp.remove(g.upButton);
             gp.remove(g.downButton);
-            gp.groups.splice(i-1);
+            gp.groups.splice(i-1, 1);
         }
     },
     setValue : function(value) {
