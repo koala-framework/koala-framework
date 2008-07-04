@@ -75,7 +75,11 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         if (is_numeric(substr($dbId, 0, 1))) {
             $data = $this->getComponentById($dbId);
-            return array($data);
+            if ($data) {
+                return array($data);
+            } else {
+                return array();
+            }
         }
 
         $ret = array();
