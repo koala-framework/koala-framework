@@ -1,11 +1,19 @@
 <?php
 class Vpc_Basic_Text_Row extends Vpc_Row
 {
+    private $_classes;
+    
+    public function init()
+    {
+        parent::init();
+        $this->_classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
+                                    'childComponentClasses');
+        
+    }
     //für Component und Row
     public function getContentParts($content = null)
     {
-        $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
-                                            'childComponentClasses');
+        $classes = $this->_classes;
 
         $usedChildComponentNrs = array();
 
@@ -118,14 +126,11 @@ class Vpc_Basic_Text_Row extends Vpc_Row
 
     protected function _delete()
     {
-        $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
-                                            'childComponentClasses');
-
         $table = new Vpc_Basic_Text_ChildComponentsModel();
         $rows = $table->fetchAll(array('component_id = ?' => $this->component_id));
         foreach ($rows as $row) {
             $t = substr($row->component, 0, 1);
-            $admin = Vpc_Admin::getInstance($classes[$row->component]);
+            $admin = Vpc_Admin::getInstance($this->_classes[$row->component]);
             $admin->delete($this->component_id . '-' . $t.$row->nr);
             $row->delete();
         }
@@ -134,8 +139,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
     //childComponents löschen die aus dem html-code entfernt wurden
     protected function _update()
     {
-        $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
-                                            'childComponentClasses');
+        $classes = $this->_classes;
 
         $this->content = $this->tidy($this->content);
         $newParts = $this->getContentParts($this->content);
@@ -230,8 +234,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
             $html = str_replace('#nbsp#', '&nbsp;', $html);
         }
 
-        $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
-                                            'childComponentClasses');
+        $classes = $this->_classes;
 
         $imageMaxChildComponentNr = $this->getMaxChildComponentNr('image');
         $linkMaxChildComponentNr = $this->getMaxChildComponentNr('link');
@@ -337,13 +340,13 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                     } catch (Vpc_Exception $e) {
                         $srcRow = false;
                     }
-                    if ($srcRow && class_exists($srcRow->link_class)) {
-                        $linkTableName = Vpc_Abstract::getSetting($srcRow->link_class, 'tablename');
-                        $linkTable = new $linkTableName(array('componentClass'=>$srcRow->link_class));
+                    if ($srcRow && class_exists($classes[$srcRow->component])) {
+                        $linkTableName = Vpc_Abstract::getSetting($classes[$srcRow->component], 'tablename');
+                        $linkTable = new $linkTableName(array('componentClass'=>$classes[$srcRow->component]));
                         $srcLinkRow = $linkTable->findRow($part['componentId'].'-1');
                         if ($srcLinkRow) {
                             $destRow = $table->createRow();
-                            $destRow->link_class = $srcRow->link_class;
+                            $destRow->component = $srcRow->component;
                             $linkMaxChildComponentNr++;
                             $destRow->component_id = $this->component_id.'-l'.$linkMaxChildComponentNr;
                             $destRow->save();
@@ -361,27 +364,27 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                     foreach ($linkClasses as $class) {
                         if ($class == 'Vpc_Basic_LinkTag_Mail_Component' ||
                                 is_subclass_of($class, 'Vpc_Basic_LinkTag_Mail_Component')) {
-                            $destRow->link_class = $class;
+                            $destRow->component = $class;
                         }
                     }
                 } else {
                     foreach ($linkClasses as $class) {
                         if ($class == 'Vpc_Basic_LinkTag_Extern_Component' ||
                                 is_subclass_of($class, 'Vpc_Basic_LinkTag_Extern_Component')) {
-                            $destRow->link_class = $class;
+                            $destRow->component = $class;
                         }
                     }
                 }
-                if (!$destRow->link_class) continue; //kein externer-link möglich
+                if (!$destRow->component) continue; //kein externer-link möglich
                 $linkMaxChildComponentNr++;
                 $destRow->component_id = $this->component_id.'-l'.$linkMaxChildComponentNr;
                 $destRow->save();
 
-                $linkExternTableName = Vpc_Abstract::getSetting($destRow->link_class, 'tablename');
-                $linkExternTable = new $linkExternTableName(array('componentClass'=>$destRow->link_class));
+                $linkExternTableName = Vpc_Abstract::getSetting($classes[$destRow->component], 'tablename');
+                $linkExternTable = new $linkExternTableName(array('componentClass'=>$classes[$destRow->component]));
                 $row = $linkExternTable->createRow();
-                if ($destRow->link_class == 'Vpc_Basic_LinkTag_Extern_Component' ||
-                        is_subclass_of($destRow->link_class, 'Vpc_Basic_LinkTag_Extern_Component')) {
+                if ($classes[$destRow->component] == 'Vpc_Basic_LinkTag_Extern_Component' ||
+                        is_subclass_of($classes[$destRow->component], 'Vpc_Basic_LinkTag_Extern_Component')) {
                     $row->target = $part['href'];
                 } else {
                     preg_match('#^mailto:(.*)\\??(.*)#', $part['href'], $m);
