@@ -18,7 +18,7 @@ abstract class Vps_View_Helper_Abstract_MailLink
 
     public function encodeText($text)
     {
-        $text = preg_replace('/(^|\s)([^@\s]+)@([^@\s]+)\.([^\.\s]+)($|\s)/',
+        $text = preg_replace('/(^|[\s<>])([^@\s<>]+)@([^@\s]+)\.([^\.\s<>]+)($|[\s<>])/',
             '$1<span class="vpsEncodedMail">$2'.$this->_atEncoding.'$3'.$this->_dotEncoding.'$4</span>$5',
             $text
         );
