@@ -6,7 +6,7 @@
     width: 400px;
 }
 .vpcPaging a {
-    padding: 2px 3px;
+    padding: 1px 3px;
     border: 1px solid $blue;
     color: $blue;
 }
