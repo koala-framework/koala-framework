@@ -1,4 +1,4 @@
-.vpcCompositeImagesEnlarge { text-align: center; margin-left: 7px; }
+.vpcCompositeImagesEnlarge { text-align: center; margin-left: 7px; position: relative; padding-bottom: 10px; }
 .vpcCompositeImagesEnlarge .thumbOuter {
     float: left;
     border: 1px solid #ccc;
@@ -38,3 +38,14 @@
     background-color: #fff; margin-top: 45px; padding: 8px 0px;
 }
 
+.vpcCompositeImagesEnlarge a.back {
+    display: block;
+    position: absolute;
+    bottom: -5px; left: 10px;
+}
+.vpcCompositeImagesEnlarge a.back span {
+    display: block;
+    float: left;
+    padding-right: 5px;
+    margin-top: -1px;
+}

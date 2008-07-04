@@ -1,5 +1,5 @@
-ul.vpcMenuDropdown li { float: left; }
-ul.vpcMenuDropdown li a { display:block; width: auto; }
+ul.vpcMenuDropdown li { display: block; float: left; position: relative; }
+ul.vpcMenuDropdown li a { display: block; width: auto; }
 
 ul.vpcMenuDropdown div.dropdown {
     position: absolute;
