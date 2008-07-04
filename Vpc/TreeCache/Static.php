@@ -47,7 +47,7 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
         $constraints = $this->_formatConstraints($parentData, $constraints);
         if (is_null($constraints)) return array();
         foreach (array_keys($this->_classes) as $key) {
-            if ($this->_acceptKey($key, $constraints)) {
+            if ($this->_acceptKey($key, $constraints, $parentData)) {
                 $ret[] = $key;
             }
         }
@@ -75,7 +75,7 @@ class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
         return $constraints;
     }
 
-    protected function _acceptKey($key, $constraints)
+    protected function _acceptKey($key, $constraints, $parentData)
     {
         $ret = true;
         if ($ret && isset($constraints['componentClass'])) {
