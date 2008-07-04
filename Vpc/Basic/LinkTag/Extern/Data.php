@@ -37,5 +37,4 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
             return parent::__get($var);
         }
     }
-
 }
