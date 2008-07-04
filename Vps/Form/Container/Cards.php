@@ -71,6 +71,8 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
             if ($card != $this->_combobox
                 && $card->getName() != $postData[$this->_combobox->getFieldName()]) {
                 $card->setSave(false);
+            } else {
+                $card->setSave(true);
             }
         }
         return parent::validate($postData);
