@@ -1,9 +1,9 @@
 <?php
 class Vpc_TreeCache_StaticBox extends Vpc_TreeCache_Static
 {
-    protected function _acceptKey($key, $constraints)
+    protected function _acceptKey($key, $constraints, $parentData)
     {
-        $ret = parent::_acceptKey($key, $constraints);
+        $ret = parent::_acceptKey($key, $constraints, $parentData);
         if ($ret && isset($constraints['inherit'])) {
             $class = $this->_classes[$key];
             return !isset($class['inherit']) || ($class['inherit'] == $constraints['inherit']);
