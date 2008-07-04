@@ -8,6 +8,7 @@ Vps.onContentReady(function()
 
         switchContent.scaleHeight = switchContent.getHeight();
         switchContent.setHeight(0);
+        switchContent.setStyle('display', 'none');
 
         if (switchLink && switchContent) {
             var scopeObj = {
@@ -20,10 +21,11 @@ Vps.onContentReady(function()
                 if (this.switchLink.hasClass('switchLinkOpened')) {
                     this.switchContent.scaleHeight = this.switchContent.getHeight();
                     this.switchContent.scale(undefined, 0,
-                        { easing: 'easeOut', duration: .5 }
+                        { easing: 'easeOut', duration: .5, afterStyle: "display:none;" }
                     );
                     this.switchLink.removeClass('switchLinkOpened');
                 } else {
+                    this.switchContent.setStyle('display', 'block');
                     this.switchContent.scale(undefined, this.switchContent.scaleHeight,
                         { easing: 'easeOut', duration: .5, afterStyle: "height:auto;" }
                     );
