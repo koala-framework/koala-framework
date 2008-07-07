@@ -361,17 +361,17 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                 $destRow = $table->createRow();
                 $linkClasses = Vpc_Abstract::getSetting($classes['link'], 'childComponentClasses');
                 if (preg_match('#^mailto:#', $part['href'], $m)) {
-                    foreach ($linkClasses as $class) {
+                    foreach ($linkClasses as $key => $class) {
                         if ($class == 'Vpc_Basic_LinkTag_Mail_Component' ||
                                 is_subclass_of($class, 'Vpc_Basic_LinkTag_Mail_Component')) {
-                            $destRow->component = $class;
+                            $destRow->component = $key;
                         }
                     }
                 } else {
-                    foreach ($linkClasses as $class) {
+                    foreach ($linkClasses as $key => $class) {
                         if ($class == 'Vpc_Basic_LinkTag_Extern_Component' ||
                                 is_subclass_of($class, 'Vpc_Basic_LinkTag_Extern_Component')) {
-                            $destRow->component = $class;
+                            $destRow->component = $key;
                         }
                     }
                 }
@@ -379,12 +379,14 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                 $linkMaxChildComponentNr++;
                 $destRow->component_id = $this->component_id.'-l'.$linkMaxChildComponentNr;
                 $destRow->save();
-
-                $linkExternTableName = Vpc_Abstract::getSetting($classes[$destRow->component], 'tablename');
-                $linkExternTable = new $linkExternTableName(array('componentClass'=>$classes[$destRow->component]));
+                $destClasses =  Vpc_Abstract::getSetting($destRow->getTable()->getComponentClass(),
+                                    'childComponentClasses');
+                
+                $linkExternTableName = Vpc_Abstract::getSetting($destClasses[$destRow->component], 'tablename');
+                $linkExternTable = new $linkExternTableName(array('componentClass'=>$destClasses[$destRow->component]));
                 $row = $linkExternTable->createRow();
-                if ($classes[$destRow->component] == 'Vpc_Basic_LinkTag_Extern_Component' ||
-                        is_subclass_of($classes[$destRow->component], 'Vpc_Basic_LinkTag_Extern_Component')) {
+                if ($destClasses[$destRow->component] == 'Vpc_Basic_LinkTag_Extern_Component' ||
+                        is_subclass_of($destClasses[$destRow->component], 'Vpc_Basic_LinkTag_Extern_Component')) {
                     $row->target = $part['href'];
                 } else {
                     preg_match('#^mailto:(.*)\\??(.*)#', $part['href'], $m);
