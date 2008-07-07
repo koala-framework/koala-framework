@@ -25,7 +25,7 @@ class Vps_Pdf_TcPdf extends TCPDF
             //(wo es funktionierte)
             //von lenz mittels sniffer herausgefunden
             //ist definitiv notwendig - ie ist böööse
-            header('Accept-Ranges: bytes');
+            header('Accept-Ranges: none');
         }
         return parent::Output($name, $dest);
     }
