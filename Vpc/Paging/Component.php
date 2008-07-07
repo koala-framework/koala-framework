@@ -30,7 +30,11 @@ class Vpc_Paging_Component extends Vpc_Abstract
                 }
                 $select->from(null, array('count' => "COUNT(DISTINCT {$table}id)"));
                 $r = $select->query()->fetchAll();
-                $this->_entries = $r[0]['count'];
+                if (!isset($r[0])) {
+                    $this->_entries  = 0;
+                } else {
+                    $this->_entries = $r[0]['count'];
+                }
             }
         }
         return $this->_entries;
