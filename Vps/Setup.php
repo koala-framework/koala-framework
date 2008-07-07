@@ -277,7 +277,17 @@ class Vps_Setup
         return $vpsConfig;
     }
 
-    public function dispatchVpc()
+    private static function _output404()
+    {
+        header('HTTP/1.1 404 Not Found');
+        $view = new Vps_View();
+        $view->requestUri = $_SERVER['REDIRECT_URL'];
+        echo $view->render('error404.tpl');
+        exit;
+
+    }
+
+    public static function dispatchVpc()
     {
         if (!isset($_SERVER['REDIRECT_URL'])) return;
 
@@ -290,11 +300,7 @@ class Vps_Setup
             $root = Vps_Component_Data_Root::getInstance();
             $data = $root->getPageByPath($requestUrl);
             if (!$data) {
-                header('HTTP/1.1 404 Not Found');
-                $view = new Vps_View();
-                $view->requestUri = $requestUrl;
-                echo $view->render('error404.tpl');
-                exit;
+                self::_output404();
             }
             $root->setCurrentPage($data);
             if ($data->url != $requestUrl) {
@@ -316,6 +322,9 @@ class Vps_Setup
 
         $urlParts = explode('/', substr($_SERVER['REDIRECT_URL'], 1));
         if (is_array($urlParts) && $urlParts[0] == 'media') {
+            if (sizeof($urlParts) != 7) {
+                self::_output404();
+            }
             $params['table'] = $urlParts[1];
             $params['id'] = $urlParts[2];
             $params['rule'] = $urlParts[3];
