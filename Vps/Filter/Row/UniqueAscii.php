@@ -56,7 +56,9 @@ class Vps_Filter_Row_UniqueAscii extends Vps_Filter_Row_Abstract
         $x = 0;
         $unique = $value;
         $where["$this->_field = ?"] = $unique;
-        $where["$this->_field != ?"] = $row->{$this->_field};
+        if ($row->{$this->_field}) {
+            $where["$this->_field != ?"] = $row->{$this->_field};
+        }
         while ($row->getTable()->fetchAll($where)->count() > 0) {
             $unique = $value . '_' . ++$x;
             $where["$this->_field = ?"] = $unique;
