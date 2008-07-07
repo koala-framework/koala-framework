@@ -28,13 +28,13 @@ class Vps_Media_Image
         if (!is_file($source)) {
             return false;
         }
+        $size = getimagesize($source);
+        if (!$size) return false;
 
         if ($width == 0) {
-            $size = getimagesize($source);
             $width = round($height * ($size[0]/$size[1]));
             return array('width'=>$width, 'height'=>$height, 'scale'=>$scale);
         } else if ($height == 0) {
-            $size = getimagesize($source);
             $height = round($width * ($size[1]/$size[0]));
             return array('width'=>$width, 'height'=>$height, 'scale'=>$scale);
         } else if ($scale == self::SCALE_CROP) {
@@ -45,8 +45,6 @@ class Vps_Media_Image
                     ."if Vps_Media_Image::SCALE_CROP is used. Maybe "
                     ."Vps_Media_Image::SCALE_BESTFIT would be better?");
             }
-
-            $size = getimagesize($source);
 
             if (($width / $height) >= ($size[0] / $size[1])) {
                 $resizeWidth  = $width;
@@ -85,9 +83,6 @@ class Vps_Media_Image
             // Bild wird auf größte Maximale Ausdehnung skaliert
             // Bild wird NICHT vergrößert! (kann also auch kleiner ausgegeben werden als angefordert)
 
-            $size = getimagesize($source);
-            if (!$size) return array();
-
             // 2 if abfragen um zu verhindern, dass das bild vergrößert wird
             if ($size[0] < $width) {
                 $height = $height / ($width / $size[0]);
@@ -116,7 +111,6 @@ class Vps_Media_Image
 
         } elseif ($scale == self::SCALE_ORIGINAL) {
 
-            $size = getimagesize($source);
             return array('width'=>$size[0], 'height'=>$size[1], 'scale'=>$scale);
 
         } else {
