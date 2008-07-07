@@ -14,7 +14,10 @@ class Vps_Debug
         }
 
         $body = $exception->__toString();
-        $body .= "\n\nREQUEST_URI: ".$_SERVER['REQUEST_URI'];
+        $body .= "\n";
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $body .= "\nREQUEST_URI: ".$_SERVER['REQUEST_URI'];
+        }
         $body .= "\nHTTP_REFERER: ".(isset($_SERVER['HTTP_REFERER'])
                                         ? $_SERVER['HTTP_REFERER'] : '(none)');
         $u = Zend_Registry::get('userModel')->getAuthedUser();
@@ -30,14 +33,18 @@ class Vps_Debug
         $body .= print_r($_POST, true);
         $body .= "\n\n------------------\n\n_SERVER:\n";
         $body .= print_r($_SERVER, true);
-        $body .= "\n\n------------------\n\n_SESSION:\n";
-        $body .= print_r($_SESSION, true);
         $body .= "\n\n------------------\n\n_FILES:\n";
         $body .= print_r($_FILES, true);
+        $body .= "\n\n------------------\n\n_SESSION:\n";
+        $body .= print_r($_SESSION, true);
         $body = substr($body, 0, 5000);
         $mail = new Zend_Mail('utf-8');
+        $subject = $_SERVER['HTTP_HOST'] . ': ' . $type;
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $subject .= ' - '.$_SERVER['REQUEST_URI'];
+        }
         $mail->setBodyText($body)
-            ->setSubject($_SERVER['HTTP_HOST'] . ': ' . $type);
+            ->setSubject($subject);
         $mail->addTo('vperror@vivid-planet.com');
         if (is_string($address)) $address = array($address);
         foreach ($address as $i) {
