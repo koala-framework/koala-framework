@@ -40,7 +40,9 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
 
             // Cache-Datei erstellen
             $source = $fileRow->getFileSource();
-            Vps_Media_Image::scale($source, $target, array(40, 40));
+            if (!Vps_Media_Image::scale($source, $target, array(40, 40))) {
+                throw new Vps_Controller_Action_Web_Exception('Invalid Image');
+            }
         }
         Vps_Media_Output::output($target, $fileRow->mime_type);
     }
