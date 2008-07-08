@@ -8,7 +8,6 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['pagesize'] = 10;
         $ret['maxPagingLinks'] = 13;
         $ret['bigPagingSteps'] = array(10, 50);
-        $ret['includedParams'] = array();
         $ret['cssClass'] = 'webStandard';
         $ret['viewCache'] = false;
         return $ret;
@@ -45,9 +44,8 @@ class Vpc_Paging_Component extends Vpc_Abstract
         if (is_null($linktext)) $linktext = $pageNumber;
 
         $params = array();
-        foreach ($this->_getSetting('includedParams') as $p) {
-            $v = $this->_getParam($p);
-            if ($v) {
+        foreach ($_GET as $p=>$v) {
+            if ($p != $this->_getParamName()) {
                 $params[] = "$p=".urlencode($v);
             }
         }
