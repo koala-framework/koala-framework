@@ -112,6 +112,7 @@ class Vps_Form extends Vps_Form_NonTableForm
         $this->_model = new Vps_Model_Db(array(
             'table' => $table
         ));
+        return $this;
     }
     public function getModel()
     {
@@ -159,7 +160,11 @@ class Vps_Form extends Vps_Form_NonTableForm
             return null;
         } else {
             if (count($rowset)== 0) {
-                throw new Vps_Exception('No database-entry found.');
+                if ($this->getCreateMissingRow()) { //für Vps_Form_AddForm
+                    $this->_rows[$key] = $this->_model->createRow();
+                } else {
+                    throw new Vps_Exception('No database-entry found.');
+                }
             } else if (count($rowset) > 1) {
                 throw new Vps_Exception('More than one database-entry found.');
             } else {
