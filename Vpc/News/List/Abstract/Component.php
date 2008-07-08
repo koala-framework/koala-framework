@@ -10,6 +10,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
         $ret['childComponentClasses']['paging'] = 'Vpc_News_List_Abstract_Paging_Component';
         $ret['childComponentClasses']['view'] = 'Vpc_News_List_Abstract_View_Component';
         $ret['viewCacheTag'] = 'news';
+        $ret['order'] = 'publish_date DESC';
         return $ret;
     }
 
@@ -45,7 +46,7 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
             $start = $l['start'];
         }
         $select->limit($limit, $start);
-        $select->order('publish_date DESC');
+        $select->order($this->_getSetting('order'));
         $select->group('vpc_news.id');
         $constraints = array(
             'treecache' => 'Vpc_News_Directory_TreeCacheDetail',
