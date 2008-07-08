@@ -14,6 +14,7 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
         $ret['placeholder']['submitButton'] = trlVps('Submit');
         $ret['decorator'] = 'Vpc_Formular_Decorator_Label';
         $ret['viewCache'] = false;
+        $ret['method'] = 'POST';
         return $ret;
     }
 
@@ -33,7 +34,7 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
         }
 
         $this->_errors = array();
-        if (isset($_POST[$this->getData()->componentId])) {
+        if (isset($_REQUEST[$this->getData()->componentId])) {
             $this->_errors = $this->_form->validate($_REQUEST);
             if (!$this->_errors) {
                 $this->_form->prepareSave(null, $_REQUEST);
@@ -84,6 +85,7 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
         $ret['formName'] = $this->getData()->componentId;
 
         $ret['action'] = $this->getData()->url;
+        $ret['method'] = $this->_getSetting('method');
 
         return $ret;
     }

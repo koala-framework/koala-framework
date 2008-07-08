@@ -12,7 +12,7 @@ if ($this->showSuccess) {
         echo '</ul>';
     }
     ?>
-    <form action="<?= $this->action ?>" method="POST">
+    <form action="<?= $this->action ?>" method="<?=$this->method?>">
         <?php $this->formField($this->form) ?>
         <button type="submit" name="<?= $this->formName ?>" value="submit"><?= $this->placeholder['submitButton'] ?></button>
     </form>
