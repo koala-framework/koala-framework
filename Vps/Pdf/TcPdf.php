@@ -25,6 +25,8 @@ class Vps_Pdf_TcPdf extends TCPDF
             //(wo es funktionierte)
             //von lenz mittels sniffer herausgefunden
             //ist definitiv notwendig - ie ist böööse
+            header('Cache-Control: public');
+            header('Last-Modified: ' . gmdate("D, d M Y H:i:s \G\M\T", time()));
             header('Accept-Ranges: none');
         }
         return parent::Output($name, $dest);
