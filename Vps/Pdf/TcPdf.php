@@ -21,12 +21,8 @@ class Vps_Pdf_TcPdf extends TCPDF
     public function Output ($name='',$dest='')
     {
         if ($dest == 'I' || $dest == 'D') {
-            //Workaround für IE problem: unterschied von Apache-Auslieferung
-            //(wo es funktionierte)
-            //von lenz mittels sniffer herausgefunden
-            //ist definitiv notwendig - ie ist böööse
             header('Cache-Control: public');
-            header('Last-Modified: ' . gmdate("D, d M Y H:i:s \G\M\T", time()));
+            header('Last-Modified: ' . gmdate("D, d M Y H:i:s \G\M\T", time() - 60*60*24));
             header('Accept-Ranges: none');
         }
         return parent::Output($name, $dest);
