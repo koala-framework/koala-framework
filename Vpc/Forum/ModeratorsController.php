@@ -12,7 +12,6 @@ class Vpc_Forum_ModeratorsController extends Vps_Controller_Action_Auto_Grid
     public function preDispatch()
     {
         $this->_table = Zend_Registry::get('userModel');
-        $this->_table->createAllCache();
         parent::preDispatch();
     }
 

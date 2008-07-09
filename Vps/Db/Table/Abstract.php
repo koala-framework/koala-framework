@@ -27,7 +27,7 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
     {
         //instead of setDefaultAdapter - this one layz loads
         if (! $this->_db) {
-            $this->_db = Zend_Registry::get('db');
+            $this->_db = Vps_Registry::get('db');
         }
     }
 

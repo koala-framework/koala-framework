@@ -8,6 +8,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
     protected $_editDialog = array('controllerUrl'=>'/vps/user/user',
                                    'width'=>400,
                                    'height'=>410);
+    protected $_filters = array('text' => true);
 
     protected function _getWhere()
     {
@@ -34,7 +35,6 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
     public function preDispatch()
     {
         $this->_table = Zend_Registry::get('userModel');
-//         $this->_table->createAllCache();
         parent::preDispatch();
     }
 

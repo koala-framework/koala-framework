@@ -4,96 +4,98 @@ class Vps_Model_User_Users extends Vps_Db_Table
     protected $_name = 'vps_users';
     protected $_primary = 'id';
     protected $_rowClass = 'Vps_Model_User_User';
-    private $_rowCache = array(); //damit jede row nur einmal erstellt wird
 
-    static public $allCache = null;
+    static $checkCacheDone = false;
 
-    public function fetchAll($where, $order = null, $limit = null, $start = null)
+    protected function _fetch($select)
     {
-        // wenn serviceColumn in where vorkommt, komplettes where an Service schicken und id's zurückbekommen
-        $where = $this->prepareWhere($where);
-
-        // ob nach serviceColumn sortiert werden soll
-        if ($order) {
-            list($orderColumn, $direction) = explode(' ', $order);
-            $orderColumn = trim($orderColumn);
-
-            $sc = call_user_func(array($this->_rowClass, 'getServiceColumns'));
-            if (in_array($orderColumn, $sc)) {
-                $ret = parent::fetchAll($where);
-                $ret->sort($order, $limit, $start);
-                return $ret;
-            }
+        $serviceCols = call_user_func(array($this->_rowClass, 'getServiceColumns'));
+        if (preg_match('/('.implode('|', $serviceCols).')/', $select->__toString())) {
+            $this->checkCache();
         }
 
-        return parent::fetchAll($where, $order, $limit, $start);
+        return parent::_fetch($select);
     }
 
-    public function prepareWhere($where)
+    public function checkCache()
     {
-        if ($where) {
-            if (!is_array($where)) $where = array($where);
-            $sc = call_user_func(array($this->_rowClass, 'getServiceColumns'));
+        if (!self::$checkCacheDone) {
+            $b = Vps_Benchmark::start();
+            self::$checkCacheDone = true;
 
-            $serviceColumnMatched = false;
-            foreach ($where as $key => $val) {
-                foreach ($sc as $scol) {
-                    if ((is_string($key) && strpos($key, $scol) !== false)
-                        || strpos($val, $scol) !== false
-                    ) {
-                        $serviceColumnMatched = true;
-                        break 2;
+            $cacheId = 'userDbCache';
+            $frontendOptions = array('lifetime' => null);
+            $backendOptions = array('cache_dir' => 'application/cache/table/');
+            $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+
+            $restClient = new Vps_Rest_Client();
+            if (!($cacheTimestamp = $cache->load($cacheId))) {
+                if (preg_match('/^(.+)\/([^\/]+)\/?$/', $restClient->getUri()->getUri(), $matches)) {
+                    $restClient->setUri($matches[1]);
+                    $path = $matches[2];
+                } else {
+                    throw new Vps_Exception('Rest URL '.$restClient->getUri()->getUri().' not possible. '
+                        .'Use URL of type http://service.vivid-planet.com/user');
+                }
+
+                // alle ids mitschicken
+                $info = $this->info();
+                $select = $this->getAdapter()->select();
+                $select->from($info['name'], 'id');
+                $idRows = $this->getAdapter()->fetchAll($select);
+
+                $ids = array();
+                foreach ($idRows as $v) {
+                    $ids[] = $v['id'];
+                }
+
+                if (count($ids)) {
+                    $response = $restClient->restPost($path,
+                        array('method' => 'getData', 'id' => $ids, 'columns' => '')
+                    );
+
+                    $ret = new Zend_Rest_Client_Result($response->getBody());
+
+                    foreach ($ret->data as $k => $v) {
+                        $this->_syncUserByRestData($v);
                     }
                 }
-            }
 
-            if ($serviceColumnMatched) {
-                $restClient = new Vps_Rest_Client();
-                $restClient->getIdsWhere($where, 'fakeArgWegenZend');
+                $cacheTimestamp = (string)$ret->timestamp();
+            } else {
+                $restClient->syncCache($this->getRowWebcode(), $cacheTimestamp);
                 $restResult = $restClient->get();
-                $ids = (array)$restResult->ids;
-                if (count($ids)) {
-                    $where = 'id IN('.implode(',', $ids).')';
-                } else {
-                    $where = 'id = 0';
+
+                foreach ((array)$restResult->data as $v) {
+                    $this->_syncUserByRestData($v);
                 }
+
+                $cacheTimestamp = (string)$restResult->timestamp;
             }
+            $cache->save($cacheTimestamp, $cacheId);
         }
-        return $where;
     }
 
-    static public function getAllCache()
+    private function _syncUserByRestData($restRow)
     {
-        return self::$allCache;
-    }
-
-    public function createAllCache()
-    {
-        self::$allCache = array();
-
-        $allIds = array();
-        foreach (parent::fetchAll(null) as $row) {
-            $allIds[] = $row->id;
-        }
-
-        $restClient = new Vps_Rest_Client();
-        $restClient->getData($allIds, '');
-        $restResult = $restClient->get();
-
-        foreach ($restResult->data as $row) {
-            self::$allCache[(int)$row->id] = $row;
+        $row = $this->find((integer)$restRow->id)->current();
+        if ($row) {
+            $cacheCols = call_user_func(array($this->_rowClass, 'getCachedColumns'));
+            $cacheData = array();
+            foreach ($cacheCols as $c) {
+                $cacheData[$c] = (string)$restRow->{$c};
+            }
+            $row->updateCache($cacheData);
         }
     }
 
+    /**
+     * @deprecated fetchRow() direkt verwenden. Vor dem 8.7.2008 wurde hier der
+     *             service gefragt, weils noch keinen web-cache der daten gab
+     */
     public function fetchRowByEmail($email)
     {
-        $restClient = new Vps_Rest_Client();
-        $restClient->exists($this->getRowWebcode(), $email);
-        $restResult = $restClient->get();
-        if ($restResult->status()) {
-            return $this->find($restResult->id())->current();
-        }
-        return null;
+        return $this->fetchRow(array('email = ?' => $email));
     }
 
     public function getRowWebcode()
@@ -170,6 +172,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
         $u = $this->getAuthedUser();
         return $u ? $u->role : 'guest';
     }
+
     public function getAuthedChangedUserRole()
     {
         $storage = Vps_Auth::getInstance()->getStorage();
@@ -185,13 +188,5 @@ class Vps_Model_User_Users extends Vps_Db_Table
             $role = 'guest';
         }
         return $role;
-    }
-
-    public function find($id)
-    {
-        if (!isset($this->_rowCache[$id])) {
-            $this->_rowCache[$id] = parent::find($id);
-        }
-        return $this->_rowCache[$id];
     }
 }
