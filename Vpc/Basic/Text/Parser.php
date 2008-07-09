@@ -111,7 +111,7 @@ class Vpc_Basic_Text_Parser
                         }
                     }
                 }
-                if ($element == 'BR') {
+                if ($element == 'BR' || $element == 'IMG') {
                     $this->_finalHTML .= ' /';
                     array_push($this->_stack, false);
                 } else {
