@@ -18,10 +18,6 @@ class Vpc_Forum_Group_Component extends Vpc_Abstract
 
     public function getTemplateVars()
     {
-        if (!(Zend_Registry::get('userModel')->getAllCache())) {
-            Zend_Registry::get('userModel')->createAllCache();
-        }
-
         $ret = parent::getTemplateVars();
 
         $group = $this->getTable()->find($this->getCurrentPageKey())->current();

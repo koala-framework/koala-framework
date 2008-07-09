@@ -118,15 +118,18 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                     url: '/vps/user/changeUser/json-data'
                 },
                 mode: 'remote',
-                editable: false,
+                editable: true,
+                forceSelection: true,
+                pageSize: 10,
                 triggerAction: 'all',
                 width: 120,
-                listWidth: 250,
+                maxHeight: 350,
+                listWidth: 280,
                 tpl: new Ext.XTemplate(
                       '<tpl for=".">',
                         '<div class="x-combo-list-item">',
-                            '<h3>{name}</h3>',
-                            '{email} {role}',
+                            '<h3>{lastname} {firstname}</h3>',
+                            '{email} <span style="color: #777;">({role})</span>',
                         '</div>',
                       '</tpl>')
             });

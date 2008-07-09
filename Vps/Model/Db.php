@@ -60,12 +60,6 @@ class Vps_Model_Db implements Vps_Model_Interface
             throw new Vps_Exception("array or Zend_Db_Select required as first argument for fetchCount");
         }
 
-        //TODO: das geh�rt hier nicht her
-        if ($this->_table instanceof Vps_Model_User_Users) {
-            $where = $this->_table->prepareWhere($where);
-            if (!is_array($where)) $where = array($where);
-        }
-
         return $this->_table->getAdapter()->query($select)->fetchColumn();
     }
 

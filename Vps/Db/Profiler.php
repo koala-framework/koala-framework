@@ -22,8 +22,8 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
         $this->_logger = new Zend_Log($writer);
 
         foreach (new DirectoryIterator('/tmp') as $item) {
-            if (substr($item->getFilename(), 0, 9+4) == 'querylog.test') {
-                $time = (int)(substr($item->getFilename(), 9+4, -2));
+            if (substr($item->getFilename(), 0, 9) == 'querylog.') {
+                $time = (int)(substr($item->getFilename(), 9, -2));
                 if (time()-$time > 15*60) {
                     unlink($item->getPathname());
                 }

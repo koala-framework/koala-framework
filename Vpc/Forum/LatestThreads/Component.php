@@ -12,10 +12,6 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
 
     public function getTemplateVars()
     {
-        if (!(Zend_Registry::get('userModel')->getAllCache())) {
-            Zend_Registry::get('userModel')->createAllCache();
-        }
-
         $vars = parent::getTemplateVars();
         $vars['forumLatestThreads'] = array();
 

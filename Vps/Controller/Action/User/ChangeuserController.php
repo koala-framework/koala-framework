@@ -1,7 +1,8 @@
 <?php
 class Vps_Controller_Action_User_ChangeuserController extends Vps_Controller_Action_Auto_Grid
 {
-    protected $_defaultOrder = 'id';
+    protected $_defaultOrder = 'lastname';
+    protected $_paging = 10;
 
     protected function _getWhere()
     {
@@ -15,11 +16,12 @@ class Vps_Controller_Action_User_ChangeuserController extends Vps_Controller_Act
                     $roles[] = $role->getRoleId();
                 }
             }
+            $roles = array_unique($roles);
             $where[] = "role IN ('".implode("', '", $roles)."')";
         }
         return $where;
     }
-    
+
     public function init()
     {
         $this->_table = Zend_Registry::get('userModel');
@@ -28,8 +30,8 @@ class Vps_Controller_Action_User_ChangeuserController extends Vps_Controller_Act
     protected function _initColumns()
     {
         parent::_initColumns();
-        Zend_Registry::get('userModel')->createAllCache();
-        $this->_columns->add(new Vps_Grid_Column('name'));
+        $this->_columns->add(new Vps_Grid_Column('firstname'));
+        $this->_columns->add(new Vps_Grid_Column('lastname'));
         $this->_columns->add(new Vps_Grid_Column('role'))
              ->setData(new Vps_Controller_Action_User_Users_RoleData());
         $this->_columns->add(new Vps_Grid_Column('email'));

@@ -22,10 +22,6 @@ class Vpc_Forum_Component extends Vpc_Abstract
 
     public function getTemplateVars()
     {
-        if (!(Zend_Registry::get('userModel')->getAllCache())) {
-            Zend_Registry::get('userModel')->createAllCache();
-        }
-
         $ret = parent::getTemplateVars();
         $where = array();
         $where['component_id = ?'] = $this->getDbId();

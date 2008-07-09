@@ -15,7 +15,13 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
 
     public static function getServiceColumns() {
         return array(
-            'email', 'password', 'password_salt', 'gender', 'title', 'firstname', 'lastname', 'webcode', 'created', 'logins', 'last_login'
+            'email', 'password', 'password_salt', 'gender', 'title', 'firstname', 'lastname', 'webcode', 'created', 'logins', 'last_login', 'last_modified'
+        );
+    }
+
+    public static function getCachedColumns() {
+        return array(
+            'email', 'password', 'gender', 'title', 'firstname', 'lastname', 'webcode', 'created', 'last_modified'
         );
     }
 
@@ -35,23 +41,6 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
         if ($this->firstname) $ret .= $this->firstname.' ';
         if ($this->lastname) $ret .= $this->lastname;
         return trim($ret);
-    }
-
-    public function toArray()
-    {
-        $ret = parent::toArray();
-
-        $restClient = new Vps_Rest_Client();
-        $restClient->getData($this->id, '');
-        $restResult = $restClient->get();
-
-        if ($restResult->status()) {
-            foreach ($restResult->data as $key => $value) {
-                $ret[(string)$key] = (string) $value;
-            }
-        }
-
-        return $ret;
     }
 
     public function getActivationCode()
@@ -146,15 +135,8 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
 
         $this->_changedServiceData = array();
 
-        if (!empty($oldMail)) {
-            if ($oldMail != $this->email) {
-                $this->sendChangedMailMail($oldMail);
-            }
-        }
-
-        $allCache = call_user_func(array($this->getTableClass(), 'getAllCache'));
-        if (!is_null($allCache)) {
-            $this->getTable()->createAllCache();
+        if (!empty($oldMail) && $oldMail != $this->email) {
+            $this->sendChangedMailMail($oldMail);
         }
 
         if (!empty($this->_changedPasswordData['password1']) && !empty($this->_changedPasswordData['password2'])) {
@@ -242,6 +224,14 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
         return $mail->send();
     }
 
+    public function updateCache(array $columns = array())
+    {
+        foreach ($columns as $col => $val) {
+            parent::__set($col, $val);
+        }
+        parent::save();
+    }
+
     public function __set($columnName, $value)
     {
         if (in_array($columnName, $this->getServiceColumns())) {
@@ -255,27 +245,27 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
 
     public function __get($columnName)
     {
-        static $cache = array();
         if (in_array($columnName, $this->getServiceColumns())) {
             if (isset($this->_changedServiceData[$columnName])) {
                 return $this->_changedServiceData[$columnName];
             } else if ($this->id) {
-                if (!isset($cache[$this->id])) {
-                    $allCache = call_user_func(array($this->getTableClass(), 'getAllCache'));
-                    if (!is_null($allCache)) {
-                        $cache[$this->id] = $allCache[$this->id];
-                    } else {
-                        $restClient = new Vps_Rest_Client();
-                        $restClient->getData($this->id, '');
-
-                        $restResult = $restClient->get();
-                        if (!$restResult->status()) {
-                            throw new Vps_Exception($restResult->msg());
-                        }
-                        $cache[$this->id] = $restResult->data;
-                    }
+                if (in_array($columnName, $this->getServiceColumns())) {
+                    $this->_table->checkCache();
                 }
-                return (string)$cache[$this->id]->{$columnName};
+                // wenn column nicht gecached, service wieder manuell fragen
+                if (!in_array($columnName, $this->getCachedColumns())) {
+                    $restClient = new Vps_Rest_Client();
+                    $restClient->getData($this->id, '');
+
+                    $restResult = $restClient->get();
+                    if (!$restResult->status()) {
+                        throw new Vps_Exception($restResult->msg());
+                    }
+                    $res = $restResult->data;
+                    return (string)$res->{$columnName};
+                } else {
+                    return parent::__get($columnName);
+                }
             }
             return null;
         } else if ($columnName == 'password1' || $columnName == 'password2') {

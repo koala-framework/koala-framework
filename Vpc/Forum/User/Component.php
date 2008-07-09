@@ -21,7 +21,6 @@ class Vpc_Forum_User_Component extends Vpc_Abstract
 
     public function getTemplateVars()
     {
-        Zend_Registry::get('userModel')->createAllCache();
         $ret = parent::getTemplateVars();
         $limit = $this->_getPagingComponent()->getLimit();
         $pf = $this->getPageFactory()->getAdditionalFactory('view');
