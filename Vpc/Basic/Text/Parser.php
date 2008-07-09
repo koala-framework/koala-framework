@@ -3,7 +3,6 @@ class Vpc_Basic_Text_Parser
 {
     protected $_row;
     protected $_parser;
-    protected $_elementStack = array();
     protected $_stack = array();
     protected $_P = array();
     protected $_SPAN = array();
@@ -13,54 +12,23 @@ class Vpc_Basic_Text_Parser
     protected $_enableTagsWhitelist = true;
     protected $_enableStyles = true;
 
-    public function __construct(Vpc_Basic_Text_Row $row)
+    public function __construct(Vpc_Basic_Text_Row $row = null)
     {
         $this->_row = $row;
-
-        $this->_parser = xml_parser_create();
-
-        xml_set_object($this->_parser, $this);
-
-        xml_set_element_handler(
-          $this->_parser,
-          'startElement',
-          'endElement'
-        );
-
-        xml_set_character_data_handler(
-          $this->_parser,
-          'characterData'
-        );
-
-        xml_set_default_handler(
-          $this->_parser,
-          'characterData'
-        );
     }
 
     protected function endElement($parser, $element)
     {
-        $element = array_pop($this->_elementStack);
-
-        if ($element == 'SPAN'){
-            $tag = array_pop($this->_stack);
+        $tag = array_pop($this->_stack);
+        if ($tag == 'SPAN'){
             if ($tag != '') $this->_finalHTML .= '</'.$tag.'>';
-        } elseif ($element == 'BODY' || $element == 'O:P' || $element == 'BR'
-                    || $element == 'IMG' || $element == 'SCRIPT') {
-            //do nothing
-        } elseif ($this->_enableTagsWhitelist
-                    && !in_array(strtolower($element), $this->_tagsWhitelist)) {
-            //do nothing
-        } else {
-            $this->_finalHTML .= '</'.$element.'>';
+        } else if ($tag) {
+            $this->_finalHTML .= '</'.$tag.'>';
         }
     }
 
     protected function startElement($parser, $element, $attributes)
     {
-        array_push($this->_elementStack, $element);
-        //$this->_enableTagsWhitelist
-
         if ($element == 'SPAN') {
             if (isset($attributes['STYLE'])) {
                 $style = $attributes['STYLE'];
@@ -83,17 +51,18 @@ class Vpc_Basic_Text_Parser
                  array_push($this->_stack, 'span');
                  $this->_finalHTML .= '<span style="'.$style.'">';
             } else {
-                array_push($this->_stack, 'span');
-                $this->_finalHTML .= '<'.$element;
-                foreach ($attributes as $key => $value) {
-                    $this->_finalHTML .= ' ' . $key . '="'. $value . '"';
+                if ($this->_enableStyles && isset($attributes['CLASS']) && preg_match('#^style[0-9]+$#', $attributes['CLASS'])) {
+                    array_push($this->_stack, 'span');
+                    $this->_finalHTML .= '<span class="'.$attributes['CLASS'].'">';
+                } else {
+                    array_push($this->_stack, false);
                 }
-
-                $this->_finalHTML .= '>';
             }
         } elseif ($element == 'BODY' || $element == 'O:P') {
+            array_push($this->_stack, false);
             //do nothing
         } elseif ($element == 'SCRIPT') {
+            array_push($this->_stack, false);
             $this->_deleteContent = true;
         } else {
             if ($element == 'IMG') {
@@ -131,12 +100,19 @@ class Vpc_Basic_Text_Parser
                 }
             }
             if ($this->_enableTagsWhitelist
-                && !in_array(strtolower($element), $this->_tagsWhitelist)) {
+                && !in_array(strtolower($element), array_keys($this->_tagsWhitelist))) {
                 //ignore this tag
+                array_push($this->_stack, false);
             } else {
-                $this->_finalHTML .= '<'.$element;
+                array_push($this->_stack, strtolower($element));
+                $this->_finalHTML .= '<'.strtolower($element);
                 foreach ($attributes as $key => $value) {
-                    $this->_finalHTML .= ' ' . $key . '="'. $value . '"';
+                    if (!$this->_enableStyles
+                        || in_array(strtolower($key), $this->_tagsWhitelist[strtolower($element)])) {
+                        if ($key != 'CLASS' || preg_match('#^style[0-9]+$#', $value)) {
+                            $this->_finalHTML .= ' ' . strtolower($key) . '="'. $value . '"';
+                        }
+                    }
                 }
                 $this->_finalHTML .= '>';
             }
@@ -146,9 +122,7 @@ class Vpc_Basic_Text_Parser
 
     protected function characterData($parser, $cdata)
     {
-       if (!$this->_deleteContent){
-            $level   = sizeof($this->_elementStack) - 1;
-            $element = $this->_elementStack[$level];
+        if (!$this->_deleteContent){
             $this->_finalHTML .= $cdata;
             $this->_deleteContent = false;
         }
@@ -171,14 +145,39 @@ class Vpc_Basic_Text_Parser
 
     public function parse($html)
     {
-    
         $this->_tagsWhitelist = array(
-            'p', 'a', 'img', 'br', 'strong', 'em', 'u', 'ul', 'ol', 'li'
+            'p'=>array('class'), 'a'=>array('href'),
+            'img'=>array('src'), 'br'=>array(), 'strong'=>array(), 'em'=>array(),
+            'u'=>array(), 'ul'=>array(), 'ol'=>array(), 'li'=>array()
         );
         if ($this->_enableStyles) {
             $this->_tagsWhitelist = array_merge($this->_tagsWhitelist, 
-                array('span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'));
+                array('span'=>array('class'), 'h1'=>array('class'), 'h2'=>array('class'),
+                      'h3'=>array('class'), 'h4'=>array('class'),
+                      'h5'=>array('class'), 'h6'=>array('class')));
         }
+        $this->_stack = array();
+        $this->_finalHTML = '';
+        $this->_parser = xml_parser_create();
+
+        xml_set_object($this->_parser, $this);
+
+        xml_set_element_handler(
+          $this->_parser,
+          'startElement',
+          'endElement'
+        );
+
+        xml_set_character_data_handler(
+          $this->_parser,
+          'characterData'
+        );
+
+        xml_set_default_handler(
+          $this->_parser,
+          'characterData'
+        );
+
         xml_parse($this->_parser,
           "<BODY>".$html."</BODY>",
           true);

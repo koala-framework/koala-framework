@@ -10,6 +10,7 @@ class Vpc_Basic_Text_Pdf extends Vpc_Abstract_Pdf
             if (is_string($content)){
                 $html = str_replace("", "", $content);
                 $html = preg_replace('# +#', ' ', $html);
+                $html = str_replace('&nbsp;', ' ', $html);
                 $html = preg_replace('#<br[^>]*>[^<]*</li#', '</li', $html);
                 $html = preg_replace('#>\s+#', '>', $html);
                 $html = preg_replace('#<br *[/]> *</p> *<[A-Za-z]l#', '<br><ul', $html);
