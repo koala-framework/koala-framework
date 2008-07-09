@@ -20,9 +20,7 @@ class Vpc_Basic_Text_Parser
     protected function endElement($parser, $element)
     {
         $tag = array_pop($this->_stack);
-        if ($tag == 'SPAN'){
-            if ($tag != '') $this->_finalHTML .= '</'.$tag.'>';
-        } else if ($tag) {
+        if ($tag) {
             $this->_finalHTML .= '</'.$tag.'>';
         }
     }
@@ -104,7 +102,6 @@ class Vpc_Basic_Text_Parser
                 //ignore this tag
                 array_push($this->_stack, false);
             } else {
-                array_push($this->_stack, strtolower($element));
                 $this->_finalHTML .= '<'.strtolower($element);
                 foreach ($attributes as $key => $value) {
                     if (!$this->_enableStyles
@@ -113,6 +110,12 @@ class Vpc_Basic_Text_Parser
                             $this->_finalHTML .= ' ' . strtolower($key) . '="'. $value . '"';
                         }
                     }
+                }
+                if ($element == 'BR') {
+                    $this->_finalHTML .= ' /';
+                    array_push($this->_stack, false);
+                } else {
+                    array_push($this->_stack, strtolower($element));
                 }
                 $this->_finalHTML .= '>';
             }
