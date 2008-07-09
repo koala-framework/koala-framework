@@ -18,6 +18,7 @@ class Vpc_News_List_Abstract_View_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['news'] = $this->_getNews();
+        $ret['allNews'] = $this->getData()->parent->getComponent()->getNewsComponent();
         return $ret;
     }
 }
