@@ -10,11 +10,6 @@ class Vps_Media_Output
             throw new Vps_Controller_Action_Web_Exception("File '$target' not found.");
         }
 
-        header('Cache-Control:');
-        header('Pragma:');
-        header('Expires:');
-        header('Transfer-Encoding:');
-
         $headers = apache_request_headers();
         $lastModifiedString = gmdate("D, d M Y H:i:s \G\M\T", filemtime($target));
         $etag = md5($target . $lastModifiedString);
