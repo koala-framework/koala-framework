@@ -9,23 +9,24 @@ class Vps_Media_Output
         if (!is_file($target)) {
             throw new Vps_Controller_Action_Web_Exception("File '$target' not found.");
         }
-
+        
         $headers = apache_request_headers();
         $lastModifiedString = gmdate("D, d M Y H:i:s \G\M\T", filemtime($target));
         $etag = md5($target . $lastModifiedString);
         if ((isset($headers['If-Modified-Since']) &&
                 $headers['If-Modified-Since'] == $lastModifiedString) ||
             (isset($headers['If-None-Match']) &&
-                $headers['If-Modified-Since'] == $etag)
+                $headers['If-None-Match'] == $etag)
         ) {
             header('HTTP/1.1 304 Not Modified');
             header('ETag: ' . $etag);
             header('Last-Modified: ' . $lastModifiedString);
         } else {
-            header('Content-type: ' . $mimeType);
-            header('Last-Modified: ' . $lastModifiedString);
+            header('Content-Type: ' . $mimeType);
             header('Content-Length: ' . filesize($target));
+            header('Last-Modified: ' . $lastModifiedString);
             header('ETag: ' . $etag);
+            header('Accept-Ranges: none');
             if ($downloadFilename) {
                 header('Content-Disposition', 'attachment; filename="' . $downloadFilename . '"');
             }
