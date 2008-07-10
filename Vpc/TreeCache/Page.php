@@ -66,7 +66,9 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_Abstract
             if (isset($constraints['filename']) || isset($constraints['componentClass'])) {
                 throw new Vps_Exception("Can't use contraint filename or componentClass together with home");
             }
-            $pageIds[] = $this->_pageHome;
+            if ($this->_pageHome) {
+                $pageIds[] = $this->_pageHome;
+            }
         } else if (isset($constraints['filename'])) {
             if (isset($constraints['componentClass'])) {
                 throw new Vps_Exception("Can't use contraint filename and componentClass together");
@@ -109,7 +111,6 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_Abstract
                 $pageIds = array_keys($this->_pageData);
             }
         }
-
         foreach ($pageIds as $pageId) {
             $page = $this->_pageData[$pageId];
             if (isset($constraints['type']) && $constraints['type'] != $page['type']) {
