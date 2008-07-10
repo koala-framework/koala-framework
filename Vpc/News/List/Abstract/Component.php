@@ -7,9 +7,21 @@ abstract class Vpc_News_List_Abstract_Component extends Vpc_Abstract_Composite_C
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['childComponentClasses']['paging'] = 'Vpc_News_List_Abstract_Paging_Component';
-        $ret['childComponentClasses']['view'] = 'Vpc_News_List_Abstract_View_Component';
-        $ret['viewCacheTag'] = 'news';
+        $ret['generators']['view'] = array(
+            'component' => 'Vpc_News_List_Abstract_View_Component',
+            'class' => 'Vps_Component_Generator_Static'
+        );
+
+        $ret['generators']['paging'] = array(
+            'component' => 'Vpc_News_List_Abstract_Paging_Component',
+            'class' => 'Vps_Component_Generator_Static'
+        );
+
+        $ret['generators']['feed'] = array(
+            'component' => 'Vpc_News_List_Abstract_Feed_Component',
+            'class' => 'Vps_Component_Generator_StaticPage'
+        );
+
         $ret['order'] = 'publish_date DESC';
         return $ret;
     }

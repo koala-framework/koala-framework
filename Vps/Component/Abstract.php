@@ -60,7 +60,9 @@ class Vps_Component_Abstract
             'componentIcon' => new Vps_Asset('paragraph_page'),
             'placeholder'   => array(),
             'childComponentClasses' => array(),
-            'plugins'       => array()
+            'plugins'       => array(),
+            'generators'    => array()
+
         );
     }
 
