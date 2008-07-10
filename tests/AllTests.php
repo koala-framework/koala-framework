@@ -3,40 +3,19 @@ error_reporting(E_ALL|E_STRICT);
 if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'AllTests::main');
 }
+define('VPS_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR.'..');
+$include_path  = get_include_path();
+$include_path .= PATH_SEPARATOR . VPS_PATH;
+set_include_path($include_path);
+require_once 'Vps/Loader.php';
+Vps_Loader::registerAutoload();
 
-function p($src, $max_depth = 3) {
-    Zend_Debug::dump($src);
-    /*
-    ini_set('xdebug.var_display_max_depth', $max_depth);
-    if(function_exists('xdebug_var_dump')) {
-        xdebug_var_dump($src);
-    } else {
-        echo "<pre>";
-        print_r($src);
-        echo "</pre>";
-    }
-    */
-}
 
 require_once 'TestConfiguration.php';
 
 require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 require_once 'PHPUnit/Extensions/ExceptionTestCase.php';
-
-/**
- * Prepend library/ to the include_path.  This allows the tests to run out of the box and
- * helps prevent finding other copies of the framework that might be present.
- */
-set_include_path(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library'
-                 . PATH_SEPARATOR . '.' . PATH_SEPARATOR . get_include_path());
-
-require_once 'Zend.php';
-require_once 'Zend/Loader.php';
-function __autoload($class)
-{
-    Zend_Loader::loadClass($class);
-}
 
 class E3_Test extends PHPUnit_Framework_TestCase
 {
@@ -72,7 +51,7 @@ class AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('E3 Framework');
-        foreach (self::dirlist('E3') as $filename) {
+        foreach (self::dirlist('Vpc') as $filename) {
             require_once($filename);
             $suite->addTestSuite(str_replace('.php', '', str_replace('/', '_', $filename)));
         }
