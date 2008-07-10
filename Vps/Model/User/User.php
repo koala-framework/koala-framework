@@ -114,9 +114,11 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
             }
         }
 
-        $restClient = new Vps_Rest_Client();
-        $restClient->save($this->getWebcode(), $id, $this->_changedServiceData);
-        $restResult = $restClient->get();
+        if (count($this->_changedServiceData)) {
+            $restClient = new Vps_Rest_Client();
+            $restClient->save($this->getWebcode(), $id, $this->_changedServiceData);
+            $restResult = $restClient->get();
+        }
 
         if (!$restResult->status() && $restResult->operation() == 'update') {
             // wenn er bereits existiert und inserted wurde, soll er einfach

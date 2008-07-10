@@ -25,7 +25,7 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
             if (substr($item->getFilename(), 0, 9) == 'querylog.') {
                 $time = (int)(substr($item->getFilename(), 9, -2));
                 if (time()-$time > 15*60) {
-                    unlink($item->getPathname());
+                    @unlink($item->getPathname());
                 }
             }
         }
