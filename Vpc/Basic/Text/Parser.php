@@ -4,9 +4,8 @@ class Vpc_Basic_Text_Parser
     protected $_row;
     protected $_parser;
     protected $_stack = array();
-    protected $_P = array();
-    protected $_SPAN = array();
     protected $_finalHTML;
+
     protected $_deleteContent = false;
     protected $_enableColor = false;
     protected $_enableTagsWhitelist = true;
@@ -104,8 +103,7 @@ class Vpc_Basic_Text_Parser
             } else {
                 $this->_finalHTML .= '<'.strtolower($element);
                 foreach ($attributes as $key => $value) {
-                    if (!$this->_enableStyles
-                        || in_array(strtolower($key), $this->_tagsWhitelist[strtolower($element)])) {
+                    if (in_array(strtolower($key), $this->_tagsWhitelist[strtolower($element)])) {
                         if ($key != 'CLASS' || preg_match('#^style[0-9]+$#', $value)) {
                             $this->_finalHTML .= ' ' . strtolower($key) . '="'. $value . '"';
                         }
@@ -149,7 +147,7 @@ class Vpc_Basic_Text_Parser
     public function parse($html)
     {
         $this->_tagsWhitelist = array(
-            'p'=>array('class'), 'a'=>array('href'),
+            'p'=>array(), 'a'=>array('href'),
             'img'=>array('src'), 'br'=>array(), 'strong'=>array(), 'em'=>array(),
             'u'=>array(), 'ul'=>array(), 'ol'=>array(), 'li'=>array()
         );
@@ -158,6 +156,7 @@ class Vpc_Basic_Text_Parser
                 array('span'=>array('class'), 'h1'=>array('class'), 'h2'=>array('class'),
                       'h3'=>array('class'), 'h4'=>array('class'),
                       'h5'=>array('class'), 'h6'=>array('class')));
+            $this->_tagsWhitelist['p'][] = 'class';
         }
         $this->_stack = array();
         $this->_finalHTML = '';
