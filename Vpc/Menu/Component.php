@@ -11,6 +11,7 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
         $ret = parent::getSettings();
         $ret['maxLevel'] = 1;
         $ret['childComponentClasses']['subMenu'] = 'Vpc_Menu_Component';
+	$ret['separator'] = '';
         return $ret;
     }
     public function getTemplateVars()
@@ -19,6 +20,7 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
         $ret['menu'] = $this->_getMenuData();
         $ret['level'] = $this->_getSetting('level');
         $ret['subMenu'] = $this->getData()->getChildComponent('-subMenu');
+	$ret['separator'] = $this->_getSetting('separator');
         return $ret;
     }
 }
