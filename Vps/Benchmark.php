@@ -93,7 +93,11 @@ class Vps_Benchmark
             if (substr($k, 0, 1) == '_') continue;
             $out[] = $k.': '.$i;
         }
-        p($this->identifier.': '.implode('; ', $out));
+        if (class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {	
+            p($this->identifier.': '.implode('; ', $out));
+	} else {
+	    //TODO
+	}
         $this->_stopped = true;
     }
 
