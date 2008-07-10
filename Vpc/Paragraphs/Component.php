@@ -5,8 +5,6 @@
  */
 class Vpc_Paragraphs_Component extends Vpc_Abstract
 {
-    private $_rows;
-
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
@@ -16,8 +14,11 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
         $ret['tablename'] = 'Vpc_Paragraphs_Model';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
         $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
-        $ret['childComponentClasses']['text'] = 'Vpc_Basic_Text_Component';
-        $ret['childComponentClasses']['image'] = 'Vpc_Basic_Image_Component';
+        $ret['generator']['paragraphs'] = array(
+            'class' => 'Vps_Component_Generator_Table',
+            'component' => array('text' => 'Vpc_Basic_Text_Component',
+                                 'image' => 'Vpc_Basic_Image_Component')
+        );
         $ret['default'] = array();
         return $ret;
     }
