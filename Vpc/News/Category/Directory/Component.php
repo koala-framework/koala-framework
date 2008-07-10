@@ -5,8 +5,11 @@ class Vpc_News_Category_Directory_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['pool'] = 'Newskategorien'; //todo zu ph, hier engl.
-        $ret['childComponentClasses']['detail'] =  'Vpc_News_Category_Detail_Component';
-        $ret['ownTreeCache'] = 'Vpc_News_Category_TreeCache';
+        $ret['generators']['detail'] = array(
+            'class' => 'Vpc_News_Category_Directory_TreeCache',
+            'component' => 'Vpc_News_Category_Detail_Component',
+            'table' => 'Vps_Dao_Pool'
+        );
 
         //für News-Kategorien Box
         $ret['categoryChildId'] = 'categories';
