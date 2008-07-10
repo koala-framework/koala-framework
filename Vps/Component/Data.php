@@ -117,7 +117,7 @@ class Vps_Component_Data
         if (isset($canCreatePagesCache[$componentClass])) {
             return $canCreatePagesCache[$componentClass];
         }
-        $tc = Vpc_TreeCache_Abstract::getInstance($componentClass);
+        $tc = Vps_Component_Generator_Abstract::getInstance($componentClass);
         if ($tc && $tc->createsPages()) {
             $canCreatePagesCache[$componentClass] = true;
             return true;
@@ -157,7 +157,7 @@ class Vps_Component_Data
             }
         }
 
-        $constraints['treecache'] = 'Vpc_TreeCache_StaticBox';
+        $constraints['treecache'] = 'Vps_Component_Generator_StaticBox';
         $ret = $this->getChildComponents($constraints);
         foreach ($this->getChildComponents($childConstraints) as $component) {
             $ret = array_merge($ret, $component->getChildBoxes($constraints));
@@ -175,7 +175,7 @@ class Vps_Component_Data
         if (isset($canCreateBoxesCache[$componentClass])) {
             return $canCreateBoxesCache[$componentClass];
         }
-        $tc = Vpc_TreeCache_Abstract::getInstance($componentClass);
+        $tc = Vps_Component_Generator_Abstract::getInstance($componentClass);
         if ($tc && $tc->createsBoxes()) {
             $canCreateBoxesCache[$componentClass] = true;
             return true;
@@ -252,7 +252,7 @@ class Vps_Component_Data
     
     protected function _getTreeCache()
     {
-        return Vpc_TreeCache_Abstract::getInstance($this->componentClass);
+        return Vps_Component_Generator_Abstract::getInstance($this->componentClass);
     }
     
     public function getChildComponent($constraints = array())

@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_Composite_TreeCache extends Vpc_TreeCache_Static
+class Vpc_Abstract_Composite_TreeCache extends Vps_Component_Generator_Static
 {
     protected $_classes = array();
 

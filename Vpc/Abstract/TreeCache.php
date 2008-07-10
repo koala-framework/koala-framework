@@ -1,4 +1,4 @@
 <?php
-class Vpc_Abstract_TreeCache extends Vpc_TreeCache_Abstract
+class Vpc_Abstract_TreeCache extends Vps_Component_Generator_Abstract
 {
 }

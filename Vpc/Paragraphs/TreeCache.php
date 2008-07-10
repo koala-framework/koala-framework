@@ -1,5 +1,5 @@
 <?php
-class Vpc_Paragraphs_TreeCache extends Vpc_TreeCache_Table
+class Vpc_Paragraphs_TreeCache extends Vps_Component_Generator_Table
 {
     protected $_loadTableFromComponent = true;
 }

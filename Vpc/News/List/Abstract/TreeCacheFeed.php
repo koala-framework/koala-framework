@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_List_Abstract_TreeCacheFeed extends Vpc_TreeCache_StaticPage
+class Vpc_News_List_Abstract_TreeCacheFeed extends Vps_Component_Generator_StaticPage
 {
     protected $_classes = array('feed'=>array(
         'componentClass' => 'Vpc_News_List_Abstract_Feed_Component',
