@@ -28,6 +28,9 @@ class Vps_Component_Abstract
     {
         //$class = self::_normalizeClass($class);
         if (!isset(self::$_settingsCache[$class])) {
+            if (!class_exists($class)) {
+                throw new Vps_Exception("Component '$class' not found");
+            }
             self::$_settingsCache[$class] = call_user_func(array($class, 'getSettings'));
         }
         if (!isset(self::$_settingsCache[$class][$setting])) {

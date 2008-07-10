@@ -3,7 +3,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
 {
     public static function getSettings()
     {
-        $settings = array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'componentName'     => trlVps('Image'),
             'componentIcon'     => new Vps_Asset('picture'),
             'tablename'         => 'Vpc_Basic_Image_Model',
@@ -21,7 +21,8 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
             'extensions'        => array('jpg'),
             'pdfMaxWidth'       => 0
         ));
-        return $settings;
+        $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
+        return $ret;
     }
 
     public function getTemplateVars()

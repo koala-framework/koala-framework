@@ -1,5 +1,4 @@
 <?php
-class Vpc_Abstract_FormEmpty {
-    
+class Vpc_Abstract_FormEmpty
+{
 }
-?>

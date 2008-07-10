@@ -3,6 +3,7 @@ class Vps_View_Helper_Image
 {
     public function image($row, $rule = null, $type = 'default', $alt = '', $cssClass = null)
     {
+        if (!$row) return '';
         $url = $row->getFileUrl($rule, $type);
         $attr = '';
         if (is_string($cssClass)) {
