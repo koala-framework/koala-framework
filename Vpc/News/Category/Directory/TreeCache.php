@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Category_Directory_TreeCache extends Vpc_TreeCache_TablePage
+class Vpc_News_Category_Directory_TreeCache extends Vps_Component_Generator_TablePage
 {
     protected $_tableName = 'Vps_Dao_Pool';
     protected $_childClassKey = 'detail';

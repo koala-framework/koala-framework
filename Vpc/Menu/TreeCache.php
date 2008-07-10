@@ -1,5 +1,5 @@
 <?php
-class Vpc_Menu_TreeCache extends Vpc_TreeCache_Static
+class Vpc_Menu_TreeCache extends Vps_Component_Generator_Static
 {
     protected $_classes = array(
         'subMenu' => array(

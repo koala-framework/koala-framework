@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_TreeCache extends Vpc_TreeCache_Table
+class Vpc_Basic_Text_TreeCache extends Vps_Component_Generator_Table
 {
     protected $_tableName = 'Vpc_Basic_Text_ChildComponentsModel';
 

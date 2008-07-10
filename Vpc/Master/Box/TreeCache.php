@@ -1,5 +1,5 @@
 <?php
-class Vpc_Master_Box_TreeCache extends Vpc_TreeCache_StaticBox
+class Vpc_Master_Box_TreeCache extends Vps_Component_Generator_StaticBox
 {
     protected $_classes = array();
 

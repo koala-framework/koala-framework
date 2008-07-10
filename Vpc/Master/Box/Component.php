@@ -10,7 +10,7 @@ class Vpc_Master_Box_Component extends Vpc_Master_Abstract
         while ($page) { // Aktuelle inkl. aller Überseiten durchlaufen
             // Boxen für jeweilige Seite holen, falls Überseite nur die mit inherit==true
             $constraints = array(
-                'treecache' => 'Vpc_TreeCache_StaticBox',
+                'treecache' => 'Vps_Component_Generator_StaticBox',
                 'inherit' => $page->componentId != $this->getData()->componentId
             );
             $boxes = $page->getChildBoxes($constraints);

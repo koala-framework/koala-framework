@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Month_Directory_TreeCache extends Vpc_TreeCache_TablePage
+class Vpc_News_Month_Directory_TreeCache extends Vps_Component_Generator_TablePage
 {
     protected $_tableName = 'Vpc_News_Directory_Model';
     protected $_childClassKey = 'detail';

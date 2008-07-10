@@ -84,7 +84,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         $ret = array();
         foreach (Vpc_Abstract::getComponentClasses() as $class) {
-            $tc = Vpc_TreeCache_Abstract::getInstance($class);
+            $tc = Vps_Component_Generator_Abstract::getInstance($class);
             if (!$tc) continue;
             if ($dbIdShortcut = $tc->getDbIdShortcut($dbId)) {
                 $idParts = $this->_getIdParts(substr($dbId, strlen($dbIdShortcut) - 1));
@@ -119,7 +119,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
             $ret = array();
             foreach ($this->_getCreatorsForClasses($lookingForChildClasses) as $c) {
-                $tc = Vpc_TreeCache_Abstract::getInstance($c);
+                $tc = Vps_Component_Generator_Abstract::getInstance($c);
                 if (!$tc) {
                     throw new Vps_Exception("No TreeCache found for '$c' although it has childComponentClasses");
                 }
