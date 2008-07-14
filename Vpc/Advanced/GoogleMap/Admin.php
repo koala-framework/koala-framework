@@ -1,10 +1,9 @@
 <?php
-class Vpc_Advanced_GoogleMap_Admin extends Vpc_Admin
+class Vpc_Advanced_GoogleMap_Admin extends Vpc_Abstract_Composite_Admin
 {
     public function setup()
     {
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        Vpc_Admin::getInstance($classes['text'])->setup();
+        parent::setup();
 
         $fields['coordinates'] = 'VARCHAR(40) NOT NULL';
         $fields['zoom'] = 'INT(11) NOT NULL';

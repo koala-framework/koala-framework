@@ -5,8 +5,8 @@ class Vpc_Basic_Image_Enlarge_Row extends Vpc_Basic_Image_Row
     {
         parent::_delete();
         $componentClass = $this->getTable()->getComponentClass();
-        $classes = Vpc_Abstract::getSetting($componentClass, 'childComponentClasses');
-        $admin = Vpc_Admin::getInstance($classes['smallImage']);
+        $class = Vpc_Abstract::getChildComponentClasses($componentClass, 'smallImage');
+        $admin = Vpc_Admin::getInstance($class);
         if ($admin) {
             $admin->delete($this->component_id);
         }
@@ -16,8 +16,7 @@ class Vpc_Basic_Image_Enlarge_Row extends Vpc_Basic_Image_Row
     {
         if ($type == 'small') {
             $componentClass = $this->getTable()->getComponentClass();
-            $childComponentClasses = Vpc_Abstract::getSetting($componentClass, 'childComponentClasses');
-            $childComponentClass = $childComponentClasses['smallImage'];
+            $childComponentClass = Vpc_Abstract::getChildComponentClasses($componentClass, 'smallImage');
             $dimensions = Vpc_Abstract::getSetting($childComponentClass, 'dimensions');
             Vps_Media_Image::scale($source, $target, $dimensions);
         } else {

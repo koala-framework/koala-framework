@@ -3,10 +3,10 @@ class Vpc_Composite_TextImageEnlarge_Component extends Vpc_Composite_TextImage_C
 {
     public static function getSettings()
     {
-        $settings = parent::getSettings();
-        $settings['componentName'] = trlVps('Text Image enlarge');
-        $settings['childComponentClasses']['image'] =
+        $ret = parent::getSettings();
+        $ret['componentName'] = trlVps('Text Image enlarge');
+        $ret['generators']['child']['component']['image'] =
                                         'Vpc_Basic_Image_Enlarge_Component';
-        return $settings;
+        return $ret;
     }
 }

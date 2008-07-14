@@ -3,8 +3,8 @@ class Vpc_News_Directory_Admin extends Vpc_Admin
 {
     public function getExtConfig()
     {
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        $classes = Vpc_Abstract::getSetting($classes['detail'], 'childComponentClasses');
+        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
+        $classes = Vpc_Abstract::getChildComponentClasses($detail, 'child');
         $contentClass = $classes['content'];
 
         $plugins = array();
@@ -26,8 +26,8 @@ class Vpc_News_Directory_Admin extends Vpc_Admin
 
     public function setup()
     {
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        Vpc_Admin::getInstance($classes['detail'])->setup();
+        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
+        Vpc_Admin::getInstance($detail)->setup();
 
         if (!$this->_tableExists('vpc_news')) {
             $this->_db->query("CREATE TABLE IF NOT EXISTS `vpc_news` (
@@ -45,7 +45,7 @@ class Vpc_News_Directory_Admin extends Vpc_Admin
 
     public function delete($componentId)
     {
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        Vpc_Admin::getInstance($classes['detail'])->delete($componentId);
+        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
+        Vpc_Admin::getInstance($detail)->delete($componentId);
     }
 }

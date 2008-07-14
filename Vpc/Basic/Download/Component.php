@@ -3,18 +3,17 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'tablename' => 'Vpc_Basic_Download_Model',
             'componentName' => trlVps('Download'),
             'componentIcon' => new Vps_Asset('folder_link'),
             'showFilesize' => true,
             'cssClass' => 'webStandard',
-            'childComponentClasses'   => array(
-                'downloadTag' => 'Vpc_Basic_DownloadTag_Component',
-            ),
             'default'   => array(
             )
         ));
+        $ret['generators']['child']['component']['downloadTag'] = 'Vpc_Basic_DownloadTag_Component';
+        return $ret;
     }
 
     public function getTemplateVars()

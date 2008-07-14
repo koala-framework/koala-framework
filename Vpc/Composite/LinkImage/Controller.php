@@ -6,7 +6,7 @@ class Vpc_Composite_LinkImage_Controller extends Vps_Controller_Action_Auto_Vpc_
 
     public function _initFields()
     {
-        $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($this->class, 'child');
 
         // Image
         $form = new Vpc_Basic_Image_Form('image', $classes['image']);

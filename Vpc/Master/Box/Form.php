@@ -9,7 +9,7 @@ class Vpc_Master_Box_Form extends Vps_Form_NonTableForm
     public function __construct($name, $class, $id = null)
     {
         parent::__construct($name, $class, $id);
-        foreach (Vpc_Abstract::getSetting($class, 'childComponentClasses') as $key => $component) {
+        foreach (Vpc_Abstract::getChildComponentClasses($class) as $key => $component) {
             try {
                 $form = Vpc_Abstract_Form::createComponentForm($key, $component);
                 if ($form instanceof Vpc_Abstract_FormEmpty) {

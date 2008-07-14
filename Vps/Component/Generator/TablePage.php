@@ -1,5 +1,5 @@
 <?php
-abstract class Vpc_TreeCache_TablePage extends Vpc_TreeCache_Table
+abstract class Vps_Component_Generator_TablePage extends Vps_Component_Generator_Table
 {
     protected $_showInMenu = false;
 

@@ -1,10 +1,8 @@
 <?php
-class Vpc_News_Month_Directory_TreeCache extends Vps_Component_Generator_TablePage
+class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_TablePage
 {
-    protected $_tableName = 'Vpc_News_Directory_Model';
     protected $_childClassKey = 'detail';
     protected $_uniqueFilename = true;
-    protected $_joinTreeCacheOnComponentId = false;
 
     protected function _init()
     {

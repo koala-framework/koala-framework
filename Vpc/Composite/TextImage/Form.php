@@ -4,7 +4,7 @@ class Vpc_Composite_TextImage_Form extends Vpc_Abstract_Form
     protected function _init()
     {
         parent::_init();
-        $classes = Vpc_Abstract::getSetting($this->getClass(), 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($this->getClass(), 'child');
 
         // Text
         $form = Vpc_Abstract_Form::createComponentForm('text', $classes['text']);

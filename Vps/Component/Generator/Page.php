@@ -1,5 +1,5 @@
 <?php
-class Vpc_TreeCache_Page extends Vpc_TreeCache_Abstract
+class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
 {
     protected $_tableName = 'Vps_Dao_Pages';
     protected $_componentClass = 'row';
@@ -43,8 +43,8 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_Abstract
     
     public function getChildIds($parentData, $constraints)
     {
-        $ret = Vpc_TreeCache_Abstract::getChildIds($parentData, $constraints);
-        $constraints = Vpc_TreeCache_Abstract::_formatConstraints($parentData, $constraints);
+        $ret = Vps_Component_Generator_Abstract::getChildIds($parentData, $constraints);
+        $constraints = Vps_Component_Generator_Abstract::_formatConstraints($parentData, $constraints);
         if (is_null($constraints)) return $ret;
         if (isset($constraints['page']) && !$constraints['page']) return $ret;
 
@@ -86,7 +86,7 @@ class Vpc_TreeCache_Page extends Vpc_TreeCache_Abstract
                 $constraintClasses = array($constraintClasses);
             }
             if (!$constraintClasses) return $ret;
-            $childClasses = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+            $childClasses = $this->_settings['component'];
             $keys = array();
             foreach ($constraintClasses as $constraintClass) {
                 $key = array_search($constraintClass, $childClasses);

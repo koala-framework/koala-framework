@@ -25,16 +25,20 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             'stylesIdPattern'   => false, //zB: '^company_[0-9]+',
             'enableStyles'      => true,
             'enableTagsWhitelist'=> true,
-            'childComponentClasses' => array(
+            'default'           => array(
+                'content'       => '<p>'.Vpc_Abstract::LOREM_IPSUM.'</p>'
+            )
+        ));
+        $ret['generators']['child'] = array(
+            'class' => 'Vpc_Basic_Text_Generator',
+            'component' => array(
                 //auf false setzen um buttons zu deaktivieren
                 'image'         => 'Vpc_Basic_Text_Image_Component',
                 'link'          => 'Vpc_Basic_LinkTag_Component',
                 'download'      => 'Vpc_Basic_DownloadTag_Component'
             ),
-            'default'           => array(
-                'content'       => '<p>'.Vpc_Abstract::LOREM_IPSUM.'</p>'
-            )
-        ));
+            'table' => 'Vpc_Basic_Text_ChildComponentsModel'
+        );
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditor.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditorTab.js';
         $ret['assets']['dep'][] = 'VpsMailDecode';

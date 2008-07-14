@@ -3,8 +3,8 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
 {
     public function getExtConfig()
     {
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        $childConfig = Vpc_Admin::getInstance($classes['child'])->getExtConfig();
+        $class = Vpc_Abstract::getChildComponentClass($this->_class, 'child');
+        $childConfig = Vpc_Admin::getInstance($class)->getExtConfig();
         
         return array_merge(parent::getExtConfig(), array(
             'xtype'=>'vpc.list',
@@ -13,8 +13,8 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
     }
     public function setup()
     {
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        Vpc_Admin::getInstance($classes['child'])->setup();
+        $class = Vpc_Abstract::getChildComponentClass($this->_class, 'child');
+        Vpc_Admin::getInstance($class)->setup();
 
         if (!$this->_tableExists('vpc_composite_list')) {
             $sql = 'CREATE TABLE IF NOT EXISTS `vpc_composite_list` (

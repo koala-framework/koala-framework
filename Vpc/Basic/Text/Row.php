@@ -6,10 +6,9 @@ class Vpc_Basic_Text_Row extends Vpc_Row
     public function init()
     {
         parent::init();
-        $this->_classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
-                                    'childComponentClasses');
-        
+        $this->_classes = Vpc_Abstract::getChildComponentClasses($this->getTable()->getComponentClass(), 'child');
     }
+    
     //für Component und Row
     public function getContentParts($content = null)
     {
@@ -359,7 +358,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                     }
                 }
                 $destRow = $table->createRow();
-                $linkClasses = Vpc_Abstract::getSetting($classes['link'], 'childComponentClasses');
+                $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link']);
                 if (preg_match('#^mailto:#', $part['href'], $m)) {
                     foreach ($linkClasses as $key => $class) {
                         if ($class == 'Vpc_Basic_LinkTag_Mail_Component' ||
@@ -379,8 +378,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                 $linkMaxChildComponentNr++;
                 $destRow->component_id = $this->component_id.'-l'.$linkMaxChildComponentNr;
                 $destRow->save();
-                $destClasses =  Vpc_Abstract::getSetting($destRow->getTable()->getComponentClass(),
-                                    'childComponentClasses');
+                $destClasses =  Vpc_Abstract::getChildComponentClasses($destRow->getTable()->getComponentClass());
                 
                 $linkExternTableName = Vpc_Abstract::getSetting($destClasses[$destRow->component], 'tablename');
                 $linkExternTable = new $linkExternTableName(array('componentClass'=>$destClasses[$destRow->component]));

@@ -9,7 +9,7 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['childComponentClasses']['success'] = 'Vpc_Formular_Success_Component';
+        $ret['generators']['child']['component']['success'] = 'Vpc_Formular_Success_Component';
         $ret['componentName'] = 'Formular';
         $ret['placeholder']['submitButton'] = trlVps('Submit');
         $ret['decorator'] = 'Vpc_Formular_Decorator_Label';
@@ -63,12 +63,12 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
 
         $this->_processForm();
 
-        $classes = $this->_getSetting('childComponentClasses');
+        $class = self::getChildComponentClass(get_class($this), 'child', 'success');
 
         $ret['showSuccess'] = false;
         $ret['errors'] = $this->getErrors();
         if (isset($_POST[$this->getData()->componentId])) {
-            if (!$ret['errors'] && $classes['success']) {
+            if (!$ret['errors'] && $class) {
                 $ret['showSuccess'] = true;
             }
         }

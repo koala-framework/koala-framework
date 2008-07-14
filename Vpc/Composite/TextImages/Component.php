@@ -7,15 +7,13 @@ class Vpc_Composite_TextImages_Component extends Vpc_Abstract_Composite_Componen
             'componentName'     => 'TextImages',
             'componentIcon'     => new Vps_Asset('textImages'),
             'tablename'         => 'Vpc_Composite_TextImages_Model',
-            'childComponentClasses' => array(
-                'text'         => 'Vpc_Basic_Text_Component',
-                'images'       => 'Vpc_Composite_Images_Component',
-            ),
             'default'           => array(
                 'image_position'    => 'left' // 'left', 'right', 'alternate'
             )
         ));
         $ret['assetsAdmin']['dep'][] = 'VpsTabPanel';
+        $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
+        $ret['generators']['child']['component']['images'] = 'Vpc_Composite_Images_Component';
         return $ret;
     }
 

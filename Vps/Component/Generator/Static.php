@@ -1,6 +1,6 @@
 <?php
 
-class Vpc_TreeCache_Static extends Vpc_TreeCache_Abstract
+class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
 {
     protected $_classes;
     protected $_idSeparator = '-';

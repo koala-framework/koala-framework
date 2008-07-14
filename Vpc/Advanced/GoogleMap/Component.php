@@ -3,12 +3,9 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'Google Maps',
             'tablename' => 'Vpc_Advanced_GoogleMap_Model',
-        	'childComponentClasses' => array(
-                'text'         => 'Vpc_Basic_Text_Component'
-            ),
             'default' => array(
                 'content' => Vpc_Abstract::LOREM_IPSUM
             ),
@@ -22,7 +19,8 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract_Composite_Component
                 'dep'   => array('VpsGoolgeMapField')
             )
         ));
-
+        $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
+        return $ret;
     }
 
     public function getTemplateVars()

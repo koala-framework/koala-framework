@@ -16,23 +16,30 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         $ret['viewCache'] = true;
         return $ret;
     }
-    public static function getChildComponentClasses($class)
+    
+    public static function getChildComponentClasses($class, $generator = null)
     {
-        return self::getSetting($class, 'childComponentClasses');
+        $ret = array();
+        foreach (self::getSetting($class, 'generators') as $key => $g) {
+            if (!$generator || $generator == $key) {
+                if (is_array($g['component'])) {
+                    $ret = array_merge($ret, $g['component']);
+                } else {
+                    $ret[] = $g['component'];
+                }
+            }
+        }
+        return $ret;
     }
-    public static function getChildComponentClass($class, $key)
+    
+    public static function getChildComponentClass($class, $generator, $key = null)
     {
-        $classes = self::getSetting($class, 'childComponentClasses');
+        $classes = self::getChildComponentClasses($class, $generator);
+        if (!$key) $key = 0;
         if (!isset($classes[$key])) {
             throw new Vps_Exception("childComponentClass '$key' not set for '$class'");
         }
         return $classes[$key];
-    }
-
-    protected function _getChildComponentClass($key)
-    {
-        $c = $this->_getSetting('childComponentClasses');
-        return $c[$key];
     }
 
     protected function _getRow()

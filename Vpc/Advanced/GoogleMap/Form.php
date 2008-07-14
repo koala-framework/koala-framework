@@ -1,9 +1,9 @@
 <?php
 class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
 {
-    public function __construct($name, $class, $id = null)
+    public function __construct($name, $class)
     {
-        parent::__construct($name, $class, $id);
+        parent::__construct($name, $class);
 
         $this->setLabelWidth(120);
         $this->fields->add(new Vps_Form_Field_GoogleMapsField('coordinates', trlVps('Coordinates')));
@@ -24,9 +24,7 @@ class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
             ->setAllowBlank(false)
             ->setWidth(120);
 
-        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
-        $form = new Vpc_Basic_Text_Form('text', $classes['text']);
-        $form->setIdTemplate('{0}-text');
+        $form = Vpc_Abstract_Form::createComponentForm($class, '{0}-text');
         $this->fields->add($form);
 
 

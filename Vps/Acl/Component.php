@@ -6,7 +6,6 @@ class Vps_Acl_Component extends Vps_Acl
         parent::__construct();
 
         $this->add(new Zend_Acl_Resource('vps_debug_classtree'), 'vps_debug');
-        $this->add(new Zend_Acl_Resource('vps_debug_treecache'), 'vps_debug');
         $this->add(new Zend_Acl_Resource('vps_component_web'));
         $this->add(new Zend_Acl_Resource('vps_component_media'));
         $this->add(new Zend_Acl_Resource('vps_component_index'));

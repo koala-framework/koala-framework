@@ -10,7 +10,7 @@ class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Act
             if (in_array($class, $processed)) break;
             $processed[] = $class;
             $ret .= get_parent_class($class)."->{$class};\n";
-            $childs = Vpc_Abstract::getSetting($class, 'childComponentClasses');
+            $childs = Vpc_Abstract::getChildComponentClasses($class);
             foreach ($childs as $child) {
                 if ($child) {
 //                     $ret .= "{$class}->{$child}[arrowtail=odiamond]\n";

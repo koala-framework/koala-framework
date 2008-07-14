@@ -59,7 +59,6 @@ class Vps_Component_Abstract
             'assetsAdmin'   => array('files'=>array(), 'dep'=>array()),
             'componentIcon' => new Vps_Asset('paragraph_page'),
             'placeholder'   => array(),
-            'childComponentClasses' => array(),
             'plugins'       => array(),
             'generators'    => array()
 
@@ -82,18 +81,6 @@ class Vps_Component_Abstract
         return self::getSetting(get_class($this), $setting);
     }
 
-    protected function _getClassFromSetting($setting, $parentClass) {
-        $classes = $this->_getSetting('childComponentClasses');
-        if (!isset($classes[$setting])) {
-            throw new Vpc_Exception(trlVps("ChildComponentClass {0} is not defined in settings.", $setting));
-        }
-        $class = $classes[$setting];
-        if ($class != $parentClass && !is_subclass_of($class, $parentClass)) {
-            throw new Vpc_Exception(trlVps("{0} '{1}' must be a subclass of {2}.",array($setting, $class, $parentClass)));
-        }
-        return $class;
-    }
-
     public static function getComponentClasses()
     {
         static $componentClasses;
@@ -104,11 +91,9 @@ class Vps_Component_Abstract
         return $componentClasses;
     }
 
-    //bitte nicht mehr in eine funktion zusammenführen :D
-    //rekursive aufrufe sind viel einfacher mit einsprungs-fkt und rekursiv-fkt
     private static function _getChildComponentClasses(&$componentClasses, $class)
     {
-        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($class);
         foreach ($classes as $class) {
             if ($class && !in_array($class, $componentClasses)) {
                 $componentClasses[] = $class;

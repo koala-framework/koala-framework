@@ -3,7 +3,7 @@ class Vpc_Abstract_Composite_TabsAdmin extends Vpc_Abstract_Composite_Admin
 {
     public function getExtConfig()
     {
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($this->_class, 'child');
 
         $config = parent::getExtConfig();
 
@@ -20,10 +20,10 @@ class Vpc_Abstract_Composite_TabsAdmin extends Vpc_Abstract_Composite_Admin
 
     public function delete($componentId)
     {
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        Vpc_Admin::getInstance($classes['text'])->delete($componentId . '-text');
-        Vpc_Admin::getInstance($classes['images'])->delete($componentId . '-images');
-
+        $classes = Vpc_Abstract::getChildComponentClasses($this->_class, 'child');
+        foreach ($classes as $key => $class) {
+            Vpc_Admin::getInstance($class)->delete($componentId . '-' . $key);
+        }
         parent::delete($componentId);
     }
 }

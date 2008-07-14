@@ -9,7 +9,7 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
         $field->setFieldLabel(trlVps('Text'));
 
         $ignoreSettings = array('tablename', 'componentName',
-                'childComponentClasses', 'default', 'assets', 'assetsAdmin',
+                'default', 'assets', 'assetsAdmin',
                 'placeholder');
         foreach (call_user_func(array($class, 'getSettings')) as $key => $val) {
             if (!in_array($key, $ignoreSettings)) {
@@ -17,7 +17,7 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
                 $field->$method($val);
             }
         }
-        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($class, 'child');
         if ($classes['link']) {
             $c = Vpc_Admin::getInstance($classes['link'])->getExtConfig();
             $field->setLinkComponentConfig($c);

@@ -1,9 +1,6 @@
 <?php
-class Vpc_Basic_Text_TreeCache extends Vps_Component_Generator_Table
+class Vpc_Basic_Text_Generator extends Vps_Component_Generator_Table
 {
-    protected $_tableName = 'Vpc_Basic_Text_ChildComponentsModel';
-
-
     protected function _getIdFromRow($row)
     {
         return substr($row->component, 0, 1).$row->nr;

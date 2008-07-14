@@ -13,9 +13,6 @@ class Vpc_Basic_Link_Admin extends Vpc_Abstract_Composite_Admin
     public function setup()
     {
         parent::setup();
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
-        Vpc_Admin::getInstance($classes['linkTag'])->setup();
-
         $fields['text'] = 'text';
         $this->createFormTable('vpc_basic_link', $fields);
     }

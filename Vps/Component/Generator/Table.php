@@ -1,5 +1,5 @@
 <?php
-abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
+abstract class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 {
     protected $_componentClass; //unterkomponenten-klasse
     protected $_childClassKey;  //oder: childComponentClasses-key
@@ -130,7 +130,8 @@ abstract class Vpc_TreeCache_Table extends Vpc_TreeCache_Abstract
                 $constraintClasses = array($constraintClasses);
             }
             if (!$constraintClasses) return null;
-            $childClasses = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+            $childClasses = $this->_settings['component'];
+            if (!is_array($childClasses)) return null;
             $keys = array();
             foreach ($constraintClasses as $constraintClass) {
                 $key = array_search($constraintClass, $childClasses);

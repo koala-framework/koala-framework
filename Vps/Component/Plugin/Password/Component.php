@@ -6,7 +6,10 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_Abstr
     {
         $ret = parent::getSettings();
         $ret['password'] = 'planet';
-        $ret['childComponentClasses']['loginForm'] = 'Vps_Component_Plugin_Password_LoginForm_Component';
+        $ret['generators']['loginForm'] = array(
+            'class' => 'Vps_Component_Generator_Static',
+            'component' => 'Vps_Component_Plugin_Password_LoginForm_Component'
+        );
         return $ret;
     }
 

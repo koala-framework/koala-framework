@@ -1,7 +1,6 @@
 <?php
 class Vpc_News_Category_ShowCategories_Component extends Vpc_News_List_Abstract_Component
 {
-    private $_newsTreeCacheRow;
     private $_categories;
     public static function getSettings()
     {

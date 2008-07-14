@@ -18,6 +18,14 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract imple
         $this->setLabelAlign('right');
         $this->setBaseCls('x-plain');
     }
+    
+    protected function _init()
+    {
+        parent::_init();
+        $this->_initFields();
+    }
+    
+    protected function _initFields(){}
 
     public function getMetaData()
     {

@@ -10,7 +10,7 @@ class Vps_Data_Vpc_ComponentClass extends Vps_Data_Abstract
 
     public function load($row)
     {
-        $classes = Vpc_Abstract::getSetting($this->_componentClass, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($this->_componentClass, 'paragraphs');
         return $class = $classes[$row->component];
     }
 }

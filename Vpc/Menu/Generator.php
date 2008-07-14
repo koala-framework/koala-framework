@@ -1,12 +1,6 @@
 <?php
-class Vpc_Menu_TreeCache extends Vps_Component_Generator_Static
+class Vpc_Menu_Generator extends Vps_Component_Generator_Static
 {
-    protected $_classes = array(
-        'subMenu' => array(
-            'childClassKey' => 'subMenu'
-        )
-    );
-
     protected function _formatConstraints($parentData, $constraints)
     {
         $maxLevel = $this->_getSetting('maxLevel');

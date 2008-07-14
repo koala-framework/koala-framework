@@ -10,7 +10,7 @@ class Vps_Data_Vpc_ComponentName extends Vps_Data_Abstract
 
     public function load($row)
     {
-        $classes = Vpc_Abstract::getSetting($this->_componentClass, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($this->_componentClass, 'paragraphs');
         $class = $classes[$row->component];
         $name = Vpc_Abstract::getSetting($class, 'componentName');
         return str_replace('.', ' -> ', $name);

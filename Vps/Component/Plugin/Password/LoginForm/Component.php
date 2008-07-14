@@ -4,7 +4,7 @@ class Vps_Component_Plugin_Password_LoginForm_Component extends Vpc_Formular_Com
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['childComponentClasses']['success'] = false;
+        $ret['generators']['child']['component']['success'] = false;
         return $ret;
     }
 

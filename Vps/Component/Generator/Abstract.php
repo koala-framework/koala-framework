@@ -1,21 +1,19 @@
 <?php
-abstract class Vpc_TreeCache_Abstract
+abstract class Vps_Component_Generator_Abstract
 {
     protected $_db;
     protected $_class;
+    protected $_settings;
 
     protected $_loadTableFromComponent = false;
     protected $_table;
-    protected $_tableName;
-
-    protected $_additionalTreeCaches = array();
-    private $_isTop = true;
 
     private $_dataCache = array();
 
-    protected function __construct($class)
+    protected function __construct($class, $settings)
     {
         $this->_class = $class;
+        $this->_settings = $settings;
         $this->_db = Zend_Registry::get('db');
         $this->_init();
         Vps_Benchmark::count('treeCaches');
@@ -24,8 +22,8 @@ abstract class Vpc_TreeCache_Abstract
     protected function _init()
     {
         if (!isset($this->_table)) {
-            if (isset($this->_tableName)) {
-                $this->_table = new $this->_tableName;
+            if (isset($this->_settings['table'])) {
+                $this->_table = new $this->_settings['table'];
             } else if ($this->_loadTableFromComponent) {
                 $table = Vpc_Abstract::getSetting($this->_class, 'tablename');
                 if (!$table) {
@@ -34,23 +32,23 @@ abstract class Vpc_TreeCache_Abstract
                 $this->_table = new $table(array('componentClass'=>$this->_class));
             }
         }
-        foreach ($this->_additionalTreeCaches as $key => $treeCache) {
-            $this->_additionalTreeCaches[$key] = new $treeCache($this->_class);
-        }
     }
     
-    public static function getInstance($componentClass, $isTop = true)
+    public static function getInstance($componentClass, $key)
     {
         static $instances = array();
-        if (!isset($instances[$componentClass])) {
-            $c = Vpc_Admin::getComponentFile($componentClass, 'TreeCache', 'php', true);
-            if ($c) {
-                $instances[$componentClass] = new $c($componentClass);
+        $instanceKey = $componentClass . '_' . $key;
+        if (!isset($instances[$instanceKey])) {
+            $settings = Vpc_Abstract::getSetting($componentClass, 'treecaches');
+            if (isset($settings[$key]) && 
+                $settings[$key]['class'] instanceof Vps_Component_Generator_Abstract)
+            {
+                $instances[$instanceKey] = new $settings[$key]['class']($componentClass, $settings[$key]);
             } else {
-                $instances[$componentClass] = null;
+                throw new Vps_Exception("Treecache with key '$key' for '$componentClass' not found.");
             }
         }
-        return $instances[$componentClass];
+        return $instances[$instanceKey];
     }
     
     public function getTreeCache($class)
@@ -89,7 +87,7 @@ abstract class Vpc_TreeCache_Abstract
         $ret = $this->_additionalTreeCaches;
         if ($this->_isTop) {
             foreach ($this->_getSetting('plugins') as $plugin) {
-                $tc = Vpc_TreeCache_Abstract::getInstance($plugin);
+                $tc = Vps_Component_Generator_Abstract::getInstance($plugin);
                 if ($tc) {
                     $ret[] = $tc;
                 }
@@ -98,7 +96,7 @@ abstract class Vpc_TreeCache_Abstract
         if ($this->_isTop && $parentData && $parentData->isPage) {
             if (!$parentData instanceof Vps_Component_Data_Root) {
                 foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $mc) {
-                    $tc = Vpc_TreeCache_Abstract::getInstance($mc);
+                    $tc = Vps_Component_Generator_Abstract::getInstance($mc);
                     if ($tc) {
                         $tc->_isTop = false;
                         $ret[] = $tc;
@@ -106,7 +104,7 @@ abstract class Vpc_TreeCache_Abstract
                 }
             }
             if ($parentData instanceof Vps_Component_Data_Root || is_numeric($parentData->componentId)) {
-                $tc = Vpc_TreeCache_Abstract::getInstance(Vps_Registry::get('config')->vpc->rootComponent);
+                $tc = Vps_Component_Generator_Abstract::getInstance(Vps_Registry::get('config')->vpc->rootComponent);
                 //TODO wird da eh nicht ein bestehender tc geändert der woanders ohne isTop gebraucht wird?
                 $tc->_isTop = false;
                 $ret[] = $tc;
@@ -115,14 +113,9 @@ abstract class Vpc_TreeCache_Abstract
         return $ret;
     }
 
-    protected function _getSetting($name)
-    {
-        return Vpc_Abstract::getSetting($this->_class, $name);
-    }
-
     protected function _getChildComponentClass($key)
     {
-        $c = $this->_getSetting('childComponentClasses');
+        $c = $this->_setting['component'];
         if (!isset($c[$key])) {
             throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found.");
         }

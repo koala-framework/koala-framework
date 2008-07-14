@@ -6,8 +6,8 @@ class Vpc_Composite_TextImageLink_Component extends Vpc_Abstract_Composite_Compo
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Text Image Link');
         $ret['tablename'] = 'Vpc_Composite_TextImageLink_Model';
-        $ret['childComponentClasses']['image'] = 'Vpc_Basic_Image_Component';
-        $ret['childComponentClasses']['link'] = 'Vpc_Basic_LinkTag_Component';
+        $ret['generators']['child']['component']['image'] = 'Vpc_Basic_Image_Component';
+        $ret['generators']['child']['component']['link'] = 'Vpc_Basic_LinkTag_Component';
         $ret['default'] = array();
         return $ret;
     }

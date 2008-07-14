@@ -5,22 +5,17 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['assetsAdmin']['dep'][] = 'VpsTabPanel';
+        $ret['generators']['child'] = array(
+            'class' => 'Vps_Component_Generator_Static',
+            'component' => array()
+        );
         return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $components = array();
-        foreach ($this->getData()->getChildComponents(array('treecache' => 'Vpc_Abstract_Composite_TreeCache')) as $c) {
-            $components[$c->id] = $c;
-        }
-        foreach ($this->_getSetting('generators') as $id=>$c) {
-            //TODO :D
-            if (isset($components[$id])) {
-                $ret[$id] = $components[$id];
-            }
-        }
+        $ret = array_merge($ret, $this->getData()->getChildComponents(array('generator' => 'child')));
         return $ret;
     }
 }
