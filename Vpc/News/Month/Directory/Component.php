@@ -4,8 +4,11 @@ class Vpc_News_Month_Directory_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['childComponentClasses']['detail'] =  'Vpc_News_Month_Detail_Component';
-        $ret['ownTreeCache'] = 'Vpc_News_Month_TreeCache';
+        $ret['generators']['detail'] = array(
+            'class' => 'Vpc_News_Month_Directory_Generator',
+            'component' => 'Vpc_News_Month_Detail_Component',
+            'table' => 'Vpc_News_Directory_Model'
+        );
 
         //für News-Kategorien Box
         $ret['categoryChildId'] = 'months';

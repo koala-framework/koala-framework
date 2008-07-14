@@ -3,7 +3,7 @@ class Vpc_Basic_LinkTag_Admin extends Vpc_Admin
 {
     public function setup()
     {
-        $classes = Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($this->_class, 'link');
         foreach ($classes as $class) {
             Vpc_Admin::getInstance($class)->setup();
         }

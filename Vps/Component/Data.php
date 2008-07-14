@@ -92,7 +92,7 @@ class Vps_Component_Data
 
     public function getChildPages($constraints = array())
     {
-        $classes = Vpc_Abstract::getSetting($this->componentClass, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
         $childConstraints = array('page'=>false);
         $childConstraints['componentClass'] = array();
 
@@ -123,7 +123,7 @@ class Vps_Component_Data
             return true;
         }
         $canCreatePagesCache[$componentClass] = false;
-        $classes = Vpc_Abstract::getSetting($componentClass, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($componentClass);
         foreach ($classes as $class) {
             if ($class && $this->_canCreatePages($class)) {
                 $canCreatePagesCache[$componentClass] = true;
@@ -147,7 +147,7 @@ class Vps_Component_Data
     
     public function getChildBoxes($constraints = array())
     {
-        $classes = Vpc_Abstract::getSetting($this->componentClass, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
         $childConstraints = array('page'=>false);
         $childConstraints['componentClass'] = array();
 
@@ -181,7 +181,7 @@ class Vps_Component_Data
             return true;
         }
         $canCreateBoxesCache[$componentClass] = false;
-        $classes = Vpc_Abstract::getSetting($componentClass, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($componentClass);
         foreach ($classes as $class) {
             if ($class && $this->_canCreateBoxes($class)) {
                 $canCreateBoxesCache[$componentClass] = true;

@@ -6,13 +6,18 @@ class Vpc_Formular_Dynamic_Component extends Vpc_Formular_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['childComponentClasses']['textfield'] = 'Vps_Form_Field_TextField';
-        $ret['childComponentClasses']['checkbox'] = 'Vps_Form_Field_Checkbox';
-        $ret['childComponentClasses']['select'] = 'Vps_Form_Field_Select';
-        $ret['childComponentClasses']['numberfield'] = 'Vps_Form_Field_NumberField';
-        $ret['childComponentClasses']['textarea'] = 'Vps_Form_Field_TextArea';
-        $ret['childComponentClasses']['fieldset'] = 'Vps_Form_Container_FieldSet';
-        $ret['childComponentClasses']['text'] = 'Vpc_Basic_Text_Component';
+        $ret['generators']['child'] = array(
+            'class' => 'Vpc_Formular_Dynamic_Generator',
+            'component' => array (
+                'textfield' => 'Vps_Form_Field_TextField',
+                'checkbox' => 'Vps_Form_Field_Checkbox',
+                'select' => 'Vps_Form_Field_Select',
+                'numberfield' => 'Vps_Form_Field_NumberField',
+                'textarea' => 'Vps_Form_Field_TextArea',
+                'fieldset' => 'Vps_Form_Container_FieldSet',
+                'text' => 'Vpc_Basic_Text_Component'
+            )
+        );
         return $ret;
     }
 

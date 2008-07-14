@@ -3,9 +3,9 @@ class Vpc_Composite_Images_Controller extends Vpc_Abstract_List_Controller
 {
     protected function _initColumns()
     {
-        $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
+        $class = Vpc_Abstract::getChildComponentClasses($this->class, 'child');
 
-        if (Vpc_Abstract::getSetting($classes['child'], 'editComment')) {
+        if (Vpc_Abstract::getSetting($class, 'editComment')) {
             $data = new Vps_Data_Vpc_Table(
                 'Vpc_Basic_Image_Model',
                 'comment',

@@ -3,8 +3,8 @@ class Vpc_Composite_LinksImages_Controller extends Vpc_Abstract_List_Controller
 {
     protected function _initColumns()
     {
-        $classes = Vpc_Abstract::getSetting($this->class, 'childComponentClasses');
-        $classes = Vpc_Abstract::getSetting($classes['child'], 'childComponentClasses');
+        $class = Vpc_Abstract::getChildComponentClass($this->class, 'child');
+        $classes = Vpc_Abstract::getSetting($class, 'child');
 
 
         $this->_columns->add(new Vps_Grid_Column('image', trlVps('Image'), 40))

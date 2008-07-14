@@ -7,7 +7,7 @@ class Vpc_Composite_TextImageLink_Form extends Vpc_Abstract_Form
         $this->add(new Vps_Form_Field_TextField('title', trlVps('Title')));
         $this->add(new Vps_Form_Field_TextField('teaser', trlVps('Teaser')));
 
-        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($class, 'child');
         foreach ($classes as $k=>$i) {
             $form = Vpc_Abstract_Form::createComponentForm($k, $i);
             $form->setIdTemplate('{0}-'.$k);

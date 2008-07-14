@@ -5,13 +5,11 @@ class Vpc_Composite_ParagraphsImage_Component extends Vpc_Abstract_Composite_Com
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName'     => 'ParagraphsImage',
-            'componentIcon'     => new Vps_Asset('page_white_picture'),
-            'childComponentClasses' => array(
-                'paragraphs'   => 'Vpc_Paragraphs_Component',
-                'image'        => 'Vpc_Basic_Image_Enlarge_Component'
-            )
+            'componentIcon'     => new Vps_Asset('page_white_picture')
         ));
         $ret['assetsAdmin']['dep'][] = 'VpsTabPanel';
+        $ret['generators']['child']['component']['paragraphs'] = 'Vpc_Paragraphs_Component';
+        $ret['generators']['child']['component']['image'] = 'Vpc_Basic_Image_Enlarge_Component';
         return $ret;
     }
 

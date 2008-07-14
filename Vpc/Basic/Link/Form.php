@@ -1,17 +1,13 @@
 <?php
-class Vpc_Basic_Link_Form extends Vpc_Abstract_Form
+class Vpc_Basic_Link_Form extends Vpc_Abstract_Composite_Form
 {
-    public function __construct($name, $class)
+    protected function _initFields()
     {
-        parent::__construct($name, $class);
-
-        $this->add(new Vps_Form_Field_TextField('text', trlVps('Linktext')))
+        $form = new Vpc_Abstract_Form('text', $this->getClass());
+        $form->add(new Vps_Form_Field_TextField('text', trlVps('Linktext')))
             ->setWidth(300)
             ->setAllowBlank(false);
 
-        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
-        $form = Vpc_Abstract_Form::createComponentForm('linkTag', $classes['linkTag']);
-        $form->setIdTemplate('{0}-linkTag');
-        $this->add($form);
+        parent::_initFields();
     }
 }

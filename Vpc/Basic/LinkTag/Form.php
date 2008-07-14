@@ -5,15 +5,14 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
     {
         parent::__construct($name, $class, $id);
 
-        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($class, 'link');
 
         reset($classes);
         $cards = $this->add(new Vps_Form_Container_Cards('component', trlVps('Linktype')))
             ->setDefaultValue(key($classes));
 
         foreach ($classes as $name => $class) {
-            $form = Vpc_Abstract_Form::createComponentForm($name, $class);
-            $form->setIdTemplate('{0}-link');
+            $form = Vpc_Abstract_Form::createComponentForm('{0}-link', $this->getClass());
             $form->setAutoHeight(true);
             $form->setBaseCls('x-plain');
 

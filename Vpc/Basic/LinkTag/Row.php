@@ -10,8 +10,8 @@ class Vpc_Basic_LinkTag_Row extends Vpc_Row
 
     protected function _delete()
     {
-        $classes = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'childComponentClasses');
-        $admin = Vpc_Admin::getInstance($classes[$this->component]);
+        $class = Vpc_Abstract::getChildComponentClass($this->getTable()->getComponentClass(), null, $this->component);
+        $admin = Vpc_Admin::getInstance($class);
         if ($admin) {
             $admin->delete($this->component_id.'-1');
         }

@@ -6,12 +6,15 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'List',
             'tablename'     => 'Vpc_Abstract_List_Model',
-            'childComponentClasses' => array(),
             'showVisible' => true,
             'default' => array(
                 'visible' => 1
             )
         ));
+        $ret['generators']['child'] = array(
+            'class' => 'Vps_Component_Generator_Table',
+            'component' => null
+        );
         $ret['assetsAdmin']['dep'][] = 'VpsProxyPanel';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Abstract/List/Panel.js';
         return $ret;
@@ -20,7 +23,7 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['children'] = $this->getData()->getChildComponents(array('treecache' => 'Vpc_Abstract_List_TreeCache'));
+        $ret['children'] = $this->getData()->getChildComponents(array('generator' => 'child'));
         return $ret;
     }
 

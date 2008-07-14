@@ -3,18 +3,17 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'componentName'     => trlVps('TextImage'),
             'componentIcon'     => new Vps_Asset('textImage'),
             'tablename'         => 'Vpc_Composite_TextImage_Model',
-            'childComponentClasses' => array(
-                'text'         => 'Vpc_Basic_Text_Component',
-                'image'        => 'Vpc_Basic_Image_Component',
-            ),
             'default'           => array(
                 'image_position'    => 'left' // 'left', 'right', 'alternate'
             )
         ));
+        $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
+        $ret['generators']['child']['component']['image'] = 'Vpc_Basic_Image_Component';
+        return $ret;
     }
 
     public function getTemplateVars()

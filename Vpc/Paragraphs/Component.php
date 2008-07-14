@@ -27,7 +27,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['paragraphs'] = $this->getData()
-            ->getChildComponents(array('treecache'=>'Vpc_Paragraphs_TreeCache'));
+            ->getChildComponents(array('generator'=>'paragraphs'));
         return $ret;
     }
 }

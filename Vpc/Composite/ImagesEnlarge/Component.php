@@ -4,7 +4,7 @@ class Vpc_Composite_ImagesEnlarge_Component extends Vpc_Composite_Images_Compone
     public static function getSettings()
     {
         $settings = parent::getSettings();
-        $settings['childComponentClasses']['child'] = 'Vpc_Basic_Image_Enlarge_Title_Component';
+        $ret['generators']['child']['component'] = 'Vpc_Basic_Image_Enlarge_Title_Component';
         $settings['componentName'] = 'Images Enlarge';
         $settings['assets']['files'][] = 'vps/Vpc/Composite/ImagesEnlarge/Component.js';
         $settings['assets']['dep'][] = 'ExtCore';
@@ -15,7 +15,7 @@ class Vpc_Composite_ImagesEnlarge_Component extends Vpc_Composite_Images_Compone
     {
         $ret = parent::getTemplateVars();
         $images = $this->getData()->getChildComponents(array(
-            'treecache' => 'Vpc_Abstract_List_TreeCache'
+            'generator' => 'child'
         ));
         $ret['smallMaxWidth'] = 0;
         $ret['smallMaxHeight'] = 0;

@@ -233,7 +233,7 @@ class Vps_Assets_Dependencies
         //reverse damit css von weiter unten in der vererbungshierachie überschreibt
         $this->_files[$assetsType] = array_merge($this->_files[$assetsType], array_reverse($componentCssFiles));
 
-        $classes = Vpc_Abstract::getSetting($class, 'childComponentClasses');
+        $classes = Vpc_Abstract::getChildComponentClasses($class);
         $classes = array_merge($classes, Vpc_Abstract::getSetting($class, 'plugins'));
         foreach ($classes as $class) {
             if ($class) {

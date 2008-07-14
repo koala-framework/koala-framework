@@ -1,5 +1,5 @@
 <?php
-abstract class Vpc_TreeCache_StaticPage extends Vpc_TreeCache_Static
+abstract class Vps_Component_Generator_StaticPage extends Vps_Component_Generator_Static
 {
     protected $_showInMenu = false;
     protected $_idSeparator = '_';

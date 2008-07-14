@@ -1,5 +1,5 @@
 <?php
-class Vpc_TreeCache_StaticBox extends Vpc_TreeCache_Static
+class Vps_Component_Generator_StaticBox extends Vps_Component_Generator_Static
 {
     protected function _acceptKey($key, $constraints, $parentData)
     {

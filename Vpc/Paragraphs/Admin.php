@@ -36,7 +36,7 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
 
     protected function _getComponents()
     {
-        return Vpc_Abstract::getSetting($this->_class, 'childComponentClasses');
+        return Vpc_Abstract::getChildComponentClasses($this->_class, 'paragraphs');
     }
 
     public function setup()

@@ -5,10 +5,10 @@ class Vpc_News_Detail_Form extends Vpc_News_Detail_Abstract_Form
     {
         parent::__construct($newsClass, $id);
 
-        $c = Vpc_Abstract::getSetting($newsClass, 'childComponentClasses');
-        $detailClasses = Vpc_Abstract::getSetting($c['detail'], 'childComponentClasses');
+        $detail = Vpc_Abstract::getChildComponentClasses($newsClass, 'child', 'detail');
+        $image = Vpc_Abstract::getChildComponentClasses($detail, 'child', 'image');
 
-        $this->add(Vpc_Abstract_Form::createComponentForm('image', $detailClasses['image']))
+        $this->add(Vpc_Abstract_Form::createComponentForm('image', $image))
             ->setIdTemplate('news_{0}-image');
 
 //  1:1 Form:

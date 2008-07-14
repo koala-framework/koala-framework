@@ -67,9 +67,9 @@ class Vpc_Basic_Text_Parser
                 $id = preg_quote($this->_row->component_id);
                 if (preg_match('#/media/([^/]+)/('.$id.'-i[0-9]+)#', $src, $m)) {
                     //"/media/$class/$id/$rule/$type/$checksum/$filename.$extension$random"
-                    $classes = Vpc_Abstract::getSetting($this->_row->getTable()
-                                ->getComponentClass(), 'childComponentClasses');
-                    $t = Vpc_Abstract::getSetting($classes['image'], 'tablename');
+                    $class = Vpc_Abstract::getChildComponentClasses($this->_row->getTable()
+                                ->getComponentClass(), 'child', 'image');
+                    $t = Vpc_Abstract::getSetting($class, 'tablename');
                     $t = new $t(array('componentClass' => $classes['image']));
                     $imageRow = $t->find($m[2])->current();
 
