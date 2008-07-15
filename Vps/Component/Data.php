@@ -89,48 +89,67 @@ class Vps_Component_Data
             throw new Vps_Exception("Invalid method called: '$method'");
         }
     }
-
-    public function getChildPages($constraints = array())
+    
+    private function _getRecursiveChildComponents($constraints)
     {
-        $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
         $childConstraints = array('page'=>false);
         $childConstraints['componentClass'] = array();
-
-        foreach ($classes as $class) {
-            if ($this->_canCreatePages($class)) {
-                $childConstraints['componentClass'][] = $class;
+        if (isset($constraints['page']) && $constraints['page']) {
+            $generatorInterface = 'Vps_Component_Generator_Page_Interface';
+        } else if (isset($constraints['box']) && $constraints['box']) {
+            $generatorInterface = 'Vps_Component_Generator_Box_Interface';
+        } else {
+            $generatorInterface = false;
+        }
+        if ($generatorInterface) {
+            $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
+            foreach ($classes as $class) {
+                if ($this->_hasGenerator($class, $generatorInterface)) {
+                    $childConstraints['componentClass'][] = $class;
+                }
             }
         }
-
-        $constraints['page'] = true;
+        
         $ret = $this->getChildComponents($constraints);
         foreach ($this->getChildComponents($childConstraints) as $component) {
-            $ret = array_merge($ret, $component->getChildPages($constraints));
+            $ret = array_merge($ret, $component->_getRecursiveChildComponents($constraints));
         }
         return $ret;
     }
 
-    private function _canCreatePages($componentClass)
+    public function getChildPages($constraints = array())
     {
-        static $canCreatePagesCache = array();
-
-        if (isset($canCreatePagesCache[$componentClass])) {
-            return $canCreatePagesCache[$componentClass];
+        $constraints['page'] = true;
+        return $this->_getRecursiveChildComponents($constraints);
+    }
+    public function getChildBoxes($constraints = array())
+    {
+        $constraints['box'] = true;
+        return $this->_getRecursiveChildComponents($constraints);
+    }
+    
+    private function _hasGenerator($componentClass, $interface)
+    {
+        static $hasGenerator = array();
+        if (isset($hasGenerator[$interface][$componentClass])) {
+            return $hasGenerator[$interface][$componentClass];
         }
-        $tc = Vps_Component_Generator_Abstract::getInstance($componentClass);
-        if ($tc && $tc->createsPages()) {
-            $canCreatePagesCache[$componentClass] = true;
-            return true;
-        }
-        $canCreatePagesCache[$componentClass] = false;
-        $classes = Vpc_Abstract::getChildComponentClasses($componentClass);
-        foreach ($classes as $class) {
-            if ($class && $this->_canCreatePages($class)) {
-                $canCreatePagesCache[$componentClass] = true;
+        $hasGenerator[$interface][$componentClass] = false;
+        
+        $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
+        foreach ($generators as $key => $generator) {
+            if (is_instance_of($generator['class'], $interface)) {
+                $hasGenerator[$interface][$componentClass] = true;
                 return true;
             }
+            $classes = Vpc_Abstract::getChildComponentClasses($componentClass, $key);
+            foreach ($classes as $class) {
+                if ($class && $this->_hasGenerator($class, $interface)) {
+                    $hasGenerator[$interface][$componentClass] = true;
+                    return true;
+                }
+            }
         }
-        $canCreatePagesCache[$componentClass] = false;
         return false;
     }
     /*
@@ -145,53 +164,6 @@ class Vps_Component_Data
         return $ret;
     }*/
     
-    public function getChildBoxes($constraints = array())
-    {
-        $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
-        $childConstraints = array('page'=>false);
-        $childConstraints['componentClass'] = array();
-
-        foreach ($classes as $class) {
-            if ($this->_canCreateBoxes($class)) {
-                $childConstraints['componentClass'][] = $class;
-            }
-        }
-
-        $constraints['treecache'] = 'Vps_Component_Generator_StaticBox';
-        $ret = $this->getChildComponents($constraints);
-        foreach ($this->getChildComponents($childConstraints) as $component) {
-            $ret = array_merge($ret, $component->getChildBoxes($constraints));
-        }
-        return $ret;
-    }
-
-    //TODO: ist eine 99%ige kopie von _canCreatePages
-    //wird verbessert wenn wir in den komponenten-einstellungen die additionalBoxes haben
-    //und auch ob es page oder box TreeCaches sind
-    private function _canCreateBoxes($componentClass)
-    {
-        static $canCreateBoxesCache = array();
-
-        if (isset($canCreateBoxesCache[$componentClass])) {
-            return $canCreateBoxesCache[$componentClass];
-        }
-        $tc = Vps_Component_Generator_Abstract::getInstance($componentClass);
-        if ($tc && $tc->createsBoxes()) {
-            $canCreateBoxesCache[$componentClass] = true;
-            return true;
-        }
-        $canCreateBoxesCache[$componentClass] = false;
-        $classes = Vpc_Abstract::getChildComponentClasses($componentClass);
-        foreach ($classes as $class) {
-            if ($class && $this->_canCreateBoxes($class)) {
-                $canCreateBoxesCache[$componentClass] = true;
-                return true;
-            }
-        }
-        $canCreateBoxesCache[$componentClass] = false;
-        return false;
-    }
-
     public function getChildPage($constraints = array())
     {
         $childPages = $this->getChildPages($constraints);
@@ -230,11 +202,18 @@ class Vps_Component_Data
         $sc = md5($sc);
         if (!isset($this->_constraintsCache[$sc])) {
             $ret = array();
-            $tc = $this->_getTreeCache();
-            if ($tc) {
-                $this->_constraintsCache[$sc] = $tc->getChildData($this, $constraints);
-            } else {
-                $this->_constraintsCache[$sc] = array();
+            
+            $generatorConstraints = array();
+            foreach (array('page', 'box', 'generator') as $c) {
+                if (isset($constraints[$c])) {
+                    $generatorConstraints[$c] = $constraints[$c];
+                    unset($constraints[$c]);
+                }
+            }
+            $generators = Vps_Component_Generator_Abstract::getInstances($this->componentClass, $this, $generatorConstraints);
+            $this->_constraintsCache[$sc] = array();
+            foreach ($generators as $generator) {
+                $this->_constraintsCache[$sc] = array_merge($this->_constraintsCache[$sc], $generator->getChildData($this, $constraints));
             }
         }
         return $this->_constraintsCache[$sc];
@@ -305,29 +284,13 @@ class Vps_Component_Data
         $ret = array();
         $plugins = Vpc_Abstract::getSetting($this->componentClass, 'plugins');
         foreach ($plugins as $p) {
-            if (!$interface || $this->_isInstanceOf($p, $interface)) {
+            if (!$interface || is_instance_of($p, $interface)) {
                 $ret[] = $p;
             }
         }
         return $ret;
     }
 
-    //instanceof operator geht für strings ned korrekt, von php.net gfladad
-    private function _isInstanceOf($sub, $super)
-    {
-        $sub = (string)$sub;
-        $super = is_object($super) ? get_class($super) : (string)$super;
-    
-        switch(true)
-        {
-            case $sub === $super; // well ... conformity
-            case is_subclass_of($sub, $super):
-            case in_array($super, class_implements($sub)):
-                return true;
-            default:
-                return false;
-        }
-    }
 /*
     public function toDebug()
     {

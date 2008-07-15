@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
+class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 {
     protected $_componentClass; //unterkomponenten-klasse
     protected $_childClassKey;  //oder: childComponentClasses-key
@@ -23,8 +23,8 @@ abstract class Vps_Component_Generator_Table extends Vps_Component_Generator_Abs
 
     public function select($parentData)
     {
-        $select = new Vps_Db_Table_Select_TreeCache($this->_table);
-        $select->setTreeCacheClass(get_class($this));
+        $select = new Vps_Db_Table_Select_Generator($this->_table);
+        $select->setGeneratorClass(get_class($this));
         $select->from($this->_table);
         $cols = $this->_table->info('cols');
         if ($parentData && in_array('component_id', $cols)) {

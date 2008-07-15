@@ -2,7 +2,6 @@
 
 class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
 {
-    protected $_classes;
     protected $_idSeparator = '-';
 
     public function getChildIds($parentData, $constraints = array())
@@ -24,7 +23,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
                 //Performance: wenn id contraint schauen ob es überhaupt was gibt
                 //wenn nicht parentDatas nicht ermitteln (kann aufwändig sein)
                 $id = substr($constraints['id'], 1);
-                if (substr($constraints['id'], 0, 1) == $this->_idSeparator || !isset($this->_classes[$id])) {
+                if (substr($constraints['id'], 0, 1) == $this->_idSeparator || !isset($this->_settings['component'][$id])) {
                     return $ret;
                 }
             }
@@ -46,7 +45,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         $ret = array();
         $constraints = $this->_formatConstraints($parentData, $constraints);
         if (is_null($constraints)) return array();
-        foreach (array_keys($this->_classes) as $key) {
+        foreach (array_keys($this->_settings['component']) as $key) {
             if ($this->_acceptKey($key, $constraints, $parentData)) {
                 $ret[] = $key;
             }
@@ -79,7 +78,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
     {
         $ret = true;
         if ($ret && isset($constraints['componentClass'])) {
-            if (!in_array($this->_getComponentClass($key), $constraints['componentClass'])) {
+            if (!in_array($this->_settings['component'][$key], $constraints['componentClass'])) {
                 $ret = false;
             }
         }
@@ -93,7 +92,6 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
 
     protected function _formatConfig($parentData, $componentKey)
     {
-        $c = $this->_classes[$componentKey];
         $componentId = '';
         if ($parentData->componentId) {
             $componentId = $parentData->componentId . $this->_idSeparator;
@@ -108,7 +106,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         return array(
             'componentId' => $componentId,
             'dbId' => $dbId,
-            'componentClass' => $this->_getComponentClass($componentKey),
+            'componentClass' => $this->_settings['component'][$componentKey],
             'parent' => $parentData,
             'isPage' => false
         );
@@ -116,19 +114,5 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
     protected function _getIdFromRow($componentKey)
     {
         return $componentKey;
-    }
-    
-    private function _getComponentClass($componentKey)
-    {
-        $c = $this->_classes[$componentKey];
-        if (is_string($c)) {
-            return $c;
-        } else if (!isset($c['childComponentClass']) && isset($c['childClassKey'])) {
-            return $this->_getChildComponentClass($c['childClassKey']);
-        } else if (isset($c['componentClass'])) {
-            return $c['componentClass'];
-        } else {
-            throw new Vps_Exception('ComponentClass is not set in ' . get_class($this));
-        }
     }
 }

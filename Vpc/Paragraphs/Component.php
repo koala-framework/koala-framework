@@ -14,7 +14,7 @@ class Vpc_Paragraphs_Component extends Vpc_Abstract
         $ret['tablename'] = 'Vpc_Paragraphs_Model';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Paragraphs/Panel.js';
         $ret['assetsAdmin']['dep'][] = 'VpsAutoGrid';
-        $ret['generator']['paragraphs'] = array(
+        $ret['generators']['paragraphs'] = array(
             'class' => 'Vps_Component_Generator_Table',
             'component' => array('text' => 'Vpc_Basic_Text_Component',
                                  'image' => 'Vpc_Basic_Image_Component')

@@ -146,6 +146,22 @@ function trlcpVps($context, $single, $plural, $text = array()){
     return Zend_Registry::get('trl')->trlcp($context, $single, $plural, $text, Vps_Trl::SOURCE_VPS);
 }
 
+//instanceof operator geht für strings ned korrekt, von php.net gfladad
+function is_instance_of($sub, $super)
+{
+    $sub = (string)$sub;
+    $super = is_object($super) ? get_class($super) : (string)$super;
+
+    switch(true)
+    {
+        case $sub === $super:
+        case is_subclass_of($sub, $super):
+        case in_array($super, class_implements($sub)):
+            return true;
+        default:
+            return false;
+    }
+}
 class Vps_Setup
 {
     public static function setUp()

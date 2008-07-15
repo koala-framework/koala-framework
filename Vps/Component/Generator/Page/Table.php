@@ -1,5 +1,5 @@
 <?php
-abstract class Vps_Component_Generator_TablePage extends Vps_Component_Generator_Table
+class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_Table implements Vps_Component_Generator_Page_Interface
 {
     protected $_showInMenu = false;
 

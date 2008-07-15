@@ -8,12 +8,12 @@ class Vpc_News_Directory_Component extends Vpc_News_List_Abstract_Component
         $ret['componentIcon'] = new Vps_Asset('newspaper');
         $ret['tablename'] = 'Vpc_News_Directory_Model';
         $ret['generators']['detail'] = array(
-            'class' => 'Vps_Component_Generator_TablePage',
+            'class' => 'Vps_Component_Generator_Page_Table',
             'component' => 'Vpc_News_Detail_Component',
             'nameColumn' => 'title'
         );
         $ret['generators']['newsMenu'] = array(
-            'class' => 'Vps_Component_Generator_StaticBox',
+            'class' => 'Vps_Component_Generator_Box_Static',
             'component' => 'Vpc_News_Menu_Component',
             'priority' => 3
         );

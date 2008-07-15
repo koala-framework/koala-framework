@@ -10,7 +10,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
     protected function _fetch($select)
     {
         $serviceCols = call_user_func(array($this->_rowClass, 'getServiceColumns'));
-        if (preg_match('/('.implode('|', $serviceCols).')/', $select->__toString())) {
+        if ($select instanceof Zend_Db_Select && preg_match('/('.implode('|', $serviceCols).')/', $select->__toString())) {
             $this->checkCache();
         }
 
