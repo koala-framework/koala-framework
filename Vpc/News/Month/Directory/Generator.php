@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_TablePage
+class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_Page_Table
 {
     protected $_childClassKey = 'detail';
     protected $_uniqueFilename = true;

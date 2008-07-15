@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
+class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract implements Vps_Component_Generator_Page_Interface
 {
     protected $_tableName = 'Vps_Dao_Pages';
     protected $_componentClass = 'row';

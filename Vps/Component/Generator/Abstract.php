@@ -39,83 +39,87 @@ abstract class Vps_Component_Generator_Abstract
         static $instances = array();
         $instanceKey = $componentClass . '_' . $key;
         if (!isset($instances[$instanceKey])) {
-            $settings = Vpc_Abstract::getSetting($componentClass, 'treecaches');
+            $settings = Vpc_Abstract::getSetting($componentClass, 'generators');
             if (isset($settings[$key]) && 
-                $settings[$key]['class'] instanceof Vps_Component_Generator_Abstract)
+                is_subclass_of($settings[$key]['class'], 'Vps_Component_Generator_Abstract'))
             {
+                if (!is_array($settings[$key]['component'])) {
+                    $settings[$key]['component'] = array($key => $settings[$key]['component']);
+                }
                 $instances[$instanceKey] = new $settings[$key]['class']($componentClass, $settings[$key]);
             } else {
-                throw new Vps_Exception("Treecache with key '$key' for '$componentClass' not found.");
+                throw new Vps_Exception("Generator with key '$key' for '$componentClass' not found.");
             }
         }
         return $instances[$instanceKey];
     }
     
-    public function getTreeCache($class)
+    private static function _getGeneratorsForComponent($componentClass, $constraints)
     {
-        if ($this instanceof $class) {
-            return $this;
-        } else {
-            foreach ($this->_additionalTreeCaches as $treeCache) {
-                $tc = $treeCache->getTreeCache($class);
-                if ($tc) return $tc;
-            }
-        }
-        return null;
-    }
-
-    public function getChildData($parentData, $constraints)
-    {
+        $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
         $ret = array();
-        foreach ($this->_getAdditionalTreeCaches($parentData) as $treeCache) {
-            $ret = array_merge($ret, $treeCache->getChildData($parentData, $constraints));
+        foreach ($generators as $key => $generator) {
+            if (isset($constraints['generator']) && $key != $constraints['generator']) {
+                continue;
+            }
+            if (!isset($generator['class'])) {
+                throw new Vps_Exception("Generator class for '$key' ($componentClass) is not set.");
+            }
+            if (isset($constraints['page'])) {
+                if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page_Interface')) {
+                    if (!$constraints['page']) continue;
+                } else {
+                    if ($constraints['page']) continue;
+                }
+            }
+            if (isset($constraints['box'])) {
+                if (is_instance_of($generator['class'], 'Vps_Component_Generator_Box_Interface')) {
+                    if (!$constraints['box']) continue;
+                } else {
+                    if ($constraints['box']) continue;
+                }
+            }
+            $ret[] = self::getInstance($componentClass, $key);
         }
         return $ret;
+    }
+    
+    public static function getInstances($componentClass, $parentData = null, $constraints = array())
+    {
+        $ret = self::_getGeneratorsForComponent($componentClass, $constraints);
+        
+        foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
+            $ret = array_merge($ret, self::_getGeneratorsForComponent($pluginClass, $constraints));
+        }
+        
+        if ($parentData && $parentData->isPage) {
+            if (!$parentData instanceof Vps_Component_Data_Root) {
+                foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $mc) {
+                    $ret = array_merge($ret, self::_getGeneratorsForComponent($mc, $constraints));
+                }
+            }
+            if ($parentData instanceof Vps_Component_Data_Root || is_numeric($parentData->componentId)) {
+                $ret = array_merge($ret, self::_getGeneratorsForComponent(
+                    Vps_Registry::get('config')->vpc->rootComponent, $constraints
+                ));
+            }
+        }
+        return $ret;
+    }
+    
+    public function getChildData($parentData, $constraints)
+    {
+        return array();
     }
 
     public function getChildIds($parentData, $constraints)
     {
-        $ret = array();
-        foreach ($this->_getAdditionalTreeCaches($parentData) as $treeCache) {
-            $ret = array_merge($ret, $treeCache->getChildIds($parentData, $constraints));
-        }
-        return $ret;
-    }
-
-    protected function _getAdditionalTreeCaches($parentData)
-    {
-        $ret = $this->_additionalTreeCaches;
-        if ($this->_isTop) {
-            foreach ($this->_getSetting('plugins') as $plugin) {
-                $tc = Vps_Component_Generator_Abstract::getInstance($plugin);
-                if ($tc) {
-                    $ret[] = $tc;
-                }
-            }
-        }
-        if ($this->_isTop && $parentData && $parentData->isPage) {
-            if (!$parentData instanceof Vps_Component_Data_Root) {
-                foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $mc) {
-                    $tc = Vps_Component_Generator_Abstract::getInstance($mc);
-                    if ($tc) {
-                        $tc->_isTop = false;
-                        $ret[] = $tc;
-                    }
-                }
-            }
-            if ($parentData instanceof Vps_Component_Data_Root || is_numeric($parentData->componentId)) {
-                $tc = Vps_Component_Generator_Abstract::getInstance(Vps_Registry::get('config')->vpc->rootComponent);
-                //TODO wird da eh nicht ein bestehender tc geändert der woanders ohne isTop gebraucht wird?
-                $tc->_isTop = false;
-                $ret[] = $tc;
-            }
-        }
-        return $ret;
+        return array();
     }
 
     protected function _getChildComponentClass($key)
     {
-        $c = $this->_setting['component'];
+        $c = $this->_settings['component'];
         if (!isset($c[$key])) {
             throw new Vps_Exception("ChildComponent with type '$key' for Component '{$this->_class}' not found.");
         }

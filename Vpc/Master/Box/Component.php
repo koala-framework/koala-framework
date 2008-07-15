@@ -5,7 +5,7 @@ class Vpc_Master_Box_Component extends Vpc_Master_Abstract
     {
         $ret = parent::getSettings();
         $ret['generators']['box'] = array(
-            'class' => 'Vps_Component_Generator_StaticBox',
+            'class' => 'Vps_Component_Generator_Box_Static',
             'component' => array(),
             'inherit' => false,
             'priority' => 0
@@ -22,7 +22,6 @@ class Vpc_Master_Box_Component extends Vpc_Master_Abstract
         while ($page) { // Aktuelle inkl. aller Überseiten durchlaufen
             // Boxen für jeweilige Seite holen, falls Überseite nur die mit inherit==true
             $constraints = array(
-                'generatorType' => 'box',
                 'inherit' => $page->componentId != $this->getData()->componentId
             );
             $boxes = $page->getChildBoxes($constraints);
