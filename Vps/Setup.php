@@ -97,7 +97,7 @@ function bt()
     $out = array(array('File', 'Line', 'Function', 'Args'));
     foreach ($bt as $i) {
         $out[] = array(
-            $i['file'], $i['line'],
+            isset($i['file']) ? $i['file'] : '', isset($i['line']) ? $i['line'] : '',
             isset($i['function']) ? $i['function'] : null,
             _btArgsString($i['args']),
         );

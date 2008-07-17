@@ -17,7 +17,7 @@ class Vpc_Basic_LinkTag_Component extends Vpc_Abstract
             )
         ));
         $ret['generators']['link'] = array(
-            'class' => 'Vps_Component_Generator_Table',
+            'class' => 'Vpc_Basic_LinkTag_Generator',
             'component' => array(
                 'intern' => 'Vpc_Basic_LinkTag_Intern_Component',
                 'extern' => 'Vpc_Basic_LinkTag_Extern_Component',

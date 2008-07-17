@@ -57,9 +57,6 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
     {
         $constraints = parent::_formatConstraints($parentData, $constraints);
         if (is_null($constraints)) return null;
-        if (isset($constraints['page']) && $constraints['page']) {
-            return null;
-        }
         if (isset($constraints['filename'])) {
             return null;
         }

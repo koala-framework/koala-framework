@@ -6,10 +6,6 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
 
     protected function _formatConstraints($parentData, $constraints)
     {
-        if (isset($constraints['page'])) {
-            if (!$constraints['page']) return null;
-            unset($constraints['page']);
-        }
         $filename = isset($constraints['filename']) ? $constraints['filename'] : null;
         if (isset($constraints['showInMenu'])) {
             $showInMenu = $constraints['showInMenu'];
@@ -62,10 +58,4 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
         $data['isPage'] = true;
         return $data;
     }
-
-    public function createsPages()
-    {
-        return true;
-    }
-
 }
