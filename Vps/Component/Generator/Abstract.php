@@ -40,16 +40,23 @@ abstract class Vps_Component_Generator_Abstract
         $instanceKey = $componentClass . '_' . $key;
         if (!isset($instances[$instanceKey])) {
             $settings = Vpc_Abstract::getSetting($componentClass, 'generators');
-            if (isset($settings[$key]) && 
-                is_subclass_of($settings[$key]['class'], 'Vps_Component_Generator_Abstract'))
-            {
-                if (!is_array($settings[$key]['component'])) {
-                    $settings[$key]['component'] = array($key => $settings[$key]['component']);
-                }
-                $instances[$instanceKey] = new $settings[$key]['class']($componentClass, $settings[$key]);
-            } else {
+            if (!isset($settings[$key])) {
                 throw new Vps_Exception("Generator with key '$key' for '$componentClass' not found.");
             }
+            if (!isset($settings[$key]['class'])) {
+                throw new Vps_Exception("No Generator-Class set: key '$key' for '$componentClass'");
+            }
+            if (!class_exists($settings[$key]['class'])) {
+                throw new Vps_Exception("Generator-Class '{$settings[$key]['class']}' does not exist (used in '$componentClass')");
+            }
+            if (!is_subclass_of($settings[$key]['class'], 'Vps_Component_Generator_Abstract')) {
+                throw new Vps_Exception("Generator-Class '{$settings[$key]['class']}' is not an Vps_Component_Generator_Abstract");
+            }
+            if (!is_array($settings[$key]['component'])) {
+                $settings[$key]['component'] = array($key => $settings[$key]['component']);
+            }
+            $settings[$key]['generator'] = $key;
+            $instances[$instanceKey] = new $settings[$key]['class']($componentClass, $settings[$key]);
         }
         return $instances[$instanceKey];
     }
@@ -83,15 +90,15 @@ abstract class Vps_Component_Generator_Abstract
         }
         return $ret;
     }
-    
+
     public static function getInstances($componentClass, $parentData = null, $constraints = array())
     {
         $ret = self::_getGeneratorsForComponent($componentClass, $constraints);
-        
+
         foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
             $ret = array_merge($ret, self::_getGeneratorsForComponent($pluginClass, $constraints));
         }
-        
+
         if ($parentData && $parentData->isPage) {
             if (!$parentData instanceof Vps_Component_Data_Root) {
                 foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $mc) {
@@ -125,26 +132,14 @@ abstract class Vps_Component_Generator_Abstract
         }
         return $c[$key];
     }
-    
+
     protected function _formatConstraints($parentData, $constraints)
     {
-        if (isset($constraints['select']) && ($constraints['select'] instanceof Vps_Db_Table_Select_TreeCache)) {
-            $constraints['treecache'] = $constraints['select']->getTreeCacheClass();
-        }
-        if (isset($constraints['treecache']) &&
-            !$this instanceof $constraints['treecache']
-        ){
-            return null;
-        }
         return $constraints;
     }
-    
+
     public function getDbIdShortcut($dbId)
     {
-        foreach ($this->_getAdditionalTreeCaches(null) as $treeCache) {
-            $ret = $treeCache->getDbIdShortcut($dbId);
-            if ($ret) return $ret;
-        }
         return null;
     }
 
@@ -173,20 +168,5 @@ abstract class Vps_Component_Generator_Abstract
     }
     protected function _getIdFromRow($row) {
         throw new Vps_Exception('_getIdFromRow has to be implemented for '.get_class($this));
-    }
-
-    public function createsPages()
-    {
-        foreach ($this->_getAdditionalTreeCaches(null) as $treeCache) {
-            if ($treeCache->createsPages()) return true;
-        }
-        return false;
-    }
-    public function createsBoxes()
-    {
-        foreach ($this->_getAdditionalTreeCaches(null) as $treeCache) {
-            if ($treeCache->createsBoxes()) return true;
-        }
-        return false;
     }
 }

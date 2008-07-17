@@ -1,14 +1,14 @@
 <?php
 class Vps_Db_Table_Select_Generator extends Vps_Db_Table_Select
 {
-    private $_class;
-    public function setGeneratorClass($v)
+    private $_generator;
+    public function setGenerator($v)
     {
-        $this->_class = $v;
+        $this->_generator = $v;
         return $this;
     }
-    public function getGeneratorClass()
+    public function getGenerator()
     {
-        return $this->_class;
+        return $this->_generator;
     }
 }

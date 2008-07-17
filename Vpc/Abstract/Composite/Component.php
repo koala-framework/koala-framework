@@ -15,7 +15,9 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret = array_merge($ret, $this->getData()->getChildComponents(array('generator' => 'child')));
+        foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
+            $ret[$c->id] = $c;
+        }
         return $ret;
     }
 }

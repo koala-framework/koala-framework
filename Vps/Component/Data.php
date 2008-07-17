@@ -152,17 +152,6 @@ class Vps_Component_Data
         }
         return false;
     }
-    /*
-    public function getChildBoxes($constraints = array())
-    {
-        $ret = array_merge(array(), $this->getChildComponents($constraints));
-        foreach ($this->getChildComponents() as $component) {
-            if (!$component->isPage) {
-                $ret = array_merge($ret, $component->getChildBoxes($constraints));
-            }
-        }
-        return $ret;
-    }*/
     
     public function getChildPage($constraints = array())
     {
@@ -170,12 +159,9 @@ class Vps_Component_Data
         return isset($childPages[0]) ? $childPages[0] : null;
     }
 
-    public function getTreeCache($class)
+    public function getGenerator($key)
     {
-        $tc = $this->_getTreeCache();
-        if ($tc) {
-            return $tc->getTreeCache($class);
-        }
+        return Vps_Component_Generator_Abstract::getInstance($this->componentClass, $key);
     }
 
     public function getChildComponents($constraints = array())
@@ -202,13 +188,16 @@ class Vps_Component_Data
         $sc = md5($sc);
         if (!isset($this->_constraintsCache[$sc])) {
             $ret = array();
-            
+
             $generatorConstraints = array();
             foreach (array('page', 'box', 'generator') as $c) {
                 if (isset($constraints[$c])) {
                     $generatorConstraints[$c] = $constraints[$c];
                     unset($constraints[$c]);
                 }
+            }
+            if (isset($constraints['select']) && $constraints['select'] instanceof Vps_Db_Table_Select_Generator) {
+                $generatorConstraints['generator'] = $constraints['select']->getGenerator();
             }
             $generators = Vps_Component_Generator_Abstract::getInstances($this->componentClass, $this, $generatorConstraints);
             $this->_constraintsCache[$sc] = array();

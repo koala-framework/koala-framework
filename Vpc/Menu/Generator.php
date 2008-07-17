@@ -3,7 +3,7 @@ class Vpc_Menu_Generator extends Vps_Component_Generator_Static
 {
     protected function _formatConstraints($parentData, $constraints)
     {
-        $maxLevel = $this->_getSetting('maxLevel');
+        $maxLevel = Vpc_Abstract::getSetting($this->_class, 'maxLevel');
         if ($this->_getParentLevel($parentData) >= $maxLevel) {
             return null;
         }
@@ -15,7 +15,7 @@ class Vpc_Menu_Generator extends Vps_Component_Generator_Static
         if (isset($parentData->level)) {
             return $parentData->level;
         } else {
-            $level = $this->_getSetting('level');
+            $level = Vpc_Abstract::getSetting($this->_class, 'level');
             if (is_string($level)) {
                 return 1;
             }
