@@ -74,6 +74,11 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
     protected function _acceptKey($key, $constraints, $parentData)
     {
         $ret = true;
+        
+        if (isset($this->_settings['component'][$key]) && !$this->_settings['component'][$key]) {
+            $ret = false;
+        }
+        
         if ($ret && isset($constraints['componentClass'])) {
             if (!in_array($this->_settings['component'][$key], $constraints['componentClass'])) {
                 $ret = false;

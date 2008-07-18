@@ -3,20 +3,9 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 {
     protected $_loadTableFromComponent = true;
 
-    protected $_dbIdShortcut = false;
     protected $_idSeparator = '-'; //um in StaticTable _ verwenden zu können
     protected $_idColumn = 'id';
     private $_rows = array();
-
-    public function getDbIdShortcut($dbId)
-    {
-        if ($this->_dbIdShortcut &&
-            substr($dbId, 0, strlen($this->_dbIdShortcut)) == $this->_dbIdShortcut
-        ) {
-            return $this->_dbIdShortcut;
-        }
-        return parent::getDbIdShortcut($dbId);
-    }
 
     public function select($parentData)
     {
@@ -71,7 +60,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     {
         if (isset($row->component_id)) {
             $ret = Vps_Component_Data_Root::getInstance()
-                                        ->getByDbId($row->component_id);
+                                        ->getComponentByDbId($row->component_id);
         } else {
             //TODO: funktioniert das so korrekt?
             $ret = Vps_Component_Data_Root::getInstance()
@@ -155,8 +144,8 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $componentId = $parentData->componentId . $this->_idSeparator . $componentId;
         }
         $dbId = $this->_getIdFromRow($row);
-        if ($this->_dbIdShortcut) {
-            $dbId = $this->_dbIdShortcut . $dbId;
+        if (isset($this->_settings['dbIdShortcut'])) {
+            $dbId = $this->_settings['dbIdShortcut'] . $dbId;
         } else if ($this->_idSeparator && !$parentData instanceof Vps_Component_Data_Root) {
             $dbId = $parentData->dbId . $this->_idSeparator . $dbId;
         }
@@ -183,7 +172,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     }
     
     /**
-     * wird in Link-TreeCache überschrieben
+     * wird in Link-Generator überschrieben
      **/
     protected function _getIdFromRow($row)
     {

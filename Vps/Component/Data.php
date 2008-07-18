@@ -204,6 +204,13 @@ class Vps_Component_Data
             foreach ($generators as $generator) {
                 $this->_constraintsCache[$sc] = array_merge($this->_constraintsCache[$sc], $generator->getChildData($this, $constraints));
             }
+            $ids = array();
+            foreach ($this->_constraintsCache[$sc] as $data) {
+                if (in_array($data->componentId, $ids)) {
+                    throw new Vps_Exception("Key für generator not unique: {$data->componentId}");
+                }
+                $ids[] = $data->componentId;
+            }
         }
         return $this->_constraintsCache[$sc];
 
@@ -216,11 +223,6 @@ class Vps_Component_Data
             $ret[] = $data->componentId;
         }
         return $ret;
-    }
-    
-    protected function _getTreeCache()
-    {
-        return Vps_Component_Generator_Abstract::getInstance($this->componentClass);
     }
     
     public function getChildComponent($constraints = array())

@@ -11,7 +11,7 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
     public function load($row)
     {
         $id = $row->component_id.'-'.$row->id;
-        $data = Vps_Component_Data_Root::getInstance()->getByDbId($id);
+        $data = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id);
         if (!$data) {
             return "Component with '$id' not found";
         }
