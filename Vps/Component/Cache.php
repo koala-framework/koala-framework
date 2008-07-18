@@ -2,6 +2,7 @@
 class Vps_Component_Cache extends Zend_Cache_Core {
     
     static private $_instance;
+    private $_backend;
     
     public function __construct()
     {
@@ -9,14 +10,14 @@ class Vps_Component_Cache extends Zend_Cache_Core {
             'lifetime' => 30*60
         ));
         
-        $backend = new Zend_Cache_Backend_File(array(
-            'cache_dir' => 'application/cache/component',
+        $this->_backend = new Zend_Cache_Backend_File(array(
+            'cache_dir' => $this->_getCacheDir(),
             'hashed_directory_level' => 2,
             'file_name_prefix' => 'vpc',
             'hashed_directory_umask' => 0770
         ));
         
-        $this->setBackend($backend);
+        $this->setBackend($this->_backend);
     }
     
     public static function getInstance()
@@ -26,21 +27,26 @@ class Vps_Component_Cache extends Zend_Cache_Core {
         }
         return self::$_instance;
     }
-    
-    public function cleanByTag($tag)
+        
+    public function save($data, $componentClass, $componentId, $tags)
     {
-        $b = Vps_Benchmark::start();
-        $this->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array($tag));
+        $this->_setCacheDir($componentClass);
+        parent::save($data, $componentId, $tags);
     }
     
-    public function remove($componentId)
+    public function remove($component)
     {
-        $b = Vps_Benchmark::start();
-        parent::remove($this->getCacheIdFromComponentId($componentId));
+        if ($component instanceof Vps_Component_Data) {
+            $this->_setCacheDir($component->componentClass);
+            parent::remove($this->getCacheIdFromComponentId($component->componentId));
+        } else {
+            $this->rm_recursive($this->_getCacheDir($component));
+        }
     }
     
-    public function load($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
+    public function load($componentClass, $id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
     {
+        $this->_setCacheDir($componentClass);
         if (!$this->test($id)) {
             return false;
         }
@@ -89,4 +95,38 @@ class Vps_Component_Cache extends Zend_Cache_Core {
             return str_replace('__', '-', $cacheId);
         }
     }
+    
+    protected function _setCacheDir($componentClass)
+    {
+        $cacheDir = $this->_getCacheDir($componentClass);
+        if (!is_dir($cacheDir)) {
+            mkdir($cacheDir);
+        }
+        $this->_backend->setCacheDir($cacheDir);
+    }
+    
+    private function _getCacheDir($componentClass = '')
+    {
+        $cacheDir = 'application/cache/component';
+        if ($componentClass != '') $cacheDir .= '/' . $componentClass;
+        return $cacheDir;
+    }
+    
+    function rm_recursive($filepath)
+    {
+        if (is_dir($filepath) && !is_link($filepath)) {
+            if ($dh = opendir($filepath)) {
+                while (($sf = readdir($dh)) !== false) {
+                    if ($sf == '.' || $sf == '..') { continue; }
+                    if (!rm_recursive($filepath.'/'.$sf)) {
+                        throw new Exception($filepath.'/'.$sf.' could not be deleted.');
+                    }
+                }
+                closedir($dh);
+            }
+            return rmdir($filepath);
+        }
+        return unlink($filepath);
+    }
+    
 }

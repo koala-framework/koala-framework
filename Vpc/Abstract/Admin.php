@@ -70,16 +70,30 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
         return in_array($tablename, $this->_db->listTables());
     }
     
-    public function clearCache($caller)
+    public function onRowUpdate($row)
     {
-        // Cache der aktuellen Komponente löschen
-        if ($caller instanceof Vpc_Row &&
-            Vpc_Abstract::getSetting($this->_class, 'tablename') == $caller->getTableClass()
-        ) {
-            $components = Vps_Component_Data_Root::getInstance()->getComponentsByDbId($caller->component_id);
+        $this->_deleteCache($row);
+    }
+
+    public function onRowDelete($row)
+    {
+        $this->_deleteCache($row);
+    }
+    
+    private function _deleteCache($row)
+    {
+        if ($row instanceof Vpc_Row
+            && Vpc_Abstract::hasSetting($this->_class, 'tablename')
+            && Vpc_Abstract::getSetting($this->_class, 'tablename') == $row->getTableClass())
+        {
+            $components = Vps_Component_Data_Root::getInstance()->getComponentsByDbId($row->component_id);
             foreach ($components as $c) {
-                Vps_Component_Cache::getInstance()->remove($c->componentId);
+                Vps_Component_Cache::getInstance()->remove($c);
             }
         }
+    }
+
+    public function onRowInsert($row)
+    {
     }
 }
