@@ -63,7 +63,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $ret;
     }
     
-    public function getByDbId($dbId)
+    public function getComponentByDbId($dbId)
     {
         $cmp = $this->getComponentsByDbId($dbId, true);
         return isset($cmp[0]) ? $cmp[0] : null;
@@ -84,22 +84,24 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
         $ret = array();
         foreach (Vpc_Abstract::getComponentClasses() as $class) {
-            $tc = Vps_Component_Generator_Abstract::getInstance($class);
-            if (!$tc) continue;
-            if ($dbIdShortcut = $tc->getDbIdShortcut($dbId)) {
-                $idParts = $this->_getIdParts(substr($dbId, strlen($dbIdShortcut) - 1));
-                $data = $tc->getChildData(null, array('id' => $idParts[0]));
-                unset($idParts[0]);
-                $data = isset($data[0]) ? $data[0] : null;
-                foreach ($idParts as $idPart) {
-                    if (!$data) break;
-                    $data = $data->getChildComponent($idPart);
-                }
-                if ($data) {
-                    $ret[] = $data;
-                }
-                if ($ret && $returnFirst) {
-                    return $ret;
+            foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
+                if (isset($generator['dbIdShortcut'])
+                        && substr($dbId, 0, strlen($generator['dbIdShortcut'])) == $generator['dbIdShortcut']) {
+                    $idParts = $this->_getIdParts(substr($dbId, strlen($generator['dbIdShortcut']) - 1));
+                    $generator = Vps_Component_Generator_Abstract::getInstance($class, $key);
+                    $data = $generator->getChildData(null, array('id' => $idParts[0]));
+                    unset($idParts[0]);
+                    $data = isset($data[0]) ? $data[0] : null;
+                    foreach ($idParts as $idPart) {
+                        if (!$data) break;
+                        $data = $data->getChildComponent($idPart);
+                    }
+                    if ($data) {
+                        $ret[] = $data;
+                    }
+                    if ($ret && $returnFirst) {
+                        return $ret;
+                    }
                 }
             }
         }
@@ -110,6 +112,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         if (!isset($this->_componentsByClassCache[$class])) {
             $benchmark = Vps_Benchmark::start();
 
+            // Man sucht die Komponenten der übergebenen und aller Unterklassen
             $lookingForChildClasses = array();
             foreach (Vpc_Abstract::getComponentClasses() as $c) {
                 if (is_subclass_of($c, $class) || $c == $class) {
@@ -118,29 +121,29 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             }
 
             $ret = array();
-            foreach ($this->_getCreatorsForClasses($lookingForChildClasses) as $c) {
-                $tc = Vps_Component_Generator_Abstract::getInstance($c);
-                if (!$tc) {
-                    throw new Vps_Exception("No TreeCache found for '$c' although it has childComponentClasses");
-                }
+            foreach ($this->_getGeneratorsForClasses($lookingForChildClasses) as $generator) {
                 $constraints = array('componentClass' => $lookingForChildClasses);
-                $ret = array_merge($ret, $tc->getChildData(null, $constraints));
+                $ret = array_merge($ret, $generator->getChildData(null, $constraints));
             }
             $this->_componentsByClassCache[$class] = $ret;
         }
         return $this->_componentsByClassCache[$class];
     }
 
-    //gibt ein array von komponenten-klassen zurück die die übergebenen klassen
-    //erstellen können
-    private function _getCreatorsForClasses($lookingForClasses)
+    private function _getGeneratorsForClasses($lookingForClasses)
     {
         $ret = array();
         foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            $cc = Vpc_Abstract::getChildComponentClasses($c);
-            foreach ($cc as $childClass) {
-                if (in_array($childClass, $lookingForClasses)) {
-                    $ret[] = $c;
+            foreach (Vpc_Abstract::getSetting($c, 'generators') as $key => $generator) {
+                if (is_array($generator['component'])) {
+                    $childClasses = $generator['component'];
+                } else {
+                    $childClasses = array($generator['component']);
+                }
+                foreach ($childClasses as $childClass) {
+                    if (in_array($childClass, $lookingForClasses)) {
+                        $ret[] = Vps_Component_Generator_Abstract::getInstance($c, $key);
+                    }
                 }
             }
         }

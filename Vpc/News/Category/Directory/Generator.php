@@ -9,7 +9,7 @@ class Vpc_News_Category_Directory_Generator extends Vps_Component_Generator_Page
     {
         $select = parent::_getSelect($parentData, $constraints);
         if (!$select) return null;
-        $select->where('pool = ?', $this->_getSetting('pool'));
+        $select->where('pool = ?', Vpc_Abstract::getSetting($this->_class, 'pool'));
         return $select;
     }
 }

@@ -16,7 +16,7 @@ abstract class Vps_Component_Generator_Abstract
         $this->_settings = $settings;
         $this->_db = Zend_Registry::get('db');
         $this->_init();
-        Vps_Benchmark::count('treeCaches');
+        Vps_Benchmark::count('generators');
     }
 
     protected function _init()
@@ -27,7 +27,7 @@ abstract class Vps_Component_Generator_Abstract
             } else if ($this->_loadTableFromComponent) {
                 $table = Vpc_Abstract::getSetting($this->_class, 'tablename');
                 if (!$table) {
-                    throw new Vps_Exception("Entweder tablename-setting der Komponente oder _tableName bzw. _table des TreeCaches muss geseftzt sein ($this->_class)");
+                    throw new Vps_Exception("Entweder tablename-setting der Komponente oder _tableName bzw. _table des Generators muss gesetzt sein ($this->_class)");
                 }
                 $this->_table = new $table(array('componentClass'=>$this->_class));
             }
@@ -94,7 +94,6 @@ abstract class Vps_Component_Generator_Abstract
     public static function getInstances($componentClass, $parentData = null, $constraints = array())
     {
         $ret = self::_getGeneratorsForComponent($componentClass, $constraints);
-
         foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
             $ret = array_merge($ret, self::_getGeneratorsForComponent($pluginClass, $constraints));
         }
@@ -136,11 +135,6 @@ abstract class Vps_Component_Generator_Abstract
     protected function _formatConstraints($parentData, $constraints)
     {
         return $constraints;
-    }
-
-    public function getDbIdShortcut($dbId)
-    {
-        return null;
     }
 
     protected function _createData($parentData, $row)

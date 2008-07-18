@@ -10,7 +10,8 @@ class Vpc_News_Directory_Component extends Vpc_News_List_Abstract_Component
         $ret['generators']['detail'] = array(
             'class' => 'Vps_Component_Generator_Page_Table',
             'component' => 'Vpc_News_Detail_Component',
-            'nameColumn' => 'title'
+            'nameColumn' => 'title',
+            'dbIdShortcut' => 'news_'
         );
         $ret['generators']['newsMenu'] = array(
             'class' => 'Vps_Component_Generator_Box_Static',

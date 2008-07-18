@@ -10,7 +10,7 @@ class Vpc_Basic_LinkTag_Intern_Data extends Vps_Component_Data
             $row = $table->find($this->dbId)->current();
             if ($row) {
                 $this->_data = Vps_Component_Data_Root::getInstance()
-                                                ->getByDbId($row->target);
+                                                ->getComponentByDbId($row->target);
             } else {
                 $this->_data = false;
             }

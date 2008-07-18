@@ -23,7 +23,7 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
     {
         $ret = parent::_acceptKey($key, $constraints, $parentData);
         if ($ret) {
-            $c = $this->_settings['component'][$key];
+            $c = $this->_settings;
             if (isset($constraints['filename']) &&
                 $constraints['filename'] != $this->_getFilenameFromRow($key)
             ) {
@@ -35,9 +35,9 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
 
     protected function _getFilenameFromRow($componentKey)
     {
-        $c = $this->_settings['component'][$componentKey];
+        $c = $this->_settings;
         if (isset($c['filename'])) {
-            return $c['filename'];
+            $ret = $c['filename'];
         }
         if (isset($c['name'])) {
             $ret = $c['name'];
@@ -49,7 +49,7 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
 
     protected function _formatConfig($parentData, $componentKey)
     {
-        $c = $this->_settings['component'][$componentKey];
+        $c = $this->_settings;
 
         $data = parent::_formatConfig($parentData, $componentKey);
         $data['filename'] = $this->_getFilenameFromRow($componentKey);

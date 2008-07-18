@@ -7,7 +7,7 @@ class Vpc_News_Directory_FormController extends Vps_Controller_Action_Auto_Form
     public function _initFields()
     {
         $data = Vps_Component_Data_Root::getInstance()
-                        ->getByDbId($this->_getParam('component_id'));
+                        ->getComponentByDbId($this->_getParam('component_id'));
         $classes = Vpc_Abstract::getChildComponentClasses($data->componentClass, 'child');
 
         $this->_form = Vpc_Abstract_Form::createComponentForm($data->componentClass, $classes['detail']);

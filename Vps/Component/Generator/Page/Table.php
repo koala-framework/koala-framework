@@ -10,8 +10,16 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_Table i
             unset($constraints['filename']);
         }
         if (isset($constraints['showInMenu'])) {
-            if ($constraints['showInMenu'] && !$this->_settings['showInMenu']) return null;
-            if (!$constraints['showInMenu'] && $this->_settings['showInMenu']) return null;
+            if ($constraints['showInMenu'] &&
+                (!isset($this->_settings['showInMenu']) || !$this->_settings['showInMenu']))
+            {
+                return null;
+            }
+            if (!$constraints['showInMenu'] && 
+                isset($this->_settings['showInMenu']) && $this->_settings['showInMenu'])
+            {
+                return null;
+            }
             unset($constraints['showInMenu']);
         }
         $constraints = parent::_formatConstraints($parentData, $constraints);
@@ -25,7 +33,7 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_Table i
         $select = parent::_getSelect($parentData, $constraints);
         if (!$select) return null;
         if (isset($constraints['filename'])) {
-            if ($this->_settings['uniqueFilename']) {
+            if (isset($this->_settings['uniqueFilename']) && $this->_settings['uniqueFilename']) {
                 $select->where($this->_settings['filenameColumn'] . ' = ?', $constraints['filename']);
             } else {
                 if (!preg_match('#^([0-9]+)_#', $constraints['filename'], $m)) return null;

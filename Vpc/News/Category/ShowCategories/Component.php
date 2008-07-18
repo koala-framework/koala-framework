@@ -24,7 +24,7 @@ class Vpc_News_Category_ShowCategories_Component extends Vpc_News_List_Abstract_
         $categories = $this->_getCategories();
         if (count($categories)) {
             return Vps_Component_Data_Root::getInstance()
-                ->getByDbId($categories->current()->news_component_id);
+                ->getComponentByDbId($categories->current()->news_component_id);
         }
         return null;
     }

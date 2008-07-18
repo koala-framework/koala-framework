@@ -16,7 +16,7 @@ class Vpc_News_Top_Component extends Vpc_News_List_Abstract_Component
     {
         $row = $this->_getRow();
         if ($row && $row->news_component_id) {
-            return Vps_Component_Data_Root::getInstance()->getByDbId($row->news_component_id);
+            return Vps_Component_Data_Root::getInstance()->getComponentByDbId($row->news_component_id);
         }
         return null;
     }
