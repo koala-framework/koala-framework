@@ -167,9 +167,16 @@ class Vps_Setup
     public static function setUp()
     {
         require_once 'Vps/Loader.php';
-        Vps_Loader::registerAutoload();
-
+        require_once 'Vps/Registry.php';
         Zend_Registry::setClassName('Vps_Registry');
+        if (Zend_Registry::get('config')->debug->benchmark) {
+            require_once 'Vps/Benchmark.php';
+            //vor registerAutoload aufrufen damit wir dort benchmarken können
+            Vps_Benchmark::enable();
+            $GLOBALS['renderedCounter'] = array('cached' => array(), 'notcached' => array());
+            $GLOBALS['getComponentByIdCalled'] = array();
+        }
+        Vps_Loader::registerAutoload();
 
         error_reporting(E_ALL);
         date_default_timezone_set('Europe/Berlin');
@@ -180,12 +187,6 @@ class Vps_Setup
             $ip .= PATH_SEPARATOR . $p;
         }
         set_include_path($ip);
-
-        if (Zend_Registry::get('config')->debug->benchmark) {
-            Vps_Benchmark::enable();
-            $GLOBALS['renderedCounter'] = array('cached' => array(), 'notcached' => array());
-            $GLOBALS['getComponentByIdCalled'] = array();
-        }
 
         Zend_Registry::set('requestNum', ''.floor(microtime(true)*100));
         if (Zend_Registry::get('config')->debug->firephp && !isset($_SERVER['SHELL'])) {
@@ -264,6 +265,7 @@ class Vps_Setup
 
         $vpsSection = $webSection = 'vivid';
 
+        require_once 'Zend/Config/Ini.php';
         $webConfigFull = new Zend_Config_Ini('application/config.ini', null);
         if (isset($webConfigFull->$section)) {
             $webSection = $section;
@@ -379,11 +381,13 @@ class Vps_Setup
             if ($rule == 'default') { $rule = null; }
 
             // TODO: Cachen ohne Datenbankabfragen
-            if (class_exists($class) && is_subclass_of($class, 'Vpc_Abstract')) {
+            if (Vpc_Abstract::hasSettings($class)) {
                 $tableClass = Vpc_Abstract::getSetting($class, 'tablename');
                 $table = new $tableClass(array('componentClass' => $class));
-            } else {
+            } else if (is_a($table, 'Vps_Db_Table_Abstract')) {
                 $table = new $class();
+            } else {
+                throw new Vps_Exception("Invalid class: $class");
             }
             $row = $table->find($id)->current();
             if (!$row) {

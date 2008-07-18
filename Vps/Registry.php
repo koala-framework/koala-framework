@@ -1,4 +1,5 @@
 <?php
+require_once 'Zend/Registry.php';
 class Vps_Registry extends Zend_Registry
 {
     public function offsetGet($index)
@@ -12,8 +13,10 @@ class Vps_Registry extends Zend_Registry
             $this->offsetSet('dao', $v);
             return $v;
         } else if ($index == 'config' && !parent::offsetExists($index)) {
+            require_once 'Vps/Config/Cache.php';
             $cache = new Vps_Config_Cache;
             $cacheId = Vps_Setup::getConfigSection();
+            require_once 'Zend/Config/Ini.php';
             if(!$v = $cache->load($cacheId)) {
                 $v = Vps_Setup::createConfig();
                 $cache->save($v, $cacheId);

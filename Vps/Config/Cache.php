@@ -1,4 +1,5 @@
 <?php
+require_once 'Zend/Cache/Frontend/File.php';
 class Vps_Config_Cache extends Zend_Cache_Frontend_File {
     
     private $_masterFile2_mtime = null;
@@ -10,8 +11,9 @@ class Vps_Config_Cache extends Zend_Cache_Frontend_File {
             'automatic_serialization' => true
         ));
         
-        $this->_masterFile2_mtime = filemtime(VPS_PATH . '/config.ini');        
+        $this->_masterFile2_mtime = filemtime(VPS_PATH . '/config.ini');
         
+        require_once 'Zend/Cache/Backend/File.php';
         $backend = new Zend_Cache_Backend_File(array(
             'cache_dir' => 'application/cache/config',
             'hashed_directory_umask' => 0770

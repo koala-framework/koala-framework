@@ -17,10 +17,10 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         return $ret;
     }
     
-    public static function getChildComponentClasses($class, $generator = null)
+    public static function getChildComponentClasses($class, $generator = null, $useSettingsCache = true)
     {
         $ret = array();
-        foreach (self::getSetting($class, 'generators') as $key => $g) {
+        foreach (self::getSetting($class, 'generators', $useSettingsCache) as $key => $g) {
             if (!$generator || $generator == $key) {
                 if (is_array($g['component'])) {
                     $ret = array_merge($ret, $g['component']);
@@ -29,9 +29,12 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
                 }
             }
         }
+        foreach (self::getSetting($class, 'plugins', $useSettingsCache) as $p) {
+            $ret[] = $p;
+        }
         return $ret;
     }
-    
+
     public static function getChildComponentClass($class, $generator, $key = null)
     {
         $classes = self::getChildComponentClasses($class, $generator);

@@ -93,11 +93,11 @@ class Vps_Benchmark
             if (substr($k, 0, 1) == '_') continue;
             $out[] = $k.': '.$i;
         }
-        if (class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {	
+        if (class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
             p($this->identifier.': '.implode('; ', $out));
-	} else {
-	    //TODO
-	}
+        } else {
+            //TODO
+        }
         $this->_stopped = true;
     }
 
@@ -111,6 +111,11 @@ class Vps_Benchmark
     {
         self::$_startTime = microtime(true);
         self::$_enabled = true;
+    }
+
+    public static function isEnabled()
+    {
+        return self::$_enabled;
     }
 
     public static function count($name, $value = null)
@@ -159,6 +164,14 @@ class Vps_Benchmark
             }
         }
         echo "</div>";
+    }
+
+    public static function info($msg)
+    {
+        if (!self::$_enabled) return;
+        if (class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
+            p($msg, 'INFO');
+        }
     }
 
 }

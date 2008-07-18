@@ -208,9 +208,8 @@ class Vps_Assets_Dependencies
 
         //alle css-dateien der vererbungshierache includieren
         $componentCssFiles = array();
-        $c = $class;
 
-        while ($c) {
+        foreach (Vpc_Abstract::getParentClasses($class) as $c) {
             $curClass = $c;
             if (substr($curClass, -10) == '_Component') {
                 $curClass = substr($curClass, 0, -10);
@@ -228,7 +227,6 @@ class Vps_Assets_Dependencies
                     break;
                 }
             }
-            $c = get_parent_class($c);
         }
         //reverse damit css von weiter unten in der vererbungshierachie überschreibt
         $this->_files[$assetsType] = array_merge($this->_files[$assetsType], array_reverse($componentCssFiles));

@@ -1,7 +1,6 @@
 <?php
 class Vps_Component_Abstract
 {
-    private static $_settingsCache = array();
     public function __construct()
     {
         $this->_init();
@@ -15,41 +14,118 @@ class Vps_Component_Abstract
     {
     }
 
+    public static function hasSettings($class)
+    {
+        //& für performance
+        $s =& self::_getSettingsCached();
+        return isset($s[$class]);
+    }
+
     public static function hasSetting($class, $setting)
     {
-        //$class = self::_normalizeClass($class);
-        if (!isset(self::$_settingsCache[$class])) {
-            self::$_settingsCache[$class] = call_user_func(array($class, 'getSettings'));
+        //& für performance
+        $s =& self::_getSettingsCached();
+        if (!isset($s[$class])) {
+            throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses.");
         }
-        return isset(self::$_settingsCache[$class][$setting]);
+        return isset($s[$class][$setting]);
     }
 
-    public static function getSetting($class, $setting)
+    public static function getSetting($class, $setting, $useSettingsCache = true)
     {
-        //$class = self::_normalizeClass($class);
-        if (!isset(self::$_settingsCache[$class])) {
-            if (!class_exists($class)) {
-                throw new Vps_Exception("Component '$class' not found");
+        if (!$useSettingsCache) {
+            //um endlosschleife in settingsCache zu verhindern
+            $settings = call_user_func(array($class, 'getSettings'));
+            return $settings[$setting];
+        }
+        //& für performance
+        $s =& self::_getSettingsCached();
+        if (!isset($s[$class])) {
+            throw new Vps_Exception("No Settings for component '$class' found; it is probably not in allComponentClasses.");
+        }
+        if (!isset($s[$class][$setting])) {
+            throw new Vps_Exception("Setting '$setting' does not exist for Component '$class'");
+        }
+        return $s[$class][$setting];
+    }
+
+    private static function &_getSettingsCached()
+    {
+        static $settings = null;
+        if (!$settings) {
+            $frontendOptions = array(
+                'lifetime' => null,
+                'automatic_serialization' => true
+            );
+            $backendOptions = array(
+                'cache_dir' => 'application/cache/config/'
+            );
+            $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+            $cacheId = 'componentSettings'.Vps_Registry::get('trl')->getTargetLanguage();
+            $settings = $cache->load($cacheId);
+
+            if ($settings && Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
+                foreach ($settings as $s) {
+                    if (!isset($s['parentFiles'])) {
+                        Vps_Benchmark::info("Settings-Cache regenerated (checkComponentModification changed)");
+                        $settings = false;
+                        break;
+                    }
+                    foreach ($s['parentFiles'] as $f) {
+                        if (filemtime($f) > $s['mtime']) {
+                            Vps_Benchmark::info("Settings-Cache regenerated ($f modified)");
+                            $settings = false;
+                            break;
+                        }
+                    }
+                    if (!$settings) break;
+                }
+            } else if (!$settings) {
+                Vps_Benchmark::info('Settings-Cache regenerated (was empty)');
             }
-            self::$_settingsCache[$class] = call_user_func(array($class, 'getSettings'));
+
+            if (!$settings) {
+                $settings = array();
+                $incPaths = explode(PATH_SEPARATOR, get_include_path());
+                foreach (self::getComponentClasses(false/*don't use settings cache*/) as $c) {
+                    $settings[$c] = call_user_func(array($c, 'getSettings'));
+                    $p = $c;
+                    $settings[$c]['parentClasses'] = array();
+                    do {
+                        $settings[$c]['parentClasses'][] = $p;
+                    } while ($p = get_parent_class($p));
+                    if (Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
+                        $settings[$c]['parentFiles'] = array();
+                        $settings[$c]['mtime'] = 0;
+                        $p = $c;
+                        do {
+                            $file = str_replace('_', DIRECTORY_SEPARATOR, $p) . '.php';
+                            $f = false;
+                            foreach ($incPaths as $incPath) {
+                                if (file_exists($incPath.DIRECTORY_SEPARATOR.$file)) {
+                                    $f = $incPath.DIRECTORY_SEPARATOR.$file;
+                                    break;
+                                }
+                            }
+                            if (!$f) { throw new Vps_Exception("File $file not found"); }
+                            $settings[$c]['parentFiles'][] = $f;
+                            $settings[$c]['mtime'] = max($settings[$c]['mtime'], filemtime($f));
+                        } while ($p = get_parent_class($p));
+                    }
+                }
+                $cache->save($settings, $cacheId);
+            }
         }
-        if (!isset(self::$_settingsCache[$class][$setting])) {
-            throw new Vps_Exception("Setting '$setting' does not exist for Component $class");
-        }
-        return self::$_settingsCache[$class][$setting];
+        return $settings;
     }
 
-    private static function _normalizeClass($class)
+    public static function getParentClasses($c)
     {
-        if (is_object($class)) $class = get_class($class);
-        if (!Vps_Loader::classExists($class)) {
-            $class = substr($class, 0, strrpos($class, '_')) . '_Component';
-        }
-        if (!class_exists($class)) {
-            throw new Vps_Exception("Component '$class' does not exist");
-        }
-        return $class;
+        //im printzip das gleiche wie while() { get_parent_class() } wird aber so
+        //in settings-cache gecached
+        return self::getSetting($c, 'parentClasses');
     }
+
 
 
     public static function getSettings()
@@ -81,23 +157,28 @@ class Vps_Component_Abstract
         return self::getSetting(get_class($this), $setting);
     }
 
-    public static function getComponentClasses()
+    public static function getComponentClasses($useSettingsCache = true)
     {
-        static $componentClasses;
-        if (isset($componentClasses)) return $componentClasses;
+        static $componentClasses = null;
+        if ($componentClasses) return $componentClasses;
+        $componentClasses = array();
         $c = Vps_Registry::get('config')->vpc->rootComponent;
-        $componentClasses = array($c);
-        self::_getChildComponentClasses($componentClasses, $c);
+        $componentClasses[] = $c;
+        self::_getChildComponentClasses($componentClasses, $c, $useSettingsCache);
+        foreach (Vps_Registry::get('config')->vpc->masterComponents as $c) {
+            $componentClasses[] = $c;
+            self::_getChildComponentClasses($componentClasses, $c, $useSettingsCache);
+        }
         return $componentClasses;
     }
 
-    private static function _getChildComponentClasses(&$componentClasses, $class)
+    private static function _getChildComponentClasses(&$componentClasses, $class, $useSettingsCache)
     {
-        $classes = Vpc_Abstract::getChildComponentClasses($class);
+        $classes = Vpc_Abstract::getChildComponentClasses($class, null, $useSettingsCache);
         foreach ($classes as $class) {
             if ($class && !in_array($class, $componentClasses)) {
                 $componentClasses[] = $class;
-                self::_getChildComponentClasses($componentClasses, $class);
+                self::_getChildComponentClasses($componentClasses, $class, $useSettingsCache);
             }
         }
     }

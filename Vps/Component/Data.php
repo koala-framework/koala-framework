@@ -138,6 +138,9 @@ class Vps_Component_Data
         
         $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
         foreach ($generators as $key => $generator) {
+            if (!isset($generator['class'])) {
+                throw new Vps_Exception("Generator '$key' of component '$componentClass' doesn't have a class");
+            }
             if (is_instance_of($generator['class'], $interface)) {
                 $hasGenerator[$interface][$componentClass] = true;
                 return true;
