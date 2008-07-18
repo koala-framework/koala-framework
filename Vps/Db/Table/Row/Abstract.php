@@ -280,4 +280,29 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
         return parent::findParentRow($parentTable, $ruleKey, $select);
     }
+    
+    
+    protected function _postUpdate()
+    {
+        parent::_postUpdate();
+        foreach (Vpc_Abstract::getComponentClasses() as $c) {
+            Vpc_Admin::getInstance($c)->onRowUpdate($this);
+        }
+    }
+
+    protected function _postInsert()
+    {
+        parent::_postInsert();
+        foreach (Vpc_Abstract::getComponentClasses() as $c) {
+            Vpc_Admin::getInstance($c)->onRowInsert($this);
+        }
+    }
+
+    protected function _postDelete()
+    {
+        parent::_postDelete();
+        foreach (Vpc_Abstract::getComponentClasses() as $c) {
+            Vpc_Admin::getInstance($c)->onRowDelete($this);
+        }
+    }    
 }

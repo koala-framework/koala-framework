@@ -34,7 +34,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         if ($row->is_home) {
             $data['bIcon'] = $this->_icons['home']->__toString();
         }
-        $classes = Vpc_Abstract::getChildComponentClasses(Vps_Registry::get('config')->vpc->rootComponent, 'child');
+        $classes = Vpc_Abstract::getChildComponentClasses(Vps_Registry::get('config')->vpc->rootComponent, 'page');
         $data['data']['component_class'] = $classes[$row->component];
         $data['uiProvider'] = 'Vps.Component.PagesNode';
         return $data;
