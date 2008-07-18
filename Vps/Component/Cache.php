@@ -66,8 +66,8 @@ class Vps_Component_Cache extends Zend_Cache_Core {
             if ($data) {
                 $file = Vpc_Admin::getComponentFile($data->componentClass, 'Component', 'tpl');
                 if ($lastModified > filemtime($file)) { // Wenn Component.tpl nicht geändert wurde, Component.php prüfen
-                    $class = $data->componentClass;
-                    while ($class) { // Alle Component.php der Klassenhierarchie prüfen
+                    // Alle Component.php der Klassenhierarchie prüfen
+                    foreach (Vpc_Abstract::getParentClasses($data->componentClass) as $class) {
                         $file = Vpc_Admin::getComponentFile($class, 'Component', 'php');
                         if ($lastModified < filemtime($file)) {
                             return false;

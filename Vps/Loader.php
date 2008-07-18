@@ -26,4 +26,33 @@ class Vps_Loader extends Zend_Loader
         }
         return false;
     }
+
+    public static function registerAutoload($class = null, $enabled = true)
+    {
+        if (!$class) {
+            require_once 'Vps/Benchmark.php';
+            if (Vps_Benchmark::isEnabled()) {
+                $class = 'Vps_Loader';
+            } else {
+                //für performance
+                $class = 'Zend_Loader';
+            }
+        }
+        parent::registerAutoload($class, $enabled);
+    }
+
+    public static function autoload($class)
+    {
+        $ret = parent::autoload($class);
+        if (substr($class, 0, 4) == 'Vpc_') {
+            if (is_subclass_of($class, 'Vpc_Abstract')) {
+                Vps_Benchmark::count('component classes included');
+            } else if (is_subclass_of($class, 'Vps_Component_Generator_Abstract')) {
+                Vps_Benchmark::count('generator classes included');
+            }
+        }
+        Vps_Benchmark::count('classes included', $class);
+        return $ret;
+    }
+
 }
