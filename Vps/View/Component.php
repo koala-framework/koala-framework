@@ -43,12 +43,15 @@ class Vps_View_Component extends Vps_View
 
         //plugins _nach_ im cache speichern ausführen
         foreach ($plugins as $p) {
+            if (!$p) {
+                throw new Vps_Exception("Invalid Plugin specified '$p'");
+            }
             $p = new $p($componentId);
             $ret = $p->processOutput($ret);
         }
 
         // nocache-Tags ersetzen
-        preg_match_all('/{nocache: ([^ }]+) ?([^ }]*) ?([^}]*)}/', $ret, $matches);
+        preg_match_all('/{nocache: ([^ }]+) ([^ }]*) ?([^}]*)}/', $ret, $matches);
         foreach ($matches[0] as $key => $search) {
             if ($matches[3][$key]) {
                 $plugins = explode(' ', $matches[3][$key]);
@@ -62,10 +65,9 @@ class Vps_View_Component extends Vps_View
         return $ret;
     }
 
+
     private static function _renderComponent(Vps_Component_Data $componentData, $isMaster)
     {
-        $componentId = $componentData->componentId;
-
         if ($isMaster) {
             $templateVars = array();
             foreach (Zend_Registry::get('config')->vpc->masterComponents->toArray()
@@ -94,7 +96,8 @@ class Vps_View_Component extends Vps_View
 
         $view = new Vps_View_Component();
         $view->assign($templateVars);
-        return $view->render($template);
+        $ret = $view->render($template);
+        return $ret;
     }
 
     protected function _script($name)

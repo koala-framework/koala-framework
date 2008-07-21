@@ -6,6 +6,6 @@ class Vps_View_Helper_Component
         $plugins = $component->getPlugins('Vps_Component_Plugin_Interface_View');
         $plugins = implode(' ', $plugins);
         if ($plugins) $plugins = ' '.$plugins;
-        return "{nocache: {$component->componentClass} {$component->componentId} {$plugins}}";
+        return "{nocache: {$component->componentClass} {$component->componentId}{$plugins}}";
     }
 }
