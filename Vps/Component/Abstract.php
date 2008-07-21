@@ -121,7 +121,7 @@ class Vps_Component_Abstract
 
     public static function getParentClasses($c)
     {
-        //im printzip das gleiche wie while() { get_parent_class() } wird aber so
+        //im prinzip das gleiche wie while() { get_parent_class() } wird aber so
         //in settings-cache gecached
         return self::getSetting($c, 'parentClasses');
     }
