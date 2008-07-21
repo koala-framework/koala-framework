@@ -163,8 +163,8 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     }
     public function getFileRow($rule = null)
     {
-        $key = is_null($rule) ? 'asdf' : $rule;
-        if (!array_key_exists($rule, $this->_fileRowCache)) {
+        $key = is_null($rule) ? '' : $rule;
+        if (!array_key_exists($key, $this->_fileRowCache)) {
             $this->_fileRowCache[$key] = $this->findParentRow('Vps_Dao_File', $this->_getRule($rule));
         }
         return $this->_fileRowCache[$key];
