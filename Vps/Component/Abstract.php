@@ -49,6 +49,12 @@ class Vps_Component_Abstract
         return $s[$class][$setting];
     }
 
+    public static function getSettingCacheMtime()
+    {
+        $s =& self::_getSettingsCached();
+        return $s['mtime'];
+    }
+
     private static function &_getSettingsCached()
     {
         static $settings = null;
@@ -65,7 +71,8 @@ class Vps_Component_Abstract
             $settings = $cache->load($cacheId);
 
             if ($settings && Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
-                foreach ($settings as $s) {
+                foreach ($settings as $k=>$s) {
+                    if ($k=='mtime') continue;
                     if (!isset($s['parentFiles'])) {
                         Vps_Benchmark::info("Settings-Cache regenerated (checkComponentModification changed)");
                         $settings = false;
@@ -112,6 +119,7 @@ class Vps_Component_Abstract
                             $settings[$c]['mtime'] = max($settings[$c]['mtime'], filemtime($f));
                         } while ($p = get_parent_class($p));
                     }
+                    $settings['mtime'] = time();
                 }
                 $cache->save($settings, $cacheId);
             }

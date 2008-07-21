@@ -21,7 +21,7 @@ class Vps_Assets_Dependencies
 
     public function getAssetFiles($assetsType, $fileType = null)
     {
-        //$b = Vps_Benchmark::start();
+        $b = Vps_Benchmark::start();
         if ($this->_config->debug->menu) {
             $session = new Zend_Session_Namespace('debug');
             if (isset($session->enable) && $session->enable) {
@@ -34,7 +34,11 @@ class Vps_Assets_Dependencies
             $ret[] = "/assets/All$assetsType.$fileType?v=$v";
             $allUsed = true;
         }
+
         foreach ($this->_getFiles($assetsType, $fileType) as $file) {
+            if ($file instanceof Vps_Assets_Dynamic) {
+                $file = $file->getFile();
+            }
             if (substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/') {
                 $ret[] = $file;
             } else if (empty($allUsed)) {
@@ -47,15 +51,36 @@ class Vps_Assets_Dependencies
     private function _getFiles($assetsType, $fileType = null)
     {
         if (!isset($this->_files[$assetsType])) {
-            $this->_files[$assetsType] = array();
-            $assetsSection = $assetsType;
-            if (!isset($this->_config->assets->$assetsType)) {
-                throw new Vps_Exception("Unknown AssetsType '$assetsType'");
+            $cacheId = 'dependencies'.$assetsType;
+            $cache = new Vps_Assets_Cache();
+            $mtime = $cache->test($cacheId);
+            if (!$mtime) {
+                Vps_Benchmark::info('Generate Dependencies Cache');
             }
-            foreach ($this->_config->assets->$assetsType as $d=>$v) {
-                if ($v) {
-                    $this->_processDependency($assetsType, $d);
+            if (Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
+                if ($mtime && $mtime < Vpc_Abstract::getSettingCacheMtime()) {
+                    Vps_Benchmark::info('Regenerate Dependencies Cache (component settings changed)');
+                    $mtime = false;
                 }
+                if ($mtime && $mtime < Vps_Registry::get('configMtime')) {
+                    Vps_Benchmark::info('Regenerate Dependencies Cache (config.ini changed)');
+                    $mtime = false;
+                }
+            }
+            if (!$mtime) {
+                $this->_files[$assetsType] = array();
+                $assetsSection = $assetsType;
+                if (!isset($this->_config->assets->$assetsType)) {
+                    throw new Vps_Exception("Unknown AssetsType '$assetsType'");
+                }
+                foreach ($this->_config->assets->$assetsType as $d=>$v) {
+                    if ($v) {
+                        $this->_processDependency($assetsType, $d);
+                    }
+                }
+                $cache->save($this->_files[$assetsType], $cacheId);
+            } else {
+                $this->_files[$assetsType] = $cache->load($cacheId);
             }
         }
 
@@ -63,8 +88,9 @@ class Vps_Assets_Dependencies
 
         $files = array();
         foreach ($this->_files[$assetsType] as $file) {
-            if (substr($file, -strlen($fileType)) == $fileType) {
-                if (substr($file, -strlen($fileType)-1) == " $fileType") {
+            if ((is_string($file) && substr($file, -strlen($fileType)) == $fileType)
+                || ($file instanceof Vps_Assets_Dynamic && $file->getType() == $fileType)) {
+                if (is_string($file) && substr($file, -strlen($fileType)-1) == " $fileType") {
                     //wenn asset hinten mit " js" aufhört das js abschneiden
                     //wird benötigt für googlemaps wo die js-dateien kein js am ende haben
                     $file = substr($file, 0, -strlen($fileType)-1);
@@ -126,6 +152,9 @@ class Vps_Assets_Dependencies
         }
         $contents = '';
         foreach ($this->_getFiles($assetsType, $fileType) as $file) {
+            if ($file instanceof Vps_Assets_Dynamic) {
+                $file = $file->getFile();
+            }
             if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
                 $contents .= Vps_Assets_Loader::getFileContents($file, $this->_config->path) . "\n";
             }
@@ -242,7 +271,7 @@ class Vps_Assets_Dependencies
 
     private function _processDependencyFile($assetsType, $file)
     {
-        if (substr($file, -2)=="/*") {
+        if (is_string($file) && substr($file, -2)=="/*") {
             $pathType = substr($file, 0, strpos($file, '/'));
             if (!isset($this->_config->path->$pathType)) {
                 throw new Vps_Exception(trlVps("Assets-Path-Type '{0}' not found in config.", $pathType));

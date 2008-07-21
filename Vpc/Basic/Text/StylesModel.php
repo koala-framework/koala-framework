@@ -56,14 +56,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
 
     private static function _getCache()
     {
-        $frontendOptions = array(
-            'lifetime' => null,
-            'automatic_serialization' => true
-        );
-        $backendOptions = array(
-            'cache_dir' => 'application/cache/assets/'
-        );
-        return Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        return new Vps_Assets_Cache();
     }
 
     public static function removeCache()
@@ -71,10 +64,10 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
         return self::_getCache()->remove('RteStyles');
     }
 
-    private static function _getCacheData()
+    public static function getStylesContents()
     {
         $cache = self::_getCache();
-        if (!$cacheData = $cache->load('RteStyles')) {
+        if (!$css = $cache->load('RteStyles')) {
             $model = new Vps_Model_Db(array('table'=>new Vpc_Basic_Text_StylesModel()));
             $css = '';
             $stylesModel = new Vps_Model_Field(array(
@@ -104,23 +97,14 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
                 }
                 $css .= "} /* $row->name */\n";
             }
-
-            $cacheData = array(
-                'contents' => $css,
-                'mtime' => time()
-            );
-            $cache->save($cacheData, 'RteStyles');
+            $cache->save($css, 'RteStyles');
         }
-        return $cacheData;
-    }
-    public static function getStylesContents()
-    {
-        $cacheData = self::_getCacheData();
-        return $cacheData['contents'];
+        return $css;
     }
     public static function getStylesUrl()
     {
-        $cacheData = self::_getCacheData();
-        return '/assets/AllRteStyles.css?v='.$cacheData['mtime'];
+        $mtime = self::_getCache()->test('RteStyles');
+        if (!$mtime) $mtime = time();
+        return '/assets/AllRteStyles.css?v='.$mtime;
     }
 }

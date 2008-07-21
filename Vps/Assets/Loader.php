@@ -113,15 +113,7 @@ class Vps_Assets_Loader
                     echo self::_encode($contents, $encoding);
                 } else {
 
-                    $frontendOptions = array(
-                        'lifetime' => null,
-                        'automatic_serialization' => true
-                    );
-                    $backendOptions = array(
-                        'cache_dir' => 'application/cache/assets/'
-                    );
-                    $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-
+                    $cache = new Vps_Assets_Cache();
                     $sessionDebug = new Zend_Session_Namespace('debug');
                     $config = Vps_Registry::get('config');
                     if ((!$cacheData = $cache->load($fileType.$encoding.$section))
