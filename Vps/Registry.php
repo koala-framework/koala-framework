@@ -17,10 +17,15 @@ class Vps_Registry extends Zend_Registry
             $cache = new Vps_Config_Cache;
             $cacheId = Vps_Setup::getConfigSection();
             require_once 'Zend/Config/Ini.php';
-            if(!$v = $cache->load($cacheId)) {
+            $mtime = $cache->test($cacheId);
+            if(!$mtime) {
                 $v = Vps_Setup::createConfig();
+                $mtime = time();
                 $cache->save($v, $cacheId);
+            } else {
+                $v = $cache->load($cacheId);
             }
+            $this->offsetSet('configMtime', $mtime);
             $this->offsetSet('config', $v);
             return $v;
         } else if ($index == 'acl' && !parent::offsetExists($index)) {

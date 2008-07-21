@@ -44,10 +44,8 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
         $ret['assets']['dep'][] = 'VpsMailDecode';
         $ret['cssClass'] = 'webStandard vpcText';
 
-        //hinten ' css' anhängen damit die datei als css-datei erkannt wird
-        //nötig weil ein get-parameter mit der mtime dranhängt
-        $ret['assets']['files'][] =
-                    Vpc_Basic_Text_StylesModel::getStylesUrl().' css';
+        $ret['assets']['files'][] = new Vps_Assets_Dynamic('css',
+                            array('Vpc_Basic_Text_StylesModel', 'getStylesUrl'));
 
         return $ret;
     }
