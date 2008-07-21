@@ -4,6 +4,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
     protected $_name = 'vps_users';
     protected $_primary = 'id';
     protected $_rowClass = 'Vps_Model_User_User';
+    private $_authedUser;
 
     static $checkCacheDone = false;
 
@@ -162,9 +163,12 @@ class Vps_Model_User_Users extends Vps_Db_Table
 
     public function getAuthedUser()
     {
-        $loginData = Vps_Auth::getInstance()->getStorage()->read();
-        if (!$loginData) return null;
-        return $this->find($loginData['userId'])->current();
+        if (!isset($this->_authedUser)) {
+            $loginData = Vps_Auth::getInstance()->getStorage()->read();
+            if (!$loginData) return null;
+            $this->_authedUser = $this->find($loginData['userId'])->current();
+        }
+        return $this->_authedUser;
     }
 
     public function getAuthedUserRole()
