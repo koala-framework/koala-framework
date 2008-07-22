@@ -31,8 +31,8 @@ class Vps_View_Ext extends Vps_View
 
         // View einrichten
         $dep = new Vps_Assets_Dependencies();
-        $ext['assets']['js'] = $dep->getAssetFiles('Admin', 'js');
-        $ext['assets']['css'] = $dep->getAssetFiles('Admin', 'css');
+        $ext['assets']['js'] = $dep->getAssetUrls('Admin', 'js');
+        $ext['assets']['css'] = $dep->getAssetUrls('Admin', 'css');
         $ext['class'] = $class;
         $ext['config'] = Zend_Json::encode($config);
         $ext['viewport'] = $viewport;

@@ -50,8 +50,12 @@ class AllTests
 
     public static function suite()
     {
-        $suite = new PHPUnit_Framework_TestSuite('E3 Framework');
+        $suite = new PHPUnit_Framework_TestSuite('Vps Framework');
         foreach (self::dirlist('Vpc') as $filename) {
+            require_once($filename);
+            $suite->addTestSuite(str_replace('.php', '', str_replace('/', '_', $filename)));
+        }
+        foreach (self::dirlist('Vps') as $filename) {
             require_once($filename);
             $suite->addTestSuite(str_replace('.php', '', str_replace('/', '_', $filename)));
         }
