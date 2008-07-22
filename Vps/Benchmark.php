@@ -93,7 +93,7 @@ class Vps_Benchmark
             if (substr($k, 0, 1) == '_') continue;
             $out[] = $k.': '.$i;
         }
-        if (class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
+        if (Zend_Registry::get('config')->debug->firephp && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
             p($this->identifier.': '.implode('; ', $out));
         } else {
             //TODO
@@ -169,7 +169,7 @@ class Vps_Benchmark
     public static function info($msg)
     {
         if (!self::$_enabled) return;
-        if (class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
+        if (Zend_Registry::get('config')->debug->firephp && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
             p($msg, 'INFO');
         }
     }

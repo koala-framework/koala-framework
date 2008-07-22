@@ -14,12 +14,7 @@ class Vps_Assets_Dependencies
         $this->_config = Vps_Registry::get('config');
     }
 
-    private function _getFilePath($file)
-    {
-        return Vps_Assets_Loader::getAssetPath($file, $this->_config->path);
-    }
-
-    public function getAssetFiles($assetsType, $fileType = null)
+    public function getAssetUrls($assetsType, $fileType = null)
     {
         $b = Vps_Benchmark::start();
         if ($this->_config->debug->menu) {
@@ -31,11 +26,12 @@ class Vps_Assets_Dependencies
         $ret = array();
         if (!$this->_config->debug->assets->$fileType || (isset($session->$fileType) && !$session->$fileType)) {
             $v = $this->_config->application->version;
-            $ret[] = "/assets/All$assetsType.$fileType?v=$v";
+            $language = Zend_Registry::get('trl')->getTargetLanguage();
+            $ret[] = "/assets/All$assetsType-$language.$fileType?v=$v";
             $allUsed = true;
         }
 
-        foreach ($this->_getFiles($assetsType, $fileType) as $file) {
+        foreach ($this->getAssetFiles($assetsType, $fileType) as $file) {
             if ($file instanceof Vps_Assets_Dynamic) {
                 $file = $file->getFile();
             }
@@ -48,7 +44,7 @@ class Vps_Assets_Dependencies
         return $ret;
     }
 
-    private function _getFiles($assetsType, $fileType = null)
+    public function getAssetFiles($assetsType, $fileType = null)
     {
         if (!isset($this->_files[$assetsType])) {
             $cacheId = 'dependencies'.$assetsType;
@@ -71,7 +67,7 @@ class Vps_Assets_Dependencies
                 $this->_files[$assetsType] = array();
                 $assetsSection = $assetsType;
                 if (!isset($this->_config->assets->$assetsType)) {
-                    throw new Vps_Exception("Unknown AssetsType '$assetsType'");
+                    throw new Vps_Assets_NotFoundException("Unknown AssetsType '$assetsType'");
                 }
                 foreach ($this->_config->assets->$assetsType as $d=>$v) {
                     if ($v) {
@@ -140,23 +136,24 @@ class Vps_Assets_Dependencies
         return $contents;
     }
 
-    public function getPackedAll($assetsType, $fileType)
+    public function getPackedAll($assetsType, $fileType, $language)
     {
-        return $this->_pack($this->getContentsAll($assetsType, $fileType), $fileType);
+        return $this->_pack($this->getContentsAll($assetsType, $fileType, $language), $fileType);
     }
 
-    public function getContentsAll($assetsType, $fileType)
+    public function getContentsAll($assetsType, $fileType, $language)
     {
         if (substr($assetsType, -5) == 'Debug' && !$this->_config->debug->menu) {
             throw new Vps_Exception("Debug Assets are not avaliable as the debug menu is disabled");
         }
         $contents = '';
-        foreach ($this->_getFiles($assetsType, $fileType) as $file) {
+        foreach ($this->getAssetFiles($assetsType, $fileType) as $file) {
             if ($file instanceof Vps_Assets_Dynamic) {
                 $file = $file->getFile();
             }
             if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
-                $contents .= Vps_Assets_Loader::getFileContents($file, $this->_config->path) . "\n";
+                $c = $this->getFileContents($file, $language);
+                $contents .=  $c['contents']."\n";
             }
         }
         return $contents;
@@ -300,5 +297,231 @@ class Vps_Assets_Dependencies
                 $this->_files[$assetsType][] = $file;
             }
         }
+    }
+    public function getAssetPath($url)
+    {
+        if (file_exists($url)) return $url;
+        $paths = $this->_config->path;
+        $type = substr($url, 0, strpos($url, '/'));
+        $url = substr($url, strpos($url, '/')+1);
+        if (!isset($paths->$type)) {
+            throw new Vps_Assets_NotFoundException("Assets-Path-Type '$type' for url '$url' not found in config.");
+        }
+        $p = $paths->$type;
+        if ($p == 'VPS_PATH') $p = VPS_PATH;
+        if (!file_exists($p.'/'.$url)) {
+            throw new Vps_Assets_NotFoundException("Assets '$url' not found");
+        }
+        return $p.'/'.$url;
+    }
+
+    public function getFileContents($file, $language)
+    {
+        $ret = array();
+        if ($file == 'AllRteStyles.css') {
+            $ret = Vpc_Basic_Text_StylesModel::getStylesContents();
+        } else if (preg_match('#^All([a-z]+)\\-([a-z]+).(js|css)$#i', $file, $m)) {
+
+            $section = $m[1];
+            $language = $m[2];
+            if ($m[3] == 'js') {
+                $fileType = 'js';
+            } else {
+                $fileType = 'css';
+            }
+
+            $encoding = Vps_Media_Output::getEncoding();
+            $cache = new Vps_Assets_Cache();
+            $sessionDebug = new Zend_Session_Namespace('debug');
+            $cacheId = $fileType.$encoding.$section.Vps_Setup::getConfigSection().$language;
+
+            $cacheData = $cache->load($cacheId);
+            if ($cacheData && $cacheData['version'] != $this->_config->application->version) {
+                $cacheData = false;
+            }
+            if ($cacheData && Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
+                $mtime = 0;
+                foreach ($cacheData['files'] as $f) {
+                    $mtime = max($mtime, filemtime($f));
+                }
+                if ($mtime > $cacheData['mtime']) {
+                    $cacheData = false;
+                }
+            }
+
+            if (!$cacheData) {
+                $cacheData  = array();
+                $contents = $this->getPackedAll($section, $fileType, $language);
+                $cacheData['contentLength'] = strlen($contents);
+                $contents = Vps_Media_Output::encode($contents, $encoding);
+                $cacheData['contents'] = $contents;
+                $cacheData['version'] = $this->_config->application->version;
+                if ($fileType == 'js') {
+                    $cacheData['mimeType'] = 'text/javascript; charset=utf8';
+                } else if ($fileType == 'css') {
+                    $cacheData['mimeType'] = 'text/css; charset=utf8';
+                }
+                $cacheData['files'] = array();
+                $cacheData['mtime'] = 0;
+                foreach ($this->getAssetFiles($section, $fileType) as $file) {
+                    if ($file instanceof Vps_Assets_Dynamic) {
+                        $file = $file->getFile();
+                    }
+                    if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
+                        $f = $this->getAssetPath($file);
+                        $cacheData['files'][] = $f;
+                        $cacheData['mtime'] = max($cacheData['mtime'], filemtime($f));
+                    }
+                }
+                $cache->save($cacheData, $cacheId);
+            }
+            $ret['mtime'] = $cacheData['mtime'];
+            $ret['contents'] = $cacheData['contents'];
+            $ret['contentLength'] = $cacheData['contentLength'];
+            $ret['mimeType'] = $cacheData['mimeType'];
+            $ret['encoding'] = $encoding;
+        } else {
+            $contents = file_get_contents($this->getAssetPath($file));
+
+            if (substr($file, 0, 4)=='ext/') {
+                //hack um bei ext-css-dateien korrekte pfade für die bilder zu haben
+                $contents = str_replace('../images/', '/assets/ext/resources/images/', $contents);
+            }
+
+            if (substr($file, -4) == '.css') {
+                static $cssConfig;
+                if (!isset($cssConfig)) {
+                    try {
+                        $cssConfig = new Zend_Config_Ini('application/config.ini', 'css');
+                    } catch (Zend_Config_Exception $e) {
+                        $cssConfig = array();
+                    }
+                }
+                foreach ($cssConfig as $k=>$i) {
+                    $contents = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $contents);
+                }
+            }
+
+            if (substr($file, -3) == '.js') {
+                preg_match_all('#{([A-Za-z0-9_]+)::([A-Za-z0-9_]+)\\(\\)}#', $contents, $m);
+                foreach (array_keys($m[0]) as $i) {
+                    $contents = str_replace($m[0][$i], call_user_func(array($m[1][$i], $m[2][$i]), $this), $contents);
+                }
+
+                $version = Zend_Registry::get('config')->application->version;
+                $contents = str_replace('{$application.version}', $version, $contents);
+
+                $contents = $this->_trl($contents, $language);
+                $contents = $this->_hlp($contents, $language);
+            }
+
+            $ret['contents'] = $contents;
+            $ret['mtime'] = filemtime($this->getAssetPath($file));
+            if (substr($file, -4)=='.gif') {
+                $mimeType = '$file/gif';
+            } else if (substr($file, -4)=='.png') {
+                $mimeType = 'image/png';
+            } else if (substr($file, -4)=='.jpg') {
+                $mimeType = 'image/jpeg';
+            } else if (substr($file, -4)=='.css') {
+                $mimeType = 'text/css; charset=utf-8';
+            } else if (substr($file, -3)=='.js') {
+                $mimeType = 'text/javascript; charset=utf-8';
+            } else if (substr($file, -4)=='.swf') {
+                $mimeType = 'application/flash';
+            } else if (substr($file, -4)=='.ico') {
+                $mimeType = 'image/x-icon';
+            } else if (substr($file, -5)=='.html') {
+                $mimeType = 'text/html; charset=utf-8';
+            } else {
+                throw new Vps_Assets_NotFoundException("Invalid filetype");
+            }
+            $ret['mimeType'] = $mimeType;
+        }
+
+        return $ret;
+    }
+
+    private function _hlp($contents, $language)
+    {
+        //TODO 1902 $language verwenden
+        $matches = array();
+        preg_match_all("#hlp\('(.*)'\)#", $contents, $matches);
+        foreach ($matches[0] as $key => $search) {
+            $r = hlp($matches[1][$key]);
+            $r = str_replace(array("\n", "\r", "'"), array('\n', '', "\\'"), $r);
+            $contents = str_replace($search, "'" . $r . "'", $contents);
+        }
+        return $contents;
+    }
+
+    private function _trl($contents, $language)
+    {
+        //TODO 1902 $language verwenden
+        $elements = Zend_Registry::get('trl')->parse($contents);
+
+        foreach ($elements as $i=>$trlelement) {
+            $values = array();
+
+            if ($trlelement['source'] == Vps_Trl::SOURCE_VPS) {
+                $mode = "Vps";
+            } else  {
+                $mode = '';
+            }
+
+            //TODO: vereinfachen
+            if ($trlelement['type'] == 'trl') {
+                $values['before'] = $trlelement['before'];
+                $values['tochange'] = $trlelement['text'];
+                $method = $trlelement['type'].$mode;
+                $values['now'] = $method($values['tochange']);
+                $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
+                $values['now'] = str_replace($method, "trl", $values['now']);
+
+            } else if ($trlelement['type'] == 'trlc') {
+                $values = array();
+                $values['context'] = $trlelement['context'];
+                $values['before'] = $trlelement['before'];
+                $values['tochange'] = $trlelement['text'];
+                $method = $trlelement['type'].$mode;
+                $values['now'] = $method($values['context'] ,$values['tochange']);
+                $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
+                $values['now'] = str_replace($method, 'trl', $values['now']);
+                $values['now'] = str_replace('\''.$values['context'].'\', ', '', $values['now']);
+                $values['now'] = str_replace('"'.$values['context'].'", ', '', $values['now']);
+
+            } else if ($trlelement['type'] == 'trlp') {
+                $values['before'] = $trlelement['before'];
+                $values['single'] = $trlelement['text'];
+                $values['plural'] = $trlelement['plural'];
+
+                $newValues = Zend_Registry::get('trl')->getTrlpValues(null, $values['single'],
+                                            $values['plural'], $trlelement['source'] );
+
+                $method = $trlelement['type'].$mode;
+                $values['now'] = str_replace($values['single'], $newValues['single'], $values['before']);
+                $values['now'] = str_replace($values['plural'], $newValues['plural'], $values['now']);
+                $values['now'] = str_replace($method, 'trlp', $values['now']);
+
+            } else if ($trlelement['type'] == 'trlcp') {
+                $values = array();
+                $values['before'] = $trlelement['before'];
+                $values['context'] = $trlelement['context'];
+                $values['single'] = $trlelement['text'];
+                $values['plural'] = $trlelement['plural'];
+
+                $newValues = Zend_Registry::get('trl')->getTrlpValues($values['context'],
+                            $values['single'], $values['plural'], $trlelement['source'] );
+
+                $method = 'trlcp'.$mode;
+                $values['now'] = str_replace($values['single'], $newValues['single'], $values['before']);
+                $values['now'] = str_replace($values['plural'], $newValues['plural'], $values['now']);
+                $values['now'] = str_replace("\"".$values['context']."\",", "", $values['now']);
+                $values['now'] = str_replace('\''.$values['context'].'\',', "", $values['now']);
+                $values['now'] = str_replace($method, 'trlp', $values['now']);
+            }
+            $contents = str_replace($values['before'], $values['now'], $contents);
+        }
+        return $contents;
     }
 }

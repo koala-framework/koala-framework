@@ -2,7 +2,7 @@
 function p($src, $Type = 'LOG')
 {
     $isToDebug = false;
-    if ($Type != 'ECHO' && class_exists('FirePHP') && FirePHP::getInstance()) {
+    if ($Type != 'ECHO' && Zend_Registry::get('config')->debug->firephp && class_exists('FirePHP') && FirePHP::getInstance()) {
         if (is_object($src) && method_exists($src, 'toArray')) {
             $src = $src->toArray();
         } else if (is_object($src)) {
@@ -189,15 +189,21 @@ class Vps_Setup
         set_include_path($ip);
 
         Zend_Registry::set('requestNum', ''.floor(microtime(true)*100));
+
         if (Zend_Registry::get('config')->debug->firephp && !isset($_SERVER['SHELL'])) {
-            ob_start();
             require_once 'FirePHPCore/FirePHP.class.php';
             FirePHP::init();
         }
+
         if (Zend_Registry::get('config')->debug->querylog && !isset($_SERVER['SHELL'])) {
             header('X-Vps-RequestNum: '.Zend_Registry::get('requestNum'));
+            register_shutdown_function(array('Vps_Setup', 'shutDown'));
         }
-        register_shutdown_function(array('Vps_Setup', 'shutDown'));
+        if ((Zend_Registry::get('config')->debug->firephp || Zend_Registry::get('config')->debug->querylog)
+                && !isset($_SERVER['SHELL']))
+        {
+            ob_start();
+        }
 
         if (isset($_POST['PHPSESSID'])) {
             //für swfupload
@@ -297,7 +303,7 @@ class Vps_Setup
         return $vpsConfig;
     }
 
-    private static function _output404()
+    public static function output404()
     {
         header('HTTP/1.1 404 Not Found');
         $view = new Vps_View();
@@ -320,7 +326,7 @@ class Vps_Setup
             $root = Vps_Component_Data_Root::getInstance();
             $data = $root->getPageByPath($requestUrl);
             if (!$data) {
-                self::_output404();
+                self::output404();
             }
             $root->setCurrentPage($data);
             if ($data->url != $requestUrl) {
@@ -341,9 +347,11 @@ class Vps_Setup
         if (!isset($_SERVER['REDIRECT_URL'])) return;
 
         $urlParts = explode('/', substr($_SERVER['REDIRECT_URL'], 1));
-        if (is_array($urlParts) && $urlParts[0] == 'media') {
+        if (is_array($urlParts) && $urlParts[0] == 'media' && $urlParts[1] == 'headline') {
+            Vps_Media_Headline::outputHeadline($_GET['selector'], $_GET['text']);
+        } else if (is_array($urlParts) && $urlParts[0] == 'media') {
             if (sizeof($urlParts) != 7) {
-                self::_output404();
+                self::output404();
             }
             $params['table'] = $urlParts[1];
             $params['id'] = $urlParts[2];

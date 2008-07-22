@@ -67,7 +67,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
     public static function getStylesContents()
     {
         $cache = self::_getCache();
-        if (!$css = $cache->load('RteStyles')) {
+        if (!$ret = $cache->load('RteStyles')) {
             $model = new Vps_Model_Db(array('table'=>new Vpc_Basic_Text_StylesModel()));
             $css = '';
             $stylesModel = new Vps_Model_Field(array(
@@ -97,9 +97,15 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
                 }
                 $css .= "} /* $row->name */\n";
             }
-            $cache->save($css, 'RteStyles');
+            $ret = array(
+                'contents' => $css,
+                'mtime' => time(),
+                'mimeType' => 'text/css',
+                'etag' => md5($css)
+            );
+            $cache->save($ret, 'RteStyles');
         }
-        return $css;
+        return $ret;
     }
     public static function getStylesUrl()
     {
