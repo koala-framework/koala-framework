@@ -9,8 +9,7 @@ class Vpc_Composite_TextImageLink_Form extends Vpc_Abstract_Form
 
         $classes = Vpc_Abstract::getChildComponentClasses($class, 'child');
         foreach ($classes as $k=>$i) {
-            $form = Vpc_Abstract_Form::createComponentForm($k, $i);
-            $form->setIdTemplate('{0}-'.$k);
+            $form = Vpc_Abstract_Form::createChildComponentForm($i, '-'.$k);
             $this->add($form);
         }
     }

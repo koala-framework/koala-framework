@@ -2,7 +2,16 @@
 class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_Table implements Vps_Component_Generator_Page_Interface
 {
     protected $_idSeparator = '_';
-
+    protected $_nameColumn;
+    protected $_filenameColumn;
+    
+    protected function _init()
+    {
+        parent::_init();
+        $this->_settings['nameColumn'] = $this->_nameColumn;
+        $this->_settings['filenameColumn'] = $this->_filenameColumn;
+    }
+    
     protected function _formatConstraints($parentData, $constraints)
     {
         if (isset($constraints['filename'])) {

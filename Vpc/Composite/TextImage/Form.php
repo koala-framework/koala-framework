@@ -4,11 +4,9 @@ class Vpc_Composite_TextImage_Form extends Vpc_Abstract_Form
     protected function _init()
     {
         parent::_init();
-        $classes = Vpc_Abstract::getChildComponentClasses($this->getClass(), 'child');
 
         // Text
-        $form = Vpc_Abstract_Form::createComponentForm('text', $classes['text']);
-        $form->setIdTemplate('{0}-text');
+        $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), '-text');
 
         $fieldset = new Vps_Form_Container_FieldSet(trlVps('Text'));
         $fieldset->add($form);
@@ -19,8 +17,7 @@ class Vpc_Composite_TextImage_Form extends Vpc_Abstract_Form
         $this->add($fieldset);
 
         // Image
-        $form = Vpc_Abstract_Form::createComponentForm('image', $classes['image']);
-        $form->setIdTemplate('{0}-image');
+        $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), '-image');
         $this->add(new Vps_Form_Container_FieldSet(trlVps('Image')))
             ->add($form);
     }

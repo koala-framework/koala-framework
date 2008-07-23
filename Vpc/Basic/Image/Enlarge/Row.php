@@ -16,7 +16,7 @@ class Vpc_Basic_Image_Enlarge_Row extends Vpc_Basic_Image_Row
     {
         if ($type == 'small') {
             $componentClass = $this->getTable()->getComponentClass();
-            $childComponentClass = Vpc_Abstract::getChildComponentClasses($componentClass, 'smallImage');
+            $childComponentClass = Vpc_Abstract::getChildComponentClass($componentClass, 'smallImage');
             $dimensions = Vpc_Abstract::getSetting($childComponentClass, 'dimensions');
             Vps_Media_Image::scale($source, $target, $dimensions);
         } else {

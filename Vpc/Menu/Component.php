@@ -23,7 +23,7 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
         $ret['menu'] = $this->_getMenuData();
         $ret['level'] = $this->_getSetting('level');
         $ret['subMenu'] = $this->getData()->getChildComponent('-subMenu');
-	$ret['separator'] = $this->_getSetting('separator');
+	    $ret['separator'] = $this->_getSetting('separator');
         return $ret;
     }
 }

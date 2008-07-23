@@ -32,6 +32,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         foreach (self::getSetting($class, 'plugins', $useSettingsCache) as $p) {
             $ret[] = $p;
         }
+        
         return $ret;
     }
 
@@ -40,7 +41,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         $classes = self::getChildComponentClasses($class, $generator);
         if (!$key) $key = 0;
         if (!isset($classes[$key])) {
-            throw new Vps_Exception("childComponentClass '$key' not set for '$class'");
+            throw new Vps_Exception("childComponentClass '$key' for generator '$generator' not set for '$class'");
         }
         return $classes[$key];
     }

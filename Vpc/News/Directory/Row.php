@@ -8,7 +8,7 @@ class Vpc_News_Directory_Row extends Vps_Db_Table_Row_Abstract
         if ($admin) {
             $admin->delete($this->component_id . '-' . $this->id);
         }
-        Vps_Component_Cache::getInstance()->cleanByTag('news');
+        //Vps_Component_Cache::getInstance()->cleanByTag('news');
     }
 
     public function __toString()
@@ -18,10 +18,10 @@ class Vpc_News_Directory_Row extends Vps_Db_Table_Row_Abstract
 
     protected function _update()
     {
-        Vps_Component_Cache::getInstance()->cleanByTag('news');
+        //Vps_Component_Cache::getInstance()->cleanByTag('news');
     }
     protected function _insert()
     {
-        Vps_Component_Cache::getInstance()->cleanByTag('news');
+        //Vps_Component_Cache::getInstance()->cleanByTag('news');
     }
 }

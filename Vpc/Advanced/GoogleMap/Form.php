@@ -24,7 +24,7 @@ class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
             ->setAllowBlank(false)
             ->setWidth(120);
 
-        $form = Vpc_Abstract_Form::createComponentForm($class, '{0}-text');
+        $form = Vpc_Abstract_Form::createChildComponentForm($class, '-text');
         $this->fields->add($form);
 
 

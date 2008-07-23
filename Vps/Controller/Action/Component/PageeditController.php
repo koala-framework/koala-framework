@@ -29,7 +29,7 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
         $components = $cfg->vpc->masterComponents ? $cfg->vpc->masterComponents : array();
         foreach ($components as $key => $component) {
             try {
-                $form = Vpc_Abstract_Form::createComponentForm($key, $component);
+                $form = Vpc_Abstract_Form::createComponentForm($component);
                 $form->setBaseCls('x-plain');
                 try {
                     $title = Vpc_Abstract::getSetting($component, 'componentName');
