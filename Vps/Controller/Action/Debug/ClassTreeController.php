@@ -6,18 +6,32 @@ class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Act
     {
         static $processed = array();
         $ret = '';
-        do {
-            if (in_array($class, $processed)) break;
-            $processed[] = $class;
-            $ret .= get_parent_class($class)."->{$class};\n";
-            $childs = Vpc_Abstract::getChildComponentClasses($class);
-            foreach ($childs as $child) {
+        if (in_array($class, $processed)) return;
+        $processed[] = $class;
+        foreach (Vpc_Abstract::getSetting($class, 'generators') as $generator) {
+            $shape = 'ellipse';
+            if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page_Interface')) {
+                $shape = 'box';
+            } else if (is_instance_of($generator['class'], 'Vps_Component_Generator_Box_Interface')) {
+                $shape = 'hexagon';
+            }
+            $fontColor = 'blue';
+            if (file_exists(VPS_PATH.'/'.str_replace('_', '/', $class).'.php')) {
+                $fontColor = 'red';
+            }
+            if (!is_array($generator['component'])) $generator['component'] = array($generator['component']);
+            foreach ($generator['component'] as $child) {
                 if ($child) {
-//                     $ret .= "{$class}->{$child}[arrowtail=odiamond]\n";
+                    $ret .= "\"{$child}\" [shape=$shape, label=\"{$child}\", color=$fontColor, fontsize=10];\n";
+                    $ret .= "{$class}->{$child}[arrowtail=odiamond];\n";
                     $ret .= $this->_graphData($child);
                 }
             }
-        } while($class = get_parent_class($class));
+        }
+//         do {
+//         $ret .= get_parent_class($class)."->{$class};\n";
+//             if (in_array($class, $processed)) break;
+//         } while($class = get_parent_class($class));
         return $ret;
     }
     public function indexAction()
@@ -25,7 +39,6 @@ class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Act
         $graph  = 'digraph hierarchy {';
         $graph .= 'edge[dir=back, arrowtail=empty] ';
         $graph .= $this->_graphData(Vps_Registry::get('config')->vpc->rootComponent);
-//         $graph .= $this->_graphData('Vpc_Rotary_Home_Component');
         $graph .= '}';
 
         $descriptorspec = array(
@@ -50,7 +63,6 @@ class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Act
         }
         header('Content-Type: image/png');
         echo $image;
-//         echo $graph;
         exit;
     }
 
