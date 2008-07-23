@@ -1,10 +1,10 @@
 <div class="<?=$this->cssClass?>">
 <?php
 if ($this->showSuccess) {
-    $this->component($this->success);
+    echo $this->component($this->success);
 } else {
     if ($this->errors) {
-        echo 'Fehler:';
+        echo $this->placeholder['error'].':';
         echo '<ul class="error">';
         foreach ($this->errors as $error) {
             echo "<li>$error</li>";

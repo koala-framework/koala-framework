@@ -87,6 +87,15 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract implements
         return $ret;
     }
 
+    public function processInput($postData)
+    {
+        if ($this->hasChildren()) {
+            foreach ($this->getChildren() as $field) {
+                $field->processInput($postData);
+            }
+        }
+    }
+
     public function validate($postData)
     {
         $this->_addValidators();

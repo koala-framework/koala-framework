@@ -34,6 +34,10 @@ class Vpc_Paging_Component extends Vpc_Abstract
                 } else {
                     $this->_entries = $r[0]['count'];
                 }
+                if ($select->getPart(Zend_Db_Select::LIMIT_COUNT)) {
+                    //falls select ein limit hat dieses verwenden
+                    $this->_entries  = min($this->_entries, $select->getPart(Zend_Db_Select::LIMIT_COUNT));
+                }
             }
         }
         return $this->_entries;
@@ -101,6 +105,19 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['limit'] = $this->_getSetting('pagesize');
         $ret['start'] = ($this->_getCurrentPage()-1)*$this->_getSetting('pagesize');
         return $ret;
+    }
+
+    public function limitSelect(Zend_Db_Select $select)
+    {
+        $limit = $this->getLimit();
+        if ($select->getPart(Zend_Db_Select::LIMIT_COUNT)) {
+            //wenn schon ein limit gesetzt
+            $existingLimitCount = $select->getPart(Zend_Db_Select::LIMIT_COUNT);
+            if ($existingLimitCount < $limit['limit']) {
+                return;
+            }
+        }
+        $select->limit($limit);
     }
 
     public function getTemplateVars()

@@ -65,7 +65,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
             $config = Zend_Registry::get('config');
             if ($config->debug->errormail != '') {
                 Vps_Debug::sendErrorMail($exception, $config->debug->errormail);
-                $this->view->error = trlVps('An error occured. Please try again later.');
+                $this->view->error = trlVps('An error has occurred. Please try again later.');
             } else {
                 $this->view->exception = $exception->__toString();
             }

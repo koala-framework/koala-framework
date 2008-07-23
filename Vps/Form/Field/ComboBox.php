@@ -34,6 +34,9 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
 
     //setShowNoSelection
         //keine auswahl anbieten
+
+    //setFilterValue
+        //wird von ComboBoxFilter aufgerufen
         
 
     public function getMetaData()
@@ -60,17 +63,52 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
 
         if ($this->getStoreUrl()) {
             $store['url'] = $this->getStoreUrl();
+            if ($this->getFilterField()) {
+                throw new Vps_Exception("Not possible (yet) to use storeUrl + ComboBoxFilter");
+            }
         }
         $data = $this->getValues();
-        if (is_string($data)) {
+        if ($this->getFilterField() && !$this->getFilterValue()) {
+            $store['data'] = array();
+        } else if (is_string($data)) {
             $store['url'] = $data;
-        } else if ($data instanceof Vps_Db_Table_Rowset_Abstract) {
-            if ($this->getFields()) {
-                $store['data'] = $data->toStringDataArray($fields);
-            } else {
-                $store['data'] = $data->toStringDataArray();
+            if ($this->getFilterField()) {
+                throw new Vps_Exception("Not possible (yet) to use storeUrl + ComboBoxFilter");
+            }
+        } else if ($data instanceof Zend_Db_Table_Abstract || $data instanceof Vps_Db_Table_Rowset_Abstract) {
+            if ($data instanceof Zend_Db_Table_Abstract) {
+                $select = $this->getSelect();
+                if (!$select) {
+                    $select = $data->select();
+                }
+                if ($this->getFilterField() && $this->getFilterValue()) {
+                    $select->where($this->getFilterField().' = ?', $this->getFilterValue());
+                }
+                $data = $data->fetchAll($select);
+            }
+            $store['data'] = array();
+            foreach ($data as $row) {
+                if ($this->getFilterField() && !isset($select)) {
+                    if (!$this->getFilterValue()) continue;
+                    if ($row->{$this->getFilterField()} != $this->getFilterValue()) {
+                        continue;
+                    }
+                }
+                $d = array();
+                if ($fields) {
+                    foreach ($fields as $f) {
+                        $d[] = $row->$f;
+                    }
+                } else {
+                    $d[] = $row->id;
+                    $d[] = $row->__toString();
+                }
+                $store['data'][] = $d;
             }
         } else if (is_array($data)) {
+            if ($this->getFilterValue()) {
+                throw new Vps_Exception("Not possible (yet) to use array data + ComboBoxFilter");
+            }
             if (isset($data['data'])) $data = $data['data'];
             $store['data'] = array();
             foreach ($data as $k=>$i) {

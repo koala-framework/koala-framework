@@ -52,7 +52,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
             plain: true,
             modal: true,
             baseCls: 'x-plain',
-            buttons: [this.getAction('cancel'), this.getAction('save')]
+            buttons: [this.getAction('save'), this.getAction('cancel')]
         });
         this.closeAction = 'hide';
 

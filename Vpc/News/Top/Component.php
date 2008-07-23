@@ -20,18 +20,12 @@ class Vpc_News_Top_Component extends Vpc_News_List_Abstract_Component
         }
         return null;
     }
-
-    public function getNews($limit = 15, $start = null)
+    protected function _selectNews()
     {
-        $c = $this->getNewsComponent();
-        if (!$c) return array();
-        return $c->getComponent()->getNews($this->_getSetting('limit'));
-    }
-
-    public function getPagingCount()
-    {
-        //todo: langsam und unschön
-        return count($this->getNews(null, null));
+        $select = parent::_selectNews();
+        if (!$select) return null;
+        $select->limit($this->_getSetting('limit'));
+        return $select;
     }
 
     public function getTemplateVars()

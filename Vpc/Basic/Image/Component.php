@@ -19,7 +19,8 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
                 'filename'   => 'filename'
             ),
             'extensions'        => array('jpg'),
-            'pdfMaxWidth'       => 0
+            'pdfMaxWidth'       => 0,
+            'imgCssClass'       => ''
         ));
         $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
         return $ret;
@@ -27,12 +28,12 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
 
     public function getTemplateVars()
     {
-
         $ret = parent::getTemplateVars();
         $ret['row'] = $this->_getRow();
         if (Vpc_Abstract::getSetting(get_class($this), 'editComment')) {
             $ret['comment'] = $this->_getRow()->comment;
         }
+        $ret['imgCssClass'] = $this->_getSetting('imgCssClass');
         return $ret;
     }
 

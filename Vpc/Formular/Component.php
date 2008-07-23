@@ -12,6 +12,7 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['child']['component']['success'] = 'Vpc_Formular_Success_Component';
         $ret['componentName'] = 'Formular';
         $ret['placeholder']['submitButton'] = trlVps('Submit');
+        $ret['placeholder']['error'] = trlVps('An error has occurred');
         $ret['decorator'] = 'Vpc_Formular_Decorator_Label';
         $ret['viewCache'] = false;
         $ret['method'] = 'POST';
@@ -28,11 +29,10 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
         $this->_processed = true;
 
         $this->_initForm();
-
         if (!isset($this->_form) && isset($this->_formName)) {
             $this->_form = new $this->_formName();
         }
-
+        $this->_form->processInput($_REQUEST);
         $this->_errors = array();
         if (isset($_REQUEST[$this->getData()->componentId])) {
             $this->_errors = $this->_form->validate($_REQUEST);

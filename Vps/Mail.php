@@ -62,12 +62,12 @@ class Vps_Mail
     }
     public function addCc($email, $name='')
     {
-        $mailSendAll = Zend_Registry::get('config')->debug->sendAllMailsTo;
-        if ($mailSendAll) {
-            list($mailName, $mailHost) = explode('@', $mailSendAll);
-            $this->addHeader('X-Real-Cc-Email', $email);
-            $this->addHeader('X-Real-Cc-Name', $name);
-            $this->_mail->addCc($mailSendAll, $mailName);
+        if (Zend_Registry::get('config')->debug->sendAllMailsTo) {
+            if ($name) {
+                $this->addHeader('X-Real-Cc', $name ." <".$email.">");
+            } else {
+                $this->addHeader('X-Real-Cc', $email);
+            }
         } else {
             $this->_mail->addCc($email, $name);
         }
@@ -78,11 +78,8 @@ class Vps_Mail
     }
     public function addBcc($email)
     {
-        $mailSendAll = Zend_Registry::get('config')->debug->sendAllMailsTo;
-        if ($mailSendAll) {
-            list($mailName, $mailHost) = explode('@', $mailSendAll);
-            $this->addHeader('X-Real-Bcc-Email', $email);
-            $this->_mail->addBcc($mailSendAll);
+        if (Zend_Registry::get('config')->debug->sendAllMailsTo) {
+            $this->addHeader('X-Real-Bcc', $email);
         } else {
             $this->_mail->addBcc($email);
         }
@@ -93,12 +90,12 @@ class Vps_Mail
     }
     public function addTo($email, $name='')
     {
-        $mailSendAll = Zend_Registry::get('config')->debug->sendAllMailsTo;
-        if ($mailSendAll) {
-            list($mailName, $mailHost) = explode('@', $mailSendAll);
-            $this->addHeader('X-Real-Recipient-Email', $email);
-            $this->addHeader('X-Real-Recipient-Name', $name);
-            $this->_mail->addTo($mailSendAll, $mailName);
+        if (Zend_Registry::get('config')->debug->sendAllMailsTo) {
+            if ($name) {
+                $this->addHeader('X-Real-Recipient', $name ." <".$email.">");
+            } else {
+                $this->addHeader('X-Real-Recipient', $email);
+            }
         } else {
             $this->_mail->addTo($email, $name);
         }
@@ -109,6 +106,11 @@ class Vps_Mail
     }
     public function send()
     {
+        $mailSendAll = Zend_Registry::get('config')->debug->sendAllMailsTo;
+        if ($mailSendAll) {
+            $this->_mail->addTo($mailSendAll);
+        }
+
         if ($this->getFrom() == null) {
             if (Zend_Registry::get('config')->email) {
                 $fromName = Zend_Registry::get('config')->email->from->name;
