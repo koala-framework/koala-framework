@@ -94,6 +94,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
         $row = $this->_form->getRow();
 
+        $this->_form->processInput($this->getRequest()->getParams());
         $invalid = $this->_form->validate($this->getRequest()->getParams());
         if ($invalid) {
             throw new Vps_ClientException(implode("<br />", $invalid));

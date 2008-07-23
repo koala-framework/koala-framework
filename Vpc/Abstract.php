@@ -100,5 +100,48 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         header('Content-Type: text/html; charset=utf-8');
         echo Vps_View_Component::renderCachedComponent($this->getData(), null, true);
     }
+    /**
+     * Gibt die Variablen für View zurück.
+     *
+     * @return array Template-Variablen
+     */
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['placeholder'] = $this->_getSetting('placeholder');
+
+        $cssClass = array($this->_formatCssClass(get_class($this)));
+        $dirs = explode(PATH_SEPARATOR, get_include_path());
+        $c = get_parent_class($this);
+        do {
+            $file = str_replace('_', '/', $c);
+            if (substr($file, -10) != '/Component') {
+                $file .= '/Component';
+            }
+            $file .= '.css';
+            foreach ($dirs as $dir) {
+                if (is_file($dir . '/' . $file)) {
+                    $cssClass[] = $this->_formatCssClass($c);
+                    break;
+                }
+            }
+        } while($c = get_parent_class($c));
+        $ret['cssClass'] = implode(' ', array_reverse($cssClass));
+        if (Vpc_Abstract::hasSetting(get_class($this), 'cssClass')) {
+            $ret['cssClass'] .= ' '.Vpc_Abstract::getSetting(get_class($this), 'cssClass');
+            $ret['cssClass'] = trim($ret['cssClass']);
+        }
+        $ret['data'] = $this->getData();
+        return $ret;
+    }
+    private function _formatCssClass($cls)
+    {
+        if (substr($cls, -10) == '_Component') {
+            $cls = substr($cls, 0, -10);
+        }
+        $cls = str_replace('_', '', $cls);
+        return strtolower(substr($cls, 0, 1)) . substr($cls, 1);
+    }
+
 }
 

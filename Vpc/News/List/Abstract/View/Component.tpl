@@ -1,4 +1,7 @@
 <div class="<?=$this->cssClass?>">
+<? if($this->paging) { ?>
+    <?=$this->component($this->paging)?>
+<? } ?>
 <?php foreach ($this->news as $new) { ?>
     <div class="text">
         <?=$this->componentLink($new);?>
@@ -6,4 +9,7 @@
         <p><?=$this->mailEncodeText($new->row->teaser)?></p>
     </div>
 <?php } ?>
+<? if($this->paging) { ?>
+    <?=$this->component($this->paging)?>
+<? } ?>
 </div>

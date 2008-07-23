@@ -763,6 +763,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         if (!is_null($data)) {
             foreach ($data as $row => $cols) {
                 foreach ($cols as $col => $text) {
+                    if (is_array($text)) $text = implode(', ', $text);
                     if ($row == 0) {
                         $sheet->write($row, $col, utf8_decode($text), $headFormat);
                     } else {

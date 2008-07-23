@@ -1,7 +1,3 @@
-<? if($this->paging) { ?>
-    <?=$this->component($this->paging)?>
-<? } ?>
+<div class="<?=$this->cssClass?>">
 <?=$this->component($this->view)?>
-<? if($this->paging) { ?>
-    <?=$this->component($this->paging)?>
-<? } ?>
+</div>

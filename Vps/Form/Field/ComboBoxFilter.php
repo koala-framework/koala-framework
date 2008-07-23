@@ -3,19 +3,18 @@
  * Für zwei (oder mehr) zusammengeschaltete ComboBoxen (Auswahl in der ersten
  * lädt Daten in der zweiten nach, gespeichert wird nur die zweite wenn nicht anders angegeben)
  **/
-class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_ComboBox
+class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
 {
-    private $_filterObject;
-
     public function __construct($field_name = null, $field_label = null)
     {
         parent::__construct($field_name, $field_label);
-
-        $this->setEditable(false);
-        $this->setTriggerAction('all');
         $this->setXtype('comboboxfilter');
+        $this->setSave(false);
     }
 
+    //setFilteredCombo(combo)
+
+    /*
     public function getMetaData()
     {
         $ret = parent::getMetaData();
@@ -56,18 +55,29 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_ComboBox
 
         return $ret;
     }
-
-    public function setFilterComboBox($filterObject, $save = false)
+    */
+    public function processInput($postData)
     {
-        if (! $filterObject instanceof Vps_Form_Field_ComboBox) {
-            throw new Vps_Exception('Methode setFilterComboBox der Klasse '
-                .'Vps_Form_Field_ComboBoxFilter akzeptiert nur Objekte die eine '
-                .'Instanz von Vps_Form_Field_ComboBox sind.');
+        parent::processInput($postData);
+        if (!$this->getFilteredCombo()) {
+            throw new Vps_Exception("No filteredCombo set");
         }
-
-        $this->_filterObject = $filterObject;
-        if (!$save) $this->_filterObject->setSave(false);
-        return $this;
+        $value = $this->_getValueFromPostData($postData);
+        if ($value) {
+            $filtered = $this->getFilteredCombo();
+            $filtered->setFilterValue($value);
+        }
     }
 
+    public function getTemplateVars($values)
+    {
+        $ret = parent::getTemplateVars($values);
+
+        //TODO: Wenn wir mal Ext-Forms im Frontend haben das hier entfernen
+        $onclick = "onchange=\"this.form.submit();\"";
+        $ret['html'] = str_replace("<select ", "<select $onclick ", $ret['html']);
+
+        $ret['html'] .= '<input type="submit" value="»" />';
+        return $ret;
+    }
 }

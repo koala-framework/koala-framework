@@ -301,10 +301,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Bitte f&#xFC;llen Sie das Feld {0} aus</de>
 </text>
 <text>
-<en default="1">An error occured during the file upload</en>
-<de>W&#xE4;hrend der Datei&#xFC;bertragung ist ein Fehler aufgetreten.</de>
-</text>
-<text>
 <en default="1">Invalid format in field {0}, valid formats: {1}</en>
 <de>Ung&#xFC;ltiges Dateiformat in Feld {0}, g&#xFC;ltiges Format: {1}</de>
 </text>
@@ -1151,7 +1147,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Das wiederholte Passwort ist unterschiedlich - bitte versuchen Sie es erneut.</de>
 </text>
 <text>
-<en default="1">An error occured</en>
+<en default="1">An error has occurred</en>
 <de>Ein Fehler ist aufgetreten</de>
 </text>
 <text>
@@ -1818,7 +1814,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Diese Komponente hat keinen Bearbeitungsbereich.</de>
 </text>
 <text>
-<en default="1">An error occured. Please try again later.</en>
+<en default="1">An error has occurred. Please try again later.</en>
 <de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es sp&#xE4;ter wieder.</de>
 </text>
 <text>
