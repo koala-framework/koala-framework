@@ -12,7 +12,7 @@ class Vps_Component_Cache extends Zend_Cache_Core {
         
         $this->_backend = new Zend_Cache_Backend_File(array(
             'cache_dir' => $this->_getCacheDir(),
-            'hashed_directory_level' => 2,
+            'hashed_directory_level' => 0,
             'file_name_prefix' => 'vpc',
             'hashed_directory_umask' => 0770
         ));
@@ -39,6 +39,7 @@ class Vps_Component_Cache extends Zend_Cache_Core {
         if ($component instanceof Vps_Component_Data) {
             $this->_setCacheDir($component->componentClass);
             parent::remove($this->getCacheIdFromComponentId($component->componentId));
+            @rmdir($this->_getCacheDir($component->componentClass));
         } else {
             $this->rm_recursive($this->_getCacheDir($component));
         }

@@ -43,7 +43,7 @@ class Vps_Component_Data
         } else if ($var == 'filename') {
             return $this->getPage()->_filename;
         } else {
-            throw new Vps_Exception("Variable '$var' is not set for ".get_class($this));
+            throw new Vps_Exception("Variable '$var' is not set for ".get_class($this) . " with componentId '{$this->componentId}'");
         }
     }
 

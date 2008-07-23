@@ -109,4 +109,33 @@ class Vps_Component_Abstract_Admin
     public function delete()
     {
     }
+    
+    public function onRowUpdate($row)
+    {
+        $this->_deleteCache($row);
+    }
+
+    public function onRowDelete($row)
+    {
+        $this->_deleteCache($row);
+    }
+    
+    private function _deleteCache($row)
+    {
+        if ($row instanceof Vpc_Row
+            && Vpc_Abstract::hasSetting($this->_class, 'tablename')
+            && Vpc_Abstract::getSetting($this->_class, 'tablename') == $row->getTableClass())
+        {
+            $components = Vps_Component_Data_Root::getInstance()->getComponentsByDbId($row->component_id);
+            foreach ($components as $c) {
+                if ($this->_class == $c->componentClass) {
+                    Vps_Component_Cache::getInstance()->remove($c);
+                }
+            }
+        }
+    }
+
+    public function onRowInsert($row)
+    {
+    }
 }

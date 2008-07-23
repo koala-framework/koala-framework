@@ -33,7 +33,8 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
     {
         $ret = array();
         $ret['placeholder'] = $this->_getSetting('placeholder');
-
+        $ret['component'] = $this->getData();
+        
         $cssClass = array();
         $dirs = explode(PATH_SEPARATOR, get_include_path());
         $c = get_class($this);

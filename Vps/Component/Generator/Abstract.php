@@ -9,7 +9,8 @@ abstract class Vps_Component_Generator_Abstract
     protected $_table;
 
     private $_dataCache = array();
-
+    protected $_idSeparator;
+    
     protected function __construct($class, $settings)
     {
         $this->_class = $class;
@@ -18,7 +19,23 @@ abstract class Vps_Component_Generator_Abstract
         $this->_init();
         Vps_Benchmark::count('generators');
     }
-
+    
+    public function getIdSeparator()
+    {
+        return $this->_idSeparator;
+    }
+    
+    public function getComponentByKey($key)
+    {
+        if ($this->_settings['generator'] == $key) {
+            return $this->_settings['component'][$key];
+        }
+        if (isset($this->_settings['component'][$key])) {
+            return $this->_settings['component'][$key];
+        }
+        return null;
+    }
+    
     protected function _init()
     {
         if (!isset($this->_table)) {

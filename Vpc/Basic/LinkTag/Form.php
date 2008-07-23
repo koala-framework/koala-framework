@@ -12,7 +12,7 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
             ->setDefaultValue(key($classes));
 
         foreach ($classes as $name => $class) {
-            $form = Vpc_Abstract_Form::createComponentForm('{0}-link', $this->getClass());
+            $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), '-link');
             $form->setAutoHeight(true);
             $form->setBaseCls('x-plain');
 
