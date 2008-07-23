@@ -88,9 +88,16 @@ class Vps_Media_Headline
         Vps_Media_Output::output($cacheData);
     }
 
+    /**
+     * Unterstützte CSS-Eigenschaften:
+     * height, width, padding-top, padding-bottom, padding-left, padding-right
+     * font-size, font-file, color, background-color, line-height
+     */
     private static function _generateHeadline($styles, $text)
     {
         $text = str_replace(chr(0xE2).chr(0x80).chr(0x93), '-', $text); //langen bindestrich durch normalen ersetzen
+        $text = str_replace(array("\r", "\n", "<br>", "<br/>"), array("", "", "<br />", "<br />"), $text);
+        $text = explode("<br />", $text);
 
         $fontFile = $styles['font-file'];
         if (file_exists($fontFile)) {
@@ -109,12 +116,11 @@ class Vps_Media_Headline
         if ($height) $height = (int)substr($height, 0, -2);
 
         $fontSize = isset($styles['font-size']) ? $styles['font-size'] : 12;
-        $fontSize = isset($styles['font-size']) ? $styles['font-size'] : 12;
         $paddingTop = isset($styles['padding-top']) ? $styles['padding-top'] : 0;
         $paddingLeft = isset($styles['padding-left']) ? $styles['padding-left'] : 0;
         $paddingBottom = isset($styles['padding-bottom']) ? $styles['padding-bottom'] : 0;
         $paddingRight = isset($styles['padding-right']) ? $styles['padding-right'] : 0;
-        $lineSpacing = isset($styles['line-spacing']) ? $styles['line-spacing'] : 0;
+        $lineHeight = isset($styles['line-height']) ? $styles['line-height'] : $fontSize;
         
 
         $backgroundColor = isset($styles['background-color']) ? $styles['background-color'] : '#FFFFFF';
@@ -135,9 +141,13 @@ class Vps_Media_Headline
         //5  upper right corner, Y position = 3
         //6  upper left corner, X position
         //7  upper left corner, Y position
-        $bbox = imagettfbbox($fontSize*$factor, 0, $fontFile, $text);
+        
+        $bbox = imagettfbbox($fontSize*$factor, 0, $fontFile, $text[0]);
         if (!$width) {
-            $width += abs($bbox[4] - $bbox[0])/$factor + 2; //+2 damit platz für antializing-pixel sind
+            foreach ($text as $t) {
+                $bbox = imagettfbbox($fontSize*$factor, 0, $fontFile, $t);
+                $width += abs($bbox[4] - $bbox[0])/$factor + 2; //+2 damit platz für antializing-pixel sind
+            }
         }
         $width += $paddingRight;
         $width += $paddingLeft;
@@ -148,7 +158,7 @@ class Vps_Media_Headline
         //TODO: funktioniert nicht für mehrzeilige texte!
         $bbox = imagettfbbox($fontSize*$factor, 0, $fontFile, 'gÜ');
         if (!$height) {
-            $height = abs($bbox[3] - $bbox[7])/$factor;
+            $height = (abs($bbox[3] - $bbox[7])/$factor) * count($text);
         }
         $height += $paddingTop;
         $height += $paddingBottom;
@@ -167,8 +177,6 @@ class Vps_Media_Headline
         imageFill($im1, 0, 0, $bgColor);
         $textColorAllocated = ImageColorAllocate ($im1, hexdec(substr($color,1,2)), hexdec(substr($color,3,2)), hexdec(substr($color,5,2)));
 
-        $text = str_replace(array("\r", "\n", "<br>", "<br/>"), array("", "", "<br />", "<br />"), $text);
-        $text = explode("<br />", $text);
         $textY = $fontY;
 
         //zeile für zeile schreiben
@@ -178,7 +186,7 @@ class Vps_Media_Headline
             if(!$antializing) $c = -$c; //negative farbe schaltet antializing aus
             imagettftext($im1, $fontSize*$factor, 0, $fontX, $textY, $c, $fontFile, $t);
             $pos = 0;
-            $textY+=$fontSize*$factor+$lineSpacing*$factor;
+            $textY += $lineHeight*$factor;
         }
         if($factor==1) {
             $outputImage = $im1;
