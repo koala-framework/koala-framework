@@ -35,12 +35,12 @@ class Vps_Media_Output
         $ret = array('headers' => array(), 'contents' => '');
 
         if (!isset($file['contents'])) {
-            if (!isset($file['file'])) {
+            if (isset($file['file'])) {
                 if (!is_file($file['file'])) {
                     throw new Vps_Controller_Action_Web_Exception("File '$file[file]' not found.");
                 }
-                $file['contents'] = file_get_contents($file);
-                $file['mtime'] = filemtime($file);
+                $file['contents'] = file_get_contents($file['file']);
+                $file['mtime'] = filemtime($file['file']);
             } else {
                 throw new Vps_Exception("contents for file has to be set");
             }
