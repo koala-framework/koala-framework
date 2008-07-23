@@ -54,9 +54,11 @@ class Vps_Assets_Dependencies
                 Vps_Benchmark::info('Generate Dependencies Cache');
             }
             if (Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
-                if ($mtime && $mtime < Vpc_Abstract::getSettingCacheMtime()) {
-                    Vps_Benchmark::info('Regenerate Dependencies Cache (component settings changed)');
-                    $mtime = false;
+                if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
+                    if ($mtime && $mtime < Vpc_Abstract::getSettingCacheMtime()) {
+                        Vps_Benchmark::info('Regenerate Dependencies Cache (component settings changed)');
+                        $mtime = false;
+                    }
                 }
                 if ($mtime && $mtime < Vps_Registry::get('configMtime')) {
                     Vps_Benchmark::info('Regenerate Dependencies Cache (config.ini changed)');

@@ -44,7 +44,10 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
                 throw new Vps_Controller_Action_Web_Exception('Invalid Image');
             }
         }
-        Vps_Media_Output::output($target, $fileRow->mime_type);
+        Vps_Media_Output::output(array(
+            'file' => $target,
+            'mimeType' => $fileRow->mime_type
+        ));
     }
 
     public function downloadAction()
@@ -56,6 +59,10 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
 
         $source = $fileRow->getFileSource();
 
-        Vps_Media_Output::output($source, $fileRow->mime_type, $fileRow->filename);
+        Vps_Media_Output::output(array(
+            'file' => $source,
+            'mimeType' => $fileRow->mime_type,
+            'downloadFilename' => $fileRow->filename
+        ));
     }
 }

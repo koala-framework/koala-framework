@@ -9,31 +9,13 @@ $include_path .= PATH_SEPARATOR . VPS_PATH;
 set_include_path($include_path);
 require_once 'Vps/Loader.php';
 Vps_Loader::registerAutoload();
-
+date_default_timezone_set('Europe/Berlin');
 
 require_once 'TestConfiguration.php';
 
 require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 require_once 'PHPUnit/Extensions/ExceptionTestCase.php';
-
-class E3_Test extends PHPUnit_Framework_TestCase
-{
-    protected function createDao()
-    {
-        $dbConfig = new Zend_Config_Ini('../application/config.db.ini', 'database');
-        return new E3_Dao($dbConfig);
-    }
-}
-
-class E3_ExceptionTest extends PHPUnit_Extensions_ExceptionTestCase
-{
-    protected function createDao()
-    {
-        $dbConfig = new Zend_Config_Ini('../application/config.db.ini', 'database');
-        return new E3_Dao($dbConfig);
-    }
-}
 
 class AllTests
 {

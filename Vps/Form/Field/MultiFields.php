@@ -14,6 +14,8 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             $model = $tableName;
         } else if (class_exists($tableName)) {
             $model = new $tableName();
+        } else {
+            throw new Vps_Exception("Invalid table or model: '$tableName'");
         }
         parent::__construct(get_class($model));
         if ($model instanceof Zend_Db_Table_Abstract) {

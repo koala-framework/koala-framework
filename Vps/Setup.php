@@ -411,7 +411,11 @@ class Vps_Setup
             if ($download) {
                 $downloadFilename = $params['filename'];
             }
-            Vps_Media_Output::output($target, $fileRow->mime_type, $downloadFilename);
+            Vps_Media_Output::output(array(
+                'file' => $target,
+                'mimeType' => $fileRow->mime_type,
+                'downloadFilename' => $downloadFilename
+            ));
         }
     }
 }
