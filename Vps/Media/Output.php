@@ -3,7 +3,6 @@ class Vps_Media_Output
 {
     public static function getEncoding()
     {
-        $headers = apache_request_headers();
         if (isset($_SERVER['HTTP_ACCEPT_ENCODING'])) {
             $encoding = strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip')
                         ? 'gzip' : (strstr($_SERVER['HTTP_ACCEPT_ENCODING'], 'deflate')
@@ -14,60 +13,75 @@ class Vps_Media_Output
         return $encoding;
     }
 
-    public static function output($file, $mimeType = null, $downloadFilename = false)
+    public static function output($file)
     {
-        if (is_string($file)) {
-            if (!is_file($file)) {
-                throw new Vps_Controller_Action_Web_Exception("File '$target' not found.");
+        $data = self::getOutputData($file, apache_request_headers());
+        foreach ($data['headers'] as $h) {
+            if (is_array($h)) {
+                call_user_func_array('header', $h);
+            } else {
+                header($h);
             }
-            $file = array(
-                'contents' => file_get_contents($file),
-                'mtime' => filemtime($file),
-            );
         }
-        if ($mimeType) $file['mimeType'] = $mimeType;
-        if ($downloadFilename) $file['downloadFilename'] = $downloadFilename;
+        echo $data['contents'];
+        exit;
+    }
 
-        $headers = apache_request_headers();
+    /**
+     * PUBLIC METHOD FOR UNIT TESTING ONLY !
+     */
+    public static function getOutputData($file, array $headers)
+    {
+        $ret = array('headers' => array(), 'contents' => '');
+
+        if (!isset($file['contents'])) {
+            if (!isset($file['file'])) {
+                if (!is_file($file['file'])) {
+                    throw new Vps_Controller_Action_Web_Exception("File '$file[file]' not found.");
+                }
+                $file['contents'] = file_get_contents($file);
+                $file['mtime'] = filemtime($file);
+            } else {
+                throw new Vps_Exception("contents for file has to be set");
+            }
+        }
         if (isset($file['mtime'])) {
             $lastModifiedString = gmdate("D, d M Y H:i:s \G\M\T", $file['mtime']);
         }
-        header('Cache-Control: public, max-age='.(24*60*60));
-        header('Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+(24*60*60)));
-        header('Pragma: public');
+        $ret['headers'][] = 'Cache-Control: public, max-age='.(24*60*60);
+        $ret['headers'][] = 'Expires: '.gmdate("D, d M Y H:i:s \G\M\T", time()+(24*60*60));
+        $ret['headers'][] = 'Pragma: public';
         if (isset($file['mtime']) && isset($headers['If-Modified-Since']) &&
                 $headers['If-Modified-Since'] == $lastModifiedString) {
-            header('Not Modified', true, 304);
-            header('Last-Modified: '.$headers['If-Modified-Since']);
-            exit;
+            $ret['headers'][] = array('Not Modified', true, 304);
+            $ret['headers'][] = 'Last-Modified: '.$headers['If-Modified-Since'];
         } else if (isset($file['etag']) && isset($headers['If-None-Match']) &&
                 $headers['If-None-Match'] == $file['etag']) {
-            header('Not Modified', true, 304);
-            header('ETag: '.$headers['If-None-Match']);
-            exit;
+            $ret['headers'][] = array('Not Modified', true, 304);
+            $ret['headers'][] = 'ETag: '.$headers['If-None-Match'];
         } else {
-            if (isset($file['etag'])) header('ETag: ' . $file['etag'], true);
-            if (isset($file['mtime'] )) header('Last-Modified: ' . $lastModifiedString, true);
-            header('Accept-Ranges: none');
-            if (isset($file['downloadFilename'])) {
-                header('Content-Disposition', 'attachment; filename="' . $file['downloadFilename'] . '"');
+            if (isset($file['etag'])) $ret['headers'][] = 'ETag: ' . $file['etag'];
+            if (isset($file['mtime'] )) $ret['headers'][] = 'Last-Modified: ' . $lastModifiedString;
+            $ret['headers'][] = 'Accept-Ranges: none';
+            if (isset($file['downloadFilename']) && $file['downloadFilename']) {
+                $ret['headers'][] = 'Content-Disposition: attachment; filename="' . $file['downloadFilename'] . '"';
             }
             if (isset($file['encoding'])) {
-                header("Content-Encoding: " . $file['encoding']);
+                $ret['headers'][] = "Content-Encoding: " . $file['encoding'];
             } else {
                 if (substr($file['mimeType'], 0, 5) == 'text/') {
-                    $encoding = self::getEncoding();
+                    $encoding = self::getEncoding($headers);
                     $file['contents'] = self::encode($file['contents'], $encoding);
                 } else {
                     $encoding = 'none';
                 }
-                header("Content-Encoding: " . $encoding);
+                $ret['headers'][] = "Content-Encoding: " . $encoding;
             }
-            header('Content-Type: ' . $file['mimeType']);
-            header('Content-Length: ' . strlen($file['contents']));
-            echo $file['contents'];
+            $ret['headers'][] = 'Content-Type: ' . $file['mimeType'];
+            $ret['headers'][] = 'Content-Length: ' . strlen($file['contents']);
+            $ret['contents'] = $file['contents'];
         }
-        exit;
+        return $ret;
     }
 
     static public function encode($contents, $encoding)
