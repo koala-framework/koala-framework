@@ -29,10 +29,10 @@ class Vpc_Abstract_Form extends Vps_Form
         }
         if ($id) { // id hatte form 'dbId_{0}-key', also für Key Unterkomponente suchen
             $form = self::createChildComponentForm($componentClass, $id, $name);
-            $form->setIdTemplate($dbIdTemplate);
+            if ($form) $form->setIdTemplate($dbIdTemplate);
         } else {
             $form = self::createComponentForm($componentClass, $name);
-            $form->setIdTemplate($dbIdShortcut . '{0}');
+            if ($form) $form->setIdTemplate($dbIdShortcut . '{0}');
         }
         return $form;
     }
@@ -45,9 +45,8 @@ class Vpc_Abstract_Form extends Vps_Form
         }
         
         $formClass = Vpc_Admin::getComponentClass($componentClass, 'Form');
-        if (!$formClass) {
-            throw new Vps_Exception("No Form for Component '$componentClass' found");
-        }
+        if (!$formClass || $formClass == 'Vpc_Abstract_Form') return null;
+
         if (!$name) $name = $componentClass;
         return new $formClass($name, $componentClass);
     }
@@ -70,7 +69,9 @@ class Vpc_Abstract_Form extends Vps_Form
             throw new Vps_Exception("No child component with id '$id' for '$componentClass' found.");
         }
         $form = self::createComponentForm($childComponentClass, $name);
-        $form->setIdTemplate($idTemplate);
+        if ($form) {
+            $form->setIdTemplate($idTemplate);
+        }
         return $form;        
     }
 }
