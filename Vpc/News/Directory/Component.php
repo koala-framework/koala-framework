@@ -19,6 +19,7 @@ class Vpc_News_Directory_Component extends Vpc_News_List_Abstract_Component
             'priority' => 3
         );
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/News/Directory/Panel.js';
+        $ret['assetsAdmin']['dep'][] = 'ExtFormDateField';
         $ret['enableExpireDate'] = true;
         return $ret;
     }

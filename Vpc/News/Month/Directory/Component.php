@@ -36,6 +36,6 @@ class Vpc_News_Month_Directory_Component extends Vpc_Abstract
     }
     protected function _getNewsComponent()
     {
-        return $this->getData()->getParentComponent();
+        return $this->getData()->parent;
     }
 }
