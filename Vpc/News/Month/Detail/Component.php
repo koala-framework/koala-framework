@@ -13,7 +13,7 @@ class Vpc_News_Month_Detail_Component extends Vpc_News_List_Abstract_Component
     public function getNewsComponent()
     {
         return $this->getData()
-            ->getParentComponent() //month directory
+            ->parent //month directory
             ->getNewsComponent();
     }
 }
