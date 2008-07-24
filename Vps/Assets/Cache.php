@@ -12,4 +12,32 @@ class Vps_Assets_Cache extends Zend_Cache_Core
         ));
         $this->setBackend($backend);
     }
+
+    public function load($cacheId)
+    {
+        $ret = parent::load($cacheId);
+        if ($ret && isset($ret['mtimeFiles'])
+            && Vps_Registry::get('config')->debug->componentCache->checkComponentModification)
+        {
+            $mtime = 0;
+            foreach ($ret['mtimeFiles'] as $f) {
+                if (filemtime($f) > $ret['mtime']) {
+                    $ret = false;
+                    break;
+                }
+            }
+        }
+        return $ret;
+    }
+
+    public function save(&$cacheData, $cacheId)
+    {
+        if (isset($cacheData['mtimeFiles'])) {
+            if (!isset($cacheData['mtime'])) $cacheData['mtime'] = 0;
+            foreach ($cacheData['mtimeFiles'] as $f) {
+                $cacheData['mtime'] = max($cacheData['mtime'], filemtime($f));
+            }
+        }
+        return parent::save($cacheData, $cacheId);
+    }
 }

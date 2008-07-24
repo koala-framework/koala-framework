@@ -21,6 +21,20 @@ class Vps_Media_Headline
         return Zend_Json::encode($ret);
     }
 
+    public static function getMTimeFiles(Vps_Assets_Dependencies $dep)
+    {
+        $ret = array();
+        foreach ($dep->getAssetFiles('Frontend', 'css') as $file) {
+            if ($file instanceof Vps_Assets_Dynamic) {
+                $file = $file->getFile();
+            }
+            if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
+                $ret[] = $dep->getAssetPath($file);
+            }
+        }
+        return $ret;
+    }
+
     public static function getHeadlineStyles($contents)
     {
         $ret = array();
