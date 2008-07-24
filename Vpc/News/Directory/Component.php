@@ -39,4 +39,13 @@ class Vpc_News_Directory_Component extends Vpc_News_List_Abstract_Component
         $select->order($this->_getSetting('order'));
         return $select;
     }
+    public function modifyNewsData(Vps_Component_Data $new)
+    {
+        foreach (Vpc_Abstract::getChildComponentClasses(get_class($this)) as $c) {
+            if (Vpc_Abstract::hasSetting($c, 'hasModifyNewsData')
+                && Vpc_Abstract::getSetting($c, 'hasModifyNewsData')) {
+                call_user_func(array($c, 'modifyNewsData'), $new);
+            }
+        }
+    }
 }
