@@ -35,8 +35,6 @@ class Vpc_News_List_Abstract_View_Component extends Vpc_Abstract_Composite_Compo
     {
         $ret = parent::getTemplateVars();
         $ret['news'] = $this->_getNews();
-        $ret['pagingVisible'] = $this->getData()->getChildComponent('-paging')
-                                    ->getComponent()->getPagingVisible();
         $ret['allNews'] = $this->getData()->parent->getComponent()->getNewsComponent();
         return $ret;
     }

@@ -94,7 +94,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
         return $page;
     }
 
-    public function getPagingVisible()
+    public function hasContent()
     {
         return ($this->_getPages() > 1 ? true : false);
     }
