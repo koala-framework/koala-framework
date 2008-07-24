@@ -5,7 +5,11 @@ abstract class Vpc_News_Detail_Abstract_Component extends Vpc_Abstract_Composite
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['content'] = 'Vpc_News_Detail_Paragraphs_Component';
+        $ret['hasModifyNewsData'] = true;
         return $ret;
+    }
+    public static function modifyNewsData(Vps_Component_Data $new)
+    {
     }
 
     public function getTemplateVars()

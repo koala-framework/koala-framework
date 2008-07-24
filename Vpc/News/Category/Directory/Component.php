@@ -17,7 +17,20 @@ class Vpc_News_Category_Directory_Component extends Vpc_Abstract
 
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/News/Category/Directory/Plugin.js';
         $ret['assetsAdmin']['dep'][] = 'VpsPool';
+
+        $ret['hasModifyNewsData'] = true;
         return $ret;
+    }
+
+    public static function modifyNewsData(Vps_Component_Data $new)
+    {
+        $categories = $new->row->findManyToManyRowset('Vps_Dao_Pool',
+                    'Vpc_News_Category_Directory_NewsToCategoriesModel');
+        $new->categories = array();
+        foreach ($categories as $c) {
+            $new->categories[] = Vps_Component_Data_Root::getInstance()
+                ->getComponentById($new->parent->componentId.'_categories_'.$c->id);
+        }
     }
 
     public function getTemplateVars()

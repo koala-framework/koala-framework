@@ -22,8 +22,13 @@ class Vpc_News_List_Abstract_View_Component extends Vpc_Abstract_Composite_Compo
         $this->getData()->getChildComponent('-paging')
             ->getComponent()->limitSelect($select);
         $select->group('vpc_news.id');
-        return $this->getData()->parent->getComponent()->getNewsComponent()
+        $ret = $this->getData()->parent->getComponent()->getNewsComponent()
                     ->getChildComponents($select);
+        foreach ($ret as $new) {
+            $this->getData()->parent->getComponent()->getNewsComponent()
+                ->getComponent()->modifyNewsData($new);
+        }
+        return $ret;
     }
 
     public function getTemplateVars()
