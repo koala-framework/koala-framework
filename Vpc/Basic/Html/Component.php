@@ -26,6 +26,14 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public function hasContent()
+    {
+        if (trim($this->_getRow()->content) != "") {
+            return true;
+        }
+        return false;
+    }
+
     public function getSearchVars()
     {
         $ret = parent::getSearchVars();

@@ -66,6 +66,19 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
     }
 
     /**
+     * Gibt an, ob eine Komponente Inhalt hat
+     *
+     * Wird verwendet in Templates um zu prüfen, ob eine Komponente einen Inhalt
+     * hat (z.B. Text oder Download)
+     *
+     * @return boolean $hasContent Ob die Komponente Inhalt hat (true) oder nicht (false)
+     */
+    public function hasContent()
+    {
+        return true;
+    }
+
+    /**
      * Gibt Werte für den Statistik-Decorator zurück
      * 
      * Standardmäßig wird in die Tabelle "temp" geschrieben,
