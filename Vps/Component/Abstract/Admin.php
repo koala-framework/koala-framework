@@ -113,11 +113,18 @@ class Vps_Component_Abstract_Admin
     public function onRowUpdate($row)
     {
         $this->_deleteCache($row);
+        $this->_onRowAction($row);
     }
 
     public function onRowDelete($row)
     {
         $this->_deleteCache($row);
+        $this->_onRowAction($row);
+    }
+
+    public function onRowInsert($row)
+    {
+        $this->_onRowAction($row);
     }
     
     private function _deleteCache($row)
@@ -134,8 +141,6 @@ class Vps_Component_Abstract_Admin
             }
         }
     }
-
-    public function onRowInsert($row)
-    {
-    }
+    
+    protected function _onRowAction($row) {}
 }
