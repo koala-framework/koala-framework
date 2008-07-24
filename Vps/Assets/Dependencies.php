@@ -49,23 +49,8 @@ class Vps_Assets_Dependencies
         if (!isset($this->_files[$assetsType])) {
             $cacheId = 'dependencies'.$assetsType;
             $cache = $this->_getCache();
-            $mtime = $cache->test($cacheId);
-            if (!$mtime) {
-                Vps_Benchmark::info('Generate Dependencies Cache');
-            }
-            if (Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
-                if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
-                    if ($mtime && $mtime < Vpc_Abstract::getSettingCacheMtime()) {
-                        Vps_Benchmark::info('Regenerate Dependencies Cache (component settings changed)');
-                        $mtime = false;
-                    }
-                }
-                if ($mtime && $mtime < Vps_Registry::get('configMtime')) {
-                    Vps_Benchmark::info('Regenerate Dependencies Cache (config.ini changed)');
-                    $mtime = false;
-                }
-            }
-            if (!$mtime) {
+            $this->_files[$assetsType] = $cache->load($cacheId);
+            if (!$this->_files[$assetsType]) {
                 $this->_files[$assetsType] = array();
                 $assetsSection = $assetsType;
                 if (!isset($this->_config->assets->$assetsType)) {
@@ -77,8 +62,6 @@ class Vps_Assets_Dependencies
                     }
                 }
                 $cache->save($this->_files[$assetsType], $cacheId);
-            } else {
-                $this->_files[$assetsType] = $cache->load($cacheId);
             }
         }
 
@@ -315,12 +298,8 @@ class Vps_Assets_Dependencies
             $encoding = Vps_Media_Output::getEncoding();
             $cache = $this->_getCache();
             $cacheId = $fileType.$encoding.$section.Vps_Setup::getConfigSection().$language;
-
-            $cacheData = $cache->load($cacheId);
-            if ($cacheData && $cacheData['version'] != $this->_config->application->version) {
-                $cacheData = false;
-            }
-            if (!$cacheData) {
+            if (!$cacheData = $cache->load($cacheId)) {
+                
                 $cacheData  = array();
 
                 $cacheData['contents'] = '';

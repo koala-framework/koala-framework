@@ -49,7 +49,7 @@ class Vps_Component_Abstract
         return $s[$class][$setting];
     }
 
-    public static function getSettingCacheMtime()
+    public static function getSettingMtime()
     {
         $s =& self::_getSettingsCached();
         return $s['mtime'];
@@ -59,40 +59,12 @@ class Vps_Component_Abstract
     {
         static $settings = null;
         if (!$settings) {
-            $frontendOptions = array(
-                'lifetime' => null,
-                'automatic_serialization' => true
-            );
-            $backendOptions = array(
-                'cache_dir' => 'application/cache/config/'
-            );
-            $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+            $cache = new Vps_Assets_Cache(array('checkComponentSettings' => false));
             $cacheId = 'componentSettings'.Vps_Registry::get('trl')->getTargetLanguage();
             $settings = $cache->load($cacheId);
-
-            if ($settings && Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
-                foreach ($settings as $k=>$s) {
-                    if ($k=='mtime') continue;
-                    if (!isset($s['parentFiles'])) {
-                        Vps_Benchmark::info("Settings-Cache regenerated (checkComponentModification changed)");
-                        $settings = false;
-                        break;
-                    }
-                    foreach ($s['parentFiles'] as $f) {
-                        if (filemtime($f) > $s['mtime']) {
-                            Vps_Benchmark::info("Settings-Cache regenerated ($f modified)");
-                            $settings = false;
-                            break;
-                        }
-                    }
-                    if (!$settings) break;
-                }
-            } else if (!$settings) {
-                Vps_Benchmark::info('Settings-Cache regenerated (was empty)');
-            }
-
             if (!$settings) {
                 $settings = array();
+                $settings['mtimeFiles'] = array();
                 $incPaths = explode(PATH_SEPARATOR, get_include_path());
                 foreach (self::getComponentClasses(false/*don't use settings cache*/) as $c) {
                     $settings[$c] = call_user_func(array($c, 'getSettings'));
@@ -101,25 +73,20 @@ class Vps_Component_Abstract
                     do {
                         $settings[$c]['parentClasses'][] = $p;
                     } while ($p = get_parent_class($p));
-                    if (Vps_Registry::get('config')->debug->componentCache->checkComponentModification) {
-                        $settings[$c]['parentFiles'] = array();
-                        $settings[$c]['mtime'] = 0;
-                        $p = $c;
-                        do {
-                            $file = str_replace('_', DIRECTORY_SEPARATOR, $p) . '.php';
-                            $f = false;
-                            foreach ($incPaths as $incPath) {
-                                if (file_exists($incPath.DIRECTORY_SEPARATOR.$file)) {
-                                    $f = $incPath.DIRECTORY_SEPARATOR.$file;
-                                    break;
-                                }
+                    $p = $c;
+                    do {
+                        $file = str_replace('_', DIRECTORY_SEPARATOR, $p);
+                        $f = false;
+                        foreach ($incPaths as $incPath) {
+                            if (file_exists($incPath.DIRECTORY_SEPARATOR.$file . '.php')) {
+                                $f = $incPath.DIRECTORY_SEPARATOR.$file . '.php';
+                                break;
                             }
-                            if (!$f) { throw new Vps_Exception("File $file not found"); }
-                            $settings[$c]['parentFiles'][] = $f;
-                            $settings[$c]['mtime'] = max($settings[$c]['mtime'], filemtime($f));
-                        } while ($p = get_parent_class($p));
-                    }
-                    $settings['mtime'] = time();
+                        }
+                        if (!$f) { throw new Vps_Exception("File $file not found"); }
+                        $settings['mtimeFiles'][] = $f;
+                        $settings['mtimeFiles'][] = $incPath.DIRECTORY_SEPARATOR.$file.'.css';
+                    } while ($p = get_parent_class($p));
                 }
                 $cache->save($settings, $cacheId);
             }
