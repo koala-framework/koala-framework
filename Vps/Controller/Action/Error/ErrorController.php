@@ -29,12 +29,15 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
                 $errors->exception instanceof Vps_Controller_Action_Web_FileNotFoundException) {
                 $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
                 $file = 'Error404';
+            } else if ($errors->exception instanceof Vps_ClientException) {
+                $file = 'ErrorClient';
             } else {
+                $this->getResponse()->setRawHeader('HTTP/1.1 500 Internal Server Error');
                 $file = 'Error';
             }
 
             $this->_helper->viewRenderer->setRender($file);
-                        
+
             $config = Zend_Registry::get('config');
             $this->view->type = $errors->type;
             $this->view->exception = $errors->exception;
@@ -44,8 +47,10 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
             } else {
                 $this->view->requestUri = '';
             }
-            if ($config->debug->errormail != '') {
-                Vps_Debug::sendErrorMail($errors->exception, $config->debug->errormail);
+            if ($config->debug->errormail) {
+                if (substr($this->view->requestUri, -12) != '/favicon.ico') {
+                    Vps_Debug::sendErrorMail($errors->exception, $config->debug->errormail);
+                }
                 $this->view->debug = false;
             } else {
                 $this->view->debug = true;
