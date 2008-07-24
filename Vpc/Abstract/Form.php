@@ -25,7 +25,7 @@ class Vpc_Abstract_Form extends Vps_Form
             }
         }
         if (!$componentClass) {
-            throw new Vps_Exception("No component for dbIdShortcut '$dbIdShortcut' found.");
+            throw new Vpc_Exception("No component for dbIdShortcut '$dbIdShortcut' found.");
         }
         if ($id) { // id hatte form 'dbId_{0}-key', also für Key Unterkomponente suchen
             $form = self::createChildComponentForm($componentClass, $id, $name);
@@ -41,14 +41,20 @@ class Vpc_Abstract_Form extends Vps_Form
     {
         // Es wurde ein dbIdTemplate angegeben
         if (!in_array($componentClass, Vpc_Abstract::getComponentClasses())) {
-            return self::createComponentFormByDbIdTemplate($componentClass);
+            try {
+                return self::createComponentFormByDbIdTemplate($componentClass);
+            } catch (Vpc_Exception $e) {
+                throw new Vpc_Exception("Could not find component '$componentClass'.");
+            }
         }
         
         $formClass = Vpc_Admin::getComponentClass($componentClass, 'Form');
         if (!$formClass || $formClass == 'Vpc_Abstract_Form') return null;
-
+        
         if (!$name) $name = $componentClass;
-        return new $formClass($name, $componentClass);
+        $form = new $formClass($name, $componentClass);
+        if ($form instanceof Vpc_Abstract_FormEmpty) { return null; }
+        return $form;
     }
     
     public static function createChildComponentForm($componentClass, $id, $name = null)
@@ -66,7 +72,7 @@ class Vpc_Abstract_Form extends Vps_Form
             }
         }
         if (!$childComponentClass) {
-            throw new Vps_Exception("No child component with id '$id' for '$componentClass' found.");
+            throw new Vpc_Exception("No child component with id '$id' for '$componentClass' found.");
         }
         $form = self::createComponentForm($childComponentClass, $name);
         if ($form) {

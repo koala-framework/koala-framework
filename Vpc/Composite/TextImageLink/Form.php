@@ -1,16 +1,10 @@
 <?php
-class Vpc_Composite_TextImageLink_Form extends Vpc_Abstract_Form
+class Vpc_Composite_TextImageLink_Form extends Vpc_Abstract_Composite_Form
 {
-    public function __construct($name, $class)
+    protected function _initFields()
     {
-        parent::__construct($name, $class);
         $this->add(new Vps_Form_Field_TextField('title', trlVps('Title')));
         $this->add(new Vps_Form_Field_TextField('teaser', trlVps('Teaser')));
-
-        $classes = Vpc_Abstract::getChildComponentClasses($class, 'child');
-        foreach ($classes as $k=>$i) {
-            $form = Vpc_Abstract_Form::createChildComponentForm($i, '-'.$k);
-            $this->add($form);
-        }
+        parent::_initFields();
     }
 }
