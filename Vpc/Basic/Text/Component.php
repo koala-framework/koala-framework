@@ -82,6 +82,13 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public function hasContent()
+    {
+        $content = trim(strip_tags($this->_getRow()->content));
+        if (!empty($content)) return true;
+        return false;
+    }
+
     public function getSearchVars()
     {
         $ret = parent::getSearchVars();

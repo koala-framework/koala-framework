@@ -155,7 +155,17 @@ class Vps_Component_Data
         }
         return false;
     }
-    
+
+    /**
+     * Abkürzung für $this->getComponent()->hasContent()
+     *
+     * @return boolean $hasContent Ob die zugehörige Komponente Inhalt hat oder nicht
+     */
+    public function hasContent()
+    {
+        return $this->getComponent()->hasContent();
+    }
+
     public function getChildPage($constraints = array())
     {
         $childPages = $this->getChildPages($constraints);

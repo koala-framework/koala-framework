@@ -12,6 +12,14 @@ class Vpc_Abstract_Composite_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public function hasContent()
+    {
+        foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
+            if ($c->hasContent()) return true;
+        }
+        return false;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
