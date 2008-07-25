@@ -99,6 +99,7 @@ class Vps_Component_Data
         } else {
             $generatorInterface = false;
         }
+        $currentChildConstraints['page'] = false;
         $currentChildConstraints['componentClass'] = array();
         if ($generatorInterface) {
             $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
