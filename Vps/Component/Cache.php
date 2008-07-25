@@ -28,7 +28,7 @@ class Vps_Component_Cache extends Zend_Cache_Core {
         return self::$_instance;
     }
         
-    public function save($data, $componentClass, $componentId, $tags)
+    public function save($data, $componentClass, $componentId, $tags = array())
     {
         $this->_setCacheDir($componentClass);
         parent::save($data, $componentId, $tags);
