@@ -47,8 +47,9 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         this.actions.reload = new Ext.Action({
             text    : '',
             handler : function () { this.tree.getRootNode().reload(); },
-            icon    : '/assets/silkicons/bullet_star.png',
+            icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
             cls     : 'x-btn-icon',
+            tooltip : trlVps('Reload'),
             scope   : this
         });
 

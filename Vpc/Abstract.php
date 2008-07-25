@@ -111,7 +111,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
     public function sendContent($decoratedPage)
     {
         header('Content-Type: text/html; charset=utf-8');
-        echo Vps_View_Component::renderCachedComponent($this->getData(), null, true);
+        echo Vps_View_Component::renderComponent($this->getData(), null, true);
     }
     /**
      * Gibt die Variablen für View zurück.

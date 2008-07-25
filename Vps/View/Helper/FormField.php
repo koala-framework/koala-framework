@@ -12,7 +12,7 @@ class Vps_View_Helper_FormField
                 $this->formField($i);
             }
         } elseif (isset($component)) {
-            echo Vps_View_Component::renderCachedComponent($component);
+            echo Vps_View_Component::renderComponent($component);
         }
         if (isset($postHtml)) { echo $postHtml; }
     }

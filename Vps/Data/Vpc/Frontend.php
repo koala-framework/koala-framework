@@ -11,13 +11,13 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
     public function load($row)
     {
         $id = $row->component_id.'-'.$row->id;
-        $data = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id);
+        $data = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id, array('ignoreVisible' => true));
         if (!$data) {
             return "Component with '$id' not found";
         }
         $class = $data->componentClass;
         if (is_subclass_of($class, 'Vpc_Abstract')) {
-            return Vps_View_Component::renderCachedComponent($data);
+            return Vps_View_Component::renderComponent($data, true);
         } else if (isset($row->settings)) {
             $settingsModel = new Vps_Model_Field(array(
                 'parentModel' => $row->getModel(),

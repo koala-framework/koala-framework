@@ -7,7 +7,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     protected $_idColumn = 'id';
     private $_rows = array();
 
-    public function select($parentData)
+    public function select($parentData, array $constraints = array())
     {
         $select = new Vps_Db_Table_Select_Generator($this->_table);
         $select->setGenerator($this->_settings['generator']);
@@ -17,7 +17,8 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if ($parentData && in_array('component_id', $cols)) {
             $select->where("$tableName.component_id = ?", $parentData->dbId);
         }
-        if (in_array('visible', $cols) && !Vps_Registry::get('config')->showInvisible) {
+        if ((!isset($constraints['ignoreVisible']) || !$constraints['ignoreVisible'])
+            && in_array('visible', $cols) && !Vps_Registry::get('config')->showInvisible) {
             $select->where("$tableName.visible = ?", 1);
         }
         if (in_array('pos', $cols)) {
@@ -41,12 +42,12 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     {
         $ret = parent::getChildData($parentData, $constraints);
         foreach ($this->_fetchRows($parentData, $constraints) as $row) {
-            $ret[] = $this->_createData($parentData, $row);
+            $ret[] = $this->_createData($parentData, $row, $constraints);
         }
         return $ret;
     }
 
-    protected function _createData($parentData, $row)
+    protected function _createData($parentData, $row, $constraints)
     {
         if (!$parentData) {
             $parentData = $this->_getParentDataByRow($row);
@@ -54,7 +55,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if (!$parentData) {
             throw new Vps_Exception("Can't find parentData in ".get_class($this));
         }
-        return parent::_createData($parentData, $row);
+        return parent::_createData($parentData, $row, $constraints);
     }
 
     protected function _getParentDataByRow($row)
@@ -92,7 +93,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             return null;
         }
         if (!isset($constraints['select'])) {
-            $constraints['select'] = $this->select($parentData);
+            $constraints['select'] = $this->select($parentData, $constraints);
         }
 
         return $constraints;
@@ -104,12 +105,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
         $constraints = $this->_formatConstraints($parentData, $constraints);
         if (!$constraints) return null;
-
-        if (isset($constraints['select'])) {
-            $select = $constraints['select'];
-        } else {
-            $select = $this->select($parentData);
-        }
+        $select = $constraints['select'];
         if (!$select) return null;
 
         if (isset($constraints['componentClass'])) {

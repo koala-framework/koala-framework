@@ -34,9 +34,38 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         if ($row->is_home) {
             $data['bIcon'] = $this->_icons['home']->__toString();
         }
-        $classes = Vpc_Abstract::getChildComponentClasses(Vps_Registry::get('config')->vpc->rootComponent, 'page');
-        $data['data']['component_class'] = $classes[$row->component];
         $data['uiProvider'] = 'Vps.Component.PagesNode';
+
+        $c = Vps_Component_Data_Root::getInstance()->getComponentById($row->id, array('ignoreVisible' => true));
+        $editComponents = array($c);
+        $boxEditComponents = array();
+        $priorities = array();
+        $constraints = array('hasEditComponents' => true);
+        $childConstraints = array('skipRoot' => true);
+        foreach ($c->getRecursiveChildComponents($constraints, $childConstraints) as $cc) {
+            if (isset($cc->box)) {
+                if (!isset($priorities[$cc->box]) || $cc->priority > $priorities[$cc->box]) {
+                    $priorities[$cc->box] = $cc->priority;
+                    $boxEditComponents[$cc->box] = $cc;
+                }
+            } else {
+                $editComponents[] = $cc;
+            }
+        }
+        $editComponents = array_merge($editComponents, $boxEditComponents);
+        $data['data']['editComponents'] = array();
+        foreach ($editComponents as $cc) {
+            if (Vpc_Abstract::hasSetting($cc->componentClass, 'componentName')
+                && Vpc_Abstract::getSetting($cc->componentClass, 'componentName'))
+            {
+                $data['data']['editComponents'][] = array(
+                    'componentClass' => $cc->componentClass,
+                    'componentName' => Vpc_Abstract::getSetting($cc->componentClass, 'componentName'),
+                    'dbId' => $cc->dbId,
+                    'componentIcon' => Vpc_Abstract::getSetting($cc->componentClass, 'componentIcon')->__toString()
+                );
+            }
+        }
         return $data;
     }
 

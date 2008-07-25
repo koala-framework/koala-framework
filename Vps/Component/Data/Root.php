@@ -35,11 +35,12 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
     }
 
-    public function getComponentById($componentId, $page = null)
+    public function getComponentById($componentId, array $constraints = array())
     {
-        if (!$page) $page = $this;
+        $page = $this;
         foreach ($this->_getIdParts($componentId) as $idPart) {
-            $page = $page->getChildComponent($idPart);
+            $constraints['id'] = $idPart;
+            $page = $page->getChildComponent($constraints);
             if (!$page) break;
         }
         return $page;
@@ -63,18 +64,18 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $ret;
     }
     
-    public function getComponentByDbId($dbId)
+    public function getComponentByDbId($dbId, array $constraints = array())
     {
-        $cmp = $this->getComponentsByDbId($dbId, true);
+        $cmp = $this->getComponentsByDbId($dbId, $constraints, true);
         return isset($cmp[0]) ? $cmp[0] : null;
     }
 
-    public function getComponentsByDbId($dbId, $returnFirst=false)
+    public function getComponentsByDbId($dbId, array $constraints = array(), $returnFirst=false)
     {
         $benchmark = Vps_Benchmark::start();
 
         if (is_numeric(substr($dbId, 0, 1))) {
-            $data = $this->getComponentById($dbId);
+            $data = $this->getComponentById($dbId, $constraints);
             if ($data) {
                 return array($data);
             } else {
@@ -89,12 +90,14 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                         && substr($dbId, 0, strlen($generator['dbIdShortcut'])) == $generator['dbIdShortcut']) {
                     $idParts = $this->_getIdParts(substr($dbId, strlen($generator['dbIdShortcut']) - 1));
                     $generator = Vps_Component_Generator_Abstract::getInstance($class, $key);
-                    $data = $generator->getChildData(null, array('id' => $idParts[0]));
+                    $constraints['id'] = $idParts[0];
+                    $data = $generator->getChildData(null, $constraints);
                     unset($idParts[0]);
                     $data = isset($data[0]) ? $data[0] : null;
                     foreach ($idParts as $idPart) {
                         if (!$data) break;
-                        $data = $data->getChildComponent($idPart);
+                        $constraints['id'] = $idPart;
+                        $data = $data->getChildComponent($constraints);
                     }
                     if ($data) {
                         $ret[] = $data;

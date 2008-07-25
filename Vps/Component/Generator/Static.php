@@ -34,7 +34,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         }
         foreach ($parentDatas as $parentData) {
             foreach ($this->_fetchKeys($parentData, $constraints) as $key) {
-                $ret[] = $this->_createData($parentData, $key);
+                $ret[] = $this->_createData($parentData, $key, $constraints);
             }
         }
         return $ret;

@@ -121,7 +121,8 @@ abstract class Vps_Component_Generator_Abstract
                     $ret = array_merge($ret, self::_getGeneratorsForComponent($mc, $constraints));
                 }
             }
-            if ($parentData instanceof Vps_Component_Data_Root || is_numeric($parentData->componentId)) {
+            if ((!isset($constraints['skipRoot']) || !$constraints['skipRoot'])
+                && ($parentData instanceof Vps_Component_Data_Root || is_numeric($parentData->componentId))) {
                 $ret = array_merge($ret, self::_getGeneratorsForComponent(
                     Vps_Registry::get('config')->vpc->rootComponent, $constraints
                 ));
@@ -151,10 +152,33 @@ abstract class Vps_Component_Generator_Abstract
 
     protected function _formatConstraints($parentData, $constraints)
     {
+        if (isset($constraints['hasEditComponents'])) {
+            unset($constraints['hasEditComponents']);
+            if (isset($constraints['componentClass'])) {
+                throw new Vps_Exception("Can't use constraint hasEditComponents together with componentClass (not implemented)");
+            }
+            $constraints['componentClass'] = array();
+            if (!Vpc_Abstract::hasSetting($this->_class, 'editComponents')
+                    || !Vpc_Abstract::getSetting($this->_class, 'editComponents'))
+            {
+                return null;
+            }
+            $editComponents = Vpc_Abstract::getSetting($this->_class, 'editComponents');
+            if (!isset($editComponents[$this->_settings['generator']])) return null;
+            $editComponents = $editComponents[$this->_settings['generator']];
+            if (!is_array($editComponents)) $editComponents = array($editComponents);
+
+            $constraints['componentClass'][] = array();
+            foreach ($editComponents as $c) {
+                $constraints['componentClass'][] = $this->_settings['component'][$c];
+            }
+
+            if (!$constraints['componentClass']) return null;
+        }
         return $constraints;
     }
 
-    protected function _createData($parentData, $row)
+    protected function _createData($parentData, $row, $constraints)
     {
         $id = $this->_getIdFromRow($row);
         if (!isset($this->_dataCache[$parentData->componentId][$id])) {

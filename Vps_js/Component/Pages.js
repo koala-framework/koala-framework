@@ -25,6 +25,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         this.treePanel.on('loaded', this.onTreePanelLoaded, this);
         this.on('editcomponent', this.loadComponent, this);
         this.setupEditform();
+
+        this.editActions = {};
     },
 
     setupEditform : function ()
@@ -41,32 +43,33 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
     onTreePanelLoaded : function(tree)
     {
-        this.pageButton = new Ext.Toolbar.Button({
-            cls     : 'x-btn-text-icon bmenu',
-            text    : trlVps('Page'),
-            menu    : [
+        this.pageButtonMenu = new Ext.menu.Menu({
+            items    : [
+                '-',
                 this.getAction('properties'),
                 this.getAction('add'),
                 this.getAction('delete'),
                 this.getAction('visible'),
                 this.getAction('makeHome'),
                 this.getAction('preview')
-            ],
+            ]
+        });
+        this.pageButton = new Ext.Toolbar.Button({
+            cls     : 'x-btn-text-icon bmenu',
+            text    : trlVps('Page'),
+            menu    : this.pageButtonMenu,
             icon    : '/assets/silkicons/page.png',
             disabled: true
         });
 
         this.treePanel.getTopToolbar().add(
             this.pageButton,
-            '-',
-            this.getAction('edit'),
             '->',
-            this.getAction('reloadAll')
+            this.treePanel.getAction('reload')
         );
 
         this.contextMenu = new Ext.menu.Menu({
              items: [
-                this.getAction('edit'),
                 '-',
                 this.getAction('properties'),
                 this.getAction('add'),
@@ -88,21 +91,49 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         }, this);
 
         tree.on('dblclick', function (o, e) {
-            this.fireEvent('editcomponent', {id: o.attributes.id, cls: o.attributes.data.component_class, text: o.text})
+            for (var i in this.editActions) {
+                if (!this.editActions[i].isHidden) {
+                    this.editActions[i].execute();
+                    break;
+                }
+            }
         }, this);
     },
 
     treeSelectionchange : function (node) {
         if (node) {
             this.pageButton.enable();
+            for (var i in this.editActions) {
+                this.editActions[i].hide();
+            }
             if (node.attributes.type == 'category') {
-                this.getAction('edit').disable();
                 this.getAction('properties').disable();
                 this.getAction('delete').disable();
                 this.getAction('visible').disable();
                 this.getAction('makeHome').disable();
             } else {
-                this.getAction('edit').enable();
+                node.attributes.data.editComponents.each(function(component) {
+                    if (!this.editActions[component.componentClass]) {
+                        this.editActions[component.componentClass] = new Ext.Action({
+                            text    : trlVps('Edit {0}', [component.componentName]),
+                            handler : function (o, e) {
+                                var node = this.treePanel.tree.getSelectionModel().getSelectedNode();
+                                this.fireEvent('editcomponent', {
+                                    id: o.component.dbId,
+                                    cls: o.component.componentClass,
+                                    text: node.text + ' - ' + o.component.componentName
+                                });
+                            },
+                            icon    : component.componentIcon,
+                            cls     : 'x-btn-text-icon',
+                            scope   : this,
+                            component: component
+                        });
+                        this.contextMenu.insert(0, new Ext.menu.Item(this.editActions[component.componentClass]));
+                        this.pageButtonMenu.insert(0, new Ext.menu.Item(this.editActions[component.componentClass]));
+                    }
+                    this.editActions[component.componentClass].show();
+                }, this);
                 this.getAction('properties').enable();
                 this.getAction('delete').enable();
                 this.getAction('visible').enable();
@@ -144,19 +175,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
     {
         if (this.actions[type]) return this.actions[type];
 
-        if (type == 'edit') {
-            this.actions[type] = new Ext.Action({
-                text    : trlVps('Edit Content'),
-                disabled: true,
-                handler : function (o, e) {
-                    node = this.treePanel.tree.getSelectionModel().getSelectedNode();
-                    this.fireEvent('editcomponent', {id: node.attributes.id, cls: node.attributes.data.component_class, text: node.text});
-                },
-                icon    : '/assets/silkicons/page_edit.png',
-                cls     : 'x-btn-text-icon',
-                scope   : this
-            });
-        } else if (type == 'properties') {
+        if (type == 'properties') {
             this.actions[type] = new Ext.Action({
                 text    : trlVps('Properties of selected Page'),
                 handler : function () {
@@ -216,14 +235,6 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 },
                 icon    : '/assets/silkicons/application_home.png',
                 cls     : 'x-btn-text-icon',
-                scope   : this
-            });
-        } else if (type == 'reloadAll') {
-            this.actions[type] = new Ext.Action({
-                handler : function () { this.treePanel.tree.getRootNode().reload(); },
-                icon    : '/assets/silkicons/arrow_rotate_clockwise.png',
-                cls     : 'x-btn-icon',
-                tooltip : 'Reload',
                 scope   : this
             });
         } else if (type == 'expand') {
