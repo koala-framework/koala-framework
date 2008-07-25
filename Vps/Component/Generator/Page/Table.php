@@ -40,13 +40,14 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_Table i
     protected function _getSelect($parentData, $constraints)
     {
         $select = parent::_getSelect($parentData, $constraints);
+        $tableName = $this->_table->info('name');
         if (!$select) return null;
         if (isset($constraints['filename'])) {
             if (isset($this->_settings['uniqueFilename']) && $this->_settings['uniqueFilename']) {
-                $select->where($this->_settings['filenameColumn'] . ' = ?', $constraints['filename']);
+                $select->where($tableName.'.'.$this->_settings['filenameColumn'] . ' = ?', $constraints['filename']);
             } else {
                 if (!preg_match('#^([0-9]+)_#', $constraints['filename'], $m)) return null;
-                $select->where($this->_idColumn . ' = ?', $m[1]);
+                $select->where($tableName.'.'.$this->_idColumn . ' = ?', $m[1]);
             }
         }
         return $select;
