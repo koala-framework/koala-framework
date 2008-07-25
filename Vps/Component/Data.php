@@ -259,7 +259,7 @@ class Vps_Component_Data
             $ids = array();
             foreach ($this->_constraintsCache[$sc] as $data) {
                 if (in_array($data->componentId, $ids)) {
-                    throw new Vps_Exception("Key für generator not unique: {$data->componentId}");
+                    //throw new Vps_Exception("Key für generator not unique: {$data->componentId}");
                 }
                 $ids[] = $data->componentId;
             }
