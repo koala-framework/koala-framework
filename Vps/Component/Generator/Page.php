@@ -16,12 +16,9 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract impl
     {
         parent::_init();
         $select = new Zend_Db_Select($this->_db);
-        $select->from('vps_pages', array('id', 'parent_id', 'component',
+        $select->from('vps_pages', array('id', 'parent_id', 'component', 'visible',
                                     'filename', 'hide', 'type', 'name', 'is_home'));
         $select->order('pos');
-        if (!Zend_Registry::get('config')->showInvisible) {
-            $select->where('visible = ?', 1);
-        }
 
         $this->_pageData = array();
         $this->_pageParent = array();
@@ -119,6 +116,13 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract impl
             if (isset($constraints['showInMenu']) && $constraints['showInMenu'] == $page['hide']) {
                 continue;
             }
+            if (!$this->_pageData[$pageId]['visible']) {
+                if (!Vps_Registry::get('config')->showInvisible && (!isset($constraints['ignoreVisible']) || !$constraints['ignoreVisible']))
+                {
+                    continue;
+                }
+            }
+
             $ret[] = $page['id'];
         }
         return $ret;
@@ -128,22 +132,26 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract impl
     {
         $ret = parent::getChildData($parentData, $constraints);
         foreach ($this->getChildIds($parentData, $constraints) as $id) {
-            $ret[] = $this->_createData($parentData, $id);
+            $ret[] = $this->_createData($parentData, $id, $constraints);
         }
         return $ret;
     }
-    protected function _createData($parentData, $id)
+    protected function _createData($parentData, $id, $constraints)
     {
         $page = $this->_pageData[$id];
-        if (!$parentData || ($parentData instanceof Vps_Component_Data_Root && $page['parent_id'])) {
+        if (!$parentData || (($parentData instanceof Vps_Component_Data_Root) && $page['parent_id'])) {
             if (!$page['parent_id']) {
                 $parentData = Vps_Component_Data_Root::getInstance();
             } else {
+                $c = array();
+                if (isset($constraints['ignoreVisible'])) {
+                    $c['ignoreVisible'] = $constraints['ignoreVisible'];
+                }
                 $parentData = Vps_Component_Data_Root::getInstance()
-                                    ->getComponentById($page['parent_id']);
+                                    ->getComponentById($page['parent_id'], $c);
             }
         }
-        return parent::_createData($parentData, $id);
+        return parent::_createData($parentData, $id, $constraints);
     }
 
     protected function _formatConfig($parentData, $id)

@@ -7,12 +7,20 @@ class Vps_View_Component extends Vps_View
         $this->addScriptPath('application/views');
     }
 
-    public static function renderCachedComponent($componentClass, $componentId = null, $isMaster = false, $plugins = array())
+    public static function renderMasterComponent($component)
     {
-        if ($componentClass instanceof Vps_Component_Data) {
-            $component = $componentClass;
+        return self::renderComponent($component, false, true);
+    }
+
+    public static function renderComponent($component, $ignoreVisible = false, $isMaster = false, array $plugins = array())
+    {
+        if ($component instanceof Vps_Component_Data) {
             $componentClass = $component->componentClass;
             $componentId = $component->componentId;
+        } else {
+            $componentClass = $component['componentClass'];
+            $componentId = $component['componentId'];
+            unset($component);
         }
 
         // Falls es Cache gibt, Cache holen
@@ -22,15 +30,18 @@ class Vps_View_Component extends Vps_View
 
         if ($cacheDisabled || ($ret = $cache->load($componentClass, $cacheId))===false) {
             if (!isset($component)) {
-                $component = Vps_Component_Data_Root::getInstance()->getComponentById($componentId);
+                $component = Vps_Component_Data_Root::getInstance()
+                    ->getComponentById($componentId, array('ignoreVisible' => $ignoreVisible));
             }
-
             if ($component) {
-                $ret = Vps_View_Component::_renderComponent($component, $isMaster);
+                if ($isMaster) {
+                    $ret = Vps_View_Component::_renderMasterComponent($component);
+                } else {
+                    $ret = Vps_View_Component::_renderComponent($component);
+                }
                 $useCache = Vpc_Abstract::getSetting($component->componentClass, 'viewCache');
                 if (!$cacheDisabled && ($useCache || $isMaster)) {
-                    $tags = array($isMaster ? 'master' : $component->componentClass);
-                    $cache->save($ret, $component->componentClass, $cacheId, $tags);
+                    $cache->save($ret, $component->componentClass, $cacheId);
                 }
             } else {
                 $ret = "Component '$componentId' not found";
@@ -58,48 +69,64 @@ class Vps_View_Component extends Vps_View
             } else {
                 $plugins = array();
             }
-            $replace = self::renderCachedComponent($matches[1][$key], $matches[2][$key], false, $plugins);
+            $c = array(
+                'componentClass' => $matches[1][$key],
+                'componentId' => $matches[2][$key]
+            );
+            $replace = self::renderComponent($c, $ignoreVisible, false, $plugins);
             $ret = str_replace($search, $replace, $ret);
         }
 
         return $ret;
     }
 
-
-    private static function _renderComponent(Vps_Component_Data $componentData, $isMaster)
+    private static function _renderComponent(Vps_Component_Data $componentData)
     {
-        if ($isMaster) {
-            $templateVars = array();
-            foreach (Zend_Registry::get('config')->vpc->masterComponents->toArray()
-             as $componentClass)
-            {
-                $component = new $componentClass($componentData);
-                if (!$component instanceof Vpc_Master_Abstract) {
-                    throw new Vps_Exception('vpc.masterComponent has to be instance of Vpc_Master_Abstract');
-                }
-                $vars = $component->getTemplateVars();
-                $templateVars = array_merge($templateVars, $vars);
-            }
-            $templateVars['component'] = $componentData;
-            $template = 'application/views/master/default.tpl';
-        } else {
-            $templateVars = $componentData->getComponent()->getTemplateVars();
-            $template = Vpc_Admin::getComponentFile($componentData->componentClass, 'Component', 'tpl');
-            if (!$template) {
-                throw new Vps_Exception("No Template found for '$componentData->componentClass'");
-            }
+        $templateVars = $componentData->getComponent()->getTemplateVars();
+        $template = Vpc_Admin::getComponentFile($componentData->componentClass, 'Component', 'tpl');
+        if (!$template) {
+            throw new Vps_Exception("No Template found for '$componentData->componentClass'");
         }
 
         if (is_null($templateVars)) {
             throw new Vps_Exception('getTemplateVars einer Komponenten gibt null zurück. return $vars; vergessen?');
         }
 
+        return self::_render($template, $templateVars);
+
+    }
+    private static function _render($template, $templateVars)
+    {
         $view = new Vps_View_Component();
         $view->assign($templateVars);
-        $ret = $view->render($template);
-        return $ret;
+        return $view->render($template);
     }
 
+    private static function _renderMasterComponent(Vps_Component_Data $componentData)
+    {
+        $templateVars = array();
+        foreach (Zend_Registry::get('config')->vpc->masterComponents->toArray()
+            as $componentClass)
+        {
+            $component = new $componentClass($componentData);
+            if (!$component instanceof Vpc_Master_Abstract) {
+                throw new Vps_Exception('vpc.masterComponent has to be instance of Vpc_Master_Abstract');
+            }
+            $templateVars = array_merge($templateVars, $component->getTemplateVars());
+        }
+        $templateVars['component'] = $componentData;
+
+        return self::_render('application/views/master/default.tpl', $templateVars);
+    }
+
+
+
+    /**
+     * Finds a view script from the available directories.
+     *
+     * @param $name string The base name of the script.
+     * @return void
+     */
     protected function _script($name)
     {
         return $name;
