@@ -13,14 +13,15 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $select->setGenerator($this->_settings['generator']);
         $select->from($this->_table);
         $cols = $this->_table->info('cols');
+        $tableName = $this->_table->info('name');
         if ($parentData && in_array('component_id', $cols)) {
-            $select->where('component_id = ?', $parentData->dbId);
+            $select->where("$tableName.component_id = ?", $parentData->dbId);
         }
         if (in_array('visible', $cols) && !Vps_Registry::get('config')->showInvisible) {
-            $select->where('visible = ?', 1);
+            $select->where("$tableName.visible = ?", 1);
         }
         if (in_array('pos', $cols)) {
-            $select->order('pos');
+            $select->order("$tableName.pos");
         }
         return $select;
     }
@@ -99,6 +100,8 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     protected function _getSelect($parentData, $constraints)
     {
+        $tableName = $this->_table->info('name');
+
         $constraints = $this->_formatConstraints($parentData, $constraints);
         if (!$constraints) return null;
 
@@ -128,13 +131,13 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                     return null;
                 }
             } else {
-                $select->where("component IN ('".implode("', '", $keys) ."')");
+                $select->where("$tableName.component IN ('".implode("', '", $keys) ."')");
             }
         }
 
         if (isset($constraints['id'])) {
                                                     //- bzw. _ abschneiden
-            $select->where($this->_idColumn.' = ?', substr($constraints['id'], 1));
+            $select->where($tableName.".".$this->_idColumn.' = ?', substr($constraints['id'], 1));
         }
         return $select;
     }
