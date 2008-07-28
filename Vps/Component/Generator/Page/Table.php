@@ -70,6 +70,9 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_Table i
         } else {
             $data['filename'] = $this->_getIdFromRow($row).'_';
             if (isset($this->_settings['filenameColumn'])) {
+                if (!isset($row->{$this->_settings['filenameColumn']})) {
+                    throw new Vps_Exception("filenameColumn '".$this->_settings['filenameColumn']."' does not exist in row (Generator: ".get_class($this).")");
+                }
                 $data['filename'] .= $row->{$this->_settings['filenameColumn']};
             } else {
                 $data['filename'] .= Vps_Filter::get($data['name'], 'Ascii');
