@@ -3,7 +3,7 @@ class Vpc_Composite_Images_Controller extends Vpc_Abstract_List_Controller
 {
     protected function _initColumns()
     {
-        $class = Vpc_Abstract::getChildComponentClasses($this->class, 'child');
+        $class = Vpc_Abstract::getChildComponentClass($this->class, 'child');
 
         if (Vpc_Abstract::getSetting($class, 'editComment')) {
             $data = new Vps_Data_Vpc_Table(
@@ -15,7 +15,7 @@ class Vpc_Composite_Images_Controller extends Vpc_Abstract_List_Controller
             $this->_columns->add(new Vps_Grid_Column('comment', trlVps('Comment'), 195))
                 ->setData($data);
 
-        } else if (Vpc_Abstract::getSetting($classes['child'], 'editFilename')) {
+        } else if (Vpc_Abstract::getSetting($class, 'editFilename')) {
             $data = new Vps_Data_Vpc_Table(
                 'Vpc_Basic_Image_Model',
                 'filename',
@@ -28,11 +28,11 @@ class Vpc_Composite_Images_Controller extends Vpc_Abstract_List_Controller
         }
 
 
-        $this->_columns->add(new Vps_Grid_Column($classes['child'], trlVps('Image'), 40))
-            ->setData(new Vps_Data_Vpc_Image($classes['child'], 'mini'))
+        $this->_columns->add(new Vps_Grid_Column($class, trlVps('Image'), 40))
+            ->setData(new Vps_Data_Vpc_Image($class, 'mini'))
             ->setRenderer('mouseoverPic');
         $this->_columns->add(new Vps_Grid_Column('pic_large'))
-            ->setData(new Vps_Data_Vpc_Image($classes['child'], 'thumb'));
+            ->setData(new Vps_Data_Vpc_Image($class, 'thumb'));
         parent::_initColumns();
     }
 }
