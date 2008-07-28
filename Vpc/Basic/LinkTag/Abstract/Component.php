@@ -8,10 +8,4 @@ abstract class Vpc_Basic_LinkTag_Abstract_Component extends Vpc_Abstract
         ));
     }
 
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        $ret['data'] = $this->getData();
-        return $ret;
-    }
 }
