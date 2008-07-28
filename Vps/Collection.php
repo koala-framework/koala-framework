@@ -19,7 +19,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
     public function offsetExists($offset)
     {
         foreach ($this->_array as $v) {
-            if ($ret = $v->getByName($name)) {
+            if ($ret = $v->getByName($offset)) {
                 return true;
             }
         }
