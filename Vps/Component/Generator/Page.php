@@ -132,7 +132,8 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract impl
     {
         $ret = parent::getChildData($parentData, $constraints);
         foreach ($this->getChildIds($parentData, $constraints) as $id) {
-            $ret[] = $this->_createData($parentData, $id, $constraints);
+            $d = $this->_createData($parentData, $id, $constraints);
+            if ($d) $ret[] = $d;
         }
         return $ret;
     }
@@ -149,6 +150,9 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract impl
                 }
                 $parentData = Vps_Component_Data_Root::getInstance()
                                     ->getComponentById($page['parent_id'], $c);
+                if (!$parentData) {
+                    return null;
+                }
             }
         }
         return parent::_createData($parentData, $id, $constraints);
