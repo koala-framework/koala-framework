@@ -8,7 +8,8 @@ class Vpc_News_Category_Directory_Component extends Vpc_Abstract
         $ret['generators']['detail'] = array(
             'class' => 'Vpc_News_Category_Directory_Generator',
             'component' => 'Vpc_News_Category_Detail_Component',
-            'table' => 'Vps_Dao_Pool'
+            'table' => 'Vps_Dao_Pool',
+            'showInMenu' => true
         );
 
         //für News-Kategorien Box

@@ -13,11 +13,6 @@ class Vpc_News_Directory_Component extends Vpc_News_List_Abstract_Component
             'nameColumn' => 'title',
             'dbIdShortcut' => 'news_'
         );
-        $ret['generators']['newsMenu'] = array(
-            'class' => 'Vps_Component_Generator_Box_Static',
-            'component' => 'Vpc_News_Menu_Component',
-            'priority' => 3
-        );
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/News/Directory/Panel.js';
         $ret['enableExpireDate'] = false;
         $ret['order'] = 'publish_date DESC';
