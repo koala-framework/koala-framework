@@ -24,23 +24,6 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
             ->setValues($types)
             ->setAllowBlank(false);
         $fields->add(new Vps_Form_Field_Checkbox('hide', 'Hide in Menu'));
-
-        $cfg = Zend_Registry::get('config');
-        $components = $cfg->vpc->masterComponents ? $cfg->vpc->masterComponents->toArray() : array();
-        foreach ($components as $component) {
-            $form = Vpc_Abstract_Form::createComponentForm($component);
-            if ($form) {
-                $form->setBaseCls('x-plain');
-                try {
-                    $title = Vpc_Abstract::getSetting($component, 'componentName');
-                    $fieldset = new Vps_Form_Container_FieldSet($title);
-                    $fieldset->add($form);
-                    $fields->add($fieldset);
-                } catch (Vps_Exception $e) {
-                    $fields->add($form);
-                }
-            }
-        }
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)

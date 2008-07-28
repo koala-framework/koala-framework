@@ -150,6 +150,10 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             'table' => $table
         ));
     }
+    public function setModel($model)
+    {
+        $this->_model = $model;
+    }
 
     protected function _getWhere()
     {

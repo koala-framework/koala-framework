@@ -4,7 +4,7 @@ class Vpc_Abstract_Form extends Vps_Form
     public function __construct($name, $class)
     {
         $this->setClass($class);
-        $this->setTable(Vpc_Abstract::createTable($class));
+        $this->setModel(Vpc_Abstract::createModel($class));
         parent::__construct($name, $class);
     }
     
