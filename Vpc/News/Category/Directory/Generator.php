@@ -1,7 +1,6 @@
 <?php
 class Vpc_News_Category_Directory_Generator extends Vps_Component_Generator_Page_Table
 {
-    protected $_childClassKey = 'detail';
     protected $_nameColumn = 'value';
     protected $_filenameColumn = 'id';
 

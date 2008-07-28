@@ -9,7 +9,7 @@ class Vpc_News_Category_Detail_Component extends Vpc_News_List_Abstract_Componen
                       array());
         $categoryId = $this->getData()->id;
         $select->where('vpc_news_to_categories.category_id = ?', $categoryId);
-        $select->group('vps_news.id');
+        $select->group('vpc_news.id');
         return $select;
     }
 
