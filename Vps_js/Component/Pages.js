@@ -92,8 +92,8 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
 
         tree.on('dblclick', function (o, e) {
             for (var i in this.editActions) {
-                if (!this.editActions[i].isHidden) {
-                    this.editActions[i].execute();
+                if (!this.editActions[i].isHidden()) {
+                    this.editActions[i].execute(this.editActions[i].initialConfig);
                     break;
                 }
             }
@@ -118,16 +118,21 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                             text    : trlVps('Edit {0}', [component.componentName]),
                             handler : function (o, e) {
                                 var node = this.treePanel.tree.getSelectionModel().getSelectedNode();
-                                this.fireEvent('editcomponent', {
-                                    id: o.component.dbId,
-                                    cls: o.component.componentClass,
-                                    text: node.text + ' - ' + o.component.componentName
-                                });
+                                node.attributes.data.editComponents.each(function(component) {
+                                    if (component.componentClass == o.componentClass) {
+                                        this.fireEvent('editcomponent', {
+                                            id: component.dbId,
+                                            cls: component.componentClass,
+                                            text: node.text + ' - ' + component.componentName
+                                        });
+                                        return false;
+                                    }
+                                }, this);
                             },
                             icon    : component.componentIcon,
                             cls     : 'x-btn-text-icon',
                             scope   : this,
-                            component: component
+                            componentClass: component.componentClass
                         });
                         this.contextMenu.insert(0, new Ext.menu.Item(this.editActions[component.componentClass]));
                         this.pageButtonMenu.insert(0, new Ext.menu.Item(this.editActions[component.componentClass]));
