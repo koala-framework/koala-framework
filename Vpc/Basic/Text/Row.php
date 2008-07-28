@@ -342,7 +342,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                     if ($srcRow && class_exists($classes[$srcRow->component])) {
                         $linkTableName = Vpc_Abstract::getSetting($classes[$srcRow->component], 'tablename');
                         $linkTable = new $linkTableName(array('componentClass'=>$classes[$srcRow->component]));
-                        $srcLinkRow = $linkTable->findRow($part['componentId'].'-1');
+                        $srcLinkRow = $linkTable->findRow($part['componentId'].'-link');
                         if ($srcLinkRow) {
                             $destRow = $table->createRow();
                             $destRow->component = $srcRow->component;
@@ -350,7 +350,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                             $destRow->component_id = $this->component_id.'-l'.$linkMaxChildComponentNr;
                             $destRow->save();
                             $destLinkRow = $linkTable->createRow($srcLinkRow->toArray());
-                            $destLinkRow->component_id = $destRow->component_id.'-1';
+                            $destLinkRow->component_id = $destRow->component_id.'-link';
                             $destLinkRow->save();
                             $newContent .= "<a href=\"{$destRow->component_id}\">";
                             continue;
@@ -393,7 +393,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                     $row->subject = isset($m['subject']) ? $m['subject'] : '';
                     $row->text = isset($m['body']) ? $m['body'] : '';
                 }
-                $row->component_id = $destRow->component_id.'-1';
+                $row->component_id = $destRow->component_id.'-link';
                 $row->save();
                 $newContent .= "<a href=\"{$destRow->component_id}\">";
 

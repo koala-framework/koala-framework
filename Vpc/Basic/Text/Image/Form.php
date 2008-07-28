@@ -5,8 +5,12 @@ class Vpc_Basic_Text_Image_Form extends Vpc_Basic_Image_Form
     {
         parent::__construct($class, $id);
 
-        //felder ausblenden, werden im rte per drag+drop geändert
-        unset($this->fields['width']);
-        unset($this->fields['height']);
+        //felder ausblenden, werden im rte per drag+drop geï¿½ndert
+        if (isset($this->fields['width'])) {
+            unset($this->fields['width']);
+        }
+        if (isset($this->fields['height'])) {
+            unset($this->fields['height']);
+        }
     }
 }
