@@ -90,7 +90,8 @@ class Vps_Component_Data
         }
     }
 
-    public function getRecursiveChildComponents(array $constraints, array $childConstraints = array('page'=>false))
+    public function getRecursiveChildComponents(array $constraints,
+                                array $childConstraints = array('page'=>false))
     {
         if (isset($constraints['page']) && $constraints['page']) {
             $generatorInterface = 'Vps_Component_Generator_Page_Interface';
@@ -99,7 +100,7 @@ class Vps_Component_Data
         } else {
             $generatorInterface = false;
         }
-        $currentChildConstraints['page'] = false;
+        $currentChildConstraints = $childConstraints;
         $currentChildConstraints['componentClass'] = array();
         if ($generatorInterface) {
             $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
