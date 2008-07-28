@@ -4,10 +4,12 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_Table i
     protected $_idSeparator = '_';
     protected $_nameColumn;
     protected $_filenameColumn;
+    protected $_uniqueFilename;
     
     protected function _init()
     {
         parent::_init();
+        $this->_settings['uniqueFilename'] = $this->_uniqueFilename;
         $this->_settings['nameColumn'] = $this->_nameColumn;
         $this->_settings['filenameColumn'] = $this->_filenameColumn;
     }
@@ -43,7 +45,7 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_Table i
         $tableName = $this->_table->info('name');
         if (!$select) return null;
         if (isset($constraints['filename'])) {
-            if (isset($this->_settings['uniqueFilename']) && $this->_settings['uniqueFilename']) {
+            if ($this->_settings['uniqueFilename']) {
                 $select->where($tableName.'.'.$this->_settings['filenameColumn'] . ' = ?', $constraints['filename']);
             } else {
                 if (!preg_match('#^([0-9]+)_#', $constraints['filename'], $m)) return null;
@@ -57,13 +59,13 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_Table i
     {
         $data = parent::_formatConfig($parentData, $row);
         $data['row'] = $row;
-
-        if (isset($this->_settings['nameColumn'])) {
+        
+        if ($this->_settings['nameColumn']) {
             $data['name'] = $row->{$this->_settings['nameColumn']};
         } else {
             $data['name'] = $row->__toString();
         }
-        if (isset($this->_settings['uniqueFilename']) && $this->_settings['uniqueFilename']) {
+        if ($this->_settings['uniqueFilename']) {
             $data['filename'] = $row->{$this->_settings['filenameColumn']};
         } else {
             $data['filename'] = $this->_getIdFromRow($row).'_';
@@ -73,7 +75,6 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_Table i
                 $data['filename'] .= Vps_Filter::get($data['name'], 'Ascii');
             }
         }
-
         $data['rel'] = '';
         $data['isPage'] = true;
         return $data;
