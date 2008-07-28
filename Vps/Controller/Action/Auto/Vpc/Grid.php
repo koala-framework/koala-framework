@@ -4,7 +4,7 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
     public function preDispatch()
     {
         if (!isset($this->_model) && !isset($this->_tableName)) {
-            $this->setTable(Vpc_Abstract::createTable($this->class));
+            $this->setModel(Vpc_Abstract::createModel($this->class));
         }
         parent::preDispatch();
     }

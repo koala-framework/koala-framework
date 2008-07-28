@@ -126,7 +126,22 @@ class Vps_Component_Abstract
         }
         return new $tablename(array('componentClass'=>$class));
     }
-    
+
+    public static function createModel($class)
+    {
+        if (Vpc_Abstract::hasSetting($class, 'tablename')) {
+            $model = new Vps_Model_Db(array(
+                'table' => self::createTable($class)
+            ));
+        } else if (Vpc_Abstract::hasSetting($class, 'modelname')) {
+            $modelName = Vpc_Abstract::getSetting($class, 'modelname');
+            $model = new $modelName();
+        } else {
+            throw new Vps_Exception("tablename and modelname not set for '$class'");
+        }
+        return $model;
+    }
+
     protected function _getSetting($setting)
     {
         return self::getSetting(get_class($this), $setting);

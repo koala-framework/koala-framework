@@ -1,5 +1,5 @@
 <?php
-class Vpc_Abstract_Composite_Form extends Vpc_Abstract_NonTableForm
+class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
 {
     protected function _initFields()
     {
