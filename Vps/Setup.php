@@ -382,21 +382,21 @@ class Vps_Setup
                 throw new Vps_Controller_Action_Web_Exception('Access to file not allowed.');
             }
 
-            $class = $params['table'];
             $type = $params['type'];
             $id = explode(',', $params['id']);
             $rule = $params['rule'];
             if ($rule == 'default') { $rule = null; }
 
             // TODO: Cachen ohne Datenbankabfragen
-            if (Vpc_Abstract::hasSettings($class)) {
-                $tableClass = Vpc_Abstract::getSetting($class, 'tablename');
-                $table = new $tableClass(array('componentClass' => $class));
-            } else if (is_a($table, 'Vps_Db_Table_Abstract')) {
-                $table = new $class();
+            if (Vpc_Abstract::hasSettings($params['table'])) {
+                $tableClass = Vpc_Abstract::getSetting($params['table'], 'tablename');
+                $table = new $tableClass(array('componentClass' => $params['table']));
+            } else if (is_instance_of($params['table'], 'Vps_Db_Table_Abstract')) {
+                $table = new $params['table']();
             } else {
-                throw new Vps_Exception("Invalid class: $class");
+                throw new Vps_Exception("Invalid class: {$params['table']}");
             }
+
             $row = $table->find($id)->current();
             if (!$row) {
                 throw new Vps_Exception('File not found.');
