@@ -2,7 +2,6 @@
 class Vpc_News_Category_Directory_Generator extends Vps_Component_Generator_Page_Table
 {
     protected $_nameColumn = 'value';
-    protected $_filenameColumn = 'id';
 
     protected function _getSelect($parentData, $constraints)
     {
