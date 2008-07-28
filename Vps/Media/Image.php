@@ -33,11 +33,11 @@ class Vps_Media_Image
 
         if ($width == 0) {
             $width = round($height * ($size[0]/$size[1]));
-            return array('width'=>$width, 'height'=>$height, 'scale'=>$scale);
-        } else if ($height == 0) {
+        }
+        if ($height == 0) {
             $height = round($width * ($size[1]/$size[0]));
-            return array('width'=>$width, 'height'=>$height, 'scale'=>$scale);
-        } else if ($scale == self::SCALE_CROP) {
+        } 
+        if ($scale == self::SCALE_CROP) {
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
 
             if (!$width || !$height) {
