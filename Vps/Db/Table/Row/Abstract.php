@@ -281,14 +281,11 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         return parent::findParentRow($parentTable, $ruleKey, $select);
     }
     
-    
     protected function _postUpdate()
     {
         parent::_postUpdate();
         if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
-            foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                Vpc_Admin::getInstance($c)->onRowUpdate($this);
-            }
+            Vps_Component_Cache::getInstance()->update($this);
         }
     }
 
@@ -296,9 +293,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     {
         parent::_postInsert();
         if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
-            foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                Vpc_Admin::getInstance($c)->onRowInsert($this);
-            }
+            Vps_Component_Cache::getInstance()->insert($this);
         }
     }
 
@@ -306,9 +301,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     {
         parent::_postDelete();
         if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
-            foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                Vpc_Admin::getInstance($c)->onRowDelete($this);
-            }
+            Vps_Component_Cache::getInstance()->delete($this);
         }
     }
 }

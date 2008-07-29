@@ -41,6 +41,13 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             }
         }
     }
+    
+    public function postDispatch()
+    {
+        if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
+            Vps_Component_Cache::getInstance()->process();
+        }
+    }
 
     protected function _getResourceName()
     {
