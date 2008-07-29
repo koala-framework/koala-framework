@@ -170,9 +170,11 @@ class Vps_Component_Abstract
         $c = Vps_Registry::get('config')->vpc->rootComponent;
         $componentClasses[] = $c;
         self::_getChildComponentClasses($componentClasses, $c, $useSettingsCache);
-        foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $c) {
-            $componentClasses[] = $c;
-            self::_getChildComponentClasses($componentClasses, $c, $useSettingsCache);
+        if (Vps_Registry::get('config')->vpc->masterComponents) {
+            foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $c) {
+                $componentClasses[] = $c;
+                self::_getChildComponentClasses($componentClasses, $c, $useSettingsCache);
+            }
         }
         return $componentClasses;
     }
