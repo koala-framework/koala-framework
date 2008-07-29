@@ -48,7 +48,9 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
                 $this->view->requestUri = '';
             }
             if ($config->debug->errormail) {
-                if (substr($this->view->requestUri, -12) != '/favicon.ico') {
+                if (substr($this->view->requestUri, -12) != '/favicon.ico'
+                    && substr($this->view->requestUri, -10) != '/robots.txt')
+                {
                     Vps_Debug::sendErrorMail($errors->exception, $config->debug->errormail);
                 }
                 $this->view->debug = false;
