@@ -352,15 +352,15 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
             this.getForm().clearInvalid();
             this.fireEvent('addaction', this);
 
-            if (this.ownerCt instanceof Ext.TabPanel) {
+			if (this.ownerCt instanceof Ext.TabPanel) {
                 //wenn  form in einem tab, die form anzeigen
                 //nach addaction, damit in grid an dem die form gebunden ist die activeId
                 //auf 0 gesetzt werden kann
                 this.ownerCt.setActiveTab(this);
             } else if (this.getFormPanel() && this.getFormPanel().items.first()
                         && this.getFormPanel().items.first().items.first()
-                        && this.getFormPanel().items.first().items.first().items.first()
-                        && this.getFormPanel().items.first().items.first() instanceof Ext.TabPanel) {
+						&& this.getFormPanel().items.first().items.first() instanceof Ext.TabPanel
+                        && this.getFormPanel().items.first().items.first().items.first()) {
                 //und das gleiche auch noch wenn IN der form tabs sind
                 //da den ersten tab öffnen
                 var tabs = this.getFormPanel().items.first().items.first();

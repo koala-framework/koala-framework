@@ -139,6 +139,10 @@ class Vps_Component_Abstract_Admin
                     Vps_Component_Cache::getInstance()->remove($c);
                 }
             }
+        } else if (Vpc_Abstract::hasSetting($this->_class, 'clearCacheTable')
+            && Vpc_Abstract::getSetting($this->_class, 'clearCacheTable') == $row->getTableClass())
+        {
+            Vps_Component_Cache::getInstance()->remove($this->_class);
         }
     }
     

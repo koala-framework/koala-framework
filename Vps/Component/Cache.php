@@ -14,7 +14,8 @@ class Vps_Component_Cache extends Zend_Cache_Core {
             'cache_dir' => $this->_getCacheDir(),
             'hashed_directory_level' => 0,
             'file_name_prefix' => 'vpc',
-            'hashed_directory_umask' => 0770
+            'hashed_directory_umask' => 0777,
+            'cache_file_umask' => 0777
         ));
         
         $this->setBackend($this->_backend);
@@ -39,10 +40,10 @@ class Vps_Component_Cache extends Zend_Cache_Core {
         if ($component instanceof Vps_Component_Data) {
             $this->_setCacheDir($component->componentClass);
             parent::remove($this->getCacheIdFromComponentId($component->componentId));
-            //p("Cache für Komponente '$component->componentClass' mit Id '$component->componentId' gelöscht.");
+            Vps_Benchmark::info("Cache für Komponente '$component->componentClass' mit Id '$component->componentId' gelöscht.");
         } else {
             $this->rm_recursive($this->_getCacheDir($component));
-            //p("Cache für Komponente '$component' gelöscht.");
+            Vps_Benchmark::info("Cache für Komponente '$component' gelöscht.");
         }
     }
     
@@ -102,7 +103,7 @@ class Vps_Component_Cache extends Zend_Cache_Core {
     {
         $cacheDir = $this->_getCacheDir($componentClass);
         if (!is_dir($cacheDir)) {
-            mkdir($cacheDir);
+            mkdir($cacheDir, 0777);
         }
         $this->_backend->setCacheDir($cacheDir);
     }
@@ -114,21 +115,34 @@ class Vps_Component_Cache extends Zend_Cache_Core {
         return $cacheDir;
     }
     
-    function rm_recursive($filepath)
+    function rm_recursive($path)
     {
-        if (is_dir($filepath) && !is_link($filepath)) {
-            if ($dh = opendir($filepath)) {
-                while (($sf = readdir($dh)) !== false) {
-                    if ($sf == '.' || $sf == '..') { continue; }
-                    if (!rm_recursive($filepath.'/'.$sf)) {
-                        throw new Exception($filepath.'/'.$sf.' could not be deleted.');
-                    }
+        $origipath = $path;
+        if (!is_dir($path)) { return true; }
+        $handler = opendir($path);
+        while (true) {
+            $item = readdir($handler);
+            if ($item == "." or $item == "..") {
+                continue;
+            } elseif (gettype($item) == "boolean") {
+                closedir($handler);
+                if (!@rmdir($path)) {
+                    return false;
                 }
-                closedir($dh);
+                if ($path == $origipath) {
+                    break;
+                }
+                $path = substr($path, 0, strrpos($path, "/"));
+                $handler = opendir($path);
+            } elseif (is_dir($path."/".$item)) {
+                closedir($handler);
+                $path = $path."/".$item;
+                $handler = opendir($path);
+            } else {
+                unlink($path."/".$item);
             }
-            return rmdir($filepath);
         }
-        if (is_dir($filepath)) unlink($filepath);
+        return true;
     }
     
 }
