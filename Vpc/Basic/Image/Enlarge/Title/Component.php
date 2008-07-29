@@ -5,6 +5,7 @@ class Vpc_Basic_Image_Enlarge_Title_Component extends Vpc_Basic_Image_Enlarge_Co
     {
         $ret = parent::getSettings();
         $ret['editComment'] = true;
+        $ret['hasSmallImageComponent'] = false;
         return $ret;
     }
 }
