@@ -56,20 +56,6 @@ abstract class Vpc_Master_Abstract extends Vps_Component_Abstract
         return Vps_Registry::get('config')->showInvisible;
     }
 
-    public function getTable($tablename = null)
-    {
-        if (!$tablename) {
-            $tablename = $this->_getSetting('tablename');
-            if (!$tablename) {
-                return null;
-            }
-        }
-        if (!isset($this->_tables[$tablename])) {
-            $this->_tables[$tablename] = new $tablename(array('componentClass'=>get_class($this)));
-        }
-        return $this->_tables[$tablename];
-    }
-
     public function getTemplateVars()
     {
         return array();
