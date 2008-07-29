@@ -119,30 +119,42 @@ class Vps_Component_Abstract
         );
     }
 
+    public function getTable($tablename = null)
+    {
+        return self::createTable(get_class($this));
+    }
+
     public static function createTable($class, $tablename = null)
     {
-        if (!$tablename) {
-            $tablename = Vpc_Abstract::getSetting($class, 'tablename');
+        static $tables = array();
+        if (!isset($tables[$class.'-'.$tablename])) {
             if (!$tablename) {
-                throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
+                $tablename = Vpc_Abstract::getSetting($class, 'tablename');
+                if (!$tablename) {
+                    throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
+                }
             }
+            $tables[$class.'-'.$tablename] = new $tablename(array('componentClass'=>$class));
         }
-        return new $tablename(array('componentClass'=>$class));
+        return $tables[$class.'-'.$tablename];
     }
 
     public static function createModel($class)
     {
-        if (Vpc_Abstract::hasSetting($class, 'tablename')) {
-            $model = new Vps_Model_Db(array(
-                'table' => self::createTable($class)
-            ));
-        } else if (Vpc_Abstract::hasSetting($class, 'modelname')) {
-            $modelName = Vpc_Abstract::getSetting($class, 'modelname');
-            $model = new $modelName();
-        } else {
-            throw new Vps_Exception("tablename and modelname not set for '$class'");
+        static $models = array();
+        if (!isset($models[$class])) {
+            if (Vpc_Abstract::hasSetting($class, 'tablename')) {
+                $models[$class] = new Vps_Model_Db(array(
+                    'table' => self::createTable($class)
+                ));
+            } else if (Vpc_Abstract::hasSetting($class, 'modelname')) {
+                $modelName = Vpc_Abstract::getSetting($class, 'modelname');
+                $models[$class] = new $modelName();
+            } else {
+                throw new Vps_Exception("tablename and modelname not set for '$class'");
+            }
         }
-        return $model;
+        return $models[$class];
     }
 
     protected function _getSetting($setting)
