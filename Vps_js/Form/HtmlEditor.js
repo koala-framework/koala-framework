@@ -464,6 +464,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     createImage: function() {
         var img = this.getFocusElement('img');
         if (img && img.tagName && img.tagName.toLowerCase() == 'img') {
+            this._currentImage = img;
             var expr = new RegExp('/media/[^/]+/'+this.component_id+'-i([0-9]+)/');
             var m = img.src.match(expr);
             if (m) {
@@ -500,9 +501,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
         this.insertAtCursor(html);
     },
     _modifyImage: function(r) {
-        img.src = r.imageUrl+'?'+Math.random();
-        img.width = r.imageDimension.width;
-        img.height = r.imageDimension.height;
+        this._currentImage.src = r.imageUrl+'?'+Math.random();
+        this._currentImage.width = r.imageDimension.width;
+        this._currentImage.height = r.imageDimension.height;
     },
     createLink: function() {
         if (!this.linkDialog) {

@@ -235,9 +235,6 @@ class Vpc_Basic_Text_Row extends Vpc_Row
 
         $classes = $this->_classes;
 
-        $imageMaxChildComponentNr = $this->getMaxChildComponentNr('image');
-        $linkMaxChildComponentNr = $this->getMaxChildComponentNr('link');
-        $downloadMaxChildComponentNr = $this->getMaxChildComponentNr('download');
         $newContent = '';
 
         foreach ($this->getContentParts($html) as $part) {
@@ -249,9 +246,8 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                     && (strtolower($part['componentClass']) == 'vpc_basic_image_component'
                         || is_subclass_of($part['componentClass'], 'Vpc_Basic_Image_Component'))) {
 
-                    $srcTableName = Vpc_Abstract::getSetting($part['componentClass'], 'tablename');
-                    $srcTable = new $srcTableName(array('componentClass' => $part['componentClass']));
-                    $srcRow = $srcTable->findRow($part['componentId']);
+                    $srcRow = Vpc_Abstract::createTable($part['componentClass'])
+                                                ->findRow($part['componentId']);
                     $srcFileRow = $srcRow->findParentRow('Vps_Dao_File');
                     if ($srcFileRow && $srcFileRow->getFileSource()) {
                         $fileTable = new Vps_Dao_File();
@@ -260,12 +256,10 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                                                 $srcFileRow->filename,
                                                 $srcFileRow->extension);
 
-                        $destTableName = Vpc_Abstract::getSetting($classes['image'], 'tablename');
-                        $destTable = new $destTableName(array('componentClass' => $classes['image']));
-                        $destRow = $destTable->createRow($srcRow->toArray());
-                        $imageMaxChildComponentNr++;
-                        $destRow->component_id = $this->component_id.'-i'.$imageMaxChildComponentNr;
+                        $destRow = Vpc_Abstract::createTable($classes['image'])
+                                                ->createRow($srcRow->toArray());
                         $destRow->vps_upload_id = $destFileRow->id;
+                        $this->addChildComponentRow('image', $destRow);
                         $destRow->save();
                         $dimension = $destRow->getImageDimensions();
                         $newContent .= "<img src=\"".$destRow->getFileUrl()."\" ".
@@ -312,17 +306,15 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                 }
 
                 $destFileRow->writeFile($response->getBody(), $srcFileName, $extension, $contentType);
-                $destTableName = Vpc_Abstract::getSetting($classes['image'], 'tablename');
-                $destTable = new $destTableName(array('componentClass' => $classes['image']));
-                $destRow = $destTable->createRow();
-                $imageMaxChildComponentNr++;
-                $destRow->component_id = $this->component_id.'-i'.$imageMaxChildComponentNr;
+
+                $destRow = Vpc_Abstract::createTable($classes['image'])->createRow();
                 $destRow->vps_upload_id = $destFileRow->id;
                 $size = getimagesize($destFileRow->getFileSource());
                 $destRow->width = $size[0];
                 $destRow->height = $size[1];
                 $destRow->filename = $srcFileName;
                 $destRow->scale = '';
+                $this->addChildComponentRow('image', $destRow);
                 $destRow->save();
                 $dimension = $destRow->getImageDimensions();
                 $newContent .= "<img src=\"".$destRow->getFileUrl()."\" ".
@@ -331,23 +323,21 @@ class Vpc_Basic_Text_Row extends Vpc_Row
 
             } else if ($part['type'] == 'invalidLink') {
 
-                $tableName = Vpc_Abstract::getSetting($classes['link'], 'tablename');
-                $table = new $tableName(array('componentClass'=>$classes['link']));
+                $table = Vpc_Abstract::createTable($classes['link']);
                 if (isset($part['componentId'])) {
                     try {
                         $srcRow = $table->findRow($part['componentId']);
                     } catch (Vpc_Exception $e) {
                         $srcRow = false;
                     }
-                    if ($srcRow && class_exists($classes[$srcRow->component])) {
-                        $linkTableName = Vpc_Abstract::getSetting($classes[$srcRow->component], 'tablename');
-                        $linkTable = new $linkTableName(array('componentClass'=>$classes[$srcRow->component]));
+                    $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link']);
+                    if ($srcRow && class_exists($linkClasses[$srcRow->component])) {
+                        $linkTable = Vpc_Abstract::createTable($linkClasses[$srcRow->component]);
                         $srcLinkRow = $linkTable->findRow($part['componentId'].'-link');
                         if ($srcLinkRow) {
                             $destRow = $table->createRow();
                             $destRow->component = $srcRow->component;
-                            $linkMaxChildComponentNr++;
-                            $destRow->component_id = $this->component_id.'-l'.$linkMaxChildComponentNr;
+                            $this->addChildComponentRow('link', $destRow);
                             $destRow->save();
                             $destLinkRow = $linkTable->createRow($srcLinkRow->toArray());
                             $destLinkRow->component_id = $destRow->component_id.'-link';
@@ -360,31 +350,21 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                 $destRow = $table->createRow();
                 $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link']);
                 if (preg_match('#^mailto:#', $part['href'], $m)) {
-                    foreach ($linkClasses as $key => $class) {
-                        if ($class == 'Vpc_Basic_LinkTag_Mail_Component' ||
-                                is_subclass_of($class, 'Vpc_Basic_LinkTag_Mail_Component')) {
-                            $destRow->component = $key;
-                        }
+                    if (isset($linkClasses['mail']) && $linkClasses['mail']) {
+                        $destRow->component = 'mail';
                     }
                 } else {
-                    foreach ($linkClasses as $key => $class) {
-                        if ($class == 'Vpc_Basic_LinkTag_Extern_Component' ||
-                                is_subclass_of($class, 'Vpc_Basic_LinkTag_Extern_Component')) {
-                            $destRow->component = $key;
-                        }
+                    if (isset($linkClasses['extern']) && $linkClasses['extern']) {
+                        $destRow->component = 'extern';
                     }
                 }
-                if (!$destRow->component) continue; //kein externer-link möglich
-                $linkMaxChildComponentNr++;
-                $destRow->component_id = $this->component_id.'-l'.$linkMaxChildComponentNr;
+                if (!$destRow->component) continue; //kein solcher-link möglich
+                $this->addChildComponentRow('link', $destRow);
                 $destRow->save();
                 $destClasses =  Vpc_Abstract::getChildComponentClasses($destRow->getTable()->getComponentClass());
-                
-                $linkExternTableName = Vpc_Abstract::getSetting($destClasses[$destRow->component], 'tablename');
-                $linkExternTable = new $linkExternTableName(array('componentClass'=>$destClasses[$destRow->component]));
-                $row = $linkExternTable->createRow();
-                if ($destClasses[$destRow->component] == 'Vpc_Basic_LinkTag_Extern_Component' ||
-                        is_subclass_of($destClasses[$destRow->component], 'Vpc_Basic_LinkTag_Extern_Component')) {
+
+                $row = Vpc_Abstract::createTable($destClasses[$destRow->component])->createRow();
+                if ($destRow->component == 'extern') {
                     $row->target = $part['href'];
                 } else {
                     preg_match('#^mailto:(.*)\\??(.*)#', $part['href'], $m);
@@ -399,9 +379,8 @@ class Vpc_Basic_Text_Row extends Vpc_Row
 
             } else if ($part['type'] == 'invalidDownload') {
 
-                $srcTableName = Vpc_Abstract::getSetting($classes['download'], 'tablename');
-                $srcTable = new $srcTableName(array('componentClass' => $classes['download']));
-                $srcRow = $srcTable->findRow($part['componentId']);
+                $srcRow = Vpc_Abstract::createTable($classes['download'])
+                                                ->findRow($part['componentId']);
                 $srcFileRow = $srcRow->findParentRow('Vps_Dao_File');
                 if ($srcFileRow && $srcFileRow->getFileSource()) {
                     $fileTable = new Vps_Dao_File();
@@ -410,12 +389,10 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                                             $srcFileRow->filename,
                                             $srcFileRow->extension);
 
-                    $destTableName = Vpc_Abstract::getSetting($classes['download'], 'tablename');
-                    $destTable = new $destTableName(array('componentClass' => $classes['download']));
-                    $destRow = $destTable->createRow($srcRow->toArray());
-                    $downloadMaxChildComponentNr++;
-                    $destRow->component_id = $this->component_id.'-d'.$downloadMaxChildComponentNr;
+                    $destRow = Vpc_Abstract::createTable($classes['download'])
+                                                ->createRow($srcRow->toArray());
                     $destRow->vps_upload_id = $destFileRow->id;
+                    $this->addChildComponentRow('download', $destRow);
                     $destRow->save();
                     $newContent .= "<a href=\"{$destRow->component_id}\">";
                     continue;
@@ -429,5 +406,23 @@ class Vpc_Basic_Text_Row extends Vpc_Row
             }
         }
         return $newContent;
+    }
+
+    //muss aufgerufen werden wenn eine unterkomponente hinzugefügt wird
+    //im Controller + in der row
+    public function addChildComponentRow($type, $childComponentRow = null)
+    {
+        $t = new Vpc_Basic_Text_ChildComponentsModel();
+        $r = $t->createRow();
+        $r->component_id = $this->component_id;
+        $r->component = $type;
+        $r->nr = $this->getMaxChildComponentNr($type)+1;
+        $r->saved = 0;
+        $r->save();
+
+        if ($childComponentRow) {
+            $childComponentRow->component_id = $this->component_id.'-'.substr($type, 0, 1).$r->nr;
+        }
+        return $r;
     }
 }
