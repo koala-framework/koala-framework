@@ -26,16 +26,8 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
     {
         $row = $this->_form->getRow();
         Zend_Registry::get('db')->beginTransaction();
-        $nr = $row->getRow()->getMaxChildComponentNr($type)+1;
-        $this->view->component_id = $row->component_id.'-'.substr($type, 0, 1).$nr;
-
-        $t = new Vpc_Basic_Text_ChildComponentsModel();
-        $r = $t->createRow();
-        $r->component_id = $row->component_id;
-        $r->component = $type;
-        $r->nr = $nr;
-        $r->saved = 0;
-        $r->save();
+        $childCompnentRow = $row->getRow()->addChildComponentRow($type);
+        $this->view->component_id = $row->component_id.'-'.substr($type, 0, 1).$childCompnentRow->nr;
         Zend_Registry::get('db')->commit();
     }
 
