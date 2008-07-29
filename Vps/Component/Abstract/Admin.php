@@ -133,12 +133,7 @@ class Vps_Component_Abstract_Admin
             && Vpc_Abstract::hasSetting($this->_class, 'tablename')
             && Vpc_Abstract::getSetting($this->_class, 'tablename') == $row->getTableClass())
         {
-            $components = Vps_Component_Data_Root::getInstance()->getComponentsByDbId($row->component_id);
-            foreach ($components as $c) {
-                if ($this->_class == $c->componentClass) {
-                    Vps_Component_Cache::getInstance()->remove($c);
-                }
-            }
+            Vps_Component_Cache::getInstance()->remove($this->_class, $row->component_id);
         } else if (Vpc_Abstract::hasSetting($this->_class, 'clearCacheTable')
             && Vpc_Abstract::getSetting($this->_class, 'clearCacheTable') == $row->getTableClass())
         {

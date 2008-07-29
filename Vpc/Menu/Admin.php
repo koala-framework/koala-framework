@@ -16,17 +16,16 @@ class Vpc_Menu_Admin extends Vpc_Admin
     private function _deleteCache($row)
     {
         if ($row->getTable() instanceof Vps_Dao_Pages) {
-            Vps_Component_Cache::getInstance()->remove(get_class($this));
+            Vps_Component_Cache::getInstance()->remove($this->_class);
         }
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
             foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $generator) {
                 if ((is_instance_of($generator['class'], 'Vps_Component_Generator_Page_Interface') &&
                     isset($generator['table']) &&
-                    isset($generator['showInMenu']) && $generator['showInMenu']) ||
-                    $row->getTable() instanceof Vps_Dao_Table)
+                    isset($generator['showInMenu']) && $generator['showInMenu']))
                 {
                     if (is_instance_of($generator['table'], $generator['table'])) {
-                        Vps_Component_Cache::getInstance()->remove(get_class($this));
+                        Vps_Component_Cache::getInstance()->remove($componentClass);
                     }
                 }
             }

@@ -58,11 +58,10 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
         if (!$fileRow) throw new Vps_Exception("Can't find upload");
 
         $source = $fileRow->getFileSource();
-
         Vps_Media_Output::output(array(
             'file' => $source,
             'mimeType' => $fileRow->mime_type,
-            'downloadFilename' => $fileRow->filename
+            'downloadFilename' => $fileRow->filename . '.' . $fileRow->extension
         ));
     }
 }
