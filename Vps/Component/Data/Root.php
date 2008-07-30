@@ -122,6 +122,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 while ($c) {
                     if ($c == $class) {
                         $lookingForChildClasses[] = $c;
+                        break;
                     }
                     $c = get_parent_class($c);
                 }
