@@ -154,7 +154,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if (count($this->_settings['component']) > 1) {
             if (isset($row->component)) {
                 if (!isset($this->_settings['component'][$row->component])) {
-                    throw new Vps_Exception("Component stored in table does is not valid child: {$row->component}");
+                    throw new Vps_Exception("Component stored in table does is not valid child: '{$row->component}' (for component '$this->_class')");
                 }
                 $componentClass = $this->_settings['component'][$row->component];
             } else {
