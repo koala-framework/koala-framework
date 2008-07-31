@@ -15,7 +15,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 'name' => '',
                 'parent' => null,
                 'isPage' => false,
-                'componentId' => null
+                'componentId' => 'root'
             ));
         }
         return self::$_instance;

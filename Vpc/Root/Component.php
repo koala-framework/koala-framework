@@ -12,6 +12,12 @@ class Vpc_Root_Component extends Vpc_Abstract
                 'firstChildPage' => 'Vpc_Basic_LinkTag_FirstChildPage_Component'
             )
         );
+        $ret['generators']['box'] = array(
+            'class' => 'Vps_Component_Generator_Box_Static',
+            'component' => array(),
+            'inherit' => true,
+            'priority' => 0
+        );
         return $ret;
     }
 }

@@ -22,7 +22,7 @@ class Vps_View_Component extends Vps_View
             $componentId = $component['componentId'];
             unset($component);
         }
-
+        
         // Falls es Cache gibt, Cache holen
         $cache = Vps_Component_Cache::getInstance();
         $cacheId = $cache->getCacheIdFromComponentId($componentId, $isMaster);
@@ -115,7 +115,18 @@ class Vps_View_Component extends Vps_View
             $templateVars = array_merge($templateVars, $component->getTemplateVars());
         }
         $templateVars['component'] = $componentData;
-
+        foreach ($componentData->getChildBoxes() as $box) {
+            if (!isset($templateVars['boxes'][$box->box]) || 
+                $box->priority > $templateVars['boxes'][$box->box]->priority)
+            {
+                $templateVars['boxes'][$box->box] = $box;
+            }
+        }
+        
+        foreach ($templateVars['boxes'] as $box) {
+            p($box->box . ' - ' . $box->componentId);
+        }
+        
         return self::_render('application/views/master/default.tpl', $templateVars);
     }
 
