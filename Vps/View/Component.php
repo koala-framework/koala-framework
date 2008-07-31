@@ -123,10 +123,6 @@ class Vps_View_Component extends Vps_View
             }
         }
         
-        foreach ($templateVars['boxes'] as $box) {
-            p($box->box . ' - ' . $box->componentId);
-        }
-        
         return self::_render('application/views/master/default.tpl', $templateVars);
     }
 
