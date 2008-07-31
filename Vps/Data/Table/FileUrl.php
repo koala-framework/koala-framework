@@ -16,7 +16,7 @@ class Vps_Data_Table_FileUrl extends Vps_Data_Abstract
 
     public function load($row)
     {
-        return $row->getFileUrl($this->_rule, $this->_type,
+        return $row->getRow()->getFileUrl($this->_rule, $this->_type,
                                 $this->_filename, $this->_addRandom);
     }
 }
