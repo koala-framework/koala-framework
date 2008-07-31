@@ -277,8 +277,11 @@ class Vps_Assets_Dependencies
         return $p.'/'.$url;
     }
 
-    public function getFileContents($file, $language)
+    public function getFileContents($file, $language = null)
     {
+        if (!$language) {
+            $language = Zend_Registry::get('trl')->getTargetLanguage();
+        }
         $ret = array();
         if ($file == 'AllRteStyles.css') {
             $ret = Vpc_Basic_Text_StylesModel::getStylesContents();
