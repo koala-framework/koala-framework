@@ -8,7 +8,7 @@ class Vps_Mail
 
     public function __construct($template, $masterTemplate = 'Master')
     {
-        $this->_view = new Vps_View();
+        $this->_view = new Vps_View_Mail();
         $this->_template = $template;
         $this->_masterTemplate = $masterTemplate;
 
@@ -161,6 +161,13 @@ class Vps_Mail
         if (file_exists("application/views/$file") || file_exists(VPS_PATH."/views/$file")) {
             $this->_mail->setBodyHtml( $this->_view->render($file) );
         }
+
+        //hinzufügen von Bilder zur Email
+        $this->_mail->setType(Zend_Mime::MULTIPART_RELATED);
+        foreach ($this->_view->getImages() as $image) {
+            $this->_mail->addAttachment($image);
+        }
+
 
         $this->_mail->setSubject($this->_view->subject);
 
