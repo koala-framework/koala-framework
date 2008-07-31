@@ -114,19 +114,46 @@ abstract class Vps_Component_Generator_Abstract
         foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
             $ret = array_merge($ret, self::_getGeneratorsForComponent($pluginClass, $constraints));
         }
-
+        
         if ($parentData && $parentData->isPage) {
+            
             if (!$parentData instanceof Vps_Component_Data_Root) {
                 foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $mc) {
                     $ret = array_merge($ret, self::_getGeneratorsForComponent($mc, $constraints));
                 }
             }
+            
+            if (!isset($constraints['generator']) &&
+                (!isset($constraints['page']) || !$constraints['page']) &&
+                (!isset($constraints['skipBox']) || !$constraints['skipBox']))
+            {
+                $boxConstraints = array(
+                    'box' => true,
+                    'skipBox' => true,
+                    'inherit' => true
+                );
+                $page = $parentData;
+                while ($page) { // Aktuelle inkl. aller Überseiten durchlaufen
+                    if ($page->componentId == $parentData->componentId) {
+                        $generators = $parentData->getGenerators($boxConstraints);
+                    } else {
+                        $generators = $page->getRecursiveGenerators($boxConstraints);
+                    }
+                    $ret = array_merge($ret, $generators);                    
+                    $parent = $page->getParentPage();
+                    if (!$parent) { $parent = $page->parent; }
+                    $page = $parent;
+                }
+            }
+            
             if ((!isset($constraints['skipRoot']) || !$constraints['skipRoot'])
-                && ($parentData instanceof Vps_Component_Data_Root || is_numeric($parentData->componentId))) {
+                && ($parentData instanceof Vps_Component_Data_Root || is_numeric($parentData->componentId))
+            ) {
                 $ret = array_merge($ret, self::_getGeneratorsForComponent(
-                    Vps_Registry::get('config')->vpc->rootComponent, $constraints
+                    Vps_Registry::get('config')->vpc->rootComponent, array_merge(array('generator' => 'page'), $constraints)
                 ));
             }
+            
         }
         return $ret;
     }

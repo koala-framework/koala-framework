@@ -6,8 +6,8 @@ class Vps_Component_Data
     private $_url;
     private $_rel;
     private $_filename;
-    private $_componentIdCache = array();
     private $_constraintsCache = array();
+    private $_generatorsCache = array();
     
     public function __construct($config)
     {
@@ -90,8 +90,31 @@ class Vps_Component_Data
         }
     }
 
-    public function getRecursiveChildComponents(array $constraints,
+    public function getRecursiveGenerators(array $constraints,
                                 array $childConstraints = array('page'=>false))
+    {
+        
+        $ret = $this->getGenerators($constraints);
+        foreach ($this->getChildComponents($this->_formatChildConstraints($constraints, $childConstraints)) as $component) {
+            $ret = array_merge($ret, $component->getRecursiveGenerators($constraints, $childConstraints));
+        }
+        return $ret;
+    }
+
+    public function getGenerators($constraints = array())
+    {
+        $sc = '';
+        foreach ($constraints as $key => $val) {
+            $sc .= $key . $val;
+        }
+        $sc = md5($sc);
+        if (!isset($this->_generatorsCache[$sc])) {
+            $this->_generatorsCache[$sc] = Vps_Component_Generator_Abstract::getInstances($this->componentClass, $this, $constraints);
+        }
+        return $this->_generatorsCache[$sc];
+    }
+    
+    private function _formatChildConstraints($constraints, $childConstraints)
     {
         if (isset($constraints['page']) && $constraints['page']) {
             $generatorInterface = 'Vps_Component_Generator_Page_Interface';
@@ -100,13 +123,12 @@ class Vps_Component_Data
         } else {
             $generatorInterface = false;
         }
-        $currentChildConstraints = $childConstraints;
-        $currentChildConstraints['componentClass'] = array();
+        $childConstraints['componentClass'] = array();
         if ($generatorInterface) {
             $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
             foreach ($classes as $class) {
                 if ($this->_hasGenerator($class, $generatorInterface)) {
-                    $currentChildConstraints['componentClass'][] = $class;
+                    $childConstraints['componentClass'][] = $class;
                 }
             }
         }
@@ -114,23 +136,107 @@ class Vps_Component_Data
             $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
             foreach ($classes as $class) {
                 if ($this->_hasChildSetting($class, 'editComponents')) {
-                    $currentChildConstraints['componentClass'][] = $class;
+                    $childConstraints['componentClass'][] = $class;
                 }
             }
         }
-        
+        return $childConstraints;
+    }
+    
+    public function getRecursiveChildComponents(array $constraints,
+                                array $childConstraints = array('page'=>false))
+    {
         $ret = $this->getChildComponents($constraints);
-        foreach ($this->getChildComponents($currentChildConstraints) as $component) {
+        foreach ($this->getChildComponents($this->_formatChildConstraints($constraints, $childConstraints)) as $component) {
             $ret = array_merge($ret, $component->getRecursiveChildComponents($constraints, $childConstraints));
         }
         return $ret;
     }
 
+    public function getChildComponents($constraints = array())
+    {
+        if (!is_array($constraints)) {
+            if (is_string($constraints)) {
+                $constraints = array('id' => $constraints);
+            } else if ($constraints instanceof Zend_Db_Select) {
+                $constraints = array('select' => $constraints);
+            } else {
+                throw new Vps_Exception("Invalid contraint");
+            }
+        }
+        $sc = '';
+        foreach ($constraints as $key => $val) {
+            if ($val instanceof Zend_Db_Select) {
+                $val = $val->__toString();
+            }
+            if (is_array($val)) {
+                $val = implode('', $val);
+            }
+            $sc .= $key . $val;
+        }
+        $sc = md5($sc);
+        if (!isset($this->_constraintsCache[$sc])) {
+            $ret = array();
+
+            $generatorConstraints = array();
+            foreach (array('page', 'box', 'generator', 'skipRoot') as $c) {
+                if (isset($constraints[$c])) {
+                    $generatorConstraints[$c] = $constraints[$c];
+                    unset($constraints[$c]);
+                }
+            }
+            if (isset($constraints['select']) && $constraints['select'] instanceof Vps_Db_Table_Select_Generator) {
+                $generatorConstraints['generator'] = $constraints['select']->getGenerator();
+            }
+            $this->_constraintsCache[$sc] = array();
+            if (isset($constraints['componentClass']) && $constraints['componentClass'] == array()) {
+                return $this->_constraintsCache[$sc]; //vorzeitig abbrechen, da kommt sicher kein ergebnis
+            }
+            $generators = $this->getGenerators($generatorConstraints);
+            foreach ($generators as $generator) {
+                foreach ($generator->getChildData($this, $constraints) as $data) {
+                    if (isset($this->_constraintsCache[$sc][$data->componentId])) {
+                        $odata = $this->_constraintsCache[$sc][$data->componentId];
+                        if (isset($data->box) && isset($odata->box) && $data->box == $odata->box) {
+                            if ($data->priority > $odata->priority) {
+                                unset($this->_constraintsCache[$sc][$data->componentId]);
+                            } else {
+                                continue;
+                            }
+                        }
+                    }
+                    if (isset($this->_constraintsCache[$sc][$data->componentId])) {
+                        throw new Vps_Exception("Key for generator not unique: {$data->componentId}");
+                    }
+                    $this->_constraintsCache[$sc][$data->componentId] = $data;
+                }
+            }
+        }
+        return $this->_constraintsCache[$sc];
+    }
+    
+/*
+    public function getDataFromGenerators($generator)
+    {
+        $ret = array();
+        foreach ($generators as $generator) {
+            foreach ($generator->getChildData($this, $constraints) as $data) {
+                //p(get_class($generator));
+                if (isset($this->_constraintsCache[$sc][$data->componentId])) {
+                    throw new Vps_Exception("Key for generator not unique: {$data->componentId}");
+                }
+                $ret[$data->componentId] = $data;
+            }
+        }
+        return $ret;
+    }
+*/
     public function getChildPages(array $constraints = array())
     {
         $constraints['page'] = true;
         return $this->getRecursiveChildComponents($constraints);
     }
+    
     public function getChildBoxes(array $constraints = array())
     {
         $constraints['box'] = true;
@@ -202,71 +308,12 @@ class Vps_Component_Data
 
     public function getChildPage($constraints = array())
     {
-        $childPages = $this->getChildPages($constraints);
-        return isset($childPages[0]) ? $childPages[0] : null;
+        return array_shift($this->getChildPages($constraints));
     }
 
     public function getGenerator($key)
     {
         return Vps_Component_Generator_Abstract::getInstance($this->componentClass, $key);
-    }
-
-    public function getChildComponents($constraints = array())
-    {
-        if (!is_array($constraints)) {
-            if (is_string($constraints)) {
-                $constraints = array('id' => $constraints);
-            } else if ($constraints instanceof Zend_Db_Select) {
-                $constraints = array('select' => $constraints);
-            } else {
-                throw new Vps_Exception("Invalid contraint");
-            }
-        }
-        $sc = '';
-        foreach ($constraints as $key => $val) {
-            if ($val instanceof Zend_Db_Select) {
-                $val = $val->__toString();
-            }
-            if (is_array($val)) {
-                $val = implode('', $val);
-            }
-            $sc .= $key . $val;
-        }
-        $sc = md5($sc);
-        if (!isset($this->_constraintsCache[$sc])) {
-            $ret = array();
-
-            $generatorConstraints = array();
-            foreach (array('page', 'box', 'generator', 'skipRoot') as $c) {
-                if (isset($constraints[$c])) {
-                    $generatorConstraints[$c] = $constraints[$c];
-                    unset($constraints[$c]);
-                }
-            }
-            if (isset($constraints['select']) && $constraints['select'] instanceof Vps_Db_Table_Select_Generator) {
-                $generatorConstraints['generator'] = $constraints['select']->getGenerator();
-            }
-
-            if (isset($constraints['componentClass']) && $constraints['componentClass'] == array()) {
-                //vorzeitig abbrechen, da kommt sicher kein ergebnis
-                $this->_constraintsCache[$sc] = array();
-                return $this->_constraintsCache[$sc];
-            }
-            $generators = Vps_Component_Generator_Abstract::getInstances($this->componentClass, $this, $generatorConstraints);
-            $this->_constraintsCache[$sc] = array();
-            foreach ($generators as $generator) {
-                $this->_constraintsCache[$sc] = array_merge($this->_constraintsCache[$sc], $generator->getChildData($this, $constraints));
-            }
-            $ids = array();
-            foreach ($this->_constraintsCache[$sc] as $data) {
-                if (in_array($data->componentId, $ids)) {
-                    //throw new Vps_Exception("Key für generator not unique: {$data->componentId}");
-                }
-                $ids[] = $data->componentId;
-            }
-        }
-        return $this->_constraintsCache[$sc];
-
     }
 
     public function getChildComponentIds($constraints = array())
@@ -280,8 +327,7 @@ class Vps_Component_Data
     
     public function getChildComponent($constraints = array())
     {
-        $childComponents = $this->getChildComponents($constraints);
-        return isset($childComponents[0]) ? $childComponents[0] : null;
+        return array_shift($this->getChildComponents($constraints));
     }
 
     public function getComponent()
@@ -304,9 +350,9 @@ class Vps_Component_Data
     
     public function getParentPage()
     {
-        $parent = $this->getPage()->parent;
-        if ($parent) {
-            return $parent->getPage();
+        $page = $this->getPage();
+        if ($page && $page->parent) {
+            return $page->parent->getPage();
         }
         return null;
     }
