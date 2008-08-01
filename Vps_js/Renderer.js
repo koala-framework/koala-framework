@@ -14,13 +14,18 @@ Ext.util.Format.password = function(value)
 
 Ext.util.Format.euroMoney = function(v, p)
 {
+    return Ext.util.Format.decimal(v,p) + " €";
+};
+
+Ext.util.Format.decimal = function(v, p)
+{
     if (p) p.css = 'vps-renderer-euro-money';
     if (v === null || v == undefined) return "";
     v = v.toString().replace(",", ".");
     v = (Math.round((v-0)*100))/100;
     v = (v == Math.floor(v)) ? v + ".00" : ((v*10 == Math.floor(v*10)) ? v + "0" : v);
     v = v.toString().replace(".", ",");
-    return v + " €";
+    return v;
 };
 
 Ext.util.Format.percent = function(v)
