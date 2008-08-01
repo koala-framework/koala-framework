@@ -1,0 +1,1 @@
+<?phpclass Vpc_Directories_Category_ShowCategories_Model extends Vps_Db_Table_Abstract{    protected $_rowClass = 'Vpc_Directories_Category_ShowCategories_Row';    protected $_name = 'vpc_directories_category_showcategories';}

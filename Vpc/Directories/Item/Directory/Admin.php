@@ -1,0 +1,1 @@
+<?phpclass Vpc_Directories_Item_Directory_Admin extends Vpc_Admin{    public function delete($componentId)    {        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');        Vpc_Admin::getInstance($detail)->delete($componentId);    }}

@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Directory_Admin extends Vpc_Admin
+class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
 {
     public function getExtConfig()
     {
@@ -41,11 +41,5 @@ class Vpc_News_Directory_Admin extends Vpc_Admin
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
         }
-    }
-
-    public function delete($componentId)
-    {
-        $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
-        Vpc_Admin::getInstance($detail)->delete($componentId);
     }
 }

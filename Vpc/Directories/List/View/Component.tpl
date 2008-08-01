@@ -1,0 +1,1 @@
+<div class="<?=$this->cssClass?>">    <?=$this->component($this->paging)?>    <ul>        <?php foreach ($this->items as $new) { ?>            <li><?=$this->componentLink($new);?></li>        <?php } ?>    </ul>    <?=$this->component($this->paging)?></div>

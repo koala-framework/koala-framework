@@ -1,17 +1,16 @@
 <?php
-class Vpc_News_Category_Directory_NewsToCategoriesModel extends Vps_Db_Table_Abstract
+class Vpc_News_Category_Directory_NewsToCategoriesModel
+    extends Vpc_Directories_Category_Directory_ItemsToCategoriesModel
 {
     protected $_name = 'vpc_news_to_categories';
-    protected $_referenceMap = array(
-        'Category' => array(
-            'columns'           => array('category_id'),
-            'refTableClass'     => 'Vps_Dao_Pool',
-            'refColumns'        => array('id')
-        ),
-        'News' => array(
+
+    protected function _setup()
+    {
+        $this->_referenceMap['Item'] = array(
             'columns'           => array('news_id'),
             'refTableClass'     => 'Vpc_News_Directory_Model',
             'refColumns'        => array('id')
-        )
-    );
+        );
+        parent::_setup();
+    }
 }
