@@ -15,7 +15,7 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
         $ret['placeholder']['error'] = trlVps('An error has occurred');
         $ret['decorator'] = 'Vpc_Formular_Decorator_Label';
         $ret['viewCache'] = false;
-        $ret['method'] = 'POST';
+        $ret['method'] = 'post';
         return $ret;
     }
 

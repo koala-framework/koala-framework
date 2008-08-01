@@ -1,0 +1,1 @@
+<?phpabstract class Vpc_Directories_Category_Directory_ItemsToCategoriesModel extends Vps_Db_Table_Abstract{    protected $_referenceMap = array(        'Category' => array(            'columns'           => array('category_id'),            'refTableClass'     => 'Vps_Dao_Pool',            'refColumns'        => array('id')        ),        'Item' => array()    );}

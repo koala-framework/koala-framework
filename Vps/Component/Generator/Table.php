@@ -95,6 +95,9 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if (!isset($constraints['select'])) {
             $constraints['select'] = $this->select($parentData, $constraints);
         }
+        if (isset($constraints['id'])) {
+            if (!is_numeric(substr($constraints['id'], 1))) return null;
+        }
 
         return $constraints;
     }
