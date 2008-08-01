@@ -23,7 +23,10 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     
     public function getPageByPath($path)
     {
-        if ($path == '/') {
+        if (substr($path, -1) == '/') {
+            $path = substr($path, 0, -1);
+        }
+        if ($path == '') {
             return $this->getChildPage(array('home' => true));
         } else {
             $page = $this;
