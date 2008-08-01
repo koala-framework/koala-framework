@@ -123,8 +123,8 @@ class Vps_Component_Data
         } else {
             $generatorInterface = false;
         }
-        $childConstraints['componentClass'] = array();
         if ($generatorInterface) {
+            $childConstraints['componentClass'] = array();
             $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
             foreach ($classes as $class) {
                 if ($this->_hasGenerator($class, $generatorInterface)) {
@@ -133,6 +133,9 @@ class Vps_Component_Data
             }
         }
         if (isset($constraints['hasEditComponents'])) {
+            if (!isset($childConstraints['componentClass'])) {
+                $childConstraints['componentClass'] = array();
+            }
             $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
             foreach ($classes as $class) {
                 if ($this->_hasChildSetting($class, 'editComponents')) {
