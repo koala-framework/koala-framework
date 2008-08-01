@@ -35,9 +35,10 @@ class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface
 
         // do we already have a row object for this position?
         if (empty($this->_rows[$this->_pointer])) {
+            $keys = array_keys($this->_data);
             $this->_rows[$this->_pointer] = new $this->_rowClass(
                 array(
-                    'data' => $this->_data[$this->_pointer],
+                    'data' => $this->_data[$keys[$this->_pointer]],
                     'model' => $this->getModel()
                 )
             );

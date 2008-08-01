@@ -106,44 +106,44 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             for (var i in this.editActions) {
                 this.editActions[i].hide();
             }
-            if (node.attributes.type == 'category') {
+            if (!node.attributes.data.isPage) {
                 this.getAction('properties').disable();
                 this.getAction('delete').disable();
                 this.getAction('visible').disable();
                 this.getAction('makeHome').disable();
             } else {
-                node.attributes.data.editComponents.each(function(component) {
-                    if (!this.editActions[component.componentClass]) {
-                        this.editActions[component.componentClass] = new Ext.Action({
-                            text    : trlVps('Edit {0}', [component.componentName]),
-                            handler : function (o, e) {
-                                var node = this.treePanel.tree.getSelectionModel().getSelectedNode();
-                                node.attributes.data.editComponents.each(function(component) {
-                                    if (component.componentClass == o.componentClass) {
-                                        this.fireEvent('editcomponent', {
-                                            id: component.dbId,
-                                            cls: component.componentClass,
-                                            text: node.text + ' - ' + component.componentName
-                                        });
-                                        return false;
-                                    }
-                                }, this);
-                            },
-                            icon    : component.componentIcon,
-                            cls     : 'x-btn-text-icon',
-                            scope   : this,
-                            componentClass: component.componentClass
-                        });
-                        this.contextMenu.insert(0, new Ext.menu.Item(this.editActions[component.componentClass]));
-                        this.pageButtonMenu.insert(0, new Ext.menu.Item(this.editActions[component.componentClass]));
-                    }
-                    this.editActions[component.componentClass].show();
-                }, this);
                 this.getAction('properties').enable();
                 this.getAction('delete').enable();
                 this.getAction('visible').enable();
                 this.getAction('makeHome').enable();
             }
+            node.attributes.data.editComponents.each(function(component) {
+                if (!this.editActions[component.componentClass]) {
+                    this.editActions[component.componentClass] = new Ext.Action({
+                        text    : trlVps('Edit {0}', [component.componentName]),
+                        handler : function (o, e) {
+                            var node = this.treePanel.tree.getSelectionModel().getSelectedNode();
+                            node.attributes.data.editComponents.each(function(component) {
+                                if (component.componentClass == o.componentClass) {
+                                    this.fireEvent('editcomponent', {
+                                        id: component.dbId,
+                                        cls: component.componentClass,
+                                        text: node.text + ' - ' + component.componentName
+                                    });
+                                    return false;
+                                }
+                            }, this);
+                        },
+                        icon    : component.componentIcon,
+                        cls     : 'x-btn-text-icon',
+                        scope   : this,
+                        componentClass: component.componentClass
+                    });
+                    this.contextMenu.insert(0, new Ext.menu.Item(this.editActions[component.componentClass]));
+                    this.pageButtonMenu.insert(0, new Ext.menu.Item(this.editActions[component.componentClass]));
+                }
+                this.editActions[component.componentClass].show();
+            }, this);
         }
     },
 

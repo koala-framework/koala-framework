@@ -7,6 +7,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected $_primaryKey;
     protected $_table;
     protected $_tableName;
+    protected $_model;
 
     protected $_icons = array (
         'root'      => 'folder',
@@ -32,49 +33,62 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     private $_openedNodes = array();
     protected $_addPosition = self::ADD_FIRST;
 
-    public function init()
+    public function setTable($table)
     {
-        parent::init();
+        $this->_model = new Vps_Model_Db(array(
+            'table' => $table
+        ));
+    }
+    
+    private function _getTableInfo()
+    {
+        if (!isset($this->_model) || !($this->_model instanceof Vps_Model_Db)) {
+            return null;
+        }
+        return $this->_model->getTable()->info();
     }
     
     public function preDispatch()
     {
         parent::preDispatch();
 
-        if (!isset($this->_table)) {
-            $this->_table = new $this->_tableName();
+        if (!$this->_model) {
+            if (!isset($this->_table)) {
+                $this->_table = new $this->_tableName();
+            }
+            $this->_model = new Vps_Model_Db(array(
+                'table' => $this->_table
+            ));
         }
 
-        $info = $this->_table->info();
+        $info = $this->_getTableInfo();
 
-        if (isset($this->_table)) {
-            $info = $this->_table->info();
-            if (!isset($this->_primaryKey)) {
-                $info = $this->_table->info();
-                $this->_primaryKey = $info['primary'];
+        // PrimaryKey setzen
+        if (!isset($this->_primaryKey)) {
+            $this->_primaryKey = $this->_model->getPrimaryKey();
+            if (is_array($this->_primaryKey)) {
+                $this->_primaryKey = $this->_primaryKey[1];
             }
         }
-
-        if (is_array($this->_primaryKey)) {
-            $this->_primaryKey = $this->_primaryKey[1];
+        
+        if ($info) {
+            // Invisible-Button hinzufügen falls nicht überschrieben und in DB
+            if (array_key_exists('invisible', $this->_buttons) &&
+                is_null($this->_buttons['invisible']) &&
+                in_array('visible', $info['cols']))
+            {
+                $this->_buttons['invisible'] = true;
+            }
+    
+            // Pos-Feld
+            if (!isset($this->_hasPosition)) {
+                $this->_hasPosition = in_array('pos', $info['cols']);
+            }
+            if ($this->_hasPosition && !in_array('pos', $info['cols'])) {
+                throw new Vps_Exception("_hasPosition is true, but 'pos' does not exist in database");
+            }
         }
-
-        // Invisible-Button hinzufügen falls nicht überschrieben und in DB
-        if (array_key_exists('invisible', $this->_buttons) &&
-            is_null($this->_buttons['invisible']) &&
-            in_array('visible', $info['cols'])) {
-
-            $this->_buttons['invisible'] = true;
-        }
-
-        // Pos-Feld
-        if (!isset($this->_hasPosition)) {
-            $this->_hasPosition = in_array('pos', $info['cols']);
-        }
-        if ($this->_hasPosition && !in_array('pos', $info['cols'])) {
-            throw new Vps_Exception("_hasPosition is true, but 'pos' does not exist in database");
-        }
-
+        
         foreach ($this->_icons as $k=>$i) {
             if (is_string($i)) {
                 $this->_icons[$k] = new Vps_Asset($i);
@@ -109,21 +123,25 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     public function jsonNodeDataAction()
     {
         $id = $this->getRequest()->getParam('node');
-        $row = $this->_table->find($id)->current();
+        $row = $this->_model->find($id)->current();
         if ($row) {
             $this->view->data = $this->_formatNode($row);
         } else {
             throw new Vps_ClientException('Couldn\'t find row with id ' . $id);
         }
     }
-
+    
     protected function _getTreeWhere($parentId = null)
     {
         $where = $this->_getWhere();
-        if (!$parentId) {
-            $where[] = "$this->_parentField IS NULL";
+        if ($this->_model instanceof Vps_Model_Db) {
+            if (!$parentId) {
+                $where[] = "$this->_parentField IS NULL";
+            } else {
+                $where["$this->_parentField = ?"] = $parentId;
+            }
         } else {
-            $where["$this->_parentField = ?"] = $parentId;
+            $where['parent'] = $parentId;
         }
         return $where;
     }
@@ -137,8 +155,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     {
         $nodes = array();
         $order = $this->_hasPosition ? 'pos' : null ;
-        $rows = $this->_table->fetchAll($this->_getTreeWhere($parentId), $order);
-        $primaryKey = $this->_primaryKey;
+        $rows = $this->_model->fetchAll($this->_getTreeWhere($parentId), $order);
         foreach ($rows as $row) {
             $nodes[] = $this->_formatNode($row);
         }
@@ -172,8 +189,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         } else {
             $data['expanded'] = false;
         }
-
-        $data['children'] = $this->_formatNodes((int)$row->$primaryKey);
+        $data['children'] = $this->_formatNodes($row->$primaryKey);
         if (sizeof($data['children']) == 0) {
             $data['expanded'] = true;
         }
@@ -202,7 +218,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $openedId = $this->_getParam('openedId');
         $this->_openedNodes = array();
         while ($openedId) {
-            $row = $this->_table->find($openedId)->current();
+            $row = $this->_model->find($openedId)->current();
             $this->_openedNodes[$openedId] = true;
             $field = $this->_parentField;
             $openedId = $row ? $row->$field : null;
@@ -214,7 +230,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $visible = $this->getRequest()->getParam('visible') == 'true';
         $id = $this->getRequest()->getParam('id');
         $this->_table->getAdapter()->beginTransaction();
-        $row = $this->_table->find($id)->current();
+        $row = $this->_model->find($id)->current();
         $row->visible = $row->visible == '0' ? '1' : '0';
         $this->view->id = $row->save();
         $this->_table->getAdapter()->commit();
@@ -223,13 +239,12 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
 
     public function jsonAddAction()
     {
-        $this->_table->getAdapter()->beginTransaction();
         $insert[$this->_parentField] = $this->getRequest()->getParam('parentId');
         $insert[$this->_textField] = $this->getRequest()->getParam('name');
         if ($this->_hasPosition) {
             $insert['pos'] = 0;
         }
-        $row = $this->_table->createRow($insert);
+        $row = $this->_model->createRow($insert);
         $row->save();
         $data = $this->_formatNode($row);
         foreach ($data as $k=>$i) {
@@ -238,18 +253,15 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             }
         }
         $this->view->data = $data;
-        $this->_table->getAdapter()->commit();
     }
 
     public function jsonDeleteAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $this->_table->getAdapter()->beginTransaction();
-        $row = $this->_table->find($id)->current();
+        $row = $this->_model->find($id)->current();
         if (!$row) throw new Vps_Exception("No entry with id '$id' found");
         $row->delete();
         $this->view->id = $id;
-        $this->_table->getAdapter()->commit();
     }
 
     public function jsonMoveAction()
@@ -258,8 +270,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $target = $this->getRequest()->getParam('target');
         $point  = $this->getRequest()->getParam('point');
 
-        $this->_table->getAdapter()->beginTransaction();
-        $row = $this->_table->find($source)->current();
+        $row = $this->_model->find($source)->current();
         if ($point == 'append') {
             $parentField = $this->_parentField;
             $row->$parentField = (int)$target == 0 ? null : $target;
@@ -284,7 +295,6 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             }
         }
         $row->save();
-        $this->_table->getAdapter()->commit();
     }
 
     public function jsonCollapseAction()

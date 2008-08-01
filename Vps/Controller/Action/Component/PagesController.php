@@ -10,7 +10,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         'add' => 'page_add',
         'delete' => 'page_delete',
         'folder' => 'folder',
-        'home' => 'application_home'
+        'home' => 'application_home',
+        'root' => 'world'
         );
     protected $_buttons = array();
 
@@ -21,7 +22,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
     public function init()
     {
-        $this->_table = new Vps_Dao_Pages();
+        $this->_model = new Vps_Component_Model();
         parent::init();
     }
 
@@ -31,28 +32,22 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         if (!$row->visible) {
             $data['bIcon'] = $this->_icons['invisible']->__toString();
         }
-        if ($row->is_home) {
+        if ($row->isHome) {
             $data['bIcon'] = $this->_icons['home']->__toString();
+        }
+        if ($row->componentId == 'root') {
+            $data['bIcon'] = $this->_icons['root']->__toString();
         }
         $data['uiProvider'] = 'Vps.Component.PagesNode';
 
-        $c = Vps_Component_Data_Root::getInstance()->getComponentById($row->id, array('ignoreVisible' => true));
-        $editComponents = array($c);
-        $boxEditComponents = array();
-        $priorities = array();
-        $constraints = array('hasEditComponents' => true);
-        $childConstraints = array('skipRoot' => true);
-        foreach ($c->getRecursiveChildComponents($constraints, $childConstraints) as $cc) {
-            if (isset($cc->box)) {
-                if (!isset($priorities[$cc->box]) || $cc->priority > $priorities[$cc->box]) {
-                    $priorities[$cc->box] = $cc->priority;
-                    $boxEditComponents[$cc->box] = $cc;
-                }
-            } else {
-                $editComponents[] = $cc;
-            }
-        }
-        $editComponents = array_merge($editComponents, $boxEditComponents);
+        $component = $row->getData();
+        $editComponents = array_merge(
+            array($component), 
+            $component->getChildComponents(
+                array('hasEditComponents' => true), 
+                array('skipRoot' => true, 'page' => false)
+            )
+        );
         $data['data']['editComponents'] = array();
         foreach ($editComponents as $cc) {
             if (Vpc_Abstract::hasSetting($cc->componentClass, 'componentName')
@@ -67,49 +62,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             }
         }
         return $data;
-    }
-
-    public function jsonDataAction()
-    {
-        $id = $this->getRequest()->getParam('node');
-        if ($id === '0') {
-
-            $types = Zend_Registry::get('config')->vpc->pageTypes->toArray();
-            if (sizeof($types) == 0) $types[''] = 'Seiten';
-            foreach ($types as $type => $text) {
-                $data = array();
-                $data['id'] = $type;
-                $data['text'] = $text;
-                $data['leaf'] = false;
-                $data['expanded'] = true;
-                $data['allowDrag'] = false;
-                $data['type'] = 'category';
-                $data['bIcon'] = new Vps_Asset('folder_page');
-                $data['bIcon'] = $data['bIcon']->__toString();
-                $data['uiProvider'] = 'Vps.Component.PagesNode';
-                $data['children'] = $this->_formatNodes($type);
-                $return[] = $data;
-            }
-            $this->view->nodes = $return;
-
-        } else {
-
-            parent::jsonDataAction();
-
-        }
-    }
-
-    protected function _getTreeWhere($parentId = null)
-    {
-        $where = array();
-        $node = $this->getRequest()->getParam('node');
-        if (is_string($parentId)) {
-            $where['parent_id IS NULL'] = '';
-            $where['type = ?'] = $parentId;
-        } else {
-            $where['parent_id = ?'] = $parentId;
-        }
-        return $where;
     }
 
     public function jsonMakeHomeAction()

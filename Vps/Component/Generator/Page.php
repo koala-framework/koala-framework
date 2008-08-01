@@ -170,6 +170,8 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract impl
         $data['componentClass'] = $this->_getChildComponentClass($page['component']);
         $data['row'] = (object)$page;
         $data['parent'] = $parentData;
+        $data['visible'] = $page['visible'];
+        $data['isHome'] = $page['is_home'];
         return $data;
     }
     protected function _getIdFromRow($id)

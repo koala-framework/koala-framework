@@ -138,7 +138,7 @@ class Vps_Component_Data
             }
             $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
             foreach ($classes as $class) {
-                if ($this->_hasChildSetting($class, 'editComponents')) {
+                if ($class && $this->_hasChildSetting($class, 'editComponents')) {
                     $childConstraints['componentClass'][] = $class;
                 }
             }
@@ -281,7 +281,6 @@ class Vps_Component_Data
             return $hasChildSetting[$setting][$componentClass];
         }
         $hasChildSetting[$setting][$componentClass] = false;
-
         foreach (Vpc_Abstract::getChildComponentClasses($componentClass) as $class) {
             if ($class) {
                 if (Vpc_Abstract::hasSetting($class, $setting)

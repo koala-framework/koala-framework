@@ -191,15 +191,15 @@ abstract class Vps_Component_Generator_Abstract
                 return null;
             }
             $editComponents = Vpc_Abstract::getSetting($this->_class, 'editComponents');
-            if (!isset($editComponents[$this->_settings['generator']])) return null;
-            $editComponents = $editComponents[$this->_settings['generator']];
             if (!is_array($editComponents)) $editComponents = array($editComponents);
 
             $constraints['componentClass'][] = array();
             foreach ($editComponents as $c) {
-                $constraints['componentClass'][] = $this->_settings['component'][$c];
+                if (isset($this->_settings['component'][$c])) {
+                    $constraints['componentClass'][] = $this->_settings['component'][$c];
+                }
             }
-
+            
             if (!$constraints['componentClass']) return null;
         }
         return $constraints;
