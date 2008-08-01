@@ -110,7 +110,8 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
             'dbId' => $dbId,
             'componentClass' => $this->_settings['component'][$componentKey],
             'parent' => $parentData,
-            'isPage' => false
+            'isPage' => false,
+            'visible' => true
         );
     }
     protected function _getIdFromRow($componentKey)

@@ -6,21 +6,43 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     private $_componentsByClassCache;
     private $_currentPage;
 
-    public static function getInstance()
+    public function __construct($config = array())
     {
-        if (!self::$_instance) {
-            $componentClass = Vps_Registry::get('config')->vpc->rootComponent;
-            self::$_instance = new self(array(
-                'componentClass' => $componentClass,
-                'name' => '',
+        $config = array_merge(array(
+                'componentClass' => Vps_Registry::get('config')->vpc->rootComponent,
+                'name' => 'Root',
                 'parent' => null,
                 'isPage' => false,
                 'componentId' => 'root'
-            ));
+            ), $config
+        );
+        return parent::__construct($config);
+    }
+        
+    public static function getInstance()
+    {
+        if (!self::$_instance) {
+            self::$_instance = new self();
         }
         return self::$_instance;
     }
-    
+    /*
+    public function getChildComponents($constraints = array())
+    {
+        if ($this->componentId == 'root' && Zend_Registry::get('config')->vpc->pageTypes) {
+            $pagetypes = Zend_Registry::get('config')->vpc->pageTypes->toArray();
+            $ret = array();
+            foreach ($pagetypes as $id => $name) {
+                if (!isset($constraints['id']) || $id == $constraints['id']) {
+                    $ret[$id] = new Vps_Component_Data_Category($id, $name);
+                }
+            }
+            return $ret;
+        } else {
+            return parent::getChildComponents($constraints);
+        }
+    }
+    */
     public function getPageByPath($path)
     {
         if (substr($path, -1) == '/') {
@@ -40,13 +62,16 @@ class Vps_Component_Data_Root extends Vps_Component_Data
 
     public function getComponentById($componentId, array $constraints = array())
     {
-        $page = $this;
-        foreach ($this->_getIdParts($componentId) as $idPart) {
-            $constraints['id'] = $idPart;
-            $page = $page->getChildComponent($constraints);
-            if (!$page) break;
+        $ret = $this;
+        if ($componentId != $this->componentId) {
+            $ret = $this;
+            foreach ($this->_getIdParts($componentId) as $idPart) {
+                $constraints['id'] = $idPart;
+                $ret = $ret->getChildComponent($constraints);
+                if (!$ret) break;
+            }
         }
-        return $page;
+        return $ret;
     }
 
     private function _getIdParts($componentId)
@@ -64,6 +89,14 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             }
             $ret[] = $idPart;
         }
+        /*
+        if (Zend_Registry::get('config')->vpc->pageTypes) {
+            $pageTypes = Zend_Registry::get('config')->vpc->pageTypes->toArray();
+            if (!isset($pageTypes[$componentId])) {
+                array_unshift($ret, 'main');
+            }
+        }
+*/
         return $ret;
     }
     

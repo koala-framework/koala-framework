@@ -167,13 +167,19 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $componentClass = current($this->_settings['component']);
         }
         
+        $visible = true;
+        if (in_array('visible', $this->_table->info('cols'))) {
+            $visible = $row->visible == '1';
+        }
+                
         $data = array(
             'componentId' => $componentId,
             'dbId' => $dbId,
             'componentClass' => $componentClass,
             'parent' => $parentData,
             'row' => $row,
-            'isPage' => false
+            'isPage' => false,
+            'visible' => $visible
         );
         return $data;
     }

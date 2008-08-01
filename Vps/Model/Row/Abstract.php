@@ -40,7 +40,7 @@ class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
             return null;
         }
     }
-
+    
     public function __set($name, $value)
     {
         $this->_data[$name] = $value;
