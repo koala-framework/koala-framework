@@ -9,7 +9,7 @@
     ?>
     <?php if($content != '') { ?>
         <div class="welcomeContent">
-            <?= $content ?>
+            <?= $this->content ?>
         </div>
     <?php } else { ?>
         <div class="welcomeContent">

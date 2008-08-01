@@ -163,11 +163,12 @@ class Vps_Mail
         }
 
         //hinzufügen von Bilder zur Email
-        $this->_mail->setType(Zend_Mime::MULTIPART_RELATED);
-        foreach ($this->_view->getImages() as $image) {
-            $this->_mail->addAttachment($image);
+        if ($this->_view->getImages()){
+            $this->_mail->setType(Zend_Mime::MULTIPART_RELATED);
+            foreach ($this->_view->getImages() as $image) {
+                $this->_mail->addAttachment($image);
+            }
         }
-
 
         $this->_mail->setSubject($this->_view->subject);
 
