@@ -26,12 +26,13 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         return self::$_instance;
     }
-    
+   /* 
     public function getChildComponents($constraints = array())
     {
         $pageTypes = Zend_Registry::get('config')->vpc->pageTypes->toArray();
         if ($this->componentId == 'root'
             && !isset($constraints['hasEditComponents'])
+            && !isset($constraints['home'])
             && (
                 (isset($constraints['id']) && isset($pageTypes[$constraints['id']])) || 
                 (!isset($constraints['type']) && !isset($constraints['id']))
@@ -48,7 +49,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             return parent::getChildComponents($constraints);
         }
     }
-
+*/
     public function getPageByPath($path)
     {
         if (substr($path, -1) == '/') {
@@ -69,7 +70,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getComponentById($componentId, array $constraints = array())
     {
         $ret = $this;
-        foreach ($this->_getIdParts($componentId, $constraints) as $idPart) {
+        foreach ($this->_getIdParts($componentId) as $idPart) {
             if ($idPart == 'root') {
                 $ret = $this;
             } else {
@@ -81,7 +82,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $ret;
     }
 
-    private function _getIdParts($componentId, $constraints)
+    private function _getIdParts($componentId)
     {
         $ret = array();
         $ids = preg_split('/([_\-])/', $componentId, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -95,9 +96,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 $idPart .= $ids[$i];
             }
             $ret[] = $idPart;
-        }
-        if (isset($constraints['type'])) {
-            //array_unshift($ret, $constraints['type']);
         }
         return $ret;
     }
