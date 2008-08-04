@@ -131,17 +131,17 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         }
     }
     
-    protected function _getTreeWhere($parentId = null)
+    protected function _getTreeWhere($parentRow = null)
     {
         $where = $this->_getWhere();
         if ($this->_model instanceof Vps_Model_Db) {
-            if (!$parentId) {
+            if (!$parentRow) {
                 $where[] = "$this->_parentField IS NULL";
             } else {
-                $where["$this->_parentField = ?"] = $parentId;
+                $where["$this->_parentField = ?"] = $parentRow->{$this->_primaryKey};
             }
         } else {
-            $where['parent'] = $parentId;
+            $where['parent'] = $parentRow ? $parentRow->{$this->_primaryKey} : null;
         }
         return $where;
     }
@@ -151,11 +151,11 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         return array();
     }
 
-    protected function _formatNodes($parentId = null)
+    protected function _formatNodes($parentRow = null)
     {
         $nodes = array();
         $order = $this->_hasPosition ? 'pos' : null ;
-        $rows = $this->_model->fetchAll($this->_getTreeWhere($parentId), $order);
+        $rows = $this->_model->fetchAll($this->_getTreeWhere($parentRow), $order);
         foreach ($rows as $row) {
             $nodes[] = $this->_formatNode($row);
         }
@@ -189,7 +189,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         } else {
             $data['expanded'] = false;
         }
-        $data['children'] = $this->_formatNodes($row->$primaryKey);
+        $data['children'] = $this->_formatNodes($row);
         if (sizeof($data['children']) == 0) {
             $data['expanded'] = true;
         }
@@ -229,11 +229,9 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     {
         $visible = $this->getRequest()->getParam('visible') == 'true';
         $id = $this->getRequest()->getParam('id');
-        $this->_table->getAdapter()->beginTransaction();
         $row = $this->_model->find($id)->current();
         $row->visible = $row->visible == '0' ? '1' : '0';
         $this->view->id = $row->save();
-        $this->_table->getAdapter()->commit();
         $this->view->visible = $row->visible == '1';
     }
 
@@ -278,7 +276,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 $row->pos = '1';
             }
         } else {
-            $targetRow = $this->_table->find($target)->current();
+            $targetRow = $this->_model->getTable()->find($target)->current();
             if ($targetRow) {
                 $parentField = $this->_parentField;
                 $row->$parentField = $targetRow->$parentField;

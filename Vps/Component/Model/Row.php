@@ -36,10 +36,18 @@ class Vps_Component_Model_Row implements Vps_Model_Row_Interface
 
     public function save()
     {
+        if (isset($this->visible)) {
+            $row = $this->_model->getTable()->find($this->componentId)->current();
+            $row->visible = $this->visible;
+            $row->save();
+        }
     }
 
     public function delete()
     {
+        $table = new Vps_Dao_Pages;
+        $row = $table->find($this->componentId)->current();
+        $row->delete();
     }
     
     public function getData()

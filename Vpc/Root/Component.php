@@ -18,6 +18,7 @@ class Vpc_Root_Component extends Vpc_Abstract
             'inherit' => true,
             'priority' => 0
         );
+        $ret['componentName'] = 'Root';
         return $ret;
     }
 }

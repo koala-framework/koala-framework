@@ -137,6 +137,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract impl
         }
         return $ret;
     }
+    
     protected function _createData($parentData, $id, $constraints)
     {
         $page = $this->_pageData[$id];
@@ -148,6 +149,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract impl
                 if (isset($constraints['ignoreVisible'])) {
                     $c['ignoreVisible'] = $constraints['ignoreVisible'];
                 }
+                $c['type'] = $page['type'];
                 $parentData = Vps_Component_Data_Root::getInstance()
                                     ->getComponentById($page['parent_id'], $c);
                 if (!$parentData) {
@@ -172,6 +174,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract impl
         $data['parent'] = $parentData;
         $data['visible'] = $page['visible'];
         $data['isHome'] = $page['is_home'];
+        $data['type'] = $page['type'];
         return $data;
     }
     protected function _getIdFromRow($id)

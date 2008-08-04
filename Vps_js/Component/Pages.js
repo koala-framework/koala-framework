@@ -111,12 +111,19 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
                 this.getAction('delete').disable();
                 this.getAction('visible').disable();
                 this.getAction('makeHome').disable();
+                this.getAction('add').disable();
+                this.getAction('preview').disable();
             } else {
                 this.getAction('properties').enable();
                 this.getAction('delete').enable();
                 this.getAction('visible').enable();
                 this.getAction('makeHome').enable();
+                this.getAction('add').enable();
+                this.getAction('preview').enable();
             }
+			if (node.attributes.type == 'category') {
+				this.getAction('add').enable();
+			}
             node.attributes.data.editComponents.each(function(component) {
                 if (!this.editActions[component.componentClass]) {
                     this.editActions[component.componentClass] = new Ext.Action({

@@ -40,8 +40,7 @@ class Vps_Dao_Row_Page extends Vps_Db_Table_Row_Abstract
         }
 
         // Dranhängende Komponente löschen
-        
-        $class = Vpc_Abstract::getChildComponentClass(Vps_Registry::get('config')->vpc->rootComponent, $this->component);
+        $class = Vpc_Abstract::getChildComponentClass(Vps_Registry::get('config')->vpc->rootComponent, null, $this->component);
         Vpc_Admin::getInstance($class)->delete($this->id);
     }
 }
