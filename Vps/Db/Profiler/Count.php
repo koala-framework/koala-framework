@@ -1,0 +1,16 @@
+<?php
+class Vps_Db_Profiler_Count extends Zend_Db_Profiler
+{
+    public function queryStart($queryText, $queryType = null)
+    {
+        if (!$this->_enabled) {
+            return null;
+        }
+        $this->_count++;
+        return null;
+    }
+    public function getQueryCount()
+    {
+        return $this->_count;
+    }
+}

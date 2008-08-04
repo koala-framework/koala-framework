@@ -3,6 +3,7 @@ class Vps_Benchmark
 {
     private static $_startTime;
     private static $_enabled = false;
+    private static $_logEnabled = false;
     private static $_counter;
 
     private $_start;
@@ -109,8 +110,14 @@ class Vps_Benchmark
 
     public static function enable()
     {
-        self::$_startTime = microtime(true);
+        if (!isset(self::$_startTime)) self::$_startTime = microtime(true);
         self::$_enabled = true;
+    }
+
+    public static function enableLog()
+    {
+        if (!isset(self::$_startTime)) self::$_startTime = microtime(true);
+        self::$_logEnabled = true;
     }
 
     public static function isEnabled()
@@ -120,7 +127,7 @@ class Vps_Benchmark
 
     public static function count($name, $value = null)
     {
-        if (!self::$_enabled) return false;
+        if (!self::$_enabled && !self::$_logEnabled) return false;
         if (!isset(self::$_counter[$name])) {
             if ($value) {
                 self::$_counter[$name] = array();
@@ -143,27 +150,81 @@ class Vps_Benchmark
 
     public static function output()
     {
-        if (!self::$_enabled) return;
-        echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:200px;position:absolute;top:0;right:0;padding:5px;">';
-        echo round(microtime(true) - self::$_startTime, 2)." sec<br />\n";
-        echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br />\n";
-        if (Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
-            echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
-        }
-        foreach (self::$_counter as $k=>$i) {
-            if (is_array($i)) {
-                echo "<a style=\"display:block;\"href=\"#\" onclick=\"this.nextSibling.style.display='block';return(false);\">";
-                echo "$k: ".count($i)."</a>";
-                echo "<ul style=\"display:none\">";
-                foreach ($i as $j) {
-                    echo "<li>$j</li>";
-                }
-                echo "</ul>";
-            } else {
-                echo "$k: $i<br />\n";
+        if (self::$_logEnabled) {
+            $fields = false;
+            $newFile = true;
+            if (file_exists('benchmark')) {
+                $newFile = false;
+                $fp = fopen('benchmark', 'r');
+                $fields = fgetcsv($fp, 1024, ';');
+                fclose($fp);
             }
+            if ($fields) {
+                foreach (array_keys(self::$_counter) as $i) {
+                    if (!in_array($i, $fields)) {
+                        d('Baaam'.$i);
+                        $newFile = true;
+                        $fields = false;
+                        break;
+                    }
+                }
+            }
+            if (!$fields) {
+                $fields = array('date', 'url', 'duration', 'memory', 'queries');
+                foreach (self::$_counter as $k=>$i) {
+                    $fields[] = $k;
+                }
+            }
+            $fp = fopen('benchmark', 'a');
+            if ($newFile) {
+                fwrite($fp, implode(';', $fields)."\n");
+            }
+            $out = array();
+            foreach ($fields as $i) {
+                if ($i == 'date') {
+                    $out[] = date('Y-m-d H:i:s');
+                } else if ($i == 'url') {
+                    $out[] = $_SERVER['REQUEST_URI'];
+                } else if ($i == 'duration') {
+                    $out[] = round(microtime(true) - self::$_startTime, 2);
+                } else if ($i == 'memory') {
+                    $out[] = round(memory_get_peak_usage()/1024);
+                } else if ($i == 'queries') {
+                    if (Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
+                        $out[] = Zend_Registry::get('db')->getProfiler()->getQueryCount();
+                    } else {
+                        $out[] = '';
+                    }
+                } else if (is_array(self::$_counter[$i])) {
+                    $out[] = count(self::$_counter[$i]);
+                } else {
+                    $out[] = self::$_counter[$i];
+                }
+            }
+            fwrite($fp, implode(';', $out)."\n");
+            fclose($fp);
+        } else if (self::$_enabled) {
+            echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:200px;position:absolute;top:0;right:0;padding:5px;">';
+            echo round(microtime(true) - self::$_startTime, 2)." sec<br />\n";
+            echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br />\n";
+            if (Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
+                echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
+            }
+            foreach (self::$_counter as $k=>$i) {
+                if (is_array($i)) {
+                    echo "<a style=\"display:block;\"href=\"#\" onclick=\"this.nextSibling.style.display='block';return(false);\">";
+                    echo "$k: ".count($i)."</a>";
+                    echo "<ul style=\"display:none\">";
+                    foreach ($i as $j) {
+                        echo "<li>$j</li>";
+                    }
+                    echo "</ul>";
+                } else {
+                    echo "$k: $i<br />\n";
+                }
+            }
+            echo "</div>";
         }
-        echo "</div>";
     }
 
     public static function info($msg)
