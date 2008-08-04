@@ -175,8 +175,7 @@ class Vps_Setup
             require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enable();
-        }
-        if (Zend_Registry::get('config')->debug->benchmarkLog) {
+        } else if (Zend_Registry::get('config')->debug->benchmarkLog) {
             require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enableLog();
