@@ -169,7 +169,7 @@ class Vps_Benchmark
                 }
             }
             if (!$fields) {
-                $fields = array('date', 'url', 'duration', 'memory', 'queries');
+                $fields = array('date', 'url', 'load', 'duration', 'memory', 'queries');
                 foreach (self::$_counter as $k=>$i) {
                     $fields[] = $k;
                 }
@@ -184,6 +184,14 @@ class Vps_Benchmark
                     $out[] = date('Y-m-d H:i:s');
                 } else if ($i == 'url') {
                     $out[] = $_SERVER['REQUEST_URI'];
+                } else if ($i == 'load') {
+                    $load = @file_get_contents('/proc/loadavg');
+                    $load = explode(' ', $load);
+                    if (isset($load[0])) {
+                        $out[] = $load[0];
+                    } else {
+                        $out[] = '';
+                    }
                 } else if ($i == 'duration') {
                     $out[] = round(microtime(true) - self::$_startTime, 2);
                 } else if ($i == 'memory') {
