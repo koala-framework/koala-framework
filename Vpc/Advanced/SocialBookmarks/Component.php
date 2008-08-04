@@ -13,7 +13,7 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
     protected function _getServices()
     {
         $ret = array(
-            'mrwong' => array(
+            'wong' => array(
                 'url' => 'http://www.mister-wong.de/index.php?action=addurl&bm_url={0}',
                 'name' => 'Mister Wong'
             ),
@@ -51,11 +51,12 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+        $services = $this->_getServices();
         foreach ($this->_getSetting('services') as $service) {
             if (!isset($services[$service])) {
                 throw new Vps_Exception('Service not found: ' . $service);
             }
-            $services[$service]['url'] = str_replace('{0}', $_SERVER['SCRIPT_URI']);
+            $services[$service]['url'] = str_replace('{0}', $_SERVER['SCRIPT_URI'], $services[$service]['url']);
             $ret['services'][] = $services[$service];
         }
         return $ret;
