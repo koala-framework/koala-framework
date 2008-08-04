@@ -4,7 +4,7 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
     protected $_form;
     protected $_formName;
     private $_processed = false;
-    private $_errors;
+    protected $_errors = array();
 
     public static function getSettings()
     {
@@ -33,9 +33,8 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
 
         $this->_initForm();
         $this->_form->processInput($_REQUEST);
-        $this->_errors = array();
         if (isset($_REQUEST[$this->getData()->componentId])) {
-            $this->_errors = $this->_form->validate($_REQUEST);
+            $this->_errors = array_merge($this->_errors, $this->_form->validate($_REQUEST));
             if (!$this->_errors) {
                 $this->_form->prepareSave(null, $_REQUEST);
                 $this->_beforeSave($this->_form->getRow());
