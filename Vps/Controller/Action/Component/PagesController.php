@@ -26,6 +26,15 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         parent::init();
     }
 
+    protected function _getTreeWhere($parentRow)
+    {
+        $where = parent::_getTreeWhere($parentRow);
+        if ($parentRow) {
+            $where['type'] = $parentRow->type;
+        }
+        return $where;
+    }
+    
     protected function _formatNode($row)
     {
         $data = parent::_formatNode($row);
@@ -35,19 +44,27 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         if ($row->isHome) {
             $data['bIcon'] = $this->_icons['home']->__toString();
         }
+        $data['type'] = 'default';
         if ($row->componentId == 'root') {
             $data['bIcon'] = $this->_icons['root']->__toString();
+            $data['expanded'] = true;
+            $data['type'] = 'root';
+        }
+        if ($row->getData() instanceof Vps_Component_Data_Category) {
+            $data['bIcon'] = $this->_icons['folder']->__toString();
+            $data['expanded'] = true;
+            $data['type'] = 'category';
         }
         $data['uiProvider'] = 'Vps.Component.PagesNode';
 
         $component = $row->getData();
-        $editComponents = array_merge(
-            array($component), 
-            $component->getChildComponents(
-                array('hasEditComponents' => true), 
-                array('skipRoot' => true, 'page' => false)
-            )
+        $editComponents = $component->getChildComponents(
+            array('hasEditComponents' => true), 
+            array('skipRoot' => true, 'page' => false)
         );
+        if (!$component instanceof Vps_Component_Data_Root) {
+            $editComponents[] = $component; 
+        }
         $data['data']['editComponents'] = array();
         foreach ($editComponents as $cc) {
             if (Vpc_Abstract::hasSetting($cc->componentClass, 'componentName')
@@ -67,9 +84,10 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     public function jsonMakeHomeAction()
     {
         $id = $this->_getParam('id');
-        $row = $this->_table->find($id)->current();
+        $table = $this->_model->getTable();
+        $row = $table->find($id)->current();
         if ($row) {
-            $oldRows = $this->_table->fetchAll("is_home=1 AND id!='$id'");
+            $oldRows = $table->fetchAll("is_home=1 AND id!='$id'");
             $oldId = $id;
             $oldVisible = false;
             foreach ($oldRows as $oldRow) {
@@ -78,14 +96,14 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 $oldRow->is_home = 0;
                 $oldRow->save();
             }
-
+            
             $row->is_home = 1;
             $row->save();
             $this->view->home = $id;
             $this->view->oldhome = $oldId;
             $this->view->oldhomeVisible = $oldVisible;
         } else {
-            $this->view->error = 'Node not found';
+            $this->view->error = 'Page not found';
         }
     }
 

@@ -9,5 +9,11 @@ class Vps_Component_Data_Category extends Vps_Component_Data_Root
         );
         parent::__construct($config);
     }
+    
+    public function getChildComponents($constraints = array())
+    {
+        $constraints['type'] = $this->componentId;
+        return parent::getChildComponents($constraints);
+    }
 }
 ?>

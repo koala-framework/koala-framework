@@ -39,7 +39,9 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
     public static function getChildComponentClass($class, $generator, $key = null)
     {
         $classes = self::getChildComponentClasses($class, $generator);
-        if (!$key) $key = 0;
+        if (!$key) { 
+            $key = array_shift(array_keys($classes));
+        }
         if (!isset($classes[$key])) {
             throw new Vps_Exception("childComponentClass '$key' for generator '$generator' not set for '$class'");
         }

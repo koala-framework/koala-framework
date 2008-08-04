@@ -3,6 +3,10 @@ class Vps_Component_Model implements Vps_Model_Interface
 {
     protected $_rowClass = 'Vps_Component_Model_Row';
     protected $_rowsetClass = 'Vps_Component_Model_Rowset';
+    protected $_constraints = array(
+        'generator' => 'page',
+        'ignoreVisible' => true
+    );
     
     public function createRow(array $data=array()) {
         throw new Vps_Exception('Not implemented yet.');
@@ -11,7 +15,7 @@ class Vps_Component_Model implements Vps_Model_Interface
     public function find($id)
     {
         return new $this->_rowsetClass(array(
-            'data' => array(Vps_Component_Data_Root::getInstance()->getComponentById($id)),
+            'data' => array(Vps_Component_Data_Root::getInstance()->getComponentById($id, $this->_constraints)),
             'rowClass' => $this->_rowClass,
             'model' => $this
         ));
@@ -21,8 +25,12 @@ class Vps_Component_Model implements Vps_Model_Interface
     {
         $root = Vps_Component_Data_Root::getInstance();
         if ($where['parent']) {
-            $page = $root->getComponentById($where['parent'], array('ignoreVisible' => true)); 
-            $rowset = $page->getChildComponents(array('generator' => 'page', 'ignoreVisible' => true));
+            $constraints = $this->_constraints;
+            if (isset($where['type'])) {
+                $constraints['type'] = $where['type'];
+            }
+            $page = $root->getComponentById($where['parent'], $constraints);
+            $rowset = $page->getChildComponents($this->_constraints);
         } else {
             $rowset = array($root);
         }
@@ -33,11 +41,18 @@ class Vps_Component_Model implements Vps_Model_Interface
         ));
     }
     
-    public function fetchCount($where = array()) {
+    public function fetchCount($where = array())
+    {
         throw new Vps_Exception('Not implemented yet.');
     }
     
-    public function getPrimaryKey() {
+    public function getPrimaryKey()
+    {
         return 'componentId';
+    }
+    
+    public function getTable()
+    {
+        return new Vps_Dao_Pages();
     }
 }
