@@ -1,6 +1,7 @@
 <?php
 class Vps_Db_Profiler extends Zend_Db_Profiler
 {
+    private static $_staticCount = 0;
     private $_count = 0;
     private $_lastQuery;
     private $_longestQuery = null;
@@ -56,6 +57,7 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
     
 
         $this->_count++;
+        self::$_staticCount++;
         if ($this->_logger) {
             $this->_logger->info($this->_count.' ----------------------');
             $this->_logger->debug($queryText);
@@ -124,5 +126,10 @@ class Vps_Db_Profiler extends Zend_Db_Profiler
     public function getQueryCount()
     {
         return $this->_count;
+    }
+
+    public static function getCount()
+    {
+        return self::$_staticCount;
     }
 }
