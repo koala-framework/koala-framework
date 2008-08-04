@@ -40,7 +40,11 @@ abstract class Vps_Component_Generator_Abstract
     {
         if (!isset($this->_table)) {
             if (isset($this->_settings['table'])) {
-                $this->_table = new $this->_settings['table'];
+                if (is_string($this->_settings['table'])) {
+                    $this->_table = new $this->_settings['table'];
+                } else {
+                    $this->_table = $this->_settings['table'];
+                }
             } else if ($this->_loadTableFromComponent) {
                 $table = Vpc_Abstract::getSetting($this->_class, 'tablename');
                 if (!$table) {

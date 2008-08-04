@@ -2,6 +2,11 @@
 //empty, aber 0 ist erlaubt
 class Vps_Validate_NotEmpty extends Zend_Validate_NotEmpty
 {
+    public function __construct()
+    {
+        $this->_messageTemplates[self::IS_EMPTY] = trlVps("Value is empty, but a non-empty value is required");
+    }
+
     public function isValid($value)
     {
         $valueString = (string) $value;

@@ -1,9 +1,9 @@
-<div class="vpcUserEdit">
-    <h1>{trlVps text="Lost your password?"}</h1>
+<div class="<?=$this->cssClass?>">
+    <h1><?=trlVps('Lost your password?')?></h1>
     <p>
-        {trlVps text="Please type in your email address in the field below."}<br />
-        {trlVps text="You will receive an email with a passwort reset link and further instructions."}
+        <?=trlVps('Please type in your email address in the field below.')?><br />
+        <?=trlVps('You will receive an email with a passwort reset link and further instructions.')?>
     </p>
 
-    {include file=$component.formTemplate}
+    <?=$this->component($this->form)?>
 </div>

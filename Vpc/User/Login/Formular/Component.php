@@ -1,10 +1,13 @@
 <?php
-class Vpc_User_Login_Component extends Vpc_Abstract_Composite_Component
+class Vpc_User_Login_Formular_Component extends Vpc_Formular_Component
 {
+    protected $_formName = 'Vpc_User_Login_Formular_Form';
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['form'] = 'Vpc_User_Login_Formular_Component';
+        $ret['placeholder']['submitButton'] = trlVps('Login');
+        $ret['generators']['child']['component']['success'] = 'Vpc_User_Login_Formular_Success_Component';
         return $ret;
     }
 
@@ -15,4 +18,5 @@ class Vpc_User_Login_Component extends Vpc_Abstract_Composite_Component
                         ->getComponentByClass('Vpc_User_Register_Component');
         return $ret;
     }
+
 }

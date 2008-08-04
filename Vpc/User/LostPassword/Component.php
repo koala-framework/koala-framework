@@ -1,50 +1,10 @@
 <?php
-class Vpc_User_LostPassword_Component extends Vpc_Formular_Component
+class Vpc_User_LostPassword_Component extends Vpc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = '';
+        $ret['generators']['child']['component']['form'] = 'Vpc_User_LostPassword_Formular_Component';
         return $ret;
-    }
-
-    protected function _init()
-    {
-        parent::_init();
-
-        $fieldSettings = array('name'  => 'email',
-                               'width' => 200);
-        $c = $this->_createFieldComponent('Textbox', $fieldSettings);
-        $c->store('name', 'email');
-        $c->store('fieldLabel', 'Email');
-        $c->store('isMandatory', true);
-
-        $c = $this->_createFieldComponent('Submit', array(
-            'name'=>'sbmt', 'width'=>205, 'text' => trlVps('Request password')
-        ));
-        $c->store('name', 'sbmt');
-        $c->store('fieldLabel', '&nbsp;');
-    }
-
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        $ret['formTemplate'] = Vpc_Admin::getComponentFile('Vpc_Formular_Component', '', 'tpl');
-        return $ret;
-    }
-
-    protected function _processForm()
-    {
-        $values = array();
-        foreach ($this->getChildComponents() as $c) {
-            if ($c instanceof Vpc_Formular_Field_Interface) {
-                $name = $c->getStore('name');
-                if ($name == 'email') {
-                    $values[$name] = $c->getValue();
-                }
-            }
-        }
-
-        Zend_Registry::get('userModel')->lostPassword($values['email']);
     }
 }

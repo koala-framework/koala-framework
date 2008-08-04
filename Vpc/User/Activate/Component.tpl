@@ -1,10 +1,9 @@
-<h1>{trlVps text="Activate Useraccount"}</h1>
-
-{if $component.sent != 3}
+<div class="<?=$this->cssClass?>">
+    <h1><?=trlVps'Activate Useraccount')?></h1>
     <p>
-    	{trlVps text="Plese enter in both fields the password which you want to use for your useraccount"}.<br />
-        {trlVps text="After the activation you are automatically loggid and you could use your account."}
+        <?=trlVps('Plese enter in both fields the password which you want to use for your useraccount')?>.<br />
+        <?=trlVps('After the activation you are automatically logged in and you could use your account.')?>
     </p>
-{/if}
 
-{include file=$component.formTemplate}
+    <?=$this->component($this->form)?>
+</div>

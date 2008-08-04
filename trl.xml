@@ -1793,6 +1793,10 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>d.m.Y</de>
 </text>
 <text>
+<en default="1">Y-m-d H:i</en>
+<de>d.m.Y H:i</de>
+</text>
+<text>
 <en default="1">no selection</en>
 <de>keine Auswahl</de>
 </text>
