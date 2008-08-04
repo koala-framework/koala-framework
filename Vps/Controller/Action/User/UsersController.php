@@ -54,6 +54,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
         $this->_columns->add(new Vps_Grid_Column('firstname', trlVps('First name'), 150));
         $this->_columns->add(new Vps_Grid_Column('lastname', trlVps('Last name'), 150));
 
+        //TODO: sowas nicht mit try-catch lösen
         try {
             new Vpc_Forum_User_Model();
             $this->_columns->add(new Vps_Grid_Column('nickname', trlVps('Forum name'), 150))

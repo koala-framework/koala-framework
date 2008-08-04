@@ -13,13 +13,13 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         parent::_addValidators();
 
         if ($this->getVType() === 'email') {
-            $this->addValidator(new Zend_Validate_EmailAddress());
+            $this->addValidator(new Vps_Validate_EmailAddress());
         } else if ($this->getVType() === 'url') {
             //todo, reuse Zend_Uri::check
         } else if ($this->getVType() === 'alpha') {
-            $this->addValidator(new Zend_Validate_Alpha());
+            $this->addValidator(new Vps_Validate_Alpha());
         } else if ($this->getVType() === 'alphanum') {
-            $this->addValidator(new Zend_Validate_Alnum());
+            $this->addValidator(new Vps_Validate_Alnum());
         }
     }
 

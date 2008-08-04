@@ -21,6 +21,9 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
 
     protected function _initForm()
     {
+        if (!isset($this->_form) && isset($this->_formName)) {
+            $this->_form = new $this->_formName();
+        }
     }
 
     protected function _processForm()
@@ -29,9 +32,6 @@ class Vpc_Formular_Component extends Vpc_Abstract_Composite_Component
         $this->_processed = true;
 
         $this->_initForm();
-        if (!isset($this->_form) && isset($this->_formName)) {
-            $this->_form = new $this->_formName();
-        }
         $this->_form->processInput($_REQUEST);
         $this->_errors = array();
         if (isset($_REQUEST[$this->getData()->componentId])) {

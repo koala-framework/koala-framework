@@ -1,5 +1,5 @@
 <div class="<?=$this->cssClass?>">
     <p>
-        Das Formular wurde erfolgreich übermittelt.
+        <?=$this->placeholder['success']?>
     </p>
 </div>

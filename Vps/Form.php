@@ -57,8 +57,18 @@ class Vps_Form extends Vps_Form_NonTableForm
             $row->$primaryKey = $this->_getIdByParentRow($parentRow);
         }
 
+        if (!$this->getId()) {
+            $this->_beforeInsert($row);
+        }
+        $this->_beforeSave($row);
+
         $row->save();
         parent::save($parentRow, $postData);
+
+        if (!$this->getId()) {
+            $this->_afterInsert($row);
+        }
+        $this->_afterSave($row);
 
         if (!$this->getId()) {
             if (is_array($primaryKey)) {
@@ -165,4 +175,22 @@ class Vps_Form extends Vps_Form_NonTableForm
         }
         return $this->_rows[$key];
     }
+
+
+    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _afterSave(Vps_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _beforeInsert(Vps_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _afterInsert(Vps_Model_Row_Interface $row)
+    {
+    }
+
 }

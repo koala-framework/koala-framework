@@ -90,17 +90,10 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
         if ($this->id) $id = $this->id;
 
         if (!$id) {
-            // create: prüfen ob ohne webcode in DIESEM web schon existent
-            $restClient = new Vps_Rest_Client();
-            $restClient->exists('', $this->_changedServiceData['email']);
-            $restResult = $restClient->get();
-
-            if ($restResult->status()) {
-                if ($this->getTable()->find((int)$restResult->data->id)->current()) {
-                    throw new Vps_ClientException(
-                        trlVps('An account with this email address already exists')
-                    );
-                }
+            if ($this->getTable()->mailExists($this->email)) {
+                throw new Vps_ClientException(
+                    trlVps('An account with this email address already exists')
+                );
             }
         } else {
             // alte email adresse holen um zu prüfen ob sie sich geändert hat
@@ -155,21 +148,21 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
     public function sendActivationMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= trlVps(' - Useraccount created');
+        $subject .= ' - '.trlVps('Useraccount created');
         return $this->_sendMail('UserActivation', $subject);
     }
 
     public function sendLostPasswordMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= trlVps(' - lost password');
+        $subject .= ' - '.trlVps('lost password');
         return $this->_sendMail('UserLostPassword', $subject);
     }
 
     public function sendChangedMailMail($oldMail)
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= trlVps(' - Email changed');
+        $subject .= ' - '.trlVps('Email changed');
         return $this->_sendMail(
             'UserChangedMail',
             $subject,
@@ -180,7 +173,7 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
     public function sendDeletedMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= trlVps(' - Accound deleted');
+        $subject .= ' - '.trlVps('Accound deleted');
         return $this->_sendMail('UserDeleted', $subject);
     }
 
@@ -197,26 +190,10 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
         $mail->fullname = $this->__toString();
         $mail->userData = $this->toArray();
 
-        $activateComponent = null;
-        $config = new Zend_Config_Ini('application/config.ini');
-        if ($config->pagecollection) {
-            $pc = Vps_PageCollection_Abstract::getInstance();
-            $userComponent = $pc->getComponentByParentClass('Vpc_User_Component');
-            if ($userComponent) {
-                $tmpComponents = $pc->getChildPages($userComponent);
-                if ($tmpComponents) {
-                    foreach ($tmpComponents as $tmpComponent) {
-                        if ($tmpComponent instanceof Vpc_User_Activate_Component) {
-                            $activateComponent = $tmpComponent;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
+        $activateComponent = Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass('Vpc_User_Activate_Component');
         if ($activateComponent) {
-            $url = $activateComponent->getUrl();
+            $url = $activateComponent->url;
         } else {
             $url = '/vps/user/login/activate';
         }

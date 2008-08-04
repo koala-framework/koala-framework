@@ -174,7 +174,7 @@ class Vps_Benchmark
                     $fields[] = $k;
                 }
             }
-            $fp = fopen('benchmark', 'a');
+            $fp = fopen('benchmark', $newFile ? 'w' : 'a');
             if ($newFile) {
                 fwrite($fp, implode(';', $fields)."\n");
             }

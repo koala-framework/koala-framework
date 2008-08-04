@@ -90,13 +90,14 @@ class Vps_Model_User_Users extends Vps_Db_Table
         }
     }
 
-    /**
-     * @deprecated fetchRow() direkt verwenden. Vor dem 8.7.2008 wurde hier der
-     *             service gefragt, weils noch keinen web-cache der daten gab
-     */
     public function fetchRowByEmail($email)
     {
         return $this->fetchRow(array('email = ?' => $email));
+    }
+
+    public function mailExists($email)
+    {
+        return (bool)$this->fetchRowByEmail($email);
     }
 
     public function getRowWebcode()

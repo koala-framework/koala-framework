@@ -50,7 +50,7 @@ class Vps_Controller_Action_Cli_VpsTagController extends Vps_Controller_Action_C
             $version .= $max+1;
         }
 
-        if (!preg_match('#^[0-9]+\.[0-9]+\.[0-9]+$#', $version)) {
+        if (!preg_match('#^[0-9]+\.[0-9]+\.[0-9]+-[0-9]*$#', $version)) {
             throw new Vps_ClientException("Invalid version number: '$version'");
         }
         if (in_array($version, $versions)) {

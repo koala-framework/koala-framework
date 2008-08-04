@@ -63,9 +63,10 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getComponentById($componentId, array $constraints = array())
     {
         $ret = $this;
-        if ($componentId != $this->componentId) {
-            $ret = $this;
-            foreach ($this->_getIdParts($componentId) as $idPart) {
+        foreach ($this->_getIdParts($componentId) as $idPart) {
+            if ($idPart == 'root') {
+                $ret = $this;
+            } else {
                 $constraints['id'] = $idPart;
                 $ret = $ret->getChildComponent($constraints);
                 if (!$ret) break;
