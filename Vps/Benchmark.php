@@ -162,7 +162,6 @@ class Vps_Benchmark
             if ($fields) {
                 foreach (array_keys(self::$_counter) as $i) {
                     if (!in_array($i, $fields)) {
-                        d('Baaam'.$i);
                         $newFile = true;
                         $fields = false;
                         break;
@@ -195,6 +194,8 @@ class Vps_Benchmark
                     } else {
                         $out[] = '';
                     }
+                } else if (!isset(self::$_counter[$i])) {
+                    $out[] = 0;
                 } else if (is_array(self::$_counter[$i])) {
                     $out[] = count(self::$_counter[$i]);
                 } else {
