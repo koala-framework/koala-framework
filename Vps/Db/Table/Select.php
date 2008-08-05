@@ -33,4 +33,9 @@ class Vps_Db_Table_Select extends Zend_Db_Table_Select
     {
         return $this->_info['name'];
     }
+
+    public function info()
+    {
+        return $this->_info;
+    }
 }
