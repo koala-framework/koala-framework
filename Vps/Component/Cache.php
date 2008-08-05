@@ -74,10 +74,15 @@ class Vps_Component_Cache extends Zend_Cache_Core {
     {
         if ($componentId) {
             $this->_setCacheDir($componentClass);
-            if (parent::remove($this->getCacheIdFromComponentId($componentId))) {
+            $cacheId = $this->getCacheIdFromComponentId($componentId);
+            if (parent::remove($cacheId)) {
                 Vps_Benchmark::info("Cache für Komponente '$componentClass' mit Id '$componentId' gelöscht.");
                 //p("Cache für Komponente '$componentClass' mit Id '$componentId' gelöscht.");
             }
+            $cacheId = $this->getCacheIdFromComponentId($componentId, true);
+            parent::remove($cacheId);
+            $cacheId = $this->getCacheIdFromComponentId($componentId, false, true);
+            parent::remove($cacheId);
         } else {
             if ($this->rm_recursive($this->_getCacheDir($componentClass))) {
                 Vps_Benchmark::info("Cache für Komponente '$componentClass' gelöscht.");
@@ -123,9 +128,10 @@ class Vps_Component_Cache extends Zend_Cache_Core {
         return true;
     }
     
-    public function getCacheIdFromComponentId($componentId, $isMaster = false)
+    public function getCacheIdFromComponentId($componentId, $isMaster = false, $isHasContent = false)
     {
         if ($isMaster) { $componentId .= '-master'; }
+        if ($isHasContent) { $componentId .= '-hasContent'; }
         return str_replace('-', '__', $componentId);
     }
     

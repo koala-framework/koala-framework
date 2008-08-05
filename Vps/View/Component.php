@@ -11,6 +11,12 @@ class Vps_View_Component extends Vps_View
     {
         return self::renderComponent($component, false, true);
     }
+    
+    private static function _getComponent($componentId, $ignoreVisible)
+    {
+        return Vps_Component_Data_Root::getInstance()
+            ->getComponentById($componentId, array('ignoreVisible' => $ignoreVisible));
+    }
 
     public static function renderComponent($component, $ignoreVisible = false, $isMaster = false, array $plugins = array())
     {
@@ -30,8 +36,7 @@ class Vps_View_Component extends Vps_View
 
         if ($cacheDisabled || ($ret = $cache->load($componentClass, $cacheId))===false) {
             if (!isset($component)) {
-                $component = Vps_Component_Data_Root::getInstance()
-                    ->getComponentById($componentId, array('ignoreVisible' => $ignoreVisible));
+                $component = self::_getComponent($componentId, $ignoreVisible);
             }
             if ($component) {
                 if ($isMaster) {
@@ -61,6 +66,28 @@ class Vps_View_Component extends Vps_View
             $ret = $p->processOutput($ret);
         }
 
+        // content-Tags ersetzen
+        preg_match_all("/{content: ([^ }]+) ([^ }]*)}(.*){content}/imsU", $ret, $matches);
+        foreach ($matches[0] as $key => $search) {
+            $componentId = $matches[2][$key];
+            $componentClass = $matches[1][$key];
+            $content = $matches[3][$key];
+            
+            if (!Zend_Registry::get('config')->debug->componentCache->disable) {
+                $cacheId = $cache->getCacheIdFromComponentId($componentId, false, true);
+                $cachedContent = $cache->load($componentClass, $cacheId);
+                if ($cachedContent === false) {
+                    $component = self::_getComponent($componentId, $ignoreVisible);
+                    $cachedContent = $component->hasContent() ? $content : '';
+                    $cache->save($cachedContent, $componentClass, $cacheId);
+                }
+            } else {
+                $component = self::_getComponent($componentId, $ignoreVisible);
+                $cachedContent = $component->hasContent() ? $content : '';
+            }
+            $ret = str_replace($search, $cachedContent, $ret);
+        }
+        
         // nocache-Tags ersetzen
         preg_match_all('/{nocache: ([^ }]+) ([^ }]*) ?([^}]*)}/', $ret, $matches);
         foreach ($matches[0] as $key => $search) {
