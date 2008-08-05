@@ -1,7 +1,7 @@
 <?php
 require_once 'tcpdf.php';
 
-abstract class Vps_Grid_Pdf_Abstract extends TCPDF
+abstract class Vps_Grid_Pdf_Abstract extends Vps_Pdf_TcPdf
 {
 
     protected $_fields = array();
