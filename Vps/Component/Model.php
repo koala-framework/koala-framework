@@ -26,11 +26,20 @@ class Vps_Component_Model implements Vps_Model_Interface
         $root = Vps_Component_Data_Root::getInstance();
         if ($where['parent']) {
             $constraints = $this->_constraints;
-            if (isset($where['type'])) {
-                $constraints['type'] = $where['type'];
+            if ($where['parent'] == 'root') {
+                $rowset = array();
+                foreach (Zend_Registry::get('config')->vpc->pageTypes->toArray() as $id => $name) {
+                    $id = 'root-' . $id;
+                    $rowset[] = new Vps_Component_Data_Category($id, $name);
+                }
+            } else {
+                if (substr($where['parent'], 0, 5) == 'root-') {
+                    $constraints['type'] = substr($where['parent'], 5);
+                    $where['parent'] = 'root';
+                }
+                $page = $root->getComponentById($where['parent'], $this->_constraints);
+                $rowset = $page->getChildComponents($constraints);
             }
-            $page = $root->getComponentById($where['parent'], $constraints);
-            $rowset = $page->getChildComponents($this->_constraints);
         } else {
             $rowset = array($root);
         }
