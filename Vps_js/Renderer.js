@@ -43,6 +43,11 @@ Ext.util.Format.nl2Br = function(v) {
     return v.replace(/\n/g, "<br />");
 };
 
+Ext.util.Format.AutoNl2Br = function(v) {
+	//span wird in v gesetzt, da er sonst wieder überschrieben wird
+    return "<span class=\'vps-renderer-linebreak\'>"+v.replace(/\n/g, "<br />")+"</span>";
+};
+
 Ext.util.Format.component = function(v, f) {
     f.css += 'content';
     f.attr += 'style="overflow: visible; white-space: normal;"';
@@ -51,7 +56,7 @@ Ext.util.Format.component = function(v, f) {
 
 //date-funktion überschreiben, damit Y-m-d als eingabeformat verwendet werden kann
 Ext.util.Format.date = function(v, format) {
-    if(!v){
+	if(!v){
         return '';
     }
     if(!(v instanceof Date)){
@@ -66,6 +71,7 @@ Ext.util.Format.date = function(v, format) {
     }
     return v.dateFormat(format || trlVps('Y-m-d'));
 };
+
 
 Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer(trlVps('Y-m-d'));
 Ext.util.Format.germanDate = Ext.util.Format.dateRenderer('d.m.Y');

@@ -6,6 +6,7 @@ class Vps_Grid_Column_Date extends Vps_Grid_Column
         parent::__construct($dataIndex, $header, $width);
         $this->setType('date');
         $this->setRenderer('localizedDate');
+        $this->setDateFormat('Y-m-d');
     }
 
     public function load($row, $role)

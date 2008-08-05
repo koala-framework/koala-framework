@@ -13,7 +13,7 @@ class Vps_Controller_Action_User_MailsController extends Vps_Controller_Action_A
     {
         parent::_initColumns();
         if (Zend_Registry::get('userModel')->getAuthedUserRole() == 'admin') {
-            $this->_buttons = array('add', 'delete');
+            $this->_buttons = array('add' => true, 'delete' => true);
         }
 
         $this->_columns->add(new Vps_Grid_Column('name', 'Name', 400));

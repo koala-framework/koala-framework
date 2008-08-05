@@ -57,7 +57,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
                 $this->_setParam($param, $filter['default']);
             }
         }
-        
+
         $addColumns = array();
         if (is_array($this->_columns)) $addColumns = $this->_columns;
         $this->_columns = new Vps_Collection();
@@ -235,8 +235,8 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $order = $this->_getOrder($order);
 
         $where = $this->_getWhere();
-
         //wenn getWhere null zurückliefert nichts laden
+
         if (is_null($where)) return null;
         return $this->_model->fetchAll($where, $order, $limit, $start);
     }
@@ -544,7 +544,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             if (!$this->_hasPermissions($row, 'duplicate')) {
                 throw new Vps_Exception("You don't have the permissions to duplicate this row.");
             }
-            $new = $row->duplicate();
+            $new = $row->getRow()->duplicate();
             $this->view->data['duplicatedIds'][] = $new->{$this->_primaryKey};
         }
         Zend_Registry::get('db')->commit();
