@@ -3,6 +3,14 @@ Ext.namespace('Vps.Menu');
 Vps.Menu.Index = Ext.extend(Ext.Toolbar,
 {
     controllerUrl: '/vps/user/menu',
+	changeUserTpl: ['<tpl for=".">',
+                        '<div class="x-combo-list-item">',
+                            '<h3>{lastname} {firstname}</h3>',
+                            '{email} <span style="color: #777;">({role})</span>',
+                        '</div>',
+                      '</tpl>'],
+    tplDataControllerUrl: '/vps/user/changeUser/json-data',
+
     initComponent : function()
     {
         this.addEvents(
@@ -115,7 +123,7 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
         if (result.changeUser) {
             var changeUser = new Vps.Form.ComboBox({
                 store: {
-                    url: '/vps/user/changeUser/json-data'
+                    url: this.tplDataControllerUrl
                 },
                 mode: 'remote',
                 editable: true,
@@ -126,12 +134,8 @@ Vps.Menu.Index = Ext.extend(Ext.Toolbar,
                 maxHeight: 350,
                 listWidth: 280,
                 tpl: new Ext.XTemplate(
-                      '<tpl for=".">',
-                        '<div class="x-combo-list-item">',
-                            '<h3>{lastname} {firstname}</h3>',
-                            '{email} <span style="color: #777;">({role})</span>',
-                        '</div>',
-                      '</tpl>')
+				        this.changeUserTpl
+                      )
             });
             changeUser.on('render', function(combo) {
                 combo.setRawValue(result.fullname);

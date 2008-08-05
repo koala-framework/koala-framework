@@ -1,2 +1,6 @@
 .vps-renderer-euro-money .x-grid3-cell-inner { text-align: right; }
 .vps-renderer-bright { color: #888888; }
+.vps-renderer-linebreak {
+    overflow:visible;
+	white-space: normal;
+}
