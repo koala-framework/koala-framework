@@ -50,7 +50,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     {
         $ret = parent::validate($postData);
 
-        if ($this->getSave() !== false) {
+        if ($this->getSave() !== false && $this->getInternalSave() !== false) {
             $data = $this->_getValueFromPostData($postData);
             if ($data) {
                 $t = new Vps_Dao_File();
@@ -62,6 +62,21 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
                 }
             }
         }
+        return $ret;
+    }
+    public function getTemplateVars($values)
+    {
+        $name = $this->getFieldName();
+        if (isset($values[$name])) {
+            $value = $values[$name];
+        } else {
+            $value = $this->getDefaultValue();
+        }
+        $ret = parent::getTemplateVars($values);
+
+        $value = htmlspecialchars($value);
+        $name = htmlspecialchars($name);
+        $ret['html'] = "<input type=\"file\" id=\"$name\" name=\"$name\" value=\"$value\" style=\"width: {$this->getWidth()}px\" />";
         return $ret;
     }
 }

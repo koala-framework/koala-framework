@@ -43,7 +43,8 @@ class Vpc_Advanced_SocialBookmarks_Component extends Vpc_Abstract
             )
         );
         foreach ($ret as $key => &$r) {
-            $ret[$key]['icon'] = "/assets/vps/images/socialbookmarks/$key.gif";
+            $ext = $key=='wong' ? 'png' : 'gif';
+            $r['icon'] = "/assets/vps/images/socialbookmarks/$key.$ext";
         }
         return $ret;
     }

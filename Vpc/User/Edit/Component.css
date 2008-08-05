@@ -1,0 +1,5 @@
+div.vpcUserEdit label {
+    float: left; text-align: right;
+    margin-right: 20px; width: 150px;
+}
+div.vpcUserEdit .showField { font-weight: bold; margin-bottom: 9px; }

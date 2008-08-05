@@ -175,7 +175,8 @@ class Vps_Setup
             require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enable();
-        } else if (Zend_Registry::get('config')->debug->benchmarkLog) {
+        }
+        if (Zend_Registry::get('config')->debug->benchmarkLog) {
             require_once 'Vps/Benchmark.php';
             //vor registerAutoload aufrufen damit wir dort benchmarken können
             Vps_Benchmark::enableLog();
@@ -313,6 +314,7 @@ class Vps_Setup
         $view = new Vps_View();
         $view->requestUri = $_SERVER['REDIRECT_URL'];
         echo $view->render('error404.tpl');
+        Vps_Benchmark::shutDown();
         exit;
 
     }
@@ -335,12 +337,14 @@ class Vps_Setup
             $root->setCurrentPage($data);
             if ($data->url != $requestUrl) {
                 header('Location: '.$data->url);
+                Vps_Benchmark::shutDown();
                 exit;
             }
             $page = $data->getComponent();
             $page->sendContent($page);
 
             Vps_Benchmark::output();
+            Vps_Benchmark::shutDown();
 
             exit;
         }

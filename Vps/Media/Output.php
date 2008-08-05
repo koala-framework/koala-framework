@@ -24,6 +24,7 @@ class Vps_Media_Output
             }
         }
         echo $data['contents'];
+        Vps_Benchmark::shutDown();
         exit;
     }
 

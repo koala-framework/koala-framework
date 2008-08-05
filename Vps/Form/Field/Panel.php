@@ -7,4 +7,12 @@ class Vps_Form_Field_Panel extends Vps_Form_Container_Abstract
         $this->setXtype('panel');
         $this->setBaseCls('x-plain');
     }
+    public function getTemplateVars($values)
+    {
+        $ret = parent::getTemplateVars($values);
+        if ($this->getHtml()) {
+            $ret['html'] = $this->getHtml();
+        }
+        return $ret;
+    }
 }

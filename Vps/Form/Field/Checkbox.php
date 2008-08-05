@@ -11,15 +11,18 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
     {
         $name = $this->getFieldName();
         if (isset($values[$name])) {
-            $value = $values[$name];
+            $value = true;
         } else {
             $value = $this->getDefaultValue();
         }
         $ret = parent::getTemplateVars($values);
         //todo: escapen
         $ret['html'] = "<input type=\"checkbox\" id=\"$name\" name=\"$name\" ";
-        if ($value) 'checked="checked" ';
+        if ($value) $ret['html'] .= 'checked="checked" ';
         $ret['html'] .= "/>";
+        if ($this->getBoxLabel()) {
+            $ret['html'] .= ' '.$this->getBoxLabel();
+        }
         return $ret;
     }
 
