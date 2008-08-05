@@ -1,0 +1,98 @@
+<?php
+class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
+{
+    protected $_form;
+    private $_processed = false;
+    protected $_errors = array();
+
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['generators']['child']['component']['success'] = 'Vpc_Form_Success_Component';
+        $ret['componentName'] = trlVps('Formular');
+        $ret['placeholder']['submitButton'] = trlVps('Submit');
+        $ret['placeholder']['error'] = trlVps('An error has occurred');
+        $ret['decorator'] = 'Vpc_Form_Decorator_Label';
+        $ret['viewCache'] = false;
+        $ret['method'] = 'post';
+        return $ret;
+    }
+
+    protected function _initForm()
+    {
+        if (!isset($this->_form)) {
+            $this->_form = Vpc_Abstract_Form::createComponentForm(get_class($this));
+        }
+    }
+
+    protected function _processForm()
+    {
+        if ($this->_processed) return;
+        $this->_processed = true;
+
+        $this->_initForm();
+        $this->_form->processInput($_REQUEST);
+        if (isset($_REQUEST[$this->getData()->componentId])) {
+            $this->_errors = array_merge($this->_errors, $this->_form->validate($_REQUEST));
+            if (!$this->_errors) {
+                $this->_form->prepareSave(null, $_REQUEST);
+                $this->_beforeSave($this->_form->getRow());
+                $this->_form->save(null, $_REQUEST);
+                $this->_afterSave($this->_form->getRow());
+            }
+        }
+    }
+
+    public function getErrors()
+    {
+        $this->_processForm();
+        return $this->_errors;
+    }
+
+    public function getFormRow()
+    {
+        $this->_processForm();
+        return $this->_form->getRow();
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+
+        $this->_processForm();
+
+        $class = self::getChildComponentClass(get_class($this), 'child', 'success');
+
+        $ret['showSuccess'] = false;
+        $ret['errors'] = $this->getErrors();
+        if (isset($_POST[$this->getData()->componentId])) {
+            if (!$ret['errors'] && $class) {
+                $ret['showSuccess'] = true;
+            }
+        }
+
+        $values = array_merge($this->_form->load(null), $_REQUEST);
+        $ret['form'] = $this->_form->getTemplateVars($values);
+
+        $dec = $this->_getSetting('decorator');
+        if ($dec && is_string($dec)) {
+            $dec = new $dec();
+            $ret['form'] = $dec->processItem($ret['form']);
+        }
+
+        $ret['formName'] = $this->getData()->componentId;
+
+        $ret['action'] = $this->getData()->url;
+        $ret['method'] = $this->_getSetting('method');
+
+        return $ret;
+    }
+
+    protected function _afterSave(Vps_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    {
+    }
+}

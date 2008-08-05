@@ -77,11 +77,11 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract imple
         return $this->fields->getIterator();
     }
 
-    public function setSave($v)
+    public function setInternalSave($v)
     {
         $this->setProperty('save', $v);
         foreach ($this as $f) {
-            $f->setSave($v);
+            $f->setInternalSave($v);
         }
     }
 
@@ -109,7 +109,7 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract imple
     public function save($parentRow, $postData)
     {
         //wenn form zB in einem CardLayout liegt und deaktivert wurde nicht speichern
-        if ($this->getSave() === false) return array();
+        if ($this->getSave() === false || $this->getInternalSave() === false) return array();
 
         $row = $this->_getRowByParentRow($parentRow);
         parent::save($row, $postData);

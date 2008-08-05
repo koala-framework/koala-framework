@@ -4,7 +4,7 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
     public function load($row)
     {
         $ret = array();
-        if ($this->getSave() !== false) {
+        if ($this->getSave() !== false && $this->getInternalSave() !== false) {
             $ret[$this->getFieldName()] = $this->getData()->load($row);
         }
         return array_merge($ret, parent::load($row));
@@ -19,7 +19,7 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
     {
         $ret = parent::validate($postData);
 
-        if ($this->getSave() !== false) {
+        if ($this->getInternalSave() !== false) {
 
             $data = $this->_getValueFromPostData($postData);
 
@@ -48,7 +48,7 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
     {
         parent::prepareSave($row, $postData);
 
-        if ($this->getSave() !== false) {
+        if ($this->getSave() !== false && $this->getInternalSave() !== false) {
             $data = $this->_getValueFromPostData($postData);
             $this->getData()->save($row, $data);
         }

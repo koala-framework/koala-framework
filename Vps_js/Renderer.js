@@ -39,9 +39,8 @@ Ext.util.Format.showField = function(fieldName) {
     };
 };
 
-Ext.util.Format.nl2Br = function(v) {
-    return v.replace(/\n/g, "<br />");
-};
+//eigene implementation durch ext eigene ersetzt
+Ext.util.Format.nl2Br = Ext.util.Format.nl2br;
 
 Ext.util.Format.AutoNl2Br = function(v) {
 	//span wird in v gesetzt, da er sonst wieder überschrieben wird

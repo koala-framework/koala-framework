@@ -44,8 +44,10 @@ class Vpc_Table extends Vps_Db_Table
     }
     public function createRow(array $data = array())
     {
-        $defaultValues = Vpc_Abstract::getSetting($this->_componentClass, 'default');
-        if (is_array($defaultValues)) {
+        if (Vpc_Abstract::hasSetting($this->_componentClass, 'default')) {
+            $defaultValues = Vpc_Abstract::getSetting($this->_componentClass, 'default');
+        }
+        if (isset($defaultValues) && is_array($defaultValues)) {
             $data = array_merge($defaultValues, $data);
         }
         return parent::createRow($data);

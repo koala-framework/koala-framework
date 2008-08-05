@@ -174,7 +174,11 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         $ret = array();
 
         $this->_addValidators();
-        $postData = $postData[$this->getFieldName()];
+        if (!isset($postData[$this->getFieldName()])) {
+            $postData = array();
+        } else {
+            $postData = $postData[$this->getFieldName()];
+        }
         if (is_string($postData)) { $postData = Zend_Json::decode($postData); }
 
         $cnt = count($postData);
@@ -241,6 +245,33 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
                 $field->save($r, $rowPostData);
             }
         }
+    }
 
+    public function getTemplateVars($values)
+    {
+//WORK IN PROGRESS
+        $ret = parent::getTemplateVars($values);
+        $name = $this->getFieldName();
+        if (isset($values[$name])) {
+            $value = $values[$name];
+        } else {
+            $value = $this->getDefaultValue();
+        }
+        $ret = parent::getTemplateVars($values);
+        $ret['preHtml'] = '<input type="hidden" name="'.$name.'" value="'.'TODO'.'" />';
+        $ret['postHtml'] = '<button type="submit" name="'.$name.'_add">add</button>';
+
+
+        if (!isset($postData[$this->getFieldName()])) {
+            $postData = array();
+        } else {
+            $postData = $postData[$this->getFieldName()];
+        }
+        if (is_string($postData)) { $postData = Zend_Json::decode($postData); }
+
+
+
+        $ret['items'] = $this->fields->getTemplateVars($values);
+        return $ret;
     }
 }

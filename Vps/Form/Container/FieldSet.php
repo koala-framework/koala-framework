@@ -26,7 +26,7 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
             if (!isset($postData[$n]) || !$postData[$n]) {
                 foreach ($this->fields as $f) {
                     if ($f != $this->_checkboxHiddenField) {
-                        $f->setSave(false);
+                        $f->setInternalSave(false);
                     }
                 }
             }
