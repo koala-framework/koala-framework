@@ -20,7 +20,7 @@ class Vps_Pdf_TcPdf extends TCPDF
 
     public function Output ($name='',$dest='')
     {
-        if ($dest == 'I' || $dest == 'D') {
+        if ($dest == 'I' || $dest == 'D' || (!$dest && !$name)) {
             header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
             header('Last-Modified: ' . gmdate("D, d M Y H:i:s \G\M\T", time() - 60*60*24));
             header('Accept-Ranges: none');
