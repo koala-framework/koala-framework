@@ -42,7 +42,8 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
                 $currentPageIds[] = $page->getComponentId();
             }
         }
-        foreach ($ret as $i=>$r) {
+        $i = 0;
+        foreach ($ret as $r) {
             $class = array();
             if ($i == 0) { $class[] = 'first'; }
             if ($i == count($ret)-1) { $class[] = 'last'; }
@@ -51,6 +52,7 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
                 $r->current = true;
             }
             $r->class = implode(' ', $class);
+            $i++;
         }
         return $ret;
     }
