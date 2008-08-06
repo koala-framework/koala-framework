@@ -44,7 +44,7 @@ Ext.util.Format.nl2Br = Ext.util.Format.nl2br;
 
 Ext.util.Format.AutoNl2Br = function(v) {
 	//span wird in v gesetzt, da er sonst wieder überschrieben wird
-    return "<span class=\'vps-renderer-linebreak\'>"+v.replace(/\n/g, "<br />")+"</span>";
+    return "<span class=\'vps-renderer-linebreak\'>"+Ext.util.Format.nl2Br(v)+"</span>";
 };
 
 Ext.util.Format.component = function(v, f) {

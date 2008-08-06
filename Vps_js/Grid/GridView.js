@@ -13,3 +13,15 @@ Ext.grid.GridView.prototype.getColumnStyle = function(col, isHeader){
     }
     return style;
 };
+
+//Workaround für Bug beschrieben hier:
+//http://extjs.com/forum/showthread.php?p=205062#post205062
+//!!!! entfernen wenn in ext behoben
+Ext.grid.GridView.prototype.afterRender = function(){
+    this.mainBody.dom.innerHTML = this.renderBody();
+    this.processRows(0, true);
+
+    if(this.deferEmptyText !== true){
+        this.applyEmptyText();
+    }
+};
