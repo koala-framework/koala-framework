@@ -2,7 +2,7 @@
 class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Auto_Form
 {
     protected $_permissions = array('save', 'add');
-    protected $_userDataFormName = 'Vpc_User_Edit_Formular_Form';
+    protected $_userDataFormName = 'Vpc_User_Edit_Form_Form';
 
     protected function _initFields()
     {
@@ -64,11 +64,13 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
             $addRoles[$role->getParentRoleId()][$role->getRoleId()] = $role->getRoleName();
         }
 
+
         // Wenns keine additionalRoles gibt, normales select verwenden
         if (!$addRoles) {
-            $ret = new Vps_Form_Field_Select('role', trlVps('Rights'))
-                ->setValues($roles)
-                ->setAllowBlank(false);
+                $ret = new Vps_Form_Field_Select('role', trlVps('Rights'));
+                $ret->setValues($roles)->setAllowBlank(false);
+
+
         } else {
             // eigene additionalRoles holen, nur die dürfen zugewiesen werden
             $allowedRoles = array_merge(
@@ -77,8 +79,8 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
             );
 
             // cards container erstellen und zu form hinzufügen
-            $ret = new Vps_Form_Container_Cards('role', trlVps('Rights'))
-                ->setAllowBlank(false);
+            $ret = new Vps_Form_Container_Cards('role', trlVps('Rights'));
+            $ret->setAllowBlank(false);
             foreach ($roles as $roleId => $roleName) {
                 $card = $ret->add();
                 $card->setTitle($roleName);
