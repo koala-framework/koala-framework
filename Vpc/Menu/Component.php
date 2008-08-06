@@ -27,4 +27,13 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
         $ret['separator'] = $this->_getSetting('separator');
         return $ret;
     }
+    public function hasContent()
+    {
+        if (count($this->_getMenuData())) return true;
+        $sub = $this->getData()->getChildComponent('-subMenu');
+        if ($sub && $sub->getComponent()->hasContent()) {
+            return true;
+        }
+        return false;
+    }
 }
