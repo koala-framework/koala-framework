@@ -39,14 +39,17 @@ Ext.util.Format.showField = function(fieldName) {
     };
 };
 
-//eigene implementation durch ext eigene ersetzt
-//wieder alte version
-Ext.util.Format.nl2Br = function(v) {
-    return v.replace(/\n/g, "<br />");
-};
+if (Ext.util.Format.nl2br) {
+    //ab ext 2.2, hat aber anderen namen
+    Ext.util.Format.nl2Br = Ext.util.Format.nl2br;
+} else {
+    Ext.util.Format.nl2Br = function(v) {
+        return v.replace(/\n/g, "<br />");
+    };
+}
 
 Ext.util.Format.AutoNl2Br = function(v) {
-	//span wird in v gesetzt, da er sonst wieder überschrieben wird
+    //span wird in v gesetzt, da er sonst wieder überschrieben wird
     return "<span class=\'vps-renderer-linebreak\'>"+Ext.util.Format.nl2Br(v)+"</span>";
 };
 
