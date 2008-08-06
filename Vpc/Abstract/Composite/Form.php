@@ -6,6 +6,7 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
         parent::_initFields();
         $classes = Vpc_Abstract::getChildComponentClasses($this->getClass(), 'child');
         foreach ($classes as $key => $class) {
+            if (!$class) continue;
             $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), "-$key");
             if ($form) {
                 $name = Vpc_Abstract::getSetting($class, 'componentName');
