@@ -9,6 +9,11 @@ class Vps_Db_Profiler_Count extends Zend_Db_Profiler
         $this->_count++;
         return null;
     }
+
+    public function queryEnd($queryId)
+    {
+    }
+
     public function getQueryCount()
     {
         return $this->_count;
