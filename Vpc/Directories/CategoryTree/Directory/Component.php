@@ -10,8 +10,6 @@ class Vpc_Directories_CategoryTree_Directory_Component extends Vpc_Directories_C
 
         $ret['categoryToItemTableName'] = null;
 
-        $ret['order'] = 'pos ASC';
-
         return $ret;
     }
 
