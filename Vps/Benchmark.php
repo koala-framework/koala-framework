@@ -4,7 +4,7 @@ class Vps_Benchmark
     private static $_startTime;
     private static $_enabled = false;
     private static $_logEnabled = false;
-    private static $_counter;
+    private static $_counter = array();
 
     private $_start;
     private $_stop;
