@@ -1,5 +1,5 @@
 <?php
-class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
+class Vpc_News_Directory_Admin extends Vpc_Directories_ItemPage_Directory_Admin
 {
     public function getExtConfig()
     {
