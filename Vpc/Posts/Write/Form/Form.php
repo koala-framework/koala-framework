@@ -10,4 +10,9 @@ class Vpc_Posts_Write_Form_Form extends Vps_Form
             ->setHtml(trlVps('Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.'));
     }
 
+    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    {
+        parent::_beforeSave($row);
+    }
+
 }

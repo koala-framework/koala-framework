@@ -13,4 +13,9 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
         parent::_initForm();
         $this->_form->setTable($this->getData()->parent->parent->getComponent()->getTable());
     }
+
+    protected function _beforeSave(Vps_Model_Row_Interface $row)
+    {
+        $row->component_id = $this->getData()->parent->parent->componentId;
+    }
 }

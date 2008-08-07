@@ -34,7 +34,7 @@ class Vpc_Forum_Group_Component extends Vpc_Abstract_Composite_Component
         $this->getData()->getChildComponent('-paging')->getComponent()
                                             ->limitSelect($select);
         $ret['threads'] = $this->getData()->getChildComponents($select);
-        $ret['newThread'] = $this->getData()->getChildComponent('-newThread');
+        $ret['newThread'] = $this->getData()->getChildComponent('_newThread');
 /*
         $ret['newThreadUrl'] = $this->getPageFactory()
                                     ->getChildPageById('newthread')->getUrl();
