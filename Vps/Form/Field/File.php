@@ -76,6 +76,14 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     public function processInput($postData)
     {
         $postData = parent::processInput($postData);
+
+        if (isset($postData[$this->getFieldName().'_upload_id'])
+            && !isset($postData[$this->getFieldName()])
+        ) {
+            $postData[$this->getFieldName()] = $postData[$this->getFieldName().'_upload_id'];
+            unset($postData[$this->getFieldName().'_upload_id']);
+        }
+
         if (isset($postData[$this->getFieldName()])
             && is_array($postData[$this->getFieldName()])
             && isset($postData[$this->getFieldName()]['tmp_name'])
@@ -112,8 +120,13 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         $ret['html'] = "<input type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
                         " style=\"width: {$this->getWidth()}px\" />";
         if ($value) {
+            $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
+                        " value=\"$value[uploadId]\" />";
             $ret['html'] .= '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">del</button>';
             $ret['html'] .= ''.$value['filename'].'.'.$value['extension'];
+            $helper = new Vps_View_Helper_FileSize();
+            $ret['html'] .= ' ('.$helper->fileSize($value['fileSize']).')';
+            $ret['html'] .= ' <img src="/vps/media/upload/preview?uploadId='.$value['uploadId'].'" />';
         }
         return $ret;
     }

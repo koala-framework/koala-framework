@@ -26,7 +26,7 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
 
     public function previewAction()
     {
-        //TODO: mit hash absichern?
+        //TODO: mit hash absichern!!!
         $t = new Vps_Dao_File();
         $fileRow = $t->find($this->_getParam('uploadId'))->current();
         if (!$fileRow) throw new Vps_Exception("Can't find upload");
