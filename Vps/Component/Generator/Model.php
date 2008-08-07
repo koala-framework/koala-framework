@@ -9,24 +9,28 @@ class Vps_Component_Generator_Model extends Vps_Model_Abstract
     public function fetchAll($where=null, $order=null, $limit=null, $start=null)
     {
         $rowset = array();
-        if (!$where['parent']) {
+        if (!$where['parent'] || $where['parent'] === '0') {
             $rowset[] = array(
-                'component' => $this->_default,
+                'component' => Vps_Registry::get('config')->vpc->rootComponent,
                 'class' => 'root'
             );
         } else {
-            foreach (Vpc_Abstract::getSetting($where['parent'], 'generators', false) as $generator) {
+            foreach (Vpc_Abstract::getSetting($where['parent'], 'generators', false) as $key => $generator) {
                 if (is_array($generator['component'])) {
                     foreach ($generator['component'] as $component => $class) {
-                        $rowset[] = array(
-                            'component' => $class,
-                            'class' => $generator['class']
-                        );
+                        if ($class) {
+                            $rowset[] = array(
+                                'component' => $class,
+                                'class' => $generator['class'],
+                                'name' => $component
+                            );
+                        }
                     }
-                } else {
+                } else if ($generator['class']) {
                     $rowset[] = array(
                         'component' => $generator['component'],
-                        'class' => $generator['class']
+                        'class' => $generator['class'],
+                        'name' => $key
                     );
                 }
             }
