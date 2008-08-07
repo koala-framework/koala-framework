@@ -121,16 +121,16 @@ abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract imple
         parent::delete($row);
     }
 
-    public function load($parentRow)
+    public function load($parentRow, $postData = array())
     {
         $row = (object)$this->_getRowByParentRow($parentRow);
-        return parent::load($row);
+        return parent::load($row, $postData);
     }
 
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $fieldNamePostfix='')
     {
-        $ret = parent::getTemplateVars($values);
-        $ret['items'] = $this->fields->getTemplateVars($values);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
+        $ret['items'] = $this->fields->getTemplateVars($values, $fieldNamePostfix);
         return $ret;
     }
 }

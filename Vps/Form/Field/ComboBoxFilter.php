@@ -58,7 +58,7 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
     */
     public function processInput($postData)
     {
-        parent::processInput($postData);
+        $postData = parent::processInput($postData);
         if (!$this->getFilteredCombo()) {
             throw new Vps_Exception("No filteredCombo set");
         }
@@ -67,11 +67,12 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
             $filtered = $this->getFilteredCombo();
             $filtered->setFilterValue($value);
         }
+        return $postData;
     }
 
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $fieldNamePostfix = '')
     {
-        $ret = parent::getTemplateVars($values);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
 
         //TODO: Wenn wir mal Ext-Forms im Frontend haben das hier entfernen
         $onclick = "onchange=\"this.form.submit();\"";

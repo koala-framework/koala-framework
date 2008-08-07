@@ -27,7 +27,7 @@ class Vps_Form_Field_DateField extends Vps_Form_Field_SimpleAbstract
         return $ret;
     }
 
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();
         if (isset($values[$name])) {
@@ -36,11 +36,12 @@ class Vps_Form_Field_DateField extends Vps_Form_Field_SimpleAbstract
             $value = $this->getDefaultValue();
         }
         if (!$value) $value = trlVps('yyyy-mm-dd');
-        $ret = parent::getTemplateVars($values);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
 
         $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);
-        $ret['html'] = "<input type=\"text\" id=\"$name\" name=\"$name\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
+        $ret['id'] = $name.$fieldNamePostfix;
+        $ret['html'] = "<input type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
         return $ret;
     }
 }

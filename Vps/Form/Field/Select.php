@@ -12,9 +12,9 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         $this->setTriggerAction('all');
     }
 
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $fieldNamePostfix = '')
     {
-        $ret = parent::getTemplateVars($values);
+        $ret = parent::getTemplateVars($values, $fieldNamePostfix);
 
         $name = $this->getFieldName();
         if (isset($values[$name])) {
@@ -23,7 +23,8 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
             $value = '';
         }
         //todo: escapen
-        $ret['html'] = "<select id=\"$name\" name=\"$name\">";
+        $ret['id'] = $name.$fieldNamePostfix;
+        $ret['html'] = "<select id=\"$ret[id]\" name=\"$name$fieldNamePostfix\">";
         //todo: andere values varianten ermöglichen
         //todo: html wählt ersten wert vor-aus - ext galub ich nicht
         //      => sollte sich gleich verhalten.

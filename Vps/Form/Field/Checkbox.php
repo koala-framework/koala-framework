@@ -7,7 +7,7 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
         $this->setXtype('checkbox');
     }
 
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();
         if (isset($values[$name])) {
@@ -17,7 +17,8 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
         }
         $ret = parent::getTemplateVars($values);
         //todo: escapen
-        $ret['html'] = "<input type=\"checkbox\" id=\"$name\" name=\"$name\" ";
+        $ret['id'] = $name.$fieldNamePostfix;
+        $ret['html'] = "<input type=\"checkbox\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" ";
         if ($value) $ret['html'] .= 'checked="checked" ';
         $ret['html'] .= "/>";
         if ($this->getBoxLabel()) {

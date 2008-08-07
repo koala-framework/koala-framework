@@ -98,22 +98,53 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         }
         return $rows;
     }
-    public function load(Vps_Model_Row_Interface $row)
+    public function load(Vps_Model_Row_Interface $row, $postData = array())
     {
+        if (isset($postData[$this->getFieldName()])) {
+            $postData = $postData[$this->getFieldName()];
+        } else {
+            $postData = false;
+        }
+
         if (!$row) return array();
         $ret = array($this->getFieldName()=>array());
 
         $rows = $this->_getRowsByRow($row);
 
-        $pos = array();
-        foreach ($rows as $r) {
-            $retRow = array();
-            foreach ($this->fields as $field) {
-                $retRow = array_merge($retRow, $field->load($r));
+        if ($postData!==false) {
+            $pos = array();
+            $rowsArray = array();
+            foreach ($rows as $r) {
+                $rowsArray[] = $r;
             }
-            $ret[$this->getFieldName()][] = $retRow;
-            if (isset($r->pos)) {
-                $pos[] = $r->pos;
+            foreach ($postData as $i=>$rPostData) {
+                $retRow = array();
+                if (isset($rowsArray[$i]) && (!isset($rPostData['isNewRow']) || !$rPostData['isNewRow'])) {
+                    $r = $rowsArray[$i];
+                } else {
+                    $r = $this->_model->createRow();
+                }
+                $rPostData = $postData[$i];
+                foreach ($this->fields as $field) {
+                    $retRow = array_merge($retRow, $field->load($r, $rPostData));
+                }
+                $ret[$this->getFieldName()][] = $retRow;
+                if (isset($r->pos)) {
+                        //funktioniert ned gscheit mit hinzufügen im frontend
+//                     $pos[] = $r->pos;
+                }
+            }
+        } else {
+            $pos = array();
+            foreach ($rows as $i=>$r) {
+                $retRow = array();
+                foreach ($this->fields as $field) {
+                    $retRow = array_merge($retRow, $field->load($r));
+                }
+                $ret[$this->getFieldName()][] = $retRow;
+                if (isset($r->pos)) {
+                    $pos[] = $r->pos;
+                }
             }
         }
         if (count($pos)) {
@@ -126,10 +157,48 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         return $ret;
     }
 
+    public function processInput($postData)
+    {
+        if (isset($postData[$this->getFieldName().'_num'])) {
+            $ret = array();
+            $postData[$this->getFieldName()] = array();
+            for ($i = 0; $i < $postData[$this->getFieldName().'_num']; $i++) {
+                if (isset($postData[$this->getFieldName().'_del']) && $postData[$this->getFieldName().'_del'] == $i) {
+                    continue;
+                }
+                $postRow = array();
+                foreach ($postData as $fieldName=>$values) {
+                    if (is_array($values) && isset($values[$i])) {
+                        $postRow[$fieldName] = $values[$i];
+                        unset($postData[$fieldName][$i]);
+                    }
+                }
+                $postData[$this->getFieldName()][] = $postRow;
+            }
+            if (isset($postData[$this->getFieldName().'_add'])) {
+                $postData[$this->getFieldName()][] = array('isNewRow' => true);
+            }
+        } else if (isset($postData[$this->getFieldName()])) {
+            if (is_string($postData[$this->getFieldName()])) {
+                $postData[$this->getFieldName()] = Zend_Json::decode($postData[$this->getFieldName()]);
+            }
+        }
+        if (isset($postData[$this->getFieldName()])) {
+            foreach ($postData[$this->getFieldName()] as $i=>$rowPostData) {
+                foreach ($this->fields as $item) {
+                    $postData[$this->getFieldName()][$i] = $item->processInput($rowPostData);
+                }
+            }
+        }
+        return $postData;
+    }
+
     public function prepareSave(Vps_Model_Row_Interface $row, $postData)
     {
+        if (!isset($postData[$this->getFieldName()])) {
+            throw new Vps_Exceception("No postData found");
+        }
         $postData = $postData[$this->getFieldName()];
-        if (is_string($postData)) { $postData = Zend_Json::decode($postData); }
 
         $rows = $this->_getRowsByRow($row);
 
@@ -179,7 +248,6 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         } else {
             $postData = $postData[$this->getFieldName()];
         }
-        if (is_string($postData)) { $postData = Zend_Json::decode($postData); }
 
         $cnt = count($postData);
         $name = $this->getFieldLabel();
@@ -197,7 +265,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         }
         return $ret;
     }
-    
+
     protected function _getReferences($row)
     {
         if ($this->_references) {
@@ -247,31 +315,22 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         }
     }
 
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $namePostfix = '')
     {
-//WORK IN PROGRESS
         $ret = parent::getTemplateVars($values);
         $name = $this->getFieldName();
         if (isset($values[$name])) {
             $value = $values[$name];
-        } else {
-            $value = $this->getDefaultValue();
         }
         $ret = parent::getTemplateVars($values);
-        $ret['preHtml'] = '<input type="hidden" name="'.$name.'" value="'.'TODO'.'" />';
-        $ret['postHtml'] = '<button type="submit" name="'.$name.'_add">add</button>';
+        $ret['preHtml'] = '<input type="hidden" name="'.$name.'_num'.$namePostfix.'" value="'.count($value).'" />';
+        $ret['postHtml'] = '<button type="submit" name="'.$name.'_add'.$namePostfix.'" value="1">add</button>';
 
-
-        if (!isset($postData[$this->getFieldName()])) {
-            $postData = array();
-        } else {
-            $postData = $postData[$this->getFieldName()];
+        $ret['items'] = array();
+        foreach ($value as $i=>$rowValues) {
+            $ret['items'] = array_merge($ret['items'], $this->fields->getTemplateVars($rowValues, $namePostfix."[$i]"));
+            $ret['items'][] = array('html' => '<button type="submit" name="'.$name.'_del'.$namePostfix.'" value="'.$i.'">del</button>', 'item' => null);
         }
-        if (is_string($postData)) { $postData = Zend_Json::decode($postData); }
-
-
-
-        $ret['items'] = $this->fields->getTemplateVars($values);
         return $ret;
     }
 }

@@ -6,7 +6,7 @@ class Vps_Form_Field_TextArea extends Vps_Form_Field_TextField
         parent::__construct($field_name, $field_label);
         $this->setXtype('textarea');
     }
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();
         if (isset($values[$name])) {
@@ -16,7 +16,8 @@ class Vps_Form_Field_TextArea extends Vps_Form_Field_TextField
         }
         $ret = Vps_Form_Field_SimpleAbstract::getTemplateVars($values);
         //todo: escapen
-        $ret['html'] = "<textarea id=\"$name\" name=\"$name\" ";
+        $ret['id'] = $name.$fieldNamePostfix;
+        $ret['html'] = "<textarea id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" ";
         $ret['html'] .= "style=\"width: {$this->getWidth()}px; height: {$this->getHeight()}px\">";
         $ret['html'] .= $value;
         $ret['html'] .= "</textarea>";

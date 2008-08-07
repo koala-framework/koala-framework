@@ -76,12 +76,12 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract implements
         return $ret;
     }
 
-    public function load($row)
+    public function load($row, $postData = array())
     {
         $ret = array();
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
-                $ret = array_merge($ret, $field->load($row));
+                $ret = array_merge($ret, $field->load($row, $postData));
             }
         }
         return $ret;
@@ -91,9 +91,10 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract implements
     {
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
-                $field->processInput($postData);
+                $postData = $field->processInput($postData);
             }
         }
+        return $postData;
     }
 
     public function validate($postData)
@@ -208,7 +209,7 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract implements
         $data->setFieldname($this->getName());
         return $this;
     }
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = array();
         $ret['item'] = $this;
