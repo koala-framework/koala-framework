@@ -33,6 +33,14 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     private $_openedNodes = array();
     protected $_addPosition = self::ADD_FIRST;
 
+    public function indexAction()
+    {
+        $config = array(
+            'controllerUrl' => $this->getRequest()->getPathInfo()
+        );
+        $this->view->ext('Vps.Auto.SyncTreePanel', $config);
+    }
+    
     public function setTable($table)
     {
         $this->_model = new Vps_Model_Db(array(

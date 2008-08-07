@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Plugin_Password_LoginForm_Component extends Vpc_Formular_Component
+class Vps_Component_Plugin_Password_LoginForm_Component extends Vpc_Form_Component
 {
     public static function getSettings()
     {

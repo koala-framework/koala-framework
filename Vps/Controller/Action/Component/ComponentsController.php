@@ -1,5 +1,5 @@
 <?php
-class Vps_Controller_Action_Component_ComponentsController extends Vps_Controller_Action_Auto_Synctree
+class Vps_Controller_Action_Component_ComponentsController extends Vps_Controller_Action_Auto_Tree
 {
     protected $_primaryKey = 'component';
     protected $_textField = 'component';
@@ -40,23 +40,9 @@ class Vps_Controller_Action_Component_ComponentsController extends Vps_Controlle
         } else {
             $icon = 'component';            
         }
+        $data['expanded'] = $row->class == 'root';
         $data['bIcon'] = $this->_icons[$icon]->__toString();
+        $data['text'] .= ': ' . $row->name;
         return $data;
     }
-    
-    public function indexAction()
-    {
-        $config = array();
-        if (!$this->_getParam('class')) {
-            throw new Vps_ClientException('Paramater class is missing.');
-        }
-        $config['baseParams'] = array('class' => $this->_getParam('class'));
-        $this->view->ext('Vps.Component.Components', $config);
-    }
-    
-    protected function _saveSessionNodeOpened()
-    {
-        return 'all';
-    }
-    
 }
