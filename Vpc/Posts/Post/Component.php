@@ -19,8 +19,11 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
             'component' => 'Vpc_Posts_Post_Delete_Component',
             'name' => trlVps('delete')
         );
-
-        $ret['tablename'] = 'Vpc_Posts_Model';
+        $ret['generators']['quote'] = array(
+            'class' => 'Vps_Component_Generator_Page_Static',
+            'component' => 'Vpc_Posts_Post_Quote_Component',
+            'name' => trlVps('quote')
+        );
         return $ret;
     }
     public function getTemplateVars()
@@ -34,6 +37,7 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
             $ret['delete'] = $this->getData()->getChildComponent('_delete');
         }
         $ret['report'] = $this->getData()->getChildComponent('_report');
+        $ret['quote'] = $this->getData()->getChildComponent('_quote');
 
         $ret['user'] = $this->getData()->row->findParentRow(Vps_Registry::get('userModel'));
         return $ret;

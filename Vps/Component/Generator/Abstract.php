@@ -100,6 +100,13 @@ abstract class Vps_Component_Generator_Abstract
                     if ($constraints['page']) continue;
                 }
             }
+            if (isset($constraints['pseudoPage'])) {
+                if (is_instance_of($generator['class'], 'Vps_Component_Generator_PseudoPage_Interface')) {
+                    if (!$constraints['pseudoPage']) continue;
+                } else {
+                    if ($constraints['pseudoPage']) continue;
+                }
+            }
             if (isset($constraints['box'])) {
                 if (is_instance_of($generator['class'], 'Vps_Component_Generator_Box_Interface')) {
                     if (!$constraints['box']) continue;

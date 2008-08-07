@@ -1,5 +1,6 @@
 <?php
-class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static implements Vps_Component_Generator_Page_Interface
+class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
+    implements Vps_Component_Generator_Page_Interface, Vps_Component_Generator_PseudoPage_Interface
 {
     protected $_showInMenu = false;
     protected $_idSeparator = '_';
@@ -56,6 +57,7 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
         $data['rel'] = isset($c['rel']) ? $c['rel'] : '';
         $data['name'] = isset($c['name']) ? $c['name'] : $componentKey;
         $data['isPage'] = true;
+        $data['isPseudoPage'] = true;
         return $data;
     }
 }

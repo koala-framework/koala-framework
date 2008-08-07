@@ -35,6 +35,9 @@ class Vps_Component_Abstract
     {
         if (!$useSettingsCache) {
             //um endlosschleife in settingsCache zu verhindern
+            if (!class_exists($class)) {
+                throw new Vps_Exception("Invalid component '$class'");
+            }
             $settings = call_user_func(array($class, 'getSettings'));
             return $settings[$setting];
         }

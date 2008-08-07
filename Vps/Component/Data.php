@@ -33,15 +33,15 @@ class Vps_Component_Data
     {
         if ($var == 'url') {
             $filenames = array();
-            $page = $this->getPage();
+            $page = $this->getPseudoPage();
             do {
                 $filenames[] = $page->filename;
-            } while ($page = $page->getParentPage());
+            } while ($page = $page->getParentPseudoPage());
             return '/'.implode('/', array_reverse($filenames));
         } else if ($var == 'rel') {
-            return $this->getPage()->_rel;
+            return $this->getPseudoPage()->_rel;
         } else if ($var == 'filename') {
-            return $this->getPage()->_filename;
+            return $this->getPseudoPage()->_filename;
         } else {
             throw new Vps_Exception("Variable '$var' is not set for ".get_class($this) . " with componentId '{$this->componentId}'");
         }
@@ -182,7 +182,7 @@ class Vps_Component_Data
             $ret = array();
 
             $generatorConstraints = array();
-            foreach (array('page', 'box', 'generator', 'skipRoot') as $c) {
+            foreach (array('page', 'pseudoPage', 'box', 'generator', 'skipRoot') as $c) {
                 if (isset($constraints[$c])) {
                     $generatorConstraints[$c] = $constraints[$c];
                     unset($constraints[$c]);
@@ -239,13 +239,19 @@ class Vps_Component_Data
         $constraints['page'] = true;
         return $this->getRecursiveChildComponents($constraints);
     }
-    
+
+    public function getChildPseudoPages(array $constraints = array())
+    {
+        $constraints['pseudoPage'] = true;
+        return $this->getRecursiveChildComponents($constraints);
+    }
+
     public function getChildBoxes(array $constraints = array())
     {
         $constraints['box'] = true;
         return $this->getRecursiveChildComponents($constraints);
     }
-    
+
     private function _hasGenerator($componentClass, $interface)
     {
         static $hasGenerator = array();
@@ -313,6 +319,11 @@ class Vps_Component_Data
         return array_shift($this->getChildPages($constraints));
     }
 
+    public function getChildPseudoPage($constraints = array())
+    {
+        return array_shift($this->getChildPseudoPages($constraints));
+    }
+    
     public function getGenerator($key)
     {
         return Vps_Component_Generator_Abstract::getInstance($this->componentClass, $key);
@@ -349,7 +360,16 @@ class Vps_Component_Data
         }
         return $page;
     }
-    
+
+    public function getPseudoPage()
+    {
+        $page = $this;
+        while ($page && !$page->isPseudoPage) {
+            $page = $page->parent;
+        }
+        return $page;
+    }
+
     public function getParentPage()
     {
         $page = $this->getPage();
@@ -358,7 +378,16 @@ class Vps_Component_Data
         }
         return null;
     }
-    
+
+    public function getParentPseudoPage()
+    {
+        $page = $this->getPseudoPage();
+        if ($page && $page->parent) {
+            return $page->parent->getPseudoPage();
+        }
+        return null;
+    }
+
     public function getTitle()
     {
         $title = array();

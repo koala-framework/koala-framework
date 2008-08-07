@@ -13,6 +13,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 'name' => 'Root',
                 'parent' => null,
                 'isPage' => false,
+                'isPseudoPage' => false,
                 'componentId' => 'root'
             ), $config
         );
@@ -60,7 +61,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         } else {
             $page = $this;
             foreach (explode('/', substr($path, 1)) as $pathPart) {
-                $page = $page->getChildPage(array('filename' => $pathPart));
+                $page = $page->getChildPseudoPage(array('filename' => $pathPart));
                 if (!$page) break;
             }
             return $page;

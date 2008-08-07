@@ -179,6 +179,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             'parent' => $parentData,
             'row' => $row,
             'isPage' => false,
+            'isPseudoPage' => false,
             'visible' => $visible
         );
         return $data;
