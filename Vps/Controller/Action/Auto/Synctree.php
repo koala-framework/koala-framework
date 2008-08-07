@@ -17,7 +17,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         'add'       => 'table_add',
         'delete'    => 'table_delete'
     );
-    protected $_textField = 'text';
+    protected $_textField = 'name';
     protected $_parentField = 'parent_id';
     protected $_buttons = array(
         'add'       => true,
@@ -167,7 +167,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         $data = array();
         $primaryKey = $this->_primaryKey;
         $data['id'] = $row->$primaryKey;
-        $data['text'] = $row->name;
+        $data['text'] = $row->{$this->_textField};
         $data['data'] = $row->toArray();
         $data['leaf'] = false;
         $data['visible'] = true;

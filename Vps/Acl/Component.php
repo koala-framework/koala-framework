@@ -17,7 +17,7 @@ class Vps_Acl_Component extends Vps_Acl
                                 'vps_component_pages'); // für /component/show
             $this->add(new Zend_Acl_Resource('vps_component'),
                                 'vps_component_pages'); // für /component/edit
-
+            
         $this->add(new Vps_Acl_Resource_MenuUrl('vps_component_overview',
             array('text'=>trlVps('Components'), 'icon'=>'application_view_list.png'),
             '/admin/component/overview'));
