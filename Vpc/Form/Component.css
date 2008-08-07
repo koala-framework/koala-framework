@@ -1,7 +1,7 @@
-.vpcFormular form div.vpsField { font-size: 12px; }
-.vpcFormular form div.vpsField label { display: block; line-height: 20px; }
-.vpcFormular form div.vpsField input { margin-right: 10px; }
-.vpcFormular form button {
+.vpcForm form div.vpsField { font-size: 12px; }
+.vpcForm form div.vpsField label { display: block; line-height: 20px; }
+.vpcForm form div.vpsField input { margin-right: 10px; }
+.vpcForm form button {
     border: 1px solid #000;
     background-color: #fff;
     margin-top: 10px;
