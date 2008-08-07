@@ -38,7 +38,7 @@ class Vps_Model_Field_Row extends Vps_Model_Row_Abstract
 
     public function save()
     {
-        $this->_parentRow->save();
+        return $this->_parentRow->save();
     }
 
     public function delete()

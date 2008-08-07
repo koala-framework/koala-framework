@@ -48,6 +48,7 @@ class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
 
     public function save()
     {
+        return null;
     }
 
     public function delete()

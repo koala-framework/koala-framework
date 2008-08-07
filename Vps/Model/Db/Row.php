@@ -49,7 +49,7 @@ class Vps_Model_Db_Row implements Vps_Model_Row_Interface
 
     public function save()
     {
-        $this->_row->save();
+        return $this->_row->save();
     }
 
     public function delete()

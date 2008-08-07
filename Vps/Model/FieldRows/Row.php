@@ -12,9 +12,10 @@ class Vps_Model_FieldRows_Row extends Vps_Model_Row_Abstract
             $id = $this->_model->insert($this->_data);
             $this->_data[$this->_getPrimaryKey()] = $id;
         } else {
-            $this->_model->update($this->_data[$this->_getPrimaryKey()],
-                                    $this->_data);
+            $id = $this->_data[$this->_getPrimaryKey()];
+            $this->_model->update($id, $this->_data);
         }
+        return $id;
     }
 
     public function delete()
