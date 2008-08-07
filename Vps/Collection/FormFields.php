@@ -39,11 +39,11 @@ class Vps_Collection_FormFields extends Vps_Collection
         return $ret;
     }
 
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $ret = array();
         foreach ($this as $field) {
-            $data = $field->getTemplateVars($values);
+            $data = $field->getTemplateVars($values, $fieldNamePostfix);
             if (!is_null($data)) $ret[] = $data;
         }
         return $ret;

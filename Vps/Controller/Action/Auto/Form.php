@@ -94,13 +94,13 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
 
         $row = $this->_form->getRow();
 
-        $this->_form->processInput($this->getRequest()->getParams());
-        $invalid = $this->_form->validate($this->getRequest()->getParams());
+        $postData = $this->_form->processInput($this->getRequest()->getParams());
+        $invalid = $this->_form->validate($postData);
         if ($invalid) {
             throw new Vps_ClientException(implode("<br />", $invalid));
         }
 
-        $data = $this->_form->prepareSave(null, $this->getRequest()->getParams());
+        $data = $this->_form->prepareSave(null, $postData);
 
         $insert = false;
 
@@ -129,7 +129,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
             throw new Vps_Exception("Save is not allowed for this row.");
         }
 
-        $data = $this->_form->save(null, $this->getRequest()->getParams());
+        $data = $this->_form->save(null, $postData);
 
         if ($row) {
             if ($insert) {

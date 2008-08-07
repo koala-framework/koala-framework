@@ -23,7 +23,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         }
     }
 
-    public function getTemplateVars($values)
+    public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();
         if (isset($values[$name])) {
@@ -35,7 +35,11 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
 
         $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);
-        $ret['html'] = "<input type=\"".$this->getInputType()."\" id=\"$name\" name=\"$name\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\" />";
+        $ret['id'] = $name.$fieldNamePostfix;
+        $ret['html'] = "<input type=\"".$this->getInputType()."\" id=\"$ret[id]\" ".
+                        "name=\"$name$fieldNamePostfix\" value=\"$value\" ".
+                        "style=\"width: {$this->getWidth()}px\" ".
+                        "maxlength=\"{$this->getMaxLength()}\" />";
         return $ret;
     }
 

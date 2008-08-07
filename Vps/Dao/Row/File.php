@@ -271,7 +271,7 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
     public function uploadFile($filedata)
     {
         if ($filedata['error'] == UPLOAD_ERR_NO_FILE) {
-            throw new Vps_Exception(trlVps('No File was uploaded.'));
+            throw new Vps_Exception('No File was uploaded.');
         }
 
         if ($filedata['error'] == UPLOAD_ERR_INI_SIZE || $filedata['error'] == UPLOAD_ERR_FORM_SIZE) {

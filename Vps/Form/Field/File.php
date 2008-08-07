@@ -28,15 +28,22 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         return $ret;
     }
 
-    public function load($row)
+    public function load($row, $postData = array())
     {
-        $fileRow = $row->getRow()->getFileRow($this->getRuleKey());
+        if (isset($postData[$this->getFieldName()])) {
+            $fileId = $postData[$this->getFieldName()];
+        } else {
+            $ref = $row->getRow()->getTable()->getReference('Vps_Dao_File', $this->getRuleKey());
+            $fileId = $row->{$ref['columns'][0]};
+        }
+        $t = new Vps_Dao_File();
+        $fileRow = $t->find($fileId)->current();
         if ($fileRow) {
             $return = $fileRow->getFileInfo();
         } else {
             $return = '';
         }
-        return array_merge(parent::load($row),
+        return array_merge(parent::load($row, $postData),
             array($this->getFieldName() => $return));
     }
 
@@ -52,6 +59,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 
         if ($this->getSave() !== false && $this->getInternalSave() !== false) {
             $data = $this->_getValueFromPostData($postData);
+            //TODO: validierung von error-codes bei frontend-uploads
             if ($data) {
                 $t = new Vps_Dao_File();
                 $row = $t->find($data)->current();
@@ -64,7 +72,32 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         }
         return $ret;
     }
-    public function getTemplateVars($values)
+
+    public function processInput($postData)
+    {
+        $postData = parent::processInput($postData);
+        if (isset($postData[$this->getFieldName()])
+            && is_array($postData[$this->getFieldName()])
+            && isset($postData[$this->getFieldName()]['tmp_name'])
+        ) {
+            //frontend formular, $_FILE werte
+            $file = $postData[$this->getFieldName()];
+            if ($file['error'] != UPLOAD_ERR_NO_FILE) {
+                $t = new Vps_Dao_File();
+                $fileRow = $t->createRow();
+                $fileRow->uploadFile($file);
+                $postData[$this->getFieldName()] = $fileRow->id;
+            } else {
+                unset($postData[$this->getFieldName()]);
+            }
+        }
+        if (isset($postData[$this->getFieldName().'_del'])) {
+            $postData[$this->getFieldName()] = '';
+        }
+        return $postData;
+    }
+
+    public function getTemplateVars($values, $namePostfix = '')
     {
         $name = $this->getFieldName();
         if (isset($values[$name])) {
@@ -74,9 +107,14 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         }
         $ret = parent::getTemplateVars($values);
 
-        $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);
-        $ret['html'] = "<input type=\"file\" id=\"$name\" name=\"$name\" value=\"$value\" style=\"width: {$this->getWidth()}px\" />";
+        $ret['id'] = $name.$namePostfix;
+        $ret['html'] = "<input type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
+                        " style=\"width: {$this->getWidth()}px\" />";
+        if ($value) {
+            $ret['html'] .= '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">del</button>';
+            $ret['html'] .= ''.$value['filename'].'.'.$value['extension'];
+        }
         return $ret;
     }
 }

@@ -1,9 +1,9 @@
 <?php
 class Vpc_Basic_Image_Form extends Vpc_Abstract_Form
 {
-    public function __construct($name, $class, $id = null)
+    public function __construct($name, $class)
     {
-        parent::__construct($name, $class, $id);
+        parent::__construct($name, $class);
 
         // Kommentar
         if (Vpc_Abstract::getSetting($class, 'editComment')) {
