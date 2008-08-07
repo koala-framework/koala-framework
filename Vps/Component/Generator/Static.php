@@ -111,6 +111,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
             'componentClass' => $this->_settings['component'][$componentKey],
             'parent' => $parentData,
             'isPage' => false,
+            'isPseudoPage' => false,
             'visible' => true
         );
     }

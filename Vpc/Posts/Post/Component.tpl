@@ -9,14 +9,11 @@
         <? if ($this->edit) { ?>
             <br /><?=$this->componentLink($this->edit)?></a>
         <? } ?>
-        <? if ($this->report) { ?>
-            <br /><?=$this->componentLink($this->report)?></a>
-        <? } ?>
         <? if ($this->delete) { ?>
             <br /><?=$this->componentLink($this->delete)?></a>
         <? } ?>
-        Beitrag:
-        zitieren
+        <?=$this->componentLink($this->report)?></a>
+        <?=$this->componentLink($this->quote)?></a>
     </div>
     <div class="clear"></div>
     <div class="content">

@@ -1,5 +1,6 @@
 <?php
-class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract implements Vps_Component_Generator_Page_Interface
+class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
+    implements Vps_Component_Generator_Page_Interface, Vps_Component_Generator_PseudoPage_Interface
 {
     protected $_tableName = 'Vps_Dao_Pages';
     protected $_componentClass = 'row';
@@ -168,6 +169,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract impl
         $data['rel'] = '';
         $data['name'] = $page['name'];
         $data['isPage'] = true;
+        $data['isPseudoPage'] = true;
         $data['componentId'] = $page['id'];
         $data['componentClass'] = $this->_getChildComponentClass($page['component']);
         $data['row'] = (object)$page;

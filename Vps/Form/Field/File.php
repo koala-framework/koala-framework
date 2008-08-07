@@ -126,7 +126,10 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             $ret['html'] .= ''.$value['filename'].'.'.$value['extension'];
             $helper = new Vps_View_Helper_FileSize();
             $ret['html'] .= ' ('.$helper->fileSize($value['fileSize']).')';
-            $ret['html'] .= ' <img src="/vps/media/upload/preview?uploadId='.$value['uploadId'].'" />';
+            if ($value['image']) {
+                //todo: with und height von image
+                $ret['html'] .= " <img src=\"/vps/media/upload/preview?uploadId=$value[uploadId]\" alt=\"\"/>";
+            }
         }
         return $ret;
     }
