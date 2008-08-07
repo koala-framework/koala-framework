@@ -1,5 +1,5 @@
 <?php
-abstract class Vpc_Directories_ItemPage_Directory_Component extends Vpc_Directories_ItemPage_Directory_Component
+abstract class Vpc_Directories_ItemPage_Directory_Component extends Vpc_Directories_Item_Directory_Component
 {
     public static function getSettings()
     {

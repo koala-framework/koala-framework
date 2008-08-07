@@ -8,22 +8,36 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
                 $item['items'][$k] = $this->processItem($i);
             }
         } else if (isset($item['html'])) {
-            $errors = $item['item']->validate($_REQUEST);
+            $errors = false;
+            if ($item['item']) {
+                $errors = $item['item']->validate($_REQUEST);
+            }
             $class = 'vpsField';
             if ($errors) {
                 $class .= ' vpsFieldError';
             }
-            if ($item['item']->getAllowBlank()===false) {
+            if ($item['item'] && $item['item']->getAllowBlank()===false) {
                 $class .= ' vpsFieldRequired';
             }
             $item['preHtml'] = '<div class="'.$class.'">';
-            if (!$item['item']->getHideLabels()) {
-                $item['preHtml'] .= '<label for="'.$item['item']->getFieldName().'">';
-                $item['preHtml'] .= $item['item']->getFieldLabel();
-                if ($item['item']->getAllowBlank()===false) {
+            if (!$item['item'] || !$item['item']->getHideLabels()) {
+                if ($item['item']) {
+                    if (isset($item['id'])) {
+                        $id = $item['id'];
+                    } else {
+                        $id = $item['item']->getFieldName();
+                    }
+                    $item['preHtml'] .= '<label for="'.$id.'">';
+                }
+                if ($item['item']) {
+                    $item['preHtml'] .= $item['item']->getFieldLabel();
+                }
+                if ($item['item'] && $item['item']->getAllowBlank()===false) {
                     $item['preHtml'] .= '*';
                 }
-                $item['preHtml'] .= $item['item']->getLabelSeparator();
+                if ($item['item']) {
+                    $item['preHtml'] .= $item['item']->getLabelSeparator();
+                }
                 $item['preHtml'] .= '</label>';
             }
             $item['postHtml'] = '</div>';

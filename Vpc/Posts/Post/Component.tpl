@@ -7,11 +7,16 @@
         <strong>#TODO:</strong>
         <i><?=$this->dateTime($this->data->row->create_time)?></i>
         <? if ($this->edit) { ?>
-            <br /><?=$this->componentLink($this->edit, trlVps('Change Post'))?></a>
+            <br /><?=$this->componentLink($this->edit)?></a>
         <? } ?>
         <? if ($this->report) { ?>
-            <br /><?=$this->componentLink($this->report, trlVps('Report Post'))?></a>
+            <br /><?=$this->componentLink($this->report)?></a>
         <? } ?>
+        <? if ($this->delete) { ?>
+            <br /><?=$this->componentLink($this->delete)?></a>
+        <? } ?>
+        Beitrag:
+        zitieren
     </div>
     <div class="clear"></div>
     <div class="content">

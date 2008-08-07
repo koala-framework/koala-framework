@@ -1,5 +1,5 @@
 <?php
-class Vpc_Posts_Directory_Component extends Vpc_Directories_ItemPage_Directory_Component
+class Vpc_Posts_Directory_Component extends Vpc_Directories_Item_Directory_Component
 {
     public static function getSettings()
     {
@@ -11,7 +11,7 @@ class Vpc_Posts_Directory_Component extends Vpc_Directories_ItemPage_Directory_C
         $ret['generators']['write'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Posts_Write_Component',
-            'name' => trlVps('Write')
+            'name' => trlVps('Write'),
         );
         $ret['generators']['child']['component']['view'] = 'Vpc_Posts_Directory_View_Component';
         return $ret;

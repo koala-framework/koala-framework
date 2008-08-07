@@ -3,6 +3,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 {
     protected $_form;
     private $_processed = false;
+    private $_postData;
     protected $_errors = array();
 
     public static function getSettings()
@@ -31,16 +32,38 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $this->_processed = true;
 
         $this->_initForm();
-        $this->_form->processInput($_REQUEST);
-        if (isset($_REQUEST[$this->getData()->componentId])) {
-            $this->_errors = array_merge($this->_errors, $this->_form->validate($_REQUEST));
-            if (!$this->_errors) {
-                $this->_form->prepareSave(null, $_REQUEST);
-                $this->_beforeSave($this->_form->getRow());
-                $this->_form->save(null, $_REQUEST);
-                $this->_afterSave($this->_form->getRow());
+
+        $postData = $_REQUEST;
+        //in _REQUEST sind _FILES nicht mit drinnen
+        foreach ($_FILES as $k=>$file) {
+            if (is_array($file['tmp_name'])) {
+                //wenn name[0] dann kommts in komischer form daher -> umwandeln
+                foreach (array_keys($file['tmp_name']) as $i) {
+                    foreach (array_keys($file) as $prop) {
+                        $postData[$k][$i][$prop] = $file[$prop][$i];
+                    }
+                }
+            } else {
+                $postData[$k] = $file;
             }
         }
+        $postData = $this->_form->processInput($postData);
+        if (isset($postData[$this->getData()->componentId])) {
+            $this->_errors = array_merge($this->_errors, $this->_form->validate($postData));
+            if (!$this->_errors) {
+                $this->_form->prepareSave(null, $postData);
+                $this->_beforeSave($this->_form->getRow());
+                if (!$this->_form->getRow()->{$this->_form->getModel()->getPrimaryKey()}) {
+                    $this->_beforeInsert($this->_form->getRow());
+                }
+                $this->_form->save(null, $postData);
+                $this->_afterSave($this->_form->getRow());
+                if (!$this->_form->getRow()->{$this->_form->getModel()->getPrimaryKey()}) {
+                    $this->_afterInsert($this->_form->getRow());
+                }
+            }
+        }
+        $this->_postData = $postData;
     }
 
     public function getErrors()
@@ -71,7 +94,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             }
         }
 
-        $values = array_merge($this->_form->load(null), $_REQUEST);
+        $values = $this->_form->load(null, $this->_postData);
         $ret['form'] = $this->_form->getTemplateVars($values);
 
         $dec = $this->_getSetting('decorator');
@@ -85,6 +108,16 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['action'] = $this->getData()->url;
         $ret['method'] = $this->_getSetting('method');
 
+        $ret['isUpload'] = false;
+        foreach (new RecursiveIteratorIterator(
+                new Vps_Collection_Iterator_RecursiveFormFields($this->_form->fields))
+                as $f) {
+            if ($f instanceof Vps_Form_Field_File) {
+                $ret['isUpload'] = true;
+                break;
+            }
+        }
+
         return $ret;
     }
 
@@ -93,6 +126,14 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     }
 
     protected function _beforeSave(Vps_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _afterInsert(Vps_Model_Row_Interface $row)
+    {
+    }
+
+    protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
     }
 }

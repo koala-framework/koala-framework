@@ -7,13 +7,19 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['edit'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Posts_Post_Edit_Component',
-            'name' => trlVps('Edit')
+            'name' => trlVps('edit')
         );
         $ret['generators']['report'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Posts_Post_Report_Component',
-            'name' => trlVps('Report')
+            'name' => trlVps('report')
         );
+        $ret['generators']['delete'] = array(
+            'class' => 'Vps_Component_Generator_Page_Static',
+            'component' => 'Vpc_Posts_Post_Delete_Component',
+            'name' => trlVps('delete')
+        );
+
         $ret['tablename'] = 'Vpc_Posts_Model';
         return $ret;
     }
@@ -22,11 +28,12 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         $ret = parent::getTemplateVars();
         
         $ret['content'] = self::replaceCodes($this->getData()->row->content);
-        $ret['edit'] = false;
+        $ret['delete'] = false;
         if ($this->mayEditPost()) {
-            $ret['edit'] = $this->getData()->getChildComponent('-edit');
+            $ret['edit'] = $this->getData()->getChildComponent('_edit');
+            $ret['delete'] = $this->getData()->getChildComponent('_delete');
         }
-        $ret['report'] = $this->getData()->getChildComponent('-report');
+        $ret['report'] = $this->getData()->getChildComponent('_report');
 
         $ret['user'] = $this->getData()->row->findParentRow(Vps_Registry::get('userModel'));
         return $ret;
