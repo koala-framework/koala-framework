@@ -46,4 +46,8 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     {
         return $this->_default;
     }
+
+    public function isEqual(Vps_Model_Interface $other) {
+        throw new Vps_Exception("Method 'isEqual' is not yet implemented in '".get_class($this)."'");
+    }
 }

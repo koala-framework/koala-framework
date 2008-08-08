@@ -97,7 +97,8 @@ class Vps_Model_User_Users extends Vps_Db_Table
 
     public function mailExists($email)
     {
-        return (bool)$this->fetchRowByEmail($email);
+        $row = $this->fetchRowByEmail($email);
+        return $row ? true : false;
     }
 
     public function getRowWebcode()

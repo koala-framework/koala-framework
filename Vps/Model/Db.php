@@ -84,4 +84,14 @@ class Vps_Model_Db implements Vps_Model_Interface
         return $this->getTable()->getAdapter();
     }
 
+    public function isEqual(Vps_Model_Interface $other) {
+        if ($other instanceof Vps_Model_Db &&
+            $this->getTable()->info(Zend_Db_Table_Abstract::NAME) ==
+            $other->getTable()->info(Zend_Db_Table_Abstract::NAME)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
 }
