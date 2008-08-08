@@ -63,6 +63,10 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
 
     protected function _delete()
     {
+        if (!Vps_Registry::get('config')->allowDeleteUsers) {
+            throw new Vps_Exception("Deleting users is not allowed. See config value 'allowDeleteUsers'.");
+        }
+
         $this->sendDeletedMail();
 
         $restClient = new Vps_Rest_Client();
