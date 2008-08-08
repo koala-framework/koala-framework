@@ -6,4 +6,5 @@ interface Vps_Model_Interface
     public function fetchAll($where=null, $order=null, $limit=null, $start=null);
     public function fetchCount($where = array());
     public function getPrimaryKey();
+    public function isEqual(Vps_Model_Interface $other);
 }

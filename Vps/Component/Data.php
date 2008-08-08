@@ -33,13 +33,13 @@ class Vps_Component_Data
     {
         if ($var == 'url') {
             $filenames = array();
-            $page = $this->getPseudoPage();
+            $page = $this->getPage();
             do {
                 $filenames[] = $page->filename;
             } while ($page = $page->getParentPseudoPage());
             return '/'.implode('/', array_reverse($filenames));
         } else if ($var == 'rel') {
-            return $this->getPseudoPage()->_rel;
+            return $this->getPage()->_rel;
         } else if ($var == 'filename') {
             return $this->getPseudoPage()->_filename;
         } else {
