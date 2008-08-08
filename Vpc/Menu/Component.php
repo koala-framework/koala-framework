@@ -25,7 +25,7 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
         $ret['level'] = $this->_getSetting('level');
         $ret['subMenu'] = $this->getData()->getChildComponent('-subMenu');
         $ret['separator'] = $this->_getSetting('separator');
-        $ret['linkPrefix'] = $this->_getSetting('linkPrefix');        
+        $ret['linkPrefix'] = $this->_getSetting('linkPrefix');
         return $ret;
     }
     public function hasContent()
