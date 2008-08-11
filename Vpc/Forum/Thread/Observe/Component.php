@@ -1,10 +1,10 @@
 <?php
-class Vpc_Forum_Posts_Observe_Component extends Vpc_Abstract
+class Vpc_Forum_Thread_Observe_Component extends Vpc_Abstract
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['tablename'] = 'Vpc_Forum_Posts_Observe_Model';
+        $ret['tablename'] = 'Vpc_Forum_Thread_Observe_Model';
         return $ret;
     }
 
