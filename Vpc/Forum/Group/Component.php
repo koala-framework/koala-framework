@@ -4,7 +4,7 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['detail']['component'] = 'Vpc_Forum_Thread_Component';
+        $ret['generators']['detail']['component'] = 'Vpc_Forum_Thread_Directory_Component';
         $ret['generators']['child']['component']['view'] = 'Vpc_Forum_Group_View_Component';
         $ret['generators']['newThread'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
@@ -21,7 +21,7 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
     }
     private function _getSelect()
     {
-        return $this->getData()->getGenerator('thread')->select($this->getData());
+        return $this->getData()->getGenerator('detail')->select($this->getData());
     }
     public function getTemplateVars()
     {

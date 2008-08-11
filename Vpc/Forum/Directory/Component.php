@@ -32,43 +32,34 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
         $ret = array();
         foreach ($groups as $group) {
             if ($group->row->parent_id == $parentId) {
-                $lastThread = null;
-                /*
-                if ($row->post) {
-                    $where = array();
-                    $where['component_id = ?'] = $page->getDbId();
-                    $lastThread = $threadT->fetchAll($where, null, 1)->current();
-                    $g['numPosts'] = $threadT->getNumPosts($page->getDbId());
-                    $g['numThreads'] = $threadT->getNumThreads($page->getDbId());
-                }
-                if ($lastThread) {
-                    $post = $postsT->getLastPost($lastThread->component_id.'_'.$lastThread->id.'-posts');
-                    $g['lastPostTime'] = $post->create_time;
-                    $forumUserTable = new Vpc_Forum_User_Model();
-                    $forumUser = $forumUserTable->fetchRow(array('id = ?' => $post->user_id));
-                    $user = Zend_Registry::get('userModel')->find($post->user_id)->current();
-                    if ($user) {
-                        if ($forumUser->nickname) {
-                            $g['lastPostUser'] = $forumUser->nickname;
-                        } else {
-                            $g['lastPostUser'] = $user->firstname;
-                        }
-                        $g['lastPostUserUrl'] = $this->getUserViewComponent($forumUser)->getUrl();
-                    } else {
-                        $g['lastPostUser'] = 'Anonym';
-                        $g['lastPostUserUrl'] = null;
+                $group->lastPost = null;
+                $group->lastUser = null;
+                $group->countThreads = 0;
+                $group->countPosts = 0;
+                
+                /* // ist wahrscheinlich zu langsam, wäre aber sauberer als Lösung unten
+                $threads = $group->getChildComponents(array('generator' => 'detail'));
+                $thread = array_shift($threads);
+                if ($thread) {
+                    $select = $thread->getGenerator('detail')->select($group, array('noDirectParent' => true));
+                    $select->order('create_time DESC');
+                    $posts = $thread->getChildComponents($select);
+                    $group->lastPost = array_shift($posts);
+                    $group->lastUser = $this->getData()->getChildComponent('_users')->getChildComponent('_' . $group->lastPost->row->user_id);
+                    $group->countThreads = count($threads);
+                    $group->countPosts = count($posts);
+                }*/
+                
+                $root = Vps_Component_Data_Root::getInstance();
+                $lastPostId = $group->row->getLastPostId();
+                if ($lastPostId) {
+                    $group->countPosts = $group->row->countPosts();
+                    $group->countThreads = $group->row->countThreads();
+                    $group->lastPost = $root->getComponentById($lastPostId);
+                    if ($group->lastPost) {
+                        $group->lastUser = $this->getData()->getChildComponent('_users')->getChildComponent('_' . $group->lastPost->row->user_id);
                     }
-                    $page = $page->getPageFactory()->getChildPageByRow($lastThread);
-                    $g['lastPostUrl'] = $page->getUrl();
-                    $g['lastPostSubject'] = $lastThread->subject;
-                } else {
-                    $g['lastPostUrl'] = null;
-                    $g['lastPostSubject'] = null;
-                    $g['lastPostTime'] = null;
-                    $g['lastPostUser'] = null;
-                    $g['lastPostUserUrl'] = null;
                 }
-                */
                 $group->childGroups = $this->_processGroups($groups, $group->row->id);
                 $ret[] = $group;
             }
