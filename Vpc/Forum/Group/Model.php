@@ -4,7 +4,16 @@ class Vpc_Forum_Group_Model extends Vps_Db_Table_Abstract
     protected $_name = 'vpc_forum_threads';
     protected $_rowClass = 'Vpc_Forum_Group_Row';
 
-
+    protected function _setup()
+    {
+        $this->_referenceMap['User'] = array(
+            'columns'           => array('user_id'),
+            'refTableClass'     => get_class(Vps_Registry::get('userModel')),
+            'refColumns'        => array('id')
+        );
+        parent::_setup();
+    }
+    
     public function fetchAll($where, $order = null, $limit = null, $start = null)
     {
         if ($order == null) {

@@ -11,7 +11,12 @@ class Vps_Model_Mail extends Vps_Model_FnF
         parent::__construct($config);
         if (!empty($config['tpl'])) {
             $this->setMailTemplate($config['tpl']);
+        } else if (!empty($config['componentClass'])) {
+            $tpl = Vpc_Admin::getComponentFile($config['componentClass'], 'Component', 'html.tpl');
+            $tpl = str_replace('.html.tpl', '', $tpl);
+            $this->setMailTemplate($tpl);
         }
+        
     }
 
     public function setMailTemplate($tpl)

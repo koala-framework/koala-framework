@@ -21,6 +21,7 @@ class Vpc_Posts_Directory_Model extends Vpc_Table
         $where[] = 'visible = 1';
         return $this->fetchAll($where, 'id DESC', 1)->current();
     }
+    
     public function getNumPosts($dbId)
     {
         $info = $this->info();

@@ -8,6 +8,11 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Page_Table',
             'component' => 'Vpc_Forum_Group_Component'
         );
+        $ret['generators']['users'] = array(
+            'class' => 'Vps_Component_Generator_Page_Static',
+            'component' => 'Vpc_Forum_User_Directory_Component',
+            'name' => 'users'
+        );
         $ret['tablename'] = 'Vpc_Forum_Directory_Model';
         return $ret;
     }
