@@ -23,6 +23,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract
 
         $table = $this->getTable();
         $where = array('component_id = ?' => $this->getData()->dbId);
+        $ret['referers'] = array();
         $i = 0;
         $rowset = $table->fetchAll($where, 'id DESC');
         foreach ($rowset as $row) {

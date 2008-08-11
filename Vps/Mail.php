@@ -51,6 +51,11 @@ class Vps_Mail
         return $this->_mail;
     }
 
+    public function getTemplate()
+    {
+        return $this->_template;
+    }
+
     public function getView()
     {
         return $this->_view;
@@ -60,6 +65,17 @@ class Vps_Mail
     {
         return $this->_mail->getFrom();
     }
+
+    public function getRecipients()
+    {
+        return $this->_mail->getRecipients();
+    }
+
+    public function getHeaders()
+    {
+        return $this->_mail->getHeaders();
+    }
+
     public function addCc($email, $name='')
     {
         if (Zend_Registry::get('config')->debug->sendAllMailsTo) {
@@ -72,10 +88,12 @@ class Vps_Mail
             $this->_mail->addCc($email, $name);
         }
     }
+
     public function addHeader($name, $value, $append = false)
     {
         $this->_mail->addHeader($name, $value, $append);
     }
+
     public function addBcc($email)
     {
         if (Zend_Registry::get('config')->debug->sendAllMailsTo) {
@@ -84,10 +102,12 @@ class Vps_Mail
             $this->_mail->addBcc($email);
         }
     }
+
     public function setReturnPath($email)
     {
         $this->_mail->setReturnPath($email);
     }
+
     public function addTo($email, $name='')
     {
         if (Zend_Registry::get('config')->debug->sendAllMailsTo) {
@@ -100,10 +120,12 @@ class Vps_Mail
             $this->_mail->addTo($email, $name);
         }
     }
+
     public function setFrom($email, $name='')
     {
         $this->_mail->setFrom($email, $name);
     }
+
     public function send()
     {
         $mailSendAll = Zend_Registry::get('config')->debug->sendAllMailsTo;

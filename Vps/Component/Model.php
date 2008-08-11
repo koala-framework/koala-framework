@@ -7,11 +7,11 @@ class Vps_Component_Model implements Vps_Model_Interface
         'generator' => 'page',
         'ignoreVisible' => true
     );
-    
+
     public function createRow(array $data=array()) {
         throw new Vps_Exception('Not implemented yet.');
     }
-    
+
     public function find($id)
     {
         return new $this->_rowsetClass(array(
@@ -20,7 +20,17 @@ class Vps_Component_Model implements Vps_Model_Interface
             'model' => $this
         ));
     }
-    
+
+    public function isEqual(Vps_Model_Interface $other) {
+        if ($other instanceof Vps_Component_Model &&
+            $this->getTable()->info(Zend_Db_Table_Abstract::NAME) ==
+            $other->getTable()->info(Zend_Db_Table_Abstract::NAME)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     public function fetchAll($where=null, $order=null, $limit=null, $start=null)
     {
         $root = Vps_Component_Data_Root::getInstance();

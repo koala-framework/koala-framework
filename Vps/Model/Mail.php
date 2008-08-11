@@ -1,10 +1,11 @@
 <?php
-class Vps_Model_Mail extends Vps_Model_FnF
+class Vps_Model_Mail extends Vps_Model_Db
 {
+    protected $_tableName = 'Vps_Model_Mail_Table';
     protected $_rowClass = 'Vps_Model_Mail_Row';
-    protected $_rowsetClass = 'Vps_Model_Mail_Rowset';
 
     protected $_mailTemplate;
+    protected $_spamFields;
 
     public function __construct(array $config = array())
     {
@@ -16,7 +17,9 @@ class Vps_Model_Mail extends Vps_Model_FnF
             $tpl = str_replace('.html.tpl', '', $tpl);
             $this->setMailTemplate($tpl);
         }
-        
+        if (!empty($config['spamFields'])) {
+            $this->setSpamFields($config['spamFields']);
+        }
     }
 
     public function setMailTemplate($tpl)
@@ -28,4 +31,21 @@ class Vps_Model_Mail extends Vps_Model_FnF
     {
         return $this->_mailTemplate;
     }
+
+    public function setSpamFields(array $spamFields)
+    {
+        $this->_spamFields = $spamFields;
+    }
+
+    public function getSpamFields()
+    {
+        return $this->_spamFields;
+    }
+
+
+
+
+
+
+    
 }
