@@ -26,6 +26,7 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         );
         return $ret;
     }
+    
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

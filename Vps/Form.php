@@ -56,9 +56,11 @@ class Vps_Form extends Vps_Form_NonTableForm
             throw new Vps_Exception('Row must be a Vps_Model_Row_Interface.');
         }
 
-        $primaryKey = $this->getPrimaryKey();
-        if (!$row->$primaryKey && $this->getIdTemplate()) {
-            $row->$primaryKey = $this->_getIdByParentRow($parentRow);
+        if ($this->getIdTemplate()) {
+            $field = $this->getIdTemplateField() ? $this->getIdTemplateField() : $this->getPrimaryKey();
+            if (!$row->$field && $this->getIdTemplate()) {
+                $row->$field = $this->_getIdByParentRow($parentRow);
+            }
         }
 
         if (!$this->getId()) {
@@ -75,6 +77,7 @@ class Vps_Form extends Vps_Form_NonTableForm
         $this->_afterSave($row);
 
         if (!$this->getId()) {
+            $primaryKey = $this->getPrimaryKey();
             if (is_array($primaryKey)) {
                 $addedId = array();
                 foreach ($primaryKey as $key) {

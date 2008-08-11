@@ -5,12 +5,14 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
     {
         $ret = parent::getSettings();
         $ret['generators']['detail']['component'] = 'Vpc_Forum_Thread_Component';
+        $ret['generators']['child']['component']['view'] = 'Vpc_Forum_Group_View_Component';
         $ret['generators']['newThread'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Forum_Group_NewThread_Component',
             'name' => trlVps('new thread')
         );
         $ret['tablename'] = 'Vpc_Forum_Group_Model';
+        $ret['order'] = 'create_time DESC';
         return $ret;
     }
     public function getPagingCount()
@@ -25,6 +27,8 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
     {
         $ret = parent::getTemplateVars();
         $ret['newThread'] = $this->getData()->getChildComponent('_newThread');
+        $ret['group'] = $this->getData();
+        $ret['forum'] = $this->getData()->getParentPage();
         return $ret;
     }
 }

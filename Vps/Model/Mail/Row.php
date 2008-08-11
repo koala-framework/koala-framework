@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Mail_Row extends Vps_Model_Fnf_Row
+class Vps_Model_Mail_Row extends Vps_Model_FnF_Row
 {
     protected $_mail;
 

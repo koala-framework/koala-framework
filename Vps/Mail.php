@@ -135,17 +135,16 @@ class Vps_Mail
             $vars = $mails->fetchAll($where, 'template');
         }
 
+        $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.txt.tpl");
+        $template = "{$this->_template}";
+        if (substr($template, 0, 1) != '/') { $template = "mails/$template"; }
+        
         // txt mail
         foreach ($vars as $row) {
             $var = $row->variable;
             $this->_view->$var = trim($row->text);
         }
-
-        $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.txt.tpl");
-
-        $this->_mail->setBodyText(
-            $this->_view->render("mails/{$this->_template}.txt.tpl")
-        );
+        $this->_mail->setBodyText($this->_view->render("$template.txt.tpl"));
 
         // html mail
         foreach ($vars as $row) {
@@ -154,13 +153,7 @@ class Vps_Mail
             if (trim(strip_tags($html)) == '') $html = '';
             $this->_view->$var = $html;
         }
-
-        $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.html.tpl");
-
-        $file = "mails/{$this->_template}.html.tpl";
-        if (file_exists("application/views/$file") || file_exists(VPS_PATH."/views/$file")) {
-            $this->_mail->setBodyHtml( $this->_view->render($file) );
-        }
+        $this->_mail->setBodyHtml($this->_view->render("$template.html.tpl"));
 
         //hinzufügen von Bilder zur Email
         if ($this->_view->getImages()){

@@ -5,17 +5,17 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Vpc_Posts_Write_Form_Success_Component';
+        $ret['tablename'] = 'Vpc_Posts_Directory_Model';
         return $ret;
     }
 
-    protected function _initForm()
+    protected function _getPostsComponent()
     {
-        parent::_initForm();
-        $this->_form->setTable($this->getData()->parent->parent->getComponent()->getTable());
+        return $this->getData()->parent->parent;
     }
-
+    
     protected function _beforeSave(Vps_Model_Row_Interface $row)
     {
-        $row->component_id = $this->getData()->parent->parent->componentId;
+        $row->component_id = $this->_getPostsComponent()->componentId;
     }
 }
