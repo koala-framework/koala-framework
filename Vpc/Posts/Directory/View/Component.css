@@ -1,0 +1,29 @@
+.vpcPostsDirectoryView div.vpcPostsPost {
+    background-color: #F3F2F1;
+    font-size: 11px;
+    line-height: 16px;
+    padding: 0px;
+    margin: 15px 0px;
+    border: 1px solid #CCCCCC;
+    clear: both;
+}
+.vpcPostsDirectoryView div.vpcPostsPost div.postData {
+    margin-left:10px;
+    padding-top:3px;
+}
+.vpcPostsDirectoryView div.vpcPostsPost div.avatar {
+    float:left;
+    height:40px;
+    position:absolute;
+    right:-10px;
+    top:0px;
+}
+
+.vpcPostsDirectoryView div.vpcPostsPost div.avatar img { margin-right:10px; }
+
+.vpcPostsDirectoryView div.vpcPostsPost div.content {
+    margin-bottom: 10px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 0px 20px;;
+}

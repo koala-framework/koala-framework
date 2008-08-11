@@ -12,6 +12,7 @@
         <? if ($this->delete) { ?>
             <br /><?=$this->componentLink($this->delete)?></a>
         <? } ?>
+
         <?=$this->componentLink($this->report)?></a>
         <?=$this->componentLink($this->quote)?></a>
     </div>
