@@ -5,16 +5,18 @@ class Vps_Pdf_TcPdf extends TCPDF
     protected $_font = 'arial';
     protected $_font_bold = 'arialb';
     protected $_font_italic = 'ariali';
+    protected $_component;
         
-    public function __construct()
+    public function __construct($component = null)
     {
+        $this->_component = $component;
         parent::__construct("P", "mm", array(210, 297));
         $this->SetFont($this->_font, "", 16);
         $this->SetAuthor("Vivid Planet Software GmbH");
         $this->SetCreator("Vivid Planet Software GmbH mit FPDF");
         $this->SetTitle("Wochenbericht");
     }
-
+    
     public function getRightMargin()
     {
         return $this->rMargin;

@@ -116,7 +116,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         if (isset($_GET['pdf']) && ($pdfClass = Vpc_Admin::getComponentFile(get_class($this), 'Pdf', 'php', true))) {
             $masterClass = Vpc_Admin::getComponentFile(get_class($this), 'PdfMaster', 'php', true);
             if (!$masterClass) { $masterClass = 'Vps_Pdf_TcPdf'; }
-            $pdf = new $masterClass();
+            $pdf = new $masterClass($this);
             $this->getPdfWriter($pdf)->writeContent();
             $pdf->output();
             die();
