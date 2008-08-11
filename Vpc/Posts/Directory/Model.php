@@ -1,5 +1,5 @@
 <?php
-class Vpc_Posts_Directory_Model extends Vpc_Table
+class Vpc_Posts_Directory_Model extends Vps_Db_Table
 {
     protected $_name = 'vpc_posts';
     protected $_rowClass = 'Vpc_Posts_Directory_Row';
