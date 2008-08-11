@@ -2,7 +2,7 @@
     <? if (isset($this->paging)) echo $this->component($this->paging); ?>
     <ul>
         <?php foreach ($this->items as $item) {
-            $posts = $item->getChildComponent('-posts')->getChildComponents(array('generator' => 'detail'));
+            $posts = $item->getChildComponents(array('generator' => 'detail'));
             $first = array_shift($posts);
             $last = array_pop($posts);
             $firstUser = $first->row->findParentRow(get_class(Vps_Registry::get('userModel')));
