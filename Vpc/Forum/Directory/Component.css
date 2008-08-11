@@ -1,0 +1,30 @@
+.vpcForumDirectory ul li.post { border: 1px solid #ccc; }
+.vpcForumDirectory ul li.post div.description a {
+    margin-left: -10px;
+    padding-left: 10px;
+    display: block;
+}
+.vpcProhaustierForum ul li.post div.lastPost {
+    border-top: 1px solid #ccc;
+    font-size: 11px;
+    height: 35px;
+    line-height: 16px;
+    margin-left: -10px;
+    padding-left: 10px;
+}
+.vpcProhaustierForum ul li.post div.statistik {
+    border-left: 1px solid #ccc;
+    float: right;
+    height: 100%;
+}
+.vpcProhaustierForum ul li.title {
+    font-weight: bold;
+    padding-left: 10px;
+}
+.vpcProhaustierForum ul li.post {
+    font-weight: normal;
+    margin-bottom: 15px;
+    margin-left: -10px;
+    margin-top: 10px;
+    padding-left: 10px;
+}
