@@ -25,6 +25,8 @@ class Vps_Acl extends Zend_Acl
 
         $this->add(new Vps_Acl_Resource_UserSelf('vps_user_self', '/vps/user/self'));
 
+        $this->add(new Zend_Acl_Resource('vps_spam_set'));
+
         $this->add(new Zend_Acl_Resource('vps_cli_help'));
         $this->add(new Zend_Acl_Resource('vps_cli_index'));
         $this->add(new Zend_Acl_Resource('vps_cli_trlparse'));
@@ -48,6 +50,7 @@ class Vps_Acl extends Zend_Acl
         $this->allow('admin', 'vps_debug');
         $this->allow('admin', 'vps_media_upload');
         $this->allow('admin', 'edit_role');
+        $this->allow(null, 'vps_spam_set');
     }
 
     public function isAllowed($role = null, $resource = null, $privilege = null)
