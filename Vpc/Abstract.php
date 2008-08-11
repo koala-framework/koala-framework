@@ -14,6 +14,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = true;
+        $ret['isPdf'] = false;
         return $ret;
     }
     
@@ -112,8 +113,17 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
 
     public function sendContent($decoratedPage)
     {
-        header('Content-Type: text/html; charset=utf-8');
-        echo Vps_View_Component::renderComponent($this->getData(), null, true);
+        if (isset($_GET['pdf']) && ($pdfClass = Vpc_Admin::getComponentFile(get_class($this), 'Pdf', 'php', true))) {
+            $masterClass = Vpc_Admin::getComponentFile(get_class($this), 'PdfMaster', 'php', true);
+            if (!$masterClass) { $masterClass = 'Vps_Pdf_TcPdf'; }
+            $pdf = new $masterClass();
+            $this->getPdfWriter($pdf)->writeContent();
+            $pdf->output();
+            die();
+        } else {
+            header('Content-Type: text/html; charset=utf-8');
+            echo Vps_View_Component::renderComponent($this->getData(), null, true);
+        }
     }
     /**
      * Gibt die Variablen für View zurück.

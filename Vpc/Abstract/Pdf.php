@@ -12,4 +12,8 @@ class Vpc_Abstract_Pdf
     public function writeContent()
     {
     }
+    public function getPdf()
+    {
+        return $this->_pdf;
+    }
 }
