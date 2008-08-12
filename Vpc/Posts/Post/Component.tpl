@@ -21,8 +21,9 @@
         <?=trlVps('Member since')?>: <?= $this->date($this->user->row->created) ?>
 
         <? } ?>
-
+        <?php if(isset($this->data->postNumber)) { ?>
         <strong>#<?= $this->data->postNumber ?></strong>
+        <?php } ?>
         <i><?=$this->dateTime($this->data->row->create_time)?></i>
 
         <? if ($this->edit) { ?>

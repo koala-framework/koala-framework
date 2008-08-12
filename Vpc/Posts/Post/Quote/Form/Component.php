@@ -5,4 +5,10 @@ class Vpc_Posts_Post_Quote_Form_Component extends Vpc_Posts_Write_Form_Component
     {
         return $this->getData()->parent->parent->parent;
     }
+    
+    protected function _initForm()
+    {
+        parent::_initForm();
+        $this->_form->setQuoteText($this->getData()->parent->parent->row->content);
+    }
 }
