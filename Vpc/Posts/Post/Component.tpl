@@ -1,20 +1,20 @@
 <div class="<?=$this->cssClass?>">
     <div class="postData">
         <? if ($this->user) { ?>
-        <?=trlVps('By')?>: <?=$this->user?>
-        <?=trlVps('Member since')?>: <?=$this->date($this->user->created)?>
+        <?=trlVps('By')?>: <?= $this->componentLink($this->user) ?>
+        <?=trlVps('Member since')?>: <?= $this->date($this->user->row->created) ?>
         <? } ?>
-        <strong>#TODO:</strong>
+        <strong>#<?= $this->data->postNumber ?></strong>
         <i><?=$this->dateTime($this->data->row->create_time)?></i>
         <? if ($this->edit) { ?>
-            <br /><?=$this->componentLink($this->edit)?></a>
+            <br /><?=$this->componentLink($this->edit)?>
         <? } ?>
         <? if ($this->delete) { ?>
-            <br /><?=$this->componentLink($this->delete)?></a>
+            <br /><?=$this->componentLink($this->delete)?>
         <? } ?>
 
-        <?=$this->componentLink($this->report)?></a>
-        <?=$this->componentLink($this->quote)?></a>
+        <?=$this->componentLink($this->report)?>
+        <?=$this->componentLink($this->quote)?>
     </div>
     <div class="clear"></div>
     <div class="content">

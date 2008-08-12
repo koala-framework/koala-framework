@@ -20,15 +20,7 @@
                     );?>
                     <div class="time">
                         <strong>am: </strong><?= $this->dateTime($g->lastPost->row->create_time) ?> <strong>von: </strong>
-                        <?= $this->componentLink($g->lastUser) ?>
-                        <!--
-                        <strong>am: </strong>{$g.lastPostTime|date_format:"%d.%m.%y, %H:%M"} <strong>von: </strong>
-                        {if $g.lastPostUserUrl}
-                            <a href="{$g.lastPostUserUrl}">{$g.lastPostUser}</a>
-                        {else}
-                            {$g.lastPostUser}
-                        {/if}
-                        -->
+                        <?= $this->componentLink($g->lastUser); ?>
                     </div>
                 <? } else { ?>
                     -
