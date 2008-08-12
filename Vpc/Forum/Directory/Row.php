@@ -8,17 +8,16 @@ class Vpc_Forum_Directory_Row extends Vpc_Row
     
     public function getLastPostId()
     {
+        $db = Zend_Registry::get('db');
         $componentIdPattern = $this->component_id . '_' . $this->id . '_%';
-        $where = array(
-            "component_id LIKE '$componentIdPattern'" => '',
-            "visible = ?" => 1,
-        );
-        $model = new Vpc_Posts_Directory_Model();
-        $last = $model->fetchAll($where, 'create_time DESC')->current();
-        if ($last) {
-            return $last->component_id . '_' . $last->id;
-        }
-        return null;
+        $sql = "SELECT CONCAT(p.component_id, '_', p.id) component_id
+            FROM vpc_posts p, vpc_forum_threads t
+            WHERE p.component_id=CONCAT(t.component_id, '_', t.id)
+                AND p.component_id LIKE '$componentIdPattern'
+            ORDER BY p.create_time DESC
+            LIMIT 1
+        ";
+        return $db->fetchOne($sql);
     }
     
     public function countThreads()
@@ -32,13 +31,15 @@ class Vpc_Forum_Directory_Row extends Vpc_Row
     
     public function countPosts()
     {
+        $db = Zend_Registry::get('db');
         $componentIdPattern = $this->component_id . '_' . $this->id . '_%';
-        $where = array(
-            "component_id LIKE '$componentIdPattern'" => '',
-            'visible = ?' => 1
-        );
-        $model = new Vpc_Posts_Directory_Model();
-        return count($model->fetchAll($where));
+        $sql = "SELECT COUNT(*)
+            FROM vpc_posts p, vpc_forum_threads t
+            WHERE p.component_id=CONCAT(t.component_id, '_', t.id)
+                AND p.component_id LIKE '$componentIdPattern'
+        ";
+                p($sql);
+        return $db->fetchOne($sql);
     }
 
 }

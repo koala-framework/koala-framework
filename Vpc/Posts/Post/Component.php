@@ -30,31 +30,24 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+        $data = $this->getData();
         
-        $ret['content'] = self::replaceCodes($this->getData()->row->content);
+        $ret['content'] = self::replaceCodes($data->row->content);
         $ret['delete'] = false;
         if ($this->mayEditPost()) {
-            $ret['edit'] = $this->getData()->getChildComponent('_edit');
-            $ret['delete'] = $this->getData()->getChildComponent('_delete');
+            $ret['edit'] = $data->getChildComponent('_edit');
+            $ret['delete'] = $data->getChildComponent('_delete');
         }
-        $ret['report'] = $this->getData()->getChildComponent('_report');
-        $ret['quote'] = $this->getData()->getChildComponent('_quote');
-
-        $ret['user'] = $this->getData()->row->findParentRow(Vps_Registry::get('userModel'));
+        $ret['report'] = $data->getChildComponent('_report');
+        $ret['quote'] = $data->getChildComponent('_quote');
+        $ret['user'] = $data->parent->getComponent()->getUserComponent($data->row->user_id);
         return $ret;
-    }
-
-    public function setPostNum($postNum)
-    {
-        //TODO
-        $this->_postNum = $postNum;
     }
 
     public function mayEditPost()
     {
         $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
         if (!$authedUser) return false;
-
         return $authedUser->id == $this->getData()->row->user_id;
     }
 

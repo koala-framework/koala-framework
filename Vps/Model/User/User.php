@@ -255,6 +255,12 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
             return '';
         } else if ($columnName == 'name') {
             return $this->firstname . ' ' . $this->lastname;
+        } else if ($columnName == 'forumname') {
+            if (isset($this->nickname) && $this->nickname != '') {
+                return $this->nickname;
+            } else {
+                return $this->firstname . ' ' . substr($this->lastname, 0, 1);
+            }
         } else {
             return parent::__get($columnName);
         }
@@ -267,7 +273,8 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
         } else if (
             $columnName == 'password1' ||
             $columnName == 'password2' ||
-            $columnName == 'name')
+            $columnName == 'name' ||
+            $columnName == 'forumname')
         {
             return true;
         } else {
