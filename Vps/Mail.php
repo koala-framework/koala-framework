@@ -157,11 +157,11 @@ class Vps_Mail
             $vars = $mails->fetchAll($where, 'template');
         }
 
-        $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.txt.tpl");
         $template = "{$this->_template}";
         if (substr($template, 0, 1) != '/') { $template = "mails/$template"; }
-        
+
         // txt mail
+        $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.txt.tpl");
         foreach ($vars as $row) {
             $var = $row->variable;
             $this->_view->$var = trim($row->text);
@@ -169,6 +169,7 @@ class Vps_Mail
         $this->_mail->setBodyText($this->_view->render("$template.txt.tpl"));
 
         // html mail
+        $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.html.tpl");
         foreach ($vars as $row) {
             $var = $row->variable;
             $html = $row->html;
