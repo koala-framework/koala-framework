@@ -1,8 +1,52 @@
-.vpcForumDirectory ul li.post { border: 1px solid #ccc; }
+.vpcForumDirectory ul li.post {
+    border: 1px solid #ccc;
+}
 .vpcForumDirectory ul li.post div.description a {
     margin-left: -10px;
     padding-left: 10px;
     display: block;
+}
+.vpcProhaustierForum strong {
+    font-weight: bold;
+}
+.vpcProhaustierForum a {
+    color: $typoBrown;
+    text-decoration: none;
+}
+.vpcProhaustierForum a:hover {
+    color: $orange;
+    text-decoration: none;
+}
+.vpcProhaustierForum div.forumSearch {
+    text-align: right;
+    margin-right: -14px;
+    color: $orange;
+}
+.vpcProhaustierForum div.forumSearch button {
+    width: 35px;
+    height: 35px;
+    border: none;
+    background: url(/assets/web/images/btnSearch.gif) 2px 4px no-repeat;
+}
+.vpcProhaustierForum div.forumSearch input {
+    width: 180px;
+    margin-left: 10px;
+    padding: 2px;
+    background-color: $searchFieldBg;
+    border-right: 1px solid $searchFieldBorder;
+    border-bottom: 1px solid $searchFieldBorder;
+    border-top: 1px solid $typo;
+    border-left: 1px solid $typo;
+}
+.vpcProhaustierForum ul {
+    margin-top: 20px;
+}
+.vpcProhaustierForum ul li.post {
+    font-weight: normal;
+    margin-bottom: 15px;
+    margin-left: -10px;
+    margin-top: 10px;
+    padding-left: 10px;
 }
 .vpcProhaustierForum ul li.post div.lastPost {
     border-top: 1px solid #ccc;
@@ -18,13 +62,11 @@
     height: 100%;
 }
 .vpcProhaustierForum ul li.title {
+    background: url(/assets/web/images/forumHeaderBg.jpg) repeat-x top left;
     font-weight: bold;
+    line-height: 24px;
     padding-left: 10px;
 }
-.vpcProhaustierForum ul li.post {
-    font-weight: normal;
-    margin-bottom: 15px;
-    margin-left: -10px;
+.vpcProhaustierForum ul li.title ul {
     margin-top: 10px;
-    padding-left: 10px;
 }
