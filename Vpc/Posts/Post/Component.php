@@ -43,7 +43,7 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         $ret['user'] = $data->parent->getComponent()->getUserComponent($data->row->user_id);
         $ret['signature'] = null;
         if ($ret['user']) {
-            $ret['signature'] = htmlspecialchars(nl2br($ret['user']->row->signature));
+            $ret['signature'] = nl2br(htmlspecialchars($ret['user']->row->signature));
         }
         return $ret;
     }
