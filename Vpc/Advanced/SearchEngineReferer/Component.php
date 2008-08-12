@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract
+class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
@@ -7,40 +7,20 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract
         $ret['allowedHosts'] = array(
             'google', 'yahoo', 'msn', 'live', 'aol', 'altavista'
         );
+        $ret['generators']['child']['component']['view'] =
+            'Vpc_Advanced_SearchEngineReferer_ViewMyLatest_Component';
         $ret['componentName'] = trlVps('Search engine referer');
         $ret['tablename'] = 'Vpc_Advanced_SearchEngineReferer_Model';
         $ret['limit'] = 5;
         $ret['viewCache'] = false;
+        $ret['saveReferer'] = true;
         return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $this->_saveReferer();
-
-        $limit = $this->_getSetting('limit');
-
-        $table = $this->getTable();
-        $where = array('component_id = ?' => $this->getData()->dbId);
-        $ret['referers'] = array();
-        $i = 0;
-        $rowset = $table->fetchAll($where, 'id DESC');
-        foreach ($rowset as $row) {
-            if ($i < $limit) {
-                $host = parse_url($row->referer_url, PHP_URL_HOST);
-                $tmpVar = array(
-                    'time'    => $row->create_time,
-                    'referer' => $row->referer_url,
-                    'host'    => $host,
-                    'query'   => $this->_getQueryVar($row->referer_url)
-                );
-                $ret['referers'][] = $tmpVar;
-            } else {
-                $row->delete();
-            }
-            $i++;
-        }
+        if ($this->_getSetting('saveReferer')) $this->_saveReferer();
         return $ret;
     }
 
@@ -53,21 +33,21 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract
             if (preg_match('/^(www\.)?(('.implode(')|(', $allowedHosts).'))\.[a-z]+$/i', $host)) {
                 $table = $this->getTable();
 
-                $where = array('component_id = ?' => $this->getData()->dbId);
+                $where = array('component_id = ?' => $this->getData()->parent->dbId);
                 $rowCompare = $table->fetchRow($where, 'id DESC');
 
-                $query = $this->_getQueryVar($referer);
+                $query = self::getQueryVar($referer);
 
                 if ($rowCompare) {
                     $hostCompare = parse_url($rowCompare->referer_url, PHP_URL_HOST);
-                    $queryCompare = $this->_getQueryVar($rowCompare->referer_url);
+                    $queryCompare = self::getQueryVar($rowCompare->referer_url);
                 }
 
                 if ((!$rowCompare || $hostCompare != $host || $queryCompare != $query)
                     && strpos($query, 'site:') === false
                 ) {
                     $row = $table->createRow();
-                    $row->component_id = $this->getData()->dbId;
+                    $row->component_id = $this->getData()->parent->dbId;
                     $row->referer_url = $referer;
                     $row->save();
                     return true;
@@ -77,7 +57,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract
         return false;
     }
 
-    private function _getQueryVar($url)
+    public static function getQueryVar($url)
     {
         $host = parse_url($url, PHP_URL_HOST);
         $queryString = parse_url($url, PHP_URL_QUERY);
