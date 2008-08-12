@@ -38,7 +38,6 @@ class Vpc_Forum_Directory_Row extends Vpc_Row
             WHERE p.component_id=CONCAT(t.component_id, '_', t.id)
                 AND p.component_id LIKE '$componentIdPattern'
         ";
-                p($sql);
         return $db->fetchOne($sql);
     }
 
