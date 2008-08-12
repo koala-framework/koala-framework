@@ -1,6 +1,9 @@
 <div class="<?=$this->cssClass?>">
     <div class="postData">
         <? if ($this->user) { ?>
+        <div class="avatar">
+            <?= $this->componentLink($this->user, '<img src="/assets/images/logoLight.jpg" alt="Avatar" />') ?>
+        </div>
         <?=trlVps('By')?>: <?= $this->componentLink($this->user) ?>
         <?=trlVps('Member since')?>: <?= $this->date($this->user->row->created) ?>
         <? } ?>
@@ -20,4 +23,7 @@
     <div class="content">
         <?=$this->content?>
     </div>
+    <? if ($this->signature) { ?>
+        <p class="signature"><tt>--<br /><?=$this->signature?></tt></p>
+    <?php } ?>
 </div>
