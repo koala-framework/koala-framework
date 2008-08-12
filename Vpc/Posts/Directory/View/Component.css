@@ -11,6 +11,13 @@
     margin-left:10px;
     padding-top:3px;
 }
+.vpcPostsDirectoryView div.vpcPostsPost div.postData div.user {
+    float:right;
+    padding-right:10px;
+    margin-right:50px;
+    position:relative;
+    text-align:right;
+}
 .vpcPostsDirectoryView div.vpcPostsPost div.avatar {
     float:left;
     height:40px;
@@ -21,9 +28,8 @@
 
 .vpcPostsDirectoryView div.vpcPostsPost div.avatar img { margin-right:10px; }
 
-.vpcPostsDirectoryView div.vpcPostsPost div.content {
-    margin-bottom: 10px;
+.vpcPostsDirectoryView div.vpcPostsPost div.comment {
     margin-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 0px 20px;;
+    padding: 0px 20px;
+    background-color: #fff;
 }
