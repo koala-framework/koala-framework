@@ -1,4 +1,19 @@
+.vpcPostsDirectoryView h2 {
+    font-weight: bold;
+    height: 25px;
+    margin: 0px;
+    padding-left: 20px;
+    padding-top: 3px;
+    background: url(/assets/web/images/forumHeaderBg.jpg) repeat-x top left;
+}
+.vpcPostsDirectoryView div.post {
+    background: url(/assets/web/images/themaBtn.jpg) no-repeat top left;
+    font-weight: bold;
+    line-height: 25px;
+    margin-top: 45px;
+}
 .vpcPostsDirectoryView div.vpcPostsPost {
+    color: $recommend;
     background-color: #F3F2F1;
     font-size: 11px;
     line-height: 16px;
@@ -8,8 +23,7 @@
     clear: both;
 }
 .vpcPostsDirectoryView div.vpcPostsPost div.postData {
-    margin-left:10px;
-    padding-top:3px;
+    padding: 3px 15px 10px 15px;
 }
 .vpcPostsDirectoryView div.vpcPostsPost div.postData div.user {
     float:right;
@@ -19,17 +33,22 @@
     text-align:right;
 }
 .vpcPostsDirectoryView div.vpcPostsPost div.avatar {
-    float:left;
-    height:40px;
-    position:absolute;
-    right:-10px;
-    top:0px;
+    float: right;
+    margin-top: -3px;
+    margin-right: -15px;
 }
 
-.vpcPostsDirectoryView div.vpcPostsPost div.avatar img { margin-right:10px; }
-
 .vpcPostsDirectoryView div.vpcPostsPost div.comment {
-    margin-top: 10px;
-    padding: 0px 20px;
+    font-size: 12px;
+    margin: 2px -15px -10px -15px;
+    padding: 15px 20px;
     background-color: #fff;
+    color: $recommend;
+}
+.vpcPostsDirectoryView div.vpcPostsPost div.comment fieldset.quote {
+    background-color: #f3f2f1;
+    border: 1px solid #ccc;
+    font-style: italic;
+    margin-top: 10px;
+    padding: 10px;   
 }

@@ -19,7 +19,7 @@
                         $this->truncate($g->lastPost->getPage()->row->subject, 50, '...', true) 
                     );?>
                     <div class="time">
-                        <strong>am: </strong><?= $this->dateTime($g->lastPost->row->create_time) ?> <strong>von: </strong>
+                        am: <?= $this->dateTime($g->lastPost->row->create_time) ?> von: 
                         <?= $this->componentLink($g->lastUser); ?>
                     </div>
                 <? } else { ?>
