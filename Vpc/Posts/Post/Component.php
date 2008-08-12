@@ -41,6 +41,10 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         $ret['report'] = $data->getChildComponent('_report');
         $ret['quote'] = $data->getChildComponent('_quote');
         $ret['user'] = $data->parent->getComponent()->getUserComponent($data->row->user_id);
+        $ret['signature'] = null;
+        if ($ret['user']) {
+            $ret['signature'] = htmlspecialchars(nl2br($ret['user']->row->signature));
+        }
         return $ret;
     }
 
