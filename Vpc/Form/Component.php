@@ -43,7 +43,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
                         $postData[$k][$i][$prop] = $file[$prop][$i];
                     }
                 }
-            } else {
+            } else if ($file['error'] != 4) {
                 $postData[$k] = $file;
             }
         }

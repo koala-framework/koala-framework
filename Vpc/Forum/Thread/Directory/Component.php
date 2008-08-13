@@ -5,6 +5,7 @@ class Vpc_Forum_Thread_Directory_Component extends Vpc_Posts_Directory_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['view'] = 'Vpc_Forum_Thread_Directory_View_Component';
+        $ret['name'] = trlVps('Forum');
         return $ret;
     }
     

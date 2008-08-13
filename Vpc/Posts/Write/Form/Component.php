@@ -16,6 +16,6 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
     
     protected function _beforeSave(Vps_Model_Row_Interface $row)
     {
-        $row->component_id = $this->_getPostsComponent()->componentId;
+        $row->component_id = $this->_getPostsComponent()->dbId;
     }
 }

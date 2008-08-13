@@ -21,7 +21,7 @@ class Vps_Form extends Vps_Form_NonTableForm
     //kann überschrieben werden wenn wir eine anderen row haben wollen
     protected function _getRowByParentRow($parentRow)
     {
-        if ($parentRow && $parentRow->getModel()->isEqual($this->_model)) {
+        if ($parentRow && !$parentRow instanceof Vps_Model_FnF_Row && $parentRow->getModel()->isEqual($this->_model)) {
             return $parentRow;
         }
 
