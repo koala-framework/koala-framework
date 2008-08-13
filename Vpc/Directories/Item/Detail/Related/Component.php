@@ -15,12 +15,17 @@ class Vpc_Directories_Item_Detail_Related_Component extends Vpc_Abstract
         return $ret;
     }
 
+    protected function _getCategoryDirectory()
+    {
+        return Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass('Vpc_Directories_Category_Directory_Component');
+    }
+
     private function _getRelatedCompaniesLinks()
     {
         $itemRow = $this->getData()->parent->row;
 
-        $categoryDirectory = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_Directories_Category_Directory_Component');
+        $categoryDirectory = $this->_getCategoryDirectory();
         $connectTableName = Vpc_Abstract::getSetting(
             $categoryDirectory->componentClass, 'categoryToItemTableName'
         );
