@@ -122,7 +122,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         if ($value) {
             $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
                         " value=\"$value[uploadId]\" />";
-            $ret['html'] .= '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">del</button>';
+            $ret['html'] .= '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="delete" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">del</button>';
             $ret['html'] .= ''.$value['filename'].'.'.$value['extension'];
             $helper = new Vps_View_Helper_FileSize();
             $ret['html'] .= ' ('.$helper->fileSize($value['fileSize']).')';
