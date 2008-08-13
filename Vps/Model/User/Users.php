@@ -172,6 +172,11 @@ class Vps_Model_User_Users extends Vps_Db_Table
         }
         return $this->_authedUser;
     }
+    
+    public function clearAuthedUser()
+    {
+        $this->_authedUser = null;
+    }
 
     public function getAuthedUserRole()
     {

@@ -16,6 +16,7 @@ class Vpc_User_Login_Form_Component extends Vpc_Form_Component
                         ->getComponentByClass('Vpc_User_Register_Component');
         return $ret;
     }
+    
     protected function _afterSave(Vps_Model_Row_Interface $row)
     {
         $adapter = new Vps_Auth_Adapter_Service();

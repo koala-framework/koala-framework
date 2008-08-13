@@ -2,7 +2,7 @@
     <div class="postData">
         <? if ($this->user) { ?>
         <?php
-            $image = $this->user->row->getFileUrl('Avatar', 'avatarsmall');
+            $image = $this->user->getChildComponent('-avatar')->getComponent()->getImageUrl('forum');
             if (!$image) { $image = '/assets/images/logoLight.jpg'; }
         ?>
         <div class="avatar">

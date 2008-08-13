@@ -14,7 +14,7 @@ class Vpc_User_Edit_Form_Component extends Vpc_Form_Component
     {
         $table = Zend_Registry::get('userModel');
         $user = $table->getAuthedUser();
-        if (!$user) { Vps_Setup::output404(); }
+        if (!$user) return parent::_initForm();
         $id = $user->id;
         $this->_form = new Vps_Form('user');
         $this->_form->setTable($table);

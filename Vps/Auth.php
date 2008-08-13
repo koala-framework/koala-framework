@@ -34,6 +34,14 @@ class Vps_Auth extends Zend_Auth
 
         return self::$_instance;
     }
+    
+    public function clearIdentity()
+    {
+        $ret = parent::clearIdentity();
+        $userModel = Vps_Registry::get('userModel');
+        if ($userModel) { $userModel->clearAuthedUser(); }
+        return $ret;
+    }
 
 
 }
