@@ -1,0 +1,21 @@
+.vpcForumGroupNewThread div.vpsField label {
+    width: auto;
+    text-align: left;
+}
+.vpcForumGroupNewThread button.submit {
+    background:transparent url(/assets/web/images/themaBtn.jpg) no-repeat scroll left top;
+    border: none;
+    font-weight: bold;
+    height: 25px;
+    margin: 20px 0;
+    width: 160px;
+}
+.vpcForumGroupNewThread textarea {
+    background-color: $searchFieldBg;
+    border-right: 1px solid $searchFieldBorder;
+    border-bottom: 1px solid $searchFieldBorder;
+    border-top: 1px solid $typo;
+    border-left: 1px solid $typo;
+    padding: 2px;
+    margin-bottom: 8px;
+}

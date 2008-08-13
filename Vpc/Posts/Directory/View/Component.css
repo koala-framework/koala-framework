@@ -13,40 +13,38 @@
     margin-top: 45px;
 }
 .vpcPostsDirectoryView div.vpcPostsPost {
-    color: $recommend;
-    background-color: #F3F2F1;
+    color: $reccomend;
+    background: #f3f2f1;
     font-size: 11px;
     line-height: 16px;
     padding: 0px;
     margin: 15px 0px;
-    border: 1px solid #CCCCCC;
+    border: 1px solid #ccc;
     clear: both;
 }
 .vpcPostsDirectoryView div.vpcPostsPost div.postData {
     padding: 3px 15px 10px 15px;
 }
 .vpcPostsDirectoryView div.vpcPostsPost div.postData div.user {
-    float:right;
-    padding-right:10px;
-    margin-right:50px;
-    position:relative;
-    text-align:right;
+    float: right;
+    padding-right: 10px;
+    margin-right: 50px;
+    position: relative;
+    text-align: right;
 }
 .vpcPostsDirectoryView div.vpcPostsPost div.avatar {
     float: right;
     margin-top: -3px;
     margin-right: -15px;
 }
-
 .vpcPostsDirectoryView div.vpcPostsPost div.comment {
     font-size: 12px;
     margin: 2px -15px -10px -15px;
     padding: 15px 20px;
-    background-color: #fff;
-    color: $recommend;
+    background: #fff;
 }
 .vpcPostsDirectoryView div.vpcPostsPost div.comment fieldset.quote {
-    background-color: #f3f2f1;
+    background: #f3f2f1;
     border: 1px solid #ccc;
     font-style: italic;
     margin-top: 10px;
