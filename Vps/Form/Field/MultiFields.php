@@ -324,12 +324,12 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         }
         $ret = parent::getTemplateVars($values);
         $ret['preHtml'] = '<input type="hidden" name="'.$name.'_num'.$namePostfix.'" value="'.count($value).'" />';
-        $ret['postHtml'] = '<button type="submit" name="'.$name.'_add'.$namePostfix.'" value="1">add</button>';
+        $ret['postHtml'] = '<button class="add" type="submit" name="'.$name.'_add'.$namePostfix.'" value="1">add</button>';
 
         $ret['items'] = array();
         foreach ($value as $i=>$rowValues) {
             $ret['items'] = array_merge($ret['items'], $this->fields->getTemplateVars($rowValues, $namePostfix."[$i]"));
-            $ret['items'][] = array('html' => '<button type="submit" name="'.$name.'_del'.$namePostfix.'" value="'.$i.'">del</button>', 'item' => null);
+            $ret['items'][] = array('html' => '<button class="delete" type="submit" name="'.$name.'_del'.$namePostfix.'" value="'.$i.'">del</button>', 'item' => null);
         }
         return $ret;
     }
