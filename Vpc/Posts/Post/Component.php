@@ -45,6 +45,11 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         if ($ret['user']) {
             $ret['signature'] = nl2br(htmlspecialchars($ret['user']->row->signature));
         }
+        $select = $data->parent->getGenerator('detail')->select($data->parent)
+            ->where('create_time <= ?', $data->row->create_time)
+            ->where('id != ?', $data->row->id)
+            ->order(array('create_time', 'id'));
+        $ret['postNumber'] = count($select->query(Zend_Db::FETCH_NUM)->fetchAll()) + 1;
         return $ret;
     }
 

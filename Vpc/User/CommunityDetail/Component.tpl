@@ -1,1 +1,0 @@
-todo wenn zB für freiheit.cc benötigt, teile von prohaustier kopieren

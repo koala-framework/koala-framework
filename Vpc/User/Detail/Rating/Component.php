@@ -4,6 +4,7 @@ class Vpc_User_Detail_Rating_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['componentName'] = 'Rating';
         $ret['pointsPerPost'] = 1;
         $ret['pointsPerThread'] = 5;
         $ret['starsTable'] = array(

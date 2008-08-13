@@ -1,25 +1,33 @@
 <div class="<?=$this->cssClass?>">
     <div class="postData">
         <? if ($this->user) { ?>
+        <?php
+            $image = $this->user->row->getFileUrl('Avatar', 'avatarsmall');
+            if (!$image) { $image = '/assets/images/logoLight.jpg'; }
+        ?>
         <div class="avatar">
-            <?= $this->componentLink($this->user, '<img src="/assets/images/logoLight.jpg" alt="Avatar" />') ?>
+            <?= $this->componentLink($this->user, '<img src="' . $image . '" alt="Avatar" />') ?>
         </div>
         <div class="user">
             <?=trlVps('By')?>: <?= $this->componentLink($this->user) ?>
         </div>
-        <?/*=trlVps('Member since')?>: <?=$this->date($this->user->created)*/?>
-        <strong>#<?= $this->data->postNumber ?></strong>
-        <i><?=$this->dateTime($this->data->row->create_time)?></i><br />
+        <? } ?>
+        <strong>#<?= $this->postNumber ?></strong>
+        <i><?=trlVps('on') ?> <?=$this->date($this->data->row->create_time)?> <?=trlVps('at') ?> <?=$this->time($this->data->row->create_time)?></i><br />
         Beitrag: 
-        <?=$this->componentLink($this->report)?></a> | <?=$this->componentLink($this->quote)?></a>
+        <? if ($this->edit) { ?>
+            <br /><?=$this->componentLink($this->edit)?>
+        <? } ?>
+        <? if ($this->delete) { ?>
+            <br /><?=$this->componentLink($this->delete)?>
+        <? } ?>
+        <?=$this->componentLink($this->report)?> | <?=$this->componentLink($this->quote)?>
         <div class="comment">
             <?=$this->content?>
         </div>
-        <? } ?>
+        <? if ($this->signature) { ?>
+            <p class="signature"><tt>--<br /><?=$this->signature?></tt></p>
+        <?php } ?>
     </div>
     <div class="clear"></div>
-    
-    <? if ($this->signature) { ?>
-        <p class="signature"><tt>--<br /><?=$this->signature?></tt></p>
-    <?php } ?>
 </div>
