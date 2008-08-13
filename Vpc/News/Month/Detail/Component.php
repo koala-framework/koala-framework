@@ -1,19 +1,24 @@
 <?php
-class Vpc_News_Month_Detail_Component extends Vpc_News_List_Abstract_Component
+class Vpc_News_Month_Detail_Component extends Vpc_Directories_List_Component
 {
-    protected function _selectNews()
+    public static function getSettings()
     {
-        $select = parent::_selectNews();
-        $monthDate = $this->getData()->id;
+        $ret = parent::getSettings();
+        $ret['generators']['child']['component']['view'] = 'Vpc_News_List_View_Component';
+        return $ret;
+    }
+
+    public function getSelect()
+    {
+        $select = parent::getSelect();
+        $monthDate = substr($this->getData()->row->publish_date, 0, 7);
         $select->where('publish_date >= ?', "$monthDate-01");
         $select->where('publish_date <= ?', "$monthDate-31");
         return $select;
     }
 
-    public function getNewsComponent()
+    protected function _getItemDirectory()
     {
-        return $this->getData()
-            ->parent //month directory
-            ->getNewsComponent();
+        return $this->getData()->parent->parent;
     }
 }
