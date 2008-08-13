@@ -4,11 +4,9 @@
         <?=$this->componentLink($this->data->getParentPage())?> »
         <?=$this->componentLink($this->data)?>
     </h2>
-    
     <?=$this->component($this->observe)?>
-
     <?php if (!$this->threadClosed) { ?>
-        <?=$this->componentLink($this->write, trlVps('add Comment'))?>
+        <div class="newPost"><?=$this->componentLink($this->write, trlVps('add Comment'))?></div>
     <?php } else { ?>
         <span class="threadClosed">Thread closed</span>
     <?php } ?>
@@ -18,7 +16,7 @@
     <? } ?>
     <?=$this->component($this->paging)?>
     <?php if (!$this->threadClosed) { ?>
-        <?=$this->componentLink($this->write, trlVps('add Comment'))?>
+        <div class="newPost"><?=$this->componentLink($this->write, trlVps('add Comment'))?></div>
     <?php } else { ?>
         <span class="threadClosed">Thread closed</span>
     <?php } ?>

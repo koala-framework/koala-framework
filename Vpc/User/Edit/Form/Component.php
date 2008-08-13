@@ -6,6 +6,7 @@ class Vpc_User_Edit_Form_Component extends Vpc_Form_Component
         $ret = parent::getSettings();
         $ret['placeholder']['submitButton'] = trlVps('edit account');
         $ret['generators']['child']['component']['success'] = 'Vpc_User_Edit_Form_Success_Component';
+        $ret['cssClass'] = 'webStandard';
         return $ret;
     }
     

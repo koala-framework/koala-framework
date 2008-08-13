@@ -5,11 +5,11 @@
             <div class="avatar"><img src="{$component.forumUserData.avatarUrl}" alt="Avatar" /></div>
         <? } ?>
 
-        <h3>
+        <h2>
             <?=$this->data->row->title?>
             <?=$this->data->row->firstname?>
             <?=substr($this->data->row->lastname, 0, 1).'.'?>
-        </h3>
+        </h2>
 
         <p>
             <strong><?=trlVps('Member since')?>:</strong>

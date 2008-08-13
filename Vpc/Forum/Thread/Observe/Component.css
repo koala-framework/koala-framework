@@ -1,16 +1,24 @@
-a.notObserved {
-    background: url(/assets/vps/Vpc/Forum/notObserved.jpg) no-repeat 0px 1px;
-    line-height: 24px;
-    padding-left: 28px;
-    float: right;
-}
-a.notObserved:hover,
-a.observed:hover {
-    background: url(/assets/vps/Vpc/Forum/observedOver.jpg) no-repeat 0px 1px;
-}
-a.observed {
-    background: url(/assets/vps/Vpc/Forum/observed.jpg) no-repeat 0px 1px;
-    padding-left: 28px;
+a.observed, a.notObserved{
     float: right;
     line-height: 24px;
+    padding-left: 28px;
+}
+.vpcForumThreadDirectoryView div.observeThread a.notObserved {
+    background: url(/assets/web/images/notObserved.jpg) no-repeat left center;
+    float: right;
+    line-height: 30px;
+    margin-top: 15px;
+}
+.vpcForumThreadDirectoryView div.observeThread a.observed:hover,
+.vpcForumThreadDirectoryView div.observeThread a.notObserved:hover {
+    background: url(/assets/web/images/observedOver.jpg) no-repeat left center;
+    float: right;
+    line-height: 30px;
+    margin-top: 15px;
+}
+.vpcForumThreadDirectoryView div.observeThread a.observed {
+    background: url(/assets/web/images/observed.jpg) no-repeat left center;
+    float: right;
+    line-height: 30px;
+    margin-top: 15px;
 }
