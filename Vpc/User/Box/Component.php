@@ -10,6 +10,9 @@ class Vpc_User_Box_Component extends Vpc_Abstract_Composite_Component
 
     public function getTemplateVars()
     {
+        if (isset($_GET['logout'])) {
+            Vps_Auth::getInstance()->clearIdentity();
+        }
         $ret = parent::getTemplateVars();
         $ret['authedUser'] = Vps_Registry::get('userModel')->getAuthedUser();
         $ret['register'] = Vps_Component_Data_Root::getInstance()
@@ -17,10 +20,14 @@ class Vpc_User_Box_Component extends Vpc_Abstract_Composite_Component
         $ret['lostPassword'] = Vps_Component_Data_Root::getInstance()
                         ->getComponentByClass('Vpc_User_LostPassword_Component');
         if ($ret['authedUser']) {
+            $ret['myProfile'] = Vps_Component_Data_Root::getInstance()
+                ->getComponentByClass('Vpc_User_Directory_Component')
+                ->getChildComponent('_' . $ret['authedUser']->id);
             $ret['links'] = $this->_getLinks();
         }
         return $ret;
     }
+    
     protected function _getLinks()
     {
         $ret = array();
@@ -28,10 +35,6 @@ class Vpc_User_Box_Component extends Vpc_Abstract_Composite_Component
         $userDirectory = Vps_Component_Data_Root::getInstance()
             ->getComponentByClass('Vpc_User_Directory_Component');
         
-        //Mein Profil
-        $userId = Vps_Registry::get('userModel')->getAuthedUser()->id;
-        $ret[] = $userDirectory->getChildComponent("_$userId");
-
         //Einstellungen
         $ret[] = $userDirectory->getChildComponent('_edit');
 

@@ -4,9 +4,8 @@
         <?php foreach ($this->items as $item) { ?>
             <li>
                 <?=$this->componentLink($item);?>
-                <?php if ($item->row->created) { ?>
-                    <span>( <?= trlVps('Member since') ?>: <?= $this->date($item->row->created) ?>)</span>
-                <?php } ?>
+                <?= $this->component($item->parent->getChildComponent('_' . $item->row->id)->getChildComponent('-rating')) ?>
+                (<?= trlVps('Member since') ?>: <?= $this->date($item->row->created) ?>)
             </li>
         <?php } ?>
     </ul>

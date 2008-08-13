@@ -1,6 +1,4 @@
 <div class="<?=$this->cssClass?>">
-
-    TODO: text entfernen, gehört nur in login-plugin
     <h1><?=trlVps('Please login')?></h1>
     <p><?=trlVps('You have to login to see the requested page.')?></p>
     <? if ($this->register) { ?>

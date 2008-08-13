@@ -20,6 +20,8 @@ class Vps_View_Helper_Image
         }
 
         if (is_string($image)){
+            $image = str_replace(VPS_PATH, '/assets/vps', $image);
+            $image = str_replace(getcwd(), '/assets', $image);
             $url = $image;
             if (!$this->_dep) {
                 $this->_dep = new Vps_Assets_Dependencies();

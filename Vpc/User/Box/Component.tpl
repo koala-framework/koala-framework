@@ -3,6 +3,7 @@
     <div class="account">
         <h2><?=trlVps('My account')?>:</h2>
         <ul>
+            <li><?=$this->componentLink($this->myProfile, trlVps('My Profile'))?></li>
             <? foreach ($this->links as $l) { ?>
                 <li><?=$this->componentLink($l)?></li>
             <? } ?>

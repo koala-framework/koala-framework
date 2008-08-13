@@ -5,6 +5,7 @@ class Vpc_User_Detail_Community_Component extends Vpc_User_Detail_Abstract_Compo
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Community');
+        $ret['numberOfLastPosts'] = 9;
         return $ret;
     }
     
@@ -12,14 +13,16 @@ class Vpc_User_Detail_Community_Component extends Vpc_User_Detail_Abstract_Compo
     {
         $ret = parent::getTemplateVars();
         $ret['activitiesCount'] = 0;
+        $ret['lastPosts'] = null;
+        $ret['showLastPosts'] = $this->_getSetting('numberOfLastPosts') > 0;
         
         $table = new Vpc_Posts_Directory_Model();
         $select = $table->select()
             ->where('visible = ?', 1)
-            ->where('user_id = ?', Zend_Registry::get('userModel')->getAuthedUser()->id)
+            ->where('user_id = ?', $this->getData()->parent->row->id)
             ->order('create_time DESC');
         $ret['postsCount'] = count($select->query()->fetchAll());
-        $select->limit(5);
+        $select->limit($this->_getSetting('numberOfLastPosts'));
         foreach ($select->query()->fetchAll() as $row) {
             $id = $row['component_id'] . '-' . $row['id'];
             $post = Vps_Component_Data_Root::getInstance()->getComponentById($id);
