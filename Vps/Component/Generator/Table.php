@@ -7,11 +7,16 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     protected $_idColumn = 'id';
     private $_rows = array();
 
+    protected function _getSelectFields()
+    {
+        return array(Zend_Db_Select::SQL_WILDCARD);
+    }
+
     public function select($parentData, array $constraints = array())
     {
         $select = new Vps_Db_Table_Select_Generator($this->_table);
         $select->setGenerator($this->_settings['generator']);
-        $select->from($this->_table);
+        $select->from($this->_table, $this->_getSelectFields());
         $cols = $this->_table->info('cols');
         $tableName = $this->_table->info('name');
         if ($parentData && in_array('component_id', $cols)) {
@@ -137,11 +142,17 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                 $select->where("$tableName.component IN ('".implode("', '", $keys) ."')");
             }
         }
-
         if (isset($constraints['id'])) {
-                                                    //- bzw. _ abschneiden
-            $select->where($tableName.".".$this->_idColumn.' = ?', substr($constraints['id'], 1));
+            $selectFields = $this->_getSelectFields();
+            // mit substr - bzw. _ abschneiden
+            if (array_key_exists($this->_idColumn, $selectFields)) {
+                $select->where($selectFields[$this->_idColumn].' = ?', substr($constraints['id'], 1));
+            } else {
+                $select->where($tableName.".".$this->_idColumn.' = ?', substr($constraints['id'], 1));
+            }
+
         }
+
         return $select;
     }
 

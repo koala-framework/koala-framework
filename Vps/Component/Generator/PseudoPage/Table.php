@@ -44,7 +44,12 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
         if (!$select) return null;
         if (isset($constraints['filename'])) {
             if ($this->_settings['uniqueFilename']) {
-                $select->where($tableName.'.'.$this->_settings['filenameColumn'] . ' = ?', $constraints['filename']);
+                $selectFields = $this->_getSelectFields();
+                if (array_key_exists($this->_settings['filenameColumn'], $selectFields)) {
+                    $select->where($selectFields[$this->_settings['filenameColumn']]. ' = ?', $constraints['filename']);
+                } else {
+                    $select->where($tableName.'.'.$this->_settings['filenameColumn'] . ' = ?', $constraints['filename']);
+                }
             } else {
                 if (!preg_match('#^([0-9]+)_#', $constraints['filename'], $m)) return null;
                 $select->where($tableName.'.'.$this->_idColumn . ' = ?', $m[1]);
@@ -56,7 +61,6 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
     protected function _formatConfig($parentData, $row)
     {
         $data = parent::_formatConfig($parentData, $row);
-
         if ($this->_settings['nameColumn']) {
             $data['name'] = $row->{$this->_settings['nameColumn']};
         } else if (method_exists($row, '__toString')) {
