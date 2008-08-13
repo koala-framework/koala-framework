@@ -25,14 +25,15 @@ class Vpc_User_Box_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = array();
 
+        $userDirectory = Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass('Vpc_User_Directory_Component');
+        
         //Mein Profil
-        $ret[] = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_User_Directory_Component')
-            ->getChildComponent('_'.Vps_Registry::get('userModel')->getAuthedUser()->id);
+        $userId = Vps_Registry::get('userModel')->getAuthedUser()->id;
+        $ret[] = $userDirectory->getChildComponent("_$userId");
 
         //Einstellungen
-        $ret = array_merge($ret, Vps_Component_Data_Root::getInstance()
-                        ->getComponentsByClass('Vpc_User_Edit_Component'));
+        $ret[] = $userDirectory->getChildComponent('_edit');
 
         return $ret;
     }
