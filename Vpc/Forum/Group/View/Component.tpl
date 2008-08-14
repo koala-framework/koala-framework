@@ -14,14 +14,14 @@
                 <div class="statistik">
                     <div class="threads"><strong><?= trlVps('Created by') ?>:</strong>
                         <?= $this->componentLink($item->firstUser) ?>
-                        <div class="posts"><?= $this->dateTime($item->lastPost->row->create_time, "%d.%m.%y, %H:%M") ?></div>
+                        <div class="posts"><?= $this->timestamp($item->lastPost->row->create_time) ?></div>
                     </div>
                 </div>
     
                 <div class="lastPost">
                 <strong><?= trlVps('Last entry') ?>:</strong>
                     <?= $this->componentLink($item->lastUser) ?>
-                    <div class="time"><?= $this->dateTime($item->lastPost->row->create_time, "%d.%m.%y, %H:%M") ?></div>
+                    <div class="time"><?= $this->timestamp($item->lastPost->row->create_time) ?></div>
                 </div>
                 <div class="clear"></div>
             </li>
