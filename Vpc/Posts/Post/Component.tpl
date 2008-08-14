@@ -1,6 +1,10 @@
 <div class="<?=$this->cssClass?>">
     <div class="postData">
-        <? if ($this->user) { ?>
+        <? if ($this->user) {
+            $userText = $this->user->name;
+            $rating = $this->user->getChildComponent('-rating');
+            if ($rating) $userText .= ' ' . $this->component($rating);
+        ?>
         <?php
             $image = $this->user->getChildComponent('-avatar')->getComponent()->getImageUrl('forum');
             if (!$image) { $image = '/assets/images/logoLight.jpg'; }
@@ -9,7 +13,7 @@
             <?= $this->componentLink($this->user, '<img src="' . $image . '" alt="Avatar" />') ?>
         </div>
         <div class="user">
-            <?=trlVps('By')?>: <?= $this->componentLink($this->user) ?>
+            <?=trlVps('By')?>: <?= $this->componentLink($this->user, $userText) ?>
         </div>
         <? } ?>
         <strong>#<?= $this->postNumber ?></strong>

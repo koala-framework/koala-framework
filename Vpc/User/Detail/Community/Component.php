@@ -13,7 +13,7 @@ class Vpc_User_Detail_Community_Component extends Vpc_User_Detail_Abstract_Compo
     {
         $ret = parent::getTemplateVars();
         $ret['activitiesCount'] = 0;
-        $ret['lastPosts'] = null;
+        $ret['lastPosts'] = array();
         $ret['showLastPosts'] = $this->_getSetting('numberOfLastPosts') > 0;
         
         $table = new Vpc_Posts_Directory_Model();

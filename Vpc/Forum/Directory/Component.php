@@ -11,7 +11,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
         $ret['generators']['users'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Forum_User_Directory_Component',
-            'name' => 'users'
+            'name' => trlVps('users')
         );
         $ret['tablename'] = 'Vpc_Forum_Directory_Model';
         return $ret;

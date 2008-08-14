@@ -36,12 +36,15 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         $ret['delete'] = false;
         if ($this->mayEditPost()) {
             $ret['edit'] = $data->getChildComponent('_edit');
+        }
+        if ($this->mayDeletePost()) {
             $ret['delete'] = $data->getChildComponent('_delete');
         }
         $ret['report'] = $data->getChildComponent('_report');
         $ret['quote'] = $data->getChildComponent('_quote');
-        $ret['user'] = $data->parent->getComponent()->getUserComponent($data->row->user_id);
         $ret['signature'] = null;
+        
+        $ret['user'] = $data->parent->getComponent()->getUserComponent($data->row->user_id);
         if ($ret['user']) {
             $ret['signature'] = nl2br(htmlspecialchars($ret['user']->row->signature));
         }
@@ -58,6 +61,11 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
         if (!$authedUser) return false;
         return $authedUser->id == $this->getData()->row->user_id;
+    }
+
+    public function mayDeletePost()
+    {
+        return $this->mayEditPost();
     }
 
     static public function replaceCodes($content)
