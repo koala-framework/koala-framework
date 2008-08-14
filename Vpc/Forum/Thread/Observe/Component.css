@@ -3,20 +3,20 @@ a.observed, a.notObserved{
     line-height: 24px;
     padding-left: 28px;
 }
-.vpcForumThreadDirectoryView div.observeThread a.notObserved {
+.vpcForumThreadDirectoryView div.vpcForumThreadObserve a.notObserved {
     background: url(/assets/web/images/notObserved.jpg) no-repeat left center;
     float: right;
     line-height: 30px;
     margin-top: 15px;
 }
-.vpcForumThreadDirectoryView div.observeThread a.observed:hover,
-.vpcForumThreadDirectoryView div.observeThread a.notObserved:hover {
+.vpcForumThreadDirectoryView div.vpcForumThreadObserve a.observed:hover,
+.vpcForumThreadDirectoryView div.vpcForumThreadObserve a.notObserved:hover {
     background: url(/assets/web/images/observedOver.jpg) no-repeat left center;
     float: right;
     line-height: 30px;
     margin-top: 15px;
 }
-.vpcForumThreadDirectoryView div.observeThread a.observed {
+.vpcForumThreadDirectoryView div.vpcForumThreadObserve a.observed {
     background: url(/assets/web/images/observed.jpg) no-repeat left center;
     float: right;
     line-height: 30px;

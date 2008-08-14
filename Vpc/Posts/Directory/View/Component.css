@@ -7,14 +7,14 @@
     background: url(/assets/web/images/forumHeaderBg.jpg) repeat-x top left;
 }
 .vpcPostsDirectoryView div.post {
-    background: url(/assets/web/images/themaBtn.jpg) no-repeat top left;
+    background: url(/assets/web/images/antwortBtn.jpg) no-repeat top left;
     font-weight: bold;
-    line-height: 25px;
-    margin-top: 45px;
+    margin-top: 15px;
+    padding: 5px 15px;
 }
 .vpcPostsDirectoryView div.vpcPostsPost {
     color: $reccomend;
-    background: #f3f2f1;
+    background: #fff;
     font-size: 11px;
     line-height: 16px;
     padding: 0px;
@@ -22,8 +22,9 @@
     border: 1px solid #ccc;
     clear: both;
 }
-.vpcPostsDirectoryView div.vpcPostsPost div.postData {
-    padding: 3px 15px 10px 15px;
+.vpcPostsDirectoryView div.vpcPostsPost div.postData div.postInfo {
+    background: #f3f2f1;
+    padding: 3px 15px 5px 15px;
 }
 .vpcPostsDirectoryView div.vpcPostsPost div.postData div.user {
     float: right;
@@ -39,9 +40,11 @@
 }
 .vpcPostsDirectoryView div.vpcPostsPost div.comment {
     font-size: 12px;
-    margin: 2px -15px -10px -15px;
     padding: 15px 20px;
     background: #fff;
+}
+.vpcPostsDirectoryView div.vpcPostsPost p.signature {
+    padding: 15px 20px;
 }
 .vpcPostsDirectoryView div.vpcPostsPost div.comment fieldset.quote {
     background: #f3f2f1;

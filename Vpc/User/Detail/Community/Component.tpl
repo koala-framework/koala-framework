@@ -1,5 +1,4 @@
 <div class="<?=$this->cssClass?>">
-
     <? if ($this->row->nickname != '') { ?>
     <h3><?=trlVps('Name for Forum')?>:</h3>
     <?=htmlspecialchars($this->row->nickname)?>
@@ -23,9 +22,9 @@
     <? if($this->showLastPosts) { ?>
     <h3><?=trlVps('Last Posts')?>:</h3>
     <ul>
-    <?php foreach ($this->lastPosts as $lastPost) { ?>
-    <li><?= $this->componentLink($lastPost, $lastPost->linktext) ?></li>
-    <?php } ?>
+        <?php foreach ($this->lastPosts as $lastPost) { ?>
+            <li><?= $this->componentLink($lastPost, $lastPost->linktext) ?></li>
+        <?php } ?>
     </ul>
     <?php } ?>
 </div>
