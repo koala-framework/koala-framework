@@ -1,5 +1,5 @@
 <?php if($this->userIsAuthed) { ?>
-    <div class="observeThread">
+    <div class="<?=$this->cssClass?>">
     <?php if ($this->isObserved) { ?>
         <a class="observed" href="<?= $this->observeUrl ?>">Thema beobachten</a>
     <?php } else { ?>

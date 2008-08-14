@@ -24,6 +24,8 @@ class Vpc_Posts_Directory_Component extends Vpc_Directories_Item_Directory_Compo
     
     public function getUserComponent($userId)
     {
-        return null;
+        return Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass('Vpc_User_Directory_Component')
+            ->getChildComponent('_' . $userId);
     }
 }
