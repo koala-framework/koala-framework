@@ -15,14 +15,26 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
         $ret['order'] = 'create_time DESC';
         return $ret;
     }
-    public function getPagingCount()
+    
+    public function mayModerate()
     {
-        return $this->_getSelect();
+        $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
+        if ($authedUser) {
+            $table = new Vpc_Forum_Group_ModeratorsModel();
+            $row = $table->fetchRow(array(
+                'user_id = ?' => $authedUser->id,
+                'group_id = ?' => $this->getData()->row->id
+            ));
+            if ($row) return true;
+        }
+        return false;
     }
+    
     private function _getSelect()
     {
         return $this->getData()->getGenerator('detail')->select($this->getData());
     }
+    
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

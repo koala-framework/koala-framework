@@ -5,16 +5,15 @@ class Vpc_Forum_Thread_Directory_View_Component extends Vpc_Posts_Directory_View
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['observe'] = 'Vpc_Forum_Thread_Observe_Component';
+        $ret['generators']['child']['component']['moderate'] = 'Vpc_Forum_Thread_Moderate_Component';
         return $ret;
     }
     
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $postNumber = 1;
-        foreach ($ret['items'] as &$item) {
-            $item->postNumber = $postNumber++;
-        }
+        $ret['threadClosed'] = $this->getData()->getChildComponent('-moderate')->
+            getChildComponent('-close')->getComponent()->isClosed();
         return $ret;
     }
 }

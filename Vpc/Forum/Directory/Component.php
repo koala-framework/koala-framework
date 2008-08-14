@@ -20,16 +20,16 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $groups = $this->getData()->getChildComponents(array('generator' => 'groups'));
-        $ret['groups'] = $this->_processGroups($groups);
+        $ret['groups'] = $this->getGroups();
         $ret['groupsTemplate'] = Vpc_Admin::getComponentFile(get_class($this), 'Groups', 'tpl');
         //$ret['searchUrl'] = $this->getPageFactory()->getChildPageById('search')->getUrl();
         return $ret;
     }
     
-    private function _processGroups($groups, $parentId = null)
+    public function getGroups($parentId = null)
     {
         $ret = array();
+        $groups = $this->getData()->getChildComponents(array('generator' => 'groups'));
         foreach ($groups as $group) {
             if ($group->row->parent_id == $parentId) {
                 $group->lastPost = null;
@@ -60,7 +60,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                         $group->lastUser = $this->getData()->getChildComponent('_users')->getChildComponent('_' . $group->lastPost->row->user_id);
                     }
                 }
-                $group->childGroups = $this->_processGroups($groups, $group->row->id);
+                $group->childGroups = $this->getGroups($group->row->id);
                 $ret[] = $group;
             }
         }

@@ -8,16 +8,18 @@
     <?php if (!$this->threadClosed) { ?>
         <div class="newPost"><?=$this->componentLink($this->write, trlVps('add Comment'))?></div>
     <?php } else { ?>
-        <span class="threadClosed">Thread closed</span>
+        <span class="threadClosed"><?= trlVps('Thread closed') ?></span>
     <?php } ?>
     <?=$this->component($this->paging)?>
     <? foreach($this->items as $post) { ?>
         <?=$this->component($post)?>
     <? } ?>
     <?=$this->component($this->paging)?>
+    <?=$this->component($this->observe)?>
     <?php if (!$this->threadClosed) { ?>
         <div class="newPost"><?=$this->componentLink($this->write, trlVps('add Comment'))?></div>
     <?php } else { ?>
-        <span class="threadClosed">Thread closed</span>
+        <span class="threadClosed"><?= trlVps('Thread closed') ?></span>
     <?php } ?>
+    <?=$this->component($this->moderate)?>
 </div>
