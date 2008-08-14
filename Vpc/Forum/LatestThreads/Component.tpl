@@ -1,0 +1,22 @@
+<div class="<?=$this->cssClass ?>">
+    <ul>
+        <?php $x= 0; foreach ($this->threads as $thread) { $x++ ?>
+            <li <?php if($x == 1) { ?> class="first"<?php } ?>>
+                <?php
+                    $image = $thread->lastUser->getChildComponent('-avatar')->getComponent()->getImageUrl('forum');
+                    if (!$image) { $image = '/assets/images/logoLight.jpg'; }
+                ?>
+                <div class="avatar">
+                    <?= $this->componentLink($thread->lastUser, '<img src="' . $image . '" alt="Avatar" />') ?>
+                </div>
+                <div class="thread">
+                    <?=$this->componentLink($thread, $this->truncate($thread->row->subject, 50, '...', true));?>
+                    <span>(<?=$thread->replies ?> <?=trlpVps("reply", "replies", $thread->replies) ?>)<br />
+                        <?= trlVps('Last post by') ?> <?= $this->componentLink($thread->lastUser) ?> <?= $this->timestamp($thread->lastPost->row->create_time) ?>
+                        | <?=$this->componentLink($thread->getParentPage(), $this->truncate($thread->getParentPage()->row->name, 22, '...', true));?>
+                    </span>
+                </div>
+            </li>
+        <?php } ?>
+    </ul>
+</div>
