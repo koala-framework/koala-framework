@@ -13,7 +13,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
     {
         $where = $this->_getWhere();
         if ($this->_model instanceof Vps_Model_Db) {
-            if (!$parentRow) {
+            if (!$parentId) {
                 $where[] = "$this->_parentField IS NULL";
             } else {
                 $where["$this->_parentField = ?"] = $parentId;
