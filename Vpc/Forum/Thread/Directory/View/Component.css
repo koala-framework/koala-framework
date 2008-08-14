@@ -1,7 +1,5 @@
 .vpcForumThreadDirectoryView div.newPost {
     background: url(/assets/web/images/antwortBtn.jpg) no-repeat left top;
     font-weight: bold;
-    line-height: 30px;
-    margin-top: 25px;
-    padding: 0px 25px;
+    padding: 5px 15px;
 }

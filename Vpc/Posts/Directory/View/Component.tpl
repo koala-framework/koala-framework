@@ -4,7 +4,7 @@
         <?=$this->component($post)?>
     <? } ?>
     <?=$this->component($this->paging)?>
-    <div>
-    <?=$this->componentLink($this->write, trlVps('add Comment'))?>
+    <div class="post">
+        <?=$this->componentLink($this->write, trlVps('add Comment'))?>
     </div>
 </div>
