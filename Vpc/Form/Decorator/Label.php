@@ -19,15 +19,19 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
             if ($item['item'] && $item['item']->getAllowBlank()===false) {
                 $class .= ' vpsFieldRequired';
             }
+            if ($item['item']) {
+                if (isset($item['id'])) {
+                    $class .= ' '.$item['id'];
+                } else {
+                    $class .= ' '.$item['item']->getFieldName();
+                }
+            }
             $item['preHtml'] = '<div class="'.$class.'">';
-            if (!$item['item'] || !$item['item']->getHideLabels()) {
+            if ($item['item'] && !$item['item']->getHideLabels()) {
                 if ($item['item']) {
-                    if (isset($item['id'])) {
-                        $id = $item['id'];
-                    } else {
-                        $id = $item['item']->getFieldName();
-                    }
-                    $item['preHtml'] .= '<label for="'.$id.'">';
+                    $item['preHtml'] .= '<label for="'
+                        .(isset($item['id']) ? $item['id'] : $item['item']->getFieldName())
+                    .'">';
                 }
                 if ($item['item']) {
                     $item['preHtml'] .= $item['item']->getFieldLabel();

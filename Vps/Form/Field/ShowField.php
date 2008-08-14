@@ -9,4 +9,21 @@ class Vps_Form_Field_ShowField extends Vps_Form_Field_SimpleAbstract
     public function prepareSave(Vps_Model_Row_Interface $row, $postData)
     {
     }
+    public function getTemplateVars($values, $fieldNamePostfix = '')
+    {
+        $name = $this->getFieldName();
+        $ret = parent::getTemplateVars($values);
+        //todo: escapen
+        $ret['id'] = $name.$fieldNamePostfix;
+        if (!$this->getShowText()) $this->setShowText('&nbsp;');
+        $ret['html'] = $this->getShowText();
+        return $ret;
+    }
+
+    public static function getSettings()
+    {
+        return array_merge(parent::getSettings(), array(
+            'componentName' => trlVps('Show field')
+        ));
+    }
 }
