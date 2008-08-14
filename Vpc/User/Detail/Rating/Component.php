@@ -25,14 +25,9 @@ class Vpc_User_Detail_Rating_Component extends Vpc_Abstract
         return $ret;
     }
     
-    protected function _getUser()
-    {
-        return $userId = $this->getData()->parent;
-    }
-
     public function getRating()
     {
-        $userId = $this->_getUser()->row->id;
+        $userId = $this->getData()->parent->row->id;
         $select = Zend_Registry::get('db')->select();
         $select->from(array('p'=> 'vpc_posts'), array('count'=>'COUNT(p.id)'))
                 ->where('p.user_id = ?', $userId);

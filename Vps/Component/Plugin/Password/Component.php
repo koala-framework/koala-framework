@@ -12,8 +12,8 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_Abstr
         );
         return $ret;
     }
-
-    public function processOutput($output)
+    
+    public function isLoggedId()
     {
         $pw = $this->_getSetting('password');
         if (!is_array($pw)) $pw = array($pw);
@@ -25,7 +25,12 @@ class Vps_Component_Plugin_Password_Component extends Vps_Component_Plugin_Abstr
                 $session->login = true;
             }
         }
-        if ($session->login) return $output;
+        return $session->login;
+    }
+    
+    public function processOutput($output)
+    {
+        if ($this->isLoggedId()) return $output;
 
         $templateVars = array();
         $templateVars['loginForm'] = Vps_Component_Data_Root::getInstance()
