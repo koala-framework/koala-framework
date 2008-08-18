@@ -312,7 +312,11 @@ class Vps_Assets_Dependencies
                         $file = $file->getFile();
                     }
                     if (!(substr($file, 0, 7) == 'http://' || substr($file, 0, 8) == 'https://' || substr($file, 0, 1) == '/')) {
-                        $c = $this->getFileContents($file, $language);
+                        try {
+                            $c = $this->getFileContents($file, $language);
+                        } catch (Vps_Assets_NotFoundException $e) {
+                            throw new Vps_Exception($e->getMessage());
+                        }
                         $cacheData['contents'] .=  $c['contents']."\n";
                         $cacheData['mtimeFiles'] = array_merge($cacheData['mtimeFiles'], $c['mtimeFiles']);
                     }
