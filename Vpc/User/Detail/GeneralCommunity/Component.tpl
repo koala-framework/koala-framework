@@ -1,17 +1,25 @@
 <div class="<?=$this->cssClass?>">
-    <? if ($this->row->nickname != '') { ?>
-    <h3><?=trlVps('Name for Forum')?>:</h3>
-    <?=htmlspecialchars($this->row->nickname)?>
-    <? } ?>
+
+    <div class="nickname"><?=htmlspecialchars($this->row->nickname)?></div>
+    
+    <?php
+    if ($this->rating) {
+        $this->component($this->rating);
+    }
+    if ($this->avatar) {
+        $this->component($this->avatar);
+    }
+    ?>
+
+    <h3><?=trlVps('Member since')?></h3>
+    <?=$this->date($this->row->created)?>
+
+    <h3><?=trlVps('Latest online')?></h3>
+    <?=$this->timestamp($this->row->last_login)?>
 
     <? if ($this->row->location != '') { ?>
     <h3><?=trlVps('Place of living')?>:</h3>
     <?=htmlspecialchars($this->row->location)?>
-    <? } ?>
-
-    <? if ($this->row->signature != '') { ?>
-    <h3><?=trlcVps('forum', 'Signature')?>:</h3>
-    <?=nl2br(htmlspecialchars($this->row->signature))?>
     <? } ?>
 
     <? if ($this->row->description_short != '') { ?>
@@ -19,7 +27,7 @@
     <?=nl2br(htmlspecialchars($this->row->description_short))?>
     <? } ?>
 
-    <? if($this->showLastPosts) { ?>
+    <? if ($this->showLastPosts) { ?>
     <h3><?=trlVps('Last Posts')?>:</h3>
     <ul>
         <?php foreach ($this->lastPosts as $lastPost) { ?>

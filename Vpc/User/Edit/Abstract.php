@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Edit_Component extends Vpc_User_Edit_Abstract
+class Vpc_User_Edit_Abstract extends Vpc_Abstract_Composite_Component
 {
     public static function getSettings()
     {
