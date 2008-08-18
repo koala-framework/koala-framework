@@ -78,9 +78,10 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         $postData = parent::processInput($postData);
 
         if (isset($postData[$this->getFieldName().'_upload_id'])
-            && !isset($postData[$this->getFieldName()])
+            && (!isset($postData[$this->getFieldName()])
+                || $postData[$this->getFieldName()]['error'] == UPLOAD_ERR_NO_FILE)
         ) {
-            $postData[$this->getFieldName()] = $postData[$this->getFieldName().'_upload_id'];
+            $postData[$this->getFieldName()] = (int)$postData[$this->getFieldName().'_upload_id'];
             unset($postData[$this->getFieldName().'_upload_id']);
         }
 
