@@ -1,31 +1,31 @@
-div.vpcForumGroup ul li.threads {
+.vpcForumGroupView ul li.threads {
     border: 1px solid #ccc;
-    margin-bottom: 15px;
+    margin: 15px 0px;
 }
-div.vpcForumGroup div.description {
-border-bottom:1px solid #CCCCCC;
+.vpcForumGroupView div.description {
+    border-bottom: 1px solid #CCCCCC;
 }
-div.vpcForumGroup div.description a {
+.vpcForumGroupView div.description a {
     font-weight: bold;
     display: block;
     background: #f3f2f1;
     padding: 3px 3px 3px 10px;
 }
-div.vpcForumGroup div.description a span {
+.vpcForumGroupView div.description a span {
     position: absolute;
-    right: 30px;
+    right: 60px;
 }
-div.vpcForumGroup div.statistik {
+.vpcForumGroupView div.statistik {
     float: right;
     font-size: 11px;
     line-height: 16px;
     width: 200px;
 }
-div.vpcForumGroup div.threads {
+.vpcForumGroupView div.threads {
     margin-right: 10px;
     text-align: right;
 }
-div.vpcForumGroup div.lastPost {
+.vpcForumGroupView div.lastPost {
     font-size: 11px;
     line-height: 16px;
     padding-left: 10px;

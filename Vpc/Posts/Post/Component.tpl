@@ -27,10 +27,10 @@
             <em><?=trlVps('on') ?> <?=$this->date($this->data->row->create_time)?> <?=trlVps('at') ?> <?=$this->time($this->data->row->create_time)?></em><br />
             Beitrag: 
             <? if ($this->edit) { ?>
-                <br /><?=$this->componentLink($this->edit)?>
+                <?=$this->componentLink($this->edit)?> |
             <? } ?>
             <? if ($this->delete) { ?>
-                <br /><?=$this->componentLink($this->delete)?>
+                <?=$this->componentLink($this->delete)?> |
             <? } ?>
             <?=$this->componentLink($this->report)?> | <?=$this->componentLink($this->quote)?>
         </div>

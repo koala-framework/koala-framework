@@ -1,6 +1,6 @@
 <div class="<?=$this->cssClass?>">
 
-    <div class="nickname"><?=htmlspecialchars($this->row->nickname)?></div>
+    <div class="nickname"><h3><?=htmlspecialchars($this->row->nickname)?></h3></div>
     
     <?php
     if ($this->rating) {
@@ -11,10 +11,10 @@
     }
     ?>
 
-    <h3><?=trlVps('Member since')?></h3>
+    <h3><?=trlVps('Member since')?>:</h3>
     <?=$this->date($this->row->created)?>
 
-    <h3><?=trlVps('Latest online')?></h3>
+    <h3><?=trlVps('Latest online')?>:</h3>
     <?=$this->timestamp($this->row->last_login)?>
 
     <? if ($this->row->location != '') { ?>
