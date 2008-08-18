@@ -1,0 +1,10 @@
+.vpcForumThreadModerate {
+    margin-top: 20px;
+}
+.vpcForumThreadModerate fieldset {
+    padding: 10px;
+}
+.vpcForumThreadModerate fieldset legend {
+    background: #fff;
+    padding: 5px;
+}
