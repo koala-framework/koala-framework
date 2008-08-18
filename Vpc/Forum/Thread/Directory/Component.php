@@ -17,8 +17,17 @@ class Vpc_Forum_Thread_Directory_Component extends Vpc_Posts_Directory_Component
         $ret['firstPost'] = array_shift($posts);
         $ret['lastPost'] = array_pop($posts);
         if (!$ret['lastPost']) $ret['lastPost'] = $ret['firstPost'];
-        $ret['firstUser'] = $this->getData()->parent->parent->getChildComponent('_users')->getChildComponent('_' . $ret['firstPost']->row->user_id);
-        $ret['lastUser'] = $this->getData()->parent->parent->getChildComponent('_users')->getChildComponent('_' . $ret['lastPost']->row->user_id);
+        if ($ret['firstPost']) {
+            $ret['firstPost']->user = $this->getData()->parent->parent
+                ->getChildComponent('_users')
+                ->getChildComponent('_' . $ret['firstPost']->row->user_id);
+        } else {
+        }
+        if ($ret['lastPost']) {
+            $ret['lastPost']->user = $this->getData()->parent->parent
+                ->getChildComponent('_users')
+                ->getChildComponent('_' . $ret['lastPost']->row->user_id);
+        }
         return $ret;
     }
     

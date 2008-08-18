@@ -43,11 +43,10 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         $ret['report'] = $data->getChildComponent('_report');
         $ret['quote'] = $data->getChildComponent('_quote');
         $ret['signature'] = null;
-        
-        $ret['user'] = $data->parent->getComponent()->getUserComponent($data->row->user_id);
-        if ($ret['user']) {
-            $ret['signature'] = nl2br(htmlspecialchars($ret['user']->row->signature));
-        }
+
+        $ret['user'] = Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass('Vpc_User_Directory_Component')
+            ->getChildComponent('_'.$data->row->user_id);
         $select = $data->parent->getGenerator('detail')->select($data->parent)
             ->where('create_time <= ?', $data->row->create_time)
             ->where('id != ?', $data->row->id)
