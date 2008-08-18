@@ -8,7 +8,8 @@
         <div class="postInfo">
             <?php
             $avatarRow = $this->user->getChildComponent('-general')
-                ->getChildComponent('-avatar')->getComponent()->getImageRow();
+                ->getChildComponent('-avatar')
+                ->getComponent()->getImageRow();
             if ($avatarRow->vps_upload_id) {
                 $image = $this->image($avatarRow, null, 'forum');
             } else {
@@ -23,7 +24,7 @@
             </div>
             <? } ?>
             <strong>#<?= $this->postNumber ?></strong>
-            <i><?=trlVps('on') ?> <?=$this->date($this->data->row->create_time)?> <?=trlVps('at') ?> <?=$this->time($this->data->row->create_time)?></i><br />
+            <em><?=trlVps('on') ?> <?=$this->date($this->data->row->create_time)?> <?=trlVps('at') ?> <?=$this->time($this->data->row->create_time)?></em><br />
             Beitrag: 
             <? if ($this->edit) { ?>
                 <br /><?=$this->componentLink($this->edit)?>
@@ -36,8 +37,8 @@
         <div class="comment">
             <?=$this->content?>
         </div>
-        <? if ($this->signature) { ?>
-            <p class="signature"><tt>--<br /><?=$this->signature?></tt></p>
+        <? if ($this->user->row->signature) { ?>
+            <p class="signature"><tt>--<br /><?=nl2br(htmlspecialchars($this->user->row->signature))?></tt></p>
         <?php } ?>
     </div>
     <div class="clear"></div>

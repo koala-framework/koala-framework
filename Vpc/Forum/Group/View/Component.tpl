@@ -12,16 +12,20 @@
                 </div>
                
                 <div class="statistik">
+                    <? if ($item->firstPost) { ?>
                     <div class="threads"><strong><?= trlVps('Created by') ?>:</strong>
-                        <?= $this->componentLink($item->firstUser) ?>
-                        <div class="posts"><?= $this->timestamp($item->lastPost->row->create_time) ?></div>
+                        <?= $this->componentLink($item->firstPost->user) ?>
+                        <div class="posts"><?= $this->timestamp($item->firstPost->row->create_time) ?></div>
                     </div>
+                    <? } ?>
                 </div>
     
                 <div class="lastPost">
-                <strong><?= trlVps('Last entry') ?>:</strong>
-                    <?= $this->componentLink($item->lastUser) ?>
+                    <? if ($item->lastPost) { ?>
+                    <strong><?= trlVps('Last entry') ?>:</strong>
+                    <?= $this->componentLink($item->lastPost->user) ?>
                     <div class="time"><?= $this->timestamp($item->lastPost->row->create_time) ?></div>
+                    <? } ?>
                 </div>
                 <div class="clear"></div>
             </li>
