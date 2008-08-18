@@ -3,7 +3,6 @@ class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_Page_Ta
 {
     protected $_childClassKey = 'detail';
     protected $_uniqueFilename = true;
-    protected $_sqlTimeNames = 'de_DE';
 
     protected function _init()
     {
@@ -15,8 +14,6 @@ class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_Page_Ta
 
     public function select($parentData)
     {
-        Vps_Registry::get('db')->query("SET lc_time_names = '".($this->_sqlTimeNames)."'");
-
         $ret = parent::select($parentData->parent);
         $ret->group(array('YEAR(publish_date)', 'MONTH(publish_date)'));
         $ret->order('publish_date DESC');

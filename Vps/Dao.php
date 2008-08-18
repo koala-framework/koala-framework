@@ -30,6 +30,8 @@ class Vps_Dao
             $dbConfig = $this->_config->$db->toArray();
             $this->_db[$db] = Zend_Db::factory('PDO_MYSQL', $dbConfig);
             $this->_db[$db]->query('SET names UTF8');
+            $this->_db[$db]->query("SET lc_time_names = '".trlVps('en_US')."'");
+
 
             if (Zend_Registry::get('config')->debug->querylog) {
                 $profiler = new Vps_Db_Profiler(true);
