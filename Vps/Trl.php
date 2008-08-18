@@ -39,7 +39,7 @@ class Vps_Trl
     public function getTargetLanguage()
     {
         $languages = $this->getLanguages();
-        if (isset(Zend_Registry::get('userModel')->getAuthedUser()->language)){
+        if (count($languages) > 2 && isset(Zend_Registry::get('userModel')->getAuthedUser()->language)){
             $userLanguage = Zend_Registry::get('userModel')->getAuthedUser()->language;
             if (array_search($userLanguage, $languages)) {
                 return $userLanguage;
