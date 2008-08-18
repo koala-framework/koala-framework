@@ -43,10 +43,13 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
                         $postData[$k][$i][$prop] = $file[$prop][$i];
                     }
                 }
-            } else if ($file['error'] != 4) {
+            } else {
                 $postData[$k] = $file;
             }
         }
+
+        Vps_Registry::get('db')->beginTransaction();
+
         $postData = $this->_form->processInput($postData);
         if (isset($postData[$this->getData()->componentId])) {
             $this->_errors = array_merge($this->_errors, $this->_form->validate($postData));
@@ -64,6 +67,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             }
         }
         $this->_postData = $postData;
+
+        Vps_Registry::get('db')->commit();
     }
 
     public function getErrors()
