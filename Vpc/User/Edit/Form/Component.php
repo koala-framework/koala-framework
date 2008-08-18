@@ -12,6 +12,9 @@ class Vpc_User_Edit_Form_Component extends Vpc_Form_Component
     
     protected function _initForm()
     {
+        $parentClass = $this->getData()->parent->componentClass;
+        $forms = Vpc_Abstract::getSetting($parentClass, 'forms');
+        
         $table = Zend_Registry::get('userModel');
         $user = $table->getAuthedUser();
         if (!$user) return parent::_initForm();
@@ -23,12 +26,14 @@ class Vpc_User_Edit_Form_Component extends Vpc_Form_Component
         $class = $detailsComponent->componentClass;
         $generators = Vpc_Abstract::getSetting($class, 'generators');
         foreach ($generators['child']['component'] as $component => $class) {
-            $form = Vpc_Abstract_Form::createComponentForm($class, $component);
-            if ($form) {
-                $form->setId($detailsComponent->dbId . '-' . $component);
-                $title = trlVps(ucfirst($component));
-                $this->_form->add(new Vps_Form_Container_FieldSet($title))
-                    ->add($form);
+            if ($forms == 'all' || in_array($class, $forms)) {
+                $form = Vpc_Abstract_Form::createComponentForm($class, $component);
+                if ($form) {
+                    $form->setId($detailsComponent->dbId . '-' . $component);
+                    $title = trlVps(ucfirst($component));
+                    $this->_form->add(new Vps_Form_Container_FieldSet($title))
+                        ->add($form);
+                }
             }
         }
     }

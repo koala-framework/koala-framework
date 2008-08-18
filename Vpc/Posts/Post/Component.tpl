@@ -7,9 +7,10 @@
         ?>
         <div class="postInfo">
             <?php
-            $avatar = $this->user->getChildComponent('-general')->getChildComponent('-avatar');
-            if ($avatar) {
-                $image = $this->component($avatar);
+            $avatarRow = $this->user->getChildComponent('-general')
+                ->getChildComponent('-avatar')->getComponent()->getImageRow();
+            if ($avatarRow->vps_upload_id) {
+                $image = $this->image($avatarRow, null, 'forum');
             } else {
                 $image = $this->image($this->componentFile($this->data, 'avatar.png'));
             }
