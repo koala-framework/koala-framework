@@ -4,10 +4,10 @@
     
     <?php
     if ($this->rating) {
-        $this->component($this->rating);
+        echo $this->component($this->rating);
     }
     if ($this->avatar) {
-        $this->component($this->avatar);
+        echo $this->component($this->avatar);
     }
     ?>
 
