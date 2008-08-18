@@ -1,6 +1,6 @@
 <?php
-class Vps_Component_Cache extends Zend_Cache_Core {
-    
+class Vps_Component_Cache extends Zend_Cache_Core
+{
     static private $_instance;
     private $_backend;
     protected $_process = array(
@@ -54,9 +54,9 @@ class Vps_Component_Cache extends Zend_Cache_Core {
     
     public function process()
     {
-        foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            foreach ($this->_process as $action => $process) {
-                foreach ($process as $row) {
+        foreach ($this->_process as $action => $process) {
+            foreach ($process as $row) {
+                foreach (Vpc_Abstract::getComponentClasses() as $c) {
                     $method = 'onRow' . ucfirst($action);
                     Vpc_Admin::getInstance($c)->$method($row);
                 }
