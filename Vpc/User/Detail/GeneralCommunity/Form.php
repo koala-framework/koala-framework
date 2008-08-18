@@ -6,7 +6,7 @@ class Vpc_User_Detail_GeneralCommunity_Form extends Vpc_User_Detail_General_Form
         parent::_init();
         $this->setTable(Zend_Registry::get('userModel'));
 
-        $this->add(new Vps_Form_Field_TextField('nickname', trlVps('Name for Forum')))
+        $this->add(new Vps_Form_Field_TextField('nickname', trlVps('Nickname')))
                     ->setAllowBlank(false)
                     ->setWidth(250);
 

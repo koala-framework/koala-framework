@@ -34,6 +34,9 @@ class Vps_View_Helper_Image
             $size = getimagesize($this->_dep->getAssetPath($depUrl)); //image
             $size['width'] = $size[0];
             $size['height'] = $size[1];
+        } else if ($image instanceof Vpc_Basic_Image_Component) {
+            $url = $image->getImageUrl($type);
+            $size = $image->getImageDimensions($type);
         } else {
             $row = $image;
             if (!$row) return '';
