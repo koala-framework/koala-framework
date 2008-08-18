@@ -215,6 +215,30 @@ class Vps_Setup
             Zend_Session::setId($_POST['PHPSESSID']);
         }
 
+        $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
+        if (isset($_SERVER['HTTP_HOST']) && substr($_SERVER['HTTP_HOST'], 0, 5) == 'test.'
+            && empty($sessionPhpAuthed->success)
+        ) {
+            if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
+                $loginResponse = Zend_Registry::get('userModel')
+                    ->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+                if ($loginResponse['zendAuthResultCode'] == Zend_Auth_Result::SUCCESS) {
+                    $sessionPhpAuthed->success = 1;
+                } else {
+                    unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+                    echo 'Logindaten fehlerhaft';
+                }
+            }
+
+            // separate if abfrage, damit login wieder kommt, falls gerade falsch eingeloggt wurde
+            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
+                header('WWW-Authenticate: Basic realm="Testserver"');
+                header('HTTP/1.0 401 Unauthorized');
+                echo "<br />Ung&uuml;ltiger Login";
+                exit;
+            }
+        }
+
         $frontendOptions = array('automatic_serialization' => true);
         $backendOptions  = array('cache_dir' => 'application/cache/table');
         $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
