@@ -7,11 +7,15 @@
         ?>
         <div class="postInfo">
             <?php
-                $image = $this->user->getChildComponent('-avatar')->getComponent()->getImageUrl('forum');
-                if (!$image) { $image = '/assets/images/logoLight.jpg'; }
-            ?>
+                $imageUrl = $this->user->getChildComponent('-general')
+                    ->getChildComponent('-avatar')->getComponent()
+                    ->getImageUrl('forum');
+                if (!$imageUrl) {
+                    $imageUrl = $this->componentFile($this->data, 'avatar.png');
+                }
+                ?>
             <div class="avatar">
-                <?= $this->componentLink($this->user, '<img src="' . $image . '" alt="Avatar" />') ?>
+                <?= $this->componentLink($this->user, $this->image($imageUrl)) ?>
             </div>
             <div class="user">
                 <?=trlVps('By')?>: <?= $this->componentLink($this->user) ?>

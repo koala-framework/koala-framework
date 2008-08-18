@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Detail_Community_Form extends Vps_Form
+class Vpc_User_Detail_GeneralCommunity_Form extends Vpc_User_Detail_General_Form
 {
     protected function _init()
     {

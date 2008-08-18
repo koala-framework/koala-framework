@@ -30,14 +30,7 @@ class Vpc_User_Box_Component extends Vpc_Abstract_Composite_Component
     
     protected function _getLinks()
     {
-        $ret = array();
-
-        $userDirectory = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_User_Directory_Component');
-        
-        //Einstellungen
-        $ret[] = $userDirectory->getChildComponent('_edit');
-
-        return $ret;
+        return Vps_Component_Data_Root::getInstance()
+            ->getComponentsByClass('Vpc_User_Edit_Component');
     }
 }

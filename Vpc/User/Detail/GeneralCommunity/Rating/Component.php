@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Detail_Rating_Component extends Vpc_Abstract
+class Vpc_User_Detail_GeneralCommunity_Rating_Component extends Vpc_Abstract
 {
     public static function getSettings()
     {
