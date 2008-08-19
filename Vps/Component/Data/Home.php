@@ -6,6 +6,7 @@ class Vps_Component_Data_Home extends Vps_Component_Data
         if ($var == 'url') {
             return '/';
         }
+        return parent::__get($var);
     }
 
 }
