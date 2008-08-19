@@ -114,6 +114,23 @@ abstract class Vps_Component_Generator_Abstract
                     if ($constraints['box']) continue;
                 }
             }
+            if (isset($constraints['multibox'])) {
+                if (is_instance_of($generator['class'], 'Vps_Component_Generator_MultiBox_Interface')) {
+                    if (!$constraints['multibox']) continue;
+                } else {
+                    if ($constraints['multibox']) continue;
+                }
+            }
+            if (isset($constraints['unique']) && $constraints['unique'] && 
+                (!isset($generator['unique']) || !$generator['unique']))
+            {
+                continue;
+            }
+            if (isset($constraints['inherit']) && $constraints['inherit'] && 
+                (!isset($generator['inherit']) || !$generator['inherit']))
+            {
+                continue;
+            }
             $ret[] = self::getInstance($componentClass, $key);
         }
         return $ret;
@@ -136,19 +153,17 @@ abstract class Vps_Component_Generator_Abstract
             
             if (!isset($constraints['generator']) &&
                 (!isset($constraints['page']) || !$constraints['page']) &&
-                (!isset($constraints['skipBox']) || !$constraints['skipBox']))
+                (!isset($constraints['skipInherit']) || !$constraints['skipInherit']))
             {
-                $boxConstraints = array(
-                    'box' => true,
-                    'skipBox' => true,
-                    'inherit' => true
-                );
+                $inheritConstraints = $constraints;
+                $inheritConstraints['skipInherit'] = true;
+                $inheritConstraints['inherit'] = true;
                 $page = $parentData;
                 while ($page) { // Aktuelle inkl. aller Überseiten durchlaufen
                     if ($page->componentId == $parentData->componentId) {
-                        $generators = $parentData->getGenerators($boxConstraints);
+                        $generators = $parentData->getGenerators($inheritConstraints);
                     } else {
-                        $generators = $page->getRecursiveGenerators($boxConstraints);
+                        $generators = $page->getRecursiveGenerators($inheritConstraints);
                     }
                     $ret = array_merge($ret, $generators);                    
                     $parent = $page->getParentPage();

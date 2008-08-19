@@ -6,8 +6,8 @@ class Vpc_MultiBox_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['boxes'] = array();
         $boxname = $this->getData()->box;
-        foreach ($this->getData()->getPage()->getChildBoxes() as $box) {
-            if ($box->multi && $box->box == $boxname) {
+        foreach ($this->getData()->getPage()->getChildMultiBoxes() as $box) {
+            if ($box->box == $boxname) {
                 $ret['boxes'][] = $box;
             }
         }
