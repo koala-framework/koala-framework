@@ -2501,5 +2501,9 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en default="1">Your account is active and a password has been set.{2}Use the application by {0}clicking here{1}.</en>
 <de>Ihr Account ist aktiv und das Passwort wurde bereits gesetzt. {2} {0}Klicken Sie hier{1}, um in den Admin-Bereich zu gelangen.</de>
 </text>
+<text>
+    <en default="1">en_US</en>
+    <de>de_DE</de>
+</text>
 </trl>
 
