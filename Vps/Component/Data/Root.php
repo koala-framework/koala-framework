@@ -147,7 +147,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         return $ret;
     }
-    public function getComponentsByClass($class)
+    public function getComponentsByClass($class, $constraints = array())
     {
         if (!isset($this->_componentsByClassCache[$class])) {
             $benchmark = Vps_Benchmark::start();
@@ -172,8 +172,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             }
 
             $ret = array();
+            $constraints['componentClass'] = $lookingForChildClasses;
             foreach ($this->_getGeneratorsForClasses($lookingForChildClasses) as $generator) {
-                $constraints = array('componentClass' => $lookingForChildClasses);
                 $ret = array_merge($ret, $generator->getChildData(null, $constraints));
             }
             $this->_componentsByClassCache[$class] = $ret;
@@ -201,9 +201,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $ret;
     }
 
-    public function getComponentByClass($class)
+    public function getComponentByClass($class, $constraints = array())
     {
-        $components = $this->getComponentsByClass($class);
+        $components = $this->getComponentsByClass($class, $constraints);
         if (isset($components[0])) {
             return $components[0];
         }
