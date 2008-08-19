@@ -16,6 +16,9 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['decorator'] = 'Vpc_Form_Decorator_Label';
         $ret['viewCache'] = false;
         $ret['method'] = 'post';
+        
+        //todo: wenn mehrere verbessern
+        $ret['assets']['files'][] = 'vps/Vps/Form/Field/File/Component.css';
         return $ret;
     }
 

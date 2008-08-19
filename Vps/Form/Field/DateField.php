@@ -40,7 +40,7 @@ class Vps_Form_Field_DateField extends Vps_Form_Field_SimpleAbstract
 
         $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);
-        $ret['id'] = $name.$fieldNamePostfix;
+        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<input type=\"text\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" value=\"$value\" style=\"width: {$this->getWidth()}px\" maxlength=\"{$this->getMaxLength()}\"/>";
         return $ret;
     }

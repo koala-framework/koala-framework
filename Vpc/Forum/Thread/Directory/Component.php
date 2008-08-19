@@ -18,15 +18,15 @@ class Vpc_Forum_Thread_Directory_Component extends Vpc_Posts_Directory_Component
         $ret['lastPost'] = array_pop($posts);
         if (!$ret['lastPost']) $ret['lastPost'] = $ret['firstPost'];
         if ($ret['firstPost']) {
-            $ret['firstPost']->user = $this->getData()->parent->parent
-                ->getChildComponent('_users')
-                ->getChildComponent('_' . $ret['firstPost']->row->user_id);
+            $ret['firstPost']->user = Vps_Component_Data_Root::getInstance()
+                            ->getComponentByClass('Vpc_User_Directory_Component')
+                            ->getChildComponent('_' . $ret['firstPost']->row->user_id);
         } else {
         }
         if ($ret['lastPost']) {
-            $ret['lastPost']->user = $this->getData()->parent->parent
-                ->getChildComponent('_users')
-                ->getChildComponent('_' . $ret['lastPost']->row->user_id);
+            $ret['lastPost']->user = Vps_Component_Data_Root::getInstance()
+                            ->getComponentByClass('Vpc_User_Directory_Component')
+                            ->getChildComponent('_' . $ret['lastPost']->row->user_id);
         }
         return $ret;
     }

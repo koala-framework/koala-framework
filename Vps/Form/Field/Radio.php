@@ -26,7 +26,7 @@ class Vps_Form_Field_Radio extends Vps_Form_Field_ComboBox
             $value = '';
         }
         //todo: escapen
-        $ret['id'] = $name.$fieldNamePostfix;
+        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $store = $this->_getStoreData();
         if ($this->getShowNoSelection()) {
             array_unshift($store['data'], array('', '('.trlVps('no selection').')'));
