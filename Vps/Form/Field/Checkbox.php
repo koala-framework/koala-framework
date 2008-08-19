@@ -17,7 +17,7 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
         }
         $ret = parent::getTemplateVars($values);
         //todo: escapen
-        $ret['id'] = $name.$fieldNamePostfix;
+        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<input type=\"checkbox\" id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" ";
         if ($value) $ret['html'] .= 'checked="checked" ';
         $ret['html'] .= "/>";

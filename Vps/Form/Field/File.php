@@ -2,6 +2,12 @@
 class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 {
     private $_fields;
+    
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        return $ret;
+    }
 
     public function __construct($fieldname = null, $fieldLabel = null, $ruleKey = null)
     {
@@ -105,7 +111,8 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         }
         return $postData;
     }
-
+/*
+ * ORIGINAL-BACKUP
     public function getTemplateVars($values, $namePostfix = '')
     {
         $name = $this->getFieldName();
@@ -118,12 +125,14 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 
         $name = htmlspecialchars($name);
         $ret['id'] = $name.$namePostfix;
-        $ret['html'] = "<input type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
+        $ret['html']  = "<div class=\"vpsFormFiledFile\">\n";
+        $ret['html'] .= "<input type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
                         " style=\"width: {$this->getWidth()}px\" />";
         if ($value) {
             $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
                         " value=\"$value[uploadId]\" />";
-            $ret['html'] .= '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="delete" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">del</button>';
+            $ret['html'] .= '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            $ret['html'] .= '<button class="delete" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">del</button>';
             $ret['html'] .= ''.$value['filename'].'.'.$value['extension'];
             $helper = new Vps_View_Helper_FileSize();
             $ret['html'] .= ' ('.$helper->fileSize($value['fileSize']).')';
@@ -132,6 +141,38 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
                 $ret['html'] .= " <img src=\"/vps/media/upload/preview?uploadId=$value[uploadId]\" alt=\"\"/>";
             }
         }
+        $ret['html'] .= '</div>';
+        return $ret;
+    }
+*/
+    public function getTemplateVars($values, $namePostfix = '')
+    {
+        $name = $this->getFieldName();
+        if (isset($values[$name])) {
+            $value = $values[$name];
+        } else {
+            $value = $this->getDefaultValue();
+        }
+        $ret = parent::getTemplateVars($values);
+
+        $name = htmlspecialchars($name);
+        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$namePostfix);
+        $ret['html']  = "<div class=\"vpsFormFiledFile\">\n";
+        $ret['html'] .= "<input type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
+                        " style=\"width: {$this->getWidth()}px\" />";
+        if ($value) {
+            $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
+                        " value=\"$value[uploadId]\" />";
+            if ($value['image']) {
+                //todo: with und height von image
+                $ret['html'] .= " <img src=\"/vps/media/upload/preview?uploadId=$value[uploadId]\" alt=\"\"/>";
+            }
+            $ret['html'] .= '<button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlVps("Delete Image").'</button>';
+            $ret['html'] .= ''.$value['filename'].'.'.$value['extension'];
+            $helper = new Vps_View_Helper_FileSize();
+            $ret['html'] .= ' ('.$helper->fileSize($value['fileSize']).')';
+        }
+        $ret['html'] .= '</div>';
         return $ret;
     }
 }

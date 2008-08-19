@@ -8,6 +8,8 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
                 $item['items'][$k] = $this->processItem($i);
             }
         } else if (isset($item['html'])) {
+            if (!isset($item['preHtml'])) $item['preHtml'] = '';
+            if (!isset($item['postHtml'])) $item['postHtml'] = '';
             $errors = false;
             if ($item['item']) {
                 $errors = $item['item']->validate($_REQUEST);
@@ -26,7 +28,7 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
                     $class .= ' '.$item['item']->getFieldName();
                 }
             }
-            $item['preHtml'] = '<div class="'.$class.'">';
+            $item['preHtml'] .= '<div class="'.$class.'">';
             if ($item['item'] && !$item['item']->getHideLabels()) {
                 if ($item['item']) {
                     $item['preHtml'] .= '<label for="'
@@ -44,7 +46,7 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
                 }
                 $item['preHtml'] .= '</label>';
             }
-            $item['postHtml'] = '</div>';
+            $item['postHtml'] .= '</div>';
         }
         return $item;
     }

@@ -35,7 +35,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
 
         $value = htmlspecialchars($value);
         $name = htmlspecialchars($name);
-        $ret['id'] = $name.$fieldNamePostfix;
+        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<input type=\"".$this->getInputType()."\" id=\"$ret[id]\" ".
                         "name=\"$name$fieldNamePostfix\" value=\"$value\" ".
                         "style=\"width: {$this->getWidth()}px\" ".

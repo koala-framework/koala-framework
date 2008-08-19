@@ -23,7 +23,7 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
             $value = '';
         }
         //todo: escapen
-        $ret['id'] = $name.$fieldNamePostfix;
+        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<select id=\"$ret[id]\" name=\"$name$fieldNamePostfix\">";
         //todo: andere values varianten ermöglichen
         //todo: html wählt ersten wert vor-aus - ext galub ich nicht

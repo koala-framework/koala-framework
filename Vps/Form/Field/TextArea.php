@@ -16,7 +16,7 @@ class Vps_Form_Field_TextArea extends Vps_Form_Field_TextField
         }
         $ret = Vps_Form_Field_SimpleAbstract::getTemplateVars($values);
         //todo: escapen
-        $ret['id'] = $name.$fieldNamePostfix;
+        $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<textarea id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" ";
         $ret['html'] .= "style=\"width: {$this->getWidth()}px; height: {$this->getHeight()}px\">";
         $ret['html'] .= $value;

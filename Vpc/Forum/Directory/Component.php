@@ -10,6 +10,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
         );
         $ret['tablename'] = 'Vpc_Forum_Directory_Model';
         $ret['componentName'] = trlVps('Forum');
+        $ret['placeholder']['searchButtonText'] = trlVps('go');
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Forum/Directory/Panel.js';
         $ret['assetsAdmin']['dep'][] = 'VpsAutoTree';
         $ret['assetsAdmin']['dep'][] = 'VpsAutoAssignGrid';
