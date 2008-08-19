@@ -57,7 +57,9 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                     $group->countThreads = $group->row->countThreads();
                     $group->lastPost = $root->getComponentById($lastPostId);
                     if ($group->lastPost) {
-                        $group->lastUser = $this->getData()->getChildComponent('_users')->getChildComponent('_' . $group->lastPost->row->user_id);
+                        $group->lastUser = Vps_Component_Data_Root::getInstance()
+                            ->getComponentByClass('Vpc_User_Directory_Component')
+                            ->getChildComponent('_' . $group->lastPost->row->user_id);
                     }
                 }
                 $group->childGroups = $this->getGroups($group->row->id);
