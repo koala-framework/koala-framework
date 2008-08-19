@@ -711,11 +711,17 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         }
 
         $this->_helper->viewRenderer->setNoRender();
-        $this->getResponse()->setHeader('Content-Description', 'File Transfer')
-                            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')
-                            ->setHeader('Content-Type', 'text/csv')
+        $this->getResponse()->setHeader('Content-Type', "application/vnd-ms-excel")
                             ->setHeader('Content-Disposition', 'attachment; filename="csv_export_'.date('Y-m-d_Hi').'.csv"')
+                            ->setHeader('ETag', '1253859135') //muss für IE 7 mitgegeben werden
+                            ->setHeader('Last-Modified', gmdate("D, d M Y H:i:s \G\M\T", time() - 60*60*24))
+                            ->setHeader('Accept-Ranges', 'none')
+                            ->setHeader('Content-Length', strlen($csvReturn))
+                            ->setHeader('Pragma', 0, true) //muss für IE 7 überschrieben werden
+                            ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true) //muss für IE 7 überschrieben werden
                             ->setBody($csvReturn);
+
+                            $datei = "filename.xls";
     }
 
     public function xlsAction()
@@ -726,15 +732,16 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         require_once 'Spreadsheet/Excel/Writer.php';
 
         $xls = new Spreadsheet_Excel_Writer();
-//         $xls->setVersion(8);
         $xls->send('xls_export_'.date('Y-m-d_Hi').'.xls');
+        header('ETag:523566889'); //muss für IE 7 überschrieben werden
 
         $sheet = $xls->addWorksheet('export_'. date('Y-m-d_H-i'));
-        // UTF-8 würde mit setVersion(8) funzen, allerdings dann max. 255 zeichen / zeile
-//         $sheet->setInputEncoding('UTF-8');
+        $sheet->setInputEncoding('UTF-8');
 
+        $colHeaderOptions = array();
         $colOptions = array();
         $i = 0;
+
         foreach ($this->_columns as $column) {
             if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_XLS)) continue;
             if (is_null($column->getHeader())) continue;
@@ -749,13 +756,26 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
 
             if ($options->getWidth() === null) {
-                if ($column->getWidth()) {
-                    $options->setWidth(round($column->getWidth() / 6, 1));
+                if ($column->getXlsWidth()) {
+                    $options->setWidth($column->getXlsWidth());
                 } else {
-                    $options->setWidth($options->getDefaultOption('width'));
+                    if ($column->getWidth()) {
+                        $options->setWidth(round($column->getWidth() / 6, 1));
+                    } else {
+                        $options->setWidth($options->getDefaultOption('width'));
+                    }
                 }
             }
-
+            if ($column->getXlsColOptions()){
+                $colOptions[$i] = $xls->addFormat($column->getXlsColOptions());
+            } else {
+                $colOptions[$i] = null;
+            }
+            if ($column->getXlsColHeaderOptions()){
+                $colHeaderOptions[$i] = $xls->addFormat($column->getXlsColHeaderOptions());
+            } else {
+                $colHeaderOptions[$i] = null;
+            }
             $sheet->setColumn($i, $i, $options->getWidth());
 
             $i++;
@@ -766,17 +786,24 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $data = $this->_getExportData(Vps_Grid_Column::SHOW_IN_XLS);
         if (!is_null($data)) {
             foreach ($data as $row => $cols) {
+                $i = 0;
                 foreach ($cols as $col => $text) {
                     if (is_array($text)) $text = implode(', ', $text);
                     if ($row == 0) {
-                        $sheet->write($row, $col, utf8_decode($text), $headFormat);
+                        if ($colHeaderOptions[$i]) {
+                            $format = $colHeaderOptions[$i];
+                        } else {
+                            $format = $headFormat;
+                        }
                     } else {
-                        $sheet->write($row, $col, utf8_decode($text));
+                        $format = $colOptions[$i];
                     }
+                    //TODO Zeilenumbrüche
+                    $sheet->write($row, $col, mb_convert_encoding( $text, 'Windows-1252', 'UTF-8'), $format);
+                    $i++;
                 }
             }
         }
-
         $xls->close();
         $this->_helper->viewRenderer->setNoRender();
     }
