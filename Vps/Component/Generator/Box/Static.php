@@ -17,6 +17,7 @@ class Vps_Component_Generator_Box_Static extends Vps_Component_Generator_Static 
         $ret['priority'] = isset($c['priority']) ? $c['priority'] : 0;
         $ret['inherit'] = !isset($c['inherit']) || $c['inherit'];
         $ret['box'] = isset($c['box']) ? $c['box'] : $key;
+        $ret['multi'] = isset($c['multi']) ? $c['multi'] : false;
         return $ret;
     }
     
