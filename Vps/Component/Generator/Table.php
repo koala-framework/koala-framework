@@ -20,11 +20,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $cols = $this->_table->info('cols');
         $tableName = $this->_table->info('name');
         if ($parentData && in_array('component_id', $cols)) {
-            if (isset($constraints['noDirectParent']) && $constraints['noDirectParent']) {
-                $select->where("$tableName.component_id LIKE '$parentData->dbId%'");
-            } else {
-                $select->where("$tableName.component_id = ?", $parentData->dbId);
-            }
+            $select->where("$tableName.component_id = ?", $parentData->dbId);
         }
         if ((!isset($constraints['ignoreVisible']) || !$constraints['ignoreVisible'])
             && in_array('visible', $cols) && !Vps_Registry::get('config')->showInvisible) {
