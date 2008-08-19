@@ -17,6 +17,31 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
     }
     public function getChildData($parentData, $constraints = array())
     {
+        if (isset($this->_settings['unique']) && $this->_settings['unique']) {
+            $component = $parentData;
+            while ($component && $component->componentClass != $this->_class) {
+                if ($component->componentClass != $this->_class) {
+                    foreach ($component->getRecursiveChildComponents(array('page' => false, 'unique' => true)) as $c) {
+                        if ($c->getParent()->componentClass == $this->_class) {
+                            $component = $c->getParent();
+                        }
+                    }
+                }
+                if ($component->componentClass != $this->_class) {
+                    if ($component->parent instanceof Vps_Component_Data_Root) {
+                        $component = $component->getParent();
+                    } else {
+                        $component = $component->getParentPage();
+                    }
+                }
+            }
+            if ($component) {
+                $parentData = $component;
+            } else {
+                $component = $this->_settings['generator'];
+                throw new Vps_Exception("Couldn't find unique component '$component'");
+            }
+        }
         $ret = parent::getChildData($parentData, $constraints);
         if (!$parentData) {
             if (isset($constraints['id'])) {
@@ -74,11 +99,9 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
     protected function _acceptKey($key, $constraints, $parentData)
     {
         $ret = true;
-        
         if (isset($this->_settings['component'][$key]) && !$this->_settings['component'][$key]) {
             $ret = false;
         }
-        
         if ($ret && isset($constraints['componentClass'])) {
             if (!in_array($this->_settings['component'][$key], $constraints['componentClass'])) {
                 $ret = false;
@@ -88,6 +111,9 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
             if ($this->_idSeparator.$key != $constraints['id']) {
                 $ret = false;
             }
+        }
+        if ($ret && isset($constraints['inherit'])) {
+            $ret = !isset($this->_settings['inherit']) || ($this->_settings['inherit'] == $constraints['inherit']);
         }
         return $ret;
     }
@@ -105,6 +131,10 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         }
         $dbId .= $componentKey;
 
+        $c = $this->_settings;
+        $priority = isset($c['priority']) ? $c['priority'] : 0;
+        $inherit = !isset($c['inherit']) || $c['inherit'];
+        
         return array(
             'componentId' => $componentId,
             'dbId' => $dbId,
@@ -112,7 +142,9 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
             'parent' => $parentData,
             'isPage' => false,
             'isPseudoPage' => false,
-            'visible' => true
+            'visible' => true,
+            'priority' => $priority,
+            'inherit' => $inherit
         );
     }
     protected function _getIdFromRow($componentKey)

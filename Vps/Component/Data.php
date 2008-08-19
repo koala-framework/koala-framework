@@ -120,6 +120,8 @@ class Vps_Component_Data
             $generatorInterface = 'Vps_Component_Generator_Page_Interface';
         } else if (isset($constraints['box']) && $constraints['box']) {
             $generatorInterface = 'Vps_Component_Generator_Box_Interface';
+        } else if (isset($constraints['multibox']) && $constraints['multibox']) {
+            $generatorInterface = 'Vps_Component_Generator_MultiBox_Interface';
         } else {
             $generatorInterface = false;
         }
@@ -182,7 +184,7 @@ class Vps_Component_Data
             $ret = array();
 
             $generatorConstraints = array();
-            foreach (array('page', 'pseudoPage', 'box', 'generator', 'skipRoot') as $c) {
+            foreach (array('page', 'pseudoPage', 'box', 'multibox', 'generator', 'skipRoot') as $c) {
                 if (isset($constraints[$c])) {
                     $generatorConstraints[$c] = $constraints[$c];
                     unset($constraints[$c]);
@@ -249,6 +251,12 @@ class Vps_Component_Data
     public function getChildBoxes(array $constraints = array())
     {
         $constraints['box'] = true;
+        return $this->getRecursiveChildComponents($constraints);
+    }
+
+    public function getChildMultiBoxes(array $constraints = array())
+    {
+        $constraints['multibox'] = true;
         return $this->getRecursiveChildComponents($constraints);
     }
 

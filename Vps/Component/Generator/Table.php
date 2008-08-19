@@ -69,11 +69,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $ret = Vps_Component_Data_Root::getInstance()
                                         ->getComponentByDbId($row->component_id);
         } else {
-            //Ist diese Exception korrekt - stört das irgendwo?
-            //die lösung darunter ist mega uneffizient
             throw new Vps_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' Generator");
-            //$ret = Vps_Component_Data_Root::getInstance()
-            //  ->getComponentByClass($this->_class);
         }
         return $ret;
     }
@@ -103,7 +99,10 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if (isset($constraints['id'])) {
             if (!is_numeric(substr($constraints['id'], 1))) return null;
         }
-
+        if (isset($constraints['inherit'])) {
+            return null;
+        }
+        
         return $constraints;
     }
 
