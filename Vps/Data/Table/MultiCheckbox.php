@@ -12,7 +12,7 @@ class Vps_Data_Table_MultiCheckbox extends Vps_Data_Abstract
 
     public function load($row)
     {
-        $selected = $row->findDependentRowset($this->_tableName);
+        $selected = $row->getRow()->findDependentRowset($this->_tableName);
         $ref = $selected->getTable()->getReference(get_class($this->_values->getTable()));
         $key = $ref['columns'][0];
 

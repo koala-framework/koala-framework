@@ -14,19 +14,35 @@ Ext.util.Format.password = function(value)
 
 Ext.util.Format.euroMoney = function(v, p)
 {
-    return Ext.util.Format.decimal(v,p) + " €";
+    return Ext.util.Format.money(v,p) + " €";
 };
 
 Ext.util.Format.decimal = function(v, p)
 {
-    if (p) p.css = 'vps-renderer-euro-money';
+    if (p) p.css = 'vps-renderer-decimal';
     if (v === null || v == undefined) return "";
-    v = v.toString().replace(",", ".");
-    v = (Math.round((v-0)*100))/100;
+
+	v = v.toString().replace(",", ".");
+	v = (Math.round((v-0)*100))/100;
     v = (v == Math.floor(v)) ? v + ".00" : ((v*10 == Math.floor(v*10)) ? v + "0" : v);
     v = v.toString().replace(".", ",");
-    return v;
+	return v;
 };
+
+Ext.util.Format.money = function(v, p)
+{
+	v = Ext.util.Format.decimal(v, p);
+    x = v.substr(0, v.lastIndexOf(','));
+    ret = '';
+    while (x.length > 3) {
+	    ret = "." + x.substr(-3) + ret;
+	    x = x.substr(0, x.length-3);
+
+    }
+    ret = x+ret+v.substr(-3);
+	ret = ret.replace(/\-\./, "-");
+    return ret;
+}
 
 Ext.util.Format.percent = function(v)
 {
@@ -79,6 +95,7 @@ Ext.util.Format.date = function(v, format) {
 
 
 Ext.util.Format.localizedDate = Ext.util.Format.dateRenderer(trlVps('Y-m-d'));
+Ext.util.Format.localizedDatetime = Ext.util.Format.dateRenderer(trlVps('Y-m-d H:i'));
 Ext.util.Format.germanDate = Ext.util.Format.dateRenderer('d.m.Y');
 Ext.util.Format.germanDay = function(value, p) {
     p.css += 'vps-renderer-bright';
