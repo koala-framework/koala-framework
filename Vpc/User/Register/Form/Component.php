@@ -18,8 +18,7 @@ class Vpc_User_Register_Form_Component extends Vpc_Form_Component
     {
         parent::_initForm();
         $detailClass = Vpc_Abstract::getChildComponentClass($this->getData()->parent->parent->componentClass, 'detail');
-        $this->_form->setUserDetailsComponent($detailClass);
-
-        $this->_form->setUserEditForms(Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'forms'));
+        $forms = Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'forms');
+        $this->_form->addUserForms($detailClass, $forms);
     }
 }

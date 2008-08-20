@@ -10,7 +10,6 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
 
         $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Advice')));
         $fs->setLabelWidth(80);
-        $fs->setStyle('margin:10px;');
 
         $fs->add(new Vps_Form_Field_Panel())
             ->setHtml(trlVps('At the following action emails are automatically sent to the adequade user.').'<br />'
@@ -18,23 +17,23 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
         $fs->add(new Vps_Form_Field_ShowField('password', trlVps('Activation link')))
             ->setData(new Vps_Controller_Action_User_Users_ActivationlinkData());
 
-//         // Hauptdaten
-//         $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Accessdata and person')));
-//         $fs->setLabelWidth(100);
-//         $fs->setStyle('margin:10px;');
 
         $userEditForm = $this->_form->add(new $this->_userDataFormName());
         $userDirectory = Vps_Component_Data_Root::getInstance()
             ->getComponentByClass('Vpc_User_Directory_Component');
-
         if ($userDirectory) {
             $detailClass = Vpc_Abstract::getChildComponentClass($userDirectory->componentClass, 'detail');
-            $userEditForm->setUserDetailsComponent($detailClass);
-            $userEditForm->setUserEditForms(array('general'));
+            $userEditForm->addUserForms($detailClass, array('general'));
+            $userEditForm->fields['firstname']->setAllowBlank(true);
+            $userEditForm->fields['lastname']->setAllowBlank(true);
+        } else {
+            $this->add(new Vpc_User_Detail_General_Form('general'));
         }
 
         if ($roleField = $this->_getRoleField()) {
-            $this->_form->add($roleField);
+            $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Permissions')));
+            $fs->setLabelWidth(100);
+            $fs->add($roleField);
         }
 
         $config = Zend_Registry::get('config');

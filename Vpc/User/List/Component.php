@@ -5,6 +5,7 @@ class Vpc_User_List_Component extends Vpc_Directories_List_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps("Users.List");
+        $ret['order'] = 'nickname';
         return $ret;
     }
     protected function _getItemDirectory()

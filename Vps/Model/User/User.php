@@ -40,7 +40,9 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
         if ($this->title) $ret .= $this->title.' ';
         if ($this->firstname) $ret .= $this->firstname.' ';
         if ($this->lastname) $ret .= $this->lastname;
-        return trim($ret);
+        $ret = trim($ret);
+        if (!$ret) $ret = $this->email;
+        return $ret;
     }
 
     public function getActivationCode()
