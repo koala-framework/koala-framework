@@ -74,6 +74,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
             if ($this->_acceptKey($key, $constraints, $parentData)) {
                 $ret[] = $key;
             }
+            if (isset($constraints['limit']) && count($ret) >= $constraints['limit']) break;
         }
         return $ret;
     }

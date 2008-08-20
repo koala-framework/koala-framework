@@ -7,9 +7,10 @@ class Vpc_Posts_Post_Report_Component extends Vpc_Form_Component
         $ret['reportMail'] = 'content@vivid-planet.com';
         $ret['reportMailName'] = '';
         $ret['cssClass'] = 'webFormular webFormularInner';
+        $ret['flags']['noIndex'] = true;
         return $ret;
     }
-    
+
     protected function _beforeSave(Vps_Model_Row_Interface $row)
     {
         $post = $this->getData()->parent;

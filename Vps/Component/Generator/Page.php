@@ -125,6 +125,8 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             }
 
             $ret[] = $page['id'];
+
+            if (isset($constraints['limit']) && count($ret) >= $constraints['limit']) break;
         }
         return $ret;
     }

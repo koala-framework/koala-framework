@@ -168,5 +168,28 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         return strtolower(substr($cls, 0, 1)) . substr($cls, 1);
     }
 
+    static public function getShortcutUrl($componentClass, Vps_Component_Data $data)
+    {
+        if (!Vpc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
+            throw new Vps_Exception("You must either have the setting 'shortcutUrl' or reimplement getShortcutUrl method for '$componentClass'");
+        }
+        return Vpc_Abstract::getSetting($componentClass, 'shortcutUrl');
+    }
+
+    static public function getDataByShortcutUrl($componentClass, $url)
+    {
+        if (!Vpc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
+            throw new Vps_Exception("You must either have the setting 'shortcutUrl' or reimplement getDataByShortcutUrl method for '$componentClass'");
+        }
+
+        $sc = Vpc_Abstract::getSetting($componentClass, 'shortcutUrl');
+        if (substr($url, 0, strlen($sc)) != $sc) return false;
+        $ret = Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass($componentClass);
+        if ($url != $sc) {
+            $ret = $ret->getChildPageByPath(substr($url, strlen($sc)+1));
+        }
+        return $ret;
+    }
 }
 
