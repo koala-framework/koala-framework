@@ -157,7 +157,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 
         $name = htmlspecialchars($name);
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$namePostfix);
-        $ret['html']  = "<div class=\"vpsFormFiledFile\">\n";
+        $ret['html']  = "<div class=\"vpsFormFieldFile\">\n";
         $ret['html'] .= "<input type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
                         " style=\"width: {$this->getWidth()}px\" />";
         if ($value) {
@@ -167,10 +167,12 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
                 //todo: with und height von image
                 $ret['html'] .= " <img src=\"/vps/media/upload/preview?uploadId=$value[uploadId]\" alt=\"\"/>";
             }
-            $ret['html'] .= '<button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlVps("Delete Image").'</button>';
+            $ret['html'] .= '<div class="deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlVps("Delete Image").'</button></div>';
+            $ret['html'] .= "<div class=\"vpsFormFieldFileInfo\">\n";
             $ret['html'] .= ''.$value['filename'].'.'.$value['extension'];
             $helper = new Vps_View_Helper_FileSize();
             $ret['html'] .= ' ('.$helper->fileSize($value['fileSize']).')';
+            $ret['html'] .= '</div>';
         }
         $ret['html'] .= '</div>';
         return $ret;

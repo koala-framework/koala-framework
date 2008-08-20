@@ -1,0 +1,19 @@
+.vpcUserRegisterForm fieldset {
+    border: none;
+    margin-bottom: 20px;
+}
+.vpcUserRegisterForm fieldset legend {
+    font-weight: bold;
+}
+.vpcUserRegisterForm label {
+    width: 110px;
+    float: left;
+    text-align: right;
+    margin-top: 4px;
+}
+.vpcUserRegisterForm input,
+.vpcUserRegisterForm select {
+    margin-left: 10px;
+    margin-bottom: 5px;
+    padding: 2px
+}
