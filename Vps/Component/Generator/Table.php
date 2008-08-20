@@ -31,6 +31,24 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         }
         return $select;
     }
+    
+    protected function _joinComponent($select, $data, $parentTable)
+    {
+        $table = $this->_table->info('name');
+        $concat = "{$table}.component_id, '{$this->_idSeparator}', {$table}.id";
+        $select->join($table, "CONCAT($concat)={$parentTable}.component_id");
+        $select->where($this->select($data)->getPart(Zend_Db_Select::WHERE));
+        return $select;
+    }
+    
+    public function joinSelect($generator, $data)
+    {
+        $table = $this->_table->info('name');
+        $select = $this->select(null);
+        $select->setIntegrityCheck(false);
+        $select = $generator->_joinComponent($select, $data, $table);
+        return $select;
+    }
 
     public function getChildIds($parentData, $constraints = array())
     {

@@ -58,4 +58,22 @@ class Vpc_Basic_Image_Row extends Vpc_Row
         parent::_postUpdate();
         $this->deleteFileCache();
     }
+    
+    public function findParentRow($parentTable, $ruleKey = null, Zend_Db_Table_Select $select = null)
+    {
+        $ret = parent::findParentRow($parentTable, $ruleKey, $select);
+        if (is_null($ret)) {
+            $filename = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'emptyImage');
+            if ($filename) {
+                $ext = substr($filename, strrpos($filename, '.') + 1);
+                $filename = substr($filename, 0, strrpos($filename, '.'));
+                $filename = Vpc_Admin::getComponentFile($this->getTable()->getComponentClass(), $filename, $ext);
+                $table = new $parentTable();
+                $ret = $table->createRow();
+                $ret->extension = $ext;
+                $ret->filename = $filename;
+            }
+        }
+        return $ret;
+    }
 }
