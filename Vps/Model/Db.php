@@ -7,12 +7,13 @@ class Vps_Model_Db implements Vps_Model_Interface
     protected $_tableName;
     protected $_default = array();
 
-    public function __construct($config)
+    public function __construct($config = array())
     {
         if (isset($config['table'])) $this->_table = $config['table'];
         if (isset($config['default'])) $this->_default = $config['default'];
         $this->_init();
     }
+
     protected function _init()
     {
         if (!isset($this->_table) && isset($this->_tableName)) {
@@ -37,6 +38,7 @@ class Vps_Model_Db implements Vps_Model_Interface
             'model' => $this
         ));
     }
+
     public function fetchAll($where=null, $order=null, $limit=null, $start=null)
     {
         return new $this->_rowsetClass(array(
