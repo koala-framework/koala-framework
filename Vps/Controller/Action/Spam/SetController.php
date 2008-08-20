@@ -7,16 +7,31 @@ class Vps_Controller_Action_Spam_SetController extends Vps_Controller_Action
         // ham setzen und email doch schicken
         $value = $this->_getParam('value');
         if ($value == 0) {
-            $model = new Vps_Model_Mail();
+            $model = new Vps_Model_Db(array('table' => new Vps_Model_Mail_Table()));
             $row = $model->find($this->_getParam('id'))->current();
 
             if ($row->is_spam && !$row->mail_sent) {
-                if ($row->getSpamKey() != $this->_getParam('key')) {
+                $varsModel = new Vps_Model_Field(array(
+                    'fieldName'   => 'serialized_mail_vars',
+                    'parentModel' => $model
+                ));
+                $varsRow = $varsModel->getRowByParentRow($row);
+
+                $essentialModel = new Vps_Model_Field(array(
+                    'fieldName'   => 'serialized_mail_essentials',
+                    'parentModel' => $model
+                ));
+                $essentialRow = $essentialModel->getRowByParentRow($row);
+
+                if (Vps_Model_Mail_Row::getSpamKey($row) != $this->_getParam('key')) {
                     die('0');
                 }
 
                 $row->is_spam = 0;
-                $row->save(); // mit diesem save wird die email mitgesendet
+                $row->mail_sent = 1;
+                $row->save();
+
+                Vps_Model_Mail_Row::sendMail($essentialRow, $varsRow);
 
                 die('1');
             }
