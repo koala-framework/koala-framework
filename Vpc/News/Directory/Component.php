@@ -7,9 +7,17 @@ class Vpc_News_Directory_Component extends Vpc_Directories_ItemPage_Directory_Co
         $ret['componentName'] = trlVps('News.List');
         $ret['componentIcon'] = new Vps_Asset('newspaper');
         $ret['tablename'] = 'Vpc_News_Directory_Model';
+
         $ret['generators']['detail']['component'] = 'Vpc_News_Detail_Component';
         $ret['generators']['detail']['nameColumn'] = 'title';
         $ret['generators']['detail']['dbIdShortcut'] = 'news_';
+
+        $ret['generators']['feed'] = array(
+            'class' => 'Vps_Component_Generator_Page_Static',
+            'component' => 'Vpc_Directories_List_Feed_Component',
+            'name' => trlVps('Feed')
+        );
+
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/News/Directory/Panel.js';
         $ret['enableExpireDate'] = false;
         $ret['order'] = 'publish_date DESC';

@@ -4,7 +4,7 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps('Forum - latest threads');
+        $ret['componentName'] = trlVps('Forum.Latest Threads');
         $ret['tablename'] = 'Vpc_Forum_Group_Model';
         return $ret;
     }

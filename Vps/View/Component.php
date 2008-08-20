@@ -132,15 +132,6 @@ class Vps_View_Component extends Vps_View
     private static function _renderMasterComponent(Vps_Component_Data $componentData)
     {
         $templateVars = array();
-        foreach (Zend_Registry::get('config')->vpc->masterComponents->toArray()
-            as $componentClass)
-        {
-            $component = new $componentClass($componentData);
-            if (!$component instanceof Vpc_Master_Abstract) {
-                throw new Vps_Exception('vpc.masterComponent has to be instance of Vpc_Master_Abstract');
-            }
-            $templateVars = array_merge($templateVars, $component->getTemplateVars());
-        }
         $templateVars['component'] = $componentData;
         foreach ($componentData->getChildBoxes() as $box) {
             if (!isset($templateVars['boxes'][$box->box]) || 

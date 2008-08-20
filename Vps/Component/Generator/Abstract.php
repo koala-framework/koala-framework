@@ -145,12 +145,6 @@ abstract class Vps_Component_Generator_Abstract
         
         if ($parentData && $parentData->isPage) {
             
-            if (!$parentData instanceof Vps_Component_Data_Root) {
-                foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $mc) {
-                    $ret = array_merge($ret, self::_getGeneratorsForComponent($mc, $constraints));
-                }
-            }
-            
             if (!isset($constraints['generator']) &&
                 (!isset($constraints['page']) || !$constraints['page']) &&
                 (!isset($constraints['skipInherit']) || !$constraints['skipInherit']))

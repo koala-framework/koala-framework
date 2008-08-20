@@ -138,11 +138,6 @@ class Vps_Assets_Dependencies
         if ($dependency == 'Components' || $dependency == 'ComponentsAdmin') {
             $rootComonent = $this->_config->vpc->rootComponent;
             $this->_processComponentDependency($assetsType, $rootComonent, $dependency == 'ComponentsAdmin');
-            foreach ($this->_config->vpc->masterComponents as $c) {
-                if ($c) {
-                    $this->_processComponentDependency($assetsType, $c, $dependency == 'ComponentsAdmin');
-                }
-            }
             return;
         }
         if (!isset($this->_getDependenciesConfig()->$dependency)) {
