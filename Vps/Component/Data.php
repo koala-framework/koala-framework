@@ -8,7 +8,7 @@ class Vps_Component_Data
     private $_filename;
     private $_constraintsCache = array();
     private $_generatorsCache = array();
-    
+
     public function __construct($config)
     {
         foreach ($config as $k=>$i) {
@@ -35,11 +35,25 @@ class Vps_Component_Data
             $filenames = array();
             $page = $this->getPage();
             do {
-                $filenames[] = $page->filename;
+                if (Vpc_Abstract::getFlag($page->componentClass, 'shortcutUrl')) {
+                    $filenames[] = call_user_func(array($page->componentClass, 'getShortcutUrl'), $page->componentClass, $page);
+                    break;
+                } else {
+                    $filenames[] = $page->filename;
+                }
             } while ($page = $page->getParentPseudoPage());
             return '/'.implode('/', array_reverse($filenames));
         } else if ($var == 'rel') {
-            return $this->getPage()->_rel;
+            $childs = $this->getPage()->getRecursiveChildComponents(array(
+                'flags' => array('noIndex' => true),
+                'page' => false,
+                'limit' => 1
+            ));
+            $rel = $this->getPage()->_rel;
+            if ($childs || $this->_hasFlags($this->componentClass, array('noIndex' => true))) {
+                $rel .= ' nofollow';
+            }
+            return trim($rel);
         } else if ($var == 'filename') {
             return $this->getPseudoPage()->_filename;
         } else {
@@ -93,7 +107,6 @@ class Vps_Component_Data
     public function getRecursiveGenerators(array $constraints,
                                 array $childConstraints = array('page'=>false))
     {
-        
         $ret = $this->getGenerators($constraints);
         foreach ($this->getChildComponents($this->_formatChildConstraints($constraints, $childConstraints)) as $component) {
             $ret = array_merge($ret, $component->getRecursiveGenerators($constraints, $childConstraints));
@@ -113,7 +126,7 @@ class Vps_Component_Data
         }
         return $this->_generatorsCache[$sc];
     }
-    
+
     private function _formatChildConstraints($constraints, $childConstraints)
     {
         if (isset($constraints['page']) && $constraints['page']) {
@@ -126,6 +139,9 @@ class Vps_Component_Data
             $generatorInterface = false;
         }
         if ($generatorInterface) {
+            if (isset($childConstraints['componentClass'])) {
+                throw new Vps_Exception("Constraint 'page' or 'box' may not (yet) be used with 'componentClass'");
+            }
             $childConstraints['componentClass'] = array();
             $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
             foreach ($classes as $class) {
@@ -135,9 +151,10 @@ class Vps_Component_Data
             }
         }
         if (isset($constraints['hasEditComponents'])) {
-            if (!isset($childConstraints['componentClass'])) {
-                $childConstraints['componentClass'] = array();
+            if (isset($childConstraints['componentClass'])) {
+                throw new Vps_Exception("Constraint 'hasEditComponents' may not (yet) be used with 'componentClass'");
             }
+            $childConstraints['componentClass'] = array();
             $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
             foreach ($classes as $class) {
                 if ($class && $this->_hasChildSetting($class, 'editComponents')) {
@@ -145,9 +162,24 @@ class Vps_Component_Data
                 }
             }
         }
+        if (isset($constraints['flags'])) {
+            if (!is_array($constraints['flags'])) {
+                throw new Vps_Exception("Constraint 'flags' must be of type array");
+            }
+            if (isset($childConstraints['componentClass'])) {
+                throw new Vps_Exception("Constraint 'flags' may not (yet) be used with 'componentClass'");
+            }
+            $childConstraints['componentClass'] = array();
+            $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
+            foreach ($classes as $class) {
+                if ($class && $this->_hasChildFlags($class, $constraints['flags'])) {
+                    $childConstraints['componentClass'][] = $class;
+                }
+            }
+        }
         return $childConstraints;
     }
-    
+
     public function getRecursiveChildComponents(array $constraints,
                                 array $childConstraints = array('page'=>false))
     {
@@ -193,13 +225,36 @@ class Vps_Component_Data
             if (isset($constraints['select']) && $constraints['select'] instanceof Vps_Db_Table_Select_Generator) {
                 $generatorConstraints['generator'] = $constraints['select']->getGenerator();
             }
+            if (isset($constraints['flags'])) {
+                if (!is_array($constraints['flags'])) {
+                    throw new Vps_Exception("Constraint 'flags' must be of type array");
+                }
+                if (isset($constraints['componentClass'])) {
+                    throw new Vps_Exception("Constraint 'flags' may not be used with other constraints");
+                }
+                $constraints['componentClass'] = array();
+                $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
+                foreach ($classes as $class) {
+                    if ($class) {
+                        if ($this->_hasFlags($class, $constraints['flags'])) {
+                            $constraints['componentClass'][] = $class;
+                        }
+                    }
+                }
+                unset($constraints['flags']);
+            }
+
             $this->_constraintsCache[$sc] = array();
             if (isset($constraints['componentClass']) && $constraints['componentClass'] == array()) {
                 return $this->_constraintsCache[$sc]; //vorzeitig abbrechen, da kommt sicher kein ergebnis
             }
             $generators = $this->getGenerators($generatorConstraints);
             foreach ($generators as $generator) {
-                foreach ($generator->getChildData($this, $constraints) as $data) {
+                $childConstraints = $constraints;
+                if (isset($constraints['limit'])) {
+                    $childConstraints['limit'] -= count($this->_constraintsCache[$sc]);
+                }
+                foreach ($generator->getChildData($this, $childConstraints) as $data) {
                     if (isset($this->_constraintsCache[$sc][$data->componentId])) {
                         $odata = $this->_constraintsCache[$sc][$data->componentId];
                         if (isset($data->box) && isset($odata->box) && $data->box == $odata->box) {
@@ -215,11 +270,14 @@ class Vps_Component_Data
                     }
                     $this->_constraintsCache[$sc][$data->componentId] = $data;
                 }
+                if (isset($constraints['limit'])) {
+                    if ($constraints['limit'] - count($this->_constraintsCache[$sc]) <= 0) break;
+                }
             }
         }
         return $this->_constraintsCache[$sc];
     }
-    
+
 /*
     public function getDataFromGenerators($generator)
     {
@@ -267,7 +325,7 @@ class Vps_Component_Data
             return $hasGenerator[$interface][$componentClass];
         }
         $hasGenerator[$interface][$componentClass] = false;
-        
+
         $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
         foreach ($generators as $key => $generator) {
             if (!isset($generator['class'])) {
@@ -312,6 +370,44 @@ class Vps_Component_Data
         return false;
     }
 
+    private function _hasChildFlags($componentClass, array $flags)
+    {
+        static $hasChildFlags = array();
+        $cacheKey = serialize($flags);
+        if (isset($hasChildFlags[$cacheKey][$componentClass])) {
+            return $hasChildFlags[$cacheKey][$componentClass];
+        }
+
+        if ($this->_hasFlags($componentClass, $flags)) {
+            $hasChildFlags[$cacheKey][$componentClass] = true;
+            return true;
+        } else {
+            $hasChildFlags[$cacheKey][$componentClass] = false;
+        }
+
+        foreach (Vpc_Abstract::getChildComponentClasses($componentClass) as $class) {
+            if ($class) {
+                if ($this->_hasChildFlags($class, $flags)) {
+                    $hasChildFlags[$cacheKey][$componentClass] = true;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    protected function _hasFlags($class, array $flags)
+    {
+        $componentFlags = Vpc_Abstract::getSetting($class, 'flags');
+        foreach ($flags as $k => $c) {
+            if (!isset($componentFlags[$k])) $componentFlags[$k] = false;
+            if ($componentFlags[$k] != $c) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Abkürzung für $this->getComponent()->hasContent()
      *
@@ -324,14 +420,16 @@ class Vps_Component_Data
 
     public function getChildPage($constraints = array())
     {
+        $constraints['limit'] = 1;
         return array_shift($this->getChildPages($constraints));
     }
 
     public function getChildPseudoPage($constraints = array())
     {
+        $constraints['limit'] = 1;
         return array_shift($this->getChildPseudoPages($constraints));
     }
-    
+
     public function getGenerator($key)
     {
         return Vps_Component_Generator_Abstract::getInstance($this->componentClass, $key);
@@ -345,9 +443,19 @@ class Vps_Component_Data
         }
         return $ret;
     }
-    
+
     public function getChildComponent($constraints = array())
     {
+        if (!is_array($constraints)) {
+            if (is_string($constraints)) {
+                $constraints = array('id' => $constraints);
+            } else if ($constraints instanceof Zend_Db_Select) {
+                $constraints = array('select' => $constraints);
+            } else {
+                throw new Vps_Exception("Invalid contraint");
+            }
+        }
+        $constraints['limit'] = 1;
         return array_shift($this->getChildComponents($constraints));
     }
 
@@ -359,7 +467,7 @@ class Vps_Component_Data
         }
         return $this->_component;
     }
-    
+
     public function getPage()
     {
         $page = $this;
@@ -418,6 +526,16 @@ class Vps_Component_Data
             }
         }
         return $ret;
+    }
+
+    public function getChildPageByPath($path)
+    {
+        $page = $this;
+        foreach (explode('/', $path) as $pathPart) {
+            $page = $page->getChildPseudoPage(array('filename' => $pathPart));
+            if (!$page) break;
+        }
+        return $page;
     }
 
 /*

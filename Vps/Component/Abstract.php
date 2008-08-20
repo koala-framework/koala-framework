@@ -117,8 +117,8 @@ class Vps_Component_Abstract
             'componentIcon' => new Vps_Asset('paragraph_page'),
             'placeholder'   => array(),
             'plugins'       => array(),
-            'generators'    => array()
-
+            'generators'    => array(),
+            'flags'         => array()
         );
     }
 
@@ -163,6 +163,13 @@ class Vps_Component_Abstract
     protected function _getSetting($setting)
     {
         return self::getSetting(get_class($this), $setting);
+    }
+
+    static public function getFlag($class, $flag)
+    {
+        $flags = self::getSetting($class, 'flags');
+        if (!isset($flags[$flag])) return false;
+        return $flags[$flag];
     }
 
     public static function getComponentClasses($useSettingsCache = true)

@@ -148,6 +148,8 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
         }
 
+        if (isset($constraints['limit'])) $select->limit($constraints['limit']);
+
         return $select;
     }
 
