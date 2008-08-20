@@ -1,0 +1,15 @@
+.vpcUserLostPassword h1,
+.vpcUserLostPassword p {
+    margin-bottom: 10px;
+}
+.vpcUserLostPassword label {
+    width: 110px;
+    float: left;
+    text-align: right;
+    margin-top: 4px;
+}
+.vpcUserLostPassword input {
+    margin-left: 10px;
+    margin-bottom: 5px;
+    padding: 2px
+}
