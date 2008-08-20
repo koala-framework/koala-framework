@@ -40,6 +40,10 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
             'extension'=> $this->extension,
             'fileSize' => $this->getFileSize()
         );
+        if (!$this->id && is_file($this->filename)) {
+            $ret['mimeType'] = $this->_getMimeType($this->filename);
+            $ret['extension'] = substr(strrchr($this->filename, '.'), 1);
+        }
         $size = @getimagesize($this->getFileSource());
         if ($size) {
             $ret['image'] = true;
@@ -53,7 +57,13 @@ class Vps_Dao_Row_File extends Vps_Db_Table_Row_Abstract
 
     public function getFileSource()
     {
-        if (!$this->id) return null;
+        if (!$this->id) {
+            if ($this->filename && is_file($this->filename)) {
+                return $this->filename;
+            } else {
+                return null;
+            }
+        }
         return self::getUploadDir() . '/' . $this->id;
     }
 

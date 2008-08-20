@@ -21,11 +21,4 @@ class Vpc_Posts_Directory_Component extends Vpc_Directories_Item_Directory_Compo
         $ret['generators']['child']['component']['view'] = 'Vpc_Posts_Directory_View_Component';
         return $ret;
     }
-    
-    public function getUserComponent($userId)
-    {
-        return Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_User_Directory_Component')
-            ->getChildComponent('_' . $userId);
-    }
 }

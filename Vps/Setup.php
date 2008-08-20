@@ -429,7 +429,7 @@ class Vps_Setup
                 throw new Vps_Exception("Invalid class: {$params['table']}");
             }
 
-            $row = $table->find($id)->current();
+            $row = $table->find($id[0])->current();
             if (!$row) {
                 throw new Vps_Exception('File not found.');
             }
@@ -438,7 +438,7 @@ class Vps_Setup
                 throw new Vps_Exception('No File uploaded.');
             }
             $target = $row->getFileSource($rule, $type);
-
+            
             $downloadFilename = false;
             if ($download) {
                 $downloadFilename = $params['filename'];

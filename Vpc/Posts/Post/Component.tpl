@@ -6,18 +6,12 @@
             if ($rating) $userText .= ' ' . $this->component($rating);
         ?>
         <div class="postInfo">
-            <?php
-            $avatarRow = $this->user->getChildComponent('-general')
-                ->getChildComponent('-avatar')
-                ->getComponent()->getImageRow();
-            if ($avatarRow->vps_upload_id) {
-                $image = $this->image($avatarRow, null, 'forum');
-            } else {
-                $image = $this->image($this->componentFile($this->data, 'avatar.png'));
-            }
-            ?>
             <div class="avatar">
-                <?= $this->componentLink($this->user, $image) ?>
+                <?= $this->componentLink(
+                        $this->user, 
+                        $this->component($this->user->getChildComponent('-general')
+                            ->getChildComponent('-avatar')->getChildComponent('-small'))
+                ) ?>
             </div>
             <div class="user">
                 <?=trlVps('By')?>: <?= $this->componentLink($this->user) ?>

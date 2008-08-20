@@ -30,9 +30,4 @@ class Vpc_Forum_Thread_Directory_Component extends Vpc_Posts_Directory_Component
         }
         return $ret;
     }
-    
-    public function getUserComponent($userId)
-    {
-        return $this->getData()->parent->parent->getChildComponent('_users')->getChildComponent('_' . $userId);
-    }
 }
