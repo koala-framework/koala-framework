@@ -17,13 +17,13 @@ class Vps_Controller_Action_Cli_TextComponentsController extends Vps_Controller_
         $ccm = new Vpc_Basic_Text_ChildComponentsModel();
         $existingEntries = array();
         foreach ($ccm->fetchAll() as $row) {
-            $existingEntries[] = $row->component_id.'-'.$row->type.$row->nr;
+            $existingEntries[] = $row->component_id.'-'.substr($row->component, 0, 1).$row->nr;
         }
         $validEntries = array();
         foreach ($t->fetchAll() as $row) {
             foreach ($row->getContentParts() as $part) {
                 if (is_array($part) && in_array($part['type'], $validTypes)) {
-                    $id = $row->component_id.'-'.$part['type'].$part['nr'];
+                    $id = $row->component_id.'-'.substr($part['type'], 0, 1).$part['nr'];
                     $validEntries[] = $id;
                     if (in_array($id, $existingEntries)) {
                         $existingCount++;
@@ -31,7 +31,7 @@ class Vps_Controller_Action_Cli_TextComponentsController extends Vps_Controller_
                         $addedCount++;
                         $r = $ccm->createRow();
                         $r->component_id = $row->component_id;
-                        $r->type = $part['type'];
+                        $r->component = $part['type'];
                         $r->nr = $part['nr'];
                         $r->saved = 1;
                         $r->save();
@@ -40,7 +40,7 @@ class Vps_Controller_Action_Cli_TextComponentsController extends Vps_Controller_
             }
         }
         foreach ($ccm->fetchAll() as $row) {
-            $id = $row->component_id.'-'.$row->type.$row->nr;
+            $id = $row->component_id.'-'.substr($row->component, 0, 1).$row->nr;
             if (!in_array($id, $validEntries)) {
                 $deletedCount++;
                 $row->delete();
