@@ -380,6 +380,22 @@ class Vps_Assets_Dependencies
                         foreach ($cssConfig as $k=>$i) {
                             $cacheData['contents'] = preg_replace('#\\$'.preg_quote($k).'([^a-z0-9A-Z])#', "$i\\1", $cacheData['contents']);
                         }
+                        $cssClass = $file;
+                        if (substr($cssClass, 0, 4) == 'web/') {
+                            $cssClass = substr($cssClass, 4);
+                        }
+                        if (substr($cssClass, 0, 4) == 'vps/') {
+                            $cssClass = substr($cssClass, 4);
+                        }
+                        if (substr($cssClass, -4) == '.css') {
+                            $cssClass = substr($cssClass, 0, -4);
+                        }
+                        if (substr($cssClass, -10) == '/Component') {
+                            $cssClass = substr($cssClass, 0, -10);
+                        }
+                        $cssClass = str_replace('/', '', $cssClass);
+                        $cssClass = strtolower(substr($cssClass, 0, 1)) . substr($cssClass, 1);
+                        $cacheData['contents'] = str_replace('$cssClass', $cssClass, $cacheData['contents']);
                     }
 
                     if (substr($ret['mimeType'], 0, 15) == 'text/javascript') {
