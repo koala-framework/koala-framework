@@ -1,17 +1,17 @@
 <?php
 class Vps_View_Helper_Assets
 {
-    public function assets($assets)
+    public function assets($type)
     {
+        $dep = new Vps_Assets_Dependencies();
         $indent = str_repeat(' ', 8);
         $ret = '';
-        foreach ($assets['css'] as $file) {
+        foreach ($dep->getAssetUrls($type, 'css') as $file) {
             $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"$file\" />\n";
         }
-        foreach ($assets['js'] as $file) {
+        foreach ($dep->getAssetUrls($type, 'js') as $file) {
             $ret .= "$indent<script type=\"text/javascript\" src=\"$file\"></script>\n";
         }
         return $ret;
     }
 }
-

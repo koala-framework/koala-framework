@@ -35,7 +35,7 @@
         var Vps = {isApp: true};
     </script>
 
-    <?= $this->assets($this->ext['assets']) ?>
+    <?= $this->assets('Admin') ?>
     <?= $this->debugData() ?>
 
     <script type="text/javascript">

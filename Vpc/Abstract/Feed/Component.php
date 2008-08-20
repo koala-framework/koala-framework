@@ -15,7 +15,7 @@ abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
             'link' => 'http://'.$_SERVER['HTTP_HOST'].$this->getUrl(),
             //'lastUpdate' => ,
             'charset' => 'utf-8',
-            //'description' => $blog->description,
+            'description' => 'foo',
             //'author' => 'Alexander Netkachev',
             //'email' => 'alexander.netkachev@gmail.com',
             'copyright' => Zend_Registry::get('config')->application->name,

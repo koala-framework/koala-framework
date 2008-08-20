@@ -1,5 +1,5 @@
 <?php
-class Vpc_Master_Title_Component extends Vpc_Master_Abstract
+class Vpc_Box_Title_Component extends Vpc_Abstract
 {
     public function getTemplateVars()
     {
@@ -8,4 +8,5 @@ class Vpc_Master_Title_Component extends Vpc_Master_Abstract
             . Zend_Registry::get('config')->application->name;
         return $ret;
     }
+
 }

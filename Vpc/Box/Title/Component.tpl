@@ -1,0 +1,1 @@
+<title><?=$this->title?></title>
