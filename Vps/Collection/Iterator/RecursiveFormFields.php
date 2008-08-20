@@ -12,6 +12,6 @@ class Vps_Collection_Iterator_RecursiveFormFields extends Vps_Collection_Iterato
 
     public function getChildren()
     {
-        return new Vps_Collection_Iterator_Recursive($this->current()->getChildren());
+        return new Vps_Collection_Iterator_RecursiveFormFields($this->current()->getChildren());
     }
 }

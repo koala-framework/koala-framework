@@ -53,6 +53,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         Vps_Registry::get('db')->beginTransaction();
 
+        $this->_form->initFields();
+
         $postData = $this->_form->processInput($postData);
         if (isset($postData[$this->getData()->componentId])) {
             $this->_errors = array_merge($this->_errors, $this->_form->validate($postData));

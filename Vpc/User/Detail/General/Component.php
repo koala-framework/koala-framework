@@ -4,7 +4,7 @@ class Vpc_User_Detail_General_Component extends Vpc_User_Detail_Abstract_Compone
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = '';
+        $ret['componentName'] = trlVps('General');
         return $ret;
     }
 }

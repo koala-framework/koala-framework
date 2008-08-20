@@ -1,5 +1,6 @@
 <?php
-abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract implements Vps_Collection_Item_Interface
+abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
+    implements Vps_Collection_Item_Interface
 {
     private $_properties;
     protected $_validators = array();
@@ -15,6 +16,15 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract implements
 
     protected function _init()
     {
+    }
+
+    public function initFields()
+    {
+        if ($this->hasChildren()) {
+            foreach ($this->getChildren() as $field) {
+                $field->initFields();
+            }
+        }
     }
 
     public function __call($method, $arguments)
