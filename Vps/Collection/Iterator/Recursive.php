@@ -1,5 +1,6 @@
 <?php
-class Vps_Collection_Iterator_Recursive extends Vps_Collection_Iterator implements RecursiveIterator
+class Vps_Collection_Iterator_Recursive extends Vps_Collection_Iterator
+    implements RecursiveIterator
 {
     public function hasChildren()
     {

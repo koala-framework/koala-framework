@@ -50,6 +50,7 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         }
 
         $this->_initFields();
+        $this->_form->initFields();
 
         if (!$this->_form->getId()) {
             if (is_array($this->_form->getPrimaryKey())) {

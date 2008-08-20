@@ -3,7 +3,8 @@
  * Basisklasse für Fields die andere Fields beinhalten
  *
  **/
-abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract implements IteratorAggregate
+abstract class Vps_Form_Container_Abstract extends Vps_Form_Field_Abstract
+    implements IteratorAggregate
 {
     public $fields;
 

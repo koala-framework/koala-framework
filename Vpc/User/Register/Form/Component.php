@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Login_Form_Component extends Vpc_Form_Component
+class Vpc_User_Register_Form_Component extends Vpc_Form_Component
 {
     public static function getSettings()
     {
@@ -14,5 +14,12 @@ class Vpc_User_Login_Form_Component extends Vpc_Form_Component
         parent::_beforeSave($row);
         $row->role = $this->_getSetting('standardRole');
     }
+    protected function _initForm()
+    {
+        parent::_initForm();
+        $detailClass = Vpc_Abstract::getChildComponentClass($this->getData()->parent->parent->componentClass, 'detail');
+        $this->_form->setUserDetailsComponent($detailClass);
 
+        $this->_form->setUserEditForms(Vpc_Abstract::getSetting($this->getData()->parent->componentClass, 'forms'));
+    }
 }

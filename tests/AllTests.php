@@ -8,8 +8,14 @@ $include_path  = get_include_path();
 $include_path .= PATH_SEPARATOR . VPS_PATH;
 set_include_path($include_path);
 require_once 'Vps/Loader.php';
+require_once 'Vps/Setup.php';
 Vps_Loader::registerAutoload();
 date_default_timezone_set('Europe/Berlin');
+
+Zend_Registry::setClassName('Vps_Registry');
+Vps_Registry::set('config', new Zend_Config(array(
+    'webCodeLanguage' => 'en'
+)));
 
 require_once 'TestConfiguration.php';
 

@@ -18,15 +18,23 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
         $fs->add(new Vps_Form_Field_ShowField('password', trlVps('Activation link')))
             ->setData(new Vps_Controller_Action_User_Users_ActivationlinkData());
 
-        // Hauptdaten
-        $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Accessdata and person')));
-        $fs->setLabelWidth(100);
-        $fs->setStyle('margin:10px;');
+//         // Hauptdaten
+//         $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Accessdata and person')));
+//         $fs->setLabelWidth(100);
+//         $fs->setStyle('margin:10px;');
 
-        $fs->add(new $this->_userDataFormName());
+        $userEditForm = $this->_form->add(new $this->_userDataFormName());
+        $userDirectory = Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass('Vpc_User_Directory_Component');
+
+        if ($userDirectory) {
+            $detailClass = Vpc_Abstract::getChildComponentClass($userDirectory->componentClass, 'detail');
+            $userEditForm->setUserDetailsComponent($detailClass);
+            $userEditForm->setUserEditForms(array('general'));
+        }
 
         if ($roleField = $this->_getRoleField()) {
-            $fs->add($roleField);
+            $this->_form->add($roleField);
         }
 
         $config = Zend_Registry::get('config');
@@ -35,13 +43,13 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
             foreach ($config->languages as $key => $value){
                 $data[$key] = $value;
             }
-            $fs->add(new Vps_Form_Field_Select('language', trlVps('Language')))
+            $this->_form->add(new Vps_Form_Field_Select('language', trlVps('Language')))
             ->setValues($data);
         }
 
         $authedRole = Zend_Registry::get('userModel')->getAuthedUserRole();
         if (Vps_Registry::get('acl')->getRole($authedRole) instanceof Vps_Acl_Role_Admin) {
-            $fs->add(new Vps_Form_Field_Checkbox('webcode', trlVps('Webcode')))
+            $this->_form->add(new Vps_Form_Field_Checkbox('webcode', trlVps('Webcode')))
                 ->setData(new Vps_Controller_Action_User_Users_WebcodeData());
         }
 

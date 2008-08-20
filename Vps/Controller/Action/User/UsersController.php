@@ -6,7 +6,7 @@ class Vps_Controller_Action_User_UsersController extends Vps_Controller_Action_A
     protected $_defaultOrder = 'id';
     protected $_paging = 20;
     protected $_editDialog = array('controllerUrl'=>'/vps/user/user',
-                                   'width'=>400,
+                                   'width'=>500,
                                    'height'=>410);
     protected $_filters = array('text' => true);
 

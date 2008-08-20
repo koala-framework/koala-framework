@@ -43,6 +43,7 @@ class Vps_Collection_FormFields extends Vps_Collection
     {
         $ret = array();
         foreach ($this as $field) {
+            if ($field->getHidden()) continue;
             $data = $field->getTemplateVars($values, $fieldNamePostfix);
             if (!is_null($data)) $ret[] = $data;
         }

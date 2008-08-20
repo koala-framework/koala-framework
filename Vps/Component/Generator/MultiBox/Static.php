@@ -1,5 +1,6 @@
 <?php
-class Vps_Component_Generator_MultiBox_Static extends Vps_Component_Generator_Static implements Vps_Component_Generator_MultiBox_Interface
+class Vps_Component_Generator_MultiBox_Static extends Vps_Component_Generator_Static
+    implements Vps_Component_Generator_MultiBox_Interface
 {
     protected function _formatConfig($parentData, $key)
     {
