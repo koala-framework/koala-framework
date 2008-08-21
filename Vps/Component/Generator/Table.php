@@ -32,34 +32,27 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $select;
     }
     
-    public function joinWithChildGenerator($select, $childGenerator, $parentData = null)
+    public function joinWithChildGenerator($select, $childGenerator)
     {
         $table = $this->_table->info('name');
         $childTable = $childGenerator->_table->info('name');
         $concat = "{$table}.component_id, '{$this->_idSeparator}', {$table}.id";
-        $select->join($table, "CONCAT($concat)={$childTable}.component_id", array());
-        if ($parentData) {
-            $where = $this->select($parentData)->getPart(Zend_Db_Select::WHERE);
-            $select->where(implode(' ', $where));
-        }
+        $select->setIntegrityCheck(false);
+        $select->join($childTable, "CONCAT($concat)={$childTable}.component_id", array());
         return $select;
     }
 
-    public function joinWithParentGenerator($select, $parentGenerator)
+    public function joinWithParentGenerator($select, $parentGenerator, $grandParentData = null)
     {
         $table = $this->_table->info('name');
         $parentTable = $parentGenerator->_table->info('name');
         $concat = "{$parentTable}.component_id, '{$parentGenerator->_idSeparator}', {$parentTable}.id";
-        $select->join($table, "CONCAT($concat)={$table}.component_id", array());
-        return $select;
-    }
-
-    public function joinedSelect($grandParentGenerator, $grandParentData)
-    {
-        $table = $this->_table->info('name');
-        $select = $this->select(null);
         $select->setIntegrityCheck(false);
-        $select = $grandParentGenerator->joinWithChildGenerator($select, $this, $grandParentData);
+        $select->join($parentTable, "CONCAT($concat)={$table}.component_id", array());
+        if ($grandParentData) {
+            $where = $parentGenerator->select($grandParentData)->getPart(Zend_Db_Select::WHERE);
+            $select->where(implode(' ', $where));
+        }
         return $select;
     }
 
