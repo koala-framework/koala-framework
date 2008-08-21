@@ -62,7 +62,11 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         $uploadDir = Vps_Dao_Row_File::getUploadDir();
         $uploadId = $fileRow->id;
         if (is_null($uploadId)) { $uploadId = 'default'; }
-        $class = get_class($this->getTable());
+        if ($this->getTable() instanceof Vpc_Table) {
+            $class = $this->getTable()->getComponentClass();
+        } else {
+            $class = get_class($this->getTable());
+        }
         $id = $this->_getIdString();
         $target = "$uploadDir/cache/$uploadId/$class.$id.$rule.$type";
 
