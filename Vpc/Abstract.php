@@ -21,13 +21,23 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
     public static function getChildComponentClasses($class, $generator = null, $useSettingsCache = true)
     {
         $ret = array();
+        $constraints = array();
+        if (is_array($generator)) {
+            $constraints = $generator;
+            $generator = null;
+        }
         foreach (self::getSetting($class, 'generators', $useSettingsCache) as $key => $g) {
             if (!$generator || $generator == $key) {
-                if (is_array($g['component'])) {
-                    $ret = array_merge($ret, $g['component']);
-                } else {
-                    $ret[] = $g['component'];
+                if (!isset($constraints['page']) || 
+                    $constraints['page'] === is_instance_of($g['class'], 'Vps_Component_Generator_Page_Interface')
+                ) {
+                    if (is_array($g['component'])) {
+                        $ret = array_merge($ret, $g['component']);
+                    } else {
+                        $ret[] = $g['component'];
+                    }
                 }
+                
             }
         }
         foreach (self::getSetting($class, 'plugins', $useSettingsCache) as $p) {

@@ -11,23 +11,34 @@ class Vpc_Forum_Thread_Directory_Component extends Vpc_Posts_Directory_Component
     
     public function getThreadVars()
     {
-        $posts = $this->getData()->getChildComponents(array('generator' => 'detail'));
+        $select = $this->getData()->getGenerator('detail')->select($this->getData());
+        
+        $select->limit(1);
+        $select->order('create_time ASC');
+        $firstPost = $this->getData()->getChildComponent($select);
+        if ($firstPost) {
+            $firstPost->user = Vps_Component_Data_Root::getInstance()
+                ->getComponentByClass('Vpc_User_Directory_Component')
+                ->getChildComponent('_' . $firstPost->row->user_id);
+        }
+        
+        $select->order('create_time DESC');
+        $lastPost = $this->getData()->getChildComponent($select);
+        if ($lastPost) {
+            $lastPost->user = Vps_Component_Data_Root::getInstance()
+                ->getComponentByClass('Vpc_User_Directory_Component')
+                ->getChildComponent('_' . $lastPost->row->user_id);
+        }
+        
+        $select->setIntegrityCheck(false);
+        $select->reset(Zend_Db_Select::COLUMNS);
+        $select->from(null, array('count' => "COUNT(*)"));
+        $replies = $select->query()->fetchColumn(0) - 1;
+        
         $ret = array();
-        $ret['replies'] = count($posts) - 1;
-        $ret['firstPost'] = array_shift($posts);
-        $ret['lastPost'] = array_pop($posts);
-        if (!$ret['lastPost']) $ret['lastPost'] = $ret['firstPost'];
-        if ($ret['firstPost']) {
-            $ret['firstPost']->user = Vps_Component_Data_Root::getInstance()
-                            ->getComponentByClass('Vpc_User_Directory_Component')
-                            ->getChildComponent('_' . $ret['firstPost']->row->user_id);
-        } else {
-        }
-        if ($ret['lastPost']) {
-            $ret['lastPost']->user = Vps_Component_Data_Root::getInstance()
-                            ->getComponentByClass('Vpc_User_Directory_Component')
-                            ->getChildComponent('_' . $ret['lastPost']->row->user_id);
-        }
+        $ret['replies'] = $replies;
+        $ret['firstPost'] = $firstPost;
+        $ret['lastPost'] = $lastPost;
         return $ret;
     }
 }

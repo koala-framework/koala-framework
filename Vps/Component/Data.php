@@ -171,10 +171,9 @@ class Vps_Component_Data
                 throw new Vps_Exception("Constraint 'flags' may not (yet) be used with 'componentClass'");
             }
             $childConstraints['componentClass'] = array();
-            $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
-            //p($classes);
+            $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass, $constraints);
             foreach ($classes as $class) {
-                if ($class && $this->_hasChildFlags($class, $constraints['flags'])) {
+                if ($class && $this->_hasChildFlags($class, $constraints)) {
                     $childConstraints['componentClass'][] = $class;
                 }
             }
@@ -298,7 +297,6 @@ class Vps_Component_Data
                     if (isset($this->_constraintsCache[$sc][$data->componentId])) {
                         throw new Vps_Exception("Key for generator not unique: {$data->componentId}");
                     }
-                    //p($data->componentId);
                     $this->_constraintsCache[$sc][$data->componentId] = $data;
                 }
                 if (isset($constraints['limit'])) {
@@ -401,9 +399,10 @@ class Vps_Component_Data
         return false;
     }
 
-    private function _hasChildFlags($componentClass, array $flags)
+    private function _hasChildFlags($componentClass, array $constraints)
     {
         static $hasChildFlags = array();
+        $flags = isset($constraints['flags']) ? $constraints['flags'] : array();
         $cacheKey = serialize($flags);
         if (isset($hasChildFlags[$cacheKey][$componentClass])) {
             return $hasChildFlags[$cacheKey][$componentClass];
@@ -416,9 +415,9 @@ class Vps_Component_Data
             $hasChildFlags[$cacheKey][$componentClass] = false;
         }
 
-        foreach (Vpc_Abstract::getChildComponentClasses($componentClass) as $class) {
+        foreach (Vpc_Abstract::getChildComponentClasses($componentClass, $constraints) as $class) {
             if ($class) {
-                if ($this->_hasChildFlags($class, $flags)) {
+                if ($this->_hasChildFlags($class, $constraints)) {
                     $hasChildFlags[$cacheKey][$componentClass] = true;
                     return true;
                 }
