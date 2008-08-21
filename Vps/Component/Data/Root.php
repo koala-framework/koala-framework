@@ -158,14 +158,12 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             // Man sucht die Komponenten der übergebenen und aller Unterklassen
             $lookingForChildClasses = array();
             foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                // is_subclass_of funktioniert nicht, wahrscheinlich wegen autoload
-                $p = $c;
-                do {
+                foreach (Vpc_Abstract::getParentClasses($c) as $p) {
                     if ($p == $class) {
                         $lookingForChildClasses[] = $c;
                         break;
                     }
-                } while($p = get_parent_class($p));
+                }
             }
 
             foreach ($lookingForChildClasses as $c) {
