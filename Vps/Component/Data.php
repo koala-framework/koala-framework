@@ -130,6 +130,8 @@ class Vps_Component_Data
     {
         if (isset($constraints['page']) && $constraints['page']) {
             $generatorInterface = 'Vps_Component_Generator_Page_Interface';
+        } else if (isset($constraints['pseudoPage']) && $constraints['pseudoPage']) {
+            $generatorInterface = 'Vps_Component_Generator_PseudoPage_Interface';
         } else if (isset($constraints['box']) && $constraints['box']) {
             $generatorInterface = 'Vps_Component_Generator_Box_Interface';
         } else if (isset($constraints['multibox']) && $constraints['multibox']) {
@@ -170,10 +172,39 @@ class Vps_Component_Data
             }
             $childConstraints['componentClass'] = array();
             $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
+            //p($classes);
             foreach ($classes as $class) {
                 if ($class && $this->_hasChildFlags($class, $constraints['flags'])) {
                     $childConstraints['componentClass'][] = $class;
                 }
+            }
+        }
+        if (isset($constraints['inherit'])) {
+            $childConstraints['componentClass'] = array();
+            $components = array();
+            $generators = Vpc_Abstract::getSetting($this->componentClass, 'generators');
+            foreach ($generators as $generator) {
+                if (isset($generator['inherit']) && $generator['inherit']) {
+                    $components = $generator['component'];
+                    if (!is_array($components)) $components = array($generator['component']);
+                }
+            }
+            while (!empty($components)) {
+                $childComponents = array();
+                foreach ($components as $component) {
+                    $generators = Vpc_Abstract::getSetting($component, 'generators');
+                    foreach ($generators as $generator) {
+                        if (isset($generator['inherit']) && $generator['inherit']) {
+                            $c = $generator['component'];
+                            if (!is_array($c)) $c = array($generator['component']);
+                            $childConstraints['componentClass'] = array_merge(
+                                $childConstraints['componentClass'], $c
+                            );
+                            $childComponents = array_merge($childComponents, $c);
+                        }
+                    }
+                }
+                $components = $childComponents;
             }
         }
         return $childConstraints;
@@ -191,6 +222,9 @@ class Vps_Component_Data
 
     public function getChildComponents($constraints = array())
     {
+        if (isset($constraints['page']) && isset($constraints['componentClass'])) {
+//            p($constraints);
+        }
         if (!is_array($constraints)) {
             if (is_string($constraints)) {
                 $constraints = array('id' => $constraints);
@@ -267,6 +301,7 @@ class Vps_Component_Data
                     if (isset($this->_constraintsCache[$sc][$data->componentId])) {
                         throw new Vps_Exception("Key for generator not unique: {$data->componentId}");
                     }
+                    //p($data->componentId);
                     $this->_constraintsCache[$sc][$data->componentId] = $data;
                 }
                 if (isset($constraints['limit'])) {
