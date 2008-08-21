@@ -70,7 +70,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                 $select->reset(Zend_Db_Select::COLUMNS);
                 $select->from(null, array('count' => "COUNT(*)"));
                 $group->countPosts = $select->query()->fetchColumn(0);
-                
+
                 // lastPost
                 $select = $groupGenerator->joinedSelect($threadGenerator, $group);
                 $select->order('vpc_posts.create_time DESC');
@@ -87,8 +87,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                         ->getComponentByClass('Vpc_User_Directory_Component')
                         ->getChildComponent('_' . $group->lastPost->row->user_id);
                 }
-                
-                // Rekursion
+
                 $group->childGroups = $this->getGroups($group->row->id);
                 
                 $ret[] = $group;
