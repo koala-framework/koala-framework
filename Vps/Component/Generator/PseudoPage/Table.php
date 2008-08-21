@@ -68,14 +68,14 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
         }
 
         if ($this->_settings['uniqueFilename']) {
-            $data['filename'] = $row->{$this->_settings['filenameColumn']};
+            $data['filename'] = Vps_Filter::get($row->{$this->_settings['filenameColumn']}, 'Ascii');
         } else {
             $data['filename'] = $this->_getIdFromRow($row).'_';
             if ($this->_settings['filenameColumn']) {
                 if (!isset($row->{$this->_settings['filenameColumn']})) {
                     throw new Vps_Exception("filenameColumn '".$this->_settings['filenameColumn']."' does not exist in row (Generator: ".get_class($this).")");
                 }
-                $data['filename'] .= $row->{$this->_settings['filenameColumn']};
+                $data['filename'] .= Vps_Filter::get($row->{$this->_settings['filenameColumn']}, 'Ascii');
             } else if (isset($data['name'])) {
                 $data['filename'] .= Vps_Filter::get($data['name'], 'Ascii');
             } else {
