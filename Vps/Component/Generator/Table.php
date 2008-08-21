@@ -32,21 +32,34 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $select;
     }
     
-    protected function _joinComponent($select, $data, $parentTable)
+    public function joinWithChildGenerator($select, $childGenerator, $parentData = null)
     {
         $table = $this->_table->info('name');
+        $childTable = $childGenerator->_table->info('name');
         $concat = "{$table}.component_id, '{$this->_idSeparator}', {$table}.id";
-        $select->join($table, "CONCAT($concat)={$parentTable}.component_id");
-        $select->where($this->select($data)->getPart(Zend_Db_Select::WHERE));
+        $select->join($table, "CONCAT($concat)={$childTable}.component_id", array());
+        if ($parentData) {
+            $where = $this->select($parentData)->getPart(Zend_Db_Select::WHERE);
+            $select->where(implode(' ', $where));
+        }
         return $select;
     }
-    
-    public function joinSelect($generator, $data)
+
+    public function joinWithParentGenerator($select, $parentGenerator)
+    {
+        $table = $this->_table->info('name');
+        $parentTable = $parentGenerator->_table->info('name');
+        $concat = "{$parentTable}.component_id, '{$parentGenerator->_idSeparator}', {$parentTable}.id";
+        $select->join($table, "CONCAT($concat)={$table}.component_id", array());
+        return $select;
+    }
+
+    public function joinedSelect($grandParentGenerator, $grandParentData)
     {
         $table = $this->_table->info('name');
         $select = $this->select(null);
         $select->setIntegrityCheck(false);
-        $select = $generator->_joinComponent($select, $data, $table);
+        $select = $grandParentGenerator->joinWithChildGenerator($select, $this, $grandParentData);
         return $select;
     }
 

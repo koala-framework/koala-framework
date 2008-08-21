@@ -222,9 +222,6 @@ class Vps_Component_Data
 
     public function getChildComponents($constraints = array())
     {
-        if (isset($constraints['page']) && isset($constraints['componentClass'])) {
-//            p($constraints);
-        }
         if (!is_array($constraints)) {
             if (is_string($constraints)) {
                 $constraints = array('id' => $constraints);
