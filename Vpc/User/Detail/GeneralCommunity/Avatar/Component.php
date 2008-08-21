@@ -5,9 +5,9 @@ class Vpc_User_Detail_GeneralCommunity_Avatar_Component extends Vpc_Basic_Image_
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Avatar');
-        $ret['dimensions'] = array(150, 150, Vps_Media_Image::SCALE_DEFORM);
+        $ret['dimensions'] = array(150, 150, Vps_Media_Image::SCALE_CROP);
         $ret['ouputDimensions'] = array(
-            'small'  => array(40, 40, Vps_Media_Image::SCALE_BESTFIT)
+            'small'  => array(40, 40, Vps_Media_Image::SCALE_CROP)
         );
         $ret['generators']['small'] = array(
             'class' => 'Vps_Component_Generator_Static',
