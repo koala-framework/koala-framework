@@ -29,4 +29,5 @@ class Vpc_Basic_LinkTag_Extern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
         $ret['assets']['dep'][] = 'ExtCore';
         return $ret;
     }
+
 }
