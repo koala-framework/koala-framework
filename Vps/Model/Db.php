@@ -9,7 +9,12 @@ class Vps_Model_Db implements Vps_Model_Interface
 
     public function __construct($config = array())
     {
-        if (isset($config['table'])) $this->_table = $config['table'];
+        if (isset($config['table'])) {
+            if (!is_object($config['table'])) {
+                throw new Vps_Exception("Construct-config value 'table' needs to be an object for 'Vps_Model_Db'");
+            }
+            $this->_table = $config['table'];
+        }
         if (isset($config['default'])) $this->_default = $config['default'];
         $this->_init();
     }
