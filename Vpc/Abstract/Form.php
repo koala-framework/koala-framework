@@ -8,6 +8,9 @@ class Vpc_Abstract_Form extends Vps_Form
         parent::__construct($name, $class);
     }
     
+    /**
+     * @return Vpc_Abstract_Form
+     **/
     public static function createComponentFormByDbIdTemplate($dbIdTemplate, $name = null)
     {
         $componentClass = null;
@@ -36,7 +39,9 @@ class Vpc_Abstract_Form extends Vps_Form
         }
         return $form;
     }
-    
+    /**
+     * @return Vpc_Abstract_Form
+     **/
     public static function createComponentForm($componentClass, $name = null)
     {
         // Es wurde ein dbIdTemplate angegeben
@@ -57,6 +62,9 @@ class Vpc_Abstract_Form extends Vps_Form
         return $form;
     }
     
+    /**
+     * @return Vpc_Abstract_Form
+     **/
     public static function createChildComponentForm($componentClass, $id, $name = null)
     {
         $id = str_replace('-', '', $id);
@@ -78,6 +86,6 @@ class Vpc_Abstract_Form extends Vps_Form
         if ($form) {
             $form->setIdTemplate($idTemplate);
         }
-        return $form;        
+        return $form;
     }
 }
