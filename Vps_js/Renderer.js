@@ -31,16 +31,18 @@ Ext.util.Format.decimal = function(v, p)
 
 Ext.util.Format.money = function(v, p)
 {
-	v = Ext.util.Format.decimal(v, p);
+    v = Ext.util.Format.decimal(v, p);
+    var preSign = v.substr(0, 1) == '-' ? '-' : '';
+    var x = '';
     x = v.substr(0, v.lastIndexOf(','));
+    if (x.substr(0, 1) == '-') x = x.substr(1, x.length-1);
     ret = '';
     while (x.length > 3) {
-	    ret = "." + x.substr(-3) + ret;
-	    x = x.substr(0, x.length-3);
+        ret = "." + x.substr(x.length-3, 3) + ret;
+        x = x.substr(0, x.length-3);
 
     }
-    ret = x+ret+v.substr(-3);
-	ret = ret.replace(/\-\./, "-");
+    ret = preSign+x+ret+v.substr(v.length-3, 3);
     return ret;
 }
 
