@@ -22,7 +22,7 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
             'pdfMaxWidth'       => 0,
             'imgCssClass'       => '',
             'type'              => 'default',
-            'emptyImage'        => null
+            'emptyImage'        => false
         ));
         $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
         return $ret;
