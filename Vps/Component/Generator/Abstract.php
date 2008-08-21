@@ -136,6 +136,11 @@ abstract class Vps_Component_Generator_Abstract
         return $ret;
     }
 
+    /**
+     * Gibt alle Generators für eine Komponente zurück.
+     * ist abhängig davon ob es eine Page ist (daher $parentData)
+     * und man kann auch constraints übergeben (zB um nur page generators zu bekommen)
+     **/
     public static function getInstances($componentClass, $parentData = null, $constraints = array())
     {
         $ret = self::_getGeneratorsForComponent($componentClass, $constraints);
