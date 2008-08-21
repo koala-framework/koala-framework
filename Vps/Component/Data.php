@@ -25,8 +25,7 @@ class Vps_Component_Data
         if (!isset($this->dbId) && isset($this->componentId)) {
             $this->dbId = $this->componentId;
         }
-
-        Vps_Benchmark::count('componentDatas');
+        Vps_Benchmark::count('componentDatas', $this->componentId);
     }
 
     public function __get($var)
