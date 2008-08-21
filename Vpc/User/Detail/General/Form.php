@@ -8,6 +8,11 @@ class Vpc_User_Detail_General_Form extends Vpc_Abstract_Composite_Form
         parent::_init();
     }
 
+    protected function _getIdTemplateForChild($key)
+    {
+        return 'users_{0}-general-'.$key;
+    }
+
     protected function _initFields()
     {
         $this->_generalFieldset = $this->add(new Vps_Form_Container_FieldSet(trlVps('General')));
