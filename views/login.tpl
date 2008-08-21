@@ -1,7 +1,7 @@
 <?= $this->doctype() ?>
 <html>
     <head>
-        <?= $this->assets($this->ext['assets']) ?>
+        <?= $this->assets('Admin') ?>
     </head>
     <body>
 
