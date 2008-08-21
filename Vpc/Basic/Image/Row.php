@@ -1,48 +1,30 @@
 <?php
 class Vpc_Basic_Image_Row extends Vpc_Row
 {
-    private function _getScaleSettings()
+    protected function _createCacheFile($source, $target)
     {
         $dimension = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'dimensions');
         if (isset($dimension[0]) && !is_array($dimension[0])) {
-            $ret['width'] = $dimension[0];
-            $ret['height'] = $dimension[1];
-            $ret['scale'] = isset($dimension[2]) ? $dimension[2] : false;
+            $s['width'] = $dimension[0];
+            $s['height'] = $dimension[1];
+            $s['scale'] = isset($dimension[2]) ? $dimension[2] : false;
         } else { // aus DB
-            $ret['width'] = $this->width;
-            $ret['height'] = $this->height;
-            $ret['scale'] = $this->scale;
+            $s['width'] = $this->width;
+            $s['height'] = $this->height;
+            $s['scale'] = $this->scale;
         }
-        if (is_null($ret['width']) && is_null($ret['height'])) {
+        if (is_null($s['width']) && is_null($s['height'])) {
             $parentRow = $this->findParentRow('Vps_Dao_File');
             if ($parentRow) {
                 $originalFile = $parentRow->getFileSource();
                 if (is_file($originalFile)) {
                     $data = getimagesize($originalFile);
-                    $ret['width'] = $data[0];
-                    $ret['height'] = $data[1];
+                    $s['width'] = $data[0];
+                    $s['height'] = $data[1];
                 }
             }
         }
-
-        return $ret;
-    }
-
-    protected function _createCacheFile($source, $target, $type)
-    {
-        if ($type == 'default') {
-            $s = $this->_getScaleSettings();
-            Vps_Media_Image::scale($source, $target, $s);
-        } else {
-            $outputDimensions = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(),
-                                        'ouputDimensions');
-            if (isset($outputDimensions[$type])) {
-                $s = $outputDimensions[$type];
-                Vps_Media_Image::scale($source, $target, $s);
-            } else {
-                parent::_createCacheFile($source, $target, $type);
-            }
-        }
+        Vps_Media_Image::scale($source, $target, $s);
     }
 
     public function getFileUrl($rule = null, $type = 'default', $filename = null, $addRandom = false)
@@ -58,7 +40,7 @@ class Vpc_Basic_Image_Row extends Vpc_Row
         parent::_postUpdate();
         $this->deleteFileCache();
     }
-    
+
     public function findParentRow($parentTable, $ruleKey = null, Zend_Db_Table_Select $select = null)
     {
         $ret = parent::findParentRow($parentTable, $ruleKey, $select);

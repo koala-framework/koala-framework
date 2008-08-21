@@ -9,20 +9,18 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
             'tablename'         => 'Vpc_Basic_Image_Model',
 
             'dimensions'        => array(300, 200, Vps_Media_Image::SCALE_BESTFIT), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), null: Bild in Originalgröße)
-            'ouputDimensions'   => array('mini'  => array(20, 20, Vps_Media_Image::SCALE_BESTFIT),
-                                         'thumb' => array(100, 100, Vps_Media_Image::SCALE_BESTFIT)),
-
+//             'ouputDimensions'   => array('mini'  => array(20, 20, Vps_Media_Image::SCALE_BESTFIT),
+//                                          'thumb' => array(100, 100, Vps_Media_Image::SCALE_BESTFIT)),
             'editComment'       => false,
             'editFilename'      => false,
             'allowBlank'        => true,
             'default'           => array(
                 'filename'   => 'filename'
             ),
-            'extensions'        => array('jpg'),
             'pdfMaxWidth'       => 0,
             'imgCssClass'       => '',
-            'type'              => 'default',
-            'emptyImage'        => false
+            'emptyImage'        => false,
+            'useParentImage'    => false
         ));
         $ret['assetsAdmin']['dep'][] = 'VpsSwfUpload';
         return $ret;
@@ -31,28 +29,31 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['row'] = $this->_getRow();
+        $ret['row'] = $this->getImageRow();
         if (Vpc_Abstract::getSetting(get_class($this), 'editComment')) {
-            $ret['comment'] = $this->_getRow()->comment;
+            $ret['comment'] = $ret['row']->comment;
         }
         $ret['imgCssClass'] = $this->_getSetting('imgCssClass');
-        $ret['type'] = $this->_getSetting('type');
         return $ret;
     }
 
-    public function getImageUrl($type = 'default')
+    public function getImageUrl()
     {
-        return $this->_getRow()->getFileUrl(null, $type);
+        return $this->getImageRow()->getFileUrl();
     }
 
-    public function getImageDimensions($type = 'default')
+    public function getImageDimensions()
     {
-        return $this->_getRow()->getImageDimensions(null, $type);
+        return $this->getImageRow()->getImageDimensions();
     }
 
     //für Pdf
     public function getImageRow()
     {
-        return $this->_getRow();
+        if ($this->_getSetting('useParentImage')) {
+            return $this->getTable()->findRow($this->getData()->parent->dbId);
+        } else {
+            return $this->_getRow();
+        }
     }
 }

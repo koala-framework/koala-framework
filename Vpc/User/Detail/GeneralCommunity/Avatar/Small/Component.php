@@ -1,10 +1,12 @@
 <?php
-class Vpc_User_Detail_GeneralCommunity_Avatar_Small_Component extends Vpc_Basic_Image_View_Component
+class Vpc_User_Detail_GeneralCommunity_Avatar_Small_Component extends Vpc_User_Detail_GeneralCommunity_Avatar_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['type'] = 'small';
+        $ret['dimensions'] = array(40, 40, Vps_Media_Image::SCALE_CROP);
+        unset($ret['generator']['small']);
+        $ret['useParentImage'] = true;
         return $ret;
     }
 }
