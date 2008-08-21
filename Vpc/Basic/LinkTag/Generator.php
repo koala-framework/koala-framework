@@ -41,7 +41,7 @@ class Vpc_Basic_LinkTag_Generator extends Vps_Component_Generator_Static
             $dbId = $parentData->dbId . $this->_idSeparator;
         }
         $dbId .= $componentKey;
-        $row = $this->_table->find($parentData->componentId)->current();
+        $row = $this->_table->find($parentData->dbId)->current();
         return array(
             'componentId' => $componentId,
             'dbId' => $dbId,

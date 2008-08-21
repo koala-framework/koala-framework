@@ -11,16 +11,18 @@ class Vpc_Basic_LinkTag_Form extends Vpc_Abstract_Form
 
         foreach ($classes as $name => $class) {
             $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), '-' . $name);
-            $form->setIdTemplate('{0}-link');
-            $form->setAutoHeight(true);
-            $form->setBaseCls('x-plain');
+            if ($form) {
+                $form->setIdTemplate('{0}-link');
+                $form->setAutoHeight(true);
+                $form->setBaseCls('x-plain');
+            }
 
             $card = $cards->add();
             $title = Vpc_Abstract::getSetting($class, 'componentName');
             $title = str_replace('.', ' ', $title);
             $card->setTitle($title);
             $card->setName($name);
-            $card->add($form);
+            if ($form) $card->add($form);
         }
     }
 }
