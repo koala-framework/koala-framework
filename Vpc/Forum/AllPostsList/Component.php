@@ -15,8 +15,8 @@ class Vpc_Forum_AllPostsList_Component extends Vpc_Directories_List_Component
         $threadComponentClass = Vpc_Abstract::getChildComponentClass($groupComponentClass, 'detail');
         $postGenerator = Vps_Component_Generator_Abstract
                                 ::getInstance($threadComponentClass, 'detail');
-        $threadGenerator->joinWithChildGenerator($ret, $postGenerator);
-        $groupGenerator->joinWithChildGenerator($ret, $threadGenerator, $this->getData()->parent);
+        $postGenerator->joinWithParentGenerator($ret, $threadGenerator);
+        $threadGenerator->joinWithParentGenerator($ret, $groupGenerator, $this->getData()->parent);
         return $ret;
     }
 }

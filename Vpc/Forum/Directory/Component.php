@@ -52,11 +52,12 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                 $group->countPosts = 0;
                 
                 // Generators holen
-                $threadGenerator = $group->getGenerator('detail');
+                $threadGenerator = Vps_Component_Generator_Abstract
+                    ::getInstance($group->componentClass, 'detail');
                 $generators = Vpc_Abstract::getSetting($group->componentClass, 'generators');
-                $groupGenerator = Vps_Component_Generator_Abstract
+                $postsGenerator = Vps_Component_Generator_Abstract
                     ::getInstance($generators['detail']['component'], 'detail');
-                
+                    
                 // countThreads
                 $select = $threadGenerator->select($group);
                 $select->setIntegrityCheck(false);
@@ -65,14 +66,15 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                 $group->countThreads = $select->query()->fetchColumn(0);
                 
                 // countPosts
-                $select = $groupGenerator->joinedSelect($threadGenerator, $group);
-                $select->setIntegrityCheck(false);
+                $select = $postsGenerator->select(null);
+                $select = $postsGenerator->joinWithParentGenerator($select, $threadGenerator, $group);
                 $select->reset(Zend_Db_Select::COLUMNS);
                 $select->from(null, array('count' => "COUNT(*)"));
                 $group->countPosts = $select->query()->fetchColumn(0);
 
                 // lastPost
-                $select = $groupGenerator->joinedSelect($threadGenerator, $group);
+                $select = $postsGenerator->select(null);
+                $select = $postsGenerator->joinWithParentGenerator($select, $threadGenerator, $group);
                 $select->order('vpc_posts.create_time DESC');
                 $select->limit(1);
                 $row = $select->query()->fetchAll();
@@ -87,7 +89,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                         ->getComponentByClass('Vpc_User_Directory_Component')
                         ->getChildComponent('_' . $group->lastPost->row->user_id);
                 }
-
+                
                 $group->childGroups = $this->getGroups($group->row->id);
                 
                 $ret[] = $group;
