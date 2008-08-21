@@ -22,11 +22,16 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
                 $class .= ' vpsFieldRequired';
             }
             if ($item['item']) {
-                if (isset($item['id'])) {
-                    $class .= ' '.$item['id'];
-                } else {
+                $c = get_class($item['item']);
+                if (substr($c, -10) == '_Component') $c = substr($c, 0, -10);
+                $c = str_replace('_', '', $c);
+                $class .= ' '.strtolower(substr($c, 0, 1)).substr($c, 1);
+				if (!isset($item['id'])) {
                     $class .= ' '.$item['item']->getFieldName();
                 }
+            }
+            if (isset($item['id'])) {
+                $class .= ' '.$item['id'];
             }
             $item['preHtml'] .= '<div class="'.$class.'">';
             if ($item['item'] && !$item['item']->getHideLabels()) {
