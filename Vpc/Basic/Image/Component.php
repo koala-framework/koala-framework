@@ -9,8 +9,6 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
             'tablename'         => 'Vpc_Basic_Image_Model',
 
             'dimensions'        => array(300, 200, Vps_Media_Image::SCALE_BESTFIT), // Leeres Array -> freie Wahl, array(width, height), array(array(width, height), null: Bild in Originalgröße)
-//             'ouputDimensions'   => array('mini'  => array(20, 20, Vps_Media_Image::SCALE_BESTFIT),
-//                                          'thumb' => array(100, 100, Vps_Media_Image::SCALE_BESTFIT)),
             'editComment'       => false,
             'editFilename'      => false,
             'allowBlank'        => true,

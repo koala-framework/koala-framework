@@ -155,17 +155,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         if (!isset($this->_componentsByClassCache[$class])) {
             $benchmark = Vps_Benchmark::start();
 
-            // Man sucht die Komponenten der übergebenen und aller Unterklassen
-            $lookingForChildClasses = array();
-            foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                foreach (Vpc_Abstract::getParentClasses($c) as $p) {
-                    if ($p == $class) {
-                        $lookingForChildClasses[] = $c;
-                        break;
-                    }
-                }
-            }
-
+            $lookingForChildClasses = Vpc_Abstract::getComponentClassesByParentClass($class);
             foreach ($lookingForChildClasses as $c) {
                 if (is_instance_of($c, 'Vpc_Root_Component')) {
                     return array($this);

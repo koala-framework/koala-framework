@@ -191,5 +191,34 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         }
         return $ret;
     }
+
+    public static function getComponentClassesByParentClass($class)
+    {
+        $ret = array();
+        foreach (Vpc_Abstract::getComponentClasses() as $c) {
+            if ($c == $class) {
+                $ret[] = $c;
+                continue;
+            }
+            foreach (Vpc_Abstract::getParentClasses($c) as $p) {
+                if ($p == $class) {
+                    $ret[] = $c;
+                    break;
+                }
+            }
+        }
+        return $ret;
+    }
+    public static function getComponentClassByParentClass($class)
+    {
+        $ret = self::getComponentClassesByParentClass($class);
+        if (count($ret) != 1) {
+            if (!$ret) {
+                throw new Vps_Exception("No Component with class '$class' found");
+            }
+            throw new Vps_Exception("More then one component with class '$class' found, there should exist only one");
+        }
+        return $ret[0];
+    }
 }
 

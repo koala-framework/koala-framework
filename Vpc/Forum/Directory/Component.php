@@ -8,6 +8,19 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Page_Table',
             'component' => 'Vpc_Forum_Group_Component'
         );
+
+        $ret['generators']['search'] = array(
+            'class' => 'Vps_Component_Generator_Page_Static',
+            'component' => 'Vpc_Forum_Search_Component',
+            'name' => trlVps('Search'),
+            'showInMenu' => true
+        );
+
+        $ret['generators']['feedList'] = array(
+            'class' => 'Vps_Component_Generator_Static',
+            'component' => 'Vpc_Forum_FeedList_Component'
+        );
+
         $ret['tablename'] = 'Vpc_Forum_Directory_Model';
         $ret['componentName'] = trlVps('Forum');
         $ret['placeholder']['searchButtonText'] = trlVps('go');
@@ -23,10 +36,10 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['groups'] = $this->getGroups();
         $ret['groupsTemplate'] = Vpc_Admin::getComponentFile(get_class($this), 'Groups', 'tpl');
-        //$ret['searchUrl'] = $this->getPageFactory()->getChildPageById('search')->getUrl();
+        $ret['search'] = $this->getData()->getChildComponent('_search');
         return $ret;
     }
-    
+
     public function getGroups($parentId = null)
     {
         $ret = array();
@@ -52,13 +65,14 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                 $group->countThreads = $select->query()->fetchColumn(0);
                 
                 // countPosts
-                $select = $groupGenerator->joinSelect($threadGenerator, $group);
+                $select = $groupGenerator->joinedSelect($threadGenerator, $group);
+                $select->setIntegrityCheck(false);
                 $select->reset(Zend_Db_Select::COLUMNS);
                 $select->from(null, array('count' => "COUNT(*)"));
                 $group->countPosts = $select->query()->fetchColumn(0);
                 
                 // lastPost
-                $select = $groupGenerator->joinSelect($threadGenerator, $group);
+                $select = $groupGenerator->joinedSelect($threadGenerator, $group);
                 $select->order('vpc_posts.create_time DESC');
                 $select->limit(1);
                 $row = $select->query()->fetchAll();
