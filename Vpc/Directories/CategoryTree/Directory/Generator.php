@@ -1,7 +1,7 @@
 <?php
 class Vpc_Directories_CategoryTree_Directory_Generator extends Vps_Component_Generator_Page_Table
 {
-    protected $_nameColumn = 'name';
+    protected $_filenameColumn = 'name_path';
 
     public function select($parentData, array $constraints = array())
     {
