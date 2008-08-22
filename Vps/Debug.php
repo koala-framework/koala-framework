@@ -1,6 +1,7 @@
 <?php
 class Vps_Debug
 {
+    static $_enabled = true;
     public static function sendErrorMail($exception, $address)
     {
         if ($exception instanceof Vps_Controller_Action_Web_FileNotFoundException) {
@@ -68,5 +69,20 @@ class Vps_Debug
         } else {
             throw $exception;
         }
+    }
+
+    public static function enable()
+    {
+        self::$_enabled = true;
+    }
+
+    public static function disable()
+    {
+        self::$_enabled = false;
+    }
+
+    public static function isEnabled()
+    {
+        return self::$_enabled;
     }
 }
