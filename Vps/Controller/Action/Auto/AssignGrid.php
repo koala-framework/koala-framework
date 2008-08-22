@@ -30,14 +30,14 @@ abstract class Vps_Controller_Action_Auto_AssignGrid extends Vps_Controller_Acti
             $row = $this->_assignTable->fetchRow($where);
 
             if (!$row) {
-                $data = array();
+                $row = $this->_assignTable->createRow();
                 foreach ($assignToColumns as $toColumn) {
-                    $data[$toColumn] = $this->_getParam($toColumn);
+                    $row->$toColumn = $this->_getParam($toColumn);
                 }
                 foreach ($assignFromColumns as $fromColumn) {
-                    $data[$fromColumn] = $id;
+                    $row->$fromColumn = $id;
                 }
-                $this->_assignTable->insert($data);
+                $row->save();
             }
         }
         $this->_model->getAdapter()->commit();
