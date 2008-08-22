@@ -14,7 +14,12 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     public function select($parentData, array $constraints = array())
     {
-        $select = new Vps_Db_Table_Select_Generator($this->_table);
+        if (isset($this->_settings['selectClass'])) {
+            $selectClass = $this->_settings['selectClass'];
+        } else {
+            $selectClass = 'Vps_Db_Table_Select_Generator';
+        }
+        $select = new $selectClass($this->_table);
         $select->setGenerator($this->_settings['generator']);
         $select->from($this->_table, $this->_getSelectFields());
         $cols = $this->_table->info('cols');

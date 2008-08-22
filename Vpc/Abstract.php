@@ -18,45 +18,55 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         return $ret;
     }
     
-    public static function getChildComponentClasses($class, $generator = null, $useSettingsCache = true)
+    public static function getChildComponentClasses($class, $constraints = array())
     {
         $ret = array();
-        $constraints = array();
-        if (is_array($generator)) {
-            $constraints = $generator;
-            $generator = null;
+        if (is_string($constraints)) {
+            $constraints = array('generator' => $constraints);
         }
-        foreach (self::getSetting($class, 'generators', $useSettingsCache) as $key => $g) {
-            if (!$generator || $generator == $key) {
-                if (!isset($constraints['page']) || 
-                    $constraints['page'] === is_instance_of($g['class'], 'Vps_Component_Generator_Page_Interface')
-                ) {
-                    if (is_array($g['component'])) {
-                        $ret = array_merge($ret, $g['component']);
-                    } else {
-                        $ret[] = $g['component'];
-                    }
-                }
-                
-            }
+        $generators = Vps_Component_Generator_Abstract::getInstances($class, $constraints);
+        foreach ($generators as $generator) {
+            $ret = array_merge($ret, $generator->getChildComponentClasses($constraints));
         }
-        foreach (self::getSetting($class, 'plugins', $useSettingsCache) as $p) {
-            $ret[] = $p;
-        }
-        
-        return $ret;
+
+        return array_unique($ret);
     }
 
-    public static function getChildComponentClass($class, $generator, $key = null)
+    public static function getRecursiveChildComponentClasses($class, $constraints = array())
     {
+        $cacheId = serialize($constraints);
+        return self::_getRecursiveChildComponentClasses($class, $constraints, $cacheId);
+    }
+    
+    private static function _getRecursiveChildComponentClasses($class, $constraints, $cacheId)
+    {
+        static $ccc = array();
+        if (isset($ccc[$class.$cacheId])) {
+            return $ccc[$class.$cacheId];
+        }
+
+        $childConstraints = array('page' => false);
+        $ccc[$class.$cacheId] = Vpc_Abstract::getChildComponentClasses($class, $constraints);
+        foreach (Vpc_Abstract::getChildComponentClasses($class, $childConstraints) as $childClass) {
+            $ccc[$class.$cacheId] = array_merge(
+                $ccc[$class.$cacheId], 
+                Vpc_Abstract::_getRecursiveChildComponentClasses($childClass, $constraints, $cacheId)
+            );
+        }
+        return array_unique($ccc[$class.$cacheId]);
+    }
+
+    public static function getChildComponentClass($class, $generator, $componentKey = null)
+    {
+        $constraints = array(
+            'generator' => $generator,
+            'componentKey' => $componentKey
+        );
         $classes = self::getChildComponentClasses($class, $generator);
-        if (!$key) { 
-            $key = array_shift(array_keys($classes));
+        if (!isset($classes[0])) {
+            throw new Vps_Exception("childComponentClass '$componentKey' for generator '$generator' not set for '$class'");
         }
-        if (!isset($classes[$key])) {
-            throw new Vps_Exception("childComponentClass '$key' for generator '$generator' not set for '$class'");
-        }
-        return $classes[$key];
+        return $classes[0];
     }
 
     protected function _getRow()
