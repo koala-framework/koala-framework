@@ -2,7 +2,6 @@
 class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
     implements Vps_Component_Generator_Page_Interface, Vps_Component_Generator_PseudoPage_Interface
 {
-    protected $_tableName = 'Vps_Dao_Pages';
     protected $_componentClass = 'row';
     protected $_idSeparator = false;
     protected $_loadTableFromComponent = false;
@@ -16,26 +15,22 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
     protected function _init()
     {
         parent::_init();
-        $select = new Zend_Db_Select($this->_db);
-        $select->from('vps_pages', array('id', 'parent_id', 'component', 'visible',
-                                    'filename', 'hide', 'type', 'name', 'is_home'));
-        $select->order('pos');
-
+        
         $this->_pageData = array();
         $this->_pageParent = array();
         $this->_pageFilename = array();
         $this->_pageComponentParent = array();
         $this->_pageComponent = array();
         $this->_pageHome = 0;
-        foreach ($select->query()->fetchAll() as $row) {
-            $this->_pageData[$row['id']] = $row;
-            $parentId = $row['parent_id'];
+        foreach ($this->_model->fetchAll(null, 'pos') as $row) {
+            $this->_pageData[$row->id] = $row->toArray();
+            $parentId = $row->parent_id;
             if (is_null($parentId)) $parentId = 0;
-            $this->_pageChilds[$parentId][] = $row['id'];
-            $this->_pageFilename[$parentId][$row['filename']] = $row['id'];
-            $this->_pageComponentParent[$parentId][$row['component']][] = $row['id'];
-            $this->_pageComponent[$row['component']][] = $row['id'];
-            if ($row['is_home']) $this->_pageHome = $row['id'];
+            $this->_pageChilds[$parentId][] = $row->id;
+            $this->_pageFilename[$parentId][$row->filename] = $row->id;
+            $this->_pageComponentParent[$parentId][$row->component][] = $row->id;
+            $this->_pageComponent[$row->component][] = $row->id;
+            if ($row->is_home) $this->_pageHome = $row->id;
         }
     }
     

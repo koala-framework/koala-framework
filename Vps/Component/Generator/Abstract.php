@@ -1,7 +1,6 @@
 <?php
 abstract class Vps_Component_Generator_Abstract
 {
-    protected $_db;
     protected $_class;
     protected $_settings;
 
@@ -15,42 +14,30 @@ abstract class Vps_Component_Generator_Abstract
     {
         $this->_class = $class;
         $this->_settings = $settings;
-        $this->_db = Zend_Registry::get('db');
         $this->_init();
         Vps_Benchmark::count('generators');
     }
     
-    public function getIdSeparator()
-    {
-        return $this->_idSeparator;
-    }
-    
-    public function getComponentByKey($key)
-    {
-        if ($this->_settings['generator'] == $key) {
-            return $this->_settings['component'][$key];
-        }
-        if (isset($this->_settings['component'][$key])) {
-            return $this->_settings['component'][$key];
-        }
-        return null;
-    }
-    
     protected function _init()
     {
-        if (!isset($this->_table)) {
+        if (isset($this->_settings['model'])) {
+            $this->_model = new $this->_settings['model']();
+        } else {
             if (isset($this->_settings['table'])) {
                 if (is_string($this->_settings['table'])) {
-                    $this->_table = new $this->_settings['table'];
+                    $table = new $this->_settings['table'];
                 } else {
-                    $this->_table = $this->_settings['table'];
+                    $table = $this->_settings['table'];
                 }
             } else if ($this->_loadTableFromComponent) {
-                $table = Vpc_Abstract::getSetting($this->_class, 'tablename');
-                if (!$table) {
+                $tableName = Vpc_Abstract::getSetting($this->_class, 'tablename');
+                if (!$tableName) {
                     throw new Vps_Exception("Entweder tablename-setting der Komponente oder _tableName bzw. _table des Generators muss gesetzt sein ($this->_class)");
                 }
-                $this->_table = new $table(array('componentClass'=>$this->_class));
+                $table = new $tableName(array('componentClass'=>$this->_class));
+            }
+            if (isset($table)) {
+                $this->_model = new Vps_Db_Model(array('table' => $table));
             }
         }
     }
@@ -114,22 +101,37 @@ abstract class Vps_Component_Generator_Abstract
                     if ($constraints['box']) continue;
                 }
             }
-            if (isset($constraints['multibox'])) {
+            if (isset($constraints['multiBox'])) {
                 if (is_instance_of($generator['class'], 'Vps_Component_Generator_MultiBox_Interface')) {
-                    if (!$constraints['multibox']) continue;
+                    if (!$constraints['multiBox']) continue;
                 } else {
-                    if ($constraints['multibox']) continue;
+                    if ($constraints['multiBox']) continue;
                 }
             }
-            if (isset($constraints['unique']) && $constraints['unique'] && 
-                (!isset($generator['unique']) || !$generator['unique']))
-            {
-                continue;
+            if (isset($constraints['unique'])) {
+                if ($constraints['unique']) {
+                    $constraints['inherit'] = true;
+                }
+                if (isset($generator['unique']) && $generator['unique']) {
+                    if (!$constraints['unique']) continue;
+                } else {
+                    if ($constraints['unique']) continue;
+                }
             }
             if (isset($constraints['inherit']) && $constraints['inherit'] && 
                 (!isset($generator['inherit']) || !$generator['inherit']))
             {
                 continue;
+            }
+            if (isset($constraints['hasEditComponents']) && $constraints['hasEditComponents'])
+            {
+                if (!Vpc_Abstract::hasSetting($componentClass, 'editComponents')) {
+                    continue;
+                }
+                $editComponents = Vpc_Abstract::getSetting($componentClass, 'editComponents');
+                if (!in_array($key, $editComponents)) {
+                    continue;
+                }
             }
             $ret[] = self::getInstance($componentClass, $key);
         }
@@ -141,14 +143,17 @@ abstract class Vps_Component_Generator_Abstract
      * ist abhängig davon ob es eine Page ist (daher $parentData)
      * und man kann auch constraints übergeben (zB um nur page generators zu bekommen)
      **/
-    public static function getInstances($componentClass, $parentData = null, $constraints = array())
+    public static function getInstances($component, $constraints = array())
     {
-        $ret = self::_getGeneratorsForComponent($componentClass, $constraints);
-        foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
-            $ret = array_merge($ret, self::_getGeneratorsForComponent($pluginClass, $constraints));
+        if ($component instanceof Vps_Component_Data) {
+            $componentClass = $component->componentClass;
+        } else {
+            $componentClass = $component;
+            $component = null;
         }
+        $ret = self::_getGeneratorsForComponent($componentClass, $constraints);
         
-        if ($parentData && $parentData->isPage) {
+        if ($component && $component->isPage) {
             
             if (!isset($constraints['generator']) &&
                 (!isset($constraints['page']) || !$constraints['page']) &&
@@ -157,10 +162,10 @@ abstract class Vps_Component_Generator_Abstract
                 $inheritConstraints = $constraints;
                 $inheritConstraints['skipInherit'] = true;
                 $inheritConstraints['inherit'] = true;
-                $page = $parentData;
+                $page = $component;
                 while ($page) { // Aktuelle inkl. aller Überseiten durchlaufen
-                    if ($page->componentId == $parentData->componentId) {
-                        $generators = $parentData->getGenerators($inheritConstraints);
+                    if ($page->componentId == $component->componentId) {
+                        $generators = $component->getGenerators($inheritConstraints);
                     } else {
                         $generators = $page->getRecursiveGenerators($inheritConstraints);
                     }
@@ -172,7 +177,7 @@ abstract class Vps_Component_Generator_Abstract
             }
             
             if ((!isset($constraints['skipRoot']) || !$constraints['skipRoot'])
-                && ($parentData instanceof Vps_Component_Data_Root || is_numeric($parentData->componentId))
+                && ($component instanceof Vps_Component_Data_Root || is_numeric($component->componentId))
             ) {
                 $ret = array_merge($ret, self::_getGeneratorsForComponent(
                     Vps_Registry::get('config')->vpc->rootComponent, array_merge(array('generator' => 'page'), $constraints)
@@ -180,7 +185,62 @@ abstract class Vps_Component_Generator_Abstract
             }
             
         }
+        
+        foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
+            $generators = self::_getGeneratorsForComponent($pluginClass, $constraints);
+            $ret = array_merge($ret, $generators);
+        }
         return $ret;
+    }
+    
+    public function getChildComponentClasses($constraints = array())
+    {
+        $ret = $this->_settings['component'];
+        if (!is_array($ret)) $ret = array($ret);
+        
+        if (isset($constraints['flags'])) {
+            foreach ($ret as $k=>$c) {
+                foreach ($constraints['flags'] as $f=>$v) {
+                    if (Vpc_Abstract::getFlag($c, $f) != $v) {
+                        unset($ret[$k]);
+                    }
+                }
+            }
+        }
+        
+        if (isset($constraints['componentKey'])) {
+            if (isset($ret[$constraints['componentKey']])) {
+                $ret = array($ret[$constraints['componentKey']]);
+            } else {
+                return array();
+            }
+        }
+                
+        if (isset($constraints['componentClasses'])) {
+            foreach ($ret as $k => $r) {
+                if (in_array($r, $constraints['componentClasses'])) {
+                    unset($ret[$k]);
+                }
+            }
+        }
+                
+        return array_unique(array_values($ret));
+    }
+    
+    public function getIdSeparator()
+    {
+        return $this->_idSeparator;
+    }
+    
+    public function getComponentByKey($key)
+    {
+        if ($this->_settings['generator'] == $key) {
+            return $this->_settings['component'][$key];
+        }
+        if (isset($this->_settings['component'][$key])) {
+            return $this->_settings['component'][$key];
+        }
+        return null;
     }
     
     public function getChildData($parentData, $constraints)

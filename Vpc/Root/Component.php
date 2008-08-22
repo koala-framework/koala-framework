@@ -10,7 +10,8 @@ class Vpc_Root_Component extends Vpc_Abstract
                 'paragraphs' => 'Vpc_Paragraphs_Component',
                 'link' => 'Vpc_Basic_LinkTag_Component',
                 'firstChildPage' => 'Vpc_Basic_LinkTag_FirstChildPage_Component'
-            )
+            ),
+            'table' => 'Vps_Dao_Pages'
         );
         $ret['generators']['box'] = array(
             'class' => 'Vps_Component_Generator_Box_Static',

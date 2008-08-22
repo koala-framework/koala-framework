@@ -23,6 +23,14 @@ class Vps_Component_Abstract
 
     public static function hasSetting($class, $setting)
     {
+        if (!Vps_Registry::get('config')->debug->settingsCache) {
+            //um endlosschleife in settingsCache zu verhindern
+            if (!class_exists($class)) {
+                throw new Vps_Exception("Invalid component '$class'");
+            }
+            $settings = call_user_func(array($class, 'getSettings'));
+            return isset($settings[$setting]);
+        }
         //& für performance
         $s =& self::_getSettingsCached();
         if (!isset($s[$class])) {
@@ -33,7 +41,7 @@ class Vps_Component_Abstract
 
     public static function getSetting($class, $setting, $useSettingsCache = true)
     {
-        if (!$useSettingsCache) {
+        if (!$useSettingsCache || !Vps_Registry::get('config')->debug->settingsCache) {
             //um endlosschleife in settingsCache zu verhindern
             if (!class_exists($class)) {
                 throw new Vps_Exception("Invalid component '$class'");
@@ -191,7 +199,18 @@ class Vps_Component_Abstract
 
     private static function _getChildComponentClasses(&$componentClasses, $class, $useSettingsCache)
     {
-        $classes = Vpc_Abstract::getChildComponentClasses($class, null, $useSettingsCache);
+        $classes = array();
+        foreach (Vpc_Abstract::getSetting($class, 'generators', $useSettingsCache) as $generator) {
+            if (is_array($generator['component'])) {
+                $classes = array_merge($classes, $generator['component']);
+            } else {
+                $classes[] = $generator['component'];
+            }
+        }
+        $plugins = Vpc_Abstract::getSetting($class, 'plugins', $useSettingsCache);
+        if (is_array($plugins)) {
+            $classes = array_merge($classes, $plugins);
+        }
         foreach ($classes as $class) {
             if ($class && !in_array($class, $componentClasses)) {
                 $componentClasses[] = $class;

@@ -13,9 +13,6 @@ Vps_Loader::registerAutoload();
 date_default_timezone_set('Europe/Berlin');
 
 Zend_Registry::setClassName('Vps_Registry');
-Vps_Registry::set('config', new Zend_Config(array(
-    'webCodeLanguage' => 'en'
-)));
 
 require_once 'TestConfiguration.php';
 
@@ -59,7 +56,10 @@ class AllTests
                 if (is_dir($entry)) {
                     $listarray = array_merge($listarray, self::dirlist($entry));
                 } else {
-                    $listarray[] = $entry;
+                    $className = str_replace('.php', '', str_replace('/', '_', $entry));
+                    if (is_instance_of($className, 'PHPUnit_Framework_TestCase')) {
+                        $listarray[] = $entry;
+                    }
                 }
             }
         }
