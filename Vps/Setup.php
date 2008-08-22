@@ -1,6 +1,7 @@
 <?php
 function p($src, $Type = 'LOG')
 {
+    if (!Vps_Debug::isEnabled()) return;
     $isToDebug = false;
     if ($Type != 'ECHO' && Zend_Registry::get('config')->debug->firephp && class_exists('FirePHP') && FirePHP::getInstance()) {
         if (is_object($src) && method_exists($src, 'toArray')) {
@@ -41,6 +42,7 @@ function p($src, $Type = 'LOG')
 
 function d($src)
 {
+    if (!Vps_Debug::isEnabled()) return;
     p($src, 'ECHO');
     exit;
 }
@@ -92,6 +94,7 @@ function _btArgsString($args)
 }
 function bt()
 {
+    if (!Vps_Debug::isEnabled()) return;
     $bt = debug_backtrace();
     unset($bt[0]);
     $out = array(array('File', 'Line', 'Function', 'Args'));
