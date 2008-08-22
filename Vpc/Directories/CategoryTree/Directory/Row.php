@@ -25,6 +25,35 @@ class Vpc_Directories_CategoryTree_Directory_Row extends Vps_Db_Table_Row_Abstra
         return $path;
     }
 
+    public function getRecursiveChildCategoryIds(array $where = array(), $parentId = null)
+    {
+        static $branchCache = array();
+        if (!$branchCache) {
+            $select = new Vps_Db_Table_Select($this->getTable());
+            $select->from($this->getTable(), array('id', 'parent_id'));
+            foreach ($where as $k => $v) {
+                if (is_string($k)) {
+                    $select->where($k, $v);
+                } else {
+                    $select->where($v);
+                }
+            }
+            foreach ($select->query()->fetchAll() as $row) {
+                $branchCache[$row['id']] = $row['parent_id'];
+            }
+        }
+
+        if (is_null($parentId)) $parentId = $this->id;
+
+        $ret = array($parentId);
+        foreach (array_keys($branchCache, $parentId) as $v) {
+            $ret[] = $v;
+            $ret = array_merge($ret, $this->getRecursiveChildCategoryIds($where, $v));
+        }
+
+        return array_values(array_unique($ret));
+    }
+
     public function __isset($name)
     {
         if ($name == 'name_path') {

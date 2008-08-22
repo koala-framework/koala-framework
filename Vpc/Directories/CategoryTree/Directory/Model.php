@@ -17,9 +17,9 @@ abstract class Vpc_Directories_CategoryTree_Directory_Model extends Vps_Db_Table
     {
         $filter = new Vps_Filter_Row_Numberize();
         $filter->setGroupBy('parent_id');
-        $this->_filters = array(
+/*        $this->_filters = array(
             'pos' => $filter,
             'filename' => 'Vps_Filter_Row_FilenameParents'
-        );
+        );*/
     }
 }
