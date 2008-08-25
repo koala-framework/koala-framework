@@ -12,49 +12,41 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
         $ret['componentName'] = trlVps('Search engine referer');
         $ret['tablename'] = 'Vpc_Advanced_SearchEngineReferer_Model';
         $ret['limit'] = 5;
-        $ret['viewCache'] = false;
         $ret['saveReferer'] = true;
+        $ret['flags']['processInput'] = true;
         return $ret;
     }
 
-    public function getTemplateVars()
+    public function processInput()
     {
-        $ret = parent::getTemplateVars();
-        if ($this->_getSetting('saveReferer')) $this->_saveReferer();
-        return $ret;
-    }
+        if (!$this->_getSetting('saveReferer')) return;
+        if (isset($_SERVER['HTTP_REFERER'])) return;
+        if (!$_SERVER['HTTP_REFERER']) return;
+        $referer = $_SERVER['HTTP_REFERER'];
+        $host = parse_url($referer, PHP_URL_HOST);
+        $allowedHosts = $this->_getSetting('allowedHosts');
+        if (preg_match('/^(www\.)?(('.implode(')|(', $allowedHosts).'))\.[a-z]+$/i', $host)) {
+            $table = $this->getTable();
 
-    private function _saveReferer()
-    {
-        if (!empty($_SERVER['HTTP_REFERER'])) {
-            $referer = $_SERVER['HTTP_REFERER'];
-            $host = parse_url($referer, PHP_URL_HOST);
-            $allowedHosts = $this->_getSetting('allowedHosts');
-            if (preg_match('/^(www\.)?(('.implode(')|(', $allowedHosts).'))\.[a-z]+$/i', $host)) {
-                $table = $this->getTable();
+            $where = array('component_id = ?' => $this->getData()->parent->dbId);
+            $rowCompare = $table->fetchRow($where, 'id DESC');
 
-                $where = array('component_id = ?' => $this->getData()->parent->dbId);
-                $rowCompare = $table->fetchRow($where, 'id DESC');
+            $query = self::getQueryVar($referer);
 
-                $query = self::getQueryVar($referer);
+            if ($rowCompare) {
+                $hostCompare = parse_url($rowCompare->referer_url, PHP_URL_HOST);
+                $queryCompare = self::getQueryVar($rowCompare->referer_url);
+            }
 
-                if ($rowCompare) {
-                    $hostCompare = parse_url($rowCompare->referer_url, PHP_URL_HOST);
-                    $queryCompare = self::getQueryVar($rowCompare->referer_url);
-                }
-
-                if ((!$rowCompare || $hostCompare != $host || $queryCompare != $query)
-                    && strpos($query, 'site:') === false
-                ) {
-                    $row = $table->createRow();
-                    $row->component_id = $this->getData()->parent->dbId;
-                    $row->referer_url = $referer;
-                    $row->save();
-                    return true;
-                }
+            if ((!$rowCompare || $hostCompare != $host || $queryCompare != $query)
+                && strpos($query, 'site:') === false
+            ) {
+                $row = $table->createRow();
+                $row->component_id = $this->getData()->parent->dbId;
+                $row->referer_url = $referer;
+                $row->save();
             }
         }
-        return false;
     }
 
     public static function getQueryVar($url)

@@ -5,14 +5,19 @@ class Vpc_User_Box_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['login'] = 'Vpc_User_Login_Component';
+        $ret['viewCache'] = false;
         return $ret;
+    }
+
+    public function processInput(array $postData)
+    {
+        if (isset($postData['logout'])) {
+            Vps_Auth::getInstance()->clearIdentity();
+        }
     }
 
     public function getTemplateVars()
     {
-        if (isset($_GET['logout'])) {
-            Vps_Auth::getInstance()->clearIdentity();
-        }
         $ret = parent::getTemplateVars();
         $ret['authedUser'] = Vps_Registry::get('userModel')->getAuthedUser();
         $ret['register'] = Vps_Component_Data_Root::getInstance()

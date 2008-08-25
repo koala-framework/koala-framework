@@ -10,5 +10,7 @@ class Vpc_User_Login_Form_Form extends Vps_Form
                     ->setVType('email');
 
         $this->add(new Vps_Form_Field_Password('password', trlVps('Password')));
+
+        $this->add(new Vps_Form_Field_Checkbox('auto_login', trlVps('Auto Login')));
     }
 }
