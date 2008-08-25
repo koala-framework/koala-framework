@@ -16,7 +16,29 @@ class Vpc_User_Login_Form_Component extends Vpc_Form_Component
                         ->getComponentByClass('Vpc_User_Register_Component');
         return $ret;
     }
-    
+
+    public function processInput($postData)
+    {
+        if (isset($postData['feAutologin'])
+            && !Vps_Registry::get('userModel')->getAuthedUser()
+        ) {
+            list($cookieId, $cookieMd5) = explode('.', $postData['feAutologin']);
+            if (!empty($cookieId) && !empty($cookieMd5)) {
+                $auth = Vps_Auth::getInstance();
+                $auth->clearIdentity();
+                $adapter = new Vps_Auth_Adapter_Cookie();
+                $adapter->setIdentity($cookieId);
+                $adapter->setCredential($cookieMd5);
+                $result = $auth->authenticate($adapter);
+                if ($result->isValid()) {
+                    $loginData = array('userId' => $adapter->getUserId());
+                    $auth->getStorage()->write($loginData);
+                }
+            }
+        }
+        parent::processInput($postData);
+    }
+
     protected function _afterSave(Vps_Model_Row_Interface $row)
     {
         $adapter = new Vps_Auth_Adapter_Service();
@@ -29,6 +51,11 @@ class Vpc_User_Login_Form_Component extends Vpc_Form_Component
         if ($result->isValid()) {
             $loginData = array('userId' => $adapter->getUserId());
             $auth->getStorage()->write($loginData);
+            if ($row->auto_login) {
+                $authedUser = Vps_Registry::get('userModel')->getAuthedUser();
+                $cookieValue = $authedUser->id.'.'.md5($authedUser->password);
+                setcookie('feAutologin', $cookieValue, time() + (100*24*60*60));
+            }
         } else {
             $this->_errors[] = trlVps('Invalid E-Mail or password, please try again.');
         }

@@ -19,6 +19,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         
         //todo: wenn mehrere verbessern
         $ret['assets']['files'][] = 'vps/Vps/Form/Field/File/Component.css';
+
+        $ret['flags']['processInput'] = true;
         return $ret;
     }
 
@@ -29,27 +31,11 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         }
     }
 
-    protected function _processForm()
+    public function processInput(array $postData)
     {
-        if ($this->_processed) return;
         $this->_processed = true;
 
         $this->_initForm();
-
-        $postData = $_REQUEST;
-        //in _REQUEST sind _FILES nicht mit drinnen
-        foreach ($_FILES as $k=>$file) {
-            if (is_array($file['tmp_name'])) {
-                //wenn name[0] dann kommts in komischer form daher -> umwandeln
-                foreach (array_keys($file['tmp_name']) as $i) {
-                    foreach (array_keys($file) as $prop) {
-                        $postData[$k][$i][$prop] = $file[$prop][$i];
-                    }
-                }
-            } else {
-                $postData[$k] = $file;
-            }
-        }
 
         Vps_Registry::get('db')->beginTransaction();
 
@@ -78,13 +64,17 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
     public function getErrors()
     {
-        $this->_processForm();
+        if (!$this->_processed) {
+            throw new Vps_Exception("Form has not yet been processed, processInput must be called");
+        }
         return $this->_errors;
     }
 
     public function getFormRow()
     {
-        $this->_processForm();
+        if (!$this->_processed) {
+            throw new Vps_Exception("Form has not yet been processed, processInput must be called");
+        }
         return $this->_form->getRow();
     }
 
@@ -92,7 +82,9 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getTemplateVars();
 
-        $this->_processForm();
+        if (!$this->_processed) {
+            throw new Vps_Exception("Form has not yet been processed, processInput must be called");
+        }
 
         $class = self::getChildComponentClass(get_class($this), 'child', 'success');
 
