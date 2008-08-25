@@ -99,4 +99,23 @@ class Vps_Component_Generator_GeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($count, count($classes));
     }
     
+    public function testChildComponents()
+    {
+        $root = Vps_Component_Data_Root::getInstance();
+        $this->_assertChildComponents($root, array(), array('root-empty', 'root-static'));
+        $this->_assertChildComponents($root, array(), array('root-empty', 'root-static'));
+    }
+    
+    public function _assertChildComponents($parent, $constraints, $componentIds)
+    {
+        $ret = true;
+        foreach($parent->getChildComponents($constraints) as $cc) {
+            $ids[] = $cc->componentId;
+            if (!in_array($cc->componentId, $componentIds)) {
+                return false;
+            }
+        }
+        return count($ids) == count($componentIds);
+    }
+    
 }

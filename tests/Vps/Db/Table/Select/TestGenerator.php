@@ -1,5 +1,5 @@
 <?php
-class Vps_Test_Db_Table_Select_Generator
+class Vps_Db_Table_Select_TestGenerator
 {
     private $_generator;
     
@@ -14,7 +14,7 @@ class Vps_Test_Db_Table_Select_Generator
         return $this->_generator;
     }
     
-    public function __call()
+    public function __call($a, $b)
     {
        return $this;
     }
