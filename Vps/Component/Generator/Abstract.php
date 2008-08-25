@@ -264,28 +264,10 @@ abstract class Vps_Component_Generator_Abstract
 
     protected function _formatConstraints($parentData, $constraints)
     {
-        if (isset($constraints['hasEditComponents'])) {
-            unset($constraints['hasEditComponents']);
-            if (isset($constraints['componentClass'])) {
-                throw new Vps_Exception("Can't use constraint hasEditComponents together with componentClass (not implemented)");
-            }
-            $constraints['componentClass'] = array();
-            if (!Vpc_Abstract::hasSetting($this->_class, 'editComponents')
-                    || !Vpc_Abstract::getSetting($this->_class, 'editComponents'))
-            {
-                return null;
-            }
-            $editComponents = Vpc_Abstract::getSetting($this->_class, 'editComponents');
-            if (!is_array($editComponents)) $editComponents = array($editComponents);
-
-            $constraints['componentClass'][] = array();
-            foreach ($editComponents as $c) {
-                if (isset($this->_settings['component'][$c])) {
-                    $constraints['componentClass'][] = $this->_settings['component'][$c];
-                }
-            }
-            
-            if (!$constraints['componentClass']) return null;
+        if (isset($constraints['flags']) || isset($constraints['componentKey'])) {
+            $constraints['componentClass'] = 
+                Vpc_Abstract::getChildComponentClasses($parentData->componentClass, $constraints);
+            if (empty($constraints['componentClass'])) return null;
         }
         return $constraints;
     }

@@ -14,16 +14,19 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     public function select($parentData, array $constraints = array())
     {
+        //$ret = new Vps_Component_Generator_Constraints();
+        //d($this->_model);
         if (isset($this->_settings['selectClass'])) {
             $selectClass = $this->_settings['selectClass'];
         } else {
             $selectClass = 'Vps_Db_Table_Select_Generator';
         }
-        $select = new $selectClass($this->_table);
+        $table = $this->_model->getTable();
+        $select = new $selectClass($table);
         $select->setGenerator($this->_settings['generator']);
-        $select->from($this->_table, $this->_getSelectFields());
-        $cols = $this->_table->info('cols');
-        $tableName = $this->_table->info('name');
+        $select->from($table, $this->_getSelectFields());
+        $cols = $table->info('cols');
+        $tableName = $table->info('name');
         if ($parentData && in_array('component_id', $cols)) {
             $select->where("$tableName.component_id = ?", $parentData->dbId);
         }
