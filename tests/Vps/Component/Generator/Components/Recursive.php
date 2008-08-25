@@ -15,7 +15,7 @@ class Vps_Component_Generator_Components_Recursive extends Vpc_Abstract
                 'recursive' => 'Vps_Component_Generator_Components_RecursiveTable',
             ),
             'model' => 'Vps_Model_FnF',
-            'selectClass' => 'Vps_Test_Db_Table_Select_Generator'
+            'selectClass' => 'Vps_Db_Table_Select_TestGenerator'
         );
         return $ret;
     }
