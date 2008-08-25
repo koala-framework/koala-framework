@@ -4,10 +4,12 @@ class Vpc_Abstract_Form extends Vps_Form
     public function __construct($name, $class)
     {
         $this->setClass($class);
-        $this->setModel(Vpc_Abstract::createModel($class));
+        if ($class) {
+            $this->setModel(Vpc_Abstract::createModel($class));
+        }
         parent::__construct($name, $class);
     }
-    
+
     /**
      * @return Vpc_Abstract_Form
      **/
@@ -52,16 +54,16 @@ class Vpc_Abstract_Form extends Vps_Form
                 throw new Vpc_Exception("Could not find component '$componentClass'.");
             }
         }
-        
+
         $formClass = Vpc_Admin::getComponentClass($componentClass, 'Form');
         if (!$formClass || $formClass == 'Vpc_Abstract_Form') return null;
-        
+
         if (!$name) $name = $componentClass;
         $form = new $formClass($name, $componentClass);
         if ($form instanceof Vpc_Abstract_FormEmpty) { return null; }
         return $form;
     }
-    
+
     /**
      * @return Vpc_Abstract_Form
      **/
@@ -70,7 +72,7 @@ class Vpc_Abstract_Form extends Vps_Form
         $id = str_replace('-', '', $id);
         $idTemplate = '{0}';
         $childComponentClass = null;
-        
+
         foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $generatorKey => $generatorData) {
             $generator = Vps_Component_Generator_Abstract::getInstance($componentClass, $generatorKey);
             $component = $generator->getComponentByKey($id);

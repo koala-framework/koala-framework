@@ -9,6 +9,7 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
     protected function _initFields()
     {
         parent::_initFields();
+        if (!$this->getClass()) return;
         $classes = Vpc_Abstract::getChildComponentClasses($this->getClass(), 'child');
         foreach ($classes as $key => $class) {
             if (!$class) continue;
