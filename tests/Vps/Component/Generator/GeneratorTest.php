@@ -1,6 +1,7 @@
 <?php
 class Vps_Component_Generator_GeneratorTest extends PHPUnit_Framework_TestCase
 {
+    /*
     public function testRoot()
     {
         $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root');
@@ -98,24 +99,26 @@ class Vps_Component_Generator_GeneratorTest extends PHPUnit_Framework_TestCase
         $classes = Vpc_Abstract::getRecursiveChildComponentClasses('Vps_Component_Generator_Components_Recursive', $constraints);
         $this->assertEquals($count, count($classes));
     }
-    
+    */
     public function testChildComponents()
     {
         $root = Vps_Component_Data_Root::getInstance();
-        $this->_assertChildComponents($root, array(), array('root-empty', 'root-static'));
-        $this->_assertChildComponents($root, array(), array('root-empty', 'root-static'));
+        //$this->_assertChildComponents($root, array(), array('root-empty', 'root-static'));
+        //$this->_assertChildComponents($root, array('box' => true), array('root-empty'));
+        //$this->_assertChildComponents($root, array('page' => true), array());
+        $multiple = $root->getChildComponent('-static');
+        $this->assertEquals('root-static', $multiple->componentId);
+        $this->_assertChildComponents($multiple, array('pseudoPage' => true, 'page' => false), array('root-static-pseudoPageTable'));
+        
     }
     
     public function _assertChildComponents($parent, $constraints, $componentIds)
     {
-        $ret = true;
+        $ids = array();
         foreach($parent->getChildComponents($constraints) as $cc) {
             $ids[] = $cc->componentId;
-            if (!in_array($cc->componentId, $componentIds)) {
-                return false;
-            }
         }
-        return count($ids) == count($componentIds);
+        $this->assertEquals($componentIds, $ids);
     }
     
 }

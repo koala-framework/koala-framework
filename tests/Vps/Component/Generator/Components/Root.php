@@ -5,6 +5,7 @@ class Vps_Component_Generator_Components_Root extends Vpc_Root_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['page']['model'] = 'Vps_Model_TestPages';
+        $ret['generators']['page']['component'] = array();
         $ret['generators']['box']['component'] = array('empty' => 'Vpc_Basic_Empty_Component');
         $ret['generators']['static'] = array(
             'class' => 'Vps_Component_Generator_Static',

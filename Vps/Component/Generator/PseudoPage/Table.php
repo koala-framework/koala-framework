@@ -40,7 +40,7 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
     protected function _getSelect($parentData, $constraints)
     {
         $select = parent::_getSelect($parentData, $constraints);
-        $tableName = $this->_table->info('name');
+        $tableName = $this->_model->getTable()->info('name');
         if (!$select) return null;
         if (isset($constraints['filename'])) {
             if ($this->_settings['uniqueFilename']) {

@@ -219,71 +219,49 @@ class Vps_Component_Data
         return $ret;
     }
 
-    public function getChildComponents($constraints = array())
+    private function _formatConstraints($constraints)
     {
         if (!is_array($constraints)) {
             if (is_string($constraints)) {
                 $constraints = array('id' => $constraints);
-            } else if ($constraints instanceof Zend_Db_Select) {
-                $constraints = array('select' => $constraints);
+            } else if ($constraints instanceof Vps_Db_Table_Select_Generator) {
+                $constraints['select'] = $constraints;
+                $constraints['generator'] = $constraints->getGenerator();
             } else {
-                throw new Vps_Exception("Invalid contraint");
+                throw new Vps_Exception("Invalid constraint");
             }
         }
+        //return new Vps_Component_Generator_Constraints($constraints);
+        return $constraints;
+    }
+    
+    public function getChildComponents($constraints = array())
+    {
+        $constraints = $this->_formatConstraints($constraints);
+
         $sc = '';
         foreach ($constraints as $key => $val) {
             if ($val instanceof Zend_Db_Select) {
                 $val = $val->__toString();
             }
-            if (is_array($val)) {
-                $val = implode('', $val);
-            }
+            $val = serialize($val);
             $sc .= $key . $val;
         }
         $sc = md5($sc);
         if (!isset($this->_constraintsCache[$sc])) {
             $ret = array();
 
-            $generatorConstraints = array();
-            foreach (array('page', 'pseudoPage', 'box', 'multiBox', 'generator', 'skipRoot') as $c) {
-                if (isset($constraints[$c])) {
-                    $generatorConstraints[$c] = $constraints[$c];
-                    unset($constraints[$c]);
-                }
-            }
-            if (isset($constraints['select']) && $constraints['select'] instanceof Vps_Db_Table_Select_Generator) {
-                $generatorConstraints['generator'] = $constraints['select']->getGenerator();
-            }
-            if (isset($constraints['flags'])) {
-                if (!is_array($constraints['flags'])) {
-                    throw new Vps_Exception("Constraint 'flags' must be of type array");
-                }
-                if (isset($constraints['componentClass'])) {
-                    throw new Vps_Exception("Constraint 'flags' may not be used with other constraints");
-                }
-                $constraints['componentClass'] = array();
-                $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
-                foreach ($classes as $class) {
-                    if ($class) {
-                        if ($this->_hasFlags($class, $constraints['flags'])) {
-                            $constraints['componentClass'][] = $class;
-                        }
-                    }
-                }
-                unset($constraints['flags']);
-            }
-
             $this->_constraintsCache[$sc] = array();
             if (isset($constraints['componentClass']) && $constraints['componentClass'] == array()) {
                 return $this->_constraintsCache[$sc]; //vorzeitig abbrechen, da kommt sicher kein ergebnis
             }
-            $generators = $this->getGenerators($generatorConstraints);
+            $generators = $this->getGenerators($constraints);
             foreach ($generators as $generator) {
-                $childConstraints = $constraints;
+                $currentConstraints = $constraints;
                 if (isset($constraints['limit'])) {
-                    $childConstraints['limit'] -= count($this->_constraintsCache[$sc]);
+                    $currentConstraints['limit'] -= count($this->_constraintsCache[$sc]);
                 }
-                foreach ($generator->getChildData($this, $childConstraints) as $data) {
+                foreach ($generator->getChildData($this, $currentConstraints) as $data) {
                     if (isset($this->_constraintsCache[$sc][$data->componentId])) {
                         $odata = $this->_constraintsCache[$sc][$data->componentId];
                         if (isset($data->box) && isset($odata->box) && $data->box == $odata->box) {
@@ -476,17 +454,9 @@ class Vps_Component_Data
 
     public function getChildComponent($constraints = array())
     {
-        if (!is_array($constraints)) {
-            if (is_string($constraints)) {
-                $constraints = array('id' => $constraints);
-            } else if ($constraints instanceof Zend_Db_Select) {
-                $constraints = array('select' => $constraints);
-            } else {
-                throw new Vps_Exception("Invalid contraint");
-            }
-        }
+        $constraints = $this->_formatConstraints($constraints);
         $constraints['limit'] = 1;
-        return array_shift($this->getChildComponents($constraints));
+        return current($this->getChildComponents($constraints));
     }
 
     public function getComponent()
