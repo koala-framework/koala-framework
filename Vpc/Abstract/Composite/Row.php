@@ -5,7 +5,6 @@ class Vpc_Abstract_Composite_Row extends Vpc_Row
     {
         $classes = Vpc_Abstract::getChildComponentClasses($this->getTable()->getComponentClass());
         foreach ($classes as $k=>$i) {
-            p($i);
             Vpc_Admin::getInstance($i)->delete($this->component_id.'-'.$k);
         }
     }

@@ -1,7 +1,7 @@
 <?php
 class Vps_Component_Data_Root extends Vps_Component_Data
 {
-    private static $_instance;
+    private static $_instances = array();
     private $_hasChildComponentCache;
     private $_componentsByClassCache;
     private $_currentPage;
@@ -9,7 +9,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function __construct($config = array())
     {
         $config = array_merge(array(
-                'componentClass' => Vps_Registry::get('config')->vpc->rootComponent,
                 'name' => 'Root',
                 'parent' => null,
                 'isPage' => false,
@@ -22,35 +21,12 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         
     public static function getInstance()
     {
-        if (!self::$_instance) {
-            self::$_instance = new self();
+        $rootComponentClass = Vps_Registry::get('config')->vpc->rootComponent;
+        if (!isset(self::$_instances[$rootComponentClass])) {
+            self::$_instances[$rootComponentClass] = new self(array('componentClass' => $rootComponentClass));
         }
-        return self::$_instance;
+        return self::$_instances[$rootComponentClass];
     }
-   /* 
-    public function getChildComponents($constraints = array())
-    {
-        $pageTypes = Zend_Registry::get('config')->vpc->pageTypes->toArray();
-        if ($this->componentId == 'root'
-            && !isset($constraints['hasEditComponents'])
-            && !isset($constraints['home'])
-            && (
-                (isset($constraints['id']) && isset($pageTypes[$constraints['id']])) || 
-                (!isset($constraints['type']) && !isset($constraints['id']))
-            )
-        ) {
-            $ret = array();
-            foreach ($pageTypes as $id => $name) {
-                if (!isset($constraints['id']) || $id == $constraints['id']) {
-                    $ret[$id] = new Vps_Component_Data_Category($id, $name);
-                }
-            }
-            return $ret;
-        } else {
-            return parent::getChildComponents($constraints);
-        }
-    }
-*/
     public function getPageByPath($path)
     {
         if (substr($path, -1) == '/') {
@@ -70,15 +46,18 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
     }
 
-    public function getComponentById($componentId, array $constraints = array())
+    public function getComponentById($componentId, $select = array())
     {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
         $ret = $this;
         foreach ($this->_getIdParts($componentId) as $idPart) {
             if ($idPart == 'root') {
                 $ret = $this;
             } else {
-                $constraints['id'] = $idPart;
-                $ret = $ret->getChildComponent($constraints);
+                $select->whereId($idPart);
+                $ret = $ret->getChildComponent($select);
                 if (!$ret) break;
             }
         }
@@ -103,19 +82,22 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $ret;
     }
     
-    public function getComponentByDbId($dbId, array $constraints = array())
+    public function getComponentByDbId($dbId, $select = array())
     {
-        $constraints['limit'] = 1;
-        $cmp = $this->getComponentsByDbId($dbId, $constraints);
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        $select->limit(1);
+        $cmp = $this->getComponentsByDbId($dbId, $select);
         return isset($cmp[0]) ? $cmp[0] : null;
     }
 
-    public function getComponentsByDbId($dbId, array $constraints = array())
+    public function getComponentsByDbId($dbId, $select = array())
     {
         $benchmark = Vps_Benchmark::start();
 
         if (is_numeric(substr($dbId, 0, 1))) {
-            $data = $this->getComponentById($dbId, $constraints);
+            $data = $this->getComponentById($dbId, $select);
             if ($data) {
                 return array($data);
             } else {
@@ -123,6 +105,18 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             }
         }
 
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+
+        if ($checkProcessed = $select->getCheckProcessed()) {
+            $select->resetProcessed();
+            $select->setCheckProcessed(false);
+        }
+
+        if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT)) {
+            $limitCount = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
+        }
         $ret = array();
         foreach (Vpc_Abstract::getComponentClasses() as $class) {
             foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
@@ -130,20 +124,28 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                         && substr($dbId, 0, strlen($generator['dbIdShortcut'])) == $generator['dbIdShortcut']) {
                     $idParts = $this->_getIdParts(substr($dbId, strlen($generator['dbIdShortcut']) - 1));
                     $generator = Vps_Component_Generator_Abstract::getInstance($class, $key);
-                    $constraints['id'] = $idParts[0];
-                    $data = $generator->getChildData(null, $constraints);
+                    $generatorSelect = clone $select;
+                    if (isset($limitCount)) {
+                        $generatorSelect->limit($limitCount - count($ret));
+                    }
+                    $generatorSelect->whereId($idParts[0]);
+                    $data = $generator->getChildData(null, $generatorSelect);
                     unset($idParts[0]);
                     $data = isset($data[0]) ? $data[0] : null;
                     foreach ($idParts as $idPart) {
                         if (!$data) break;
-                        $constraints['id'] = $idPart;
-                        $data = $data->getChildComponent($constraints);
+                        $select->whereId($idPart);
+                        $data = $data->getChildComponent($select);
                     }
                     if ($data) {
                         $ret[] = $data;
                     }
-                    if ($ret && isset($constraints['limit']) && count($ret) >= $constraints['limit']) {
+                    $generatorSelect->setCheckProcessed($checkProcessed);
+                    $generatorSelect->checkAndResetProcessed();
+                    if (isset($limitCount)) {
+                        if ($limitCount - count($ret) <= 0) {
                         return $ret;
+                        }
                     }
                 }
             }

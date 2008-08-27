@@ -41,7 +41,7 @@ abstract class Vps_Component_Generator_Abstract
                 $table = new $tableName(array('componentClass'=>$this->_class));
             }
             if (isset($table)) {
-                $this->_model = new Vps_Db_Model(array('table' => $table));
+                $this->_model = new Vps_Model_Db(array('table' => $table));
             }
         }
     }
@@ -135,6 +135,24 @@ abstract class Vps_Component_Generator_Abstract
                     continue;
                 }
             }
+            if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                $componentClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+                $generatorComponentClasses = $generator['component'];
+                if (!is_array($generatorComponentClasses)) {
+                    $generatorComponentClasses = array($generatorComponentClasses);
+                }
+                $continue = true;
+                foreach ($generatorComponentClasses as $cc) {
+                    if (in_array($cc, $componentClasses)) {
+                        $continue = false;
+                        break;
+                    }
+                }
+                if ($continue) { continue; }
+            }
+            if ($select->hasPart(Vps_Component_Select::WHERE_HOME)) {
+                if (!is_instance_of($generator['class'], 'Vps_Component_Generator_Page')) continue;
+            }
             $ret[] = self::getInstance($componentClass, $key);
         }
         $select->processed(Vps_Component_Select::WHERE_GENERATOR);
@@ -146,6 +164,7 @@ abstract class Vps_Component_Generator_Abstract
         $select->processed(Vps_Component_Select::WHERE_INHERIT);
         $select->processed(Vps_Component_Select::WHERE_SHOW_IN_MENU);
         $select->processed(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS);
+        $select->processed(Vps_Component_Select::WHERE_HOME);
 
         return $ret;
     }
@@ -177,15 +196,18 @@ abstract class Vps_Component_Generator_Abstract
             
             if (!$select->getPart(Vps_Component_Select::WHERE_GENERATOR) &&
                 !$select->getPart(Vps_Component_Select::WHERE_PAGE) &&
+                !$select->hasPart(Vps_Component_Select::WHERE_ID) &&
                 !$select->getPart(Vps_Component_Select::SKIP_INHERIT))
             {
                 $inheritSelect = clone $select;
+                $inheritSelect->resetProcessed();
+                $inheritSelect->setCheckProcessed(false);
                 $inheritSelect->skipInherit();
                 $inheritSelect->whereInherit();
                 $page = $component;
                 while ($page) { // Aktuelle inkl. aller Überseiten durchlaufen
                     if ($page->componentId == $component->componentId) {
-                        $generators = $component->getGenerators($inheritSelect);
+                        $generators = self::getInstances($component, $inheritSelect);
                     } else {
                         $generators = $page->getRecursiveGenerators($inheritSelect);
                     }
@@ -197,11 +219,12 @@ abstract class Vps_Component_Generator_Abstract
             }
             $select->processed(Vps_Component_Select::SKIP_INHERIT);
 
-            if (!$select->skipRoot()
+            if (!$select->getPart(Vps_Component_Select::SKIP_ROOT)
                 && ($component instanceof Vps_Component_Data_Root || is_numeric($component->componentId))
             ) {
                 $rootSelect = clone $select;
-                $rootSelect->wherePage();
+                $rootSelect->resetProcessed();
+                $rootSelect->whereGenerator('page');
                 $ret = array_merge($ret, self::_getGeneratorsForComponent(
                     Vps_Registry::get('config')->vpc->rootComponent, $rootSelect
                 ));
@@ -213,6 +236,13 @@ abstract class Vps_Component_Generator_Abstract
             $generators = self::_getGeneratorsForComponent($pluginClass, $select);
             $ret = array_merge($ret, $generators);
         }
+        if ($select->getCheckProcessed()) {
+            //wenn nur nach generatoren gesucht wird (getCheckProcessed==true) dann haben
+            //wir schon nach componentClasses gefiltert.
+            //wenn mit dem selben select dann nach klassen od. komponenten selbst gesucht wird
+            //nicht
+            $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+        }
         $select->checkAndResetProcessed();
         return $ret;
     }
@@ -223,7 +253,6 @@ abstract class Vps_Component_Generator_Abstract
             $select = new Vps_Component_Select($select);
         }
 
-        $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
         $select->processed(Vps_Component_Select::WHERE_FLAGS);
         $select->processed(Vps_Component_Select::WHERE_COMPONENT_KEY);
 
@@ -250,15 +279,6 @@ abstract class Vps_Component_Generator_Abstract
             }
         }
 
-        if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-            $componentKey = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
-            foreach ($ret as $k => $r) {
-                if (in_array($r, $constraints['componentClasses'])) {
-                    unset($ret[$k]);
-                }
-            }
-        }
-
         $select->checkAndResetProcessed();
         return array_unique(array_values($ret));
     }
@@ -279,7 +299,7 @@ abstract class Vps_Component_Generator_Abstract
         return null;
     }
     
-    public function getChildData($parentData, $select)
+    public function getChildData($parentData, $select = array())
     {
         return array();
     }
@@ -306,6 +326,15 @@ abstract class Vps_Component_Generator_Abstract
         return $select;
     }
 
+    protected function _formatSelectHome(Vps_Component_Select $select)
+    {
+        if ($select->hasPart(Vps_Component_Select::WHERE_HOME)) {
+            $select->processed(Vps_Component_Select::WHERE_HOME);
+            return null;
+        }
+        return $select;
+    }
+
     protected function _formatSelect($parentData, $select)
     {
         if (is_array($select)) {
@@ -316,6 +345,9 @@ abstract class Vps_Component_Generator_Abstract
 
         $select = $this->_formatSelectFilename($select);
         if (is_null($select)) return null;
+        $select = $this->_formatSelectHome($select);
+        if (is_null($select)) return null;
+
 
         if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS) || $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)) {
             $classesSelect = clone $select;
@@ -356,5 +388,10 @@ abstract class Vps_Component_Generator_Abstract
     }
     protected function _getIdFromRow($row) {
         throw new Vps_Exception('_getIdFromRow has to be implemented for '.get_class($this));
+    }
+
+    public function toDebug()
+    {
+        return print_r($this->_settings, true);
     }
 }

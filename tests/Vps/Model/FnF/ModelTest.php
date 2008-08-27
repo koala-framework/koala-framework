@@ -79,4 +79,22 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
             $this->fail('expected exception');
         }
     }
+
+    public function testLimit()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 'foo'),
+            array('id' => 2, 'value' => 'bar'),
+            array('id' => 3, 'value' => 'baz'),
+            array('id' => 4, 'value' => 'buz'),
+        ));
+        $select = $model->select();
+        $select->limit(1);
+        $this->_assertIds($model, $select, array(1));
+
+        $select = $model->select();
+        $select->limit(2);
+        $this->_assertIds($model, $select, array(1, 2));
+    }
 }

@@ -6,7 +6,7 @@ class Vps_Component_Generator_Components_Multiple extends Vpc_Abstract
         $ret = parent::getSettings();
         $ret['generators']['box'] = array(
             'class' => 'Vps_Component_Generator_Box_Static',
-            'component' => 'Vpc_Basic_Text_Component'
+            'component' => 'Vpc_Basic_Html_Component'
         );
         $ret['generators']['multiBox'] = array(
             'class' => 'Vps_Component_Generator_MultiBox_Static',

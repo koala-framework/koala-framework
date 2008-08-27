@@ -33,7 +33,7 @@ class Vps_Model_FnF extends Vps_Model_Abstract
             $select = $this->select();
             if ($where) $select->where($where);
             if ($order) $select->order($order);
-            if ($limit || $start) $select->order($limit, $start);
+            if ($limit || $start) $select->limit($limit, $start);
         } else {
             $select = $where;
         }
@@ -67,6 +67,13 @@ class Vps_Model_FnF extends Vps_Model_Abstract
             $data = $sortedData;
             $select->processed(Vps_Model_Select::ORDER);
         }
+
+        if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
+            $select->processed(Vps_Model_Select::LIMIT_COUNT);
+            $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
+            $data = array_slice($data, 0, $limitCount);
+        }
+
 
         $select->checkAndResetProcessed();
         return new $this->_rowsetClass(array(

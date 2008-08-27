@@ -53,12 +53,16 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         $ret = array();
         $select = $this->_formatSelect($parentData, $select);
         if (is_null($select)) return array();
+
+        $select->processed(Vps_Model_Select::LIMIT_COUNT);
+        $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+        $select->processed(Vps_Component_Select::WHERE_ID);
+
         foreach (array_keys($this->_settings['component']) as $key) {
             if ($this->_acceptKey($key, $select, $parentData)) {
                 $ret[] = $key;
             }
             if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
-                $select->processed(Vps_Model_Select::LIMIT_COUNT);
                 if (count($ret) >= $select->getPart(Vps_Model_Select::LIMIT_COUNT)) break;
             }
         }
@@ -72,14 +76,12 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         }
         if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
             $value = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
-            $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
             if (!in_array($this->_settings['component'][$key], $value)) {
                 return false;
             }
         }
         if ($select->hasPart(Vps_Component_Select::WHERE_ID)) {
             $value = $select->getPart(Vps_Component_Select::WHERE_ID);
-            $select->processed(Vps_Component_Select::WHERE_ID);
             if ($this->_idSeparator.$key != $value) {
                 return false;
             }

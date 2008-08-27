@@ -94,7 +94,6 @@ class Vps_Model_Db implements Vps_Model_Interface
             $dbSelect->where($this->getPrimaryKey()." = ?", $whereId);
             $select->processed(Vps_Model_Select::WHERE_ID);
         }
-
         $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
         $limitOffset = $select->getPart(Vps_Model_Select::LIMIT_OFFSET);
         if ($limitCount || $limitOffset) {
