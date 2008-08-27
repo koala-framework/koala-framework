@@ -10,7 +10,7 @@ class Vps_Component_Generator_Components_RecursiveTable extends Vpc_Abstract
         );
         $ret['generators']['staticpage'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Basic_Text_Component'
+            'component' => 'Vpc_Basic_Html_Component'
         );
         return $ret;
     }

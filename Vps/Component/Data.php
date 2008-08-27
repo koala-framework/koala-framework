@@ -55,6 +55,12 @@ class Vps_Component_Data
             return trim($rel);
         } else if ($var == 'filename') {
             return $this->getPseudoPage()->_filename;
+        } else if ($var == 'visible') {
+            if (isset($this->row->visible)) {
+                return $this->row->visible;
+            } else {
+                return true;
+            }
         } else {
             throw new Vps_Exception("Variable '$var' is not set for ".get_class($this) . " with componentId '{$this->componentId}'");
         }
@@ -115,15 +121,7 @@ class Vps_Component_Data
 
     public function getGenerators($constraints = array())
     {
-        $sc = '';
-        foreach ($constraints as $key => $val) {
-            $sc .= $key . $val;
-        }
-        $sc = md5($sc);
-        if (!isset($this->_generatorsCache[$sc])) {
-            $this->_generatorsCache[$sc] = Vps_Component_Generator_Abstract::getInstances($this, $constraints);
-        }
-        return $this->_generatorsCache[$sc];
+        return Vps_Component_Generator_Abstract::getInstances($this, $constraints);
     }
 
     private function _formatChildConstraints($constraints, $childConstraints)
@@ -219,49 +217,49 @@ class Vps_Component_Data
         return $ret;
     }
 
-    private function _formatConstraints($constraints)
+    private function _formatSelect($select)
     {
-        if (!is_array($constraints)) {
-            if (is_string($constraints)) {
-                $constraints = array('id' => $constraints);
-            } else if ($constraints instanceof Vps_Db_Table_Select_Generator) {
-                $constraints['select'] = $constraints;
-                $constraints['generator'] = $constraints->getGenerator();
-            } else {
-                throw new Vps_Exception("Invalid constraint");
-            }
+        if (is_string($select)) {
+            $select = array('id' => $select);
         }
-        //return new Vps_Component_Generator_Constraints($constraints);
-        return $constraints;
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        return $select;
     }
     
-    public function getChildComponents($constraints = array())
+    public function getChildComponents($select = array())
     {
-        $constraints = $this->_formatConstraints($constraints);
-
-        $sc = '';
-        foreach ($constraints as $key => $val) {
-            if ($val instanceof Zend_Db_Select) {
-                $val = $val->__toString();
-            }
-            $val = serialize($val);
-            $sc .= $key . $val;
-        }
-        $sc = md5($sc);
+        $select = $this->_formatSelect($select);
+        $sc = serialize($select->getParts());
         if (!isset($this->_constraintsCache[$sc])) {
             $ret = array();
 
             $this->_constraintsCache[$sc] = array();
-            if (isset($constraints['componentClass']) && $constraints['componentClass'] == array()) {
+            if ($checkProcessed = $select->getCheckProcessed()) {
+                $select->resetProcessed();
+                $select->setCheckProcessed(false);
+            }
+
+            if ($select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES) === array()) {
+                $select->setCheckProcessed($checkProcessed);
+                $select->checkAndResetProcessed();
                 return $this->_constraintsCache[$sc]; //vorzeitig abbrechen, da kommt sicher kein ergebnis
             }
-            $generators = $this->getGenerators($constraints);
+
+            $generators = $this->getGenerators($select);
+
+            if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT)) {
+                $limitCount = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
+            }
+
             foreach ($generators as $generator) {
-                $currentConstraints = $constraints;
-                if (isset($constraints['limit'])) {
-                    $currentConstraints['limit'] -= count($this->_constraintsCache[$sc]);
+                $generatorSelect = clone $select;
+                if (isset($limitCount)) {
+                    $generatorSelect->limit($limitCount - count($this->_constraintsCache[$sc]));
                 }
-                foreach ($generator->getChildData($this, $currentConstraints) as $data) {
+
+                foreach ($generator->getChildData($this, $generatorSelect) as $data) {
                     if (isset($this->_constraintsCache[$sc][$data->componentId])) {
                         $odata = $this->_constraintsCache[$sc][$data->componentId];
                         if (isset($data->box) && isset($odata->box) && $data->box == $odata->box) {
@@ -277,9 +275,18 @@ class Vps_Component_Data
                     }
                     $this->_constraintsCache[$sc][$data->componentId] = $data;
                 }
-                if (isset($constraints['limit'])) {
-                    if ($constraints['limit'] - count($this->_constraintsCache[$sc]) <= 0) break;
+
+                if (isset($limitCount)) {
+                    if ($limitCount - count($this->_constraintsCache[$sc]) <= 0) {
+                        break;
+                    }
                 }
+
+                $generatorSelect->setCheckProcessed($checkProcessed);
+                if ($generatorSelect->getUnprocessedParts()) {
+                    d(get_class($generator). ' '.implode(', ', array_keys($generatorSelect->getUnprocessedParts())));
+                }
+                $generatorSelect->checkAndResetProcessed();
             }
         }
         return $this->_constraintsCache[$sc];
@@ -452,11 +459,11 @@ class Vps_Component_Data
         return $ret;
     }
 
-    public function getChildComponent($constraints = array())
+    public function getChildComponent($select = array())
     {
-        $constraints = $this->_formatConstraints($constraints);
-        $constraints['limit'] = 1;
-        return current($this->getChildComponents($constraints));
+        $select = $this->_formatSelect($select);
+        $select->limit(1);
+        return current($this->getChildComponents($select));
     }
 
     public function getComponent()

@@ -50,4 +50,14 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function isEqual(Vps_Model_Interface $other) {
         throw new Vps_Exception("Method 'isEqual' is not yet implemented in '".get_class($this)."'");
     }
+
+    public function select()
+    {
+        return new Vps_Model_Select();
+    }
+
+    public function getColumns()
+    {
+        return array();
+    }
 }

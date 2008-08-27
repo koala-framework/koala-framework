@@ -25,35 +25,17 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
         if (!isset($this->_settings['nameColumn'])) $this->_settings['nameColumn'] = false;
     }
 
-    protected function _formatConstraints($parentData, $constraints)
+    protected function _formatSelectFilename(Vps_Component_Select $select)
     {
-        if (isset($constraints['filename'])) {
-            $filename = $constraints['filename'];
-            unset($constraints['filename']);
-        }
-        $constraints = parent::_formatConstraints($parentData, $constraints);
-        if (isset($filename)) { $constraints['filename'] = $filename; }
-
-        return $constraints;
-    }
-
-    protected function _getSelect($parentData, $constraints)
-    {
-        $select = parent::_getSelect($parentData, $constraints);
-        $tableName = $this->_model->getTable()->info('name');
-        if (!$select) return null;
-        if (isset($constraints['filename'])) {
+        if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
+            $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
             if ($this->_settings['uniqueFilename']) {
-                $selectFields = $this->_getSelectFields();
-                if (array_key_exists($this->_settings['filenameColumn'], $selectFields)) {
-                    $select->where($selectFields[$this->_settings['filenameColumn']]. ' = ?', $constraints['filename']);
-                } else {
-                    $select->where($tableName.'.'.$this->_settings['filenameColumn'] . ' = ?', $constraints['filename']);
-                }
+                $select->whereEquals($this->_settings['filenameColumn'], $filename);
             } else {
-                if (!preg_match('#^([0-9]+)_#', $constraints['filename'], $m)) return null;
-                $select->where($tableName.'.'.$this->_idColumn . ' = ?', $m[1]);
+                if (!preg_match('#^([0-9]+)_#', $filename, $m)) return null;
+                $select->whereId($m[1]);
             }
+            $select->processed(Vps_Component_Select::WHERE_FILENAME);
         }
         return $select;
     }
@@ -79,7 +61,7 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
             } else if (isset($data['name'])) {
                 $data['filename'] .= Vps_Filter::get($data['name'], 'Ascii');
             } else {
-                throw new Vps_Exception("can't create filename for $this->_class");
+                throw new Vps_Exception("can't create filename for child-page of '$this->_class'");
             }
         }
         $data['rel'] = '';

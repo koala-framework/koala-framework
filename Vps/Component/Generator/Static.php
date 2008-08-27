@@ -4,18 +4,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
 {
     protected $_idSeparator = '-';
 
-    public function getChildIds($parentData, $constraints = array())
-    {
-        $ret = parent::getChildIds($parentData, $constraints);
-        if (!$parentData) {
-            throw new Vps_Exception("no parentData for getChildIds is not (yet) implemented");
-        }
-        foreach ($this->_fetchKeys($parentData, $constraints) as $key) {
-            $ret[] = $this->_idSeparator . $key;
-        }
-        return $ret;
-    }
-    public function getChildData($parentData, $constraints = array())
+    public function getChildData($parentData, $select = array())
     {
         if (isset($this->_settings['unique']) && $this->_settings['unique']) {
             $component = $parentData;
@@ -42,81 +31,60 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
                 throw new Vps_Exception("Couldn't find unique component '$component'");
             }
         }
-        $ret = parent::getChildData($parentData, $constraints);
-        if (!$parentData) {
-            if (isset($constraints['id'])) {
-                //Performance: wenn id contraint schauen ob es überhaupt was gibt
-                //wenn nicht parentDatas nicht ermitteln (kann aufwändig sein)
-                $id = substr($constraints['id'], 1);
-                if (substr($constraints['id'], 0, 1) == $this->_idSeparator || !isset($this->_settings['component'][$id])) {
-                    return $ret;
+        $ret = parent::getChildData($parentData, $select);
+        foreach ($this->_fetchKeys($parentData, $select) as $key) {
+            if (!isset($parentDatas)) {
+                if (!$parentData) {
+                    $parentDatas = Vps_Component_Data_Root::getInstance()
+                                                ->getComponentsByClass($this->_class);
+                } else {
+                    $parentDatas = array($parentData);
                 }
             }
-            $parentDatas = Vps_Component_Data_Root::getInstance()
-                                        ->getComponentsByClass($this->_class);
-        } else {
-            $parentDatas = array($parentData);
-        }
-        foreach ($parentDatas as $parentData) {
-            foreach ($this->_fetchKeys($parentData, $constraints) as $key) {
-                $ret[] = $this->_createData($parentData, $key, $constraints);
+            foreach ($parentDatas as $parentData) {
+                $ret[] = $this->_createData($parentData, $key, $select);
             }
         }
         return $ret;
     }
 
-    protected function _fetchKeys($parentData, $constraints)
+    protected function _fetchKeys($parentData, $select)
     {
         $ret = array();
-        $constraints = $this->_formatConstraints($parentData, $constraints);
-        if (is_null($constraints)) return array();
+        $select = $this->_formatSelect($parentData, $select);
+        if (is_null($select)) return array();
         foreach (array_keys($this->_settings['component']) as $key) {
-            if ($this->_acceptKey($key, $constraints, $parentData)) {
+            if ($this->_acceptKey($key, $select, $parentData)) {
                 $ret[] = $key;
             }
-            if (isset($constraints['limit']) && count($ret) >= $constraints['limit']) break;
+            if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
+                $select->processed(Vps_Model_Select::LIMIT_COUNT);
+                if (count($ret) >= $select->getPart(Vps_Model_Select::LIMIT_COUNT)) break;
+            }
         }
         return $ret;
     }
 
-    protected function _formatConstraints($parentData, $constraints)
+    protected function _acceptKey($key, $select, $parentData)
     {
-        $constraints = parent::_formatConstraints($parentData, $constraints);
-        if (is_null($constraints)) return null;
-        if (isset($constraints['filename'])) {
-            return null;
-        }
-        if (isset($constraints['showInMenu'])) {
-            return null;
-        }
-        if (isset($constraints['componentClass'])) {
-            if (!is_array($constraints['componentClass'])) {
-                $constraints['componentClass'] = array($constraints['componentClass']);
-            }
-        }
-        return $constraints;
-    }
-
-    protected function _acceptKey($key, $constraints, $parentData)
-    {
-        $ret = true;
         if (isset($this->_settings['component'][$key]) && !$this->_settings['component'][$key]) {
-            $ret = false;
+            return false;
         }
-        if ($ret && isset($constraints['componentClass'])) {
-            if (!in_array($this->_settings['component'][$key], $constraints['componentClass'])) {
-                $ret = false;
+        if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+            $value = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+            $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+            if (!in_array($this->_settings['component'][$key], $value)) {
+                return false;
             }
         }
-        if ($ret && isset($constraints['id'])) {
-            if ($this->_idSeparator.$key != $constraints['id']) {
-                $ret = false;
+        if ($select->hasPart(Vps_Component_Select::WHERE_ID)) {
+            $value = $select->getPart(Vps_Component_Select::WHERE_ID);
+            $select->processed(Vps_Component_Select::WHERE_ID);
+            if ($this->_idSeparator.$key != $value) {
+                return false;
             }
         }
-        if ($ret && isset($constraints['inherit'])) {
-            $ret = !isset($this->_settings['inherit']) || ($this->_settings['inherit'] == $constraints['inherit']);
-        }
-        return $ret;
+        return true;
     }
 
     protected function _formatConfig($parentData, $componentKey)
@@ -143,7 +111,6 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
             'parent' => $parentData,
             'isPage' => false,
             'isPseudoPage' => false,
-            'visible' => true,
             'priority' => $priority,
             'inherit' => $inherit
         );

@@ -7,36 +7,10 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     protected $_idColumn = 'id';
     private $_rows = array();
 
-    protected function _getSelectFields()
+    public function select($parentData, array $select = array())
     {
-        return array(Zend_Db_Select::SQL_WILDCARD);
-    }
-
-    public function select($parentData, array $constraints = array())
-    {
-        //$ret = new Vps_Component_Generator_Constraints();
-        //d($this->_model);
-        if (isset($this->_settings['selectClass'])) {
-            $selectClass = $this->_settings['selectClass'];
-        } else {
-            $selectClass = 'Vps_Db_Table_Select_Generator';
-        }
-        $table = $this->_model->getTable();
-        $select = new $selectClass($table);
-        $select->setGenerator($this->_settings['generator']);
-        $select->from($table, $this->_getSelectFields());
-        $cols = $table->info('cols');
-        $tableName = $table->info('name');
-        if ($parentData && in_array('component_id', $cols)) {
-            $select->where("$tableName.component_id = ?", $parentData->dbId);
-        }
-        if ((!isset($constraints['ignoreVisible']) || !$constraints['ignoreVisible'])
-            && in_array('visible', $cols) && !Vps_Registry::get('config')->showInvisible) {
-            $select->where("$tableName.visible = ?", 1);
-        }
-        if (in_array('pos', $cols)) {
-            $select->order("$tableName.pos");
-        }
+        $select = new Vps_Component_Select($select);
+        $select->whereGenerator($this->_settings['generator']);
         return $select;
     }
     
@@ -64,27 +38,16 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $select;
     }
 
-    public function getChildIds($parentData, $constraints = array())
+    public function getChildData($parentData, $select = array())
     {
-        $ret = parent::getChildIds($parentData, $constraints);
-        if (!$parentData) {
-            throw new Vps_Exception("no parentData for getChildIds is not (yet) implemented");
-        }
-        foreach ($this->_fetchRows($parentData, $constraints) as $row) {
-            $ret[] = $this->_idSeparator . $this->_getIdFromRow($row);
-        }
-        return $ret;
-    }
-    public function getChildData($parentData, $constraints = array())
-    {
-        $ret = parent::getChildData($parentData, $constraints);
-        foreach ($this->_fetchRows($parentData, $constraints) as $row) {
-            $ret[] = $this->_createData($parentData, $row, $constraints);
+        $ret = parent::getChildData($parentData, $select);
+        foreach ($this->_fetchRows($parentData, $select) as $row) {
+            $ret[] = $this->_createData($parentData, $row, $select);
         }
         return $ret;
     }
 
-    protected function _createData($parentData, $row, $constraints)
+    protected function _createData($parentData, $row, $select)
     {
         if (!$parentData) {
             $parentData = $this->_getParentDataByRow($row);
@@ -92,7 +55,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if (!$parentData) {
             throw new Vps_Exception("Can't find parentData in ".get_class($this));
         }
-        return parent::_createData($parentData, $row, $constraints);
+        return parent::_createData($parentData, $row, $select);
     }
 
     protected function _getParentDataByRow($row)
@@ -106,57 +69,44 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $ret;
     }
 
-    protected function _fetchRows($parentData, $constraints)
+    protected function _fetchRows($parentData, $select)
     {
-        $select = $this->_getSelect($parentData, $constraints);
+        $select = $this->_formatSelect($parentData, $select);
         if ($select) {
-            return $this->_table->fetchAll($select);
+            return $this->_model->fetchAll($select);
         }
         return array();
     }
 
-    protected function _formatConstraints($parentData, $constraints)
+    protected function _formatSelect($parentData, $select)
     {
-        $constraints = parent::_formatConstraints($parentData, $constraints);
-        if (is_null($constraints)) return null;
-        if (isset($constraints['filename'])) {
-            return null;
+        $select = parent::_formatSelect($parentData, $select);
+        if (is_null($select)) return null;
+        if ($select->hasPart(Vps_Model_Select::WHERE_ID)) {
+            $id = $select->getPart(Vps_Model_Select::WHERE_ID);
+            if (!is_numeric(substr($id, 1))) return null;
         }
-        if (isset($constraints['showInMenu'])) {
-            return null;
-        }
-        if (!isset($constraints['select'])) {
-            $constraints['select'] = $this->select($parentData, $constraints);
-        }
-        if (isset($constraints['id'])) {
-            if (!is_numeric(substr($constraints['id'], 1))) return null;
-        }
-        if (isset($constraints['inherit'])) {
-            return null;
-        }
-        
-        return $constraints;
-    }
 
-    protected function _getSelect($parentData, $constraints)
-    {
-        $tableName = $this->_table->info('name');
+        $cols = $this->_model->getColumns();
+        if ($parentData && in_array('component_id', $cols)) {
+            $select->whereEquals('component_id', $parentData->dbId);
+        }
+        if (in_array('pos', $cols) && !$select->hasPart(Vps_Component_Select::ORDER)) {
+            $select->order("pos");
+        }
+        if (!$select->getPart(Vps_Component_Select::IGNORE_VISIBLE)
+            && in_array('visible', $cols) && !Vps_Registry::get('config')->showInvisible) {
+            $select->whereEquals("visible", 1);
+            $select->processed(Vps_Component_Select::IGNORE_VISIBLE);
+        }
 
-        $constraints = $this->_formatConstraints($parentData, $constraints);
-        if (!$constraints) return null;
-        $select = $constraints['select'];
-        if (!$select) return null;
-
-        if (isset($constraints['componentClass'])) {
-            $constraintClasses = $constraints['componentClass'];
-            if (!is_array($constraintClasses)) {
-                $constraintClasses = array($constraintClasses);
-            }
-            if (!$constraintClasses) return null;
+        if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+            $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+            if (!$selectClasses) return null;
             $childClasses = $this->_settings['component'];
             $keys = array();
-            foreach ($constraintClasses as $constraintClass) {
-                $key = array_search($constraintClass, $childClasses);
+            foreach ($selectClasses as $selectClass) {
+                $key = array_search($selectClass, $childClasses);
                 if ($key) $keys[] = $key;
             }
             if (!$keys) return null;
@@ -166,22 +116,14 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
                     return null;
                 }
             } else {
-                $select->where("$tableName.component IN ('".implode("', '", $keys) ."')");
+                $select->whereEquals('component', $keys);
             }
+            $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
         }
-        if (isset($constraints['id'])) {
-            $selectFields = $this->_getSelectFields();
-            // mit substr - bzw. _ abschneiden
-            if (array_key_exists($this->_idColumn, $selectFields)) {
-                $select->where($selectFields[$this->_idColumn].' = ?', substr($constraints['id'], 1));
-            } else {
-                $select->where($tableName.".".$this->_idColumn.' = ?', substr($constraints['id'], 1));
-            }
-
+        if ($select->hasPart(Vps_Component_Select::WHERE_ID)) {
+            $id = $select->getPart(Vps_Component_Select::WHERE_ID);
+            $select->whereId(substr($id, 1)); // mit substr - bzw. _ abschneiden
         }
-
-        if (isset($constraints['limit'])) $select->limit($constraints['limit']);
-
         return $select;
     }
 
@@ -210,12 +152,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         } else {
             $componentClass = current($this->_settings['component']);
         }
-        
-        $visible = true;
-        if (in_array('visible', $this->_table->info('cols'))) {
-            $visible = $row->visible == '1';
-        }
-                
+
         $data = array(
             'componentId' => $componentId,
             'dbId' => $dbId,
@@ -223,8 +160,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             'parent' => $parentData,
             'row' => $row,
             'isPage' => false,
-            'isPseudoPage' => false,
-            'visible' => $visible
+            'isPseudoPage' => false
         );
         return $data;
     }
