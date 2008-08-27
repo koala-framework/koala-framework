@@ -101,6 +101,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         }
 
         if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+            $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
             $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
             if (!$selectClasses) return null;
             $childClasses = $this->_settings['component'];
@@ -118,7 +119,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             } else {
                 $select->whereEquals('component', $keys);
             }
-            $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
         }
         if ($select->hasPart(Vps_Component_Select::WHERE_ID)) {
             $id = $select->getPart(Vps_Component_Select::WHERE_ID);

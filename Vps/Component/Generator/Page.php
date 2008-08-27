@@ -39,7 +39,12 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         return $select;
     }
 
-    public function getChildData($parentData, $select)
+    protected function _formatSelectHome(Vps_Component_Select $select)
+    {
+        return $select;
+    }
+
+    public function getChildData($parentData, $select = array())
     {
         $select = $this->_formatSelect($parentData, $select);
         if (is_null($select)) return array();
@@ -57,10 +62,10 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             }
             $select->processed(Vps_Component_Select::WHERE_ID);
         } else if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
+            $select->processed(Vps_Component_Select::WHERE_HOME);
             if ($this->_pageHome) {
                 $pageIds[] = $this->_pageHome;
             }
-            $select->processed(Vps_Component_Select::WHERE_HOME);
         } else if ($parentId && $select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
             $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
             if (isset($this->_pageFilename[$parentId][$filename])) {

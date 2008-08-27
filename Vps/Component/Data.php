@@ -109,110 +109,54 @@ class Vps_Component_Data
         }
     }
 
-    public function getRecursiveGenerators(array $constraints,
-                                array $childConstraints = array('page'=>false))
+    public function getRecursiveGenerators($select,
+                                $childSelect = array('page'=>false))
     {
-        $ret = $this->getGenerators($constraints);
-        foreach ($this->getChildComponents($this->_formatChildConstraints($constraints, $childConstraints)) as $component) {
-            $ret = array_merge($ret, $component->getRecursiveGenerators($constraints, $childConstraints));
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        if (is_array($childSelect)) {
+            $childSelect = new Vps_Component_Select($childSelect);
+        }
+        $ret = $this->getGenerators($select);
+        foreach ($this->getChildComponents($this->_formatChildConstraints($select, $childSelect)) as $component) {
+            $ret = array_merge($ret, $component->getRecursiveGenerators($select, $childSelect));
         }
         return $ret;
     }
 
-    public function getGenerators($constraints = array())
+    public function getGenerators($select = array())
     {
-        return Vps_Component_Generator_Abstract::getInstances($this, $constraints);
+        return Vps_Component_Generator_Abstract::getInstances($this, $select);
     }
 
-    private function _formatChildConstraints($constraints, $childConstraints)
+    private function _formatChildConstraints($select, $childSelect)
     {
-        if (isset($constraints['page']) && $constraints['page']) {
-            $generatorInterface = 'Vps_Component_Generator_Page_Interface';
-        } else if (isset($constraints['pseudoPage']) && $constraints['pseudoPage']) {
-            $generatorInterface = 'Vps_Component_Generator_PseudoPage_Interface';
-        } else if (isset($constraints['box']) && $constraints['box']) {
-            $generatorInterface = 'Vps_Component_Generator_Box_Interface';
-        } else if (isset($constraints['multiBox']) && $constraints['multiBox']) {
-            $generatorInterface = 'Vps_Component_Generator_MultiBox_Interface';
-        } else {
-            $generatorInterface = false;
+        $childSelect = clone $childSelect;
+
+        $select = clone $select;
+        $select->setCheckProcessed(true);
+        if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
+            $select->unsetPart(Vps_Model_Select::LIMIT_COUNT);
         }
-        if ($generatorInterface) {
-            if (isset($childConstraints['componentClass'])) {
-                throw new Vps_Exception("Constraint 'page' or 'box' may not (yet) be used with 'componentClass'");
-            }
-            $childConstraints['componentClass'] = array();
-            $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
-            foreach ($classes as $class) {
-                if ($this->_hasGenerator($class, $generatorInterface)) {
-                    $childConstraints['componentClass'][] = $class;
-                }
-            }
-        }
-        if (isset($constraints['hasEditComponents'])) {
-            if (isset($childConstraints['componentClass'])) {
-                throw new Vps_Exception("Constraint 'hasEditComponents' may not (yet) be used with 'componentClass'");
-            }
-            $childConstraints['componentClass'] = array();
-            $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass);
-            foreach ($classes as $class) {
-                if ($class && $this->_hasChildSetting($class, 'editComponents')) {
-                    $childConstraints['componentClass'][] = $class;
-                }
-            }
-        }
-        if (isset($constraints['flags'])) {
-            if (!is_array($constraints['flags'])) {
-                throw new Vps_Exception("Constraint 'flags' must be of type array");
-            }
-            if (isset($childConstraints['componentClass'])) {
-                throw new Vps_Exception("Constraint 'flags' may not (yet) be used with 'componentClass'");
-            }
-            $childConstraints['componentClass'] = array();
-            $classes = Vpc_Abstract::getChildComponentClasses($this->componentClass, $constraints);
-            foreach ($classes as $class) {
-                if ($class && $this->_hasChildFlags($class, $constraints)) {
-                    $childConstraints['componentClass'][] = $class;
-                }
-            }
-        }
-        if (isset($constraints['inherit'])) {
-            $childConstraints['componentClass'] = array();
-            $components = array();
-            $generators = Vpc_Abstract::getSetting($this->componentClass, 'generators');
-            foreach ($generators as $generator) {
-                if (isset($generator['inherit']) && $generator['inherit']) {
-                    $components = $generator['component'];
-                    if (!is_array($components)) $components = array($generator['component']);
-                }
-            }
-            while (!empty($components)) {
-                $childComponents = array();
-                foreach ($components as $component) {
-                    $generators = Vpc_Abstract::getSetting($component, 'generators');
-                    foreach ($generators as $generator) {
-                        if (isset($generator['inherit']) && $generator['inherit']) {
-                            $c = $generator['component'];
-                            if (!is_array($c)) $c = array($generator['component']);
-                            $childConstraints['componentClass'] = array_merge(
-                                $childConstraints['componentClass'], $c
-                            );
-                            $childComponents = array_merge($childComponents, $c);
-                        }
-                    }
-                }
-                $components = $childComponents;
-            }
-        }
-        return $childConstraints;
+        $childSelect->whereComponentClasses(
+            Vpc_Abstract::getRecursiveChildComponentClasses($this->componentClass, $select)
+        );
+        return $childSelect;
     }
 
-    public function getRecursiveChildComponents(array $constraints,
-                                array $childConstraints = array('page'=>false))
+    public function getRecursiveChildComponents($select,
+                                $childSelect = array('page'=>false))
     {
-        $ret = $this->getChildComponents($constraints);
-        foreach ($this->getChildComponents($this->_formatChildConstraints($constraints, $childConstraints)) as $component) {
-            $ret = array_merge($ret, $component->getRecursiveChildComponents($constraints, $childConstraints));
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        if (is_array($childSelect)) {
+            $childSelect = new Vps_Component_Select($childSelect);
+        }
+        $ret = $this->getChildComponents($select);
+        foreach ($this->getChildComponents($this->_formatChildConstraints($select, $childSelect)) as $component) {
+            $ret = array_merge($ret, $component->getRecursiveChildComponents($select, $childSelect));
         }
         return $ret;
     }
@@ -243,7 +187,7 @@ class Vps_Component_Data
 
             if ($select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES) === array()) {
                 $select->setCheckProcessed($checkProcessed);
-                $select->checkAndResetProcessed();
+                //kein checkAndResetProcessed() da nicht alle berücksichtigt werden müssen
                 return $this->_constraintsCache[$sc]; //vorzeitig abbrechen, da kommt sicher kein ergebnis
             }
 
@@ -254,6 +198,7 @@ class Vps_Component_Data
             }
 
             foreach ($generators as $generator) {
+
                 $generatorSelect = clone $select;
                 if (isset($limitCount)) {
                     $generatorSelect->limit($limitCount - count($this->_constraintsCache[$sc]));
@@ -284,7 +229,10 @@ class Vps_Component_Data
 
                 $generatorSelect->setCheckProcessed($checkProcessed);
                 if ($generatorSelect->getUnprocessedParts()) {
-                    d(get_class($generator). ' '.implode(', ', array_keys($generatorSelect->getUnprocessedParts())));
+                    p($this->componentId);
+                    p($select);
+                    p(get_class($generator));
+                    p($generatorSelect);
                 }
                 $generatorSelect->checkAndResetProcessed();
             }
@@ -308,28 +256,48 @@ class Vps_Component_Data
         return $ret;
     }
 */
-    public function getChildPages(array $constraints = array())
+    public function getChildPages($select = array())
     {
-        $constraints['page'] = true;
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        } else {
+            $select = clone $select;
+        }
+        $select->wherePage(true);
+        return $this->getRecursiveChildComponents($select);
+    }
+
+    public function getChildPseudoPages(array $select = array())
+    {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        } else {
+            $select = clone $select;
+        }
+        $select->wherePseudoPage(true);
         return $this->getRecursiveChildComponents($constraints);
     }
 
-    public function getChildPseudoPages(array $constraints = array())
+    public function getChildBoxes(array $select = array())
     {
-        $constraints['pseudoPage'] = true;
-        return $this->getRecursiveChildComponents($constraints);
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        } else {
+            $select = clone $select;
+        }
+        $select->whereBox(true);
+        return $this->getRecursiveChildComponents($select);
     }
 
-    public function getChildBoxes(array $constraints = array())
+    public function getChildMultiBoxes(array $select = array())
     {
-        $constraints['box'] = true;
-        return $this->getRecursiveChildComponents($constraints);
-    }
-
-    public function getChildMultiBoxes(array $constraints = array())
-    {
-        $constraints['multiBox'] = true;
-        return $this->getRecursiveChildComponents($constraints);
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        } else {
+            $select = clone $select;
+        }
+        $select->whereMultiBox(true);
+        return $this->getRecursiveChildComponents($select);
     }
 
     private function _hasGenerator($componentClass, $interface)
@@ -433,16 +401,22 @@ class Vps_Component_Data
         return $this->getComponent()->hasContent();
     }
 
-    public function getChildPage($constraints = array())
+    public function getChildPage($select = array())
     {
-        $constraints['limit'] = 1;
-        return array_shift($this->getChildPages($constraints));
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        $select->limit(1);
+        return current($this->getChildPages($select));
     }
 
-    public function getChildPseudoPage($constraints = array())
+    public function getChildPseudoPage($select = array())
     {
-        $constraints['limit'] = 1;
-        return array_shift($this->getChildPseudoPages($constraints));
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        $select->limit(1);
+        return current($this->getChildPseudoPages($select));
     }
 
     public function getGenerator($key)

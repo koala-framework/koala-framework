@@ -27,15 +27,20 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
             $select = new Vps_Component_Select($select);
         }
         $ret = array();
-        if ($select->getCheckProcessed()) {
+        if ($checkProcessed = $select->getCheckProcessed()) {
             $select->resetProcessed();
             $select->setCheckProcessed(false);
         }
         $generators = Vps_Component_Generator_Abstract::getInstances($class, $select);
+        if (!$generators) {
+            //kein checkAndResetProcessed
+            $select->setCheckProcessed($checkProcessed);
+            return $ret;
+        }
         foreach ($generators as $generator) {
             $ret = array_merge($ret, $generator->getChildComponentClasses($select));
         }
-        $select->setCheckProcessed(true);
+        $select->setCheckProcessed($checkProcessed);
         $select->checkAndResetProcessed();
         return array_unique($ret);
     }
@@ -46,10 +51,10 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
             $select = new Vps_Component_Select($select);
         }
         $cacheId = serialize($select->getParts());
-        return self::_getRecursiveChildComponentClasses($class, $select, $cacheId);
+        return array_unique(self::_getRecursiveChildComponentClasses($class, $select, $cacheId));
     }
 
-    private static function _getRecursiveChildComponentClasses($class, $constraints, $cacheId)
+    private static function _getRecursiveChildComponentClasses($class, $select, $cacheId)
     {
         static $ccc = array();
         if (isset($ccc[$class.$cacheId])) {
@@ -57,12 +62,17 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         }
 
         $childConstraints = array('page' => false);
-        $ccc[$class.$cacheId] = Vpc_Abstract::getChildComponentClasses($class, $constraints);
+
+        $childComponentClassesSelect = clone $select;
+        $childComponentClassesSelect->unsetPart(Vps_Component_Select::SKIP_INHERIT);
+        $childComponentClassesSelect->unsetPart(Vps_Component_Select::SKIP_ROOT);
+        $ccc[$class.$cacheId] = Vpc_Abstract::getChildComponentClasses($class, $childComponentClassesSelect);
         foreach (Vpc_Abstract::getChildComponentClasses($class, $childConstraints) as $childClass) {
-            $ccc[$class.$cacheId] = array_merge(
-                $ccc[$class.$cacheId], 
-                Vpc_Abstract::_getRecursiveChildComponentClasses($childClass, $constraints, $cacheId)
-            );
+            $classes = Vpc_Abstract::_getRecursiveChildComponentClasses($childClass, $select, $cacheId);
+            if ($classes) {
+                $ccc[$class.$cacheId][] = $childClass;
+            }
+            $ccc[$class.$cacheId] = array_merge($ccc[$class.$cacheId], $classes);
         }
         return array_unique($ccc[$class.$cacheId]);
     }
