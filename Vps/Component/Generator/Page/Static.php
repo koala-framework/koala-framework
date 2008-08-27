@@ -5,31 +5,17 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
     protected $_showInMenu = false;
     protected $_idSeparator = '_';
 
-    protected function _formatConstraints($parentData, $constraints)
+    protected function _formatSelectFilename(Vps_Component_Select $select)
     {
-        $filename = isset($constraints['filename']) ? $constraints['filename'] : null;
-        if (isset($constraints['showInMenu'])) {
-            $showInMenu = $constraints['showInMenu'];
-            if ($constraints['showInMenu'] && !$this->_showInMenu) return null;
-            if (!$constraints['showInMenu'] && $this->_showInMenu) return null;
-            unset($constraints['showInMenu']);
-        }
-        $constraints = parent::_formatConstraints($parentData, $constraints);
-        if ($filename) { $constraints['filename'] = $filename; }
-        if (isset($showInMenu)) { $constraints['showInMenu'] = $showInMenu; }
-        return $constraints;
+        return $select;
     }
 
-    protected function _acceptKey($key, $constraints, $parentData)
+    protected function _acceptKey($key, $select, $parentData)
     {
-        $ret = parent::_acceptKey($key, $constraints, $parentData);
-        if ($ret) {
-            $c = $this->_settings;
-            if (isset($constraints['filename']) &&
-                $constraints['filename'] != $this->_getFilenameFromRow($key)
-            ) {
-                $ret = false;
-            }
+        $ret = parent::_acceptKey($key, $select, $parentData);
+        if ($ret && $select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
+            $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
+            if ($filename != $this->_getFilenameFromRow($key)) return false;
         }
         return $ret;
     }

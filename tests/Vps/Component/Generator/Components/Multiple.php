@@ -23,14 +23,19 @@ class Vps_Component_Generator_Components_Multiple extends Vpc_Abstract
                 'empty' => 'Vpc_Basic_Empty_Component',
                 'flag' => 'Vps_Component_Generator_Components_Flag'
             ),
-            'model' => 'Vps_Model_FnF',
-            'selectClass' => 'Vps_Db_Table_Select_TestGenerator'
+            'nameColumn' => 'name',
+            'model' => new Vps_Model_FnF(
+                array('data' => array(
+                        array('id' => 1, 'name' => 'test1', 'component' => 'empty'),
+                        array('id' => 2, 'name' => 'test2', 'component' => 'flag')
+                    )
+                )
+            ),
         );
         $ret['generators']['pseudoPageTable'] = array(
             'class' => 'Vps_Component_Generator_PseudoPage_Table',
             'component' => 'Vpc_Basic_Empty_Component',
             'model' => 'Vps_Model_FnF',
-            'selectClass' => 'Vps_Db_Table_Select_TestGenerator',
             'inherit' => true
         );
         $ret['generators']['static'] = array(
@@ -43,7 +48,6 @@ class Vps_Component_Generator_Components_Multiple extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Table',
             'component' => 'Vpc_Basic_Empty_Component',
             'model' => 'Vps_Model_FnF',
-            'selectClass' => 'Vps_Db_Table_Select_TestGenerator'
         );
         $ret['plugins'] = array(
             'Vps_Component_Generator_Components_Plugin'

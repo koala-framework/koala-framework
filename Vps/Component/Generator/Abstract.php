@@ -21,7 +21,11 @@ abstract class Vps_Component_Generator_Abstract
     protected function _init()
     {
         if (isset($this->_settings['model'])) {
-            $this->_model = new $this->_settings['model']();
+            if (is_string($this->_settings['model'])) {
+                $this->_model = new $this->_settings['model']();
+            } else {
+                $this->_model = $this->_settings['model'];
+            }
         } else {
             if (isset($this->_settings['table'])) {
                 if (is_string($this->_settings['table'])) {
@@ -69,62 +73,60 @@ abstract class Vps_Component_Generator_Abstract
         return $instances[$instanceKey];
     }
     
-    private static function _getGeneratorsForComponent($componentClass, $constraints)
+    private static function _getGeneratorsForComponent($componentClass, $select)
     {
         $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
         $ret = array();
         foreach ($generators as $key => $generator) {
-            if (isset($constraints['generator']) && $key != $constraints['generator']) {
-                continue;
+            if ($value = $select->getPart(Vps_Component_Select::WHERE_GENERATOR)) {
+                if ($value != $key) {
+                    continue;
+                }
             }
             if (!isset($generator['class'])) {
                 throw new Vps_Exception("Generator class for '$key' ($componentClass) is not set.");
             }
-            if (isset($constraints['page'])) {
-                if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page_Interface')) {
-                    if (!$constraints['page']) continue;
-                } else {
-                    if ($constraints['page']) continue;
+            $interfaces = array(
+                Vps_Component_Select::WHERE_PAGE => 'Vps_Component_Generator_Page_Interface',
+                Vps_Component_Select::WHERE_PSEUDO_PAGE => 'Vps_Component_Generator_PseudoPage_Interface',
+                Vps_Component_Select::WHERE_BOX => 'Vps_Component_Generator_Box_Interface',
+                Vps_Component_Select::WHERE_MULTI_BOX => 'Vps_Component_Generator_MultiBox_Interface'
+            );
+            foreach ($interfaces as $part=>$interface) {
+                if ($select->hasPart($part)) {
+                    $value = $select->getPart($part);
+                    if (is_instance_of($generator['class'], $interface)) {
+                        if (!$value) continue 2;
+                    } else {
+                        if ($value) continue 2;
+                    }
                 }
             }
-            if (isset($constraints['pseudoPage'])) {
-                if (is_instance_of($generator['class'], 'Vps_Component_Generator_PseudoPage_Interface')) {
-                    if (!$constraints['pseudoPage']) continue;
-                } else {
-                    if ($constraints['pseudoPage']) continue;
-                }
-            }
-            if (isset($constraints['box'])) {
-                if (is_instance_of($generator['class'], 'Vps_Component_Generator_Box_Interface')) {
-                    if (!$constraints['box']) continue;
-                } else {
-                    if ($constraints['box']) continue;
-                }
-            }
-            if (isset($constraints['multiBox'])) {
-                if (is_instance_of($generator['class'], 'Vps_Component_Generator_MultiBox_Interface')) {
-                    if (!$constraints['multiBox']) continue;
-                } else {
-                    if ($constraints['multiBox']) continue;
-                }
-            }
-            if (isset($constraints['unique'])) {
-                if ($constraints['unique']) {
-                    $constraints['inherit'] = true;
-                }
+            if ($select->hasPart(Vps_Component_Select::WHERE_UNIQUE)) {
+                $value = $select->getPart(Vps_Component_Select::WHERE_UNIQUE);
                 if (isset($generator['unique']) && $generator['unique']) {
-                    if (!$constraints['unique']) continue;
+                    if (!$value) continue;
                 } else {
-                    if ($constraints['unique']) continue;
+                    if ($value) continue;
                 }
             }
-            if (isset($constraints['inherit']) && $constraints['inherit'] && 
-                (!isset($generator['inherit']) || !$generator['inherit']))
-            {
-                continue;
+            if ($select->hasPart(Vps_Component_Select::WHERE_INHERIT)) {
+                $value = $select->getPart(Vps_Component_Select::WHERE_INHERIT);
+                if (isset($generator['inherit']) && $generator['inherit']) {
+                    if (!$value) continue;
+                } else {
+                    if ($value) continue;
+                }
             }
-            if (isset($constraints['hasEditComponents']) && $constraints['hasEditComponents'])
-            {
+            if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
+                $value = $select->getPart(Vps_Component_Select::WHERE_SHOW_IN_MENU);
+                if (isset($generator['showInMenu']) && $generator['showInMenu']) {
+                    if (!$value) continue;
+                } else {
+                    if ($value) continue;
+                }
+            }
+            if ($select->getPart(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS)) {
                 if (!Vpc_Abstract::hasSetting($componentClass, 'editComponents')) {
                     continue;
                 }
@@ -135,6 +137,16 @@ abstract class Vps_Component_Generator_Abstract
             }
             $ret[] = self::getInstance($componentClass, $key);
         }
+        $select->processed(Vps_Component_Select::WHERE_GENERATOR);
+        $select->processed(Vps_Component_Select::WHERE_PAGE);
+        $select->processed(Vps_Component_Select::WHERE_PSEUDO_PAGE);
+        $select->processed(Vps_Component_Select::WHERE_BOX);
+        $select->processed(Vps_Component_Select::WHERE_MULTI_BOX);
+        $select->processed(Vps_Component_Select::WHERE_UNIQUE);
+        $select->processed(Vps_Component_Select::WHERE_INHERIT);
+        $select->processed(Vps_Component_Select::WHERE_SHOW_IN_MENU);
+        $select->processed(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS);
+
         return $ret;
     }
 
@@ -143,87 +155,111 @@ abstract class Vps_Component_Generator_Abstract
      * ist abhängig davon ob es eine Page ist (daher $parentData)
      * und man kann auch constraints übergeben (zB um nur page generators zu bekommen)
      **/
-    public static function getInstances($component, $constraints = array())
+    public static function getInstances($component, $select = array())
     {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+
+        if ($select->getCheckProcessed()) {
+            $select->resetProcessed();
+        }
+
         if ($component instanceof Vps_Component_Data) {
             $componentClass = $component->componentClass;
         } else {
             $componentClass = $component;
             $component = null;
         }
-        $ret = self::_getGeneratorsForComponent($componentClass, $constraints);
+        $ret = self::_getGeneratorsForComponent($componentClass, $select);
         
         if ($component && $component->isPage) {
             
-            if (!isset($constraints['generator']) &&
-                (!isset($constraints['page']) || !$constraints['page']) &&
-                (!isset($constraints['skipInherit']) || !$constraints['skipInherit']))
+            if (!$select->getPart(Vps_Component_Select::WHERE_GENERATOR) &&
+                !$select->getPart(Vps_Component_Select::WHERE_PAGE) &&
+                !$select->getPart(Vps_Component_Select::SKIP_INHERIT))
             {
-                $inheritConstraints = $constraints;
-                $inheritConstraints['skipInherit'] = true;
-                $inheritConstraints['inherit'] = true;
+                $inheritSelect = clone $select;
+                $inheritSelect->skipInherit();
+                $inheritSelect->whereInherit();
                 $page = $component;
                 while ($page) { // Aktuelle inkl. aller Überseiten durchlaufen
                     if ($page->componentId == $component->componentId) {
-                        $generators = $component->getGenerators($inheritConstraints);
+                        $generators = $component->getGenerators($inheritSelect);
                     } else {
-                        $generators = $page->getRecursiveGenerators($inheritConstraints);
+                        $generators = $page->getRecursiveGenerators($inheritSelect);
                     }
-                    $ret = array_merge($ret, $generators);                    
+                    $ret = array_merge($ret, $generators);
                     $parent = $page->getParentPage();
                     if (!$parent) { $parent = $page->parent; }
                     $page = $parent;
                 }
             }
-            
-            if ((!isset($constraints['skipRoot']) || !$constraints['skipRoot'])
+            $select->processed(Vps_Component_Select::SKIP_INHERIT);
+
+            if (!$select->skipRoot()
                 && ($component instanceof Vps_Component_Data_Root || is_numeric($component->componentId))
             ) {
+                $rootSelect = clone $select;
+                $rootSelect->wherePage();
                 $ret = array_merge($ret, self::_getGeneratorsForComponent(
-                    Vps_Registry::get('config')->vpc->rootComponent, array_merge(array('generator' => 'page'), $constraints)
+                    Vps_Registry::get('config')->vpc->rootComponent, $rootSelect
                 ));
             }
-            
+            $select->processed(Vps_Component_Select::SKIP_ROOT);
         }
         
         foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
-            $generators = self::_getGeneratorsForComponent($pluginClass, $constraints);
+            $generators = self::_getGeneratorsForComponent($pluginClass, $select);
             $ret = array_merge($ret, $generators);
         }
+        $select->checkAndResetProcessed();
         return $ret;
     }
     
-    public function getChildComponentClasses($constraints = array())
+    public function getChildComponentClasses($select = array())
     {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+
+        $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+        $select->processed(Vps_Component_Select::WHERE_FLAGS);
+        $select->processed(Vps_Component_Select::WHERE_COMPONENT_KEY);
+
         $ret = $this->_settings['component'];
         if (!is_array($ret)) $ret = array($ret);
-        
-        if (isset($constraints['flags'])) {
+
+        if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS)) {
+            $flags = $select->getPart(Vps_Component_Select::WHERE_FLAGS);
             foreach ($ret as $k=>$c) {
-                foreach ($constraints['flags'] as $f=>$v) {
+                foreach ($flags as $f=>$v) {
                     if (Vpc_Abstract::getFlag($c, $f) != $v) {
                         unset($ret[$k]);
                     }
                 }
             }
         }
-        
-        if (isset($constraints['componentKey'])) {
-            if (isset($ret[$constraints['componentKey']])) {
-                $ret = array($ret[$constraints['componentKey']]);
+
+        if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)) {
+            $componentKey = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_KEY);
+            if (isset($ret[$componentKey])) {
+                $ret = array($ret[$componentKey]);
             } else {
                 return array();
             }
         }
-                
-        if (isset($constraints['componentClasses'])) {
+
+        if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+            $componentKey = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
             foreach ($ret as $k => $r) {
                 if (in_array($r, $constraints['componentClasses'])) {
                     unset($ret[$k]);
                 }
             }
         }
-                
+
+        $select->checkAndResetProcessed();
         return array_unique(array_values($ret));
     }
     
@@ -243,12 +279,7 @@ abstract class Vps_Component_Generator_Abstract
         return null;
     }
     
-    public function getChildData($parentData, $constraints)
-    {
-        return array();
-    }
-
-    public function getChildIds($parentData, $constraints)
+    public function getChildData($parentData, $select)
     {
         return array();
     }
@@ -262,17 +293,45 @@ abstract class Vps_Component_Generator_Abstract
         return $c[$key];
     }
 
-    protected function _formatConstraints($parentData, $constraints)
+    protected function _formatSelectFilename(Vps_Component_Select $select)
     {
-        if (isset($constraints['flags']) || isset($constraints['componentKey'])) {
-            $constraints['componentClass'] = 
-                Vpc_Abstract::getChildComponentClasses($parentData->componentClass, $constraints);
-            if (empty($constraints['componentClass'])) return null;
+        if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
+            $select->processed(Vps_Component_Select::WHERE_FILENAME);
+            return null;
         }
-        return $constraints;
+        if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
+            $select->processed(Vps_Component_Select::WHERE_SHOW_IN_MENU);
+            return null;
+        }
+        return $select;
     }
 
-    protected function _createData($parentData, $row, $constraints)
+    protected function _formatSelect($parentData, $select)
+    {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        $select->processed(Vps_Component_Select::WHERE_FLAGS);
+        $select->processed(Vps_Component_Select::WHERE_COMPONENT_KEY);
+
+        $select = $this->_formatSelectFilename($select);
+        if (is_null($select)) return null;
+
+        if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS) || $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)) {
+            $classesSelect = clone $select;
+            $classesSelect->setCheckProcessed(false);
+            $classes = Vpc_Abstract::getChildComponentClasses($parentData->componentClass, $classesSelect);
+            $select->whereComponentClasses($classes);
+            if ($select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES) === array()) {
+                $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+                return null;
+            }
+
+        }
+        return $select;
+    }
+
+    protected function _createData($parentData, $row, $select)
     {
         $id = $this->_getIdFromRow($row);
         if (!isset($this->_dataCache[$parentData->componentId][$id])) {

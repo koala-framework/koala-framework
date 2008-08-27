@@ -26,6 +26,11 @@ class Vps_Model_Db implements Vps_Model_Interface
         }
     }
 
+    public function getColumns()
+    {
+        return $this->_table->info(Zend_Db_Table_Abstract::COLS);
+    }
+
     public function createRow(array $data=array())
     {
         $data = array_merge($this->_default, $data);
@@ -46,8 +51,66 @@ class Vps_Model_Db implements Vps_Model_Interface
 
     public function fetchAll($where=null, $order=null, $limit=null, $start=null)
     {
+        if (!is_object($where)) {
+            $select = $this->select();
+            if ($where) $select->where($where);
+            if ($order) $select->order($order);
+            if ($limit || $start) $select->limit($limit, $start);
+        } else {
+            $select = $where;
+        }
+
+        if ($select->getCheckProcessed()) {
+            $select->resetProcessed();
+        }
+
+        $dbSelect = $this->_table->select();
+        if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
+            $dbSelect->order($order);
+            $select->processed(Vps_Model_Select::ORDER);
+        }
+        if ($whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
+            foreach ($whereEquals as $field=>$value) {
+                if (is_array($value)) {
+                    foreach ($value as &$v) {
+                        $v = $this->getAdapter()->quote($v);
+                    }
+                    $value = implode(', ', $value);
+                    $dbSelect->where("$field IN ($value)");
+                } else {
+                    $dbSelect->where("$field = ?", $value);
+                }
+            }
+            $select->processed(Vps_Model_Select::WHERE_EQUALS);
+        }
+        if ($where = $select->getPart(Vps_Model_Select::WHERE)) {
+            foreach ($where as $w) {
+                $dbSelect->where($w[0], $w[1], $w[2]);
+            }
+            $select->processed(Vps_Model_Select::WHERE);
+        }
+
+        if ($whereId = $select->getPart(Vps_Model_Select::WHERE_ID)) {
+            $dbSelect->where($this->getPrimaryKey()." = ?", $whereId);
+            $select->processed(Vps_Model_Select::WHERE_ID);
+        }
+
+        $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
+        $limitOffset = $select->getPart(Vps_Model_Select::LIMIT_OFFSET);
+        if ($limitCount || $limitOffset) {
+            $dbSelect->limit($limitCount, $limitOffset);
+            if ($limitCount) $select->processed(Vps_Model_Select::LIMIT_COUNT);
+            if ($limitOffset) $select->processed(Vps_Model_Select::LIMIT_OFFSET);
+        }
+        if ($other = $select->getPart(Vps_Model_Select::OTHER)) {
+            foreach ($other as $i) {
+                call_user_func_array(array($dbSelect, $i['method']), $i['arguments']);
+            }
+            $select->processed(Vps_Model_Select::OTHER);
+        }
+        $select->checkAndResetProcessed();
         return new $this->_rowsetClass(array(
-            'rowset' => $this->_table->fetchAll($where, $order, $limit, $start),
+            'rowset' => $this->_table->fetchAll($dbSelect),
             'rowClass' => $this->_rowClass,
             'model' => $this
         ));
@@ -72,8 +135,7 @@ class Vps_Model_Db implements Vps_Model_Interface
 
     public function getPrimaryKey()
     {
-        $info = $this->_table->info();
-        $ret = $info['primary'];
+        $ret = $this->_table->info('primary');
         if (sizeof($ret) == 1) {
             $ret = array_values($ret);
             $ret = $ret[0];
@@ -101,4 +163,8 @@ class Vps_Model_Db implements Vps_Model_Interface
         return false;
     }
 
+    public function select()
+    {
+        return new Vps_Model_Select();
+    }
 }

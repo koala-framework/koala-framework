@@ -33,13 +33,16 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             if ($row->is_home) $this->_pageHome = $row->id;
         }
     }
-    
-    public function getChildIds($parentData, $constraints)
+
+    protected function _formatSelectFilename(Vps_Component_Select $select)
     {
-        $ret = Vps_Component_Generator_Abstract::getChildIds($parentData, $constraints);
-        $constraints = Vps_Component_Generator_Abstract::_formatConstraints($parentData, $constraints);
-        if (is_null($constraints)) return $ret;
-        if (isset($constraints['page']) && !$constraints['page']) return $ret;
+        return $select;
+    }
+
+    public function getChildData($parentData, $select)
+    {
+        $select = $this->_formatSelect($parentData, $select);
+        if (is_null($select)) return array();
 
         if ($parentData instanceof Vps_Component_Data_Root) {
             $parentId = 0;
@@ -48,45 +51,29 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         }
         $pageIds = array();
 
-        if (isset($constraints['id'])) {
-            if (isset($constraints['home']) || isset($constraints['filename']) || isset($constraints['componentClass'])) {
-                throw new Vps_Exception("Can't use contraint home, filename or componentClass together with id");
+        if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
+            if (isset($this->_pageData[$id])) {
+                $pageIds[] = $id;
             }
-            if (isset($this->_pageData[$constraints['id']])) {
-                $pageIds[] = $constraints['id'];
-            }
-        } else if (isset($constraints['home']) && $constraints['home']) {
-            if (isset($constraints['filename']) || isset($constraints['componentClass'])) {
-                throw new Vps_Exception("Can't use contraint filename or componentClass together with home");
-            }
+            $select->processed(Vps_Component_Select::WHERE_ID);
+        } else if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
             if ($this->_pageHome) {
                 $pageIds[] = $this->_pageHome;
             }
-        } else if (isset($constraints['filename'])) {
-            if (isset($constraints['componentClass'])) {
-                throw new Vps_Exception("Can't use contraint filename and componentClass together");
+            $select->processed(Vps_Component_Select::WHERE_HOME);
+        } else if ($parentId && $select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
+            $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
+            if (isset($this->_pageFilename[$parentId][$filename])) {
+                $pageIds[] = $this->_pageFilename[$parentId][$filename];
             }
-            if (!isset($parentId)) {
-                throw new Vps_Exception("filename contraint only works with parentData");
-            }
-            if (!isset($this->_pageFilename[$parentId][$constraints['filename']])) {
-                return $ret;
-            }
-            $pageIds[] = $this->_pageFilename[$parentId][$constraints['filename']];
-        } else if (isset($constraints['componentClass'])) {
-            $constraintClasses = $constraints['componentClass'];
-            if (!is_array($constraintClasses)) {
-                $constraintClasses = array($constraintClasses);
-            }
-            if (!$constraintClasses) return $ret;
-            $childClasses = $this->_settings['component'];
+            $select->processed(Vps_Component_Select::WHERE_FILENAME);
+        } else if ($parentId && $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+            $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
             $keys = array();
-            foreach ($constraintClasses as $constraintClass) {
-                $key = array_search($constraintClass, $childClasses);
+            foreach ($selectClasses as $selectClass) {
+                $key = array_search($selectClass, $this->_settings['component']);
                 if ($key) $keys[] = $key;
             }
-            if (!$keys) return $ret;
-
             foreach ($keys as $key) {
                 if (isset($parentId) && isset($this->_pageComponentParent[$parentId][$key])) {
                     $pageIds = array_merge($pageIds, $this->_pageComponentParent[$parentId][$key]);
@@ -95,48 +82,46 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
                     $pageIds = array_merge($pageIds, $this->_pageComponent[$key]);
                 }
             }
+            $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
         } else {
-            if (isset($parentId) && isset($this->_pageChilds[$parentId])) {
-                $pageIds = $this->_pageChilds[$parentId];
-            }
             if (!isset($parentId)) {
                 throw new Vps_Exception("This would return all pages. You don't want this.");
-                $pageIds = array_keys($this->_pageData);
+            }
+            if (isset($this->_pageChilds[$parentId])) {
+                $pageIds = $this->_pageChilds[$parentId];
             }
         }
+
+        $ret = array();
         foreach ($pageIds as $pageId) {
             $page = $this->_pageData[$pageId];
-            if (isset($constraints['type']) && $constraints['type'] != $page['type']) {
-                continue;
+            if ($select->hasPart(Vps_Component_Select::WHERE_TYPE)) {
+                $type = $select->getPart(Vps_Component_Select::WHERE_TYPE);
+                if ($type != $page['type']) continue;
+                $select->processed(Vps_Component_Select::WHERE_TYPE);
             }
-            if (isset($constraints['showInMenu']) && $constraints['showInMenu'] == $page['hide']) {
-                continue;
+            if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
+                $menu = $select->getPart(Vps_Component_Select::WHERE_SHOW_IN_MENU);
+                if ($menu == $page['hide']) continue;
             }
-            if (!$this->_pageData[$pageId]['visible']) {
-                if (!Vps_Registry::get('config')->showInvisible && (!isset($constraints['ignoreVisible']) || !$constraints['ignoreVisible']))
-                {
-                    continue;
-                }
+            if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+                $select->processed(Vps_Component_Select::IGNORE_VISIBLE);
+            } else if (!Vps_Registry::get('config')->showInvisible) {
+                if (!$this->_pageData[$pageId]['visible']) continue;
             }
 
-            $ret[] = $page['id'];
-
-            if (isset($constraints['limit']) && count($ret) >= $constraints['limit']) break;
-        }
-        return $ret;
-    }
-
-    public function getChildData($parentData, $constraints)
-    {
-        $ret = parent::getChildData($parentData, $constraints);
-        foreach ($this->getChildIds($parentData, $constraints) as $id) {
-            $d = $this->_createData($parentData, $id, $constraints);
+            $d = $this->_createData($parentData, $pageId, $select);
             if ($d) $ret[] = $d;
+
+            if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
+                if (count($ret) >= $select->getPart(Vps_Model_Select::LIMIT_COUNT)) break;
+            }
         }
+        $select->processed(Vps_Model_Select::LIMIT_COUNT);
         return $ret;
     }
     
-    protected function _createData($parentData, $id, $constraints)
+    protected function _createData($parentData, $id, $select)
     {
         $page = $this->_pageData[$id];
         if (!$parentData || (($parentData instanceof Vps_Component_Data_Root) && $page['parent_id'])) {
@@ -144,8 +129,8 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
                 $parentData = Vps_Component_Data_Root::getInstance();
             } else {
                 $c = array();
-                if (isset($constraints['ignoreVisible'])) {
-                    $c['ignoreVisible'] = $constraints['ignoreVisible'];
+                if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+                    $c['ignoreVisible'] = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
                 }
                 $c['type'] = $page['type'];
                 $parentData = Vps_Component_Data_Root::getInstance()
@@ -155,7 +140,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
                 }
             }
         }
-        return parent::_createData($parentData, $id, $constraints);
+        return parent::_createData($parentData, $id, $select);
     }
 
     protected function _formatConfig($parentData, $id)
@@ -171,7 +156,6 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         $data['componentClass'] = $this->_getChildComponentClass($page['component']);
         $data['row'] = (object)$page;
         $data['parent'] = $parentData;
-        $data['visible'] = $page['visible'];
         $data['isHome'] = $page['is_home'];
         $data['type'] = $page['type'];
         return $data;

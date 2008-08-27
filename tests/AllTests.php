@@ -1,24 +1,8 @@
 <?php
-error_reporting(E_ALL|E_STRICT);
 if (!defined('PHPUnit_MAIN_METHOD')) {
     define('PHPUnit_MAIN_METHOD', 'AllTests::main');
 }
-define('VPS_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR.'..');
-$include_path  = get_include_path();
-$include_path .= PATH_SEPARATOR . VPS_PATH;
-set_include_path($include_path);
-require_once 'Vps/Loader.php';
-require_once 'Vps/Setup.php';
-Vps_Loader::registerAutoload();
-date_default_timezone_set('Europe/Berlin');
-
-Zend_Registry::setClassName('Vps_Registry');
-
-require_once 'TestConfiguration.php';
-
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
-require_once 'PHPUnit/Extensions/ExceptionTestCase.php';
+require_once 'bootstrap.php';
 
 class AllTests
 {
@@ -56,6 +40,7 @@ class AllTests
                 if (is_dir($entry)) {
                     $listarray = array_merge($listarray, self::dirlist($entry));
                 } else {
+                    if (substr($entry, -4) != '.php') continue;
                     $className = str_replace('.php', '', str_replace('/', '_', $entry));
                     if (is_instance_of($className, 'PHPUnit_Framework_TestCase')) {
                         $listarray[] = $entry;

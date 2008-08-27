@@ -18,26 +18,37 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         return $ret;
     }
     
-    public static function getChildComponentClasses($class, $constraints = array())
+    public static function getChildComponentClasses($class, $select = array())
     {
+        if (is_string($select)) {
+            $select = array('generator' => $select);
+        }
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
         $ret = array();
-        if (is_string($constraints)) {
-            $constraints = array('generator' => $constraints);
+        if ($select->getCheckProcessed()) {
+            $select->resetProcessed();
+            $select->setCheckProcessed(false);
         }
-        $generators = Vps_Component_Generator_Abstract::getInstances($class, $constraints);
+        $generators = Vps_Component_Generator_Abstract::getInstances($class, $select);
         foreach ($generators as $generator) {
-            $ret = array_merge($ret, $generator->getChildComponentClasses($constraints));
+            $ret = array_merge($ret, $generator->getChildComponentClasses($select));
         }
-
+        $select->setCheckProcessed(true);
+        $select->checkAndResetProcessed();
         return array_unique($ret);
     }
 
-    public static function getRecursiveChildComponentClasses($class, $constraints = array())
+    public static function getRecursiveChildComponentClasses($class, $select = array())
     {
-        $cacheId = serialize($constraints);
-        return self::_getRecursiveChildComponentClasses($class, $constraints, $cacheId);
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        $cacheId = serialize($select->getParts());
+        return self::_getRecursiveChildComponentClasses($class, $select, $cacheId);
     }
-    
+
     private static function _getRecursiveChildComponentClasses($class, $constraints, $cacheId)
     {
         static $ccc = array();
@@ -134,6 +145,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
     public function sendContent($decoratedPage)
     {
         if (isset($_GET['pdf']) && ($pdfClass = Vpc_Admin::getComponentFile(get_class($this), 'Pdf', 'php', true))) {
+            //TODO: bessere lösung für das!
             $masterClass = Vpc_Admin::getComponentFile(get_class($this), 'PdfMaster', 'php', true);
             if (!$masterClass) { $masterClass = 'Vps_Pdf_TcPdf'; }
             $pdf = new $masterClass($this);

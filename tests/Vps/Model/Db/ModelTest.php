@@ -1,0 +1,150 @@
+<?php
+class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
+{
+    private $_table;
+    private $_dbSelect;
+    private $_model;
+
+    public function setUp()
+    {
+        $this->_table = $this->getMock('Vps_Db_Table_Abstract',
+            array('select', '_setupMetadata', '_setupPrimaryKey', 'fetchAll', 'info'),
+            array('db' => new Vps_Model_Db_TestAdapter()), '', true);
+
+        $this->_dbSelect = $this->getMock('Vps_Db_Table_Select', array(), array(), '', false);
+        
+        $this->_table->expects($this->any())
+            ->method('select')
+            ->will($this->returnValue($this->_dbSelect));
+
+        $this->_table->expects($this->any())
+            ->method('info')
+            ->will($this->returnValue(array('id')));
+        $this->_model = new Vps_Model_Db(array(
+            'table' => $this->_table
+        ));
+    }
+
+    public function testFetchAll()
+    {
+        $this->_table->expects($this->once())
+                  ->method('fetchAll');
+        $this->_model->fetchAll();
+    }
+
+    public function testSelectWhereEquals()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('where')
+            ->with($this->equalTo('foo = ?'), $this->equalTo(1));
+        $select = $this->_model->select()
+                    ->whereEquals('foo', 1);
+        $this->_table->expects($this->once())
+                  ->method('fetchAll')
+                  ->with($this->equalTo($this->_dbSelect));
+        $this->_model->fetchAll($select);
+    }
+
+    public function testSelectWhereId()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('where')
+            ->with($this->equalTo('id = ?'), $this->equalTo(1));
+        $select = $this->_model->select()
+                    ->whereId(1);
+        $this->_table->expects($this->once())
+                  ->method('fetchAll')
+                  ->with($this->equalTo($this->_dbSelect));
+        $this->_model->fetchAll($select);
+    }
+
+    public function testSelectOrder()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('order')
+            ->with($this->equalTo('bar'));
+        $select = $this->_model->select()
+            ->order('bar');
+        $this->_table->expects($this->once())
+                  ->method('fetchAll')
+                  ->with($this->equalTo($this->_dbSelect));
+        $this->_model->fetchAll($select);
+    }
+
+    public function testSelectWhereEqualsArray1()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('where')
+            ->with($this->equalTo('id IN (1, 2)'));
+        $select = $this->_model->select()
+            ->whereEquals('id', array(1, 2));
+        $this->_table->expects($this->once())
+                  ->method('fetchAll')
+                  ->with($this->equalTo($this->_dbSelect));
+        $this->_model->fetchAll($select);
+    }
+
+    public function testSelectWhereEqualsArray2()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('where')
+            ->with($this->equalTo("foo IN ('str1', 'str2')"));
+        $select = $this->_model->select()
+            ->whereEquals('foo', array('str1', 'str2'));
+        $this->_model->fetchAll($select);
+    }
+
+    public function testSelectWhere()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('where')
+            ->with($this->equalTo("foo = ?"), $this->equalTo(1));
+        $select = $this->_model->select()
+            ->where('foo = ?', 1);
+        $this->_model->fetchAll($select);
+    }
+    public function testUnknownType()
+    {
+        $select = new Vps_Component_Select();
+        $select->wherePage(true);
+        while (1) {
+            try {
+                $this->_model->fetchAll($select);
+            } catch(Vps_Exception $e) {
+                break;
+            }
+            $this->fail('expected exception');
+        }
+    }
+
+    public function testJoin()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('join')
+            ->with($this->equalTo("foo"), $this->equalTo('foo.bar=blub.bar'));
+        $select = $this->_model->select()
+            ->join('foo', 'foo.bar=blub.bar');
+        $this->_model->fetchAll($select);
+    }
+
+    public function testWithoutSelect()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('where')
+            ->with($this->equalTo("foo = 'bar'"));
+
+        $this->_dbSelect->expects($this->once())
+            ->method('order')
+            ->with($this->equalTo('orderKey'));
+
+        $this->_dbSelect->expects($this->once())
+            ->method('limit')
+            ->with($this->equalTo(10), $this->equalTo(5));
+
+        $this->_table->expects($this->once())
+                  ->method('fetchAll')
+                  ->with($this->equalTo($this->_dbSelect));
+
+        $this->_model->fetchAll("foo = 'bar'", 'orderKey', 10, 5);
+    }
+}
