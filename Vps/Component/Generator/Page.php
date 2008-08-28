@@ -48,14 +48,12 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
     {
         $select = $this->_formatSelect($parentData, $select);
         if (is_null($select)) return array();
-
         if ($parentData instanceof Vps_Component_Data_Root) {
             $parentId = 0;
         } else if ($parentData) {
             $parentId = $parentData->componentId;
         }
         $pageIds = array();
-
         if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
             if (isset($this->_pageData[$id])) {
                 $pageIds[] = $id;
@@ -66,35 +64,36 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             if ($this->_pageHome) {
                 $pageIds[] = $this->_pageHome;
             }
-        } else if ($parentId && $select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
-            $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
-            if (isset($this->_pageFilename[$parentId][$filename])) {
-                $pageIds[] = $this->_pageFilename[$parentId][$filename];
-            }
-            $select->processed(Vps_Component_Select::WHERE_FILENAME);
-        } else if ($parentId && $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-            $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
-            $keys = array();
-            foreach ($selectClasses as $selectClass) {
-                $key = array_search($selectClass, $this->_settings['component']);
-                if ($key) $keys[] = $key;
-            }
-            foreach ($keys as $key) {
-                if (isset($parentId) && isset($this->_pageComponentParent[$parentId][$key])) {
-                    $pageIds = array_merge($pageIds, $this->_pageComponentParent[$parentId][$key]);
+        } else if (!is_null($parentId)) {
+            if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
+                $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
+                if (isset($this->_pageFilename[$parentId][$filename])) {
+                    $pageIds[] = $this->_pageFilename[$parentId][$filename];
                 }
-                if (!isset($parentId) && isset($this->_pageComponent[$key])) {
-                    $pageIds = array_merge($pageIds, $this->_pageComponent[$key]);
+                $select->processed(Vps_Component_Select::WHERE_FILENAME);
+            } else if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+                $keys = array();
+                foreach ($selectClasses as $selectClass) {
+                    $key = array_search($selectClass, $this->_settings['component']);
+                    if ($key) $keys[] = $key;
+                }
+                foreach ($keys as $key) {
+                    if (isset($parentId) && isset($this->_pageComponentParent[$parentId][$key])) {
+                        $pageIds = array_merge($pageIds, $this->_pageComponentParent[$parentId][$key]);
+                    }
+                    if (!isset($parentId) && isset($this->_pageComponent[$key])) {
+                        $pageIds = array_merge($pageIds, $this->_pageComponent[$key]);
+                    }
+                }
+                $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+            } else {
+                if (isset($this->_pageChilds[$parentId])) {
+                    $pageIds = $this->_pageChilds[$parentId];
                 }
             }
-            $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
         } else {
-            if (!isset($parentId)) {
-                throw new Vps_Exception("This would return all pages. You don't want this.");
-            }
-            if (isset($this->_pageChilds[$parentId])) {
-                $pageIds = $this->_pageChilds[$parentId];
-            }
+            throw new Vps_Exception("This would return all pages. You don't want this.");
         }
 
         $ret = array();

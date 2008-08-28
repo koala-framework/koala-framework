@@ -1,4 +1,4 @@
-.vpcPostsPost {
+.$cssClass {
     color: $reccomend;
     background: #fff;
     font-size: 11px;
@@ -8,34 +8,62 @@
     border: 1px solid #ccc;
     clear: both;
 }
-.vpcPostsPost div.postData div.postInfo {
+.$cssClass .postData {
+    overflow: hidden;
+}
+.$cssClass .postData .postInfo {
     background: #f3f2f1;
     padding: 3px 15px 5px 15px;
 }
-.vpcPostsPost div.postData div.user {
+.$cssClass .postData .user {
     float: right;
     padding-right: 10px;
     margin-right: 50px;
     position: relative;
     text-align: right;
 }
-.vpcPostsPost div.avatar {
+.$cssClass .avatar {
     float: right;
     margin-top: -3px;
     margin-right: -15px;
 }
-.vpcPostsPost div.comment {
+.$cssClass .comment {
     font-size: 12px;
     padding: 15px 20px;
     background: #fff;
 }
-.vpcPostsPost p.signature {
+.$cssClass p.signature {
     padding: 15px 20px;
 }
-.vpcPostsPost div.comment fieldset.quote {
+.$cssClass .comment fieldset.quote {
     background: #f3f2f1;
     border: 1px solid #ccc;
     font-style: italic;
     margin-top: 10px;
     padding: 10px;   
+}
+.$cssClass .emoticon_smile {
+    background-image: url(/assets/silkicons/emoticon_smile.png);
+    padding-right: 16px;
+    margin-right: 3px;
+}
+.$cssClass .emoticon_grin {
+    background-image: url(/assets/silkicons/emoticon_grin.png);
+    padding-right: 16px;
+    margin-right: 3px;
+}
+.$cssClass .emoticon_tongue {
+    background-image: url(/assets/silkicons/emoticon_tongue.png);
+    padding-right: 16px;
+    margin-right: 3px;
+}
+.$cssClass .emoticon_unhappy {
+    background-image: url(/assets/silkicons/emoticon_unhappy.png);
+    padding-right: 16px;
+    margin-right: 3px;
+}
+.$cssClass .emoticon_wink {
+    background-image: url(/assets/silkicons/emoticon_wink.png);
+    padding-right: 16px;
+    margin-right: 3px;
 }

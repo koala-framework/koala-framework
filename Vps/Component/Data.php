@@ -49,9 +49,10 @@ class Vps_Component_Data
                 'limit' => 1
             ));
             $rel = $this->getPage()->_rel;
+            /*
             if ($childs || $this->_hasFlags($this->componentClass, array('noIndex' => true))) {
                 $rel .= ' nofollow';
-            }
+            }*/
             return trim($rel);
         } else if ($var == 'filename') {
             return $this->getPseudoPage()->_filename;
@@ -149,42 +150,7 @@ class Vps_Component_Data
                 }
             }
         }
-        $classes = array_unique($classes);
-        /*
-
-        if ($this->isPage) {
-            $parent = $this;
-            while ($parent) {
-                if ($parent->parent instanceof Vps_Component_Data_Root) {
-                    $parent = $parent->parent;
-                } else {
-                    $parent = $parent->getParentPage();
-                }
-                if ($parent) {
-                    $inheritGenerators = $parent->getRecursiveGenerators(array('inherit' => true));
-                    foreach ($inheritGenerators as $ig) {
-                        $ccc = $ig->getRecursiveChildComponentClasses($select);
-                        $classes = array_merge($classes, $ccc);
-                    }
-                }
-            }
-        }
-
-        if ($this->isPage) {
-            $parent = $this;
-            while ($parent) {
-                if ($parent->parent instanceof Vps_Component_Data_Root) {
-                    $parent = $parent->parent;
-                } else {
-                    $parent = $parent->getParentPage();
-                }
-                if ($parent) {
-                    $classes = Vpc_Abstract::getRecursiveChildComponentClasses($parent->componentClass, $select);
-                }
-            }
-        }
-        */
-        $childSelect->whereComponentClasses($classes);
+        $childSelect->whereComponentClasses(array_unique($classes));
         return $childSelect;
     }
 
@@ -268,6 +234,7 @@ class Vps_Component_Data
                     if ($limitCount - count($this->_constraintsCache[$sc]) <= 0) {
                         break;
                     }
+                    $generatorSelect->processed(Vps_Component_Select::LIMIT_COUNT);
                 }
 
                 $generatorSelect->setCheckProcessed($checkProcessed);
@@ -293,7 +260,7 @@ class Vps_Component_Data
         return $this->getRecursiveChildComponents($select);
     }
 
-    public function getChildPseudoPages(array $select = array())
+    public function getChildPseudoPages($select = array())
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
@@ -301,10 +268,10 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->wherePseudoPage(true);
-        return $this->getRecursiveChildComponents($constraints);
+        return $this->getRecursiveChildComponents($select);
     }
 
-    public function getChildBoxes(array $select = array())
+    public function getChildBoxes($select = array())
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
@@ -315,7 +282,7 @@ class Vps_Component_Data
         return $this->getRecursiveChildComponents($select);
     }
 
-    public function getChildMultiBoxes(array $select = array())
+    public function getChildMultiBoxes($select = array())
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
@@ -324,97 +291,6 @@ class Vps_Component_Data
         }
         $select->whereMultiBox(true);
         return $this->getRecursiveChildComponents($select);
-    }
-
-    private function _hasGenerator($componentClass, $interface)
-    {
-        static $hasGenerator = array();
-        if (isset($hasGenerator[$interface][$componentClass])) {
-            return $hasGenerator[$interface][$componentClass];
-        }
-        $hasGenerator[$interface][$componentClass] = false;
-
-        $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
-        foreach ($generators as $key => $generator) {
-            if (!isset($generator['class'])) {
-                throw new Vps_Exception("Generator '$key' of component '$componentClass' doesn't have a class");
-            }
-            if (is_instance_of($generator['class'], $interface)) {
-                $hasGenerator[$interface][$componentClass] = true;
-                return true;
-            }
-            $classes = Vpc_Abstract::getChildComponentClasses($componentClass, $key);
-            foreach ($classes as $class) {
-                if ($class && $this->_hasGenerator($class, $interface)) {
-                    $hasGenerator[$interface][$componentClass] = true;
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private function _hasChildSetting($componentClass, $setting)
-    {
-        static $hasChildSetting = array();
-        if (isset($hasChildSetting[$setting][$componentClass])) {
-            return $hasChildSetting[$setting][$componentClass];
-        }
-        $hasChildSetting[$setting][$componentClass] = false;
-        foreach (Vpc_Abstract::getChildComponentClasses($componentClass) as $class) {
-            if ($class) {
-                if (Vpc_Abstract::hasSetting($class, $setting)
-                    && Vpc_Abstract::getSetting($class, $setting))
-                {
-                    $hasChildSetting[$setting][$componentClass] = true;
-                    return true;
-                }
-                if ($this->_hasChildSetting($class, $setting)) {
-                    $hasChildSetting[$setting][$componentClass] = true;
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private function _hasChildFlags($componentClass, array $constraints)
-    {
-        static $hasChildFlags = array();
-        $flags = isset($constraints['flags']) ? $constraints['flags'] : array();
-        $cacheKey = serialize($flags);
-        if (isset($hasChildFlags[$cacheKey][$componentClass])) {
-            return $hasChildFlags[$cacheKey][$componentClass];
-        }
-
-        if ($this->_hasFlags($componentClass, $flags)) {
-            $hasChildFlags[$cacheKey][$componentClass] = true;
-            return true;
-        } else {
-            $hasChildFlags[$cacheKey][$componentClass] = false;
-        }
-
-        foreach (Vpc_Abstract::getChildComponentClasses($componentClass, $constraints) as $class) {
-            if ($class) {
-                if ($this->_hasChildFlags($class, $constraints)) {
-                    $hasChildFlags[$cacheKey][$componentClass] = true;
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    protected function _hasFlags($class, array $flags)
-    {
-        $componentFlags = Vpc_Abstract::getSetting($class, 'flags');
-        foreach ($flags as $k => $c) {
-            if (!isset($componentFlags[$k])) $componentFlags[$k] = false;
-            if ($componentFlags[$k] != $c) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**

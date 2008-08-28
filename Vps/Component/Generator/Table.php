@@ -82,11 +82,20 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     {
         $select = parent::_formatSelect($parentData, $select);
         if (is_null($select)) return null;
+        $select->processed(Vps_Component_Select::IGNORE_VISIBLE);
+        $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+        
         if ($select->hasPart(Vps_Model_Select::WHERE_ID)) {
             $id = $select->getPart(Vps_Model_Select::WHERE_ID);
-            if (!is_numeric(substr($id, 1))) return null;
+            $separator = substr($id, 0, 1);
+            $id = substr($id, 1);
+            if ($separator != $this->_idSeparator || !is_numeric($id)) {
+                $select->processed(Vps_Component_Select::WHERE_ID);
+                return null;
+            }
+            $select->whereId($id);
         }
-
+        
         $cols = $this->_model->getColumns();
         if ($parentData && in_array('component_id', $cols)) {
             $select->whereEquals('component_id', $parentData->dbId);
@@ -97,11 +106,9 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if (!$select->getPart(Vps_Component_Select::IGNORE_VISIBLE)
             && in_array('visible', $cols) && !Vps_Registry::get('config')->showInvisible) {
             $select->whereEquals("visible", 1);
-            $select->processed(Vps_Component_Select::IGNORE_VISIBLE);
         }
 
         if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-            $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
             $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
             if (!$selectClasses) return null;
             $childClasses = $this->_settings['component'];
@@ -119,10 +126,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             } else {
                 $select->whereEquals('component', $keys);
             }
-        }
-        if ($select->hasPart(Vps_Component_Select::WHERE_ID)) {
-            $id = $select->getPart(Vps_Component_Select::WHERE_ID);
-            $select->whereId(substr($id, 1)); // mit substr - bzw. _ abschneiden
         }
         return $select;
     }

@@ -2,6 +2,14 @@
 class Vpc_Directories_Item_Detail_AssignedCategories_Component
     extends Vpc_Directories_List_Component
 {
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['generators']['child']['component']['view'] =
+            'Vpc_Directories_Item_Detail_AssignedCategories_View_Component';
+        return $ret;
+    }
+
     protected function _getItemDirectory()
     {
         return $this->getData()->parent->parent->getChildComponent('_category');

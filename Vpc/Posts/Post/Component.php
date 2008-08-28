@@ -73,11 +73,11 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         $content = htmlspecialchars($content);
 
         // smileys
-        $content = preg_replace('/:-?\)/', '<img class="emoticon_smile" src="/assets/web/images/spacer.gif" alt=":-)" border="0" />', $content);
-        $content = preg_replace('/:-?D/', '<img class="emoticon_grin" src="/assets/web/images/spacer.gif" alt=":-D" border="0" />', $content);
-        $content = preg_replace('/:-?P/', '<img class="emoticon_tongue" src="/assets/web/images/spacer.gif" alt=":-P" border="0" />', $content);
-        $content = preg_replace('/:-?\(/', '<img class="emoticon_unhappy" src="/assets/web/images/spacer.gif" alt=":-(" border="0" />', $content);
-        $content = preg_replace('/;-?\)/', '<img class="emoticon_wink" src="/assets/web/images/spacer.gif" alt=";-)" border="0" />', $content);
+        $content = preg_replace('/:-?\)/', '<span class="emoticon_smile"></span>', $content);
+        $content = preg_replace('/:-?D/', '<span class="emoticon_grin"></span>', $content);
+        $content = preg_replace('/:-?P/', '<span class="emoticon_tongue"></span>', $content);
+        $content = preg_replace('/:-?\(/', '<span class="emoticon_unhappy"></span>', $content);
+        $content = preg_replace('/;-?\)/', '<span class="emoticon_wink"></span>', $content);
 
         // zitate
         $content = str_replace('[quote]', '<fieldset class="quote"><legend>Zitat</legend>', $content, $countOpened);
@@ -98,23 +98,19 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         }
 
         // automatische verlinkung
-        if (!function_exists('replaceLinks')) {
-            function replaceLinks($matches) {
-                $rel = 'popup_menubar=yes,toolbar=yes,location=yes,status=yes,scrollbars=yes,resizable=yes';
-                $showUrl = $matches[5];
-                if (strlen($showUrl) > 62) {
-                    $showUrl = substr($showUrl, 0, 60).'...';
-                }
-                return "<a href=\"http://{$matches[3]}{$matches[5]}\" title=\"{$matches[3]}{$matches[5]}\" rel=\"$rel\">{$matches[3]}$showUrl</a>";
-            }
+        $truncate = new Vps_View_Helper_Truncate();
+        $pattern = '/((http:\/\/)|(www\.)|(http:\/\/www\.)){1,1}([a-z0-9äöü;\/?:@=&!*~#%\'+$.,_-]+)/i';
+        $offset = 0;
+        while (preg_match($pattern, $content, $matches, PREG_OFFSET_CAPTURE, $offset)) {
+            $showUrl = $truncate->truncate($matches[5][0], 60, '...', true);
+            $search = $matches[0][0];
+            $replace = "<a href=\"http://{$matches[3][0]}{$matches[5][0]}\" "
+                ."title=\"{$matches[3][0]}{$matches[5][0]}\" rel=\"popup_blank\">{$matches[3][0]}$showUrl</a>";
+            $content = substr($content, 0, $matches[0][1])
+                .$replace.substr($content, $matches[0][1] + strlen($matches[0][0]));
+            $offset = $matches[0][1] + strlen($replace);
         }
 
-        $content = preg_replace_callback(
-            '/((http:\/\/)|(www\.)|(http:\/\/www\.)){1,1}([a-z0-9äöü;\/?:@=&!*~#%\'+$.,_-]+)/i',
-            'replaceLinks',
-            $content
-        );
-        
         return nl2br($content);
     }
 }

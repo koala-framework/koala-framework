@@ -7,6 +7,7 @@ class Vpc_Posts_Write_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['child']['component']['form'] = 'Vpc_Posts_Write_Form_Component';
         $ret['generators']['child']['component']['lastPosts'] = 'Vpc_Posts_Write_LastPosts_Component';
         $ret['flags']['noIndex'] = true;
+        $ret['plugins'] = array('Vps_Component_Plugin_Login_Component');
         return $ret;
     }
 

@@ -8,7 +8,7 @@ class Vps_Model_Select
     const LIMIT_COUNT = 'limitCount';
     const LIMIT_OFFSET = 'limitOffset';
     const OTHER = 'other';
-
+    
     protected $_parts = array();
     protected $_processed = array();
     protected $_checkProcessed = true;
@@ -16,7 +16,11 @@ class Vps_Model_Select
     public function __construct($where = array())
     {
         foreach ($where as $key => $val) {
-            $method = "where".ucfirst($key);
+            if ($key != 'limit' && $key != 'order') {
+                $method = "where".ucfirst($key);
+            } else {
+                $method = $key;
+            }
             $this->$method($val);
         }
     }
@@ -57,7 +61,7 @@ class Vps_Model_Select
         if ($offset) $this->_parts[self::LIMIT_OFFSET] = $offset;
         return $this;
     }
-
+    
     protected function _checkNotProcessed($part)
     {
         if (in_array($part, $this->_processed)) {

@@ -169,7 +169,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
                         'flags' => array('processInput' => true)
                     ));
             foreach ($process as $i) {
-                $i->processInput();
+                $i->getComponent()->processInput($_POST);
             }
             echo Vps_View_Component::renderComponent($this->getData(), null, true);
         }

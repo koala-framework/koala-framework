@@ -86,6 +86,16 @@ abstract class Vps_Component_Generator_Abstract
             if (!isset($generator['class'])) {
                 throw new Vps_Exception("Generator class for '$key' ($componentClass) is not set.");
             }
+            if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
+                if (!$select->hasPart(Vps_Component_Select::WHERE_PAGE)) {
+                    $select->wherePage();
+                }
+            }
+            if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+                if (!$generator instanceof Vps_Component_Generator_Table) {
+                    continue;
+                }
+            }
             $interfaces = array(
                 Vps_Component_Select::WHERE_PAGE => 'Vps_Component_Generator_Page_Interface',
                 Vps_Component_Select::WHERE_PSEUDO_PAGE => 'Vps_Component_Generator_PseudoPage_Interface',
@@ -165,7 +175,9 @@ abstract class Vps_Component_Generator_Abstract
         $select->processed(Vps_Component_Select::WHERE_SHOW_IN_MENU);
         $select->processed(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS);
         $select->processed(Vps_Component_Select::WHERE_HOME);
-
+        $select->processed(Vps_Component_Select::WHERE_FILENAME);
+        $select->processed(Vps_Component_Select::IGNORE_VISIBLE);
+        
         return $ret;
     }
 
@@ -191,10 +203,6 @@ abstract class Vps_Component_Generator_Abstract
             $component = null;
         }
         $ret = self::_getGeneratorsForComponent($componentClass, $select);
-        if ($component) {
-//             p($component->componentId);
-//             p($select);
-        }
         if ($component && $component->isPage) {
             
             if (!$select->getPart(Vps_Component_Select::WHERE_GENERATOR) &&
@@ -269,6 +277,11 @@ abstract class Vps_Component_Generator_Abstract
 
         $ret = $this->_settings['component'];
         if (!is_array($ret)) $ret = array($ret);
+        foreach ($ret as $key => $r) {
+            if (!$r) {
+                unset($ret[$key]);
+            }
+        }
 
         if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS)) {
             $flags = $select->getPart(Vps_Component_Select::WHERE_FLAGS);

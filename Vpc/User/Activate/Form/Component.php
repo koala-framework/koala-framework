@@ -4,7 +4,7 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['submitButton'] = trlVps('activate Account');
+        $ret['placeholder']['submitButton'] = trlVps('Activate Account');
         $ret['generators']['child']['component']['success'] = 'Vpc_User_Activate_Form_Success_Component';
         return $ret;
     }
@@ -16,8 +16,7 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
         }
 
         if (empty($userId) || empty($code)) {
-            return trlVps('Data was not sent completely. ')
-                .trlVps('Please copy the complete address out of the email.');
+            return trlVps('Data was not sent completely. Please copy the complete address out of the email.');
         }
 
         $users = Zend_Registry::get('userModel');
@@ -26,8 +25,7 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
         if (!$row) {
             return 'User ID ist ungültig.';
         } else if ($row->getActivationCode() != $code) {
-            return trlVps('Activation code is wrong. Eventually your account has already been activated')
-                .', or the address was copied wrong out of the email.';
+            return trlVps('Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.');
         }
 
         return '';
@@ -47,7 +45,7 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
 
         $error = $this->_checkUserdata();
         if (!empty($error)) {
-            throw new Vps_ClientException(trlvps('Activation-Error: ').$error);
+            throw new Vps_ClientException(trlvps('Activation-Error').': '.$error);
         }
 
         list($userId, $code) = explode('-', $this->_getParam('code'));

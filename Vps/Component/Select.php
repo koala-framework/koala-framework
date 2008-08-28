@@ -19,7 +19,20 @@ class Vps_Component_Select extends Vps_Model_Select
     const IGNORE_VISIBLE = 'ignoreVisible';
     const SKIP_ROOT = 'skipRoot';
 
-    /**
+    public function __construct($where = array())
+    {
+        if (array_key_exists(self::IGNORE_VISIBLE, $where)) {
+            $this->ignoreVisible($where[self::IGNORE_VISIBLE]);
+            unset($where[self::IGNORE_VISIBLE]);
+        }
+        if (array_key_exists(self::SKIP_ROOT, $where)) {
+            $this->skipRoot($where[self::SKIP_ROOT]);
+            unset($where[self::SKIP_ROOT]);
+        }
+        parent::__construct($where);
+    }
+    
+/**
      * @deprecated nur für abwärtskompatibilität
      **/
     public function whereSelect($select)
