@@ -6,6 +6,7 @@ class Vpc_Root_Component extends Vpc_Abstract
         $ret = parent::getSettings();
         $ret['generators']['page'] = array(
             'class' => 'Vps_Component_Generator_Page',
+            'showInMenu' => true,
             'component' => array(
                 'paragraphs' => 'Vpc_Paragraphs_Component',
                 'link' => 'Vpc_Basic_LinkTag_Component',

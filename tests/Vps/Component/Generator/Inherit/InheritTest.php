@@ -27,6 +27,7 @@ class Vps_Component_Generator_Inherit_InheritTest extends PHPUnit_Framework_Test
         $this->assertEquals(count($c), 1);
         $this->assertEquals(current($c)->componentId, 'root_static-box-flag');
 
+        $this->assertNotNull($this->_root->getComponentById('root_static-box'));
         $this->assertEquals($this->_root->getComponentById('root_static-box')->componentId, 'root_static-box');
         $this->assertEquals($this->_root->getComponentById('root_static-box-flag')->componentId, 'root_static-box-flag');
     }

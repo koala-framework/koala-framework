@@ -151,7 +151,7 @@ class Vps_Benchmark
     public static function output()
     {
         if (!self::$_enabled) return;
-        echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:200px;position:absolute;top:0;right:0;padding:5px;">';
+        echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:200px;position:absolute;top:0;right:0;padding:5px;z-index:1;">';
         echo round(microtime(true) - self::$_startTime, 2)." sec<br />\n";
         echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br />\n";
         if (Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {

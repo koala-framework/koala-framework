@@ -10,6 +10,9 @@ class Vps_Component_Generator_Page_SkipRootTest extends PHPUnit_Framework_TestCa
 
     public function testChilds()
     {
+        $c = $this->_root->getChildPages(array('type'=>'main', 'showInMenu'=>true));
+        $this->assertEquals(count($c), 1);
+
         $c = $this->_root->getChildPages();
         $this->assertEquals(count($c), 1);
 
