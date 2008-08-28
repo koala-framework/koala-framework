@@ -28,6 +28,7 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
     protected function _formatSelectFilename(Vps_Component_Select $select)
     {
         if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
+            $select->processed(Vps_Component_Select::WHERE_FILENAME);
             $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
             if ($this->_settings['uniqueFilename']) {
                 $select->whereEquals($this->_settings['filenameColumn'], $filename);
@@ -35,7 +36,6 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
                 if (!preg_match('#^([0-9]+)_#', $filename, $m)) return null;
                 $select->whereId($m[1]);
             }
-            $select->processed(Vps_Component_Select::WHERE_FILENAME);
         }
         return $select;
     }

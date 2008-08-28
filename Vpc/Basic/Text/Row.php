@@ -27,7 +27,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                 $ret[] = $m[1];
             }
 
-            if ($classes['image'] && $m[3] != ''
+            if (isset($classes['image']) && $m[3] != ''
                 && preg_match('#/media/([^/]+)/([^/]+)#', $m[3], $m2)) {
                 //"/media/$class/$id/$rule/$type/$checksum/$filename.$extension$random"
                 $isInvalid = false;
@@ -51,18 +51,18 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                                     'componentId'=>$childComponentId,
                                     'html'=>$m[2]);
                 }
-            } else if ($classes['image'] && $m[3] != '') {
+            } else if (isset($classes['image']) && $m[3] != '') {
                 $ret[] = array('type'=>'invalidImage', 'src'=>$m[3], 'html'=>$m[2]);
             } else if ($m[3] != '') {
                 $ret[] = $m[2];
             }
 
-            if (($classes['link'] || $classes['download']) && $m[4] != ''
+            if ((isset($classes['link']) || isset($classes['download'])) && $m[4] != ''
                 && preg_match('#/?([^/]+)$#', $m[4], $m2)) {
 
                 $isInvalid = false;
                 $childComponentId = $m2[1];
-                if ($classes['link']
+                if (isset($classes['link'])
                     && substr($childComponentId, 0, strlen($componentId)+2)
                             == $componentId.'-l') {
                     $nr = substr($childComponentId, strlen($componentId)+2);
@@ -75,7 +75,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                                     'componentId'=>$m2[1],
                                     'html'=>$m[2]);
                     }
-                } else if ($classes['download']
+                } else if (isset($classes['download'])
                         && substr($childComponentId, 0, strlen($componentId)+2)
                             == $componentId.'-d') {
                     $nr = substr($childComponentId, strlen($componentId)+2);
@@ -88,12 +88,12 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                                     'componentId'=>$m2[1],
                                     'html'=>$m[2]);
                     }
-                } else if ($classes['link'] && preg_match('#-l[0-9]+$#', $m2[1])) {
+                } else if (isset($classes['link']) && preg_match('#-l[0-9]+$#', $m2[1])) {
                     $ret[] = array('type'=>'invalidLink',
                                    'href'=>$m[4],
                                    'componentId'=>$m2[1],
                                    'html'=>$m[2]);
-                } else if ($classes['download'] && preg_match('#-d[0-9]+$#', $m2[1])) {
+                } else if (isset($classes['download']) && preg_match('#-d[0-9]+$#', $m2[1])) {
                     $ret[] = array('type'=>'invalidDownload',
                                    'href'=>$m[4],
                                    'componentId'=>$m2[1],
@@ -101,7 +101,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                 } else {
                     $ret[] = array('type'=>'invalidLink', 'href'=>$m[4], 'html'=>$m[2]);
                 }
-            } else if ($classes['link'] && $m[4] != '') {
+            } else if (isset($classes['link']) && $m[4] != '') {
                 $ret[] = array('type'=>'invalidLink', 'href'=>$m[4], 'html'=>$m[2]);
             } else if ($m[4] != '') {
                 $ret[] = $m[2];

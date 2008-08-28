@@ -16,6 +16,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['decorator'] = 'Vpc_Form_Decorator_Label';
         $ret['viewCache'] = false;
         $ret['method'] = 'post';
+        $ret['cssClass'] = 'webStandard webForm';
         
         //todo: wenn mehrere verbessern
         $ret['assets']['files'][] = 'vps/Vps/Form/Field/File/Component.css';
@@ -65,7 +66,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     public function getErrors()
     {
         if (!$this->_processed) {
-            throw new Vps_Exception("Form has not yet been processed, processInput must be called");
+            throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
         return $this->_errors;
     }
@@ -73,7 +74,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     public function getFormRow()
     {
         if (!$this->_processed) {
-            throw new Vps_Exception("Form has not yet been processed, processInput must be called");
+            throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
         return $this->_form->getRow();
     }
@@ -83,7 +84,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret = parent::getTemplateVars();
 
         if (!$this->_processed) {
-            throw new Vps_Exception("Form has not yet been processed, processInput must be called");
+            throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
 
         $class = self::getChildComponentClass(get_class($this), 'child', 'success');

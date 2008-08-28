@@ -15,7 +15,7 @@ class Vpc_Root_Component extends Vpc_Abstract
         );
         $ret['generators']['box'] = array(
             'class' => 'Vps_Component_Generator_Box_Static',
-            'component' => array(),
+            'component' => array('title' => 'Vpc_Box_Title_Component'),
             'inherit' => true,
             'priority' => 0
         );

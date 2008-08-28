@@ -1,9 +1,11 @@
 <div class="<?=$this->cssClass?>">
-    <h2>
-        <?=$this->componentLink($this->data->getParentPage()->getParentPage())?> »
-        <?=$this->componentLink($this->data->getParentPage())?> »
-        <?=$this->componentLink($this->data)?>
-    </h2>
+    <div class="path">
+        <h2>
+            <?=$this->componentLink($this->data->getParentPage()->getParentPage())?> »
+            <?=$this->componentLink($this->data->getParentPage())?> »
+            <?=$this->componentLink($this->data)?>
+        </h2>
+    </div>
     <?=$this->component($this->observe)?>
     <?php if (!$this->threadClosed) { ?>
         <div class="newPost"><?=$this->componentLink($this->write, trlVps('add Comment'))?></div>

@@ -4,7 +4,7 @@ class Vpc_User_Detail_Component extends Vpc_Directories_Item_Detail_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['general'] = 'Vpc_User_Detail_General_Component';
+        $ret['generators']['child']['component']['general'] = 'Vpc_User_Detail_GeneralCommunity_Component';
         return $ret;
     }
     

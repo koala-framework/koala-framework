@@ -30,4 +30,23 @@ class Vps_Component_Generator_Page_SkipRootTest extends PHPUnit_Framework_TestCa
         $this->assertEquals(count($this->_root->getComponentById(1)
                                     ->getChildPages($select)), 0);
     }
+    
+    public function testBox()
+    {
+        $box = $this->_root->getComponentById(3)->getChildComponent('-title');
+        $this->assertEquals('3-title', $box->componentId);
+    }
+    
+    public function testFilename()
+    {
+        $ccc = Vpc_Abstract::getChildComponentClasses('Vps_Component_Generator_Page_Root', array('filename' => 'home'));
+        $this->assertEquals(1, count($ccc));
+        $this->assertEquals('Vpc_Basic_Empty_Component', current($ccc));
+        $children = $this->_root->getChildComponents(array('filename' => 'home'));
+        $this->assertEquals(1, count($children));
+        $child = $this->_root->getChildComponent(array('filename' => 'home'));
+        $this->assertEquals('1', $child->componentId);
+        $child = $child->getChildComponent(array('filename' => 'foo'));
+        $this->assertEquals('2', $child->componentId);
+    }
 }

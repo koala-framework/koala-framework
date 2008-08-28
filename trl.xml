@@ -520,7 +520,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Signature</en>
-<de>Unterschrift</de>
+<de>Signatur</de>
 </text>
 <text>
 <en default="1">Latest topics</en>
@@ -672,7 +672,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Edit account</en>
-<de>Konto &#xE4;ndern</de>
+<de>Speichern</de>
 </text>
 <text>
 <en default="1">Account - Properties</en>
@@ -1180,7 +1180,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">New Entry</en>
-<de>Neuer Beitrag</de>
+<de>Neuer Eintrag</de>
 </text>
 <text>
 <en default="1">No controllerUrl specified for AutoForm.</en>
@@ -2171,7 +2171,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Request password</en>
-<de>Passwort erforderlich</de>
+<de>Passwort anfordern</de>
 </text>
 <text>
 <en default="1">{0} '{1}' must be a subclass of {2}.</en>
@@ -2502,8 +2502,415 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Ihr Account ist aktiv und das Passwort wurde bereits gesetzt. {2} {0}Klicken Sie hier{1}, um in den Admin-Bereich zu gelangen.</de>
 </text>
 <text>
-    <en default="1">en_US</en>
-    <de>de_DE</de>
+<en default="1">en_US</en>
+<de>de_DE</de>
+</text>
+<text>
+<en default="1">Branch directory</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">AGBs</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Verkn&#xFC;pfte Eintr&#xE4;ge</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Edit Images</en>
+<de>Bildergalerie</de>
+</text>
+<text>
+<en default="1">An error has occured</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Offline hidden Html</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Feed</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Forum</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">go</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Threads</en>
+<de>Themen</de>
+</text>
+<text>
+<en default="1">Posts</en>
+<de>Beiträge</de>
+</text>
+<text>
+<en default="1">Last post by</en>
+<de>Letzter Beitrag von</de>
+</text>
+<text>
+<en default="1">reply</en>
+<en_plural>replies</en_plural>
+<de>Antwort</de>
+<de_plural>Antworten</de_plural>
+</text>
+<text>
+<en default="1">Forum.Latest Threads</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">add Comment</en>
+<de>Antwort erstellen</de>
+</text>
+<text>
+<en default="1">Thread closed</en>
+<de>Thema geschlossen</de>
+</text>
+<text>
+<en default="1">Reopen Thread</en>
+<de>Thema öffnen</de>
+</text>
+<text>
+<en default="1">Close Thread</en>
+<de>Thema schließen</de>
+</text>
+<text>
+<en default="1">Move Thread</en>
+<de>Thema verschieben</de>
+</text>
+<text>
+<en default="1">The thread has been moved.</en>
+<de>Das Thema wurde verschoben.</de>
+</text>
+<text>
+<en default="1">Moderate Thread</en>
+<de>Thema moderieren</de>
+</text>
+<text>
+<en default="1">Thread was successfully saved.</en>
+<de>Thema wurde erfolgreich gespeichert.</de>
+</text>
+<text>
+<en default="1">new thread</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">The Form has been submitted successfully.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Formular</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Images Enlarge</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Bookmark bei</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Search engine referer</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Write</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Hello,&lt;br /&gt;&lt;br /&gt;
+a post has been reported for the following reason:</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Open the post or read it directly:</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Please enter a reason for reporting this Post</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">A post has been reported</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Hello,
+
+a post has been reported for the following reason:</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Open this url to go to the post or read it here:</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">report</en>
+<de>melden</de>
+</text>
+<text>
+<en default="1">quote</en>
+<de>zitieren</de>
+</text>
+<text>
+<en default="1">confirmed</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Comment was successfully deleted.</en>
+<de>Der Eintrag wurde erfolgreich gelöscht.</de>
+</text>
+<text>
+<en default="1">Do you really want to delete this post?</en>
+<de>Wollen Sie den Eintrag wirklich löschen?</de>
+</text>
+<text>
+<en default="1">&lt;strong&gt;Create Post: &lt;/strong&gt;&lt;br /&gt;Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
+<de>&lt;strong&gt;Nachricht erstellen: &lt;/strong&gt;&lt;br /&gt;Bitte gib den gewünschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
+</text>
+<text>
+<en default="1">Last Posts</en>
+<de>Letzte Aktivitäten</de>
+</text>
+<text>
+<en default="1">News.Top</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">News.Show categories</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">After the activation you are automatically logged in and you could use your account.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Guestbook</en>
+<de>Gästebuch</de>
+</text>
+<text>
+<en default="1">Gallery</en>
+<de>Bildergalerie</de>
+</text>
+<text>
+<en default="1">Userprofile</en>
+<de>Benutzerprofil</de>
+</text>
+<text>
+<en default="1">General</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Avatar</en>
+<de>Profilbild</de>
+</text>
+<text>
+<en default="1">Place of living</en>
+<de>Wohnort</de>
+</text>
+<text>
+<en default="1">Nickname</en>
+<de>Name für Forum</de>
+</text>
+<text>
+<en default="1">Short Description</en>
+<de>Kurze Beschreibung</de>
+</text>
+<text>
+<en default="1">Register</en>
+<de>Registrieren</de>
+</text>
+<text>
+<en default="1">Lost Password</en>
+<de>Passwort vergessen</de>
+</text>
+<text>
+<en default="1">Activate</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">An account for the address '%value%' doesn't exist</en>
+<de>Es existiert kein Account mit der E-Mail-Adresse '%value%'</de>
+</text>
+<text>
+<en default="1">Your Account has been created successfully. You will receive an confirmation e-mail soon.</en>
+<de>Ihr Account wurde erfolgreich erstellt.<br /><br />Sie erhalten in Kürze eine Email mit einem Aktivierungslink.<br />
+Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin aufgefordert das Passwort einzugeben, das Sie künftig für Ihren Account verwenden möchten.
+</de>
+</text>
+<text>
+<en default="1">create account</en>
+<de>Account erstellen</de>
+</text>
+<text>
+<en default="1">edit account</en>
+<de>Speichern</de>
+</text>
+<text>
+<en default="1">Users.List</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">My account</en>
+<de>Mein Account</de>
+</text>
+<text>
+<en default="1">My Profile</en>
+<de>Mein Profil</de>
+</text>
+<text>
+<en default="1">Lost password</en>
+<de>Passwort vergessen</de>
+</text>
+<text>
+<en default="1">Logged In</en>
+<de>Eingeloggt</de>
+</text>
+<text>
+<en default="1">You have been logged in sucessfully.</en>
+<de>Sie wurden erfolgreich eingeloggt.</de>
+</text>
+<text>
+<en default="1">If the needed page doesn't load automatically,</en>
+<de>Falls die Seite nicht automatisch neu geladen wird</de>
+</text>
+<text>
+<en default="1">please click here</en>
+<de>bitte hier klicken</de>
+</text>
+<text>
+<en default="1">Invalid E-Mail or password, please try again.</en>
+<de>E-Mail oder Passwort falsch, bitte versuchen Sie es nochmal.</de>
+</text>
+<text>
+<en default="1">Please login</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">You have to login to see the requested page.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">If you don't have an account, you can</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">register here</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Show</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">This category can't be deleted, because there exist sub-categories in it.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Delete Entry</en>
+<de>Eintrag löschen</de>
+</text>
+<text>
+<en default="1">Delete Image</en>
+<de>Bild löschen</de>
+</text>
+<text>
+<en default="1">Show field</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">repeat %1</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Radio Buttons</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Permissions</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Value is empty, but a non-empty value is required</en>
+<de>Bitte füllen Sie das Feld aus</de>
+</text>
+<text>
+<en default="1">'%value%' has not only alphabetic and digit characters</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' is an empty string</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' is not a valid email address in the basic format local-part@hostname</en>
+<de>'%value%' ist keine gültige E-Mail-Adresse</de>
+</text>
+<text>
+<en default="1">'%hostname%' is not a valid hostname for email address '%value%'</en>
+<de>'%hostname%' ist kein gültiger Hostname</de>
+</text>
+<text>
+<en default="1">'%hostname%' does not appear to have a valid MX record for the email address '%value%'</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%localPart%' not matched against dot-atom format</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%localPart%' not matched against quoted-string format</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%localPart%' is not a valid local part for email address '%value%'</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' has not only alphabetic characters</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' does allready exist</en>
+<de>'%value%' existiert bereits</de>
+</text>
+<text>
+<en default="1">Useraccount created</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">lost password</en>
+<de>Passwort vergessen</de>
+</text>
+<text>
+<en default="1">Email changed</en>
+<de>E-Mail-Adresse geändert</de>
+</text>
+<text>
+<en default="1">Accound deleted</en>
+<de>Accound gelöscht</de>
+</text>
+<text>
+<en default="1">H:i</en>
+<de>_</de>
+</text>
+<text context="time">
+<en default="1">On</en>
+<de>am</de>
+</text>
+<text context="time">
+<en default="1">at</en>
+<de>um</de>
+</text>
+<text>
+<en default="1">Internal Server Error</en>
+<de>_</de>
 </text>
 </trl>
 

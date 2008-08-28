@@ -14,7 +14,10 @@ class Vps_Component_Generator_Page_Root extends Vpc_Root_Component
             array('id'=>4, 'pos'=>2, 'visible'=>true, 'name'=>'Foo3', 'filename' => 'foo3',
                   'parent_id'=>2, 'component'=>'empty', 'is_home'=>false, 'type'=>'main'),
         )));
-        $ret['generators']['page']['component'] = array('empty' => 'Vpc_Basic_Empty_Component');
+        $ret['generators']['page']['component'] = array(
+            'empty' => 'Vpc_Basic_Empty_Component',
+            'child' => 'Vpc_Basic_Empty_Component'
+        );
         return $ret;
     }
 }
