@@ -17,7 +17,6 @@ class Vps_Component_Select extends Vps_Model_Select
     const WHERE_HOME = 'whereHome';
     const WHERE_TYPE = 'whereType';
     const IGNORE_VISIBLE = 'ignoreVisible';
-    const SKIP_INHERIT = 'skipInherit';
     const SKIP_ROOT = 'skipRoot';
 
     /**
@@ -98,13 +97,6 @@ class Vps_Component_Select extends Vps_Model_Select
     {
         $this->_checkNotProcessed(self::WHERE_GENERATOR);
         $this->_parts[self::WHERE_GENERATOR] = $value;
-        return $this;
-    }
-
-    public function skipInherit($value = true)
-    {
-        $this->_checkNotProcessed(self::SKIP_INHERIT);
-        $this->_parts[self::SKIP_INHERIT] = $value;
         return $this;
     }
 

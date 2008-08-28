@@ -17,16 +17,36 @@ class Vps_Component_Generator_Inherit_InheritTest extends PHPUnit_Framework_Test
         $c = $this->_root->getChildComponent('_static')->getChildBoxes();
         $this->assertEquals(count($c), 1);
         $this->assertEquals(current($c)->componentId, 'root_static-box');
+//         $this->markTestIncomplete();
 
-        $this->markTestIncomplete();
-        return;
 
-        //buggy weil das nicht statisch herausgefunden werden kann - same problem as before
-        $c = $this->_root->getChildComponent('_static')
-            ->getRecursiveChildComponents(array('flags'=>array('foo'=>true)));
+        $cc = Vpc_Abstract::getRecursiveChildComponentClasses('Vps_Component_Generator_Inherit_Root',
+                array('flags'=>array('foo'=>true)));
+        $this->assertEquals(count($cc), 2);
+
+        $c = $this->_root->getChildComponent('_static');
+        $c = $c->getRecursiveChildComponents(array('flags'=>array('foo'=>true)));
         $this->assertEquals(count($c), 1);
         $this->assertEquals(current($c)->componentId, 'root_static-box-flag');
 
+        $this->assertEquals($this->_root->getComponentById('root_static-box')->componentId, 'root_static-box');
+        $this->assertEquals($this->_root->getComponentById('root_static-box-flag')->componentId, 'root_static-box-flag');
+    }
+
+    public function testInheritedGenerators()
+    {
+        $page = $this->_root->getChildComponent('_static');
+        $gen = Vps_Component_Generator_Abstract::getInstances($page);
+        $this->assertEquals(count($gen), 1);
+
+        $page = $this->_root->getComponentById('1');
+        $gen = Vps_Component_Generator_Abstract::getInstances($page);
+        $this->assertEquals(count($gen), 2);
+
+        $select = new Vps_Component_Select();
+        $select->skipRoot();
+        $gen = Vps_Component_Generator_Abstract::getInstances($page, $select);
+        $this->assertEquals(count($gen), 1);
     }
 
 }

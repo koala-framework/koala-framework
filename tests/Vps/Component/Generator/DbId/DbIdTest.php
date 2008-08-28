@@ -11,12 +11,12 @@ class Vps_Component_Generator_DbId_DbIdTest extends PHPUnit_Framework_TestCase
     public function testDbId()
     {
         $page = $this->_root->getComponentById('root_static_1');
-        $this->assertTrue(!!$page);
+        $this->assertNotNull($page);
         $this->assertEquals($page->componentId, 'root_static_1');
         $this->assertEquals($page->dbId, 'test_1');
 
         $page = $this->_root->getComponentByDbId('test_1');
-        $this->assertTrue(!!$page);
+        $this->assertNotNull($page);
         $this->assertEquals($page->componentId, 'root_static_1');
         $this->assertEquals($page->dbId, 'test_1');
     }

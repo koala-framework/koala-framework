@@ -139,9 +139,52 @@ class Vps_Component_Data
         if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
             $select->unsetPart(Vps_Model_Select::LIMIT_COUNT);
         }
-        $childSelect->whereComponentClasses(
-            Vpc_Abstract::getRecursiveChildComponentClasses($this->componentClass, $select)
-        );
+        $classes = Vpc_Abstract::getRecursiveChildComponentClasses($this->componentClass, $select);
+        foreach (Vpc_Abstract::getComponentClasses() as $c) {
+            $inheritClasses = Vpc_Abstract::getChildComponentClasses($c, array('inherit'=>true));
+            foreach ($inheritClasses as $ic) {
+                $childClasses = Vpc_Abstract::getRecursiveChildComponentClasses($ic, $select);
+                if ($childClasses) {
+                    $classes = array_merge($classes, $childClasses, array($ic));
+                }
+            }
+        }
+        $classes = array_unique($classes);
+        /*
+
+        if ($this->isPage) {
+            $parent = $this;
+            while ($parent) {
+                if ($parent->parent instanceof Vps_Component_Data_Root) {
+                    $parent = $parent->parent;
+                } else {
+                    $parent = $parent->getParentPage();
+                }
+                if ($parent) {
+                    $inheritGenerators = $parent->getRecursiveGenerators(array('inherit' => true));
+                    foreach ($inheritGenerators as $ig) {
+                        $ccc = $ig->getRecursiveChildComponentClasses($select);
+                        $classes = array_merge($classes, $ccc);
+                    }
+                }
+            }
+        }
+
+        if ($this->isPage) {
+            $parent = $this;
+            while ($parent) {
+                if ($parent->parent instanceof Vps_Component_Data_Root) {
+                    $parent = $parent->parent;
+                } else {
+                    $parent = $parent->getParentPage();
+                }
+                if ($parent) {
+                    $classes = Vpc_Abstract::getRecursiveChildComponentClasses($parent->componentClass, $select);
+                }
+            }
+        }
+        */
+        $childSelect->whereComponentClasses($classes);
         return $childSelect;
     }
 
@@ -228,34 +271,17 @@ class Vps_Component_Data
                 }
 
                 $generatorSelect->setCheckProcessed($checkProcessed);
-                if ($generatorSelect->getUnprocessedParts()) {
-                    p($this->componentId);
-                    p($select);
-                    p(get_class($generator));
-                    p($generatorSelect);
-                }
                 $generatorSelect->checkAndResetProcessed();
+            }
+            $select->setCheckProcessed($checkProcessed);
+            if ($checkProcessed) {
+                $select->resetProcessed();
             }
         }
         return $this->_constraintsCache[$sc];
     }
 
-/*
-    public function getDataFromGenerators($generator)
-    {
-        $ret = array();
-        foreach ($generators as $generator) {
-            foreach ($generator->getChildData($this, $constraints) as $data) {
-                //p(get_class($generator));
-                if (isset($this->_constraintsCache[$sc][$data->componentId])) {
-                    throw new Vps_Exception("Key for generator not unique: {$data->componentId}");
-                }
-                $ret[$data->componentId] = $data;
-            }
-        }
-        return $ret;
-    }
-*/
+
     public function getChildPages($select = array())
     {
         if (is_array($select)) {
@@ -437,7 +463,9 @@ class Vps_Component_Data
     {
         $select = $this->_formatSelect($select);
         $select->limit(1);
-        return current($this->getChildComponents($select));
+        $cc = $this->getChildComponents($select);
+        if (!$cc) return null;
+        return current($cc);
     }
 
     public function getComponent()

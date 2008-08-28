@@ -191,33 +191,33 @@ abstract class Vps_Component_Generator_Abstract
             $component = null;
         }
         $ret = self::_getGeneratorsForComponent($componentClass, $select);
-        
+        if ($component) {
+//             p($component->componentId);
+//             p($select);
+        }
         if ($component && $component->isPage) {
             
             if (!$select->getPart(Vps_Component_Select::WHERE_GENERATOR) &&
-                !$select->getPart(Vps_Component_Select::WHERE_PAGE) &&
-                !$select->hasPart(Vps_Component_Select::WHERE_ID) &&
-                !$select->getPart(Vps_Component_Select::SKIP_INHERIT))
+                !$select->getPart(Vps_Component_Select::WHERE_PAGE))
             {
                 $inheritSelect = clone $select;
                 $inheritSelect->resetProcessed();
+                $inheritSelect->unsetPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
                 $inheritSelect->setCheckProcessed(false);
-                $inheritSelect->skipInherit();
-                $inheritSelect->whereInherit();
-                $page = $component;
-                while ($page) { // Aktuelle inkl. aller Überseiten durchlaufen
-                    if ($page->componentId == $component->componentId) {
-                        $generators = self::getInstances($component, $inheritSelect);
-                    } else {
-                        $generators = $page->getRecursiveGenerators($inheritSelect);
+                if ($component->parent instanceof Vps_Component_Data_Root) {
+                    $parent = $component->parent;
+                } else {
+                    $parent = $component->getParentPage();
+                }
+                if ($parent) {
+                    $inheritGenerators = $parent->getRecursiveGenerators(array('inherit' => true));
+                    foreach ($inheritGenerators as $ig) {
+                        if ($ig->getRecursiveChildComponentClasses($inheritSelect)) {
+                            $ret[] = $ig;
+                        }
                     }
-                    $ret = array_merge($ret, $generators);
-                    $parent = $page->getParentPage();
-                    if (!$parent) { $parent = $page->parent; }
-                    $page = $parent;
                 }
             }
-            $select->processed(Vps_Component_Select::SKIP_INHERIT);
 
             if (!$select->getPart(Vps_Component_Select::SKIP_ROOT)
                 && ($component instanceof Vps_Component_Data_Root || is_numeric($component->componentId))
@@ -247,6 +247,17 @@ abstract class Vps_Component_Generator_Abstract
         return $ret;
     }
     
+    public function getRecursiveChildComponentClasses($select = array())
+    {
+        $ret = $this->getChildComponentClasses($select);
+        foreach ($this->getChildComponentClasses() as $c) {
+            $ccc = Vpc_Abstract::getRecursiveChildComponentClasses($c, $select);
+            if ($ccc) $ret[] = $c;
+            $ret = array_merge($ret, $ccc);
+        }
+        return array_unique($ret);
+    }
+
     public function getChildComponentClasses($select = array())
     {
         if (is_array($select)) {

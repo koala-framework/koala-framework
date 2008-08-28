@@ -1,6 +1,5 @@
 <?php
-require_once dirname(__FILE__).'/../../../../tests/bootstrap.php';
-class Vps_Component_Generator_GeneratorTest extends PHPUnit_Framework_TestCase
+class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framework_TestCase
 {
     private $_root;
     public function setUp()
@@ -91,10 +90,13 @@ class Vps_Component_Generator_GeneratorTest extends PHPUnit_Framework_TestCase
         )), 3, 'Vps_Component_Generator_Components_Root');
     }
 
-    private function _assertGeneratorsCount($constraints, $count, $component = 'Vps_Component_Generator_Components_Multiple')
+    private function _assertGeneratorsCount($select, $count, $component = 'Vps_Component_Generator_Components_Multiple')
     {
-        $generators = Vps_Component_Generator_Abstract::getInstances($component, $constraints);
+        $select = new Vps_Component_Select($select);
+        $initailSelect = clone $select;
+        $generators = Vps_Component_Generator_Abstract::getInstances($component, $select);
         $this->assertEquals($count, count($generators));
+        $this->assertEquals($initailSelect, $select); //check if select was modified
     }
 
     public function testRecursiveGenerators()
@@ -127,10 +129,13 @@ class Vps_Component_Generator_GeneratorTest extends PHPUnit_Framework_TestCase
         $this->_assertChildComponentClassesCount(array('generator' => 'static', 'componentKey' => 'flag'), 0);
     }
 
-    private function _assertChildComponentClassesCount($constraints, $count)
+    private function _assertChildComponentClassesCount($select, $count)
     {
-        $classes = Vpc_Abstract::getChildComponentClasses('Vps_Component_Generator_Components_Multiple', $constraints);
+        $select = new Vps_Component_Select($select);
+        $initailSelect = clone $select;
+        $classes = Vpc_Abstract::getChildComponentClasses('Vps_Component_Generator_Components_Multiple', $select);
         $this->assertEquals($count, count($classes));
+        $this->assertEquals($initailSelect, $select); //check if select was modified
     }
     
     public function testRecursiveComponentClasses()
@@ -151,6 +156,7 @@ class Vps_Component_Generator_GeneratorTest extends PHPUnit_Framework_TestCase
     {
         $root = $this->_root;
         $this->_assertChildComponents($root, array(), array('1', 'root-empty', 'root-static'));
+        /*
         $this->_assertChildComponents($root, array('box' => true), array('root-empty'));
         $this->_assertChildComponents($root, array('page' => true), array('1'));
         $multiple = $root->getChildComponent('-static');
@@ -159,6 +165,7 @@ class Vps_Component_Generator_GeneratorTest extends PHPUnit_Framework_TestCase
             array('root-static_pageStatic', 'root-static_1', 'root-static_2'));
         $this->_assertChildComponents($multiple, array('page' => true, 'flags' => array('foo'=>true)),
             array('root-static_pageStatic', 'root-static_2'));
+        */
     }
 
     public function testHome()
@@ -168,12 +175,15 @@ class Vps_Component_Generator_GeneratorTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function _assertChildComponents($parent, $constraints, $componentIds)
+    public function _assertChildComponents($parent, $select, $componentIds)
     {
+        $select = new Vps_Component_Select($select);
+        $initailSelect = clone $select;
         $ids = array();
-        foreach($parent->getChildComponents($constraints) as $cc) {
+        foreach($parent->getChildComponents($select) as $cc) {
             $ids[] = $cc->componentId;
         }
         $this->assertEquals($componentIds, $ids);
+        $this->assertEquals($initailSelect, $select); //check if select was modified
     }
 }
