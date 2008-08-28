@@ -183,17 +183,15 @@ class Vps_Component_Abstract
     public static function getComponentClasses($useSettingsCache = true)
     {
         static $componentClasses = null;
-        if ($componentClasses) return $componentClasses;
-        $componentClasses = array();
-        $c = Vps_Registry::get('config')->vpc->rootComponent;
-        $componentClasses[] = $c;
-        self::_getChildComponentClasses($componentClasses, $c, $useSettingsCache);
-        if (Vps_Registry::get('config')->vpc->masterComponents) {
-            foreach (Vps_Registry::get('config')->vpc->masterComponents->toArray() as $c) {
-                $componentClasses[] = $c;
-                self::_getChildComponentClasses($componentClasses, $c, $useSettingsCache);
-            }
+        static $usedRoot = null;
+        if ($usedRoot != Vps_Registry::get('config')->vpc->rootComponent) {
+            //wg. unit-tests wo sich die root ändern kann
+            $usedRoot = Vps_Registry::get('config')->vpc->rootComponent;
+            $componentClasses = null;
         }
+        if ($componentClasses) return $componentClasses;
+        $componentClasses = array($usedRoot);
+        self::_getChildComponentClasses($componentClasses, $usedRoot, $useSettingsCache);
         return $componentClasses;
     }
 

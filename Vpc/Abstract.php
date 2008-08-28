@@ -64,7 +64,6 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         $childConstraints = array('page' => false);
 
         $childComponentClassesSelect = clone $select;
-        $childComponentClassesSelect->unsetPart(Vps_Component_Select::SKIP_INHERIT);
         $childComponentClassesSelect->unsetPart(Vps_Component_Select::SKIP_ROOT);
         $ccc[$class.$cacheId] = Vpc_Abstract::getChildComponentClasses($class, $childComponentClassesSelect);
         foreach (Vpc_Abstract::getChildComponentClasses($class, $childConstraints) as $childClass) {

@@ -84,4 +84,15 @@ class Vps_Model_SelectTest extends PHPUnit_Framework_TestCase
         $select->resetProcessed();
         $this->assertEquals(count($select->getUnprocessedParts()), 2);
     }
+
+    public function testUnsetPart()
+    {
+        $select = new Vps_Model_Select();
+
+        $select->where('foo = ?', 1);
+        $this->assertEquals(count($select->getParts()), 1);
+
+        $select->unsetPart(Vps_Model_Select::WHERE);
+        $this->assertEquals(count($select->getParts()), 0);
+    }
 }
