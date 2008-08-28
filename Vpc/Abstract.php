@@ -50,16 +50,74 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
+
+        $countOutput = '';
+        foreach (debug_backtrace() as $bt) {
+            if ($bt['function'] == '_formatChildConstraints') {
+                $countOutput = '_formatChildConstraints<br />';
+                break;
+            }
+        }
+        if (!$countOutput) {
+            foreach (debug_backtrace() as $bt) {
+                if (isset($bt['class'])) $countOutput .= $bt['class'];
+                $countOutput .= '::'.$bt['function']."<br />";
+            }
+        }
+        $countOutput = "<b>$class</b><br />".$select->toDebug().$countOutput."<br />";
+
+        Vps_Benchmark::count('getRecChildCClasses', $countOutput);
         $cacheId = serialize($select->getParts());
         return array_unique(self::_getRecursiveChildComponentClasses($class, $select, $cacheId));
     }
 
     private static function _getRecursiveChildComponentClasses($class, $select, $cacheId)
     {
-        static $ccc = array();
+        static $ccc = null;
+        if (is_null($ccc)) {
+            if (Vps_Registry::get('config')->debug->settingsCache) {
+                $cache = new Vps_Assets_Cache(array('checkComponentSettings' => true));
+                $cacheFileId = 'rccc';
+                $ccc = $cache->load($cacheFileId);
+                if (!$ccc) {
+                    $benchmark = Vps_Benchmark::start('getRecursiveChildComponentClasses cache');
+                    $ccc = array();
+                    //übliche aufrufe cachen: reihenfolge von wheres ist wichtig
+                    foreach (Vpc_Abstract::getComponentClasses() as $c) {
+                        self::getRecursiveChildComponentClasses($c, array('page'=>true));
+                        self::getRecursiveChildComponentClasses($c, array('showInMenu'=>true, 'page'=>true));
+                        self::getRecursiveChildComponentClasses($c, array('page'=>false));
+                        self::getRecursiveChildComponentClasses($c, array('inherit'=>true));
+                        self::getRecursiveChildComponentClasses($c, array('box'=>true));
+                        self::getRecursiveChildComponentClasses($c, array('flags'=>array('noIndex'=>true), 'page'=>false));
+                        self::getRecursiveChildComponentClasses($c, array('page'=>false, 'flags'=>array('processInput'=>true)));
+                    }
+                    $cache->save($ccc, $cacheFileId);
+                    $benchmark->stop();
+                }
+            }
+        }
+
+        
         if (isset($ccc[$class.$cacheId])) {
+            Vps_Benchmark::count('rccc cache hit');
             return $ccc[$class.$cacheId];
         }
+        $countOutput = '';
+        foreach (debug_backtrace() as $bt) {
+            if ($bt['function'] == '_formatChildConstraints') {
+                $countOutput = '_formatChildConstraints<br />';
+                break;
+            }
+        }
+        if (!$countOutput) {
+            foreach (debug_backtrace() as $bt) {
+                if (isset($bt['class'])) $countOutput .= $bt['class'];
+                $countOutput .= '::'.$bt['function']."<br />";
+            }
+        }
+        $countOutput = "<b>$class</b><br />".$select->toDebug().$countOutput."<br />";
+        Vps_Benchmark::count('rccc cache miss', $countOutput);
 
         $childConstraints = array('page' => false);
 
@@ -163,6 +221,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
             die();
         } else {
             header('Content-Type: text/html; charset=utf-8');
+            /*
             $process = $this->getData()
                 ->getRecursiveChildComponents(array(
                         'page' => false,
@@ -171,6 +230,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
             foreach ($process as $i) {
                 $i->getComponent()->processInput($_POST);
             }
+            */
             echo Vps_View_Component::renderComponent($this->getData(), null, true);
         }
     }

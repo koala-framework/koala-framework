@@ -18,6 +18,9 @@ class Vpc_Paging_Component extends Vpc_Abstract
             $this->_entries = $this->getData()->parent->getComponent()->getPagingCount();
             if (!$this->_entries) {
                 $this->_entries = 0;
+            } else if ($this->_entries instanceof Vps_Model_Select) {
+                //TODO
+                $this->_entries = 50;
             } else if ($this->_entries instanceof Zend_Db_Select) {
                 $select = $this->_entries;
                 $select->setIntegrityCheck(false);
@@ -107,12 +110,12 @@ class Vpc_Paging_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function limitSelect(Zend_Db_Select $select)
+    public function limitSelect(Vps_Model_Select $select)
     {
         $limit = $this->getLimit();
-        if ($select->getPart(Zend_Db_Select::LIMIT_COUNT)) {
+        if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
             //wenn schon ein limit gesetzt
-            $existingLimitCount = $select->getPart(Zend_Db_Select::LIMIT_COUNT);
+            $existingLimitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
             if ($existingLimitCount < $limit['limit']) {
                 return;
             }

@@ -4,30 +4,35 @@ class Vpc_Basic_LinkTag_Generator extends Vps_Component_Generator_Static
     protected $_loadTableFromComponent = true;
 
     
-    protected function _formatConstraints($parentData, $constraints)
+    protected function _formatSelect($parentData, $select = array())
     {
         //es gibt exakt eine unterkomponente mit der id 'link'
-        if (isset($constraints['id'])) {
-            if ($constraints['id'] != '-link') {
+        if ($select->hasPart(Vps_Component_Select::WHERE_ID)) {
+            $select->processed(Vps_Component_Select::WHERE_ID);
+            if ($select->getPart(Vps_Component_Select::WHERE_ID) != '-link') {
                 return null;
             }
-            unset($constraints['id']); //contraint nicht weiterreichen
         }
-        if (isset($constraints['componentClass'])) {
+        if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
             throw new Vps_Exception("componentClass constraint not supported for LinkTag");
         }
-        return parent::_formatConstraints($parentData, $constraints);
+        return parent::_formatSelect($parentData, $select);
     }
 
-    protected function _fetchKeys($parentData, $constraints)
+    protected function _fetchKeys($parentData, $select)
     {
         //es gibt exakt eine unterkomponente mit der id 'link'
         $ret = array();
-        $constraints = $this->_formatConstraints($parentData, $constraints);
-        if (is_null($constraints)) return array();
+        $select = $this->_formatSelect($parentData, $select);
+        if (is_null($select)) return array();
         $ret[] = 'link';
         return $ret;
-    }    
+    }
+
+    protected function _acceptKey($key, $select, $parentData)
+    {
+        return true;
+    }
 
     protected function _formatConfig($parentData, $componentKey)
     {
@@ -41,7 +46,7 @@ class Vpc_Basic_LinkTag_Generator extends Vps_Component_Generator_Static
             $dbId = $parentData->dbId . $this->_idSeparator;
         }
         $dbId .= $componentKey;
-        $row = $this->_table->find($parentData->dbId)->current();
+        $row = $this->_model->find($parentData->dbId)->current();
         return array(
             'componentId' => $componentId,
             'dbId' => $dbId,

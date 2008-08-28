@@ -44,9 +44,7 @@ class Vps_Loader extends Zend_Loader
         $ret = parent::autoload($class);
         if ($ret && substr($class, 0, 4) == 'Vpc_') {
             if (is_subclass_of($class, 'Vpc_Abstract')) {
-                Vps_Benchmark::count('component classes included');
-            } else if (is_subclass_of($class, 'Vps_Component_Generator_Abstract')) {
-                Vps_Benchmark::count('generator classes included');
+                Vps_Benchmark::count('component classes included', $class);
             }
         }
         Vps_Benchmark::count('classes included', $class);

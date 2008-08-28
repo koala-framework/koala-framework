@@ -192,6 +192,28 @@ abstract class Vps_Component_Generator_Abstract
             $select = new Vps_Component_Select($select);
         }
 
+        if (is_object($component)) {
+            $cacheId = $component->componentId;
+            Vps_Benchmark::count('Gen::getInstances dynamisch', $cacheId.$select->toDebug());
+        } else {
+            $cacheId = $component."<br />";
+            $type = 'unknown';
+            foreach (debug_backtrace() as $bt) {
+                if ($bt['function']=='getRecursiveChildComponentClasses') {
+                    $type = 'getRecursiveChildComponentClasses';
+                }
+            }
+            if ($type == 'unknown') {
+                foreach (debug_backtrace() as $bt) {
+                    if (isset($bt['class'])) $cacheId .= $bt['class'];
+                    $cacheId .= '::'.$bt['function']."<br />";
+                }
+            } else {
+                $cacheId .= "<b>$type</b><br />";
+            }
+            Vps_Benchmark::count('Gen::getInstances statisch', $cacheId.$select->toDebug());
+        }
+
         if ($select->getCheckProcessed()) {
             $select->resetProcessed();
         }
@@ -200,11 +222,35 @@ abstract class Vps_Component_Generator_Abstract
             $componentClass = $component->componentClass;
         } else {
             $componentClass = $component;
-            $component = null;
+        }
+        $ret = self::getStaticInstances($componentClass, $select);
+        if (is_object($component)) {
+            $ret = array_merge($ret, self::getDynamicInstances($component, $select));
+        }
+        return $ret;
+    }
+
+    public static function getStaticInstances($componentClass, $select = array())
+    {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
         }
         $ret = self::_getGeneratorsForComponent($componentClass, $select);
-        if ($component && $component->isPage) {
-            
+        foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
+            $generators = self::_getGeneratorsForComponent($pluginClass, $select);
+            $ret = array_merge($ret, $generators);
+        }
+        return $ret;
+    }
+
+    public static function getDynamicInstances($component, $select = array())
+    {
+        $ret = array();
+
+        if ($component->isPage) {
+
+            Vps_Benchmark::count('Gen::getInstances dynamisch+page');
+
             if (!$select->getPart(Vps_Component_Select::WHERE_GENERATOR) &&
                 !$select->getPart(Vps_Component_Select::WHERE_PAGE))
             {
@@ -240,10 +286,6 @@ abstract class Vps_Component_Generator_Abstract
             $select->processed(Vps_Component_Select::SKIP_ROOT);
         }
         
-        foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
-            $generators = self::_getGeneratorsForComponent($pluginClass, $select);
-            $ret = array_merge($ret, $generators);
-        }
         if ($select->getCheckProcessed()) {
             //wenn nur nach generatoren gesucht wird (getCheckProcessed==true) dann haben
             //wir schon nach componentClasses gefiltert.
@@ -252,6 +294,7 @@ abstract class Vps_Component_Generator_Abstract
             $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
         }
         $select->checkAndResetProcessed();
+
         return $ret;
     }
     
