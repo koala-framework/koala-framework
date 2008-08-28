@@ -163,6 +163,14 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
             die();
         } else {
             header('Content-Type: text/html; charset=utf-8');
+            $process = $this->getData()
+                ->getRecursiveChildComponents(array(
+                        'page' => false,
+                        'flags' => array('processInput' => true)
+                    ));
+            foreach ($process as $i) {
+                $i->processInput();
+            }
             echo Vps_View_Component::renderComponent($this->getData(), null, true);
         }
     }
