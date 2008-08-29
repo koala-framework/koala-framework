@@ -58,19 +58,16 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             if (isset($this->_pageData[$id])) {
                 $pageIds[] = $id;
             }
-            $select->processed(Vps_Component_Select::WHERE_ID);
         } else if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
-            $select->processed(Vps_Component_Select::WHERE_HOME);
             if ($this->_pageHome) {
                 $pageIds[] = $this->_pageHome;
             }
-        } else if (!is_null($parentId)) {
+        } else if (isset($parentId)) {
             if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
                 $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
                 if (isset($this->_pageFilename[$parentId][$filename])) {
                     $pageIds[] = $this->_pageFilename[$parentId][$filename];
                 }
-                $select->processed(Vps_Component_Select::WHERE_FILENAME);
             } else if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
                 $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
                 $keys = array();
@@ -86,10 +83,21 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
                         $pageIds = array_merge($pageIds, $this->_pageComponent[$key]);
                     }
                 }
-                $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
             } else {
                 if (isset($this->_pageChilds[$parentId])) {
                     $pageIds = $this->_pageChilds[$parentId];
+                }
+            }
+        } else if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+            $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+            $keys = array();
+            foreach ($selectClasses as $selectClass) {
+                $key = array_search($selectClass, $this->_settings['component']);
+                if ($key) $keys[] = $key;
+            }
+            foreach ($keys as $key) {
+                if (isset($this->_pageComponent[$key])) {
+                    $pageIds = array_merge($pageIds, $this->_pageComponent[$key]);
                 }
             }
         } else {
@@ -102,14 +110,12 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             if ($select->hasPart(Vps_Component_Select::WHERE_TYPE)) {
                 $type = $select->getPart(Vps_Component_Select::WHERE_TYPE);
                 if ($type != $page['type']) continue;
-                $select->processed(Vps_Component_Select::WHERE_TYPE);
             }
             if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
                 $menu = $select->getPart(Vps_Component_Select::WHERE_SHOW_IN_MENU);
                 if ($menu == $page['hide']) continue;
             }
             if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE)) {
-                $select->processed(Vps_Component_Select::IGNORE_VISIBLE);
             } else if (!Vps_Registry::get('config')->showInvisible) {
                 if (!$this->_pageData[$pageId]['visible']) continue;
             }
@@ -121,7 +127,6 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
                 if (count($ret) >= $select->getPart(Vps_Model_Select::LIMIT_COUNT)) break;
             }
         }
-        $select->processed(Vps_Model_Select::LIMIT_COUNT);
         return $ret;
     }
     

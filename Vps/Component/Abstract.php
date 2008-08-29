@@ -46,8 +46,19 @@ class Vps_Component_Abstract
             if (!class_exists($class)) {
                 throw new Vps_Exception("Invalid component '$class'");
             }
-            $settings = call_user_func(array($class, 'getSettings'));
-            return $settings[$setting];
+            if ($setting == 'parentClasses') {
+                $ret = array();
+                $p = $class;
+                while ($p) {
+                    $p = get_parent_class($p);
+                    if ($p) $ret[] = $p;
+                }
+                return $ret;
+            } else {
+                $settings = call_user_func(array($class, 'getSettings'));
+                return $settings[$setting];
+            }
+            
         }
         //& für performance
         $s =& self::_getSettingsCached();

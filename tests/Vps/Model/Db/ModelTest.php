@@ -103,19 +103,6 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
             ->where('foo = ?', 1);
         $this->_model->fetchAll($select);
     }
-    public function testUnknownType()
-    {
-        $select = new Vps_Component_Select();
-        $select->wherePage(true);
-        while (1) {
-            try {
-                $this->_model->fetchAll($select);
-            } catch(Vps_Exception $e) {
-                break;
-            }
-            $this->fail('expected exception');
-        }
-    }
 
     public function testJoin()
     {

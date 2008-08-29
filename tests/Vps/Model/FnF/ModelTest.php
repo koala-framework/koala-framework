@@ -64,22 +64,6 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($ids, $res);
     }
 
-    public function testWhere()
-    {
-        $model = new Vps_Model_FnF();
-        $select = $model->select();
-        $select->where('foo = ?', 1);
-        $select->processed(Vps_Model_Select::WHERE);
-        while (1) {
-            try {
-                $model->fetchAll($select);
-            } catch(Vps_Exception $e) {
-                break;
-            }
-            $this->fail('expected exception');
-        }
-    }
-
     public function testLimit()
     {
         $model = new Vps_Model_FnF();

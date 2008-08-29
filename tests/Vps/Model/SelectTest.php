@@ -55,35 +55,6 @@ class Vps_Model_SelectTest extends PHPUnit_Framework_TestCase
 
     }
 
-    public function testProcessed()
-    {
-        $select = new Vps_Model_Select();
-        $this->assertTrue($select->getCheckProcessed());
-        $select->setCheckProcessed(false);
-        $this->assertFalse($select->getCheckProcessed());
-
-        $select->whereEquals('foo', 1);
-        $this->assertEquals(count($select->getUnprocessedParts()), 1);
-        $select->processed(Vps_Model_Select::WHERE_EQUALS);
-        $this->assertEquals($select->getUnprocessedParts(), array());
-
-        $select->order('foo');
-        $this->assertEquals(count($select->getUnprocessedParts()), 1);
-        $select->processed(Vps_Model_Select::ORDER);
-        $this->assertEquals($select->getUnprocessedParts(), array());
-
-        while (1) {
-            try {
-                $select->whereEquals('foo', 1);
-            } catch(Vps_Exception $e) {
-                break;
-            }
-            $this->fail('expected exception');
-        }
-
-        $select->resetProcessed();
-        $this->assertEquals(count($select->getUnprocessedParts()), 2);
-    }
 
     public function testUnsetPart()
     {

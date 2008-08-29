@@ -82,15 +82,12 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     {
         $select = parent::_formatSelect($parentData, $select);
         if (is_null($select)) return null;
-        $select->processed(Vps_Component_Select::IGNORE_VISIBLE);
-        $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
         
         if ($select->hasPart(Vps_Model_Select::WHERE_ID)) {
             $id = $select->getPart(Vps_Model_Select::WHERE_ID);
             $separator = substr($id, 0, 1);
             $id = substr($id, 1);
             if ($separator != $this->_idSeparator || !is_numeric($id)) {
-                $select->processed(Vps_Component_Select::WHERE_ID);
                 return null;
             }
             $select->whereId($id);

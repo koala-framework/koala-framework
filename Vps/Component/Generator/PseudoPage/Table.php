@@ -45,7 +45,8 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
         $data = parent::_formatConfig($parentData, $row);
         if ($this->_settings['nameColumn']) {
             $data['name'] = $row->{$this->_settings['nameColumn']};
-        } else if (method_exists($row, '__toString')) {
+        } else if (($row instanceof Vps_Model_Db_Row && method_exists($row->getRow(), '__toString'))
+                    || !($row instanceof Vps_Model_Db_Row)) {
             $data['name'] = $row->__toString();
         }
 
