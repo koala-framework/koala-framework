@@ -140,8 +140,8 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
     
     public function testRecursiveComponentClasses()
     {
-        $this->_assertRec(array(), 5);
-        $this->_assertRec(array('page' => false), 4);
+        $this->_assertRec(array(), 3);
+        $this->_assertRec(array('page' => false), 3);
         $this->_assertRec(array('box' => true), 1);
     }
 

@@ -11,7 +11,7 @@ class Vps_Component_Generator_Recursive_RecursiveTest extends PHPUnit_Framework_
     public function testFlag()
     {
         $this->assertEquals(count(Vpc_Abstract::getRecursiveChildComponentClasses('Vps_Component_Generator_Recursive_Static',
-            array('flags'=>array('foo'=>true)))), 2);
+            array('flags'=>array('foo'=>true)))), 1);
 
         $this->_assertRecursiveIds($this->_root->getChildComponent('_static'),
                                     array('flags'=>array('foo'=>true)),

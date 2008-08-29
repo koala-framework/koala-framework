@@ -20,7 +20,7 @@ class Vps_Component_Generator_Inherit_InheritTest extends PHPUnit_Framework_Test
 
         $cc = Vpc_Abstract::getRecursiveChildComponentClasses('Vps_Component_Generator_Inherit_Root',
                 array('flags'=>array('foo'=>true)));
-        $this->assertEquals(count($cc), 2);
+        $this->assertEquals(count($cc), 1);
 
         $c = $this->_root->getChildComponent('_static');
         $c = $c->getRecursiveChildComponents(array('flags'=>array('foo'=>true)));
