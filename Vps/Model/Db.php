@@ -60,14 +60,9 @@ class Vps_Model_Db implements Vps_Model_Interface
             $select = $where;
         }
 
-        if ($select->getCheckProcessed()) {
-            $select->resetProcessed();
-        }
-
         $dbSelect = $this->_table->select();
         if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
             $dbSelect->order($order);
-            $select->processed(Vps_Model_Select::ORDER);
         }
         if ($whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
             foreach ($whereEquals as $field=>$value) {
@@ -81,33 +76,26 @@ class Vps_Model_Db implements Vps_Model_Interface
                     $dbSelect->where("$field = ?", $value);
                 }
             }
-            $select->processed(Vps_Model_Select::WHERE_EQUALS);
         }
         if ($where = $select->getPart(Vps_Model_Select::WHERE)) {
             foreach ($where as $w) {
                 $dbSelect->where($w[0], $w[1], $w[2]);
             }
-            $select->processed(Vps_Model_Select::WHERE);
         }
 
         if ($whereId = $select->getPart(Vps_Model_Select::WHERE_ID)) {
             $dbSelect->where($this->getPrimaryKey()." = ?", $whereId);
-            $select->processed(Vps_Model_Select::WHERE_ID);
         }
         $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
         $limitOffset = $select->getPart(Vps_Model_Select::LIMIT_OFFSET);
         if ($limitCount || $limitOffset) {
             $dbSelect->limit($limitCount, $limitOffset);
-            if ($limitCount) $select->processed(Vps_Model_Select::LIMIT_COUNT);
-            if ($limitOffset) $select->processed(Vps_Model_Select::LIMIT_OFFSET);
         }
         if ($other = $select->getPart(Vps_Model_Select::OTHER)) {
             foreach ($other as $i) {
                 call_user_func_array(array($dbSelect, $i['method']), $i['arguments']);
             }
-            $select->processed(Vps_Model_Select::OTHER);
         }
-        $select->checkAndResetProcessed();
         return new $this->_rowsetClass(array(
             'rowset' => $this->_table->fetchAll($dbSelect),
             'rowClass' => $this->_rowClass,

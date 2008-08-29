@@ -54,10 +54,6 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         $select = $this->_formatSelect($parentData, $select);
         if (is_null($select)) return array();
 
-        $select->processed(Vps_Model_Select::LIMIT_COUNT);
-        $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
-        $select->processed(Vps_Component_Select::WHERE_ID);
-
         foreach (array_keys($this->_settings['component']) as $key) {
             if ($this->_acceptKey($key, $select, $parentData)) {
                 $ret[] = $key;

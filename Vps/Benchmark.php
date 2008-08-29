@@ -5,108 +5,18 @@ class Vps_Benchmark
     private static $_enabled = false;
     private static $_logEnabled = false;
     private static $_counter = array();
-
-    private $_start;
-    private $_stop;
-    private $_queriesStart;
-    private $_queriesStop;
-    private $_memoryStart;
-    private $_memoryStop;
-    public $identifier;
-    public $duration;
-    public $queries;
-    private $_stopped = false;
-
-    private function __construct($identifier = null)
-    {
-        if (!$identifier && function_exists('debug_backtrace')) {
-            if (function_exists('memory_get_usage')) {
-                $this->_memoryStart = memory_get_usage();
-            }
-            $bt = debug_backtrace();
-            if (isset($bt[2]['function'])) {
-                $identifier = $bt[2]['function'];
-            }
-            if (isset($bt[2]['args'])) {
-                $identifier .= '(';
-                foreach ($bt[2]['args'] as $i=>$a) {
-                    if (is_array($a)) {
-                        foreach ($a as &$ai) {
-                            if (is_array($ai)) $ai = 'Array';
-                        }
-                        $a = implode(', ', $a);
-                    }
-                    if (is_object($a) && method_exists($a, '__toString')) $a = $a->__toString();
-                    if (is_object($a)) $a = '('.get_class($a).')';
-                    if ($i > 0) $identifier .= ', ';
-                    $identifier .= (string)$a;
-                }
-                if (strlen($identifier) > 100) $identifier = substr($identifier, 0, 100).'...';
-                $identifier .= ')';
-            }
-            if (isset($bt[3]['function'])) {
-                $identifier .= ', '.$bt[3]['function'];
-            }
-        }
-        $this->identifier = $identifier;
-        $this->_start = microtime(true);
-        if (Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
-            $this->_queriesStart =
-                Zend_Registry::get('db')->getProfiler()->getQueryCount();
-        }
-    }
+    public static $benchmarks = array();
 
     /**
      * Startet eine Sequenz
      *
      * @param string $identifier
      */
-    public static function start($identifier = null)
+    public static function start($identifier = null, $addInfo = null)
     {
         if (!self::$_enabled) return null;
-        return new Vps_Benchmark($identifier);
+        return new Vps_Benchmark_Profile($identifier, $addInfo);
     }
-
-    /**
-     * Beendet eine Sequenz
-     *
-     */
-    public function stop()
-    {
-        $out = array();
-        $this->_stop = microtime(true);
-        $this->duration = $this->_stop - $this->_start;
-        $out[] = round($this->duration, 3).' sec';
-
-        if (function_exists('memory_get_usage')) {
-            $this->_memoryStop = memory_get_usage();
-            $this->memory = $this->_memoryStop - $this->_memoryStart;
-            $out[] = $this->memory.' Bytes';
-        }
-        if (Zend_Registry::get('db')->getProfiler() instanceof Vps_Db_Profiler) {
-            $this->_queriesStop =  Zend_Registry::get('db')->getProfiler()->getQueryCount();
-            $this->queries = $this->_queriesStop - $this->_queriesStart;
-            $out[] = $this->queries.' DB-Queries';
-        }
-
-        foreach ($this as $k=>$i) {
-            if ($k == 'identifier' || $k == 'duration' || $k == 'queries' || $k == 'memory') continue;
-            if (substr($k, 0, 1) == '_') continue;
-            $out[] = $k.': '.$i;
-        }
-        if (Zend_Registry::get('config')->debug->firephp && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
-            p($this->identifier.': '.implode('; ', $out));
-        } else {
-            //TODO
-        }
-        $this->_stopped = true;
-    }
-
-    public function __destruct()
-    {
-        if (!$this->_stopped) $this->stop();
-    }
-
 
     public static function enable()
     {
@@ -128,38 +38,72 @@ class Vps_Benchmark
     public static function count($name, $value = null)
     {
         if (!self::$_enabled && !self::$_logEnabled) return false;
-        if (!isset(self::$_counter[$name])) {
+
+        self::_countArray(self::$_counter, $name, $value);
+
+        foreach (self::$benchmarks as $b) {
+            if (!$b->stopped) {
+                self::_countArray($b->counter, $name, $value);
+            }
+        }
+    }
+    private static function _countArray(&$counter, $name, $value)
+    {
+        if (!isset($counter[$name])) {
             if ($value) {
-                self::$_counter[$name] = array();
+                $counter[$name] = array();
             } else {
-                self::$_counter[$name] = 0;
+                $counter[$name] = 0;
             }
         }
         if ($value) {
-            if (!is_array(self::$_counter[$name])) {
+            if (!is_array($counter[$name])) {
                 throw new Vps_Exception("Missing value for counter '$name'");
             }
-            self::$_counter[$name][] = $value;;
+            $counter[$name][] = $value;;
         } else {
-            if (is_array(self::$_counter[$name])) {
+            if (is_array($counter[$name])) {
                 throw new Vps_Exception("no value possible for counter '$name'");
             }
-            self::$_counter[$name]++;
+            $counter[$name]++;
         }
     }
 
     public static function output()
     {
         if (!self::$_enabled) return;
-        echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:200px;position:absolute;top:0;right:0;padding:5px;z-index:1;">';
+        echo '<div style="position:absolute;top:0;right:0;z-index:1;width:200px">';
+        echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:1500px;position:absolute;padding:5px;">';
         echo round(microtime(true) - self::$_startTime, 2)." sec<br />\n";
         echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br />\n";
         if (Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
             echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
         }
-        foreach (self::$_counter as $k=>$i) {
+        self::_outputCounter(self::$_counter);
+        if (self::$benchmarks) {
+            echo "<br /><b>Benchmarks:</b><br/>";
+            foreach (self::$benchmarks as $i) {
+                echo "<a style=\"display:block;\"href=\"#\" onclick=\"if(this.nextSibling.nextSibling.style.display=='none') { this.open=true; this.nextSibling.nextSibling.style.display='block'; this.nextSibling.style.display=''; } else { this.open=false; this.nextSibling.nextSibling.style.display='none';this.nextSibling.style.display='none'; } return(false); }\"
+                                                            onmouseover=\"if(!this.open) this.nextSibling.style.display=''\"
+                                                            onmouseout=\"if(!this.open) this.nextSibling.style.display='none'\">";
+                echo "{$i->identifier} (".round($i->duration, 3)." sec)</a>";
+                echo "<div style=\"display:none;margin-left:10px\">";
+                echo $i->addInfo."<br/>";
+                echo implode('<br />', $i->getOutput());
+                echo "</div>";
+                echo "<div style=\"display:none;margin-left:10px\">";
+                self::_outputCounter($i->counter);
+                echo "</div>";
+            }
+        }
+        echo "</div>";
+        echo "</div>";
+    }
+    private static function _outputCounter($counter)
+    {
+        foreach ($counter as $k=>$i) {
             if (is_array($i)) {
-                echo "<a style=\"display:block;\"href=\"#\" onclick=\"this.nextSibling.style.display='block';return(false);\">";
+                echo "<a style=\"display:block;\"href=\"#\" onclick=\"if(this.nextSibling.style.display=='none') this.nextSibling.style.display='block'; else this.nextSibling.style.display='none';return(false);\">";
                 echo "$k: ".count($i)."</a>";
                 echo "<ul style=\"display:none\">";
                 foreach ($i as $j) {
@@ -170,7 +114,6 @@ class Vps_Benchmark
                 echo "$k: $i<br />\n";
             }
         }
-        echo "</div>";
     }
 
     public static function info($msg)

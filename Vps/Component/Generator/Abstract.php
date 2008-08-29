@@ -87,8 +87,8 @@ abstract class Vps_Component_Generator_Abstract
                 throw new Vps_Exception("Generator class for '$key' ($componentClass) is not set.");
             }
             if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
-                if (!$select->hasPart(Vps_Component_Select::WHERE_PAGE)) {
-                    $select->wherePage();
+                if (!$select->hasPart(Vps_Component_Select::WHERE_PSEUDO_PAGE)) {
+                    $select->wherePseudoPage();
                 }
             }
             if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
@@ -165,19 +165,6 @@ abstract class Vps_Component_Generator_Abstract
             }
             $ret[] = self::getInstance($componentClass, $key);
         }
-        $select->processed(Vps_Component_Select::WHERE_GENERATOR);
-        $select->processed(Vps_Component_Select::WHERE_PAGE);
-        $select->processed(Vps_Component_Select::WHERE_PSEUDO_PAGE);
-        $select->processed(Vps_Component_Select::WHERE_BOX);
-        $select->processed(Vps_Component_Select::WHERE_MULTI_BOX);
-        $select->processed(Vps_Component_Select::WHERE_UNIQUE);
-        $select->processed(Vps_Component_Select::WHERE_INHERIT);
-        $select->processed(Vps_Component_Select::WHERE_SHOW_IN_MENU);
-        $select->processed(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS);
-        $select->processed(Vps_Component_Select::WHERE_HOME);
-        $select->processed(Vps_Component_Select::WHERE_FILENAME);
-        $select->processed(Vps_Component_Select::IGNORE_VISIBLE);
-        
         return $ret;
     }
 
@@ -214,10 +201,6 @@ abstract class Vps_Component_Generator_Abstract
             Vps_Benchmark::count('Gen::getInstances statisch', $cacheId.$select->toDebug());
         }
 
-        if ($select->getCheckProcessed()) {
-            $select->resetProcessed();
-        }
-
         if ($component instanceof Vps_Component_Data) {
             $componentClass = $component->componentClass;
         } else {
@@ -248,16 +231,14 @@ abstract class Vps_Component_Generator_Abstract
         $ret = array();
 
         if ($component->isPage) {
-
+$b = Vps_Benchmark::start('getDynamicInstances', $component->componentClass.'<br/>'.$select->toDebug());
             Vps_Benchmark::count('Gen::getInstances dynamisch+page');
 
             if (!$select->getPart(Vps_Component_Select::WHERE_GENERATOR) &&
                 !$select->getPart(Vps_Component_Select::WHERE_PAGE))
             {
                 $inheritSelect = clone $select;
-                $inheritSelect->resetProcessed();
                 $inheritSelect->unsetPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
-                $inheritSelect->setCheckProcessed(false);
                 if ($component->parent instanceof Vps_Component_Data_Root) {
                     $parent = $component->parent;
                 } else {
@@ -277,36 +258,31 @@ abstract class Vps_Component_Generator_Abstract
                 && ($component instanceof Vps_Component_Data_Root || is_numeric($component->componentId))
             ) {
                 $rootSelect = clone $select;
-                $rootSelect->resetProcessed();
                 $rootSelect->whereGenerator('page');
                 $ret = array_merge($ret, self::_getGeneratorsForComponent(
                     Vps_Registry::get('config')->vpc->rootComponent, $rootSelect
                 ));
             }
-            $select->processed(Vps_Component_Select::SKIP_ROOT);
+if($b)$b->stop();
         }
-        
-        if ($select->getCheckProcessed()) {
-            //wenn nur nach generatoren gesucht wird (getCheckProcessed==true) dann haben
-            //wir schon nach componentClasses gefiltert.
-            //wenn mit dem selben select dann nach klassen od. komponenten selbst gesucht wird
-            //nicht
-            $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
-        }
-        $select->checkAndResetProcessed();
 
         return $ret;
     }
-    
+
     public function getRecursiveChildComponentClasses($select = array())
     {
-        $ret = $this->getChildComponentClasses($select);
-        foreach ($this->getChildComponentClasses() as $c) {
-            $ccc = Vpc_Abstract::getRecursiveChildComponentClasses($c, $select);
-            if ($ccc) $ret[] = $c;
-            $ret = array_merge($ret, $ccc);
+        if ($select->hasPart(Vps_Component_Select::WHERE_ID)) {
+            $ret = $this->getChildComponentClasses($select);
+        } else {
+            $ret = $this->getChildComponentClasses($select);
+            foreach ($this->getChildComponentClasses() as $c) {
+                $ccc = Vpc_Abstract::getRecursiveChildComponentClasses($c, $select);
+                if ($ccc) $ret[] = $c;
+                $ret = array_merge($ret, $ccc);
+            }
         }
-        return array_unique($ret);
+        $ret = array_unique($ret);
+        return $ret;
     }
 
     public function getChildComponentClasses($select = array())
@@ -314,9 +290,6 @@ abstract class Vps_Component_Generator_Abstract
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-
-        $select->processed(Vps_Component_Select::WHERE_FLAGS);
-        $select->processed(Vps_Component_Select::WHERE_COMPONENT_KEY);
 
         $ret = $this->_settings['component'];
         if (!is_array($ret)) $ret = array($ret);
@@ -346,8 +319,9 @@ abstract class Vps_Component_Generator_Abstract
             }
         }
 
-        $select->checkAndResetProcessed();
-        return array_unique(array_values($ret));
+        $ret = array_unique(array_values($ret));
+        
+        return $ret;
     }
     
     public function getIdSeparator()
@@ -383,11 +357,9 @@ abstract class Vps_Component_Generator_Abstract
     protected function _formatSelectFilename(Vps_Component_Select $select)
     {
         if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
-            $select->processed(Vps_Component_Select::WHERE_FILENAME);
             return null;
         }
         if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
-            $select->processed(Vps_Component_Select::WHERE_SHOW_IN_MENU);
             return null;
         }
         return $select;
@@ -396,7 +368,6 @@ abstract class Vps_Component_Generator_Abstract
     protected function _formatSelectHome(Vps_Component_Select $select)
     {
         if ($select->hasPart(Vps_Component_Select::WHERE_HOME)) {
-            $select->processed(Vps_Component_Select::WHERE_HOME);
             return null;
         }
         return $select;
@@ -407,9 +378,6 @@ abstract class Vps_Component_Generator_Abstract
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-        $select->processed(Vps_Component_Select::WHERE_FLAGS);
-        $select->processed(Vps_Component_Select::WHERE_COMPONENT_KEY);
-
         $select = $this->_formatSelectFilename($select);
         if (is_null($select)) return null;
         $select = $this->_formatSelectHome($select);
@@ -418,11 +386,9 @@ abstract class Vps_Component_Generator_Abstract
 
         if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS) || $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)) {
             $classesSelect = clone $select;
-            $classesSelect->setCheckProcessed(false);
             $classes = Vpc_Abstract::getChildComponentClasses($parentData->componentClass, $classesSelect);
             $select->whereComponentClasses($classes);
             if ($select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES) === array()) {
-                $select->processed(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
                 return null;
             }
 

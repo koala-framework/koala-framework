@@ -38,17 +38,12 @@ class Vps_Model_FnF extends Vps_Model_Abstract
             $select = $where;
         }
 
-        if ($select->getCheckProcessed()) {
-            $select->resetProcessed();
-        }
         $data = array();
         foreach ($this->_data as $d) {
             if ($this->_matchSelect($d, $select)) {
                 $data[] = $d;
             }
         }
-        $select->processed(Vps_Model_Select::WHERE_EQUALS);
-        $select->processed(Vps_Model_Select::WHERE_ID);
 
         if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
             $orderData = array();
@@ -65,17 +60,14 @@ class Vps_Model_FnF extends Vps_Model_Abstract
                 }
             }
             $data = $sortedData;
-            $select->processed(Vps_Model_Select::ORDER);
         }
 
         if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
-            $select->processed(Vps_Model_Select::LIMIT_COUNT);
             $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
             $data = array_slice($data, 0, $limitCount);
         }
 
 
-        $select->checkAndResetProcessed();
         return new $this->_rowsetClass(array(
             'model' => $this,
             'rowClass' => $this->_rowClass,

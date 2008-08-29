@@ -33,7 +33,8 @@ class Vpc_Forum_Thread_Directory_Component extends Vpc_Posts_Directory_Component
         $select->setIntegrityCheck(false);
         $select->reset(Zend_Db_Select::COLUMNS);
         $select->from(null, array('count' => "COUNT(*)"));
-        $replies = $select->query()->fetchColumn(0) - 1;
+//         $replies = $select->query()->fetchColumn(0) - 1;
+        $replies = '?';
         
         $ret = array();
         $ret['replies'] = $replies;

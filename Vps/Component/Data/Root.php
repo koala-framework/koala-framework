@@ -109,10 +109,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $select = new Vps_Component_Select($select);
         }
 
-        if ($checkProcessed = $select->getCheckProcessed()) {
-            $select->resetProcessed();
-            $select->setCheckProcessed(false);
-        }
 
         if ($select->hasPart(Vps_Component_Select::LIMIT_COUNT)) {
             $limitCount = $select->getPart(Vps_Component_Select::LIMIT_COUNT);
@@ -140,8 +136,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     if ($data) {
                         $ret[] = $data;
                     }
-                    $generatorSelect->setCheckProcessed($checkProcessed);
-                    $generatorSelect->checkAndResetProcessed();
                     if (isset($limitCount)) {
                         if ($limitCount - count($ret) <= 0) {
                         return $ret;
@@ -163,11 +157,11 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     return array($this);
                 }
             }
-            $constraints = array('componentClass' => $lookingForChildClasses);
+            $select = array('componentClasses' => $lookingForChildClasses);
 
             $ret = array();
             foreach ($this->_getGeneratorsForClasses($lookingForChildClasses) as $generator) {
-                $ret = array_merge($ret, $generator->getChildData(null, $constraints));
+                $ret = array_merge($ret, $generator->getChildData(null, $select));
             }
 
             $this->_componentsByClassCache[$class] = $ret;
@@ -195,9 +189,9 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $ret;
     }
 
-    public function getComponentByClass($class, $constraints = array())
+    public function getComponentByClass($class, $select = array())
     {
-        $components = $this->getComponentsByClass($class, $constraints);
+        $components = $this->getComponentsByClass($class, $select);
         if (isset($components[0])) {
             return $components[0];
         }
