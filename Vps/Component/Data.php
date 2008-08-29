@@ -140,6 +140,22 @@ class Vps_Component_Data
         return $ret;
     }
 
+    public function getRecursiveGeneratorData($select,
+                                $childSelect = array('page'=>false))
+    {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        if (is_array($childSelect)) {
+            $childSelect = new Vps_Component_Select($childSelect);
+        }
+        $ret = Vps_Component_Generator_Abstract::getData($this->componentClass, $select);
+        foreach ($this->getChildComponents($this->_formatChildConstraints($select, $childSelect)) as $component) {
+            $ret = array_merge($ret, $component->getRecursiveGeneratorData($select, $childSelect));
+        }
+        return $ret;
+    }
+
     public function getGenerators($select = array())
     {
         return Vps_Component_Generator_Abstract::getInstances($this, $select);
@@ -231,7 +247,10 @@ class Vps_Component_Data
         }
 //########### versuch 4
 */
-
+        //p($this->componentClass);
+        //p($select);
+        //p($classes);
+        
         $childSelect->whereComponentClasses(array_unique($classes));
         return $childSelect;
     }

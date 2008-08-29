@@ -77,7 +77,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
                 if (!$ccc) {
                     $benchmark = Vps_Benchmark::start('getRecursiveChildComponentClasses cache');
                     $ccc = array();
-                    //übliche aufrufe cachen: reihenfolge von wheres ist wichtig
+                    //ï¿½bliche aufrufe cachen: reihenfolge von wheres ist wichtig
                     foreach (Vpc_Abstract::getComponentClasses() as $c) {
                         self::getRecursiveChildComponentClasses($c, array('page'=>true));
                         self::getRecursiveChildComponentClasses($c, array('pseudoPage'=>true));
