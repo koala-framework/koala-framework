@@ -46,35 +46,41 @@ abstract class Vps_Component_Generator_Abstract
         }
     }
     
-    public static function getInstance($componentClass, $key)
+    public static function getInstance($componentClass, $key, $settings = array())
     {
         static $instances = array();
         $instanceKey = $componentClass . '_' . $key;
         if (!isset($instances[$instanceKey])) {
-            $settings = Vpc_Abstract::getSetting($componentClass, 'generators');
-            if (!isset($settings[$key])) {
-                throw new Vps_Exception("Generator with key '$key' for '$componentClass' not found.");
+            if (empty($settings)) {
+                $settings = Vpc_Abstract::getSetting($componentClass, 'generators');
+                if (!isset($settings[$key])) {
+                    throw new Vps_Exception("Generator with key '$key' for '$componentClass' not found.");
+                }
+                $settings = $settings[$key];
             }
-            if (!isset($settings[$key]['class'])) {
+            if (!isset($settings['class'])) {
                 throw new Vps_Exception("No Generator-Class set: key '$key' for '$componentClass'");
             }
-            if (!class_exists($settings[$key]['class'])) {
-                throw new Vps_Exception("Generator-Class '{$settings[$key]['class']}' does not exist (used in '$componentClass')");
+            if (!class_exists($settings['class'])) {
+                throw new Vps_Exception("Generator-Class '{$settings['class']}' does not exist (used in '$componentClass')");
             }
-            if (!is_subclass_of($settings[$key]['class'], 'Vps_Component_Generator_Abstract')) {
-                throw new Vps_Exception("Generator-Class '{$settings[$key]['class']}' is not an Vps_Component_Generator_Abstract");
+            if (!is_subclass_of($settings['class'], 'Vps_Component_Generator_Abstract')) {
+                throw new Vps_Exception("Generator-Class '{$settings['class']}' is not an Vps_Component_Generator_Abstract");
             }
-            if (!is_array($settings[$key]['component'])) {
-                $settings[$key]['component'] = array($key => $settings[$key]['component']);
+            if (!is_array($settings['component'])) {
+                $settings['component'] = array($key => $settings['component']);
             }
-            $settings[$key]['generator'] = $key;
-            $instances[$instanceKey] = new $settings[$key]['class']($componentClass, $settings[$key]);
+            $settings['generator'] = $key;
+            $instances[$instanceKey] = new $settings['class']($componentClass, $settings);
         }
         return $instances[$instanceKey];
     }
     
-    private static function _getGeneratorsForComponent($componentClass, $select)
+    public static function _getGeneratorsForComponent($componentClass, $select)
     {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
         $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
         $ret = array();
         foreach ($generators as $key => $generator) {
@@ -163,16 +169,11 @@ abstract class Vps_Component_Generator_Abstract
             if ($select->hasPart(Vps_Component_Select::WHERE_HOME)) {
                 if (!is_instance_of($generator['class'], 'Vps_Component_Generator_Page')) continue;
             }
-            $ret[] = self::getInstance($componentClass, $key);
+            $ret[] = self::getInstance($componentClass, $key, $generator);
         }
         return $ret;
     }
 
-    /**
-     * Gibt alle Generators für eine Komponente zurück.
-     * ist abhängig davon ob es eine Page ist (daher $parentData)
-     * und man kann auch constraints übergeben (zB um nur page generators zu bekommen)
-     **/
     public static function getInstances($component, $select = array())
     {
         if (is_array($select)) {
@@ -215,13 +216,9 @@ abstract class Vps_Component_Generator_Abstract
 
     public static function getStaticInstances($componentClass, $select = array())
     {
-        if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
-        }
         $ret = self::_getGeneratorsForComponent($componentClass, $select);
         foreach (Vpc_Abstract::getSetting($componentClass, 'plugins') as $pluginClass) {
-            $generators = self::_getGeneratorsForComponent($pluginClass, $select);
-            $ret = array_merge($ret, $generators);
+            $ret = array_merge($ret, self::_getGeneratorsForComponent($pluginClass, $select));
         }
         return $ret;
     }
@@ -271,27 +268,35 @@ if($b)$b->stop();
 
     public function getRecursiveChildComponentClasses($select = array())
     {
-        if ($select->hasPart(Vps_Component_Select::WHERE_ID)) {
-            $ret = $this->getChildComponentClasses($select);
+        if ($this->hasChildComponentClasses($select)) {
+            return true;
         } else {
-            $ret = $this->getChildComponentClasses($select);
             foreach ($this->getChildComponentClasses() as $c) {
-                $ccc = Vpc_Abstract::getRecursiveChildComponentClasses($c, $select);
-                if ($ccc) $ret[] = $c;
-                $ret = array_merge($ret, $ccc);
+                if (Vpc_Abstract::getRecursiveChildComponentClasses($c, $select)) {
+                    return true;
+                }
             }
         }
-        $ret = array_unique($ret);
-        return $ret;
+        return false;
     }
 
+    public function hasChildComponentClasses($select = array())
+    {
+        return count($this->getChildComponentClasses($select)) > 0;
+    }
+    
     public function getChildComponentClasses($select = array())
+    {
+        return self::getStaticChildComponentClasses($this->_settings, $select);
+    }
+    
+    public static function getStaticChildComponentClasses($data, $select = array())
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
 
-        $ret = $this->_settings['component'];
+        $ret = $data['component'];
         if (!is_array($ret)) $ret = array($ret);
         foreach ($ret as $key => $r) {
             if (!$r) {
