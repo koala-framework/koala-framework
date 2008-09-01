@@ -1,7 +1,8 @@
 <?php
 class Vps_Component_Data_Root extends Vps_Component_Data
 {
-    private static $_instances = array();
+    private static $_instance;
+    private static $_rootComponentClass;
     private $_hasChildComponentCache;
     private $_componentsByClassCache;
     private $_currentPage;
@@ -21,12 +22,26 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         
     public static function getInstance()
     {
-        $rootComponentClass = Vps_Registry::get('config')->vpc->rootComponent;
-        if (!isset(self::$_instances[$rootComponentClass])) {
-            self::$_instances[$rootComponentClass] = new self(array('componentClass' => $rootComponentClass));
+        if (is_null(self::$_instance)) {
+            self::$_instance = new self(array('componentClass' => self::getComponentClass()));
         }
-        return self::$_instances[$rootComponentClass];
+        return self::$_instance;
     }
+    
+    public static function getComponentClass()
+    {
+        if (is_null(self::$_rootComponentClass)) {
+            self::$_rootComponentClass = Vps_Registry::get('config')->vpc->rootComponent;
+        }
+        return self::$_rootComponentClass;
+    }
+    
+    public static function setComponentClass($componentClass)
+    {
+        self::$_rootComponentClass = $componentClass;
+        self::$_instance = null;
+    }
+    
     public function getPageByPath($path)
     {
         if (substr($path, -1) == '/') {

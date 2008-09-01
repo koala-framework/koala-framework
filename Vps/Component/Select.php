@@ -154,5 +154,4 @@ class Vps_Component_Select extends Vps_Model_Select
         $this->_parts[self::IGNORE_VISIBLE] = $value;
         return $this;
     }
-
 }

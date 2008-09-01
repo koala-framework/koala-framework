@@ -4,12 +4,13 @@ class Vps_Component_Generator_Inherit_InheritTest extends PHPUnit_Framework_Test
     private $_root;
     public function setUp()
     {
-        Vps_Registry::get('config')->vpc->rootComponent = 'Vps_Component_Generator_Inherit_Root';
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_Inherit_Root');
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 
     public function testInherit()
     {
+/*
         $c = $this->_root->getChildComponent('_static')->getChildComponents();
         $this->assertEquals(count($c), 1);
         $this->assertEquals(current($c)->componentId, 'root_static-box');
@@ -17,11 +18,12 @@ class Vps_Component_Generator_Inherit_InheritTest extends PHPUnit_Framework_Test
         $c = $this->_root->getChildComponent('_static')->getChildBoxes();
         $this->assertEquals(count($c), 1);
         $this->assertEquals(current($c)->componentId, 'root_static-box');
-
-        $cc = Vpc_Abstract::getRecursiveChildComponentClasses('Vps_Component_Generator_Inherit_Root',
+*/
+        $cc = Vpc_Abstract::getIndirectChildComponentClasses('Vps_Component_Generator_Inherit_Root',
                 array('flags'=>array('foo'=>true)));
-        $this->assertEquals(count($cc), 1);
-
+        $this->assertEquals(1, count($cc));
+        $this->assertEquals('Vps_Component_Generator_Inherit_Box', current($cc));
+        
         $c = $this->_root->getChildComponent('_static');
         $c = $c->getRecursiveChildComponents(array('flags'=>array('foo'=>true)));
         $this->assertEquals(count($c), 1);

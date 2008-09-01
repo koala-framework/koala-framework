@@ -4,13 +4,13 @@ class Vps_Component_Generator_Recursive_RecursiveTest extends PHPUnit_Framework_
     private $_root;
     public function setUp()
     {
-        Vps_Registry::get('config')->vpc->rootComponent = 'Vps_Component_Generator_Recursive_Root';
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_Recursive_Root');
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 
     public function testFlag()
     {
-        $this->assertEquals(count(Vpc_Abstract::getRecursiveChildComponentClasses('Vps_Component_Generator_Recursive_Static',
+        $this->assertEquals(count(Vpc_Abstract::getIndirectChildComponentClasses('Vps_Component_Generator_Recursive_Static',
             array('flags'=>array('foo'=>true)))), 1);
 
         $this->_assertRecursiveIds($this->_root->getChildComponent('_static'),

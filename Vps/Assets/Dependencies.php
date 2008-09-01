@@ -136,8 +136,8 @@ class Vps_Assets_Dependencies
         if (in_array($assetsType.$dependency, $this->_processedDependencies)) return;
         $this->_processedDependencies[] = $assetsType.$dependency;
         if ($dependency == 'Components' || $dependency == 'ComponentsAdmin') {
-            $rootComonent = $this->_config->vpc->rootComponent;
-            $this->_processComponentDependency($assetsType, $rootComonent, $dependency == 'ComponentsAdmin');
+            $rootComponent = Vps_Component_Data_Root::getComponentClass();
+            $this->_processComponentDependency($assetsType, $rootComponent, $dependency == 'ComponentsAdmin');
             return;
         }
         if (!isset($this->_getDependenciesConfig()->$dependency)) {

@@ -11,7 +11,7 @@ class Vps_Component_Generator_Model extends Vps_Model_Abstract
         $rowset = array();
         if (!$where['parent'] || $where['parent'] === '0') {
             $rowset[] = array(
-                'component' => Vps_Registry::get('config')->vpc->rootComponent,
+                'component' => Vps_Component_Data_Root::getComponentClass(),
                 'class' => 'root'
             );
         } else {

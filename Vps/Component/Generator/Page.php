@@ -22,15 +22,24 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         $this->_pageComponentParent = array();
         $this->_pageComponent = array();
         $this->_pageHome = 0;
-        foreach ($this->_model->fetchAll(null, 'pos') as $row) {
-            $this->_pageData[$row->id] = $row->toArray();
-            $parentId = $row->parent_id;
+        if (isset($this->_settings['model'])) {
+            $rows = $this->_getModel()->fetchAll(null, 'pos')->toArray();
+        } else {
+            $select = new Zend_Db_Select(Vps_Registry::get('db'));
+            $select->from('vps_pages', array('id', 'parent_id', 'component', 'visible',
+                                        'filename', 'hide', 'type', 'name', 'is_home'));
+            $select->order('pos');
+            $rows = $select->query()->fetchAll();
+        }
+        foreach ($rows as $row) {
+            $this->_pageData[$row['id']] = $row;
+            $parentId = $row['parent_id'];
             if (is_null($parentId)) $parentId = 0;
-            $this->_pageChilds[$parentId][] = $row->id;
-            $this->_pageFilename[$parentId][$row->filename] = $row->id;
-            $this->_pageComponentParent[$parentId][$row->component][] = $row->id;
-            $this->_pageComponent[$row->component][] = $row->id;
-            if ($row->is_home) $this->_pageHome = $row->id;
+            $this->_pageChilds[$parentId][] = $row['id'];
+            $this->_pageFilename[$parentId][$row['filename']] = $row['id'];
+            $this->_pageComponentParent[$parentId][$row['component']][] = $row['id'];
+            $this->_pageComponent[$row['component']][] = $row['id'];
+            if ($row['is_home']) $this->_pageHome = $row['id'];
         }
     }
 
@@ -115,8 +124,12 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
                 $menu = $select->getPart(Vps_Component_Select::WHERE_SHOW_IN_MENU);
                 if ($menu == $page['hide']) continue;
             }
+            static $showInvisible;
+            if (is_null($showInvisible)) {
+                $showInvisible = Vps_Registry::get('config')->showInvisible;
+            }
             if ($select->getPart(Vps_Component_Select::IGNORE_VISIBLE)) {
-            } else if (!Vps_Registry::get('config')->showInvisible) {
+            } else if (!$showInvisible) {
                 if (!$this->_pageData[$pageId]['visible']) continue;
             }
 

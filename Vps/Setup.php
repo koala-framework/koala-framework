@@ -62,50 +62,70 @@ function _btArgsString($args)
 {
     $ret = array();
     foreach ($args as $arg) {
-        if (is_object($arg)) {
-            $ret[] = get_class($arg);
-        } else if (is_array($arg)) {
-            $arrayString = array();
-            foreach ($arg as $k=>$i) {
-                $s = '';
-                if (!is_int($k)) {
-                    $s = $k.'=>';
-                }
-                if (is_array($i)) {
-                    $arrayString[] = $s.'array('._btArgsString($i).')';
-                } else if (is_object($i)) {
-                    $arrayString[] = $s.get_class($i);
-                } else if (is_null($i)) {
-                    $arrayString[] = $s.'null';
-                } else {
-                    $arrayString[] = $s.$i;
-                }
-            }
-            $ret[] = 'array('.implode(', ', $arrayString).')';
-        } else if (is_null($arg)) {
-            $ret[] = 'null';
-        } else if (is_string($arg)) {
-            $ret[] = '"'.$arg.'"';
-        } else {
-            $ret[] = $arg;
-        }
+        $ret[] = _btArgString($arg);
     }
     return implode(', ', $ret);
+}
+function _btArgString($arg)
+{
+    $ret = array();
+    if ($arg instanceof Vps_Model_Select) {
+        $r = array();
+        foreach ($arg->getParts() as $key =>$val) {
+            $val = _btArgString($val);
+            $r[] = "$key => $val";
+        }
+        $ret[] = 'select(' . implode(', ', $r) . ')';
+    } else if (is_object($arg)) {
+        $ret[] = get_class($arg);
+    } else if (is_array($arg)) {
+        $arrayString = array();
+        foreach ($arg as $k=>$i) {
+            $i = _btArgString($i);
+            if (!is_int($k)) {
+                $arrayString[] = "$k => $i";
+            } else {
+                $arrayString[] = $i;
+            }
+        }
+        $ret[] = 'array('.implode(', ', $arrayString).')';
+    } else if (is_null($arg)) {
+        $ret[] = 'null';
+    } else if (is_string($arg)) {
+        $ret[] = '"'.$arg.'"';
+    } else {
+        $ret[] = $arg;
+    }
+    return current($ret);
 }
 function bt()
 {
     if (!Vps_Debug::isEnabled()) return;
     $bt = debug_backtrace();
     unset($bt[0]);
-    $out = array(array('File', 'Line', 'Function', 'Args'));
-    foreach ($bt as $i) {
-        $out[] = array(
-            isset($i['file']) ? $i['file'] : '', isset($i['line']) ? $i['line'] : '',
-            isset($i['function']) ? $i['function'] : null,
-            _btArgsString($i['args']),
-        );
+    if (php_sapi_name() == 'cli') {
+        foreach ($bt as $i) {
+            if (isset($i['file']) && substr($i['file'], 0, 22) == '/usr/share/php/PHPUnit') continue;
+            if (isset($i['file']) && substr($i['file'], 0, 16) == '/usr/bin/phpunit') continue;
+            echo 
+                (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
+                (isset($i['line']) ? $i['line'] : '?') . ' - ' .
+                ((isset($i['object']) && $i['object'] instanceof Vps_Component_Data) ? $i['object']->componentId . '->' : '') .
+                (isset($i['function']) ? $i['function'] : '') . '(' .
+                _btArgsString($i['args']) . ')' . "\n";
+        }
+                
+    } else {
+        $out = array(array('File', 'Line', 'Function', 'Args'));
+        foreach ($bt as $i) {
+            $out[] = array(
+                isset($i['file']) ? $i['file'] : '', isset($i['line']) ? $i['line'] : '',
+                isset($i['function']) ? $i['function'] : null,
+                _btArgsString($i['args']),
+            );
+        }
+        p(array('Backtrace for '._btString($bt[1]), $out), 'TABLE');
     }
-    p(array('Backtrace for '._btString($bt[1]), $out), 'TABLE');
 }
 
 function hlp($string){

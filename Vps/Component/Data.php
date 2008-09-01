@@ -113,6 +113,11 @@ class Vps_Component_Data
         }
     }
 
+    public function getGenerators($select = array())
+    {
+        return Vps_Component_Generator_Abstract::getInstances($this, $select);
+    }
+
     public function getRecursiveGenerators($select,
                                 $childSelect = array('page'=>false))
     {
@@ -132,7 +137,8 @@ class Vps_Component_Data
         $b = Vps_Benchmark::start('getRecursiveGenerators', $this->componentClass.' '.$select->toDebug());
 
         $ret = $this->getGenerators($select);
-        foreach ($this->getChildComponents($this->_formatChildConstraints($select, $childSelect)) as $component) {
+        $childSelect = $this->_formatChildConstraints($select, $childSelect);
+        foreach ($this->getChildComponents($childSelect) as $component) {
             $ret = array_merge($ret, $component->getRecursiveGenerators($select, $childSelect));
         }
         $this->_recursiveGeneratorsCache[$cacheId] = $ret;
@@ -140,25 +146,26 @@ class Vps_Component_Data
         return $ret;
     }
 
-    public function getRecursiveGeneratorData($select,
+    public function getRecursiveChildComponents($select,
                                 $childSelect = array('page'=>false))
     {
+        Vps_Benchmark::count('getRecursiveChildComponents');
+
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
         if (is_array($childSelect)) {
             $childSelect = new Vps_Component_Select($childSelect);
         }
-        $ret = Vps_Component_Generator_Abstract::getData($this->componentClass, $select);
-        foreach ($this->getChildComponents($this->_formatChildConstraints($select, $childSelect)) as $component) {
-            $ret = array_merge($ret, $component->getRecursiveGeneratorData($select, $childSelect));
+        $ret = $this->getChildComponents($select);
+        if ($select->getPart(Vps_Component_Select::LIMIT_COUNT) == 1) {
+            return $ret;
+        }
+        $childSelect = $this->_formatChildConstraints($select, $childSelect);
+        foreach ($this->getChildComponents($childSelect) as $component) {
+            $ret = array_merge($ret, $component->getRecursiveChildComponents($select, $childSelect));
         }
         return $ret;
-    }
-
-    public function getGenerators($select = array())
-    {
-        return Vps_Component_Generator_Abstract::getInstances($this, $select);
     }
 
     private function _formatChildConstraints($select, $childSelect)
@@ -175,14 +182,15 @@ class Vps_Component_Data
         if ($select->hasPart(Vps_Component_Select::WHERE_HOME)) {
             $select->unsetPart(Vps_Component_Select::WHERE_HOME);
         }
-        $classes = Vpc_Abstract::getRecursiveChildComponentClasses($this->componentClass, $select);
-
+        //if (!$childSelect->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+            $classes = Vpc_Abstract::getIndirectChildComponentClasses($this->componentClass, $select);
+        
 /*
 //########### versuch 1
         foreach (Vpc_Abstract::getComponentClasses() as $c) {
             $inheritClasses = Vpc_Abstract::getChildComponentClasses($c, array('inherit'=>true));
             foreach ($inheritClasses as $ic) {
-                $childClasses = Vpc_Abstract::getRecursiveChildComponentClasses($ic, $select);
+                $childClasses = Vpc_Abstract::getIndirectChildComponentClasses($ic, $select);
                 if ($childClasses) {
                     $classes = array_merge($classes, $childClasses, array($ic));
                 }
@@ -200,7 +208,7 @@ class Vps_Component_Data
                     if (!is_array($inheritClasses)) $inheritClasses = array($inheritClasses);
                     foreach ($inheritClasses as $ic) {
                         if (!$ic) continue;
-                        $childClasses = Vpc_Abstract::getRecursiveChildComponentClasses($ic, $select);
+                        $childClasses = Vpc_Abstract::getIndirectChildComponentClasses($ic, $select);
                         $classes = array_merge($classes, $childClasses, array($ic));
                     }
                 }
@@ -210,6 +218,7 @@ class Vps_Component_Data
 */
 
 //########### versuch 3
+
         $page = $this;
         while (1) {
             if ($this->parent instanceof Vps_Component_Data_Root) {
@@ -219,7 +228,7 @@ class Vps_Component_Data
             }
             if (!$page) break;
             $classes = array_merge($classes,
-                Vpc_Abstract::getRecursiveChildComponentClasses($page->componentClass, $select)
+                Vpc_Abstract::getIndirectChildComponentClasses($page->componentClass, $select)
             );
         }
 //########### versuch 3
@@ -242,38 +251,16 @@ class Vps_Component_Data
             }
         }
         foreach ($inheritClasses as $ic) {
-            $childClasses = Vpc_Abstract::getRecursiveChildComponentClasses($ic, $select);
+            $childClasses = Vpc_Abstract::getIndirectChildComponentClasses($ic, $select);
             $classes = array_merge($classes, $childClasses, array($ic));
         }
 //########### versuch 4
 */
-        //p($this->componentClass);
-        //p($select);
         //p($classes);
         
-        $childSelect->whereComponentClasses(array_unique($classes));
+            $childSelect->whereComponentClasses(array_unique($classes));
+        //}
         return $childSelect;
-    }
-
-    public function getRecursiveChildComponents($select,
-                                $childSelect = array('page'=>false))
-    {
-        Vps_Benchmark::count('getRecursiveChildComponents');
-
-        if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
-        }
-        if (is_array($childSelect)) {
-            $childSelect = new Vps_Component_Select($childSelect);
-        }
-        $ret = $this->getChildComponents($select);
-        if ($select->getPart(Vps_Component_Select::LIMIT_COUNT) == 1) {
-            return $ret;
-        }
-        foreach ($this->getChildComponents($this->_formatChildConstraints($select, $childSelect)) as $component) {
-            $ret = array_merge($ret, $component->getRecursiveChildComponents($select, $childSelect));
-        }
-        return $ret;
     }
 
     private function _formatSelect($select)

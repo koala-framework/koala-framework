@@ -32,7 +32,10 @@ class Vps_View_Component extends Vps_View
         // Falls es Cache gibt, Cache holen
         $cache = Vps_Component_Cache::getInstance();
         $cacheId = $cache->getCacheIdFromComponentId($componentId, $isMaster);
-        $cacheDisabled = Zend_Registry::get('config')->debug->componentCache->disable;
+        static $cacheDisabled;
+        if (is_null($cacheDisabled)) {
+            $cacheDisabled = Zend_Registry::get('config')->debug->componentCache->disable;
+        }
 
         if ($cacheDisabled || ($ret = $cache->load($componentClass, $cacheId))===false) {
             if (!isset($component)) {
