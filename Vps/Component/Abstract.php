@@ -23,7 +23,9 @@ class Vps_Component_Abstract
 
     public static function hasSetting($class, $setting)
     {
-        if (!Vps_Registry::get('config')->debug->settingsCache) {
+        static $settingsCache;
+        if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
+        if (!$settingsCache) {
             //um endlosschleife in settingsCache zu verhindern
             if (!class_exists($class)) {
                 throw new Vps_Exception("Invalid component '$class'");
@@ -41,7 +43,9 @@ class Vps_Component_Abstract
 
     public static function getSetting($class, $setting, $useSettingsCache = true)
     {
-        if (!$useSettingsCache || !Vps_Registry::get('config')->debug->settingsCache) {
+        static $settingsCache;
+        if (is_null($settingsCache)) $settingsCache = Vps_Registry::get('config')->debug->settingsCache;
+        if (!$useSettingsCache || !$settingsCache) {
             //um endlosschleife in settingsCache zu verhindern
             if (!class_exists($class)) {
                 throw new Vps_Exception("Invalid component '$class'");
@@ -195,9 +199,9 @@ class Vps_Component_Abstract
     {
         static $componentClasses = null;
         static $usedRoot = null;
-        if ($usedRoot != Vps_Registry::get('config')->vpc->rootComponent) {
+        if ($usedRoot != Vps_Component_Data_Root::getComponentClass()) {
             //wg. unit-tests wo sich die root ändern kann
-            $usedRoot = Vps_Registry::get('config')->vpc->rootComponent;
+            $usedRoot = Vps_Component_Data_Root::getComponentClass();
             $componentClasses = null;
         }
         if ($componentClasses) return $componentClasses;

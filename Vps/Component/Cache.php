@@ -103,7 +103,11 @@ class Vps_Component_Cache extends Zend_Cache_Core
     public function test($id)
     {
         $lastModified = parent::test($id);
-        if (!Zend_Registry::get('config')->debug->componentCache->checkComponentModification) {
+        static $checkComponentModification;
+        if (is_null($checkComponentModification)) {
+            $checkComponentModification = Vps_Registry::get('config')->debug->componentCache->checkComponentModification;
+        }
+        if (!$checkComponentModification) {
             return $lastModified;
         }
         

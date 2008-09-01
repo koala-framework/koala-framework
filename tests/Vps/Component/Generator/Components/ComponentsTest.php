@@ -4,7 +4,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
     private $_root;
     public function setUp()
     {
-        Vps_Registry::get('config')->vpc->rootComponent = 'Vps_Component_Generator_Components_Root';
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_Components_Root');
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 
@@ -103,7 +103,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
     {
         $generators = $this->_root->getRecursiveGenerators(array('page' => false));
         $this->assertEquals(8, count($generators));
-
+        
         $generators = $this->_root->getRecursiveGenerators(array('box' => true));
         $this->assertEquals(2, count($generators));
     }
@@ -140,14 +140,14 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
     
     public function testRecursiveComponentClasses()
     {
-        $this->_assertRec(array(), 3);
-        $this->_assertRec(array('page' => false), 3);
+        $this->_assertRec(array(), 2);
+        $this->_assertRec(array('page' => false), 2);
         $this->_assertRec(array('box' => true), 1);
     }
 
     private function _assertRec($constraints, $count)
     {
-        $classes = Vpc_Abstract::getRecursiveChildComponentClasses(
+        $classes = Vpc_Abstract::getIndirectChildComponentClasses(
             'Vps_Component_Generator_Components_Recursive', $constraints);
         $this->assertEquals($count, count($classes));
     }

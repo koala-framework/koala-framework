@@ -4,7 +4,7 @@ class Vps_Component_Generator_DbId_DbIdTest extends PHPUnit_Framework_TestCase
     private $_root;
     public function setUp()
     {
-        Vps_Registry::get('config')->vpc->rootComponent = 'Vps_Component_Generator_DbId_Root';
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_DbId_Root');
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 

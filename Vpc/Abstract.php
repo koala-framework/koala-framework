@@ -37,7 +37,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         return array_unique($ret);
     }
 
-    public static function getRecursiveChildComponentClasses($class, $select = array())
+    public static function getIndirectChildComponentClasses($class, $select = array())
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
@@ -59,14 +59,14 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         $countOutput = "<b>$class</b><br />".$select->toDebug().$countOutput."<br />";
 
         $cacheId = serialize($select->getParts());
-        $ret = self::_getRecursiveChildComponentClasses($class, $select, $cacheId);
+        $ret = self::_getIndirectChildComponentClasses($class, $select, $cacheId);
 
         $countOutput .= "<b>result:</b><pre>".print_r($ret, true)."</pre></br>";
         Vps_Benchmark::count('getRecChildCClasses', $countOutput);
         return $ret;
     }
 
-    private static function _getRecursiveChildComponentClasses($class, $select, $cacheId)
+    private static function _getIndirectChildComponentClasses($class, $select, $cacheId)
     {
         static $ccc = null;
         if (is_null($ccc)) {
@@ -75,19 +75,21 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
                 $cacheFileId = 'rccc';
                 $ccc = $cache->load($cacheFileId);
                 if (!$ccc) {
-                    $benchmark = Vps_Benchmark::start('getRecursiveChildComponentClasses cache');
+                    $benchmark = Vps_Benchmark::start('getIndirectChildComponentClasses cache');
                     $ccc = array();
-                    //�bliche aufrufe cachen: reihenfolge von wheres ist wichtig
+                    //übliche aufrufe cachen: reihenfolge von wheres ist wichtig
                     foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                        self::getRecursiveChildComponentClasses($c, array('page'=>true));
-                        self::getRecursiveChildComponentClasses($c, array('pseudoPage'=>true));
-                        self::getRecursiveChildComponentClasses($c, array('showInMenu'=>true, 'page'=>true));
-                        self::getRecursiveChildComponentClasses($c, array('page'=>false));
-                        self::getRecursiveChildComponentClasses($c, array('inherit'=>true));
-                        self::getRecursiveChildComponentClasses($c, array('page'=>false, 'unique'=>true, 'inherit'=>true));
-                        self::getRecursiveChildComponentClasses($c, array('box'=>true));
-                        self::getRecursiveChildComponentClasses($c, array('flags'=>array('noIndex'=>true), 'page'=>false));
-                        self::getRecursiveChildComponentClasses($c, array('page'=>false, 'flags'=>array('processInput'=>true)));
+                        self::getIndirectChildComponentClasses($c, array('page'=>true));
+                        self::getIndirectChildComponentClasses($c, array('pseudoPage'=>true));
+                        self::getIndirectChildComponentClasses($c, array('showInMenu'=>true, 'page'=>true));
+                        self::getIndirectChildComponentClasses($c, array('page'=>false));
+                        self::getIndirectChildComponentClasses($c, array('inherit'=>true));
+                        self::getIndirectChildComponentClasses($c, array('page'=>false, 'unique'=>true, 'inherit'=>true));
+                        self::getIndirectChildComponentClasses($c, array('box'=>true));
+                        self::getIndirectChildComponentClasses($c, array('flags'=>array('noIndex'=>true), 'page'=>false));
+                        self::getIndirectChildComponentClasses($c, array('page'=>false, 'flags'=>array('processInput'=>true)));
+                        self::getIndirectChildComponentClasses($c, array('page'=>false, 'flags'=>array('metaTags'=>true)));
+                        self::getIndirectChildComponentClasses($c, array('showInMenu'=>true, 'type'=>'main', 'page' => true));
                     }
                     $cache->save($ccc, $cacheFileId);
                     if ($benchmark) $benchmark->stop();
@@ -105,13 +107,16 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
 
         $childComponentClassesSelect = clone $select;
         $childComponentClassesSelect->unsetPart(Vps_Component_Select::SKIP_ROOT);
-        $ccc[$class.$cacheId] = Vpc_Abstract::getChildComponentClasses($class, $childComponentClassesSelect);
+        $ccc[$class.$cacheId] = array();
         foreach (Vpc_Abstract::getChildComponentClasses($class, $childConstraints) as $childClass) {
-            $classes = Vpc_Abstract::_getRecursiveChildComponentClasses($childClass, $select, $cacheId);
+            if (Vpc_Abstract::getChildComponentClasses($childClass, $select, $cacheId)) {
+                $ccc[$class.$cacheId][] = $childClass;
+                continue;
+            }
+            $classes = Vpc_Abstract::_getIndirectChildComponentClasses($childClass, $select, $cacheId);
             if ($classes) {
                 $ccc[$class.$cacheId][] = $childClass;
             }
-//             $ccc[$class.$cacheId] = array_merge($ccc[$class.$cacheId], $classes);
         }
         $ccc[$class.$cacheId] = array_unique($ccc[$class.$cacheId]);
         

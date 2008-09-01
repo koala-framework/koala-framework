@@ -4,7 +4,7 @@ class Vps_Component_Generator_Page_SkipRootTest extends PHPUnit_Framework_TestCa
     private $_root;
     public function setUp()
     {
-        Vps_Registry::get('config')->vpc->rootComponent = 'Vps_Component_Generator_Page_Root';
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_Page_Root');
         $this->_root = Vps_Component_Data_Root::getInstance();
     }
 

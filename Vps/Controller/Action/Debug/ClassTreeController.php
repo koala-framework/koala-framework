@@ -38,7 +38,7 @@ class Vps_Controller_Action_Debug_ClassTreeController extends Vps_Controller_Act
     {
         $graph  = 'digraph hierarchy {';
         $graph .= 'edge[dir=back, arrowtail=empty] ';
-        $graph .= $this->_graphData(Vps_Registry::get('config')->vpc->rootComponent);
+        $graph .= $this->_graphData(Vps_Component_Data_Root::getComponentClass());
         $graph .= '}';
 
         $descriptorspec = array(
