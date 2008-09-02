@@ -208,7 +208,19 @@ class Vps_Component_Data
         }
         return $select;
     }
-    
+    public function countChildComponents($select = array())
+    {
+        Vps_Benchmark::count('countChildComponents');
+
+        $select = $this->_formatSelect($select);
+
+        if (!$select->hasPart(Vps_Component_Select::WHERE_GENERATOR)) {
+            throw new Vps_Exception("You can count only for one generator at a time");
+        }
+        $generators = Vps_Component_Generator_Abstract::getInstances($this->componentClass, $select);
+        return current($generators)->countChildData($this, $select);
+    }
+
     public function getChildComponents($select = array())
     {
         Vps_Benchmark::count('getChildComponents');

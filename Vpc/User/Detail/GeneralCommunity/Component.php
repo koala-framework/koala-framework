@@ -21,7 +21,7 @@ class Vpc_User_Detail_GeneralCommunity_Component extends Vpc_User_Detail_General
         $select = $table->select()
             ->where('visible = ?', 1)
             ->where('user_id = ?', $this->getData()->parent->row->id)
-            ->order('create_time DESC');
+            ->order('create_time', 'DESC');
         $ret['postsCount'] = count($select->query()->fetchAll());
         $select->limit($this->_getSetting('numberOfLastPosts'));
         foreach ($select->query()->fetchAll() as $row) {

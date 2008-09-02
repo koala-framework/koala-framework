@@ -39,6 +39,11 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $select->order('value');
         $select->whereEquals('value', array('foo', 'baz'));
         $this->_assertIds($model, $select, array(3, 1));
+
+        $select = $model->select();
+        $select->order('value', 'DESC');
+        $select->whereEquals('value', array('foo', 'baz'));
+        $this->_assertIds($model, $select, array(1, 3));
     }
 
     public function testWhereId()

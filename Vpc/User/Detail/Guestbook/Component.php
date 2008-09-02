@@ -10,7 +10,7 @@ class Vpc_User_Detail_Guestbook_Component extends Vpc_Posts_Directory_Component
     public function getSelect()
     {
         $select = parent::getSelect();
-        $select->order('create_time DESC');
+        $select->order('create_time', 'DESC');
         return $select;
     }
 }

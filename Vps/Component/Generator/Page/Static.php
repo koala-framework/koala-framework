@@ -10,15 +10,6 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
         return $select;
     }
 
-    protected function _fetchKeys($parentData, $select)
-    {
-        $select = $this->_formatSelect($parentData, $select);
-        if ($select) {
-            $select->processed(Vps_Component_Select::WHERE_FILENAME);
-        }
-        return parent::_fetchKeys($parentData, $select);
-    }
-    
     protected function _acceptKey($key, $select, $parentData)
     {
         $ret = parent::_acceptKey($key, $select, $parentData);

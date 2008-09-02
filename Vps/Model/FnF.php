@@ -46,11 +46,19 @@ class Vps_Model_FnF extends Vps_Model_Abstract
         }
 
         if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
+            if (count($order) > 1) throw new Vps_Exception("Multiple Order fields not yet implemented");
+            $order = current($order);
             $orderData = array();
             foreach ($data as $d) {
-                $orderData[$d['id']] = $d[$order];
+                $orderData[$d['id']] = $d[$order['field']];
             }
-            asort($orderData);
+            if ($order['dir'] == 'ASC') {
+                asort($orderData);
+            } else if ($order['dir'] == 'DESC') {
+                arsort($orderData);
+            } else {
+                throw new Vps_Exception("Invalid order direction: {$order['dir']}");
+            }
             $sortedData = array();
             foreach (array_keys($orderData) as $id) {
                 foreach ($data as $d) {
@@ -73,11 +81,6 @@ class Vps_Model_FnF extends Vps_Model_Abstract
             'rowClass' => $this->_rowClass,
             'data' => $data
         ));
-    }
-
-    public function fetchCount($where = array())
-    {
-        return count($this->fetchAll($where));
     }
 
     private function _matchSelect($data, $select)

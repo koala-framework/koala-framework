@@ -1,1 +1,0 @@
-<?phpclass Vpc_Directories_Top_Model extends Vpc_Table{    protected $_name = 'vpc_directories_top';}
