@@ -9,13 +9,6 @@ class Vpc_User_Box_Component extends Vpc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function processInput(array $postData)
-    {
-        if (isset($postData['logout'])) {
-            Vps_Auth::getInstance()->clearIdentity();
-        }
-    }
-
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

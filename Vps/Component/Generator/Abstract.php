@@ -191,29 +191,6 @@ abstract class Vps_Component_Generator_Abstract
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-
-        if (is_object($component)) {
-            $cacheId = $component->componentId;
-            Vps_Benchmark::count('Gen::getInstances dynamisch', $cacheId.$select->toDebug());
-        } else {
-            $cacheId = $component."<br />";
-            $type = 'unknown';
-            foreach (debug_backtrace() as $bt) {
-                if ($bt['function']=='getIndirectChildComponentClasses') {
-                    $type = 'getIndirectChildComponentClasses';
-                }
-            }
-            if ($type == 'unknown') {
-                foreach (debug_backtrace() as $bt) {
-                    if (isset($bt['class'])) $cacheId .= $bt['class'];
-                    $cacheId .= '::'.$bt['function']."<br />";
-                }
-            } else {
-                $cacheId .= "<b>$type</b><br />";
-            }
-            Vps_Benchmark::count('Gen::getInstances statisch', $cacheId.$select->toDebug());
-        }
-
         if ($component instanceof Vps_Component_Data) {
             $componentClass = $component->componentClass;
         } else {
@@ -243,13 +220,8 @@ abstract class Vps_Component_Generator_Abstract
         static $instances = array();
         $cacheId = $component->componentId . serialize($select->getParts());
         if (isset($instances[$cacheId])) {
-$b = Vps_Benchmark::start('getDynamicInstancesCached', $component->componentId.'<br/>'.$select->toDebug());
             return $instances[$cacheId];
-if($b)$b->stop();
         }
-
-$b = Vps_Benchmark::start('getDynamicInstances', $component->componentId.'<br/>'.$select->toDebug());
-        Vps_Benchmark::count('Gen::getInstances dynamisch+page');
 
         if (!$select->getPart(Vps_Component_Select::WHERE_GENERATOR) &&
             !$select->getPart(Vps_Component_Select::WHERE_PAGE))
@@ -281,7 +253,6 @@ $b = Vps_Benchmark::start('getDynamicInstances', $component->componentId.'<br/>'
             ));
         }
         $instances[$cacheId] = $ret;
-if($b)$b->stop();
 
         return $ret;
     }

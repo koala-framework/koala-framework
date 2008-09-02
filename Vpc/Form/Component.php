@@ -109,6 +109,9 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['formName'] = $this->getData()->componentId;
 
         $ret['action'] = $this->getData()->url;
+        d($this->getData()->getPage()->url);
+        d($this->getData()->parent->parent->parent->url);
+        d($ret['action']);
         $ret['method'] = $this->_getSetting('method');
 
         $ret['isUpload'] = false;
