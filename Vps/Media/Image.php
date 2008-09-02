@@ -128,6 +128,15 @@ class Vps_Media_Image
 
         if ($size === false) return false;
 
+        // wenn bild schon der angeforderten größe entspricht, original ausgeben
+        // nötig für zB animierte gifs, da sonst die animation verloren geht
+        if (($scale == self::SCALE_CROP || $scale == self::SCALE_BESTFIT || $scale == self::SCALE_DEFORM)) {
+            $originalSize = getimagesize($source);
+            if ($originalSize[0] == $size['width'] && $originalSize[1] == $size['height']) {
+                $scale = self::SCALE_ORIGINAL;
+            }
+        }
+
         if ($size['scale'] == self::SCALE_CROP) {
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
             if (class_exists('Imagick')) {
