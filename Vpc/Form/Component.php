@@ -20,9 +20,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         
         //todo: wenn mehrere verbessern
         $ret['assets']['files'][] = 'vps/Vps/Form/Field/File/Component.css';
-        $ret['assets']['files'][] = 'vps/Vps/Form/Field/MultiFields/Component.css';
 
-	$ret['flags']['processInput'] = true;
+        $ret['flags']['processInput'] = true;
         return $ret;
     }
 
@@ -110,9 +109,6 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         $ret['formName'] = $this->getData()->componentId;
 
         $ret['action'] = $this->getData()->url;
-        d($this->getData()->getPage()->url);
-        d($this->getData()->parent->parent->parent->url);
-        d($ret['action']);
         $ret['method'] = $this->_getSetting('method');
 
         $ret['isUpload'] = false;

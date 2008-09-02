@@ -33,7 +33,11 @@ class Vps_Component_Data
     {
         if ($var == 'url') {
             $filenames = array();
-            $page = $this->getPage();
+            if (!$this->isPage) {
+                $page = $this->getPage();
+                return $page->url;
+            }
+            $page = $this;
             do {
                 if (Vpc_Abstract::getFlag($page->componentClass, 'shortcutUrl')) {
                     $filenames[] = call_user_func(array($page->componentClass, 'getShortcutUrl'), $page->componentClass, $page);
