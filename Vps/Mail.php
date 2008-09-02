@@ -12,7 +12,7 @@ class Vps_Mail
         $this->_template = $template;
         $this->_masterTemplate = $masterTemplate;
 
-        $this->_mail = new Zend_Mail('utf-8');
+        $this->_mail = new Vps_Mail_Fixed('utf-8');
 
         $host = $_SERVER['HTTP_HOST'];
         $webUrl = 'http://'.$host;
@@ -190,7 +190,6 @@ class Vps_Mail
                 $this->_mail->addAttachment($image);
             }
         }
-
         $this->_mail->setSubject($this->_view->subject);
 
         return $this->_mail->send();
