@@ -88,9 +88,6 @@ abstract class Vps_Component_Generator_Abstract
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-        //p($componentClass);
-        //p($select);
-        //bt();
         $generators = Vpc_Abstract::getSetting($componentClass, 'generators');
         $ret = array();
         foreach ($generators as $key => $generator) {
