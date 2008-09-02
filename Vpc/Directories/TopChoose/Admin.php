@@ -1,5 +1,5 @@
 <?php
-class Vpc_Directories_Top_Admin extends Vpc_Admin
+class Vpc_Directories_TopChoose_Admin extends Vpc_Admin
 {
     public function setup()
     {
