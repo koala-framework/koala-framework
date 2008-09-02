@@ -50,7 +50,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                 $group->lastUser = null;
                 $group->countThreads = 0;
                 $group->countPosts = 0;
-                
+                /*
                 // Generators holen
                 $threadGenerator = Vps_Component_Generator_Abstract
                     ::getInstance($group->componentClass, 'detail');
@@ -89,7 +89,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                         ->getComponentByClass('Vpc_User_Directory_Component')
                         ->getChildComponent('_' . $group->lastPost->row->user_id);
                 }
-                
+                */
                 $group->childGroups = $this->getGroups($group->row->id);
                 
                 $ret[] = $group;

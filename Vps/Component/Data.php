@@ -152,7 +152,6 @@ class Vps_Component_Data
                                 $childSelect = array('page'=>false))
     {
         Vps_Benchmark::count('getRecursiveChildComponents');
-
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
@@ -160,6 +159,7 @@ class Vps_Component_Data
             $childSelect = new Vps_Component_Select($childSelect);
         }
         $ret = $this->getChildComponents($select);
+        
         if ($ret && $select->getPart(Vps_Component_Select::LIMIT_COUNT) == 1) {
             return $ret;
         }
@@ -184,84 +184,17 @@ class Vps_Component_Data
         if ($select->hasPart(Vps_Component_Select::WHERE_HOME)) {
             $select->unsetPart(Vps_Component_Select::WHERE_HOME);
         }
-        //if (!$childSelect->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-            $classes = Vpc_Abstract::getIndirectChildComponentClasses($this->componentClass, $select);
-        
-/*
-//########### versuch 1
-        foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            $inheritClasses = Vpc_Abstract::getChildComponentClasses($c, array('inherit'=>true));
-            foreach ($inheritClasses as $ic) {
-                $childClasses = Vpc_Abstract::getIndirectChildComponentClasses($ic, $select);
-                if ($childClasses) {
-                    $classes = array_merge($classes, $childClasses, array($ic));
-                }
-            }
-        }
-//########### versuch 1
-*/
-/*
-//########### versuch 2
-        foreach (Vpc_Abstract::getComponentClasses() as $c) {
-            $generators = Vpc_Abstract::getSetting($c, 'generators');
-            foreach ($generators as $key=>$gen) {
-                if (isset($gen['inherit']) && $gen['inherit']) {
-                    $inheritClasses = $gen['component'];
-                    if (!is_array($inheritClasses)) $inheritClasses = array($inheritClasses);
-                    foreach ($inheritClasses as $ic) {
-                        if (!$ic) continue;
-                        $childClasses = Vpc_Abstract::getIndirectChildComponentClasses($ic, $select);
-                        $classes = array_merge($classes, $childClasses, array($ic));
-                    }
-                }
-            }
-        }
-//########### versuch 2
-*/
-
-//########### versuch 3
-
+        $classes = Vpc_Abstract::getIndirectChildComponentClasses($this->componentClass, $select);
         $page = $this;
         while (1) {
-            if ($this->parent instanceof Vps_Component_Data_Root) {
-                $page = $page->parent;
-            } else {
-                $page = $page->getParentPage();
-            }
-            if (!$page) break;
+            if ($page instanceof Vps_Component_Data_Root) break;
+            $page = $page->getParentPage();
+            if (!$page) { $page = Vps_Component_Data_Root::getInstance(); }
             $classes = array_merge($classes,
                 Vpc_Abstract::getIndirectChildComponentClasses($page->componentClass, $select)
             );
         }
-//########### versuch 3
-
-/*
-//########### versuch 4
-        static $inheritClasses = null;
-        if (is_null($inheritClasses)) {
-            foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                $generators = Vpc_Abstract::getSetting($c, 'generators');
-                foreach ($generators as $key=>$gen) {
-                    if (isset($gen['inherit']) && $gen['inherit']) {
-                        if (!is_array($gen['component'])) $gen['component'] = array($gen['component']);
-                        foreach ($gen['component'] as $ic) {
-                            if (!$ic) continue;
-                            $inheritClasses[] = $ic;
-                        }
-                    }
-                }
-            }
-        }
-        foreach ($inheritClasses as $ic) {
-            $childClasses = Vpc_Abstract::getIndirectChildComponentClasses($ic, $select);
-            $classes = array_merge($classes, $childClasses, array($ic));
-        }
-//########### versuch 4
-*/
-        //p($classes);
-        
-            $childSelect->whereComponentClasses(array_unique($classes));
-        //}
+        $childSelect->whereComponentClasses(array_unique($classes));
         return $childSelect;
     }
 
@@ -279,7 +212,6 @@ class Vps_Component_Data
     public function getChildComponents($select = array())
     {
         Vps_Benchmark::count('getChildComponents');
-
         $select = $this->_formatSelect($select);
         $sc = serialize($select->getParts());
         if (!isset($this->_constraintsCache[$sc])) {
@@ -313,7 +245,7 @@ class Vps_Component_Data
     private function _getChildComponentsForGenerators(&$ret, $generators, $select, $limitCount)
     {
         foreach ($generators as $generator) {
-
+            
             $generatorSelect = clone $select;
             if ($limitCount) {
                 $generatorSelect->limit($limitCount - count($ret));
