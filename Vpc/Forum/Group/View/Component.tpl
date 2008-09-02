@@ -7,7 +7,7 @@
                 <div class="description">
                     <?=$this->componentLink(
                         $item, 
-                        $this->truncate($item->row->subject, 50, '...', true) . '<span>' . $item->replies . ' ' . trlpVps("reply", "replies", $item->replies) . '</span>', 
+                        '<span>' . $item->replies . ' ' . trlpVps("reply", "replies", $item->replies) . '</span>' . $this->truncate($item->row->subject, 50, '...', true), 
                         'name'
                     );?>
                 </div>
