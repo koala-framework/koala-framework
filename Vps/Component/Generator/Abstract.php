@@ -349,22 +349,14 @@ abstract class Vps_Component_Generator_Abstract
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
+        if (is_null($select)) return null;
         $select = $this->_formatSelectFilename($select);
         if (is_null($select)) return null;
         $select = $this->_formatSelectHome($select);
         if (is_null($select)) return null;
 
         if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS) || $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)) {
-            $classes = Vpc_Abstract::getChildComponentClasses($parentData->componentClass, $select);
-            $page = $parentData;
-            while (1) {
-                if ($page instanceof Vps_Component_Data_Root) break;
-                $page = $page->getParentPage();
-                if (!$page) { $page = Vps_Component_Data_Root::getInstance(); }
-                $classes = array_merge($classes,
-                    Vpc_Abstract::getChildComponentClasses($page->componentClass, $select)
-                );
-            }
+            $classes = $this->getChildComponentClasses($select);
             $select->whereComponentClasses($classes);
             if ($select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES) === array()) {
                 return null;
