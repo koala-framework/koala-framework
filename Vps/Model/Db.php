@@ -117,8 +117,7 @@ class Vps_Model_Db implements Vps_Model_Interface
         }
         $dbSelect = $this->_createDbSelect($select);
         $dbSelect->reset(Zend_Db_Select::COLUMNS);
-        $dbSelect->reset(Zend_Db_Select::ORDER);
-        $dbSelect->from(null, 'COUNT(*)');
+        $dbSelect->from($this->_table->info('name'), 'COUNT(*)');
         $dbSelect->setIntegrityCheck(false);
         return $this->_table->getAdapter()->query($dbSelect)->fetchColumn();
     }

@@ -87,7 +87,10 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
 
-        $class = self::getChildComponentClass(get_class($this), 'child', 'success');
+        $class = null;
+        if (self::hasChildComponentClass(get_class($this), 'child', 'success')) {
+            $class = self::getChildComponentClass(get_class($this), 'child', 'success');               
+        }
 
         $ret['showSuccess'] = false;
         $ret['errors'] = $this->getErrors();

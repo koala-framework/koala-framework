@@ -1,10 +1,8 @@
 .$cssClass .newPost {
-    float: left;
-    margin: 20px 0px;
+    margin: 30px 0px;
 }
 .$cssClass .newPost a {
     border: 1px solid #ccc;
     font-weight: bold;
     padding: 3px 10px;
-    line-height: 20px;
 }

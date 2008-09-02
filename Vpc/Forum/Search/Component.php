@@ -15,17 +15,19 @@ class Vpc_Forum_Search_Component extends Vpc_Directories_List_Component
     public function getSelect()
     {
         $ret = parent::getSelect();
-        
-        $groupGenerator = $this->getData()->parent->getGenerator('groups');
+        /*
         $groupComponentClass = Vpc_Abstract::getChildComponentClass($this->getData()->parent->componentClass, 'groups');
+        $threadComponentClass = Vpc_Abstract::getChildComponentClass($groupComponentClass, 'detail');
+        $postsComponentClass = Vpc_Abstract::getChildComponentClass($threadComponentClass, 'child', 'posts');
+
+        $groupGenerator = $this->getData()->parent->getGenerator('groups');
         $threadGenerator = Vps_Component_Generator_Abstract
                                 ::getInstance($groupComponentClass, 'detail');
-        $threadComponentClass = Vpc_Abstract::getChildComponentClass($groupComponentClass, 'detail');
         $postGenerator = Vps_Component_Generator_Abstract
-                                ::getInstance($threadComponentClass, 'detail');
+                                ::getInstance($postsComponentClass, 'posts');
                                 
         $postGenerator->joinWithParentGenerator($ret, $threadGenerator);
-        $groupGenerator->joinWithChildGenerator($ret, $threadGenerator, $this->getData()->parent);
+        $groupGenerator->joinWithChildGenerator($ret, $threadGenerator, $this->getData()->parent);*/
         return $ret;
     }
 }

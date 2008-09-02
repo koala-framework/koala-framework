@@ -115,7 +115,17 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         }
         return $classes[0];
     }
-
+    
+    public static function hasChildComponentClass($class, $generator, $componentKey = null)
+    {
+        $constraints = array(
+            'generator' => $generator,
+            'componentKey' => $componentKey
+        );
+        $classes = self::getChildComponentClasses($class, $generator);
+        return isset($classes[0]);
+    }
+    
     protected function _getRow()
     {
         if (!isset($this->_row)) {
@@ -195,6 +205,9 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
                         'page' => false,
                         'flags' => array('processInput' => true)
                     ));
+            if (Vps_Component_Abstract::getFlag(get_class($this), 'processInput')) {
+                $process[] = $this->getData();
+            }
             foreach ($process as $i) {
                 $i->getComponent()->processInput($_REQUEST);
             }
