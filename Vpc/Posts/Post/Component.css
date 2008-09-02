@@ -1,5 +1,4 @@
 .$cssClass {
-    color: $reccomend;
     background: #fff;
     font-size: 11px;
     line-height: 16px;
@@ -31,9 +30,7 @@
     font-size: 12px;
     padding: 15px 20px;
     background: #fff;
-}
-.$cssClass p.signature {
-    padding: 15px 20px;
+    margin-top: 3px; /*IE7 bugfix*/
 }
 .$cssClass .comment fieldset.quote {
     background: #f3f2f1;
@@ -41,4 +38,7 @@
     font-style: italic;
     margin-top: 10px;
     padding: 10px;   
+}
+.$cssClass p.signature {
+    padding: 15px 20px;
 }

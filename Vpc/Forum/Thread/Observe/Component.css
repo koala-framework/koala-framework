@@ -2,3 +2,15 @@
     margin: 20px 0px;
     float: right;
 }
+.$cssClass a.notObserved {
+    background: url(/assets/web/images/notObserved.jpg) no-repeat left center;
+    padding-left: 25px;
+}
+.$cssClass a.observed {
+    background: url(/assets/web/images/observed.jpg) no-repeat left center;
+    padding-left: 25px;
+}
+.$cssClass a.observed:hover,
+.$cssClass a.notObserved:hover {
+    background: url(/assets/web/images/observedOver.jpg) no-repeat left center;
+}

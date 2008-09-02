@@ -1,32 +1,30 @@
-.vpcForumGroupView ul li.threads {
+.$cssClass ul li.threads {
     border: 1px solid #ccc;
     margin: 15px 0px;
 }
-.vpcForumGroupView div.description {
+.$cssClass div.description {
     border-bottom: 1px solid #CCCCCC;
 }
-.vpcForumGroupView div.description a {
+.$cssClass div.description a {
     font-weight: bold;
     display: block;
     background: #f3f2f1;
-    padding: 3px 3px 3px 10px;
+    padding: 3px 10px 3px 10px;
 }
-.vpcForumGroupView div.description a span {
+.$cssClass div.description a span {
     float: right;
-    margin-top: -15px;
-    padding-right: 5px;
 }
-.vpcForumGroupView div.statistik {
+.$cssClass div.statistik {
     float: right;
     font-size: 11px;
     line-height: 16px;
     width: 200px;
 }
-.vpcForumGroupView div.threads {
+.$cssClass div.threads {
     margin-right: 10px;
     text-align: right;
 }
-.vpcForumGroupView div.lastPost {
+.$cssClass div.lastPost {
     font-size: 11px;
     line-height: 16px;
     padding-left: 10px;

@@ -22,6 +22,9 @@
     margin-right: 251px;
     margin-top: -31px;
 }
+.ext-safari .$cssClass div.deleteImage {
+    margin-top: 0px;
+}
 .$cssClass .vpsFormFieldFileInfo {
     width: 240px;
     overflow: hidden;

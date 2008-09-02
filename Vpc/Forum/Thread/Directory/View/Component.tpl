@@ -12,6 +12,7 @@
     <?php } else { ?>
         <span class="threadClosed"><?= trlVps('Thread closed') ?></span>
     <?php } ?>
+    <div class="clear"></div>
     <?=$this->component($this->paging)?>
     <? foreach($this->items as $post) { ?>
         <?=$this->component($post)?>
@@ -23,5 +24,6 @@
     <?php } else { ?>
         <span class="threadClosed"><?= trlVps('Thread closed') ?></span>
     <?php } ?>
+    <div class="clear"></div>
     <?=$this->component($this->moderate)?>
 </div>

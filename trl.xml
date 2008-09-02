@@ -447,6 +447,10 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Eintrag wurde erfolgreich gespeichert.</de>
 </text>
 <text>
+<en default="1">Action was successfully saved.</en>
+<de>Die Aktion wurde erfolgreich gespeichert.</de>
+</text>
+<text>
 <en default="1">to topic</en>
 <de>Zum Thema</de>
 </text>
