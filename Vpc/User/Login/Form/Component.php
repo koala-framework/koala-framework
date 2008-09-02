@@ -36,6 +36,10 @@ class Vpc_User_Login_Form_Component extends Vpc_Form_Component
                 }
             }
         }
+
+        if (isset($postData['logout'])) {
+            Vps_Auth::getInstance()->clearIdentity();
+        }
         parent::processInput($postData);
     }
 

@@ -42,27 +42,8 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
         }
-
-        $countOutput = '';
-        foreach (debug_backtrace() as $bt) {
-            if ($bt['function'] == '_formatChildConstraints') {
-//                 $countOutput = '_formatChildConstraints<br />';
-                break;
-            }
-        }
-        if (!$countOutput) {
-            foreach (debug_backtrace() as $bt) {
-                if (isset($bt['class'])) $countOutput .= $bt['class'];
-                $countOutput .= '::'.$bt['function']."<br />";
-            }
-        }
-        $countOutput = "<b>$class</b><br />".$select->toDebug().$countOutput."<br />";
-
         $cacheId = serialize($select->getParts());
         $ret = self::_getIndirectChildComponentClasses($class, $select, $cacheId);
-
-        $countOutput .= "<b>result:</b><pre>".print_r($ret, true)."</pre></br>";
-        Vps_Benchmark::count('getRecChildCClasses', $countOutput);
         return $ret;
     }
 
@@ -97,11 +78,11 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
             }
         }
 
-        
         if (isset($ccc[$class.$cacheId])) {
-            Vps_Benchmark::count('rccc cache hit');
+            Vps_Benchmark::count('iccc cache hit');
             return $ccc[$class.$cacheId];
         }
+        Vps_Benchmark::count('iccc cache miss');
 
         $childConstraints = array('page' => false);
 
@@ -119,43 +100,6 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
             }
         }
         $ccc[$class.$cacheId] = array_unique($ccc[$class.$cacheId]);
-        
-        $countOutput = '';
-        foreach (debug_backtrace() as $bt) {
-            if ($bt['function'] == 'getRecursiveChildComponents') {
-//                 $countOutput = 'getRecursiveChildComponents<br />';
-                break;
-            }
-        }
-        
-        if (!$countOutput) {
-            foreach (debug_backtrace() as $bt) {
-                if (isset($bt['class'])) $countOutput .= $bt['class'];
-                $countOutput .= '::'.$bt['function'].'(';
-                
-                foreach ($bt['args'] as $arg) {
-                    if (is_string($arg)) {
-                        $countOutput .= $arg;
-                    } else if ($arg instanceof Vps_Model_Select) {
-                        $countOutput .= print_r($arg->getParts(), true);
-                    } else if ($arg instanceof Vps_Component_Data) {
-                        $countOutput .= $arg->componentId;
-//                     } else if (is_array($arg)) {
-//                         $countOutput .= substr(print_r($arg, true), 0, 20);
-                    } else {
-                        $countOutput .= '?';
-                    }
-                    $countOutput .= ', ';
-                }
-                $countOutput = substr($countOutput, 0, -2);
-                $countOutput .= ")<br />";
-            }
-        }
-        $countOutput = "<b>$class</b><br />".$select->toDebug().$countOutput."";
-        $countOutput .= "<b>result:</b><pre>".print_r($ccc[$class.$cacheId], true)."</pre><br/>";
-        Vps_Benchmark::count('rccc cache miss', $countOutput);
-
-
         return $ccc[$class.$cacheId];
     }
 
@@ -252,7 +196,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
                         'flags' => array('processInput' => true)
                     ));
             foreach ($process as $i) {
-                $i->getComponent()->processInput($_POST);
+                $i->getComponent()->processInput($_REQUEST);
             }
             echo Vps_View_Component::renderComponent($this->getData(), null, true);
         }

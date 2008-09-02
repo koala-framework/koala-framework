@@ -74,4 +74,14 @@ class Vps_Component_Model implements Vps_Model_Interface
     {
         return new Vps_Dao_Pages();
     }
+
+    public function getColumns()
+    {
+        throw new Vps_Exception('Not implemented yet.');
+    }
+
+    public function select()
+    {
+        return new Vps_Component_Select();
+    }
 }

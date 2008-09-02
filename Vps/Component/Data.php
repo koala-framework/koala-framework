@@ -134,7 +134,6 @@ class Vps_Component_Data
             return $this->_recursiveGeneratorsCache[$cacheId];
         }
         Vps_Benchmark::count('getRecursiveGenerators miss', $this->componentClass.' '.$select->toDebug()."<br />");
-        $b = Vps_Benchmark::start('getRecursiveGenerators', $this->componentClass.' '.$select->toDebug());
 
         $ret = $this->getGenerators($select);
         $childSelect = $this->_formatChildConstraints($select, $childSelect);
@@ -142,7 +141,6 @@ class Vps_Component_Data
             $ret = array_merge($ret, $component->getRecursiveGenerators($select, $childSelect));
         }
         $this->_recursiveGeneratorsCache[$cacheId] = $ret;
-        if($b) $b->stop();
         return $ret;
     }
 
