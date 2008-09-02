@@ -12,8 +12,9 @@
     padding: 3px 3px 3px 10px;
 }
 .vpcForumGroupView div.description a span {
-    position: absolute;
-    right: 30px;
+    float: right;
+    margin-top: -15px;
+    padding-right: 5px;
 }
 .vpcForumGroupView div.statistik {
     float: right;

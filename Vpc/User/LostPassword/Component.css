@@ -1,14 +1,15 @@
-.vpcUserLostPassword h1,
-.vpcUserLostPassword p {
+.$cssClass h1,
+.$cssClass p {
     margin-bottom: 10px;
 }
-.vpcUserLostPassword label {
-    width: 110px;
+.$cssClass label {
+    width: 50px;
     float: left;
     text-align: right;
     margin-top: 4px;
 }
-.vpcUserLostPassword input {
+.$cssClass input {
+    width: 200px;
     margin-left: 10px;
     margin-bottom: 5px;
     padding: 2px

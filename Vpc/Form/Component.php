@@ -20,8 +20,9 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         
         //todo: wenn mehrere verbessern
         $ret['assets']['files'][] = 'vps/Vps/Form/Field/File/Component.css';
+        $ret['assets']['files'][] = 'vps/Vps/Form/Field/MultiFields/Component.css';
 
-        $ret['flags']['processInput'] = true;
+	$ret['flags']['processInput'] = true;
         return $ret;
     }
 

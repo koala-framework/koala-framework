@@ -4,7 +4,7 @@ class Vpc_User_Box_Component extends Vpc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['login'] = 'Vpc_User_Login_Component';
+        $ret['generators']['child']['component']['login'] = 'Vpc_User_Box_Login_Component';
         $ret['viewCache'] = false;
         return $ret;
     }

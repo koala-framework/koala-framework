@@ -157,7 +157,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 
         $name = htmlspecialchars($name);
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$namePostfix);
-        $ret['html']  = "<div class=\"vpsFormFieldFile\">\n";
+        $ret['html']  = "<div class=\"vpsFormFieldFileInner\">\n";
         $ret['html'] .= "<input type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
                         " style=\"width: {$this->getWidth()}px\" />";
         if ($value) {

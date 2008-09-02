@@ -1,0 +1,13 @@
+.$cssClass .newThread.first {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+.$cssClass .newThread {
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+.$cssClass .newThread a {
+    border: 1px solid #ccc;
+    font-weight: bold;
+    padding: 3px 10px;
+}

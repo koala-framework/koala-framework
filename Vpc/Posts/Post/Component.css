@@ -4,7 +4,7 @@
     font-size: 11px;
     line-height: 16px;
     padding: 0px;
-    margin: 15px 0px;
+    margin: 10px 0px;
     border: 1px solid #ccc;
     clear: both;
 }
@@ -41,29 +41,4 @@
     font-style: italic;
     margin-top: 10px;
     padding: 10px;   
-}
-.$cssClass .emoticon_smile {
-    background-image: url(/assets/silkicons/emoticon_smile.png);
-    padding-right: 16px;
-    margin-right: 3px;
-}
-.$cssClass .emoticon_grin {
-    background-image: url(/assets/silkicons/emoticon_grin.png);
-    padding-right: 16px;
-    margin-right: 3px;
-}
-.$cssClass .emoticon_tongue {
-    background-image: url(/assets/silkicons/emoticon_tongue.png);
-    padding-right: 16px;
-    margin-right: 3px;
-}
-.$cssClass .emoticon_unhappy {
-    background-image: url(/assets/silkicons/emoticon_unhappy.png);
-    padding-right: 16px;
-    margin-right: 3px;
-}
-.$cssClass .emoticon_wink {
-    background-image: url(/assets/silkicons/emoticon_wink.png);
-    padding-right: 16px;
-    margin-right: 3px;
 }

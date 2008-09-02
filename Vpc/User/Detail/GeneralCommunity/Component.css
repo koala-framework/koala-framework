@@ -1,0 +1,19 @@
+.$cssClass h2 {
+    margin-top: -15px;
+    padding: 2px 10px;
+    border-bottom: 2px solid #ccc;
+}
+.$cssClass .nickname h3 {
+    float: left;
+    font-size: 14px;
+    margin-right: 10px;
+    padding-top: 1px;
+}
+.$cssClass .avatar {
+    float: right;
+    margin-top: -15px;
+}
+.$cssClass .userData h3 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}

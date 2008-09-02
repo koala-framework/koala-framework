@@ -10,6 +10,10 @@ class Vps_View_Helper_Image
 
     public function image($image, $rule = null, $type = 'default', $alt = '', $cssClass = null)
     {
+        if (is_string($image)) {
+            $alt = $rule;
+            $cssClass = $type;
+        }
         $attr = '';
         if (is_string($cssClass)) {
             $attr .= ' class="'.$cssClass.'"';

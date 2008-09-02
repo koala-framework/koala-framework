@@ -1,18 +1,30 @@
-div.vpcUserEdit label {
+.$cssClass label {
+    width: 150px;
     float: left;
     margin-right: 20px;
     text-align: right;
 }
-div.vpcUserEdit .showField {
+.$cssClass .showField {
     font-weight: bold;
     margin-bottom: 9px;
 }
-div.vpcUserEdit fieldset {
-    padding-bottom: 15px;
+.$cssClass fieldset {
     margin-bottom: 20px;
+    padding: 10px;
 }
-div.vpcUserEdit fieldset legend {
+.$cssClass fieldset legend {
     font-weight: bold;
     margin-left: 20px;
     padding: 5px;
+}
+.$cssClass div.deleteImage {
+    float: right;
+    margin-right: 251px;
+    margin-top: -31px;
+}
+.$cssClass .vpsFormFieldFileInfo {
+    width: 240px;
+    overflow: hidden;
+    float: right;
+    margin-top: -24px;
 }
