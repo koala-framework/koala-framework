@@ -1,22 +1,25 @@
-.vpcPaging {
-    margin-bottom: -5px;
-    line-height: 20px;
+.$cssClass {
     position: relative;
+    margin: 15px auto;
+    padding: 5px 0px;
+    text-align: center;
+    line-height: 20px;
     z-index: 1000;
-    width: 400px;
 }
-.vpcPaging a {
+.$cssClass a {
     padding: 1px 3px;
-    border: 1px solid $blue;
-    color: $blue;
-}
-.vpcPaging a:hover,
-.vpcPaging a.active {
-    color: $gold;
+    border: 1px solid #000;
+    color: #000;
+    padding: 3px 5px;
     font-weight: bold;
-    background-color: $white;
 }
-.vpcPaging span {
+.$cssClass a:hover,
+.$cssClass a.active {
+    color: #000;
+    font-weight: bold;
+    background-color: #fff;
+}
+.$cssClass span {
     font-weight: bold;
     color: $blue;
     padding-right: 5px;

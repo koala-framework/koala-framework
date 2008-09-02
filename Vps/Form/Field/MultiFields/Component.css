@@ -1,0 +1,1 @@
+.$cssClass {    border: 1px solid;    margin-bottom: 50px;    padding: 10px}.$cssClass button.add,.$cssClass button.delete,.$cssClass button.deleteImage,.$cssClass button.deleteImage {    cursor: pointer;}.$cssClass div.vpsField label {    width: 150px;    margin-top: 4px;    margin-right: 5px;}

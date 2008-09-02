@@ -1,6 +1,6 @@
 <div class="<?=$this->cssClass?>">
-    <?= trlVps('Do you really want to delete this post?') ?>
-    <?= $this->componentLink($this->data->parent->parent, trlVps('No')) ?>
-    <?= $this->componentLink($this->data->getChildComponent('_confirmed'), trlVps('Yes')) ?>
+    <h2><?= trlVps('Do you really want to delete this post?') ?></h2>
     <?= $this->component($this->data->parent); ?>
+    <div class="deletingPost"><?= $this->componentLink($this->data->parent->parent, trlVps('No')) ?></div>
+    <div class="deletingPost yes"><?= $this->componentLink($this->data->getChildComponent('_confirmed'), trlVps('Yes')) ?></div>
 </div>

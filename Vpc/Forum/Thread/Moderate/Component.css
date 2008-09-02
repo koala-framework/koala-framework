@@ -1,10 +1,7 @@
-.vpcForumThreadModerate {
-    margin-top: 20px;
-}
-.vpcForumThreadModerate fieldset {
+.$cssClass fieldset {
     padding: 10px;
 }
-.vpcForumThreadModerate fieldset legend {
+.$cssClass fieldset legend {
     background: #fff;
     padding: 5px;
 }

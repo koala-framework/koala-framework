@@ -16,7 +16,6 @@
     <?php
     }
     ?>
-    <div class="clear"></div>
     <div class="userData">
         <h3><?=trlVps('Member since')?>:</h3>
         <p><?=$this->date($this->row->created)?></p>

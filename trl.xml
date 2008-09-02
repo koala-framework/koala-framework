@@ -2634,7 +2634,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">Please enter a reason for reporting this Post</en>
-<de>_</de>
+<de>Bitte geben sie einen Grund zur Wiederöffnung des Themas an</de>
 </text>
 <text>
 <en default="1">A post has been reported</en>
@@ -2704,7 +2704,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">General</en>
-<de>_</de>
+<de>Allgemein</de>
 </text>
 <text>
 <en default="1">Avatar</en>
@@ -2790,19 +2790,19 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 </text>
 <text>
 <en default="1">Please login</en>
-<de>_</de>
+<de>Bitte loggen sie sich ein</de>
 </text>
 <text>
 <en default="1">You have to login to see the requested page.</en>
-<de>_</de>
+<de>Sie müssen eingeloggt sein, um die Seite zu betreten.</de>
 </text>
 <text>
 <en default="1">If you don't have an account, you can</en>
-<de>_</de>
+<de>Wenn sie noch keinen Account haben, können sie sich</de>
 </text>
 <text>
 <en default="1">register here</en>
-<de>_</de>
+<de>hier registrieren</de>
 </text>
 <text>
 <en default="1">Show</en>
@@ -2882,7 +2882,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 </text>
 <text>
 <en default="1">Useraccount created</en>
-<de>_</de>
+<de>Account erfolgreich erstellt</de>
 </text>
 <text>
 <en default="1">lost password</en>

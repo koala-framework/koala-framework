@@ -73,11 +73,11 @@ class Vpc_Posts_Post_Component extends Vpc_Abstract_Composite_Component
         $content = htmlspecialchars($content);
 
         // smileys
-        $content = preg_replace('/:-?\)/', '<span class="emoticon_smile"></span>', $content);
-        $content = preg_replace('/:-?D/', '<span class="emoticon_grin"></span>', $content);
-        $content = preg_replace('/:-?P/', '<span class="emoticon_tongue"></span>', $content);
-        $content = preg_replace('/:-?\(/', '<span class="emoticon_unhappy"></span>', $content);
-        $content = preg_replace('/;-?\)/', '<span class="emoticon_wink"></span>', $content);
+        $content = preg_replace('/:-?\)/', '<img src="/assets/silkicons/emoticon_smile.png" border="0" alt=":-)" />', $content);
+        $content = preg_replace('/:-?D/', '<img src="/assets/silkicons/emoticon_grin.png" border="0" alt=":-D" />', $content);
+        $content = preg_replace('/:-?P/', '<img src="/assets/silkicons/emoticon_tongue.png" border="0" alt=":-P" />', $content);
+        $content = preg_replace('/:-?\(/', '<img src="/assets/silkicons/emoticon_unhappy.png" border="0" alt=":-(" />', $content);
+        $content = preg_replace('/;-?\)/', '<img src="/assets/silkicons/emoticon_wink.png" border="0" alt=";-)" />', $content);
 
         // zitate
         $content = str_replace('[quote]', '<fieldset class="quote"><legend>Zitat</legend>', $content, $countOpened);

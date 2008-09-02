@@ -1,33 +1,47 @@
-.vpcForumDirectory ul li.post {
-    border: 1px solid #ccc;
+.$cssClass .title {
+    font-weight: bold;
+    line-height: 25px;
+    padding-bottom: 20px;
+    padding-left: 20px;
 }
-.vpcForumDirectory ul li.threads {
+.$cssClass .post {
+    border: 1px solid #ccc;
+    font-weight: normal;
+    margin-top: 10px;
+    margin-left: -20px;
+    padding: 0px;
+    color: $typo;
+}
+.$cssClass li.threads {
     border: 1px solid #ccc;
     margin: 15px 0px;
 }
-.vpcForumDirectory div.description a {
+.$cssClass .description a {
     font-weight: bold;
     display: block;
     background: #f3f2f1;
     padding: 3px 3px 3px 10px;
 }
-.vpcForumDirectory div.description p {
+.$cssClass .description p {
     padding-left: 10px;
 }
-.vpcForumDirectory div.statistik {
+.$cssClass .statistik {
+    width: 100px;
     float: right;
     font-size: 11px;
     line-height: 16px;
-    width: 200px;
     text-align: center;
     border-left: 1px solid #ccc;
 }
-.vpcForumDirectory div.threads {
+.$cssClass div.threads {
     border-bottom: 1px solid #ccc;
 }
-.vpcForumDirectory div.lastPost {
+.$cssClass .lastPost {
     border-top: 1px solid #ccc;
     font-size: 11px;
     line-height: 16px;
     padding-left: 10px;
+}
+.$cssClass .forumSearch {
+    text-align: right;
 }
