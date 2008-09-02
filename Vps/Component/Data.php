@@ -160,7 +160,7 @@ class Vps_Component_Data
             $childSelect = new Vps_Component_Select($childSelect);
         }
         $ret = $this->getChildComponents($select);
-        if ($select->getPart(Vps_Component_Select::LIMIT_COUNT) == 1) {
+        if ($ret && $select->getPart(Vps_Component_Select::LIMIT_COUNT) == 1) {
             return $ret;
         }
         $childSelect = $this->_formatChildConstraints($select, $childSelect);
