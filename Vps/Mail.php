@@ -133,6 +133,11 @@ class Vps_Mail
             $this->_mail->addTo($mailSendAll);
         }
 
+        $mailSendAllBcc = Zend_Registry::get('config')->debug->sendAllMailsBcc;
+        if ($mailSendAllBcc) {
+            $this->_mail->addBcc($mailSendAllBcc);
+        }
+
         if ($this->getFrom() == null) {
             if (Zend_Registry::get('config')->email) {
                 $fromName = Zend_Registry::get('config')->email->from->name;
