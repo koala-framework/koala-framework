@@ -1,5 +1,5 @@
 <?php
-class Vpc_Forum_Thread_Directory_View_Component extends Vpc_Posts_Directory_View_Component
+class Vpc_Forum_Posts_Directory_View_Component extends Vpc_Posts_Directory_View_Component
 {
     public static function getSettings()
     {

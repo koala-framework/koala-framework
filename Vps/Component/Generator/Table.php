@@ -54,6 +54,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     public function countChildData($parentData, $select = array())
     {
+        $select = $this->_formatSelect($parentData, $select);
         if ($select) {
             return $this->_getModel()->fetchCount($select);
         } else {

@@ -16,7 +16,7 @@ class Vpc_Posts_Write_LastPosts_Component extends Vpc_Directories_List_Component
     {
         $select = parent::getSelect();
         $select->limit(5);
-        $select->order('id DESC');
+        $select->order('id', 'DESC');
         return $select;
     }
 }
