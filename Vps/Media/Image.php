@@ -130,10 +130,10 @@ class Vps_Media_Image
 
         // wenn bild schon der angeforderten größe entspricht, original ausgeben
         // nötig für zB animierte gifs, da sonst die animation verloren geht
-        if (($scale == self::SCALE_CROP || $scale == self::SCALE_BESTFIT || $scale == self::SCALE_DEFORM)) {
+        if (($size['scale'] == self::SCALE_CROP || $size['scale'] == self::SCALE_BESTFIT || $size['scale'] == self::SCALE_DEFORM)) {
             $originalSize = getimagesize($source);
             if ($originalSize[0] == $size['width'] && $originalSize[1] == $size['height']) {
-                $scale = self::SCALE_ORIGINAL;
+                $size['scale'] = self::SCALE_ORIGINAL;
             }
         }
 
