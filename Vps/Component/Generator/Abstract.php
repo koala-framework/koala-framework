@@ -213,7 +213,6 @@ abstract class Vps_Component_Generator_Abstract
     {
         $ret = array();
         if (!$component->isPage) return array();
-        
         static $instances = array();
         $cacheId = $component->componentId . serialize($select->getParts());
         if (isset($instances[$cacheId])) {
@@ -225,10 +224,9 @@ abstract class Vps_Component_Generator_Abstract
         {
             $inheritSelect = clone $select;
             $inheritSelect->unsetPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
-            if ($component->parent instanceof Vps_Component_Data_Root) {
-                $parent = $component->parent;
-            } else {
-                $parent = $component->getParentPage();
+            $parent = $component->getParentPage();
+            if (!$parent && !$component instanceof Vps_Component_Data_Root) {
+                $parent = Vps_Component_Data_Root::getInstance();
             }
             if ($parent) {
                 $inheritGenerators = $parent->getRecursiveGenerators(array('inherit' => true));
@@ -250,7 +248,6 @@ abstract class Vps_Component_Generator_Abstract
             ));
         }
         $instances[$cacheId] = $ret;
-
         return $ret;
     }
 
@@ -359,6 +356,15 @@ abstract class Vps_Component_Generator_Abstract
 
         if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS) || $select->hasPart(Vps_Component_Select::WHERE_COMPONENT_KEY)) {
             $classes = Vpc_Abstract::getChildComponentClasses($parentData->componentClass, $select);
+            $page = $parentData;
+            while (1) {
+                if ($page instanceof Vps_Component_Data_Root) break;
+                $page = $page->getParentPage();
+                if (!$page) { $page = Vps_Component_Data_Root::getInstance(); }
+                $classes = array_merge($classes,
+                    Vpc_Abstract::getChildComponentClasses($page->componentClass, $select)
+                );
+            }
             $select->whereComponentClasses($classes);
             if ($select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES) === array()) {
                 return null;

@@ -114,7 +114,7 @@ function bt()
                 (isset($i['function']) ? $i['function'] : '') . '(' .
                 _btArgsString($i['args']) . ')' . "\n";
         }
-                
+        echo "\n";     
     } else {
         $out = array(array('File', 'Line', 'Function', 'Args'));
         foreach ($bt as $i) {
