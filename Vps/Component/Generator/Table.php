@@ -40,11 +40,25 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     public function getChildData($parentData, $select = array())
     {
-        $ret = parent::getChildData($parentData, $select);
-        foreach ($this->_fetchRows($parentData, $select) as $row) {
+        $ret = array();
+        $select = $this->_formatSelect($parentData, $select);
+        $rows = array();
+        if ($select) {
+            $rows = $this->_getModel()->fetchAll($select);
+        }
+        foreach ($rows as $row) {
             $ret[] = $this->_createData($parentData, $row, $select);
         }
         return $ret;
+    }
+
+    public function countChildData($parentData, $select = array())
+    {
+        if ($select) {
+            return $this->_getModel()->fetchCount($select);
+        } else {
+            return 0;
+        }
     }
 
     protected function _createData($parentData, $row, $select)
@@ -67,15 +81,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             throw new Vps_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' Generator");
         }
         return $ret;
-    }
-
-    protected function _fetchRows($parentData, $select)
-    {
-        $select = $this->_formatSelect($parentData, $select);
-        if ($select) {
-            return $this->_getModel()->fetchAll($select);
-        }
-        return array();
     }
 
     protected function _formatSelect($parentData, $select)

@@ -5,7 +5,7 @@ class Vpc_Forum_Search_Component extends Vpc_Directories_List_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['view'] = 'Vpc_Forum_Search_View_Component';
-        $ret['order'] = 'vpc_posts.create_time DESC';
+        $ret['order'] = array('field'=>'create_time', 'dir'=>'DESC');
         return $ret;
     }
     protected function _getItemDirectory()

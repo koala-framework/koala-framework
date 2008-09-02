@@ -38,15 +38,11 @@ abstract class Vps_Component_Generator_Abstract
                     } else {
                         $table = $this->_settings['table'];
                     }
-                } else if ($this->_loadTableFromComponent) {
-                    $tableName = Vpc_Abstract::getSetting($this->_class, 'tablename');
-                    if (!$tableName) {
-                        throw new Vps_Exception("Entweder tablename-setting der Komponente oder _tableName bzw. _table des Generators muss gesetzt sein ($this->_class)");
-                    }
-                    $table = new $tableName(array('componentClass'=>$this->_class));
-                }
-                if (isset($table)) {
                     $this->_model = new Vps_Model_Db(array('table' => $table));
+                } else if ($this->_loadTableFromComponent) {
+                    $this->_model = Vpc_Abstract::createModel($this->_class);
+                } else {
+                    throw new Vps_Exception("Can't create model");
                 }
             }
         }
@@ -315,6 +311,13 @@ abstract class Vps_Component_Generator_Abstract
     {
         return array();
     }
+
+    public function countChildData($parentData, $select = array())
+    {
+        //Wenn nicht effizient genug, fkt überschreiben!
+        return count($this->getChildData($parentData, $select));
+    }
+
 
     protected function _getChildComponentClass($key)
     {

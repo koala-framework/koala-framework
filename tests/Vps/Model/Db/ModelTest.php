@@ -62,9 +62,22 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
     {
         $this->_dbSelect->expects($this->once())
             ->method('order')
-            ->with($this->equalTo('bar'));
+            ->with($this->equalTo('bar ASC'));
         $select = $this->_model->select()
-            ->order('bar');
+            ->order('bar', 'ASC');
+        $this->_table->expects($this->once())
+                  ->method('fetchAll')
+                  ->with($this->equalTo($this->_dbSelect));
+        $this->_model->fetchAll($select);
+    }
+
+    public function testSelectOrder2()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('order')
+            ->with($this->equalTo('bar ASC'));
+        $select = $this->_model->select()
+            ->order(array('field'=>'bar', 'dir'=>'ASC'));
         $this->_table->expects($this->once())
                   ->method('fetchAll')
                   ->with($this->equalTo($this->_dbSelect));
@@ -122,7 +135,7 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
 
         $this->_dbSelect->expects($this->once())
             ->method('order')
-            ->with($this->equalTo('orderKey'));
+            ->with($this->equalTo('orderKey ASC'));
 
         $this->_dbSelect->expects($this->once())
             ->method('limit')

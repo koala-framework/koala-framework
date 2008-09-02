@@ -75,7 +75,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                 // lastPost
                 $select = $postsGenerator->select(null);
                 $select = $postsGenerator->joinWithParentGenerator($select, $threadGenerator, $group);
-                $select->order('vpc_posts.create_time DESC');
+                $select->order('create_time', 'DESC');
                 $select->limit(1);
                 $row = $select->query()->fetchAll();
                 if ($row) {

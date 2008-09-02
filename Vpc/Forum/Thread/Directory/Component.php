@@ -14,7 +14,7 @@ class Vpc_Forum_Thread_Directory_Component extends Vpc_Posts_Directory_Component
         $select = $this->getData()->getGenerator('detail')->select($this->getData());
         
         $select->limit(1);
-        $select->order('create_time ASC');
+        $select->order('create_time', 'ASC');
         $firstPost = $this->getData()->getChildComponent($select);
         if ($firstPost) {
             $firstPost->user = Vps_Component_Data_Root::getInstance()
@@ -22,7 +22,7 @@ class Vpc_Forum_Thread_Directory_Component extends Vpc_Posts_Directory_Component
                 ->getChildComponent('_' . $firstPost->row->user_id);
         }
         
-        $select->order('create_time DESC');
+        $select->order('create_time', 'DESC');
         $lastPost = $this->getData()->getChildComponent($select);
         if ($lastPost) {
             $lastPost->user = Vps_Component_Data_Root::getInstance()

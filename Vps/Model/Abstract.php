@@ -35,6 +35,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function fetchCount($where = array())
     {
+        return count($this->fetchAll($where));
     }
 
     public function getPrimaryKey()
@@ -51,9 +52,9 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         throw new Vps_Exception("Method 'isEqual' is not yet implemented in '".get_class($this)."'");
     }
 
-    public function select()
+    public function select($where = array())
     {
-        return new Vps_Model_Select();
+        return new Vps_Model_Select($where);
     }
 
     public function getColumns()

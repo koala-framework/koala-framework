@@ -12,7 +12,7 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
             'name' => trlVps('new thread')
         );
         $ret['tablename'] = 'Vpc_Forum_Group_Model';
-        $ret['order'] = 'create_time DESC';
+        $ret['order'] = array('field'=>'create_time', 'dir'=>'DESC');
         return $ret;
     }
     

@@ -169,7 +169,9 @@ class Vps_Component_Abstract
     {
         static $models = array();
         if (!isset($models[$class])) {
-            if (Vpc_Abstract::hasSetting($class, 'tablename')) {
+            if (Vpc_Abstract::hasSetting($class, 'model')) {
+                $models[$class] = Vpc_Abstract::getSetting($class, 'model');
+            } else if (Vpc_Abstract::hasSetting($class, 'tablename')) {
                 $models[$class] = new Vps_Model_Db(array(
                     'table' => self::createTable($class)
                 ));

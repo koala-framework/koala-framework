@@ -13,7 +13,14 @@ class Vps_Model_Select
 
     public function __construct($where = array())
     {
+        if (is_string($where)) {
+            $where = array($where);
+        }
         foreach ($where as $key => $val) {
+            if (is_int($key)) {
+                $this->where($val);
+                continue;
+            }
             if ($key != 'limit' && $key != 'order') {
                 $method = "where".ucfirst($key);
             } else {
@@ -41,9 +48,13 @@ class Vps_Model_Select
         return $this;
     }
 
-    public function order($field)
+    public function order($field, $dir = 'ASC')
     {
-        $this->_parts[self::ORDER] = $field;
+        if (is_array($field)) {
+            $this->_parts[self::ORDER][] = $field;
+        } else {
+            $this->_parts[self::ORDER][] = array('field'=>$field, 'dir'=>$dir);
+        }
         return $this;
     }
 
