@@ -6,6 +6,7 @@ class Vpc_Posts_Post_Quote_Form_Form extends Vpc_Posts_Write_Form_Form
         $ret = parent::load($parentRow, $postData);
         $ret['Vpc_Posts_Post_Quote_Form_Component_content'] = 
             "[quote]\n" . $this->getQuoteText() . "\n[/quote]\n";
+        p($ret);
         return $ret;
     }
 }

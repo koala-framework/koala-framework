@@ -23,5 +23,7 @@
     <?php } else { ?>
         <span class="threadClosed"><?= trlVps('Thread closed') ?></span>
     <?php } ?>
+    <? if ($this->mayModerate) { ?>
     <?=$this->component($this->moderate)?>
+    <?php } ?>
 </div>

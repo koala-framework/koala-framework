@@ -14,6 +14,8 @@ class Vpc_Forum_Posts_Directory_View_Component extends Vpc_Posts_Directory_View_
         $ret = parent::getTemplateVars();
         $ret['threadClosed'] = $this->getData()->getChildComponent('-moderate')->
             getChildComponent('-close')->getComponent()->isClosed();
+        $ret['mayModerate'] = $this->getData()->getParentPage()->getComponent()->mayModerate();
+        
         return $ret;
     }
 }

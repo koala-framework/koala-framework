@@ -7,7 +7,7 @@ class Vpc_Forum_Group_NewThread_Form extends Vpc_Abstract_Form
         $this->add(new Vps_Form_Field_TextField('subject', trlVps('Subject')))
             ->setAllowBlank(false);
         $this->add(Vpc_Abstract_Form::createComponentForm('Vpc_Posts_Write_Form_Component', 'post'))
-            ->setIdTemplate('{component_id}_{id}')
+            ->setIdTemplate('{component_id}_{id}-posts')
             ->setIdTemplateField('component_id');
     }
 }

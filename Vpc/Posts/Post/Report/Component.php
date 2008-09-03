@@ -6,6 +6,7 @@ class Vpc_Posts_Post_Report_Component extends Vpc_Form_Component
         $ret = parent::getSettings();
         $ret['reportMail'] = 'content@vivid-planet.com';
         $ret['reportMailName'] = '';
+        $ret['generators']['child']['component']['success'] = 'Vpc_Posts_Post_Report_Success_Component';
         $ret['flags']['noIndex'] = true;
         return $ret;
     }

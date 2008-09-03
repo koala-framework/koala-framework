@@ -5,6 +5,8 @@
         <?=$this->componentLink($this->data->getParentPage())?>
     </h2>
     <?=$this->component($this->form)?>
+    <?php if (!$this->isProcessed) { ?>
     <h2><?=trlVps('Last Posts')?>:</h2>
     <?=$this->component($this->lastPosts)?>
+    <?php } ?>
 </div>

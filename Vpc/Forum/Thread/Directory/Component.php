@@ -22,7 +22,8 @@ class Vpc_Forum_Thread_Directory_Component extends Vpc_Abstract_Composite_Compon
                 ->getComponentByClass('Vpc_User_Directory_Component')
                 ->getChildComponent('_' . $firstPost->row->user_id);
         }
-        
+
+        $select->unsetPart(Vps_Component_Select::ORDER);
         $select->order('create_time', 'DESC');
         $lastPost = $postsData->getChildComponent($select);
         if ($lastPost) {

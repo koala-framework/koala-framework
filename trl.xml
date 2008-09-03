@@ -2638,7 +2638,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">Please enter a reason for reporting this Post</en>
-<de>Bitte geben sie einen Grund zur Wiederöffnung des Themas an</de>
+<de>Bitte geben sie einen Grund an, warum dieser Post gemeldet werden soll</de>
 </text>
 <text>
 <en default="1">A post has been reported</en>
