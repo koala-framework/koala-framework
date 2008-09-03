@@ -30,7 +30,6 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
     }
     public function hasContent()
     {
-        return false;
         if (count($this->_getMenuData())) return true;
         $sub = $this->getData()->getChildComponent('-subMenu');
         if ($sub && $sub->getComponent()->hasContent()) {
