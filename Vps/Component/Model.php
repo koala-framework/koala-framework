@@ -80,8 +80,8 @@ class Vps_Component_Model implements Vps_Model_Interface
         throw new Vps_Exception('Not implemented yet.');
     }
 
-    public function select()
+    public function select($where = array())
     {
-        return new Vps_Component_Select();
+        return new Vps_Component_Select($where);
     }
 }

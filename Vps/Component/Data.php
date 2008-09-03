@@ -256,21 +256,23 @@ class Vps_Component_Data
     }
     private function _getChildComponentsForGenerators(&$ret, $generators, $select, $limitCount)
     {
-        foreach ($generators as $generator) {
-            
+        foreach ($generators as $generator)
+        {
             $generatorSelect = clone $select;
             if ($limitCount) {
                 $generatorSelect->limit($limitCount - count($ret));
             }
 
             foreach ($generator->getChildData($this, $generatorSelect) as $data) {
-                if (isset($ret[$data->componentId])) {
-                    $odata = $ret[$data->componentId];
-                    if (isset($data->box) && isset($odata->box) && $data->box == $odata->box) {
-                        if ($data->priority > $odata->priority) {
-                            unset($ret[$data->componentId]);
-                        } else {
-                            continue;
+                if (isset($data->box)) {
+                    foreach ($ret as $odata) {
+                        if (isset($odata->box) && $odata->box == $data->box) {
+                            if ($data->priority > $odata->priority) {
+                                unset($ret[$odata->componentId]);
+                                break;
+                            } else {
+                                continue 2; //skip this component
+                            }
                         }
                     }
                 }
@@ -278,11 +280,11 @@ class Vps_Component_Data
                     throw new Vps_Exception("Key for generator not unique: {$data->componentId}");
                 }
                 $ret[$data->componentId] = $data;
-            }
 
-            if ($limitCount) {
-                if ($limitCount - count($ret) <= 0) {
-                    break;
+                if ($limitCount) {
+                    if ($limitCount - count($ret) <= 0) {
+                        break;
+                    }
                 }
             }
         }

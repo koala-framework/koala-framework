@@ -7,7 +7,7 @@ class Vpc_MultiBox_Component extends Vpc_Abstract
         $ret['boxes'] = array();
         $boxname = $this->getData()->box;
         foreach ($this->getData()->getPage()->getChildMultiBoxes() as $box) {
-            if ($box->box == $boxname) {
+            if ($box->multiBox == $boxname) {
                 $ret['boxes'][] = $box;
             }
         }

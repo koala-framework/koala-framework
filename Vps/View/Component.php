@@ -136,12 +136,9 @@ class Vps_View_Component extends Vps_View
     {
         $templateVars = array();
         $templateVars['component'] = $componentData;
+        $templateVars['boxes'] = array();
         foreach ($componentData->getChildBoxes() as $box) {
-            if (!isset($templateVars['boxes'][$box->box]) || 
-                $box->priority > $templateVars['boxes'][$box->box]->priority)
-            {
-                $templateVars['boxes'][$box->box] = $box;
-            }
+            $templateVars['boxes'][$box->box] = $box;
         }
         return self::_render('application/views/master/default.tpl', $templateVars);
     }
