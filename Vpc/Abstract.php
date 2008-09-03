@@ -232,9 +232,9 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
     {
         if (!is_string($component)) $component = get_class($component);
 
-        $ret['cssClass'] = '';
+        $ret = '';
         if (Vpc_Abstract::hasSetting($component, 'cssClass')) {
-            $ret['cssClass'] .= Vpc_Abstract::getSetting($component, 'cssClass').' ';
+            $ret .= Vpc_Abstract::getSetting($component, 'cssClass').' ';
         }
 
         $cssClass = array(self::_formatCssClass($component));
@@ -252,8 +252,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
                 }
             }
         }
-        $ret['cssClass'] .= implode(' ', array_reverse($cssClass));
-        $ret['cssClass'] = trim($ret['cssClass']);
+        $ret .= implode(' ', array_reverse($cssClass));
         return trim($ret);
     }
 
