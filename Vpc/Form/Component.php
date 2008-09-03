@@ -29,7 +29,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     protected function _initForm()
     {
         if (!isset($this->_form)) {
-            $this->_form = Vpc_Abstract_Form::createComponentForm(get_class($this));
+            $this->_form = Vpc_Abstract_Form::createComponentForm(get_class($this), 'form');
         }
     }
 
