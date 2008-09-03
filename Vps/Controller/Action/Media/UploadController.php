@@ -31,16 +31,26 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
         $fileRow = $t->find($this->_getParam('uploadId'))->current();
         if (!$fileRow) throw new Vps_Exception("Can't find upload");
 
+        $sizes = array(
+            'default' => array(40, 40),
+            'frontend' => array(100, 100, Vps_Media_Image::SCALE_CROP)
+        );
+        if (isset($sizes[$this->_getParam('size')])) {
+            $size = $this->_getParam('size');
+        } else {
+            $size = 'default';
+        }
+
         $uploadDir = Vps_Dao_Row_File::getUploadDir();
         $uploadId = $fileRow->id;
-        $target = "$uploadDir/cache/$uploadId/preview";
+        $target = "$uploadDir/cache/$uploadId/preview$size";
         if (!is_file($target) && !is_link($target)) {
             // Verzeichnisse anlegen, falls nicht existent
             Vps_Dao_Row_File::prepareCacheTarget($target);
 
             // Cache-Datei erstellen
             $source = $fileRow->getFileSource();
-            if (!Vps_Media_Image::scale($source, $target, array(40, 40))) {
+            if (!Vps_Media_Image::scale($source, $target, $sizes[$size])) {
                 throw new Vps_Controller_Action_Web_Exception('Invalid Image');
             }
         }
