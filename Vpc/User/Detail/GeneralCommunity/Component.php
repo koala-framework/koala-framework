@@ -16,7 +16,7 @@ class Vpc_User_Detail_GeneralCommunity_Component extends Vpc_User_Detail_General
         $ret['activitiesCount'] = 0;
         $ret['lastPosts'] = array();
         $ret['showLastPosts'] = $this->_getSetting('numberOfLastPosts') > 0;
-        
+
         $table = new Vpc_Posts_Directory_Model();
         $select = $table->select()
             ->where('visible = ?', 1)
@@ -31,7 +31,7 @@ class Vpc_User_Detail_GeneralCommunity_Component extends Vpc_User_Detail_General
                 $dateHelper = new Vps_View_Helper_Date();
                 $post->linktext =
                     $dateHelper->date($post->row->create_time) . ': ' . 
-                    Vpc_Abstract::getSetting($post->parent->componentClass, 'name') . ': ' . 
+                    $post->getParentPage()->getParentPage()->name . ': ' .
                     $post->getPage()->name;
                 $ret['lastPosts'][] = $post;
             }
