@@ -50,46 +50,19 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                 $group->lastUser = null;
                 $group->countThreads = 0;
                 $group->countPosts = 0;
-                /*
-                // Generators holen
-                $threadGenerator = Vps_Component_Generator_Abstract
-                    ::getInstance($group->componentClass, 'detail');
-                $generators = Vpc_Abstract::getSetting($group->componentClass, 'generators');
-                $postsGenerator = Vps_Component_Generator_Abstract
-                    ::getInstance($generators['detail']['component'], 'detail');
-                    
-                // countThreads
-                $select = $threadGenerator->select($group);
-                $select->setIntegrityCheck(false);
-                $select->reset(Zend_Db_Select::COLUMNS);
-                $select->from(null, array('count' => "COUNT(*)"));
-                $group->countThreads = $select->query()->fetchColumn(0);
-                
-                // countPosts
-                $select = $postsGenerator->select(null);
-                $select = $postsGenerator->joinWithParentGenerator($select, $threadGenerator, $group);
-                $select->reset(Zend_Db_Select::COLUMNS);
-                $select->from(null, array('count' => "COUNT(*)"));
-                $group->countPosts = $select->query()->fetchColumn(0);
 
-                // lastPost
-                $select = $postsGenerator->select(null);
-                $select = $postsGenerator->joinWithParentGenerator($select, $threadGenerator, $group);
-                $select->order('create_time', 'DESC');
-                $select->limit(1);
-                $row = $select->query()->fetchAll();
-                if ($row) {
-                    $group->lastPost = Vps_Component_Data_Root::getInstance()
-                        ->getComponentById($row[0]['component_id'] . '_' . $row[0]['id']);
+                $row = $group->row->getRow();
+                $lastPostId = $row->getLastPostId();
+                $root = Vps_Component_Data_Root::getInstance();
+                if ($lastPostId) {
+                    $group->countPosts = $row->countPosts();
+                    $group->countThreads = $row->countThreads();
+                    $group->lastPost = $root->getComponentById($lastPostId);
+                    if ($group->lastPost) {
+                        $group->lastUser = $root->getComponentByClass('Vpc_User_Directory_Component')
+                            ->getChildComponent('_' . $group->lastPost->row->user_id);
+                    }
                 }
-                
-                // lastUser
-                if ($group->lastPost) {
-                    $group->lastUser = Vps_Component_Data_Root::getInstance()
-                        ->getComponentByClass('Vpc_User_Directory_Component')
-                        ->getChildComponent('_' . $group->lastPost->row->user_id);
-                }
-                */
                 $group->childGroups = $this->getGroups($group->row->id);
                 
                 $ret[] = $group;

@@ -10,5 +10,12 @@ class Vpc_Posts_Write_Component extends Vpc_Abstract_Composite_Component
         $ret['plugins'] = array('Vps_Component_Plugin_Login_Component');
         return $ret;
     }
+    
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['isProcessed'] = $this->getData()->getChildComponent('-form')->getComponent()->isProcessed();
+        return $ret;
+    }
 
 }

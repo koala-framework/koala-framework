@@ -1,9 +1,9 @@
 <?php
-class Vpc_Posts_Post_Report_Form extends Vps_Form
+class Vpc_Posts_Post_Report_Form extends Vpc_Abstract_Form
 {
     protected function _init()
     {
-        $this->setModel(new Vps_Model_Mail(array('componentClass' => $this->getName())));
+        $this->setModel(new Vps_Model_Mail(array('componentClass' => $this->getClass())));
         $this->add(new Vps_Form_Field_TextArea('reason', trlVps('Please enter a reason for reporting this Post')))
             ->setWidth(475)->setHeight(150);
         parent::_init();
