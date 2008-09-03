@@ -233,8 +233,8 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         if (!is_string($component)) $component = get_class($component);
 
         $ret['cssClass'] = '';
-        if (Vpc_Abstract::hasSetting(get_class($this), 'cssClass')) {
-            $ret['cssClass'] .= Vpc_Abstract::getSetting(get_class($this), 'cssClass').' ';
+        if (Vpc_Abstract::hasSetting($component, 'cssClass')) {
+            $ret['cssClass'] .= Vpc_Abstract::getSetting($component, 'cssClass').' ';
         }
 
         $cssClass = array(self::_formatCssClass($component));
