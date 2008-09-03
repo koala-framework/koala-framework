@@ -1,0 +1,13 @@
+.$cssClass h3 {
+    margin-bottom: 10px;
+}
+.$cssClass .title {
+    font-weight: bold;
+    margin-top: 7px;
+    margin-left: 5px;
+}
+.$cssClass .post {
+    font-weight: normal;
+    list-style-type: square;
+    margin-left: 25px;
+}
