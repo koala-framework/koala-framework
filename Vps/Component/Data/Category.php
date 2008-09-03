@@ -5,7 +5,8 @@ class Vps_Component_Data_Category extends Vps_Component_Data_Root
     {
         $config = array(
             'componentId' => $id,
-            'name' => $name
+            'name' => $name,
+            'componentClass' => Vps_Component_Data_Root::getComponentClass()
         );
         parent::__construct($config);
     }
@@ -16,4 +17,3 @@ class Vps_Component_Data_Category extends Vps_Component_Data_Root
         return parent::getChildComponents($constraints);
     }
 }
-?>

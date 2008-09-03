@@ -5,7 +5,7 @@ class Vps_Component_Generator_MultiBox_Static extends Vps_Component_Generator_St
     protected function _formatConfig($parentData, $key)
     {
         $ret = parent::_formatConfig($parentData, $key);
-        $ret['box'] = isset($this->_settings['box']) ? $this->_settings['box'] : $key;
+        $ret['multiBox'] = isset($this->_settings['box']) ? $this->_settings['box'] : $key;
         return $ret;
     }
 }

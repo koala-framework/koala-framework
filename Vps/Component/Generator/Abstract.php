@@ -210,6 +210,9 @@ abstract class Vps_Component_Generator_Abstract
         $ret = array();
         if (!$component->isPage) return array();
         static $instances = array();
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
         $cacheId = $component->componentId . serialize($select->getParts());
         if (isset($instances[$cacheId])) {
             return $instances[$cacheId];
@@ -225,7 +228,9 @@ abstract class Vps_Component_Generator_Abstract
                 $parent = Vps_Component_Data_Root::getInstance();
             }
             if ($parent) {
-                $inheritGenerators = $parent->getRecursiveGenerators(array('inherit' => true));
+                $s = clone $select;
+                $s->whereInherit(true);
+                $inheritGenerators = $parent->getRecursiveGenerators($s);
                 foreach ($inheritGenerators as $ig) {
                     if ($ig->getChildComponentClasses($inheritSelect)) {
                         $ret[] = $ig;
