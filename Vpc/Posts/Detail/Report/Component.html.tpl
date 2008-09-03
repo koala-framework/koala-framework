@@ -1,7 +1,7 @@
 <?= trlVps("Hello")?>,<br /><br />
 <?=trlVps("a post has been reported for the following reason:") ?><br />
 <hr />
-<i><?= $this->htmlReason ?></i><br />
+<i><?= nl2br(htmlspecialchars($this->reason)) ?></i><br />
 <hr />
 <br />
 <a href="<?= $this->url ?>"><?= $this->url ?></a><br />

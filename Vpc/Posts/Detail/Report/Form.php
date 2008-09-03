@@ -11,8 +11,7 @@ class Vpc_Posts_Detail_Report_Form extends Vpc_Abstract_Form
 
     protected function _beforeSave(Vps_Model_Row_Interface $row)
     {
-        $row->htmlReason = nl2br($row->reason);
-        $row->addTo(Vpc_Abstract::getSetting($this->getName(), 'reportMail'));
+        $row->addTo(Vpc_Abstract::getSetting($this->getClass(), 'reportMail'));
         $row->setFrom('Report-Component');
         $row->subject = trlVps('A post has been reported');
     }
