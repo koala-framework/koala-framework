@@ -1863,7 +1863,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">You will receive an email with a passwort reset link and further instructions.</en>
-<de>Sie erhalten eine Email mit einem Passwort zur&#xFC;cksetzen Link und weiteren Anweisungen.</de>
+<de>Sie erhalten eine E-Mail mit weiteren Anweisungen und einem Link, welcher ihr Passwort zurücksetzt.</de>
 </text>
 <text>
 <en default="1">Post</en>
@@ -2551,7 +2551,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Posts</en>
-<de>Beiträge</de>
+<de>Beitr&#xE4;ge</de>
 </text>
 <text>
 <en default="1">Last post by</en>
@@ -2572,28 +2572,36 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Antwort erstellen</de>
 </text>
 <text>
+<en default="1">Comment was successfully reported.</en>
+<de>Der Kommentar wurde erfolgreich gemeldet.</de>
+</text>
+<text>
 <en default="1">Thread closed</en>
 <de>Thema geschlossen</de>
 </text>
 <text>
 <en default="1">Reopen Thread</en>
-<de>Thema öffnen</de>
+<de>Thema &#xF6;ffnen</de>
 </text>
 <text>
 <en default="1">Close Thread</en>
-<de>Thema schließen</de>
+<de>Thema schlie&#xDF;en</de>
 </text>
 <text>
 <en default="1">Move Thread</en>
 <de>Thema verschieben</de>
 </text>
 <text>
-<en default="1">The thread has been moved.</en>
-<de>Das Thema wurde verschoben.</de>
+<en default="1">Thread was successfully moved.</en>
+<de>Das Thema wurde erfolgreich verschoben.</de>
 </text>
 <text>
 <en default="1">Moderate Thread</en>
 <de>Thema moderieren</de>
+</text>
+<text>
+<en default="1">Observe Thread</en>
+<de>Thema beobachten</de>
 </text>
 <text>
 <en default="1">Thread was successfully saved.</en>
@@ -2638,7 +2646,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">Please enter a reason for reporting this Post</en>
-<de>Bitte geben sie einen Grund an, warum dieser Post gemeldet werden soll</de>
+<de>Bitte geben sie einen Grund an, warum dieser Kommentar gemeldet werden soll</de>
 </text>
 <text>
 <en default="1">A post has been reported</en>
@@ -2668,19 +2676,19 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">Comment was successfully deleted.</en>
-<de>Der Eintrag wurde erfolgreich gelöscht.</de>
+<de>Der Eintrag wurde erfolgreich gel&#xF6;scht.</de>
 </text>
 <text>
 <en default="1">Do you really want to delete this post?</en>
-<de>Wollen Sie den Eintrag wirklich löschen?</de>
+<de>Wollen Sie den Eintrag wirklich l&#xF6;schen?</de>
 </text>
 <text>
 <en default="1">&lt;strong&gt;Create Post: &lt;/strong&gt;&lt;br /&gt;Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
-<de>&lt;strong&gt;Nachricht erstellen: &lt;/strong&gt;&lt;br /&gt;Bitte gib den gewünschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
+<de>&lt;strong&gt;Nachricht erstellen: &lt;/strong&gt;&lt;br /&gt;Bitte gib den gew&#xFC;nschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
 </text>
 <text>
 <en default="1">Last Posts</en>
-<de>Letzte Aktivitäten</de>
+<de>Letzte Aktivit&#xE4;ten</de>
 </text>
 <text>
 <en default="1">News.Top</en>
@@ -2696,7 +2704,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">Guestbook</en>
-<de>Gästebuch</de>
+<de>G&#xE4;stebuch</de>
 </text>
 <text>
 <en default="1">Gallery</en>
@@ -2720,7 +2728,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">Nickname</en>
-<de>Name für Forum</de>
+<de>Name f&#xFC;r Forum</de>
 </text>
 <text>
 <en default="1">Short Description</en>
@@ -2744,8 +2752,9 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">Your Account has been created successfully. You will receive an confirmation e-mail soon.</en>
-<de>Ihr Account wurde erfolgreich erstellt.<br /><br />Sie erhalten in Kürze eine Email mit einem Aktivierungslink.<br />
-Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin aufgefordert das Passwort einzugeben, das Sie künftig für Ihren Account verwenden möchten.
+<de>Ihr Account wurde erfolgreich erstellt.<br/>
+<br/>Sie erhalten in K&#xFC;rze eine Email mit einem Aktivierungslink.<br/>
+Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin aufgefordert das Passwort einzugeben, das Sie k&#xFC;nftig f&#xFC;r Ihren Account verwenden m&#xF6;chten.
 </de>
 </text>
 <text>
@@ -2798,11 +2807,11 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 </text>
 <text>
 <en default="1">You have to login to see the requested page.</en>
-<de>Sie müssen eingeloggt sein, um die Seite zu betreten.</de>
+<de>Sie m&#xFC;ssen eingeloggt sein, um die Seite zu betreten.</de>
 </text>
 <text>
 <en default="1">If you don't have an account, you can</en>
-<de>Wenn sie noch keinen Account haben, können sie sich</de>
+<de>Wenn sie noch keinen Account haben, k&#xF6;nnen sie sich</de>
 </text>
 <text>
 <en default="1">register here</en>
@@ -2818,11 +2827,11 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 </text>
 <text>
 <en default="1">Delete Entry</en>
-<de>Eintrag löschen</de>
+<de>Eintrag l&#xF6;schen</de>
 </text>
 <text>
 <en default="1">Delete Image</en>
-<de>Bild löschen</de>
+<de>Bild l&#xF6;schen</de>
 </text>
 <text>
 <en default="1">Show field</en>
@@ -2842,7 +2851,7 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 </text>
 <text>
 <en default="1">Value is empty, but a non-empty value is required</en>
-<de>Bitte füllen Sie das Feld aus</de>
+<de>Bitte f&#xFC;llen Sie das Feld aus</de>
 </text>
 <text>
 <en default="1">'%value%' has not only alphabetic and digit characters</en>
@@ -2854,11 +2863,11 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 </text>
 <text>
 <en default="1">'%value%' is not a valid email address in the basic format local-part@hostname</en>
-<de>'%value%' ist keine gültige E-Mail-Adresse</de>
+<de>'%value%' ist keine g&#xFC;ltige E-Mail-Adresse</de>
 </text>
 <text>
 <en default="1">'%hostname%' is not a valid hostname for email address '%value%'</en>
-<de>'%hostname%' ist kein gültiger Hostname</de>
+<de>'%hostname%' ist kein g&#xFC;ltiger Hostname</de>
 </text>
 <text>
 <en default="1">'%hostname%' does not appear to have a valid MX record for the email address '%value%'</en>
@@ -2894,11 +2903,11 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 </text>
 <text>
 <en default="1">Email changed</en>
-<de>E-Mail-Adresse geändert</de>
+<de>E-Mail-Adresse ge&#xE4;ndert</de>
 </text>
 <text>
 <en default="1">Accound deleted</en>
-<de>Accound gelöscht</de>
+<de>Accound gel&#xF6;scht</de>
 </text>
 <text>
 <en default="1">H:i</en>
@@ -2915,6 +2924,68 @@ Bitte öffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin au
 <text>
 <en default="1">Internal Server Error</en>
 <de>_</de>
+</text>
+<text>
+<en default="1">Hello,&lt;br /&gt;&lt;br /&gt;
+a post in an observed thread has been submitted:</en>
+<de>Hallo,&lt;br /&gt;&lt;br /&gt;
+es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
+</text>
+<text>
+<en default="1">Hello,
+
+a post in an observed thread has been submitted:</en>
+<de>Hallo,
+
+es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
+</text>
+<text>
+<en default="1">Link to concerning thread:</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Edit Post</en>
+<de>Kommentar bearbeiten</de>
+</text>
+<text>
+<en default="1">a post has been reported for the following reason:</en>
+<de>Ein Kommentar wurde aus folgenden Gründen gemeldet:</de>
+</text>
+<text>
+<en default="1">You were logged in, automatically</en>
+<de>Sie wurden automatisch eingeloggt</de>
+</text>
+<text>
+<en default="1">Activate Account</en>
+<de>Account aktivieren</de>
+</text>
+<text>
+<en default="1">Data was not sent completely. Please copy the complete address out of the email.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.</en>
+<de>Der Aktivierungscode ist ungültig. Eventuell wurde der Account schon aktiviert oder die Adresse wurde falsch aus der E-Mail kopiert.</de>
+</text>
+<text>
+<en default="1">Please type in your {0} email address in the field below.</en>
+<de>Bitte geben sie ihre {0} E-Mail Adresse im Feld darunter ein.</de>
+</text>
+<text>
+<en default="1">Auto Login</en>
+<de>eingeloggt bleiben</de>
+</text>
+<text>
+<en default="1">Current category:</en>
+<de>Aktuelle Kategorie:</de>
+</text>
+<text>
+<en default="1">Search term</en>
+<de>Suchbegriff</de>
+</text>
+<text>
+<en default="1">Please type at least two characters.</en>
+<de>Bitte geben sie mindestens 2 Zeichen ein.</de>
 </text>
 </trl>
 
