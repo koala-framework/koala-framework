@@ -52,6 +52,7 @@ class Vps_Model_Db implements Vps_Model_Interface
     private function _createDbSelect($select)
     {
         $dbSelect = $this->_table->select();
+        $dbSelect->from($this->_table->info('name'));
         if ($whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
             foreach ($whereEquals as $field=>$value) {
                 if (is_array($value)) {
@@ -117,7 +118,7 @@ class Vps_Model_Db implements Vps_Model_Interface
         }
         $dbSelect = $this->_createDbSelect($select);
         $dbSelect->reset(Zend_Db_Select::COLUMNS);
-        $dbSelect->from($this->_table->info('name'), 'COUNT(*)');
+        $dbSelect->from(null, 'COUNT(*)');
         $dbSelect->setIntegrityCheck(false);
         return $this->_table->getAdapter()->query($dbSelect)->fetchColumn();
     }

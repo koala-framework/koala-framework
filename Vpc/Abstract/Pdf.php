@@ -16,4 +16,14 @@ class Vpc_Abstract_Pdf
     {
         return $this->_pdf;
     }
+
+    public function __call($method, $arguments)
+    {
+        if (method_exists($this->_pdf, $method)) {
+            return call_user_func_array(array($this->_pdf, $method), $arguments);
+        } else {
+            throw new Vps_Exception("Invalid method called: '$method'");
+        }
+    }
+
 }

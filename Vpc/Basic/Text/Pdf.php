@@ -12,7 +12,12 @@ class Vpc_Basic_Text_Pdf extends Vpc_Abstract_Pdf
                 $html = preg_replace('# +#', ' ', $html);
                 $html = str_replace('&nbsp;', ' ', $html);
                 $html = preg_replace('#<br[^>]*>[^<]*</li#', '</li', $html);
-                $html = preg_replace('#>\s+#', '>', $html);
+
+                $html = preg_replace('#>\s+<#', '><', $html);
+                $html = preg_replace('#<br *[/]>\s+#', '<br />', $html);
+                $html = preg_replace('#</p>\s+#', '<p />', $html);
+                $html = preg_replace('#<p>\s+#', '<p>', $html);
+
                 $html = preg_replace('#<br *[/]> *</p> *<[A-Za-z]l#', '<br><ul', $html);
                 $html = preg_replace('#</p> *<[A-Za-z]l#', '<br><ul', $html);
                 $html = preg_replace('#</ul> *<p>#', '</ul>', $html);
@@ -25,9 +30,8 @@ class Vpc_Basic_Text_Pdf extends Vpc_Abstract_Pdf
                 $html = preg_replace('#<p[^>]*>#', '<br>', $html);
                 $html = preg_replace('#<p[^>]*///>#', '<br/>', $html);
                 $html = str_replace("\n", "", $html);
-                $this->_pdf->SetFont("arial");
-                $this->_pdf->MultiCell($this->_pdf->getPageWidth() - ($this->_pdf->getRightMargin() + $this->_pdf->getLeftMargin()), 3, $this->_pdf->writeHTML($html, false, 0, false, false));
-                $this->_pdf->setY($this->_pdf->getY());
+
+                $this->textAreaHTML($html);
             } else {
                 //TODO andere Komponenten aufrufen
 
