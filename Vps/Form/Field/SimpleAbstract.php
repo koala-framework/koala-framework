@@ -37,7 +37,7 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
                     $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
                 }
             }
-            if (!is_null($data)) {
+            if ($data) {
                 foreach ($this->getValidators() as $v) {
                     if (!$v->isValid($data)) {
                         $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
