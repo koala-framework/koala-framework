@@ -3,6 +3,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 {
     protected $_form;
     private $_processed = false;
+    private $_isSaved = false;
     private $_postData;
     protected $_errors = array();
 
@@ -56,6 +57,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
                 if (!$this->_form->getRow()->{$this->_form->getModel()->getPrimaryKey()}) {
                     $this->_afterInsert($this->_form->getRow());
                 }
+                $this->_isSaved = true;
             }
         }
         $this->_postData = $postData;
@@ -130,6 +132,11 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     public function isProcessed()
     {
         return $this->_processed;
+    }
+
+    public function isSaved()
+    {
+        return $this->_isSaved;
     }
 
     protected function _afterSave(Vps_Model_Row_Interface $row)

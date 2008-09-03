@@ -10,18 +10,18 @@ class Vpc_Forum_Thread_Observe_Component extends Vpc_Abstract
     }
 
     public function processInput(array $postData)
-    {        
+    {
         $user = $this->_getUser();
-        if ($user && $this->_getParam('observe')) {
+        if ($user && isset($postData['observe'])) {
             $observeRow = $this->_getObserveRow();
-            if (!$observeRow) {
+            if (!$observeRow && $postData['observe']) {
                 $observeRow = $this->getTable()->createRow();
                 $observeRow->thread_id = $this->getData()->getPage()->row->id;
                 $observeRow->user_id = $user->id;
                 $observeRow->save();
-            } else {
+            }
+            if ($observeRow && !$postData['observe']) {
                 $observeRow->delete();
-                $observeRow = null;
             }
         }
     }
@@ -42,15 +42,17 @@ class Vpc_Forum_Thread_Observe_Component extends Vpc_Abstract
     {
         return Zend_Registry::get('userModel')->getAuthedUser();
     }
-    
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
         $ret['isObserved'] = $this->_getObserveRow() != null;
         $ret['userIsAuthed'] = $this->_getUser() != null;
-        $ret['observeUrl'] = $_SERVER['REQUEST_URI'];
-        if (substr($ret['observeUrl'], -10) != '?observe=1') {
+        $ret['observeUrl'] = $this->getData()->url;
+        if (!$ret['isObserved']) {
             $ret['observeUrl'] .= '?observe=1';
+        } else {
+            $ret['observeUrl'] .= '?observe=0';
         }
 
         return $ret;

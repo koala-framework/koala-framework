@@ -8,7 +8,6 @@ class Vpc_Forum_Posts_Directory_View_Component extends Vpc_Posts_Directory_View_
         $ret['generators']['child']['component']['moderate'] = 'Vpc_Forum_Thread_Moderate_Component';
         return $ret;
     }
-    
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

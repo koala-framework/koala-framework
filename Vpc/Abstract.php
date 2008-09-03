@@ -224,6 +224,10 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         $ret = parent::getTemplateVars();
         $ret['placeholder'] = $this->_getSetting('placeholder');
 
+        $ret['cssClass'] = '';
+        if (Vpc_Abstract::hasSetting(get_class($this), 'cssClass')) {
+            $ret['cssClass'] .= Vpc_Abstract::getSetting(get_class($this), 'cssClass').' ';
+        }
         $cssClass = array($this->_formatCssClass(get_class($this)));
         $dirs = explode(PATH_SEPARATOR, get_include_path());
         $c = get_parent_class($this);
@@ -240,11 +244,8 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
                 }
             }
         } while($c = get_parent_class($c));
-        $ret['cssClass'] = implode(' ', array_reverse($cssClass));
-        if (Vpc_Abstract::hasSetting(get_class($this), 'cssClass')) {
-            $ret['cssClass'] .= ' '.Vpc_Abstract::getSetting(get_class($this), 'cssClass');
-            $ret['cssClass'] = trim($ret['cssClass']);
-        }
+        $ret['cssClass'] .= implode(' ', array_reverse($cssClass));
+        $ret['cssClass'] = trim($ret['cssClass']);
         $ret['data'] = $this->getData();
         return $ret;
     }

@@ -10,7 +10,8 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
     {
         parent::_initFields();
         if (!$this->getClass()) return;
-        $classes = Vpc_Abstract::getChildComponentClasses($this->getClass(), 'child');
+        $generators = Vpc_Abstract::getSetting($this->getClass(), 'generators');
+        $classes = $generators['child']['component'];
         foreach ($classes as $key => $class) {
             if (!$class) continue;
             $form = Vpc_Abstract_Form::createChildComponentForm($this->getClass(), "-$key");
