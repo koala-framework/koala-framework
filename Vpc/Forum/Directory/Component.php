@@ -28,7 +28,16 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
         $ret['assetsAdmin']['dep'][] = 'VpsAutoTree';
         $ret['assetsAdmin']['dep'][] = 'VpsAutoAssignGrid';
         $ret['assets']['dep'][] = 'ExtCore';
+        $ret['flags']['processInput'] = true;
         return $ret;
+    }
+
+    public function processInput($postData)
+    {
+        $this->getData()->getChildComponent('_search')
+                ->getChildComponent('-view')
+                ->getChildComponent('-searchForm')
+                ->getComponent()->processInput($postData);
     }
 
     public function getTemplateVars()
@@ -36,7 +45,8 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['groups'] = $this->getGroups();
         $ret['groupsTemplate'] = Vpc_Admin::getComponentFile(get_class($this), 'Groups', 'tpl');
-        $ret['search'] = $this->getData()->getChildComponent('_search');
+        $ret['searchForm'] = $this->getData()->getChildComponent('_search')
+                ->getChildComponent('-view')->getChildComponent('-searchForm');
         return $ret;
     }
 
