@@ -20,6 +20,7 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
     public function mayModerate()
     {
         $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
+        if ($authedUser->role == 'admin') return true;
         if ($authedUser) {
             $table = new Vpc_Forum_Group_ModeratorsModel();
             $row = $table->fetchRow(array(
