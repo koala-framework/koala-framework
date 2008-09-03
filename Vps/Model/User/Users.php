@@ -72,7 +72,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
 
                 $b4 = Vps_Benchmark::start('user-sync-full sync');
                 $this->_syncUsersByRestData((array)$restResult->data);
-                $b4->stop();
+                if ($b4) $b4->stop();
 
                 $cacheTimestamp = (string)$restResult->timestamp;
             }
