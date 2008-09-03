@@ -75,10 +75,9 @@ class Vpc_Abstract_Form extends Vps_Form
 
         foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $generatorKey => $generatorData) {
             $generator = Vps_Component_Generator_Abstract::getInstance($componentClass, $generatorKey);
-            $component = $generator->getComponentByKey($id);
-            if ($component) {
-                $childComponentClass = $component;
+            if ($childComponentClass = $generator->getComponentByKey($id)) {
                 $idTemplate .= $generator->getIdSeparator() . $id;
+                break;
             }
         }
         if (!$childComponentClass) {

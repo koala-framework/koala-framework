@@ -20,7 +20,9 @@ class Vps_Validate_Unique extends Zend_Validate_Abstract
 
         $this->_setValue($valueString);
 
-        if ($this->model->fetchAll(array("$this->fieldName = ?"=>$valueString))->current()) {
+        $select = $this->model->select()
+            ->whereEquals($this->fieldName, $valueString);
+        if ($this->model->fetchCount($select)) {
             $this->_error(self::NOT_UNIQUE);
             return false;
         }

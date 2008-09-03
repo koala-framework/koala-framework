@@ -8,7 +8,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
         $ret['pagesize'] = 10;
         $ret['maxPagingLinks'] = 13;
         $ret['bigPagingSteps'] = array(10, 50);
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'webStandard webPaging';
         $ret['viewCache'] = false;
         return $ret;
     }
