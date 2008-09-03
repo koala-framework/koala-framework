@@ -208,8 +208,23 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
             if (Vps_Component_Abstract::getFlag(get_class($this), 'processInput')) {
                 $process[] = $this->getData();
             }
+
+            $postData = $_REQUEST;
+            //in _REQUEST sind _FILES nicht mit drinnen
+            foreach ($_FILES as $k=>$file) {
+                if (is_array($file['tmp_name'])) {
+                    //wenn name[0] dann kommts in komischer form daher -> umwandeln
+                    foreach (array_keys($file['tmp_name']) as $i) {
+                        foreach (array_keys($file) as $prop) {
+                            $postData[$k][$i][$prop] = $file[$prop][$i];
+                        }
+                    }
+                } else {
+                    $postData[$k] = $file;
+                }
+            }
             foreach ($process as $i) {
-                $i->getComponent()->processInput($_REQUEST);
+                $i->getComponent()->processInput($postData);
             }
             echo Vps_View_Component::renderComponent($this->getData(), null, true);
         }
