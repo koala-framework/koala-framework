@@ -223,15 +223,23 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['placeholder'] = $this->_getSetting('placeholder');
+        $ret['cssClass'] = self::getCssClass($this);
+        $ret['data'] = $this->getData();
+        return $ret;
+    }
+
+    static public function getCssClass($component)
+    {
+        if (!is_string($component)) $component = get_class($component);
 
         $ret['cssClass'] = '';
         if (Vpc_Abstract::hasSetting(get_class($this), 'cssClass')) {
             $ret['cssClass'] .= Vpc_Abstract::getSetting(get_class($this), 'cssClass').' ';
         }
-        $cssClass = array($this->_formatCssClass(get_class($this)));
+
+        $cssClass = array(self::_formatCssClass($component));
         $dirs = explode(PATH_SEPARATOR, get_include_path());
-        $c = get_parent_class($this);
-        do {
+        foreach (self::getParentClasses($component) as $c) {
             $file = str_replace('_', '/', $c);
             if (substr($file, -10) != '/Component') {
                 $file .= '/Component';
@@ -239,17 +247,17 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
             $file .= '.css';
             foreach ($dirs as $dir) {
                 if (is_file($dir . '/' . $file)) {
-                    $cssClass[] = $this->_formatCssClass($c);
+                    $cssClass[] = self::_formatCssClass($c);
                     break;
                 }
             }
-        } while($c = get_parent_class($c));
+        }
         $ret['cssClass'] .= implode(' ', array_reverse($cssClass));
         $ret['cssClass'] = trim($ret['cssClass']);
-        $ret['data'] = $this->getData();
-        return $ret;
+        return trim($ret);
     }
-    private function _formatCssClass($cls)
+
+    static private function _formatCssClass($cls)
     {
         if (substr($cls, -10) == '_Component') {
             $cls = substr($cls, 0, -10);

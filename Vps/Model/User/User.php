@@ -211,10 +211,14 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
 
     public function updateCache(array $columns = array())
     {
+        $rowIsDirty = false;
         foreach ($columns as $col => $val) {
-            parent::__set($col, $val);
+            if ($this->$col != $val) {
+                parent::__set($col, $val);
+                $rowIsDirty = true;
+            }
         }
-        parent::save();
+        if ($rowIsDirty) parent::save();
     }
 
     public function __set($columnName, $value)

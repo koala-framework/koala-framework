@@ -21,7 +21,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
     public function checkCache()
     {
         if (!self::$checkCacheDone) {
-            $b = Vps_Benchmark::start();
+            $b = Vps_Benchmark::start('user-sync gesamt');
             self::$checkCacheDone = true;
 
             $cacheId = 'userDbCache';
@@ -51,43 +51,66 @@ class Vps_Model_User_Users extends Vps_Db_Table
                 }
 
                 if (count($ids)) {
+                    $b3 = Vps_Benchmark::start('user-sync-full all rest request ('.count($ids).' ids)');
                     $response = $restClient->restPost($path,
                         array('method' => 'getData', 'id' => $ids, 'columns' => '')
                     );
-
                     $ret = new Zend_Rest_Client_Result($response->getBody());
+                    if ($b3) $b3->stop();
 
-                    foreach ($ret->data as $k => $v) {
-                        $this->_syncUserByRestData($v);
-                    }
+                    $b4 = Vps_Benchmark::start('user-sync-full sync');
+                    $this->_syncUsersByRestData((array)$ret->data);
+                    if ($b4) $b4->stop();
                 }
 
                 $cacheTimestamp = (string)$ret->timestamp();
             } else {
+                $b3 = Vps_Benchmark::start('user-sync-partial rest request');
                 $restClient->syncCache($this->getRowWebcode(), $cacheTimestamp);
                 $restResult = $restClient->get();
+                if ($b3) $b3->stop();
 
-                foreach ((array)$restResult->data as $v) {
-                    $this->_syncUserByRestData($v);
-                }
+                $b4 = Vps_Benchmark::start('user-sync-full sync');
+                $this->_syncUsersByRestData((array)$restResult->data);
+                $b4->stop();
 
                 $cacheTimestamp = (string)$restResult->timestamp;
             }
             $cache->save($cacheTimestamp, $cacheId);
+            if ($b) $b->stop();
         }
     }
 
-    private function _syncUserByRestData($restRow)
+    private function _syncUsersByRestData($restResultData)
     {
-        $row = $this->find((integer)$restRow->id)->current();
-        if ($row) {
-            $cacheCols = call_user_func(array($this->_rowClass, 'getCachedColumns'));
-            $cacheData = array();
-            foreach ($cacheCols as $c) {
-                $cacheData[$c] = (string)$restRow->{$c};
-            }
-            $row->updateCache($cacheData);
+        $restIds = array();
+        foreach ($restResultData as $v) {
+            $restIds[] = (integer)$v->id;
         }
+
+        if (count($restIds)) {
+            $rowset = $this->fetchAll(array('id IN('.implode(',', $restIds).')'));
+
+            foreach ($rowset as $row) {
+                foreach ($restResultData as $k => $v) {
+                    if ((integer)$v->id == $row->id) {
+                        $this->_syncUserByRestData($v, $row);
+                        unset($restResultData[$k]);
+                        break 1;
+                    }
+                }
+            }
+        }
+    }
+
+    private function _syncUserByRestData($restRow, $row)
+    {
+        $cacheCols = call_user_func(array($this->_rowClass, 'getCachedColumns'));
+        $cacheData = array();
+        foreach ($cacheCols as $c) {
+            $cacheData[$c] = (string)$restRow->{$c};
+        }
+        $row->updateCache($cacheData);
     }
 
     public function fetchRowByEmail($email)
