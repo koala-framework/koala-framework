@@ -2,7 +2,6 @@
     font-size: 12px;
 }
 .$cssClass form .vpsField label {
-    display: block;
     line-height: 20px;
 }
 .$cssClass form .vpsField input {
