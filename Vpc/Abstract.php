@@ -17,7 +17,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         $ret['isPdf'] = false;
         return $ret;
     }
-    
+
     public static function getChildComponentClasses($class, $select = array())
     {
         if (is_string($select)) {
@@ -115,7 +115,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         }
         return $classes[0];
     }
-    
+
     public static function hasChildComponentClass($class, $generator, $componentKey = null)
     {
         $constraints = array(
@@ -125,7 +125,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         $classes = self::getChildComponentClasses($class, $generator);
         return isset($classes[0]);
     }
-    
+
     protected function _getRow()
     {
         if (!isset($this->_row)) {
@@ -160,15 +160,15 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
 
     /**
      * Gibt Werte für den Statistik-Decorator zurück
-     * 
+     *
      * Standardmäßig wird in die Tabelle "temp" geschrieben,
      * falls man in eine andere Tabelle schreiben möchte, ist der Tabellenname
      * als Schlüssel für das eigentlich Wertearray anzugebn.
-     * 
+     *
      * Falls kein leeres Array zurückgegeben wird, wird für die aktuelle Seite die
      * Statistik gezählt, falls nicht ohnehin die Statistik generell aktiviert
      * ist.
-     * 
+     *
      * Falls die Statistik generell aktiviert ist, werden die hier angegebenen
      * Variable am Ende gemergt.
      *

@@ -607,7 +607,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         $breakBeforeRow = array();
         for ($i = 1; $i <= 2; $i++) {
             $pdf = new Vps_Grid_Pdf_Table($this->_pdf['orientation'], 'mm', $this->_pdf['format']);
-            $pdf->SetFont('vera', '', 8);
+            $pdf->SetFont('helvetica', '', 8);
             $pdf->SetMargins($pageMargin, 20, $pageMargin);
             $pdf->SetFooterMargin(5);
             $pdf->SetAutoPageBreak(true, 20);
