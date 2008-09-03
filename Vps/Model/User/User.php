@@ -265,7 +265,7 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
             if (parent::__isset('nickname') && parent::__get('nickname') != '') {
                 return parent::__get('nickname');
             } else {
-                return $this->firstname . ' ' . substr($this->lastname, 0, 1);
+                return trim($this->firstname . ' ' . substr($this->lastname, 0, 1));
             }
         } else {
             return parent::__get($columnName);
