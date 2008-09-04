@@ -6,7 +6,8 @@ class Vpc_User_Detail_GeneralCommunity_Form extends Vpc_User_Detail_General_Form
         parent::_initFields();
         $this->_generalFieldset->add(new Vps_Form_Field_TextField('nickname', trlVps('Nickname')))
                     ->setAllowBlank(false)
-                    ->setWidth(250);
+                    ->setWidth(250)
+                    ->setMaxLength(20);
 
         $this->_generalFieldset->add(new Vps_Form_Field_TextField('location', trlVps('Place of living')))
             ->setWidth(250);

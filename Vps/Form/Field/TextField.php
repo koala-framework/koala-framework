@@ -21,6 +21,9 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         } else if ($this->getVType() === 'alphanum') {
             $this->addValidator(new Vps_Validate_Alnum());
         }
+        if ($this->getMaxLength()) {
+            $this->addValidator(new Zend_Validate_StringLength(0, $this->getMaxLength()));
+        }
     }
 
     public function getTemplateVars($values, $fieldNamePostfix = '')
