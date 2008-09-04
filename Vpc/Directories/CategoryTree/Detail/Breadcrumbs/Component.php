@@ -18,7 +18,7 @@ class Vpc_Directories_CategoryTree_Detail_Breadcrumbs_Component
 
         $breadcrumbs = array($detail);
 
-        $row = $detail->row->findParentRow($detail->row->getTable());
+        $row = $detail->row->getRow()->findParentRow($detail->row->getModel()->getTable());
         while ($row) {
             $breadcrumbs[] = $directory->getChildComponent('_'.$row->id);
             $row = $row->findParentRow($row->getTable());

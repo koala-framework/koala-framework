@@ -95,6 +95,7 @@ class Vps_Model_Db implements Vps_Model_Interface
         }
         $dbSelect = $this->_createDbSelect($select);
         if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
+            
             foreach ($order as $o) {
                 $dbSelect->order($o['field'].' '.$o['dir']);
             }

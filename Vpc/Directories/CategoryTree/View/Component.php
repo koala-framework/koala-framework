@@ -11,7 +11,7 @@ class Vpc_Directories_CategoryTree_View_Component
 
     public static function getItemCountCacheId($row)
     {
-        return 'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getTable()).$row->id.'_itemCount';
+        return 'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getModel()->getTable()).$row->id.'_itemCount';
     }
 
     public static function getItemCountCache()
@@ -47,15 +47,11 @@ class Vpc_Directories_CategoryTree_View_Component
                         ->getItemDirectory()->parent->getComponent();
                 }
 
-                $categoryIds = $item->row->getRecursiveChildCategoryIds(array(
+                $categoryIds = $item->row->getRow()->getRecursiveChildCategoryIds(array(
                     'visible = 1'
                 ));
 
                 $select = $directoryComponent->getSelect();
-                $select->setIntegrityCheck(false);
-                $select->reset(Zend_Db_Select::COLUMNS);
-                $select->reset(Zend_Db_Select::ORDER);
-                $select->from(null, array('cnt' => 'COUNT(*)'));
                 $select->join(
                     $connectData['tableName'],
                     "$connectData[refTableName].$connectData[refItemColumn] = $connectData[tableName].$connectData[itemColumn]",
@@ -63,7 +59,7 @@ class Vpc_Directories_CategoryTree_View_Component
                 );
                 $select->where("$connectData[tableName].category_id IN(".implode(',', $categoryIds).")");
 
-                $item->listCount = $select->query()->fetchColumn();
+                $item->listCount = $directoryComponent->getData()->countChildComponents($select);
 
                 $cache->save($item->listCount, $cacheId);
             }
