@@ -3005,15 +3005,15 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">'%value%' is less than %min% characters long</en>
-<de>_</de>
+<de>'%value%' ist kürzer als %min% Zeichen</de>
 </text>
 <text>
 <en default="1">'%value%' is greater than %max% characters long</en>
-<de>_</de>
+<de>'%value%' ist länger als %max% Zeichen</de>
 </text>
 <text>
 <en default="1">'%value%' appears to be an IP address, but IP addresses are not allowed</en>
-<de>_</de>
+<de>'%value%' scheint eine IP-Adresse zu sein, aber IP-Adressen sind nicht erlaubt</de>
 </text>
 <text>
 <en default="1">'%value%' appears to be a DNS hostname but cannot match TLD against known list</en>
@@ -3033,15 +3033,15 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">'%value%' does not match the expected structure for a DNS hostname</en>
-<de>_</de>
+<de>'%value%' hat keine richtige DNS-Hostname Struktur</de>
 </text>
 <text>
 <en default="1">'%value%' does not appear to be a valid local network name</en>
-<de>_</de>
+<de>'%value%' scheint kein gültiger Netzwerkname zu sein</de>
 </text>
 <text>
 <en default="1">'%value%' appears to be a local network name but local network names are not allowed</en>
-<de>_</de>
+<de>'%value%' scheint ein lokaler Netzwerkname zu sein, aber lokale Netzwerknamen sind aber nicht erlaubt.</de>
 </text>
 </trl>
 
