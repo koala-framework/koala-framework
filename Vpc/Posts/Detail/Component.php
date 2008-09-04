@@ -80,19 +80,23 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
         // zitate
         $content = str_replace('[quote]', '<fieldset class="quote"><legend>Zitat</legend>', $content, $countOpened);
 
-        $content = str_replace('[/quote]', '</fieldset>', $content, $closed);
-
-        $content = preg_replace('/\[quote=(.*?)\]/i',
+        $content = preg_replace('/\[quote=([^\]]*)\]/i',
             '<fieldset class="quote"><legend>Zitat von $1</legend>',
             $content,
             -1, $countOpenedPreg
         );
+
+        $content = str_replace('[/quote]', '</fieldset>', $content, $closed);
 
         $open = $countOpened + $countOpenedPreg;
 
         while ($open > $closed) {
             $content .= '</fieldset>';
             $closed++;
+        }
+        while ($closed > $open) {
+            $content = '<fieldset class="quote"><legend>Zitat</legend>'.$content;
+            $open++;
         }
 
         // automatische verlinkung
@@ -101,7 +105,6 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
         $offset = 0;
         while (preg_match($pattern, $content, $matches, PREG_OFFSET_CAPTURE, $offset)) {
             $showUrl = $truncate->truncate($matches[5][0], 60, '...', true);
-            $search = $matches[0][0];
             $replace = "<a href=\"http://{$matches[3][0]}{$matches[5][0]}\" "
                 ."title=\"{$matches[3][0]}{$matches[5][0]}\" rel=\"popup_blank\">{$matches[3][0]}$showUrl</a>";
             $content = substr($content, 0, $matches[0][1])
