@@ -5,7 +5,9 @@
     <h3><?=trlVps('Member since')?></h3>
     <?=$this->date($this->row->created)?>
 
-    <h3><?=trlVps('Latest online')?></h3>
-    <?=$this->timestamp($this->row->last_login)?>
+    <? if (isset($this->row->last_login_web)) { ?>
+        <h3><?=trlVps('Latest online')?></h3>
+        <?=$this->timestamp($this->row->last_login_web)?>
+    <? } ?>
 
 </div>

@@ -70,7 +70,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
                 $restResult = $restClient->get();
                 if ($b3) $b3->stop();
 
-                $b4 = Vps_Benchmark::start('user-sync-full sync');
+                $b4 = Vps_Benchmark::start('user-sync-partial sync');
                 $this->_syncUsersByRestData((array)$restResult->data);
                 if ($b4) $b4->stop();
 
@@ -145,6 +145,11 @@ class Vps_Model_User_Users extends Vps_Db_Table
                     'identity'           => $identity,
                     'messages'           => array('User not existent in this web.')
                 );
+            }
+
+            if (isset($userRow->last_login_web)) {
+                $userRow->last_login_web = date('Y-m-d H:i:s');
+                $userRow->save();
             }
 
             return array(
