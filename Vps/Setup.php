@@ -239,9 +239,7 @@ class Vps_Setup
         }
 
         $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
-        if (isset($_SERVER['HTTP_HOST']) && substr($_SERVER['HTTP_HOST'], 0, 5) == 'test.'
-            && empty($sessionPhpAuthed->success)
-        ) {
+        if (Zend_Registry::get('config')->preLogin && empty($sessionPhpAuthed->success)) {
             if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
                 $loginResponse = Zend_Registry::get('userModel')
                     ->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
