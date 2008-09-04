@@ -15,10 +15,12 @@
             </div>
             <div class="user">
                 <?=trlVps('By')?>: <?= $this->componentLink($this->user) ?>
+                <?=$this->component($this->user->getChildComponent('-general')->getChildComponent('-rating'))?>
             </div>
             <? } ?>
             <strong>#<?= $this->postNumber ?></strong>
-            <em><?=trlVps('on') ?> <?=$this->date($this->data->row->create_time)?> <?=trlVps('at') ?> <?=$this->time($this->data->row->create_time)?></em><br />
+            <em><?=trlVps('on') ?> <?=$this->date($this->data->row->create_time)?>
+                <?=trlVps('at') ?> <?=$this->time($this->data->row->create_time)?></em><br />
             <?=trlVps('Post')?>:
             <? if ($this->edit) { ?>
                 <?=$this->componentLink($this->edit)?> |

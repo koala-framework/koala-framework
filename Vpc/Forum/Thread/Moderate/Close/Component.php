@@ -16,14 +16,14 @@ class Vpc_Forum_Thread_Moderate_Close_Component extends Vpc_Abstract
         $ret['closed'] = $this->isClosed();
         return $ret;
     }
-    
+
     public function isClosed()
     {
         if (is_null($this->_isClosed)) {
-            $row = $this->getData()->parent->parent->parent->parent->row;
+            $row = $this->getData()->parent->parent->row;
             if (!is_null($this->_getParam('close'))) {
                 $row->closed = $this->_getParam('close');
-                $row->save();            
+                $row->save();
             }
             $this->_isClosed = $row->closed == '1';
         }

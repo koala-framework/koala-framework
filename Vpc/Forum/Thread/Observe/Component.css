@@ -2,14 +2,14 @@
     float: right;
 }
 .$cssClass a.notObserved {
-    background: url(/assets/web/images/notObserved.jpg) no-repeat left center;
+    background: url(/assets/vps/Vpc/Forum/Thread/Observe/notObserved.jpg) no-repeat left center;
     padding-left: 25px;
 }
 .$cssClass a.observed {
-    background: url(/assets/web/images/observed.jpg) no-repeat left center;
+    background: url(/assets/vps/Vpc/Forum/Thread/Observe/observed.jpg) no-repeat left center;
     padding-left: 25px;
 }
 .$cssClass a.observed:hover,
 .$cssClass a.notObserved:hover {
-    background: url(/assets/web/images/observedOver.jpg) no-repeat left center;
+    background: url(/assets/vps/Vpc/Forum/Thread/Observe/observedOver.jpg) no-repeat left center;
 }

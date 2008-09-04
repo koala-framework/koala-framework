@@ -4,7 +4,6 @@ class Vpc_Forum_Group_NewThread_Component extends Vpc_Abstract_Composite_Compone
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['breadCrumbs'] = 'Vpc_Menu_BreadCrumbs_Component';
         $ret['generators']['child']['component']['form'] = 'Vpc_Forum_Group_NewThread_Form_Component';
         return $ret;
     }
