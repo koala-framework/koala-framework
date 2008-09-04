@@ -3,7 +3,7 @@ class Vps_Model_Select
 {
     const WHERE = 'where';
     const WHERE_EQUALS = 'whereEquals';
-    const WHERE_ID = 'id';
+    const WHERE_ID = 'whereId';
     const ORDER = 'order';
     const LIMIT_COUNT = 'limitCount';
     const LIMIT_OFFSET = 'limitOffset';

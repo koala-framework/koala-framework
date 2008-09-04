@@ -4,6 +4,7 @@ class Vpc_User_Directory_Component extends Vpc_Directories_ItemPage_Directory_Co
     public static function getSettings()
     {
         $ret = parent::getSettings();
+        $ret['generators']['detail']['class'] = 'Vpc_User_Directory_Generator';
         $ret['generators']['detail']['component'] = 'Vpc_User_Detail_Component';
         $ret['generators']['detail']['table'] = get_class(Vps_Registry::get('userModel'));
         $ret['generators']['detail']['dbIdShortcut'] = 'users_';

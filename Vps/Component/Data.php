@@ -148,7 +148,7 @@ class Vps_Component_Data
         return $ret;
     }
 
-    public function getRecursiveChildComponents($select,
+    public function getRecursiveChildComponents($select = array(),
                                 $childSelect = array('page'=>false))
     {
         Vps_Benchmark::count('getRecursiveChildComponents');

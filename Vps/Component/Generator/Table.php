@@ -103,8 +103,9 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     protected function _formatSelect($parentData, $select)
     {
         $select = parent::_formatSelect($parentData, $select);
+
         if (is_null($select)) return null;
-        
+
         if ($select->hasPart(Vps_Model_Select::WHERE_ID)) {
             $id = $select->getPart(Vps_Model_Select::WHERE_ID);
             $separator = substr($id, 0, 1);
@@ -114,7 +115,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             }
             $select->whereId($id);
         }
-        
+
         $cols = $this->_getModel()->getColumns();
         if ($parentData && in_array('component_id', $cols)) {
             $select->whereEquals('component_id', $parentData->dbId);
@@ -122,6 +123,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if (in_array('pos', $cols) && !$select->hasPart(Vps_Component_Select::ORDER)) {
             $select->order("pos");
         }
+        
         static $showInvisible;
         if (is_null($showInvisible)) {
             $showInvisible = Vps_Registry::get('config')->showInvisible;

@@ -161,9 +161,13 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         return $ret;
     }
-    public function getComponentsByClass($class)
+    public function getComponentsByClass($class, $select = array())
     {
-        if (!isset($this->_componentsByClassCache[$class])) {
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        $cacheId = $class.serialize($select->getParts());
+        if (!isset($this->_componentsByClassCache[$cacheId])) {
             $benchmark = Vps_Benchmark::start();
 
             $lookingForChildClasses = Vpc_Abstract::getComponentClassesByParentClass($class);
@@ -172,16 +176,16 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     return array($this);
                 }
             }
-            $select = array('componentClasses' => $lookingForChildClasses);
+            $select->whereComponentClasses($lookingForChildClasses);
 
             $ret = array();
             foreach ($this->_getGeneratorsForClasses($lookingForChildClasses) as $generator) {
                 $ret = array_merge($ret, $generator->getChildData(null, $select));
             }
 
-            $this->_componentsByClassCache[$class] = $ret;
+            $this->_componentsByClassCache[$cacheId] = $ret;
         }
-        return $this->_componentsByClassCache[$class];
+        return $this->_componentsByClassCache[$cacheId];
     }
 
     private function _getGeneratorsForClasses($lookingForClasses)
