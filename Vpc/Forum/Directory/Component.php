@@ -61,18 +61,38 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                 $group->countThreads = 0;
                 $group->countPosts = 0;
 
-                $row = $group->row->getRow();
-                $lastPostId = $row->getLastPostId();
-                $root = Vps_Component_Data_Root::getInstance();
-                if ($lastPostId) {
-                    $group->countPosts = $row->countPosts();
-                    $group->countThreads = $row->countThreads();
-                    $group->lastPost = $root->getComponentById($lastPostId);
-                    if ($group->lastPost) {
-                        $group->lastUser = $root->getComponentByClass('Vpc_User_Directory_Component')
-                            ->getChildComponent('_' . $group->lastPost->row->user_id);
-                    }
+                // Generators holen
+                $groupComponentClass = $group->componentClass;
+                $threadComponentClass = Vpc_Abstract::getChildComponentClass($groupComponentClass, 'detail');
+                $postsComponentClass = Vpc_Abstract::getChildComponentClass($threadComponentClass, 'child', 'posts');
+                $threadGenerator = Vps_Component_Generator_Abstract
+                    ::getInstance($groupComponentClass, 'detail');
+                $postsGenerator = Vps_Component_Generator_Abstract
+                    ::getInstance($postsComponentClass, 'detail');
+                    
+                // countThreads
+                $select = $threadGenerator->select($group);
+                $group->countThreads = $threadGenerator->countChildData(null, $select);
+
+                // countPosts
+                $select = $postsGenerator->select(null);
+                $select = $postsGenerator->joinWithParentGenerator($select, $threadGenerator, $group, '-posts');
+                $group->countPosts = $postsGenerator->countChildData(null, $select);
+
+                // lastPost
+                $select = $postsGenerator->select(null);
+                $select = $postsGenerator->joinWithParentGenerator($select, $threadGenerator, $group, '-posts');
+                $select->order('create_time', 'DESC');
+                $select->limit(1);
+                $group->lastPost = current($postsGenerator->getChildData(null, $select));
+                
+                // lastUser
+                if ($group->lastPost) {
+                    $group->lastUser = Vps_Component_Data_Root::getInstance()
+                        ->getComponentByClass('Vpc_User_Directory_Component')
+                        ->getChildComponent('_' . $group->lastPost->row->user_id);
                 }
+
                 $group->childGroups = $this->getGroups($group->row->id);
                 
                 $ret[] = $group;

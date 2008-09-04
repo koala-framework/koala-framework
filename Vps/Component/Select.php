@@ -41,6 +41,15 @@ class Vps_Component_Select extends Vps_Model_Select
             $this->setPart($type, $part);
         }
     }
+    
+    public function joinWithParentGenerators($data, $generatorNames)
+    {
+        foreach ($generatorNames as $generatorName) {
+            $data = $data->parent;
+            $generator = $data->getGenerator($generatorName);
+            $generator->joinWithParentGenerator($this, $data);
+        }
+    }
 
     public function wherePage($value = true)
     {
