@@ -51,8 +51,9 @@ class Vps_Model_Db implements Vps_Model_Interface
 
     private function _createDbSelect($select)
     {
+        $tablename = $this->_table->info('name');
         $dbSelect = $this->_table->select();
-        $dbSelect->from($this->_table->info('name'));
+        $dbSelect->from($tablename);
         if ($whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
             foreach ($whereEquals as $field=>$value) {
                 if (is_array($value)) {
@@ -95,7 +96,6 @@ class Vps_Model_Db implements Vps_Model_Interface
         }
         $dbSelect = $this->_createDbSelect($select);
         if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
-            
             foreach ($order as $o) {
                 $dbSelect->order($o['field'].' '.$o['dir']);
             }

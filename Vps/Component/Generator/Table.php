@@ -39,13 +39,15 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $where = $parentSelect->getPart(Vps_Component_Select::WHERE_EQUALS);
             if ($where) {
                 foreach ($parentSelect->getPart(Vps_Component_Select::WHERE_EQUALS) as $key => $value) {
-                    $select->whereEquals($parentTable . '.' . $key, $value);
+                    if (!strpos($key, '.')) { $key = $parentTable . '.' . $key; }
+                    $select->whereEquals($key, $value);
                 }
             }
             $where = $parentSelect->getPart(Vps_Component_Select::WHERE);
             if ($where) {
                 foreach ($where as $key => $value) {
-                    $select->where($parentTable . '.' . $key, $value);
+                    if (!strpos($key, '.')) { $key = $parentTable . '.' . $key; }
+                    $select->where($key, $value);
                 }
             }
         }
@@ -126,7 +128,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         }
         if (!$select->getPart(Vps_Component_Select::IGNORE_VISIBLE)
             && in_array('visible', $cols) && !$showInvisible) {
-            $select->whereEquals("visible", 1);
+            $select->whereEquals($this->_getModel()->getTable()->info('name') . ".visible", 1);
         }
 
         if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
