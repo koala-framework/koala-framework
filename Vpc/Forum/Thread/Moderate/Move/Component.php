@@ -20,15 +20,12 @@ class Vpc_Forum_Thread_Moderate_Move_Component extends Vpc_Abstract_Composite_Co
         
         $ret['moved'] = false;
         if ($this->_getParam('to')) {
-            $thread = $this->getData()->getParentPage();
-            $group = $thread->getParentPage();
-            $forum = $group->parent;
-            
+
             // Thread verschieben
             $componentId = $forum->getChildComponent('_' . $this->_getParam('to'))->dbId;
             $thread->row->component_id = $componentId;
             $thread->row->save();
-            
+
             // Posts verschieben
             $newThreadId = $componentId . '_' . $thread->row->id;
             $componentId = $newThreadId . '-posts';
@@ -39,7 +36,7 @@ class Vpc_Forum_Thread_Moderate_Move_Component extends Vpc_Abstract_Composite_Co
             $this->newThread = Vps_Component_Data_Root::getInstance()->getComponentById($newThreadId);
             $ret['moved'] = true;
         }
-        
+
         $ret['groups'] = array();
         if (!$ret['moved'] && $group->getComponent()->mayModerate()) {
             $ret['groups'] = $group->parent->getComponent()->getGroups();

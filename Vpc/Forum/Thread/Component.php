@@ -4,12 +4,23 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['child']['component']['breadCrumbs'] = 'Vpc_Menu_BreadCrumbs_Component';
         $ret['generators']['child']['component']['posts'] = 'Vpc_Forum_Posts_Directory_Component';
+        $ret['generators']['child']['component']['observe'] = 'Vpc_Forum_Thread_Observe_Component';
+        $ret['generators']['child']['component']['moderate'] = 'Vpc_Forum_Thread_Moderate_Component';
         $ret['name'] = trlVps('Forum');
         return $ret;
     }
-    
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['write'] = $this->getData()->getChildComponent('-posts')->getChildComponent('_write');
+        $ret['threadClosed'] = $this->getData()->getChildComponent('-moderate')->
+            getChildComponent('-close')->getComponent()->isClosed();
+        $ret['mayModerate'] = $this->getData()->getParentPage()->getComponent()->mayModerate();
+        return $ret;
+    }
+
     public function getThreadVars()
     {
         $postsData = $this->getData()->getChildComponent('-posts');
