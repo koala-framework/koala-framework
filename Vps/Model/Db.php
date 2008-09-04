@@ -75,7 +75,7 @@ class Vps_Model_Db implements Vps_Model_Interface
         if ($whereId = $select->getPart(Vps_Model_Select::WHERE_ID)) {
             $dbSelect->where($this->getPrimaryKey()." = ?", $whereId);
         }
-
+        
         if ($other = $select->getPart(Vps_Model_Select::OTHER)) {
             foreach ($other as $i) {
                 call_user_func_array(array($dbSelect, $i['method']), $i['arguments']);
@@ -119,8 +119,14 @@ class Vps_Model_Db implements Vps_Model_Interface
         }
         $dbSelect = $this->_createDbSelect($select);
         $dbSelect->reset(Zend_Db_Select::COLUMNS);
-        $dbSelect->from(null, 'COUNT(*)');
         $dbSelect->setIntegrityCheck(false);
+        if ($dbSelect->getPart('group')) {
+            $group = current($dbSelect->getPart('group'));
+            $dbSelect->reset(Zend_Db_Select::GROUP);
+            $dbSelect->from(null, "COUNT(DISTINCT $group) c");
+        } else {
+            $dbSelect->from(null, 'COUNT(*) c');
+        }
         return $this->_table->getAdapter()->query($dbSelect)->fetchColumn();
     }
 

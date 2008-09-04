@@ -14,26 +14,40 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $select;
     }
     
-    public function joinWithChildGenerator($select, $childGenerator)
+    public function joinWithChildGenerator($select, $childGenerator, $appendComponentId = '')
     {
-        $table = $this->_table->info('name');
-        $childTable = $childGenerator->_table->info('name');
+        $table = $this->_getModel()->getTable()->info('name');
+        $childTable = $childGenerator->_getModel()->getTable()->info('name');
         $concat = "{$table}.component_id, '{$this->_idSeparator}', {$table}.id";
+        if ($appendComponentId != '') $concat .= ", '$appendComponentId'";
         $select->setIntegrityCheck(false);
         $select->join($childTable, "CONCAT($concat)={$childTable}.component_id", array());
         return $select;
     }
 
-    public function joinWithParentGenerator($select, $parentGenerator, $grandParentData = null)
+    public function joinWithParentGenerator($select, $parentGenerator, $grandParentData = null, $appendComponentId = '')
     {
-        $table = $this->_table->info('name');
-        $parentTable = $parentGenerator->_table->info('name');
+        $table = $this->_getModel()->getTable()->info('name');
+        $parentTable = $parentGenerator->_getModel()->getTable()->info('name');
         $concat = "{$parentTable}.component_id, '{$parentGenerator->_idSeparator}', {$parentTable}.id";
+        if ($appendComponentId != '') $concat .= ", '$appendComponentId'";
         $select->setIntegrityCheck(false);
         $select->join($parentTable, "CONCAT($concat)={$table}.component_id", array());
         if ($grandParentData) {
-            $where = $parentGenerator->select($grandParentData)->getPart(Zend_Db_Select::WHERE);
-            $select->where(implode(' ', $where));
+            $parentSelect = $parentGenerator->select($grandParentData);
+            $parentSelect = $parentGenerator->_formatSelect($grandParentData, $parentSelect);
+            $where = $parentSelect->getPart(Vps_Component_Select::WHERE_EQUALS);
+            if ($where) {
+                foreach ($parentSelect->getPart(Vps_Component_Select::WHERE_EQUALS) as $key => $value) {
+                    $select->whereEquals($parentTable . '.' . $key, $value);
+                }
+            }
+            $where = $parentSelect->getPart(Vps_Component_Select::WHERE);
+            if ($where) {
+                foreach ($where as $key => $value) {
+                    $select->where($parentTable . '.' . $key, $value);
+                }
+            }
         }
         return $select;
     }
@@ -136,7 +150,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         }
         return $select;
     }
-
+    
     protected function _formatConfig($parentData, $row)
     {
         $componentId = $this->_getIdFromRow($row);
