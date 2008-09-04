@@ -17,17 +17,39 @@
     margin-left: 20px;
     padding: 5px;
 }
-.$cssClass div.deleteImage {
+.ext-ie6 .$cssClass fieldset legend,
+.ext-ie7 .$cssClass fieldset legend {
+    margin-bottom: 10px;
+}
+.$cssClass .vpsFormFieldFileInner img {
+    float: left;
+}
+.$cssClass .vpsFormFieldFileInner input {
     float: right;
-    margin-right: 251px;
-    margin-top: -31px;
 }
-.ext-safari .$cssClass div.deleteImage {
-    margin-top: 0px;
+.$cssClass .vpsFormFieldFileInner div.deleteImage {
+    float: right;
+    margin-left: 25px;
 }
-.$cssClass .vpsFormFieldFileInfo {
-    width: 240px;
+.ext-safari .$cssClass .vpsFormFieldFileInner div.deleteImage {
+    float: right;
+    margin-top: 10px;
+    margin-right: -243px;
+}
+.$cssClass .vpsFormFieldFileInner .vpsFormFieldFileInfo {
+    width: 220px;
     overflow: hidden;
     float: right;
-    margin-top: -24px;
+    margin-top: 10px;
+    text-align: right;
+}
+.ext-ie6 .$cssClass .vpsFormFieldFileInner .vpsFormFieldFileInfo {
+    width: 200px;
+}
+.ext-gecko .$cssClass .vpsFormFieldFileInner div.deleteImage {
+    margin-left: 45px;
+}
+.ext-gecko .$cssClass .vpsFormFieldFileInner .vpsFormFieldFileInfo {
+    width: 245px;
+    margin-right: -20px;
 }

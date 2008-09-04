@@ -11,6 +11,9 @@
     text-align: right;
     margin-top: 4px;
 }
+.ext-safari .$cssClass label {
+    margin-bottom: -5px;
+}
 .$cssClass input,
 .$cssClass select {
     margin-left: 10px;

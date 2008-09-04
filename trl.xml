@@ -810,7 +810,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <en default="1">Edit</en>
 <de>Bearbeiten</de>
 </text>
-<text context="forum">
+<text>
 <en default="1">edit</en>
 <de>bearbeiten</de>
 </text>
@@ -1863,7 +1863,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">You will receive an email with a passwort reset link and further instructions.</en>
-<de>Sie erhalten eine E-Mail mit weiteren Anweisungen und einem Link, welcher ihr Passwort zurücksetzt.</de>
+<de>Sie erhalten eine E-Mail mit weiteren Anweisungen und einem Link, welcher ihr Passwort zur&#xFC;cksetzt.</de>
 </text>
 <text>
 <en default="1">Post</en>
@@ -2564,6 +2564,10 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de_plural>Antworten</de_plural>
 </text>
 <text>
+<en defailt="1">Reply</en>
+<de>Antworten</de>
+</text>
+<text>
 <en default="1">Forum.Latest Threads</en>
 <de>_</de>
 </text>
@@ -2609,11 +2613,11 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">new thread</en>
-<de>_</de>
+<de>Neues Thema</de>
 </text>
 <text>
 <en default="1">The Form has been submitted successfully.</en>
-<de>_</de>
+<de>Der Antrag wurde erfolgreich abgeschickt.</de>
 </text>
 <text>
 <en default="1">Formular</en>
@@ -2633,7 +2637,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Write</en>
-<de>_</de>
+<de>schreiben</de>
 </text>
 <text>
 <en default="1">Hello,&lt;br /&gt;&lt;br /&gt;
@@ -2642,7 +2646,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">Open the post or read it directly:</en>
-<de>_</de>
+<de>Kommentar &#xF6;ffnen oder direkt lesen:</de>
 </text>
 <text>
 <en default="1">Please enter a reason for reporting this Post</en>
@@ -2650,7 +2654,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">A post has been reported</en>
-<de>_</de>
+<de>Ein Kommentar wurde gemeldet</de>
 </text>
 <text>
 <en default="1">Hello,
@@ -2660,7 +2664,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">Open this url to go to the post or read it here:</en>
-<de>_</de>
+<de>&#xD6;ffnen sie diesem Link um zum Kommentar zu gelangen oder lesen sie ihn hier:</de>
 </text>
 <text>
 <en default="1">report</en>
@@ -2672,7 +2676,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">confirmed</en>
-<de>_</de>
+<de>best&#xE4;tigt</de>
 </text>
 <text>
 <en default="1">Comment was successfully deleted.</en>
@@ -2744,7 +2748,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">Activate</en>
-<de>_</de>
+<de>aktivieren</de>
 </text>
 <text>
 <en default="1">An account for the address '%value%' doesn't exist</en>
@@ -2855,7 +2859,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en default="1">'%value%' has not only alphabetic and digit characters</en>
-<de>_</de>
+<de>'%value%' beinhaltet unerlaubte Zeichen</de>
 </text>
 <text>
 <en default="1">'%value%' is an empty string</en>
@@ -2949,7 +2953,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">a post has been reported for the following reason:</en>
-<de>Ein Kommentar wurde aus folgenden Gründen gemeldet:</de>
+<de>Ein Kommentar wurde aus folgenden Gr&#xFC;nden gemeldet:</de>
 </text>
 <text>
 <en default="1">You were logged in, automatically</en>
@@ -2965,7 +2969,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.</en>
-<de>Der Aktivierungscode ist ungültig. Eventuell wurde der Account schon aktiviert oder die Adresse wurde falsch aus der E-Mail kopiert.</de>
+<de>Der Aktivierungscode ist ung&#xFC;ltig. Eventuell wurde der Account schon aktiviert oder die Adresse wurde falsch aus der E-Mail kopiert.</de>
 </text>
 <text>
 <en default="1">Please type in your {0} email address in the field below.</en>
@@ -2986,6 +2990,58 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <text>
 <en default="1">Please type at least two characters.</en>
 <de>Bitte geben sie mindestens 2 Zeichen ein.</de>
+</text>
+<text>
+<en default="1">Register</en>
+<de>Registrieren</de>
+</text>
+<text>
+<en default="1">With a free {0} account you can take part actively in the forum and write own posts. In addition, you have the possibility to observe single discussions and get informed by e-mail about new posts on the subject.</en>
+<de>Mit einem kostenlosen Benutzerkonto auf "{0}" k&#xF6;nnen Sie aktiv am Forum teilnehmen und eigene Beitr&#xE4;ge verfassen. Zus&#xE4;tzlich haben Sie die M&#xF6;glichkeit, einzelne Diskussionen gezielt zu beobachten und werden per E-Mail &#xFC;ber neue Beitr&#xE4;ge zum Thema informiert.</de>
+</text>
+<text>
+<en default="1">Preview:</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' is less than %min% characters long</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' is greater than %max% characters long</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' appears to be an IP address, but IP addresses are not allowed</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' appears to be a DNS hostname but cannot match TLD against known list</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' appears to be a DNS hostname but contains a dash (-) in an invalid position</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' appears to be a DNS hostname but cannot extract TLD part</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' does not match the expected structure for a DNS hostname</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' does not appear to be a valid local network name</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">'%value%' appears to be a local network name but local network names are not allowed</en>
+<de>_</de>
 </text>
 </trl>
 

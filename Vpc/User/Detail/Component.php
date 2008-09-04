@@ -5,6 +5,7 @@ class Vpc_User_Detail_Component extends Vpc_Directories_Item_Detail_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['general'] = 'Vpc_User_Detail_GeneralCommunity_Component';
+        $ret['cssClass'] = 'webStandard';
         return $ret;
     }
     

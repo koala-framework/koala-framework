@@ -34,21 +34,15 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
                 $class .= ' '.$item['id'];
             }
             $item['preHtml'] .= '<div class="'.$class.'">';
-            if ($item['item'] && !$item['item']->getHideLabels()) {
-                if ($item['item']) {
-                    $item['preHtml'] .= '<label for="'
-                        .(isset($item['id']) ? $item['id'] : $item['item']->getFieldName())
-                    .'">';
-                }
-                if ($item['item']) {
-                    $item['preHtml'] .= $item['item']->getFieldLabel();
-                }
-                if ($item['item'] && $item['item']->getAllowBlank()===false) {
+            if ($item['item'] && !$item['item']->getHideLabels() && $item['item']->getFieldLabel()) {
+                $item['preHtml'] .= '<label for="'
+                    .(isset($item['id']) ? $item['id'] : $item['item']->getFieldName())
+                .'">';
+                $item['preHtml'] .= $item['item']->getFieldLabel();
+                if ($item['item']->getAllowBlank()===false) {
                     $item['preHtml'] .= '*';
                 }
-                if ($item['item']) {
-                    $item['preHtml'] .= $item['item']->getLabelSeparator();
-                }
+                $item['preHtml'] .= $item['item']->getLabelSeparator();
                 $item['preHtml'] .= '</label>';
             }
             $item['postHtml'] .= '</div>';

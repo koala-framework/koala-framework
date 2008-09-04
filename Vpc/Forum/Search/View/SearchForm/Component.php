@@ -6,6 +6,7 @@ class Vpc_Forum_Search_View_SearchForm_Component extends Vpc_Form_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = false;
         $ret['method'] = 'get';
+        $ret['placeholder']['submitButton'] = trlVps('Search');
         return $ret;
     }
 

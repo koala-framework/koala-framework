@@ -16,8 +16,6 @@
 }
 .$cssClass .postData .user {
     float: right;
-    padding-right: 10px;
-    margin-right: 50px;
     position: relative;
     text-align: right;
 }
@@ -30,7 +28,7 @@
     font-size: 12px;
     padding: 15px 20px;
     background: #fff;
-    margin-top: 3px; /*IE7 bugfix*/
+    margin-top: 3px;
 }
 .$cssClass .comment fieldset.quote {
     background: #f3f2f1;

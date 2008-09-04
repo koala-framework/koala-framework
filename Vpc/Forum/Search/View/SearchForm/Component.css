@@ -1,5 +1,26 @@
+.ext-ie6 .$cssClass .vpsField {
+    float: none;
+    margin: 0px;
+    padding: 0px;
+}
+.ext-ie6 .$cssClass .vpsField input {
+    margin-top: 25px;
+    margin-right: 110px;
+}
+.ext-ie6 .$cssClass .submitWrapper {
+    margin-top: -32px;
+}
+.ext-ie7 .$cssClass .vpsField {
+    margin-left: 175px;
+}
+.ext-ie7 .$cssClass .vpsField input {
+    margin-top: 20px;
+}
 .$cssClass .vpsField {
     float: left;
     margin-left: 195px;
     padding-top: 5px;
+}
+.$cssClass .vpsField label {
+    float: none;
 }
