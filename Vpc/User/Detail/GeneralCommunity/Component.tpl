@@ -20,11 +20,11 @@
         <h3><?=trlVps('Member since')?>:</h3>
         <p><?=$this->date($this->row->created)?></p>
 
-        <? if ($this->row->last_login) { ?>
-        <h3><?=trlVps('Latest online')?>:</h3>
-        <p><?=$this->timestamp($this->row->last_login)?></p>
+        <? if (isset($this->row->last_login_web)) { ?>
+            <h3><?=trlVps('Latest online')?>:</h3>
+            <p><?=$this->timestamp($this->row->last_login_web)?></p>
         <? } ?>
-    
+
         <? if ($this->row->location != '') { ?>
         <h3><?=trlVps('Place of living')?>:</h3>
         <p><?=htmlspecialchars($this->row->location)?></p>

@@ -2915,7 +2915,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text context="time">
 <en default="1">On</en>
-<de>am</de>
+<de>Am</de>
 </text>
 <text context="time">
 <en default="1">at</en>
