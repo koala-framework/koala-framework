@@ -6,19 +6,39 @@ Ext.onReady(function()
     Ext.each(previews, function(preview)
     {
         var previewTarget = Ext.query('div.previewBox', preview)[0];
-        var previewSourceSelector = Ext.query('input.previewSourceSelector', preview)[0].value;
-        var previewSource = Ext.query(previewSourceSelector)[0];
+
+        var sourceSelector = Ext.query('input.sourceSelector', preview)[0].value;
+        var previewSource = null;
+        var rootNode = preview.parentNode;
+        while (!previewSource) {
+            previewSource = Ext.query(sourceSelector, rootNode)[0];
+            if (rootNode.tagName == 'BODY') break;
+            rootNode = rootNode.parentNode;
+        }
+
         if (previewSource) {
             previewTarget.innerHTML = Vpc.PostsWritePreview.replaceText(previewSource.value);
+            Vpc.PostsWritePreview.scrollToBottom(previewTarget, 140);
 
             previewSource = Ext.get(previewSource);
 
             previewSource.on('keyup', function(event, el) {
                 previewTarget.innerHTML = Vpc.PostsWritePreview.replaceText(el.value);
-            });
+                Vpc.PostsWritePreview.scrollToBottom(previewTarget, 140);
+            }, previewSource, { buffer: 120 });
         }
     });
 });
+
+Vpc.PostsWritePreview.scrollToBottom = function(el, maxHeight) {
+    var extEl = Ext.get(el);
+    if (extEl.getHeight() > maxHeight) {
+        extEl.setHeight(maxHeight);
+    }
+    if (extEl.getHeight() >= maxHeight) {
+        extEl.scroll("bottom", 20000);
+    }
+}
 
 Vpc.PostsWritePreview.replaceText = function(v)
 {
