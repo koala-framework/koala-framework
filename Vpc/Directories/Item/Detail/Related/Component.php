@@ -37,7 +37,7 @@ class Vpc_Directories_Item_Detail_Related_Component extends Vpc_Abstract
         );
 
         $categoryIds = array();
-        $categoryIdsRowset = $itemRow->findDependentRowset($connectTableName);
+        $categoryIdsRowset = $itemRow->getRow()->findDependentRowset($connectTableName);
         foreach ($categoryIdsRowset as $categoryIdRow) {
             $categoryIds[] = $categoryIdRow->{$categoryReference['itemColumn']};
         }

@@ -20,7 +20,7 @@ class Vpc_Advanced_SearchEngineReferer_Component extends Vpc_Abstract_Composite_
     public function processInput()
     {
         if (!$this->_getSetting('saveReferer')) return;
-        if (isset($_SERVER['HTTP_REFERER'])) return;
+        if (!isset($_SERVER['HTTP_REFERER'])) return;
         if (!$_SERVER['HTTP_REFERER']) return;
         $referer = $_SERVER['HTTP_REFERER'];
         $host = parse_url($referer, PHP_URL_HOST);

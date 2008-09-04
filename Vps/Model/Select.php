@@ -51,7 +51,13 @@ class Vps_Model_Select
     public function order($field, $dir = 'ASC')
     {
         if (is_array($field)) {
-            $this->_parts[self::ORDER][] = $field;
+            if (!isset($field['field'])) {
+                foreach ($field as $f) {
+                    $this->order($f);
+                }
+            } else {
+                $this->_parts[self::ORDER][] = $field;
+            }
         } else {
             $this->_parts[self::ORDER][] = array('field'=>$field, 'dir'=>$dir);
         }
