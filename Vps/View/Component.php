@@ -55,9 +55,9 @@ class Vps_View_Component extends Vps_View
                 $ret = "Component '$componentId' not found";
                 //todo: throw error
             }
-            Vps_Benchmark::count('rendered nocache', $componentId);
+            Vps_Benchmark::count('rendered nocache', $componentId.($isMaster?' (master)':''));
         } else {
-            Vps_Benchmark::count('rendered cache', $componentId);
+            Vps_Benchmark::count('rendered cache', $componentId.($isMaster?' (master)':''));
         }
 
         //plugins _nach_ im cache speichern ausführen

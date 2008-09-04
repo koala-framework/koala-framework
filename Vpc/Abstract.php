@@ -226,6 +226,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
             foreach ($process as $i) {
                 $i->getComponent()->processInput($postData);
             }
+            Vps_Component_Cache::getInstance()->process();
             echo Vps_View_Component::renderComponent($this->getData(), null, true);
         }
     }
