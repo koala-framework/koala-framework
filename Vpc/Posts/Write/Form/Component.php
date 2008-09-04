@@ -19,7 +19,7 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
         $row->component_id = $this->_getPostsComponent()->dbId;
         if (get_class($this) == 'Vpc_Posts_Write_Form_Component') {
             $thread = $this->getData()->getParentPage();
-            $observe = $thread->getChildComponent('-posts')->getChildComponent('-view')->getChildComponent('-observe');
+            $observe = $thread->getChildComponent('-observe');
             $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
             $table = Vpc_Abstract::createTable($observe->componentClass);
             $observers = $table->fetchAll(array('thread_id = ?' => $thread->row->id));

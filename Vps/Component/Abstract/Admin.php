@@ -112,13 +112,13 @@ class Vps_Component_Abstract_Admin
     
     public function onRowUpdate($row)
     {
-        $this->_deleteCache($row);
+        $this->_deleteCacheForRow($row);
         $this->_onRowAction($row);
     }
 
     public function onRowDelete($row)
     {
-        $this->_deleteCache($row);
+        $this->_deleteCacheForRow($row);
         $this->_onRowAction($row);
     }
 
@@ -127,19 +127,22 @@ class Vps_Component_Abstract_Admin
         $this->_onRowAction($row);
     }
     
-    private function _deleteCache($row)
+    protected function _deleteCacheForRow($row)
     {
-        if ($row instanceof Vpc_Row
+        if (isset($row->component_id)
             && Vpc_Abstract::hasSetting($this->_class, 'tablename')
             && Vpc_Abstract::getSetting($this->_class, 'tablename') == $row->getTableClass())
         {
             Vps_Component_Cache::getInstance()->remove($this->_class, $row->component_id);
-        } else if (Vpc_Abstract::hasSetting($this->_class, 'clearCacheTable')
+        }
+    }
+    
+    protected function _onRowAction($row)
+    {
+        if (Vpc_Abstract::hasSetting($this->_class, 'clearCacheTable')
             && Vpc_Abstract::getSetting($this->_class, 'clearCacheTable') == $row->getTableClass())
         {
             Vps_Component_Cache::getInstance()->remove($this->_class);
         }
     }
-    
-    protected function _onRowAction($row) {}
 }
