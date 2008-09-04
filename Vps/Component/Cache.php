@@ -86,17 +86,14 @@ class Vps_Component_Cache extends Zend_Cache_Core
         if ($componentId) {
             $this->_setCacheDir($componentClass);
             $cacheId = $this->getCacheIdFromComponentId($componentId);
-            p($cacheId);
             if (parent::remove($cacheId)) {
                 Vps_Benchmark::info("Cache für Komponente '$componentClass' mit Id '$componentId' gelöscht.");
             } else {
                 Vps_Benchmark::info("Cache NICHT für Komponente '$componentClass' mit Id '$componentId' gelöscht. (keiner vorhanden)");
             }
             $cacheId = $this->getCacheIdFromComponentId($componentId, true);
-            p($cacheId);
             parent::remove($cacheId);
             $cacheId = $this->getCacheIdFromComponentId($componentId, false, true);
-            p($cacheId);
             parent::remove($cacheId);
         } else {
             if ($this->rm_recursive($this->_getCacheDir($componentClass))) {

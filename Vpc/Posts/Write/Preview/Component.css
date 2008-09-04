@@ -1,1 +1,6 @@
-.$cssClass .previewBox { overflow: auto; }
+.$cssClass {
+    padding: 10px;
+}
+.$cssClass .previewBox {
+    overflow: auto;
+}

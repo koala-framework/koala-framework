@@ -5,6 +5,7 @@ class Vpc_User_Login_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['form'] = 'Vpc_User_Login_Form_Component';
+        $ret['cssClass'] = 'webStandard';
         return $ret;
     }
 

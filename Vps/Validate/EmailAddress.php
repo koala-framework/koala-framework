@@ -11,4 +11,11 @@ class Vps_Validate_EmailAddress extends Zend_Validate_EmailAddress
         $this->_messageTemplates[self::QUOTED_STRING] = trlVps("'%localPart%' not matched against quoted-string format");
         $this->_messageTemplates[self::INVALID_LOCAL_PART] = trlVps("'%localPart%' is not a valid local part for email address '%value%'");
     }
+    public function setHostnameValidator(Zend_Validate_Hostname $hostnameValidator = null, $allow = Zend_Validate_Hostname::ALLOW_DNS)
+    {
+        if ($hostnameValidator === null) {
+            $hostnameValidator = new Vps_Validate_Hostname($allow);
+        }
+        $this->hostnameValidator = $hostnameValidator;
+    }
 }

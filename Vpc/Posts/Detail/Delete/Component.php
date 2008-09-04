@@ -9,6 +9,7 @@ class Vpc_Posts_Detail_Delete_Component extends Vpc_Abstract
             'component' => 'Vpc_Posts_Detail_Delete_Confirmed_Component',
             'name' => trlVps('confirmed')
         );
+        $ret['cssClass'] = 'webStandard';
         return $ret;
     }
 }
