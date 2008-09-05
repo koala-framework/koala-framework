@@ -903,10 +903,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Die Seite mit der id {0} konnte nicht erstellt werden</de>
 </text>
 <text>
-<en default="1">Decorator  not found.</en>
-<de>Decorator konnte nicht gefunden werden.</de>
-</text>
-<text>
 <en default="1">Cannot set Parent Page for the same object: {0}</en>
 <de>&#xDC;bergeordnete Seite kann nicht f&#xFC;r das selbe Objekt gesetzt werden: {0}</de>
 </text>

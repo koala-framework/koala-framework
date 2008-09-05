@@ -28,13 +28,6 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
 
             $vars = $f->getTemplateVars(array());
 
-            $dec = Vpc_Abstract::getSetting($this->_componentClass, 'decorator');
-
-            if ($dec && is_string($dec)) {
-                $dec = new $dec();
-                $vars = $dec->processItem($vars);
-            }
-
             $view = new Vps_View_Ext();
             $view->item = $vars;
             return $view->render('field.tpl');

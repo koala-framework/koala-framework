@@ -1,14 +1,10 @@
 <?php
-class Vpc_Master_Statistic_Component extends Vpc_Master_Abstract
+class Vpc_Box_Statistic_Component extends Vpc_Abstract
 {
-    public static function getSettings()
-    {
-        return parent::getSettings();
-    }
-    
     public function getTemplateVars()
     {
-        $return = parent::getTemplateVars();
+        $ret = parent::getTemplateVars();
+        /* TODO
         $statistic = array();
         $dbname = Zend_Registry::get('config')->service->users->webcode;
         if (!$dbname) {
@@ -40,8 +36,7 @@ class Vpc_Master_Statistic_Component extends Vpc_Master_Abstract
             $src .= "}\n//--></script>\n";
         }
         $return['statistic'] = $src;
-        
-        return $return;
+        */
+        return $ret;
     }
-    
 }

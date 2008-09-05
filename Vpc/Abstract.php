@@ -4,12 +4,65 @@
  * @package Vpc
  * @copyright Copyright (c) 2007, Vivid Planet Software GmbH
  */
-abstract class Vpc_Abstract extends Vpc_Master_Abstract
+abstract class Vpc_Abstract extends Vps_Component_Abstract 
 {
+    private $_data;
     protected $_row;
     private $_pdfWriter;
     const LOREM_IPSUM = 'Lorem ipsum vix at error vocibus, sit at autem liber? Qui eu odio moderatius, populo pericula ex his. Mea hinc decore tempor ei, postulant honestatis eum ut. Eos te assum elaboraret, in ius fastidii officiis electram.';
 
+    public function __construct(Vps_Component_Data $data)
+    {
+        $this->_data = $data;
+        parent::__construct();
+    }
+    
+    public function getData()
+    {
+        return $this->_data;
+    }
+
+    public function getDbId()
+    {
+        return $this->getData()->dbId;
+    }
+
+    public function getComponentId()
+    {
+        return $this->getData()->componentId;
+    }
+
+    protected function _getParam($param)
+    {
+        return isset($_REQUEST[$param]) ? $_REQUEST[$param] : null;
+    }
+
+    /**
+     * Shortcut, fragt vom Seitenbaum die Url für eine Komponente ab
+     *
+     * @return string URL der Seite
+     */
+    public function getUrl()
+    {
+        return $this->getData()->getPage()->url;
+    }
+
+    public function getName()
+    {
+        return $this->getData()->getPage()->name;
+    }
+
+    /**
+     * Shortcut, fragt vom Seitenbaum, ob die unsichtbaren Einträge
+     * auch angezeige werden
+     *
+     * @return boolean
+     */
+    protected function _showInvisible()
+    {
+        return Vps_Registry::get('config')->showInvisible;
+    }
+    
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -158,27 +211,6 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
         return true;
     }
 
-    /**
-     * Gibt Werte für den Statistik-Decorator zurück
-     *
-     * Standardmäßig wird in die Tabelle "temp" geschrieben,
-     * falls man in eine andere Tabelle schreiben möchte, ist der Tabellenname
-     * als Schlüssel für das eigentlich Wertearray anzugebn.
-     *
-     * Falls kein leeres Array zurückgegeben wird, wird für die aktuelle Seite die
-     * Statistik gezählt, falls nicht ohnehin die Statistik generell aktiviert
-     * ist.
-     *
-     * Falls die Statistik generell aktiviert ist, werden die hier angegebenen
-     * Variable am Ende gemergt.
-     *
-     * @return Array mit Statistik-Variablen
-     */
-     public function getStatisticVars()
-     {
-         return array();
-     }
-
     public function getPdfWriter($pdf)
     {
         if (!isset($this->_pdfWriter)) {
@@ -240,6 +272,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
             Vps_Component_Cache::getInstance()->process();
         }
     }
+    
     /**
      * Gibt die Variablen für View zurück.
      *
@@ -247,7 +280,7 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
      */
     public function getTemplateVars()
     {
-        $ret = parent::getTemplateVars();
+        $ret = array();
         $ret['placeholder'] = $this->_getSetting('placeholder');
         $ret['cssClass'] = self::getCssClass($this);
         $ret['data'] = $this->getData();
