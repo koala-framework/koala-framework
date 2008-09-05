@@ -11,5 +11,6 @@ class Vps_Validate_Hostname extends Zend_Validate_Hostname
         $this->_messageTemplates[self::INVALID_HOSTNAME] = trlVps("'%value%' does not match the expected structure for a DNS hostname");
         $this->_messageTemplates[self::INVALID_LOCAL_NAME] = trlVps("'%value%' does not appear to be a valid local network name");
         $this->_messageTemplates[self::LOCAL_NAME_NOT_ALLOWED] = trlVps("'%value%' appears to be a local network name but local network names are not allowed");
+        parent::__construct($allow, $validateIdn, $validateTld, $ipValidator);
      }
 }
