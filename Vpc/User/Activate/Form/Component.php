@@ -1,6 +1,7 @@
 <?php
 class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
 {
+    private $_user = null;
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -8,52 +9,45 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
         $ret['generators']['child']['component']['success'] = 'Vpc_User_Activate_Form_Success_Component';
         return $ret;
     }
-    
-    private function _checkUserData()
+
+    protected function _initForm()
     {
-        if ($this->_getParam('code')) {
-            list($userId, $code) = explode('-', $this->_getParam('code'));
-        }
-
-        if (empty($userId) || empty($code)) {
-            return trlVps('Data was not sent completely. Please copy the complete address out of the email.');
-        }
-
-        $users = Zend_Registry::get('userModel');
-        $row = $users->find($userId)->current();
-
-        if (!$row) {
-            return 'User ID ist ungültig.';
-        } else if ($row->getActivationCode() != $code) {
-            return trlVps('Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.');
-        }
-
-        return '';
+        parent::_initForm();
+        $this->_form->setModel(new Vps_Model_FnF());
+        $this->_form->add(new Vps_Form_Field_Hidden('code'));
     }
 
-    protected function _processForm($values)
+    
+    public function processInput(array $postData)
     {
-        $values = array();
-        foreach ($this->getChildComponents() as $c) {
-            if ($c instanceof Vpc_Form_Field_Interface) {
-                $name = $c->getStore('name');
-                if ($name == 'password') {
-                    $password = $c->getValue();
-                }
-            }
+        parent::processInput($postData);
+
+        if (isset($postData['code'])) {
+            $code = $postData['code'];
+            $this->_form->getRow()->code = $code;
+        } else {
+            $code = $this->_form->getRow()->code;
         }
 
-        $error = $this->_checkUserdata();
-        if (!empty($error)) {
-            throw new Vps_ClientException(trlvps('Activation-Error').': '.$error);
+        list($userId, $code) = explode('-', $code);
+        if (empty($userId) || empty($code)) {
+            $this->_errors[] = trlVps('Data was not sent completely. Please copy the complete address out of the email.');
+        }
+        $userId = (int)$userId;
+        $this->_user = Zend_Registry::get('userModel')->find($userId)->current();
+
+        if (!$this->_user) {
+            $this->_errors[] = trlVps('User ID ist invalid.');
+        } else if ($this->_user->getActivationCode() != $code) {
+            $this->_errors[] = trlVps('Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.');
         }
 
-        list($userId, $code) = explode('-', $this->_getParam('code'));
-        $users = Zend_Registry::get('userModel');
-        $row = $users->find($userId)->current();
-        $status = $row->setPassword($password);
+        Vps_Auth::getInstance()->clearIdentity();
 
-        $auth = Vps_Auth::getInstance();
-        $auth->getStorage()->write(array('userId' => $row->id()));
+        if ($this->_user && $this->isSaved()) {
+            $this->_user->setPassword($this->_form->getRow()->password);
+            $auth = Vps_Auth::getInstance();
+            $auth->getStorage()->write(array('userId' => $this->_user->id));
+        }
     }
 }

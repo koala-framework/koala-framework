@@ -2700,7 +2700,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">After the activation you are automatically logged in and you could use your account.</en>
-<de>_</de>
+<de>Nach der Aktivierung sind Sie automatisch angemeldet und Sie k&#xF6;nnen Ihr Konto verwenden.</de>
 </text>
 <text>
 <en default="1">Guestbook</en>
@@ -2838,8 +2838,8 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 <de>_</de>
 </text>
 <text>
-<en default="1">repeat %1</en>
-<de>_</de>
+<en default="1">repeat {0}</en>
+<de>{0} wiederholen</de>
 </text>
 <text>
 <en default="1">Radio Buttons</en>
