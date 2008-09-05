@@ -5,6 +5,8 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
     protected $_filenameColumn;
     protected $_uniqueFilename;
     protected $_nameColumn;
+    protected $_maxFilenameLength;
+    protected $_maxNameLength;
 
     protected function _init()
     {
@@ -23,6 +25,16 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
             $this->_settings['nameColumn'] = $this->_nameColumn;
         }
         if (!isset($this->_settings['nameColumn'])) $this->_settings['nameColumn'] = false;
+
+        if (isset($this->_maxFilenameLength)) {
+            $this->_settings['maxFilenameLength'] = $this->_maxFilenameLength;
+        }
+        if (!isset($this->_settings['maxFilenameLength'])) $this->_settings['maxFilenameLength'] = 100;
+
+        if (isset($this->_maxNameLength)) {
+            $this->_settings['maxNameLength'] = $this->_maxNameLength;
+        }
+        if (!isset($this->_settings['maxNameLength'])) $this->_settings['maxNameLength'] = 100;
     }
 
     protected function _formatSelectFilename(Vps_Component_Select $select)
@@ -63,13 +75,13 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
             } else {
                 throw new Vps_Exception("can't create filename for child-page of '$this->_class'");
             }
-            if (strlen($data['filename']) > 30) {
-                $data['filename'] = substr($data['filename'], 0, 30);
+            if (strlen($data['filename']) > $this->_settings['maxFilenameLength']) {
+                $data['filename'] = substr($data['filename'], 0, $this->_settings['maxFilenameLength']);
             }
         }
 
-        if (isset($data['name']) && strlen($data['name']) > 33) {
-            $data['name'] = substr($data['name'], 0, 30).'...';
+        if (isset($data['name']) && strlen($data['name']) > $this->_settings['maxNameLength']) {
+            $data['name'] = substr($data['name'], 0, $this->_settings['maxNameLength']-3).'...';
         }
         $data['rel'] = '';
         $data['isPseudoPage'] = true;
