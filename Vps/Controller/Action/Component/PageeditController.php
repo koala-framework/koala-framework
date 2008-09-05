@@ -8,7 +8,10 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
     protected function _initFields()
     {
         $types = array();
-        $classes = Vpc_Abstract::getChildComponentClasses(Vps_Component_Data_Root::getComponentClass(), 'page');
+        $generator = current(Vps_Component_Generator_Abstract::getInstances(
+            Vps_Component_Data_Root::getComponentClass(), array('generator' => 'page'))
+        );
+        $classes = $generator->getChildComponentClasses();
         foreach ($classes as $component=>$class) {
             $name = Vpc_Abstract::getSetting($class, 'componentName');
             if ($name) {
