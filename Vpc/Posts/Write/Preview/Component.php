@@ -13,6 +13,7 @@ class Vpc_Posts_Write_Preview_Component extends Vpc_Abstract
         // bis bis ein parentNode in irgendeiner unterebene ein child hat,
         // das mit sourceSelector übereinstimmt
         $ret['sourceSelector'] = 'textarea';
+        $ret['textClass'] = 'text';
 
         $ret['cssClass'] = 'webStandard';
 
@@ -22,11 +23,11 @@ class Vpc_Posts_Write_Preview_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $dirGenerators = Vpc_Abstract::getSetting(
-            $this->getData()->parent->getComponent()->getDirectoryComponent()->componentClass, 'generators'
+        $ret['detailClasses'] = self::getCssClass(
+            $this->getData()->parent->getComponent()->getPostDirectoryClass()
         );
-        $ret['detailCss'] = self::getCssClass($dirGenerators['detail']['component']);
         $ret['sourceSelector'] = $this->_getSetting('sourceSelector');
+        $ret['textClass'] = $this->_getSetting('textClass');
         return $ret;
     }
 

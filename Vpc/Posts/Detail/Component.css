@@ -24,13 +24,13 @@
     margin-top: -3px;
     margin-right: -15px;
 }
-.$cssClass .comment {
+.$cssClass .text {
     font-size: 12px;
     padding: 15px 20px;
     background: #fff;
     margin-top: 3px;
 }
-.$cssClass .comment fieldset.quote {
+.$cssClass .text fieldset.quote {
     background: #f3f2f1;
     border: 1px solid #ccc;
     font-style: italic;
