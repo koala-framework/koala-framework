@@ -4,7 +4,7 @@ class Vpc_User_Detail_GeneralCommunity_LastPosts_Component extends Vpc_Posts_Lat
     protected function _getSelect()
     {
         $select = parent::_getSelect();
-        $select->where('user_id', $this->getData()->getPage()->row->id);
+        $select->whereEquals('user_id', $this->getData()->getPage()->row->id);
         return $select;
     }
 }

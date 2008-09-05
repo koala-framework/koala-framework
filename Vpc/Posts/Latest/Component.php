@@ -14,7 +14,7 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
     {
         $select = new Vps_Model_Select();
         $select
-            ->where('visible', 1)
+            ->whereEquals('visible', 1)
             ->order('create_time', 'DESC')
             ->limit($this->_getSetting('numberOfPosts'));
         return $select;
