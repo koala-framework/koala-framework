@@ -9,6 +9,6 @@ class Vpc_Posts_Detail_Edit_Form_Component extends Vpc_Posts_Write_Form_Componen
     protected function _initForm()
     {
         parent::_initForm();
-        $this->_form->setId($this->getData()->parent->parent->row->id);
+        $this->_form->setId($this->getData()->parent->parent->parent->row->id);
     }
 }
