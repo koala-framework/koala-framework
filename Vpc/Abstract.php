@@ -224,10 +224,20 @@ abstract class Vpc_Abstract extends Vpc_Master_Abstract
                 }
             }
             foreach ($process as $i) {
-                $i->getComponent()->processInput($postData);
+                if (method_exists($i->getComponent(), 'processInput')) {
+                    $i->getComponent()->processInput($postData);
+                }
+            }
+            Vps_Component_Cache::getInstance()->process(false);
+
+            echo Vps_View_Component::renderComponent($this->getData(), null, true);
+
+            foreach ($process as $i) {
+                if (method_exists($i->getComponent(), 'postProcessInput')) {
+                    $i->getComponent()->postProcessInput($postData);
+                }
             }
             Vps_Component_Cache::getInstance()->process();
-            echo Vps_View_Component::renderComponent($this->getData(), null, true);
         }
     }
     /**
