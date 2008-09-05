@@ -20,20 +20,20 @@ class Vpc_Posts_Detail_Delete_Confirmed_Component extends Vpc_Posts_Success_Comp
 
     private function _getNumPosts()
     {
-        $posts = $this->getData()->parent->parent->parent;
+        $posts = $this->getData()->parent->parent->parent->parent;
         return $posts->countChildComponents(array('generator'=>'detail'));
     }
 
     public function postProcessInput($postData)
     {
-        if ($this->getData()->parent->parent->getComponent()->mayEditPost()) {
-            $posts = $this->getData()->parent->parent->parent;
-            $numPosts = $this->_getNumPosts();
-            $post = $this->getData()->parent->parent;
+        $actions = $this->getData()->parent->parent;
+        if ($actions->getComponent()->mayEditPost()) {
+            $post = $actions->parent;
             $post->row->delete();
-            if ($numPosts == 1) {
+            $numPosts = $this->_getNumPosts();
+            if ($numPosts == 0) {
                 //thread auch löschen
-                $posts->parent->row->delete();
+                $post->parent->parent->row->delete();
             }
         }
     }
