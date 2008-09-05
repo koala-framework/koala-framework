@@ -16,7 +16,7 @@ class Vpc_Forum_Directory_Controller extends Vps_Controller_Action_Auto_Vpc_Tree
         $id = $this->getRequest()->getParam('id');
         $row = $this->_table->find($id)->current();
 
-        $threadTable = new Vpc_Forum_Thread_Model();
+        $threadTable = new Vpc_Forum_Group_Model();
         $threadRow = $threadTable->fetchRow(
             array('component_id = ?' => $row->component_id.'_'.$row->id)
         );
