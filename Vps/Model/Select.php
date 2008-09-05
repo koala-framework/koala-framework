@@ -28,7 +28,7 @@ class Vps_Model_Select
             }
             if (method_exists($this, $method)) {
                 $this->$method($val);
-            } else {
+            } else if (!is_null($val)) {
                 $this->where($key, $val);
             }
         }
