@@ -294,7 +294,6 @@ abstract class Vps_Component_Generator_Abstract
                 return array();
             }
         }
-        $ret = array_unique(array_values($ret));
         
         return $ret;
     }
