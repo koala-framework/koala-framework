@@ -238,7 +238,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             }
         }
     }
-    public function validate($postData)
+    public function validate(Vps_Model_Row_Interface $row, $postData)
     {
         $ret = array();
 
@@ -260,7 +260,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 
         foreach ($this->fields as $field) {
             foreach ($postData as $d) {
-                $ret = array_merge($ret, $field->validate($d));
+                $ret = array_merge($ret, $field->validate(null, $d));
             }
         }
         return $ret;

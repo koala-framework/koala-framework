@@ -19,7 +19,7 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         return $this;
     }
 
-    public function validate($postData)
+    public function validate(Vps_Model_Row_Interface $row, $postData)
     {
         if ($this->_checkboxHiddenField) {
             $n = $this->_checkboxHiddenField->getFieldName();
@@ -31,7 +31,7 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
                 }
             }
         }
-        return parent::validate($postData);
+        return parent::validate($row, $postData);
     }
 
     public function getMetaData()

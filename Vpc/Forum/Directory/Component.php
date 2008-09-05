@@ -28,6 +28,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
         $ret['assetsAdmin']['dep'][] = 'VpsAutoAssignGrid';
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['flags']['processInput'] = true;
+
         $ret['clearCacheTable'] = 'Vpc_Posts_Directory_Model';
         return $ret;
     }

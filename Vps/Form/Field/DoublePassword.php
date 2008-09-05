@@ -19,9 +19,9 @@ class Vps_Form_Field_DoublePassword extends Vps_Form_Field_Abstract
     {
         return array($this->_passwordField1, $this->_passwordField2);
     }
-    public function validate($postData)
+    public function validate(Vps_Model_Row_Interface $row, $postData)
     {
-        $ret = parent::validate($postData);
+        $ret = parent::validate(Vps_Model_Row_Interface $row, $postData);
         if ($postData[$this->_passwordField1->getFieldName()] !=
                             $postData[$this->_passwordField2->getFieldName()])
         {

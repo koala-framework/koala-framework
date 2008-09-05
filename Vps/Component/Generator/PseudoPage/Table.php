@@ -63,6 +63,13 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
             } else {
                 throw new Vps_Exception("can't create filename for child-page of '$this->_class'");
             }
+            if (strlen($data['filename']) > 30) {
+                $data['filename'] = substr($data['filename'], 0, 30);
+            }
+        }
+
+        if (isset($data['name']) && strlen($data['name']) > 33) {
+            $data['name'] = substr($data['name'], 0, 30).'...';
         }
         $data['rel'] = '';
         $data['isPseudoPage'] = true;

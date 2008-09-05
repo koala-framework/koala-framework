@@ -123,7 +123,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         if (in_array('pos', $cols) && !$select->hasPart(Vps_Component_Select::ORDER)) {
             $select->order("pos");
         }
-        
+
         static $showInvisible;
         if (is_null($showInvisible)) {
             $showInvisible = Vps_Registry::get('config')->showInvisible;

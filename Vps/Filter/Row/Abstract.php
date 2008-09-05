@@ -3,8 +3,8 @@ abstract class Vps_Filter_Row_Abstract implements Zend_Filter_Interface
 {
     protected $_field = null;
 
-    //bekommt ein Zend_Db_Table_Row übergeben
-    public function filter($value)
+    //bekommt eine row übergeben
+    public function filter($row)
     {
     }
 
