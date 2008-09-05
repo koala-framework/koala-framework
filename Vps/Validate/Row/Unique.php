@@ -13,10 +13,12 @@ class Vps_Validate_Row_Unique extends Vps_Validate_Row_Abstract
         $valueString = (string)$value;
         $this->_setValue($valueString);
 
-        $primaryKey = $row->getModel()->getPrimaryKey();
         $select = $row->getModel()->select()
-            ->whereEquals($this->_field, $valueString)
-            ->where($primaryKey.' != ?', $row->$primaryKey);
+            ->whereEquals($this->_field, $valueString);
+        $primaryKey = $row->getModel()->getPrimaryKey();
+        if ($row->$primaryKey) {
+            $select->where($primaryKey.' != ?', $row->$primaryKey);
+        }
         if ($row->getModel()->fetchCount($select)) {
             $this->_error(self::NOT_UNIQUE);
             return false;
