@@ -7,6 +7,7 @@ class Vpc_Forum_Thread_Moderate_Move_Component extends Vpc_Abstract_Composite_Co
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Vpc_Forum_Thread_Moderate_Move_Success_Component';
+        $ret['viewCache'] = false;
         return $ret;
     }
 
@@ -17,7 +18,9 @@ class Vpc_Forum_Thread_Moderate_Move_Component extends Vpc_Abstract_Composite_Co
         $thread = $this->getData()->getParentPage();
         $group = $thread->getParentPage();
         $forum = $group->parent;
-        
+
+        //nicht in processInput bzw. postProcessInput weil wir 1. uns selbst brauchen zur anzeige
+        //und 2. den neuen thread brauchen zum hinlinken
         $ret['moved'] = false;
         if ($this->_getParam('to')) {
 

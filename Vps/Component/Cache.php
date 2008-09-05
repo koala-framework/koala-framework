@@ -61,9 +61,9 @@ class Vps_Component_Cache extends Zend_Cache_Core
         $this->_process['delete'][] = $row;
     }
     
-    public function process()
+    public function process($isLastCall = true)
     {
-        $this->_processed = true;
+        $this->_processed = $isLastCall;
         foreach ($this->_process as $action => $process) {
             foreach ($process as $row) {
                 foreach (Vpc_Abstract::getComponentClasses() as $c) {
