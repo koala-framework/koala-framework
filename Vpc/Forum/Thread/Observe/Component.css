@@ -1,6 +1,10 @@
 .$cssClass {
     float: right;
 }
+.$cssClass a {
+    height: 18px;
+    display: block;
+}
 .$cssClass a.notObserved {
     background: url(/assets/vps/Vpc/Forum/Thread/Observe/notObserved.jpg) no-repeat left center;
     padding-left: 25px;
