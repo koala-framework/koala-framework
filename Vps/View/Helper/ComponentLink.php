@@ -7,23 +7,23 @@ class Vps_View_Helper_ComponentLink
         if ($m instanceof Vps_Component_Data) {
             $m = $m->getPage();
             $m = array(
-                'href' => $m->url,
+                'url' => $m->url,
                 'rel' => $m->rel,
-                'text' => $m->name
+                'name' => $m->name
             );
         }
         if (!empty($get)) {
-            $m['href'] .= '?';
+            $m['url'] .= '?';
         }
         foreach ($get as $key => $val) {
-            $m['href'] .= "&$key=$val";
+            $m['url'] .= "&$key=$val";
         }
-        if (!$text) $text = $m['text'];
+        if (!$text) $text = $m['name'];
         if ($cssClass) {
             $cssClass = " class=\"$cssClass\"";
         } else {
             $cssClass = '';
         }
-        return "<a href=\"{$m['href']}\" rel=\"{$m['rel']}\"$cssClass>$text</a>";
+        return "<a href=\"{$m['url']}\" rel=\"{$m['rel']}\"$cssClass>$text</a>";
     }
 }

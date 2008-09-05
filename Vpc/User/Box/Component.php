@@ -28,7 +28,8 @@ class Vpc_User_Box_Component extends Vpc_Abstract_Composite_Component
     
     protected function _getLinks()
     {
-        return Vps_Component_Data_Root::getInstance()
+        $ret = Vps_Component_Data_Root::getInstance()
             ->getComponentsByClass('Vpc_User_Edit_Component');
+        return $ret;
     }
 }
