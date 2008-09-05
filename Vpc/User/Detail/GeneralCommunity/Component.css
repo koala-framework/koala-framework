@@ -13,6 +13,9 @@
     float: right;
     margin-top: -15px;
 }
+.$cssClass .userData {
+    clear: left;
+}
 .$cssClass .userData h3 {
     margin-top: 10px;
     margin-bottom: 5px;

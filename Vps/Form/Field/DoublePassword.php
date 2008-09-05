@@ -6,7 +6,9 @@ class Vps_Form_Field_DoublePassword extends Vps_Form_Field_Abstract
     public function __construct($fieldName = null, $fieldLabel = null)
     {
         $this->_passwordField1 = new Vps_Form_Field_Password($fieldName, $fieldLabel);
-        $this->_passwordField2 = new Vps_Form_Field_Password($fieldName.'_repeat', trlVps('repeat %1', $fieldLabel));
+        $this->_passwordField1->setAllowBlank(false);
+        $this->_passwordField2 = new Vps_Form_Field_Password($fieldName.'_repeat', trlVps('repeat {0}', $fieldLabel));
+        $this->_passwordField2->setAllowBlank(false);
         $this->_passwordField2->setSave(false);
         parent::__construct(null, null);
     }
@@ -17,11 +19,14 @@ class Vps_Form_Field_DoublePassword extends Vps_Form_Field_Abstract
     }
     public function getChildren()
     {
-        return array($this->_passwordField1, $this->_passwordField2);
+        $ret = new Vps_Collection_FormFields();
+        $ret[] = $this->_passwordField1;
+        $ret[] = $this->_passwordField2;
+        return $ret;
     }
     public function validate(Vps_Model_Row_Interface $row, $postData)
     {
-        $ret = parent::validate(Vps_Model_Row_Interface $row, $postData);
+        $ret = parent::validate($row, $postData);
         if ($postData[$this->_passwordField1->getFieldName()] !=
                             $postData[$this->_passwordField2->getFieldName()])
         {
@@ -31,4 +36,13 @@ class Vps_Form_Field_DoublePassword extends Vps_Form_Field_Abstract
         }
         return $ret;
     }
+    public function getTemplateVars($values, $fieldNamePostfix = '')
+    {
+        $ret = array();
+        $ret['items'] = array();
+        $ret['items'][] = $this->_passwordField1->getTemplateVars($values, $fieldNamePostfix);
+        $ret['items'][] = $this->_passwordField2->getTemplateVars($values, $fieldNamePostfix);
+        return $ret;
+    }
+
 }
