@@ -22,13 +22,7 @@
             <em><?=trlVps('on') ?> <?=$this->date($this->data->row->create_time)?>
                 <?=trlVps('at') ?> <?=$this->time($this->data->row->create_time)?></em><br />
             <?=trlVps('Post')?>:
-            <? if ($this->edit) { ?>
-                <?=$this->componentLink($this->edit)?> |
-            <? } ?>
-            <? if ($this->delete) { ?>
-                <?=$this->componentLink($this->delete)?> |
-            <? } ?>
-            <?=$this->componentLink($this->report)?> | <?=$this->componentLink($this->quote)?>
+            <?= $this->component($this->actions) ?>
         </div>
         <div class="comment">
             <?=$this->content?>

@@ -4,26 +4,7 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['edit'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Posts_Detail_Edit_Component',
-            'name' => trlVps('edit')
-        );
-        $ret['generators']['report'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Posts_Detail_Report_Component',
-            'name' => trlVps('report')
-        );
-        $ret['generators']['delete'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Posts_Detail_Delete_Component',
-            'name' => trlVps('delete')
-        );
-        $ret['generators']['quote'] = array(
-            'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Posts_Detail_Quote_Component',
-            'name' => trlVps('quote')
-        );
+        $ret['generators']['child']['component']['actions'] = 'Vpc_Posts_Detail_Actions_Component';
         return $ret;
     }
     
@@ -33,15 +14,6 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
         $data = $this->getData();
         
         $ret['content'] = self::replaceCodes($data->row->content);
-        $ret['delete'] = false;
-        if ($this->mayEditPost()) {
-            $ret['edit'] = $data->getChildComponent('_edit');
-        }
-        if ($this->mayDeletePost()) {
-            $ret['delete'] = $data->getChildComponent('_delete');
-        }
-        $ret['report'] = $data->getChildComponent('_report');
-        $ret['quote'] = $data->getChildComponent('_quote');
         $ret['signature'] = null;
 
         $ret['user'] = Vps_Component_Data_Root::getInstance()
@@ -51,18 +23,6 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
             ->where('create_time <= ?', $data->row->create_time);
         $ret['postNumber'] = $data->parent->countChildComponents($select);
         return $ret;
-    }
-
-    public function mayEditPost()
-    {
-        $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
-        if (!$authedUser) return false;
-        return $authedUser->id == $this->getData()->row->user_id;
-    }
-
-    public function mayDeletePost()
-    {
-        return $this->mayEditPost();
     }
 
     static public function replaceCodes($content)
