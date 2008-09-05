@@ -6,6 +6,7 @@ class Vpc_Forum_Thread_Observe_Component extends Vpc_Abstract
         $ret = parent::getSettings();
         $ret['tablename'] = 'Vpc_Forum_Thread_Observe_Model';
         $ret['flags']['processInput'] = true;
+        $ret['viewCache'] = false;
         return $ret;
     }
 
