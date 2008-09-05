@@ -58,7 +58,6 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         if (!$fileRow) {
             return null;
         }
-
         $uploadDir = Vps_Dao_Row_File::getUploadDir();
         $uploadId = $fileRow->id;
         if (is_null($uploadId)) { $uploadId = 'default'; }
@@ -98,11 +97,10 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         $id = $this->_getIdString();
         $extension = $fileRow->extension;
         $checksum = md5($encryption . $class . $id . $rule . $type);
-        $random = $addRandom ? '?' . uniqid() : '';
         if (!$filename || $filename == '') {
             $filename = $fileRow->filename;
         }
-        return "/media/$class/$id/$rule/$type/$checksum/$filename.$extension$random";
+        return "/media/$class/$id/$rule/$type/$checksum/$filename.$extension?".$fileRow->id;
     }
 
     public function getFileSize($rule = null, $type = 'default')
