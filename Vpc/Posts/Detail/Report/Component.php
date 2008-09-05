@@ -9,6 +9,7 @@ class Vpc_Posts_Detail_Report_Component extends Vpc_Form_Component
         $ret['generators']['child']['component']['success'] = 'Vpc_Posts_Detail_Report_Success_Component';
         $ret['flags']['noIndex'] = true;
         $ret['cssClass'] .= ' vpsFormLabelAbove';
+        $ret['plugins'] = array('Vps_Component_Plugin_Login_Component');
         return $ret;
     }
 

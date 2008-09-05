@@ -364,6 +364,17 @@ class Vps_Setup
 
     }
 
+    public static function output401()
+    {
+        header('HTTP/1.1 401 Access Denied');
+        $view = new Vps_View();
+        $view->requestUri = $_SERVER['REDIRECT_URL'];
+        echo $view->render('error401.tpl');
+        Vps_Benchmark::shutDown();
+        exit;
+
+    }
+
     public static function dispatchVpc()
     {
         if (!isset($_SERVER['REDIRECT_URL'])) return;

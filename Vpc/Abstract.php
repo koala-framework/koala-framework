@@ -262,7 +262,13 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             }
             Vps_Component_Cache::getInstance()->process(false);
 
-            echo Vps_View_Component::renderComponent($this->getData(), null, true);
+            $showAccessDenied = false;
+            $exception = false;
+            try {
+                echo Vps_View_Component::renderComponent($this->getData(), null, true);
+            } catch (Vpc_AccessDeniedException $e) {
+                $showAccessDenied = true;
+            }
 
             foreach ($process as $i) {
                 if (method_exists($i->getComponent(), 'postProcessInput')) {
@@ -270,6 +276,10 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                 }
             }
             Vps_Component_Cache::getInstance()->process();
+            
+            if ($showAccessDenied) {
+                Vps_Setup::output401();
+            }
         }
     }
     
