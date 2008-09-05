@@ -21,8 +21,9 @@ class Vpc_Posts_Write_Component extends Vpc_Abstract_Composite_Component
     }
 
     // momentan nur für preview component
-    public function getDirectoryComponent()
+    public function getPostDirectoryClass()
     {
-        return $this->getData()->parent;
+        $posts = $this->getData()->parent;
+        return self::getChildComponentClass($posts, 'detail');
     }
 }

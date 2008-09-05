@@ -77,7 +77,7 @@ Vpc.PostsWritePreview.replaceText = function(v)
 
     // automatische verlinkung
     var offset = 0;
-    var pattern = /((http:\/\/)|(www\.)|(http:\/\/www\.)){1,1}([a-z0-9äöü;\/?:@=&!*~#%\'+$.,_-]+)/;
+    var pattern = /((http:\/\/)|(www\.)|(http:\/\/www\.)){1,1}([A-Za-z0-9äöüÄÖÜ;\/?:@=&!*~#%\'+$.,_-]+)/;
     while (v.substr(offset).match(pattern)) {
         offset += v.substr(offset).search(pattern);
         var matches = v.substr(offset).match(pattern);

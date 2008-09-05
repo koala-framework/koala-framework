@@ -24,7 +24,7 @@
             <?=trlVps('Post')?>:
             <?= $this->component($this->actions) ?>
         </div>
-        <div class="comment">
+        <div class="text">
             <?=$this->content?>
         </div>
         <? if ($this->user->row->signature) { ?>

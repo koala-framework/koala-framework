@@ -10,8 +10,8 @@ class Vpc_Posts_Detail_Quote_Component extends Vpc_Posts_Write_Component
     }
 
     // momentan nur für preview component
-    public function getDirectoryComponent()
+    public function getPostDirectoryClass()
     {
-        return $this->getData()->parent->parent->parent;
+        return $this->getData()->parent->parent->componentClass;
     }
 }
