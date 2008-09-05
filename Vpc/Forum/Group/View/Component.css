@@ -1,31 +1,4 @@
-.$cssClass ul li.threads {
+.$cssClass ul li.thread {
     border: 1px solid #ccc;
     margin: 15px 0px;
-}
-.$cssClass div.description {
-    border-bottom: 1px solid #CCCCCC;
-}
-.$cssClass div.description a {
-    font-weight: bold;
-    display: block;
-    background: #f3f2f1;
-    padding: 3px 10px 3px 10px;
-}
-.$cssClass div.description a span {
-    float: right;
-}
-.$cssClass div.statistik {
-    float: right;
-    font-size: 11px;
-    line-height: 16px;
-    width: 220px;
-}
-.$cssClass div.threads {
-    margin-right: 10px;
-    text-align: right;
-}
-.$cssClass div.lastPost {
-    font-size: 11px;
-    line-height: 16px;
-    padding-left: 10px;
 }

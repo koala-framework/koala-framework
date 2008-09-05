@@ -1,12 +1,12 @@
 <?php
-class Vpc_User_Detail_Abstract_Admin extends Vpc_Abstract_Composite_Admin
+class Vpc_User_Detail_GeneralCommunity_Rating_Admin extends Vpc_Admin
 {
-    public function onRowUpdate($row)
+    public function onRowInsert($row)
     {
-        parent::onRowUpdate($row);
-        if ($row instanceof Vps_Model_User_User) {
+        parent::onRowInsert($row);
+        if ($row instanceof Vpc_Posts_Directory_Row) {
             $userDetails =  Vps_Component_Data_Root::getInstance()
-                ->getComponentsByClass('Vpc_User_Detail_Component', array('id'=>'_'.$row->id));
+                ->getComponentsByClass('Vpc_User_Detail_Component', array('id'=>'_'.$row->user_id));
             foreach ($userDetails as $detail) {
                 foreach ($detail->getRecursiveChildComponents(array('componentClass'=>$this->_class)) as $c) {
                     Vps_Component_Cache::getInstance()->remove($this->_class, $c->componentId);

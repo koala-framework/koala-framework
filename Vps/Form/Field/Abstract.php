@@ -107,14 +107,14 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
         return $postData;
     }
 
-    public function validate($postData)
+    public function validate(Vps_Model_Row_Interface $row, $postData)
     {
         $this->_addValidators();
 
         $ret = array();
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
-                $ret = array_merge($ret, $field->validate($postData));
+                $ret = array_merge($ret, $field->validate($row, $postData));
             }
         }
         return $ret;

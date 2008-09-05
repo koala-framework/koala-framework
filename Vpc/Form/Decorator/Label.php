@@ -12,7 +12,8 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
             if (!isset($item['postHtml'])) $item['postHtml'] = '';
             $errors = false;
             if ($item['item']) {
-                $errors = $item['item']->validate($_REQUEST);
+//todo: nicht nochmal fragen, vorallem nicht mit $_REQUEST (problem bei File+MultiFields)
+//                 $errors = $item['item']->validate($_REQUEST);
             }
             $class = 'vpsField';
             if ($errors) {

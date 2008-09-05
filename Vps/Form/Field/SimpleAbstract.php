@@ -19,9 +19,9 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
         parent::_addValidators();
     }
 
-    public function validate($postData)
+    public function validate(Vps_Model_Row_Interface $row, $postData)
     {
-        $ret = parent::validate($postData);
+        $ret = parent::validate($row, $postData);
 
         if ($this->getInternalSave() !== false) {
 
@@ -39,7 +39,13 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
             }
             if ($data) {
                 foreach ($this->getValidators() as $v) {
-                    if (!$v->isValid($data)) {
+                    if ($v instanceof Vps_Validate_Row_Abstract) {
+                        $v->setField($this->getName());
+                        $isValid = $v->isValidRow($data, $row);
+                    } else {
+                        $isValid = $v->isValid($data);
+                    }
+                    if (!$isValid) {
                         $ret[] = $name.": ".implode("<br />\n", $v->getMessages());
                     }
                 }

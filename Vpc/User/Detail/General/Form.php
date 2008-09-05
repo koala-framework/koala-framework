@@ -19,7 +19,9 @@ class Vpc_User_Detail_General_Form extends Vpc_Abstract_Composite_Form
         $this->_generalFieldset->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
                     ->setVType('email')
                     ->setAllowBlank(false)
-                    ->setWidth(250);
+                    ->setWidth(250)
+                    ->addValidator(new Vps_Validate_Row_Unique());
+
 
         $this->_generalFieldset->add(new Vps_Form_Field_TextField('firstname', trlVps('Firstname')))
                     ->setAllowBlank(false)

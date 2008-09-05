@@ -7,6 +7,7 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['child']['component']['posts'] = 'Vpc_Forum_Posts_Directory_Component';
         $ret['generators']['child']['component']['observe'] = 'Vpc_Forum_Thread_Observe_Component';
         $ret['generators']['child']['component']['moderate'] = 'Vpc_Forum_Thread_Moderate_Component';
+        $ret['generators']['child']['component']['preview'] = 'Vpc_Forum_Thread_Preview_Component';
         $ret['name'] = trlVps('Forum');
         return $ret;
     }
