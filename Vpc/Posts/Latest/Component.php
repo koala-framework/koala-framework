@@ -1,0 +1,42 @@
+<?php
+class Vpc_Posts_Latest_Component extends Vpc_Abstract
+{
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['componentName'] = trlVps('Posts.Last Posts');
+        $ret['tablename'] = 'Vpc_Posts_Directory_Model';
+        $ret['numberOfPosts'] = 9;
+        return $ret;
+    }
+    
+    protected function _getSelect()
+    {
+        $select = new Vps_Model_Select();
+        $select
+            ->where('visible', 1)
+            ->order('create_time', 'DESC')
+            ->limit($this->_getSetting('numberOfPosts'));
+        return $select;
+    }
+
+    public function getTemplateVars()
+    {
+        $ret = parent::getTemplateVars();
+        $ret['posts'] = array();
+        $rows = $this->getModel()->fetchAll($this->_getSelect());
+        foreach ($rows as $row) {
+            $id = $row->component_id . '-' . $row->id;
+            $post = Vps_Component_Data_Root::getInstance()->getComponentById($id);
+            if ($post) {
+                $dateHelper = new Vps_View_Helper_Date();
+                $post->linktext =
+                    $dateHelper->date($post->row->create_time) . ': ' . 
+                    $post->getParentPage()->getParentPage()->name . ': ' .
+                    $post->getPage()->name;
+                $ret['posts'][] = $post;
+            }
+        }
+        return $ret;
+    }
+}
