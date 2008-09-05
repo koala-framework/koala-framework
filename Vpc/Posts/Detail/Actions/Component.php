@@ -35,10 +35,10 @@ class Vpc_Posts_Detail_Actions_Component extends Vpc_Abstract_Composite_Componen
         
         $ret['edit'] = null;
         $ret['delete'] = null;
-        if (!$this->mayEditPost()) {
+        if ($this->mayEditPost()) {
             $ret['edit'] = $data->getChildComponent('_edit');
         }
-        if (!$this->mayDeletePost()) {
+        if ($this->mayDeletePost()) {
             $ret['delete'] = $data->getChildComponent('_delete');
         }
         $ret['report'] = $data->getChildComponent('_report');

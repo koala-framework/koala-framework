@@ -12,6 +12,6 @@ class Vpc_Posts_Detail_Edit_Component extends Vpc_Posts_Write_Component
     // momentan nur für preview component
     public function getDirectoryComponent()
     {
-        return $this->getData()->parent->parent;
+        return $this->getData()->parent->parent->parent;
     }
 }
