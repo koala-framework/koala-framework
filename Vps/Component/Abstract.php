@@ -184,6 +184,11 @@ class Vps_Component_Abstract
         }
         return $models[$class];
     }
+    
+    public function getModel()
+    {
+        return self::createModel(get_class($this));
+    }
 
     protected function _getSetting($setting)
     {

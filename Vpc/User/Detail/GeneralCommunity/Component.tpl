@@ -35,13 +35,7 @@
         <p><?=nl2br(htmlspecialchars($this->row->description_short))?></p>
         <? } ?>
     
-        <? if ($this->showLastPosts) { ?>
         <h3><?=trlVps('Last Posts')?>:</h3>
-        <ul>
-            <?php foreach ($this->lastPosts as $lastPost) { ?>
-                <li><p><?= $this->componentLink($lastPost, $lastPost->linktext) ?></p></li>
-            <?php } ?>
-        </ul>
-        <?php } ?>
+        <?= $this->component($this->latestPosts) ?>
     </div>
 </div>
