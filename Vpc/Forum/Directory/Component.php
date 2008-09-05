@@ -73,7 +73,7 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
                     
                 // countThreads
                 $select = $threadGenerator->select($group);
-                $group->countThreads = $threadGenerator->countChildData(null, $select);
+                $group->countThreads = $threadGenerator->countChildData($group, $select);
 
                 // countPosts
                 $select = $postsGenerator->select(null);
