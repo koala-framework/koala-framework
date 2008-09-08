@@ -3,3 +3,6 @@
     font-weight: bold;
     padding: 3px 10px;
 }
+.$cssClass .newPost {
+    margin-bottom: 20px;
+}
