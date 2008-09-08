@@ -91,6 +91,14 @@ class Vps_Model_Db implements Vps_Model_Interface
         return $dbSelect;
     }
 
+    //Nur zum Debuggen verwenden!
+    public function getSqlForSelect($select)
+    {
+        //TODO: limit und order fehlen :D
+        $dbSelect = $this->_createDbSelect($select);
+        return $dbSelect->__toString();
+    }
+
     public function fetchAll($where = array(), $order=null, $limit=null, $start=null)
     {
         if (!is_object($where)) {
