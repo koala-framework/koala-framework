@@ -4,6 +4,7 @@ class Vps_Model_Select
     const WHERE = 'where';
     const WHERE_EQUALS = 'whereEquals';
     const WHERE_ID = 'whereId';
+    const WHERE_NULL = 'whereNull';
     const ORDER = 'order';
     const LIMIT_COUNT = 'limitCount';
     const LIMIT_OFFSET = 'limitOffset';
@@ -28,7 +29,9 @@ class Vps_Model_Select
             }
             if (method_exists($this, $method)) {
                 $this->$method($val);
-            } else if (!is_null($val)) {
+            } else if (is_null($val)) {
+                $this->whereNull($key);
+            } else {
                 $this->where($key, $val);
             }
         }
@@ -37,6 +40,12 @@ class Vps_Model_Select
     public function whereEquals($field, $value)
     {
         $this->_parts[self::WHERE_EQUALS][$field] = $value;
+        return $this;
+    }
+
+    public function whereNull($field)
+    {
+        $this->_parts[self::WHERE_NULL][] = $field;
         return $this;
     }
 

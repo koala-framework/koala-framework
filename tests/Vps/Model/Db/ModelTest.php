@@ -19,10 +19,17 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
 
         $this->_table->expects($this->any())
             ->method('info')
-            ->will($this->returnValue(array('id')));
+            ->will($this->returnCallback(array($this, 'tableInfoCallback')));
+
         $this->_model = new Vps_Model_Db(array(
             'table' => $this->_table
         ));
+    }
+
+    public function tableInfoCallback($type)
+    {
+        if ($type == 'name') return 'testtable';
+        if ($type == 'primary') return array('id');
     }
 
     public function testFetchAll()
@@ -36,7 +43,7 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
     {
         $this->_dbSelect->expects($this->once())
             ->method('where')
-            ->with($this->equalTo('foo = ?'), $this->equalTo(1));
+            ->with($this->equalTo('testtable.foo = ?'), $this->equalTo(1));
         $select = $this->_model->select()
                     ->whereEquals('foo', 1);
         $this->_table->expects($this->once())
@@ -49,7 +56,7 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
     {
         $this->_dbSelect->expects($this->once())
             ->method('where')
-            ->with($this->equalTo('id = ?'), $this->equalTo(1));
+            ->with($this->equalTo('testtable.id = ?'), $this->equalTo(1));
         $select = $this->_model->select()
                     ->whereId(1);
         $this->_table->expects($this->once())
@@ -62,7 +69,7 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
     {
         $this->_dbSelect->expects($this->once())
             ->method('order')
-            ->with($this->equalTo('bar ASC'));
+            ->with($this->equalTo('testtable.bar ASC'));
         $select = $this->_model->select()
             ->order('bar', 'ASC');
         $this->_table->expects($this->once())
@@ -75,7 +82,7 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
     {
         $this->_dbSelect->expects($this->once())
             ->method('order')
-            ->with($this->equalTo('bar ASC'));
+            ->with($this->equalTo('testtable.bar ASC'));
         $select = $this->_model->select()
             ->order(array('field'=>'bar', 'dir'=>'ASC'));
         $this->_table->expects($this->once())
@@ -88,7 +95,7 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
     {
         $this->_dbSelect->expects($this->once())
             ->method('where')
-            ->with($this->equalTo('id IN (1, 2)'));
+            ->with($this->equalTo('testtable.id IN (1, 2)'));
         $select = $this->_model->select()
             ->whereEquals('id', array(1, 2));
         $this->_table->expects($this->once())
@@ -101,7 +108,7 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
     {
         $this->_dbSelect->expects($this->once())
             ->method('where')
-            ->with($this->equalTo("foo IN ('str1', 'str2')"));
+            ->with($this->equalTo("testtable.foo IN ('str1', 'str2')"));
         $select = $this->_model->select()
             ->whereEquals('foo', array('str1', 'str2'));
         $this->_model->fetchAll($select);
@@ -135,7 +142,7 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
 
         $this->_dbSelect->expects($this->once())
             ->method('order')
-            ->with($this->equalTo('orderKey ASC'));
+            ->with($this->equalTo('testtable.orderKey ASC'));
 
         $this->_dbSelect->expects($this->once())
             ->method('limit')

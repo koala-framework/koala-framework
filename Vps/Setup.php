@@ -397,7 +397,11 @@ class Vps_Setup
                 exit;
             }
             $page = $data->getComponent();
-            $page->sendContent($page);
+            try {
+                $page->sendContent($page);
+            } catch (Vpc_AccessDeniedException $e) {
+                self::output401();
+            }
 
             Vps_Benchmark::output();
             Vps_Benchmark::shutDown();

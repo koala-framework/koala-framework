@@ -11,4 +11,12 @@ class Vpc_Posts_Detail_Edit_Form_Component extends Vpc_Posts_Write_Form_Componen
         parent::_initForm();
         $this->_form->setId($this->getData()->parent->parent->parent->row->id);
     }
+
+    public function processInput($postData)
+    {
+        if (!$this->getData()->parent->parent->getComponent()->mayEditPost()) {
+            throw new Vpc_AccessDeniedException();
+        }
+        parent::processInput($postData);
+    }
 }

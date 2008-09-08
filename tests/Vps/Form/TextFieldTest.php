@@ -29,10 +29,13 @@ class Vps_Form_TextFieldTest extends PHPUnit_Framework_TestCase
     }
     public function testValidate()
     {
-        $this->assertEquals($this->_textField->validate(array('test12' => 'foobar')), array());
+        $model = new Vps_Model_FnF();
+        $row = $model->createRow();
+
+        $this->assertEquals($this->_textField->validate($row, array('test12' => 'foobar')), array());
 
         $this->_textField->setVType('email');
-        $this->assertEquals(count($this->_textField->validate(array('test12' => 'foobar'))), 1);
-        $this->assertEquals(count($this->_textField->validate(array('test12' => 'foo@bar.com'))), 0);
+        $this->assertEquals(count($this->_textField->validate($row, array('test12' => 'foobar'))), 1);
+        $this->assertEquals(count($this->_textField->validate($row, array('test12' => 'foo@bar.com'))), 0);
     }
 }

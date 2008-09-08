@@ -12,13 +12,7 @@ class Vpc_Posts_Detail_Delete_Component extends Vpc_Abstract
         $ret['cssClass'] = 'webStandard';
         return $ret;
     }
-    
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        if (!$this->getData()->parent->getComponent()->mayDeletePost()) {
-            throw new Vpc_AccessDeniedException();
-        }
-        return $ret;
-    }
+
+    //hier keine berechtigungsüberpüfung notwendig da nichts gelöscht wird
+    //ist in der confirmed komponente
 }

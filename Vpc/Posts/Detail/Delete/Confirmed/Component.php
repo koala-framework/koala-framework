@@ -24,17 +24,22 @@ class Vpc_Posts_Detail_Delete_Confirmed_Component extends Vpc_Posts_Success_Comp
         return $posts->countChildComponents(array('generator'=>'detail'));
     }
 
-    public function postProcessInput($postData)
+    public function processInput($postData)
     {
         $actions = $this->getData()->parent->parent;
-        if ($actions->getComponent()->mayEditPost()) {
-            $post = $actions->parent;
-            $post->row->delete();
-            $numPosts = $this->_getNumPosts();
-            if ($numPosts == 0) {
-                //thread auch löschen
-                $post->parent->parent->row->delete();
-            }
+        if (!$actions->getComponent()->mayEditPost()) {
+            throw new Vpc_AccessDeniedException();
+        }
+    }
+
+    public function postProcessInput($postData)
+    {
+        $post = $this->getData()->parent->parent->parent;
+        $post->row->delete();
+        $numPosts = $this->_getNumPosts();
+        if ($numPosts == 0) {
+            //thread auch löschen
+            $post->parent->parent->row->delete();
         }
     }
 }
