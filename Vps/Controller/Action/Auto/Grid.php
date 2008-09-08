@@ -474,7 +474,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             }
             foreach ($this->_columns as $column) {
                 if (!($column->getShowIn() & Vps_Grid_Column::SHOW_IN_GRID)) continue;
-                $invalid = $column->validate($submitRow);
+                $invalid = $column->validate($row, $submitRow);
                 if ($invalid) {
                     throw new Vps_ClientException(implode("<br />", $invalid));
                 }
