@@ -3037,7 +3037,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">'%value%' appears to be a local network name but local network names are not allowed</en>
-<de>'%value%' scheint ein lokaler Netzwerkname zu sein, aber lokale Netzwerknamen sind aber nicht erlaubt.</de>
+<de>'%value%' scheint ein lokaler Netzwerkname zu sein, aber lokale Netzwerknamen sind nicht erlaubt.</de>
 </text>
 </trl>
 
