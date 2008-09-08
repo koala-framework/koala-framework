@@ -128,15 +128,15 @@ class Vps_Grid_Column implements Vps_Collection_Item_Interface
         return array();
     }
 
-    public function validate($submitRow)
+    public function validate(Vps_Model_Row_Interface $row, $submitRow)
     {
         if ($this->getEditor()) {
-            return $this->getEditor()->validate($submitRow);
+            return $this->getEditor()->validate($row, $submitRow);
         } else {
             return array();
         }
     }
-    
+
     public function prepareSave($row, $submitRow)
     {
         if ($this->getEditor()) {
