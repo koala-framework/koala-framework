@@ -62,7 +62,7 @@ class Vps_Component_Abstract
                 $settings = call_user_func(array($class, 'getSettings'));
                 return $settings[$setting];
             }
-            
+
         }
         //& für performance
         $s =& self::_getSettingsCached();
@@ -80,6 +80,7 @@ class Vps_Component_Abstract
 
     public static function getSettingMtime()
     {
+        if (!Vps_Registry::get('config')->vpc->rootComponent) return 0;
         $s =& self::_getSettingsCached();
         return $s['mtime'];
     }
@@ -184,7 +185,7 @@ class Vps_Component_Abstract
         }
         return $models[$class];
     }
-    
+
     public function getModel()
     {
         return self::createModel(get_class($this));
@@ -212,6 +213,7 @@ class Vps_Component_Abstract
             $componentClasses = null;
         }
         if ($componentClasses) return $componentClasses;
+        if (!$usedRoot) return array();
         $componentClasses = array($usedRoot);
         self::_getChildComponentClasses($componentClasses, $usedRoot, $useSettingsCache);
         return $componentClasses;
