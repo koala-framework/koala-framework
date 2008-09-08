@@ -2,7 +2,26 @@
 class Vpc_Forum_Thread_Moderate_Close_Component extends Vpc_Abstract
 {
     private $_isClosed;
-    
+
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['flags']['processInput'] = true;
+        return $ret;
+    }
+
+    public function processInput($postData)
+    {
+        $row = $this->getData()->parent->parent->row;
+        if ($this->getData()->getParentPage()->getComponent()->mayModerate()) {
+            if (isset($postData['close'])) {
+                $row->closed = $postData['close'];
+                $row->save();
+            }
+        }
+        $this->_isClosed = $row->closed == '1';
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -19,14 +38,6 @@ class Vpc_Forum_Thread_Moderate_Close_Component extends Vpc_Abstract
 
     public function isClosed()
     {
-        if (is_null($this->_isClosed)) {
-            $row = $this->getData()->parent->parent->row;
-            if (!is_null($this->_getParam('close'))) {
-                $row->closed = $this->_getParam('close');
-                $row->save();
-            }
-            $this->_isClosed = $row->closed == '1';
-        }
         return $this->_isClosed;
     }
 }

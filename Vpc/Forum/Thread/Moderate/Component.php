@@ -11,13 +11,15 @@ class Vpc_Forum_Thread_Moderate_Component extends Vpc_Abstract_Composite_Compone
             'name' => trlVps('Move Thread'),
             'filename' => 'move'
         );
+        $ret['viewCache'] = false;
         return $ret;
     }
-    
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
         $ret['move'] = $this->getData()->getChildComponent('_move');
+        $ret['mayModerate'] = $this->getData()->getParentPage()->getComponent()->mayModerate();
         return $ret;
     }
 }

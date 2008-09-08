@@ -95,6 +95,11 @@ class Vps_Model_FnF extends Vps_Model_Abstract
                 if (!in_array($data[$f], $v)) return false;
             }
         }
+        if ($where = $select->getPart(Vps_Model_Select::WHERE_NULL)) {
+            foreach ($where as $f) {
+                if (!is_null($data[$f])) return false;
+            }
+        }
         return true;
     }
 

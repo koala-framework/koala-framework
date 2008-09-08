@@ -61,9 +61,9 @@ class Vps_Model_Db implements Vps_Model_Interface
                         $v = $this->getAdapter()->quote($v);
                     }
                     $value = implode(', ', $value);
-                    $dbSelect->where("$field IN ($value)");
+                    $dbSelect->where("$tablename.$field IN ($value)");
                 } else {
-                    $dbSelect->where("$field = ?", $value);
+                    $dbSelect->where("$tablename.$field = ?", $value);
                 }
             }
         }
@@ -74,9 +74,15 @@ class Vps_Model_Db implements Vps_Model_Interface
         }
 
         if ($whereId = $select->getPart(Vps_Model_Select::WHERE_ID)) {
-            $dbSelect->where($this->getPrimaryKey()." = ?", $whereId);
+            $dbSelect->where($tablename.'.'.$this->getPrimaryKey()." = ?", $whereId);
         }
-        
+
+        if ($whereNull = $select->getPart(Vps_Model_Select::WHERE_NULL)) {
+            foreach ($whereNull as $field) {
+                $dbSelect->where("ISNULL($tablename.$field)");
+            }
+        }
+
         if ($other = $select->getPart(Vps_Model_Select::OTHER)) {
             foreach ($other as $i) {
                 call_user_func_array(array($dbSelect, $i['method']), $i['arguments']);
@@ -96,7 +102,11 @@ class Vps_Model_Db implements Vps_Model_Interface
         }
         $dbSelect = $this->_createDbSelect($select);
         if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
+            $tablename = $this->_table->info('name');
             foreach ($order as $o) {
+                if (strpos($o['field'], '.')===false) {
+                    $o['field'] = $tablename.'.'.$o['field'];
+                }
                 $dbSelect->order($o['field'].' '.$o['dir']);
             }
         }

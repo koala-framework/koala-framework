@@ -19,6 +19,10 @@ class Vpc_Forum_Thread_Moderate_Move_Component extends Vpc_Abstract_Composite_Co
         $group = $thread->getParentPage();
         $forum = $group->parent;
 
+        if (!$group->getComponent()->mayModerate()) {
+            throw new Vpc_AccessDeniedException();
+        }
+
         //nicht in processInput bzw. postProcessInput weil wir 1. uns selbst brauchen zur anzeige
         //und 2. den neuen thread brauchen zum hinlinken
         $ret['moved'] = false;
@@ -41,7 +45,7 @@ class Vpc_Forum_Thread_Moderate_Move_Component extends Vpc_Abstract_Composite_Co
         }
 
         $ret['groups'] = array();
-        if (!$ret['moved'] && $group->getComponent()->mayModerate()) {
+        if (!$ret['moved']) {
             $ret['groups'] = $group->parent->getComponent()->getGroups();
         }
         $ret['groupsTemplate'] = Vpc_Admin::getComponentFile(get_class($this), 'Groups', 'tpl');
