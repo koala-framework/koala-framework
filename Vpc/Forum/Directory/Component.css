@@ -44,4 +44,8 @@
 }
 .$cssClass .forumSearch {
     text-align: right;
+    margin-top: 20px;
+}
+.ext-ie6 .$cssClass .forumSearch {
+    margin-top: 0px;
 }

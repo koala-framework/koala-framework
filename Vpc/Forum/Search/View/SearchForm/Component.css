@@ -7,18 +7,22 @@
     margin-top: 25px;
     margin-right: 110px;
 }
-.ext-ie6 .$cssClass .submitWrapper {
-    margin-top: -32px;
-}
-.ext-ie7 .$cssClass .vpsField {
-    margin-left: 175px;
-}
 .ext-ie7 .$cssClass .vpsField input {
-    margin-top: 20px;
+    margin-right: 20px;
+}
+.ext-ie7 .$cssClass .submitWrapper {
+    margin-top: -33px;
+}
+.ext-safari .$cssClass .submitWrapper {
+    margin-top: -28px;
+}
+.$cssClass .submitWrapper {
+    margin-top: -31px;
 }
 .$cssClass .vpsField {
-    float: left;
-    margin-left: 195px;
+/*    float: left;
+    margin-left: 195px;*/
+    margin-right: 85px;
     padding-top: 5px;
 }
 .$cssClass .vpsField label {
