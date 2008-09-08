@@ -36,7 +36,7 @@ class Vps_Media_Image
         }
         if ($height == 0) {
             $height = round($width * ($size[1]/$size[0]));
-        } 
+        }
         if ($scale == self::SCALE_CROP) {
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
 

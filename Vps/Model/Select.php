@@ -69,14 +69,14 @@ class Vps_Model_Select
                     $this->order($f);
                 }
             } else {
-                if (isset($field['direction'])) {
-                    throw new Vps_Exception("'direction' key doesn't exist anymore, it was renamed to 'dir'");
+                if (isset($field['dir'])) {
+                    throw new Vps_Exception("'dir' key doesn't exist anymore, it was renamed to 'direction'");
                 }
-                if (!isset($field['dir'])) $field['dir'] = 'ASC';
+                if (!isset($field['direction'])) $field['direction'] = 'ASC';
                 $this->_parts[self::ORDER][] = $field;
             }
         } else {
-            $this->_parts[self::ORDER][] = array('field'=>$field, 'dir'=>$dir);
+            $this->_parts[self::ORDER][] = array('field'=>$field, 'direction'=>$dir);
         }
         return $this;
     }

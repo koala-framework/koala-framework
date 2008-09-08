@@ -137,9 +137,10 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         }
 
         if (is_string($this->_defaultOrder)) {
+
             $this->_defaultOrder = array(
                 'field' => $this->_defaultOrder,
-                'dir'   => 'ASC'
+                'direction'   => 'ASC'
             );
         }
     }
@@ -292,9 +293,10 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             if ($this->getRequest()->getParam('sort')) {
                 $order['field'] = $this->getRequest()->getParam('sort');
             }
-            if ($this->_getParam("dir") && $this->_getParam('dir') != 'undefined') {
-                $order['dir'] = $this->_getParam('dir');
+            if ($this->_getParam("direction") && $this->_getParam('direction') != 'undefined') {
+                $order['direction'] = $this->_getParam('direction');
             }
+
 // wird vermutlich nicht benötigt, da beim ersten laden 'sortInfo' in den metadaten drin ist
 // falls es irgendwo benötigt wird wieder einkommentieren
 //             $this->view->order = $order;
@@ -302,6 +304,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
 
         $primaryKey = $this->_primaryKey;
 
+        //d ($order);
         $rowSet = $this->_fetchData($order, $limit, $start);
         if (!is_null($rowSet)) {
             $rows = array();
@@ -377,7 +380,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             $this->view->metaData['sortInfo'] = $this->_defaultOrder;
         } else {
             $this->view->metaData['sortInfo']['field'] = $this->_getParam('sort');
-            $this->view->metaData['sortInfo']['dir'] = $this->_getParam('dir');
+            $this->view->metaData['sortInfo']['direction'] = $this->_getParam('direction');
         }
         $this->view->metaData['columns'] = array();
         $this->view->metaData['fields'] = array();

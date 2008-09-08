@@ -26,12 +26,12 @@ class Vps_Model_SelectTest extends PHPUnit_Framework_TestCase
 
         $select->order('foo');
         $this->assertEquals($select->getPart(Vps_Model_Select::ORDER),
-                            array(array('field'=>'foo', 'dir'=>'ASC')));
+                            array(array('field'=>'foo', 'direction'=>'ASC')));
 
         $select->order('foo2', 'DESC');
         $this->assertEquals($select->getPart(Vps_Model_Select::ORDER),
-                            array(array('field'=>'foo', 'dir'=>'ASC'),
-                                  array('field'=>'foo2', 'dir'=>'DESC')));
+                            array(array('field'=>'foo', 'direction'=>'ASC'),
+                                  array('field'=>'foo2', 'direction'=>'DESC')));
 
         $select->limit(10);
         $this->assertEquals($select->getPart(Vps_Model_Select::LIMIT_COUNT), 10);
