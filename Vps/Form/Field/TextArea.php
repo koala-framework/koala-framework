@@ -18,7 +18,11 @@ class Vps_Form_Field_TextArea extends Vps_Form_Field_TextField
         //todo: escapen
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<textarea id=\"$ret[id]\" name=\"$name$fieldNamePostfix\" ";
-        $ret['html'] .= "style=\"width: {$this->getWidth()}px; height: {$this->getHeight()}px\">";
+        $width = $this->getWidth();
+        if (is_numeric($width)) {
+            $width .= 'px';
+        }
+        $ret['html'] .= "style=\"width: $width; height: {$this->getHeight()}px\">";
         $ret['html'] .= $value;
         $ret['html'] .= "</textarea>";
         return $ret;

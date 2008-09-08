@@ -1,6 +1,3 @@
-.$cssClass form .vpsField {
-    font-size: 12px;
-}
 .$cssClass form .vpsField label {
     line-height: 20px;
 }
@@ -32,6 +29,11 @@
     float: left;
     margin-right: 20px;
     text-align: right;
+}
+.$cssClass .vpsFieldLabelAlignTop label {
+    width: auto;
+    margin: 0px;
+    text-align: left;
 }
 .$cssClass .showField {
     font-weight: bold;

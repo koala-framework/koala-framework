@@ -11,6 +11,7 @@
 }
 .$cssClass .avatar {
     float: right;
+    margin-top: -15px;
 }
 .$cssClass .userData {
     clear: left;
