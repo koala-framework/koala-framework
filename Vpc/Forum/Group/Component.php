@@ -14,10 +14,10 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
             'name' => trlVps('new thread')
         );
         $ret['tablename'] = 'Vpc_Forum_Group_Model';
-        $ret['order'] = array('field'=>'create_time', 'dir'=>'DESC');
+        $ret['order'] = array('field'=>'create_time', 'direction'=>'DESC');
         return $ret;
     }
-    
+
     public function mayModerate()
     {
         $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
@@ -32,12 +32,12 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
         }
         return false;
     }
-    
+
     private function _getSelect()
     {
         return $this->getData()->getGenerator('detail')->select($this->getData());
     }
-    
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();

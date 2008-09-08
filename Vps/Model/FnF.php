@@ -26,7 +26,7 @@ class Vps_Model_FnF extends Vps_Model_Abstract
             'data' => $data
         ));
     }
-    
+
     public function fetchAll($where=null, $order=null, $limit=null, $start=null)
     {
         if (!is_object($where)) {
@@ -52,12 +52,12 @@ class Vps_Model_FnF extends Vps_Model_Abstract
             foreach ($data as $d) {
                 $orderData[$d['id']] = strtolower($d[$order['field']]);
             }
-            if ($order['dir'] == 'ASC') {
+            if ($order['direction'] == 'ASC') {
                 asort($orderData);
-            } else if ($order['dir'] == 'DESC') {
+            } else if ($order['direction'] == 'DESC') {
                 arsort($orderData);
             } else {
-                throw new Vps_Exception("Invalid order direction: {$order['dir']}");
+                throw new Vps_Exception("Invalid order direction: {$order['direction']}");
             }
             $sortedData = array();
             foreach (array_keys($orderData) as $id) {

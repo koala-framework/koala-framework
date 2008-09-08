@@ -115,7 +115,7 @@ class Vps_Model_Db implements Vps_Model_Interface
                 if (strpos($o['field'], '.')===false) {
                     $o['field'] = $tablename.'.'.$o['field'];
                 }
-                $dbSelect->order($o['field'].' '.$o['dir']);
+                $dbSelect->order($o['field'].' '.$o['direction']);
             }
         }
         $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);

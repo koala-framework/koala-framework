@@ -12,7 +12,7 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
             array('db' => new Vps_Model_Db_TestAdapter()), '', true);
 
         $this->_dbSelect = $this->getMock('Vps_Db_Table_Select', array(), array(), '', false);
-        
+
         $this->_table->expects($this->any())
             ->method('select')
             ->will($this->returnValue($this->_dbSelect));
@@ -84,7 +84,7 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
             ->method('order')
             ->with($this->equalTo('testtable.bar ASC'));
         $select = $this->_model->select()
-            ->order(array('field'=>'bar', 'dir'=>'ASC'));
+            ->order(array('field'=>'bar', 'direction'=>'ASC'));
         $this->_table->expects($this->once())
                   ->method('fetchAll')
                   ->with($this->equalTo($this->_dbSelect));
