@@ -44,7 +44,11 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
             onRender();
         }
 
-        Ext.applyIf(this, {
+        var buttons = [this.getAction('save'), this.getAction('cancel')];
+		if (this.initialConfig['close']) {
+            buttons = [this.getAction('close')];
+		}
+		Ext.applyIf(this, {
             width: 400,
             height: 300,
             layout: 'fit',
@@ -52,7 +56,7 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
             plain: true,
             modal: true,
             baseCls: 'x-plain',
-            buttons: [this.getAction('save'), this.getAction('cancel')]
+            buttons: buttons
         });
         this.closeAction = 'hide';
 
@@ -84,6 +88,14 @@ Vps.Auto.Form.Window = Ext.extend(Ext.Window, {
         } else if (type == 'cancel') {
             this.actions[type] = new Ext.Action({
                 text    : trlVps('Cancel'),
+                handler : function() {
+                    this.hide();
+                },
+                scope   : this
+            });
+        } else if (type == 'close') {
+            this.actions[type] = new Ext.Action({
+                text    : trlVps('Close'),
                 handler : function() {
                     this.hide();
                 },
