@@ -50,7 +50,7 @@ class Vps_Model_FnF extends Vps_Model_Abstract
             $order = current($order);
             $orderData = array();
             foreach ($data as $d) {
-                $orderData[$d['id']] = $d[$order['field']];
+                $orderData[$d['id']] = strtolower($d[$order['field']]);
             }
             if ($order['dir'] == 'ASC') {
                 asort($orderData);
