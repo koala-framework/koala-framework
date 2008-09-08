@@ -33,11 +33,6 @@
     margin-right: 20px;
     text-align: right;
 }
-.vpsFormLabelAbove label {
-    width: auto;
-    text-align: left;
-    float: none;
-}
 .$cssClass .showField {
     font-weight: bold;
     margin-bottom: 9px;

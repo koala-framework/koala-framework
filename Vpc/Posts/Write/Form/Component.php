@@ -6,7 +6,6 @@ class Vpc_Posts_Write_Form_Component extends Vpc_Form_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Vpc_Posts_Write_Form_Success_Component';
         $ret['tablename'] = 'Vpc_Posts_Directory_Model';
-        $ret['cssClass'] .= ' vpsFormLabelAbove';
         return $ret;
     }
 
