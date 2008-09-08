@@ -9,7 +9,7 @@ class Vps_Model_Select
     const LIMIT_COUNT = 'limitCount';
     const LIMIT_OFFSET = 'limitOffset';
     const OTHER = 'other';
-    
+
     protected $_parts = array();
 
     public function __construct($where = array())
@@ -69,6 +69,10 @@ class Vps_Model_Select
                     $this->order($f);
                 }
             } else {
+                if (isset($field['direction'])) {
+                    throw new Vps_Exception("'direction' key doesn't exist anymore, it was renamed to 'dir'");
+                }
+                if (!isset($field['dir'])) $field['dir'] = 'ASC';
                 $this->_parts[self::ORDER][] = $field;
             }
         } else {
@@ -87,7 +91,7 @@ class Vps_Model_Select
         if ($offset) $this->_parts[self::LIMIT_OFFSET] = $offset;
         return $this;
     }
-    
+
     public function getParts()
     {
         return $this->_parts;
