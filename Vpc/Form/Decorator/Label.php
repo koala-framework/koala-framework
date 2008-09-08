@@ -16,6 +16,9 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
 //                 $errors = $item['item']->validate($_REQUEST);
             }
             $class = 'vpsField';
+            if ($item['item'] && $item['item']->getLabelAlign()) {
+                $class .= ' vpsFieldLabelAlign'.ucfirst($item['item']->getLabelAlign());
+            }
             if ($errors) {
                 $class .= ' vpsFieldError';
             }

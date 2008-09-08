@@ -5,7 +5,9 @@ class Vpc_Posts_Detail_Report_Form extends Vpc_Abstract_Form
     {
         $this->setModel(new Vps_Model_Mail(array('componentClass' => $this->getClass())));
         $this->add(new Vps_Form_Field_TextArea('reason', trlVps('Please enter a reason for reporting this Post')))
-            ->setWidth(475)->setHeight(150);
+            ->setWidth('100%')
+            ->setHeight(150)
+            ->setLabelAlign('top');
         parent::_init();
     }
 
