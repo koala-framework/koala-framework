@@ -9,6 +9,16 @@ class Vps_Mail
     public function __construct($template, $masterTemplate = 'Master')
     {
         $this->_view = new Vps_View_Mail();
+        if (is_object($template)) {
+            if ($template instanceof Vpc_Abstract) {
+                $template = $template->getData();
+            }
+            if (!$template instanceof Vps_Component_Data) {
+                throw new Vps_Exception("template must be instance of 'Vpc_Abstract' or 'Vps_Component_Data'");
+            }
+            $template = Vpc_Admin::getComponentFile($template->componentClass, 'Component', 'html.tpl');
+            $template = str_replace('.html.tpl', '', $template);
+        }
         $this->_template = $template;
         $this->_masterTemplate = $masterTemplate;
 
