@@ -8,7 +8,7 @@ class Vpc_Posts_Write_Preview_Component extends Vpc_Abstract
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['files'][] = 'vps/Vpc/Posts/Write/Preview/Component.js';
 
-        $ret['placeholder']['preview'] = trlVps('Preview:');
+        $ret['placeholder']['preview'] = trlVps('Preview').':';
         // es wird von der eigenen komponente aus so lange nach oben gesucht
         // bis bis ein parentNode in irgendeiner unterebene ein child hat,
         // das mit sourceSelector übereinstimmt

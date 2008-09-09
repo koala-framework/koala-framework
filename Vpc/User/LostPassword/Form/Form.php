@@ -7,7 +7,9 @@ class Vpc_User_LostPassword_Form_Form extends Vps_Form
         $this->setModel(new Vps_Model_FnF());
 
         $this->add(new Vpc_User_LostPassword_Form_UserEMail('email', trlVps('E-Mail')))
-            ->setAllowBlank(false);
+            ->setAllowBlank(false)
+            ->setWidth(200)
+            ->setLabelWidth(50);
     }
     protected function _afterSave(Vps_Model_Row_Interface $row)
     {

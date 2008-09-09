@@ -3039,5 +3039,13 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en default="1">'%value%' appears to be a local network name but local network names are not allowed</en>
 <de>'%value%' scheint ein lokaler Netzwerkname zu sein, aber lokale Netzwerknamen sind nicht erlaubt.</de>
 </text>
+<text>
+<en default="1">chosen thread</en>
+<de>Ausgewähltes Thema</de>
+</text>
+<text>
+<en default="1">Please choose a group, in which the thread should be moved</en>
+<de>Bitte klicken Sie auf die Gruppe, in die das Thema verschoben werden soll</de>
+</text>
 </trl>
 

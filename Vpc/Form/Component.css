@@ -23,6 +23,16 @@
 }
 .$cssClass form .vpsFormFieldCheckbox input {
     width: auto;
+    border: none;
+    background: none;
+    margin-left: 5px;
+    margin-top: 3px;
+}
+.ext-ie6 .$cssClass .vpsFormFieldCheckbox label {
+    margin-right: 0px;
+}
+.$cssClass .vpsFormFieldCheckbox label {
+    margin-right: 15px;
 }
 .$cssClass label {
     width: 150px;

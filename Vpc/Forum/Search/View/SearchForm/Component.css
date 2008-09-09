@@ -1,3 +1,6 @@
+.$cssClass {
+    text-align: right;   
+}
 .ext-ie6 .$cssClass .vpsField {
     float: none;
     margin: 0px;
@@ -20,8 +23,6 @@
     margin-top: -31px;
 }
 .$cssClass .vpsField {
-/*    float: left;
-    margin-left: 195px;*/
     margin-right: 85px;
     padding-top: 5px;
 }

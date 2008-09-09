@@ -40,8 +40,9 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
             $item['preHtml'] .= '<div class="'.$class.'">';
             if ($item['item'] && !$item['item']->getHideLabels() && $item['item']->getFieldLabel()) {
                 $item['preHtml'] .= '<label for="'
-                    .(isset($item['id']) ? $item['id'] : $item['item']->getFieldName())
-                .'">';
+                    .(isset($item['id']) ? $item['id'] : $item['item']->getFieldName()).'"'
+                    .($item['item']->getLabelWidth() ? ' style="width:'.$item['item']->getLabelWidth().'px"' : '')
+                .'>';
                 $item['preHtml'] .= $item['item']->getFieldLabel();
                 if ($item['item']->getAllowBlank()===false) {
                     $item['preHtml'] .= '*';
