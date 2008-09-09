@@ -12,10 +12,6 @@
     padding: 0px;
     color: $typo;
 }
-.$cssClass li.threads {
-    border: 1px solid #ccc;
-    margin: 15px 0px;
-}
 .$cssClass .description a {
     font-weight: bold;
     display: block;
@@ -43,7 +39,6 @@
     padding-left: 10px;
 }
 .$cssClass .forumSearch {
-    text-align: right;
     margin-top: 20px;
 }
 .ext-ie6 .$cssClass .forumSearch {

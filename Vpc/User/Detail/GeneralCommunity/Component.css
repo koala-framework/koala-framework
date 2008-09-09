@@ -7,11 +7,11 @@
     float: left;
     font-size: 14px;
     margin-right: 10px;
+    margin-bottom: 15px;
     padding-top: 1px;
 }
 .$cssClass .avatar {
     float: right;
-    margin-top: -15px;
 }
 .$cssClass .userData {
     clear: left;

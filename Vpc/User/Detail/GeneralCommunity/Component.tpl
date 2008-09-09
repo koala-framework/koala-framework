@@ -3,9 +3,6 @@
     <div class="nickname"><h3><?=htmlspecialchars($this->row->nickname)?></h3></div>
     
     <?php
-    if ($this->rating) {
-        echo $this->component($this->rating);
-    }
     if ($this->avatar) {
     ?>
     <div class="avatar">
@@ -14,6 +11,9 @@
         ?>
     </div>
     <?php
+    }
+    if ($this->rating) {
+        echo $this->component($this->rating);
     }
     ?>
     <div class="userData">
