@@ -190,7 +190,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
     {
         Ext.Ajax.request({
             url: this.controllerUrl + '/json-node-data',
-            params: { node: id },
+            params: Ext.apply({node:id}, this.getBaseParams()),
             success: function(r) {
                 this.onSaved(Ext.decode(r.responseText).data);
             },
