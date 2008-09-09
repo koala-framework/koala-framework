@@ -5,6 +5,7 @@ class Vps_Form_Field_NumberField extends Vps_Form_Field_TextField
     {
         parent::__construct($field_name, $field_label);
         $this->setXtype('numberfield');
+        $this->setDecimalSeparator(trlcVps('decimal separator', '.'));
     }
     protected function _addValidators()
     {
