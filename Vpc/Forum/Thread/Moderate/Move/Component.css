@@ -1,9 +1,6 @@
-.$cssClass h3 {
-    margin-bottom: 10px;
-}
 .$cssClass .title {
     font-weight: bold;
-    margin-top: 7px;
+    margin-top: 10px;
     margin-left: 5px;
 }
 .$cssClass .post {

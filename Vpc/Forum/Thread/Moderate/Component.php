@@ -12,6 +12,7 @@ class Vpc_Forum_Thread_Moderate_Component extends Vpc_Abstract_Composite_Compone
             'filename' => 'move'
         );
         $ret['viewCache'] = false;
+        $ret['cssClass'] = 'webStandard webForm';
         return $ret;
     }
 
