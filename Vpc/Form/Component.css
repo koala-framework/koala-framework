@@ -28,10 +28,10 @@
     margin-left: 5px;
     margin-top: 3px;
 }
-.ext-ie6 .$cssClass .vpsFormFieldCheckbox label {
+.ext-ie6 .$cssClass form .vpsFormFieldCheckbox label {
     margin-right: 0px;
 }
-.$cssClass .vpsFormFieldCheckbox label {
+.$cssClass form .vpsFormFieldCheckbox label {
     margin-right: 15px;
 }
 .$cssClass label {
