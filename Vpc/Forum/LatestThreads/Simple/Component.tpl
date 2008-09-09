@@ -1,4 +1,4 @@
-<? if ($this->threads) { ?>
+<?php if ($this->threads) { ?>
     <div class="<?=$this->cssClass ?>">
         <h2>Aktuell im Forum:</h2>
         <ul>
@@ -12,4 +12,4 @@
             <?php } ?>
         </ul>
     </div>
-<? } ?>
+<?php } ?>
