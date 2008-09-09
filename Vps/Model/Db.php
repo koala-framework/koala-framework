@@ -112,10 +112,14 @@ class Vps_Model_Db implements Vps_Model_Interface
         if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
             $tablename = $this->_table->info('name');
             foreach ($order as $o) {
-                if (strpos($o['field'], '.')===false) {
-                    $o['field'] = $tablename.'.'.$o['field'];
+                if ($o['field'] == Vps_Model_Select::ORDER_RAND) {
+                    $dbSelect->order('RAND()');
+                } else {
+                    if (strpos($o['field'], '.')===false) {
+                        $o['field'] = $tablename.'.'.$o['field'];
+                    }
+                    $dbSelect->order($o['field'].' '.$o['direction']);
                 }
-                $dbSelect->order($o['field'].' '.$o['direction']);
             }
         }
         $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);

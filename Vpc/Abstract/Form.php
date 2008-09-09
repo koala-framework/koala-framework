@@ -22,6 +22,7 @@ class Vpc_Abstract_Form extends Vps_Form
             $dbIdShortcut = substr($dbIdTemplate, 0, strpos($dbIdTemplate, '{0}'));
             $id = substr($dbIdTemplate, strpos($dbIdTemplate, '{0}') + 4);
         }
+
         foreach (Vpc_Abstract::getComponentClasses() as $class) {
             foreach (Vpc_Abstract::getSetting($class, 'generators') as $g) {
                 if (isset($g['dbIdShortcut']) && $g['dbIdShortcut'] == $dbIdShortcut) {
@@ -29,9 +30,11 @@ class Vpc_Abstract_Form extends Vps_Form
                 }
             }
         }
+
         if (!$componentClass) {
             throw new Vpc_Exception("No component for dbIdShortcut '$dbIdShortcut' found.");
         }
+
         if ($id) { // id hatte form 'dbId_{0}-key', also für Key Unterkomponente suchen
             $form = self::createChildComponentForm($componentClass, $id, $name);
             if ($form) $form->setIdTemplate($dbIdTemplate);
@@ -48,11 +51,7 @@ class Vpc_Abstract_Form extends Vps_Form
     {
         // Es wurde ein dbIdTemplate angegeben
         if (!in_array($componentClass, Vpc_Abstract::getComponentClasses())) {
-            try {
-                return self::createComponentFormByDbIdTemplate($componentClass);
-            } catch (Vpc_Exception $e) {
-                throw new Vpc_Exception("Could not find component '$componentClass'.");
-            }
+            return self::createComponentFormByDbIdTemplate($componentClass);
         }
 
         $formClass = Vpc_Admin::getComponentClass($componentClass, 'Form');

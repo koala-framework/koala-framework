@@ -26,7 +26,9 @@ class Vpc_Table extends Vps_Db_Table
     {
         return $this->find($id)->current();
     }
-    public function find($id) {
+
+    public function find($id)
+    {
         $ret = parent::find($id);
         if (!$ret->count()) {
             $defaults = array_combine($this->_cols, array_fill(0, count($this->_cols), null));
@@ -42,6 +44,7 @@ class Vpc_Table extends Vps_Db_Table
         }
         return $ret;
     }
+
     public function createRow(array $data = array())
     {
         if (Vpc_Abstract::hasSetting($this->_componentClass, 'default')) {

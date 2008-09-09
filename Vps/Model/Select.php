@@ -10,6 +10,8 @@ class Vps_Model_Select
     const LIMIT_OFFSET = 'limitOffset';
     const OTHER = 'other';
 
+    const ORDER_RAND = 'orderRand';
+
     protected $_parts = array();
 
     public function __construct($where = array())

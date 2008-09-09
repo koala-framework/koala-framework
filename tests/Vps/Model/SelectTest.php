@@ -56,6 +56,11 @@ class Vps_Model_SelectTest extends PHPUnit_Framework_TestCase
         $select->whereId(11);
         $this->assertEquals($select->getPart(Vps_Model_Select::WHERE_ID), 11);
 
+        $select = new Vps_Model_Select();
+        $select->order(Vps_Model_Select::ORDER_RAND);
+        $this->assertEquals($select->getPart(Vps_Model_Select::ORDER),
+                array(array('field'=>Vps_Model_Select::ORDER_RAND, 'direction'=>'ASC')));;
+
     }
 
 
