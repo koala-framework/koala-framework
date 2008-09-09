@@ -26,7 +26,7 @@ class Vps_Component_Generator_Components_Multiple extends Vpc_Abstract
             'nameColumn' => 'name',
             'model' => new Vps_Model_FnF(
                 array('data' => array(
-                        array('id' => 1, 'name' => 'test1', 'component' => 'empty'),
+                        array('id' => 1, 'name' => 'test1', 'component' => 'editComponent'),
                         array('id' => 2, 'name' => 'test2', 'component' => 'flag')
                     )
                 )

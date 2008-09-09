@@ -36,6 +36,11 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
 
     public function testRootConstraints()
     {
+        $constraints = array('generator' => 'static');
+        $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
+        $this->assertEquals(count($generators), 1);
+        $this->assertTrue($generators[0] instanceof Vps_Component_Generator_Static);
+
         $constraints = array('page' => true);
         $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root', $constraints);
         $this->assertEquals(count($generators), 1);
@@ -84,7 +89,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
         )), 1);
         $this->_assertGeneratorsCount(array('componentClasses' => array(
             'Vps_Component_Generator_Components_Multiple', 'Vpc_Basic_Html_Component'
-        )), 1, 'Vps_Component_Generator_Components_Root');
+        )), 2, 'Vps_Component_Generator_Components_Root');
         $this->_assertGeneratorsCount(array('componentClasses' => array(
             'Vps_Component_Generator_Components_Multiple', 'Vpc_Basic_Empty_Component'
         )), 3, 'Vps_Component_Generator_Components_Root');
@@ -156,7 +161,6 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
     {
         $root = $this->_root;
         $this->_assertChildComponents($root, array(), array('1', 'root-empty', 'root-static'));
-        /*
         $this->_assertChildComponents($root, array('box' => true), array('root-empty'));
         $this->_assertChildComponents($root, array('page' => true), array('1'));
         $multiple = $root->getChildComponent('-static');
@@ -165,7 +169,10 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
             array('root-static_pageStatic', 'root-static_1', 'root-static_2'));
         $this->_assertChildComponents($multiple, array('page' => true, 'flags' => array('foo'=>true)),
             array('root-static_pageStatic', 'root-static_2'));
-        */
+        $this->_assertChildComponents($multiple, array('generator' => 'pageTable'),
+            array('root-static_1', 'root-static_2'));
+        $this->_assertChildComponents($root->getChildComponent('1'), array('generator' => 'pageTable'),
+            array('1_1', '1_2'));
     }
 
     public function testHome()

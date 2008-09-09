@@ -229,7 +229,7 @@ abstract class Vps_Component_Generator_Abstract
         if (isset($instances[$cacheId])) {
             return $instances[$cacheId];
         }
-
+        
         if (!$select->getPart(Vps_Component_Select::WHERE_GENERATOR) &&
             !$select->getPart(Vps_Component_Select::WHERE_PAGE))
         {
@@ -253,6 +253,7 @@ abstract class Vps_Component_Generator_Abstract
 
         if (!$select->getPart(Vps_Component_Select::SKIP_ROOT)
             && ($component instanceof Vps_Component_Data_Root || is_numeric($component->componentId))
+            && (!$select->hasPart(Vps_Component_Select::WHERE_GENERATOR) || $select->getPart(Vps_Component_Select::WHERE_GENERATOR) == 'page')
         ) {
             $rootSelect = clone $select;
             $rootSelect->whereGenerator('page');
