@@ -247,16 +247,13 @@ class Vps_Setup
                     $sessionPhpAuthed->success = 1;
                 } else {
                     unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-                    echo 'Logindaten fehlerhaft';
                 }
             }
 
             // separate if abfrage, damit login wieder kommt, falls gerade falsch eingeloggt wurde
             if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
                 header('WWW-Authenticate: Basic realm="Testserver"');
-                header('HTTP/1.0 401 Unauthorized');
-                echo "<br />Ung&uuml;ltiger Login";
-                exit;
+                self::output401();
             }
         }
 
