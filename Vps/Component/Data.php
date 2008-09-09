@@ -277,7 +277,7 @@ class Vps_Component_Data
                     }
                 }
                 if (isset($ret[$data->componentId])) {
-                    throw new Vps_Exception("Key for generator not unique: {$data->componentId}");
+                    throw new Vps_Exception("Id not unique: {$data->componentId}");
                 }
                 $ret[$data->componentId] = $data;
 

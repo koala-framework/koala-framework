@@ -164,4 +164,22 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
             ->order(Vps_Model_Select::ORDER_RAND);
         $this->_model->fetchAll($select);
     }
+
+    public function testNull()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('where')
+            ->with($this->equalTo('ISNULL(testtable.foo)'));
+        $select = $this->_model->select()
+            ->whereNull('foo');
+        $this->_model->fetchAll($select);
+    }
+
+    public function testNullWithoutSelect()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('where')
+            ->with($this->equalTo('ISNULL(foo)'));
+        $this->_model->fetchAll(array('foo = ?'=>null));
+    }
 }

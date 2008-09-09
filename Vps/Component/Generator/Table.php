@@ -5,7 +5,6 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     protected $_idSeparator = '-'; //um in StaticTable _ verwenden zu können
     protected $_idColumn = 'id';
-    private $_rows = array();
 
     public function select($parentData, array $select = array())
     {
@@ -100,12 +99,8 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $ret;
     }
 
-    protected function _formatSelect($parentData, $select)
+    protected function _formatSelectId(Vps_Component_Select $select)
     {
-        $select = parent::_formatSelect($parentData, $select);
-
-        if (is_null($select)) return null;
-
         if ($select->hasPart(Vps_Model_Select::WHERE_ID)) {
             $id = $select->getPart(Vps_Model_Select::WHERE_ID);
             $separator = substr($id, 0, 1);
@@ -115,6 +110,16 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             }
             $select->whereId($id);
         }
+        return $select;
+    }
+
+    protected function _formatSelect($parentData, $select)
+    {
+        $select = parent::_formatSelect($parentData, $select);
+        if (is_null($select)) return null;
+
+        $select = $this->_formatSelectId($select);
+        if (is_null($select)) return null;
 
         $cols = $this->_getModel()->getColumns();
         if ($parentData && in_array('component_id', $cols)) {
@@ -154,7 +159,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         }
         return $select;
     }
-    
+
     protected function _formatConfig($parentData, $row)
     {
         $componentId = $this->_getIdFromRow($row);
