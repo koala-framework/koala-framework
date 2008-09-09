@@ -1,5 +1,5 @@
 <?php
-class Vpc_Box_Search_Component extends Vpc_Abstract
+abstract class Vpc_Box_Search_Component extends Vpc_Abstract
 {
     public static function getSettings()
     {
@@ -31,13 +31,6 @@ class Vpc_Box_Search_Component extends Vpc_Abstract
         return $ret;
     }
 
-    public function getSearchComponents()
-    {
-        return array();
-    }
-
-    protected function _getSearchPageUrl()
-    {
-        return '/firmenverzeichnis/verzeichnissuche';
-    }
+    abstract public function getSearchComponents();
+    abstract protected function _getSearchPageUrl();
 }
