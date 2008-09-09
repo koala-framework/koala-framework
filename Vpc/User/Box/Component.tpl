@@ -11,7 +11,7 @@
         </ul>
     </div>
 <? } else { ?>
-    <h3>Login:</h3>
+    <h2>Login:</h2>
     <?=$this->component($this->login)?>
     <ul>
         <li><?=$this->componentLink($this->register, trlVps('Register'))?> &raquo;</li>
