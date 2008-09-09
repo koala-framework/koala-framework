@@ -8,6 +8,7 @@ class Vpc_Forum_Thread_Moderate_Move_Component extends Vpc_Abstract_Composite_Co
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Vpc_Forum_Thread_Moderate_Move_Success_Component';
         $ret['viewCache'] = false;
+        $ret['cssClass'] = 'webStandard';
         return $ret;
     }
 
