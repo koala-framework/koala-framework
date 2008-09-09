@@ -1,37 +1,66 @@
 <?php
 class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_Page_Table
 {
-    protected $_childClassKey = 'detail';
     protected $_uniqueFilename = true;
-
-    protected function _init()
+    public function getChildData($parentData, $select = array())
     {
-        $this->_nameColumn = "nameColumn";
-        $this->_filenameColumn = "filenameColumn";
-        $this->_idColumn = "idColumn";
-        parent::_init();
+        $ret = array();
+        $select = $this->_formatSelect($parentData, $select);
+        $rows = array();
+        if ($select) {
+            $rows = $this->_getModel()->fetchAll($select);
+        }
+        foreach ($rows as $row) {
+            $ret[] = $this->_createData($parentData, $row, $select);
+        }
+        return $ret;
     }
 
-    public function select($parentData)
+    protected function _formatSelectFilename(Vps_Component_Select $select)
     {
-        $ret = parent::select($parentData->parent);
+        if ($select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
+            $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
+            if (!preg_match('#^([0-9]{4})_([0-9]{2})$#', $filename, $m)) return null;
+            $select->where("YEAR(publish_date) = ?", $m[1]);
+            $select->where("MONTH(publish_date) = ?", $m[2]);
+        }
+        return $select;
+    }
+
+    protected function _formatSelectId(Vps_Component_Select $select)
+    {
+        if ($select->hasPart(Vps_Model_Select::WHERE_ID)) {
+            $id = $select->getPart(Vps_Model_Select::WHERE_ID);
+            if (!preg_match('#^_([0-9]{4})([0-9]{2})$#', $id, $m)) return null;
+            $select->where("YEAR(publish_date) = ?", $m[1]);
+            $select->where("MONTH(publish_date) = ?", $m[2]);
+            $select->unsetPart(Vps_Model_Select::WHERE_ID);
+        }
+        return $select;
+    }
+
+    protected function _formatSelect($parentData, $select)
+    {
+        $ret = parent::_formatSelect($parentData, $select);
+        if (!$ret) return $ret;
         $ret->group(array('YEAR(publish_date)', 'MONTH(publish_date)'));
-        $ret->order('publish_date DESC');
+        $ret->order('publish_date', 'DESC');
+        $ret->whereEquals('component_id', $parentData->parent->dbId);
         return $ret;
     }
 
-    protected function _getSelectFields()
+    protected function _getNameFromRow($row)
     {
-        $ret = parent::_getSelectFields();
-        $ret['nameColumn'] = new Zend_Db_Expr("CONCAT(MONTHNAME(publish_date), ' ', YEAR(publish_date))");
-        $ret['filenameColumn'] = new Zend_Db_Expr(
-            "CONCAT(YEAR(publish_date), '_',
-                IF(MONTH(publish_date) < 10, CONCAT('0', MONTH(publish_date)), MONTH(publish_date))
-            )"
-        );
-        $ret['idColumn'] = new Zend_Db_Expr("CONCAT(YEAR(publish_date),
-            IF(MONTH(publish_date) < 10, CONCAT('0', MONTH(publish_date)), MONTH(publish_date))
-        )");
-        return $ret;
+        $date = new Zend_Date($row->publish_date);
+        return $date->get(Zend_Date::MONTH_NAME).' '.$date->get(Zend_Date::YEAR);
+    }
+
+    protected function _getFilenameFromRow($row)
+    {
+        return date('Y_m', strtotime($row->publish_date));
+    }
+    protected function _getIdFromRow($row)
+    {
+        return date('Ym', strtotime($row->publish_date));
     }
 }

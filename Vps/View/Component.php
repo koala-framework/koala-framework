@@ -86,6 +86,9 @@ class Vps_View_Component extends Vps_View
                 }
             } else {
                 $component = self::_getComponent($componentId, $ignoreVisible);
+                if (!$component) {
+                    throw new Vps_Exception("Can't find component '$componentId'");
+                }
                 $cachedContent = $component->hasContent() ? $content : '';
             }
             $ret = str_replace($search, $cachedContent, $ret);

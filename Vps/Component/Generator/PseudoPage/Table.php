@@ -6,7 +6,6 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
     protected $_uniqueFilename;
     protected $_nameColumn;
     protected $_maxFilenameLength;
-    protected $_maxNameLength;
 
     protected function _init()
     {
@@ -30,11 +29,6 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
             $this->_settings['maxFilenameLength'] = $this->_maxFilenameLength;
         }
         if (!isset($this->_settings['maxFilenameLength'])) $this->_settings['maxFilenameLength'] = 100;
-
-        if (isset($this->_maxNameLength)) {
-            $this->_settings['maxNameLength'] = $this->_maxNameLength;
-        }
-        if (!isset($this->_settings['maxNameLength'])) $this->_settings['maxNameLength'] = 100;
     }
 
     protected function _formatSelectFilename(Vps_Component_Select $select)
@@ -51,38 +45,46 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
         return $select;
     }
 
+    protected function _getNameFromRow($row)
+    {
+        if ($this->_settings['nameColumn']) {
+            return $row->{$this->_settings['nameColumn']};
+        } else if (($row instanceof Vps_Model_Db_Row && method_exists($row->getRow(), '__toString'))
+                    || !($row instanceof Vps_Model_Db_Row)) {
+            return $row->__toString();
+        } else {
+            return null;
+        }
+    }
+
+    protected function _getFilenameFromRow($row)
+    {
+        if ($this->_settings['filenameColumn']) {
+            if (!isset($row->{$this->_settings['filenameColumn']})) {
+                throw new Vps_Exception("filenameColumn '".$this->_settings['filenameColumn']."' does not exist in row (Generator: ".get_class($this).")");
+            }
+            return $row->{$this->_settings['filenameColumn']};
+        } else {
+            $name = $this->_getNameFromRow($row);
+            if (!$name) {
+                throw new Vps_Exception("can't create filename for child-page of '$this->_class'");
+            }
+            return $name;
+        }
+    }
     protected function _formatConfig($parentData, $row)
     {
         $data = parent::_formatConfig($parentData, $row);
-        if ($this->_settings['nameColumn']) {
-            $data['name'] = $row->{$this->_settings['nameColumn']};
-        } else if (($row instanceof Vps_Model_Db_Row && method_exists($row->getRow(), '__toString'))
-                    || !($row instanceof Vps_Model_Db_Row)) {
-            $data['name'] = $row->__toString();
+
+        $data['filename'] = '';
+        if (!$this->_settings['uniqueFilename']) {
+            $data['filename'] .= $this->_getIdFromRow($row).'_';
+        }
+        $data['filename'] .= Vps_Filter::get($this->_getFilenameFromRow($row), 'Ascii');
+        if (strlen($data['filename']) > $this->_settings['maxFilenameLength']) {
+            $data['filename'] = substr($data['filename'], 0, $this->_settings['maxFilenameLength']);
         }
 
-        if ($this->_settings['uniqueFilename']) {
-            $data['filename'] = Vps_Filter::get($row->{$this->_settings['filenameColumn']}, 'Ascii');
-        } else {
-            $data['filename'] = $this->_getIdFromRow($row).'_';
-            if ($this->_settings['filenameColumn']) {
-                if (!isset($row->{$this->_settings['filenameColumn']})) {
-                    throw new Vps_Exception("filenameColumn '".$this->_settings['filenameColumn']."' does not exist in row (Generator: ".get_class($this).")");
-                }
-                $data['filename'] .= Vps_Filter::get($row->{$this->_settings['filenameColumn']}, 'Ascii');
-            } else if (isset($data['name'])) {
-                $data['filename'] .= Vps_Filter::get($data['name'], 'Ascii');
-            } else {
-                throw new Vps_Exception("can't create filename for child-page of '$this->_class'");
-            }
-            if (strlen($data['filename']) > $this->_settings['maxFilenameLength']) {
-                $data['filename'] = substr($data['filename'], 0, $this->_settings['maxFilenameLength']);
-            }
-        }
-
-        if (isset($data['name']) && strlen($data['name']) > $this->_settings['maxNameLength']) {
-            $data['name'] = substr($data['name'], 0, $this->_settings['maxNameLength']-3).'...';
-        }
         $data['rel'] = '';
         $data['isPseudoPage'] = true;
         return $data;

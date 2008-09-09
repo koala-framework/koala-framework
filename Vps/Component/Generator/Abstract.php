@@ -9,7 +9,7 @@ abstract class Vps_Component_Generator_Abstract
     private $_dataCache = array();
     protected $_idSeparator;
     private $_model;
-    
+
     protected function __construct($class, $settings)
     {
         $this->_class = $class;

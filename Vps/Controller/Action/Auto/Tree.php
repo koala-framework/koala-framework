@@ -11,17 +11,7 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
     
     protected function _getTreeWhere($parentId = null)
     {
-        $where = $this->_getWhere();
-        if ($this->_model instanceof Vps_Model_Db) {
-            if (!$parentId) {
-                $where[] = "$this->_parentField IS NULL";
-            } else {
-                $where["$this->_parentField = ?"] = $parentId;
-            }
-        } else {
-            $where['parent'] = $parentId;
-        }
-        return $where;
+        return $this->_getWhere();
     }
     
     public function jsonDataAction()
@@ -31,12 +21,18 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
         $this->_saveSessionNodeOpened($parentId, true);
         $this->_saveNodeOpened();
 
-        $order = $this->_hasPosition ? 'pos' : null ;
-        $where = $this->_getTreeWhere($parentId);
-        $rowset = $this->_model->fetchAll($where, $order);
-
+        $select = $this->_model->select($this->_getTreeWhere($parentId));
+        if (!$parentId) {
+            $select->whereNull($this->_parentField);
+        } else {
+            $select->whereEquals($this->_parentField, $parentId);
+        }
+        if ($this->_hasPosition) {
+            $select->order('pos');
+        }
+        $rows = $this->_model->fetchAll($select);
         $nodes = array();
-        foreach ($rowset as $row) {
+        foreach ($rows as $row) {
             $data = $this->_formatNode($row);
             foreach ($data as $k=>$i) {
                 if ($i instanceof Vps_Asset) {
@@ -57,7 +53,10 @@ abstract class Vps_Controller_Action_Auto_Tree extends Vps_Controller_Action_Aut
     {
         $data = parent::_formatNode($row);
         unset($data['children']);
-        if ($this->_model->fetchAll($this->_getTreeWhere($row->{$this->_primaryKey}))->count() > 0) {
+
+        $select = $this->_model->select($this->_getTreeWhere($row));
+        $select->whereEquals($this->_parentField, $row->{$this->_primaryKey});
+        if ($this->_model->fetchCount($select)) {
             $openedNodes = $this->_saveSessionNodeOpened(null, null);
             if ($openedNodes == 'all' ||
                 isset($openedNodes[$row->{$this->_primaryKey}]) ||

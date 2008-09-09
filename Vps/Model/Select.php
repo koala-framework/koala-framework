@@ -47,12 +47,18 @@ class Vps_Model_Select
 
     public function whereNull($field)
     {
+        if (strpos($field, '?') !==false) {
+            throw new Vps_Exception("You don't want '?' in the field '$field'");
+        }
         $this->_parts[self::WHERE_NULL][] = $field;
         return $this;
     }
 
     public function where($cond, $value = null, $type = null)
     {
+        if (strpos($cond, '?') !==false && is_null($value)) {
+            throw new Vps_Exception("Can't use '$cond' with value 'null'");
+        }
         $this->_parts[self::WHERE][] = array($cond, $value, $type);
         return $this;
     }
