@@ -141,17 +141,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     
     protected function _getTreeWhere($parentRow = null)
     {
-        $where = $this->_getWhere();
-        if ($this->_model instanceof Vps_Model_Db) {
-            if (!$parentRow) {
-                $where[] = "$this->_parentField IS NULL";
-            } else {
-                $where["$this->_parentField = ?"] = $parentRow->{$this->_primaryKey};
-            }
-        } else {
-            $where['parent'] = $parentRow ? $parentRow->{$this->_primaryKey} : null;
-        }
-        return $where;
+        return $this->_getWhere();
     }
 
     protected function _getWhere()
@@ -162,8 +152,16 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected function _formatNodes($parentRow = null)
     {
         $nodes = array();
-        $order = $this->_hasPosition ? 'pos' : null ;
-        $rows = $this->_model->fetchAll($this->_getTreeWhere($parentRow), $order);
+        $select = $this->_model->select($this->_getTreeWhere($parentRow));
+        if (!$parentRow) {
+            $select->whereNull($this->_parentField);
+        } else {
+            $select->whereEquals($this->_parentField, $parentRow->{$this->_primaryKey});
+        }
+        if ($this->_hasPosition) {
+            $select->order('pos');
+        }
+        $rows = $this->_model->fetchAll($select);
         foreach ($rows as $row) {
             $nodes[] = $this->_formatNode($row);
         }
