@@ -3047,5 +3047,9 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en default="1">Please choose a group, in which the thread should be moved</en>
 <de>Bitte klicken Sie auf die Gruppe, in die das Thema verschoben werden soll</de>
 </text>
+<text context="decimal separator">
+<en default="1">.</en>
+<de>,</de>
+</text>
 </trl>
 
