@@ -154,7 +154,15 @@ abstract class Vps_Component_Generator_Abstract
                     continue;
                 }
                 $editComponents = Vpc_Abstract::getSetting($componentClass, 'editComponents');
-                if (!in_array($key, $editComponents)) {
+                if (is_array($generator['component'])) {
+                    $continue = true;
+                    foreach (array_keys($generator['component']) as $componentKey) {
+                        if (in_array($componentKey, $editComponents)) {
+                            $continue = false;
+                        }
+                    }
+                    if ($continue) continue;
+                } else if (!in_array($key, $editComponents)) {
                     continue;
                 }
             }

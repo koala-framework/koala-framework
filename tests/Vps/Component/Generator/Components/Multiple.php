@@ -20,7 +20,7 @@ class Vps_Component_Generator_Components_Multiple extends Vpc_Abstract
         $ret['generators']['pageTable'] = array(
             'class' => 'Vps_Component_Generator_Page_Table',
             'component' => array(
-                'empty' => 'Vpc_Basic_Empty_Component',
+                'editComponent' => 'Vpc_Basic_Empty_Component',
                 'flag' => 'Vps_Component_Generator_Components_Flag'
             ),
             'nameColumn' => 'name',
@@ -52,7 +52,7 @@ class Vps_Component_Generator_Components_Multiple extends Vpc_Abstract
         $ret['plugins'] = array(
             'Vps_Component_Generator_Components_Plugin'
         );
-        $ret['editComponents'] = array('box', 'multiBox', 'pageStatic');
+        $ret['editComponents'] = array('pseudoPageTable', 'multiBox', 'editComponent');
         return $ret;
     }
 }

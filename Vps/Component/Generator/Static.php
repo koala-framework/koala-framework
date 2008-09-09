@@ -76,6 +76,12 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
                 return false;
             }
         }
+        if ($select->getPart(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS)) {
+            $editComponents = Vpc_Abstract::getSetting($this->_class, 'editComponents');
+            if (!in_array($key, $editComponents)) {
+                return false;
+            }
+        }
         if ($select->hasPart(Vps_Component_Select::WHERE_ID)) {
             $value = $select->getPart(Vps_Component_Select::WHERE_ID);
             if ($this->_idSeparator.$key != $value) {
