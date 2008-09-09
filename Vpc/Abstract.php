@@ -162,7 +162,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             'generator' => $generator,
             'componentKey' => $componentKey
         );
-        $classes = self::getChildComponentClasses($class, $constraints);
+        $classes = array_values(self::getChildComponentClasses($class, $constraints));
         if (!isset($classes[0])) {
             throw new Vps_Exception("childComponentClass '$componentKey' for generator '$generator' not set for '$class'");
         }
