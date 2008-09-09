@@ -1,15 +1,56 @@
 <?php
 class Vps_Form_FormInFormTest extends PHPUnit_Framework_TestCase
 {
-    private $_field;
-    public function setUp()
+    public function testForm()
     {
-        $this->_field = new Vps_Form_Field_File('test12');
+        $form = new Vps_Form('form1');
+        $form->setModel(new Vps_Model_FnF(array('data'=>array(
+            array('id'=>10, 'test1'=>'foo')
+        ))));
+        $form->add(new Vps_Form_Field_TextField('test1'));
+        $form->add(new Vps_Form('form2'))
+            ->setModel(new Vps_Model_FnF(array('data'=>array(
+                array('id'=>10, 'test2'=>'bar')
+            ))))
+            ->setIdTemplate('{0}')
+            ->add(new Vps_Form_Field_TextField('test2'));
+
+        $this->assertNotNull($form->fields['test1']);
+        $this->assertNotNull($form->fields['test2']);
+        $this->assertNotNull($form->fields['form2']);
+        $form->setId(10);
+        $data = $form->load(null);
+        $this->assertEquals($data, array('form1_test1'=>'foo', 'form1_form2_test2'=>'bar'));
+
+        $data = array('form1_test1'=>'foox', 'form1_form2_test2'=>'barx');
+        $form->prepareSave(null, $data);
+        $form->save(null, $data);
+        $this->assertEquals($form->getRow(null)->test1, 'foox');
+        $this->assertEquals($form->fields['form2']->getRow($form->getRow(null))->test2, 'barx');
+
     }
 
-    public function testFoo()
+    public function testCreateOnFind()
     {
-        
+        $form = new Vps_Form('form1');
+        $form->setModel(new Vps_Model_FnF(array('data'=>array(
+            array('id'=>10, 'test1'=>'foo')
+        ))));
+        $form->add(new Vps_Form_Field_TextField('test1'));
+        $form->add(new Vps_Form('form2'))
+            ->setModel(new Vps_Model_FnF_CreateOnFind())
+            ->setIdTemplate('{0}')
+            ->add(new Vps_Form_Field_TextField('test2'));
+
+        $form->setId(10);
+        $data = $form->load(null);
+        $this->assertEquals($data, array('form1_test1'=>'foo', 'form1_form2_test2'=>''));
+
+        $data = array('form1_test1'=>'foox', 'form1_form2_test2'=>'barx');
+        $form->prepareSave(null, $data);
+        $form->save(null, $data);
+        $this->assertEquals($form->getRow(null)->test1, 'foox');
+        $this->assertEquals($form->fields['form2']->getRow($form->getRow(null))->test2, 'barx');
     }
 
 }

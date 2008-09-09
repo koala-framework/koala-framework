@@ -50,7 +50,11 @@ class Vps_Model_FnF extends Vps_Model_Abstract
             $order = current($order);
             $orderData = array();
             foreach ($data as $d) {
-                $orderData[$d['id']] = strtolower($d[$order['field']]);
+                if ($order['field'] == Vps_Model_Select::ORDER_RAND) {
+                    $orderData[$d['id']] = rand();
+                } else {
+                    $orderData[$d['id']] = strtolower($d[$order['field']]);
+                }
             }
             if ($order['direction'] == 'ASC') {
                 asort($orderData);

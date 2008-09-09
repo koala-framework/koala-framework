@@ -154,4 +154,14 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
 
         $this->_model->fetchAll("foo = 'bar'", 'orderKey', 10, 5);
     }
+
+    public function testOrderRand()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('order')
+            ->with($this->equalTo('RAND()'));
+        $select = $this->_model->select()
+            ->order(Vps_Model_Select::ORDER_RAND);
+        $this->_model->fetchAll($select);
+    }
 }

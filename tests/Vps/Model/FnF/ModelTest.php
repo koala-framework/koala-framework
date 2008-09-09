@@ -86,4 +86,26 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $select->limit(2);
         $this->_assertIds($model, $select, array(1, 2));
     }
+
+    public function testOrderRand()
+    {
+        $model = new Vps_Model_FnF();
+        $data = array();
+        for ($i=0;$i<100;$i++) {
+            $data[] = array('id'=>$i+1);
+        }
+        $model->setData($data);
+        $select = $model->select()
+            ->order(Vps_Model_Select::ORDER_RAND);
+        $ids1 = array();
+        foreach ($model->fetchAll($select) as $row) {
+            $ids1[] = $row->id;
+        }
+        $ids2 = array();
+        foreach ($model->fetchAll($select) as $row) {
+            $ids2[] = $row->id;
+        }
+        $this->assertTrue($ids1 != $ids2);
+    }
+
 }
