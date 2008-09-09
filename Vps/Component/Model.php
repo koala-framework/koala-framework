@@ -33,21 +33,32 @@ class Vps_Component_Model implements Vps_Model_Interface
 
     public function fetchAll($where=null, $order=null, $limit=null, $start=null)
     {
+        if (!is_object($where)) {
+            $select = $this->select();
+            if ($where) $select->where($where);
+            if ($order) $select->order($order);
+            if ($limit || $start) $select->limit($limit, $start);
+        } else {
+            $select = $where;
+        }
+
         $root = Vps_Component_Data_Root::getInstance();
-        if ($where['parent']) {
+
+        $where = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
+        if ($where && isset($where['parent_id'])) {
             $constraints = $this->_constraints;
-            if ($where['parent'] == 'root') {
+            if ($where['parent_id'] == 'root') {
                 $rowset = array();
                 foreach (Zend_Registry::get('config')->vpc->pageTypes->toArray() as $id => $name) {
                     $id = 'root-' . $id;
                     $rowset[] = new Vps_Component_Data_Category($id, $name);
                 }
             } else {
-                if (substr($where['parent'], 0, 5) == 'root-') {
-                    $constraints['type'] = substr($where['parent'], 5);
-                    $where['parent'] = 'root';
+                if (substr($where['parent_id'], 0, 5) == 'root-') {
+                    $constraints['type'] = substr($where['parent_id'], 5);
+                    $where['parent_id'] = 'root';
                 }
-                $page = $root->getComponentById($where['parent'], $this->_constraints);
+                $page = $root->getComponentById($where['parent_id'], $this->_constraints);
                 $rowset = $page->getChildComponents($constraints);
             }
         } else {
