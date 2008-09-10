@@ -65,6 +65,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     {
         if (is_array($select)) {
             $select = new Vps_Component_Select($select);
+        } else {
+            $select = clone $select;
         }
         $ret = $this;
         foreach ($this->_getIdParts($componentId) as $idPart) {

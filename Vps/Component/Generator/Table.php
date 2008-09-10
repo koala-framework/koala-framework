@@ -83,7 +83,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $parentData = $this->_getParentDataByRow($row);
         }
         if (!$parentData) {
-            throw new Vps_Exception("Can't find parentData in ".get_class($this));
+            throw new Vps_Exception("Can't find parentData in ".get_class($this)." for {$this->_class}");
         }
         return parent::_createData($parentData, $row, $select);
     }

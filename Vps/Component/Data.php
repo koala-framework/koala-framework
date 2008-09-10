@@ -242,6 +242,7 @@ class Vps_Component_Data
             }
 
             $generators = Vps_Component_Generator_Abstract::getStaticInstances($this->componentClass, $select);
+
             $this->_getChildComponentsForGenerators($this->_constraintsCache[$sc],
                                 $generators, $select, $limitCount);
             if (!$limitCount || count($this->_constraintsCache[$sc]) < $limitCount) {
