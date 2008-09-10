@@ -11,7 +11,9 @@ class Vpc_Directories_CategoryTree_View_Component
 
     public static function getItemCountCacheId($row)
     {
-        return 'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getModel()->getTable()).$row->id.'_itemCount';
+        // Row kann von hier (Model) oder von Admin (DB-Row) kommen
+        if ($row instanceof Vps_Model_Row_Interface) $row = $row->getRow();
+        return 'VpcDirectoriesCategoryTreeViewComponent_category'.get_class($row->getTable()).$row->id.'_itemCount';
     }
 
     public static function getItemCountCache()
