@@ -7,6 +7,7 @@ class Vpc_User_Detail_Guestbook_Component extends Vpc_Posts_Directory_Component
         $ret['componentName'] = trlVps('Guestbook');
         return $ret;
     }
+
     public function getSelect()
     {
         $select = parent::getSelect();
