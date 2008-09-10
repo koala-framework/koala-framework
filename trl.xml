@@ -2692,7 +2692,7 @@ a post has been reported for the following reason:</en>
 </text>
 <text>
 <en default="1">News.Top</en>
-<de>_</de>
+<de>News.Aktuelle</de>
 </text>
 <text>
 <en default="1">News.Show categories</en>
@@ -3050,6 +3050,10 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <text context="decimal separator">
 <en default="1">.</en>
 <de>,</de>
+</text>
+<text>
+<en default="1">Space</en>
+<de>Abstand</de>
 </text>
 </trl>
 

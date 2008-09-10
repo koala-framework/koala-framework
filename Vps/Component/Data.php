@@ -53,13 +53,10 @@ class Vps_Component_Data
                 'flags' => array('noIndex' => true),
                 'page' => false
             ));
-            
             $rel = $this->getPage()->_rel;
-            /*
-            TODO
-            if ($childs || $this->_hasFlags($this->componentClass, array('noIndex' => true))) {
+            if ($childs || Vps_Component_Abstract::getFlag($this->componentClass, 'noIndex')) {
                 $rel .= ' nofollow';
-            }*/
+            }
             return trim($rel);
         } else if ($var == 'filename') {
             return $this->getPseudoPage()->_filename;

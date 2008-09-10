@@ -80,9 +80,22 @@ class Vps_Component_Cache extends Zend_Cache_Core
         $this->_setCacheDir($componentClass);
         parent::save($data, $componentId, $tags);
     }
-
+    /**
+     * @param array/Vps_Component_Data/componentClass
+     * @param string componentId wenn erster parameter componentClass
+     **/
     public function remove($componentClass, $componentId = null)
     {
+        if (is_array($componentClass)) {
+            foreach ($componentClass as $c) {
+                $this->remove($c);
+            }
+            return;
+        }
+        if ($componentClass instanceof Vps_Component_Data) {
+            $componentId = $componentClass->componentId;
+            $componentClass = $componentClass->componentClass;
+        }
         if (!Vpc_Abstract::getSetting($componentClass, 'viewCache')) return;
         if ($componentId) {
             $this->_setCacheDir($componentClass);
