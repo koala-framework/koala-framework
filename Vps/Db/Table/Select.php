@@ -75,7 +75,10 @@ class Vps_Db_Table_Select extends Zend_Db_Table_Select
                         ."'searchLike' method of Vps_Db_Table_Select object");
                     }
                     if (in_array('*', $searchFields)) {
-                        $searchFields = $selectInfo['cols'];
+                        $searchFields = array_merge($searchFields, $selectInfo['cols']);
+                        foreach ($searchFields as $sfk => $sfv) {
+                            if ($sfv == '*') unset($searchFields[$sfk]);
+                        }
                     }
 
                     $wheres = array();
