@@ -7,9 +7,9 @@ class Vps_View_Component extends Vps_View
         $this->addScriptPath('application/views');
     }
 
-    public static function renderMasterComponent($component)
+    public static function renderMasterComponent($component, $masterTemplate = 'application/views/master/default.tpl')
     {
-        return self::renderComponent($component, false, true);
+        return self::renderComponent($component, false, $masterTemplate);
     }
     
     private static function _getComponent($componentId, $ignoreVisible)
@@ -18,7 +18,7 @@ class Vps_View_Component extends Vps_View
             ->getComponentById($componentId, array('ignoreVisible' => $ignoreVisible));
     }
 
-    public static function renderComponent($component, $ignoreVisible = false, $isMaster = false, array $plugins = array())
+    public static function renderComponent($component, $ignoreVisible = false, $masterTemplate = false, array $plugins = array())
     {
         if ($component instanceof Vps_Component_Data) {
             $componentClass = $component->componentClass;
@@ -31,33 +31,33 @@ class Vps_View_Component extends Vps_View
         
         // Falls es Cache gibt, Cache holen
         $cache = Vps_Component_Cache::getInstance();
-        $cacheId = $cache->getCacheIdFromComponentId($componentId, $isMaster);
+        $cacheId = $cache->getCacheIdFromComponentId($componentId, $masterTemplate);
         static $cacheDisabled;
         if (is_null($cacheDisabled)) {
             $cacheDisabled = Zend_Registry::get('config')->debug->componentCache->disable;
         }
 
-        if ($cacheDisabled || ($ret = $cache->load($componentClass, $cacheId))===false) {
+        if (!$cacheId || $cacheDisabled || ($ret = $cache->load($componentClass, $cacheId))===false) {
             if (!isset($component)) {
                 $component = self::_getComponent($componentId, $ignoreVisible);
             }
             if ($component) {
-                if ($isMaster) {
-                    $ret = Vps_View_Component::_renderMasterComponent($component);
+                if ($masterTemplate) {
+                    $ret = Vps_View_Component::_renderMasterComponent($component, $masterTemplate);
                 } else {
                     $ret = Vps_View_Component::_renderComponent($component);
                 }
                 $useCache = Vpc_Abstract::getSetting($component->componentClass, 'viewCache');
-                if (!$cacheDisabled && ($useCache || $isMaster)) {
+                if ($cacheId && !$cacheDisabled && ($useCache || $isMaster)) {
                     $cache->save($ret, $component->componentClass, $cacheId);
                 }
             } else {
                 $ret = "Component '$componentId' not found";
                 //todo: throw error
             }
-            Vps_Benchmark::count('rendered nocache', $componentId.($isMaster?' (master)':''));
+            Vps_Benchmark::count('rendered nocache', $componentId.($masterTemplate?' (master)':''));
         } else {
-            Vps_Benchmark::count('rendered cache', $componentId.($isMaster?' (master)':''));
+            Vps_Benchmark::count('rendered cache', $componentId.($masterTemplate?' (master)':''));
         }
 
         //plugins _nach_ im cache speichern ausführen
@@ -135,7 +135,7 @@ class Vps_View_Component extends Vps_View
         return $view->render($template);
     }
 
-    private static function _renderMasterComponent(Vps_Component_Data $componentData)
+    private static function _renderMasterComponent(Vps_Component_Data $componentData, $masterTemplate)
     {
         $templateVars = array();
         $templateVars['component'] = $componentData;
@@ -143,7 +143,7 @@ class Vps_View_Component extends Vps_View
         foreach ($componentData->getChildBoxes() as $box) {
             $templateVars['boxes'][$box->box] = $box;
         }
-        return self::_render('application/views/master/default.tpl', $templateVars);
+        return self::_render($masterTemplate, $templateVars);
     }
 
 
