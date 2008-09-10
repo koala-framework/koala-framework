@@ -183,6 +183,16 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
     initEditor : function() {
         Vps.Form.HtmlEditor.superclass.initEditor.call(this);
+        if (this.cssFiles) {
+            this.cssFiles.forEach(function(f) {
+                var s = this.doc.createElement('link');
+                s.setAttribute('type', 'text/css');
+                s.setAttribute('href', f);
+                s.setAttribute('rel', 'stylesheet');
+                this.doc.getElementsByTagName("head")[0].appendChild(s);
+            }, this);
+        }
+
         if (this.controllerUrl && this.enableTidy) {
             Ext.EventManager.on(this.doc, 'keypress', function(e) {
                 if(e.ctrlKey){
@@ -426,11 +436,6 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
     },
     getDocMarkup : function(){
         var ret = '<html><head><style type="text/css">body{border:0;margin:0;padding:3px;height:98%;cursor:text;}</style>\n';
-        if (this.cssFiles) {
-            this.cssFiles.forEach(function(f) {
-                ret += '<link rel="stylesheet" type="text/css" href="'+f+'" />\n';
-            }, this);
-        }
         ret += '</head><body class="webStandard vpcText"></body></html>';
         return ret;
     },
