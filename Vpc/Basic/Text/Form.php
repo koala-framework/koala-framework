@@ -17,7 +17,8 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
                 $field->$method($val);
             }
         }
-        $classes = Vpc_Abstract::getChildComponentClasses($class, 'child');
+        $generators = Vpc_Abstract::getSetting($this->getClass(), 'generators');
+        $classes = $generators['child']['component'];
         if ($classes['link']) {
             $c = Vpc_Admin::getInstance($classes['link'])->getExtConfig();
             $field->setLinkComponentConfig($c);
