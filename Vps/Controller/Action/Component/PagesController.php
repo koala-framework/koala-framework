@@ -14,6 +14,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         'root' => 'world'
         );
     protected $_buttons = array();
+    protected $_hasPosition = true;
 
     public function indexAction()
     {

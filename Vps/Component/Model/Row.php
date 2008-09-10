@@ -31,7 +31,10 @@ class Vps_Component_Model_Row implements Vps_Model_Row_Interface
         
     public function __set($name, $value)
     {
-        $this->_data->$name = $value;
+        $table = new Vps_Dao_Pages;
+        $row = $table->find($this->componentId)->current();
+        $row->$name = $value;
+        $row->save();
     }
 
     public function save()
