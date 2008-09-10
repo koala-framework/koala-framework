@@ -12,6 +12,7 @@ class Vpc_Basic_Link_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['child']['component'] = array(
             'linkTag' => 'Vpc_Basic_LinkTag_Component',
         );
+        $ret['flags']['searchContent'] = true;
         return $ret;
     }
 
@@ -22,10 +23,8 @@ class Vpc_Basic_Link_Component extends Vpc_Abstract_Composite_Component
         return $ret;
     }
 
-    public function getSearchVars()
+    public function getSearchContent()
     {
-        $ret = parent::getSearchVars();
-        $ret['text'] .= ' '.$this->_getRow()->text;
-        return $ret;
+        return $this->_getRow()->text;
     }
 }

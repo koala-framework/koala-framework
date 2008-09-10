@@ -7,7 +7,7 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract
 {
     public static function getSettings()
     {
-        return array_merge(parent::getSettings(), array(
+        $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'Html',
             'componentIcon' => new Vps_Asset('tag'),
             'tablename'     => 'Vpc_Basic_Html_Model',
@@ -17,6 +17,8 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract
                 'content' => Vpc_Abstract::LOREM_IPSUM
             )
         ));
+        $ret['flags']['searchContent'] = true;
+        return $ret;
     }
 
     public function getTemplateVars()
@@ -34,10 +36,8 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract
         return false;
     }
 
-    public function getSearchVars()
+    public function getSearchContent()
     {
-        $ret = parent::getSearchVars();
-        $ret['text'] .= ' '.strip_tags($this->_getRow()->content);
-        return $ret;
+        return strip_tags($this->_getRow()->content);
     }
 }

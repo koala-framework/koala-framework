@@ -193,11 +193,6 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $this->_row;
     }
 
-    public function getSearchVars()
-    {
-        return array('text' => '');
-    }
-
     /**
      * Gibt an, ob eine Komponente Inhalt hat
      *

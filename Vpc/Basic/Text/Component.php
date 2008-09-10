@@ -46,7 +46,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
 
         $ret['assets']['files'][] = new Vps_Assets_Dynamic('css',
                             array('Vpc_Basic_Text_StylesModel', 'getStylesUrl'));
-
+        $ret['flags']['searchContent'] = true;
         return $ret;
     }
 
@@ -89,18 +89,13 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
         return false;
     }
 
-    public function getSearchVars()
+    public function getSearchContent()
     {
-        $ret = parent::getSearchVars();
-        foreach ($this->_getComponentParts() as $part) {
-            if ($part instanceof Vpc_Abstract) {
-                foreach ($part->getSearchVars() as $k=>$i) {
-                    if (!isset($ret[$k])) $ret[$k] = '';
-                    $ret[$k] .= ' '.$i;
-                }
-            } else {
+        $ret = '';
+        foreach ($this->_getRow()->getContentParts() as $part) {
+            if (is_string($part)) {
                 $part = strip_tags($part);
-                $ret['text'] .= ' '.$part;
+                $ret .= ' '.$part;
             }
         }
         return $ret;

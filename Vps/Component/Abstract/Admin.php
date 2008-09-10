@@ -148,5 +148,9 @@ class Vps_Component_Abstract_Admin
         {
             Vps_Component_Cache::getInstance()->remove($this->_class);
         }
+
+        if (isset($row->component_id)) {
+            Vps_Dao_Index::updateIndex($row->component_id);
+        }
     }
 }
