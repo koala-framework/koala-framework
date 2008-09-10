@@ -4,7 +4,7 @@ class Vpc_User_List_Component extends Vpc_Directories_List_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['componentName'] = trlVps("Users.List");
+        $ret['componentName'] = trlVps("Forum.User-List");
         $ret['order'] = 'nickname';
         return $ret;
     }

@@ -8,7 +8,7 @@ class Vpc_Basic_Space_Component extends Vpc_Abstract
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(
-            'componentName' => 'Space',
+            'componentName' => trlVps('Space'),
             'tablename'     => 'Vpc_Basic_Space_Model',
             'default'       => array(
                 'height' => 20

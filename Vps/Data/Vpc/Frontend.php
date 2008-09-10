@@ -17,6 +17,20 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
         }
         $class = $data->componentClass;
         if (is_subclass_of($class, 'Vpc_Abstract')) {
+
+            $process = $data
+                ->getRecursiveChildComponents(array(
+                        'page' => false,
+                        'flags' => array('processInput' => true)
+                    ));
+            if (Vps_Component_Abstract::getFlag($data->componentClass, 'processInput')) {
+                $process[] = $data;
+            }
+            foreach ($process as $i) {
+                if (method_exists($i->getComponent(), 'processInput')) {
+                    $i->getComponent()->processInput(array());
+                }
+            }
             return Vps_View_Component::renderComponent($data, true);
         } else if (isset($row->settings)) {
             $settingsModel = new Vps_Model_Field(array(

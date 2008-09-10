@@ -186,6 +186,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             }
 
             $this->_componentsByClassCache[$cacheId] = $ret;
+
+            $benchmark->stop();
         }
         return $this->_componentsByClassCache[$cacheId];
     }

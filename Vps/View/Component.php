@@ -48,7 +48,7 @@ class Vps_View_Component extends Vps_View
                     $ret = Vps_View_Component::_renderComponent($component);
                 }
                 $useCache = Vpc_Abstract::getSetting($component->componentClass, 'viewCache');
-                if ($cacheId && !$cacheDisabled && ($useCache || $isMaster)) {
+                if ($cacheId && !$cacheDisabled && $useCache) {
                     $cache->save($ret, $component->componentClass, $cacheId);
                 }
             } else {

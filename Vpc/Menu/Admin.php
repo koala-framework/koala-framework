@@ -17,6 +17,7 @@ class Vpc_Menu_Admin extends Vpc_Admin
     {
         if ($row->getTable() instanceof Vps_Dao_Pages) {
             Vps_Component_Cache::getInstance()->remove($this->_class);
+            return;
         }
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
             foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $generator) {
@@ -24,8 +25,9 @@ class Vpc_Menu_Admin extends Vpc_Admin
                     isset($generator['table']) &&
                     isset($generator['showInMenu']) && $generator['showInMenu']))
                 {
-                    if (is_instance_of($generator['table'], $generator['table'])) {
-                        Vps_Component_Cache::getInstance()->remove($componentClass);
+                    if (is_instance_of(get_class($row->getTable()), $generator['table'])) {
+                        Vps_Component_Cache::getInstance()->remove($this->_class);
+                        return;
                     }
                 }
             }
