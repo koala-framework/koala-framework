@@ -145,9 +145,16 @@ class Vps_Component_Cache extends Zend_Cache_Core
         return true;
     }
     
-    public function getCacheIdFromComponentId($componentId, $isMaster = false, $isHasContent = false)
+    public function getCacheIdFromComponentId($componentId, $masterTemplate = false, $isHasContent = false)
     {
-        if ($isMaster) { $componentId .= '-master'; }
+        if ($masterTemplate) {
+            //nicht optimal, wer was besseres weis - bitte
+            if ($masterTemplate == 'application/views/master/default.tpl') {
+                $componentId .= '-master';
+            } else {
+                return false;
+            }
+        }
         if ($isHasContent) { $componentId .= '-hasContent'; }
         return str_replace('-', '__', $componentId);
     }

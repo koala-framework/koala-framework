@@ -265,7 +265,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             $showAccessDenied = false;
             $exception = false;
             try {
-                echo Vps_View_Component::renderComponent($this->getData(), null, true);
+                echo Vps_View_Component::renderMasterComponent($this->getData());
             } catch (Vpc_AccessDeniedException $e) {
                 $showAccessDenied = true;
             }
