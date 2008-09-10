@@ -14,7 +14,7 @@ class Vps_Dao_Row_Page extends Vps_Db_Table_Row_Abstract
                 $parentRow = $this->getTable()->find($this->parent_id)->current();
                 $this->type = $parentRow->type;
             } else {
-                $this->type = $this->parent_id;
+                $this->type = str_replace('root-', '', $this->parent_id);
                 $this->parent_id = null;
             }
         }
