@@ -100,15 +100,6 @@ abstract class Vps_Component_Generator_Abstract
                     $select->wherePseudoPage();
                 }
             }
-            if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
-                if (!is_subclass_of($generator['class'], 'Vps_Component_Generator_Table') &&
-                    $generator['class'] != 'Vps_Component_Generator_Table' &&
-                    !is_subclass_of($generator['class'], 'Vps_Component_Generator_Page') &&
-                    $generator['class'] != 'Vps_Component_Generator_Page'
-                ) {
-                    continue;
-                }
-            }
             $interfaces = array(
                 Vps_Component_Select::WHERE_PAGE => 'Vps_Component_Generator_Page_Interface',
                 Vps_Component_Select::WHERE_PSEUDO_PAGE => 'Vps_Component_Generator_PseudoPage_Interface',

@@ -87,7 +87,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         foreach ($generators as $generator) {
             $ret = array_merge($ret, $generator->getChildComponentClasses($select));
         }
-        return array_unique($ret);
+        return array_unique(array_values($ret));
     }
 
     public static function getIndirectChildComponentClasses($class, $select = array())
