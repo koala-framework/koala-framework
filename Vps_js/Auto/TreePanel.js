@@ -6,7 +6,7 @@ Vps.Auto.TreePanel = Ext.extend(Vps.Auto.SyncTreePanel, {
         if (node == undefined) {
             if (response.data.parent_id == null) { response.data.parent_id = 0; }
             parentNode = this.tree.getNodeById(response.data.parent_id);
-            if (parentNode.isLoaded()) {
+            if (parentNode.isExpanded()) {
                 response.uiProvider = eval(response.uiProvider);
                 node = new Ext.tree.AsyncTreeNode(response);
                 if (parentNode.firstChild) {
