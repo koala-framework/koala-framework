@@ -454,7 +454,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
             delete f.type;
             f.id = filter;
             var filterField = new type(f);
-			
+
             if (f.right) {
 				gridConfig.tbar.add('->');
 				f.label += ' ';
@@ -498,7 +498,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         if (meta.buttons.reload && !existingActions.reload) {
             gridConfig.tbar.add(this.getAction('reload'));
         }
-		
+
 		if (meta.helpText) {
             gridConfig.tbar.add('->');
             gridConfig.tbar.add(new Ext.Action({
@@ -525,7 +525,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         }
 
         this.grid = new Ext.grid.EditorGridPanel(gridConfig);
-        this.relayEvents(this.grid, ['beforeedit', 'aftereditcomplete']);
+        this.relayEvents(this.grid, ['beforeedit', 'aftereditcomplete', 'validateedit']);
 
         this.grid.on('cellclick', function(grid, rowIndex, columnIndex, e) {
             //damit bei doppelclick nur ein event ausgeführt wird
