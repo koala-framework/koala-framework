@@ -179,6 +179,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         $data['row'] = (object)$page;
         $data['parent'] = $parentData;
         $data['isHome'] = $page['is_home'];
+        $data['visible'] = $page['visible'];
         $data['type'] = $page['type'];
         return $data;
     }

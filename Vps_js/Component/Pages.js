@@ -91,12 +91,15 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
         }, this);
 
         tree.on('dblclick', function (o, e) {
+			var action;
             for (var i in this.editActions) {
                 if (!this.editActions[i].isHidden()) {
-                    this.editActions[i].execute(this.editActions[i].initialConfig);
-                    break;
+                    action = this.editActions[i];
                 }
             }
+			if (action) {
+                this.editActions[i].execute(this.editActions[i].initialConfig);
+			}
         }, this);
     },
 

@@ -39,7 +39,7 @@ class Vps_Component_Model_Row implements Vps_Model_Row_Interface
         if (isset($this->visible)) {
             $row = $this->_model->getTable()->find($this->componentId)->current();
             $row->visible = $this->visible;
-            $row->save();
+            return $row->save();
         }
     }
 
