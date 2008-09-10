@@ -11,7 +11,6 @@ abstract class Vpc_Box_Search_Component extends Vpc_Abstract
             'name'      => 'Ajax'
         );
 
-        $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'ExtUpdateManager';
         $ret['assets']['dep'][] = 'VpsClearOnFocus';
         $ret['assets']['files'][] = 'vps/Vpc/Box/Search/Component.js';
