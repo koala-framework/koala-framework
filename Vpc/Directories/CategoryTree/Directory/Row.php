@@ -19,7 +19,7 @@ class Vpc_Directories_CategoryTree_Directory_Row extends Vps_Db_Table_Row_Abstra
     {
         $path = $this->__toString();
         $upperRow = $this;
-        while (!is_null($upperRow = $upperRow->findParentRow(get_class($this->getTable())))) {
+        while (!is_null($upperRow = $upperRow->findParentRow(get_class($this->_getTable())))) {
             $path = $upperRow->__toString().$separator.$path;
         }
         return $path;
