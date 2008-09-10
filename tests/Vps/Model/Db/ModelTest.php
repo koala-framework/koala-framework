@@ -175,11 +175,11 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
         $this->_model->fetchAll($select);
     }
 
+    /**
+     * @expectedException Vps_Exception
+     */
     public function testNullWithoutSelect()
     {
-        $this->_dbSelect->expects($this->once())
-            ->method('where')
-            ->with($this->equalTo('ISNULL(foo)'));
         $this->_model->fetchAll(array('foo = ?'=>null));
     }
 }
