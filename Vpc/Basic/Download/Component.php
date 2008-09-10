@@ -12,6 +12,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
             'default'   => array(
             )
         ));
+        $ret['flags']['searchContent'] = true;
         $ret['generators']['child']['component']['downloadTag'] = 'Vpc_Basic_DownloadTag_Component';
         return $ret;
     }
@@ -72,10 +73,8 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
         return $return;
     }
 
-    public function getSearchVars()
+    public function getSearchContent()
     {
-        $ret = parent::getSearchVars();
-        $ret['text'] .= ' '.$this->_getRow()->infotext;
-        return $ret;
+        return $this->_getRow()->infotext;
     }
 }

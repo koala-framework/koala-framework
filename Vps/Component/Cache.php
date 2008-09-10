@@ -72,6 +72,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
                 }
             }
         }
+        Vps_Dao_Index::process();
     }
 
     public function save($data, $componentClass, $componentId, $tags = array())

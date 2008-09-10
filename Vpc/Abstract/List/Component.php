@@ -35,16 +35,4 @@ abstract class Vpc_Abstract_List_Component extends Vpc_Abstract
         }
         return false;
     }
-
-    public function getSearchVars()
-    {
-        $ret = parent::getSearchVars();
-        foreach ($this->getData()->getChildComponents() as $c) {
-            foreach ($c->getSearchVars() as $k=>$i) {
-                if (!isset($ret[$k])) $ret[$k] = '';
-                $ret[$k] .= ' '.$i;
-            }
-        }
-        return $ret;
-    }
 }
