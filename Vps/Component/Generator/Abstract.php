@@ -233,6 +233,9 @@ abstract class Vps_Component_Generator_Abstract
             if ($parent) {
                 $s = clone $select;
                 $s->whereInherit(true);
+                if ($select->hasPart(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS)) {
+                    $s->whereUnique(false);
+                }
                 $inheritGenerators = $parent->getRecursiveGenerators($s);
                 foreach ($inheritGenerators as $ig) {
                     if ($ig->getChildComponentClasses($inheritSelect)) {

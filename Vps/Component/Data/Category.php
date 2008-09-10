@@ -14,6 +14,9 @@ class Vps_Component_Data_Category extends Vps_Component_Data_Root
     public function getChildComponents($constraints = array())
     {
         $constraints['type'] = $this->componentId;
+        if (isset($constraints['hasEditComponents'])) {
+            $constraints['unique'] = false;
+        }        
         return parent::getChildComponents($constraints);
     }
 }
