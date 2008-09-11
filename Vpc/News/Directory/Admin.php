@@ -5,7 +5,9 @@ class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
     {
         $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
         $classes = Vpc_Abstract::getChildComponentClasses($detail, 'child');
-        $contentClass = $classes['content'];
+
+        $generators = Vpc_Abstract::getSetting($detail, 'generators');
+        $contentClass = $generators['child']['component']['content'];
 
         $plugins = array();
         foreach ($classes as $class) {
