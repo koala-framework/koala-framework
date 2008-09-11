@@ -77,7 +77,7 @@ class Vps_Benchmark
         echo round(microtime(true) - self::$_startTime, 2)." sec<br />\n";
         $load = @file_get_contents('/proc/loadavg');
         $load = explode(' ', $load);
-        echo "Load: ". $load[0];
+        echo "Load: ". $load[0]."<br />\n";
         echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br />\n";
         if (Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
             echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
