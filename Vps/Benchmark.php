@@ -75,6 +75,9 @@ class Vps_Benchmark
         echo '<div style="text-align:left;position:absolute;top:0;right:0;z-index:1;width:200px">';
         echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:1500px;position:absolute;padding:5px;">';
         echo round(microtime(true) - self::$_startTime, 2)." sec<br />\n";
+        $load = @file_get_contents('/proc/loadavg');
+        $load = explode(' ', $load);
+        echo "Load: ". $load[0];
         echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br />\n";
         if (Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
             echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
