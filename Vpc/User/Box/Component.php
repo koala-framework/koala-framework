@@ -6,16 +6,9 @@ class Vpc_User_Box_Component extends Vpc_Abstract_Composite_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['login'] = 'Vpc_User_Box_Login_Component';
         $ret['viewCache'] = false;
-        $ret['flags']['processInput'] = true;
         return $ret;
     }
     
-    public function processInput($postData)
-    {
-        $this->getData()->getChildComponent('-login')->getChildComponent('-form')
-            ->getComponent()->processInput($postData);
-    }
-
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
