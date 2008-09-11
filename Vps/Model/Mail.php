@@ -14,7 +14,7 @@ class Vps_Model_Mail extends Vps_Model_FnF //Vps_Model_Db
 
     // Die zwei Vps_Model_Field's sollten nicht überschrieben werden, da ansonsten
     // der spamschutz nicht mehr funktionieren könnte
-    // (muss hardcoded in /Vps/Controller/Action/Spam/SetController.php sein)
+    // (muss leider hardcoded in /Vps/Controller/Action/Spam/SetController.php sein)
     public function __construct(array $config = array())
     {
         parent::__construct($config);

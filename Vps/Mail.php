@@ -16,9 +16,31 @@ class Vps_Mail
             if (!$template instanceof Vps_Component_Data) {
                 throw new Vps_Exception("template must be instance of 'Vpc_Abstract' or 'Vps_Component_Data'");
             }
-            $template = Vpc_Admin::getComponentFile($template->componentClass, 'Component', 'html.tpl');
+            $template = $template->componentClass;
+        }
+
+        // hier ist $template entweder ein string des templates (zB 'Report', würde in views/mails liegen)
+        // oder $template ist ein komponenten-classname. Zuerst wird geprüft, ob das Tpl in views/mails liegt
+        $checkTemplate = $template;
+        if (substr($checkTemplate, 0, 1) != '/') $checkTemplate = "mails/$checkTemplate";
+
+        if (file_exists($checkTemplate)
+            || file_exists("application/views/$checkTemplate.txt.tpl")
+            || file_exists("application/views/$checkTemplate.html.tpl")
+            || file_exists(VPS_PATH."/views/$checkTemplate.txt.tpl")
+            || file_exists(VPS_PATH."/views/$checkTemplate.html.tpl")
+        ) {
+            $template = $checkTemplate;
+        } else {
+            $checkTemplate = $template;
+            $template = Vpc_Admin::getComponentFile($checkTemplate, 'Component', 'txt.tpl');
+            if (!$template) {
+                $template = Vpc_Admin::getComponentFile($checkTemplate, 'Component', 'html.tpl');
+            }
+            $template = str_replace('.txt.tpl', '', $template);
             $template = str_replace('.html.tpl', '', $template);
         }
+
         $this->_template = $template;
         $this->_masterTemplate = $masterTemplate;
 
@@ -173,7 +195,6 @@ class Vps_Mail
         }
 
         $template = "{$this->_template}";
-        if (substr($template, 0, 1) != '/') { $template = "mails/$template"; }
 
         // txt mail
         $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.txt.tpl");
