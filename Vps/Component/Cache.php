@@ -13,7 +13,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
     public function __construct()
     {
         parent::__construct(array(
-            'lifetime' => 30*60
+            'lifetime' => null
         ));
         
         $this->_backend = new Zend_Cache_Backend_File(array(
