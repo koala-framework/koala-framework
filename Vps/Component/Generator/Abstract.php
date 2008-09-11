@@ -226,7 +226,8 @@ abstract class Vps_Component_Generator_Abstract
         {
             $inheritSelect = clone $select;
             $inheritSelect->unsetPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
-            $parent = $component->getParentPage();
+            //$parent = $component->getParentPage();
+            $parent = Vps_Component_Data_Root::getInstance();
             if (!$parent && !$component instanceof Vps_Component_Data_Root) {
                 $parent = Vps_Component_Data_Root::getInstance();
             }
@@ -236,7 +237,7 @@ abstract class Vps_Component_Generator_Abstract
                 if ($select->hasPart(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS)) {
                     $s->whereUnique(false);
                 }
-                $inheritGenerators = $parent->getRecursiveGenerators($s);
+                $inheritGenerators = $parent->getGenerators($s);
                 foreach ($inheritGenerators as $ig) {
                     if ($ig->getChildComponentClasses($inheritSelect)) {
                         $ret[] = $ig;
