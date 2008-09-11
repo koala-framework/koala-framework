@@ -6,7 +6,7 @@ Vps.onContentReady(function() {
         var els = {
             searchField  : Ext.get(Ext.DomQuery.select('.searchField', searchBox)[0]),
             searchResult : Ext.get(Ext.DomQuery.select('.searchResult', searchBox)[0]),
-            ajaxUrl      : Ext.get(Ext.DomQuery.select('.ajaxUrl', searchBox)[0]),
+            ajaxUrl      : Ext.get(Ext.DomQuery.select('.ajaxUrl', searchBox)[0])
         };
         els.searchResult.alignTo(els.searchField, 'tl-bl');
         els.searchResult.hide();
