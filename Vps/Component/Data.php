@@ -296,7 +296,7 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->wherePage(true);
-        return $this->getChildComponents($select);
+        return $this->getRecursiveChildComponents($select);
     }
 
     public function getChildPseudoPages($select = array())
@@ -307,7 +307,7 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->wherePseudoPage(true);
-        return $this->getChildComponents($select);
+        return $this->getRecursiveChildComponents($select);
     }
 
     public function getChildBoxes($select = array())
