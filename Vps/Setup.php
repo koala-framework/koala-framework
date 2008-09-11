@@ -239,7 +239,10 @@ class Vps_Setup
         }
 
         $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
-        if (Zend_Registry::get('config')->preLogin && empty($sessionPhpAuthed->success)) {
+        if (php_sapi_name() != 'cli' && 
+            Zend_Registry::get('config')->preLogin && 
+            empty($sessionPhpAuthed->success)
+        ) {
             if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
                 $loginResponse = Zend_Registry::get('userModel')
                     ->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
