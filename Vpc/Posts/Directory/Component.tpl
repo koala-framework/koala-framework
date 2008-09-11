@@ -1,4 +1,4 @@
 <div class="<?=$this->cssClass?>">
-    <?=$this->componentLink($this->write)?>
+    <div class="newEntry"><?=$this->componentLink($this->write)?></div>
     <?=$this->component($this->view)?>
 </div>

@@ -60,7 +60,11 @@
 }
 .$cssClass .vpsFormFieldFileInner div.deleteImage {
     float: right;
-    margin-left: 25px;
+    margin-left: 10px;
+    margin-right: 2px;
+}
+.ext-ie7 .$cssClass .vpsFormFieldFileInner div.deleteImage {
+    margin-right: 4px;
 }
 .ext-safari .$cssClass .vpsFormFieldFileInner div.deleteImage {
     float: right;
@@ -77,9 +81,6 @@
 .ext-ie6 .$cssClass .vpsFormFieldFileInner .vpsFormFieldFileInfo {
     width: 200px;
 }
-.ext-gecko .$cssClass .vpsFormFieldFileInner div.deleteImage {
-    margin-left: 45px;
-}
-.ext-gecko .$cssClass .vpsFormFieldFileInner .vpsFormFieldFileInfo {
-    margin-right: -20px;
+.ext-ie7 .$cssClass .vpsFormFieldFileInner .vpsFormFieldFileInfo {
+    width: 130px;
 }
