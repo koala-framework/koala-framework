@@ -48,13 +48,13 @@ class Vps_Component_Data
             } while ($page = $page->getParentPseudoPage());
             return '/'.implode('/', array_reverse($filenames));
         } else if ($var == 'rel') {
-            
+            /*
             $childs = $this->getPage()->getRecursiveChildComponents(array(
                 'flags' => array('noIndex' => true),
                 'page' => false
-            ));
+            ));*/
             $rel = $this->getPage()->_rel;
-            if ($childs || Vps_Component_Abstract::getFlag($this->componentClass, 'noIndex')) {
+            if (/*$childs || */Vps_Component_Abstract::getFlag($this->getPage()->componentClass, 'noIndex')) {
                 $rel .= ' nofollow';
             }
             return trim($rel);
@@ -296,7 +296,7 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->wherePage(true);
-        return $this->getRecursiveChildComponents($select);
+        return $this->getChildComponents($select);
     }
 
     public function getChildPseudoPages($select = array())
@@ -307,7 +307,7 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->wherePseudoPage(true);
-        return $this->getRecursiveChildComponents($select);
+        return $this->getChildComponents($select);
     }
 
     public function getChildBoxes($select = array())
@@ -318,7 +318,7 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->whereBox(true);
-        return $this->getRecursiveChildComponents($select);
+        return $this->getChildComponents($select);
     }
 
     public function getChildMultiBoxes($select = array())
@@ -329,7 +329,7 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->whereMultiBox(true);
-        return $this->getRecursiveChildComponents($select);
+        return $this->getChildComponents($select);
     }
 
     /**

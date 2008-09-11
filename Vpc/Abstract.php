@@ -229,7 +229,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             header('Content-Type: text/html; charset=utf-8');
 
             $process = $this->getData()
-                ->getRecursiveChildComponents(array(
+                ->getChildComponents(array(
                         'page' => false,
                         'flags' => array('processInput' => true)
                     ));

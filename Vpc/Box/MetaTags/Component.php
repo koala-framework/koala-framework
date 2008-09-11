@@ -4,10 +4,12 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
+        $components = array();
+        /*
         $components = $this->getData()->getPage()->getRecursiveChildComponents(array(
             'page' => false,
             'flags' => array('metaTags' => true)
-        ));
+        ));*/
         if (Vpc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'metaTags')) {
             $components[] = $this->getData()->getPage();
         }
@@ -20,12 +22,13 @@ class Vpc_Box_MetaTags_Component extends Vpc_Abstract
             }
         }
         foreach ($ret['metaTags'] as &$i) $i = trim($i);
+        /*
         $components = $this->getData()->getPage()->getRecursiveChildComponents(array(
             'page' => false,
             'limit' => 1,
             'flags' => array('noIndex' => true)
-        ));
-        if ($components || Vpc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'noIndex')) {
+        ));*/
+        if (/*$components || */Vpc_Abstract::getFlag($this->getData()->getPage()->componentClass, 'noIndex')) {
             if (isset($ret['metaTags']['robots'])) {
                 $ret['metaTags']['robots'] .= ',';
             } else {

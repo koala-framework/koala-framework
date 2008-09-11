@@ -10,7 +10,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
             $component = $parentData;
             while ($component && $component->componentClass != $this->_class) {
                 if ($component->componentClass != $this->_class) {
-                    foreach ($component->getRecursiveChildComponents(array('page' => false, 'unique' => true, 'inherit' => true)) as $c) {
+                    foreach ($component->getChildComponents(array('page' => false, 'unique' => true, 'inherit' => true)) as $c) {
                         if ($c->getParent()->componentClass == $this->_class) {
                             $component = $c->getParent();
                         }
