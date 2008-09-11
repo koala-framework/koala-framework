@@ -3001,11 +3001,11 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">'%value%' is less than %min% characters long</en>
-<de>'%value%' ist kürzer als %min% Zeichen</de>
+<de>'%value%' ist k&#xFC;rzer als %min% Zeichen</de>
 </text>
 <text>
 <en default="1">'%value%' is greater than %max% characters long</en>
-<de>'%value%' ist länger als %max% Zeichen</de>
+<de>'%value%' ist l&#xE4;nger als %max% Zeichen</de>
 </text>
 <text>
 <en default="1">'%value%' appears to be an IP address, but IP addresses are not allowed</en>
@@ -3033,7 +3033,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">'%value%' does not appear to be a valid local network name</en>
-<de>'%value%' scheint kein gültiger Netzwerkname zu sein</de>
+<de>'%value%' scheint kein g&#xFC;ltiger Netzwerkname zu sein</de>
 </text>
 <text>
 <en default="1">'%value%' appears to be a local network name but local network names are not allowed</en>
@@ -3041,7 +3041,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">chosen thread</en>
-<de>Ausgewähltes Thema</de>
+<de>Ausgew&#xE4;hltes Thema</de>
 </text>
 <text>
 <en default="1">Please choose a group, in which the thread should be moved</en>
@@ -3054,6 +3054,54 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <text>
 <en default="1">Space</en>
 <de>Abstand</de>
+</text>
+<text>
+<en default="1">ANBs</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Close</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Link</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">No entries were found.</en>
+<de>Es konnten keine Einträge gefunden werden.</de>
+</text>
+<text>
+<en default="1">Forum.Forum</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">New entry in your guestbook</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Posts.Last Posts</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">User ID ist invalid.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Forum.User-List</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">News.News</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Access Denied</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">You are not allowed to enter this page.</en>
+<de>_</de>
 </text>
 </trl>
 
