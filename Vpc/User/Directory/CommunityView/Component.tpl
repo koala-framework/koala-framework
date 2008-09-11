@@ -5,9 +5,9 @@
         <?php foreach ($this->items as $item) { ?>
             <li>
                 <?=$this->componentLink($item);?>
-                <?=$this->component($item->getChildComponent('-general')->getChildComponent('-rating'));?>
-                (<?=trlVps('Member since')?>:
-                    <?=$this->date($item->row->created);?>)
+                <span class="rating"><?=$this->component($item->getChildComponent('-general')->getChildComponent('-rating'));?></span>
+                <span class="memberSince">(<?=trlVps('Member since')?>:
+                    <?=$this->date($item->row->created);?>)</span>
             </li>
         <?php } ?>
     </ul>

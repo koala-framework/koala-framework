@@ -1,10 +1,10 @@
 .$cssClass {
-    position: relative;
     margin: 0px auto;
     padding: 5px 0px;
     text-align: center;
     line-height: 20px;
     z-index: 1000;
+    clear: both;
 }
 .$cssClass a {
     padding: 1px 3px;
