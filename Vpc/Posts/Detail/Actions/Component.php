@@ -49,23 +49,13 @@ class Vpc_Posts_Detail_Actions_Component extends Vpc_Abstract_Composite_Componen
     public function mayEditPost()
     {
         $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
+        if ($authedUser->role == 'admin') return true;
         if (!$authedUser) return false;
-        // Gehört eigentlich zu Forum
-        $component = $this->getData()->getParentPage()->getComponent();
-        $mayModerate = true;
-        if ($component instanceof Vpc_Forum_Group_Component) {
-            if (!$component->mayModerate()) $mayModerate = false;
-        }
-        return $authedUser->id == $this->getData()->parent->row->user_id || $mayModerate;
+        return $authedUser->id == $this->getData()->parent->row->user_id;
     }
 
     public function mayDeletePost()
     {
         return $this->mayEditPost();
-    }
-    
-    private function _mayModerate()
-    {
-        return true;
     }
 }
