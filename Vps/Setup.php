@@ -360,6 +360,7 @@ class Vps_Setup
         $view->requestUri = $_SERVER['REDIRECT_URL'];
         echo $view->render('error404.tpl');
         Vps_Benchmark::shutDown();
+        Vps_Benchmark::output();
         exit;
 
     }
@@ -371,6 +372,7 @@ class Vps_Setup
         $view->requestUri = $_SERVER['REDIRECT_URL'];
         echo $view->render('error401.tpl');
         Vps_Benchmark::shutDown();
+        Vps_Benchmark::output();
         exit;
 
     }
