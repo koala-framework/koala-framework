@@ -14,8 +14,11 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['threads'] = array();
+        $where = array(
+            'visible = ?' => 1
+        );
         $rows = $this->getTable()->fetchAll(
-            null, 'create_time DESC', $this->_getSetting('numberOfThreads')
+            $where, 'create_time DESC', $this->_getSetting('numberOfThreads')
         );
         foreach ($rows as $row) {
             $thread = Vps_Component_Data_Root::getInstance()->getComponentById($row->component_id . '_' . $row->id);

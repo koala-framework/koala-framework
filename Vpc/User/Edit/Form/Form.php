@@ -13,6 +13,7 @@ class Vpc_User_Edit_Form_Form extends Vps_Form
         foreach ($classes as $component => $class) {
             if ($forms == 'all' || in_array($component, $forms)) {
                 $form = Vpc_Abstract_Form::createChildComponentForm($detailsClass, '-'.$component);
+                $form->setIdTemplate("users_{0}-$component");
                 if ($form) {
                     $this->add($form);
                 }

@@ -35,6 +35,7 @@ class Vps_Component_Model_Row implements Vps_Model_Row_Interface
         $row = $table->find($this->componentId)->current();
         $row->$name = $value;
         $row->save();
+        $this->_data->$name = $value;
     }
 
     public function save()

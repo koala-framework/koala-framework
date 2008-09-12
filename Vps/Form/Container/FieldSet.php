@@ -19,7 +19,7 @@ class Vps_Form_Container_FieldSet extends Vps_Form_Container_Abstract
         return $this;
     }
 
-    public function validate(Vps_Model_Row_Interface $row, $postData)
+    public function validate($row, $postData)
     {
         if ($this->_checkboxHiddenField) {
             $n = $this->_checkboxHiddenField->getFieldName();
