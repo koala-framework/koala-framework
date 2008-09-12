@@ -237,8 +237,24 @@ abstract class Vps_Component_Generator_Abstract
                 if ($select->hasPart(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS)) {
                     $s->whereUnique(false);
                 }
-                $inheritGenerators = $parent->getGenerators($s);
+                $inheritGenerators = Vps_Component_Generator_Abstract::getInstances($parent, $s);
+                $ownBoxGenerators = self::getStaticInstances($component->componentClass, array('box'=>true));
                 foreach ($inheritGenerators as $ig) {
+                    if ($ig instanceof Vps_Component_Generator_Box_Interface) {
+                        foreach ($ownBoxGenerators as $obg) {
+                            $hasSameBox = false;
+                            foreach ($obg->getBoxes() as $b) {
+                                if (in_array($b, $ig->getBoxes())) {
+                                    $hasSameBox = true;
+                                    break;
+                                }
+                            }
+                            if ($hasSameBox && $obg->getPriority() > $ig->getPriority()
+                            ) {
+                                continue 2;
+                            }
+                        }
+                    }
                     if ($ig->getChildComponentClasses($inheritSelect)) {
                         $ret[] = $ig;
                     }

@@ -156,11 +156,11 @@ class Vps_Component_Data
             $childSelect = new Vps_Component_Select($childSelect);
         }
         $ret = $this->getChildComponents($select);
-        
         if ($ret && $select->getPart(Vps_Component_Select::LIMIT_COUNT) == 1) {
             return $ret;
         }
         $childSelect = $this->_formatChildConstraints($select, $childSelect);
+
         foreach ($this->getChildComponents($childSelect) as $component) {
             $ret = array_merge($ret, $component->getRecursiveChildComponents($select, $childSelect));
         }
@@ -183,6 +183,7 @@ class Vps_Component_Data
         }
         $classes = Vpc_Abstract::getIndirectChildComponentClasses($this->componentClass, $select);
         $page = $this;
+        /*
         while (1) {
             if ($page instanceof Vps_Component_Data_Root) break;
             $page = $page->getParentPage();
@@ -191,6 +192,10 @@ class Vps_Component_Data
                 Vpc_Abstract::getIndirectChildComponentClasses($page->componentClass, $select)
             );
         }
+        */
+        $classes = array_merge($classes,
+            Vpc_Abstract::getIndirectChildComponentClasses(Vps_Component_Data_Root::getComponentClass(), $select)
+        );
         $childSelect->whereComponentClasses(array_unique($classes));
         return $childSelect;
     }
@@ -262,6 +267,7 @@ class Vps_Component_Data
             }
 
             foreach ($generator->getChildData($this, $generatorSelect) as $data) {
+                /*
                 if (isset($data->box)) {
                     foreach ($ret as $odata) {
                         if (isset($odata->box) && $odata->box == $data->box) {
@@ -274,6 +280,7 @@ class Vps_Component_Data
                         }
                     }
                 }
+                */
                 if (isset($ret[$data->componentId])) {
                     throw new Vps_Exception("Id not unique: {$data->componentId}");
                 }
