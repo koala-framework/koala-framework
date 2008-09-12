@@ -425,6 +425,6 @@ abstract class Vps_Component_Generator_Abstract
 
     public function toDebug()
     {
-        return print_r($this->_settings, true);
+        return "<pre>".print_r($this->_settings, true)."</pre>";
     }
 }
