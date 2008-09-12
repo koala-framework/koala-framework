@@ -11,11 +11,4 @@ class Vpc_Forum_FeedList_Component extends Vpc_Forum_AllPostsList_Component
         );
         return $ret;
     }
-
-    public function getSelect()
-    {
-        $ret = parent::getSelect();
-        $ret->limit(10);
-        return $ret;
-    }
 }
