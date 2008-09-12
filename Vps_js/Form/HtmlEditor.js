@@ -359,17 +359,36 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             var el = this.getFocusElement('block');
             var selectedStyle = false;
             if (el) {
+                //zuerst alle mit einem className
                 for(var i in this.blockStyles) {
                     var selector = i.split('.');
                     var tag = selector[0];
                     var className = selector[1];
-                    if ((!tag || el.tagName.toLowerCase() == tag)
-                        && (!className || el.className.toLowerCase() == className)) {
+                    if (className
+                        && (!tag || el.tagName.toLowerCase() == tag)
+                        && el.className.toLowerCase() == className) {
                         if(i != this.blockStylesSelect.dom.value){
                             this.blockStylesSelect.dom.value = i;
                         }
                         selectedStyle = true;
                         break;
+                    }
+                }
+
+                //falls nichts passend alle nochmal
+                if (!selectedStyle) {
+                    for(var i in this.blockStyles) {
+                        var selector = i.split('.');
+                        var tag = selector[0];
+                        var className = selector[1];
+                        if ((!tag || el.tagName.toLowerCase() == tag)
+                            && (!className || el.className.toLowerCase() == className)) {
+                            if(i != this.blockStylesSelect.dom.value){
+                                this.blockStylesSelect.dom.value = i;
+                            }
+                            selectedStyle = true;
+                            break;
+                        }
                     }
                 }
             }
