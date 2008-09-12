@@ -65,7 +65,7 @@ class Vps_Form_Container_Cards extends Vps_Form_Container_Abstract
         return $ret;
     }
 
-    public function validate(Vps_Model_Row_Interface $row, $postData)
+    public function validate($row, $postData)
     {
         foreach ($this->fields as $card) {
             if ($card != $this->_combobox

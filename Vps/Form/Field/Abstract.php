@@ -107,7 +107,7 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
         return $postData;
     }
 
-    public function validate(Vps_Model_Row_Interface $row, $postData)
+    public function validate($row, $postData)
     {
         $this->_addValidators();
 

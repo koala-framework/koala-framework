@@ -238,7 +238,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             }
         }
     }
-    public function validate(Vps_Model_Row_Interface $row, $postData)
+    public function validate($row, $postData)
     {
         $ret = array();
 

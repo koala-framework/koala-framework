@@ -59,7 +59,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         if ($ret == '' || $ret == 'null') $ret = null;
         return $ret;
     }
-    public function validate(Vps_Model_Row_Interface $row, $postData)
+    public function validate($row, $postData)
     {
         $ret = parent::validate($row, $postData);
 
