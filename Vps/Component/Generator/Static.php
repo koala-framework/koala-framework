@@ -9,6 +9,7 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
         if (isset($this->_settings['unique']) && $this->_settings['unique']) {
             $component = $parentData;
             while ($component && $component->componentClass != $this->_class) {
+                /*
                 if ($component->componentClass != $this->_class) {
                     foreach ($component->getChildComponents(array('page' => false, 'unique' => true, 'inherit' => true)) as $c) {
                         if ($c->getParent()->componentClass == $this->_class) {
@@ -16,12 +17,12 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
                         }
                     }
                 }
+                */
                 if ($component->componentClass != $this->_class) {
-                    if ($component->parent instanceof Vps_Component_Data_Root) {
-                        $component = $component->getParent();
-                    } else {
-                        $component = $component->getParentPage();
-                    }
+                    //$component = $component->getParentPage();
+                    //if (!$component) {
+                        $component = Vps_Component_Data_Root::getInstance();
+                    //}
                 }
             }
             if ($component) {
