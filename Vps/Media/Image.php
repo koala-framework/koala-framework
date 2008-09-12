@@ -188,8 +188,9 @@ class Vps_Media_Image
             return false;
 
         }
-
-        chmod($target, 0644);
+        if (file_exists($target)) {
+            chmod($target, 0644);
+        }
         return true;
     }
 }
