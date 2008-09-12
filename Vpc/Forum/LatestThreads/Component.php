@@ -15,7 +15,7 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
         $ret = parent::getTemplateVars();
         $ret['threads'] = array();
         $where = array(
-            'visible = ?' => 1
+            //'visible = ?' => 1 verursacht fehler
         );
         $rows = $this->getTable()->fetchAll(
             $where, 'create_time DESC', $this->_getSetting('numberOfThreads')
