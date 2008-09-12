@@ -330,7 +330,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                     } catch (Vpc_Exception $e) {
                         $srcRow = false;
                     }
-                    $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link']);
+                    $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
                     if ($srcRow && class_exists($linkClasses[$srcRow->component])) {
                         $linkTable = Vpc_Abstract::createTable($linkClasses[$srcRow->component]);
                         $srcLinkRow = $linkTable->findRow($part['componentId'].'-link');
@@ -348,7 +348,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                     }
                 }
                 $destRow = $table->createRow();
-                $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link']);
+                $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
                 if (preg_match('#^mailto:#', $part['href'], $m)) {
                     if (isset($linkClasses['mail']) && $linkClasses['mail']) {
                         $destRow->component = 'mail';
@@ -361,7 +361,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                 if (!$destRow->component) continue; //kein solcher-link möglich
                 $this->addChildComponentRow('link', $destRow);
                 $destRow->save();
-                $destClasses =  Vpc_Abstract::getChildComponentClasses($destRow->getTable()->getComponentClass());
+                $destClasses =  Vpc_Abstract::getChildComponentClasses($destRow->getTable()->getComponentClass(), 'link');
 
                 $row = Vpc_Abstract::createTable($destClasses[$destRow->component])->createRow();
                 if ($destRow->component == 'extern') {
