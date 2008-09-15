@@ -6,16 +6,11 @@ class Vpc_Basic_Text_Generator extends Vps_Component_Generator_Table
         return substr($row->component, 0, 1).$row->nr;
     }
 
-    protected function _getSelect($parentData, $constraints)
+    protected function _formatSelectId(Vps_Component_Select $select)
     {
-        if (isset($constraints['id'])) {
-            $id = $constraints['id'];
-            unset($constraints['id']);
-        }
-        $select = parent::_getSelect($parentData, $constraints);
-        if (!$select) return null;
-
-        if (isset($id)) {
+        if ($select->hasPart(Vps_Model_Select::WHERE_ID)) {
+            $id = $select->getPart(Vps_Model_Select::WHERE_ID);
+            $select->unsetPart(Vps_Model_Select::WHERE_ID);
             if (substr($id, 0, 2)=='-l') {
                 $select->where("component = 'link'");
             } else if (substr($id, 0, 2)=='-d') {
