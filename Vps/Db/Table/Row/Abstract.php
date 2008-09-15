@@ -201,6 +201,16 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     {
         parent::_insert();
         $this->_updateFilters();
+        foreach ($this->getTable()->getAutoFill() as $field => $template) {
+            $value = $template;
+            preg_match_all("/{(.*)}/U", $template, $matches);
+            foreach ($matches[0] as $key => $match) {
+                $fn = $matches[1][$key];
+                $value = str_replace($match, $this->$fn, $value);
+            }
+            $this->$field = $value;
+        }
+        
     }
 
     protected function _update()
