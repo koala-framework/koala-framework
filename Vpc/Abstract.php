@@ -16,7 +16,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $this->_data = $data;
         parent::__construct();
     }
-    
+
     public function getData()
     {
         return $this->_data;
