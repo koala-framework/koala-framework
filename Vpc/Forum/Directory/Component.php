@@ -77,12 +77,12 @@ class Vpc_Forum_Directory_Component extends Vpc_Abstract
 
                 // countPosts
                 $select = $postsGenerator->select(null);
-                $select = $postsGenerator->joinWithParentGenerator($select, $threadGenerator, $group, '-posts');
+                $select = $postsGenerator->joinWithParentGenerator($select, $threadGenerator, $group);
                 $group->countPosts = $postsGenerator->countChildData(null, $select);
 
                 // lastPost
                 $select = $postsGenerator->select(null);
-                $select = $postsGenerator->joinWithParentGenerator($select, $threadGenerator, $group, '-posts');
+                $select = $postsGenerator->joinWithParentGenerator($select, $threadGenerator, $group);
                 $select->order('create_time', 'DESC');
                 $select->limit(1);
                 $group->lastPost = current($postsGenerator->getChildData(null, $select));

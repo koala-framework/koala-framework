@@ -7,6 +7,7 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
         $ret['componentName'] = trlVps('Forum.Latest Threads');
         $ret['tablename'] = 'Vpc_Forum_Group_Model';
         $ret['numberOfThreads'] = 5;
+        $ret['forumClass'] = 'Vpc_Forum_Directory_Component';
         return $ret;
     }
 
@@ -14,14 +15,24 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['threads'] = array();
-        $where = array(
-            //'visible = ?' => 1 verursacht fehler
-        );
-        $rows = $this->getTable()->fetchAll(
-            $where, 'create_time DESC', $this->_getSetting('numberOfThreads')
-        );
-        foreach ($rows as $row) {
-            $thread = Vps_Component_Data_Root::getInstance()->getComponentById($row->component_id . '_' . $row->id);
+        
+        $forum = Vps_Component_Data_Root::getInstance()->getComponentByClass($this->_getSetting('forumClass'));
+        $groupComponentClass = Vpc_Abstract::getChildComponentClass($forum->componentClass, 'groups');
+        $threadComponentClass = Vpc_Abstract::getChildComponentClass($groupComponentClass, 'detail');
+        $postsComponentClass = Vpc_Abstract::getChildComponentClass($threadComponentClass, 'child', 'posts');
+        
+        $groupGenerator = Vps_Component_Generator_Abstract::getInstance($forum->componentClass, 'groups');
+        $threadGenerator = Vps_Component_Generator_Abstract::getInstance($groupComponentClass, 'detail');
+        $postGenerator = Vps_Component_Generator_Abstract::getInstance($postsComponentClass, 'detail');
+        
+        $select = $postGenerator->select(null);
+        $select = $postGenerator->joinWithParentGenerator($select, $threadGenerator);
+        $select = $threadGenerator->joinWithParentGenerator($select, $groupGenerator, $forum);
+        $select->limit($this->_getSetting('numberOfThreads'));
+        $select->order('create_time', 'DESC');
+        $posts = $postGenerator->getChildData(null, $select);
+        foreach ($posts as $post) {
+            $thread = $post->parent->parent;
             foreach ($thread->getComponent()->getThreadVars() as $key => $val) {
                 $thread->$key = $val;
             }

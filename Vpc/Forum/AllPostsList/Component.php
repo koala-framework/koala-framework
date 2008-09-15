@@ -9,8 +9,8 @@ class Vpc_Forum_AllPostsList_Component extends Vpc_Directories_List_Component
     public function getSelect()
     {
         $ret = parent::getSelect();
-        /*
-        $groupComponentClass = Vpc_Abstract::getChildComponentClass($this->getData()->parent->componentClass, 'groups');
+        $forum = $this->getData()->parent;
+        $groupComponentClass = Vpc_Abstract::getChildComponentClass($forum->componentClass, 'groups');
         $threadComponentClass = Vpc_Abstract::getChildComponentClass($groupComponentClass, 'detail');
         $postsComponentClass = Vpc_Abstract::getChildComponentClass($threadComponentClass, 'child', 'posts');
         
@@ -20,8 +20,8 @@ class Vpc_Forum_AllPostsList_Component extends Vpc_Directories_List_Component
         $postGenerator = Vps_Component_Generator_Abstract
                                 ::getInstance($postsComponentClass, 'detail');
         
-        $postGenerator->joinWithParentGenerator($ret, $threadGenerator, null, '-posts');
-        $threadGenerator->joinWithParentGenerator($ret, $groupGenerator, $this->getData()->parent);*/
+        $postGenerator->joinWithParentGenerator($ret, $threadGenerator, null);
+        $threadGenerator->joinWithParentGenerator($ret, $groupGenerator, $forum);
         return $ret;
     }
 }
