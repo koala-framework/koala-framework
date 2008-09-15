@@ -1,7 +1,7 @@
 <div class="<?=$this->cssClass?>">
     <? if (isset($this->searchForm)) echo $this->component($this->searchForm); ?>
     <? if (isset($this->paging)) echo $this->component($this->paging); ?>
-    <? if (!count($this->items)) { ?>
+    <? if ($this->formSaved && !count($this->items)) { ?>
         <div class="noEntries"><?= $this->placeholder['noEntriesFound']; ?></div>
     <? } else { ?>
         <ul>
