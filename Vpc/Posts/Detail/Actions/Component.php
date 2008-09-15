@@ -49,8 +49,8 @@ class Vpc_Posts_Detail_Actions_Component extends Vpc_Abstract_Composite_Componen
     public function mayEditPost()
     {
         $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
-        if ($authedUser->role == 'admin') return true;
         if (!$authedUser) return false;
+        if ($authedUser->role == 'admin') return true;
         return $authedUser->id == $this->getData()->parent->row->user_id;
     }
 
