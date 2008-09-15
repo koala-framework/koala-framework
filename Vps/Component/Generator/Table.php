@@ -13,25 +13,21 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         return $select;
     }
     
-    public function joinWithChildGenerator($select, $childGenerator, $appendComponentId = '')
+    public function joinWithChildGenerator($select, $childGenerator)
     {
         $table = $this->_getModel()->getTable()->info('name');
         $childTable = $childGenerator->_getModel()->getTable()->info('name');
-        $concat = "{$table}.component_id, '{$this->_idSeparator}', {$table}.id";
-        if ($appendComponentId != '') $concat .= ", '$appendComponentId'";
         $select->setIntegrityCheck(false);
-        $select->join($childTable, "CONCAT($concat)={$childTable}.component_id", array());
+        $select->join($childTable, "{$table}.cache_child_component_id={$childTable}.component_id", array());
         return $select;
     }
 
-    public function joinWithParentGenerator($select, $parentGenerator, $grandParentData = null, $appendComponentId = '')
+    public function joinWithParentGenerator($select, $parentGenerator, $grandParentData = null)
     {
         $table = $this->_getModel()->getTable()->info('name');
         $parentTable = $parentGenerator->_getModel()->getTable()->info('name');
-        $concat = "{$parentTable}.component_id, '{$parentGenerator->_idSeparator}', {$parentTable}.id";
-        if ($appendComponentId != '') $concat .= ", '$appendComponentId'";
         $select->setIntegrityCheck(false);
-        $select->join($parentTable, "CONCAT($concat)={$table}.component_id", array());
+        $select->join($parentTable, "{$parentTable}.cache_child_component_id={$table}.component_id", array());
         if ($grandParentData) {
             $parentSelect = $parentGenerator->select($grandParentData);
             $parentSelect = $parentGenerator->_formatSelect($grandParentData, $parentSelect);
