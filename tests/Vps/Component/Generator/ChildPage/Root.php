@@ -9,7 +9,8 @@ class Vps_Component_Generator_ChildPage_Root extends Vpc_Root_Component
             'class' => 'Vps_Component_Generator_Static',
             'component' => 'Vps_Component_Generator_ChildPage_Child'
         );
-        $ret['generators']['box']['component'] = array('form' => 'Vps_Component_Generator_ChildPage_Form');
+        $ret['generators']['box']['component'] = array('form' => 'Vpc_Form_Component');
+        unset($ret['generators']['title']);
         return $ret;
     }
 }

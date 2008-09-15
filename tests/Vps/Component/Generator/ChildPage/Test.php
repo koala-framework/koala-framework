@@ -6,13 +6,22 @@ class Vps_Component_Generator_ChildPage_Test extends PHPUnit_Framework_TestCase
     {
         Vps_Component_Data_Root::setComponentClass('Vps_Component_Generator_ChildPage_Root');
         $this->_root = Vps_Component_Data_Root::getInstance();
+        Vps_Benchmark::enable();
+        Vps_Benchmark::reset();
+        Vps_Component_Generator_Abstract::clearInstances();
     }
-
+    public function tearDown()
+    {
+        Vps_Benchmark::disable();
+    }
     public function testSubpage()
     {
         $page = $this->_root->getChildComponent('-child')->getChildComponent('_1');
         $this->assertEquals('root-child_1', $page->dbId);
-        
+        $this->assertEquals(Vps_Benchmark::getCounterValue('generators'), 3);
+        $this->assertEquals(Vps_Benchmark::getCounterValue('componentDatas'), 2);
+        $this->assertEquals(Vps_Benchmark::getCounterValue('getChildComponents'), 2);
+
         $page = $this->_root->getChildComponent('-child')->getChildComponent(array('filename' => '1_foo'));
         $this->assertEquals('root-child_1', $page->dbId);
 
@@ -29,10 +38,20 @@ class Vps_Component_Generator_ChildPage_Test extends PHPUnit_Framework_TestCase
         $forms = $this->_root->getRecursiveChildComponents($formSelect);
         $this->assertEquals(1, count($forms));
         $this->assertEquals('root-form', current($forms)->dbId);
-        
+        $this->assertEquals(Vps_Benchmark::getCounterValue('generators'), 3);
+        $this->assertEquals(Vps_Benchmark::getCounterValue('componentDatas'), 1);
+        $this->assertEquals(Vps_Benchmark::getCounterValue('getChildComponents'), 2);
+        $this->assertEquals(Vps_Benchmark::getCounterValue('getRecursiveChildComponents'), 1);
+
+        Vps_Benchmark::reset();
+        Vps_Component_Generator_Abstract::clearInstances();
         $forms = $this->_root->getChildComponent('-child')->getChildComponent('_1')
             ->getRecursiveChildComponents($formSelect);
         $this->assertEquals(1, count($forms));
         $this->assertEquals('root-child_1-form', current($forms)->dbId);
+        $this->assertEquals(Vps_Benchmark::getCounterValue('generators'), 3);
+        $this->assertEquals(Vps_Benchmark::getCounterValue('componentDatas'), 3);
+        $this->assertEquals(Vps_Benchmark::getCounterValue('getChildComponents'), 4);
+        $this->assertEquals(Vps_Benchmark::getCounterValue('getRecursiveChildComponents'), 1);
     }
 }
