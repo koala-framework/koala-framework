@@ -19,6 +19,7 @@ class Vps_Component_Generator_Inherit_Root extends Vpc_Root_Component
             'component' => 'Vpc_Basic_Empty_Component',
             'name' => 'Static'
         );
+        unset($ret['generators']['title']);
         return $ret;
     }
 }

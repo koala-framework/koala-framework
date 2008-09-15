@@ -10,6 +10,7 @@ class Vps_Component_Generator_Boxes_Root extends Vpc_Root_Component
         )));
         $ret['generators']['page']['component'] = array('empty' => 'Vpc_Basic_Empty_Component');
 
+        unset($ret['generators']['title']);
         $ret['generators']['box']['component'] = array(
             'box' => 'Vpc_Basic_Html_Component'
         );
