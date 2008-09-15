@@ -8,7 +8,7 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
         $ret = array_merge(parent::getSettings(), array(
             'level' => 'main' // (string)pagetype oder (int)ebene
         ));
-        $ret['componentName'] = 'Menu';
+        $ret['componentName'] = trlVps('Menu');
         $ret['cssClass'] = 'webStandard';
         return $ret;
         
