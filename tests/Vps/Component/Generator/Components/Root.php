@@ -16,6 +16,7 @@ class Vps_Component_Generator_Components_Root extends Vpc_Root_Component
             'class' => 'Vps_Component_Generator_Static',
             'component' => 'Vps_Component_Generator_Components_Multiple'
         );
+        unset($ret['generators']['title']);
         return $ret;
     }
 }

@@ -14,6 +14,7 @@ class Vps_Component_Generator_Priority_Root extends Vpc_Root_Component
         $ret['generators']['box']['priority'] = 1;
         $ret['generators']['box']['component'] = array();
         $ret['generators']['box']['component']['foo'] = 'Vpc_Basic_Empty_Component';
+        unset($ret['generators']['title']);
         return $ret;
     }
 }

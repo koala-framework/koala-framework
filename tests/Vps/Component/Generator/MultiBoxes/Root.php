@@ -36,6 +36,7 @@ class Vps_Component_Generator_MultiBoxes_Root extends Vpc_Root_Component
             'box' => 'foo',
             'inherit' => true
         );
+        unset($ret['generators']['title']);
         return $ret;
     }
 }
