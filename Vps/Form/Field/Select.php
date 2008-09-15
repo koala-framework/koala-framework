@@ -30,7 +30,9 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         //      => sollte sich gleich verhalten.
         $store = $this->_getStoreData();
         if ($this->getShowNoSelection()) {
-            array_unshift($store['data'], array('', '('.trlVps('no selection').')'));
+            $emptyText = $this->getEmptyText();
+            if (!$emptyText) $emptyText = '('.trlVps('no selection').')';
+            array_unshift($store['data'], array('', $emptyText));
         }
         foreach ($store['data'] as $i) {
             $ret['html'] .= '<option value="'.$i[0].'"';

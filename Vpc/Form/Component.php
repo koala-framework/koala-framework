@@ -36,7 +36,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     public function processInput(array $postData)
     {
         if ($this->_processed) {
-            throw new Vps_Exception("ProcessInput has been called allready for {$this->getData()->componentId}");
+            throw new Vps_Exception("ProcessInput has been called already for {$this->getData()->componentId}");
         }
         $this->_processed = true;
 
