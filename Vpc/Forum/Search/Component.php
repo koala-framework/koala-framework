@@ -34,7 +34,7 @@ class Vpc_Forum_Search_Component extends Vpc_Directories_List_Component
                                 ::getInstance($postsComponentClass, 'detail');
 
         $threadGenerator->joinWithParentGenerator($ret, $groupGenerator, $this->_getForumDirectory());
-        $threadGenerator->joinWithChildGenerator($ret, $postGenerator, '-posts');
+        $threadGenerator->joinWithChildGenerator($ret, $postGenerator);
         $ret->group('vpc_forum_threads.id');
 
         return $ret;

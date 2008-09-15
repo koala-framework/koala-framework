@@ -12,5 +12,6 @@ class Vpc_Forum_Group_Row extends Vps_Db_Table_Row_Abstract
         if (!$this->user_id && $user) {
             $this->user_id = $user->id;
         }
+        parent::_insert();
     }
 }
