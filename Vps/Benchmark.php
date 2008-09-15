@@ -24,6 +24,11 @@ class Vps_Benchmark
         self::$_enabled = true;
     }
 
+    public static function disable()
+    {
+        self::$_enabled = false;
+    }
+
     public static function enableLog()
     {
         if (!isset(self::$_startTime)) self::$_startTime = microtime(true);
@@ -35,6 +40,16 @@ class Vps_Benchmark
         return self::$_enabled;
     }
 
+    public static function reset()
+    {
+        self::$_counter = array();
+    }
+    public static function getCounterValue($name)
+    {
+        $ret = self::$_counter[$name];
+        if (is_array($ret)) $ret = count($ret);
+        return $ret;
+    }
     public static function count($name, $value = null)
     {
         if (!self::$_enabled && !self::$_logEnabled) return false;
@@ -72,15 +87,17 @@ class Vps_Benchmark
     public static function output()
     {
         if (!self::$_enabled) return;
-        echo '<div style="text-align:left;position:absolute;top:0;right:0;z-index:1;width:200px">';
-        echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:1500px;position:absolute;padding:5px;">';
-        echo round(microtime(true) - self::$_startTime, 2)." sec<br />\n";
-        $load = @file_get_contents('/proc/loadavg');
-        $load = explode(' ', $load);
-        echo "Load: ". $load[0]."<br />\n";
-        echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br />\n";
-        if (Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
-            echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
+        if (PHP_SAPI != 'cli') {
+            echo '<div style="text-align:left;position:absolute;top:0;right:0;z-index:1;width:200px">';
+            echo '<div style="font-family:Verdana;font-size:10px;background-color:white;width:1500px;position:absolute;padding:5px;">';
+            echo round(microtime(true) - self::$_startTime, 2)." sec<br />\n";
+            $load = @file_get_contents('/proc/loadavg');
+            $load = explode(' ', $load);
+            echo "Load: ". $load[0]."<br />\n";
+            echo "Memory: ".round(memory_get_peak_usage()/1024)." kb<br />\n";
+            if (Zend_Registry::get('db')->getProfiler() && method_exists(Zend_Registry::get('db')->getProfiler(), 'getQueryCount')) {
+                echo "DB-Queries: ".Zend_Registry::get('db')->getProfiler()->getQueryCount()."<br />\n";
+            }
         }
         self::_outputCounter(self::$_counter);
         if (self::$benchmarks) {
@@ -99,22 +116,37 @@ class Vps_Benchmark
                 echo "</div>";
             }
         }
-        echo "</div>";
-        echo "</div>";
+        if (PHP_SAPI != 'cli') {
+            echo "</div>";
+            echo "</div>";
+        }
     }
     private static function _outputCounter($counter)
     {
+        echo "\n";
         foreach ($counter as $k=>$i) {
             if (is_array($i)) {
-                echo "<a style=\"display:block;\"href=\"#\" onclick=\"if(this.nextSibling.style.display=='none') this.nextSibling.style.display='block'; else this.nextSibling.style.display='none';return(false);\">";
-                echo "$k: ".count($i)."</a>";
-                echo "<ul style=\"display:none\">";
-                foreach ($i as $j) {
-                    echo "<li>$j</li>";
+                if (PHP_SAPI != 'cli') {
+                    echo "<a style=\"display:block;\"href=\"#\" onclick=\"if(this.nextSibling.style.display=='none') this.nextSibling.style.display='block'; else this.nextSibling.style.display='none';return(false);\">";
+                    echo "$k: ".count($i)."</a>";
+                    echo "<ul style=\"display:none\">";
+                    foreach ($i as $j) {
+                        echo "<li>$j</li>";
+                    }
+                    echo "</ul>";
+                } else {
+                    echo "$k: (".count($i).') ';
+                    foreach ($i as $j) {
+                        echo $j.' ';
+                    }
+                    echo "\n";
                 }
-                echo "</ul>";
             } else {
-                echo "$k: $i<br />\n";
+                if (PHP_SAPI != 'cli') {
+                    echo "$k: $i<br />\n";
+                } else {
+                    echo "$k: $i\n";
+                }
             }
         }
     }
