@@ -6,7 +6,7 @@ class Vpc_User_Register_Form_Component extends Vpc_Form_Component
         $ret = parent::getSettings();
         $ret['placeholder']['submitButton'] = trlVps('create account');
         $ret['generators']['child']['component']['success'] = 'Vpc_User_Register_Form_Success_Component';
-        $ret['standardRole'] = 'guest';
+        $ret['standardRole'] = 'user';
         return $ret;
     }
     protected function _beforeSave(Vps_Model_Row_Interface $row)
