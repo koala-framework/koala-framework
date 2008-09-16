@@ -9,31 +9,27 @@ abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
 
     public function sendContent($decoratedPage)
     {
-        // prepare an array that our feed is based on
-        $feedArray = array(
-            'title' => $this->_getRssTitle(),
-            'link' => 'http://'.$_SERVER['HTTP_HOST'].$this->getUrl(),
-            //'lastUpdate' => ,
-            'charset' => 'utf-8',
-            'description' => '',
-            //'author' => 'Alexander Netkachev',
-            //'email' => 'alexander.netkachev@gmail.com',
-            'copyright' => Zend_Registry::get('config')->application->name,
-            'generator' => 'Vivid Planet Software GmbH',
-            'language' => 'de', //TODO
-            'entries' => $this->_getRssEntries()
-        );
-
-        // create feed document
-        $feed = Zend_Feed::importArray($feedArray, 'rss');
-
-        // adjust created DOM document
-        foreach ($feed as $entry) {
-            $element = $entry->summary->getDOM();
-            // modify summary DOM node
+        $cache = Vps_Component_Cache::getInstance();
+        $cacheId = $cache->getCacheIdFromComponentId($this->getData()->componentId);
+        if (!$xml = $cache->load($this->getData()->componentClass, $cacheId)) {
+            $feedArray = array(
+                'title' => $this->_getRssTitle(),
+                'link' => 'http://'.$_SERVER['HTTP_HOST'].$this->getUrl(),
+                //'lastUpdate' => ,
+                'charset' => 'utf-8',
+                'description' => '',
+                //'author' => 'Alexander Netkachev',
+                //'email' => 'alexander.netkachev@gmail.com',
+                'copyright' => Zend_Registry::get('config')->application->name,
+                'generator' => 'Vivid Planet Software GmbH',
+                'language' => 'de', //TODO
+                'entries' => $this->_getRssEntries()
+            );
+            $feed = Zend_Feed::importArray($feedArray, 'rss');
+            $xml = $feed->saveXml();
+            $cache->save($xml, $this->getData()->componentClass, $cacheId);
         }
-
-        // send feed XML to client
-        $feed->send();
+        header('Content-type: application/rss+xml; charset: utf-8');
+        echo $xml;
     }
 }
