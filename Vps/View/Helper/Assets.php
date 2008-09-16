@@ -10,7 +10,11 @@ class Vps_View_Helper_Assets
             $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"$file\" />\n";
         }
         foreach ($dep->getAssetUrls($type, 'printcss') as $file) {
-            $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"$file\" media=\"print\" />\n";
+            $ret .= "$indent<link rel=\"stylesheet\" type=\"text/css\" href=\"$file\" ";
+            if (!Zend_Registry::get('config')->debug->assets->usePrintCssForAllMedia) {
+                $ret .= "media=\"print\" ";
+            }
+            $ret .= "/>\n";
         }
         foreach ($dep->getAssetUrls($type, 'js') as $file) {
             $ret .= "$indent<script type=\"text/javascript\" src=\"$file\"></script>\n";
