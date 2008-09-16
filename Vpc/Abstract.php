@@ -302,9 +302,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             if (substr($file, -10) != '/Component') {
                 $file .= '/Component';
             }
-            $file .= '.css';
             foreach ($dirs as $dir) {
-                if (is_file($dir . '/' . $file)) {
+                if (is_file($dir.'/'.$file.'.css') || is_file($dir.'/'.$file.'.printcss')) {
                     $cssClass[] = self::_formatCssClass($c);
                     break;
                 }

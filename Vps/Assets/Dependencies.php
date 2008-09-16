@@ -198,16 +198,20 @@ class Vps_Assets_Dependencies
                 $curClass = substr($curClass, 0, -10);
             }
             $curClass =  $curClass . '_Component';
-            $file = str_replace('_', DIRECTORY_SEPARATOR, $curClass) . '.css';
+            $file = str_replace('_', DIRECTORY_SEPARATOR, $curClass);
             foreach ($this->_config->path as $type=>$dir) {
                 if ($dir == '.') $dir = getcwd();
-                $path = $dir . '/' . $file;
-                if (is_file($path)) {
-                    $f = $type . '/' . $file;
+                if (is_file($dir . '/' . $file.'.css')) {
+                    $f = $type . '/' . $file.'.css';
                     if (!in_array($f, $this->_files[$assetsType])) {
                         $componentCssFiles[] = $f;
                     }
-                    break;
+                }
+                if (is_file($dir . '/' . $file.'.printcss')) {
+                    $f = $type . '/' . $file.'.printcss';
+                    if (!in_array($f, $this->_files[$assetsType])) {
+                        $componentCssFiles[] = $f;
+                    }
                 }
             }
         }
@@ -280,24 +284,20 @@ class Vps_Assets_Dependencies
         $ret = array();
         if ($file == 'AllRteStyles.css') {
             $ret = Vpc_Basic_Text_StylesModel::getStylesContents();
-        } else if (preg_match('#^All([a-z]+)\\-([a-z]+).(js|css)$#i', $file, $m)) {
+        } else if (preg_match('#^All([a-z]+)\\-([a-z]+)\\.(printcss|js|css)$#i', $file, $m)) {
 
             $section = $m[1];
             if (substr($section, -5) == 'Debug' && !$this->_config->debug->menu) {
                 throw new Vps_Exception("Debug Assets are not avaliable as the debug menu is disabled");
             }
             $language = $m[2];
-            if ($m[3] == 'js') {
-                $fileType = 'js';
-            } else {
-                $fileType = 'css';
-            }
+            $fileType = $m[3];
 
             $encoding = Vps_Media_Output::getEncoding();
             $cache = $this->_getCache();
-            $cacheId = $fileType.$encoding.$section.Vps_Setup::getConfigSection().$language;
+            $cacheId = str_replace('.', '_', $fileType).$encoding.$section.Vps_Setup::getConfigSection().$language;
             if (!$cacheData = $cache->load($cacheId)) {
-                
+
                 $cacheData  = array();
 
                 $cacheData['contents'] = '';
@@ -310,7 +310,7 @@ class Vps_Assets_Dependencies
                         try {
                             $c = $this->getFileContents($file, $language);
                         } catch (Vps_Assets_NotFoundException $e) {
-                            throw new Vps_Exception($e->getMessage());
+                            throw new Vps_Exception($file.': '.$e->getMessage());
                         }
                         $cacheData['contents'] .=  $c['contents']."\n";
                         $cacheData['mtimeFiles'] = array_merge($cacheData['mtimeFiles'], $c['mtimeFiles']);
@@ -321,7 +321,7 @@ class Vps_Assets_Dependencies
                 $cacheData['version'] = $this->_config->application->version;
                 if ($fileType == 'js') {
                     $cacheData['mimeType'] = 'text/javascript; charset=utf8';
-                } else if ($fileType == 'css') {
+                } else if ($fileType == 'css' || $fileType == 'printcss') {
                     $cacheData['mimeType'] = 'text/css; charset=utf8';
                 }
                 $cache->save($cacheData, $cacheId);
@@ -338,6 +338,8 @@ class Vps_Assets_Dependencies
             } else if (substr($file, -4)=='.jpg') {
                 $ret['mimeType'] = 'image/jpeg';
             } else if (substr($file, -4)=='.css') {
+                $ret['mimeType'] = 'text/css; charset=utf-8';
+            } else if (substr($file, -9)=='.printcss') {
                 $ret['mimeType'] = 'text/css; charset=utf-8';
             } else if (substr($file, -3)=='.js') {
                 $ret['mimeType'] = 'text/javascript; charset=utf-8';
@@ -384,6 +386,9 @@ class Vps_Assets_Dependencies
                         }
                         if (substr($cssClass, -4) == '.css') {
                             $cssClass = substr($cssClass, 0, -4);
+                        }
+                        if (substr($cssClass, -9) == '.printcss') {
+                            $cssClass = substr($cssClass, 0, -9);
                         }
                         if (substr($cssClass, -10) == '/Component') {
                             $cssClass = substr($cssClass, 0, -10);
