@@ -8,7 +8,11 @@ class Vps_Dao_Index extends Vps_Db_Table
 
     public function updateIndex($componentId)
     {
-        if (!in_array($componentId, self::$_componentIds)) {
+        static $hasIndex;
+        if (is_null($hasIndex)) {
+            $hasIndex = Zend_Registry::get('config')->hasIndex;
+        }
+        if ($hasIndex && !in_array($componentId, self::$_componentIds)) {
             self::$_componentIds[] = $componentId;
         }
     }
