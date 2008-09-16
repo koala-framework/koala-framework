@@ -6,6 +6,7 @@ class Vpc_Forum_Group_NewThread_Component extends Vpc_Abstract_Composite_Compone
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['preview'] = 'Vpc_Posts_Write_Preview_Component';
         $ret['generators']['child']['component']['form'] = 'Vpc_Forum_Group_NewThread_Form_Component';
+        $ret['viewCache'] = false; // Wegen if-Abfrage in Template
         return $ret;
     }
 
