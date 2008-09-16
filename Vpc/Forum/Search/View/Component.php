@@ -11,10 +11,8 @@ class Vpc_Forum_Search_View_Component extends Vpc_Forum_Group_View_Component
     protected function _getSelect()
     {
         //wenn kein suchbegriff eingegeben, nichts anzeigen
-        $searchForm = $this->_getSearchForm();
-        $formRow = $searchForm->getComponent()->getFormRow();
+        $formRow = $this->_getSearchForm()->getComponent()->getFormRow();
         if (!$formRow->query) return null;
-
         return parent::_getSelect();
     }
 }
