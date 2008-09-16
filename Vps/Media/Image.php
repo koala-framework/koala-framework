@@ -21,7 +21,7 @@ class Vps_Media_Image
         else $scale = self::SCALE_BESTFIT;
         if (!$scale) $scale = self::SCALE_BESTFIT;
 
-        if ($width == 0 && $height == 0) {
+        if ($width == 0 && $height == 0 && $scale != self::SCALE_ORIGINAL) {
             return false;
         }
 
@@ -31,12 +31,15 @@ class Vps_Media_Image
         $size = getimagesize($source);
         if (!$size) return false;
 
-        if ($width == 0) {
-            $width = round($height * ($size[0]/$size[1]));
+        if ($scale != self::SCALE_ORIGINAL) {
+            if ($width == 0) {
+                $width = round($height * ($size[0]/$size[1]));
+            }
+            if ($height == 0) {
+                $height = round($width * ($size[1]/$size[0]));
+            }
         }
-        if ($height == 0) {
-            $height = round($width * ($size[1]/$size[0]));
-        }
+
         if ($scale == self::SCALE_CROP) {
             // Bild wird auf allen 4 Seiten gleichmäßig beschnitten
 
