@@ -39,7 +39,11 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
                 foreach ($values as $value) {
                     if ($row->$field == $value) {
                         $valueFound = true;
-                        $where["$field = ?"] = $value;
+			if (is_null($value)) {
+                            $where[] = "ISNULL($field)";
+			} else {
+			    $where["$field = ?"] = $value;
+			}
                         break;
                     }
                 }
@@ -52,7 +56,11 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
                     $where[] = "$field NOT IN ($in)";
                 }
             } else {
-                $where["$field = ?"] = $row->$field;
+	        if (is_null($row->$field)) {
+		    $where[] = "ISNULL($field)";
+		} else {
+                    $where["$field = ?"] = $row->$field;
+		}
             }
         }
         return $where;
