@@ -766,11 +766,13 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             }
             this.relayCmd('formatblock', v);
         }
-        var elm = this.getFocusElement(tag || 'block');
-        if (elm) {
-            elm.className = className;
-        }
         this.deferFocus();
+        (function() {
+            var elm = this.getFocusElement(tag || 'block');
+            if (elm) {
+                elm.className = className;
+            }
+        }).defer(11, this);
         this.updateToolbar();
     },
     _onSelectInlineStyle: function() {
