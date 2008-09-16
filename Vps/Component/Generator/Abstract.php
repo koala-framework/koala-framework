@@ -10,14 +10,16 @@ abstract class Vps_Component_Generator_Abstract
     protected $_idSeparator;
     private $_model;
 
+    private static $instances = array();
+
     protected function __construct($class, $settings)
     {
         $this->_class = $class;
         $this->_settings = $settings;
         $this->_init();
-        Vps_Benchmark::count('generators');
+        Vps_Benchmark::count('generators', $this->_class.'-'.$settings['generator']);
     }
-    
+
     protected function _init()
     {
     }
@@ -48,12 +50,17 @@ abstract class Vps_Component_Generator_Abstract
         }
         return $this->_model;
     }
-    
+
+    //um den speicherverbrauch zu reduzieren
+    public static function clearInstances()
+    {
+        self::$instances = array();
+    }
+
     public static function getInstance($componentClass, $key, $settings = array())
     {
-        static $instances = array();
         $instanceKey = $componentClass . '_' . $key;
-        if (!isset($instances[$instanceKey])) {
+        if (!isset(self::$instances[$instanceKey])) {
             if (empty($settings)) {
                 $settings = Vpc_Abstract::getSetting($componentClass, 'generators');
                 if (!isset($settings[$key])) {
@@ -74,9 +81,9 @@ abstract class Vps_Component_Generator_Abstract
                 $settings['component'] = array($key => $settings['component']);
             }
             $settings['generator'] = $key;
-            $instances[$instanceKey] = new $settings['class']($componentClass, $settings);
+            self::$instances[$instanceKey] = new $settings['class']($componentClass, $settings);
         }
-        return $instances[$instanceKey];
+        return self::$instances[$instanceKey];
     }
     
     private static function _getGeneratorsForComponent($componentClass, $select)
