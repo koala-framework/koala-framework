@@ -17,6 +17,7 @@ class Vpc_Menu_Component extends Vpc_Menu_Abstract
         $ret['separator'] = '';
         $ret['linkPrefix'] = '';
         $ret['showParentPage'] = false;
+        $ret['cssClass'] = 'webStandard printHidden';
         return $ret;
     }
     public function getTemplateVars()
