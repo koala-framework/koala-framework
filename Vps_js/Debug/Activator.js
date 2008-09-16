@@ -13,6 +13,7 @@ Ext.onReady(function() {
         a.style.zIndex = '200';
         a.title = 'Activate Debugging';
         a.href = '/vps/debug/activate?url=' + location.href;
+        a.className = 'printHidden';
         document.body.appendChild(a);
     }
 });
