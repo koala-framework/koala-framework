@@ -405,7 +405,13 @@ class Vps_Setup
                 self::output401();
             }
 
+            if ($page instanceof Vpc_Abstract_Feed_Component) {
+                echo "<!--";
+            }
             Vps_Benchmark::output();
+            if ($page instanceof Vpc_Abstract_Feed_Component) {
+                echo "-->";
+            }
             Vps_Benchmark::shutDown();
 
             exit;
