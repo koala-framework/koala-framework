@@ -69,7 +69,7 @@ class Vps_Assets_Dependencies
 
         $files = array();
         foreach ($this->_files[$assetsType] as $file) {
-            if ((is_string($file) && substr($file, -strlen($fileType)) == $fileType)
+            if ((is_string($file) && substr($file, -strlen($fileType)-1) == '.'.$fileType)
                 || ($file instanceof Vps_Assets_Dynamic && $file->getType() == $fileType)) {
                 if (is_string($file) && substr($file, -strlen($fileType)-1) == " $fileType") {
                     //wenn asset hinten mit " js" aufhört das js abschneiden
