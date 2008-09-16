@@ -133,7 +133,7 @@ class Vps_Component_Abstract_Admin
             && Vpc_Abstract::hasSetting($this->_class, 'tablename')
             && Vpc_Abstract::getSetting($this->_class, 'tablename') == $row->getTableClass())
         {
-            foreach (Vps_Component_Data_Root::getInstance()->getComponentsByDbId($row->component_id) as $c) {
+            foreach (Vps_Component_Data_Root::getInstance()->getComponentsByDbId($row->component_id, array('ignoreVisible' => true)) as $c) {
                 if ($c->componentClass == $this->_class) {
                     Vps_Component_Cache::getInstance()->remove($this->_class, $c->componentId);
                 }
