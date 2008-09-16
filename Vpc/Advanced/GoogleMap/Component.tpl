@@ -5,7 +5,7 @@
 
     <div class="container"></div>
 
-    <form action="#" class="fromAddress">
+    <form action="#" class="fromAddress printHidden">
         <input type="text" class="textBefore"/>
         <input type="submit" value="<?= trlVps('Show Route') ?>" class="submitOn"/>
     </form>
