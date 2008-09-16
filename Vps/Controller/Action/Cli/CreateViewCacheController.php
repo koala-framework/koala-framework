@@ -21,6 +21,8 @@ class Vps_Controller_Action_Cli_CreateViewCacheController extends Vps_Controller
 
     private function _doIt($component)
     {
+//         Vps_Component_Generator_Abstract::clearInstances();
+
         if (in_array($component->componentId, $this->_processed)) return; //wg. unique boxen unterseiten
         $this->_processed[] = $component->componentId;
         echo date("H:i:s").' ';
