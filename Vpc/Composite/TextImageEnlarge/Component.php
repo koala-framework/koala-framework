@@ -1,5 +1,6 @@
 <?php
-class Vpc_Composite_TextImageEnlarge_Component extends Vpc_Composite_TextImage_Component
+class Vpc_Composite_TextImageEnlarge_Component
+    extends Vpc_Composite_TextImage_Component
 {
     public static function getSettings()
     {

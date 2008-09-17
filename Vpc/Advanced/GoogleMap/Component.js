@@ -145,7 +145,9 @@ Vps.onContentReady(function() {
         Vpc.Advanced.GoogleMap.renderedMaps.push(map);
 
         var mapContainer = new Ext.Element(map);
-        var options = Ext.decode(mapContainer.down(".options", true).value);
+        var options = mapContainer.down(".options", true);
+        if (!options) return;
+        options = Ext.decode(options.value);
         var text = mapContainer.down("div.text").dom.innerHTML;
         var myMap = new Vpc.Advanced.GoogleMap(mapContainer, options, text);
 
