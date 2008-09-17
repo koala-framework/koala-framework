@@ -112,13 +112,11 @@ class Vps_Component_Abstract_Admin
     
     public function onRowUpdate($row)
     {
-        $this->_deleteCacheForRow($row);
         $this->_onRowAction($row);
     }
 
     public function onRowDelete($row)
     {
-        $this->_deleteCacheForRow($row);
         $this->_onRowAction($row);
     }
 
@@ -143,6 +141,7 @@ class Vps_Component_Abstract_Admin
     
     protected function _onRowAction($row)
     {
+        $this->_deleteCacheForRow($row);
         if (Vpc_Abstract::hasSetting($this->_class, 'clearCacheTable')
             && Vpc_Abstract::getSetting($this->_class, 'clearCacheTable') == $row->getTableClass())
         {
