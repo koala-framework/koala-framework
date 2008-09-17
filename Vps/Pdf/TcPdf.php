@@ -7,10 +7,10 @@ class Vps_Pdf_TcPdf extends TCPDF
     protected $_fontsize = 10;
     protected $_component;
 
-    public function __construct($component = null )
+    public function __construct($component = null , $format = 'A4')
     {
         $this->_component = $component;
-        parent::__construct("P", "mm", array(210, 297));
+        parent::__construct("P", "mm", $format);
         $this->SetFont($this->_font, "B", 16);
         $this->SetAuthor("Vivid Planet Software GmbH");
         $this->SetCreator("Vivid Planet Software GmbH mit FPDF");
@@ -30,6 +30,11 @@ class Vps_Pdf_TcPdf extends TCPDF
     public function getTopMargin()
     {
         return $this->tMargin;
+    }
+
+    public function getBottomMargin()
+    {
+        return $this->bMargin;
     }
 
     public function Output ($name='',$dest='I')

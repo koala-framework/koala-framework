@@ -31,7 +31,10 @@ class Vpc_Basic_Image_Pdf extends Vpc_Abstract_Pdf
             $size['height'] = $this->_calculateDpi($height);
 
             Vps_Media_Image::scale($source, $tempstring, $size);
-            if (($this->getY() + $height) > $this->getPageHeight()) {
+            $pageExclBorders = $this->getPageHeight()
+                                - $this->getBottomMargin();
+
+            if (($this->getY() + $height) > ($pageExclBorders)) {
                 if ($this->PageNo() == $this->getNumPages()) {
                     $this->AddPage();
                 } else {
