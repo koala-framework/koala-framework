@@ -18,6 +18,8 @@ class Vpc_Paging_Component extends Vpc_Abstract
             $this->_entries = $this->getData()->parent->getComponent()->getPagingCount();
             if (!$this->_entries) {
                 $this->_entries = 0;
+            } else if ($this->_entries instanceof Vps_Component_Select) {
+                $this->_entries = $this->getData()->parent->countChildComponents($this->_entries);
             } else if ($this->_entries instanceof Vps_Model_Select) {
                 throw new Vps_Exception("Not yet implemented, probably not really possible");
             } else if ($this->_entries instanceof Zend_Db_Select) {
