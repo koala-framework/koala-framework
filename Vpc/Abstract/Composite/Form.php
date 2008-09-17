@@ -1,6 +1,8 @@
 <?php
 class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
 {
+    protected $_createFieldsets = true;
+    
     protected function _getIdTemplateForChild($key)
     {
         return null;
@@ -21,9 +23,13 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
                 }
                 $name = Vpc_Abstract::getSetting($class, 'componentName');
                 $name = str_replace('.', ' ', $name);
-                $this->add(new Vps_Form_Container_FieldSet($name))
-                    ->setName($key)
-                    ->add($form);
+                if ($this->_createFieldsets) {
+                    $this->add($form);
+                } else {
+                    $this->add(new Vps_Form_Container_FieldSet($name))
+                        ->setName($key)
+                        ->add($form);
+                }
             }
         }
     }
