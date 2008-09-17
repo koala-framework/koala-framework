@@ -21,12 +21,12 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
         }
 
         $fields = $this->_form->fields;
-        $fields->add(new Vps_Form_Field_TextField('name', 'Name of Page'))
+        $fields->add(new Vps_Form_Field_TextField('name', trlVps('Name of Page')))
             ->setAllowBlank(false);
-        $fields->add(new Vps_Form_Field_Select('component', 'Pagetype'))
+        $fields->add(new Vps_Form_Field_Select('component',  trlVps('Pagetype')))
             ->setValues($types)
             ->setAllowBlank(false);
-        $fields->add(new Vps_Form_Field_Checkbox('hide', 'Hide in Menu'));
+        $fields->add(new Vps_Form_Field_Checkbox('hide',  trlVps('Hide in Menu')));
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)

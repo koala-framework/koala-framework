@@ -3069,7 +3069,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">No entries were found.</en>
-<de>Es konnten keine Einträge gefunden werden.</de>
+<de>Es konnten keine Eintr&#xE4;ge gefunden werden.</de>
 </text>
 <text>
 <en default="1">Forum.Forum</en>
@@ -3077,7 +3077,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">New entry in your guestbook</en>
-<de>_</de>
+<de>Neuer Eintrag in deinem G&#xE4;stebuch</de>
 </text>
 <text>
 <en default="1">Posts.Last Posts</en>
@@ -3097,11 +3097,27 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Access Denied</en>
-<de>_</de>
+<de>Zugriff verboten</de>
 </text>
 <text>
 <en default="1">You are not allowed to enter this page.</en>
-<de>_</de>
+<de>Sie haben keine Berechtigungen für diese Seite.</de>
+</text>
+<text>
+<en default="1">Menu</en>
+<de>Men&#xFC;</de>
+</text>
+<text>
+<en default="1">Name of Page</en>
+<de>Seitenname</de>
+</text>
+<text>
+<en default="1">Pagetype</en>
+<de>Seitentype</de>
+</text>
+<text>
+<en default="1">Hide in Menu</en>
+<de>In Men&#xFC; verstecken</de>
 </text>
 </trl>
 
