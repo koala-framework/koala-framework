@@ -49,8 +49,9 @@ class Vps_Model_Db implements Vps_Model_Interface
         ));
     }
 
-    private function _createDbSelect($select)
+    public function createDbSelect($select)
     {
+        if (!$select) return null;
         $tablename = $this->_table->info('name');
         $dbSelect = $this->_table->select();
         $dbSelect->from($tablename);
@@ -95,7 +96,7 @@ class Vps_Model_Db implements Vps_Model_Interface
     public function getSqlForSelect($select)
     {
         //TODO: limit und order fehlen :D
-        $dbSelect = $this->_createDbSelect($select);
+        $dbSelect = $this->createDbSelect($select);
         return $dbSelect->__toString();
     }
 
@@ -108,7 +109,7 @@ class Vps_Model_Db implements Vps_Model_Interface
         } else {
             $select = $where;
         }
-        $dbSelect = $this->_createDbSelect($select);
+        $dbSelect = $this->createDbSelect($select);
         if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
             $tablename = $this->_table->info('name');
             foreach ($order as $o) {
@@ -139,7 +140,7 @@ class Vps_Model_Db implements Vps_Model_Interface
         if (!is_object($select)) {
             $select = $this->select($select);
         }
-        $dbSelect = $this->_createDbSelect($select);
+        $dbSelect = $this->createDbSelect($select);
         $dbSelect->reset(Zend_Db_Select::COLUMNS);
         $dbSelect->setIntegrityCheck(false);
         if ($dbSelect->getPart('group')) {
@@ -185,5 +186,10 @@ class Vps_Model_Db implements Vps_Model_Interface
     public function select($where = array())
     {
         return new Vps_Model_Select($where);
+    }
+    
+    public function getRowsetClass()
+    {
+        return $this->_rowsetClass;
     }
 }
