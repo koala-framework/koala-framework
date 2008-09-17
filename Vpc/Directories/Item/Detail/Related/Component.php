@@ -1,6 +1,8 @@
 <?php
 class Vpc_Directories_Item_Detail_Related_Component extends Vpc_Abstract
 {
+    protected $_relatedCache = null;
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -21,8 +23,19 @@ class Vpc_Directories_Item_Detail_Related_Component extends Vpc_Abstract
             ->getComponentByClass('Vpc_Directories_Category_Directory_Component');
     }
 
+    public function hasContent()
+    {
+        $ret = $this->_getRelatedCompaniesLinks();
+        return count($ret) ? true : false;
+    }
+
+    /**
+     * @return array $relatedEntries
+     */
     private function _getRelatedCompaniesLinks()
     {
+        if (!is_null($this->_relatedCache)) return $this->_relatedCache;
+
         $itemRow = $this->getData()->parent->row;
 
         $categoryDirectory = $this->_getCategoryDirectory();
@@ -83,9 +96,11 @@ class Vpc_Directories_Item_Detail_Related_Component extends Vpc_Abstract
 
                 $ret = $itemDirectory->getChildComponents($select);
             }
+            $this->_relatedCache = $ret;
             return $ret;
         }
-        return null;
+        $this->_relatedCache = array();
+        return array();
     }
 
 }
