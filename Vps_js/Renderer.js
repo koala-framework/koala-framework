@@ -108,7 +108,7 @@ Ext.util.Format.time = Ext.util.Format.dateRenderer('H:i');
 Ext.util.Format.mouseoverPic = function(v, p, record){
     if (!v) return '';
     p.css += 'vps-cell-button';
-    p.attr += 'style="background-image:url('+escape(v)+');"';
+    p.attr += 'style="background-image:url('+v+');"';
     p.attr += ' ext:qtip="&lt;img src=\''+record.data.pic_large+'\' /&gt;"';
     return '';
 };

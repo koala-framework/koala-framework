@@ -28,11 +28,11 @@ class Vpc_Composite_Images_Controller extends Vpc_Abstract_List_Controller
         }
 
 
-        $this->_columns->add(new Vps_Grid_Column($class, trlVps('Image'), 40))
-            ->setData(new Vps_Data_Vpc_Image($class, 'mini'))
+        $this->_columns->add(new Vps_Grid_Column('pic', trlVps('Image'), 40))
+            ->setData(new Vps_Data_Vpc_Image($class, 'gridRow'))
             ->setRenderer('mouseoverPic');
         $this->_columns->add(new Vps_Grid_Column('pic_large'))
-            ->setData(new Vps_Data_Vpc_Image($class, 'thumb'));
+            ->setData(new Vps_Data_Vpc_Image($class, 'gridRowLarge'));
         parent::_initColumns();
     }
 }

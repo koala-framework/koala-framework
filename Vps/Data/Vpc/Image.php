@@ -16,8 +16,8 @@ class Vps_Data_Vpc_Image extends Vps_Data_Abstract
         $table = new $tablename(array('componentClass'=>$this->_class));
         $componentId = $row->component_id . '-' . $row->id;
         $row = $table->find($componentId)->current();
-        if ($row) {
-            return $row->getFileUrl(null, $this->_size);
+        if ($row && $row->vps_upload_id) {
+            return '/vps/media/upload/preview?uploadId='.$row->vps_upload_id.'&size='.$this->_size;
         } else {
             return '';
         }
