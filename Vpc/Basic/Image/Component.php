@@ -37,6 +37,15 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
         return $ret;
     }
 
+    public function hasContent()
+    {
+        $imageRow = $this->getImageRow();
+        if ($imageRow && $imageRow->vps_upload_id) {
+            return true;
+        }
+        return false;
+    }
+
     public function getImageUrl()
     {
         return $this->getImageRow()->getFileUrl();
