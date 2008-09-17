@@ -23,6 +23,8 @@ class Vpc_User_Detail_GeneralCommunity_Form extends Vpc_User_Detail_General_Form
             ->setHeight(100)
             ->setHideInRegister(true);
 
-        $this->fields['avatar']->setHideInRegister(true);
+        if (isset($this->fields['avatar'])) {
+            $this->fields['avatar']->setHideInRegister(true);
+        }
     }
 }
