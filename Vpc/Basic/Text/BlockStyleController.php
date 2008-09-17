@@ -15,6 +15,8 @@ class Vpc_Basic_Text_BlockStyleController extends Vpc_Basic_Text_InlineStyleCont
                 'h4'   => trlVps('Überschrift 4 (h4)'),
                 'h5'   => trlVps('Überschrift 5 (h5)'),
                 'h6'   => trlVps('Überschrift 6 (h6)')
-             ));
+             ))
+            ->setAllowBlank(false)
+            ->setDefaultValue('p');
     }
 }
