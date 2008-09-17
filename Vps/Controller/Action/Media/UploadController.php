@@ -33,7 +33,9 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
 
         $sizes = array(
             'default' => array(40, 40),
-            'frontend' => array(100, 100, Vps_Media_Image::SCALE_CROP)
+            'frontend' => array(100, 100, Vps_Media_Image::SCALE_CROP),
+            'gridRow' => array(40, 20, Vps_Media_Image::SCALE_CROP),
+            'gridRowLarge' => array(200, 200, Vps_Media_Image::SCALE_BESTFIT),
         );
         if (isset($sizes[$this->_getParam('size')])) {
             $size = $this->_getParam('size');
