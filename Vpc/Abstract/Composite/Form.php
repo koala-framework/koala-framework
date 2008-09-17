@@ -23,7 +23,7 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
                 }
                 $name = Vpc_Abstract::getSetting($class, 'componentName');
                 $name = str_replace('.', ' ', $name);
-                if ($this->_createFieldsets) {
+                if (!$this->_createFieldsets) {
                     $this->add($form);
                 } else {
                     $this->add(new Vps_Form_Container_FieldSet($name))
