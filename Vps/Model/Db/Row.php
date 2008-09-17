@@ -77,36 +77,47 @@ class Vps_Model_Db_Row implements Vps_Model_Row_Interface
         return $this->_row->toArray();
     }
     
-    public function findDependentRowset($dependentModel, $ruleKey = null, Vps_Model_Select $select = null)
+    public function findDependentRowset($dependentTable, $ruleKey = null, Vps_Model_Select $select = null)
     {
-        $dbSelect = $this->_createDbSelect($select);
-        $dependentTable = $dependentModel->getTable();
-        return new $this->_rowsetClass(array(
-            'rowset' => $this->_table->findDependentRowset($dependentTable, $ruleKey, $dbSelect),
-            'rowClass' => $this->_rowClass,
+        $dbSelect = $this->_model->createDbSelect($select);
+        if ($dependentTable instanceof Vps_Model_Db) {
+            $dependentTable = $dependentTable->getTable();
+        }
+        $class = $this->_model->getRowsetClass();
+        return new $class(array(
+            'rowset' => $this->_row->findDependentRowset($dependentTable, $ruleKey, $dbSelect),
+            'rowClass' => get_class($this),
             'model' => $this
         ));
     }
         
-    public function findParentRow($parentModel, $ruleKey = null, Vps_Model_Select $select = null)
+    public function findParentRow($parentTable, $ruleKey = null, Vps_Model_Select $select = null)
     {
-        $dbSelect = $this->_createDbSelect($select);
-        $parentTable = $parentModel->getTable();
-        return new $this->_rowClass(array(
-            'row' => $this->_table->findParentRow($parentTable, $ruleKey, $dbSelect),
+        $dbSelect = $this->_model->createDbSelect($select);
+        if ($parentTable instanceof Vps_Model_Db) {
+            $parentTable = $parentTable->getTable();
+        }
+        $class = get_class($this);
+        return new $class(array(
+            'row' => $this->_row->findParentRow($parentTable, $ruleKey, $dbSelect),
             'model' => $this->_model
         ));
     }
 
-    public function findManyToManyRowset($matchModel, $intersectionModel, $callerRefRule = null,
+    public function findManyToManyRowset($matchTable, $intersectionTable, $callerRefRule = null,
                                          $matchRefRule = null, Vps_Model_Select $select = null)
     {
-        $dbSelect = $this->_createDbSelect($select);
-        $matchTable = $matchModel->getTable();
-        $intersectionTable = $intersectionModel->getTable();
-        return new $this->_rowsetClass(array(
-            'rowset' => $this->_table->findManyToManyRowset($matchModel, $intersectionModel, $callerRefRule, $matchRefRule, $dbSelect),
-            'rowClass' => $this->_rowClass,
+        $dbSelect = $this->_model->createDbSelect($select);
+        if ($matchTable instanceof Vps_Model_Db) {
+            $matchTable = $matchTable->getTable();
+        }
+        if ($intersectionTable instanceof Vps_Model_Db) {
+            $intersectionTable = $intersectionTable->getTable();
+        }
+        $class = $this->_model->getRowsetClass();
+        return new $class(array(
+            'rowset' => $this->_row->findManyToManyRowset($matchModel, $intersectionModel, $callerRefRule, $matchRefRule, $dbSelect),
+            'rowClass' => get_class($this),
             'model' => $this
         ));
     }
