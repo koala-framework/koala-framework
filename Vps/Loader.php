@@ -30,25 +30,22 @@ class Vps_Loader extends Zend_Loader
         if (!$class) {
             require_once 'Vps/Benchmark.php';
             if (Vps_Benchmark::isEnabled()) {
-                $class = 'Vps_Loader';
+                $class = 'Vps_Loader_Benchmark';
             } else {
                 //für performance
-                $class = 'Zend_Loader';
+                $class = 'Vps_Loader';
             }
         }
         parent::registerAutoload($class, $enabled);
     }
-
     public static function autoload($class)
     {
-        $ret = parent::autoload($class);
-        if ($ret && substr($class, 0, 4) == 'Vpc_') {
-            if (is_subclass_of($class, 'Vpc_Abstract')) {
-                Vps_Benchmark::count('component classes included', $class);
-            }
+        if ($class == 'TCPDF') {
+            require_once 'tcpdf.php';
+        } else {
+            parent::autoload($class);
         }
-        Vps_Benchmark::count('classes included', $class);
-        return $ret;
     }
+
 
 }
