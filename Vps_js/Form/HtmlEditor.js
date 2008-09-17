@@ -772,8 +772,9 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
             if (elm) {
                 elm.className = className;
             }
+            this.deferFocus();
+            this.updateToolbar();
         }).defer(11, this);
-        this.updateToolbar();
     },
     _onSelectInlineStyle: function() {
         var v = this.inlineStylesSelect.dom.value;
