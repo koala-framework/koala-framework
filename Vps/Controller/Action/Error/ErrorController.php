@@ -10,7 +10,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
         }
 
         if ($this->_getParam('module') == 'component' &&
-            $this->_getParam('action') == 'jsonIndex' &&
+            $this->_getParam('action') == 'json-index' &&
             $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER) {
             $errors->exception = new Vps_ComponentNotFoundException();
         }
@@ -67,7 +67,7 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
         if ($exception instanceof Vps_ClientException) {
             $this->view->error = $exception->getMessage();
         } else if ($exception instanceof Vps_ComponentNotFoundException) {
-            $this->view->error = trlVps('There is no editig for this component.');
+            $this->view->error = trlVps('There is no editing for this component.');
         } else {
             $config = Zend_Registry::get('config');
             if ($config->debug->errormail != '') {
