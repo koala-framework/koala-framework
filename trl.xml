@@ -3120,6 +3120,10 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <de>In Men&#xFC; verstecken</de>
 </text>
 <text>
+<en default="1">save</en>
+<de>speichern</de>
+</text>
+<text>
 <en default="1">coordinates not entered</en>
 <de>keine Koordinaten eingetragen</de>
 </text>
