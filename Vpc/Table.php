@@ -40,19 +40,24 @@ class Vpc_Table extends Vps_Db_Table
                 'stored'    => false
             ));
             $ret->current()->component_id = $id;
-            $ret->current()->setFromArray(Vpc_Abstract::getSetting($this->_componentClass, 'default'));
+            $ret->current()->setFromArray($this->_getDefaultValues($ret->current()));
         }
         return $ret;
     }
 
     public function createRow(array $data = array())
     {
+        $ret = parent::createRow();
+        $ret->setFromArray($this->_getDefaultValues($ret));
+        $ret->setFromArray($data);
+        return $ret;
+    }
+
+    protected function _getDefaultValues($row)
+    {
         if (Vpc_Abstract::hasSetting($this->_componentClass, 'default')) {
-            $defaultValues = Vpc_Abstract::getSetting($this->_componentClass, 'default');
+            return Vpc_Abstract::getSetting($this->_componentClass, 'default');
         }
-        if (isset($defaultValues) && is_array($defaultValues)) {
-            $data = array_merge($defaultValues, $data);
-        }
-        return parent::createRow($data);
+        return array();
     }
 }
