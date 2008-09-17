@@ -1,5 +1,13 @@
+.$cssClass div {
+    clear: both;
+}
+.$cssClass .form_housenumber,
+.$cssClass .form_city {
+    clear: none;
+}
 .$cssClass form .vpsField label {
     line-height: 20px;
+    clear: both;
 }
 .$cssClass form button {
     font-size: 11px;
@@ -15,6 +23,11 @@
 .$cssClass select {
     padding: 2px;
     margin-bottom: 4px;
+}
+.$cssClass input.radio {
+    margin-left: 10px;
+    border: none;
+    background: none;
 }
 .$cssClass form .vpsFormFieldCheckbox input {
     width: auto;
@@ -75,4 +88,11 @@
     float: right;
     margin-top: 10px;
     text-align: right;
+}
+.$cssClass .vpsFormFieldRadio {
+    margin-left: -10px;
+}
+.$cssClass .vpsFormFieldRadio label{
+    margin-left: 10px;
+    margin-right: 10px;
 }
