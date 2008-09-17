@@ -28,5 +28,9 @@ class Vpc_Posts_Directory_Component extends Vpc_Directories_Item_Directory_Compo
         $ret['write'] = $this->getData()->getChildComponent('_write');
         return $ret;
     }
-
+    public function hasContent()
+    {
+        //der write-link ist ja immer da
+        return true;
+    }
 }
