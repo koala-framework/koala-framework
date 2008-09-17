@@ -7,7 +7,8 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract_Composite_Component
             'componentName' => 'Google Maps',
             'tablename' => 'Vpc_Advanced_GoogleMap_Model',
             'default' => array(
-                'content' => Vpc_Abstract::LOREM_IPSUM
+                'zoom' => 8,
+                'height' => 300
             ),
             'assets' => array(
                 'files' => array(
@@ -40,6 +41,7 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract_Composite_Component
         $options['satelite'] = $this->_getRow()->satelite;
         $options['overview'] = $this->_getRow()->overview;
         $ret['options'] = Zend_Json::encode($options);
+        $ret['hasCoordinates'] = !!$this->_getRow()->coordinates;
         return $ret;
     }
 }

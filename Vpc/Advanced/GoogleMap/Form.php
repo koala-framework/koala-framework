@@ -46,9 +46,9 @@ class Vpc_Advanced_GoogleMap_Form extends Vpc_Abstract_Form
         $zoomLevels = array();
         for ($i = 0; $i <= 20; $i++) {
             if ($i == 0) {
-                $zommText = trlVps(' (Worldview)');
+                $zommText = ' ('.trlVps('Worldview').')';
             } else if ($i == 20) {
-                $zommText = trlVps(' (Detailview)');
+                $zommText = ' ('.trlVps('Detailview').')';
             } else {
                 $zommText = '';
             }

@@ -181,12 +181,12 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>&#xDC;bersichtskarte</de>
 </text>
 <text>
-<en default="1"> (Worldview)</en>
-<de>(Weltansicht)</de>
+<en default="1">Worldview</en>
+<de>Weltansicht</de>
 </text>
 <text>
-<en default="1"> (Detailview)</en>
-<de>(Detailansicht)</de>
+<en default="1">Detailview</en>
+<de>Detailansicht</de>
 </text>
 <text>
 <en default="1">Infotext</en>
@@ -3118,6 +3118,10 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <text>
 <en default="1">Hide in Menu</en>
 <de>In Men&#xFC; verstecken</de>
+</text>
+<text>
+<en default="1">coordinates not entered</en>
+<de>keine Koordinaten eingetragen</de>
 </text>
 </trl>
 
