@@ -4,9 +4,9 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
     public function __construct($name, $class, $id = null)
     {
         parent::__construct($name, $class, $id);
-        $field = new Vps_Form_Field_HtmlEditor('content', 'Content');
+        $field = new Vps_Form_Field_HtmlEditor('content', trlVps('Text'));
         $field->setData(new Vps_Data_Vpc_ComponentIds('content'));
-        $field->setFieldLabel(trlVps('Text'));
+        $field->setHideLabel(true);
 
         $ignoreSettings = array('tablename', 'componentName',
                 'default', 'assets', 'assetsAdmin',
