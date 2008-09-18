@@ -1,7 +1,7 @@
 <?php
 class Vpc_Basic_ImagePosition_Form extends Vpc_Abstract_Composite_Form 
 {
-    protected $_createFieldsets = true;
+    protected $_createFieldsets = false;
     
     public function __construct($name, $class)
     {
