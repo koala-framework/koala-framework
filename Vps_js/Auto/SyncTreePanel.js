@@ -14,8 +14,7 @@ Vps.Auto.SyncTreePanel = Ext.extend(Vps.Binding.AbstractPanel, {
         this.addEvents(
             'selectionchange',
             'editaction',
-            'addaction',
-            'loaded'
+            'addaction'
         );
         this.actions['delete'] = new Ext.Action({
             text    : trlVps('Delete'),

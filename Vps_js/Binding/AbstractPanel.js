@@ -17,7 +17,8 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
             */
             'datachange',
             'selectionchange',
-            'beforeselectionchange'
+            'beforeselectionchange',
+            'loaded'
         );
         var binds = this.bindings;
         this.bindings = new Ext.util.MixedCollection();
