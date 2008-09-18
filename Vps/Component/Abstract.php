@@ -196,6 +196,11 @@ class Vps_Component_Abstract
         return self::getSetting(get_class($this), $setting);
     }
 
+    protected function _hasSetting($setting)
+    {
+        return self::hasSetting(get_class($this), $setting);
+    }
+
     static public function getFlag($class, $flag)
     {
         $flags = self::getSetting($class, 'flags');

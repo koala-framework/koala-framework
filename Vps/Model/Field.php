@@ -82,4 +82,11 @@ class Vps_Model_Field extends Vps_Model_Abstract
             'fieldName' => $this->_fieldName
         ));
     }
+    
+    public function isEqual(Vps_Model_Interface $other) {
+        return (
+            $other instanceof $this &&
+            $this->_fieldName == $other->_fieldName
+        );
+    }
 }

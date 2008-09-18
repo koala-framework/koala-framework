@@ -151,5 +151,13 @@ class Vps_Component_Abstract_Admin
         if (isset($row->component_id)) {
             Vps_Dao_Index::updateIndex($row->component_id);
         }
+        
+        if ($row->getTable() instanceof Vps_Dao_ComponentField && 
+            Vpc_Abstract::hasSetting($this->_class, 'modelname') &&
+            Vpc_Abstract::getSetting($this->_class, 'modelname') == 'Vps_Model_Component_Field')
+        {
+            Vps_Component_Cache::getInstance()->remove($this->_class, $row->component_id);
+        }
+        
     }
 }
