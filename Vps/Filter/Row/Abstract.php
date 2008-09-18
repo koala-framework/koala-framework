@@ -16,4 +16,9 @@ abstract class Vps_Filter_Row_Abstract implements Zend_Filter_Interface
     public function onDeleteRow(Vps_Db_Table_Row_Abstract $row)
     {
     }
+    
+    public function filterAfterSave()
+    {
+        return false;
+    }
 }

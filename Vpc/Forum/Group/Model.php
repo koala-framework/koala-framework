@@ -3,9 +3,12 @@ class Vpc_Forum_Group_Model extends Vps_Db_Table_Abstract
 {
     protected $_name = 'vpc_forum_threads';
     protected $_rowClass = 'Vpc_Forum_Group_Row';
-    protected $_autoFill = array(
-        'cache_child_component_id' => '{component_id}_{id}-posts'
-    );
+
+    protected function _setupFilters()
+    {
+        $filter = new Vps_Filter_Row_AutoFill('{component_id}_{id}-posts');
+        $this->_filters = array('cache_child_component_id' => $filter);
+    }
     
     protected function _setup()
     {
