@@ -180,7 +180,7 @@ class Vps_Benchmark
             }
         }
         if (!$fields) {
-            $fields = array('date', 'url', 'load', 'duration', 'memory', 'queries');
+            $fields = array('date', 'url', 'ip', 'useragent', 'load', 'duration', 'memory', 'queries');
             foreach (self::$_counter as $k=>$i) {
                 $fields[] = $k;
             }
@@ -191,7 +191,11 @@ class Vps_Benchmark
         }
         $out = array();
         foreach ($fields as $i) {
-            if ($i == 'date') {
+            if ($i == 'ip') {
+                $out[] = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+            } else if ($i == 'useragent') {
+                $out[] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
+            } else if ($i == 'url') {
                 $out[] = date('Y-m-d H:i:s');
             } else if ($i == 'url') {
                 $out[] = $_SERVER['REQUEST_URI'];
