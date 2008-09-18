@@ -56,7 +56,7 @@ Vps.Form.VpcLinkField = Ext.extend(Ext.form.TriggerField,
     },
 
     setValue: function(value) {
-        if (typeof value.name != 'undefined') {
+        if (value && typeof value.name != 'undefined') {
             Vps.Form.VpcLinkField.superclass.setValue.call(this, value.name);
             this.value = value.id;
         } else {
