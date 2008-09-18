@@ -21,10 +21,6 @@ class Vps_Form extends Vps_Form_NonTableForm
     //kann überschrieben werden wenn wir eine anderen row haben wollen
     protected function _getRowByParentRow($parentRow)
     {
-        if ($parentRow && !$parentRow instanceof Vps_Model_FnF_Row && $parentRow->getModel()->isEqual($this->_model)) {
-            return $parentRow;
-        }
-
         if ($parentRow && $this->_model instanceof Vps_Model_Field) {
             return $this->_model->getRowByParentRow($parentRow);
         } else {
@@ -147,6 +143,13 @@ class Vps_Form extends Vps_Form_NonTableForm
         $rowset = null;
 
         $id = $this->_getIdByParentRow($parentRow);
+
+        if ($parentRow && !$parentRow instanceof Vps_Model_FnF_Row
+            && $parentRow->getModel()->isEqual($this->_model)
+            && $parentRow->{$parentRow->getModel()->getPrimaryKey()} == $id
+        ) {
+            return $parentRow;
+        }
 
         if (is_array($this->getPrimaryKey())) {
             $where = array();
