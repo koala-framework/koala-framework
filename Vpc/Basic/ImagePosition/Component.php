@@ -9,15 +9,7 @@ class Vpc_Basic_ImagePosition_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['child']['component'] = array(
             'image' => 'Vpc_Basic_Image_Component'
         );
-        $ret['modelname'] = 'Vpc_Basic_ImagePosition_Model';
-        return $ret;
-    }
-
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        $ret['imagePosition'] = 
-            $this->getModel()->find($this->getData()->componentId)->current()->image_position;
+        $ret['modelname'] = 'Vps_Model_Component_Field';
         return $ret;
     }
 }
