@@ -6,7 +6,7 @@ class Vps_Media_Image
     const SCALE_DEFORM = 'deform';
     const SCALE_ORIGINAL = 'original';
 
-    public static function calculateScaleDimensions($source, $size)
+    public static function calculateScaleDimensions($sourceSize, $size)
     {
         if (isset($size['width'])) $width = $size['width'];
         else if (isset($size[0])) $width = $size[0];
@@ -24,13 +24,9 @@ class Vps_Media_Image
         if ($width == 0 && $height == 0 && $scale != self::SCALE_ORIGINAL) {
             return false;
         }
-
-        if (!is_file($source)) {
-            return false;
-        }
-        $size = getimagesize($source);
-        if (!$size) return false;
-
+        
+        $size = $sourceSize;
+        
         if ($scale != self::SCALE_ORIGINAL) {
             if ($width == 0) {
                 $width = round($height * ($size[0]/$size[1]));
@@ -87,7 +83,7 @@ class Vps_Media_Image
             // Bild wird NICHT vergrößert! (kann also auch kleiner ausgegeben werden als angefordert)
 
             // 3 if abfragen um zu verhindern, dass das bild vergrößert wird
-            if ($size[0] < $width && $size[1] < $height) {
+            if ($size[0] <= $width && $size[1] <= $height) {
                 $width = $size[0];
                 $height = $size[1];
             } else if ($size[0] < $width) {
@@ -127,7 +123,12 @@ class Vps_Media_Image
 
     public static function scale($source, $target, $size)
     {
-        $size = self::calculateScaleDimensions($source, $size);
+        if (!is_file($source)) {
+            return false;
+        }
+        $sourceSize = getimagesize($source);
+        if (!$sourceSize) return false;
+        $size = self::calculateScaleDimensions($sourceSize, $size);
 
         if ($size === false) return false;
 
