@@ -2054,8 +2054,16 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Absatz-Formatvorlagen</de>
 </text>
 <text>
+<en default="1">Block</en>
+<de>Absatz</de>
+</text>
+<text>
 <en default="1">Inline-Styles</en>
 <de>Text-Formatvorlagen</de>
+</text>
+<text>
+<en default="1">Inline</en>
+<de>Textformat</de>
 </text>
 <text>
 <en default="1">Master-Styles</en>
