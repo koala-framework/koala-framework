@@ -29,7 +29,7 @@
             </div>
 
         <?php } else { ?>
-            <?= $g->name ?>
+            <h1 class="mainHeadline"><?= $g->name ?></h1>
         <?php } ?>
         <?php if (!empty($g->childGroups)) {
             echo $this->partial($this->groupsTemplate, array('groups' => $g->childGroups,
