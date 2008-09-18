@@ -565,6 +565,7 @@ Vps.Auto.GridPanel = Ext.extend(Vps.Binding.AbstractPanel,
         this.doLayout();
 
         this.fireEvent('rendergrid', this.grid);
+        this.fireEvent('loaded', this.grid);
 
         if (result.rows) {
             this.store.loadData(result);

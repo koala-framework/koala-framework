@@ -123,6 +123,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         });
         this.formPanel.on('render', function() {
             this.fireEvent('renderform', this.getForm());
+            this.fireEvent('loaded', this.getForm());
         }, this);
         this.add(this.formPanel);
         this.doLayout();

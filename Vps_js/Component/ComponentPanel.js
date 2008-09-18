@@ -60,6 +60,15 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                     });
                     var panel = Ext.ComponentMgr.create(response.config);
                     panel.on('editcomponent', this.loadComponent, this);
+                    panel.on('loaded', function() {
+                        //muss hier oben auch nochmal gemacht werden
+                        //weil in loadComponentPanel gibt es die action noch nicht
+                        if (panel.getAction('saveBack')) {
+                            if (this.getTopToolbar().items.getCount() > 0) {
+                                panel.getAction('saveBack').show();
+                            }
+                        }
+                    }, this);
                     this.add(panel);
                     this.doLayout();
 
