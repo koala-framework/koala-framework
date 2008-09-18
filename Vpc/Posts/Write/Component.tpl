@@ -2,7 +2,7 @@
     <? if (!$this->isSaved) echo $this->component($this->preview); ?>
     <?=$this->component($this->form)?>
     <? if (!$this->isSaved) { ?>
-    <h2><?=trlVps('Last Posts')?>:</h2>
+    <h1 class="mainHeadline"><?=trlVps('Last Posts')?>:</h1>
     <?=$this->component($this->lastPosts)?>
     <? } ?>
 </div>
