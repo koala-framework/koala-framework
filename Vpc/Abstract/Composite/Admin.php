@@ -15,7 +15,7 @@ class Vpc_Abstract_Composite_Admin extends Vpc_Admin
     {
         parent::delete($componentId);
         $classes = Vpc_Abstract::getChildComponentClasses($this->_class, 'child');
-        if (!Vpc_Abstract::getSetting($this->_class, 'tablename')) {
+        if (Vpc_Abstract::hasSetting($this->_class, 'tablename')) {
             //wenn komponente kein model hat unterkomponenten hier löschen
             //ansonsten erledigt das die row
             foreach ($classes as $k=>$i) {
