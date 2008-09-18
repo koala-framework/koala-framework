@@ -19,7 +19,7 @@ Vpc.Basic.ImageEnlarge = function()
 {
     this.lightbox = Ext.get(
         Ext.DomHelper.append(Ext.getBody(),
-            { tag: 'div', cls: 'lightbox' }
+            { tag: 'div', cls: 'lightbox webLightbox webStandard' }
         )
     );
 };
