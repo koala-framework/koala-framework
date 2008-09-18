@@ -860,7 +860,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 }
                 var tb = this.getToolbar();
                 tb.tr = tb.stylesTr;
-                this.inlineStylesToolbarText = tb.insert(offs, 'Inline:');
+                this.inlineStylesToolbarText = tb.insert(offs, trlVps('Inline')+':');
                 this.inlineStylesToolbarItem = tb.insert(offs+1, this.inlineStylesSelect.dom);
                 this.inlineStylesSeparator = tb.insert(offs+2, '-');
                 tb.tr = tb.originalTr;
@@ -891,7 +891,7 @@ Vps.Form.HtmlEditor = Ext.extend(Ext.form.HtmlEditor, {
                 this.blockStylesSelect.on('change', this._onSelectBlockStyle, this);
                 var tb = this.getToolbar();
                 tb.tr = tb.stylesTr;
-                this.blockStylesToolbarText = tb.insert(0, 'Block:');
+                this.blockStylesToolbarText = tb.insert(0, trlVps('Block')+':');
                 this.blockStylesToolbarItem = tb.insert(1, this.blockStylesSelect.dom);
                 this.blockStylesSeparator = tb.insert(2, '-');
                 tb.tr = tb.originalTr;
