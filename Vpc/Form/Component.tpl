@@ -17,6 +17,10 @@ if ($this->showSuccess) {
         <div class="submitWrapper">
             <button class="submit" type="submit" name="<?= $this->formName ?>" value="submit"><?= $this->placeholder['submitButton'] ?></button>
         </div>
+        <? if ($this->method == 'get') { ?>
+            <? /* IE schickt bei enter-taste den submit-value nicht mit */ ?>
+            <input type="hidden" name="<?= $this->formName ?>" value="submit" />
+        <? } ?>
     </form>
     <?php
 }
