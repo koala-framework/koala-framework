@@ -2815,15 +2815,15 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en default="1">You have to login to see the requested page.</en>
-<de>Sie m&#xFC;ssen eingeloggt sein, um die Seite zu betreten.</de>
+<de>Sie müssen sich einloggen, um die gewünschte Seite zu sehen.</de>
 </text>
 <text>
 <en default="1">If you don't have an account, you can</en>
-<de>Wenn sie noch keinen Account haben, k&#xF6;nnen sie sich</de>
+<de>Sollten Sie noch kein Benutzerkonto besitzen, können Sie</de>
 </text>
 <text>
 <en default="1">register here</en>
-<de>hier registrieren</de>
+<de>kostenlos ein neues Benutzerkonto anlegen</de>
 </text>
 <text>
 <en default="1">Show</en>
@@ -3093,7 +3093,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">User ID ist invalid.</en>
-<de>_</de>
+<de>Der Aktivierungscode ist ungültig.</de>
 </text>
 <text>
 <en default="1">Forum.User-List</en>
