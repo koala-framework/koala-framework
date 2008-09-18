@@ -71,4 +71,14 @@ class Vps_Form_NonTableForm extends Vps_Form_Container_Abstract
         unset($ret['idTemplate']);
         return $ret;
     }
+
+    public function getModel()
+    {
+        $this->getProperty('model');
+    }
+
+    public function setModel($value)
+    {
+        return $this->setProperty('model', $value);
+    }
 }
