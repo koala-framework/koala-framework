@@ -19,6 +19,7 @@ class Vpc_Posts_Directory_Component extends Vpc_Directories_Item_Directory_Compo
             'name' => trlVps('Write'),
         );
         $ret['generators']['child']['component']['view'] = 'Vpc_Posts_Directory_View_Component';
+        $ret['placeholder']['writeText'] = null;
         return $ret;
     }
 
