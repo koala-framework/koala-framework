@@ -33,7 +33,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
 
         $where = array();
         if ($ownStyles) {
-            $where["ownStyles = ? OR ownStyles=''"] = $ownStyles;
+            $where["ownStyles = ?"] = $ownStyles;
         } else {
             $where[] = "ownStyles = ''";
         }
