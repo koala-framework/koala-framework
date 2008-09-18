@@ -6,7 +6,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     const FILE_PASSWORD = 'l4Gx8SFe';
     const FILE_PASSWORD_DOWNLOAD = 'j3yjEdv1';
     private $_fileRowCache = array();
-
+   
     public function duplicate($data = array())
     {
         $data = array_merge($this->toArray(), $data);
@@ -201,16 +201,6 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     {
         parent::_insert();
         $this->_updateFilters();
-        foreach ($this->getTable()->getAutoFill() as $field => $template) {
-            $value = $template;
-            preg_match_all("/{(.*)}/U", $template, $matches);
-            foreach ($matches[0] as $key => $match) {
-                $fn = $matches[1][$key];
-                $value = str_replace($match, $this->$fn, $value);
-            }
-            $this->$field = $value;
-        }
-        
     }
 
     protected function _update()
@@ -219,18 +209,29 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         $this->_updateFilters();
     }
 
-    private function _updateFilters()
+    private function _updateFilters($filterAfterSave = false)
     {
         if ($this->_skipFilters) return; //für saveSkipFilters
 
         $filters = $this->getTable()->getFilters();
         foreach($filters as $k=>$f) {
+            if ($f->filterAfterSave() != $filterAfterSave) continue;
             if ($f instanceof Vps_Filter_Row_Abstract) {
                 $this->$k = $f->filter($this);
             } else {
                 $this->$k = $f->filter($this->__toString());
             }
+            if ($filterAfterSave) {
+                $this->_skipFilters = true;
+                $this->save();
+            }
         }
+    }
+
+    public function save()
+    {
+        parent::save();
+        $this->_updateFilters(true);
     }
 
 
