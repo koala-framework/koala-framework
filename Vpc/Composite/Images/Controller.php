@@ -28,7 +28,7 @@ class Vpc_Composite_Images_Controller extends Vpc_Abstract_List_Controller
         }
 
 
-        $this->_columns->add(new Vps_Grid_Column('pic', trlVps('Image'), 40))
+        $this->_columns->add(new Vps_Grid_Column('pic', trlVps('Image'), 100))
             ->setData(new Vps_Data_Vpc_Image($class, 'gridRow'))
             ->setRenderer('mouseoverPic');
         $this->_columns->add(new Vps_Grid_Column('pic_large'))
