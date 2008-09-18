@@ -5,6 +5,7 @@ class Vpc_User_Detail_Guestbook_Component extends Vpc_Posts_Directory_Component
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Guestbook');
+        $ret['placeholder']['writeText'] = trlVps('New Entry');
         return $ret;
     }
 
