@@ -272,7 +272,7 @@ Vps.Component.Pages = Ext.extend(Ext.Panel, {
             this.actions[type] = new Ext.Action({
                 text    : trlVps('Open Preview'),
                 handler : function () {
-                    window.open('/admin/component/pages/openPreview?page_id='+
+                    window.open('/admin/component/pages/open-preview?page_id='+
                                 this.treePanel.getSelectedId());
                 },
                 icon    : '/assets/silkicons/page_white_magnify.png',
