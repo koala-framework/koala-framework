@@ -30,14 +30,26 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
         $select = $threadGenerator->joinWithParentGenerator($select, $groupGenerator, $forum);
         $select->limit($this->_getSetting('numberOfThreads'));
         $select->order('create_time', 'DESC');
-        $posts = $postGenerator->getChildData(null, $select);
-        foreach ($posts as $post) {
-            $thread = $post->parent->parent;
-            foreach ($thread->getComponent()->getThreadVars() as $key => $val) {
-                $thread->$key = $val;
+        $threads = array();
+        $threadIds = array();
+        while (count($threads) < $this->_getSetting('numberOfThreads')) {
+            $posts = $postGenerator->getChildData(null, $select);
+            foreach ($posts as $post) {
+                $thread = $post->parent->parent;
+                if (in_array($thread->componentId, $threadIds)) continue;
+                foreach ($thread->getComponent()->getThreadVars() as $key => $val) {
+                    $thread->$key = $val;
+                }
+                $threadIds[] = $thread->componentId;
+                $threads[] = $thread;
             }
-            $ret['threads'][] = $thread;
+            if ($post) {
+                $select->where('vpc_posts.create_time < ?', $post->row->create_time);
+            } else {
+                break;
+            }
         }
+        $ret['threads'] = $threads;
         return $ret;
     }
 }
