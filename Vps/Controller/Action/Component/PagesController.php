@@ -113,9 +113,11 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $host = $_SERVER['HTTP_HOST'];
         $host = str_replace('www.', '', $host);
         $host = 'preview.' . $host;
-        $pc = Vps_PageCollection_Abstract::getInstance();
-        $p = $pc->getPageById($this->_getParam('page_id'));
-        $href = 'http://' . $host . $pc->getUrl($p);
+        $page = Vps_Component_Data_Root::getInstance()->getComponentById($this->_getParam('page_id'));
+        if (!$page) {
+            throw new Vps_ClientException(trlVps('Page not found'));
+        }
+        $href = 'http://' . $host . $page->url;
         header('Location: '.$href);
         exit;
     }
