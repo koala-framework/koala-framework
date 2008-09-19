@@ -27,13 +27,19 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
         $rows = $this->getModel()->fetchAll($this->_getSelect());
         foreach ($rows as $row) {
             $id = $row->component_id . '-' . $row->id;
-            $post = Vps_Component_Data_Root::getInstance()->getComponentById($id);
+            $post = Vps_Component_Data_Root::getInstance()->getComponentByDbId($id);
             if ($post) {
                 $dateHelper = new Vps_View_Helper_Date();
-                $post->linktext =
-                    $dateHelper->date($post->row->create_time) . ': ' . 
-                    $post->getParentPage()->getParentPage()->name . ': ' .
-                    $post->getPage()->name;
+                $linktexts = array();
+                $page = $post->getPage();
+                while ($page) {
+                    $linktexts[] = $page->name;
+                    $page = $page->getParentPage();
+                }
+                $post->linktext = 
+                    $dateHelper->date($post->row->create_time) . 
+                    ': ' .
+                    implode(' -> ', array_reverse($linktexts));
                 $ret['posts'][] = $post;
             }
         }

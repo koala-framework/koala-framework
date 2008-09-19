@@ -1,5 +1,5 @@
 <?php
-class Vpc_User_Detail_GeneralCommunity_LastPosts_Admin extends Vpc_Abstract_Composite_Admin
+class Vpc_User_Detail_GeneralCommunity_LastPosts_Admin extends Vpc_Posts_Latest_Admin
 {
     public function _onRowAction($row)
     {
@@ -10,9 +10,6 @@ class Vpc_User_Detail_GeneralCommunity_LastPosts_Admin extends Vpc_Abstract_Comp
             foreach ($userDetails as $detail) {
                 Vps_Component_Cache::getInstance()->remove($detail->getRecursiveChildComponents(array('componentClass'=>$this->_class)));
             }
-        }
-        if ($row instanceof Vpc_Forum_Directory_Row) {
-            Vps_Component_Cache::getInstance()->remove($this->_class);
         }
     }
 }
