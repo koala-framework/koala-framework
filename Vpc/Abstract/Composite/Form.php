@@ -21,11 +21,11 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
                 if ($this->_getIdTemplateForChild($key)) {
                     $form->setIdTemplate($this->_getIdTemplateForChild($key));
                 }
-                $name = Vpc_Abstract::getSetting($class, 'componentName');
-                $name = str_replace('.', ' ', $name);
-                if (!$this->_createFieldsets) {
+                if (!$this->_createFieldsets || !Vpc_Abstract::hasSetting($class, 'componentName')) {
                     $this->add($form);
                 } else {
+                    $name = Vpc_Abstract::getSetting($class, 'componentName');
+                    $name = str_replace('.', ' ', $name);
                     $this->add(new Vps_Form_Container_FieldSet($name))
                         ->setName($key)
                         ->add($form);
