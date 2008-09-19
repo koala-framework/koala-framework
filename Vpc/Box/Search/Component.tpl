@@ -1,8 +1,9 @@
 <div class="<?=$this->cssClass?> searchBox">
     <form action="<?= $this->searchPageUrl; ?>" method="get" autocomplete="off">
         <input type="hidden" class="ajaxUrl" value="<?= $this->ajaxUrl; ?>" />
-        <input type="text" name="query" class="searchField vpsClearOnFocus"
+        <input type="text" name="<?=$this->queryParam?>" class="searchField vpsClearOnFocus"
             value="<?= $this->placeholder['clearOnFocus']; ?>" autocomplete="off" />
+        <input type="hidden" name="<?=$this->submitParam?>" value="submit" autocomplete="off" />
         <button type="submit" class="submit"><?= $this->placeholder['searchButton']; ?></button>
     </form>
     <div class="searchResult">
