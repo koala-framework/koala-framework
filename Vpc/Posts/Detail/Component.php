@@ -5,6 +5,7 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['actions'] = 'Vpc_Posts_Detail_Actions_Component';
+        $ret['generators']['child']['component']['signature'] = 'Vpc_Posts_Detail_Signature_Component';
         return $ret;
     }
     
@@ -14,8 +15,6 @@ class Vpc_Posts_Detail_Component extends Vpc_Abstract_Composite_Component
         $data = $this->getData();
         
         $ret['content'] = self::replaceCodes($data->row->content);
-        $ret['signature'] = null;
-
         $ret['user'] = Vps_Component_Data_Root::getInstance()
             ->getComponentByClass('Vpc_User_Directory_Component')
             ->getChildComponent('_'.$data->row->user_id);

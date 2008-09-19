@@ -1,10 +1,6 @@
 <div class="<?=$this->cssClass?>">
     <div class="postData">
-        <? if ($this->user) {
-            $userText = $this->user->name;
-            $rating = $this->user->getChildComponent('-rating');
-            if ($rating) $userText .= ' ' . $this->component($rating);
-        ?>
+        <? if ($this->user) { ?>
         <div class="postInfo">
             <div class="avatar">
                 <?= $this->componentLink(
@@ -27,9 +23,7 @@
         <div class="text">
             <?=$this->content?>
         </div>
-        <? if ($this->user->row->signature) { ?>
-            <p class="signature"><tt>--<br /><?=nl2br(htmlspecialchars($this->user->row->signature))?></tt></p>
-        <?php } ?>
+        <?=$this->component($this->signature)?>
     </div>
     <div class="clear"></div>
 </div>
