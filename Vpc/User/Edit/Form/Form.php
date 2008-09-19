@@ -6,6 +6,12 @@ class Vpc_User_Edit_Form_Form extends Vps_Form
         parent::_init();
         $this->setTable(Zend_Registry::get('userModel'));
     }
+    
+    protected function _getRowByParentRow($parentRow)
+    {
+        return $parentRow;
+    }
+    
     public function addUserForms($detailsClass, $forms)
     {
         $generators = Vpc_Abstract::getSetting($detailsClass, 'generators');
