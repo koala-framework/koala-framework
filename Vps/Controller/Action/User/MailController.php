@@ -7,13 +7,8 @@ class Vps_Controller_Action_User_MailController extends Vps_Controller_Action_Au
     protected function _initFields()
     {
         if (Zend_Registry::get('userModel')->getAuthedUserRole() == 'admin') {
-            $values = $this->_getMailTemplatesRecursive();
-
-            $this->_form->add(new Vps_Form_Field_Select('template', trlVps('Template')))
-                ->setWidth(300)
-                ->setValues($values)
-                ->setShowNoSelection(true)
-                ->setEmptyText(trlVps('(all templates)'));
+            $this->_form->add(new Vps_Form_Field_TextField('template', trlVps('Template')))
+                ->setWidth(300);
             $this->_form->add(new Vps_Form_Field_TextField('variable', trlVps('Variable')))
                 ->setWidth(300);
         } else {
@@ -34,13 +29,14 @@ class Vps_Controller_Action_User_MailController extends Vps_Controller_Action_Au
             ->setHeight(200);
     }
 
-    private function _getMailTemplatesRecursive($scanPath = 'application/views/mails')
+    // deprecated - wird nicht mehr verwendet
+    private function _getMailTemplatesRecursive($scanPath = 'application/views')
     {
         $values = array();
         foreach (new DirectoryIterator($scanPath) as $file) {
             if ($file->isFile()) {
                 $name = '';
-                if (preg_match('#^application/views/mails/(.+)$#', $scanPath, $matches)) {
+                if (preg_match('#^application/views/(.+)$#', $scanPath, $matches)) {
                     $name = $matches[1].'/';
                 }
                 $name .= $file->getFilename();
