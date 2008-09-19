@@ -4,6 +4,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
     protected $_form;
     private $_processed = false;
     private $_isSaved = false;
+    private $_initialized = false;
     private $_postData;
     protected $_errors = array();
 
@@ -40,11 +41,9 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         }
         $this->_processed = true;
 
-        $this->_initForm();
-
         Vps_Registry::get('db')->beginTransaction();
 
-        $this->_form->initFields();
+        $this->getForm()->initFields();
 
         $postData = $this->_form->processInput($postData);
         if (isset($postData[$this->getData()->componentId])) {
@@ -81,7 +80,16 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         if (!$this->_processed) {
             throw new Vps_Exception("Form '{$this->getData()->componentId}' has not yet been processed, processInput must be called");
         }
-        return $this->_form->getRow();
+        return $this->getForm()->getRow();
+    }
+
+    public function getForm()
+    {
+        if (!$this->_initialized) {
+            $this->_initialized = true;
+            $this->_initForm();
+        }
+        return $this->_form;
     }
 
     public function getTemplateVars()
@@ -105,8 +113,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
             }
         }
 
-        $values = $this->_form->load(null, $this->_postData);
-        $ret['form'] = $this->_form->getTemplateVars($values);
+        $values = $this->getForm()->load(null, $this->_postData);
+        $ret['form'] = $this->getForm()->getTemplateVars($values);
 
         $dec = $this->_getSetting('decorator');
         if ($dec && is_string($dec)) {
@@ -121,7 +129,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         $ret['isUpload'] = false;
         foreach (new RecursiveIteratorIterator(
-                new Vps_Collection_Iterator_RecursiveFormFields($this->_form->fields))
+                new Vps_Collection_Iterator_RecursiveFormFields($this->getForm()->fields))
                 as $f) {
             if ($f instanceof Vps_Form_Field_File) {
                 $ret['isUpload'] = true;
