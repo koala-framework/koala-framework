@@ -2258,12 +2258,6 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 <de>Der Aktivierungscode ist falsch. Vielleicht wurde die URL unvollst&#xE4;ndig kopiert.</de>
 </text>
 <text>
-<en default="1">Activation code is invalid. Maybe your '
-                                         .'account has already been activated?</en>
-<de>Der Aktivierungscode ist falsch. Vielleicht wurde Ihr '
-                                         .'Zugang bereits aktiviert?</de>
-</text>
-<text>
 <en default="1">New password couldn't be set</en>
 <de>Das neue Passwort konnte nicht erstellt werden</de>
 </text>
@@ -2969,7 +2963,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Data was not sent completely. Please copy the complete address out of the email.</en>
-<de>_</de>
+<de>Daten wurden nicht vollst&#xE4;ndig gesendet. Bitte kopieren Sie die vollst&#xE4;ndige Adresse aus der E-Mail.</de>
 </text>
 <text>
 <en default="1">Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.</en>
