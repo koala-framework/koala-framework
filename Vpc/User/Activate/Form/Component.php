@@ -28,18 +28,18 @@ class Vpc_User_Activate_Form_Component extends Vpc_Form_Component
         } else {
             $code = $this->_form->getRow()->code;
         }
-
-        list($userId, $code) = explode('-', $code);
-        if (empty($userId) || empty($code)) {
+        $code = explode('-', $code);
+        if (count($code) != 2 || empty($code[0]) || empty($code[1])) {
             $this->_errors[] = trlVps('Data was not sent completely. Please copy the complete address out of the email.');
-        }
-        $userId = (int)$userId;
-        $this->_user = Zend_Registry::get('userModel')->find($userId)->current();
-
-        if (!$this->_user) {
-            $this->_errors[] = trlVps('User ID ist invalid.');
-        } else if ($this->_user->getActivationCode() != $code) {
-            $this->_errors[] = trlVps('Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.');
+        } else {
+            $userId = (int)$code[0];
+            $code = $code[1];
+            $this->_user = Zend_Registry::get('userModel')->find($userId)->current();
+            if (!$this->_user) {
+                $this->_errors[] = trlVps('Data was not sent completely. Please copy the complete address out of the email.');
+            } else if ($this->_user->getActivationCode() != $code) {
+                $this->_errors[] = trlVps('Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.');
+            }
         }
 
         Vps_Auth::getInstance()->clearIdentity();
