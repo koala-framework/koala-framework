@@ -115,6 +115,9 @@ class Vps_Model_User_Users extends Vps_Db_Table
 
     public function fetchRowByEmail($email)
     {
+        if (is_null($email)) {
+            throw new Vps_Exception("email must not be null");
+        }
         return $this->fetchRow(array('email = ?' => $email));
     }
 
