@@ -3,18 +3,23 @@ class Vpc_Posts_Detail_Edit_Form_Component extends Vpc_Posts_Write_Form_Componen
 {
     protected function _getPostsComponent()
     {
+        return $this->_getPostComponent();
+    }
+    
+    protected function _getPostComponent()
+    {
         return $this->getData()->parent->parent->parent;
     }
 
     protected function _initForm()
     {
         parent::_initForm();
-        $this->_form->setId($this->getData()->parent->parent->parent->row->id);
+        $this->_form->setId($this->_getPostComponent()->row->id);
     }
 
     public function processInput($postData)
     {
-        if (!$this->getData()->parent->parent->getComponent()->mayEditPost()) {
+        if (!$this->_getPostComponent()->getChildComponent('-actions')->getComponent()->mayEditPost()) {
             throw new Vpc_AccessDeniedException();
         }
         parent::processInput($postData);
