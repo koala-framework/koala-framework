@@ -26,6 +26,15 @@ abstract class Vpc_Box_Search_Component extends Vpc_Abstract
     {
         $ret = parent::getTemplateVars();
         $ret['ajaxUrl'] = $this->getData()->getChildComponent('_ajax')->url;
+        $formData = $this->getSearchFormData();
+        $ret['queryParam'] = $formData['queryParam'];
+        $ret['submitParam'] = $formData['submitParam'];
+        $ret['searchPageUrl'] = $formData['searchPageUrl'];
+        return $ret;
+    }
+
+    public function getSearchFormData()
+    {
         $fc = $this->_getSearchForm();
         if (!$fc->getComponent() instanceof Vpc_Form_Component) {
             throw new Vps_Exception("The Component returned by _getSearchForm needs to be a Vpc_Form_Component");
@@ -34,10 +43,11 @@ abstract class Vpc_Box_Search_Component extends Vpc_Abstract
         if (!isset($form->fields['query'])) {
             throw new Vps_Exception("The Form returned by _getSearchForm must have a field named 'query'");
         }
-        $ret['queryParam'] = $form->fields['query']->getFieldName();
-        $ret['submitParam'] = $fc->componentId;
-        $ret['searchPageUrl'] = $fc->url;
-        return $ret;
+        return array(
+            'queryParam' => $form->fields['query']->getFieldName(),
+            'submitParam' => $fc->componentId,
+            'searchPageUrl' => $fc->url
+        );
     }
 
     abstract public function getSearchComponents();

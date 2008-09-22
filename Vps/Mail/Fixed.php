@@ -10,10 +10,10 @@ class Vps_Mail_Fixed extends Zend_Mail
     //override
     protected function _encodeHeader($value)
     {
-      if (Zend_Mime::isPrintable($value)) {
-          return $value;
-      } else {
-          return Vps_Mime::encodeQuotedPrintableHeader($value, 'utf-8');
-      }
+        if (Zend_Mime::isPrintable($value)) {
+            return $value;
+        } else {
+            return Vps_Mime::encodeQuotedPrintableHeader($value, 'utf-8');
+        }
     }
 }
