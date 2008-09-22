@@ -18,7 +18,7 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
             ->setData(new Vps_Controller_Action_User_Users_ActivationlinkData());
 
 
-        $userEditForm = $this->_form->add(new $this->_userDataFormName('form'));
+        $userEditForm = $this->_form->add(new $this->_userDataFormName('user'));
         $userEditForm->setIdTemplate('{0}');
 
         $userDirectory = Vps_Component_Data_Root::getInstance()
