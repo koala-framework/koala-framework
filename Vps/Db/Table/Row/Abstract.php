@@ -230,8 +230,9 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
     public function save()
     {
-        parent::save();
+        $ret = parent::save();
         $this->_updateFilters(true);
+        return $ret;
     }
 
 
