@@ -15,6 +15,7 @@ class Vps_Pdf_TcPdf extends TCPDF
         $this->SetAuthor("Vivid Planet Software GmbH");
         $this->SetCreator("Vivid Planet Software GmbH mit FPDF");
         $this->SetTitle("Wochenbericht");
+        $this->lisymbol = utf8_encode(chr(0x95)); // = •
     }
 
     public function getRightMargin()
@@ -131,7 +132,25 @@ class Vps_Pdf_TcPdf extends TCPDF
     {
         $text = str_replace("€", utf8_encode(chr(0x80)), $text);
         $text = str_replace("—", utf8_encode(chr(0x97)), $text);
+        $text = str_replace("•", utf8_encode(chr(0x95)), $text);
         return $text;
+    }
+
+
+    /*
+     * patch für tcpdf -> bei nummernzeichen werden automatish zwei
+     * zeilenumbrüche durchgeführt.
+     */
+    protected function closeHTMLTagHandler(&$dom, $key, $cell=false) {
+            $temp = $this->lasth;
+            switch($dom[$key]['value']) {
+                case 'ul':
+                case 'ol':
+                    $this->lasth = $this->lasth / 2;
+                    break;
+            }
+            parent::closeHTMLTagHandler(&$dom, $key, $cell);
+            $this->lasth = $temp;
     }
 
 

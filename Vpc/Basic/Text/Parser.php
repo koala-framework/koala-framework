@@ -1,12 +1,13 @@
 <?php
 class Vpc_Basic_Text_Parser
 {
-    protected $_row;
     protected $_parser;
-    protected $_stack = array();
+    protected $_stack;
     protected $_finalHTML;
+    protected $_deleteContent;
+    protected $_deleteContentStack;
 
-    protected $_deleteContent = false;
+    protected $_row;
     protected $_enableColor = false;
     protected $_enableTagsWhitelist = true;
     protected $_enableStyles = true;
@@ -19,13 +20,22 @@ class Vpc_Basic_Text_Parser
     protected function endElement($parser, $element)
     {
         $tag = array_pop($this->_stack);
-        if ($tag) {
+        if ($tag && !$this->_deleteContent) {
             $this->_finalHTML .= '</'.$tag.'>';
         }
+        if ($element == "SCRIPT") {
+            array_pop($this->_deleteContentStack);
+            if (!$this->_deleteContentStack) {
+                $this->_deleteContent = false;
+            }
+        }
+
+
     }
 
     protected function startElement($parser, $element, $attributes)
     {
+        $finalHTML = $this->_finalHTML;
         if ($element == 'SPAN') {
             if (isset($attributes['STYLE'])) {
                 $style = $attributes['STYLE'];
@@ -60,6 +70,7 @@ class Vpc_Basic_Text_Parser
             //do nothing
         } elseif ($element == 'SCRIPT') {
             array_push($this->_stack, false);
+            array_push($this->_deleteContentStack, $element);
             $this->_deleteContent = true;
         } else {
             if ($element == 'IMG') {
@@ -118,14 +129,17 @@ class Vpc_Basic_Text_Parser
                 $this->_finalHTML .= '>';
             }
         }
+        if ($this->_deleteContent) {
+            $this->_finalHTML = $finalHTML;
+        }
 
     }
 
     protected function characterData($parser, $cdata)
     {
+        $cdata = preg_replace("#<!--.*-->#", "", $cdata);
         if (!$this->_deleteContent){
             $this->_finalHTML .= $cdata;
-            $this->_deleteContent = false;
         }
     }
 
@@ -152,7 +166,7 @@ class Vpc_Basic_Text_Parser
             'u'=>array(), 'ul'=>array(), 'ol'=>array(), 'li'=>array()
         );
         if ($this->_enableStyles) {
-            $this->_tagsWhitelist = array_merge($this->_tagsWhitelist, 
+            $this->_tagsWhitelist = array_merge($this->_tagsWhitelist,
                 array('span'=>array('class'), 'h1'=>array('class'), 'h2'=>array('class'),
                       'h3'=>array('class'), 'h4'=>array('class'),
                       'h5'=>array('class'), 'h6'=>array('class')));
@@ -160,6 +174,8 @@ class Vpc_Basic_Text_Parser
         }
         $this->_stack = array();
         $this->_finalHTML = '';
+        $this->_deleteContent = false;
+        $this->_deleteContentStack = array();
         $this->_parser = xml_parser_create();
 
         xml_set_object($this->_parser, $this);
@@ -183,6 +199,7 @@ class Vpc_Basic_Text_Parser
         xml_parse($this->_parser,
           "<BODY>".$html."</BODY>",
           true);
+
         return $this->_finalHTML;
     }
 }
