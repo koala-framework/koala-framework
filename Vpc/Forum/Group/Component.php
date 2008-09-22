@@ -14,7 +14,14 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
             'name' => trlVps('new thread')
         );
         $ret['tablename'] = 'Vpc_Forum_Group_Model';
-        $ret['order'] = array('field'=>'create_time', 'direction'=>'DESC');
+        $ret['order'] = array(
+            'field' => '(
+                SELECT MAX(create_time) 
+                FROM vpc_posts 
+                WHERE vpc_posts.component_id=cache_child_component_id
+            )',
+            'direction'=>'DESC'
+        );
         return $ret;
     }
 
@@ -32,12 +39,7 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
         }
         return false;
     }
-
-    private function _getSelect()
-    {
-        return $this->getData()->getGenerator('detail')->select($this->getData());
-    }
-
+    
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
