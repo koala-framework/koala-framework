@@ -76,7 +76,7 @@ class Vps_Model_Db_Row implements Vps_Model_Row_Interface
     {
         return $this->_row->toArray();
     }
-    
+
     public function findDependentRowset($dependentTable, $ruleKey = null, Vps_Model_Select $select = null)
     {
         $dbSelect = $this->_model->createDbSelect($select);
@@ -90,7 +90,7 @@ class Vps_Model_Db_Row implements Vps_Model_Row_Interface
             'model' => $this
         ));
     }
-        
+
     public function findParentRow($parentTable, $ruleKey = null, Vps_Model_Select $select = null)
     {
         $dbSelect = $this->_model->createDbSelect($select);
@@ -98,8 +98,10 @@ class Vps_Model_Db_Row implements Vps_Model_Row_Interface
             $parentTable = $parentTable->getTable();
         }
         $class = get_class($this);
+        $dbRow = $this->_row->findParentRow($parentTable, $ruleKey, $dbSelect);
+        if (!$dbRow) return null;
         return new $class(array(
-            'row' => $this->_row->findParentRow($parentTable, $ruleKey, $dbSelect),
+            'row' => $dbRow,
             'model' => $this->_model
         ));
     }
