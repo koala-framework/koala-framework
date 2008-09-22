@@ -64,7 +64,9 @@ class Vps_Form extends Vps_Form_NonTableForm
         }
         $this->_beforeSave($row);
 
-        $row->save();
+        if (!$this->_rowIsParentRow($parentRow)) {
+            $row->save();
+        }
         parent::save($parentRow, $postData);
 
         if (!$this->getId()) {
@@ -129,6 +131,19 @@ class Vps_Form extends Vps_Form_NonTableForm
         return $this;
     }
 
+    private function _rowIsParentRow($parentRow)
+    {
+        $id = $this->_getIdByParentRow($parentRow);
+
+        if ($parentRow && !$parentRow instanceof Vps_Model_FnF_Row
+            && $parentRow->getModel()->isEqual($this->_model)
+            && $parentRow->{$parentRow->getModel()->getPrimaryKey()} == $id
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     public function getRow($parentRow = null)
     {
         $key = 'none';
@@ -142,14 +157,11 @@ class Vps_Form extends Vps_Form_NonTableForm
         }
         $rowset = null;
 
-        $id = $this->_getIdByParentRow($parentRow);
-
-        if ($parentRow && !$parentRow instanceof Vps_Model_FnF_Row
-            && $parentRow->getModel()->isEqual($this->_model)
-            && $parentRow->{$parentRow->getModel()->getPrimaryKey()} == $id
-        ) {
+        if ($this->_rowIsParentRow($parentRow)) {
             return $parentRow;
         }
+
+        $id = $this->_getIdByParentRow($parentRow);
 
         if (is_array($this->getPrimaryKey())) {
             $where = array();
