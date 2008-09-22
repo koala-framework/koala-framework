@@ -1,6 +1,7 @@
 .$cssClass div.searchResult {
     border: 1px solid #bbb;
     background-color: #fff;
-    width: 250px;
+    width: 300px;
     position: absolute;
+    z-index: 30000;
 }

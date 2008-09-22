@@ -16,17 +16,17 @@ class Vpc_Box_Search_Ajax_Component extends Vpc_Abstract_Ajax_Component
             $ret['qry'] = $_REQUEST['query'];
         }
         $searchComponents = $this->getData()->parent->getComponent()->getSearchComponents();
-        foreach ($searchComponents as $c) {
-            $generators = Vpc_Abstract::getSetting($c->componentClass, 'generators');
-            $fields = Vpc_Abstract::getSetting(
-                $generators['child']['component']['view'], 'searchQueryFields'
-            );
-            $select = $c->getComponent()->getSelect()->searchLike($ret['qry'], $fields);
-            $select->limit(10);
-            $ret['lists'][] = array(
-                'list' => $c,
-                'items' => $c->getChildComponents($select)
-            );
+        foreach ($searchComponents as $key => $val) {
+            $addList = array();
+            if (is_array($val)) {
+                $addList['component'] = $val['component'];
+                $addList['title'] = $val['title'];
+            } else if (is_object($val)) {
+                $addList['component'] = $val;
+                $addList['title'] = $key;
+                if (is_numeric($addList['title'])) $addList['title'] = '';
+            }
+            $ret['lists'][] = $addList;
         }
         return $ret;
     }

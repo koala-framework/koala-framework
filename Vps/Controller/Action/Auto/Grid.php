@@ -163,6 +163,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             return array();
         }
         $db = $this->_model->getTable()->getAdapter();
+        $availableColumns = $this->_model->getTable()->info(Zend_Db_Table_Abstract::COLS);
         $where = array();
         $query = $this->getRequest()->getParam('query');
         $sk = isset($this->_filters['text']['skipWhere']) &&
@@ -180,10 +181,12 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
             foreach ($query as $q) {
                 if (strpos($q, ':') !== false) {
                     list($field, $value) = explode(':', $q);
-                    if (is_numeric($value)) {
-                        $where[] = "$field = '$value'";
-                    } else {
-                        $where[] = "$field LIKE '%$value%'";
+                    if (in_array($field, $availableColumns)) {
+                        if (is_numeric($value)) {
+                            $where[] = $db->quoteInto("$field = ?", $value);
+                        } else {
+                            $where[] = $db->quoteInto("$field LIKE ?", "%$value%");
+                        }
                     }
                 } else {
                     $whereQuery = array();
