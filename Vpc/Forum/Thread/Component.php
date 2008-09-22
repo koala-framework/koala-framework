@@ -8,6 +8,11 @@ class Vpc_Forum_Thread_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['child']['component']['observe'] = 'Vpc_Forum_Thread_Observe_Component';
         $ret['generators']['child']['component']['moderate'] = 'Vpc_Forum_Thread_Moderate_Component';
         $ret['generators']['child']['component']['preview'] = 'Vpc_Forum_Thread_Preview_Component';
+        $ret['generators']['edit'] = array(
+            'class' => 'Vps_Component_Generator_Page_Static',
+            'component' => 'Vpc_Forum_Thread_Edit_Component',
+            'name' => trlVps('edit')
+        );
         $ret['name'] = trlVps('Forum');
         return $ret;
     }
