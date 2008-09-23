@@ -400,7 +400,7 @@ class Vps_Setup
             }
             $page = $data->getComponent();
             try {
-                $page->sendContent($page);
+                $page->sendContent();
             } catch (Vpc_AccessDeniedException $e) {
                 self::output401();
             }
