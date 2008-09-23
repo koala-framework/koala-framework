@@ -67,7 +67,6 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = true;
-        $ret['isPdf'] = false;
         return $ret;
     }
 
@@ -223,58 +222,48 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $this->_pdfWriter;
     }
 
-    public function sendContent($decoratedPage)
+    public function sendContent()
     {
-        if (isset($_GET['pdf']) && ($pdfClass = Vpc_Admin::getComponentFile(get_class($this), 'Pdf', 'php', true))) {
-            //TODO: bessere lösung für das!
-            $masterClass = Vpc_Admin::getComponentFile(get_class($this), 'PdfMaster', 'php', true);
-            if (!$masterClass) { $masterClass = 'Vps_Pdf_TcPdf'; }
-            $pdf = new $masterClass($this);
-            $this->getPdfWriter($pdf)->writeContent();
-            $pdf->output();
-            die();
-        } else {
-            header('Content-Type: text/html; charset=utf-8');
-            
-            $process = $this->getData()
-                ->getRecursiveChildComponents(array(
-                        'page' => false,
-                        'flags' => array('processInput' => true)
-                    ));
-            if (Vps_Component_Abstract::getFlag(get_class($this), 'processInput')) {
-                $process[] = $this->getData();
-            }
-
-            $postData = $_REQUEST;
-            //in _REQUEST sind _FILES nicht mit drinnen
-            foreach ($_FILES as $k=>$file) {
-                if (is_array($file['tmp_name'])) {
-                    //wenn name[0] dann kommts in komischer form daher -> umwandeln
-                    foreach (array_keys($file['tmp_name']) as $i) {
-                        foreach (array_keys($file) as $prop) {
-                            $postData[$k][$i][$prop] = $file[$prop][$i];
-                        }
-                    }
-                } else {
-                    $postData[$k] = $file;
-                }
-            }
-            foreach ($process as $i) {
-                if (method_exists($i->getComponent(), 'processInput')) {
-                    $i->getComponent()->processInput($postData);
-                }
-            }
-            Vps_Component_Cache::getInstance()->process(false);
-
-            echo Vps_View_Component::renderMasterComponent($this->getData());
-
-            foreach ($process as $i) {
-                if (method_exists($i->getComponent(), 'postProcessInput')) {
-                    $i->getComponent()->postProcessInput($postData);
-                }
-            }
-            Vps_Component_Cache::getInstance()->process();
+        header('Content-Type: text/html; charset=utf-8');
+        
+        $process = $this->getData()
+            ->getRecursiveChildComponents(array(
+                    'page' => false,
+                    'flags' => array('processInput' => true)
+                ));
+        if (Vps_Component_Abstract::getFlag(get_class($this), 'processInput')) {
+            $process[] = $this->getData();
         }
+
+        $postData = $_REQUEST;
+        //in _REQUEST sind _FILES nicht mit drinnen
+        foreach ($_FILES as $k=>$file) {
+            if (is_array($file['tmp_name'])) {
+                //wenn name[0] dann kommts in komischer form daher -> umwandeln
+                foreach (array_keys($file['tmp_name']) as $i) {
+                    foreach (array_keys($file) as $prop) {
+                        $postData[$k][$i][$prop] = $file[$prop][$i];
+                    }
+                }
+            } else {
+                $postData[$k] = $file;
+            }
+        }
+        foreach ($process as $i) {
+            if (method_exists($i->getComponent(), 'processInput')) {
+                $i->getComponent()->processInput($postData);
+            }
+        }
+        Vps_Component_Cache::getInstance()->process(false);
+
+        echo Vps_View_Component::renderMasterComponent($this->getData());
+
+        foreach ($process as $i) {
+            if (method_exists($i->getComponent(), 'postProcessInput')) {
+                $i->getComponent()->postProcessInput($postData);
+            }
+        }
+        Vps_Component_Cache::getInstance()->process();
     }
     
     /**
