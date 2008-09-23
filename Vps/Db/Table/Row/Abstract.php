@@ -215,8 +215,8 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
 
         $filters = $this->getTable()->getFilters();
         foreach($filters as $k=>$f) {
-            if ($f->filterAfterSave() != $filterAfterSave) continue;
             if ($f instanceof Vps_Filter_Row_Abstract) {
+                if ($f->filterAfterSave() != $filterAfterSave) continue;
                 $this->$k = $f->filter($this);
             } else {
                 $this->$k = $f->filter($this->__toString());
