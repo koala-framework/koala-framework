@@ -3,7 +3,7 @@ abstract class Vpc_Abstract_Pdf_Component extends Vpc_Abstract
 {
     protected function _getPdfComponent()
     {
-        return $this->getData();
+        return $this->getData()->parent;
     }
     
     public function sendContent()
