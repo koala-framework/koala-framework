@@ -1,5 +1,5 @@
 <div class="<?=$this->cssClass?>">
-<? if($this->hasCoordinates) { ?>
+<? if($this->data->hasContent()) { ?>
     <div class="text"><?php echo $this->component($this->text) ?><br /></div>
     <input type="hidden" class="options" value="<?= str_replace("\"", "'", $this->options) ?>" />
 

@@ -41,7 +41,11 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract_Composite_Component
         $options['satelite'] = $this->_getRow()->satelite;
         $options['overview'] = $this->_getRow()->overview;
         $ret['options'] = Zend_Json::encode($options);
-        $ret['hasCoordinates'] = !!$this->_getRow()->coordinates;
         return $ret;
+    }
+
+    public function hasContent()
+    {
+        return !!$this->_getRow()->coordinates;
     }
 }
