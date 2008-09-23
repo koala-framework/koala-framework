@@ -15,6 +15,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         $this->_data = $data;
         parent::__construct();
+        Vps_Benchmark::count('components', $data->componentClass.' '.$data->componentId);
     }
 
     public function getData()
@@ -104,58 +105,40 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     private static function _getIndirectChildComponentClasses($class, $select, $cacheId)
     {
-        static $ccc = null;
-        if (is_null($ccc)) {
-            if (Vps_Registry::get('config')->debug->settingsCache) {
-                $cache = new Vps_Assets_Cache(array('checkComponentSettings' => true));
-                $cacheFileId = 'rccc';
-                $ccc = $cache->load($cacheFileId);
-                if (!$ccc) {
-                    $benchmark = Vps_Benchmark::start('getIndirectChildComponentClasses cache');
-                    $ccc = array();
-                    //übliche aufrufe cachen: reihenfolge von wheres ist wichtig
-                    foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                        self::getIndirectChildComponentClasses($c, array('page'=>true));
-                        self::getIndirectChildComponentClasses($c, array('pseudoPage'=>true));
-                        self::getIndirectChildComponentClasses($c, array('showInMenu'=>true, 'page'=>true));
-                        self::getIndirectChildComponentClasses($c, array('page'=>false));
-                        self::getIndirectChildComponentClasses($c, array('inherit'=>true));
-                        self::getIndirectChildComponentClasses($c, array('page'=>false, 'unique'=>true, 'inherit'=>true));
-                        self::getIndirectChildComponentClasses($c, array('box'=>true));
-                        self::getIndirectChildComponentClasses($c, array('flags'=>array('noIndex'=>true), 'page'=>false));
-                        self::getIndirectChildComponentClasses($c, array('page'=>false, 'flags'=>array('processInput'=>true)));
-                        self::getIndirectChildComponentClasses($c, array('page'=>false, 'flags'=>array('metaTags'=>true)));
-                        self::getIndirectChildComponentClasses($c, array('showInMenu'=>true, 'type'=>'main', 'page' => true));
-                    }
-                    $cache->save($ccc, $cacheFileId);
-                    if ($benchmark) $benchmark->stop();
-                }
-            }
+        static $ccc = array();
+
+        static $cache = null;
+        if (!$cache) {
+            $cache = Zend_Cache::factory('Core', 'Memcached', array('lifetime'=>null, 'automatic_serialization'=>true));
         }
+        $currentCacheId = 'iccc'.md5($class.$cacheId);
 
         if (isset($ccc[$class.$cacheId])) {
             Vps_Benchmark::count('iccc cache hit');
             return $ccc[$class.$cacheId];
-        }
-        Vps_Benchmark::count('iccc cache miss');
-
-        $childConstraints = array('page' => false);
-
-        $childComponentClassesSelect = clone $select;
-        $childComponentClassesSelect->unsetPart(Vps_Component_Select::SKIP_ROOT);
-        $ccc[$class.$cacheId] = array();
-        foreach (Vpc_Abstract::getChildComponentClasses($class, $childConstraints) as $childClass) {
-            if (Vpc_Abstract::getChildComponentClasses($childClass, $select, $cacheId)) {
-                $ccc[$class.$cacheId][] = $childClass;
-                continue;
+        } else if (($ret = $cache->load($currentCacheId)) !== false) {
+            $ccc[$class.$cacheId] = $ret;
+            Vps_Benchmark::count('iccc cache semi-hit');
+            return $ret;
+        } else {
+            Vps_Benchmark::count('iccc cache miss', $class.' '.print_r($select->getParts(), true));
+            $childConstraints = array('page' => false);
+            $ccc[$class.$cacheId] = array();
+            foreach (Vpc_Abstract::getChildComponentClasses($class, $childConstraints) as $childClass) {
+                if (Vpc_Abstract::getChildComponentClasses($childClass, $select, $cacheId)) {
+                    $ccc[$class.$cacheId][] = $childClass;
+                    continue;
+                }
+                $classes = Vpc_Abstract::_getIndirectChildComponentClasses($childClass, $select, $cacheId);
+                if ($classes) {
+                    $ccc[$class.$cacheId][] = $childClass;
+                }
             }
-            $classes = Vpc_Abstract::_getIndirectChildComponentClasses($childClass, $select, $cacheId);
-            if ($classes) {
-                $ccc[$class.$cacheId][] = $childClass;
-            }
+            $ccc[$class.$cacheId] = array_unique(array_values($ccc[$class.$cacheId]));
+
+            $cache->save($ccc[$class.$cacheId], $currentCacheId);
+            return $ccc[$class.$cacheId];
         }
-        $ccc[$class.$cacheId] = array_unique(array_values($ccc[$class.$cacheId]));
-        return $ccc[$class.$cacheId];
     }
 
     public static function getChildComponentClass($class, $generator, $componentKey = null)
@@ -224,6 +207,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
     public function sendContent()
     {
+
         header('Content-Type: text/html; charset=utf-8');
         
         $process = $this->getData()

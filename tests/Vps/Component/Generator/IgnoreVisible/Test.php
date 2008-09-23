@@ -14,14 +14,14 @@ class Vps_Component_Generator_IgnoreVisible_Test extends PHPUnit_Framework_TestC
         $this->assertNotNull($c);
         $this->assertEquals('root-child', $c->componentId);
 
-        $generators = Vps_Component_Generator_Abstract::getStaticInstances($this->_root->componentClass);
+        $generators = Vps_Component_Generator_Abstract::getInstances($this->_root->componentClass);
         $this->assertEquals(count($generators), 1);
 
-        $generators = Vps_Component_Generator_Abstract::getStaticInstances($this->_root->componentClass,
+        $generators = Vps_Component_Generator_Abstract::getInstances($this->_root->componentClass,
                 array('ignoreVisible' => false));
         $this->assertEquals(count($generators), 1);
 
-        $generators = Vps_Component_Generator_Abstract::getStaticInstances($this->_root->componentClass,
+        $generators = Vps_Component_Generator_Abstract::getInstances($this->_root->componentClass,
                 array('ignoreVisible' => true));
         $this->assertEquals(count($generators), 1);
 

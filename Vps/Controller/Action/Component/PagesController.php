@@ -60,8 +60,8 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
 
         $component = $row->getData();
         $editComponents = $component->getChildComponents(
-            array('hasEditComponents' => true), 
-            array('skipRoot' => true, 'page' => false)
+            array('hasEditComponents' => true)/*,
+            array('page' => false)*/
         );
         if (!$component instanceof Vps_Component_Data_Root) {
             $editComponents[] = $component; 

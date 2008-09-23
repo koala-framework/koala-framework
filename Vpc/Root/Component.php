@@ -7,6 +7,7 @@ class Vpc_Root_Component extends Vpc_Abstract
         $ret['generators']['page'] = array(
             'class' => 'Vps_Component_Generator_Page',
             'showInMenu' => true,
+            'inherit' => true,
             'component' => array(
                 'paragraphs' => 'Vpc_Paragraphs_Component',
                 'link' => 'Vpc_Basic_LinkTag_Component',

@@ -28,10 +28,6 @@ class Vps_Component_Generator_Page_SkipRootTest extends PHPUnit_Framework_TestCa
         $this->assertEquals(count($this->_root->getComponentById(2)
                                     ->getChildPages()), 2);
 
-        $select = new Vps_Component_Select();
-        $select->skipRoot();
-        $this->assertEquals(count($this->_root->getComponentById(1)
-                                    ->getChildPages($select)), 0);
     }
     
     public function testBox()

@@ -82,7 +82,8 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
         $this->_assertGeneratorsCount(array('inherit' => true), 2);
         $this->_assertGeneratorsCount(array('unique' => true), 1);
         $this->_assertGeneratorsCount(array('generator' => 'static'), 1);
-        $this->_assertGeneratorsCount(array('generator' => 'pluginStatic'), 1);
+        $this->_assertGeneratorsCount(array('generator' => 'pluginStatic'), 0);
+        $this->_assertGeneratorsCount(array('generator' => 'page'), 0);
         $this->_assertGeneratorsCount(array('hasEditComponents' => true), 3);
         $this->_assertGeneratorsCount(array('componentClasses' => array(
             'Vps_Component_Generator_Components_Multiple', 'Vpc_Basic_Html_Component'
@@ -104,15 +105,6 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
         $this->assertEquals($initailSelect, $select); //check if select was modified
     }
 
-    public function testRecursiveGenerators()
-    {
-        $generators = $this->_root->getRecursiveGenerators(array('page' => false));
-        $this->assertEquals(8, count($generators));
-        
-        $generators = $this->_root->getRecursiveGenerators(array('box' => true));
-        $this->assertEquals(2, count($generators));
-    }
-
     public function testChildComponentClasses()
     {
         $this->_assertChildComponentClassesCount(array(), 5);
@@ -127,7 +119,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
         $this->_assertChildComponentClassesCount(array('inherit' => true), 2);
         $this->_assertChildComponentClassesCount(array('unique' => true), 1);
         $this->_assertChildComponentClassesCount(array('generator' => 'static'), 1);
-        $this->_assertChildComponentClassesCount(array('generator' => 'pluginStatic'), 1);
+        $this->_assertChildComponentClassesCount(array('generator' => 'pluginStatic'), 0);
         $this->_assertChildComponentClassesCount(array('hasEditComponents' => true), 2);
         $this->_assertChildComponentClassesCount(array('flags' => array('foo' => true)), 1);
         $this->_assertChildComponentClassesCount(array('generator' => 'pageTable', 'componentKey' => 'flag'), 1);
