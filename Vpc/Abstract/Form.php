@@ -68,9 +68,13 @@ class Vpc_Abstract_Form extends Vps_Form
      **/
     public static function createChildComponentForm($componentClass, $id, $name = null)
     {
-        $id = str_replace('-', '', $id);
+        if (substr($id, 0, 1)=='-' || substr($id, 0, 1)=='_') {
+            $id = substr($id, 1);
+        }
         $idTemplate = '{0}';
         $childComponentClass = null;
+
+        //TODO: wenns mal benötigt wird recursiv die id weiter nach unten gehen und komponenten suchen
 
         foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $generatorKey => $generatorData) {
             $generator = Vps_Component_Generator_Abstract::getInstance($componentClass, $generatorKey);
