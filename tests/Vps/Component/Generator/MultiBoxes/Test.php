@@ -18,9 +18,6 @@ class Vps_Component_Generator_MultiBoxes_Test extends PHPUnit_Framework_TestCase
     {
         $page = $this->_root->getChildComponent('_page1');
 
-        $generators = Vps_Component_Generator_Abstract::getDynamicInstances($page, array('box'=>true));
-        $this->assertEquals(1, count($generators));
-
         $generators = Vps_Component_Generator_Abstract::getInstances($page, array('box'=>true));
         $this->assertEquals(1, count($generators));
 

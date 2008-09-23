@@ -18,6 +18,7 @@ class Vps_Component_Generator_Page_Root extends Vpc_Root_Component
             'empty' => 'Vpc_Basic_Empty_Component',
             'child' => 'Vps_Component_Generator_Page_Child'
         );
+        unset($ret['generators']['box']);
         return $ret;
     }
 }

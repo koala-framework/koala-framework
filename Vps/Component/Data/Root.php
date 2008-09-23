@@ -14,7 +14,8 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 'parent' => null,
                 'isPage' => false,
                 'isPseudoPage' => false,
-                'componentId' => 'root'
+                'componentId' => 'root',
+                'inheritClasses' => array()
             ), $config
         );
         return parent::__construct($config);

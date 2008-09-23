@@ -32,7 +32,8 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
                 throw new Vps_Exception("Couldn't find unique component '$component'");
             }
         }
-        $ret = parent::getChildData($parentData, $select);
+
+        $ret = array();
         foreach ($this->_fetchKeys($parentData, $select) as $key) {
             if (!isset($parentDatas)) {
                 if (!$parentData) {

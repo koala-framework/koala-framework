@@ -4,7 +4,6 @@ class Vps_Component_Abstract
     public function __construct()
     {
         $this->_init();
-        Vps_Benchmark::count('components');
     }
 
     /**

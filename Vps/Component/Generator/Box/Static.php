@@ -2,6 +2,18 @@
 class Vps_Component_Generator_Box_Static extends Vps_Component_Generator_Static
     implements Vps_Component_Generator_Box_Interface
 {
+    protected function _init()
+    {
+        if (is_array($this->_settings['component'])) {
+            if (isset($this->_settings['box'])) {
+                throw new Vps_Exception("How would you put multiple components into one box?");
+            }
+        } else {
+            $this->_settings['component'] = array($this->_settings['generator'] => $this->_settings['component']);
+        }
+        parent::_init();
+    }
+
     protected function _formatConfig($parentData, $key)
     {
         $ret = parent::_formatConfig($parentData, $key);
@@ -23,5 +35,15 @@ class Vps_Component_Generator_Box_Static extends Vps_Component_Generator_Static
             return array($this->_settings['box']);
         }
         return array_keys($this->_settings['component']);
+    }
+
+    public function removeBox($box)
+    {
+        if (isset($this->_settings['box'])) {
+            //there can be just one box
+            $this->_settings['component'] = array();
+        } else {
+            unset($this->_settings['component'][$box]);
+        }
     }
 }

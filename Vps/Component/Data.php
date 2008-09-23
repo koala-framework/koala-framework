@@ -7,7 +7,6 @@ class Vps_Component_Data
     private $_rel;
     private $_filename;
     private $_constraintsCache = array();
-    private $_recursiveGeneratorsCache = array();
 
 
     public function __construct($config)
@@ -114,37 +113,6 @@ class Vps_Component_Data
         }
     }
 
-    public function getGenerators($select = array())
-    {
-        return Vps_Component_Generator_Abstract::getInstances($this, $select);
-    }
-
-    public function getRecursiveGenerators($select,
-                                $childSelect = array('page'=>false))
-    {
-        if (is_array($select)) {
-            $select = new Vps_Component_Select($select);
-        }
-        if (is_array($childSelect)) {
-            $childSelect = new Vps_Component_Select($childSelect);
-        }
-
-        $cacheId = serialize($select->getParts());
-        if (isset($this->_recursiveGeneratorsCache[$cacheId])) {
-            Vps_Benchmark::count('getRecursiveGenerators hit');
-            return $this->_recursiveGeneratorsCache[$cacheId];
-        }
-        Vps_Benchmark::count('getRecursiveGenerators miss', $this->componentClass.' '.$select->toDebug()."<br />");
-
-        $ret = $this->getGenerators($select);
-        $childSelect = $this->_formatChildConstraints($select, $childSelect);
-        foreach ($this->getChildComponents($childSelect) as $component) {
-            $ret = array_merge($ret, $component->getRecursiveGenerators($select, $childSelect));
-        }
-        $this->_recursiveGeneratorsCache[$cacheId] = $ret;
-        return $ret;
-    }
-
     public function getRecursiveChildComponents($select = array(),
                                 $childSelect = array('page'=>false))
     {
@@ -183,19 +151,11 @@ class Vps_Component_Data
         }
         $classes = Vpc_Abstract::getIndirectChildComponentClasses($this->componentClass, $select);
         $page = $this;
-        /*
-        while (1) {
-            if ($page instanceof Vps_Component_Data_Root) break;
-            $page = $page->getParentPage();
-            if (!$page) { $page = Vps_Component_Data_Root::getInstance(); }
+        foreach ($this->inheritClasses as $c) {
             $classes = array_merge($classes,
-                Vpc_Abstract::getIndirectChildComponentClasses($page->componentClass, $select)
+                Vpc_Abstract::getIndirectChildComponentClasses($c, $select)
             );
         }
-        */
-        $classes = array_merge($classes,
-            Vpc_Abstract::getIndirectChildComponentClasses(Vps_Component_Data_Root::getComponentClass(), $select)
-        );
         $childSelect->whereComponentClasses(array_unique($classes));
         return $childSelect;
     }
@@ -243,56 +203,30 @@ class Vps_Component_Data
                 $limitCount = null;
             }
 
-            $generators = Vps_Component_Generator_Abstract::getStaticInstances($this->componentClass, $select);
+            $generators = Vps_Component_Generator_Abstract::getInstances($this, $select);
 
-            $this->_getChildComponentsForGenerators($this->_constraintsCache[$sc],
-                                $generators, $select, $limitCount);
-            if (!$limitCount || count($this->_constraintsCache[$sc]) < $limitCount) {
-                $generators = Vps_Component_Generator_Abstract::getDynamicInstances($this, $select);
-                $this->_getChildComponentsForGenerators($this->_constraintsCache[$sc],
-                                $generators, $select, $limitCount);
-            }
+            $ret = array();
+            foreach ($generators as $generator) {
+                $generatorSelect = clone $select;
+                if ($limitCount) {
+                    $generatorSelect->limit($limitCount - count($ret));
+                }
+                foreach ($generator->getChildData($this, $generatorSelect) as $data) {
+                    if (isset($ret[$data->componentId])) {
+                        throw new Vps_Exception("Id not unique: {$data->componentId}");
+                    }
+                    $ret[$data->componentId] = $data;
 
-
-        }
-        return $this->_constraintsCache[$sc];
-    }
-    private function _getChildComponentsForGenerators(&$ret, $generators, $select, $limitCount)
-    {
-        foreach ($generators as $generator)
-        {
-            $generatorSelect = clone $select;
-            if ($limitCount) {
-                $generatorSelect->limit($limitCount - count($ret));
-            }
-
-            foreach ($generator->getChildData($this, $generatorSelect) as $data) {
-                /*
-                if (isset($data->box)) {
-                    foreach ($ret as $odata) {
-                        if (isset($odata->box) && $odata->box == $data->box) {
-                            if ($data->priority > $odata->priority) {
-                                unset($ret[$odata->componentId]);
-                                break;
-                            } else {
-                                continue 2; //skip this component
-                            }
+                    if ($limitCount) {
+                        if ($limitCount - count($ret) <= 0) {
+                            break 2;
                         }
                     }
                 }
-                */
-                if (isset($ret[$data->componentId])) {
-                    throw new Vps_Exception("Id not unique: {$data->componentId}");
-                }
-                $ret[$data->componentId] = $data;
-
-                if ($limitCount) {
-                    if ($limitCount - count($ret) <= 0) {
-                        break;
-                    }
-                }
             }
+            $this->_constraintsCache[$sc] = $ret;
         }
+        return $this->_constraintsCache[$sc];
     }
 
     public function getChildPages($select = array())

@@ -10,6 +10,7 @@ class Vps_Component_Select extends Vps_Model_Select
     const WHERE_UNIQUE = 'whereUnique';
     const WHERE_HAS_EDIT_COMPONENTS = 'whereHasEditComponents';
     const WHERE_GENERATOR = 'whereGenerator';
+    const WHERE_GENERATOR_CLASS = 'whereGeneratorClass';
     const WHERE_COMPONENT_KEY = 'whereComponentKey';
     const WHERE_COMPONENT_CLASSES = 'whereComponentClasses';
     const WHERE_FILENAME = 'whereFilename';
@@ -17,17 +18,12 @@ class Vps_Component_Select extends Vps_Model_Select
     const WHERE_HOME = 'whereHome';
     const WHERE_TYPE = 'whereType';
     const IGNORE_VISIBLE = 'ignoreVisible';
-    const SKIP_ROOT = 'skipRoot';
 
     public function __construct($where = array())
     {
         if (array_key_exists(self::IGNORE_VISIBLE, $where)) {
             $this->ignoreVisible($where[self::IGNORE_VISIBLE]);
             unset($where[self::IGNORE_VISIBLE]);
-        }
-        if (array_key_exists(self::SKIP_ROOT, $where)) {
-            $this->skipRoot($where[self::SKIP_ROOT]);
-            unset($where[self::SKIP_ROOT]);
         }
         parent::__construct($where);
     }
@@ -112,9 +108,9 @@ class Vps_Component_Select extends Vps_Model_Select
         return $this;
     }
 
-    public function skipRoot($value = true)
+    public function whereGeneratorClass($value)
     {
-        $this->_parts[self::SKIP_ROOT] = $value;
+        $this->_parts[self::WHERE_GENERATOR_CLASS] = $value;
         return $this;
     }
 
