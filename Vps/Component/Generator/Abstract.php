@@ -34,9 +34,6 @@ abstract class Vps_Component_Generator_Abstract
         $this->_settings = $settings;
         $this->_init();
         Vps_Benchmark::count('generators', $this->_class.'-'.$settings['generator']);
-//         if ($this->_class.'-'.$settings['generator'] == 'Vpc_Basic_Download_Component-child') {
-//             bt();
-//         }
     }
 
     protected function _init()
@@ -137,9 +134,7 @@ abstract class Vps_Component_Generator_Abstract
         }
         $cacheId = $cacheIdPrefix.$componentClass;
         if ($component) {
-            foreach ($component->inheritClasses as $class) {
-                $cacheId .= '__' . $class;
-            }
+            $cacheId .= '__'.implode('__', $component->inheritClasses);
         }
         static $cache = null;
         if (!$cache) {
@@ -167,7 +162,8 @@ abstract class Vps_Component_Generator_Abstract
                 $generators = array_merge($generators, self::_getGeneratorsForComponent($pluginClass));
             }
             if (is_object($component) && $component->inheritClasses) {
-                foreach ($component->inheritClasses as $inheritClass) {
+                $ic = $component->inheritClasses;
+                foreach ($ic as $inheritClass) {
                     $gs = Vpc_Abstract::getSetting($inheritClass, 'generators');
                     foreach ($gs as $key => $inheritedGenerator) {
                         if (!$inheritedGenerator['component']) {
@@ -463,38 +459,13 @@ abstract class Vps_Component_Generator_Abstract
         $id = $this->_getIdFromRow($row);
         if (!isset($this->_dataCache[$parentData->componentId][$id])) {
             $config = $this->_formatConfig($parentData, $row);
-            $config['inheritClasses'] = array();
-            if ($config['isPage']) {
-                $page = $parentData->getPage();
-                $foundInheritGeneratorPage = false;
-
-                while ($page) {
-                    $hasInheritGenerator = false;
-                    foreach (Vpc_Abstract::getSetting($page->componentClass, 'generators') as $g) {
-                        if (isset($g['inherit']) && $g['inherit']) {
-                            $hasInheritGenerator = true;
-                            break;
-                        }
-                    }
-                    if ($hasInheritGenerator) {
-                        $config['inheritClasses'][] = $page->componentClass;
-                        $config['inheritClasses'] = array_merge($config['inheritClasses'], $page->inheritClasses);
-                        $foundInheritGeneratorPage = true;
-                        break;
-                    }
-                    $page = $page->getParentPage();
-                }
-
-                if (!$foundInheritGeneratorPage) {
-                    $config['inheritClasses'][] = Vps_Component_Data_Root::getComponentClass();
-                }
-            }
             $config['id'] = $id;
             $pageDataClass = $this->_getDataClass($config, $row);
             $this->_dataCache[$parentData->componentId][$id] = new $pageDataClass($config);
         }
         return $this->_dataCache[$parentData->componentId][$id];
     }
+
     protected function _getDataClass($config, $row)
     {
         if (Vpc_Abstract::hasSetting($config['componentClass'], 'dataClass')) {

@@ -6,8 +6,8 @@ class Vps_Component_Data
     private $_url;
     private $_rel;
     private $_filename;
+    private $_inheritClasses;
     private $_constraintsCache = array();
-
 
     public function __construct($config)
     {
@@ -18,6 +18,8 @@ class Vps_Component_Data
                 $this->_rel = $i;
             } else if ($k == 'filename') {
                 $this->_filename = $i;
+            } else if ($k == 'inheritClasses') {
+                $this->_inheritClasses = $i;
             } else {
                 $this->$k = $i;
             }
@@ -26,6 +28,9 @@ class Vps_Component_Data
             $this->dbId = $this->componentId;
         }
         Vps_Benchmark::count('componentDatas', $this->componentId);
+        if ($this->isPage) {
+            Vps_Benchmark::count('componentData Pages', $this->componentId);
+        }
     }
 
     public function __get($var)
@@ -65,6 +70,36 @@ class Vps_Component_Data
             } else {
                 return true;
             }
+        } else if ($var == 'inheritClasses') {
+            if (!isset($this->_inheritClasses)) {
+                $this->_inheritClasses = array();
+                if ($this->isPage) {
+                    $page = $this->getParentPage();
+                    $foundInheritGeneratorPage = false;
+
+                    while ($page) {
+                        $hasInheritGenerator = false;
+                        foreach (Vpc_Abstract::getSetting($page->componentClass, 'generators') as $g) {
+                            if (isset($g['inherit']) && $g['inherit']) {
+                                $hasInheritGenerator = true;
+                                break;
+                            }
+                        }
+                        if ($hasInheritGenerator) {
+                            $this->_inheritClasses[] = $page->componentClass;
+                            $this->_inheritClasses = array_merge($this->_inheritClasses, $page->inheritClasses);
+                            $foundInheritGeneratorPage = true;
+                            break;
+                        }
+                        $page = $page->getParentPage();
+                    }
+
+                    if (!$foundInheritGeneratorPage) {
+                        $this->_inheritClasses[] = Vps_Component_Data_Root::getComponentClass();
+                    }
+                }
+            }
+            return $this->_inheritClasses;
         } else {
             throw new Vps_Exception("Variable '$var' is not set for ".get_class($this) . " with componentId '{$this->componentId}'");
         }
@@ -151,7 +186,8 @@ class Vps_Component_Data
         }
         $classes = Vpc_Abstract::getIndirectChildComponentClasses($this->componentClass, $select);
         $page = $this;
-        foreach ($this->inheritClasses as $c) {
+        $ic = $this->inheritClasses;
+        foreach ($ic as $c) {
             $classes = array_merge($classes,
                 Vpc_Abstract::getIndirectChildComponentClasses($c, $select)
             );
@@ -298,7 +334,9 @@ class Vps_Component_Data
             $select = new Vps_Component_Select($select);
         }
         $select->limit(1);
-        return current($this->getChildPseudoPages($select));
+        $ret = $this->getChildPseudoPages($select);
+        if (!$ret) return null;
+        return current($ret);
     }
 
     public function getGenerator($key)

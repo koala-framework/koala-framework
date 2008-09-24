@@ -5,11 +5,17 @@ class Vps_Component_Generator_Unique_Root extends Vpc_Root_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['page']['model'] = new Vps_Model_FnF();
+        $ret['generators']['page']['component'] = array();
         $ret['generators']['box']['priority'] = 1;
 //         $ret['generators']['box']['unique'] = true;
         $ret['generators']['box']['component'] = array();
         $ret['generators']['box']['component']['box'] = 'Vps_Component_Generator_Unique_Box';
         unset($ret['generators']['title']);
+        $ret['generators']['page2'] = array(
+            'class' => 'Vps_Component_Generator_Page_Static',
+            'component' => 'Vps_Component_Generator_Unique_Page2',
+            'name' => 'page2'
+        );
         return $ret;
     }
 }

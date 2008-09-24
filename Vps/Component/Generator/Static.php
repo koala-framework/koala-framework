@@ -6,33 +6,6 @@ class Vps_Component_Generator_Static extends Vps_Component_Generator_Abstract
 
     public function getChildData($parentData, $select = array())
     {
-        if (isset($this->_settings['unique']) && $this->_settings['unique']) {
-            $component = $parentData;
-            while ($component && $component->componentClass != $this->_class) {
-                /*
-                if ($component->componentClass != $this->_class) {
-                    foreach ($component->getChildComponents(array('page' => false, 'unique' => true, 'inherit' => true)) as $c) {
-                        if ($c->getParent()->componentClass == $this->_class) {
-                            $component = $c->getParent();
-                        }
-                    }
-                }
-                */
-                if ($component->componentClass != $this->_class) {
-                    //$component = $component->getParentPage();
-                    //if (!$component) {
-                        $component = Vps_Component_Data_Root::getInstance();
-                    //}
-                }
-            }
-            if ($component) {
-                $parentData = $component;
-            } else {
-                $component = $this->_settings['generator'];
-                throw new Vps_Exception("Couldn't find unique component '$component'");
-            }
-        }
-
         $ret = array();
         foreach ($this->_fetchKeys($parentData, $select) as $key) {
             if (!isset($parentDatas)) {
