@@ -8,7 +8,8 @@ Ext.namespace(
 'Vps.Form',
 'Vps.Binding',
 'Vpc.Advanced',
-'Vps.Debug'
+'Vps.Debug',
+'Vps.Switch'
 );
 
 Ext.applyIf(Array.prototype, {

@@ -3,7 +3,8 @@
     <div class="text"><?php echo $this->component($this->text) ?><br /></div>
     <input type="hidden" class="options" value="<?= str_replace("\"", "'", $this->options) ?>" />
 
-    <div class="container"></div>
+    <? /* height wird benötigt wenn gmap innerhalb von switchDisplay liegt*/ ?>
+    <div class="container" style="height: <?= $this->height; ?>px;"></div>
 
     <form action="#" class="fromAddress printHidden">
         <input type="text" class="textBefore"/>

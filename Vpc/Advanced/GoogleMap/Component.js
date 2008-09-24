@@ -138,23 +138,37 @@ Vpc.Advanced.GoogleMap.prototype = {
 
 Vpc.Advanced.GoogleMap.renderedMaps = [];
 
+Vpc.Advanced.GoogleMap.renderMap = function(map) {
+    if (Vpc.Advanced.GoogleMap.renderedMaps.indexOf(map) != -1) return;
+    Vpc.Advanced.GoogleMap.renderedMaps.push(map);
+
+    var mapContainer = new Ext.Element(map);
+    var options = mapContainer.down(".options", true);
+    if (!options) return;
+    options = Ext.decode(options.value);
+    var text = mapContainer.down("div.text").dom.innerHTML;
+    var myMap = new Vpc.Advanced.GoogleMap(mapContainer, options, text);
+
+    Vps.GoogleMap.load(function() {
+        this.show();
+        this.activateMarker();
+    }, myMap);
+};
+
 Vps.onContentReady(function() {
     var maps = Ext.DomQuery.select('div.vpcAdvancedGoogleMap');
     Ext.each(maps, function(map) {
-        if (Vpc.Advanced.GoogleMap.renderedMaps.indexOf(map) != -1) return;
-        Vpc.Advanced.GoogleMap.renderedMaps.push(map);
-
-        var mapContainer = new Ext.Element(map);
-        var options = mapContainer.down(".options", true);
-        if (!options) return;
-        options = Ext.decode(options.value);
-        var text = mapContainer.down("div.text").dom.innerHTML;
-        var myMap = new Vpc.Advanced.GoogleMap(mapContainer, options, text);
-
-        Vps.GoogleMap.load(function() {
-            this.show();
-            this.activateMarker();
-        }, myMap);
+        var up = Ext.get(map).up('div.vpsSwitchDisplay');
+        if (up) {
+            var lay = new Ext.util.DelayedTask();
+            lay.delay(1, function(up) {
+                Ext.get(up).switchDisplayObject.on('opened', function() {
+                    Vpc.Advanced.GoogleMap.renderMap(map);
+                });
+            }, this, [up]);;
+        } else {
+            Vpc.Advanced.GoogleMap.renderMap(map);
+        }
     });
 });
 
