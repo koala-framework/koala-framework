@@ -5,6 +5,7 @@ class Vpc_Box_LinksImages_LinkImage_Image_Component extends Vpc_Basic_Image_Comp
     {
         $ret = parent::getSettings();
         $ret['dimensions'] = array(0, 0, Vps_Media_Image::SCALE_ORIGINAL);
+        unset($ret['componentName']);
         return $ret;
     }
 }

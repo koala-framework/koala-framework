@@ -7,13 +7,14 @@ class Vpc_Box_LinksImages_Component extends Vpc_Composite_LinksImages_Component
         $ret['generators']['child']['component'] = 'Vpc_Box_LinksImages_LinkImage_Component';
         $ret['viewCache'] = false;
         $ret['random'] = false;
+        unset($ret['componentName']);
         return $ret;
     }
 
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        if ($this->_getSetting('random')) {
+        if ($ret['children'] && $this->_getSetting('random')) {
             $randKey = array_rand($ret['children']);
             $ret['children'] = array($ret['children'][$randKey]);
         }
