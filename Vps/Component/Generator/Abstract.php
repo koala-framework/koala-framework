@@ -134,7 +134,10 @@ abstract class Vps_Component_Generator_Abstract
         }
         $cacheId = $cacheIdPrefix.$componentClass;
         if ($component) {
-            $cacheId .= '__'.implode('__', $component->inheritClasses);
+            $ic = $component->inheritClasses;
+            foreach ($ic as $inheritComponent) {
+                $cacheId .= '__' . $inheritComponent;
+            }
         }
         static $cache = null;
         if (!$cache) {
@@ -143,7 +146,7 @@ abstract class Vps_Component_Generator_Abstract
                 'automatic_cleaning_factor' => false,
                 'automatic_serialization'=>true));
         }
-        
+
         static $cachedGenerators;
         if (isset($cachedGenerators[$cacheId])) {
             Vps_Benchmark::count('Generator::getInst hit');
@@ -234,6 +237,11 @@ abstract class Vps_Component_Generator_Abstract
 
         $ret = array();
         foreach ($generators as $g) {
+            if ($component && $g instanceof Vps_Component_Generator_Page &&
+                !(is_numeric($component->componentId) || $component instanceof Vps_Component_Data_Root)
+            ) {
+                continue;
+            }
             if ($value = $select->getPart(Vps_Component_Select::WHERE_GENERATOR_CLASS)) {
                 if ($g instanceof $value) {
                     continue;
@@ -286,6 +294,7 @@ abstract class Vps_Component_Generator_Abstract
             }
             if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
                 $value = $select->getPart(Vps_Component_Select::WHERE_SHOW_IN_MENU);
+                //d($g->_settings);
                 if (isset($g->_settings['showInMenu']) && $g->_settings['showInMenu']) {
                     if (!$value) continue;
                 } else {
@@ -486,4 +495,15 @@ abstract class Vps_Component_Generator_Abstract
     {
         return "<pre>".print_r($this->_settings, true)."</pre>";
     }
+
+    public function getClass()
+    {
+        return $this->_class;
+    }
+
+    public function getGeneratorKey()
+    {
+        return $this->_settings['generator'];
+    }
+    
 }

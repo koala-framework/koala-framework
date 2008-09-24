@@ -2,7 +2,6 @@
 class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
     implements Vps_Component_Generator_Page_Interface, Vps_Component_Generator_PseudoPage_Interface
 {
-    protected $_showInMenu = false;
     protected $_idSeparator = '_';
 
     protected function _formatSelectFilename(Vps_Component_Select $select)

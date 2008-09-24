@@ -78,6 +78,7 @@ class Vps_Debug
 
     public static function disable()
     {
+        p('debug output disabled');
         self::$_enabled = false;
     }
 

@@ -36,11 +36,12 @@ class Vps_Component_Generator_Inherit_InheritTest extends PHPUnit_Framework_Test
     public function testInheritedGenerators()
     {
         $page = $this->_root->getComponentById('1');
+        $this->assertNotNull($page);
         $gen = Vps_Component_Generator_Abstract::getInstances($page);
         $this->assertEquals(count($gen), 2);
 
-        $this->markTestIncomplete();
         $page = $this->_root->getChildComponent('_static');
+        $this->assertNotNull($page);
         $gen = Vps_Component_Generator_Abstract::getInstances($page);
         $this->assertEquals(count($gen), 1);
     }
