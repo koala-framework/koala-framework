@@ -71,6 +71,7 @@ class Vps_Model_Select
 
     public function order($field, $dir = 'ASC')
     {
+        if ($field['field'] == 'publish_date') bt();
         if (is_array($field)) {
             if (!isset($field['field'])) {
                 foreach ($field as $f) {
