@@ -44,6 +44,7 @@ class Vps_View_Helper_Image
         } else {
             $row = $image;
             if (!$row) return '';
+            if ($row instanceof Vps_Model_Db_Row) $row = $row->getRow();
             $url = $row->getFileUrl($rule, $type);
             $size = $row->getImageDimensions($rule, $type);
         }
