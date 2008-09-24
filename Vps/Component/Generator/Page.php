@@ -15,7 +15,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
     protected function _init()
     {
         parent::_init();
-        
+
         $this->_pageData = array();
         $this->_pageParent = array();
         $this->_pageFilename = array();

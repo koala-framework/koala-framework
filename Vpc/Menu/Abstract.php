@@ -62,7 +62,7 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
     {
         if (!isset($this->_currentPages)) {
             $this->_currentPages = array();
-            $p = Vps_Component_Data_Root::getInstance()->getCurrentPage();
+            $p = $this->getData()->getPage();
             if (!$p) {
                 throw new Vps_Exception('To show the menu currentPage has to be set for Vps_Component_Data_Root');
             }

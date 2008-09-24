@@ -14,13 +14,14 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 'parent' => null,
                 'isPage' => false,
                 'isPseudoPage' => false,
-                'componentId' => 'root',
-                'inheritClasses' => array()
+                'componentId' => 'root'
             ), $config
         );
-        return parent::__construct($config);
+        parent::__construct($config);
+        $this->_inheritClasses = array();
+        $this->_uniqueParentDatas = array();
     }
-        
+
     public static function getInstance()
     {
         if (is_null(self::$_instance)) {
@@ -28,7 +29,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         return self::$_instance;
     }
-    
+
     public static function getComponentClass()
     {
         if (is_null(self::$_rootComponentClass)) {

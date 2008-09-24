@@ -6,7 +6,9 @@ class Vps_Component_Data
     private $_url;
     private $_rel;
     private $_filename;
-    private $_inheritClasses;
+    protected $_inheritClasses;
+    protected $_uniqueParentDatas;
+
     private $_constraintsCache = array();
 
     public function __construct($config)
@@ -18,8 +20,6 @@ class Vps_Component_Data
                 $this->_rel = $i;
             } else if ($k == 'filename') {
                 $this->_filename = $i;
-            } else if ($k == 'inheritClasses') {
-                $this->_inheritClasses = $i;
             } else {
                 $this->$k = $i;
             }
@@ -72,6 +72,7 @@ class Vps_Component_Data
             }
         } else if ($var == 'inheritClasses') {
             if (!isset($this->_inheritClasses)) {
+                $this->_uniqueParentDatas = array();
                 $this->_inheritClasses = array();
                 if ($this->isPage) {
                     $page = $this->getParentPage();
@@ -79,10 +80,12 @@ class Vps_Component_Data
 
                     while ($page) {
                         $hasInheritGenerator = false;
-                        foreach (Vpc_Abstract::getSetting($page->componentClass, 'generators') as $g) {
+                        foreach (Vpc_Abstract::getSetting($page->componentClass, 'generators') as $gKey=> $g) {
                             if (isset($g['inherit']) && $g['inherit']) {
                                 $hasInheritGenerator = true;
-                                break;
+                                if (isset($g['unique']) && $g['unique']) {
+                                    $this->_uniqueParentDatas[$page->componentClass.$gKey] = $page;
+                                }
                             }
                         }
                         if ($hasInheritGenerator) {
@@ -240,14 +243,19 @@ class Vps_Component_Data
             }
 
             $generators = Vps_Component_Generator_Abstract::getInstances($this, $select);
-
             $ret = array();
             foreach ($generators as $generator) {
                 $generatorSelect = clone $select;
                 if ($limitCount) {
                     $generatorSelect->limit($limitCount - count($ret));
                 }
-                foreach ($generator->getChildData($this, $generatorSelect) as $data) {
+                $genId = $generator->getClass().$generator->getGeneratorKey();
+                if (isset($this->_uniqueParentDatas[$genId])) {
+                    $parentData = $this->_uniqueParentDatas[$genId];
+                } else {
+                    $parentData = $this;
+                }
+                foreach ($generator->getChildData($parentData, $generatorSelect) as $data) {
                     if (isset($ret[$data->componentId])) {
                         throw new Vps_Exception("Id not unique: {$data->componentId}");
                     }
