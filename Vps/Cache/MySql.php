@@ -45,7 +45,7 @@ class Vps_Cache_MySql extends Zend_Cache_Backend
 
     public function test($id)
     {
-        $sql = "SELECT lastModified FROM {$this->_options['table']} WHERE id='$id' AND (expire=0 OR expire>" . time() . ')';
+        $sql = "SELECT last_modified FROM {$this->_options['table']} WHERE id='$id' AND (expire=0 OR expire>" . time() . ')';
         $stmt = $this->_adapter->query($sql);
         return $stmt->fetchColumn();
     }
@@ -59,7 +59,7 @@ class Vps_Cache_MySql extends Zend_Cache_Backend
         } else {
             $expire = $mktime + $lifetime;
         }
-        $sql = "REPLACE INTO {$this->_options['table']} (id, content, lastModified, expire) VALUES (:id, :data, :mktime, :expire)";
+        $sql = "REPLACE INTO {$this->_options['table']} (id, content, last_modified, expire) VALUES (:id, :data, :mktime, :expire)";
         $res = $this->_adapter->query($sql, array(
             'id' => $id,
             'data' => $data,
@@ -83,6 +83,13 @@ class Vps_Cache_MySql extends Zend_Cache_Backend
 
     public function clean($mode = Zend_Cache::CLEANING_MODE_ALL, $tags = array())
     {
+        if ($mode == Vps_Component_Cache::CLEANING_MODE_COMPONENT_CLASS) {
+            if (!is_string($tags)) {
+                throw new Vps_Exception("second argument must be a component class name");
+            }
+            $res = $this->_adapter->query("DELETE FROM {$this->_options['table']} WHERE component_class=?", array($tags));
+            return (bool)$res;
+        }
         if ($mode==Zend_Cache::CLEANING_MODE_ALL) {
             $res = $this->_adapter->query("DELETE FROM {$this->_options['table']}");
             return (bool)$res;
