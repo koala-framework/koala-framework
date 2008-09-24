@@ -204,7 +204,7 @@ abstract class Vps_Component_Generator_Abstract
                             if (!$g instanceof Vps_Component_Generator_Box_Interface) continue;
                             foreach ($inheritedBoxes as $inheritedBox) {
                                 if (!in_array($inheritedBox, $g->getBoxes())) continue;
-                                if ($g->getPriority() > $inheritedGenerator->getPriority()) {
+                                if ($g->getPriority() >= $inheritedGenerator->getPriority()) {
                                     continue 3;
                                 } else {
                                     if (count($g->getBoxes()) > 1) {
