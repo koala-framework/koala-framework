@@ -29,6 +29,9 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract_Composite_Component
         $ret = parent::getTemplateVars();
         $pos = strpos($this->_getRow()->coordinates, ";");
 
+        // wird benötigt wenn gmap in switchDisplay liegt
+        $ret['height'] = $this->_getRow()->height;
+
         $options = array();
         $options['zoom_properties'] = $this->_getRow()->zoom_properties;
         $options['zoom'] = $this->_getRow()->zoom;
