@@ -1,5 +1,5 @@
 <?php
-class Vps_Cache_MySql extends Zend_Cache_Backend
+class Vps_Cache_Backend_Db extends Zend_Cache_Backend
 {
     /**
      * Available options
