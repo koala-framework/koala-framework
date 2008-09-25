@@ -5,7 +5,7 @@ class Vpc_Posts_Latest_Admin extends Vpc_Admin
     {
         parent::_onRowAction($row);
         if ($row instanceof Vpc_Forum_Directory_Row) {
-            Vps_Component_Cache::getInstance()->remove($this->_class);
+            Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
         }
     }
 }

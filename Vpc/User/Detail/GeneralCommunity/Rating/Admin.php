@@ -12,7 +12,15 @@ class Vpc_User_Detail_GeneralCommunity_Rating_Admin extends Vpc_Admin
             }
         }
         if ($row instanceof Vpc_Forum_Directory_Row) {
-            Vps_Component_Cache::getInstance()->remove($this->_class);
+            Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
+        }
+    }
+    public function onRowUpdate($row)
+    {
+        parent::onRowUpdate($row);
+        if ($row instanceof Vpc_Forum_Directory_Row) {
+            //gruppe offline nehmen
+            Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
         }
     }
 }

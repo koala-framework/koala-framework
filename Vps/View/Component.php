@@ -36,8 +36,31 @@ class Vps_View_Component extends Vps_View
         if (is_null($cacheDisabled)) {
             $cacheDisabled = Zend_Registry::get('config')->debug->componentCache->disable;
         }
+        if ($cacheDisabled) $cacheId = false;
+        if (!$masterTemplate && !Vpc_Abstract::getSetting($componentClass, 'viewCache')) {
+            $cacheId = false;
+        }
 
-        if (!$cacheId || $cacheDisabled || ($ret = $cache->load($componentClass, $cacheId))===false) {
+        static $loadedPageIds = array();
+        static $componentCache = array();
+        if ($masterTemplate) {
+            $pageId = $component->getPage()->componentId;
+            if (!in_array($pageId, $loadedPageIds)) {
+                $loadedPageIds[] = $pageId;
+                $pageId = $cache->getCacheIdFromComponentId($pageId);
+                $sql = "SELECT id, content FROM cache_component WHERE page_id='$pageId'";
+                $rows = Zend_Registry::get('db')->query($sql)->fetchAll();
+                foreach ($rows as $row) {
+                    $componentCache[$row['id']] = $row['content'];
+                }
+            }
+        }
+
+
+        if (isset($componentCache[$cacheId])) {
+            $ret = $componentCache[$cacheId];
+            Vps_Benchmark::count('rendered cache (preloaded)', $componentId.($masterTemplate?' (master)':''));
+        } else if (!$cacheId || ($ret = $cache->load($cacheId))===false) {
             if (!isset($component)) {
                 $component = self::_getComponent($componentId, $ignoreVisible);
             }
@@ -47,9 +70,11 @@ class Vps_View_Component extends Vps_View
                 } else {
                     $ret = Vps_View_Component::_renderComponent($component);
                 }
-                $useCache = Vpc_Abstract::getSetting($component->componentClass, 'viewCache');
-                if ($cacheId && !$cacheDisabled && $useCache) {
-                    $cache->save($ret, $component->componentClass, $cacheId);
+                if ($cacheId) {
+                    $cache->save($ret, $cacheId, array(
+                        'componentClass'=>$component->componentClass,
+                        'pageId' => $cache->getCacheIdFromComponentId($component->getPage()->componentId),
+                    ));
                 }
             } else {
                 $ret = "Component '$componentId' not found";
@@ -75,21 +100,28 @@ class Vps_View_Component extends Vps_View
             $componentId = $matches[2][$key];
             $componentClass = $matches[1][$key];
             $content = $matches[3][$key];
-            
-            if (!Zend_Registry::get('config')->debug->componentCache->disable) {
-                $cacheId = $cache->getCacheIdFromComponentId($componentId, false, true);
-                $cachedContent = $cache->load($componentClass, $cacheId);
-                if ($cachedContent === false) {
-                    $component = self::_getComponent($componentId, $ignoreVisible);
-                    $cachedContent = $component->hasContent() ? $content : '';
-                    $cache->save($cachedContent, $componentClass, $cacheId);
+
+            $cachedContent = false;
+            $cacheId = $cache->getCacheIdFromComponentId($componentId, false, true);
+            if (!$cacheDisabled) {
+                if (isset($componentCache[$cacheId])) {
+                    $cachedContent = $cache->load($cacheId);
+                } else {
+                    $cachedContent = $cache->load($cacheId);
                 }
-            } else {
+            }
+            if ($cachedContent === false) {
                 $component = self::_getComponent($componentId, $ignoreVisible);
                 if (!$component) {
                     throw new Vps_Exception("Can't find component '$componentId'");
                 }
                 $cachedContent = $component->hasContent() ? $content : '';
+                if (!$cacheDisabled) {
+                    $cache->save($cachedContent, $cacheId, array(
+                        'componentClass'=>$componentClass,
+                        'pageId' => $cache->getCacheIdFromComponentId($component->getPage()->componentId)
+                    ));
+                }
             }
             $ret = str_replace($search, $cachedContent, $ret);
         }
@@ -140,6 +172,7 @@ class Vps_View_Component extends Vps_View
         $templateVars = array();
         $templateVars['component'] = $componentData;
         $templateVars['boxes'] = array();
+        Vps_Debug::enable();
         foreach ($componentData->getChildBoxes() as $box) {
             $templateVars['boxes'][$box->box] = $box;
         }

@@ -8,7 +8,7 @@ class Vpc_Forum_LatestThreads_Admin extends Vpc_Admin
             $row instanceof Vpc_Forum_Group_Row ||
             $row instanceof Vpc_Posts_Directory_Row)
         {
-            Vps_Component_Cache::getInstance()->remove($this->_class);
+            Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
         }
     }
 }

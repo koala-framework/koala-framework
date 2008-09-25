@@ -195,7 +195,7 @@ class Vps_Benchmark
                 $out[] = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
             } else if ($i == 'useragent') {
                 $out[] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-            } else if ($i == 'url') {
+            } else if ($i == 'date') {
                 $out[] = date('Y-m-d H:i:s');
             } else if ($i == 'url') {
                 $out[] = $_SERVER['REQUEST_URI'];
