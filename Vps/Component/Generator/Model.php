@@ -2,7 +2,7 @@
 class Vps_Component_Generator_Model extends Vps_Model_Abstract 
 {
     protected $_constraints = array(
-        'generator' => 'page',
+        'pageGenerator' => true,
         'ignoreVisible' => true
     );
 

@@ -17,6 +17,7 @@ class Vps_Component_Select extends Vps_Model_Select
     const WHERE_SHOW_IN_MENU = 'whereShowInMenu';
     const WHERE_HOME = 'whereHome';
     const WHERE_TYPE = 'whereType';
+    const WHERE_PAGE_GENERATOR = 'wherePageGenerator';
     const IGNORE_VISIBLE = 'ignoreVisible';
 
     public function __construct($where = array())
@@ -45,6 +46,12 @@ class Vps_Component_Select extends Vps_Model_Select
             $generator = $data->getGenerator($generatorName);
             $generator->joinWithParentGenerator($this, $data);
         }
+    }
+
+    public function wherePageGenerator($value = true)
+    {
+        $this->_parts[self::WHERE_PAGE_GENERATOR] = $value;
+        return $this;
     }
 
     public function wherePage($value = true)
