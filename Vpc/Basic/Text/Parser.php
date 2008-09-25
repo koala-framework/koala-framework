@@ -58,7 +58,19 @@ class Vpc_Basic_Text_Parser
                  array_push($this->_stack, 'span');
                  $this->_finalHTML .= '<span style="'.$style.'">';
             } else {
-                if ($this->_enableStyles && isset($attributes['CLASS']) && preg_match('#^style[0-9]+$#', $attributes['CLASS'])) {
+                $masterStyles = Vpc_Basic_Text_StylesModel::getMasterStyles();
+                $masterStyles = $masterStyles['inline'];
+                $allowedClasses = array();
+                foreach (array_keys($masterStyles) as $s) {
+                    $i = explode('.', $s);
+                    if (isset($i[1])) {
+                        $allowedClasses[] = $i[1];
+                    }
+                }
+                if ($this->_enableStyles && isset($attributes['CLASS'])
+                    && (preg_match('#^style[0-9]+$#', $attributes['CLASS'])
+                        || in_array($attributes['CLASS'], $allowedClasses))
+                ) {
                     array_push($this->_stack, 'span');
                     $this->_finalHTML .= '<span class="'.$attributes['CLASS'].'">';
                 } else {
@@ -115,7 +127,16 @@ class Vpc_Basic_Text_Parser
                 $this->_finalHTML .= '<'.strtolower($element);
                 foreach ($attributes as $key => $value) {
                     if (in_array(strtolower($key), $this->_tagsWhitelist[strtolower($element)])) {
-                        if ($key != 'CLASS' || preg_match('#^style[0-9]+$#', $value)) {
+                        $masterStyles = Vpc_Basic_Text_StylesModel::getMasterStyles();
+                        $masterStyles = $masterStyles['block'];
+                        $allowedClasses = array();
+                        foreach (array_keys($masterStyles) as $s) {
+                            $i = explode('.', $s);
+                            if ($i[0]==strtolower($element) && isset($i[1])) {
+                                $allowedClasses[] = $i[1];
+                            }
+                        }
+                        if ($key == 'CLASS' && (preg_match('#^style[0-9]+$#', $value) || in_array($value, $allowedClasses))) {
                             $this->_finalHTML .= ' ' . strtolower($key) . '="'. $value . '"';
                         }
                     }

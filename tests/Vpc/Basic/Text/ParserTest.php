@@ -55,6 +55,15 @@ class Vpc_Basic_Text_ParserTest extends PHPUnit_Framework_TestCase
         $out = $this->_parser->parse('<h1 class="style1" asdf="foo">f<span class="style1">oo</span>7</h1>');
         $this->assertEquals('<h1 class="style1">f<span class="style1">oo</span>7</h1>', $out);
 
+        $out = $this->_parser->parse('<h1 class="fooTest" asdf="foo">f<span class="foo">oo</span>7</h1>');
+        $this->assertEquals('<h1 class="fooTest">foo7</h1>', $out);
+
+        $out = $this->_parser->parse('<h2 class="fooTest" asdf="foo">f<span class="foo">oo</span>7</h2>');
+        $this->assertEquals('<h2>foo7</h2>', $out);
+
+        $out = $this->_parser->parse('f<span class="fooTest2">oo</span>7');
+        $this->assertEquals('f<span class="fooTest2">oo</span>7', $out);
+
         $this->_parser->setEnableStyles(false);
         $out = $this->_parser->parse('<h1>foo8</h1>');
         $this->assertEquals('foo8', $out);

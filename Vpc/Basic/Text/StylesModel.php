@@ -11,12 +11,9 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
         $this->_filters = array('pos' => $filter);
     }
 
-    public function getStyles($ownStyles = false)
+    public static function getMasterStyles()
     {
-        $styles = array();
-        $styles['block'] = array('p' => trlVps('Default'));
-        $styles['inline'] = array('span' => trlVps('Normal'));
-
+        $styles = array('inline' => array(), 'block' => array());
         if (file_exists('css/master.css')) {
             $masterContent = file_get_contents('css/master.css');
             preg_match_all('#^ *.webStandard *((span|p|h[1-6])\\.?[^ ]*) *{[^}]*} */\\* +(.*?) +\\*/#m', $masterContent, $m);
@@ -30,6 +27,18 @@ class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
                 }
             }
         }
+        return $styles;
+    }
+
+    public function getStyles($ownStyles = false)
+    {
+        $styles = array();
+        $styles['block'] = array('p' => trlVps('Default'));
+        $styles['inline'] = array('span' => trlVps('Normal'));
+
+        $masterStyles = self::getMasterStyles();
+        $styles['block'] = array_merge($styles['block'], $masterStyles['block']);
+        $styles['inline'] = array_merge($styles['inline'], $masterStyles['inline']);
 
         $where = array();
         if ($ownStyles) {
