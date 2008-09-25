@@ -6,7 +6,7 @@ abstract class Vpc_Abstract_Pdf_Component extends Vpc_Abstract
         return $this->getData()->parent;
     }
     
-    public function sendContent()
+    public function sendContent($output = 'I')
     {
         $plugins = $this->getData()->getPlugins('Vps_Component_Plugin_Interface_View');
         if ($plugins) {
@@ -27,6 +27,6 @@ abstract class Vpc_Abstract_Pdf_Component extends Vpc_Abstract
         }
         $pdf = new $masterClass($pdfComponent);
         $pdfComponent->getPdfWriter($pdf)->writeContent();
-        $pdf->output();
+        return $pdf->output($output);
     }
 }
