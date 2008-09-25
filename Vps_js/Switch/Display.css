@@ -7,4 +7,11 @@ div.vpsSwitchDisplay a.switchLink.switchLinkOpened {
 
 }
 div.vpsSwitchDisplay div.switchContent { overflow: hidden; z-index: 1000; position: relative; }
-div.vpsSwitchDisplay div.switchContent img { position: relative; z-index: 500;}
+
+/*
+Bei einer Bildergalerie in einem switch display gab es einen Fehler,
+der beim schließen die Bilder nicht sofort verschwinden ließ, sondern
+über die schrift nach oben schob. Das hier war ein fix dafür, der allerdings
+die steuerung (zoom +/-) einer GoogleMap in einem switchDisplay zerstören würde.
+*/
+/* div.vpsSwitchDisplay div.switchContent img { position: relative; z-index: 500;} */
