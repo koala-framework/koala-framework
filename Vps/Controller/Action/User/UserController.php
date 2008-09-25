@@ -29,7 +29,8 @@ class Vps_Controller_Action_User_UserController extends Vps_Controller_Action_Au
             $userEditForm->fields['firstname']->setAllowBlank(true);
             $userEditForm->fields['lastname']->setAllowBlank(true);
         } else {
-            $this->_form->add(new Vpc_User_Detail_General_Form('general', null));
+            $this->_form->add(new Vpc_User_Detail_General_Form('general', null))
+                        ->setIdTemplate('{0}');
         }
 
         if ($roleField = $this->_getRoleField()) {
