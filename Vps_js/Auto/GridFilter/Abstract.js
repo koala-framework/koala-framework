@@ -1,6 +1,6 @@
 Ext.ns('Vps.Auto.GridFilter');
 Vps.Auto.GridFilter.Abstract = function(config) {
-    Vps.Auto.GridFilter.Abstract.superclass.constructor.call(this, config);
+    Vps.Auto.GridFilter.Abstract.superclass.constructor.call(this);
     this.addEvents('filter');
     this.toolbarItems = [];
     this.id = config.id;
