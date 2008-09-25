@@ -18,5 +18,14 @@ class Vpc_News_Month_Directory_Component extends Vpc_Directories_ItemPage_Direct
 
         return $ret;
     }
+    public function getSelect()
+    {
+        $select = parent::getSelect();
+        $select->where('publish_date <= NOW()');
+        if ($this->_getItemDirectorySetting('enableExpireDate')) {
+            $select->where('expiry_date >= NOW() OR ISNULL(expiry_date)');
+        }
+        return $select;
+    }
 
 }

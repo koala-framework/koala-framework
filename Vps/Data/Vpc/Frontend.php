@@ -16,7 +16,7 @@ class Vps_Data_Vpc_Frontend extends Vps_Data_Abstract
             return "Component with '$id' not found";
         }
         $class = $data->componentClass;
-        if (is_subclass_of($class, 'Vpc_Abstract')) {
+        if (is_instance_of($class, 'Vpc_Abstract')) {
 
             $process = $data
                 ->getRecursiveChildComponents(array(
