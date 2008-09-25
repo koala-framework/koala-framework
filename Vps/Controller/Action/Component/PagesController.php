@@ -59,9 +59,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $data['uiProvider'] = 'Vps.Component.PagesNode';
 
         $component = $row->getData();
-                if ($component->componentId != 'root' && $component->componentId != '213') {
-                    Vps_Debug::enable();
-                }
         $editComponents = $component->getChildComponents(
             array('hasEditComponents' => true)
         );
