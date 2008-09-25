@@ -8,7 +8,7 @@ class Vpc_Basic_Html_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'componentName' => 'Html',
+            'componentName' => trlVps('Html'),
             'componentIcon' => new Vps_Asset('tag'),
             'tablename'     => 'Vpc_Basic_Html_Model',
             'width'         => 400,
