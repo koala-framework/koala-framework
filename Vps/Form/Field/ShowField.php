@@ -1,6 +1,14 @@
 <?php
 class Vps_Form_Field_ShowField extends Vps_Form_Field_SimpleAbstract
 {
+    public function load($row, $postData = array())
+    {
+        $ret = parent::load($row, $postData);
+        $fn = $this->getFieldName();
+        $ret[$fn] = nl2br($ret[$fn]);
+        return $ret;
+    }
+    
     public function __construct($field_name = null, $field_label = null)
     {
         parent::__construct($field_name, $field_label);
