@@ -14,12 +14,12 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
         $ret = parent::_acceptKey($key, $select, $parentData);
         if ($ret && $select->hasPart(Vps_Component_Select::WHERE_FILENAME)) {
             $filename = $select->getPart(Vps_Component_Select::WHERE_FILENAME);
-            if ($filename != $this->_getFilenameFromRow($key)) return false;
+            if ($filename != $this->_getFilenameFromRow($key, $parentData)) return false;
         }
         return $ret;
     }
 
-    protected function _getFilenameFromRow($componentKey)
+    protected function _getFilenameFromRow($componentKey, $parentData)
     {
         $c = $this->_settings;
         if (isset($c['filename'])) {
@@ -38,7 +38,7 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
         $c = $this->_settings;
 
         $data = parent::_formatConfig($parentData, $componentKey);
-        $data['filename'] = $this->_getFilenameFromRow($componentKey);
+        $data['filename'] = $this->_getFilenameFromRow($componentKey, $parentData);
         $data['rel'] = isset($c['rel']) ? $c['rel'] : '';
         $data['name'] = isset($c['name']) ? $c['name'] : $componentKey;
         $data['isPage'] = true;
