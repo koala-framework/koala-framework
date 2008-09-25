@@ -9,8 +9,7 @@ class Vpc_Basic_FlashMediaPlayer_Component extends Vpc_Abstract
         $ret['tablename'] = 'Vpc_Basic_FlashMediaPlayer_Model';
         $ret['default'] = array(
             'width' => 400,
-            'height' => 300,
-            'viewport_height' => 0
+            'height' => 300
         );
         $ret['assets']['dep'][] = 'SwfObject';
         $ret['playerPath'] = '/assets/vps/Vpc/Basic/FlashMediaPlayer/player.swf';
