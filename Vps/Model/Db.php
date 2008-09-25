@@ -116,7 +116,9 @@ class Vps_Model_Db implements Vps_Model_Interface
                 if ($o['field'] == Vps_Model_Select::ORDER_RAND) {
                     $dbSelect->order('RAND()');
                 } else {
-                    if (strpos($o['field'], '.')===false) {
+                    if (strpos($o['field'], '.') === false &&
+                        strpos($o['field'], '(') === false
+                    ) {
                         $o['field'] = $tablename.'.'.$o['field'];
                     }
                     $dbSelect->order($o['field'].' '.$o['direction']);
