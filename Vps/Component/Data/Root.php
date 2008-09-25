@@ -77,7 +77,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 $ret = $this;
             } else {
                 if ($i+1 == count($idParts)) {
-                    //nur bei letzem part select berücksichtigen
+                    //nur bei letzem part select berï¿½cksichtigen
                     $select->whereId($idPart);
                     $ret = $ret->getChildComponent($select);
                 } else {
@@ -120,7 +120,6 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getComponentsByDbId($dbId, $select = array())
     {
         $benchmark = Vps_Benchmark::start();
-
         if (is_numeric(substr($dbId, 0, 1))) {
             $data = $this->getComponentById($dbId, $select);
             if ($data) {
@@ -145,25 +144,27 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                         && substr($dbId, 0, strlen($generator['dbIdShortcut'])) == $generator['dbIdShortcut']) {
                     $idParts = $this->_getIdParts(substr($dbId, strlen($generator['dbIdShortcut']) - 1));
                     $generator = Vps_Component_Generator_Abstract::getInstance($class, $key);
-                    $generatorSelect = clone $select;
+                    if (count($idParts) <= 1) {
+                        $generatorSelect = clone $select;
+                    } else {
+                        $generatorSelect = new Vps_Component_Select(); // Select erst bei letzten Part
+                    }
                     if (isset($limitCount)) {
                         $generatorSelect->limit($limitCount - count($ret));
                     }
                     $generatorSelect->whereId($idParts[0]);
                     $data = $generator->getChildData(null, $generatorSelect);
-                    unset($idParts[0]);
-                    $data = isset($data[0]) ? $data[0] : null;
-                    foreach ($idParts as $idPart) {
-                        if (!$data) break;
-                        $select->whereId($idPart);
-                        $data = $data->getChildComponent($select);
-                    }
-                    if ($data) {
-                        $ret[] = $data;
+                    if (isset($data[0])) {
+                        unset($idParts[0]);
+                        $componentId = $data[0]->componentId . implode('', $idParts);
+                        $data = $this->getComponentById($componentId, $select);
+                        if ($data) {
+                            $ret[] = $data;
+                        }
                     }
                     if (isset($limitCount)) {
                         if ($limitCount - count($ret) <= 0) {
-                        return $ret;
+                            return $ret;
                         }
                     }
                 }
