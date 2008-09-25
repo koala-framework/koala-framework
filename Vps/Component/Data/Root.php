@@ -71,12 +71,18 @@ class Vps_Component_Data_Root extends Vps_Component_Data
             $select = clone $select;
         }
         $ret = $this;
-        foreach ($this->_getIdParts($componentId) as $idPart) {
+        $idParts = $this->_getIdParts($componentId);
+        foreach ($idParts as $i=>$idPart) {
             if ($idPart == 'root') {
                 $ret = $this;
             } else {
-                $select->whereId($idPart);
-                $ret = $ret->getChildComponent($select);
+                if ($i+1 == count($idParts)) {
+                    //nur bei letzem part select berücksichtigen
+                    $select->whereId($idPart);
+                    $ret = $ret->getChildComponent($select);
+                } else {
+                    $ret = $ret->getChildComponent(array('id'=>$idPart));
+                }
                 if (!$ret) break;
             }
         }

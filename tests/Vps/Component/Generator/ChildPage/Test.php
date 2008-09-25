@@ -13,6 +13,21 @@ class Vps_Component_Generator_ChildPage_Test extends PHPUnit_Framework_TestCase
     {
         Vps_Benchmark::disable();
     }
+    public function testComponentClassConstraint()
+    {
+        $c = $this->_root->getComponentById('root-child');
+        $this->assertNotNull($c);
+
+        $c = $this->_root->getComponentById('root-child', array('componentClass'=>'Vps_Component_Generator_ChildPage_Child'));
+        $this->assertNotNull($c);
+
+        $c = $this->_root->getComponentById('root-child', array('componentClass'=>'NotExistent'));
+        $this->assertNull($c);
+
+        $c = $this->_root->getComponentById('root-child_1', array('componentClass'=>'Vpc_Basic_Empty_Component'));
+        $this->assertNotNull($c);
+    }
+
     public function testSubpage()
     {
         $this->assertNotNull($this->_root->getChildComponent('-child'));

@@ -131,11 +131,13 @@ class Vps_Component_Abstract_Admin
             && Vpc_Abstract::hasSetting($this->_class, 'tablename')
             && Vpc_Abstract::getSetting($this->_class, 'tablename') == $row->getTableClass())
         {
-            foreach (Vps_Component_Data_Root::getInstance()->getComponentsByDbId($row->component_id, array('ignoreVisible' => true)) as $c) {
-                if ($c->componentClass == $this->_class) {
-                    Vps_Component_Cache::getInstance()->remove($this->_class, $c->componentId);
-                }
-            }
+            Vps_Component_Cache::getInstance()->remove(
+                Vps_Component_Data_Root::getInstance()
+                    ->getComponentsByDbId($row->component_id, array(
+                        'ignoreVisible' => true,
+                        'componentClass'=>$this->_class)
+                    )
+            );
         }
     }
     
@@ -145,7 +147,7 @@ class Vps_Component_Abstract_Admin
         if (Vpc_Abstract::hasSetting($this->_class, 'clearCacheTable')
             && Vpc_Abstract::getSetting($this->_class, 'clearCacheTable') == $row->getTableClass())
         {
-            Vps_Component_Cache::getInstance()->remove($this->_class);
+            Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
         }
 
         if (isset($row->component_id)) {
@@ -156,7 +158,7 @@ class Vps_Component_Abstract_Admin
             Vpc_Abstract::hasSetting($this->_class, 'modelname') &&
             Vpc_Abstract::getSetting($this->_class, 'modelname') == 'Vps_Model_Component_Field')
         {
-            Vps_Component_Cache::getInstance()->remove($this->_class, $row->component_id);
+            Vps_Component_Cache::getInstance()->remove($row->component_id);
         }
         
     }

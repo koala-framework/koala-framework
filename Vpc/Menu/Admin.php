@@ -16,7 +16,7 @@ class Vpc_Menu_Admin extends Vpc_Admin
     private function _deleteCache($row)
     {
         if ($row->getTable() instanceof Vps_Dao_Pages) {
-            Vps_Component_Cache::getInstance()->remove($this->_class);
+            Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
             return;
         }
         foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
@@ -26,7 +26,7 @@ class Vpc_Menu_Admin extends Vpc_Admin
                     isset($generator['showInMenu']) && $generator['showInMenu']))
                 {
                     if (is_instance_of(get_class($row->getTable()), $generator['table'])) {
-                        Vps_Component_Cache::getInstance()->remove($this->_class);
+                        Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
                         return;
                     }
                 }

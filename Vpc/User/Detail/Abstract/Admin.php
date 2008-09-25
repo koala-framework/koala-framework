@@ -8,9 +8,9 @@ class Vpc_User_Detail_Abstract_Admin extends Vpc_Abstract_Composite_Admin
             $userDetails =  Vps_Component_Data_Root::getInstance()
                 ->getComponentsByClass('Vpc_User_Detail_Component', array('id'=>'_'.$row->id));
             foreach ($userDetails as $detail) {
-                foreach ($detail->getRecursiveChildComponents(array('componentClass'=>$this->_class)) as $c) {
-                    Vps_Component_Cache::getInstance()->remove($this->_class, $c->componentId);
-                }
+                Vps_Component_Cache::getInstance()->remove(
+                    $detail->getRecursiveChildComponents(array('componentClass'=>$this->_class))
+                );
             }
         }
     }

@@ -10,7 +10,7 @@ class Vpc_Forum_Thread_Preview_Admin extends Vpc_Admin
             foreach ($posts as $p) {
                 $preview = $p->parent->getChildComponent('-preview');
                 if ($preview && $preview->componentClass == $this->_class) {
-                    Vps_Component_Cache::getInstance()->remove($this->_class, $preview->componentId);
+                    Vps_Component_Cache::getInstance()->remove($preview);
                 }
             }
         }
