@@ -59,20 +59,23 @@ class Vps_Cache_Backend_Db extends Zend_Cache_Backend
         } else {
             $expire = $mktime + $lifetime;
         }
-        $sql = "REPLACE INTO {$this->_options['table']} (id, content, last_modified, expire) VALUES (:id, :data, :mktime, :expire)";
+
+        $componentClass = isset($tags['componentClass']) ? $tags['componentClass'] : '';
+        $pageId = isset($tags['pageId']) ? $tags['pageId'] : '';
+        $sql = "REPLACE INTO {$this->_options['table']} (id, content, last_modified, expire, component_class, page_id)";
+        $sql .= "VALUES (:id, :data, :mktime, :expire, :componentClass, :pageId)";
         $res = $this->_adapter->query($sql, array(
             'id' => $id,
             'data' => $data,
             'mktime' => $mktime,
-            'expire' => $expire
+            'expire' => $expire,
+            'componentClass' => $componentClass,
+            'pageId' => $pageId
         ));
 
         if (!$res) {
             $this->_log("Vps_Cache_Backend_Db::save() : impossible to store the cache id=$id");
             return false;
-        }
-        if (count($tags) > 0) {
-            $this->_log("Vps_Cache_Backend_Db::save() : tags are unsupported by the Db backend");
         }
         return $res;
     }
