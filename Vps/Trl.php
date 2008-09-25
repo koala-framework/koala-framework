@@ -107,7 +107,7 @@ class Vps_Trl
 
         $target = $this->getTargetLanguage();
         $xml = $this->_getXml($source);
-        if (!$xml) return ''; 
+        if (!$xml) return $needle; 
         foreach ($xml->text as $element) {
             if ($element->$codeLanguage == $needle && $element->$target != '_' && ($element['context'] == $context)){
                 return (string) $element->$target;
@@ -123,7 +123,7 @@ class Vps_Trl
         $target = $this->getTargetLanguage().'_plural';
         $plural = $codeLanguage.'_plural';
         $xml = $this->_getXml($source);
-        if (!$xml) return ''; 
+        if (!$xml) return $needle; 
         foreach ($xml->text as $element) {
             if ($element->$plural == $needle && $element->$target != '_' && ($element['context'] == $context)) {
                 return (string)$element->$target;
