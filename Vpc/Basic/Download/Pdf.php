@@ -6,8 +6,9 @@ class Vpc_Basic_Download_Pdf extends Vpc_Abstract_Pdf
         $fileSizeHelper = new Vps_View_Helper_FileSize();
         $encodeTextHelper = new Vps_View_Helper_MailEncodeText();
         $vars = $this->_component->getTemplateVars();
-        if ($vars['icon']) {
-            $this->_pdf->Image('http://'.$_SERVER['HTTP_HOST'].$vars['icon'], $this->_pdf->getX(), $this->_pdf->getY(), 3, 3, 'PNG');
+        if ($vars['iconname']) {
+            $icon = new Vps_Asset($vars['iconname']);
+            $this->_pdf->Image($icon->getFilename(), $this->_pdf->getX(), $this->_pdf->getY(), 3, 3, 'PNG');
         }
         $this->_pdf->setX($this->_pdf->getX() + 4);
         if ($vars['filesize']) {
