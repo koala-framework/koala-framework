@@ -258,6 +258,7 @@ abstract class Vps_Component_Generator_Abstract
                 }
             }
             $interfaces = array(
+                Vps_Component_Select::WHERE_PAGE_GENERATOR => 'Vps_Component_Generator_Page',
                 Vps_Component_Select::WHERE_PAGE => 'Vps_Component_Generator_Page_Interface',
                 Vps_Component_Select::WHERE_PSEUDO_PAGE => 'Vps_Component_Generator_PseudoPage_Interface',
                 Vps_Component_Select::WHERE_BOX => 'Vps_Component_Generator_Box_Interface',
@@ -294,7 +295,6 @@ abstract class Vps_Component_Generator_Abstract
             }
             if ($select->hasPart(Vps_Component_Select::WHERE_SHOW_IN_MENU)) {
                 $value = $select->getPart(Vps_Component_Select::WHERE_SHOW_IN_MENU);
-                //d($g->_settings);
                 if (isset($g->_settings['showInMenu']) && $g->_settings['showInMenu']) {
                     if (!$value) continue;
                 } else {
@@ -302,10 +302,10 @@ abstract class Vps_Component_Generator_Abstract
                 }
             }
             if ($select->getPart(Vps_Component_Select::WHERE_HAS_EDIT_COMPONENTS)) {
-                if (!Vpc_Abstract::hasSetting($componentClass, 'editComponents')) {
+                if (!Vpc_Abstract::hasSetting($g->_class, 'editComponents')) {
                     continue;
                 }
-                $editComponents = Vpc_Abstract::getSetting($componentClass, 'editComponents');
+                $editComponents = Vpc_Abstract::getSetting($g->_class, 'editComponents');
                 if (is_array($g->_settings['component'])) {
                     $continue = true;
                     foreach (array_keys($g->_settings['component']) as $componentKey) {

@@ -6,7 +6,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
     protected $_icons = array (
         'default' => 'page',
         'invisible' => 'page_red',
-        'reload' => 'control_repeat_blue',
+        'reload' => 'arrow_rotate_clockwise',
         'add' => 'page_add',
         'delete' => 'page_delete',
         'folder' => 'folder',
@@ -59,9 +59,11 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $data['uiProvider'] = 'Vps.Component.PagesNode';
 
         $component = $row->getData();
+                if ($component->componentId != 'root' && $component->componentId != '213') {
+                    Vps_Debug::enable();
+                }
         $editComponents = $component->getChildComponents(
-            array('hasEditComponents' => true)/*,
-            array('page' => false)*/
+            array('hasEditComponents' => true)
         );
         if (!$component instanceof Vps_Component_Data_Root) {
             $editComponents[] = $component; 

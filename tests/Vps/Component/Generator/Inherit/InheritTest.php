@@ -24,6 +24,8 @@ class Vps_Component_Generator_Inherit_InheritTest extends PHPUnit_Framework_Test
         $this->assertEquals('Vps_Component_Generator_Inherit_Box', current($cc));
         
         $c = $this->_root->getChildComponent('_static');
+        $cc = current($c->getChildComponents(array('hasEditComponents' => true)));
+        $this->assertEquals('root_static-box', $cc->componentId);
         $c = $c->getRecursiveChildComponents(array('flags'=>array('foo'=>true)));
         $this->assertEquals(count($c), 1);
         $this->assertEquals(current($c)->componentId, 'root_static-box-flag');

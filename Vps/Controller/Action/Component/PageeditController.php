@@ -9,7 +9,7 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
     {
         $types = array();
         $generator = current(Vps_Component_Generator_Abstract::getInstances(
-            Vps_Component_Data_Root::getComponentClass(), array('generator' => 'page'))
+            Vps_Component_Data_Root::getComponentClass(), array('pageGenerator' => true))
         );
         $classes = $generator->getChildComponentClasses();
         foreach ($classes as $component=>$class) {
