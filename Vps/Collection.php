@@ -65,6 +65,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
         foreach ($this->_array as $k=>$v) {
             if ($ret = $v->getByName($offset)) {
                 unset($this->_array[$k]);
+                $this->_array = array_values($this->_array);
                 return;
             }
         }
@@ -113,6 +114,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
             if ($v->getName() == $where) {
                 array_splice($this->_array, $i, 0, array($value));
                 $added = true;
+                break;
             }
         }
         if (!$added) {
@@ -130,6 +132,7 @@ class Vps_Collection implements ArrayAccess, IteratorAggregate
             if ($v->getName() == $where) {
                 array_splice($this->_array, $i+1, 0, array($value));
                 $added = true;
+                break;
             }
         }
         if (!$added) {

@@ -5,6 +5,7 @@ class Vpc_News_Month_Detail_Component extends Vpc_Directories_List_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['view'] = 'Vpc_News_List_View_Component';
+        $ret['useDirectorySelect'] = false;
         return $ret;
     }
 
@@ -14,6 +15,7 @@ class Vpc_News_Month_Detail_Component extends Vpc_Directories_List_Component
         $monthDate = substr($this->getData()->row->publish_date, 0, 7);
         $select->where('publish_date >= ?', "$monthDate-01");
         $select->where('publish_date <= ?', "$monthDate-31");
+        $select->order('publish_date', 'DESC');
         return $select;
     }
 

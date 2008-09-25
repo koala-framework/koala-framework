@@ -20,7 +20,6 @@ class Vpc_News_Directory_Component extends Vpc_Directories_ItemPage_Directory_Co
 
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/News/Directory/Panel.js';
         $ret['enableExpireDate'] = false;
-//         $ret['order'] = array('field'=>'publish_date', 'direction'=>'DESC');
         $ret['assetsAdmin']['dep'][] = 'ExtFormDateField';
         return $ret;
     }
@@ -32,6 +31,7 @@ class Vpc_News_Directory_Component extends Vpc_Directories_ItemPage_Directory_Co
         if ($this->_getSetting('enableExpireDate')) {
             $select->where('expiry_date >= NOW() OR ISNULL(expiry_date)');
         }
+        $select->order('publish_date', 'DESC');
         return $select;
     }
 }

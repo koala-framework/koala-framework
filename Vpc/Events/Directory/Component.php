@@ -10,13 +10,13 @@ class Vpc_Events_Directory_Component extends Vpc_News_Directory_Component
         $ret['generators']['detail']['component'] = 'Vpc_Events_Detail_Component';
         $ret['generators']['detail']['dbIdShortcut'] = 'events_';
 
-        $ret['order'] = null; //array('field'=>'start_date', 'direction'=>'DESC');
         return $ret;
     }
     public function getSelect()
     {
         $select = Vpc_Directories_ItemPage_Directory_Component::getSelect();
-        $select->where('start_date >= NOW()');
+        $select->where('IF(ISNULL(end_date), start_date, end_date) >= NOW()');
+        $select->order('start_date', 'ASC');
         return $select;
     }
 }

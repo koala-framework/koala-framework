@@ -1,11 +1,10 @@
 <?php
-class Vpc_Events_TopChoose_Component extends Vpc_News_TopChoose_Component
+abstract class Vpc_Events_Top_Component extends Vpc_News_Top_Component
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Events.Top');
-        $ret['showDirectoryClass'] = 'Vpc_Events_Directory_Component';
         $ret['generators']['child']['component']['view'] = 'Vpc_Events_List_View_Component';
         return $ret;
     }
