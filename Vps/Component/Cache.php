@@ -107,7 +107,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
 
     public function cleanComponentClass($componentClass)
     {
-        $this->clean(self::CLEANING_MODE_COMPONENT_CLASS, $componentClass);
+        $this->_backend->clean(self::CLEANING_MODE_COMPONENT_CLASS, $componentClass);
         Vps_Benchmark::info("Kompletter Cache für Komponente '$componentClass' gelöscht.");
     }
 
