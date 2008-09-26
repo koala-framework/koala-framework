@@ -136,7 +136,7 @@ class Vpc_Basic_Text_Parser
                                 $allowedClasses[] = $i[1];
                             }
                         }
-                        if ($key == 'CLASS' && (preg_match('#^style[0-9]+$#', $value) || in_array($value, $allowedClasses))) {
+                        if ($key != 'CLASS' || (preg_match('#^style[0-9]+$#', $value) || in_array($value, $allowedClasses))) {
                             $this->_finalHTML .= ' ' . strtolower($key) . '="'. $value . '"';
                         }
                     }
