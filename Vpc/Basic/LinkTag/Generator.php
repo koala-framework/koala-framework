@@ -3,7 +3,6 @@ class Vpc_Basic_LinkTag_Generator extends Vps_Component_Generator_Static
 {
     protected $_loadTableFromComponent = true;
 
-    
     protected function _formatSelect($parentData, $select = array())
     {
         //es gibt exakt eine unterkomponente mit der id 'link'
@@ -13,8 +12,11 @@ class Vpc_Basic_LinkTag_Generator extends Vps_Component_Generator_Static
                 return null;
             }
         }
+
         if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
-            throw new Vps_Exception("componentClass constraint not supported for LinkTag");
+            $cc = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+            $row = $this->_getModel()->find($parentData->dbId)->current();
+            if (!in_array($this->_settings['component'][$row->component], $cc)) return null;
         }
         return parent::_formatSelect($parentData, $select);
     }
