@@ -318,6 +318,10 @@ abstract class Vps_Component_Generator_Abstract
                 } else if (!in_array($key, $editComponents)) {
                     continue;
                 }
+                if (isset($g->_settings['unique']) && $g->_settings['unique']) {
+                    //vererbte, unique nur bei eigener komponente zurückgeben
+                    if ($g->_class != $componentClass) continue;
+                }
             }
             if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
                 $componentClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
