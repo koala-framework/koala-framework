@@ -65,11 +65,7 @@ class Vps_Component_Generator_PseudoPage_Table extends Vps_Component_Generator_T
             }
             return $row->{$this->_settings['filenameColumn']};
         } else {
-            $name = $this->_getNameFromRow($row);
-            if (!$name) {
-                throw new Vps_Exception("can't create filename for child-page of '$this->_class'");
-            }
-            return $name;
+            return $this->_getNameFromRow($row);
         }
     }
     protected function _formatConfig($parentData, $row)
