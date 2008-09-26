@@ -9,13 +9,13 @@ Vps.GoogleMap.load = function(callback, scope)
         callback.call(scope || window);
         return;
     }
-    if (Vps.GoogleMap.isLoaded) return;
-
-    Vps.GoogleMap.isLoaded = true;
     Vps.GoogleMap.callbacks.push({
         callback: callback,
         scope: scope
     });
+    if (Vps.GoogleMap.isLoaded) return;
+
+    Vps.GoogleMap.isLoaded = true;
 
     var url = 'http:/'+'/maps.google.com/maps?file=api&v=2.x&key={Vps_Assets_GoogleMapsApiKey::getKey()}&c&async=2';
     url += '&callback=Vps.GoogleMap._loaded';

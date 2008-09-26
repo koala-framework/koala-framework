@@ -87,11 +87,21 @@ Vpc.Advanced.GoogleMap.prototype = {
         );
         this.map.addOverlay(this.marker);
         this.windowsize = parseInt(this.options.width) * 0.8;
-        if (this.text != "" && "<br>" != this.text.toLowerCase()) {
-            this.marker.openInfoWindowHtml(this.text, {maxWidth: this.windowsize});
-        }
 
-        GEvent.addListener(this.marker, 'click',this.showWindow.createDelegate(this));
+
+        var showNextWindow = function() {
+            var map = Vpc.Advanced.GoogleMap.maps.shift();
+            map.showWindow();
+            if (Vpc.Advanced.GoogleMap.maps.length) {
+                showNextWindow.defer(1500);
+            }
+        };
+        if (Vpc.Advanced.GoogleMap.maps.length == 0) {
+            showNextWindow.defer(1);
+        }
+        Vpc.Advanced.GoogleMap.maps.push(this);
+
+        GEvent.addListener(this.marker, 'click', this.showWindow.createDelegate(this));
     },
 
     showWindow : function () {
@@ -153,6 +163,7 @@ Vpc.Advanced.GoogleMap.prototype = {
     }
 };
 
+Vpc.Advanced.GoogleMap.maps = [];
 Vpc.Advanced.GoogleMap.renderedMaps = [];
 
 Vpc.Advanced.GoogleMap.renderMap = function(map) {
@@ -162,10 +173,11 @@ Vpc.Advanced.GoogleMap.renderMap = function(map) {
     var mapContainer = new Ext.Element(map);
     var options = mapContainer.down(".options", true);
     if (!options) return;
+
     options = Ext.decode(options.value);
     var text = mapContainer.down("div.text").dom.innerHTML;
     var myMap = new Vpc.Advanced.GoogleMap(mapContainer, options, text);
-
+    
     Vps.GoogleMap.load(function() {
         this.show();
         this.activateMarker();
@@ -177,12 +189,11 @@ Vps.onContentReady(function() {
     Ext.each(maps, function(map) {
         var up = Ext.get(map).up('div.vpsSwitchDisplay');
         if (up) {
-            var lay = new Ext.util.DelayedTask();
-            lay.delay(1, function(up) {
+            (function(up, map) {
                 Ext.get(up).switchDisplayObject.on('opened', function() {
                     Vpc.Advanced.GoogleMap.renderMap(map);
                 });
-            }, this, [up]);
+            }).defer(1, this, [up, map]);
         } else {
             Vpc.Advanced.GoogleMap.renderMap(map);
         }
