@@ -20,9 +20,6 @@ class Vps_Data_Table_Parent extends Vps_Data_Abstract
         } else {
             $tables = $this->_parentTable;
         }
-        if ($row instanceof Vps_Model_Db_Row) {
-            $row = $row->getRow();
-        }
         foreach ($tables as $t) {
             $row = $row->findParentRow($t, $this->_ruleKey);
             if (!$row) return '';
