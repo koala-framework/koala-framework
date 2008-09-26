@@ -22,27 +22,27 @@ Ext.form.Field.override({
         if (this.helpText){
             var wrapDiv = this.getEl().up('div.x-form-item');
             if (wrapDiv) {
-                var label = wrapDiv.child('label');
-                if (label) {
-                    if (this.width) {
-                        var style = 'position:absolute; margin-left:' + (this.width + 10) + 'px'
-                    } else {
-                        var style = 'margin-bottom: 0px; margin-left: 5px; padding: 0px;';
-                    }
-                    var helpImage = label.createChild({
-                        tag: 'img', 
-                        src: '/assets/silkicons/information.png',
-                        style: style,
-                        width: 16,
-                        height: 16
+                var helpEl = wrapDiv.createChild({
+                    tag: 'a',
+                    href: '#',
+                    style: 'display: block; width: 16px; height: 16px; '+
+                        'position: absolute; '+
+                        'background-image: url(/assets/silkicons/information.png)'
+                });
+                helpEl.on('click', function(e) {
+                    e.stopEvent();
+                    var helpWindow = new Ext.Window({
+                        html: this.helpText,
+                        width: 400,
+                        bodyStyle: 'padding: 10px; background-color: white;',
+                        autoHeight: true,
+                        bodyBorder : false,
+                        title: trlVps('Info'),
+                        resize: false
                     });
-                    Ext.QuickTips.register({
-                        target:  helpImage,
-                        title: '',
-                        text: this.helpText,
-                        enabled: true
-                    });
-                }
+                    helpWindow.show();
+                }, this);
+                Ext.get(helpEl).alignTo(this.getEl(), 'tr', [10, 2]);
             }
         }
     }
