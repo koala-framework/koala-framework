@@ -10,13 +10,13 @@ class Vps_Component_Data_Category extends Vps_Component_Data_Root
         );
         parent::__construct($config);
     }
-    
-    public function getChildComponents($constraints = array())
+
+    public function getChildComponents($select = array())
     {
-        $constraints['type'] = $this->componentId;
-        if (isset($constraints['hasEditComponents'])) {
-            $constraints['unique'] = false;
-        }        
-        return parent::getChildComponents($constraints);
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        $select->whereType($this->componentId);
+        return parent::getChildComponents($select);
     }
 }

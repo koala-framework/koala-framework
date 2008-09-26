@@ -59,11 +59,18 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $data['uiProvider'] = 'Vps.Component.PagesNode';
 
         $component = $row->getData();
-        $editComponents = $component->getChildComponents(
-            array('hasEditComponents' => true)
-        );
-        if (!$component instanceof Vps_Component_Data_Root) {
-            $editComponents[] = $component; 
+        if ($component instanceof Vps_Component_Data_Category) {
+            $editComponents = array();
+        } else {
+            $editComponents = $component->getRecursiveChildComponents(
+                array(
+                    'hasEditComponents' => true,
+                    'pageGenerator' => false
+                )
+            );
+            if (!$component instanceof Vps_Component_Data_Root) {
+                $editComponents[] = $component; 
+            }
         }
         $data['data']['editComponents'] = array();
         foreach ($editComponents as $cc) {
