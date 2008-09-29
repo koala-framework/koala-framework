@@ -1,5 +1,6 @@
 Vps.Form.DateField = Ext.extend(Ext.form.DateField,
 {
+    helpTextOffset: [10+13, 2],
     format: trlVps('Y-m-d'),
     width: 80,
     initComponent : function(){
