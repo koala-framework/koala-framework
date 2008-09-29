@@ -78,19 +78,20 @@ class Vps_Component_Data
                     $page = $this->getParentPage();
                     $foundInheritGeneratorPage = false;
 
-                    while ($page) {
+                    while ($page && !$foundInheritGeneratorPage) {
                         foreach (Vpc_Abstract::getSetting($page->componentClass, 'generators') as $gKey=> $g) {
                             if (isset($g['inherit']) && $g['inherit']) {
-                                $this->_inheritClasses[] = $page->componentClass;
-                                $this->_inheritClasses = array_merge($this->_inheritClasses, $page->inheritClasses);
-                                $foundInheritGeneratorPage = true;
-                                $this->_uniqueParentDatas = $page->_uniqueParentDatas;
+                                if (!$foundInheritGeneratorPage) {
+                                    $this->_inheritClasses[] = $page->componentClass;
+                                    $this->_inheritClasses = array_merge($this->_inheritClasses, $page->inheritClasses);
+                                    $this->_uniqueParentDatas = $page->_uniqueParentDatas;
+                                }
                                 if (isset($g['unique']) && $g['unique']) {
                                     $this->_uniqueParentDatas[$page->componentClass.$gKey] = $page;
                                 }
+                                $foundInheritGeneratorPage = true;
                             }
                         }
-                        if ($foundInheritGeneratorPage) break;
                         $page = $page->getParentPage();
                     }
 
@@ -241,6 +242,7 @@ class Vps_Component_Data
 
             $generators = Vps_Component_Generator_Abstract::getInstances($this, $select);
             $ret = array();
+
             foreach ($generators as $generator) {
                 $generatorSelect = clone $select;
                 if ($limitCount) {
