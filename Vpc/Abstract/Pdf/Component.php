@@ -6,7 +6,7 @@ abstract class Vpc_Abstract_Pdf_Component extends Vpc_Abstract
         return $this->getData()->parent;
     }
     
-    public function sendContent($output = 'I')
+    public function sendContent($output = 'I', $filename = null)
     {
         $plugins = $this->getData()->getPlugins('Vps_Component_Plugin_Interface_View');
         if ($plugins) {
@@ -15,7 +15,8 @@ abstract class Vpc_Abstract_Pdf_Component extends Vpc_Abstract
             }
             $p = new $plugins[0]($this->getData()->componentId);
             if ($p->processOutput('')) {
-                return parent::sendContent();
+                parent::sendContent();
+                return false;
             }
         }
         
@@ -27,6 +28,7 @@ abstract class Vpc_Abstract_Pdf_Component extends Vpc_Abstract
         }
         $pdf = new $masterClass($pdfComponent);
         $pdfComponent->getPdfWriter($pdf)->writeContent();
-        return $pdf->output($output);
+        $pdf->output($filename, $output);
+        return true;
     }
 }
