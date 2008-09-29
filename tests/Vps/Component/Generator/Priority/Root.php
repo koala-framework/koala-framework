@@ -5,6 +5,8 @@ class Vps_Component_Generator_Priority_Root extends Vpc_Root_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['page']['model'] = new Vps_Model_FnF();
+        $ret['generators']['page']['component'] = array();
+
         $ret['generators']['page1'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vps_Component_Generator_Priority_Page1',
