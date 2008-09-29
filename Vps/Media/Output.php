@@ -67,6 +67,9 @@ class Vps_Media_Output
             if (isset($file['downloadFilename']) && $file['downloadFilename']) {
                 $ret['headers'][] = 'Content-Disposition: attachment; filename="' . $file['downloadFilename'] . '"';
             }
+            if (isset($file['filename']) && $file['filename']) {
+                $ret['headers'][] = 'Content-Disposition: inline; filename="' . $file['filename'] . '"';
+            }
             if (isset($file['encoding'])) {
                 $ret['headers'][] = "Content-Encoding: " . $file['encoding'];
             } else {
