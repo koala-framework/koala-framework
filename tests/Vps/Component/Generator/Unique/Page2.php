@@ -14,7 +14,7 @@ class Vps_Component_Generator_Unique_Page2 extends Vpc_Abstract
         );
         $ret['generators']['page3'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
-            'component' => 'Vpc_Basic_Empty_Component',
+            'component' => 'Vps_Component_Generator_Unique_Page3',
             'name' => 'page3'
         );
         return $ret;

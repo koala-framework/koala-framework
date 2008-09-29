@@ -79,20 +79,17 @@ class Vps_Component_Data
                     $foundInheritGeneratorPage = false;
 
                     while ($page) {
-                        $hasInheritGenerator = false;
                         foreach (Vpc_Abstract::getSetting($page->componentClass, 'generators') as $gKey=> $g) {
                             if (isset($g['inherit']) && $g['inherit']) {
-                                $hasInheritGenerator = true;
+                                $this->_inheritClasses[] = $page->componentClass;
+                                $this->_inheritClasses = array_merge($this->_inheritClasses, $page->inheritClasses);
+                                $foundInheritGeneratorPage = true;
+                                $this->_uniqueParentDatas = $page->_uniqueParentDatas;
                                 if (isset($g['unique']) && $g['unique']) {
                                     $this->_uniqueParentDatas[$page->componentClass.$gKey] = $page;
                                 }
+                                break 2;
                             }
-                        }
-                        if ($hasInheritGenerator) {
-                            $this->_inheritClasses[] = $page->componentClass;
-                            $this->_inheritClasses = array_merge($this->_inheritClasses, $page->inheritClasses);
-                            $foundInheritGeneratorPage = true;
-                            break;
                         }
                         $page = $page->getParentPage();
                     }
