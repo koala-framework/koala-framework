@@ -13,7 +13,7 @@ class Vps_Benchmark_Profile
     public $queries;
     public $stopped = false;
 
-    //sollte über Vps_Benchmark::start aufgerufen werden
+    //sollte ï¿½ber Vps_Benchmark::start aufgerufen werden
     public function __construct($identifier, $addInfo)
     {
         if (!$identifier && function_exists('debug_backtrace')) {
@@ -100,7 +100,7 @@ class Vps_Benchmark_Profile
         }
 
         if (Zend_Registry::get('config')->debug->firephp && class_exists('FirePHP') && FirePHP::getInstance() && FirePHP::getInstance()->detectClientExtension()) {
-            p($this->identifier.': '.$this->addInfo.' '.implode('; ', $this->getOutput()));
+            //p($this->identifier.': '.$this->addInfo.' '.implode('; ', $this->getOutput()));
         }
         $this->stopped = true;
     }
