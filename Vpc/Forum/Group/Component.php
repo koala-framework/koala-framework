@@ -15,14 +15,6 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
             'name' => trlVps('new thread')
         );
         $ret['tablename'] = 'Vpc_Forum_Group_Model';
-        $ret['order'] = array(
-            'field' => '(
-                SELECT MAX(create_time) 
-                FROM vpc_posts 
-                WHERE vpc_posts.component_id=cache_child_component_id
-            )',
-            'direction'=>'DESC'
-        );
         return $ret;
     }
 
@@ -48,5 +40,14 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
         $ret['group'] = $this->getData();
         $ret['forum'] = $this->getData()->getParentPage();
         return $ret;
+    }
+    
+    public function getSelect()
+    {
+        $ret = parent::getSelect();
+        $ret->order(new Zend_Db_Expr('(SELECT MAX(create_time) 
+                FROM vpc_posts 
+                WHERE vpc_posts.component_id=cache_child_component_id) DESC'));
+        return $ret;        
     }
 }
