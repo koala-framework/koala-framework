@@ -88,9 +88,9 @@ class Vps_Component_Data
                                 if (isset($g['unique']) && $g['unique']) {
                                     $this->_uniqueParentDatas[$page->componentClass.$gKey] = $page;
                                 }
-                                break 2;
                             }
                         }
+                        if ($foundInheritGeneratorPage) break;
                         $page = $page->getParentPage();
                     }
 
