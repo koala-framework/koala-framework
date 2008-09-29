@@ -16,6 +16,11 @@ class Vps_Component_Generator_Priority_Page3 extends Vpc_Abstract
             'component' => 'Vpc_Basic_Empty_Component',
             'name' => 'page4'
         );
+        $ret['generators']['page5'] = array(
+            'class' => 'Vps_Component_Generator_Page_Static',
+            'component' => 'Vps_Component_Generator_Priority_Page5',
+            'name' => 'page5'
+        );
         return $ret;
     }
 

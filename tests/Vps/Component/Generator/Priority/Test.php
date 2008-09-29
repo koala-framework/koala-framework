@@ -45,6 +45,15 @@ class Vps_Component_Generator_Priority_Test extends PHPUnit_Framework_TestCase
         $this->_assertIds($boxes, array('root_page1_page3_page4-box2'));
     }
 
+    public function testSamePriorityBox()
+    {
+        $boxes = $this->_root->getChildComponent('_page1')
+                        ->getChildComponent('_page3')
+                        ->getChildComponent('_page5')
+                        ->getChildComponents(array('box'=>true));
+        $this->_assertIds($boxes, array('root_page1_page3_page5-box5'));
+    }
+
     private function _assertIds($components, $ids)
     {
         $i = array();
