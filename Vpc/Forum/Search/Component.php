@@ -5,7 +5,6 @@ class Vpc_Forum_Search_Component extends Vpc_Directories_List_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['view'] = 'Vpc_Forum_Search_View_Component';
-        $ret['order'] = array('field'=>'vpc_posts.create_time', 'direction'=>'DESC');
         return $ret;
     }
 
@@ -22,6 +21,8 @@ class Vpc_Forum_Search_Component extends Vpc_Directories_List_Component
     public function getSelect()
     {
         $ret = parent::getSelect();
+        
+        $ret->order('create_time');
 
         $groupComponentClass = Vpc_Abstract::getChildComponentClass($this->_getForumDirectory()->componentClass, 'groups');
         $threadComponentClass = Vpc_Abstract::getChildComponentClass($groupComponentClass, 'detail');

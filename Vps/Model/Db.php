@@ -115,6 +115,8 @@ class Vps_Model_Db implements Vps_Model_Interface
             foreach ($order as $o) {
                 if ($o['field'] == Vps_Model_Select::ORDER_RAND) {
                     $dbSelect->order('RAND()');
+                } else if ($o['field'] instanceof Zend_Db_Expr) {
+                    $dbSelect->order($o['field']);
                 } else {
                     if (strpos($o['field'], '.') === false &&
                         strpos($o['field'], '(') === false
