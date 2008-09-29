@@ -1,4 +1,6 @@
 Ext.form.Field.prototype.afterRenderExt = Ext.form.Field.prototype.afterRender;
+
+Ext.form.Field.prototype.helpTextOffset = [10, 2];
 Ext.form.Field.override({
     getName: function() {
         //http://extjs.com/forum/showthread.php?t=15236
@@ -42,7 +44,7 @@ Ext.form.Field.override({
                     });
                     helpWindow.show();
                 }, this);
-                Ext.get(helpEl).alignTo(this.getEl(), 'tr', [10, 2]);
+                Ext.get(helpEl).alignTo(this.getEl(), 'tr', this.helpTextOffset);
             }
         }
     }
