@@ -24,7 +24,7 @@ class Vps_Component_Generator_Box_Static extends Vps_Component_Generator_Static
     public function getPriority()
     {
         if (!isset($this->_settings['priority'])) {
-            $this->_settings['priority'] = 0;
+            return 0;
         }
         return $this->_settings['priority'];
     }
