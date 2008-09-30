@@ -1,6 +1,7 @@
 Ext.form.Field.prototype.afterRenderExt = Ext.form.Field.prototype.afterRender;
 
 Ext.form.Field.prototype.helpTextOffset = [10, 2];
+Ext.form.TriggerField.prototype.helpTextOffset = [10+13, 2]; //js ist supa :D
 Ext.form.Field.override({
     getName: function() {
         //http://extjs.com/forum/showthread.php?t=15236
@@ -44,8 +45,20 @@ Ext.form.Field.override({
                     });
                     helpWindow.show();
                 }, this);
-                Ext.get(helpEl).alignTo(this.getEl(), 'tr', this.helpTextOffset);
+                this.helpEl = Ext.get(helpEl);
+                this.alignHelpTextIcon();
+
+                //re-align when tab is shown
+                this.ownerCt.bubble(function(c) {
+                    if (c.ownerCt instanceof Ext.TabPanel) {
+                        c.on('show', this.alignHelpTextIcon, this);
+                    }
+                }, this);
             }
         }
+    },
+    alignHelpTextIcon: function() {
+        console.log(this.getXType(), this.helpTextOffset);
+        this.helpEl.alignTo(this.getEl(), 'tr', this.helpTextOffset);
     }
 });
