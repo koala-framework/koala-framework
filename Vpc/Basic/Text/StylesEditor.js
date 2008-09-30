@@ -61,7 +61,6 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
     {
         var styles = '';
         var values = {};
-        debugger;
         this.form.getForm().items.each(function(i) {
             if (i.isFormField && i.getValue()) {
                 if (i instanceof Vps.Form.ColorField) {
