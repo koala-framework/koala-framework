@@ -3129,5 +3129,11 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en default="1">coordinates not entered</en>
 <de>keine Koordinaten eingetragen</de>
 </text>
+<text>
+    <en default="1">No File uploaded, please select a file.</en>
+    <de>Keine Datei wurde hochgeladen, bitte wählen Sie eine aus.</de>
+</text>
+
+
 </trl>
 
