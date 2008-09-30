@@ -22,7 +22,8 @@ class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
         return array_merge(parent::getExtConfig(), array(
             'xtype'=>'vpc.news',
             'contentClass' => $contentClass,
-            'componentPlugins' => $plugins
+            'componentPlugins' => $plugins,
+            'idTemplate' => 'news_{0}-content'
         ));
     }
 
