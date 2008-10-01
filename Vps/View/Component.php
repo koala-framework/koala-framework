@@ -75,10 +75,10 @@ class Vps_View_Component extends Vps_View
                     $ret = Vps_View_Component::_renderComponent($component);
                 }
                 if ($cacheId) {
-                    $cache->save($ret, $cacheId, array(
-                        'componentClass'=>$component->componentClass,
-                        'pageId' => $cache->getCacheIdFromComponentId($component->getPage()->componentId),
-                    ));
+                    $tags = array();
+                    $tags['componentClass'] = $component->componentClass;
+                    if ($component->getPage()) $tags['pageId'] = $cache->getCacheIdFromComponentId($component->getPage()->componentId);
+                    $cache->save($ret, $cacheId, $tags);
                 }
             } else {
                 $ret = "Component '$componentId' not found";
