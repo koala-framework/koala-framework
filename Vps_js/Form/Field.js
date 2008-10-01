@@ -1,7 +1,6 @@
 Ext.form.Field.prototype.afterRenderExt = Ext.form.Field.prototype.afterRender;
 
 Ext.form.Field.prototype.helpTextOffset = [10, 2];
-Ext.form.TriggerField.prototype.helpTextOffset = [10+13, 2]; //js ist supa :D
 Ext.form.Field.override({
     getName: function() {
         //http://extjs.com/forum/showthread.php?t=15236
