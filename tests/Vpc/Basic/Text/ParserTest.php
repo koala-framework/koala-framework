@@ -106,5 +106,8 @@ class Vpc_Basic_Text_ParserTest extends PHPUnit_Framework_TestCase
 
         $out = $this->_parser->parse('<strong>te<em>a<em>-</em></em>xt</strong>');
         $this->assertEquals('<strong>te<em>a-</em>xt</strong>', $out);
+
+        $out = $this->_parser->parse('<strong>te<strong foo="bar">-</strong>xt</strong>');
+        $this->assertEquals('<strong>te-xt</strong>', $out);
     }
 }

@@ -1,19 +1,20 @@
 <?php
 class Vpc_Basic_Text_Parser
 {
+    //aktueller zustand von parser währen des parsens
     protected $_parser;
     protected $_stack;
     protected $_finalHTML;
     protected $_deleteContent;
-    protected $_deleteContentStack;
+    protected $_strongTagAllowed = true;
+    protected $_emTagAllowed = true;
 
+    //einstellungen für parser
     protected $_row;
     protected $_enableColor = false;
     protected $_enableTagsWhitelist = true;
     protected $_enableStyles = true;
 
-    protected $_strongTagAllowed = true;
-    protected $_emTagAllowed = true;
 
     public function __construct(Vpc_Basic_Text_Row $row = null)
     {
@@ -34,10 +35,7 @@ class Vpc_Basic_Text_Parser
 
         }
         if ($element == "SCRIPT") {
-            array_pop($this->_deleteContentStack);
-            if (!$this->_deleteContentStack) {
-                $this->_deleteContent = false;
-            }
+            $this->_deleteContent--;
         }
 
 
@@ -93,8 +91,7 @@ class Vpc_Basic_Text_Parser
             //do nothing
         } elseif ($element == 'SCRIPT') {
             array_push($this->_stack, false);
-            array_push($this->_deleteContentStack, $element);
-            $this->_deleteContent = true;
+            $this->_deleteContent++;
         } else {
             if ($element == 'IMG') {
                 $src = $attributes['SRC'];
@@ -134,21 +131,17 @@ class Vpc_Basic_Text_Parser
                 && !in_array(strtolower($element), array_keys($this->_tagsWhitelist))) {
                 //ignore this tag
                 array_push($this->_stack, false);
-            } else {
-                if ((!$this->_strongTagAllowed && $element == 'STRONG') ||
+            } else if ((!$this->_strongTagAllowed && $element == 'STRONG') ||
                     (!$this->_emTagAllowed && $element == 'EM')) {
-                    $check = false;
-                } elseif ($element == 'STRONG') {
-                    $check = true;
+                array_push($this->_stack, strtolower($element));
+            } else {
+                if ($element == 'STRONG') {
                     $this->_strongTagAllowed = false;
                 } elseif ($element == 'EM') {
-                    $check = true;
                     $this->_emTagAllowed = false;
-                } else {
-                    $check = true;
                 }
 
-                if ($check) $this->_finalHTML .= '<'.strtolower($element);
+                $this->_finalHTML .= '<'.strtolower($element);
                 foreach ($attributes as $key => $value) {
                     if (in_array(strtolower($key), $this->_tagsWhitelist[strtolower($element)])) {
                         $masterStyles = Vpc_Basic_Text_StylesModel::getMasterStyles();
@@ -171,7 +164,7 @@ class Vpc_Basic_Text_Parser
                 } else {
                     array_push($this->_stack, strtolower($element));
                 }
-                if ($check) $this->_finalHTML .= '>';
+                $this->_finalHTML .= '>';
             }
         }
         if ($this->_deleteContent) {
@@ -219,8 +212,7 @@ class Vpc_Basic_Text_Parser
         }
         $this->_stack = array();
         $this->_finalHTML = '';
-        $this->_deleteContent = false;
-        $this->_deleteContentStack = array();
+        $this->_deleteContent = 0;
         $this->_parser = xml_parser_create();
 
         xml_set_object($this->_parser, $this);
