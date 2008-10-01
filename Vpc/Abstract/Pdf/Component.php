@@ -8,15 +8,17 @@ abstract class Vpc_Abstract_Pdf_Component extends Vpc_Abstract
     
     public function sendContent($output = 'I', $filename = null)
     {
-        $plugins = $this->getData()->getPlugins('Vps_Component_Plugin_Interface_View');
-        if ($plugins) {
-            if (count($plugins) > 1 || !is_instance_of($plugins[0], 'Vps_Component_Plugin_Password_Component')) {
-                throw new Vps_Exception("For pdf only one plugin of type 'Vps_Component_Plugin_Password_Component' is allowed.");
-            }
-            $p = new $plugins[0]($this->getData()->componentId);
-            if ($p->processOutput('')) {
-                parent::sendContent();
-                return false;
+        if ($output == 'I') {
+            $plugins = $this->getData()->getPlugins('Vps_Component_Plugin_Interface_View');
+            if ($plugins) {
+                if (count($plugins) > 1 || !is_instance_of($plugins[0], 'Vps_Component_Plugin_Password_Component')) {
+                    throw new Vps_Exception("For pdf only one plugin of type 'Vps_Component_Plugin_Password_Component' is allowed.");
+                }
+                $p = new $plugins[0]($this->getData()->componentId);
+                if ($p->processOutput('')) {
+                    parent::sendContent();
+                    return false;
+                }
             }
         }
         
