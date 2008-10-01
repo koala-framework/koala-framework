@@ -6,6 +6,7 @@ class Vpc_Directories_CategoryTree_Detail_CategoryList_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['view'] = 'Vpc_Directories_CategoryTree_View_Component';
+        $ret['useDirectorySelect'] = false;
         return $ret;
     }
 
