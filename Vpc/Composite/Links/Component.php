@@ -8,13 +8,8 @@ class Vpc_Composite_Links_Component extends Vpc_Abstract_List_Component
         $ret['componentName'] = trlVps('Links');
         $ret['componentIcon'] = new Vps_Asset('links');
         $ret['tablename'] = 'Vpc_Composite_Links_Model';
+        $ret['cssClass'] = 'webStandard';
 
-        return $ret;
-    }
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        $ret['children'] = $this->getData()->getChildComponents(array('generator' => 'child'));
         return $ret;
     }
 }
