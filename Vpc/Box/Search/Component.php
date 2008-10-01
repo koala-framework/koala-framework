@@ -1,5 +1,5 @@
 <?php
-abstract class Vpc_Box_Search_Component extends Vpc_Abstract
+abstract class Vpc_Box_Search_Component extends Vpc_Abstract_Composite_Component
 {
     public static function getSettings()
     {

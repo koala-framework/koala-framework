@@ -3,7 +3,7 @@
     <?=$this->component($this->observe)?>
 
     <?php if (!$this->threadClosed) { ?>
-        <div class="newPost"><?=$this->componentLink($this->write)?></div>
+        <span class="beforeButton"></span><span class="button"><div class="newPost"><?=$this->componentLink($this->write)?></div></span><span class="afterButton"></span>
     <?php } else { ?>
         <span class="threadClosed"><?= trlVps('Thread closed') ?></span>
     <?php } ?>
@@ -13,7 +13,7 @@
     <?=$this->component($this->observe)?>
 
     <?php if (!$this->threadClosed) { ?>
-        <div class="newPost"><?=$this->componentLink($this->write)?></div>
+        <span class="beforeButton"></span><span class="button"><div class="newPost"><?=$this->componentLink($this->write)?></div></span><span class="afterButton"></span>
     <?php } else { ?>
         <span class="threadClosed"><?= trlVps('Thread closed') ?></span>
     <?php } ?>

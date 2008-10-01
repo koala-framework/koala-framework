@@ -1,0 +1,3 @@
+.$cssClass {
+    page-break-before: always;
+}
