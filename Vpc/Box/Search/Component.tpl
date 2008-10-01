@@ -1,4 +1,4 @@
-<div class="<?=$this->cssClass?> searchBox">
+<div class="<?=$this->cssClass?>">
     <form action="<?= $this->searchPageUrl; ?>" method="get" autocomplete="off">
         <input type="hidden" class="ajaxUrl" value="<?= $this->ajaxUrl; ?>" />
         <input type="text" name="<?=$this->queryParam?>" class="searchField vpsClearOnFocus"

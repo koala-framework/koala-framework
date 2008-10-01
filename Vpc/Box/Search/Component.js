@@ -1,7 +1,7 @@
 
 Vps.onContentReady(function() {
 
-    var searchBoxes = Ext.DomQuery.select('div.searchBox');
+    var searchBoxes = Ext.DomQuery.select('.vpcBoxSearch');
     Ext.each(searchBoxes, function(searchBox) {
         var els = {
             searchField  : Ext.get(Ext.DomQuery.select('.searchField', searchBox)[0]),
