@@ -10,7 +10,6 @@ class Vpc_Basic_Text_ParserTest extends PHPUnit_Framework_TestCase
     }
     public function testParser()
     {
-    /*
         $out = $this->_parser->parse('<br />');
         $this->assertEquals('<br />', $out);
 
@@ -89,11 +88,23 @@ class Vpc_Basic_Text_ParserTest extends PHPUnit_Framework_TestCase
 
         $out = $this->_parser->parse('<!-- [if !supportLists] -->');
         $this->assertEquals('', $out);
-*/
+
         $out = $this->_parser->parse('<a href="blubb">asfas df</a>');
         $this->assertEquals('<a href="blubb">asfas df</a>', $out);
 
         $out = $this->_parser->parse('<a href="blubb" class="scahs">asfas df</a>');
         $this->assertEquals('<a href="blubb">asfas df</a>', $out);
+
+        $out = $this->_parser->parse('<strong>te<strong>-</strong>xt</strong>');
+        $this->assertEquals('<strong>te-xt</strong>', $out);
+
+        $out = $this->_parser->parse('<em>te<em>-</em>xt</em>');
+        $this->assertEquals('<em>te-xt</em>', $out);
+
+        $out = $this->_parser->parse('<strong>te<em>-</em>xt</strong>');
+        $this->assertEquals('<strong>te<em>-</em>xt</strong>', $out);
+
+        $out = $this->_parser->parse('<strong>te<em>a<em>-</em></em>xt</strong>');
+        $this->assertEquals('<strong>te<em>a-</em>xt</strong>', $out);
     }
 }
