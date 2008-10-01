@@ -15,7 +15,7 @@ class Vps_Pdf_TcPdf extends TCPDF
         $this->SetAuthor("Vivid Planet Software GmbH");
         $this->SetCreator("Vivid Planet Software GmbH mit FPDF");
         $this->SetTitle("Wochenbericht");
-        $this->lisymbol = utf8_encode(chr(0x95)); // = •
+        $this->setLIsymbol(utf8_encode(chr(0x95))); // = •
     }
 
     public function getRightMargin()
@@ -132,6 +132,17 @@ class Vps_Pdf_TcPdf extends TCPDF
         $text = str_replace("—", utf8_encode(chr(0x97)), $text);
         $text = str_replace("•", utf8_encode(chr(0x95)), $text);
         return $text;
+    }
+
+    //workaround für bug bei pdf erstellung
+    public function AddFont($family, $style='', $file='') {
+        $allowedStyles = array('B', 'I', 'BI', 'IB', '');
+        if (!in_array($style, $allowedStyles)) {
+            if (in_array(substr($style, 0, 1), $allowedStyles)) {
+                $style = substr($style, 0, 1);
+            }
+        }
+        return parent::AddFont($family, $style, $file);
     }
 
 

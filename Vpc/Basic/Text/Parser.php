@@ -12,6 +12,9 @@ class Vpc_Basic_Text_Parser
     protected $_enableTagsWhitelist = true;
     protected $_enableStyles = true;
 
+    protected $_strongTagAllowed = true;
+    protected $_emTagAllowed = true;
+
     public function __construct(Vpc_Basic_Text_Row $row = null)
     {
         $this->_row = $row;
@@ -21,7 +24,14 @@ class Vpc_Basic_Text_Parser
     {
         $tag = array_pop($this->_stack);
         if ($tag && !$this->_deleteContent) {
-            $this->_finalHTML .= '</'.$tag.'>';
+            if (($tag == 'strong' || $tag == 'em') && !in_array($tag, $this->_stack)) {
+                $this->_finalHTML .= '</'.$tag.'>';
+                $this->_strongTagAllowed = true;
+                $this->_emTagAllowed = true;
+            } elseif ($tag != 'strong' && $tag != 'em') {
+                $this->_finalHTML .= '</'.$tag.'>';
+            }
+
         }
         if ($element == "SCRIPT") {
             array_pop($this->_deleteContentStack);
@@ -44,7 +54,8 @@ class Vpc_Basic_Text_Parser
             }
             if (preg_match('# *font-weight *: *bold *; *#', $style, $matches)){
                  array_push($this->_stack, 'strong');
-                 $this->_finalHTML .= '<strong>';
+                $this->_finalHTML .= '<strong>';
+                $this->_strongTagAllowed = false;
             } elseif (preg_match('# *font-style *: *italic *; *#', $style, $matches)){
                  array_push($this->_stack, 'em');
                  $this->_finalHTML .= '<em>';
@@ -124,7 +135,20 @@ class Vpc_Basic_Text_Parser
                 //ignore this tag
                 array_push($this->_stack, false);
             } else {
-                $this->_finalHTML .= '<'.strtolower($element);
+                if ((!$this->_strongTagAllowed && $element == 'STRONG') ||
+                    (!$this->_emTagAllowed && $element == 'EM')) {
+                    $check = false;
+                } elseif ($element == 'STRONG') {
+                    $check = true;
+                    $this->_strongTagAllowed = false;
+                } elseif ($element == 'EM') {
+                    $check = true;
+                    $this->_emTagAllowed = false;
+                } else {
+                    $check = true;
+                }
+
+                if ($check) $this->_finalHTML .= '<'.strtolower($element);
                 foreach ($attributes as $key => $value) {
                     if (in_array(strtolower($key), $this->_tagsWhitelist[strtolower($element)])) {
                         $masterStyles = Vpc_Basic_Text_StylesModel::getMasterStyles();
@@ -147,7 +171,7 @@ class Vpc_Basic_Text_Parser
                 } else {
                     array_push($this->_stack, strtolower($element));
                 }
-                $this->_finalHTML .= '>';
+                if ($check) $this->_finalHTML .= '>';
             }
         }
         if ($this->_deleteContent) {
