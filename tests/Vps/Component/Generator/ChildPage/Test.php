@@ -69,7 +69,9 @@ class Vps_Component_Generator_ChildPage_Test extends PHPUnit_Framework_TestCase
             'page' => false,
             'flags' => array('processInput' => true)
         );
-        $c = $this->_root->getChildComponent('-child')->getChildComponent('_1');
+        //$c = $this->_root->getChildComponent('-child')->getChildComponent('_1');
+        $c = $this->_root->getComponentById('root-child_1');
+//         d($c->getChildComponents());
         $forms = $c->getRecursiveChildComponents($formSelect);
         $this->assertEquals(1, count($forms));
         $this->assertEquals('root-child_1-form', current($forms)->dbId);

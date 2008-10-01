@@ -4,7 +4,8 @@ class Vps_Component_Generator_ChildPage_Root extends Vpc_Root_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        unset($ret['generators']['page']);
+        $ret['generators']['page']['model'] = new Vps_Model_FnF();
+        $ret['generators']['page']['component'] = array();
         $ret['generators']['child'] = array(
             'class' => 'Vps_Component_Generator_Static',
             'component' => 'Vps_Component_Generator_ChildPage_Child'

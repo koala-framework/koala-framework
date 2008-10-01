@@ -75,9 +75,8 @@ class Vps_Component_Data
                 $this->_uniqueParentDatas = array();
                 $this->_inheritClasses = array();
                 if ($this->isPage) {
-                    $page = $this->getParentPage();
+                    $page = $this->getParentPageOrRoot();
                     $foundInheritGeneratorPage = false;
-
                     while ($page && !$foundInheritGeneratorPage) {
                         foreach (Vpc_Abstract::getSetting($page->componentClass, 'generators') as $gKey=> $g) {
                             if (isset($g['inherit']) && $g['inherit']) {
@@ -92,11 +91,10 @@ class Vps_Component_Data
                                 $foundInheritGeneratorPage = true;
                             }
                         }
-                        $page = $page->getParentPage();
+                        $page = $page->getParentPageOrRoot();
                     }
-
                     if (!$foundInheritGeneratorPage) {
-                        $this->_inheritClasses[] = Vps_Component_Data_Root::getComponentClass();
+                        throw new Vps_Exception("didn't find any inherited compont");
                     }
                 }
             }
@@ -387,6 +385,16 @@ class Vps_Component_Data
         return $page;
     }
 
+    public function getPageOrRoot()
+    {
+        $page = $this;
+        while ($page && !$page->isPage) {
+            if ($page instanceof Vps_Component_Data_Root) return $page;
+            $page = $page->parent;
+        }
+        return $page;
+    }
+
     public function getPseudoPage()
     {
         $page = $this;
@@ -401,6 +409,15 @@ class Vps_Component_Data
         $page = $this->getPage();
         if ($page && $page->parent) {
             return $page->parent->getPage();
+        }
+        return null;
+    }
+
+    public function getParentPageOrRoot()
+    {
+        $page = $this->getPageOrRoot();
+        if ($page && $page->parent) {
+            return $page->parent->getPageOrRoot();
         }
         return null;
     }
