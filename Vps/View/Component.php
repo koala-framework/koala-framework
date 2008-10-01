@@ -44,7 +44,11 @@ class Vps_View_Component extends Vps_View
         static $loadedPageIds = array();
         static $componentCache = array();
         if ($masterTemplate) {
-            $pageId = $component->getPage()->componentId;
+            if ($component->getPage()) {
+                $pageId = $component->getPage()->componentId;
+            } else {
+                $pageId = false;
+            }
             if (!in_array($pageId, $loadedPageIds)) {
                 $loadedPageIds[] = $pageId;
                 $pageId = $cache->getCacheIdFromComponentId($pageId);
