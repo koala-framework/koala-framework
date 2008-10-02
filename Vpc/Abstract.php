@@ -234,6 +234,11 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             }
         }
         foreach ($process as $i) {
+            if (method_exists($i->getComponent(), 'preProcessInput')) {
+                $i->getComponent()->preProcessInput($postData);
+            }
+        }
+        foreach ($process as $i) {
             if (method_exists($i->getComponent(), 'processInput')) {
                 $i->getComponent()->processInput($postData);
             }
