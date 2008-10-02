@@ -28,6 +28,7 @@ class Vps_Dao_Index extends Vps_Db_Table
             if (!$component) continue; //kann sein wegen visible, wir speichern nur visible komponenten in den index
 
             $page = $component->getPage();
+            if (!$page) continue; //zB eine Box die direkt unter der root liegt
             if (in_array($page->dbId, $processedPageIds)) continue;
             $processedPageIds[] = $page->dbId;
 
