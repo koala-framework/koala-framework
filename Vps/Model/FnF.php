@@ -4,10 +4,12 @@ class Vps_Model_FnF extends Vps_Model_Abstract
     protected $_rowClass = 'Vps_Model_FnF_Row';
     protected $_rowsetClass = 'Vps_Model_FnF_Rowset';
     protected $_data = array();
+    protected $_columns = array();
 
     public function __construct(array $config = array())
     {
         if (isset($config['data'])) $this->setData($config['data']);
+        if (isset($config['columns'])) $this->_columns = $config['columns'];
         parent::__construct($config);
     }
 
@@ -110,5 +112,13 @@ class Vps_Model_FnF extends Vps_Model_Abstract
     public function setData(array $data)
     {
         $this->_data = $data;
+    }
+
+    /**
+     * mostly useless (but needed for some tests)
+     **/
+    public function getColumns()
+    {
+        return $this->_columns;
     }
 }

@@ -77,11 +77,17 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 $ret = $this;
             } else {
                 if ($i+1 == count($idParts)) {
-                    //nur bei letzem part select ber�cksichtigen
+                    //nur bei letzem part select berücksichtigen
                     $select->whereId($idPart);
                     $ret = $ret->getChildComponent($select);
                 } else {
-                    $ret = $ret->getChildComponent(array('id'=>$idPart));
+                    $s = array('id'=>$idPart);
+                    if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
+                        //ignoreVisible doch mitnehmen damit wir unterkomponeten von unsichtbaren
+                        //komponenten finden
+                        $s['ignoreVisible'] = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
+                    }
+                    $ret = $ret->getChildComponent($s);
                 }
                 if (!$ret) break;
             }
