@@ -94,7 +94,10 @@ class Vps_Component_Data
                         $page = $page->getParentPageOrRoot();
                     }
                     if (!$foundInheritGeneratorPage) {
-                        throw new Vps_Exception("didn't find any inherited compont");
+                        //root sollte normalerweise immer einen page-genarator haben.
+                        //falls es mal einen fall geben soll wo das nicht so ist kann diese
+                        //Exception möglicherweise entfernt werden
+                        throw new Vps_Exception("didn't find any inherited compont (root must have one!)");
                     }
                 }
             }

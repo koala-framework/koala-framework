@@ -43,5 +43,33 @@ class Vps_Component_Generator_IgnoreVisible_Test extends PHPUnit_Framework_TestC
 
         $c = $this->_root->getComponentById('root-child_1', array('ignoreVisible'=>true));
         $this->assertNotNull($c);
+
+        $c = $this->_root->getComponentById('root-child_2');
+        $this->assertNull($c);
+
+        $c = $this->_root->getComponentById('root-child_2', array('ignoreVisible'=>true));
+        $this->assertNotNull($c);
+
+        $c = $this->_root->getComponentById('root-child');
+        $this->assertEquals(array_keys($c->getChildComponents()), array('root-child_1'));
+        $this->assertEquals(array_keys($c->getChildComponents(array('ignoreVisible'=>false))),
+                array('root-child_1'));
+        $this->assertEquals(array_keys($c->getChildComponents(array('ignoreVisible'=>true))),
+                array('root-child_1', 'root-child_2', 'root-child_3'));
+        $this->assertNotNull($c);
+    }
+
+    public function testStaticInInvisibleTable()
+    {
+        $c = $this->_root->getComponentById('root-child_1-bar');
+        $this->assertNotNull($c);
+        $this->assertEquals('root-child_1-bar', $c->componentId);
+
+        $c = $this->_root->getComponentById('root-child_2-bar');
+        $this->assertNull($c);
+
+        $c = $this->_root->getComponentById('root-child_2-bar', array('ignoreVisible'=>true));
+        $this->assertNotNull($c);
+        $this->assertEquals('root-child_2-bar', $c->componentId);
     }
 }
