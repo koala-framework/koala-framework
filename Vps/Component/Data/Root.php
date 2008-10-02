@@ -120,7 +120,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     public function getComponentsByDbId($dbId, $select = array())
     {
         $benchmark = Vps_Benchmark::start();
-        if (is_numeric(substr($dbId, 0, 1))) {
+        if (is_numeric(substr($dbId, 0, 1)) || substr($dbId, 0, 4)=='root') {
             $data = $this->getComponentById($dbId, $select);
             if ($data) {
                 return array($data);
