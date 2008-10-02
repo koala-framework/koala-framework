@@ -1,6 +1,7 @@
 .lightbox { position:absolute; background-color: #fff; width: 680px; height:542px; z-index: 100; display: none; }
 
 .lightbox .lightboxHeader {
+    height: 20px;
     margin:  0px 10px 5px 10px;
     padding: 5px 10px 3px 10px;
     font-weight:bold; color: #555; border-bottom:1px solid #aaa;
@@ -8,9 +9,6 @@
 .lightbox .fullSizeLink {
     display: block; float: left; width: 16px; height: 16px; padding-right: 10px;
     background: url(/assets/silkicons/picture_save.png) left top no-repeat;
-}
-.lightbox .lightboxBody, .switchBig {
-    height: 480px;
 }
 .lightbox .lightboxBody { text-align: center; position: relative; }
 .lightbox .lightboxFooter {
@@ -24,6 +22,8 @@
 
 .lightbox .switchButton { font-weight: bold; }
 .lightbox .nextSwitchButton { float: right; }
+
+.lightbox p.title { display: inline; }
 
 .lightbox .switchBig {
     width: 22%; position: absolute; top: 0px; z-index: 105;
