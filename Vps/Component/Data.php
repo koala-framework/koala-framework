@@ -300,7 +300,7 @@ class Vps_Component_Data
             $select = clone $select;
         }
         $select->whereBox(true);
-        return $this->getChildComponents($select);
+        return $this->getRecursiveChildComponents($select);
     }
 
     public function getChildMultiBoxes($select = array())
