@@ -28,6 +28,7 @@ Vpc.Basic.ImageEnlarge = function()
 Vpc.Basic.ImageEnlarge.tpl = new Ext.XTemplate(
     '<div class="lightboxHeader">{header}</div>',
     '<div class="lightboxBody">{body}</div',
+    '<div Class="clear"></div>',
     '<div class="lightboxFooter">{footer}</div'
 );
 
