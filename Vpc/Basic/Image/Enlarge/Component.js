@@ -15,6 +15,7 @@ Vps.onContentReady(function() {
 
 
 Ext.namespace("Vpc.Basic");
+
 Vpc.Basic.ImageEnlarge = function()
 {
     this.lightbox = Ext.get(
@@ -23,6 +24,46 @@ Vpc.Basic.ImageEnlarge = function()
         )
     );
 };
+
+Vpc.Basic.ImageEnlarge.tpl = new Ext.XTemplate(
+    '<div class="lightboxHeader">{header}</div>',
+    '<div class="lightboxBody">{body}</div',
+    '<div class="lightboxFooter">{footer}</div'
+);
+
+Vpc.Basic.ImageEnlarge.tplHeader = new Ext.XTemplate(
+    '<a class="closeButton" href="#">',
+        ''+trlVps('close')+' X',
+    '</a>',
+    '{fullSizeLink}'
+);
+
+Vpc.Basic.ImageEnlarge.tplBody = new Ext.XTemplate(
+    '<img src="{values.image.src}" width="{values.image.width}" height="{values.image.height}" class="centerImage" />',
+    '{nextImageBig}',
+    '{previousImageBig}'
+);
+Vpc.Basic.ImageEnlarge.tplFooter = new Ext.XTemplate(
+    '{nextImageButton}',
+    '<p class="title">{title}</p>',
+    '{previousImageButton}'
+);
+
+Vpc.Basic.ImageEnlarge.tplSwitchBig = new Ext.XTemplate(
+    '<div class="switchBig {type}SwitchBig">',
+        '<div class="lightboxContent">',
+            '<p><tpl if="type==\'previous\'">« </tpl>{text}<tpl if="type==\'next\'"> »</tpl></p>',
+            '<img src="{src}" />',
+            '<div>{[fm.ellipsis(values.title, 18)]}</div>',
+        '</div>',
+    '</div>'
+);
+
+Vpc.Basic.ImageEnlarge.tplSwitchButton = new Ext.XTemplate(
+    '<a class="switchButton {type}SwitchButton" href="#">',
+        '<tpl if="type==\'previous\'">« </tpl>{text}<tpl if="type==\'next\'"> »</tpl>',
+    '</a>'
+);
 
 Vpc.Basic.ImageEnlarge.prototype =
 {
@@ -41,137 +82,97 @@ Vpc.Basic.ImageEnlarge.prototype =
         this.lightbox.applyStyles('display: block;');
         this.lightbox.center();
 
-        var m = linkEl.dom.rel.match(/enlarge_([0-9]+)_([0-9]+)_?(.*)/);
+        var m = linkEl.dom.rel.match(/enlarge_([0-9]+)_([0-9]+)_?([^ ]*)/);
 
-        var imgWidth = parseInt(m[1]);
-        var imgHeight = parseInt(m[2]);
-        var fullSizePath = false;
+        var data = {};
         if (m[3]) {
-            fullSizePath = m[3];
+            data.fullSizeLink = '<a href="'+m[3]+'" class="fullSizeLink" title="'+trlVps('image in originalsize')+'" target="_blank"></a> ';
+        } else {
+            data.fullSizeLink = '';
         }
-
-        // head
-        var hdHtml = '';
-        if (fullSizePath) hdHtml += '<a href="'+fullSizePath+'" class="fullSizeLink" title="Bild in Originalgröße" target="_blank"></a> ';
-        hdHtml += linkEl.dom.title ? linkEl.dom.title : '&nbsp;';
-        var hd = Ext.DomHelper.overwrite(this.lightbox,
-            { tag: 'div', cls:'lightboxHd', html: hdHtml }
-        );
-
-        // head - close
-        var closeLink = Ext.get(Ext.DomHelper.insertFirst(hd,
-            { tag: 'a', cls: 'lightboxClose', href: '#', children: [
-                { tag: 'img', src: '/assets/vps/images/spacer.gif', alt: 'close' }
-            ]}
-        ));
-
-        // body
-        var bd = Ext.get(Ext.DomHelper.append(this.lightbox,
-            { tag: 'div', cls: 'lightboxBd' }
-        ));
-
-        // body - image
-        var imageTopMargin = (parseInt(bd.getStyle('height')) - imgHeight) / 2;
-        if (imageTopMargin < 0) imageTopMargin = 0;
-
-        var img = Ext.get(Ext.DomHelper.append(bd, {
-            tag    : 'img',
-            src    : linkEl.dom.href,
-            alt    : '',
-            width  : imgWidth,
-            height : imgHeight,
-            style  : 'margin-top: '+imageTopMargin+'px;'
-        }));
-
-        // foot
-        var ft = Ext.DomHelper.append(this.lightbox,
-            { tag: 'div', cls: 'lightboxFt' }
-        );
+        data.title = linkEl.dom.title ? linkEl.dom.title : '&nbsp;';
+        data.image = {
+            src: linkEl.dom.href,
+            width: parseInt(m[1]),
+            height: parseInt(m[2])
+        };
         if (linkEl.nextImage) {
-            // overlay next button
-            var bigNext = Ext.get(Ext.DomHelper.append(bd, {
-                tag: 'div', cls: 'lightboxNextBig'
-            }));
-            var tmpTitle = linkEl.nextImage.dom.title;
-            if (tmpTitle.length > 18) {
-                tmpTitle = tmpTitle.substr(0, 15)+'...';
-            }
-            Ext.DomHelper.append(bigNext, {
-                tag: 'div', cls: 'lightboxNextBigContent', children: [
-                    { tag: 'img', cls: 'lightboxNextBigButton', src: '/assets/vps/images/spacer.gif', alt: 'next' },
-                    { tag: 'br' },
-                    { tag: 'img', src: linkEl.nextImage.child('img').dom.src, alt: '' },
-                    { tag: 'div', html: tmpTitle }
-                ]
-            });
-            bigNext.on('click', function(e) {
-                this.show(linkEl.nextImage);
-            }, this, { stopEvent: true });
-            bigNext.on('mouseover', function(e) {
-                this.addClass('bigOver');
-            }, bigPrevious);
-            bigNext.on('mouseout', function(e) {
-                this.removeClass('bigOver');
-            }, bigPrevious);
-
-            // small next button
-            var nextButton = Ext.get(Ext.DomHelper.append(ft,
-                { tag: 'a', cls:'lightboxNext', href:'#', children: [
-                    { tag: 'img', src: '/assets/vps/images/spacer.gif', alt: 'next' }
-                ]}
-            ));
-            nextButton.on('click', function(e) {
-                this.show(linkEl.nextImage);
-            }, this, { stopEvent: true });
-
-            // preload next image
-            var tmpNextImage = new Image();
-            tmpNextImage.src = linkEl.nextImage.dom.href;
+            data.nextImage = {
+                src: linkEl.nextImage.child('img').dom.src,
+                title: linkEl.nextImage.dom.title,
+                type: 'next',
+                text: trlVps('next')
+            };
         }
         if (linkEl.previousImage) {
-            // overlay previous button
-            var bigPrevious = Ext.get(Ext.DomHelper.append(bd, {
-                tag: 'div', cls: 'lightboxPreviousBig'
-            }));
-            var tmpTitle = linkEl.previousImage.dom.title;
-            if (tmpTitle.length > 18) {
-                tmpTitle = tmpTitle.substr(0, 15)+'...';
-            }
-            Ext.DomHelper.append(bigPrevious, {
-                tag: 'div', cls: 'lightboxPreviousBigContent', children: [
-                    { tag: 'img', cls: 'lightboxPreviousBigButton', src: '/assets/vps/images/spacer.gif', alt: 'previous' },
-                    { tag: 'br' },
-                    { tag: 'img', src: linkEl.previousImage.child('img').dom.src, alt: '' },
-                    { tag: 'div', html: tmpTitle }
-                ]
-            });
-            bigPrevious.on('click', function(e) {
-                this.show(linkEl.previousImage);
-            }, this, { stopEvent: true });
-            bigPrevious.on('mouseover', function(e) {
-                this.addClass('bigOver');
-            }, bigPrevious);
-            bigPrevious.on('mouseout', function(e) {
-                this.removeClass('bigOver');
-            }, bigPrevious);
-
-            // previous small button
-            var prevButton = Ext.get(Ext.DomHelper.append(ft,
-                { tag: 'a', cls:'lightboxPrevious', href:'#', children: [
-                    { tag: 'img', src: '/assets/vps/images/spacer.gif', alt: 'previous' }
-                ]}
-            ));
-            prevButton.on('click', function(e) {
-                this.show(linkEl.previousImage);
-            }, this, { stopEvent: true });
-
-            // preload previous image
-            var tmpPreviousImage = new Image();
-            tmpPreviousImage.src = linkEl.previousImage.dom.href;
-
+            data.previousImage = {
+                src: linkEl.previousImage.child('img').dom.src,
+                title: linkEl.previousImage.dom.title,
+                type: 'previous',
+                text: trlVps('previous')
+            };
         }
 
-        closeLink.on('click', this.hide, this, { stopEvent: true });
+        var tpls = Vpc.Basic.ImageEnlarge;
+        if (data.nextImage) {
+            data.nextImageButton = tpls.tplSwitchButton.apply(data.nextImage);
+            data.nextImageBig = tpls.tplSwitchBig.apply(data.nextImage);
+        }
+        if (data.previousImage) {
+            data.previousImageButton = tpls.tplSwitchButton.apply(data.previousImage);
+            data.previousImageBig = tpls.tplSwitchBig.apply(data.previousImage);
+        }
+        data.header = tpls.tplHeader.apply(data);
+        data.footer = tpls.tplFooter.apply(data);
+        data.body = tpls.tplBody.apply(data);
+
+        tpls.tpl.overwrite(this.lightbox, data);
+
+        var applyNexPreviousEvents = function(imageLink, type) {
+            // preload next image
+            var tmpNextImage = new Image();
+            tmpNextImage.src = imageLink.dom.href;
+
+            // overlay next button
+            this.lightbox.query('.'+type+'SwitchBig').each(function(el) {
+                el = Ext.get(el);
+                el.on('click', function(e) {
+                    this.lightbox.show(this.imageLink);
+                }, {lightbox: this, imageLink: imageLink}, { stopEvent: true });
+                el.on('mouseover', function(e) {
+                    this.addClass('bigOver');
+                }, el);
+                el.on('mouseout', function(e) {
+                    this.removeClass('bigOver');
+                }, el);
+            }, this);
+            // next small button
+            this.lightbox.query('.'+type+'SwitchButton').each(function(el) {
+                el = Ext.fly(el);
+                el.on('click', function(e) {
+                    this.show(linkEl.nextImage);
+                }, this, { stopEvent: true });
+            }, this);
+        };
+
+        if (linkEl.nextImage) {
+            applyNexPreviousEvents.call(this, linkEl.nextImage, 'next');
+        }
+        if (linkEl.previousImage) {
+            applyNexPreviousEvents.call(this, linkEl.previousImage, 'previous');
+        }
+
+        this.lightbox.query('.closeButton').each(function(el) {
+            el = Ext.fly(el);
+            el.on('click', this.hide, this, { stopEvent: true });
+        }, this);
+
+        this.lightbox.query('.lightboxBody img.centerImage').each(function(img) {
+            img = Ext.fly(img);
+            var imageTopMargin = (img.parent('.lightboxBody').getHeight() - img.getHeight()) / 2;
+            if (imageTopMargin < 0) imageTopMargin = 0;
+            img.setStyle('margin-top', imageTopMargin+'px');
+        }, this);
     },
 
     mask: function()

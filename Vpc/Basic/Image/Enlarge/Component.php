@@ -18,6 +18,7 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
         $ret['dimensions'] = array(640, 480);
         $ret['assets']['files'][] = 'vps/Vpc/Basic/Image/Enlarge/Component.js';
         $ret['assets']['dep'][] = 'ExtCore';
+        $ret['assets']['dep'][] = 'ExtXTemplate';
         $ret['editComment'] = true;
         return $ret;
     }

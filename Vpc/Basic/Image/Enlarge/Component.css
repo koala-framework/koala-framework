@@ -1,32 +1,49 @@
 .lightbox { position:absolute; background-color: #fff; width: 680px; height:542px; z-index: 100; display: none; }
-.lightboxHd, .lightboxBd, .lightboxFt {  }
 
-.lightboxHd {
+.lightbox .lightboxHeader {
     margin:  0px 10px 5px 10px;
     padding: 5px 10px 3px 10px;
     font-weight:bold; color: #555; border-bottom:1px solid #aaa;
 }
-.lightboxHd .fullSizeLink {
+.lightbox .fullSizeLink {
     display: block; float: left; width: 16px; height: 16px; padding-right: 10px;
     background: url(/assets/silkicons/picture_save.png) left top no-repeat;
 }
-.lightboxBd, .lightboxPreviousBig, .lightboxNextBig {
+.lightbox .lightboxBody, .switchBig {
     height: 480px;
 }
-.lightboxBd { text-align: center; position: relative; }
-.lightboxFt {
+.lightbox .lightboxBody { text-align: center; position: relative; }
+.lightbox .lightboxFooter {
     margin:  5px 10px 0px 10px;
     padding: 3px 10px 5px 10px;
     color: #999; border-top:1px solid #aaa;
 }
 
-.lightboxClose { float: right; }
-.lightboxClose img {
-    width: 65px; height: 11px; margin-top: 2px;
-    background-image:url(/assets/vps/images/lightbox/close.png);
+.lightbox .closeButton { float: right; }
+
+
+.lightbox .switchButton { font-weight: bold; }
+.lightbox .nextSwitchButton { float: right; }
+
+.lightbox .switchBig {
+    width: 22%; position: absolute; top: 0px; z-index: 105;
+    text-align: center;
+    opacity: 0.0; -moz-opacity: 0.0; filter: alpha(opacity=0);
+    cursor: pointer;
+    font-weight: bold;
 }
+.lightbox .previousSwitchBig { left: 0px; }
+.lightbox .nextSwitchBig { right: 0px; }
+
+.lightbox .bigOver { opacity: 0.82; -moz-opacity: 0.82; filter: alpha(opacity=82); }
+
+.lightbox .switchBig .lightboxContent {
+    background-color: #fff; margin-top: 45px; padding: 8px 0px;
+}
+
 
 .lightboxMask {
     background-color: #000; z-index: 50;
     opacity: 0.8; -moz-opacity: 0.8; filter: alpha(opacity=80);
 }
+
