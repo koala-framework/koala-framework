@@ -36,8 +36,6 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
                     ));
                     if ($row) $this->_mayModerate = true;
                 }
-            } else {
-                bt();
             }
         }
         return $this->_mayModerate;
