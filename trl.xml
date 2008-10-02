@@ -3130,14 +3130,26 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <de>keine Koordinaten eingetragen</de>
 </text>
 <text>
-    <en default="1">No File uploaded, please select a file.</en>
-    <de>Keine Datei wurde hochgeladen, bitte wählen Sie eine aus.</de>
+<en default="1">No File uploaded, please select a file.</en>
+<de>Keine Datei wurde hochgeladen, bitte wählen Sie eine aus.</de>
+</text>
+<text>
+<en default="1">image in originalsize</en>
+<de>Bild in Originalgröße</de>
+</text>
+<text>
+<en default="1">close</en>
+<de>schließen</de>
+</text>
+<text>
+<en default="1">next</en>
+<de>weiter</de>
+</text>
+<text>
+<en default="1">previous</en>
+<de>zurück</de>
 </text>
 
-<text>
-    <en default="1">image in originalsize</en>
-    <de>Bild in Originalgröße</de>
-</text>
 
 </trl>
 
