@@ -1,6 +1,15 @@
 <?php
 class Vpc_Forum_Posts_Detail_Actions_Component extends Vpc_Posts_Detail_Actions_Component
 {
+    public function mayEditPost()
+    {
+        $ret = parent::mayEditPost();
+        if ($this->getData()->getParentPage()->getComponent()->mayModerate()) {
+            $ret = true;
+        }
+        return $ret;
+    }
+    
     public function mayDeletePost()
     {
         $ret = parent::mayDeletePost();
