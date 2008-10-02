@@ -17,7 +17,12 @@ class Vpc_User_Login_Form_Component extends Vpc_Form_Component
         return $ret;
     }
 
-    public function processInput($postData)
+    public function processInput(array $postData)
+    {
+        // Leer, weil _processInput schon in proProcessInput aufgerufen wurde
+    }
+    
+    public function preProcessInput($postData)
     {
         if (isset($postData['feAutologin'])
             && !Vps_Registry::get('userModel')->getAuthedUser()
@@ -32,7 +37,8 @@ class Vpc_User_Login_Form_Component extends Vpc_Form_Component
             Vps_Auth::getInstance()->clearIdentity();
             setcookie('feAutologin', '', time() - 3600);
         }
-        parent::processInput($postData);
+        $this->_processInput($postData);
+        parent::preProcessInput($postData);
     }
 
     protected function _afterSave(Vps_Model_Row_Interface $row)

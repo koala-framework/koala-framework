@@ -1,6 +1,8 @@
 <?php
 class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Component
 {
+    private $_mayModerate;
+    
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -20,21 +22,25 @@ class Vpc_Forum_Group_Component extends Vpc_Directories_ItemPage_Directory_Compo
 
     public function mayModerate()
     {
-        static $ret;
-        if (is_null($ret)) {
-            $ret = false;
+        if (is_null($this->_mayModerate)) {
+            $this->_mayModerate = false;
             $authedUser = Zend_Registry::get('userModel')->getAuthedUser();
             if ($authedUser) {
-                if ($authedUser->role == 'admin') return true;
-                $table = new Vpc_Forum_Group_ModeratorsModel();
-                $row = $table->fetchRow(array(
-                    'user_id = ?' => $authedUser->id,
-                    'group_id = ?' => $this->getData()->row->id
-                ));
-                if ($row) $ret = true;
+                if ($authedUser->role == 'admin') {
+                    $this->_mayModerate = true;
+                } else {
+                    $table = new Vpc_Forum_Group_ModeratorsModel();
+                    $row = $table->fetchRow(array(
+                        'user_id = ?' => $authedUser->id,
+                        'group_id = ?' => $this->getData()->row->id
+                    ));
+                    if ($row) $this->_mayModerate = true;
+                }
+            } else {
+                bt();
             }
         }
-        return $ret;
+        return $this->_mayModerate;
     }
     
     public function getTemplateVars()
