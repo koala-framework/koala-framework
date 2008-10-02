@@ -3134,6 +3134,10 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
     <de>Keine Datei wurde hochgeladen, bitte wählen Sie eine aus.</de>
 </text>
 
+<text>
+    <en default="1">image in originalsize</en>
+    <de>Bild in Originalgröße</de>
+</text>
 
 </trl>
 
