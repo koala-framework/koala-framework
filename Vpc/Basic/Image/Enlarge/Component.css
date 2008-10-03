@@ -35,9 +35,9 @@
     cursor: pointer;
     font-weight: bold;
 }
-.lightbox .previousSwitchBig { left: 34px; }
-.lightbox .previousSwitchBig img { margin-left: -34px; text-align: left; }
-.lightbox .nextSwitchBig { right: 34px; }
+.lightbox .previousSwitchBig { left: 35px; }
+.lightbox .previousSwitchBig img { margin-left: -35px; text-align: left; }
+.lightbox .nextSwitchBig { right: 35px; }
 
 .lightbox .bigOver { opacity: 0.82; -moz-opacity: 0.82; filter: alpha(opacity=82); }
 

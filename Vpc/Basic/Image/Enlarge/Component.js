@@ -53,7 +53,7 @@ Vpc.Basic.ImageEnlarge.tplSwitchBig = new Ext.XTemplate(
     '<div class="switchBig {type}SwitchBig">',
         '<div class="lightboxContent">',
             '<p><tpl if="type==\'previous\'">« </tpl>{text}<tpl if="type==\'next\'"> »</tpl></p>',
-            '<img src="{src}" />',
+            '<img width="185px" src="{src}" />',
             '<div>{[fm.ellipsis(values.title, 18)]}</div>',
         '</div>',
     '</div>'
