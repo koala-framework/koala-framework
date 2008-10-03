@@ -105,8 +105,9 @@ class Vps_Pdf_TcPdf extends TCPDF
         $this->SetX($xtmp);
     }
 
-    public function textBox ($text, $fontweight = '', $align = 'L', $border = '', $linebreak = 0) {
-        $this->SetFont($this->getFont(), $fontweight, $this->getFontsize());
+    public function textBox ($text, $fontweight = '', $align = 'L', $border = '', $linebreak = 0, $fontsize = false) {
+        if (!$fontsize) $fontsize = $this->getFontsize();
+        $this->SetFont($this->getFont(), $fontweight, $fontsize);
         $this->Cell($this->getMaxTextWidth(), 3, $this->decodeText($text), $border, $linebreak, $align);
         $this->SetFont($this->getFont(), "", $this->getFontsize());
     }
@@ -132,6 +133,10 @@ class Vps_Pdf_TcPdf extends TCPDF
         $text = str_replace("—", utf8_encode(chr(0x97)), $text);
         $text = str_replace("•", utf8_encode(chr(0x95)), $text);
         return $text;
+    }
+
+    public function setCellHeightRatio ($ratio) {
+        $this->cell_height_ratio = $ratio;
     }
 
     //workaround für bug bei pdf erstellung
@@ -160,6 +165,17 @@ class Vps_Pdf_TcPdf extends TCPDF
             }
             parent::closeHTMLTagHandler(&$dom, $key, $cell);
             $this->lasth = $temp;
+    }
+
+    public function getMaxTextWidth()
+    {
+        return $this->getPageWidth()-$this->getRightMargin()-$this->getLeftMargin();
+    }
+
+    public function writeCheckbox($check) {
+        if ($check) $text = "checked";
+        else $text = "unchecked";
+        $this->Image("images/pdf/$text.jpg", $this->GetX(), $this->GetY(), 7, 7);
     }
 
 
