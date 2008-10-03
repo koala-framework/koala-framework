@@ -264,6 +264,10 @@ class Vps_Setup
         $backendOptions  = array('cache_dir' => 'application/cache/table');
         $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
         Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
+
+        if ($tl = Zend_Registry::get('config')->debug->timeLimit) {
+            set_time_limit($tl);
+        }
     }
 
     public static function shutDown()
