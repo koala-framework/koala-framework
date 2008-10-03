@@ -19,8 +19,8 @@ abstract class Vps_Grid_Pdf_Abstract extends Vps_Pdf_TcPdf
 
     public function Header()
     {
-        $date = new Zend_Date();
-        $headStr = $date->get(Zend_Date::WEEKDAY).', '.date('d.m.Y, H:i');
+        $date = new Vps_Date();
+        $headStr = $date->get(Vps_Date::WEEKDAY).', '.date('d.m.Y, H:i');
 
         $yBefore = $this->GetY();
         $this->SetY(10);
