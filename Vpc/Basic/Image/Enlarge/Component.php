@@ -10,7 +10,7 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
         $ret['componentIcon'] = new Vps_Asset('imageEnlarge');
         $ret['tablename'] = 'Vpc_Basic_Image_Enlarge_Model';
         $ret['hasSmallImageComponent'] = true;
-        $ret['fullSizeDownloadable'] = true;
+        $ret['fullSizeDownloadable'] = false;
         $ret['generators']['smallImage'] = array(
             'class' => 'Vps_Component_Generator_Static',
             'component' => 'Vpc_Basic_Image_Thumb_Component'
