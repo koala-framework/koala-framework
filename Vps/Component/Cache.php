@@ -2,6 +2,7 @@
 class Vps_Component_Cache extends Zend_Cache_Core
 {
     const CLEANING_MODE_COMPONENT_CLASS = 'componentClass';
+    const CLEANING_MODE_ID_PATTERN = 'idPattern';
 
     static private $_instance;
     private $_backend;
@@ -74,6 +75,18 @@ class Vps_Component_Cache extends Zend_Cache_Core
             }
         }
         Vps_Dao_Index::process();
+    }
+    
+    public function removeByIdPattern($idPattern, $componentClass = null)
+    {
+        $this->_backend->clean(self::CLEANING_MODE_ID_PATTERN, 
+            array('idPattern' => $idPattern, 'componentClass' => $componentClass)
+        );
+        if ($componentClass) {
+            Vps_Benchmark::info("Cache für Pattern '$idPattern' mit Klasse '$componentClass' gelöscht.");
+        } else {
+            Vps_Benchmark::info("Cache für Pattern '$idPattern' gelöscht.");
+        }
     }
 
     /**

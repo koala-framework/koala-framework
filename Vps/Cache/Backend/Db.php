@@ -93,6 +93,19 @@ class Vps_Cache_Backend_Db extends Zend_Cache_Backend
             $res = $this->_adapter->query("DELETE FROM {$this->_options['table']} WHERE component_class=?", array($tags));
             return (bool)$res;
         }
+        if ($mode == Vps_Component_Cache::CLEANING_MODE_ID_PATTERN) {
+            if (!is_array($tags) || !isset($tags['idPattern'])) {
+                throw new Vps_Exception("second argument must be an array");
+            }
+            $vars = array($tags['idPattern'], $tags['idPattern'] . '%__master');
+            $sql = "DELETE FROM {$this->_options['table']} WHERE id LIKE ? AND id NOT LIKE ?";
+            if (isset($tags['componentClass']) && $tags['componentClass']) {
+                $sql .= " AND component_class=?";
+                $vars[] = $tags['componentClass'];
+            }
+            $res = $this->_adapter->query($sql, $vars);
+            return (bool)$res;
+        }
         if ($mode==Zend_Cache::CLEANING_MODE_ALL) {
             $res = $this->_adapter->query("DELETE FROM {$this->_options['table']}");
             return (bool)$res;
