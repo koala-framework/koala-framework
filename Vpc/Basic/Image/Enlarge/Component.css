@@ -23,6 +23,7 @@
 }
 
 .lightbox .switchButton { font-weight: bold; }
+.lightbox .previousSwitchButton { float: left; margin-top: -15px; }
 .lightbox .nextSwitchButton { float: right; }
 
 .lightbox p.title { display: inline; }
@@ -34,8 +35,9 @@
     cursor: pointer;
     font-weight: bold;
 }
-.lightbox .previousSwitchBig { left: 0px; }
-.lightbox .nextSwitchBig { right: 0px; }
+.lightbox .previousSwitchBig { left: 34px; }
+.lightbox .previousSwitchBig img { margin-left: -34px; text-align: left; }
+.lightbox .nextSwitchBig { right: 34px; }
 
 .lightbox .bigOver { opacity: 0.82; -moz-opacity: 0.82; filter: alpha(opacity=82); }
 
