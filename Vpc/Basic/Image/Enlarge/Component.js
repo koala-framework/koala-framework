@@ -1,6 +1,5 @@
 
 Vps.onContentReady(function() {
-
     var lightbox = new Vpc.Basic.ImageEnlarge();
     var els = document.getElementsByTagName('a');
     for (var i=0; i<els.length; i++) {
@@ -151,8 +150,8 @@ Vpc.Basic.ImageEnlarge.prototype =
             this.lightbox.query('.'+type+'SwitchButton').each(function(el) {
                 el = Ext.fly(el);
                 el.on('click', function(e) {
-                    this.show(linkEl.nextImage);
-                }, this, { stopEvent: true });
+                    this.lightbox.show(this.imageLink);
+                }, {lightbox: this, imageLink: imageLink}, { stopEvent: true });
             }, this);
         };
 
