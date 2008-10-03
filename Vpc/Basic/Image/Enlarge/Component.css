@@ -17,7 +17,10 @@
     color: #999; border-top:1px solid #aaa;
 }
 
-.lightbox .closeButton { float: right; }
+.lightbox .closeButton {
+    float: right;
+    background-image: assetUrl({Vpc_Basic_Image_Enlarge_Graphics::closeButton('#ffffff')})
+}
 
 .lightbox .switchButton { font-weight: bold; }
 .lightbox .nextSwitchButton { float: right; }
