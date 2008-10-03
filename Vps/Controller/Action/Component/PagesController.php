@@ -74,16 +74,19 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         }
         $data['data']['editComponents'] = array();
         foreach ($editComponents as $cc) {
-            if (Vpc_Abstract::hasSetting($cc->componentClass, 'componentName')
-                && Vpc_Abstract::getSetting($cc->componentClass, 'componentName'))
+            if (!Vpc_Abstract::hasSetting($cc->componentClass, 'componentName')
+                || !Vpc_Abstract::getSetting($cc->componentClass, 'componentName'))
             {
-                $data['data']['editComponents'][] = array(
-                    'componentClass' => $cc->componentClass,
-                    'componentName' => Vpc_Abstract::getSetting($cc->componentClass, 'componentName'),
-                    'dbId' => $cc->dbId,
-                    'componentIcon' => Vpc_Abstract::getSetting($cc->componentClass, 'componentIcon')->__toString()
-                );
+                //wenn das probleme verursact ignorieren - aber es erspart lange fehlersuche warum eine komp. nicht angezeigt wird :D
+                throw new Vps_Exception("Component '$cc->componentClass' does have no componentName but must have one for editing");
             }
+            
+            $data['data']['editComponents'][] = array(
+                'componentClass' => $cc->componentClass,
+                'componentName' => Vpc_Abstract::getSetting($cc->componentClass, 'componentName'),
+                'dbId' => $cc->dbId,
+                'componentIcon' => Vpc_Abstract::getSetting($cc->componentClass, 'componentIcon')->__toString()
+            );
         }
         return $data;
     }
