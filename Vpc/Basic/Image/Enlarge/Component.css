@@ -10,7 +10,7 @@
     display: block; float: left; width: 16px; height: 16px; padding-right: 10px;
     background: url(/assets/silkicons/picture_save.png) left top no-repeat;
 }
-.lightbox .lightboxBody { text-align: center; position: relative; }
+.lightbox .lightboxBody { text-align: center; position: relative; height: 475px; }
 .lightbox .lightboxFooter {
     margin:  5px 10px 0px 10px;
     padding: 3px 10px 5px 10px;
