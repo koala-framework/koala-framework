@@ -3,6 +3,8 @@ class Vps_View_Helper_MailLink extends Vps_View_Helper_Abstract_MailLink
 {
     public function mailLink($mailAddress, $linkText = null, $cssClass = null)
     {
+        if (!$mailAddress) return $linkText;
+        
         $encodedMailAddress = $this->encodeMail($mailAddress);
 
         if (is_null($linkText)) {
