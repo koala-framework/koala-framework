@@ -1,9 +1,8 @@
-.vpcCompositeImagesEnlarge { text-align: center; margin-left: 7px; position: relative; padding-bottom: 10px; }
+.vpcCompositeImagesEnlarge { text-align: center; position: relative; padding-bottom: 10px; }
 .vpcCompositeImagesEnlarge .thumbOuter {
     float: left;
-    border: 1px solid #ccc;
     padding: 1px;
-    margin: 3px;
+    margin: 1px;
 }
 .vpcCompositeImagesEnlarge .thumb { text-align: center; overflow: hidden; }
 
