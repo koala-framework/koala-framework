@@ -16,12 +16,10 @@ Vps.onContentReady(function()
             };
 
             Ext.EventManager.addListener(el, 'mouseover', function(e) {
-                console.log('in');
                 this.switchContent.fadeIn({ endOpacity: .95, easing: 'easeOut', duration: .5, useDisplay: true });
             }, scopeObj, { stopEvent: true });
 
             Ext.EventManager.addListener(el, 'mouseout', function(e) {
-                console.log('out');
                 this.switchContent.fadeOut({ endOpacity: 0.0, easing: 'easeOut', duration: .5, useDisplay: true });
             }, scopeObj, { stopEvent: true });
         }

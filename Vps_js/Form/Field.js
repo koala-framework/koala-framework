@@ -57,7 +57,6 @@ Ext.form.Field.override({
         }
     },
     alignHelpTextIcon: function() {
-        console.log(this.getXType(), this.helpTextOffset);
         this.helpEl.alignTo(this.getEl(), 'tr', this.helpTextOffset);
     }
 });

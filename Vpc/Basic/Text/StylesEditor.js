@@ -84,7 +84,6 @@ Vpc.Basic.Text.StylesEditor = Ext.extend(Ext.Window,
         var html = '<'+values.tag+' style="'+styles+'">Lorem ipsum dolor sit amet, ';
         html += 'consectetuer adipiscing elit.</'+values.tag+'>';
         this.preview.body.update(html);
-        console.log(styles);
     }
 */
 });
