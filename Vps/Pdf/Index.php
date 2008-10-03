@@ -168,8 +168,8 @@ class Vps_Pdf_Index extends Zend_Pdf_Filter_Ascii85
     private function _getDate()
     {
         date_default_timezone_set('Europe/Berlin');
-        $date = new Zend_Date();
-        return $date->get(Zend_Date::DATE_FULL);
+        $date = new Vps_Date();
+        return $date->get(Vps_Date::DATE_FULL);
     }
 
     private function _drawTextBoxes($pdfPage)

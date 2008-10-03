@@ -51,8 +51,8 @@ class Vpc_News_Month_Directory_Generator extends Vps_Component_Generator_Page_Ta
 
     protected function _getNameFromRow($row)
     {
-        $date = new Zend_Date($row->publish_date);
-        return $date->get(Zend_Date::MONTH_NAME).' '.$date->get(Zend_Date::YEAR);
+        $date = new Vps_Date($row->publish_date);
+        return $date->get(Vps_Date::MONTH_NAME).' '.$date->get(Vps_Date::YEAR);
     }
 
     protected function _getFilenameFromRow($row)
