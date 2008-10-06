@@ -22,6 +22,13 @@ class Vps_Mail_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(dirname(__FILE__).'/Both/Component.html.tpl', $m->getHtmlTemplate());
         $this->assertEquals($c->componentClass, $m->getTemplateForDbVars());
 
+        $c = $this->_root->getChildComponent('-both');
+        $classname = get_class($c->getComponent());
+        $m = new Vps_Mail($classname);
+        $this->assertEquals(dirname(__FILE__).'/Both/Component.txt.tpl', $m->getTxtTemplate());
+        $this->assertEquals(dirname(__FILE__).'/Both/Component.html.tpl', $m->getHtmlTemplate());
+        $this->assertEquals($c->componentClass, $m->getTemplateForDbVars());
+
 
         $c = $this->_root->getChildComponent('-txtonly');
         $m = new Vps_Mail($c);
