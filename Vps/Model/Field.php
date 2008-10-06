@@ -4,7 +4,6 @@ class Vps_Model_Field extends Vps_Model_Abstract
     protected $_rowClass = 'Vps_Model_Field_Row';
     protected $_rowsetClass = 'Vps_Model_Field_Rowset';
     protected $_fieldName;
-    protected $_parentModelName;
     protected $_parentModel;
 
     public function __construct(array $config = array())
@@ -12,20 +11,19 @@ class Vps_Model_Field extends Vps_Model_Abstract
         if (isset($config['fieldName'])) {
             $this->_fieldName = $config['fieldName'];
         }
+        if (isset($config['parentTableName'])) {
+            $config['parentTable'] = new $config['parentTableName']();
+        }
+        if (isset($config['parentTable'])) {
+            $this->_parentModel = new Vps_Model_Db(array('table'=>$config['parentTable']));
+        }
         if (isset($config['parentModelName'])) {
-            $this->_parentModelName = $config['parentModelName'];
+            $this->_parentModel = new $config['parentModelName']();
         }
         if (isset($config['parentModel'])) {
             $this->_parentModel = $config['parentModel'];
         }
         parent::__construct($config);
-    }
-    protected function _init()
-    {
-        parent::_init();
-        if (!isset($this->_parentModel) && isset($this->_parentModelName)) {
-            $this->_parentModel = new $this->_parentModelName();
-        }
     }
 
     public function createRow(array $data=array())

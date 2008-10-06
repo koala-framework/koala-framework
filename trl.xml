@@ -3153,7 +3153,14 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en default="1">previous</en>
 <de>zurück</de>
 </text>
-
+<text>
+<en default="1">Amount</en>
+<de>Menge</de>
+</text>
+<text>
+<en default="1">Price</en>
+<de>Preis</de>
+</text>
 
 </trl>
 

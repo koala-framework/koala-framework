@@ -19,6 +19,7 @@ class Vps_Form extends Vps_Form_NonTableForm
     }
 
     //kann überschrieben werden wenn wir eine anderen row haben wollen
+    //aber besser getRow überschreiben!!!
     protected function _getRowByParentRow($parentRow)
     {
         if ($parentRow && $this->_model instanceof Vps_Model_Field) {

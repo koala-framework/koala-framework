@@ -7,8 +7,9 @@ class Vps_View_Component extends Vps_View
         $this->addScriptPath('application/views');
     }
 
-    public static function renderMasterComponent($component, $masterTemplate = 'application/views/master/default.tpl', $ignoreVisible = false)
+    public static function renderMasterComponent($component, $masterTemplate = null, $ignoreVisible = false)
     {
+        if (!$masterTemplate) $masterTemplate = 'application/views/master/default.tpl';
         return self::renderComponent($component, $ignoreVisible, $masterTemplate);
     }
     

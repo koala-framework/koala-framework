@@ -111,9 +111,8 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         $class = null;
         if (self::hasChildComponentClass(get_class($this), 'child', 'success')) {
-            $class = self::getChildComponentClass(get_class($this), 'child', 'success');               
+            $class = self::getChildComponentClass(get_class($this), 'child', 'success');
         }
-
         $ret['showSuccess'] = false;
         $ret['errors'] = $this->getErrors();
         if (isset($_POST[$this->getData()->componentId])) {
