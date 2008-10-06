@@ -4,11 +4,13 @@ class Vps_Model_Db implements Vps_Model_Interface
     protected $_rowClass = 'Vps_Model_Db_Row';
     protected $_rowsetClass = 'Vps_Model_Db_Rowset';
     protected $_table;
-    protected $_tableName;
     protected $_default = array();
 
     public function __construct($config = array())
     {
+        if (isset($config['tableName'])) {
+            $this->_table = new $config['tableName']();
+        }
         if (isset($config['table'])) {
             if (!is_object($config['table'])) {
                 throw new Vps_Exception("Construct-config value 'table' needs to be an object for 'Vps_Model_Db'");
@@ -19,12 +21,8 @@ class Vps_Model_Db implements Vps_Model_Interface
         $this->_init();
     }
 
-    protected function _init()
-    {
-        if (!isset($this->_table) && isset($this->_tableName)) {
-            $this->_table = new $this->_tableName;
-        }
-    }
+    protected function _init() {}
+
 
     public function getColumns()
     {

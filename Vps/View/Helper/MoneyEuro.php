@@ -1,10 +1,9 @@
 <?php
-class Vps_View_Helper_MoneyEuro
+//deprecated
+class Vps_View_Helper_MoneyEuro extends Vps_View_Helper_Money
 {
     public function moneyEuro($amount)
     {
-        $ret = number_format($amount, 2, ",", ".");
-        $ret .= ' €';
-        return $ret;
+        return $this->money($amount);
     }
 }

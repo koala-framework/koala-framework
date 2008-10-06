@@ -63,7 +63,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
                     panel.on('loaded', function() {
                         //muss hier oben auch nochmal gemacht werden
                         //weil in loadComponentPanel gibt es die action noch nicht
-                        if (panel.getAction('saveBack')) {
+                        if (panel.getAction && panel.getAction('saveBack')) {
                             if (this.getTopToolbar().items.getCount() > 0) {
                                 panel.getAction('saveBack').show();
                             }
@@ -92,7 +92,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
         this.getLayout().setActiveItem(panel);
 
-        if (panel.getAction('saveBack')) {
+        if (panel.getAction && panel.getAction('saveBack')) {
             if (this.getTopToolbar().items.getCount() > 0) {
                 panel.getAction('saveBack').show();
             }

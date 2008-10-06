@@ -32,7 +32,6 @@ Vpc.News.Directory.Panel = Ext.extend(Vps.Auto.GridPanel,
 
     fireEditComponent : function(row)
     {
-        var bp = this.getBaseParams();
         this.fireEvent('editcomponent', {
             componentClass: this.contentClass,
             componentId: this.idTemplate.replace('{0}', row.data.id),

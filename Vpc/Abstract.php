@@ -205,7 +205,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $this->_pdfWriter;
     }
 
-    public function sendContent()
+    public function sendContent($masterTemplate = null, $ignoreVisible = false)
     {
 
         header('Content-Type: text/html; charset=utf-8');
@@ -245,7 +245,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
         Vps_Component_Cache::getInstance()->process(false);
 
-        echo Vps_View_Component::renderMasterComponent($this->getData());
+        echo Vps_View_Component::renderMasterComponent($this->getData(), $masterTemplate, $ignoreVisible);
 
         foreach ($process as $i) {
             if (method_exists($i->getComponent(), 'postProcessInput')) {
