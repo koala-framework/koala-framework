@@ -324,7 +324,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         }
         $ret = parent::getTemplateVars($values);
         $ret['preHtml'] = '<input type="hidden" name="'.$name.'_num'.$namePostfix.'" value="'.count($value).'" />';
-        $ret['postHtml'] = '<button class="add" type="submit" name="'.$name.'_add'.$namePostfix.'" value="1">'.trlVps("New Entry").'</button>';
+        $ret['postHtml'] = '<div class="addLayer"><div class="submitWrapper"><span class="beforeButton"></span><span class="button"><button class="submit add" type="submit" name="'.$name.'_add'.$namePostfix.'" value="1">'.trlVps("New Entry").'</button></span><span class="afterButton"></span></div></div>';
 
         $ret['items'] = array();
         foreach ($value as $i=>$rowValues) {
