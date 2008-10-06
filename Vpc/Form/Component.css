@@ -20,11 +20,6 @@
     display: block;
     float: left;
 }
-.$cssClass .submitWrapper span.beforeButton,
-.$cssClass .submitWrapper span.afterButton {
-    width: 15px;
-    height: 25px;
-}
 .$cssClass input,
 .$cssClass textarea,
 .$cssClass select {
@@ -81,7 +76,7 @@
 .$cssClass .vpsFormFieldFileInner div.deleteImage {
     float: right;
     margin-right: 2px;
-    margin-left: 40px;
+    margin-left: 20px;
 }
 .ext-ie .$cssClass .vpsFormFieldFileInner div.deleteImage {
     margin-left: 10px;
@@ -93,7 +88,7 @@
     width: 210px;
     overflow: hidden;
     float: right;
-    margin-top: 10px;
+    margin-top: 5px;
     text-align: right;
 }
 .$cssClass .vpsFormFieldRadio {
