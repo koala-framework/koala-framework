@@ -175,7 +175,7 @@ class Vps_Pdf_TcPdf extends TCPDF
     public function writeCheckbox($check) {
         if ($check) $text = "checked";
         else $text = "unchecked";
-        $this->Image("images/pdf/$text.jpg", $this->GetX(), $this->GetY(), 7, 7);
+        $this->Image("images/pdf/$text.jpg", $this->GetX(), $this->GetY(), 5, 5);
     }
 
 
