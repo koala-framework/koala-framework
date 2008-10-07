@@ -12,9 +12,10 @@ class Vpc_Posts_Detail_Admin extends Vpc_Abstract_Composite_Admin
         // Wenn Benutzer ändert, alle Posts von Benutzer löschen (wg. componentLink auf Benutzer)
         if ($row instanceof Vps_Model_User_User) {
             $table = new Vpc_Posts_Directory_Model();
-            foreach ($table->fetchAll(array('user_id = ?' => $row->id)) as $post) {
-                Vps_Component_Cache::getInstance()->remove($post->component_id . '-' . $post->id);
-            }
+            $select = $table->select();
+            $select->where('user_id = ?', $row->id);
+            $select->from($table->info('name'), "CONCAT(component_id, '-', id)");
+            Vps_Component_Cache::getInstance()->removeBySelect($select);
         }
     }
 }

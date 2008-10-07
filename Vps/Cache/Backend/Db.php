@@ -106,6 +106,12 @@ class Vps_Cache_Backend_Db extends Zend_Cache_Backend
             $res = $this->_adapter->query($sql, $vars);
             return (bool)$res;
         }
+        if ($mode==Vps_Component_Cache::CLEANING_MODE_SELECT) {
+            $sql = "DELETE FROM {$this->_options['table']}";
+            $sql .= " WHERE id IN ($tags)";
+            $res = $this->_adapter->query($sql);
+            return (bool)$res;
+        }
         if ($mode==Zend_Cache::CLEANING_MODE_ALL) {
             $res = $this->_adapter->query("DELETE FROM {$this->_options['table']}");
             return (bool)$res;
