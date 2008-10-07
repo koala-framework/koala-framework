@@ -43,7 +43,7 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
                 $threadIds[] = $thread->componentId;
                 $threads[] = $thread;
             }
-            if ($post) {
+            if (isset($post) && $post) {
                 $select->where('vpc_posts.create_time < ?', $post->row->create_time);
             } else {
                 break;
