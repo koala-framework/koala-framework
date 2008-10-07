@@ -44,9 +44,9 @@ Vpc.Basic.ImageEnlarge.tplBody = new Ext.XTemplate(
     '{previousImageBig}'
 );
 Vpc.Basic.ImageEnlarge.tplFooter = new Ext.XTemplate(
-    '{nextImageButton}',
-    '<p class="title">{title}</p>',
-    '{previousImageButton}'
+    '<div class="prevBtn">{previousImageButton}</div>',
+    '<div class="title"><p class="title">{title}</p></div>',
+    '<div class="nextBtn">{nextImageButton}</div>'
 );
 
 Vpc.Basic.ImageEnlarge.tplSwitchBig = new Ext.XTemplate(
@@ -54,7 +54,6 @@ Vpc.Basic.ImageEnlarge.tplSwitchBig = new Ext.XTemplate(
         '<div class="lightboxContent">',
             '<p><tpl if="type==\'previous\'">« </tpl>{text}<tpl if="type==\'next\'"> »</tpl></p>',
             '<img width="185px" src="{src}" />',
-            '<div>{[fm.ellipsis(values.title, 18)]}</div>',
         '</div>',
     '</div>'
 );
