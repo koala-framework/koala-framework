@@ -57,7 +57,7 @@
 .lightbox .bigOver { opacity: 0.82; -moz-opacity: 0.82; filter: alpha(opacity=82); }
 
 .lightbox .switchBig .lightboxContent {
-    background-color: #ccc;
+    background-color: #ddd;
     margin-top: 45px;
     padding: 8px 0px;
 }
