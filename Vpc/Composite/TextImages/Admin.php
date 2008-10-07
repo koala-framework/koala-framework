@@ -1,5 +1,5 @@
 <?php
-class Vpc_Composite_TextImages_Admin extends Vpc_Abstract_Composite_TabsAdmin
+class Vpc_Composite_TextImages_Admin extends Vpc_Abstract_Composite_Admin
 {
     public function getExtConfig()
     {
