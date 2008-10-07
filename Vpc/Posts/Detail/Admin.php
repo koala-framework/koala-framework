@@ -9,5 +9,12 @@ class Vpc_Posts_Detail_Admin extends Vpc_Abstract_Composite_Admin
                 ->getComponentsByDbId($row->component_id.'-'.$row->id);
             Vps_Component_Cache::getInstance()->remove($components);
         }
+        // Wenn Benutzer ändert, alle Posts von Benutzer löschen (wg. componentLink auf Benutzer)
+        if ($row instanceof Vps_Model_User_User) {
+            $table = new Vpc_Posts_Directory_Model();
+            foreach ($table->fetchAll(array('user_id = ?' => $row->id)) as $post) {
+                Vps_Component_Cache::getInstance()->remove($post->component_id . '-' . $post->id);
+            }
+        }
     }
 }

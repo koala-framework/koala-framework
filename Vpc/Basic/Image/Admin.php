@@ -1,6 +1,22 @@
 <?php
 class Vpc_Basic_Image_Admin extends Vpc_Admin
 {
+    protected function _deleteCacheForRow($row)
+    {
+        if (isset($row->component_id) && 
+            Vpc_Abstract::hasSetting($this->_class, 'useParentImage') && 
+            Vpc_Abstract::getSetting($this->_class, 'useParentImage')
+        ) {
+            Vps_Component_Cache::getInstance()->remove(
+                Vps_Component_Data_Root::getInstance()->getComponentByDbId(
+                    $row->component_id, array('ignoreVisible' => true)
+                )->getChildComponents(array('componentClass'=>$this->_class))
+            );
+        } else {
+            parent::_deleteCacheForRow($row);
+        }
+    }
+    
     public function setup()
     {
         $fields['filename'] = 'varchar(255) DEFAULT NULL';
