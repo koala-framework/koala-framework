@@ -3,7 +3,7 @@ class Vpc_Basic_Image_Admin extends Vpc_Admin
 {
     protected function _deleteCacheForRow($row)
     {
-        if (isset($row->component_id) && 
+        if ($row instanceof Vpc_Basic_Image_Row &&
             Vpc_Abstract::hasSetting($this->_class, 'useParentImage') && 
             Vpc_Abstract::getSetting($this->_class, 'useParentImage')
         ) {
