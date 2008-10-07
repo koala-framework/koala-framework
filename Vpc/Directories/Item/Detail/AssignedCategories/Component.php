@@ -7,6 +7,7 @@ class Vpc_Directories_Item_Detail_AssignedCategories_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['view'] =
             'Vpc_Directories_Item_Detail_AssignedCategories_View_Component';
+        $ret['useDirectorySelect'] = false;
         return $ret;
     }
 
