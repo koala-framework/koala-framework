@@ -23,12 +23,12 @@
 }
 
 .lightbox .lightboxFooter .prevBtn {
-    width: 58px;
+    width: 60px;
     float: left;
     margin-top: 1px;
 }
 .lightbox .lightboxFooter .title {
-    width: 525px;
+    width: 515px;
     height: 35px;
     overflow: hidden;
     float: left;
