@@ -32,6 +32,8 @@
     height: 35px;
     overflow: hidden;
     float: left;
+    font-weight: bold;
+    font-size: 11px;
 }
 .lightbox .lightboxFooter .nextBtn {
     float: right;
