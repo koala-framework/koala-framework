@@ -12,7 +12,7 @@
 }
 .lightbox .lightboxBody { text-align: center; position: relative; height: 475px; }
 .lightbox .lightboxFooter {
-    margin:  5px 10px 0px 10px;
+    margin:  -10px 10px 0px 10px;
     padding: 3px 10px 5px 10px;
     color: #999; border-top:1px solid #aaa;
 }
@@ -22,29 +22,48 @@
     background-image: assetUrl({Vpc_Basic_Image_Enlarge_Graphics::closeButton('#ffffff')})
 }
 
-.lightbox .switchButton { font-weight: bold; }
-.lightbox .previousSwitchButton { float: left; margin-top: -15px; }
-.lightbox .nextSwitchButton { float: right; }
+.lightbox .lightboxFooter .prevBtn {
+    width: 58px;
+    float: left;
+    margin-top: 1px;
+}
+.lightbox .lightboxFooter .title {
+    width: 525px;
+    height: 35px;
+    overflow: hidden;
+    float: left;
+}
+.lightbox .lightboxFooter .nextBtn {
+    float: right;
+    margin-top: 1px;
+}
 
-.lightbox p.title { display: inline; }
+.lightbox .switchButton { font-weight: bold; }
 
 .lightbox .switchBig {
-    width: 22%; position: absolute; top: 0px; z-index: 105;
+    position: absolute;
+    top: 0px;
+    z-index: 105;
+    width: 22%;
     text-align: center;
-    opacity: 0.0; -moz-opacity: 0.0; filter: alpha(opacity=0);
+    opacity: 0.0; -moz-opacity: 0.0;
+    filter: alpha(opacity=0);
     cursor: pointer;
     font-weight: bold;
 }
-.lightbox .previousSwitchBig { left: 35px; }
-.lightbox .previousSwitchBig img { margin-left: -35px; text-align: left; }
-.lightbox .nextSwitchBig { right: 35px; }
+.lightbox .previousSwitchBig { width: 185px; left: 0px; }
+.lightbox .nextSwitchBig { width: 185px; right: 0px; }
 
 .lightbox .bigOver { opacity: 0.82; -moz-opacity: 0.82; filter: alpha(opacity=82); }
 
 .lightbox .switchBig .lightboxContent {
-    background-color: #fff; margin-top: 45px; padding: 8px 0px;
+    background-color: #ccc;
+    margin-top: 45px;
+    padding: 8px 0px;
 }
-
+.lightbox .switchBig .lightboxContent p {
+    color: #000;
+}
 
 .lightboxMask {
     background-color: #000; z-index: 50;
