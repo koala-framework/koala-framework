@@ -3,7 +3,8 @@ class Vps_Component_Cache extends Zend_Cache_Core
 {
     const CLEANING_MODE_COMPONENT_CLASS = 'componentClass';
     const CLEANING_MODE_ID_PATTERN = 'idPattern';
-
+    const CLEANING_MODE_SELECT = 'select';
+    
     static private $_instance;
     private $_backend;
     private $_process = array(
@@ -87,6 +88,12 @@ class Vps_Component_Cache extends Zend_Cache_Core
         } else {
             Vps_Benchmark::info("Cache für Pattern '$idPattern' gelöscht.");
         }
+    }
+
+    public function removeBySelect(Zend_Db_Table_Select $select)
+    {
+        $this->_backend->clean(self::CLEANING_MODE_SELECT, $select);
+        Vps_Benchmark::info("Cache mit Select gelöscht.");
     }
 
     /**
