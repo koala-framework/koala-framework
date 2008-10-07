@@ -8,9 +8,11 @@ class Vpc_Basic_Image_Pdf extends Vpc_Abstract_Pdf
         $file = $image->findParentRow('Vps_Dao_File');
         $dimension = $image->getImageDimensions();
         $area = $this->getMaxTextWidth();
-        $source = $file->getFileSource();
-        $tempstring = 'temp_'.$file->filename;
+
+
         if ($file) {
+            $source = $file->getFileSource();
+            $tempstring = 'temp_'.$file->filename;
             if (!$dimension){
                 $dimensions = getimagesize($file->getFileSource());
                 $dimension["width"] = $dimensions[0];
@@ -45,9 +47,10 @@ class Vpc_Basic_Image_Pdf extends Vpc_Abstract_Pdf
             $this->_pdf->Image($tempstring, $this->getLeftMargin(),
                                     $this->getY(), $width, $height, $file->extension);
             $this->SetY($this->getY() + $height + 2);
+            unlink($tempstring);
         }
 
-        unlink($tempstring);
+
     }
 
     private function _calculateDpi ($mm)
