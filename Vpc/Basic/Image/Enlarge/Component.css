@@ -34,6 +34,7 @@
     float: left;
     font-weight: bold;
     font-size: 11px;
+    text-align: center;
 }
 .lightbox .lightboxFooter .nextBtn {
     float: right;
@@ -53,8 +54,23 @@
     cursor: pointer;
     font-weight: bold;
 }
-.lightbox .previousSwitchBig { width: 185px; left: 0px; }
-.lightbox .nextSwitchBig { width: 185px; right: 0px; }
+
+.lightbox .previousSwitchBig {
+    width: 185px;
+    left: 0px;
+    text-align: left;
+}
+.lightbox .previousSwitchBig p {
+    margin-left: 20px;
+}
+.lightbox .nextSwitchBig {
+    width: 185px;
+    right: 0px;
+    text-align: right;
+}
+.lightbox .nextSwitchBig p {
+    margin-right: 20px;
+}
 
 .lightbox .bigOver { opacity: 0.82; -moz-opacity: 0.82; filter: alpha(opacity=82); }
 
