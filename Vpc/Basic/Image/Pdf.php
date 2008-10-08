@@ -9,8 +9,7 @@ class Vpc_Basic_Image_Pdf extends Vpc_Abstract_Pdf
         $dimension = $image->getImageDimensions();
         $area = $this->getMaxTextWidth();
 
-
-        if ($file) {
+        if ($file && is_file($file->getFileSource())) {
             $source = $file->getFileSource();
             $tempstring = 'temp_'.$file->filename;
             if (!$dimension){
