@@ -6,7 +6,10 @@
     <? } else { ?>
         <?php foreach ($this->items as $item) { ?>
             <div>
+                <?=$this->component($item->previewImage);?>
                 <?=$this->componentLink($item);?>
+                <?=$this->component($item->previewText);?>
+                <?=$this->money($item->row->price);?>
                 <?=$this->component($item->addToCart);?>
             </div>
         <?php } ?>

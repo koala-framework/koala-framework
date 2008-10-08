@@ -9,5 +9,4 @@ class Vpc_Shop_Products_View_Component extends Vpc_Directories_List_ViewPage_Com
         }
         return $ret;
     }
-
 }
