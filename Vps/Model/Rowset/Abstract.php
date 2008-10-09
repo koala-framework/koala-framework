@@ -16,7 +16,7 @@ class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface
         $this->_model = $config['model'];
         $this->_rowClass = $config['rowClass'];
     }
-    
+
     public function toArray()
     {
         return $this->_data;
@@ -83,6 +83,7 @@ class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface
         $this->_pointer = $position;
         return $this;
     }
+
     public function getModel()
     {
         return $this->_model;
