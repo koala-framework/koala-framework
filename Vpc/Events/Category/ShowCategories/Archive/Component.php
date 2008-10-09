@@ -1,5 +1,5 @@
 <?php
-class Vpc_Events_Archive_Component extends Vpc_Directories_List_Component
+class Vpc_Events_Category_ShowCategories_Archive_Component extends Vpc_Directories_Category_ShowCategories_Abstract_Component
 {
     public static function getSettings()
     {
@@ -7,6 +7,17 @@ class Vpc_Events_Archive_Component extends Vpc_Directories_List_Component
         $ret['useDirectorySelect'] = false;
         return $ret;
     }
+
+    protected function _getItemDirectory()
+    {
+        return $this->getData()->parent->getComponent()->getItemDirectory();
+    }
+
+    public function getCategoryIds()
+    {
+        return $this->getData()->parent->getComponent()->getCategoryIds();
+    }
+
     public function getSelect($overrideValues = array())
     {
         $ret = parent::getSelect($overrideValues);
@@ -14,10 +25,5 @@ class Vpc_Events_Archive_Component extends Vpc_Directories_List_Component
         $ret->where('IF(ISNULL(end_date), start_date, end_date) < NOW()');
         $ret->order('start_date', 'DESC');
         return $ret;
-    }
-
-    protected function _getItemDirectory()
-    {
-        return $this->getData()->parent->getComponent()->getItemDirectory();
     }
 }
