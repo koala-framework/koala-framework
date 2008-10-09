@@ -43,7 +43,7 @@ class Vps_Component_Data
             }
             $page = $this;
             do {
-                if (Vpc_Abstract::getFlag($page->componentClass, 'shortcutUrl')) {
+                if (!empty($filenames) && Vpc_Abstract::getFlag($page->componentClass, 'shortcutUrl')) {
                     $filenames[] = call_user_func(array($page->componentClass, 'getShortcutUrl'), $page->componentClass, $page);
                     break;
                 } else {

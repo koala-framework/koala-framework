@@ -315,8 +315,8 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
         return Vpc_Abstract::getSetting($componentClass, 'shortcutUrl');
     }
-
-    static public function getDataByShortcutUrl($componentClass, $url)
+    
+    public static function getDataByShortcutUrl($componentClass, $url, $shortcutId = null)
     {
         if (!Vpc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
             throw new Vps_Exception("You must either have the setting 'shortcutUrl' or reimplement getDataByShortcutUrl method for '$componentClass'");
@@ -324,8 +324,10 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
 
         $sc = Vpc_Abstract::getSetting($componentClass, 'shortcutUrl');
         if (substr($url, 0, strlen($sc)) != $sc) return false;
+        $constraints = array();
+        if ($shortcutId) $constraints['id'] = $shortcutId;
         $ret = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass($componentClass);
+            ->getComponentByClass($componentClass, $constraints);
         if ($url != $sc) {
             $ret = $ret->getChildPageByPath(substr($url, strlen($sc)+1));
         }
