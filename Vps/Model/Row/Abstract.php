@@ -4,7 +4,7 @@ class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     protected $_data;
     protected $_model;
     private $_internalId;
-    
+
     public function __construct(array $config)
     {
         if (isset($config['data'])) {
@@ -40,7 +40,7 @@ class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
             return null;
         }
     }
-    
+
     public function __set($name, $value)
     {
         $this->_data[$name] = $value;
@@ -54,6 +54,7 @@ class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     public function delete()
     {
     }
+
     public function getModel()
     {
         return $this->_model;
@@ -63,10 +64,10 @@ class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     {
         return $this->_model->getPrimaryKey();
     }
+
     public function toArray()
     {
         return $this->_data;
     }
-
 }
 

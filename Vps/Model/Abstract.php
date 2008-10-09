@@ -17,7 +17,8 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     public function createRow(array $data=array())
     {
-        if (!isset($data['id'])) $data['id'] = null;
+        $primaryKey = $this->getPrimaryKey();
+        if (!isset($data[$primaryKey])) $data[$primaryKey] = null;
         $data = array_merge($this->_default, $data);
         return new $this->_rowClass(array(
             'data' => $data,
