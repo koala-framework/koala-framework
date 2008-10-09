@@ -21,6 +21,5 @@
 }
 .$cssClass span {
     font-weight: bold;
-    color: $blue;
     padding-right: 5px;
 }

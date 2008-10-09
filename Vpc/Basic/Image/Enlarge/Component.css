@@ -19,7 +19,6 @@
 
 .lightbox .closeButton {
     float: right;
-    background-image: assetUrl({Vpc_Basic_Image_Enlarge_Graphics::closeButton('#ffffff')})
 }
 
 .lightbox .lightboxFooter .prevBtn {
@@ -29,7 +28,7 @@
 }
 .lightbox .lightboxFooter .title {
     width: 515px;
-    height: 35px;
+    height: 30px;
     overflow: hidden;
     float: left;
     font-weight: bold;
