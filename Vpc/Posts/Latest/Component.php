@@ -39,7 +39,7 @@ class Vpc_Posts_Latest_Component extends Vpc_Abstract
                 $post->linktext = 
                     $dateHelper->date($post->row->create_time) . 
                     ': ' .
-                    implode(' -> ', array_reverse($linktexts));
+                    implode(' &raquo; ', array_reverse($linktexts));
                 $ret['posts'][] = $post;
             }
         }
