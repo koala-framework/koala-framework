@@ -12,6 +12,7 @@ class Vps_Test
         Vps_Loader::registerAutoload();
 
         date_default_timezone_set('Europe/Berlin');
+        mb_internal_encoding('UTF-8');
 
         Zend_Registry::setClassName('Vps_Registry');
 

@@ -21,8 +21,8 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_PseudoP
 
         $data['name'] = $this->_getNameFromRow($row);
 
-        if (isset($data['name']) && strlen($data['name']) > $this->_settings['maxNameLength']) {
-            $data['name'] = substr($data['name'], 0, $this->_settings['maxNameLength']-3).'...';
+        if (isset($data['name']) && mb_strlen($data['name']) > $this->_settings['maxNameLength']) {
+            $data['name'] = mb_substr($data['name'], 0, $this->_settings['maxNameLength']-3).'...';
         }
 
         return $data;
