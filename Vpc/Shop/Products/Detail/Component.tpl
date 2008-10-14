@@ -1,5 +1,5 @@
 <div class="<?=$this->cssClass?>">
     <?=$this->component($this->content)?>
-    <p><?=trlVps('Price')?>: <?=$this->money($this->data->row->price)?></p>
+    <div class="price"><p><?=trlVps('Price')?>: <?=$this->money($this->data->row->price)?></p></div>
     <?=$this->component($this->addToCart)?>
 </div>

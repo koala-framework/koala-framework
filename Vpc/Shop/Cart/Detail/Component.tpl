@@ -1,3 +1,5 @@
-<p><?=trlVps('Product')?>: <?=$this->componentLink($this->product)?></p>
-<p><?=trlVps('Price')?>: <?=$this->money($this->product->row->price)?></p>
-<?=$this->component($this->form)?>
+<div class="product">
+    <div class="productTitle"><?=trlVps('Product')?>: <?=$this->componentLink($this->product)?></div>
+    <div class="price"><?=trlVps('Price')?>: <strong><?=$this->money($this->product->row->price)?></strong></div>
+    <div class="info"><?=$this->component($this->form)?></div>
+</div>

@@ -4,8 +4,7 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['cart'] = Vps_Component_Data_Root::getInstance()
-            ->getComponentByClass('Vpc_Shop_Cart_Component');
+        $ret['cart'] = $this->_getCart();
         $ret['checkout'] = Vps_Component_Data_Root::getInstance()
             ->getComponentByClass('Vpc_Shop_Cart_Checkout_Component');
         $ret['items'] = $ret['cart']->getChildComponents(array('generator'=>'detail'));
@@ -17,5 +16,14 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
         $ret['viewCache'] = false;
         return $ret;
     }
-
+    
+    private function _getCart()
+    {
+        return Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass('Vpc_Shop_Cart_Component');
+    }
+    public function hasContent()
+    {
+        return (bool)$this->_getCart()->countChildComponents(array('generator'=>'detail'));
+    }
 }
