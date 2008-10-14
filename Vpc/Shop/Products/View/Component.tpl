@@ -5,11 +5,11 @@
         <div class="noEntries"><?= $this->placeholder['noEntriesFound']; ?></div>
     <? } else { ?>
         <?php foreach ($this->items as $item) { ?>
-            <div>
-                <?=$this->component($item->previewImage);?>
-                <?=$this->componentLink($item);?>
-                <?=$this->component($item->previewText);?>
-                <?=$this->money($item->row->price);?>
+            <div class="product">
+                <div class="previewImage"><?=$this->component($item->previewImage);?></div>
+                <div class="productName"><?=$this->componentLink($item);?></div>
+                <div clasS="previewText"><?=$this->component($item->previewText);?></div>
+                <div class="productPrice"><?=$this->money($item->row->price);?></div>
                 <?=$this->component($item->addToCart);?>
             </div>
         <?php } ?>
