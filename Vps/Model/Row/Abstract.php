@@ -112,7 +112,6 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         foreach ($this->_getSiblingRows() as $r) {
             $r->save();
         }
-        $this->_updateFilters(true);
         return null;
     }
 
@@ -132,12 +131,6 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     public function getModel()
     {
         return $this->_model;
-    }
-
-    //für Filter_Row_UniqueAscii
-    public function getPrimaryKey()
-    {
-        return $this->_getPrimaryKey();
     }
 
     protected function _getPrimaryKey()
@@ -179,6 +172,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     {
         $ref = $this->_model->getReference($rule);
         $id = $this->{$ref['column']};
+        if (!$id) return null;
         return Vps_Model_Abstract::getInstance($ref['refModelClass'])->getRow($id);
     }
 
@@ -196,11 +190,12 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
 
     protected function _beforeSave()
     {
+        $this->_updateFilters(false);
     }
 
     protected function _afterSave()
     {
-        $this->_updateFilters(false);
+        $this->_updateFilters(true);
     }
 
     protected function _beforeInsert()
@@ -237,5 +232,18 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         $this->_skipFilters = true;
         $this->save();
         $this->_skipFilters = false;
+    }
+
+    protected function _beforeDelete()
+    {
+        $filters = $this->getModel()->getFilters();
+        foreach($filters as $k=>$f) {
+            if ($f instanceof Vps_Filter_Row_Abstract) {
+                $f->onDeleteRow($this);
+            }
+        }
+    }
+    protected function _afterDelete()
+    {
     }
 }

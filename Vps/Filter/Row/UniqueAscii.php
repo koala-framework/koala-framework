@@ -37,32 +37,49 @@ class Vps_Filter_Row_UniqueAscii extends Vps_Filter_Row_Abstract
         }
         $value = Vps_Filter::get($value, 'Ascii');
 
-        $where = array();
-        foreach ($this->_groupBy as $f) {
-            if (is_null($row->$f)) {
-                $where["ISNULL($f)"] = '';
-            } else {
-                $where["$f = ?"] = $row->$f;
+        if ($row instanceof Vps_Model_Row_Interface) {
+            $select = new Vps_Model_Select();
+            foreach ($this->_groupBy as $f) {
+                $select->whereEquals($f, $row->$f);
             }
-        }
-        foreach ($row->getPrimaryKey() as $k=>$i) {
-            if (is_null($i)) {
-                $where["ISNULL($k)"] = '';
-            } else {
-                $where["$k = ?"] = $i;
+            $pk = $row->getModel()->getPrimaryKey();
+            if ($row->$pk) {
+                $select->whereNotEquals($pk, $row->$pk);
             }
-        }
-
-        $x = 0;
-        $unique = $value;
-        $where["$this->_field = ?"] = $unique;
-        if ($row->{$this->_field}) {
-            $where["$this->_field != ?"] = $row->{$this->_field};
-        }
-        while ($row->getTable()->fetchAll($where)->count() > 0) {
-            $unique = $value . '_' . ++$x;
+            $x = 0;
+            $unique = $value;
+            while (!$this->_isUnique($unique, $select, $row->getModel())) {
+                $unique = $value . '_' . ++$x;
+            }
+        } else {
+            $where = array();
+            foreach ($this->_groupBy as $f) {
+                if (is_null($row->$f)) {
+                    $where["ISNULL($f)"] = '';
+                } else {
+                    $where["$f = ?"] = $row->$f;
+                }
+            }
+            foreach ($row->getPrimaryKey() as $k=>$i) {
+                if (!is_null($i)) {
+                    $where["$k != ?"] = $i;
+                }
+            }
+            $x = 0;
+            $unique = $value;
             $where["$this->_field = ?"] = $unique;
+            while ($row->getTable()->fetchAll($where)->count() > 0) {
+                $unique = $value . '_' . ++$x;
+                $where["$this->_field = ?"] = $unique;
+            }
         }
         return $unique;
+    }
+
+    private function _isUnique($value, $select, $model)
+    {
+        $select = clone $select;
+        $select->whereEquals($this->_field, $value);
+        return !$model->countRows($select);
     }
 }
