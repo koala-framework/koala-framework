@@ -1,6 +1,13 @@
 <?php
 class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
 {
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['viewCache'] = false;
+        return $ret;
+    }
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
@@ -13,7 +20,6 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
                 ->getComponentByDbId($i->row->add_component_id)
                 ->parent;
         }
-        $ret['viewCache'] = false;
         return $ret;
     }
     
