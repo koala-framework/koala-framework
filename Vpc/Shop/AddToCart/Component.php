@@ -4,7 +4,7 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Form_Component
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['placeholder']['submitButton'] = trlVps('add');
+        $ret['placeholder']['submitButton'] = trlVps('add to cart');
         $ret['generators']['child']['component']['success'] = 'Vpc_Shop_AddToCart_Success_Component';
         return $ret;
     }
@@ -13,7 +13,7 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Form_Component
     {
         $ret = parent::getTemplateVars();
         if ($this->_form->getId()) {
-            $ret['placeholder']['submitButton'] = trlVps('save');
+            $ret['placeholder']['submitButton'] = trlVps('save changes');
         }
         return $ret;
     }
