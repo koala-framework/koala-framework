@@ -72,7 +72,9 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
     public function delete()
     {
         parent::delete();
+        $this->_beforeDelete();
         $this->_row->delete();
+        $this->_afterDelete();
     }
 
     public function toDebug()

@@ -235,7 +235,6 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
         return $ret;
     }
 
-
     protected function _delete()
     {
         parent::_delete();

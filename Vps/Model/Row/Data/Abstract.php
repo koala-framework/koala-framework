@@ -67,11 +67,11 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         } else {
             $this->_beforeSave();
             $ret = $this->_model->insert($this, $this->_data);
-            $this->_afterSave();
         }
-        $this->_afterSave();
 
         $this->_refresh($ret);
+
+        $this->_afterSave();
 
         return $ret;
     }
@@ -85,7 +85,10 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
     public function delete()
     {
         parent::delete();
+
+        $this->_beforeDelete();
         $id = $this->{$this->_getPrimaryKey()};
         $this->_model->delete($id, $this);
+        $this->_afterDelete();
     }
 }

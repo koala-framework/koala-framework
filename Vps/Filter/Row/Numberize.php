@@ -97,15 +97,24 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
         $fieldname = $this->_field;
         $value = $row->$fieldname;
 
-        $where = $this->_getWhere($row);
-
-        foreach ($row->getPrimaryKey() as $k=>$i) {
-            if ($i) {
-                $where["$k != ?"] = $i;
+        if ($row instanceof Vps_Model_Row_Interface) {
+            $select = $this->_getSelect($row);
+            $pk = $row->getModel()->getPrimaryKey();
+            if ($row->{$pk}) {
+                $select->whereNotEquals($pk, $row->{$pk});
             }
+            $count = $row->getModel()->countRows($select) + 1;
+        } else {
+            $where = $this->_getWhere($row);
+            foreach ($row->getPrimaryKey() as $k=>$i) {
+                if ($i) {
+                    $where["$k != ?"] = $i;
+                }
+            }
+            $count = $row->getTable()->fetchAll($where)->count() + 1;
         }
 
-        $count = $row->getTable()->fetchAll($where)->count()+1;
+
 
         // Wenn value null ist, Datensatz am Ende einfügen
         if (is_null($value)) {
@@ -115,7 +124,13 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
         if ($value > $count) $value = $count;
 
         $x = 0;
-        foreach ($row->getTable()->fetchAll($where, $fieldname) as $r) {
+        if ($row instanceof Vps_Model_Row_Interface) {
+            $select->order($fieldname);
+            $rows = $row->getModel()->getRows($select);
+        } else {
+            $rows = $row->getTable()->fetchAll($where, $fieldname);
+        }
+        foreach ($rows as $r) {
             $x++;
             if ($x == $value) $x++;
             if ($r->$fieldname != $x) {
@@ -126,19 +141,33 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
         return $value;
     }
 
-    public function onDeleteRow(Vps_Db_Table_Row_Abstract $row)
+    public function onDeleteRow($row)
     {
         $fieldname = $this->_field;
         $value = $row->$fieldname;
 
         $where = $this->_getWhere($row);
 
-        foreach ($row->getPrimaryKey() as $k=>$i) {
-            $where["$k != ?"] = $i;
+        if ($row instanceof Vps_Model_Row_Interface) {
+            $select = $this->_getSelect($row);
+            $pk = $row->getModel()->getPrimaryKey();
+            if ($row->{$pk}) {
+                $select->whereNotEquals($pk, $row->{$pk});
+            }
+            $select->order($fieldname);
+            $rows = $row->getModel()->getRows($select);
+        } else {
+            $where = $this->_getWhere($row);
+            foreach ($row->getPrimaryKey() as $k=>$i) {
+                if ($i) {
+                    $where["$k != ?"] = $i;
+                }
+            }
+            $rows = $row->getTable()->fetchAll($where, $fieldname);
         }
 
         $x = 0;
-        foreach ($row->getTable()->fetchAll($where, $fieldname) as $r) {
+        foreach ($rows as $r) {
             $x++;
             if ($r->$fieldname != $x) {
                 $r->$fieldname = $x;

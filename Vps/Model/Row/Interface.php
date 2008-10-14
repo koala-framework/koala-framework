@@ -12,5 +12,4 @@ interface Vps_Model_Row_Interface
     public function getChildRows($rule, $select = array());
     public function createChildRow($rule, array $data = array());
     public function getInternalId();
-    public function getPrimaryKey();
 }
