@@ -107,6 +107,15 @@ class Vps_Model_Db extends Vps_Model_Abstract
         return $dbSelect->__toString();
     }
 
+    public function find($id)
+    {
+        return new $this->_rowsetClass(array(
+            'rowset' => $this->_table->find($id),
+            'rowClass' => $this->_rowClass,
+            'model' => $this
+        ));
+    }
+
     public function getRows($where = array(), $order=null, $limit=null, $start=null)
     {
         if (!is_object($where)) {

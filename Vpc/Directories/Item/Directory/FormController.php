@@ -12,8 +12,8 @@ class Vpc_Directories_Item_Directory_FormController extends Vps_Controller_Actio
         $this->_form = Vpc_Abstract_Form::createChildComponentForm(
                 $data->componentClass, '-detail', $data->componentClass);
         $this->_form->setIdTemplate(null);
-        $tablename = Vpc_Abstract::getSetting($data->componentClass, 'tablename');
-        $this->_form->setTable(new $tablename(array('componentClass'=>$data->componentClass)));
+
+        $this->_form->setModel(Vpc_Abstract::createModel($data->componentClass));
 
         $classes = Vpc_Abstract::getChildComponentClasses($data->componentClass);
         foreach ($classes as $class) {
