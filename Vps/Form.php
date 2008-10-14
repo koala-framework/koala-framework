@@ -14,7 +14,7 @@ class Vps_Form extends Vps_Form_NonTableForm
             $this->setTable(new $this->_tableName());
         }
         if (isset($this->_modelName) && !isset($this->_model)) {
-            $this->_model = new $this->_modelName();
+            $this->_model = Vps_Model_Abstract::getInstance($this->_modelName);
         }
     }
 

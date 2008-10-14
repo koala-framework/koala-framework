@@ -1,17 +1,17 @@
 <div class="<?=$this->cssClass?>">
     <p>
-        <?=$this->orderData->firstname?> <?=$this->orderData->lastname?><br />
-        <?=$this->orderData->street?><br />
-        <?=$this->orderData->zip?> <?=$this->orderData->city?><br />
-        <?=$this->orderData->country?>
+        <?=$this->order->firstname?> <?=$this->order->lastname?><br />
+        <?=$this->order->street?><br />
+        <?=$this->order->zip?> <?=$this->order->city?><br />
+        <?=$this->order->country?>
     </p>
 
     <p>
-        <?=$this->orderData->email?><br />
-        <?=$this->orderData->phone?>
+        <?=$this->order->email?><br />
+        <?=$this->order->phone?>
     </p>
 
-    <?=trlVps('Payment')?>: <?=$this->orderData->payment?>
+    <?=trlVps('Payment')?>: <?=$this->order->payment?>
 
     <table>
         <tr>
@@ -21,7 +21,7 @@
             <th><?=trlVps('Price')?></th>
         </tr>
         <? foreach ($this->orderProducts as $op) { ?>
-        <? $p = $op->findParentRow('Vpc_Shop_Products') ?>
+        <? $p = $op->getParentRow('Product') ?>
         <tr>
             <td><?=$p?></td>
             <td><?=$this->money($p->price)?></td>

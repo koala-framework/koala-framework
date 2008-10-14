@@ -14,7 +14,7 @@ class Vpc_Shop_Products_Directory_Component extends Vpc_Directories_ItemPage_Dir
             'component' => 'Vpc_Shop_Products_Directory_AddToCart_Component'
         );
 
-        $ret['tablename'] = 'Vpc_Shop_Products';
+        $ret['modelname'] = 'Vpc_Shop_Products';
         $ret['componentName'] = trlVps('Shop.Products');
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Shop/Products/Directory/Panel.js';
         $ret['flags']['processInput'] = true;

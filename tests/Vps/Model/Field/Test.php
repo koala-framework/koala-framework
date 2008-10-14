@@ -18,6 +18,7 @@ class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($model->getData(), array(array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>'blub', 'blub1'=>'blub1')))));
         $row = $model->getRow(1);
         $this->assertEquals($row->blub1, 'blub1');
+        $this->assertNull($row->notExistent);
 
         $row = $model->createRow();
         $row->id = 2;

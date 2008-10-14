@@ -10,7 +10,6 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db
         $this->_siblingModels = array(new Vps_Model_Field(array('fieldName'=>'styles')));
     }
 
-    //TODO
     protected function _setupFilters()
     {
         $filter = new Vps_Filter_Row_Numberize();

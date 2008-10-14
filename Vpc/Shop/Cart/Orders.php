@@ -1,8 +1,10 @@
 <?php
-class Vpc_Shop_Cart_Orders extends Vps_Db_Table_Abstract
+class Vpc_Shop_Cart_Orders extends Vps_Model_Db
 {
-    protected $_name = 'vpc_shop_orders';
+    protected $_table = 'vpc_shop_orders';
     protected $_rowClass = 'Vpc_Shop_Cart_Order';
+    protected $_siblingModels = array('Vpc_Shop_Cart_Checkout_Model');
+    protected $_dependentModels = array('Products'=>'Vpc_Shop_Cart_OrderProducts');
 
     public function getCartOrderAndSave()
     {
@@ -41,7 +43,7 @@ class Vpc_Shop_Cart_Orders extends Vps_Db_Table_Abstract
         $session->orderId = null;
     }
 
-    public function createRow($data = array())
+    public function createRow(array $data = array())
     {
         $row = parent::createRow($data);
         $row->ip = $_SERVER['REMOTE_ADDR'];
