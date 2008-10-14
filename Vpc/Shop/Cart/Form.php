@@ -1,7 +1,7 @@
 <?php
 class Vpc_Shop_Cart_Form extends Vps_Form
 {
-    protected $_tableName = 'Vpc_Shop_Cart_Orders';
+    protected $_modelName = 'Vpc_Shop_Cart_Orders';
     
     protected function _init()
     {

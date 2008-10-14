@@ -1,18 +1,15 @@
 <?php
-class Vpc_Shop_Cart_OrderProducts extends Vps_Db_Table_Abstract
+class Vpc_Shop_Cart_OrderProducts extends Vps_Model_Db
 {
-    protected $_name = 'vpc_shop_order_products';
-    protected $_filters = array('pos');
+    protected $_table = 'vpc_shop_order_products';
     protected $_referenceMap = array(
         'Order' => array(
-            'columns'   => array('shop_order_id'),
-            'refTableClass' => 'Vpc_Shop_Cart_Orders',
-            'refColumns'    => 'id'
+            'column'   => 'shop_order_id',
+            'refModelClass' => 'Vpc_Shop_Cart_Orders'
         ),
         'Product' => array(
-            'columns'   => array('shop_product_id'),
-            'refTableClass' => 'Vpc_Shop_Products',
-            'refColumns'    => 'id'
+            'column'   => 'shop_product_id',
+            'refModelClass' => 'Vpc_Shop_Products',
         )
     );
     protected function _setupFilters()

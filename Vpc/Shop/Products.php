@@ -1,8 +1,8 @@
 <?php
-class Vpc_Shop_Products extends Vps_Db_Table_Abstract
+class Vpc_Shop_Products extends Vps_Model_Db
 {
     protected $_rowClass = 'Vpc_Shop_Product';
 
-    protected $_name = 'vpc_shop_products';
+    protected $_table = 'vpc_shop_products';
     protected $_filters = array('filename');
 }

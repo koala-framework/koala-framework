@@ -7,7 +7,7 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
         $ret['generators']['child']['component']['form'] = 'Vpc_Shop_Cart_Form_Component';
         $ret['generators']['detail']['class'] = 'Vpc_Shop_Cart_Generator';
         $ret['generators']['detail']['component'] = 'Vpc_Shop_Cart_Detail_Component';
-        $ret['generators']['detail']['table'] = 'Vpc_Shop_Cart_OrderProducts';
+        $ret['generators']['detail']['model'] = 'Vpc_Shop_Cart_OrderProducts';
         $ret['generators']['checkout'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_Shop_Cart_Checkout_Component',

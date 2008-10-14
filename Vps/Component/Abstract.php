@@ -160,7 +160,13 @@ class Vps_Component_Abstract
                     throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
                 }
             }
+            if (!is_instance_of($tablename, 'Zend_Db_Table_Abstract')) {
+                throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
+            }
             $tables[$class.'-'.$tablename] = new $tablename(array('componentClass'=>$class));
+            if (!$tables[$class.'-'.$tablename] instanceof Zend_Db_Table_Abstract) {
+                throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
+            }
         }
         return $tables[$class.'-'.$tablename];
     }
@@ -172,8 +178,12 @@ class Vps_Component_Abstract
             if (Vpc_Abstract::hasSetting($class, 'model')) {
                 $models[$class] = Vpc_Abstract::getSetting($class, 'model');
             } else if (Vpc_Abstract::hasSetting($class, 'tablename')) {
+                $t = self::createTable($class);
+                if (!$t instanceof Zend_Db_Table_Abstract) {
+                    throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
+                }
                 $models[$class] = new Vps_Model_Db(array(
-                    'table' => self::createTable($class)
+                    'table' => $t
                 ));
             } else if (Vpc_Abstract::hasSetting($class, 'modelname')) {
                 $modelName = Vpc_Abstract::getSetting($class, 'modelname');

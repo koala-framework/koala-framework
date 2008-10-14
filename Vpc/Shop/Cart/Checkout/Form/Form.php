@@ -1,7 +1,7 @@
 <?php
 class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
 {
-    protected $_modelName = 'Vpc_Shop_Cart_Checkout_Model';
+    protected $_modelName = 'Vpc_Shop_Cart_Orders';
 
     protected function _initFields()
     {

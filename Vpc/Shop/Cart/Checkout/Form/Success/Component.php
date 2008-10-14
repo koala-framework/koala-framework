@@ -14,13 +14,11 @@ class Vpc_Shop_Cart_Checkout_Form_Success_Component extends Vpc_Abstract
 
         $t = new Vpc_Shop_Cart_Orders();
         $ret['order'] = $t->getCartOrder();
-        $t = new Vpc_Shop_Cart_Checkout_Model();
-        $ret['orderData'] = $t->find($ret['order']->id)->current();
-        $ret['orderProducts'] = $ret['order']->findDependentRowset('Vpc_Shop_Cart_OrderProducts');
+        $ret['orderProducts'] = $ret['order']->getChildRows('Products');
 
         $ret['subtotal'] = 0;
         foreach ($ret['orderProducts'] as $op) {
-            $p = $op->findParentRow('Vpc_Shop_Products');
+            $p = $op->getParentRow('Product');
             $ret['subtotal'] += $p->price * $op->amount;
         }
 

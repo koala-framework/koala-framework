@@ -24,6 +24,9 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 'name' => $this->_table
             ));
         }
+        if (!$this->_table instanceof Zend_Db_Table_Abstract) {
+            throw new Vps_Exception("'".get_class($this->_table)."' is not a Zend_Db_Table");
+        }
     }
 
     public function getColumns()

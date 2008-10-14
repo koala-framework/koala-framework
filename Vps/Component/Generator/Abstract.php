@@ -60,6 +60,9 @@ abstract class Vps_Component_Generator_Abstract
                     } else {
                         $table = $this->_settings['table'];
                     }
+                    if (!$table instanceof Zend_Db_Table_Abstract) {
+                        throw new Vps_Exception("table setting for generator in $this->_class is not a Zend_Db_Table");
+                    }
                     $this->_model = new Vps_Model_Db(array('table' => $table));
                 } else if ($this->_loadTableFromComponent) {
                     $this->_model = Vpc_Abstract::createModel($this->_class);
