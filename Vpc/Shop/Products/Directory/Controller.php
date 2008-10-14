@@ -7,7 +7,7 @@ class Vpc_Shop_Products_Directory_Controller extends Vps_Controller_Action_Auto_
         'width' => 600,
         'height' => 500
     );
-    protected $_tableName = 'Vpc_Shop_Products';
+    protected $_modelName = 'Vpc_Shop_Products';
 
     protected function _initColumns()
     {
