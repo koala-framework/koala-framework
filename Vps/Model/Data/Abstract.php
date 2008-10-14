@@ -121,6 +121,15 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 if (!in_array($data[$f], $v)) return false;
             }
         }
+        if ($where = $select->getPart(Vps_Model_Select::WHERE_NOT_EQUALS)) {
+            $ret = false;
+            foreach ($where as $f=>$v) {
+                if (!isset($data[$f])) { $ret = true; break; }
+                if (!is_array($v)) $v = array($v);
+                if (!in_array($data[$f], $v)) { $ret = true; break; }
+            }
+            if (!$ret) return false;
+        }
         if ($where = $select->getPart(Vps_Model_Select::WHERE_NULL)) {
             foreach ($where as $f) {
                 if (!is_null($data[$f])) return false;

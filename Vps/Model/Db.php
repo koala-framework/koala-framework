@@ -59,6 +59,19 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 }
             }
         }
+        if ($whereNotEquals = $select->getPart(Vps_Model_Select::WHERE_NOT_EQUALS)) {
+            foreach ($whereNotEquals as $field=>$value) {
+                if (is_array($value)) {
+                    foreach ($value as &$v) {
+                        $v = $this->getAdapter()->quote($v);
+                    }
+                    $value = implode(', ', $value);
+                    $dbSelect->where("$tablename.$field NOT IN ($value)");
+                } else {
+                    $dbSelect->where("$tablename.$field != ?", $value);
+                }
+            }
+        }
         if ($where = $select->getPart(Vps_Model_Select::WHERE)) {
             foreach ($where as $w) {
                 $dbSelect->where($w[0], $w[1], $w[2]);
