@@ -16,6 +16,7 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
     protected $_model;
     protected $_table;
     protected $_tableName;
+    protected $_modelName;
 
     protected $_grouping = null;
 
@@ -78,6 +79,9 @@ abstract class Vps_Controller_Action_Auto_Grid extends Vps_Controller_Action_Aut
         }
         if (!isset($this->_model) && isset($this->_table)) {
             $this->setTable($this->_table);
+        }
+        if (!isset($this->_model) && isset($this->_modelName)) {
+            $this->_model = new $this->_modelName();
         }
 
         $this->_initColumns();

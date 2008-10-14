@@ -1,10 +1,9 @@
 <?php
-class Vps_Model_Db implements Vps_Model_Interface
+class Vps_Model_Db extends Vps_Model_Abstract
 {
     protected $_rowClass = 'Vps_Model_Db_Row';
     protected $_rowsetClass = 'Vps_Model_Db_Rowset';
     protected $_table;
-    protected $_default = array();
 
     public function __construct($config = array())
     {
@@ -12,17 +11,20 @@ class Vps_Model_Db implements Vps_Model_Interface
             $this->_table = new $config['tableName']();
         }
         if (isset($config['table'])) {
-            if (!is_object($config['table'])) {
-                throw new Vps_Exception("Construct-config value 'table' needs to be an object for 'Vps_Model_Db'");
-            }
             $this->_table = $config['table'];
         }
-        if (isset($config['default'])) $this->_default = $config['default'];
-        $this->_init();
+        parent::__construct($config);
     }
 
-    protected function _init() {}
-
+    protected function _init()
+    {
+        parent::_init();
+        if (is_string($this->_table)) {
+            $this->_table = new Vps_Db_Table(array(
+                'name' => $this->_table
+            ));
+        }
+    }
 
     public function getColumns()
     {
@@ -34,15 +36,6 @@ class Vps_Model_Db implements Vps_Model_Interface
         $data = array_merge($this->_default, $data);
         return new $this->_rowClass(array(
             'row' => $this->_table->createRow($data),
-            'model' => $this
-        ));
-    }
-
-    public function find($id)
-    {
-        return new $this->_rowsetClass(array(
-            'rowset' => $this->_table->find($id),
-            'rowClass' => $this->_rowClass,
             'model' => $this
         ));
     }
@@ -98,12 +91,11 @@ class Vps_Model_Db implements Vps_Model_Interface
         return $dbSelect->__toString();
     }
 
-    public function fetchAll($where = array(), $order=null, $limit=null, $start=null)
+    public function getRows($where = array(), $order=null, $limit=null, $start=null)
     {
         if (!is_object($where)) {
-            $select = $this->select($where);
-            if ($order) $select->order($order);
-            if ($limit || $start) $select->limit($limit, $start);
+            if (is_string($where)) $where = array($where);
+            $select = $this->select($where, $order, $limit, $start);
         } else {
             $select = $where;
         }
@@ -137,8 +129,9 @@ class Vps_Model_Db implements Vps_Model_Interface
         ));
     }
 
-    public function fetchCount($select = array())
+    public function countRows($select = array())
     {
+
         if (!is_object($select)) {
             $select = $this->select($select);
         }
@@ -185,13 +178,18 @@ class Vps_Model_Db implements Vps_Model_Interface
         return false;
     }
 
-    public function select($where = array())
+    public function select($where = array(), $order = null, $limit = null, $start = null)
     {
-        return new Vps_Model_Select($where);
-    }
-    
-    public function getRowsetClass()
-    {
-        return $this->_rowsetClass;
+        if (!is_array($where)) {
+            $ret = new Vps_Model_Select();
+            if ($where) {
+                $ret->whereEquals($this->getPrimaryKey(), $where);
+            }
+        } else {
+            $ret = new Vps_Model_Select($where);
+        }
+        if ($order) $ret->order($order);
+        if ($limit || $start) $ret->limit($limit, $start);
+        return $ret;
     }
 }

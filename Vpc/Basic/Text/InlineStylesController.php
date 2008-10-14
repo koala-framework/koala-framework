@@ -3,7 +3,7 @@ class Vpc_Basic_Text_InlineStylesController extends Vps_Controller_Action_Auto_G
 {
     protected $_buttons = array('add', 'delete');
     protected $_position = 'pos';
-    protected $_tableName = 'Vpc_Basic_Text_StylesModel';
+    protected $_modelName = 'Vpc_Basic_Text_StylesModel';
 
     public function init()
     {

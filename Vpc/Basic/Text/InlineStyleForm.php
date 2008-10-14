@@ -4,6 +4,15 @@ class Vpc_Basic_Text_InlineStyleForm extends Vps_Form
     protected function _init()
     {
         parent::_init();
+
+        $this->add(new Vps_Form_Field_NumberField('pos', trlVps('Position')))
+            ->setAllowDecimals(false)
+            ->setAllowNegative(false)
+            ->setWidth(50);
+
+        $this->add(new Vps_Form_Field_TextField('name', trlVps('Name')))
+            ->setAllowBlank(false);
+
         $this->add(new Vps_Form_Field_ColorField('color', trlVps('Color')))
             ->setDefaultValue('000000');
         $this->add(new Vps_Form_Field_Select('font_weight', trlVps('Font Weight')))

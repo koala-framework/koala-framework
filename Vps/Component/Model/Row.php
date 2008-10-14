@@ -1,13 +1,12 @@
 <?php
-class Vps_Component_Model_Row implements Vps_Model_Row_Interface 
+class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
 {
     protected $_data;
-    protected $_model;
     
     public function __construct(array $config)
     {
         $this->_data = $config['data'];
-        $this->_model = $config['model'];
+        parent::__construct($config);
     }
 
     public function __isset($name)

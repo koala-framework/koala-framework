@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Model_Row implements Vps_Model_Row_Interface 
+class Vps_Component_Generator_Model_Row extends Vps_Model_Row_Abstract
 {
     protected $_data;
     protected $_model;

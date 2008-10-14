@@ -39,8 +39,17 @@ class Vps_Model_Select
         }
     }
 
-    public function whereEquals($field, $value)
+    public function whereEquals($field, $value = null)
     {
+        if (is_array($field)) {
+            foreach ($field as $f=>$v) {
+                $this->whereEquals($f, $v);
+            }
+            return $this;
+        }
+        if (is_null($value)) {
+            throw new Vps_Exception("value is required");
+        }
         $this->_parts[self::WHERE_EQUALS][$field] = $value;
         return $this;
     }

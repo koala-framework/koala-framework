@@ -1,112 +1,114 @@
 <?php
-class Vps_Model_FieldRows extends Vps_Model_Abstract
+class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
+    implements Vps_Model_RowsSubModel_Interface
 {
     protected $_rowClass = 'Vps_Model_FieldRows_Row';
     protected $_rowsetClass = 'Vps_Model_FieldRows_Rowset';
     protected $_fieldName;
-    protected $_parentRow;
     protected $_data;
-    protected $_autoId;
 
     public function __construct(array $config = array())
     {
         if (isset($config['fieldName'])) {
             $this->_fieldName = $config['fieldName'];
         }
-        if (isset($config['parentRow'])) {
-            $this->setParentRow($config['parentRow']);
-        }
         parent::__construct($config);
-    }
-
-    public function setParentRow(Vps_Model_Row_Interface $row)
-    {
-        $this->_parentRow = $row;
-        $v = (array)$this->_parentRow->{$this->_fieldName};
-        if (isset($v['data'])) {
-            $this->_data = $v['data'];
-        } else {
-            $this->_data = array();
-        }
-        if (isset($v['autoId'])) {
-            $this->_autoId = $v['autoId'];
-        } else {
-            $this->_autoId = 0;
-        }
     }
 
     public function createRow(array $data=array())
     {
-        $data[$this->getPrimaryKey()] = null;
-        return new $this->_rowClass(array(
-            'model' => $this,
-            'data' => $data,
-        ));
-    }
-    public function find($id)
-    {
-        return new $this->_rowsetClass(array(
-            'model' => $this,
-            'data' => array($this->_data[$id]),
-            'rowClass' => $this->_rowClass
-        ));
+        throw new Vps_Exception('getRows is not possible for Vps_Model_Field');
     }
 
-    public function fetchAll($where=null, $order=null, $limit=null, $start=null)
+    public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        if ($where) throw new Vps_Exception('where is not yet implmented');
-        if ($order) throw new Vps_Exception('order is not yet implmented');
-        if ($limit) throw new Vps_Exception('limit is not yet implmented');
-        if ($start) throw new Vps_Exception('start is not yet implmented');
-        return new $this->_rowsetClass(array(
-            'model' => $this,
-            'data' => array_values($this->_data),
-            'rowClass' => $this->_rowClass
-        ));
-    }
-    public function fetchCount($where = array())
-    {
-        if ($where) throw new Vps_Exception('where is not yet implmented');
-        return count($this->_data);
+        throw new Vps_Exception('getRows is not possible for Vps_Model_Field');
     }
 
-    public function getPrimaryKey()
+    public function update($id, Vps_Model_FieldRows_Row $row, $rowData)
     {
-        return 'id';
+        foreach ($this->_data[$row->getParentRow()->getInternalId()] as $k=>$i) {
+            if (isset($i[$this->getPrimaryKey()]) && $i[$this->getPrimaryKey()] == $id) {
+                $this->_data[$row->getParentRow()->getInternalId()][$k] = $rowData;
+                $this->_updateParentRow($row->getParentRow());
+                return $rowData[$this->getPrimaryKey()];
+            }
+        }
+        throw new Vps_Exception("Can't find entry with id '$id'");
     }
 
-    public function insert($data)
+    public function insert(Vps_Model_FieldRows_Row $row, $rowData)
     {
-        $this->_autoId++;
-        $data[$this->getPrimaryKey()] = $this->_autoId;
-        $this->_data[$this->_autoId] = $data;
-        $this->_updateRow();
-        return $this->_autoId;
-    }
-    public function update($id, $data)
-    {
-        $this->_data[$id] = $data;
-        $this->_updateRow();
-    }
-    public function delete($id)
-    {
-        unset($this->_data[$this->_autoId]);
-        $this->_updateRow();
+        $iId = $row->getParentRow()->getInternalId();
+        if (!isset($rowData[$this->getPrimaryKey()])) {
+            if (!isset($this->_autoId[$iId])) {
+                $this->_autoId[$iId] = 0;
+                foreach ($this->_data[$iId] as $k=>$i) {
+                    if (isset($i[$this->getPrimaryKey()])) {
+                        $this->_autoId[$iId] = max($i[$this->getPrimaryKey()], $this->_autoId[$iId]);
+                    }
+                }
+            }
+            $this->_autoId[$iId]++;
+            $rowData[$this->getPrimaryKey()] = $this->_autoId[$iId];
+        }
+        $this->_data[$iId][] = $rowData;
+        $this->_updateParentRow($row->getParentRow());
+        return $rowData[$this->getPrimaryKey()];
     }
 
-    private function _updateRow()
+    public function delete($id, Vps_Model_FieldRows_Row $row)
+    {
+        foreach ($this->_data[$row->getParentRow()->getInternalId()] as $k=>$i) {
+            if (isset($i[$this->getPrimaryKey()]) && $i[$this->getPrimaryKey()] == $id) {
+                unset($this->_data[$row->getParentRow()->getInternalId()][$k]);
+                $this->_updateParentRow($row->getParentRow());
+                return;
+            }
+        }
+        throw new Vps_Exception("Can't find entry with id '$id'");
+    }
+
+    private function _updateParentRow($parentRow)
     {
         $v = array(
-            'data' => $this->_data,
-            'autoId' => $this->_autoId
+            'data' => $this->_data[$parentRow->getInternalId()],
+            'autoId' => $this->_autoId[$parentRow->getInternalId()]
         );
-        $this->_parentRow->{$this->_fieldName} = $v;
-        $this->_parentRow->save();
+        $parentRow->{$this->_fieldName} = serialize($v);
     }
 
-    public function fetchByParentRow($parentRow)
+    public function getRowsByParentRow(Vps_Model_Row_Interface $parentRow, $select = array())
     {
-        $this->setParentRow($parentRow);
-        return $this->fetchAll();
+        $this->_data[$parentRow->getInternalId()] = array();
+
+        $v = $parentRow->{$this->_fieldName};
+        if (substr($v, 0, 13) == 'vpsSerialized') {
+            $v = substr($v, 13);
+        }
+        $v = unserialize($v);
+        if ($v) {
+            $this->_autoId[$parentRow->getInternalId()] = $v['autoId'];
+            foreach ($v['data'] as $i) {
+                $this->_data[$parentRow->getInternalId()][] = $i;
+            }
+        } else {
+            $this->_autoId[$parentRow->getInternalId()] = 0;
+        }
+
+        if (!is_object($select)) {
+            $select = $this->select($select);
+        }
+        return new $this->_rowsetClass(array(
+            'model' => $this,
+            'data' => $this->_selectData($select, $this->_data[$parentRow->getInternalId()]),
+            'parentRow' => $parentRow,
+            'rowClass' => $this->_rowClass
+        ));
+    }
+
+    public function createRowByParentRow(Vps_Model_Row_Interface $parentRow, array $data = array())
+    {
+        return $this->_createRow($data, array('parentRow' => $parentRow));
     }
 }

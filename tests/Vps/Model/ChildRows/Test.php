@@ -1,0 +1,32 @@
+<?php
+class Vps_Model_ChildRows_Test extends PHPUnit_Framework_TestCase
+{
+    public function testChildRows()
+    {
+        $cModel = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_ChildModel');
+        $model = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_Model');
+        $row = $model->getRow(1);
+        $rows = $row->getChildRows('Child');
+        $this->assertEquals(count($rows), 2);
+
+        $cRow = $row->createChildRow('Child');
+        $cRow->bar = 'bar3';
+        $cRow->save();
+
+        $row = $model->getRow(1);
+        $rows = $row->getChildRows('Child');
+        $this->assertEquals(count($rows), 3);
+
+        $row = $cModel->getRow(3);
+        $this->assertEquals($row->bar, 'bar3');
+        $this->assertEquals($row->test_id, 1);
+    }
+    public function testParentRow()
+    {
+        $cModel = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_ChildModel');
+        $model = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_Model');
+        $row = $cModel->getRow(1);
+        $this->assertEquals($row->getParentRow('Parent')->id, 1);
+        $this->assertEquals($row->getParentRow('Parent')->foo, 'foo1');
+    }
+}

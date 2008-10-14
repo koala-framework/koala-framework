@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Model extends Vps_Model_Abstract 
+class Vps_Component_Generator_Model extends Vps_Model_Abstract
 {
     protected $_constraints = array(
         'pageGenerator' => true,
