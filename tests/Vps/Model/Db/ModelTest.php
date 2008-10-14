@@ -182,4 +182,53 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
     {
         $this->_model->fetchAll(array('foo = ?'=>null));
     }
+
+    public function testSelectWhereNotEquals1()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('where')
+            ->with($this->equalTo('testtable.id != ?'), $this->equalTo(1));
+        $select = $this->_model->select()
+            ->whereNotEquals('id', 1);
+        $this->_table->expects($this->once())
+                  ->method('fetchAll')
+                  ->with($this->equalTo($this->_dbSelect));
+        $this->_model->fetchAll($select);
+    }
+
+    public function testSelectWhereNotEquals2()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('where')
+            ->with($this->equalTo("testtable.foo != ?"), $this->equalTo('bar'));
+        $select = $this->_model->select()
+            ->whereNotEquals('foo', 'bar');
+        $this->_table->expects($this->once())
+                  ->method('fetchAll')
+                  ->with($this->equalTo($this->_dbSelect));
+        $this->_model->fetchAll($select);
+    }
+
+    public function testSelectWhereNotEqualsArray1()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('where')
+            ->with($this->equalTo('testtable.id NOT IN (1, 2)'));
+        $select = $this->_model->select()
+            ->whereNotEquals('id', array(1, 2));
+        $this->_table->expects($this->once())
+                  ->method('fetchAll')
+                  ->with($this->equalTo($this->_dbSelect));
+        $this->_model->fetchAll($select);
+    }
+
+    public function testSelectWhereNotEqualsArray2()
+    {
+        $this->_dbSelect->expects($this->once())
+            ->method('where')
+            ->with($this->equalTo("testtable.foo NOT IN ('str1', 'str2')"));
+        $select = $this->_model->select()
+            ->whereNotEquals('foo', array('str1', 'str2'));
+        $this->_model->fetchAll($select);
+    }
 }

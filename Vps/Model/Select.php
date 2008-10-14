@@ -3,6 +3,7 @@ class Vps_Model_Select
 {
     const WHERE = 'where';
     const WHERE_EQUALS = 'whereEquals';
+    const WHERE_NOT_EQUALS = 'whereNotEquals';
     const WHERE_ID = 'whereId';
     const WHERE_NULL = 'whereNull';
     const ORDER = 'order';
@@ -51,6 +52,21 @@ class Vps_Model_Select
             throw new Vps_Exception("value is required");
         }
         $this->_parts[self::WHERE_EQUALS][$field] = $value;
+        return $this;
+    }
+
+    public function whereNotEquals($field, $value = null)
+    {
+        if (is_array($field)) {
+            foreach ($field as $f=>$v) {
+                $this->whereNotEquals($f, $v);
+            }
+            return $this;
+        }
+        if (is_null($value)) {
+            throw new Vps_Exception("value is required");
+        }
+        $this->_parts[self::WHERE_NOT_EQUALS][$field] = $value;
         return $this;
     }
 
