@@ -2813,11 +2813,11 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en default="1">You have to login to see the requested page.</en>
-<de>Sie müssen sich einloggen, um die gewünschte Seite zu sehen.</de>
+<de>Sie m&#xFC;ssen sich einloggen, um die gew&#xFC;nschte Seite zu sehen.</de>
 </text>
 <text>
 <en default="1">If you don't have an account, you can</en>
-<de>Sollten Sie noch kein Benutzerkonto besitzen, können Sie</de>
+<de>Sollten Sie noch kein Benutzerkonto besitzen, k&#xF6;nnen Sie</de>
 </text>
 <text>
 <en default="1">register here</en>
@@ -3091,7 +3091,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">User ID ist invalid.</en>
-<de>Der Aktivierungscode ist ungültig.</de>
+<de>Der Aktivierungscode ist ung&#xFC;ltig.</de>
 </text>
 <text>
 <en default="1">Forum.User-List</en>
@@ -3107,7 +3107,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">You are not allowed to enter this page.</en>
-<de>Sie haben keine Berechtigungen für diese Seite.</de>
+<de>Sie haben keine Berechtigungen f&#xFC;r diese Seite.</de>
 </text>
 <text>
 <en default="1">Menu</en>
@@ -3135,15 +3135,15 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">No File uploaded, please select a file.</en>
-<de>Keine Datei wurde hochgeladen, bitte wählen Sie eine aus.</de>
+<de>Keine Datei wurde hochgeladen, bitte w&#xE4;hlen Sie eine aus.</de>
 </text>
 <text>
 <en default="1">image in originalsize</en>
-<de>Bild in Originalgröße</de>
+<de>Bild in Originalgr&#xF6;&#xDF;e</de>
 </text>
 <text>
 <en default="1">close</en>
-<de>schließen</de>
+<de>schlie&#xDF;en</de>
 </text>
 <text>
 <en default="1">next</en>
@@ -3151,7 +3151,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">previous</en>
-<de>zurück</de>
+<de>zur&#xFC;ck</de>
 </text>
 <text>
 <en default="1">Amount</en>
@@ -3161,6 +3161,156 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en default="1">Price</en>
 <de>Preis</de>
 </text>
-
+<text>
+<en default="1">Cart</en>
+<de>Warenkorb</de>
+</text>
+<text>
+<en default="1">To cart</en>
+<de>Zum Warenkorb</de>
+</text>
+<text>
+<en default="1">To checkout</en>
+<de>Zur Kasse</de>
+</text>
+<text>
+<en default="1">Cart is empty</en>
+<de>Ihr Warenkorb ist leer</de>
+</text>
+<text>
+<en default="1">add to cart</en>
+<de>In den Warenkorb</de>
+</text>
+<text>
+<en default="1">Detail info</en>
+<de>Detailinfos</de>
+</text>
+<text>
+<en default="1">Image Positionable</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Flash Media Player</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Element</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Start automatically</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Loop</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Shop.Products</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">The product has been added the the cart successfully.</en>
+<de>Der Artikel wurde erfolgreich zum Warenkorb hinzugef&#xFC;gt.</de>
+</text>
+<text>
+<en default="1">You cart contains {0} products</en>
+<de>Ihr Warenkorb beinhaltet {0} Artikel</de>
+</text>
+<text>
+<en default="1">Payment</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Unit Price</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Subtotal</en>
+<de>Zwischensumme</de>
+</text>
+<text>
+<en default="1">Shipping and Handling</en>
+<de>Versandkosten</de>
+</text>
+<text>
+<en default="1">Total Amount</en>
+<de>Gesamtpreis</de>
+</text>
+<text>
+<en default="1">Street</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">ZIP</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">City</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Country</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Phone</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Prepayment</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Paypal</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Order successfully sent.</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Confirm</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Checkout</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">From</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">To</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Place (City)</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Events.Top</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Events.Events</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Start Date</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">End Date</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Events.Show categories</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">save changes</en>
+<de>Änderung speichern</de>
+</text>
 </trl>
-
