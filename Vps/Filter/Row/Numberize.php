@@ -28,7 +28,8 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
         return $this->_groupBy;
     }
 
-    protected function _getWhere($row)
+    //legacy für Db_Table
+    private function _getWhere($row)
     {
         $where = array();
         foreach ($this->_groupBy as $k=>$field) {
@@ -39,11 +40,11 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
                 foreach ($values as $value) {
                     if ($row->$field == $value) {
                         $valueFound = true;
-			if (is_null($value)) {
+                        if (is_null($value)) {
                             $where[] = "ISNULL($field)";
-			} else {
-			    $where["$field = ?"] = $value;
-			}
+                        } else {
+                            $where["$field = ?"] = $value;
+                        }
                         break;
                     }
                 }
@@ -56,14 +57,39 @@ class Vps_Filter_Row_Numberize extends Vps_Filter_Row_Abstract
                     $where[] = "$field NOT IN ($in)";
                 }
             } else {
-	        if (is_null($row->$field)) {
-		    $where[] = "ISNULL($field)";
-		} else {
+                if (is_null($row->$field)) {
+                    $where[] = "ISNULL($field)";
+                } else {
                     $where["$field = ?"] = $row->$field;
-		}
+                }
             }
         }
         return $where;
+    }
+
+    private function _getSelect($row)
+    {
+        $ret = new Vps_Model_Select();
+        foreach ($this->_groupBy as $k=>$field) {
+            if (is_array($field)) {
+                $values = $field;
+                $field = $k;
+                $valueFound = false;
+                foreach ($values as $value) {
+                    if ($row->$field == $value) {
+                        $valueFound = true;
+                        $ret->whereEquals($field, $value);
+                        break;
+                    }
+                }
+                if (!$valueFound) {
+                    $ret->whereNotEquals($field, $values);
+                }
+            } else {
+                $ret->whereEquals($field, $row->$field);
+            }
+        }
+        return $ret;
     }
 
     public function filter($row)

@@ -1,26 +1,23 @@
 <?php
-class Vps_Model_FieldRows_Row extends Vps_Model_Row_Abstract
+class Vps_Model_FieldRows_Row extends Vps_Model_Row_Data_Abstract
 {
-    public function __construct($config)
+    protected $_parentRow;
+    public function __construct(array $config)
     {
+        $this->_parentRow = $config['parentRow'];
         parent::__construct($config);
     }
 
-    public function save()
+    public function getParentRow()
     {
-        if (!$this->_data[$this->_getPrimaryKey()]) {
-            $id = $this->_model->insert($this->_data);
-            $this->_data[$this->_getPrimaryKey()] = $id;
-        } else {
-            $id = $this->_data[$this->_getPrimaryKey()];
-            $this->_model->update($id, $this->_data);
-        }
-        return $id;
+        return $this->_parentRow;
     }
-
-    public function delete()
+    protected function _refresh($id)
     {
-        $this->_model->delete($this->_data[$this->_getPrimaryKey()]);
+        $select = new Vps_Model_Select();
+        $select->whereId($id);
+        $this->_data = $this->_model->getRowsByParentRow($this->_parentRow, $select)->current()->_data;
+        $this->_cleanData = $this->_data;
     }
 
 }

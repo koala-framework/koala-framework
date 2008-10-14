@@ -5,6 +5,8 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
     protected $_fields = array(); //deprecated
     protected $_buttons = array();
 
+    protected $_formName;
+
     public function indexAction()
     {
         $config = $this->_form->getProperties();
@@ -27,7 +29,11 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         parent::preDispatch();
 
         if (!isset($this->_form)) {
-            $this->_form = new Vps_Form();
+            if (isset($this->_formName)) {
+                $this->_form = new $this->_formName();
+            } else {
+                $this->_form = new Vps_Form();
+            }
         }
 
         foreach ($this->_fields as $k=>$field) {
@@ -46,6 +52,10 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
                 $this->_form->setTable($this->_table);
             } else if (isset($this->_tableName)) {
                 $this->_form->setTable(new $this->_tableName);
+            } else if (isset($this->_modelName)) {
+                $this->_form->setModel(new $this->_modelName);
+            } else if (isset($this->_model)) {
+                $this->_form->setModel($this->_model);
             }
         }
 

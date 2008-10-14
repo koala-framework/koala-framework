@@ -1,57 +1,77 @@
 <?php
-class Vps_Model_Db_Row implements Vps_Model_Row_Interface
+class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
 {
     protected $_row;
-    protected $_model;
-    private $_internalId;
 
     public function __construct(array $config)
     {
         $this->_row = $config['row'];
-        $this->_model = $config['model'];
-        static $internalId = 0;
-        $this->_internalId = $internalId++;
-    }
-    
-    public function getInternalId()
-    {
-        return $this->_internalId;
+        parent::__construct($config);
     }
 
     public function __isset($name)
     {
-        return isset($this->_row->$name);
+        if (in_array($name, $this->_model->getColumns())) {
+            return isset($this->_row->$name);
+        } else {
+            return parent::__isset($name);
+        }
     }
 
     public function __unset($name)
     {
-        unset($this->_row->$name);
+        if (in_array($name, $this->_model->getColumns())) {
+            unset($this->_row->$name);
+        } else {
+            parent::__unset($name);
+        }
     }
 
     public function __get($name)
     {
-        $value = $this->_row->$name;
-        if (is_string($value) && substr($value, 0, 13) =='vpsSerialized') {
-            $value = unserialize(substr($value, 13));
+        if (in_array($name, $this->_model->getColumns())) {
+            $value = $this->_row->$name;
+            if (is_string($value) && substr($value, 0, 13) =='vpsSerialized') {
+                $value = unserialize(substr($value, 13));
+            }
+            return $value;
+        } else {
+            return parent::__get($name);
         }
-        return $value;
     }
 
     public function __set($name, $value)
     {
-        if (is_array($value) || is_object($value)) {
-            $value = 'vpsSerialized'.serialize($value);
+        if (in_array($name, $this->_model->getColumns())) {
+            if (is_array($value) || is_object($value)) {
+                $value = 'vpsSerialized'.serialize($value);
+            }
+            $this->_row->$name = $value;
+        } else {
+            parent::__set($name, $value);
         }
-        $this->_row->$name = $value;
     }
 
     public function save()
     {
-        return $this->_row->save();
+        parent::save();
+
+        $id = $this->{$this->_getPrimaryKey()};
+        if (!$id) {
+            $this->_beforeInsert();
+        }
+        $this->_beforeSave();
+        $ret = $this->_row->save();
+        if (!$id) {
+            $this->_afterInsert();
+        }
+        $this->_afterSave();
+        return $ret;
     }
 
     public function delete()
     {
+        parent::delete();
         $this->_row->delete();
     }
 
@@ -67,10 +87,6 @@ class Vps_Model_Db_Row implements Vps_Model_Row_Interface
     public function getRow()
     {
         return $this->_row;
-    }
-    public function getModel()
-    {
-        return $this->_model;
     }
     public function toArray()
     {

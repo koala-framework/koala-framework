@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Model implements Vps_Model_Interface 
+class Vps_Component_Model extends Vps_Model_Abstract
 {
     protected $_rowClass = 'Vps_Component_Model_Row';
     protected $_rowsetClass = 'Vps_Component_Model_Rowset';
@@ -31,7 +31,7 @@ class Vps_Component_Model implements Vps_Model_Interface
         return false;
     }
 
-    public function fetchAll($where=null, $order=null, $limit=null, $start=null)
+    public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
         if (!is_object($where)) {
             $select = $this->select();
@@ -89,10 +89,5 @@ class Vps_Component_Model implements Vps_Model_Interface
     public function getColumns()
     {
         throw new Vps_Exception('Not implemented yet.');
-    }
-
-    public function select($where = array())
-    {
-        return new Vps_Component_Select($where);
     }
 }

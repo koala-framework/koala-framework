@@ -108,4 +108,72 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($ids1 != $ids2);
     }
 
+    public function testSave()
+    {
+        $model = new Vps_Model_FnF(array('data'=>array(
+            array('id'=>1, 'foo'=>'')
+        )));
+        $row = $model->getRow(1);
+        $row->foo = 'bar';
+        $row->save();
+
+        $this->assertEquals($model->getData(), array(array('id'=>1, 'foo'=>'bar')));
+
+        $row = $model->getRow(1);
+        $this->assertEquals($row->foo, 'bar');
+    }
+
+    public function testDelete()
+    {
+        $model = new Vps_Model_FnF(array('data'=>array(
+            array('id'=>1, 'foo'=>'')
+        )));
+        $row = $model->getRow(1);
+        $row->delete();
+
+        $this->assertEquals($model->getData(), array());
+    }
+
+    public function testInsertAutoId()
+    {
+        $model = new Vps_Model_FnF(array('data'=>array(
+            array('id'=>1, 'foo'=>'')
+        )));
+        $row = $model->createRow();
+        $row->foo = 'bar2';
+        $row->save();
+
+        $this->assertEquals($model->getData(), array(
+            array('id'=>1, 'foo'=>''),
+            array('id'=>2, 'foo'=>'bar2')
+        ));
+    }
+    public function testChangeId()
+    {
+        $model = new Vps_Model_FnF(array('data'=>array(
+            array('id'=>1, 'foo'=>'')
+        )));
+        $row = $model->getRow(1);
+        $row->id = 2;
+        $row->save();
+
+        $this->assertEquals($model->getData(), array(
+            array('id'=>2, 'foo'=>'')
+        ));
+    }
+    public function testInsertManualId()
+    {
+        $model = new Vps_Model_FnF(array('data'=>array(
+            array('id'=>1, 'foo'=>'')
+        )));
+        $row = $model->createRow();
+        $row->id = 10;
+        $row->foo = 'bar2';
+        $row->save();
+
+        $this->assertEquals($model->getData(), array(
+            array('id'=>1, 'foo'=>''),
+            array('id'=>10, 'foo'=>'bar2')
+        ));
+    }
 }

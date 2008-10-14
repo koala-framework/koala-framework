@@ -1,9 +1,16 @@
 <?php
-class Vpc_Basic_Text_StylesModel extends Vps_Db_Table_Abstract
+class Vpc_Basic_Text_StylesModel extends Vps_Model_Db
 {
-    protected $_name = 'vpc_basic_text_styles';
+    protected $_table = 'vpc_basic_text_styles';
     protected $_rowClass = 'Vpc_Basic_Text_StylesRow';
 
+    protected function _init()
+    {
+        parent::_init();
+        $this->_siblingModels = array(new Vps_Model_Field(array('fieldName'=>'styles')));
+    }
+
+    //TODO
     protected function _setupFilters()
     {
         $filter = new Vps_Filter_Row_Numberize();

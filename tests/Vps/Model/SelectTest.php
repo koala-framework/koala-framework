@@ -63,7 +63,6 @@ class Vps_Model_SelectTest extends PHPUnit_Framework_TestCase
 
     }
 
-
     public function testUnsetPart()
     {
         $select = new Vps_Model_Select();
