@@ -1,14 +1,18 @@
 <div class="<?=$this->cssClass?>">
     <? if (!$this->items) { ?>
-    <?=trlVps('Cart is empty')?>
+        <div class="cartProduct">
+            <?=trlVps('Cart is empty')?>
+        </div>
     <? } else { ?>
     <? foreach ($this->items as $i) { ?>
-        <?=$this->componentLink($i->product)?>
-        <?=trlVps('Size')?>: <?=$i->row->size?>
-        <?=trlVps('Amount')?>: <?=$i->row->amount?>
-        <?=trlVps('Price')?>: <?=$this->money($i->product->row->price*$i->row->amount)?>
+        <div class="cartProduct">
+            <div class="cartName"><?=$this->componentLink($i->product)?></div>
+            <div class="cartSize"><?=trlVps('Size')?>: <?=$i->row->size?></div>
+            <div class="cartAmount"><?=trlVps('Amount')?>: <?=$i->row->amount?></div>
+            <div class="cartPrice"><?=trlVps('Price')?>: <?=$this->money($i->product->row->price*$i->row->amount)?></div>
+        </div>
     <? } ?>
-    <?=$this->componentLink($this->cart)?>
-    <?=$this->componentLink($this->checkout)?>
+    <div class="cart"><?=$this->componentLink($this->cart)?></div>
+    <div class="checkout"><?=$this->componentLink($this->checkout)?></div>
     <? } ?>
 </div>
