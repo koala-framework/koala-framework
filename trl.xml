@@ -3323,11 +3323,15 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Back to shop</en>
-<de>Zurück zum Shop</de>
+<de>Zur&#xFC;ck zum Shop</de>
 </text>
 <text>
 <en default="1">Back</en>
-<de>Zurück</de>
+<de>Zur&#xFC;ck</de>
+</text>
+<text>
+<en default="1">Back to cart</en>
+<de>Zurück zum Warenkorb</de>
 </text>
 </trl>
 
