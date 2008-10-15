@@ -25,4 +25,15 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
         $ret['checkout'] = $this->getData()->getChildComponent('_checkout');
         return $ret;
     }
+
+    public function getShipping($order = null)
+    {
+        if (!$order) $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
+                                        ->getCartOrder();
+        if (count($order->getChildRows('Products')) >= 2) {
+            return 0;
+        } else {
+            return 4.5;
+        }
+    }
 }

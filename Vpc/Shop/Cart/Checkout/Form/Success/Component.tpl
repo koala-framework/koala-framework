@@ -29,19 +29,17 @@
             <td><?=$this->money($p->price * $op->amount)?></td>
         </tr>
         <? } ?>
-        <? if ($this->shipping) { ?>
         <tr>
             <td colspan="3"><?=trlVps('Subtotal')?>:</td>
-            <td><?=$this->money($this->subtotal)?></td>
+            <td><?=$this->money($this->order->getSubTotal())?></td>
         </tr>
         <tr>
             <td colspan="3"><?=trlVps('Shipping and Handling')?>:</td>
-            <td><?=$this->money($this->shipping)?></td>
+            <td><?=$this->money($this->order->getShipping())?></td>
         </tr>
-        <? } ?>
         <tr>
             <td colspan="3"><?=trlVps('Total Amount')?>:</td>
-            <td><?=$this->money($this->total)?></td>
+            <td><?=$this->money($this->order->getTotal())?></td>
         </tr>
     </table>
 

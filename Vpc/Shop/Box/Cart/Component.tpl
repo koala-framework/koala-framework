@@ -15,8 +15,8 @@
             </div>
         <? } ?>
         <div class="moneyInfo">
-            <?=trl('Shipping and Handling')?>: <?=$this->money($this->shipping)?><br />
-            <?=trl('Total Amount')?>: <strong><?=$this->money($this->total)?></strong>
+            <?=trl('Shipping and Handling')?>: <?=$this->money($this->order->getShipping())?><br />
+            <?=trl('Total Amount')?>: <strong><?=$this->money($this->order->getTotal())?></strong>
         </div>
     </div>
     <div class="cartOrder">
