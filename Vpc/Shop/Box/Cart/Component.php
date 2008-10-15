@@ -20,6 +20,9 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
                 ->getComponentByDbId($i->row->add_component_id)
                 ->parent;
         }
+        $ret['order'] = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
+                            ->getCartOrder();
+
         return $ret;
     }
     
