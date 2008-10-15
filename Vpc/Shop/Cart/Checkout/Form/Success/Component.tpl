@@ -1,47 +1,43 @@
 <div class="<?=$this->cssClass?>">
-    <p>
-        <?=$this->order->firstname?> <?=$this->order->lastname?><br />
+    <div class="receiver">
+        <strong><?=$this->order->firstname?> <?=$this->order->lastname?></strong><br />
         <?=$this->order->street?><br />
-        <?=$this->order->zip?> <?=$this->order->city?><br />
-        <?=$this->order->country?>
-    </p>
-
-    <p>
+        <?=$this->order->country?> - <?=$this->order->zip?> <?=$this->order->city?>
+    </div>
+    <div class="receiverInfo">
         <?=$this->order->email?><br />
         <?=$this->order->phone?>
-    </p>
-
-    <?=trlVps('Payment')?>: <?=$this->order->payment?>
-
+    </div>
     <table>
-        <tr>
-            <th><?=trlVps('Product')?></th>
+        <tr class="firstRow">
+            <th class="thProduct"><?=trlVps('Product')?></th>
             <th><?=trlVps('Unit Price')?></th>
             <th><?=trlVps('Amount')?></th>
-            <th><?=trlVps('Price')?></th>
+            <th class="thPrice"><?=trlVps('Price')?></th>
         </tr>
         <? foreach ($this->orderProducts as $op) { ?>
         <? $p = $op->getParentRow('Product') ?>
         <tr>
             <td><?=$p?></td>
-            <td><?=$this->money($p->price)?></td>
+            <td><?=trlVps('EUR')?> <?=$this->money($p->price,'')?></td>
             <td><?=$op->amount?></td>
-            <td><?=$this->money($p->price * $op->amount)?></td>
+            <td><?=trlVps('EUR')?> <?=$this->money($p->price * $op->amount,'')?></td>
         </tr>
+        <tr><td colspan="4"><div class="line"></div></td></tr>
         <? } ?>
-        <tr>
+        <tr class="subtotal">
             <td colspan="3"><?=trlVps('Subtotal')?>:</td>
-            <td><?=$this->money($this->order->getSubTotal())?></td>
+            <td><?=trlVps('EUR')?> <?=$this->money($this->order->getSubTotal(),'')?></td>
         </tr>
         <tr>
             <td colspan="3"><?=trlVps('Shipping and Handling')?>:</td>
-            <td><?=$this->money($this->order->getShipping())?></td>
+            <td><?=trlVps('EUR')?> <?=$this->money($this->order->getShipping(),'')?></td>
         </tr>
-        <tr>
+        <tr class="totalAmount">
             <td colspan="3"><?=trlVps('Total Amount')?>:</td>
-            <td><?=$this->money($this->order->getTotal())?></td>
+            <td class="totalAmountPrice"><?=trlVps('EUR')?> <?=$this->money($this->order->getTotal(),'')?></td>
         </tr>
     </table>
 
-    <?=$this->componentLink($this->confirm)?>
+    <div class="confirm"><?=$this->componentLink($this->confirm)?></div>
 </div>
