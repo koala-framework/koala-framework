@@ -39,5 +39,4 @@
         </tr>
     </table>
     <div class="confirm"><?=$this->componentLink($this->confirm)?></div>
-    <div class="back"><?=$this->componentLink($this->data->getParentPage(),trlVps('Back'));?></div>
 </div>

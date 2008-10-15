@@ -3331,7 +3331,11 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Back to cart</en>
-<de>Zurück zum Warenkorb</de>
+<de>Zur&#xFC;ck zum Warenkorb</de>
+</text>
+<text>
+<en default="1">Delete</en>
+<de>Löschen</de>
 </text>
 </trl>
 
