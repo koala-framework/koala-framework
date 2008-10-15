@@ -7,15 +7,16 @@
         <?php foreach ($this->items as $item) { ?>
             <div class="product">
                 <div class="left">
-                    <div class="previewImage"><?=$this->component($item->previewImage);?></div>
+                    <div class="previewImage"><?=$this->componentLink($item, $this->component($item->previewImage));?></div>
                 </div>
                 <div class="right">
                     <div class="productName"><?=$item->row->title;?></div>
                     <div class="previewText"><?=$this->component($item->previewText);?></div>
                     <div class="detail"><?=$this->componentLink($item, trlVps('Detail info').' ...');?></div>
-                    <div class="productPrice"><?=$this->money($item->row->price);?></div>
+                </div>
+                <div class="blubb">
+                    <div class="productPrice"><?=trl('EUR')?> <?=$this->money($item->row->price,'');?></div>
                     <?=$this->component($item->addToCart);?>
-                    <div class="clear"></div>
                 </div>
             </div>
         <?php } ?>

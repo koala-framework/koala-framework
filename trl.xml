@@ -3219,11 +3219,11 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Payment</en>
-<de>_</de>
+<de>Bezahlung</de>
 </text>
 <text>
 <en default="1">Unit Price</en>
-<de>_</de>
+<de>Stückpreis</de>
 </text>
 <text>
 <en default="1">Subtotal</en>
@@ -3239,27 +3239,27 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Street</en>
-<de>_</de>
+<de>Strasse</de>
 </text>
 <text>
 <en default="1">ZIP</en>
-<de>_</de>
+<de>PLZ</de>
 </text>
 <text>
 <en default="1">City</en>
-<de>_</de>
+<de>Ort</de>
 </text>
 <text>
 <en default="1">Country</en>
-<de>_</de>
+<de>Land</de>
 </text>
 <text>
 <en default="1">Phone</en>
-<de>_</de>
+<de>Telefon</de>
 </text>
 <text>
 <en default="1">Prepayment</en>
-<de>_</de>
+<de>Vorauszahlung</de>
 </text>
 <text>
 <en default="1">Paypal</en>
@@ -3267,11 +3267,11 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Order successfully sent.</en>
-<de>_</de>
+<de>Die Bestellung wurde erfolgreich abgeschickt</de>
 </text>
 <text>
 <en default="1">Confirm</en>
-<de>_</de>
+<de>Bestätigen</de>
 </text>
 <text>
 <en default="1">Checkout</en>
@@ -3310,7 +3310,16 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <de>_</de>
 </text>
 <text>
-<en default="1">save changes</en>
-<de>Änderung speichern</de>
+<en default="1">Save changes</en>
+<de>&#xC4;nderung speichern</de>
+</text>
+<text>
+<en default="1">Send order</en>
+<de>Bestellung abschicken</de>
+</text>
+<text>
+<en default="1">EUR</en>
+<de>EUR</de>
 </text>
 </trl>
+
