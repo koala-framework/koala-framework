@@ -14,7 +14,7 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
             'name' => trlVps('Checkout')
         );
         $ret['viewCache'] = false;
-        $ret['cssClass'] = 'webStandard';
+        $ret['cssClass'] = 'webStandard webForm';
         return $ret;
     }
 
