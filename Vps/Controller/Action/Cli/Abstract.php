@@ -38,4 +38,11 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
     {
         return array();
     }
+
+    protected function _systemCheckRet($cmd)
+    {
+        $ret = null;
+        system($cmd, $ret);
+        if ($ret != 0) throw new Vps_ClientException("Aktion fehlgeschlagen");
+    }
 }
