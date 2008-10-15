@@ -60,7 +60,7 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
                 'param'=> 'type',
                 'value'=> $types,
                 'valueOptional' => true,
-                'help' => 'what to parse'
+                'help' => 'what to clear'
             )
         );
     }
