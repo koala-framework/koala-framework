@@ -38,6 +38,6 @@
             <td class="totalAmountPrice"><?=trlVps('EUR')?> <?=$this->money($this->order->getTotal(),'')?></td>
         </tr>
     </table>
-
     <div class="confirm"><?=$this->componentLink($this->confirm)?></div>
+    <div class="back"><?=$this->componentLink($this->data->getParentPage(),trlVps('Back'));?></div>
 </div>
