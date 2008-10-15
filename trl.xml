@@ -3223,7 +3223,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Unit Price</en>
-<de>Stückpreis</de>
+<de>St&#xFC;ckpreis</de>
 </text>
 <text>
 <en default="1">Subtotal</en>
@@ -3267,15 +3267,15 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Order successfully sent.</en>
-<de>Die Bestellung wurde erfolgreich abgeschickt</de>
+<de>Die Bestellung wurde erfolgreich abgeschickt.</de>
 </text>
 <text>
 <en default="1">Confirm</en>
-<de>Bestätigen</de>
+<de>Best&#xE4;tigen</de>
 </text>
 <text>
 <en default="1">Checkout</en>
-<de>_</de>
+<de>Kasse</de>
 </text>
 <text>
 <en default="1">From</en>
@@ -3319,7 +3319,15 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">EUR</en>
-<de>EUR</de>
+<de>_</de>
+</text>
+<text>
+<en default="1">Back to shop</en>
+<de>Zurück zum Shop</de>
+</text>
+<text>
+<en default="1">Back</en>
+<de>Zurück</de>
 </text>
 </trl>
 

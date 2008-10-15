@@ -8,6 +8,7 @@
     </form>
 
     <? if($this->countProducts) { ?>
+    <div class="back"><?=$this->componentLink($this->data->getParentPage(),trlVps('Back to shop'));?></div>
     <div class="checkout"><?=$this->componentLink($this->checkout, trlVps('To checkout'))?></div>
     <? } ?>
 
