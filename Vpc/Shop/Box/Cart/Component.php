@@ -5,6 +5,7 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
     {
         $ret = parent::getSettings();
         $ret['viewCache'] = false;
+        $ret['cssClass'] = 'webStandard';
         return $ret;
     }
 
