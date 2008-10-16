@@ -298,16 +298,16 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     protected function _postUpdate()
     {
         parent::_postUpdate();
-        if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_Cache::getInstance()->update($this);
+        if (Vps_Component_Data_Root::getComponentClass() && !$this->getTable()->getSkipComponentCache()) {
+            Vps_Component_RowObserver::getInstance()->update($this);
         }
     }
 
     protected function _postInsert()
     {
         parent::_postInsert();
-        if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_Cache::getInstance()->insert($this);
+        if (Vps_Component_Data_Root::getComponentClass() && !$this->getTable()->getSkipComponentCache()) {
+            Vps_Component_RowObserver::getInstance()->insert($this);
         }
     }
 
@@ -319,8 +319,8 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
            wär sonst die row (bzw. dessen Daten) in einer onRowDelete() methode
            einer Admin.php nicht mehr verfügbar
         */
-        if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_Cache::getInstance()->delete(clone $this);
+        if (Vps_Component_Data_Root::getComponentClass() && !$this->getTable()->getSkipComponentCache()) {
+            Vps_Component_RowObserver::getInstance()->delete(clone $this);
         }
     }
 }

@@ -1,13 +1,11 @@
 <?php
 class Vps_Component_Abstract_Admin
 {
-    protected $_db;
     protected $_class;
 
-    protected function __construct($class, Zend_Db_Adapter_Pdo_Mysql $db)
+    protected function __construct($class)
     {
         $this->_class = $class;
-        $this->_db = $db;
     }
 
     public static function getInstance($componentClass)
@@ -16,7 +14,7 @@ class Vps_Component_Abstract_Admin
         if (!isset($instances[$componentClass])) {
             $c = self::getComponentFile($componentClass, 'Admin', 'php', true);
             if (!$c) { return null; }
-            $instances[$componentClass] = new $c($componentClass, Zend_Registry::get('db'));
+            $instances[$componentClass] = new $c($componentClass);
         }
         return $instances[$componentClass];
     }
@@ -124,13 +122,34 @@ class Vps_Component_Abstract_Admin
     {
         $this->_onRowAction($row);
     }
-    
+
+    public function onRowSave($row)
+    {
+    }
+
     protected function _deleteCacheForRow($row)
     {
-        if (isset($row->component_id)
+        if ($row instanceof Zend_Db_Table_Row_Abstract
+            && isset($row->component_id)
             && Vpc_Abstract::hasSetting($this->_class, 'tablename')
             && Vpc_Abstract::getSetting($this->_class, 'tablename') == $row->getTableClass())
         {
+            Vps_Component_Cache::getInstance()->remove(
+                Vps_Component_Data_Root::getInstance()
+                    ->getComponentsByDbId($row->component_id, array(
+                        'ignoreVisible' => true,
+                        'componentClass'=>$this->_class)
+                    )
+            );
+        }
+        if ($row instanceof Vps_Model_Row_Interface && isset($row->component_id)) {
+            if (Vpc_Abstract::hasSetting($this->_class, 'modelname')) {
+                if (Vpc_Abstract::getSetting($this->_class, 'modelname') != get_class($row->getModel())) return;
+            } else if (Vpc_Abstract::hasSetting($this->_class, 'model')) {
+                if (Vpc_Abstract::getSetting($this->_class, 'model') !== $row->getModel()) return;
+            } else {
+                return;
+            }
             Vps_Component_Cache::getInstance()->remove(
                 Vps_Component_Data_Root::getInstance()
                     ->getComponentsByDbId($row->component_id, array(
@@ -144,8 +163,15 @@ class Vps_Component_Abstract_Admin
     protected function _onRowAction($row)
     {
         $this->_deleteCacheForRow($row);
-        if (Vpc_Abstract::hasSetting($this->_class, 'clearCacheTable')
+        if ($row instanceof Zend_Db_Table_Row_Abstract
+            && Vpc_Abstract::hasSetting($this->_class, 'clearCacheTable')
             && Vpc_Abstract::getSetting($this->_class, 'clearCacheTable') == $row->getTableClass())
+        {
+            Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
+        }
+        if ($row instanceof Vps_Model_Row_Interface
+            && Vpc_Abstract::hasSetting($this->_class, 'clearCacheModel')
+            && Vpc_Abstract::getSetting($this->_class, 'clearCacheModel') == get_class($row->getModel()))
         {
             Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
         }
@@ -153,13 +179,5 @@ class Vps_Component_Abstract_Admin
         if (isset($row->component_id)) {
             Vps_Dao_Index::updateIndex($row->component_id);
         }
-        
-        if ($row->getTable() instanceof Vps_Dao_ComponentField && 
-            Vpc_Abstract::hasSetting($this->_class, 'modelname') &&
-            Vpc_Abstract::getSetting($this->_class, 'modelname') == 'Vps_Model_Component_Field')
-        {
-            Vps_Component_Cache::getInstance()->remove($row->component_id);
-        }
-        
     }
 }

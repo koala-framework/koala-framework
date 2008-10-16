@@ -50,12 +50,12 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
             }
             $sql .= 'PRIMARY KEY (component_id))';
             $sql .= 'ENGINE=InnoDB DEFAULT CHARSET=utf8';
-            $this->_db->query($sql);
+            Vps_Registry::get('db')->query($sql);
 
             if (isset($fields['vps_upload_id'])) {
-                $this->_db->query("ALTER TABLE $tablename
+                Vps_Registry::get('db')->query("ALTER TABLE $tablename
                     ADD INDEX (vps_upload_id)");
-                $this->_db->query("ALTER TABLE $tablename
+                Vps_Registry::get('db')->query("ALTER TABLE $tablename
                     ADD FOREIGN KEY (vps_upload_id)
                     REFERENCES vps_uploads (id)
                     ON DELETE RESTRICT ON UPDATE RESTRICT");
@@ -67,6 +67,6 @@ class Vpc_Abstract_Admin extends Vps_Component_Abstract_Admin
 
     protected function _tableExists($tablename)
     {
-        return in_array($tablename, $this->_db->listTables());
+        return in_array($tablename, Vps_Registry::get('db')->listTables());
     }
 }

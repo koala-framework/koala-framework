@@ -4,6 +4,7 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
     private $_dao;
     protected $_rowClass = 'Vps_Db_Table_Row';
     protected $_rowsetClass = 'Vps_Db_Table_Rowset';
+    protected $_skipComponentCache = false;
 
     /**
      * Row-Filters für automatisch befüllte Spalten
@@ -72,5 +73,15 @@ abstract class Vps_Db_Table_Abstract extends Zend_Db_Table_Abstract
     public function select()
     {
         return new Vps_Db_Table_Select($this);
+    }
+
+    public function setSkipComponentCache($flag)
+    {
+        $this->_skipComponentCache = $flag;
+        return $this;
+    }
+    public function getSkipComponentCache()
+    {
+        return $this->_skipComponentCache;
     }
 }

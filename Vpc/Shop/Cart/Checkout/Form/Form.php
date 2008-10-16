@@ -22,12 +22,13 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
         $this->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
             ->setVType('email');
         $this->add(new Vps_Form_Field_TextField('phone', trlVps('Phone')));
-        /*
+        
         $this->add(new Vps_Form_Field_Radio('payment', trlVps('Payment')))
             ->setValues(array(
                 'prepayment'=>trlVps('Prepayment'),
-                'paypal'=>trlVps('Paypal'),
-            ));
-        */
+                //'paypal'=>trlVps('Paypal'),
+            ))
+            ->setDefaultValue('prepayment');
+        
     }
 }

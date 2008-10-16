@@ -4,7 +4,7 @@ class Vps_Dao_Pages extends Vps_Db_Table_Abstract
     protected $_name = 'vps_pages';
     protected $_rowClass = 'Vps_Dao_Row_Page';
     protected $_referenceMap = array(
-        'Page'  => array('columns' => 'parent_id',
+        'Parent'  => array('columns' => 'parent_id',
                          'refTableClass' => 'Vps_Dao_Pages',
                          'refColumns' => 'id'));
 

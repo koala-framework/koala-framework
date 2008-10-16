@@ -3,7 +3,6 @@ class Vps_View_Helper_ComponentLink
 {
     public function componentLink($m, $text = null, $cssClass = null, $get = array())
     {
-        
         if ($m instanceof Vps_Component_Data) {
             $m = $m->getPage();
             $m = array(

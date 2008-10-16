@@ -6,7 +6,7 @@ class Vps_Dao_Index extends Vps_Db_Table
 
     private static $_componentIds = array();
 
-    public function updateIndex($componentId)
+    public static function updateIndex($componentId)
     {
         static $hasIndex;
         if (is_null($hasIndex)) {

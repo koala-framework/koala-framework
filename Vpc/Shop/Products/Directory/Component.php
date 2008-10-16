@@ -5,6 +5,7 @@ class Vpc_Shop_Products_Directory_Component extends Vpc_Directories_ItemPage_Dir
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['view'] = 'Vpc_Shop_Products_View_Component';
+
         $ret['generators']['detail']['class'] = 'Vpc_Shop_Products_Directory_Generator';
         $ret['generators']['detail']['component'] = 'Vpc_Shop_Products_Detail_Component';
         $ret['generators']['detail']['dbIdShortcut'] = 'shopProducts_';
@@ -15,6 +16,7 @@ class Vpc_Shop_Products_Directory_Component extends Vpc_Directories_ItemPage_Dir
         );
 
         $ret['modelname'] = 'Vpc_Shop_Products';
+
         $ret['componentName'] = trlVps('Shop.Products');
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Shop/Products/Directory/Panel.js';
         $ret['flags']['processInput'] = true;

@@ -187,7 +187,7 @@ class Vps_Component_Abstract
                 ));
             } else if (Vpc_Abstract::hasSetting($class, 'modelname')) {
                 $modelName = Vpc_Abstract::getSetting($class, 'modelname');
-                $models[$class] = new $modelName();
+                $models[$class] = Vps_Model_Abstract::getInstance($modelName);
             } else {
                 throw new Vps_Exception("tablename and modelname not set for '$class'");
             }

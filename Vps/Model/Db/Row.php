@@ -59,11 +59,15 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         $id = $this->{$this->_getPrimaryKey()};
         if (!$id) {
             $this->_beforeInsert();
+        } else {
+            $this->_beforeUpdate();
         }
         $this->_beforeSave();
         $ret = $this->_row->save();
         if (!$id) {
             $this->_afterInsert();
+        } else {
+            $this->_afterUpdate();
         }
         $this->_afterSave();
         return $ret;
