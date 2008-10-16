@@ -1,95 +1,84 @@
 <?php
 class Vps_View_Component extends Vps_View
 {
+    private static $_loadedIds = array();
+    private static $_componentCache = array();
+   
     public function init()
     {
         parent::init();
         $this->addScriptPath('application/views');
     }
 
-    public static function renderMasterComponent($component, $masterTemplate = null, $ignoreVisible = false)
+    public static function renderMasterComponent(Vps_Component_Data $component, $masterTemplate = null, $ignoreVisible = false)
     {
         if (!$masterTemplate) $masterTemplate = 'application/views/master/default.tpl';
+        self::preloadComponentCache(array($component->componentId . '-master' => $component->getPage()->componentId));
         return self::renderComponent($component, $ignoreVisible, $masterTemplate);
     }
     
-    private static function _getComponent($componentId, $ignoreVisible)
-    {
-        return Vps_Component_Data_Root::getInstance()
-            ->getComponentById($componentId, array('ignoreVisible' => $ignoreVisible));
-    }
-
     public static function renderComponent($component, $ignoreVisible = false, $masterTemplate = false, array $plugins = array())
+    {
+        $data = self::_parseComponent($component, $ignoreVisible, $masterTemplate);
+        return self::_renderComponent($data, $ignoreVisible);
+    }
+    
+    private static function _renderComponent($data, $ignoreVisible)
+    {
+        $ret = $data['content'];
+        $preloadIds = array();
+        foreach ($data['toLoad'] as $val) {
+            $preloadIds[$val['componentId']] = $val['pageId'];
+        }
+        foreach ($data['toLoadHasContent'] as $val) {
+            $preloadIds[$val['componentId']] = $val['pageId'];
+        }
+        self::preloadComponentCache($preloadIds);
+        foreach ($data['toLoadHasContent'] as $search => $val) {
+            $content = self::_renderHasContent($val, $ignoreVisible);
+            $replace = self::_parseTemplate($content, true, $ignoreVisible);
+            $replace = self::_renderComponent($replace, $ignoreVisible);
+            $ret = str_replace($search, $replace, $ret);
+        }
+        foreach ($data['toLoad'] as $search => $val) {
+            $replace = self::renderComponent($val, $ignoreVisible);
+            $ret = str_replace($search, $replace, $ret);
+        }
+        return $ret;
+    }
+    
+    private static function _parseComponent($component, $ignoreVisible = false, $masterTemplate = false, array $plugins = array())
     {
         if ($component instanceof Vps_Component_Data) {
             $componentClass = $component->componentClass;
             $componentId = $component->componentId;
+            $pageId = $component->getPage()->componentId;
         } else {
             $componentClass = $component['componentClass'];
             $componentId = $component['componentId'];
+            $pageId = $component['pageId'];
             unset($component);
         }
         
         // Falls es Cache gibt, Cache holen
-        $cache = Vps_Component_Cache::getInstance();
-        $cacheId = $cache->getCacheIdFromComponentId($componentId, $masterTemplate);
-        static $cacheDisabled;
-        if (is_null($cacheDisabled)) {
-            $cacheDisabled = Zend_Registry::get('config')->debug->componentCache->disable;
-        }
-        if ($cacheDisabled) $cacheId = false;
-        if (!$masterTemplate && !Vpc_Abstract::getSetting($componentClass, 'viewCache')) {
-            $cacheId = false;
-        }
-
-        static $loadedPageIds = array();
-        static $componentCache = array();
-        if ($masterTemplate) {
-            if ($component->getPage()) {
-                $pageId = $component->getPage()->componentId;
+        $cacheId = Vps_Component_Cache::getInstance()->getCacheIdFromComponentId($componentId, $masterTemplate);
+        if (self::_hasCache($componentId, $componentClass)) {
+            if (isset(self::$_componentCache[$cacheId])) {
+                Vps_Benchmark::count('rendered cache (preloaded)', $componentId.($masterTemplate?' (master)':''));
+                $ret = self::$_componentCache[$cacheId];
             } else {
-                $pageId = false;
-            }
-            if (!in_array($pageId, $loadedPageIds)) {
-                $loadedPageIds[] = $pageId;
-                $pageId = $cache->getCacheIdFromComponentId($pageId);
-                $sql = "SELECT id, content FROM cache_component WHERE page_id='$pageId'";
-                $rows = Zend_Registry::get('db')->query($sql)->fetchAll();
-                foreach ($rows as $row) {
-                    $componentCache[$row['id']] = $row['content'];
-                }
-            }
-        }
-
-
-        if (isset($componentCache[$cacheId])) {
-            $ret = $componentCache[$cacheId];
-            Vps_Benchmark::count('rendered cache (preloaded)', $componentId.($masterTemplate?' (master)':''));
-        } else if (!$cacheId || ($ret = $cache->load($cacheId))===false) {
-            if (!isset($component)) {
-                $component = self::_getComponent($componentId, $ignoreVisible);
-            }
-            if ($component) {
-                if ($masterTemplate) {
-                    $ret = Vps_View_Component::_renderMasterComponent($component, $masterTemplate);
+                $loadId = $componentId;
+                if ($masterTemplate) $loadId .= '-master';
+                if (self::_shouldBeLoaded($loadId)) {
+                    $ret = self::_renderNoCache($componentId, $ignoreVisible, $masterTemplate);
                 } else {
-                    $ret = Vps_View_Component::_renderComponent($component);
+                    $ret = false;
                 }
-                if ($cacheId) {
-                    $tags = array();
-                    $tags['componentClass'] = $component->componentClass;
-                    if ($component->getPage()) $tags['pageId'] = $cache->getCacheIdFromComponentId($component->getPage()->componentId);
-                    $cache->save($ret, $cacheId, $tags);
-                }
-            } else {
-                $ret = "Component '$componentId' not found";
-                //todo: throw error
             }
-            Vps_Benchmark::count('rendered nocache', $componentId.($masterTemplate?' (master)':''));
         } else {
-            Vps_Benchmark::count('rendered cache', $componentId.($masterTemplate?' (master)':''));
+            $ret = self::_renderNoCache($componentId, $ignoreVisible, $masterTemplate);
         }
-
+                
         //plugins _nach_ im cache speichern ausführen
         foreach ($plugins as $p) {
             if (!$p) {
@@ -100,91 +89,209 @@ class Vps_View_Component extends Vps_View
         }
 
         // content-Tags ersetzen
-        preg_match_all("/{content: ([^ }]+) ([^ }]*)}(.*){content}/imsU", $ret, $matches);
-        foreach ($matches[0] as $key => $search) {
-            $componentId = $matches[2][$key];
-            $componentClass = $matches[1][$key];
-            $content = $matches[3][$key];
-
-            $cachedContent = false;
-            $cacheId = $cache->getCacheIdFromComponentId($componentId, false, true);
-            if (!$cacheDisabled) {
-                if (isset($componentCache[$cacheId])) {
-                    $cachedContent = $cache->load($cacheId);
-                } else {
-                    $cachedContent = $cache->load($cacheId);
-                }
+        return self::_parseTemplate($ret, $ignoreVisible);
+    }
+    
+    private static function _parseTemplate($ret, $ignoreVisible)
+    {
+        $toLoad = array();
+        $toLoadHasContent = array();
+        preg_match_all("/{content: ([^ }]+) ([^ }]*) ([^ }]*)}(.*){content}/imsU", $ret, $contentMatches);
+        foreach ($contentMatches[0] as $key => $search) {
+            $c = array(
+                'componentId' => $contentMatches[2][$key],
+                'componentClass' => $contentMatches[1][$key],
+                'pageId' => $contentMatches[3][$key],
+                'content' => $contentMatches[4][$key]
+            );
+            
+            $replace = self::_renderHasContent($c, $ignoreVisible);
+            if (!$replace) {
+                $replace = "{hasContent " . $c['componentId'] . "}";
+                $toLoadHasContent[$replace] = $c;
             }
-            if ($cachedContent === false) {
-                $component = self::_getComponent($componentId, $ignoreVisible);
-                if (!$component) {
-                    throw new Vps_Exception("Can't find component '$componentId'");
-                }
-                $cachedContent = $component->hasContent() ? $content : '';
-                if (!$cacheDisabled) {
-                    $cache->save($cachedContent, $cacheId, array(
-                        'componentClass'=>$componentClass,
-                        'pageId' => $cache->getCacheIdFromComponentId($component->getPage()->componentId)
-                    ));
-                }
-            }
-            $ret = str_replace($search, $cachedContent, $ret);
+            $ret = str_replace($search, $replace, $ret);
         }
         
         // nocache-Tags ersetzen
-        preg_match_all('/{nocache: ([^ }]+) ([^ }]*) ?([^}]*)}/', $ret, $matches);
-        foreach ($matches[0] as $key => $search) {
-            if ($matches[3][$key]) {
-                $plugins = explode(' ', $matches[3][$key]);
-            } else {
-                $plugins = array();
+        preg_match_all('/{nocache: ([^ }]+) ([^ }]*) ([^ }]*) ?([^}]*)}/', $ret, $nocacheMatches);
+        foreach ($nocacheMatches[0] as $key => $search) {
+            $plugins = array();
+            if ($nocacheMatches[4][$key]) {
+                $plugins = explode(' ', $nocacheMatches[4][$key]);
             }
             $c = array(
-                'componentClass' => $matches[1][$key],
-                'componentId' => $matches[2][$key]
+                'componentClass' => $nocacheMatches[1][$key],
+                'componentId' => $nocacheMatches[2][$key],
+                'pageId' => $nocacheMatches[3][$key]
             );
-            $replace = self::renderComponent($c, $ignoreVisible, false, $plugins);
-            $ret = str_replace($search, $replace, $ret);
+            $data = self::_parseComponent($c, $ignoreVisible, false, $plugins);
+            if ($data['content']) {
+                $ret = str_replace($search, $data['content'], $ret);   
+            } else {
+                $toLoad[$search] = $c;
+            }
+            $toLoad = array_merge($toLoad, $data['toLoad']);
         }
-
+        return array(
+            'content' => $ret,
+            'toLoad' => $toLoad,
+            'toLoadHasContent' => $toLoadHasContent
+        );
+    }
+    
+    private static function _renderHasContent($c, $ignoreVisible)
+    {
+        $componentId = $c['componentId'];
+        if (self::_hasCache($componentId, $c['componentClass'])) {
+            $cacheId = Vps_Component_Cache::getInstance()->getCacheIdFromComponentId($componentId, false, true);
+            if (isset(self::$_componentCache[$cacheId])) {
+                Vps_Benchmark::count('rendered cache (preloaded)', $componentId.' (hasContent)');
+                $ret = self::$_componentCache[$cacheId];
+            } else {
+                if (self::_shouldBeLoaded($componentId . '-hasContent')) {
+                    $ret = self::_renderHasContentNoCache($componentId, $ignoreVisible, $c['content']);
+                } else {
+                    $ret = false;
+                }
+            }
+        } else {
+            $ret = self::_renderHasContentNoCache($cId, $ignoreVisible, $c['content']);
+        }
         return $ret;
     }
-
-    private static function _renderComponent(Vps_Component_Data $componentData)
+    
+    private static function _renderHasContentNoCache($componentId, $ignoreVisible, $content)
     {
-        $templateVars = $componentData->getComponent()->getTemplateVars();
-        $template = Vpc_Admin::getComponentFile($componentData->componentClass, 'Component', 'tpl');
-        if (!$template) {
-            throw new Vps_Exception("No Template found for '$componentData->componentClass'");
+        $component = self::_getComponent($componentId, $ignoreVisible);
+        if (!$component) {
+            throw new Vps_Exception("Can't find component '$componentId'");
         }
-
-        if (is_null($templateVars)) {
-            throw new Vps_Exception('getTemplateVars einer Komponenten gibt null zurück. return $vars; vergessen?');
-        }
-
-        return self::_render($template, $templateVars);
-
+        $cachedContent = $component->hasContent() ? $content : '';
+        $cache = Vps_Component_Cache::getInstance();
+        $cacheId = $cache->getCacheIdFromComponentId($componentId, false, true);
+        $cache->save($cachedContent, $cacheId, array(
+            'componentClass'=>$component->componentClass,
+            'pageId' => $cache->getCacheIdFromComponentId($component->getPage()->componentId)
+        ));
+        Vps_Benchmark::count('rendered nocache', $componentId.' (hasContent)');
+        return $cachedContent;
     }
+    
+    private static function _renderNoCache($componentId, $ignoreVisible, $masterTemplate)
+    {
+        $component = self::_getComponent($componentId, $ignoreVisible);
+        
+        $cache = Vps_Component_Cache::getInstance();
+        $cacheId = $cache->getCacheIdFromComponentId($componentId, $masterTemplate);
+        
+        if ($component) {
+            if ($masterTemplate) {
+                $templateVars = array();
+                $templateVars['component'] = $component;
+                $templateVars['boxes'] = array();
+                Vps_Debug::enable();
+                foreach ($component->getChildBoxes() as $box) {
+                    $templateVars['boxes'][$box->box] = $box;
+                }
+                $ret = self::_render($masterTemplate, $templateVars);
+            } else {
+                $templateVars = $component->getComponent()->getTemplateVars();
+                $template = Vpc_Admin::getComponentFile($component->componentClass, 'Component', 'tpl');
+                if (!$template) {
+                    throw new Vps_Exception("No Template found for '$component->componentClass'");
+                }
+        
+                if (is_null($templateVars)) {
+                    throw new Vps_Exception('getTemplateVars einer Komponenten gibt null zurück. return $vars; vergessen?');
+                }
+        
+                $ret = self::_render($template, $templateVars);
+            }
+            if ($cacheId) {
+                $tags = array();
+                $tags['componentClass'] = $component->componentClass;
+                if ($component->getPage()) $tags['pageId'] = $cache->getCacheIdFromComponentId($component->getPage()->componentId);
+                $cache->save($ret, $cacheId, $tags);
+            }
+        } else {
+            $ret = "Component '$componentId' not found";
+            //todo: throw error
+        }
+        Vps_Benchmark::count('rendered nocache', $componentId.($masterTemplate?' (master)':''));
+        return $ret;
+    }
+    
+    private static function _hasCache($componentId, $componentClass)
+    {
+        static $cacheDisabled;
+        if (is_null($cacheDisabled)) {
+            $cacheDisabled = Zend_Registry::get('config')->debug->componentCache->disable;
+        }
+        if ($cacheDisabled) return false;
+        if (!Vpc_Abstract::getSetting($componentClass, 'viewCache')) {
+            return false;
+        }
+        return true;
+    }
+    
+    private static function _shouldBeLoaded($componentId)
+    {
+        $componentId = (string)$componentId;
+        if (isset(self::$_componentCache[$componentId]) ||
+            in_array($componentId, self::$_loadedIds)
+        )  {
+            return true;
+        }
+        $cutId = $componentId;
+        while ($cutId) {
+            $pos = strrpos($cutId, '-');
+            $cutId = $pos ? substr($cutId, 0, $pos) : '';
+            if (in_array($cutId, self::$_loadedIds))  {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static function preloadComponentCache($ids)
+    {
+        $parts = array();
+        foreach ($ids as $key => $val) {
+            if ($key) {
+                if (self::_shouldBeLoaded($key)) continue;
+                self::$_loadedIds[] = $key;
+                $key = Vps_Component_Cache::getInstance()->getCacheIdFromComponentId($key);
+                $val = Vps_Component_Cache::getInstance()->getCacheIdFromComponentId($val);
+                $parts[] = "(id LIKE '{$key}%' AND page_id='$val')";
+            } else {
+                self::$_loadedIds[] = $val;
+                $val = Vps_Component_Cache::getInstance()->getCacheIdFromComponentId($val);
+                $parts[] = "page_id='$val'";
+            }
+        }
+        if ($parts) {
+            $sql = "SELECT id, content FROM cache_component WHERE " . implode(' OR ', $parts);
+            Vps_Benchmark::count('preload cache', $sql);
+            $rows = Zend_Registry::get('db')->query($sql)->fetchAll();
+            foreach ($rows as $row) {
+                self::$_componentCache[$row['id']] = $row['content'];
+            }
+        }
+    }
+
+    private static function _getComponent($componentId, $ignoreVisible)
+    {
+        return Vps_Component_Data_Root::getInstance()
+            ->getComponentById($componentId, array('ignoreVisible' => $ignoreVisible));
+    }
+
     private static function _render($template, $templateVars)
     {
         $view = new Vps_View_Component();
         $view->assign($templateVars);
         return $view->render($template);
     }
-
-    private static function _renderMasterComponent(Vps_Component_Data $componentData, $masterTemplate)
-    {
-        $templateVars = array();
-        $templateVars['component'] = $componentData;
-        $templateVars['boxes'] = array();
-        Vps_Debug::enable();
-        foreach ($componentData->getChildBoxes() as $box) {
-            $templateVars['boxes'][$box->box] = $box;
-        }
-        return self::_render($masterTemplate, $templateVars);
-    }
-
-
 
     /**
      * Finds a view script from the available directories.
