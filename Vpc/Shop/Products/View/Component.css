@@ -1,16 +1,16 @@
-.$cssClass .blubb {
+.$cssClass .orderStuff {
     background: url(/assets/web/images/shop/orderStuffBg.jpg) no-repeat top left;
     width: 563px;
     height: 40px;
     padding: 0px 25px;
     padding-top: 8px;
 }
-.$cssClass .blubb .productPrice {
+.$cssClass .orderStuff .productPrice {
     float: left;
     font-weight: bold;
     width: 100px;
     padding-top: 5px;
 }
-.$cssClass .blubb button.submit {
+.$cssClass .orderStuff button.submit {
     margin-left: 25px;
 }
