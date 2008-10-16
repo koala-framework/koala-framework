@@ -187,7 +187,7 @@ class Vps_Component_Output
                 }
             }
         } else {
-            $ret = $this->_renderHasContentNoCache($cId, $ignoreVisible, $c['content']);
+            $ret = $this->_renderHasContentNoCache($componentId, $ignoreVisible, $c['content']);
         }
         return $ret;
     }
