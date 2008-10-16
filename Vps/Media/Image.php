@@ -126,7 +126,7 @@ class Vps_Media_Image
         if (!is_file($source)) {
             return false;
         }
-        $sourceSize = getimagesize($source);
+        $sourceSize = @getimagesize($source);
         if (!$sourceSize) return false;
         $size = self::calculateScaleDimensions($sourceSize, $size);
 
