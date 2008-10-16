@@ -8,15 +8,16 @@
         <? foreach ($this->items as $i) { ?>
             <div class="cartProduct">
                 <div class="cartName"><?=$this->componentLink($i->product)?></div>
-                <div class="cartSize"><?=trlVps('Size')?>: <?=$i->row->size?></div>
                 <div class="cartAmount"><?=trlVps('Amount')?>: <?=$i->row->amount?></div>
-                <div class="cartPrice"><?=trlVps('Price')?>: <?=trlVps('EUR')?> <?=$this->money($i->product->row->price*$i->row->amount, '')?></div>
+                <div class="cartSize"><?=trlVps('Size')?>: <?=$i->row->size?></div>
+                <!--<div class="cartPrice"><?=trlVps('Price')?>: <?=trlVps('EUR')?> <?=$this->money($i->product->row->price*$i->row->amount, '')?></div>-->
                 <div class="clear"></div>
             </div>
         <? } ?>
         <div class="moneyInfo">
-            <?=trlVps('Shipping and Handling')?>: <?=trlVps('EUR')?> <?=$this->money($this->order->getShipping(),'')?><br />
-            <?=trlVps('Total Amount')?>: <strong><?=trlVps('EUR')?> <?=$this->money($this->order->getTotal(),'')?></strong>
+            <div class="shippingText"><?=trlVps('Shipping and Handling')?>:</div><div class="shippingPrice"><?=trlVps('EUR')?> <?=$this->money($this->order->getShipping(),'')?></div><br />
+            <div class="amountText"><?=trlVps('Total Amount')?>:</div><div class="amountPrice"><strong><?=trlVps('EUR')?> <?=$this->money($this->order->getTotal(),'')?></strong></div>
+            <div class="clear"></div>
         </div>
     </div>
     <div class="cartOrder">
