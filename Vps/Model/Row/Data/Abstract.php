@@ -25,7 +25,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         if ($this->_model->getColumns() && !in_array($name, $this->_model->getColumns())) {
             parent::__unset($name);
         } else {
-            unset($this->_row->$name);
+            unset($this->_data[$name]);
         }
     }
 

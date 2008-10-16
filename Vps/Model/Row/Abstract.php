@@ -182,7 +182,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         if (method_exists($this, '__toString')) {
             $i .= " (".$this->__toString().")\n";
         }
-        $ret = print_r($this->_data, true);
+        $ret = print_r($this->toArray(), true);
         $ret = preg_replace('#^Array#', $i, $ret);
         $ret = "<pre>$ret</pre>";
         return $ret;

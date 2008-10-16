@@ -18,6 +18,6 @@ class Vps_Model_FnF extends Vps_Model_Data_Abstract
 
     public function isEqual(Vps_Model_Interface $other)
     {
-        return false;
+        return $this === $other;
     }
 }

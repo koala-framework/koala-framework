@@ -5,11 +5,15 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     protected $_data = array();
     protected $_autoId;
+    protected $_columns = array();
+    protected $_primaryKey = 'id';
 
     public function __construct(array $config = array())
     {
         if (isset($config['data'])) $this->setData($config['data']);
         if (isset($config['autoId'])) (int)$this->_autoId = $config['autoId'];
+        if (isset($config['columns'])) $this->_columns = (array)$config['columns'];
+        if (isset($config['primaryKey'])) $this->_primaryKey = (string)$config['primaryKey'];
         parent::__construct($config);
     }
 
@@ -136,5 +140,21 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             }
         }
         return true;
+    }
+
+    public function getPrimaryKey()
+    {
+        return $this->_primaryKey;
+    }
+
+    public function getColumns()
+    {
+        return $this->_columns;
+    }
+
+    public function setColumns(array $columns)
+    {
+        $this->_columns = $columns;
+        return $this;
     }
 }

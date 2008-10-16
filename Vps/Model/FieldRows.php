@@ -5,7 +5,6 @@ class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
     protected $_rowClass = 'Vps_Model_FieldRows_Row';
     protected $_rowsetClass = 'Vps_Model_FieldRows_Rowset';
     protected $_fieldName;
-    protected $_data;
 
     public function __construct(array $config = array())
     {

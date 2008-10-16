@@ -1,0 +1,66 @@
+<?php
+class Vps_Model_Proxy extends Vps_Model_Abstract
+{
+    protected $_proxyModel;
+    protected $_rowClass = 'Vps_Model_Proxy_Row';
+    protected $_rowsetClass = 'Vps_Model_Proxy_Rowset';
+
+    public function __construct(array $config = array())
+    {
+        if (isset($config['proxyModel'])) $this->_proxyModel = $config['proxyModel'];
+        parent::__construct($config);
+    }
+
+    public function createRow(array $data=array())
+    {
+        $proxyRow = $this->_proxyModel->createRow($data);
+        return new $this->_rowClass(array(
+            'row' => $proxyRow,
+            'model' => $this
+        ));
+    }
+
+    public function getPrimaryKey()
+    {
+        return $this->_proxyModel->getPrimaryKey();
+    }
+
+    public function isEqual(Vps_Model_Interface $other)
+    {
+        if (get_class($other) == get_class($this)
+            && $this->_proxyModel->isEqual($other->_proxyModel)
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getColumns()
+    {
+        return $this->_proxyModel->getColumns();
+    }
+
+    public function hasColumn($col)
+    {
+        if ($this->_proxyModel->hasColumn($col)) return true;
+        foreach ($this->getSiblingModels() as $m) {
+            if ($m->hasColumn($col)) return true;
+        }
+        return false;
+    }
+
+    public function getRows($where=null, $order=null, $limit=null, $start=null)
+    {
+        $proxyRowset = $this->_proxyModel->getRows($where, $order, $limit, $start);
+        return new $this->_rowsetClass(array(
+            'rowset' => $proxyRowset,
+            'rowClass' => $this->_rowClass,
+            'model' => $this
+        ));
+    }
+
+    public function countRows($where = array())
+    {
+        return $this->_proxyModel->countRows($where);
+    }
+}

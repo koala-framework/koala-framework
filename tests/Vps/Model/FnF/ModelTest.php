@@ -1,6 +1,22 @@
 <?php
+/**
+ * @group Model_FnF
+ */
 class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
 {
+    public function testRowUnset()
+    {
+        $fnf = new Vps_Model_FnF(array(
+            'data' => array(
+                array('id' => 4, 'names' => 'foo')
+            ),
+            'columns' => array('id', 'names')
+        ));
+
+        $row = $fnf->getRow(4);
+        unset($row->names);
+    }
+
     public function testData()
     {
         $model = new Vps_Model_FnF();
@@ -175,5 +191,14 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
             array('id'=>1, 'foo'=>''),
             array('id'=>10, 'foo'=>'bar2')
         ));
+    }
+
+    public function testIsEqual()
+    {
+        $fnf1 = new Vps_Model_FnF();
+        $fnf2 = new Vps_Model_FnF();
+        $this->assertTrue($fnf1->isEqual($fnf1));
+        $this->assertFalse($fnf1->isEqual($fnf2));
+        $this->assertFalse($fnf2->isEqual($fnf1));
     }
 }

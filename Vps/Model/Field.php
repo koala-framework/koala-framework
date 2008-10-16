@@ -4,12 +4,14 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
     protected $_rowClass = 'Vps_Model_Field_Row';
     protected $_rowsetClass = 'Vps_Model_Field_Rowset';
     protected $_fieldName;
+    protected $_columns = array();
 
     public function __construct(array $config = array())
     {
         if (isset($config['fieldName'])) {
             $this->_fieldName = $config['fieldName'];
         }
+        if (isset($config['columns'])) $this->_columns = (array)$config['columns'];
         parent::__construct($config);
     }
 
@@ -31,6 +33,16 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
     public function isEqual(Vps_Model_Interface $other)
     {
         throw new Vps_Exception('isEqual is not possible for Vps_Model_Field');
+    }
+
+    public function getPrimaryKey()
+    {
+        return null;
+    }
+
+    public function getColumns()
+    {
+        return $this->_columns;
     }
 
     public function getRowBySiblingRow(Vps_Model_Row_Interface $siblingRow)
