@@ -25,6 +25,16 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
         }
         return $ret;
     }
+
+    public function getTotalAmount()
+    {
+        $ret = 0;
+        foreach ($this->getChildRows('Products') as $op) {
+            $ret += $op->amount;
+        }
+        return $ret;
+    }
+
     public function getTotal()
     {
         return $this->getShipping() + $this->getSubTotal();
