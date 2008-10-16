@@ -3341,5 +3341,21 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en default="1">Shop.Cart</en>
 <de>Shop - Warenkorb</de>
 </text>
+<text>
+<en default="1">Mr.</en>
+<de>Herr</de>
+</text>
+<text>
+<en default="1">Mrs.</en>
+<de>Frau</de>
+</text>
+<text>
+<en default="1">Degree</en>
+<de>Titel</de>
+</text>
+<text context="people">
+<en default="1">Title</en>
+<de>Anrede</de>
+</text>
 </trl>
 
