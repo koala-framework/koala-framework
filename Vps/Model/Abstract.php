@@ -6,9 +6,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     protected $_default = array();
     protected $_siblingModels = array();
     protected $_dependentModels = array();
-    protected $_columns = array();
     protected $_referenceMap = array();
-    protected $_primaryKey = 'id';
 
     /**
      * Row-Filters für automatisch befüllte Spalten
@@ -25,8 +23,6 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function __construct(array $config = array())
     {
         if (isset($config['default'])) $this->_default = (array)$config['default'];
-        if (isset($config['columns'])) $this->_columns = (array)$config['columns'];
-        if (isset($config['primaryKey'])) $this->_primaryKey = (string)$config['primaryKey'];
         if (isset($config['siblingModels'])) $this->_siblingModels = (array)$config['siblingModels'];
         if (isset($config['dependentModels'])) $this->_dependentModels = (array)$config['dependentModels'];
         if (isset($config['filters'])) $this->_filters = (array)$config['filters'];
@@ -130,11 +126,6 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     }
 
 
-    public function getPrimaryKey()
-    {
-        return $this->_primaryKey;
-    }
-
     public function getDefault()
     {
         return $this->_default;
@@ -160,20 +151,10 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $ret;
     }
 
-    public function getColumns()
-    {
-        return $this->_columns;
-    }
-    public function setColumns(array $columns)
-    {
-        $this->_columns = $columns;
-        return $this;
-    }
-
     public function hasColumn($col)
     {
-        if (!$this->_columns) return true;
-        if (in_array($col, $this->_columns)) return true;
+        if (!$this->getColumns()) return true;
+        if (in_array($col, $this->getColumns())) return true;
         foreach ($this->getSiblingModels() as $m) {
             if ($m->hasColumn($col)) return true;
         }

@@ -1,7 +1,6 @@
 <?php
-class Vps_Model_Mail extends Vps_Model_FnF //Vps_Model_Db
+class Vps_Model_Mail extends Vps_Model_FnF
 {
-//     protected $_tableName = 'Vps_Model_Mail_Table';
     protected $_rowClass = 'Vps_Model_Mail_Row';
 
     protected $_mailTemplate;
