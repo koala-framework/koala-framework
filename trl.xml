@@ -3207,7 +3207,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Shop.Products</en>
-<de>_</de>
+<de>Shop - Produkte</de>
 </text>
 <text>
 <en default="1">The product has been added the the cart successfully.</en>
@@ -3335,7 +3335,11 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Delete</en>
-<de>Löschen</de>
+<de>L&#xF6;schen</de>
+</text>
+<text>
+<en default="1">Shop.Cart</en>
+<de>Shop - Warenkorb</de>
 </text>
 </trl>
 
