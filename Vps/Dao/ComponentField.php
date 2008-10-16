@@ -1,8 +1,15 @@
 <?php
-class Vps_Dao_ComponentField extends Vps_Db_Table
+class Vps_Dao_ComponentField extends Vps_Model_Db
 {
-    protected $_name = 'vpc_data';
-    protected $_primary = 'component_id';
+    protected $_table = 'vpc_data';
+
+    protected function _init()
+    {
+        parent::_init();
+        $this->_siblingModels[] = new Vps_Model_Field(array(
+            'fieldName' => 'data'
+        ));
+    }
     
     // TODO
     // Kopie von Vpc_Table

@@ -33,7 +33,7 @@ class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
         Vpc_Admin::getInstance($detail)->setup();
 
         if (!$this->_tableExists('vpc_news')) {
-            $this->_db->query("CREATE TABLE IF NOT EXISTS `vpc_news` (
+            Vps_Registry::get('db')->query("CREATE TABLE IF NOT EXISTS `vpc_news` (
   `id` smallint(6) NOT NULL auto_increment,
   `component_id` varchar(255) collate utf8_unicode_ci NOT NULL,
   `visible` tinyint(4) NOT NULL,

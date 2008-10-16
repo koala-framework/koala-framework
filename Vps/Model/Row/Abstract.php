@@ -196,6 +196,21 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     protected function _afterSave()
     {
         $this->_updateFilters(true);
+        if (Vps_Component_Data_Root::getComponentClass()) {
+            Vps_Component_RowObserver::getInstance()->save($this);
+        }
+    }
+
+    protected function _beforeUpdate()
+    {
+    }
+
+    protected function _afterUpdate()
+    {
+        $this->_updateFilters(true);
+        if (Vps_Component_Data_Root::getComponentClass()) {
+            Vps_Component_RowObserver::getInstance()->update($this);
+        }
     }
 
     protected function _beforeInsert()
@@ -204,6 +219,31 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
 
     protected function _afterInsert()
     {
+        if (Vps_Component_Data_Root::getComponentClass()) {
+            Vps_Component_RowObserver::getInstance()->insert($this);
+        }
+    }
+
+    protected function _beforeDelete()
+    {
+        $filters = $this->getModel()->getFilters();
+        foreach($filters as $k=>$f) {
+            if ($f instanceof Vps_Filter_Row_Abstract) {
+                $f->onDeleteRow($this);
+            }
+        }
+    }
+
+    protected function _afterDelete()
+    {
+        /* Das clone vor dem $this is zwar bisserl eine verarsche, aber da im
+           Vps_Component_Cache nur gesammelt und später erst ausgeführt ist,
+           wär sonst die row (bzw. dessen Daten) in einer onRowDelete() methode
+           einer Admin.php nicht mehr verfügbar
+        */
+        if (Vps_Component_Data_Root::getComponentClass()) {
+            Vps_Component_RowObserver::getInstance()->delete(clone $this);
+        }
     }
 
     private function _updateFilters($filterAfterSave = false)
@@ -232,18 +272,5 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         $this->_skipFilters = true;
         $this->save();
         $this->_skipFilters = false;
-    }
-
-    protected function _beforeDelete()
-    {
-        $filters = $this->getModel()->getFilters();
-        foreach($filters as $k=>$f) {
-            if ($f instanceof Vps_Filter_Row_Abstract) {
-                $f->onDeleteRow($this);
-            }
-        }
-    }
-    protected function _afterDelete()
-    {
     }
 }

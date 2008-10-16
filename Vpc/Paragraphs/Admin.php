@@ -43,7 +43,7 @@ class Vpc_Paragraphs_Admin extends Vpc_Admin
     {
         $tablename = 'vpc_paragraphs';
         if (!$this->_tableExists($tablename)) {
-          $this->_db->query("CREATE TABLE `$tablename` (
+            Vps_Registry::get('db')->query("CREATE TABLE `$tablename` (
                   `id` int(10) unsigned NOT NULL auto_increment,
                   `component_id` varchar(255) NOT NULL,
                   `component` varchar(255) NOT NULL,

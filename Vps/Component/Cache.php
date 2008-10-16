@@ -7,12 +7,6 @@ class Vps_Component_Cache extends Zend_Cache_Core
     
     static private $_instance;
     private $_backend;
-    private $_process = array(
-        'insert' => array(), 
-        'update' => array(), 
-        'delete' => array()
-    );
-    private $_processed = false;
     private $_preloadedValues = array();
     
     public function __construct()
@@ -30,18 +24,6 @@ class Vps_Component_Cache extends Zend_Cache_Core
         $this->setBackend($this->_backend);
     }
 
-    public function __destruct()
-    {
-        if (!$this->_processed && $this->_process != array(
-            'insert' => array(), 
-            'update' => array(), 
-            'delete' => array()
-        )) {
-            //exceptions funktionieren im destruktor nicht
-            d("There are unprocessed cache-actions, you must call process() somewhere");
-        }
-    }
-    
     public static function getInstance()
     {
         if (!self::$_instance) {
@@ -49,39 +31,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
         }
         return self::$_instance;
     }
-    
-    public function insert($row)
-    {
-        if ($this->_processed) throw new Vps_Exception("ComponentCache: allready processed");
-        $this->_process['insert'][] = $row;
-    }
-    
-    public function update($row)
-    {
-        if ($this->_processed) throw new Vps_Exception("ComponentCache: allready processed");
-        $this->_process['update'][] = $row;
-    }
-    
-    public function delete($row)
-    {
-        if ($this->_processed) throw new Vps_Exception("ComponentCache: allready processed");
-        $this->_process['delete'][] = $row;
-    }
-    
-    public function process($isLastCall = true)
-    {
-        $this->_processed = $isLastCall;
-        foreach ($this->_process as $action => $process) {
-            foreach ($process as $row) {
-                foreach (Vpc_Abstract::getComponentClasses() as $c) {
-                    $method = 'onRow' . ucfirst($action);
-                    Vpc_Admin::getInstance($c)->$method($row);
-                }
-            }
-        }
-        Vps_Dao_Index::process();
-    }
-    
+
     public function removeByIdPattern($idPattern, $componentClass = null)
     {
         $this->_backend->clean(self::CLEANING_MODE_ID_PATTERN, 

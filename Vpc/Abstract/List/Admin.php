@@ -25,7 +25,7 @@ class Vpc_Abstract_List_Admin extends Vpc_Admin
               `visible` tinyint(4) NOT NULL,
               PRIMARY KEY  (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;';
-            $this->_db->query($sql);
+            Vps_Registry::get('db')->query($sql);
         }
     }
 

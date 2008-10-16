@@ -243,7 +243,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                 $i->getComponent()->processInput($postData);
             }
         }
-        Vps_Component_Cache::getInstance()->process(false);
+        Vps_Component_RowObserver::getInstance()->process(false);
 
         echo Vps_View_Component::renderMasterComponent($this->getData(), $masterTemplate, $ignoreVisible);
 
@@ -252,7 +252,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
                 $i->getComponent()->postProcessInput($postData);
             }
         }
-        Vps_Component_Cache::getInstance()->process();
+        Vps_Component_RowObserver::getInstance()->process();
     }
     
     /**
@@ -266,7 +266,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $ret['placeholder'] = $this->_getSetting('placeholder');
         $ret['cssClass'] = self::getCssClass($this);
         $ret['data'] = $this->getData();
-        if ($this->_hasSetting('modelname') && $this->getModel() instanceof Vps_Model_Component_Field) {
+        if ($this->_hasSetting('modelname') && $this->getModel() instanceof Vps_Dao_ComponentField) {
             $ret['row'] = $this->_getRow();
         }
         return $ret;
