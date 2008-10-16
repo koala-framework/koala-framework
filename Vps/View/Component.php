@@ -156,7 +156,7 @@ class Vps_View_Component extends Vps_View
                 }
             }
         } else {
-            $ret = self::_renderHasContentNoCache($cId, $ignoreVisible, $c['content']);
+            $ret = self::_renderHasContentNoCache($componentId, $ignoreVisible, $c['content']);
         }
         return $ret;
     }
