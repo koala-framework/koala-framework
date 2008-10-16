@@ -97,3 +97,13 @@
     margin-left: 10px;
     margin-right: 20px;
 }
+.ext-ie .$cssClass .form_title {
+    margin-top: -5px;
+    padding-bottom: 5px;
+}
+.ext-ie .$cssClass .form_title label {
+    margin-top: 5px;
+}
+.ext-ie .$cssClass .form_title input {
+    margin-bottom: 0px;
+}
