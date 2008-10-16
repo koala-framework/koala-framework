@@ -54,7 +54,7 @@ class Vps_Component_Output
         $ret = $data['content'];
         $preloadIds = array();
         foreach ($data['toLoad'] as $val) {
-            $componentId = $this->getCache()->getCacheIdFromComponentId($val['componentId']);
+            $componentId = $this->getCache()->getCacheIdFromComponentId($val['componentId'], $val['masterTemplate']);
             $pageId = $this->getCache()->getCacheIdFromComponentId($val['pageId']);
             $preloadIds[$componentId] = $pageId;
         }
@@ -71,7 +71,7 @@ class Vps_Component_Output
             $ret = str_replace($search, $replace, $ret);
         }
         foreach ($data['toLoad'] as $search => $val) {
-            $replace = $this->_render($val, $ignoreVisible, false, $val['plugins']);
+            $replace = $this->_render($val, $ignoreVisible, $val['masterTemplate'], $val['plugins']);
             $ret = str_replace($search, $replace, $ret);
         }
         return $ret;
@@ -89,9 +89,10 @@ class Vps_Component_Output
             $pageId = $component['pageId'];
             unset($component);
         }
-        
+
         // Falls es Cache gibt, Cache holen
         $cacheId = $this->getCache()->getCacheIdFromComponentId($componentId, $masterTemplate);
+        
         if ($this->_useCache($componentId, $componentClass)) {
             if ($this->getCache()->isLoaded($cacheId)) {
                 Vps_Benchmark::count('rendered cache (preloaded)', $componentId.($masterTemplate?' (master)':''));
@@ -100,7 +101,19 @@ class Vps_Component_Output
                 if ($this->getCache()->shouldBeLoaded($cacheId)) {
                     $ret = $this->_renderNoCache($componentId, $ignoreVisible, $masterTemplate);
                 } else {
-                    $ret = false;
+                    $content = "{empty: $componentId}";
+                    return array(
+                        'content' => $content,
+                        'toLoad' => array($content => array(
+                            'componentClass' => $componentClass,
+                            'componentId' => $componentId,
+                            'pageId' => $pageId,
+                            'masterTemplate' => $masterTemplate,
+                            'plugins' => $plugins,
+                        )),
+                        'toLoadHasContent' => array(),
+                        'notfound' => true
+                    );
                 }
             }
         } else {
@@ -109,13 +122,13 @@ class Vps_Component_Output
                 
         //plugins _nach_ im cache speichern ausführen
         if ($ret) {
-            foreach ($plugins as $p) {
-                if (!$p) {
-                    throw new Vps_Exception("Invalid Plugin specified '$p'");
-                }
-                $p = new $p($componentId);
-                $ret = $p->processOutput($ret);
+        foreach ($plugins as $p) {
+            if (!$p) {
+                throw new Vps_Exception("Invalid Plugin specified '$p'");
             }
+            $p = new $p($componentId);
+            $ret = $p->processOutput($ret);
+        }
         }
         
         // content-Tags ersetzen
@@ -154,20 +167,18 @@ class Vps_Component_Output
                 'componentClass' => $nocacheMatches[1][$key],
                 'componentId' => $nocacheMatches[2][$key],
                 'pageId' => $nocacheMatches[3][$key],
-                'plugins' => $plugins
+                'plugins' => $plugins,
+                'masterTemplate' => false
             );
             $data = $this->_parseComponent($c, $ignoreVisible, false, $plugins);
-            if ($data['content']) {
-                $ret = str_replace($search, $data['content'], $ret);   
-            } else {
-                $toLoad[$search] = $c;
-            }
+            $ret = str_replace($search, $data['content'], $ret);   
             $toLoad = array_merge($toLoad, $data['toLoad']);
         }
         return array(
             'content' => $ret,
             'toLoad' => $toLoad,
-            'toLoadHasContent' => $toLoadHasContent
+            'toLoadHasContent' => $toLoadHasContent,
+            'notfound' => false
         );
     }
     

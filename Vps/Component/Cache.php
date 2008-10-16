@@ -132,9 +132,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
     
     public function preload($ids)
     {
-        $this->_preloadedValues = array_merge(
-            $this->_preloadedValues, $this->_preload($ids)
-        );
+        $this->_preloadedValues = $this->_preloadedValues + $this->_preload($ids);
     }
     
     protected function _preload($ids)
@@ -147,7 +145,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
                 $values[$key] = null;
             } else {
                 $parts[] = "page_id='$val'";
-                $values[$val] = null;
+                $values[(string)$val] = null;
             }
         }
         if ($parts) {
@@ -155,7 +153,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
             Vps_Benchmark::count('preload cache', $sql);
             $rows = Zend_Registry::get('db')->query($sql)->fetchAll();
             foreach ($rows as $row) {
-                $values[$row['id']] = $row['content'];
+                $values[(string)$row['id']] = $row['content'];
             }
         }
         return $values;
@@ -164,7 +162,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
     public function shouldBeLoaded($cacheId)
     {
         $cacheId = (string)$cacheId;
-        if (isset($this->_preloadedValues[$cacheId])) {
+        if (array_key_exists($cacheId, $this->_preloadedValues)) {
             return true;
         }
         $cutId = $cacheId;
@@ -180,9 +178,8 @@ class Vps_Component_Cache extends Zend_Cache_Core
     
     public function isLoaded($cacheId)
     {
-        return 
-            isset($this->_preloadedValues[$cacheId]) &&
-            !is_null($this->_preloadedValues[$cacheId]);
+        $cacheId = (string)$cacheId;
+        return isset($this->_preloadedValues[$cacheId]);
     }
     
     public function getCacheIdFromComponentId($componentId, $masterTemplate = false, $isHasContent = false)

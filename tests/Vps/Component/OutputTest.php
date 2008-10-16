@@ -23,8 +23,6 @@ class Vps_Component_OutputTest extends PHPUnit_Framework_TestCase
         foreach ($ids as $key => $val) {
             if (isset($templates[$key])) {
                 $ret[$key] = $templates[$key];
-            } else {
-                $ret[$key] = 'not found';
             }
         }
         return $ret;
