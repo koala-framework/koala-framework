@@ -13,6 +13,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
         'delete' => array()
     );
     private $_processed = false;
+    private $_preloadedValues = array();
     
     public function __construct()
     {
@@ -26,13 +27,16 @@ class Vps_Component_Cache extends Zend_Cache_Core
             'table' => 'cache_component',
             'adapter' => Vps_Registry::get('db')
         ));
-        
         $this->setBackend($this->_backend);
     }
 
     public function __destruct()
     {
-        if (!$this->_processed && $this->_process) {
+        if (!$this->_processed && $this->_process != array(
+            'insert' => array(), 
+            'update' => array(), 
+            'delete' => array()
+        )) {
             //exceptions funktionieren im destruktor nicht
             d("There are unprocessed cache-actions, you must call process() somewhere");
         }
@@ -130,9 +134,13 @@ class Vps_Component_Cache extends Zend_Cache_Core
         $this->_backend->clean(self::CLEANING_MODE_COMPONENT_CLASS, $componentClass);
         Vps_Benchmark::info("Kompletter Cache für Komponente '$componentClass' gelöscht.");
     }
-
+    
     public function load($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
     {
+        if ($this->isLoaded($id)) {
+            return $this->_preloadedValues[$id];
+        }
+        
         //TODO: nicht test() aufrufen, macht 2. sql abfrage
         if (!$this->test($id)) {
             return false;
@@ -165,6 +173,66 @@ class Vps_Component_Cache extends Zend_Cache_Core
             }
         }
         return $lastModified;
+    }
+    
+    public function emptyPreload()
+    {
+        $this->_preloadedValues = array();
+    }
+    
+    public function preload($ids)
+    {
+        $this->_preloadedValues = array_merge(
+            $this->_preloadedValues, $this->_preload($ids)
+        );
+    }
+    
+    protected function _preload($ids)
+    {
+        $parts = array();
+        $values = array();
+        foreach ($ids as $key => $val) {
+            if ($key) {
+                $parts[] = "(id LIKE '{$key}%' AND page_id='$val')";
+                $values[$key] = null;
+            } else {
+                $parts[] = "page_id='$val'";
+                $values[$val] = null;
+            }
+        }
+        if ($parts) {
+            $sql = "SELECT id, content FROM cache_component WHERE " . implode(' OR ', $parts);
+            Vps_Benchmark::count('preload cache', $sql);
+            $rows = Zend_Registry::get('db')->query($sql)->fetchAll();
+            foreach ($rows as $row) {
+                $values[$row['id']] = $row['content'];
+            }
+        }
+        return $values;
+    }
+    
+    public function shouldBeLoaded($cacheId)
+    {
+        $cacheId = (string)$cacheId;
+        if (isset($this->_preloadedValues[$cacheId])) {
+            return true;
+        }
+        $cutId = $cacheId;
+        while ($cutId) {
+            $pos = strrpos($cutId, '-');
+            $cutId = $pos ? substr($cutId, 0, $pos) : '';
+            if (in_array($cutId, array_keys($this->_preloadedValues)))  {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public function isLoaded($cacheId)
+    {
+        return 
+            isset($this->_preloadedValues[$cacheId]) &&
+            !is_null($this->_preloadedValues[$cacheId]);
     }
     
     public function getCacheIdFromComponentId($componentId, $masterTemplate = false, $isHasContent = false)
