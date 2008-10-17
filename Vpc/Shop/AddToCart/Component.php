@@ -13,7 +13,7 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Form_Component
     {
         $ret = parent::getTemplateVars();
         if ($this->_form->getId()) {
-            $ret['placeholder']['submitButton'] = trlVps('Save changes');
+            $ret['placeholder']['submitButton'] = trlVps('Update');
         }
         return $ret;
     }

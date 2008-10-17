@@ -5,7 +5,7 @@ class Vpc_Shop_Cart_Checkout_Form_Component extends Vpc_Form_Component
     {
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['success'] = 'Vpc_Shop_Cart_Checkout_Form_Success_Component';
-        $ret['placeholder']['submitButton'] = trlVps('Confirm');
+        $ret['placeholder']['submitButton'] = trlVps('Order');
         return $ret;
     }
 

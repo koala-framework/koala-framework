@@ -10,17 +10,25 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
             ->setValues(array(
                 'male'   => trlVps('Mr.'),
                 'female' => trlVps('Mrs.')
-            ));
+            ))
+            ->setAllowBlank(false);
         $this->add(new Vps_Form_Field_TextField('title', trlVps('Title')));
-        $this->add(new Vps_Form_Field_TextField('firstname', trlVps('First name')));
-        $this->add(new Vps_Form_Field_TextField('lastname', trlVps('Last name')));
-        $this->add(new Vps_Form_Field_TextField('street', trlVps('Street')));
-        $this->add(new Vps_Form_Field_TextField('zip', trlVps('ZIP')));
-        $this->add(new Vps_Form_Field_TextField('city', trlVps('City')));
+        $this->add(new Vps_Form_Field_TextField('firstname', trlVps('First name')))
+            ->setAllowBlank(false);
+        $this->add(new Vps_Form_Field_TextField('lastname', trlVps('Last name')))
+            ->setAllowBlank(false);
+        $this->add(new Vps_Form_Field_TextField('street', trlVps('Street')))
+            ->setAllowBlank(false);
+        $this->add(new Vps_Form_Field_TextField('zip', trlVps('ZIP')))
+            ->setAllowBlank(false);
+        $this->add(new Vps_Form_Field_TextField('city', trlVps('City')))
+            ->setAllowBlank(false);
         $this->add(new Vps_Form_Field_SelectCountry('country', trlVps('Country')))
-            ->setDefaultValue('AT');
+            ->setDefaultValue('AT')
+            ->setAllowBlank(false);
         $this->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
-            ->setVType('email');
+            ->setVType('email')
+            ->setAllowBlank(false);
         $this->add(new Vps_Form_Field_TextField('phone', trlVps('Phone')));
         
         $this->add(new Vps_Form_Field_Radio('payment', trlVps('Payment')))

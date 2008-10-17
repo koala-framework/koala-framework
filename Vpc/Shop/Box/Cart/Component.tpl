@@ -8,9 +8,9 @@
         <? foreach ($this->items as $i) { ?>
             <div class="cartProduct">
                 <div class="cartName"><?=$this->componentLink($i->product)?></div>
+                <div class="cartPrice"><?=trlVps('EUR')?> <?=$this->money($i->product->row->price*$i->row->amount, '')?></div>
                 <div class="cartAmount"><?=trlVps('Amount')?>: <?=$i->row->amount?></div>
                 <div class="cartSize"><?=trlVps('Size')?>: <?=$i->row->size?></div>
-                <!--<div class="cartPrice"><?=trlVps('Price')?>: <?=trlVps('EUR')?> <?=$this->money($i->product->row->price*$i->row->amount, '')?></div>-->
                 <div class="clear"></div>
             </div>
         <? } ?>
