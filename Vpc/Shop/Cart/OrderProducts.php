@@ -1,6 +1,7 @@
 <?php
 class Vpc_Shop_Cart_OrderProducts extends Vps_Model_Db
 {
+    protected $_rowClass = 'Vpc_Shop_Cart_OrderProduct';
     protected $_table = 'vpc_shop_order_products';
     protected $_referenceMap = array(
         'Order' => array(

@@ -39,4 +39,21 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     {
         return $this->getShipping() + $this->getSubTotal();
     }
+
+    public function getOrderNumber()
+    {
+        return $this->id + 11000;
+    }
+
+    public function getSalutation()
+    {
+        $ret = '';
+        if ($this->sex == 'male') {
+            $ret .= trlVps('Mr.');
+        } else {
+            $ret .= trlVps('Mrs.');
+        }
+        $ret .= ' '.trim($this->title.' '.$this->lastname);
+        return $ret;
+    }
 }

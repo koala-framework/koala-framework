@@ -31,7 +31,7 @@ class Vpc_Shop_Cart_Component extends Vpc_Directories_Item_Directory_Component
     {
         if (!$order) $order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
                                         ->getCartOrder();
-                                        
+        if ($order->payment == 'cashOnDelivery') return 6;
         if ($order->getTotalAmount() >= 2) {
             return 0;
         } else {

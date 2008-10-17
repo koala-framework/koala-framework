@@ -2,5 +2,7 @@
     <div class="productTitle"><?=trlVps('Product')?>: <?=$this->componentLink($this->product)?></div>
     <div class="price"><strong><?=trlVps('EUR')?> <?=$this->money($this->product->row->price,'')?></strong></div>
     <div class="info"><?=$this->component($this->form)?></div>
-    <div class="deleteProduct"><?=trlVps('Delete')?></div>
+    <div class="deleteProduct">
+        <button type="submit" name="<?=$this->data->componentId?>" value="delete"><?= trlVps('Delete') ?></button>
+    </div>
 </div>

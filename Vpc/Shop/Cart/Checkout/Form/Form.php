@@ -6,12 +6,12 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
     protected function _initFields()
     {
         parent::_initFields();
-        $this->add(new Vps_Form_Field_Radio('title', trlcVps('people','Title')))
+        $this->add(new Vps_Form_Field_Radio('sex', trlcVps('sex', 'Title')))
             ->setValues(array(
-                'mr'=>trlVps('Mr.'),
-                'mrs'=>trlVps('Mrs.'),
+                'male'   => trlVps('Mr.'),
+                'female' => trlVps('Mrs.')
             ));
-        $this->add(new Vps_Form_Field_TextField('degree', trlVps('Degree')));
+        $this->add(new Vps_Form_Field_TextField('title', trlVps('Title')));
         $this->add(new Vps_Form_Field_TextField('firstname', trlVps('First name')));
         $this->add(new Vps_Form_Field_TextField('lastname', trlVps('Last name')));
         $this->add(new Vps_Form_Field_TextField('street', trlVps('Street')));
@@ -26,6 +26,7 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
         $this->add(new Vps_Form_Field_Radio('payment', trlVps('Payment')))
             ->setValues(array(
                 'prepayment'=>trlVps('Prepayment'),
+                'cashOnDelivery'=>trlVps('Nachnahme'),
                 //'paypal'=>trlVps('Paypal'),
             ))
             ->setDefaultValue('prepayment');

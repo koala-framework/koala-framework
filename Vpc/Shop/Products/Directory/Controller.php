@@ -8,6 +8,7 @@ class Vpc_Shop_Products_Directory_Controller extends Vps_Controller_Action_Auto_
         'height' => 500
     );
     protected $_modelName = 'Vpc_Shop_Products';
+    protected $_position = 'pos';
 
     protected function _initColumns()
     {
