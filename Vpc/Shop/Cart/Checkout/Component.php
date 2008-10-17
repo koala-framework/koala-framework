@@ -13,14 +13,4 @@ class Vpc_Shop_Cart_Checkout_Component extends Vpc_Abstract_Composite_Component
         $ret['cssClass'] = 'webForm webStandard';
         return $ret;
     }
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        $ret['keys'] = array();
-        foreach ($this->getData()->getChildComponents(array('generator' => 'child')) as $c) {
-            $ret[$c->id] = $c;
-            $ret['keys'][] = $c->id;
-        }
-        return $ret;
-    }
 }
