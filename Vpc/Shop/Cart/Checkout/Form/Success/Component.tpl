@@ -33,6 +33,10 @@
             <td colspan="3"><?=trlVps('Shipping and Handling')?>:</td>
             <td><?=trlVps('EUR')?> <?=$this->money($this->order->getShipping(),'')?></td>
         </tr>
+        <tr>
+            <td colspan="3"><?=trlVps('Cash on Delivery Charge')?>:</td>
+            <td><?=trlVps('EUR')?> <?=$this->money($this->order->getCashOnDeliveryCharge(),'')?></td>
+        </tr>
         <tr class="totalAmount">
             <td colspan="3"><?=trlVps('Total Amount')?>:</td>
             <td class="totalAmountPrice"><?=trlVps('EUR')?> <?=$this->money($this->order->getTotal(),'')?></td>
