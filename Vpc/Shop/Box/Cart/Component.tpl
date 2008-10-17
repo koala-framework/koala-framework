@@ -15,7 +15,20 @@
             </div>
         <? } ?>
         <div class="moneyInfo">
-            <div class="shippingText"><?=trlVps('Shipping and Handling')?>:</div><div class="shippingPrice"><?=trlVps('EUR')?> <?=$this->money($this->order->getShipping(),'')?></div><br />
+            <div class="shippingText">
+                <?=trlVps('Shipping and Handling')?>:
+            </div>
+            <div class="shippingPrice">
+                <?=trlVps('EUR')?> <?=$this->money($this->order->getShipping(),'')?>
+            </div><br />
+            <? if($this->order->payment == 'cashOnDelivery') { ?>
+            <div class="shippingText">
+                <?=trlVps('Cash on Delivery Charge')?>:
+            </div>
+            <div class="shippingPrice">
+                <?=trlVps('EUR')?> <?=$this->money($this->order->getCashOnDeliveryCharge(),'')?>
+            </div><br />
+            <? } ?>
             <div class="amountText"><?=trlVps('Total Amount')?>:</div><div class="amountPrice"><strong><?=trlVps('EUR')?> <?=$this->money($this->order->getTotal(),'')?></strong></div>
             <div class="clear"></div>
         </div>

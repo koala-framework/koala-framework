@@ -30,7 +30,9 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
             ->setVType('email')
             ->setAllowBlank(false);
         $this->add(new Vps_Form_Field_TextField('phone', trlVps('Phone')));
-        
+
+        $this->add(new Vps_Form_Field_Panel())
+            ->setHtml(trlVps('What type of payment do you wish?'));
         $this->add(new Vps_Form_Field_Radio('payment', trlVps('Payment')))
             ->setValues(array(
                 'prepayment'=>trlVps('Prepayment'),
@@ -38,6 +40,5 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
                 //'paypal'=>trlVps('Paypal'),
             ))
             ->setDefaultValue('prepayment');
-        
     }
 }

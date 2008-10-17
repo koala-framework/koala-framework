@@ -116,11 +116,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     public function getTemplateVars($values, $namePostfix = '')
     {
         $name = $this->getFieldName();
-        if (isset($values[$name])) {
-            $value = $values[$name];
-        } else {
-            $value = $this->getDefaultValue();
-        }
+        $value = $values[$name];
         $ret = parent::getTemplateVars($values);
 
         $name = htmlspecialchars($name);

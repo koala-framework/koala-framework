@@ -17,11 +17,8 @@ class Vps_Form_Field_Select extends Vps_Form_Field_ComboBox
         $ret = parent::getTemplateVars($values, $fieldNamePostfix);
 
         $name = $this->getFieldName();
-        if (isset($values[$name])) {
-            $value = $values[$name];
-        } else {
-            $value = '';
-        }
+        $value = $values[$name];
+
         //todo: escapen
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
         $ret['html'] = "<select id=\"$ret[id]\" name=\"$name$fieldNamePostfix\">";

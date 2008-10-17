@@ -11,6 +11,9 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
                 $ret[$this->getFieldName()] = $this->getData()->load($row);
             }
         }
+        if (is_null($ret[$this->getFieldName()])) {
+            $ret[$this->getFieldName()] = $this->getDefaultValue();
+        }
         return array_merge($ret, parent::load($row, $postData));
     }
 
@@ -68,14 +71,5 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
         $fieldName = $this->getFieldName();
         if (!isset($postData[$fieldName])) $postData[$fieldName] = null;
         return $postData[$fieldName];
-    }
-
-    public function processInput($postData)
-    {
-        $fieldName = $this->getFieldName();
-        if (!isset($postData[$fieldName]) && $this->getDefaultValue()) {
-            $postData[$fieldName] = $this->getDefaultValue();
-        }
-        return $postData;
     }
 }
