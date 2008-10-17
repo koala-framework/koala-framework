@@ -3387,5 +3387,9 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en default="1">Your cart contain</en>
 <de>Ihr Warenkorb beinhaltet</de>
 </text>
+<text>
+<en default="1">Other comments or notices</en>
+<de>Sonstigen Bemerkunken, Anmerkungen oder Notizen</de>
+</text>
 </trl>
 
