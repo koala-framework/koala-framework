@@ -54,7 +54,11 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         $this->getForm()->initFields();
 
+        if (!isset($postData[$this->getData()->componentId.'-post'])) {
+            $postData = array();
+        }
         $postData = $this->_form->processInput($postData);
+        $this->_postData = $postData;
         if (isset($postData[$this->getData()->componentId])) {
             $this->_errors = array_merge($this->_errors, $this->_form->validate($this->_form->getRow(), $postData));
             if (!$this->_errors) {
@@ -71,7 +75,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
                 $this->_isSaved = true;
             }
         }
-        $this->_postData = $postData;
+        
 
         Vps_Registry::get('db')->commit();
     }

@@ -22,6 +22,9 @@ if ($this->showSuccess) {
             <? /* IE schickt bei enter-taste den submit-value nicht mit */ ?>
             <input type="hidden" name="<?= $this->formName ?>" value="submit" />
         <? } ?>
+
+        <? /* damit wir wissen ob gepostet wurde und ob wir laden sollen */ ?>
+        <input type="hidden" name="<?= $this->formName ?>-post" value="post" />
     </form>
     <?php
 }
