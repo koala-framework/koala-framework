@@ -6,6 +6,8 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
     protected function _initFields()
     {
         parent::_initFields();
+        $this->add(new Vps_Form_Field_Panel())
+            ->setHtml('<h2>'.trlVps('Please enter your address').'</h2><br />');
         $this->add(new Vps_Form_Field_Radio('sex', trlcVps('sex', 'Title')))
             ->setValues(array(
                 'male'   => trlVps('Mr.'),
