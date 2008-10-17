@@ -24,6 +24,12 @@ class Vps_Component_Cache extends Zend_Cache_Core
         $this->setBackend($this->_backend);
     }
 
+    //für unit testing
+    public static function setInstance($instance)
+    {
+        self::$_instance = $instance;
+    }
+
     public static function getInstance()
     {
         if (!self::$_instance) {

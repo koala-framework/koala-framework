@@ -18,11 +18,6 @@ class Vps_Component_RowObserver
         return self::$_instance;
     }
 
-    //für unit testing
-    public static function setInstance($instance)
-    {
-        self::$_instance = $instance;
-    }
 
     public function insert($row)
     {
