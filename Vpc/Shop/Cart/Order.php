@@ -13,7 +13,14 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
     {
         return Vps_Component_Data_Root::getInstance()
             ->getComponentByClass('Vpc_Shop_Cart_Component')
-            ->getComponent()->getShipping();
+            ->getComponent()->getShipping($this);
+    }
+
+    public function getCashOnDeliveryCharge()
+    {
+        return Vps_Component_Data_Root::getInstance()
+            ->getComponentByClass('Vpc_Shop_Cart_Component')
+            ->getComponent()->getCashOnDeliveryCharge($this);
     }
 
     public function getSubTotal()
@@ -37,7 +44,8 @@ class Vpc_Shop_Cart_Order extends Vps_Model_Db_Row
 
     public function getTotal()
     {
-        return $this->getShipping() + $this->getSubTotal();
+        return $this->getShipping() + $this->getCashOnDeliveryCharge() + $this->getSubTotal();
+
     }
 
     public function getOrderNumber()

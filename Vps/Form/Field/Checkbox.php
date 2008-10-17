@@ -10,11 +10,8 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
     public function getTemplateVars($values, $fieldNamePostfix = '')
     {
         $name = $this->getFieldName();
-        if (isset($values[$name])) {
-            $value = true;
-        } else {
-            $value = $this->getDefaultValue();
-        }
+        $value = $values[$name];
+
         $ret = parent::getTemplateVars($values);
         //todo: escapen
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$fieldNamePostfix);
@@ -24,9 +21,18 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
         if ($this->getBoxLabel()) {
             $ret['html'] .= ' '.$this->getBoxLabel();
         }
+        $ret['html'] .= "<input type=\"hidden\" name=\"$name$fieldNamePostfix-post\" value=\"1\" />";
         return $ret;
     }
 
+    public function processInput($postData)
+    {
+        $fieldName = $this->getFieldName();
+        if (isset($postData[$fieldName.'-post'])) {
+            $postData[$fieldName] = (int)isset($postData[$fieldName]);
+        }
+        return $postData;
+    }
     public static function getSettings()
     {
         return array_merge(parent::getSettings(), array(

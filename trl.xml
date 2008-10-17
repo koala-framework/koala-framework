@@ -3357,6 +3357,20 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <en default="1">Title</en>
 <de>Anrede</de>
 </text>
+<text context="agb">
+    <en default="1">Terms</en>
+    <de>AGB</de>
+</text>
+
+<text>
+    <en default="1">What type of payment do you wish?</en>
+    <de>Welche Zahlungsart wünschen Sie?</de>
+</text>
+
+<text>
+    <en default="1">Cash on Delivery Charge</en>
+    <de>Nachnahmegebühr</de>
+</text>
 <text>
 <en default="1">Order</en>
 <de>Bestellen</de>
