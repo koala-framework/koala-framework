@@ -55,7 +55,11 @@ class Vps_Component_RowObserver
             foreach ($process as $row) {
                 foreach (Vpc_Abstract::getComponentClasses() as $c) {
                     $method = 'onRow' . ucfirst($action);
-                    Vpc_Admin::getInstance($c)->$method($row);
+                    if (get_class($row->getModel()) == 'Vps_Model_Db') {
+                        Vpc_Admin::getInstance($c)->$method($row->getRow());
+                    } else {
+                        Vpc_Admin::getInstance($c)->$method($row);
+                    }
                 }
             }
         }
