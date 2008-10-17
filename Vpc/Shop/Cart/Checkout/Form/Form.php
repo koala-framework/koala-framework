@@ -42,5 +42,9 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
                 //'paypal'=>trlVps('Paypal'),
             ))
             ->setDefaultValue('prepayment');
+
+        $this->add(new Vps_Form_Field_TextArea('comment', trlVps('Other comments or notices')))
+            ->setHeight(80)
+            ->setWidth(200);
     }
 }
