@@ -107,3 +107,10 @@
 .ext-ie .$cssClass .form_title input {
     margin-bottom: 0px;
 }
+.$cssClass .error {
+    padding: 10px;
+}
+.$cssClass .error h1 {
+    font-weight: bold;
+    font-size: 12px;
+}

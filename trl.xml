@@ -396,7 +396,7 @@ sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
 </text>
 <text>
 <en default="1">Lastname</en>
-<de>Familienname</de>
+<de>Nachname</de>
 </text>
 <text>
 <en default="1">Email</en>
@@ -3155,7 +3155,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Amount</en>
-<de>Menge</de>
+<de>St&#xFC;ck</de>
 </text>
 <text>
 <en default="1">Price</en>
@@ -3211,7 +3211,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">The product has been added the the cart successfully.</en>
-<de>Der Artikel wurde erfolgreich zum Warenkorb hinzugef&#xFC;gt.</de>
+<de>Der Artikel wurde erfolgreich in den Warenkorb gelegt.</de>
 </text>
 <text>
 <en default="1">You cart contains {0} products</en>
@@ -3219,7 +3219,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Payment</en>
-<de>Bezahlung</de>
+<de>Zahlungsart</de>
 </text>
 <text>
 <en default="1">Unit Price</en>
@@ -3235,11 +3235,11 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Total Amount</en>
-<de>Gesamtpreis</de>
+<de>Gesamtbetrag</de>
 </text>
 <text>
 <en default="1">Street</en>
-<de>Strasse</de>
+<de>Stra&#xDF;e</de>
 </text>
 <text>
 <en default="1">ZIP</en>
@@ -3259,7 +3259,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Prepayment</en>
-<de>Vorauszahlung</de>
+<de>Vorauskasse</de>
 </text>
 <text>
 <en default="1">Paypal</en>
@@ -3310,8 +3310,8 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <de>_</de>
 </text>
 <text>
-<en default="1">Save changes</en>
-<de>&#xC4;nderung speichern</de>
+<en default="1">Update</en>
+<de>Aktualisieren</de>
 </text>
 <text>
 <en default="1">Send order</en>
@@ -3356,6 +3356,22 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <text context="sex">
 <en default="1">Title</en>
 <de>Anrede</de>
+</text>
+<text>
+<en default="1">Order</en>
+<de>Bestellen</de>
+</text>
+<text>
+<en default="1">Nachnahme</en>
+<de>_</de>
+</text>
+<text>
+<en default="1">Please enter your address</en>
+<de>Bitte geben Sie Ihre Adressdaten ein</de>
+</text>
+<text>
+<en default="1">Your cart contain</en>
+<de>Ihr Warenkorb beinhaltet</de>
 </text>
 </trl>
 

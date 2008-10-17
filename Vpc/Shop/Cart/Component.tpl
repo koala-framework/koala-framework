@@ -1,14 +1,14 @@
 <div class="<?=$this->cssClass?>">
+    <h2><?=trlVps('Your cart contain');?>:</h2><br />
     <form action="<?= $this->data->url ?>" method="post">
         <?=$this->component($this->view)?>
+        <div class="back"><?=$this->componentLink($this->data->getParentPage(),trlVps('Back to shop'));?></div>
         <div class="submitWrapper">
-            <span class="beforeButton"></span><span class="button"><button class="submit" type="submit" name="<?= $this->form->componentId ?>" value="submit"><?= trlVps('Save changes') ?></button></span><span class="afterButton"></span>
+            <span class="beforeButton"></span><span class="button"><button class="submit" type="submit" name="<?= $this->form->componentId ?>" value="submit"><?= trlVps('Update') ?></button></span><span class="afterButton"></span>
             <div class="clear"></div>
         </div>
     </form>
-
     <? if($this->countProducts) { ?>
-    <div class="back"><?=$this->componentLink($this->data->getParentPage(),trlVps('Back to shop'));?></div>
     <div class="checkout"><?=$this->componentLink($this->checkout, trlVps('To checkout'))?></div>
     <? } ?>
 

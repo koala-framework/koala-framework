@@ -4,12 +4,14 @@ if ($this->showSuccess) {
     echo $this->component($this->success);
 } else {
     if ($this->errors) {
-        echo $this->placeholder['error'].':';
-        echo '<ul class="error">';
+        echo '<div class="error">';
+        echo '<h1>'.$this->placeholder['error'].':</h1>';
+        echo '<ul>';
         foreach ($this->errors as $error) {
             echo "<li>$error</li>";
         }
         echo '</ul>';
+        echo '</div>';
     }
     ?>
     <form action="<?= $this->action ?>" method="<?=$this->method?>"<? if($this->isUpload) { ?> enctype="multipart/form-data"<? } ?>>
