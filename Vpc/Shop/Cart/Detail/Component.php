@@ -6,7 +6,15 @@ class Vpc_Shop_Cart_Detail_Component extends Vpc_Abstract_Composite_Component
         $ret = parent::getSettings();
         $ret['generators']['child']['component']['form'] = 'Vpc_Shop_Cart_Detail_Form_Component';
         $ret['viewCache'] = false;
+        $ret['flags']['processInput'] = true;
         return $ret;
+    }
+
+    public function processInput($data)
+    {
+        if (isset($data[$this->getData()->componentId]) && $data[$this->getData()->componentId] == 'delete') {
+            $this->getData()->row->delete();
+        }
     }
 
     public function getTemplateVars()

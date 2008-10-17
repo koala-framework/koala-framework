@@ -4,7 +4,7 @@
         <? if (!$this->items) { ?>
             <p><?=trlVps('Cart is empty')?></p>
         <? } else { ?>
-        <div class="countProducts"><?=trlVps('You cart contains {0} products','<strong>'.count($this->items).'</strong>')?></div>
+        <div class="countProducts"><?=trlVps('You cart contains {0} products','<strong>'.$this->order->getTotalAmount().'</strong>')?></div>
         <? foreach ($this->items as $i) { ?>
             <div class="cartProduct">
                 <div class="cartName"><?=$this->componentLink($i->product)?></div>

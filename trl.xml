@@ -3350,10 +3350,10 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <de>Frau</de>
 </text>
 <text>
-<en default="1">Degree</en>
+<en default="1">Title</en>
 <de>Titel</de>
 </text>
-<text context="people">
+<text context="sex">
 <en default="1">Title</en>
 <de>Anrede</de>
 </text>

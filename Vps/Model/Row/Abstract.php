@@ -148,6 +148,9 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         } else {
             $select = $m->select($select);
             $ref = $m->getReferenceByModelClass(get_class($this->_model), $rule);
+            if (!$this->{$this->_getPrimaryKey()}) {
+                throw new Vps_Exception("row does not yet have a primary id");
+            }
             $select->whereEquals($ref['column'], $this->{$this->_getPrimaryKey()});
             return $m->getRows($select);
         }
