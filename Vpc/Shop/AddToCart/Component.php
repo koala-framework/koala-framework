@@ -21,7 +21,11 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Form_Component
     protected function _initForm()
     {
         parent::_initForm();
-        $this->_form->setProductId($this->_getProduct()->id);
+        $this->fields['size']
+            ->setShowNoSelection(true)
+            ->setEmptyText("-")
+            ->setAllowBlank(false);
+
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
