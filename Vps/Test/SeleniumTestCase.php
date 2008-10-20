@@ -1,6 +1,4 @@
 <?php
-require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
-
 class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
     public static $browsers = array(

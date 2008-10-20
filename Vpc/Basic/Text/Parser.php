@@ -14,11 +14,26 @@ class Vpc_Basic_Text_Parser
     protected $_enableColor = false;
     protected $_enableTagsWhitelist = true;
     protected $_enableStyles = true;
+    private $_masterStyles = null;
 
 
     public function __construct(Vpc_Basic_Text_Row $row = null)
     {
         $this->_row = $row;
+    }
+
+    public function setMasterStyles($ms)
+    {
+        $this->_masterStyles = $ms;
+    }
+
+    protected function _getMasterStyles()
+    {
+        if (is_null($this->_masterStyles)) {
+            $s = Vpc_Basic_Text_StylesModel::getMasterStyles();
+            $this->_masterStyles = array_merge($s['inline'], $s['block']);
+        }
+        return $this->_masterStyles;
     }
 
     protected function endElement($parser, $element)
@@ -67,8 +82,7 @@ class Vpc_Basic_Text_Parser
                  array_push($this->_stack, 'span');
                  $this->_finalHTML .= '<span style="'.$style.'">';
             } else {
-                $masterStyles = Vpc_Basic_Text_StylesModel::getMasterStyles();
-                $masterStyles = $masterStyles['inline'];
+                $masterStyles = $this->_getMasterStyles();
                 $allowedClasses = array();
                 foreach (array_keys($masterStyles) as $s) {
                     $i = explode('.', $s);
@@ -144,8 +158,7 @@ class Vpc_Basic_Text_Parser
                 $this->_finalHTML .= '<'.strtolower($element);
                 foreach ($attributes as $key => $value) {
                     if (in_array(strtolower($key), $this->_tagsWhitelist[strtolower($element)])) {
-                        $masterStyles = Vpc_Basic_Text_StylesModel::getMasterStyles();
-                        $masterStyles = $masterStyles['block'];
+                        $masterStyles = $this->_getMasterStyles();
                         $allowedClasses = array();
                         foreach (array_keys($masterStyles) as $s) {
                             $i = explode('.', $s);

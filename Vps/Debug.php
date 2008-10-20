@@ -56,7 +56,7 @@ class Vps_Debug
         $mail->send();
     }
 
-    function handleError($errno, $errstr, $errfile, $errline)
+    public static function handleError($errno, $errstr, $errfile, $errline)
     {
         if (error_reporting() == 0) return; // error unterdrückt mit @foo()
         $exception = new ErrorException($errstr, 0, $errno, $errfile, $errline);

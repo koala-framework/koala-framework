@@ -201,4 +201,22 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($fnf1->isEqual($fnf2));
         $this->assertFalse($fnf2->isEqual($fnf1));
     }
+
+    public function testUniqueRowObject()
+    {
+        $this->markTestIncomplete();
+
+        $model = new Vps_Model_FnF(array('data'=>array(
+            array('id'=>1, 'foo'=>'')
+        )));
+        $r1 = $model->getRow(1);
+        $r2 = $model->getRow(1);
+        $this->assertEquals($r2->foo, '');
+        $r1->foo = 'foo';
+        $this->assertEquals($r2->foo, 'foo');
+        $this->assertTrue($r1 === $r2);
+
+        $r3 = $model->getRows()->current();
+        $this->assertTrue($r1 === $r3);
+    }
 }

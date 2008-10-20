@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Model_Db
+ */
 class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
 {
     private $_table;
@@ -222,13 +225,19 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
         $this->_model->fetchAll($select);
     }
 
-    public function testSelectWhereNotEqualsArray2()
+    public function testUniqueRowObject()
     {
-        $this->_dbSelect->expects($this->once())
-            ->method('where')
-            ->with($this->equalTo("testtable.foo NOT IN ('str1', 'str2')"));
-        $select = $this->_model->select()
-            ->whereNotEquals('foo', array('str1', 'str2'));
-        $this->_model->fetchAll($select);
+        $this->markTestIncomplete();
+
+        $r1 = $this->_model->getRows()->current();
+        $r2 = $this->_model->getRows()->current();
+        
+        $this->assertEquals($r2->foo, '');
+        $r1->foo = 'foo';
+        $this->assertEquals($r2->foo, 'foo');
+        $this->assertTrue($r1 === $r2);
+
+        $r3 = $this->_model->getRow();
+        $this->assertTrue($r1 === $r3);
     }
 }
