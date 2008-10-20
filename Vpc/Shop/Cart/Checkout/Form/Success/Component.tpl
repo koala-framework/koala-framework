@@ -1,12 +1,19 @@
 <div class="<?=$this->cssClass?>">
+    <h2><?=trlVps('Please check your petitions');?></h2>
     <div class="receiver">
-        <strong><?=$this->order->firstname?> <?=$this->order->lastname?></strong><br />
+        <strong><?=$this->order->title?> <?=$this->order->firstname?> <?=$this->order->lastname?></strong><br />
         <?=$this->order->street?><br />
         <?=$this->order->country?> - <?=$this->order->zip?> <?=$this->order->city?>
     </div>
     <div class="receiverInfo">
         <?=$this->order->email?><br />
         <?=$this->order->phone?>
+    </div>
+    <div class="receiverComment">
+        <? if ($this->order->comment) { ?>
+            <?=trlVps('Your Comment')?>:<br />
+            <?=$this->order->comment?>
+        <? } ?>
     </div>
     <table>
         <tr class="firstRow">
@@ -33,10 +40,12 @@
             <td colspan="3"><?=trlVps('Shipping and Handling')?>:</td>
             <td><?=trlVps('EUR')?> <?=$this->money($this->order->getShipping(),'')?></td>
         </tr>
+        <? if ($this->order->getCashOnDeliveryCharge()) { ?>
         <tr>
             <td colspan="3"><?=trlVps('Cash on Delivery Charge')?>:</td>
             <td><?=trlVps('EUR')?> <?=$this->money($this->order->getCashOnDeliveryCharge(),'')?></td>
         </tr>
+        <? } ?>
         <tr class="totalAmount">
             <td colspan="3"><?=trlVps('Total Amount')?>:</td>
             <td class="totalAmountPrice"><?=trlVps('EUR')?> <?=$this->money($this->order->getTotal(),'')?></td>

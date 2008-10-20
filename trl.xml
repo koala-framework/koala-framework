@@ -3358,18 +3358,16 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <de>Anrede</de>
 </text>
 <text context="agb">
-    <en default="1">Terms</en>
-    <de>AGB</de>
+<en default="1">Terms</en>
+<de>AGB</de>
 </text>
-
 <text>
-    <en default="1">What type of payment do you wish?</en>
-    <de>Welche Zahlungsart wünschen Sie?</de>
+<en default="1">What type of payment do you wish?</en>
+<de>Welche Zahlungsart w&#xFC;nschen Sie?</de>
 </text>
-
 <text>
-    <en default="1">Cash on Delivery Charge</en>
-    <de>Nachnahmegebühr</de>
+<en default="1">Cash on Delivery Charge</en>
+<de>Nachnahmegeb&#xFC;hr</de>
 </text>
 <text>
 <en default="1">Order</en>
@@ -3390,6 +3388,14 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <text>
 <en default="1">Other comments or notices</en>
 <de>Sonstigen Bemerkunken, Anmerkungen oder Notizen</de>
+</text>
+<text>
+<en default="1">Please check your petitions</en>
+<de>Bitte überprüfen sie Ihre Eingaben</de>
+</text>
+<text>
+<en default="1">Your Comment</en>
+<de>Ihre Anmerkung</de>
 </text>
 </trl>
 
