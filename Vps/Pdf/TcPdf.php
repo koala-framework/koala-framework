@@ -85,12 +85,12 @@ class Vps_Pdf_TcPdf extends TCPDF
         return implode($delimiter, $implodeParts);
     }
 
-    public function textArea ($text, $align = "L", $indent = 0, $height = 0, $fontweight = '')
+    public function textArea ($text, $align = "L", $indent = 0, $height = 0, $fontweight = '', $ln = 1)
     {
         $this->SetFont($this->getFont(), $fontweight, $this->getFontsize());
         $xtmp = $this->GetX();
         $this->SetX($this->GetX()+$indent);
-        $this->MultiCell($this->getMaxTextWidth(), $height, $this->decodeText($text), 0, $align, 0);
+        $this->MultiCell($this->getMaxTextWidth(), $height, $this->decodeText($text), 0, $align, 0, $ln);
         $this->SetX($xtmp);
         $this->SetFont($this->getFont(), "", $this->getFontsize());
     }
