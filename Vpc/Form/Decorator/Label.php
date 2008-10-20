@@ -45,7 +45,14 @@ class Vpc_Form_Decorator_Label extends Vpc_Form_Decorator_Abstract
                 .'>';
                 $item['preHtml'] .= $item['item']->getFieldLabel();
                 if ($item['item']->getAllowBlank()===false) {
-                    $item['preHtml'] .= '*';
+                    /* TODO: wenn wir hier einmal andere Zeichen benötigen oder an einer anderen
+                     * Position, dann machen wir eine reine CSS-Lösung:
+                     * für alles ausser <IE8 .foo:after { content: '*'; }
+                     * und für IE ein Javascript das das emuliert. Das Javascript muss Serverseitig
+                     * das CSS parsen und daraus generieren welche Zeichen an welcher Stelle
+                     * eingefügt werden müssen.
+                     */
+                    $item['preHtml'] .= '<span class="requiredSign">*</span>';
                 }
                 $item['preHtml'] .= $item['item']->getLabelSeparator();
                 $item['preHtml'] .= '</label>';
