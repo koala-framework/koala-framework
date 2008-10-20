@@ -3386,16 +3386,20 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <de>Ihr Warenkorb beinhaltet</de>
 </text>
 <text>
-<en default="1">Other comments or notices</en>
-<de>Sonstigen Bemerkunken, Anmerkungen oder Notizen</de>
+<en default="1">Other comments, questions or suggestions</en>
+<de>Sonstige Bemerkungen, Fragen oder Anregungen</de>
 </text>
 <text>
 <en default="1">Please check your petitions</en>
-<de>Bitte überprüfen sie Ihre Eingaben</de>
+<de>Bitte überprüfen sie Ihre Daten</de>
 </text>
 <text>
 <en default="1">Your Comment</en>
 <de>Ihre Anmerkung</de>
+</text>
+<text>
+<en default="1">Welcome to our shop</en>
+<de>Willkommen zu unserem Shop</de>
 </text>
 </trl>
 

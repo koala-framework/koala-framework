@@ -1,5 +1,5 @@
 <div class="<?=$this->cssClass?>">
-    <h2><?=trlVps('Please check your petitions');?></h2>
+    <h1><?=trlVps('Please check your petitions');?></h1>
     <div class="receiver">
         <strong><?=$this->order->title?> <?=$this->order->firstname?> <?=$this->order->lastname?></strong><br />
         <?=$this->order->street?><br />
