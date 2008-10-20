@@ -21,7 +21,7 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Form_Component
     protected function _initForm()
     {
         parent::_initForm();
-        $this->fields['size']
+        $this->_form->fields['size']
             ->setShowNoSelection(true)
             ->setEmptyText("-")
             ->setAllowBlank(false);
