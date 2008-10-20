@@ -23,7 +23,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
                 $this->getRequest()->setParam($opt['param'], $v);
                 $p = $v;
             }
-            if (is_array($opt['value']) && !in_array($p, $opt['value'])) {
+            if (isset($opt['value']) && is_array($opt['value']) && !in_array($p, $opt['value'])) {
                 throw new Vps_ClientException("Invalid value for parameter '$opt[param]'");
             }
         }
