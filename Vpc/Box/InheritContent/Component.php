@@ -9,6 +9,10 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
             'class' => 'Vps_Component_Generator_Static',
             'component' => false
         );
+
+        //TODO: viewcache nicht deaktiveren
+        //cache löschen muss dazu korrekt eingebaut werden
+        $ret['viewCache'] = false;
         return $ret;
     }
 
