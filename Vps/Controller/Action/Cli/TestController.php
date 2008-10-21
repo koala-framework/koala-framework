@@ -36,6 +36,9 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
     public function indexAction()
     {
         Zend_Registry::get('config')->debug->settingsCache = false;
+        Zend_Registry::get('config')->debug->benchmark = false;
+        Zend_Registry::get('config')->debug->querylog = false;
+        Vps_Benchmark::disable();
 
         $arguments = array();
         $arguments['ansi'] = true;

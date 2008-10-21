@@ -20,6 +20,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
     public function setData(array $data)
     {
         $this->_data = $data;
+        $this->_rows = array();
     }
 
     public function getData()
@@ -27,15 +28,15 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         return $this->_data;
     }
 
-    public function update($id, Vps_Model_Row_Interface $row, $rowData)
+    public function update(Vps_Model_Row_Interface $row, $rowData)
     {
-        foreach ($this->_data as $k=>$i) {
-            if (isset($i[$this->getPrimaryKey()]) && $i[$this->getPrimaryKey()] == $id) {
+        foreach ($this->_rows as $k=>$i) {
+            if ($row === $i) {
                 $this->_data[$k] = $rowData;
                 return $rowData[$this->getPrimaryKey()];
             }
         }
-        throw new Vps_Exception("Can't find entry with id '$id'");
+        throw new Vps_Exception("Can't find entry");
     }
 
     public function insert(Vps_Model_Row_Interface $row, $rowData)
@@ -51,29 +52,43 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             }
             $this->_autoId++;
             $rowData[$this->getPrimaryKey()] = $this->_autoId;
+            $row->{$this->getPrimaryKey()} = $this->_autoId;
         }
         $this->_data[] = $rowData;
+        $this->_rows[count($this->_data)-1] = $row;
         return $rowData[$this->getPrimaryKey()];
     }
 
-    public function delete($id, Vps_Model_Row_Interface $row)
+    public function delete(Vps_Model_Row_Interface $row)
     {
-        foreach ($this->_data as $k=>$i) {
-            if (isset($i[$this->getPrimaryKey()]) && $i[$this->getPrimaryKey()] == $id) {
+        foreach ($this->_rows as $k=>$i) {
+            if ($row === $i) {
                 unset($this->_data[$k]);
+                unset($this->_rows[$k]);
                 return;
             }
         }
-        throw new Vps_Exception("Can't find entry with id '$id'");
+        throw new Vps_Exception("Can't find entry");
     }
 
-                                                                 //& für performance
-    protected function _selectData(Vps_Model_Select $select, array &$inData)
+    public function getRowByDataKey($key)
     {
-        $data = array();
-        foreach ($inData as $d) {
+        if (!isset($this->_rows[$key])) {
+            $this->_rows[$key] = new $this->_rowClass(array(
+                'data' => $this->_data[$key],
+                'model' => $this
+            ));
+        }
+        return $this->_rows[$key];
+    }
+
+                                                                     //& für performance
+    protected function _selectDataKeys(Vps_Model_Select $select, array &$inData)
+    {
+        $dataKeys = array();
+        foreach ($inData as $key=>$d) {
             if ($this->_matchSelect($d, $select)) {
-                $data[] = $d;
+                $dataKeys[] = $key;
             }
         }
 
@@ -81,11 +96,11 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             if (count($order) > 1) throw new Vps_Exception("Multiple Order fields not yet implemented");
             $order = current($order);
             $orderData = array();
-            foreach ($data as $d) {
+            foreach ($dataKeys as $key) {
                 if ($order['field'] == Vps_Model_Select::ORDER_RAND) {
-                    $orderData[$d['id']] = rand();
+                    $orderData[$inData[$key]['id']] = rand();
                 } else {
-                    $orderData[$d['id']] = strtolower($d[$order['field']]);
+                    $orderData[$inData[$key]['id']] = strtolower($inData[$key][$order['field']]);
                 }
             }
             if ($order['direction'] == 'ASC') {
@@ -95,22 +110,22 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             } else {
                 throw new Vps_Exception("Invalid order direction: {$order['direction']}");
             }
-            $sortedData = array();
+            $sortedDataKeys = array();
             foreach (array_keys($orderData) as $id) {
-                foreach ($data as $d) {
-                    if ($d['id'] == $id) {
-                        $sortedData[] = $d;
+                foreach ($dataKeys as $key) {
+                    if ($inData[$key]['id'] == $id) {
+                        $sortedDataKeys[] = $key;
                     }
                 }
             }
-            $data = $sortedData;
+            $dataKeys = $sortedDataKeys;
         }
 
         if ($select->hasPart(Vps_Model_Select::LIMIT_COUNT)) {
             $limitCount = $select->getPart(Vps_Model_Select::LIMIT_COUNT);
-            $data = array_slice($data, 0, $limitCount);
+            $dataKeys = array_slice($dataKeys, 0, $limitCount);
         }
-        return $data;
+        return $dataKeys;
     }
 
     private function _matchSelect($data, $select)

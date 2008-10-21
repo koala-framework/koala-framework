@@ -38,7 +38,8 @@ class Vps_Form_FormInFormTest extends PHPUnit_Framework_TestCase
         ))));
         $form->add(new Vps_Form_Field_TextField('test1'));
         $form->add(new Vps_Form('form2'))
-            ->setModel(new Vps_Model_FnF_CreateOnFind())
+            ->setModel(new Vps_Model_FnF())
+            ->setCreateMissingRow(true)
             ->setIdTemplate('{0}')
             ->add(new Vps_Form_Field_TextField('test2'));
 

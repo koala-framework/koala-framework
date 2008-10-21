@@ -224,20 +224,4 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
                   ->with($this->equalTo($this->_dbSelect));
         $this->_model->fetchAll($select);
     }
-
-    public function testUniqueRowObject()
-    {
-        $this->markTestIncomplete();
-
-        $r1 = $this->_model->getRows()->current();
-        $r2 = $this->_model->getRows()->current();
-        
-        $this->assertEquals($r2->foo, '');
-        $r1->foo = 'foo';
-        $this->assertEquals($r2->foo, 'foo');
-        $this->assertTrue($r1 === $r2);
-
-        $r3 = $this->_model->getRow();
-        $this->assertTrue($r1 === $r3);
-    }
 }

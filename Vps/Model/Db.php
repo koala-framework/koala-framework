@@ -43,6 +43,24 @@ class Vps_Model_Db extends Vps_Model_Abstract
         ));
     }
 
+    public function afterInsert($row)
+    {
+        $id = $row->{$this->getPrimaryKey()};
+        $this->_rows[$id] = $row;
+    }
+
+    public function getRowByProxiedRow($proxiedRow)
+    {
+        $id = $proxiedRow->{$this->getPrimaryKey()};
+        if (!isset($this->_rows[$id])) {
+            $this->_rows[$id] = new $this->_rowClass(array(
+                'row' => $proxiedRow,
+                'model' => $this
+            ));
+        }
+        return $this->_rows[$id];
+    }
+
     public function createDbSelect($select)
     {
         if (!$select) return null;

@@ -169,11 +169,10 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         if (!isset($this->_row)) {
             $model = $this->getModel();
             if ($model instanceof Vps_Model_Db) {
-                $table = $model->getTable();
-                if ($table && !isset($this->_row)) {
-                    $info = $table->info();
-                    if ($info['primary'] == array(1 => 'component_id')) {
-                        $this->_row = $table->findRow($this->getDbId());
+                if ($model->getPrimaryKey() == 'component_id') {
+                    $this->_row = $table->getRow($this->getDbId());
+                    if (!$this->_row) {
+                        $this->_row = $table->createRow();
                     }
                 }
             } else {

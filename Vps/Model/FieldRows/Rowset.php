@@ -7,10 +7,13 @@ class Vps_Model_FieldRows_Rowset extends Vps_Model_Rowset_Abstract
         $this->_parentRow = $config['parentRow'];
         parent::__construct($config);
     }
-    protected function _getRowConfig($index)
+
+    public function current()
     {
-        $ret = parent::_getRowConfig($index);
-        $ret['parentRow'] = $this->_parentRow;
-        return $ret;
+        if ($this->valid() === false) {
+            return null;
+        }
+        $key = $this->_dataKeys[$this->_pointer];
+        return $this->getModel()->getRowByDataKey($key, $this->_parentRow);
     }
 }

@@ -2,7 +2,7 @@
 class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
 {
     protected $_createFieldsets = true;
-    
+
     protected function _getIdTemplateForChild($key)
     {
         return null;
@@ -11,6 +11,8 @@ class Vpc_Abstract_Composite_Form extends Vpc_Abstract_Form
     protected function _initFields()
     {
         parent::_initFields();
+        $this->setCreateMissingRow(true);
+
         if (!$this->getClass()) return;
         $generators = Vpc_Abstract::getSetting($this->getClass(), 'generators');
         $classes = $generators['child']['component'];

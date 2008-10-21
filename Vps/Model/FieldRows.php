@@ -24,16 +24,17 @@ class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
         throw new Vps_Exception('getRows is not possible for Vps_Model_Field');
     }
 
-    public function update($id, Vps_Model_FieldRows_Row $row, $rowData)
+    public function update(Vps_Model_FieldRows_Row $row, $rowData)
     {
-        foreach ($this->_data[$row->getParentRow()->getInternalId()] as $k=>$i) {
-            if (isset($i[$this->getPrimaryKey()]) && $i[$this->getPrimaryKey()] == $id) {
-                $this->_data[$row->getParentRow()->getInternalId()][$k] = $rowData;
+        $iId = $row->getParentRow()->getInternalId();
+        foreach ($this->_rows[$iId] as $k=>$i) {
+            if ($row === $i) {
+                $this->_data[$iId][$k] = $rowData;
                 $this->_updateParentRow($row->getParentRow());
                 return $rowData[$this->getPrimaryKey()];
             }
         }
-        throw new Vps_Exception("Can't find entry with id '$id'");
+        throw new Vps_Exception("Can't find entry");
     }
 
     public function insert(Vps_Model_FieldRows_Row $row, $rowData)
@@ -52,20 +53,34 @@ class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
             $rowData[$this->getPrimaryKey()] = $this->_autoId[$iId];
         }
         $this->_data[$iId][] = $rowData;
+        $this->_rows[$iId][count($this->_data[$iId])-1] = $row;
         $this->_updateParentRow($row->getParentRow());
         return $rowData[$this->getPrimaryKey()];
     }
 
-    public function delete($id, Vps_Model_FieldRows_Row $row)
+    public function delete(Vps_Model_FieldRows_Row $row)
     {
-        foreach ($this->_data[$row->getParentRow()->getInternalId()] as $k=>$i) {
-            if (isset($i[$this->getPrimaryKey()]) && $i[$this->getPrimaryKey()] == $id) {
+        foreach ($this->_rows[$row->getParentRow()->getInternalId()] as $k=>$i) {
+            if ($row === $i) {
                 unset($this->_data[$row->getParentRow()->getInternalId()][$k]);
+                unset($this->_rows[$row->getParentRow()->getInternalId()][$k]);
                 $this->_updateParentRow($row->getParentRow());
                 return;
             }
         }
-        throw new Vps_Exception("Can't find entry with id '$id'");
+        throw new Vps_Exception("Can't find entry");
+    }
+
+    public function getRowByDataKey($key, $parentRow)
+    {
+        if (!isset($this->_rows[$parentRow->getInternalId()][$key])) {
+            $this->_rows[$parentRow->getInternalId()][$key] = new $this->_rowClass(array(
+                'data' => $this->_data[$parentRow->getInternalId()][$key],
+                'model' => $this,
+                'parentRow' => $parentRow
+            ));
+        }
+        return $this->_rows[$parentRow->getInternalId()][$key];
     }
 
     private function _updateParentRow($parentRow)
@@ -100,9 +115,8 @@ class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
         }
         return new $this->_rowsetClass(array(
             'model' => $this,
-            'data' => $this->_selectData($select, $this->_data[$parentRow->getInternalId()]),
-            'parentRow' => $parentRow,
-            'rowClass' => $this->_rowClass
+            'dataKeys' => $this->_selectDataKeys($select, $this->_data[$parentRow->getInternalId()]),
+            'parentRow' => $parentRow
         ));
     }
 

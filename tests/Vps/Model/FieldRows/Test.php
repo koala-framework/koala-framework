@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Model_FieldRows
+ */
 class Vps_Model_FieldRows_Test extends PHPUnit_Framework_TestCase
 {
     public function testFnFFieldRows()

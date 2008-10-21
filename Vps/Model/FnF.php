@@ -8,11 +8,10 @@ class Vps_Model_FnF extends Vps_Model_Data_Abstract
         } else {
             $select = $where;
         }
-        $data = $this->_selectData($select, $this->_data);
+        $dataKeys = $this->_selectDataKeys($select, $this->_data);
         return new $this->_rowsetClass(array(
             'model' => $this,
-            'rowClass' => $this->_rowClass,
-            'data' => $data
+            'dataKeys' => $dataKeys
         ));
     }
 

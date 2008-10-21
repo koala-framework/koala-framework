@@ -14,10 +14,24 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     public function createRow(array $data=array())
     {
         $proxyRow = $this->_proxyModel->createRow($data);
-        return new $this->_rowClass(array(
+        $ret = new $this->_rowClass(array(
             'row' => $proxyRow,
             'model' => $this
         ));
+        $this->_rows[$proxyRow->getInternalId()] = $ret;
+        return $ret;
+    }
+
+    public function getRowByProxiedRow($proxiedRow)
+    {
+        $id = $proxiedRow->getInternalId();
+        if (!isset($this->_rows[$id])) {
+            $this->_rows[$id] = new $this->_rowClass(array(
+                'row' => $proxiedRow,
+                'model' => $this
+            ));
+        }
+        return $this->_rows[$id];
     }
 
     public function getPrimaryKey()

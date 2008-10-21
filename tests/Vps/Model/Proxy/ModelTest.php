@@ -31,13 +31,6 @@ class Vps_Model_Proxy_ModelTest extends PHPUnit_Framework_TestCase
 
     public function testCreateRow()
     {
-        $fnf = $this->getMock('Vps_Model_FnF', array('createRow'));
-        $fnf->expects($this->once())
-            ->method('createRow')
-            ->with($this->equalTo(array()));
-        $proxy = new Vps_Model_Proxy(array('proxyModel' => $fnf));
-        $proxy->createRow();
-
         $fnf1 = new Vps_Model_FnF();
         $proxy = new Vps_Model_Proxy(array('proxyModel' => $fnf1));
         $row = $proxy->createRow(array('id' => 3, 'name' => 'Huber'));
@@ -116,5 +109,39 @@ class Vps_Model_Proxy_ModelTest extends PHPUnit_Framework_TestCase
         ));
         $proxy = new Vps_Model_Proxy(array('proxyModel' => $fnf));
         $this->assertEquals(1, $proxy->countRows($select));
+    }
+
+    public function testUniqueRowObject()
+    {
+        $fnf = new Vps_Model_FnF();
+        $fnf->setData(array(
+            array('id' => 2, 'name' => 'foo'),
+            array('id' => 18, 'name' => 'bar'),
+            array('id' => 456, 'name' => 'bar2')
+        ));
+        $proxy = new Vps_Model_Proxy(array('proxyModel' => $fnf));
+
+        $r1 = $proxy->getRow(2);
+        $r2 = $proxy->getRow(2);
+        $this->assertTrue($r1 === $r2);
+    }
+
+    public function testUniqueRowObjectCreateRow()
+    {
+        $fnf = new Vps_Model_FnF();
+        $fnf->setData(array(
+            array('id' => 1, 'name' => 'foo'),
+        ));
+        $proxy = new Vps_Model_Proxy(array('proxyModel' => $fnf));
+
+        $r1 = $proxy->createRow();
+        $newId = $r1->save();
+        $this->assertEquals(2, $newId);
+        $r2 = $proxy->getRow(2);
+
+        $r1->name = 'foo1';
+        $this->assertEquals($r2->name, 'foo1');
+
+        $this->assertTrue($r1 === $r2);
     }
 }
