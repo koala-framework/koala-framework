@@ -187,6 +187,7 @@ class Vps_Form extends Vps_Form_NonTableForm
             if (count($rowset)== 0) {
                 if ($this->getCreateMissingRow()) { //für Vps_Form_AddForm
                     $this->_rows[$key] = $this->_model->createRow();
+                    $this->_rows[$key]->{$this->getPrimaryKey()} = $id;
                 } else {
                     throw new Vps_Exception('No database-entry found.');
                 }
