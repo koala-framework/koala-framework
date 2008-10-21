@@ -3,7 +3,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 {
     protected $_data = array();
     protected $_cleanData = array();
-    
+
     public function __construct(array $config)
     {
         $this->_data = (array)$config['data'];
@@ -38,7 +38,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
             return $this->_data[$name];
         }
     }
-    
+
     public function __set($name, $value)
     {
         if ($this->_model->getColumns() && !in_array($name, $this->_model->getColumns())) {
@@ -61,7 +61,6 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         if (isset($this->_cleanData[$this->_getPrimaryKey()])) {
             $this->_beforeInsert();
             $this->_beforeSave();
-            $id = $this->_cleanData[$this->_getPrimaryKey()];
             $ret = $this->_model->update($this, $this->_data);
             $this->_afterInsert();
         } else {
@@ -84,4 +83,5 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         $this->_model->delete($this);
         $this->_afterDelete();
     }
+
 }

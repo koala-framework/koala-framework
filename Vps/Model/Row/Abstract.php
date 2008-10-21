@@ -8,7 +8,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
     protected $_model;
     private $_internalId;
     protected $_siblingRows;
-    
+
     public function __construct(array $config)
     {
         if (isset($config['siblingRows'])) {

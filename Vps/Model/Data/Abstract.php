@@ -172,4 +172,14 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         $this->_columns = $columns;
         return $this;
     }
+
+    protected function _keyExists ($key, $data = null)
+    {
+        if ($data == null) {
+            $data = $this->_data;
+        }
+        if (array_key_exists($key, $data)){
+            return true;
+        }
+    }
 }
