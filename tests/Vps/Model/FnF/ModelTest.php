@@ -231,4 +231,43 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $r2 = $model->getRow(2);
         $this->assertTrue($r1 === $r2);
     }
+
+    public function testUniqueRowObjectDelete()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'name' => 'foo1'),
+            array('id' => 2, 'name' => 'foo2'),
+            array('id' => 3, 'name' => 'foo3'),
+        ));
+
+        $r = $model->getRow(3);
+
+        $this->assertTrue($r === $model->getRow(3));
+        $model->getRow(2)->delete();
+        $this->assertTrue($r === $model->getRow(3));
+    }
+
+    public function testUniqueRowObjectDeleteCreateRow()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'name' => 'foo1'),
+            array('id' => 2, 'name' => 'foo2'),
+        ));
+
+        $model->getRow(1);
+        $model->getRow(2);
+
+        $model->getRow(2)->delete();
+
+        $r1 = $model->createRow();
+        $newId = $r1->save();
+        $this->assertEquals(2, $newId);
+
+        $model->getRow(1)->delete();
+
+        $this->assertTrue($r1 === $model->getRow(2));
+    }
+
 }
