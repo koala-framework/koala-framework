@@ -2,6 +2,7 @@
 .vpcCompositeImagesEnlarge .thumbOuter {
     float: left;
     margin-right: 5px;
+    margin-bottom: 5px;
 }
 .vpcCompositeImagesEnlarge .thumb { text-align: center; overflow: hidden; }
 
