@@ -26,7 +26,7 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
 
         return $ret;
     }
-    
+
     private function _getCart()
     {
         return Vps_Component_Data_Root::getInstance()

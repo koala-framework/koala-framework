@@ -223,10 +223,16 @@ class Vps_Component_Data
 
     public function getChildComponents($select = array())
     {
-        Vps_Benchmark::count('getChildComponents');
         $select = $this->_formatSelect($select);
         $sc = serialize($select->getParts());
-        if (!isset($this->_constraintsCache[$sc])) {
+        if (isset($this->_constraintsCache[$sc])) {
+            Vps_Benchmark::count('getChildComponents cached', print_r($select->getParts(), true));
+        } else {
+            Vps_Benchmark::count('getChildComponents uncached');
+        }
+
+            //cache temporär deaktiviert
+        if (true || !isset($this->_constraintsCache[$sc])) {
             $ret = array();
 
             $this->_constraintsCache[$sc] = array();

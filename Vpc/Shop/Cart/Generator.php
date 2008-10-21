@@ -12,5 +12,4 @@ class Vpc_Shop_Cart_Generator extends Vps_Component_Generator_Table
 
         return $ret;
     }
-
 }
