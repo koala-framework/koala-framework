@@ -15,7 +15,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
     public function find($id)
     {
         return new $this->_rowsetClass(array(
-            'data' => array(Vps_Component_Data_Root::getInstance()->getComponentById($id, $this->_constraints)),
+            'dataKeys' => array(Vps_Component_Data_Root::getInstance()->getComponentById($id, $this->_constraints)),
             'rowClass' => $this->_rowClass,
             'model' => $this
         ));
@@ -59,16 +59,28 @@ class Vps_Component_Model extends Vps_Model_Abstract
                     $where['parent_id'] = 'root';
                 }
                 $page = $root->getComponentById($where['parent_id'], $this->_constraints);
-                $rowset = $page->getChildComponents($constraints);
+                $rowset = array_values($page->getChildComponents($constraints));
             }
         } else {
             $rowset = array($root);
         }
         return new $this->_rowsetClass(array(
-            'data' => $rowset,
+            'dataKeys' => $rowset,
             'rowClass' => $this->_rowClass,
             'model' => $this
         ));
+    }
+
+    public function getRowByDataKey($component)
+    {
+        $key = $component->componentId;
+        if (!isset($this->_rows[$key])) {
+            $this->_rows[$key] = new $this->_rowClass(array(
+                'data' => $component,
+                'model' => $this
+            ));
+        }
+        return $this->_rows[$key];
     }
     
     public function fetchCount($where = array())

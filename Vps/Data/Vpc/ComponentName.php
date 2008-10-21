@@ -12,7 +12,9 @@ class Vps_Data_Vpc_ComponentName extends Vps_Data_Abstract
     {
         $generators = Vpc_Abstract::getSetting($this->_componentClass, 'generators');
         $classes = $generators['paragraphs']['component']; 
-        $class = $classes[$row->component];
+        if (!isset($classes[$row->component])) {
+            return '';
+        }        $class = $classes[$row->component];
         $name = Vpc_Abstract::getSetting($class, 'componentName');
         return str_replace('.', ' -> ', $name);
     }
