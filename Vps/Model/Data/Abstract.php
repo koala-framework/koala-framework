@@ -55,7 +55,8 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             $row->{$this->getPrimaryKey()} = $this->_autoId;
         }
         $this->_data[] = $rowData;
-        $this->_rows[count($this->_data)-1] = $row;
+        $key = end(array_keys($this->_data));
+        $this->_rows[$key] = $row;
         return $rowData[$this->getPrimaryKey()];
     }
 

@@ -8,10 +8,11 @@ class Vps_Model_FieldRows_Row extends Vps_Model_Row_Data_Abstract
         parent::__construct($config);
     }
 
-    public function getParentRow()
+    public function getModelParentRow()
     {
         return $this->_parentRow;
     }
+
     protected function _refresh($id)
     {
         $select = new Vps_Model_Select();

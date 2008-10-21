@@ -26,11 +26,11 @@ class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
 
     public function update(Vps_Model_FieldRows_Row $row, $rowData)
     {
-        $iId = $row->getParentRow()->getInternalId();
+        $iId = $row->getModelParentRow()->getInternalId();
         foreach ($this->_rows[$iId] as $k=>$i) {
             if ($row === $i) {
                 $this->_data[$iId][$k] = $rowData;
-                $this->_updateParentRow($row->getParentRow());
+                $this->_updateParentRow($row->getModelParentRow());
                 return $rowData[$this->getPrimaryKey()];
             }
         }
@@ -39,7 +39,7 @@ class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
 
     public function insert(Vps_Model_FieldRows_Row $row, $rowData)
     {
-        $iId = $row->getParentRow()->getInternalId();
+        $iId = $row->getModelParentRow()->getInternalId();
         if (!isset($rowData[$this->getPrimaryKey()])) {
             if (!isset($this->_autoId[$iId])) {
                 $this->_autoId[$iId] = 0;
@@ -54,17 +54,17 @@ class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
         }
         $this->_data[$iId][] = $rowData;
         $this->_rows[$iId][count($this->_data[$iId])-1] = $row;
-        $this->_updateParentRow($row->getParentRow());
+        $this->_updateParentRow($row->getModelParentRow());
         return $rowData[$this->getPrimaryKey()];
     }
 
     public function delete(Vps_Model_FieldRows_Row $row)
     {
-        foreach ($this->_rows[$row->getParentRow()->getInternalId()] as $k=>$i) {
+        foreach ($this->_rows[$row->getModelParentRow()->getInternalId()] as $k=>$i) {
             if ($row === $i) {
-                unset($this->_data[$row->getParentRow()->getInternalId()][$k]);
-                unset($this->_rows[$row->getParentRow()->getInternalId()][$k]);
-                $this->_updateParentRow($row->getParentRow());
+                unset($this->_data[$row->getModelParentRow()->getInternalId()][$k]);
+                unset($this->_rows[$row->getModelParentRow()->getInternalId()][$k]);
+                $this->_updateParentRow($row->getModelParentRow());
                 return;
             }
         }
