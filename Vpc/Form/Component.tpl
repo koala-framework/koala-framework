@@ -16,7 +16,7 @@ if ($this->showSuccess) {
     ?>
     <form action="<?= $this->action ?>" method="<?=$this->method?>"<? if($this->isUpload) { ?> enctype="multipart/form-data"<? } ?>>
         <?php $this->formField($this->form) ?>
-        <div class="submitasdWrapper">
+        <div class="submitWrapper">
             <span class="beforeButton"></span><span class="button"><button class="submit" type="submit" name="<?= $this->formName ?>" value="submit"><?= $this->placeholder['submitButton'] ?></button></span><span class="afterButton"></span>
             <div class="clear"></div>
         </div>
