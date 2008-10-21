@@ -66,6 +66,7 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         $ret = $this->_row->save();
         if (!$id) {
             $this->_afterInsert();
+            $this->_model->afterInsert($this);
         } else {
             $this->_afterUpdate();
         }

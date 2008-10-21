@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group ChildRows
+ */
 class Vps_Model_ChildRows_Test extends PHPUnit_Framework_TestCase
 {
     public function testChildRows()

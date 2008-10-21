@@ -2,24 +2,23 @@
 class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface
 {
     protected $_pointer = 0;
-    protected $_count;
-    protected $_rows = array();
-    protected $_data;
+    protected $_dataKeys;
     protected $_model;
-    protected $_rowClass;
 
     public function __construct($config)
     {
         $this->_init();
-        $this->_data = $config['data'];
-        $this->_count = count($config['data']);
+        $this->_dataKeys = $config['dataKeys'];
         $this->_model = $config['model'];
-        $this->_rowClass = $config['rowClass'];
     }
 
     public function toArray()
     {
-        return $this->_data;
+        $ret = array();
+        foreach ($this as $row) {
+            $ret[] = $row->toArray();
+        }
+        return $ret;
     }
 
     protected function _init()
@@ -37,25 +36,8 @@ class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface
         if ($this->valid() === false) {
             return null;
         }
-
-        // do we already have a row object for this position?
-        if (empty($this->_rows[$this->_pointer])) {
-            $keys = array_keys($this->_data);
-            $this->_rows[$this->_pointer] = new $this->_rowClass(
-                $this->_getRowConfig($keys[$this->_pointer])
-            );
-        }
-
-        // return the row object
-        return $this->_rows[$this->_pointer];
-    }
-
-    protected function _getRowConfig($index)
-    {
-        return array(
-            'data' => $this->_data[$index],
-            'model' => $this->getModel()
-        );
+        $key = $this->_dataKeys[$this->_pointer];
+        return $this->getModel()->getRowByDataKey($key);
     }
 
     public function key()
@@ -70,18 +52,18 @@ class Vps_Model_Rowset_Abstract implements Vps_Model_Rowset_Interface
 
     public function valid()
     {
-        return $this->_pointer < $this->_count;
+        return $this->_pointer < $this->count();
     }
 
     public function count()
     {
-        return $this->_count;
+        return count($this->_dataKeys);
     }
 
     public function seek($position)
     {
         $position = (int) $position;
-        if ($position < 0 || $position > $this->_count) {
+        if ($position < 0 || $position > $this->count()) {
             require_once 'Zend/Db/Table/Rowset/Exception.php';
             throw new Zend_Db_Table_Rowset_Exception("Illegal index $position");
         }

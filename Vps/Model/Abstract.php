@@ -7,7 +7,6 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     protected $_siblingModels = array();
     protected $_dependentModels = array();
     protected $_referenceMap = array();
-
     /**
      * Row-Filters für automatisch befüllte Spalten
      *
@@ -19,6 +18,9 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
      * _filters = array('pos' => new MyFilter($settings))
      */
     protected $_filters = array();
+
+
+    protected $_rows = array();
 
     public function __construct(array $config = array())
     {

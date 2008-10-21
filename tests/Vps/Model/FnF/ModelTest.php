@@ -204,8 +204,6 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
 
     public function testUniqueRowObject()
     {
-        $this->markTestIncomplete();
-
         $model = new Vps_Model_FnF(array('data'=>array(
             array('id'=>1, 'foo'=>'')
         )));
@@ -218,5 +216,17 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
 
         $r3 = $model->getRows()->current();
         $this->assertTrue($r1 === $r3);
+    }
+    public function testUniqueRowObjectCreateRow()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'name' => 'foo'),
+        ));
+
+        $r1 = $model->createRow();
+        $r1->save();
+        $r2 = $model->getRow(2);
+        $this->assertTrue($r1 === $r2);
     }
 }

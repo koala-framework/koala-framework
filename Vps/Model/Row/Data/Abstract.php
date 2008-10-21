@@ -62,24 +62,17 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
             $this->_beforeInsert();
             $this->_beforeSave();
             $id = $this->_cleanData[$this->_getPrimaryKey()];
-            $ret = $this->_model->update($id, $this, $this->_data);
+            $ret = $this->_model->update($this, $this->_data);
             $this->_afterInsert();
         } else {
             $this->_beforeSave();
             $ret = $this->_model->insert($this, $this->_data);
         }
-
-        $this->_refresh($ret);
+        $this->_cleanData = $this->_data;
 
         $this->_afterSave();
 
         return $ret;
-    }
-
-    protected function _refresh($id)
-    {
-        $this->_data = $this->_model->getRow($id)->_data;
-        $this->_cleanData = $this->_data;
     }
 
     public function delete()
@@ -88,7 +81,7 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
 
         $this->_beforeDelete();
         $id = $this->{$this->_getPrimaryKey()};
-        $this->_model->delete($id, $this);
+        $this->_model->delete($this);
         $this->_afterDelete();
     }
 }

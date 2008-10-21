@@ -22,10 +22,7 @@ class Vps_Model_Proxy_Rowset implements Vps_Model_Rowset_Interface
     {
         $row = $this->_rowset->current();
         if (is_null($row)) return null;
-        return new $this->_rowClass(array(
-            'row' => $row,
-            'model' => $this->_model
-        ));
+        return $this->_model->getRowByProxiedRow($row);
     }
 
     public function key()

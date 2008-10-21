@@ -6,7 +6,7 @@ abstract class Vps_Db_Table_Row_Abstract extends Zend_Db_Table_Row_Abstract
     const FILE_PASSWORD = 'l4Gx8SFe';
     const FILE_PASSWORD_DOWNLOAD = 'j3yjEdv1';
     private $_fileRowCache = array();
-   
+
     public function duplicate($data = array())
     {
         $data = array_merge($this->toArray(), $data);
