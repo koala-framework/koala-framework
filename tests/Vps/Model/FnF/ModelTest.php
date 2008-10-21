@@ -225,7 +225,9 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         ));
 
         $r1 = $model->createRow();
-        $r1->save();
+        $newId = $r1->save();
+        $this->assertEquals(2, $newId);
+
         $r2 = $model->getRow(2);
         $this->assertTrue($r1 === $r2);
     }
