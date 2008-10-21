@@ -7,6 +7,7 @@ class Vpc_Shop_Cart_Checkout_Confirm_Component extends Vpc_Abstract
         $ret = parent::getSettings();
         $ret['flags']['processInput'] = true;
         $ret['cssClass'] = 'webStandard';
+        $ret['viewCache'] = false;
         return $ret;
     }
 

@@ -49,7 +49,7 @@ abstract class Vps_Component_Generator_Abstract
         if (!$this->_model) {
             if (isset($this->_settings['model'])) {
                 if (is_string($this->_settings['model'])) {
-                    $this->_model = new $this->_settings['model']();
+                    $this->_model = Vps_Model_Abstract::getInstance($this->_settings['model']);
                 } else {
                     $this->_model = $this->_settings['model'];
                 }

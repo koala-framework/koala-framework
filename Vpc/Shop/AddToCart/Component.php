@@ -31,7 +31,7 @@ class Vpc_Shop_AddToCart_Component extends Vpc_Form_Component
     protected function _beforeInsert(Vps_Model_Row_Interface $row)
     {
         parent::_beforeInsert($row);
-        $orders = new Vpc_Shop_Cart_Orders();
+        $orders = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders');
         $row->shop_order_id = $orders->getCartOrderAndSave()->id;
         $row->shop_product_id = $this->_getProduct()->id;
         $row->add_component_id = $this->getData()->dbId;

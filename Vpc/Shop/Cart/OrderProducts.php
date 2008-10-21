@@ -19,5 +19,4 @@ class Vpc_Shop_Cart_OrderProducts extends Vps_Model_Db
         $this->_filters['pos'] = new Vps_Filter_Row_Numberize();
         $this->_filters['pos']->setGroupBy('shop_order_id');
     }
-
 }
