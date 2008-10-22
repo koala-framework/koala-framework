@@ -168,7 +168,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         if (!isset($this->_row)) {
             $model = $this->getModel();
-            if ($model instanceof Vps_Model_Db) {
+            if ($model instanceof Vps_Model_Interface) {
                 if ($model->getPrimaryKey() == 'component_id') {
                     $this->_row = $model->getRow($this->getDbId());
                     if (!$this->_row) {
@@ -268,7 +268,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $ret['placeholder'] = $this->_getSetting('placeholder');
         $ret['cssClass'] = self::getCssClass($this);
         $ret['data'] = $this->getData();
-        if ($this->_hasSetting('modelname') && $this->getModel() instanceof Vps_Dao_ComponentField) {
+        if ($this->_hasSetting('modelname') && $this->_getSetting('modelname') == 'Vps_Dao_ComponentField') {
             $ret['row'] = $this->_getRow();
         }
         return $ret;
