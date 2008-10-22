@@ -199,7 +199,8 @@ class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
             'xmlContent' => '<trl>
             				 <text><en>Visible</en><de>Sichtbar</de></text>
             				 <text><en>Delete</en><de>löschen</de></text>
-            				 </trl>'
+            				 </trl>',
+        	'primaryKey' => ''
         ));
         $select = $model->select();
         $select->whereEquals('en', 'Delete');
