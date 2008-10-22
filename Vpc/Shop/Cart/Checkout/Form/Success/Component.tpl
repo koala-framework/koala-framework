@@ -38,27 +38,27 @@
             <td><?=trlVps('EUR')?> <?=$this->money($p->price,'')?></td>
             <td><?=$op->amount?></td>
             <td><?=$op->size?></td>
-            <td><?=trlVps('EUR')?> <?=$this->money($p->price * $op->amount,'')?></td>
+            <td class="productPrice price"><?=trlVps('EUR')?> <?=$this->money($p->price * $op->amount,'')?></td>
         </tr>
         <tr><td colspan="5"><div class="line"></div></td></tr>
         <? } ?>
         <tr class="subtotal">
-            <td colspan="4"><?=trlVps('Subtotal')?>:</td>
-            <td><?=trlVps('EUR')?> <?=$this->money($this->order->getSubTotal(),'')?></td>
+            <td colspan="3"><?=trlVps('Subtotal')?>:</td>
+            <td colspan="2" class="price"><?=trlVps('EUR')?> <?=$this->money($this->order->getSubTotal(),'')?></td>
         </tr>
         <tr>
-            <td colspan="4"><?=trlVps('Shipping and Handling')?>:</td>
-            <td><?=trlVps('EUR')?> <?=$this->money($this->order->getShipping(),'')?></td>
+            <td colspan="3"><?=trlVps('Shipping and Handling')?>:</td>
+            <td colspan="2" class="price"><?=trlVps('EUR')?> <?=$this->money($this->order->getShipping(),'')?></td>
         </tr>
         <? if ($this->order->getCashOnDeliveryCharge()) { ?>
         <tr>
-            <td colspan="4"><?=trlVps('Cash on Delivery Charge')?>:</td>
-            <td><?=trlVps('EUR')?> <?=$this->money($this->order->getCashOnDeliveryCharge(),'')?></td>
+            <td colspan="3"><?=trlVps('Cash on Delivery Charge')?>:</td>
+            <td colspan="2" class="price"><?=trlVps('EUR')?> <?=$this->money($this->order->getCashOnDeliveryCharge(),'')?></td>
         </tr>
         <? } ?>
         <tr class="totalAmount">
-            <td colspan="4"><?=trlVps('Total Amount')?>:</td>
-            <td class="totalAmountPrice"><?=trlVps('EUR')?> <?=$this->money($this->order->getTotal(),'')?></td>
+            <td colspan="3"><?=trlVps('Total Amount')?>:</td>
+            <td colspan="2" class="totalAmountPrice"><?=trlVps('EUR')?> <?=$this->money($this->order->getTotal(),'')?></td>
         </tr>
     </table>
     <div class="confirm"><?=$this->componentLink($this->confirm)?></div>
