@@ -24,6 +24,12 @@ class Vps_Model_Db extends Vps_Model_Abstract
                 'name' => $this->_table
             ));
         }
+        if (!$this->_table) {
+            if (isset($this->_name)) {
+                throw new Vps_Exception("You must rename _name to _table in '".get_class($this)."'");
+            }
+            throw new Vps_Exception("No table set");
+        }
         if (!$this->_table instanceof Zend_Db_Table_Abstract) {
             throw new Vps_Exception("'".get_class($this->_table)."' is not a Zend_Db_Table");
         }
