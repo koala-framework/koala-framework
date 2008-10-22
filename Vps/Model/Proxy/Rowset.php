@@ -1,65 +1,81 @@
 <?php
-class Vps_Model_Proxy_Rowset implements Vps_Model_Rowset_Interface
+class Vps_Model_ProxyCache_Rowset implements Vps_Model_Rowset_Interface
 {
-    protected $_rowClass;
-    protected $_rowset;
+    protected $_cacheData;
+    protected $_pointer = 0;
     protected $_model;
 
-    public function __construct(array $config)
+    public function __construct($config)
     {
-        $this->_rowset = $config['rowset'];
-        $this->_rowClass = $config['rowClass'];
+        $this->_init();
+        if (isset($config['cacheData'])) $this->_cacheData = $config['cacheData'];
         $this->_model = $config['model'];
+    }
+
+    public function toArray()
+    {
+        $ret = array();
+        foreach ($this as $row) {
+            $ret[] = $row->toArray();
+        }
+        return $ret;
+    }
+
+    protected function _init()
+    {
     }
 
     public function rewind()
     {
-        $this->_rowset->rewind();
+        $this->_pointer = 0;
         return $this;
     }
 
     public function current()
     {
-        $row = $this->_rowset->current();
-        if (is_null($row)) return null;
-        return $this->_model->getRowByProxiedRow($row);
+        if (!$this->valid()) {
+            return null;
+        }
+
+        $cacheData = $this->_cacheData[$this->_pointer];
+        if ($cacheData) {
+            return $this->getModel()->getRowByCacheData($cacheData);
+        }
     }
 
     public function key()
     {
-        return $this->_rowset->key();
+        return $this->_pointer;
     }
 
     public function next()
     {
-        $this->_rowset->next();
+        ++$this->_pointer;
     }
 
     public function valid()
     {
-        return $this->_rowset->valid();
+        return $this->_pointer < $this->count();
     }
 
     public function count()
     {
-        return $this->_rowset->count();
+        return count($this->_cacheData);
     }
+
     public function seek($position)
     {
-        $this->_rowset->seek($position);
+        $position = (int) $position;
+        if ($position < 0 || $position > $this->count()) {
+            require_once 'Zend/Db/Table/Rowset/Exception.php';
+            throw new Zend_Db_Table_Rowset_Exception("Illegal index $position");
+        }
+        $this->_pointer = $position;
         return $this;
     }
-    public function getRowset()
-    {
-        return $this->_rowset;
-    }
+
     public function getModel()
     {
         return $this->_model;
     }
-    public function toArray()
-    {
-        return $this->_rowset->toArray();
-    }
-
 }
