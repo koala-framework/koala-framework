@@ -15,6 +15,14 @@
             <?=$this->order->comment?>
         <? } ?>
     </div>
+    <div class="orderInfo">
+        <?=trlVps('You pay by')?>
+        <? if ($this->order->getCashOnDeliveryCharge()) { ?>
+            <?=trlVps('cashOnDelivery')?>
+        <? } else {?>
+            <?=trlVps('prepayment')?>
+        <? } ?>
+    </div>
     <table>
         <tr class="firstRow">
             <th class="thProduct"><?=trlVps('Product')?></th>

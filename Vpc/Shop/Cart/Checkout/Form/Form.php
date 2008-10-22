@@ -37,8 +37,8 @@ class Vpc_Shop_Cart_Checkout_Form_Form extends Vps_Form
             ->setHtml(trlVps('What type of payment do you wish?'));
         $this->add(new Vps_Form_Field_Radio('payment', trlVps('Payment')))
             ->setValues(array(
-                'prepayment'=>trlVps('Prepayment'),
-                'cashOnDelivery'=>trlVps('Nachnahme'),
+                'prepayment'=>trlVps('prepayment'),
+                'cashOnDelivery'=>trlVps('cashOnDelivery'),
                 //'paypal'=>trlVps('Paypal'),
             ))
             ->setDefaultValue('prepayment');
