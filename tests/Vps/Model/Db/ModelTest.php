@@ -10,8 +10,8 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_table = $this->getMock('Vps_Db_Table_Abstract',
-            array('select', '_setupMetadata', '_setupPrimaryKey', 'fetchAll', 'info'),
+        $this->_table = $this->getMock('Vps_Model_Db_Table',
+            array('select', '_setupMetadata', '_setupPrimaryKey', 'fetchAll'),
             array('db' => new Vps_Model_Db_TestAdapter()), '', true);
 
         $this->_dbSelect = $this->getMock('Vps_Db_Table_Select', array(), array(), '', false);
@@ -20,19 +20,10 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->returnValue($this->_dbSelect));
 
-        $this->_table->expects($this->any())
-            ->method('info')
-            ->will($this->returnCallback(array($this, 'tableInfoCallback')));
-
         $this->_model = new Vps_Model_Db(array(
-            'table' => $this->_table
+            'table' => $this->_table,
+            'default' => array('foo' => 'defaultFoo')
         ));
-    }
-
-    public function tableInfoCallback($type)
-    {
-        if ($type == 'name') return 'testtable';
-        if ($type == 'primary') return array('id');
     }
 
     public function testFetchAll()
@@ -223,5 +214,11 @@ class Vps_Model_Db_ModelTest extends PHPUnit_Framework_TestCase
                   ->method('fetchAll')
                   ->with($this->equalTo($this->_dbSelect));
         $this->_model->fetchAll($select);
+    }
+
+    public function testDefaultValues()
+    {
+        $row = $this->_model->createRow();
+        $this->assertEquals('defaultFoo', $row->foo);
     }
 }

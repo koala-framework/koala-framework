@@ -270,4 +270,12 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($r1 === $model->getRow(2));
     }
 
+    public function testDefaultValues()
+    {
+        $model = new Vps_Model_FnF(array(
+            'default' => array('foo'=>'defaultFoo')
+        ));
+        $row = $model->createRow();
+        $this->assertEquals('defaultFoo', $row->foo);
+    }
 }

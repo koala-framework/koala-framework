@@ -94,4 +94,21 @@ class Vps_Model_FieldRows_Test extends PHPUnit_Framework_TestCase
         ));
 
     }
+
+    public function testDefaultValues()
+    {
+        $model = new Vps_Model_FnF(array(
+            'columns' => array('id', 'foo', 'data'),
+            'data'=>array(array('id'=>1, 'foo'=>'bar', 'data'=>'')),
+            'dependentModels' => array('Child'=>
+                new Vps_Model_FieldRows(array(
+                    'fieldName'=>'data',
+                    'default' => array('foo' => 'defaultFoo')
+                ))
+            )
+        ));
+        $row = $model->getRow(1);
+        $cRow = $row->createChildRow('Child');
+        $this->assertEquals('defaultFoo', $cRow->foo);
+    }
 }

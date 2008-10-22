@@ -1,6 +1,6 @@
 <?php
 /**
- * @group xmlModel
+ * @group Model_Xml
  */
 
 class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
@@ -272,4 +272,12 @@ class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testDefaultValues()
+    {
+        $model = new Vps_Model_Xml(array(
+            'default' => array('foo'=>'defaultFoo')
+        ));
+        $row = $model->createRow();
+        $this->assertEquals('defaultFoo', $row->foo);
+    }
 }
