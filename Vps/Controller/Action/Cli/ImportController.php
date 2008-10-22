@@ -75,22 +75,11 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     }
     public static function getHelpOptions()
     {
-        $webConfigFull = new Zend_Config_Ini('application/config.ini', null);
-        $sections = array();
-        $processedServers = array();
-        foreach ($webConfigFull as $k=>$i) {
-            if ($i->server) {
-                $s = $i->server->host.':'.$i->server->dir;
-                if ($i->server->host != 'vivid' && !in_array($s, $processedServers)) {
-                    $sections[] = $k;
-                    $processedServers[] = $s;
-                }
-            }
-        }
+
         return array(
             array(
                 'param'=> 'server',
-                'value'=> $sections,
+                'value'=> self::_getConfigSections(),
                 'valueOptional' => true,
                 'help' => 'what to import'
             )

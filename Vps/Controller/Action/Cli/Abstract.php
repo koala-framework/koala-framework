@@ -45,4 +45,21 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
         system($cmd, $ret);
         if ($ret != 0) throw new Vps_ClientException("Aktion fehlgeschlagen");
     }
+
+    protected static function _getConfigSections()
+    {
+        $webConfigFull = new Zend_Config_Ini('application/config.ini', null);
+        $sections = array();
+        $processedServers = array();
+        foreach ($webConfigFull as $k=>$i) {
+            if ($i->server) {
+                $s = $i->server->host.':'.$i->server->dir;
+                if ($i->server->host != 'vivid' && !in_array($s, $processedServers)) {
+                    $sections[] = $k;
+                    $processedServers[] = $s;
+                }
+            }
+        }
+        return $sections;
+    }
 }
