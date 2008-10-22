@@ -3210,8 +3210,8 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <de>Shop - Produkte</de>
 </text>
 <text>
-<en default="1">The product has been added the the cart successfully.</en>
-<de>Der Artikel wurde erfolgreich in den Warenkorb gelegt.</de>
+<en default="1">The product has been added the the cart.</en>
+<de>Der Artikel wurde in den Warenkorb gelegt.</de>
 </text>
 <text>
 <en default="1">You cart contains {0} products</en>
@@ -3374,10 +3374,6 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <de>Bestellen</de>
 </text>
 <text>
-<en default="1">Nachnahme</en>
-<de>_</de>
-</text>
-<text>
 <en default="1">Please enter your address</en>
 <de>Bitte geben Sie Ihre Adressdaten ein</de>
 </text>
@@ -3391,7 +3387,7 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en default="1">Please check your petitions</en>
-<de>Bitte überprüfen sie Ihre Daten</de>
+<de>Bitte &#xFC;berpr&#xFC;fen sie Ihre Daten</de>
 </text>
 <text>
 <en default="1">Your Comment</en>
@@ -3400,6 +3396,28 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <text>
 <en default="1">Welcome to our shop</en>
 <de>Willkommen zu unserem Shop</de>
+</text>
+<text>
+<en default="1">testWord</en>
+<de>_</de>
+</text>
+<text context="testContext">
+<en default="1">testWord</en>
+<en_plural>testWords</en_plural>
+<de>_</de>
+<de_plural>_</de_plural>
+</text>
+<text>
+<en default="1">You pay by</en>
+<de>Sie zahlen per</de>
+</text>
+<text>
+<en default="1">cashOnDelivery</en>
+<de>Nachnahme</de>
+</text>
+<text>
+<en default="1">prepayment</en>
+<de>Vorauskasse</de>
 </text>
 </trl>
 
