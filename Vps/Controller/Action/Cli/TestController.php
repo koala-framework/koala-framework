@@ -41,7 +41,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         Vps_Benchmark::disable();
 
         $arguments = array();
-        $arguments['ansi'] = true;
+        $arguments['colors'] = true;
         if ($this->_getParam('filter')) {
             $arguments['filter'] = $this->_getParam('filter');
         }
