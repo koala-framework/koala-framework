@@ -144,4 +144,15 @@ class Vps_Model_Proxy_ModelTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($r1 === $r2);
     }
+
+    public function testDefaultValues()
+    {
+        $fnf = new Vps_Model_FnF(array(
+            'default' => array('foo'=>'defaultFoo')
+        ));
+        $proxy = new Vps_Model_Proxy(array('proxyModel' => $fnf));
+
+        $row = $proxy->createRow();
+        $this->assertEquals('defaultFoo', $row->foo);
+    }
 }

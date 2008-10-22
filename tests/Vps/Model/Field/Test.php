@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Model_Field
+ */
 class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
 {
     public function testFnFField()
@@ -93,5 +96,20 @@ class Vps_Model_Field_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals($model->getData(), array(
             array('id'=>1, 'foo'=>'bar', 'data'=>serialize(array('blub'=>1)))
         ));
+    }
+
+    public function testDefaultValues()
+    {
+        $model = new Vps_Model_FnF(array(
+            'default' => array('foo1'=>'defaultFoo1'),
+            'columns' => array('id', 'foo1', 'data'),
+            'siblingModels' => array(new Vps_Model_Field(array(
+                'fieldName'=>'data',
+                'default' => array('foo2'=>'defaultFoo2'),
+            )))
+        ));
+        $row = $model->createRow();
+        $this->assertEquals('defaultFoo1', $row->foo1);
+        $this->assertEquals('defaultFoo2', $row->foo2);
     }
 }
