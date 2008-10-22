@@ -7,21 +7,6 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
     protected $_xmlContent;
     private $_simpleXml;
 
-    protected $_cacheSettings = array(
-        array(
-        	'index' => array('en', 'context'),
-            'columns' => array('de')
-        ),
-        array(
-            'index' => array('de'),
-            'colums' => array('en')
-        )
-    );
-
-    protected $_cacheData = array(
-        'en' => array('hello' => array('id' => 1, 'de'=> 'hallo'))
-    );
-
     protected $_rowClass = 'Vps_Model_Xml_Row';
     protected $_rowSetClass = 'Vps_Model_Xml_Rowset';
 
@@ -36,11 +21,8 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        $data = array();
-        foreach ($this->_getElements() as $key=>$element) {
-            $data[$key] = (array)$element;
-        }
 
+        $data = $this->getData();
         if (!is_object($where)) {
             $select = $this->select($where, $order, $limit, $start);
         } else {
@@ -52,6 +34,21 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
             'rowClass' => $this->_rowClass,
             'dataKeys' => $dataKeys
         ));
+    }
+
+    public function getData ()
+    {
+        if ($this->_data) {
+            return $this->_data;
+        } else {
+	        $data = array();
+	        foreach ($this->_getElements() as $key=>$element) {
+	            $data[$key] = (array)$element;
+	        }
+	        $this->_data = $data;
+	        return $this->_data;
+
+        }
     }
 
     public function getRowByDataKey($key)
@@ -87,20 +84,22 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
     public function insert(Vps_Model_Row_Interface $row, $rowData)
     {
         //performancemäßig noch nicht sehr gut
-        $data = array();
-        foreach ($this->_getElements() as $key=>$element) {
-            $data[$key] = (array)$element;
+        $data = $this->getData();
+        if (!$this->getPrimaryKey()) {
+            throw new Vps_Exception("No Insertion without a primary key");
+        }
+        if ($this->_idExists($rowData[$this->getPrimaryKey()])){
+            throw new Vps_Exception("Id is already used");
         }
 
-        if ($this->_keyExists($row->{$this->getPrimaryKey()}, $data)) {
-            throw new Vps_Exception("Key is already in use.");
-        }
+
         $simpleXml = $this->_getSimpleXml();
         $toAddXml = $this->_getRootElement();
 
         $node = $toAddXml->addChild($this->_topNode);
 
         $id = null;
+
         if (!array_key_exists($this->getPrimaryKey(), $rowData)) {
             throw new Vps_Exception("No Id was set, inserting impossible");
         }
@@ -120,13 +119,36 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         if ($this->_filepath) {
             file_put_contents($this->_filepath, $this->_asPrettyXML($simpleXml->asXML()));
         }
+
+        $row->{$this->getPrimaryKey()} = $id;
+        $rowData[$this->getPrimaryKey()] = $id;
+        $key = $this->_generateKey();
+        $this->_data[$key] = $rowData;
+        $this->_rows[$key] = $row;
         return $id;
+    }
+
+    private function _generateKey()
+    {
+        $rand = rand();
+        while (array_key_exists($rand, $this->_data)) {
+            $rand = rand();
+        }
+        return $rand;
     }
 
     public function delete(Vps_Model_Row_Interface $row)
     {
         $id = $row->{$this->getPrimaryKey()};
         $xml = $this->_getRootElement();
+
+        foreach ($this->_rows as $k=>$i) {
+            if ($row === $i) {
+                unset($this->_data[$k]);
+                unset($this->_rows[$k]);
+                break;
+            }
+        }
         $i = 0;
         foreach ($xml as $k => $element) {
             if ($element->{$this->getPrimaryKey()} == $id) {
@@ -135,6 +157,8 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
             }
             $i++;
         }
+
+
         if ($this->_filepath) {
             file_put_contents($this->_filepath, $this->_asPrettyXML($simpleXml->asXML()));
         }
