@@ -14,7 +14,7 @@ class Vps_Model_Db_FetchTest extends PHPUnit_Framework_TestCase
             array('select', '_setupMetadata', '_setupPrimaryKey', '_fetch', 'insert'),
             array('db' => new Vps_Model_Db_TestAdapter()), '', true);
 
-        $this->_dbSelect = $this->getMock('Vps_Db_Table_Select', array(), array(), '', false);
+        $this->_dbSelect = $this->getMock('Vps_Db_Table_Select', array(), array($this->_table));
 
         $this->_table->expects($this->any())
             ->method('select')
