@@ -161,7 +161,7 @@ class Vps_Component_Abstract
                 }
             }
             if (!is_instance_of($tablename, 'Zend_Db_Table_Abstract')) {
-                throw new Vps_Exception("table setting for generator in $class is not a Zend_Db_Table");
+                throw new Vps_Exception("table setting '$tablename' for generator in $class is not a Zend_Db_Table");
             }
             $tables[$class.'-'.$tablename] = new $tablename(array('componentClass'=>$class));
             if (!$tables[$class.'-'.$tablename] instanceof Zend_Db_Table_Abstract) {
