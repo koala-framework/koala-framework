@@ -1,6 +1,14 @@
 <div class="<?=$this->cssClass?>">
 <? if($this->data->hasContent()) { ?>
-    <div class="text"><?php echo $this->component($this->text) ?><br /></div>
+
+    <div class="text">
+    <? if ($this->text instanceof Vps_Component_Data) { ?>
+    <?php echo $this->component($this->text) ?>
+    <? } else { ?>
+    <?php echo $this->text ?>
+    <? } ?>
+    <br /></div>
+
     <input type="hidden" class="options" value="<?= str_replace("\"", "'", $this->options) ?>" />
 
     <? /* height wird benötigt wenn gmap innerhalb von switchDisplay liegt*/ ?>
