@@ -3,7 +3,6 @@
     margin-bottom: 20px;
 }
 .$cssClass a {
-    height: 18px;
     display: block;
 }
 .$cssClass a.notObserved {
