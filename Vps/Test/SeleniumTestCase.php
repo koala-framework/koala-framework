@@ -40,4 +40,23 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         'timeout' => 30000,
       )
     );
+    public function clickAndWait($link)
+    {
+        $this->click($link);
+        $this->waitForPageToLoad("30000");
+    }
+    public function sessionRestart()
+    {
+        $this->open("/vps/debug/session-restart");
+    }
+    public function assertContainsText($locator, $text)
+    {
+        if (is_array($text)) {
+            foreach ($text as $k=>$i) {
+                $this->assertContainsText($locator.'['.$k.']', $i);
+            }
+        } else {
+            $this->assertTrue((bool)preg_match('#'.$text.'#', $this->getText($locator)));
+        }
+    }
 }
