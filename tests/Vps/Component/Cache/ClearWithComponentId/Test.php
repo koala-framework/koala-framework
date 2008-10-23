@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Component_Cache
+ */
 class Vps_Component_Cache_ClearWithComponentId_Test extends PHPUnit_Framework_TestCase
 {
     private $_root;
@@ -18,6 +21,8 @@ class Vps_Component_Cache_ClearWithComponentId_Test extends PHPUnit_Framework_Te
 
     public function testClear()
     {
+        Zend_Registry::get('config')->hasIndex = false;
+
         $this->_cache->expects($this->once())
             ->method('remove')
             ->with($this->equalTo(array($this->_root->getComponentById('root-child'))));
