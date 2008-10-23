@@ -8,6 +8,7 @@ interface Vps_Model_Interface
     public function getColumns();
     public function hasColumn($col);
     public function getSiblingModels();
+    public function setDefault(array $default);
 
     public function getRow($id);
     public function getRows($where=null, $order=null, $limit=null, $start=null);

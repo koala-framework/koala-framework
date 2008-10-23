@@ -79,6 +79,12 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $this->_filters;
     }
 
+    public function setDefault(array $default)
+    {
+        $this->_default = $default;
+        return $this;
+    }
+
     public function createRow(array $data=array())
     {
         return $this->_createRow($data);
