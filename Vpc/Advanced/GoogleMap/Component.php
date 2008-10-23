@@ -29,10 +29,4 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Advanced_GoogleMapView_Compon
         $ret['overview'] = $this->_getRow()->overview;
         return $ret;
     }
-
-    public function hasContent()
-    {
-        $options = $this->_getOptions();
-        return !!$options['coordinates'];
-    }
 }

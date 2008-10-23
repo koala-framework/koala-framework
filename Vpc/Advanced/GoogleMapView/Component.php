@@ -18,7 +18,7 @@ abstract class Vpc_Advanced_GoogleMapView_Component extends Vpc_Abstract_Composi
         $options = $this->_getOptions();
         $pos = strpos($options['coordinates'], ";");
         $options['longitude'] = substr($options['coordinates'], 0, $pos);
-        $options['latitude'] = substr($options['coordinates'], $pos + 1, strlen($this->_getRow()->coordinates) - 1);
+        $options['latitude'] = substr($options['coordinates'], $pos + 1, strlen($options['coordinates']) - 1);
         $options['coordinates'] = str_replace(';', ',', $options['coordinates']);
 
         $ret['options'] = Zend_Json::encode($options);
@@ -27,6 +27,12 @@ abstract class Vpc_Advanced_GoogleMapView_Component extends Vpc_Abstract_Composi
         $ret['height'] = $options['height'];
 
         return $ret;
+    }
+
+    public function hasContent()
+    {
+        $options = $this->_getOptions();
+        return !!$options['coordinates'];
     }
 
     abstract protected function _getOptions();
