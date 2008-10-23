@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract_Composite_Component
+class Vpc_Advanced_GoogleMap_Component extends Vpc_Advanced_GoogleMapView_Component
 {
     public static function getSettings()
     {
@@ -10,45 +10,29 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Abstract_Composite_Component
                 'zoom' => 8,
                 'height' => 300
             ),
-            'assets' => array(
-                'files' => array(
-                    'vps/Vpc/Advanced/GoogleMap/Component.js',
-                ),
-                'dep'   => array('ExtCore', 'VpsGoogleMap', 'ExtUtilJson')
-            ),
-            'assetsAdmin' => array(
-                'dep'   => array('VpsGoolgeMapField')
-            )
         ));
+        $ret['assetsAdmin']['dep'][] = 'VpsGoolgeMapField';
         $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
         return $ret;
     }
 
-    public function getTemplateVars()
+    protected function _getOptions()
     {
-        $ret = parent::getTemplateVars();
-        $pos = strpos($this->_getRow()->coordinates, ";");
-
-        // wird benötigt wenn gmap in switchDisplay liegt
+        $ret = array();
+        $ret['zoom_properties'] = $this->_getRow()->zoom_properties;
+        $ret['zoom'] = $this->_getRow()->zoom;
         $ret['height'] = $this->_getRow()->height;
-
-        $options = array();
-        $options['zoom_properties'] = $this->_getRow()->zoom_properties;
-        $options['zoom'] = $this->_getRow()->zoom;
-        $options['height'] = $this->_getRow()->height;
-        $options['width'] = $this->_getRow()->width;
-        $options['longitude'] = substr($this->_getRow()->coordinates, 0, $pos);
-        $options['latitude'] = substr($this->_getRow()->coordinates, $pos + 1, strlen($this->_getRow()->coordinates) - 1);
-        $options['coordinates'] = str_replace(';', ',', $this->_getRow()->coordinates);
-        $options['scale'] = $this->_getRow()->scale;
-        $options['satelite'] = $this->_getRow()->satelite;
-        $options['overview'] = $this->_getRow()->overview;
-        $ret['options'] = Zend_Json::encode($options);
+        $ret['width'] = $this->_getRow()->width;
+        $ret['coordinates'] = $this->_getRow()->coordinates;
+        $ret['scale'] = $this->_getRow()->scale;
+        $ret['satelite'] = $this->_getRow()->satelite;
+        $ret['overview'] = $this->_getRow()->overview;
         return $ret;
     }
 
     public function hasContent()
     {
-        return !!$this->_getRow()->coordinates;
+        $options = $this->_getOptions();
+        return !!$options['coordinates'];
     }
 }

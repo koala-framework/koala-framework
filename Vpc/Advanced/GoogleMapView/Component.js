@@ -185,7 +185,7 @@ Vpc.Advanced.GoogleMap.renderMap = function(map) {
 };
 
 Vps.onContentReady(function() {
-    var maps = Ext.DomQuery.select('div.vpcAdvancedGoogleMap');
+    var maps = Ext.DomQuery.select('div.vpcAdvancedGoogleMapView');
     Ext.each(maps, function(map) {
         var up = Ext.get(map).up('div.vpsSwitchDisplay');
         if (up) {
