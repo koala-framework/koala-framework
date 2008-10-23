@@ -11,10 +11,11 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
         foreach ($options as $opt) {
             $p = $this->_getParam($opt['param']);
             if (isset($opt['value']) && ($p===true || !$p) &&
-                    !(isset($opt['valueOptional']) && $opt['valueOptional'])) {
+                    !(isset($opt['valueOptional']) && $opt['valueOptional']) &&
+                    !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
                 throw new Vps_ClientException("Parameter '$opt[param]' is missing");
             }
-            if (is_null($p) && isset($opt['value'])) {
+            if (is_null($p) && isset($opt['value']) && !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
                 if (is_array($opt['value'])) {
                     $v = $opt['value'][0];
                 } else {
@@ -23,7 +24,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
                 $this->getRequest()->setParam($opt['param'], $v);
                 $p = $v;
             }
-            if (isset($opt['value']) && is_array($opt['value']) && !in_array($p, $opt['value'])) {
+            if (isset($opt['value']) && is_array($opt['value']) && !in_array($p, $opt['value']) && !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
                 throw new Vps_ClientException("Invalid value for parameter '$opt[param]'");
             }
         }
