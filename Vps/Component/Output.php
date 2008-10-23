@@ -173,6 +173,7 @@ class Vps_Component_Output
             $data = $this->_parseComponent($c, $ignoreVisible, false, $plugins);
             $ret = str_replace($search, $data['content'], $ret);   
             $toLoad = array_merge($toLoad, $data['toLoad']);
+            $toLoadHasContent = array_merge($toLoadHasContent, $data['toLoadHasContent']);
         }
         return array(
             'content' => $ret,
