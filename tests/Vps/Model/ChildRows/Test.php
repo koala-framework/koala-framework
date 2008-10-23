@@ -23,7 +23,19 @@ class Vps_Model_ChildRows_Test extends PHPUnit_Framework_TestCase
         $row = $cModel->getRow(3);
         $this->assertEquals($row->bar, 'bar3');
         $this->assertEquals($row->test_id, 1);
+
+        $row = $model->getRow(1);
+        $select = $model->select();
+        $select->limit(1);
+        $this->assertEquals(1, count($row->getChildRows('Child', $select)));
+
+        $select = $model->select();
+        $select->whereEquals('bar', 'bar2');
+        $this->assertEquals(1, count($row->getChildRows('Child', $select)));
+        $this->assertEquals('bar2', $row->getChildRows('Child', $select)->current()->bar);
     }
+
+
     public function testParentRow()
     {
         $cModel = Vps_Model_Abstract::getInstance('Vps_Model_ChildRows_ChildModel');

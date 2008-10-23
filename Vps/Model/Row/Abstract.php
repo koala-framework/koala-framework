@@ -17,6 +17,12 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         $this->_model = $config['model'];
         static $internalId = 0;
         $this->_internalId = $internalId++;
+
+        $this->_init();
+    }
+
+    protected function _init()
+    {
     }
 
     public function getInternalId()
@@ -146,7 +152,9 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         if (method_exists($m, 'getRowsByParentRow')) {
             return $m->getRowsByParentRow($this, $select);
         } else {
-            $select = $m->select($select);
+            if (!$select instanceof Vps_Model_Select) {
+                $select = $m->select($select);
+            }
             $ref = $m->getReferenceByModelClass(get_class($this->_model), $rule);
             if (!$this->{$this->_getPrimaryKey()}) {
                 throw new Vps_Exception("row does not yet have a primary id");
