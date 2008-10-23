@@ -106,12 +106,7 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         if ($dependentTable instanceof Vps_Model_Db) {
             $dependentTable = $dependentTable->getTable();
         }
-        $class = $this->_model->getRowsetClass();
-        return new $class(array(
-            'rowset' => $this->_row->findDependentRowset($dependentTable, $ruleKey, $dbSelect),
-            'rowClass' => get_class($this),
-            'model' => $this
-        ));
+        return $this->_row->findDependentRowset($dependentTable, $ruleKey, $dbSelect);
     }
 
     public function findParentRow($parentTable, $ruleKey = null, Vps_Model_Select $select = null)
@@ -121,12 +116,7 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
             $parentTable = $parentTable->getTable();
         }
         $class = get_class($this);
-        $dbRow = $this->_row->findParentRow($parentTable, $ruleKey, $dbSelect);
-        if (!$dbRow) return null;
-        return new $class(array(
-            'row' => $dbRow,
-            'model' => $this->_model
-        ));
+        return $this->_row->findParentRow($parentTable, $ruleKey, $dbSelect);
     }
 
     public function findManyToManyRowset($matchTable, $intersectionTable, $callerRefRule = null,
@@ -139,11 +129,6 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         if ($intersectionTable instanceof Vps_Model_Db) {
             $intersectionTable = $intersectionTable->getTable();
         }
-        $class = $this->_model->getRowsetClass();
-        return new $class(array(
-            'rowset' => $this->_row->findManyToManyRowset($matchModel, $intersectionModel, $callerRefRule, $matchRefRule, $dbSelect),
-            'rowClass' => get_class($this),
-            'model' => $this
-        ));
+        return $this->_row->findManyToManyRowset($matchModel, $intersectionModel, $callerRefRule, $matchRefRule, $dbSelect);
     }
 }
