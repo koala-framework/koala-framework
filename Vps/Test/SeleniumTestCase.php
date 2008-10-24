@@ -1,45 +1,30 @@
 <?php
 class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
-    public static $browsers = array(
-    /*
-      array(
-        'name'    => 'Firefox on Linux',
-        'browser' => '*firefox /usr/lib/firefox/firefox-bin',
-        'host'    => 'my.linux.box',
-        'port'    => 4444,
-        'timeout' => 30000,
-      ),
-      array(
-        'name'    => 'Safari on MacOS X',
-        'browser' => '*safari',
-        'host'    => 'my.macosx.box',
-        'port'    => 4444,
-        'timeout' => 30000,
-      ),
-      array(
-        'name'    => 'Safari on Windows XP',
-        'browser' => '*custom C:\Programme\Safari\Safari.exe -url',
-        'host'    => 'vivid-test',
-        'port'    => 4444,
-        'timeout' => 30000,
-      ),
-      */
-      array(
-        'name'    => 'Internet Explorer on Windows XP',
-        'browser' => '*iexplore',
-        'host'    => 'vivid-test',
-        'port'    => 4444,
-        'timeout' => 30000,
-      ),
-      array(
-        'name'    => 'Firefox 2 on Windows XP',
-        'browser' => '*firefox c:\Programme\MozillaFirefox2\firefox.exe',
-        'host'    => 'vivid-test',
-        'port'    => 4444,
-        'timeout' => 30000,
-      )
-    );
+    public static function suite($className)
+    {
+        self::$browsers = array();
+        foreach (Vps_Registry::get('config')->server->testBrowser as $b) {
+            $b = $b->toArray();
+            $b['port'] = (int)$b['port'];
+            $b['timeout'] = (int)$b['timeout'];
+            self::$browsers[] = $b;
+        }
+        if (!self::$browsers) {
+            throw new Vps_Exception("No test-Browser avaliable");
+        }
+        return parent::suite($className);
+    }
+
+    protected function setUp()
+    {
+        $domain = Vps_Registry::get('config')->server->testDomain;
+        if (!$domain) {
+            throw new Vps_Exception("No testDomain set for this config section");
+        }
+        $this->setBrowserUrl('http://'.$domain.'/');
+    }
+
     public function clickAndWait($link)
     {
         $this->click($link);
