@@ -75,7 +75,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     }
     public static function getHelpOptions()
     {
-
         return array(
             array(
                 'param'=> 'server',

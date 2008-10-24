@@ -18,9 +18,9 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
     protected function setUp()
     {
-        $domain = Vps_Registry::get('config')->server->testDomain;
+        $domain = Vps_Registry::get('testDomain');
         if (!$domain) {
-            throw new Vps_Exception("No testDomain set for this config section");
+            throw new Vps_Exception("No testDomain set");
         }
         $this->setBrowserUrl('http://'.$domain.'/');
     }

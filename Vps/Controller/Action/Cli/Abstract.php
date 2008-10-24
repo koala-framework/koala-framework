@@ -63,4 +63,29 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
         }
         return $sections;
     }
+    protected static function _getConfigSectionsWithTestDomain()
+    {
+        $webConfigFull = new Zend_Config_Ini('application/config.ini', null);
+        $sections = array();
+        $processedDomains = array();
+        foreach ($webConfigFull as $k=>$i) {
+            if ($i->server && $i->server->testDomain) {
+                if ( !in_array($i->server->testDomain, $processedDomains)) {
+                    $sections[] = $k;
+                    $processedDomains[] = $i->server->testDomain;
+                }
+            }
+        }
+        $sections = array_reverse($sections);
+        $currentSection = Vps_Setup::getConfigSection();
+        $ret = array();
+        foreach ($sections as $i) {
+            if ($i == $currentSection) {
+                array_unshift($ret, $i);
+            } else {
+                $ret[] = $i;
+            }
+        }
+        return $ret;
+    }
 }
