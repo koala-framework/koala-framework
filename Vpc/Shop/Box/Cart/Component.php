@@ -15,14 +15,18 @@ class Vpc_Shop_Box_Cart_Component extends Vpc_Abstract
         $ret['cart'] = $this->_getCart();
         $ret['checkout'] = Vps_Component_Data_Root::getInstance()
             ->getComponentByClass('Vpc_Shop_Cart_Checkout_Component');
-        $ret['items'] = $ret['cart']->getChildComponents(array('generator'=>'detail'));
-        foreach ($ret['items'] as $i) {
-            $i->product = Vps_Component_Data_Root::getInstance()
-                ->getComponentByDbId($i->row->add_component_id)
-                ->parent;
-        }
         $ret['order'] = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')
                             ->getCartOrder();
+        $items = $ret['order']->getChildRows('Products'); //$ret['cart']->getChildComponents(array('generator'=>'detail'));
+        $ret['items'] = array();
+        foreach ($items as $i) {
+            $ret['items'][] = (object)array(
+                'product' => Vps_Component_Data_Root::getInstance()
+                                ->getComponentByDbId($i->add_component_id)
+                                ->parent,
+                'row' => $i
+            );
+        }
 
         return $ret;
     }
