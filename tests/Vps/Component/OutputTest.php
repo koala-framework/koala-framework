@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Component_Output
+ */
 class Vps_Component_OutputTest extends PHPUnit_Framework_TestCase
 {
     protected $_output;
@@ -122,5 +125,34 @@ class Vps_Component_OutputTest extends PHPUnit_Framework_TestCase
         );
         $this->_output->getCache()->emptyPreload();
         $this->assertEquals('foo bar foo plugin(child)', $this->_output->renderMaster($this->_root));
+    }
+
+    public function testSaveCacheEnabled()
+    {
+        $this->markTestIncomplete();
+        
+        $this->_output->getCache()->expects($this->once())
+                                    ->method('save');
+
+        self::$_templates = array(
+            //'root__master' => 'foo'
+        );
+        $this->assertEquals('foo', $this->_output->renderMaster($this->_root));
+
+    }
+
+    public function testSaveCacheDisabled()
+    {
+        $this->markTestIncomplete();
+
+        $this->_output->useCache(false);
+
+        $this->_output->getCache()->expects($this->never())
+                                    ->method('save');
+
+        self::$_templates = array(
+            //'root__master' => 'foo'
+        );
+        $this->assertEquals('foo', $this->_output->renderMaster($this->_root));
     }
 }
