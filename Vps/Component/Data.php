@@ -231,8 +231,7 @@ class Vps_Component_Data
             Vps_Benchmark::count('getChildComponents uncached');
         }
 
-            //cache temporär deaktiviert
-        if (true || !isset($this->_constraintsCache[$sc])) {
+        if (!isset($this->_constraintsCache[$sc])) {
             $ret = array();
 
             $this->_constraintsCache[$sc] = array();
