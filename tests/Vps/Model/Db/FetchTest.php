@@ -86,4 +86,23 @@ class Vps_Model_Db_FetchTest extends PHPUnit_Framework_TestCase
         $r2 = $this->_model->getRow(2);
         $this->assertTrue($r1 === $r2);
     }
+    
+    /**
+     * @expectedException Vps_Exception
+     */
+    public function testValuesNotInModel()
+    {
+        $this->_table->expects($this->any())
+            ->method('_fetch')
+            ->will($this->returnValue(array(
+                    array('id'=>1, 'foo'=>'foo', 'bar'=>null)
+                )));
+        $row = $this->_model->getRows()->current();
+        $this->assertTrue(isset($row->foobar));
+        $this->assertFalse(isset($row->foobar1));
+        $this->assertEquals('foo', $row->foo);
+        $this->assertEquals('foobar', $row->foobar);
+        $this->assertFalse(isset($row->foobar1));
+        $row->foobar1; // wird Exception
+    }
 }
