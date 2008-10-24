@@ -7,7 +7,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
     }
     public static function getHelpOptions()
     {
-        return array(
+        $ret = array(
             array(
                 'param'=> 'filter',
                 'type' => 'string',
@@ -30,14 +30,18 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             array(
                 'param'=> 'stop-on-failure',
                 'help' => 'Stop execution upon first error or failure'
-            ),
-            array(
+            )
+        );
+        $value = self::_getConfigSectionsWithTestDomain();
+        if ($value) {
+            $ret[] = array(
                 'param'=> 'server',
-                'value' => self::_getConfigSectionsWithTestDomain(),
+                'value' => $value,
                 'valueOptional' => true,
                 'help' => 'Server for Selenium-Tests'
-            ),
-        );
+            );
+        }
+        return $ret;
     }
     public function indexAction()
     {
@@ -64,8 +68,10 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if ($this->_getParam('stop-on-failure')) {
             $arguments['stopOnFailure'] = $this->_getParam('stop-on-failure');
         }
-        $cfg = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
-        Vps_Registry::set('testDomain', $cfg->server->testDomain);
+        if ($this->_getParam('server')) {
+            $cfg = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
+            Vps_Registry::set('testDomain', $cfg->server->testDomain);
+        }
 
         $suite = new Vps_Test_TestSuite();
         $runner = new PHPUnit_TextUI_TestRunner;
