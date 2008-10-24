@@ -15,7 +15,7 @@ class Vps_Data_Table extends Vps_Data_Abstract
     {
         $name = $this->_dataIndex;
         if (!$name) $name = $this->getFieldname();
-        if (!$row->getModel()->hasColumn($name)) {
+        if (!isset($row->$name)) {
             throw new Vps_Exception("Index '$name' doesn't exist in row.");
         }
         return $row->$name;
