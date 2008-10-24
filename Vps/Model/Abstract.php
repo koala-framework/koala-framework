@@ -107,7 +107,10 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         foreach ($data as $k=>$i) {
             $ret->$k = $i;
         }
-        if (!isset($ret->{$this->getPrimaryKey()})) $ret->{$this->getPrimaryKey()} = null;
+        $pk = $this->getPrimaryKey();
+        if (isset($ret->$pk) && !$ret->$pk) {
+            $ret->$pk = null;
+        }
         return $ret;
     }
 
