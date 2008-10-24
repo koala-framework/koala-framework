@@ -18,7 +18,7 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
 
     public function __unset($name)
     {
-        if (isset($this->$name)) {
+        if (isset($this->_row->$name)) {
             unset($this->_row->$name);
         } else {
             parent::__unset($name);
@@ -27,7 +27,7 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
 
     public function __get($name)
     {
-        if (isset($this->$name)) {
+        if (isset($this->_row->$name)) {
             $value = $this->_row->$name;
             if (is_string($value) && substr($value, 0, 13) =='vpsSerialized') {
                 $value = unserialize(substr($value, 13));
@@ -40,7 +40,7 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
 
     public function __set($name, $value)
     {
-        if (isset($this->$name)) {
+        if (isset($this->_row->$name)) {
             if (is_array($value) || is_object($value)) {
                 $value = 'vpsSerialized'.serialize($value);
             }
