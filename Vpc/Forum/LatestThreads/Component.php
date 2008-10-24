@@ -32,7 +32,10 @@ class Vpc_Forum_LatestThreads_Component extends Vpc_Abstract
         $select->order('create_time', 'DESC');
         $threads = array();
         $threadIds = array();
-        while (count($threads) < $this->_getSetting('numberOfThreads')) {
+        
+        $x = 0;
+        while (count($threads) < $this->_getSetting('numberOfThreads') && $x < 5) {
+            $x++;
             $posts = $postGenerator->getChildData(null, $select);
             foreach ($posts as $post) {
                 $thread = $post->parent->parent;
