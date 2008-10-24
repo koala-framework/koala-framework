@@ -39,7 +39,9 @@ class Vps_Component_Output
         $componentId = $this->getCache()->getCacheIdFromComponentId($component->componentId, $masterTemplate);
         $pageId = $component->getPage() ? $component->getPage()->componentId : '';
         $pageId = $this->getCache()->getCacheIdFromComponentId($pageId);
-        $this->getCache()->preload(array($componentId => $pageId));
+        if ($this->_useCache) {
+            $this->getCache()->preload(array($componentId => $pageId));
+        }
         return $this->_render($component, $ignoreVisible, $masterTemplate, $plugins);
     }
     
@@ -233,7 +235,6 @@ class Vps_Component_Output
                 $templateVars = array();
                 $templateVars['component'] = $component;
                 $templateVars['boxes'] = array();
-                Vps_Debug::enable();
                 foreach ($component->getChildBoxes() as $box) {
                     $templateVars['boxes'][$box->box] = $box;
                 }
@@ -251,7 +252,7 @@ class Vps_Component_Output
         
                 $ret = $this->_renderView($template, $templateVars);
             }
-            if ($cacheId) {
+            if ($this->_useCache($componentId, $component->componentClass)) {
                 $tags = array();
                 $tags['componentClass'] = $component->componentClass;
                 if ($component->getPage()) $tags['pageId'] = $cache->getCacheIdFromComponentId($component->getPage()->componentId);
