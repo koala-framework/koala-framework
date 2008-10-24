@@ -21,22 +21,6 @@ class Vps_Model_Proxy_RowTest extends PHPUnit_Framework_TestCase
         unset($row->namesFOO);
     }
 
-    public function testUnsetTrue()
-    {
-        $fnf = new Vps_Model_FnF(array(
-            'data' => array(
-                array('id' => 4, 'names' => 'foo')
-            ),
-            'columns' => array('id', 'names')
-        ));
-        $model = new Vps_Model_Proxy(array('proxyModel' => $fnf));
-
-        $row = $model->getRow(4);
-        $this->assertTrue(isset($row->names));
-        unset($row->names);
-        $this->assertFalse(isset($row->names));
-    }
-
     public function testToArray()
     {
         $fnf = new Vps_Model_FnF(array(
