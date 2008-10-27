@@ -11,7 +11,7 @@ abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
     {
         $cache = Vps_Component_Cache::getInstance();
         $cacheId = $cache->getCacheIdFromComponentId($this->getData()->componentId);
-        if (!$xml = $cache->load($this->getData()->componentClass, $cacheId)) {
+        if (!$xml = $cache->load($cacheId)) {
             $feedArray = array(
                 'title' => $this->_getRssTitle(),
                 'link' => 'http://'.$_SERVER['HTTP_HOST'].$this->getUrl(),
@@ -27,7 +27,11 @@ abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
             );
             $feed = Zend_Feed::importArray($feedArray, 'rss');
             $xml = $feed->saveXml();
-            $cache->save($xml, $this->getData()->componentClass, $cacheId);
+            $tags = array(
+                'componentClass' => $this->getData()->componentClass,
+                'pageId' => $this->getData()->getPage()->componentId
+            );
+            $cache->save($xml, $cacheId, $tags);
         }
         header('Content-type: application/rss+xml; charset: utf-8');
         echo $xml;
