@@ -2,7 +2,7 @@
 /**
  * @group Component_Output
  */
-class Vps_Component_OutputTest extends PHPUnit_Framework_TestCase
+class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
 {
     protected $_output;
     protected static $_templates = array();
@@ -23,7 +23,7 @@ class Vps_Component_OutputTest extends PHPUnit_Framework_TestCase
             array('save', '_preload'), array(), '', false);
         $cache->expects($this->any())
              ->method('_preload')
-             ->will($this->returnCallback(array('Vps_Component_OutputTest', 'callback')));
+             ->will($this->returnCallback(array('Vps_Component_Output_CacheTest', 'callback')));
         $this->_output->setCache($cache);
     }
 

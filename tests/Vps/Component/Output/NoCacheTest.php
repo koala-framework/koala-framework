@@ -15,7 +15,7 @@ class Vps_Component_Output_NoCacheTest extends PHPUnit_Framework_TestCase
 
     public function testComponentOutput()
     {
-        $output = $this->_output->render($this->_root, dirname(__FILE__) . '/../Master.tpl');
+        $output = $this->_output->render($this->_root, dirname(__FILE__) . '/Master.tpl');
         $this->assertEquals('master box root plugin(plugin(child child2))', $output);
         
         $output = $this->_output->render($this->_root);
