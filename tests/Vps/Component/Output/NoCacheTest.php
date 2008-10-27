@@ -8,14 +8,14 @@ class Vps_Component_Output_NoCacheTest extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_Root');
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_Root_Component');
         $this->_root = Vps_Component_Data_Root::getInstance();
         $this->_output = new Vps_Component_Output_NoCache();
     }
 
     public function testComponentOutput()
     {
-        $output = $this->_output->render($this->_root, dirname(__FILE__) . '/Master.tpl');
+        $output = $this->_output->render($this->_root, dirname(__FILE__) . '/Root/Master.tpl');
         $this->assertEquals('master box root plugin(plugin(child child2))', $output);
         
         $output = $this->_output->render($this->_root);
