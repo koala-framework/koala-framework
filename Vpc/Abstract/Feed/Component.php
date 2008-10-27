@@ -7,7 +7,7 @@ abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
         return Zend_Registry::get('config')->application->name;
     }
 
-    public function sendContent($decoratedPage)
+    public function sendContent()
     {
         $cache = Vps_Component_Cache::getInstance();
         $cacheId = $cache->getCacheIdFromComponentId($this->getData()->componentId);
