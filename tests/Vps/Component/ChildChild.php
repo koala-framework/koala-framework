@@ -5,5 +5,10 @@ class Vps_Component_Output_ChildChild extends Vpc_Abstract
     {
         return false;
     }
+
+    public function getTemplateFile()
+    {
+        return dirname(__FILE__) . '/ChildChild.tpl';
+    }
 }
 ?>

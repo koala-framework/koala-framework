@@ -18,9 +18,13 @@ class Vps_View_Component extends Vps_View
     
     public static function renderComponent($component, $ignoreVisible = false, $masterTemplate = false, array $plugins = array())
     {
-        $output = Vps_Component_Output::getInstance();
-        $output->useCache(!Zend_Registry::get('config')->debug->componentCache->disable);
-        return $output->render($component, $ignoreVisible, $masterTemplate, $plugins);
+        if (Zend_Registry::get('config')->debug->componentCache->disable) {
+            $output = new Vps_Component_Output_NoCache();
+        } else {
+            $output = new Vps_Component_Output_Cache();
+        }
+        $output->setIgnoreVisible($ignoreVisible);
+        return $output->render($component, $masterTemplate, $plugins);
     }
 
     /**

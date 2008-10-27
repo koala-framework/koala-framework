@@ -1,0 +1,1 @@
+child <?= $this->component($this->child) ?>
