@@ -1,14 +1,14 @@
 <?php
 class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
 {
-    private $_smallImageRow;
+    private $_smallImageComponent;
 
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['componentName'] = trlVps('Image Enlarge');
         $ret['componentIcon'] = new Vps_Asset('imageEnlarge');
-        $ret['tablename'] = 'Vpc_Basic_Image_Enlarge_Model';
+        $ret['modelname'] = 'Vpc_Basic_Image_Enlarge_Model';
         $ret['hasSmallImageComponent'] = true;
         $ret['fullSizeDownloadable'] = false;
         $ret['generators']['smallImage'] = array(
@@ -26,46 +26,63 @@ class Vpc_Basic_Image_Enlarge_Component extends Vpc_Basic_Image_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['url'] = $ret['row']->getFileUrl();
-        $size = $ret['row']->getImageDimensions();
+        $ret['url'] = $this->getImageUrl();
+        $size = $this->getImageDimensions();
         $ret['width'] = $size['width'];
         $ret['height'] = $size['height'];
+
         $ret['smallImage'] = $this->getSmallImage();
 
         $ret['fullSizeUrl'] = false;
         if ($this->_getSetting('fullSizeDownloadable')) {
-            $ret['fullSizeUrl'] = $this->_getRow()->getFileUrl(null, 'original');
+            $row = $this->getImageRow();
+            $filename = $row->filename;
+            $fRow = $row->getParentRow('Image');
+            if (!$filename && $fRow) {
+                $filename = $fRow->filename;
+            }
+            $filename .= '.'.$fRow->extension;
+            $ret['fullSizeUrl'] = Vps_Media::getUrl($this->getData()->componentClass,
+                $this->getData()->dbId, 'original', $filename);
         }
         return $ret;
     }
 
-    private function _getSmallImageRow()
+    private function _getSmallImageComponent()
     {
-        if (!isset($this->_smallImageRow)) {
-            $this->_smallImageRow = $this->getData()->getChildComponent('-smallImage')
-                                        ->getComponent()->getImageRow();
+        if (!isset($this->_smallImageComponent)) {
+            $this->_smallImageComponent = $this->getData()->getChildComponent('-smallImage')->getComponent();
         }
-        return $this->_smallImageRow;
+        return $this->_smallImageComponent;
     }
 
     //wird uA. verwendet in Vpc_Composite_ImagesEnlarge_Component
     public function getSmallImage()
     {
         $ret = array();
-
-        if (!$this->_getSetting('hasSmallImageComponent')
-            || !$this->_getRow()->enlarge
-            || !$this->_getSmallImageRow()->getFileUrl())
-        {
-            $ret['url'] = $this->_getRow()->getFileUrl(null, 'small');
-            $size = $this->_getRow()->getImageDimensions(null, 'small');
-        } else {
-            $ret['row'] = $this->_getSmallImageRow();
-            $ret['url'] = $ret['row']->getFileUrl();
-            $size = $ret['row']->getImageDimensions();
-        }
+        $ret['row'] = $this->_getSmallImageComponent()->getImageRow();
+        $ret['url'] = $this->_getSmallImageComponent()->getImageUrl();
+        $size = $this->_getSmallImageComponent()->getImageDimensions();
         $ret['width'] = $size['width'];
         $ret['height'] = $size['height'];
         return $ret;
+    }
+
+    public static function getMediaOutput($id, $type, $className)
+    {
+        if ($type == 'original') {
+            $row = Vpc_Abstract::createModel($className)->getRow($id);
+            if ($row) {
+                $fileRow = $row->getParentRow('Image');
+            } else {
+                return null;
+            }
+            return array(
+                'file' => $fileRow->getFileSource(),
+                'mimeType' => $fileRow->mime_type
+            );
+        } else {
+            return parent::getMediaOutput($id, $type, $className);
+        }
     }
 }

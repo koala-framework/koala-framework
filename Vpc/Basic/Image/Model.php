@@ -1,13 +1,12 @@
 <?php
-class Vpc_Basic_Image_Model extends Vpc_Table
+class Vpc_Basic_Image_Model extends Vps_Model_Db_Proxy
 {
-    protected $_name = 'vpc_basic_image';
+    protected $_table = 'vpc_basic_image';
     protected $_rowClass = 'Vpc_Basic_Image_Row';
     protected $_referenceMap    = array(
-        'File' => array(
-            'columns'           => array('vps_upload_id'),
-            'refTableClass'     => 'Vps_Dao_File',
-            'refColumns'        => array('id')
+        'Image' => array(
+            'column'           => 'vps_upload_id',
+            'refModelClass'     => 'Vps_Uploads_Model'
         )
     );
 }

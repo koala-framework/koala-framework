@@ -25,13 +25,13 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
         }
         if (in_array('view', $types)) {
             Vps_Component_Cache::getInstance()->clean();
-	    echo "cleared view...\n";
+            echo "cleared view...\n";
         }
-	if (in_array('upload', $types)) {
-            $dir = Vps_Dao_Row_File::getUploadDir();
-	    system("rm -rf $dir/cache/*");
-	    echo "cleared upload...\n";
-	}
+        if (in_array('upload', $types)) {
+            $dir = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')->getUploadDir();
+            system("rm -rf $dir/cache/*");
+            echo "cleared upload...\n";
+        }
         foreach (self::_getCacheDirs() as $d) {
             if (in_array($d, $types)) {
                 system("rm -rf application/cache/$d/*");

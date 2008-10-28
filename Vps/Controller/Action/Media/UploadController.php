@@ -17,8 +17,8 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
         if (!isset($file['tmp_name']) || !is_file($file['tmp_name'])) {
             throw new Vps_Exception("No File found");
         }
-        $t = new Vps_Dao_File();
-        $fileRow = $t->createRow();
+        $fileRow = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')
+            ->createRow();
         $fileRow->uploadFile($file);
 
         $this->view->value = $fileRow->getFileInfo();
@@ -27,8 +27,8 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
     public function previewAction()
     {
         //TODO: mit hash absichern!!!
-        $t = new Vps_Dao_File();
-        $fileRow = $t->find($this->_getParam('uploadId'))->current();
+        $fileRow = Vps_Model_Abstract::getInstance('Vps_Uploads_Model')
+            ->getRow($this->_getParam('uploadId'));
         if (!$fileRow) throw new Vps_Exception("Can't find upload");
 
         $sizes = array(
@@ -43,23 +43,16 @@ class Vps_Controller_Action_Media_UploadController extends Vps_Controller_Action
             $size = 'default';
         }
 
-        $uploadDir = Vps_Dao_Row_File::getUploadDir();
-        $uploadId = $fileRow->id;
-        $target = "$uploadDir/cache/$uploadId/preview$size";
-        if (!is_file($target) && !is_link($target)) {
-            // Verzeichnisse anlegen, falls nicht existent
-            Vps_Dao_Row_File::prepareCacheTarget($target);
-
-            // Cache-Datei erstellen
-            $source = $fileRow->getFileSource();
-            if (!Vps_Media_Image::scale($source, $target, $sizes[$size])) {
-                throw new Vps_Controller_Action_Web_Exception('Invalid Image');
-            }
+        static $cache = null;
+        if (!$cache) $cache = new Vps_Assets_Cache(array('checkComponentSettings'=>false));
+        $cacheId = $size.'_'.$fileRow->id;
+        if (!$output = $cache->load($cacheId)) {
+            $output = array();
+            $output['contents'] = Vps_Media_Image::scale($fileRow->getFileSource(), $sizes[$size]);
+            $output['mimeType'] = $fileRow->mime_type;
+            $cache->save($output, $cacheId);
         }
-        Vps_Media_Output::output(array(
-            'file' => $target,
-            'mimeType' => $fileRow->mime_type
-        ));
+        Vps_Media_Output::output($output);
     }
 
     public function downloadAction()

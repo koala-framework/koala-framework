@@ -7,7 +7,7 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
     {
         $html = $this->_getParam('html');
         $row = $this->_form->getRow();
-        $this->view->html = $row->getRow()->tidy($html);
+        $this->view->html = $row->tidy($html);
     }
 
     public function jsonAddImageAction()
@@ -26,7 +26,7 @@ class Vpc_Basic_Text_Controller extends Vps_Controller_Action_Auto_Vpc_Form
     {
         $row = $this->_form->getRow();
         Zend_Registry::get('db')->beginTransaction();
-        $childCompnentRow = $row->getRow()->addChildComponentRow($type);
+        $childCompnentRow = $row->addChildComponentRow($type);
         $this->view->component_id = $row->component_id.'-'.substr($type, 0, 1).$childCompnentRow->nr;
         Zend_Registry::get('db')->commit();
     }

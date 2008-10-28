@@ -3,6 +3,7 @@ class Vpc_Basic_Text_Form extends Vpc_Abstract_Form
 {
     public function __construct($name, $class, $id = null)
     {
+        $this->setModel(Vpc_Basic_Text_Component::getTextModel($class));
         parent::__construct($name, $class, $id);
         $field = new Vps_Form_Field_HtmlEditor('content', trlVps('Text'));
         $field->setData(new Vps_Data_Vpc_ComponentIds('content'));

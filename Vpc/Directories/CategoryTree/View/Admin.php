@@ -22,7 +22,7 @@ class Vpc_Directories_CategoryTree_View_Admin
 
     private function _removeCache($row)
     {
-        if ($row->getTable() instanceof Vpc_Directories_CategoryTree_Directory_ItemsToCategoriesModel) {
+        if ($row instanceof Vps_Db_Table_Row && $row->getTable() instanceof Vpc_Directories_CategoryTree_Directory_ItemsToCategoriesModel) {
             $info = Vpc_Directories_Category_Detail_List_Component::getTableReferenceData(
                 get_class($row->getTable()), $schema = 'Category'
             );
@@ -36,7 +36,7 @@ class Vpc_Directories_CategoryTree_View_Admin
 
                 $parentRow = $parentRow->findParentRow($info['refTableName']);
             } while ($parentRow);
-        } else if ($row->getTable() instanceof Vpc_Directories_CategoryTree_Directory_Model) {
+        } else if ($row instanceof Vps_Db_Table_Row && $row->getTable() instanceof Vpc_Directories_CategoryTree_Directory_Model) {
             $parentRow = $row;
             do {
                 $cacheId = Vpc_Directories_CategoryTree_View_Component::getItemCountCacheId($parentRow);

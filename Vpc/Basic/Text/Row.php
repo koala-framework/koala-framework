@@ -1,14 +1,16 @@
 <?php
-class Vpc_Basic_Text_Row extends Vpc_Row
+class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
 {
     private $_classes;
-    
-    public function init()
+    private $_componentClass;
+
+    protected function _init()
     {
-        parent::init();
-        $this->_classes = Vpc_Abstract::getChildComponentClasses($this->getTable()->getComponentClass(), 'child');
+        parent::_init();
+        $this->_componentClass = $this->getModel()->getComponentClass();
+        $this->_classes = Vpc_Abstract::getChildComponentClasses($this->_componentClass, 'child');
     }
-    
+
     //für Component und Row
     public function getContentParts($content = null)
     {
@@ -116,14 +118,16 @@ class Vpc_Basic_Text_Row extends Vpc_Row
 
     public function getMaxChildComponentNr($type)
     {
-        $select = $this->getTable()->getAdapter()->select();
-        $select->from('vpc_basic_text_components', new Zend_Db_Expr('MAX(nr)'))
-                ->where('component_id = ?', $this->component_id)
-                ->where('component = ?', $type);
-        return $select->query()->fetchColumn();
+        $select = $this->getModel()->select();
+        $select->order('nr', 'DESC');
+        $select->limit(1);
+        $select->whereEquals('component', $type);
+        $row = $this->getChildRows('ChildComponents', $select)->current();
+        if (!$row) return 0;
+        return $row->nr;
     }
 
-    protected function _delete()
+    protected function _beforeDelete()
     {
         $table = new Vpc_Basic_Text_ChildComponentsModel();
         $rows = $table->fetchAll(array('component_id = ?' => $this->component_id));
@@ -136,7 +140,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
     }
 
     //childComponents löschen die aus dem html-code entfernt wurden
-    protected function _update()
+    protected function _beforeSave()
     {
         $classes = $this->_classes;
 
@@ -149,8 +153,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
             }
         }
 
-        $table = new Vpc_Basic_Text_ChildComponentsModel();
-        $rows = $table->fetchAll(array('component_id = ?' => $this->component_id));
+        $rows = $this->getChildRows('ChildComponents');
         $existingParts = array();
         foreach ($rows as $row) {
             $t = substr($row->component, 0, 1);
@@ -170,18 +173,13 @@ class Vpc_Basic_Text_Row extends Vpc_Row
         foreach ($newParts as $part) {
             if (!is_string($part)
                 && !in_array($part['type'].$part['nr'], $existingParts)) {
-                $row = $table->createRow();
-                $row->component_id = $this->component_id;
+                $row = $this->createChildRow('ChildComponents');
                 $row->component = $part['type'];
                 $row->nr = $part['nr'];
                 $row->saved = 1;
                 $row->save();
             }
         }
-    }
-    protected function _insert()
-    {
-        $this->_update();
     }
 
     public function tidy($html)
@@ -211,8 +209,8 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                     'newline'        =>'LF',
                     'uppercase-tags' =>'false'
                     );
-        $enableTidy = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableTidy');
-        $enableFontSize = Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableFontSize');
+        $enableTidy = Vpc_Abstract::getSetting($this->_componentClass, 'enableTidy');
+        $enableFontSize = Vpc_Abstract::getSetting($this->_componentClass, 'enableFontSize');
         if ($enableFontSize){
             $config['drop-font-tags'] = false;
         }
@@ -223,9 +221,9 @@ class Vpc_Basic_Text_Row extends Vpc_Row
             $tidy->cleanRepair();
             $html = $tidy->value;
             $parser = new Vpc_Basic_Text_Parser($this);
-            $parser->setEnableColor(Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableColors'));
-            $parser->setEnableTagsWhitelist(Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableTagsWhitelist'));
-            $parser->setEnableStyles(Vpc_Abstract::getSetting($this->getTable()->getComponentClass(), 'enableStyles'));
+            $parser->setEnableColor(Vpc_Abstract::getSetting($this->_componentClass, 'enableColors'));
+            $parser->setEnableTagsWhitelist(Vpc_Abstract::getSetting($this->_componentClass, 'enableTagsWhitelist'));
+            $parser->setEnableStyles(Vpc_Abstract::getSetting($this->_componentClass, 'enableStyles'));
             $html = $parser->parse($html);
             $tidy->parseString($html, $config, 'utf8');
             $tidy->cleanRepair();
@@ -246,23 +244,18 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                     && (strtolower($part['componentClass']) == 'vpc_basic_image_component'
                         || is_subclass_of($part['componentClass'], 'Vpc_Basic_Image_Component'))) {
 
-                    $srcRow = Vpc_Abstract::createTable($part['componentClass'])
-                                                ->findRow($part['componentId']);
-                    $srcFileRow = $srcRow->findParentRow('Vps_Dao_File');
-                    if ($srcFileRow && $srcFileRow->getFileSource()) {
-                        $fileTable = new Vps_Dao_File();
-                        $destFileRow = $fileTable->createRow();
-                        $destFileRow->copyFile($srcFileRow->getFileSource(),
-                                                $srcFileRow->filename,
-                                                $srcFileRow->extension);
-
-                        $destRow = Vpc_Abstract::createTable($classes['image'])
+                    $srcRow = Vpc_Abstract::createModel($part['componentClass'])
+                                    ->getRow($part['componentId']);
+                    if ($srcRow->imageExists()) {
+                        $destRow = Vpc_Abstract::createModel($classes['image'])
                                                 ->createRow($srcRow->toArray());
-                        $destRow->vps_upload_id = $destFileRow->id;
-                        $this->addChildComponentRow('image', $destRow);
+                        $childComponentRow = $this->addChildComponentRow('image', $destRow);
                         $destRow->save();
-                        $dimension = $destRow->getImageDimensions();
-                        $newContent .= "<img src=\"".$destRow->getFileUrl()."\" ".
+                        $imageComponent = Vps_Component_Data_Root::getInstance()
+                            ->getComponentByDbId($this->component_id.'-i'.$childComponentRow->nr)
+                            ->getComponent();
+                        $dimension = $imageComponent->getImageDimensions();
+                        $newContent .= "<img src=\"".$imageComponent->getImageUrl()."\" ".
                                     "width=\"$dimension[width]\" ".
                                     "height=\"$dimension[height]\" />";
                         continue;
@@ -294,8 +287,10 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                 } else {
                     continue;
                 }
-                $fileTable = new Vps_Dao_File();
-                $destFileRow = $fileTable->createRow();
+
+                $destFileRow = Vpc_Abstract::createModel($classes['image'])
+                            ->getReferencedModel('Image')
+                            ->createRow();
 
                 $path = explode('?', $part['src']);
                 if (preg_match('#([^/]*)\\.[a-z]+$#U', $path[0], $m)) {
@@ -307,39 +302,42 @@ class Vpc_Basic_Text_Row extends Vpc_Row
 
                 $destFileRow->writeFile($response->getBody(), $srcFileName, $extension, $contentType);
 
-                $destRow = Vpc_Abstract::createTable($classes['image'])->createRow();
+                $destRow = Vpc_Abstract::createModel($classes['image'])->createRow();
                 $destRow->vps_upload_id = $destFileRow->id;
                 $size = getimagesize($destFileRow->getFileSource());
                 $destRow->width = $size[0];
                 $destRow->height = $size[1];
                 $destRow->filename = $srcFileName;
                 $destRow->scale = '';
-                $this->addChildComponentRow('image', $destRow);
+                $childComponentRow = $this->addChildComponentRow('image', $destRow);
                 $destRow->save();
-                $dimension = $destRow->getImageDimensions();
-                $newContent .= "<img src=\"".$destRow->getFileUrl()."\" ".
+                $imageComponent = Vps_Component_Data_Root::getInstance()
+                    ->getComponentByDbId($this->component_id.'-i'.$childComponentRow->nr)
+                    ->getComponent();
+                $dimension = $imageComponent->getImageDimensions();
+                $newContent .= "<img src=\"".$imageComponent->getImageUrl()."\" ".
                             "width=\"$dimension[width]\" ".
                             "height=\"$dimension[height]\" />";
 
             } else if ($part['type'] == 'invalidLink') {
 
-                $table = Vpc_Abstract::createTable($classes['link']);
+                $model = Vpc_Abstract::createModel($classes['link']);
                 if (isset($part['componentId'])) {
                     try {
-                        $srcRow = $table->findRow($part['componentId']);
+                        $srcRow = $model->getRow($part['componentId']);
                     } catch (Vpc_Exception $e) {
                         $srcRow = false;
                     }
                     $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
                     if ($srcRow && class_exists($linkClasses[$srcRow->component])) {
-                        $linkTable = Vpc_Abstract::createTable($linkClasses[$srcRow->component]);
-                        $srcLinkRow = $linkTable->findRow($part['componentId'].'-link');
+                        $linkModel = Vpc_Abstract::createModel($linkClasses[$srcRow->component]);
+                        $srcLinkRow = $linkModel->getRow($part['componentId'].'-link');
                         if ($srcLinkRow) {
-                            $destRow = $table->createRow();
+                            $destRow = $model->createRow();
                             $destRow->component = $srcRow->component;
                             $this->addChildComponentRow('link', $destRow);
                             $destRow->save();
-                            $destLinkRow = $linkTable->createRow($srcLinkRow->toArray());
+                            $destLinkRow = $linkModel->createRow($srcLinkRow->toArray());
                             $destLinkRow->component_id = $destRow->component_id.'-link';
                             $destLinkRow->save();
                             $newContent .= "<a href=\"{$destRow->component_id}\">";
@@ -347,7 +345,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                         }
                     }
                 }
-                $destRow = $table->createRow();
+                $destRow = $model->createRow();
                 $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
                 if (preg_match('#^mailto:#', $part['href'], $m)) {
                     if (isset($linkClasses['mail']) && $linkClasses['mail']) {
@@ -361,9 +359,9 @@ class Vpc_Basic_Text_Row extends Vpc_Row
                 if (!$destRow->component) continue; //kein solcher-link möglich
                 $this->addChildComponentRow('link', $destRow);
                 $destRow->save();
-                $destClasses =  Vpc_Abstract::getChildComponentClasses($destRow->getTable()->getComponentClass(), 'link');
+                $destClasses =  Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
 
-                $row = Vpc_Abstract::createTable($destClasses[$destRow->component])->createRow();
+                $row = Vpc_Abstract::createModel($destClasses[$destRow->component])->createRow();
                 if ($destRow->component == 'extern') {
                     $row->target = $part['href'];
                 } else {
@@ -412,9 +410,7 @@ class Vpc_Basic_Text_Row extends Vpc_Row
     //im Controller + in der row
     public function addChildComponentRow($type, $childComponentRow = null)
     {
-        $t = new Vpc_Basic_Text_ChildComponentsModel();
-        $r = $t->createRow();
-        $r->component_id = $this->component_id;
+        $r = $this->createChildRow('ChildComponents');
         $r->component = $type;
         $r->nr = $this->getMaxChildComponentNr($type)+1;
         $r->saved = 0;

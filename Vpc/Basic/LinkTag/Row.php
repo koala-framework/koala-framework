@@ -1,11 +1,12 @@
 <?php
-class Vpc_Basic_LinkTag_Row extends Vpc_Row
+class Vpc_Basic_LinkTag_Row extends Vps_Model_Proxy_Row
 {
     protected function _update()
     {
         if ($this->_cleanData['component'] != $this->component) {
             $this->_delete();
         }
+        parent::_update();
     }
 
     protected function _delete()

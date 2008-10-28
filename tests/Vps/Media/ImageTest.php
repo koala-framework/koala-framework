@@ -1,7 +1,10 @@
 <?php
+/**
+ * @group MediaImage
+ */
 class Vps_Media_ImageTest extends PHPUnit_Framework_TestCase
 {
-    public function testImageScale()
+    public function testImageScaleDimensions()
     {
         $dimension = array(100, 100);
         $this->_testBestFit(array(100, 100), $dimension, array(100, 100));
@@ -23,11 +26,39 @@ class Vps_Media_ImageTest extends PHPUnit_Framework_TestCase
         $this->_testBestFit(array(100, 200), $dimension, array(25, 50));
         $this->_testBestFit(array(100, 30), $dimension, array(100, 30));
     }
-    
-    private function _testBestFit($image, $dimension, $target)
+
+    private function _testBestFit($imageSize, $dimension, $expectedSize)
     {
         $dimension = array('width' => $dimension[0], 'height' => $dimension[1], 'scale' => Vps_Media_Image::SCALE_BESTFIT);
-        $ret = Vps_Media_Image::calculateScaleDimensions($image, $dimension);
-        $this->assertEquals($ret, array('width' => $target[0], 'height' => $target[1], 'scale' => Vps_Media_Image::SCALE_BESTFIT));
+        $ret = Vps_Media_Image::calculateScaleDimensions($imageSize, $dimension);
+        $this->assertEquals($ret, array('width' => $expectedSize[0], 'height' => $expectedSize[1], 'scale' => Vps_Media_Image::SCALE_BESTFIT));
+    }
+
+    public function testImageScaleDeform()
+    {
+        $this->_testScale(array(10, 10, Vps_Media_Image::SCALE_DEFORM));
+        $this->_testScale(array(16, 10, Vps_Media_Image::SCALE_DEFORM));
+        $this->_testScale(array(10, 16, Vps_Media_Image::SCALE_DEFORM));
+
+        $this->_testScale(array(10, 10, Vps_Media_Image::SCALE_CROP));
+        $this->_testScale(array(10, 16, Vps_Media_Image::SCALE_CROP));
+        $this->_testScale(array(16, 10, Vps_Media_Image::SCALE_CROP));
+
+        $this->_testScale(array(10, 10, Vps_Media_Image::SCALE_BESTFIT));
+        $this->_testScale(array(16, 10, Vps_Media_Image::SCALE_BESTFIT), array(10, 10));
+        $this->_testScale(array(10, 16, Vps_Media_Image::SCALE_BESTFIT), array(10, 10));
+
+        $this->_testScale(array(16, 16, Vps_Media_Image::SCALE_ORIGINAL));
+        $this->_testScale(array(10, 10, Vps_Media_Image::SCALE_ORIGINAL), array(16, 16));
+    }
+
+    private function _testScale($size, $expectedSize = null)
+    {
+        if (!$expectedSize) $expectedSize = $size;
+        $i = Vps_Media_Image::scale(VPS_PATH.'/images/information.png', $size);
+        $im = new Imagick();
+        $im->readImageBlob($i);
+        $this->assertEquals($expectedSize[0], $im->getImageWidth());
+        $this->assertEquals($expectedSize[1], $im->getImageHeight());
     }
 }

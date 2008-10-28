@@ -4,8 +4,8 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'tablename'         => 'Vpc_Basic_Text_Model',
-            'componentName'     => 'Text',
+            'modelname'         => 'Vpc_Basic_Text_Model',
+            'componentName'     => trlVps('Text'),
             'componentIcon'     => new Vps_Asset('paragraph_page'),
             'width'             => 550,
             'height'            => 400,
@@ -24,10 +24,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             'enableTidy'        => true,
             'stylesIdPattern'   => false, //zB: '^company_[0-9]+',
             'enableStyles'      => true,
-            'enableTagsWhitelist'=> true,
-            'default'           => array(
-                'content'       => '<p>'.Vpc_Abstract::LOREM_IPSUM.'</p>'
-            )
+            'enableTagsWhitelist'=> true
         ));
         $ret['generators']['child'] = array(
             'class' => 'Vpc_Basic_Text_Generator',
@@ -37,7 +34,7 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
                 'link'          => 'Vpc_Basic_LinkTag_Component',
                 'download'      => 'Vpc_Basic_DownloadTag_Component'
             ),
-            'table' => 'Vpc_Basic_Text_ChildComponentsModel'
+            'model' => 'Vpc_Basic_Text_ChildComponentsModel'
         );
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditor.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditorTab.js';
@@ -48,6 +45,21 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
                             array('Vpc_Basic_Text_StylesModel', 'getStylesUrl'));
         $ret['flags']['searchContent'] = true;
         return $ret;
+    }
+
+    public function getModel()
+    {
+        return self::getTextModel(get_class($this));
+    }
+
+    public static function getTextModel($componentClass)
+    {
+        static $models = array();
+        if (!isset($models[$componentClass])) {
+            $m = Vpc_Abstract::getSetting($componentClass, 'modelname');
+            $models[$componentClass] = new $m(array('componentClass' => $componentClass));
+        }
+        return $models[$componentClass];
     }
 
     public function getTemplateVars()

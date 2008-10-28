@@ -8,11 +8,11 @@ class Vps_View_Helper_Image
         $this->_view = $view;
     }
 
-    public function image($image, $rule = null, $type = 'default', $alt = '', $cssClass = null)
+    public function image($image, $type = 'default', $alt = '', $cssClass = null)
     {
         if (is_string($image)) {
-            $alt = $rule;
-            $cssClass = $type;
+            $alt = $type;
+            $cssClass = $alt;
         }
         $attr = '';
         if (is_string($cssClass)) {
@@ -23,6 +23,9 @@ class Vps_View_Helper_Image
             }
         }
 
+        if ($image instanceof Vpc_Basic_Image_Component) {
+            $image = $image->getData();
+        }
         if (is_string($image)){
             $image = str_replace(VPS_PATH, '/assets/vps', $image);
             $image = str_replace(getcwd(), '/assets', $image);
@@ -38,15 +41,11 @@ class Vps_View_Helper_Image
             $size = getimagesize($this->_dep->getAssetPath($depUrl)); //image
             $size['width'] = $size[0];
             $size['height'] = $size[1];
-        } else if ($image instanceof Vpc_Basic_Image_Component) {
-            $url = $image->getImageUrl($type);
-            $size = $image->getImageDimensions($type);
+        } else if ($image instanceof Vps_Component_Data) {
+            $url = $image->getComponent()->getImageUrl();
+            $size = $image->getComponent()->getImageDimensions();
         } else {
-            $row = $image;
-            if (!$row) return '';
-            if ($row instanceof Vps_Model_Db_Row) $row = $row->getRow();
-            $url = $row->getFileUrl($rule, $type);
-            $size = $row->getImageDimensions($rule, $type);
+            throw new Vps_Execption("Invalid image argument");
         }
 
         if ($url) {

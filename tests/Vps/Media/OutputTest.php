@@ -115,4 +115,9 @@ class Vps_Media_OutputTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($file['contents'], gzinflate(substr($output['contents'], 10)));
     }
 
+    public function testNothing()
+    {
+        $this->setExpectedException('Vpc_UrlNotFoundException');
+        Vps_Media_Output::getOutputData(array(), array());
+    }
 }

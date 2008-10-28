@@ -187,6 +187,7 @@ function is_instance_of($sub, $super)
             return false;
     }
 }
+
 class Vps_Setup
 {
     public static function setUp()
@@ -431,72 +432,19 @@ class Vps_Setup
         if (is_array($urlParts) && $urlParts[0] == 'media' && $urlParts[1] == 'headline') {
             Vps_Media_Headline::outputHeadline($_GET['selector'], $_GET['text']);
         } else if (is_array($urlParts) && $urlParts[0] == 'media') {
-            if (sizeof($urlParts) != 7) {
+            if (sizeof($urlParts) != 6) {
                 self::output404();
             }
-            $params['table'] = $urlParts[1];
-            $params['id'] = $urlParts[2];
-            $params['rule'] = $urlParts[3];
-            $params['type'] = $urlParts[4];
-            $params['checksum'] = $urlParts[5];
-            $params['filename'] = $urlParts[6];
+            $class = $urlParts[1];
+            $id = $urlParts[2];
+            $type = $urlParts[3];
+            $checksum = $urlParts[4];
+            $filename = $urlParts[5];
 
-            $download = false;
-            $checksum = md5(
-                Vps_Db_Table_Row::FILE_PASSWORD .
-                $params['table'] .
-                $params['id'] .
-                $params['rule'] .
-                $params['type']
-            );
-            if ($checksum != $params['checksum']) {
-                $checksum = md5(
-                    Vps_Db_Table_Row::FILE_PASSWORD_DOWNLOAD .
-                        $params['table'] .
-                        $params['id'] .
-                        $params['rule'] .
-                        $params['type']
-                );
-                $download = true;
+            if ($checksum != Vps_Media::getChecksum($class, $id, $type, $filename)) {
+                throw new Vpc_AccessDeniedException('Access to file not allowed.');
             }
-            if ($checksum != $params['checksum']) {
-                throw new Vps_Controller_Action_Web_Exception('Access to file not allowed.');
-            }
-
-            $type = $params['type'];
-            $id = explode(',', $params['id']);
-            $rule = $params['rule'];
-            if ($rule == 'default') { $rule = null; }
-
-            // TODO: Cachen ohne Datenbankabfragen
-            if (Vpc_Abstract::hasSettings($params['table'])) {
-                $tableClass = Vpc_Abstract::getSetting($params['table'], 'tablename');
-                $table = new $tableClass(array('componentClass' => $params['table']));
-            } else if (is_instance_of($params['table'], 'Vps_Db_Table_Abstract')) {
-                $table = new $params['table']();
-            } else {
-                throw new Vps_Exception("Invalid class: {$params['table']}");
-            }
-
-            $row = $table->find($id[0])->current();
-            if (!$row) {
-                throw new Vps_Exception('File not found.');
-            }
-            $fileRow = $row->findParentRow('Vps_Dao_File', $rule);
-            if (!$fileRow) {
-                throw new Vps_Exception('No File uploaded.');
-            }
-            $target = $row->getFileSource($rule, $type);
-            
-            $downloadFilename = false;
-            if ($download) {
-                $downloadFilename = $params['filename'];
-            }
-            Vps_Media_Output::output(array(
-                'file' => $target,
-                'mimeType' => $fileRow->mime_type,
-                'downloadFilename' => $downloadFilename
-            ));
+            Vps_Media_Output::output(Vps_Media::getOutput($class, $id, $type));
         }
     }
 }

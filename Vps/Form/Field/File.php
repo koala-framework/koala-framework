@@ -9,12 +9,11 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         return $ret;
     }
 
-    public function __construct($fieldname = null, $fieldLabel = null, $ruleKey = null)
+    public function __construct($fieldname = null, $fieldLabel = null)
     {
         parent::__construct($fieldname, $fieldLabel);
         $this->setAllowBlank(true); //standardwert für getAllowBlank
         $this->setAllowOnlyImages(false);
-        $this->setRuleKey($ruleKey);
         $this->setXtype('swfuploadfield');
     }
 
@@ -38,19 +37,17 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     {
         if (isset($postData[$this->getFieldName()])) {
             $fileId = $postData[$this->getFieldName()];
+            $fileRow = $row->getModel()->getReferencedModel($this->getName())
+                            ->getRow($fileId);
         } else {
-            $ref = $row->getRow()->getTable()->getReference('Vps_Dao_File', $this->getRuleKey());
-            $fileId = $row->{$ref['columns'][0]};
+            $fileRow = $row->getParentRow($this->getName());
         }
-        $t = new Vps_Dao_File();
-        $fileRow = $t->find($fileId)->current();
         if ($fileRow) {
             $return = $fileRow->getFileInfo();
         } else {
             $return = '';
         }
-        return array_merge(parent::load($row, $postData),
-            array($this->getFieldName() => $return));
+        return array($this->getFieldName() => $return);
     }
 
     protected function _getValueFromPostData($postData)
@@ -59,16 +56,16 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         if ($ret == '' || $ret == 'null') $ret = null;
         return $ret;
     }
+
     public function validate($row, $postData)
     {
         $ret = parent::validate($row, $postData);
 
         if ($this->getSave() !== false && $this->getInternalSave() !== false) {
             $data = $this->_getValueFromPostData($postData);
-            //TODO: validierung von error-codes bei frontend-uploads
             if ($data) {
-                $t = new Vps_Dao_File();
-                $row = $t->find($data)->current();
+                $fileModel = $row->getModel()->getReferencedModel($this->getName());
+                $row = $fileModel->getRow($data);
                 if ($this->getAllowOnlyImages() && substr($row->mime_type, 0, 6) !=  'image/') {
                     $name = $this->getFieldLabel();
                     if (!$name) $name = $this->getName();
@@ -79,9 +76,9 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         return $ret;
     }
 
-    public function processInput($postData)
+    public function processInput($row, $postData)
     {
-        $postData = parent::processInput($postData);
+        $postData = parent::processInput($row, $postData);
 
         if (isset($postData[$this->getFieldName().'_upload_id'])
             && (!isset($postData[$this->getFieldName()])
@@ -98,19 +95,29 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             //frontend formular, $_FILE werte
             $file = $postData[$this->getFieldName()];
             if ($file['error'] != UPLOAD_ERR_NO_FILE) {
-                $t = new Vps_Dao_File();
-                $fileRow = $t->createRow();
+                $fileModel = $row->getModel()->getReferencedModel($this->getName());
+                $fileRow = $fileModel->createRow();
                 $fileRow->uploadFile($file);
                 $postData[$this->getFieldName()] = $fileRow->id;
+                if (isset($postData[$this->getFieldName().'_upload_id'])) {
+                    unset($postData[$this->getFieldName().'_upload_id']);
+                }
             } else {
                 unset($postData[$this->getFieldName()]);
             }
         }
         if (isset($postData[$this->getFieldName().'_del'])) {
+            unset($postData[$this->getFieldName().'_del']);
             $postData[$this->getFieldName()] = '';
         }
 
         return $postData;
+    }
+
+    public function prepareSave(Vps_Model_Row_Interface $row, $postData)
+    {
+        $ref = $row->getModel()->getReference($this->getName());
+        $row->{$ref['column']} = $postData[$this->getFieldName()];
     }
 
     public function getTemplateVars($values, $namePostfix = '')

@@ -5,7 +5,9 @@ class Vpc_Abstract_Form extends Vps_Form
     {
         $this->setClass($class);
         if ($class) {
-            $this->setModel(Vpc_Abstract::createModel($class));
+            if (!$this->getModel()) {
+                $this->setModel(Vpc_Abstract::createModel($class));
+            }
             $this->setCreateMissingRow(true);
         }
         parent::__construct($name, $class);

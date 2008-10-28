@@ -56,9 +56,9 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
         return $ret;
     }
     */
-    public function processInput($postData)
+    public function processInput($row, $postData)
     {
-        $postData = parent::processInput($postData);
+        $postData = parent::processInput($row, $postData);
         if (!$this->getFilteredCombo()) {
             throw new Vps_Exception("No filteredCombo set");
         }

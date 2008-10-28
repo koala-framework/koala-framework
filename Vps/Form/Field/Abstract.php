@@ -97,11 +97,11 @@ abstract class Vps_Form_Field_Abstract extends Vps_Component_Abstract
         return $ret;
     }
 
-    public function processInput($postData)
+    public function processInput($row, $postData)
     {
         if ($this->hasChildren()) {
             foreach ($this->getChildren() as $field) {
-                $postData = $field->processInput($postData);
+                $postData = $field->processInput($row, $postData);
             }
         }
         return $postData;

@@ -131,24 +131,31 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     private function _matchSelect($data, $select)
     {
+        foreach ($data as &$d) {
+            $d = (string)$d;
+        }
         if ($id = $select->getPart(Vps_Model_Select::WHERE_ID)) {
-            if ($data['id'] != $id) return false;
+            if ($data['id'] != (string)$id) return false;
         }
         if ($where = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
             foreach ($where as $f=>$v) {
-                if (!isset($data[$f])) return false;
                 if (!is_array($v)) $v = array($v);
+                foreach ($v as &$i) $i = (string)$i;
+                if (!isset($data[$f])) return false;
                 if (!in_array($data[$f], $v)) return false;
             }
         }
         if ($where = $select->getPart(Vps_Model_Select::WHERE_NOT_EQUALS)) {
-            $ret = false;
+            $foundOneMatching = false;
             foreach ($where as $f=>$v) {
-                if (!isset($data[$f])) { $ret = true; break; }
                 if (!is_array($v)) $v = array($v);
-                if (!in_array($data[$f], $v)) { $ret = true; break; }
+                foreach ($v as &$i) $i = (string)$i;
+                if (isset($data[$f]) && in_array($data[$f], $v)) {
+                    $foundOneMatching = true;
+                    break;
+                }
             }
-            if (!$ret) return false;
+            if ($foundOneMatching) return false;
         }
         if ($where = $select->getPart(Vps_Model_Select::WHERE_NULL)) {
             foreach ($where as $f) {

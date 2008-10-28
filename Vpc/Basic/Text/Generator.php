@@ -12,15 +12,15 @@ class Vpc_Basic_Text_Generator extends Vps_Component_Generator_Table
             $id = $select->getPart(Vps_Model_Select::WHERE_ID);
             $select->unsetPart(Vps_Model_Select::WHERE_ID);
             if (substr($id, 0, 2)=='-l') {
-                $select->where("component = 'link'");
+                $select->whereEquals('component', 'link');
             } else if (substr($id, 0, 2)=='-d') {
-                $select->where("component = 'download'");
+                $select->whereEquals('component', 'download');
             } else if (substr($id, 0, 2)=='-i') {
-                $select->where("component = 'image'");
+                $select->whereEquals('component', 'image');
             } else {
                 return null;
             }
-            $select->where("nr = ?", substr($id, 2));
+            $select->whereEquals('nr', substr($id, 2));
         }
         return $select;
     }
