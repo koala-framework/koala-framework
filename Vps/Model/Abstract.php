@@ -22,11 +22,14 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
 
     protected $_rows = array();
 
+    private static $_instances = array();
+
     public function __construct(array $config = array())
     {
         if (isset($config['default'])) $this->_default = (array)$config['default'];
         if (isset($config['siblingModels'])) $this->_siblingModels = (array)$config['siblingModels'];
         if (isset($config['dependentModels'])) $this->_dependentModels = (array)$config['dependentModels'];
+        if (isset($config['referenceMap'])) $this->_referenceMap = (array)$config['referenceMap'];
         if (isset($config['filters'])) $this->_filters = (array)$config['filters'];
         $this->_init();
     }
@@ -36,11 +39,17 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
      **/
     public static function getInstance($modelName)
     {
-        static $instances = array();
-        if (!isset($instances[$modelName])) {
-            $instances[$modelName] = new $modelName();
+        if (is_object($modelName)) return $modelName;
+        if (!isset(self::$_instances[$modelName])) {
+            self::$_instances[$modelName] = new $modelName();
         }
-        return $instances[$modelName];
+        return self::$_instances[$modelName];
+    }
+
+    //für unit-tests
+    public static function clearInstances()
+    {
+        self::$_instances = array();
     }
 
     protected function _init()
@@ -201,6 +210,14 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     public function getReference($rule)
     {
         return $this->_referenceMap[$rule];
+    }
+
+    public function getReferencedModel($rule)
+    {
+        if (!isset($this->_referenceMap[$rule])) {
+            throw new Vps_Exception("No Reference from '".get_class($this)."' with rule '$rule'");
+        }
+        return self::getInstance($this->_referenceMap[$rule]['refModelClass']);
     }
 
     public function getDependentModel($rule)

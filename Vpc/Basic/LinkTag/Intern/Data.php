@@ -5,9 +5,8 @@ class Vpc_Basic_LinkTag_Intern_Data extends Vps_Component_Data
     private function _getData()
     {
         if (!isset($this->_data)) {
-            $t = Vpc_Abstract::getSetting($this->componentClass, 'tablename');
-            $table = new $t(array('componentClass' => $this->componentClass));
-            $row = $table->find($this->dbId)->current();
+            $m = Vpc_Abstract::createModel($this->componentClass);
+            $row = $m->getRow($this->dbId);
             if ($row) {
                 $this->_data = Vps_Component_Data_Root::getInstance()
                                                 ->getComponentByDbId($row->target);

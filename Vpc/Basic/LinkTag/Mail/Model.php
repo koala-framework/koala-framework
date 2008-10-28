@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_LinkTag_Mail_Model extends Vpc_Table
+class Vpc_Basic_LinkTag_Mail_Model extends Vps_Model_Db_Proxy
 {
-    protected $_name = 'vpc_basic_link_mail';
+    protected $_table = 'vpc_basic_link_mail';
 }

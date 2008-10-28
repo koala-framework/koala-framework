@@ -278,4 +278,31 @@ class Vps_Model_FnF_ModelTest extends PHPUnit_Framework_TestCase
         $row = $model->createRow();
         $this->assertEquals('defaultFoo', $row->foo);
     }
+
+    public function testNonNumericIds()
+    {
+        $model = new Vps_Model_FnF(array(
+            'data' => array(
+                array('id'=>'1'),
+                array('id'=>'3-foo'),
+                array('id'=>4),
+            )
+        ));
+
+        $this->assertNotNull($model->getRow(1));
+        $this->assertNotNull($model->getRow('1'));
+        $this->assertNull($model->getRow('3'));
+        $this->assertNull($model->getRow(3));
+        $this->assertNull($model->getRow($model->select()->whereId(3)));
+        $this->assertNull($model->getRow($model->select()->whereId('3')));
+        $this->assertEquals(0, count($model->getRows($model->select()->whereId('3'))));
+        $this->assertEquals(0, count($model->getRows($model->select()->whereId(3))));
+        $this->assertEquals(0, count($model->getRows($model->select()->whereEquals('id', 3))));
+        $this->assertEquals(0, count($model->getRows($model->select()->whereEquals('id', '3'))));
+        $this->assertNotNull($model->getRow('3-foo'));
+        $this->assertNull($model->getRow('4-foo'));
+        $this->assertNull($model->getRow($model->select()->whereId('4-foo')));
+        $this->assertEquals(0, count($model->getRows($model->select()->whereId('4-foo'))));
+        $this->assertEquals(0, count($model->getRows($model->select()->whereEquals('id', '4-foo'))));
+    }
 }

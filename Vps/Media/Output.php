@@ -43,7 +43,7 @@ class Vps_Media_Output
                 $file['contents'] = file_get_contents($file['file']);
                 $file['mtime'] = filemtime($file['file']);
             } else {
-                throw new Vps_Exception("contents for file has to be set");
+                throw new Vpc_UrlNotFoundException();
             }
         }
         if (isset($file['mtime'])) {

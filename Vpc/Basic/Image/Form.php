@@ -40,14 +40,14 @@ class Vpc_Basic_Image_Form extends Vpc_Abstract_Form
         }
 
         // Fileupload
-        $this->add(new Vps_Form_Field_File('vps_upload_id', trlVps('Image')))
+        $this->add(new Vps_Form_Field_File('Image', trlVps('Image')))
             ->setAllowBlank(Vpc_Abstract::getSetting($class, 'allowBlank'))
             ->setAllowOnlyImages(true);
     }
 
     public function setFieldLabel($label)
     {
-        $this->fields['vps_upload_id']->setFieldLabel($label);
+        $this->fields['Image']->setFieldLabel($label);
         return $this;
     }
 }

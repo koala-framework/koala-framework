@@ -121,8 +121,11 @@ class Vps_Media_Image
         }
     }
 
-    public static function scale($source, $target, $size)
+    public static function scale($source, $size)
     {
+        if ($source instanceof Vps_Uploads_Row) {
+            $source = $source->getFileSource();
+        }
         if (!is_file($source)) {
             return false;
         }
@@ -150,7 +153,7 @@ class Vps_Media_Image
                 $im->cropImage($size['width'], $size['height'], $size['x'], $size['y']);
                 $im->setImagePage(0, 0, 0, 0);
     //             $im->unsharpMaskImage(1, 0.5, 1.0, 0.05);
-                $im->writeImage($target);
+                $ret = $im->getImageBlob();
                 $im->destroy();
             }
 
@@ -159,7 +162,7 @@ class Vps_Media_Image
                 $im = new Imagick();
                 $im->readImage($source);
                 $im->thumbnailImage($size['width'], $size['height']);
-                $im->writeImage($target);
+                $ret = $im->getImageBlob();
                 $im->destroy();
             } else {
                 $srcSize = getimagesize($source);
@@ -174,27 +177,27 @@ class Vps_Media_Image
                 imagecopyresampled($destination, $source, 0, 0, 0, 0,
                                     $size['width'], $size['height'],
                                     $srcSize[0], $srcSize[1]);
+                ob_start();
                 if ($srcSize[2] == 1) {
-                    $source = imagegif($destination, $target);
+                    $source = imagegif($destination);
                 } elseif ($srcSize[2] == 2) {
-                    $source = imagejpeg($destination, $target);
+                    $source = imagejpeg($destination);
                 } elseif ($srcSize[2] == 3) {
-                    $source = imagepng($destination, $target);
+                    $source = imagepng($destination);
                 }
+                $ret = ob_get_contents();
+                ob_end_clean();
             }
 
         } elseif ($size['scale'] == self::SCALE_ORIGINAL) {
 
-            copy($source, $target);
+            $ret = file_get_contents($source);
 
         } else {
 
             return false;
 
         }
-        if (file_exists($target)) {
-            chmod($target, 0644);
-        }
-        return true;
+        return $ret;
     }
 }

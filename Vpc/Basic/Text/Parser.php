@@ -111,12 +111,10 @@ class Vpc_Basic_Text_Parser
                 $src = $attributes['SRC'];
                 $id = preg_quote($this->_row->component_id);
                 if (preg_match('#/media/([^/]+)/('.$id.'-i[0-9]+)#', $src, $m)) {
-                    //"/media/$class/$id/$rule/$type/$checksum/$filename.$extension$random"
-                    $class = Vpc_Abstract::getChildComponentClass($this->_row->getTable()
+                    //"/media/$class/$id/$type/$checksum/$filename.$extension$random"
+                    $class = Vpc_Abstract::getChildComponentClass($this->_row->getModel()
                                 ->getComponentClass(), 'child', 'image');
-                    $t = Vpc_Abstract::getSetting($class, 'tablename');
-                    $t = new $t(array('componentClass' => $class));
-                    $imageRow = $t->find($m[2])->current();
+                    $imageRow = Vpc_Abstract::createModel($class)->getRow($m[2]);
 
                     if (isset($attributes['WIDTH']) && $imageRow) {
                         $imageRow->width = $attributes['WIDTH'];

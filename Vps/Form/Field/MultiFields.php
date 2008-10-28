@@ -157,7 +157,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         return $ret;
     }
 
-    public function processInput($postData)
+    public function processInput($row, $postData)
     {
         if (isset($postData[$this->getFieldName().'_num'])) {
             $ret = array();
@@ -186,7 +186,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         if (isset($postData[$this->getFieldName()])) {
             foreach ($postData[$this->getFieldName()] as $i=>$rowPostData) {
                 foreach ($this->fields as $item) {
-                    $postData[$this->getFieldName()][$i] = $item->processInput($rowPostData);
+                    $postData[$this->getFieldName()][$i] = $item->processInput($row, $rowPostData);
                 }
             }
         }

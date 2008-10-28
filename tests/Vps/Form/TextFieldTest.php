@@ -2,6 +2,7 @@
 class Vps_Form_TextFieldTest extends PHPUnit_Framework_TestCase
 {
     private $_textField;
+
     public function setUp()
     {
         $this->_textField = new Vps_Form_Field_TextField('test12');

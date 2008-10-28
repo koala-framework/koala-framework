@@ -6,7 +6,7 @@ class Vpc_Composite_TextImage_Component extends Vpc_Abstract_Composite_Component
         $ret = array_merge(parent::getSettings(), array(
             'componentName'     => trlVps('TextImage'),
             'componentIcon'     => new Vps_Asset('textImage'),
-            'tablename'         => 'Vpc_Composite_TextImage_Model',
+            'modelname'         => 'Vpc_Composite_TextImage_Model',
             'default'           => array(
                 'image_position'    => 'left' // 'left', 'right', 'alternate'
             )

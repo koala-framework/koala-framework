@@ -6,13 +6,11 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'tablename' => 'Vpc_Basic_Download_Model',
+            'modelname' => 'Vpc_Basic_Download_Model',
             'componentName' => trlVps('Download'),
             'componentIcon' => new Vps_Asset('folder_link'),
             'showFilesize' => true,
             'cssClass' => 'webStandard',
-            'default'   => array(
-            )
         ));
         $ret['flags']['searchContent'] = true;
         $ret['generators']['child']['component']['downloadTag'] = 'Vpc_Basic_DownloadTag_Component';
@@ -23,7 +21,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
     {
         $return = parent::getTemplateVars();
         $return['infotext'] = $this->_getRow()->infotext;
-        
+
         $fileRow = $this->_getFileRow();
         if (!$this->_getSetting('showFilesize')) {
             $return['filesize'] = null;
@@ -35,11 +33,11 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
         $return['iconname'] = $icon;
         if ($icon) {
             $icon = '/assets/silkicons/' . $icon . '.png';
-        }        
+        }
         $return['icon'] = $icon;
         return $return;
     }
-    
+
     private function _getFileRow()
     {
         if (!$this->_fileRow) {

@@ -25,7 +25,7 @@ class Vps_Form_Field_Checkbox extends Vps_Form_Field_SimpleAbstract
         return $ret;
     }
 
-    public function processInput($postData)
+    public function processInput($row, $postData)
     {
         $fieldName = $this->getFieldName();
         if (isset($postData[$fieldName.'-post'])) {

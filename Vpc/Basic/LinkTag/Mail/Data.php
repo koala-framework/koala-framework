@@ -5,9 +5,8 @@ class Vpc_Basic_LinkTag_Mail_Data extends Vps_Component_Data
     private function _getLinkRow()
     {
         if (!isset($this->_linkRow)) {
-            $t = Vpc_Abstract::getSetting($this->componentClass, 'tablename');
-            $table = new $t(array('componentClass' => $this->componentClass));
-            $this->_linkRow = $table->find($this->dbId)->current();
+            $m = Vpc_Abstract::createModel($this->componentClass);
+            $this->_linkRow = $m->getRow($this->dbId);
         }
         return $this->_linkRow;
     }
@@ -15,7 +14,7 @@ class Vpc_Basic_LinkTag_Mail_Data extends Vps_Component_Data
     {
         if ($var == 'url') {
             $row = $this->_getLinkRow();
-            if (!$row) return '';
+            if (!$row || !$row->mail) return '';
             $ret = 'mailto:';
 
             // helper wegen spamschutz

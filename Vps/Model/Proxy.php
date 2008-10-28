@@ -11,6 +11,11 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
         parent::__construct($config);
     }
 
+    public function getProxyModel()
+    {
+        return $this->_proxyModel;
+    }
+
     public function createRow(array $data=array())
     {
         $proxyRow = $this->_proxyModel->createRow($data);

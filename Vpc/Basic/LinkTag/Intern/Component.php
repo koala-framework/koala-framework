@@ -9,7 +9,7 @@ class Vpc_Basic_LinkTag_Intern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
     {
         $ret = array_merge(parent::getSettings(), array(
             'dataClass' => 'Vpc_Basic_LinkTag_Intern_Data',
-            'tablename'     => 'Vpc_Basic_LinkTag_Intern_Model',
+            'modelname'     => 'Vpc_Basic_LinkTag_Intern_Model',
             'componentName' => 'Link.Intern',
             'default' => array()
         ));
