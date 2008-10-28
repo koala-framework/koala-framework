@@ -123,6 +123,27 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
 
     public function testClearOutputCache()
     {
-        $this->markTestIncomplete();
+        $cache = $this->getMock('Vps_Component_Cache', array('remove'), array(), '', false);
+        Vps_Component_Cache::setInstance($cache);
+        Vps_Media::getOutputCache()->clean();
+
+        Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled = 0;
+
+        Vps_Media::getOutput('Vpc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        $this->assertEquals(1, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
+
+        Vps_Media::getOutput('Vpc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        $this->assertEquals(1, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
+
+        Vps_Media::getOutputCache()->clean();
+        Vps_Media::getOutput('Vpc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        $this->assertEquals(2, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
+
+        $c = $this->_root->getComponentById('1600');
+        $c->getComponent()->getImageRow()->save();
+        Vps_Component_RowObserver::getInstance()->process(false);
+        Vps_Media::getOutput('Vpc_Basic_Image_FixDimensionComponent', '1600', 'default');
+        $this->assertEquals(3, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
+
     }
 }

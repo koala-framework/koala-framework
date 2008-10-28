@@ -49,6 +49,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         Zend_Registry::get('config')->debug->benchmark = false;
         Zend_Registry::get('config')->debug->querylog = false;
         Zend_Registry::set('db', null);
+        set_time_limit(0);
         Vps_Benchmark::disable();
 
         $arguments = array();
