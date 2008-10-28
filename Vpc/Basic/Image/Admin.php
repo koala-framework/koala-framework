@@ -7,16 +7,28 @@ class Vpc_Basic_Image_Admin extends Vpc_Admin
             Vpc_Abstract::hasSetting($this->_class, 'useParentImage') && 
             Vpc_Abstract::getSetting($this->_class, 'useParentImage')
         ) {
-            Vps_Component_Cache::getInstance()->remove(
-                Vps_Component_Data_Root::getInstance()->getComponentByDbId(
+            $components = Vps_Component_Data_Root::getInstance()->getComponentsByDbId(
                     $row->component_id, array('ignoreVisible' => true)
-                )->getChildComponents(array('componentClass'=>$this->_class))
-            );
+                );
+            foreach ($components as $c) {
+                Vps_Component_Cache::getInstance()->remove(
+                    $c->getChildComponents(array('componentClass'=>$this->_class))
+                );
+            }
         } else {
             parent::_deleteCacheForRow($row);
         }
+        if ($row instanceof Vpc_Basic_Image_Row) {
+            $components = Vps_Component_Data_Root::getInstance()->getComponentsByDbId(
+                $row->component_id, array('ignoreVisible' => true, 'componentClass'=>$this->_class)
+            );
+            foreach ($components as $c) {
+                $cacheId = $c->componentClass.'_'.str_replace('-', '__', $c->componentId).'_default';
+                Vps_Media::getOutputCache()->remove($cacheId);
+            }
+        }
     }
-    
+
     public function setup()
     {
         $fields['filename'] = 'varchar(255) DEFAULT NULL';

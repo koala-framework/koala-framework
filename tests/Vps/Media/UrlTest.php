@@ -35,9 +35,12 @@ class Vps_Media_UrlTest extends PHPUnit_Framework_TestCase
 
     public function testOutputCache()
     {
+        Vps_Media::getOutputCache()->clean();
+
         Vps_Media_TestMediaOutputClass::$called = 0;
         $id = time()+rand(0, 10000);
         $o = Vps_Media::getOutput('Vps_Media_TestMediaOutputClass', $id, 'simple');
+
         unset($o['mtime']);
         $this->assertEquals(array('mimeType' => 'text/plain', 'contents'=>'foobar'.$id), $o);
         $this->assertEquals(1, Vps_Media_TestMediaOutputClass::$called);
@@ -46,6 +49,10 @@ class Vps_Media_UrlTest extends PHPUnit_Framework_TestCase
         unset($o['mtime']);
         $this->assertEquals(array('mimeType' => 'text/plain', 'contents'=>'foobar'.$id), $o);
         $this->assertEquals(1, Vps_Media_TestMediaOutputClass::$called);
+
+        Vps_Media::getOutputCache()->clean();
+        Vps_Media::getOutput('Vps_Media_TestMediaOutputClass', $id, 'simple');
+        $this->assertEquals(2, Vps_Media_TestMediaOutputClass::$called);
     }
 
     public function testOutputReturnsNull()
