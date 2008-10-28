@@ -29,6 +29,10 @@ class Vpc_Basic_Text_Root extends Vpc_Root_Component
                   'parent_id'=>null, 'component'=>'text', 'is_home'=>false, 'type'=>'main', 'hide'=>false),
             array('id'=>1011, 'pos'=>2, 'visible'=>true, 'name'=>'foo', 'filename' => 'foo',
                   'parent_id'=>null, 'component'=>'text', 'is_home'=>false, 'type'=>'main', 'hide'=>false),
+            array('id'=>1012, 'pos'=>2, 'visible'=>true, 'name'=>'foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'text', 'is_home'=>false, 'type'=>'main', 'hide'=>false),
+            array('id'=>1013, 'pos'=>2, 'visible'=>true, 'name'=>'foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'text', 'is_home'=>false, 'type'=>'main', 'hide'=>false),
         )));
         $ret['generators']['page']['component'] = array('text' => 'Vpc_Basic_Text_TestComponent');
 

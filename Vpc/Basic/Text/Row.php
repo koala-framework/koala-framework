@@ -377,19 +377,11 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
 
             } else if ($part['type'] == 'invalidDownload') {
 
-                $srcRow = Vpc_Abstract::createTable($classes['download'])
-                                                ->findRow($part['componentId']);
-                $srcFileRow = $srcRow->findParentRow('Vps_Dao_File');
-                if ($srcFileRow && $srcFileRow->getFileSource()) {
-                    $fileTable = new Vps_Dao_File();
-                    $destFileRow = $fileTable->createRow();
-                    $destFileRow->copyFile($srcFileRow->getFileSource(),
-                                            $srcFileRow->filename,
-                                            $srcFileRow->extension);
-
-                    $destRow = Vpc_Abstract::createTable($classes['download'])
+                $srcRow = Vpc_Abstract::createModel($classes['download'])
+                                ->getRow($part['componentId']);
+                if ($srcRow->fileExists()) {
+                    $destRow = Vpc_Abstract::createModel($classes['download'])
                                                 ->createRow($srcRow->toArray());
-                    $destRow->vps_upload_id = $destFileRow->id;
                     $this->addChildComponentRow('download', $destRow);
                     $destRow->save();
                     $newContent .= "<a href=\"{$destRow->component_id}\">";

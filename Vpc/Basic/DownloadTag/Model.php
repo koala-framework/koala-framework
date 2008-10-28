@@ -1,6 +1,7 @@
 <?php
 class Vpc_Basic_DownloadTag_Model extends Vps_Model_Db_Proxy
 {
+    protected $_rowClass = 'Vpc_Basic_DownloadTag_Row';
     protected $_table = 'vpc_basic_downloadtag';
     protected $_referenceMap    = array(
         'File' => array(
