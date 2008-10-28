@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_Image_TestComponent extends Vpc_Basic_Image_Component
+class Vpc_Basic_Text_Image_TestComponent extends Vpc_Basic_Text_Image_Component
 {
     public static function getSettings()
     {
