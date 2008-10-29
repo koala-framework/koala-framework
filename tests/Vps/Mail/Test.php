@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Mail
+ */
 class Vps_Mail_Test extends PHPUnit_Framework_TestCase
 {
     private $_root;
@@ -39,27 +42,19 @@ class Vps_Mail_Test extends PHPUnit_Framework_TestCase
 
     public function testMailString()
     {
-        $this->markTestIncomplete();
-
         $m = new Vps_Mail('UserActivation');
         $this->assertEquals('mails/UserActivation.txt.tpl', $m->getTxtTemplate());
         $this->assertEquals('mails/UserActivation.html.tpl', $m->getHtmlTemplate());
         $this->assertEquals('UserActivation', $m->getTemplateForDbVars());
-
-
-        $m = new Vps_Mail('Bar');
-        $this->assertEquals('mails/Bar.txt.tpl', $m->getTxtTemplate());
-        $this->assertEquals(null, $m->getHtmlTemplate());
-        $this->assertEquals('Bar', $m->getTemplateForDbVars());
     }
 
     public function testMailSending()
     {
-        $this->markTestIncomplete();
-
         $mockMail = $this->getMock('Vps_Mail_Fixed', array('send'));
 
-        $m = new Vps_Mail('Send');
+        $c = $this->_root->getChildComponent('-both');
+        $m = new Vps_Mail($c);
+        $m->getView()->addScriptPath(dirname(__FILE__).'/views');
         $m->setMailVarsClassName(null);
         $m->setMail($mockMail);
         $m->subject = 'a special subject';

@@ -51,7 +51,7 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
                         $r->{$ref['column']} = $this->{$this->_getPrimaryKey()};
                     }
                 }
-                $this->_siblingRows[] = $r;
+                $this->_siblingRows[$k] = $r;
             }
         }
         return $this->_siblingRows;

@@ -7,6 +7,14 @@ class Vps_Controller_Action_Spam_SetController extends Vps_Controller_Action
         // ham setzen und email doch schicken
         $value = $this->_getParam('value');
         if ($value == 0) {
+            $row = Vps_Model_Abstract::getInstance('Vps_Model_Mail')->getRow($this->_getParam('id'));
+            if (!$row) die('0');
+            $row->is_spam = 0;
+            $row->save();
+            $result = $row->sendMail();
+            if (!$result) die('0');
+            die('1');
+/*
             $model = new Vps_Model_Db(array('table' => new Vps_Model_Mail_Table()));
             $row = $model->find($this->_getParam('id'))->current();
 
@@ -35,6 +43,7 @@ class Vps_Controller_Action_Spam_SetController extends Vps_Controller_Action
 
                 die('1');
             }
+*/
         }
         die('0');
     }
