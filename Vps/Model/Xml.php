@@ -252,7 +252,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
 
     public function getUniqueIdentifier() {
         if (isset($this->_filepath)) {
-            return str_replace('/', '_', str_replace('.', '_', $this->_filepath));
+            return str_replace(array('/', '.', '-'), array('_', '_', '_'), $this->_filepath);
         } else if (isset($this->_xmlContent)) {
             return md5($this->_xmlContent);
         } else {
