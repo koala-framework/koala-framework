@@ -7,15 +7,6 @@
     margin-top: 25px;
     margin-right: 110px;
 }
-.ext-ie7 .$cssClass .vpsField input {
-    margin-right: 20px;
-}
-.ext-ie7 .$cssClass .submitWrapper {
-    margin-top: -33px;
-}
-.ext-safari .$cssClass .submitWrapper {
-    margin-top: -28px;
-}
 .$cssClass input {
     float: left;
 }
