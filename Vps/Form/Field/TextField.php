@@ -13,7 +13,7 @@ class Vps_Form_Field_TextField extends Vps_Form_Field_SimpleAbstract
         parent::_addValidators();
 
         if ($this->getVType() === 'email') {
-            $this->addValidator(new Vps_Validate_EmailAddress());
+            $this->addValidator(new Vps_Validate_EmailAddressSimple());
         } else if ($this->getVType() === 'url') {
             //todo, reuse Zend_Uri::check
         } else if ($this->getVType() === 'alpha') {
