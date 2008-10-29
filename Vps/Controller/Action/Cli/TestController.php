@@ -35,6 +35,11 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
                 'param'=> 'coverage',
                 'help' => 'Create a coverage report'
             ),
+            array('param'=> 'log-xml'),
+            array('param'=> 'log-pmd'),
+            array('param'=> 'log-metrics'),
+            array('param'=> 'coverage-xml'),
+            array('param'=> 'coverage-html'),
         );
         $value = self::_getConfigSectionsWithTestDomain();
         if ($value) {
@@ -74,9 +79,17 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if ($this->_getParam('stop-on-failure')) {
             $arguments['stopOnFailure'] = $this->_getParam('stop-on-failure');
         }
-        if ($this->_getParam('server')) {
-            $cfg = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
-            Vps_Registry::set('testDomain', $cfg->server->testDomain);
+        if ($this->_getParam('log-xml')) {
+            $arguments['xmlLogfile'] = $this->_getParam('log-xml');
+        }
+        if ($this->_getParam('log-pmd')) {
+            $arguments['pmdXML'] = $this->_getParam('log-pmd');
+        }
+        if ($this->_getParam('log-metrics')) {
+            $arguments['metricsXML'] = $this->_getParam('log-metrics');
+        }
+        if ($this->_getParam('coverage-xml')) {
+            $arguments['coverageClover'] = $this->_getParam('coverage-xml');
         }
 
         if ($this->_getParam('coverage')) {
@@ -84,7 +97,16 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
                 throw new Vps_ClientException('tokenizer and xdebug extensions must be loaded');
             }
             ini_set('memory_limit', '64M');
-            $arguments['reportDirectory'] = './report';
+            if (!is_string($this->_getParam('coverage'))) {
+                $arguments['reportDirectory'] = './report';
+            } else {
+                $arguments['reportDirectory'] = $this->_getParam('coverage');
+            }
+        }
+
+        if ($this->_getParam('server')) {
+            $cfg = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
+            Vps_Registry::set('testDomain', $cfg->server->testDomain);
         }
 
         $suite = new Vps_Test_TestSuite();
