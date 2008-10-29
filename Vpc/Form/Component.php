@@ -54,7 +54,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
 
         $this->getForm()->initFields();
 
-        if (!isset($postData[$this->getData()->componentId.'-post'])) {
+        if (!isset($postData[$this->getData()->componentId.'-post']) && !isset($postData[$this->getData()->componentId])) {
             $postData = array();
         }
         $postData = $this->_form->processInput($this->_form->getRow(), $postData);
