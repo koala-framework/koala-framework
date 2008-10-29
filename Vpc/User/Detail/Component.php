@@ -14,7 +14,11 @@ class Vpc_User_Detail_Component extends Vpc_Directories_Item_Detail_Component
         $ret = parent::getTemplateVars();
         $generators = $this->_getSetting('generators');
         foreach ($generators['child']['component'] as $generator => $class) {
-            $ret['items'][$generator] = Vpc_Abstract::getSetting($class, 'componentName');
+            if (is_instance_of($class, 'Vpc_User_Detail_Menu_Component')) {
+                unset($ret['items'][$generator]);
+            } else {
+                $ret['items'][$generator] = Vpc_Abstract::getSetting($class, 'componentName');
+            }
         }
         return $ret;
     }
