@@ -146,4 +146,12 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, Vpc_Basic_Image_FixDimensionComponent::$getMediaOutputCalled);
 
     }
+
+    public function testBestFitWithZeroHeight()
+    {
+        $c = $this->_root->getComponentById('1606');
+        $s = $c->getComponent()->getImageDimensions();
+        $this->assertEquals(16, $s['width']);
+        $this->assertEquals(16, $s['height']);
+    }
 }
