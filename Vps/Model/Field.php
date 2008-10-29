@@ -68,4 +68,8 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
     {
         return $this->_fieldName;
     }
+
+    public function getUniqueIdentifier() {
+        throw new Vps_Exception("no unique identifier set");
+    }
 }

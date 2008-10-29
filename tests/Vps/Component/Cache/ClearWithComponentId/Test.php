@@ -21,7 +21,7 @@ class Vps_Component_Cache_ClearWithComponentId_Test extends PHPUnit_Framework_Te
 
     public function testClear()
     {
-        Zend_Registry::get('config')->hasIndex = false;
+        Vps_Component_RowObserver::getInstance()->clear();
 
         $this->_cache->expects($this->once())
             ->method('remove')

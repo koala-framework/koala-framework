@@ -241,4 +241,8 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if ($limit || $start) $ret->limit($limit, $start);
         return $ret;
     }
+
+    public function getUniqueIdentifier() {
+        return $this->_table->info(Zend_Db_Table_Abstract::NAME);
+    }
 }

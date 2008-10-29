@@ -107,7 +107,7 @@ class Vps_Component_Abstract_Admin
     public function delete()
     {
     }
-    
+
     public function onRowUpdate($row)
     {
         $this->_onRowAction($row);
@@ -159,7 +159,7 @@ class Vps_Component_Abstract_Admin
             );
         }
     }
-    
+
     protected function _onRowAction($row)
     {
         $this->_deleteCacheForRow($row);

@@ -107,14 +107,14 @@ function bt()
         foreach ($bt as $i) {
             if (isset($i['file']) && substr($i['file'], 0, 22) == '/usr/share/php/PHPUnit') continue;
             if (isset($i['file']) && substr($i['file'], 0, 16) == '/usr/bin/phpunit') continue;
-            echo 
+            echo
                 (isset($i['file']) ? $i['file'] : 'Unknown file') . ':' .
                 (isset($i['line']) ? $i['line'] : '?') . ' - ' .
                 ((isset($i['object']) && $i['object'] instanceof Vps_Component_Data) ? $i['object']->componentId . '->' : '') .
                 (isset($i['function']) ? $i['function'] : '') . '(' .
                 _btArgsString($i['args']) . ')' . "\n";
         }
-        echo "\n";     
+        echo "\n";
     } else {
         $out = array(array('File', 'Line', 'Function', 'Args'));
         foreach ($bt as $i) {
@@ -241,8 +241,8 @@ class Vps_Setup
         }
 
         $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
-        if (php_sapi_name() != 'cli' && 
-            Zend_Registry::get('config')->preLogin && 
+        if (php_sapi_name() != 'cli' &&
+            Zend_Registry::get('config')->preLogin &&
             empty($sessionPhpAuthed->success)
         ) {
             if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {

@@ -21,7 +21,6 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-
         $data = $this->getData();
         if (!is_object($where)) {
             $select = $this->select($where, $order, $limit, $start);
@@ -71,10 +70,30 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         foreach ($this->_getElements() as $f) {
             if ($f->{$this->getPrimaryKey()} == $id) {
                 foreach ($rowData as $k=>$i) {
-                    $f->$k = $i;
+                    if ($i === null) {
+                       unset ($f->$k);
+                    } else {
+                        $f->$k = $i;
+                    }
+
                 }
             }
         }
+        //löscht aus der der klasse gespeicherten data
+        $data = $this->getData();
+        foreach ($data as $datakey => $dataelement) {
+            if ($dataelement[$this->getPrimaryKey()] == $id) {
+            foreach ($rowData as $k=>$i) {
+                    if ($i === null) {
+                       unset ($data[$datakey][$k]);
+                    } else {
+                       $data[$datakey][$k] = $i;
+                    }
+                }
+            }
+        }
+        $this->_data = $data;
+
         if ($this->_filepath) {
             file_put_contents($this->_filepath, $this->_asPrettyXML($simpleXml->asXML()));
         }
@@ -83,7 +102,6 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
 
     public function insert(Vps_Model_Row_Interface $row, $rowData)
     {
-        //performancemäßig noch nicht sehr gut
         $data = $this->getData();
         if (!$this->getPrimaryKey()) {
             throw new Vps_Exception("No Insertion without a primary key");
@@ -113,15 +131,23 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
            if (is_array($i)) {
                throw  new Vps_Exception("No arguments allowed in a Xml Node");
            }
-           $node->addChild($k, $i);
+           if ($i !== null) {
+               $node->addChild($k, $i);
+           }
         }
 
         if ($this->_filepath) {
             file_put_contents($this->_filepath, $this->_asPrettyXML($simpleXml->asXML()));
         }
-
         $row->{$this->getPrimaryKey()} = $id;
         $rowData[$this->getPrimaryKey()] = $id;
+
+
+        foreach ($rowData as $k => $row1) {
+            if ($k != $this->getPrimaryKey() && $row1 === null) {
+                unset($rowData[$k]);
+            }
+        }
         $key = $this->_generateKey();
         $this->_data[$key] = $rowData;
         $this->_rows[$key] = $row;
@@ -130,11 +156,8 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
 
     private function _generateKey()
     {
-        $rand = rand();
-        while (array_key_exists($rand, $this->_data)) {
-            $rand = rand();
-        }
-        return $rand;
+        if (!$this->_data) return 0;
+        return max(array_keys($this->_data))+1;
     }
 
     public function delete(Vps_Model_Row_Interface $row)
@@ -150,19 +173,20 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
             }
         }
         $i = 0;
+        $check = false;
         foreach ($xml as $k => $element) {
             if ($element->{$this->getPrimaryKey()} == $id) {
                 unset($xml->{$element->getName()}[$i]);
-                return;
+                $check = true;
+                break;
             }
             $i++;
         }
 
-
         if ($this->_filepath) {
-            file_put_contents($this->_filepath, $this->_asPrettyXML($simpleXml->asXML()));
+            file_put_contents($this->_filepath, $this->_asPrettyXML($xml->asXML()));
         }
-        throw new Vps_Exception("Can't find entry with id '$id'");
+        if (!$check) throw new Vps_Exception("Can't find entry with id '$id'");
     }
 
     private function _getSimpleXml()
@@ -218,6 +242,16 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
     public function getFilePath ()
     {
         return $this->_filepath;
+    }
+
+    public function getUniqueIdentifier() {
+        if (isset($this->_filepath)) {
+            return str_replace('/', '_', str_replace('.', '_', $this->_filepath));
+        } else if (isset($this->_xmlContent)) {
+            return md5($this->_xmlContent);
+        } else {
+            throw new Vps_Exception("no unique identifier set");
+        }
     }
 
     protected function _asPrettyXML($string)

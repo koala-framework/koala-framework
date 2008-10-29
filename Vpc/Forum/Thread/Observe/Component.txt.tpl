@@ -1,6 +1,6 @@
-<?= trlVps("Hello,
+<?= trlVps("Hello") ?>,
 
-a post in an observed thread has been submitted:") ?>
+<?= trlVps("a post in an observed thread has been submitted") ?>;
 
 <?=$this->threadName ?>
 

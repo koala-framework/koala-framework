@@ -2,46 +2,60 @@
 class Vps_Model_ProxyCache extends Vps_Model_Proxy
 {
     protected $_cacheSettings;
-    protected $_cachedata;
+    protected $_cacheData = array();
     private $_cache;
-    protected $_rowCacheClass = 'Vps_Model_ProxyCache_Row';
-    protected $_rowsetCacheClass = 'Vps_Model_ProxyCache_Rowset';
+    protected $_rowClass = 'Vps_Model_ProxyCache_Row';
+    protected $_rowsetClass = 'Vps_Model_ProxyCache_Rowset';
 
     public function __construct(array $config = array())
     {
         if (isset($config['cacheSettings'])) $this->_cacheSettings = $config['cacheSettings'];
-
         parent::__construct($config);
     }
 
-
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-
         if (!is_object($where)) {
             if (is_string($where)) $where = array($where);
             $select = $this->select($where, $order, $limit, $start);
         } else {
             $select = $where;
         }
-        if ($select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
+
+        if ($select->getPart(Vps_Model_Select::WHERE_EQUALS) || $select->getPart(Vps_Model_Select::WHERE_NULL)) {
             $cacheSetting = $this->_getCacheSetting($select);
 	        if ($cacheSetting) {
+
+
 				$cacheId = $this->_getCacheId($cacheSetting);
+
 				if (!isset($this->_cacheData[$cacheId])) {
+
 				    if (!$this->_cacheData[$cacheId] = $this->_getCache()->load($cacheId)) {
 						$this->_cacheData[$cacheId] = $this->_getCacheData($cacheSetting);
 						$this->_getCache()->save($this->_cacheData[$cacheId], $cacheId);
-					}
+				    }
 				}
-                $data = array();
-				if ($where = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
-	                $v = implode(array_values($where), '_');
-                    $data[] = $this->_cacheData[$cacheId][$v];
-	            }
-		        return new $this->_rowsetCacheClass(array(
+				$where = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
+				$values = array();
+				foreach (array_values($where) as $value) {
+                    if ($value === '') $value = '#';
+				    $values[] = $value;
+				}
+
+                $v = implode($values, '_');
+                if (strrpos($v, '_') == strlen($v)-1 && strlen($v)-1 != 0) $v = substr($v, 0, strlen($v)-2);
+                if ($select->getPart(Vps_Model_Select::WHERE_NULL))$v .= '_';
+
+
+                if (isset($this->_cacheData[$cacheId][$v]))
+                    $data = $this->_cacheData[$cacheId][$v];
+                else
+                    $data = array();
+
+		        return new $this->_rowsetClass(array(
 		            'model' => $this,
-		            'rowClass' => $this->_rowCacheClass,
+		            'rowClass' => $this->_rowClass,
 		            'cacheData' => $data
 		        ));
 	        }
@@ -51,11 +65,17 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
 
     private function _getCacheSetting ($where)
     {
-        $part = $where->getPart(Vps_Model_Select::WHERE_EQUALS);
+
+        $part = array_merge($where->getPart(Vps_Model_Select::WHERE_EQUALS));
         $necessary = array_keys($part);
+
+        if ($wherenull = $where->getPart(Vps_Model_Select::WHERE_NULL)) {
+            $necessary[] = $wherenull[0];
+        }
         foreach ($this->_cacheSettings as $cacheSetting) {
-            if ($cacheSetting['index'] == $necessary)
+            if ($cacheSetting['index'] ==$necessary) {
                 return $cacheSetting;
+            }
         }
         return null;
     }
@@ -63,15 +83,17 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
     private function _getCacheId ($cacheSetting)
     {
         $parts = array();
+        $parts[] = $this->getUniqueIdentifier();
         $parts[] = implode ($cacheSetting['index'], '_');
         $parts[] = implode ($cacheSetting['columns'], '_');
         return implode ($parts, '_');
     }
 
-    private function _getCache() {
+    private function _getCache()
+    {
         if (!$this->_cache) {
             $frontendOptions = array('lifetime' => 3600, 'automatic_serialization' => true);
-            $backendOptions = array('cache_dir' => 'application/cache/model/'); //verzeichnis ändern
+            $backendOptions = array('cache_dir' => 'application/cache/model');
             $this->_cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
         }
 
@@ -80,69 +102,65 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
 
     private function _getCacheData($cacheSetting)
     {
+
         $cachedata = array();
         $indexes = $cacheSetting['index'];
         $colindexes = $cacheSetting['columns'];
         $colindexes[] = $this->getPrimaryKey();
 
-        $parts = array();
+        $ret = array();
         $i = 0;
+
         foreach ($this->getRows() as $row) {
             $searchKey = $this->_getSearchKey($row, $indexes);
-            $parts[$searchKey] = array();
-
+            $parts = array();
             foreach ($colindexes as $key => $colindex) {
-                $parts[$searchKey][$colindex] = $row->{$colindex};
+                $parts['data'][$colindex] = $row->{$colindex};
             }
-            $parts[$searchKey]['internalId'] = $i;
-            $i++;
+            if (!$this->getPrimaryKey()) {
+                $parts['id'] = $i;
+                $i++;
+            } else {
+                $parts['id'] = $row->{$this->getPrimaryKey()};
+            }
+            $ret[$searchKey][$parts['id']] = $parts;
         }
-        return $parts;
+
+        return $ret;
     }
 
     private function _getSearchKey($row, $indexes)
     {
         $identifier = array();
         foreach ($indexes as $key => $index) {
-            $identifier[] = $row->{$index};
+            if ($row->{$index} === '') $identifier[] = '#';
+            else $identifier[] = $row->{$index};
         }
         return implode($identifier, '_');
     }
 
-    public function getRowByCacheData($cacheData)
+    public function getRowByCacheData($id, $cacheData)
     {
-        $id = $cacheData['internalId'];
         if (!isset($this->_rows[$id])) {
-            $this->_rows[$id] = new $this->_rowCacheClass(array(
+            $this->_rows[$id] = new $this->_rowClass(array(
                 'cacheData' => $cacheData,
+                'id' => $id,
                 'model' => $this
             ));
         }
         return $this->_rows[$id];
     }
 
-    public function clearCache()
+    public function getRowByProxiedRow($proxiedRow)
     {
-        $this->_getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
-        $this->_cacheData = null;
-    }
-
-    public function createRow(array $data=array())
-    {
-        $proxyRow = $this->_proxyModel->createRow($data);
-        $ret = new $this->_rowCacheClass(array(
-            'row' => $proxyRow,
-            'model' => $this
-        ));
-        $this->_rows[3] = $ret;
-        return $ret;
-    }
-
-    // nur fürs testen
-    public function checkCache ()
-    {
-        if ($this->_cacheData) return true;
-        else return false;
+        $id = $proxiedRow->{$this->getPrimaryKey()};
+        if (!isset($this->_rows[$id])) {
+            $this->_rows[$id] = new $this->_rowClass(array(
+                'row' => $proxiedRow,
+                'model' => $this
+            ));
+        }
+        return $this->_rows[$id];
     }
 
     public function getRowById($select)
@@ -151,6 +169,70 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
             $select = $this->select($select);
         }
         $select->limit(1);
-        return parent::getRows($select)->current();
+        return $this->_proxyModel->getRow($select);
+    }
+
+    public function clearCache()
+    {
+        $this->_getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+        $this->_cacheData = array();
+    }
+
+    public function clearCacheStore()
+    {
+        $this->_getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+    }
+
+    public function createRow(array $data=array())
+    {
+        $proxyRow = $this->_proxyModel->createRow($data);
+        $ret = new $this->_rowClass(array(
+            'row' => $proxyRow,
+            'model' => $this
+        ));
+        return $ret;
+    }
+
+    public function checkCache ()
+    {
+        if (isset($this->_cacheData) && $this->_cacheData) return true;
+        else return false;
+    }
+
+    public function afterInsert($row) {
+        $this->_createCacheDataRow($row);
+    }
+    public function afterUpdate($row) {
+        $this->_createCacheDataRow($row);
+    }
+
+    public function _createCacheDataRow($row)
+    {
+        foreach ($this->_cacheSettings as $cacheSetting) {
+            //wenn cache nocht nicht geladen nicht updated
+            if (!isset($this->_cacheData[$this->_getCacheId($cacheSetting)])) continue;
+            $cachedata = array();
+	        $indexes = $cacheSetting['index'];
+	        $colindexes = $cacheSetting['columns'];
+	        $colindexes[] = $this->getPrimaryKey();
+	        $ret = array();
+	        $searchKey = $this->_getSearchKey($row, $indexes);
+	        $parts = array();
+	        foreach ($colindexes as $key => $colindex) {
+	            $parts['data'][$colindex] = $row->{$colindex};
+	        }
+	        $parts['id'] = $row->{$this->getPrimaryKey()};
+            $this->_cacheData[$this->_getCacheId($cacheSetting)][$searchKey][$row->{$this->getPrimaryKey()}] = $parts;
+        }
+        $this->_rows[$row->{$this->getPrimaryKey()}] = $row;
+    }
+
+    public function deleteCacheDataRow($row)
+    {
+        foreach ($this->_cacheData as $index => $indexdata) {
+            foreach ($indexdata as $searchkey => $rows) {
+                unset($this->_cacheData[$index][$searchkey][$row->{$this->getPrimaryKey()}]);
+            }
+        }
     }
 }
