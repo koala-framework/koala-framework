@@ -56,14 +56,16 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vps_Media_Output
             $file = self::_getEmptyImage(get_class($this));
             if (!$file) return null;
             $filename = $this->_getSetting('emptyImage');
+            $id = $this->getData()->dbId;
         } else {
             $filename = $row->filename;
             if (!$filename) {
                 $filename = $fRow->filename;
             }
             $filename .= '.'.$fRow->extension;
+            $id = $row->component_id;
         }
-        return Vps_Media::getUrl(get_class($this), $row->component_id, 'default', $filename);
+        return Vps_Media::getUrl(get_class($this), $id, 'default', $filename);
     }
 
     public function getImageDimensions()
