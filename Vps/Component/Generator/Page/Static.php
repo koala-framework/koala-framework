@@ -21,13 +21,16 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
 
     protected function _getFilenameFromRow($componentKey, $parentData)
     {
+        $ret = false;
+
         $c = $this->_settings;
         if (isset($c['filename'])) {
             $ret = $c['filename'];
         }
-        if (isset($c['name'])) {
+        if (!$ret && isset($c['name'])) {
             $ret = $c['name'];
-        } else {
+        }
+        if (!$ret) {
             $ret = $componentKey;
         }
         return Vps_Filter::get($ret, 'Ascii');
