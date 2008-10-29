@@ -75,7 +75,6 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
                 $this->_isSaved = true;
             }
         }
-        
 
         Vps_Registry::get('db')->commit();
     }
@@ -119,7 +118,7 @@ class Vpc_Form_Component extends Vpc_Abstract_Composite_Component
         }
         $ret['showSuccess'] = false;
         $ret['errors'] = $this->getErrors();
-        if (isset($_POST[$this->getData()->componentId])) {
+        if ($this->isSaved()) {
             if (!$ret['errors'] && $class) {
                 $ret['showSuccess'] = true;
             }

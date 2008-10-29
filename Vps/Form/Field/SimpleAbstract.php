@@ -11,7 +11,7 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
                 $ret[$this->getFieldName()] = $this->getData()->load($row);
             }
         }
-        if (is_null($ret[$this->getFieldName()])) {
+        if (!isset($ret[$this->getFieldName()]) || is_null($ret[$this->getFieldName()])) {
             $ret[$this->getFieldName()] = $this->getDefaultValue();
         }
         return array_merge($ret, parent::load($row, $postData));

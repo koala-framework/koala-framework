@@ -9,8 +9,16 @@ class Vpc_User_Login_Form_Success_Component extends Vpc_Form_Success_Component
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $ret['redirectTo'] = $_SERVER['REQUEST_URI'];
-        $ret['redirectTo'] = preg_replace('/(\?)logout=?[^&]*&?/', '$1', $ret['redirectTo']);
+        if (is_instance_of($this->getData()->getPage()->componentClass, 'Vpc_User_Login_Component')) {
+            $user = Vps_Registry::get('userModel')->getAuthedUser();
+            $ret['redirectTo'] = Vps_Component_Data_Root::getInstance()
+                ->getComponentByClass('Vpc_User_Directory_Component')
+                ->getChildComponent('_' . $user->id);
+            $ret['redirectType'] = 'profile';
+        } else {
+            $ret['redirectTo'] = $this->getData()->getPage();
+            $ret['redirectType'] = 'page';
+        }
         return $ret;
     }
 }
