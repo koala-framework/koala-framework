@@ -176,10 +176,10 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete();
         /*
-        - interne links (noch nicht implementiert)
-        - beim speichern einträge löschen die nicht im html vorkommen
-        - beim speichern saved=1 setzen
-        - beim löschen unterkompoenten mitlöschen
+        - interne links umwandeln (noch nicht implementiert)
+        - testen: beim speichern einträge löschen die nicht im html vorkommen
+        - testen: beim speichern saved=1 setzen
+        - testen: beim löschen unterkompoenten mitlöschen
         */
     }
 }

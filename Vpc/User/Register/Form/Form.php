@@ -11,11 +11,21 @@ class Vpc_User_Register_Form_Form extends Vpc_User_Edit_Form_Form
     private function _setHidden($f)
     {
         if ($f->getHideInRegister()) {
-            $f->setHidden(true);
+            $this->_setHidden2($f);
         }
         foreach ($f as $i) {
             if (is_object($i)) {
                 $this->_setHidden($i);
+            }
+        }
+    }
+    private function _setHidden2($f)
+    {
+        $f->setHidden(true);
+        $f->setSave(false);
+        foreach ($f as $i) {
+            if (is_object($i)) {
+                $this->_setHidden2($i);
             }
         }
     }

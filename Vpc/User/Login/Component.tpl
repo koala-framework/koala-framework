@@ -6,5 +6,10 @@
         <?=$this->componentLink($this->register, trlVps('register here'))?>.
         </p>
     <? } ?>
+    <? if ($this->lostPassword) { ?>
+        <p><?=trlVps("If you have lost your password, ")?>
+        <?=$this->componentLink($this->lostPassword, trlVps('request a new one here'))?>.
+        </p>
+    <? } ?>
     <?=$this->component($this->form)?>
 </div>
