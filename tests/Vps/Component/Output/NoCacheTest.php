@@ -4,24 +4,56 @@
  */
 class Vps_Component_Output_NoCacheTest extends PHPUnit_Framework_TestCase
 {
-    protected $_output;
-    
-    public function setUp()
+    public function testMaster()
     {
-        Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_Root_Component');
-        $this->_root = Vps_Component_Data_Root::getInstance();
-        $this->_output = new Vps_Component_Output_NoCache();
+        $this->markTestIncomplete();
+        
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_C3_Root_Component');
+        $root = Vps_Component_Data_Root::getInstance();
+        $output = new Vps_Component_Output_Master();
+        
+        $value = $output->render($root);
+        $this->assertEquals('master {nocache: Vps_Component_Output_C3_Root_Component root }', $value);
+
+        $value = $output->render($root->getChildComponent('_childpage'));
+        $this->assertEquals('master master2 {nocache: Vps_Component_Output_C3_ChildPage_Component root_childpage }', $value);
+        
+        $value = $output->renderMaster($root->getChildComponent('_childpage')->getChildComponent('_childpage'));
+        $this->assertEquals('master master2 {nocache: Vps_Component_Output_C3_ChildPage2_Component root_childpage_childpage }', $value);
     }
 
-    public function testComponentOutput()
+    public function testC1()
     {
-        $output = $this->_output->render($this->_root, dirname(__FILE__) . '/Root/Master.tpl');
-        $this->assertEquals('master box root plugin(plugin(child child2))', $output);
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_C1_Root_Component');
+        $root = Vps_Component_Data_Root::getInstance();
+        $output = new Vps_Component_Output_NoCache();
         
-        $output = $this->_output->render($this->_root);
-        $this->assertEquals('root plugin(plugin(child child2))', $output);
+        $value = $output->render($root->getChildComponent('-child'));
+        $this->assertEquals('master2 child child2', $value);
         
-        $output = $this->_output->render($this->_root->getChildComponent('-child'));
-        $this->assertEquals('child child2', $output);
+        $value = $output->renderMaster($root);
+        $this->assertEquals('master box root plugin(plugin(master2 child child2))', $value);
+        
+        $value = $output->render($root);
+        $this->assertEquals('root plugin(plugin(master2 child child2))', $value);
+    }
+    
+    public function testC3()
+    {
+        Vps_Component_Data_Root::setComponentClass('Vps_Component_Output_C3_Root_Component');
+        $root = Vps_Component_Data_Root::getInstance();
+        $output = new Vps_Component_Output_NoCache();
+
+        $value = $output->renderMaster($root);
+        $this->assertEquals('master box root', $value);
+
+        $value = $output->renderMaster($root->getChildComponent('_childpage'));
+        $this->assertEquals('master box2 master2 childpage', $value);
+
+        $value = $output->render($root->getChildComponent('_childpage'));
+        $this->assertEquals('master2 childpage', $value);
+
+        $value = $output->renderMaster($root->getChildComponent('_childpage')->getChildComponent('_childpage'));
+        $this->assertEquals('master box2 master2 childpage2', $value);
     }
 }

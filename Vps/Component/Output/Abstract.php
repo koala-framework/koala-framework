@@ -15,7 +15,7 @@ abstract class Vps_Component_Output_Abstract
     
     public function setIgnoreVisible($ignoreVisible)
     {
-        $this->_useCache = $ignoreVisible;
+        $this->_ignoreVisible = $ignoreVisible;
     }
     
     public function ignoreVisible()
