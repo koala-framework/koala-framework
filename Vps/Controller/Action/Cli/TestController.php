@@ -52,6 +52,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         Zend_Registry::get('config')->debug->settingsCache = false;
         Zend_Registry::get('config')->debug->benchmark = false;
         Zend_Registry::get('config')->debug->querylog = false;
+        Zend_Registry::get('config')->hasIndex = false; //zwischenlösung bis index auf models umgestellt wurde und auch getestet werden muss
         Zend_Registry::set('db', null);
         set_time_limit(0);
         Vps_Benchmark::disable();
@@ -77,7 +78,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             $cfg = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
             Vps_Registry::set('testDomain', $cfg->server->testDomain);
         }
-        
+
         if ($this->_getParam('coverage')) {
             if (!extension_loaded('tokenizer') || !extension_loaded('xdebug')) {
                 throw new Vps_ClientException('tokenizer and xdebug extensions must be loaded');
