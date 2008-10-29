@@ -96,18 +96,14 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vps_Media_Output
             $s['height'] = $row->height;
             $s['scale'] = $row->scale;
         }
-        if (is_null($s['width']) && is_null($s['height'])) {
-            $fileRow = $row->getParentRow('Image');
-            if (!$fileRow) {
-                $file = self::_getEmptyImage($className);
-            } else {
-                $file = $fileRow->getFileSource();
-            }
-            if ($file && file_exists($file)) {
-                $data = getimagesize($file);
-                $s['width'] = $data[0];
-                $s['height'] = $data[1];
-            }
+        if (!$row || !$fileRow = $row->getParentRow('Image')) {
+            $file = self::_getEmptyImage($className);
+        } else {
+            $file = $fileRow->getFileSource();
+        }
+        if ($file && file_exists($file)) {
+            $sourceSize = getimagesize($file);
+            return Vps_Media_Image::calculateScaleDimensions($sourceSize, $s);
         }
         return $s;
     }

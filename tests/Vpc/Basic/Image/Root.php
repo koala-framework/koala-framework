@@ -17,12 +17,16 @@ class Vpc_Basic_Image_Root extends Vpc_Root_Component
                   'parent_id'=>null, 'component'=>'emptyImage', 'is_home'=>false, 'type'=>'main', 'hide'=>false),
             array('id'=>1605, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
                   'parent_id'=>null, 'component'=>'parentImage', 'is_home'=>false, 'type'=>'main', 'hide'=>false),
+            array('id'=>1606, 'pos'=>1, 'visible'=>true, 'name'=>'Foo', 'filename' => 'foo',
+                  'parent_id'=>null, 'component'=>'bestFitWithZeroHeight', 'is_home'=>false, 'type'=>'main', 'hide'=>false),
+
         )));
         $ret['generators']['page']['component'] = array(
             'image' => 'Vpc_Basic_Image_TestComponent',
             'imageFix' => 'Vpc_Basic_Image_FixDimensionComponent',
             'emptyImage' => 'Vpc_Basic_Image_EmptyImageComponent',
-            'parentImage' => 'Vpc_Basic_Image_ParentImageComponent_Component'
+            'parentImage' => 'Vpc_Basic_Image_ParentImageComponent_Component',
+            'bestFitWithZeroHeight' => 'tests_Vpc_Basic_Image_BestFitWithZeroHeightComponent'
         );
 
         unset($ret['generators']['title']);

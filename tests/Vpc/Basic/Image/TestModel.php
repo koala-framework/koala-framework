@@ -13,6 +13,7 @@ class Vpc_Basic_Image_TestModel extends Vpc_Basic_Image_Model
                     array('component_id'=>1601, 'vps_upload_id'=>1, 'filename'=>'myname'),
                     array('component_id'=>1603, 'vps_upload_id'=>1, 'width'=>10, 'height'=>10, 'scale'=>Vps_Media_Image::SCALE_DEFORM),
                     array('component_id'=>1605, 'vps_upload_id'=>1),
+                    array('component_id'=>1606, 'vps_upload_id'=>1),
                 )
             ));
         parent::__construct($config);
