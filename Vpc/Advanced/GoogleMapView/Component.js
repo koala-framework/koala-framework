@@ -1,9 +1,12 @@
 Vpc.Advanced.GoogleMap = function(mapContainer, options, text) {
-    var input = mapContainer.down("form.fromAddress input");
-    mapContainer.down("form.fromAddress").on('submit', function(e) {
-        this.setMapDir(input.getValue());
-        e.stopEvent();
-    }, this);
+    var fromEl = mapContainer.down("form.fromAddress");
+    if (fromEl) {
+        var input = mapContainer.down("form.fromAddress input");
+        fromEl.on('submit', function(e) {
+            this.setMapDir(input.getValue());
+            e.stopEvent();
+        }, this);
+    }
     this.mapContainer = mapContainer;
     this.options = options;
     this.text = text;
@@ -11,31 +14,6 @@ Vpc.Advanced.GoogleMap = function(mapContainer, options, text) {
     var container = mapContainer.down(".container");
     container.setWidth(parseInt(options.width));
     container.setHeight(parseInt(options.height));
-
-    var input = mapContainer.down("form.fromAddress input");
-    input.dom.value = trlVps('Place of departure: zip code, Town, Street');
-    //input.set({value:'Place of departure: zip code, Town, Street'}); // auskommentiert wegen problemen mit safari
-    input.on('focus', function() {
-        if (this.getValue() == trlVps('Place of departure: zip code, Town, Street')){
-            /*this.set({
-            value: ''
-            });*/
-            input.dom.value = '';
-            this.removeClass('textBefore');
-            this.addClass('textOn');
-        }
-    }, input);
-    input.on('blur', function() {
-        if (this.getValue()=='') {
-            /*this.set({
-            value:'Ihr Abfahrtsort: PLZ, Ort, Straße'});*/
-            input.dom.value = trlVps('Place of departure: zip code, Town, Street');
-            this.removeClass('textOn');
-            this.addClass('textBefore');
-
-        }
-        this.addClass('textBefore');
-    }, input);
 };
 
 Vpc.Advanced.GoogleMap.prototype = {
@@ -105,7 +83,7 @@ Vpc.Advanced.GoogleMap.prototype = {
     },
 
     showWindow : function () {
-        if (this.text != "" && "<br>" != this.text.toLowerCase()) {
+        if (this.text && this.text != "" && "<br />" != this.text.toLowerCase()) {
             this.marker.openInfoWindowHtml(this.text, {maxWidth: this.windowsize});
         }
     },
@@ -175,7 +153,8 @@ Vpc.Advanced.GoogleMap.renderMap = function(map) {
     if (!options) return;
 
     options = Ext.decode(options.value);
-    var text = mapContainer.down("div.text").dom.innerHTML;
+    var text = mapContainer.down("div.text");
+    if (text) text = text.dom.innerHTML;
     var myMap = new Vpc.Advanced.GoogleMap(mapContainer, options, text);
     
     Vps.GoogleMap.load(function() {
