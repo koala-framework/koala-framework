@@ -4,6 +4,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
     protected $_filepath;
     protected $_xpath;
     protected $_topNode;
+    protected $_rootNode;
     protected $_xmlContent;
     private $_simpleXml;
 
@@ -16,6 +17,7 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         if (isset($config['xmlContent'])) $this->_xmlContent = $config['xmlContent'];
         if (isset($config['xpath'])) $this->_xpath = $config['xpath'];
         if (isset($config['topNode'])) $this->_topNode = $config['topNode'];
+        if (isset($config['rootNode'])) $this->_rootNode = $config['rootNode'];
         parent::__construct($config);
     }
 
@@ -197,6 +199,10 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
 	        } else {
 		        if (file_exists($this->_filepath)){
 		            $contents = file_get_contents($this->_filepath);
+		        } elseif (isset($this->_rootNode)) {
+		            $contents = "<$this->_rootNode ></$this->_rootNode>";
+		        } else {
+		            throw new Vps_Exception("Neither a rootnode nor a filepath is set");
 		        }
 	        }
 	        $this->_simpleXml = new SimpleXMLElement($contents);

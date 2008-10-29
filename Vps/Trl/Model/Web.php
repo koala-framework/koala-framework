@@ -5,6 +5,7 @@ class Vps_Trl_Model_Web extends Vps_Trl_Model_Abstract
     {
 
         $modelWeb = new Vps_Model_Xml(array(
+            'rootNode' => 'trl',
             'xpath' => '/trl',
             'topNode' => 'text',
             'filepath' => './application/trl.xml'
