@@ -13,7 +13,12 @@ class Vpc_Directories_Item_Detail_AssignedCategories_Component
 
     protected function _getItemDirectory()
     {
-        return $this->getData()->parent->parent->getChildComponent('_category');
+        return $this->_getItemDetail()->parent->getChildComponent('_category');
+    }
+
+    protected function _getItemDetail()
+    {
+        return $this->getData()->parent;
     }
 
     public function getSelect()
@@ -37,7 +42,7 @@ class Vpc_Directories_Item_Detail_AssignedCategories_Component
 
         $ret->where(
             $refDataItem['tableName'].'.'.$refDataItem['itemColumn'].' = ?',
-            $this->getData()->parent->row->id
+            $this->_getItemDetail()->row->id
         );
 
         return $ret;
