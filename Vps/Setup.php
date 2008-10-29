@@ -365,10 +365,6 @@ class Vps_Setup
         $view = new Vps_View();
         $view->requestUri = $_SERVER['REDIRECT_URL'];
         $template = 'error404.tpl';
-        $root = Vps_Component_Data_Root::getInstance()->getComponent();
-        if ($root) {
-            $template = $root->getTemplateFile('Error404');
-        }
         echo $view->render($template);
         Vps_Benchmark::shutDown();
         Vps_Benchmark::output();
@@ -381,10 +377,7 @@ class Vps_Setup
         header('HTTP/1.1 401 Access Denied');
         $view = new Vps_View();
         $view->requestUri = $_SERVER['REDIRECT_URL'];
-        $root = Vps_Component_Data_Root::getInstance()->getComponent();
-        if ($root) {
-            $template = $root->getTemplateFile('Error401');
-        }
+        $template = 'error401.tpl';
         echo $view->render($template);
         Vps_Benchmark::shutDown();
         Vps_Benchmark::output();
