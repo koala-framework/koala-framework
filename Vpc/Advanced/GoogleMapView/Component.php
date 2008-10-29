@@ -21,7 +21,11 @@ abstract class Vpc_Advanced_GoogleMapView_Component extends Vpc_Abstract_Composi
         $options['latitude'] = substr($options['coordinates'], $pos + 1, strlen($options['coordinates']) - 1);
         $options['coordinates'] = str_replace(';', ',', $options['coordinates']);
 
-        $ret['options'] = Zend_Json::encode($options);
+        if (!isset($options['routing'])) {
+            $options['routing'] = 1;
+        }
+
+        $ret['options'] = $options;
 
         // wird benötigt wenn gmap in switchDisplay liegt
         $ret['height'] = $options['height'];
