@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Output_ChildNoCache_Component extends Vpc_Abstract_Composite_Component
+class Vps_Component_Output_C2_ChildNoCache_Component extends Vpc_Abstract_Composite_Component
 {
     public static function getSettings()
     {

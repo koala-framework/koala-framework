@@ -1,0 +1,1 @@
+master2 <?= $this->component($this->component) ?>

@@ -97,6 +97,10 @@ class Vps_Component_Abstract
                 $incPaths = explode(PATH_SEPARATOR, get_include_path());
                 foreach (self::getComponentClasses(false/*don't use settings cache*/) as $c) {
                     $settings[$c] = call_user_func(array($c, 'getSettings'));
+                    $settings[$c]['templates'] = array(
+                        'Master' => Vpc_Admin::getComponentFile($c, 'Master', 'tpl'),
+                        'Component' => Vpc_Admin::getComponentFile($c, 'Component', 'tpl')
+                    );
                     $p = $c;
                     $settings[$c]['parentClasses'] = array();
                     do {

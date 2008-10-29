@@ -8,8 +8,8 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
     
     protected function _processComponent($componentId, $componentClass, $masterTemplate = false, array $plugins = array())
     {
-        $ret = $this->_renderContent($componentId, $componentClass, $masterTemplate, $plugins);
-                
+        $ret = $this->_renderContent($componentId, $componentClass, $masterTemplate);
+
         foreach ($plugins as $p) {
             if (!$p) throw new Vps_Exception("Invalid Plugin specified '$p'");
             $p = new $p($componentId);
@@ -54,22 +54,12 @@ class Vps_Component_Output_NoCache extends Vps_Component_Output_Abstract
     protected function _renderContent($componentId, $componentClass, $masterTemplate)
     {
         Vps_Benchmark::count('rendered nocache', $componentId.($masterTemplate?' (master)':''));
-        $component = $this->_getComponent($componentId);
         if ($masterTemplate) {
-            $template = $masterTemplate;
-            $templateVars = array();
-            $templateVars['component'] = $component;
-            $templateVars['boxes'] = array();
-            foreach ($component->getChildBoxes() as $box) {
-                $templateVars['boxes'][$box->box] = $box;
-            }
+            $output = new Vps_Component_Output_Master();
         } else {
-            $templateVars = $component->getComponent()->getTemplateVars();
-            $template = $component->getComponent()->getTemplateFile();
-            if (is_null($templateVars)) {
-                throw new Vps_Exception('Return value of getTemplateVars() returns null. Maybe forgot "return $ret?"');
-            }
+            $output = new Vps_Component_Output_ComponentMaster();
         }
-        return $this->_renderView($template, $templateVars);
+        $output->setIgnoreVisible($this->ignoreVisible());
+        return $output->render($this->_getComponent($componentId));
     }
 }

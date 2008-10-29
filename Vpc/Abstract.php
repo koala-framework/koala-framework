@@ -275,17 +275,13 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         return $ret;
     }
 
-    public function getTemplateFile()
+    public function getTemplateFile($filename = 'Component')
     {
-        $componentClass = get_class($this);
-        static $templateFile;
-        if (!$templateFile) {
-            $templateFile = Vpc_Admin::getComponentFile($componentClass, 'Component', 'tpl');
-            if (!$templateFile) {
-                throw new Vps_Exception("No Template found for '$componentClass'");
-            }
+        if ($this->_hasSetting('templates')) {
+            $templates = $this->_getSetting('templates');
+            if (isset($templates[$filename])) return $templates[$filename];
         }
-        return $templateFile;
+        return Vpc_Admin::getComponentFile(get_class($this), $filename, 'tpl');
     }
         
     static public function getCssClass($component)
