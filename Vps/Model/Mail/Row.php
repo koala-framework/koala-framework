@@ -1,5 +1,5 @@
 <?php
-class Vps_Model_Mail_Row extends Vps_Model_FnF_Row //Vps_Model_Db_Row
+class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
 {
     protected $_mail;
     private $_mailData = array();
@@ -10,120 +10,73 @@ class Vps_Model_Mail_Row extends Vps_Model_FnF_Row //Vps_Model_Db_Row
         return $this->_additionalMailVarsRow;
     }
 
-    static public function sendMail($essentialsRow, $varsRow)
+    public function sendMail()
     {
+        $siblingRows = $this->_getSiblingRows();
+        $essentialsRow = $siblingRows['essentials'];
+        $varsRow = $siblingRows['vars'];
+
         if (!empty($essentialsRow->masterTemplate)) {
-            $mail = new Vps_Mail($essentialsRow->template, $essentialsRow->masterTemplate);
+            $mail = new $essentialsRow->mailerClass($essentialsRow->template, $essentialsRow->masterTemplate);
         } else {
-            $mail = new Vps_Mail($essentialsRow->template);
+            $mail = new $essentialsRow->mailerClass($essentialsRow->template);
         }
 
         foreach ($varsRow->toArray() as $k => $v) {
             $mail->$k = $v;
         }
 
-        if (isset($essentialsRow->cc)) {
-            $arr = $essentialsRow->cc;
+        if ($essentialsRow->cc) {
+            $arr = unserialize($essentialsRow->cc);
             foreach ($arr as $v) {
                 $mail->addCc($v['email'], $v['name']);
             }
         }
-        if (isset($essentialsRow->header)) {
-            $arr = $essentialsRow->header;
+        if ($essentialsRow->header) {
+            $arr = unserialize($essentialsRow->header);
             foreach ($arr as $v) {
                 $mail->addHeader($v['name'], $v['value'], $v['append']);
             }
         }
-        if (isset($essentialsRow->bcc)) {
-            $arr = $essentialsRow->bcc;
+        if ($essentialsRow->bcc) {
+            $arr = unserialize($essentialsRow->bcc);
             foreach ($arr as $v) {
-                $mail->addBcc($v['email']);
+                $mail->addBcc($v);
             }
         }
-        if (isset($essentialsRow->to)) {
-            $arr = $essentialsRow->to;
+        if ($essentialsRow->to) {
+            $arr = unserialize($essentialsRow->to);
             foreach ($arr as $v) {
                 $mail->addTo($v['email'], $v['name']);
             }
         }
-        if (isset($essentialsRow->returnPath)) {
-            $mail->setReturnPath($essentialsRow->returnPath['email']);
+        if ($essentialsRow->returnPath) {
+            $mail->setReturnPath($essentialsRow->returnPath);
         }
-        if (isset($essentialsRow->from)) {
-            $mail->setFrom($essentialsRow->from['email'], $essentialsRow->from['name']);
+        if ($essentialsRow->from) {
+            $from = unserialize($essentialsRow->from);
+            $mail->setFrom($from['email'], $from['name']);
         }
 
         $mail->send();
     }
 
-    public function save()
+
+    protected function _beforeInsert()
     {
-        $saveModel = $this->getModel()->getSaveModel();
-        if ($saveModel) {
-            $row = $saveModel->createRow();
-            $row->is_spam = 0;
-            $row->mail_sent = 0;
-            $row->save();
+        $this->mail_sent = 0;
+    }
+
+    protected function _afterInsert()
+    {
+        // checkIsSpam brauch eine ID, deshalb im afterInsert
+        $this->is_spam = $this->_checkIsSpam();
+
+        if (!$this->is_spam) {
+            $this->sendMail();
+            $this->mail_sent = 1;
         }
-
-        $addMailVarsModel = $this->getModel()->getAdditionalMailVarsModel();
-        if ($addMailVarsModel) {
-            $this->_additionalMailVarsRow = $addMailVarsModel->createRow();
-            foreach ($this->_data as $k => $v) {
-                $this->_additionalMailVarsRow->$k = $v;
-            }
-            $this->_additionalMailVarsRow->save();
-        }
-
-        $mailVarsModel = $this->getModel()->getSaveMailVarsModel();
-        if ($mailVarsModel) {
-            if ($mailVarsModel instanceof Vps_Model_Field) {
-                $mailVarsRow = $mailVarsModel->getRowByParentRow($row);
-            } else {
-                $mailVarsRow = $mailVarsModel->createRow();
-            }
-
-            foreach ($this->_data as $k => $v) {
-                $mailVarsRow->$k = $v;
-            }
-            $mailVarsRow->save();
-        }
-
-        $mailEssentialsModel = $this->getModel()->getSaveMailEssentialsModel();
-        if ($mailEssentialsModel) {
-            if ($mailEssentialsModel instanceof Vps_Model_Field) {
-                $mailEssentialsRow = $mailEssentialsModel->getRowByParentRow($row);
-            } else {
-                $mailEssentialsRow = $mailEssentialsModel->createRow();
-            }
-
-            foreach ($this->_mailData as $k => $v) {
-                $mailEssentialsRow->$k = $v;
-            }
-            $tpl = $this->getModel()->getMailTemplate();
-            if (!$tpl) {
-                throw new Vps_Exception("Mail template not set for model '".get_class($this->getModel())."'");
-            }
-            $mailEssentialsRow->template = $tpl;
-
-            $masterTpl = $this->getModel()->getMailMasterTemplate();
-            if ($masterTpl) {
-                $mailEssentialsRow->masterTemplate = $masterTpl;
-            }
-
-            $mailEssentialsRow->save();
-        }
-
-        $row->is_spam = $this->_checkIsSpam($mailVarsRow);
-        $row->save();
-
-        if (!$row->is_spam) {
-            self::sendMail($mailEssentialsRow, $mailVarsRow);
-            $row->mail_sent = 1;
-            $row->save();
-        }
-
-        parent::save();
+        $this->save();
     }
 
     static public function getSpamKey($enquiriesRow)
@@ -131,9 +84,13 @@ class Vps_Model_Mail_Row extends Vps_Model_FnF_Row //Vps_Model_Db_Row
         return substr(md5(serialize($enquiriesRow->id.$enquiriesRow->save_date)), 0, 15);
     }
 
-    private function _checkIsSpam($mailVarsRow)
+    private function _checkIsSpam()
     {
-        $spamFields = $this->getModel()->getSpamFields();
+        $siblingRows = $this->_getSiblingRows();
+        $essentialsRow = $siblingRows['essentials'];
+        $mailVarsRow = $siblingRows['vars'];
+
+        $spamFields = unserialize($essentialsRow->spamFields);
         if (!$spamFields) return 0;
 
         if (in_array('*', $spamFields)) {
@@ -142,7 +99,7 @@ class Vps_Model_Mail_Row extends Vps_Model_FnF_Row //Vps_Model_Db_Row
 
         $additionalData = array(
             'http_host' => $_SERVER['HTTP_HOST'],
-            'ham_url' => '/vps/spam/set?id='.$mailVarsRow->getParentRow()->id.'&value=0&key='.self::getSpamKey($mailVarsRow->getParentRow())
+            'ham_url' => '/vps/spam/set?id='.$this->id.'&value=0&key='.self::getSpamKey($this)
         );
 
         require_once "HTTP/Request.php";
@@ -164,37 +121,84 @@ class Vps_Model_Mail_Row extends Vps_Model_FnF_Row //Vps_Model_Db_Row
         return 0;
     }
 
+    // sets für mail essentails
+    private function _getEssentialsRow()
+    {
+        $siblingRows = $this->_getSiblingRows();
+        return $siblingRows['essentials'];
+    }
+
+    private function _addToSerializedEssentialsColumn($column, $data)
+    {
+        $row = $this->_getEssentialsRow();
+        $ret = array();
+        if (!empty($row->$column)) {
+            $ret = unserialize($row->$column);
+        }
+        $ret[] = $data;
+        $row->$column = serialize($ret);
+    }
+
+    public function setTemplate($tpl)
+    {
+        $row = $this->_getEssentialsRow();
+        $row->template = $tpl;
+    }
+
+    public function setMasterTemplate($tpl)
+    {
+        $row = $this->_getEssentialsRow();
+        $row->masterTemplate = $tpl;
+    }
+
+    public function setSpamFields(array $spamFields = array())
+    {
+        $row = $this->_getEssentialsRow();
+        $row->spamFields = serialize($spamFields);
+    }
+
+    public function setMailerClass($mailerClass)
+    {
+        $row = $this->_getEssentialsRow();
+        $row->mailerClass = $mailerClass;
+    }
+
+
     public function addCc($email, $name = '')
     {
-        if (!isset($this->_mailData['cc'])) $this->_mailData['cc'] = array();
-        $this->_mailData['cc'][] = array('email' => $email, 'name' => $name);
+        $this->_addToSerializedEssentialsColumn(
+            'cc', array('email' => $email, 'name' => $name)
+        );
     }
 
     public function addHeader($name, $value, $append = false)
     {
-        if (!isset($this->_mailData['header'])) $this->_mailData['header'] = array();
-        $this->_mailData['header'][] = array('name' => $name, 'value' => $value, 'append' => $append);
+        $this->_addToSerializedEssentialsColumn(
+            'header', array('name' => $name, 'value' => $value, 'append' => $append)
+        );
     }
 
     public function addBcc($email)
     {
-        if (!isset($this->_mailData['bcc'])) $this->_mailData['bcc'] = array();
-        $this->_mailData['bcc'][] = array('email' => $email);
-    }
-
-    public function setReturnPath($email)
-    {
-        $this->_mailData['returnPath'] = array('email' => $email);
+        $this->_addToSerializedEssentialsColumn('bcc', $email);
     }
 
     public function addTo($email, $name = '')
     {
-        if (!isset($this->_mailData['to'])) $this->_mailData['to'] = array();
-        $this->_mailData['to'][] = array('email' => $email, 'name' => $name);
+        $this->_addToSerializedEssentialsColumn(
+            'to', array('email' => $email, 'name' => $name)
+        );
+    }
+
+    public function setReturnPath($email)
+    {
+        $row = $this->_getEssentialsRow();
+        $row->returnPath = $email;
     }
 
     public function setFrom($email, $name = '')
     {
-        $this->_mailData['from'] = array('email' => $email, 'name' => $name);
+        $row = $this->_getEssentialsRow();
+        $row->from = serialize(array('email' => $email, 'name' => $name));
     }
 }

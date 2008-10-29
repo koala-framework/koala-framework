@@ -1,1 +1,0 @@
-The foo variable is:<br /><?= $this->foo; ?>
