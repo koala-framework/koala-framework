@@ -3,12 +3,9 @@
     margin: 0px;
     padding: 0px;
 }
-.ext-ie6 .$cssClass .vpsField input {
-    margin-top: 25px;
-    margin-right: 110px;
-}
 .$cssClass input {
     float: left;
+    margin-bottom: 20px;
 }
 .$cssClass .submitWrapper {
     float: right

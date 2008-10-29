@@ -36,9 +36,3 @@
     line-height: 16px;
     padding-left: 10px;
 }
-.$cssClass .forumSearch {
-    margin-top: 20px;
-}
-.ext-ie6 .$cssClass .forumSearch {
-    margin-top: 0px;
-}
