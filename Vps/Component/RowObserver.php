@@ -18,6 +18,13 @@ class Vps_Component_RowObserver
         return self::$_instance;
     }
 
+    public function clear()
+    {
+        foreach (array_keys($this->_process) as $i) {
+            $this->_process[$i] = array();
+        }
+    }
+
 
     public function insert($row)
     {

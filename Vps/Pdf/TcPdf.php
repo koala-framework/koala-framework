@@ -16,6 +16,7 @@ class Vps_Pdf_TcPdf extends TCPDF
         $this->SetCreator("Vivid Planet Software GmbH mit FPDF");
         $this->SetTitle("Wochenbericht");
         $this->setLIsymbol(utf8_encode(chr(0x95))); // = •
+       // $this->AddFontPath("/www/public/lorenz/tcpdf/fonts/");
     }
 
     public function getRightMargin()

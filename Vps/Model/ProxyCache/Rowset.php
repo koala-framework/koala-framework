@@ -1,81 +1,113 @@
 <?php
-class Vps_Model_ProxyCache_Rowset implements Vps_Model_Rowset_Interface
+class Vps_Model_ProxyCache_Rowset extends Vps_Model_Proxy_Rowset
 {
-    protected $_cacheData;
+    protected $_cacheData = null;
     protected $_pointer = 0;
     protected $_model;
 
     public function __construct($config)
     {
-        $this->_init();
-        if (isset($config['cacheData'])) $this->_cacheData = $config['cacheData'];
-        $this->_model = $config['model'];
+        if (isset($config['cacheData']))  {
+            $this->_cacheData = array_values($config['cacheData']);
+        }
+        if (!isset($config['rowset']) && !isset($config['cacheData'])) {
+            throw new Vps_Exception("kein rowset&cacheData vorhanden");
+        }
+        parent::__construct($config);
     }
 
     public function toArray()
     {
-        $ret = array();
-        foreach ($this as $row) {
-            $ret[] = $row->toArray();
+        if (!is_null($this->_cacheData)) {
+          $ret = array();
+          foreach ($this as $row) {
+              $ret[] = $row->toArray();
+          }
+          return $ret;
+        } else {
+            return parent::toArray();
         }
-        return $ret;
-    }
-
-    protected function _init()
-    {
     }
 
     public function rewind()
     {
-        $this->_pointer = 0;
+        if (!is_null($this->_cacheData)) {
+            $this->_pointer = 0;
+        } else {
+            parent::rewind();
+        }
         return $this;
     }
 
     public function current()
     {
-        if (!$this->valid()) {
-            return null;
-        }
-
-        $cacheData = $this->_cacheData[$this->_pointer];
-        if ($cacheData) {
-            return $this->getModel()->getRowByCacheData($cacheData);
+        if (!is_null($this->_cacheData)) {
+          if (!$this->valid()) {
+              return null;
+          }
+          $cacheData = $this->_cacheData[$this->_pointer];
+          if ($cacheData) {
+              return $this->getModel()->getRowByCacheData($cacheData['id'], $cacheData['data']);
+          }
+        } else {
+            return parent::current();
         }
     }
 
     public function key()
     {
-        return $this->_pointer;
+        if (!is_null($this->_cacheData)) {
+            return $this->_pointer;
+        } else {
+            return parent::key();
+        }
     }
 
     public function next()
     {
-        ++$this->_pointer;
+        if (!is_null($this->_cacheData)) {
+            ++$this->_pointer;
+        } else {
+            return parent::next();
+        }
     }
 
     public function valid()
     {
-        return $this->_pointer < $this->count();
+        if (!is_null($this->_cacheData)) {
+            return $this->_pointer < $this->count();
+        } else {
+            return parent::valid();
+        }
     }
 
     public function count()
     {
-        return count($this->_cacheData);
+        if (!is_null($this->_cacheData)) {
+            return count($this->_cacheData);
+        } else {
+            return parent::count();
+        }
     }
 
     public function seek($position)
     {
-        $position = (int) $position;
-        if ($position < 0 || $position > $this->count()) {
-            require_once 'Zend/Db/Table/Rowset/Exception.php';
-            throw new Zend_Db_Table_Rowset_Exception("Illegal index $position");
+        if (!is_null($this->_cacheData)) {
+          $position = (int) $position;
+          if ($position < 0 || $position > $this->count()) {
+              require_once 'Zend/Db/Table/Rowset/Exception.php';
+              throw new Zend_Db_Table_Rowset_Exception("Illegal index $position");
+          }
+          $this->_pointer = $position;
+          return $this;
+        } else {
+            return parrent::seek($position);
         }
-        $this->_pointer = $position;
-        return $this;
     }
 
     public function getModel()
     {
         return $this->_model;
+
     }
 }

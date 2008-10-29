@@ -7,7 +7,7 @@ class Vps_Model_Proxy_Rowset implements Vps_Model_Rowset_Interface
 
     public function __construct(array $config)
     {
-        $this->_rowset = $config['rowset'];
+        if (isset($config['rowset'])) $this->_rowset = $config['rowset'];
         $this->_rowClass = $config['rowClass'];
         $this->_model = $config['model'];
     }

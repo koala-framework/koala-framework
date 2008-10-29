@@ -1,31 +1,48 @@
 <?php
 class Vps_Trl
 {
-    private $_xml;
-    private $_xmlVps;
+    private $_modelWeb;
+    private $_modelVps;
     private $_languages; //cache
 
     const SOURCE_VPS = 'vps';
     const SOURCE_WEB = 'web';
+    const TRLCP = 'trlcp';
+    const TRLP = 'trlp';
+    const TRLC = 'trlc';
+    const TRL = 'trl';
 
-    public function __construct()
+    const ERROR_INVALID_CHAR = 'invalidChar';
+    const ERROR_INVALID_STRING = 'invalidString';
+    const ERROR_WRONG_NR_OF_ARGUMENTS = 'wrongNrOfArguments';
+    protected $_errorMessages = array(
+        self::ERROR_INVALID_CHAR => 'Unallowed character inbetween two quotationmark blocks (e.g. "aa"."bb)"',
+        self::ERROR_INVALID_STRING => 'String is not valid. Unallowed characters are used',
+        self::ERROR_WRONG_NR_OF_ARGUMENTS => 'To few arguments.'
+    );
+
+
+    public function __construct($config = array())
     {
-        $filename = 'application/trl.xml';
-        if (is_file($filename)) {
-           $this->_xml = new SimpleXMLElement(file_get_contents($filename));
-        }
-        $filename = VPS_PATH . '/trl.xml';
-        if (is_file($filename)) {
-           $this->_xmlVps = new SimpleXMLElement(file_get_contents($filename));
-        }
+        if (isset($config['modelVps'])) $this->_modelVps = $config['modelVps'];
+        else $this->_modelVps = new Vps_Trl_Model_Vps();
+        if (isset($config['modelWeb'])) $this->_modelVps = $config['modelWeb'];
+        else $this->_modelWeb = new Vps_Trl_Model_Web();
+    }
+
+    public function setModel($model, $type)
+    {
+        if ($type == 'vps') $this->_modelVps = $model;
+        else $this->_modelWeb = $model;
     }
 
     public function getLanguages()
     {
+
         if (!isset($this->_languages)) {
             $config = Zend_Registry::get('config');
             if ($config->languages) {
-                $this->_languages = array_keys($config->languages->toArray());
+                $this->_languages = array_values($config->languages->toArray());
             } else if ($config->webCodeLanguage) {
                 $this->_languages = array($config->webCodeLanguage);
             }
@@ -34,6 +51,11 @@ class Vps_Trl
             }
         }
         return $this->_languages;
+    }
+
+    public function setLanguages($languages) //notwendig zum testen
+    {
+        $this->_languages = $languages;
     }
 
     public function getTargetLanguage()
@@ -56,38 +78,38 @@ class Vps_Trl
             }
     }
 
-    private function _getXml($type)
+    private function _getModel($type)
     {
-        return $type == self::SOURCE_WEB ? $this->_xml : $this->_xmlVps;
+         return $type == self::SOURCE_WEB ? $this->_modelWeb : $this->_modelVps;
     }
 
-    public function trl($string, $params, $source)
+    public function trl($string, $params, $source, $language = null)
     {
-        return $this->trlc(null, $string, $params, $source);
+        return $this->trlc('', $string, $params, $source, $language);
     }
 
-    function trlc($context, $string, $params, $source)
+    public function trlc($context, $string, $params, $source, $language = null)
     {
         $params = $this->_makeArray($params);
-        $text = $this->_findElement($string, $source, $context);
+        $text = $this->_findElement($string, $source, $context, $language);
         foreach ($params as $key => $value) {
             $text = str_replace('{'.$key.'}', $value, $text);
         }
         return $text;
     }
 
-    function trlp($single, $plural, $params, $source)
+    public function trlp($single, $plural, $params, $source, $language = null)
     {
-        return $this->trlcp(null, $single, $plural, $params, $source);
+        return $this->trlcp('', $single, $plural, $params, $source, $language);
     }
 
-    function trlcp($context, $single, $plural, $params, $source)
+    function trlcp($context, $single, $plural, $params, $source, $language = null)
     {
         $params = $this->_makeArray($params);
         if ($params[0] != 1){
-            $text = $this->_findElementPlural($plural, $source, $context);
+            $text = $this->_findElementPlural($single, $plural, $source, $context, $language);
         } else {
-            $text = $this->_findElement($single, $source, $context);
+            $text = $this->_findElement($single, $source, $context, $language);
         }
         foreach ($params as $key => $value){
             $text = str_replace('{'.$key.'}', $value, $text);
@@ -100,154 +122,268 @@ class Vps_Trl
         return is_array($placeolders) ? $placeolders : array($placeolders);
     }
 
-    protected function _findElement($needle, $source, $context = null)
+    protected function _findElement($needle, $source, $context, $language = null)
     {
         if ($source == self::SOURCE_WEB) $codeLanguage = $this->getWebCodeLanguage();
         else $codeLanguage = "en";
 
-        $target = $this->getTargetLanguage();
-        $xml = $this->_getXml($source);
-        if (!$xml) return $needle; 
-        foreach ($xml->text as $element) {
-            if ($element->$codeLanguage == $needle && $element->$target != '_' && ($element['context'] == $context)){
-                return (string) $element->$target;
-            }
+        if ($language) $target = $language;
+        else $target = $this->getTargetLanguage();
+        $model = $this->_getModel($source);
+        if (!$model) return $needle;
+        $select = $model->select();
+        $select->whereEquals($codeLanguage, $needle);
+        if ($context) $select->whereEquals('context', $context);
+        else $select->whereNull('context');
+        $row = $rows = $model->getRows($select)->current();
+
+        if ($row && $row->$target != '_') {
+            return (string) $row->$target;
         }
         return $needle;
     }
 
-    protected function _findElementPlural($needle, $source, $context = null)
+    protected function _findElementPlural($needle, $plural, $source, $context = '', $language = null)
     {
         if ($source == self::SOURCE_WEB) $codeLanguage = $this->getWebCodeLanguage();
         else $codeLanguage = "en";
-        $target = $this->getTargetLanguage().'_plural';
-        $plural = $codeLanguage.'_plural';
-        $xml = $this->_getXml($source);
-        if (!$xml) return $needle; 
-        foreach ($xml->text as $element) {
-            if ($element->$plural == $needle && $element->$target != '_' && ($element['context'] == $context)) {
-                return (string)$element->$target;
-            }
+        if ($language) $target = $language;
+        else $target = $this->getTargetLanguage();
+        $target = $target.'_plural';
+        $model = $this->_getModel($source);
+        if (!$model) return $needle;
+        $select = $model->select();
+        $select->whereEquals($codeLanguage, $needle);
+        if ($context) $select->whereEquals('context', $context);
+        else $select->whereNull('context');
+
+        $rows = $model->getRows($select);
+        foreach ($rows as $row) {
+            if ($row->$target && $row->$target != '_') return (string) $row->$target;
         }
-        return $needle;
+
+        return $plural;
     }
 
-    function getTrlpValues($context, $single, $plural, $source)
+    function getTrlpValues($context, $single, $plural, $source, $language = null)
     {
         $values = array();
-        $values['plural'] = $this->_findElementPlural($plural, $source, $context);
-        $values['single'] = $this->_findElement($single, $source, $context);
+        $values['plural'] = $this->_findElementPlural($single, $plural, $source, $context, $language);
+        $values['single'] = $this->_findElement($single, $source, $context, $language);
         return $values;
     }
 
-    public function parse($content)
+    public function parse($content, $type = 'php')
     {
-        return array_merge($this->_parseType('trl', $content),
-                           $this->_parseType('trlc', $content),
-                           $this->_parseType('trlp', $content),
-                           $this->_parseType('trlcp', $content));
+        $parts = array();
+        foreach ($this->_getExpressions($content) as $expression) {
+            $parts[] = $this->_getContents($expression, $type);
+        }
+        return $parts;
     }
 
-    private function _parseType($type, $content)
+    private function _getType($expression)
     {
-        $pattern = null;
-        switch($type) {
-            case "trl":
-                $pattern = '#(trl|trlVps)((\("(.+?)"[\)|^,])|(\(\'(.*?)\'[\)|^,])|'.
-                             '(\(\'(.+?)\', +(.+?)\))|(\(\"(.+?)\", +(.+?)\)))#s';
-                break;
-            case "trlc":
-                $pattern = '#(trlc|trlcVps)((\(\'(.*?)\', +\'(.*?)\'[\)|^,])|(\("(.*?)", +"(.*?)"[\)|^,])|'.
-                			'(\(\'(.+?)\', +\'(.*?)\', +(.*?)\))|(\(\"(.+?)\", +"(.*?)", +(.*?)\)))#s';
-                break;
-            case "trlp":
-                $pattern = '#(trlp|trlpVps)((\(\'(.+?)\', *\'(.*?)\', *(.*?)\))|(\(\"(.*?)\", +"(.*?)", +(.*?)\)))#s';
-                break;
-            case "trlcp":
-                $pattern = '#(trlcp|trlcpVps)((\(\'(.+?)\', \'(.+?)\', *\'(.+?)\', *(.+?)\))|(\("(.+?)", \"(.+?)\", +"(.*?)", +(.*?)\)))#s';
-                break;
-
+        if (strpos($expression, 'trlcp') === 0) {
+            return self::TRLCP;
         }
-        if ($pattern) {
-            preg_match_all($pattern, $content, $m);
-
-            if ($m[0]){
-                return $this->_rearrange($m);
-            }
+        if (strpos($expression, 'trlp') === 0) {
+            return self::TRLP;
         }
-        return array();
+        if (strpos($expression, 'trlc') === 0) {
+            return self::TRLC;
+        }
+        if (strpos($expression, 'trl') === 0) {
+            return self::TRL;
+        }
     }
 
-    private function _rearrange ($m)
+    private function _getExpressions($content, $prevnr = 0)
     {
-        $retAll = array();
-        foreach($m[0] as $key => $value) {
-            $ret = array();
-            $ret['type'] = $m[1][$key];
-            $ret['before'] = $m[0][$key];
-            if ($ret['type'] == "trl" || $ret['type'] == "trlVps"){
-                if (($m[4][$key] != "")) {
-                    $ret['text'] = $m[4][$key];
-                } elseif (($m[6][$key] != "")) {
-                    $ret['text'] = $m[6][$key];
-                }  elseif (($m[8][$key] != "")) {
-                    $ret['text'] = $m[8][$key];
-                }  elseif (($m[11][$key] != "")) {
-                    $ret['text'] = $m[11][$key];
+        $pattern = "#(.*?)((trl|trlVps|trlc|trlcVps|trlp|trlpVps|trlcp|trlcpVps) *\(['|\"].*)#s";
+        preg_match($pattern, $content, $m);
+        if ($m) {
+            $text = $m[2];
+            $linenumber = $prevnr + $this->_getLineNumber($m[1]);
+            $content = '';
+            $countMarksDouble = 0;
+            $countMarksSingle = 0;
+            $write = false;
+            $parts = array();
+            for ($i = 0; $i < strlen($text); $i++) {
+                if ($text[$i] == '"' && ($i == 0 || $text[$i-1] != "\\") && ($countMarksSingle == 0 || $countMarksDouble != 0)) {
+                    $countMarksDouble++;
+                } else if ($text[$i] == "'" && ($i == 0 || $text[$i-1] != "\\") && ($countMarksSingle != 0 || $countMarksDouble == 0)) {
+                    $countMarksSingle++;
                 }
-            } elseif ($ret['type'] == "trlc" || $ret['type'] == "trlcVps"){
-                if (($m[4][$key] != "")) {
-                    $ret['context'] = $m[4][$key];
-                    $ret['text'] = $m[5][$key];
-                } elseif (($m[7][$key] != "")) {
-                    $ret['context'] = $m[7][$key];
-                    $ret['text'] = $m[8][$key];
-                }  elseif (($m[10][$key] != "")) {
-                    $ret['context'] = $m[10][$key];
-                    $ret['text'] = $m[11][$key];
-                }  elseif (($m[14][$key] != "")) {
-                    $ret['context'] = $m[14][$key];
-                    $ret['text'] = $m[15][$key];
+                if ($text[$i] == ')' && (($countMarksSingle % 2 == 0 && $countMarksSingle != 0)
+                        || ($countMarksDouble % 2 == 0 && $countMarksDouble != 0))) {
+                    $parts[] = array('expr' => (substr($text, 0, ++$i)), 'linenr' => $linenumber);
+                    $newContent = substr($text, $i);
+                    return array_merge($parts, $this->_getExpressions($newContent, $linenumber-1));
                 }
-            } elseif ($ret['type'] == "trlp" || $ret['type'] == "trlpVps"){
-                if (($m[4][$key] != "")) {
-                    $ret['text'] = $m[4][$key];
-                    $ret['plural'] = $m[5][$key];
-                } elseif (($m[8][$key] != "")) {
-                    $ret['text'] = $m[8][$key];
-                    $ret['plural'] = $m[9][$key];
-                }
-            } elseif ($ret['type'] == "trlcp" || $ret['type'] == "trlcpVps"){
-                if (($m[4][$key] != "")) {
-                    $ret['context'] = $m[4][$key];
-                    $ret['text'] = $m[5][$key];
-                    $ret['plural'] = $m[6][$key];
-                } elseif (($m[9][$key] != "")) {
-                    $ret['context'] = $m[9][$key];
-                    $ret['text'] = $m[10][$key];
-                    $ret['plural'] = $m[11][$key];
-                }
-            } else {
-                throw new Vps_Exception("Unknown type: '$ret[type]' for trl-parsing");
             }
-            if (strpos($ret['type'], 'Vps')) {
-                $ret['source'] = Vps_Trl::SOURCE_VPS;
-                $ret['type'] = str_replace('Vps', '', $ret['type']);
-            } else {
-                $ret['source'] = Vps_Trl::SOURCE_WEB;
+          }
+          return array();
+    }
+
+    private function _getLineNumber($text) {
+        $array = explode("\n", $text);
+        return count($array);
+    }
+
+    private function _getContents ($expressArray, $type)
+    {
+        $expression = $expressArray['expr'];
+        $write = false;
+        $words = array();
+        $word = '';
+        $countMarksDouble = 0;
+        $countMarksSingle = 0;
+        for ($i = 0; $i < strlen($expression); $i++) {
+            //doppelte Anfürhungszeihen
+            if (($expression[$i] == '"' && ($i == 0 || $expression[$i-1] != "\\")
+                    && $countMarksDouble % 2 == 0) && !$write) {
+                $countMarksDouble++;
+                $write = true;
+                $i++;
+            } else if ($expression[$i] == '"' && ($i == 0 || $expression[$i-1] != "\\")
+                    &&  $countMarksDouble % 2 == 1 && $write) {
+                $countMarksDouble++;
+                $write = false;
+                $i++;
+                $words[] = $word;
+                $word = '';
             }
-            $ret['text'] = $this->_unescapeString($ret['text']);
-            if (isset($ret['plural'])) $ret['plural'] = $this->_unescapeString($ret['plural']);
-            if (isset($ret['context'])) $ret['context'] = $this->_unescapeString($ret['context']);
-            $retAll[] = $ret;
+            //einfache Anführungszeichen
+            if (!$write && $i < strlen($expression) && ($expression[$i] == "'" &&
+                        ($i == 0 || $expression[$i-1] != "\\") && $countMarksSingle % 2 == 0)) {
+                $countMarksSingle++;
+                $write = true;
+                $i++;
+            } else if ($write && $i < strlen($expression) && $expression[$i] == "'" &&
+                        ($i == 0 || $expression[$i-1] != "\\") &&  $countMarksSingle % 2 == 1) {
+                $countMarksSingle++;
+                $write = false;
+                $i++;
+                $words[] = $word;
+                $word = '';
+            }
+            if ($write) {
+                if ($expression[$i] == "\\" && in_array($expression[$i+1], array('"', "n"))) {
+                    //do nothing
+                } else {
+                    $word .= $expression[$i];
+                }
+            }
+            if ($this->_parseForError($expression, $i, $countMarksSingle, $countMarksDouble, $words, $type)) {
+                return ( array_merge($this->_parseForError($expression, $i, $countMarksSingle, $countMarksDouble, $words, $type),
+                            array('linenr' => $expressArray['linenr'])));
+            }
         }
-        return $retAll;
+
+
+        if ($this->_checkArguments($this->_getType($expression), $words)) {
+            return ( array_merge($this->_checkArguments($this->_getType($expression), $words),
+                            array('linenr' => $expressArray['linenr'])));
+        }
+        switch ($this->_getType($expression)) {
+            case self::TRLCP: $words = array('context' => $words[0], 'text' => $words[1], 'plural' => $words[2]); break;
+            case self::TRLP: $words = array('text' => $words[0], 'plural' => $words[1]); break;
+            case self::TRLC: $words = array('context' => $words[0], 'text' => $words[1]); break;
+            case self::TRL: $words = array('text' => $words[0]); break;
+         }
+         $words['source'] = $this->_getSource($expression);
+         $words['type'] = $this->_getType($expression);
+         $words['before'] = $expression;
+         $words['linenr'] = $expressArray['linenr'];
+
+         return $words;
+    }
+
+    private function _checkArguments($type, $words) {
+        if ($type == self::TRL) {
+            if (count($words)< 1) {
+                return array('error' => true, 'error_short' =>self::ERROR_WRONG_NR_OF_ARGUMENTS,
+                          'message' => $this->_errorMessages[self::ERROR_WRONG_NR_OF_ARGUMENTS].
+                                ' TRL needs at least one argument');
+            }
+        } elseif ($type == self::TRLC) {
+            if (count($words) < 2) {
+                return array('error' => true, 'error_short' =>self::ERROR_WRONG_NR_OF_ARGUMENTS,
+                    'message' => $this->_errorMessages[self::ERROR_WRONG_NR_OF_ARGUMENTS].
+                    ' TRLC needs at least two arguments');
+            }
+        } elseif ($type == self::TRLP) {
+            if (count($words) < 2) {
+                return array('error' => true, 'error_short' =>self::ERROR_WRONG_NR_OF_ARGUMENTS,
+                    'message' => $this->_errorMessages[self::ERROR_WRONG_NR_OF_ARGUMENTS].
+                    ' TRLP needs at least two arguments');
+            }
+        } elseif ($type == self::TRLC) {
+            if (count($words) < 3) {
+                return array('error' => true, 'error_short' =>self::ERROR_WRONG_NR_OF_ARGUMENTS,
+                    'message' => $this->_errorMessages[self::ERROR_WRONG_NR_OF_ARGUMENTS].
+                    ' TRLCP needs at least three arguments');
+            }
+        }
+        return false;
+    }
+
+    private function _parseForError($expression, $i, $countMarksSingle, $countMarksDouble, $words, $type)
+    {
+        $letter = $expression[$i];
+        if (($countMarksSingle == 0 && $countMarksDouble != 0 && $countMarksDouble % 2 == 0) ||
+                ($countMarksDouble == 0 && $countMarksDouble != 0 && $countMarksSingle % 2 == 0)) {
+                if ( in_array($letter, array(',', ' ', ')', '('))) { //ary -> buchstaben für array
+                    return false;
+                } else if (in_array($letter, array('.'))) {
+                    return array('error' => true, 'error_short' =>self::ERROR_INVALID_CHAR,
+                          'message' => $this->_errorMessages[self::ERROR_INVALID_CHAR]);
+                } else {
+
+                    return $this->_checkArguments($this->_getType($expression), $words);
+                }
+
+        }
+        $blackList = array("\n");
+        if ($type == 'php') {
+            $blackList[] = '$';
+        }
+        if (($countMarksSingle == 0 && $countMarksDouble != 0 && $countMarksDouble % 2 == 1) ||
+                ($countMarksDouble == 0 && $countMarksDouble != 0 && $countMarksSingle % 2 == 1)) {
+                if ($expression[$i-1] == "\\" && $expression[$i] == "n") {
+                        return array('error' => true, 'error_short' =>self::ERROR_INVALID_STRING,
+                              'message' => $this->_errorMessages[self::ERROR_INVALID_STRING]);
+                }
+                if (in_array($letter, $blackList)) {
+                    if ($expression[$i-1] != "\\") {
+                        return array('error' => true, 'error_short' =>self::ERROR_INVALID_STRING,
+                              'message' => $this->_errorMessages[self::ERROR_INVALID_STRING]);
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+        }
+
+        return false;
+    }
+
+    private function _getSource($expression) {
+        if (strpos($expression, 'Vps')) {
+            return 'vps';
+        } else {
+            return 'web';
+        }
     }
 
     private function _unescapeString($text)
     {
         $newText = "";
         for ($i = 0; $i < strlen($text); $i++) {
+
             if ($text[$i] == '\\'){
                 switch ($text[$i+1]){
                     case 'n': $temp = "\n"; $i++; break;

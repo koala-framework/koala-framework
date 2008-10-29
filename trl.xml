@@ -1,3423 +1,4330 @@
 <?xml version="1.0"?>
 <trl>
-<text/>
 <text>
-<en default="1">Visible</en>
+<id>1</id>
+</text>
+<text>
+<en>Visible</en>
 <de>Sichtbar</de>
+<id>2</id>
 </text>
 <text>
-<en default="1">version</en>
+<en>version</en>
 <de>Version</de>
+<id>3</id>
 </text>
 <text>
-<en default="1">Copyright 2007 Vivid Planet Software GmbH</en>
+<en>Copyright 2007 Vivid Planet Software GmbH</en>
 <de>Copyright 2007 Vivid Planet Software GmbH</de>
+<id>4</id>
 </text>
 <text>
-<en default="1">Error</en>
+<en>Error</en>
 <de>Fehler</de>
+<id>5</id>
 </text>
 <text>
-<en default="1">Errortype:</en>
+<en>Errortype:</en>
 <de>Fehlertyp:</de>
+<id>6</id>
 </text>
 <text>
-<en default="1">Message:</en>
+<en>Message:</en>
 <de>Nachricht:</de>
+<id>7</id>
 </text>
 <text>
-<en default="1">An Error ocurred. Please try again later.</en>
+<en>An Error ocurred. Please try again later.</en>
 <de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es zu einem sp&#xE4;teren Zeitpunkt noch einmal.</de>
+<id>8</id>
 </text>
 <text>
-<en default="1">Page not found</en>
+<en>Page not found</en>
 <de>Seite wurde nicht gefunden.</de>
+<id>9</id>
 </text>
 <text>
-<en default="1">Email:</en>
+<en>Email:</en>
 <de>E-Mail:</de>
+<id>10</id>
 </text>
 <text>
-<en default="1">Password:</en>
+<en>Password:</en>
 <de>Passwort:</de>
+<id>11</id>
 </text>
 <text>
-<en default="1">Lost password?</en>
+<en>Lost password?</en>
 <de>Passwort vergessen?</de>
+<id>12</id>
 </text>
 <text>
-<en default="1">Login</en>
+<en>Login</en>
 <de>Einloggen</de>
+<id>13</id>
 </text>
 <text>
-<en default="1">Hello {0}!</en>
+<en>Hello {0}!</en>
 <de>Hallo {0}!</de>
+<id>14</id>
 </text>
 <text>
-<en default="1">Your account at {0}
+<en>Your account at {0}
 has just been created.</en>
 <de>Ihr Konto bei {0}
 wurde soeben erstellt.</de>
+<id>15</id>
 </text>
 <text>
-<en default="1">Please use the following link to choose yourself a password and to login</en>
+<en>Please use the following link to choose yourself a password and to login</en>
 <de>Bitte verwenden Sie diesen Link um sich ein Passwort zu erstellen und einzuloggen.</de>
+<id>16</id>
 </text>
 <text>
-<en default="1">This email has been generated automatically. There may be no recipient if you answer to this email.</en>
+<en>This email has been generated automatically. There may be no recipient if you answer to this email.</en>
 <de>Diese E-Mail wurde automatisch erzeugt. Es gibt keinen Empf&#xE4;nger an den eine Antwort gesendet werden kann.</de>
+<id>17</id>
 </text>
 <text>
-<en default="1">Your email address at {0} has been changed
+<en>Your email address at {0} has been changed
 from {1} to {2}</en>
 <de>Ihre E-Mail Adresse bei {0} wurde von {1} auf {2} ge&#xE4;ndert.</de>
+<id>18</id>
 </text>
 <text>
-<en default="1">Your account at {0} has been deleted.</en>
+<en>Your account at {0} has been deleted.</en>
 <de>Ihr Konto bei {0} wurde gel&#xF6;scht.</de>
+<id>19</id>
 </text>
 <text>
-<en default="1">This email has been generated automatically. There may be no
+<en>This email has been generated automatically. There may be no
 recipient if you answer to this email.</en>
 <de>Diese E-Mail wurde automatisch erzeugt. Es gibt keinen Empf&#xE4;nger an den eine Antwort gesendet werden kann.</de>
+<id>20</id>
 </text>
 <text>
-<en default="1">This email has been generated using the lost password function
+<en>This email has been generated using the lost password function
 at {0}</en>
 <de>Diese E-Mail wurde erzeugt durch die "Passwort vergessen"-Funktion bei {0}.</de>
+<id>21</id>
 </text>
 <text>
-<en default="1">Please use the following link to choose yourself a new password.</en>
+<en>Please use the following link to choose yourself a new password.</en>
 <de>Bitte verwenden Sie den folgenden Link um sich selbst ein neues Passwort zu erstellen.</de>
+<id>22</id>
 </text>
 <text>
-<en default="1">If you did not request this email you may just ignore it and
+<en>If you did not request this email you may just ignore it and
 use the login as before.</en>
 <de>Wenn Sie diese E-Mail nicht angefordert haben, k&#xF6;nnen Sie diese ignorieren und
 sich weiterhin &#xFC;ber Ihr altes Passwort einloggen.</de>
+<id>23</id>
 </text>
 <text>
-<en default="1">Invalid type: {0}, no such childComponent exists</en>
+<en>Invalid type: {0}, no such childComponent exists</en>
 <de>Falscher Typ: {0}, es existiert keine derartige Kinderkomponente ;-)</de>
+<id>24</id>
 </text>
 <text>
-<en default="1">'name' is required in _pages array</en>
+<en>'name' is required in _pages array</en>
 <de>'name' ist erforderlich im _pages Array.</de>
+<id>25</id>
 </text>
 <text>
-<en default="1">'componentClass' is required in _pages array</en>
+<en>'componentClass' is required in _pages array</en>
 <de>'componentClass' ist erforderlich im _pages Array.</de>
+<id>26</id>
 </text>
 <text>
-<en default="1">No _componentClass specified for {0}</en>
+<en>No _componentClass specified for {0}</en>
 <de>Keine _componentClass ist f&#xFC;r {0} spezifiziert.</de>
+<id>27</id>
 </text>
 <text>
-<en default="1">ID {0} doesnt match pattern for Id: {1}</en>
+<en>ID {0} doesnt match pattern for Id: {1}</en>
 <de>ID {0} passt nicht zum Muster f&#xFC;r ID: {1}</de>
+<id>28</id>
 </text>
 <text>
-<en default="1">Template not found for Component {0}</en>
+<en>Template not found for Component {0}</en>
 <de>Template f&#xFC;r Component {0} nicht gefunden.</de>
+<id>29</id>
 </text>
 <text>
-<en default="1">ChildComponentClass {0} is not defined in settings.</en>
+<en>ChildComponentClass {0} is not defined in settings.</en>
 <de>ChildComponentClass {0} wurde in den Einstellungen nicht definiert.</de>
+<id>30</id>
 </text>
 <text>
-<en default="1">Place of departure: zip code, Town, Street</en>
+<en>Place of departure: zip code, Town, Street</en>
 <de>Ort der Abreise: Postleitzahl, Ort, Stra&#xDF;e</de>
+<id>31</id>
 </text>
 <text>
-<en default="1">Entered place could not been found!</en>
+<en>Entered place could not been found!</en>
 <de>Eingetragener Ort konnte nicht gefunden werden!</de>
+<id>32</id>
 </text>
 <text>
-<en default="1">Show Route</en>
+<en>Show Route</en>
 <de>Route zeigen</de>
+<id>33</id>
 </text>
 <text>
-<en default="1">Suggestions</en>
+<en>Suggestions</en>
 <de>Vorschl&#xE4;ge</de>
+<id>34</id>
 </text>
 <text>
-<en default="1">Coordinates</en>
+<en>Coordinates</en>
 <de>Koordinaten</de>
+<id>35</id>
 </text>
 <text>
-<en default="1">Zoomlevel</en>
+<en>Zoomlevel</en>
 <de>Vergr&#xF6;&#xDF;erungsfaktor</de>
+<id>36</id>
 </text>
 <text>
-<en default="1">Width</en>
+<en>Width</en>
 <de>Breite</de>
+<id>37</id>
 </text>
 <text>
-<en default="1">Height</en>
+<en>Height</en>
 <de>H&#xF6;he</de>
+<id>38</id>
 </text>
 <text>
-<en default="1">Move + Zoom</en>
+<en>Move + Zoom</en>
 <de>Bewegen + Zoomen</de>
+<id>39</id>
 </text>
 <text>
-<en default="1">Move + Zoom (without zoombar)</en>
+<en>Move + Zoom (without zoombar)</en>
 <de>Bewegen + Zoomen (ohne Vergr&#xF6;&#xDF;erungsleiste)</de>
+<id>40</id>
 </text>
 <text>
-<en default="1">Just Zoom</en>
+<en>Just Zoom</en>
 <de>Nur Vergr&#xF6;&#xDF;ern.</de>
+<id>41</id>
 </text>
 <text>
-<en default="1">Scale</en>
+<en>Scale</en>
 <de>Skalieren</de>
+<id>42</id>
 </text>
 <text>
-<en default="1">Satelitemap</en>
+<en>Satelitemap</en>
 <de>Satellitenkarte</de>
+<id>43</id>
 </text>
 <text>
-<en default="1">Overviewmap</en>
+<en>Overviewmap</en>
 <de>&#xDC;bersichtskarte</de>
+<id>44</id>
 </text>
 <text>
-<en default="1">Worldview</en>
+<en>Worldview</en>
 <de>Weltansicht</de>
+<id>45</id>
 </text>
 <text>
-<en default="1">Detailview</en>
+<en>Detailview</en>
 <de>Detailansicht</de>
+<id>46</id>
 </text>
 <text>
-<en default="1">Infotext</en>
+<en>Infotext</en>
 <de>Infotext</de>
+<id>47</id>
 </text>
 <text>
-<en default="1">Filename</en>
+<en>Filename</en>
 <de>Dateiname</de>
+<id>48</id>
 </text>
 <text>
-<en default="1">File</en>
+<en>File</en>
 <de>Datei</de>
+<id>49</id>
 </text>
 <text>
-<en default="1">Content</en>
+<en>Content</en>
 <de>Inhalt</de>
+<id>50</id>
 </text>
 <text>
-<en default="1">Image</en>
+<en>Image</en>
 <de>Bild</de>
+<id>51</id>
 </text>
 <text>
-<en default="1">Image Enlarge</en>
+<en>Image Enlarge</en>
 <de>Bild vergr&#xF6;&#xDF;ern</de>
+<id>52</id>
 </text>
 <text>
-<en default="1">File (optional)</en>
+<en>File (optional)</en>
 <de>Datei (optional)</de>
+<id>53</id>
 </text>
 <text>
-<en default="1">enlarge</en>
+<en>enlarge</en>
 <de>vergr&#xF6;&#xDF;ern</de>
+<id>54</id>
 </text>
 <text>
-<en default="1">Comment</en>
+<en>Comment</en>
 <de>Kommentar</de>
+<id>55</id>
 </text>
 <text>
-<en default="1">Size</en>
+<en>Size</en>
 <de>Gr&#xF6;&#xDF;e</de>
+<id>56</id>
 </text>
 <text>
-<en default="1">Scaling</en>
+<en>Scaling</en>
 <de>Skalierung</de>
+<id>57</id>
 </text>
 <text>
-<en default="1">Preview</en>
+<en>Preview</en>
 <de>Vorschau</de>
+<id>58</id>
 </text>
 <text>
-<en default="1">Text</en>
+<en>Text</en>
 <de>Text</de>
+<id>59</id>
 </text>
 <text>
-<en default="1">Position of Image</en>
+<en>Position of Image</en>
 <de>Bildposition</de>
+<id>60</id>
 </text>
 <text>
-<en default="1">Left</en>
+<en>Left</en>
 <de>Links</de>
+<id>61</id>
 </text>
 <text>
-<en default="1">Right</en>
+<en>Right</en>
 <de>Rechts</de>
+<id>62</id>
 </text>
 <text>
-<en default="1">Alternate</en>
+<en>Alternate</en>
 <de>Alternierend</de>
+<id>63</id>
 </text>
 <text>
-<en default="1">The captcha field has to be filled out correctly!</en>
+<en>The captcha field has to be filled out correctly!</en>
 <de>Das Captcha-Feld muss korrekt ausgef&#xFC;llt werden!</de>
+<id>64</id>
 </text>
 <text>
-<en default="1">Field {0} does not fit to the required formatting ({1})</en>
+<en>Field {0} does not fit to the required formatting ({1})</en>
 <de>Das Feld {0} passt nicht zur erforderlichen Formatierung ({1})</de>
+<id>65</id>
 </text>
 <text>
-<en default="1">Field {0} is mandatory.</en>
+<en>Field {0} is mandatory.</en>
 <de>Das Feld {0} ist verpflichtend.</de>
+<id>66</id>
 </text>
 <text>
-<en default="1">Maximum Length</en>
+<en>Maximum Length</en>
 <de>Maximale L&#xE4;nge</de>
+<id>67</id>
 </text>
 <text>
-<en default="1">Default Value</en>
+<en>Default Value</en>
 <de>Standardwert</de>
+<id>68</id>
 </text>
 <text>
-<en default="1">Please check you values, errors occured</en>
+<en>Please check you values, errors occured</en>
 <de>Bitte &#xFC;berpr&#xFC;fen Sie Ihre Eingaben - es sind Fehler aufgetreten.</de>
+<id>69</id>
 </text>
 <text>
-<en default="1">Field Label</en>
+<en>Field Label</en>
 <de>Feldbezeichnung</de>
+<id>70</id>
 </text>
 <text>
-<en default="1">Mandatory</en>
+<en>Mandatory</en>
 <de>Pflicht</de>
+<id>71</id>
 </text>
 <text>
-<en default="1">Row</en>
+<en>Row</en>
 <de>Zeile</de>
+<id>72</id>
 </text>
 <text>
-<en default="1">Passwords are different. Please try again.</en>
+<en>Passwords are different. Please try again.</en>
 <de>Passw&#xF6;rter sind unterschiedlich. Bitte versuchen Sie es erneut.</de>
+<id>73</id>
 </text>
 <text>
-<en default="1">Field {0} is mandatory, please fill out</en>
+<en>Field {0} is mandatory, please fill out</en>
 <de>Bitte f&#xFC;llen Sie das Feld {0} aus</de>
+<id>74</id>
 </text>
 <text>
-<en default="1">Invalid format in field {0}, valid formats: {1}</en>
+<en>Invalid format in field {0}, valid formats: {1}</en>
 <de>Ung&#xFC;ltiges Dateiformat in Feld {0}, g&#xFC;ltiges Format: {1}</de>
+<id>75</id>
 </text>
 <text>
-<en default="1">Maximum Upload {0} kB</en>
+<en>Maximum Upload {0} kB</en>
 <de>Maximale Dateig&#xF6;&#xDF;e: {0} kB</de>
+<id>76</id>
 </text>
 <text>
-<en default="1">Max. filesize (in kb)</en>
+<en>Max. filesize (in kb)</en>
 <de>Maximale Dateig&#xF6;&#xDF;e (in kB)</de>
+<id>77</id>
 </text>
 <text>
-<en default="1">Valid types (e.g. jpg, gif)</en>
+<en>Valid types (e.g. jpg, gif)</en>
 <de>erlaubte Formate (z.B. jpg, gif)</de>
+<id>78</id>
 </text>
 <text>
-<en default="1">Description</en>
+<en>Description</en>
 <de>Beschreibung</de>
+<id>79</id>
 </text>
 <text>
-<en default="1">Checked</en>
+<en>Checked</en>
 <de>Kontrolliert</de>
+<id>80</id>
 </text>
 <text>
-<en default="1">Submit</en>
+<en>Submit</en>
 <de>Senden</de>
+<id>81</id>
 </text>
 <text>
-<en default="1">The following data has been sent:</en>
+<en>The following data has been sent:</en>
 <de>Folgende Daten wurden gesendet:</de>
+<id>82</id>
 </text>
 <text>
-<en default="1">Validator</en>
+<en>Validator</en>
 <de>Validator</de>
+<id>83</id>
 </text>
 <text>
-<en default="1">No Validator</en>
+<en>No Validator</en>
 <de>Kein Validator</de>
+<id>84</id>
 </text>
 <text>
-<en default="1">E-Mail</en>
+<en>E-Mail</en>
 <de>E-Mail</de>
+<id>85</id>
 </text>
 <text>
-<en default="1">Date</en>
+<en>Date</en>
 <de>Datum</de>
+<id>86</id>
 </text>
 <text>
-<en default="1">Group</en>
+<en>Group</en>
 <de>Gruppe</de>
+<id>87</id>
 </text>
 <text>
-<en default="1">enable posts</en>
+<en>enable posts</en>
 <de>Beitr&#xE4;ge erlauben</de>
+<id>88</id>
 </text>
 <text>
-<en default="1">Topics</en>
+<en>Topics</en>
 <de>Themen</de>
+<id>89</id>
 </text>
 <text>
-<en default="1">Entries</en>
+<en>Entries</en>
 <de>Beitr&#xE4;ge</de>
+<id>90</id>
 </text>
 <text>
-<en default="1">Last Entry</en>
+<en>Last Entry</en>
 <de>Letzter Beitrag</de>
+<id>91</id>
 </text>
 <text>
-<en default="1">Last entry</en>
+<en>Last entry</en>
 <de>Letzter Beitrag</de>
+<id>92</id>
 </text>
 <text>
-<en default="1">at</en>
+<en>at</en>
 <de>um</de>
+<id>93</id>
 </text>
 <text>
-<en default="1">answer</en>
-<en_plural default="1">answers</en_plural>
+<en>answer</en>
+<en_plural>answers</en_plural>
 <de>Antwort</de>
 <de_plural>Antworten</de_plural>
+<id>94</id>
+<sp_plural>_</sp_plural>
 </text>
 <text>
-<en default="1">Empty</en>
+<en>Empty</en>
 <de>Leer</de>
+<id>95</id>
 </text>
 <text>
-<en default="1">Title</en>
+<en>Title</en>
 <de>Titel</de>
+<id>96</id>
 </text>
 <text>
-<en default="1">Firstname</en>
+<en>Firstname</en>
 <de>Vorname</de>
+<id>97</id>
 </text>
 <text>
-<en default="1">Lastname</en>
+<en>Lastname</en>
 <de>Nachname</de>
+<id>98</id>
 </text>
 <text>
-<en default="1">Email</en>
+<en>Email</en>
 <de>E-Mail</de>
+<id>99</id>
 </text>
 <text>
-<en default="1">Title</en>
+<en>Title</en>
 <de>Titel</de>
+<id>100</id>
 </text>
 <text>
-<en default="1">Subject</en>
+<en>Subject</en>
 <de>Betreff</de>
+<id>101</id>
 </text>
 <text>
-<en default="1">Moderators of selected group</en>
+<en>Moderators of selected group</en>
 <de>Moderatoren der ausgew&#xE4;hlten Gruppe</de>
+<id>102</id>
 </text>
 <text>
-<en default="1">create answer</en>
+<en>create answer</en>
 <de>Antwort erstellen</de>
+<id>103</id>
 </text>
 <text>
-<en default="1">Moderation</en>
+<en>Moderation</en>
 <de>Moderation</de>
+<id>104</id>
 </text>
 <text>
-<en default="1">Edit entry</en>
+<en>Edit entry</en>
 <de>Beitrag bearbeiten</de>
+<id>105</id>
 </text>
 <text>
-<en default="1">of</en>
+<en>of</en>
 <de>von</de>
+<id>106</id>
 </text>
 <text>
-<en default="1">Member since</en>
+<en>Member since</en>
 <de>Mitglied seit</de>
+<id>107</id>
 </text>
 <text>
-<en default="1">Please check your entry, errors occured</en>
+<en>Please check your entry, errors occured</en>
 <de>Bitte &#xFC;berpr&#xFC;fen Sie Ihren Beitrag, Fehler sind aufgetreten.</de>
+<id>108</id>
 </text>
 <text>
-<en default="1">Post was successfully saved.</en>
+<en>Post was successfully saved.</en>
 <de>Beitrag wurde erfolgreich gespeichert.</de>
+<id>109</id>
 </text>
 <text>
-<en default="1">Entry was successfully saved.</en>
+<en>Entry was successfully saved.</en>
 <de>Eintrag wurde erfolgreich gespeichert.</de>
+<id>110</id>
 </text>
 <text>
-<en default="1">Action was successfully saved.</en>
+<en>Action was successfully saved.</en>
 <de>Die Aktion wurde erfolgreich gespeichert.</de>
+<id>111</id>
 </text>
 <text>
-<en default="1">to topic</en>
+<en>to topic</en>
 <de>Zum Thema</de>
+<id>112</id>
 </text>
 <text>
-<en default="1">back to group</en>
+<en>back to group</en>
 <de>Zur&#xFC;ck zur Gruppe.</de>
+<id>113</id>
 </text>
 <text>
-<en default="1">back to forum</en>
+<en>back to forum</en>
 <de>Zur&#xFC;ck zum Forum.</de>
+<id>114</id>
 </text>
 <text>
-<en default="1">Change properties</en>
+<en>Change properties</en>
 <de>Eigenschaften &#xE4;ndern.</de>
+<id>115</id>
 </text>
 <text>
-<en default="1">This "name for the forum" already exists. </en>
+<en>This "name for the forum" already exists. </en>
 <de>Dieser "Forumsname" existiert bereits. </de>
+<id>116</id>
 </text>
 <text>
-<en default="1">Please choose a different.</en>
+<en>Please choose a different.</en>
 <de>Bitte w&#xE4;hlen Sie einen anderen.</de>
+<id>117</id>
 </text>
 <text>
-<en default="1">Forum - Properties</en>
+<en>Forum - Properties</en>
 <de>Forum - Einstellungen</de>
+<id>118</id>
 </text>
 <text>
-<en default="1">Changed data was successfully saved</en>
+<en>Changed data was successfully saved</en>
 <de>Die ge&#xE4;nderten Daten wurden erfolgreich gespeichert</de>
+<id>119</id>
 </text>
 <text>
-<en default="1">Click here</en>
+<en>Click here</en>
 <de>Hier klicken</de>
+<id>120</id>
 </text>
 <text>
-<en default="1">to get back to the forum</en>
+<en>to get back to the forum</en>
 <de>um zum Forum zur&#xFC;ckzukehren</de>
+<id>121</id>
 </text>
 <text>
-<en default="1">User does not exist (anymore).</en>
+<en>User does not exist (anymore).</en>
 <de>Benutzer existiert nicht (mehr).</de>
+<id>122</id>
 </text>
 <text>
-<en default="1">Forum-User does not exist (anymore).</en>
+<en>Forum-User does not exist (anymore).</en>
 <de>Forum-Benutzer existiert nicht (mehr).</de>
+<id>123</id>
 </text>
 <text>
-<en default="1">Userprofile:</en>
+<en>Userprofile:</en>
 <de>Benutzerprofil:</de>
+<id>124</id>
 </text>
 <text>
-<en default="1">Name</en>
+<en>Name</en>
 <de>Name</de>
+<id>125</id>
 </text>
 <text>
-<en default="1">Latest online</en>
+<en>Latest online</en>
 <de>Zuletzt online</de>
+<id>126</id>
 </text>
 <text>
-<en default="1">Town</en>
+<en>Town</en>
 <de>Stadt</de>
+<id>127</id>
 </text>
 <text>
-<en default="1">Short description</en>
+<en>Short description</en>
 <de>Kurze Beschreibung</de>
+<id>128</id>
 </text>
 <text>
-<en default="1">interests, hobbies, pets, ...</en>
+<en>interests, hobbies, pets, ...</en>
 <de>Interessen, Hobbies, Haustiere, ...</de>
+<id>129</id>
 </text>
 <text>
-<en default="1">Signature</en>
+<en>Signature</en>
 <de>Signatur</de>
+<id>130</id>
 </text>
 <text>
-<en default="1">Latest topics</en>
+<en>Latest topics</en>
 <de>Letzte Themen</de>
+<id>131</id>
 </text>
 <text>
-<en default="1">Latest entries</en>
+<en>Latest entries</en>
 <de>Letzte Beitr&#xE4;ge</de>
+<id>132</id>
 </text>
 <text>
-<en default="1">childComponentClass must be set for key \{0}\</en>
+<en>childComponentClass must be set for key \{0}\</en>
 <de>childComponentClass muss auf den Schl&#xFC;ssel \{0}\ gesetzt werden</de>
+<id>133</id>
 </text>
 <text>
-<en default="1">News Categories</en>
+<en>News Categories</en>
 <de>Neue Kategorien</de>
+<id>134</id>
 </text>
 <text>
-<en default="1">Publish Date</en>
+<en>Publish Date</en>
 <de>Datum der Ver&#xF6;ffentlichung</de>
+<id>135</id>
 </text>
 <text>
-<en default="1">Expiry Date</en>
+<en>Expiry Date</en>
 <de>Ablauf Datum</de>
+<id>136</id>
 </text>
 <text>
-<en default="1">Teaser</en>
+<en>Teaser</en>
 <de>Kurztext (Teaser)</de>
+<id>137</id>
 </text>
 <text>
-<en default="1">News category pageFactory not set (key: {0})</en>
+<en>News category pageFactory not set (key: {0})</en>
 <de>News Kategorie pageFactory nicht gesetzt (key: {0})</de>
+<id>138</id>
 </text>
 <text>
-<en default="1">Component {0} not found</en>
+<en>Component {0} not found</en>
 <de>Komponente {0} nicht gefunden</de>
+<id>139</id>
 </text>
 <text>
-<en default="1">Comments</en>
+<en>Comments</en>
 <de>Kommentare</de>
+<id>140</id>
 </text>
 <text>
-<en default="1">Created</en>
+<en>Created</en>
 <de>Erstellt</de>
+<id>141</id>
 </text>
 <text>
-<en default="1">Content</en>
+<en>Content</en>
 <de>Inhalt</de>
+<id>142</id>
 </text>
 <text>
-<en default="1">Change Post</en>
+<en>Change Post</en>
 <de>Beitrag &#xE4;ndern</de>
+<id>143</id>
 </text>
 <text>
-<en default="1">Member since</en>
+<en>Member since</en>
 <de>Mitglied seit</de>
+<id>144</id>
 </text>
 <text>
-<en default="1">Please enter the desired newstext:</en>
+<en>Please enter the desired newstext:</en>
 <de>Bitte geben Sie den gew&#xFC;nschten Newstext ein:</de>
+<id>145</id>
 </text>
 <text>
-<en default="1">Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
+<en>Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
 <de>Bitte gib den gew&#xFC;nschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
+<id>146</id>
 </text>
 <text>
-<en default="1">Create comment</en>
+<en>Create comment</en>
 <de>Kommentar erstellen</de>
+<id>147</id>
 </text>
 <text>
-<en default="1">Comment was successfully saved.</en>
+<en>Comment was successfully saved.</en>
 <de>Kommentar wurde erfolgreich gespeichert.</de>
+<id>148</id>
 </text>
 <text>
-<en default="1">to continue</en>
+<en>to continue</en>
 <de>um fortzufahren</de>
+<id>149</id>
 </text>
 <text>
-<en default="1">Product</en>
+<en>Product</en>
 <de>Produkt</de>
+<id>150</id>
 </text>
 <text>
-<en default="1">filename</en>
+<en>filename</en>
 <de>Dateiname</de>
+<id>151</id>
 </text>
 <text>
-<en default="1">price</en>
+<en>price</en>
 <de>Preis</de>
+<id>152</id>
 </text>
 <text>
-<en default="1">vat</en>
+<en>vat</en>
 <de>MwSt.</de>
+<id>153</id>
 </text>
 <text>
-<en default="1">componentClass is required for Vpc_Table in config</en>
+<en>componentClass is required for Vpc_Table in config</en>
 <de>componentClass is erforderlich f&#xFC;r Vpc_Table in config</de>
+<id>154</id>
 </text>
 <text>
-<en default="1">activate Account</en>
+<en>activate Account</en>
 <de>Konto aktivieren</de>
+<id>155</id>
 </text>
 <text>
-<en default="1">Data was not sent completely. </en>
+<en>Data was not sent completely. </en>
 <de>Daten wurden nicht vollst&#xE4;ndig gesendet. </de>
+<id>156</id>
 </text>
 <text>
-<en default="1">Please copy the complete address out of the email.</en>
+<en>Please copy the complete address out of the email.</en>
 <de>Bitte kopieren Sie die vollst&#xE4;ndige Adresse aus der E-Mail.</de>
+<id>157</id>
 </text>
 <text>
-<en default="1">Activation code is wrong. Eventually your account has already been activated</en>
+<en>Activation code is wrong. Eventually your account has already been activated</en>
 <de>Aktivierungscode ist falsch. Eventuell wurde Ihr Konto bereits aktiviert.</de>
+<id>158</id>
 </text>
 <text>
-<en default="1">Activate Useraccount</en>
+<en>Activate Useraccount</en>
 <de>Benutzerkonto aktivieren</de>
+<id>159</id>
 </text>
 <text>
-<en default="1">Plese enter in both fields the password which you want to use for your useraccount</en>
+<en>Plese enter in both fields the password which you want to use for your useraccount</en>
 <de>Bitte geben Sie in beide Felder das gew&#xFC;nschte Passwort f&#xFC;r Ihr Benutzerkonto ein</de>
+<id>160</id>
 </text>
 <text>
-<en default="1">After the activation you are automatically loggid and you could use your account.</en>
+<en>After the activation you are automatically loggid and you could use your account.</en>
 <de>Nach der Aktivierung sind Sie automatisch angemeldet und Sie k&#xF6;nnen Ihr Konto verwenden.</de>
+<id>161</id>
 </text>
 <text>
-<en default="1">Your useraccount was successfully activated.</en>
+<en>Your useraccount was successfully activated.</en>
 <de>Ihr Benutzerkonto wurde erfolgreich aktiviert.</de>
+<id>162</id>
 </text>
 <text>
-<en default="1">You were logged in, automatically.</en>
+<en>You were logged in, automatically.</en>
 <de>Sie sind automatisch angemeldet.</de>
+<id>163</id>
 </text>
 <text>
-<en default="1">to get back to the Startpage</en>
+<en>to get back to the Startpage</en>
 <de>um zur Startseite zur&#xFC;ckzukehren</de>
+<id>164</id>
 </text>
 <text>
-<en default="1">Female</en>
+<en>Female</en>
 <de>Weiblich</de>
+<id>165</id>
 </text>
 <text>
-<en default="1">Male</en>
+<en>Male</en>
 <de>M&#xE4;nnlich</de>
+<id>166</id>
 </text>
 <text>
-<en default="1">Gender</en>
+<en>Gender</en>
 <de>Geschlecht</de>
+<id>167</id>
 </text>
 <text>
-<en default="1">Edit account</en>
+<en>Edit account</en>
 <de>Speichern</de>
+<id>168</id>
 </text>
 <text>
-<en default="1">Account - Properties</en>
+<en>Account - Properties</en>
 <de>Konto - Eigenschaften</de>
+<id>169</id>
 </text>
 <text>
-<en default="1">E-Mail Adress</en>
+<en>E-Mail Adress</en>
 <de>E-Mail Adresse</de>
+<id>170</id>
 </text>
 <text>
-<en default="1">The changed data was saved successfully</en>
+<en>The changed data was saved successfully</en>
 <de>Die ge&#xE4;nderten Daten wurden erfolgreich gespeichert</de>
+<id>171</id>
 </text>
 <text>
-<en default="1">Parent Resource id {0} does not exist</en>
+<en>Parent Resource id {0} does not exist</en>
 <de>Parent Resource id {0} existiert nicht</de>
+<id>172</id>
 </text>
 <text>
-<en default="1">Unknown AssetsType: {0}</en>
+<en>Unknown AssetsType: {0}</en>
 <de>Unbekannter AssetsType: {0}</de>
+<id>173</id>
 </text>
 <text>
-<en default="1">Assets-Path-Type {0} not found in config.</en>
+<en>Assets-Path-Type {0} not found in config.</en>
 <de>Assets-Path-Type {0} in config nicht gefunden.</de>
+<id>174</id>
 </text>
 <text>
-<en default="1">Path {0} does not exist.</en>
+<en>Path {0} does not exist.</en>
 <de>Pfad {0} existiert nicht.</de>
+<id>175</id>
 </text>
 <text>
-<en default="1">Asset-File {0} does not exist.</en>
+<en>Asset-File {0} does not exist.</en>
 <de>Asset-File {0} existiert nicht.</de>
+<id>176</id>
 </text>
 <text>
-<en default="1">autologin failed: {0}</en>
+<en>autologin failed: {0}</en>
 <de>Automatischer Login ist fehlgeschlagen: {0}</de>
+<id>177</id>
 </text>
 <text>
-<en default="1">Not yet Implemented.</en>
+<en>Not yet Implemented.</en>
 <de>Noch nicht implementiert.</de>
+<id>178</id>
 </text>
 <text>
-<en default="1">Vps_Collection can hold only items with Vps_Collection_Item_Interface</en>
+<en>Vps_Collection can hold only items with Vps_Collection_Item_Interface</en>
 <de>Vps_Collection can hold only items with Vps_Collection_Item_Interface</de>
+<id>179</id>
 </text>
 <text>
-<en default="1">Offset {0} not found</en>
+<en>Offset {0} not found</en>
 <de>Offset {0} nicht gefunden</de>
+<id>180</id>
 </text>
 <text>
-<en default="1">userId is required</en>
+<en>userId is required</en>
 <de>userId ist erforderklich</de>
+<id>181</id>
 </text>
 <text>
-<en default="1">You don't have enough permissions for this Action</en>
+<en>You don't have enough permissions for this Action</en>
 <de>Sie haben nicht die erforderlichen Befugnisse f&#xFC;r diese Aktion.</de>
+<id>182</id>
 </text>
 <text>
-<en default="1">Login failed</en>
+<en>Login failed</en>
 <de>Login fehlgeschlagen</de>
+<id>183</id>
 </text>
 <text>
-<en default="1">Activation code is invalid. Maybe the URL wasn\'t copied completely?</en>
+<en>Activation code is invalid. Maybe the URL wasn\'t copied completely?</en>
 <de>Aktivierungscode ist fehlerhaft. Vielleicht wurde die URL nicht vollst&#xE4;ndig kopiert?</de>
+<id>184</id>
 </text>
 <text>
-<en default="1">Data not submitted completely.</en>
+<en>Data not submitted completely.</en>
 <de>Daten wurden nicht vollst&#xE4;ndig vorgelegt.</de>
+<id>185</id>
 </text>
 <text>
-<en default="1">New password couldn\'t be set</en>
+<en>New password couldn\'t be set</en>
 <de>Das neue Passwort kann nicht gesetzt werden</de>
+<id>186</id>
 </text>
 <text>
-<en default="1">_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service</en>
+<en>_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service</en>
 <de>_createAuthAdapter didn\'t return instance of Vps_Auth_Adapter_Service</de>
+<id>187</id>
 </text>
 <text>
-<en default="1">Debug is not enabled</en>
+<en>Debug is not enabled</en>
 <de>Debuggen ist nicht aktiviert</de>
+<id>188</id>
 </text>
 <text>
-<en default="1">Login data</en>
+<en>Login data</en>
 <de>Login-Daten</de>
+<id>189</id>
 </text>
 <text>
-<en default="1">Change password</en>
+<en>Change password</en>
 <de>Passwort &#xE4;ndern</de>
+<id>190</id>
 </text>
 <text>
-<en default="1">Repeat password</en>
+<en>Repeat password</en>
 <de>Passwort wiederholen</de>
+<id>191</id>
 </text>
 <text>
-<en default="1">Personal data</en>
+<en>Personal data</en>
 <de>Pers&#xF6;nliche Daten</de>
+<id>192</id>
 </text>
 <text>
-<en default="1">First name</en>
+<en>First name</en>
 <de>Vorname</de>
+<id>193</id>
 </text>
 <text>
-<en default="1">Last name</en>
+<en>Last name</en>
 <de>Familienname</de>
+<id>194</id>
 </text>
 <text>
-<en default="1">Advice</en>
+<en>Advice</en>
 <de>Information</de>
+<id>195</id>
 </text>
 <text>
-<en default="1">At the following action emails are automatically sent to the adequade user.</en>
+<en>At the following action emails are automatically sent to the adequade user.</en>
 <de>Nach &#xC4;nderungen der folgenden Felder wird automatisch eine E-Mail an die eingetragene E-Mail Adresse versendet:</de>
+<id>196</id>
 </text>
 <text>
-<en default="1">Create, Delete and E-Mail change</en>
+<en>Create, Delete and E-Mail change</en>
 <de>Hinzuf&#xFC;gen, L&#xF6;schen und E-Mail-&#xC4;nderungen</de>
+<id>197</id>
 </text>
 <text>
-<en default="1">Accessdata and person</en>
+<en>Accessdata and person</en>
 <de>Zugangsdaten und Person</de>
+<id>198</id>
 </text>
 <text>
-<en default="1">Webcode</en>
+<en>Webcode</en>
 <de>Webcode</de>
+<id>199</id>
 </text>
 <text>
-<en default="1">Rights</en>
+<en>Rights</en>
 <de>Rechte</de>
+<id>200</id>
 </text>
 <text>
-<en default="1">Edit</en>
+<en>Edit</en>
 <de>Bearbeiten</de>
+<id>201</id>
 </text>
 <text>
-<en default="1">edit</en>
+<en>edit</en>
 <de>bearbeiten</de>
+<id>202</id>
 </text>
 <text>
-<en default="1">Invalid controller class ("{0}")</en>
+<en>Invalid controller class ("{0}")</en>
 <de>Ung&#xFC;ltige Controller Klasse ("{0}")</de>
+<id>203</id>
 </text>
 <text>
-<en default="1">Page width id {0} not found</en>
+<en>Page width id {0} not found</en>
 <de>Seite mit der ID {0} wurde nicht gefunden</de>
+<id>204</id>
 </text>
 <text>
-<en default="1">Param "uploads" has to be set in the file application/config.ini.</en>
+<en>Param "uploads" has to be set in the file application/config.ini.</en>
 <de>_</de>
+<id>205</id>
 </text>
 <text>
-<en default="1">No File was uploaded.</en>
+<en>No File was uploaded.</en>
 <de>Es wurde keine Datei hochgeladen.</de>
+<id>206</id>
 </text>
 <text>
-<en default="1">The file is larger than the maximum upload amount.</en>
+<en>The file is larger than the maximum upload amount.</en>
 <de>Die Datei &#xFC;bersteigt die maximale Dategr&#xF6;&#xDF;e f&#xFC;r Dateiuploads.</de>
+<id>207</id>
 </text>
 <text>
-<en default="1">The file was not uploaded completely.</en>
+<en>The file was not uploaded completely.</en>
 <de>Die Datei wurde nicht vollst&#xE4;ndig hochgeladen.</de>
+<id>208</id>
 </text>
 <text>
-<en default="1">Path for uploads is not writeable: {0}</en>
+<en>Path for uploads is not writeable: {0}</en>
 <de>Der Pfad f&#xFC;r Dateiuploads ist schreibgesch&#xFC;tzt: {0}</de>
+<id>209</id>
 </text>
 <text>
-<en default="1">File {0} does not exist</en>
+<en>File {0} does not exist</en>
 <de>Datei {0} existiert nicht</de>
+<id>210</id>
 </text>
 <text>
-<en default="1">Cant sort by {0}, field doesnt exist in row</en>
+<en>Cant sort by {0}, field doesnt exist in row</en>
 <de>Sortierung nach {0} nicht m&#xF6;glich, das Feld existiert nicht</de>
+<id>211</id>
 </text>
 <text>
-<en default="1">Can't sort by , array_multisort returned an error</en>
+<en>Can't sort by , array_multisort returned an error</en>
 <de>Sortierung nicht m&#xF6;glich, array_multisort liefert einen Fehler zur&#xFC;ck</de>
+<id>212</id>
 </text>
 <text>
-<en default="1">'service.users.webcode' not defined in config</en>
+<en>'service.users.webcode' not defined in config</en>
 <de>'service.users.webcode' ist in config nicht definiert</de>
+<id>213</id>
 </text>
 <text>
-<en default="1">An account with this email address already exists</en>
+<en>An account with this email address already exists</en>
 <de>Es besteht bereits ein Konto mit dieser E-Mail Adresse</de>
+<id>214</id>
 </text>
 <text>
-<en default="1">Passwords are different - please try again</en>
+<en>Passwords are different - please try again</en>
 <de>Passw&#xF6;rter sind unterschiedlich - bitte versuchen Sie es erneut</de>
+<id>215</id>
 </text>
 <text>
-<en default="1"> - Useraccount created</en>
+<en> - Useraccount created</en>
 <de> - Benutzerkonto wurde eingerichtet</de>
+<id>216</id>
 </text>
 <text>
-<en default="1"> - lost password</en>
+<en> - lost password</en>
 <de> - Passwort vergessen</de>
+<id>217</id>
 </text>
 <text>
-<en default="1"> - Email changed</en>
+<en> - Email changed</en>
 <de> - E-Mail wurde ge&#xE4;ndert</de>
+<id>218</id>
 </text>
 <text>
-<en default="1"> - Accound deleted</en>
+<en> - Accound deleted</en>
 <de> - Konto wurde gel&#xF6;scht</de>
+<id>219</id>
 </text>
 <text>
-<en default="1">Invalid urlScheme specified</en>
+<en>Invalid urlScheme specified</en>
 <de>Ung&#xFC;ltiges url-Schema wurde rezeugt</de>
+<id>220</id>
 </text>
 <text>
-<en default="1">Component must be instance of Vpc_Interface.</en>
+<en>Component must be instance of Vpc_Interface.</en>
 <de>Die Komponente muss eine Instanz des Vpc_Interface sein.</de>
+<id>221</id>
 </text>
 <text>
-<en default="1">Pagename must not be empty. Probably Component is not a Page.</en>
+<en>Pagename must not be empty. Probably Component is not a Page.</en>
 <de>Seitenname darf nicht leer sein. Wahrscheinlich ist die Komponente keine Seite.</de>
+<id>222</id>
 </text>
 <text>
-<en default="1">A page with the same componentId already exists.</en>
+<en>A page with the same componentId already exists.</en>
 <de>Es existiert bereits eine Seite mit der gleichen componenId.</de>
+<id>223</id>
 </text>
 <text>
-<en default="1">Couldn\t create Page with id {0}</en>
+<en>Couldn\t create Page with id {0}</en>
 <de>Die Seite mit der id {0} konnte nicht erstellt werden</de>
+<id>224</id>
 </text>
 <text>
-<en default="1">Cannot set Parent Page for the same object: {0}</en>
+<en>Cannot set Parent Page for the same object: {0}</en>
 <de>&#xDC;bergeordnete Seite kann nicht f&#xFC;r das selbe Objekt gesetzt werden: {0}</de>
+<id>225</id>
 </text>
 <text>
-<en default="1">Page does not exist: {0}</en>
+<en>Page does not exist: {0}</en>
 <de>Seite existiert nicht: {0}</de>
+<id>226</id>
 </text>
 <text>
-<en default="1">'service.users.url' not defined in config (usually defined in VPS config)</en>
+<en>'service.users.url' not defined in config (usually defined in VPS config)</en>
 <de>'service.users.url' ist in config nicht definiert (gew&#xF6;hnlich wird diesen in VPS config definiert)</de>
+<id>227</id>
 </text>
 <text>
-<en default="1">Please enter the text you wish to assign.</en>
+<en>Please enter the text you wish to assign.</en>
 <de>Bitte geben Sie den Text ein, welchen Sie zuweisen m&#xF6;chten.</de>
+<id>228</id>
 </text>
 <text>
-<en default="1">Seperate items by a new line.</en>
+<en>Seperate items by a new line.</en>
 <de>Unterteilen Sie Elemente durch eine neue Zeile.</de>
+<id>229</id>
 </text>
 <text>
-<en default="1">Can't save, please fill all marked fields correctly.</en>
+<en>Can't save, please fill all marked fields correctly.</en>
 <de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle markierten Felder aus.</de>
+<id>230</id>
 </text>
 <text>
-<en default="1">Cant save, please fill all marked fields correctly.</en>
+<en>Cant save, please fill all marked fields correctly.</en>
 <de>Speichern ist nicht m&#xF6;glich, bitte f&#xFC;llen Sie alle markierten Felder aus.</de>
+<id>231</id>
 </text>
 <text>
-<en default="1">Do you really want to delete this entry?</en>
+<en>Do you really want to delete this entry?</en>
 <de>Wollen Sie diesen Beitrag wirklich l&#xF6;schen?</de>
+<id>232</id>
 </text>
 <text>
-<en default="1">Do you want to save the changes?</en>
+<en>Do you want to save the changes?</en>
 <de>Wollen Sie die &#xC4;nderungen speichern?</de>
+<id>233</id>
 </text>
 <text>
-<en default="1">Copying...</en>
+<en>Copying...</en>
 <de>Kopiere...</de>
+<id>234</id>
 </text>
 <text>
-<en default="1">create </en>
+<en>create </en>
 <de>erstellen </de>
+<id>235</id>
 </text>
 <text>
-<en default="1">File successfully created: </en>
+<en>File successfully created: </en>
 <de>Datei wurde erfolgreich erstellt: </de>
+<id>236</id>
 </text>
 <text>
-<en default="1">Component</en>
+<en>Component</en>
 <de>Komponente</de>
+<id>237</id>
 </text>
 <text>
-<en default="1">Add Component</en>
+<en>Add Component</en>
 <de>Komponente hinzuf&#xFC;gen</de>
+<id>238</id>
 </text>
 <text>
-<en default="1">Creating...</en>
+<en>Creating...</en>
 <de>Erzeugen...</de>
+<id>239</id>
 </text>
 <text>
-<en default="1">Page</en>
+<en>Page</en>
 <de>Seite</de>
+<id>240</id>
 </text>
 <text>
-<en default="1">Edit Content</en>
+<en>Edit Content</en>
 <de>Inhalt bearbeiten</de>
+<id>241</id>
 </text>
 <text>
-<en default="1">Properties of selected Page</en>
+<en>Properties of selected Page</en>
 <de>Eigenschaften der gew&#xE4;hlten Seite</de>
+<id>242</id>
 </text>
 <text>
-<en default="1">Add new Subpage</en>
+<en>Add new Subpage</en>
 <de>Neue Unterseite hinzuf&#xFC;gen</de>
+<id>243</id>
 </text>
 <text>
-<en default="1">Delete selected Page</en>
+<en>Delete selected Page</en>
 <de>Ausgew&#xE4;hlte Seite l&#xF6;schen</de>
+<id>244</id>
 </text>
 <text>
-<en default="1">Toggle Visibility of selected Page</en>
+<en>Toggle Visibility of selected Page</en>
 <de>Sichtbarkeit der gew&#xE4;hlten Seite &#xE4;ndern</de>
+<id>245</id>
 </text>
 <text>
-<en default="1">Make selected Page Homepage</en>
+<en>Make selected Page Homepage</en>
 <de>Gew&#xE4;hlte Seite zur Homepage machen</de>
+<id>246</id>
 </text>
 <text>
-<en default="1">Reload all</en>
+<en>Reload all</en>
 <de>Alles neuladen</de>
+<id>247</id>
 </text>
 <text>
-<en default="1">Expand here</en>
+<en>Expand here</en>
 <de>Hier erweitern</de>
+<id>248</id>
 </text>
 <text>
-<en default="1">Collapse here</en>
+<en>Collapse here</en>
 <de>Hier schrumpfen</de>
+<id>249</id>
 </text>
 <text>
-<en default="1">Open Preview</en>
+<en>Open Preview</en>
 <de>Vorschau &#xF6;ffnen</de>
+<id>250</id>
 </text>
 <text>
-<en default="1">Javascript Parse Exception</en>
+<en>Javascript Parse Exception</en>
 <de>Javascript Parse Ausnahme</de>
+<id>251</id>
 </text>
 <text>
-<en default="1">PHP Exception</en>
+<en>PHP Exception</en>
 <de>PHP Ausnahme</de>
+<id>252</id>
 </text>
 <text>
-<en default="1">A Server failure occured.</en>
+<en>A Server failure occured.</en>
 <de>Ein Server Fehler ist aufgetreten.</de>
+<id>253</id>
 </text>
 <text>
-<en default="1">Error - wrong version</en>
+<en>Error - wrong version</en>
 <de>Fehler - falsche Version.</de>
+<id>254</id>
 </text>
 <text>
-<en default="1">Because of an application update the application has to be reloaded.</en>
+<en>Because of an application update the application has to be reloaded.</en>
 <de>Aufgrund eines Updates muss die Anwendung neu geladen werden.</de>
+<id>255</id>
 </text>
 <text>
-<en default="1">A connection problem occured.</en>
+<en>A connection problem occured.</en>
 <de>Ein Verbindungsfehler ist aufgetreten.</de>
+<id>256</id>
 </text>
 <text>
-<en default="1">Debug info</en>
+<en>Debug info</en>
 <de>Debug Info</de>
+<id>257</id>
 </text>
 <text>
-<en default="1">Select your Position</en>
+<en>Select your Position</en>
 <de>W&#xE4;hlen Sie Ihre Position.</de>
+<id>258</id>
 </text>
 <text>
-<en default="1">enter address</en>
+<en>enter address</en>
 <de>Adresse eingeben.</de>
+<id>259</id>
 </text>
 <text>
-<en default="1">Example: Pfongauerstra&#xDF;e 67, 5202 Neumarkt am Wallersee</en>
+<en>Example: Pfongauerstra&#xDF;e 67, 5202 Neumarkt am Wallersee</en>
 <de>Beispiel: Pfongauerstra&#xDF;e 67, 5202 Neumarkt am Wallersee</de>
+<id>260</id>
 </text>
 <text>
-<en default="1">Unknown address</en>
+<en>Unknown address</en>
 <de>Unbekannte Adresse.</de>
+<id>261</id>
 </text>
 <text>
-<en default="1">Address could not be found</en>
+<en>Address could not be found</en>
 <de>Adresse kann nicht gefunden werden.</de>
+<id>262</id>
 </text>
 <text>
-<en default="1">Move marker while pressing mousekey.</en>
+<en>Move marker while pressing mousekey.</en>
 <de>Bewegen Sie den Marker mit der Maus.</de>
+<id>263</id>
 </text>
 <text>
-<en default="1">Latitude</en>
+<en>Latitude</en>
 <de>Breitengrad</de>
+<id>264</id>
 </text>
 <text>
-<en default="1">Longitude</en>
+<en>Longitude</en>
 <de>L&#xE4;ngengrad</de>
+<id>265</id>
 </text>
 <text>
-<en default="1">Error), trlVps(Code {0} Error Returned</en>
+<en>Error), trlVps(Code {0} Error Returned</en>
 <de>Error), trlVps(Code {0} Error Returned</de>
+<id>266</id>
 </text>
 <text>
-<en default="1">Insert new image or edit selected image.</en>
+<en>Insert new image or edit selected image.</en>
 <de>F&#xFC;gt neues Bild ein oder bearbeitet das ausgew&#xE4;hlte Bild.</de>
+<id>267</id>
 </text>
 <text>
-<en default="1">Create new Download for the selected text or edit selected Download.</en>
+<en>Create new Download for the selected text or edit selected Download.</en>
 <de>Erstellt neuen Download f&#xFC;r den ausgew&#xE4;hlten Text oder bearbeitet den ausgew&#xE4;hlten Download.</de>
+<id>268</id>
 </text>
 <text>
-<en default="1">Create new Link for the selected text or edit selected Link.</en>
+<en>Create new Link for the selected text or edit selected Link.</en>
 <de>Erzeugt neuen Link f&#xFC;r den ausgew&#xE4;hlten Text oder bearbeitet den ausgew&#xE4;hlten Link.</de>
+<id>269</id>
 </text>
 <text>
-<en default="1">Undo the last action.</en>
+<en>Undo the last action.</en>
 <de>Letzten Arbeitsschritt r&#xFC;ckg&#xE4;ngig machen.</de>
+<id>270</id>
 </text>
 <text>
-<en default="1">Redo the last action.</en>
+<en>Redo the last action.</en>
 <de>Letzten Arbeitsschritt wiederholen.</de>
+<id>271</id>
 </text>
 <text>
-<en default="1">Insert a custom character.</en>
+<en>Insert a custom character.</en>
 <de>Sonderzeichen einf&#xFC;gen.</de>
+<id>272</id>
 </text>
 <text>
-<en default="1">Insert text without formating.</en>
+<en>Insert text without formating.</en>
 <de>Text ohne Formatierung einf&#xFC;gen.</de>
+<id>273</id>
 </text>
 <text>
-<en default="1">Clean up Html and remove formatings.</en>
+<en>Clean up Html and remove formatings.</en>
 <de>HTML-Bereinigung und entfernen von Formatierungen.</de>
+<id>274</id>
 </text>
 <text>
-<en default="1">Insert Custom Character</en>
+<en>Insert Custom Character</en>
 <de>Benutzerdefiniertes Zeichen einf&#xFC;gen</de>
+<id>275</id>
 </text>
 <text>
-<en default="1">Insert Plain Text</en>
+<en>Insert Plain Text</en>
 <de>"Sauberen" Text einf&#xFC;gen</de>
+<id>276</id>
 </text>
 <text>
-<en default="1">Cleaning...</en>
+<en>Cleaning...</en>
 <de>Reinigen...</de>
+<id>277</id>
 </text>
 <text>
-<en default="1">Password lost</en>
+<en>Password lost</en>
 <de>Passwort vergessen</de>
+<id>278</id>
 </text>
 <text>
-<en default="1">Please enter your email address</en>
+<en>Please enter your email address</en>
 <de>Bitte geben Sie Ihre E-Mail Adresse ein</de>
+<id>279</id>
 </text>
 <text>
-<en default="1">Please type in your password. After clicking the button below </en>
+<en>Please type in your password. After clicking the button below </en>
 <de>Bitte geben Sie Ihr Passwort ein. Nach dem Klick auf den unteren Button </de>
+<id>280</id>
 </text>
 <text>
-<en default="1">you are logged in automatically and may use the typed in password </en>
+<en>you are logged in automatically and may use the typed in password </en>
 <de>werden Sie automatisch angemeldet und k&#xF6;nnen das eingegebenen Passwort </de>
+<id>281</id>
 </text>
 <text>
-<en default="1">for future logins.</en>
+<en>for future logins.</en>
 <de>f&#xFC;r k&#xFC;nftige Anmeldungen verwenden.</de>
+<id>282</id>
 </text>
 <text>
-<en default="1">Your email address: </en>
+<en>Your email address: </en>
 <de>Ihre E-Mail Adresse: </de>
+<id>283</id>
 </text>
 <text>
-<en default="1">Activate and login account</en>
+<en>Activate and login account</en>
 <de>Konto aktivieren und anmelden</de>
+<id>284</id>
 </text>
 <text>
-<en default="1">The repeated password is different - please try again.</en>
+<en>The repeated password is different - please try again.</en>
 <de>Das wiederholte Passwort ist unterschiedlich - bitte versuchen Sie es erneut.</de>
+<id>285</id>
 </text>
 <text>
-<en default="1">An error has occurred</en>
+<en>An error has occurred</en>
 <de>Ein Fehler ist aufgetreten</de>
+<id>286</id>
 </text>
 <text>
-<en default="1">Link cannot link to itself</en>
+<en>Link cannot link to itself</en>
 <de>Link kann nicht auf sich sich selbst verlinken</de>
+<id>287</id>
 </text>
 <text>
-<en default="1">Add Paragraph</en>
+<en>Add Paragraph</en>
 <de>Absatz hinzuf&#xFC;gen</de>
+<id>288</id>
 </text>
 <text>
-<en default="1">Save</en>
+<en>Save</en>
 <de>Speichern</de>
+<id>289</id>
 </text>
 <text>
-<en default="1">Cancel</en>
+<en>Cancel</en>
 <de>Abbrechen</de>
+<id>290</id>
 </text>
 <text>
-<en default="1">Save and Back</en>
+<en>Save and Back</en>
 <de>Speichern und zur&#xFC;ck</de>
+<id>291</id>
 </text>
 <text>
-<en default="1">Delete</en>
+<en>Delete</en>
 <de>L&#xF6;schen</de>
+<id>292</id>
 </text>
 <text>
-<en default="1">delete</en>
+<en>delete</en>
 <de>l&#xF6;schen</de>
+<id>293</id>
 </text>
 <text>
-<en default="1">New Entry</en>
+<en>New Entry</en>
 <de>Neuer Eintrag</de>
+<id>294</id>
 </text>
 <text>
-<en default="1">No controllerUrl specified for AutoForm.</en>
+<en>No controllerUrl specified for AutoForm.</en>
 <de>No controllerUrl specified for AutoForm.</de>
+<id>295</id>
 </text>
 <text>
-<en default="1">delete?</en>
+<en>delete?</en>
 <de>L&#xF6;schen?</de>
+<id>296</id>
 </text>
 <text>
-<en default="1">Duplicate</en>
+<en>Duplicate</en>
 <de>Duplizieren</de>
+<id>297</id>
 </text>
 <text>
-<en default="1">Print</en>
+<en>Print</en>
 <de>Drucken</de>
+<id>298</id>
 </text>
 <text>
-<en default="1">CSV Export</en>
+<en>CSV Export</en>
 <de>CSV Export</de>
+<id>299</id>
 </text>
 <text>
-<en default="1">Excel Export</en>
+<en>Excel Export</en>
 <de>Excel Export</de>
+<id>300</id>
 </text>
 <text>
-<en default="1">Do you really wish to remove this entry / these entries?</en>
+<en>Do you really wish to remove this entry / these entries?</en>
 <de>Wollen Sie diesen Beitrag (diese Beitr&#xE4;ge) wirklich l&#xF6;schen?</de>
+<id>301</id>
 </text>
 <text>
-<en default="1">Add</en>
+<en>Add</en>
 <de>Hinzuf&#xFC;gen</de>
+<id>302</id>
 </text>
 <text>
-<en default="1">Toggle Visibility</en>
+<en>Toggle Visibility</en>
 <de>Sichtbarkeit umschalten</de>
+<id>303</id>
 </text>
 <text>
-<en default="1">Search</en>
+<en>Search</en>
 <de>Suchen</de>
+<id>304</id>
 </text>
 <text>
-<en default="1">Possible Destinations</en>
+<en>Possible Destinations</en>
 <de>M&#xF6;glicher Bestimmungsort</de>
+<id>305</id>
 </text>
 <text>
-<en default="1">Hyperlink</en>
+<en>Hyperlink</en>
 <de>Hyperlink</de>
+<id>306</id>
 </text>
 <text>
-<en default="1">Undo (Ctrl+Z)</en>
+<en>Undo (Ctrl+Z)</en>
 <de>R&#xFC;ckg&#xE4;ngig (Ctrl+Z)</de>
+<id>307</id>
 </text>
 <text>
-<en default="1">Redo</en>
+<en>Redo</en>
 <de>Wiederholen</de>
+<id>308</id>
 </text>
 <text>
-<en default="1">Character</en>
+<en>Character</en>
 <de>Zeichen</de>
+<id>309</id>
 </text>
 <text>
-<en default="1">Clean Html</en>
+<en>Clean Html</en>
 <de>HTML bereinigen</de>
+<id>310</id>
 </text>
 <text>
-<en default="1">Loading...</en>
+<en>Loading...</en>
 <de>Laden...</de>
+<id>311</id>
 </text>
 <text>
-<en default="1">{0} selected row(s)</en>
+<en>{0} selected row(s)</en>
 <de>{0} markierte Zeile(n)</de>
+<id>312</id>
 </text>
 <text>
-<en default="1">Close this tab</en>
+<en>Close this tab</en>
 <de>Schlie&#xDF;t diesen tab</de>
+<id>313</id>
 </text>
 <text>
-<en default="1">The value in this field is invalid</en>
+<en>The value in this field is invalid</en>
 <de>Die Variable in diesem Feld ist falsch</de>
+<id>314</id>
 </text>
 <text>
-<en default="1">January</en>
+<en>January</en>
 <de>J&#xE4;nner</de>
+<id>315</id>
 </text>
 <text>
-<en default="1">February</en>
+<en>February</en>
 <de>Februar</de>
+<id>316</id>
 </text>
 <text>
-<en default="1">March</en>
+<en>March</en>
 <de>M&#xE4;rz</de>
+<id>317</id>
 </text>
 <text>
-<en default="1">April</en>
+<en>April</en>
 <de>April</de>
+<id>318</id>
 </text>
 <text>
-<en default="1">May</en>
+<en>May</en>
 <de>Mai</de>
+<id>319</id>
 </text>
 <text>
-<en default="1">June</en>
+<en>June</en>
 <de>Juni</de>
+<id>320</id>
 </text>
 <text>
-<en default="1">July</en>
+<en>July</en>
 <de>Juli</de>
+<id>321</id>
 </text>
 <text>
-<en default="1">August</en>
+<en>August</en>
 <de>August</de>
+<id>322</id>
 </text>
 <text>
-<en default="1">September</en>
+<en>September</en>
 <de>September</de>
+<id>323</id>
 </text>
 <text>
-<en default="1">October</en>
+<en>October</en>
 <de>Oktober</de>
+<id>324</id>
 </text>
 <text>
-<en default="1">November</en>
+<en>November</en>
 <de>November</de>
+<id>325</id>
 </text>
 <text>
-<en default="1">December</en>
+<en>December</en>
 <de>Dezember</de>
+<id>326</id>
 </text>
 <text>
-<en default="1">Sunday</en>
+<en>Sunday</en>
 <de>Sonntag</de>
+<id>327</id>
 </text>
 <text>
-<en default="1">Monday</en>
+<en>Monday</en>
 <de>Montag</de>
+<id>328</id>
 </text>
 <text>
-<en default="1">Tuesday</en>
+<en>Tuesday</en>
 <de>Dienstag</de>
+<id>329</id>
 </text>
 <text>
-<en default="1">Wednesday</en>
+<en>Wednesday</en>
 <de>Mittwoch</de>
+<id>330</id>
 </text>
 <text>
-<en default="1">Thursday</en>
+<en>Thursday</en>
 <de>Donnerstag</de>
+<id>331</id>
 </text>
 <text>
-<en default="1">Friday</en>
+<en>Friday</en>
 <de>Freitag</de>
+<id>332</id>
 </text>
 <text>
-<en default="1">OK</en>
+<en>OK</en>
 <de>OK</de>
+<id>333</id>
 </text>
 <text>
-<en default="1">Yes</en>
+<en>Yes</en>
 <de>Ja</de>
+<id>334</id>
 </text>
 <text>
-<en default="1">No</en>
+<en>No</en>
 <de>Nein</de>
+<id>335</id>
 </text>
 <text>
-<en default="1">Today</en>
+<en>Today</en>
 <de>Heute</de>
+<id>336</id>
 </text>
 <text>
-<en default="1">This date is before the minimum date</en>
+<en>This date is before the minimum date</en>
 <de>Dieses Datum ist vor dem Mindestdatum</de>
+<id>337</id>
 </text>
 <text>
-<en default="1">This date is after the maximum date</en>
+<en>This date is after the maximum date</en>
 <de>Dieses Datum ist nach dem Maximaldatum</de>
+<id>338</id>
 </text>
 <text>
-<en default="1">Next Month (Control+Right)</en>
+<en>Next Month (Control+Right)</en>
 <de>n&#xE4;chstes Monat (Control + &#x279D;)</de>
+<id>339</id>
 </text>
 <text>
-<en default="1">Previous Month (Control+Left)</en>
+<en>Previous Month (Control+Left)</en>
 <de>letztes Monat (Control + &#x2190;)</de>
+<id>340</id>
 </text>
 <text>
-<en default="1">Choose a month (Control+Up/Down to move years)</en>
+<en>Choose a month (Control+Up/Down to move years)</en>
 <de>W&#xE4;hlen Sie ein Monat (Control + &#x2191;/&#x2193; um Jahre zu bewegen)</de>
+<id>341</id>
 </text>
 <text>
-<en default="1">{0} (Spacebar)</en>
+<en>{0} (Spacebar)</en>
 <de>{0} (Leertaste)</de>
+<id>342</id>
 </text>
 <text>
-<en default="1">m/d/y</en>
+<en>m/d/y</en>
 <de>m/t/j</de>
+<id>343</id>
 </text>
 <text>
-<en default="1">of {0}</en>
+<en>of {0}</en>
 <de>von {0}</de>
+<id>344</id>
 </text>
 <text>
-<en default="1">First Page</en>
+<en>First Page</en>
 <de>Erste Seite</de>
+<id>345</id>
 </text>
 <text>
-<en default="1">Previous Page</en>
+<en>Previous Page</en>
 <de>Vorige Seite</de>
+<id>346</id>
 </text>
 <text>
-<en default="1">Next Page</en>
+<en>Next Page</en>
 <de>N&#xE4;chste Seite</de>
+<id>347</id>
 </text>
 <text>
-<en default="1">Last Page</en>
+<en>Last Page</en>
 <de>Letzte Seite</de>
+<id>348</id>
 </text>
 <text>
-<en default="1">Refresh</en>
+<en>Refresh</en>
 <de>Neu laden</de>
+<id>349</id>
 </text>
 <text>
-<en default="1">Displaying {0} - {1} of {2}</en>
+<en>Displaying {0} - {1} of {2}</en>
 <de>Zeige {0} - {1} von {2}</de>
+<id>350</id>
 </text>
 <text>
-<en default="1">No data to display</en>
+<en>No data to display</en>
 <de>Keine Daten zur Anzeige vorhanden</de>
+<id>351</id>
 </text>
 <text>
-<en default="1">The minimum length for this field is {0}</en>
+<en>The minimum length for this field is {0}</en>
 <de>Die Mindestl&#xE4;nge f&#xFC;r dieses Feld ist {0}</de>
+<id>352</id>
 </text>
 <text>
-<en default="1">The maximum length for this field is {0}</en>
+<en>The maximum length for this field is {0}</en>
 <de>Die Maximall&#xE4;nge f&#xFC;r dieses Feld ist {0}</de>
+<id>353</id>
 </text>
 <text>
-<en default="1">This field is required</en>
+<en>This field is required</en>
 <de>Dieses Feld ist erforderlich</de>
+<id>354</id>
 </text>
 <text>
-<en default="1">The minimum value for this field is {0}</en>
+<en>The minimum value for this field is {0}</en>
 <de>Der Mindestwert f&#xFC;r dieses Feld ist {0}</de>
+<id>355</id>
 </text>
 <text>
-<en default="1">The maximum value for this field is {0}</en>
+<en>The maximum value for this field is {0}</en>
 <de>Der Maximalwert f&#xFC;r dieses Feld ist {0}</de>
+<id>356</id>
 </text>
 <text>
-<en default="1">{0} is not a valid number</en>
+<en>{0} is not a valid number</en>
 <de>{0} ist keine g&#xFC;ltige Nummer.</de>
+<id>357</id>
 </text>
 <text>
-<en default="1">Disabled</en>
+<en>Disabled</en>
 <de>Ausgeblendet</de>
+<id>358</id>
 </text>
 <text>
-<en default="1">The date in this field must be after {0}</en>
+<en>The date in this field must be after {0}</en>
 <de>Das Datum in diesem Feld muss nach dem {0} sein</de>
+<id>359</id>
 </text>
 <text>
-<en default="1">The date in this field must be before {0}</en>
+<en>The date in this field must be before {0}</en>
 <de>Das Datum in diesem Feld muss vor dem {0} sein</de>
+<id>360</id>
 </text>
 <text>
-<en default="1">{0} is not a valid date - it must be in the format {1}</en>
+<en>{0} is not a valid date - it must be in the format {1}</en>
 <de>{0} ist kein g&#xFC;ltiges Datum - es muss im Format {1} sein</de>
+<id>361</id>
 </text>
 <text>
-<en default="1">This field should be an e-mail address in the format "user@domain.com"</en>
+<en>This field should be an e-mail address in the format "user@domain.com"</en>
 <de>Dieses Feld sollte eine E-Mail Adresse im Format "user@domain.com" enthalten.</de>
+<id>362</id>
 </text>
 <text>
-<en default="1">This field should be a URL in the format "http:/'+'/www.domain.com"</en>
+<en>This field should be a URL in the format "http:/'+'/www.domain.com"</en>
 <de>Dieses Feld sollte eine Webadresse im Format "http:/'+'/www.domain.com" enthalten.</de>
+<id>363</id>
 </text>
 <text>
-<en default="1">This field should only contain letters and _</en>
+<en>This field should only contain letters and _</en>
 <de>Dieses Feld sollte nur Zeichen und _ enthalten</de>
+<id>364</id>
 </text>
 <text>
-<en default="1">This field should only contain letters, numbers and _</en>
+<en>This field should only contain letters, numbers and _</en>
 <de>Dieses Feld sollte nur Zeichen, Zahlen und _ enthalten</de>
+<id>365</id>
 </text>
 <text>
-<en default="1">Please enter the URL for the link:</en>
+<en>Please enter the URL for the link:</en>
 <de>Bitte geben Sie die Webadresse f&#xFC;r den Link ein:</de>
+<id>366</id>
 </text>
 <text>
-<en default="1">Bold (Ctrl+B)</en>
+<en>Bold (Ctrl+B)</en>
 <de>Fett (Ctrl+B)</de>
+<id>367</id>
 </text>
 <text>
-<en default="1">Make the selected text bold.</en>
+<en>Make the selected text bold.</en>
 <de>Schreibt den markierten Text fett.</de>
+<id>368</id>
 </text>
 <text>
-<en default="1">Italic (Ctrl+I)</en>
+<en>Italic (Ctrl+I)</en>
 <de>Kursiv (Ctrl+I)</de>
+<id>369</id>
 </text>
 <text>
-<en default="1">Make the selected text italic.</en>
+<en>Make the selected text italic.</en>
 <de>Schreibt den markierten Text kursiv.</de>
+<id>370</id>
 </text>
 <text>
-<en default="1">Underline (Ctrl+U)</en>
+<en>Underline (Ctrl+U)</en>
 <de>Unterstreichen (Ctrl+U)</de>
+<id>371</id>
 </text>
 <text>
-<en default="1">Underline the selected text.</en>
+<en>Underline the selected text.</en>
 <de>Unterstreicht den markierten Text.</de>
+<id>372</id>
 </text>
 <text>
-<en default="1">Grow Text</en>
+<en>Grow Text</en>
 <de>Text vergr&#xF6;&#xDF;ern.</de>
+<id>373</id>
 </text>
 <text>
-<en default="1">Increase the font size.</en>
+<en>Increase the font size.</en>
 <de>Die Schriftgr&#xF6;&#xDF;e wird vergr&#xF6;&#xDF;ert.</de>
+<id>374</id>
 </text>
 <text>
-<en default="1">Shrink Text</en>
+<en>Shrink Text</en>
 <de>Text verkleinern.</de>
+<id>375</id>
 </text>
 <text>
-<en default="1">Decrease the font size.</en>
+<en>Decrease the font size.</en>
 <de>Die Schriftgr&#xF6;&#xDF;e wird verkleinern.</de>
+<id>376</id>
 </text>
 <text>
-<en default="1">Text Highlight Color</en>
+<en>Text Highlight Color</en>
 <de>Text-Hervorheben Farbe.</de>
+<id>377</id>
 </text>
 <text>
-<en default="1">Change the background color of the selected text.</en>
+<en>Change the background color of the selected text.</en>
 <de>Wechselt die Hintergund-Farbe des markierten Textes.</de>
+<id>378</id>
 </text>
 <text>
-<en default="1">Font Color</en>
+<en>Font Color</en>
 <de>Schrift Farbe</de>
+<id>379</id>
 </text>
 <text>
-<en default="1">Change the color of the selected text.</en>
+<en>Change the color of the selected text.</en>
 <de>Wechselt die Farbe des markierten Textes.</de>
+<id>380</id>
 </text>
 <text>
-<en default="1">Align Text Left</en>
+<en>Align Text Left</en>
 <de>Text links ausrichten.</de>
+<id>381</id>
 </text>
 <text>
-<en default="1">Align text to the left.</en>
+<en>Align text to the left.</en>
 <de>Richtet den Text linksb&#xFC;ndig aus.</de>
+<id>382</id>
 </text>
 <text>
-<en default="1">Center Text</en>
+<en>Center Text</en>
 <de>Text zentrieren.</de>
+<id>383</id>
 </text>
 <text>
-<en default="1">Center text in the editor.</en>
+<en>Center text in the editor.</en>
 <de>Richtet den Text zentriert aus.</de>
+<id>384</id>
 </text>
 <text>
-<en default="1">Align Text Right</en>
+<en>Align Text Right</en>
 <de>Text rechts ausrichten.</de>
+<id>385</id>
 </text>
 <text>
-<en default="1">Align text to the right.</en>
+<en>Align text to the right.</en>
 <de>Richtet den Text rechtsb&#xFC;ndig aus.</de>
+<id>386</id>
 </text>
 <text>
-<en default="1">Bullet List</en>
+<en>Bullet List</en>
 <de>Aufz&#xE4;hlungsliste</de>
+<id>387</id>
 </text>
 <text>
-<en default="1">Start a bulleted list.</en>
+<en>Start a bulleted list.</en>
 <de>Eine Nummerierte Liste</de>
+<id>388</id>
 </text>
 <text>
-<en default="1">Numbered List</en>
+<en>Numbered List</en>
 <de>Nummerierte Liste</de>
+<id>389</id>
 </text>
 <text>
-<en default="1">Start a numbered list.</en>
+<en>Start a numbered list.</en>
 <de>Eine Aufz&#xE4;hlungsliste beginnen.</de>
+<id>390</id>
 </text>
 <text>
-<en default="1">Make the selected text a hyperlink.</en>
+<en>Make the selected text a hyperlink.</en>
 <de>Erzeugt aus dem markierten Text einen Hyperlink.</de>
+<id>391</id>
 </text>
 <text>
-<en default="1">Source Edit</en>
+<en>Source Edit</en>
 <de>Quellcode editieren</de>
+<id>392</id>
 </text>
 <text>
-<en default="1">Switch to source editing mode.</en>
+<en>Switch to source editing mode.</en>
 <de>Schaltet in den Quellcode-Editier Modus.</de>
+<id>393</id>
 </text>
 <text>
-<en default="1">Sort Ascending</en>
+<en>Sort Ascending</en>
 <de>Aufsteigend sortieren</de>
+<id>394</id>
 </text>
 <text>
-<en default="1">Sort Descending</en>
+<en>Sort Descending</en>
 <de>Absteigend sortieren</de>
+<id>395</id>
 </text>
 <text>
-<en default="1">Lock Column</en>
+<en>Lock Column</en>
 <de>Spalten sperren</de>
+<id>396</id>
 </text>
 <text>
-<en default="1">Unlock Column</en>
+<en>Unlock Column</en>
 <de>Spalten freigeben</de>
+<id>397</id>
 </text>
 <text>
-<en default="1">Columns</en>
+<en>Columns</en>
 <de>Spalten</de>
+<id>398</id>
 </text>
 <text>
-<en default="1">(None)</en>
+<en>(None)</en>
 <de>(Keine)</de>
+<id>399</id>
 </text>
 <text>
-<en default="1">Group By This Field</en>
+<en>Group By This Field</en>
 <de>Mit diesem Feld gruppieren</de>
+<id>400</id>
 </text>
 <text>
-<en default="1">Show in Groups</en>
+<en>Show in Groups</en>
 <de>Gruppiert anzeigen</de>
+<id>401</id>
 </text>
 <text>
-<en default="1">Value</en>
+<en>Value</en>
 <de>Variable</de>
+<id>402</id>
 </text>
 <text>
-<en default="1">Drag to resize.</en>
+<en>Drag to resize.</en>
 <de>Ziehen um die Gr&#xF6;&#xDF;e zu ver&#xE4;ndern.</de>
+<id>403</id>
 </text>
 <text>
-<en default="1">Drag to resize. Double click to hide.</en>
+<en>Drag to resize. Double click to hide.</en>
 <de>Ziehen um die Gr&#xF6;&#xDF;e zu ver&#xE4;ndern. Doppelt klicken um unsichtabr zu machen.</de>
+<id>404</id>
 </text>
 <text>
-<en default="1">Do you really want to delete this entry:\n\n"</en>
+<en>Do you really want to delete this entry:\n\n"</en>
 <de>Wollen Sie diesen Beitrag wirklich l&#xF6;schen:\n\n"</de>
+<id>405</id>
 </text>
 <text>
-<en default="1">Sitetree</en>
+<en>Sitetree</en>
 <de>Seitenbaum</de>
+<id>406</id>
 </text>
 <text>
-<en default="1">Components</en>
+<en>Components</en>
 <de>Komponenten</de>
+<id>407</id>
 </text>
 <text>
-<en default="1">Language</en>
+<en>Language</en>
 <de>Sprache</de>
+<id>408</id>
 </text>
 <text>
-<en default="1">lang</en>
+<en>lang</en>
 <de>Spr.</de>
+<id>409</id>
 </text>
 <text>
-<en default="1">Small Image (optional)</en>
+<en>Small Image (optional)</en>
 <de>Kleines Bild (optional)</de>
+<id>410</id>
 </text>
 <text>
-<en default="1">Paragraphs</en>
+<en>Paragraphs</en>
 <de>Abs&#xE4;tze</de>
+<id>411</id>
 </text>
 <text>
-<en default="1">Code {0} Error Returned</en>
+<en>Code {0} Error Returned</en>
 <de>Code {0} Fehler</de>
+<id>412</id>
 </text>
 <text>
-<en default="1">Download</en>
+<en>Download</en>
 <de>Datei Herunterladen</de>
+<id>413</id>
 </text>
 <text>
-<en default="1">Logout</en>
+<en>Logout</en>
 <de>Abmelden</de>
+<id>414</id>
 </text>
 <text>
-<en default="1">Line</en>
+<en>Line</en>
 <de>Linie</de>
+<id>415</id>
 </text>
 <text>
-<en default="1">Headline</en>
+<en>Headline</en>
 <de>&#xDC;berschrift</de>
+<id>416</id>
 </text>
 <text>
-<en default="1">Images</en>
+<en>Images</en>
 <de>Bilder</de>
+<id>417</id>
 </text>
 <text>
-<en default="1">Links</en>
+<en>Links</en>
 <de>Links</de>
+<id>418</id>
 </text>
 <text>
-<en default="1">TextImage</en>
+<en>TextImage</en>
 <de>Text-Bild</de>
+<id>419</id>
 </text>
 <text>
-<en default="1">TextImages</en>
+<en>TextImages</en>
 <de>Text-Bilder</de>
+<id>420</id>
 </text>
 <text>
-<en default="1">Reload</en>
+<en>Reload</en>
 <de>Neu laden</de>
+<id>421</id>
 </text>
 <text>
-<en default="1">Save properties</en>
+<en>Save properties</en>
 <de>Eigenschaften speichern</de>
+<id>422</id>
 </text>
 <text>
-<en default="1">Login successful</en>
+<en>Login successful</en>
 <de>Erfolgreich eingeloggt</de>
+<id>423</id>
 </text>
 <text>
-<en default="1">Back to topic</en>
+<en>Back to topic</en>
 <de>Zur&#xFC;ck zum Thema</de>
+<id>424</id>
 </text>
 <text>
-<en default="1">Back to group</en>
+<en>Back to group</en>
 <de>Zur&#xFC;ck zur Gruppe</de>
+<id>425</id>
 </text>
 <text>
-<en default="1">Back to forum</en>
+<en>Back to forum</en>
 <de>Zur&#xFC;ck zum Forum</de>
+<id>426</id>
 </text>
 <text>
-<en default="1">to get back to the formular</en>
+<en>to get back to the formular</en>
 <de>um zum Formular zur&#xFC;ck zu gelangen</de>
+<id>427</id>
 </text>
 <text>
-<en default="1">Forum name</en>
+<en>Forum name</en>
 <de>Name f&#xFC;r Forum</de>
+<id>428</id>
 </text>
 <text>
-<en default="1">Location</en>
+<en>Location</en>
 <de>Ort</de>
+<id>429</id>
 </text>
-<text context="forum">
-<en default="1">Location</en>
+<text>
+<context>forum</context>
+<en>Location</en>
 <de>Wohnort</de>
+<id>430</id>
 </text>
 <text>
-<en default="1">Avatar (Image)</en>
+<en>Avatar (Image)</en>
 <de>Avatar (Bild)</de>
+<id>431</id>
 </text>
 <text>
-<en default="1">Delete current Avatar</en>
+<en>Delete current Avatar</en>
 <de>Aktuellen Avatar l&#xF6;schen</de>
+<id>432</id>
 </text>
 <text>
-<en default="1">You may upload a picture that is displayed in your profile and in each of your posts in a small version (40x40 Pixels).</en>
+<en>You may upload a picture that is displayed in your profile and in each of your posts in a small version (40x40 Pixels).</en>
 <de>Hier k&#xF6;nnen Sie ein Bild hochladen, welches in Ihrem Profil und in verkleinerter Version (40x40 Pixel) bei Ihren Beitr&#xE4;gen angezeigt wird.</de>
+<id>433</id>
 </text>
 <text>
-<en default="1">For optimized displayment the picture should have a width of at least 150 Pixels, the file size may not be bigger than 2 MB.</en>
+<en>For optimized displayment the picture should have a width of at least 150 Pixels, the file size may not be bigger than 2 MB.</en>
 <de>F&#xFC;r eine optimale Darstellung sollte das Bild mindestens 150 Pixel breit sein, die maximale Dateigr&#xF6;&#xDF;e darf 2 MB nicht &#xFC;berschreiten.</de>
+<id>434</id>
 </text>
 <text>
-<en default="1">Delete avatar</en>
+<en>Delete avatar</en>
 <de>Avatar l&#xF6;schen</de>
+<id>435</id>
 </text>
-<text context="forum">
-<en default="1">Signature</en>
+<text>
+<context>forum</context>
+<en>Signature</en>
 <de>Signatur</de>
+<id>436</id>
 </text>
 <text>
-<en default="1">will be displayed at the end of each post</en>
+<en>will be displayed at the end of each post</en>
 <de>wird am Ende eines jeden Forumbeitrags angeh&#xE4;ngt</de>
+<id>437</id>
 </text>
 <text>
-<en default="1">File-Type not allowed. Only Images are allowed.</en>
+<en>File-Type not allowed. Only Images are allowed.</en>
 <de>_</de>
-<de>_</de>
+<id>438</id>
 </text>
 <text>
-<en default="1">Show Original</en>
+<en>Show Original</en>
 <de>_</de>
-<de>_</de>
+<id>439</id>
 </text>
 <text>
-<en default="1">Assign</en>
+<en>Assign</en>
 <de>Zuweisen</de>
+<id>440</id>
 </text>
 <text>
-<en default="1">Assign by text input</en>
+<en>Assign by text input</en>
 <de>Durch Texteingabe zuweisen</de>
+<id>441</id>
 </text>
 <text>
-<en default="1">Plese enter in both fields the password which you want to use for your useraccount</en>
+<en>Plese enter in both fields the password which you want to use for your useraccount</en>
 <de>_</de>
+<id>442</id>
 </text>
 <text>
-<en default="1">Original Size</en>
+<en>Original Size</en>
 <de>_</de>
+<id>443</id>
 </text>
 <text>
-<en default="1">By</en>
+<en>By</en>
 <de>Von</de>
+<id>444</id>
 </text>
 <text>
-<en default="1">Latest posts from this topic</en>
+<en>Latest posts from this topic</en>
 <de>Die letzten Beitr&#xE4;ge in diesem Thema</de>
+<id>445</id>
 </text>
 <text>
-<en default="1">Last entry by</en>
+<en>Last entry by</en>
 <de>Letzter Beitrag von</de>
+<id>446</id>
 </text>
 <text>
-<en default="1">Y-m-d</en>
+<en>Y-m-d</en>
 <de>d.m.Y</de>
+<id>447</id>
 </text>
 <text>
-<en default="1">Y-m-d H:i</en>
+<en>Y-m-d H:i</en>
 <de>d.m.Y H:i</de>
+<id>448</id>
 </text>
 <text>
-<en default="1">no selection</en>
+<en>no selection</en>
 <de>keine Auswahl</de>
+<id>449</id>
 </text>
 <text>
-<en default="1">add new entry</en>
+<en>add new entry</en>
 <de>_</de>
+<id>450</id>
 </text>
 <text>
-<en default="1">Edit Paragraph</en>
+<en>Edit Paragraph</en>
 <de>_</de>
+<id>451</id>
 </text>
 <text>
-<en default="1">Plese enter in both fields the password which you want to use
+<en>Plese enter in both fields the password which you want to use
     	for your useraccount</en>
 <de>_</de>
+<id>452</id>
 </text>
 <text>
-<en default="1">There is no editing for this component.</en>
+<en>There is no editing for this component.</en>
 <de>Diese Komponente hat keinen Bearbeitungsbereich.</de>
+<id>453</id>
 </text>
 <text>
-<en default="1">An error has occurred. Please try again later.</en>
+<en>An error has occurred. Please try again later.</en>
 <de>Ein Fehler ist aufgetreten. Bitte versuchen Sie es sp&#xE4;ter wieder.</de>
+<id>454</id>
 </text>
 <text>
-<en default="1">on</en>
+<en>on</en>
 <de>am</de>
+<id>455</id>
 </text>
 <text>
-<en default="1">Profile picture</en>
+<en>Profile picture</en>
 <de>Profilbild</de>
+<id>456</id>
 </text>
 <text>
-<en default="1">Delete picture</en>
+<en>Delete picture</en>
 <de>Bild l&#xF6;schen</de>
+<id>457</id>
 </text>
 <text>
-<en default="1">Delete current picture</en>
+<en>Delete current picture</en>
 <de>Aktuelles Bild l&#xF6;schen</de>
+<id>458</id>
 </text>
 <text>
-<en default="1">New post in observed thread</en>
+<en>New post in observed thread</en>
 <de>Neuer Beitrag in beobachtetem Thema</de>
+<id>459</id>
 </text>
 <text>
-<en default="1">A new Post has been written in thread:</en>
+<en>A new Post has been written in thread:</en>
 <de>In folgendem Thema wurde ein neuer Beitrag verfasst:</de>
+<id>460</id>
 </text>
 <text>
-<en default="1">in the forum of:</en>
+<en>in the forum of:</en>
 <de>im Forum von:</de>
+<id>461</id>
 </text>
 <text>
-<en default="1">Click the following link to go directly to the mentioned thread:</en>
+<en>Click the following link to go directly to the mentioned thread:</en>
 <de>Klicken Sie auf folgenden Link um direkt zum betreffenden Thema zu gelangen:</de>
+<id>462</id>
 </text>
 <text>
-<en default="1">Please type in your email address in the field below.</en>
+<en>Please type in your email address in the field below.</en>
 <de>Bitte geben Sie im Feld Ihre Email-Adresse ein.</de>
+<id>463</id>
 </text>
 <text>
-<en default="1">You will receive an email with a passwort reset link and further instructions.</en>
+<en>You will receive an email with a passwort reset link and further instructions.</en>
 <de>Sie erhalten eine E-Mail mit weiteren Anweisungen und einem Link, welcher ihr Passwort zur&#xFC;cksetzt.</de>
+<id>464</id>
 </text>
 <text>
-<en default="1">Post</en>
+<en>Post</en>
 <de>Beitrag</de>
+<id>465</id>
 </text>
 <text>
-<en default="1">Lost your password?</en>
+<en>Lost your password?</en>
 <de>Passwort vergessen?</de>
+<id>466</id>
 </text>
 <text>
-<en default="1">User not existent in this web.</en>
+<en>User not existent in this web.</en>
 <de>Dieser Benutzer existiert leider nicht.</de>
+<id>467</id>
 </text>
 <text>
 <en>Please write friendly in your posts. Every author is liable for the content of his/her posts. Offending posts will be deleted without a comment.</en>
 <de>Bitte bleibt in den Beitr&#xE4;gen bei einem freundlichen Umgangston. Jeder Verfasser haftet f&#xFC;r s&#xE4;mtliche von ihm ver&#xF6;ffentlichte Beitr&#xE4;ge selbst. Beleidigende oder verletzende Beitr&#xE4;ge werden von uns ohne Kommentar gel&#xF6;scht.</de>
+<id>468</id>
 </text>
 <text>
 <en>Do you really wish to delete this post?</en>
 <de>M&#xF6;chten Sie diesen Beitrag wirklich l&#xF6;schen?</de>
+<id>469</id>
 </text>
 <text>
 <en>Created by</en>
 <de>Erstellt von</de>
+<id>470</id>
 </text>
 <text>
 <en>Create a new topic</en>
 <de>Neues Thema erstellen</de>
+<id>471</id>
 </text>
 <text>
 <en>New entry in guestbook</en>
 <de>Neuer Eintrag im Gaestebuch</de>
+<id>472</id>
 </text>
 <text>
 <en>Users</en>
 <de>Benutzer</de>
+<id>473</id>
 </text>
 <text>
 <en>Account - Images</en>
 <de>Benutzerprofil - Bilder</de>
+<id>474</id>
 </text>
 <text>
 <en>Upload new image</en>
 <de>Neues Bild hochladen</de>
+<id>475</id>
 </text>
 <text>
 <en>Upload</en>
 <de>Hochladen</de>
+<id>476</id>
 </text>
 <text>
-<en default="1">Add {0}</en>
+<en>Add {0}</en>
 <de>{0} hinzuf&#xFC;gen</de>
+<id>477</id>
 </text>
 <text>
-<en default="1">Edit {0}</en>
+<en>Edit {0}</en>
 <de>{0} bearbeiten</de>
+<id>478</id>
 </text>
 <text>
-<en default="1">Saving...</en>
+<en>Saving...</en>
 <de>Speichern...</de>
+<id>479</id>
 </text>
 <text>
-<en default="1">Deleting...</en>
+<en>Deleting...</en>
 <de>L&#xF6;schen...</de>
+<id>480</id>
 </text>
 <text>
-<en default="1">Duplicating...</en>
+<en>Duplicating...</en>
 <de>Duplizieren</de>
+<id>481</id>
 </text>
 <text>
-<en default="1">clubId is required</en>
+<en>clubId is required</en>
 <de>clubId ist erforderlich</de>
+<id>482</id>
 </text>
 <text>
-<en default="1">Events.show Categories</en>
+<en>Events.show Categories</en>
 <de>_</de>
+<id>483</id>
 </text>
 <text>
-<en default="1">empty</en>
+<en>empty</en>
 <de>leer</de>
+<id>484</id>
 </text>
 <text>
-<en default="1">Upload File</en>
+<en>Upload File</en>
 <de>Datei hochladen</de>
+<id>485</id>
 </text>
 <text>
-<en default="1">Delete File</en>
+<en>Delete File</en>
 <de>Datei l&#xF6;schen</de>
+<id>486</id>
 </text>
 <text>
-<en default="1">Uploading file</en>
+<en>Uploading file</en>
 <de>Datei wird hochgeladen</de>
+<id>487</id>
 </text>
 <text>
-<en default="1">Edit Styles</en>
+<en>Edit Styles</en>
 <de>Formatvorlagen bearbeiten</de>
+<id>488</id>
 </text>
 <text>
-<en default="1">Modify and Create Styles.</en>
+<en>Modify and Create Styles.</en>
 <de>Bearbeiten und erzeugen von Formatvorlagen.</de>
+<id>489</id>
 </text>
 <text>
-<en default="1">File upload</en>
+<en>File upload</en>
 <de>Datei hochladen</de>
+<id>490</id>
 </text>
 <text>
-<en default="1">Info</en>
+<en>Info</en>
 <de>Info</de>
+<id>491</id>
 </text>
 <text>
-<en default="1">Do you really want to delete this entry:</en>
+<en>Do you really want to delete this entry:</en>
 <de>Wollen Sie diesen Eintrag wirklich l&#xF6;schen:</de>
+<id>492</id>
 </text>
 <text>
-<en default="1">yyyy-mm-dd</en>
+<en>yyyy-mm-dd</en>
 <de>dd.mm.yyyy</de>
+<id>493</id>
 </text>
 <text>
-<en default="1">Small Image</en>
+<en>Small Image</en>
 <de>Kleines Bild</de>
+<id>494</id>
 </text>
 <text>
-<en default="1">Margin top</en>
+<en>Margin top</en>
 <de>Abstand oben</de>
+<id>495</id>
 </text>
 <text>
-<en default="1">Margin bottom</en>
+<en>Margin bottom</en>
 <de>Abstand unten</de>
+<id>496</id>
 </text>
 <text>
-<en default="1">Text Align</en>
+<en>Text Align</en>
 <de>Textausrichtung</de>
+<id>497</id>
 </text>
 <text>
-<en default="1">Center</en>
+<en>Center</en>
 <de>Zentriert</de>
+<id>498</id>
 </text>
 <text>
-<en default="1">Justify</en>
+<en>Justify</en>
 <de>Blocksatz</de>
+<id>499</id>
 </text>
 <text>
-<en default="1">Tag</en>
+<en>Tag</en>
 <de>_</de>
+<id>500</id>
 </text>
 <text>
-<en default="1">Position</en>
+<en>Position</en>
 <de>Position</de>
+<id>501</id>
 </text>
 <text>
-<en default="1">Selector</en>
+<en>Selector</en>
 <de>_</de>
+<id>502</id>
 </text>
 <text>
-<en default="1">Default</en>
+<en>Default</en>
 <de>Grundeinstellung</de>
+<id>503</id>
 </text>
 <text>
-<en default="1">Normal</en>
+<en>Normal</en>
 <de>_</de>
+<id>504</id>
 </text>
 <text>
-<en default="1">Normal (p)</en>
+<en>Normal (p)</en>
 <de>_</de>
+<id>505</id>
 </text>
 <text>
-<en default="1">&#xDC;berschrift 1 (h1)</en>
+<en>&#xDC;berschrift 1 (h1)</en>
 <de>_</de>
+<id>506</id>
 </text>
 <text>
-<en default="1">&#xDC;berschrift 2 (h2)</en>
+<en>&#xDC;berschrift 2 (h2)</en>
 <de>_</de>
+<id>507</id>
 </text>
 <text>
-<en default="1">&#xDC;berschrift 3 (h3)</en>
+<en>&#xDC;berschrift 3 (h3)</en>
 <de>_</de>
+<id>508</id>
 </text>
 <text>
-<en default="1">&#xDC;berschrift 4 (h4)</en>
+<en>&#xDC;berschrift 4 (h4)</en>
 <de>_</de>
+<id>509</id>
 </text>
 <text>
-<en default="1">&#xDC;berschrift 5 (h5)</en>
+<en>&#xDC;berschrift 5 (h5)</en>
 <de>_</de>
+<id>510</id>
 </text>
 <text>
-<en default="1">&#xDC;berschrift 6 (h6)</en>
+<en>&#xDC;berschrift 6 (h6)</en>
 <de>_</de>
+<id>511</id>
 </text>
 <text>
-<en default="1">Block-Styles</en>
+<en>Block-Styles</en>
 <de>Absatz-Formatvorlagen</de>
+<id>512</id>
 </text>
 <text>
-<en default="1">Block</en>
+<en>Block</en>
 <de>Absatz</de>
+<id>513</id>
 </text>
 <text>
-<en default="1">Inline-Styles</en>
+<en>Inline-Styles</en>
 <de>Text-Formatvorlagen</de>
+<id>514</id>
 </text>
 <text>
-<en default="1">Inline</en>
+<en>Inline</en>
 <de>Textformat</de>
+<id>515</id>
 </text>
 <text>
-<en default="1">Master-Styles</en>
+<en>Master-Styles</en>
 <de>Master-Formatvorlagen</de>
+<id>516</id>
 </text>
 <text>
-<en default="1">Color</en>
+<en>Color</en>
 <de>Farbe</de>
+<id>517</id>
 </text>
 <text>
-<en default="1">Font Weight</en>
+<en>Font Weight</en>
 <de>Schriftschnitt</de>
+<id>518</id>
 </text>
 <text>
-<en default="1">Bold</en>
+<en>Bold</en>
 <de>Fett</de>
+<id>519</id>
 </text>
 <text>
-<en default="1">Bolder</en>
+<en>Bolder</en>
 <de>Fetter</de>
+<id>520</id>
 </text>
 <text>
-<en default="1">Lighter</en>
+<en>Lighter</en>
 <de>Heller</de>
+<id>521</id>
 </text>
 <text>
-<en default="1">Font Family</en>
+<en>Font Family</en>
 <de>Schriftart</de>
+<id>522</id>
 </text>
 <text>
-<en default="1">Font size</en>
+<en>Font size</en>
 <de>Schriftgrad</de>
+<id>523</id>
 </text>
 <text>
-<en default="1">Additional Styles</en>
+<en>Additional Styles</en>
 <de>Zus&#xE4;tzliche CSS Einstellungen</de>
+<id>524</id>
 </text>
 <text>
-<en default="1">You can't delete master styles</en>
+<en>You can't delete master styles</en>
 <de>Master Formatvorlagen k&#xF6;nnen nicht gel&#xF6;scht werden</de>
+<id>525</id>
 </text>
 <text>
-<en default="1">Beschreibungstext</en>
+<en>Beschreibungstext</en>
 <de>Beschreibungstext</de>
+<id>526</id>
 </text>
 <text>
-<en default="1">Linktype</en>
+<en>Linktype</en>
 <de>Linktyp</de>
+<id>527</id>
 </text>
 <text>
-<en default="1">Settings</en>
+<en>Settings</en>
 <de>Einstellungen</de>
+<id>528</id>
 </text>
 <text>
-<en default="1">Forum Feed</en>
+<en>Forum Feed</en>
 <de>Forum-Feed</de>
+<id>529</id>
 </text>
 <text>
-<en default="1">You may upload a picture that is displayed in your profile
+<en>You may upload a picture that is displayed in your profile
                 and in each of your posts in a small version (40x40 Pixels).</en>
 <de>Sie k&#xF6;nnen ein Bild hochladen, das in in Ihrem Profil angezeigt wird
                 und in jedem Ihrer Schreiben als kleine Version (40x40 Pixels).</de>
+<id>530</id>
 </text>
 <text>
-<en default="1">For optimized displayment the picture should have a width of at least 150 Pixels,
+<en>For optimized displayment the picture should have a width of at least 150 Pixels,
                 the file size may not be bigger than 2 MB.</en>
 <de>F&#xFC;r eine optimale Bildschirmdarstellung sollten das Bild eine Mindestbreite von 150 Pixel haben,
                 die Dateigr&#xF6;&#xDF;e sollte nicht mehr als 2 MB betragen.</de>
+<id>531</id>
 </text>
 <text>
-<en default="1">Information</en>
+<en>Information</en>
 <de>Information</de>
+<id>532</id>
 </text>
 <text>
-<en default="1">Link Image</en>
+<en>Link Image</en>
 <de>Bild Link</de>
+<id>533</id>
 </text>
 <text>
-<en default="1">Text Image enlarge</en>
+<en>Text Image enlarge</en>
 <de>Text Bildvergr&#xF6;&#xDF;erung</de>
+<id>534</id>
 </text>
 <text>
-<en default="1">Text Image Link</en>
+<en>Text Image Link</en>
 <de>Text Bild Link</de>
+<id>535</id>
 </text>
 <text>
-<en default="1">Links Images</en>
+<en>Links Images</en>
 <de>Bilder Links</de>
+<id>536</id>
 </text>
 <text>
-<en default="1">Show News</en>
+<en>Show News</en>
 <de>Nachrichten zeigen</de>
+<id>537</id>
 </text>
 <text>
-<en default="1">News.List</en>
+<en>News.List</en>
 <de>News.List</de>
+<id>538</id>
 </text>
 <text>
-<en default="1">Months</en>
+<en>Months</en>
 <de>Monate</de>
+<id>539</id>
 </text>
 <text>
-<en default="1">News Feed</en>
+<en>News Feed</en>
 <de>News Feed</de>
+<id>540</id>
 </text>
 <text>
-<en default="1">Categories</en>
+<en>Categories</en>
 <de>Kategorien</de>
+<id>541</id>
 </text>
 <text>
-<en default="1">News.show Categories</en>
+<en>News.show Categories</en>
 <de>News.show Kategorien</de>
+<id>542</id>
 </text>
 <text>
-<en default="1">Request password</en>
+<en>Request password</en>
 <de>Passwort anfordern</de>
+<id>543</id>
 </text>
 <text>
-<en default="1">{0} '{1}' must be a subclass of {2}.</en>
+<en>{0} '{1}' must be a subclass of {2}.</en>
 <de>{0} '{1}' muss eine Unterklasse von {2} sein.</de>
+<id>544</id>
 </text>
 <text>
-<en default="1">Label</en>
+<en>Label</en>
 <de>Bezeichnung</de>
+<id>545</id>
 </text>
 <text>
-<en default="1">Fieldset</en>
+<en>Fieldset</en>
 <de>Fieldset</de>
+<id>546</id>
 </text>
 <text>
-<en default="1">Url</en>
+<en>Url</en>
 <de>Internetadresse</de>
+<id>547</id>
 </text>
 <text>
-<en default="1">Alpha</en>
+<en>Alpha</en>
 <de>Zeichen</de>
+<id>548</id>
 </text>
 <text>
-<en default="1">Alpha Numeric</en>
+<en>Alpha Numeric</en>
 <de>Zeichen und Zahlen</de>
+<id>549</id>
 </text>
 <text>
-<en default="1">Maximum Value</en>
+<en>Maximum Value</en>
 <de>Maximum</de>
+<id>550</id>
 </text>
 <text>
-<en default="1">Minimum Value</en>
+<en>Minimum Value</en>
 <de>Minimum</de>
+<id>551</id>
 </text>
 <text>
-<en default="1">Allow Negative</en>
+<en>Allow Negative</en>
 <de>Negative Zahlen erlaubt</de>
+<id>552</id>
 </text>
 <text>
-<en default="1">Allow Decimals</en>
+<en>Allow Decimals</en>
 <de>Dezimalzahlen erlaubt</de>
+<id>553</id>
 </text>
 <text>
-<en default="1">Allow Blank</en>
+<en>Allow Blank</en>
 <de>Leerzeichen erlaubt</de>
+<id>554</id>
 </text>
 <text>
-<en default="1">Values</en>
+<en>Values</en>
 <de>Variablen</de>
+<id>555</id>
 </text>
 <text>
-<en default="1">Number Field</en>
+<en>Number Field</en>
 <de>Zahlenfeld</de>
+<id>556</id>
 </text>
 <text>
-<en default="1">Text Area</en>
+<en>Text Area</en>
 <de>Textfeld (mehrzeilig)</de>
+<id>557</id>
 </text>
 <text>
-<en default="1">Select Field</en>
+<en>Select Field</en>
 <de>Auswahlfeld</de>
+<id>558</id>
 </text>
 <text>
-<en default="1">Checkbox</en>
+<en>Checkbox</en>
 <de>Kontrollk&#xE4;stchen</de>
+<id>559</id>
 </text>
 <text>
-<en default="1">This is not an image.</en>
+<en>This is not an image.</en>
 <de>Das ist kein Bild.</de>
+<id>560</id>
 </text>
 <text>
-<en default="1">Text Field</en>
+<en>Text Field</en>
 <de>Textfeld</de>
+<id>561</id>
 </text>
 <text>
-<en default="1">Activation code is invalid. Maybe the URL wasn't copied completely?</en>
+<en>Activation code is invalid. Maybe the URL wasn't copied completely?</en>
 <de>Der Aktivierungscode ist falsch. Vielleicht wurde die URL unvollst&#xE4;ndig kopiert.</de>
+<id>562</id>
 </text>
 <text>
-<en default="1">New password couldn't be set</en>
+<en>New password couldn't be set</en>
 <de>Das neue Passwort konnte nicht erstellt werden</de>
+<id>563</id>
 </text>
 <text>
-<en default="1">_createAuthAdapter didn't return instance of Vps_Auth_Adapter_Service</en>
+<en>_createAuthAdapter didn't return instance of Vps_Auth_Adapter_Service</en>
 <de>_</de>
+<id>564</id>
 </text>
 <text>
-<en default="1">Activation link</en>
+<en>Activation link</en>
 <de>Aktivierungslink</de>
+<id>565</id>
 </text>
 <text>
-<en default="1">Additional rights</en>
+<en>Additional rights</en>
 <de>Zus&#xE4;tzliche Rechte</de>
+<id>566</id>
 </text>
 <text>
-<en default="1">Activated</en>
+<en>Activated</en>
 <de>Aktiviert</de>
+<id>567</id>
 </text>
 <text>
-<en default="1">Template</en>
+<en>Template</en>
 <de>Vorlage</de>
+<id>568</id>
 </text>
 <text>
-<en default="1">(all templates)</en>
+<en>(all templates)</en>
 <de>(alle Vorlagen)</de>
+<id>569</id>
 </text>
 <text>
-<en default="1">Variable</en>
+<en>Variable</en>
 <de>Variable</de>
+<id>570</id>
 </text>
 <text>
-<en default="1">Html</en>
+<en>Html</en>
 <de>HTML</de>
+<id>571</id>
 </text>
 <text>
-<en default="1">Can't sort by {0}, field doesn't exist in row</en>
+<en>Can't sort by {0}, field doesn't exist in row</en>
 <de>Nach {0} kann nicht sorteirt werden, das Feld existiert nicht als Spalte</de>
+<id>572</id>
 </text>
 <text>
-<en default="1">Assets-Path-Type '{0}' not found in config.</en>
+<en>Assets-Path-Type '{0}' not found in config.</en>
 <de>Der Assets-Path-Type '{0}' konnte in der config nicht gefunden werden.</de>
+<id>573</id>
 </text>
 <text>
-<en default="1">Path '{0}' does not exist.</en>
+<en>Path '{0}' does not exist.</en>
 <de>Der Pfad '{0}' existiert nicht.</de>
+<id>574</id>
 </text>
 <text>
-<en default="1">Cannot set Home Page invisible</en>
+<en>Cannot set Home Page invisible</en>
 <de>Die Home-Seite kann nicht auf unsichtbar gesetzt werden</de>
+<id>575</id>
 </text>
 <text>
-<en default="1">Can't delete page as there are child pages.</en>
+<en>Can't delete page as there are child pages.</en>
 <de>Die Seite kann nicht gel&#xF6;scht werden, da es Unterseiten dazu gibt.</de>
+<id>576</id>
 </text>
 <text>
-<en default="1">Hello</en>
+<en>Hello</en>
 <de>Hallo</de>
+<id>577</id>
 </text>
 <text>
-<en default="1">A Post at {0} has been reported with the following comment</en>
+<en>A Post at {0} has been reported with the following comment</en>
 <de>Der Eintrag auf {0} wurde mit folgendem Kommentar versehen</de>
+<id>578</id>
 </text>
 <text>
-<en default="1">to go directly to the post or read it below</en>
+<en>to go directly to the post or read it below</en>
 <de>um direkt zum Eintrag zu gelangen oder lesen Sie in unten</de>
+<id>579</id>
 </text>
 <text>
-<en default="1">Click the link</en>
+<en>Click the link</en>
 <de>Klicken Sie auf den Link</de>
+<id>580</id>
 </text>
 <text>
-<en default="1">A new entry has been written in your guestbook.</en>
+<en>A new entry has been written in your guestbook.</en>
 <de>Ein neuer Eintrag wurde in Ihr G&#xE4;stebuch geschrieben.</de>
+<id>581</id>
 </text>
 <text>
-<en default="1">Here is the Link to your profile:</en>
+<en>Here is the Link to your profile:</en>
 <de>Das ist der Link um in Ihr Profil zu gelangen:</de>
+<id>582</id>
 </text>
 <text>
-<en default="1">This is the text that was saved in your guestbook:</en>
+<en>This is the text that was saved in your guestbook:</en>
 <de>Das ist der Text der in Ihrem G&#xE4;stebuch gespeichert wurde:</de>
+<id>583</id>
 </text>
 <text>
-<en default="1">Click here to go directly to your profile</en>
+<en>Click here to go directly to your profile</en>
 <de>Klicken Sie bitte hier um direkt zu Ihrem Profil zu gelangen</de>
+<id>584</id>
 </text>
 <text>
-<en default="1">This email has been generated using the lost password function at</en>
+<en>This email has been generated using the lost password function at</en>
 <de>Diese Email wurde durch die Passwort vergessen funktion auf</de>
+<id>585</id>
 </text>
 <text>
-<en default="1">If you did not request this email you may just ignore it and use the login as before.</en>
+<en>If you did not request this email you may just ignore it and use the login as before.</en>
 <de>Sollten Sie diese Email nicht angefordert haben, ignorieren Sie sie bitte und benutzen Ihr Login wie zuvor.</de>
+<id>586</id>
 </text>
 <text>
-<en default="1">Click here to activate and log in to your Account</en>
+<en>Click here to activate and log in to your Account</en>
 <de>Klicken Sie hier, um Ihren Account zu aktivieren und sich einzuloggen</de>
+<id>587</id>
 </text>
 <text>
-<en default="1">If the activationlink does not work, copy the following address and paste it in your browser (it is possible that the address has a line-break, so please be sure to copy everything correctly):</en>
+<en>If the activationlink does not work, copy the following address and paste it in your browser (it is possible that the address has a line-break, so please be sure to copy everything correctly):</en>
 <de>Wenn der Aktivierungslink nicht funktioniert, kopieren Sie bitte die folgende Adresse und f&#xFC;gen Sie in Ihrem Browser in der Adresszeile ein (es ist m&#xF6;glich, dass die Adresse umbricht, also stellen Sie bitte sicher, dass Sie alles korrekt kopiert haben):</de>
+<id>588</id>
 </text>
 <text>
-<en default="1">Your email address at {0} has been changed.</en>
+<en>Your email address at {0} has been changed.</en>
 <de>Ihre Email Adresse auf {0} wurde ge&#xE4;ndert.</de>
+<id>589</id>
 </text>
 <text>
-<en default="1">From your old email address {0} to {1}</en>
+<en>From your old email address {0} to {1}</en>
 <de>&#xC4;ndern Sie bitte Ihre alte E-Mail Adresse von {0} zu {1}</de>
+<id>590</id>
 </text>
 <text>
-<en default="1">Not Found</en>
+<en>Not Found</en>
 <de>Nicht gefunden</de>
+<id>591</id>
 </text>
 <text>
-<en default="1">The requested URL "{0}" was not found on this server.</en>
+<en>The requested URL "{0}" was not found on this server.</en>
 <de>Die Adresse "{0}" konnte nicht gefunden werden.</de>
+<id>592</id>
 </text>
 <text>
-<en default="1">Version</en>
+<en>Version</en>
 <de>Version</de>
+<id>593</id>
 </text>
 <text>
-<en default="1">Password</en>
+<en>Password</en>
 <de>Passwort</de>
+<id>594</id>
 </text>
 <text>
-<en default="1">Errortype</en>
+<en>Errortype</en>
 <de>_</de>
+<id>595</id>
 </text>
 <text>
-<en default="1">Message</en>
+<en>Message</en>
 <de>Nachricht</de>
+<id>596</id>
 </text>
 <text>
-<en default="1">Last DB-Query</en>
+<en>Last DB-Query</en>
 <de>_</de>
+<id>597</id>
 </text>
 <text>
-<en default="1">Revision</en>
+<en>Revision</en>
 <de>_</de>
+<id>598</id>
 </text>
 <text>
-<en default="1">Your old email address was {0}, the new one is {1}</en>
+<en>Your old email address was {0}, the new one is {1}</en>
 <de>Ihre alte Email Adresse war {0}, die neue ist {1}</de>
+<id>599</id>
 </text>
 <text>
-<en default="1">This email has been generated using the lost password function at {0}</en>
+<en>This email has been generated using the lost password function at {0}</en>
 <de>Diese Email wurde von der Passwort vergessen Funktion auf {0} generiert.</de>
+<id>600</id>
 </text>
 <text>
-<en default="1">Click here to choose a new password</en>
+<en>Click here to choose a new password</en>
 <de>Klicken Sie hier, um ein neues Passwort zu w&#xE4;hlen</de>
+<id>601</id>
 </text>
 <text>
-<en default="1">Already activated</en>
+<en>Already activated</en>
 <de>Bereits aktiviert</de>
+<id>602</id>
 </text>
 <text>
-<en default="1">Do you really want to delete this entry:
+<en>Do you really want to delete this entry:
 
 "</en>
 <de>_</de>
+<id>603</id>
 </text>
 <text>
-<en default="1">Activate / Login</en>
+<en>Activate / Login</en>
 <de>Aktivieren / Einloggen</de>
+<id>604</id>
 </text>
 <text>
-<en default="1">Passwords not equal</en>
+<en>Passwords not equal</en>
 <de>Passw&#xF6;rter unterschiedlich</de>
+<id>605</id>
 </text>
 <text>
-<en default="1">Select Page</en>
+<en>Select Page</en>
 <de>_</de>
+<id>606</id>
 </text>
 <text>
-<en default="1">Activation link sent to email address.</en>
+<en>Activation link sent to email address.</en>
 <de>Aktivierungslink wurde zur Email-Adresse gesendet.</de>
+<id>607</id>
 </text>
 <text>
-<en default="1">Error sending the mail.</en>
+<en>Error sending the mail.</en>
 <de>Fehler beim senden der Email.</de>
+<id>608</id>
 </text>
 <text>
-<en default="1">male</en>
+<en>male</en>
 <de>m&#xE4;nnlich</de>
+<id>609</id>
 </text>
 <text>
-<en default="1">female</en>
+<en>female</en>
 <de>weiblich</de>
+<id>610</id>
 </text>
 <text>
-<en default="1">URL</en>
+<en>URL</en>
 <de>URL</de>
+<id>611</id>
 </text>
 <text>
-<en default="1">Open in</en>
+<en>Open in</en>
 <de>&#xD6;ffnen im</de>
+<id>612</id>
 </text>
 <text>
-<en default="1">Own window</en>
+<en>Own window</en>
 <de>Selben Fenster</de>
+<id>613</id>
 </text>
 <text>
-<en default="1">New window</en>
+<en>New window</en>
 <de>Neuen Fenster</de>
+<id>614</id>
 </text>
 <text>
-<en default="1">Popup</en>
+<en>Popup</en>
 <de>Popup</de>
+<id>615</id>
 </text>
 <text>
-<en default="1">Linktext</en>
+<en>Linktext</en>
 <de>Linktext</de>
+<id>616</id>
 </text>
 <text>
-<en default="1">Invalid Password</en>
+<en>Invalid Password</en>
 <de>Ung&#xFC;ltiges Passwort</de>
+<id>617</id>
 </text>
 <text>
-<en default="1">Login required</en>
+<en>Login required</en>
 <de>_</de>
+<id>618</id>
 </text>
 <text>
-<en default="1">Bestfit</en>
+<en>Bestfit</en>
 <de>_</de>
+<id>619</id>
 </text>
 <text>
-<en default="1">Crop</en>
+<en>Crop</en>
 <de>_</de>
+<id>620</id>
 </text>
 <text>
-<en default="1">Deform</en>
+<en>Deform</en>
 <de>_</de>
+<id>621</id>
 </text>
 <text>
-<en default="1">Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?</en>
+<en>Activation code is invalid. Maybe your account has already been activated, the URL was not copied completely, or the password has already been set?</en>
 <de>Aktivierungscode ist ung&#xFC;ltig. Vielleicht wurde Ihr Account bereits aktiviert, oder die URL wurde nicht vollst&#xE4;ndig kopiert, oder Ihr Passwort wurde bereits gesetzt?</de>
+<id>622</id>
 </text>
 <text>
-<en default="1">Your account is active and a password has been set.{2}Use the application by {0}clicking here{1}.</en>
+<en>Your account is active and a password has been set.{2}Use the application by {0}clicking here{1}.</en>
 <de>Ihr Account ist aktiv und das Passwort wurde bereits gesetzt. {2} {0}Klicken Sie hier{1}, um in den Admin-Bereich zu gelangen.</de>
+<id>623</id>
 </text>
 <text>
-<en default="1">en_US</en>
+<en>en_US</en>
 <de>de_DE</de>
+<id>624</id>
 </text>
 <text>
-<en default="1">Branch directory</en>
+<en>Branch directory</en>
 <de>_</de>
+<id>625</id>
 </text>
 <text>
-<en default="1">AGBs</en>
+<en>AGBs</en>
 <de>_</de>
+<id>626</id>
 </text>
 <text>
-<en default="1">Verkn&#xFC;pfte Eintr&#xE4;ge</en>
+<en>Verkn&#xFC;pfte Eintr&#xE4;ge</en>
 <de>_</de>
+<id>627</id>
 </text>
 <text>
-<en default="1">Edit Images</en>
+<en>Edit Images</en>
 <de>Bildergalerie</de>
+<id>628</id>
 </text>
 <text>
-<en default="1">An error has occured</en>
+<en>An error has occured</en>
 <de>_</de>
+<id>629</id>
 </text>
 <text>
-<en default="1">Offline hidden Html</en>
+<en>Offline hidden Html</en>
 <de>_</de>
+<id>630</id>
 </text>
 <text>
-<en default="1">Feed</en>
+<en>Feed</en>
 <de>_</de>
+<id>631</id>
 </text>
 <text>
-<en default="1">Forum</en>
+<en>Forum</en>
 <de>_</de>
+<id>632</id>
 </text>
 <text>
-<en default="1">go</en>
+<en>go</en>
 <de>_</de>
+<id>633</id>
 </text>
 <text>
-<en default="1">Threads</en>
+<en>Threads</en>
 <de>Themen</de>
+<id>634</id>
 </text>
 <text>
-<en default="1">Posts</en>
+<en>Posts</en>
 <de>Beitr&#xE4;ge</de>
+<id>635</id>
 </text>
 <text>
-<en default="1">Last post by</en>
+<en>Last post by</en>
 <de>Letzter Beitrag von</de>
+<id>636</id>
 </text>
 <text>
-<en default="1">reply</en>
+<en>reply</en>
 <en_plural>replies</en_plural>
 <de>Antwort</de>
 <de_plural>Antworten</de_plural>
+<id>637</id>
 </text>
 <text>
 <en defailt="1">Reply</en>
 <de>Antworten</de>
+<id>638</id>
 </text>
 <text>
-<en default="1">Forum.Latest Threads</en>
+<en>Forum.Latest Threads</en>
 <de>_</de>
+<id>639</id>
 </text>
 <text>
-<en default="1">add Comment</en>
+<en>add Comment</en>
 <de>Antwort erstellen</de>
+<id>640</id>
 </text>
 <text>
-<en default="1">Comment was successfully reported.</en>
+<en>Comment was successfully reported.</en>
 <de>Der Kommentar wurde erfolgreich gemeldet.</de>
+<id>641</id>
 </text>
 <text>
-<en default="1">Thread closed</en>
+<en>Thread closed</en>
 <de>Thema geschlossen</de>
+<id>642</id>
 </text>
 <text>
-<en default="1">Reopen Thread</en>
+<en>Reopen Thread</en>
 <de>Thema &#xF6;ffnen</de>
+<id>643</id>
 </text>
 <text>
-<en default="1">Close Thread</en>
+<en>Close Thread</en>
 <de>Thema schlie&#xDF;en</de>
+<id>644</id>
 </text>
 <text>
-<en default="1">Move Thread</en>
+<en>Move Thread</en>
 <de>Thema verschieben</de>
+<id>645</id>
 </text>
 <text>
-<en default="1">Thread was successfully moved.</en>
+<en>Thread was successfully moved.</en>
 <de>Das Thema wurde erfolgreich verschoben.</de>
+<id>646</id>
 </text>
 <text>
-<en default="1">Moderate Thread</en>
+<en>Moderate Thread</en>
 <de>Thema moderieren</de>
+<id>647</id>
 </text>
 <text>
-<en default="1">Observe Thread</en>
+<en>Observe Thread</en>
 <de>Thema beobachten</de>
+<id>648</id>
 </text>
 <text>
-<en default="1">Thread was successfully saved.</en>
+<en>Thread was successfully saved.</en>
 <de>Thema wurde erfolgreich gespeichert.</de>
+<id>649</id>
 </text>
 <text>
-<en default="1">new thread</en>
+<en>new thread</en>
 <de>Neues Thema</de>
+<id>650</id>
 </text>
 <text>
-<en default="1">The Form has been submitted successfully.</en>
+<en>The Form has been submitted successfully.</en>
 <de>Das Formular wurde erfolgreich abgeschickt.</de>
+<id>651</id>
 </text>
 <text>
-<en default="1">Formular</en>
+<en>Formular</en>
 <de>_</de>
+<id>652</id>
 </text>
 <text>
-<en default="1">Images Enlarge</en>
+<en>Images Enlarge</en>
 <de>_</de>
+<id>653</id>
 </text>
 <text>
-<en default="1">Bookmark bei</en>
+<en>Bookmark bei</en>
 <de>_</de>
+<id>654</id>
 </text>
 <text>
-<en default="1">Search engine referer</en>
+<en>Search engine referer</en>
 <de>_</de>
+<id>655</id>
 </text>
 <text>
-<en default="1">Write</en>
+<en>Write</en>
 <de>schreiben</de>
+<id>656</id>
 </text>
 <text>
-<en default="1">Hello,&lt;br /&gt;&lt;br /&gt;
+<en>Hello,&lt;br /&gt;&lt;br /&gt;
 a post has been reported for the following reason:</en>
 <de>_</de>
+<id>657</id>
 </text>
 <text>
-<en default="1">Open the post or read it directly:</en>
+<en>Open the post or read it directly:</en>
 <de>Kommentar &#xF6;ffnen oder direkt lesen:</de>
+<id>658</id>
 </text>
 <text>
-<en default="1">Please enter a reason for reporting this Post</en>
+<en>Please enter a reason for reporting this Post</en>
 <de>Bitte geben sie einen Grund an, warum dieser Kommentar gemeldet werden soll</de>
+<id>659</id>
 </text>
 <text>
-<en default="1">A post has been reported</en>
+<en>A post has been reported</en>
 <de>Ein Kommentar wurde gemeldet</de>
+<id>660</id>
 </text>
 <text>
-<en default="1">Hello,
+<en>Hello,
 
 a post has been reported for the following reason:</en>
 <de>_</de>
+<id>661</id>
 </text>
 <text>
-<en default="1">Open this url to go to the post or read it here:</en>
+<en>Open this url to go to the post or read it here:</en>
 <de>&#xD6;ffnen sie diesem Link um zum Kommentar zu gelangen oder lesen sie ihn hier:</de>
+<id>662</id>
 </text>
 <text>
-<en default="1">report</en>
+<en>report</en>
 <de>melden</de>
+<id>663</id>
 </text>
 <text>
-<en default="1">quote</en>
+<en>quote</en>
 <de>zitieren</de>
+<id>664</id>
 </text>
 <text>
-<en default="1">confirmed</en>
+<en>confirmed</en>
 <de>best&#xE4;tigt</de>
+<id>665</id>
 </text>
 <text>
-<en default="1">Comment was successfully deleted.</en>
+<en>Comment was successfully deleted.</en>
 <de>Der Eintrag wurde erfolgreich gel&#xF6;scht.</de>
+<id>666</id>
 </text>
 <text>
-<en default="1">Do you really want to delete this post?</en>
+<en>Do you really want to delete this post?</en>
 <de>Wollen Sie den Eintrag wirklich l&#xF6;schen?</de>
+<id>667</id>
 </text>
 <text>
-<en default="1">&lt;strong&gt;Create Post: &lt;/strong&gt;&lt;br /&gt;Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
+<en>&lt;strong&gt;Create Post: &lt;/strong&gt;&lt;br /&gt;Please enter the desired text. HTML is not allowed an will be filtered. Links like http://... or www.... will be linked automatically.</en>
 <de>&lt;strong&gt;Nachricht erstellen: &lt;/strong&gt;&lt;br /&gt;Bitte gib den gew&#xFC;nschten Text ein. HTML ist nicht erlaubt und wird ausgefiltert. Links in der Form http://... oder www.... werden automatisch erkannt und verlinkt.</de>
+<id>668</id>
 </text>
 <text>
-<en default="1">Last Posts</en>
+<en>Last Posts</en>
 <de>Letzte Aktivit&#xE4;ten</de>
+<id>669</id>
 </text>
 <text>
-<en default="1">News.Top</en>
+<en>News.Top</en>
 <de>News.Aktuelle</de>
+<id>670</id>
 </text>
 <text>
-<en default="1">News.Show categories</en>
+<en>News.Show categories</en>
 <de>_</de>
+<id>671</id>
 </text>
 <text>
-<en default="1">After the activation you are automatically logged in and you could use your account.</en>
+<en>After the activation you are automatically logged in and you could use your account.</en>
 <de>Nach der Aktivierung sind Sie automatisch angemeldet und Sie k&#xF6;nnen Ihr Konto verwenden.</de>
+<id>672</id>
 </text>
 <text>
-<en default="1">Guestbook</en>
+<en>Guestbook</en>
 <de>G&#xE4;stebuch</de>
+<id>673</id>
 </text>
 <text>
-<en default="1">Gallery</en>
+<en>Gallery</en>
 <de>Bildergalerie</de>
+<id>674</id>
 </text>
 <text>
-<en default="1">Userprofile</en>
+<en>Userprofile</en>
 <de>Benutzerprofil</de>
+<id>675</id>
 </text>
 <text>
-<en default="1">General</en>
+<en>General</en>
 <de>Allgemein</de>
+<id>676</id>
 </text>
 <text>
-<en default="1">Avatar</en>
+<en>Avatar</en>
 <de>Profilbild</de>
+<id>677</id>
 </text>
 <text>
-<en default="1">Place of living</en>
+<en>Place of living</en>
 <de>Wohnort</de>
+<id>678</id>
 </text>
 <text>
-<en default="1">Nickname</en>
+<en>Nickname</en>
 <de>Name f&#xFC;r Forum</de>
+<id>679</id>
 </text>
 <text>
-<en default="1">Short Description</en>
+<en>Short Description</en>
 <de>Kurze Beschreibung</de>
+<id>680</id>
 </text>
 <text>
-<en default="1">Register</en>
+<en>Register</en>
 <de>Registrieren</de>
+<id>681</id>
 </text>
 <text>
-<en default="1">Lost Password</en>
+<en>Lost Password</en>
 <de>Passwort vergessen</de>
+<id>682</id>
 </text>
 <text>
-<en default="1">Activate</en>
+<en>Activate</en>
 <de>aktivieren</de>
+<id>683</id>
 </text>
 <text>
-<en default="1">An account for the address '%value%' doesn't exist</en>
+<en>An account for the address '%value%' doesn't exist</en>
 <de>Es existiert kein Account mit der E-Mail-Adresse '%value%'</de>
+<id>684</id>
 </text>
 <text>
-<en default="1">Your Account has been created successfully. You will receive an confirmation e-mail soon.</en>
-<de>Ihr Account wurde erfolgreich erstellt.<br/>
-<br/>Sie erhalten in K&#xFC;rze eine Email mit einem Aktivierungslink.<br/>
+<en>Your Account has been created successfully. You will receive an confirmation e-mail soon.</en>
+<de>Ihr Account wurde erfolgreich erstellt.
+Sie erhalten in K&#xFC;rze eine Email mit einem Aktivierungslink.
 Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhin aufgefordert das Passwort einzugeben, das Sie k&#xFC;nftig f&#xFC;r Ihren Account verwenden m&#xF6;chten.
 </de>
+<id>685</id>
 </text>
 <text>
-<en default="1">create account</en>
+<en>create account</en>
 <de>Account erstellen</de>
+<id>686</id>
 </text>
 <text>
-<en default="1">edit account</en>
+<en>edit account</en>
 <de>Speichern</de>
+<id>687</id>
 </text>
 <text>
-<en default="1">Users.List</en>
+<en>Users.List</en>
 <de>_</de>
+<id>688</id>
 </text>
 <text>
-<en default="1">My account</en>
+<en>My account</en>
 <de>Mein Account</de>
+<id>689</id>
 </text>
 <text>
-<en default="1">My Profile</en>
+<en>My Profile</en>
 <de>Mein Profil</de>
+<id>690</id>
 </text>
 <text>
-<en default="1">Lost password</en>
+<en>Lost password</en>
 <de>Passwort vergessen</de>
+<id>691</id>
 </text>
 <text>
-<en default="1">Logged In</en>
+<en>Logged In</en>
 <de>Eingeloggt</de>
+<id>692</id>
 </text>
 <text>
-<en default="1">You have been logged in sucessfully.</en>
+<en>You have been logged in sucessfully.</en>
 <de>Sie wurden erfolgreich eingeloggt.</de>
+<id>693</id>
 </text>
 <text>
-<en default="1">If the needed page doesn't load automatically,</en>
+<en>If the needed page doesn't load automatically,</en>
 <de>Falls die Seite nicht automatisch neu geladen wird</de>
+<id>694</id>
 </text>
 <text>
-<en default="1">please click here</en>
+<en>please click here</en>
 <de>bitte hier klicken</de>
+<id>695</id>
 </text>
 <text>
-<en default="1">Invalid E-Mail or password, please try again.</en>
+<en>Invalid E-Mail or password, please try again.</en>
 <de>E-Mail oder Passwort falsch, bitte versuchen Sie es nochmal.</de>
+<id>696</id>
 </text>
 <text>
-<en default="1">Please login</en>
+<en>Please login</en>
 <de>Bitte loggen sie sich ein</de>
+<id>697</id>
 </text>
 <text>
-<en default="1">You have to login to see the requested page.</en>
+<en>You have to login to see the requested page.</en>
 <de>Sie m&#xFC;ssen sich einloggen, um die gew&#xFC;nschte Seite zu sehen.</de>
+<id>698</id>
 </text>
 <text>
-<en default="1">If you don't have an account, you can</en>
+<en>If you don't have an account, you can</en>
 <de>Sollten Sie noch kein Benutzerkonto besitzen, k&#xF6;nnen Sie</de>
+<id>699</id>
 </text>
 <text>
-<en default="1">register here</en>
+<en>register here</en>
 <de>kostenlos ein neues Benutzerkonto anlegen</de>
+<id>700</id>
 </text>
 <text>
-<en default="1">Show</en>
+<en>Show</en>
 <de>_</de>
+<id>701</id>
 </text>
 <text>
-<en default="1">This category can't be deleted, because there exist sub-categories in it.</en>
+<en>This category can't be deleted, because there exist sub-categories in it.</en>
 <de>_</de>
+<id>702</id>
 </text>
 <text>
-<en default="1">Delete Entry</en>
+<en>Delete Entry</en>
 <de>Eintrag l&#xF6;schen</de>
+<id>703</id>
 </text>
 <text>
-<en default="1">Delete Image</en>
+<en>Delete Image</en>
 <de>Bild l&#xF6;schen</de>
+<id>704</id>
 </text>
 <text>
-<en default="1">Show field</en>
+<en>Show field</en>
 <de>_</de>
+<id>705</id>
 </text>
 <text>
-<en default="1">repeat {0}</en>
+<en>repeat {0}</en>
 <de>{0} wiederholen</de>
+<id>706</id>
 </text>
 <text>
-<en default="1">Radio Buttons</en>
+<en>Radio Buttons</en>
 <de>_</de>
+<id>707</id>
 </text>
 <text>
-<en default="1">Permissions</en>
+<en>Permissions</en>
 <de>_</de>
+<id>708</id>
 </text>
 <text>
-<en default="1">Value is empty, but a non-empty value is required</en>
+<en>Value is empty, but a non-empty value is required</en>
 <de>Bitte f&#xFC;llen Sie das Feld aus</de>
+<id>709</id>
 </text>
 <text>
-<en default="1">'%value%' has not only alphabetic and digit characters</en>
+<en>'%value%' has not only alphabetic and digit characters</en>
 <de>'%value%' beinhaltet unerlaubte Zeichen</de>
+<id>710</id>
 </text>
 <text>
-<en default="1">'%value%' is an empty string</en>
+<en>'%value%' is an empty string</en>
 <de>_</de>
+<id>711</id>
 </text>
 <text>
-<en default="1">'%value%' is not a valid email address in the basic format local-part@hostname</en>
+<en>'%value%' is not a valid email address in the basic format local-part@hostname</en>
 <de>'%value%' ist keine g&#xFC;ltige E-Mail-Adresse</de>
+<id>712</id>
 </text>
 <text>
-<en default="1">'%hostname%' is not a valid hostname for email address '%value%'</en>
+<en>'%hostname%' is not a valid hostname for email address '%value%'</en>
 <de>'%hostname%' ist kein g&#xFC;ltiger Hostname</de>
+<id>713</id>
 </text>
 <text>
-<en default="1">'%hostname%' does not appear to have a valid MX record for the email address '%value%'</en>
+<en>'%hostname%' does not appear to have a valid MX record for the email address '%value%'</en>
 <de>_</de>
+<id>714</id>
 </text>
 <text>
-<en default="1">'%localPart%' not matched against dot-atom format</en>
+<en>'%localPart%' not matched against dot-atom format</en>
 <de>_</de>
+<id>715</id>
 </text>
 <text>
-<en default="1">'%localPart%' not matched against quoted-string format</en>
+<en>'%localPart%' not matched against quoted-string format</en>
 <de>_</de>
+<id>716</id>
 </text>
 <text>
-<en default="1">'%localPart%' is not a valid local part for email address '%value%'</en>
+<en>'%localPart%' is not a valid local part for email address '%value%'</en>
 <de>_</de>
+<id>717</id>
 </text>
 <text>
-<en default="1">'%value%' has not only alphabetic characters</en>
+<en>'%value%' has not only alphabetic characters</en>
 <de>_</de>
+<id>718</id>
 </text>
 <text>
-<en default="1">'%value%' does allready exist</en>
+<en>'%value%' does allready exist</en>
 <de>'%value%' existiert bereits</de>
+<id>719</id>
 </text>
 <text>
-<en default="1">Useraccount created</en>
+<en>Useraccount created</en>
 <de>Account erfolgreich erstellt</de>
+<id>720</id>
 </text>
 <text>
-<en default="1">lost password</en>
+<en>lost password</en>
 <de>Passwort vergessen</de>
+<id>721</id>
 </text>
 <text>
-<en default="1">Email changed</en>
+<en>Email changed</en>
 <de>E-Mail-Adresse ge&#xE4;ndert</de>
+<id>722</id>
 </text>
 <text>
-<en default="1">Accound deleted</en>
+<en>Accound deleted</en>
 <de>Accound gel&#xF6;scht</de>
+<id>723</id>
 </text>
 <text>
-<en default="1">H:i</en>
+<en>H:i</en>
 <de>_</de>
+<id>724</id>
 </text>
-<text context="time">
-<en default="1">On</en>
+<text>
+<context>time</context>
+<en>On</en>
 <de>Am</de>
+<id>725</id>
 </text>
-<text context="time">
-<en default="1">at</en>
+<text>
+<context>time</context>
+<en>at</en>
 <de>um</de>
+<id>726</id>
 </text>
 <text>
-<en default="1">Internal Server Error</en>
+<en>Internal Server Error</en>
 <de>_</de>
+<id>727</id>
 </text>
 <text>
-<en default="1">Hello,&lt;br /&gt;&lt;br /&gt;
+<en>Hello,&lt;br /&gt;&lt;br /&gt;
 a post in an observed thread has been submitted:</en>
 <de>Hallo,&lt;br /&gt;&lt;br /&gt;
 es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
+<id>728</id>
 </text>
 <text>
-<en default="1">Hello,
+<en>Hello,
 
 a post in an observed thread has been submitted:</en>
 <de>Hallo,
 
 es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
+<id>729</id>
 </text>
 <text>
-<en default="1">Link to concerning thread:</en>
+<en>Link to concerning thread:</en>
 <de>_</de>
+<id>730</id>
 </text>
 <text>
-<en default="1">Edit Post</en>
+<en>Edit Post</en>
 <de>Kommentar bearbeiten</de>
+<id>731</id>
 </text>
 <text>
-<en default="1">a post has been reported for the following reason:</en>
+<en>a post has been reported for the following reason:</en>
 <de>Ein Kommentar wurde aus folgenden Gr&#xFC;nden gemeldet:</de>
+<id>732</id>
 </text>
 <text>
-<en default="1">You were logged in, automatically</en>
+<en>You were logged in, automatically</en>
 <de>Sie wurden automatisch eingeloggt</de>
+<id>733</id>
 </text>
 <text>
-<en default="1">Activate Account</en>
+<en>Activate Account</en>
 <de>Account aktivieren</de>
+<id>734</id>
 </text>
 <text>
-<en default="1">Data was not sent completely. Please copy the complete address out of the email.</en>
+<en>Data was not sent completely. Please copy the complete address out of the email.</en>
 <de>Daten wurden nicht vollst&#xE4;ndig gesendet. Bitte kopieren Sie die vollst&#xE4;ndige Adresse aus der E-Mail.</de>
+<id>735</id>
 </text>
 <text>
-<en default="1">Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.</en>
+<en>Activation code is wrong. Eventually your account has already been activated, or the address was copied wrong out of the email.</en>
 <de>Der Aktivierungscode ist ung&#xFC;ltig. Eventuell wurde der Account schon aktiviert oder die Adresse wurde falsch aus der E-Mail kopiert.</de>
+<id>736</id>
 </text>
 <text>
-<en default="1">Please type in your {0} email address in the field below.</en>
+<en>Please type in your {0} email address in the field below.</en>
 <de>Bitte geben sie ihre {0} E-Mail Adresse im Feld darunter ein.</de>
+<id>737</id>
 </text>
 <text>
-<en default="1">Auto Login</en>
+<en>Auto Login</en>
 <de>eingeloggt bleiben</de>
+<id>738</id>
 </text>
 <text>
-<en default="1">Current category:</en>
+<en>Current category:</en>
 <de>Aktuelle Kategorie:</de>
+<id>739</id>
 </text>
 <text>
-<en default="1">Search term</en>
+<en>Search term</en>
 <de>Suchbegriff</de>
+<id>740</id>
 </text>
 <text>
-<en default="1">Please type at least two characters.</en>
+<en>Please type at least two characters.</en>
 <de>Bitte geben sie mindestens 2 Zeichen ein.</de>
+<id>741</id>
 </text>
 <text>
-<en default="1">Register</en>
+<en>Register</en>
 <de>Registrieren</de>
+<id>742</id>
 </text>
 <text>
-<en default="1">With a free {0} account you can take part actively in the forum and write own posts. In addition, you have the possibility to observe single discussions and get informed by e-mail about new posts on the subject.</en>
+<en>With a free {0} account you can take part actively in the forum and write own posts. In addition, you have the possibility to observe single discussions and get informed by e-mail about new posts on the subject.</en>
 <de>Mit einem kostenlosen Benutzerkonto auf "{0}" k&#xF6;nnen Sie aktiv am Forum teilnehmen und eigene Beitr&#xE4;ge verfassen. Zus&#xE4;tzlich haben Sie die M&#xF6;glichkeit, einzelne Diskussionen gezielt zu beobachten und werden per E-Mail &#xFC;ber neue Beitr&#xE4;ge zum Thema informiert.</de>
+<id>743</id>
 </text>
 <text>
-<en default="1">Preview:</en>
+<en>Preview:</en>
 <de>_</de>
+<id>744</id>
 </text>
 <text>
-<en default="1">'%value%' is less than %min% characters long</en>
+<en>'%value%' is less than %min% characters long</en>
 <de>'%value%' ist k&#xFC;rzer als %min% Zeichen</de>
+<id>745</id>
 </text>
 <text>
-<en default="1">'%value%' is greater than %max% characters long</en>
+<en>'%value%' is greater than %max% characters long</en>
 <de>'%value%' ist l&#xE4;nger als %max% Zeichen</de>
+<id>746</id>
 </text>
 <text>
-<en default="1">'%value%' appears to be an IP address, but IP addresses are not allowed</en>
+<en>'%value%' appears to be an IP address, but IP addresses are not allowed</en>
 <de>'%value%' scheint eine IP-Adresse zu sein, aber IP-Adressen sind nicht erlaubt</de>
+<id>747</id>
 </text>
 <text>
-<en default="1">'%value%' appears to be a DNS hostname but cannot match TLD against known list</en>
+<en>'%value%' appears to be a DNS hostname but cannot match TLD against known list</en>
 <de>_</de>
+<id>748</id>
 </text>
 <text>
-<en default="1">'%value%' appears to be a DNS hostname but contains a dash (-) in an invalid position</en>
+<en>'%value%' appears to be a DNS hostname but contains a dash (-) in an invalid position</en>
 <de>_</de>
+<id>749</id>
 </text>
 <text>
-<en default="1">'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'</en>
+<en>'%value%' appears to be a DNS hostname but cannot match against hostname schema for TLD '%tld%'</en>
 <de>_</de>
+<id>750</id>
 </text>
 <text>
-<en default="1">'%value%' appears to be a DNS hostname but cannot extract TLD part</en>
+<en>'%value%' appears to be a DNS hostname but cannot extract TLD part</en>
 <de>_</de>
+<id>751</id>
 </text>
 <text>
-<en default="1">'%value%' does not match the expected structure for a DNS hostname</en>
+<en>'%value%' does not match the expected structure for a DNS hostname</en>
 <de>'%value%' hat keine richtige DNS-Hostname Struktur</de>
+<id>752</id>
 </text>
 <text>
-<en default="1">'%value%' does not appear to be a valid local network name</en>
+<en>'%value%' does not appear to be a valid local network name</en>
 <de>'%value%' scheint kein g&#xFC;ltiger Netzwerkname zu sein</de>
+<id>753</id>
 </text>
 <text>
-<en default="1">'%value%' appears to be a local network name but local network names are not allowed</en>
+<en>'%value%' appears to be a local network name but local network names are not allowed</en>
 <de>'%value%' scheint ein lokaler Netzwerkname zu sein, aber lokale Netzwerknamen sind nicht erlaubt.</de>
+<id>754</id>
 </text>
 <text>
-<en default="1">chosen thread</en>
+<en>chosen thread</en>
 <de>Ausgew&#xE4;hltes Thema</de>
+<id>755</id>
 </text>
 <text>
-<en default="1">Please choose a group, in which the thread should be moved</en>
+<en>Please choose a group, in which the thread should be moved</en>
 <de>Bitte klicken Sie auf die Gruppe, in die das Thema verschoben werden soll</de>
+<id>756</id>
 </text>
-<text context="decimal separator">
-<en default="1">.</en>
+<text>
+<context>decimal separator</context>
+<en>.</en>
 <de>,</de>
+<id>757</id>
 </text>
 <text>
-<en default="1">Space</en>
+<en>Space</en>
 <de>Abstand</de>
+<id>758</id>
 </text>
 <text>
-<en default="1">ANBs</en>
+<en>ANBs</en>
 <de>_</de>
+<id>759</id>
 </text>
 <text>
-<en default="1">Close</en>
+<en>Close</en>
 <de>_</de>
+<id>760</id>
 </text>
 <text>
-<en default="1">Link</en>
+<en>Link</en>
 <de>_</de>
+<id>761</id>
 </text>
 <text>
-<en default="1">No entries were found.</en>
+<en>No entries were found.</en>
 <de>Es konnten keine Eintr&#xE4;ge gefunden werden.</de>
+<id>762</id>
 </text>
 <text>
-<en default="1">Forum.Forum</en>
+<en>Forum.Forum</en>
 <de>_</de>
+<id>763</id>
 </text>
 <text>
-<en default="1">New entry in your guestbook</en>
+<en>New entry in your guestbook</en>
 <de>Neuer Eintrag in deinem G&#xE4;stebuch</de>
+<id>764</id>
 </text>
 <text>
-<en default="1">Posts.Last Posts</en>
+<en>Posts.Last Posts</en>
 <de>_</de>
+<id>765</id>
 </text>
 <text>
-<en default="1">User ID ist invalid.</en>
+<en>User ID ist invalid.</en>
 <de>Der Aktivierungscode ist ung&#xFC;ltig.</de>
+<id>766</id>
 </text>
 <text>
-<en default="1">Forum.User-List</en>
+<en>Forum.User-List</en>
 <de>_</de>
+<id>767</id>
 </text>
 <text>
-<en default="1">News.News</en>
+<en>News.News</en>
 <de>_</de>
+<id>768</id>
 </text>
 <text>
-<en default="1">Access Denied</en>
+<en>Access Denied</en>
 <de>Zugriff verboten</de>
+<id>769</id>
 </text>
 <text>
-<en default="1">You are not allowed to enter this page.</en>
+<en>You are not allowed to enter this page.</en>
 <de>Sie haben keine Berechtigungen f&#xFC;r diese Seite.</de>
+<id>770</id>
 </text>
 <text>
-<en default="1">Menu</en>
+<en>Menu</en>
 <de>Men&#xFC;</de>
+<id>771</id>
 </text>
 <text>
-<en default="1">Name of Page</en>
+<en>Name of Page</en>
 <de>Seitenname</de>
+<id>772</id>
 </text>
 <text>
-<en default="1">Pagetype</en>
+<en>Pagetype</en>
 <de>Seitentype</de>
+<id>773</id>
 </text>
 <text>
-<en default="1">Hide in Menu</en>
+<en>Hide in Menu</en>
 <de>In Men&#xFC; verstecken</de>
+<id>774</id>
 </text>
 <text>
-<en default="1">save</en>
+<en>save</en>
 <de>speichern</de>
+<id>775</id>
 </text>
 <text>
-<en default="1">coordinates not entered</en>
+<en>coordinates not entered</en>
 <de>keine Koordinaten eingetragen</de>
+<id>776</id>
 </text>
 <text>
-<en default="1">No File uploaded, please select a file.</en>
+<en>No File uploaded, please select a file.</en>
 <de>Keine Datei wurde hochgeladen, bitte w&#xE4;hlen Sie eine aus.</de>
+<id>777</id>
 </text>
 <text>
-<en default="1">image in originalsize</en>
+<en>image in originalsize</en>
 <de>Bild in Originalgr&#xF6;&#xDF;e</de>
+<id>778</id>
 </text>
 <text>
-<en default="1">close</en>
+<en>close</en>
 <de>schlie&#xDF;en</de>
+<id>779</id>
 </text>
 <text>
-<en default="1">next</en>
+<en>next</en>
 <de>weiter</de>
+<id>780</id>
 </text>
 <text>
-<en default="1">previous</en>
+<en>previous</en>
 <de>zur&#xFC;ck</de>
+<id>781</id>
 </text>
 <text>
-<en default="1">Amount</en>
+<en>Amount</en>
 <de>St&#xFC;ck</de>
+<id>782</id>
 </text>
 <text>
-<en default="1">Price</en>
+<en>Price</en>
 <de>Preis</de>
+<id>783</id>
 </text>
 <text>
-<en default="1">Cart</en>
+<en>Cart</en>
 <de>Warenkorb</de>
+<id>784</id>
 </text>
 <text>
-<en default="1">To cart</en>
+<en>To cart</en>
 <de>Zum Warenkorb</de>
+<id>785</id>
 </text>
 <text>
-<en default="1">To checkout</en>
+<en>To checkout</en>
 <de>Zur Kasse</de>
+<id>786</id>
 </text>
 <text>
-<en default="1">Cart is empty</en>
+<en>Cart is empty</en>
 <de>Ihr Warenkorb ist leer</de>
+<id>787</id>
 </text>
 <text>
-<en default="1">add to cart</en>
+<en>add to cart</en>
 <de>In den Warenkorb</de>
+<id>788</id>
 </text>
 <text>
-<en default="1">Detail info</en>
+<en>Detail info</en>
 <de>Detailinfos</de>
+<id>789</id>
 </text>
 <text>
-<en default="1">Image Positionable</en>
+<en>Image Positionable</en>
 <de>_</de>
+<id>790</id>
 </text>
 <text>
-<en default="1">Flash Media Player</en>
+<en>Flash Media Player</en>
 <de>_</de>
+<id>791</id>
 </text>
 <text>
-<en default="1">Element</en>
+<en>Element</en>
 <de>_</de>
+<id>792</id>
 </text>
 <text>
-<en default="1">Start automatically</en>
+<en>Start automatically</en>
 <de>_</de>
+<id>793</id>
 </text>
 <text>
-<en default="1">Loop</en>
+<en>Loop</en>
 <de>_</de>
+<id>794</id>
 </text>
 <text>
-<en default="1">Shop.Products</en>
+<en>Shop.Products</en>
 <de>Shop - Produkte</de>
+<id>795</id>
 </text>
 <text>
-<en default="1">The product has been added the the cart.</en>
+<en>The product has been added the the cart.</en>
 <de>Der Artikel wurde in den Warenkorb gelegt.</de>
+<id>796</id>
 </text>
 <text>
-<en default="1">You cart contains {0} products</en>
+<en>You cart contains {0} products</en>
 <de>Ihr Warenkorb beinhaltet {0} Artikel</de>
+<id>797</id>
 </text>
 <text>
-<en default="1">Payment</en>
+<en>Payment</en>
 <de>Zahlungsart</de>
+<id>798</id>
 </text>
 <text>
-<en default="1">Unit Price</en>
+<en>Unit Price</en>
 <de>St&#xFC;ckpreis</de>
+<id>799</id>
 </text>
 <text>
-<en default="1">Subtotal</en>
+<en>Subtotal</en>
 <de>Zwischensumme</de>
+<id>800</id>
 </text>
 <text>
-<en default="1">Shipping and Handling</en>
+<en>Shipping and Handling</en>
 <de>Versandkosten</de>
+<id>801</id>
 </text>
 <text>
-<en default="1">Total Amount</en>
+<en>Total Amount</en>
 <de>Gesamtbetrag</de>
+<id>802</id>
 </text>
 <text>
-<en default="1">Street</en>
+<en>Street</en>
 <de>Stra&#xDF;e</de>
+<id>803</id>
 </text>
 <text>
-<en default="1">ZIP</en>
+<en>ZIP</en>
 <de>PLZ</de>
+<id>804</id>
 </text>
 <text>
-<en default="1">City</en>
+<en>City</en>
 <de>Ort</de>
+<id>805</id>
 </text>
 <text>
-<en default="1">Country</en>
+<en>Country</en>
 <de>Land</de>
+<id>806</id>
 </text>
 <text>
-<en default="1">Phone</en>
+<en>Phone</en>
 <de>Telefon</de>
+<id>807</id>
 </text>
 <text>
-<en default="1">Prepayment</en>
+<en>Prepayment</en>
 <de>Vorauskasse</de>
+<id>808</id>
 </text>
 <text>
-<en default="1">Paypal</en>
+<en>Paypal</en>
 <de>_</de>
+<id>809</id>
 </text>
 <text>
-<en default="1">Order successfully sent.</en>
+<en>Order successfully sent.</en>
 <de>Die Bestellung wurde erfolgreich abgeschickt.</de>
+<id>810</id>
 </text>
 <text>
-<en default="1">Confirm</en>
+<en>Confirm</en>
 <de>Best&#xE4;tigen</de>
+<id>811</id>
 </text>
 <text>
-<en default="1">Checkout</en>
+<en>Checkout</en>
 <de>Kasse</de>
+<id>812</id>
 </text>
 <text>
-<en default="1">From</en>
+<en>From</en>
 <de>_</de>
+<id>813</id>
 </text>
 <text>
-<en default="1">To</en>
+<en>To</en>
 <de>_</de>
+<id>814</id>
 </text>
 <text>
-<en default="1">Place (City)</en>
+<en>Place (City)</en>
 <de>_</de>
+<id>815</id>
 </text>
 <text>
-<en default="1">Events.Top</en>
+<en>Events.Top</en>
 <de>_</de>
+<id>816</id>
 </text>
 <text>
-<en default="1">Events.Events</en>
+<en>Events.Events</en>
 <de>_</de>
+<id>817</id>
 </text>
 <text>
-<en default="1">Start Date</en>
+<en>Start Date</en>
 <de>_</de>
+<id>818</id>
 </text>
 <text>
-<en default="1">End Date</en>
+<en>End Date</en>
 <de>_</de>
+<id>819</id>
 </text>
 <text>
-<en default="1">Events.Show categories</en>
+<en>Events.Show categories</en>
 <de>_</de>
+<id>820</id>
 </text>
 <text>
-<en default="1">Update</en>
+<en>Update</en>
 <de>Aktualisieren</de>
+<id>821</id>
 </text>
 <text>
-<en default="1">Send order</en>
+<en>Send order</en>
 <de>Bestellung abschicken</de>
+<id>822</id>
 </text>
 <text>
-<en default="1">EUR</en>
+<en>EUR</en>
 <de>_</de>
+<id>823</id>
 </text>
 <text>
-<en default="1">Back to shop</en>
+<en>Back to shop</en>
 <de>Zur&#xFC;ck zum Shop</de>
+<id>824</id>
 </text>
 <text>
-<en default="1">Back</en>
+<en>Back</en>
 <de>Zur&#xFC;ck</de>
+<id>825</id>
 </text>
 <text>
-<en default="1">Back to cart</en>
+<en>Back to cart</en>
 <de>Zur&#xFC;ck zum Warenkorb</de>
+<id>826</id>
 </text>
 <text>
-<en default="1">Delete</en>
+<en>Delete</en>
 <de>L&#xF6;schen</de>
+<id>827</id>
 </text>
 <text>
-<en default="1">Shop.Cart</en>
+<en>Shop.Cart</en>
 <de>Shop - Warenkorb</de>
+<id>828</id>
 </text>
 <text>
-<en default="1">Mr.</en>
+<en>Mr.</en>
 <de>Herr</de>
+<id>829</id>
 </text>
 <text>
-<en default="1">Mrs.</en>
+<en>Mrs.</en>
 <de>Frau</de>
+<id>830</id>
 </text>
 <text>
-<en default="1">Title</en>
+<en>Title</en>
 <de>Titel</de>
+<id>831</id>
 </text>
-<text context="sex">
-<en default="1">Title</en>
+<text>
+<context>sex</context>
+<en>Title</en>
 <de>Anrede</de>
+<id>832</id>
 </text>
-<text context="agb">
-<en default="1">Terms</en>
+<text>
+<context>agb</context>
+<en>Terms</en>
 <de>AGB</de>
+<id>833</id>
 </text>
 <text>
-<en default="1">What type of payment do you wish?</en>
+<en>What type of payment do you wish?</en>
 <de>Welche Zahlungsart w&#xFC;nschen Sie?</de>
+<id>834</id>
 </text>
 <text>
-<en default="1">Cash on Delivery Charge</en>
+<en>Cash on Delivery Charge</en>
 <de>Nachnahmegeb&#xFC;hr</de>
+<id>835</id>
 </text>
 <text>
-<en default="1">Order</en>
+<en>Order</en>
 <de>Bestellen</de>
+<id>836</id>
 </text>
 <text>
-<en default="1">Please enter your address</en>
+<en>Please enter your address</en>
 <de>Bitte geben Sie Ihre Adressdaten ein</de>
+<id>837</id>
 </text>
 <text>
-<en default="1">Your cart contain</en>
+<en>Your cart contain</en>
 <de>Ihr Warenkorb beinhaltet</de>
+<id>838</id>
 </text>
 <text>
-<en default="1">Other comments, questions or suggestions</en>
+<en>Other comments, questions or suggestions</en>
 <de>Sonstige Bemerkungen, Fragen oder Anregungen</de>
+<id>839</id>
 </text>
 <text>
-<en default="1">Please check your petitions</en>
+<en>Please check your petitions</en>
 <de>Bitte &#xFC;berpr&#xFC;fen sie Ihre Daten</de>
+<id>840</id>
 </text>
 <text>
-<en default="1">Your Comment</en>
+<en>Your Comment</en>
 <de>Ihre Anmerkung</de>
+<id>841</id>
 </text>
 <text>
-<en default="1">Welcome to our shop</en>
+<en>Welcome to our shop</en>
 <de>Willkommen zu unserem Shop</de>
+<id>842</id>
 </text>
 <text>
-<en default="1">testWord</en>
+<en>testWord</en>
 <de>_</de>
-</text>
-<text context="testContext">
-<en default="1">testWord</en>
-<en_plural>testWords</en_plural>
-<de>_</de>
-<de_plural>_</de_plural>
+<id>843</id>
 </text>
 <text>
-<en default="1">You pay by</en>
+<en>You pay by</en>
 <de>Sie zahlen per</de>
+<id>844</id>
 </text>
 <text>
-<en default="1">cashOnDelivery</en>
+<en>cashOnDelivery</en>
 <de>Nachnahme</de>
+<id>845</id>
 </text>
 <text>
-<en default="1">prepayment</en>
+<en>prepayment</en>
 <de>Vorauskasse</de>
+<id>846</id>
+</text>
+<text>
+<en>News</en>
+<de>_</de>
+<id>847</id>
+</text>
+<text>
+<en>User</en>
+<de>_</de>
+<id>848</id>
+</text>
+<text>
+<en>Todo</en>
+<de>_</de>
+<id>849</id>
+</text>
+<text>
+<en>Datum</en>
+<de>_</de>
+<id>850</id>
+</text>
+<text>
+<en>Ok</en>
+<de>_</de>
+<id>851</id>
+</text>
+<text>
+<en>This field should be a URL in the format "http:/</en>
+<de>_</de>
+<id>852</id>
+</text>
+<text>
+<en>This field should only contain letters and _</en>
+<de>_</de>
+<id>853</id>
+</text>
+<text>
+<en>This field should only contain letters, numbers and _</en>
+<de>_</de>
+<id>854</id>
+</text>
+<text>
+<en>Do you really want to delete this entry:nn"</en>
+<de>_</de>
+<id>855</id>
+</text>
+<text>
+<en>Link.Extern</en>
+<de>_</de>
+<id>856</id>
+</text>
+<text>
+<en>Link.FirstChildPage</en>
+<de>_</de>
+<id>857</id>
+</text>
+<text>
+<en>a post in an observed thread has been submitted</en>
+<de>_</de>
+<id>858</id>
 </text>
 </trl>
 

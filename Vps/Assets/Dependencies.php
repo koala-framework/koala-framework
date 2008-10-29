@@ -6,12 +6,14 @@ class Vps_Assets_Dependencies
     private $_dependenciesConfig;
     private $_processedDependencies = array();
     private $_processedComponents = array();
+    private $_jsLoader;
     /**
      * @param string Assets-Typ, Frontend od. Admin
      **/
     public function __construct()
     {
         $this->_config = Vps_Registry::get('config');
+        $this->_jsLoader = new Vps_Trl_JsLoader();
     }
 
     public function getAssetUrls($assetsType, $fileType = null)
@@ -279,6 +281,7 @@ class Vps_Assets_Dependencies
 
     public function getFileContents($file, $language = null)
     {
+
         if (!$language) {
             $language = Zend_Registry::get('trl')->getTargetLanguage();
         }
@@ -413,7 +416,7 @@ class Vps_Assets_Dependencies
                         $version = Vps_Registry::get('config')->application->version;
                         $cacheData['contents'] = str_replace('{$application.version}', $version, $cacheData['contents']);
 
-                        $cacheData['contents'] = $this->_trl($cacheData['contents'], $language);
+                        $cacheData['contents'] = $this->_jsLoader->trlLoad($cacheData['contents'], $language);
                         $cacheData['contents'] = $this->_hlp($cacheData['contents'], $language);
                     }
                     $cache->save($cacheData, $cacheId);
@@ -446,75 +449,6 @@ class Vps_Assets_Dependencies
         return $contents;
     }
 
-    private function _trl($contents, $language)
-    {
-        //TODO 1902 $language verwenden
-        $elements = Zend_Registry::get('trl')->parse($contents);
-
-        foreach ($elements as $i=>$trlelement) {
-            $values = array();
-
-            if ($trlelement['source'] == Vps_Trl::SOURCE_VPS) {
-                $mode = "Vps";
-            } else  {
-                $mode = '';
-            }
-
-            //TODO: vereinfachen
-            if ($trlelement['type'] == 'trl') {
-                $values['before'] = $trlelement['before'];
-                $values['tochange'] = $trlelement['text'];
-                $method = $trlelement['type'].$mode;
-                $values['now'] = $method($values['tochange']);
-                $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                $values['now'] = str_replace($method, "trl", $values['now']);
-
-            } else if ($trlelement['type'] == 'trlc') {
-                $values = array();
-                $values['context'] = $trlelement['context'];
-                $values['before'] = $trlelement['before'];
-                $values['tochange'] = $trlelement['text'];
-                $method = $trlelement['type'].$mode;
-                $values['now'] = $method($values['context'] ,$values['tochange']);
-                $values['now'] = str_replace($values['tochange'], $values['now'], $values['before']);
-                $values['now'] = str_replace($method, 'trl', $values['now']);
-                $values['now'] = str_replace('\''.$values['context'].'\', ', '', $values['now']);
-                $values['now'] = str_replace('"'.$values['context'].'", ', '', $values['now']);
-
-            } else if ($trlelement['type'] == 'trlp') {
-                $values['before'] = $trlelement['before'];
-                $values['single'] = $trlelement['text'];
-                $values['plural'] = $trlelement['plural'];
-
-                $newValues = Zend_Registry::get('trl')->getTrlpValues(null, $values['single'],
-                                            $values['plural'], $trlelement['source'] );
-
-                $method = $trlelement['type'].$mode;
-                $values['now'] = str_replace($values['single'], $newValues['single'], $values['before']);
-                $values['now'] = str_replace($values['plural'], $newValues['plural'], $values['now']);
-                $values['now'] = str_replace($method, 'trlp', $values['now']);
-
-            } else if ($trlelement['type'] == 'trlcp') {
-                $values = array();
-                $values['before'] = $trlelement['before'];
-                $values['context'] = $trlelement['context'];
-                $values['single'] = $trlelement['text'];
-                $values['plural'] = $trlelement['plural'];
-
-                $newValues = Zend_Registry::get('trl')->getTrlpValues($values['context'],
-                            $values['single'], $values['plural'], $trlelement['source'] );
-
-                $method = 'trlcp'.$mode;
-                $values['now'] = str_replace($values['single'], $newValues['single'], $values['before']);
-                $values['now'] = str_replace($values['plural'], $newValues['plural'], $values['now']);
-                $values['now'] = str_replace("\"".$values['context']."\",", "", $values['now']);
-                $values['now'] = str_replace('\''.$values['context'].'\',', "", $values['now']);
-                $values['now'] = str_replace($method, 'trlp', $values['now']);
-            }
-            $contents = str_replace($values['before'], $values['now'], $contents);
-        }
-        return $contents;
-    }
 
     private function _getCache()
     {

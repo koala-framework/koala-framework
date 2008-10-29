@@ -124,4 +124,8 @@ class Vps_Model_FieldRows extends Vps_Model_Data_Abstract
     {
         return $this->_createRow($data, array('parentRow' => $parentRow));
     }
+
+    public function getUniqueIdentifier() {
+        throw new Vps_Exception("no unique identifier set");
+    }
 }

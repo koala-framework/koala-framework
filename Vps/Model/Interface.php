@@ -9,6 +9,10 @@ interface Vps_Model_Interface
     public function hasColumn($col);
     public function getSiblingModels();
     public function setDefault(array $default);
+    /**
+     * @return string
+     */
+    public function getUniqueIdentifier();
 
     public function getRow($id);
     public function getRows($where=null, $order=null, $limit=null, $start=null);
@@ -18,5 +22,6 @@ interface Vps_Model_Interface
     public function find($id);
     public function fetchAll($where=null, $order=null, $limit=null, $start=null);
     public function fetchCount($where = array());
+
 
 }

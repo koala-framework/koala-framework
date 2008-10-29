@@ -82,17 +82,17 @@ class Vps_Component_Model extends Vps_Model_Abstract
         }
         return $this->_rows[$key];
     }
-    
+
     public function fetchCount($where = array())
     {
         throw new Vps_Exception('Not implemented yet.');
     }
-    
+
     public function getPrimaryKey()
     {
         return 'componentId';
     }
-    
+
     public function getTable()
     {
         return new Vps_Dao_Pages();
@@ -101,5 +101,10 @@ class Vps_Component_Model extends Vps_Model_Abstract
     public function getColumns()
     {
         throw new Vps_Exception('Not implemented yet.');
+    }
+
+    public function getUniqueIdentifier()
+    {
+        throw new Vps_Exception("no unique identifier set");
     }
 }

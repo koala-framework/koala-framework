@@ -82,4 +82,12 @@ class Vps_Model_Proxy extends Vps_Model_Abstract
     {
         return $this->_proxyModel->countRows($where);
     }
+
+    public function getUniqueIdentifier() {
+        if (isset($this->_proxyModel)) {
+            return $this->_proxyModel->getUniqueIdentifier().'_proxy';
+        } else {
+            throw new Vps_Exception("no unique identifier set");
+        }
+    }
 }

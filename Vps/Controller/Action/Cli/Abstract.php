@@ -5,6 +5,8 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
     {
         parent::preDispatch();
 
+        set_time_limit(0);
+
         //php sux
         $options = call_user_func(array(get_class($this), 'getHelpOptions'));
 

@@ -273,7 +273,7 @@ class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testDefaultValues()
+    public function testXmlDefaultValues ()
     {
         $model = new Vps_Model_Xml(array(
             'default' => array('foo'=>'defaultFoo')
@@ -281,4 +281,154 @@ class Vps_Model_Xml_ModelTest extends PHPUnit_Framework_TestCase
         $row = $model->createRow();
         $this->assertEquals('defaultFoo', $row->foo);
     }
+
+    public function testXmlWriteFile ()
+    {
+        $tmpfname = tempnam("/tmp", "XMLTEST");
+        file_put_contents($tmpfname, "<trl></trl>");
+
+         $model = new Vps_Model_Xml(array(
+            'xpath' => '/trl',
+            'topNode' => 'text',
+            'filepath' => $tmpfname
+        ));
+        //check ob file geladen
+        $this->assertTrue((bool)strpos($model->getXmlContentString(), '<trl/>'));
+
+        $r1 = $model->createRow(array('en' => 'english', 'de' => 'englisch'));
+        $r1->save();
+        $this->assertEquals(1, $model->getRows()->count());
+        $r2 = $model->getRow(1);
+        $this->assertEquals('englisch', $r2->de);
+        $this->assertTrue($r1 === $r2);
+        $r2->en = "american";
+        $this->assertEquals('american', $r1->en);
+
+        $r3 = $model->createRow(array('en' => 'german', 'de' => 'deutsch'));
+        $r3->save();
+
+        $this->assertEquals(2, $model->getRows()->count());
+        $r4 = $model->getRow(2);
+        $this->assertEquals('deutsch', $r4->de);
+
+        $r2->delete();
+        $this->assertEquals(1, $model->getRows()->count());
+
+
+        //check ob der file richtig geschrieben wurde
+        $contents = file_get_contents($tmpfname);
+		$simpleXml = new SimpleXMLElement($contents);
+		$xml = $simpleXml->asXML();
+		$this->assertTrue((bool)strpos($xml, '<en>german</en>'));
+		$this->assertTrue((bool)strpos($xml, '<de>deutsch</de>'));
+		$this->assertFalse((bool)strpos($xml, '<en>english</en>'));
+		$this->assertFalse((bool)strpos($xml, '<de>englisch</de>'));
+		unlink($tmpfname);
+    }
+
+    public function testXmlFindContextNull ()
+    {
+         $model = new Vps_Model_Xml(array(
+            'xpath' => '/trl',
+            'topNode' => 'text',
+            'xmlContent' => '<trl><text><id>1</id><en>foo</en><de>dings</de></text></trl>'
+        ));
+        $row = $model->getRow($model->select()->whereEquals('en', 'foo')->whereNull('context'));
+        $this->assertEquals('dings', $row->de);
+
+        $row = $model->getRow($model->select()->whereEquals('en', 'foo')->whereEquals('context', ''));
+        $this->assertNull($row);
+    }
+
+    public function testAddNullToXml ()
+    {
+        $model = new Vps_Model_Xml(array(
+            'xpath' => '/trl',
+            'topNode' => 'text',
+            'xmlContent' => '<trl><text><id>1</id><en>foo</en><de>dings</de></text></trl>'
+        ));
+        $row = $model->createRow(array('en' => 'foobar', 'de' => 'dingsbums', 'context' => null));
+        $row->save();
+
+        $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereNull('context'));
+        $this->assertEquals('dingsbums', $row->de);
+
+        $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereEquals('context', ''));
+        $this->assertNull($row);
+
+        $model = new Vps_Model_Xml(array(
+            'xpath' => '/trl',
+            'topNode' => 'text',
+            'xmlContent' => $model->getXmlContentString()
+        ));
+        $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereNull('context'));
+        $this->assertEquals('dingsbums', $row->de);
+
+        $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereEquals('context', ''));
+        $this->assertNull($row);
+    }
+
+    public function testAddEmptyStringToXml ()
+    {
+        $model = new Vps_Model_Xml(array(
+            'xpath' => '/trl',
+            'topNode' => 'text',
+            'xmlContent' => '<trl><text><id>1</id><en>foo</en><de>dings</de></text></trl>'
+        ));
+        $row1 = $model->createRow(array('en' => 'foobar', 'de' => 'dingsbums', 'context' => ''));
+        $row1->save();
+
+        $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereNull('context'));
+        $this->assertNull($row);
+
+        $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereEquals('context', ''));
+        $this->assertEquals('dingsbums', $row->de);
+
+
+        $model = new Vps_Model_Xml(array(
+            'xpath' => '/trl',
+            'topNode' => 'text',
+            'xmlContent' => $model->getXmlContentString()
+        ));
+        $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereNull('context'));
+        $this->assertNull($row);
+
+        $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereEquals('context', ''));
+        $this->assertEquals('dingsbums', $row->de);
+    }
+
+    public function testUpdateValueToNull ()
+    {
+          $model = new Vps_Model_Xml(array(
+            'xpath' => '/trl',
+            'topNode' => 'text',
+            'xmlContent' => '<trl><text><id>1</id><en>foo</en><de>dings</de></text></trl>'
+        ));
+        $row1 = $model->createRow(array('en' => 'foobar', 'de' => 'dingsbums', 'context' => 'hallo'));
+        $row1->save();
+
+        $row1->context = null;
+        $row1->save();
+
+        $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereNull('context'));
+        $this->assertEquals('dingsbums', $row->de);
+
+        $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereEquals('context', ''));
+        $this->assertNull($row);
+
+        $model = new Vps_Model_Xml(array(
+            'xpath' => '/trl',
+            'topNode' => 'text',
+            'xmlContent' => $model->getXmlContentString()
+        ));
+
+        $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereNull('context'));
+        $this->assertEquals('dingsbums', $row->de);
+
+        $row = $model->getRow($model->select()->whereEquals('en', 'foobar')->whereEquals('context', ''));
+        $this->assertNull($row);
+
+    }
+
+
 }

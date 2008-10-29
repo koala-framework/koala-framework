@@ -89,4 +89,9 @@ class Vps_Component_Generator_Model extends Vps_Model_Abstract
         array_pop($stack);
         return $ret;
     }
+
+    public function getUniqueIdentifier()
+    {
+        throw new Vps_Exception("no unique identifier set");
+    }
 }

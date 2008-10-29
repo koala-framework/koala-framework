@@ -159,7 +159,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         }
         if ($where = $select->getPart(Vps_Model_Select::WHERE_NULL)) {
             foreach ($where as $f) {
-                if (!is_null($data[$f])) return false;
+                if (isset($data[$f]) && !is_null($data[$f])) return false;
             }
         }
         return true;
