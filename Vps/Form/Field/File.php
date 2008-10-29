@@ -35,7 +35,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 
     public function load($row, $postData = array())
     {
-        if ($this->getSave() !== false || $this->getInternalSave() !== false) {
+        if ($this->getSave() === false || $this->getInternalSave() === false) {
             return array();
         }
         if (isset($postData[$this->getFieldName()])) {
