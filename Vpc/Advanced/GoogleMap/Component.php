@@ -13,6 +13,7 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Advanced_GoogleMapView_Compon
         ));
         $ret['assetsAdmin']['dep'][] = 'VpsGoolgeMapField';
         $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
+        $ret['placeholder']['noCoordinates'] = trlVps('coordinates not entered');
         return $ret;
     }
 

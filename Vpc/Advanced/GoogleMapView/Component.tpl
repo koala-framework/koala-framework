@@ -31,7 +31,7 @@
 
     <div class="mapDir"></div>
 <? } else { ?>
-    <?=trlVps('coordinates not entered')?>
+    <?=$this->placeholder['noCoordinates']?>
 <? } ?>
 </div>
 
