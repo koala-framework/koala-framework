@@ -30,7 +30,11 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             array(
                 'param'=> 'stop-on-failure',
                 'help' => 'Stop execution upon first error or failure'
-            )
+            ),
+            array(
+                'param'=> 'coverage',
+                'help' => 'Create a coverage report'
+            ),
         );
         $value = self::_getConfigSectionsWithTestDomain();
         if ($value) {
@@ -72,6 +76,14 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if ($this->_getParam('server')) {
             $cfg = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
             Vps_Registry::set('testDomain', $cfg->server->testDomain);
+        }
+        
+        if ($this->_getParam('coverage')) {
+            if (!extension_loaded('tokenizer') || !extension_loaded('xdebug')) {
+                throw new Vps_ClientException('tokenizer and xdebug extensions must be loaded');
+            }
+            ini_set('memory_limit', '64M');
+            $arguments['reportDirectory'] = './report';
         }
 
         $suite = new Vps_Test_TestSuite();
