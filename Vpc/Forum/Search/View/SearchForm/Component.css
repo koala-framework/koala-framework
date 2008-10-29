@@ -1,6 +1,3 @@
-.$cssClass {
-    text-align: right;   
-}
 .ext-ie6 .$cssClass .vpsField {
     float: none;
     margin: 0px;
@@ -19,8 +16,11 @@
 .ext-safari .$cssClass .submitWrapper {
     margin-top: -28px;
 }
+.$cssClass input {
+    float: left;
+}
 .$cssClass .submitWrapper {
-    margin-top: -31px;
+    float: right
 }
 .$cssClass .vpsField {
     margin-right: 85px;
