@@ -42,8 +42,12 @@ class Vps_View_Helper_Image
             $size['width'] = $size[0];
             $size['height'] = $size[1];
         } else if ($image instanceof Vps_Component_Data) {
-            $url = $image->getComponent()->getImageUrl();
-            $size = $image->getComponent()->getImageDimensions();
+            $c = $image->getComponent();
+            if (!$c instanceof Vpc_Basic_Image_Component) {
+                throw new Vps_Exception("No Vpc_Basic_Image_Component Component given (is '".get_class($c)."')");
+            }
+            $url = $c->getImageUrl();
+            $size = $c->getImageDimensions();
         } else {
             throw new Vps_Execption("Invalid image argument");
         }
