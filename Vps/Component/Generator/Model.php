@@ -1,22 +1,35 @@
 <?php
 class Vps_Component_Generator_Model extends Vps_Model_Abstract
 {
+    protected $_rowClass = 'Vps_Model_Row_Data_Abstract';
+    protected $_rowsetClass = 'Vps_Component_Generator_Model_Rowset';
+    
     protected $_constraints = array(
         'pageGenerator' => true,
         'ignoreVisible' => true
     );
 
-    public function fetchAll($where=null, $order=null, $limit=null, $start=null)
+    public function getPrimaryKey() {
+        return 'id';
+    }
+    
+    public function getColumns() {
+        return array();
+    }
+    
+    public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
         $rowset = array();
-        if (!$where['parent']) {
+        if ($where->getPart('whereNull') && in_array('parent_id', $where->getPart('whereNull'))) {
             $rowset[] = array(
                 'component' => Vps_Component_Data_Root::getComponentClass(),
                 'class' => 'root',
                 'name' => 'root'
             );
         } else {
-            foreach (Vpc_Abstract::getSetting($where['parent'], 'generators', false) as $key => $generator) {
+            $equals = $where->getPart('whereEquals');
+            $parent = $equals['parent_id'];
+            foreach (Vpc_Abstract::getSetting($parent, 'generators', false) as $key => $generator) {
                 if (is_array($generator['component'])) {
                     foreach ($generator['component'] as $component => $class) {
                         if ($class) {
@@ -36,12 +49,25 @@ class Vps_Component_Generator_Model extends Vps_Model_Abstract
                 }
             }
         }
+        
         return new $this->_rowsetClass(array(
-            'data' => $rowset,
-            'rowClass' => $this->_rowClass,
-            'model' => $this
+            'model' => $this,
+            'dataKeys' => $rowset
         ));
     }
+    
+    public function getRowByDataKey($row)
+    {
+        $key = $row['component'];
+        if (!isset($this->_rows[$key])) {
+            $this->_rows[$key] = new $this->_rowClass(array(
+                'data' => $row,
+                'model' => $this
+            ));
+        }
+        return $this->_rows[$key];
+    }
+
     /**
      * Gibt den Komponenten-Baum aus (für CLI)
      **/
@@ -94,4 +120,5 @@ class Vps_Component_Generator_Model extends Vps_Model_Abstract
     {
         throw new Vps_Exception("no unique identifier set");
     }
+    
 }

@@ -8,7 +8,8 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected $_table;
     protected $_tableName;
     protected $_model;
-
+    protected $_modelName;
+    
     protected $_icons = array (
         'root'      => 'folder',
         'default'   => 'table',
@@ -60,7 +61,10 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     {
         parent::preDispatch();
 
-        if (!$this->_model) {
+        if (isset($this->_modelName)) {
+            $modelName = $this->_modelName;
+            $this->_model = new $modelName();
+        } else if (!$this->_model) {
             if (!isset($this->_table)) {
                 $this->_table = new $this->_tableName();
             }
