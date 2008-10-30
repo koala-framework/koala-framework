@@ -57,6 +57,7 @@ class Vps_Db_Table_Select extends Zend_Db_Table_Select
         if (is_string($searchFields)) $searchFields = array($searchFields);
 
         $selectInfo = $this->info();
+        $wheres = array();
         foreach ($searchValues as $column => $value) {
             if (empty($value) ||
                 ($column != 'query' && !in_array($column, $selectInfo['cols']))
@@ -90,12 +91,14 @@ class Vps_Db_Table_Select extends Zend_Db_Table_Select
                             $field.' LIKE ?', "%$searchWord%"
                         );
                     }
-                    $this->where(implode(' OR ', $wheres));
                 } else {
-                    $this->where($column.' LIKE ?', "%".$searchWord."%");
+                    $wheres[] = Vps_Registry::get('db')->quoteInto(
+                        $column.' LIKE ?', "%$searchWord%"
+                    );
                 }
             }
         }
+        $this->where(implode(' OR ', $wheres));
         return $this;
     }
 }
