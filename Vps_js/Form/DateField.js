@@ -1,7 +1,7 @@
 Vps.Form.DateField = Ext.extend(Ext.form.DateField,
 {
     format: trlVps('Y-m-d'),
-    width: 80,
+    width: 90,
     initComponent : function(){
         Vps.Form.DateField.superclass.initComponent.call(this);
         this.addEvents('menuhidden');
