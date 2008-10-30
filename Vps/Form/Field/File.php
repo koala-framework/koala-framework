@@ -134,9 +134,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
 
         $name = htmlspecialchars($name);
         $ret['id'] = str_replace(array('[', ']'), array('_', '_'), $name.$namePostfix);
-        $ret['html']  = "<div class=\"vpsFormFieldFileInner\">\n";
-        $ret['html'] .= "<input type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
-                        " style=\"width: {$this->getWidth()}px\" />";
+        $ret['html']  = "<div class=\"vpsFormFieldFileInnerImg\">\n";
         if ($value) {
             $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
                         " value=\"$value[uploadId]\" />";
@@ -144,12 +142,22 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
                 //todo: with und height von image
                 $ret['html'] .= " <img src=\"/vps/media/upload/preview?uploadId=$value[uploadId]&amp;size=frontend\" alt=\"\" width=\"100\" height=\"100\" />";
             }
-            $ret['html'] .= '<div class="deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlVps("Delete Image").'</button></div>';
-            $ret['html'] .= "<div class=\"vpsFormFieldFileInfo\">\n";
+        }
+        $ret['html'] .= '</div>';
+        $ret['html'] .= "<div class=\"vpsFormFieldFileInnerContent\">\n";
+        $ret['html'] .= "<div class=\"imagePath\">\n";
+        $ret['html'] .= "<input type=\"file\" id=\"$ret[id]\" name=\"$name$namePostfix\" ".
+                        " style=\"width: {$this->getWidth()}px\" />";
+        $ret['html'] .= '</div>';
+        if ($value) {
+            $ret['html'] .= "<div class=\"imageTitle\">\n";
             $ret['html'] .= ''.$value['filename'].'.'.$value['extension'];
             $helper = new Vps_View_Helper_FileSize();
             $ret['html'] .= ' ('.$helper->fileSize($value['fileSize']).')';
             $ret['html'] .= '</div>';
+            $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
+                        " value=\"$value[uploadId]\" />";
+            $ret['html'] .= '<div class="deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlVps("Delete Image").'</button></div>';
         }
         $ret['html'] .= '</div>';
         return $ret;
