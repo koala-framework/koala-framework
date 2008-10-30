@@ -12,7 +12,6 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
 
     public function testTrlParsePhp()
     {
-        //$this->markTestIncomplete();
         $values = $this->_trlObject->parse('trl("\n")');
         $this->assertEquals(Vps_Trl::ERROR_INVALID_STRING, $values[0]['error_short']);
 
@@ -141,7 +140,6 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
 
     public function testTrlParseJs ()
     {
-       // $this->markTestIncomplete();
         $values = $this->_trlObject->parse('trlc("context", "{0} days a week", [5])', 'js');
         $this->assertEquals('context', $values[0]['context']);
         $this->assertEquals('{0} days a week', $values[0]['text']);
@@ -172,9 +170,27 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(true, $values[0]['error']);
     }
 
-    public function testTrlInsertToXml ()
+    public function testTrlParseJsLargeString()
     {
-       // $this->markTestIncomplete();
+        $this->markTestIncomplete();
+        //wenn behoben in JsLoader Zeile 77 Hack entfernen
+
+        $input = str_repeat(' ', 10015)." trlVps('Info')";
+        $result = $this->_trlObject->parse($input, 'js');
+        $this->assertEquals(1, count($result));
+
+        $input = str_repeat(' ', 11000)." trlVps('Info')";
+        $result = $this->_trlObject->parse($input, 'js');
+        $this->assertEquals(1, count($result));
+
+        $input = str_repeat(' ', 7998)."trlVps('Info')".
+                 str_repeat(' ', 11000)."trlVps('Foo')";
+        $result = $this->_trlObject->parse($input, 'js');
+        $this->assertEquals(2, count($result));
+    }
+
+    public function testTrlInsertToXml()
+    {
         $modelWeb = new Vps_Model_FnF();
         $modelWeb->setData(array(
             array('id' => 1, 'en' => 'foo', 'de' => 'dings'),
