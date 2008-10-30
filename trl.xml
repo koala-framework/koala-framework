@@ -4326,5 +4326,40 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <de>_</de>
 <id>858</id>
 </text>
+<text>
+<en>This field should only contain letters and _</en>
+<de>_</de>
+<id>859</id>
+</text>
+<text>
+<en>This field should only contain letters, numbers and _</en>
+<de>_</de>
+<id>860</id>
+</text>
+<text>
+<en>If you have lost your password, </en>
+<de>Wenn Sie ihr Passwort vergessen haben, k&#xF6;nnnen Sie </de>
+<id>861</id>
+</text>
+<text>
+<en>request a new one here</en>
+<de>hier ein neues anfordern</de>
+<id>862</id>
+</text>
+<text>
+<en>This field should only contain letters and _</en>
+<de>_</de>
+<id>863</id>
+</text>
+<text>
+<en>This field should only contain letters, numbers and _</en>
+<de>_</de>
+<id>864</id>
+</text>
+<text>
+<en>Your options</en>
+<de>Ihre Optionen</de>
+<id>865</id>
+</text>
 </trl>
 

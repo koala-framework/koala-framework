@@ -1,0 +1,16 @@
+.$cssClass .vpsFormFieldFile label {
+    width: auto !important;
+    float: left;
+}
+.$cssClass .vpsFormFieldFileInnerImg {
+    float: left;
+}
+.$cssClass .vpsFormFieldFileInnerContent {
+    float: right;
+    text-align: right;
+}
+.$cssClass .vpsFormFieldFileInnerContent .imageTitle {
+    width: 250px;
+    margin: 10px 0px;
+    overflow: hidden;
+}

@@ -66,30 +66,6 @@
     margin-left: 20px;
     padding: 5px;
 }
-.$cssClass .vpsFormFieldFileInner img {
-    float: left;
-}
-.$cssClass .vpsFormFieldFileInner input {
-    float: right;
-}
-.$cssClass .vpsFormFieldFileInner div.deleteImage {
-    float: right;
-    margin-right: 2px;
-    margin-left: 20px;
-}
-.ext-ie .$cssClass .vpsFormFieldFileInner div.deleteImage {
-    margin-left: 10px;
-}
-.ext-ie7 .$cssClass .vpsFormFieldFileInner div.deleteImage {
-    margin-right: 4px;
-}
-.$cssClass .vpsFormFieldFileInner .vpsFormFieldFileInfo {
-    width: 210px;
-    overflow: hidden;
-    float: right;
-    margin-top: 5px;
-    text-align: right;
-}
 .$cssClass .vpsFormFieldRadio {
     margin-left: -10px;
 }
