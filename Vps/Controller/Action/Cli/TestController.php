@@ -96,7 +96,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             if (!extension_loaded('tokenizer') || !extension_loaded('xdebug')) {
                 throw new Vps_ClientException('tokenizer and xdebug extensions must be loaded');
             }
-            ini_set('memory_limit', '64M');
+            ini_set('memory_limit', '128M');
             if (!is_string($this->_getParam('coverage'))) {
                 $arguments['reportDirectory'] = './report';
             } else {

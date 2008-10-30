@@ -88,7 +88,11 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             && (!isset($postData[$this->getFieldName()])
                 || $postData[$this->getFieldName()]['error'] == UPLOAD_ERR_NO_FILE)
         ) {
-            $postData[$this->getFieldName()] = (int)$postData[$this->getFieldName().'_upload_id'];
+            if (!$postData[$this->getFieldName().'_upload_id']) {
+                $postData[$this->getFieldName()] = null;
+            } else {
+                $postData[$this->getFieldName()] = (int)$postData[$this->getFieldName().'_upload_id'];
+            }
             unset($postData[$this->getFieldName().'_upload_id']);
         }
 
@@ -112,7 +116,11 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         }
         if (isset($postData[$this->getFieldName().'_del'])) {
             unset($postData[$this->getFieldName().'_del']);
-            $postData[$this->getFieldName()] = '';
+            $postData[$this->getFieldName()] = null;
+        }
+
+        if ($postData[$this->getFieldName()] === '') {
+            $postData[$this->getFieldName()] = null;
         }
 
         return $postData;

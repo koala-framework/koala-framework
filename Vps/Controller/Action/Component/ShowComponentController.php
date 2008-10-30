@@ -7,7 +7,12 @@ class Vps_Controller_Action_Component_ShowComponentController extends Vps_Contro
         if (!$id) {
             throw new Vps_ClientException("Missing Parameter: id");
         }
-        $c = Vps_Component_Data_Root::getInstance()->getComponentById($id, array('ignoreVisible'=>true));
+        $c = Vps_Component_Data_Root::getInstance()
+            ->getComponentById($id, array('ignoreVisible'=>true));
+        if (!$c) {
+            $c = Vps_Component_Data_Root::getInstance()
+                ->getComponentByDbId($id, array('ignoreVisible'=>true));
+        }
         if (!$c) {
             throw new Vps_ClientException("Component with id '$id' not found");
         }
