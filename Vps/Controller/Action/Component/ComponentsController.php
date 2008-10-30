@@ -12,21 +12,10 @@ class Vps_Controller_Action_Component_ComponentsController extends Vps_Controlle
         'page'      => 'page',
         'component' => 'page_white',
         'box'       => 'page_white_database',
-        'default'   => 'page_error'
+        'default'   => 'page_error',
+        'invisible'   => 'page_error'
     );
-    
-    public function init()
-    {
-        $class = $this->_getParam('class');
-        $this->_model = new Vps_Component_Generator_Model(array('default' => $class));
-        parent::init();
-    }
-    
-    public function jsonMetaAction()
-    {
-        parent::jsonMetaAction();
-        $this->view->baseParams = array('class' => $this->_getParam('class'));
-    }
+    protected $_modelName = 'Vps_Component_Generator_Model';
     
     protected function _formatNode($row)
     {
