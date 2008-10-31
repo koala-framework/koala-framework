@@ -269,7 +269,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         $ret['placeholder'] = $this->_getSetting('placeholder');
         $ret['cssClass'] = self::getCssClass($this);
         $ret['data'] = $this->getData();
-        if ($this->_hasSetting('modelname') && $this->_getSetting('modelname') == 'Vps_Dao_ComponentField') {
+        if ($this->_hasSetting('modelname') && is_instance_of($this->_getSetting('modelname'), 'Vps_Component_FieldModel')) {
             $ret['row'] = $this->_getRow();
         }
         return $ret;
