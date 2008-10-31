@@ -61,6 +61,46 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
     }
 
+    public function testCreatesInternLinkComponent()
+    {
+        $c = $this->_root->getComponentById(1014)->getComponent();
+        $row = $c->getRow();
+        $html = '<p><a href="/foo1">foo</a></p>';
+        $row->content = $html;
+        $row->save();
+        $html = $row->content;
+        $this->assertEquals("<p>\n  <a href=\"1014-l1\">foo</a>\n</p>", $html);
+
+        $cc = array_values($c->getData()->getChildComponents());
+        $this->assertEquals(1, count($cc));
+        $this->assertEquals('1014-l1', current($cc)->componentId);
+
+        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_TestChildComponentsModel');
+        $rows = $m->getRows($m->select()->whereEquals('component_id', '1014'));
+        $this->assertEquals(1, count($rows));
+        $row = $rows->current();
+        $this->assertEquals('link', $row->component);
+        $this->assertEquals('1', $row->nr);
+
+        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Link_TestModel');
+        $rows = $m->getRows($m->select()->whereEquals('component_id', '1014-l1'));
+        $this->assertEquals(1, count($rows));
+        $row = $rows->current();
+        $this->assertEquals('intern', $row->component);
+
+        $m = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_Link_Intern_TestModel');
+        $rows = $m->getRows($m->select()->whereEquals('component_id', '1014-l1-link'));
+        $this->assertEquals(1, count($rows));
+        $row = $rows->current();
+        $this->assertEquals('1001', $row->target);
+
+        $output = new Vps_Component_Output_NoCache();
+        $html = $output->render($c->getData());
+        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicText vpcBasicTextTestComponent\">\n".
+                    "<p>\n  <a href=\"/foo1\">foo</a>\n</p>".
+                    "</div>", $html);
+    }
+
     public function testCreatesMailLinkComponentHtml()
     {
         $c = $this->_root->getComponentById(1005)->getComponent();
@@ -176,7 +216,6 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete();
         /*
-        - interne links umwandeln (noch nicht implementiert)
         - testen: beim speichern einträge löschen die nicht im html vorkommen
         - testen: beim speichern saved=1 setzen
         - testen: beim löschen unterkompoenten mitlöschen

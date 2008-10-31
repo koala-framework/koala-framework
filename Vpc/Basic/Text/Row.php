@@ -347,15 +347,25 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                 }
                 $destRow = $model->createRow();
                 $linkClasses = Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
+
+                $destRow->component = null;
                 if (preg_match('#^mailto:#', $part['href'], $m)) {
                     if (isset($linkClasses['mail']) && $linkClasses['mail']) {
                         $destRow->component = 'mail';
                     }
                 } else {
-                    if (isset($linkClasses['extern']) && $linkClasses['extern']) {
+                    if (isset($linkClasses['intern']) && $linkClasses['intern']) {
+                        $internLinkPage = Vps_Component_Data_Root::getInstance()
+                            ->getPageByPath($part['href']);
+                        if ($internLinkPage) {
+                            $destRow->component = 'intern';
+                        }
+                    }
+                    if (!$destRow->component && isset($linkClasses['extern']) && $linkClasses['extern']) {
                         $destRow->component = 'extern';
                     }
                 }
+
                 if (!$destRow->component) continue; //kein solcher-link möglich
                 $this->addChildComponentRow('link', $destRow);
                 $destRow->save();
@@ -364,6 +374,8 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                 $row = Vpc_Abstract::createModel($destClasses[$destRow->component])->createRow();
                 if ($destRow->component == 'extern') {
                     $row->target = $part['href'];
+                } else if ($destRow->component == 'intern') {
+                    $row->target = $internLinkPage->dbId;
                 } else {
                     preg_match('#^mailto:(.*)\\??(.*)#', $part['href'], $m);
                     $row->mail = $m[1];
