@@ -102,7 +102,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
     {
         // Wenn Komponente keinen View Cache hat, ohne Cache ausgeben
         if (!Vpc_Abstract::getSetting($componentClass, 'viewCache')) {
-            return parent::_renderContent($componentId, $componentClass, $masterTemplate);
+            return parent::_renderHasContent($componentId, $componentClass, $content);
         }
         
         // Komponente aus Cache holen
