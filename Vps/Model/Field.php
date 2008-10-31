@@ -47,11 +47,13 @@ class Vps_Model_Field extends Vps_Model_Abstract implements Vps_Model_SubModel_I
 
     public function getRowBySiblingRow(Vps_Model_Row_Interface $siblingRow)
     {
-        $v = $siblingRow->{$this->_fieldName};
-        if (substr($v, 0, 13) == 'vpsSerialized') {
-            $v = substr($v, 13);
+        $data = $siblingRow->{$this->_fieldName};
+        if (is_string($data)) {
+            if (substr($data, 0, 13) == 'vpsSerialized') {
+                $data = substr($data, 13);
+            }
+            $data = unserialize($data);
         }
-        $data = unserialize($v);
         if (!$data) {
             $data = $this->getDefault();
         }
