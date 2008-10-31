@@ -444,7 +444,7 @@ class Vps_Component_Data
         $title = array();
         $row = $this->getPage();
         do {
-            if ($row->name != '') {
+            if ($row->name != '' && $row->name != 'Home') {
                 $title[] = $row->name;
             }
         } while ($row = $row->getParentPage());
