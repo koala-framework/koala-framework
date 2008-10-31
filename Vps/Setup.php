@@ -240,6 +240,14 @@ class Vps_Setup
             Zend_Session::setId($_POST['PHPSESSID']);
         }
 
+        if (Zend_Registry::get('config')->server->redirectToDomain
+            && Zend_Registry::get('config')->server->domain
+            && isset($_SERVER['HTTP_HOST'])
+            && $_SERVER['HTTP_HOST'] != Zend_Registry::get('config')->server->domain) {
+            header("Location: http://".Zend_Registry::get('config')->server->domain.$_SERVER['REQUEST_URI'], true, 301);
+            exit;
+        }
+
         $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
         if (php_sapi_name() != 'cli' &&
             Zend_Registry::get('config')->preLogin &&

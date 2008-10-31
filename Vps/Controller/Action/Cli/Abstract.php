@@ -71,10 +71,10 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
         $sections = array();
         $processedDomains = array();
         foreach ($webConfigFull as $k=>$i) {
-            if ($i->server && $i->server->testDomain) {
-                if ( !in_array($i->server->testDomain, $processedDomains)) {
+            if ($i->server && $i->server->domain) {
+                if ( !in_array($i->server->domain, $processedDomains)) {
                     $sections[] = $k;
-                    $processedDomains[] = $i->server->testDomain;
+                    $processedDomains[] = $i->server->domain;
                 }
             }
         }
