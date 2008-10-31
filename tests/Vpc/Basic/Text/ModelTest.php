@@ -212,6 +212,23 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
                     "</div>", $html);
     }
 
+    public function testOldMediaUrlImage()
+    {
+        $c = $this->_root->getComponentById(1015)->getComponent();
+        $row = $c->getRow();
+        $html = '<p><img src="/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/File/small/e73520d11dee6ff49859b8bb26fc631f/filename.jpg?319" /></p>';
+        $row->content = $html;
+        $row->save();
+        $html = $row->content;
+        $this->assertEquals("<p>\n  <img src=\n  \"/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/File/small/e73520d11dee6ff49859b8bb26fc631f/filename.jpg?319\" />\n</p>", $html);
+
+        $output = new Vps_Component_Output_NoCache();
+        $html = $output->render($c->getData());
+        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicText vpcBasicTextTestComponent\">\n".
+                    "<p>\n  <div class=\"vpcBasicTextImageTestComponent\"><img src=\"/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/default/987577de8b2c5b4b75b8343ed85db0bf/foo.png\" width=\"100\" height=\"100\" alt=\"\" class=\"\" /></div>\n</p>".
+                    "</div>", $html);
+    }
+
     public function testMore()
     {
         $this->markTestIncomplete();
@@ -220,5 +237,4 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         - testen: beim speichern saved=1 setzen
         - testen: beim löschen unterkompoenten mitlöschen
         */
-    }
-}
+    }}

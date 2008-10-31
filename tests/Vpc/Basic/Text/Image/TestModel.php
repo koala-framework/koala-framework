@@ -9,7 +9,8 @@ class Vpc_Basic_Text_Image_TestModel extends Vpc_Basic_Image_Model
             'columns' => array('component_id', 'width', 'height', 'scale', 'vps_upload_id', 'filename', 'enlarge', 'comment'),
             'primaryKey' => 'component_id',
             'data'=> array(
-                array('component_id'=>'1011-i1', 'vps_upload_id'=>1)
+                array('component_id'=>'1011-i1', 'vps_upload_id'=>1),
+                array('component_id'=>'1015-i1', 'vps_upload_id'=>1)
             )
         ));
         parent::__construct($config);
