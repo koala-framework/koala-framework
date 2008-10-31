@@ -91,12 +91,10 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if ($this->_getParam('coverage-xml')) {
             $arguments['coverageClover'] = $this->_getParam('coverage-xml');
         }
-
         if ($this->_getParam('coverage')) {
             if (!extension_loaded('tokenizer') || !extension_loaded('xdebug')) {
                 throw new Vps_ClientException('tokenizer and xdebug extensions must be loaded');
             }
-            ini_set('memory_limit', '128M');
             if (!is_string($this->_getParam('coverage'))) {
                 $arguments['reportDirectory'] = './report';
             } else {
@@ -108,6 +106,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             $cfg = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
             Vps_Registry::set('testDomain', $cfg->server->domain);
         }
+        ini_set('memory_limit', '128M');
 
         $suite = new Vps_Test_TestSuite();
         $runner = new PHPUnit_TextUI_TestRunner;
