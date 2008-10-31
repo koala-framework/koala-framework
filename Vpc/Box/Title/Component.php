@@ -3,8 +3,10 @@ class Vpc_Box_Title_Component extends Vpc_Abstract
 {
     protected function _getTitle()
     {
-        return $this->getData()->getTitle() . " - "
-            . Zend_Registry::get('config')->application->name;
+        $ret = $this->getData()->getTitle();
+        if ($ret) $ret .= ' - ';
+        $ret .= Zend_Registry::get('config')->application->name;
+        return $ret;
     }
     public function getTemplateVars()
     {
