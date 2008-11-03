@@ -1,5 +1,6 @@
 <?php
-class Vpc_Basic_Image_Component extends Vpc_Abstract implements Vps_Media_Output_Interface
+class Vpc_Basic_Image_Component extends Vpc_Abstract
+    implements Vps_Media_Output_Interface
 {
     public static function getSettings()
     {

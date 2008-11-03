@@ -130,6 +130,19 @@ class Vps_Uploads_Row extends Vps_Model_Proxy_Row
         $this->_deleteFile();
     }
 
+    public function getImageDimensions()
+    {
+        $size = @getimagesize($this->getFileSource());
+        if ($size) {
+            $ret = array();
+            $ret['width'] = $size[0];
+            $ret['height'] = $size[1];
+        } else {
+            $ret = false;
+        }
+        return $ret;
+    }
+
     /*
     TODO
     public function duplicate($data = array())

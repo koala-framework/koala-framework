@@ -5,8 +5,8 @@ class Vps_Controller_Action_Welcome_ContentController extends Vps_Controller_Act
     {
         $this->view->content = '';
         try {
-            $t = new Vps_Dao_Welcome();
-            $row = $t->find(1)->current();
+            $t = new Vps_Util_Welcome_Model();
+            $row = $t->getRow(1);
             if ($row) {
                 $this->view->content = $row->content;
             }
@@ -15,8 +15,10 @@ class Vps_Controller_Action_Welcome_ContentController extends Vps_Controller_Act
             $row = null;
         }
         if ($row) {
-            $this->view->image = $row->getFileUrl('WelcomeImage', 'welcome');
-            $this->view->imageSize = $row->getImageDimensions('WelcomeImage', 'welcome');
+            $this->view->image = Vps_Media::getUrlByRow(
+                $row, 'WelcomeImage'
+            );
+            $this->view->imageSize = Vps_Media::getDimensionsByRow($row, 'LoginImage');
         } else {
             $this->view->image = false;
         }
