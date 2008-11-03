@@ -19,15 +19,6 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Advanced_GoogleMapView_Compon
 
     protected function _getOptions()
     {
-        $ret = array();
-        $ret['zoom_properties'] = $this->_getRow()->zoom_properties;
-        $ret['zoom'] = $this->_getRow()->zoom;
-        $ret['height'] = $this->_getRow()->height;
-        $ret['width'] = $this->_getRow()->width;
-        $ret['coordinates'] = $this->_getRow()->coordinates;
-        $ret['scale'] = $this->_getRow()->scale;
-        $ret['satelite'] = $this->_getRow()->satelite;
-        $ret['overview'] = $this->_getRow()->overview;
-        return $ret;
+        return $this->_getRow()->toArray();
     }
 }

@@ -14,6 +14,14 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         } else {
             throw new Vps_ClientException("Unknown server-host: {$config->server->host}");
         }
+        $onlineRevision = false;
+        try {
+            $info = new SimpleXMLElement(`ssh {$this->_sshHost} "cd {$config->server->dir} && svn info --xml"`);
+            $onlineRevision = (int)$info->entry['revision'];
+        } catch (Exception $e) {}
+        if (!$onlineRevision) {
+            throw new Vps_ClientException("Can't detect online revision");
+        }
 
         echo "ermittle db optionen...\n";
         $dbConfigIni = tempnam('/tmp', 'vpsimport');
@@ -59,6 +67,9 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         echo "loesche datebank dump lokal...\n";
         $this->_systemCheckRet("rm $dumpname");
+
+        echo "writing application/update ($onlineRevision)...\n";
+        file_put_contents('application/update', $onlineRevision);
 
         echo "fertig!\n";
 
