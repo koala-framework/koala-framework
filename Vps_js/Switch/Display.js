@@ -54,6 +54,9 @@ Ext.extend(Vps.Switch.Display, Ext.util.Observable, {
             { easing: 'easeOut', duration: .5, afterStyle: "height:auto;",
                 callback: function() {
                     this.fireEvent('opened', this);
+                    if (Ext.isIE6) {
+                        this.switchContent.setWidth(this.switchContent.getWidth());
+                    }
                 },
                 scope: this
             }
