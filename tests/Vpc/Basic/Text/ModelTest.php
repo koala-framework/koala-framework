@@ -55,7 +55,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
 
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicText vpcBasicTextTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"http://www.vivid-planet.com/\">foo</a>\n</p>".
                     "</div>", $html);
 
@@ -96,7 +96,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicText vpcBasicTextTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"/foo1\">foo</a>\n</p>".
                     "</div>", $html);
     }
@@ -111,7 +111,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicText vpcBasicTextTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"mailto:foo(vpsat)example(vpsdot)com\">foo</a>\n</p>".
                     "</div>", $html);
     }
@@ -126,7 +126,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicText vpcBasicTextTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"http://vivid.com\">foo</a>\n</p>".
                     "</div>", $html);
     }
@@ -176,7 +176,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
 
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicText vpcBasicTextTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <div class=\"vpcBasicTextImageTestComponent\"><img src=\"/media/Vpc_Basic_Text_Image_TestComponent/1009-i1/default/12a259547cf4ad9a4687e39969cc0033/vividplanetinternetagentursalzburg.gif\" width=\"100\" height=\"100\" alt=\"\" class=\"\" /></div>\n</p>".
                     "</div>", $html);
 
@@ -192,7 +192,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicText vpcBasicTextTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <div class=\"vpcBasicTextImageTestComponent\"><img src=\"/media/Vpc_Basic_Text_Image_TestComponent/1010-i1/default/9ab09415a09caef30d520e9080262b7f/foo.png\" width=\"100\" height=\"100\" alt=\"\" class=\"\" /></div>\n</p>".
                     "</div>", $html);
     }
@@ -207,7 +207,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicText vpcBasicTextTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <a href=\"/media/Vpc_Basic_Text_Download_TestComponent/1012-d1/default/a1b024ef219bcfe6b3f5ac9916d8f722/foo.png\">\nfoo</a>\n</p>".
                     "</div>", $html);
     }
@@ -224,7 +224,7 @@ class Vpc_Basic_Text_ModelTest extends PHPUnit_Framework_TestCase
 
         $output = new Vps_Component_Output_NoCache();
         $html = $output->render($c->getData());
-        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicText vpcBasicTextTestComponent\">\n".
+        $this->assertEquals("<div class=\"webStandard vpcText vpcBasicTextTestComponent\">\n".
                     "<p>\n  <div class=\"vpcBasicTextImageTestComponent\"><img src=\"/media/Vpc_Basic_Text_Image_TestComponent/1015-i1/default/987577de8b2c5b4b75b8343ed85db0bf/foo.png\" width=\"100\" height=\"100\" alt=\"\" class=\"\" /></div>\n</p>".
                     "</div>", $html);
     }
