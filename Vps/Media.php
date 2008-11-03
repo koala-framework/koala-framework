@@ -3,6 +3,7 @@ class Vps_Media
 {
     private static $_ouputCache;
     const PASSWORD = 'l4Gx8SFe';
+
     public static function getUrl($class, $id, $type, $filename)
     {
         if ($filename instanceof Vps_Uploads_Row) {
@@ -17,10 +18,34 @@ class Vps_Media
         return md5(self::PASSWORD . $class . $id . $type . $filename);
     }
 
-    public static function getUrlByRow($row, $type, $filename)
+    /**
+     * @param Vps_Model_Row_Interface Row zu der ein Bild existiert
+     * @param string Type
+     * @param string/Vps_Uploads_Row Wenn string wird der Dateiname verwendet
+     *         wenn Vps_Uploads_Row wird der Original-Dateiname verwendet
+     *         wenn nicht gesetzt wird die uploads row mittels $type ermittelt
+     *         und dieser Dateiname verwendet
+     */
+    public static function getUrlByRow($row, $type, $filename = null)
     {
         $pk = $row->getModel()->getPrimaryKey();
+        if (!$filename) {
+            $filename = $row->getParentRow($type);
+        }
         return self::getUrl(get_class($row->getModel()), $row->$pk, $type, $filename);
+    }
+
+    public static function getDimensionsByRow($row, $type, $fileRow = null)
+    {
+        $model = get_class($row->getModel());
+        $dim = call_user_func(array($model, 'getImageDimensions'), $type);
+        if (!$fileRow) {
+            $fileRow = $row->getParentRow($type);
+        }
+        return Vps_Media_Image::calculateScaleDimensions(
+            $fileRow->getImageDimensions(),
+            $dim
+        );
     }
 
     public static function setOutputCache(Zend_Cache_Core $cache)

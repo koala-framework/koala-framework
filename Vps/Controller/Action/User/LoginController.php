@@ -26,15 +26,17 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
     public function headerAction()
     {
         try {
-            $t = new Vps_Dao_Welcome();
-            $row = $t->find(1)->current();
+            $t = new Vps_Util_Welcome_Model();
+            $row = $t->getRow(1);
         } catch (Zend_Db_Statement_Exception $e) {
             //wenn tabelle nicht existiert fehler abfangen
             $row = null;
         }
         if ($row) {
-            $this->view->image = $row->getFileUrl('LoginImage', 'login');
-            $this->view->imageSize = $row->getImageDimensions('LoginImage', 'login');
+            $this->view->image = Vps_Media::getUrlByRow(
+                $row, 'LoginImage'
+            );
+            $this->view->imageSize = Vps_Media::getDimensionsByRow($row, 'LoginImage');
         } else {
             $this->view->image = false;
         }

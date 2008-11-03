@@ -26,7 +26,9 @@ class Vps_Media_Image
         }
         
         $size = $sourceSize;
-        
+        if (isset($size['width'])) $size[0] = $size['width'];
+        if (isset($size['height'])) $size[1] = $size['height'];
+
         if ($scale != self::SCALE_ORIGINAL) {
             if ($width == 0) {
                 $width = round($height * ($size[0]/$size[1]));
