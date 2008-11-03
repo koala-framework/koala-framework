@@ -213,6 +213,7 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
     {
         $rowIsDirty = false;
         foreach ($columns as $col => $val) {
+
             if ($this->$col != $val) {
                 parent::__set($col, $val);
                 $rowIsDirty = true;
@@ -253,6 +254,7 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
                     $res = $restResult->data;
                     return (string)$res->{$columnName};
                 } else {
+
                     return parent::__get($columnName);
                 }
             }

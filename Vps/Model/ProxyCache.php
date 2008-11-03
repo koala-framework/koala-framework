@@ -15,13 +15,13 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
+
         if (!is_object($where)) {
             if (is_string($where)) $where = array($where);
             $select = $this->select($where, $order, $limit, $start);
         } else {
             $select = $where;
         }
-
         if ($select->getPart(Vps_Model_Select::WHERE_EQUALS) || $select->getPart(Vps_Model_Select::WHERE_NULL)) {
             $cacheSetting = $this->_getCacheSetting($select);
 	        if ($cacheSetting) {
@@ -36,22 +36,30 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
 						$this->_getCache()->save($this->_cacheData[$cacheId], $cacheId);
 				    }
 				}
-				$where = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
+				$whereEquals = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
+				$whereNull = $select->getPart(Vps_Model_Select::WHERE_NULL);
 				$values = array();
-				foreach (array_values($where) as $value) {
-                    if ($value === '') $value = '#';
-				    $values[] = $value;
+				foreach ($cacheSetting['index'] as $value) {
+				    if ($whereEquals) {
+				        if (isset($whereEquals[$value])) $values[] = $this->_escapeSearchKeyElement($whereEquals[$value]);
+				    }
+				    if ($whereNull) {
+					    foreach (array_values($whereNull) as $whereKey => $whereValue) {
+                            if ($whereValue == $value)
+						        $values[] = $this->_escapeSearchKeyElement(null);
+						}
+				    }
 				}
-
+                $valuesbefore = $values;
                 $v = implode($values, '_');
-                if (strrpos($v, '_') == strlen($v)-1 && strlen($v)-1 != 0) $v = substr($v, 0, strlen($v)-2);
-                if ($select->getPart(Vps_Model_Select::WHERE_NULL))$v .= '_';
-
 
                 if (isset($this->_cacheData[$cacheId][$v]))
                     $data = $this->_cacheData[$cacheId][$v];
-                else
+                else {
                     $data = array();
+                }
+
+
 
 		        return new $this->_rowsetClass(array(
 		            'model' => $this,
@@ -65,17 +73,35 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
 
     private function _getCacheSetting ($where)
     {
+        $necessary = array();
+	    $whereEquals = $where->getPart(Vps_Model_Select::WHERE_EQUALS);
+	    $whereNull = $where->getPart(Vps_Model_Select::WHERE_NULL);
 
-        $part = array_merge($where->getPart(Vps_Model_Select::WHERE_EQUALS));
-        $necessary = array_keys($part);
-
-        if ($wherenull = $where->getPart(Vps_Model_Select::WHERE_NULL)) {
-            $necessary[] = $wherenull[0];
-        }
         foreach ($this->_cacheSettings as $cacheSetting) {
-            if ($cacheSetting['index'] ==$necessary) {
-                return $cacheSetting;
-            }
+            $check = true;
+            foreach ($cacheSetting['index'] as $value) {
+                $cacheSettingCheck = false;
+			    if ($whereEquals) {
+				    if (isset($whereEquals[$value])) {
+				        $values[] = $this->_escapeSearchKeyElement($whereEquals[$value]);
+				        $cacheSettingCheck = true;
+				    }
+				}
+				if ($whereNull) {
+				    foreach (array_values($whereNull) as $whereKey => $whereValue) {
+                        if ($whereValue == $value) {
+				            $values[] = $this->_escapeSearchKeyElement(null);
+						        $cacheSettingCheck = true;
+                        }
+				    }
+				}
+				if ($cacheSettingCheck == false) {
+				    $check = false;
+				}
+		    }
+		    if ($check) {
+		        return $cacheSetting;
+		    }
         }
         return null;
     }
@@ -125,7 +151,6 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
             }
             $ret[$searchKey][$parts['id']] = $parts;
         }
-
         return $ret;
     }
 
@@ -133,12 +158,21 @@ class Vps_Model_ProxyCache extends Vps_Model_Proxy
     {
         $identifier = array();
         foreach ($indexes as $key => $index) {
-            if ($row->{$index} === '') $identifier[] = '#';
-            else $identifier[] = $row->{$index};
+           $identifier[] = $this->_escapeSearchKeyElement($row->{$index});
         }
-        return implode($identifier, '_');
+        $ret = implode(($identifier), '_');
+        return $ret;
     }
 
+    private function _escapeSearchKeyElement($element)
+    {
+        if ($element === null){
+            return '_';
+        }
+        $element = str_replace("\\", "\\\\", $element);
+        $element = str_replace("_", "\_", $element);
+        return $element;
+    }
     public function getRowByCacheData($id, $cacheData)
     {
         if (!isset($this->_rows[$id])) {
