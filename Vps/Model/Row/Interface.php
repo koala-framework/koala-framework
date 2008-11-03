@@ -13,4 +13,7 @@ interface Vps_Model_Row_Interface
     public function createChildRow($rule, array $data = array());
     public function getParentRow($rule);
     public function getInternalId();
+
+    //abwärtskompatibilität für Db-Models, sonst null
+    public function getTable();
 }
