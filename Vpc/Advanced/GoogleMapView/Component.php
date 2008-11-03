@@ -18,15 +18,29 @@ abstract class Vpc_Advanced_GoogleMapView_Component extends Vpc_Abstract_Composi
         $ret = parent::getTemplateVars();
 
         $options = $this->_getOptions();
+        if (!isset($options['coordinates'])) {
+            throw new Vps_Exception("You must return coordinates in _getOptions");
+        }
         $pos = strpos($options['coordinates'], ";");
         $options['longitude'] = substr($options['coordinates'], 0, $pos);
         $options['latitude'] = substr($options['coordinates'], $pos + 1, strlen($options['coordinates']) - 1);
         $options['coordinates'] = str_replace(';', ',', $options['coordinates']);
 
-        if (!isset($options['routing'])) {
-            $options['routing'] = 1;
+        $defaults = array(
+            'zoom_properties' => 0,
+            'zoom' => 10,
+            'height' => 400,
+            'width' => 400,
+            'scale' => 1,
+            'satelite' => 1,
+            'overview' => 1,
+            'routing' => 1
+        );
+        foreach ($defaults as $k=>$i) {
+            if (!isset($options[$k])) {
+                $options[$k] = $i;
+            }
         }
-
         $ret['options'] = $options;
 
         // wird benötigt wenn gmap in switchDisplay liegt

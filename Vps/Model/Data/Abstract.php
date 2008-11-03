@@ -17,12 +17,6 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         parent::__construct($config);
     }
 
-    public function setData(array $data)
-    {
-        $this->_data = $data;
-        $this->_rows = array();
-    }
-
     public function getData()
     {
         return $this->_data;
@@ -135,7 +129,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             $d = (string)$d;
         }
         if ($id = $select->getPart(Vps_Model_Select::WHERE_ID)) {
-            if ($data['id'] != (string)$id) return false;
+            if ($data[$this->getPrimaryKey()] != (string)$id) return false;
         }
         if ($where = $select->getPart(Vps_Model_Select::WHERE_EQUALS)) {
             foreach ($where as $f=>$v) {

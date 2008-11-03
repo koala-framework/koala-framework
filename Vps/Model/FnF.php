@@ -9,6 +9,12 @@ class Vps_Model_FnF extends Vps_Model_Data_Abstract
         parent::__construct($config);
     }
 
+    public function setData(array $data)
+    {
+        $this->_data = $data;
+        $this->_rows = array();
+    }
+
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
         if (!is_object($where)) {
