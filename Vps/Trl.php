@@ -176,8 +176,29 @@ class Vps_Trl
     public function parse($content, $type = 'php')
     {
         $parts = array();
-        foreach ($this->_getExpressions($content) as $expression) {
-            $parts[] = $this->_getContents($expression, $type);
+
+        /*
+         * beim parsen von datien mit über 10000 zeichen tritt
+         * bei den regular expressions ein fehler auf -> diese
+         * abfrage ist der bugfix
+         */
+        $from = 0;
+        $length = 9500;
+        $check = true;
+        while ($check) {
+            if ($from != 0 && $from > 500) {
+                $from = $from - 500;
+            }
+            if (($from + $length) > strlen($content)) {
+                $length = strlen($content)- $from;
+                $check = false;
+            }
+
+            $newContent = substr($content, $from, $length);
+            $from += $length;
+            foreach ($this->_getExpressions($newContent) as $expression) {
+                $parts[] = $this->_getContents($expression, $type);
+            }
         }
         return $parts;
     }

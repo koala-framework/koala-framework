@@ -70,11 +70,6 @@ class Vps_Trl_JsLoader
                 $contents = str_replace($values['before'], $values['now'], $contents);
             }
         }
-
-        //HACK: nicht gefundene trlVps() aufrufe ersetzen
-        //TODO: bug in parser fixen und das hier entfernen
-        $contents = str_replace('trlVps', 'trl', $contents);
-
         return $contents;
     }
 

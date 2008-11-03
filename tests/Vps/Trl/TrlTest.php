@@ -172,7 +172,7 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
 
     public function testTrlParseJsLargeString()
     {
-        $this->markTestIncomplete();
+        //$this->markTestIncomplete();
         //wenn behoben in JsLoader Zeile 77 Hack entfernen
 
         $input = str_repeat(' ', 10015)." trlVps('Info')";
@@ -187,10 +187,32 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
                  str_repeat(' ', 11000)."trlVps('Foo')";
         $result = $this->_trlObject->parse($input, 'js');
         $this->assertEquals(2, count($result));
+
+        $input = str_repeat(' ', 9997)."trlVps('Info')".
+                 str_repeat(' ', 11000)."trlVps('Foo')";
+        $result = $this->_trlObject->parse($input, 'js');
+        $this->assertEquals(2, count($result));
+
+        $input = str_repeat(' ', 9797)."trlVps('Info')".
+                 str_repeat(' ', 11000)."trlVps('Foo')";
+        $result = $this->_trlObject->parse($input, 'js');
+        $this->assertEquals(2, count($result));
+
+        $input = str_repeat(' ', 9797)."trlVps('Info')".
+                 str_repeat(' ', 11000)."trlVps('Foo')".
+                 str_repeat(' ', 11000)."trlVps('foobar')".
+                 str_repeat(' ', 6879)."trlVps('lala')";
+        $result = $this->_trlObject->parse($input, 'js');
+        $this->assertEquals(4, count($result));
     }
 
     public function testTrlInsertToXml()
     {
+
+        $tmpfname = tempnam("/tmp", "XMLTEST");
+        file_put_contents($tmpfname, "<trl></trl>");
+
+
         $modelWeb = new Vps_Model_FnF();
         $modelWeb->setData(array(
             array('id' => 1, 'en' => 'foo', 'de' => 'dings'),
@@ -206,7 +228,7 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
         ));
         $parser = new Vps_Trl_Parser($modelVps, $modelWeb, 'vps');
         $parser->setLanguages(array('en', 'de'));
-        $parser->insertToXml(array(array('text' => 'newFoo', 'source' => 'vps')), 'pfad');
+        $parser->insertToXml(array(array('text' => 'newFoo', 'source' => 'vps')), $tmpfname);
         $select = $modelVps->select();
         $select->whereEquals('en', 'newFoo');
         $row = $modelVps->getRows($select)->current();
@@ -215,8 +237,27 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
 
         //insert same again
         $this->assertEquals(3, $modelVps->getRows()->count());
-        $parser->insertToXml(array(array('text' => 'newFoo', 'source' => 'web')), 'pfad');
+        $parser->insertToXml(array(array('text' => 'newFoo', 'source' => 'web')), $tmpfname);
         $this->assertEquals(3, $modelVps->getRows()->count());
+
+        //insert other
+        $this->assertEquals(3, $modelVps->getRows()->count());
+        $parser->insertToXml(array(array('text' => 'newFoo2', 'source' => 'vps')), $tmpfname);
+        $this->assertEquals(4, $modelVps->getRows()->count());
+
+         //insert other
+        $this->assertEquals(4, $modelVps->getRows()->count());
+        $parser->insertToXml(array(array('text' => 'This field should only contain letters and _', 'source' => 'vps')), $tmpfname);
+        $this->assertEquals(5, $modelVps->getRows()->count());
+
+         //insert other
+        $this->assertEquals(5, $modelVps->getRows()->count());
+        $parser->insertToXml(array(array('text' => 'This field should only contain letters and _', 'source' => 'vps')), $tmpfname);
+        $this->assertEquals(5, $modelVps->getRows()->count());
+
+        unlink($tmpfname);
+
+
     }
 
     public function testTrlTranslation ()
@@ -271,6 +312,7 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
         $this->_trlObject->setModel($modelVps, 'vps');
         $this->assertEquals('notfound', $this->_trlObject->trl('notfound', array(), 'vps'));
     }
+
 
     //zum schreiben der ids in ein element ohne ids
     /*public function testmanipulateXml ()

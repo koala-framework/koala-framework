@@ -790,5 +790,145 @@ class Vps_Model_Proxycache_ModelTest extends PHPUnit_Framework_TestCase
         $this->assertNull($row);
     }
 
+    public function testUnderscoreAtEndOfEntry()
+    {
+        $fnf = new Vps_Model_FnF(array(
+        		'columns' => array('id', 'en', 'de'),
+        		'uniqueIdentifier' => 'unique'
+        ));
+        $fnf->setData(array(
+            array('id' => 1, 'en' => 'foo_', 'de' => 'dings2'),
+            array('id' => 2, 'en' => 'foo3', 'de' => 'dings3')
+        ));
+        $proxy = new Vps_Model_ProxyCache(array(
+        	'proxyModel' => $fnf,
+            'cacheSettings' => array(
+                array('index' => array('en'),
+            		  'columns' => array('de'))
+            )
+        ));
+        $row = $proxy->getRow($proxy->select()->whereEquals('en', 'foo_'));
+        $this->assertNotNull($row);
 
+    }
+
+    public function testWhereNullTwoColumns()
+    {
+        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf->setData(array(
+            array('id' => 1, 'en' => 'foo', 'de' => 'dings2'),
+            array('id' => 2, 'en' => 'foo3', 'de' => 'dings3'),
+            array('id' => 3, 'en' => null, 'de' => null)
+        ));
+        $proxy = new Vps_Model_ProxyCache(array(
+        	'proxyModel' => $fnf,
+            'cacheSettings' => array(
+                array('index' => array('id', 'en', 'de'),
+            		  'columns' => array('de'))
+            )
+        ));
+        Vps_Debug::enable();
+        $proxy->clearCache();
+        $row = $proxy->getRow($proxy->select()->whereEquals('id', 3)
+                                            ->whereNull('en')
+                                            ->whereNull('de'));
+        $this->assertEquals(3, $row->id);
+    }
+
+    public function testSearchKeys()
+    {
+        Vps_Debug::enable();
+        $fnf = new Vps_Model_FnF(array('uniqueIdentifier' => 'unique'));
+        $fnf->setData(array(
+            array('id' => 1, 'en' => 'foo', 'de' => 'bar', 'sp' => 'blub'),
+            array('id' => 2, 'en' => 'foo_', 'de' => 'bar', 'sp' => 'blub'),
+            array('id' => 3, 'en' => 'foo', 'de' => '', 'sp' => 'blub'),
+            array('id' => 4, 'en' => '', 'de' => '', 'sp' => ''),
+            array('id' => 5, 'en' => null, 'de' => null, 'sp' => null),
+            array('id' => 6, 'en' => 'foo', 'de' => 'bar', 'sp' => null),
+            array('id' => 7, 'en' => '__', 'de' => '___', 'sp' => '____'),
+            array('id' => 8, 'en' => null, 'de' => '___', 'sp' => '____'),
+        ));
+        $proxy = new Vps_Model_ProxyCache(array(
+        	'proxyModel' => $fnf,
+            'cacheSettings' => array(
+                array('index' => array('en', 'de', 'sp'),
+            		  'columns' => array())
+            )
+        ));
+
+        $proxy->clearCache();
+
+        $row = $proxy->getRow($proxy->select()->whereEquals('en', 'foo')->whereEquals('de', 'bar')
+                                                ->whereEquals('sp', 'blub'));
+        $this->assertNotNull($row);
+        $this->assertEquals(1, $row->id);
+
+        $row = $proxy->getRow($proxy->select()->whereEquals('en', 'foo_')->whereEquals('de', 'bar')
+                                                ->whereEquals('sp', 'blub'));
+        $this->assertNotNull($row);
+        $this->assertEquals(2, $row->id);
+
+        $row = $proxy->getRow($proxy->select()->whereEquals('en', 'foo')->whereEquals('de', '')
+                                                ->whereEquals('sp', 'blub'));
+        $this->assertNotNull($row);
+        $this->assertEquals(3, $row->id);
+
+        $row = $proxy->getRow($proxy->select()->whereEquals('en', '')->whereEquals('de', '')
+                                                ->whereEquals('sp', ''));
+        $this->assertNotNull($row);
+        $this->assertEquals(4, $row->id);
+
+        $row = $proxy->getRow($proxy->select()->whereNull('en')->whereNull('de')
+                                                ->whereNull('sp'));
+        $this->assertNotNull($row);
+        $this->assertEquals(5, $row->id);
+
+        $row = $proxy->getRow($proxy->select()->whereEquals('en', 'foo')->whereEquals('de', 'bar')
+                                                ->whereNull('sp'));
+        $this->assertNotNull($row);
+        $this->assertEquals(6, $row->id);
+
+        $row = $proxy->getRow($proxy->select()->whereEquals('sp', '____')->whereEquals('de', '___')
+                                                ->whereEquals('en', '__'));
+        $this->assertNotNull($row);
+        $this->assertEquals(7, $row->id);
+
+        $row = $proxy->getRow($proxy->select()->whereNull('en')->whereEquals('de', '___')->whereEquals('sp', '____'));
+        $this->assertNotNull($row);
+        $this->assertEquals(8, $row->id);
+    }
+
+    public function testNewlineInIndex()
+    {
+        $fnf = new Vps_Model_Proxycache_TestFnF(array('uniqueIdentifier' => 'unique'));
+        $fnf->setData(array(
+            array('id' => 1, 'en' => "foo\nbar", 'de' => "foo\\nbar"),
+        ));
+        $proxy = new Vps_Model_ProxyCache(array(
+        	'proxyModel' => $fnf,
+            'cacheSettings' => array(
+                array('index' => array('en'),
+            		  'columns' => array()),
+                array('index' => array('de'),
+            		  'columns' => array())
+
+            )
+        ));
+        Vps_Debug::enable();
+        $proxy->clearCache();
+        $row = $proxy->getRow($proxy->select()->whereEquals('en', "foo\nbar"));
+        $this->assertEquals(1, $fnf->getRowsCalled);
+
+        $row = $proxy->getRow($proxy->select()->whereEquals('en', "foo\nbar"));
+        $this->assertEquals(1, $row->id);
+        $this->assertEquals(1, $fnf->getRowsCalled);
+
+        $row = $proxy->getRow($proxy->select()->whereEquals('de', "foo\\nbar"));
+        $this->assertEquals(2, $fnf->getRowsCalled);
+
+        $row = $proxy->getRow($proxy->select()->whereEquals('de', "foo\\nbar"));
+        $this->assertEquals(1, $row->id);
+        $this->assertEquals(2, $fnf->getRowsCalled);
+    }
 }
