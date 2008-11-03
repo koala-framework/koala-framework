@@ -54,6 +54,8 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
                 }
             }
             echo "\033[32msucessfully updated\033[37m\n";
+
+            file_put_contents('application/update', $currentRevision);
         } catch (Vps_ClientException $e) {
             echo "\033[31mError:\033[37m\n";
             echo $e->getMessage()."\n";
