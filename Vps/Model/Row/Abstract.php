@@ -284,4 +284,9 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         $this->save();
         $this->_skipFilters = false;
     }
+
+    public function getTable()
+    {
+        return null;
+    }
 }
