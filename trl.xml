@@ -3507,7 +3507,7 @@ Bitte &#xF6;ffnen Sie den Aktivierungslink in Ihrem Browser. Sie werden daraufhi
 </text>
 <text>
 <en>Please login</en>
-<de>Bitte loggen sie sich ein</de>
+<de>Bitte loggen Sie sich ein</de>
 <id>697</id>
 </text>
 <text>
@@ -4338,12 +4338,12 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 </text>
 <text>
 <en>If you have lost your password, </en>
-<de>Wenn Sie ihr Passwort vergessen haben, k&#xF6;nnnen Sie </de>
+<de>Wenn Sie ihr Passwort vergessen haben, k&#xF6;nnen Sie </de>
 <id>861</id>
 </text>
 <text>
 <en>request a new one here</en>
-<de>hier ein neues anfordern</de>
+<de>hier ein Neues anfordern</de>
 <id>862</id>
 </text>
 <text>
@@ -4357,9 +4357,9 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <id>864</id>
 </text>
 <text>
-<en>Your options</en>
-<de>Ihre Optionen</de>
-<id>865</id>
+<en>Edit Profil</en>
+<de>Profil bearbeiten</de>
+<id>866</id>
 </text>
 </trl>
 
