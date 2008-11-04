@@ -4,7 +4,7 @@ abstract class Vps_Form_Field_SimpleAbstract extends Vps_Form_Field_Abstract
     public function load($row, $postData = array())
     {
         $ret = array();
-        if (isset($postData[$this->getFieldName()])) {
+        if (array_key_exists($this->getFieldName(), $postData)) {
             $ret[$this->getFieldName()] = $postData[$this->getFieldName()];
         } else {
             if ($this->getSave() !== false && $this->getInternalSave() !== false) {
