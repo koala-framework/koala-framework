@@ -1,6 +1,5 @@
 <div class="<?=$this->cssClass?>">
-    <?=trlVps('Your options')?>:
     <? foreach($this->links as $l) { ?>
-        <?=$this->componentLink($l)?>
+        <?=$this->componentLink($l, trlVps('Edit Profil'))?>
     <? } ?>
 </div>

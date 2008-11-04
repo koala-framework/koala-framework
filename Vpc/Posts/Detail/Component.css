@@ -22,6 +22,7 @@
     float: right;
     margin-top: -3px;
     margin-right: -15px;
+    margin-left: 10px;
 }
 .$cssClass .text {
     font-size: 12px;
