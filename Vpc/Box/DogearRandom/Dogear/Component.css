@@ -1,0 +1,11 @@
+div#dogearSmall,
+div#dogearBig {
+    position: absolute; right: 0px;
+}
+
+div#dogearSmall {
+    z-index: 1; top: 0px;
+}
+div#dogearBig {
+    z-index: 2; top: -700px;
+}
