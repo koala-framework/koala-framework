@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Form_TextField
+ */
 class Vps_Form_TextFieldTest extends PHPUnit_Framework_TestCase
 {
     private $_textField;
@@ -18,6 +21,9 @@ class Vps_Form_TextFieldTest extends PHPUnit_Framework_TestCase
 
         $data = $this->_textField->load($row, array('test12' => 'loaded', 'garbage2' => 'foo'));
         $this->assertEquals($data, array('test12' => 'loaded'));
+
+        $data = $this->_textField->load($row, array());
+        $this->assertEquals($data, array('test12' => 'foobar'));
     }
 
     public function testPrepareSave()

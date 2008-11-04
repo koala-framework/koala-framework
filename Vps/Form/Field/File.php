@@ -38,10 +38,16 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         if ($this->getSave() === false || $this->getInternalSave() === false) {
             return array();
         }
-        if (isset($postData[$this->getFieldName()])) {
+
+        if (array_key_exists($this->getFieldName(), $postData)) {
             $fileId = $postData[$this->getFieldName()];
-            $fileRow = $row->getModel()->getReferencedModel($this->getName())
-                            ->getRow($fileId);
+            if ($fileId) {
+                $fileRow = $row->getModel()
+                                ->getReferencedModel($this->getName())
+                                ->getRow($fileId);
+            } else {
+                $fileRow = null;
+            }
         } else {
             $fileRow = $row->getParentRow($this->getName());
         }
@@ -82,6 +88,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
     public function processInput($row, $postData)
     {
         $postData = parent::processInput($row, $postData);
+
         if ($this->getSave() === false || $this->getInternalSave() === false) return $postData;
 
         if (isset($postData[$this->getFieldName().'_upload_id'])
@@ -102,6 +109,7 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
         ) {
             //frontend formular, $_FILE werte
             $file = $postData[$this->getFieldName()];
+            unset($postData[$this->getFieldName()]);
             if ($file['error'] != UPLOAD_ERR_NO_FILE) {
                 $fileModel = $row->getModel()->getReferencedModel($this->getName());
                 $fileRow = $fileModel->createRow();
@@ -110,8 +118,6 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
                 if (isset($postData[$this->getFieldName().'_upload_id'])) {
                     unset($postData[$this->getFieldName().'_upload_id']);
                 }
-            } else {
-                unset($postData[$this->getFieldName()]);
             }
         }
         if (isset($postData[$this->getFieldName().'_del'])) {
@@ -119,7 +125,9 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             $postData[$this->getFieldName()] = null;
         }
 
-        if ($postData[$this->getFieldName()] === '') {
+        if (isset($postData[$this->getFieldName()])
+            && $postData[$this->getFieldName()] === ''
+        ) {
             $postData[$this->getFieldName()] = null;
         }
 
@@ -163,10 +171,13 @@ class Vps_Form_Field_File extends Vps_Form_Field_SimpleAbstract
             $helper = new Vps_View_Helper_FileSize();
             $ret['html'] .= ' ('.$helper->fileSize($value['fileSize']).')';
             $ret['html'] .= '</div>';
-            $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
-                        " value=\"$value[uploadId]\" />";
             $ret['html'] .= '<div class="deleteImage"><button class="deleteImage" type="submit" name="'.$name.'_del'.$namePostfix.'" value="1">'.trlVps("Delete Image").'</button></div>';
+            $uploadId = $value['uploadId'];
+        } else {
+            $uploadId = '0';
         }
+        $ret['html'] .= "<input type=\"hidden\" name=\"{$name}_upload_id{$namePostfix}\" ".
+                    " value=\"\" />";
         $ret['html'] .= '</div>';
         return $ret;
     }

@@ -66,6 +66,13 @@ class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
         $this->assertSame($data, array('File' => null));
     }
 
+    public function testProcessInputEmpty()
+    {
+        $input = array();
+        $data = $this->_field->processInput($this->_row, $input);
+        $this->assertSame($data, array());
+    }
+
     public function testProcessInputFileUploaded()
     {
         $file = tempnam('/tmp', 'uploadtest');
@@ -174,6 +181,12 @@ class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
         $data = $this->_field->load($this->_row, $post);
         $i = $this->_uploadsModel->getRow(2)->getFileInfo();
         $this->assertEquals(array('File'=>$i), $data);
+
+        $post = array(
+            'File' => null
+        );
+        $data = $this->_field->load($this->_row, $post);
+        $this->assertEquals(array('File'=>''), $data);
     }
 
     public function testPrepareSave()
@@ -189,6 +202,12 @@ class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
         );
         $this->_field->prepareSave($this->_row, $post);
         $this->assertEquals(2, $this->_row->upload_id);
+
+        $post = array(
+            'File' => null
+        );
+        $this->_field->prepareSave($this->_row, $post);
+        $this->assertEquals(null, $this->_row->upload_id);
     }
 
     public function testSaveDisabled1()
