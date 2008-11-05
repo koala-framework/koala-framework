@@ -41,12 +41,15 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         $dumpname = tempnam('/tmp', 'vpsimport');
         echo "erstelle datenbank dump (online) - $dumpname...\n";
+        exec("ssh {$this->_sshHost} \"echo 'SHOW TABLES' | /usr/local/mysql/bin/mysql $mysqlOnlineOptions {$onlineDbConfig->dbname}\"", $tables);
+
         $this->_systemSsh("/usr/local/mysql/bin/mysqldump --ignore-table={$onlineDbConfig->dbname}.cache_component $mysqlOnlineOptions {$onlineDbConfig->dbname} > $dumpname");
-        $this->_systemSsh("/usr/local/mysql/bin/mysqldump --no-data $mysqlOnlineOptions {$onlineDbConfig->dbname} cache_component >> $dumpname");
+        if (in_array('cache_component', $tables)) {
+            $this->_systemSsh("/usr/local/mysql/bin/mysqldump --no-data $mysqlOnlineOptions {$onlineDbConfig->dbname} cache_component >> $dumpname");
+        }
 
         $this->_systemSsh("bzip2 $dumpname");
         $this->_systemSsh("ls -lh $dumpname.bz2");
-
 
         echo "kopiere datenbank dump...\n";
         $this->_systemCheckRet("scp {$this->_sshHost}:{$dumpname}.bz2 {$dumpname}.bz2");
@@ -82,7 +85,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
     public static function getHelp()
     {
-        return "import uplodas+database";
+        return "import uploads+database";
     }
     public static function getHelpOptions()
     {

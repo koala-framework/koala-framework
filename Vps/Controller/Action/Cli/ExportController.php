@@ -37,8 +37,6 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
         }
 
         $this->_systemSshVps("svn-up");
-        echo "\n";
-        $this->_systemSshVps("clear-cache");
         exit();
     }
 }

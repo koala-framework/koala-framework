@@ -23,7 +23,7 @@ class Vps_Controller_Action_Cli_ClearCacheController extends Vps_Controller_Acti
             $cache->clean();
             echo "cleared memcache...\n";
         }
-        if (in_array('view', $types)) {
+        if (in_array('view', $types) && Vps_Component_Data_Root::getComponentClass()) {
             Vps_Component_Cache::getInstance()->clean();
             echo "cleared view...\n";
         }

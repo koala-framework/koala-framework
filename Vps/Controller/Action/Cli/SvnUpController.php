@@ -12,6 +12,12 @@ class Vps_Controller_Action_Cli_SvnUpController extends Vps_Controller_Action_Cl
         passthru('svn up');
         echo "\nupdating vps\n";
         passthru('svn up '.VPS_PATH);
+
+        echo "\nclearing cache\n";
+        passthru('vps clear-cache');
+
+        echo "\ncalling update\n";
+        passthru('vps update');
         exit;
     }
 }
