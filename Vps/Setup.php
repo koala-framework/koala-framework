@@ -364,6 +364,12 @@ class Vps_Setup
         if (preg_match('/Revision: ([0-9]+)/', $vpsConfig->application->vps->revision, $m)) {
             $vpsConfig->application->vps->revision = (int)$m[1];
         }
+        foreach ($vpsConfig->path as $k=>$i) {
+            $vpsConfig->path->$k = str_replace('%libraryPath%', $vpsConfig->libraryPath, $i);
+        }
+        foreach ($vpsConfig->includepath as $k=>$i) {
+            $vpsConfig->includepath->$k = str_replace('%libraryPath%', $vpsConfig->libraryPath, $i);
+        }
         return $vpsConfig;
     }
 
