@@ -2,9 +2,6 @@
 class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 {
     public $fields;
-    private $_updatedRows = array();
-    private $_deletedRows = array();
-    private $_insertedRows = array();
     private $_model;
     private $_references;
     
@@ -53,6 +50,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     public function setReferences($references)
     {
         $this->_references = $references;
+        return $this;
     }
 
     public function getMetaData()
@@ -183,61 +181,60 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
                 $postData[$this->getFieldName()] = Zend_Json::decode($postData[$this->getFieldName()]);
             }
         }
-        if (isset($postData[$this->getFieldName()])) {
-            foreach ($postData[$this->getFieldName()] as $i=>$rowPostData) {
-                foreach ($this->fields as $item) {
-                    $postData[$this->getFieldName()][$i] = $item->processInput($row, $rowPostData);
-                }
+
+        $fieldPostData = $postData[$this->getFieldName()];
+
+        $postData[$this->getFieldName()] = array(
+            'save' => array(),
+            'delete' => array()
+        );
+
+        $rows = $this->_getRowsByRow($row);
+
+        foreach ($rows as $k=>$r) {
+            if (isset($fieldPostData[$k])) {
+                $rowPostData = $fieldPostData[$k];
+                $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>false);
+                unset($fieldPostData[$k]);
+            } else {
+                $postData[$this->getFieldName()]['delete'][] = $r;
             }
         }
+
+        foreach ($fieldPostData as $rowPostData) {
+            $r = $this->_model->createRow();
+            $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>true);
+        }
+
+        foreach ($postData[$this->getFieldName()]['save'] as $d) {
+            foreach ($this->fields as $field) {
+                $field->processInput($d['row'], $d['data']);
+            }
+        }
+
+
         return $postData;
     }
 
     public function prepareSave(Vps_Model_Row_Interface $row, $postData)
     {
         if (!isset($postData[$this->getFieldName()])) {
-            throw new Vps_Exceception("No postData found");
+            throw new Vps_Exception("No postData found '".$this->getFieldName()."'");
         }
         $postData = $postData[$this->getFieldName()];
 
-        $rows = $this->_getRowsByRow($row);
-
-        $id = $row->getInternalId();
-        $this->_updatedRows[$id] = array();
-        $this->_deletedRows[$id] = array();
-        $this->_insertedRows[$id] = array();
         $pos = 0;
-
-        foreach ($rows as $k=>$r) {
-            if (isset($postData[$k])) {
-                $rowPostData = $postData[$k];
-                $this->_updatedRows[$id][] = array('row'=>$r, 'data'=>$rowPostData);
-                foreach ($this->fields as $field) {
-                    $field->prepareSave($r, $rowPostData);
-                }
-                $pos++;
-                if (isset($r->pos)) {
-                    $r->pos = $pos;
-                }
-                unset($postData[$k]);
-            } else {
-                $this->_deletedRows[$id][] = $r;
-            }
-        }
-
-        foreach ($postData as $k=>$rowPostData) {
-            $k = (int)$k;
-            $r = $this->_model->createRow();
-            $this->_insertedRows[$id][] = array('row'=>$r, 'data'=>$rowPostData);
+        foreach ($postData['save'] as $d) {
             foreach ($this->fields as $field) {
-                $field->prepareSave($r, $rowPostData);
+                $field->prepareSave($d['row'], $d['data']);
             }
             $pos++;
-            if (isset($r->pos)) {
-                $r->pos = $pos;
+            if (isset($d['row']->pos)) {
+                $d['row']->pos = $pos;
             }
         }
     }
+
     public function validate($row, $postData)
     {
         $ret = array();
@@ -258,9 +255,9 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             }
         }
 
-        foreach ($this->fields as $field) {
-            foreach ($postData as $d) {
-                $ret = array_merge($ret, $field->validate(null, $d));
+        foreach ($postData['save'] as $d) {
+            foreach ($this->fields as $field) {
+                $ret = array_merge($ret, $field->validate($d['row'], $d['data']));
             }
         }
         return $ret;
@@ -280,34 +277,26 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
 
     public function save(Vps_Model_Row_Interface $row, $postData)
     {
-        $id = $row->getInternalId();
+        $postData = $postData[$this->getFieldName()];
 
-        foreach ($this->_deletedRows[$id] as $r) {
+        foreach ($postData['delete'] as $d) {
             $r->delete();
         }
 
-        foreach ($this->_insertedRows[$id] as $i) {
+        foreach ($postData['save'] as $i) {
             $r = $i['row'];
             $rowPostData = $i['data'];
-
-            if ($this->_model instanceof Vps_Model_FieldRows) {
-                //nichts zu tun, keine parent_id muss gesetzt werden
-            } else {
-                $ref = $this->_getReferences($row);
-                $where = array();
-                foreach (array_keys($ref['columns']) as $k) {
-                    $r->{$ref['columns'][$k]} = $row->{$ref['refColumns'][$k]};
+            if ($i['insert']) {
+                if ($this->_model instanceof Vps_Model_FieldRows) {
+                    //nichts zu tun, keine parent_id muss gesetzt werden
+                } else {
+                    $ref = $this->_getReferences($row);
+                    $where = array();
+                    foreach (array_keys($ref['columns']) as $k) {
+                        $r->{$ref['columns'][$k]} = $row->{$ref['refColumns'][$k]};
+                    }
                 }
             }
-            $r->save();
-            foreach ($this->fields as $field) {
-                $field->save($r, $rowPostData);
-            }
-        }
-
-        foreach ($this->_updatedRows[$id] as $i) {
-            $r = $i['row'];
-            $rowPostData = $i['data'];
             $r->save();
             foreach ($this->fields as $field) {
                 $field->save($r, $rowPostData);
