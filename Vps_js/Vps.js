@@ -119,28 +119,13 @@ Vps.callWithErrorHandler = function(fn, scope) {
     }
 };
 
-/*Ext.onReady(function() {
+Ext.onReady(function() {
    Ext.Ajax.request({
    	    timeout: 1000,
 		params: {test:1},
         url: '/vps/error/error/json-timeout'
     });
-   Ext.Ajax.request({
-        timeout: 1000,
-        params: {test:2},
-        url: '/vps/error/error/json-timeout'
-    });
-   Ext.Ajax.request({
-        timeout: 1000,
-        params: {test:3},
-        url: '/vps/error/error/json-timeout'
-    });
-   Ext.Ajax.request({
-        timeout: 1000,
-        params: {test:4},
-        url: '/vps/error/error/json-timeout'
-    });
-});*/
+});
 
 Vps.keepAlive = function() {
        Ext.Ajax.request({
