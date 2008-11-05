@@ -17,9 +17,9 @@ class Vps_Validate_Row_Unique extends Vps_Validate_Row_Abstract
             ->whereEquals($this->_field, $valueString);
         $primaryKey = $row->getModel()->getPrimaryKey();
         if ($row->$primaryKey) {
-            $select->where($primaryKey.' != ?', $row->$primaryKey);
+            $select->whereNotEquals($primaryKey, $row->$primaryKey);
         }
-        if ($row->getModel()->fetchCount($select)) {
+        if ($row->getModel()->countRows($select)) {
             $this->_error(self::NOT_UNIQUE);
             return false;
         }
