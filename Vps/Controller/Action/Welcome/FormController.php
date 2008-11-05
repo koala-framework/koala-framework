@@ -1,7 +1,7 @@
 <?php
 class Vps_Controller_Action_Welcome_FormController extends Vps_Controller_Action_Auto_Form
 {
-    protected $_modelName = 'Vps_Util_Welcome_Model';
+    protected $_modelName = 'Vps_Util_Model_Welcome';
     protected $_buttons = array('save');
     protected function _initFields()
     {
