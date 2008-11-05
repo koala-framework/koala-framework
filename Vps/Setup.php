@@ -207,6 +207,7 @@ class Vps_Setup
         }
         Vps_Loader::registerAutoload();
 
+        ini_set('memory_limit', '64M');
         error_reporting(E_ALL);
         date_default_timezone_set('Europe/Berlin');
         mb_internal_encoding('UTF-8');
