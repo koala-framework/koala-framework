@@ -210,7 +210,11 @@ class Vps_Benchmark
             } else if ($i == 'duration') {
                 $out[] = round(microtime(true) - self::$_startTime, 2);
             } else if ($i == 'memory') {
-                $out[] = round(memory_get_peak_usage()/1024);
+                if (function_exists('memory_get_peak_usage')) {
+                    $out[] = round(memory_get_peak_usage()/1024);
+                } else {
+                    $out[] = round(memory_get_usage()/1024);
+                }
             } else if ($i == 'queries') {
                 //$out[] = Vps_Db_Profiler::getCount();
             } else if (!isset(self::$_counter[$i])) {
