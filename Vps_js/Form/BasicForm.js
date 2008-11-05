@@ -11,7 +11,7 @@ Ext.form.BasicForm.override({
     },
     clearValues: function() {
         this.items.each(function(field) {
-            field.clearValue();
+            if (field.rendered) field.clearValue();
         }, this);
     },
 

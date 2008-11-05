@@ -35,6 +35,12 @@ class Vps_View_Ext extends Vps_View
         $ext['config'] = Zend_Json::encode($config);
         $ext['viewport'] = $viewport;
         $ext['userRole'] = Zend_Registry::get('userModel')->getAuthedUserRole();
+        if (isset($config->assetsType)) {
+            $ext['assetsType'] = $config->assetsType;
+            unset($config->assetsType);
+        } else {
+            $ext['assetsType'] = 'Admin';
+        }
         $this->ext = $ext;
         $this->extTemplate = 'ext.tpl';
 

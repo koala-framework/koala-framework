@@ -45,7 +45,7 @@ Ext.applyIf(Function.prototype, {
             return newRetval;
         };
         if (this.prototype){
-            Ext.apply(interception.prototype, this.prototype) 
+            Ext.apply(interception.prototype, this.prototype)
             if (this.superclass){ interception.superclass=this.superclass; }
             if (this.override){ interception.override=this.override; }
         }
@@ -119,6 +119,40 @@ Vps.callWithErrorHandler = function(fn, scope) {
     }
 };
 
+/*Ext.onReady(function() {
+   Ext.Ajax.request({
+   	    timeout: 1000,
+		params: {test:1},
+        url: '/vps/error/error/json-timeout'
+    });
+   Ext.Ajax.request({
+        timeout: 1000,
+        params: {test:2},
+        url: '/vps/error/error/json-timeout'
+    });
+   Ext.Ajax.request({
+        timeout: 1000,
+        params: {test:3},
+        url: '/vps/error/error/json-timeout'
+    });
+   Ext.Ajax.request({
+        timeout: 1000,
+        params: {test:4},
+        url: '/vps/error/error/json-timeout'
+    });
+});*/
+
+Vps.keepAlive = function() {
+       Ext.Ajax.request({
+           url: '/vps/user/login/json-keep-alive',
+		   ignoreErrors: true
+       });
+	   Vps.keepAlive.defer(1000 * 60 * 5);
+};
+if (Vps.isApp) {
+    Vps.keepAlive.defer(1000 * 60 * 5);
+}
+
 Vps.contentReadyHandlers = [];
 Vps.onContentReady = function(fn, scope) {
     if (Vps.isApp) {
@@ -134,21 +168,76 @@ Vps.onContentReady = function(fn, scope) {
     }
 };
 
-Vps.handleError = function(errorMsg, errorMsgTitle, sendMail) {
-    if (Vps.Debug.displayErrors) {
+Vps.handleError = function(error) {
+	if (error instanceof String) error = { message: error };
+	if (arguments[1]) error.title = arguments[1];
+	if (arguments[2]) error.mail = arguments[2];
+
+
+	if (error.retry) {
+		if ((Vps.Debug.displayErrors)) {
+			title = error.title;
+			msg = error.message;
+		} else {
+			title = (trlVps('Error'));
+			msg = trlVps("A Server failure occured.");
+			if (error.mail || (typeof error.mail == 'undefined')) {
+            Ext.Ajax.request({
+                url: '/vps/error/error/json-mail',
+                params: {msg: error.message}
+            });
+        }
+		}
+		msg += "<br /><br /> "+trlVps("Repeat request?");
+
+            var win = new Ext.Window({
+                    autoCreate : true,
+                    title:title,
+                    resizable:true,
+                    constrain:true,
+                    constrainHeader:true,
+                    minimizable : false,
+                    maximizable : false,
+                    stateful: false,
+                    modal: false,
+                    shim:true,
+                    buttonAlign:"center",
+                    width:400,
+                    minHeight: 300,
+                    plain:true,
+                    footer:true,
+                    closable:false,
+					html: msg,
+					buttons: [{
+                        text     : trlVps('Retry'),
+                        handler  : function(){
+                            error.retry.call(error.scope || window);
+                            win.close();
+                        }
+                    },{
+                        text     : trlVps('Abort'),
+                        handler  : function(){
+							error.abort.call(error.scope || window);
+                            win.close();
+                        }
+                }]
+
+                });
+				win.show();
+	} else if (Vps.Debug.displayErrors) {
         Ext.Msg.show({
-            title: errorMsgTitle,
-            msg: errorMsg,
+            title: error.title,
+            msg: error.message,
             buttons: Ext.Msg.OK,
             modal: true,
             width: 800
         });
     } else {
         Ext.Msg.alert(trlVps('Error'), trlVps("A Server failure occured."));
-        if (sendMail || (typeof sendMail == 'undefined')) {
+        if (error.mail || (typeof error.mail == 'undefined')) {
             Ext.Ajax.request({
                 url: '/vps/error/error/json-mail',
-                params: {msg: errorMsg}
+                params: {msg: error.message}
             });
         }
     }

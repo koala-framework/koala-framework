@@ -35,7 +35,7 @@
         var Vps = {isApp: true};
     </script>
 
-    <?= $this->assets('Admin') ?>
+    <?= $this->assets($this->ext['assetsType']) ?>
     <?= $this->debugData() ?>
 
     <script type="text/javascript">
@@ -44,7 +44,7 @@
             var panel = new <?= $this->ext['class'] ?>(<?= $this->ext['config'] ?>);
             if (!panel.region) panel.region = 'center';
             panel.id = 'mainPanel';
-            Vps.currentViewport = new Vps.Viewport({
+            Vps.currentViewport = new <?= $this->ext['viewport'] ?>({
                 items: [panel]
             });
             if(Vps.Connection.masks == 0  && Ext.get('loading')) {

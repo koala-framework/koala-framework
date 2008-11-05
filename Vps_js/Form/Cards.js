@@ -15,7 +15,9 @@ Vps.Form.Cards = Ext.extend(Ext.Panel,
                 } else {
                     cards.getLayout().setActiveItem(i);
                     i.cascade(function(it) {
-                        it.enable();
+                        if (!it.disabledByFieldset) {
+                            it.enable();
+                        }
                     }, this);
                 }
             }, this);

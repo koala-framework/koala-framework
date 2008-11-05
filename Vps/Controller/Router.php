@@ -45,5 +45,9 @@ class Vps_Controller_Router extends Zend_Controller_Router_Rewrite
                     '/vps/spam/:controller/:action',
                     array('module'     => 'vps_controller_action_spam',
                           'action'     =>'index')));
+        $this->AddRoute('vps_test', new Zend_Controller_Router_Route(
+                    '/vps/test/:controller/:action',
+                    array('module'     => 'vps_controller_action_test',
+                          'action'     =>'index')));
     }
 }
