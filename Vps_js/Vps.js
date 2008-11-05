@@ -110,7 +110,7 @@ Vps.callWithErrorHandler = function(fn, scope) {
             Ext.get('loading').fadeOut({remove: true});
         }
         if (Ext.Msg) {
-			if (console) console.trace();
+			debugger;
             Ext.Msg.alert(trlVps('Error'), trlVps("An error has occured"));
         }
         Ext.Ajax.request({
