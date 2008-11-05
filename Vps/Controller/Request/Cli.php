@@ -9,7 +9,12 @@ class Vps_Controller_Request_Cli extends Zend_Controller_Request_Abstract
             $this->setControllerName($argv[1]);
             unset($argv[1]);
         }
-        $this->setActionName('index');
+        if (isset($argv[2]) && substr($argv[2], 0, 2) != '--') {
+            $this->setActionName($argv[2]);
+            unset($argv[2]);
+        } else {
+            $this->setActionName('index');
+        }
 
         //todo: reuse any cli-args-parser (der mehr kann)
         //parst im moment nur parameter wie --debug=foo (=foo ist optional)
