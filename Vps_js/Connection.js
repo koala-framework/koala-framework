@@ -75,7 +75,6 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
             var data = [[new Date(), url, encParams, r.requestNum]];
             Vps.Debug.requestsStore.loadData(data, true);
         }
-
         if (!errorMsg && r.exception) {
             var p;
             if (typeof options.params == "string") {
@@ -89,8 +88,18 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         if (errorMsg) {
             errorMsg = '<a href="'+options.url+'?'+encParams+'">request-url</a><br />' + errorMsg;
             var sendMail = !r || !r.exception;
-            Vps.handleError(errorMsg, errorMsgTitle, sendMail);
-            Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
+			Vps.handleError({
+			    message: errorMsg,
+				title: errorMsgTitle,
+				mail: sendMail,
+				retry: function() {
+					this.connection.repeatRequest(this.options);
+				},
+				abort: function() {
+                    Ext.callback(this.options.vpsCallback.failure, this.options.vpsCallback.scope, [this.response, this.options]);
+				},
+				scope: { connection: this, options: options, response: response }
+			});
             return;
         }
 
@@ -140,8 +149,23 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         for (var dbg in options.params) {
             debugString += '<br />params.' + dbg + ' = ' + options.params[dbg];
         }
-        Ext.Msg.alert(trlVps('Error'), trlVps("A connection problem occured.")+"<br /><br /><b>"+trlVps("Debug info")+":</b><br />"
-            + "url: " + options.url + debugString);
+
+		errorMsgTitle = trlVps('Error');
+        errorMsg = trlVps("A connection problem occured.")+"<br /><br /><b>"+trlVps("Debug info")+":</b><br />"
+            + "url: " + options.url + debugString;
+
+		Vps.handleError({
+            message: errorMsg,
+            title: errorMsgTitle,
+            mail: false,
+            retry: function() {
+                this.repeatRequest(options);
+            },
+            abort: function() {
+                Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
+            },
+            scope: this
+        });
         Ext.callback(options.vpsCallback.failure, options.vpsCallback.scope, [response, options]);
         return;
     },

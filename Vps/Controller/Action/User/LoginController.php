@@ -189,4 +189,9 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
     protected function _onLogout()
     {
     }
+
+    public function jsonKeepAliveAction()
+    {
+        //do nothing
+    }
 }

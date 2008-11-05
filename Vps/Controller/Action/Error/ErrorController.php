@@ -85,6 +85,12 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
         Vps_Debug::sendErrorMail($exception, Zend_Registry::get('config')->debug->errormail);
     }
 
+    public function jsonTimeoutAction()
+    {
+         throw new Vps_Exception("test error exception");
+        sleep(50);
+    }
+
     public function jsonWrongVersionAction()
     {
         $this->view->wrongversion = true;
