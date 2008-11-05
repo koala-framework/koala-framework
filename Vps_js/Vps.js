@@ -110,7 +110,6 @@ Vps.callWithErrorHandler = function(fn, scope) {
             Ext.get('loading').fadeOut({remove: true});
         }
         if (Ext.Msg) {
-			debugger;
             Ext.Msg.alert(trlVps('Error'), trlVps("An error has occured"));
         }
         Ext.Ajax.request({
@@ -155,7 +154,6 @@ Vps.onContentReady = function(fn, scope) {
 };
 
 Vps.handleError = function(error) {
-	alert('hier');
 	if (error instanceof String) error = { message: error };
 	if (arguments[1]) error.title = arguments[1];
 	if (arguments[2]) error.mail = arguments[2];
