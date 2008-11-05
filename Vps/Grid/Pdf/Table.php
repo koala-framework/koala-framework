@@ -54,7 +54,7 @@ class Vps_Grid_Pdf_Table extends Vps_Grid_Pdf_Abstract
 
     public function writeHeader()
     {
-        $this->SetFont('vera', 'B', 8);
+        $this->SetFont('helvetica', 'B', 8);
         $currentRowY = $this->GetY();
         $this->_setLineValue('y', $currentRowY);
         $nextX = $this->GetX();
@@ -71,7 +71,7 @@ class Vps_Grid_Pdf_Table extends Vps_Grid_Pdf_Abstract
 
         $this->_setLineValueXY($nextX, $nextRowY);
 
-        $this->SetFont('vera', '', 8);
+        $this->SetFont('helvetica', '', 8);
     }
 
     public function writeRow($row)
