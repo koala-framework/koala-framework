@@ -26,7 +26,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
     public function headerAction()
     {
         try {
-            $t = new Vps_Util_Welcome_Model();
+            $t = new Vps_Util_Model_Welcome();
             $row = $t->getRow(1);
         } catch (Zend_Db_Statement_Exception $e) {
             //wenn tabelle nicht existiert fehler abfangen

@@ -1,5 +1,5 @@
 <?php
-class Vps_Util_Welcome_Model extends Vps_Model_Db
+class Vps_Util_Model_Welcome extends Vps_Model_Db
     implements Vps_Media_Output_Interface
 {
     protected $_table = 'vps_welcome';
