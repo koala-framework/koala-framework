@@ -119,14 +119,6 @@ Vps.callWithErrorHandler = function(fn, scope) {
     }
 };
 
-Ext.onReady(function() {
-   Ext.Ajax.request({
-   	    timeout: 1000,
-		params: {test:1},
-        url: '/vps/error/error/json-timeout'
-    });
-});
-
 Vps.keepAlive = function() {
        Ext.Ajax.request({
            url: '/vps/user/login/json-keep-alive',
