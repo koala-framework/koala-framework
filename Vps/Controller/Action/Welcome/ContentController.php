@@ -5,7 +5,7 @@ class Vps_Controller_Action_Welcome_ContentController extends Vps_Controller_Act
     {
         $this->view->content = '';
         try {
-            $t = new Vps_Util_Welcome_Model();
+            $t = new Vps_Util_Model_Welcome();
             $row = $t->getRow(1);
             if ($row) {
                 $this->view->content = $row->content;
@@ -18,7 +18,7 @@ class Vps_Controller_Action_Welcome_ContentController extends Vps_Controller_Act
             $this->view->image = Vps_Media::getUrlByRow(
                 $row, 'WelcomeImage'
             );
-            $this->view->imageSize = Vps_Media::getDimensionsByRow($row, 'LoginImage');
+            $this->view->imageSize = Vps_Media::getDimensionsByRow($row, 'WelcomeImage');
         } else {
             $this->view->image = false;
         }
