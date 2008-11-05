@@ -87,7 +87,6 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
 
     public function jsonTimeoutAction()
     {
-         throw new Vps_Exception("test error exception");
         sleep(50);
     }
 
