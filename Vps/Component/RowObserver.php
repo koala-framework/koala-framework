@@ -8,7 +8,6 @@ class Vps_Component_RowObserver
         'delete' => array(),
         'save'   => array()
     );
-    private $_processed = false;
 
     public static function getInstance()
     {
@@ -28,31 +27,26 @@ class Vps_Component_RowObserver
 
     public function insert($row)
     {
-        if ($this->_processed) throw new Vps_Exception("ComponentCache: allready processed");
         $this->_process['insert'][] = $row;
     }
 
     public function update($row)
     {
-        if ($this->_processed) throw new Vps_Exception("ComponentCache: allready processed");
         $this->_process['update'][] = $row;
     }
 
     public function save($row)
     {
-        if ($this->_processed) throw new Vps_Exception("ComponentCache: allready processed");
         $this->_process['save'][] = $row;
     }
 
     public function delete($row)
     {
-        if ($this->_processed) throw new Vps_Exception("ComponentCache: allready processed");
         $this->_process['delete'][] = $row;
     }
 
-    public function process($isLastCall = true)
+    public function process()
     {
-        $this->_processed = $isLastCall;
         foreach ($this->_process as $action => $process) {
             foreach ($process as $row) {
                 foreach (Vpc_Abstract::getComponentClasses() as $c) {
