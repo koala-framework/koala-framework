@@ -82,6 +82,11 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
         $id = $this->{$this->_getPrimaryKey()};
         $this->_model->delete($this);
         $this->_afterDelete();
+
+        $this->_data = array_combine(
+            array_keys($this->_data),
+            array_fill(0, count($this->_data), null)
+        );
     }
 
 }
