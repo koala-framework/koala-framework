@@ -76,7 +76,7 @@ class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
     public function testProcessInputFileUploaded()
     {
         $file = tempnam('/tmp', 'uploadtest');
-        file_put_contents('foo', $file);
+        file_put_contents($file, 'foo');
         $input = array(
             'File_upload_id' => '1',
             'File' => array(
@@ -93,7 +93,7 @@ class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
     public function testProcessInputFileUploadedNothingExisting()
     {
         $file = tempnam('/tmp', 'uploadtest');
-        file_put_contents('foo', $file);
+        file_put_contents($file, 'foo');
         $input = array(
             'File' => array(
                 'error' => 0,
@@ -119,7 +119,7 @@ class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
     public function testProcessInputFileDeleteAndUploaded()
     {
         $file = tempnam('/tmp', 'uploadtest');
-        file_put_contents('foo', $file);
+        file_put_contents($file, 'foo');
 
         $input = array(
             'File_upload_id' => '1',
