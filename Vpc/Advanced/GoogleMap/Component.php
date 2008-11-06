@@ -5,7 +5,7 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Advanced_GoogleMapView_Compon
     {
         $ret = array_merge(parent::getSettings(), array(
             'componentName' => 'Google Maps',
-            'tablename' => 'Vpc_Advanced_GoogleMap_Model',
+            'modelname' => 'Vpc_Advanced_GoogleMap_Model',
             'default' => array(
                 'zoom' => 8,
                 'height' => 300
