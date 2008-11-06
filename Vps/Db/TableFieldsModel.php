@@ -136,4 +136,26 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
         $this->_rows[$iId][count($this->_data[$iId])-1] = $row;
         return $rowData[$this->getPrimaryKey()];
     }
+
+    public function delete(Vps_Model_Row_Interface $row)
+    {
+        $iId = $row->getModelParentRow()->getInternalId();
+        
+        if (!$row->field) {
+            throw new Vps_ClientException("field is required");
+        }
+        $sql = "ALTER TABLE ";
+        $sql .= $row->getModelParentRow()->table." ";
+        $sql .= "DROP {$row->field}";
+        $row->getModelParentRow()->getModel()->getDb()->query(trim($sql));
+
+        foreach ($this->_rows[$iId] as $k=>$i) {
+            if ($row === $i) {
+                unset($this->_data[$iId][$k]);
+                unset($this->_rows[$iId][$k]);
+                return;
+            }
+        }
+        throw new Vps_Exception("Can't find entry");
+    }
 }
