@@ -123,14 +123,6 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
         return $ret;
     }
 
-    protected function _getRowConfig($data)
-    {
-        return array(
-            'data' => $this->_data[$index],
-            'model' => $this->getModel()
-        );
-    }
-
     public function getRow($select)
     {
         if (!is_object($select)) {

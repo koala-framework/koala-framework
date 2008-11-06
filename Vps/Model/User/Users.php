@@ -138,7 +138,8 @@ class Vps_Model_User_Users extends Vps_Db_Table
         $restClient->login($this->getRowWebcode(), $identity, $credential);
 
         $restResult = $restClient->get();
-
+p($restResult->status);
+p($restResult->status());
         if ($restResult->status()) {
             $userRow = $this->find($restResult->id())->current();
 
