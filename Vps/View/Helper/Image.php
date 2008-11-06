@@ -49,7 +49,7 @@ class Vps_View_Helper_Image
             $url = $c->getImageUrl();
             $size = $c->getImageDimensions();
         } else {
-            throw new Vps_Execption("Invalid image argument");
+            throw new Vps_Exception("Invalid image argument");
         }
 
         if ($url) {
