@@ -29,12 +29,8 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
     {
         $config = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
 
-        if ($config->server->host == 'vivid-planet.com') {
-            $this->_sshHost = 'vivid@vivid-planet.com';
-            $this->_sshDir = $config->server->dir;
-        } else {
-            throw new Vps_ClientException("Unknown server-host: {$config->server->host}");
-        }
+        $this->_sshHost = $config->server->user.'@'.$config->server->host;
+        $this->_sshDir = $config->server->dir;
 
         $this->_systemSshVps("svn-up");
         exit();
