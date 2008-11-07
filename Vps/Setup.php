@@ -366,10 +366,14 @@ class Vps_Setup
             $vpsConfig->application->vps->revision = (int)$m[1];
         }
         foreach ($vpsConfig->path as $k=>$i) {
-            $vpsConfig->path->$k = str_replace('%libraryPath%', $vpsConfig->libraryPath, $i);
+            $vpsConfig->path->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
+                                            array($vpsConfig->libraryPath, VPS_PATH),
+                                            $i);
         }
         foreach ($vpsConfig->includepath as $k=>$i) {
-            $vpsConfig->includepath->$k = str_replace('%libraryPath%', $vpsConfig->libraryPath, $i);
+            $vpsConfig->includepath->$k = str_replace(array('%libraryPath%', '%vpsPath%'),
+                                            array($vpsConfig->libraryPath, VPS_PATH),
+                                            $i);
         }
         return $vpsConfig;
     }
