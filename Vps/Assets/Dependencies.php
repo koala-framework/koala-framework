@@ -284,7 +284,6 @@ class Vps_Assets_Dependencies
             throw new Vps_Assets_NotFoundException("Assets-Path-Type '$type' for url '$url' not found in config.");
         }
         $p = $paths->$type;
-        if ($p == 'VPS_PATH') $p = VPS_PATH;
         if (!file_exists($p.'/'.$url)) {
             throw new Vps_Assets_NotFoundException("Assets '$url' not found");
         }

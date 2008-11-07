@@ -10,7 +10,7 @@ class Vpc_Basic_DownloadTag_Form extends Vpc_Abstract_Form
             ->setVtype('alphanum')
             ->setIsFilename(true) //um es im JavaScript zu finden
             ->setHelpText(hlpVps('vps_download_filename'));
-        $this->fields->add(new Vps_Form_Field_File('vps_upload_id', trlVps('File')))
+        $this->fields->add(new Vps_Form_Field_File('File', trlVps('File')))
             ->setDirectory('BasicDownloadTag')
             ->setAllowBlank(false)
             ->setAllowOnlyImages(false);

@@ -2,7 +2,7 @@
 class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
 {
     protected $_fileRow;
-    
+
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
@@ -26,7 +26,7 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
         if (!$this->_getSetting('showFilesize')) {
             $return['filesize'] = null;
         } else {
-            $return['filesize'] = $fileRow->getFilesize();
+            $return['filesize'] = $fileRow->getParentRow('File')->getFileSize();
         }
 
         $icon = $this->getIcon();
@@ -41,15 +41,16 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
     private function _getFileRow()
     {
         if (!$this->_fileRow) {
-            $this->_fileRow = $this->getData()->getChildComponent('-downloadTag')->
+            $this->_fileRow = $this->getData()
+                ->getChildComponent('-downloadTag')->
                 getComponent()->getFileRow();
         }
         return $this->_fileRow;
     }
-    
+
     public function getIcon()
     {
-        $extension = $this->_getFileRow()->getFileExtension();
+        $extension = $this->_getFileRow()->getParentRow('File')->extension;
         switch ($extension) {
             case 'pdf':
                 return 'page_white_acrobat';
