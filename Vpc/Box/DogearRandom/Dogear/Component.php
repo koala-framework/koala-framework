@@ -11,6 +11,7 @@ class Vpc_Box_DogearRandom_Dogear_Component extends Vpc_Abstract_Composite_Compo
         $ret['generators']['child']['component']['imageSmall'] = 'Vpc_Box_DogearRandom_Dogear_ImageSmall_Component';
         $ret['generators']['child']['component']['linkExtern'] = 'Vpc_Basic_LinkTag_Extern_Component';
 
+        $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'SwfObject';
         $ret['assets']['files'][] = '/assets/vps/Vpc/Box/DogearRandom/Dogear/Component.js';
         return $ret;
