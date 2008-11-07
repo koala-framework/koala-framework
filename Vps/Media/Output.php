@@ -64,7 +64,9 @@ class Vps_Media_Output
             if (isset($file['etag'])) $ret['headers'][] = 'ETag: ' . $file['etag'];
             if (isset($file['mtime'] )) $ret['headers'][] = 'Last-Modified: ' . $lastModifiedString;
             $ret['headers'][] = 'Accept-Ranges: none';
-            if (isset($file['downloadFilename']) && $file['downloadFilename']) {
+            if (isset($file['downloadFilename']) && $file['downloadFilename'] &&
+                substr($file['mimeType'], 0, 6) != 'image/'
+            ) {
                 $ret['headers'][] = 'Content-Disposition: attachment; filename="' . $file['downloadFilename'] . '"';
             }
             if (isset($file['filename']) && $file['filename']) {
