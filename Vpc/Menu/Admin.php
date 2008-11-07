@@ -12,10 +12,10 @@ class Vpc_Menu_Admin extends Vpc_Admin
         parent::onRowDelete($row);
         self::_deleteCache($row);
     }
-    
+
     private function _deleteCache($row)
     {
-        if ($row instanceof Zend_Db_Table_Row && $row->getTable() instanceof Vps_Dao_Pages) {
+        if ($row instanceof Vps_Db_Table_Row_Abstract && $row->getTable() instanceof Vps_Dao_Pages) {
             Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
             return;
         }
@@ -25,7 +25,7 @@ class Vpc_Menu_Admin extends Vpc_Admin
                 if (!is_instance_of($generator['class'], 'Vps_Component_Generator_Page_Interface')) continue;
 
                 if (isset($generator['table']) &&
-                    $row instanceof Zend_Db_Table_Row)
+                    $row instanceof Vps_Db_Table_Row_Abstract)
                 {
                     if (is_instance_of(get_class($row->getTable()), $generator['table'])) {
                         Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
