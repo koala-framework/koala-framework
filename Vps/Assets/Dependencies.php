@@ -161,6 +161,18 @@ class Vps_Assets_Dependencies
         }
         return;
     }
+
+    private function _hasFile($assetsType, $file)
+    {
+        //in_array scheint mit php 5.1 mit objekten nicht zu funktionieren
+        foreach ($this->_files[$assetsType] as $f) {
+            if (gettype($f) == gettype($file) && $f == $file) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private function _processComponentDependency($assetsType, $class, $includeAdminAssets)
     {
         if (in_array($assetsType.$class.$includeAdminAssets, $this->_processedComponents)) return;
@@ -206,13 +218,13 @@ class Vps_Assets_Dependencies
                 if ($dir == '.') $dir = getcwd();
                 if (is_file($dir . '/' . $file.'.css')) {
                     $f = $type . '/' . $file.'.css';
-                    if (!in_array($f, $this->_files[$assetsType])) {
+                    if (!$this->_hasFile($assetsType, $f)) {
                         $componentCssFiles[] = $f;
                     }
                 }
                 if (is_file($dir . '/' . $file.'.printcss')) {
                     $f = $type . '/' . $file.'.printcss';
-                    if (!in_array($f, $this->_files[$assetsType])) {
+                    if (!$this->_hasFile($assetsType, $f)) {
                         $componentCssFiles[] = $f;
                     }
                 }
@@ -251,13 +263,13 @@ class Vps_Assets_Dependencies
                     $f = $file->getPathname();
                     $f = substr($f, strlen($this->_config->path->$pathType));
                     $f = $pathType . $f;
-                    if (!in_array($f, $this->_files[$assetsType])) {
+                    if (!$this->_hasFile($assetsType, $f)) {
                         $this->_files[$assetsType][] = $f;
                     }
                 }
             }
         } else {
-            if (!in_array($file, $this->_files[$assetsType])) {
+            if (!$this->_hasFile($assetsType, $file)) {
                 $this->_files[$assetsType][] = $file;
             }
         }
