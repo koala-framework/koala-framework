@@ -42,6 +42,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
     {
         self::$_rootComponentClass = $componentClass;
         self::$_instance = null;
+        Vps_Component_Abstract::resetSettingsCache();
     }
     
     public function getPageByPath($path)

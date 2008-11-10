@@ -1,6 +1,8 @@
 <?php
 class Vps_Component_Abstract
 {
+    private static $_settings = null;
+
     public function __construct()
     {
         $this->_init();
@@ -84,27 +86,33 @@ class Vps_Component_Abstract
         return $s['mtime'];
     }
 
+    //wenn root geändert wird muss der cache hier gelöscht werden können
+    public static function resetSettingsCache()
+    {
+        self::$_settings = null;
+    }
+
     private static function &_getSettingsCached()
     {
-        static $settings = null;
-        if (!$settings) {
+        if (!self::$_settings) {
             $cache = new Vps_Assets_Cache(array('checkComponentSettings' => false));
-            $cacheId = 'componentSettings'.Vps_Registry::get('trl')->getTargetLanguage();
-            $settings = $cache->load($cacheId);
-            if (!$settings) {
-                $settings = array();
-                $settings['mtimeFiles'] = array();
+            $cacheId = 'componentSettings'.Vps_Registry::get('trl')->getTargetLanguage()
+                                .'_'.Vps_Component_Data_Root::getComponentClass();
+            self::$_settings = $cache->load($cacheId);
+            if (!self::$_settings) {
+                self::$_settings = array();
+                self::$_settings['mtimeFiles'] = array();
                 $incPaths = explode(PATH_SEPARATOR, get_include_path());
                 foreach (self::getComponentClasses(false/*don't use settings cache*/) as $c) {
-                    $settings[$c] = call_user_func(array($c, 'getSettings'));
-                    $settings[$c]['templates'] = array(
+                    self::$_settings[$c] = call_user_func(array($c, 'getSettings'));
+                    self::$_settings[$c]['templates'] = array(
                         'Master' => Vpc_Admin::getComponentFile($c, 'Master', 'tpl'),
                         'Component' => Vpc_Admin::getComponentFile($c, 'Component', 'tpl')
                     );
                     $p = $c;
-                    $settings[$c]['parentClasses'] = array();
+                    self::$_settings[$c]['parentClasses'] = array();
                     do {
-                        $settings[$c]['parentClasses'][] = $p;
+                        self::$_settings[$c]['parentClasses'][] = $p;
                     } while ($p = get_parent_class($p));
                     $p = $c;
                     do {
@@ -117,14 +125,15 @@ class Vps_Component_Abstract
                             }
                         }
                         if (!$f) { throw new Vps_Exception("File $file not found"); }
-                        $settings['mtimeFiles'][] = $f;
-                        $settings['mtimeFiles'][] = $incPath.DIRECTORY_SEPARATOR.$file.'.css';
+                        self::$_settings['mtimeFiles'][] = $f;
+                        self::$_settings['mtimeFiles'][] = $incPath.DIRECTORY_SEPARATOR.$file.'.css';
                     } while ($p = get_parent_class($p));
                 }
-                $cache->save($settings, $cacheId);
+
+                $cache->save(self::$_settings, $cacheId);
             }
         }
-        return $settings;
+        return self::$_settings;
     }
 
     public static function getParentClasses($c)
