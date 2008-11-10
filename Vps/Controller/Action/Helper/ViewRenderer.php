@@ -18,14 +18,6 @@ class Vps_Controller_Action_Helper_ViewRenderer extends Zend_Controller_Action_H
 
         if ((null !== $this->_actionController) && (null === $this->_actionController->view)) {
             $this->_actionController->view = $this->view;
-
-            if ($module == 'component') {
-                $request = $this->getRequest();
-                $componentId = $request->getParam('component_id');
-                $class = $request->getParam('class');
-                $this->_actionController->class = $class;
-                $this->_actionController->componentId = $componentId;
-            }
         }
         parent::preDispatch();
     }
