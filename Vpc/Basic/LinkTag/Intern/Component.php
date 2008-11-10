@@ -16,10 +16,4 @@ class Vpc_Basic_LinkTag_Intern_Component extends Vpc_Basic_LinkTag_Abstract_Comp
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/LinkTag/Intern/LinkField.js';
         return $ret;
     }
-    public function getTemplateVars()
-    {
-        $ret = parent::getTemplateVars();
-        $ret['data'] = $this->getData();
-        return $ret;
-    }
 }
