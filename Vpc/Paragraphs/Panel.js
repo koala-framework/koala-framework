@@ -54,7 +54,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
         var bp = this.getBaseParams();
         this.fireEvent('editcomponent', {
             componentClass: row.data.component_class,
-            componentId: bp.component_id + '-' + row.data.id,
+            componentId: bp.componentId + '-' + row.data.id,
             text: row.data.component_name
         });
     },
@@ -69,7 +69,7 @@ Vpc.Paragraphs.Panel = Ext.extend(Vps.Auto.GridPanel,
                 if (response.hasController) {
                     this.fireEvent('editcomponent', {
                         componentClass: response.data.component_class,
-                        componentId: this.getBaseParams().component_id + '-' + response.data.id,
+                        componentId: this.getBaseParams().componentId + '-' + response.data.id,
                         text: response.data.component_name
                     });
                 } else {

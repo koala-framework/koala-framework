@@ -33,7 +33,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     loadComponent: function(data) {
         var params;
         if (data.componentId) {
-            params = { component_id: data.componentId };
+            params = { componentId: data.componentId };
         } else {
             params = this.getBaseParams();
         }
@@ -167,7 +167,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
     },
     applyBaseParams : function(baseParams) {
         if (baseParams.id) {
-            baseParams.component_id = String.format(this.mainComponentId, baseParams.id);
+            baseParams.componentId = String.format(this.mainComponentId, baseParams.id);
             delete baseParams.id;
         }
         Ext.apply(this.baseParams, baseParams);
@@ -176,7 +176,7 @@ Vps.Component.ComponentPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         var baseParams = this.getBaseParams();
         for (var i in params) {
             if (i == 'id') {
-                if (baseParams.component_id != String.format(this.mainComponentId, params[i])) {
+                if (baseParams.componentId != String.format(this.mainComponentId, params[i])) {
                     return false;
                 }
             } else {
