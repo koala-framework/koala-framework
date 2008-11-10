@@ -281,11 +281,11 @@ class Vps_Trl_TrlTest extends PHPUnit_Framework_TestCase
         $this->_trlObject = new Vps_Trl($config);
         $this->_trlObject->setLanguages(array('de', 'en'));
         $this->_trlObject->setModel($modelVps, 'vps');
-        $this->assertEquals('dingsbums', $this->_trlObject->trl('foobar', array(), 'vps'));
-        $this->assertEquals('dingsbumse', $this->_trlObject->trlp('foobar', 'foobars', array(2), 'vps'));
-        $this->assertEquals('spezial dingsbums', $this->_trlObject->trlcp('special', 'special foobar', 'special foobars', array(1), 'vps'));
-        $this->assertEquals('spezial dingsbums', $this->_trlObject->trlc('special', 'special foobar', array(), 'vps'));
-        $this->assertEquals('5 dings', $this->_trlObject->trl('{0} foo', array(5), 'vps'));
+        $this->assertEquals('dingsbums', $this->_trlObject->trl('foobar', array(), 'vps', 'de'));
+        $this->assertEquals('dingsbumse', $this->_trlObject->trlp('foobar', 'foobars', array(2), 'vps', 'de'));
+        $this->assertEquals('spezial dingsbums', $this->_trlObject->trlcp('special', 'special foobar', 'special foobars', array(1), 'vps', 'de'));
+        $this->assertEquals('spezial dingsbums', $this->_trlObject->trlc('special', 'special foobar', array(), 'vps', 'de'));
+        $this->assertEquals('5 dings', $this->_trlObject->trl('{0} foo', array(5), 'vps', 'de'));
     }
 
     public function testTrlTranslationNotFound()
