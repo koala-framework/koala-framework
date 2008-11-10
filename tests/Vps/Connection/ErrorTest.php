@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group selenium
+ */
 class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
 {
     public function testError()
