@@ -6,7 +6,7 @@ abstract class Vps_Controller_Action_Auto_Vpc_Tree extends Vps_Controller_Action
         if (!isset($this->_table) && !isset($this->_tableName)) {
             $tablename = Vpc_Abstract::getSetting($this->class, 'tablename');
             if ($tablename) {
-                $this->_table = new $tablename(array('componentClass'=>$this->class));
+                $this->_table = new $tablename(array('componentClass'=>$this->_getParam('class')));
             } else {
                 throw new Vpc_Exception('No tablename in Setting defined: ' . $class);
             }
@@ -17,13 +17,13 @@ abstract class Vps_Controller_Action_Auto_Vpc_Tree extends Vps_Controller_Action
     protected function _getWhere()
     {
         $where = parent::_getWhere();
-        $where['component_id = ?'] = $this->componentId;
+        $where['component_id = ?'] = $this->_getParam('componentId');
         return $where;
     }
 
     protected function _beforeSave($row)
     {
-        $row->component_id = $this->componentId;
+        $row->component_id = $this->_getParam('componentId');
     }
 
     public function jsonIndexAction()

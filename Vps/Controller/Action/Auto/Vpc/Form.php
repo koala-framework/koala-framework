@@ -16,7 +16,7 @@ abstract class Vps_Controller_Action_Auto_Vpc_Form extends Vps_Controller_Action
         }
         
         $this->_form->setBodyStyle('padding: 10px');
-        $this->_form->setId($this->_getParam('component_id'));
+        $this->_form->setId($this->_getParam('componentId'));
         parent::preDispatch();
     }
     public function indexAction()

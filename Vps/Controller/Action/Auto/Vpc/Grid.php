@@ -4,7 +4,7 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
     public function preDispatch()
     {
         if (!isset($this->_model) && !isset($this->_tableName)) {
-            $this->setModel(Vpc_Abstract::createModel($this->class));
+            $this->setModel(Vpc_Abstract::createModel($this->_getParam('class')));
         }
         parent::preDispatch();
     }
@@ -12,18 +12,18 @@ abstract class Vps_Controller_Action_Auto_Vpc_Grid extends Vps_Controller_Action
     protected function _getWhere()
     {
         $where = parent::_getWhere();
-        $where['component_id = ?'] = $this->componentId;
+        $where['component_id = ?'] = $this->_getParam('componentId');
         return $where;
     }
 
     protected function _beforeSave($row)
     {
-        $row->component_id = $this->componentId;
+        $row->component_id = $this->_getParam('componentId');
     }
 
     public function jsonIndexAction()
     {
-        $this->view->vpc(Vpc_Admin::getInstance($this->class)->getExtConfig());
+        $this->view->vpc(Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
     }
 
     public function jsonInsertAction()

@@ -70,6 +70,6 @@ class Vpc_Paragraphs_Controller extends Vps_Controller_Action_Auto_Vpc_Grid
     }
     protected function _preforeAddParagraph($row)
     {
-        $row->component_id = $this->componentId;
+        $row->component_id = $this->_getParam('componentId');
     }
 }
