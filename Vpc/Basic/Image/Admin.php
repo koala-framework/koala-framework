@@ -23,7 +23,7 @@ class Vpc_Basic_Image_Admin extends Vpc_Admin
                 $row->component_id, array('ignoreVisible' => true, 'componentClass'=>$this->_class)
             );
             foreach ($components as $c) {
-                $cacheId = $c->componentClass.'_'.str_replace('-', '__', $c->componentId).'_default';
+                $cacheId = $c->componentClass.'_'.str_replace('-', '__', $c->dbId).'_default';
                 Vps_Media::getOutputCache()->remove($cacheId);
             }
         }
