@@ -249,25 +249,24 @@ class Vps_Setup
             exit;
         }
 
-        $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
-        if (php_sapi_name() != 'cli' &&
-            Zend_Registry::get('config')->preLogin &&
-            empty($sessionPhpAuthed->success)
-        ) {
-            if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
-                $loginResponse = Zend_Registry::get('userModel')
-                    ->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
-                if ($loginResponse['zendAuthResultCode'] == Zend_Auth_Result::SUCCESS) {
-                    $sessionPhpAuthed->success = 1;
-                } else {
-                    unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+        if (php_sapi_name() != 'cli' && Zend_Registry::get('config')->preLogin) {
+            $sessionPhpAuthed = new Zend_Session_Namespace('PhpAuth');
+            if (empty($sessionPhpAuthed->success)) {
+                if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
+                    $loginResponse = Zend_Registry::get('userModel')
+                        ->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+                    if ($loginResponse['zendAuthResultCode'] == Zend_Auth_Result::SUCCESS) {
+                        $sessionPhpAuthed->success = 1;
+                    } else {
+                        unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+                    }
                 }
-            }
 
-            // separate if abfrage, damit login wieder kommt, falls gerade falsch eingeloggt wurde
-            if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
-                header('WWW-Authenticate: Basic realm="Testserver"');
-                self::output401();
+                // separate if abfrage, damit login wieder kommt, falls gerade falsch eingeloggt wurde
+                if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
+                    header('WWW-Authenticate: Basic realm="Testserver"');
+                    self::output401();
+                }
             }
         }
 
