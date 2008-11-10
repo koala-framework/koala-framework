@@ -4,8 +4,14 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     public function getControllerClass(Zend_Controller_Request_Abstract $request)
     {
         $module = $request->getModuleName();
-        if ($module == 'component'
-                && $request->getControllerName() == 'component') {
+        if (($module == 'component' && $request->getControllerName() == 'component')
+            || ($module == 'component_test' && $request->getControllerName() == 'component_test')
+        ) {
+            if ($module == 'component_test') {
+                Zend_Registry::get('config')->debug->settingsCache = false;
+                Zend_Registry::get('config')->debug->componentCache->disable = true;
+                Vps_Component_Data_Root::setComponentClass($request->getParam('root'));
+            }
 
             $className = '';
             $class = $request->getParam('class');
@@ -19,14 +25,15 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
             if ($className == '') {
                 Zend_Loader::loadClass($class);
                 while (is_subclass_of($class, 'Vps_Component_Abstract')) {
+
                     $cc = $class;
                     if (substr($cc, -10) == '_Component') {
                         $cc = substr($cc, 0, -10);
                     }
                     $cc .= '_Controller';
-
                     if (Vps_Loader::classExists($cc)) {
-                        return $cc;
+                        $className = $cc;
+                        break;
                     }
                     $class = get_parent_class($class);
                 }
@@ -35,6 +42,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
         } else {
 
             $className = parent::getControllerClass($request);
+
         }
 
         return $className;
@@ -42,7 +50,7 @@ class Vps_Controller_Dispatcher extends Zend_Controller_Dispatcher_Standard
     
     public function getControllerDirectory($module = null)
     {
-        if ($module == 'component') {
+        if ($module == 'component' || $module == 'component_test') {
             return '';
         } else {
             return parent::getControllerDirectory($module);
