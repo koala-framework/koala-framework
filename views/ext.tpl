@@ -41,9 +41,11 @@
     <script type="text/javascript">
         Vps.userRole = '<?= $this->ext['userRole'] ?>';
         Vps.main = function() {
-            var panel = new <?= $this->ext['class'] ?>(<?= $this->ext['config'] ?>);
-            if (!panel.region) panel.region = 'center';
-            panel.id = 'mainPanel';
+            <? if ($this->ext['class']) { ?>
+            var panel = new <?= $this->ext['class'] ?>(<?= Zend_Json::encode($this->ext['config']) ?>);
+            <? } else { ?>
+            var panel = <?= Zend_Json::encode($this->ext['config']) ?>;
+            <? } ?>
             Vps.currentViewport = new <?= $this->ext['viewport'] ?>({
                 items: [panel]
             });
