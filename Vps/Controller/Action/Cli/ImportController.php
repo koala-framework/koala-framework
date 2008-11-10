@@ -1,6 +1,7 @@
 <?php
 class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_Cli_Abstract
 {
+    protected $_mysqlDir = '';
     public function indexAction()
     {
         $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
@@ -9,11 +10,11 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         $config = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
 
+        $this->_sshHost = $config->server->user.'@'.$config->server->host;
         if ($config->server->host == 'vivid-planet.com') {
-            $this->_sshHost = 'vivid@vivid-planet.com';
-        } else {
-            throw new Vps_ClientException("Unknown server-host: {$config->server->host}");
+            $this->_mysqlDir = '/usr/local/mysql/bin/';
         }
+
         $onlineRevision = false;
         try {
             $info = new SimpleXMLElement(`ssh {$this->_sshHost} "cd {$config->server->dir} && svn info --xml"`);
@@ -41,11 +42,11 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         $dumpname = tempnam('/tmp', 'vpsimport');
         echo "erstelle datenbank dump (online) - $dumpname...\n";
-        exec("ssh {$this->_sshHost} \"echo 'SHOW TABLES' | /usr/local/mysql/bin/mysql $mysqlOnlineOptions {$onlineDbConfig->dbname}\"", $tables);
+        exec("ssh {$this->_sshHost} \"echo 'SHOW TABLES' | {$this->_mysqlDir}mysql $mysqlOnlineOptions {$onlineDbConfig->dbname}\"", $tables);
 
-        $this->_systemSsh("/usr/local/mysql/bin/mysqldump --ignore-table={$onlineDbConfig->dbname}.cache_component $mysqlOnlineOptions {$onlineDbConfig->dbname} > $dumpname");
+        $this->_systemSsh("{$this->_mysqlDir}mysqldump --ignore-table={$onlineDbConfig->dbname}.cache_component $mysqlOnlineOptions {$onlineDbConfig->dbname} > $dumpname");
         if (in_array('cache_component', $tables)) {
-            $this->_systemSsh("/usr/local/mysql/bin/mysqldump --no-data $mysqlOnlineOptions {$onlineDbConfig->dbname} cache_component >> $dumpname");
+            $this->_systemSsh("{$this->_mysqlDir}mysqldump --no-data $mysqlOnlineOptions {$onlineDbConfig->dbname} cache_component >> $dumpname");
         }
 
         $this->_systemSsh("bzip2 $dumpname");
