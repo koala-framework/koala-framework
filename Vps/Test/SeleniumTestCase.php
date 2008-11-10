@@ -44,4 +44,40 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             $this->assertTrue((bool)preg_match('#'.$text.'#', $this->getText($locator)));
         }
     }
+
+    protected function _reloadSession()
+    {
+        $data = file_get_contents(session_save_path().'/sess_'.Zend_Session::getId());
+        $vars = preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
+                $data, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+        $data = array();
+        for($i=0; isset($vars[$i]); $i++) {
+            $data[$vars[$i++]]
+                = unserialize($vars[$i]);
+        }
+        $_SESSION = $data;
+    }
+
+    public function __call($command, $arguments)
+    {
+        if ($command == 'open') {
+            $this->deleteCookie(session_name(), '/');
+            $this->createCookie(session_name().'='.session_id(), 'path=/');
+            Zend_Session::writeClose();
+        }
+        return parent::__call($command, $arguments);
+    }
+
+    protected function defaultAssertions($action)
+    {
+        if ($this->isElementPresent('id=exception')) {
+            $exception = $this->getText('id=exception');
+            $exception = unserialize(base64_decode($exception));
+            throw $exception;
+        }
+        $this->assertTextNotPresent('Exception');
+        $this->assertTextNotPresent('error');
+        $this->assertTextNotPresent('warning');
+        $this->assertTextNotPresent('notice');
+    }
 }

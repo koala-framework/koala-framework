@@ -54,6 +54,10 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
     }
     public function indexAction()
     {
+        Zend_Session::start();
+        //damit der webserver auf die session auch zugriff hat
+        chmod(session_save_path().'/sess_'.Zend_Session::getId(), 0777);
+
         Zend_Registry::get('config')->debug->settingsCache = false;
         Zend_Registry::get('config')->debug->benchmark = false;
         Zend_Registry::get('config')->debug->querylog = false;

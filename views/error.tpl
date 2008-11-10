@@ -17,6 +17,7 @@
             <p>Last DB-Query:</p>
             <pre><?= $this->query ?></pre>
             <?php } ?>
+            <p id="exception" stlye="display:none"><?=base64_encode(serialize($this->exception))?></p>
         <?php } else { ?>
             <?= trlVps('An Error ocurred. Please try again later.') ?>
         <?php } ?>
