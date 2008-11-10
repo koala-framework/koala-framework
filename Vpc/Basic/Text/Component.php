@@ -36,9 +36,14 @@ class Vpc_Basic_Text_Component extends Vpc_Abstract
             ),
             'model' => 'Vpc_Basic_Text_ChildComponentsModel'
         );
+
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditor.js';
         $ret['assetsAdmin']['files'][] = 'vps/Vpc/Basic/Text/StylesEditorTab.js';
+        $ret['assetsAdmin']['dep'][] = 'ExtWindow';
+        $ret['assetsAdmin']['dep'][] = 'VpsAutoForm';
+
         $ret['assets']['dep'][] = 'VpsMailDecode';
+
         $ret['cssClass'] = 'webStandard vpcText';
 
         $ret['assets']['files'][] = new Vps_Assets_Dynamic('css',
