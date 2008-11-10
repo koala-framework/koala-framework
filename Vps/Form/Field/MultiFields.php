@@ -4,7 +4,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
     public $fields;
     private $_model;
     private $_references;
-    
+
     public function __construct($tableName = null)
     {
         if (is_object($tableName)) {
@@ -25,7 +25,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         $this->setBorder(false);
         $this->setXtype('multifields');
     }
-    
+
     protected function _addValidators()
     {
         parent::_addValidators();
@@ -206,12 +206,11 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
             $postData[$this->getFieldName()]['save'][] = array('row'=>$r, 'data'=>$rowPostData, 'insert'=>true);
         }
 
-        foreach ($postData[$this->getFieldName()]['save'] as $d) {
+        foreach ($postData[$this->getFieldName()]['save'] as &$d) {
             foreach ($this->fields as $field) {
-                $field->processInput($d['row'], $d['data']);
+                $d['data'] = $field->processInput($d['row'], $d['data']);
             }
         }
-
 
         return $postData;
     }
