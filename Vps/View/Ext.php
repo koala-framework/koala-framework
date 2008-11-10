@@ -3,17 +3,11 @@ class Vps_View_Ext extends Vps_View
 {
     public function vpc($config)
     {
-        throw new Vps_Exception("Noch nicht konvertiert, wenns benötigt wird niko sagen :D");
-        $this->ext($config['class'], $config['config']);
+        $this->ext(null, $config);
     }
 
     public function ext($class, $config = array(), $viewport = null)
     {
-        if (!is_string($class)) {
-            throw new Vps_View_Exception('Class must be a string.');
-        }
-
-
         if (!$viewport) {
             $viewport = Zend_Registry::get('config')->ext->defaultViewport;
         }
@@ -32,15 +26,17 @@ class Vps_View_Ext extends Vps_View
         // View einrichten
         $dep = new Vps_Assets_Dependencies();
         $ext['class'] = $class;
-        $ext['config'] = Zend_Json::encode($config);
-        $ext['viewport'] = $viewport;
-        $ext['userRole'] = Zend_Registry::get('userModel')->getAuthedUserRole();
+        if (!isset($config->id)) $config->id = 'mainPanel';
+        if (!isset($config->region)) $config->region = 'center';
         if (isset($config->assetsType)) {
             $ext['assetsType'] = $config->assetsType;
             unset($config->assetsType);
         } else {
             $ext['assetsType'] = 'Admin';
         }
+        $ext['config'] = $config;
+        $ext['viewport'] = $viewport;
+        $ext['userRole'] = Zend_Registry::get('userModel')->getAuthedUserRole();
         $this->ext = $ext;
         $this->extTemplate = 'ext.tpl';
 
