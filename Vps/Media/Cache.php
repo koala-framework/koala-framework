@@ -13,4 +13,10 @@ class Vps_Media_Cache extends Vps_Cache_Core
         ));
         $this->setBackend($backend);
     }
+
+    public function remove($id)
+    {
+        Vps_Benchmark::info("Media-Cache '$id' gelöscht.");
+        return parent::remove($id);
+    }
 }
