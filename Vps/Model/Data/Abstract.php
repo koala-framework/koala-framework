@@ -3,7 +3,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 {
     protected $_rowClass = 'Vps_Model_Row_Data_Abstract';
 
-    protected $_data = array();
+    protected $_data = null;
     protected $_autoId;
     protected $_columns = array();
     protected $_primaryKey = 'id';
@@ -19,14 +19,36 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     public function getData()
     {
-        return $this->_data;
+        $ret = $this->_data;
+        if (!$ret) $ret = array();
+        return $ret;
+    }
+
+    protected function _afterDataUpdate()
+    {
+    }
+
+    public function getRows($where=null, $order=null, $limit=null, $start=null)
+    {
+        if (!is_object($where)) {
+            $select = $this->select($where, $order, $limit, $start);
+        } else {
+            $select = $where;
+        }
+        $dataKeys = $this->_selectDataKeys($select, $this->getData());
+        return new $this->_rowsetClass(array(
+            'model' => $this,
+            'dataKeys' => $dataKeys
+        ));
     }
 
     public function update(Vps_Model_Row_Interface $row, $rowData)
     {
+        $this->getData();
         foreach ($this->_rows as $k=>$i) {
             if ($row === $i) {
                 $this->_data[$k] = $rowData;
+                $this->_afterDataUpdate();
                 return $rowData[$this->getPrimaryKey()];
             }
         }
@@ -35,6 +57,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     public function insert(Vps_Model_Row_Interface $row, $rowData)
     {
+        $this->getData();
         if (!isset($rowData[$this->getPrimaryKey()])) {
             if (!isset($this->_autoId)) {
                 $this->_autoId = 0;
@@ -49,6 +72,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
             $row->{$this->getPrimaryKey()} = $this->_autoId;
         }
         $this->_data[] = $rowData;
+        $this->_afterDataUpdate();
         $key = end(array_keys($this->_data));
         $this->_rows[$key] = $row;
         return $rowData[$this->getPrimaryKey()];
@@ -56,9 +80,11 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     public function delete(Vps_Model_Row_Interface $row)
     {
+        $this->getData();
         foreach ($this->_rows as $k=>$i) {
             if ($row === $i) {
                 unset($this->_data[$k]);
+                $this->_afterDataUpdate();
                 unset($this->_rows[$k]);
                 return;
             }

@@ -21,35 +21,16 @@ class Vps_Model_Xml extends Vps_Model_Data_Abstract
         parent::__construct($config);
     }
 
-    public function getRows($where=null, $order=null, $limit=null, $start=null)
+    public function getData()
     {
-        $data = $this->getData();
-        if (!is_object($where)) {
-            $select = $this->select($where, $order, $limit, $start);
-        } else {
-            $select = $where;
+        if (!isset($this->_data)) {
+            $data = array();
+            foreach ($this->_getElements() as $key=>$element) {
+                $data[$key] = (array)$element;
+            }
+            $this->_data = $data;
         }
-        $dataKeys = $this->_selectDataKeys($select, $data);
-        return new $this->_rowsetClass(array(
-            'model' => $this,
-            'rowClass' => $this->_rowClass,
-            'dataKeys' => $dataKeys
-        ));
-    }
-
-    public function getData ()
-    {
-        if ($this->_data) {
-            return $this->_data;
-        } else {
-	        $data = array();
-	        foreach ($this->_getElements() as $key=>$element) {
-	            $data[$key] = (array)$element;
-	        }
-	        $this->_data = $data;
-	        return $this->_data;
-
-        }
+        return $this->_data;
     }
 
     public function getRowByDataKey($key)
