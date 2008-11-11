@@ -14,10 +14,11 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;
 
-        $onlineRevision = $this->_systemSshVps('import get-update-revision');
+        $onlineRevision = `sudo -u www-data sshvps $this->_sshHost $this->_sshDir import get-update-revision`;
 
         echo "kopiere uploads...\n";
         $this->_systemSshVps('copy-uploads '.Vps_Registry::get('config')->uploads.'/', $config->uploads);
+
         //$this->_systemCheckRet("rsync --progress --delete --update --exclude=cache/ ".
         //    "--recursive {$this->_sshHost}:{$config->uploads}/ ".Vps_Registry::get('config')->uploads."/");
 
@@ -27,11 +28,10 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_systemCheckRet("mysqldump $mysqlLocalOptions {$dbConfig->dbname} > $p");
 
         echo "erstelle datenbank dump (online)...\n";
-        $dumpname = $this->_systemSshVps('import create-dump');
+        $dumpname = `sudo -u www-data sshvps $this->_sshHost $this->_sshDir import create-dump`;
 
         echo "kopiere datenbank dump...\n";
-        $dumpname = $this->_systemSshVps('copy-dump '.$dumpname);
-        //$this->_systemCheckRet("scp {$this->_sshHost}:{$dumpname} {$dumpname}");
+        $this->_systemSshVps('copy-dump '.$dumpname);
 
         echo "loesche lokale datenbank...\n";
         $this->_systemCheckRet("echo \"DROP DATABASE \`{$dbConfig->dbname}\`\" | mysql $mysqlLocalOptions");
@@ -40,14 +40,10 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_systemCheckRet("echo \"CREATE DATABASE \`{$dbConfig->dbname}\`\" | mysql $mysqlLocalOptions");
 
         echo "spiele dump in lokale datenbank ein...\n";
-        $this->_systemCheckRet("bunzip2 {$dumpname}");
         $dumpname = substr($dumpname, 0, -4);
         $this->_systemCheckRet("mysql $mysqlLocalOptions {$dbConfig->dbname} < $dumpname");
 
-        echo "loesche datebank dump lokal...\n";
-        $this->_systemCheckRet("rm $dumpname");
-
-        echo "writing application/update ($onlineRevision)...\n";
+        echo "schreibe application/update ($onlineRevision)...\n";
         file_put_contents('application/update', $onlineRevision);
 
         echo "fertig!\n";
