@@ -182,7 +182,7 @@ abstract class Vps_Model_Abstract implements Vps_Model_Interface
     {
         $ret = array();
         foreach ($this->_referenceMap as $k=>$ref) {
-            if ($ref['refModelClass'] == $modelClassName) {
+            if (is_instance_of($modelClassName, $ref['refModelClass'])) {
                 $ret[$k] = $ref;
             }
         }
