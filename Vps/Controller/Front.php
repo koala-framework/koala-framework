@@ -6,6 +6,8 @@ class Vps_Controller_Front extends Zend_Controller_Front
 {
     protected function _init()
     {
+        $this->setDispatcher(new Vps_Controller_Dispatcher());
+
         $this->setControllerDirectory('application/controllers');
         $this->returnResponse(true);
         $this->setParam('disableOutputBuffering', true);

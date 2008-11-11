@@ -244,7 +244,7 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
 
         this.getAction('save').disable();
 
-        
+
         if (!options) options = {};
 
         var cb = {
@@ -266,6 +266,9 @@ Vps.Auto.FormPanel = Ext.extend(Vps.Binding.AbstractPanel, {
         }
 
         Ext.apply(params, this.getBaseParams());
+		if (!params['id']) {
+		  params['avoid_reinsert_id'] = Math.random();
+		}
         Ext.Ajax.request(Ext.apply(options, {
             params: params,
             url: this.controllerUrl+'/json-save',

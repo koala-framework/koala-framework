@@ -10,12 +10,14 @@ Vps.Form.Cards = Ext.extend(Ext.Panel,
             cards.items.each(function(i) {
                 if (i.name != value) {
                     i.cascade(function(it) {
-                        it.disable();
+                        it.hide(); //bugfix für falsche anzeige bei kitepowerbuchung
+						it.disable();
                     }, this);
                 } else {
                     cards.getLayout().setActiveItem(i);
                     i.cascade(function(it) {
                         if (!it.disabledByFieldset) {
+							it.show(); //bugfix für falsche anzeige bei kitepowerbuchung
                             it.enable();
                         }
                     }, this);

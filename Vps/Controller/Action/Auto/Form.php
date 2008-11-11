@@ -116,41 +116,62 @@ abstract class Vps_Controller_Action_Auto_Form extends Vps_Controller_Action_Aut
         $insert = false;
 
         $primaryKey = $this->_form->getPrimaryKey();
+        $skip = false;
         if ($row && $primaryKey) {
             if (is_array($primaryKey)) $primaryKey = $primaryKey[1];
-            if (!$row->$primaryKey) {
+
+            if (!$row->$primaryKey){
                 $insert = true;
             }
+
+
             if ($insert) {
+                $sessionFormId = new Zend_Session_Namespace('avoid_reinsert_id');
+                if (isset($sessionFormId->avoid[$this->_getParam('avoid_reinsert_id')])) {
+                    $skip = true;
+                }
                 if (!isset($this->_permissions['add']) || !$this->_permissions['add']) {
                     throw new Vps_Exception('Add is not allowed.');
                 }
-                $this->_beforeInsert($row);
+                if (!$skip) $this->_beforeInsert($row);
             } else {
                 if (!isset($this->_permissions['save']) || !$this->_permissions['save']) {
                     throw new Vps_Exception('Save is not allowed.');
                 }
             }
-            $this->_beforeSave($row);
+
+            if (!$skip) $this->_beforeSave($row);
         }
-
-        //erst hier unten Berechtigungen überprüfen, damit beforeInsert usw vorher noch ausgeführt
-        //wird und eventuelle Daten gesetzt werden
-        if (!$this->_hasPermissions($row, 'save')) {
-            throw new Vps_Exception("Save is not allowed for this row.");
-        }
-
-        $data = $this->_form->save(null, $postData);
-
-        if ($row) {
-            if ($insert) {
-                $this->_afterInsert($row);
+        if (!$skip) {
+            //erst hier unten Berechtigungen überprüfen, damit beforeInsert usw vorher noch ausgeführt
+            //wird und eventuelle Daten gesetzt werden
+            if (!$this->_hasPermissions($row, 'save')) {
+                throw new Vps_Exception("Save is not allowed for this row.");
             }
-            $this->_afterSave($row);
-        }
-        Zend_Registry::get('db')->commit();
+            $data = $this->_form->save(null, $postData);
 
-        $this->view->data = $data;
+            if ($row) {
+                if ($insert) {
+                    $this->_afterInsert($row);
+                }
+                $this->_afterSave($row);
+            }
+            Zend_Registry::get('db')->commit();
+
+            $this->view->data = $data;
+
+            $sessionFormId = new Zend_Session_Namespace('avoid_reinsert_id');
+            if (!isset($sessionFormId->avoid)) {
+                $avoid = array();
+            } else {
+                $avoid = $sessionFormId->avoid;
+            }
+            $avoid[$this->_getParam('avoid_reinsert_id')] = $data;
+            $sessionFormId->avoid = $avoid;
+        } else {
+            $this->view->data = $sessionFormId->avoid[$this->_getParam('avoid_reinsert_id')];
+        }
+
     }
 
     public function jsonDeleteAction()

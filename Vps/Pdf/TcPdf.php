@@ -17,6 +17,7 @@ class Vps_Pdf_TcPdf extends TCPDF
         $this->SetTitle("Wochenbericht");
         $this->setLIsymbol(utf8_encode(chr(0x95))); // = •
        // $this->AddFontPath("/www/public/lorenz/tcpdf/fonts/");
+        //$this->setListIndentWidth($this->getStringWidth("00"));
     }
 
     public function getRightMargin()
