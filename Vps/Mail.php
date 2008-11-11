@@ -1,6 +1,9 @@
 <?php
 class Vps_Mail
 {
+    // wozu _ownReturnPath? siehe getReturnPath
+    protected $_ownReturnPath = null;
+
     protected $_mail;
     protected $_view;
     protected $_masterTemplate = null;
@@ -139,6 +142,15 @@ class Vps_Mail
         return $this->_mail->getHeaders();
     }
 
+    public function getReturnPath()
+    {
+        /**
+         * Zend_Mail gibt bei getReturnPath() das From zurück, wenn der return path
+         * noch nicht gesetzt wurde, deshalb merken wir uns es selbst.
+         */
+        return $this->_ownReturnPath;
+    }
+
     public function addCc($email, $name='')
     {
         if (Zend_Registry::get('config')->debug->sendAllMailsTo) {
@@ -168,6 +180,8 @@ class Vps_Mail
 
     public function setReturnPath($email)
     {
+        // wozu _ownReturnPath? siehe getReturnPath
+        $this->_ownReturnPath = $email;
         $this->_mail->setReturnPath($email);
     }
 
@@ -201,16 +215,17 @@ class Vps_Mail
             $this->_mail->addBcc($mailSendAllBcc);
         }
 
+        $hostNonWww = preg_replace('#^www\\.#', '', $this->_view->host);
+
         if ($this->getFrom() == null) {
-            if (Zend_Registry::get('config')->email) {
-                $fromName = Zend_Registry::get('config')->email->from->name;
-                $fromAddress = Zend_Registry::get('config')->email->from->address;
-            } else {
-                $hostNonWww = preg_replace('#^www\\.#', '', $this->_view->host);
-                $fromName = Zend_Registry::get('config')->application->name;
-                $fromAddress = 'noreply@'.$hostNonWww;
-            }
-            $this->_mail->setFrom($fromAddress, $fromName);
+            $fromName = str_replace('%host%', $hostNonWww, Zend_Registry::get('config')->email->from->name);
+            $fromAddress = str_replace('%host%', $hostNonWww, Zend_Registry::get('config')->email->from->address);
+            $this->setFrom($fromAddress, $fromName);
+        }
+
+        if ($this->getReturnPath() == null) {
+            $returnPath = str_replace('%host%', $hostNonWww, Zend_Registry::get('config')->email->returnPath);
+            $this->setReturnPath($returnPath);
         }
 
         $vars = array();
@@ -258,7 +273,13 @@ class Vps_Mail
         }
         $this->_mail->setSubject($this->_view->subject);
 
-        return $this->_mail->send();
+        // eigenen transport setzen, damit returnPath korrekt funktioniert
+        $transport = null;
+        if ($this->getReturnPath() != null) {
+            $transport = new Zend_Mail_Transport_Sendmail('-f'.$this->getReturnPath());
+        }
+
+        return $this->_mail->send($transport);
     }
 
 }

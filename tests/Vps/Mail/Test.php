@@ -66,6 +66,33 @@ class Vps_Mail_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('The foo variable is:<br />bar', $m->getMail()->getBodyHtml(true));
     }
 
+    public function testGetReturnPath()
+    {
+        $mockMail = $this->getMock('Vps_Mail_Fixed', array('send'));
+
+        $c = $this->_root->getChildComponent('-both');
+        $m = new Vps_Mail($c);
+        $m->getView()->addScriptPath(dirname(__FILE__).'/views');
+        $m->setMailVarsClassName(null);
+        $m->setMail($mockMail);
+
+        $this->assertNull($m->getFrom());
+        $this->assertNull($m->getReturnPath());
+
+        $m->setFrom('foo@vivid-planet.com', 'Foo Bar');
+
+        $this->assertEquals($m->getFrom(), 'foo@vivid-planet.com');
+        $this->assertEquals($m->getReturnPath(), null);
+
+        $m->setReturnPath('return@vivid-planet.com');
+
+        $this->assertEquals($m->getFrom(), 'foo@vivid-planet.com');
+        $this->assertEquals($m->getReturnPath(), 'return@vivid-planet.com');
+
+        $m->send();
+
+    }
+
     /**
      * @expectedException Vps_Exception
      */
