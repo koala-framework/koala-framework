@@ -271,8 +271,7 @@ class Vps_Setup
         }
 
         $frontendOptions = array('automatic_serialization' => true);
-        $backendOptions  = array('cache_dir' => 'application/cache/table');
-        $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        $cache = Zend_Cache::factory('Core', 'Memcached', $frontendOptions);
         Zend_Db_Table_Abstract::setDefaultMetadataCache($cache);
 
         if ($tl = Zend_Registry::get('config')->debug->timeLimit) {
