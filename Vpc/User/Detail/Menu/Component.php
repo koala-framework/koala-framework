@@ -19,6 +19,7 @@ class Vpc_User_Detail_Menu_Component extends Vpc_Abstract_Composite_Component
         }
         return $ret;
     }
+
     protected function _getLinks()
     {
         $ret = Vps_Component_Data_Root::getInstance()

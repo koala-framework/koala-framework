@@ -18,7 +18,7 @@ class Vpc_User_Edit_Component extends Vpc_Abstract_Composite_Component
         if ($ret['authedUser']) {
             $ret['userProfile'] = Vps_Component_Data_Root::getInstance()
                 ->getComponentByClass('Vpc_User_Directory_Component')
-                ->getChildComponent('_' . $ret['authedUser']->id);
+                ->getChildComponent('_' .  $ret['authedUser']->id);
         }
         return $ret;
     }
