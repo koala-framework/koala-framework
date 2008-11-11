@@ -3,7 +3,6 @@ class Vps_Controller_Front_Component extends Vps_Controller_Front
 {
     protected function _init()
     {
-        $this->setDispatcher(new Vps_Controller_Dispatcher());
         parent::_init();
         $this->addControllerDirectory(VPS_PATH . '/Vps/Controller/Action/Component',
                                         'vps_controller_action_component');

@@ -49,4 +49,12 @@ class Vps_Model_Session extends Vps_Model_Data_Abstract
         $ns = new Zend_Session_Namespace($this->_namespace);
         $ns->data = $this->_data;
     }
+
+    public function isEqual(Vps_Model_Interface $other)
+    {
+        if ($other instanceof Vps_Model_Session && $other->_namespace == $this->_namespace) {
+            return true;
+        }
+        return false;
+    }
 }

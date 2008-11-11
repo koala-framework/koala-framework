@@ -20,8 +20,10 @@ class Vpc_Basic_Text_Pdf extends Vpc_Abstract_Pdf
                 $html = preg_replace('#</p>\s+#', '<p />', $html);
                 $html = preg_replace('#<p>\s+#', '<p>', $html);
 
-                $html = preg_replace('#<br *[/]> *</p> *<[A-Za-z]l#', '<br><ul', $html);
-                $html = preg_replace('#</p> *<[A-Za-z]l#', '<br><ul', $html);
+                $html = preg_replace('#<br *[/]> *</p> *<[A-Za-z]ul#', '<br><ul', $html);
+                $html = preg_replace('#<br *[/]> *</p> *<[A-Za-z]ol#', '<br><ol', $html);
+                $html = preg_replace('#</p> *<[A-Za-z]ul#', '<br><ul', $html);
+                $html = preg_replace('#</p> *<[A-Za-z]ol#', '<br><ol', $html);
                 $html = preg_replace('#</ul> *<p>#', '</ul>', $html);
 
                 $html = preg_replace('#<br *[/]> *</p> *<p>#', '<br><br>', $html);

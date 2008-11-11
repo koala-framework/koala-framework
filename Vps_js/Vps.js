@@ -155,6 +155,9 @@ Vps.handleError = function(error) {
 		if ((Vps.Debug.displayErrors)) {
 			title = error.title;
 			msg = error.message;
+		} else if (error.errorText) {
+            title = error.errorText;
+			msg = error.errorText;
 		} else {
 			title = (trlVps('Error'));
 			msg = trlVps("A Server failure occured.");

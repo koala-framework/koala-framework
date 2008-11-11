@@ -89,10 +89,16 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
 	        if (errorMsg && !options.ignoreErrors) {
 	            errorMsg = '<a href="'+options.url+'?'+encParams+'">request-url</a><br />' + errorMsg;
 	            var sendMail = !r || !r.exception;
+				if (options.errorText) {
+					errorText = options.errorText;
+				} else {
+					errorText = null;
+				}
 				Vps.handleError({
 				    message: errorMsg,
 					title: errorMsgTitle,
 					mail: sendMail,
+					errorText: errorText,
 					retry: function() {
 						this.connection.repeatRequest(this.options);
 					},
@@ -147,18 +153,19 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
     {
 		if (!options.ignoreErrors) {
 	        options.vpsIsSuccess = false;
-	        var debugString = '';
-	        for (var dbg in options.params) {
-	            debugString += '<br />params.' + dbg + ' = ' + options.params[dbg];
-	        }
 
 			errorMsgTitle = trlVps('Error');
-	        errorMsg = trlVps("A connection problem occured.")+"<br /><br /><b>"+trlVps("Debug info")+":</b><br />"
-	            + "url: " + options.url + debugString;
+			if (options.errorText) {
+                errorText = options.errorText;
+			} else {
+	           errorMsg = trlVps("A connection problem occured.");
+			   errorText = null;
+			}
 	        if (!options.ignoreErrors) {
 				Vps.handleError({
 		            message: errorMsg,
 		            title: errorMsgTitle,
+					errorText: errorText,
 		            mail: false,
 		            retry: function() {
 		                this.repeatRequest(options);

@@ -61,7 +61,12 @@ class Vps_Media_Output
             $ret['headers'][] = array('Not Modified', true, 304);
             $ret['headers'][] = 'ETag: '.$headers['If-None-Match'];
         } else {
-            if (isset($file['etag'])) $ret['headers'][] = 'ETag: ' . $file['etag'];
+            if (isset($file['etag'])) {
+                $ret['headers'][] = 'ETag: ' . $file['etag'];
+            } else {
+                //wird benötigt für IE der sonst den download verweigert
+                $ret['headers'][] = 'ETag: tag';
+            }
             if (isset($file['mtime'] )) $ret['headers'][] = 'Last-Modified: ' . $lastModifiedString;
             $ret['headers'][] = 'Accept-Ranges: none';
             if (isset($file['downloadFilename']) && $file['downloadFilename'] &&

@@ -72,10 +72,13 @@ class Vps_Trl
 
     public function getWebCodeLanguage()
     {
-         $config = Zend_Registry::get('config');
-         if ($config->webCodeLanguage) {
-                return $config->webCodeLanguage;
-            }
+        $config = Zend_Registry::get('config');
+        if (isset($this->_webCodeLanguage) && $this->_webCodeLanguage) {
+            return $this->_webCodeLanguage;
+        }
+        if ($config->webCodeLanguage) {
+            return $config->webCodeLanguage;
+        }
     }
 
     private function _getModel($type)
