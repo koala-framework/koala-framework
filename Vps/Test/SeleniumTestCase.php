@@ -68,16 +68,31 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         return parent::__call($command, $arguments);
     }
 
+    public function openVpc($url)
+    {
+        return $this->open('/vps/vpctest/'.Vps_Component_Data_Root::getComponentClass().$url);
+    }
+    public function openVpcEdit($componentClass, $componentId)
+    {
+        $url = '/vps/componentedittest/'.
+                Vps_Component_Data_Root::getComponentClass().'/'.
+                $componentClass.
+                '?componentId='.$componentId;
+        return $this->open($url);
+    }
+
     protected function defaultAssertions($action)
     {
-        if ($this->isElementPresent('id=exception')) {
-            $exception = $this->getText('id=exception');
-            $exception = unserialize(base64_decode($exception));
-            throw $exception;
+        if ($action != 'createCookie') {
+            if ($this->isElementPresent('id=exception')) {
+                $exception = $this->getText('id=exception');
+                $exception = unserialize(base64_decode($exception));
+                throw $exception;
+            }
+            $this->assertTextNotPresent('Exception');
+            $this->assertTextNotPresent('error');
+            $this->assertTextNotPresent('warning');
+            $this->assertTextNotPresent('notice');
         }
-        $this->assertTextNotPresent('Exception');
-        $this->assertTextNotPresent('error');
-        $this->assertTextNotPresent('warning');
-        $this->assertTextNotPresent('notice');
     }
 }
