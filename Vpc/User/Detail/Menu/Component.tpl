@@ -1,5 +1,9 @@
 <div class="<?=$this->cssClass?>">
-    <? foreach($this->links as $l) { ?>
-        <?=$this->componentLink($l)?>
-    <? } ?>
+    <ul>
+        <? $i=0; foreach($this->links as $l) { ?>
+            <li<? if ($i == 0) { echo ' class="first"'; }?>>
+                <?=$this->componentLink($l)?>
+            </li>
+        <? $i++; } ?>
+    </ul>
 </div>
