@@ -21,15 +21,23 @@ class Vpc_Box_DogearRandom_Dogear_Component extends Vpc_Abstract_Composite_Compo
     {
         $ret = parent::getTemplateVars();
 
-        $ret['colorRow'] = $this->_getRow();
+        $options = array();
+        $options['colors'] = array(
+            'color_small_1' => $this->_getRow()->color_small_1,
+            'color_small_2' => $this->_getRow()->color_small_2,
+            'color_big_1' => $this->_getRow()->color_big_1,
+            'color_big_2' => $this->_getRow()->color_big_2
+        );
 
         // images
-        $ret['urlSmall'] = $ret['imageSmall']->getComponent()->getImageUrl();
-        $ret['urlBig'] = $ret['image']->getComponent()->getImageUrl();
+        $options['urlSmall'] = $ret['imageSmall']->getComponent()->getImageUrl();
+        $options['urlBig'] = $ret['image']->getComponent()->getImageUrl();
         // link
         $vars = $ret['linkExtern']->getComponent()->getTemplateVars();
-        $ret['linkUrl'] = $vars['data']->url;
-        $ret['linkOpen'] = $vars['data']->rel;
+        $options['linkUrl'] = $vars['data']->url;
+        $options['linkOpen'] = $vars['data']->rel;
+
+        $ret['options'] = $options;
 
         return $ret;
     }

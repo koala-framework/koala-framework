@@ -14,7 +14,7 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
             var b = {};
             if (this.baseParams) {
                 for (var j in this.baseParams) {
-                    if (j == 'component_id' && this.tabs[i].componentIdSuffix) {
+                    if (j == 'componentId' && this.tabs[i].componentIdSuffix) {
                         b[j] = this.baseParams[j] + this.tabs[i].componentIdSuffix;
                     } else {
                         b[j] = this.baseParams[j];
@@ -106,7 +106,7 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
         this.tabItems.each(function(item) {
             var b = {};
             for (var i in baseParams) {
-                if (i == 'component_id' && item.componentIdSuffix) {
+                if (i == 'componentId' && item.componentIdSuffix) {
                     b[i] = baseParams[i] + item.componentIdSuffix;
                 } else {
                     b[i] = baseParams[i];
