@@ -19,8 +19,7 @@ class Vpc_Directories_Item_Directory_FormController extends Vps_Controller_Actio
         foreach ($classes as $class) {
             $formName = Vpc_Admin::getComponentClass($class, 'ItemEditForm');
             if ($formName) {
-                $this->_form->add(new $formName($class, $class))
-                    ->setIdTemplate('{0}');
+                $this->_form->add(new $formName($class, $class));
             }
         }
     }
