@@ -71,11 +71,11 @@ Ext.extend(Vps.Binding.AbstractPanel, Ext.Panel,
     {
         var params = {};
         if (b.componentIdSuffix) {
-            params.component_id =
-                this.getBaseParams()['component_id'] +
+            params.componentId =
+                this.getBaseParams()['componentId'] +
                 String.format(b.componentIdSuffix, this.activeId);
         } else if (b.componentId) {
-            params.component_id =
+            params.componentId =
                 String.format(b.componentId, this.activeId);
         } else {
 			//this.getGrid().getSelectionModel().getSelections()[0].data[b.valueParam];

@@ -102,21 +102,19 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
             'ham_url' => '/vps/spam/set?id='.$this->id.'&value=0&key='.self::getSpamKey($this)
         );
 
-        require_once "HTTP/Request.php";
-
         $text = array();
         foreach ($spamFields as $v) {
             $text[] = $mailVarsRow->$v;
         }
         $text = implode("\n", $text);
 
-        $req = new HTTP_Request('http://cms.vivid-planet.com/spamfilter/check.php?method=checkSpam');
-        $req->setMethod(HTTP_REQUEST_METHOD_POST);
-        $req->addPostData('text', (strlen($text) > 2000 ? substr($text, 0, 2000) : $text));
-        $req->addPostData('additional_data', $additionalData);
-        $res = $req->sendRequest();
+        $req = new Zend_Http_Client('http://cms.vivid-planet.com/spamfilter/check.php?method=checkSpam');
+        $req->setMethod(Zend_Http_Client::POST);
+        $req->setParameterPost('text', (strlen($text) > 2000 ? substr($text, 0, 2000) : $text));
+        $req->setParameterPost('additional_data', $additionalData);
+        $res = $req->request();
         if ($res) {
-            return $req->getResponseBody();
+            return $res->getBody();
         }
         return 0;
     }

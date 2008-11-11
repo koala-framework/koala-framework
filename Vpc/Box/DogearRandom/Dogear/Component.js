@@ -1,31 +1,89 @@
 
-// functions müssen so heißen, werden vom flash aufgerufen
-// limitiert zu max einem dogear, mehr macht aber sowieso nicht sinn...
-function dogearEnlarge() {
+Ext.namespace("Vpc.Box.Dogear");
+
+Vpc.Box.Dogear.initDone = false;
+
+Vpc.Box.Dogear.enlarge = function() {
     var dogearSmall = document.getElementById('dogearSmall');
     var dogearBig = document.getElementById('dogearBig');
     dogearBig.style.top = '0';
     dogearSmall.style.top = '-500px';
-//     dogearBig.childNodes[0].showLarge();
-}
+};
 
-function dogearShrink(){
+Vpc.Box.Dogear.shrink = function() {
     var dogearSmall = document.getElementById('dogearSmall');
     var dogearBig = document.getElementById('dogearBig');
     dogearSmall.childNodes[0].showLoop();
     dogearSmall.style.top = '0';
     dogearBig.style.top = '-700px';
-}
+};
 
+Vpc.Box.Dogear.init = function() {
+    Vpc.Box.Dogear.smallDiv.style.display = 'block';
+    Vpc.Box.Dogear.bigDiv.style.display = 'block';
+
+    var optionsEl = Ext.query(".dogearOptions");
+    if (!optionsEl) return;
+    var options = Ext.decode(optionsEl[0].value);
+
+    if (options.urlSmall && options.urlBig) {
+        var s1 = new SWFObject("/assets/vps/Vpc/Box/DogearRandom/Dogear/dogear.swf","dogearSmallPlayer","180","180","9","#FFFFFF");
+        s1.addParam("allowfullscreen","false");
+        s1.addParam("allowscriptaccess","always");
+        s1.addParam("wmode","transparent");
+        s1.addParam("swLiveConnect","true");
+        s1.addParam("flashvars",
+            "picurl="+options.urlSmall
+            +"&color1=0x"+options.colors.color_small_1+"&color2=0x"+options.colors.color_small_2
+            +"&linktarget="+(options.linkOpen ? 'blank' : 'self')
+            +"&clicktag="+options.linkUrl
+        );
+        s1.write("dogearSmall");
+
+        // big image preloaden
+        var tmp = new Image();
+        tmp.src = options.urlBig;
+
+        var s2 = new SWFObject("/assets/vps/Vpc/Box/DogearRandom/Dogear/dogear_large.swf","dogearBigPlayer","680","680","9","#FFFFFF");
+        s2.addParam("allowfullscreen","false");
+        s2.addParam("allowscriptaccess","always");
+        s2.addParam("wmode","transparent");
+        s2.addParam("swLiveConnect","true");
+        s2.addParam("flashvars",
+            "picurl="+options.urlBig
+            +"&color1=0x"+options.colors.color_big_1+"&color2=0x"+options.colors.color_big_2
+            +"&linktarget="+(options.linkOpen ? 'blank' : 'self')
+            +"&clicktag="+options.linkUrl
+        );
+        s2.write("dogearBig");
+
+        Vpc.Box.Dogear.initDone = true;
+    }
+};
 
 Ext.onReady(function() {
-    Ext.EventManager.addListener(window, 'resize', function() {
+    Vpc.Box.Dogear.smallDiv = document.getElementById('dogearSmall');
+    Vpc.Box.Dogear.bigDiv = document.getElementById('dogearBig');
+
+    if (Vpc.Box.Dogear.smallDiv && Vpc.Box.Dogear.bigDiv) {
         if (Ext.getBody().getWidth() >= 990) {
-            document.getElementById('dogearSmall').style.display = 'block';
-            document.getElementById('dogearBig').style.display = 'block';
+            Vpc.Box.Dogear.init();
         } else {
-            document.getElementById('dogearSmall').style.display = 'none';
-            document.getElementById('dogearBig').style.display = 'none';
+            Vpc.Box.Dogear.smallDiv.style.display = 'none';
+            Vpc.Box.Dogear.bigDiv.style.display = 'none';
         }
-    });
+
+        Ext.EventManager.addListener(window, 'resize', function() {
+            if (Ext.getBody().getWidth() >= 990) {
+                Vpc.Box.Dogear.smallDiv.style.display = 'block';
+                Vpc.Box.Dogear.bigDiv.style.display = 'block';
+                if (!Vpc.Box.Dogear.initDone) {
+                    Vpc.Box.Dogear.init();
+                }
+            } else {
+                Vpc.Box.Dogear.smallDiv.style.display = 'none';
+                Vpc.Box.Dogear.bigDiv.style.display = 'none';
+            }
+        });
+    }
 });
