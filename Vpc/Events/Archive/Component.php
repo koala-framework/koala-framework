@@ -20,4 +20,9 @@ class Vpc_Events_Archive_Component extends Vpc_Directories_List_Component
     {
         return $this->getData()->parent->getComponent()->getItemDirectory();
     }
+
+    public function getViewCacheLifetime()
+    {
+        return mktime(0, 0, 0, date('m'), date('d')+1, date('Y')) - time();
+    }
 }

@@ -4,7 +4,7 @@
  * @package Vpc
  * @copyright Copyright (c) 2007, Vivid Planet Software GmbH
  */
-abstract class Vpc_Abstract extends Vps_Component_Abstract 
+abstract class Vpc_Abstract extends Vps_Component_Abstract
 {
     private $_data;
     protected $_row;
@@ -63,7 +63,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
         return Vps_Registry::get('config')->showInvisible;
     }
-    
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -212,7 +212,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
     {
 
         header('Content-Type: text/html; charset=utf-8');
-        
+
         $process = $this->getData()
             ->getRecursiveChildComponents(array(
                     'page' => false,
@@ -257,7 +257,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
         Vps_Component_RowObserver::getInstance()->process();
     }
-    
+
     /**
      * Gibt die Variablen für View zurück.
      *
@@ -283,7 +283,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
         return Vpc_Admin::getComponentFile(get_class($this), $filename, 'tpl');
     }
-        
+
     static public function getCssClass($component)
     {
         if (!is_string($component)) $component = get_class($component);
@@ -327,7 +327,7 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
         }
         return Vpc_Abstract::getSetting($componentClass, 'shortcutUrl');
     }
-    
+
     public static function getDataByShortcutUrl($componentClass, $url)
     {
         if (!Vpc_Abstract::hasSetting($componentClass, 'shortcutUrl')) {
@@ -369,6 +369,10 @@ abstract class Vpc_Abstract extends Vps_Component_Abstract
             throw new Vps_Exception("More then one component with class '$class' found, there should exist only one");
         }
         return $ret[0];
+    }
+    public function getViewCacheLifetime()
+    {
+        return null;
     }
 }
 

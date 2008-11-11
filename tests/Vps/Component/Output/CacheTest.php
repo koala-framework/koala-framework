@@ -8,12 +8,12 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
     protected static $_templates = array();
     protected static $_expectedCalls = 0;
     protected static $_calls = 0;
-    
+
     public function setUp()
     {
         $this->_setup();
     }
-    
+
     private function _setup($rootClass = 'Vps_Component_Output_C1_Root_Component')
     {
         Vps_Component_Data_Root::setComponentClass($rootClass);
@@ -40,7 +40,7 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         }
         return $ret;
     }
-    
+
     public function testCachePreloaded()
     {
         $this->_output->getCache()->expects($this->never())
@@ -56,7 +56,7 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         self::$_expectedCalls = 2;
         $this->_output->getCache()->emptyPreload();
         $this->assertEquals('foo', $this->_output->renderMaster($this->_root));
-        
+
         // Root nicht als MasterTemplate
         self::$_templates = array(
             'root' => 'bar'
@@ -65,7 +65,7 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         self::$_expectedCalls = 1;
         $this->_output->getCache()->emptyPreload();
         $this->assertEquals('bar', $this->_output->render($this->_root));
-        
+
         // Root und Child
         self::$_templates = array(
             'root__master' => 'foo {nocache: Vps_Component_Output_C1_Child_Component root-child} bar',
@@ -78,7 +78,7 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         self::$_calls = 0;
         self::$_expectedCalls = 1;
         $this->assertEquals('child', $this->_output->render($this->_root->getChildComponent('-child')));
-        
+
         // Root mit ChildChild
         self::$_templates = array(
             'root__master' => 'foo {nocache: Vps_Component_Output_C1_Child_Component root-child} root',
@@ -120,7 +120,7 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         self::$_expectedCalls = 3;
         $this->_output->getCache()->emptyPreload();
         $this->assertEquals('foo plugin(bar plugin(child))', $this->_output->renderMaster($this->_root));
-        
+
         // Plugin im Child und im Child-Child
         self::$_templates = array(
             'root__master' => 'foo {nocache: Vps_Component_Output_C1_Child_Component root-child Vps_Component_Output_Plugin}',
@@ -131,7 +131,7 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         self::$_expectedCalls = 3;
         $this->_output->getCache()->emptyPreload();
         $this->assertEquals('foo plugin(bar plugin(child))', $this->_output->renderMaster($this->_root));
-        
+
         // IfHasContent
         self::$_templates = array(
             'root__master' => 'foo {content: Vps_Component_Output_C1_Child_Component root-child}{content}',
@@ -177,11 +177,11 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         $this->_output->getCache()->emptyPreload();
         $this->assertEquals('foo child child child2', $this->_output->renderMaster($this->_root));
     }
-    
+
     public function testCacheDisabledForComponent()
     {
         $this->_setup('Vps_Component_Output_C2_Root_Component');
-        
+
         $this->_output->getCache()->expects($this->never())
                                     ->method('save');
 
@@ -195,14 +195,20 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         $this->_output->getCache()->emptyPreload();
         $this->assertEquals('foo child childNoCache', $this->_output->renderMaster($this->_root));
     }
-        
+
     public function testComponentNotPreloaded()
     {
-        $this->markTestIncomplete();        
-
         $this->_output->getCache()->expects($this->once())
-                                    ->method('save');
-
+                                    ->method('save')
+                                    ->with(
+                                        $this->equalTo('master2 child {nocache: Vps_Component_Output_C1_ChildChild_Component root-child-child }'),
+                                        $this->equalTo('root__child'),
+                                        $this->equalTo(array(
+                                            'componentClass' => 'Vps_Component_Output_C1_Child_Component',
+                                            'pageId' => 'root__child')
+                                        ),
+                                        $this->equalTo(null)
+                                    );
         self::$_templates = array(
             'root__master' => 'foo {nocache: Vps_Component_Output_C1_Child_Component root-child}',
             'root__child__child' => 'child2preloaded',
@@ -210,6 +216,28 @@ class Vps_Component_Output_CacheTest extends PHPUnit_Framework_TestCase
         self::$_calls = 0;
         self::$_expectedCalls = 5;
         $this->_output->getCache()->emptyPreload();
-        $this->assertEquals('foo child child2preloaded', $this->_output->renderMaster($this->_root));
+        $this->assertEquals('foo master2 child child2preloaded', $this->_output->renderMaster($this->_root));
+    }
+
+    public function testExpire()
+    {
+        $this->_setup('Vps_Component_Output_C4_Component');
+        $this->_output->getCache()->expects($this->once())
+                                    ->method('save')
+                                    ->with(
+                                        $this->equalTo('foo'),
+                                        $this->equalTo('root__master'),
+                                        $this->equalTo(array(
+                                            'componentClass' => 'Vps_Component_Output_C4_Component',
+                                            'pageId' => 'root')
+                                        ),
+                                        $this->equalTo(10)
+                                    );
+
+        self::$_templates = array();
+        self::$_calls = 0;
+        self::$_expectedCalls = 2;
+        $this->_output->getCache()->emptyPreload();
+        $this->assertEquals('foo', $this->_output->renderMaster($this->_root));
     }
 }
