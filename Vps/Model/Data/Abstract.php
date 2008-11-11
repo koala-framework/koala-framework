@@ -19,9 +19,8 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     public function getData()
     {
-        $ret = $this->_data;
-        if (!$ret) $ret = array();
-        return $ret;
+        if (!$this->_data) $this->_data = array();
+        return $this->_data;
     }
 
     protected function _afterDataUpdate()
