@@ -4,11 +4,11 @@ class Vps_Component_Cache extends Zend_Cache_Core
     const CLEANING_MODE_COMPONENT_CLASS = 'componentClass';
     const CLEANING_MODE_ID_PATTERN = 'idPattern';
     const CLEANING_MODE_SELECT = 'select';
-    
+
     static private $_instance;
     private $_backend;
     private $_preloadedValues = array();
-    
+
     public function __construct()
     {
         parent::__construct(array(
@@ -16,7 +16,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
             'write_control'=>false,
             'automatic_cleaning_factor'=>0
         ));
-        
+
         $this->_backend = new Vps_Cache_Backend_Db(array(
             'table' => 'cache_component',
             'adapter' => Vps_Registry::get('db')
@@ -40,7 +40,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
 
     public function removeByIdPattern($idPattern, $componentClass = null)
     {
-        $this->_backend->clean(self::CLEANING_MODE_ID_PATTERN, 
+        $this->_backend->clean(self::CLEANING_MODE_ID_PATTERN,
             array('idPattern' => $idPattern, 'componentClass' => $componentClass)
         );
         if ($componentClass) {
@@ -90,13 +90,13 @@ class Vps_Component_Cache extends Zend_Cache_Core
         $this->_backend->clean(self::CLEANING_MODE_COMPONENT_CLASS, $componentClass);
         Vps_Benchmark::info("Kompletter Cache für Komponente '$componentClass' gelöscht.");
     }
-    
+
     public function load($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
     {
         if ($this->isLoaded($id)) {
             return $this->_preloadedValues[$id];
         }
-        
+
         //TODO: nicht test() aufrufen, macht 2. sql abfrage
         if (!$this->test($id)) {
             return false;
@@ -130,17 +130,17 @@ class Vps_Component_Cache extends Zend_Cache_Core
         }
         return $lastModified;
     }
-    
+
     public function emptyPreload()
     {
         $this->_preloadedValues = array();
     }
-    
+
     public function preload($ids)
     {
         $this->_preloadedValues = $this->_preloadedValues + $this->_preload($ids);
     }
-    
+
     protected function _preload($ids)
     {
         $parts = array();
@@ -155,16 +155,18 @@ class Vps_Component_Cache extends Zend_Cache_Core
             }
         }
         if ($parts) {
-            $sql = "SELECT id, content FROM cache_component WHERE " . implode(' OR ', $parts);
+            $sql = "SELECT id, content, expire FROM cache_component WHERE " . implode(' OR ', $parts);
             Vps_Benchmark::count('preload cache', $sql);
             $rows = Zend_Registry::get('db')->query($sql)->fetchAll();
             foreach ($rows as $row) {
-                $values[(string)$row['id']] = $row['content'];
+                if ($row['expire'] == 0 || $row['expire'] > time()) {
+                    $values[(string)$row['id']] = $row['content'];
+                }
             }
         }
         return $values;
     }
-    
+
     public function shouldBeLoaded($cacheId)
     {
         $cacheId = (string)$cacheId;
@@ -181,13 +183,13 @@ class Vps_Component_Cache extends Zend_Cache_Core
         }
         return false;
     }
-    
+
     public function isLoaded($cacheId)
     {
         $cacheId = (string)$cacheId;
         return isset($this->_preloadedValues[$cacheId]);
     }
-    
+
     public function getCacheIdFromComponentId($componentId, $masterTemplate = false, $isHasContent = false)
     {
         if ($masterTemplate) {
@@ -201,7 +203,7 @@ class Vps_Component_Cache extends Zend_Cache_Core
         if ($isHasContent) { $componentId .= '-hasContent'; }
         return str_replace('-', '__', $componentId);
     }
-    
+
     public function getComponentIdFromCacheId($cacheId)
     {
         if (substr($cacheId, -8) == '__master') {

@@ -26,4 +26,9 @@ class Vpc_Events_Category_ShowCategories_Archive_Component extends Vpc_Directori
         $ret->order('start_date', 'DESC');
         return $ret;
     }
+
+    public function getViewCacheLifetime()
+    {
+        return mktime(0, 0, 0, date('m'), date('d')+1, date('Y')) - time();
+    }
 }

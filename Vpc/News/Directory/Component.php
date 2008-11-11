@@ -34,4 +34,9 @@ class Vpc_News_Directory_Component extends Vpc_Directories_ItemPage_Directory_Co
         $select->order('publish_date', 'DESC');
         return $select;
     }
+
+    public function getViewCacheLifetime()
+    {
+        return mktime(0, 0, 0, date('m'), date('d')+1, date('Y')) - time();
+    }
 }
