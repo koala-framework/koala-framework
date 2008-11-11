@@ -15,7 +15,7 @@ class Vpc_Menu_Admin extends Vpc_Admin
 
     private function _deleteCache($row)
     {
-        if ($row instanceof Vps_Db_Table_Row_Abstract && $row->getTable() instanceof Vps_Dao_Pages) {
+        if ($row instanceof Vps_Component_Model_Row) {
             Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
             return;
         }

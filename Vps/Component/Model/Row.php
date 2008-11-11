@@ -27,7 +27,8 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
             return null;
         }
     }
-        
+
+    //TODO: nicht immer gleich speichern
     public function __set($name, $value)
     {
         $table = new Vps_Dao_Pages;
@@ -37,15 +38,21 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
         $this->_data->$name = $value;
     }
 
+
+    //TODO: hier speichern
+    //TODO: _before/_afterUpdate aufrufen
     public function save()
     {
+        $this->_beforeUpdate();
         if (isset($this->visible)) {
             $row = $this->_model->getTable()->find($this->componentId)->current();
             $row->visible = $this->visible;
-            return $row->save();
+            $ret = $row->save();
         }
+        $this->_afterUpdate();
     }
 
+    //TODO: _before/_afterDelete aufrufen
     public function delete()
     {
         $table = new Vps_Dao_Pages;
