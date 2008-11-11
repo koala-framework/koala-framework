@@ -124,6 +124,7 @@ class Vps_Benchmark
     private static function _outputCounter($counter)
     {
         echo "\n";
+        if (!is_array($counter)) return;
         foreach ($counter as $k=>$i) {
             if (is_array($i)) {
                 if (PHP_SAPI != 'cli') {
