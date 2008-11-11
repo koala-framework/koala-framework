@@ -18,7 +18,7 @@ class Vpc_User_Directory_Component extends Vpc_Directories_ItemPage_Directory_Co
         $ret['generators']['edit'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
             'component' => 'Vpc_User_Edit_Component',
-            'name' => trlVps('Edit')
+            'name' => trlVps('Edit Profile')
         );
         $ret['generators']['login'] = array(
             'class' => 'Vps_Component_Generator_Page_Static',
