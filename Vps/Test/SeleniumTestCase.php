@@ -95,4 +95,10 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             $this->assertTextNotPresent('notice');
         }
     }
+
+    protected function waitForConnections()
+    {
+        $this->waitForCondition('selenium.browserbot.getCurrentWindow().Vps.Connection.runningRequests==0');
+    }
+
 }
