@@ -9,15 +9,15 @@ Vps.Form.Cards = Ext.extend(Ext.Panel,
             var cards = this.items.get(1);
             cards.items.each(function(i) {
                 if (i.name != value) {
+					i.hide(); //bugfix kitepowerbuchung muss es ganz verschwinden, nicht nur ausgrauen
                     i.cascade(function(it) {
-                        it.hide(); //bugfix für falsche anzeige bei kitepowerbuchung
 						it.disable();
                     }, this);
                 } else {
                     cards.getLayout().setActiveItem(i);
+					i.show(); //bugfix für falsche anzeige bei kitepowerbuchung
                     i.cascade(function(it) {
                         if (!it.disabledByFieldset) {
-							it.show(); //bugfix für falsche anzeige bei kitepowerbuchung
                             it.enable();
                         }
                     }, this);
