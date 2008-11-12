@@ -1,6 +1,8 @@
 <?php
 class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
+    protected $autoStop = false;
+
     public static function suite($className)
     {
         self::$browsers = array();
@@ -23,6 +25,15 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             throw new Vps_Exception("No testDomain set");
         }
         $this->setBrowserUrl('http://'.$domain.'/');
+    }
+
+    protected function tearDown()
+    {
+        try {
+            $this->stop();
+        }
+        catch (RuntimeException $e) {
+        }
     }
 
     public function clickAndWait($link)
