@@ -15,6 +15,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             if ($version != $this->_getParam('application_version')) {
                 $this->_forward('json-wrong-version', 'error',
                                     'vps_controller_action_error');
+                return;
             }
         }
 
@@ -51,8 +52,9 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
 
     protected function _getResourceName()
     {
-        if (isset($_SERVER['SHELL'])) return 'vps_cli';
-        if ($this->getRequest()->getControllerName() == 'component') {
+        if (isset($_SERVER['SHELL'])) {
+            $resource = 'vps_cli';
+        } else if ($this->getRequest()->getControllerName() == 'component') {
             $resource = 'vps_component';
         } else if ($this->getRequest()->getControllerName() == 'component_test') {
             $resource = 'vps_test';
