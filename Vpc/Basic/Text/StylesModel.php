@@ -83,7 +83,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db
     {
         $cache = self::_getCache();
         if (!$ret = $cache->load('RteStyles')) {
-            $model = new Vps_Model_Db(array('table'=>new Vpc_Basic_Text_StylesModel()));
+            $model = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_StylesModel');
             $css = '';
             $stylesModel = new Vps_Model_Field(array(
                 'parentModel' => $model,
