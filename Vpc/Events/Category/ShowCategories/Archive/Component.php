@@ -27,7 +27,7 @@ class Vpc_Events_Category_ShowCategories_Archive_Component extends Vpc_Directori
         return $ret;
     }
 
-    public function getViewCacheLifetime()
+    public static function getViewCacheLifetimeForView()
     {
         return mktime(0, 0, 0, date('m'), date('d')+1, date('Y')) - time();
     }

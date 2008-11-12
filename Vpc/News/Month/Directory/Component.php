@@ -28,7 +28,7 @@ class Vpc_News_Month_Directory_Component extends Vpc_Directories_ItemPage_Direct
         return $select;
     }
 
-    public function getViewCacheLifetime()
+    public static function getViewCacheLifetimeForView()
     {
         return mktime(0, 0, 0, date('m'), date('d')+1, date('Y')) - time();
     }
