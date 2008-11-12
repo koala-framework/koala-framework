@@ -36,6 +36,12 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
         return $this;
     }
 
+    public function getSiblingRow($rule)
+    {
+        $rows = $this->_getSiblingRows();
+        return $rows[$rule];
+    }
+
     protected function _getSiblingRows()
     {
         if (!isset($this->_siblingRows)) {

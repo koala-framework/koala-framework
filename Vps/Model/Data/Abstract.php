@@ -113,11 +113,14 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         }
 
         if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
-            if (count($order) > 1) throw new Vps_Exception("Multiple Order fields not yet implemented");
+            //TODO: implement Multiple Order fields
             $order = current($order);
             $orderData = array();
             foreach ($dataKeys as $key) {
-                if ($order['field'] == Vps_Model_Select::ORDER_RAND) {
+                if ($order['field'] instanceof Zend_Db_Expr) {
+                    //NOT IMPLEMENTED!
+                    $orderData[$inData[$key]['id']] = '';
+                } else if ($order['field'] == Vps_Model_Select::ORDER_RAND) {
                     $orderData[$inData[$key]['id']] = rand();
                 } else {
                     $orderData[$inData[$key]['id']] = strtolower($inData[$key][$order['field']]);
