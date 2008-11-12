@@ -241,6 +241,10 @@ class Vps_Setup
             Zend_Session::setId($_POST['PHPSESSID']);
         }
 
+        if (isset($_COOKIE['unitTest'])) {
+            Zend_Registry::get('config')->debug->benchmark = false;
+        }
+
         if (Zend_Registry::get('config')->server->redirectToDomain
             && Zend_Registry::get('config')->server->domain
             && isset($_SERVER['HTTP_HOST'])
