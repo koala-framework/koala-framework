@@ -50,7 +50,7 @@ class Vpc_Basic_DownloadTag_Component extends Vpc_Abstract implements Vps_Media_
             $filename = $fRow->filename;
         }
         $filename .= '.'.$fRow->extension;
-        $id = $this->getData()->componentId;
+        $id = $this->getData()->dbId;
         return Vps_Media::getUrl(get_class($this), $id, 'default', $filename);
     }
 
