@@ -152,10 +152,10 @@ class Vps_Model_Db extends Vps_Model_Abstract
         if ($order = $select->getPart(Vps_Model_Select::ORDER)) {
             $tablename = $this->_table->info('name');
             foreach ($order as $o) {
-                if ($o['field'] == Vps_Model_Select::ORDER_RAND) {
-                    $dbSelect->order('RAND()');
-                } else if ($o['field'] instanceof Zend_Db_Expr) {
+                if ($o['field'] instanceof Zend_Db_Expr) {
                     $dbSelect->order($o['field']);
+                } else if ($o['field'] == Vps_Model_Select::ORDER_RAND) {
+                    $dbSelect->order('RAND()');
                 } else {
                     if (strpos($o['field'], '.') === false &&
                         strpos($o['field'], '(') === false
