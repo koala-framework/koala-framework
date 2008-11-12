@@ -12,7 +12,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         $config = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
-        d($config->server);
         $this->_sshDir = $config->server->dir;
 
         $onlineRevision = `sudo -u www-data sshvps $this->_sshHost $this->_sshDir import get-update-revision`;
