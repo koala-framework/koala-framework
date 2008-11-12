@@ -1,5 +1,5 @@
 <?php
-class Vpc_Basic_Text_StylesModel extends Vps_Model_Db
+class Vpc_Basic_Text_StylesModel extends Vps_Model_Db_Proxy
 {
     protected $_table = 'vpc_basic_text_styles';
     protected $_rowClass = 'Vpc_Basic_Text_StylesRow';
@@ -7,7 +7,7 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db
     protected function _init()
     {
         parent::_init();
-        $this->_siblingModels = array(new Vps_Model_Field(array('fieldName'=>'styles')));
+        $this->_siblingModels['styles'] = new Vps_Model_Field(array('fieldName'=>'styles'));
     }
 
     protected function _setupFilters()
@@ -36,25 +36,32 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db
         return $styles;
     }
 
+    //um es im test einfacher überschreiben zu können
+    protected function _getMasterStyles()
+    {
+        return self::getMasterStyles();
+    }
+
     public function getStyles($ownStyles = false)
     {
         $styles = array();
         $styles['block'] = array('p' => trlVps('Default'));
         $styles['inline'] = array('span' => trlVps('Normal'));
 
-        $masterStyles = self::getMasterStyles();
+        $masterStyles = $this->_getMasterStyles();
         $styles['block'] = array_merge($styles['block'], $masterStyles['block']);
         $styles['inline'] = array_merge($styles['inline'], $masterStyles['inline']);
 
-        $where = array();
+        $select = $this->select();
         if ($ownStyles) {
-            $where["ownStyles = ?"] = $ownStyles;
+            $select->whereEquals('ownStyles', $ownStyles);
         } else {
-            $where[] = "ownStyles = ''";
+            $select->whereEquals('ownStyles', '');
         }
-        $order = new Zend_Db_Expr("ownStyles!='', pos");
+        $select->order(new Zend_Db_Expr("ownStyles!=''"));
+        $select->order('pos');
         $blockTags = array('p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6');
-        foreach ($this->fetchAll($where, $order) as $row) {
+        foreach ($this->getRows($select) as $row) {
             $selector = $row->tag.'.style'.$row->id;
             if ($selector) {
                 $name = $row->name;
@@ -79,23 +86,21 @@ class Vpc_Basic_Text_StylesModel extends Vps_Model_Db
         return self::_getCache()->remove('RteStyles');
     }
 
-    public static function getStylesContents()
+    public function getStylesContents()
+    {
+        return Vps_Model_Abstract::getInstance('Vpc_Basic_Text_StylesModel')->getStylesContents2();
+    }
+
+    public function getStylesContents2()
     {
         $cache = self::_getCache();
         if (!$ret = $cache->load('RteStyles')) {
-            $model = Vps_Model_Abstract::getInstance('Vpc_Basic_Text_StylesModel');
             $css = '';
-            $stylesModel = new Vps_Model_Field(array(
-                'parentModel' => $model,
-                'fieldName' => 'styles'
-            ));
-
-            foreach ($model->fetchAll() as $row) {
+            foreach ($this->getRows() as $row) {
                 $css .= '.vpcText ' . $row->tag;
                 $css .= '.style'.$row->id;
                 $css .= ' { ';
-                $stylesRow = $stylesModel->getRowByParentRow($row);
-                foreach ($stylesRow->toArray() as $name=>$value) {
+                foreach ($row->getSiblingRow('styles')->toArray() as $name=>$value) {
                     if (!$value) continue;
                     if ($name == 'id') continue;
                     $name = str_replace('_', '-', $name);

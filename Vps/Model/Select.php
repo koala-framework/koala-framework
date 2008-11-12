@@ -40,6 +40,8 @@ class Vps_Model_Select
         }
     }
 
+    //vielleicht mal umstellen auf:
+    //return $this->where(new Vps_Model_Select_Expr_Equals($field, $value));
     public function whereEquals($field, $value = null)
     {
         if (is_array($field)) {
