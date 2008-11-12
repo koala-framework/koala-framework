@@ -4,7 +4,7 @@ abstract class Vps_Controller_Action_Auto_Vpc_Tree extends Vps_Controller_Action
     public function preDispatch()
     {
         if (!isset($this->_table) && !isset($this->_tableName)) {
-            $tablename = Vpc_Abstract::getSetting($this->class, 'tablename');
+            $tablename = Vpc_Abstract::getSetting($this->_getParam('class'), 'tablename');
             if ($tablename) {
                 $this->_table = new $tablename(array('componentClass'=>$this->_getParam('class')));
             } else {
@@ -28,11 +28,11 @@ abstract class Vps_Controller_Action_Auto_Vpc_Tree extends Vps_Controller_Action
 
     public function jsonIndexAction()
     {
-        $this->view->vpc(Vpc_Admin::getInstance($this->class)->getExtConfig());
+        $this->view->vpc(Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
     }
 
     public function indexAction()
     {
-        $this->view->ext('Vps.Auto.TreePanel', Vpc_Admin::getInstance($this->class)->getExtConfig());
+        $this->view->ext('Vps.Auto.TreePanel', Vpc_Admin::getInstance($this->_getParam('class'))->getExtConfig());
     }
 }
