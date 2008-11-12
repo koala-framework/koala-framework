@@ -86,8 +86,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
                 'componentClass' => $componentClass,
                 'pageId' => $this->getCache()->getCacheIdFromComponentId($this->_getPageIdFromComponentId($componentId))
             );
-            //$lifetime = $this->_getComponent($componentId)->getComponent()->getViewCacheLifetime();
-            $lifetime = null;
+            $lifetime = $this->_getComponent($componentId)->getComponent()->getViewCacheLifetime();
             $this->getCache()->save($ret, $cacheId, $tags, $lifetime);
         } else {
             $ret = "{empty: $componentId}";
@@ -116,8 +115,7 @@ class Vps_Component_Output_Cache extends Vps_Component_Output_NoCache
             $ret = $this->getCache()->load($cacheId);
         } else if ($this->getCache()->shouldBeLoaded($cacheId)) { // Nicht in Cache, aber sollte in Cache sein -> ohne Cache holen
             $ret = parent::_renderHasContent($componentId, $componentClass, $content);
-            //$lifetime = $this->_getComponent($componentId)->getComponent()->getViewCacheLifetime();
-            $lifetime = null;
+            $lifetime = $this->_getComponent($componentId)->getComponent()->getViewCacheLifetime();
             $this->getCache()->save($ret, $cacheId, array(
                 'componentClass' => $componentClass,
                 'pageId' => $this->getCache()->getCacheIdFromComponentId($this->_getPageIdFromComponentId($componentId))
