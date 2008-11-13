@@ -1,0 +1,18 @@
+<?php
+class Vps_ExceptionNoMail extends Exception
+{
+    public function getHeader()
+    {
+        return 'HTTP/1.1 500 Internal Server Error';
+    }
+
+    public function getTemplate()
+    {
+        return 'Error';
+    }
+
+    public function isDebug()
+    {
+        return Zend_Registry::get('config')->debug->errormail == '';
+    }
+}

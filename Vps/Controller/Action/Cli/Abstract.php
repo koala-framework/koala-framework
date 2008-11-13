@@ -7,6 +7,8 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
 
         set_time_limit(0);
 
+        Zend_Registry::get('config')->debug->errormail = false;
+
         //php sux
         $options = call_user_func(array(get_class($this), 'getHelpOptions'));
 

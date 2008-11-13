@@ -5,7 +5,7 @@ class Vpc_Posts_Detail_Edit_Form_Component extends Vpc_Posts_Write_Form_Componen
     {
         return $this->_getPostComponent();
     }
-    
+
     protected function _getPostComponent()
     {
         return $this->getData()->parent->parent->parent;
@@ -20,11 +20,11 @@ class Vpc_Posts_Detail_Edit_Form_Component extends Vpc_Posts_Write_Form_Componen
     public function processInput($postData)
     {
         if (!$this->_getPostComponent()->getChildComponent('-actions')->getComponent()->mayEditPost()) {
-            throw new Vpc_AccessDeniedException();
+            throw new Vps_Exception_AccessDenied();
         }
         parent::processInput($postData);
     }
-    
+
     public static function getSettings()
     {
         $ret = parent::getSettings();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Controller der für eigene root-komponenten verwendet werden kann.
- * für selenium-tests.
+ * Controller der fï¿½r eigene root-komponenten verwendet werden kann.
+ * fï¿½r selenium-tests.
  * Url: /vps/vpctest/Vpc_Basic_Text_Root/url
  */
 class Vpc_TestController extends Vps_Controller_Action
@@ -14,7 +14,7 @@ class Vpc_TestController extends Vps_Controller_Action
         $root = Vps_Component_Data_Root::getInstance();
         $data = $root->getPageByPath($this->_getParam('url'));
         if (!$data) {
-            throw new Vps_ComponentNotFoundException("blub");
+            throw new Vps_Exception_NotFound();
         }
         $root->setCurrentPage($data);
         $data->getComponent()->sendContent();

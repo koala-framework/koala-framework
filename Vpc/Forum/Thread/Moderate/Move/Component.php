@@ -1,8 +1,8 @@
 <?php
-class Vpc_Forum_Thread_Moderate_Move_Component extends Vpc_Abstract_Composite_Component 
+class Vpc_Forum_Thread_Moderate_Move_Component extends Vpc_Abstract_Composite_Component
 {
     public $newThread;
-    
+
     public static function getSettings()
     {
         $ret = parent::getSettings();
@@ -21,7 +21,7 @@ class Vpc_Forum_Thread_Moderate_Move_Component extends Vpc_Abstract_Composite_Co
         $forum = $group->parent;
 
         if (!$group->getComponent()->mayModerate()) {
-            throw new Vpc_AccessDeniedException();
+            throw new Vps_Exception_AccessDenied();
         }
 
         //nicht in processInput bzw. postProcessInput weil wir 1. uns selbst brauchen zur anzeige

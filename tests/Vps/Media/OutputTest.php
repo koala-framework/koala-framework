@@ -117,7 +117,7 @@ class Vps_Media_OutputTest extends PHPUnit_Framework_TestCase
 
     public function testNothing()
     {
-        $this->setExpectedException('Vpc_UrlNotFoundException');
+        $this->setExpectedException('Vps_Exception_NotFound');
         Vps_Media_Output::getOutputData(array(), array());
     }
 }

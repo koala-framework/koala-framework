@@ -45,7 +45,7 @@ class Vps_Controller_Action_Cli_CreateViewCacheController extends Vps_Controller
             if (method_exists($i, 'processInput')) {
                 try {
                     $i->processInput(array());
-                } catch (Vpc_AccessDeniedException $e) {
+                } catch (Vps_Exception_AccessDenied $e) {
                     $accessDenied = true;
                 }
             }
@@ -53,7 +53,7 @@ class Vps_Controller_Action_Cli_CreateViewCacheController extends Vps_Controller
         if (!$accessDenied) {
             try {
                 Vps_View_Component::renderComponent($component);
-            } catch (Vpc_AccessDeniedException $e) {
+            } catch (Vps_Exception_AccessDenied $e) {
             }
         }
 

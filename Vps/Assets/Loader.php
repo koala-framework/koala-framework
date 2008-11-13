@@ -17,7 +17,7 @@ class Vps_Assets_Loader
                 Vps_Media_Output::output($dep->getFileContents($url,
                                 Zend_Registry::get('trl')->getTargetLanguage()));
             } catch (Vps_Assets_NotFoundException $e) {
-                Vps_Setup::output404();
+                throw new Vps_Exception_NotFound();
             }
         }
     }

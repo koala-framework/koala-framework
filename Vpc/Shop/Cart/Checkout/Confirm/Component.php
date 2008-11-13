@@ -15,7 +15,7 @@ class Vpc_Shop_Cart_Checkout_Confirm_Component extends Vpc_Abstract
     {
         $this->_order = Vps_Model_Abstract::getInstance('Vpc_Shop_Cart_Orders')->getCartOrder();
         if (!$this->_order || !$this->_order->data) {
-            throw new Vpc_AccessDeniedException("No Order exists");
+            throw new Vps_Exception_AccessDenied("No Order exists");
         }
         $mail = $this->_getMail();
         $mail->send();
@@ -25,7 +25,7 @@ class Vpc_Shop_Cart_Checkout_Confirm_Component extends Vpc_Abstract
         $this->_order->save();
 
     }
-    
+
     protected function _getMail()
     {
         $mail = new Vps_Mail($this);

@@ -356,7 +356,7 @@ abstract class Vps_Component_Generator_Abstract
     {
         return self::getStaticChildComponentClasses($this->_settings, $select);
     }
-    
+
     public static function getStaticChildComponentClasses($data, $select = array())
     {
         if (is_array($select)) {
@@ -371,7 +371,7 @@ abstract class Vps_Component_Generator_Abstract
                 unset($ret[$key]);
             }
         }
-        
+
         if ($select->hasPart(Vps_Component_Select::WHERE_FLAGS)) {
             $flags = $select->getPart(Vps_Component_Select::WHERE_FLAGS);
             foreach ($ret as $k=>$c) {
@@ -390,15 +390,15 @@ abstract class Vps_Component_Generator_Abstract
                 return array();
             }
         }
-        
+
         return $ret;
     }
-    
+
     public function getIdSeparator()
     {
         return $this->_idSeparator;
     }
-    
+
     public function getComponentByKey($key)
     {
         if ($this->_settings['generator'] == $key) {
@@ -409,7 +409,7 @@ abstract class Vps_Component_Generator_Abstract
         }
         return null;
     }
-    
+
     abstract public function getChildData($parentData, $select = array());
 
     public function countChildData($parentData, $select = array())
@@ -512,5 +512,5 @@ abstract class Vps_Component_Generator_Abstract
     {
         return $this->_settings['generator'];
     }
-    
+
 }

@@ -18,7 +18,7 @@ class Vpc_Posts_Detail_Delete_Confirmed_Component extends Vpc_Posts_Success_Comp
     {
         $actions = $this->getData()->parent->parent;
         if (!$actions->getComponent()->mayEditPost()) {
-            throw new Vpc_AccessDeniedException();
+            throw new Vps_Exception_AccessDenied();
         }
     }
 

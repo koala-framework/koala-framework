@@ -60,7 +60,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         if ($parentData instanceof Vps_Component_Data_Root) {
             $parentId = 0;
         } else if ($parentData) {
-            $parentId = $parentData->componentId;
+            $parentId = $parentData->dbId;
         }
         $pageIds = array();
         if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
@@ -142,7 +142,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         }
         return $ret;
     }
-    
+
     protected function _createData($parentData, $id, $select)
     {
         $page = $this->_pageData[$id];
