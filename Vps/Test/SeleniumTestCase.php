@@ -102,7 +102,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
                 throw $exception;
             }
             $this->assertTextNotPresent('Exception');
-            $this->assertTextNotPresent('error');
+            $this->assertTextNotPresent('Fatal error');
             $this->assertTextNotPresent('warning');
             $this->assertTextNotPresent('notice');
         }
