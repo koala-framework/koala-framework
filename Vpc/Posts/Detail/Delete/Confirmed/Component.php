@@ -11,17 +11,7 @@ class Vpc_Posts_Detail_Delete_Confirmed_Component extends Vpc_Posts_Success_Comp
 
     protected function _getTargetPage()
     {
-        $ret = $this->getData()->getParentPage()->getParentPage();
-        if ($this->_getNumPosts() == 1) {
-            $ret = $ret->getParentPage();
-        }
-        return $ret;
-    }
-
-    private function _getNumPosts()
-    {
-        $posts = $this->getData()->parent->parent->parent->parent;
-        return $posts->countChildComponents(array('generator'=>'detail'));
+        return $this->getData()->getParentPage()->getParentPage();
     }
 
     public function processInput($postData)
@@ -36,10 +26,5 @@ class Vpc_Posts_Detail_Delete_Confirmed_Component extends Vpc_Posts_Success_Comp
     {
         $post = $this->getData()->parent->parent->parent;
         $post->row->delete();
-        $numPosts = $this->_getNumPosts();
-        if ($numPosts == 0) {
-            //thread auch löschen
-            $post->parent->parent->row->delete();
-        }
     }
 }
