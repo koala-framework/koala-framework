@@ -179,7 +179,7 @@ class Vps_Model_User_User extends Vps_Db_Table_Row_Abstract
     public function sendDeletedMail()
     {
         $subject = Zend_Registry::get('config')->application->name;
-        $subject .= ' - '.trlVps('Accound deleted');
+        $subject .= ' - '.trlVps('Account deleted');
         return $this->_sendMail('UserDeleted', $subject);
     }
 
