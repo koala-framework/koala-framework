@@ -50,6 +50,7 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
             $ret = $row->save();
         }
         $this->_afterUpdate();
+        return $ret;
     }
 
     //TODO: _before/_afterDelete aufrufen
