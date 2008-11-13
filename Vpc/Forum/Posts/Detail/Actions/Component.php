@@ -1,6 +1,13 @@
 <?php
 class Vpc_Forum_Posts_Detail_Actions_Component extends Vpc_Posts_Detail_Actions_Component
 {
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['generators']['delete']['component'] = 'Vpc_Forum_Posts_Detail_Actions_Delete_Component';
+        return $ret;
+    }
+
     public function mayEditPost()
     {
         $ret = parent::mayEditPost();
@@ -9,7 +16,7 @@ class Vpc_Forum_Posts_Detail_Actions_Component extends Vpc_Posts_Detail_Actions_
         }
         return $ret;
     }
-    
+
     public function mayDeletePost()
     {
         $ret = parent::mayDeletePost();
@@ -18,14 +25,14 @@ class Vpc_Forum_Posts_Detail_Actions_Component extends Vpc_Posts_Detail_Actions_
         if ($countPosts > 1 && $this->_isFirstPost()) $ret = false;
         return $ret;
     }
-    
+
     private function _isFirstPost()
     {
         $firstPost = $this->getData()->parent->parent
             ->getChildComponent(array('generator' => 'detail'));
         return $firstPost->componentId == $this->getData()->parent->componentId;
     }
-    
+
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
