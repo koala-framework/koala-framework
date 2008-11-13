@@ -9,6 +9,13 @@ class Vps_Model_Db_Row extends Vps_Model_Row_Abstract
         parent::__construct($config);
     }
 
+    function __clone()
+    {
+        // Force a copy of this->object, otherwise
+        // it will point to same object.
+        $this->_row = clone $this->_row;
+    }
+
     public function __isset($name)
     {
         $ret = isset($this->_row->$name);
