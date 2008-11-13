@@ -17,7 +17,9 @@
             <p>Last DB-Query:</p>
             <pre><?= $this->query ?></pre>
             <?php } ?>
-            <p id="exception" style="display:none"><?=base64_encode(serialize($this->exception))?></p>
+            <? try {
+                echo '<p id="exception" style="display:none">'.base64_encode(serialize($this->exception)).'</p>';
+            } catch (PDOException $e) {} ?>
         <?php } else { ?>
             <?= trlVps('An Error ocurred. Please try again later.') ?>
         <?php } ?>
