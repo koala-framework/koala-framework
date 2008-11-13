@@ -371,7 +371,11 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                 $destRow->save();
                 $destClasses =  Vpc_Abstract::getChildComponentClasses($classes['link'], 'link');
 
-                $row = Vpc_Abstract::createModel($destClasses[$destRow->component])->createRow();
+                $row = Vpc_Abstract::createModel($destClasses[$destRow->component])
+                            ->getRow($destRow->component_id.'-link');
+                if (!$row) $row = Vpc_Abstract::createModel($destClasses[$destRow->component])
+                                            ->createRow();
+                $row->component_id = $destRow->component_id.'-link';
                 if ($destRow->component == 'extern') {
                     $row->target = $part['href'];
                 } else if ($destRow->component == 'intern') {
@@ -383,7 +387,6 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                     $row->subject = isset($m['subject']) ? $m['subject'] : '';
                     $row->text = isset($m['body']) ? $m['body'] : '';
                 }
-                $row->component_id = $destRow->component_id.'-link';
                 $row->save();
                 $newContent .= "<a href=\"{$destRow->component_id}\">";
 
