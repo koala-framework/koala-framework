@@ -1,6 +1,13 @@
 <?php
 class Vpc_Forum_AllPostsList_Component extends Vpc_Directories_List_Component
 {
+    public static function getSettings()
+    {
+        $ret = parent::getSettings();
+        $ret['useDirectorySelect'] = false;
+        return $ret;
+    }
+
     protected function _getItemDirectory()
     {
         return 'Vpc_Forum_Posts_Directory_Component';
