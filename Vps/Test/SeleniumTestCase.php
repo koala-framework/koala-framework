@@ -95,8 +95,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
     protected function defaultAssertions($action)
     {
-        
-        if ($action == 'open' || $action == 'waitForPageToLoad') {
+        if ($action == 'waitForPageToLoad') {
             if ($this->isElementPresent('id=exception')) {
                 $exception = $this->getText('id=exception');
                 $exception = unserialize(base64_decode($exception));
@@ -107,7 +106,6 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             $this->assertTextNotPresent('warning');
             $this->assertTextNotPresent('notice');
         }
-        
     }
 
     protected function waitForConnections()
