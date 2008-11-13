@@ -29,7 +29,7 @@ abstract class Vpc_Abstract_Feed_Component extends Vpc_Abstract
             $xml = $feed->saveXml();
             $tags = array(
                 'componentClass' => $this->getData()->componentClass,
-                'pageId' => $this->getData()->getPage()->componentId
+                'pageId' => $cache->getCacheIdFromComponentId($this->getData()->getPage()->componentId)
             );
             $cache->save($xml, $cacheId, $tags);
         }

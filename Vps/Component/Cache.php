@@ -29,7 +29,9 @@ class Vps_Component_Cache extends Zend_Cache_Core
     {
         self::$_instance = $instance;
     }
-
+    /**
+     * @return Vps_Component_Cache
+     */
     public static function getInstance()
     {
         if (!self::$_instance) {
