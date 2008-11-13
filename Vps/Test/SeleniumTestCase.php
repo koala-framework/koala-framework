@@ -27,13 +27,17 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         $this->setBrowserUrl('http://'.$domain.'/');
     }
 
-    protected function tearDown()
+    protected function assertPostConditions()
     {
         try {
             $this->stop();
         }
         catch (RuntimeException $e) {
         }
+    }
+
+    protected function tearDown()
+    {
     }
 
     public function clickAndWait($link)
@@ -77,25 +81,11 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             $this->createCookie('unitTest=1', 'path=/');
             Zend_Session::writeClose();
         }
-        return parent::__call($command, $arguments);
-    }
-
-    public function openVpc($url)
-    {
-        return $this->open('/vps/vpctest/'.Vps_Component_Data_Root::getComponentClass().$url);
-    }
-    public function openVpcEdit($componentClass, $componentId)
-    {
-        $url = '/vps/componentedittest/'.
-                Vps_Component_Data_Root::getComponentClass().'/'.
-                $componentClass.
-                '?componentId='.$componentId;
-        return $this->open($url);
-    }
-
-    protected function defaultAssertions($action)
-    {
-        if ($action == 'waitForPageToLoad') {
+        $ret = parent::__call($command, $arguments);
+        if ($command == 'open') {
+            $this->waitForPageToLoad();
+        }
+        if ($command == 'waitForPageToLoad') {
             if ($this->isElementPresent('id=exception')) {
                 $exception = $this->getText('id=exception');
                 $exception = unserialize(base64_decode($exception));
@@ -106,11 +96,26 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             $this->assertTextNotPresent('warning');
             $this->assertTextNotPresent('notice');
         }
+        
+        return $ret;
+    }
+
+    public function openVpc($url)
+    {
+        return $this->open('/vps/vpctest/'.Vps_Component_Data_Root::getComponentClass().$url);
+    }
+
+    public function openVpcEdit($componentClass, $componentId)
+    {
+        $url = '/vps/componentedittest/'.
+                Vps_Component_Data_Root::getComponentClass().'/'.
+                $componentClass.
+                '?componentId='.$componentId;
+        return $this->open($url);
     }
 
     protected function waitForConnections()
     {
         $this->waitForCondition('selenium.browserbot.getCurrentWindow().Vps.Connection.runningRequests==0');
     }
-
 }
