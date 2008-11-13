@@ -13,7 +13,7 @@ class Vpc_Shop_Cart_Checkout_Form_Component extends Vpc_Form_Component
     {
         parent::_initForm();
         if (!Vpc_Shop_Cart_Orders::getCartOrderId()) {
-            throw new Vpc_AccessDeniedException("No Order exists");
+            throw new Vps_Exception_AccessDenied("No Order exists");
         }
         $this->_form->setId(Vpc_Shop_Cart_Orders::getCartOrderId());
     }

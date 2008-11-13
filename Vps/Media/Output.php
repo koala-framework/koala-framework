@@ -38,12 +38,12 @@ class Vps_Media_Output
         if (!isset($file['contents'])) {
             if (isset($file['file'])) {
                 if (!is_file($file['file'])) {
-                    throw new Vps_Controller_Action_Web_Exception("File '$file[file]' not found.");
+                    throw new Vps_Exception_NotFound("File '$file[file]' not found.");
                 }
                 $file['contents'] = file_get_contents($file['file']);
                 $file['mtime'] = filemtime($file['file']);
             } else {
-                throw new Vpc_UrlNotFoundException();
+                throw new Vps_Exception_NotFound();
             }
         }
         if (isset($file['mtime'])) {

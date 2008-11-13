@@ -5,8 +5,8 @@ class Vps_Controller_Action_Error_CliController extends Vps_Controller_Action
     {
         $errors = $this->getRequest()->getParam('error_handler');
         if ($errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER ||
-            $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION ||
-            $errors->exception instanceof Vps_Controller_Action_Web_FileNotFoundException) {
+            $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION)
+        {
             if ($errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER) {
                 file_put_contents('php://stderr', "ERROR: Controller not found\n");
             } else if ($errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION) {

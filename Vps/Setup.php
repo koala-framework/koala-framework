@@ -212,6 +212,7 @@ class Vps_Setup
         date_default_timezone_set('Europe/Berlin');
         mb_internal_encoding('UTF-8');
         set_error_handler(array('Vps_Debug', 'handleError'), E_ALL);
+        set_exception_handler(array('Vps_Debug', 'handleException'));
 
         $ip = get_include_path();
         foreach (Zend_Registry::get('config')->includepath as $p) {
@@ -269,7 +270,7 @@ class Vps_Setup
                 // separate if abfrage, damit login wieder kommt, falls gerade falsch eingeloggt wurde
                 if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
                     header('WWW-Authenticate: Basic realm="Testserver"');
-                    self::output401();
+                    throw new Vps_Exception_AccessDenied();
                 }
             }
         }
@@ -380,32 +381,6 @@ class Vps_Setup
         return $vpsConfig;
     }
 
-    public static function output404()
-    {
-        header('HTTP/1.1 404 Not Found');
-        $view = new Vps_View();
-        $view->requestUri = $_SERVER['REDIRECT_URL'];
-        $template = 'error404.tpl';
-        echo $view->render($template);
-        Vps_Benchmark::shutDown();
-        Vps_Benchmark::output();
-        exit;
-
-    }
-
-    public static function output401()
-    {
-        header('HTTP/1.1 401 Access Denied');
-        $view = new Vps_View();
-        $view->requestUri = $_SERVER['REDIRECT_URL'];
-        $template = 'error401.tpl';
-        echo $view->render($template);
-        Vps_Benchmark::shutDown();
-        Vps_Benchmark::output();
-        exit;
-
-    }
-
     public static function dispatchVpc()
     {
         if (!isset($_SERVER['REDIRECT_URL'])) return;
@@ -419,7 +394,7 @@ class Vps_Setup
             $root = Vps_Component_Data_Root::getInstance();
             $data = $root->getPageByPath($requestUrl);
             if (!$data) {
-                self::output404();
+               throw new Vps_Exception_NotFound();
             }
             $root->setCurrentPage($data);
             if ($data->url != $requestUrl) {
@@ -428,11 +403,7 @@ class Vps_Setup
                 exit;
             }
             $page = $data->getComponent();
-            try {
-                $page->sendContent();
-            } catch (Vpc_AccessDeniedException $e) {
-                self::output401();
-            }
+            $page->sendContent();
 
             if ($page instanceof Vpc_Abstract_Feed_Component) {
                 echo "<!--";
@@ -458,7 +429,7 @@ class Vps_Setup
             Vps_Media_Headline::outputHeadline($_GET['selector'], $_GET['text']);
         } else if (is_array($urlParts) && $urlParts[0] == 'media') {
             if (sizeof($urlParts) != 6) {
-                self::output404();
+                throw new Vps_Exception_NotFound();
             }
             $class = $urlParts[1];
             $id = $urlParts[2];
@@ -467,7 +438,7 @@ class Vps_Setup
             $filename = $urlParts[5];
 
             if ($checksum != Vps_Media::getChecksum($class, $id, $type, $filename)) {
-                throw new Vpc_AccessDeniedException('Access to file not allowed.');
+                throw new Vps_Exception_AccessDenied('Access to file not allowed.');
             }
             Vps_Media_Output::output(Vps_Media::getOutput($class, $id, $type));
         }

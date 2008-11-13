@@ -9,54 +9,22 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
             FirePHP::getInstance()->fb($errors->exception);
         }
 
-        if ($this->_getParam('module') == 'component' &&
-            $this->_getParam('action') == 'json-index' &&
-            $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER) {
-            $errors->exception = new Vps_ComponentNotFoundException();
+        if ($errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER ||
+            $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION)
+        {
+            $errors->exception = new Vps_Exception_NotFound();
         }
 
         $prefix = substr($this->_getParam('action'), 0, 4);
-        $isHttpRequest = (isset($_SERVER['REQUEST_METHOD'])
-                            && $_SERVER['REQUEST_METHOD']== 'POST') ||
-                    isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
+        $isHttpRequest =
+            (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']== 'POST') ||
+            isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+            $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
         if ($prefix == 'json' &&
             ($isHttpRequest || $errors->exception instanceof Vps_ClientException)) {
             $this->_forward('json-error');
         } else {
-
-            if ($errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER ||
-                $errors->type == Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION ||
-                $errors->exception instanceof Vps_Controller_Action_Web_FileNotFoundException) {
-                $this->getResponse()->setRawHeader('HTTP/1.1 404 Not Found');
-                $file = 'Error404';
-            } else if ($errors->exception instanceof Vps_ClientException) {
-                $file = 'ErrorClient';
-            } else {
-                $this->getResponse()->setRawHeader('HTTP/1.1 500 Internal Server Error');
-                $file = 'Error';
-            }
-
-            $this->_helper->viewRenderer->setRender($file);
-
-            $config = Zend_Registry::get('config');
-            $this->view->type = $errors->type;
-            $this->view->exception = $errors->exception;
-            $this->view->message = $errors->exception->getMessage();
-            if (isset($_SERVER['REQUEST_URI'])) {
-                $this->view->requestUri = $_SERVER['REQUEST_URI'];
-            } else {
-                $this->view->requestUri = '';
-            }
-            if ($config->debug->errormail) {
-                if (substr($this->view->requestUri, -12) != '/favicon.ico'
-                    && substr($this->view->requestUri, -10) != '/robots.txt')
-                {
-                    Vps_Debug::sendErrorMail($errors->exception, $config->debug->errormail);
-                }
-                $this->view->debug = false;
-            } else {
-                $this->view->debug = true;
-            }
+            throw $errors->exception; // wird von Vps_Debug::handleException behandelt
         }
     }
 
@@ -66,28 +34,26 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
         $exception = $errors->exception;
         if ($exception instanceof Vps_ClientException) {
             $this->view->error = $exception->getMessage();
-        } else if ($exception instanceof Vps_ComponentNotFoundException) {
+        } else if ($exception instanceof Vps_Exception_NotFound) {
             $this->view->error = trlVps('There is no editing for this component.');
         } else {
-            $config = Zend_Registry::get('config');
-            if ($config->debug->errormail != '') {
-                Vps_Debug::sendErrorMail($exception, $config->debug->errormail);
-                $this->view->error = trlVps('An error has occurred. Please try again later.');
-            } else {
+            if ($exception->isDebug()) {
                 $this->view->exception = $exception->__toString();
+            } else {
+                $this->view->error = trlVps('An error has occurred. Please try again later.');
             }
         }
+        if ($exception instanceof Vps_Exception) $exception->sendErrorMail();
     }
 
     public function jsonMailAction()
     {
-        $exception = new Vps_JavaScriptException($this->_getParam('msg'));
-        Vps_Debug::sendErrorMail($exception, Zend_Registry::get('config')->debug->errormail);
+        throw new Vps_Exception_JavaScript($this->_getParam('msg'));
     }
 
     public function jsonTimeoutAction()
     {
-        throw new Vps_Exception(("excpetion"));
+        throw new Vps_Exception(("exception"));
         sleep(50);
     }
 
