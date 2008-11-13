@@ -42,7 +42,12 @@ class Vps_Component_RowObserver
 
     public function delete($row)
     {
-        $this->_process['delete'][] = $row;
+        /* Das clone vor der $row is zwar bisserl eine verarsche, aber da hier
+           nur gesammelt und später erst ausgeführt ist,
+           wär sonst die row (bzw. dessen Daten) in einer onRowDelete() methode
+           einer Admin.php nicht mehr verfügbar
+        */
+        $this->_process['delete'][] = clone $row;
     }
 
     public function process()

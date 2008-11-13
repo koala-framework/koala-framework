@@ -249,18 +249,13 @@ abstract class Vps_Model_Row_Abstract implements Vps_Model_Row_Interface
                 $f->onDeleteRow($this);
             }
         }
+        if (Vps_Component_Data_Root::getComponentClass()) {
+            Vps_Component_RowObserver::getInstance()->delete($this);
+        }
     }
 
     protected function _afterDelete()
     {
-        /* Das clone vor dem $this is zwar bisserl eine verarsche, aber da im
-           Vps_Component_Cache nur gesammelt und später erst ausgeführt ist,
-           wär sonst die row (bzw. dessen Daten) in einer onRowDelete() methode
-           einer Admin.php nicht mehr verfügbar
-        */
-        if (Vps_Component_Data_Root::getComponentClass()) {
-            Vps_Component_RowObserver::getInstance()->delete(clone $this);
-        }
     }
 
     private function _updateFilters($filterAfterSave = false)
