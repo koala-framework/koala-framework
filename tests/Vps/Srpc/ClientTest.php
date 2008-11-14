@@ -15,12 +15,13 @@ class Vps_Srpc_ClientTest extends PHPUnit_Framework_TestCase
     {
         $expectedArray = array(
             'method' => 'getMyId',
-            'arguments' => array(1, 'foo')
+            'arguments' => serialize(array(1, 'foo'))
         );
         $this->_client->expects($this->once())
             ->method('_performRequest')
             ->with($this->equalTo($expectedArray))
             ->will($this->returnValue(serialize(array('id' => 'foo'))));
+
         $this->assertEquals(array('id' => 'foo'), $this->_client->getMyId(1, 'foo'));
     }
 
@@ -28,7 +29,7 @@ class Vps_Srpc_ClientTest extends PHPUnit_Framework_TestCase
     {
         $expectedArray = array(
             'method' => 'syncIt',
-            'arguments' => array()
+            'arguments' => serialize(array())
         );
         $this->_client->expects($this->once())
             ->method('_performRequest')

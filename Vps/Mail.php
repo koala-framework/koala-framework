@@ -4,6 +4,12 @@ class Vps_Mail
     // wozu _ownReturnPath? siehe getReturnPath
     protected $_ownReturnPath = null;
 
+    // die folgenden 4 sind für maillog
+    protected $_ownFrom = '';
+    protected $_ownTo = array();
+    protected $_ownCc = array();
+    protected $_ownBcc = array();
+
     protected $_mail;
     protected $_view;
     protected $_masterTemplate = null;
@@ -60,11 +66,13 @@ class Vps_Mail
 
         if (isset($_SERVER['HTTP_HOST'])) {
             $host = $_SERVER['HTTP_HOST'];
-            $webUrl = 'http://'.$host;
-            $this->_view->webUrl = $webUrl;
-            $this->_view->host = $host;
+        } else {
+            $host = Vps_Registry::get('config')->server->domain;
         }
-        $this->_view->applicationName = Zend_Registry::get('config')->application->name;
+        $this->_view->webUrl = 'http://'.$host;
+        $this->_view->host = $host;
+
+        $this->_view->applicationName = Vps_Registry::get('config')->application->name;
     }
 
     public function __set($key, $val)
@@ -153,7 +161,8 @@ class Vps_Mail
 
     public function addCc($email, $name='')
     {
-        if (Zend_Registry::get('config')->debug->sendAllMailsTo) {
+        $this->_ownCc[] = trim("$name <$email>");
+        if (Vps_Registry::get('config')->debug->sendAllMailsTo) {
             if ($name) {
                 $this->addHeader('X-Real-Cc', $name ." <".$email.">");
             } else {
@@ -171,7 +180,8 @@ class Vps_Mail
 
     public function addBcc($email)
     {
-        if (Zend_Registry::get('config')->debug->sendAllMailsTo) {
+        $this->_ownBcc[] = $email;
+        if (Vps_Registry::get('config')->debug->sendAllMailsTo) {
             $this->addHeader('X-Real-Bcc', $email);
         } else {
             $this->_mail->addBcc($email);
@@ -187,7 +197,8 @@ class Vps_Mail
 
     public function addTo($email, $name='')
     {
-        if (Zend_Registry::get('config')->debug->sendAllMailsTo) {
+        $this->_ownTo[] = trim("$name <$email>");
+        if (Vps_Registry::get('config')->debug->sendAllMailsTo) {
             if ($name) {
                 $this->addHeader('X-Real-Recipient', $name ." <".$email.">");
             } else {
@@ -200,17 +211,18 @@ class Vps_Mail
 
     public function setFrom($email, $name='')
     {
+        $this->_ownFrom = trim("$name <$email>");
         $this->_mail->setFrom($email, $name);
     }
 
     public function send()
     {
-        $mailSendAll = Zend_Registry::get('config')->debug->sendAllMailsTo;
+        $mailSendAll = Vps_Registry::get('config')->debug->sendAllMailsTo;
         if ($mailSendAll) {
             $this->_mail->addTo($mailSendAll);
         }
 
-        $mailSendAllBcc = Zend_Registry::get('config')->debug->sendAllMailsBcc;
+        $mailSendAllBcc = Vps_Registry::get('config')->debug->sendAllMailsBcc;
         if ($mailSendAllBcc) {
             $this->_mail->addBcc($mailSendAllBcc);
         }
@@ -218,13 +230,13 @@ class Vps_Mail
         $hostNonWww = preg_replace('#^www\\.#', '', $this->_view->host);
 
         if ($this->getFrom() == null) {
-            $fromName = str_replace('%host%', $hostNonWww, Zend_Registry::get('config')->email->from->name);
-            $fromAddress = str_replace('%host%', $hostNonWww, Zend_Registry::get('config')->email->from->address);
+            $fromName = str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->from->name);
+            $fromAddress = str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->from->address);
             $this->setFrom($fromAddress, $fromName);
         }
 
         if ($this->getReturnPath() == null) {
-            $returnPath = str_replace('%host%', $hostNonWww, Zend_Registry::get('config')->email->returnPath);
+            $returnPath = str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->returnPath);
             $this->setReturnPath($returnPath);
         }
 
@@ -277,6 +289,28 @@ class Vps_Mail
         $transport = null;
         if ($this->getReturnPath() != null) {
             $transport = new Zend_Mail_Transport_Sendmail('-f'.$this->getReturnPath());
+        }
+
+        // in service mitloggen wenn url vorhanden
+        if (Vps_Registry::get('config')->service->maillog && Vps_Registry::get('config')->service->maillog->url) {
+            $maillogUrl = Vps_Registry::get('config')->service->maillog->url;
+            $m = new Vps_Model_Service(array('serverUrl' => $maillogUrl));
+            $r = $m->createRow();
+            $r->from = $this->_ownFrom;
+            $r->to = implode(';', $this->_ownTo);
+            $r->cc = implode(';', $this->_ownCc);
+            $r->bcc = implode(';', $this->_ownBcc);
+            if ($this->getReturnPath() != null) {
+                $r->return_path = $this->getReturnPath();
+            }
+            $bodyText = $this->_mail->getBodyText();
+            if ($bodyText instanceof Zend_Mime_Part) $bodyText = $bodyText->getContent();
+            $bodyHtml = $this->_mail->getBodyHtml();
+            if ($bodyHtml instanceof Zend_Mime_Part) $bodyHtml = $bodyHtml->getContent();
+            $r->subject = $this->_mail->getSubject();
+            $r->body_text = $bodyText;
+            $r->body_html = $bodyHtml;
+            $r->save();
         }
 
         return $this->_mail->send($transport);

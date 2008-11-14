@@ -44,8 +44,21 @@ class Vps_Srpc_Client
             $params['arguments'] = $args;
         }
 
-        $response = $this->_performRequest($params);
+        $params['arguments'] = serialize($params['arguments']);
 
-        return unserialize($response);
+        $response = $this->_performRequest($params);
+        if (!@unserialize($response)) {
+            throw new Vps_Exception('Srpc Server Response is not serialized: '.$response);
+        } else {
+            $result = unserialize($response);
+        }
+
+        // result könnte eine Exception sein, wenn ja wird sie weitergeschmissen
+        if ($result instanceof Exception) {
+            throw $result;
+        }
+
+        return $result;
     }
 }
+
