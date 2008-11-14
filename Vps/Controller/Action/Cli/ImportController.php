@@ -3,35 +3,49 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 {
     public function indexAction()
     {
-        if (Vps_Registry::get('config')->server->host != 'vivid') {
+        $ownConfig = Vps_Registry::get('config');
+        if ($ownConfig->server->host != 'vivid') {
             throw new Vps_ClientException("Import is only possible on vivid server");
         }
         $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
         $dbConfig = $dbConfig->web;
         $mysqlLocalOptions = "--host={$dbConfig->host} --user={$dbConfig->username} --password={$dbConfig->password} ";
 
-        $config = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
+        $server = $this->_getParam('server');
+        $config = new Zend_Config_Ini('application/config.ini', $server);
         $this->_sshHost = $config->server->user.'@'.$config->server->host;
         $this->_sshDir = $config->server->dir;
 
-        $onlineRevision = `sudo -u www-data sshvps $this->_sshHost $this->_sshDir import get-update-revision`;
+        if ($ownConfig->server->host == $config->server->host) {
+            $onlineRevision = `cd {$config->server->dir} && php bootstrap.php import get-update-revision`;
+        } else {
+            $onlineRevision = `sudo -u www-data sshvps $this->_sshHost $this->_sshDir import get-update-revision`;
+        }
 
         echo "kopiere uploads...\n";
-        $this->_systemSshVps('copy-uploads '.Vps_Registry::get('config')->uploads.'/', $config->uploads);
-
-        //$this->_systemCheckRet("rsync --progress --delete --update --exclude=cache/ ".
-        //    "--recursive {$this->_sshHost}:{$config->uploads}/ ".Vps_Registry::get('config')->uploads."/");
-
+        if ($ownConfig->server->host == $config->server->host) {
+            $this->_systemCheckRet("rsync --progress --delete --update --exclude=cache/ --recursive {$ownConfig->uploads}/ {$config->uploads}/");
+        } else {
+            $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/', $config->uploads);
+        }
 
         $p = "/var/backups/vpsimport/".date("Y-m-d_H:i:s_U")."_{$dbConfig->dbname}.sql";
         echo "erstelle datenbank-backup in $p...\n";
         $this->_systemCheckRet("mysqldump $mysqlLocalOptions {$dbConfig->dbname} > $p");
 
-        echo "erstelle datenbank dump (online)...\n";
-        $dumpname = `sudo -u www-data sshvps $this->_sshHost $this->_sshDir import create-dump`;
+        echo "erstelle datenbank dump ($server)...\n";
+        if ($ownConfig->server->host == $config->server->host) {
+            $dumpname = `cd {$config->server->dir} && php bootstrap.php import create-dump`;
+        } else {
+            $dumpname = `sudo -u www-data sshvps $this->_sshHost $this->_sshDir import create-dump`;
+        }
 
-        echo "kopiere datenbank dump...\n";
-        $this->_systemSshVps('copy-dump '.$dumpname);
+        if ($ownConfig->server->host != $config->server->host) {
+            echo "kopiere datenbank dump...\n";
+            $this->_systemSshVps('copy-dump '.$dumpname);
+        } else {
+            $this->_systemCheckRet("bunzip2 $dumpname");
+        }
 
         echo "loesche lokale datenbank...\n";
         $this->_systemCheckRet("echo \"DROP DATABASE \`{$dbConfig->dbname}\`\" | mysql $mysqlLocalOptions");
