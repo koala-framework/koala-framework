@@ -43,7 +43,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $dumpname = substr($dumpname, 0, -4);
         $this->_systemCheckRet("mysql $mysqlLocalOptions {$dbConfig->dbname} < $dumpname");
 
-        echo "schreibe application/update ($onlineRevision)...\n";
+        echo "schreibe application/update...\n";
         file_put_contents('application/update', $onlineRevision);
 
         echo "fertig!\n";
