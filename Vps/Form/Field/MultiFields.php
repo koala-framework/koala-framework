@@ -279,7 +279,7 @@ class Vps_Form_Field_MultiFields extends Vps_Form_Field_Abstract
         $postData = $postData[$this->getFieldName()];
 
         foreach ($postData['delete'] as $d) {
-            $r->delete();
+            $d->delete();
         }
 
         foreach ($postData['save'] as $i) {
