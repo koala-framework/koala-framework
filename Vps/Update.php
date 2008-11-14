@@ -2,17 +2,24 @@
 abstract class Vps_Update
 {
     protected $_actions = array();
+    protected $_revision;
 
-    public function __construct()
+    public function __construct($revision)
     {
+        $this->_revision = (int)$revision;
         $this->_init();
+    }
+
+    public function getRevision()
+    {
+        return $this->_revision;
     }
 
     protected function _init()
     {
     }
 
-    public function update()
+    public function preUpdate()
     {
         $ret = array();
         foreach ($this->_actions as $a) {
@@ -21,6 +28,36 @@ abstract class Vps_Update
                 $ret[] = $res;
             }
         }
+        return $ret;
+    }
+
+    public function postUpdate()
+    {
+        $ret = array();
+        foreach ($this->_actions as $a) {
+            $res = $a->postUpdate();
+            if ($res) {
+                $ret[] = $res;
+            }
+        }
+        return $ret;
+    }
+
+    public function checkSettings()
+    {
+        $ret = array();
+        foreach ($this->_actions as $a) {
+            $res = $a->checkSettings();
+            if ($res) {
+                $ret[] = $res;
+            }
+        }
+        return $ret;
+    }
+
+    public function update()
+    {
+        $ret = array();
         foreach ($this->_actions as $a) {
             $res = $a->update();
             if ($res) {
@@ -94,7 +131,7 @@ abstract class Vps_Update
                         if ($nr >= $from && $nr < $to) {
                             $n = str_replace(DIRECTORY_SEPARATOR, '_', $file).'_Update_'.$nr;
                             if (is_instance_of($n, 'Vps_Update')) {
-                                $ret[] = new $n();
+                                $ret[] = new $n($nr);
                             }
                         }
                     }

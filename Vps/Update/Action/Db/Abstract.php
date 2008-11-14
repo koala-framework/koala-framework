@@ -4,9 +4,9 @@ abstract class Vps_Update_Action_Db_Abstract extends Vps_Update_Action_Abstract
     public $model;
     public $table;
 
-    public function preUpdate()
+    public function checkSettings()
     {
-        parent::preUpdate();
+        parent::checkSettings();
         if (!isset($this->model)) {
             $this->model = new Vps_Db_TablesModel;
         }
