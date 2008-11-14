@@ -24,8 +24,8 @@ class Vps_Exception extends Vps_ExceptionNoMail
             && substr($requestUri, -12) != '/favicon.ico'
             && substr($requestUri, -10) != '/robots.txt')
         {
-            $type = get_class($this);
-            $body = $this->__toString();
+            $type = get_class($this->getException());
+            $body = $this->getException()->__toString();
             $body .= "\n";
             if (isset($_SERVER['REQUEST_URI'])) {
                 $body .= "\nREQUEST_URI: ".$_SERVER['REQUEST_URI'];
