@@ -12,26 +12,26 @@ class Vps_Debug
 
     public static function handleException($exception)
     {
+        if (!$exception instanceof Vps_ExceptionNoMail) {
+            $exception = new Vps_ExceptionOther($exception);
+        }
+
         Vps_Benchmark::shutDown();
         Vps_Benchmark::output();
         $view = self::getView();
-        $view->exception = $exception;
-        $view->message = $exception->getMessage();
+        $view->exception = $exception->getException();
+        $view->message = $exception->getException()->getMessage();
         $view->requestUri = isset($_SERVER['REQUEST_URI']) ?
             $_SERVER['REQUEST_URI'] : '' ;
         $view->debug = Vps_Exception::isDebug();
 
-        if ($exception instanceof Vps_ExceptionNoMail) {
-            $header = $exception->getHeader();
-            $template = $exception->getTemplate();
-            $template = strtolower(substr($template, 0, 1)) . substr($template, 1) . '.tpl';
-            if ($exception instanceof Vps_Exception) {
-                $exception->sendErrorMail();
-            }
-        } else {
-            $header = 'HTTP/1.1 500 Internal Server Error';
-            $template = 'error.tpl';
+        $header = $exception->getHeader();
+        $template = $exception->getTemplate();
+        $template = strtolower(substr($template, 0, 1)) . substr($template, 1) . '.tpl';
+        if ($exception instanceof Vps_Exception) {
+            $exception->sendErrorMail();
         }
+
         if (!headers_sent()) header($header);
         echo $view->render($template);
     }
