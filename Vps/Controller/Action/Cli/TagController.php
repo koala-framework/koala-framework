@@ -5,6 +5,7 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
 
     public static function getHelp()
     {
+        if (Vps_Registry::get('config')->server->host == 'vivid') return null;
         return "create new vps-tag";
     }
     public static function getHelpOptions()

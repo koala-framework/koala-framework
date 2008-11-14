@@ -59,7 +59,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
         foreach ($webConfigFull as $k=>$i) {
             if ($i->server) {
                 $s = $i->server->host.':'.$i->server->dir;
-                if ($i->server->host != 'vivid' && !in_array($s, $processedServers)) {
+                if (/*$i->server->host != 'vivid' &&*/ !in_array($s, $processedServers)) {
                     $sections[] = $k;
                     $processedServers[] = $s;
                 }
