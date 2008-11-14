@@ -13,10 +13,13 @@ class Vpc_Basic_LinkTag_Extern_Data extends Vps_Component_Data
     public function __get($var)
     {
         if ($var == 'url') {
-            return $this->_getLinkRow()->target;
+            $row = $this->_getLinkRow();
+            if (!$row) return '';
+            return $row->target;
         } else if ($var == 'rel') {
             $ret = '';
             $row = $this->_getLinkRow();
+            if (!$row) return '';
             if ($row->open_type == 'popup') {
                 $pop = array();
                 if ($row->width) $pop[] = 'width='.$row->width;
