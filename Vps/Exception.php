@@ -19,7 +19,7 @@ class Vps_Exception extends Vps_ExceptionNoMail
         $requestUri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '' ;
         $address = Zend_Registry::get('config')->debug->errormail;
 
-        if (!$this->isDebug()
+        if (!self::isDebug()
             && $address
             && substr($requestUri, -12) != '/favicon.ico'
             && substr($requestUri, -10) != '/robots.txt')

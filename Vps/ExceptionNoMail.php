@@ -11,7 +11,7 @@ class Vps_ExceptionNoMail extends Exception
         return 'Error';
     }
 
-    public function isDebug()
+    public static function isDebug()
     {
         return Zend_Registry::get('config')->debug->errormail == '';
     }
