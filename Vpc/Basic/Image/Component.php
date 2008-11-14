@@ -103,7 +103,8 @@ class Vpc_Basic_Image_Component extends Vpc_Abstract
             $file = $fileRow->getFileSource();
         }
         if ($file && file_exists($file)) {
-            $sourceSize = getimagesize($file);
+            $sourceSize = @getimagesize($file);
+            if (!$sourceSize) return null;
             return Vps_Media_Image::calculateScaleDimensions($sourceSize, $s);
         }
         return $s;
