@@ -42,9 +42,9 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             array('param'=> 'coverage-html'),
         );
         $value = self::_getConfigSectionsWithTestDomain();
-        $value = self::_getConfigSections();
         if (in_array('production', $value)) {
             unset($value[array_search('production', $value)]);
+            $value = array_values($value);
         }
         if ($value) {
             $ret[] = array(

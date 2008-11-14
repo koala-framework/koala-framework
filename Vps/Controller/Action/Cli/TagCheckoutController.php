@@ -57,6 +57,7 @@ class Vps_Controller_Action_Cli_TagCheckoutController extends Vps_Controller_Act
             $this->_systemCheckRet("svn co $url $path");
 
             $ip = file_get_contents("$vpsPath/include_path");
+            echo "include_path: $ip\n";
             file_put_contents($path.'/include_path', $ip);
         }
 

@@ -32,7 +32,7 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
                 $p = $v;
             }
             if (isset($opt['value']) && is_array($opt['value']) && !in_array($p, $opt['value']) && !(isset($opt['allowBlank']) && $opt['allowBlank'])) {
-                throw new Vps_ClientException("Invalid value for parameter '$opt[param]'");
+//                 throw new Vps_ClientException("Invalid value for parameter '$opt[param]'");
             }
         }
     }
