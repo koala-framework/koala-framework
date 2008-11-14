@@ -25,11 +25,14 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
         }
         foreach ($commands as $cmd=>$class) {
             if ($cmd == 'index') continue;
-            echo "$cmd".str_repeat(' ', $maxLen-strlen($cmd));
+            $help = false;
             if (method_exists($class, 'getHelp')) {
-                echo " ".call_user_func(array($class, 'getHelp'));
+                $help = call_user_func(array($class, 'getHelp'));
+                if (!$help) continue;
+                $help = " $help";
             }
-            echo "\n";
+            echo "$cmd".str_repeat(' ', $maxLen-strlen($cmd));
+            echo "$help\n";
             if (method_exists($class, 'getHelpOptions')) {
                 $options = call_user_func(array($class, 'getHelpOptions'));
                 foreach ($options as $o) {
@@ -51,7 +54,7 @@ class Vps_Controller_Action_Cli_HelpController extends Vps_Controller_Action_Cli
                 }
             }
         }
-        exit;
+        $this->_helper->viewRenderer->setNoRender(true);
     }
 
     private function _processModule($module)

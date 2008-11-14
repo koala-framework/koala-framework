@@ -5,4 +5,8 @@ class Vps_Controller_Action_Cli_IndexController extends Vps_Controller_Action_Cl
     {
         $this->_forward('index', 'help', 'vps_controller_action_cli');
     }
+    public static function getHelp()
+    {
+        return "show help";
+    }
 }

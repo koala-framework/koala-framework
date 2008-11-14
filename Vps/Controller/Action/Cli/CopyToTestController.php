@@ -3,7 +3,7 @@ class Vps_Controller_Action_Cli_CopyToTestController extends Vps_Controller_Acti
 {
     public static function getHelp()
     {
-        return "copy from prod to test";
+        return "copy from prod to test (database+uploads)";
     }
 
     public static function getHelpOptions()
@@ -11,13 +11,14 @@ class Vps_Controller_Action_Cli_CopyToTestController extends Vps_Controller_Acti
         $sections = self::_getConfigSections();
         if (in_array('production', $sections)) {
             unset($sections[array_search('production', $sections)]);
+            $sections = array_values($sections);
         }
         return array(
             array(
                 'param'=> 'server',
                 'value'=> $sections,
-                'valueOptional' => false,
-                'help' => 'where to copy from prod'
+                'help' => 'where to copy from prod',
+                'valueOptional'=>true
             )
         );
     }
@@ -37,6 +38,7 @@ class Vps_Controller_Action_Cli_CopyToTestController extends Vps_Controller_Acti
         $this->_sshDir = $config->server->dir;
 
         $this->_systemSshVps("import");
-        exit();
+echo "dooo";
+        $this->_helper->viewRenderer->setNoRender(true);
     }
 }

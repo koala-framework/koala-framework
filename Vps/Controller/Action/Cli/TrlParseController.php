@@ -46,7 +46,7 @@ class Vps_Controller_Action_Cli_TrlParseController extends Vps_Controller_Action
         }
         echo "------------------------\n";
         echo "Parsing end\n";
-        exit();
+        $this->_helper->viewRenderer->setNoRender(true);
     }
 
 }

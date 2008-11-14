@@ -73,10 +73,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         $this->_helper->viewRenderer->setNoRender(true);
     }
-    private function _systemSsh($cmd)
-    {
-        return $this->_systemCheckRet("ssh {$this->_sshHost} \"nice ".$cmd."\"");
-    }
     private function _systemSshVps($cmd, $dir = null)
     {
         if (!$dir) $dir = $this->_sshDir;

@@ -33,6 +33,6 @@ class Vps_Controller_Action_Cli_ExportController extends Vps_Controller_Action_C
         $this->_sshDir = $config->server->dir;
 
         $this->_systemSshVps("svn-up");
-        exit();
+        $this->_helper->viewRenderer->setNoRender(true);
     }
 }
