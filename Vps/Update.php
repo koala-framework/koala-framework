@@ -34,7 +34,7 @@ abstract class Vps_Update
     {
         $ret = self::getVpcUpdates($from, $to);
 
-        //web/Vps/*/Update nach updates durchsuchen
+        //web/Vps/ * /Update nach updates durchsuchen
         if (is_dir('./Vps')) {
             foreach (new DirectoryIterator('./Vps') as $d) {
                 if ($d->isDir() && substr($d->__toString(), 0, 1) != '.'
@@ -45,6 +45,9 @@ abstract class Vps_Update
                 }
             }
         }
+
+        $u = self::getUpdatesForDir(VPS_PATH.'/Vps', $from, $to);
+        $ret = array_merge($ret, $u);
         return $ret;
     }
 
@@ -74,6 +77,9 @@ abstract class Vps_Update
         $ret = array();
         foreach (explode(PATH_SEPARATOR, get_include_path()) as $dir) {
             if ($dir == '.') $dir = getcwd();
+            if (substr($file, 0, strlen($dir)) == $dir) {
+                $file = substr($file, strlen($dir)+1);
+            }
             $path = $dir . '/' . $file;
             if (is_dir($path)) {
                 $path =  $path . '/Update';
