@@ -292,7 +292,7 @@ class Vps_Mail
         }
 
         // in service mitloggen wenn url vorhanden
-        if (Vps_Registry::get('config')->service->maillog && Vps_Registry::get('config')->service->maillog->url) {
+/*        if (Vps_Registry::get('config')->service->maillog && Vps_Registry::get('config')->service->maillog->url) {
             $maillogUrl = Vps_Registry::get('config')->service->maillog->url;
             $m = new Vps_Model_Service(array('serverUrl' => $maillogUrl));
             $r = $m->createRow();
@@ -312,7 +312,7 @@ class Vps_Mail
             $r->body_html = $bodyHtml;
             $r->save();
         }
-
+*/
         return $this->_mail->send($transport);
     }
 
