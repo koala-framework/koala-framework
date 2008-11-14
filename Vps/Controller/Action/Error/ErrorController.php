@@ -32,13 +32,16 @@ class Vps_Controller_Action_Error_ErrorController extends Vps_Controller_Action
     {
         $errors = $this->getRequest()->getParam('error_handler');
         $exception = $errors->exception;
+        if (!$exception instanceof Vps_ExceptionNoMail) {
+            $exception = new Vps_ExceptionOther($exception);
+        }
         if ($exception instanceof Vps_ClientException) {
             $this->view->error = $exception->getMessage();
         } else if ($exception instanceof Vps_Exception_NotFound) {
             $this->view->error = trlVps('There is no editing for this component.');
         } else {
             if (Vps_Exception::isDebug()) {
-                $this->view->exception = $exception->__toString();
+                $this->view->exception = $exception->getException()->__toString();
             } else {
                 $this->view->error = trlVps('An error has occurred. Please try again later.');
             }
