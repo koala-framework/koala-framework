@@ -89,7 +89,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             $e = false;
             try {
                 $res = $update->$method();
-            } catch (Vps_ClientException $e) {
+            } catch (Exception $e) {
                 if ($method == 'checkSettings') {
                     echo get_class($update);
                 }
