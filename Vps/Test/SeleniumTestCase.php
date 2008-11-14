@@ -118,4 +118,61 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     {
         $this->waitForCondition('selenium.browserbot.getCurrentWindow().Vps.Connection.runningRequests==0');
     }
+    
+    //kopiert von PhpUnit, nur um eigenen Driver verwenden zu können
+    protected function getDriver(array $browser)
+    {
+        if (isset($browser['name'])) {
+            if (!is_string($browser['name'])) {
+                throw new InvalidArgumentException;
+            }
+        } else {
+            $browser['name'] = '';
+        }
+
+        if (isset($browser['browser'])) {
+            if (!is_string($browser['browser'])) {
+                throw new InvalidArgumentException;
+            }
+        } else {
+            $browser['browser'] = '';
+        }
+
+        if (isset($browser['host'])) {
+            if (!is_string($browser['host'])) {
+                throw new InvalidArgumentException;
+            }
+        } else {
+            $browser['host'] = 'localhost';
+        }
+
+        if (isset($browser['port'])) {
+            if (!is_int($browser['port'])) {
+                throw new InvalidArgumentException;
+            }
+        } else {
+            $browser['port'] = 4444;
+        }
+
+        if (isset($browser['timeout'])) {
+            if (!is_int($browser['timeout'])) {
+                throw new InvalidArgumentException;
+            }
+        } else {
+            $browser['timeout'] = 30000;
+        }
+
+        $driver = new Vps_Test_SeleniumTestCase_Driver;
+        $driver->setName($browser['name']);
+        $driver->setBrowser($browser['browser']);
+        $driver->setHost($browser['host']);
+        $driver->setPort($browser['port']);
+        $driver->setTimeout($browser['timeout']);
+        $driver->setTestCase($this);
+        $driver->setTestId($this->testId);
+
+        $this->drivers[] = $driver;
+
+        return $driver;
+    }
 }
