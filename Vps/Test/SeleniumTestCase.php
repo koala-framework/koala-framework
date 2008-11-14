@@ -78,6 +78,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         if ($command == 'open') {
             $this->deleteCookie(session_name(), '/');
             $this->createCookie(session_name().'='.session_id(), 'path=/');
+            $this->deleteCookie('unitTest', '/');
             $this->createCookie('unitTest=1', 'path=/');
             Zend_Session::writeClose();
         }
@@ -86,11 +87,12 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             $this->waitForPageToLoad();
         }
         if ($command == 'waitForPageToLoad') {
-            if ($this->isElementPresent('id=exception')) {
-                $exception = $this->getText('id=exception');
+            if ($this->isElementPresent('css=#exception')) {
+                $exception = $this->getText('css=#exception');
                 $exception = unserialize(base64_decode($exception));
                 throw $exception;
             }
+            $this->assertTextNotPresent('Fehler');
             $this->assertTextNotPresent('Exception');
             $this->assertTextNotPresent('Fatal error');
             $this->assertTextNotPresent('warning');
