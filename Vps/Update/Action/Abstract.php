@@ -13,7 +13,15 @@ abstract class Vps_Update_Action_Abstract
     {
     }
 
+    public function checkSettings()
+    {
+    }
+
     public function preUpdate()
+    {
+    }
+
+    public function postUpdate()
     {
     }
 

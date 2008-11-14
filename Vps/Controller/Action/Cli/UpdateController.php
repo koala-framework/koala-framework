@@ -27,15 +27,21 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         }
 
         if (!file_exists('application/update')) {
-            file_put_contents('application/update', $currentRevision);
+            file_put_contents('application/update', serialize(array('start' => $currentRevision)));
             echo "No application/update revision found, wrote current revision ($currentRevision)\n";
             exit;
         }
-        $updateRevision = (int)file_get_contents('application/update');
+        $updateRevision = file_get_contents('application/update');
+        if (is_numeric($updateRevision)) {
+            $updateRevision = array('start' => $updateRevision);
+        } else {
+            $updateRevision = unserialize($updateRevision);
+        }
         if (!$updateRevision) {
             throw new Vps_ClientException("Invalid application/update revision");
         }
-        $from = $updateRevision;
+        if (!isset($updateRevision['done'])) $updateRevision['done'] = array();
+        $from = $updateRevision['start'];
         $to = $currentRevision;
         if ($this->_getParam('current')) {
             $to++;
@@ -44,25 +50,60 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             echo "Already up-to-date\n\n";
         } else {
             echo "Looking for update-scripts from revistion $from to {$to}...";
-            try {
-                $updates = Vps_Update::getUpdates($from, $to);
-                echo " found ".count($updates)."\n";
-                foreach ($updates as $update) {
-                    echo "executing ".get_class($update)."...\n";
-                    $res = $update->update();
-                    if ($res) {
-                        print_r($res);
+            $updates = Vps_Update::getUpdates($from, $to);
+            foreach ($updates as $k=>$u) {
+                if (in_array($u->getRevision(), $updateRevision['done'])) {
+                    if ($this->_getParam('current') && $u->getRevision() == $to-1) continue;
+                    unset($updates[$k]);
+                }
+            }
+            echo " found ".count($updates)."\n\n";
+            if ($this->_executeUpdate($updates, 'checkSettings')) {
+                Vps_Controller_Action_Cli_ClearCacheController::clearCache();
+                $this->_executeUpdate($updates, 'preUpdate');
+                $this->_executeUpdate($updates, 'update');
+                Vps_Controller_Action_Cli_ClearCacheController::clearCache();
+                $this->_executeUpdate($updates, 'postUpdate');
+                Vps_Controller_Action_Cli_ClearCacheController::clearCache();
+                echo "\ncleared cache";
+                echo "\n\033[32mupdate finished\033[0m\n";
+                foreach ($updates as $k=>$u) {
+                    if (!in_array($u->getRevision(), $updateRevision['done'])) {
+                        $updateRevision['done'][] = $u->getRevision();
                     }
                 }
-                echo "\033[32msucessfully updated\033[37m\n";
-            } catch (Vps_ClientException $e) {
-                echo "\033[31mError:\033[37m\n";
-                echo $e->getMessage()."\n";
+                file_put_contents('application/update', serialize($updateRevision));
+            } else {
+                echo "\nupdate stopped\n";
             }
-            file_put_contents('application/update', $currentRevision);
         }
 
-        $this->_forward('index', 'clear-cache');
         $this->_helper->viewRenderer->setNoRender(true);
+    }
+
+    private function _executeUpdate($updates, $method)
+    {
+        $ret = true;
+        foreach ($updates as $update) {
+            if ($method != 'checkSettings') echo "executing $method ".get_class($update)."... ";
+            $e = false;
+            try {
+                $res = $update->$method();
+            } catch (Vps_ClientException $e) {
+                if ($method == 'checkSettings') {
+                    echo get_class($update);
+                }
+                echo "\n\033[31mError:\033[0m\n";
+                echo $e->getMessage()."\n\n";
+                $ret = false;
+            }
+            if (!$e) {
+                if ($method != 'checkSettings') echo "\033[32 OK \033[0m\n";
+                if ($res) {
+                    print_r($res);
+                }
+            }
+        }
+        return $ret;
     }
 }
