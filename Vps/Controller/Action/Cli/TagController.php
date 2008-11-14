@@ -100,12 +100,21 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
         $branch = $this->_getParam('web-branch');
         $version = $this->_getParam('web-version');
         if ($version) {
+            $dir = tempnam('/tmp', 'webtag');
+            unlink($dir);
+            passthru("svn co --non-recursive ".self::$_svnBase."/$branch/application $dir >/dev/null");
+            if (!file_exists($dir.'/config.ini')) {
+                throw new Vps_ClientException("Can't change web-version, config.ini not found");
+            }
+            $c = file_get_contents($dir.'/config.ini');
+            $c = preg_replace("#application.version = [^\n]+#", "application.version = $version", $c);
+            file_put_contents($dir.'/config.ini', $c);
+            passthru("svn ci $dir/config.ini -m \"version++\" >/dev/null");
+            passthru("rm -rf $dir >/dev/null");
             preg_match("#trunk/vps-projekte/(.*)\n#", `svn info`, $m);
             $this->_createTag($branch, $version, $m[1]);
         }
-
-
-        exit();
+        $this->_helper->viewRenderer->setNoRender(true);
     }
 
     private function _createTag($branch, $version, $project)
