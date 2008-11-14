@@ -30,7 +30,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if (file_exists("/var/backups/vpsimport/")) {
             $p = "/var/backups/vpsimport/";
         } else {
-            $p = getcwd().'/../backup';
+            $p = getcwd().'/../backup/';
             if (!file_exists($p)) mkdir($p);
         }
         $p .= date("Y-m-d_H:i:s_U")."_{$dbConfig->dbname}.sql";
