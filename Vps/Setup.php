@@ -324,7 +324,8 @@ class Vps_Setup
             return 'dev';
         } else if (substr($host, 0, 5)=='test.' ||
                    substr($path, 0, 17) == '/docs/vpcms/test.' ||
-                   substr($path, 0, 21) == '/docs/vpcms/www.test.') {
+                   substr($path, 0, 21) == '/docs/vpcms/www.test.' ||
+                   substr($path, 0, 26) == '/var/www/html/vpcms/test.') {
             return 'test';
         } else if (substr($host, 0, 8)=='preview.') {
             return 'preview';
