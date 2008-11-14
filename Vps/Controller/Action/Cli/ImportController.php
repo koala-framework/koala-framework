@@ -22,7 +22,10 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
 
         echo "kopiere uploads...\n";
         if ($ownConfig->server->host == $config->server->host) {
-            $this->_systemCheckRet("rsync --progress --delete --update --exclude=cache/ --recursive {$ownConfig->uploads}/ {$config->uploads}/");
+            if ($ownConfig->uploads == $config->uploads) {
+                throw new Vps_ClientException("Uplodas-Pfade für beide Server sind gleich!");
+            }
+            $this->_systemCheckRet("rsync --progress --delete --update --exclude=cache/ --recursive {$config->uploads}/ {$ownConfig->uploads}/");
         } else {
             $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/', $config->uploads);
         }
