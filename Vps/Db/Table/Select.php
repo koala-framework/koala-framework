@@ -78,6 +78,10 @@ class Vps_Db_Table_Select extends Zend_Db_Table_Select
                         $searchFields = array_merge($searchFields, $selectInfo['cols']);
                         foreach ($searchFields as $sfk => $sfv) {
                             if ($sfv == '*') unset($searchFields[$sfk]);
+                            if (substr($sfv, 0, 1) == '!') {
+                                unset($searchFields[$sfk]);
+                                unset($searchFields[array_search(substr($sfv, 1), $searchFields)]);
+                            }
                         }
                     }
 
