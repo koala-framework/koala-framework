@@ -50,6 +50,6 @@ class Vps_Controller_Action_Cli_TextComponentsController extends Vps_Controller_
         echo "added: $addedCount\n";
         echo "deleted: $deletedCount\n";
         echo 'done in '.(microtime(true)-$start).'sec';
-        exit;
+        $this->_helper->viewRenderer->setNoRender(true);
     }
 }

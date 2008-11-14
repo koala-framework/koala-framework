@@ -16,7 +16,7 @@ class Vps_Controller_Action_Cli_HlpParseController extends Vps_Controller_Action
         $maskedTexts += $this->_findMaskedTexts('./application', true);
         $this->_createXmlFromTexts($maskedTexts, VPS_PATH . '/hlp.xml', $vpsLanguages);
         echo "Parsing durchgelaufen\n";
-        exit();
+        $this->_helper->viewRenderer->setNoRender(true);
     }
 
     protected function _findMaskedTexts($directory, $isVps = false)

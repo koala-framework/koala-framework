@@ -9,6 +9,9 @@ class Vps_Controller_Action_Cli_Abstract extends Vps_Controller_Action
 
         Zend_Registry::get('config')->debug->errormail = false;
 
+        $help = call_user_func(array(get_class($this), 'getHelp'));
+        if (!$help) throw new Vps_ClientException("This command is not avaliable");
+
         //php sux
         $options = call_user_func(array(get_class($this), 'getHelpOptions'));
 

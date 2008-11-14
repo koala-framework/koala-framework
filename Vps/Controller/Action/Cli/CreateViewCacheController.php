@@ -16,7 +16,7 @@ class Vps_Controller_Action_Cli_CreateViewCacheController extends Vps_Controller
         $this->_doIt(Vps_Component_Data_Root::getInstance()->getPageByPath('/forum'));
 //         $this->_doIt(Vps_Component_Data_Root::getInstance()->getPageByPath('/forum/16_stell_dich_vor/39_bin_auch_neu_hier/82/bearbeiten'));
         echo "====>done\n";
-        exit;
+        $this->_helper->viewRenderer->setNoRender(true);
     }
 
     private function _doIt($component)

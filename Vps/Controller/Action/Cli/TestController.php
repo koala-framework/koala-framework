@@ -56,7 +56,8 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         }
         return $ret;
     }
-    public function indexAction()
+
+    public static function initForTests()
     {
         Zend_Session::start();
         //damit der webserver auf die session auch zugriff hat
@@ -70,6 +71,11 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         Zend_Registry::set('db', null);
         set_time_limit(0);
         Vps_Benchmark::disable();
+    }
+
+    public function indexAction()
+    {
+        self::initForTests();
 
         $arguments = array();
         $arguments['colors'] = true;
