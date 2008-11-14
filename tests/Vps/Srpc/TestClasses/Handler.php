@@ -9,4 +9,9 @@ class Vps_Srpc_TestClasses_Handler
             return array('id' => 3, 'name' => 'Hans');
         }
     }
+
+    public function getPrimaryKey()
+    {
+        return 'my_id';
+    }
 }

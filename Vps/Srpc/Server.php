@@ -41,32 +41,37 @@ class Vps_Srpc_Server
 
     public function handle($method = null, $arguments = null)
     {
-        if (is_null($method) && isset($_REQUEST['method']) && !is_null($_REQUEST['method'])) {
-            $method = $_REQUEST['method'];
-        }
-        if (is_null($arguments) && isset($_REQUEST['arguments']) && !is_null($_REQUEST['arguments'])) {
-            $arguments = $_REQUEST['arguments'];
+        try {
+            if (is_null($method) && isset($_REQUEST['method']) && !is_null($_REQUEST['method'])) {
+                $method = $_REQUEST['method'];
+            }
+            if (is_null($arguments) && isset($_REQUEST['arguments']) && !is_null($_REQUEST['arguments'])) {
+                $arguments = unserialize($_REQUEST['arguments']);
+            }
+            if (is_null($arguments)) {
+                $arguments = array();
+            }
+
+            // throw some exceptions
+            if (!$this->_handler) {
+                throw new Vps_Srpc_Exception("A handler has to be set when using 'Vpc_Srpc_Server'");
+            }
+            if (is_null($method)) {
+                throw new Vps_Srpc_Exception("'method' must be set as first argument, or exists as key in ".'$_REQUEST');
+            }
+            if (!is_null($method) && !is_string($method)) {
+                throw new Vps_Srpc_Exception("'method' is expected to be a string");
+            }
+            if (!is_null($arguments) && !is_array($arguments)) {
+                throw new Vps_Srpc_Exception("'arguments' is expected to be an array");
+            }
+
+            $result = call_user_func_array(array($this->getHandler(), $method), $arguments);
+            $result = serialize($result);
+        } catch (Vps_Srpc_Exception $e) {
+            $result = serialize($e);
         }
 
-        // throw some exceptions
-        if (!$this->_handler) {
-            throw new Vps_Exception("A handler has to be set when using 'Vpc_Srpc_Server'");
-        }
-        if (is_null($method)) {
-            throw new Vps_Exception("'method' must be set as first argument, or exists as key in ".'$_REQUEST');
-        }
-        if (!is_null($method) && !is_string($method)) {
-            throw new Vps_Exception("'method' is expected to be a string");
-        }
-        if (is_null($arguments)) {
-            throw new Vps_Exception("'arguments' must be set as first argument, or exists as key in ".'$_REQUEST');
-        }
-        if (!is_null($arguments) && !is_array($arguments)) {
-            throw new Vps_Exception("'arguments' is expected to be an array");
-        }
-
-        $result = call_user_func_array(array($this->getHandler(), $method), $arguments);
-        $result = serialize($result);
         if (!$this->_returnResponse) {
             echo $result;
             return;

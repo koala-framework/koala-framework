@@ -18,7 +18,7 @@ class Vps_Srpc_Handler_Model
     public function getModel()
     {
         if (!$this->_model) {
-            throw new Vps_Exception("'model' has not been set for '".get_class($this)."'. Either set it in _init() or use the config option 'model'.");
+            throw new Vps_Srpc_Exception("'model' has not been set for '".get_class($this)."'. Either set it in _init() or use the config option 'model'.");
         }
         return $this->_model;
     }
