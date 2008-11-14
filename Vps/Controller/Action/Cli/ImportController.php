@@ -4,9 +4,7 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
     public function indexAction()
     {
         $ownConfig = Vps_Registry::get('config');
-        if ($ownConfig->server->host != 'vivid') {
-            throw new Vps_ClientException("Import is only possible on vivid server");
-        }
+
         $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
         $dbConfig = $dbConfig->web;
         $mysqlLocalOptions = "--host={$dbConfig->host} --user={$dbConfig->username} --password={$dbConfig->password} ";
