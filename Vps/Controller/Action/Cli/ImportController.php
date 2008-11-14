@@ -27,7 +27,13 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
             $this->_systemSshVps('copy-uploads '.$ownConfig->uploads.'/', $config->uploads);
         }
 
-        $p = "/var/backups/vpsimport/".date("Y-m-d_H:i:s_U")."_{$dbConfig->dbname}.sql";
+        if (file_exists("/var/backups/vpsimport/")) {
+            $p = "/var/backups/vpsimport/";
+        } else {
+            $p = getcwd().'/../backup';
+            if (!file_exists($p)) mkdir($p);
+        }
+        $p .= date("Y-m-d_H:i:s_U")."_{$dbConfig->dbname}.sql";
         echo "erstelle datenbank-backup in $p...\n";
         $this->_systemCheckRet("mysqldump $mysqlLocalOptions {$dbConfig->dbname} > $p");
 
