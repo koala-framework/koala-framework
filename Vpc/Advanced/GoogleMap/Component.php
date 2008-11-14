@@ -11,7 +11,7 @@ class Vpc_Advanced_GoogleMap_Component extends Vpc_Advanced_GoogleMapView_Compon
                 'height' => 300
             ),
         ));
-        $ret['assetsAdmin']['dep'][] = 'VpsGoolgeMapField';
+        $ret['assetsAdmin']['dep'][] = 'VpsGoogleMapField';
         $ret['generators']['child']['component']['text'] = 'Vpc_Basic_Text_Component';
         $ret['placeholder']['noCoordinates'] = trlVps('coordinates not entered');
         return $ret;
