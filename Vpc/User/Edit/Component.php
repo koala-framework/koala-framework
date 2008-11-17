@@ -7,6 +7,7 @@ class Vpc_User_Edit_Component extends Vpc_Abstract_Composite_Component
         $ret['generators']['child']['component']['form'] = 'Vpc_User_Edit_Form_Component';
         $ret['forms'] = 'all';
         $ret['cssClass'] = 'webStandard';
+        $ret['viewCache'] = false;
         return $ret;
     }
     
