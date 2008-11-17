@@ -22,7 +22,7 @@
         <?php } ?>
         <?php if ($this->debug || isset($_COOKIE['unitTest'])) { ?>
         <? try {
-            echo '<p id="exception">'.base64_encode(serialize($this->exception)).'</p>';
+            echo '<p id="exception" style="display:none">'.base64_encode(serialize($this->exception)).'</p>';
         } catch (Exception $e) {} ?>
         <? } ?>
     </body>
