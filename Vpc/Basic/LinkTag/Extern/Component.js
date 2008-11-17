@@ -1,4 +1,4 @@
-Ext.onReady(function()
+Vps.onContentReady(function()
 {
     // links holen und durchgehen
     var lnks = Ext.query('a');

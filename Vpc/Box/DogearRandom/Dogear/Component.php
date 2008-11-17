@@ -13,7 +13,7 @@ class Vpc_Box_DogearRandom_Dogear_Component extends Vpc_Abstract_Composite_Compo
 
         $ret['assets']['dep'][] = 'ExtCore';
         $ret['assets']['dep'][] = 'SwfObject';
-        $ret['assets']['files'][] = '/assets/vps/Vpc/Box/DogearRandom/Dogear/Component.js';
+        $ret['assets']['files'][] = 'vps/Vpc/Box/DogearRandom/Dogear/Component.js';
         return $ret;
     }
 

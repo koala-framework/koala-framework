@@ -61,7 +61,7 @@ Vpc.Box.Dogear.init = function() {
     }
 };
 
-Ext.onReady(function() {
+Vps.onContentReady(function() {
     Vpc.Box.Dogear.smallDiv = document.getElementById('dogearSmall');
     Vpc.Box.Dogear.bigDiv = document.getElementById('dogearBig');
 
