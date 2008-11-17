@@ -23,10 +23,11 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
         $return['infotext'] = $this->_getRow()->infotext;
 
         $fileRow = $this->_getFileRow();
-        if (!$this->_getSetting('showFilesize')) {
-            $return['filesize'] = null;
+        $parentRow = $fileRow->getParentRow('File');
+        if ($this->_getSetting('showFilesize') && $parentRow) {
+            $return['filesize'] = $parentRow->getFileSize();
         } else {
-            $return['filesize'] = $fileRow->getParentRow('File')->getFileSize();
+            $return['filesize'] = null;
         }
 
         $icon = $this->getIcon();
@@ -50,7 +51,9 @@ class Vpc_Basic_Download_Component extends Vpc_Abstract_Composite_Component
 
     public function getIcon()
     {
-        $extension = $this->_getFileRow()->getParentRow('File')->extension;
+        $fileRow = $this->_getFileRow()->getParentRow('File');
+        if (!$fileRow) return 'page_white_get';
+        $extension = $fileRow->extension;
         switch ($extension) {
             case 'pdf':
                 return 'page_white_acrobat';

@@ -3,7 +3,7 @@ class Vpc_Composite_LinksImages_Controller extends Vpc_Abstract_List_Controller
 {
     protected function _initColumns()
     {
-        $class = Vpc_Abstract::getChildComponentClass($this->class, 'child');
+        $class = Vpc_Abstract::getChildComponentClass($this->_getParam('class'), 'child');
         $classes = Vpc_Abstract::getChildComponentClasses($class, 'child');
 
 

@@ -3,7 +3,7 @@ class Vpc_Composite_Images_Controller extends Vpc_Abstract_List_Controller
 {
     protected function _initColumns()
     {
-        $class = Vpc_Abstract::getChildComponentClass($this->class, 'child');
+        $class = Vpc_Abstract::getChildComponentClass($this->_getParam('class'), 'child');
 
         if (Vpc_Abstract::getSetting($class, 'editComment')) {
             $data = new Vps_Data_Vpc_Table(
