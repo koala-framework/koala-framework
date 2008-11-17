@@ -96,7 +96,32 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         );
     }
 
+    public function backupDbAction()
+    {
+        $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
+        $dbConfig = $dbConfig->web;
+
+        if (file_exists("/var/backups/vpsimport/")) {
+            $dumpname = "/var/backups/vpsimport/";
+        } else {
+            $dumpname = getcwd().'/../backup/';
+            if (!file_exists($dumpname)) mkdir($dumpname);
+        }
+        $dumpname .= date("Y-m-d_H:i:s_U")."_{$dbConfig->dbname}.sql";
+        echo "erstelle backup...\n";
+        $this->_createDump($dumpname);
+        echo "\n";
+        $this->_helper->viewRenderer->setNoRender(true);
+    }
+
     public function createDumpAction()
+    {
+        $dumpname = tempnam('/tmp', 'vpsimport');
+        $this->_createDump($dumpname);
+        $this->_helper->viewRenderer->setNoRender(true);
+    }
+
+    private function _createDump($dumpname)
     {
         $dbConfig = new Zend_Config_Ini('application/config.db.ini', 'database');
         $dbConfig = $dbConfig->web;
@@ -107,8 +132,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         if ($config->server->host == 'vivid-planet.com') {
             $mysqlDir = '/usr/local/mysql/bin/';
         }
-
-        $dumpname = tempnam('/tmp', 'vpsimport');
 
         $tables = Zend_Registry::get('db')->fetchCol('SHOW TABLES');
 
@@ -121,8 +144,6 @@ class Vps_Controller_Action_Cli_ImportController extends Vps_Controller_Action_C
         $this->_systemCheckRet("bzip2 $dumpname");
 
         echo $dumpname.".bz2";
-
-        $this->_helper->viewRenderer->setNoRender(true);
     }
 
     public function getUpdateRevisionAction()
