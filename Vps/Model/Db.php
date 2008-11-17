@@ -51,13 +51,24 @@ class Vps_Model_Db extends Vps_Model_Abstract
 
     public function afterInsert($row)
     {
-        $id = $row->{$this->getPrimaryKey()};
+        $id = $this->_getUniqueId($row);
         $this->_rows[$id] = $row;
+    }
+
+    protected function _getUniqueId($row)
+    {
+        $keys = $this->getPrimaryKey();
+        if (!is_array($keys)) $keys = array($keys);
+        $ids = array();
+        foreach ($keys as $key) {
+            $ids[] = $row->$key;
+        }
+        return implode('_', $ids);
     }
 
     public function getRowByProxiedRow($proxiedRow)
     {
-        $id = $proxiedRow->{$this->getPrimaryKey()};
+        $id = $this->_getUniqueId($proxiedRow);
         if (!isset($this->_rows[$id])) {
             $this->_rows[$id] = new $this->_rowClass(array(
                 'row' => $proxiedRow,

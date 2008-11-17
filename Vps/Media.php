@@ -64,7 +64,7 @@ class Vps_Media
     public static function getOutput($class, $id, $type)
     {
         if (!is_instance_of($class, 'Vps_Media_Output_Interface')) {
-            throw new Vps_Exception("Invalid class: {$params['class']}, does not implement Vps_Media_Output_Interface");
+            throw new Vps_Exception("Invalid class: $class, does not implement Vps_Media_Output_Interface");
         }
         $cacheId = $class.'_'.str_replace('-', '__', $id).'_'.$type;
         if (!$output = self::getOutputCache()->load($cacheId)) {
