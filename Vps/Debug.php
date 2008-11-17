@@ -33,7 +33,14 @@ class Vps_Debug
         }
 
         if (!headers_sent()) header($header);
-        echo $view->render($template);
+        try {
+            echo $view->render($template);
+        } catch (Exception $e) {
+            echo '<pre>';
+            print_r($e->__toString());
+            echo '</pre>';
+            die();
+        }
     }
 
     public static function setView(Vps_View $view)
