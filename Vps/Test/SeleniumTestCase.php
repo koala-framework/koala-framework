@@ -60,33 +60,19 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
         }
     }
 
-    protected function _reloadSession()
-    {
-        $data = file_get_contents(session_save_path().'/sess_'.Zend_Session::getId());
-        $vars = preg_split('/([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff^|]*)\|/',
-                $data, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-        $data = array();
-        for($i=0; isset($vars[$i]); $i++) {
-            $data[$vars[$i++]]
-                = unserialize($vars[$i]);
-        }
-        $_SESSION = $data;
-    }
-
     public function __call($command, $arguments)
     {
         if ($command == 'open') {
-            $this->deleteCookie(session_name(), '/');
-            $this->createCookie(session_name().'='.session_id(), 'path=/');
-            $this->deleteCookie('unitTest', '/');
+            $this->deleteCookie('unitTest', 'path=/');
             $this->createCookie('unitTest=1', 'path=/');
-            Zend_Session::writeClose();
         }
         $ret = parent::__call($command, $arguments);
-        if ($command == 'open') {
-            $this->waitForPageToLoad();
-        }
-        if ($command == 'waitForPageToLoad') {
+        return $ret;
+    }
+
+    protected function defaultAssertions($command)
+    {
+        if ($command == 'waitForPageToLoad' || $command == 'open') {
             if ($this->isElementPresent('css=#exception')) {
                 $exception = $this->getText('css=#exception');
                 $exception = unserialize(base64_decode($exception));
@@ -95,11 +81,10 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             $this->assertTextNotPresent('Fehler');
             $this->assertTextNotPresent('Exception');
             $this->assertTextNotPresent('Fatal error');
+            $this->assertTextNotPresent('Parse error');
             $this->assertTextNotPresent('warning');
             $this->assertTextNotPresent('notice');
         }
-        
-        return $ret;
     }
 
     public function openVpc($url)
