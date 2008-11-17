@@ -135,7 +135,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
     public function login($identity, $credential)
     {
         if ($credential == 'test' && Vps_Registry::get('config')->isTestServer) {
-            $row = $this->fetchRowByEmail();
+            $row = $this->fetchRowByEmail($identity);
             if ($row) {
                 return array(
                     'zendAuthResultCode' => Zend_Auth_Result::SUCCESS,
