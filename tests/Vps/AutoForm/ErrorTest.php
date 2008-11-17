@@ -1,6 +1,7 @@
 <?php
 /**
  * @group selenium
+ * @group AutoForm
  */
 class Vps_AutoForm_ErrorTest extends Vps_Test_SeleniumTestCase
 {
@@ -12,17 +13,22 @@ class Vps_AutoForm_ErrorTest extends Vps_Test_SeleniumTestCase
 
     public function testAutoFormAdd()
     {
-        $model = Vps_Model_Abstract::getInstance('Vps_AutoForm_TestModel');
+        $this->open('/vps/test/vps_auto-form_test/get-row-count');
+        $count = $this->getText('//body');
+        $this->assertEquals(1, $count);
+
         $this->open('/vps/test/vps_auto-form_test');
         $this->waitForConnections();
         $this->type("//input[@name='foo']", "newValue");
         $this->click("//button[text()='".trlVps('Save')."']");
         $this->waitForConnections();
         $this->click("//button[text()='".trlVps('Retry')."']");
+        sleep(1);
 
-        $model->reloadSession();
-        $rows = $model->countRows();
-        $this->assertEquals(2, $rows);
+
+        $this->open('/vps/test/vps_auto-form_test/get-row-count');
+        $count = $this->getText('//body');
+        $this->assertEquals(2, $count);
     }
 
     protected function defaultAssertions($action)
