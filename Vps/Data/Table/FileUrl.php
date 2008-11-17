@@ -1,22 +1,17 @@
 <?php
 class Vps_Data_Table_FileUrl extends Vps_Data_Abstract
 {
-    protected $_rule;
     protected $_type;
-    protected $_filename;
-    protected $_addRandom;
+    protected $_rule;
 
-    public function __construct($rule = null, $type = 'default', $filename = null, $addRandom = false)
+    public function __construct($rule, $type = 'default')
     {
         $this->_rule = $rule;
         $this->_type = $type;
-        $this->_filename = $filename;
-        $this->_addRandom = $addRandom;
     }
 
     public function load($row)
     {
-        return $row->getRow()->getFileUrl($this->_rule, $this->_type,
-                                $this->_filename, $this->_addRandom);
+        return Vps_Media::getUrl(get_class($row->getModel()), $row->id, $this->_type, $row->getParentRow($this->_rule));
     }
 }
