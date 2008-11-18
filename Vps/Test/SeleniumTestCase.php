@@ -105,7 +105,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     {
         $this->waitForCondition('selenium.browserbot.getCurrentWindow().Vps.Connection.runningRequests==0');
     }
-    
+
     //kopiert von PhpUnit, nur um eigenen Driver verwenden zu können
     protected function getDriver(array $browser)
     {
