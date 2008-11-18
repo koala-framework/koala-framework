@@ -63,6 +63,6 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
          }
         foo();");
        // $this->getText(//)
-        //$this->click("////button[text()='Abort']");
+        //$this->click("////button[text()='Abort']");*/
     }
 }
