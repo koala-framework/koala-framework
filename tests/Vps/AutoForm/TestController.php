@@ -20,7 +20,8 @@ class Vps_AutoForm_TestController extends Vps_Controller_Action_Auto_Form
         $sessionFormId = new Zend_Session_Namespace('test_avoid_reinsert_id');
         if ($sessionFormId->count == 0) {
             $sessionFormId->count++;
-            throw new Vps_Exception("error");
+            $this->view->exception = "error";
+            $this->view->success = false;
         }
     }
 
