@@ -5,6 +5,7 @@ Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
     id: 'blub',
     initComponent: function()
     {
+		Vps.Debug.displayErrors = true;
         this.buttons = [];
         this.buttons.push(
             new Ext.Button({
