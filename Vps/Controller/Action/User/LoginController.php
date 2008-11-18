@@ -32,7 +32,7 @@ class Vps_Controller_Action_User_LoginController extends Vps_Controller_Action
             //wenn tabelle nicht existiert fehler abfangen
             $row = null;
         }
-        if ($row->getParentRow('LoginImage')) {
+        if ($row && $row->getParentRow('LoginImage')) {
             $this->view->image = Vps_Media::getUrlByRow(
                 $row, 'LoginImage'
             );

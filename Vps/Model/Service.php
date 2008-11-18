@@ -3,22 +3,34 @@ class Vps_Model_Service extends Vps_Model_Abstract
 {
     protected $_rowClass = 'Vps_Model_Service_Row';
     protected $_client;
+    protected $_serverUrl;
     protected $_data = array();
 
     protected $_primaryKey;
 
     public function __construct(array $config = array())
     {
-        if (empty($config['client'])) {
-            if (empty($config['serverUrl'])) {
-                throw new Vps_Exception("Either config option 'client' or 'serverUrl' must be set when using '".get_class($this)."'");
+        if (!empty($config['client'])) {
+            $this->_client = $config['client'];
+            if (!($this->_client instanceof Vps_Srpc_Client)) {
             }
-            $config['client'] = new Vps_Srpc_Client(array('serverUrl' => $config['serverUrl']));
+        } else if (!empty($config['serverUrl'])) {
+            $this->_client = new Vps_Srpc_Client(array('serverUrl' => $config['serverUrl']));
+        } else if ($this->_serverUrl) {
+            $this->_client = new Vps_Srpc_Client(array('serverUrl' => $this->_serverUrl));
         }
-        if (!($config['client'] instanceof Vps_Srpc_Client)) {
+
+        $this->_init();
+
+        if (!$this->_client) {
+            throw new Vps_Exception("No client or serverUrl has been set in '".get_class($this)."'");
+        } else if (!($this->_client instanceof Vps_Srpc_Client)) {
             throw new Vps_Exception("Client must be of type 'Vps_Srpc_Client' in '".get_class($this)."'");
         }
-        $this->_client = $config['client'];
+    }
+
+    protected function _init()
+    {
     }
 
     public function update(Vps_Model_Row_Interface $row, $rowData)

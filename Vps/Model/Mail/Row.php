@@ -71,7 +71,6 @@ class Vps_Model_Mail_Row extends Vps_Model_Proxy_Row
     {
         // checkIsSpam brauch eine ID, deshalb im afterInsert
         $this->is_spam = $this->_checkIsSpam();
-
         if (!$this->is_spam) {
             $this->sendMail();
             $this->mail_sent = 1;
