@@ -5,6 +5,17 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
     protected $_permissions = array('save' => true, 'add' => true);
     protected $_tableName = 'Vps_Dao_Pages';
 
+    public function _isAllowed($user)
+    {
+        $c = Vps_Component_Data_Root::getInstance()
+            ->getComponentByDbId($this->_getParam('id'), array('ignoreVisible'=>true));
+        if (!$c) {
+            throw new Vps_Exception("Can't find component to check permissions");
+        }
+        return Vps_Registry::get('acl')->getComponentAcl()
+            ->isAllowed($this->_getAuthData(), $c);
+    }
+
     protected function _initFields()
     {
         $types = array();
@@ -27,6 +38,7 @@ class Vps_Controller_Action_Component_PageEditController extends Vps_Controller_
             ->setValues($types)
             ->setAllowBlank(false);
         $fields->add(new Vps_Form_Field_Checkbox('hide',  trlVps('Hide in Menu')));
+        $fields->add(new Vps_Form_Field_TextField('tags', trlVps('Tags')));
     }
 
     protected function _beforeInsert(Vps_Model_Row_Interface $row)

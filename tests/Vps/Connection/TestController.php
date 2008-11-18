@@ -7,10 +7,6 @@ class Vps_Connection_TestController extends Vps_Controller_Action
             'assetsType' => 'AdminTest'
         ), 'Vps.Test.Viewport');
     }
-    protected function _getResourceName()
-    {
-        return 'vps_test';
-    }
 
     public function jsonTimeoutAction() {
         sleep(50);

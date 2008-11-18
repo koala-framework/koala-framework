@@ -1,6 +1,14 @@
 <?php
 class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
 {
+    protected $_resourceName;
+
+    protected function _init()
+    {
+        parent::_init();
+        $this->_resourceName = trlVps('News');
+    }
+
     public function getExtConfig()
     {
         $detail = Vpc_Abstract::getChildComponentClass($this->_class, 'detail');
@@ -43,6 +51,28 @@ class Vpc_News_Directory_Admin extends Vpc_Directories_Item_Directory_Admin
   `expiry_date` date default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
+        }
+    }
+
+    public function addResources(Vps_Acl $acl)
+    {
+        parent::addResources($acl);
+        $components = Vps_Component_Data_Root::getInstance()
+                ->getComponentsBySameClass($this->_class, array('ignoreVisible'=>true));
+        if (count($components) > 1) {
+            $acl->add(new Vps_Acl_Resource_MenuDropdown('vpc_news',
+                        array('text'=>$this->_resourceName, 'icon'=>'newspaper.png')), 'vps_component_root');
+            foreach ($components as $c) {
+                $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
+                        array('text'=>$c->getTitle(), 'icon'=>'newspaper.png'),
+                        '/admin/component/edit/'.$c->componentClass.'?componentId='.$c->dbId), 'vpc_news');
+            }
+        } else {
+            $c = $components[0];
+            $acl->add(new Vps_Acl_Resource_Component_MenuUrl($c,
+                    array('text'=>$this->_resourceName, 'icon'=>'newspaper.png'),
+                    '/admin/component/edit/'.$c->componentClass.'?componentId='.$c->dbId), 'vps_component_root');
+
         }
     }
 }

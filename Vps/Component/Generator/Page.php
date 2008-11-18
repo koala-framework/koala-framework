@@ -27,7 +27,7 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         } else {
             $select = new Zend_Db_Select(Vps_Registry::get('db'));
             $select->from('vps_pages', array('id', 'parent_id', 'component', 'visible',
-                                        'filename', 'hide', 'type', 'name', 'is_home'));
+                                        'filename', 'hide', 'type', 'name', 'is_home', 'tags'));
             $select->order('pos');
             $rows = $select->query()->fetchAll();
         }
@@ -65,7 +65,15 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         $pageIds = array();
         if ($id = $select->getPart(Vps_Component_Select::WHERE_ID)) {
             if (isset($this->_pageData[$id])) {
-                $pageIds[] = $id;
+                if ($select->hasPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES)) {
+                    $selectClasses = $select->getPart(Vps_Component_Select::WHERE_COMPONENT_CLASSES);
+                    $class = $this->_settings['component'][$this->_pageData[$id]['component']];
+                    if (in_array($class, $selectClasses)) {
+                        $pageIds[] = $id;
+                    }
+                } else {
+                    $pageIds[] = $id;
+                }
             }
         } else if ($select->getPart(Vps_Component_Select::WHERE_HOME)) {
             if ($this->_pageHome) {
@@ -181,6 +189,11 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
         $data['isHome'] = $page['is_home'];
         $data['visible'] = $page['visible'];
         $data['type'] = $page['type'];
+        if (isset($page['tags']) && $page['tags']) {
+            $data['tags'] = explode(',', $page['tags']);
+        } else {
+            $data['tags'] = array();
+        }
         return $data;
     }
     protected function _getIdFromRow($id)

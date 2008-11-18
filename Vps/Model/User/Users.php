@@ -222,6 +222,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
 
     public function getAuthedUserRole()
     {
+        if (php_sapi_name() == 'cli') return 'cli';
         $u = $this->getAuthedUser();
         return $u ? $u->role : 'guest';
     }

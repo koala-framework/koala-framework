@@ -20,7 +20,7 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
         }
 
         $acl = $this->_getAcl();
-        $resource = $this->_getResourceName();
+        $resource = $this->getRequest()->getResourceName();
         if ($resource == 'vps_user_changeuser') {
             //spezielle berechtigungsabfrage für Benutzerwechsel
             $role = Zend_Registry::get('userModel')->getAuthedChangedUserRole();
@@ -29,6 +29,40 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             $allowed = $acl->isAllowed('cli', $resource, 'view');
         } else {
             $allowed = $acl->isAllowedUser($this->_getAuthData(), $resource, 'view');
+        }
+        if ($allowed) {
+            if ($resource == 'vps_component') {
+                $a = $this->getRequest()->getActionName();
+                if ($a != 'json-index' && $a != 'index') {
+                    if (!$this->_getParam('componentId')) {
+                        $allowed = false;
+                        foreach (Vps_Registry::get('acl')->getAllResources() as $r) {
+                            if ($r instanceof Vps_Acl_Resource_ComponentClass_Interface) {
+                                if ($this->_getParam('class') == $r->getComponentClass()) {
+                                    $allowed = Vps_Registry::get('acl')->getComponentAcl()
+                                        ->isAllowed($this->_getAuthData(), $this->_getParam('class'));
+                                    break;
+                                }
+                            }
+                        }
+                    } else {
+                        $c = Vps_Component_Data_Root::getInstance()
+                            ->getComponentByDbId($this->_getParam('componentId'), array('ignoreVisible'=>true));
+                        if (!$c) {
+                            throw new Vps_Exception("Can't find component to check permissions");
+                        }
+                        $allowed = Vps_Registry::get('acl')->getComponentAcl()
+                            ->isAllowed($this->_getAuthData(), $c);
+                    }
+                }
+            }
+        }
+        if ($allowed) {
+            if ($this->_getUserRole() == 'cli') {
+                $allowed = $this->_isAllowed('cli');
+            } else {
+                $allowed = $this->_isAllowed($this->_getAuthData());
+            }
         }
 
         if (!$allowed) {
@@ -42,7 +76,12 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
             }
         }
     }
-    
+
+    protected function _isAllowed($user)
+    {
+        return true;
+    }
+
     public function postDispatch()
     {
         if (Zend_Controller_Front::getInstance() instanceof Vps_Controller_Front_Component) {
@@ -50,29 +89,8 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
         }
     }
 
-    protected function _getResourceName()
-    {
-        if (isset($_SERVER['SHELL'])) {
-            $resource = 'vps_cli';
-        } else if ($this->getRequest()->getControllerName() == 'component') {
-            $resource = 'vps_component';
-        } else if ($this->getRequest()->getControllerName() == 'component_test') {
-            $resource = 'vps_test';
-        } else {
-            $resource = strtolower(str_replace(array('Vps_Controller_Action_',
-                                                    'Controller'),
-                                            '', get_class($this)));
-
-            if (substr(get_class($this), 0, 4) == 'Vps_') {
-                $resource = 'vps_'.$resource;
-            }
-        }
-        return $resource;
-    }
-
     protected function _getUserRole()
     {
-        if (php_sapi_name() == 'cli') return 'cli';
         return Zend_Registry::get('userModel')->getAuthedUserRole();
     }
 
@@ -80,7 +98,9 @@ abstract class Vps_Controller_Action extends Zend_Controller_Action
     {
         return Zend_Registry::get('userModel')->getAuthedUser();
     }
-
+    /**
+     * @return Vps_Acl
+     */
     protected function _getAcl()
     {
         return Zend_Registry::get('acl');

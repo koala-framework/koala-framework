@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_Page_SkipRootTest extends PHPUnit_Framework_TestCase
+class Vps_Component_Generator_Page_Test extends PHPUnit_Framework_TestCase
 {
     private $_root;
     public function setUp()
@@ -67,5 +67,14 @@ class Vps_Component_Generator_Page_SkipRootTest extends PHPUnit_Framework_TestCa
         $page = $this->_root->getComponentById('2');
         $this->assertNotNull($page);
         $this->assertEquals($page->url, '/home/foo');
+    }
+    
+    public function testIdAndComponentClassConstraints()
+    {
+        $c = $this->_root->getComponentById(2, array('componentClass'=>'Vpc_Basic_Empty_Component'));
+        $this->assertNotNull($c);
+
+        $c = $this->_root->getComponentById(2, array('componentClass'=>'Vps_Component_Generator_Page_Child'));
+        $this->assertNull($c);
     }
 }
