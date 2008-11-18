@@ -6,17 +6,40 @@ class Vps_Connection_TestController extends Vps_Controller_Action
         $this->view->ext('Vps.Test.ConnectionsError', array(
             'assetsType' => 'AdminTest'
         ), 'Vps.Test.Viewport');
+        $connections_counts = new Zend_Session_Namespace('test_connection_count');
+        $connections_counts->timeouts = 0;
+        $connections_counts->exceptions = 0;
+
+
     }
 
     public function jsonTimeoutAction() {
-        sleep(50);
+        $connections_counts = new Zend_Session_Namespace('test_connection_count');
+        $connections_counts->timeouts++;
+        session_write_close();
+        sleep(2);
     }
 
     public function jsonExceptionAction() {
+        $connections_counts = new Zend_Session_Namespace('test_connection_count');
+        $connections_counts->exceptions++;
         throw new Vps_Exception("test Exceptions");
     }
 
     public function jsonSuccessAction() {
        //do nothing
+    }
+
+    public function getTimeoutsAction() {
+        $connections_counts = new Zend_Session_Namespace('test_connection_count');
+        echo $connections_counts->timeouts;
+        exit;
+
+    }
+
+    public function getExceptionsAction() {
+        $connections_counts = new Zend_Session_Namespace('test_connection_count');
+        echo  $connections_counts->exceptions;
+        exit;
     }
 }

@@ -42,27 +42,39 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
 
     public function testMoreRequests()
     {
-        $this->markTestIncomplete();
 
         $this->open('/vps/test/vps_connection_test');
         $this->click("//button[text()='testC']");
         $this->waitForConnections();
-        // $this->click("//button[text()='Retry']");
-        /*$this->click("dom=function foo() {
-        var ret;
-        Ext.ComponentMgr.all.each(function(c) {
-            if (c instanceof Ext.Window && c.title == 'exceptionError') {
-                c.buttons.each(function (b) {
-                    if (b.text == 'Retry') {
-                        ret = b.el.dom;
-                    }
-                });
-            }
-         });
-         return ret;
-         }
-        foo();");
-       // $this->getText(//)
-        //$this->click("////button[text()='Abort']");*/
+        $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->waitForConnections();
+        $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->waitForConnections();
+        $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->waitForConnections();
+
+        $this->click("//div[contains(text(),'exceptionError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->waitForConnections();
+        $this->click("//div[contains(text(),'exceptionError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->waitForConnections();
+        $this->click("//div[contains(text(),'exceptionError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->waitForConnections();
+        $this->click("//div[contains(text(),'exceptionError')]/../../../..//button[text()='".trlVps("Retry")."']");
+        $this->waitForConnections();
+
+        $this->click("//div[contains(text(),'exceptionError')]/../../../..//button[text()='".trlVps("Abort")."']");
+        $this->waitForConnections();
+
+        $this->click("//div[contains(text(),'timeoutError')]/../../../..//button[text()='".trlVps("Abort")."']");
+        $this->waitForConnections();
+
+        $this->open('/vps/test/vps_connection_test/get-timeouts');
+        $count = $this->getText('//body');
+        $this->assertEquals(4, $count);
+
+        $this->open('/vps/test/vps_connection_test/get-exceptions');
+        $count = $this->getText('//body');
+        $this->assertEquals(5, $count);
+
     }
 }
