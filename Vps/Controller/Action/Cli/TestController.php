@@ -59,6 +59,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
 
     public static function initForTests()
     {
+        ini_set('memory_limit', '256M');
         Zend_Registry::get('config')->debug->settingsCache = false;
         Zend_Registry::get('config')->debug->benchmark = false;
         Zend_Registry::get('config')->debug->querylog = false;
@@ -117,7 +118,6 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             $cfg = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
             Vps_Registry::set('testDomain', $cfg->server->domain);
         }
-        ini_set('memory_limit', '128M');
 
         $suite = new Vps_Test_TestSuite();
         $runner = new PHPUnit_TextUI_TestRunner;
