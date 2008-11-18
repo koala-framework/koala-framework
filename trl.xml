@@ -4361,5 +4361,90 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <de>Profil bearbeiten</de>
 <id>866</id>
 </text>
+<text>
+<en>Retry</en>
+<de>Wiederholen</de>
+<id>867</id>
+</text>
+<text>
+<en>Clear</en>
+<de>leeren</de>
+<id>868</id>
+</text>
+<text>
+<en>Search Location</en>
+<de>Ort suchen</de>
+<id>869</id>
+</text>
+<text>
+<en>Adresses</en>
+<de>Adressen</de>
+<id>870</id>
+</text>
+<text>
+<en>Abort</en>
+<de>Abbrechen</de>
+<id>871</id>
+</text>
+<text>
+<en>Image big</en>
+<de>_</de>
+<id>872</id>
+</text>
+<text>
+<en>Image small</en>
+<de>_</de>
+<id>873</id>
+</text>
+<text>
+<en>Dogear</en>
+<de>_</de>
+<id>874</id>
+</text>
+<text>
+<en>Colors</en>
+<de>_</de>
+<id>875</id>
+</text>
+<text>
+<en>Color small 1</en>
+<de>_</de>
+<id>876</id>
+</text>
+<text>
+<en>Color small 2</en>
+<de>_</de>
+<id>877</id>
+</text>
+<text>
+<en>Color big 1</en>
+<de>_</de>
+<id>878</id>
+</text>
+<text>
+<en>Color big 2</en>
+<de>_</de>
+<id>879</id>
+</text>
+<text>
+<en>Dogears</en>
+<de>_</de>
+<id>880</id>
+</text>
+<text>
+<en>Welcome-Image</en>
+<de>_</de>
+<id>881</id>
+</text>
+<text>
+<en>Login-Image</en>
+<de>_</de>
+<id>882</id>
+</text>
+<text>
+<en>en</en>
+<de>de</de>
+<id>883</id>
+</text>
 </trl>
 
