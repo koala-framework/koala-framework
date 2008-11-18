@@ -165,6 +165,9 @@ Vps.handleError = function(error) {
 	if (arguments[1]) error.title = arguments[1];
 	if (arguments[2]) error.mail = arguments[2];
 
+	Vps.log("Vps.js display errors "+Vps.Debug.displayErrors);
+	Vps.log("Vps.js checkRetry "+error.checkRetry);
+	Vps.log("Vps.js Retry "+error.retry);
 	if ((error.checkRetry || Vps.Debug.displayErrors) && error.retry) {
 		if (error.errorText) {
             title = error.errorText;
