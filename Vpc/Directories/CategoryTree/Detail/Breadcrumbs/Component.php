@@ -6,6 +6,8 @@ class Vpc_Directories_CategoryTree_Detail_Breadcrumbs_Component
     {
         $ret = parent::getSettings();
         $ret['placeholder']['currentCategories'] = trlVps('Current category:');
+        $ret['placeholder']['categoryTreeRootText'] = null;
+        $ret['cssClass'] = 'webStandard';
         return $ret;
     }
 
@@ -23,7 +25,13 @@ class Vpc_Directories_CategoryTree_Detail_Breadcrumbs_Component
             $breadcrumbs[] = $directory->getChildComponent('_'.$row->id);
             $row = $row->findParentRow($row->getTable());
         }
+        $ret['root'] = $this->_getCategoryTreeRoot();
         $ret['breadcrumbs'] = array_reverse($breadcrumbs);
         return $ret;
+    }
+
+    protected function _getCategoryTreeRoot()
+    {
+        return null;
     }
 }
