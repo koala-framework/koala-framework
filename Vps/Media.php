@@ -42,10 +42,13 @@ class Vps_Media
         if (!$fileRow) {
             $fileRow = $row->getParentRow($type);
         }
-        return Vps_Media_Image::calculateScaleDimensions(
-            $fileRow->getImageDimensions(),
-            $dim
-        );
+        if ($fileRow) {
+            return Vps_Media_Image::calculateScaleDimensions(
+                $fileRow->getImageDimensions(),
+                $dim
+            );
+        }
+        return null;
     }
 
     public static function setOutputCache(Zend_Cache_Core $cache)
