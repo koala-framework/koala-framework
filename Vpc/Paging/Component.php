@@ -53,7 +53,7 @@ class Vpc_Paging_Component extends Vpc_Abstract
 
         $params = array();
         foreach ($_GET as $p=>$v) {
-            if ($p != $this->_getParamName()) {
+            if ($p != $this->_getParamName() && !is_array($v)) {
                 $params[] = "$p=".urlencode($v);
             }
         }
