@@ -1,0 +1,4 @@
+<?php
+class Vps_Component_Generator_GetComponentByClassWithComponentId_Table2 extends Vps_Component_Generator_GetComponentByClassWithComponentId_Table
+{
+}

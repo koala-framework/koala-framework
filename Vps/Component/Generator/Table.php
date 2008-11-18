@@ -58,7 +58,8 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $rows = $this->_getModel()->fetchAll($select);
         }
         foreach ($rows as $row) {
-            $ret[] = $this->_createData($parentData, $row, $select);
+            $d = $this->_createData($parentData, $row, $select);
+            if ($d) $ret[] = $d;
         }
         return $ret;
     }
@@ -77,9 +78,10 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     {
         if (!$parentData) {
             $parentData = $this->_getParentDataByRow($row);
-        }
-        if (!$parentData) {
-            throw new Vps_Exception("Can't find parentData in ".get_class($this)." for {$this->_class}");
+            if (!$parentData) return null; //siehe Vps_Component_Generator_GetComponentByClassWithComponentId_Test
+            if ($parentData->componentClass != $this->_class) {
+                throw new Vps_Exception("_getParentDataByRow returned a component with a wrong componentClass '{$parentData->componentClass}' instead of '$this->_class'");
+            }
         }
         return parent::_createData($parentData, $row, $select);
     }
@@ -88,7 +90,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
     {
         if (isset($row->component_id)) {
             $ret = Vps_Component_Data_Root::getInstance()
-                                        ->getComponentByDbId($row->component_id);
+                ->getComponentByDbId($row->component_id, array('componentClass'=>$this->_class));
         } else {
             throw new Vps_Exception("Can't find parentData for row, implement _getParentDataByRow for the '{$this->_class}' Generator");
         }

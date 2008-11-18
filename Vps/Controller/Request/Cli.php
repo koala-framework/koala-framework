@@ -29,4 +29,8 @@ class Vps_Controller_Request_Cli extends Zend_Controller_Request_Abstract
         }
         $this->setParams($params);
     }
+    public function getResourceName()
+    {
+        return 'vps_cli';
+    }
 }

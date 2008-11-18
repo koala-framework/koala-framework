@@ -32,6 +32,6 @@ class Vps_Component_Cache_ClearWithComponentId_Test extends PHPUnit_Framework_Te
         $row->content = 'blub';
         $row->save();
 
-        Vps_Component_RowObserver::getInstance()->process(false);
+        Vps_Component_RowObserver::getInstance()->process();
     }
 }

@@ -194,18 +194,32 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     return array($this);
                 }
             }
-            $select->whereComponentClasses($lookingForChildClasses);
-
-            $ret = array();
-            foreach ($this->_getGeneratorsForClasses($lookingForChildClasses) as $generator) {
-                $ret = array_merge($ret, $generator->getChildData(null, $select));
-            }
-
+            $ret = $this->getComponentsBySameClass($lookingForChildClasses, $select);
             $this->_componentsByClassCache[$cacheId] = $ret;
 
             if ($benchmark) $benchmark->stop();
         }
         return $this->_componentsByClassCache[$cacheId];
+    }
+
+    public function getComponentsBySameClass($lookingForChildClasses, $select = array())
+    {
+        if (!is_array($lookingForChildClasses)) {
+            $lookingForChildClasses = array($lookingForChildClasses);
+        }
+
+        if (is_array($select)) {
+            $select = new Vps_Component_Select($select);
+        }
+        $select->whereComponentClasses($lookingForChildClasses);
+
+
+        $ret = array();
+        foreach ($this->_getGeneratorsForClasses($lookingForChildClasses) as $generator) {
+            $data = $generator->getChildData(null, $select);
+            $ret = array_merge($ret, $data);
+        }
+        return $ret;
     }
 
     private function _getGeneratorsForClasses($lookingForClasses)

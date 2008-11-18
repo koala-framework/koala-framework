@@ -1,0 +1,34 @@
+<?php
+abstract class Vps_Controller_Plugin_Acl_Abstract extends Zend_Controller_Plugin_Abstract
+{
+    protected $_acl;
+
+    public function __construct(Vps_Acl $acl)
+    {
+        $this->_acl = $acl;
+    }
+
+    protected function _forwardLogin(Zend_Controller_Request_Abstract $request)
+    {
+        $request->setModuleName('vps_controller_action_user');
+        $request->setControllerName('login');
+        $request->setDispatched(false);
+        if (substr($request->getActionName(), 0, 4) == 'json') {
+            $request->setActionName('json-login');
+        } else {
+            $params = array('location' => $request->getPathInfo());
+            $request->setParams($params);
+            $request->setActionName('index');
+        }
+    }
+
+    protected function _getAuthedUserRole()
+    {
+        return Zend_Registry::get('userModel')->getAuthedUserRole();
+    }
+    protected function _getAuthedUser()
+    {
+        return Zend_Registry::get('userModel')->getAuthedUser();
+    }
+
+}

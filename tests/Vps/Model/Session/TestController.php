@@ -26,8 +26,4 @@ class Vps_Model_Session_TestController extends Vps_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);
     }
 
-    protected function _getResourceName()
-    {
-        return 'vps_test';
-    }
 }

@@ -500,7 +500,8 @@ abstract class Vps_Component_Generator_Abstract
 
     public function toDebug()
     {
-        return "<pre>".print_r($this->_settings, true)."</pre>";
+        return "<pre>".str_replace('Array', $this->_class.': '.get_class($this),
+                                        print_r($this->_settings, true))."</pre>";
     }
 
     public function getClass()

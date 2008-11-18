@@ -1,6 +1,10 @@
 <?php
 class Vps_Acl extends Zend_Acl
 {
+    protected $_componentAclClass = 'Vps_Component_Acl';
+    protected $_componentAcl;
+    protected $_vpcResourcesLoaded = false;
+
     public function __construct()
     {
         $this->addRole(new Zend_Acl_Role('guest'));
@@ -207,6 +211,7 @@ class Vps_Acl extends Zend_Acl
 
     public function getAllResources()
     {
+        $this->loadVpcResources();
         $ret = array();
         foreach ($this->_resources as $resource) {
             $ret[] = $resource['instance'];
@@ -225,5 +230,111 @@ class Vps_Acl extends Zend_Acl
     public function getRoles()
     {
         return $this->_getRoleRegistry()->getRoles();
+    }
+
+    /**
+     * Lädt Resourcen die von Komponenten kommen.
+     * Muss extra aufgerufen werden wenn diese Resourcen benötigt werden, aus
+     * performance gründen
+     */
+    public function loadVpcResources()
+    {
+        if ($this->_vpcResourcesLoaded) return;
+        foreach (Vpc_Abstract::getComponentClasses() as $c) {
+            if (Vpc_Abstract::getFlag($c, 'hasResources')) {
+                Vpc_Admin::getInstance($c)->addResources($this);
+            }
+        }
+        $this->_vpcResourcesLoaded = true;
+    }
+
+    public function getMenuConfig($user)
+    {
+        $this->loadVpcResources();
+        return $this->_processResources($user, $this->getResources());
+    }
+
+    private function _processResources($user, $resources)
+    {
+        $menus = array();
+        foreach ($resources as $resource) {
+            if ($resource instanceof Vps_Acl_Resource_Component_Interface) {
+                if (!$this->getComponentAcl()->isAllowed($user, $resource->getComponent())) continue;
+            } else {
+                if (!$this->isAllowedUser($user, $resource, 'view')) continue;
+            }
+            if ($resource instanceof Vps_Acl_Resource_ComponentClass_Interface) {
+                if (!$this->getComponentAcl()->isAllowed($user, $resource->getComponentClass())) continue;
+            } else {
+                if (!$this->isAllowedUser($user, $resource, 'view')) continue;
+            }
+            if (!$resource instanceof Vps_Acl_Resource_Abstract) {
+                //nur Vps-Resourcen im Menü anzeigen
+                $menus = array_merge($menus, $this->_processResources($user, $this->getResources($resource)));
+                continue;
+            }
+            $menu = array();
+            $menu['menuConfig'] = $resource->getMenuConfig();
+            if (is_string($menu['menuConfig'])) {
+                $menu['menuConfig'] = array('text' => $menu['menuConfig']);
+            }
+
+            if (isset($menu['menuConfig']['icon'])) {
+                if (is_string($menu['menuConfig']['icon'])) {
+                    $menu['menuConfig']['icon'] = new Vps_Asset($menu['menuConfig']['icon']);
+                }
+                $menu['menuConfig']['icon'] = $menu['menuConfig']['icon']->__toString();
+            }
+
+            if ($resource instanceof Vps_Acl_Resource_MenuDropdown) {
+                $menu['type'] = 'dropdown';
+                $menu['children'] = $this->_processResources($user, $this->getResources($resource));
+                if (!$menu['children']) {
+                    //wenn keine children dropdown ignorieren
+                    continue;
+                }
+            } else if ($resource instanceof Vps_Acl_Resource_MenuEvent) {
+                $menu['type'] = 'event';
+                $menu['eventConfig'] = $resource->getMenuEventConfig();
+            } else if ($resource instanceof Vps_Acl_Resource_MenuUrl) {
+                $menu['type'] = 'url';
+                $menu['url'] = $resource->getMenuUrl();
+            } else if ($resource instanceof Vps_Acl_Resource_MenuCommandDialog) {
+                $menu['type'] = 'commandDialog';
+                $menu['commandClass'] = $resource->getMenuCommandClass();
+                $menu['commandConfig'] = $resource->getMenuCommandConfig();
+            } else if ($resource instanceof Vps_Acl_Resource_MenuCommand) {
+                $menu['type'] = 'command';
+                $menu['commandClass'] = $resource->getMenuCommandClass();
+                $menu['commandConfig'] = $resource->getMenuCommandConfig();
+            } else if ($resource instanceof Vps_Acl_Resource_MenuSeparator) {
+                $menu['type'] = 'separator';
+            } else {
+                $menu = $menu['menuConfig'];
+            }
+            $menus[] = $menu;
+        }
+        return $menus;
+    }
+
+    public function getComponentAcl()
+    {
+        if (!isset($this->_componentAcl)) {
+            $this->_componentAcl = new $this->_componentAclClass($this->_getRoleRegistry());
+        }
+        return $this->_componentAcl;
+    }
+
+    public function setComponentAcl(Vps_Component_Acl $componentAcl)
+    {
+        $this->_componentAcl = $componentAcl;
+    }
+
+    public function setComponentAclClass($class)
+    {
+        if (isset($this->_componentAcl)) {
+            throw new Vps_Exception("Can't modify componentAclClass when getComponentAcl was called already");
+        }
+        $this->_componentAclClass = $class;
     }
 }

@@ -36,7 +36,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
 
         $plugin = new Zend_Controller_Plugin_ErrorHandler();
         $plugin->setErrorHandlerModule('vps_controller_action_error');
-        if (isset($_SERVER['SHELL'])) {
+        if (php_sapi_name() == 'cli') {
             $plugin->setErrorHandlerController('cli');
         }
         $this->registerPlugin($plugin);
@@ -55,7 +55,7 @@ class Vps_Controller_Front extends Zend_Controller_Front
     public function getRouter()
     {
         if (null == $this->_router) {
-            if (isset($_SERVER['SHELL'])) {
+            if (php_sapi_name() == 'cli') {
                 $this->setRouter(new Vps_Controller_Router_Cli());
             } else {
                 $this->setRouter(new Vps_Controller_Router());
@@ -65,12 +65,13 @@ class Vps_Controller_Front extends Zend_Controller_Front
         return $this->_router;
     }
 
-    //funktioniert über __destrukt nicht, workaround:
     public function dispatch(Zend_Controller_Request_Abstract $request = null, Zend_Controller_Response_Abstract $response = null)
     {
         if ($request === null) {
-            if (isset($_SERVER['SHELL'])) {
+            if (php_sapi_name() == 'cli') {
                 $request = new Vps_Controller_Request_Cli();
+            } else {
+                $request = new Vps_Controller_Request_Http();
             }
         }
         $ret = parent::dispatch($request, $response);

@@ -22,7 +22,9 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
     public function __get($name)
     {
         if (isset($this->_data->$name)) {
-            return $this->_data->$name;
+            $ret = $this->_data->$name;
+            if ($name == 'tags') $ret = implode(',', $ret);
+            return $ret;
         } else {
             return null;
         }

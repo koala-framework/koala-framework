@@ -31,8 +31,4 @@ class Vps_AutoForm_TestController extends Vps_Controller_Action_Auto_Form
         exit;
     }
 
-    protected function _getResourceName()
-    {
-        return 'vps_test';
-    }
 }

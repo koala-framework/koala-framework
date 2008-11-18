@@ -16,8 +16,6 @@ class Vps_Debug
             $exception = new Vps_ExceptionOther($exception);
         }
 
-        Vps_Benchmark::shutDown();
-        Vps_Benchmark::output();
         $view = self::getView();
         $view->exception = $exception->getException();
         $view->message = $exception->getException()->getMessage();
@@ -27,7 +25,7 @@ class Vps_Debug
 
         $header = $exception->getHeader();
         $template = $exception->getTemplate();
-        $template = strtolower(substr($template, 0, 1)) . substr($template, 1) . '.tpl';
+        $template = strtolower(Zend_Filter::get($template, 'Word_CamelCaseToDash').'.tpl');
         if ($exception instanceof Vps_Exception) {
             $exception->sendErrorMail();
         }
@@ -39,8 +37,9 @@ class Vps_Debug
             echo '<pre>';
             print_r($e->__toString());
             echo '</pre>';
-            die();
         }
+        Vps_Benchmark::shutDown();
+        Vps_Benchmark::output();
     }
 
     public static function setView(Vps_View $view)
