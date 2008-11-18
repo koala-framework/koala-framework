@@ -34,11 +34,15 @@ class Vps_AutoForm_ErrorTest extends Vps_Test_SeleniumTestCase
         $this->type("//input[@name='foo']", "newValue");
 
         if (!$errors) $this->runScript('function foo() {Vps.Debug.displayErrors = false; Vps.log("selenium: "+Vps.Debug.displayErrors); }; foo();');
+        else {
+            $this->runScript('function foo() {Vps.Debug.displayErrors = true; Vps.log("selenium: "+Vps.Debug.displayErrors); }; foo();');
+        }
         $this->click("//button[text()='".trlVps('Save')."']");
         $this->waitForConnections();
 
         if (!$errors) $button = trlVps('OK');
         else $button = trlVps('Retry');
+
         $this->click("//button[text()='".$button."']");
         sleep(1);
 
