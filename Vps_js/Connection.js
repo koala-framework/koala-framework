@@ -40,6 +40,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
         Vps.Connection.superclass.request.call(this, options);
     },
     repeatRequest: function(options) {
+        Vps.Connection.runningRequests++;
         delete options.vpsIsSuccess;
         Vps.Connection.superclass.request.call(this, options);
     },
@@ -157,6 +158,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
 			errorMsgTitle = trlVps('Error');
 			if (options.errorText) {
                 errorText = options.errorText;
+				errorMsg = options.errorText;
 			} else {
 	           errorMsg = trlVps("A connection problem occured.");
 			   errorText = null;
