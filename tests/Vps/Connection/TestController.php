@@ -23,7 +23,8 @@ class Vps_Connection_TestController extends Vps_Controller_Action
     public function jsonExceptionAction() {
         $connections_counts = new Zend_Session_Namespace('test_connection_count');
         $connections_counts->exceptions++;
-        throw new Vps_Exception("test Exceptions");
+        $this->view->exception = "test Exceptions";
+        $this->view->success = false;
     }
 
     public function jsonSuccessAction() {
