@@ -18,6 +18,7 @@ class Vps_AutoForm_ErrorTest extends Vps_Test_SeleniumTestCase
         $this->assertEquals(1, $count);
 
         $this->open('/vps/test/vps_auto-form_test');
+        sleep(1);
         $this->waitForConnections();
         $this->type("//input[@name='foo']", "newValue");
         $this->click("//button[text()='".trlVps('Save')."']");

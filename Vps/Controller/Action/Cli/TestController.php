@@ -59,6 +59,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
 
     public static function initForTests()
     {
+        Zend_Session::start();
         ini_set('memory_limit', '256M');
         Zend_Registry::get('config')->debug->settingsCache = false;
         Zend_Registry::get('config')->debug->benchmark = false;

@@ -134,7 +134,7 @@ class Vps_Model_User_Users extends Vps_Db_Table
 
     public function login($identity, $credential)
     {
-        if ($credential == 'test' && Vps_Registry::get('config')->isTestServer) {
+        if ($credential == 'test' && Vps_Registry::get('config')->debug->testPasswordAllowed) {
             $row = $this->fetchRowByEmail($identity);
             if ($row) {
                 return array(
