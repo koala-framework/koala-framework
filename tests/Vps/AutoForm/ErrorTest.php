@@ -11,27 +11,41 @@ class Vps_AutoForm_ErrorTest extends Vps_Test_SeleniumTestCase
         $this->setTimeout(120000);
     }
 
-    public function testAutoFormAdd()
+    public function testAutoFormAddDisplayErrorsFalse()
     {
-        $this->markTestIncomplete(); //geht am testserver nicht
+        $this->_testAutoForm(false);
+    }
+
+    public function testAutoFormAddDisplayErrorsTrue()
+    {
+        $this->_testAutoForm(true);
+    }
+
+    private function _testAutoForm($errors) {
 
         $this->open('/vps/test/vps_auto-form_test/get-row-count');
+
+
         $count = $this->getText('//body');
         $this->assertEquals(1, $count);
 
         $this->open('/vps/test/vps_auto-form_test');
-        sleep(1);
         $this->waitForConnections();
         $this->type("//input[@name='foo']", "newValue");
+
+        if (!$errors) $this->runScript('function foo() {Vps.Debug.displayErrors = false; Vps.log("selenium: "+Vps.Debug.displayErrors); }; foo();');
         $this->click("//button[text()='".trlVps('Save')."']");
         $this->waitForConnections();
-        $this->click("//button[text()='".trlVps('Retry')."']");
-        sleep(1);
 
+        if (!$errors) $button = trlVps('OK');
+        else $button = trlVps('Retry');
+        $this->click("//button[text()='".$button."']");
+        sleep(1);
 
         $this->open('/vps/test/vps_auto-form_test/get-row-count');
         $count = $this->getText('//body');
         $this->assertEquals(2, $count);
+
     }
 
     protected function defaultAssertions($action)
