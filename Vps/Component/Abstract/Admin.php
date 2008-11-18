@@ -6,6 +6,11 @@ class Vps_Component_Abstract_Admin
     protected function __construct($class)
     {
         $this->_class = $class;
+        $this->_init();
+    }
+
+    protected function _init()
+    {
     }
 
     public static function getInstance($componentClass)
@@ -179,5 +184,34 @@ class Vps_Component_Abstract_Admin
         if (isset($row->component_id)) {
             Vps_Dao_Index::updateIndex($row->component_id);
         }
+    }
+
+    public function addResources(Vps_Acl $acl)
+    {
+    }
+
+    //Hilfsfunktion, verwendet in Title und Menü beim cache löschen
+    protected function _getGeneratorsForRow($row)
+    {
+        $ret = array();
+        foreach (Vpc_Abstract::getComponentClasses() as $componentClass) {
+            foreach (Vpc_Abstract::getSetting($componentClass, 'generators') as $generator) {
+                if (isset($generator['table']) &&
+                    $row instanceof Vps_Db_Table_Row_Abstract)
+                {
+                    if (is_instance_of(get_class($row->getTable()), $generator['table'])) {
+                        $ret[] = $generator;
+                    }
+                }
+                if (isset($generator['model']) &&
+                    $row instanceof Vps_Model_Row_Interface)
+                {
+                    if (is_instance_of(get_class($row->getModel()), $generator['model'])) {
+                        $ret[] = $generator;
+                    }
+                }
+            }
+        }
+        return $ret;
     }
 }
