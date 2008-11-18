@@ -13,6 +13,8 @@ class Vps_AutoForm_ErrorTest extends Vps_Test_SeleniumTestCase
 
     public function testAutoFormAdd()
     {
+        $this->markTestIncomplete(); //geht am testserver nicht
+
         $this->open('/vps/test/vps_auto-form_test/get-row-count');
         $count = $this->getText('//body');
         $this->assertEquals(1, $count);
