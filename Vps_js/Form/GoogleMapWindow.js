@@ -6,7 +6,7 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
 
         this.actions = {};
         this.actions.clear = new Ext.Action({
-            text:'Clear',
+            text:trlVps('Clear'),
             handler: function() {
                 this.clear = true;
                 this.fireEvent('clear', this);
@@ -20,9 +20,9 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
         this.tbar = [{}];
         this.tbar.add(
             '->', {
-            text:'Search',
+            text:trlVps('Search Location'),
             handler: this.addressPrompt,
-            icon    : '/assets/silkicons/find.png',
+            icon    : '/assets/silkicons/zoom.png',
             cls     : 'x-btn-text-icon',
             scope : this
         }, this.actions.clear);
@@ -35,7 +35,7 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
 			},
 			scope: this
 		},{
-			text: 'Ok',
+			text: trlVps('Ok'),
 			handler: function() {
 				this.clear = false;
 				this.fireEvent('confirm', this);
@@ -134,7 +134,7 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
                     var grid = new Ext.grid.GridPanel({
                         store:store,
                         columns: [
-                            {id: 'address', header: "Adressen", width: 300, sortable:false, dataIndex: 'address'}
+                            {id: 'address', header: trlVps("Adresses"), width: 300, sortable:false, dataIndex: 'address'}
                         ]
                     });
                     grid.on('rowdblclick', function(grid, index) {
@@ -192,7 +192,7 @@ Vps.Form.GoogleMapWindow = Ext.extend(Ext.Window,
             this.map.clearOverlays();
             this.map.addOverlay(this.marker);
             this.showLatLng();
-        } else {
+        } else if (!this.markerpoint_y && !this.markerpoint_y) {
             this.addressPrompt();
         }
 
