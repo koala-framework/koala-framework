@@ -96,6 +96,21 @@ Ext.onReady(function()
 
 Vps.application = { version: '{$application.version}' };
 
+//log das auch ohne irgendwelche abhänigkeiten funktioniert (zB im Selenium)
+Vps.log = function(msg) {
+    if (!Vps.debugDiv) {
+        Vps.debugDiv = document.createElement('div');
+        document.body.appendChild(Vps.debugDiv);
+        Vps.debugDiv.style.position = 'absolute';
+        Vps.debugDiv.style.zIndex = '300';
+        Vps.debugDiv.style.top = 0;
+        Vps.debugDiv.style.right = 0;
+        Vps.debugDiv.style.backgroundColor = 'white';
+		Vps.debugDiv.style.fontSize = '10px';
+    }
+    Vps.debugDiv.innerHTML += msg+'<br />';
+};
+
 Vps.callWithErrorHandler = function(fn, scope) {
     if (Vps.Debug.displayErrors) {
         //call without error handler
@@ -150,12 +165,8 @@ Vps.handleError = function(error) {
 	if (arguments[1]) error.title = arguments[1];
 	if (arguments[2]) error.mail = arguments[2];
 
-
-	if (error.retry) {
-		if ((Vps.Debug.displayErrors)) {
-			title = error.title;
-			msg = error.message;
-		} else if (error.errorText) {
+	if ((error.checkRetry || Vps.Debug.displayErrors) && error.retry) {
+		if (error.errorText) {
             title = error.errorText;
 			msg = error.errorText;
 		} else {

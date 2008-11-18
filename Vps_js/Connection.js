@@ -100,6 +100,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
 					title: errorMsgTitle,
 					mail: sendMail,
 					errorText: errorText,
+					checkRetry: false,
 					retry: function() {
 						this.connection.repeatRequest(this.options);
 					},
@@ -169,6 +170,7 @@ Vps.Connection = Ext.extend(Ext.data.Connection, {
 		            title: errorMsgTitle,
 					errorText: errorText,
 		            mail: false,
+					checkRetry: true,
 		            retry: function() {
 		                this.repeatRequest(options);
 		            },
