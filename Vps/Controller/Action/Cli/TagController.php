@@ -54,7 +54,7 @@ class Vps_Controller_Action_Cli_TagController extends Vps_Controller_Action_Cli_
         $ret = array();
         $maxVersion = false;
         foreach (self::_getSvnDirs($dir) as $v) {
-            if (!$maxVersion || version_compare($maxVersion, $v)) {
+            if (!$maxVersion || version_compare($maxVersion, $v) == -1) {
                 $maxVersion = $v;
             }
         }
