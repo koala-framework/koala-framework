@@ -1,5 +1,5 @@
 <?php
-class Vpc_Menu_Admin extends Vpc_Admin
+class Vpc_Box_Title_Admin extends Vpc_Admin
 {
     protected function _onRowAction($row)
     {
@@ -9,8 +9,7 @@ class Vpc_Menu_Admin extends Vpc_Admin
             return;
         }
         foreach ($this->_getGeneratorsForRow($row) as $generator) {
-            if (!isset($generator['showInMenu']) || !$generator['showInMenu']) continue;
-            if (!is_instance_of($generator['class'], 'Vps_Component_Generator_Page_Interface')) continue;
+            if (!is_instance_of($generator['class'], 'Vps_Component_Generator_PseudoPage_Interface')) continue;
             Vps_Component_Cache::getInstance()->cleanComponentClass($this->_class);
             return;
         }
