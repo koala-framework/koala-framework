@@ -13,6 +13,7 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $ret = Vps_Controller_Action_Cli_TagController::getHelpOptions();
         $ret['vpsVersion']['allowBlank'] = false;
         $ret['webVersion']['allowBlank'] = false;
+        $ret[] = array('param' => 'skip-test');
         return $ret;
     }
 
@@ -27,6 +28,8 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
 
     public function indexAction()
     {
+        Zend_Session::start(); //wegen tests
+
         $prodConfig = new Zend_Config_Ini('application/config.ini', 'production');
         if (!$prodConfig || !$prodConfig->server->host || !$prodConfig->server->dir) {
             throw new Vps_ClientException("Prod-Server not configured");
@@ -65,17 +68,21 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $this->_systemSshVps("update", $testConfig);
 
         echo "\n\n*** [08/14] test: unit-tests laufen lassen\n";
-        Vps_Controller_Action_Cli_TestController::initForTests();
-        $suite = new Vps_Test_TestSuite();
-        $runner = new PHPUnit_TextUI_TestRunner;
+        if ($this->_getParam('skip-test')) {
+            echo "(uebersprungen)\n";
+        } else {
+            Vps_Controller_Action_Cli_TestController::initForTests();
+            $suite = new Vps_Test_TestSuite();
+            $runner = new PHPUnit_TextUI_TestRunner;
 
-        Vps_Registry::set('testDomain', $testConfig->server->domain);
+            Vps_Registry::set('testDomain', $testConfig->server->domain);
 
-        $arguments = array();
-        $arguments['colors'] = true;
-        $result = $runner->doRun($suite, $arguments);
-        if (!$result->wasSuccessful()) {
-            throw new Vps_ClientException("Tests failed");
+            $arguments = array();
+            $arguments['colors'] = true;
+            $result = $runner->doRun($suite, $arguments);
+            if (!$result->wasSuccessful()) {
+                throw new Vps_ClientException("Tests failed");
+            }
         }
 
         echo "\n\n*** [09/14] test: web zurueck auf trunk switchen\n";
@@ -88,13 +95,13 @@ class Vps_Controller_Action_Cli_GoOnlineController extends Vps_Controller_Action
         $this->_systemSshVps("import backup-db", $prodConfig);
 
         echo "\n\n*** [12/14] prod: vps-version anpassen\n";
-        //$this->_systemSshVps("tag-checkout vps-use --version=$vpsVersion", $prodConfig);
+        $this->_systemSshVps("tag-checkout vps-use --version=$vpsVersion", $prodConfig);
 
         echo "\n\n*** [13/14] prod: web tag switchen\n";
-        //$this->_systemSshVps("tag-checkout web-switch --version=$webVersion", $prodConfig);
+        $this->_systemSshVps("tag-checkout web-switch --version=$webVersion", $prodConfig);
 
         echo "\n\n*** [14/14] prod: update ausführen\n";
-        //$this->_systemSshVps("update", $prodConfig);
+        $this->_systemSshVps("update", $prodConfig);
 
         echo "\n\n\n\033[32mF E R T I G ! ! !\033[0m\n";
 
