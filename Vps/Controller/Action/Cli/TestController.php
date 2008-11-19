@@ -40,6 +40,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             array('param'=> 'log-metrics'),
             array('param'=> 'coverage-xml'),
             array('param'=> 'coverage-html'),
+            array('param'=> 'report'),
         );
         $value = self::_getConfigSectionsWithTestDomain();
         if (in_array('production', $value)) {
@@ -134,6 +135,20 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             throw new Vps_ClientException(
               'Could not create and run test suite: ' . $e->getMessage()
             );
+        }
+        if ($this->_getParam('report')) {
+            $info = new SimpleXMLElement(`svn info --xml`);
+            $data = array(
+                'svnPath' => (string)$info->entry->url,
+                'tests' => $result->count(),
+                'failures' => $result->failureCount(),
+                'skipped' => $result->skippedCount(),
+                'not_implemented' => $result->notImplementedCount()
+            );
+            $r = file_get_contents("http://zeiterfassung.vivid/test_report.php?data=".serialize($data));
+            if ($r != 'OK') {
+                throw new Vps_Exception("Can't report to zeiterfassung: $r");
+            }
         }
 
         if ($result->wasSuccessful()) {
