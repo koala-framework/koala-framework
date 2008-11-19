@@ -11,6 +11,11 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             array(
                 'param'=> 'current',
                 'help' => 'Also execute updates for current revision'
+            ),
+            array(
+                'param'=> 'rev',
+                'value' => '12300[:12305]',
+                'help' => 'Executes update for a given revision'
             )
         );
     }
@@ -45,6 +50,22 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
         $to = $currentRevision;
         if ($this->_getParam('current')) {
             $to++;
+        } else if ($this->_getParam('rev')) {
+            $ex = explode(':', $this->_getParam('rev'), 2);
+            $ex1 = $ex[0];
+            if (!isset($ex[1])) {
+                $ex2 = null;
+            } else {
+                $ex2 = $ex[1];
+            }
+            $from = $ex1;
+            if (!$ex2) {
+                $to = $from + 1;
+            } else if ($ex1 == $ex2) {
+                $to = $ex2 + 1;
+            } else {
+                $to = $ex2;
+            }
         }
         if ($from == $to) {
             echo "Already up-to-date\n\n";
@@ -52,7 +73,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             echo "Looking for update-scripts from revistion $from to {$to}...";
             $updates = Vps_Update::getUpdates($from, $to);
             foreach ($updates as $k=>$u) {
-                if (in_array($u->getRevision(), $updateRevision['done'])) {
+                if (in_array($u->getRevision(), $updateRevision['done']) && !$this->_getParam('rev')) {
                     if ($this->_getParam('current') && $u->getRevision() == $to-1) continue;
                     unset($updates[$k]);
                 }
