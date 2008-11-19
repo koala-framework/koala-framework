@@ -297,6 +297,9 @@ class Vps_Mail
         // in service mitloggen wenn url vorhanden
         if (Vps_Util_Model_MailLog::isAvailable()) {
             $r = Vps_Model_Abstract::getInstance('Vps_Util_Model_MailLog')->createRow();
+            if (isset($_COOKIE['unitTest']) && $_COOKIE['unitTest']) {
+                $r->identifier = $_COOKIE['unitTest'];
+            }
             $r->from = $this->_ownFrom;
             $r->to = implode(';', $this->_ownTo);
             $r->cc = implode(';', $this->_ownCc);
