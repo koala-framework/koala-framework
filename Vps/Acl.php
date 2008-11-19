@@ -319,6 +319,7 @@ class Vps_Acl extends Zend_Acl
 
     public function getComponentAcl()
     {
+        if (!Vps_Component_Data_Root::getComponentClass()) return null;
         if (!isset($this->_componentAcl)) {
             $this->_componentAcl = new $this->_componentAclClass($this->_getRoleRegistry());
         }
