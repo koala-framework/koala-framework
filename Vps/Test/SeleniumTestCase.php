@@ -2,6 +2,7 @@
 class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
     protected $autoStop = false;
+    protected $_unitTestCookie;
 
     public static function suite($className)
     {
@@ -25,6 +26,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
             throw new Vps_Exception("No testDomain set");
         }
         $this->setBrowserUrl('http://'.$domain.'/');
+        $this->_unitTestCookie = md5(uniqid('testId', true));
     }
 
     protected function assertPostConditions()
@@ -64,7 +66,7 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     {
         if ($command == 'open') {
             $this->deleteCookie('unitTest', 'path=/');
-            $this->createCookie('unitTest=1', 'path=/');
+            $this->createCookie('unitTest='.$this->_unitTestCookie, 'path=/');
         }
         $ret = parent::__call($command, $arguments);
         return $ret;
