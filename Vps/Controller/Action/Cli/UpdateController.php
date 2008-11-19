@@ -15,6 +15,7 @@ class Vps_Controller_Action_Cli_UpdateController extends Vps_Controller_Action_C
             array(
                 'param'=> 'rev',
                 'value' => '12300[:12305]',
+                'allowBlank' => true,
                 'help' => 'Executes update for a given revision'
             )
         );
