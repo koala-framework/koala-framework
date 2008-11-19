@@ -6,6 +6,7 @@ class Vps_Model_Select
     const WHERE_NOT_EQUALS = 'whereNotEquals';
     const WHERE_ID = 'whereId';
     const WHERE_NULL = 'whereNull';
+    const WHERE_EXPRESSION = 'whereExpression';
     const ORDER = 'order';
     const LIMIT_COUNT = 'limitCount';
     const LIMIT_OFFSET = 'limitOffset';
@@ -41,7 +42,40 @@ class Vps_Model_Select
     }
 
     //vielleicht mal umstellen auf:
-    //return $this->where(new Vps_Model_Select_Expr_Equals($field, $value));
+    /*
+interface Vps_Model_Select_Expr_Interface {}
+class Vps_Model_Select_Expr_CompareField_Abstract implements Vps_Model_Select_Expr_Interface
+{
+    __construct($field, $value)
+    getField
+    getValue
+}
+class Vps_Model_Select_Expr_Not implements Vps_Model_Select_Expr_Interface
+{
+    __construct(Vps_Model_Select_Expr_Interface $expr);
+}
+class Vps_Model_Select_Expr_Equals extends Vps_Model_Select_Expr_CompareField_Abstract {}
+class Vps_Model_Select_Expr_Lower extends Vps_Model_Select_Expr_CompareField_Abstract {}
+class Vps_Model_Select_Expr_Higher extends Vps_Model_Select_Expr_CompareField_Abstract {}
+class Vps_Model_Select_Expr_NotEquals implements Vps_Model_Select_Expr_Not
+{
+    __construct($field, $value)
+    {
+        parent::__construct(new Vps_Model_Select_Expr_Equals($field, $value);
+    }
+}
+class Vps_Model_Select_Expr_LowerEquals implements Vps_Model_Select_Expr_Or
+{
+    __construct($field, $value)
+    {
+        parent::__construct(array(new Vps_Model_Select_Expr_Lower($field, $value), new Vps_Model_Select_Expr_Equals($field, $value));
+    }
+}
+    return $this->where(new Vps_Model_Select_Expr_Equals($field, $value));
+    return $this->where(new Vps_Model_Select_Expr_Not(new Vps_Model_Select_Expr_Equals($field, $value)));
+    return $this->where(new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Equals($field, $value),
+                                                        new Vps_Model_Select_Expr_Higher($field, $value)));
+    */
     public function whereEquals($field, $value = null)
     {
         if (is_array($field)) {
@@ -83,9 +117,15 @@ class Vps_Model_Select
 
     public function where($cond, $value = null, $type = null)
     {
+        if ($cond instanceof  Vps_Model_Select_Expr_Interface ) {
+            $this->_parts[self::WHERE_EXPRESSION][] = $cond;
+            return $this;
+        }
+
         if (strpos($cond, '?') !==false && is_null($value)) {
             throw new Vps_Exception("Can't use '$cond' with value 'null'");
         }
+
         $this->_parts[self::WHERE][] = array($cond, $value, $type);
         return $this;
     }
@@ -171,4 +211,5 @@ class Vps_Model_Select
         $ret = "<pre>$ret</pre>";
         return $ret;
     }
+
 }
