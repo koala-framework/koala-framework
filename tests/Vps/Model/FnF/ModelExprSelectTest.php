@@ -1,0 +1,156 @@
+<?php
+/**
+ * @group Model_FnF
+ */
+class Vps_Model_FnF_ModelExprSelectTest extends PHPUnit_Framework_TestCase
+{
+    public function testExprEqualsSelect()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 'foo'),
+            array('id' => 2, 'value' => 'bar'),
+        ));
+
+        $select = $model->select();
+        $select->where(new Vps_Model_Select_Expr_Equals('value', 'bar'));
+        $rows = $model->getRows($select);
+        $count = $rows->count();
+        $current = $rows->current();
+        $this->assertEquals(1, $count);
+        $this->assertEquals(2, $current->id);
+
+        $this->assertEquals(1, $model->getRows($model->select()
+                                ->where(new Vps_Model_Select_Expr_Equals('value', 'foo')))->current()->id);
+    }
+
+    public function testExprHigherSelect()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 5),
+            array('id' => 2, 'value' => 8),
+        ));
+
+        $select = $model->select();
+        $select->where(new Vps_Model_Select_Expr_Higher('value', 6));
+        $rows = $model->getRows($select);
+        $count = $rows->count();
+        $current = $rows->current();
+        $this->assertEquals(1, $count);
+        $this->assertEquals(2, $current->id);
+    }
+
+    public function testExprHigherAndEqualSelect()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 5),
+            array('id' => 2, 'value' => 8),
+        ));
+
+        $select = $model->select();
+
+        $select->where(new Vps_Model_Select_Expr_Higher('value', 6));
+        $select->where(new Vps_Model_Select_Expr_Equals('value', 7));
+
+        $rows = $model->getRows($select);
+        $count = $rows->count();
+        $this->assertEquals(0, $count);
+
+        $select = $model->select();
+        $select->where(new Vps_Model_Select_Expr_Higher('value', 6));
+        $select->whereEquals('value', 8);
+
+        $rows = $model->getRows($select);
+        $count = $rows->count();
+        $this->assertEquals(1, $count);
+    }
+
+    public function testExprOrSelect()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 5),
+            array('id' => 2, 'value' => 8),
+            array('id' => 3, 'value' => 3),
+        ));
+
+        $select = $model->select();
+        $orExpression = new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Higher('value', 6),
+                                                           new Vps_Model_Select_Expr_Equals('value', 5)));
+        $select->where($orExpression);
+        $rows = $model->getRows($select);
+        $count = $rows->count();
+        $current = $rows->current();
+        $this->assertEquals(2, $count);
+    }
+
+    public function testExprNotSelect()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 5),
+            array('id' => 2, 'value' => 8),
+            array('id' => 3, 'value' => 3),
+        ));
+
+        $select = $model->select();
+        $notExpression = new Vps_Model_Select_Expr_Not(new Vps_Model_Select_Expr_Higher('value', 6));
+        $select->where($notExpression);
+        $rows = $model->getRows($select);
+        $count = $rows->count();
+        $current = $rows->current();
+        $this->assertEquals(2, $count);
+        $this->assertEquals(1, $current->id);
+    }
+
+    public function testExprSmaller()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 5),
+            array('id' => 2, 'value' => 8),
+            array('id' => 3, 'value' => 3),
+            array('id' => 4, 'value' => 10),
+            array('id' => 5, 'value' => 1),
+            array('id' => 6, 'value' => 13),
+            array('id' => 7, 'value' => 15),
+        ));
+
+        $select = $model->select();
+        $smallExpression = new Vps_Model_Select_Expr_Smaller('value', 13);
+
+        $select = $model->select();
+        $select->where($smallExpression);
+        $rows = $model->getRows($select);
+        $count = $rows->count();
+        $this->assertEquals(5, $count);
+    }
+
+    public function testExprExtraBig()
+    {
+        $model = new Vps_Model_FnF();
+        $model->setData(array(
+            array('id' => 1, 'value' => 5),
+            array('id' => 2, 'value' => 8),
+            array('id' => 3, 'value' => 3),
+            array('id' => 4, 'value' => 10),
+            array('id' => 5, 'value' => 1),
+            array('id' => 6, 'value' => 13),
+            array('id' => 7, 'value' => 15),
+        ));
+
+        $select = $model->select();
+        $orExpression = new Vps_Model_Select_Expr_Or(array(new Vps_Model_Select_Expr_Smaller('value', 8),
+                                                           new Vps_Model_Select_Expr_Higher('value', 13)));
+
+        $notExpression = new Vps_Model_Select_Expr_Not($orExpression);
+        $select->where($notExpression);
+        $rows = $model->getRows($select);
+        $count = $rows->count();
+        $current = $rows->current();
+        $this->assertEquals(3, $count);
+    }
+
+}

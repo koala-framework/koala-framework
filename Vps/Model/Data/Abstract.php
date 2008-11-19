@@ -29,7 +29,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     public function getRows($where=null, $order=null, $limit=null, $start=null)
     {
-        if (!is_object($where)) {
+        if (!is_object($where) || $where instanceof Vps_Model_Select_Expr_Interface) {
             $select = $this->select($where, $order, $limit, $start);
         } else {
             $select = $where;
@@ -153,6 +153,7 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
 
     private function _matchSelect($data, $select)
     {
+
         foreach ($data as &$d) {
             $d = (string)$d;
         }
@@ -165,6 +166,11 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
                 foreach ($v as &$i) $i = (string)$i;
                 if (!isset($data[$f])) return false;
                 if (!in_array($data[$f], $v)) return false;
+            }
+        }
+        if ($where = $select->getPart(Vps_Model_Select::WHERE_EXPRESSION)) {
+            foreach ($where as $expr) {
+                if (!$this->_checkExpressions($expr, $data)) return false;
             }
         }
         if ($where = $select->getPart(Vps_Model_Select::WHERE_NOT_EQUALS)) {
@@ -187,6 +193,33 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         return true;
     }
 
+    private function _checkExpressions(Vps_Model_Select_Expr_Interface $expr, $data) {
+        if ($expr instanceof Vps_Model_Select_Expr_Equals) {
+            if (!($data[$expr->getField()] && $data[$expr->getField()] == $expr->getValue())) {
+                return false;
+            }
+        } else if ($expr instanceof Vps_Model_Select_Expr_Higher) {
+            if (!($data[$expr->getField()] && $data[$expr->getField()] > $expr->getValue())) {
+                return false;
+            }
+        } else if ($expr instanceof Vps_Model_Select_Expr_Smaller) {
+            if (!($data[$expr->getField()] && $data[$expr->getField()] < $expr->getValue())) {
+                return false;
+            }
+        } else if ($expr instanceof Vps_Model_Select_Expr_Not) {
+                if ($this->_checkExpressions($expr->getExpression(), $data)) {
+                    return false;
+                }
+        } else if ($expr instanceof Vps_Model_Select_Expr_Or) {
+            foreach ($expr->getExpressions() as $orExpr) {
+                if ($this->_checkExpressions($orExpr, $data)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
     public function getPrimaryKey()
     {
         return $this->_primaryKey;
