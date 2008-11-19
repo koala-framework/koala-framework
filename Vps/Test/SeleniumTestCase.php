@@ -164,4 +164,21 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 
         return $driver;
     }
+
+    protected function _getLatestMail($select = null)
+    {
+        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_MailLog');
+        if (!$select) $select = $m->select();
+        $select->order('id', 'DESC');
+        $select->limit(1);
+        return $this->_getMails($select)->current();
+    }
+
+    protected function _getMails($select = null)
+    {
+        $m = Vps_Model_Abstract::getInstance('Vps_Util_Model_MailLog');
+        if (!$select) $select = $m->select();
+        return $m->getRows($select
+                    ->whereEquals('identifier', $this->_unitTestCookie));
+    }
 }
