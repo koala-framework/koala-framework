@@ -141,7 +141,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             $data = array(
                 'svnPath' => (string)$info->entry->url,
                 'tests' => $result->count(),
-                'failures' => $result->failureCount(),
+                'failures' => $result->failureCount()+$result->errorCount(),
                 'skipped' => $result->skippedCount(),
                 'not_implemented' => $result->notImplementedCount()
             );
