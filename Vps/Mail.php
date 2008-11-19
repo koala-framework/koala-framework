@@ -235,7 +235,7 @@ class Vps_Mail
             $this->setFrom($fromAddress, $fromName);
         }
 
-        if ($this->getReturnPath() == null) {
+        if ($this->getReturnPath() == null && Vps_Registry::get('config')->email->returnPath) {
             $returnPath = str_replace('%host%', $hostNonWww, Vps_Registry::get('config')->email->returnPath);
             $this->setReturnPath($returnPath);
         }
@@ -262,9 +262,11 @@ class Vps_Mail
             $var = $row->variable;
             $this->_view->$var = trim($row->text);
         }
-        $this->_mail->setBodyText($this->_view->render($this->_txtTemplate));
+        $bodyText = $this->_view->render($this->_txtTemplate);
+        $this->_mail->setBodyText($bodyText);
 
         // html mail
+        $bodyHtml = null;
         if ($this->_htmlTemplate) {
             $this->_view->setMasterTemplate("mails/{$this->_masterTemplate}.html.tpl");
             foreach ($vars as $row) {
@@ -273,7 +275,8 @@ class Vps_Mail
                 if (trim(strip_tags($html)) == '') $html = '';
                 $this->_view->$var = $html;
             }
-            $this->_mail->setBodyHtml($this->_view->render($this->_htmlTemplate));
+            $bodyHtml = $this->_view->render($this->_htmlTemplate);
+            $this->_mail->setBodyHtml($bodyHtml);
         }
 
         //hinzufügen von Bilder zur Email
@@ -301,10 +304,6 @@ class Vps_Mail
             if ($this->getReturnPath() != null) {
                 $r->return_path = $this->getReturnPath();
             }
-            $bodyText = $this->_mail->getBodyText();
-            if ($bodyText instanceof Zend_Mime_Part) $bodyText = $bodyText->getContent();
-            $bodyHtml = $this->_mail->getBodyHtml();
-            if ($bodyHtml instanceof Zend_Mime_Part) $bodyHtml = $bodyHtml->getContent();
             $r->subject = $this->_mail->getSubject();
             $r->body_text = $bodyText;
             $r->body_html = $bodyHtml;

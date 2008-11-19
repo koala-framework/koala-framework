@@ -105,7 +105,7 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
         if (!$row->type) {
             throw new Vps_ClientException("type is required");
         }
-        if (!$row->null && is_null($row->default)) {
+        if (!$row->null && is_null($row->default) && $row->extra != 'auto_increment') {
             throw new Vps_ClientException("invalid default value, null is not allowed");
         }
         $iId = $row->getModelParentRow()->getInternalId();
@@ -118,11 +118,14 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
         }
         $sql .= "{$row->field} {$row->type} ";
         $sql .= $row->null ? 'NULL ' : 'NOT NULL ';
-        $sql .= "DEFAULT ";
-        if (is_null($row->default)) {
-            $sql .= "NULL ";
-        } else {
-            $sql .= "'{$row->default}' ";
+
+        if ($row->extra != 'auto_increment') {
+            $sql .= "DEFAULT ";
+            if (is_null($row->default) || $row->default == 'NULL') {
+                $sql .= "NULL ";
+            } else {
+                $sql .= "'{$row->default}' ";
+            }
         }
         $sql .= $row->extra;
         $row->getModelParentRow()->getModel()->getDb()->query(trim($sql));
