@@ -57,18 +57,27 @@ class Vps_Model_Row_Data_Abstract extends Vps_Model_Row_Abstract
     public function save()
     {
         parent::save();
+        $update = isset($this->_cleanData[$this->_getPrimaryKey()]);
 
-        if (isset($this->_cleanData[$this->_getPrimaryKey()])) {
-            $this->_beforeInsert();
-            $this->_beforeSave();
-            $ret = $this->_model->update($this, $this->_data);
-            $this->_afterInsert();
+        $this->_beforeSave();
+        if ($update) {
+            $this->_beforeUpdate();
         } else {
-            $this->_beforeSave();
+            $this->_beforeInsert();
+        }
+
+        if ($update) {
+            $ret = $this->_model->update($this, $this->_data);
+        } else {
             $ret = $this->_model->insert($this, $this->_data);
         }
         $this->_cleanData = $this->_data;
 
+        if ($update) {
+            $this->_afterUpdate();
+        } else {
+            $this->_afterInsert();
+        }
         $this->_afterSave();
 
         return $ret;

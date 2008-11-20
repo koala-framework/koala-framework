@@ -10,7 +10,7 @@ class Vps_Update_Action_Db_TestModel extends Vps_Model_FnF
             'autoId' => 0,
             'data' => array(
                 array('field'=>'id', 'type'=>'int'),
-                array('field'=>'bar', 'type'=>'text'),
+                array('field'=>'bar', 'type'=>'text', 'default'=>5),
             ))))
         );
         $this->_dependentModels = array(

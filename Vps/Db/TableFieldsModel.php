@@ -121,7 +121,7 @@ class Vps_Db_TableFieldsModel extends Vps_Model_Data_Abstract
 
         if ($row->extra != 'auto_increment') {
             $sql .= "DEFAULT ";
-            if (is_null($row->default) || $row->default == 'NULL') {
+            if (is_null($row->default)) {
                 $sql .= "NULL ";
             } else {
                 $sql .= "'{$row->default}' ";
