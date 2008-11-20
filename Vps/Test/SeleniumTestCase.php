@@ -33,13 +33,16 @@ class Vps_Test_SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
     {
         try {
             $this->stop();
-        }
-        catch (RuntimeException $e) {
-        }
+        } catch (RuntimeException $e) {}
     }
 
     protected function tearDown()
     {
+        if (Zend_Registry::get('config')->server->autoStopTest) {
+            try {
+                $this->stop();
+            } catch (RuntimeException $e) {}
+        }
     }
 
     public function clickAndWait($link)
