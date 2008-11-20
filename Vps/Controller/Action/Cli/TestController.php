@@ -74,6 +74,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
 
     public function indexAction()
     {
+        //set_include_path('/www/public/niko/phpunit:'.get_include_path());
         self::initForTests();
 
         $arguments = array();
@@ -87,6 +88,7 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
         if ($this->_getParam('exclude-group')) {
             $arguments['excludeGroups'] = explode(',', $this->_getParam('exclude-group'));
         }
+        $arguments['verbose'] = false;
         if ($this->_getParam('verbose')) {
             $arguments['verbose'] = $this->_getParam('verbose');
         }
@@ -120,6 +122,10 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             $cfg = new Zend_Config_Ini('application/config.ini', $this->_getParam('server'));
             Vps_Registry::set('testDomain', $cfg->server->domain);
         }
+        if ($this->_getParam('report')) {
+            $resultLogger = new Vps_Test_ResultLogger(true/*verbose*/);
+            $arguments['listeners'][] = $resultLogger;
+        }
 
         $suite = new Vps_Test_TestSuite();
         $runner = new PHPUnit_TextUI_TestRunner;
@@ -137,17 +143,24 @@ class Vps_Controller_Action_Cli_TestController extends Vps_Controller_Action_Cli
             );
         }
         if ($this->_getParam('report')) {
+            $resultLogger->printResult($result);
             $info = new SimpleXMLElement(`svn info --xml`);
-            $data = array(
+
+            $client = new Zend_Http_Client('http://zeiterfassung.niko.vivid/test_report.php');
+            $client->setMethod(Zend_Http_Client::POST);
+            $response = $client->request('POST');
+
+            $client->setParameterPost(array(
                 'svnPath' => (string)$info->entry->url,
                 'tests' => $result->count(),
                 'failures' => $result->failureCount()+$result->errorCount(),
                 'skipped' => $result->skippedCount(),
-                'not_implemented' => $result->notImplementedCount()
-            );
-            $r = file_get_contents("http://zeiterfassung.vivid/test_report.php?data=".serialize($data));
-            if ($r != 'OK') {
-                throw new Vps_Exception("Can't report to zeiterfassung: $r");
+                'not_implemented' => $result->notImplementedCount(),
+                'log' => $resultLogger->getContent()
+            ));
+            $response = $client->request();
+            if ($response->getBody() != 'OK') {
+                throw new Vps_Exception("Can't report to zeiterfassung: ".$response->getBody());
             }
         }
 
