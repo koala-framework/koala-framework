@@ -88,6 +88,29 @@ class Vps_Db_TablesModel_TableFieldsTest extends PHPUnit_Framework_TestCase
         $fieldRow->save();
     }
 
+    public function testUpdateFieldDefaultNull()
+    {
+        $this->_db->expects($this->once())
+            ->method('fetchAssoc')
+            ->with($this->equalTo('SHOW FIELDS FROM foo'))
+            ->will($this->returnValue(array(
+                array('Field'=>'id', 'Type'=>'int(11)', 'Null'=>'NO', 'Key'=>'PRI', 'Default'=>null, 'Extra'=>'auto_increment'),
+                array('Field'=>'foo', 'Type'=>'varchar(255)', 'Null'=>'NO', 'Key'=>'MUL', 'Default'=>'', 'Extra'=>''),
+            )));
+        $this->_db->expects($this->exactly(1))
+            ->method('query')
+            ->with($this->equalTo('ALTER TABLE foo CHANGE foo foo VARCHAR(10) NULL DEFAULT NULL'));
+        $row = $this->_model->getRow('foo');
+        $fieldRow = $this->_model->getRow('foo')
+            ->getChildRows('Fields', $this->_model->select()->whereId('foo'))
+            ->current();
+        $this->assertNotNull($fieldRow);
+        $fieldRow->type = 'VARCHAR(10)';
+        $fieldRow->null = 1;
+        $fieldRow->default = null;
+        $fieldRow->save();
+    }
+
     public function testDropField()
     {
         $this->_db->expects($this->once())

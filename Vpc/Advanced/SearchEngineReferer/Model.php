@@ -1,5 +1,5 @@
 <?php
-class Vpc_Advanced_SearchEngineReferer_Model extends Vps_Db_Table
+class Vpc_Advanced_SearchEngineReferer_Model extends Vps_Model_Db
 {
-    protected $_name = 'vpc_advanced_se_referer';
+    protected $_table = 'vpc_advanced_se_referer';
 }

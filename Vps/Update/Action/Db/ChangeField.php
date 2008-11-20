@@ -5,7 +5,7 @@ class Vps_Update_Action_Db_ChangeField extends Vps_Update_Action_Db_Abstract
     public $type;
     public $null;
     public $key;
-    public $default;
+    public $default = false; //php sux (kann sonst nicht auf null gesetzt werden)
     public $extra;
 
     public function checkSettings()
@@ -27,7 +27,7 @@ class Vps_Update_Action_Db_ChangeField extends Vps_Update_Action_Db_Abstract
         if (isset($this->type)) $field->type = $this->type;
         if (isset($this->null)) $field->null = $this->null;
         if (isset($this->key)) $field->key = $this->key;
-        if (isset($this->default)) $field->default = $this->default;
+        if ($this->default !== false) $field->default = $this->default;
         if (isset($this->extra)) $field->extra = $this->extra;
         $field->save();
 

@@ -3,6 +3,7 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
     extends Vpc_Abstract
 {
     private $_referersCache = null;
+    private $_parentModel;
 
     public static function getSettings()
     {
@@ -19,11 +20,19 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
         return $ret;
     }
 
+    protected function _getParentModel()
+    {
+        if (!isset($this->_parentModel)) {
+            $this->_parentModel = $this->getData()->parent->getComponent()->getModel();
+        }
+        return $this->_parentModel;
+    }
+
     private function _getReferers()
     {
         if (is_null($this->_referersCache)) {
-            $table = $this->getData()->parent->getComponent()->getTable();
-            $rowset = $table->fetchAll($this->_getWhere(), 'id DESC', $this->_getSetting('limit'));
+            $model = $this->_getParentModel();
+            $rowset = $model->getRows($this->_getSelect());
 
             $this->_referersCache = array();
             foreach ($rowset as $row) {
@@ -45,8 +54,11 @@ class Vpc_Advanced_SearchEngineReferer_ViewLatest_Component
         return count($refs) ? true : false;
     }
 
-    protected function _getWhere()
+    protected function _getSelect()
     {
-        return array();
+        $model = $this->_getParentModel();
+        return $model->select()
+            ->order('id', 'DESC')
+            ->limit($this->_getSetting('limit'));
     }
 }
