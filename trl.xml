@@ -4446,5 +4446,80 @@ es wurde ein neuer Kommentar in einem beobachteten Thema erstellt:</de>
 <de>de</de>
 <id>883</id>
 </text>
+<text>
+<en>Events</en>
+<de>_</de>
+<id>884</id>
+</text>
+<text>
+<en>Shop</en>
+<de>_</de>
+<id>885</id>
+</text>
+<text>
+<en>Products</en>
+<de>_</de>
+<id>886</id>
+</text>
+<text>
+<en>Tags</en>
+<de>_</de>
+<id>887</id>
+</text>
+<text>
+<en>Status</en>
+<de>_</de>
+<id>888</id>
+</text>
+<text>
+<en>Priority</en>
+<de>_</de>
+<id>889</id>
+</text>
+<text>
+<en>Estimated time</en>
+<de>_</de>
+<id>890</id>
+</text>
+<text>
+<en>Create date</en>
+<de>_</de>
+<id>891</id>
+</text>
+<text>
+<en>Deadline</en>
+<de>_</de>
+<id>892</id>
+</text>
+<text>
+<en>Open</en>
+<de>Offen</de>
+<id>893</id>
+</text>
+<text>
+<en>Done</en>
+<de>Erledigt</de>
+<id>894</id>
+</text>
+<text>
+<en>In progress</en>
+<de>In Arbeit</de>
+<id>895</id>
+</text>
+<text>
+<en>Is being tested</en>
+<de>Wird getestet</de>
+<id>896</id>
+</text>
+<text>
+<en>Fax</en>
+<de>_</de>
+<id>897</id>
+</text>
+<text>
+<en>Website</en>
+<de>_</de>
+<id>898</id>
+</text>
 </trl>
 

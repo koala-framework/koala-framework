@@ -6,8 +6,11 @@
     background-image:url(/assets/silkicons/cross.png);
 }
 
+.vps-cell-icon div.x-grid3-cell-inner,
 .vps-cell-button div.x-grid3-cell-inner {
     background-image: url(/assets/silkicons/page_edit.png);
     background-position: center; background-repeat: no-repeat;
+}
+.vps-cell-button div.x-grid3-cell-inner {
     cursor: pointer;
 }
