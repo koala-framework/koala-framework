@@ -27,8 +27,8 @@ class Vps_Controller_Action_Todo_TodosController extends Vps_Controller_Action_A
     {
         $where = parent::_getWhere();
         $projectIds = Vps_Registry::get('config')->todo->projectIds->toArray();
-//         $where[] = 'project_id IN('.implode(',', $projectIds).')';
-//         $where[] = 'show_online = 1';
+        $where[] = 'project_id IN('.implode(',', $projectIds).')';
+        $where[] = 'show_online = 1';
         return $where;
     }
 
