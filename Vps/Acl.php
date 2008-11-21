@@ -11,7 +11,7 @@ class Vps_Acl extends Zend_Acl
         $this->addRole(new Vps_Acl_Role_Admin('admin', 'Administrator'));
         $this->addRole(new Zend_Acl_Role('cli'));
 
-        $this->add(new Zend_Acl_Resource('index'));
+        $this->add(new Zend_Acl_Resource('default_index'));
         $this->add(new Zend_Acl_Resource('vps_user_menu'));
         $this->add(new Zend_Acl_Resource('vps_user_login'));
         $this->add(new Zend_Acl_Resource('vps_user_changeuser'));
@@ -45,9 +45,9 @@ class Vps_Acl extends Zend_Acl
         $this->allow('cli', 'vps_cli_trlparse');
         $this->allow('cli', 'vps_cli_hlpparse');
 
-        $this->allow(null, 'index');
+        $this->allow(null, 'default_index');
         $this->allow(null, 'vps_test_connectionerror');
-        $this->deny('guest', 'index');
+        $this->deny('guest', 'default_index');
         $this->allow(null, 'vps_user_menu');
         $this->allow(null, 'vps_user_login');
         $this->allow(null, 'vps_error_error');

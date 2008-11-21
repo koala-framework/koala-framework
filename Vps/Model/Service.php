@@ -7,6 +7,7 @@ class Vps_Model_Service extends Vps_Model_Abstract
     protected $_data = array();
 
     protected $_primaryKey;
+    protected $_columns;
 
     public function __construct(array $config = array())
     {
@@ -114,7 +115,10 @@ class Vps_Model_Service extends Vps_Model_Abstract
 
     public function getColumns()
     {
-        return $this->_client->getColumns();
+        if (!$this->_columns) {
+            $this->_columns = $this->_client->getColumns();
+        }
+        return $this->_columns;
     }
 
     public function getPrimaryKey()

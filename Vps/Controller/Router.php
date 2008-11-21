@@ -26,6 +26,11 @@ class Vps_Controller_Router extends Zend_Controller_Router_Rewrite
                     array('module'     => 'vps_controller_action_pool',
                           'controller' => 'pools',
                           'action'     => 'index')));
+        $this->AddRoute('vps_todo', new Zend_Controller_Router_Route(
+                    '/vps/todo/:controller/:action',
+                    array('module'     => 'vps_controller_action_todo',
+                          'controller' => 'todos',
+                          'action'     => 'index')));
         $this->AddRoute('trl', new Zend_Controller_Router_Route(
                     '/vps/trl/:controller/:action',
                     array('module'     => 'vps_controller_action_trl',
