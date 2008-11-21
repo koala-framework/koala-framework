@@ -100,11 +100,13 @@ class Vps_Model_Service extends Vps_Model_Abstract
         $pk = $this->getPrimaryKey();
         $keys = array();
         $data = $this->_client->getRows($where, $order, $limit, $start);
-        foreach ($data as $row) {
-            if (!isset($this->_data[$row[$pk]])) {
-                $this->_data[$row[$pk]] = $row;
+        if ($data) {
+            foreach ($data as $row) {
+                if (!isset($this->_data[$row[$pk]])) {
+                    $this->_data[$row[$pk]] = $row;
+                }
+                $keys[] = $row[$pk];
             }
-            $keys[] = $row[$pk];
         }
 
         return new $this->_rowsetClass(array(
