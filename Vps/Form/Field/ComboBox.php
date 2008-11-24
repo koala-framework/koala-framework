@@ -75,7 +75,9 @@ class Vps_Form_Field_ComboBox extends Vps_Form_Field_SimpleAbstract
             if ($this->getFilterField()) {
                 throw new Vps_Exception("Not possible (yet) to use storeUrl + ComboBoxFilter");
             }
-        } else if ($data instanceof Zend_Db_Table_Abstract || $data instanceof Vps_Db_Table_Rowset_Abstract) {
+        } else if ($data instanceof Zend_Db_Table_Abstract || $data instanceof Vps_Db_Table_Rowset_Abstract
+            || $data instanceof Vps_Model_Rowset_Interface
+        ) {
             if ($data instanceof Zend_Db_Table_Abstract) {
                 $select = $this->getSelect();
                 if (!$select) {
