@@ -2,7 +2,7 @@ Vps.Form.ShowField = Ext.extend(Ext.form.Field,
 {
     defaultAutoCreate : {tag: 'div', cls: 'vps-form-show-field'},
     /**
-     * {value} wenn kein objekt �bergeben, sonst index aus objekt
+     * {value} wenn kein objekt übergeben, sonst index aus objekt
      */
     tpl: '{value}',
 
@@ -15,6 +15,7 @@ Vps.Form.ShowField = Ext.extend(Ext.form.Field,
         Vps.Form.ShowField.superclass.afterRender.call(this);
         if (typeof this.tpl == 'string') this.tpl = new Ext.XTemplate(this.tpl);
         this.tpl.compile();
+        this.setRawValue("&nbsp;"); //bugfix für IE 7 -> /vps/test/vps_form_show-field_value-overlaps-error
     },
     getName: function(){
         return this.name;
@@ -29,7 +30,6 @@ Vps.Form.ShowField = Ext.extend(Ext.form.Field,
     {
         return null;
     },
-
     setValue : function(value)
     {
         this.value = value;
@@ -40,6 +40,9 @@ Vps.Form.ShowField = Ext.extend(Ext.form.Field,
                 if (typeof value != 'object') value = { value : value };
                 this.tpl.overwrite(this.el, value);
             }
+        }
+        if (this.getRawValue() == '') {
+            this.setRawValue("&nbsp;");
         }
     }
 });

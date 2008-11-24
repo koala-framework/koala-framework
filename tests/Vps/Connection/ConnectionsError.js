@@ -5,7 +5,7 @@ Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
     id: 'blub',
     initComponent: function()
     {
-		Vps.Debug.displayErrors = true;
+        Vps.Debug.displayErrors = false;
         this.buttons = [];
         this.buttons.push(
             new Ext.Button({
@@ -50,6 +50,7 @@ Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
             new Ext.Button({
             text:'testC',
             handler : function(){
+                Vps.Debug.displayErrors = true;
                 Ext.Ajax.request({
                     timeout: 1000,
                     params: {test:1},
@@ -70,6 +71,26 @@ Vps.Test.ConnectionsError = Ext.extend(Ext.Panel, {
                     url: '/vps/test/vps_connection_test/json-exception',
                     failure: function() {
                         this.el.insertHtml('beforeBegin', "<div id=\"abortexception\">abortexception</div>");
+                    },
+                    success: function() {
+                        this.el.insertHtml('beforeBegin', "<div id=\"success\">success</div>");
+                    },
+                    scope: this
+               });
+            },
+            scope: this
+        }));
+        this.buttons.push(
+            new Ext.Button({
+            text:'testD',
+            handler : function(){
+                Vps.Debug.displayErrors = true;
+                Ext.Ajax.request({
+                    timeout: 1000,
+                    params: {test:1},
+                    url: '/vps/test/vps_connection_test/json-real-exception',
+                    failure: function() {
+                        this.el.insertHtml('beforeBegin', "<div id=\"abort\">abort</div>");
                     },
                     success: function() {
                         this.el.insertHtml('beforeBegin', "<div id=\"success\">success</div>");
