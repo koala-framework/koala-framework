@@ -25,7 +25,6 @@ Vps.Binding.TabPanel = Ext.extend(Vps.Binding.AbstractPanel,
                 autoScroll  : true,
                 closable    : false,
                 title       : i,
-                id          : i,
                 baseParams  : b,
                 autoLoad    : this.autoLoad
             }));
