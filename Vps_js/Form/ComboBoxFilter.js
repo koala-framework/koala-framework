@@ -11,33 +11,38 @@ Vps.Form.ComboBoxFilter = Ext.extend(Ext.Panel, {
         this.filterBox = this.items.items[0];
         this.saveBox   = this.items.items[1];
 
+        this.firstChangeDone = false;
+
         this.filterBox.on('select', function(box, r, idx) {
             if (r.data.id) {
                 this.saveBox.enable();
+                this.saveBox.setValue(null);
             } else {
                 this.saveBox.disable();
             }
         }, this);
 
-        this.saveBox.on('changevalue', function(packageId) {
+        this.saveBox.on('changevalue', function(contactId) {
             this.saveBox.store.clearFilter();
 
             var saveStoreData = this.saveBox.store.getAt(
-                this.saveBox.store.find('id', packageId)
+                this.saveBox.store.find('id', contactId)
             );
 
-            if (saveStoreData && saveStoreData.data.filterId) {
-                this.filterBox.setValue(saveStoreData.data.filterId);
+            if (saveStoreData && saveStoreData.data[this.saveBox.filterField]) {
+                this.filterBox.setValue(saveStoreData.data[this.saveBox.filterField]);
                 this.saveBox.enable();
-            } else {
+            } else if (!this.firstChangeDone) {
                 this.saveBox.disable();
             }
+
+            this.firstChangeDone = true;
         }, this);
 
         this.saveBox.on('expand', function(box, r, idx) {
             this.saveBox.store.filterBy(function(r, id) {
-                if (!r.data.filterId ||
-                    (r.data.filterId && r.data.filterId == this.filterBox.getValue())
+                if (!r.data[this.saveBox.filterField] ||
+                    (r.data[this.saveBox.filterField] && r.data[this.saveBox.filterField] == this.filterBox.getValue())
                 ) {
                     return true;
                 }

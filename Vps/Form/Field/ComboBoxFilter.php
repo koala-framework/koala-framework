@@ -3,7 +3,7 @@
  * Für zwei (oder mehr) zusammengeschaltete ComboBoxen (Auswahl in der ersten
  * lädt Daten in der zweiten nach, gespeichert wird nur die zweite wenn nicht anders angegeben)
  **/
-class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
+class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_ComboBox
 {
     public function __construct($field_name = null, $field_label = null)
     {
@@ -14,18 +14,23 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
 
     //setFilteredCombo(combo)
 
-    /*
+
     public function getMetaData()
     {
         $ret = parent::getMetaData();
 
-        $filterMetaData = $this->_filterObject->getMetaData();
+        $saveCombo = $this->getFilteredCombo();
+        $saveMetaData = $saveCombo->getMetaData();
 
-        $saveMetaData = $ret;
-        $saveMetaData['xtype'] = 'combobox';
+        $filterMetaData = $ret;
+        $filterMetaData['xtype'] = 'combobox';
+
+        if (!$saveCombo->getFilterField()) {
+            throw new Vps_Exception("setFilterField(str) must be called for the save-combo-box");
+        }
 
         // Breite von Filter übernehmen, wenn gesetzt
-        if (!empty($filterMetaData['width'])) {
+/*        if (!empty($filterMetaData['width'])) {
             $saveMetaData['width'] = $filterMetaData['width'];
         } else if (!empty($saveMetaData['width'])) {
             unset($saveMetaData['width']);
@@ -37,15 +42,19 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
         if (empty($filterMetaData['store']['fields'])) {
             $filterMetaData['store']['fields'] = array('id', 'value');
         }
-
-        $data = $this->getValues();
+*/
+        $data = $saveCombo->getValues();
         if (is_array($data)) {
             $saveMetaData['store']['data'] = array();
             foreach ($data as $k=>$i) {
-                $saveMetaData['store']['data'][] = array($i['id'], $i['value'], $i['filterId']);
+                $addArray = array();
+                foreach ($i as $i2) {
+                    $addArray[] = $i2;
+                }
+                $saveMetaData['store']['data'][] = $addArray;
             }
         }
-        $ret['store'] = $saveMetaData['store'];
+//         $ret['store'] = $saveMetaData['store'];
 
 
         $ret['items'] = array(
@@ -55,7 +64,7 @@ class Vps_Form_Field_ComboBoxFilter extends Vps_Form_Field_Select
 
         return $ret;
     }
-    */
+
     public function processInput($row, $postData)
     {
         $postData = parent::processInput($row, $postData);
