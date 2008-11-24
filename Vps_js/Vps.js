@@ -106,7 +106,7 @@ Vps.log = function(msg) {
         Vps.debugDiv.style.top = 0;
         Vps.debugDiv.style.right = 0;
         Vps.debugDiv.style.backgroundColor = 'white';
-		Vps.debugDiv.style.fontSize = '10px';
+        Vps.debugDiv.style.fontSize = '10px';
     }
     Vps.debugDiv.innerHTML += msg+'<br />';
 };
@@ -137,9 +137,9 @@ Vps.callWithErrorHandler = function(fn, scope) {
 Vps.keepAlive = function() {
        Ext.Ajax.request({
            url: '/vps/user/login/json-keep-alive',
-		   ignoreErrors: true
+           ignoreErrors: true
        });
-	   Vps.keepAlive.defer(1000 * 60 * 5);
+       Vps.keepAlive.defer(1000 * 60 * 5);
 };
 if (Vps.isApp) {
     Vps.keepAlive.defer(1000 * 60 * 5);
@@ -162,25 +162,28 @@ Vps.onContentReady = function(fn, scope) {
 
 Vps.handleError = function(error) {
 
-	if (error instanceof String) error = { message: error };
-	if (arguments[1]) error.title = arguments[1];
-	if (arguments[2]) error.mail = arguments[2];
+    if (error instanceof String) error = { message: error };
+    if (arguments[1]) error.title = arguments[1];
+    if (arguments[2]) error.mail = arguments[2];
 
 
-	if ((error.checkRetry || Vps.Debug.displayErrors) && error.retry) {
-		if (error.errorText) {
+    if ((error.checkRetry || Vps.Debug.displayErrors) && error.retry) {
+        if (Vps.Debug.displayErrors) {
+            title = error.title;
+            msg = error.message;
+        } else if (error.errorText) {
             title = error.errorText;
-			msg = error.errorText;
-		} else {
-			title = (trlVps('Error'));
-			msg = trlVps("A Server failure occured.");
-			if (error.mail || (typeof error.mail == 'undefined')) {
+            msg = error.errorText;
+        } else {
+            title = (trlVps('Error'));
+            msg = trlVps("A Server failure occured.");
+            if (error.mail || (typeof error.mail == 'undefined')) {
             Ext.Ajax.request({
                 url: '/vps/error/error/json-mail',
                 params: {msg: error.message}
             });
         }
-		}
+        }
 
             var win = new Ext.Window({
                     autoCreate : true,
@@ -199,8 +202,8 @@ Vps.handleError = function(error) {
                     plain:true,
                     footer:true,
                     closable:false,
-					html: msg,
-					buttons: [{
+                    html: msg,
+                    buttons: [{
                         text     : trlVps('Retry'),
                         handler  : function(){
                             error.retry.call(error.scope || window);
@@ -209,14 +212,14 @@ Vps.handleError = function(error) {
                     },{
                         text     : trlVps('Abort'),
                         handler  : function(){
-							error.abort.call(error.scope || window);
+                            error.abort.call(error.scope || window);
                             win.close();
                         }
                 }]
 
                 });
-				win.show();
-	} else if (Vps.Debug.displayErrors) {
+                win.show();
+    } else if (Vps.Debug.displayErrors) {
         Ext.Msg.show({
             title: error.title,
             msg: error.message,

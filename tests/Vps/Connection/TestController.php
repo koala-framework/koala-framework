@@ -23,7 +23,7 @@ class Vps_Connection_TestController extends Vps_Controller_Action
     public function jsonExceptionAction() {
         $connections_counts = new Zend_Session_Namespace('test_connection_count');
         $connections_counts->exceptions++;
-        $this->view->exception = "test Exceptions";
+        $this->view->exception = "exceptionError";
         $this->view->success = false;
     }
 
@@ -42,5 +42,10 @@ class Vps_Connection_TestController extends Vps_Controller_Action
         $connections_counts = new Zend_Session_Namespace('test_connection_count');
         echo  $connections_counts->exceptions;
         exit;
+    }
+
+    public function jsonRealExceptionAction() {
+
+        throw new Vps_Exception("Exception");
     }
 }

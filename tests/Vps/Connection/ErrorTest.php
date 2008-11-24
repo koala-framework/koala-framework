@@ -9,12 +9,12 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
         parent::setUp();
         $this->setTimeout(120000);
     }
-    public function testErrorDisplayErrorsFalse()
+    public function testConnectionErrorDisplayErrorsFalse()
     {
         $this->_testError(false);
     }
 
-    public function testErrorDisplayErrorsTrue()
+    public function testConnectionErrorDisplayErrorsTrue()
     {
         $this->_testError(true);
     }
@@ -32,7 +32,7 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
 
     }
 
-    public function testSuccess()
+    public function testConnectionSuccess()
     {
         $this->open('/vps/test/vps_connection_test');
         $this->click("//button[text()='testB']");
@@ -40,7 +40,7 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
         $this->assertEquals("success", $this->getText('id=success'));
     }
 
-    public function testMoreRequests()
+    public function testConnectionMoreRequests()
     {
 
         $this->open('/vps/test/vps_connection_test');
@@ -77,4 +77,16 @@ class Vps_Connection_ErrorTest extends Vps_Test_SeleniumTestCase
         $this->assertEquals(5, $count);
 
     }
+
+    public function testConnectionRealException()
+    {
+        $this->open('/vps/test/vps_connection_test');
+        $this->click("//button[text()='testD']");
+        $this->waitForConnections();
+        $text = $this->getText("//div[contains(text(), 'Vps_Exception')]");
+        $this->assertTrue((bool)strpos($text, 'Connection/TestController.php:49'));
+    }
+
+
+
 }
