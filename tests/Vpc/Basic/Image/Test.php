@@ -42,6 +42,8 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
 
     public function testGetMediaOutput()
     {
+        $checkCmpMod = Vps_Registry::get('config')->debug->componentCache->checkComponentModification;
+        Vps_Registry::get('config')->debug->componentCache->checkComponentModification = true;
         $o = Vpc_Basic_Image_Component::getMediaOutput('1600', 'default', 'Vpc_Basic_Image_FixDimensionComponent');
         $this->assertEquals('image/png', $o['mimeType']);
         $im = new Imagick();
@@ -51,6 +53,7 @@ class Vpc_Basic_Image_Test extends PHPUnit_Framework_TestCase
         $this->assertContains(Vps_Model_Abstract::getInstance('Vpc_Basic_Image_UploadsModel')->getUploadDir().'/1', $o['mtimeFiles']);
         $this->assertContains(VPS_PATH.'/Vpc/Basic/Image/Component.php', $o['mtimeFiles']);
         $this->assertContains(VPS_PATH.'/tests/Vpc/Basic/Image/FixDimensionComponent.php', $o['mtimeFiles']);
+        Vps_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
     }
 
     public function testHtml()
