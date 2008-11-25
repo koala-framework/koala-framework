@@ -3,6 +3,7 @@ Ext.namespace('Vps.Test');
 Vps.Test.OverlapsError = Ext.extend(Ext.Panel, {
     initComponent: function()
     {
+        Vps.Debug.displayErrors = true;
         this.buttons = [];
         this.buttons.push(
             new Ext.Button({
