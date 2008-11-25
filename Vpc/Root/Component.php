@@ -4,16 +4,10 @@ class Vpc_Root_Component extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = parent::getSettings();
-        $ret['generators']['page'] = array(
-            'class' => 'Vps_Component_Generator_Page',
-            'showInMenu' => true,
-            'inherit' => true,
-            'component' => array(
-                'paragraphs' => 'Vpc_Paragraphs_Component',
-                'link' => 'Vpc_Basic_LinkTag_Component',
-                'firstChildPage' => 'Vpc_Basic_LinkTag_FirstChildPage_Component'
-            ),
-            'table' => 'Vps_Dao_Pages'
+        $ret['generators']['category'] = array(
+            'class' => 'Vpc_Root_CategoryGenerator',
+            'component' => 'Vpc_Root_Category_Component',
+            'model' => 'Vpc_Root_CategoryModel'
         );
         $ret['generators']['box'] = array(
             'class' => 'Vps_Component_Generator_Box_Static',

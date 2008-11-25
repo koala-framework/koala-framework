@@ -1,5 +1,5 @@
 <?php
-class Vpc_Box_Title_Root extends Vpc_Root_Component
+class Vpc_Box_Title_Root extends Vps_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {

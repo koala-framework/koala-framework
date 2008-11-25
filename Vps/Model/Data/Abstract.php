@@ -243,4 +243,8 @@ abstract class Vps_Model_Data_Abstract extends Vps_Model_Abstract
         }
         return false;
     }
+
+    public function getUniqueIdentifier() {
+        throw new Vps_Exception('Not implemented');
+    }
 }

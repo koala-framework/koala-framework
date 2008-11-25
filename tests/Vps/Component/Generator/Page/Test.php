@@ -10,7 +10,7 @@ class Vps_Component_Generator_Page_Test extends PHPUnit_Framework_TestCase
 
     public function testChilds()
     {
-        $c = $this->_root->getChildPages(array('type'=>'main', 'showInMenu'=>true));
+        $c = $this->_root->getChildPages(array('showInMenu'=>true));
         $this->assertEquals(count($c), 1);
 
         $c = $this->_root->getChildPages();
@@ -29,19 +29,19 @@ class Vps_Component_Generator_Page_Test extends PHPUnit_Framework_TestCase
                                     ->getChildPages()), 2);
 
     }
-    
+
     public function testBox()
     {
         $box = $this->_root->getComponentById(3)->getChildComponent('-title');
         $this->assertEquals('3-title', $box->componentId);
     }
-    
+
     public function testGetGeneratorPage()
     {
         $pages = $this->_root->getComponentById(1)->getChildComponents(array('generatorPage' => true, 'page' => true));
         $this->assertEquals('2', current($pages)->componentId);
     }
-    
+
     public function testFilename()
     {
         $ccc = Vpc_Abstract::getChildComponentClasses('Vps_Component_Generator_Page_Root', array('filename' => 'home'));
@@ -68,7 +68,7 @@ class Vps_Component_Generator_Page_Test extends PHPUnit_Framework_TestCase
         $this->assertNotNull($page);
         $this->assertEquals($page->url, '/home/foo');
     }
-    
+
     public function testIdAndComponentClassConstraints()
     {
         $c = $this->_root->getComponentById(2, array('componentClass'=>'Vpc_Basic_Empty_Component'));

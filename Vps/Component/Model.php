@@ -7,6 +7,19 @@ class Vps_Component_Model extends Vps_Model_Abstract
         'pageGenerator' => true,
         'ignoreVisible' => true
     );
+    protected $_primaryKey = 'componentId';
+    private $_root;
+
+    public function setRoot(Vps_Component_Data $root)
+    {
+        $this->_root = $root;
+    }
+
+    public function getRoot()
+    {
+        if (!$this->_root) $this->_root = Vps_Component_Data_Root::getInstance();
+        return $this->_root;
+    }
 
     public function createRow(array $data=array()) {
         throw new Vps_Exception('Not implemented yet.');
@@ -42,27 +55,23 @@ class Vps_Component_Model extends Vps_Model_Abstract
             $select = $where;
         }
 
-        $root = Vps_Component_Data_Root::getInstance();
+        $root = $this->getRoot();
 
         $where = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
-        if ($where && isset($where['parent_id'])) {
-            $constraints = $this->_constraints;
-            if ($where['parent_id'] == 'root') {
-                $rowset = array();
-                foreach (Zend_Registry::get('config')->vpc->pageTypes->toArray() as $id => $name) {
-                    $id = 'root-' . $id;
-                    $rowset[] = new Vps_Component_Data_Category($id, $name);
-                }
-            } else {
-                if (substr($where['parent_id'], 0, 5) == 'root-') {
-                    $constraints['type'] = substr($where['parent_id'], 5);
-                    $where['parent_id'] = 'root';
-                }
-                $page = $root->getComponentById($where['parent_id'], $this->_constraints);
-                $rowset = array_values($page->getChildComponents($constraints));
+        $parts = $select->getPart(Vps_Model_Select::WHERE_NULL);
+        if ($parts && in_array('parent_id', $parts)) {
+            $rowset = array($root);
+        } else if (isset($where['parent_id'])) {
+            $page = $root->getComponentById($where['parent_id'], array('ignoreVisible' => true));
+            $rowset = array_values($page->getChildComponents($this->_constraints));
+            if ($page instanceof Vps_Component_Data_Root) {
+                $constraints = $this->_constraints;
+                unset($constraints['pageGenerator']);
+                $constraints['generator'] = 'category';
+                $rowset = array_merge(array_values($page->getChildComponents($constraints)));
             }
         } else {
-            $rowset = array($root);
+            throw new Vps_Exception('Cannot return all pages');
         }
         return new $this->_rowsetClass(array(
             'dataKeys' => $rowset,

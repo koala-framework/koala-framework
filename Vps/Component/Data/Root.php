@@ -14,6 +14,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 'parent' => null,
                 'isPage' => false,
                 'isPseudoPage' => false,
+                'inherits' => true,
                 'componentId' => 'root'
             ), $config
         );
@@ -37,14 +38,14 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         return self::$_rootComponentClass;
     }
-    
+
     public static function setComponentClass($componentClass)
     {
         self::$_rootComponentClass = $componentClass;
         self::$_instance = null;
         Vps_Component_Abstract::resetSettingsCache();
     }
-    
+
     public function getPageByPath($path)
     {
         if (substr($path, -1) == '/') {
@@ -80,7 +81,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 if ($i+1 == count($idParts)) {
                     //nur bei letzem part select berücksichtigen
                     $select->whereId($idPart);
-                    $ret = $ret->getChildComponent($select);
+                    $s = $select;
                 } else {
                     $s = array('id'=>$idPart);
                     if ($select->hasPart(Vps_Component_Select::IGNORE_VISIBLE)) {
@@ -88,9 +89,36 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                         //komponenten finden
                         $s['ignoreVisible'] = $select->getPart(Vps_Component_Select::IGNORE_VISIBLE);
                     }
+                }
+
+                if ($i == 0) { // Muss eine Page sein
+                    $generators = $this->_getPageGenerators($this->componentClass);
+                    foreach ($generators as $generator) {
+                        $ret = array_pop($generator->getChildData(null, $s));
+                        if ($ret) break;
+                    }
+                } else {
                     $ret = $ret->getChildComponent($s);
                 }
                 if (!$ret) break;
+            }
+        }
+        return $ret;
+    }
+
+    private function _getPageGenerators($class)
+    {
+        $ret = array();
+        foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
+            $components = $generator['component'];
+            if (!is_array($components)) $components = array($components);
+            if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page')) {
+                $ret[] = Vps_Component_Generator_Abstract::getInstance($class, $key, $generator);
+            }
+            foreach ($components as $component) {
+                if (is_instance_of($component, 'Vpc_Root_Category_Component')) {
+                    $ret = array_merge($ret, $this->_getPageGenerators($component));
+                }
             }
         }
         return $ret;
@@ -113,7 +141,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         }
         return $ret;
     }
-    
+
     public function getComponentByDbId($dbId, $select = array())
     {
         if (is_array($select)) {

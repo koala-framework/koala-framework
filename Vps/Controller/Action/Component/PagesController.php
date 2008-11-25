@@ -27,15 +27,6 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         parent::init();
     }
 
-    protected function _getTreeWhere($parentRow)
-    {
-        $where = parent::_getTreeWhere($parentRow);
-        if ($parentRow) {
-            $where['type'] = $parentRow->type;
-        }
-        return $where;
-    }
-    
     protected function _formatNode($row)
     {
         $data = parent::_formatNode($row);
@@ -51,7 +42,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $data['expanded'] = true;
             $data['type'] = 'root';
         }
-        if ($row->getData() instanceof Vps_Component_Data_Category) {
+        if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_Category_Component')) {
             $data['bIcon'] = $this->_icons['folder']->__toString();
             $data['expanded'] = true;
             $data['type'] = 'category';
@@ -59,18 +50,14 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         $data['uiProvider'] = 'Vps.Component.PagesNode';
 
         $component = $row->getData();
-        if ($component instanceof Vps_Component_Data_Category) {
-            $editComponents = array();
-        } else {
-            $editComponents = $component->getRecursiveChildComponents(
-                array(
-                    'hasEditComponents' => true,
-                    'pageGenerator' => false
-                )
-            );
-            if (!$component instanceof Vps_Component_Data_Root) {
-                $editComponents[] = $component; 
-            }
+        $editComponents = $component->getRecursiveChildComponents(
+            array(
+                'hasEditComponents' => true,
+                'pageGenerator' => false
+            )
+        );
+        if ($component->isPage) {
+            $editComponents[] = $component;
         }
         $data['data']['editComponents'] = array();
         foreach ($editComponents as $cc) {
@@ -80,7 +67,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 //wenn das probleme verursact ignorieren - aber es erspart lange fehlersuche warum eine komp. nicht angezeigt wird :D
                 throw new Vps_Exception("Component '$cc->componentClass' does have no componentName but must have one for editing");
             }
-            
+
             $data['data']['editComponents'][] = array(
                 'componentClass' => $cc->componentClass,
                 'componentName' => Vpc_Abstract::getSetting($cc->componentClass, 'componentName'),
@@ -106,7 +93,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
                 $oldRow->is_home = 0;
                 $oldRow->save();
             }
-            
+
             $row->is_home = 1;
             $row->save();
             $this->view->home = $id;
