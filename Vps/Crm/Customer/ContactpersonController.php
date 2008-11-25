@@ -6,15 +6,15 @@ class Vps_Crm_Customer_ContactpersonController extends Vps_Controller_Action_Aut
 
     protected function _initFields()
     {
-        $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Ansprechpartner')));
+        $fs = $this->_form->add(new Vps_Form_Container_FieldSet(trlVps('Contact person')));
         $fs->setLabelWidth(50);
         $fs->setStyle('margin:10px;');
 
-        $fs->add(new Vps_Form_Field_TextField('firstname', trlVps('Vorname')))
+        $fs->add(new Vps_Form_Field_TextField('firstname', trlVps('Firstname')))
             ->setWidth(250);
-        $fs->add(new Vps_Form_Field_TextField('lastname', trlVps('Zuname')))
+        $fs->add(new Vps_Form_Field_TextField('lastname', trlVps('Lastname')))
             ->setWidth(250);
-        $fs->add(new Vps_Form_Field_TextField('phone', trlVps('Telefon')))
+        $fs->add(new Vps_Form_Field_TextField('phone', trlVps('Phone')))
             ->setWidth(250);
         $fs->add(new Vps_Form_Field_TextField('email', trlVps('E-Mail')))
             ->setWidth(250);
