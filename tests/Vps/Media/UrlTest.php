@@ -72,6 +72,8 @@ class Vps_Media_UrlTest extends PHPUnit_Framework_TestCase
 
     public function testOutputCacheWithMtimeFiles()
     {
+        $checkCmpMod = Vps_Registry::get('config')->debug->componentCache->checkComponentModification;
+        Vps_Registry::get('config')->debug->componentCache->checkComponentModification = true;
         Vps_Media_TestMediaOutputClass::$called = 0;
 
         $f = tempnam('/tmp', 'outputTest');
@@ -102,5 +104,7 @@ class Vps_Media_UrlTest extends PHPUnit_Framework_TestCase
 
         $o = Vps_Media::getOutput('Vps_Media_TestMediaOutputClass', $id, 'mtimeFiles');
         $this->assertEquals(2, Vps_Media_TestMediaOutputClass::$called);
+
+        Vps_Registry::get('config')->debug->componentCache->checkComponentModification = $checkCmpMod;
     }
 }

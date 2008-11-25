@@ -30,13 +30,6 @@ class Vps_Form_File_FileTest extends PHPUnit_Framework_TestCase
         $this->_row->save();
         $this->_field = new Vps_Form_Field_File('File');
     }
-    public function tearDown()
-    {
-        $dir = $this->_uploadsModel->getUploadDir();
-        if (substr($dir, 0, 4)=='/tmp') {
-            system('rm -r '.$dir);
-        }
-    }
 
     public function testProcessInputNothingUploaded()
     {
