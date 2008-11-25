@@ -127,7 +127,11 @@ class Vps_Component_Generator_Page extends Vps_Component_Generator_Abstract
             throw new Vps_Exception("This would return all pages. You don't want this.");
         }
         if ($parentData && is_instance_of($parentData->componentClass, 'Vpc_Root_Category_Component')) {
-            $pageIds = array_intersect($this->_pageCategory[$parentData->row->id], $pageIds);
+            if (isset($this->_pageCategory[$parentData->row->id])) {
+                $pageIds = array_intersect($this->_pageCategory[$parentData->row->id], $pageIds);
+            } else {
+                $pageIds = array();
+            }
         }
 
         $ret = array();

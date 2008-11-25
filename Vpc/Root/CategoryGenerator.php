@@ -10,4 +10,9 @@ class Vpc_Root_CategoryGenerator extends Vps_Component_Generator_Table
         $ret['name'] = $ret['row']->name;
         return $ret;
     }
+
+    protected function _getParentDataByRow($row)
+    {
+        return Vps_Component_Data_Root::getInstance();
+    }
 }

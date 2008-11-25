@@ -14,7 +14,7 @@ class Vps_Component_Generator_Categories_Test extends PHPUnit_Framework_TestCase
     public function testCategories()
     {
         $categories = $this->_root->getChildComponents();
-        $this->assertEquals(3, count($categories));
+        $this->assertEquals(4, count($categories));
 
         $category = $this->_root->getChildComponent('-main');
         $this->assertEquals('root-main', $category->componentId);
@@ -23,6 +23,10 @@ class Vps_Component_Generator_Categories_Test extends PHPUnit_Framework_TestCase
         $this->assertEquals('root', $category->parent->dbId);
 
         $this->assertNotNull($this->_root->getComponentById('root-main'));
+
+        $this->assertEquals(3, count($this->_root->getComponentsByClass('Vpc_Root_Category_Component')));
+        $this->assertNotNull($this->_root->getComponentByClass('Vpc_Root_Category_Component',
+                                        array('id' => '-main')));
     }
 
     public function testPages()
@@ -69,7 +73,7 @@ class Vps_Component_Generator_Categories_Test extends PHPUnit_Framework_TestCase
 
         $select = $model->select()->whereEquals('parent_id', 'root');
         $this->assertEquals('root-main', $model->getRow($select)->componentId);
-        $this->assertEquals(2, $model->countRows($select));
+        $this->assertEquals(3, $model->countRows($select));
 
         $select = $model->select()->whereEquals('parent_id', 'root-main');
         $this->assertEquals('1', $model->getRow($select)->componentId);
