@@ -1,5 +1,5 @@
 <?php
-class Vps_Component_Generator_UniqueRoot_Root extends Vpc_Root_Component
+class Vps_Component_Generator_UniqueRoot_Root extends Vps_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {

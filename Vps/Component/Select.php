@@ -16,7 +16,6 @@ class Vps_Component_Select extends Vps_Model_Select
     const WHERE_FILENAME = 'whereFilename';
     const WHERE_SHOW_IN_MENU = 'whereShowInMenu';
     const WHERE_HOME = 'whereHome';
-    const WHERE_TYPE = 'whereType';
     const WHERE_PAGE_GENERATOR = 'wherePageGenerator';
     const IGNORE_VISIBLE = 'ignoreVisible';
 
@@ -28,7 +27,7 @@ class Vps_Component_Select extends Vps_Model_Select
         }
         parent::__construct($where);
     }
-    
+
 /**
      * @deprecated nur für abwärtskompatibilität
      **/
@@ -38,7 +37,7 @@ class Vps_Component_Select extends Vps_Model_Select
             $this->setPart($type, $part);
         }
     }
-    
+
     public function joinWithParentGenerators($data, $generatorNames)
     {
         foreach ($generatorNames as $generatorName) {
@@ -153,11 +152,6 @@ class Vps_Component_Select extends Vps_Model_Select
     public function whereHome($value = true)
     {
         $this->_parts[self::WHERE_HOME] = $value;
-        return $this;
-    }
-    public function whereType($value)
-    {
-        $this->_parts[self::WHERE_TYPE] = $value;
         return $this;
     }
 

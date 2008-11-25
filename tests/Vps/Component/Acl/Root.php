@@ -1,18 +1,18 @@
 <?php
-class Vps_Component_Acl_Root extends Vpc_Root_Component
+class Vps_Component_Acl_Root extends Vps_Component_NoCategoriesRoot
 {
     public static function getSettings()
     {
         $ret = parent::getSettings();
         $ret['generators']['page']['model'] = new Vps_Model_FnF(array('data'=>array(
             array('id'=>1, 'pos'=>1, 'visible'=>true, 'name'=>'Home', 'filename' => 'home',
-                  'tags' => 'test', 'parent_id'=>null, 'component'=>'empty', 'is_home'=>true, 'type'=>'main', 'hide'=>false),
+                  'tags' => 'test', 'parent_id'=>null, 'component'=>'empty', 'is_home'=>true, 'category' =>'main', 'hide'=>false),
             array('id'=>2, 'pos'=>2, 'visible'=>true, 'name'=>'Test2', 'filename' => 'test2',
-                  'tags' => 'foo', 'parent_id'=>null, 'component'=>'empty2', 'is_home'=>false, 'type'=>'main', 'hide'=>false),
+                  'tags' => 'foo', 'parent_id'=>null, 'component'=>'empty2', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
             array('id'=>3, 'pos'=>3, 'visible'=>true, 'name'=>'Test3', 'filename' => 'test3',
-                  'tags' => 'blub', 'parent_id'=>null, 'component'=>'testComponent', 'is_home'=>false, 'type'=>'main', 'hide'=>false),
+                  'tags' => 'blub', 'parent_id'=>null, 'component'=>'testComponent', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
             array('id'=>4, 'pos'=>1, 'visible'=>true, 'name'=>'Test4', 'filename' => 'test4',
-                  'tags' => '', 'parent_id'=>3, 'component'=>'empty', 'is_home'=>false, 'type'=>'main', 'hide'=>false),
+                  'tags' => '', 'parent_id'=>3, 'component'=>'empty', 'is_home'=>false, 'category' =>'main', 'hide'=>false),
         )));
         $ret['generators']['page']['component'] = array('empty' => 'Vpc_Basic_Empty_Component',
                                                         'empty2' => 'Vps_Component_Acl_Empty2',

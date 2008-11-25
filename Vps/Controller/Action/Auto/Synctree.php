@@ -9,7 +9,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
     protected $_tableName;
     protected $_model;
     protected $_modelName;
-    
+
     protected $_icons = array (
         'root'      => 'folder',
         'default'   => 'table',
@@ -41,14 +41,14 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         );
         $this->view->ext('Vps.Auto.SyncTreePanel', $config);
     }
-    
+
     public function setTable($table)
     {
         $this->_model = new Vps_Model_Db(array(
             'table' => $table
         ));
     }
-    
+
     private function _getTableInfo()
     {
         if (!isset($this->_model) || !($this->_model instanceof Vps_Model_Db)) {
@@ -56,7 +56,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
         }
         return $this->_model->getTable()->info();
     }
-    
+
     public function preDispatch()
     {
         parent::preDispatch();
@@ -82,7 +82,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 $this->_primaryKey = $this->_primaryKey[1];
             }
         }
-        
+
         if ($info) {
             // Invisible-Button hinzufügen falls nicht überschrieben und in DB
             if (array_key_exists('invisible', $this->_buttons) &&
@@ -91,7 +91,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             {
                 $this->_buttons['invisible'] = true;
             }
-    
+
             // Pos-Feld
             if (!isset($this->_hasPosition)) {
                 $this->_hasPosition = in_array('pos', $info['cols']);
@@ -100,7 +100,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
                 throw new Vps_Exception("_hasPosition is true, but 'pos' does not exist in database");
             }
         }
-        
+
         foreach ($this->_icons as $k=>$i) {
             if (is_string($i)) {
                 $this->_icons[$k] = new Vps_Asset($i);
@@ -142,7 +142,7 @@ abstract class Vps_Controller_Action_Auto_Synctree extends Vps_Controller_Action
             throw new Vps_ClientException('Couldn\'t find row with id ' . $id);
         }
     }
-    
+
     protected function _getTreeWhere($parentRow = null)
     {
         return $this->_getWhere();

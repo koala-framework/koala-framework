@@ -241,7 +241,11 @@ abstract class Vps_Component_Generator_Abstract
         $ret = array();
         foreach ($generators as $g) {
             if ($component && $g instanceof Vps_Component_Generator_Page &&
-                !(is_numeric($component->componentId) || $component instanceof Vps_Component_Data_Root)
+                !(
+                    is_numeric($component->componentId) ||
+                    $component instanceof Vps_Component_Data_Root ||
+                    is_instance_of($component->componentClass, 'Vpc_Root_Category_Component')
+                )
             ) {
                 continue;
             }

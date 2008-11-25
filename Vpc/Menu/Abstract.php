@@ -6,12 +6,12 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
     public static function getSettings()
     {
         $ret = array_merge(parent::getSettings(), array(
-            'level' => 'main' // (string)pagetype oder (int)ebene
+            'level' => 'main' // (string)category oder (int)ebene
         ));
         $ret['componentName'] = trlVps('Menu');
         $ret['cssClass'] = 'webStandard';
         return $ret;
-        
+
     }
 
     protected function _getMenuData($parentData = null)
@@ -28,8 +28,9 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
                 $level = $this->_getSetting('level');
             }
             if (is_string($level)) {
-                $constraints['type'] = $level;
-                $ret = Vps_Component_Data_Root::getInstance()->getChildPages($constraints);
+                $category = Vps_Component_Data_Root::getInstance()
+                    ->getComponentByClass('Vpc_Root_Category_Component', array('category' => $level));
+                $ret = $category->getChildPages($constraints);
             } else {
                 if (isset($currentPages[$level-2])) {
                     $ret = $currentPages[$level-2]->getChildPages($constraints);
@@ -56,7 +57,7 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
         }
         return $ret;
     }
-    
+
     // Array mit IDs von aktueller Seiten und Parent Pages
     protected function _getCurrentPages()
     {

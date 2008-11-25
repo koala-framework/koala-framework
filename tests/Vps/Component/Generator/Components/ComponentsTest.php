@@ -30,8 +30,8 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
     {
         $generators = Vps_Component_Generator_Abstract::getInstances('Vps_Component_Generator_Components_Root');
         $this->assertEquals(count($generators), 3);
-        $this->assertTrue($generators[0] instanceof Vps_Component_Generator_Page);
-        $this->assertTrue($generators[1] instanceof Vps_Component_Generator_Box_Static);
+        $this->assertTrue($generators[1] instanceof Vps_Component_Generator_Page);
+        $this->assertTrue($generators[0] instanceof Vps_Component_Generator_Box_Static);
     }
 
     public function testRootConstraints()
@@ -134,7 +134,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
         $this->assertEquals($count, count($classes));
         $this->assertEquals($initailSelect, $select); //check if select was modified
     }
-    
+
     public function testRecursiveComponentClasses()
     {
         $this->_assertRec(array(), 2);
@@ -152,7 +152,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
     public function testChildComponents()
     {
         $root = $this->_root;
-        $this->_assertChildComponents($root, array(), array('1', 'root-empty', 'root-static'));
+        $this->_assertChildComponents($root, array(), array('root-empty', '1', 'root-static'));
         $this->_assertChildComponents($root, array('box' => true), array('root-empty'));
         $this->_assertChildComponents($root, array('page' => true), array('1'));
         $multiple = $root->getChildComponent('-static');

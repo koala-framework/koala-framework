@@ -64,6 +64,8 @@ class Vps_Component_Data
             return trim($rel);
         } else if ($var == 'filename') {
             return $this->getPseudoPage()->_filename;
+        } else if ($var == 'inherits') {
+            return false;
         } else if ($var == 'visible') {
             if (isset($this->row->visible)) {
                 return $this->row->visible;
@@ -74,10 +76,11 @@ class Vps_Component_Data
             if (!isset($this->_inheritClasses)) {
                 $this->_uniqueParentDatas = array();
                 $this->_inheritClasses = array();
-                if ($this->isPage) {
-                    $page = $this->getParentPageOrRoot();
+                if ($this->inherits) {
+                    $page = $this;
                     $foundInheritGeneratorPage = false;
-                    while ($page && !$foundInheritGeneratorPage) {
+                    while (($page = $page->parent) && !$foundInheritGeneratorPage) {
+                        if (!$page->inherits) continue;
                         foreach (Vpc_Abstract::getSetting($page->componentClass, 'generators') as $gKey=> $g) {
                             if (isset($g['inherit']) && $g['inherit']) {
                                 if (!$foundInheritGeneratorPage) {
@@ -91,13 +94,6 @@ class Vps_Component_Data
                                 $foundInheritGeneratorPage = true;
                             }
                         }
-                        $page = $page->getParentPageOrRoot();
-                    }
-                    if (!$foundInheritGeneratorPage) {
-                        //root sollte normalerweise immer einen page-genarator haben.
-                        //falls es mal einen fall geben soll wo das nicht so ist kann diese
-                        //Exception möglicherweise entfernt werden
-                        throw new Vps_Exception("didn't find any inherited compont (root must have one!)");
                     }
                 }
             }

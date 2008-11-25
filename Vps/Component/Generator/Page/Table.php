@@ -18,6 +18,7 @@ class Vps_Component_Generator_Page_Table extends Vps_Component_Generator_PseudoP
     {
         $data = parent::_formatConfig($parentData, $row);
         $data['isPage'] = true;
+        $data['inherits'] = true;
 
         $data['name'] = $this->_getNameFromRow($row);
 

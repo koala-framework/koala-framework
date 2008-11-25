@@ -45,6 +45,7 @@ class Vps_Component_Generator_Page_Static extends Vps_Component_Generator_Static
         $data['rel'] = isset($c['rel']) ? $c['rel'] : '';
         $data['name'] = isset($c['name']) ? $c['name'] : $componentKey;
         $data['isPage'] = true;
+        $data['inherits'] = true;
         $data['isPseudoPage'] = true;
         return $data;
     }

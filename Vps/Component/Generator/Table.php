@@ -5,6 +5,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     protected $_idSeparator = '-'; //um in StaticTable _ verwenden zu können
     protected $_idColumn = 'id';
+    protected $_hasNumericIds = true;
 
     public function select($parentData, array $select = array())
     {
@@ -12,7 +13,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         $select->whereGenerator($this->_settings['generator']);
         return $select;
     }
-    
+
     public function joinWithChildGenerator($select, $childGenerator)
     {
         $table = $this->_getModel()->getTable()->info('name');
@@ -103,7 +104,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
             $id = $select->getPart(Vps_Model_Select::WHERE_ID);
             $separator = substr($id, 0, 1);
             $id = substr($id, 1);
-            if ($separator != $this->_idSeparator || !is_numeric($id)) {
+            if ($separator != $this->_idSeparator || ($this->_hasNumericIds && !is_numeric($id))) {
                 return null;
             }
             $select->whereId($id);
@@ -160,14 +161,11 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
 
     protected function _formatConfig($parentData, $row)
     {
-        $componentId = $this->_getIdFromRow($row);
-        if ($this->_idSeparator && !$parentData instanceof Vps_Component_Data_Root) {
-            $componentId = $parentData->componentId . $this->_idSeparator . $componentId;
-        }
+        $componentId = $parentData->componentId . $this->_idSeparator . $this->_getIdFromRow($row);
         $dbId = $this->_getIdFromRow($row);
         if (isset($this->_settings['dbIdShortcut'])) {
             $dbId = $this->_settings['dbIdShortcut'] . $dbId;
-        } else if ($this->_idSeparator && !$parentData instanceof Vps_Component_Data_Root) {
+        } else {
             $dbId = $parentData->dbId . $this->_idSeparator . $dbId;
         }
 
@@ -195,7 +193,7 @@ class Vps_Component_Generator_Table extends Vps_Component_Generator_Abstract
         );
         return $data;
     }
-    
+
     /**
      * wird in Link-Generator überschrieben
      **/
