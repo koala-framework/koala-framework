@@ -2,6 +2,7 @@
 class Vpc_Root_CategoryModel extends Vps_Model_Data_Abstract
 {
     private $_pageCategories;
+    protected $_columns = array('id', 'name');
 
     public function __construct($config = array())
     {

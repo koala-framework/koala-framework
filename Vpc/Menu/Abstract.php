@@ -29,7 +29,10 @@ class Vpc_Menu_Abstract extends Vpc_Abstract
             }
             if (is_string($level)) {
                 $category = Vps_Component_Data_Root::getInstance()
-                    ->getComponentByClass('Vpc_Root_Category_Component', array('category' => $level));
+                     ->getComponentByClass('Vpc_Root_Category_Component', array('id' => '-'.$level));
+                if (!$category) {
+                    throw new Vps_Exception("Category-Component '$level' not found");
+                }
                 $ret = $category->getChildPages($constraints);
             } else {
                 if (isset($currentPages[$level-2])) {
