@@ -13,7 +13,7 @@ class Vps_Form_ShowField_ValueOverlapsErrorFormController extends Vps_Controller
         $cards = $this->_form->add(new Vps_Form_Container_Cards('type', trlVps('Type')))
             ->setValues(array("storage"));
 
-        $form = new Vps_Kitepower_Form_Booking_ServiceStorage('storage');
+        $form = new Vps_Form_ShowField_Storage('storage');
         $card = $cards->add();
         $title = "Storage";
         $title = str_replace('.', ' ', $title);
