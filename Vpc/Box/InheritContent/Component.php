@@ -19,12 +19,16 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
     public function getTemplateVars()
     {
         $ret = parent::getTemplateVars();
-        $page = $this->getData()->getPageOrRoot();
+        $page = $this->getData();
         do {
+            while ($page && !$page->inherits) {
+                $page = $page->parent;
+                if ($page instanceof Vps_Component_Data_Root) break;
+            }
             $c = $page->getChildComponent('-'.$this->getData()->id)
                     ->getChildComponent(array('generator' => 'child'));
-            while (!$page->inherit) $page = $page->parent;
             if ($page instanceof Vps_Component_Data_Root) break;
+            $page = $page->parent;
         } while(!$c->hasContent());
         $ret['child'] = $c;
         return $ret;
