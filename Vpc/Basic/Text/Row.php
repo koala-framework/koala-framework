@@ -354,6 +354,7 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                         $destRow->component = 'mail';
                     }
                 } else {
+                    /*
                     if (isset($linkClasses['intern']) && $linkClasses['intern']) {
                         $internLinkPage = Vps_Component_Data_Root::getInstance()
                             ->getPageByUrl($part['href']);
@@ -362,6 +363,8 @@ class Vpc_Basic_Text_Row extends Vps_Model_Proxy_Row
                         }
                     }
                     if (!$destRow->component && isset($linkClasses['extern']) && $linkClasses['extern']) {
+                    */
+                    if (isset($linkClasses['extern']) && $linkClasses['extern']) {
                         $destRow->component = 'extern';
                     }
                 }
