@@ -46,13 +46,15 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         Vps_Component_Abstract::resetSettingsCache();
     }
 
-    public function getPageByPath($path)
+    public function getPageByUrl($url)
     {
+        $parsedUrl = parse_url($url);
+        $path = $this->getComponent()->formatPath($parsedUrl);
         if (substr($path, -1) == '/') {
             $path = substr($path, 0, -1);
         }
         if ($path == '') {
-            return $this->getChildPage(array('home' => true));
+            $ret = $this->getChildPage(array('home' => true));
         } else {
             $path = substr($path, 1);
             foreach (Vpc_Abstract::getComponentClasses() as $c) {
@@ -61,8 +63,12 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                     if ($ret) return $ret;
                 }
             }
-            return $this->getChildPageByPath($path);
+            $ret = $this->getChildPageByPath($path);
+            if ($parsedUrl['path'] == '' || $parsedUrl['path'] == '/') {
+                $ret = $ret->getChildPage(array('home' => true));
+            }
         }
+        return $ret;
     }
 
     public function getComponentById($componentId, $select = array())
@@ -92,7 +98,7 @@ class Vps_Component_Data_Root extends Vps_Component_Data
                 }
 
                 if ($i == 0) { // Muss eine Page sein
-                    $generators = $this->_getPageGenerators($this->componentClass);
+                    $generators = $this->getPageGenerators();
                     foreach ($generators as $generator) {
                         $ret = array_pop($generator->getChildData(null, $s));
                         if ($ret) break;
@@ -106,18 +112,13 @@ class Vps_Component_Data_Root extends Vps_Component_Data
         return $ret;
     }
 
-    private function _getPageGenerators($class)
+    public function getPageGenerators()
     {
         $ret = array();
-        foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
-            $components = $generator['component'];
-            if (!is_array($components)) $components = array($components);
-            if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page')) {
-                $ret[] = Vps_Component_Generator_Abstract::getInstance($class, $key, $generator);
-            }
-            foreach ($components as $component) {
-                if (is_instance_of($component, 'Vpc_Root_Category_Component')) {
-                    $ret = array_merge($ret, $this->_getPageGenerators($component));
+        foreach (Vpc_Abstract::getComponentClasses() as $class) {
+            foreach (Vpc_Abstract::getSetting($class, 'generators') as $key => $generator) {
+                if (is_instance_of($generator['class'], 'Vps_Component_Generator_Page')) {
+                    $ret[] = Vps_Component_Generator_Abstract::getInstance($class, $key, $generator);
                 }
             }
         }

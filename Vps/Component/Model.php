@@ -64,12 +64,13 @@ class Vps_Component_Model extends Vps_Model_Abstract
         } else if (isset($where['parent_id'])) {
             $page = $root->getComponentById($where['parent_id'], array('ignoreVisible' => true));
             $rowset = array_values($page->getChildComponents($this->_constraints));
-            if ($page instanceof Vps_Component_Data_Root) {
-                $constraints = $this->_constraints;
-                unset($constraints['pageGenerator']);
-                $constraints['generator'] = 'category';
-                $rowset = array_merge(array_values($page->getChildComponents($constraints)));
-            }
+
+            $constraints = $this->_constraints;
+            unset($constraints['pageGenerator']);
+            $constraints['generator'] = 'category';
+            $rowset = array_merge($rowset, array_values($page->getChildComponents($constraints)));
+            $constraints['generator'] = 'domain';
+            $rowset = array_merge($rowset, array_values($page->getChildComponents($constraints)));
         } else {
             throw new Vps_Exception('Cannot return all pages');
         }

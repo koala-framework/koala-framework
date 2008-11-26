@@ -11,6 +11,7 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
         'delete' => 'page_delete',
         'folder' => 'folder',
         'home' => 'application_home',
+        'domain' => 'world',
         'root' => 'world'
         );
     protected $_buttons = array();
@@ -46,6 +47,11 @@ class Vps_Controller_Action_Component_PagesController extends Vps_Controller_Act
             $data['bIcon'] = $this->_icons['folder']->__toString();
             $data['expanded'] = true;
             $data['type'] = 'category';
+        }
+        if (is_instance_of($row->getData()->componentClass, 'Vpc_Root_DomainRoot_Domain_Component')) {
+            $data['bIcon'] = $this->_icons['domain']->__toString();
+            $data['expanded'] = true;
+            $data['type'] = 'root';
         }
         $data['uiProvider'] = 'Vps.Component.PagesNode';
 

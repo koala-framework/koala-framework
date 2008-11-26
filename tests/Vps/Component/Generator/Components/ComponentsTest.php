@@ -169,7 +169,7 @@ class Vps_Component_Generator_Components_ComponentsTest extends PHPUnit_Framewor
 
     public function testHome()
     {
-        $p = $this->_root->getPageByPath('/');
+        $p = $this->_root->getPageByUrl('/');
         $this->assertEquals($p->componentId, '1');
     }
 

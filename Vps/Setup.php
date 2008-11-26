@@ -390,10 +390,10 @@ class Vps_Setup
         $i = strpos($uri, '/');
         if ($i) $uri = substr($uri, 0, $i);
         if (!in_array($uri, array('media', 'vps', 'admin', 'assets'))) {
-            $requestUrl = $_SERVER['REDIRECT_URL'];
+            $requestUrl = $_SERVER['SCRIPT_URI'];
 
             $root = Vps_Component_Data_Root::getInstance();
-            $data = $root->getPageByPath($requestUrl);
+            $data = $root->getPageByUrl($requestUrl);
             if (!$data) {
                throw new Vps_Exception_NotFound();
             }
