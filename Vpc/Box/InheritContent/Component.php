@@ -23,8 +23,9 @@ class Vpc_Box_InheritContent_Component extends Vpc_Abstract
         do {
             $c = $page->getChildComponent('-'.$this->getData()->id)
                     ->getChildComponent(array('generator' => 'child'));
+            while (!$page->inherit) $page = $page->parent;
             if ($page instanceof Vps_Component_Data_Root) break;
-        } while(!$c->hasContent() && $page = $page->getParentPageOrRoot());
+        } while(!$c->hasContent());
         $ret['child'] = $c;
         return $ret;
     }
