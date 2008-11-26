@@ -398,7 +398,7 @@ class Vps_Setup
                throw new Vps_Exception_NotFound();
             }
             $root->setCurrentPage($data);
-            if ($data->url != $requestUrl) {
+            if ($data->url != $_SERVER['REDIRECT_URL']) {
                 header('Location: '.$data->url);
                 Vps_Benchmark::shutDown();
                 exit;
