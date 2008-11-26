@@ -12,6 +12,8 @@ class Vps_Dao_Pages extends Vps_Db_Table_Abstract
     {
         parent::_setupFilters();
         $this->_filters['filename'] = new Vps_Filter_Row_UniqueAscii();
-        $this->_filters['filename']->setGroupBy(array('parent_id', 'type'));
+        $this->_filters['filename']->setGroupBy(array('parent_id', 'domain'));
+        $this->_filters['pos'] = new Vps_Filter_Row_Numberize();
+        $this->_filters['pos']->setGroupBy(array('parent_id', 'category', 'domain'));
     }
 }
