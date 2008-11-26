@@ -58,6 +58,7 @@ class Vps_Component_Model extends Vps_Model_Abstract
 
         $where = $select->getPart(Vps_Model_Select::WHERE_EQUALS);
         $parts = $select->getPart(Vps_Model_Select::WHERE_NULL);
+
         if ($parts && in_array('parent_id', $parts)) {
             $rowset = array($root);
         } else if (isset($where['parent_id'])) {
