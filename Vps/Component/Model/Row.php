@@ -30,39 +30,47 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
         }
     }
 
-    //TODO: nicht immer gleich speichern
     public function __set($name, $value)
     {
-        $table = new Vps_Dao_Pages;
-        $row = $table->find($this->componentId)->current();
-        $row->$name = $value;
-        $row->save();
         $this->_data->$name = $value;
     }
 
 
-    //TODO: hier speichern
-    //TODO: _before/_afterUpdate aufrufen
     public function save()
     {
-        $this->_beforeUpdate();
-        if (isset($this->visible)) {
-            $row = $this->_model->getTable()->find($this->componentId)->current();
-            $row->visible = $this->visible;
-            $ret = $row->save();
+        $this->_beforeSave();
+        $id = $this->_data->row->id;
+        $m = new Vps_Dao_Pages();
+        if ($id) {
+            if (!is_numeric($id)) {
+                throw new Vps_Exception("Can only save pages");
+            }
+            $this->_beforeUpdate();
+            $row = $m->find($id)->current();
+        } else {
+            $this->_beforeInsert();
+            $row = $m->createRow();
         }
-        $this->_afterUpdate();
+        $row->visible = $this->visible;
+        $row->name = $this->name;
+        $row->is_home = $this->is_home;
+        $ret = $row->save();
+        if ($id) {
+            $this->_afterUpdate();
+        } else {
+            $this->_afterInsert();
+        }
+        $this->_afterSave();
         return $ret;
     }
 
-    //TODO: _before/_afterDelete aufrufen
     public function delete()
     {
-        $table = new Vps_Dao_Pages;
-        $row = $table->find($this->componentId)->current();
-        $row->delete();
+        $this->_beforeDelete();
+        $this->_data->row->delete();
+        $this->_afterDelete();
     }
-    
+
     public function getData()
     {
         return $this->_data;
@@ -70,8 +78,6 @@ class Vps_Component_Model_Row extends Vps_Model_Row_Abstract
 
     public function toArray()
     {
-        return array(
-            'isPage' => $this->_data->isPage
-        );
+        return array();
     }
 }

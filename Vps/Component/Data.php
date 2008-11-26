@@ -468,7 +468,6 @@ class Vps_Component_Data
         }
         return $page;
     }
-
 /*
     public function toDebug()
     {

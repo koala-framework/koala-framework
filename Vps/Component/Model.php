@@ -2,7 +2,6 @@
 class Vps_Component_Model extends Vps_Model_Abstract
 {
     protected $_rowClass = 'Vps_Component_Model_Row';
-    protected $_rowsetClass = 'Vps_Component_Model_Rowset';
     protected $_constraints = array(
         'pageGenerator' => true,
         'ignoreVisible' => true
