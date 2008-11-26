@@ -1,4 +1,7 @@
 <?php
+/**
+ * @group Vpc_Box_InheritContent
+ */
 class Vpc_Box_InheritContent_Test extends PHPUnit_Framework_TestCase
 {
     private $_root;
